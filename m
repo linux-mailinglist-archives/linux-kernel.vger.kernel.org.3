@@ -2,116 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFEC153274F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3B253274A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235735AbiEXKPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 06:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S234675AbiEXKP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 06:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236083AbiEXKPK (ORCPT
+        with ESMTP id S229543AbiEXKPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:15:10 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EF18723D;
-        Tue, 24 May 2022 03:15:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653387308; x=1684923308;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=YogcLhioZD8mO8o2z+SR0UJW63uOHaQtqSiO2gDX0Wk=;
-  b=uyqbWXSita2DFnjfBxfuJxEkDu2Rs0NaR8Lq4Ej48jqSxW6tL3TDFqnh
-   Mm2JZi1o96wcnAPNGm0ADUjS1xzaxze4GnGae4bzwxFZutuPxiEbbJQg3
-   PpjaCaIpSdGAAYoDU7cUfOqoQ+hv+Jo/Cnpr56uzAjiLNw1kS/5Qv/pdp
-   k=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 May 2022 03:15:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 03:15:07 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 24 May 2022 03:15:07 -0700
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 24 May
- 2022 03:15:02 -0700
-Subject: Re: [PATCH] mailbox: qcom-ipcc: Fix -Wunused-function with
- CONFIG_PM_SLEEP=n
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>
-CC:     Prasad Sodagudi <quic_psodagud@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@lists.linux.dev>
-References: <20220523224702.2002652-1-nathan@kernel.org>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <6d97075e-d62c-6f85-3cba-c3f7c71fdbbf@quicinc.com>
-Date:   Tue, 24 May 2022 15:44:59 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 24 May 2022 06:15:53 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2896F7E1D1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:15:52 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OA6mHZ014857;
+        Tue, 24 May 2022 10:15:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2XZ1WUugb0+bzkv/oIVhLNr19Fk0qAaWlx4k0tucVUo=;
+ b=CbdI0N6INX3IgU8qoH2aCnho8huUEdIQGCjRIZas9SzT7rM4yLHiK3Pk8nyy9h3PTXVP
+ 8aqnX3CqWLXjzuqHuNiIfGQsGWdFLU/1buPqtfWH21hkB1ikwZ+FJBwdh1MUHbSxdb6M
+ /9QkCdTWoINSZDnm3CR9/n3BcFKEAeKzRihASQxNHw7Eb4yTo5lQ7t2CDy9r2Tym5KCs
+ Vm3fuVpwp38plo+u4cO211Dtv3eU67cdiftbUNPaNqSD7n9JssYIdniFw+OTAwlSRSaE
+ G08feC/KaPysS6XAQbIajZZa5PhzaJ+t/b7HVkW58jB/xDFyWqojUf2TX2vqBie2W8m8 Nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8v6j1gdw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 10:15:27 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OA9pex024172;
+        Tue, 24 May 2022 10:15:27 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8v6j1gd5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 10:15:27 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OA8KdI005623;
+        Tue, 24 May 2022 10:15:25 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g6qq948fa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 10:15:25 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OAFMCp41877890
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 May 2022 10:15:23 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B39AB4204F;
+        Tue, 24 May 2022 10:15:22 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F0C042041;
+        Tue, 24 May 2022 10:15:22 +0000 (GMT)
+Received: from localhost (unknown [9.199.154.182])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 24 May 2022 10:15:22 +0000 (GMT)
+Date:   Tue, 24 May 2022 15:45:20 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [RFC PATCH 1/4] objtool: Add --mnop as an option to --mcount
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>
+References: <20220523175548.922671-1-sv@linux.ibm.com>
+        <20220523175548.922671-2-sv@linux.ibm.com>
+        <26c7bfc8-3089-034a-70c0-8857d7cd3a99@csgroup.eu>
+In-Reply-To: <26c7bfc8-3089-034a-70c0-8857d7cd3a99@csgroup.eu>
 MIME-Version: 1.0
-In-Reply-To: <20220523224702.2002652-1-nathan@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1653386854.o7nss9hzc9.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LcReRrfGxPgKstSwunxeCTJ3vHJvcc5b
+X-Proofpoint-ORIG-GUID: foRDD5U1AKCkYPI3EQhEuPv_b1KM-j40
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-24_06,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 mlxscore=0 adultscore=0 mlxlogscore=828
+ phishscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205240051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Nathan,
-Thanks for the fix!
+Christophe Leroy wrote:
+>=20
+>=20
+> Le 23/05/2022 =C3=A0 19:55, Sathvika Vasireddy a =C3=A9crit=C2=A0:
+>> Architectures can select HAVE_NOP_MCOUNT if they choose
+>> to nop out mcount call sites. If that config option is
+>> selected, then --mnop is passed as an option to objtool,
+>> along with --mcount.
+>>=20
+>=20
+> Is there a reason not to nop out mcount call sites on powerpc as well ?
 
-On 5/24/22 4:17 AM, Nathan Chancellor wrote:
-> When CONFIG_PM_SLEEP is not set, there is a warning that
-> qcom_ipcc_pm_resume() is unused:
-> 
->    drivers/mailbox/qcom-ipcc.c:258:12: error: 'qcom_ipcc_pm_resume' defined but not used [-Werror=unused-function]
->      258 | static int qcom_ipcc_pm_resume(struct device *dev)
->          |            ^~~~~~~~~~~~~~~~~~~
->    cc1: all warnings being treated as errors
-> 
-> Commit 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate old
-> ones") reworked the PM_OPS macros to avoid this problem. Use
-> NOIRQ_SYSTEM_SLEEP_PM_OPS directly so that qcom_ipcc_pm_resume() always
-> appears to be used to the compiler, even though it will be dead code
-> eliminated in the !CONFIG_PM_SLEEP case.
-> 
-> Fixes: c25f77899753 ("mailbox: qcom-ipcc: Log the pending interrupt during resume")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Yes, if there are functions that are out of range of _mcount(), then the=20
+linker would have inserted long branch trampolines. We detect such cases=20
+during boot. But, if we nop out the _mcount call sites during build=20
+time, we will need some other way to identify these.
 
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+- Naveen
 
-> ---
->   drivers/mailbox/qcom-ipcc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mailbox/qcom-ipcc.c b/drivers/mailbox/qcom-ipcc.c
-> index 2583b20cdeb7..31d58b7d55fe 100644
-> --- a/drivers/mailbox/qcom-ipcc.c
-> +++ b/drivers/mailbox/qcom-ipcc.c
-> @@ -344,7 +344,7 @@ static const struct of_device_id qcom_ipcc_of_match[] = {
->   MODULE_DEVICE_TABLE(of, qcom_ipcc_of_match);
->   
->   static const struct dev_pm_ops qcom_ipcc_dev_pm_ops = {
-> -	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, qcom_ipcc_pm_resume)
-> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, qcom_ipcc_pm_resume)
->   };
->   
->   static struct platform_driver qcom_ipcc_driver = {
-> 
-> base-commit: bca1a1004615efe141fd78f360ecc48c60bc4ad5
-> 

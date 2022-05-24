@@ -2,160 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E71B532CC0
+	by mail.lfdr.de (Postfix) with ESMTP id 03206532CBF
 	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238513AbiEXO6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S238522AbiEXO6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 10:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238505AbiEXO6D (ORCPT
+        with ESMTP id S238492AbiEXO6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 10:58:03 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F88C9CF52;
-        Tue, 24 May 2022 07:58:01 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id t14-20020a9d66ce000000b0060af9ed4b87so7173975otm.9;
-        Tue, 24 May 2022 07:58:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nkf+mvMwrjUruEFDYrxAVkAx6OHaDoDw1ld4EH6YiqY=;
-        b=48EfI1RnJlke9G5cehBsT23gqTpVScNueGkKTVp18pYseHOQld/OOlry8FTfAsUbTN
-         mvUqwC0UNOLZX7sVrDtgIm08XfvTrorT7PLCIyZXR7ysc2X/QWpf3mwddXKgWCHJXlRU
-         7W7tdQZb0wFPSBxm2tdMtBVE6OUBUTa6PEeEmaRjOsNC/BQtdW5Zbn5WWJVUe4Xzif0c
-         dmLy1a+L9GIp8Iauav9ZB+qTMF1XN7WOTH4Heva98VVNl5gXH6aJUwJ09aQBrad2YPVY
-         e9BdxwVvi0nOqJ/mCmVAMkXXclzgAk8rT4YpQbxC7V/1j6m36aW7mS3mN20JdpWlE6UV
-         BW7w==
-X-Gm-Message-State: AOAM5317+aRy/OhPZ2EKF6OA2bZ/uPX7c6lTRQjrulf11f1gHNDKtaet
-        4Jcwlm6NQgnjb+vBbBIWGg/f6wAjYA==
-X-Google-Smtp-Source: ABdhPJxSlaxF5FMo24zzHp9eAzq7uAZ6ra/ZXFH50nBDue68wirqOC+MwRr2fSlFqH39W7Vz+MTO3A==
-X-Received: by 2002:a05:6830:82:b0:60b:127e:d3fb with SMTP id a2-20020a056830008200b0060b127ed3fbmr3978825oto.259.1653404280302;
-        Tue, 24 May 2022 07:58:00 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t22-20020a05687044d600b000f23989c532sm3427224oai.8.2022.05.24.07.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 07:57:59 -0700 (PDT)
-Received: (nullmailer pid 3778981 invoked by uid 1000);
-        Tue, 24 May 2022 14:57:58 -0000
-Date:   Tue, 24 May 2022 09:57:58 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 01/23] dt-bindings: ata: ahci-platform: Drop
- dma-coherent property declaration
-Message-ID: <20220524145758.GA3730540-robh@kernel.org>
-References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
- <20220511231810.4928-2-Sergey.Semin@baikalelectronics.ru>
- <20220517185841.GA1388602-robh@kernel.org>
- <20220521092248.7i53lxf3gx26fmi5@mobilestation>
+        Tue, 24 May 2022 10:58:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1B987A1E;
+        Tue, 24 May 2022 07:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653404287; x=1684940287;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=JUpfAF9Am5zA2GbGQFfRJxRjAhrPXzVHQcmG8Ad5zuE=;
+  b=Llxzv/3vBA+rZEoRTBAH1ecHS3pSdrD/PNOC3RsBOEUHsyaIDCDwfjJx
+   88/n3u15kI45DllCp6lBzm+Q3eBmy+9nGkpdHBmeCe7uo1nxpyGjKnHP5
+   o23NaczivZ4JY4kcTbGGTFGZUa51jNqvPDWkcnx2sBywDVPc1nAfpgAyp
+   WewNaG33UtHn1ygNIfdtqMKm4Fx1MEbNYcQTSyLhX3XgKfKhiEjjFRgIS
+   FUjh7j0R/nr2lmC1VE006KRw1nbvrc2SX9cIIiiUQQSjANY/gFYZOJyL1
+   M25BzHeOWtkya4bLBp5SDj4uTp4094fz4amfhnSvFRpIlN9E8D9eHbwqs
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="271127274"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="271127274"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 07:58:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="577919340"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga007.fm.intel.com with ESMTP; 24 May 2022 07:58:07 -0700
+Received: from [10.252.209.117] (kliang2-MOBL.ccr.corp.intel.com [10.252.209.117])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id B6BCD580223;
+        Tue, 24 May 2022 07:58:06 -0700 (PDT)
+Message-ID: <fd28e6fb-cf4c-a065-6138-4c581e871341@linux.intel.com>
+Date:   Tue, 24 May 2022 10:58:05 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220521092248.7i53lxf3gx26fmi5@mobilestation>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [BUG REPORT] perf tools: x86_64: weight column displays odd
+ memory latency data
+Content-Language: en-US
+To:     Tyson Thomas <tyson.thomas@sydney.edu.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>
+References: <SYBPR01MB6620E2316BDF9CE29178CB32DBD59@SYBPR01MB6620.ausprd01.prod.outlook.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <SYBPR01MB6620E2316BDF9CE29178CB32DBD59@SYBPR01MB6620.ausprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 12:22:48PM +0300, Serge Semin wrote:
-> On Tue, May 17, 2022 at 01:58:41PM -0500, Rob Herring wrote:
-> > On Thu, May 12, 2022 at 02:17:48AM +0300, Serge Semin wrote:
-> > > It's redundant to have the 'dma-coherent' property explicitly specified in
-> > > the DT schema because it's a generic property described in the core
-> > > DT-schema by which the property is always evaluated.
-> > 
+
+
+On 5/22/2022 6:14 PM, Tyson Thomas wrote:
+> Hi Kan, Linux-Perf Team
 > 
-> > It is not redundant.
-> > 
-> > The core schema defines the property (as a boolean), but this schema 
-> > defines it being used in this binding. Otherwise, it won't be allowed.
+> I have observed some odd behaviour within perf when using perf-mem. Specifically the reported latency under the weight column appears to be unreasonably high.
 > 
-> I thought that the generic properties like ranges, dma-ranges, etc
-> including the dma-coherent one due to being defined in the dt-core
-> schema are always evaluated. As such seeing the unevaluatedProperties
-> property is set to false here, they can be used in the DT-nodes with
-> no need to be explicitly specified in the DT node bindings. In
-> addition to that I tested this assumption by dropping the dma-coherent
-> property definition from the AHCI-common schema and executed the
-> DT-bindings check procedure. No error has been spotted:
-
-Those common properties are always applied, but not at the same time as 
-a device binding. IOW, it's 2 schemas that are applied to an instance 
-(node) independently. For things like 'reg', the common schema does type 
-checks and the device schema does size (number of entries) checks.
-
-There a few things always allowed like 'status', and those are added to 
-the device schema by the tools.
-
+> Here is a given sample from a recent test, I find that some of the  latencies are close to an unsigned short and I cannot seem to be understand why that would be outside of it being an issue with the perf events.
 > 
-> > [fancer@mobilestation] kernel $ cat Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml | grep dma-coherent
-> >        dma-coherent;
-> > [fancer@mobilestation] kernel $ make -j8 DT_SCHEMA_FILES=Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml dt_binding_check
-> >   LINT    Documentation/devicetree/bindings
-> >   DTEX    Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dts
-> >   CHKDT   Documentation/devicetree/bindings/processed-schema.json
-> >   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-> >   DTC     Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dtb
-> >   CHECK   Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dtb
-> > [fancer@mobilestation] kernel $ cat Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dts | grep dma-coherent
-> >           dma-coherent;
-> > [fancer@mobilestation] kernel $ echo $?
-> > 0
-> Due to that here are a few backward questions:
-> 1) Am I doing something wrong in the framework of the DT-bindings
-> evaluation? Really I even tried to specify unknown property in the
-> DT-bindings example like "bla-bla-bla;" and no evaluation error was
-> printed. Anyway If what you are saying was correct I would have got an
-> error during the DT-bindings evaluation, but as you can see there was
-> none.
+> This can be replicated using a NAS benchmark, specifically cg.D.
+> 
+> I observe the following results in perf mem report (just getting the top 10 results)
+>
 
-I think this is a known issue which has a pending fix. If a referenced 
-schema has 'additionalProperties: true' in it, then the referring schema 
-never has any unevaluated properties. The fix is pending because all 
-the schema examples that start failing have to be fixed and in a base 
-that people work on (i.e. rc1).
 
-> 2) Am I wrong in thinking that the unevaluatedProperties setting
-> concerns the generic properties defined in the DT-core schema? 
+Could you please show me the exact perf command used?
 
-You are wrong as explained above.
+With my perf mem report,
+The first column is the Overhead.
+The second column is the number of samples.
+The third column is the weight.
+The fourth is the Memory access.
 
-> If it
-> doesn't concern the generic properties then does it work for the
-> $ref'ed schemas only? 
+Seems like the weight is missed?
 
-Yes, except for the issue making it not work.
+Could you please check the perf report -D?
+It will dump the weight for each Sample.
+Does it look correct?
 
-> Getting back to the patch topic. We need to drop the dma-coherent
-> property from the schema anyway. AHCI-specification doesn't
-> regulate the DMA operations coherency. The dma-coherent property is
-> more specific to the particular controller implementation mainly
-> dependent on the platform settings. So I'll change the patch log, but
-> get to keep the patch in the series. What do you think?
+Thanks,
+Kan
 
-Intel wrote the spec, so they probably assume coherent. In DT, PPC is 
-default coherent and Arm is default non-coherent.
-
-You'll need to add it to whatever specific device schemas need it if you 
-remove it. Personally, I think it is fine where it is. dma-coherent is 
-valid on any DMA capable device and it's not really a property of the 
-device, but the system. If we could generically identify DMA capable 
-devices, then dma-coherent would be allowed on them automatically.
-
-Rob
+>   0.02% ,62515 ,L1 or L1 hit
+>   0.02% ,54048 ,L1 or L1 hit
+>   0.02% ,52206 ,L1 or L1 hit
+>   0.02% ,49831 ,L1 or L1 hit
+>   0.02% ,49056 ,Local RAM or RAM hit
+>   0.01% ,40666 ,LFB or LFB hit
+>   0.01% ,38080 ,L1 or L1 hit
+>   0.01% ,36772 ,L1 or L1 hit
+>   0.01% ,36729 ,LFB or LFB hit
+>   0.01% ,27101 ,LFB or LFB hit
+> 
+> Is it possible for someone to shed some light on this or am I misunderstanding how the weight column is used here?
+> This appears to have been an issue on 5.4, 5.10 and 5.15. I am looking into seeing if it is still present in 5.17 and 5.18.
+> 
+> I've also tried this on different Intel CPUs such as Intel Xeon 6230, i5-1135G7, Intel Xeon 6330
+> 
+> Any insight or help would be appreciated,
+> Tyson

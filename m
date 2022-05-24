@@ -2,164 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BC6533297
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 140BB53329A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241703AbiEXUsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
+        id S241709AbiEXUtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241696AbiEXUsJ (ORCPT
+        with ESMTP id S241696AbiEXUtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:48:09 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD16E74DCC
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:48:08 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id s20so511729ljd.10
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:48:08 -0700 (PDT)
+        Tue, 24 May 2022 16:49:17 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A967737B9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:49:16 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id g184so17269242pgc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:49:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7VF1h9VoAjTirhiTdduIUPLKqTj+n1pCpzbChlFIzhY=;
-        b=n2Ms+d/2wyZrpq84XEvd1spFFzFVV5DC3dX27H3EnH0INSQBrRkDaGGliChTegAiRT
-         MjFhrlI2Ssk5UuDUrM3ymBYmD10lwCG2p/vtWqksDNh/rfjqsWKR4bS7uaR6+a+0W1fo
-         k4TlnYdpXaYMoNoDKdo4nhjKPYicW3iyx/UqkA5mphCFj7/IMhDcHdGAIOHqrkBGanAO
-         FrWi+bV5nxmNlS6jUMryeebiHsx6TY+aymnM6giAfAZGgA3vSWfWRjBJhKymugS7Cns8
-         0TV83mKGRjUI5EgOGXVPmT3cs4xPXyf0q4bQTFeRKFin5iwXgmhMD2ivzK5By/j1x/1V
-         JRRA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e9ahkSLTtuvwLRoOkp0E00xXCsWuniaEqLjpRE+FmXM=;
+        b=AXCr0XgSkVrF9pCBmMIp3f38r3JJf2AjRX5w1UCFvFugMSOA8Se7MLQ1xl6emdyIx8
+         LeVkeS3aM38TUQ7nGBZOro8M5oQFFf+AWzi00HrtsjExVGtL7W9u/n55/660ncvC6u71
+         yFlf5B3NV8qkExYAo9G9O3AQ+mBqAJgEvCy1k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7VF1h9VoAjTirhiTdduIUPLKqTj+n1pCpzbChlFIzhY=;
-        b=Epgl0zr2Fbbl+IpnXfF001Fg+I4kDUAbLE2Cz+Hg6sWUiDg7h6wqly6t8biM/EdQNX
-         V5Uyvc7RkTCTG4kUEdkQ5PU3fUrGH/eoKtLfo6qHsVpzK2zph4i5+VwWMPKkLRHhohaa
-         ebO4FeQHMA966/TUIOAazZq1OQIaoZubUUCYKTJSIU6Za71X/54vPMm9N2ucyMVulUR5
-         HR9H8VpsDRJ4kTbln52jKEkXxGTQoDKpkuQI4f7GHnw/R1wocah9uf0z8CAtiL4wPWRI
-         SX+vDw7DX/ABfzDX6vHCPqZJufBmL0sZqslvVSoyQEw1ZcfN2E9Ohl4H/Y1QNe5+CebA
-         nhJw==
-X-Gm-Message-State: AOAM531kPH3grYUC1qH3khPfo4n0E3ZHreICEFh8l7+73c1bgRsPXztp
-        dcbMl9aHREi62bU3JUQ9ZVw25SEktY3IeYmhqr5NyQ==
-X-Google-Smtp-Source: ABdhPJyQO8qS6aGD8XnCH+3Zo+UOwCbzqSC96vwlTbaTtq667oU9uZ0xjiA6D4lx6SD4k6nIcMbrxGib2ITUyM88tn4=
-X-Received: by 2002:a2e:b04d:0:b0:253:e5e3:ec1c with SMTP id
- d13-20020a2eb04d000000b00253e5e3ec1cmr9600787ljl.360.1653425286864; Tue, 24
- May 2022 13:48:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e9ahkSLTtuvwLRoOkp0E00xXCsWuniaEqLjpRE+FmXM=;
+        b=E5UhYBN/+3DmUp8wlMJsCk4/KojaGCoz8ID2n7L4Oj4PuUoIpaC48cpTO/CLbM2zYc
+         ABRbW0+lniumbjKgnN7gp1tJLmU2GNUctXJhpQ+jtUwUHUD+L/uT4Ep/nxHtS6rtQ1dJ
+         J1XGjb5ejiXatJNnFNI4WL3GpWZ+kS4Y/brFxqKsRv7VkJgwbEwRGqDFoeRC3sMFTWr4
+         IGJh6WFofdNN3ZHSyMSRTIfjF2lURyBb8AvbLGHJ/Rv3ASpTwrJ2TFfDTUnzOD3nVbkQ
+         8W9UCZHLd3pKf7RkFxbr+AZtbXozcQmTuXOdks43frMjotAnNWt2NOV9ZriZSNi9YZAy
+         dsQA==
+X-Gm-Message-State: AOAM532nRk69pp7Dv1upCA3bjO/1IXxGJU6HxFgQzx4GPUsEvfwvbGOw
+        dgRkH9U6JYzSUw8wcgsePF/cLQ==
+X-Google-Smtp-Source: ABdhPJwCz55uI2qGOYgI22kmaw7O/6E1G/+i+42mFsW1jnbNomUOjxKNl3/aN6OfdEf3gmO/FAvfvQ==
+X-Received: by 2002:a63:4204:0:b0:3f6:4a4f:5a96 with SMTP id p4-20020a634204000000b003f64a4f5a96mr23128307pga.10.1653425355851;
+        Tue, 24 May 2022 13:49:15 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:e1fc:e14a:1559:6e05])
+        by smtp.gmail.com with ESMTPSA id n11-20020a65450b000000b003fa5b550303sm3988813pgq.68.2022.05.24.13.49.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 13:49:15 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sc7280: Add touchscreen to villager
+Date:   Tue, 24 May 2022 13:48:49 -0700
+Message-Id: <20220524134840.1.I80072b8815ac08c12af8f379a33cc2d83693dc51@changeid>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-References: <20220523164626.858340-1-masahiroy@kernel.org> <20220523164626.858340-3-masahiroy@kernel.org>
-In-Reply-To: <20220523164626.858340-3-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 24 May 2022 13:47:55 -0700
-Message-ID: <CAKwvOdnCQUSOUHqL20nAFJ1FcUGQOSz9DWkyS5UU-8C9M-wcNA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] modpost: simplify mod->name allocation
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 9:48 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> mod->name is set to the ELF filename with the suffix ".o" stripped.
->
-> The current code calls strdup() and free() to manipulate the string,
-> but a simpler approach is to pass new_module() with the name length
-> subtracted by 2.
->
-> Also, check if the passed filename ends with ".o" before stripping it.
->
-> The current code blindly chops the suffix
->
->     tmp[strlen(tmp) - 2] = '\0'
->
-> but it will cause buffer under-run if strlen(tmp) < 2;
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+This adds the touchscreen to the sc7280-herobrine-villager device
+tree. Note that the touchscreen on villager actually uses the reset
+line and thus we use the more specific "elan,ekth6915" compatible
+which allows us to specify the reset.
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+The fact that villager's touchscreen uses the reset line can be
+contrasted against the touchscreen for CRD/herobrine-r1. On those
+boards, even though the touchscreen goes to the display, it's not
+hooked up to anything there.
 
-> ---
->
->  scripts/mod/modpost.c | 25 ++++++++++++-------------
->  1 file changed, 12 insertions(+), 13 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 843c64eebe8b..77c315dea1a3 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -172,11 +172,11 @@ static struct module *find_module(const char *modname)
->         return NULL;
->  }
->
-> -static struct module *new_module(const char *modname)
-> +static struct module *new_module(const char *name, size_t namelen)
->  {
->         struct module *mod;
->
-> -       mod = NOFAIL(malloc(sizeof(*mod) + strlen(modname) + 1));
-> +       mod = NOFAIL(malloc(sizeof(*mod) + namelen + 1));
->         memset(mod, 0, sizeof(*mod));
->
->         INIT_LIST_HEAD(&mod->exported_symbols);
-> @@ -184,8 +184,9 @@ static struct module *new_module(const char *modname)
->         INIT_LIST_HEAD(&mod->missing_namespaces);
->         INIT_LIST_HEAD(&mod->imported_namespaces);
->
-> -       strcpy(mod->name, modname);
-> -       mod->is_vmlinux = (strcmp(modname, "vmlinux") == 0);
-> +       memcpy(mod->name, name, namelen);
-> +       mod->name[namelen] = '\0';
-> +       mod->is_vmlinux = (strcmp(mod->name, "vmlinux") == 0);
->
->         /*
->          * Set mod->is_gpl_compatible to true by default. If MODULE_LICENSE()
-> @@ -2022,16 +2023,14 @@ static void read_symbols(const char *modname)
->         if (!parse_elf(&info, modname))
->                 return;
->
-> -       {
-> -               char *tmp;
-> -
-> -               /* strip trailing .o */
-> -               tmp = NOFAIL(strdup(modname));
-> -               tmp[strlen(tmp) - 2] = '\0';
-> -               mod = new_module(tmp);
-> -               free(tmp);
-> +       if (!strends(modname, ".o")) {
-> +               error("%s: filename must be suffixed with .o\n", modname);
-> +               return;
->         }
->
-> +       /* strip trailing .o */
-> +       mod = new_module(modname, strlen(modname) - strlen(".o"));
-> +
->         if (!mod->is_vmlinux) {
->                 license = get_modinfo(&info, "license");
->                 if (!license)
-> @@ -2493,7 +2492,7 @@ static void read_dump(const char *fname)
->
->                 mod = find_module(modname);
->                 if (!mod) {
-> -                       mod = new_module(modname);
-> +                       mod = new_module(modname, strlen(modname));
->                         mod->from_dump = true;
->                 }
->                 s = sym_add_exported(symname, mod, gpl_only);
-> --
-> 2.32.0
->
+In order to keep the line parked on herobrine/CRD, we'll move the
+pullup from the qcard.dtsi file to the specific boards. This allows us
+to disable the pullup in the villager device tree since the pin is an
+output.
 
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+This uses bindings introduced in the patch ("dt-bindings: HID:
+i2c-hid: elan: Introduce bindings for Elan eKTH6915") [1].
 
+[1] https://lore.kernel.org/r/20220523142257.v2.1.Iedc61f9ef220a89af6a031200a7850a27a440134@changeid
+
+ .../boot/dts/qcom/sc7280-herobrine-crd.dts    | 11 ++++++++
+ .../qcom/sc7280-herobrine-herobrine-r1.dts    | 11 ++++++++
+ .../dts/qcom/sc7280-herobrine-villager-r0.dts | 25 +++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |  1 -
+ 4 files changed, 47 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+index a4ac33c4fd59..b79d84d7870a 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+@@ -134,6 +134,17 @@ &sdhc_2 {
+ 	status = "okay";
+ };
+ 
++/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
++
++/*
++ * This pin goes to the display panel but then doesn't actually do anything
++ * on the panel itself (it doesn't connect to the touchscreen controller).
++ * We'll set a pullup here just to park the line.
++ */
++&ts_rst_conn {
++	bias-pull-up;
++};
++
+ /* PINCTRL - BOARD-SPECIFIC */
+ 
+ /*
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+index b69ca09d9bfb..c1647a85a371 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+@@ -128,6 +128,17 @@ &sdhc_2 {
+ 	status = "okay";
+ };
+ 
++/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
++
++/*
++ * This pin goes to the display panel but then doesn't actually do anything
++ * on the panel itself (it doesn't connect to the touchscreen controller).
++ * We'll set a pullup here just to park the line.
++ */
++&ts_rst_conn {
++	bias-pull-up;
++};
++
+ /* PINCTRL - BOARD-SPECIFIC */
+ 
+ /*
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
+index d3d6ffad4eff..950b69448109 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
+@@ -46,6 +46,25 @@ trackpad: trackpad@2c {
+ 	};
+ };
+ 
++ts_i2c: &i2c13 {
++	status = "okay";
++	clock-frequency = <400000>;
++
++	ap_ts: touchscreen@10 {
++		compatible = "elan,ekth6915";
++		reg = <0x10>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&ts_int_conn>, <&ts_rst_conn>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <55 IRQ_TYPE_LEVEL_LOW>;
++
++		reset-gpios = <&tlmm 54 GPIO_ACTIVE_LOW>;
++
++		vcc33-supply = <&ts_avdd>;
++	};
++};
++
+ &ap_sar_sensor_i2c {
+ 	status = "okay";
+ };
+@@ -81,6 +100,12 @@ &sdhc_1 {
+ 	status = "okay";
+ };
+ 
++/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
++
++&ts_rst_conn {
++	bias-disable;
++};
++
+ /* PINCTRL - BOARD-SPECIFIC */
+ 
+ /*
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+index d59002d4492e..404936c6bf20 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
+@@ -604,7 +604,6 @@ ts_int_conn: ts-int-conn {
+ 	ts_rst_conn: ts-rst-conn {
+ 		pins = "gpio54";
+ 		function = "gpio";
+-		bias-pull-up;
+ 		drive-strength = <2>;
+ 	};
+ };
 -- 
-Thanks,
-~Nick Desaulniers
+2.36.1.124.g0e6072fb45-goog
+

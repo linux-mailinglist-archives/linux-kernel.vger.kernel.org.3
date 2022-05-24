@@ -2,145 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C95A532F16
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237B2532F18
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237992AbiEXQhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 12:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
+        id S238395AbiEXQid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 12:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiEXQhd (ORCPT
+        with ESMTP id S233418AbiEXQia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 12:37:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E485CE023
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 09:37:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FAB4B81802
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 16:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC82C34115;
-        Tue, 24 May 2022 16:37:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653410249;
-        bh=vvGHSyTSQoD32553zowylQZDuq/Dd/Xycf277l12l3A=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=qDk7C1uGg7Rl1YLLlZmO8RkOH5lXUc49Jn912boOAKy4m1vVg8Re7zaIXrRQIIl1n
-         9OHLaj0LviXw/atAy2xJ92dOPqXdlWqDyI962E6KUqHiY3uPxALcB+5pEU8bQppfiU
-         OxfYuERn4TU4UudxNti08UxM6WXY5AVTrj+SJk5Jl0la30QudhpUKLiE51SKnPvt3v
-         FsjTEmm9ti2JpEQjAOLVAknpIyvljmyp/g0fiqgxH7BZmucHYwCIGR5rv9n2CI9ufE
-         jCmMvECHxmyYvqBtUltLDLF+mZTtbng9btGoW662/25kLVgS2eiBAb4uaVzaYTgrt4
-         LR/EOQCzUjdxQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F09605C0378; Tue, 24 May 2022 09:37:28 -0700 (PDT)
-Date:   Tue, 24 May 2022 09:37:28 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
-Message-ID: <20220524163728.GO1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220517140049.GF63055@ziepe.ca>
- <ef901bdb-6117-bad4-2f26-c80df270b86e@nvidia.com>
- <20220517192825.GM63055@ziepe.ca>
- <b6eef200-43d1-7913-21ed-176b05fcb4fe@nvidia.com>
- <You3Q/VFaCoS0mC8@google.com>
- <bcb95d6b-4507-8836-cf17-7c3cd179a3da@nvidia.com>
- <YoxqSud9fvNXqo89@google.com>
- <20220524141937.GA2661880@ziepe.ca>
- <Yoz9H95uXbjoKwdC@google.com>
- <20220524154831.GC2661880@ziepe.ca>
+        Tue, 24 May 2022 12:38:30 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02ADAE023;
+        Tue, 24 May 2022 09:38:30 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id q4so16302460plr.11;
+        Tue, 24 May 2022 09:38:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HDX84FFeFcjSflCNx/dYP2mOlMAVfBYz8NXog7/4cdA=;
+        b=kCGVsnokeKe36OuduWxziv0q3V3zFewTgyZ8ZcYnQUMh2yWCS/RhP0lulH2745OHxm
+         TrBc6V/3T6oYEPYvu5h636CXl8ymu9t7NmarcjASamefGZ4C2xBhz1sSRShLQIscFrol
+         SdtK9pnKzB15c5ABS9qP2+hTL02S/SN0vH6P3XmGP31V9lmgMiI2ERYE/I8qxBDERClb
+         Hhs5dxeS6k/FQYmSM39bCFrWO9ZZnkGqhrhloxdQazHOMAuyrDJy6UO5YV69TM5zVQoU
+         BFEfJxAetRO6IJW85qZLE7PEi6cq6J0yoHLfInuG+l3jAld2BtEEjg7ifGyWhUiq0H9q
+         9HEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HDX84FFeFcjSflCNx/dYP2mOlMAVfBYz8NXog7/4cdA=;
+        b=1/R0DOUWgjsz3lwPGr/2Z6ubpl+svHfHtycrOYxoxeZgE6gSCY9lB7OoYRzKLWLeQN
+         AF8v85ilnQ1aaQqw2gnf/qPbJhGAwQAnPcWQYwSavzsG+KauDaXLIZDI7HLQZIF3Hl08
+         8h/8rrzM48u2KFlO3vMNde3DmNktiTI7KH77WNquLzdk9sTcROBrrEM+CfkgeRgxs76o
+         dQmUMRBsASz/XKB4JiONCMJWY5htfz245f+Z/nkDlOHsLtRsKbE/H2xcLovxwvqMTfxI
+         468/9ko6Q9wpW7K0LjCAWFFZCcwU1mK+w33SAAC9EQ/4XwboQp1QSb5MimcdlS4GAiTP
+         BO3g==
+X-Gm-Message-State: AOAM533X+jzOqvk25zFj0H+3RdpPNAKaILJPK4iZmRHdDwnSTQo36Wxo
+        s2nxxBB83STRCzFWLpmP7Gk=
+X-Google-Smtp-Source: ABdhPJyHJTZK9prcTPjbOowTYJbwGiMQofwKhcs/AB/aQXuadf8eb7QK39M1QUve5l38G3Hve1FeXg==
+X-Received: by 2002:a17:903:288:b0:15f:a13:dfd5 with SMTP id j8-20020a170903028800b0015f0a13dfd5mr28525273plr.55.1653410309327;
+        Tue, 24 May 2022 09:38:29 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id v6-20020a63b946000000b003c14af5063fsm6808077pgo.87.2022.05.24.09.38.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 09:38:28 -0700 (PDT)
+Message-ID: <7682977b-5929-890a-3a18-662fbfcede5c@gmail.com>
+Date:   Tue, 24 May 2022 09:38:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524154831.GC2661880@ziepe.ca>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] MIPS: Rewrite `csum_tcpudp_nofold' in plain C
+Content-Language: en-US
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <alpine.DEB.2.21.2205222035380.52080@angie.orcam.me.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 12:48:31PM -0300, Jason Gunthorpe wrote:
-> On Tue, May 24, 2022 at 08:43:27AM -0700, Minchan Kim wrote:
-> > On Tue, May 24, 2022 at 11:19:37AM -0300, Jason Gunthorpe wrote:
-> > > On Mon, May 23, 2022 at 10:16:58PM -0700, Minchan Kim wrote:
-> > > > On Mon, May 23, 2022 at 07:55:25PM -0700, John Hubbard wrote:
-> > > > > On 5/23/22 09:33, Minchan Kim wrote:
-> > > > > ...
-> > > > > > > So then:
-> > > > > > > 
-> > > > > > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > > > > > > index 0e42038382c1..b404f87e2682 100644
-> > > > > > > +++ b/mm/page_alloc.c
-> > > > > > > @@ -482,7 +482,12 @@ unsigned long __get_pfnblock_flags_mask(const struct page *page,
-> > > > > > >          word_bitidx = bitidx / BITS_PER_LONG;
-> > > > > > >          bitidx &= (BITS_PER_LONG-1);
-> > > > > > > 
-> > > > > > > -       word = bitmap[word_bitidx];
-> > > > > > > +       /*
-> > > > > > > +        * This races, without locks, with set_pageblock_migratetype(). Ensure
-> > > > > >                                               set_pfnblock_flags_mask would be better?
-> > > > > > > +        * a consistent (non-tearing) read of the memory array, so that results,
-> > > > > > 
-> > > > > > Thanks for proceeding and suggestion, John.
-> > > > > > 
-> > > > > > IIUC, the load tearing wouldn't be an issue since [1] fixed the issue.
-> > > > > 
-> > > > > Did it? [1] fixed something, but I'm not sure we can claim that that
-> > > > > code is now safe against tearing in all possible cases, especially given
-> > > > > the recent discussion here. Specifically, having this code do a read,
-> > > > > then follow that up with calculations, seems correct. Anything else is
-> > > > 
-> > > > The load tearing you are trying to explain in the comment would be
-> > > > solved by [1] since the bits will always align on a word and accessing
-> > > > word size based on word aligned address is always atomic so there is
-> > > > no load tearing problem IIUC.
-> > > 
-> > > That is not technically true. It is exactly the sort of thing
-> > > READ_ONCE is intended to guard against.
-> > 
-> > Oh, does word access based on the aligned address still happen
-> > load tearing? 
-> > 
-> > I just referred to
-> > https://elixir.bootlin.com/linux/latest/source/Documentation/memory-barriers.txt#L1759
+On 5/22/22 13:48, Maciej W. Rozycki wrote:
+> Recent commit 198688edbf77 ("MIPS: Fix inline asm input/output type
+> mismatch in checksum.h used with Clang") introduced a code size and
+> performance regression with 64-bit code emitted for `csum_tcpudp_nofold'
+> by GCC, caused by a redundant truncation operation produced due to a
+> data type change made to the variable associated with the inline
+> assembly's output operand.
 > 
-> I read that as saying load tearing is technically allowed but doesn't
-> happen in gcc, and so must use the _ONCE macros.
-
-This is in fact the intent, except...
-
-And as that passage goes on to state, there really are compilers (such
-as GCC) that tear stores of constants to machine aligned/sized locations.
-
-In short, use of the _ONCE() macros can save you a lot of pain.
-
-> > I didn't say it doesn't refetch the value without the READ_ONCE.
-> > 
-> > What I am saying is READ_ONCE(bitmap_word_bitidx] prevents "refetching"
-> > issue rather than "tearing" issue in specific __get_pfnblock_flags_mask
-> > context because I though there is no load-tearing issue there since
-> > bitmap is word-aligned/accessed. No?
+> The intent previously expressed here with operands and constraints for
+> optimal code was to have the output operand share a register with one
+> inputs, both of a different integer type each.  This is perfectly valid
+> with the MIPS psABI where a register can hold integer data of different
+> types and the assembly code used here makes data stored in the output
+> register match the data type used with the output operand, however it
+> has turned out impossible to express this arrangement in source code
+> such as to satisfy LLVM, apparently due to the compiler's internal
+> limitations.
 > 
-> It does both. AFAIK our memory model has no guarentees on what naked C
-> statements will do. Tearing, multi-load, etc - it is all technically
-> permitted. Use the proper accessors.
+> There is nothing peculiar about the inline assembly `csum_tcpudp_nofold'
+> includes however, though it does choose assembly instructions carefully.
+> 
+> Rewrite this piece of assembly in plain C then, using corresponding C
+> language operations, making GCC produce the same assembly instructions,
+> possibly shuffled, in the general case and sometimes actually fewer of
+> them where an input is constant, because the compiler does not have to
+> reload it to a register (operand constraints could be adjusted for that,
+> but the plain C approach is cleaner anyway).
+> 
+> Example code size changes are as follows, for a 32-bit configuration:
+> 
+>        text       data        bss      total filename
+>     5920480    1347236     126592    7394308 vmlinux-old
+>     5920480    1347236     126592    7394308 vmlinux-now
+>     5919728    1347236     126592    7393556 vmlinux-c
+> 
+> and for a 64-bit configuration:
+> 
+>        text       data        bss      total filename
+>     6024112    1790828     225728    8040668 vmlinux-old
+>     6024128    1790828     225728    8040684 vmlinux-now
+>     6023760    1790828     225728    8040316 vmlinux-c
+> 
+> respectively, where "old" is with the commit referred reverted, "now" is
+> with no change, and "c" is with this change applied.
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> ---
+> Hi,
+> 
+>   I have visually inspected code produced and verified this change to boot
+> with TCP networking performing just fine, both with a 32-bit and a 64-bit
+> configuration.  Sadly with the little endianness only, because in the
+> course of this verification I have discovered the core card of my Malta
+> board bit the dust a few days ago, apparently in a permanent manner, and I
+> have no other big-endian MIPS system available here to try.
 
-I am with Jason on this one.
-
-In fact, I believe that any naked C-language access to mutable shared
-variables should have a comment stating why the compiler cannot mangle
-that access.
-
-							Thanx, Paul
+How about QEMU is not that a viable option for testing big/little endian 
+configurations?
+-- 
+Florian

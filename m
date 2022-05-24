@@ -2,104 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDDA5331B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5507E5331B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240766AbiEXTUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
+        id S234111AbiEXTVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiEXTUS (ORCPT
+        with ESMTP id S229586AbiEXTVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:20:18 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5637A64BC4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:20:17 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id p10so8461400wrg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:20:17 -0700 (PDT)
+        Tue, 24 May 2022 15:21:35 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B1426AE3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:21:32 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id t6so27103067wra.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:21:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=message-id:subject:from:reply-to:to:cc:date:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=Mt9M1gkKLEXdm19V1RfAKfuaLVzEHPQcfZI5XRLDbh4=;
-        b=PrABYHIthafLbtt2NStkcGUWnO5SCbjjjzTw21Pbth452TR7xqAeVPv2Y/HhOHJLdj
-         EpRuW5CpzFyZ7BX+aS9dw18F/oSjjR6J+KKWAwPrlAgHGqYFwgQo+cAvAydT1oryibWi
-         Ld6RlTGccTEhtPCnJzrHPB+sc4fQMHBT3LqhzGh9jI2HOVl+IMLxm8VD2WcFoO6SgEES
-         0kJqd+r5yZWUT5jNJ2qKkIy1nGiVtk6JllvWclX8Pj6imU5ZXSSQccIWBtCNTG0yfTwG
-         /SGpdubZZttf64U6cmG3+enqXA8CtJZf9NOSLJ8Blu7OKxo12GDTNzd43BSY5CbjMKDJ
-         EQ1A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=uNv6ls8dnKUufiUdGbGdaPRRmY56nlCsQeJp2G8NpvM=;
+        b=gNLvbkl8DL0/vaUesQvC2yj0wqHMsNaX2V5C5eX6vnKLo93SlXLl+UVLehFU351TVz
+         eipO9D3yXkW5h0R4bxeR4b7S8wI4Bt9HWyQJCUknU5b5o2xo1/6egDPDoGXy50Wp1gqL
+         LoA6dXoQOTvHoC4pxb9YIEWJZpuQARNAmQXgfG3zP2b5JKNsiyxD608QSGsMM8tnhipO
+         XQ1l4ZDGqTeC9HJI95aEHlpe4uq83tsAz7ZCjVilWF8Ia5jY1CfX9cnwD6w6YM4Fbm03
+         XRm59y4MwnOiUQPPSbcnnctS1Snwg87jqEShIHgxrUe+eoOgLIG+SN0bkzWW/F3EuumO
+         1hRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc:date
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=Mt9M1gkKLEXdm19V1RfAKfuaLVzEHPQcfZI5XRLDbh4=;
-        b=C169WRaH4TAJkDFK3ACU9wRIEk7bRnsx3UPUZ078rwe0v+kEjESJgMqHuISAqdLojU
-         1Ss79J37upHS/oRHCy7Cx2pLFb/MR8B+y7AlGWthMNcx5joc3ZDK+/L/FW0sSjHAzx3Q
-         A1ZTrA0daRnWgLBcMtLoXg7mMji80IsQmBKId9rHo4gL26cZulg/IiIcffCtOXXo/AQd
-         kOGtzDk2T50Wa+F7M2++YqAwJ2N6/0nVifq7RwdX6R1GTSHlP66sY+nfipD+UMCxkqq4
-         JajD/6gJiVX0tCcsByQpJkvt1Xkp4eZ1JweCI9uV8ozsDLKHcXUSNVE36SmqxDU3G9Rq
-         Fxng==
-X-Gm-Message-State: AOAM533N+gTeLy7KpUy0OAvJ4OPTUYAfspiBC4czAvWAYq5ANSxYQOr8
-        NXeTCLQzQ2UnHmtoce7unss=
-X-Google-Smtp-Source: ABdhPJycIU8EUWa6sk6j8pSnaz8LvsntfLNkERrRa89WZqkB7pk10YjIdZwAi5wZTQSkZIxIr2USWg==
-X-Received: by 2002:a5d:4948:0:b0:20e:58f8:f4ce with SMTP id r8-20020a5d4948000000b0020e58f8f4cemr25040149wrs.229.1653420015848;
-        Tue, 24 May 2022 12:20:15 -0700 (PDT)
-Received: from mars.fritz.box ([2a02:8070:bb0:8700:3e7c:3fff:fe20:2cae])
-        by smtp.gmail.com with ESMTPSA id m8-20020a056000024800b0020fdc90aeabsm213865wrz.82.2022.05.24.12.20.14
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=uNv6ls8dnKUufiUdGbGdaPRRmY56nlCsQeJp2G8NpvM=;
+        b=mAnSqZaBdfYmAhTcX+I2wB3ghLd6pDyrLLbxBbCb+hw1Hm8gE1+Dxuq/5ou7Z2qJq8
+         kCHhkI8P7688YOBaDPONnBzUzodo9Yg4fOnZYs5Jcns19aeXoNI66TtmvEOl/2wvVqbh
+         lQmur36dnPhGgycMdtaCCqrzjaOEeCVatqDOPhzpQdyLsnuPQb16lRdEgqvJF2Z3kY/X
+         AgIwFG74/iEP7TxnNjqLZi+GYNGw5dSMauuuIuwQWZLOuSG/wT/QfT6ohorvX5TbS87T
+         thDIvKwrLo1NTX8pbnfa5hl9+WPqgQozWYrudKi0p4gjlmJsH1qiltmwjKInNbAJhhTy
+         2YRQ==
+X-Gm-Message-State: AOAM530ZTAbWd1OJ1ThVljcmdmGT25rr/QW8n2iNDhIrbe+CN3sHg4wu
+        mrMoziFaujIdJ2KmHxqy3d0XSg==
+X-Google-Smtp-Source: ABdhPJx3mRKDU6VolRY97BlNo6uf523WeVOwvNCjBxD2+leUVArciHSXU9pGzgvvUWL0Ms61KXchfg==
+X-Received: by 2002:a05:6000:1a8c:b0:20c:bd6b:ecaf with SMTP id f12-20020a0560001a8c00b0020cbd6becafmr24165632wry.341.1653420091080;
+        Tue, 24 May 2022 12:21:31 -0700 (PDT)
+Received: from localhost ([2a01:cb19:85e6:1900:d9b6:6217:ea92:4fe0])
+        by smtp.gmail.com with ESMTPSA id e21-20020a5d5955000000b0020c5253d8d0sm274479wri.28.2022.05.24.12.21.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 12:20:15 -0700 (PDT)
-Message-ID: <48b49de3712267780916b665d3b2a3323e6f10ce.camel@googlemail.com>
-Subject: [PATCH] mtd: spi-nor: atmel: Add at25ql641 support
-From:   Christoph Fritz <chf.fritz@googlemail.com>
-Reply-To: chf.fritz@googlemail.com
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        ClaudiuBeznea <claudiu.beznea@microchip.com>,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 24 May 2022 21:20:13 +0200
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Tue, 24 May 2022 12:21:30 -0700 (PDT)
+From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-input@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH 1/2] Input: mt6779-keypad - fix hardware code
+ mapping
+In-Reply-To: <Yosex9/a7OTuC6ZK@google.com>
+References: <20220513151845.2802795-1-mkorpershoek@baylibre.com>
+ <20220513151845.2802795-2-mkorpershoek@baylibre.com>
+ <YoHf6Z4HTfh4Y+bn@google.com> <874k1qkk7n.fsf@baylibre.com>
+ <4a7bcbfb-12da-0e3f-8732-ecc53046a4ff@collabora.com>
+ <Yosex9/a7OTuC6ZK@google.com>
+Date:   Tue, 24 May 2022 21:21:28 +0200
+Message-ID: <87y1yq91on.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds AT25QL641 to the list of supported nor flashs.
+On dim., mai 22, 2022 at 22:42, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
 
-Signed-off-by: Christoph Fritz <chf.fritz@googlemail.com>
----
- drivers/mtd/spi-nor/atmel.c | 2 ++
- 1 file changed, 2 insertions(+)
+> On Mon, May 16, 2022 at 01:06:43PM +0200, AngeloGioacchino Del Regno wrote:
+>> Il 16/05/22 09:30, Mattijs Korpershoek ha scritto:
+>> > Hi Dmitry,
+>> > 
+>> > Thank you for your review,
+>> > 
+>> > On dim., mai 15, 2022 at 22:23, Dmitry Torokhov <dmitry.torokhov@gmail.com> wrote:
+>> > 
+>> > > On Fri, May 13, 2022 at 05:18:44PM +0200, Mattijs Korpershoek wrote:
+>> > > > In mt6779_keypad_irq_handler(), we
+>> > > > 1. Read a hardware code from KPD_MEM1 -> KPD_MEM5
+>> > > > 2. Use that hardware code to compute columns/rows for the standard
+>> > > >     keyboard matrix.
+>> > > > 
+>> > > > According to the (non-public) datasheet, the
+>> > > > map between the hardware code and the cols/rows is:
+>> > > > 
+>> > > >          |(0)  |(1)  |(2)
+>> > > >      ----*-----*-----*-----
+>> > > >          |     |     |
+>> > > >          |(9)  |(10) |(11)
+>> > > >      ----*-----*-----*-----
+>> > > >          |     |     |
+>> > > >          |(18) |(19) |(20)
+>> > > >      ----*-----*-----*-----
+>> > > >          |     |     |
+>> > > > 
+>> > > > This brings us to another formula:
+>> > > > -> row = code / 9;
+>> > > > -> col = code % 3;
+>> > > 
+>> > > What if there are more than 3 columns?
+>> > That's not supported, in hardware, according to the datasheet.
+>> > 
+>> > The datasheet I have states that "The interface of MT6763 only supports
+>> > 3*3 single or 2*2 double, but internal ASIC still detects keys in the
+>> > manner of 8*8 single, and 3*3 double. The registers and key codes still
+>> > follows the legacy naming".
+>> > 
+>> > Should I add another patch in this series to add that limitation in the
+>> > probe? There are no checks done in the probe() right now.
+>> > 
+>> 
+>> I've just checked a downstream kernel for MT6795 and that one looks like
+>> being fully compatible with this driver as well... and as far as downstream
+>> is concerned, apparently, mt6735, 6739, 6755, 6757, 6758, 6763, 6771, 6775
+>> all have the same register layout and the downstream driver for these is
+>> always the very same one...
+>> 
+>> ...so, I don't think that there's currently any SoC that supports more than
+>> three columns. Besides, a fast check shows that MT8195 also has the same.
+>> At this point, I'd say that assuming that there are 3 columns, nor less, not
+>> more, is just fine.
+>
+> OK, now that I looked at the datasheet I remember how it came about. The
+> programming (register) interface does not really care about how actual
+> matrix is organized, and instead has a set of bits representing keys,
+> from KEY0 to KEY77, arranged in 5 chunks of 15 bits split into 5 32-bit
+> registers. So we simply decided to use register number as row and
+> offset in the register as column when encoding our "matrix".
 
-diff --git a/drivers/mtd/spi-nor/atmel.c b/drivers/mtd/spi-nor/atmel.c
-index 656dd80a0be7..dfbc12071093 100644
---- a/drivers/mtd/spi-nor/atmel.c
-+++ b/drivers/mtd/spi-nor/atmel.c
-@@ -186,6 +186,8 @@ static const struct flash_info atmel_nor_parts[] = {
- 		.fixups = &atmel_nor_global_protection_fixups },
- 	{ "at25sl321",	INFO(0x1f4216, 0, 64 * 1024, 64)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-+	{ "at25ql641",	INFO(0x1f4317, 0, 64 * 1024, 128)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
- 	{ "at26f004",   INFO(0x1f0400, 0, 64 * 1024,  8)
- 		NO_SFDP_FLAGS(SECT_4K) },
- 	{ "at26df081a", INFO(0x1f4501, 0, 64 * 1024, 16)
--- 
-2.30.2
+That's correct and that's a good way to phrase it.
+I will add that in the commit message.
+
+>
+> This does not match the actual keypad matrix organization, so if we want
+> to change this, that's fine, but then we also need to recognize that we
+> are skipping bits 16-31, 48-63, and so on, so to get to the right key
+> number we need to do something like:
+>
+> 	key = bit_nr / 32 * 16 + bit_nr % 32;
+> 	row = key / 9;
+> 	col = key % 9;
+
+I would prefer to have the driver's matrix_keypad (build in probe()) to
+match the actual hardware. To me this seems easier to understand for
+people familiar with the hardware.
+
+I've also tested the above snippet and it matches my expectations.
+
+>
+> I looked at the datasheets I have and they talk about 8x8 single keypad
+> matrix, and 3x3 double keypad (with actual matrices either 3x3 or 2x2)
+
+Indeed. I plan to send out double keypad support for this driver since
+that's actually needed for mt8183-pumpkin as well.
+It's already in our mtk-v5.10[1] integration tree but I have not submitted
+it yet.
+I planned to send this a separate series to avoid burdening / have
+smaller chunks to review. If that was a mistake, please let me know.
+
+> but I do not actually see this map layout that Mattijs drew  documented
+
+The map layout that I draw is not directly copied from the datasheet.
+It's a "translation" of the following table:
+
+| hardware key code | col0 | col1 | col2|
+| ----------------- | -----| ---- | --- |
+| row0              | 0    | 1    | 2   |
+| row1              | 9    | 10   | 11  |
+| row2              | 18   | 19   | 20  |
+
+It seems that caused more confusion than actual useful information,
+sorry about that.
+
+> anywhere though...  I also wonder if there are already existing DTSes in
+> the wild that will be rendered invalid by these changes. I wonder if it
+> would not be be better to document the existing meaning of row and
+> column in the driver?
+
+The concern for "DTSes in the wild" that will break is a valid point.
+I'm not aware of any of those. Most vendor trees i've seen don't use
+this driver at all. I hope that will change at some point.
+
+In the end. I'd prefer to have the driver's keypad matrix match
+the actual hardware. Right now we can have a 5x32 matrix which seems
+absurd. Having at most an 8x8 is more reasonable.
+
+I'd like to send v3 with just fixing the row/column suggestion in
+mt6779_keypad_irq_handler() that Dmitry suggested.
+
+Would that work Dmitry?
 
 
+[1] https://gitlab.com/mediatek/aiot/bsp/linux/-/tree/mtk-v5.10
+
+> Thanks.
+>
+> -- 
+> Dmitry

@@ -2,134 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6C75332F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA6A533309
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241910AbiEXVXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 17:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S241944AbiEXVi0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 24 May 2022 17:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235078AbiEXVXL (ORCPT
+        with ESMTP id S241943AbiEXViU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 17:23:11 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AEA71A24
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:23:10 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 36DE91F44798
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653427388;
-        bh=+4kY50wvvK8xnfpL7EAb+VQqUenC2VyyO6SNi5GVpOE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RyqEPqC7N8HkeMwEeJ5oYO9oIji6w9zMNumE8OwDsEls/1s1SLhXRonUSz2oCItTb
-         M0uKojoWMkkwjsxx3RfpQdpHCAaqQpuE/aS1UvYGnEpZrnVNjMtVOmAcQFB51ql7qm
-         SpEs/Qo0h2pceUDpyCqUQMednqVsNGcIpwzp46J/VZQQo5Xaozn365hlqK+t2r1189
-         TmPEZi8xhie3GjGY/Ke1JHN8IjsA79V3JfEqu1xmlEBnlG9roC9WFsHTGqBqPI8y4j
-         E0gzC5mBB8Zgo3d/aQlBhSuByw9QQNt2M/ZU5gQESXtt7jLPK5ph0G5cci2p7XLzyM
-         kK/cBYHqMRGsg==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v1] kernel/reboot: Change registration order of legacy power-off handler
-Date:   Wed, 25 May 2022 00:21:18 +0300
-Message-Id: <20220524212118.425702-1-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 24 May 2022 17:38:20 -0400
+X-Greylist: delayed 914 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 May 2022 14:38:19 PDT
+Received: from sender11-of-o53.zoho.eu (sender11-of-o53.zoho.eu [31.186.226.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39647C173
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:38:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1653427341; cv=none; 
+        d=zohomail.eu; s=zohoarc; 
+        b=RDDY9bThuyuptIf+ctqCWHQ+TX2DXrCRDM475nm00NC9aIXdMxh8kCFdzYARvieGZjc1UbwDkHu8DK8hmH4cwhfBTIek/TxRuOHHOJCXECu2EaaFSpYA1bFEfZ8j+FnXWcD2lQOQlydnRAH90Mu0PmiEvPF6nqYA5DnAaB0BGks=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+        t=1653427341; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=eUsYtGvjMVMeiJbcfkFwYYtNYc+bXWXsUkZz7xnU2AE=; 
+        b=bx7m7ovII/BQ4+3ZQfx9WOO/sNeWbeEGaMPNItlzzN5+mm1hf5CxuMtuPyNSRGxnvF3tq/aoGLlFkIBdmXjNg5GQgvOEHs+lG86eyJK6XMQ76o7wSZAwKF6VoxioQRzAyRs3io4aMKhMY//taRESiiOf0UmifqLiwaQDkRe5cn8=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+        spf=pass  smtp.mailfrom=hostmaster@neglo.de;
+        dmarc=pass header.from=<bage@debian.org>
+Received: from localhost.localdomain (port-92-194-239-176.dynamic.as20676.net [92.194.239.176]) by mx.zoho.eu
+        with SMTPS id 165342733992663.21335406305718; Tue, 24 May 2022 23:22:19 +0200 (CEST)
+From:   Bastian Germann <bage@debian.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kubakici@wp.pl>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Bastian Germann <bage@debian.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>
+Message-ID: <20220524212155.16944-1-bage@debian.org>
+Subject: [PATCH v2 0/3] arm64: allwinner: a64: add bluetooth support for Pinebook
+Date:   Tue, 24 May 2022 23:21:51 +0200
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We're unconditionally registering sys-off handler for the legacy
-pm_power_off() callback, this causes problem for platforms that don't
-use power-off handlers at all and should be halted. Now reboot syscall
-assumes that there is a power-off handler installed and tries to power
-off system instead of halting it.
+Pinebook uses RTL8723CS for WiFi and bluetooth. Unfortunately RTL8723CS
+has broken BT-4.1 support, so it requires a quirk.
 
-To fix the trouble, move the handler's registration to the reboot syscall
-and check the pm_power_off() presence.
+Add a quirk, wire up 8723CS support in btrtl and enable bluetooth
+in Pinebook dts.
 
-Fixes: 0e2110d2e910 ("kernel/reboot: Add kernel_can_power_off()")
-Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- kernel/reboot.c | 33 +++++++++++++++++----------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+This series was sent in July 2020 by Vasily Khoruzhick.
+This is a rebase on the current tree.
+I have tested it to work on the Pinebook.
 
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index 0bdc64ecf4f6..a091145ee710 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -569,22 +569,6 @@ static int legacy_pm_power_off(struct sys_off_data *data)
- 	return NOTIFY_DONE;
- }
- 
--/*
-- * Register sys-off handlers for legacy PM callbacks. This allows legacy
-- * PM callbacks co-exist with the new sys-off API.
-- *
-- * TODO: Remove legacy handlers once all legacy PM users will be switched
-- *       to the sys-off based APIs.
-- */
--static int __init legacy_pm_init(void)
--{
--	register_sys_off_handler(SYS_OFF_MODE_POWER_OFF, SYS_OFF_PRIO_DEFAULT,
--				 legacy_pm_power_off, NULL);
--
--	return 0;
--}
--core_initcall(legacy_pm_init);
--
- static void do_kernel_power_off_prepare(void)
- {
- 	blocking_notifier_call_chain(&power_off_prep_handler_list, 0, NULL);
-@@ -646,6 +630,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
- 		void __user *, arg)
- {
- 	struct pid_namespace *pid_ns = task_active_pid_ns(current);
-+	struct sys_off_handler *sys_off = NULL;
- 	char buffer[256];
- 	int ret = 0;
- 
-@@ -670,6 +655,21 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * Register sys-off handlers for legacy PM callback. This allows
-+	 * legacy PM callbacks temporary co-exist with the new sys-off API.
-+	 *
-+	 * TODO: Remove legacy handlers once all legacy PM users will be
-+	 *       switched to the sys-off based APIs.
-+	 */
-+	if (pm_power_off) {
-+		sys_off = register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-+						   SYS_OFF_PRIO_DEFAULT,
-+						   legacy_pm_power_off, NULL);
-+		if (IS_ERR(sys_off))
-+			return PTR_ERR(sys_off);
-+	}
-+
- 	/* Instead of trying to make the power_off code look like
- 	 * halt when pm_power_off is not set do it the easy way.
- 	 */
-@@ -727,6 +727,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
- 		break;
- 	}
- 	mutex_unlock(&system_transition_mutex);
-+	unregister_sys_off_handler(sys_off);
- 	return ret;
- }
- 
+Changelog:
+v2:
+   * Rebase
+   * Add uart-has-rtscts to device tree as requested by reviewer
+
+Vasily Khoruzhick (3):
+  Bluetooth: Add new quirk for broken local ext features max_page
+  Bluetooth: btrtl: add support for the RTL8723CS
+  arm64: allwinner: a64: enable Bluetooth On Pinebook
+
+ .../dts/allwinner/sun50i-a64-pinebook.dts     |  13 ++
+ drivers/bluetooth/btrtl.c                     | 120 +++++++++++++++++-
+ drivers/bluetooth/btrtl.h                     |   5 +
+ drivers/bluetooth/hci_h5.c                    |   4 +
+ include/net/bluetooth/hci.h                   |   7 +
+ net/bluetooth/hci_event.c                     |   4 +-
+ 6 files changed, 148 insertions(+), 5 deletions(-)
+
 -- 
-2.35.3
+2.36.1
+
 

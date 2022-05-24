@@ -2,78 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C8B5323A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE255323AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234443AbiEXHH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S234466AbiEXHIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiEXHH0 (ORCPT
+        with ESMTP id S234453AbiEXHIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:07:26 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4AF5DBCB;
-        Tue, 24 May 2022 00:07:22 -0700 (PDT)
+        Tue, 24 May 2022 03:08:37 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229EB84A2D
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:08:36 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 1so6450805ljh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:08:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653376042; x=1684912042;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HIi9OrWvRfCZVad63wOQaigEoLSzdp+sMi9p6BFpKZk=;
-  b=IEpRaBa5Y6bzlh++8BtLuS+UO1kRhp6fMC6xwZFuHfJQ59VPgEUu++TB
-   1RXA9wPYsj2x4l5cCBo4FFL/dlwyT/idA3ybd9X5E+Ikh6DFoWn/EVZX9
-   2T/N6ReEn70TwVENhZ8U5RNlNBCi3rTUsRlGTjYQt/b8oFZpSZsSi6JMW
-   0=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 24 May 2022 00:07:22 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 00:07:21 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 24 May 2022 00:07:20 -0700
-Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 24 May
- 2022 00:07:16 -0700
-Message-ID: <f162a07b-bf45-431e-7f16-d314d7d466b4@quicinc.com>
-Date:   Tue, 24 May 2022 15:07:13 +0800
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sZ0SEJMDewbb4cdbPD0390E8YQ7MceyC5EWnHO5cujc=;
+        b=KXuQy/4sTDlEX2yWV3xfM7vPhghHFjvNnRWVTd4Xr6M/ZI7j/ZA37N21TdNtKJP6i3
+         PaAokYnIvCy8XYCFz30GrUikPXizKG0WHINqTyBCXGZI5xGPMtbc2sVrovtxTNIyOt20
+         yZQ81+OefVWaBbcCIc+XC3E9EpJ5o7Y5H084SqXPpu+IgCC+pWbaKh9RhluM2/AFSuFe
+         XZyLo9quD1MG2OqAk+jE8AK8SFbdcCUAtp0FaDkFclSQaRKRwysJtWdIcBgPj/Dldx6e
+         BJBjtXLlaRENiw4whox1d/zHPkq8oHEYmf+nFVSQUddVmUN307OfK7tYRcj1/kVrYNik
+         fJog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sZ0SEJMDewbb4cdbPD0390E8YQ7MceyC5EWnHO5cujc=;
+        b=Xg0Z5P2lB8HO7mdfypayuCkJIek1x6kvWXmyFex4QkHfvhK/wYae2eel39v8KP8dgR
+         nvPtPZswKH5GClP5Z0v8IZmUp8Auf9DuU/p37FkUi3QHSvk02WVz/BKeJ8ZQz46gZV9+
+         9ak5BNBv3wxY0gsXNMmi1XijvNGAvbPca0gE/w6KnNB8OVrcpS+PL67w1k7lXF3LR0pD
+         UunGupjEMgxPmsC9BKvEmOSeeyH8pDsNI+kwmz3DOCfptMwuep1KJrXf0SAztrCr/xp/
+         5BZCXUVrwG8IfQPyPMMB2eo7/iglB51qNMzGs0Fiz33/PkfUNnIUJP7HK7OZ+um3rxsa
+         lPEA==
+X-Gm-Message-State: AOAM532j5g+nyOhJ557HujLvR0P+x++ELoLbAkF4HpJ5HiiMo4iOZPqG
+        e4mx/AynD0MEr4gwIoLF7sJuOw==
+X-Google-Smtp-Source: ABdhPJwapjjxbwWshe3MtGo8eVeVq/7+DMcCfW6rPQEyrJ26Q1nW9d4OMJxhU/vduSauiMdRVL9UPQ==
+X-Received: by 2002:a2e:88d5:0:b0:253:ea46:b00 with SMTP id a21-20020a2e88d5000000b00253ea460b00mr5407663ljk.399.1653376114467;
+        Tue, 24 May 2022 00:08:34 -0700 (PDT)
+Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id e12-20020a2e8ecc000000b0024f3d1daebdsm2237655ljl.69.2022.05.24.00.08.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 00:08:33 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dan Murphy <dmurphy@ti.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kyle Swenson <kyle.swenson@est.tech>
+Subject: [PATCH v2 1/2] dt-bindings: leds: lp50xx: correct reg/unit addresses in example
+Date:   Tue, 24 May 2022 09:08:14 +0200
+Message-Id: <20220524070815.42997-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v7 04/10] coresight-tpdm: Add DSB dataset support
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>
-CC:     Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220509133947.20987-1-quic_jinlmao@quicinc.com>
- <20220509133947.20987-5-quic_jinlmao@quicinc.com>
- <00c30f02-de4e-6bd1-f220-00ae114ef91f@arm.com>
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-In-Reply-To: <00c30f02-de4e-6bd1-f220-00ae114ef91f@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,166 +74,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
+The multi-led node defined address/size cells, so it intended to have
+children with unit addresses.
 
-On 5/23/2022 5:11 PM, Suzuki K Poulose wrote:
-> Hi
->
-> On 09/05/2022 14:39, Mao Jinlong wrote:
->> TPDM serves as data collection component for various dataset types.
->> DSB(Discrete Single Bit) is one of the dataset types. DSB subunit
->> can be enabled for data collection by writing 1 to the first bit of
->> DSB_CR register. This change is to add enable/disable function for
->> DSB dataset by writing DSB_CR register.
->
-> The patch looks good to me, except for some minor comment below.
->
->>
->> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
->> ---
->>   drivers/hwtracing/coresight/coresight-tpdm.c | 58 ++++++++++++++++++++
->>   drivers/hwtracing/coresight/coresight-tpdm.h | 23 ++++++++
->>   2 files changed, 81 insertions(+)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->> b/drivers/hwtracing/coresight/coresight-tpdm.c
->> index 6a4e2a35053d..70df888ac565 100644
->> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->> @@ -20,7 +20,28 @@
->>     DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
->>   +static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->> +{
->> +    u32 val;
->> +
->> +    /* Set the enable bit of DSB control register to 1 */
->> +    val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
->> +    val |= TPDM_DSB_CR_ENA;
->> +    writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
->> +}
->> +
->>   /* TPDM enable operations */
->> +static void _tpdm_enable(struct tpdm_drvdata *drvdata)
->> +{
->> +    CS_UNLOCK(drvdata->base);
->> +
->> +    /* Check if DSB datasets is present for TPDM. */
->> +    if (drvdata->datasets & BIT(TPDM_DS_DSB))
->> +        tpdm_enable_dsb(drvdata);
->> +
->> +    CS_LOCK(drvdata->base);
->> +}
->> +
->>   static int tpdm_enable(struct coresight_device *csdev,
->>                  struct perf_event *event, u32 mode)
->>   {
->> @@ -32,6 +53,7 @@ static int tpdm_enable(struct coresight_device *csdev,
->>           return -EBUSY;
->>       }
->>   +    _tpdm_enable(drvdata);
->>       drvdata->enable = true;
->>       mutex_unlock(&drvdata->lock);
->>   @@ -39,7 +61,29 @@ static int tpdm_enable(struct coresight_device 
->> *csdev,
->>       return 0;
->>   }
->>   +static void tpdm_disable_dsb(struct tpdm_drvdata *drvdata)
->> +{
->> +    u32 val;
->> +
->> +    /* Set the enable bit of DSB control register to 0 */
->> +    val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
->> +    val &= ~TPDM_DSB_CR_ENA;
->> +    writel_relaxed(val, drvdata->base + TPDM_DSB_CR);
->> +}
->> +
->>   /* TPDM disable operations */
->> +static void _tpdm_disable(struct tpdm_drvdata *drvdata)
->> +{
->> +    CS_UNLOCK(drvdata->base);
->> +
->> +    /* Check if DSB datasets is present for TPDM. */
->> +    if (drvdata->datasets & BIT(TPDM_DS_DSB))
->> +        tpdm_disable_dsb(drvdata);
->> +
->> +    CS_LOCK(drvdata->base);
->> +
->
-> nit: extra new line.
-I will remove it.
->> +}
->> +
->>   static void tpdm_disable(struct coresight_device *csdev,
->>                struct perf_event *event)
->>   {
->> @@ -51,6 +95,7 @@ static void tpdm_disable(struct coresight_device 
->> *csdev,
->>           return;
->>       }
->>   +    _tpdm_disable(drvdata);
->>       drvdata->enable = false;
->>       mutex_unlock(&drvdata->lock);
->>   @@ -66,6 +111,18 @@ static const struct coresight_ops tpdm_cs_ops = {
->>       .source_ops    = &tpdm_source_ops,
->>   };
->>   +static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
->> +{
->> +    int i;
->> +    u32 pidr;
->> +
->> +    CS_UNLOCK(drvdata->base);
->> +    /*  Get the datasets present on the TPDM. */
->> +    pidr = readl_relaxed(drvdata->base + CORESIGHT_PERIPHIDR0);
->> +    drvdata->datasets |= pidr & GENMASK(TPDM_DATASETS - 1, 0);
->> +    CS_LOCK(drvdata->base);
->> +}
->> +
->>   static int tpdm_probe(struct amba_device *adev, const struct 
->> amba_id *id)
->>   {
->>       struct device *dev = &adev->dev;
->> @@ -104,6 +161,7 @@ static int tpdm_probe(struct amba_device *adev, 
->> const struct amba_id *id)
->>       if (IS_ERR(drvdata->csdev))
->>           return PTR_ERR(drvdata->csdev);
->>   +    tpdm_init_default_data(drvdata);
->>       /* Decrease pm refcount when probe is done.*/
->>       pm_runtime_put(&adev->dev);
->>   diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h 
->> b/drivers/hwtracing/coresight/coresight-tpdm.h
->> index 94a7748a5426..f95aaad9c653 100644
->> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
->> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
->> @@ -6,6 +6,27 @@
->>   #ifndef _CORESIGHT_CORESIGHT_TPDM_H
->>   #define _CORESIGHT_CORESIGHT_TPDM_H
->>   +/* The max number of the datasets that TPDM supports */
->> +#define TPDM_DATASETS       7
->> +
->> +/* DSB Subunit Registers */
->> +#define TPDM_DSB_CR        (0x780)
->> +/* Enable bit for DSB subunit */
->> +#define TPDM_DSB_CR_ENA        BIT(0)
->> +
->> +/**
->> + * This enum is for PERIPHIDR0 register of TPDM.
->> + * The fields [6:0] of PERIPHIDR0 are used to determine what
->> + * interfaces and subunits are present on a given TPDM.
->> + *
->> + * PERIPHIDR0[0] : Fix to 1 if ImplDef subunit present, else 0
->> + * PERIPHIDR0[1] : Fix to 1 if DSB subunit present, else 0
->> + */
->> +enum tpdm_dataset {
->> +    TPDM_DS_IMPLDEF,
->> +    TPDM_DS_DSB,
->> +};
->
-> Please could we name this explicitly to indicate the register field 
-> they appear in ? e.g,
->
-> #define TPDM_PIDR0_DS_IMPDEF    BIT(0)
-> #define    TPDM_PIDR0_DS_DSB    BIT(1)
-I will check and update.
->
-> Suzuki
+The second multi-led's reg property defined three LED indexes within one
+reg item, which is not correct - these are three separate items.
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+Changes since v1:
+1. Correct multi-led unit address as well (Rob).
+
+Cc: Kyle Swenson <kyle.swenson@est.tech>
+---
+ .../devicetree/bindings/leds/leds-lp50xx.yaml | 24 ++++++++++++-------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
+index f12fe5b53f30..29ce0cb7d449 100644
+--- a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
+@@ -99,35 +99,41 @@ examples:
+                color = <LED_COLOR_ID_RGB>;
+                function = LED_FUNCTION_CHARGING;
+ 
+-               led-0 {
++               led@0 {
++                   reg = <0x0>;
+                    color = <LED_COLOR_ID_RED>;
+                };
+ 
+-               led-1 {
++               led@1 {
++                   reg = <0x1>;
+                    color = <LED_COLOR_ID_GREEN>;
+                };
+ 
+-               led-2 {
++               led@2 {
++                   reg = <0x2>;
+                    color = <LED_COLOR_ID_BLUE>;
+                };
+           };
+ 
+-          multi-led@2 {
++          multi-led@3 {
+             #address-cells = <1>;
+-            #size-cells = <2>;
+-            reg = <0x2 0x3 0x5>;
++            #size-cells = <0>;
++            reg = <0x3>, <0x4>, <0x5>;
+             color = <LED_COLOR_ID_RGB>;
+             function = LED_FUNCTION_STANDBY;
+ 
+-            led-6 {
++            led@3 {
++              reg = <0x3>;
+               color = <LED_COLOR_ID_RED>;
+             };
+ 
+-            led-7 {
++            led@4 {
++              reg = <0x4>;
+               color = <LED_COLOR_ID_GREEN>;
+             };
+ 
+-            led-8 {
++            led@5 {
++              reg = <0x5>;
+               color = <LED_COLOR_ID_BLUE>;
+             };
+          };
+-- 
+2.34.1
+

@@ -2,71 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318AC53314A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37B6533153
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240755AbiEXTGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S240874AbiEXTHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240966AbiEXTGQ (ORCPT
+        with ESMTP id S240924AbiEXTHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:06:16 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2321EBC83
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:06:15 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id a38so14203457pgl.9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=9iK1Y/xvkraMUDUhvCrqdJBBlhbpRh8+1syBMwtJ3ms=;
-        b=jjcIPpFhWhkWqmKA74ZUjcTZPVuqn+/WecT0fu0v8fD45EL2KnifCnV3+oSGKr/6tG
-         OLcuCPPQI70JIW3Q79v4jPYvIlWji8SugJwfQgHjIrmVqhWNp2NxhO0NpN0min+yGIPj
-         tkC50LHhJnn0iZrarDw3vesTHvhMlRQfzPDEp2pxwSUyRwwzJRqD9Valq4Y4LyDgWUGe
-         +g/diqOPEkCka+s/C0GR7exGaNQxnG7oZu0iMbVAvqueAWG/Y6C7DCx0taknbo57xp3d
-         QpC7lbl5YFUjQ0JlPNKXT/9GBKGdx7gdYO5M6bwuBSJ+lU651fTRWf6DHtQv42DZwVmR
-         F2HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=9iK1Y/xvkraMUDUhvCrqdJBBlhbpRh8+1syBMwtJ3ms=;
-        b=aY/iNgJfO0gL8XlcKnoyERVqJ7TuCClrtfR8AtRrb5W5Qr0QE7dnZsIt+hMunxs1mg
-         wcMQrAXGcTeoH+GbxlfRq9nrgb7B8Ts6xywbZPtsKGwTqDGD6r9ugiSbV/1S73iid1dO
-         9+K1ScshR1cjkH957SdqbMvdIllQcb9L8/4LOpRyUSbhBXFiRNjiC1A6vPDGY/ZHL7K4
-         O4YKTJ2W+t646JESC3qCkgBwglYeErfssY0qEwzhWk9zTn1pmDh1dK9OZd7DA7gFYJWU
-         MseQNYAyWQtRoaYgZ4mDABPJPDgzY/yl5lz0rKqrp7Rq9nscHGpi6PEAD9acWYmh5fs8
-         wxpQ==
-X-Gm-Message-State: AOAM532w/1reoUrbiffYUFdtLLNto/7yjCI6Bdta4unEZgjosvmx+jJQ
-        LakPP74+gnSOxvVtrslzGQqi1Q==
-X-Google-Smtp-Source: ABdhPJzmeh8RWIGak6xk08iqrJXPyqCEog91d8uB5qCyKw21A2cc3mzzZFfiJdtDcsjswaxxOzl5Gw==
-X-Received: by 2002:a63:f158:0:b0:3db:8563:e8f5 with SMTP id o24-20020a63f158000000b003db8563e8f5mr25801523pgk.191.1653419174346;
-        Tue, 24 May 2022 12:06:14 -0700 (PDT)
-Received: from google.com (249.189.233.35.bc.googleusercontent.com. [35.233.189.249])
-        by smtp.gmail.com with ESMTPSA id u14-20020a62d44e000000b0050dc7628153sm9682826pfl.45.2022.05.24.12.06.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 12:06:13 -0700 (PDT)
-Date:   Tue, 24 May 2022 19:06:10 +0000
-From:   William McVicker <willmcvicker@google.com>
-To:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Bug when mapping designware PCIe MSI msg
-Message-ID: <Yo0soniFborDl7+C@google.com>
+        Tue, 24 May 2022 15:07:08 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F08F24F21;
+        Tue, 24 May 2022 12:06:58 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OIKlhL032304;
+        Tue, 24 May 2022 19:06:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : from : to : cc : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=/ue2Poc0hILLV7gtJGwQlryK+rzWjYj8WhQTasPSWSM=;
+ b=By9KAOmMy1AENiNfjW5u/RLLWS0NiO3voDsYf9omiM5V9l54ANArKdeb1Kez40M3FCjV
+ C9Sw9Gs2nx4dHyinI36JCOj1rgE02MptYVFG8OtzUkGf9NHJIrf4qLJOHDpYxrL6Nkn5
+ PZtN6GBBujBM+kWCoIU6FC4ZoYmUKMez2bRRzcmt6WbrmYzcOwe1rK/KAOGKfWEf/Ya6
+ oMl/kQcV0n/PXt5CNNlyLt1SjnJnO3NSqz1hZdys0kNoPG/Ew3Ac0NFeDq/VLMZuSC2R
+ F/FO3zkddxTc5Z9f5NLur9VswEf+qPYY0o+CikLMTi9HYvLvgvO3wKE3OIgiwUYl8G2K ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g94jf0taq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 19:06:55 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OIxNWm015551;
+        Tue, 24 May 2022 19:06:55 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g94jf0taa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 19:06:55 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OJ3BZe027630;
+        Tue, 24 May 2022 19:06:54 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma05wdc.us.ibm.com with ESMTP id 3g93vb8kms-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 19:06:54 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OJ6rK140370546
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 May 2022 19:06:53 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 08B736A04F;
+        Tue, 24 May 2022 19:06:53 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1ED86A04D;
+        Tue, 24 May 2022 19:06:50 +0000 (GMT)
+Received: from [9.163.3.233] (unknown [9.163.3.233])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 24 May 2022 19:06:50 +0000 (GMT)
+Message-ID: <59746b70-de0e-35ba-98e7-b30aed2c959f@linux.ibm.com>
+Date:   Tue, 24 May 2022 15:06:50 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 00/22] KVM: s390: enable zPCI for interpretive
+ execution
+Content-Language: en-US
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220524185907.140285-1-mjrosato@linux.ibm.com>
+In-Reply-To: <20220524185907.140285-1-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CdL2-EbQyPxa3yzWeIEN01TdyFEKb3DE
+X-Proofpoint-GUID: QCs9xGvigEgT5HLJTZmptPIDfgLAPqhv
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-24_09,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=872
+ priorityscore=1501 impostorscore=0 spamscore=0 suspectscore=0 adultscore=0
+ clxscore=1015 bulkscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2205240094
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,65 +104,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On 5/24/22 2:58 PM, Matthew Rosato wrote:
+> Note: this version of the series is built on top of vfio -next:
+> https://github.com/awilliam/linux-vfio/tree/next
+> As it now depends on 'vfio: remove VFIO_GROUP_NOTIFY_SET_KVM' and its
+> prereqs.
+> Additionally, if you care to try testing this series on top of vfio -next
+> you'll also want to pick up this fix:
+> https://lore.kernel.org/kvm/20220519182929.581898-1-mjrosato@linux.ibm.com/
+> 
+> ---
+> 
+> Enable interpretive execution of zPCI instructions + adapter interruption
+> forwarding for s390x KVM vfio-pci.  This is done by triggering a routine
+> when the VFIO group is associated with the KVM guest, transmitting to
+> firmware a special token (GISA designation) to enable that specific guest
+> for interpretive execution on that zPCI device.  Load/store interpreation
+> enablement is then controlled by userspace (based upon whether or not a
+> SHM bit is placed in the virtual function handle).  Adapter Event
+> Notification interpretation is controlled from userspace via a new KVM
+> ioctl.
+> 
+> By allowing intepretation of zPCI instructions and firmware delivery of
+> interrupts to guests, we can reduce the frequency of guest SIE exits for
+> zPCI.
+> 
+>  From the perspective of guest configuration, you passthrough zPCI devices
+> in the same manner as before, with intepretation support being used by
+> default if available in kernel+qemu.
+> 
+> Will follow up with a link an updated QEMU series.
+> 
 
-I've been debugging a PCIe dma mapping issue and I believe I have tracked the
-bug down to how the designware PCIe host driver is mapping the MSI msg. In
-commit 07940c369a6b ("PCI: dwc: Fix MSI page leakage in suspend/resume") [1],
-the PCIe driver was re-worked to drop allocating a page for the MSI msg in
-favor of using an address from the driver data. Then in commit 660c486590aa
-("PCI: dwc: Set 32-bit DMA mask for MSI target address allocation") [2],
-a 32-bit DMA mask was enforced for this MSI msg address in order to support
-both 32-bit and 64-bit MSI address capable hardware. Both of these changes
-together expose a bug on hardware that supports an MSI address greather than
-32-bits. For example, the Pixel 6 supports a 36-bit MSI address and therefore
-calls:
+QEMU v6 series:
+https://lore.kernel.org/kvm/20220524190305.140717-1-mjrosato@linux.ibm.com/
 
-  dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(36));
-
-Before [2], this was fine because getting an address for the driver data that
-was less than or equal to 36-bits was common enough to not hit this issue, but
-after [2] I started hitting the below DMA buffer overflow when the driver data
-address was greater than 32-bits:
-
-  exynos-pcie-rc 14520000.pcie: DMA addr 0x000000088536d908+2 overflow (mask ffffffff, bus limit 0).
-          : WARNING: CPU: 3 PID: 8 at kernel/dma/direct.h:99 dma_map_page_attrs+0x254/0x278
-  ...
-  Hardware name: Oriole DVT (DT)
-  Workqueue: events_unbound deferred_probe_work_func
-  pstate  : 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-  pc      : dma_map_page_attrs+0x254/0x278
-  lr      : dma_map_page_attrs+0x250/0x278
-  sp      : ffffffc0080938b0
-  ...
-  Call trace:
-          : dma_map_page_attrs+0x254/0x278
-          : dma_map_single_attrs+0xdc/0x10c
-          : dw_pcie_host_init+0x4a0/0x78c
-          : exynos_pcie_rc_add_port+0x7c/0x104 [pcie_exynos_gs]
-          : exynos_pcie_rc_probe+0x4c8/0x6ec [pcie_exynos_gs]
-          : platform_probe+0x80/0x200
-          : really_probe+0x1cc/0x458
-          : __driver_probe_device+0x204/0x260
-          : driver_probe_device+0x44/0x4b0
-          : __device_attach_driver+0x200/0x308
-          : __device_attach+0x20c/0x330
-
-
-The underlying issue is that using the driver data (which can be a 64-bit
-address) for the MSI msg mapping causes a DMA_MAPPING_ERROR when the dma mask
-is less than 64-bits. I'm not familiar enough with the dma mapping code to
-suggest a full-proof solution to solve this; however, I don't think reverting
-[1] is a great solution since it addresses a valid issue and reverting [2]
-doesn't actually solve the bug since the driver data address isn't restricted
-by the dma mask.
-
-I hope that helps explain the issue. Please let me know your thoughts on how we
-should address this.
-
-Thanks,
-Will
-
-
-[1] https://lore.kernel.org/all/20201009155505.5a580ef5@xhacker.debian/
-[2] https://lore.kernel.org/r/20201117165312.25847-1-vidyas@nvidia.com

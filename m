@@ -2,132 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C345331CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387AF5331CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240955AbiEXTgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        id S240957AbiEXThT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240969AbiEXTf7 (ORCPT
+        with ESMTP id S230428AbiEXThR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:35:59 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45DE71D81
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:35:57 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso3128667pjg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:35:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dOQqJipjB7XvkB7vBfeZvym+R0VGemcRWEp42KC5/do=;
-        b=Wq7LLslOzGJL9kfe/q0uEybu7QvXvdl07qEMXiycgbsX9H9w3un7Yb2KlWsbaNeKvx
-         GYPng7tBLKJcK6DC6kN1Z8dZFR1A3GlGf3LnEBIErRAyJNsYJ6HhqvP25x5Nh+/rj8WK
-         L2hGpCfJG6hzW74j8YeR5giyHeZZygYiKthnGtFU4QQtOSLhRgFeonMSEvR0mvuF26DW
-         dfyQnKd69M1XN6ZumpMXiMbK9jzwTgDvwJf6towsdC39T3bHQ1LJURjpkbakrTLf2yie
-         yxmtFWuKf5UvAewl3hRiF43th2wRFmIk883p00PDm7W+wgNXUgu4maXbeIOQfdpV1P70
-         UZoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dOQqJipjB7XvkB7vBfeZvym+R0VGemcRWEp42KC5/do=;
-        b=ZdkNKAU6uUmPk/fDK/hOjYzSwY7icVfYlH3CnhkliaqPPkuKl59vJd9WuRkoP/qt1s
-         X37i1XeTPERbvULNK+Yf5DDPTkAOhk3MCnHhTZpHxIXKU+rjhrLxwTCvWscbP6C49pVV
-         1T8aZGWZz8tNAv7JXVKZKUbFxR1dT1ykvkyYd1HB6KpBQt+hcCf8i1GVVY77dTm/TfHx
-         yB0qq0nLv3w+AuENu1+YgOobsCYtc9jY7Kh3sm52XB1D16Qffz992q/BLZicrvrLBweP
-         rGx3MRVhtWmNTm5Tn62GItls2cAe1+AtArzI9shBo55LMQizREzpT8BJd6Zlx3M7Ws0A
-         vpvw==
-X-Gm-Message-State: AOAM533ubW0dcttUg/MUJS3xrSugaiXXTUoje1IsSqG4m9SwPUITDKZN
-        H+2iD6zRejGpPBO0vrN3Ye10sIJ0JAiSag==
-X-Google-Smtp-Source: ABdhPJyH1Zkdu32w5va1hZu7bLMZ9V1k6vip5S6YIxb0m8wD8/tNl4g58vAsT46JwafkST2fDpJmig==
-X-Received: by 2002:a17:90b:3284:b0:1e0:97e7:2e4d with SMTP id ks4-20020a17090b328400b001e097e72e4dmr1657886pjb.187.1653420956940;
-        Tue, 24 May 2022 12:35:56 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id w15-20020a63b74f000000b003f26c2f583asm6842111pgt.61.2022.05.24.12.35.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 12:35:56 -0700 (PDT)
-Date:   Tue, 24 May 2022 19:35:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>
-Cc:     akpm@linux-foundation.org, naoya.horiguchi@nec.com, mst@redhat.com,
-        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        pbonzini@redhat.com, peterx@redhat.com, qemu-devel@nongnu.org
-Subject: Re: [PATCH 3/3] virtio_balloon: Introduce memory recover
-Message-ID: <Yo0zmP28FqpivlxF@google.com>
-References: <20220520070648.1794132-1-pizhenwei@bytedance.com>
- <20220520070648.1794132-4-pizhenwei@bytedance.com>
+        Tue, 24 May 2022 15:37:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF14D5EBEE
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653421035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DpubzQBBkhnbnZFsTGP/aVX/4nL+Rlw3c4n1v94PkHU=;
+        b=VPN4115UxN/8ZLOM51NplDY4x76qQBOCGRWXFSJM1KVpZqNpC23u+3NRr2OEpigIHyCvke
+        mMKM+LQMyKMQcx1qsUUwrn9FNAVckps0Pq/yt7DEatUXEreCDV9IO4Yih9v2BhaSA3HLHF
+        7KFTzsbT0iDAYUzDR+uP8BsxPqugUjo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-574-atUNXk-aPfK1jGGTnfffzg-1; Tue, 24 May 2022 15:37:13 -0400
+X-MC-Unique: atUNXk-aPfK1jGGTnfffzg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55CAC85A5BC;
+        Tue, 24 May 2022 19:37:13 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.33.52])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1A47B2026D64;
+        Tue, 24 May 2022 19:37:13 +0000 (UTC)
+Date:   Tue, 24 May 2022 15:37:11 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] cpuhp: make target_store() a nop when target == state
+Message-ID: <Yo0z56Fqgj3gqYlG@lorien.usersys.redhat.com>
+References: <20220523144728.32414-1-pauld@redhat.com>
+ <xhsmh35gzj77s.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220520070648.1794132-4-pizhenwei@bytedance.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <xhsmh35gzj77s.mognet@vschneid.remote.csb>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 20, 2022, zhenwei pi wrote:
-> @@ -59,6 +60,12 @@ enum virtio_balloon_config_read {
->  	VIRTIO_BALLOON_CONFIG_READ_CMD_ID = 0,
->  };
->  
-> +/* the request body to commucate with host side */
-> +struct __virtio_balloon_recover {
-> +	struct virtio_balloon_recover vbr;
-> +	__virtio32 pfns[VIRTIO_BALLOON_PAGES_PER_PAGE];
+Hi Valentin,
 
-I assume this is copied from virtio_balloon.pfns, which also uses __virtio32, but
-isn't that horribly broken?  PFNs are 'unsigned long', i.e. 64 bits on 64-bit kernels.
-x86-64 at least most definitely generates 64-bit PFNs.  Unless there's magic I'm
-missing, page_to_balloon_pfn() will truncate PFNs and feed the host bad info.
+On Tue, May 24, 2022 at 04:11:51PM +0100 Valentin Schneider wrote:
+> On 23/05/22 10:47, Phil Auld wrote:
+> > writing the current state back into hotplug/target calls cpu_down()
+> > which will set cpu dying even when it isn't and then nothing will
+> > ever clear it. A stress test that reads values and writes them back
+> > for all cpu device files in sysfs will trigger the BUG() in
+> > select_fallback_rq once all cpus are marked as dying.
+> >
+> > kernel/cpu.c::target_store()
+> > 	...
+> >         if (st->state < target)
+> >                 ret = cpu_up(dev->id, target);
+> >         else
+> >                 ret = cpu_down(dev->id, target);
+> >
+> > cpu_down() -> cpu_set_state()
+> > 	 bool bringup = st->state < target;
+> > 	 ...
+> > 	 if (cpu_dying(cpu) != !bringup)
+> > 		set_cpu_dying(cpu, !bringup);
+> >
+> > Make this safe by catching the case where target == state
+> > and bailing early.
+> >
+> > Signed-off-by: Phil Auld <pauld@redhat.com>
+> > ---
+> >
+> > Yeah, I know... don't do that. But it's still messy.
+> >
+> > !< != > 
+> >
+> >  kernel/cpu.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/kernel/cpu.c b/kernel/cpu.c
+> > index d0a9aa0b42e8..8a71b1149c60 100644
+> > --- a/kernel/cpu.c
+> > +++ b/kernel/cpu.c
+> > @@ -2302,6 +2302,9 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
+> >  		return -EINVAL;
+> >  #endif
+> >  
+> > +	if (target == st->state)
+> > +		return count;
+> > +
+> 
+> The current checks are against static boundaries, this has to compare
+> against st->state - AFAICT this could race with another hotplug operation
+> to the same CPU, e.g.
+> 
+>   CPU42.cpuhp_state
+>     ->state  == CPUHP_AP_SCHED_STARTING
+>     ->target == CPUHP_ONLINE
+> 
+>   <write CPUHP_ONLINE via sysfs, OK because current state != CPUHP_ONLINE>
+> 
+>   CPU42.cpuhp_state == CPUHP_ONLINE
+>   
+>   <issues ensue>
+> 
+> 
+> _cpu_up() has:
+> 
+> 	/*
+> 	 * The caller of cpu_up() might have raced with another
+> 	 * caller. Nothing to do.
+> 	 */
+> 	if (st->state >= target)
+> 		goto out;
+> 
+> Looks like we want an equivalent in _cpu_down(), what do you think?
+>
 
-> @@ -494,6 +511,198 @@ static void update_balloon_size_func(struct work_struct *work)
->  		queue_work(system_freezable_wq, work);
->  }
->  
-> +/*
-> + * virtballoon_memory_failure - notified by memory failure, try to fix the
-> + *                              corrupted page.
-> + * The memory failure notifier is designed to call back when the kernel handled
-> + * successfully only, WARN_ON_ONCE on the unlikely condition to find out any
-> + * error(memory error handling is a best effort, not 100% coverd).
-> + */
-> +static int virtballoon_memory_failure(struct notifier_block *notifier,
-> +				      unsigned long pfn, void *parm)
-> +{
-> +	struct virtio_balloon *vb = container_of(notifier, struct virtio_balloon,
-> +						 memory_failure_nb);
-> +	struct page *page;
-> +	struct __virtio_balloon_recover *out_vbr;
-> +	struct scatterlist sg;
-> +	unsigned long flags;
-> +	int err;
-> +
-> +	page = pfn_to_online_page(pfn);
-> +	if (WARN_ON_ONCE(!page))
-> +		return NOTIFY_DONE;
-> +
-> +	if (PageHuge(page))
-> +		return NOTIFY_DONE;
-> +
-> +	if (WARN_ON_ONCE(!PageHWPoison(page)))
-> +		return NOTIFY_DONE;
-> +
-> +	if (WARN_ON_ONCE(page_count(page) != 1))
-> +		return NOTIFY_DONE;
-> +
-> +	get_page(page); /* balloon reference */
-> +
-> +	out_vbr = kzalloc(sizeof(*out_vbr), GFP_KERNEL);
-> +	if (WARN_ON_ONCE(!out_vbr))
-> +		return NOTIFY_BAD;
+I did it like this (shown below) and from my test it also works for
+this case.
 
-Not that it truly matters, but won't failure at this point leak the poisoned page?
+I could move it below the lock and goto out;  instead if you think
+that is better. It still seems better to me to stop this higher up
+because there's work being done in the out path too.  We're not
+actually doing any hot(un)plug so doing post unplug cleanup seems
+iffy.
+
+_cpu_down()
+...
+out:
+        cpus_write_unlock();
+        /*
+         * Do post unplug cleanup. This is still protected against
+         * concurrent CPU hotplug via cpu_add_remove_lock.
+         */
+        lockup_detector_cleanup();
+        arch_smt_update();
+        cpu_up_down_serialize_trainwrecks(tasks_frozen);
+	return ret;
+}
+
+----------
+
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 8a71b1149c60..e36788742d18 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1130,6 +1130,13 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen,
+ 	if (!cpu_present(cpu))
+ 		return -EINVAL;
+ 
++	/*
++	 * The caller of cpu_down() might have raced with another
++	 * caller. Nothing to do.
++	 */
++	if (st->state <= target)
++		return 0;
++
+ 	cpus_write_lock();
+ 
+ 	cpuhp_tasks_frozen = tasks_frozen;
+
+
+
+
+Cheers,
+Phil
+
+-- 
+

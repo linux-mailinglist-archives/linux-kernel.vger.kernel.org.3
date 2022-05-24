@@ -2,232 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093395328D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4625328E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236014AbiEXLXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
+        id S236578AbiEXLYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236546AbiEXLXb (ORCPT
+        with ESMTP id S230081AbiEXLYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 07:23:31 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8587B79838
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:23:29 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id o80so30340322ybg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:23:29 -0700 (PDT)
+        Tue, 24 May 2022 07:24:30 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA47779381
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:24:29 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id r6-20020a1c2b06000000b00396fee5ebc9so1193623wmr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:24:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=u4jkgddlBr3J9ubsDMtzmtFV4psU8nzYoRhT/4FQDVo=;
-        b=CxMAVJZhM5HFyDKuKe8HrCXnG/Oml/x91Z9qYGQBXxIQ1VG3Xf0RAVCdgBGTIWohQq
-         TYZcx0EyTcu+DPz9gO74MalLDMP1mN0e9OilfwnhRQP9lvvSNK21QnCcEeQTqKoJuiQ0
-         Br5BUiihNSVM0fVJ3Acjk6yTHKXFdCL12nRl99X8SOqZd88TAchqxI6d7F2o7JbUnm4U
-         4vjchNAEpjGh1DweQNIy4O0x065rL5pUYPHM4YwAZRYBfhnsR/p1MwwiW91ajj7/uik4
-         ssr6KBz/jEq3RepWcK1NwW83MsGpREPxcxr0b7dZDMrdTcptmsKCEH3/hlnJoZrkVT+2
-         knlA==
+         :cc;
+        bh=yfCYl4aV74lIhtPwwS5Hj7a7JLAdHT5HtAXAEPKuxxw=;
+        b=SkEJCBhdLlFzmsU79CLKeBLhUBGc21SllCmNz5BJw0D+GbWUAg3Zor9zFl//oWG9OQ
+         1KqWUyp7inB2ZpNmoLokYAd8tGeJKSoR6AekxiFG2LEQatcPdWNKdIJWK29PLSmaZsB5
+         JxL1fWSOpTzkKylyxE3ZuvMWFMEstvhrZYDbUuNk/rZ5Zx4zngCqCIbqcQ6YH/vuBi20
+         VIks0/oZF9dqUp065iC0043Ymy+cQlQwBdgRz00WN4dOlxYm0cxnVAM5rVfDclmsh21e
+         3fWOrYqDrjvFiqnovynEsyG8xRnUrUKu6yIGDITpsgMjPaUn6Cg+Ts3d7vsLJrCJ2tZH
+         tHfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=u4jkgddlBr3J9ubsDMtzmtFV4psU8nzYoRhT/4FQDVo=;
-        b=hnKj5/Of0BQekJ2+GmLgm5RJBnRLV4Il0d3D6QRtMV+qtABqgWcu1kKhJnOO/AWv/k
-         OECJguA1pa/7UJnLDrDs752E7cpmvgYJzQLoPIvA3kMSYC2/jHi+/oqpMNT8vTmzCxzt
-         GaTTTGrdhj/mAVFx6CAxv/De4HODrSpj5523eli7ztDfEKYMarpgvslHuxywVxC84lT3
-         m6yNkiqd05h0WmRdAyDj7rkvL/uUXN5EQWS5iGbLWlj32ybINQMlTFy88Og6t35rfFoH
-         i6GZpBgAIZspQuR15NIj67s3Cs4DaIQxuwXWvG7tloRWZ7AQ+wnfg3NBMqTXEwySvuio
-         XuZg==
-X-Gm-Message-State: AOAM530S/fOmr/9ESYwXyRp0Mv57sihjqrZr0aMr+mqRecbXexrIfRNj
-        dgrbMvuDjsb7f/erXgZSLpkS/H7RkoYvZl20tS5IqsXSxysBjA==
-X-Google-Smtp-Source: ABdhPJwU2wZ7cSYyDNwd5odPJUiqg9Us5uBOjH9/ZHsHvhL41SzoLGbf8RdvF4O9x9vy/Oc/p6M9vsRxDBiiy3XXBI4=
-X-Received: by 2002:a25:814a:0:b0:64f:f06c:cf6d with SMTP id
- j10-20020a25814a000000b0064ff06ccf6dmr7522343ybm.88.1653391408633; Tue, 24
- May 2022 04:23:28 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=yfCYl4aV74lIhtPwwS5Hj7a7JLAdHT5HtAXAEPKuxxw=;
+        b=h7PIezRhYRwbEuUe38bgD0YZEJ+7D/6pW0H4VTF8uTYVEEHWQAAiM18FEybpBm26FV
+         5czbE/W/VvNsNPVD3hQzc+/suDO82XttAO7yOVLv5J1oetsoOsNV5b+GYJVDMJzn3SrB
+         e5f8xoNWNxLACkobQ4mRrI3nSFqNqPkIYnXwW9H2GPOzqX3fn6+TgWIlJzbY6tbAlvVz
+         461NtOttWCtWuMSA8qCZ1AQfhBSXyi5D/ukexuONkgi/7ELfhMqAqYYCu/Ct3ciqQ0lm
+         qhQLjnlDP3EosWu74Emp5e4S1mmyWmYZa5qQXLMXrjKWVaQlv5ENQtToFFPVROyNNLhi
+         C64w==
+X-Gm-Message-State: AOAM532ML5Wwvh3pTIu/HOlZe1uoWjdTXZc30s0yApLx5xHh6VYGFMpU
+        TrZ89l91t2arUkVw79qrJ9jCR2HtnTJSEP0uRJIXig==
+X-Google-Smtp-Source: ABdhPJw17mFO2a4bDkcxbKfi5pHfVkge6/luoUZPssTZkTO6b1Ep89/x1yZbqkfqlaxo1Z8MUx6f2F8ncymnnSC1FM0=
+X-Received: by 2002:a05:600c:5112:b0:397:53f5:e15b with SMTP id
+ o18-20020a05600c511200b0039753f5e15bmr3292625wms.93.1653391468187; Tue, 24
+ May 2022 04:24:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523165802.500642349@linuxfoundation.org>
-In-Reply-To: <20220523165802.500642349@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 24 May 2022 16:53:17 +0530
-Message-ID: <CA+G9fYvkWXyc=b3vgN-SEBkMuWd2pj7u45CqW1tfNzvfeMj-4g@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/68] 5.4.196-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+References: <20220426185245.281182-1-atishp@rivosinc.com> <20220426185245.281182-2-atishp@rivosinc.com>
+In-Reply-To: <20220426185245.281182-2-atishp@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 24 May 2022 16:54:16 +0530
+Message-ID: <CAAhSdy2Xco9wZrQ8tFfFNkNxkOcDksvi3EySdVNFtKGxVyceYQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] RISC-V: Add SSTC extension CSR details
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 at 22:37, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Wed, Apr 27, 2022 at 12:23 AM Atish Patra <atishp@rivosinc.com> wrote:
 >
-> This is the start of the stable review cycle for the 5.4.196 release.
-> There are 68 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> This patch just introduces the required CSR fields related to the
+> SSTC extension.
 >
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+
+Looks good to me.
+
+Reviewed-by: Anup Patel <anup@brainfault.org>
+
+Regards,
+Anup
+
+> ---
+>  arch/riscv/include/asm/csr.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.196-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index e935f27b10fd..10f4e1c36908 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -227,6 +227,9 @@
+>  #define CSR_SIP                        0x144
+>  #define CSR_SATP               0x180
 >
-> thanks,
+> +#define CSR_STIMECMP           0x14D
+> +#define CSR_STIMECMPH          0x15D
+> +
+>  #define CSR_VSSTATUS           0x200
+>  #define CSR_VSIE               0x204
+>  #define CSR_VSTVEC             0x205
+> @@ -236,6 +239,8 @@
+>  #define CSR_VSTVAL             0x243
+>  #define CSR_VSIP               0x244
+>  #define CSR_VSATP              0x280
+> +#define CSR_VSTIMECMP          0x24D
+> +#define CSR_VSTIMECMPH         0x25D
 >
-> greg k-h
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.4.196-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: e9366e2c155ad1cd8fb6e1368bec57174ce80027
-* git describe: v5.4.195-69-ge9366e2c155a
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-95-69-ge9366e2c155a
-
-## Test Regressions (compared to v5.4.194-43-g71ab15716d94)
-No test regressions found.
-
-## Metric Regressions (compared to v5.4.194-43-g71ab15716d94)
-No metric regressions found.
-
-## Test Fixes (compared to v5.4.194-43-g71ab15716d94)
-No test fixes found.
-
-## Metric Fixes (compared to v5.4.194-43-g71ab15716d94)
-No metric fixes found.
-
-## Test result summary
-total: 86725, pass: 72314, fail: 836, skip: 12392, xfail: 1183
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 290 total, 290 passed, 0 failed
-* arm64: 34 total, 34 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 40 total, 40 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+>  #define CSR_HSTATUS            0x600
+>  #define CSR_HEDELEG            0x602
+> @@ -251,6 +256,8 @@
+>  #define CSR_HTINST             0x64a
+>  #define CSR_HGATP              0x680
+>  #define CSR_HGEIP              0xe12
+> +#define CSR_HENVCFG            0x60A
+> +#define CSR_HENVCFGH           0x61A
+>
+>  #define CSR_MSTATUS            0x300
+>  #define CSR_MISA               0x301
+> @@ -312,6 +319,10 @@
+>  #define IE_TIE         (_AC(0x1, UL) << RV_IRQ_TIMER)
+>  #define IE_EIE         (_AC(0x1, UL) << RV_IRQ_EXT)
+>
+> +/* ENVCFG related bits */
+> +#define HENVCFG_STCE   63
+> +#define HENVCFGH_STCE  31
+> +
+>  #ifndef __ASSEMBLY__
+>
+>  #define csr_swap(csr, val)                                     \
+> --
+> 2.25.1
+>

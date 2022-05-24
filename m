@@ -2,139 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B0A5322D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DBA532323
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbiEXGCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 02:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35512 "EHLO
+        id S234962AbiEXG1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 02:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234260AbiEXGCd (ORCPT
+        with ESMTP id S234915AbiEXG1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 02:02:33 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEC862113
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:02:31 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id c10so21709807edr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:02:31 -0700 (PDT)
+        Tue, 24 May 2022 02:27:11 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8147A70930
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:27:09 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id c22so15553025pgu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:27:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Nw23TS5XTec30rhvH0nb9YZUl+vCbv2UU1WiPCiZsMU=;
-        b=V8AqDG0hACi4K+uvmcUbHpgEMaTCH7TF5Ex6gWm7j4ZB1rwkDjGO1uMbU7iBYO/Q9e
-         CW/5NDyKW10LGRgUeNYfi/WJfqByLjwE1KyZIUtRkwEjIMixRlkwhKJ2Z4GYtLMgApap
-         eYOF0bOsnr7/l+V2qtd+5rlVirrfOm2pffEYLjyZMW7A7yTOTAmBj0X1qxKnQQCy5eWr
-         2j8TyVz3iS4ewfsOnnKasmBbLGkLEuyE3HpWeZ2KOnboHC3+QvWoKyWDVx0ByZZ/f//r
-         5JIAfdPGCsm0zvg9TNpTzkWUKvtygpV+d01vfaSuGUEej5MAdjPrl13Ck1cOkTmXBXBj
-         E6qA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ND4Wm9nToFOkSC+HCQqYbGct8fIpn1B51prLBRQfkMk=;
+        b=oNg5WAyRm2i9JIYRZEomX+IDEPBBrkEi20tO3tXOeGZ3NY2K4J++6op0FTruyXRsHp
+         Tn2A6AhiGpYzdNXhTJncn7lBvLxYyeAMag4bJkedvOxuOJGPIoXVC4z4bHfIY4JTbSmb
+         8I1/XyDu3R+NrM6yUfnTGvCuQJhG82Np7tSzAXRr7DNmwZoYczB73UpFS3KenplKbdkZ
+         RTKx0VVw2KEriD5cvTi1bzlywFqRDb0TfsghojTN1RVUa2erY+1OSHZDjj45T0uoPXc4
+         EeGTOaA+GVNLKRMsDMJ7yiTvX0+4l6ZwgaOQwGgefi/2FUZ8Loi0hMh6bCHq2gtNHTeW
+         f12g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Nw23TS5XTec30rhvH0nb9YZUl+vCbv2UU1WiPCiZsMU=;
-        b=7Bscy/ceqxtfxTtGMwBQfnhrHvl7MljgBDe3n8gVeygG5gTAa//EArUiMVWvFHAqmO
-         C06Vnzh/WF7bvKwz3Q87CbgR3k4d+UMLyinnr6bMw7oR5/8XYb+PnfSXF1Tsgb8/NUcP
-         NcKBoK1qkmzdu+EkihSAWJ/9zIwoxX7YfBkafr7blMn8bTzWTHCqbYdpdLx2qZSrTqEh
-         1RX9Kf7vcEpb0x9Y6IZrqsGbtoCttexd+EgtPDPzO5rNzkyeSeeC+MDzfi5Adr8a0jiH
-         A3/ch240f0IjbIx07F+ZEkVtLL1VxIZnNl+xwk3Q2ye9cZJXDCFUX4BMRthv/P0QtKsD
-         d4Ew==
-X-Gm-Message-State: AOAM533+DZkXyZhozRtfB3pfS+XK73BDlZgvzsLHuA7XNb/fQKZERxiX
-        ehRUVaoUvg1qZ+En9JRePTY=
-X-Google-Smtp-Source: ABdhPJxRTStMwC9RaJeh4Ph3l6z0wF+oEk4fi2gamRfVkSe+JLi+Susi1MvcvXNjaggd6Gzn5i522g==
-X-Received: by 2002:a05:6402:75a:b0:42a:bbb9:504c with SMTP id p26-20020a056402075a00b0042abbb9504cmr27522865edy.348.1653372150387;
-        Mon, 23 May 2022 23:02:30 -0700 (PDT)
-Received: from gmail.com (84-236-113-78.pool.digikabel.hu. [84.236.113.78])
-        by smtp.gmail.com with ESMTPSA id d16-20020aa7d690000000b0042617ba63c0sm9323733edr.74.2022.05.23.23.02.29
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ND4Wm9nToFOkSC+HCQqYbGct8fIpn1B51prLBRQfkMk=;
+        b=xntEhLST2yzPIaMPfNfkE4hm58RaYgfMA/Jp8sUeQtGJq/VXhfejC1AEALSXzrBw4X
+         3nqbLAz5VXJehhTmPFE5MRz+PL6kv7bpdXcLvvvbo0w1kc0DjHBsrbdqNKLidbmHMW4n
+         OGzVlBZ90bMvcGopAIslneMF/xmjgRtXQyFGwKpfFtrGCacc12LPTtDuDZSRoF53AAOr
+         9A9dC6046vCQsrvrAQ0hIUzrvLzX15B5olpN+heBiuL/or0ZBEWDhY391QmhedMP1Vee
+         24qqDgyWW3ZFYbIHUmIP8WoiRTpqgf6dwlEmW00XK5n9Z+1vbCdy6+wvfIv7y24U7BcM
+         ulXA==
+X-Gm-Message-State: AOAM531d7PAfqC5D/mXrRqL4sUqko0cvQ5wpekZlyV2Jc8bu32um+sUN
+        CwVTtIuq1ALpst2Wqlasme5+Vw==
+X-Google-Smtp-Source: ABdhPJwUCmag/6VD9SDJbs2ZEysCf53XGTtLBQbtPouBXrnO6grNU092F3BjVpB4ZnnvzGd5wzOpvA==
+X-Received: by 2002:a05:6a00:a0e:b0:4fd:fa6e:95fc with SMTP id p14-20020a056a000a0e00b004fdfa6e95fcmr27336024pfh.17.1653373629021;
+        Mon, 23 May 2022 23:27:09 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([2408:8207:18da:2310:f940:af17:c2f5:8656])
+        by smtp.gmail.com with ESMTPSA id h5-20020a170902f54500b0016168e90f2dsm6254455plf.219.2022.05.23.23.27.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 23:02:29 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 24 May 2022 08:02:27 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [GIT PULL] objtool changes for v5.19
-Message-ID: <Yox088fRrhh4grBX@gmail.com>
-References: <You3JC/BOIyEnmQj@gmail.com>
- <Yoxucp7aUrCaV9uE@gmail.com>
+        Mon, 23 May 2022 23:27:08 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        longman@redhat.com, Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v4 00/11] Use obj_cgroup APIs to charge the LRU pages
+Date:   Tue, 24 May 2022 14:05:40 +0800
+Message-Id: <20220524060551.80037-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yoxucp7aUrCaV9uE@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This version is rebased on v5.18.
 
-* Ingo Molnar <mingo@kernel.org> wrote:
+Since the following patchsets applied. All the kernel memory are charged
+with the new APIs of obj_cgroup.
 
->  34 files changed, 959 insertions(+), 684 deletions(-)
+	[v17,00/19] The new cgroup slab memory controller [1]
+	[v5,0/7] Use obj_cgroup APIs to charge kmem pages [2]
 
-Note that with your latest tree you'll get 3 new conflicts:
+But user memory allocations (LRU pages) pinning memcgs for a long time -
+it exists at a larger scale and is causing recurring problems in the real
+world: page cache doesn't get reclaimed for a long time, or is used by the
+second, third, fourth, ... instance of the same job that was restarted into
+a new cgroup every time. Unreclaimable dying cgroups pile up, waste memory,
+and make page reclaim very inefficient.
 
-  CONFLICT (content): Merge conflict in scripts/link-vmlinux.sh
-  CONFLICT (content): Merge conflict in scripts/Makefile.build
-  CONFLICT (content): Merge conflict in arch/x86/Kconfig
+We can convert LRU pages and most other raw memcg pins to the objcg direction
+to fix this problem, and then the LRU pages will not pin the memcgs.
 
-If you want to double check, you can find our resolution in tip:x86/merge:
+This patchset aims to make the LRU pages to drop the reference to memory
+cgroup by using the APIs of obj_cgroup. Finally, we can see that the number
+of the dying cgroups will not increase if we run the following test script.
 
-  a1df7cc57786 Merge branch 'objtool/core' into x86/merge, to resolve conflicts
+```bash
+#!/bin/bash
 
-At:
+dd if=/dev/zero of=temp bs=4096 count=1
+cat /proc/cgroups | grep memory
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/merge # INTERNAL MERGE TREE, DO NOT PULL
+for i in {0..2000}
+do
+	mkdir /sys/fs/cgroup/memory/test$i
+	echo $$ > /sys/fs/cgroup/memory/test$i/cgroup.procs
+	cat temp >> log
+	echo $$ > /sys/fs/cgroup/memory/cgroup.procs
+	rmdir /sys/fs/cgroup/memory/test$i
+done
 
-Here's the merge description:
+cat /proc/cgroups | grep memory
 
- ===================
- The following commits between objtool/core and various x86 branches conflict:
+rm -f temp log
+```
 
-   968b493173ac x86/mm: Make DMA memory shared for TD guest
-   77a512e35db7 x86/boot: Avoid #VE during boot for TDX platforms
-   65fab5bc033a x86/tdx: Exclude shared bit from __PHYSICAL_MASK
-   41394e33f3a0 x86/tdx: Extend the confidential computing API to support TDX guests
-   59bd54a84d15 x86/tdx: Detect running as a TDX guest in early boot
-   dbae0a934f09 x86/cpu: Remove CONFIG_X86_SMAP and "nosmap"
+[1] https://lore.kernel.org/linux-mm/20200623015846.1141975-1-guro@fb.com/
+[2] https://lore.kernel.org/linux-mm/20210319163821.20704-1-songmuchun@bytedance.com/
 
- and:
+v3: https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/
+v2: https://lore.kernel.org/all/20210916134748.67712-1-songmuchun@bytedance.com/
+v1: https://lore.kernel.org/all/20210814052519.86679-1-songmuchun@bytedance.com/
+RFC v4: https://lore.kernel.org/all/20210527093336.14895-1-songmuchun@bytedance.com/
+RFC v3: https://lore.kernel.org/all/20210421070059.69361-1-songmuchun@bytedance.com/
+RFC v2: https://lore.kernel.org/all/20210409122959.82264-1-songmuchun@bytedance.com/
+RFC v1: https://lore.kernel.org/all/20210330101531.82752-1-songmuchun@bytedance.com/
 
-   753da4179d08 objtool: Remove --lto and --vmlinux in favor of --link
-   489e355b4225 objtool: Add HAVE_NOINSTR_VALIDATION
-   0f620cefd775 objtool: Rename "VMLINUX_VALIDATION" -> "NOINSTR_VALIDATION"
-   22102f4559be objtool: Make noinstr hacks optional
-   4ab7674f5951 objtool: Make jump label hack optional
-   26e176896a5b objtool: Make static call annotation optional
-   720644749647 objtool: Make stack validation frame-pointer-specific
-   03f16cd020eb objtool: Add CONFIG_OBJTOOL
-   7dce62041ac3 objtool: Make stack validation optional
-   b51277eb9775 objtool: Ditch subcommands
-   2daf7faba7de objtool: Reorganize cmdline options
-   4cdfc11b2836 x86/Kconfig: fix the spelling of 'becoming' in X86_KERNEL_IBT config
-   4a5de9b76fcb objtool: Enable unreachable warnings for CLANG LTO
+v4:
+ - Resend and rebased on v5.18.
 
- Resolve them:
+v3:
+ - Removed the Acked-by tags from Roman since this version is based on
+   the folio relevant.
 
-  - overlapping modifications
-  - modifying removed functionality
+v2:
+ - Rename obj_cgroup_release_kmem() to obj_cgroup_release_bytes() and the
+   dependencies of CONFIG_MEMCG_KMEM (suggested by Roman, Thanks).
+ - Rebase to linux 5.15-rc1.
+ - Add a new pacth to cleanup mem_cgroup_kmem_disabled().
 
- Conflicts:
-	arch/x86/Kconfig
-	scripts/Makefile.build
-	scripts/link-vmlinux.sh
- ===================
+v1:
+ - Drop RFC tag.
+ - Rebase to linux next-20210811.
 
-Thanks,
+RFC v4:
+ - Collect Acked-by from Roman.
+ - Rebase to linux next-20210525.
+ - Rename obj_cgroup_release_uncharge() to obj_cgroup_release_kmem().
+ - Change the patch 1 title to "prepare objcg API for non-kmem usage".
+ - Convert reparent_ops_head to an array in patch 8.
 
-	Ingo
+Thanks for Roman's review and suggestions.
+
+RFC v3:
+ - Drop the code cleanup and simplification patches. Gather those patches
+   into a separate series[1].
+ - Rework patch #1 suggested by Johannes.
+
+RFC v2:
+ - Collect Acked-by tags by Johannes. Thanks.
+ - Rework lruvec_holds_page_lru_lock() suggested by Johannes. Thanks.
+ - Fix move_pages_to_lru().
+
+Muchun Song (11):
+  mm: memcontrol: prepare objcg API for non-kmem usage
+  mm: memcontrol: introduce compact_folio_lruvec_lock_irqsave
+  mm: memcontrol: make lruvec lock safe when LRU pages are reparented
+  mm: vmscan: rework move_pages_to_lru()
+  mm: thp: introduce folio_split_queue_lock{_irqsave}()
+  mm: thp: make split queue lock safe when LRU pages are reparented
+  mm: memcontrol: make all the callers of {folio,page}_memcg() safe
+  mm: memcontrol: introduce memcg_reparent_ops
+  mm: memcontrol: use obj_cgroup APIs to charge the LRU pages
+  mm: lru: add VM_BUG_ON_FOLIO to lru maintenance function
+  mm: lru: use lruvec lock to serialize memcg changes
+
+ fs/buffer.c                      |   4 +-
+ fs/fs-writeback.c                |  23 +-
+ include/linux/memcontrol.h       | 198 ++++++++------
+ include/linux/mm_inline.h        |   6 +
+ include/trace/events/writeback.h |   5 +
+ mm/compaction.c                  |  39 ++-
+ mm/huge_memory.c                 | 157 ++++++++++--
+ mm/memcontrol.c                  | 542 ++++++++++++++++++++++++++++-----------
+ mm/migrate.c                     |   4 +
+ mm/page_io.c                     |   5 +-
+ mm/swap.c                        |  49 ++--
+ mm/vmscan.c                      |  57 ++--
+ 12 files changed, 756 insertions(+), 333 deletions(-)
+
+
+base-commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+-- 
+2.11.0
+

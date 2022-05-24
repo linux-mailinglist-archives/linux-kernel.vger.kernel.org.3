@@ -2,130 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74689533261
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31722533264
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241278AbiEXUXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
+        id S241295AbiEXUXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241126AbiEXUXD (ORCPT
+        with ESMTP id S237701AbiEXUXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:23:03 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51CC5D5E6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:23:01 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2fee010f509so194016147b3.11
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jkbsj8ZwrUi7OObfgCh/4Ar2JNwqZvHZHWjqqEl/+jU=;
-        b=DcF4IOeyC1v9Z+v2nErxKz1G/LVvOm7gwchisLgHi3xQICx+mu9q8u8QSxLDgwtJL7
-         OASbpLKso3Ab2vBCILTtKzTqwplcynpS/nLv+j0EXAJg+k273y2lNWN6MgWpwZ332kia
-         F6krBjU4uSNwOq/li1dfZwgb3BT/NJtcAV6p818t1T1R3QLXyQ+vECn3AUXir0V0tr98
-         nINilkpN2pFDLxd8/0NwlHmAzpA/xM2X532i3r7+gAyzrDoXYSALN0p0Yq8IBDWZFNWz
-         YSKW79yB9lklVhZ27eh3a8dhXhyCyJ9vS5G6xa56h5Qht+nUE1h/9n3qQ2RJ4z0Po9MI
-         RnZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jkbsj8ZwrUi7OObfgCh/4Ar2JNwqZvHZHWjqqEl/+jU=;
-        b=m6ds9jvJc0AUNNWODwnHoWS9Jvs2On1IvYewPEpDwbiHPFfE7XDDqYOfhePsL2r1z6
-         hVV2gJ8fVti3V2iu7e9xo6DMzpWHeFR1sJlGNR7mRCDVnu1L4VsldTO+gf+wv3Fg+nFL
-         id7hwN0WOpSERWvLNAICKbB8Vvod/lk2sSsISN+aYLG/y3HS78nZ9UCB8fbETE8jYo+E
-         SOGAN42VmEMKBzQAcZn7TDjAl8OqQqKx9TS6nIQC8zNvK9MIAaAOFv9ZHKaRTAQ6wU5p
-         Ch2dauKLvTjElcCRI9/Wo2SMVGioR5EF+DLZmMVFlmmruVYmwEMLO2bZ6+5XfQWPj2pM
-         eS1g==
-X-Gm-Message-State: AOAM5303YacJnsK7Bt+Aowz1xX+Py9NBtnH2Mwc/71JH4wJcL4p2Marn
-        qR/QZOq8VZHIBUgJOFHSmEdX+uqeb39+nF7AX5XBKQ==
-X-Google-Smtp-Source: ABdhPJxI0LRDxxcWqCGKYs6WhpYtvmy2F8jbSAxNaFVcE1AEGhn5zSjLp5nioTc3NHXvpgAlkAFCwNktgzjS4b6u/ak=
-X-Received: by 2002:a81:b401:0:b0:300:2e86:e7e5 with SMTP id
- h1-20020a81b401000000b003002e86e7e5mr4238965ywi.467.1653423780877; Tue, 24
- May 2022 13:23:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <4740526.31r3eYUQgx@natalenko.name> <4bd84c983e77486fbc94dfa2a167afaa@AcuMS.aculab.com>
- <CADVnQykt1Lz0m1gfEckHhDLy66xhJvO0F2Z1-yQ=Mgi7gBY5RQ@mail.gmail.com>
-In-Reply-To: <CADVnQykt1Lz0m1gfEckHhDLy66xhJvO0F2Z1-yQ=Mgi7gBY5RQ@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 24 May 2022 13:22:49 -0700
-Message-ID: <CANn89iKsJ53GKJyKGLLvn_NhY_oe5TzHLGRtRttZpHaUOVmiBw@mail.gmail.com>
-Subject: Re: [RFC] tcp_bbr2: use correct 64-bit division
-To:     Neal Cardwell <ncardwell@google.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Yuchung Cheng <ycheng@google.com>,
-        Yousuk Seung <ysseung@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Adithya Abraham Philip <abrahamphilip@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Konstantin Demin <rockdrilla@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 24 May 2022 16:23:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9391E5C654
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:23:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38E4CB81BB4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 20:23:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 711B8C34100;
+        Tue, 24 May 2022 20:23:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1653423811;
+        bh=1TBccbNXXdkA4yggnTErP3z1KQ5YvTNhTlw2uX3PD+0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p8uKByO78gwiPvUIrtEW+RfKKx4lPhiAP5F3d+Wq8yHlKPW5HK6fS/Hs0x6HMjtdX
+         aUqaytSI5r/DeFrqaaLyeLhjGs+E3H0zChZ50QZRKRiBU7KsZ7TBZa8X/Yx8eCIHm4
+         /MROOd+wzqKIesHZFh49zCSmEQ3xemCYvb2Ndqng=
+Date:   Tue, 24 May 2022 13:23:30 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Zi Yan <zi.yan@sent.com>, Qian Cai <quic_qiancai@quicinc.com>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH] mm: fix a potential infinite loop in
+ start_isolate_page_range().
+Message-Id: <20220524132330.eaf1366967d2fa927fdaf995@linux-foundation.org>
+In-Reply-To: <20220524194756.1698351-1-zi.yan@sent.com>
+References: <20220524194756.1698351-1-zi.yan@sent.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 1:06 PM Neal Cardwell <ncardwell@google.com> wrote:
->
-> On Tue, May 24, 2022 at 4:01 AM David Laight <David.Laight@aculab.com> wrote:
-> >
-> > From: Oleksandr Natalenko
-> > > Sent: 22 May 2022 23:30
-> > > To: Neal Cardwell <ncardwell@google.com>
-> > >
-> > > Hello Neal.
-> > >
-> > > It was reported to me [1] by Konstantin (in Cc) that BBRv2 code suffers from integer division issue on
-> > > 32 bit systems.
-> >
-> > Do any of these divisions ever actually have 64bit operands?
-> > Even on x86-64 64bit divide is significantly slower than 32bit divide.
-> >
-> > It is quite clear that x * 8 / 1000 is the same as x / (1000 / 8).
-> > So promoting to 64bit cannot be needed.
-> >
-> >         David
->
-> The sk->sk_pacing_rate can definitely be bigger than 32 bits if the
-> network path can support more than 34 Gbit/sec  (a pacing rate of 2^32
-> bytes per sec is roughly 34 Gibt/sec). This definitely happens.
->
-> So  this one seems reasonable to me (and is only in debug code, so the
-> performance is probably fine):
-> -                (u64)sk->sk_pacing_rate * 8 / 1000,
-> +                div_u64((u64)sk->sk_pacing_rate * 8, 1000),
->
-> For the other two I agree we should rework them to avoid the 64-bit
-> divide, since we don't need it.
->
-> There is similar logic in mainline Linux in tcp_tso_autosize(), which
-> is currently using "unsigned long" for bytes.
->
+On Tue, 24 May 2022 15:47:56 -0400 Zi Yan <zi.yan@sent.com> wrote:
 
-Not sure I follow.
-
-sk_pacing_rate is also 'unsigned long'
-
-So tcp_tso_autosize() is correct on 32bit and 64bit arches.
-There is no forced 64bit operation there.
-
-
-> Eric, what do you advise?
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> In isolate_single_pageblock() called by start_isolate_page_range(),
+> there are some pageblock isolation issues causing a potential
+> infinite loop when isolating a page range. This is reported by Qian Cai.
+> 
+> 1. the pageblock was isolated by just changing pageblock migratetype
+>    without checking unmovable pages. Calling set_migratetype_isolate() to
+>    isolate pageblock properly.
+> 2. an off-by-one error caused migrating pages unnecessarily, since the page
+>    is not crossing pageblock boundary.
+> 3. migrating a compound page across pageblock boundary then splitting the
+>    free page later has a small race window that the free page might be
+>    allocated again, so that the code will try again, causing an potential
+>    infinite loop. Temporarily set the to-be-migrated page's pageblock to
+>    MIGRATE_ISOLATE to prevent that and bail out early if no free page is
+>    found after page migration.
+> 
+> An additional fix to split_free_page() aims to avoid crashing in
+> __free_one_page(). When the free page is split at the specified
+> split_pfn_offset, free_page_order should check both the first bit of
+> free_page_pfn and the last bit of split_pfn_offset and use the smaller one.
+> For example, if free_page_pfn=0x10000, split_pfn_offset=0xc000,
+> free_page_order should first be 0x8000 then 0x4000, instead of 0x4000 then
+> 0x8000, which the original algorithm did.
+> 
+> ...
 >
-> thanks,
-> neal
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1114,13 +1114,16 @@ void split_free_page(struct page *free_page,
+>  	unsigned long flags;
+>  	int free_page_order;
+>  
+> +	if (split_pfn_offset == 0)
+> +		return;
+> +
+>  	spin_lock_irqsave(&zone->lock, flags);
+>  	del_page_from_free_list(free_page, zone, order);
+>  	for (pfn = free_page_pfn;
+>  	     pfn < free_page_pfn + (1UL << order);) {
+>  		int mt = get_pfnblock_migratetype(pfn_to_page(pfn), pfn);
+>  
+> -		free_page_order = ffs(split_pfn_offset) - 1;
+> +		free_page_order = min(pfn ? __ffs(pfn) : order, __fls(split_pfn_offset));
+
+Why is it testing the zeroness of `pfn' here?  Can pfn==0 even happen? 
+If so, it's a legitimate value so why does it get special-cased?
+
+
+

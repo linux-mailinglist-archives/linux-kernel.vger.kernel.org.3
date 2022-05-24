@@ -2,182 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FEE532719
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7556A532720
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbiEXKI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 06:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
+        id S231839AbiEXKMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 06:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiEXKIZ (ORCPT
+        with ESMTP id S231514AbiEXKMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:08:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A94779834
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653386903; x=1684922903;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=d/a2bdtMEfJLJm4/sbv0OBeBqTGWXn245KlMgMEhULk=;
-  b=K1vrjyejM2LYyovt+Zr1VzI3fHmuA7S/sdhFahT2W2e37Qr9J0xu1tXp
-   Yc6hd9p7374mfMcfSZWYYIwcAzeBdIt0SCXxh12+/+2bApLE+cHsliJnp
-   GfqZMoN9/h0QMT+2Bzy3HCrI5jXk/6YExd4dDtcBXjN8auljluW+55GxG
-   3EiBZpY4y8GAeGZPdpX0qmj5CG6HucSaeYPMPsswLTd6tIkDZYsNSr/oJ
-   v/DR1Ie8GFwawhrLnpdJQB0fqnJfeNaTg6wtvVFkqiC55x6/Hbq4l4G/6
-   3U5iGzC+KjiC81FCCJKOJnKLriRpfqP9gTt2VgK9sIP4EJl4BkOmi/6Pi
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="298805645"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="298805645"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 03:08:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="703407301"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 May 2022 03:08:20 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntRSd-0001ws-IE;
-        Tue, 24 May 2022 10:08:19 +0000
-Date:   Tue, 24 May 2022 18:07:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alex Shi <alexs@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to
- undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202205241805.y0qqNBIf-lkp@intel.com>
+        Tue, 24 May 2022 06:12:16 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 818C55F8F0;
+        Tue, 24 May 2022 03:12:13 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 901C410E66B1;
+        Tue, 24 May 2022 20:12:06 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1ntRWH-00Fn9P-Gs; Tue, 24 May 2022 20:12:05 +1000
+Date:   Tue, 24 May 2022 20:12:05 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     jlayton@kernel.org, keescook@chromium.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-doc@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fsdevel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] netfs: Fix gcc-12 warning by embedding vfs inode in
+ netfs_i_context
+Message-ID: <20220524101205.GI2306852@dread.disaster.area>
+References: <165305805651.4094995.7763502506786714216.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <165305805651.4094995.7763502506786714216.stgit@warthog.procyon.org.uk>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=628caf7c
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=7-415B0cAAAA:8
+        a=OnzENxpBzhtb90kDdFQA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   143a6252e1b8ab424b4b293512a97cca7295c182
-commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
-date:   2 months ago
-config: mips-randconfig-c004-20220524 (https://download.01.org/0day-ci/archive/20220524/202205241805.y0qqNBIf-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+On Fri, May 20, 2022 at 03:47:36PM +0100, David Howells wrote:
+> While randstruct was satisfied with using an open-coded "void *" offset
+> cast for the netfs_i_context <-> inode casting, __builtin_object_size() as
+> used by FORTIFY_SOURCE was not as easily fooled.  This was causing the
+> following complaint[1] from gcc v12:
+> 
+> In file included from ./include/linux/string.h:253,
+>                  from ./include/linux/ceph/ceph_debug.h:7,
+>                  from fs/ceph/inode.c:2:
+> In function 'fortify_memset_chk',
+>     inlined from 'netfs_i_context_init' at ./include/linux/netfs.h:326:2,
+>     inlined from 'ceph_alloc_inode' at fs/ceph/inode.c:463:2:
+> ./include/linux/fortify-string.h:242:25: warning: call to '__write_overflow_field' declared with attribute warning:
+> detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+>   242 |                         __write_overflow_field(p_size_field, size);
+>       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fix this by embedding a struct inode into struct netfs_i_context (which
+> should perhaps be renamed to struct netfs_inode).  The struct inode
+> vfs_inode fields are then removed from the 9p, afs, ceph and cifs inode
+> structs and vfs_inode is then simply changed to "netfs.inode" in those
+> filesystems.
+> 
+> Further, rename netfs_i_context to netfs_inode, get rid of the
+> netfs_inode() function that converted a netfs_i_context pointer to an inode
+> pointer (that can now be done with &ctx->inode) and rename the
+> netfs_i_context() function to netfs_inode() (which is now a wrapper around
+> container_of()).
+> 
+> Most of the changes were done with:
+> 
+>   perl -p -i -e 's/vfs_inode/netfs.inode/'g \
+> 	`git grep -l 'vfs_inode' -- fs/{9p,afs,ceph,cifs}/*.[ch]`
+> 
+> Kees suggested doing it with a pair structure[2] and a special declarator
+> to insert that into the network filesystem's inode wrapper[3], but I think
+> it's cleaner to embed it - and then it doesn't matter if struct
+> randomisation reorders things.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I can't help but think the code would be so much cleaner with a
+wrapper to covert from the filesysetm structure to the vfs inode.
+e.g. in XFS we use VFS_I(xfs_inode) to get the struct inode and
+XFS_I(inode) to get the xfs_inode from the struct inode.
+i.e.:
 
-All errors (new ones prefixed by >>):
+/* Convert from vfs inode to xfs inode */
+static inline struct xfs_inode *XFS_I(struct inode *inode)
+{
+        return container_of(inode, struct xfs_inode, i_vnode);
+}
 
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
-   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                                        ^
->> drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                       ^
-   <scratch space>:171:1: note: expanded from here
-   LOCHNAGAR1_
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: initializer element is not a compile-time constant
-   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                       ^~~~~~~~~~~~~~~~~~~~~~
-   <scratch space>:171:1: note: expanded from here
-   LOCHNAGAR1_
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
-   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
-   ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                                        ^
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: initializer element is not a compile-time constant
-   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
-           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
-           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
-                                                       ^~~~~~~~~~~~~~~~~~~~~~
-   <scratch space>:182:1: note: expanded from here
-   LOCHNAGAR1_
-   ^
-   5 errors generated.
+/* convert from xfs inode to vfs inode */
+static inline struct inode *VFS_I(struct xfs_inode *ip)
+{
+        return &ip->i_vnode;
+}
 
+Then we end up with stuff like this reading:
 
-vim +/LOCHNAGAR1_ +200 drivers/pinctrl/cirrus/pinctrl-lochnagar.c
+> diff --git a/fs/9p/v9fs.c b/fs/9p/v9fs.c
+> index e28ddf763b3b..0129de2ea31a 100644
+> --- a/fs/9p/v9fs.c
+> +++ b/fs/9p/v9fs.c
+> @@ -625,7 +625,7 @@ static void v9fs_inode_init_once(void *foo)
+>  	struct v9fs_inode *v9inode = (struct v9fs_inode *)foo;
+>  
+>  	memset(&v9inode->qid, 0, sizeof(v9inode->qid));
+> -	inode_init_once(&v9inode->vfs_inode);
+> +	inode_init_once(&v9inode->netfs.inode);
 
-0548448b719ac7 Charles Keepax 2019-03-19  199  
-0548448b719ac7 Charles Keepax 2019-03-19 @200  LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
-0548448b719ac7 Charles Keepax 2019-03-19  201  LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
-0548448b719ac7 Charles Keepax 2019-03-19  202  LN1_PIN_GPIO(CDC_CIF1MODE, "codec-cif1mode", I2C_CTRL, CDC_CIF_MODE, 0);
-0548448b719ac7 Charles Keepax 2019-03-19  203  LN1_PIN_MUX(GF_GPIO2,      "gf-gpio2");
-0548448b719ac7 Charles Keepax 2019-03-19  204  LN1_PIN_MUX(GF_GPIO3,      "gf-gpio3");
-0548448b719ac7 Charles Keepax 2019-03-19  205  LN1_PIN_MUX(GF_GPIO7,      "gf-gpio7");
-0548448b719ac7 Charles Keepax 2019-03-19  206  LN1_PIN_MUX(LED1,          "led1");
-0548448b719ac7 Charles Keepax 2019-03-19  207  LN1_PIN_MUX(LED2,          "led2");
-0548448b719ac7 Charles Keepax 2019-03-19  208  LN1_PIN_AIF(CDC_AIF1);
-0548448b719ac7 Charles Keepax 2019-03-19  209  LN1_PIN_AIF(CDC_AIF2);
-0548448b719ac7 Charles Keepax 2019-03-19  210  LN1_PIN_AIF(CDC_AIF3);
-0548448b719ac7 Charles Keepax 2019-03-19  211  LN1_PIN_AIF(DSP_AIF1);
-0548448b719ac7 Charles Keepax 2019-03-19  212  LN1_PIN_AIF(DSP_AIF2);
-0548448b719ac7 Charles Keepax 2019-03-19  213  LN1_PIN_AIF(PSIA1);
-0548448b719ac7 Charles Keepax 2019-03-19  214  LN1_PIN_AIF(PSIA2);
-0548448b719ac7 Charles Keepax 2019-03-19  215  LN1_PIN_AIF(SPDIF_AIF);
-0548448b719ac7 Charles Keepax 2019-03-19  216  LN1_PIN_AIF(GF_AIF1);
-0548448b719ac7 Charles Keepax 2019-03-19  217  LN1_PIN_AIF(GF_AIF2);
-0548448b719ac7 Charles Keepax 2019-03-19  218  LN1_PIN_AIF(GF_AIF3);
-0548448b719ac7 Charles Keepax 2019-03-19  219  LN1_PIN_AIF(GF_AIF4);
-0548448b719ac7 Charles Keepax 2019-03-19  220  
+	inode_init_once(VFS_I(v9inode));
 
-:::::: The code at line 200 was first introduced by commit
-:::::: 0548448b719ac78fa18fdbcd03856952ba6cc7dc pinctrl: lochnagar: Add support for the Cirrus Logic Lochnagar
+>  }
+>  
+>  /**
+> diff --git a/fs/9p/v9fs.h b/fs/9p/v9fs.h
+> index ec0e8df3b2eb..1b219c21d15e 100644
+> --- a/fs/9p/v9fs.h
+> +++ b/fs/9p/v9fs.h
+> @@ -109,11 +109,7 @@ struct v9fs_session_info {
+>  #define V9FS_INO_INVALID_ATTR 0x01
+>  
+>  struct v9fs_inode {
+> -	struct {
+> -		/* These must be contiguous */
+> -		struct inode	vfs_inode;	/* the VFS's inode record */
+> -		struct netfs_i_context netfs_ctx; /* Netfslib context */
+> -	};
+> +	struct netfs_inode netfs; /* Netfslib context and vfs inode */
+>  	struct p9_qid qid;
+>  	unsigned int cache_validity;
+>  	struct p9_fid *writeback_fid;
+> @@ -122,13 +118,13 @@ struct v9fs_inode {
+>  
+>  static inline struct v9fs_inode *V9FS_I(const struct inode *inode)
+>  {
+> -	return container_of(inode, struct v9fs_inode, vfs_inode);
+> +	return container_of(inode, struct v9fs_inode, netfs.inode);
+>  }
 
-:::::: TO: Charles Keepax <ckeepax@opensource.cirrus.com>
-:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+Looky dat - there's already the V9FS_I() function for going from the
+VFS inode to the 9p inode....
 
+I think that having a VFS_I() for every filesystem would make all
+this code a lot cleaner, and it would be easier for everyone to
+understand without having to know the exact details of how the netfs
+inode encapsulates the struct inode. Consistency of code conventions
+across multiple filesystems is a good thing. And if this netfs inode
+structure ever has to be changed in future, it's just a few wrapper
+functions that need updating, not lots of code...
+
+Cheers,
+
+Dave.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Dave Chinner
+david@fromorbit.com

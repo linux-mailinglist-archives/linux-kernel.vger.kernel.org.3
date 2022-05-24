@@ -2,42 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0D053214E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039FF532135
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiEXCxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S233918AbiEXCvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 22:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbiEXCux (ORCPT
+        with ESMTP id S233860AbiEXCvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:50:53 -0400
-Received: from mail.meizu.com (edge01.meizu.com [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A3E6EB11;
-        Mon, 23 May 2022 19:50:48 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 24 May
- 2022 10:50:46 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 24 May
- 2022 10:50:45 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>
-CC:     Haowen Bai <baihaowen@meizu.com>, <linux-efi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] LoongArch: take size of pointed value, not pointer
-Date:   Tue, 24 May 2022 10:50:44 +0800
-Message-ID: <1653360644-28872-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        Mon, 23 May 2022 22:51:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D231A3B9;
+        Mon, 23 May 2022 19:51:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 997AB61223;
+        Tue, 24 May 2022 02:51:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 08CDEC385A9;
+        Tue, 24 May 2022 02:51:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653360675;
+        bh=GeIS+3QMgxpUci60FIASW934eMl7GiWGeQtqmA97e0Y=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=cgQDT4XeAifjy90KkGGhDp4Kn9jqFuCSo2y3vTg4pU7+0eYYiHQwZJJy1aL/MSevj
+         unsTp5yGDBjbmkxKcFxdMa960TsxaS19NctH9E7zGexXPRbmiZvmQSNor1HcLTnSwu
+         h2r4b6DmN3TaGpa6MEAoDhcHGo81PabkFn1sg5qdDEhVcQotkV2ZZQW08lpolzZW2A
+         MCByQZlkgnksx4xj6MbY0ZKA3uokuK2J0aawgI4i2uV53joOHd/ur3AlU9SuZbCfDd
+         7dIiSDpYiV/ResI+dAD3VEnJkJqUppqMWZY8yYPg8iTlAnlL34RTXxexI3r0QtppHd
+         Q/CicGQm8vByQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EC2C6EAC081;
+        Tue, 24 May 2022 02:51:14 +0000 (UTC)
+Subject: Re: [GIT PULL] EDAC updates for 5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YotQLlwVatMzp6Ow@zn.tnic>
+References: <YotQLlwVatMzp6Ow@zn.tnic>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YotQLlwVatMzp6Ow@zn.tnic>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.19_rc1
+X-PR-Tracked-Commit-Id: be80a1ca5119c5d31b6019d5e6dc6d9123bda959
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0be3ff0ccbfacb1bcc56e2ec9c1c5d92cf9a64d3
+Message-Id: <165336067495.14181.3990744775793624869.pr-tracker-bot@kernel.org>
+Date:   Tue, 24 May 2022 02:51:14 +0000
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,27 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sizeof a pointer-typed expression returns the size of the pointer, not
-that of the pointed data.
+The pull request you sent on Mon, 23 May 2022 11:13:18 +0200:
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- arch/loongarch/kernel/efi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git tags/edac_updates_for_v5.19_rc1
 
-diff --git a/arch/loongarch/kernel/efi.c b/arch/loongarch/kernel/efi.c
-index f9fdeb1ae358..f0e5d0feffc2 100644
---- a/arch/loongarch/kernel/efi.c
-+++ b/arch/loongarch/kernel/efi.c
-@@ -180,7 +180,7 @@ void __init efi_init(void)
- 	if (!efi_system_table)
- 		return;
- 
--	efi_systab = (efi_system_table_t *)early_memremap_ro(efi_system_table, sizeof(efi_systab));
-+	efi_systab = (efi_system_table_t *)early_memremap_ro(efi_system_table, sizeof(*efi_systab));
- 	if (!efi_systab) {
- 		pr_err("Can't find EFI system table.\n");
- 		return;
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0be3ff0ccbfacb1bcc56e2ec9c1c5d92cf9a64d3
+
+Thank you!
+
 -- 
-2.7.4
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,126 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2B2532065
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7398C532068
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232806AbiEXBux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 21:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
+        id S232785AbiEXBvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 21:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiEXBuu (ORCPT
+        with ESMTP id S232810AbiEXBvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 21:50:50 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C56737A1
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 18:50:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VEFh5GV_1653357042;
-Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VEFh5GV_1653357042)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 24 May 2022 09:50:44 +0800
-Subject: Re: [PATCH] RISC-V: Add fast call path of crash_kexec()
-To:     paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        palmer@dabbelt.com, wangkefeng.wang@huawei.com,
-        vitaly.wool@konsulko.com, rmk+kernel@armlinux.org.uk,
-        ebiederm@xmission.com, tongtiangen@huawei.co
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        guoren@kernel.org, mick@ics.forth.gr
-References: <20220515131407.946832-1-xianting.tian@linux.alibaba.com>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-Message-ID: <788c0f2a-1562-b4ca-a1ca-0289032b1f8a@linux.alibaba.com>
-Date:   Tue, 24 May 2022 09:50:42 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.10.1
+        Mon, 23 May 2022 21:51:06 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E9225EC;
+        Mon, 23 May 2022 18:51:03 -0700 (PDT)
+Subject: Re: [BUG report] security_inode_alloc return -ENOMEM let xfs shutdown
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653357061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dl0EsjA6NUDFxuLGWyeMwYfd4upJhhv0gDz56c+Kwu0=;
+        b=bE/bThUc4PDM4een2pnM+lwby+oovl6glOteyDepMuHtp/5gXKfY3vgcVJVQMs2nKIqgvl
+        0WOwuUV7a6CvuAd5OX6dEpeMxJDQIQgHPMcKw7wHto/bSFStGNLoGDSAwDbeYrcvzpXZID
+        +zoXls1clwcmEFhh64Y+RLz1ePw7/2Y=
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     liuzhengyuan <liuzhengyuan@kylinos.cn>,
+        =?UTF-8?B?6IOh5rW3?= <huhai@kylinos.cn>, zhangshida@kylinos.cn,
+        darrick.wong@oracle.com, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <5a3a9cdc-33c3-4196-b8f7-bfec485eae5b@linux.dev>
+ <20220523232009.GW1098723@dread.disaster.area>
+ <a05dfccc-33ff-4857-b68d-ddd64cae11d0@linux.dev>
+ <20220524012806.GY1098723@dread.disaster.area>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jackie Liu <liu.yun@linux.dev>
+Message-ID: <c529696b-0782-812a-195c-3bbf1fa51d96@linux.dev>
+Date:   Tue, 24 May 2022 09:50:53 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220515131407.946832-1-xianting.tian@linux.alibaba.com>
-Content-Type: text/plain; charset=gbk; format=flowed
+In-Reply-To: <20220524012806.GY1098723@dread.disaster.area>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-13.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-just a friendly ping
 
-ÔÚ 2022/5/15 ÏÂÎç9:14, Xianting Tian Ð´µÀ:
-> Currently, almost all archs (x86, arm64, mips...) support fast call
-> of crash_kexec() when "regs && kexec_should_crash()" is true. But
-> RISC-V not, it can only enter crash system via panic(). However panic()
-> doesn't pass the regs of the real accident scene to crash_kexec(),
-> it caused we can't get accurate backtrace via gdb,
-> 	$ riscv64-linux-gnu-gdb vmlinux vmcore
-> 	Reading symbols from vmlinux...
-> 	[New LWP 95]
-> 	#0  console_unlock () at kernel/printk/printk.c:2557
-> 	2557                    if (do_cond_resched)
-> 	(gdb) bt
-> 	#0  console_unlock () at kernel/printk/printk.c:2557
-> 	#1  0x0000000000000000 in ?? ()
->
-> With the patch we can get the accurate backtrace,
-> 	$ riscv64-linux-gnu-gdb vmlinux vmcore
-> 	Reading symbols from vmlinux...
-> 	[New LWP 95]
-> 	#0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at drivers/virtio/virtio_mmio.c:806
-> 	806             *(int *)p = 0xdead;
-> 	(gdb)
-> 	(gdb) bt
-> 	#0  0xffffffe00063a4e0 in test_thread (data=<optimized out>) at drivers/virtio/virtio_mmio.c:806
-> 	#1  0x0000000000000000 in ?? ()
->
-> Test code to produce NULL address dereference,
-> 	+extern int panic_on_oops;
-> 	+static struct task_struct *k;
-> 	+static int test_thread(void *data) {
-> 	+
-> 	+       void *p = NULL;
-> 	+
-> 	+       while (!panic_on_oops)
-> 	+               msleep(2000);
-> 	+
-> 	+       *(int *)p = 0xdead;
-> 	+
-> 	+       return 0;
-> 	+}
-> 	+
-> 	 static int __init virtio_mmio_init(void)
-> 	 {
-> 	+       k = kthread_run(test_thread, NULL, "test_thread");
-> 	+       if (IS_ERR(k))
-> 	+               pr_err("Couldn't create test kthread\n");
-> 	+
-> 	        return platform_driver_register(&virtio_mmio_driver);
-> 	 }
->
-> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> ---
->   arch/riscv/kernel/traps.c | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index fe92e119e6a3..e666ebfa2a64 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -16,6 +16,7 @@
->   #include <linux/mm.h>
->   #include <linux/module.h>
->   #include <linux/irq.h>
-> +#include <linux/kexec.h>
->   
->   #include <asm/asm-prototypes.h>
->   #include <asm/bug.h>
-> @@ -44,6 +45,9 @@ void die(struct pt_regs *regs, const char *str)
->   
->   	ret = notify_die(DIE_OOPS, str, regs, 0, regs->cause, SIGSEGV);
->   
-> +	if (regs && kexec_should_crash(current))
-> +		crash_kexec(regs);
-> +
->   	bust_spinlocks(0);
->   	add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
->   	spin_unlock_irq(&die_lock);
+
+åœ¨ 2022/5/24 ä¸Šåˆ9:28, Dave Chinner å†™é“:
+> On Tue, May 24, 2022 at 08:52:30AM +0800, Jackie Liu wrote:
+>> åœ¨ 2022/5/24 ä¸Šåˆ7:20, Dave Chinner å†™é“:
+>>> On Mon, May 23, 2022 at 04:51:50PM +0800, Jackie Liu wrote:
+>>> Yup, that's a shutdown with a dirty transaction because memory
+>>> allocation failed in the middle of a transaction. XFS can not
+>>> tolerate memory allocation failure within the scope of a dirty
+>>> transactions and, in practice, this almost never happens. Indeed,
+>>> I've never seen this allocation from security_inode_alloc():
+>>>
+>>> int lsm_inode_alloc(struct inode *inode)
+>>> {
+>>>           if (!lsm_inode_cache) {
+>>>                   inode->i_security = NULL;
+>>>                   return 0;
+>>>           }
+>>>
+>>>>>>>>     inode->i_security = kmem_cache_zalloc(lsm_inode_cache, GFP_NOFS);
+>>>           if (inode->i_security == NULL)
+>>>                   return -ENOMEM;
+>>>           return 0;
+>>> }
+>>>
+>>> fail in all my OOM testing. Hence, to me, this is a theoretical
+>>> failure as I've never, ever seen this allocation fail in production
+>>> or test systems, even when driving them hard into OOM with excessive
+>>> inode allocation and triggering the OOM killer repeatedly until the
+>>> system kills init....
+>>>
+>>> Hence I don't think there's anything we need to change here right
+>>> now. If users start hitting this, then we're going to have add new
+>>> memalloc_nofail_save/restore() functionality to XFS transaction
+>>> contexts. But until then, I don't think we need to worry about
+>>> syzkaller intentionally hitting this shutdown.
+>>
+>> Thanks Dave.
+>>
+>>    In the actual test, the x86 or arm64 device test will trigger this error
+>> more easily when FAILSLAB is turned on. After our internal discussion, we
+>> can try again through such a patch. Anyway, thank you for your reply.
+> 
+> What kernel is the patch against? It doesn't match a current TOT
+> kernel...
+
+It's linux-4.19.y with LSM security patch, but as long as the LSM 
+framework is added, this problem can be repeated.
+
+> 
+>>
+>> diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
+>> index ceee27b70384..360304409c0c 100644
+>> --- a/fs/xfs/xfs_icache.c
+>> +++ b/fs/xfs/xfs_icache.c
+>> @@ -435,6 +435,7 @@ xfs_iget_cache_hit(
+>>                                  wake_up_bit(&ip->i_flags, __XFS_INEW_BIT);
+>>                          ASSERT(ip->i_flags & XFS_IRECLAIMABLE);
+>>                          trace_xfs_iget_reclaim_fail(ip);
+>> +                       error = -EAGAIN;
+>>                          goto out_error;
+>>                  }
+> 
+> Ok, I can see what you are suggesting here - it might work if we get
+> it right. :)
+> 
+> We don't actually want (or need) an unconditional retry. This will
+> turn persistent memory allocation failure into a CPU burning
+> livelock rather than -ENOMEM being returned. It might work for a
+> one-off memory failure, but it's not viable for long term failure as
+> tends to happen when the system goes deep into OOM territory.
+
+In my opinion, if it causes the filesystem to be shutdown, it's better 
+to let it try again and again.
+
+> 
+> It also ignores the fact that we can return ENOMEM without
+> consequences from this path if we are not in a transaction - any
+> pathwalk lookup can have ENOMEM safely returned to it, and that will
+> propagate the error to userspace. Same with bulkstat lookups, etc.
+> So we still want them to fail with ENOMEM, not retry indefinitely.
+> 
+> Likely what we want to do is add conditions to the xfs_iget() lookup
+> tail to detect ENOMEM when tp != NULL. IN that case, we can then run
+> memalloc_retry_wait(GFP_NOFS) before retrying the lookup. That's in
+> line with what we do in other places that cannot tolerate allocation
+> failure (e.g. kmem_alloc(), xfs_buf_alloc_pages()) so it may make
+> sense to do the same thing here....
+
+Do you have any patch suggestions? I have a test environment here to verify.
+
+--
+BR, Jackie Liu
+
+> 
+> Cheers,
+> 
+> Dave.
+> 

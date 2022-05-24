@@ -2,224 +2,415 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B558353238B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B683532391
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234342AbiEXG7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 02:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
+        id S234353AbiEXHAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiEXG65 (ORCPT
+        with ESMTP id S229456AbiEXHAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 02:58:57 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18F5544C5;
-        Mon, 23 May 2022 23:58:55 -0700 (PDT)
-Received: from kwepemi100010.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L6lRH2cclzDqPb;
-        Tue, 24 May 2022 14:58:51 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- kwepemi100010.china.huawei.com (7.221.188.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 14:58:53 +0800
-Received: from [10.174.177.238] (10.174.177.238) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 14:58:53 +0800
-Message-ID: <d4bc3afb-02d5-1793-cffa-e15b2bdb0028@huawei.com>
-Date:   Tue, 24 May 2022 14:58:52 +0800
+        Tue, 24 May 2022 03:00:14 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B00544C5;
+        Tue, 24 May 2022 00:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653375613; x=1684911613;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wP6WJdvwPKQCVTFkQFeIUDg1EJfm95DI1FuINih206s=;
+  b=JAKDCJ6AOxITJaly2AM9xORVOT6hfZyly5PFBu7/dJ0IjuAs4hJU9Y5D
+   u1HupM+b7j+NHE/6eah1jGxGlxTfo5oKawC+3wq7FHAPXdR9xmfoLhZTj
+   kZ3PXzM+oSQ/L3bA/2wpr1l3yJgEV5PrelPSvK6tcKIDwhgAD9Ypzxkse
+   s=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 24 May 2022 00:00:12 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 00:00:11 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 24 May 2022 00:00:11 -0700
+Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 24 May
+ 2022 00:00:07 -0700
+Message-ID: <ea720e1a-c0d2-84b0-8dbc-bb5031d32208@quicinc.com>
+Date:   Tue, 24 May 2022 15:00:05 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.0.2
-Subject: Re: [PATCH] io_uring: add a schedule condition in io_submit_sqes
-To:     Jens Axboe <axboe@kernel.dk>, <asml.silence@gmail.com>,
-        <io-uring@vger.kernel.org>
-CC:     <houtao1@huawei.com>, <yi.zhang@huawei.com>,
-        <chengzhihao1@huawei.com>, <linux-kernel@vger.kernel.org>
-References: <20220521143327.3959685-1-guoxuenan@huawei.com>
- <00772002-8df8-3a41-6e6c-20e3854ad3f0@kernel.dk>
- <a2b0340c-7bf7-a00e-6338-aca8ca02a1e2@huawei.com>
- <717768b3-4f3c-a5d8-5ca3-189a49b4c481@kernel.dk>
-From:   Guo Xuenan <guoxuenan@huawei.com>
-In-Reply-To: <717768b3-4f3c-a5d8-5ca3-189a49b4c481@kernel.dk>
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v7 02/10] Coresight: Add coresight TPDM source driver
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220509133947.20987-1-quic_jinlmao@quicinc.com>
+ <20220509133947.20987-3-quic_jinlmao@quicinc.com>
+ <38bb1ec9-56bc-0cdf-6c46-d448a46ec886@arm.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <38bb1ec9-56bc-0cdf-6c46-d448a46ec886@arm.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.238]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens,
+Hi Suzuki,
 
-this piece of code is used to reproduce the problem.
-it always successfuly reproduce this bug on my
-arm64 qemu virtual machine.
-```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "liburing.h"
+Thank you for the review.
 
-int main(void)
-{
-     int ret, i = 0;
-     struct io_uring uring;
-     struct io_uring_params params;
-     struct io_uring_sqe *sqe;
-     struct io_uring_cqe *cqe;
-     struct __kernel_timespec ts = { .tv_sec = 30, .tv_nsec = 0, };
-
-     memset(&params, 0, sizeof(params));
-     ret = io_uring_queue_init_params(32768, &uring, &params);
-     if (ret < 0) {
-         printf("init err %d\n", errno);
-         return 0;
-     }
-
-     io_uring_register_personality(&uring);
-     while (i++ < 32768) {
-         sqe = io_uring_get_sqe(&uring);
-         io_uring_prep_timeout(sqe, &ts, rand(), 0);
-     }
-     io_uring_submit(&uring);
-     printf("to_submit %d\n", i - 1);
-     io_uring_wait_cqe_nr(&uring, &cqe, i - 1);
-     return 0;
-}
-```
-------------------------------------------------------------------------------------------
-considering the performance issue when we add cond_resched() in "the 
-very fast path"
-you have mentationed, may we add some restriction to avoid extreme 
-situtaions while
-also reduceing the impact on performance.
-I tested the following patch, it did work, there is no soft lockup here.
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index e0823f58f795..3c2e019fd124 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -7873,6 +7873,9 @@ static int io_submit_sqes(struct io_ring_ctx *ctx, 
-unsigned int nr)
-                         if (!(ctx->flags & IORING_SETUP_SUBMIT_ALL))
-                                 break;
-                 }
-+               /* to avoid doing too much in one submit round */
-+               if (submitted > IORING_MAX_ENTRIES / 2)
-+                       cond_resched();
-         } while (submitted < nr);
-
-         if (unlikely(submitted != nr)) {
-
-Best regards
-Xuenan
-On 2022/5/24 0:27, Jens Axboe wrote:
-> On 5/23/22 8:45 AM, Guo Xuenan wrote:
->> Hi Jens
+On 5/23/2022 4:57 PM, Suzuki K Poulose wrote:
+> Hi
+>
+> On 09/05/2022 14:39, Mao Jinlong wrote:
+>> Add driver to support Coresight device TPDM (Trace, Profiling and
+>> Diagnostics Monitor). TPDM is a monitor to collect data from
+>> different datasets. This change is to add probe/enable/disable
+>> functions for tpdm source.
 >>
->> On 2022/5/22 10:42, Jens Axboe wrote:
->>> On 5/21/22 8:33 AM, Guo Xuenan wrote:
->>>> when set up sq ring size with IORING_MAX_ENTRIES, io_submit_sqes may
->>>> looping ~32768 times which may trigger soft lockups. add need_resched
->>>> condition to avoid this bad situation.
->>>>
->>>> set sq ring size 32768 and using io_sq_thread to perform stress test
->>>> as follows:
->>>> watchdog: BUG: soft lockup - CPU#2 stuck for 26s! [iou-sqp-600:601]
->>>> Kernel panic - not syncing: softlockup: hung tasks
->>>> CPU: 2 PID: 601 Comm: iou-sqp-600 Tainted: G L 5.18.0-rc7+ #3
->>>> Hardware name: linux,dummy-virt (DT)
->>>> Call trace:
->>>>    dump_backtrace+0x218/0x228
->>>>    show_stack+0x20/0x68
->>>>    dump_stack_lvl+0x68/0x84
->>>>    dump_stack+0x1c/0x38
->>>>    panic+0x1ec/0x3ec
->>>>    watchdog_timer_fn+0x28c/0x300
->>>>    __hrtimer_run_queues+0x1d8/0x498
->>>>    hrtimer_interrupt+0x238/0x558
->>>>    arch_timer_handler_virt+0x48/0x60
->>>>    handle_percpu_devid_irq+0xdc/0x270
->>>>    generic_handle_domain_irq+0x50/0x70
->>>>    gic_handle_irq+0x8c/0x4bc
->>>>    call_on_irq_stack+0x2c/0x38
->>>>    do_interrupt_handler+0xc4/0xc8
->>>>    el1_interrupt+0x48/0xb0
->>>>    el1h_64_irq_handler+0x18/0x28
->>>>    el1h_64_irq+0x74/0x78
->>>>    console_unlock+0x5d0/0x908
->>>>    vprintk_emit+0x21c/0x470
->>>>    vprintk_default+0x40/0x50
->>>>    vprintk+0xd0/0x128
->>>>    _printk+0xb4/0xe8
->>>>    io_issue_sqe+0x1784/0x2908
->>>>    io_submit_sqes+0x538/0x2880
->>>>    io_sq_thread+0x328/0x7b0
->>>>    ret_from_fork+0x10/0x20
->>>> SMP: stopping secondary CPUs
->>>> Kernel Offset: 0x40f1e8600000 from 0xffff800008000000
->>>> PHYS_OFFSET: 0xfffffa8c80000000
->>>> CPU features: 0x110,0000cf09,00001006
->>>> Memory Limit: none
->>>> ---[ end Kernel panic - not syncing: softlockup: hung tasks ]---
->>>>
->>>> Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
->>>> ---
->>>>    fs/io_uring.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/fs/io_uring.c b/fs/io_uring.c
->>>> index 92ac50f139cd..d897c6798f00 100644
->>>> --- a/fs/io_uring.c
->>>> +++ b/fs/io_uring.c
->>>> @@ -7864,7 +7864,7 @@ static int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
->>>>                if (!(ctx->flags & IORING_SETUP_SUBMIT_ALL))
->>>>                    break;
->>>>            }
->>>> -    } while (submitted < nr);
->>>> +    } while (submitted < nr && !need_resched());
->>>>          if (unlikely(submitted != nr)) {
->>>>            int ref_used = (submitted == -EAGAIN) ? 0 : submitted;
->>> This is wrong, you'll potentially end up doing random short submits for
->>> non-sqpoll as well.
->> Sorry, Indeed, this is not a good solution. Since, the function
->> io_submit_sqes not only called by io_sq_thread, it also called by
->> syscall io_uring_enter sending large amounts of requests, will also
->> trigger soft lockup.
-> Exactly.
+>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>> ---
+>>   drivers/hwtracing/coresight/Kconfig          |  13 ++
+>>   drivers/hwtracing/coresight/Makefile         |   1 +
+>>   drivers/hwtracing/coresight/coresight-core.c |   5 +-
+>>   drivers/hwtracing/coresight/coresight-tpdm.c | 146 +++++++++++++++++++
+>>   drivers/hwtracing/coresight/coresight-tpdm.h |  26 ++++
+>>   include/linux/coresight.h                    |   1 +
+>>   6 files changed, 191 insertions(+), 1 deletion(-)
+>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+>>   create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
+>>
+>> diff --git a/drivers/hwtracing/coresight/Kconfig 
+>> b/drivers/hwtracing/coresight/Kconfig
+>> index 514a9b8086e3..5c506a1cd08f 100644
+>> --- a/drivers/hwtracing/coresight/Kconfig
+>> +++ b/drivers/hwtracing/coresight/Kconfig
+>> @@ -201,4 +201,17 @@ config CORESIGHT_TRBE
+>>           To compile this driver as a module, choose M here: the 
+>> module will be
+>>         called coresight-trbe.
+>> +
+>> +config CORESIGHT_TPDM
+>> +    tristate "CoreSight Trace, Profiling & Diagnostics Monitor driver"
+>> +    select CORESIGHT_LINKS_AND_SINKS
+>> +    help
+>> +      This driver provides support for configuring monitor. Monitors 
+>> are
+>> +      primarily responsible for data set collection and support the
+>> +      ability to collect any permutation of data set types. Monitors 
+>> are
+>> +      also responsible for interaction with system cross triggering.
 >
->>> sqpoll already supports capping how many it submits in one go, it just
->>> doesn't do it if it's only running one ring. As simple as the below,
->>> with 1024 pulled out of thin air. Would be great if you could experiment
->>> and submit a v2 based on this principle instead. Might still need a
->> yes, Jens, your patch sloved sq-poll-thread problem, but the problem
->> may not completely solved; when using syscall io_uring_enter to
->> subimit large amounts of requests.So in my opinion How about 1) add
->> cond_resched() in the while cycle part of io_submit_sqes ?. OR 2) set
->> macro IORING_MAX_ENTRIES smaller? (i'm curious about the value,why we
->> set it with 32768)
-> I did suspect this isn't specific to SQPOLL at all.
+> I find the last statement a bit confusing. Could this be :
 >
-> Might make sense to cap batches of non-sqpoll as well, and for each
-> batch, have a cond_resched() just in case. If you change
-> IORING_MAX_ENTRIES to something smaller, you risk breaking applications
-> that currently (for whatever reason) may have set up an SQ ring of that
-> side. So that is not a viable solution, and honestly wouldn't be a good
-> option even if that weren't the case.
+>     "Monitors are also connected to the cross triggers."
+Some tpdm events can be triggered by CTI trigger out.
 >
-> So the simple solution is just to do it in io_submit_sqes() itself, but
-> would need to be carefully benchmarked to make sure that it doesn't
-> regress anything. It's the very fast path, and for real use cases you'd
-> never run into this problem. Even for a synthetic use case, it sounds
-> highly suspicious that nothing in the call path ends up doing a
-> conditional reschedule. What kind of requests are being submitted when
-> you hit this?
+>> +
+>> +      To compile this driver as a module, choose M here: the module 
+>> will be
+>> +      called coresight-tpdm.
+>> +
+>>   endif
+>> diff --git a/drivers/hwtracing/coresight/Makefile 
+>> b/drivers/hwtracing/coresight/Makefile
+>> index 329a0c704b87..6bb9b1746bc7 100644
+>> --- a/drivers/hwtracing/coresight/Makefile
+>> +++ b/drivers/hwtracing/coresight/Makefile
+>> @@ -25,5 +25,6 @@ obj-$(CONFIG_CORESIGHT_CPU_DEBUG) += 
+>> coresight-cpu-debug.o
+>>   obj-$(CONFIG_CORESIGHT_CATU) += coresight-catu.o
+>>   obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
+>>   obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
+>> +obj-$(CONFIG_CORESIGHT_TPDM) += coresight-tpdm.o
+>>   coresight-cti-y := coresight-cti-core.o coresight-cti-platform.o \
+>>              coresight-cti-sysfs.o
+>> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
+>> b/drivers/hwtracing/coresight/coresight-core.c
+>> index 23ab16dd9b5d..75fe1781df20 100644
+>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>> @@ -1047,7 +1047,8 @@ static int coresight_validate_source(struct 
+>> coresight_device *csdev,
+>>       }
+>>         if (subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_PROC &&
+>> -        subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE) {
+>> +        subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE &&
+>> +        subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY) {
+>>           dev_err(&csdev->dev, "wrong device subtype in %s\n", 
+>> function);
+>>           return -EINVAL;
+>>       }
+>> @@ -1116,6 +1117,7 @@ int coresight_enable(struct coresight_device 
+>> *csdev)
+>>           per_cpu(tracer_path, cpu) = path;
+>>           break;
+>>       case CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE:
+>> +    case CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY:
+>>           /*
+>>            * Use the hash of source's device name as ID
+>>            * and map the ID to the pointer of the path.
+>> @@ -1165,6 +1167,7 @@ void coresight_disable(struct coresight_device 
+>> *csdev)
+>>           per_cpu(tracer_path, cpu) = NULL;
+>>           break;
+>>       case CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE:
+>> +    case CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY:
+>>           hash = hashlen_hash(hashlen_string(NULL, 
+>> dev_name(&csdev->dev)));
+>>           /* Find the path by the hash. */
+>>           path = idr_find(&path_idr, hash);
+>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
+>> b/drivers/hwtracing/coresight/coresight-tpdm.c
+>> new file mode 100644
+>> index 000000000000..6a4e2a35053d
+>> --- /dev/null
+>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+>> @@ -0,0 +1,146 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights 
+>> reserved.
+>> + */
+>> +
+>> +#include <linux/amba/bus.h>
+>> +#include <linux/bitmap.h>
+>> +#include <linux/coresight.h>
+>> +#include <linux/coresight-pmu.h>
+>> +#include <linux/device.h>
+>> +#include <linux/err.h>
+>> +#include <linux/fs.h>
+>> +#include <linux/io.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +
+>> +#include "coresight-priv.h"
+>> +#include "coresight-tpdm.h"
+>> +
+>> +DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
+>> +
+>> +/* TPDM enable operations */
+>> +static int tpdm_enable(struct coresight_device *csdev,
+>> +               struct perf_event *event, u32 mode)
+>> +{
+>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+>> +
+>> +    mutex_lock(&drvdata->lock);
+>> +    if (drvdata->enable) {
+>> +        mutex_unlock(&drvdata->lock);
+>> +        return -EBUSY;
+>> +    }
+>> +
+>> +    drvdata->enable = true;
+>> +    mutex_unlock(&drvdata->lock);
+>> +
+>> +    dev_info(drvdata->dev, "TPDM tracing enabled\n");
+>> +    return 0;
+>> +}
+>> +
+>> +/* TPDM disable operations */
+>> +static void tpdm_disable(struct coresight_device *csdev,
+>> +             struct perf_event *event)
+>> +{
+>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
+>> +
+>> +    mutex_lock(&drvdata->lock);
+>> +    if (!drvdata->enable) {
+>> +        mutex_unlock(&drvdata->lock);
+>> +        return;
+>> +    }
+>> +
+>> +    drvdata->enable = false;
+>> +    mutex_unlock(&drvdata->lock);
+>> +
+>> +    dev_info(drvdata->dev, "TPDM tracing disabled\n");
+>> +}
+>> +
+>> +static const struct coresight_ops_source tpdm_source_ops = {
+>> +    .enable        = tpdm_enable,
+>> +    .disable    = tpdm_disable,
+>> +};
+>> +
+>> +static const struct coresight_ops tpdm_cs_ops = {
+>> +    .source_ops    = &tpdm_source_ops,
+>> +};
+>> +
+>> +static int tpdm_probe(struct amba_device *adev, const struct amba_id 
+>> *id)
+>> +{
+>> +    struct device *dev = &adev->dev;
+>> +    struct coresight_platform_data *pdata;
+>> +    struct tpdm_drvdata *drvdata;
+>> +    struct coresight_desc desc = { 0 };
+>> +
+>> +    pdata = coresight_get_platform_data(dev);
+>> +    if (IS_ERR(pdata))
+>> +        return PTR_ERR(pdata);
+>> +    adev->dev.platform_data = pdata;
+>> +
+>> +    /* driver data*/
+>> +    drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+>> +    if (!drvdata)
+>> +        return -ENOMEM;
+>> +    drvdata->dev = &adev->dev;
+>> +    dev_set_drvdata(dev, drvdata);
+>> +
+>> +    drvdata->base = devm_ioremap_resource(dev, &adev->res);
+>> +    if (!drvdata->base)
+>> +        return -ENOMEM;
+>> +
+>> +    mutex_init(&drvdata->lock);
+>> +
+>> +    /* Set up coresight component description */
+>> +    desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
+>> +    if (!desc.name)
+>> +        return -ENOMEM;
+>> +    desc.type = CORESIGHT_DEV_TYPE_SOURCE;
+>> +    desc.subtype.source_subtype = 
+>> CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY;
+>> +    desc.ops = &tpdm_cs_ops;
+>> +    desc.pdata = adev->dev.platform_data;
+>> +    desc.dev = &adev->dev;
 >
+> desc.access must be initialised here.
+>
+>     desc.access = CSDEV_ACCESS_IOMEM(drvdata->base);
+>
+>> +    drvdata->csdev = coresight_register(&desc);
+>> +    if (IS_ERR(drvdata->csdev))
+>> +        return PTR_ERR(drvdata->csdev);
+>> +
+>> +    /* Decrease pm refcount when probe is done.*/
+>> +    pm_runtime_put(&adev->dev);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void __exit tpdm_remove(struct amba_device *adev)
+>> +{
+>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
+>> +
+>> +    coresight_unregister(drvdata->csdev);
+>> +}
+>> +
+>> +/*
+>> + * Different TPDM has different periph id.
+>> + * The difference is 0-7 bits' value. So ignore 0-7 bits.
+>> + */
+>> +static struct amba_id tpdm_ids[] = {
+>> +    {
+>> +        .id = 0x000f0e00,
+>> +        .mask = 0x000fff00,
+>> +    },
+>> +    { 0, 0},
+>> +};
+>> +
+>> +static struct amba_driver tpdm_driver = {
+>> +    .drv = {
+>> +        .name   = "coresight-tpdm",
+>> +        .owner    = THIS_MODULE,
+>> +        .suppress_bind_attrs = true,
+>> +    },
+>> +    .probe          = tpdm_probe,
+>> +    .id_table    = tpdm_ids,
+>> +    .remove        = tpdm_remove,
+>> +};
+>> +
+>> +module_amba_driver(tpdm_driver);
+>> +
+>> +MODULE_LICENSE("GPL v2");
+>> +MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Monitor driver");
+>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h 
+>> b/drivers/hwtracing/coresight/coresight-tpdm.h
+>> new file mode 100644
+>> index 000000000000..94a7748a5426
+>> --- /dev/null
+>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+>> @@ -0,0 +1,26 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights 
+>> reserved.
+>> + */
+>> +
+>> +#ifndef _CORESIGHT_CORESIGHT_TPDM_H
+>> +#define _CORESIGHT_CORESIGHT_TPDM_H
+>> +
+>> +/**
+>> + * struct tpdm_drvdata - specifics associated to an TPDM component
+>> + * @base:       memory mapped base address for this component.
+>> + * @dev:        The device entity associated to this component.
+>> + * @csdev:      component vitals needed by the framework.
+>> + * @lock:       lock for the enable value.
+>> + * @enable:     enable status of the component.
+>> + */
+>> +
+>> +struct tpdm_drvdata {
+>> +    void __iomem        *base;
+>> +    struct device        *dev;
+>> +    struct coresight_device    *csdev;
+>> +    struct mutex        lock;
+>
+> Why mutex lock ? Couldn't this be a spinlock ?
+1. There is no irq for TPDM
+2. As there are 7 dataset types, there will be some FOR loop to configure
+tpdm registers which may cause some time.
+
+
+>
+>> +    bool            enable;
+>> +};
+>> +
+>> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
+>> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+>> index 247147c11231..a9efac55029d 100644
+>> --- a/include/linux/coresight.h
+>> +++ b/include/linux/coresight.h
+>> @@ -61,6 +61,7 @@ enum coresight_dev_subtype_source {
+>>       CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
+>>       CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
+>>       CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
+>> +    CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY,
+>
+> super minor nit: I find the choice of name a bit odd.
+> We could simply make it something like :
+>
+>     CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS:
+>
+> Suzuki
+I will check and update.
+>
+>>   };
+>>     enum coresight_dev_subtype_helper {
+>
+> _______________________________________________
+> CoreSight mailing list -- coresight@lists.linaro.org
+> To unsubscribe send an email to coresight-leave@lists.linaro.org

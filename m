@@ -2,201 +2,518 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B752532FE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 19:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B57B532FF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240095AbiEXRyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 13:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
+        id S240099AbiEXSAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 14:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiEXRyB (ORCPT
+        with ESMTP id S230099AbiEXR75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 13:54:01 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38B55DA2E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:53:59 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id rq11so14778939ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wa+upPf1apLqjKuR1HuZi1E27/u3cGlLf+e2phX4Q/M=;
-        b=Lc5TUPE+V/J7/uOG4++sFWqA0iw2MijypnqiwwIh2GiIbOp7GYm+2zqLmvbIZSnWF/
-         IWG4MtvXETAauWUFTCzIm9h+JNA3a5Du5IJuH4RUscUwP85nPI5iaQ+0wkyOU0R+Wuu+
-         BFT/kOgozR1lYOBnwsCCgQ4WzjpzTjWqqDYt0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wa+upPf1apLqjKuR1HuZi1E27/u3cGlLf+e2phX4Q/M=;
-        b=dAUhG5Y4VtDtpsoPZlx0qogOJwV1bFBalKfoznO8IR57s9+a1MPPINLh4NwSmJ5sZH
-         vCyCB1sV5RQA42ry+C5iClo1j2ip2TBnOvMWFYmo+dWBBp/Y3XIBCBRyAUnv72okOoF8
-         kCj5PwGRukYQ3mmNlicFV3lrKLUg2ltlQ0ET9LDfN2yjhy7DxlZsx9ARYHYCGzRp0BRW
-         gJrhUtdOjnCa1aw71YRmoXYX9sG9Wpnb/sxxSPm3eai5sfI1BCNNIAchvifXox+e++s1
-         RRjQQiaGmKJnvDle8EnENOPQRMe6jWlSIQBa6mGWLZcrmPPqdZlAtPkg4yCbs1s7h7pi
-         1lzQ==
-X-Gm-Message-State: AOAM5324DFcJAUuktH0INimCeE0T9dVUMhGYL9kItE2CBVSxl/yeM3BS
-        eIZx3U0B9xXXWrykuvMwt4SNyhPJJtLLALdB
-X-Google-Smtp-Source: ABdhPJyQc2bMQ5t4kxnQTDEiUKIeLhhN+HFMVk2g+SZY/D2sOSepNlKypO/1gvcrOG5JPMeaE2lKyg==
-X-Received: by 2002:a17:906:2658:b0:6fe:deae:cf0d with SMTP id i24-20020a170906265800b006fedeaecf0dmr10624020ejc.119.1653414838174;
-        Tue, 24 May 2022 10:53:58 -0700 (PDT)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id n8-20020a170906088800b006fed5247df9sm2794311eje.196.2022.05.24.10.53.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 10:53:57 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id u3so26809213wrg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:53:57 -0700 (PDT)
-X-Received: by 2002:a5d:59ac:0:b0:20e:6fd6:88c1 with SMTP id
- p12-20020a5d59ac000000b0020e6fd688c1mr21783371wrr.442.1653414837147; Tue, 24
- May 2022 10:53:57 -0700 (PDT)
+        Tue, 24 May 2022 13:59:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEBA62137;
+        Tue, 24 May 2022 10:59:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E88361553;
+        Tue, 24 May 2022 17:59:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4ACC34100;
+        Tue, 24 May 2022 17:59:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653415194;
+        bh=O23kCg5BjIoTnjoGWgJg0oMLdYIrdRRC0baQ4M1oVo0=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=jR9SsuMxiuG5xTMQ18/B5Pk9RuJXhUp2GIykcRgSKtpFkfBWCCD06o05bZ3GHZtkh
+         VTfe9vGuqrXoxL7Jl6KJhbN2kHKrhzYexW/2hHOOmqpEQ6ZmCZ5C2pn+Ud1uurTAvg
+         57f39vFTXq5TMwAp9fkRrkIJe4h/OvMtbh9NZQ1ZI2eFTTv2weGir+6HKkQgIVQVyW
+         EmqU5mn0/Lb0t2CXL/h4sXjdtwGhYHFQjxQFXczaWTs8oFrG+Fi910JO9fYfE+u6/2
+         NsM6uDBXYkGZCvVp9/u8M7vIISP8K6mMBdC5TPIaWiPv5Z9sffeLDGNWiolccS9L3T
+         IVBkU5NfndtBA==
+Date:   Tue, 24 May 2022 10:59:50 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr <olekstysh@gmail.com>
+cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
+        <virtualization@lists.linux-foundation.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH V2 5/7] dt-bindings: Add xen,dev-domid property description
+ for xen-grant DMA ops
+In-Reply-To: <606dfdcc-ec10-0c4a-04e9-72cd73ee6676@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2205241058430.1905099@ubuntu-linux-20-04-desktop>
+References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com> <1651947548-4055-6-git-send-email-olekstysh@gmail.com> <CAK8P3a2cAnXr8TDDYTiFxTWzQxa67sGnYDQRRD+=Q8_cSb1mEw@mail.gmail.com> <56e8c32d-6771-7179-005f-26ca58555659@gmail.com>
+ <CAK8P3a1YhkEZ8gcbXHEa5Bwx-4VVRJO8SUHf8=RNWRsc2Yo-+A@mail.gmail.com> <460a746c-6b61-214b-4653-44a1430e314d@gmail.com> <alpine.DEB.2.22.394.2205181802310.1905099@ubuntu-linux-20-04-desktop> <6f469e9c-c26e-f4be-9a85-710afb0d77eb@gmail.com>
+ <390ba7bb-ee9e-b7b7-5f08-71a7245fa4ec@gmail.com> <alpine.DEB.2.22.394.2205231856330.1905099@ubuntu-linux-20-04-desktop> <606dfdcc-ec10-0c4a-04e9-72cd73ee6676@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <You3JC/BOIyEnmQj@gmail.com> <Yoxucp7aUrCaV9uE@gmail.com> <Yox088fRrhh4grBX@gmail.com>
-In-Reply-To: <Yox088fRrhh4grBX@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 24 May 2022 10:53:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whRTihOdCij9MxpG433cB_9ZHhBeMVAVpAA5Bf2mdr5yA@mail.gmail.com>
-Message-ID: <CAHk-=whRTihOdCij9MxpG433cB_9ZHhBeMVAVpAA5Bf2mdr5yA@mail.gmail.com>
-Subject: Re: [GIT PULL] objtool changes for v5.19
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: multipart/mixed; boundary="00000000000009102c05dfc5a498"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1170483708-1653415194=:1905099"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000009102c05dfc5a498
-Content-Type: text/plain; charset="UTF-8"
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Mon, May 23, 2022 at 11:02 PM Ingo Molnar <mingo@kernel.org> wrote:
->
-> Note that with your latest tree you'll get 3 new conflicts:
+--8323329-1170483708-1653415194=:1905099
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-No problem, but the conflicts did make something clear: the objtool
-code should just get rid of the "--uaccess" flag that is now
-unconditional when CONFIG_X86_SMAP has been removed.
+On Tue, 24 May 2022, Oleksandr wrote:
+> > On Mon, 23 May 2022, Oleksandr wrote:
+> > > > > On Thu, 19 May 2022, Oleksandr wrote:
+> > > > > > > On Wed, May 18, 2022 at 5:06 PM Oleksandr <olekstysh@gmail.com>
+> > > > > > > wrote:
+> > > > > > > > On 18.05.22 17:32, Arnd Bergmann wrote:
+> > > > > > > > > On Sat, May 7, 2022 at 7:19 PM Oleksandr Tyshchenko
+> > > > > > > > > <olekstysh@gmail.com> wrote:
+> > > > > > > > >      This would mean having a device
+> > > > > > > > > node for the grant-table mechanism that can be referred to
+> > > > > > > > > using
+> > > > > > > > > the
+> > > > > > > > > 'iommus'
+> > > > > > > > > phandle property, with the domid as an additional argument.
+> > > > > > > > I assume, you are speaking about something like the following?
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > xen_dummy_iommu {
+> > > > > > > >        compatible = "xen,dummy-iommu";
+> > > > > > > >        #iommu-cells = <1>;
+> > > > > > > > };
+> > > > > > > > 
+> > > > > > > > virtio@3000 {
+> > > > > > > >        compatible = "virtio,mmio";
+> > > > > > > >        reg = <0x3000 0x100>;
+> > > > > > > >        interrupts = <41>;
+> > > > > > > > 
+> > > > > > > >        /* The device is located in Xen domain with ID 1 */
+> > > > > > > >        iommus = <&xen_dummy_iommu 1>;
+> > > > > > > > };
+> > > > > > > Right, that's that's the idea,
+> > > > > > thank you for the confirmation
+> > > > > > 
+> > > > > > 
+> > > > > > 
+> > > > > > >     except I would not call it a 'dummy'.
+> > > > > > >    From the perspective of the DT, this behaves just like an
+> > > > > > > IOMMU,
+> > > > > > > even if the exact mechanism is different from most hardware IOMMU
+> > > > > > > implementations.
+> > > > > > well, agree
+> > > > > > 
+> > > > > > 
+> > > > > > > > > It does not quite fit the model that Linux currently uses for
+> > > > > > > > > iommus,
+> > > > > > > > > as that has an allocator for dma_addr_t space
+> > > > > > > > yes (# 3/7 adds grant-table based allocator)
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > > , but it would think it's
+> > > > > > > > > conceptually close enough that it makes sense for the binding.
+> > > > > > > > Interesting idea. I am wondering, do we need an extra actions
+> > > > > > > > for
+> > > > > > > > this
+> > > > > > > > to work in Linux guest (dummy IOMMU driver, etc)?
+> > > > > > > It depends on how closely the guest implementation can be made to
+> > > > > > > resemble a normal iommu. If you do allocate dma_addr_t addresses,
+> > > > > > > it may actually be close enough that you can just turn the
+> > > > > > > grant-table
+> > > > > > > code into a normal iommu driver and change nothing else.
+> > > > > > Unfortunately, I failed to find a way how use grant references at
+> > > > > > the
+> > > > > > iommu_ops level (I mean to fully pretend that we are an IOMMU
+> > > > > > driver). I
+> > > > > > am
+> > > > > > not too familiar with that, so what is written below might be wrong
+> > > > > > or
+> > > > > > at
+> > > > > > least not precise.
+> > > > > > 
+> > > > > > The normal IOMMU driver in Linux doesn’t allocate DMA addresses by
+> > > > > > itself, it
+> > > > > > just maps (IOVA-PA) what was requested to be mapped by the upper
+> > > > > > layer.
+> > > > > > The
+> > > > > > DMA address allocation is done by the upper layer (DMA-IOMMU which
+> > > > > > is
+> > > > > > the glue
+> > > > > > layer between DMA API and IOMMU API allocates IOVA for PA?). But,
+> > > > > > all
+> > > > > > what we
+> > > > > > need here is just to allocate our specific grant-table based DMA
+> > > > > > addresses
+> > > > > > (DMA address = grant reference + offset in the page), so let’s say
+> > > > > > we
+> > > > > > need an
+> > > > > > entity to take a physical address as parameter and return a DMA
+> > > > > > address
+> > > > > > (what
+> > > > > > actually commit #3/7 is doing), and that’s all. So working at the
+> > > > > > dma_ops
+> > > > > > layer we get exactly what we need, with the minimal changes to guest
+> > > > > > infrastructure. In our case the Xen itself acts as an IOMMU.
+> > > > > > 
+> > > > > > Assuming that we want to reuse the IOMMU infrastructure somehow for
+> > > > > > our
+> > > > > > needs.
+> > > > > > I think, in that case we will likely need to introduce a new
+> > > > > > specific
+> > > > > > IOVA
+> > > > > > allocator (alongside with a generic one) to be hooked up by the
+> > > > > > DMA-IOMMU
+> > > > > > layer if we run on top of Xen. But, even having the specific IOVA
+> > > > > > allocator to
+> > > > > > return what we indeed need (DMA address = grant reference + offset
+> > > > > > in
+> > > > > > the
+> > > > > > page) we will still need the specific minimal required IOMMU driver
+> > > > > > to
+> > > > > > be
+> > > > > > present in the system anyway in order to track the mappings(?) and
+> > > > > > do
+> > > > > > nothing
+> > > > > > with them, returning a success (this specific IOMMU driver should
+> > > > > > have
+> > > > > > all
+> > > > > > mandatory callbacks implemented).
+> > > > > > 
+> > > > > > I completely agree, it would be really nice to reuse generic IOMMU
+> > > > > > bindings
+> > > > > > rather than introducing Xen specific property if what we are trying
+> > > > > > to
+> > > > > > implement in current patch series fits in the usage of "iommus" in
+> > > > > > Linux
+> > > > > > more-less. But, if we will have to add more complexity/more
+> > > > > > components
+> > > > > > to the
+> > > > > > code for the sake of reusing device tree binding, this raises a
+> > > > > > question
+> > > > > > whether that’s worthwhile.
+> > > > > > 
+> > > > > > Or I really missed something?
+> > > > > I think Arnd was primarily suggesting to reuse the IOMMU Device Tree
+> > > > > bindings, not necessarily the IOMMU drivers framework in Linux
+> > > > > (although
+> > > > > that would be an added bonus.)
+> > > > > 
+> > > > > I know from previous discussions with you that making the grant table
+> > > > > fit in the existing IOMMU drivers model is difficult, but just reusing
+> > > > > the Device Tree bindings seems feasible?
+> > > > I started experimenting with that. As wrote in a separate email, I got a
+> > > > deferred probe timeout,
+> > > > 
+> > > > after inserting required nodes into guest device tree, which seems to be
+> > > > a
+> > > > consequence of the unavailability of IOMMU, I will continue to
+> > > > investigate
+> > > > this question.
+> > > 
+> > > I have experimented with that. Yes, just reusing the Device Tree bindings
+> > > is
+> > > technically feasible (and we are able to do this by only touching
+> > > grant-dma-ops.c), although deferred probe timeout still stands (as there
+> > > is no
+> > > IOMMU driver being present actually).
+> > > 
+> > > [    0.583771] virtio-mmio 2000000.virtio: deferred probe timeout,
+> > > ignoring
+> > > dependency
+> > > [    0.615556] virtio_blk virtio0: [vda] 4096000 512-byte logical blocks
+> > > (2.10
+> > > GB/1.95 GiB)
+> > > 
+> > > 
+> > > Below the working diff (on top of current series):
+> > > 
+> > > diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> > > index da9c7ff..6586152 100644
+> > > --- a/drivers/xen/grant-dma-ops.c
+> > > +++ b/drivers/xen/grant-dma-ops.c
+> > > @@ -272,17 +272,24 @@ static const struct dma_map_ops xen_grant_dma_ops =
+> > > {
+> > > 
+> > >   bool xen_is_grant_dma_device(struct device *dev)
+> > >   {
+> > > +       struct device_node *iommu_np;
+> > > +       bool has_iommu;
+> > > +
+> > >          /* XXX Handle only DT devices for now */
+> > >          if (!dev->of_node)
+> > >                  return false;
+> > > 
+> > > -       return of_property_read_bool(dev->of_node, "xen,backend-domid");
+> > > +       iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
+> > > +       has_iommu = iommu_np && of_device_is_compatible(iommu_np,
+> > > "xen,grant-dma");
+> > > +       of_node_put(iommu_np);
+> > > +
+> > > +       return has_iommu;
+> > >   }
+> > > 
+> > >   void xen_grant_setup_dma_ops(struct device *dev)
+> > >   {
+> > >          struct xen_grant_dma_data *data;
+> > > -       uint32_t domid;
+> > > +       struct of_phandle_args iommu_spec;
+> > > 
+> > >          data = find_xen_grant_dma_data(dev);
+> > >          if (data) {
+> > > @@ -294,16 +301,30 @@ void xen_grant_setup_dma_ops(struct device *dev)
+> > >          if (!dev->of_node)
+> > >                  goto err;
+> > > 
+> > > -       if (of_property_read_u32(dev->of_node, "xen,backend-domid",
+> > > &domid)) {
+> > > -               dev_err(dev, "xen,backend-domid property is not
+> > > present\n");
+> > > +       if (of_parse_phandle_with_args(dev->of_node, "iommus",
+> > > "#iommu-cells",
+> > > +                       0, &iommu_spec)) {
+> > > +               dev_err(dev, "Cannot parse iommus property\n");
+> > > +               goto err;
+> > > +       }
+> > > +
+> > > +       if (!of_device_is_compatible(iommu_spec.np, "xen,grant-dma") ||
+> > > +                       iommu_spec.args_count != 1) {
+> > > +               dev_err(dev, "Incompatible IOMMU node\n");
+> > > +               of_node_put(iommu_spec.np);
+> > >                  goto err;
+> > >          }
+> > > 
+> > > +       of_node_put(iommu_spec.np);
+> > > +
+> > >          data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> > >          if (!data)
+> > >                  goto err;
+> > > 
+> > > -       data->backend_domid = domid;
+> > > +       /*
+> > > +        * The endpoint ID here means the ID of the domain where the
+> > > corresponding
+> > > +        * backend is running
+> > > +        */
+> > > +       data->backend_domid = iommu_spec.args[0];
+> > > 
+> > >          if (xa_err(xa_store(&xen_grant_dma_devices, (unsigned long)dev,
+> > > data,
+> > >                          GFP_KERNEL))) {
+> > > (END)
+> > > 
+> > > 
+> > > 
+> > > Below, the nodes generated by Xen toolstack:
+> > > 
+> > >          xen_grant_dma {
+> > >                  compatible = "xen,grant-dma";
+> > >                  #iommu-cells = <0x01>;
+> > >                  phandle = <0xfde9>;
+> > >          };
+> > > 
+> > >          virtio@2000000 {
+> > >                  compatible = "virtio,mmio";
+> > >                  reg = <0x00 0x2000000 0x00 0x200>;
+> > >                  interrupts = <0x00 0x01 0xf01>;
+> > >                  interrupt-parent = <0xfde8>;
+> > >                  dma-coherent;
+> > >                  iommus = <0xfde9 0x01>;
+> > >          };
+> >   Not bad! I like it.
+> 
+> 
+> Good.
+> 
+> 
+> 
+> >     
+> > > I am wondering, would be the proper solution to eliminate deferred probe
+> > > timeout issue in our particular case (without introducing an extra IOMMU
+> > > driver)?
+> > In reality I don't think there is a way to do that. I would create an
+> > empty skelethon IOMMU driver for xen,grant-dma.
+> 
+> Ok, I found yet another option how we can avoid deferred probe timeout issue.
+> I am not sure whether it will be welcome. But it doesn't really require
+> introducing stub IOMMU driver or other changes in the guest. The idea is to
+> make IOMMU device unavailable (status = "disabled"), this way
+> of_iommu_configure() will treat that as success condition also.
+> 
+> https://elixir.bootlin.com/linux/v5.18/source/drivers/iommu/of_iommu.c#L31
+> https://elixir.bootlin.com/linux/v5.18/source/drivers/iommu/of_iommu.c#L149
+> 
+>         xen_grant_dma {
+>                 compatible = "xen,grant-dma";
+>                 #iommu-cells = <0x01>;
+>                 phandle = <0xfde9>;
+>                 status = "disabled";
+>         };
+>         virtio@2000000 {
+>                 compatible = "virtio,mmio";
+>                 reg = <0x00 0x2000000 0x00 0x200>;
+>                 interrupts = <0x00 0x01 0xf01>;
+>                 interrupt-parent = <0xfde8>;
+>                 dma-coherent;
+>                 iommus = <0xfde9 0x01>;
+>         };
+> 
+> I have checked, this "fixes" deferred probe timeout issue.
+> 
+> 
+> Or we indeed need to introduce stub IOMMU driver (I placed it to driver/xen
+> instead of driver/iommu, also we can even squash it with grant-dma-ops.c?).
+> This stub driver also results in NO_IOMMU condition (as "of_xlate" callback is
+> not implemented).
+> 
+> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
+> index a7bd8ce..35b91b9 100644
+> --- a/drivers/xen/Kconfig
+> +++ b/drivers/xen/Kconfig
+> @@ -335,6 +335,10 @@ config XEN_UNPOPULATED_ALLOC
+>           having to balloon out RAM regions in order to obtain physical memory
+>           space to create such mappings.
+> 
+> +config XEN_GRANT_DMA_IOMMU
+> +       bool
+> +       select IOMMU_API
+> +
+>  config XEN_GRANT_DMA_OPS
+>         bool
+>         select DMA_OPS
+> @@ -343,6 +347,7 @@ config XEN_VIRTIO
+>         bool "Xen virtio support"
+>         depends on VIRTIO
+>         select XEN_GRANT_DMA_OPS
+> +       select XEN_GRANT_DMA_IOMMU
+>         help
+>           Enable virtio support for running as Xen guest. Depending on the
+>           guest type this will require special support on the backend side
+> diff --git a/drivers/xen/Makefile b/drivers/xen/Makefile
+> index 1a23cb0..c0503f1 100644
+> --- a/drivers/xen/Makefile
+> +++ b/drivers/xen/Makefile
+> @@ -40,3 +40,4 @@ xen-privcmd-y                         := privcmd.o
+> privcmd-buf.o
+>  obj-$(CONFIG_XEN_FRONT_PGDIR_SHBUF)    += xen-front-pgdir-shbuf.o
+>  obj-$(CONFIG_XEN_UNPOPULATED_ALLOC)    += unpopulated-alloc.o
+>  obj-$(CONFIG_XEN_GRANT_DMA_OPS)                += grant-dma-ops.o
+> +obj-$(CONFIG_XEN_GRANT_DMA_IOMMU)      += grant-dma-iommu.o
+> diff --git a/drivers/xen/grant-dma-iommu.c b/drivers/xen/grant-dma-iommu.c
+> new file mode 100644
+> index 00000000..b8aad8a
+> --- /dev/null
+> +++ b/drivers/xen/grant-dma-iommu.c
+> @@ -0,0 +1,76 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Stub IOMMU driver which does nothing.
+> + * The main purpose of it being present is to reuse generic device-tree IOMMU
+> + * bindings by Xen grant DMA-mapping layer.
+> + */
+> +
+> +#include <linux/iommu.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +
+> +struct grant_dma_iommu_device {
+> +       struct device *dev;
+> +       struct iommu_device iommu;
+> +};
+> +
+> +/* Nothing is really needed here */
+> +static const struct iommu_ops grant_dma_iommu_ops;
+> +
+> +static const struct of_device_id grant_dma_iommu_of_match[] = {
+> +       { .compatible = "xen,grant-dma" },
+> +       { },
+> +};
+> +
+> +static int grant_dma_iommu_probe(struct platform_device *pdev)
+> +{
+> +       struct grant_dma_iommu_device *mmu;
+> +       int ret;
+> +
+> +       mmu = devm_kzalloc(&pdev->dev, sizeof(*mmu), GFP_KERNEL);
+> +       if (!mmu)
+> +               return -ENOMEM;
+> +
+> +       mmu->dev = &pdev->dev;
+> +
+> +       ret = iommu_device_register(&mmu->iommu, &grant_dma_iommu_ops,
+> &pdev->dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       platform_set_drvdata(pdev, mmu);
+> +
+> +       return 0;
+> +}
+> +
+> +static int grant_dma_iommu_remove(struct platform_device *pdev)
+> +{
+> +       struct grant_dma_iommu_device *mmu = platform_get_drvdata(pdev);
+> +
+> +       platform_set_drvdata(pdev, NULL);
+> +       iommu_device_unregister(&mmu->iommu);
+> +
+> +       return 0;
+> +}
+> +
+> +static struct platform_driver grant_dma_iommu_driver = {
+> +       .driver = {
+> +               .name = "grant-dma-iommu",
+> +               .of_match_table = grant_dma_iommu_of_match,
+> +       },
+> +       .probe = grant_dma_iommu_probe,
+> +       .remove = grant_dma_iommu_remove,
+> +};
+> +
+> +static int __init grant_dma_iommu_init(void)
+> +{
+> +       struct device_node *iommu_np;
+> +
+> +       iommu_np = of_find_matching_node(NULL, grant_dma_iommu_of_match);
+> +       if (!iommu_np)
+> +               return 0;
+> +
+> +       of_node_put(iommu_np);
+> +
+> +       return platform_driver_register(&grant_dma_iommu_driver);
+> +}
+> +subsys_initcall(grant_dma_iommu_init);
+> 
+> I have checked, this also "fixes" deferred probe timeout issue.
+> 
+> Personally I would prefer the first option, but I would be also happy to use
+> second option in order to unblock the series.
+> 
+> What do the maintainers think?
+ 
 
-I didn't actually do that, and instead just did the mindless merge
-conflict resolution, but it might be a good idea.
+I don't think it is a good idea to mark the fake IOMMU as disabled
+because it implies that there is no need to use it (no need to use
+dma_ops) which is a problem.
 
-See commit dbae0a934f09 ("x86/cpu: Remove CONFIG_X86_SMAP and
-'nosmap'") for when it was removed.
+If we don't want the skelethon driver then Rob's suggestion of having a
+skip list for deferred probe is better.
 
-Josh? The patch *might* be something like the attached, but this is
-(a) untested and (b) that 'opts.noinstr' part of the patch is a bit
-dodgy (ie I made the previous 'if' unconditional, but then changed the
-follow 'else if ()'  to just 'if ()' instead of deleting it, which is
-what "uaccess is always set" would technically have done.
-
-Again: I did *not* do this as part of the merge, the attached patch is
-just a suggestion of something that I think should now be done after
-the merge.
-
-Hmm?
-
-                        Linus
-
---00000000000009102c05dfc5a498
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l3kggtqd0>
-X-Attachment-Id: f_l3kggtqd0
-
-IHNjcmlwdHMvTWFrZWZpbGUuYnVpbGQgICAgICAgICAgICAgICAgICB8ICAxIC0KIHNjcmlwdHMv
-bGluay12bWxpbnV4LnNoICAgICAgICAgICAgICAgICB8ICAyIC0tCiB0b29scy9vYmp0b29sL2Fy
-Y2gveDg2L3NwZWNpYWwuYyAgICAgICAgfCAgOCArKy0tLS0tLQogdG9vbHMvb2JqdG9vbC9idWls
-dGluLWNoZWNrLmMgICAgICAgICAgIHwgIDQgKy0tLQogdG9vbHMvb2JqdG9vbC9jaGVjay5jICAg
-ICAgICAgICAgICAgICAgIHwgMzAgKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tCiB0b29s
-cy9vYmp0b29sL2luY2x1ZGUvb2JqdG9vbC9idWlsdGluLmggfCAgMSAtCiA2IGZpbGVzIGNoYW5n
-ZWQsIDE2IGluc2VydGlvbnMoKyksIDMwIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3Njcmlw
-dHMvTWFrZWZpbGUuYnVpbGQgYi9zY3JpcHRzL01ha2VmaWxlLmJ1aWxkCmluZGV4IGY4OWQzZmNm
-ZjM5Zi4uNGQ5NmRlYTlmZjMxIDEwMDY0NAotLS0gYS9zY3JpcHRzL01ha2VmaWxlLmJ1aWxkCisr
-KyBiL3NjcmlwdHMvTWFrZWZpbGUuYnVpbGQKQEAgLTIzNiw3ICsyMzYsNiBAQCBvYmp0b29sX2Fy
-Z3MgPQkJCQkJCQkJXAogCSQoaWYgJChDT05GSUdfU0xTKSwgLS1zbHMpCQkJCQlcCiAJJChpZiAk
-KENPTkZJR19TVEFDS19WQUxJREFUSU9OKSwgLS1zdGFja3ZhbCkJCQlcCiAJJChpZiAkKENPTkZJ
-R19IQVZFX1NUQVRJQ19DQUxMX0lOTElORSksIC0tc3RhdGljLWNhbGwpCQlcCi0JLS11YWNjZXNz
-CQkJCQkJCVwKIAkkKGlmICQobGlua2VkLW9iamVjdCksIC0tbGluaykJCQkJCVwKIAkkKGlmICQo
-cGFydC1vZi1tb2R1bGUpLCAtLW1vZHVsZSkJCQkJXAogCSQoaWYgJChDT05GSUdfR0NPVl9LRVJO
-RUwpLCAtLW5vLXVucmVhY2hhYmxlKQpkaWZmIC0tZ2l0IGEvc2NyaXB0cy9saW5rLXZtbGludXgu
-c2ggYi9zY3JpcHRzL2xpbmstdm1saW51eC5zaAppbmRleCBkN2YyNmYwMmYxNDIuLmFkZDk4Y2U5
-ZTFlNSAxMDA3NTUKLS0tIGEvc2NyaXB0cy9saW5rLXZtbGludXguc2gKKysrIGIvc2NyaXB0cy9s
-aW5rLXZtbGludXguc2gKQEAgLTE1Miw4ICsxNTIsNiBAQCBvYmp0b29sX2xpbmsoKQogCQlpZiBp
-c19lbmFibGVkIENPTkZJR19IQVZFX1NUQVRJQ19DQUxMX0lOTElORTsgdGhlbgogCQkJb2JqdG9v
-bG9wdD0iJHtvYmp0b29sb3B0fSAtLXN0YXRpYy1jYWxsIgogCQlmaQotCi0JCW9ianRvb2xvcHQ9
-IiR7b2JqdG9vbG9wdH0gLS11YWNjZXNzIgogCWZpCiAKIAlpZiBpc19lbmFibGVkIENPTkZJR19O
-T0lOU1RSX1ZBTElEQVRJT047IHRoZW4KZGlmZiAtLWdpdCBhL3Rvb2xzL29ianRvb2wvYXJjaC94
-ODYvc3BlY2lhbC5jIGIvdG9vbHMvb2JqdG9vbC9hcmNoL3g4Ni9zcGVjaWFsLmMKaW5kZXggN2M5
-N2I3MzkxMjc5Li5iMDcwZWRiNWZkOGYgMTAwNjQ0Ci0tLSBhL3Rvb2xzL29ianRvb2wvYXJjaC94
-ODYvc3BlY2lhbC5jCisrKyBiL3Rvb2xzL29ianRvb2wvYXJjaC94ODYvc3BlY2lhbC5jCkBAIC0x
-MiwxOCArMTIsMTQgQEAgdm9pZCBhcmNoX2hhbmRsZV9hbHRlcm5hdGl2ZSh1bnNpZ25lZCBzaG9y
-dCBmZWF0dXJlLCBzdHJ1Y3Qgc3BlY2lhbF9hbHQgKmFsdCkKIAlzd2l0Y2ggKGZlYXR1cmUpIHsK
-IAljYXNlIFg4Nl9GRUFUVVJFX1NNQVA6CiAJCS8qCi0JCSAqIElmIFVBQ0NFU1MgdmFsaWRhdGlv
-biBpcyBlbmFibGVkOyBmb3JjZSB0aGF0IGFsdGVybmF0aXZlOwotCQkgKiBvdGhlcndpc2UgZm9y
-Y2UgaXQgdGhlIG90aGVyIHdheS4KKwkJICogRm9yY2UgdGhlIHVhY2Nlc3MgYWx0ZXJuYXRpdmUu
-CiAJCSAqCiAJCSAqIFdoYXQgd2Ugd2FudCB0byBhdm9pZCBpcyBoYXZpbmcgYm90aCB0aGUgb3Jp
-Z2luYWwgYW5kIHRoZQogCQkgKiBhbHRlcm5hdGl2ZSBjb2RlIGZsb3cgYXQgdGhlIHNhbWUgdGlt
-ZSwgaW4gdGhhdCBjYXNlIHdlIGNhbgogCQkgKiBmaW5kIHBhdGhzIHRoYXQgc2VlIHRoZSBTVEFD
-IGJ1dCB0YWtlIHRoZSBOT1AgaW5zdGVhZCBvZgogCQkgKiBDTEFDIGFuZCB0aGUgb3RoZXIgd2F5
-IGFyb3VuZC4KIAkJICovCi0JCWlmIChvcHRzLnVhY2Nlc3MpCi0JCQlhbHQtPnNraXBfb3JpZyA9
-IHRydWU7Ci0JCWVsc2UKLQkJCWFsdC0+c2tpcF9hbHQgPSB0cnVlOworCQlhbHQtPnNraXBfb3Jp
-ZyA9IHRydWU7CiAJCWJyZWFrOwogCWNhc2UgWDg2X0ZFQVRVUkVfUE9QQ05UOgogCQkvKgpkaWZm
-IC0tZ2l0IGEvdG9vbHMvb2JqdG9vbC9idWlsdGluLWNoZWNrLmMgYi90b29scy9vYmp0b29sL2J1
-aWx0aW4tY2hlY2suYwppbmRleCBmNGMzYTUwOTE3MzcuLmFlMjg5MDVkYzE3YSAxMDA2NDQKLS0t
-IGEvdG9vbHMvb2JqdG9vbC9idWlsdGluLWNoZWNrLmMKKysrIGIvdG9vbHMvb2JqdG9vbC9idWls
-dGluLWNoZWNrLmMKQEAgLTcxLDcgKzcxLDYgQEAgY29uc3Qgc3RydWN0IG9wdGlvbiBjaGVja19v
-cHRpb25zW10gPSB7CiAJT1BUX0JPT0xFQU4oJ2wnLCAic2xzIiwgJm9wdHMuc2xzLCAidmFsaWRh
-dGUgc3RyYWlnaHQtbGluZS1zcGVjdWxhdGlvbiBtaXRpZ2F0aW9ucyIpLAogCU9QVF9CT09MRUFO
-KCdzJywgInN0YWNrdmFsIiwgJm9wdHMuc3RhY2t2YWwsICJ2YWxpZGF0ZSBmcmFtZSBwb2ludGVy
-IHJ1bGVzIiksCiAJT1BUX0JPT0xFQU4oJ3QnLCAic3RhdGljLWNhbGwiLCAmb3B0cy5zdGF0aWNf
-Y2FsbCwgImFubm90YXRlIHN0YXRpYyBjYWxscyIpLAotCU9QVF9CT09MRUFOKCd1JywgInVhY2Nl
-c3MiLCAmb3B0cy51YWNjZXNzLCAidmFsaWRhdGUgdWFjY2VzcyBydWxlcyBmb3IgU01BUCIpLAog
-CU9QVF9DQUxMQkFDS19PUFRBUkcoMCwgImR1bXAiLCBOVUxMLCBOVUxMLCAib3JjIiwgImR1bXAg
-bWV0YWRhdGEiLCBwYXJzZV9kdW1wKSwKIAogCU9QVF9HUk9VUCgiT3B0aW9uczoiKSwKQEAgLTEy
-NSw4ICsxMjQsNyBAQCBzdGF0aWMgYm9vbCBvcHRzX3ZhbGlkKHZvaWQpCiAJICAgIG9wdHMucmV0
-cG9saW5lCQl8fAogCSAgICBvcHRzLnNscwkJCXx8CiAJICAgIG9wdHMuc3RhY2t2YWwJCXx8Ci0J
-ICAgIG9wdHMuc3RhdGljX2NhbGwJCXx8Ci0JICAgIG9wdHMudWFjY2VzcykgeworCSAgICBvcHRz
-LnN0YXRpY19jYWxsKSB7CiAJCWlmIChvcHRzLmR1bXBfb3JjKSB7CiAJCQlFUlJPUigiLS1kdW1w
-IGNhbid0IGJlIGNvbWJpbmVkIHdpdGggb3RoZXIgb3B0aW9ucyIpOwogCQkJcmV0dXJuIGZhbHNl
-OwpkaWZmIC0tZ2l0IGEvdG9vbHMvb2JqdG9vbC9jaGVjay5jIGIvdG9vbHMvb2JqdG9vbC9jaGVj
-ay5jCmluZGV4IDE5MGIyZjZlMzYwYS4uODZmMDFmODZjZDEzIDEwMDY0NAotLS0gYS90b29scy9v
-Ymp0b29sL2NoZWNrLmMKKysrIGIvdG9vbHMvb2JqdG9vbC9jaGVjay5jCkBAIC0xMDMwLDkgKzEw
-MzAsNiBAQCBzdGF0aWMgdm9pZCBhZGRfdWFjY2Vzc19zYWZlKHN0cnVjdCBvYmp0b29sX2ZpbGUg
-KmZpbGUpCiAJc3RydWN0IHN5bWJvbCAqZnVuYzsKIAljb25zdCBjaGFyICoqbmFtZTsKIAotCWlm
-ICghb3B0cy51YWNjZXNzKQotCQlyZXR1cm47Ci0KIAlmb3IgKG5hbWUgPSB1YWNjZXNzX3NhZmVf
-YnVpbHRpbjsgKm5hbWU7IG5hbWUrKykgewogCQlmdW5jID0gZmluZF9zeW1ib2xfYnlfbmFtZShm
-aWxlLT5lbGYsICpuYW1lKTsKIAkJaWYgKCFmdW5jKQpAQCAtMzkxOSwyNSArMzkxNiwyNCBAQCBp
-bnQgY2hlY2soc3RydWN0IG9ianRvb2xfZmlsZSAqZmlsZSkKIAkJd2FybmluZ3MgKz0gcmV0Owog
-CX0KIAotCWlmIChvcHRzLnN0YWNrdmFsIHx8IG9wdHMub3JjIHx8IG9wdHMudWFjY2Vzcykgewot
-CQlyZXQgPSB2YWxpZGF0ZV9mdW5jdGlvbnMoZmlsZSk7Ci0JCWlmIChyZXQgPCAwKQotCQkJZ290
-byBvdXQ7Ci0JCXdhcm5pbmdzICs9IHJldDsKKwlyZXQgPSB2YWxpZGF0ZV9mdW5jdGlvbnMoZmls
-ZSk7CisJaWYgKHJldCA8IDApCisJCWdvdG8gb3V0OworCXdhcm5pbmdzICs9IHJldDsKIAotCQly
-ZXQgPSB2YWxpZGF0ZV91bndpbmRfaGludHMoZmlsZSwgTlVMTCk7CisJcmV0ID0gdmFsaWRhdGVf
-dW53aW5kX2hpbnRzKGZpbGUsIE5VTEwpOworCWlmIChyZXQgPCAwKQorCQlnb3RvIG91dDsKKwl3
-YXJuaW5ncyArPSByZXQ7CisKKwlpZiAoIXdhcm5pbmdzKSB7CisJCXJldCA9IHZhbGlkYXRlX3Jl
-YWNoYWJsZV9pbnN0cnVjdGlvbnMoZmlsZSk7CiAJCWlmIChyZXQgPCAwKQogCQkJZ290byBvdXQ7
-CiAJCXdhcm5pbmdzICs9IHJldDsKKwl9CiAKLQkJaWYgKCF3YXJuaW5ncykgewotCQkJcmV0ID0g
-dmFsaWRhdGVfcmVhY2hhYmxlX2luc3RydWN0aW9ucyhmaWxlKTsKLQkJCWlmIChyZXQgPCAwKQot
-CQkJCWdvdG8gb3V0OwotCQkJd2FybmluZ3MgKz0gcmV0OwotCQl9Ci0KLQl9IGVsc2UgaWYgKG9w
-dHMubm9pbnN0cikgeworCWlmIChvcHRzLm5vaW5zdHIpIHsKIAkJcmV0ID0gdmFsaWRhdGVfbm9p
-bnN0cl9zZWN0aW9ucyhmaWxlKTsKIAkJaWYgKHJldCA8IDApCiAJCQlnb3RvIG91dDsKZGlmZiAt
-LWdpdCBhL3Rvb2xzL29ianRvb2wvaW5jbHVkZS9vYmp0b29sL2J1aWx0aW4uaCBiL3Rvb2xzL29i
-anRvb2wvaW5jbHVkZS9vYmp0b29sL2J1aWx0aW4uaAppbmRleCAyODBlYTE4YjdmMmIuLjgwNTRm
-M2RjNzcxMiAxMDA2NDQKLS0tIGEvdG9vbHMvb2JqdG9vbC9pbmNsdWRlL29ianRvb2wvYnVpbHRp
-bi5oCisrKyBiL3Rvb2xzL29ianRvb2wvaW5jbHVkZS9vYmp0b29sL2J1aWx0aW4uaApAQCAtMjIs
-NyArMjIsNiBAQCBzdHJ1Y3Qgb3B0cyB7CiAJYm9vbCBzbHM7CiAJYm9vbCBzdGFja3ZhbDsKIAli
-b29sIHN0YXRpY19jYWxsOwotCWJvb2wgdWFjY2VzczsKIAogCS8qIG9wdGlvbnM6ICovCiAJYm9v
-bCBiYWNrdHJhY2U7Cg==
---00000000000009102c05dfc5a498--
+I think the skelethon driver also is totally fine.
+--8323329-1170483708-1653415194=:1905099--

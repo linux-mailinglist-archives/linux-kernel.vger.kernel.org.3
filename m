@@ -2,195 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E032532B75
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DACD532B72
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237658AbiEXNmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
+        id S237889AbiEXNlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbiEXNmn (ORCPT
+        with ESMTP id S231224AbiEXNlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:42:43 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C111475226;
-        Tue, 24 May 2022 06:42:41 -0700 (PDT)
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 24ODgDUG022736;
-        Tue, 24 May 2022 22:42:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 24ODgDUG022736
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653399734;
-        bh=aNLlIgPVqKG5chGBjgSqnkX4433JxjcWB7yJEVQZ+Gg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vXA8HrUWNsrcMbb4jjxlOaE1UOW4nzjC8LOPdbOMXac6+lkDf8ercmWRWQ6PntFhp
-         lbAfJ7j+CQ2UH7nNTb2juSxDe9MRJtGGZ6aySjIrlfVlcX9sJSj0BVCm/FTEkEAEbw
-         A3FQPgOVjUU/yzKOkS2SqKMP52kVy5IEdmzSXSipe+inDpK4wNAA2xuR9MR32X2bYd
-         de/lBb9qz4JB5gK5mtbgS7x4URxRknF7H6BevFWGGucM4329GlHTvZRGpAN6u/qHt5
-         jRTks2KxEk9Lxq4w8hPRb/lid7BQBgy9Fo/YcgPj+aV9bw+6GW5vkSONg8kGGvsLzU
-         PIUGgvvPbp5RQ==
-X-Nifty-SrcIP: [209.85.214.175]
-Received: by mail-pl1-f175.google.com with SMTP id n8so15901205plh.1;
-        Tue, 24 May 2022 06:42:13 -0700 (PDT)
-X-Gm-Message-State: AOAM532fDD7fTgrP2PSZWbA+u73O7vrxW/J+2a+2RkvgM1c2OOfz5JLb
-        SyP6IgYnglXAMWGxmPBxAYDepk5z1FlvutCIXJo=
-X-Google-Smtp-Source: ABdhPJyTdv6DT7AK41vY70QzhcMH2A38iaGQn1upGmFmPJo+2BcK+NmA7eL9uIW06HJVa028vlOfajtpPNm4sy2hH34=
-X-Received: by 2002:a17:90a:e004:b0:1e0:7a66:fb3a with SMTP id
- u4-20020a17090ae00400b001e07a66fb3amr2891041pjy.119.1653399732689; Tue, 24
- May 2022 06:42:12 -0700 (PDT)
+        Tue, 24 May 2022 09:41:40 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4EF3205C;
+        Tue, 24 May 2022 06:41:38 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id DC3DB1F442E3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653399691;
+        bh=qpTUo3+rCDoRa3ZgqFQh1I4V9k0JzWGh76jPDBVw0m4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hRMXxgmEZeDfWxnLgiCfIjezbE8Yst9du0UI+7few0qFS4O6SzexhgUtNR81+UMa0
+         KYtGAP7WoJvvCbjb1r9vYJeBeLntuikTxHhQ2xX4GkSM65ZWF51SWtZtKkvG2GsFyp
+         ee6wNZ4HuinXH/33e8XTqRPnuFRbKCyO2LU4lEig5MXDWQ8Ifwaf0vGosGA3FpGoOu
+         ZY9sVSFR31S/Hc7aRsnDGFMQGEBGJznHN/aWQ9jbnVbO6PcOxcFGWQQ7E0fiyfa2yi
+         ZaixIuXh19f/Vi/OJQtn0gKlBU/bhD2aoxUDefuGeAsRvNKuYRcUhucApE0L9xde3E
+         WNH0ic23yweUA==
+Message-ID: <c4914e14-1882-55a1-bcbd-a905852b45a3@collabora.com>
+Date:   Tue, 24 May 2022 16:41:23 +0300
 MIME-Version: 1.0
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-2-alexandr.lobakin@intel.com> <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
- <20220524113337.4128239-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220524113337.4128239-1-alexandr.lobakin@intel.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 24 May 2022 22:40:51 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQus0vcWLCgSdMZNcYKam4fKYj9c8Zrb3HggZ7dTBUrxQ@mail.gmail.com>
-Message-ID: <CAK7LNAQus0vcWLCgSdMZNcYKam4fKYj9c8Zrb3HggZ7dTBUrxQ@mail.gmail.com>
-Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 07/27] kernel/reboot: Add kernel_can_power_off()
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        live-patching@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        linux-csky@vger.kernel.org,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+ <20220509233235.995021-8-dmitry.osipenko@collabora.com>
+ <CAMuHMdVGjeFe=Z_1Kr9ZaNZ7HUVH1usvubEB31WUQf0fg8E1kA@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAMuHMdVGjeFe=Z_1Kr9ZaNZ7HUVH1usvubEB31WUQf0fg8E1kA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 8:34 PM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> From: Masahiro Yamada <masahiroy@kernel.org>
-> Date: Tue, 24 May 2022 03:04:00 +0900
->
-> > On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
-> > <alexandr.lobakin@intel.com> wrote:
-> > >
-> > > `-z unique-symbol` linker flag which is planned to use with FG-KASLR
-> > > to simplify livepatching (hopefully globally later on) triggers the
-> > > following:
-> > >
-> > > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
-> > >
-> > > The reason is that for now the condition from remove_dot():
-> > >
-> > > if (m && (s[n + m] == '.' || s[n + m] == 0))
-> > >
-> > > which was designed to test if it's a dot or a '\0' after the suffix
-> > > is never satisfied.
-> > > This is due to that `s[n + m]` always points to the last digit of a
-> > > numeric suffix, not on the symbol next to it (from a custom debug
-> > > print added to modpost):
-> > >
-> > > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
-> > >
-> > > So it's off-by-one and was like that since 2014.
-> > > Fix this for the sake of upcoming features, but don't bother
-> > > stable-backporting, as it's well hidden -- apart from that LD flag,
-> > > can be triggered only by GCC LTO which never landed upstream.
-> > >
-> > > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
-> > > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > > ---
-> > >  scripts/mod/modpost.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > > index 6bfa33217914..4648b7afe5cc 100644
-> > > --- a/scripts/mod/modpost.c
-> > > +++ b/scripts/mod/modpost.c
-> > > @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
-> > >
-> > >         if (n && s[n]) {
-> > >                 size_t m = strspn(s + n + 1, "0123456789");
-> > > -               if (m && (s[n + m] == '.' || s[n + m] == 0))
-> > > +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
-> > >                         s[n] = 0;
-> > >
-> > >                 /* strip trailing .lto */
-> > > --
-> > > 2.34.1
-> > >
-> >
-> > This trivial patch has not been picked up yet.
-> >
-> > I can apply this to my tree, if you want.
->
-> It's a good idea, I'd like to!
-> I don't use `-z unique-symbol` for FG-KALSR anymore*, but this fix
-> is not directly related to it and can be taken independently.
-> Should I change the commit message or it's ok to take it as it is?
-
-
-I am fine with either way.
-
-If you want to resubmit this with a fresh commit log,
-please send it to:
-  linux-kbuild@vger.kernel.org
-
-Then, I will take care of it in this MW.
-
-Thanks.
-
-
-
-
-> >
-> > Please let me know your thoughts.
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
->
-> * I'm planning to submit a new rev of FG-KASLR series soon, but
-> since I'm too busy with XDP for now, it will happen no sooner than
-> in a couple months =\
->
+On 5/24/22 16:14, Geert Uytterhoeven wrote:
+> Hi Dmitry,
+> 
+> On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>> Add kernel_can_power_off() helper that replaces open-coded checks of
+>> the global pm_power_off variable. This is a necessary step towards
+>> supporting chained power-off handlers.
+>>
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> 
+> Thanks for your patch, which is now commit 0e2110d2e910e44c
+> ("kernel/reboot: Add kernel_can_power_off()") in pm/linux-next.
+> 
+> This causes the "poweroff" command (Debian nfsroot) to no longer
+> cleanly halt the system on arm32 systems, but fail with a panic
+> instead:
+> 
+> -reboot: System halted
+> +reboot: Power down
+> +Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
+> +CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted
+> 5.18.0-rc7-shmobile-00007-g0e2110d2e910 #1274
+> +Hardware name: Generic R-Car Gen2 (Flattened Device Tree)
+> + unwind_backtrace from show_stack+0x10/0x14
+> + show_stack from dump_stack_lvl+0x40/0x4c
+> + dump_stack_lvl from panic+0xf4/0x330
+> + panic from do_exit+0x1c8/0x8e4
+> + do_exit from __do_sys_reboot+0x174/0x1fc
+> + __do_sys_reboot from ret_fast_syscall+0x0/0x54
+> +Exception stack(0xf0815fa8 to 0xf0815ff0)
+> +5fa0:                   004e6954 00000000 fee1dead 28121969 4321fedc f0d94600
+> +5fc0: 004e6954 00000000 00000000 00000058 befa0c78 00000000 befa0c10 004e56f8
+> +5fe0: 00000058 befa0b6c b6ec8d45 b6e4a746
+> +---[ end Kernel panic - not syncing: Attempted to kill init!
+> exitcode=0x00000000 ]---
+> 
+> On arm64, "poweroff" causes a clean "reboot: Power down" before/after.
+> 
+> On both arm32 and arm64, the same handlers are registered:
+>   - SYS_OFF_MODE_POWER_OFF_PREPARE: legacy_pm_power_off_prepare
+>   - SYS_OFF_MODE_POWER_OFF: legacy_pm_power_off
+> 
+> On both arm32 and arm64, legacy_pm_power_off_prepare() is called.
+> On both arm32 and arm64, legacy_pm_power_off() does not seem to
+> be called.
+> 
+> On arm32, both pm_power_off_prepare and pm_power_off are NULL.
+> On arm64, pm_power_off_prepare is NULL, and
+> pm_power_off is psci_sys_poweroff.
+> 
+> Do you have a clue?
 > Thanks!
-> Al
+
+Thank you, Geert! I see the problem, the kernel_can_power_off() checks whether power-off handler is registered, but it's always registered because legacy_pm_power_off is registered unconditionally. So it causes trouble for platforms that don't have power-off handler installed at all. All platforms that I tested have a power-off handler, so now wonder that I didn't notice this before.
+
+This change should fix the problem, please give it a try:
+
+--- 8< ---
+
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index 0bdc64ecf4f6..2d55b8bdb444 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -569,22 +569,6 @@ static int legacy_pm_power_off(struct sys_off_data *data)
+ 	return NOTIFY_DONE;
+ }
+ 
+-/*
+- * Register sys-off handlers for legacy PM callbacks. This allows legacy
+- * PM callbacks co-exist with the new sys-off API.
+- *
+- * TODO: Remove legacy handlers once all legacy PM users will be switched
+- *       to the sys-off based APIs.
+- */
+-static int __init legacy_pm_init(void)
+-{
+-	register_sys_off_handler(SYS_OFF_MODE_POWER_OFF, SYS_OFF_PRIO_DEFAULT,
+-				 legacy_pm_power_off, NULL);
+-
+-	return 0;
+-}
+-core_initcall(legacy_pm_init);
+-
+ static void do_kernel_power_off_prepare(void)
+ {
+ 	blocking_notifier_call_chain(&power_off_prep_handler_list, 0, NULL);
+@@ -670,6 +654,18 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
+ 	if (ret)
+ 		return ret;
+ 
++	/*
++	 * Register sys-off handler for the legacy PM callback. This allows
++	 * legacy PM callbacks co-exist with the new sys-off API.
++	 *
++	 * TODO: Remove legacy handler once all legacy PM users will be
++	 *       switched to the sys-off based APIs.
++	 */
++	if (pm_power_off)
++		register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
++					 SYS_OFF_PRIO_DEFAULT,
++					 legacy_pm_power_off, NULL);
++
+ 	/* Instead of trying to make the power_off code look like
+ 	 * halt when pm_power_off is not set do it the easy way.
+ 	 */
+
 
 
 
 -- 
-Best Regards
-Masahiro Yamada
+Best regards,
+Dmitry

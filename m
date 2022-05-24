@@ -2,184 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1422F532A07
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B305532A0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237137AbiEXMFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
+        id S237152AbiEXMFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 08:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237126AbiEXMFT (ORCPT
+        with ESMTP id S234556AbiEXMFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:05:19 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52A4644D8
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:05:17 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id u3so25420213wrg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=YHbf01JoDsojhLj2/S6FKhSPRlY6LzPLJ9ENwzyOdpo=;
-        b=rioiPkD7x119qEICbx6yUaJLCZg+w8s7FAfTSMngo4hzEia3J5zdwt+Ig98NCm2HF7
-         TD5rs7+gdL00jvmlB37lmdUqwsCBwlppYpX9pIMP9Ubj/bD9PhS5zgQHauPwZDUfhhqx
-         yPIpRSnmW7cU5E8gJUaTcKC4O9x9kbpW+uttrATZAzu6gfKXt9vxNd4Drbt+jorQ3LmP
-         lvLfGb+zw/LkSDhcYa3b/1RYXTGvlhlmmNweQEL3Lngp5YWQ/aRvTTwib3iRWSEMc+Mc
-         7YQNnOw6u8AEAyIOgkQMHOG19AT6pRbMTc9grrZPYXXdma6As+H1xofPaTuduSpmRfB+
-         +0lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=YHbf01JoDsojhLj2/S6FKhSPRlY6LzPLJ9ENwzyOdpo=;
-        b=75kPEf7cCquhr4Z0dEhPoNzIApUBIZwOEdNcDN+CPeJujHrFTnWeWyhg79EjOK+rIx
-         rXHf5j/VfVdu8Kz1599AozpYuaJna0tZ05qNrPWykleG5wJZsQDXG56cbun7v6PkVlL5
-         3bulIKzfYLDjLiMd7K8Yrq1zE9Pw/tTd2/uFUhpuP2Zk3D0GSjazHRjg6UhHauWs3lx1
-         7RetufALohoXSLYCMzBptY+feEQSJdQJqsYQ+ktQYYO6dwr+zjIxyv7/zx6EsO6q/HSQ
-         2aUz60yA5UGif95hrK3LPEpbS//i0o+GZpIbVvDCE7+KjtVJp29Va5tGwvj8alUUAsOL
-         GhgQ==
-X-Gm-Message-State: AOAM531XZka50HfFG/R0KHGRNorTNKZQuMrvt7VIehgNhDETgcCL5j9G
-        daxE+5TDt1MY64LWXk+b42AYjg==
-X-Google-Smtp-Source: ABdhPJyYWIdU0PzySYlNPn09EsDClOuvRe1mdcxB0/PdjPGc3cKgvpmKJiKf9uMzWzv9joNnsPC0RQ==
-X-Received: by 2002:adf:e58e:0:b0:20e:640d:494c with SMTP id l14-20020adfe58e000000b0020e640d494cmr23511528wrm.68.1653393916202;
-        Tue, 24 May 2022 05:05:16 -0700 (PDT)
-Received: from localhost ([2a01:cb19:85e6:1900:d9b6:6217:ea92:4fe0])
-        by smtp.gmail.com with ESMTPSA id m7-20020adfa3c7000000b0020d0cdbf7eesm12818548wrb.111.2022.05.24.05.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 05:05:15 -0700 (PDT)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        dmitry.torokhov@gmail.com
-Cc:     matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] Input: mtk-pmic-keys - Move long press debounce
- mask to mtk_pmic_regs
-In-Reply-To: <20220524093505.85438-3-angelogioacchino.delregno@collabora.com>
-References: <20220524093505.85438-1-angelogioacchino.delregno@collabora.com>
- <20220524093505.85438-3-angelogioacchino.delregno@collabora.com>
-Date:   Tue, 24 May 2022 14:05:14 +0200
-Message-ID: <87k0abdtl1.fsf@baylibre.com>
+        Tue, 24 May 2022 08:05:39 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE0763BE6;
+        Tue, 24 May 2022 05:05:38 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OAsBtp019002;
+        Tue, 24 May 2022 12:05:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=00VjxMXrB6NmRYmO+zKL1gLxXBQoo3e5Z8Ngmf4XXgw=;
+ b=I2V+agUu0USmq+xoQF06ma6Nce34cA7ivbzereyIXFVUCAZD1Y4yk49ZEoE9/ulGiOPf
+ zAW+hpo4ugc2Wr5/9dnMSTfFJP8wRKZXPY8YurX9XJb0VrbVTZj/P5UM/go/Odwux3Xb
+ At7et/4MN3jw/pZjFnX++2raK4+AW/TyyfDovXstNpwk8fjCh+6hzEDQBLcsTb8pIyAs
+ 0oaBX4OhSAHz71rYWztjiEWzCpOYv4QUjcBZwahtWfBhSWEzPzfXrAaobsOYVXyLDHBY
+ UPfrO6eBlUAt9YYRY/BvamlfwZCTajAfdYJTVNkV4tth2HoxVC4QR81uxKjlCgzmoz8w zQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8x0x1aa1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 12:05:32 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OBo6Hp011702;
+        Tue, 24 May 2022 12:05:32 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8x0x1a99-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 12:05:31 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OC30Fv009546;
+        Tue, 24 May 2022 12:05:29 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3g6qq94tkx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 12:05:29 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OC4cYn25493960
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 May 2022 12:04:38 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E46D942047;
+        Tue, 24 May 2022 12:05:26 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 60E344203F;
+        Tue, 24 May 2022 12:05:26 +0000 (GMT)
+Received: from [9.171.67.153] (unknown [9.171.67.153])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 24 May 2022 12:05:26 +0000 (GMT)
+Message-ID: <6b79fd16-79dd-450f-7eb7-ba5d6be2be0c@linux.ibm.com>
+Date:   Tue, 24 May 2022 14:05:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 net] net/smc: postpone sk_refcnt increment in connect()
+Content-Language: en-US
+To:     liuyacan@corp.netease.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, ubraun@linux.ibm.com
+References: <e0b64b80-90e1-5aed-1ca4-f6d20ebac6b7@linux.ibm.com>
+ <20220523152119.406443-1-liuyacan@corp.netease.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20220523152119.406443-1-liuyacan@corp.netease.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UF2_FfbrUzZFREYNuKVv5hJFtNNhY8dm
+X-Proofpoint-ORIG-GUID: blvGnHcyhkd8fbD7QfDMVb7C5JgtL9MG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-24_06,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=845 priorityscore=1501 clxscore=1015
+ malwarescore=0 phishscore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205240063
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On mar., mai 24, 2022 at 11:35, AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
+On 23/05/2022 17:21, liuyacan@corp.netease.com wrote:
+>>>> This is a rather unusual problem that can come up when fallback=true BEFORE smc_connect()
+>>>> is called. But nevertheless, it is a problem.
+>>>>
+>>>> Right now I am not sure if it is okay when we NOT hold a ref to smc->sk during all fallback
+>>>> processing. This change also conflicts with a patch that is already on net-next (3aba1030).
+>>>
+>>> Do you mean put the ref to smc->sk during all fallback processing unconditionally and remove 
+>>> the fallback branch sock_put() in __smc_release()?
+>>
+>> What I had in mind was to eventually call sock_put() in __smc_release() even if sk->sk_state == SMC_INIT
+>> (currently the extra check in the if() for sk->sk_state != SMC_INIT prevents the sock_put()), but only
+>> when it is sure that we actually reached the sock_hold() in smc_connect() before.
+>>
+>> But maybe we find out that the sock_hold() is not needed for fallback sockets, I don't know...
+> 
+> I do think the sock_hold()/sock_put() for smc->sk is a bit complicated, Emm, I'm not sure if it 
+> can be simplified..
+> 
+> In fact, I'm sure there must be another ref count issue in my environment,but I haven't caught it yet.
+> 
 
-> As the second and last step of preparation to add support for more
-> PMICs in this driver, move the long press debounce mask to struct
-> mtk_pmic_regs and use that in mtk_pmic_keys_lp_reset_setup() instead
-> of directly using the definition.
->
-> While at it, remove the definition for MTK_PMIC_RST_DU_SHIFT as we
-> are able to calculate it dynamically and spares us some unnecessary
-> new definitions around for future per-PMIC variations of RST_DU_MASK.
->
-> Lastly, it was necessary to change the function signature of
-> mtk_pmic_keys_lp_reset_setup() to now pass a pointer to the main
-> mtk_pmic_regs structure, since that's where the reset debounce
-> mask now resides.
->
-> This commit brings no functional changes.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-
-> ---
->  drivers/input/keyboard/mtk-pmic-keys.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/input/keyboard/mtk-pmic-keys.c b/drivers/input/keyboard/mtk-pmic-keys.c
-> index 2509a349a173..6404081253ea 100644
-> --- a/drivers/input/keyboard/mtk-pmic-keys.c
-> +++ b/drivers/input/keyboard/mtk-pmic-keys.c
-> @@ -19,7 +19,6 @@
->  #include <linux/regmap.h>
->  
->  #define MTK_PMIC_RST_DU_MASK	GENMASK(9, 8)
-> -#define MTK_PMIC_RST_DU_SHIFT	8
->  #define MTK_PMIC_PWRKEY_RST	BIT(6)
->  #define MTK_PMIC_HOMEKEY_RST	BIT(5)
->  
-> @@ -48,6 +47,7 @@ struct mtk_pmic_keys_regs {
->  struct mtk_pmic_regs {
->  	const struct mtk_pmic_keys_regs keys_regs[MTK_PMIC_MAX_KEY_COUNT];
->  	u32 pmic_rst_reg;
-> +	u32 rst_lprst_mask; /* Long-press reset timeout bitmask */
->  };
->  
->  static const struct mtk_pmic_regs mt6397_regs = {
-> @@ -58,6 +58,7 @@ static const struct mtk_pmic_regs mt6397_regs = {
->  		MTK_PMIC_KEYS_REGS(MT6397_OCSTATUS2,
->  		0x10, MT6397_INT_RSV, 0x8, MTK_PMIC_HOMEKEY_RST),
->  	.pmic_rst_reg = MT6397_TOP_RST_MISC,
-> +	.rst_lprst_mask = MTK_PMIC_RST_DU_MASK,
->  };
->  
->  static const struct mtk_pmic_regs mt6323_regs = {
-> @@ -68,6 +69,7 @@ static const struct mtk_pmic_regs mt6323_regs = {
->  		MTK_PMIC_KEYS_REGS(MT6323_CHRSTATUS,
->  		0x4, MT6323_INT_MISC_CON, 0x8, MTK_PMIC_HOMEKEY_RST),
->  	.pmic_rst_reg = MT6323_TOP_RST_MISC,
-> +	.rst_lprst_mask = MTK_PMIC_RST_DU_MASK,
->  };
->  
->  static const struct mtk_pmic_regs mt6358_regs = {
-> @@ -80,6 +82,7 @@ static const struct mtk_pmic_regs mt6358_regs = {
->  				   0x8, MT6358_PSC_TOP_INT_CON0, 0xa,
->  				   MTK_PMIC_HOMEKEY_RST),
->  	.pmic_rst_reg = MT6358_TOP_RST_MISC,
-> +	.rst_lprst_mask = MTK_PMIC_RST_DU_MASK,
->  };
->  
->  struct mtk_pmic_keys_info {
-> @@ -105,7 +108,7 @@ enum mtk_pmic_keys_lp_mode {
->  };
->  
->  static void mtk_pmic_keys_lp_reset_setup(struct mtk_pmic_keys *keys,
-> -					 u32 pmic_rst_reg)
-> +					 const struct mtk_pmic_regs *regs)
->  {
->  	const struct mtk_pmic_keys_regs *kregs_home, *kregs_pwr;
->  	u32 long_press_mode, long_press_debounce;
-> @@ -120,8 +123,8 @@ static void mtk_pmic_keys_lp_reset_setup(struct mtk_pmic_keys *keys,
->  	if (error)
->  		long_press_debounce = 0;
->  
-> -	mask = MTK_PMIC_RST_DU_MASK;
-> -	value = long_press_debounce << MTK_PMIC_RST_DU_SHIFT;
-> +	mask = regs->rst_lprst_mask;
-> +	value = long_press_debounce << (ffs(regs->rst_lprst_mask) - 1);
->  
->  	error  = of_property_read_u32(keys->dev->of_node,
->  				      "mediatek,long-press-mode",
-> @@ -147,7 +150,7 @@ static void mtk_pmic_keys_lp_reset_setup(struct mtk_pmic_keys *keys,
->  		break;
->  	}
->  
-> -	regmap_update_bits(keys->regmap, pmic_rst_reg, mask, value);
-> +	regmap_update_bits(keys->regmap, regs->pmic_rst_reg, mask, value);
->  }
->  
->  static irqreturn_t mtk_pmic_keys_irq_handler_thread(int irq, void *data)
-> @@ -351,7 +354,7 @@ static int mtk_pmic_keys_probe(struct platform_device *pdev)
->  		return error;
->  	}
->  
-> -	mtk_pmic_keys_lp_reset_setup(keys, mtk_pmic_regs->pmic_rst_reg);
-> +	mtk_pmic_keys_lp_reset_setup(keys, mtk_pmic_regs);
->  
->  	platform_set_drvdata(pdev, keys);
->  
-> -- 
-> 2.35.1
+Can you check my latest mail from a minute ago in thread
+"Re: [PATCH net-next v2] net/smc: align the connect behaviour with TCP"
+I think this answer also affects our discussion.

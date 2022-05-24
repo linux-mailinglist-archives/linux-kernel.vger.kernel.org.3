@@ -2,87 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1C3532BBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D711532BC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238019AbiEXNy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
+        id S238020AbiEXN6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236290AbiEXNyx (ORCPT
+        with ESMTP id S231878AbiEXN6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:54:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66D89728E;
-        Tue, 24 May 2022 06:54:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1D567CE1B57;
-        Tue, 24 May 2022 13:54:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FC1C36AE5;
-        Tue, 24 May 2022 13:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653400488;
-        bh=8gk1BM4Q1BDX3V8XDZBmAWQIJt29q+UopM2y8lNtbOE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BBwNijMXc2LMi8dhfbzHQDZKNwtbup7Mw+jy4ZxZECi51B68LzJlMgY1AfFlDN8/K
-         3y70fHazj/UtsyZgxMwRd2F/tlNWoP0MRaXPs0L9+IWC8U/wVTDCh63V3PlCO5raaP
-         z5ZMCHrFQomJ8EQ9vcCXdTybpEmJ56XcSNWlDAEb/f7mYDNkQQRr3GHtGVQnnEtJJK
-         5JMBYE5hPcYlvwA4DAmzNnL0Yj4ADbOhUefqAilHp9oqfix67cZui+OELQIs1Hj7yO
-         68Y90E2wVg+UQUA3G7wWIbNCTh2KbKQutUuQBwkrJQ7vqxXVTYR+myHWFiUToEvnRM
-         8ykLP8OVFffDA==
-From:   Dinh Nguyen <dinguyen@kernel.org>
-To:     jarkko.nikula@linux.intel.com
-Cc:     dinguyen@kernel.org, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, robh+dt@kernel.org,
-        krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCHv2 2/2] dt-bindings: i2c: dw: Add Intel's SoCFPGA I2C controller
-Date:   Tue, 24 May 2022 08:54:41 -0500
-Message-Id: <20220524135441.420600-2-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220524135441.420600-1-dinguyen@kernel.org>
-References: <20220524135441.420600-1-dinguyen@kernel.org>
+        Tue, 24 May 2022 09:58:20 -0400
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3041EAFF;
+        Tue, 24 May 2022 06:58:19 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id 24ODuUKh017802;
+        Tue, 24 May 2022 22:56:30 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 24ODuUKh017802
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653400590;
+        bh=sjzxfQyA5cu7vCUn9H7rwWsrKIkATdI1T3gWr3+EvFM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GUY4tcCCIQYGrBcVGWciRSY8U7mlxzTBftlQnpLAwi6pKuI9k5rkoo0ywSWbefzRr
+         Y22j04/QpwYz9Rze2QXBBzhDa5kKOH8khZWnon1TgKLF6106GcZttWzQzQRFRD8V26
+         aHiE4WkJ5Mwk6EARm/KdgFicHD3xVI5h6aHhJK04/DDwk7nE1NojUapUe+ZXdLGtuX
+         GxYYzc446rfeSX6BmNQKuAZNmIZ1Bg4vGVjumSUIRVGgTNxULvsqTPy0jrWUyFm0rB
+         +J4q2QoyTJdwF/rVw5nNe6S0xxLZpvDqR4pQ/zp0i0MawT35B5V4iGZ15PcdSK4xUm
+         iuAJ0Ib/CSDjQ==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH] gcc-plugins: use KERNELVERSION for plugin version
+Date:   Tue, 24 May 2022 22:55:41 +0900
+Message-Id: <20220524135541.1453693-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The I2C pins on Intel's SoCFPGA platform are not connected to GPIOs and
-thus cannot be recovered by the standard GPIO method.
+Commit 61f60bac8c05 ("gcc-plugins: Change all version strings match
+kernel") broke parallel builds.
 
-Document the "intel,socfpga-i2c" binding.
+Instead of adding the dependency between GCC plugins and utsrelease.h,
+let's use KERNELVERSION, which does not require any build artifact.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Another reason why I want to avoid utsrelease.h is because it depends
+on CONFIG_LOCALVERSION(_AUTO) and localversion* files.
+
+(include/generated/utsrelease.h depends on include/config/kernel.release,
+which is generated by scripts/setlocalversion)
+
+I want to keep host tools independent of the kernel configuration.
+
+There is no good reason to rebuild GCC plugins just because of
+CONFIG_LOCALVERSION being changed.
+
+We just want to associate the plugin versions with the kernel source
+version. KERNELVERSION should be enough for our purpose.
+
+Fixes: 61f60bac8c05 ("gcc-plugins: Change all version strings match kernel")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/linux-mm/202205230239.EZxeZ3Fv-lkp@intel.com
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
-v2: Added Acked-by
----
- Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-index d9293c57f573..a130059e97ab 100644
---- a/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/snps,designware-i2c.yaml
-@@ -33,6 +33,8 @@ properties:
-           - const: snps,designware-i2c
-       - description: Baikal-T1 SoC System I2C controller
-         const: baikal,bt1-sys-i2c
-+      - description: Intel's SoCFPGA I2C controller
-+        const: intel,socfpga-i2c
+ scripts/gcc-plugins/Makefile                  | 2 +-
+ scripts/gcc-plugins/latent_entropy_plugin.c   | 2 +-
+ scripts/gcc-plugins/randomize_layout_plugin.c | 2 +-
+ scripts/gcc-plugins/sancov_plugin.c           | 2 +-
+ scripts/gcc-plugins/stackleak_plugin.c        | 2 +-
+ scripts/gcc-plugins/structleak_plugin.c       | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/scripts/gcc-plugins/Makefile b/scripts/gcc-plugins/Makefile
+index 6f0aecad5d67..b34d11e22636 100644
+--- a/scripts/gcc-plugins/Makefile
++++ b/scripts/gcc-plugins/Makefile
+@@ -28,7 +28,7 @@ GCC_PLUGINS_DIR = $(shell $(CC) -print-file-name=plugin)
  
-   reg:
-     minItems: 1
+ plugin_cxxflags	= -Wp,-MMD,$(depfile) $(KBUILD_HOSTCXXFLAGS) -fPIC \
+ 		  -include $(srctree)/include/linux/compiler-version.h \
+-		  -include $(objtree)/include/generated/utsrelease.h \
++		  -DPLUGIN_VERSION=$(call stringify,$(KERNELVERSION)) \
+ 		  -I $(GCC_PLUGINS_DIR)/include -I $(obj) -std=gnu++11 \
+ 		  -fno-rtti -fno-exceptions -fasynchronous-unwind-tables \
+ 		  -ggdb -Wno-narrowing -Wno-unused-variable \
+diff --git a/scripts/gcc-plugins/latent_entropy_plugin.c b/scripts/gcc-plugins/latent_entropy_plugin.c
+index 5d415b2572a8..848918764174 100644
+--- a/scripts/gcc-plugins/latent_entropy_plugin.c
++++ b/scripts/gcc-plugins/latent_entropy_plugin.c
+@@ -82,7 +82,7 @@ __visible int plugin_is_GPL_compatible;
+ static GTY(()) tree latent_entropy_decl;
+ 
+ static struct plugin_info latent_entropy_plugin_info = {
+-	.version	= UTS_RELEASE,
++	.version	= PLUGIN_VERSION,
+ 	.help		= "disable\tturn off latent entropy instrumentation\n",
+ };
+ 
+diff --git a/scripts/gcc-plugins/randomize_layout_plugin.c b/scripts/gcc-plugins/randomize_layout_plugin.c
+index ea2aea570404..951b74ba1b24 100644
+--- a/scripts/gcc-plugins/randomize_layout_plugin.c
++++ b/scripts/gcc-plugins/randomize_layout_plugin.c
+@@ -34,7 +34,7 @@ __visible int plugin_is_GPL_compatible;
+ static int performance_mode;
+ 
+ static struct plugin_info randomize_layout_plugin_info = {
+-	.version	= UTS_RELEASE,
++	.version	= PLUGIN_VERSION,
+ 	.help		= "disable\t\t\tdo not activate plugin\n"
+ 			  "performance-mode\tenable cacheline-aware layout randomization\n"
+ };
+diff --git a/scripts/gcc-plugins/sancov_plugin.c b/scripts/gcc-plugins/sancov_plugin.c
+index f3d629555b84..b76cb9c42cec 100644
+--- a/scripts/gcc-plugins/sancov_plugin.c
++++ b/scripts/gcc-plugins/sancov_plugin.c
+@@ -26,7 +26,7 @@ __visible int plugin_is_GPL_compatible;
+ tree sancov_fndecl;
+ 
+ static struct plugin_info sancov_plugin_info = {
+-	.version	= UTS_RELEASE,
++	.version	= PLUGIN_VERSION,
+ 	.help		= "sancov plugin\n",
+ };
+ 
+diff --git a/scripts/gcc-plugins/stackleak_plugin.c b/scripts/gcc-plugins/stackleak_plugin.c
+index de817d54b8af..ff91885f9470 100644
+--- a/scripts/gcc-plugins/stackleak_plugin.c
++++ b/scripts/gcc-plugins/stackleak_plugin.c
+@@ -44,7 +44,7 @@ static bool verbose = false;
+ static GTY(()) tree track_function_decl;
+ 
+ static struct plugin_info stackleak_plugin_info = {
+-	.version = UTS_RELEASE,
++	.version = PLUGIN_VERSION,
+ 	.help = "track-min-size=nn\ttrack stack for functions with a stack frame size >= nn bytes\n"
+ 		"arch=target_arch\tspecify target build arch\n"
+ 		"disable\t\tdo not activate the plugin\n"
+diff --git a/scripts/gcc-plugins/structleak_plugin.c b/scripts/gcc-plugins/structleak_plugin.c
+index 86b608a24ec0..8bc04068ed39 100644
+--- a/scripts/gcc-plugins/structleak_plugin.c
++++ b/scripts/gcc-plugins/structleak_plugin.c
+@@ -37,7 +37,7 @@
+ __visible int plugin_is_GPL_compatible;
+ 
+ static struct plugin_info structleak_plugin_info = {
+-	.version	= UTS_RELEASE,
++	.version	= PLUGIN_VERSION,
+ 	.help		= "disable\tdo not activate plugin\n"
+ 			  "byref\tinit structs passed by reference\n"
+ 			  "byref-all\tinit anything passed by reference\n"
 -- 
-2.25.1
+2.32.0
 

@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9965532410
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A25532408
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235249AbiEXH2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        id S235005AbiEXH1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiEXH0b (ORCPT
+        with ESMTP id S235207AbiEXH1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:26:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537251145D;
-        Tue, 24 May 2022 00:26:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 24 May 2022 03:27:06 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE421FCF0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:27:01 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B1E04CE1A54;
-        Tue, 24 May 2022 07:26:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1474CC34100;
-        Tue, 24 May 2022 07:26:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653377186;
-        bh=bIROaGOZbF93Xt0aHUg1j/Xrg0023fKyXPwCzZwVCaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cK34n+iF/tkd+qGzXLOY68MrWM0kGjGMv7m8Tmu9tc6YmeNSSr5dDp3yugtJvZyqh
-         1HyARCzxvwupVDVgf+4eMX37hSuwlEEOrpOT4GfxITMMG28M0XeR3H3m2Gry9UFF5A
-         fDwsr2eK6aqYAx784UpRUf9Mc6bfEbRUCZMno0zf+cl20DVtOSB5MRZW+WF4M82V2L
-         irGYe4xG9Zhx44jfeueCvBvVVCrBx3jCBUv52rbzkVY1HPYpvMVazxy8qQaMDsW93/
-         7xD3Qh1Nyi/cvzsp4Q0yRVngUR9NshAdEOGoVv8h5sPNKnCKdZOQikB8mhRE8CvgoO
-         eRpJSGrJu50Bg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ntOvv-0001yU-4e; Tue, 24 May 2022 09:26:23 +0200
-Date:   Tue, 24 May 2022 09:26:23 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] ath11k: fix netdev open race
-Message-ID: <YoyIn5L8cIwxHxR0@hovoldconsulting.com>
-References: <20220517103436.15867-1-johan+linaro@kernel.org>
- <YouezMIwm3PYxOKY@hovoldconsulting.com>
- <875ylwysoy.fsf@kernel.org>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 39C473F1D3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:27:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653377220;
+        bh=shKDtZWbPRAYSxVbqGScFYHLBdbSbIz7UNIH95Lp9To=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=bl+cK1RZRTxQbyr2+hZsgoUV+PH5NxaoyA5VwrFp52DbYo1vzoXGUPlAq6XDTxsci
+         gXHxJUBYQhbLUCfzEIJVHhVdoNiXi7U7VS+72Emq/OhUMO/auh8WGSDPBRgkHd78wp
+         SBFNHUKBCHVHKFOTOqCFRDltm5C9MZu3TdcJhOPJPhL1zzibFJizYMzp81KbnTlmXQ
+         TvPXgghNR5i6xiUEgucF21dqjykjD7LyydmGMQhnhow81oYaS3U2mtEG/16lLELDKy
+         i+KkcwlnHR4jyjmp37h4szKFGTFxkZmYyDFH1CWJqVn/7KIZNXksriExTL4x4rKEng
+         cLIoDTKsvjj5w==
+Received: by mail-ed1-f71.google.com with SMTP id g10-20020a056402180a00b0042ab515d6c5so12053930edy.13
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:27:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=shKDtZWbPRAYSxVbqGScFYHLBdbSbIz7UNIH95Lp9To=;
+        b=W4WusxkKyRLAqvJlqoAOedJReHt8FddvKci5G0rjR4jhvwQ4K/CVCMEQPAoM4dd02c
+         7j0N1lmenLXzhxxgbdxP+6M4L/5JVdfuzqV/bToqLEbl9iulvQhYspUp2FLlYGEYHJsv
+         sBFPmh/OXgNkbzaga93Cy83CX2oHw7gs4Wx6NnMleYZGh2RIk5Tg/8ndXo8kP3WXTIVX
+         sIyRgysFqxvLHBp7fB9zVRTpujdYI/NzH6DjYciNyjXlHIYBWSGGu+YkI4PBgIrfcJIh
+         /jA2qcrm4ZJOju+AYFFymVlLOhqcdrrLSZb4Wi/m4P15t9JaZhadVBA+Plo1Hj6d4lfo
+         tvAQ==
+X-Gm-Message-State: AOAM532yS5OXh5s1z1q34QDkHzTpT51Z0roSEIifM8FrmpDEQC/mrgF9
+        GX4xThxqqUA8NjFB7/mpOMjTCXgmrzbz0/ciHv1fbrGUwMloB8wSiiLHMnfK0/5N4GdaZn9kxtr
+        BoNtWpUg6+FFKjbGhQEhO+mK96RGqM0qhGAh8Ktq9zA==
+X-Received: by 2002:a17:907:948c:b0:6f5:183f:eb6 with SMTP id dm12-20020a170907948c00b006f5183f0eb6mr22247273ejc.112.1653377219988;
+        Tue, 24 May 2022 00:26:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxT1vbxy1UAwwOsUFCu5M24qz9FKj3AUytk4VHpaciYfk2Y1MKhvLkbrk4yzFOCN+HMs8SrGQ==
+X-Received: by 2002:a17:907:948c:b0:6f5:183f:eb6 with SMTP id dm12-20020a170907948c00b006f5183f0eb6mr22247262ejc.112.1653377219832;
+        Tue, 24 May 2022 00:26:59 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906329100b006f3ef214dd2sm6924353ejw.56.2022.05.24.00.26.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 00:26:59 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
+To:     ysato@users.sourceforge.jp, uclinux-h8-devel@lists.sourceforge.jp
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [PATCH 0/2] h8300: Kconfig: Style cleanups
+Date:   Tue, 24 May 2022 09:26:54 +0200
+Message-Id: <20220524072656.20152-1-juergh@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <875ylwysoy.fsf@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,69 +77,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 10:06:37PM +0300, Kalle Valo wrote:
-> Johan Hovold <johan@kernel.org> writes:
-> 
-> > On Tue, May 17, 2022 at 12:34:36PM +0200, Johan Hovold wrote:
-> >> Make sure to allocate resources needed before registering the device.
-> >> 
-> >> This specifically avoids having a racing open() trigger a BUG_ON() in
-> >> mod_timer() when ath11k_mac_op_start() is called before the
-> >> mon_reap_timer as been set up.
-> >> 
-> >> Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
-> >> Fixes: 840c36fa727a ("ath11k: dp: stop rx pktlog before suspend")
-> >> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> >> ---
-> >
-> > For completeness:
-> >
-> > Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3
-> 
-> Thanks, added in the pending branch.
-> 
-> You submitted this as RFC but do you mind if I apply this anyway? The
-> patch looks good and passes my tests. But I do wonder why I haven't seen
-> the crash...
+The majority of the Kconfig files use a single tab for basic indentation
+and a single tab followed by two whitespaces for help text indentation.
+Fix the lines that don't follow this convention.
 
-If it looks good to you then please do apply it.
+Juerg Haefliger (2):
+  h8300: Kconfig: Fix indentation
+  h8300: Kconfig.cpu: Fix indentation
 
-I was just worried that there may be some subtle reason for why
-ath11k_dp_pdev_alloc() was called after netdev registration in the first
-place and that it might need to be split up so that for example
-ath11k_dp_rx_pdev_mon_attach() isn't called until after registration.
+ arch/h8300/Kconfig     | 4 ++--
+ arch/h8300/Kconfig.cpu | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-I did not see this issue with next-20220310, but I hit it on every probe
-with next-20220511. Perhaps some timing changed in between.
+-- 
+2.32.0
 
-Here's the backtrace for completeness in case someone else starts hitting
-this and searches the archives:
-
-[   51.346947] kernel BUG at kernel/time/timer.c:990!
-[   51.346958] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-...
-[   51.578225] Call trace:
-[   51.583293]  __mod_timer+0x298/0x390
-[   51.589518]  mod_timer+0x14/0x20
-[   51.595368]  ath11k_mac_op_start+0x41c/0x4a0 [ath11k]
-[   51.603165]  drv_start+0x38/0x60 [mac80211]
-[   51.610110]  ieee80211_do_open+0x29c/0x7d0 [mac80211]
-[   51.617945]  ieee80211_open+0x60/0xb0 [mac80211]
-[   51.625311]  __dev_open+0x100/0x1c0
-[   51.631420]  __dev_change_flags+0x194/0x210
-[   51.638214]  dev_change_flags+0x24/0x70
-[   51.644646]  do_setlink+0x228/0xdb0
-[   51.650723]  __rtnl_newlink+0x460/0x830
-[   51.657162]  rtnl_newlink+0x4c/0x80
-[   51.663229]  rtnetlink_rcv_msg+0x124/0x390
-[   51.669917]  netlink_rcv_skb+0x58/0x130
-[   51.676314]  rtnetlink_rcv+0x18/0x30
-[   51.682460]  netlink_unicast+0x250/0x310
-[   51.688960]  netlink_sendmsg+0x19c/0x3e0
-[   51.695458]  ____sys_sendmsg+0x220/0x290
-[   51.701938]  ___sys_sendmsg+0x7c/0xc0
-[   51.708148]  __sys_sendmsg+0x68/0xd0
-[   51.714254]  __arm64_sys_sendmsg+0x28/0x40
-[   51.720900]  invoke_syscall+0x48/0x120
-
-Johan

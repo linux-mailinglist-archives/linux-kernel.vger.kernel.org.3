@@ -2,188 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D3A53270E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1002A532712
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbiEXKFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 06:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S233372AbiEXKHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 06:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiEXKFu (ORCPT
+        with ESMTP id S231631AbiEXKHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:05:50 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F58D75221
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:05:48 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gi33so25764719ejc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:05:48 -0700 (PDT)
+        Tue, 24 May 2022 06:07:40 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FDF79824
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:07:38 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id v9so11009208lja.12
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:07:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WekZdZTtTNu0NCjGCUwHIK8cT32r5xb10hc0djOUWXs=;
-        b=iQdlwXfcFTeKrLPSKVE/Bm0wY66qW8ercKJraL44NeKyxEydbTPt7CkSnFPLomQQDI
-         Bb6wfH8bHi8LeEWFw87oHU5bQZH7gx6ZNmZAysdrEwZ2uR/YW0qP1THblazfpJx1+3gr
-         T+UoQpVOD+6mq4lpryYZzi85Qoibl0SitRsc5L75FXOkE1mwe1vEb1mkLL+mQkdjyTxZ
-         waO5mZlPtHZy8fz96dJUTLR4Hul/Ea9NeHca6IeTAg+ytGfH9gial0XvID9ws8jwxw6v
-         vhBkSEN2a4i219Ucj2Ld9Rfw1nBGmXZGi15iS6OyNjDT8VfD3LSR/1C3w+W6witY4oV1
-         icqQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=62u0OdiZGmktFTh3AqaIrUZUI/D7c2ipqL+QehY9CTA=;
+        b=kjYAiJhl1gZx0UVhGbW3xraCltid4zvCU7U7jlILyDeNpk7RL49N9xtrUzHCfqHoyE
+         0XskJ1LUFzgrNk1/eqwsOYLzzjwxM1QDz9JKf0v4WMoZ3iri9Z5VR0vtLFbRx/jlYvpI
+         4PcuqrljaltA6MiNhRaO3YvHfeBOXAkXaYjIoQGdxc/rxBZaSHLaX+SLqkgsW+z3oybW
+         eTlEO9kIgs13OkWITy/zdISSacu6gFPW6CbOobcpLKBzOALKXmLqWdms6B7yXEQ62lpK
+         pg6O42tiNAohq9S55rRoO7Ye686vP3pXDO1JM2PhyKL8vRnFMNgKbGf8htaUHW5v9WnG
+         RUHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WekZdZTtTNu0NCjGCUwHIK8cT32r5xb10hc0djOUWXs=;
-        b=QLcWFS1rMogtzr85OSvzGbL7lmkcM4ByAg7KH3/6gDv5XOu/LVLTkHPDQozsATWbcH
-         XFlXW1muG3BaZGhNeUuobYSoFa4nOAeKVBukPlFG0yGQZJxHF+/j26691d3C8g41sqbB
-         x1gdhN1/qQKJ3en7u/yrDcLiOAFL0isZO55XaL8EpUIiz9fIjdCIrcN9wzmY1ImMr1Rp
-         4lRsazYF9vHuRt+T8z/Ro6LpcMv01rcTMktxJqwu6z63CSyphAlz7GtYnp8F90NKYw7i
-         NN6aFhDy0KoNf3qwhNTr9pvls3cOQKeF8IqZ//TihRFJkuSol7yViIbH608kZ4GbEU/f
-         ktQQ==
-X-Gm-Message-State: AOAM530mUh2AW1q5o4s1vgScHB60lkea3Lu8XnlSNsTIhSelnUJziA35
-        +AdZy1YmV+VnCOpWAEYJ3TdJVky9lHdKLx7Fx7s=
-X-Google-Smtp-Source: ABdhPJz7BFtcuW392zVcxz+55BtKJcIy0OchNSwmEIJCh+IDTmYaxQ2WerYbh16n7ynBHq0RShXf5gQOBDfZGuJlQP0=
-X-Received: by 2002:a17:906:7309:b0:6f5:ea1:afa with SMTP id
- di9-20020a170906730900b006f50ea10afamr23767700ejc.170.1653386746877; Tue, 24
- May 2022 03:05:46 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=62u0OdiZGmktFTh3AqaIrUZUI/D7c2ipqL+QehY9CTA=;
+        b=gsWM3tAWSm+Fl536JeEEmrkEmpU5gzo9y6caWD0MiXhcZQLivI/xU/Un3hfcFtuRR3
+         9TYWZE0kGPKqiuCENSkuoB+QDqZDDxBBlostrSCCgRd9rOsvPW8B74Ms1Y6fIe9h91EC
+         0sjuGybnkimCBC8g6gLtHTOkQSTb5rUWPGWENh5rA2jIAH/cgWPFB21O6Rmdf1Wv+sQT
+         EeVizzZH46e0mnacgRUKEFl1HTofYovmTBh7LksB+Ll+GlggeasVIePd+NOEEVox8ySV
+         Zb/tE9M45JvGRZaP5eLcgEvthP+rNhChtgDZ9vriGdkTyAM1iqtvzR+XLIMeNEGo4Hwg
+         a+Lg==
+X-Gm-Message-State: AOAM533HhGnAC9PYiYCs6mG+J4M/v5x03G7+4xoZlpYsNv9hUALEUZwK
+        /fKLX5Xf2zz2sKN7tBCfSXyuzA==
+X-Google-Smtp-Source: ABdhPJy9L8ZYpXgX23qTOsfzdXeE19zccHaN4htCW5tI6QmMZjSGG6wzVErzNA91bPLofI0APu1QhA==
+X-Received: by 2002:a2e:391a:0:b0:253:c3e8:9387 with SMTP id g26-20020a2e391a000000b00253c3e89387mr15179864lja.156.1653386857129;
+        Tue, 24 May 2022 03:07:37 -0700 (PDT)
+Received: from [172.20.68.48] ([91.221.145.6])
+        by smtp.gmail.com with ESMTPSA id j30-20020ac2551e000000b0047255d211a2sm2451930lfk.209.2022.05.24.03.07.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 03:07:36 -0700 (PDT)
+Message-ID: <c2882212-aa1e-4614-c982-43e6c793b34a@linaro.org>
+Date:   Tue, 24 May 2022 12:07:34 +0200
 MIME-Version: 1.0
-References: <20220524071403.128644-1-21cnbao@gmail.com> <YoyTWaDmSiBUkaeg@arm.com>
-In-Reply-To: <YoyTWaDmSiBUkaeg@arm.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Tue, 24 May 2022 22:05:35 +1200
-Message-ID: <CAGsJ_4xPFkc6Kn2G5pPPk8XJ4iZV=atzan=Quq6Ljc_5vr1fnA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: enable THP_SWAP for arm64
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>, Shaohua Li <shli@kernel.org>,
-        Rik van Riel <riel@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Steven Price <steven.price@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/7] dt-bindings: soc: add bindings for i.MX93 SRC
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
+        mturquette@baylibre.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     aisheng.dong@nxp.com, l.stach@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
+References: <20220523113029.842753-1-peng.fan@oss.nxp.com>
+ <20220523113029.842753-2-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220523113029.842753-2-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 8:12 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Tue, May 24, 2022 at 07:14:03PM +1200, Barry Song wrote:
-> > From: Barry Song <v-songbaohua@oppo.com>
-> >
-> > THP_SWAP has been proved to improve the swap throughput significantly
-> > on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
-> > splitting THP after swapped out").
-> > As long as arm64 uses 4K page size, it is quite similar with x86_64
-> > by having 2MB PMD THP. So we are going to get similar improvement.
-> > For other page sizes such as 16KB and 64KB, PMD might be too large.
-> > Negative side effects such as IO latency might be a problem. Thus,
-> > we can only safely enable the counterpart of X86_64.
-> >
-> > Cc: "Huang, Ying" <ying.huang@intel.com>
-> > Cc: Minchan Kim <minchan@kernel.org>
-> > Cc: Johannes Weiner <hannes@cmpxchg.org>
-> > Cc: Hugh Dickins <hughd@google.com>
-> > Cc: Shaohua Li <shli@kernel.org>
-> > Cc: Rik van Riel <riel@redhat.com>
-> > Cc: Andrea Arcangeli <aarcange@redhat.com>
-> > Signed-off-by: Barry Song <v-songbaohua@oppo.com>
-> > ---
-> >  arch/arm64/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > index d550f5acfaf3..8e3771c56fbf 100644
-> > --- a/arch/arm64/Kconfig
-> > +++ b/arch/arm64/Kconfig
-> > @@ -98,6 +98,7 @@ config ARM64
-> >       select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
-> >       select ARCH_WANT_LD_ORPHAN_WARN
-> >       select ARCH_WANTS_NO_INSTR
-> > +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
->
-> I'm not opposed to this but I think it would break pages mapped with
-> PROT_MTE. We have an assumption in mte_sync_tags() that compound pages
-> are not swapped out (or in). With MTE, we store the tags in a slab
+On 23/05/2022 13:30, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add bindings for i.MX93 System Reset Controller(SRC). SRC supports
+> resets and power gating for mixes.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../bindings/soc/imx/fsl,imx93-src.yaml       | 88 +++++++++++++++++++
+>  include/dt-bindings/power/imx93-power.h       | 11 +++
+>  2 files changed, 99 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
 
-I assume you mean mte_sync_tags() require that THP is not swapped as a whole,
-as without THP_SWP, THP is still swapping after being splitted. MTE doesn't stop
-THP from swapping through a couple of splitted pages, does it?
+File should be in respective subsystem, so probably power/reset?
 
-> object (128-bytes per swapped page) and restore them when pages are
-> swapped in. At some point we may teach the core swap code about such
-> metadata but in the meantime that was the easiest way.
->
+>  create mode 100644 include/dt-bindings/power/imx93-power.h
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
+> new file mode 100644
+> index 000000000000..d45c1458b9c1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
+> @@ -0,0 +1,88 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/imx/fsl,imx93-src.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP i.MX9 System Reset Controller
+> +
+> +maintainers:
+> +  - Peng Fan <peng.fan@nxp.com>
+> +
+> +description: |
+> +  The System Reset Controller (SRC) is responsible for the generation of
+> +  all the system reset signals and boot argument latching.
+> +
+> +  Its main functions are as follows,
+> +  - Deals with all global system reset sources from other modules,
+> +    and generates global system reset.
+> +  - Responsible for power gating of MIXs (Slices) and their memory
+> +    low power control.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: fsl,imx93-src
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  slice:
 
-If my previous assumption is true,  the easiest way to enable THP_SWP
-for this moment
-might be always letting mm fallback to the splitting way for MTE
-hardware. For this
-moment, I care about THP_SWP more as none of my hardware has MTE.
+Why do you need this subnode, instead of listing domains here?
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 45c358538f13..d55a2a3e41a9 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -44,6 +44,8 @@
-        __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+> +    type: object
+> +    description: list of power domains provided by this controller.
+> +
 
-+#define arch_thp_swp_supported !system_supports_mte
-+
- /*
-  * Outside of a few very special situations (e.g. hibernation), we always
-  * use broadcast TLB invalidation instructions, therefore a spurious page
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index 2999190adc22..064b6b03df9e 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -447,4 +447,16 @@ static inline int split_folio_to_list(struct folio *folio,
-        return split_huge_page_to_list(&folio->page, list);
- }
+Hm, what about address/size cells? Is syscon schema bringing these?
 
-+/*
-+ * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
-+ * limitations in the implementation like arm64 MTE can override this to
-+ * false
-+ */
-+#ifndef arch_thp_swp_supported
-+static inline bool arch_thp_swp_supported(void)
-+{
-+       return true;
-+}
-+#endif
-+
- #endif /* _LINUX_HUGE_MM_H */
-diff --git a/mm/swap_slots.c b/mm/swap_slots.c
-index 2b5531840583..dde685836328 100644
---- a/mm/swap_slots.c
-+++ b/mm/swap_slots.c
-@@ -309,7 +309,7 @@ swp_entry_t get_swap_page(struct page *page)
-        entry.val = 0;
+> +    patternProperties:
+> +      "power-domain@[0-9]$":
+> +        type: object
 
-        if (PageTransHuge(page)) {
--               if (IS_ENABLED(CONFIG_THP_SWAP))
-+               if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
-                        get_swap_pages(1, &entry, HPAGE_PMD_NR);
-                goto out;
-        }
+Missing ref to power-domain.yaml
 
-> --
-> Catalin
+> +        properties:
+> +
+> +          '#power-domain-cells':
+> +            const: 0
+> +
+> +          reg:
+> +            description: |
+> +              Power domain index. Valid values are defined in
+> +              include/dt-bindings/power/imx93-power.h for fsl,imx93-src
+> +            maxItems: 1
+> +
+> +          clocks:
+> +            description: |
+> +              A number of phandles to clocks that need to be enabled
+> +              during domain power-up sequencing to ensure reset
+> +              propagation into devices located inside this power domain.
+> +            minItems: 1
+> +            maxItems: 5
+> +
+> +        required:
+> +          - '#power-domain-cells'
+> +          - reg
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - slice
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx93-clock.h>
+> +    #include <dt-bindings/power/imx93-power.h>
+> +
+> +    src@44460000 {
 
-Thanks
-Barry
+reset-controller
+or some other generic node name.
+
+> +        compatible = "fsl,imx93-src", "syscon";
+> +        reg = <0x44460000 0x10000>;
+> +
+> +        slice {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                mediamix: power-domain@0 {
+
+Best regards,
+Krzysztof

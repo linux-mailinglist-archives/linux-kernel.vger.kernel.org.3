@@ -2,297 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127AE532CB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E71B532CC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238556AbiEXO5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S238513AbiEXO6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 10:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238486AbiEXO5n (ORCPT
+        with ESMTP id S238505AbiEXO6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 10:57:43 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B05635267;
-        Tue, 24 May 2022 07:57:40 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id j25so1670491wrb.6;
-        Tue, 24 May 2022 07:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8QCXWE8pHcx/LPFOM0jnsp7YMG7xupSlYpQdCSFNUHw=;
-        b=XU4G4jEKkCzsqX+M6RhH9F1TCMT0asu3D+KLqRNZfWNgVR3Wf/7Alp0e5T6HCNh6Vh
-         dBc1UBuoA83+xqkYyILM4dx9Ji9q8Mxqv1NyjByaxPpmVsX+MWO1uqPW5XmP5KSmCJep
-         URkMiksoRfX8IjBrTXJefT2GuEGX1gF89kQXmSH9uV7EI996f8Fe69hhl2D5WY5cIDtS
-         jyZdGzmlTgLSUdrp3dQ9AA+7XIsjPsHZS03ag+dKBJ++Rd2Z2vWPzM/CyPF190MxlpDu
-         q8834SNZa0HKzU7aijqOdl1sKEfhiqRx5B3y1ZWXrdr87O/PIgV30hMFrJkaEBRYxxDh
-         gsrg==
+        Tue, 24 May 2022 10:58:03 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F88C9CF52;
+        Tue, 24 May 2022 07:58:01 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id t14-20020a9d66ce000000b0060af9ed4b87so7173975otm.9;
+        Tue, 24 May 2022 07:58:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8QCXWE8pHcx/LPFOM0jnsp7YMG7xupSlYpQdCSFNUHw=;
-        b=8PfYYHpu2Rhg+3N2iprD/NpipYe2Bs8211ZoiWBGgE+fyBmkGhCCTyaCLsevfMWiqg
-         ucwumZbDRmYqLmxNBxynos2AwlUMxzWiWF6meakxGrngbSdrN64O7OgxgX7ZPKRajoZD
-         oIgI7n3k3xtQ0MCjmpUwm+D286cWVMwKyN3kJE3yQJSjPHRLy/4k1/IcP540j0zx3fMy
-         VaaZm8krbEgUYf2C9ZrqfaWJIpiKKGJgTwC3pc8fyA4ZzJq3h1QYPXiFF7cvX4Adc36g
-         ZJejozRyTxKt9NvwH0izJROfpWl8M9w+TEchuwacyYrQtyM58RbPyqTsr3m4HdUHSQV+
-         yG7A==
-X-Gm-Message-State: AOAM5303O3PXpmiGTNjMmw147RnPKVVNzcqC2wgb0pPj03VauMDNbFkI
-        JHaRoXxjqKMeLSF012fHrk6fYXXrn4RN999Mxx89OAwBY5Y=
-X-Google-Smtp-Source: ABdhPJysZ2H+hEScT6iz94cgUKE3RmyT0gSy6SbonGVwdaIBdcNtxyO4YfpOfg4amI95k5hZykP/nC4Z+b5/pRjd6zc=
-X-Received: by 2002:adf:fb0d:0:b0:20d:97e:17ce with SMTP id
- c13-20020adffb0d000000b0020d097e17cemr24151626wrr.585.1653404258483; Tue, 24
- May 2022 07:57:38 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nkf+mvMwrjUruEFDYrxAVkAx6OHaDoDw1ld4EH6YiqY=;
+        b=48EfI1RnJlke9G5cehBsT23gqTpVScNueGkKTVp18pYseHOQld/OOlry8FTfAsUbTN
+         mvUqwC0UNOLZX7sVrDtgIm08XfvTrorT7PLCIyZXR7ysc2X/QWpf3mwddXKgWCHJXlRU
+         7W7tdQZb0wFPSBxm2tdMtBVE6OUBUTa6PEeEmaRjOsNC/BQtdW5Zbn5WWJVUe4Xzif0c
+         dmLy1a+L9GIp8Iauav9ZB+qTMF1XN7WOTH4Heva98VVNl5gXH6aJUwJ09aQBrad2YPVY
+         e9BdxwVvi0nOqJ/mCmVAMkXXclzgAk8rT4YpQbxC7V/1j6m36aW7mS3mN20JdpWlE6UV
+         BW7w==
+X-Gm-Message-State: AOAM5317+aRy/OhPZ2EKF6OA2bZ/uPX7c6lTRQjrulf11f1gHNDKtaet
+        4Jcwlm6NQgnjb+vBbBIWGg/f6wAjYA==
+X-Google-Smtp-Source: ABdhPJxSlaxF5FMo24zzHp9eAzq7uAZ6ra/ZXFH50nBDue68wirqOC+MwRr2fSlFqH39W7Vz+MTO3A==
+X-Received: by 2002:a05:6830:82:b0:60b:127e:d3fb with SMTP id a2-20020a056830008200b0060b127ed3fbmr3978825oto.259.1653404280302;
+        Tue, 24 May 2022 07:58:00 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t22-20020a05687044d600b000f23989c532sm3427224oai.8.2022.05.24.07.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 07:57:59 -0700 (PDT)
+Received: (nullmailer pid 3778981 invoked by uid 1000);
+        Tue, 24 May 2022 14:57:58 -0000
+Date:   Tue, 24 May 2022 09:57:58 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 01/23] dt-bindings: ata: ahci-platform: Drop
+ dma-coherent property declaration
+Message-ID: <20220524145758.GA3730540-robh@kernel.org>
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-2-Sergey.Semin@baikalelectronics.ru>
+ <20220517185841.GA1388602-robh@kernel.org>
+ <20220521092248.7i53lxf3gx26fmi5@mobilestation>
 MIME-Version: 1.0
-References: <20210728010632.2633470-1-robdclark@gmail.com> <20210728010632.2633470-13-robdclark@gmail.com>
- <84e03c5f-a3af-6592-d19a-a2f5d20b92fb@linux.intel.com> <CAJs_Fx6Nc337LPNh=p2GT2d2yDTdLWH934o4Cof3urDGhUJB6A@mail.gmail.com>
- <904ae104-1c30-d130-129f-ccae381261d5@linux.intel.com>
-In-Reply-To: <904ae104-1c30-d130-129f-ccae381261d5@linux.intel.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 24 May 2022 07:57:26 -0700
-Message-ID: <CAF6AEGuVhXuX63Od+kcJ0QtfAZ2-wqZsN0KOuEzKbivJdouzog@mail.gmail.com>
-Subject: Re: [PATCH v4 12/13] drm/msm: Utilize gpu scheduler priorities
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Rob Clark <robdclark@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        David Airlie <airlied@linux.ie>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Sharat Masetty <smasetty@codeaurora.org>,
-        Akhil P Oommen <akhilpo@codeaurora.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>, Sean Paul <sean@poorly.run>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521092248.7i53lxf3gx26fmi5@mobilestation>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 6:45 AM Tvrtko Ursulin
-<tvrtko.ursulin@linux.intel.com> wrote:
->
-> On 23/05/2022 23:53, Rob Clark wrote:
-> >
-> > btw, one fun (but unrelated) issue I'm hitting with scheduler... I'm
-> > trying to add an igt test to stress shrinker/eviction, similar to the
-> > existing tests/i915/gem_shrink.c.  But we hit an unfortunate
-> > combination of circumstances:
-> > 1. Pinning memory happens in the synchronous part of the submit ioctl,
-> > before enqueuing the job for the kthread to handle.
-> > 2. The first run_job() callback incurs a slight delay (~1.5ms) while
-> > resuming the GPU
-> > 3. Because of that delay, userspace has a chance to queue up enough
-> > more jobs to require locking/pinning more than the available system
-> > RAM..
->
-> Is that one or multiple threads submitting jobs?
+On Sat, May 21, 2022 at 12:22:48PM +0300, Serge Semin wrote:
+> On Tue, May 17, 2022 at 01:58:41PM -0500, Rob Herring wrote:
+> > On Thu, May 12, 2022 at 02:17:48AM +0300, Serge Semin wrote:
+> > > It's redundant to have the 'dma-coherent' property explicitly specified in
+> > > the DT schema because it's a generic property described in the core
+> > > DT-schema by which the property is always evaluated.
+> > 
+> 
+> > It is not redundant.
+> > 
+> > The core schema defines the property (as a boolean), but this schema 
+> > defines it being used in this binding. Otherwise, it won't be allowed.
+> 
+> I thought that the generic properties like ranges, dma-ranges, etc
+> including the dma-coherent one due to being defined in the dt-core
+> schema are always evaluated. As such seeing the unevaluatedProperties
+> property is set to false here, they can be used in the DT-nodes with
+> no need to be explicitly specified in the DT node bindings. In
+> addition to that I tested this assumption by dropping the dma-coherent
+> property definition from the AHCI-common schema and executed the
+> DT-bindings check procedure. No error has been spotted:
 
-In this case multiple.. but I think it could also happen with a single
-thread (provided it didn't stall on a fence, directly or indirectly,
-from an earlier submit), because of how resume and actual job
-submission happens from scheduler kthread.
+Those common properties are always applied, but not at the same time as 
+a device binding. IOW, it's 2 schemas that are applied to an instance 
+(node) independently. For things like 'reg', the common schema does type 
+checks and the device schema does size (number of entries) checks.
 
-> > I'm not sure if we want a way to prevent userspace from getting *too*
-> > far ahead of the kthread.  Or maybe at some point the shrinker should
-> > sleep on non-idle buffers?
->
-> On the direct reclaim path when invoked from the submit ioctl? In i915
-> we only shrink idle objects on direct reclaim and leave active ones for
-> the swapper. It depends on how your locking looks like whether you could
-> do them, whether there would be coupling of locks and fs-reclaim context.
+There a few things always allowed like 'status', and those are added to 
+the device schema by the tools.
 
-I think the locking is more or less ok, although lockdep is unhappy
-about one thing[1] which is I think a false warning (ie. not
-recognizing that we'd already successfully acquired the obj lock via
-trylock).  We can already reclaim idle bo's in this path.  But the
-problem with a bunch of submits queued up in the scheduler, is that
-they are already considered pinned and active.  So at some point we
-need to sleep (hopefully interruptabley) until they are no longer
-active, ie. to throttle userspace trying to shove in more submits
-until some of the enqueued ones have a chance to run and complete.
+> 
+> > [fancer@mobilestation] kernel $ cat Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml | grep dma-coherent
+> >        dma-coherent;
+> > [fancer@mobilestation] kernel $ make -j8 DT_SCHEMA_FILES=Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml dt_binding_check
+> >   LINT    Documentation/devicetree/bindings
+> >   DTEX    Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dts
+> >   CHKDT   Documentation/devicetree/bindings/processed-schema.json
+> >   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+> >   DTC     Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dtb
+> >   CHECK   Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dtb
+> > [fancer@mobilestation] kernel $ cat Documentation/devicetree/bindings/ata/snps,dwc-ahci.example.dts | grep dma-coherent
+> >           dma-coherent;
+> > [fancer@mobilestation] kernel $ echo $?
+> > 0
+> Due to that here are a few backward questions:
+> 1) Am I doing something wrong in the framework of the DT-bindings
+> evaluation? Really I even tried to specify unknown property in the
+> DT-bindings example like "bla-bla-bla;" and no evaluation error was
+> printed. Anyway If what you are saying was correct I would have got an
+> error during the DT-bindings evaluation, but as you can see there was
+> none.
 
-BR,
--R
+I think this is a known issue which has a pending fix. If a referenced 
+schema has 'additionalProperties: true' in it, then the referring schema 
+never has any unevaluated properties. The fix is pending because all 
+the schema examples that start failing have to be fixed and in a base 
+that people work on (i.e. rc1).
 
-[1] https://gitlab.freedesktop.org/drm/msm/-/issues/14
+> 2) Am I wrong in thinking that the unevaluatedProperties setting
+> concerns the generic properties defined in the DT-core schema? 
 
-> Regards,
->
-> Tvrtko
->
-> > BR,
-> > -R
-> >
-> >>
-> >> Regards,
-> >>
-> >> Tvrtko
-> >>
-> >>> + */
-> >>> +static inline int msm_gpu_convert_priority(struct msm_gpu *gpu, int prio,
-> >>> +             unsigned *ring_nr, enum drm_sched_priority *sched_prio)
-> >>> +{
-> >>> +     unsigned rn, sp;
-> >>> +
-> >>> +     rn = div_u64_rem(prio, NR_SCHED_PRIORITIES, &sp);
-> >>> +
-> >>> +     /* invert sched priority to map to higher-numeric-is-higher-
-> >>> +      * priority convention
-> >>> +      */
-> >>> +     sp = NR_SCHED_PRIORITIES - sp - 1;
-> >>> +
-> >>> +     if (rn >= gpu->nr_rings)
-> >>> +             return -EINVAL;
-> >>> +
-> >>> +     *ring_nr = rn;
-> >>> +     *sched_prio = sp;
-> >>> +
-> >>> +     return 0;
-> >>> +}
-> >>> +
-> >>>    /**
-> >>>     * A submitqueue is associated with a gl context or vk queue (or equiv)
-> >>>     * in userspace.
-> >>> @@ -257,7 +310,8 @@ struct msm_gpu_perfcntr {
-> >>>     * @id:        userspace id for the submitqueue, unique within the drm_file
-> >>>     * @flags:     userspace flags for the submitqueue, specified at creation
-> >>>     *             (currently unusued)
-> >>> - * @prio:      the submitqueue priority
-> >>> + * @ring_nr:   the ringbuffer used by this submitqueue, which is determined
-> >>> + *             by the submitqueue's priority
-> >>>     * @faults:    the number of GPU hangs associated with this submitqueue
-> >>>     * @ctx:       the per-drm_file context associated with the submitqueue (ie.
-> >>>     *             which set of pgtables do submits jobs associated with the
-> >>> @@ -272,7 +326,7 @@ struct msm_gpu_perfcntr {
-> >>>    struct msm_gpu_submitqueue {
-> >>>        int id;
-> >>>        u32 flags;
-> >>> -     u32 prio;
-> >>> +     u32 ring_nr;
-> >>>        int faults;
-> >>>        struct msm_file_private *ctx;
-> >>>        struct list_head node;
-> >>> diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/msm/msm_submitqueue.c
-> >>> index 682ba2a7c0ec..32a55d81b58b 100644
-> >>> --- a/drivers/gpu/drm/msm/msm_submitqueue.c
-> >>> +++ b/drivers/gpu/drm/msm/msm_submitqueue.c
-> >>> @@ -68,6 +68,8 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
-> >>>        struct msm_gpu_submitqueue *queue;
-> >>>        struct msm_ringbuffer *ring;
-> >>>        struct drm_gpu_scheduler *sched;
-> >>> +     enum drm_sched_priority sched_prio;
-> >>> +     unsigned ring_nr;
-> >>>        int ret;
-> >>>
-> >>>        if (!ctx)
-> >>> @@ -76,8 +78,9 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
-> >>>        if (!priv->gpu)
-> >>>                return -ENODEV;
-> >>>
-> >>> -     if (prio >= priv->gpu->nr_rings)
-> >>> -             return -EINVAL;
-> >>> +     ret = msm_gpu_convert_priority(priv->gpu, prio, &ring_nr, &sched_prio);
-> >>> +     if (ret)
-> >>> +             return ret;
-> >>>
-> >>>        queue = kzalloc(sizeof(*queue), GFP_KERNEL);
-> >>>
-> >>> @@ -86,24 +89,13 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
-> >>>
-> >>>        kref_init(&queue->ref);
-> >>>        queue->flags = flags;
-> >>> -     queue->prio = prio;
-> >>> +     queue->ring_nr = ring_nr;
-> >>>
-> >>> -     ring = priv->gpu->rb[prio];
-> >>> +     ring = priv->gpu->rb[ring_nr];
-> >>>        sched = &ring->sched;
-> >>>
-> >>> -     /*
-> >>> -      * TODO we can allow more priorities than we have ringbuffers by
-> >>> -      * mapping:
-> >>> -      *
-> >>> -      *    ring = prio / 3;
-> >>> -      *    ent_prio = DRM_SCHED_PRIORITY_MIN + (prio % 3);
-> >>> -      *
-> >>> -      * Probably avoid using DRM_SCHED_PRIORITY_KERNEL as that is
-> >>> -      * treated specially in places.
-> >>> -      */
-> >>>        ret = drm_sched_entity_init(&queue->entity,
-> >>> -                     DRM_SCHED_PRIORITY_NORMAL,
-> >>> -                     &sched, 1, NULL);
-> >>> +                     sched_prio, &sched, 1, NULL);
-> >>>        if (ret) {
-> >>>                kfree(queue);
-> >>>                return ret;
-> >>> @@ -134,16 +126,19 @@ int msm_submitqueue_create(struct drm_device *drm, struct msm_file_private *ctx,
-> >>>    int msm_submitqueue_init(struct drm_device *drm, struct msm_file_private *ctx)
-> >>>    {
-> >>>        struct msm_drm_private *priv = drm->dev_private;
-> >>> -     int default_prio;
-> >>> +     int default_prio, max_priority;
-> >>>
-> >>>        if (!priv->gpu)
-> >>>                return -ENODEV;
-> >>>
-> >>> +     max_priority = (priv->gpu->nr_rings * NR_SCHED_PRIORITIES) - 1;
-> >>> +
-> >>>        /*
-> >>> -      * Select priority 2 as the "default priority" unless nr_rings is less
-> >>> -      * than 2 and then pick the lowest priority
-> >>> +      * Pick a medium priority level as default.  Lower numeric value is
-> >>> +      * higher priority, so round-up to pick a priority that is not higher
-> >>> +      * than the middle priority level.
-> >>>         */
-> >>> -     default_prio = clamp_t(uint32_t, 2, 0, priv->gpu->nr_rings - 1);
-> >>> +     default_prio = DIV_ROUND_UP(max_priority, 2);
-> >>>
-> >>>        INIT_LIST_HEAD(&ctx->submitqueues);
-> >>>
-> >>> diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
-> >>> index f075851021c3..6b8fffc28a50 100644
-> >>> --- a/include/uapi/drm/msm_drm.h
-> >>> +++ b/include/uapi/drm/msm_drm.h
-> >>> @@ -73,11 +73,19 @@ struct drm_msm_timespec {
-> >>>    #define MSM_PARAM_MAX_FREQ   0x04
-> >>>    #define MSM_PARAM_TIMESTAMP  0x05
-> >>>    #define MSM_PARAM_GMEM_BASE  0x06
-> >>> -#define MSM_PARAM_NR_RINGS   0x07
-> >>> +#define MSM_PARAM_PRIORITIES 0x07  /* The # of priority levels */
-> >>>    #define MSM_PARAM_PP_PGTABLE 0x08  /* => 1 for per-process pagetables, else 0 */
-> >>>    #define MSM_PARAM_FAULTS     0x09
-> >>>    #define MSM_PARAM_SUSPENDS   0x0a
-> >>>
-> >>> +/* For backwards compat.  The original support for preemption was based on
-> >>> + * a single ring per priority level so # of priority levels equals the #
-> >>> + * of rings.  With drm/scheduler providing additional levels of priority,
-> >>> + * the number of priorities is greater than the # of rings.  The param is
-> >>> + * renamed to better reflect this.
-> >>> + */
-> >>> +#define MSM_PARAM_NR_RINGS   MSM_PARAM_PRIORITIES
-> >>> +
-> >>>    struct drm_msm_param {
-> >>>        __u32 pipe;           /* in, MSM_PIPE_x */
-> >>>        __u32 param;          /* in, MSM_PARAM_x */
-> >>> @@ -304,6 +312,10 @@ struct drm_msm_gem_madvise {
-> >>>
-> >>>    #define MSM_SUBMITQUEUE_FLAGS (0)
-> >>>
-> >>> +/*
-> >>> + * The submitqueue priority should be between 0 and MSM_PARAM_PRIORITIES-1,
-> >>> + * a lower numeric value is higher priority.
-> >>> + */
-> >>>    struct drm_msm_submitqueue {
-> >>>        __u32 flags;   /* in, MSM_SUBMITQUEUE_x */
-> >>>        __u32 prio;    /* in, Priority level */
+You are wrong as explained above.
+
+> If it
+> doesn't concern the generic properties then does it work for the
+> $ref'ed schemas only? 
+
+Yes, except for the issue making it not work.
+
+> Getting back to the patch topic. We need to drop the dma-coherent
+> property from the schema anyway. AHCI-specification doesn't
+> regulate the DMA operations coherency. The dma-coherent property is
+> more specific to the particular controller implementation mainly
+> dependent on the platform settings. So I'll change the patch log, but
+> get to keep the patch in the series. What do you think?
+
+Intel wrote the spec, so they probably assume coherent. In DT, PPC is 
+default coherent and Arm is default non-coherent.
+
+You'll need to add it to whatever specific device schemas need it if you 
+remove it. Personally, I think it is fine where it is. dma-coherent is 
+valid on any DMA capable device and it's not really a property of the 
+device, but the system. If we could generically identify DMA capable 
+devices, then dma-coherent would be allowed on them automatically.
+
+Rob

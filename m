@@ -2,126 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F85C5331C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEA15331BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240919AbiEXT13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S240894AbiEXT1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240862AbiEXT1Z (ORCPT
+        with ESMTP id S240862AbiEXT1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:27:25 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732056CF61;
-        Tue, 24 May 2022 12:27:24 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id c1so15786104qkf.13;
-        Tue, 24 May 2022 12:27:24 -0700 (PDT)
+        Tue, 24 May 2022 15:27:23 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0926CF61
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:27:22 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id h18so2144732qvj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:27:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PlbzmGY3IUE+JzgN/OnRwYZ1LTcH+0H8v20IvUaXIb8=;
-        b=muSVj6gWsDNJeJsHQZm5Kfk8rAqTHAxoahSpwdRRJKLo+RuYyvm6xl7nDt2G0VGYK6
-         +Y393pPLN1PweghnQH9KZl6Em2mChejg3N4MXPXlAHFUqSlCxthfrtcGKt21Zy5B6DXD
-         P+GzcSds6ux/PObm21V7/Y5Wcd5snfmKmaBmWjkf7t9Pa4t4HQG7xMZN6iCFP1EEfj3k
-         At5qYddt4bqOdRUHltiPgMmSEApcNMq6j8funk5seESBcni/RcOaUsJEj8zZaaXPqtGZ
-         929YB0lvLXFf/71sU8Hxsb5qKzXCZYAJpAcGEwFzh4+8UFGUAM7mFa/j1iVInHhyG6Pc
-         vvcA==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iHC/s/wKwgFf20BDbmEN0QqnLll5khAsu3zMTLCS7uM=;
+        b=UOC+0QNjQ3eKtHdh787nVfBuk5iczhXDMucSuwob+bzfFcNtAZ+/MFwi7vgLF+FeJP
+         11/fIC8zmH9vY/GeNbcQ712AygNw9xkKvd6SDfeEPD3F6qaP1f8fEn7ZrlDOU4WGI5Ff
+         z5pdg9OTxMI4cL/Ehl8ERiSnZ/igYnqO4lPvjTIbs0efPcmei6QsIaloTvfDsyoKW6fd
+         LNxBy8sftRPoA3ZDAK0onSKD2/ifzv8crV+QgtDtMb2OK3gGaWEOmwQa8F5ZbYREzYva
+         japzLzS7tfBh0n+gxMVTf/NTZ6c9AVBsngN53dvoa7sL8jl3O++5lxB+FRm3VpLY+CKu
+         gC3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PlbzmGY3IUE+JzgN/OnRwYZ1LTcH+0H8v20IvUaXIb8=;
-        b=BB+dJebV4zpIey+Rpk9GjQ4Gv+0Tyw8EL9uqF0hMiTmIgQZPjZG4uNtHbAtKgarBHa
-         Li9/azGBaEzWRKTzQT4VmzsghkuoKLQfNAr2MfRv2b7sxSefsnYW2/uj/Y7Qngrtex+R
-         hKTtZQZr8lE8hKx/Elm2c2JaoFj5PqQR1ApDgvg+e5WwuLDfQDpbYF7tirfR2s+hvFhv
-         kvZFSyHvXwTUPZVVKS8u2dBTiNjWIjS037Af4MuFZc2KhiMV37AbzmMZLtSrGAlcSytj
-         iC8GXO7nmomaCDrnWFB1JuyMU9KJnoLtxH3onYD6Yz8x4mxc0MTrxBZTXdRLLRjww7gJ
-         /Eqw==
-X-Gm-Message-State: AOAM532w5zD1zojZSLxZa9Dk9vG7pU9W8ku5EvXWlD319Ab9B4OCTY1u
-        9T+WlIF0EZLfNU0ZddY4Co4=
-X-Google-Smtp-Source: ABdhPJw5hZzFTUuL5gQkWifCxGNS0Gh6Rs1RttrDiEN93LoJ67dI00kuqjg5at1WDlJLbGxevypPPw==
-X-Received: by 2002:a37:6902:0:b0:606:853:fe50 with SMTP id e2-20020a376902000000b006060853fe50mr18321652qkc.751.1653420443556;
-        Tue, 24 May 2022 12:27:23 -0700 (PDT)
-Received: from gchdesk.Sonatest.net (ipagstaticip-d73c7528-4de5-0861-800b-03d8b15e3869.sdsl.bell.ca. [174.94.156.236])
-        by smtp.googlemail.com with ESMTPSA id c186-20020ae9edc3000000b006a37eb728cfsm67195qkg.1.2022.05.24.12.27.22
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iHC/s/wKwgFf20BDbmEN0QqnLll5khAsu3zMTLCS7uM=;
+        b=zvcdrT22CLMWsMcGNhD2QIwblAgj/7ZEAmWWuPeWb4PEVbdt9GEJjmr/4YKIe6yoPI
+         tNT7O0xEghOcfT9urXTbLU3MhLqVbbSYFbCMUBlkj96ktZSgJp+tYxCEEXAZwPUpivqu
+         t7NyYsM5mOuEzmLDtxClzv9RlTASHQQJOMGEYwn5XjS0GODwokst5fk6X63iias9vlL5
+         XIRROe+fL/8aIdPYQ4bEBVy+0tIcmmCGKvcqb9q3HZ9QF5vSIBFSkrAymh5pREGLLuON
+         U87Baml21Be3aclUsSfwCMTvdR6tu97RLlqTQK1GkRpA7Xaw2+HTBNv9/OVW3LQNjivc
+         35cQ==
+X-Gm-Message-State: AOAM532WmC22ogOBehJEqEyBwz6vnktSaKPszrJFVGW/IHXublG7lRJU
+        N+5dudWwR4Ohr+SgU16WMYncmw==
+X-Google-Smtp-Source: ABdhPJy2OwvCOJmjjwyCa3viSDMz2mksAOJUg3A06mu8Q30SP28gw1u1rhxY3E5kqJtA2PkBP3xgQw==
+X-Received: by 2002:ad4:47ca:0:b0:461:d5ac:b65b with SMTP id p10-20020ad447ca000000b00461d5acb65bmr22659303qvw.85.1653420441552;
+        Tue, 24 May 2022 12:27:21 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:741f])
+        by smtp.gmail.com with ESMTPSA id i25-20020ac860d9000000b002f39b99f66fsm140310qtm.9.2022.05.24.12.27.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 12:27:23 -0700 (PDT)
-From:   Guillaume Champagne <champagne.guillaume.c@gmail.com>
-To:     champagne.guillaume.c@gmail.com, michael.zaidman@gmail.com,
-        jikos@kernel.org, benjamin.tissoires@redhat.com
-Cc:     linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mathieu Gallichand <mathieu.gallichand@sonatest.com>
-Subject: [PATCH] HID: ft260: fix multi packet i2c transactions
-Date:   Tue, 24 May 2022 15:24:22 -0400
-Message-Id: <20220524192422.13967-1-champagne.guillaume.c@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        Tue, 24 May 2022 12:27:21 -0700 (PDT)
+Date:   Tue, 24 May 2022 15:27:20 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        longman@redhat.com
+Subject: Re: [PATCH v4 03/11] mm: memcontrol: make lruvec lock safe when LRU
+ pages are reparented
+Message-ID: <Yo0xmKOkBkhRy+bq@cmpxchg.org>
+References: <20220524060551.80037-1-songmuchun@bytedance.com>
+ <20220524060551.80037-4-songmuchun@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524060551.80037-4-songmuchun@bytedance.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only trigger START and STOP conditions for the first and last HID
-packets when i2c writes are split in multiple packets. Otherwise, slave
-i2c devices receive each packet as standalone i2c transactions. Since
-i2c slave devices clear their internal state on STOP, this breaks auto
-increment of the register address written to.
+On Tue, May 24, 2022 at 02:05:43PM +0800, Muchun Song wrote:
+> The diagram below shows how to make the folio lruvec lock safe when LRU
+> pages are reparented.
+> 
+> folio_lruvec_lock(folio)
+>     retry:
+> 	lruvec = folio_lruvec(folio);
+> 
+>         // The folio is reparented at this time.
+>         spin_lock(&lruvec->lru_lock);
+> 
+>         if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio)))
+>             // Acquired the wrong lruvec lock and need to retry.
+>             // Because this folio is on the parent memcg lruvec list.
+>             goto retry;
+> 
+>         // If we reach here, it means that folio_memcg(folio) is stable.
+> 
+> memcg_reparent_objcgs(memcg)
+>     // lruvec belongs to memcg and lruvec_parent belongs to parent memcg.
+>     spin_lock(&lruvec->lru_lock);
+>     spin_lock(&lruvec_parent->lru_lock);
+> 
+>     // Move all the pages from the lruvec list to the parent lruvec list.
+> 
+>     spin_unlock(&lruvec_parent->lru_lock);
+>     spin_unlock(&lruvec->lru_lock);
+> 
+> After we acquire the lruvec lock, we need to check whether the folio is
+> reparented. If so, we need to reacquire the new lruvec lock. On the
+> routine of the LRU pages reparenting, we will also acquire the lruvec
+> lock (will be implemented in the later patch). So folio_memcg() cannot
+> be changed when we hold the lruvec lock.
+> 
+> Since lruvec_memcg(lruvec) is always equal to folio_memcg(folio) after
+> we hold the lruvec lock, lruvec_memcg_debug() check is pointless. So
+> remove it.
+> 
+> This is a preparation for reparenting the LRU pages.
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 
-Concretely, SCL is now held low between processing of HID packets so i2c
-slave devices know to keep increment the same register address when the
-next bytes arrive.
+This looks good to me. Just one question:
 
-Co-developed-by: Mathieu Gallichand <mathieu.gallichand@sonatest.com>
-Signed-off-by: Mathieu Gallichand <mathieu.gallichand@sonatest.com>
-Signed-off-by: Guillaume Champagne <champagne.guillaume.c@gmail.com>
----
- drivers/hid/hid-ft260.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+> @@ -1230,10 +1213,23 @@ void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
+>   */
+>  struct lruvec *folio_lruvec_lock(struct folio *folio)
+>  {
+> -	struct lruvec *lruvec = folio_lruvec(folio);
+> +	struct lruvec *lruvec;
+>  
+> +	rcu_read_lock();
+> +retry:
+> +	lruvec = folio_lruvec(folio);
+>  	spin_lock(&lruvec->lru_lock);
+> -	lruvec_memcg_debug(lruvec, folio);
+> +
+> +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
+> +		spin_unlock(&lruvec->lru_lock);
+> +		goto retry;
+> +	}
+> +
+> +	/*
+> +	 * Preemption is disabled in the internal of spin_lock, which can serve
+> +	 * as RCU read-side critical sections.
+> +	 */
+> +	rcu_read_unlock();
 
-diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
-index 79505c64dbfe..9c5912a21ccb 100644
---- a/drivers/hid/hid-ft260.c
-+++ b/drivers/hid/hid-ft260.c
-@@ -390,6 +390,8 @@ static int ft260_i2c_write(struct ft260_device *dev, u8 addr, u8 *data,
- 	struct hid_device *hdev = dev->hdev;
- 	struct ft260_i2c_write_request_report *rep =
- 		(struct ft260_i2c_write_request_report *)dev->write_buf;
-+	bool multi_packet = data_len > FT260_WR_DATA_MAX;
-+	u8 packet_flag = multi_packet ? flag & FT260_FLAG_START_REPEATED : flag;
- 
- 	do {
- 		if (data_len <= FT260_WR_DATA_MAX)
-@@ -400,7 +402,7 @@ static int ft260_i2c_write(struct ft260_device *dev, u8 addr, u8 *data,
- 		rep->report = FT260_I2C_DATA_REPORT_ID(len);
- 		rep->address = addr;
- 		rep->length = len;
--		rep->flag = flag;
-+		rep->flag = packet_flag;
- 
- 		memcpy(rep->data, &data[idx], len);
- 
-@@ -418,6 +420,12 @@ static int ft260_i2c_write(struct ft260_device *dev, u8 addr, u8 *data,
- 		data_len -= len;
- 		idx += len;
- 
-+		if (multi_packet) {
-+			if (data_len <= FT260_WR_DATA_MAX)
-+				packet_flag = flag & FT260_FLAG_STOP;
-+			else
-+				packet_flag = FT260_FLAG_NONE;
-+		}
- 	} while (data_len > 0);
- 
- 	return 0;
--- 
-2.20.1
-
+The code looks right to me, but I don't understand the comment: why do
+we care that the rcu read-side continues? With the lru_lock held,
+reparenting is on hold and the lruvec cannot be rcu-freed anyway, no?

@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB2C53209F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C53E53209D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiEXCE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
+        id S233057AbiEXCEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 22:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbiEXCE0 (ORCPT
+        with ESMTP id S233023AbiEXCEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:04:26 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D674D95DE2;
-        Mon, 23 May 2022 19:04:24 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-edeb6c3642so20674508fac.3;
-        Mon, 23 May 2022 19:04:24 -0700 (PDT)
+        Mon, 23 May 2022 22:04:36 -0400
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420309969A;
+        Mon, 23 May 2022 19:04:35 -0700 (PDT)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-e656032735so20738333fac.0;
+        Mon, 23 May 2022 19:04:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=N0zLUHV5HQZJRuniC3/7vxtGft5GLwuurd3z/KjkOYA=;
-        b=yL1iBXThZateSEyu6mtHzzpmvvuWKGTh5qaV7+OatKGB5RuLj5ns//DeGsA04Pqbk1
-         dAKNR8g+InBELdCg0eCBIY/0MXiKdnjIozE/DlbAI/VYsB348oc3vQIKaXTjV9Pt3zOb
-         Nxp9yOjMchFOWeunv8b7KGdp08gNMAnFpP3r5CkYAG0ldPMbljQ6AKbvgsfB60wRyAiQ
-         NSAGBpsNf0c89F4F0kTpnOHDM10E4yOsjypM/lyeXU3zOBRexFMYZs2meLTAzjSQvZG6
-         JAt/czFrc5xH6dciVGAuo4AOHX2VKE3Hut6hKtY1BdBXTf57OwwU1vVshdpcB8qUnAi4
-         +XnA==
-X-Gm-Message-State: AOAM531T88FhKwBSkIG8rvIz+JnM3BlfYOIDSkmeP8TK8V2yv5Y+YMxp
-        B5cCI68uWl1nEXNHB/gzMvM+acs/9g==
-X-Google-Smtp-Source: ABdhPJzc83ILmeCGs6GwtXj9L5Lfk0v3QyLPCpftkSfOWyq1Ont2IGnAGrKE58KSeJOJWqVJaiDkdA==
-X-Received: by 2002:a05:6870:c390:b0:f1:6a3a:227b with SMTP id g16-20020a056870c39000b000f16a3a227bmr1219146oao.142.1653357864072;
-        Mon, 23 May 2022 19:04:24 -0700 (PDT)
+        bh=aHBVH9Z4v4NoMthP073OuScPWyYnaN4dj20XRgp0m30=;
+        b=w5fV5kpwirmQsHVLAwKJ3JUhnr01b1xOd6pBpAJdmgkd691rR6VRMBCWBGr2qPOUvW
+         qqz7qBn3WW2vqfguf6Xx8XHIDEeJyRa0G3rfzFnNb5pylicSZ0czosryhu0dhbVz4BjB
+         wn65MkqMnnnKPS9WDmV5lYX6DsR/cX4iId8aLnXXqza12ISk7XSq02GFPYRv/hVM0jGa
+         IBS7BIeCQlhVyN3y8f1VN0lsbywX6GW0zRwHM2w1hA8QG8h//EXPNTYrRIAPw+5kIaHo
+         pGCc5QxvrM+klhiQKrrT4D825qQd08QmxBADMD7WZ+sQlkscAJkljAT7ekdIcBilsH02
+         ZfwA==
+X-Gm-Message-State: AOAM5326amDiecxV2pQCK977I7eGzIhnMwDaXYrysMFEFGNnO//ndfKV
+        dJqhykvrbZc/ctFQo/f+ZNTRCKuMFA==
+X-Google-Smtp-Source: ABdhPJwPcIpntDGIIzKu1/uBNXSyHRFZ/w04XIH9gY0cP6Nt5dV7v91RLlQovS8A19P1KTaNBYDewA==
+X-Received: by 2002:a05:6870:14c5:b0:e9:3ce0:47e0 with SMTP id l5-20020a05687014c500b000e93ce047e0mr1195566oab.274.1653357874470;
+        Mon, 23 May 2022 19:04:34 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h6-20020a9d5546000000b0060b088dcbeesm2770482oti.27.2022.05.23.19.04.22
+        by smtp.gmail.com with ESMTPSA id r4-20020a05687002c400b000ee2bb503d0sm4462208oaf.50.2022.05.23.19.04.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 19:04:23 -0700 (PDT)
-Received: (nullmailer pid 2603318 invoked by uid 1000);
-        Tue, 24 May 2022 02:04:22 -0000
-Date:   Mon, 23 May 2022 21:04:22 -0500
+        Mon, 23 May 2022 19:04:33 -0700 (PDT)
+Received: (nullmailer pid 2603694 invoked by uid 1000);
+        Tue, 24 May 2022 02:04:32 -0000
+Date:   Mon, 23 May 2022 21:04:32 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH 08/12] dt-bindings: arm: qcom: add missing SM6125 board
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 09/12] dt-bindings: arm: qcom: add missing SM6350 board
  compatibles
-Message-ID: <20220524020422.GA2603253-robh@kernel.org>
+Message-ID: <20220524020432.GA2603667-robh@kernel.org>
 References: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org>
- <20220521164550.91115-8-krzysztof.kozlowski@linaro.org>
+ <20220521164550.91115-9-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220521164550.91115-8-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220521164550.91115-9-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -67,7 +68,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 18:45:46 +0200, Krzysztof Kozlowski wrote:
+On Sat, 21 May 2022 18:45:47 +0200, Krzysztof Kozlowski wrote:
 > Document board compatibles already present in Linux kernel.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

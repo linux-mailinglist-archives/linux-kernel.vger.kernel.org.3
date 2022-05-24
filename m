@@ -2,137 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B075321BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847A75321C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234045AbiEXDvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 23:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
+        id S234062AbiEXDwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 23:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232910AbiEXDvm (ORCPT
+        with ESMTP id S234081AbiEXDv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 23:51:42 -0400
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD6114089;
-        Mon, 23 May 2022 20:51:38 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 24 May
- 2022 11:51:37 +0800
-Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 24 May
- 2022 11:51:36 +0800
-Message-ID: <43b269f3-2970-e75d-34d0-d738a8c1fb81@meizu.com>
-Date:   Tue, 24 May 2022 11:51:35 +0800
+        Mon, 23 May 2022 23:51:57 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008BA37AB6;
+        Mon, 23 May 2022 20:51:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653364314; x=1684900314;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=9X7DrN1lEuucjb6wajZyNblT7a4IsVJl41aKORMvCwQ=;
+  b=G5l6QtUYzBBhsDg1v7n9F1gnXgdgDYN1xQHP0M/7w78h94gaHGIlb+EX
+   2oqi8zuKEeexspGQV2jrKf6m1i3N6bXgKj1o6z+YT00gDErcvX8Hy0kCp
+   wL04sAujUBrv24r6+b3OCo5YzLpKcUI6g3qNs+rg1KubfXT3syjuw2eiA
+   t0A9kTToc+r4tTQzAh9O2Vm+dZwZ/xGfuha4XdMTI+oYPUysHh9gfaX1m
+   5UVCAQiSK8wsdoC3MxfA2mqDNoKwMQY7iiyYAj0kK6kinnsBV+atc6GRZ
+   WGz0LHzo5ED38LX24UzIQX15wLy//Jmlgh3vbBvDNXYJYFYI9gxPhwTPX
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273147886"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="273147886"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 20:51:53 -0700
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="577716050"
+Received: from samuelal-mobl.amr.corp.intel.com ([10.212.199.128])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 20:51:52 -0700
+Date:   Mon, 23 May 2022 20:51:52 -0700 (PDT)
+From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: Re: [PATCH 5.17 114/158] mptcp: strict local address ID selection
+In-Reply-To: <20220523165849.851212488@linuxfoundation.org>
+Message-ID: <fa953ec-288f-7715-c6fb-47a222e85270@linux.intel.com>
+References: <20220523165830.581652127@linuxfoundation.org> <20220523165849.851212488@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V2] octeon_ep: Remove unnecessary cast
-To:     Joe Perches <joe@perches.com>
-CC:     <aayarekar@marvell.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <vburru@marvell.com>
-References: <53b4a92efb83d893230f47ae9988282f3875b355.camel@perches.com>
- <1653362915-22831-1-git-send-email-baihaowen@meizu.com>
- <059725f837c8a869cc2358d2850f6776b05a9fe2.camel@perches.com>
-From:   baihaowen <baihaowen@meizu.com>
-In-Reply-To: <059725f837c8a869cc2358d2850f6776b05a9fe2.camel@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; format=flowed; charset=US-ASCII
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/24 上午11:48, Joe Perches 写道:
-> On Tue, 2022-05-24 at 11:28 +0800, Haowen Bai wrote:
->> ./drivers/net/ethernet/marvell/octeon_ep/octep_rx.c:161:18-40: WARNING:
->> casting value returned by memory allocation function to (struct
->> octep_rx_buffer *) is useless.
-> []
->> diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-> []
->> @@ -158,8 +158,7 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
->>  		goto desc_dma_alloc_err;
->>  	}
->>  
->> -	oq->buff_info = (struct octep_rx_buffer *)
->> -			vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
->> +	oq->buff_info = vcalloc(oq->max_count, OCTEP_OQ_RECVBUF_SIZE);
-> trivia:
+On Mon, 23 May 2022, Greg Kroah-Hartman wrote:
+
+> From: Paolo Abeni <pabeni@redhat.com>
 >
-> Perhaps better to remove the used once #define OCTEP_OQ_RECVBUF_SIZE
-> and use the more obvious
+> [ Upstream commit 4cf86ae84c718333928fd2d43168a1e359a28329 ]
 >
-> 	oq->buff_info = vcalloc(oq->max_count, sizeof(struct octep_rx_buffer));
+> The address ID selection for MPJ subflows created in response
+> to incoming ADD_ADDR option is currently unreliable: it happens
+> at MPJ socket creation time, when the local address could be
+> unknown.
 >
-> though I believe the vcalloc may be better as kvcalloc as max_count isn't
-> particularly high and struct octep_rx_buffer is small.
+> Additionally, if the no local endpoint is available for the local
+> address, a new dummy endpoint is created, confusing the user-land.
 >
-> Maybe:
+> This change refactor the code to move the address ID selection inside
+> the rebuild_header() helper, when the local address eventually
+> selected by the route lookup is finally known. If the address used
+> is not mapped by any endpoint - and thus can't be advertised/removed
+> pick the id 0 instead of allocate a new endpoint.
+>
+> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+> Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  drivers/net/ethernet/marvell/octeon_ep/octep_rx.c | 8 ++++----
->  drivers/net/ethernet/marvell/octeon_ep/octep_rx.h | 2 --
->  2 files changed, 4 insertions(+), 6 deletions(-)
+> net/mptcp/pm_netlink.c | 13 --------
+> net/mptcp/protocol.c   |  3 ++
+> net/mptcp/protocol.h   |  3 +-
+> net/mptcp/subflow.c    | 67 ++++++++++++++++++++++++++++++++++++------
+> 4 files changed, 63 insertions(+), 23 deletions(-)
 >
-> diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-> index d9ae0937d17a8..d6a0da61db449 100644
-> --- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-> +++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-> @@ -158,8 +158,8 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
->  		goto desc_dma_alloc_err;
->  	}
->  
-> -	oq->buff_info = (struct octep_rx_buffer *)
-> -			vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
-> +	oq->buff_info = kvcalloc(oq->max_count, sizeof(struct octep_rx_buffer),
-> +				 GFP_KERNEL);
->  	if (unlikely(!oq->buff_info)) {
->  		dev_err(&oct->pdev->dev,
->  			"Failed to allocate buffer info for OQ-%d\n", q_no);
-> @@ -176,7 +176,7 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
->  	return 0;
->  
->  oq_fill_buff_err:
-> -	vfree(oq->buff_info);
-> +	kvfree(oq->buff_info);
->  	oq->buff_info = NULL;
->  buf_list_err:
->  	dma_free_coherent(oq->dev, desc_ring_size,
-> @@ -230,7 +230,7 @@ static int octep_free_oq(struct octep_oq *oq)
->  
->  	octep_oq_free_ring_buffers(oq);
->  
-> -	vfree(oq->buff_info);
-> +	kvfree(oq->buff_info);
->  
->  	if (oq->desc_ring)
->  		dma_free_coherent(oq->dev,
-> diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
-> index 782a24f27f3e0..34a32d95cd4b3 100644
-> --- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
-> +++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
-> @@ -67,8 +67,6 @@ struct octep_rx_buffer {
->  	u64 len;
->  };
->  
-> -#define OCTEP_OQ_RECVBUF_SIZE    (sizeof(struct octep_rx_buffer))
-> -
->  /* Output Queue statistics. Each output queue has four stats fields. */
->  struct octep_oq_stats {
->  	/* Number of packets received from the Device. */
->
->
-Good work, thanks for suggestion.
 
--- 
-Haowen Bai
+Greg, Sasha -
 
-suggestionSynonymsBetasuggestion (noun)idea(generic)thought(generic)suggestion (noun)propositionprofferproposal(generic)suggestion (noun)tracehintsmall indefinite quantity(generic)small indefinite amount(generic)Source: WordNetLanguageToolbasic
+Is it possible to drop this one patch? It makes one of the mptcp 
+selftests fail (mptcp_join.sh, "single address, backup").
+
+Looks like this patch has been included in stable because of this single 
+hunk that helps "mptcp: Do TCP fallback on early DSS checksum failure" 
+apply cleanly:
+
+> diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+> index aec767ee047a..e4413b3e50c2 100644
+> --- a/net/mptcp/protocol.h
+> +++ b/net/mptcp/protocol.h
+> @@ -442,7 +442,8 @@ struct mptcp_subflow_context {
+> 		rx_eof : 1,
+> 		can_ack : 1,        /* only after processing the remote a key */
+> 		disposable : 1,	    /* ctx can be free at ulp release time */
+> -		stale : 1;	    /* unable to snd/rcv data, do not use for xmit */
+> +		stale : 1,	    /* unable to snd/rcv data, do not use for xmit */
+> +		local_id_valid : 1; /* local_id is correctly initialized */
+> 	enum mptcp_data_avail data_avail;
+> 	u32	remote_nonce;
+> 	u64	thmac;
+
+"mptcp: Do TCP fallback on early DSS checksum failure" also adds a bit to 
+that bitfield, but there is no functional dependency between the patches.
+
+If you need to drop the "mptcp: Do TCP fallback..." patch too, I can send 
+a backported version tomorrow that accounts for that bitfield change.
+
+
+Thanks!
+
+--
+Mat Martineau
+Intel

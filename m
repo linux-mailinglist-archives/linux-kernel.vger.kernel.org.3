@@ -2,558 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719B05321DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 06:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D1A5321EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 06:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbiEXEGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 00:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S233507AbiEXERK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 00:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234043AbiEXEF7 (ORCPT
+        with ESMTP id S231564AbiEXERH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 00:05:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AC68FF9B
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 21:05:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653365157; x=1684901157;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=56PmCyV9eRfm3xfya29b1n2o+80uBzHotBb3Hdgc3FQ=;
-  b=Tp4C15uJfCNBab9jCqE+MIrmKQqcJoUSLCJB9Sltd9C0L3V7gkZYYPuK
-   DOVbk01BwOfmSX9oYGRvD3LynYH0ydXOyZ0oZ13bQKt12SI7YF+LBZ1Sn
-   W4Ie+Gi3PCmaF/GskJlBkltZcdJ7xGmtzSgjC+U8gX5DEhr//33AG5crZ
-   gBgdqZRqUbVTIWyPZOnD5rzWwVUa7mXYAyhOaow6h+TLClmcajxDqUhwX
-   rxxKoGxSce8Q6jG8jBs/wlC+QBkrOYEOjsGgR5CuBmoLlARw27c960l/g
-   AnEa9OK7j3YR0GQb87Flhcjlwv/ve9pluwxHqjkQiF3mEJZlV3wsUZn5C
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="272243090"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="272243090"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 21:05:57 -0700
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="526242049"
-Received: from jwosulli-mobl1.ger.corp.intel.com (HELO skuppusw-desk1.home) ([10.212.165.122])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 21:05:56 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v7 5/5] x86/tdx: Add Quote generation support
-Date:   Mon, 23 May 2022 21:05:17 -0700
-Message-Id: <20220524040517.703581-6-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-MIME-Version: 1.0
+        Tue, 24 May 2022 00:17:07 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B615F7B9E9
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 21:17:04 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id p8so15396257pfh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 21:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+NmJn0lHqElV2/Dj0LN2ZC/eRnUWisD3/+Ger37WlOU=;
+        b=JNr9jrbkbaByoQXNrUrgNFu4+sPgplII8SOLsoWL+5aDCcjKZSSzeQ5zWIE5gUsm8z
+         n8IOeXWWFbqKQ+vEuv7uoo8n9aaN9SRzeTj9YszbLSI9xIRClVdWTq07JSb9cs2yMN26
+         HzHLyehJOqKpKBus9RZAdsBw6EyLnvcWthPrSIXHx1bqg+SAihkGRk1lC3xkzq6jt9gx
+         nGrOEffXZwYBJ0w1zlgnEBtIw32198FblTYp2AN5tnSiSbdq5ZO34qH4YX1XZBHgkep5
+         LzN72o5+9Ph/fQIAyV96/pDf/H+yve4jbPG+kaW1+wxtIerpFcdeObOfcAmIYrabrT7R
+         SCPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=+NmJn0lHqElV2/Dj0LN2ZC/eRnUWisD3/+Ger37WlOU=;
+        b=w3rRZrX6q2V8XmAimvRxv7paobx7VptdUW8N2ZuWuzjzZxSscbSRtgUsfkkRndOt2I
+         nZPlnNjwaU+ZWgEFmCoCW0p4Xodo9ZoaE3mExzTn0rsLLd3kF6D95DQPKlP+WUPVYGX5
+         ElKiH8+28eAWmUMh6ucoaUaehk341tBMgeZdcMT/MEM8SjDZck0t2VGO25LiTnbPWfv/
+         Vr95QpdhHDMs70KzxKIBbR+vyVhsoCP6p9mHlvuMTQRt66Lh2HFICDiqUm9usPHeW3t6
+         IO6sXjEqttlwY5taSdjnW7xg7p4NIvIdQBtOi5vmseW3ooLHxA2Rv6tzG+TC7CBVUK7X
+         lN/g==
+X-Gm-Message-State: AOAM532hHxMqrUxdAZQIoG3Be/R0toN7fs51WtoNh0fyFD78uMEV7N06
+        T2yovSP19NA02GiPPCq3MVIiSw==
+X-Google-Smtp-Source: ABdhPJxC87IP+R59YBWk1R2oLuR5oGcvv3rzYdzbTZNRdNoci/Pd3lThAYCwDsl3Xs/2yUby2TzPaw==
+X-Received: by 2002:a63:91c3:0:b0:3f9:caa5:fa56 with SMTP id l186-20020a6391c3000000b003f9caa5fa56mr14844974pge.418.1653365823995;
+        Mon, 23 May 2022 21:17:03 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id n26-20020aa7985a000000b00518142f8c37sm8349053pfq.171.2022.05.23.21.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 21:17:03 -0700 (PDT)
+Date:   Mon, 23 May 2022 21:17:03 -0700 (PDT)
+X-Google-Original-Date: Mon, 23 May 2022 21:17:00 PDT (-0700)
+Subject:     Re: [PATCH -next v7 6/6] riscv/mm: Enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
+In-Reply-To: <20220507110114.4128854-7-tongtiangen@huawei.com>
+CC:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        pasha.tatashin@soleen.com, anshuman.khandual@arm.com,
+        akpm@linux-foundation.org, catalin.marinas@arm.com,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, tongtiangen@huawei.com,
+        wangkefeng.wang@huawei.com, guohanjun@huawei.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     tongtiangen@huawei.com
+Message-ID: <mhng-7c6392da-5321-4fc6-b0af-c6b41b300a6a@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In TDX guest, the second stage in attestation process is to send the
-TDREPORT to QE/QGS to generate the TD Quote. For platforms that does
-not support communication channels like vsock or TCP/IP, implement
-support to get TD Quote using hypercall. GetQuote hypercall can be used
-by the TD guest to request VMM facilitate the Quote generation via
-QE/QGS. More details about GetQuote hypercall can be found in TDX
-Guest-Host Communication Interface (GHCI) for Intel TDX 1.0, section
-titled "TDG.VP.VMCALL<GetQuote>.
+On Sat, 07 May 2022 04:01:14 PDT (-0700), tongtiangen@huawei.com wrote:
+> As commit d283d422c6c4 ("x86: mm: add x86_64 support for page table check")
+> , enable ARCH_SUPPORTS_PAGE_TABLE_CHECK on riscv.
+>
+> Add additional page table check stubs for page table helpers, these stubs
+> can be used to check the existing page table entries.
+>
+> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+> Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-Since GetQuote is an asynchronous request hypercall, it will not block
-till the TD Quote is generated. So VMM uses callback interrupt vector
-configured by SetupEventNotifyInterrupt hypercall to notify the guest
-about Quote generation completion or failure.
+This doesn't build on rv32 (or presumably any other 32-bit arch) 
+something like this should do it
 
-GetQuote TDVMCALL requires TD guest pass a 4K aligned shared buffer
-with TDREPORT data as input, which is further used by the VMM to copy
-the TD Quote result after successful Quote generation. To create the
-shared buffer without breaking the direct map, allocate physically
-contiguous kernel memory and create a virtual mapping for it using
-vmap(). set_memory_*crypted_noalias() functions can be used to share or
-unshare the vmapped page without affecting the direct map.
+    diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+    index 2b18e4410c4d..ea658ed6a1b1 100644
+    --- a/arch/riscv/include/asm/pgtable.h
+    +++ b/arch/riscv/include/asm/pgtable.h
+    @@ -690,11 +690,13 @@ static inline bool pmd_user_accessible_page(pmd_t pmd)
+     	return pmd_leaf(pmd) && pmd_user(pmd);
+     }
+    
+    +#ifdef CONFIG_64BIT
+     static inline bool pud_user_accessible_page(pud_t pud)
+     {
+     	return pud_leaf(pud) && pud_user(pud);
+     }
+    -#endif
+    +#endif /* CONFIG_64BIT */
+    +#endif /* CONFIG_PAGE_TABLE_CHECK */
+    
+     #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+     static inline int pmd_trans_huge(pmd_t pmd)
+    diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+    index 3692bea2ea2c..ac9bddfa1398 100644
+    --- a/mm/page_table_check.c
+    +++ b/mm/page_table_check.c
+    @@ -165,6 +165,7 @@ void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
+     }
+     EXPORT_SYMBOL(__page_table_check_pmd_clear);
+    
+    +#if CONFIG_PGTABLE_LEVELS > 3
+     void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
+     				  pud_t pud)
+     {
+    @@ -177,6 +178,7 @@ void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
+     	}
+     }
+     EXPORT_SYMBOL(__page_table_check_pud_clear);
+    +#endif
+    
+     void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
+     				pte_t *ptep, pte_t pte)
+    @@ -208,6 +210,7 @@ void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+     }
+     EXPORT_SYMBOL(__page_table_check_pmd_set);
+    
+    +#if CONFIG_PGTABLE_LEVELS > 3
+     void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+     				pud_t *pudp, pud_t pud)
+     {
+    @@ -222,6 +225,7 @@ void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+     	}
+     }
+     EXPORT_SYMBOL(__page_table_check_pud_set);
+    +#endif
+    
+     void __page_table_check_pte_clear_range(struct mm_struct *mm,
+     					unsigned long addr,
 
-Also note that, shared buffer allocation is currently handled in IOCTL
-handler, although it will increase the TDX_CMD_GET_QUOTE IOCTL response
-time, it is negligible compared to the time required for the quote
-generation completion. So IOCTL performance optimization is not
-considered at this time.
+with those changes this passes my tests, so
 
-For shared buffer allocation, alternatives like using the DMA API is
-also considered. Although it simpler to use, it is not preferred because
-dma_alloc_*() APIs require a valid bus device as argument, which would
-need converting the attestation driver into a platform device driver.
-This is unnecessary, and since the attestation driver does not do real
-DMA, there is no need to use real DMA APIs.
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Add support for TDX_CMD_GET_QUOTE IOCTL to allow attestation agent
-submit GetQuote requests from the user space. Since Quote generation
-is an asynchronous request, IOCTL will block indefinitely for the VMM
-response in wait_for_completion_interruptible() call. Using this call
-will also add an option for the user to end the current request
-prematurely by raising any signals. This can be used by attestation
-agent to implement Quote generation timeout feature. If attestation
-agent is aware of time it can validly wait for QE/QGS response, then
-a possible timeout support can be implemented in the user application
-using signals. Quote generation timeout feature is currently not
-implemented in the driver because the current TDX specification does
-not have any recommendation for it.
+Feel free to take this along with the rest of them if that's easier, the 
+RISC-V bits are pretty light-weight.  Also happy to do some sort of 
+shared tag once the other issues get sorted out.
 
-After submitting the GetQuote request using hypercall, the shared buffer
-allocated for the current request is owned by the VMM. So, during this
-wait window, if the user terminates the request by raising a signal or
-by terminating the application, add a logic to do the memory cleanup
-after receiving the VMM response at a later time. Such memory cleanup
-support requires accepting the page again using TDX_ACCEPT_PAGE TDX
-Module call. So to not overload the callback IRQ handler, move the
-callback handler logic to a separate work queue.
+Thanks!
 
-To support parallel GetQuote requests, use linked list to track the
-active GetQuote requests and upon receiving the callback IRQ, loop
-through the active requests and mark the processed requests complete.
-Users can open multiple instances of the attestation device and send
-GetQuote requests in parallel.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
- arch/x86/coco/tdx/attest.c      | 314 ++++++++++++++++++++++++++++++++
- arch/x86/include/uapi/asm/tdx.h |  45 +++++
- 2 files changed, 359 insertions(+)
-
-diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
-index 24db0bad4923..16f593a9d46d 100644
---- a/arch/x86/coco/tdx/attest.c
-+++ b/arch/x86/coco/tdx/attest.c
-@@ -13,16 +13,56 @@
- #include <linux/miscdevice.h>
- #include <linux/mm.h>
- #include <linux/io.h>
-+#include <linux/set_memory.h>
-+#include <linux/mutex.h>
- #include <asm/tdx.h>
-+#include <asm/coco.h>
- #include <uapi/asm/tdx.h>
- 
- #define DRIVER_NAME "tdx-attest"
- 
- /* TDREPORT module call leaf ID */
- #define TDX_GET_REPORT			4
-+/* GetQuote hypercall leaf ID */
-+#define TDVMCALL_GET_QUOTE             0x10002
-+
-+/* Used for buffer allocation in GetQuote request */
-+struct quote_buf {
-+	/* vmapped address of kernel buffer (size is page aligned) */
-+	void *vmaddr;
-+	/* Number of pages */
-+	int count;
-+};
-+
-+/* List entry of quote_list */
-+struct quote_entry {
-+	/* Flag to check validity of the GetQuote request */
-+	bool valid;
-+	/* Kernel buffer to share data with VMM */
-+	struct quote_buf *buf;
-+	/* Completion object to track completion of GetQuote request */
-+	struct completion compl;
-+	struct list_head list;
-+};
- 
- static struct miscdevice miscdev;
- 
-+/*
-+ * To support parallel GetQuote requests, use the list
-+ * to track active GetQuote requests.
-+ */
-+static LIST_HEAD(quote_list);
-+
-+/* Lock to protect quote_list */
-+static DEFINE_MUTEX(quote_lock);
-+
-+/*
-+ * Workqueue to handle Quote data after Quote generation
-+ * notification from VMM.
-+ */
-+struct workqueue_struct *quote_wq;
-+struct work_struct quote_work;
-+
- static long tdx_get_report(void __user *argp)
- {
- 	void *reportdata = NULL, *tdreport = NULL;
-@@ -71,6 +111,270 @@ static long tdx_get_report(void __user *argp)
- 	return ret;
- }
- 
-+/* tdx_get_quote_hypercall() - Request to get TD Quote using TDREPORT */
-+static long tdx_get_quote_hypercall(struct quote_buf *buf)
-+{
-+	struct tdx_hypercall_args args = {0};
-+
-+	args.r10 = TDX_HYPERCALL_STANDARD;
-+	args.r11 = TDVMCALL_GET_QUOTE;
-+	args.r12 = cc_mkdec(page_to_phys(vmalloc_to_page(buf->vmaddr)));
-+	args.r13 = buf->count * PAGE_SIZE;
-+
-+	/*
-+	 * Pass the physical address of TDREPORT to the VMM and
-+	 * trigger the Quote generation. It is not a blocking
-+	 * call, hence completion of this request will be notified to
-+	 * the TD guest via a callback interrupt. More info about ABI
-+	 * can be found in TDX Guest-Host-Communication Interface
-+	 * (GHCI), sec titled "TDG.VP.VMCALL<GetQuote>".
-+	 */
-+	return __tdx_hypercall(&args, 0);
-+}
-+
-+/*
-+ * alloc_quote_buf() - Used to allocate a shared buffer of
-+ *		       given size.
-+ *
-+ * Size is page aligned and the allocated memory is decrypted
-+ * to allow VMM to access it. Uses VMAP to create a virtual
-+ * mapping, which is further used to create a shared mapping
-+ * for the buffer without affecting the direct map.
-+ */
-+static struct quote_buf *alloc_quote_buf(u64 req_size)
-+{
-+	int size = PAGE_ALIGN(req_size);
-+	void *addr = NULL, *vmaddr = NULL;
-+	int count = size >> PAGE_SHIFT;
-+	struct page **pages = NULL;
-+	struct quote_buf *buf;
-+	int i;
-+
-+	buf = kmalloc(sizeof(*buf), GFP_KERNEL);
-+	if (!buf)
-+		return NULL;
-+
-+	addr = alloc_pages_exact(size, GFP_KERNEL);
-+	if (!addr)
-+		goto alloc_failed;
-+
-+	/* Allocate mem for array of page ptrs */
-+	pages = kcalloc(count, sizeof(*pages), GFP_KERNEL);
-+	if (!pages)
-+		goto alloc_failed;
-+
-+	for (i = 0; i < count; i++)
-+		pages[i] = virt_to_page(addr + i * PAGE_SIZE);
-+
-+	/*
-+	 * Use VMAP to create a virtual mapping, which is used
-+	 * to create shared mapping without affecting the
-+	 * direct map. Use VM_MAP_PUT_PAGES to allow vmap()
-+	 * responsible for freeing the pages when using vfree().
-+	 */
-+	vmaddr = vmap(pages, count, VM_MAP_PUT_PAGES, PAGE_KERNEL);
-+	if (!vmaddr)
-+		goto alloc_failed;
-+
-+	/* Use noalias variant to not affect the direct mapping */
-+	if (set_memory_decrypted_noalias((unsigned long)vmaddr, count))
-+		goto alloc_failed;
-+
-+	buf->vmaddr = vmaddr;
-+	buf->count = count;
-+
-+	return buf;
-+
-+alloc_failed:
-+	if (!vmaddr) {
-+		kfree(pages);
-+		if (addr)
-+			free_pages_exact(addr, size);
-+	}
-+	vfree(vmaddr);
-+	kfree(buf);
-+	return NULL;
-+}
-+
-+/* Remove the shared mapping and free the buffer */
-+static void free_quote_buf(struct quote_buf *buf)
-+{
-+	if (!buf)
-+		return;
-+
-+	/* Mark pages private */
-+	if (set_memory_encrypted_noalias((unsigned long)buf->vmaddr,
-+				buf->count)) {
-+		pr_warn("Failed to encrypt %d pages at %p", buf->count,
-+				buf->vmaddr);
-+		return;
-+	}
-+
-+	vfree(buf->vmaddr);
-+	kfree(buf);
-+}
-+
-+static struct quote_entry *alloc_quote_entry(u64 buf_len)
-+{
-+	struct quote_entry *entry = NULL;
-+
-+	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-+	if (!entry)
-+		return NULL;
-+
-+	/* Allocate buffer for quote request */
-+	entry->buf = alloc_quote_buf(buf_len);
-+	if (!entry->buf) {
-+		kfree(entry);
-+		return NULL;
-+	}
-+
-+	init_completion(&entry->compl);
-+	entry->valid = true;
-+
-+	return entry;
-+}
-+
-+static void free_quote_entry(struct quote_entry *entry)
-+{
-+	free_quote_buf(entry->buf);
-+	kfree(entry);
-+}
-+
-+/* Must be called with quote_lock held */
-+static void _del_quote_entry(struct quote_entry *entry)
-+{
-+	list_del(&entry->list);
-+	free_quote_entry(entry);
-+}
-+
-+static void del_quote_entry(struct quote_entry *entry)
-+{
-+	mutex_lock(&quote_lock);
-+	_del_quote_entry(entry);
-+	mutex_unlock(&quote_lock);
-+}
-+
-+/* Handles early termination of GetQuote requests */
-+void terminate_quote_request(struct quote_entry *entry)
-+{
-+	struct tdx_quote_hdr *quote_hdr;
-+
-+	/*
-+	 * For early termination, if the request is not yet
-+	 * processed by VMM (GET_QUOTE_IN_FLIGHT), the VMM
-+	 * still owns the shared buffer, so mark the request
-+	 * invalid to let quote_callback_handler() handle the
-+	 * memory cleanup function. If the request is already
-+	 * processed, then do the cleanup and return.
-+	 */
-+
-+	mutex_lock(&quote_lock);
-+	quote_hdr = (struct tdx_quote_hdr *)entry->buf->vmaddr;
-+	if (quote_hdr->status == GET_QUOTE_IN_FLIGHT) {
-+		entry->valid = false;
-+		mutex_unlock(&quote_lock);
-+		return;
-+	}
-+	_del_quote_entry(entry);
-+	mutex_unlock(&quote_lock);
-+}
-+
-+static long tdx_get_quote(void __user *argp)
-+{
-+	struct quote_entry *entry;
-+	struct tdx_quote_req req;
-+	struct quote_buf *buf;
-+	long ret;
-+
-+	/* Copy GetQuote request struct from user buffer */
-+	if (copy_from_user(&req, argp, sizeof(struct tdx_quote_req)))
-+		return -EFAULT;
-+
-+	/* Make sure the length is valid */
-+	if (!req.len)
-+		return -EINVAL;
-+
-+	entry = alloc_quote_entry(req.len);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	buf = entry->buf;
-+
-+	/* Copy TDREPORT from user buffer to kernel Quote buffer */
-+	if (copy_from_user(buf->vmaddr, (void __user *)req.buf, req.len)) {
-+		free_quote_entry(entry);
-+		return -EFAULT;
-+	}
-+
-+	mutex_lock(&quote_lock);
-+
-+	/* Submit GetQuote Request */
-+	ret = tdx_get_quote_hypercall(buf);
-+	if (ret) {
-+		mutex_unlock(&quote_lock);
-+		pr_err("GetQuote hypercall failed, status:%lx\n", ret);
-+		free_quote_entry(entry);
-+		return -EIO;
-+	}
-+
-+	/* Add current quote entry to quote_list to track active requests */
-+	list_add_tail(&entry->list, &quote_list);
-+
-+	mutex_unlock(&quote_lock);
-+
-+	/* Wait for attestation completion */
-+	ret = wait_for_completion_interruptible(&entry->compl);
-+	if (ret < 0) {
-+		terminate_quote_request(entry);
-+		return -EINTR;
-+	}
-+
-+	/*
-+	 * If GetQuote request completed successfully, copy the result
-+	 * back to the user and do the cleanup.
-+	 */
-+	if (copy_to_user((void __user *)req.buf, buf->vmaddr, req.len))
-+		ret = -EFAULT;
-+
-+	/*
-+	 * Reaching here means GetQuote request is processed
-+	 * successfully. So do the cleanup and return 0.
-+	 */
-+	del_quote_entry(entry);
-+
-+	return 0;
-+}
-+
-+static void attestation_callback_handler(void)
-+{
-+	queue_work(quote_wq, &quote_work);
-+}
-+
-+static void quote_callback_handler(struct work_struct *work)
-+{
-+	struct tdx_quote_hdr *quote_hdr;
-+	struct quote_entry *entry, *next;
-+
-+	/* Find processed quote request and mark it complete */
-+	mutex_lock(&quote_lock);
-+	list_for_each_entry_safe(entry, next, &quote_list, list) {
-+		quote_hdr = (struct tdx_quote_hdr *)entry->buf->vmaddr;
-+		if (quote_hdr->status == GET_QUOTE_IN_FLIGHT)
-+			continue;
-+		/*
-+		 * If user invalidated the current request, remove the
-+		 * entry from the quote list and free it. If the request
-+		 * is still valid, mark it complete.
-+		 */
-+		if (entry->valid)
-+			complete(&entry->compl);
-+		else
-+			_del_quote_entry(entry);
-+	}
-+	mutex_unlock(&quote_lock);
-+}
-+
- static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
- 			     unsigned long arg)
- {
-@@ -81,6 +385,9 @@ static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
- 	case TDX_CMD_GET_REPORT:
- 		ret = tdx_get_report(argp);
- 		break;
-+	case TDX_CMD_GET_QUOTE:
-+		ret = tdx_get_quote(argp);
-+		break;
- 	default:
- 		pr_debug("cmd %d not supported\n", cmd);
- 		break;
-@@ -103,6 +410,13 @@ static int __init tdx_attestation_init(void)
- 	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
- 		return -EIO;
- 
-+	quote_wq = create_singlethread_workqueue("tdx_quote_handler");
-+
-+	INIT_WORK(&quote_work, quote_callback_handler);
-+
-+	/* Register attestation event notify handler */
-+	tdx_setup_ev_notify_handler(attestation_callback_handler);
-+
- 	miscdev.name = DRIVER_NAME;
- 	miscdev.minor = MISC_DYNAMIC_MINOR;
- 	miscdev.fops = &tdx_attest_fops;
-diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
-index 8b57dea67eab..fe941cdb084d 100644
---- a/arch/x86/include/uapi/asm/tdx.h
-+++ b/arch/x86/include/uapi/asm/tdx.h
-@@ -39,4 +39,49 @@ struct tdx_report_req {
-  */
- #define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, struct tdx_report_req)
- 
-+/* struct tdx_quote_req: Request to generate TD Quote using TDREPORT
-+ *
-+ * @buf		: Pass user data that includes TDREPORT as input. Upon
-+ *		  successful completion of IOCTL, output is copied
-+ *		  back to the same buffer.
-+ * @len		: Length of the buffer.
-+ */
-+struct tdx_quote_req {
-+	__u64 buf;
-+	__u64 len;
-+};
-+
-+/*
-+ * TDX_CMD_GET_QUOTE - Get TD Quote from QE/QGS using GetQuote
-+ *		       TDVMCALL.
-+ *
-+ * Returns 0 on success, -EINTR for interrupted request, and
-+ * standard errono on other failures.
-+ */
-+#define TDX_CMD_GET_QUOTE		_IOR('T', 0x02, struct tdx_quote_req)
-+
-+/* TD Quote status codes */
-+#define GET_QUOTE_SUCCESS		0
-+#define GET_QUOTE_IN_FLIGHT		0xffffffffffffffff
-+#define GET_QUOTE_ERROR			0x8000000000000000
-+#define GET_QUOTE_SERVICE_UNAVAILABLE	0x8000000000000001
-+
-+/*
-+ * Format of Quote data header. More details can be found in TDX
-+ * Guest-Host Communication Interface (GHCI) for Intel TDX 1.0,
-+ * section titled "TDG.VP.VMCALL<GetQuote>"
-+ */
-+struct tdx_quote_hdr {
-+	/* Quote version, filled by TD */
-+	__u64 version;
-+	/* Status code of Quote request, filled by VMM */
-+	__u64 status;
-+	/* Length of TDREPORT, filled by TD */
-+	__u32 in_len;
-+	/* Length of Quote, filled by VMM */
-+	__u32 out_len;
-+	/* Actual Quote data */
-+	__u64 data[0];
-+};
-+
- #endif /* _UAPI_ASM_X86_TDX_H */
--- 
-2.25.1
-
+> ---
+>  arch/riscv/Kconfig               |  1 +
+>  arch/riscv/include/asm/pgtable.h | 71 +++++++++++++++++++++++++++++---
+>  2 files changed, 66 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 715390feb6ea..bb9fde09eea5 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -38,6 +38,7 @@ config RISCV
+>  	select ARCH_SUPPORTS_ATOMIC_RMW
+>  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+>  	select ARCH_SUPPORTS_HUGETLBFS if MMU
+> +	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
+>  	select ARCH_USE_MEMTEST
+>  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+>  	select ARCH_WANT_FRAME_POINTERS
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 046b44225623..62e733c85836 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -114,6 +114,8 @@
+>  #include <asm/pgtable-32.h>
+>  #endif /* CONFIG_64BIT */
+>
+> +#include <linux/page_table_check.h>
+> +
+>  #ifdef CONFIG_XIP_KERNEL
+>  #define XIP_FIXUP(addr) ({							\
+>  	uintptr_t __a = (uintptr_t)(addr);					\
+> @@ -315,6 +317,11 @@ static inline int pte_exec(pte_t pte)
+>  	return pte_val(pte) & _PAGE_EXEC;
+>  }
+>
+> +static inline int pte_user(pte_t pte)
+> +{
+> +	return pte_val(pte) & _PAGE_USER;
+> +}
+> +
+>  static inline int pte_huge(pte_t pte)
+>  {
+>  	return pte_present(pte) && (pte_val(pte) & _PAGE_LEAF);
+> @@ -446,7 +453,7 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
+>
+>  void flush_icache_pte(pte_t pte);
+>
+> -static inline void set_pte_at(struct mm_struct *mm,
+> +static inline void __set_pte_at(struct mm_struct *mm,
+>  	unsigned long addr, pte_t *ptep, pte_t pteval)
+>  {
+>  	if (pte_present(pteval) && pte_exec(pteval))
+> @@ -455,10 +462,17 @@ static inline void set_pte_at(struct mm_struct *mm,
+>  	set_pte(ptep, pteval);
+>  }
+>
+> +static inline void set_pte_at(struct mm_struct *mm,
+> +	unsigned long addr, pte_t *ptep, pte_t pteval)
+> +{
+> +	page_table_check_pte_set(mm, addr, ptep, pteval);
+> +	__set_pte_at(mm, addr, ptep, pteval);
+> +}
+> +
+>  static inline void pte_clear(struct mm_struct *mm,
+>  	unsigned long addr, pte_t *ptep)
+>  {
+> -	set_pte_at(mm, addr, ptep, __pte(0));
+> +	__set_pte_at(mm, addr, ptep, __pte(0));
+>  }
+>
+>  #define __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
+> @@ -479,7 +493,11 @@ static inline int ptep_set_access_flags(struct vm_area_struct *vma,
+>  static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+>  				       unsigned long address, pte_t *ptep)
+>  {
+> -	return __pte(atomic_long_xchg((atomic_long_t *)ptep, 0));
+> +	pte_t pte = __pte(atomic_long_xchg((atomic_long_t *)ptep, 0));
+> +
+> +	page_table_check_pte_clear(mm, address, pte);
+> +
+> +	return pte;
+>  }
+>
+>  #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
+> @@ -546,6 +564,13 @@ static inline unsigned long pmd_pfn(pmd_t pmd)
+>  	return ((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT);
+>  }
+>
+> +#define __pud_to_phys(pud)  (pud_val(pud) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
+> +
+> +static inline unsigned long pud_pfn(pud_t pud)
+> +{
+> +	return ((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT);
+> +}
+> +
+>  static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+>  {
+>  	return pte_pmd(pte_modify(pmd_pte(pmd), newprot));
+> @@ -567,6 +592,11 @@ static inline int pmd_young(pmd_t pmd)
+>  	return pte_young(pmd_pte(pmd));
+>  }
+>
+> +static inline int pmd_user(pmd_t pmd)
+> +{
+> +	return pte_user(pmd_pte(pmd));
+> +}
+> +
+>  static inline pmd_t pmd_mkold(pmd_t pmd)
+>  {
+>  	return pte_pmd(pte_mkold(pmd_pte(pmd)));
+> @@ -600,15 +630,39 @@ static inline pmd_t pmd_mkdirty(pmd_t pmd)
+>  static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
+>  				pmd_t *pmdp, pmd_t pmd)
+>  {
+> -	return set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
+> +	page_table_check_pmd_set(mm, addr, pmdp, pmd);
+> +	return __set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
+> +}
+> +
+> +static inline int pud_user(pud_t pud)
+> +{
+> +	return pte_user(pud_pte(pud));
+>  }
+>
+>  static inline void set_pud_at(struct mm_struct *mm, unsigned long addr,
+>  				pud_t *pudp, pud_t pud)
+>  {
+> -	return set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
+> +	page_table_check_pud_set(mm, addr, pudp, pud);
+> +	return __set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
+> +}
+> +
+> +#ifdef CONFIG_PAGE_TABLE_CHECK
+> +static inline bool pte_user_accessible_page(pte_t pte)
+> +{
+> +	return pte_present(pte) && pte_user(pte);
+> +}
+> +
+> +static inline bool pmd_user_accessible_page(pmd_t pmd)
+> +{
+> +	return pmd_leaf(pmd) && pmd_user(pmd);
+>  }
+>
+> +static inline bool pud_user_accessible_page(pud_t pud)
+> +{
+> +	return pud_leaf(pud) && pud_user(pud);
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  static inline int pmd_trans_huge(pmd_t pmd)
+>  {
+> @@ -634,7 +688,11 @@ static inline int pmdp_test_and_clear_young(struct vm_area_struct *vma,
+>  static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
+>  					unsigned long address, pmd_t *pmdp)
+>  {
+> -	return pte_pmd(ptep_get_and_clear(mm, address, (pte_t *)pmdp));
+> +	pmd_t pmd = __pmd(atomic_long_xchg((atomic_long_t *)pmdp, 0));
+> +
+> +	page_table_check_pmd_clear(mm, address, pmd);
+> +
+> +	return pmd;
+>  }
+>
+>  #define __HAVE_ARCH_PMDP_SET_WRPROTECT
+> @@ -648,6 +706,7 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+>  static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+>  				unsigned long address, pmd_t *pmdp, pmd_t pmd)
+>  {
+> +	page_table_check_pmd_set(vma->vm_mm, address, pmdp, pmd);
+>  	return __pmd(atomic_long_xchg((atomic_long_t *)pmdp, pmd_val(pmd)));
+>  }
+>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */

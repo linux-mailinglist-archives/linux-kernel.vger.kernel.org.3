@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B516F532877
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8CA53287C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236397AbiEXLDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S236493AbiEXLE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbiEXLDi (ORCPT
+        with ESMTP id S234063AbiEXLEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 07:03:38 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F85D74DE7;
-        Tue, 24 May 2022 04:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653390217; x=1684926217;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=CntG2zT79s+rUqc/RwF4HmNc6O2cBy1aTPUYDsYRjjE=;
-  b=dh2PDazC+Hias72hL+YjkQm+4NV8DToFrS9UKRxKmiS3wgYrkk72n1tB
-   4HB9DvustuCf75leTsWV2XTHhp/g+hpBKnjrdGuwzenebYvPq94XzybWQ
-   s1zPvooRPuxUqQc58hHj1Cq7cjoBqvpzVDjfb98Wbo4j8xSw5I9hLE9wb
-   tRHKJV2SdjpVuqjKnF7vHEArIBNa7kuAcpq7eJf2rKGc5fr5CAZ5dQyk1
-   VdQKcyihYFN9IuqXbLDzGRljMC7A+9nwHXaUA/KRi9xsK8iRezZJCDrWe
-   y61FScKe9PRfstwWtCrQcDW0AHHOXQVMLSQa0AVm+V4d3ZYUIquxtL5Bu
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273611125"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273611125"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:03:37 -0700
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="745175110"
-Received: from zychseba-mobl.ger.corp.intel.com (HELO localhost) ([10.249.136.104])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:03:33 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     kernel-janitors@vger.kernel.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915: fix typos in comments
-In-Reply-To: <20220521111145.81697-90-Julia.Lawall@inria.fr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220521111145.81697-90-Julia.Lawall@inria.fr>
-Date:   Tue, 24 May 2022 14:03:29 +0300
-Message-ID: <87ee0jw5tq.fsf@intel.com>
+        Tue, 24 May 2022 07:04:21 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAF490CD4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Y1TaiNqe+4oUo0hKcDCeioatpdaui+xyqgx5U5jgeMM=; b=UUhcPlM9X8LaJJQawZ8QATtHPP
+        sKmKYGtTaEDLG9C6BXdXkzwOwEDtwzaJ7k1XjqeBPGjo/cuwJj9MtzxyXMeCce/BReaxy4t1EARnE
+        dyE17dEVQdqAaus/hBv2a6skb2cza368zOxDoxko4/ux7bY+AMUTTMWUSBvqsicJWoq+q39V6ihp7
+        MC5miQGdgo/sGE2OU0G/npntpuUACCUrEacD/NQ9AlXQVOX1iz3qnxvamfqB6lyBEYI89/2YM23L2
+        3xkIICaaGfFyJr+l/IFtr6/uDbzmhaC1PU59aG9xkoixJRt6O4VU00ROZxmhbZNdq58+1RnRcoeD+
+        8F0XY5iA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ntSKY-001Ji0-PC; Tue, 24 May 2022 11:04:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0EF7730003C;
+        Tue, 24 May 2022 13:04:01 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D2DDE203DC9F0; Tue, 24 May 2022 13:04:01 +0200 (CEST)
+Date:   Tue, 24 May 2022 13:04:01 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, shan.gavin@gmail.com,
+        zhenyzha@redhat.com
+Subject: Re: [PATCH] sched/topology: Fix typo in build_sched_domain()
+Message-ID: <Yoy7oUJeeNnMaxfO@hirez.programming.kicks-ass.net>
+References: <20220524080733.1362818-1-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524080733.1362818-1-gshan@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,78 +61,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022, Julia Lawall <Julia.Lawall@inria.fr> wrote:
-> Spelling mistakes (triple letters) in comments.
-> Detected with the help of Coccinelle.
->
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+On Tue, May 24, 2022 at 04:07:33PM +0800, Gavin Shan wrote:
+> In build_sched_domain(), it seems that "borken" is misspelled. To
+> correct it with "broken".
 
-Thanks, pushed to drm-intel-next.
-
-BR,
-Jani.
-
->
-> ---
->  drivers/gpu/drm/i915/display/intel_color.c           |    2 +-
->  drivers/gpu/drm/i915/display/intel_pps.c             |    2 +-
->  drivers/gpu/drm/i915/gt/intel_execlists_submission.c |    2 +-
->  drivers/gpu/drm/i915/gt/uc/intel_guc_log.c           |    2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/display/intel_color.c b/drivers/gpu/drm/i915/display/intel_color.c
-> index 34128c9c635c..a27ce874a9e8 100644
-> --- a/drivers/gpu/drm/i915/display/intel_color.c
-> +++ b/drivers/gpu/drm/i915/display/intel_color.c
-> @@ -1638,7 +1638,7 @@ static u32 icl_gamma_mode(const struct intel_crtc_state *crtc_state)
->  	/*
->  	 * Enable 10bit gamma for D13
->  	 * ToDo: Extend to Logarithmic Gamma once the new UAPI
-> -	 * is acccepted and implemented by a userspace consumer
-> +	 * is accepted and implemented by a userspace consumer
->  	 */
->  	else if (DISPLAY_VER(i915) >= 13)
->  		gamma_mode |= GAMMA_MODE_MODE_10BIT;
-> diff --git a/drivers/gpu/drm/i915/display/intel_pps.c b/drivers/gpu/drm/i915/display/intel_pps.c
-> index 5a598dd06039..4bc0563dde92 100644
-> --- a/drivers/gpu/drm/i915/display/intel_pps.c
-> +++ b/drivers/gpu/drm/i915/display/intel_pps.c
-> @@ -509,7 +509,7 @@ static void wait_panel_power_cycle(struct intel_dp *intel_dp)
->  
->  	drm_dbg_kms(&i915->drm, "Wait for panel power cycle\n");
->  
-> -	/* take the difference of currrent time and panel power off time
-> +	/* take the difference of current time and panel power off time
->  	 * and then make panel wait for t11_t12 if needed. */
->  	panel_power_on_time = ktime_get_boottime();
->  	panel_power_off_duration = ktime_ms_delta(panel_power_on_time, intel_dp->pps.panel_power_off_time);
-> diff --git a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
-> index 86f7a9ac1c39..aa0d2bbbbcc4 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
-> @@ -1350,7 +1350,7 @@ static void execlists_dequeue(struct intel_engine_cs *engine)
->  			 * submission. If we don't cancel the timer now,
->  			 * we will see that the timer has expired and
->  			 * reschedule the tasklet; continually until the
-> -			 * next context switch or other preeemption event.
-> +			 * next context switch or other preemption event.
->  			 *
->  			 * Since we have decided to reschedule based on
->  			 * consumption of this timeslice, if we submit the
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_log.c b/drivers/gpu/drm/i915/gt/uc/intel_guc_log.c
-> index 78d2989fe917..02311ad90264 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc_log.c
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_log.c
-> @@ -588,7 +588,7 @@ int intel_guc_log_relay_open(struct intel_guc_log *log)
->  	/*
->  	 * We require SSE 4.1 for fast reads from the GuC log buffer and
->  	 * it should be present on the chipsets supporting GuC based
-> -	 * submisssions.
-> +	 * submissions.
->  	 */
->  	if (!i915_has_memcpy_from_wc()) {
->  		ret = -ENXIO;
->
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+I hereby award you the 'I cannot google' award.

@@ -2,192 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462F8532B6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E032532B75
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237878AbiEXNkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S237658AbiEXNmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbiEXNkd (ORCPT
+        with ESMTP id S231224AbiEXNmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:40:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC0E75221;
-        Tue, 24 May 2022 06:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653399633; x=1684935633;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=++vjas+PX+wlqfV344tFRyjKF322+YsDWlLQtLrpfxA=;
-  b=nac8nzMZe4txupb5zY20v5whw29f1e0K8K2l8ITByPBc6LyVzS/cFEkk
-   d+5tbnRbI4jI1GoE7HLkBYdFHKghSl8zS501/AaJUOPPmS98xrl9tA4NI
-   meGCvynpyPKzvdUxcHXlesenC7xwXRy2QHKpVROGTKQFpGNVW76ypQjjc
-   tpp4kvUNzBhmJa8zQ60uxl8nzzszqECnS50GZkIhS22dsFZ0fpOHnBqLM
-   aO7yWaUtwvYrMyapyLqVZFY8yQYvxBUu9Ju/CWiA5pjxbAeHtFYxstGPt
-   FDhrjvVaX2/9MfUtbEhvE2G2kz726c9dJGPMyT+fvqnGyl1CLeEsXRd1q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273645326"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273645326"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 06:40:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="526406089"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 24 May 2022 06:40:29 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 24 May 2022 06:40:29 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 24 May 2022 06:40:28 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 24 May 2022 06:40:28 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 24 May 2022 06:40:28 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jeAXRtd1KiIvH6xWi29bmD0LcaercpbKvyIjfC7s+BgEk0Ex3ZUIH+2lP+n43L3VP0vVhQIGRGX0qyDGwUleCMnI7ggTcSl9yQCd9RaEVDNqkqPs+jTBaYlk+Yyu1ViX1w0JCHZketc1e3mpFvyZ5dc/O/4kbPuuoO4eZCJrvCVqbjvtezUfv49Ss1Mg/tlq2xuj4DkCoS67vuR61UeY409E+GycDKbZlvHS5wUk8LuDzvbQ59abX1sSkB0k7t+2ZtrW9OJw9xr16ML/6GZ/C154omjYZ0HDBuL2PNSoSgMWktMOi+cqMEUF2TUPeXMOmz26qFfsx+JxQEgQR+8KIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rAfxoN75yPrvYNfcgpTDZNM0Nz8aEtz6xVVTu8aQ2CY=;
- b=oBCucRrPvczJ81SAxciw/mnKSA/y/2+Q9tf49q7+1EBSzcmCXlOEywlclnzROQW5lqLiEw+1ZGOJV68nc7cXnI8ITFsnzRgtErpvi5dEQpy9+9IPkfWC199bfZsemVJt47ofbZPSVTynSwd/kdfBFZ5Cz4SBOi8aXbqwVQVnex2Gd2/Crlb8WW3HGXa2cc0xWsfk2NXcGhs9M3zntnY+yNVjofExO2FwSNOTQuVulHpA8csYype7ukaSRCPe5WRf3L9fxXtLtec5+CQV/OgubHSrKwtoI1H6j6Ilmgh8OVeiKCqrkiohHEsV0Mvw1omp37rnlW8+iwFs/05E3clEww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com (2603:10b6:a03:79::29)
- by CH0PR11MB5475.namprd11.prod.outlook.com (2603:10b6:610:d6::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Tue, 24 May
- 2022 13:40:27 +0000
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::829:3da:fb91:c8e7]) by BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::829:3da:fb91:c8e7%6]) with mapi id 15.20.5293.013; Tue, 24 May 2022
- 13:40:27 +0000
-From:   "G, GurucharanX" <gurucharanx.g@intel.com>
-To:     Bernard Zhao <zhaojunkui2008@126.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "bernard@vivo.com" <bernard@vivo.com>
-Subject: RE: [Intel-wired-lan] [PATCH] intel/i40e: delete if NULL check before
- dev_kfree_skb
-Thread-Topic: [Intel-wired-lan] [PATCH] intel/i40e: delete if NULL check
- before dev_kfree_skb
-Thread-Index: AQHYZTzOQMmO4kPqPEi5xAu279lZRq0uHQYQ
-Date:   Tue, 24 May 2022 13:40:27 +0000
-Message-ID: <BYAPR11MB33672B20A0116900DAFCB8AFFCD79@BYAPR11MB3367.namprd11.prod.outlook.com>
-References: <20220511065451.655335-1-zhaojunkui2008@126.com>
-In-Reply-To: <20220511065451.655335-1-zhaojunkui2008@126.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f2b30c96-7456-480d-f326-08da3d8af641
-x-ms-traffictypediagnostic: CH0PR11MB5475:EE_
-x-microsoft-antispam-prvs: <CH0PR11MB547500552777604C798FF11FFCD79@CH0PR11MB5475.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VTSW2sUM3RfDCKrld0mkbepgf4ZiH/QZcQkh1zNDGtXjxd1Nogy1QAM/95WaCamb0ZcRUvDxZixN+ZuEDj2X/XcOrmoK4F/uoAFMLEyYDXUhFy8//dh8Ni2IFmkwtDdvmbuywDC7mWrC5k8x3XqHgW5V3NdbNL/3YwAhgwvyWWR5q7LgI5RFyrUzJeOQGmlDS8MXA0uj5KQTzDdz9RMpXuo6he0WOAZY33Quj/JTjubzD7ZoM8i+X3Z2EVQQTHouz0PVm9WC68RNHc0IKsbUhAoLdjEGHp1/Bgqu5x2+9H8cN6ZB1kDkflRYHk58mIunfXIDSSfLZMnBg3jutFHmE7b1GyKVkOADbtMIe50cbjXJQsG1TrYmfPgJ5fRVxuqI9krUc5OmWPb2enUQk3dTQe1gG+djf1tQf3a4FwaVIWLH8c5+9sNEKEtLMKMmJoCg8nBTAn7bjILKoxvt6H/N2wUuIwcxYC9QFXX+tCb1sc/mxrqNFdRbmMUQzzVqAznebcNUHo2G0OdxnA0pInj4VgP5+oLttUTcZ1G10s02C1Nc8fNJXG6AunD6vCrfNIkNjYsZm5l68EzTVNlXLnsI82JlSMTQBkbYBbvBL0x+TXsdjRa/s8ecbeHi/HeDVFpq/gpMUJwaCd2KKkIctAOtRRSU+jQpkmN0hOeyJ8cJm4IJAjHMjbVFH1mzS/NkWqEm0ISepdKQsPamFrkT9CfrJgfdLPCu6g6+bH/IdJXaeYg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3367.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(316002)(83380400001)(8936002)(122000001)(2906002)(110136005)(186003)(53546011)(38070700005)(66446008)(66476007)(66946007)(64756008)(66556008)(4326008)(8676002)(4744005)(55016003)(6506007)(7696005)(26005)(9686003)(921005)(82960400001)(86362001)(33656002)(508600001)(5660300002)(71200400001)(76116006)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?V/vJQKJlfrOqKGNTesh2zDX8QH4i1d6j2kvDD4paLEokVAf7yokrUq3/tp3K?=
- =?us-ascii?Q?N3u8ITFAtZ2dUP79+YtJiHpxfhrstYtDqoKFXapqNCWo3G6LxbzHX0Y4l7Yj?=
- =?us-ascii?Q?GPvVOcXIGl18YhRB4f6Qyecq32Am6iwZRwwXpvsnxz8BNLORGG0ThG9jWIvp?=
- =?us-ascii?Q?z/ive7fgpAkAUa+KZfi9T/+kHbbH3uHTolHBiRbtUpjmSdZhuj5mjLRw1XMQ?=
- =?us-ascii?Q?CRBoHVw97azoxaJaUNDOoGlO2KqW5YucTVybxdNBtub8F+kNilswSg80nZ2D?=
- =?us-ascii?Q?ya/RkMZVFLjby4IyMe8fSU7feK7No5AyYXEY+FV5nyJCAiI5vUUH8ZAmoVrf?=
- =?us-ascii?Q?50GC2Mrg2PBWcFi0XrhkGm6mAsn9qgHDPHFpcm+LiVAj/RhRGduCtg+jmzMG?=
- =?us-ascii?Q?Hug6nwxbw8PBljkVKRwccy4QdSpLtIGTBmdRiBsx8IWywruMmNbh9LppA8QN?=
- =?us-ascii?Q?5WQrBqo3Yf5XGshOLq9DmIPZCidJml2cPdBJ3UmicURVj/qJtwgyl6yW1prA?=
- =?us-ascii?Q?q8adJvDlotZmjm0+RGsaLVJ2bq/ReX9a5QtXZO4M2CGVH0+sx5fqIkNK7eyA?=
- =?us-ascii?Q?se+dez30l9bLYM309256N3tZdWUTlotiM6VWKSGKbLafX33jrSJQq+O7b1O0?=
- =?us-ascii?Q?FmQFkerH+wvvrVgJSiBcs8lwsMNowg9KUQbEYSFSlNZy6dtWCezpY+/hYoZ1?=
- =?us-ascii?Q?GVxhGay/QC8JqL4GT8kV+3PxxfH0q67ix5moCkA8q0l/gPcFYZXoZpuKZ659?=
- =?us-ascii?Q?D8mXaLsrr+43hwLM8ysD5gy28NKflln42slAlvsSThbtAGVJRJVdVWvE6nVh?=
- =?us-ascii?Q?F1oVUg5cOh+oFfW6STrzD/GeU3GDrHoAL3EHLFlJQyUzoVD0VGI9sRs8O9co?=
- =?us-ascii?Q?gMbGXwJMyinCK4b5jAcMOMG8Bo2xAqp72APhD0lZg0KiHM0BzSSUAqqpzX1P?=
- =?us-ascii?Q?9tHF3RbXbzX08G6R5xeV7ueh+AClthQUODhIDg+RhSaayQdpj10WT8C25+xw?=
- =?us-ascii?Q?p+DpzNKJRyQE9oHelXOBe4ZahTNGfZrGRCsLlV7g8F6iX/oInZawkBiCii3g?=
- =?us-ascii?Q?S5SyQH1o/6VAZ33KhngL+KfxNdbxCqhPDHmSgke4CeI48h1M+S2CAzerUe9S?=
- =?us-ascii?Q?7lQZc6egzaOKPDJe65f0H82WItROFXy5gBP3aq2bbs+j9QwRsXyYpEnjgNbo?=
- =?us-ascii?Q?oCe11MY0ZIQeVNnXr+pcMTydOLZ9bkcRNwDzN/a9bE2pERkO7Eul1cpdXf2F?=
- =?us-ascii?Q?5w0nVl1Hvm+8z52wCXkn8mnLK8EnPkfw65GsiZTykJ3Pg4oHmY7+f4NmxMWC?=
- =?us-ascii?Q?v+Ry4uOWY7fn03nZsEl/74RTIMDcAv6HK9QfUP9LJWeaRxtiA2NA8CUpI+p2?=
- =?us-ascii?Q?g/FIxSGH9lqyIsi7hyufbBQSRZ6UABQ5DP3HnjMcZEbQlNfZOkZct5FB+k4R?=
- =?us-ascii?Q?HqqbEy/OZNvdylxyWXUFnzNN9+YKPYbSdUz9dgnjMDkSIiazmoqh6Q2JxUQ6?=
- =?us-ascii?Q?8B67qtCmqXlwDh1El4Ez+HLNO2k71wrul0pL4oT+8JvvyS9RPvHcw7FHfHrD?=
- =?us-ascii?Q?OEBv69rw6P+KS+Q/Pw4vqBTfq6g/gfFiYlN3EqALyMcUKabjER5ocwGfLKcr?=
- =?us-ascii?Q?O8e4xDK6jTo6nY7N3I/s8gO5wZu636ApdSdeqWBEREIea1LlUnI1tGu46xMK?=
- =?us-ascii?Q?cO6P9TEH7pxQGIC6xqJE0pZv94RofOA3ZZA6V9C82GlS7zrLfNkKnr6pE+U1?=
- =?us-ascii?Q?vguEqwEDkg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 24 May 2022 09:42:43 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C111475226;
+        Tue, 24 May 2022 06:42:41 -0700 (PDT)
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 24ODgDUG022736;
+        Tue, 24 May 2022 22:42:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 24ODgDUG022736
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653399734;
+        bh=aNLlIgPVqKG5chGBjgSqnkX4433JxjcWB7yJEVQZ+Gg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vXA8HrUWNsrcMbb4jjxlOaE1UOW4nzjC8LOPdbOMXac6+lkDf8ercmWRWQ6PntFhp
+         lbAfJ7j+CQ2UH7nNTb2juSxDe9MRJtGGZ6aySjIrlfVlcX9sJSj0BVCm/FTEkEAEbw
+         A3FQPgOVjUU/yzKOkS2SqKMP52kVy5IEdmzSXSipe+inDpK4wNAA2xuR9MR32X2bYd
+         de/lBb9qz4JB5gK5mtbgS7x4URxRknF7H6BevFWGGucM4329GlHTvZRGpAN6u/qHt5
+         jRTks2KxEk9Lxq4w8hPRb/lid7BQBgy9Fo/YcgPj+aV9bw+6GW5vkSONg8kGGvsLzU
+         PIUGgvvPbp5RQ==
+X-Nifty-SrcIP: [209.85.214.175]
+Received: by mail-pl1-f175.google.com with SMTP id n8so15901205plh.1;
+        Tue, 24 May 2022 06:42:13 -0700 (PDT)
+X-Gm-Message-State: AOAM532fDD7fTgrP2PSZWbA+u73O7vrxW/J+2a+2RkvgM1c2OOfz5JLb
+        SyP6IgYnglXAMWGxmPBxAYDepk5z1FlvutCIXJo=
+X-Google-Smtp-Source: ABdhPJyTdv6DT7AK41vY70QzhcMH2A38iaGQn1upGmFmPJo+2BcK+NmA7eL9uIW06HJVa028vlOfajtpPNm4sy2hH34=
+X-Received: by 2002:a17:90a:e004:b0:1e0:7a66:fb3a with SMTP id
+ u4-20020a17090ae00400b001e07a66fb3amr2891041pjy.119.1653399732689; Tue, 24
+ May 2022 06:42:12 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3367.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2b30c96-7456-480d-f326-08da3d8af641
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2022 13:40:27.2019
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2HeNLakLPECsdlblTeVN8rIGSBfMp6TEetODNapJpuNCBjx0/gpHDmpoB/0UkO4woBa2hrXfisj8P4DKP2x9JQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5475
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-2-alexandr.lobakin@intel.com> <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
+ <20220524113337.4128239-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20220524113337.4128239-1-alexandr.lobakin@intel.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 24 May 2022 22:40:51 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQus0vcWLCgSdMZNcYKam4fKYj9c8Zrb3HggZ7dTBUrxQ@mail.gmail.com>
+Message-ID: <CAK7LNAQus0vcWLCgSdMZNcYKam4fKYj9c8Zrb3HggZ7dTBUrxQ@mail.gmail.com>
+Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        live-patching@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 24, 2022 at 8:34 PM Alexander Lobakin
+<alexandr.lobakin@intel.com> wrote:
+>
+> From: Masahiro Yamada <masahiroy@kernel.org>
+> Date: Tue, 24 May 2022 03:04:00 +0900
+>
+> > On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
+> > <alexandr.lobakin@intel.com> wrote:
+> > >
+> > > `-z unique-symbol` linker flag which is planned to use with FG-KASLR
+> > > to simplify livepatching (hopefully globally later on) triggers the
+> > > following:
+> > >
+> > > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
+> > >
+> > > The reason is that for now the condition from remove_dot():
+> > >
+> > > if (m && (s[n + m] == '.' || s[n + m] == 0))
+> > >
+> > > which was designed to test if it's a dot or a '\0' after the suffix
+> > > is never satisfied.
+> > > This is due to that `s[n + m]` always points to the last digit of a
+> > > numeric suffix, not on the symbol next to it (from a custom debug
+> > > print added to modpost):
+> > >
+> > > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+> > >
+> > > So it's off-by-one and was like that since 2014.
+> > > Fix this for the sake of upcoming features, but don't bother
+> > > stable-backporting, as it's well hidden -- apart from that LD flag,
+> > > can be triggered only by GCC LTO which never landed upstream.
+> > >
+> > > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
+> > > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > > ---
+> > >  scripts/mod/modpost.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > > index 6bfa33217914..4648b7afe5cc 100644
+> > > --- a/scripts/mod/modpost.c
+> > > +++ b/scripts/mod/modpost.c
+> > > @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
+> > >
+> > >         if (n && s[n]) {
+> > >                 size_t m = strspn(s + n + 1, "0123456789");
+> > > -               if (m && (s[n + m] == '.' || s[n + m] == 0))
+> > > +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
+> > >                         s[n] = 0;
+> > >
+> > >                 /* strip trailing .lto */
+> > > --
+> > > 2.34.1
+> > >
+> >
+> > This trivial patch has not been picked up yet.
+> >
+> > I can apply this to my tree, if you want.
+>
+> It's a good idea, I'd like to!
+> I don't use `-z unique-symbol` for FG-KALSR anymore*, but this fix
+> is not directly related to it and can be taken independently.
+> Should I change the commit message or it's ok to take it as it is?
 
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
-> Bernard Zhao
-> Sent: Wednesday, May 11, 2022 12:25 PM
-> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
-> <anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
-> Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>;
-> intel-wired-lan@lists.osuosl.org; netdev@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Cc: bernard@vivo.com; Bernard Zhao <zhaojunkui2008@126.com>
-> Subject: [Intel-wired-lan] [PATCH] intel/i40e: delete if NULL check befor=
-e
-> dev_kfree_skb
->=20
-> dev_kfree_skb check if the input parameter NULL and do the right thing,
-> there is no need to check again.
-> This change is to cleanup the code a bit.
->=20
-> Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
-> ---
->  drivers/net/ethernet/intel/i40e/i40e_txrx.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->=20
+I am fine with either way.
 
-Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Int=
-el)
+If you want to resubmit this with a fresh commit log,
+please send it to:
+  linux-kbuild@vger.kernel.org
+
+Then, I will take care of it in this MW.
+
+Thanks.
+
+
+
+
+> >
+> > Please let me know your thoughts.
+> >
+> >
+> > --
+> > Best Regards
+> > Masahiro Yamada
+>
+> * I'm planning to submit a new rev of FG-KASLR series soon, but
+> since I'm too busy with XDP for now, it will happen no sooner than
+> in a couple months =\
+>
+> Thanks!
+> Al
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

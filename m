@@ -2,215 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85682533255
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AE053325F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241515AbiEXUR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
+        id S241059AbiEXUWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiEXURv (ORCPT
+        with ESMTP id S234228AbiEXUWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:17:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2002873E;
-        Tue, 24 May 2022 13:17:51 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OHW4xT030512;
-        Tue, 24 May 2022 20:17:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=tqQvznJHnixV34lW3If3Q9AzE7WRwCghaqqRp7ZtiIM=;
- b=VRcHc3pEqqWhL44ZT8R4cgXBRgF6YvAzGExe8im3eWQocU6839NbqAQO25KY+oPuppFD
- qrkCS8YW3cqeXunO2807XuBNTH8QXeaNzDrjY5W4k3UEkmunXS3LZxrFdf9u0RJ3XIoS
- HaYYHVHF3vwWbma/7EoX5TEbLbl+EonnFuIQk/PSVT/T3279qxo81P+yf1LpAxkz0BhH
- Py10bL3bnMCRt9dEJFkTEBk1gyeDz1ho0rOKeV8Y6Lzw+1APscrzFcGdYJOAoJ9inpBf
- R7JKWUoRHwzpyiyB6w7mclglxtnV98kr+gFDoQ6JI3wFAS+UbhXrTnVPqjFKyLHhypAp Zg== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g93uk35kh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 20:17:38 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OKA6TM005485;
-        Tue, 24 May 2022 20:17:37 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01wdc.us.ibm.com with ESMTP id 3g93uu90ht-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 20:17:37 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OKHaFR34406886
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 20:17:36 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C2C06E058;
-        Tue, 24 May 2022 20:17:36 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2031E6E056;
-        Tue, 24 May 2022 20:17:36 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.82.60])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 24 May 2022 20:17:36 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-iio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, lars@metafoo.de, jic23@kernel.org,
-        joel@jms.id.au, Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH v3 2/2] iio: pressure: dps310: Reset chip if MEAS_CFG is corrupt
-Date:   Tue, 24 May 2022 15:17:29 -0500
-Message-Id: <20220524201729.39503-3-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220524201729.39503-1-eajames@linux.ibm.com>
-References: <20220524201729.39503-1-eajames@linux.ibm.com>
+        Tue, 24 May 2022 16:22:36 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA5F54BC3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:22:34 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id z25so4706978pfr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YUnVxa5pnWd8D3oQLkMmXCsz6an77MCtCR1yPtv/LsQ=;
+        b=VSYu/WzfHyNKrcVPPaxgRUerwl88cq5BG0EKH4DrtupwYUlU8DEcGjsDzAizLKW2Qt
+         Le6afW2RDgD/ZQ2H87iYUqm7AjSq0acsYfxJ3NwWSWp5/B8TkjNrubmA6StzF2yl2c30
+         gLeLi4cktX2vCJGBi3ZXJC8vVhiakpEeT3Q0O4dX1EsczAPYVxcMz0JZANKldm284Ndj
+         wi8HRuAzvK0C3BqyFhMdsXlblK9pb/TzDvFopEHEWz50TrWSIq2o06x5lB3fbgPHArgI
+         8rmfpApZ1rz+nMfUBzLSUXlTf4HLS7SHuw+b191b/2mmWeMJSHpPUMjVAoT0u44Rb29M
+         cO+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YUnVxa5pnWd8D3oQLkMmXCsz6an77MCtCR1yPtv/LsQ=;
+        b=LLcar6m1a1INbcUrqngNhGXFc6pdhpXjWhhOnN9fiams4nlas/ZbJCI6x8b9XbDmNj
+         mr1ifloTKZPSJRXoG4kaD3PpW/lPw7rk5zZA2Tn3CNQpguzLAS0FWKYa6AJ4r8Khdsd8
+         i2G0c3nZlG3uEmld+pGG/kxnvCvq6aBhDpLvlS4ZDOxwkyZfdrcmbILRPMknbJCzUISs
+         51NVs9W1J1WyKdLw46ydTdgICB8d0PVaUs4jMr1zPsXBEOFj+CLuv7YQgJ4mScGCH9KP
+         0GgfkPO+UTYdhwfXb8tGSBCpo59lL5oI1mRqsMoCRoFLMNthLGQ1/wGnv+TBuh2Xq3h5
+         uceQ==
+X-Gm-Message-State: AOAM532ParoDpGibBcmvU1SEPVihFHAuyhh6Mt3qLvFJPbeLSTOGfuRY
+        DsBeC3ZO880fYxcb+wOT/N4pbQ==
+X-Google-Smtp-Source: ABdhPJzEzSBOJ49SjfPAIvrDv96S6UMkcFYGOSpHrtGFcUUoN1+ex5IU8zKRocw1wS2WuYmbveO09g==
+X-Received: by 2002:a63:4387:0:b0:3c6:9490:4e4b with SMTP id q129-20020a634387000000b003c694904e4bmr25290534pga.438.1653423754123;
+        Tue, 24 May 2022 13:22:34 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h186-20020a62dec3000000b0050dc7628191sm9847289pfg.107.2022.05.24.13.22.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 13:22:33 -0700 (PDT)
+Date:   Tue, 24 May 2022 20:22:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, vbabka@suse.cz,
+        akpm@linux-foundation.org, willy@infradead.org
+Subject: Re: Is _PAGE_PROTNONE set only for user mappings?
+Message-ID: <Yo0+huWaiIDmac7Z@google.com>
+References: <20220506051940.156952-1-42.hyeyoo@gmail.com>
+ <56f89895-601e-44c9-bda4-5fae6782e27e@amd.com>
+ <YnpTHMvOO/pLJQ+l@hyeyoo>
+ <5fe161cb-6c55-6c4d-c208-16c77e115d3f@amd.com>
+ <8c2735ac-0335-6e2a-8341-8266d5d13c30@intel.com>
+ <YntHrTX12TGp35aF@hyeyoo>
+ <20220512103748.GH3441@techsingularity.net>
+ <Yn3tssUR8w8mC1DJ@hyeyoo>
+ <3f2f7c09-ddf3-6052-9860-8554a4ff2798@intel.com>
+ <Yom0hiDXuCuY4OUP@n2.us-central1-a.c.spheric-algebra-350919.internal>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: c79zHKUUpyQ9kASUV9Y0TrvNOGf6ssuD
-X-Proofpoint-ORIG-GUID: c79zHKUUpyQ9kASUV9Y0TrvNOGf6ssuD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_10,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 mlxscore=0
- suspectscore=0 lowpriorityscore=0 adultscore=0 spamscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205240100
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yom0hiDXuCuY4OUP@n2.us-central1-a.c.spheric-algebra-350919.internal>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Corruption of the MEAS_CFG register has been observed soon after
-system boot. In order to recover this scenario, check MEAS_CFG if
-measurement isn't ready, and if it's incorrect, reset the DPS310
-and execute the startup procedure.
+On Sun, May 22, 2022, Hyeonggon Yoo wrote:
+> On Mon, May 16, 2022 at 07:04:32AM -0700, Dave Hansen wrote:
+> > I was thinking of something more along the lines of taking the
+> > set_memory.c code and ensuring that it never sets (or even observes)
+> > _PAGE_BIT_GLOBAL on a _PAGE_USER mapping.
+> 
+> Yeah that would be a bit more explicit solution.
+> 
+> > There was also a question of
+> > if set_memory.c is ever used on userspace mappings.  It would be good to
+> > validate whether it's possible in-tree today and if not, enforce that
+> > _PAGE_USER PTEs should never even be observed with set_memory.c.
+> 
+> Simply adding dump_stack() tells me my kernel on my machine does not use
+> set_memory.c for userspace mappings but Hmm I'll take a look.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/iio/pressure/dps310.c | 88 +++++++++++++++++++++++++++++------
- 1 file changed, 73 insertions(+), 15 deletions(-)
+vc_slow_virt_to_phys() uses lookup_address_in_pgd() with user mappings, but that
+code is all but guaranteed to be buggy, e.g. doesn't guard against concurrent
+modifications to user mappings.
 
-diff --git a/drivers/iio/pressure/dps310.c b/drivers/iio/pressure/dps310.c
-index f79b274bb38d..fbceaa2cd71c 100644
---- a/drivers/iio/pressure/dps310.c
-+++ b/drivers/iio/pressure/dps310.c
-@@ -397,6 +397,44 @@ static int dps310_get_temp_k(struct dps310_data *data)
- 	return scale_factors[ilog2(rc)];
- }
- 
-+/*
-+ * Called with lock held. Returns a negative value on error, a positive value
-+ * when the device is not ready, and zero when the device is ready.
-+ */
-+static int dps310_check_reset_meas_cfg(struct dps310_data *data, int ready_bit)
-+{
-+	int meas_cfg;
-+	int rc = regmap_read(data->regmap, DPS310_MEAS_CFG, &meas_cfg);
-+
-+	if (rc < 0)
-+		return rc;
-+
-+	/* Device is ready, proceed to measurement */
-+	if (meas_cfg & ready_bit)
-+		return 0;
-+
-+	/* Device is OK, just not ready */
-+	if (meas_cfg & (DPS310_PRS_EN | DPS310_TEMP_EN | DPS310_BACKGROUND))
-+		return 1;
-+
-+	/* DPS310 register state corrupt, better start from scratch */
-+	rc = regmap_write(data->regmap, DPS310_RESET, DPS310_RESET_MAGIC);
-+	if (rc < 0)
-+		return rc;
-+
-+	/* Wait for device chip access: 2.5ms in specification */
-+	usleep_range(2500, 12000);
-+
-+	/* Reinitialize the chip */
-+	rc = dps310_startup(data);
-+	if (rc)
-+		return rc;
-+
-+	dev_info(&data->client->dev,
-+		 "recovered from corrupted MEAS_CFG=%02x\n", meas_cfg);
-+	return 1;
-+}
-+
- static int dps310_read_pres_raw(struct dps310_data *data)
- {
- 	int rc;
-@@ -409,16 +447,26 @@ static int dps310_read_pres_raw(struct dps310_data *data)
- 	if (mutex_lock_interruptible(&data->lock))
- 		return -EINTR;
- 
--	rate = dps310_get_pres_samp_freq(data);
--	timeout = DPS310_POLL_TIMEOUT_US(rate);
--
--	/* Poll for sensor readiness; base the timeout upon the sample rate. */
--	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
--				      ready & DPS310_PRS_RDY,
--				      DPS310_POLL_SLEEP_US(timeout), timeout);
--	if (rc)
-+	rc = dps310_check_reset_meas_cfg(data, DPS310_PRS_RDY);
-+	if (rc < 0)
- 		goto done;
- 
-+	if (rc > 0) {
-+		rate = dps310_get_pres_samp_freq(data);
-+		timeout = DPS310_POLL_TIMEOUT_US(rate);
-+
-+		/*
-+		 * Poll for sensor readiness; base the timeout upon the sample
-+		 * rate.
-+		 */
-+		rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
-+					      ready, ready & DPS310_PRS_RDY,
-+					      DPS310_POLL_SLEEP_US(timeout),
-+					      timeout);
-+		if (rc)
-+			goto done;
-+	}
-+
- 	rc = regmap_bulk_read(data->regmap, DPS310_PRS_BASE, val, sizeof(val));
- 	if (rc < 0)
- 		goto done;
-@@ -458,16 +506,26 @@ static int dps310_read_temp_raw(struct dps310_data *data)
- 	if (mutex_lock_interruptible(&data->lock))
- 		return -EINTR;
- 
--	rate = dps310_get_temp_samp_freq(data);
--	timeout = DPS310_POLL_TIMEOUT_US(rate);
--
--	/* Poll for sensor readiness; base the timeout upon the sample rate. */
--	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
--				      ready & DPS310_TMP_RDY,
--				      DPS310_POLL_SLEEP_US(timeout), timeout);
-+	rc = dps310_check_reset_meas_cfg(data, DPS310_TMP_RDY);
- 	if (rc < 0)
- 		goto done;
- 
-+	if (rc > 0) {
-+		rate = dps310_get_temp_samp_freq(data);
-+		timeout = DPS310_POLL_TIMEOUT_US(rate);
-+
-+		/*
-+		 * Poll for sensor readiness; base the timeout upon the sample
-+		 * rate.
-+		 */
-+		rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG,
-+					      ready, ready & DPS310_TMP_RDY,
-+					      DPS310_POLL_SLEEP_US(timeout),
-+					      timeout);
-+		if (rc < 0)
-+			goto done;
-+	}
-+
- 	rc = dps310_read_temp_ready(data);
- 
- done:
--- 
-2.27.0
+show_fault_oops() can also call into lookup_address_in_pgd() with a user mapping,
+though at that point the kernel has bigger problems since it's executing from user
+memory.
 
+And up until commits 44187235cbcc ("KVM: x86/mmu: fix potential races when walking
+host page table") and 643d95aac59a ("Revert "x86/mm: Introduce lookup_address_in_mm()""),
+KVM had a similar bug.
+
+Generally speaking, set_memory.c is not equipped to play nice with user mappings.
+It mostly "works", but there are races galore.  IMO, hardening set_memory.c to scream
+if it's handed a user address or encounters _PAGE_USER PTEs would be a very good thing.

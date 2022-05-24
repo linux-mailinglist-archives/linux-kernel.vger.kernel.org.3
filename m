@@ -2,140 +2,366 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA2D532F5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 19:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF5A532F61
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 19:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239806AbiEXRFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 13:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        id S239828AbiEXRGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 13:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237243AbiEXRFV (ORCPT
+        with ESMTP id S239830AbiEXRFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 13:05:21 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC197983D;
-        Tue, 24 May 2022 10:05:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Al4KdHw4U9I2K1YQ6XYLFLPiueAYqwzn2Z8NwyksjtfpAioAdfyWIzN5TXgS/HZ7Bz1BJ+Ia4bp48Y7t6mE2zz507Vt7dS/gfTmcNEkMfAYRpy7a7XLClMVwqYlKDbBfJJrl82pehRokW84ai1awUv32+wIwwEtKSYXLEWY4F+RWK+mw9gdS5j6sZinhR4FLI3Fo770JoIBefAIj8vSzZpNWrd/6yDUFBKatWxYWRLBdExhaIAloJilW7eymRb/Z2wVWx1myhTmskG1gq3sl66EtNMeEi/L4vJRZh0v2pG5cz9Fgjr6Ws8vAOXmo5Ym4wwpqghRh7G0fIRNLICe21Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RKlaon0w9WJiUFAvv4xgquJqPEvrmdkURbVT1zaLDOo=;
- b=gcwypWQqEP6qOtGgskVhlAegG9ivxQDZn638T8YjE/B4l4HrUfSpiz62y0IXMr94EUdrCRdy/xzukPrFqhwBeSmbv11Zm7sZ5MoHe+8CELSkiDYKBtFzIMeMAuXxrWYUfb9G+xk9CVCDDOxXBQbpn/rbOu9746f4QITYjnbJ9iH9i3KrUbdPJp+haJaKBRKId06OQ+nTwx0DaoS0SzmdrVXdSULaGmBZo4SwNxF467FkFX/Dn5ZhxbxLJR9xgQ20smtpIGcsvltnwyzwIzvSIfzaLru3gMc8xq9UCaYjCuIGR0dP4uV7f5WSDxRIk9mKPRxw7aze8xi2X0wEnt01ew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=opensource.wdc.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RKlaon0w9WJiUFAvv4xgquJqPEvrmdkURbVT1zaLDOo=;
- b=ZPl9HrLg4yBUuh0/zPp+ymtFuwqpmAI86zDlXpAM5I7V0kgInpNVWc1waDUHUSYvB+3f/uArXM3tIlCYCnuGeNwe7pHQW2LtgY3EqfnQWs+Lln0drGFejMcMZBNbyDqWucxxv3ufArvoj/3qC+K8tB3djrWS7mzoG3hTmI1H2Jg=
-Received: from BN0PR04CA0093.namprd04.prod.outlook.com (2603:10b6:408:ec::8)
- by SN1PR12MB2367.namprd12.prod.outlook.com (2603:10b6:802:26::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.16; Tue, 24 May
- 2022 17:05:17 +0000
-Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ec:cafe::a1) by BN0PR04CA0093.outlook.office365.com
- (2603:10b6:408:ec::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.21 via Frontend
- Transport; Tue, 24 May 2022 17:05:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Tue, 24 May 2022 17:05:17 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 24 May
- 2022 12:05:14 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH 3/3] ahci: Document the loss of hotplug by new LPM policy
-Date:   Tue, 24 May 2022 12:05:08 -0500
-Message-ID: <20220524170508.563-4-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220524170508.563-1-mario.limonciello@amd.com>
-References: <20220524170508.563-1-mario.limonciello@amd.com>
+        Tue, 24 May 2022 13:05:48 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1E47A44A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:05:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 700AE1F93F;
+        Tue, 24 May 2022 17:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653411932; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C4IFprKT0D1OTMdVGgzMSRmnTGUgiol5nXSLmMrkcog=;
+        b=f+BxwNRHgd6Do456rCxCbRg5r0H0GjUJWYHWIrHKIR6/8FPC3YsxkJp3Ahaa3oaNl24pCY
+        adc29ZKbmgO2Ru/jc4NavMWFddup46wrIg0V4TFJzlV5VRogQvEODaoH/JTJ1SO/JC8c3M
+        Q9gtMrhjNWRsGiagveWyR4D/g7erlqY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653411932;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C4IFprKT0D1OTMdVGgzMSRmnTGUgiol5nXSLmMrkcog=;
+        b=vGg0WimhyDfYU4uxuTvMk6xqAAOi3wEfK/McpDJTHGdiudRCuZsKH0IT9VbP6uNqO30Gu7
+        m2ju7j5zkIFJNNAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 474A713AE3;
+        Tue, 24 May 2022 17:05:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bUClEFwQjWI1aQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 24 May 2022 17:05:32 +0000
+Message-ID: <86fdbde5-a010-9473-2f5d-807c86620509@suse.cz>
+Date:   Tue, 24 May 2022 19:05:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9ea70655-8d65-4178-21cf-08da3da793cf
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2367:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB2367D614577BD3793EB33EC6E2D79@SN1PR12MB2367.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bwVCN3CgnhoO8nXvFphBDOwW1zj8RJNeM0LQxYYos/BWlL6wcjW/Vm5FB5Cxk1HzdbVe2oVQbi35bup9GlQhl/R31MCjcbIvEvcj2g2UZddhtgapDIt5mn+niBy71+SXUjSxQZz6/PAVW4xKePsiuZF05erGv/XgE25q0Yu78PrDzXN5Ne4cCSkpWzOKvHXWVLV19hjb4qboGo+nbNH+3TQ7eUrZp6kfcbgU4Sr1vRAFOf8NGgxCGSShNoRlrPfSb+p2xD7QwGXqdxwcEymkDTNk7dY+ywbkQtY3SsWIDqcUxnFPdBMzS0WlVq7monrEWCXKGWjr6dH3IU5qja7Eqs0UdcCWOSDda7tCrBtZrIDVdLhHzm2sAZB9I621lIJhpiCHJ6qvvQ5jtPcWE6w+dFsXHjBC7g6DiTQPZKbgHsdXXiNhjQPpij6kDS1ZrbpxMzAR53jLTxE/Gdc1HLxE6b8ALLDQGot1mtWl0gTKjUhN2B3tqG/1VHglNBSdhdcyDSv/JzyK925BlrtbQiBZ1qlJaO49Gdv0Hya4FaCC/SWjJ5jles+RjthAob0wrNeWs0QHzKh5cMTyaVF1WtBlIsazXR5uKQ8s8xUmt9Luc7pPEhNadJZxuYVYKgJY27DKmOGJZ49EI0lhLJW1W5+JAu/dGRP+cs/goP7zwNSdlR4UNj629VQhTVi2/F2VXZVThv/OV5fYWZJiejqp0qfbA513F573u/Fhe7yK0IdWgbdxTf13SXd3qiBkZx/d+YSRYibsEQmBY+7BYPcQo87E90H7LUUmineMDSKIcXi9kjKk1zlLk6H5fgfa6P+f3guL8ACa81y5OOR0eczn4YE3Gw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(40460700003)(86362001)(186003)(426003)(70206006)(5660300002)(47076005)(2616005)(966005)(54906003)(7696005)(26005)(6666004)(1076003)(36756003)(508600001)(82310400005)(36860700001)(70586007)(336012)(16526019)(2906002)(8676002)(316002)(4326008)(6916009)(81166007)(8936002)(44832011)(83380400001)(356005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2022 17:05:17.4223
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ea70655-8d65-4178-21cf-08da3da793cf
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2367
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Muchun Song <songmuchun@bytedance.com>, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, smuchun@gmail.com
+References: <20220429123044.37885-1-songmuchun@bytedance.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v2] mm: slab: optimize memcg_slab_free_hook()
+In-Reply-To: <20220429123044.37885-1-songmuchun@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Per AHCI spec v1.3.1, "7.3 Native Hot Plug Support", once LPM is
-enabled hotplug support needs to be disabled.
+On 4/29/22 14:30, Muchun Song wrote:
+> Most callers of memcg_slab_free_hook() already know the slab,  which could
+> be passed to memcg_slab_free_hook() directly to reduce the overhead of an
+> another call of virt_to_slab().  For bulk freeing of objects, the call of
+> slab_objcgs() in the loop in memcg_slab_free_hook() is redundant as well.
+> Rework memcg_slab_free_hook() and build_detached_freelist() to reduce
+> those unnecessary overhead and make memcg_slab_free_hook() can handle bulk
+> freeing in slab_free().
+> 
+> Move the calling site of memcg_slab_free_hook() from do_slab_free() to
+> slab_free() for slub to make the code clearer since the logic is weird
+> (e.g. the caller need to judge whether it needs to call
+> memcg_slab_free_hook()). It is easy to make mistakes like missing calling
+> of memcg_slab_free_hook() like fixes of:
+> 
+>   commit d1b2cf6cb84a ("mm: memcg/slab: uncharge during kmem_cache_free_bulk()")
+>   commit ae085d7f9365 ("mm: kfence: fix missing objcg housekeeping for SLAB")
 
-The LPM code always followed this and disabled the port when no
-drives were connected, but as more machines will be exposed to
-this code it might be an unexpected behavior to some users.
+Hm is this commit also fixing such bug? in mm/slab.c __cache_free():
 
-Add a note to parameter documentation to explain the new behavior.
+/* KASAN might put objp into memory quarantine, delaying its reuse. */
+if (kasan_slab_free(cachep, objp, init))
+        return;
 
-Link: https://bugs.launchpad.net/bugs/1971576
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
- 1 file changed, 7 insertions(+)
+before this patch we do not reach memcg_slab_free_hook() if
+kasan_slab_free() retuns true, after this patch we do. AFAICS SLUB always
+did memcg_slab_free_hook() in case of kasan_slab_free() so it's the correct
+thing to do?
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9e6bd212004d..4dcd9a3ba4a5 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -279,6 +279,13 @@
- 			3 => Medium power with Device Initiated PM enabled
- 			4 => Minimum power
- 
-+			NOTE: Enabling LPM when no drive is connected will disable
-+			the port which means hotplug will not work.
-+
-+			If hotplug is an important use case, this can be modified
-+			at runtime by changing
-+			/sys/module/ahci/parameters/lpm_policy
-+
- 	ALSA		[HW,ALSA]
- 			See Documentation/sound/alsa-configuration.rst
- 
--- 
-2.34.1
+> This optimization is mainly for bulk objects freeing.  The following numbers
+> is shown for 16-object freeing.
+> 
+>                            before      after
+>   kmem_cache_free_bulk:   ~430 ns     ~400 ns
+> 
+> The overhead is reduced by about 7% for 16-object freeing.
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+
+Otherwise looks good, will add to slab tree for 5.20, thanks.
+
+> ---
+> v2:
+>  - Add numbers to commit log.
+> 
+>  mm/slab.c |  4 ++--
+>  mm/slab.h | 30 ++++++++---------------------
+>  mm/slub.c | 66 +++++++++++++++++++++------------------------------------------
+>  3 files changed, 32 insertions(+), 68 deletions(-)
+> 
+> diff --git a/mm/slab.c b/mm/slab.c
+> index f8cd00f4ba13..2174962055ae 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -3406,9 +3406,10 @@ static __always_inline void __cache_free(struct kmem_cache *cachep, void *objp,
+>  {
+>  	bool init;
+>  
+> +	memcg_slab_free_hook(cachep, virt_to_slab(objp), &objp, 1);
+> +
+>  	if (is_kfence_address(objp)) {
+>  		kmemleak_free_recursive(objp, cachep->flags);
+> -		memcg_slab_free_hook(cachep, &objp, 1);
+>  		__kfence_free(objp);
+>  		return;
+>  	}
+> @@ -3441,7 +3442,6 @@ void ___cache_free(struct kmem_cache *cachep, void *objp,
+>  	check_irq_off();
+>  	kmemleak_free_recursive(objp, cachep->flags);
+>  	objp = cache_free_debugcheck(cachep, objp, caller);
+> -	memcg_slab_free_hook(cachep, &objp, 1);
+>  
+>  	/*
+>  	 * Skip calling cache_free_alien() when the platform is not numa.
+> diff --git a/mm/slab.h b/mm/slab.h
+> index db9fb5c8dae7..a8d5eb1c323f 100644
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -547,36 +547,22 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
+>  	obj_cgroup_put(objcg);
+>  }
+>  
+> -static inline void memcg_slab_free_hook(struct kmem_cache *s_orig,
+> +static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+>  					void **p, int objects)
+>  {
+> -	struct kmem_cache *s;
+>  	struct obj_cgroup **objcgs;
+> -	struct obj_cgroup *objcg;
+> -	struct slab *slab;
+> -	unsigned int off;
+>  	int i;
+>  
+>  	if (!memcg_kmem_enabled())
+>  		return;
+>  
+> -	for (i = 0; i < objects; i++) {
+> -		if (unlikely(!p[i]))
+> -			continue;
+> -
+> -		slab = virt_to_slab(p[i]);
+> -		/* we could be given a kmalloc_large() object, skip those */
+> -		if (!slab)
+> -			continue;
+> -
+> -		objcgs = slab_objcgs(slab);
+> -		if (!objcgs)
+> -			continue;
+> +	objcgs = slab_objcgs(slab);
+> +	if (!objcgs)
+> +		return;
+>  
+> -		if (!s_orig)
+> -			s = slab->slab_cache;
+> -		else
+> -			s = s_orig;
+> +	for (i = 0; i < objects; i++) {
+> +		struct obj_cgroup *objcg;
+> +		unsigned int off;
+>  
+>  		off = obj_to_index(s, slab, p[i]);
+>  		objcg = objcgs[off];
+> @@ -628,7 +614,7 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
+>  {
+>  }
+>  
+> -static inline void memcg_slab_free_hook(struct kmem_cache *s,
+> +static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+>  					void **p, int objects)
+>  {
+>  }
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 1f699ddfff7f..3794afe32b5f 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -3435,9 +3435,6 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
+>  	struct kmem_cache_cpu *c;
+>  	unsigned long tid;
+>  
+> -	/* memcg_slab_free_hook() is already called for bulk free. */
+> -	if (!tail)
+> -		memcg_slab_free_hook(s, &head, 1);
+>  redo:
+>  	/*
+>  	 * Determine the currently cpus per cpu slab.
+> @@ -3497,9 +3494,10 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
+>  }
+>  
+>  static __always_inline void slab_free(struct kmem_cache *s, struct slab *slab,
+> -				      void *head, void *tail, int cnt,
+> +				      void *head, void *tail, void **p, int cnt,
+>  				      unsigned long addr)
+>  {
+> +	memcg_slab_free_hook(s, slab, p, cnt);
+>  	/*
+>  	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
+>  	 * to remove objects, whose reuse must be delayed.
+> @@ -3521,7 +3519,7 @@ void kmem_cache_free(struct kmem_cache *s, void *x)
+>  	if (!s)
+>  		return;
+>  	trace_kmem_cache_free(_RET_IP_, x, s->name);
+> -	slab_free(s, virt_to_slab(x), x, NULL, 1, _RET_IP_);
+> +	slab_free(s, virt_to_slab(x), x, NULL, &x, 1, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(kmem_cache_free);
+>  
+> @@ -3562,79 +3560,59 @@ static inline
+>  int build_detached_freelist(struct kmem_cache *s, size_t size,
+>  			    void **p, struct detached_freelist *df)
+>  {
+> -	size_t first_skipped_index = 0;
+>  	int lookahead = 3;
+>  	void *object;
+>  	struct folio *folio;
+> -	struct slab *slab;
+> -
+> -	/* Always re-init detached_freelist */
+> -	df->slab = NULL;
+> -
+> -	do {
+> -		object = p[--size];
+> -		/* Do we need !ZERO_OR_NULL_PTR(object) here? (for kfree) */
+> -	} while (!object && size);
+> -
+> -	if (!object)
+> -		return 0;
+> +	size_t same;
+>  
+> +	object = p[--size];
+>  	folio = virt_to_folio(object);
+>  	if (!s) {
+>  		/* Handle kalloc'ed objects */
+>  		if (unlikely(!folio_test_slab(folio))) {
+>  			free_large_kmalloc(folio, object);
+> -			p[size] = NULL; /* mark object processed */
+> +			df->slab = NULL;
+>  			return size;
+>  		}
+>  		/* Derive kmem_cache from object */
+> -		slab = folio_slab(folio);
+> -		df->s = slab->slab_cache;
+> +		df->slab = folio_slab(folio);
+> +		df->s = df->slab->slab_cache;
+>  	} else {
+> -		slab = folio_slab(folio);
+> +		df->slab = folio_slab(folio);
+>  		df->s = cache_from_obj(s, object); /* Support for memcg */
+>  	}
+>  
+> -	if (is_kfence_address(object)) {
+> -		slab_free_hook(df->s, object, false);
+> -		__kfence_free(object);
+> -		p[size] = NULL; /* mark object processed */
+> -		return size;
+> -	}
+> -
+>  	/* Start new detached freelist */
+> -	df->slab = slab;
+> -	set_freepointer(df->s, object, NULL);
+>  	df->tail = object;
+>  	df->freelist = object;
+> -	p[size] = NULL; /* mark object processed */
+>  	df->cnt = 1;
+>  
+> +	if (is_kfence_address(object))
+> +		return size;
+> +
+> +	set_freepointer(df->s, object, NULL);
+> +
+> +	same = size;
+>  	while (size) {
+>  		object = p[--size];
+> -		if (!object)
+> -			continue; /* Skip processed objects */
+> -
+>  		/* df->slab is always set at this point */
+>  		if (df->slab == virt_to_slab(object)) {
+>  			/* Opportunity build freelist */
+>  			set_freepointer(df->s, object, df->freelist);
+>  			df->freelist = object;
+>  			df->cnt++;
+> -			p[size] = NULL; /* mark object processed */
+> -
+> +			same--;
+> +			if (size != same)
+> +				swap(p[size], p[same]);
+>  			continue;
+>  		}
+>  
+>  		/* Limit look ahead search */
+>  		if (!--lookahead)
+>  			break;
+> -
+> -		if (!first_skipped_index)
+> -			first_skipped_index = size + 1;
+>  	}
+>  
+> -	return first_skipped_index;
+> +	return same;
+>  }
+>  
+>  /* Note that interrupts must be enabled when calling this function. */
+> @@ -3643,7 +3621,6 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
+>  	if (WARN_ON(!size))
+>  		return;
+>  
+> -	memcg_slab_free_hook(s, p, size);
+>  	do {
+>  		struct detached_freelist df;
+>  
+> @@ -3651,7 +3628,8 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
+>  		if (!df.slab)
+>  			continue;
+>  
+> -		slab_free(df.s, df.slab, df.freelist, df.tail, df.cnt, _RET_IP_);
+> +		slab_free(df.s, df.slab, df.freelist, df.tail, &p[size], df.cnt,
+> +			  _RET_IP_);
+>  	} while (likely(size));
+>  }
+>  EXPORT_SYMBOL(kmem_cache_free_bulk);
+> @@ -4554,7 +4532,7 @@ void kfree(const void *x)
+>  		return;
+>  	}
+>  	slab = folio_slab(folio);
+> -	slab_free(slab->slab_cache, slab, object, NULL, 1, _RET_IP_);
+> +	slab_free(slab->slab_cache, slab, object, NULL, &object, 1, _RET_IP_);
+>  }
+>  EXPORT_SYMBOL(kfree);
+>  
 

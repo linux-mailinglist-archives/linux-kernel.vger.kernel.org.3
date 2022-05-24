@@ -2,130 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F85532883
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CA45328B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235531AbiEXLHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S236652AbiEXLQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbiEXLHA (ORCPT
+        with ESMTP id S236485AbiEXLPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 07:07:00 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C27E6D4F3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:06:59 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-f1d5464c48so21792320fac.6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VKKe+6qBQIm12lCUpH0Sxp4+NXI90A0uXZAqIc10ncY=;
-        b=HwVDCzwjATjlGAIJ3+JeU4cM+iRQQ0fGccnqZgJ7Dwvs7Q6IFYDh0GJqXRziKDGGJ+
-         H9tvhZs5mxuIKSyQC8CFDXsKX9ogyBkEB/C1aD8YRjrHCStbKZ1iVsKD1nOiQ0QWAPWV
-         JqX6sDB6TFi1tf4w85qQNxyJD6rUNFrzCCJoivsunDquhDIaodahgeZJjaW3QwR6inhe
-         ISTLZAj0L19EcmGbVQEmwkVQGCiok/ehKp4L+eIeGMrwa6PmU+sPKAop8VeTZlsy26CB
-         4Cjd11YnAUYOcDGo8S0E56AxsYEHrAr1H/kAB3H8yRT9WAX0cj6wDvMJ38vJpf/aqHA1
-         K9iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VKKe+6qBQIm12lCUpH0Sxp4+NXI90A0uXZAqIc10ncY=;
-        b=M+srL901mlcPNOdtRZvU7sqyx4frt0vYQZ56yo5k9iMGZHut1D9+jjKNXKSb6mRGnf
-         CMBFMBwNh008Pw7agdgBQfnUtI9R0iw01Whwk4pgAyZi3d1alw90/AaIORDSV5AsBOs3
-         zVn0sVe48Csv8nrvGyrluetoYeffufFY4/cN2xDtsoS80tPoefFZhQlNeACkkzcrx7xc
-         B14gB7RcskB292cJGzRKLjn9TOp7irKl8ddhsx3rAhaXaVMCN7vw9d96cdzbTju+/SYr
-         QTk3lWlJWoPDgUV64VUZFvpJFiIn17lTWV5xIBUxCDeMocb8SaGJOm/ekM5irgAg7czY
-         ydBQ==
-X-Gm-Message-State: AOAM5332r6qmPjcQQbPREpzhBCakfZ9D4uX0/OMaovc8u2fv2++txIPA
-        ihXkDPr4G7TTjUMmXlCzPRJwX4MKSTQfakJwUu5u/g==
-X-Google-Smtp-Source: ABdhPJzhl26EPYePCoZDxKKBpid3sxP95MD1D8lQQk/DlugmdrO4YT7uA/zZbc8AT4HaqELuAJenHw20CnIPSKMbeCQ=
-X-Received: by 2002:a05:6870:4184:b0:f1:97d2:6696 with SMTP id
- y4-20020a056870418400b000f197d26696mr2104578oac.148.1653390417932; Tue, 24
- May 2022 04:06:57 -0700 (PDT)
+        Tue, 24 May 2022 07:15:37 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C126B09F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:15:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L6s7W5XBcz4ySp;
+        Tue, 24 May 2022 21:15:35 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     naveen.n.rao@linux.vnet.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+In-Reply-To: <cover.1652074503.git.christophe.leroy@csgroup.eu>
+References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v3 00/25] powerpc: ftrace optimisation and cleanup and more [v3]
+Message-Id: <165339055456.1718562.6144281793562720834.b4-ty@ellerman.id.au>
+Date:   Tue, 24 May 2022 21:09:14 +1000
 MIME-Version: 1.0
-References: <20220512112347.18717-1-andrew@daynix.com> <CACGkMEvH1yE0CZYdstAK32DkEucejNO+V7PEAZD_641+rp2aKA@mail.gmail.com>
-In-Reply-To: <CACGkMEvH1yE0CZYdstAK32DkEucejNO+V7PEAZD_641+rp2aKA@mail.gmail.com>
-From:   Andrew Melnichenko <andrew@daynix.com>
-Date:   Tue, 24 May 2022 14:06:46 +0300
-Message-ID: <CABcq3pFJcsoj+dDf6tirT_hfTB6rj9+f6KNFafwg+usqYwTdDA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/5] TUN/VirtioNet USO features support.
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, mst <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Mon, 9 May 2022 07:35:58 +0200, Christophe Leroy wrote:
+> This series provides optimisation and cleanup of ftrace on powerpc.
+> 
+> With this series ftrace activation is about 20% faster on an 8xx.
+> 
+> At the end of the series come additional cleanups around ppc-opcode,
+> that would likely conflict with this series if posted separately.
+> 
+> [...]
 
-The issue is that host segments packets between guests on the same host.
-Tests show that it happens because SKB_GSO_DODGY skb offload in
-virtio_net_hdr_from_skb().
-To do segmentation you need to remove SKB_GSO_DODGY or add SKB_GSO_PARTIAL
-The solution with DODGY/PARTIAL offload looks like a dirty hack, so
-for now, I've lived it as it is for further investigation.
+Applied to powerpc/next.
 
+[01/25] powerpc/ftrace: Refactor prepare_ftrace_return()
+        https://git.kernel.org/powerpc/c/d996d5053eb5c0abc0358e5670014a62ada6967e
+[02/25] powerpc/ftrace: Remove redundant create_branch() calls
+        https://git.kernel.org/powerpc/c/ae3a2a2188214adc355a5bdf6deb29120886c96f
+[03/25] powerpc/code-patching: Inline is_offset_in_{cond}_branch_range()
+        https://git.kernel.org/powerpc/c/1acbf27e8a5843911d122ad0008e79ec5f7b6382
+[04/25] powerpc/ftrace: Use is_offset_in_branch_range()
+        https://git.kernel.org/powerpc/c/a1facd2578b312770aaea384adc7de0ed3f543d1
+[05/25] powerpc/code-patching: Inline create_branch()
+        https://git.kernel.org/powerpc/c/d2f47dabf1252520a88d257133e6bdec474fd935
+[06/25] powerpc/ftrace: Inline ftrace_modify_code()
+        https://git.kernel.org/powerpc/c/2c920fca8c70287c4448f2653a388ecca7b32e83
+[07/25] powerpc/ftrace: Use patch_instruction() return directly
+        https://git.kernel.org/powerpc/c/bbffdd2fc743bdc529f9a8264bdb5d3491f58c95
+[08/25] powerpc: Add CONFIG_PPC64_ELF_ABI_V1 and CONFIG_PPC64_ELF_ABI_V2
+        https://git.kernel.org/powerpc/c/661aa880398add5c27943cb077c451a45cc112a1
+[09/25] powerpc: Replace PPC64_ELF_ABI_v{1/2} by CONFIG_PPC64_ELF_ABI_V{1/2}
+        https://git.kernel.org/powerpc/c/7d40aff8213c92e64a1576ba9dfebcd201c0564d
+[10/25] powerpc: Finalise cleanup around ABI use
+        https://git.kernel.org/powerpc/c/5b89492c03e5c0a2c259b97d7d4c1bb9b02860aa
+[11/25] powerpc/ftrace: Make __ftrace_make_{nop/call}() common to PPC32 and PPC64
+        https://git.kernel.org/powerpc/c/23b44fc248f420bbcd0dcd290c3399885360984d
+[12/25] powerpc/ftrace: Don't include ftrace.o for CONFIG_FTRACE_SYSCALLS
+        https://git.kernel.org/powerpc/c/a3d0f5b4b7e425b8abeadda1e76496bda88989bd
+[13/25] powerpc/ftrace: Use CONFIG_FUNCTION_TRACER instead of CONFIG_DYNAMIC_FTRACE
+        https://git.kernel.org/powerpc/c/c2cba93d1a5e2475a636b5cb974da6b73d7a72df
+[14/25] powerpc/ftrace: Remove ftrace_plt_tramps[]
+        https://git.kernel.org/powerpc/c/ccf6607e45aaf5e0ceabfe018aeb01818a936697
+[15/25] powerpc/ftrace: Use BRANCH_SET_LINK instead of value 1
+        https://git.kernel.org/powerpc/c/cf9df92a823ce24c19c4c64b334dc5cadd74fa98
+[16/25] powerpc/ftrace: Use PPC_RAW_xxx() macros instead of opencoding.
+        https://git.kernel.org/powerpc/c/e89aa642be21b14e53bab40a37b8c6b0cf05143d
+[17/25] powerpc/ftrace: Use size macro instead of opencoding
+        https://git.kernel.org/powerpc/c/c8deb28095f9cd2ee2f4d16e948c9e816a22811b
+[18/25] powerpc/ftrace: Simplify expected_nop_sequence()
+        https://git.kernel.org/powerpc/c/b97d0e3dcfba07590ec3d2ca2b95b2f029962d16
+[19/25] powerpc/ftrace: Minimise number of #ifdefs
+        https://git.kernel.org/powerpc/c/af8b9f352ffd435734ab8f94f99ccb922da916b4
+[20/25] powerpc/inst: Add __copy_inst_from_kernel_nofault()
+        https://git.kernel.org/powerpc/c/8dfdbe4368c09d9eeae2df8968ee6c345ec8c1b5
+[21/25] powerpc/ftrace: Don't use copy_from_kernel_nofault() in module_trampoline_target()
+        https://git.kernel.org/powerpc/c/8052d043a48f733905e8ea8f900bf58b441a317f
+[22/25] powerpc/inst: Remove PPC_INST_BRANCH
+        https://git.kernel.org/powerpc/c/4390a58ee1c37dc915dcf44fabe925b160f5bcf0
+[23/25] powerpc/modules: Use PPC_LI macros instead of opencoding
+        https://git.kernel.org/powerpc/c/e0c2ef43210b023ed9a58c520c2fbede7010c592
+[24/25] powerpc/inst: Remove PPC_INST_BL
+        https://git.kernel.org/powerpc/c/ae2c760fa10ba2475aa46fffa6be42050586c604
+[25/25] powerpc/opcodes: Remove unused PPC_INST_XXX macros
+        https://git.kernel.org/powerpc/c/6bdc81eca9519a85d36b3915136640ef9cba1a23
 
-On Tue, May 17, 2022 at 9:32 AM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Thu, May 12, 2022 at 7:33 PM Andrew Melnychenko <andrew@daynix.com> wrote:
-> >
-> > Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
-> > Technically they enable NETIF_F_GSO_UDP_L4
-> > (and only if USO4 & USO6 are set simultaneously).
-> > It allows to transmission of large UDP packets.
-> >
-> > Different features USO4 and USO6 are required for qemu where Windows guests can
-> > enable disable USO receives for IPv4 and IPv6 separately.
-> > On the other side, Linux can't really differentiate USO4 and USO6, for now.
-> > For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
-> > In the future, there would be a mechanism to control UDP_L4 GSO separately.
-> >
-> > Test it WIP Qemu https://github.com/daynix/qemu/tree/Dev_USOv2
-> >
-> > New types for VirtioNet already on mailing:
-> > https://lists.oasis-open.org/archives/virtio-comment/202110/msg00010.html
-> >
-> > Also, there is a known issue with transmitting packages between two guests.
->
-> Could you explain this more? It looks like a bug. (Or any pointer to
-> the discussion)
->
-> Thanks
->
-> > Without hacks with skb's GSO - packages are still segmented on the host's postrouting.
-> >
-> > Andrew (5):
-> >   uapi/linux/if_tun.h: Added new offload types for USO4/6.
-> >   driver/net/tun: Added features for USO.
-> >   uapi/linux/virtio_net.h: Added USO types.
-> >   linux/virtio_net.h: Support USO offload in vnet header.
-> >   drivers/net/virtio_net.c: Added USO support.
-> >
-> >  drivers/net/tap.c               | 10 ++++++++--
-> >  drivers/net/tun.c               |  8 +++++++-
-> >  drivers/net/virtio_net.c        | 19 +++++++++++++++----
-> >  include/linux/virtio_net.h      |  9 +++++++++
-> >  include/uapi/linux/if_tun.h     |  2 ++
-> >  include/uapi/linux/virtio_net.h |  4 ++++
-> >  6 files changed, 45 insertions(+), 7 deletions(-)
-> >
-> > --
-> > 2.35.1
-> >
->
+cheers

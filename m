@@ -2,232 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32795332F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437E75332F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241896AbiEXV36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 17:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60852 "EHLO
+        id S241911AbiEXVbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 17:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbiEXV34 (ORCPT
+        with ESMTP id S230110AbiEXVbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 17:29:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414EF7A821;
-        Tue, 24 May 2022 14:29:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B168EB81BDB;
-        Tue, 24 May 2022 21:29:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 214A0C34100;
-        Tue, 24 May 2022 21:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653427792;
-        bh=AFWPUQLg3Lbg9QwCKuhXWThTOdPU5aKqp0hjACicNMM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=PgG98DMxQAVHzO+sjB04gDudV8hBwr42+EVh2JE+rr7R66sLxih4kroDcYWGFuxyi
-         y9UkL3Nqj/xB/hcFNTOTxkC7RHBKIYsA+H/H2/L0Iuhwj2npfa+FnH7+qX9mrpV1Hp
-         FqdnFr2nwMQIZ9gBBJr+9Nkzcm5Iu7mbqiAb+PPr5oTuslhyu7U9F4aJOqE+Wad+Yn
-         ZJPonpjUG6fLIYoXHYP48RzdL+7DYwFlZboPX/JVaQf5S1Q16Xrhj9HfJDzMet+81o
-         MmkapYfwS9Gw4qmB/mAQsUETpodamux2rVY5SG/xN63QP9SH+GWx7rrtBBDHz0zXMp
-         t5G98Yp9i+8jQ==
-Date:   Tue, 24 May 2022 16:29:50 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>, linuxarm@huawei.com,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Songxiaowei <songxiaowei@hisilicon.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH v14 04/11] PCI: kirin: Add support for bridge slot DT
- schema
-Message-ID: <20220524212950.GA269059@bhelgaas>
+        Tue, 24 May 2022 17:31:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B39C26
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:31:06 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OLLr1t010538;
+        Tue, 24 May 2022 21:30:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=qKIrqNLPjaLRBqiv4WGWBu1SfM8aEazEXMVCpIalUaA=;
+ b=QJCk2vz8emPFw9K1NUEdxUUuEeKx8N2W8LHmtcmcimoor3ng/E2LJmy0dBDoLN+g9Ene
+ 14k5Jt4sLBkKoQ6EG5x5//Jk3dfYI1TWPnd+tWsGQ/P7hiZ3trBmWTlRTPnEoZ2Qi7VK
+ arWYp1CdPtDw1Z2b6k2l5pKghx+MxXz5nOEBvwZluE2UuNAbn2LfFdiktci7yiOrmQk5
+ u6NDqgztveHK99QFLK3I1MjMCIFljcPHgkQPXjoEavQp1WbkfKKz10LpLYd5I5OQKylg
+ L1PbjojZ+nCwX2NCRglH0p90wm6A61Puq0CRSu8NrOOZ992kXejGWodQ21wfmoYM+zP/ hg== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g977ar3jh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 21:30:57 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OLS1hE026369;
+        Tue, 24 May 2022 21:30:56 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma03dal.us.ibm.com with ESMTP id 3g93ut9qve-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 21:30:56 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OLUtLq21037386
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 May 2022 21:30:55 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB41AAE062;
+        Tue, 24 May 2022 21:30:55 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 12F58AE05C;
+        Tue, 24 May 2022 21:30:55 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.82.60])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 24 May 2022 21:30:54 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        Brad Bishop <bradleyb@fuzziesquirrel.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Joel Stanley <joel@jms.id.au>
+Subject: [PATCH] eeprom: at25: Split reads into chunks and cap write size
+Date:   Tue, 24 May 2022 16:30:43 -0500
+Message-Id: <20220524213043.57559-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524215507.16e97815@coco.lan>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0eDLgV76QWcYSiEpyNuDq0HGIxrqz_1T
+X-Proofpoint-GUID: 0eDLgV76QWcYSiEpyNuDq0HGIxrqz_1T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-24_10,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ mlxscore=0 lowpriorityscore=0 phishscore=0 clxscore=1011 impostorscore=0
+ suspectscore=0 priorityscore=1501 malwarescore=0 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2205240105
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Yicong, Rafael, just FYI; trying to figure out how native host
-bridge drivers should do power management]
+From: Brad Bishop <bradleyb@fuzziesquirrel.com>
 
-On Tue, May 24, 2022 at 09:55:41PM +0200, Mauro Carvalho Chehab wrote:
-> Em Tue, 24 May 2022 12:19:47 -0500
-> Bjorn Helgaas <helgaas@kernel.org> escreveu:
-> > On Tue, Oct 19, 2021 at 07:06:41AM +0100, Mauro Carvalho Chehab wrote:
-> > > On HiKey970, there's a PEX 8606 PCI bridge on its PHY with
-> > > 6 lanes. Only 4 lanes are connected:
-> > > 
-> > > 	lane 0 - connected to Kirin 970;
-> > > 	lane 4 - M.2 slot;
-> > > 	lane 5 - mini PCIe slot;
-> > > 	lane 6 - in-board Ethernet controller.
-> > > 
-> > > Each lane has its own PERST# gpio pin, and needs a clock
-> > > request.
-> > > 
-> > > Add support to parse a DT schema containing the above data.
-> > > 
-> > > Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> > > Acked-by: Xiaowei Song <songxiaowei@hisilicon.com>
-> > > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > > ---
-> > > 
-> > > See [PATCH v14 00/11] at: https://lore.kernel.org/all/cover.1634622716.git.mchehab+huawei@kernel.org/
-> > > 
-> > >  drivers/pci/controller/dwc/pcie-kirin.c | 262 +++++++++++++++++++++---
-> > >  1 file changed, 231 insertions(+), 31 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-kirin.c b/drivers/pci/controller/dwc/pcie-kirin.c
-> > > index 86c13661e02d..de375795a3b8 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-kirin.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-kirin.c
-> > > @@ -52,6 +52,19 @@
-> > >  #define PCIE_DEBOUNCE_PARAM	0xF0F400
-> > >  #define PCIE_OE_BYPASS		(0x3 << 28)
-> > >  
-> > > +/*
-> > > + * Max number of connected PCI slots at an external PCI bridge
-> > > + *
-> > > + * This is used on HiKey 970, which has a PEX 8606 bridge with has
-> > > + * 4 connected lanes (lane 0 upstream, and the other tree lanes,
-> > > + * one connected to an in-board Ethernet adapter and the other two
-> > > + * connected to M.2 and mini PCI slots.
-> > > + *
-> > > + * Each slot has a different clock source and uses a separate PERST#
-> > > + * pin.
-> > > ...  
-> > 
-> > > +static int kirin_pcie_add_bus(struct pci_bus *bus)
-> > > +{
-> > > +	struct dw_pcie *pci = to_dw_pcie_from_pp(bus->sysdata);
-> > > +	struct kirin_pcie *kirin_pcie = to_kirin_pcie(pci);
-> > > +	int i, ret;
-> > > +
-> > > +	if (!kirin_pcie->num_slots)
-> > > +		return 0;
-> > > +
-> > > +	/* Send PERST# to each slot */
-> > > +	for (i = 0; i < kirin_pcie->num_slots; i++) {
-> > > +		ret = gpio_direction_output(kirin_pcie->gpio_id_reset[i], 1);
-> > > +		if (ret) {
-> > > +			dev_err(pci->dev, "PERST# %s error: %d\n",
-> > > +				kirin_pcie->reset_names[i], ret);
-> > > +		}
-> > > +	}
-> > > +	usleep_range(PERST_2_ACCESS_MIN, PERST_2_ACCESS_MAX);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +
-> > >  static struct pci_ops kirin_pci_ops = {
-> > >  	.read = kirin_pcie_rd_own_conf,
-> > >  	.write = kirin_pcie_wr_own_conf,
-> > > +	.add_bus = kirin_pcie_add_bus,  
-> > 
-> > This seems a little weird.  Can you educate me?
-> > 
-> > From [1], it looks like the topology here is:
-> > 
-> >   00:00.0 Root Port
-> >   01:00.0 PEX 8606 Upstream Port
-> >   02:01.0 PEX 8606 Downstream Port
-> >   02:04.0 PEX 8606 Downstream Port
-> >   02:05.0 PEX 8606 Downstream Port
-> >   02:07.0 PEX 8606 Downstream Port
-> >   02:09.0 PEX 8606 Downstream Port
-> >   06:00.0 RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller 
-> > 
-> > The .add_bus() callback will be called for *every* child bus we want
-> > to enumerate.  So if any of those PEX 8606 Downstream Ports are
-> > connected to another switch, when we enumerate the secondary buses of
-> > that other switch, it looks like we'll send PERST# to all the slots
-> > again, which doesn't sound right.  Am I missing something?
-> 
-> The implementation made on Kirin 960/970 for PCI is to not have a
-> PERST# bus. Instead, it has one independent GPIO driving the PERST#
-> signal for each single individual port that is physically connected.
-> 
-> See the schematics at:
-> 
-> 	- https://www.96boards.org/documentation/consumer/hikey/hikey970/hardware-docs/files/hikey970-schematics.pdf
-> 	- https://github.com/96boards/documentation/blob/master/consumer/hikey/hikey960/hardware-docs/HiKey960_Schematics.pdf
-> 
-> Yet, my first proposal were to send all GPIOs altogether. See, for
-> instance:
-> 
-> 	https://lore.kernel.org/all/3acf2c073e8ea67efaae91074dda0763bf7a2ab9.1626768323.git.mchehab+huawei@kernel.org/
-> 
-> There, the PERST# signals are initialized altogether, at the end
-> of hi3670_pcie_phy_power_on():
-> 
-> 	/* perst assert Endpoints */
-> 	usleep_range(21000, 23000);
-> 	for (i = 0; i < phy->n_gpio_resets; i++) {
-> 		ret = gpio_direction_output(phy->gpio_id_reset[i], 1);
-> 		if (ret)
-> 			return ret;
-> 	}
-> 	usleep_range(10000, 11000);
-> 
-> 	ret = is_pipe_clk_stable(phy);
-> 	if (!ret)
-> 		goto disable_clks;
-> 
-> 	hi3670_pcie_set_eyeparam(phy);
-> 
-> 	ret = hi3670_pcie_noc_power(phy, false);
-> 	if (ret)
-> 		goto disable_clks;
-> 
-> During the review process, I was requested to change it in order to do it
-> via .add_bus. 
+Make use of spi_max_transfer_size to avoid requesting transfers that are
+too large for some spi controllers.
 
-I see Rob suggested .add_bus() at
-https://lore.kernel.org/all/CAL_JsqLA7Z908SQKkZpyEcCvpkWsW3pa42eajpxCSkbUy4rv9g@mail.gmail.com/
+Signed-off-by: Brad Bishop <bradleyb@fuzziesquirrel.com>
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ drivers/misc/eeprom/at25.c | 93 ++++++++++++++++++++++----------------
+ 1 file changed, 53 insertions(+), 40 deletions(-)
 
-This seems sort of similar to what Yicong is doing here:
-https://lore.kernel.org/r/20220517124319.47125-1-yangyicong@hisilicon.com
-but I don't know enough to put all the pieces together.
+diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
+index 8d169a35cf13..0434ffa6ec4c 100644
+--- a/drivers/misc/eeprom/at25.c
++++ b/drivers/misc/eeprom/at25.c
+@@ -79,6 +79,11 @@ static int at25_ee_read(void *priv, unsigned int offset,
+ {
+ 	struct at25_data *at25 = priv;
+ 	char *buf = val;
++	size_t max_chunk = spi_max_transfer_size(at25->spi);
++	size_t num_msgs = DIV_ROUND_UP(count, max_chunk);
++	size_t nr_bytes = 0;
++	unsigned int msg_offset;
++	size_t msg_count;
+ 	u8			*cp;
+ 	ssize_t			status;
+ 	struct spi_transfer	t[2];
+@@ -92,54 +97,59 @@ static int at25_ee_read(void *priv, unsigned int offset,
+ 	if (unlikely(!count))
+ 		return -EINVAL;
+ 
+-	cp = at25->command;
++	msg_offset = (unsigned int)offset;
++	msg_count = min(count, max_chunk);
++	while (num_msgs) {
++		cp = at25->command;
+ 
+-	instr = AT25_READ;
+-	if (at25->chip.flags & EE_INSTR_BIT3_IS_ADDR)
+-		if (offset >= BIT(at25->addrlen * 8))
+-			instr |= AT25_INSTR_BIT3;
++		instr = AT25_READ;
++		if (at25->chip.flags & EE_INSTR_BIT3_IS_ADDR)
++			if (msg_offset >= (1U << (at25->addrlen * 8)))
++				instr |= AT25_INSTR_BIT3;
+ 
+-	mutex_lock(&at25->lock);
++		mutex_lock(&at25->lock);
+ 
+-	*cp++ = instr;
+-
+-	/* 8/16/24-bit address is written MSB first */
+-	switch (at25->addrlen) {
+-	default:	/* case 3 */
+-		*cp++ = offset >> 16;
+-		fallthrough;
+-	case 2:
+-		*cp++ = offset >> 8;
+-		fallthrough;
+-	case 1:
+-	case 0:	/* can't happen: for better code generation */
+-		*cp++ = offset >> 0;
+-	}
++		*cp++ = instr;
+ 
+-	spi_message_init(&m);
+-	memset(t, 0, sizeof(t));
++		/* 8/16/24-bit address is written MSB first */
++		switch (at25->addrlen) {
++		default:	/* case 3 */
++			*cp++ = msg_offset >> 16;
++			fallthrough;
++		case 2:
++			*cp++ = msg_offset >> 8;
++			fallthrough;
++		case 1:
++		case 0:	/* can't happen: for better codegen */
++			*cp++ = msg_offset >> 0;
++		}
+ 
+-	t[0].tx_buf = at25->command;
+-	t[0].len = at25->addrlen + 1;
+-	spi_message_add_tail(&t[0], &m);
++		spi_message_init(&m);
++		memset(t, 0, sizeof(t));
+ 
+-	t[1].rx_buf = buf;
+-	t[1].len = count;
+-	spi_message_add_tail(&t[1], &m);
++		t[0].tx_buf = at25->command;
++		t[0].len = at25->addrlen + 1;
++		spi_message_add_tail(&t[0], &m);
+ 
+-	/*
+-	 * Read it all at once.
+-	 *
+-	 * REVISIT that's potentially a problem with large chips, if
+-	 * other devices on the bus need to be accessed regularly or
+-	 * this chip is clocked very slowly.
+-	 */
+-	status = spi_sync(at25->spi, &m);
+-	dev_dbg(&at25->spi->dev, "read %zu bytes at %d --> %zd\n",
+-		count, offset, status);
++		t[1].rx_buf = buf + nr_bytes;
++		t[1].len = msg_count;
++		spi_message_add_tail(&t[1], &m);
+ 
+-	mutex_unlock(&at25->lock);
+-	return status;
++		status = spi_sync(at25->spi, &m);
++
++		mutex_unlock(&at25->lock);
++
++		if (status)
++			return status;
++
++		--num_msgs;
++		msg_offset += msg_count;
++		nr_bytes += msg_count;
++	}
++
++	dev_dbg(&at25->spi->dev, "read %zu bytes at %d\n",
++		count, offset);
++	return 0;
+ }
+ 
+ /* Read extra registers as ID or serial number */
+@@ -190,6 +200,7 @@ ATTRIBUTE_GROUPS(sernum);
+ static int at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
+ {
+ 	struct at25_data *at25 = priv;
++	size_t maxsz = spi_max_transfer_size(at25->spi);
+ 	const char *buf = val;
+ 	int			status = 0;
+ 	unsigned		buf_size;
+@@ -253,6 +264,8 @@ static int at25_ee_write(void *priv, unsigned int off, void *val, size_t count)
+ 		segment = buf_size - (offset % buf_size);
+ 		if (segment > count)
+ 			segment = count;
++		if (segment > maxsz)
++			segment = maxsz;
+ 		memcpy(cp, buf, segment);
+ 		status = spi_write(at25->spi, bounce,
+ 				segment + at25->addrlen + 1);
+-- 
+2.27.0
 
-> On my tests at the boards, I didn't see the same PERST#
-> signal to hit more than once, and the driver is working fine. 
-> So, this wasn't an actual issue, as far as I can tell. 
-
-Do you remember whether you tested with a switch below the PEX 8606?
-E.g., something like this:
-
-  00:00.0 Root Port                to [bus 01-ff]
-  01:00.0 PEX 8606 Upstream Port   to [bus 02-ff]
-  02:01.0 PEX 8606 Downstream Port to [bus 06-ff]
-  06:00.0 Switch Upstream Port     to [bus 07-ff]
-  07:01.0 Switch Downstream Port   to [bus 08]
-  08:00.0 Endpoint
-
-I think kirin_pcie_add_bus() will be called several times, probably
-once for each bus (00, 01, 02, 06, 07, 08), and it looks like it will
-do the same thing every time.  Do we reset the 8606 again when we're
-about to scan bus 08?  Surely not, because otherwise we would have
-reset the 8606 when scanning bus 06 in the original topology where the
-8606 is the only switch.
-
-I don't know enough about GPIOs to understand what happens here.  The
-doc suggests that gpio_direction_output() sets the direction (output)
-and the initial output value (1).  But I don't see any other reference
-to gpio_id_reset[i] that looks like it deasserts PERST#.
-
-Bjorn

@@ -2,57 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B3B53314F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB62753318E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240873AbiEXTHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
+        id S240692AbiEXTIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240998AbiEXTHK (ORCPT
+        with ESMTP id S241126AbiEXTIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:07:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817EF1CB0B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:07:09 -0700 (PDT)
+        Tue, 24 May 2022 15:08:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0FF3EA9C;
+        Tue, 24 May 2022 12:08:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653419229; x=1684955229;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cD7PJaLnKIV9nti4SXeUThfOz5G+SRU1ytS4vha1HcY=;
-  b=YjIQgdK/D/zEZv21g5VS378AdwbZ+0je3zmG8A22XzLSTMRo0A1c7tiQ
-   YnzHu7PAXMnurcq48eGRmiR3Zhzo/atzGmta2cxUEfykb5PvoAzKaVHha
-   NLt/iZ8ij6AXoH4ary/unTvpS1MYWG/3XP7vZtecOJGk7HlSJ38cwoIWi
-   vIhrcC3YI3OsChtpoFRAjXL7AdffjbAT0bI6zncru3fdD+4XSMawimU4a
-   8Ek2cgM6OMAFqIfUqsEjRx5vw7BflH0D5WA454c+hAABJZitIxLTHS9rz
-   GNPgZnek4n8ZFCjH5jSbpmxweK4l9LkRYhGNPdgklakrHEtKEK09YrTi8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="272449476"
+  t=1653419292; x=1684955292;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=McrA50umS7uFNif0OKWyvZB3Gg9wX6U3OTSnaLvoS2o=;
+  b=DLh6++HQLO4bH2PEb83CowW9IPaPK47mgCytTW1ObJmk/lINBJR9tb9T
+   wc4cnLUVksJkh0qcZvayxcJ8as6Wj6zOed4TdkTYTL5biSHiskKbc4BpU
+   H2k+dH7s9nPleRT7nq4ENTToDw0litFX+kcr8HXzfqsFrTF82He02Kegy
+   ob+6twRut7cCyf2GEgy4AUX2kYpFiKKS2NrfrN7bCnSifKDzOTGyiIrRK
+   Mpd1S6NPfIoQ2eF+1LeS3Whc05S6hSDEC+PBTZFQxlLcvFp5mljsHFLbq
+   +kJNs5xVLtDUhSXBKJEBPF6UfQKPBMzKrjplwnTQYyhe90i1U8IsaqgNi
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="360021578"
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="272449476"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 12:07:09 -0700
+   d="scan'208";a="360021578"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 12:08:11 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="703601287"
+   d="scan'208";a="630022328"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 May 2022 12:07:07 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 24 May 2022 12:08:07 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1ntZs3-0002Mi-0x;
-        Tue, 24 May 2022 19:07:07 +0000
-Date:   Wed, 25 May 2022 03:06:53 +0800
+        id 1ntZt1-0002Mu-5D;
+        Tue, 24 May 2022 19:08:07 +0000
+Date:   Wed, 25 May 2022 03:07:57 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 7920ec8ec743875085c2bf4391dbe53634a0990a
-Message-ID: <628d2ccd.BCZGSa19RR7r9Vu5%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+To:     Pankaj Raghav <p.raghav@samsung.com>, axboe@kernel.dk, hch@lst.de,
+        snitzer@redhat.com, damien.lemoal@opensource.wdc.com, hare@suse.de,
+        Johannes.Thumshirn@wdc.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-nvme@lists.infradead.org, dm-devel@redhat.com,
+        dsterba@suse.com, jiangbo.365@bytedance.com,
+        linux-kernel@vger.kernel.org, gost.dev@samsung.com,
+        linux-block@vger.kernel.org, jaegeuk@kernel.org,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH v5 5/7] null_blk: allow non power of 2 zoned devices
+Message-ID: <202205250258.tP8p4wdJ-lkp@intel.com>
+References: <20220523161601.58078-6-p.raghav@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20220523161601.58078-6-p.raghav@samsung.com>
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,104 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 7920ec8ec743875085c2bf4391dbe53634a0990a  Merge branch into tip/master: 'sched/core'
+Hi Pankaj,
 
-elapsed time: 723m
+Thank you for the patch! Yet something to improve:
 
-configs tested: 84
-configs skipped: 3
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on device-mapper-dm/for-next linus/master hch-configfs/for-next v5.18 next-20220524]
+[cannot apply to linux-nvme/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Raghav/block-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze/20220524-011616
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220525/202205250258.tP8p4wdJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3d3c81da0adbd40eb0d2125327b7e227582b2a37
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pankaj-Raghav/block-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze/20220524-011616
+        git checkout 3d3c81da0adbd40eb0d2125327b7e227582b2a37
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-gcc tested configs:
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm64                               defconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-alpha                               defconfig
-csky                                defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-sh                               allmodconfig
-arc                                 defconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-parisc64                            defconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-riscv                randconfig-r042-20220524
-arc                  randconfig-r043-20220524
-s390                 randconfig-r044-20220524
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220524
-hexagon              randconfig-r041-20220524
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: __umoddi3
+   >>> referenced by zoned.c:89 (drivers/block/null_blk/zoned.c:89)
+   >>>               block/null_blk/zoned.o:(null_init_zoned_dev) in archive drivers/built-in.a
 
 -- 
 0-DAY CI Kernel Test Service

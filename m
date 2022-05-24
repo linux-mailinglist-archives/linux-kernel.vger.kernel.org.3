@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A315330B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A575330B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240478AbiEXSxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S240486AbiEXSxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 24 May 2022 14:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240453AbiEXSxh (ORCPT
+        with ESMTP id S240460AbiEXSxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 24 May 2022 14:53:37 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D47C579B7
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A9857B01
         for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:53:33 -0700 (PDT)
 Received: from zn.tnic (p200300ea974657c6329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57c6:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A35F91EC0606;
-        Tue, 24 May 2022 20:53:31 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 22FE81EC0622;
+        Tue, 24 May 2022 20:53:32 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1653418411;
+        t=1653418412;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cMu/m7XioOOCsVwbHfYOStEmXft/WwJngRwU6UZOBwU=;
-        b=grJSdpytBd+r3vWvC97ogxu3EwIh3D2kB3i8TLwC3bW58BtOZmcGE1g1I3gNduCXqzEBBi
-        9WDuBWnKlCvbgFDB6aysHSuNwEvpmTpXpVJ3wNoEBx3HFZsLfL1vNNWAdQimGeiGSFvaqP
-        q7RjSSzNukd/1M0GdtDBB95O7NkQ4Hk=
+        bh=2M9QqqRLgX47depXRiMTQ6cBUd+HXGc9LcO2mQh+QJw=;
+        b=SmoLtmPmAbF13I1yW9wrv0Q5YztH/n6IHFGKodaR7ouySLSF1qc4J87FrytACnl2rt1Bjo
+        vBaomNdkeCq8Du2G1gBXSLtAx18DTBvW7AN4Bd0cyEHg5jGZUXLfhYuuHZXUmdQw00DIfq
+        TMibL4vCNCKDJVm0M40jzZCVFChWi+Y=
 From:   Borislav Petkov <bp@alien8.de>
 To:     X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [RFC PATCH 2/3] x86/microcode: Default-disable late loading
-Date:   Tue, 24 May 2022 20:53:23 +0200
-Message-Id: <20220524185324.28395-3-bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH 3/3] x86/microcode: Taint and warn on late loading
+Date:   Tue, 24 May 2022 20:53:24 +0200
+Message-Id: <20220524185324.28395-4-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220524185324.28395-1-bp@alien8.de>
 References: <20220524185324.28395-1-bp@alien8.de>
@@ -53,98 +52,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Borislav Petkov <bp@suse.de>
 
-It is dangerous and it should not be used anyway - there's a nice early
-loading already.
+Warn when done and taint the kernel.
 
-Requested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 ---
- arch/x86/Kconfig                     | 11 +++++++++++
- arch/x86/kernel/cpu/common.c         |  2 ++
- arch/x86/kernel/cpu/microcode/core.c |  7 ++++++-
- 3 files changed, 19 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/microcode/core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 1c0da2dbfb26..33891b82fb65 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1345,6 +1345,17 @@ config MICROCODE_AMD
- 	  If you select this option, microcode patch loading support for AMD
- 	  processors will be enabled.
- 
-+config MICROCODE_LATE_LOADING
-+	bool "Late microcode loading (DANGEROUS)"
-+	default n
-+	depends on MICROCODE
-+	help
-+	  Loading microcode late, when the system is up and executing instructions
-+	  is a tricky business and should be avoided if possible. Just the sequence
-+	  of synchronizing all cores and SMT threads is one fragile dance which does
-+	  not guarantee that cores might not softlock after the loading. Therefore,
-+	  use this at your own risk. Late loading taints the kernel too.
-+
- config X86_MSR
- 	tristate "/dev/cpu/*/msr - Model-specific register support"
- 	help
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 2e9142797c99..c296cb1c0113 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2222,6 +2222,7 @@ void cpu_init_secondary(void)
- }
- #endif
- 
-+#ifdef CONFIG_MICROCODE_LATE_LOADING
- /*
-  * The microcode loader calls this upon late microcode load to recheck features,
-  * only when microcode has been updated. Caller holds microcode_mutex and CPU
-@@ -2251,6 +2252,7 @@ void microcode_check(void)
- 	pr_warn("x86/CPU: CPU features have changed after loading microcode, but might not take effect.\n");
- 	pr_warn("x86/CPU: Please consider either early loading through initrd/built-in or a potential BIOS update.\n");
- }
-+#endif
- 
- /*
-  * Invoked from core CPU hotplug code after hotplug operations
 diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index b72c4134f289..c717db6b6856 100644
+index c717db6b6856..f7ded2facaa0 100644
 --- a/arch/x86/kernel/cpu/microcode/core.c
 +++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -376,6 +376,7 @@ static int apply_microcode_on_target(int cpu)
- /* fake device for request_firmware */
- static struct platform_device	*microcode_pdev;
+@@ -501,6 +501,8 @@ static int microcode_reload_late(void)
+ 		microcode_check();
  
-+#ifdef CONFIG_MICROCODE_LATE_LOADING
- /*
-  * Late loading dance. Why the heavy-handed stomp_machine effort?
-  *
-@@ -543,6 +544,9 @@ static ssize_t reload_store(struct device *dev,
+ 	pr_info("Reload completed, microcode revision: 0x%x\n", boot_cpu_data.microcode);
++	pr_err("However, late loading is dangerous and it taints the kernel.\n"
++	       "You should switch to early loading, if possible.\n");
+ 
  	return ret;
  }
+@@ -541,6 +543,8 @@ static ssize_t reload_store(struct device *dev,
+ 	if (ret == 0)
+ 		ret = size;
  
-+static DEVICE_ATTR_WO(reload);
-+#endif
++	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
 +
- static ssize_t version_show(struct device *dev,
- 			struct device_attribute *attr, char *buf)
- {
-@@ -559,7 +563,6 @@ static ssize_t pf_show(struct device *dev,
- 	return sprintf(buf, "0x%x\n", uci->cpu_sig.pf);
+ 	return ret;
  }
- 
--static DEVICE_ATTR_WO(reload);
- static DEVICE_ATTR(version, 0444, version_show, NULL);
- static DEVICE_ATTR(processor_flags, 0444, pf_show, NULL);
- 
-@@ -712,7 +715,9 @@ static int mc_cpu_down_prep(unsigned int cpu)
- }
- 
- static struct attribute *cpu_root_microcode_attrs[] = {
-+#ifdef CONFIG_MICROCODE_LATE_LOADING
- 	&dev_attr_reload.attr,
-+#endif
- 	NULL
- };
  
 -- 
 2.35.1

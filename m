@@ -2,238 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5B6532D96
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0441B532D9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238898AbiEXPd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
+        id S238944AbiEXPex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238900AbiEXPdv (ORCPT
+        with ESMTP id S235282AbiEXPet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:33:51 -0400
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640D460BA1;
-        Tue, 24 May 2022 08:33:47 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id j25-20020a4ad199000000b0040e50cc687cso2654758oor.9;
-        Tue, 24 May 2022 08:33:47 -0700 (PDT)
+        Tue, 24 May 2022 11:34:49 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA947580E1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:34:48 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id i27so36105110ejd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XKQgP4gZTvt4b++ZSM+DxjPg9J0TxcLJRrQHC/0hh0s=;
+        b=qOWSHVyq0qvKCiLV6FRf5dYPoK4I2LWG04bQZX9Ixs9fvAkWtsiP4M4uyKV4L3Owf6
+         oo/24gsZWsamGHpZduBebduOB08KFZ6VWJ5T4Rc6++e7D2kmtb3TldiP+fsuOoCb58kX
+         unaIW9RfOgVRVfnTffoALlAAFpef3zWYDaCnut6LN7Ch51bKU0ykTNcCwHKcazddwjEY
+         mI7Th1MC7eFPDtnWbOTS4Yw1UAF9wvJhofUEuwNpDEWy24GA4Kld0vjqW4Ejm7tj1c5N
+         JYFsZNb30Nm8y7zM5MZDVk71xzFwlaxKIBdjayG81cNBu82apnYDEGFurYH+1lNSailj
+         Xheg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EcvZzFYCsMzS5Yx/Ut8QojBzLo1+Vtyk5hpoiHqUgoQ=;
-        b=DCg7BcnraMsFljMLazUCwZ7LkG/cF2+n1URK52uHM8THTUd82ppfAru9TEg2u3Egol
-         GRKD5iQkB0//E8yBhEPzpY0X2f2I1tBEyDACxECE813pjhsJkxMmDaZ22XgbI8+pBY1t
-         1J5fhPxUVN2p8tGquIzfQyPXN7Gp720I95QSc7wtdJD/zqT/Cpdlfy2cllPLmXiriAUU
-         x4HH+f1OwMW4ZeT7/gjQZnVN+tMzrdGCY7EY6A+B5KlL3ZewuHL2uVbeulLlcgZ2hWJl
-         B0vjUjOUolNttzuSnX0h+NV/UBkkrckc6pkMjGKY3DmAI7y+rvfc3OG4ehhMvM7/via/
-         EwIA==
-X-Gm-Message-State: AOAM53331jDsLrtKRQ4girdPUkCcjLy/bySsRMkQKXmc/1adUHZsI62i
-        Lbcj6oTxBD+vtsbfhjiMUY7nDaUe0g==
-X-Google-Smtp-Source: ABdhPJwrZvyvEMBcR9AJtWmbvbztDIs+x+vbQ1zbDfy9UYupkCeMQe1v8j8Uwml1/UtVUjNMnO15YQ==
-X-Received: by 2002:a4a:d40d:0:b0:33a:33be:9c1e with SMTP id n13-20020a4ad40d000000b0033a33be9c1emr10840977oos.96.1653406426548;
-        Tue, 24 May 2022 08:33:46 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g6-20020a9d6c46000000b0060ae8586befsm5057109otq.53.2022.05.24.08.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 08:33:45 -0700 (PDT)
-Received: (nullmailer pid 3838423 invoked by uid 1000);
-        Tue, 24 May 2022 15:33:45 -0000
-Date:   Tue, 24 May 2022 10:33:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 20/23] dt-bindings: ata: ahci: Add Baikal-T1 AHCI SATA
- controller DT schema
-Message-ID: <20220524153345.GC3730540-robh@kernel.org>
-References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
- <20220511231810.4928-21-Sergey.Semin@baikalelectronics.ru>
- <20220517201332.GB1462130-robh@kernel.org>
- <20220522204931.rcgqyyctxivyfmv7@mobilestation>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XKQgP4gZTvt4b++ZSM+DxjPg9J0TxcLJRrQHC/0hh0s=;
+        b=y8WBu6zh/4pqeWM76G/IubpmRhoWtaOaom0iAK4s8vZalN8zVNmgkxNbJ+TE6X/A+J
+         2DT87ycTtmhhp+q/uVWfjKOliLGe/g/8et6EaQG4ri8BNqOPoAHefIK9gDCw4D8W17A3
+         6B0ua3qzRsUsLkb5tzmYwcT2gwpy9YkcqtvrDN+H1oeXQ8tKcEdFLpBUezyHR9feUuk0
+         NMKkqFyMvYnWOx4hOu/91cozLtcHNaB6qJVIKTRkSr+s7Ork1K7qUhJHPF0mXSSdvPvs
+         FsjO0/EOZDqT4dwX4c8IvbClzJJEHPIK5txCDR84osXSs4/IxhuF3Xmh5kM4liehL7AG
+         dzag==
+X-Gm-Message-State: AOAM531Uztcke6GD6RBJKcu0ipgqJtSqVe4YprcGilutPBD3CTdeMKij
+        kr9JQM64QpzdeHLT6v7gsa9nSjOfQrnSSnAmSBIMrE6+Srw=
+X-Google-Smtp-Source: ABdhPJyKYl8sTqnTGs974NhxolD0105jjPI+EMpfcxAqya5Yq62Twbhixcyf3O4P7dAR/BlHaFghgyOw2QYDKA6UwPg=
+X-Received: by 2002:a17:907:160e:b0:6f4:54c0:657e with SMTP id
+ hb14-20020a170907160e00b006f454c0657emr25501932ejc.253.1653406487255; Tue, 24
+ May 2022 08:34:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220522204931.rcgqyyctxivyfmv7@mobilestation>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220520082940.2984914-1-arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20220520082940.2984914-1-arnaud.pouliquen@foss.st.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Tue, 24 May 2022 09:34:36 -0600
+Message-ID: <CANLsYkw7wjfVPTvA7SniMV8tBommm5E5w2FA0KMyRYn0BKVDyA@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/10] Introduction of rpmsg flow control service
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Chris Lew <quic_clew@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 22, 2022 at 11:49:31PM +0300, Serge Semin wrote:
-> On Tue, May 17, 2022 at 03:13:32PM -0500, Rob Herring wrote:
-> > On Thu, May 12, 2022 at 02:18:07AM +0300, Serge Semin wrote:
-> > > Baikal-T1 AHCI controller is based on the DWC AHCI SATA IP-core v4.10a
-> > > with the next specific settings: two SATA ports, cascaded CSR access based
-> > > on two clock domains (APB and AXI), selectable source of the reference
-> > > clock (though stable work is currently available from the external source
-> > > only), two reset lanes for the application and SATA ports domains. Other
-> > > than that the device is fully compatible with the generic DWC AHCI SATA
-> > > bindings.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > 
-> > > ---
-> > > 
-> > > Changelog v2:
-> > > - Rename 'syscon' property to 'baikal,bt1-syscon'.
-> > > - Drop macro usage from the example node.
-> > > ---
-> > >  .../bindings/ata/baikal,bt1-ahci.yaml         | 127 ++++++++++++++++++
-> > >  1 file changed, 127 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml b/Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-> > > new file mode 100644
-> > > index 000000000000..7c2eae75434f
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
-> > > @@ -0,0 +1,127 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/ata/baikal,bt1-ahci.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Baikal-T1 SoC AHCI SATA controller
-> > > +
-> > > +maintainers:
-> > > +  - Serge Semin <fancer.lancer@gmail.com>
-> > > +
-> > > +description: |
-> > > +  AHCI SATA controller embedded into the Baikal-T1 SoC is based on the
-> > > +  DWC AHCI SATA v4.10a IP-core.
-> > > +
-> > > +allOf:
-> > > +  - $ref: snps,dwc-ahci.yaml#
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    contains:
-> > > +      const: baikal,bt1-ahci
-> > > +
-> > > +  clocks:
-> > > +    items:
-> > > +      - description: Peripheral APB bus clock source
-> > > +      - description: Application AXI BIU clock
-> > > +      - description: Internal SATA Ports reference clock
-> > > +      - description: External SATA Ports reference clock
-> > > +
-> > > +  clock-names:
-> > > +    items:
-> > > +      - const: pclk
-> > > +      - const: aclk
-> > > +      - const: ref_int
-> > > +      - const: ref_ext
-> > > +
-> > > +  resets:
-> > > +    items:
-> > > +      - description: Application AXI BIU domain reset
-> > > +      - description: SATA Ports clock domain reset
-> > > +
-> > > +  reset-names:
-> > > +    items:
-> > > +      - const: arst
-> > > +      - const: ref
-> > > +
-> > > +  baikal,bt1-syscon:
-> > > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > > +    description:
-> > > +      Phandle reference to the CCU system controller. It is required to
-> > > +      switch between internal and external SATA reference clock sources.
-> > 
-> 
-> > Seems like the CCU system ctrlr should be a clock provider that provides 
-> > 'ref' clock and then assigned-clocks can be used to pick internal vs. 
-> > external ref.
-> 
-> By assigned-clocks do you mean using the "assigned-clock-parents"
-> property? 
+Hi Arnaud,
 
-Yes, I meant any of those properties.
+I added your patchset to my review list.  Unfortunately it sits behind
+a sizable backlog and as such I won't be able to get to it for some
+time.
 
-> Does it mean creating additional clocks exported from the
-> CCU controller, which could have got one of the two parental clocks?
+Thanks,
+Mathieu
 
-Yes, I believe so.
-
-
-> > > +
-> > > +  ports-implemented:
-> > > +    maximum: 0x3
-> > > +
-> > > +patternProperties:
-> > > +  "^sata-port@[0-9a-e]$":
-> > > +    type: object
-> > 
-> >        unevaluatedProperties: false
-> > 
-> 
-> > and then a $ref to a sata-port schema.
-> 
-> Can I set additional sata-port properties constraints afterwards? Like
-> I've done for the reg, snps,tx-ts-max and snps,rx-ts-max properties
-> here?
-
-Yes. All the constraints are effectively ANDed together.
-
-> > > +
-> > > +    properties:
-> > > +      reg:
-> > > +        minimum: 0
-> > > +        maximum: 1
-> > > +
-> > > +      snps,tx-ts-max:
-> > > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > > +        description:
-> > > +          Due to having AXI3 bus interface utilized the maximum Tx DMA
-> > > +          transaction size can't exceed 16 beats (AxLEN[3:0]).
-> > > +        minimum: 1
-> > > +        maximum: 16
-> > > +
-> > > +      snps,rx-ts-max:
-> > > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > > +        description:
-> > > +          Due to having AXI3 bus interface utilized the maximum Rx DMA
-> > > +          transaction size can't exceed 16 beats (AxLEN[3:0]).
-> > 
-> 
-> > That's not a per port limitation (even though it's a per port register)? 
-> > I think this should be implied by the compatible string.
-> 
-> The snps,{rx,tx}-ts-max property is a per-port property. I'd better
-> explicitly set the property limitation here rather than having the
-> value implicitly clamped by hardware especially seeing the limitation
-> is set by the formulae
-> (CC_MSTR_BURST_LEN * M_HDATA_WIDTH/32)) / (M_HDATA_WIDTH/32),
-> which consists of the IP-core synthesized parameters.
-
-I did not say use the h/w default.
-
-What I asking is do you have any need for this to be different per port? 
-Seems unlikely given it's just 1 bus interface for all ports IIRC. I 
-can't see why you would want to tune the performance per port to 
-anything but the max burst length. If you have no need, use the 
-compatible string to determine what to set the register value to.
-
-> > Really, firmware should configure this IMO.
-> 
-> We don't have comprehensive firmware setting these and generic HBA parameters.
-> In our case dtb is the main platform firmware.
-
-No u-boot?
-
-Rob
+On Fri, 20 May 2022 at 02:30, Arnaud Pouliquen
+<arnaud.pouliquen@foss.st.com> wrote:
+>
+> This series proposes an implementation for the rpmsg virtio transport
+> backend, of the signaling API proposed by Deepak Kumar Singh:
+> "rpmsg and glink signaling API support" [1]
+>
+> The aim of the series is to offer the possibility for an endpoint to inform
+> a remote endpoint about its state, based on a software flow control[2].
+>
+> For this a new rpmsg service( with a fixed address 64) is proposed.
+> It is responsible for:
+> - transmitting local endpoint flow control information to the remote side,
+> - informing a local endpoint about a remote endpoint flow control.
+>
+> For the rpmsg virtio transport layer the service is negotiated thanks to the
+> virtio feature flag: VIRTIO_RPMSG_F_FC
+>
+> Notice that this pull request introduces new feature in the rpmsg protocol,
+> So it has to be aligned with OpenAMP implementation.
+> Pending OpenAMP pull request is available here:
+> https://github.com/OpenAMP/open-amp/pull/394
+>
+>
+> [1]https://lkml.org/lkml/2022/1/18/867
+> [2]https://en.wikipedia.org/wiki/Software_flow_control
+>
+> Arnaud Pouliquen (8):
+>   rpmsg: core: Add rpmsg device remote flow control announcement ops
+>   rpmsg: virtio: Implement the announce_remote_fc ops
+>   rpmsg: Introduce flow control channel driver
+>   rpmsg: virtio: Add support of the VIRTIO_RPMSG_F_FC feature
+>   rpmsg: virtio: Implement the set_flow_control ops
+>   rpmsg: Add the destination address in rpmsg_set_flow_control
+>   rpmsg: tty : Add the support of the flow control
+>   rpmsg: virtio: Set default dst address on flow control
+>
+> Deepak Kumar Singh (2):
+>   rpmsg: core: Add signal API support
+>   rpmsg: char: Add TIOCMGET/TIOCMSET ioctl support
+>
+>  drivers/rpmsg/Kconfig            |  11 +++
+>  drivers/rpmsg/Makefile           |   1 +
+>  drivers/rpmsg/rpmsg_char.c       |  56 +++++++++++++--
+>  drivers/rpmsg/rpmsg_core.c       |  47 +++++++++++++
+>  drivers/rpmsg/rpmsg_fc.c         | 113 +++++++++++++++++++++++++++++++
+>  drivers/rpmsg/rpmsg_internal.h   |   9 +++
+>  drivers/rpmsg/virtio_rpmsg_bus.c | 111 +++++++++++++++++++++++++++++-
+>  drivers/tty/rpmsg_tty.c          |  50 ++++++++++++++
+>  include/linux/rpmsg.h            |  15 ++++
+>  include/linux/rpmsg/fc.h         |  51 ++++++++++++++
+>  10 files changed, 456 insertions(+), 8 deletions(-)
+>  create mode 100644 drivers/rpmsg/rpmsg_fc.c
+>  create mode 100644 include/linux/rpmsg/fc.h
+>
+> --
+> 2.25.1
+>

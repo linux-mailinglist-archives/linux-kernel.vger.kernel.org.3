@@ -2,63 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815F6532758
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1196532765
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234402AbiEXKSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 06:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
+        id S236018AbiEXKTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 06:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiEXKSa (ORCPT
+        with ESMTP id S235957AbiEXKTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:18:30 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC85E114E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:18:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653387509; x=1684923509;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xSgj51pG5C3QFfOReMyZoIvSUtU6wGmpwG+rrptWICI=;
-  b=FaJewR6fQXZxt6b7UaG8FECvCWevopiZRLrYMM5V7J/vffrBeftoT25+
-   kMQI80VDkPEkPxF2kMF7MEA726TIKDBzivJbZrTVMW2P8yd5bWeM5peHD
-   zyTfgN4+jgIEIAWgsjZAqYuYI4ccPtQWI70oBswJmjle5YM6kRLTIU1L4
-   urVQF85hf8S1UDyQ+Gh/OGyE87CURaAc9zci6G1WR90hYA0OdZLR6dY4A
-   1auyYsSL9o+TPWcYkSom4DTKorDY8os39Lren2ZKaD/TU/STFJplQ0yTg
-   akxqSKil5D5dWRCCBnv9Z+lceXnL9oCMAwsr8qe20esKgOY0RFeb2IZqu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273486197"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273486197"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 03:18:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="820230569"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 24 May 2022 03:18:27 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntRcQ-0001xi-EV;
-        Tue, 24 May 2022 10:18:26 +0000
-Date:   Tue, 24 May 2022 18:17:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bhanuprakash Modem <bhanuprakash.modem@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Jani Nikula <jani.nikula@intel.com>,
-        Arun R Murthy <arun.r.murthy@intel.com>,
-        Harry Wentland <harry.wentland@amd.com>
-Subject: [drm-misc:drm-misc-next 1106/1116]
- drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:2: error:
- call to undeclared function 'crtc_debugfs_init'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202205241843.8EWKesIA-lkp@intel.com>
+        Tue, 24 May 2022 06:19:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BBEE8A336
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653387544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5hjdGDxm/5eb7UZfehykEkfZZM041fRa5GaKQ9lwQHI=;
+        b=iKpecxYMD7VCxtrbU+sPxVvd0BSKFPCnIGYphDjbIyqtrXmm7uONgJzKCgiq2l2C1zb1ED
+        /eqwxKuc7BCt611qLNzwgMt1rlWEUTeCzgQN74FbOYZv9C6PUgx7VCkkvioUfM7nXLcpQv
+        9su6hBX4jKR9SNvklGaEN9jbKuR/20Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-13-cdRBusv8OiWHr2Ge-bjGGw-1; Tue, 24 May 2022 06:19:03 -0400
+X-MC-Unique: cdRBusv8OiWHr2Ge-bjGGw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7889A101A52C;
+        Tue, 24 May 2022 10:19:00 +0000 (UTC)
+Received: from localhost (ovpn-13-156.pek2.redhat.com [10.72.13.156])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2727240E7F0C;
+        Tue, 24 May 2022 10:18:59 +0000 (UTC)
+Date:   Tue, 24 May 2022 18:18:55 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Young <dyoung@redhat.com>, d.hatayama@jp.fujitsu.com,
+        akpm@linux-foundation.org, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
+        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 24/30] panic: Refactor the panic path
+Message-ID: <YoyxD3WApHpa/N1n@MiWiFi-R3L-srv>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-25-gpiccoli@igalia.com>
+ <Yn0TnsWVxCcdB2yO@alley>
+ <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
+ <20220519234502.GA194232@MiWiFi-R3L-srv>
+ <ded31ec0-076b-2c5b-0fe6-0c274954821f@igalia.com>
+ <YoyQyHHfhIIXSX0U@alley>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YoyQyHHfhIIXSX0U@alley>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,54 +91,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   1a3b1ea111c44d9dce9f70ba032531a223395a15
-commit: 4cd79f614b501e496ee8e4181d528c0cc1cb4e18 [1106/1116] drm/amd/display: Move connector debugfs to drm
-config: arm64-randconfig-r001-20220524 (https://download.01.org/0day-ci/archive/20220524/202205241843.8EWKesIA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout 4cd79f614b501e496ee8e4181d528c0cc1cb4e18
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/
+On 05/24/22 at 10:01am, Petr Mladek wrote:
+> On Fri 2022-05-20 08:23:33, Guilherme G. Piccoli wrote:
+> > On 19/05/2022 20:45, Baoquan He wrote:
+> > > [...]
+> > >> I really appreciate the summary skill you have, to convert complex
+> > >> problems in very clear and concise ideas. Thanks for that, very useful!
+> > >> I agree with what was summarized above.
+> > > 
+> > > I want to say the similar words to Petr's reviewing comment when I went
+> > > through the patches and traced each reviewing sub-thread to try to
+> > > catch up. Petr has reivewed this series so carefully and given many
+> > > comments I want to ack immediately.
+> > > 
+> > > I agree with most of the suggestions from Petr to this patch, except of
+> > > one tiny concern, please see below inline comment.
+> > 
+> > Hi Baoquan, thanks! I'm glad you're also reviewing that =)
+> > 
+> > 
+> > > [...]
+> > > 
+> > > I like the proposed skeleton of panic() and code style suggested by
+> > > Petr very much. About panic_prefer_crash_dump which might need be added,
+> > > I hope it has a default value true. This makes crash_dump execute at
+> > > first by default just as before, unless people specify
+> > > panic_prefer_crash_dump=0|n|off to disable it. Otherwise we need add
+> > > panic_prefer_crash_dump=1 in kernel and in our distros to enable kdump,
+> > > this is inconsistent with the old behaviour.
+> > 
+> > I'd like to understand better why the crash_kexec() must always be the
+> > first thing in your use case. If we keep that behavior, we'll see all
+> > sorts of workarounds - see the last patches of this series, Hyper-V and
+> > PowerPC folks hardcoded "crash_kexec_post_notifiers" in order to force
+> > execution of their relevant notifiers (like the vmbus disconnect,
+> > specially in arm64 that has no custom machine_crash_shutdown, or the
+> > fadump case in ppc). This led to more risk in kdump.
+> > 
+> > The thing is: with the notifiers' split, we tried to keep only the most
+> > relevant/necessary stuff in this first list, things that ultimately
+> > should improve kdump reliability or if not, at least not break it. My
+> > feeling is that, with this series, we should change the idea/concept
+> > that kdump must run first nevertheless, not matter what. We're here
+> > trying to accommodate the antagonistic goals of hypervisors that need
+> > some clean-up (even for kdump to work) VS. kdump users, that wish a
+> > "pristine" system reboot ASAP after the crash.
+> 
+> Good question. I wonder if Baoquan knows about problems caused by the
+> particular notifiers that will end up in the hypervisor list. Note
+> that there will be some shuffles and the list will be slightly
+> different in V2.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, I knew some of them. Please check my response to Guilherme.
 
-All errors (new ones prefixed by >>):
+We have bug to track the issue on Hyper-V in which failure happened
+during panic notifiers running, haven't come to kdump. Seems both of
+us sent mail replying to Guilherme at the same time. 
 
->> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:2: error: call to undeclared function 'crtc_debugfs_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           crtc_debugfs_init(crtc);
-           ^
-   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9165:20: warning: variable 'abo' set but not used [-Wunused-but-set-variable]
-           struct amdgpu_bo *abo;
-                             ^
-   1 warning and 1 error generated.
+> 
+> Anyway, I see four possible solutions:
+> 
+>   1. The most conservative approach is to keep the current behavior
+>      and call kdump first by default.
+> 
+>   2. A medium conservative approach to change the default default
+>      behavior and call hypervisor and eventually the info notifiers
+>      before kdump. There still would be the possibility to call kdump
+>      first by the command line parameter.
+> 
+>   3. Remove the possibility to call kdump first completely. It would
+>      assume that all the notifiers in the info list are super safe
+>      or that they make kdump actually more safe.
+> 
+>   4. Create one more notifier list for operations that always should
+>      be called before crash_dump.
 
+I would vote for 1 or 4 without any hesitation, and prefer 4. I ever
+suggest the variant of solution 4 in v1 reviewing. That's taking those
+notifiers out of list and enforcing to execute them before kdump. E.g
+the one on HyperV to terminate VMbus connection. Maybe solution 4 is
+better to provide a determinate way for people to add necessary code
+at the earliest part.
 
-vim +/crtc_debugfs_init +6622 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c
+> 
+> Regarding the extra notifier list (4th solution). It is not clear to
+> me whether it would be always called even before hypervisor list or
+> when kdump is not enabled. We must not over-engineer it.
 
-e7b07ceef2a650 Harry Wentland 2017-08-10  6619  
-e69231c4451ae0 Wayne Lin      2021-03-08  6620  static int amdgpu_dm_crtc_late_register(struct drm_crtc *crtc)
-86bc221918925a Wayne Lin      2021-03-02  6621  {
-86bc221918925a Wayne Lin      2021-03-02 @6622  	crtc_debugfs_init(crtc);
-86bc221918925a Wayne Lin      2021-03-02  6623  
-86bc221918925a Wayne Lin      2021-03-02  6624  	return 0;
-86bc221918925a Wayne Lin      2021-03-02  6625  }
-86bc221918925a Wayne Lin      2021-03-02  6626  
+One thing I would like to notice is, no matter how perfect we split the
+lists this time, we can't gurantee people will add notifiers reasonablly
+in the future. And people from different sub-component may not do
+sufficient investigation and add them to fulfil their local purpose.
 
-:::::: The code at line 6622 was first introduced by commit
-:::::: 86bc221918925a0bbb49043e3936e898e009b43b drm/amd/display: Support crc on specific region
+The current panic notifers list is the best example. Hyper-V actually
+wants to run some necessary code before kdump, but not all of them, they
+just add it, ignoring the original purpose of
+crash_kexec_post_notifiers. I guess they do like this just because it's
+easy to do, no need to bother changing code in generic place.
 
-:::::: TO: Wayne Lin <Wayne.Lin@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+Solution 4 can make this no doubt, that's why I like it better.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> 2nd proposal looks like a good compromise. But maybe we could do
+> this change few releases later. The notifiers split is a big
+> change on its own.
+
+As I replied to Guilherme, solution 2 will cause regression if not
+calling kdump firstly. Solution 3 leaves people space to make mistake,
+they could add nontifier into wrong list.
+
+I would like to note again that the panic notifiers are optional to run,
+while kdump is expectd once loaded, from the original purpose. I guess
+people I know will still have this thought, e.g Hatayama, Masa, they are
+truly often use panic notifiers like this on their company's system.
+

@@ -2,71 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422EC532515
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 10:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4E753251D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 10:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232093AbiEXIQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 04:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S232128AbiEXIRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 04:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbiEXIQL (ORCPT
+        with ESMTP id S231997AbiEXIRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 04:16:11 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A8D1140
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 01:16:10 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VEHCnEO_1653380161;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VEHCnEO_1653380161)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 24 May 2022 16:16:08 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     gregkh@linuxfoundation.org
-Cc:     arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, brauner@kernel.org, hridya@google.com,
-        surenb@google.com, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] Android: binder: Fix kernel-doc
-Date:   Tue, 24 May 2022 16:16:00 +0800
-Message-Id: <20220524081600.39941-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 24 May 2022 04:17:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FEC5DA10
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 01:17:39 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24O7OBup011291;
+        Tue, 24 May 2022 08:17:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=LhRVKKB0DusQKiHLqperXZcxbEcQnxElZXIcFrsIBvM=;
+ b=rX/X6cHAs46I7VxQcdX2PSe0W4fpZpGmDJVrTVZV/YbN4BDVLVTX9VP3JYqI+X4bng6x
+ f2o7S78xA4zQjC/sy3ExlwfdMZBPD7DEipAxP8YeIGSu+DK2E6SnvLNVV4sqf24ndFI4
+ 1KxdI1p2uMFRb+hFMjPUWBU62Q72J9sQDzJyqnfjIxXuyUkK2iPE12yG8LNX0GrLLFn9
+ nIgv2Tz5H6ANfWIKg2SsT3DB9vSWimlgB2YpUMYsaC6LCp+2fRuXAvjjOTuH54JzEAxc
+ 4n36PFGX/2d5ZrGEcUiNBPzDHTIOrwbOW2ZJ2/DqZIxd3WDDH0rfXxBeoXitXJ9iZBER qg== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8r4g4du8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 08:17:19 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24O7wtSw025309;
+        Tue, 24 May 2022 08:17:17 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3g6qq8ubd7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 08:17:17 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24O8GQD522741464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 May 2022 08:16:26 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AD518A405C;
+        Tue, 24 May 2022 08:17:14 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 68B0EA4054;
+        Tue, 24 May 2022 08:17:14 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 24 May 2022 08:17:14 +0000 (GMT)
+Message-ID: <3ed0804d-dbcd-f83b-f806-cb979a6a9dfa@linux.ibm.com>
+Date:   Tue, 24 May 2022 10:17:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH] powerpc/64s: Only set HAVE_ARCH_UNMAPPED_AREA when
+ CONFIG_PPC_64S_HASH_MMU is set
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <e438c6cc09f94085e56733ed2d6e84333c35292a.1653370913.git.christophe.leroy@csgroup.eu>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <e438c6cc09f94085e56733ed2d6e84333c35292a.1653370913.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: lBdtqxVQfAZSxcdk_J8UISZlh7-BsUMJ
+X-Proofpoint-ORIG-GUID: lBdtqxVQfAZSxcdk_J8UISZlh7-BsUMJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-24_05,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 malwarescore=0 lowpriorityscore=0
+ mlxlogscore=999 mlxscore=0 clxscore=1015 impostorscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205240044
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following W=1 kernel warnings:
+On 24/05/2022, 07:42:05, Christophe Leroy wrote:
+> When CONFIG_PPC_64S_HASH_MMU is not set, slice.c is not built and
+> arch_get_unmapped_area() and arch_get_unmapped_area_topdown() are
+> not provided because RADIX uses the generic ones.
+> 
+> Therefore, neither set HAVE_ARCH_UNMAPPED_AREA nor
+> HAVE_ARCH_UNMAPPED_AREA_TOPDOWN.
+> 
+> Reported-by: Laurent Dufour <ldufour@linux.ibm.com>
+> Fixes: ab57bd7570d4 ("powerpc/mm: Move get_unmapped_area functions to slice.c")
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> 
 
-drivers/android/binder.c:362: warning: expecting prototype for
-binder_node_unlock(). Prototype was for binder_node_inner_unlock()
-instead.
+FWIW,
+Tested-by: Laurent Dufour <ldufour@linux.ibm.com>
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/android/binder.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-index 9e0982289dde..8ec8f43bf6c7 100644
---- a/drivers/android/binder.c
-+++ b/drivers/android/binder.c
-@@ -354,7 +354,7 @@ _binder_node_inner_lock(struct binder_node *node, int line)
- }
- 
- /**
-- * binder_node_unlock() - Release node and inner locks
-+ * binder_node_inner_unlock() - Release node and inner locks
-  * @node:         struct binder_node to acquire
-  *
-  * Release lock acquired via binder_node_lock()
--- 
-2.20.1.7.g153144c
+>  arch/powerpc/include/asm/book3s/64/slice.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/powerpc/include/asm/book3s/64/slice.h b/arch/powerpc/include/asm/book3s/64/slice.h
+> index b8eb4ad271b9..5fbe18544cbd 100644
+> --- a/arch/powerpc/include/asm/book3s/64/slice.h
+> +++ b/arch/powerpc/include/asm/book3s/64/slice.h
+> @@ -4,11 +4,13 @@
+>  
+>  #ifndef __ASSEMBLY__
+>  
+> +#ifdef CONFIG_PPC_64S_HASH_MMU
+>  #ifdef CONFIG_HUGETLB_PAGE
+>  #define HAVE_ARCH_HUGETLB_UNMAPPED_AREA
+>  #endif
+>  #define HAVE_ARCH_UNMAPPED_AREA
+>  #define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
+> +#endif
+>  
+>  #define SLICE_LOW_SHIFT		28
+>  #define SLICE_LOW_TOP		(0x100000000ul)
 

@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B265322AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 07:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4448C5322B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 07:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234665AbiEXF4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 01:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
+        id S234681AbiEXF5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 01:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbiEXF4Q (ORCPT
+        with ESMTP id S234177AbiEXF5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 01:56:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACBA25F86
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 22:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653371770;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=tNuCs3myf8YTzjg6YEi6CfRCnRzJghoZRGG5TUri4wc=;
-        b=Ku4J/OJsRyEAJSStK27gjfPEznp4xQO63WfZdAwJ/zdBwouwoDxqZnBwcxQ8NUw7Wr/3tY
-        ky01xkQ755TQwSn0rXEQ25ULJfiSY2D/LoWY5xg2fcDQAorNfuhO2rErUEfgnATh+TOQaq
-        p2CyCVbTErfAVL+zQeskexrFeeZhxaY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-360-byxo_TCoM-aBro8LqBX2aA-1; Tue, 24 May 2022 01:56:04 -0400
-X-MC-Unique: byxo_TCoM-aBro8LqBX2aA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DAAC0185A79C;
-        Tue, 24 May 2022 05:56:03 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-12-128.pek2.redhat.com [10.72.12.128])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 040FC40E7F06;
-        Tue, 24 May 2022 05:56:00 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com, lingshan.zhu@intel.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] vdpa: ifcvf: set pci driver data in probe
-Date:   Tue, 24 May 2022 13:55:57 +0800
-Message-Id: <20220524055557.1938-1-jasowang@redhat.com>
+        Tue, 24 May 2022 01:57:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC9A11A25
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 22:56:57 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1ntNXB-0002X2-SO; Tue, 24 May 2022 07:56:45 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1ntNXB-004DHR-Fz; Tue, 24 May 2022 07:56:44 +0200
+Received: from afa by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1ntNX9-006bgW-Cf; Tue, 24 May 2022 07:56:43 +0200
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     kernel@pengutronix.de,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: bluetooth: broadcom: Add BCM4349B1 DT binding
+Date:   Tue, 24 May 2022 07:56:40 +0200
+Message-Id: <20220524055642.1574769-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We should set the pci driver data in probe instead of the vdpa device
-adding callback. Otherwise if no vDPA device is created we will lose
-the pointer to the management device.
+The BCM4349B1, aka CYW/BCM89359, is a WiFi+BT chip and its Bluetooth
+portion can be controlled over serial.
+Extend the binding with its DT compatible.
 
-Fixes: 6b5df347c6482 ("vDPA/ifcvf: implement management netlink framework for ifcvf")
-Tested-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Jason Wang <jasowang@redhat.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 ---
- drivers/vdpa/ifcvf/ifcvf_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+v1 -> v2:
+  - reword commit message to make it clear that BCM4349B1 and
+    BCM89359 are the same chip
+  - remove reference to BT being 5.0. Datasheet says 4.1.
+  - Collect Acked-by/Reviewed-by
+---
+To: Marcel Holtmann <marcel@holtmann.org>
+To: Johan Hedberg <johan.hedberg@gmail.com>
+To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-bluetooth@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-kernel@vger.kernel.org
+To: devicetree@vger.kernel.org
+Cc: netdev@vger.kernel.org
+---
+ Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/vdpa/ifcvf/ifcvf_main.c b/drivers/vdpa/ifcvf/ifcvf_main.c
-index 750e5f23406d..0a5670729412 100644
---- a/drivers/vdpa/ifcvf/ifcvf_main.c
-+++ b/drivers/vdpa/ifcvf/ifcvf_main.c
-@@ -771,7 +771,6 @@ static int ifcvf_vdpa_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
- 	}
+diff --git a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+index 5aac094fd217..58ecafc1b7f9 100644
+--- a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
++++ b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+@@ -23,6 +23,7 @@ properties:
+       - brcm,bcm4345c5
+       - brcm,bcm43540-bt
+       - brcm,bcm4335a0
++      - brcm,bcm4349-bt
  
- 	ifcvf_mgmt_dev->adapter = adapter;
--	pci_set_drvdata(pdev, ifcvf_mgmt_dev);
- 
- 	vf = &adapter->vf;
- 	vf->dev_type = get_dev_type(pdev);
-@@ -886,6 +885,8 @@ static int ifcvf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		goto err;
- 	}
- 
-+	pci_set_drvdata(pdev, ifcvf_mgmt_dev);
-+
- 	return 0;
- 
- err:
+   shutdown-gpios:
+     maxItems: 1
 -- 
-2.25.1
+2.30.2
 

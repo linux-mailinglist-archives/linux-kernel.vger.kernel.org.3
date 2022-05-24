@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6221532ED6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21371532ED9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239522AbiEXQVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 12:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
+        id S239648AbiEXQVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 12:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbiEXQVI (ORCPT
+        with ESMTP id S239419AbiEXQV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 12:21:08 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82976BFB;
-        Tue, 24 May 2022 09:21:05 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id p22so31637051lfo.10;
-        Tue, 24 May 2022 09:21:05 -0700 (PDT)
+        Tue, 24 May 2022 12:21:29 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0571FB492;
+        Tue, 24 May 2022 09:21:26 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id o16so12187351ilq.8;
+        Tue, 24 May 2022 09:21:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=2/bDGPYXufJFzkVnBY8mqDgAglNZetlk8WJ7Djt/e2E=;
-        b=e6JB8CI6WFSU+Q/ABVHaxlfYhBRAsmmbmkIDuhn1m6DKPOXKF37gjB/m9GdsVi49dc
-         JNf43jPT5zw03LMoVZ8t3fuV30/a2V5p20h02AkSpplyqHBCbbU0BEhybKuk9LvBIU0v
-         yF5u5B3igHgLN7iRG8ZQrDAszFgPNI/I5CRCOoGPWgb0Tr5z/PCYQqsyZhaq45tfM2ue
-         TR82sVYgQfPiZLzURg9Q0Ng/5eocdGR5EPE8FxukEwr6LoxzCf3TXITUf9yHbYMLAfmG
-         vt/o3bafEdXjgzQsP4rsUwQGadPuBcmEHO5dtLS97SrWhTOdZeC4FS/jt5IR6+lcfUJ1
-         OuKg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LC2IXAGcmYuiteZpSiIXi00J39B1CEM53r26v/kTRJM=;
+        b=MycnTkQhH+UxSrimwN12BB8TeOpX70Fq9HSbOTIJylR8wHkeAejpaS7Dm2NPvfA3SW
+         POz0Ge9dHsexOR1LZR8jYvWaoxlCgsGqWZIED8pF2bp5HDSkO9uiZEtuidOVq5suRWPz
+         XYkIqIhtEf8rzc3hPRU9j6ooGV7afl2IbZabN+zo+F6I7DxbOt+tgXitaCysCmaLAPc6
+         CnQZ6ka9ORT4ZQNImgRyVRnlsj4wZRShNxsuqaObrYONLvldfFLAMQ4bg8gVMyKlyyIs
+         h5Onos6LsWuEHkvwL1ffKx9B/BunUXZAu5wkTfxA+RgTiaSYl1c/9VvtmyfyHIb8G1oP
+         CIdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=2/bDGPYXufJFzkVnBY8mqDgAglNZetlk8WJ7Djt/e2E=;
-        b=Esfw8PkOJy8PWA2w3nW58LKuNx19lVLSmgduJqZ5dkFeDnKyxtHufoWqMq3hyhH2iM
-         mlKY4hhya99RkIOU59HY9EG0tB94FSg8XxXGYg4nzEbdE4s4qWdqgJh6IwM7tVghTOYX
-         Tx8zGzeOXVjkL2K14r9LI5U/Hq7r0srO39Dc2tbaAI+fCVM5ac3kasco8O4MRHZsKMGV
-         Snd0pADdwiiSxjWIU1tmRTB1x6hWQDgSeEkrsCWckmYzzdtW5Sr2Whfp9dLWmG3+JUKq
-         jQLBdsQc33EPrJlOotS9YaWMBLfJraK8FlT65HdCncSt5MMErX5cbNAQM3DCyEG6YyFQ
-         yhww==
-X-Gm-Message-State: AOAM5318skmTGNPL93OcE5nw/vmEENrhf37/yPxIvjw9mnrNnd56lCWc
-        2NzZQ0fX5OO+PxY5Os2K0foT3oeOJl7gdA==
-X-Google-Smtp-Source: ABdhPJzIQuFRRQuyC1EsDbZ10YZKs55feovmJnYJ1MTbAEC+b0Jjw4TR7inmyaHD1E/9Z28qwFMM0w==
-X-Received: by 2002:a05:6512:1510:b0:445:cbc3:a51f with SMTP id bq16-20020a056512151000b00445cbc3a51fmr20695039lfb.116.1653409263918;
-        Tue, 24 May 2022 09:21:03 -0700 (PDT)
-Received: from wse-c0127 (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
-        by smtp.gmail.com with ESMTPSA id a26-20020a19f81a000000b0047255d21116sm2611832lff.69.2022.05.24.09.21.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 09:21:03 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Nikolay Aleksandrov <razor@blackwall.org>,
-        Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-In-Reply-To: <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
- <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
-Date:   Tue, 24 May 2022 18:21:02 +0200
-Message-ID: <86zgj6oqa9.fsf@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LC2IXAGcmYuiteZpSiIXi00J39B1CEM53r26v/kTRJM=;
+        b=GDlCzvYxo89LmcaU+DTcommu7uFl4WR69T9Nf3jQpo9t6OEG/qjDUG4XSvCtv0GnbD
+         A5ftaUVmgo2g9ry1wVwLiGUO3MDACMEgyewJ2RMZK5JRss52WTthrSU07a+9TrfiT8gZ
+         dNiT+AfayvZ4EFTBfnT1WLzDv27cDrBdC+w7XmJ7rEPFMQKT37tvgGc13/9X+rSqSnz/
+         V2g3nqu8P+MxFcBT6RgW+i31k5jGCL+EY8So9PCC35NFr287e+Cl2KD68n5B8kHxj1fE
+         duTAvu5fSSO+yPjBXxOe4MwHmioemJuZcf7kvjzYMJ3VUO688JMCnqnrtFv2Q7zmr1IH
+         77KA==
+X-Gm-Message-State: AOAM531u7OZnvtOk5Pr97Xh6+2l4hideJvxuFro6NWD4eEWtikNFfi86
+        T2aAPllGJR1ux+kQI60ZUZmHqn+kIK7U8vWZAoU=
+X-Google-Smtp-Source: ABdhPJwNQSKfUEC0s31c/Rr9/rNSNWE/ryUc80Ip9r8jglMdrY3NeJGsyCM/aWzJ5tw0gW9aXRlC9IcJXApIK+49uuw=
+X-Received: by 2002:a05:6e02:1c81:b0:2d1:3971:9343 with SMTP id
+ w1-20020a056e021c8100b002d139719343mr14623732ill.237.1653409286022; Tue, 24
+ May 2022 09:21:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220523020209.11810-1-ojeda@kernel.org> <20220523020209.11810-2-ojeda@kernel.org>
+ <YovkR56ZYsPhDW4q@kernel.org>
+In-Reply-To: <YovkR56ZYsPhDW4q@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 24 May 2022 18:21:14 +0200
+Message-ID: <CANiq72=K4eC5EX9M8YRzL5Uy9onoTzha9rki-XZ3enSPy0p+UQ@mail.gmail.com>
+Subject: Re: [PATCH v7 01/25] kallsyms: avoid hardcoding the buffer size
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -84,34 +72,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 23, 2022 at 9:46 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
 >
-> Hi Hans,
-> So this approach has a fundamental problem, f->dst is changed without any synchronization
-> you cannot rely on it and thus you cannot account for these entries properly. We must be very
-> careful if we try to add any new synchronization not to affect performance as well.
-> More below...
+> "Declare KSY_NAME_LEN, which describes the maximum length for a kernel
+> symbol read by kallsyms from the input.  In read_symbol(), define the
+> buffer to be of length "KSY_NAME_LEN + 1", which includes the terminator
+> character."
 >
->> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
->>  	if (test_bit(BR_FDB_STATIC, &f->flags))
->>  		fdb_del_hw_addr(br, f->key.addr.addr);
->>  
->> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
->> +		atomic_dec(&f->dst->locked_entry_cnt);
->
-> Sorry but you cannot do this for multiple reasons:
->  - f->dst can be NULL
->  - f->dst changes without any synchronization
->  - there is no synchronization between fdb's flags and its ->dst
->
-> Cheers,
->  Nik
+> would be better.
 
-Hi Nik,
+Note that the patch is not declaring `KSYM_NAME_LEN`, but a new
+constant for a fairly arbitrarily sized for an input buffer.
 
-if a port is decoupled from the bridge, the locked entries would of
-course be invalid, so maybe if adding and removing a port is accounted
-for wrt locked entries and the count of locked entries, would that not
-work?
+I am all for detailed commit messages, and I agree this can be
+expanded. However, I think the first sentence of what you wrote should
+be part of the docs of the constant, and the second one sounds like it
+could be a comment on the code. Something like "Introduce
+KSYM_NAME_LEN_BUFFER in place of the previously hardcoded size of the
+input buffer (...)" would be better for a reviewer.
 
-Best,
-Hans
+> You must split this then into two patches:
+
+Note that the size is not really being increased in a meaningful way
+-- the important bit is the introduction of the relationship between
+constants. The changes are all meant as a replacement for the
+previously hardcoded constant, so I don't think the split is a "must",
+but we can do it.
+
+We can even split this into 3 patches: clean up the unneeded `sizeof`,
+replace (and, importantly, document) the hardcoded constant, and
+finally introduce the relationship.
+
+Thanks for taking a look!
+
+Cheers,
+Miguel

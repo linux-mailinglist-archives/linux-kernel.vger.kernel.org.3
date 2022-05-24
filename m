@@ -2,327 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168E953229C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 07:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C456D53229F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 07:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234572AbiEXFsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 01:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        id S234587AbiEXFtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 01:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbiEXFsn (ORCPT
+        with ESMTP id S230202AbiEXFta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 01:48:43 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC8B55487;
-        Mon, 23 May 2022 22:48:42 -0700 (PDT)
+        Tue, 24 May 2022 01:49:30 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202BE5AA43
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 22:49:29 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id jx22so19625407ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 22:49:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653371322; x=1684907322;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ICDQEeff55Q5ppoKsc2WzqCAuVZf3QAJdDgf/74KjG8=;
-  b=oL1HkXI+o7Uc1b1DxCu6qt1nMiz6fqjagk3R4TC8jaW+oHznRnP7v3Fi
-   FjTsy9oxXLfGHrcsnLdzmAkkawLp9aL0UNmxjqD2aPUg6IIla/rHIfdja
-   FrJlyl9mY6+Xmfsgf23OnAbeuzMH3Wqd+W4aVaimBMnlt8EiDRTZh8IE6
-   0=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 May 2022 22:48:42 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 22:48:41 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 23 May 2022 22:48:41 -0700
-Received: from [10.216.49.5] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 23 May
- 2022 22:48:35 -0700
-Message-ID: <fb990092-e855-3421-3996-d481fb6b08ef@quicinc.com>
-Date:   Tue, 24 May 2022 11:18:31 +0530
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C+n2mFnYxjMdQyExf3HsU7WxNGZU5BDX+JooTakE2y4=;
+        b=dv0Kbor1TTr+x1QLlylZKZ43sZkOUEZZTImH5kLD93Qb94RQ3ZhORwrG0eM7mK66mG
+         gBHSiY+J66QyXqQQCWFZ3yLnDBG+onBpWWkq8RxM+3T3M+EKc1clGU2qL01xMRwG6WmV
+         ZtA6NQpRiUkKlAAVx/3faApJgMlsprV9y/TOZA5itXmwFk/28txMlmF+6YTXoUd3klf1
+         bJpLpv06uiEW0kkv737TwO6IWIaQLaaLaN62ZpL1UQl3A33eusBfgWuKuzU9ePcHakun
+         ENMLyqYcqsXOi2kf4q+nLeymOxVdV4xVF7gIQ4Rqdm+2ict4c4qeAPVpPK34rlmOXsBt
+         Lqiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=C+n2mFnYxjMdQyExf3HsU7WxNGZU5BDX+JooTakE2y4=;
+        b=wZPRC/lzQiCIsXZ2XdosOtx98r5fjn8xWYCmW46sBKUtnrQa3neQ9jJ4A+HMtYcuro
+         alglFkToxhgs+cDhDKwZMSCmKrWb63SrOIV0je1eIr+pdDG3QHzZcTQDDrVRl5R2Pt5F
+         e8KgGh+9R1JM0mvGHby0meoeLvoJuu4eHUUTw21Tndim5h2apzG3B5g8x+AYP07RlXxd
+         705jjGSvhQ2ealBXZJTEFCIW0cI9PKIMCqOgKQkalNNTLtU3iT3FI+g5iRb2J79MKx06
+         tQkzuv3hETQv3JUJ0jOxhI2JreNEDscGnQAwK4A2Gge/j9skrYVps4+SRKPnoUNSMldc
+         WzVA==
+X-Gm-Message-State: AOAM5311shdNa+2e9C8YQriCYQdSO9RjFXQDYCG+YI4PWWYHYyST3tlj
+        /KGapxXHf9w9zfsxydfeL6mcyuSB4Zw=
+X-Google-Smtp-Source: ABdhPJwnqbaeXm1LJV1yaBFzppAxn5c6m2k54s5Q1aUNQHRt9ap1eDgcI+Peb5oUEj4D/MpXWRqgAg==
+X-Received: by 2002:a17:907:1c1c:b0:6fe:cedb:d089 with SMTP id nc28-20020a1709071c1c00b006fecedbd089mr9727530ejc.323.1653371367631;
+        Mon, 23 May 2022 22:49:27 -0700 (PDT)
+Received: from gmail.com (84-236-113-78.pool.digikabel.hu. [84.236.113.78])
+        by smtp.gmail.com with ESMTPSA id dk16-20020a0564021d9000b0042a6d0508a9sm9059626edb.73.2022.05.23.22.49.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 22:49:26 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 24 May 2022 07:49:24 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [GIT PULL] scheduler updates for v5.19
+Message-ID: <Yoxx5MeAyIki0peI@gmail.com>
+References: <You+G0njuvLvLll3@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH V6 2/5] mmc: sdhci: Capture eMMC and SD card errors
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
-        <wsa+renesas@sang-engineering.com>, <shawn.lin@rock-chips.com>,
-        <yoshihiro.shimoda.uh@renesas.com>, <digetx@gmail.com>,
-        <quic_asutoshd@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_rampraka@quicinc.com>,
-        <quic_pragalla@quicinc.com>, <quic_sartgarg@quicinc.com>,
-        <quic_nitirawa@quicinc.com>, <quic_sayalil@quicinc.com>,
-        Liangliang Lu <quic_luliang@quicinc.com>,
-        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-References: <1652857340-6040-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1652857340-6040-3-git-send-email-quic_c_sbhanu@quicinc.com>
- <2fe7d7a1-b6ab-3268-3a9b-20d79086eec6@intel.com>
-From:   "Sajida Bhanu (Temp)" <quic_c_sbhanu@quicinc.com>
-In-Reply-To: <2fe7d7a1-b6ab-3268-3a9b-20d79086eec6@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <You+G0njuvLvLll3@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrain,
 
-Thank You for the review.
+* Ingo Molnar <mingo@kernel.org> wrote:
 
-Please find the inline comments.
+> Linus,
+> 
+> Please pull the latest sched/core git tree from:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched-core-2022-05-23
+> 
+>    # HEAD: 991d8d8142cad94f9c5c05db25e67fa83d6f772a topology: Remove unused cpu_cluster_mask()
+> 
+> Scheduler changes in this cycle were:
+> 
+>  - Updates to scheduler metrics:
+> 
+>     - PELT fixes & enhancements
+>     - PSI fixes & enhancements
+>     - Refactor cpu_util_without()
+> 
+>  - Updates to instrumentation/debugging:
+> 
+>     - Remove sched_trace_*() helper functions - can be done via debug info
+>     - Fix double update_rq_clock() warnings
+> 
+>  - Introduce & use "preemption model accessors" to simplify some of
+>    the Kconfig complexity.
+> 
+>  - Make softirq handling RT-safe.
+> 
+>  - Misc smaller fixes & cleanups.
+> 
+>  Thanks,
+> 
+> 	Ingo
+> 
+> ------------------>
+> Chengming Zhou (3):
+>       sched/fair: Fix cfs_rq_clock_pelt() for throttled cfs_rq
+>       sched/fair: Delete useless condition in tg_unthrottle_up()
+>       sched/psi: report zeroes for CPU full at the system level
+> 
+> Dietmar Eggemann (4):
+>       sched/fair: Refactor cpu_util_without()
+>       sched/fair: Remove sched_trace_*() helper functions
+>       sched/fair: Remove cfs_rq_tg_path()
+>       topology: Remove unused cpu_cluster_mask()
+> 
+> Hailong Liu (1):
+>       psi: Fix trigger being fired unexpectedly at initial
+> 
+> Hao Jia (2):
+>       sched/core: Avoid obvious double update_rq_clock warning
+>       sched/deadline: Remove superfluous rq clock update in push_dl_task()
+> 
+> Peter Zijlstra (1):
+>       sched: Reverse sched_class layout
+> 
+> Sebastian Andrzej Siewior (1):
+>       smp: Make softirq handling RT safe in flush_smp_call_function_queue()
+> 
+> Tao Zhou (1):
+>       sched/fair: Revise comment about lb decision matrix
+> 
+> Thomas Gleixner (2):
+>       sched: Fix missing prototype warnings
+>       smp: Rename flush_smp_call_function_from_idle()
+> 
+> Valentin Schneider (5):
+>       preempt/dynamic: Introduce preemption model accessors
+>       kcsan: Use preemption model accessors
+>       ftrace: Use preemption model accessors for trace header printout
+>       MAINTAINERS: Add myself as scheduler topology reviewer
+>       mailmap: Update my email address to @redhat.com
+> 
+> zgpeng (1):
+>       sched/fair: Move calculate of avg_load to a better location
+> 
+> 
+>  .mailmap                          |   1 +
+>  Documentation/accounting/psi.rst  |   9 +-
+>  MAINTAINERS                       |   1 +
+>  include/asm-generic/vmlinux.lds.h |  12 +-
+>  include/linux/interrupt.h         |   9 ++
+>  include/linux/sched.h             |  57 ++++++--
+>  include/linux/topology.h          |   7 -
+>  kernel/kcsan/kcsan_test.c         |   5 +-
+>  kernel/sched/build_policy.c       |   2 +
+>  kernel/sched/build_utility.c      |   1 +
+>  kernel/sched/core.c               |  35 +++--
+>  kernel/sched/deadline.c           |  15 +-
+>  kernel/sched/fair.c               | 292 +++++++++-----------------------------
+>  kernel/sched/idle.c               |   2 +-
+>  kernel/sched/pelt.h               |   4 +-
+>  kernel/sched/psi.c                |  18 ++-
+>  kernel/sched/rt.c                 |   5 +-
+>  kernel/sched/sched.h              |  55 ++++---
+>  kernel/sched/smp.h                |   6 +
+>  kernel/smp.c                      |  32 +++--
+>  kernel/softirq.c                  |  13 ++
+>  kernel/stop_machine.c             |   2 -
+>  kernel/trace/trace.c              |  14 +-
+>  23 files changed, 266 insertions(+), 331 deletions(-)
+
+Note that the above is a v5.18 based shortlog and diffstat, but because the 
+RCU tree deep-merged one of the scheduler commits that introduced better, 
+Kconfig-invariant preemption model accessors:
+
+   cfe43f478b79 preempt/dynamic: Introduce preemption model accessors
+
+... and you merged the RCU tree already, so you'll get this shortlog & 
+diffstat:
+
+=============>
+Chengming Zhou (3):
+      sched/fair: Fix cfs_rq_clock_pelt() for throttled cfs_rq
+      sched/fair: Delete useless condition in tg_unthrottle_up()
+      sched/psi: report zeroes for CPU full at the system level
+
+Dietmar Eggemann (4):
+      sched/fair: Refactor cpu_util_without()
+      sched/fair: Remove sched_trace_*() helper functions
+      sched/fair: Remove cfs_rq_tg_path()
+      topology: Remove unused cpu_cluster_mask()
+
+Hailong Liu (1):
+      psi: Fix trigger being fired unexpectedly at initial
+
+Hao Jia (2):
+      sched/core: Avoid obvious double update_rq_clock warning
+      sched/deadline: Remove superfluous rq clock update in push_dl_task()
+
+Ingo Molnar (1):
+      Merge tag 'v5.18-rc5' into sched/core to pull in fixes & to resolve a conflict
+
+Peter Zijlstra (1):
+      sched: Reverse sched_class layout
+
+Sebastian Andrzej Siewior (1):
+      smp: Make softirq handling RT safe in flush_smp_call_function_queue()
+
+Tao Zhou (1):
+      sched/fair: Revise comment about lb decision matrix
+
+Thomas Gleixner (2):
+      sched: Fix missing prototype warnings
+      smp: Rename flush_smp_call_function_from_idle()
+
+Valentin Schneider (4):
+      kcsan: Use preemption model accessors
+      ftrace: Use preemption model accessors for trace header printout
+      MAINTAINERS: Add myself as scheduler topology reviewer
+      mailmap: Update my email address to @redhat.com
+
+zgpeng (1):
+      sched/fair: Move calculate of avg_load to a better location
+
+ .mailmap                          |   1 +
+ Documentation/accounting/psi.rst  |   9 +-
+ MAINTAINERS                       |   1 +
+ include/asm-generic/vmlinux.lds.h |  12 +-
+ include/linux/interrupt.h         |   9 ++
+ include/linux/sched.h             |  16 +--
+ include/linux/topology.h          |   7 -
+ kernel/kcsan/kcsan_test.c         |   5 +-
+ kernel/sched/build_policy.c       |   2 +
+ kernel/sched/build_utility.c      |   1 +
+ kernel/sched/core.c               |  23 +--
+ kernel/sched/deadline.c           |  15 +-
+ kernel/sched/fair.c               | 292 +++++++++-----------------------------
+ kernel/sched/idle.c               |   2 +-
+ kernel/sched/pelt.h               |   4 +-
+ kernel/sched/psi.c                |  18 ++-
+ kernel/sched/rt.c                 |   5 +-
+ kernel/sched/sched.h              |  55 ++++---
+ kernel/sched/smp.h                |   6 +
+ kernel/smp.c                      |  32 +++--
+ kernel/softirq.c                  |  13 ++
+ kernel/stop_machine.c             |   2 -
+ kernel/trace/trace.c              |  14 +-
+ 23 files changed, 213 insertions(+), 331 deletions(-)
 
 Thanks,
 
-Sajida
-
-On 5/23/2022 12:44 PM, Adrian Hunter wrote:
-> On 18/05/22 10:02, Shaik Sajida Bhanu wrote:
->> Add changes to capture eMMC and SD card errors.
->> This is useful for debug and testing.
->>
->> Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
->> Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
->> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
->> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-> Misplaced blank line (see below) and seems to need to be
-Sure will address
-> re-based on Ulf's next branch:
->
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next
->
-> Otherwise:
->
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
->
->> ---
->>   drivers/mmc/host/sdhci.c | 59 ++++++++++++++++++++++++++++++++++++------------
->>   drivers/mmc/host/sdhci.h |  3 +++
->>   include/linux/mmc/mmc.h  |  6 +++++
->>   3 files changed, 53 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
->> index 7728f26..bd4372c 100644
->> --- a/drivers/mmc/host/sdhci.c
->> +++ b/drivers/mmc/host/sdhci.c
->> @@ -224,6 +224,7 @@ void sdhci_reset(struct sdhci_host *host, u8 mask)
->>   		if (timedout) {
->>   			pr_err("%s: Reset 0x%x never completed.\n",
->>   				mmc_hostname(host->mmc), (int)mask);
->> +			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
->>   			sdhci_dumpregs(host);
->>   			return;
->>   		}
->> @@ -1719,6 +1720,7 @@ static bool sdhci_send_command_retry(struct sdhci_host *host,
->>   		if (!timeout--) {
->>   			pr_err("%s: Controller never released inhibit bit(s).\n",
->>   			       mmc_hostname(host->mmc));
->> +			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
->>   			sdhci_dumpregs(host);
->>   			cmd->error = -EIO;
->>   			return false;
->> @@ -1968,6 +1970,7 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
->>   		if (timedout) {
->>   			pr_err("%s: Internal clock never stabilised.\n",
->>   			       mmc_hostname(host->mmc));
->> +			sdhci_err_stats_inc(host, CTRL_TIMEOUT);
->>   			sdhci_dumpregs(host);
->>   			return;
->>   		}
->> @@ -1990,6 +1993,7 @@ void sdhci_enable_clk(struct sdhci_host *host, u16 clk)
->>   			if (timedout) {
->>   				pr_err("%s: PLL clock never stabilised.\n",
->>   				       mmc_hostname(host->mmc));
->> +				sdhci_err_stats_inc(host, CTRL_TIMEOUT);
->>   				sdhci_dumpregs(host);
->>   				return;
->>   			}
->> @@ -3145,6 +3149,7 @@ static void sdhci_timeout_timer(struct timer_list *t)
->>   	if (host->cmd && !sdhci_data_line_cmd(host->cmd)) {
->>   		pr_err("%s: Timeout waiting for hardware cmd interrupt.\n",
->>   		       mmc_hostname(host->mmc));
->> +		sdhci_err_stats_inc(host, REQ_TIMEOUT);
->>   		sdhci_dumpregs(host);
->>   
->>   		host->cmd->error = -ETIMEDOUT;
->> @@ -3167,6 +3172,7 @@ static void sdhci_timeout_data_timer(struct timer_list *t)
->>   	    (host->cmd && sdhci_data_line_cmd(host->cmd))) {
->>   		pr_err("%s: Timeout waiting for hardware interrupt.\n",
->>   		       mmc_hostname(host->mmc));
->> +		sdhci_err_stats_inc(host, REQ_TIMEOUT);
->>   		sdhci_dumpregs(host);
->>   
->>   		if (host->data) {
->> @@ -3218,17 +3224,21 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
->>   			return;
->>   		pr_err("%s: Got command interrupt 0x%08x even though no command operation was in progress.\n",
->>   		       mmc_hostname(host->mmc), (unsigned)intmask);
->> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->>   		sdhci_dumpregs(host);
->>   		return;
->>   	}
->>   
->>   	if (intmask & (SDHCI_INT_TIMEOUT | SDHCI_INT_CRC |
->>   		       SDHCI_INT_END_BIT | SDHCI_INT_INDEX)) {
->> -		if (intmask & SDHCI_INT_TIMEOUT)
->> +		if (intmask & SDHCI_INT_TIMEOUT) {
->>   			host->cmd->error = -ETIMEDOUT;
->> -		else
->> +			sdhci_err_stats_inc(host, CMD_TIMEOUT);
->> +		} else {
->>   			host->cmd->error = -EILSEQ;
->> -
->> +			if (!mmc_op_tuning(host->cmd->opcode))
->> +				sdhci_err_stats_inc(host, CMD_CRC);
->> +		}
->>   		/* Treat data command CRC error the same as data CRC error */
->>   		if (host->cmd->data &&
->>   		    (intmask & (SDHCI_INT_CRC | SDHCI_INT_TIMEOUT)) ==
->> @@ -3249,6 +3259,8 @@ static void sdhci_cmd_irq(struct sdhci_host *host, u32 intmask, u32 *intmask_p)
->>   		int err = (auto_cmd_status & SDHCI_AUTO_CMD_TIMEOUT) ?
->>   			  -ETIMEDOUT :
->>   			  -EILSEQ;
-> Blank line better here
->
->> +		sdhci_err_stats_inc(host, AUTO_CMD);
->> +
-> This makes double blank line
->
->>   
->>   		if (mrq->sbc && (host->flags & SDHCI_AUTO_CMD23)) {
->>   			mrq->sbc->error = err;
->> @@ -3326,6 +3338,7 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
->>   			if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->>   				host->data_cmd = NULL;
->>   				data_cmd->error = -ETIMEDOUT;
->> +				sdhci_err_stats_inc(host, CMD_TIMEOUT);
->>   				__sdhci_finish_mrq(host, data_cmd->mrq);
->>   				return;
->>   			}
->> @@ -3354,23 +3367,30 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
->>   
->>   		pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
->>   		       mmc_hostname(host->mmc), (unsigned)intmask);
->> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->>   		sdhci_dumpregs(host);
->>   
->>   		return;
->>   	}
->>   
->> -	if (intmask & SDHCI_INT_DATA_TIMEOUT)
->> +	if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->>   		host->data->error = -ETIMEDOUT;
->> -	else if (intmask & SDHCI_INT_DATA_END_BIT)
->> +		sdhci_err_stats_inc(host, DAT_TIMEOUT);
->> +	} else if (intmask & SDHCI_INT_DATA_END_BIT) {
->>   		host->data->error = -EILSEQ;
->> -	else if ((intmask & SDHCI_INT_DATA_CRC) &&
->> +		if (!mmc_op_tuning(SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))))
->> +			sdhci_err_stats_inc(host, DAT_CRC);
->> +	} else if ((intmask & SDHCI_INT_DATA_CRC) &&
->>   		SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))
->> -			!= MMC_BUS_TEST_R)
->> +			!= MMC_BUS_TEST_R) {
->>   		host->data->error = -EILSEQ;
->> -	else if (intmask & SDHCI_INT_ADMA_ERROR) {
->> +		if (!mmc_op_tuning(SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND))))
->> +			sdhci_err_stats_inc(host, DAT_CRC);
->> +	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
->>   		pr_err("%s: ADMA error: 0x%08x\n", mmc_hostname(host->mmc),
->>   		       intmask);
->>   		sdhci_adma_show_error(host);
->> +		sdhci_err_stats_inc(host, ADMA);
->>   		host->data->error = -EIO;
->>   		if (host->ops->adma_workaround)
->>   			host->ops->adma_workaround(host, intmask);
->> @@ -3568,6 +3588,7 @@ static irqreturn_t sdhci_irq(int irq, void *dev_id)
->>   	if (unexpected) {
->>   		pr_err("%s: Unexpected interrupt 0x%08x.\n",
->>   			   mmc_hostname(host->mmc), unexpected);
->> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->>   		sdhci_dumpregs(host);
->>   	}
->>   
->> @@ -3889,20 +3910,27 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
->>   	if (!host->cqe_on)
->>   		return false;
->>   
->> -	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC))
->> +	if (intmask & (SDHCI_INT_INDEX | SDHCI_INT_END_BIT | SDHCI_INT_CRC)) {
->>   		*cmd_error = -EILSEQ;
->> -	else if (intmask & SDHCI_INT_TIMEOUT)
->> +		if (!mmc_op_tuning(host->cmd->opcode))
->> +			sdhci_err_stats_inc(host, CMD_CRC);
->> +	} else if (intmask & SDHCI_INT_TIMEOUT) {
->>   		*cmd_error = -ETIMEDOUT;
->> -	else
->> +		sdhci_err_stats_inc(host, CMD_TIMEOUT);
->> +	} else
->>   		*cmd_error = 0;
->>   
->> -	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC))
->> +	if (intmask & (SDHCI_INT_DATA_END_BIT | SDHCI_INT_DATA_CRC)) {
->>   		*data_error = -EILSEQ;
->> -	else if (intmask & SDHCI_INT_DATA_TIMEOUT)
->> +		if (!mmc_op_tuning(host->cmd->opcode))
->> +			sdhci_err_stats_inc(host, DAT_CRC);
->> +	} else if (intmask & SDHCI_INT_DATA_TIMEOUT) {
->>   		*data_error = -ETIMEDOUT;
->> -	else if (intmask & SDHCI_INT_ADMA_ERROR)
->> +		sdhci_err_stats_inc(host, DAT_TIMEOUT);
->> +	} else if (intmask & SDHCI_INT_ADMA_ERROR) {
->>   		*data_error = -EIO;
->> -	else
->> +		sdhci_err_stats_inc(host, ADMA);
->> +	} else
->>   		*data_error = 0;
->>   
->>   	/* Clear selected interrupts. */
->> @@ -3918,6 +3946,7 @@ bool sdhci_cqe_irq(struct sdhci_host *host, u32 intmask, int *cmd_error,
->>   		sdhci_writel(host, intmask, SDHCI_INT_STATUS);
->>   		pr_err("%s: CQE: Unexpected interrupt 0x%08x.\n",
->>   		       mmc_hostname(host->mmc), intmask);
->> +		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
->>   		sdhci_dumpregs(host);
->>   	}
->>   
->> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
->> index 6c689be..2c02ded 100644
->> --- a/drivers/mmc/host/sdhci.h
->> +++ b/drivers/mmc/host/sdhci.h
->> @@ -356,6 +356,9 @@ struct sdhci_adma2_64_desc {
->>    */
->>   #define MMC_CMD_TRANSFER_TIME	(10 * NSEC_PER_MSEC) /* max 10 ms */
->>   
->> +#define sdhci_err_stats_inc(host, err_name) \
->> +	mmc_debugfs_err_stats_inc((host)->mmc, MMC_ERR_##err_name)
->> +
->>   enum sdhci_cookie {
->>   	COOKIE_UNMAPPED,
->>   	COOKIE_PRE_MAPPED,	/* mapped by sdhci_pre_req() */
->> diff --git a/include/linux/mmc/mmc.h b/include/linux/mmc/mmc.h
->> index d9a65c6..9c50bc4 100644
->> --- a/include/linux/mmc/mmc.h
->> +++ b/include/linux/mmc/mmc.h
->> @@ -99,6 +99,12 @@ static inline bool mmc_op_multi(u32 opcode)
->>   	       opcode == MMC_READ_MULTIPLE_BLOCK;
->>   }
->>   
->> +static inline bool mmc_op_tuning(u32 opcode)
->> +{
->> +	return opcode == MMC_SEND_TUNING_BLOCK ||
->> +			opcode == MMC_SEND_TUNING_BLOCK_HS200;
->> +}
->> +
->>   /*
->>    * MMC_SWITCH argument format:
->>    *
+	Ingo

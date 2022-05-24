@@ -2,93 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A0A531FF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 02:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E84531FF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 02:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232233AbiEXAuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 20:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S232434AbiEXAvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 20:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiEXAuO (ORCPT
+        with ESMTP id S232308AbiEXAvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 20:50:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A307C152;
-        Mon, 23 May 2022 17:50:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B491615C1;
-        Tue, 24 May 2022 00:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 97144C385A9;
-        Tue, 24 May 2022 00:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653353412;
-        bh=sIp6djcrJ2pYPQ4fWtehEfwz6Acwa99SXz25tU5Ybq0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JqB70igHpu9tVw5iItH/3qBJabFLpFmkX+okdUv5kk4zcPNsyHTuWDnmtjCZaHeIg
-         SvAfOfWQhuMlUFiJh2prc82gXvlY8KsVN0Lbzv85CiuBKrmrPXZ9PCNvnSaB+/nhoa
-         UWDexZKvzZ0oiJKgypXtMiEn4dff60u8bhM4gcLMCjmII1rSvco8U+pJuVxLtoiJb0
-         j3qgbIbE+0DzmY5zIjL6pD6+k3UESM0ECopvL2eT0OJApcwKLOBYCojvhnmep8aUlf
-         giPGLI1CaPWxPHpbjyrFAXZCDqNrBxEkzXEtaoPhrl8lCzRMB1OTZfLQ3AN5n4vpbr
-         I4qSXIu/Qd/Aw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 79E2EF03943;
-        Tue, 24 May 2022 00:50:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 23 May 2022 20:51:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40EEE1FCD7
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 17:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653353492;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YYTIypUIAadfcSy41CGM20tQJDNF0c7lxi1JOJ+m/Z8=;
+        b=DfuAtgdGaAenDRRp4q9ByajuyWWKc9FvP9Go8PC8UDs/+bxryRfOpvEjfO8AYOEOWTdV1f
+        VzFyLI6DcVJrnfGyITJ1e3h7bve0sn3rbbkrkYU/3//yA2s6qh+bOGVZHW/b4ivsy1utat
+        vQk/AjKevr758u62s9oItF63BKl4SSw=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-650-JybUJKo-Pq-550DFsFcpQw-1; Mon, 23 May 2022 20:51:31 -0400
+X-MC-Unique: JybUJKo-Pq-550DFsFcpQw-1
+Received: by mail-pg1-f197.google.com with SMTP id u8-20020a656708000000b003f70a43fe1eso5058771pgf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 17:51:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=YYTIypUIAadfcSy41CGM20tQJDNF0c7lxi1JOJ+m/Z8=;
+        b=l69Ze2M9y+ktoOAaLTNa2mzBTPnCp/qW+9+mY54wLRy5Dhp/bXM4sm8Bk/m+lKGjc6
+         NzjW2ypNBwL5UW7t9/S0gmZxJJW7o08Pc20M7GIM0V3zog+pW9bKvtNJOgnwa4MjC8S2
+         6I7Fha3SQB2xVnIgZRslTWORXq4AQove/H5vCepXeMbfDkw1iMx8dx3AJNEikMSyxxCi
+         m6ron+2Ln2po7c6bElUNCl5oSdFJNRWikLPAKeAdbiPrUYtBbTc21wAJ6EUIszrfQvjC
+         gMVZIIzp8owuXQoG7EYoGoOkaanEu76pQDb/9wpp5zHTcm2WPdNdiFSIvO/t4yG9FZd7
+         kYhw==
+X-Gm-Message-State: AOAM530zeoxYrJmQRCBebEcoM4uhimsM1DA0lkKcDgOnYwuxXJQcaPAG
+        fQ+qADBkUO0T7xPX1vPJam75bP6UKDNJGxoDos6d06hLbvUG6mDUUq0yKtv/lF5y9uFkgUF0xvN
+        T8v+24J5w/I+HWYGm+Co/zRtqaq5iagUsHcSZ+xEreLbfUHlfvMxhpMwFgfenKmLXgpPxZrpDig
+        ==
+X-Received: by 2002:a63:fc08:0:b0:3f9:e159:b114 with SMTP id j8-20020a63fc08000000b003f9e159b114mr13011215pgi.526.1653353489819;
+        Mon, 23 May 2022 17:51:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwH5R8vSDYh7Qy+89u7KjwlPHBHVSXcTSiatpbqsu0in/KQMdoJAbWkmpNFUQY2OLjaEKOovA==
+X-Received: by 2002:a63:fc08:0:b0:3f9:e159:b114 with SMTP id j8-20020a63fc08000000b003f9e159b114mr13011200pgi.526.1653353489558;
+        Mon, 23 May 2022 17:51:29 -0700 (PDT)
+Received: from [10.72.12.81] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id l13-20020a6542cd000000b003c619f3d086sm5367802pgp.2.2022.05.23.17.51.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 17:51:28 -0700 (PDT)
+Subject: Re: [PATCH] MAINTAINERS: move myself from ceph "Maintainer" to
+ "Reviewer"
+To:     Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org
+Cc:     idryomov@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220523172209.141504-1-jlayton@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <70a4bb14-cdb7-2368-1a67-ab69d3ed9317@redhat.com>
+Date:   Tue, 24 May 2022 08:51:22 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 0/5] platform/chrome: cros_kbd_led_backlight: add EC PWM
- backend
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165335341249.17704.13803710194044994542.git-patchwork-notify@kernel.org>
-Date:   Tue, 24 May 2022 00:50:12 +0000
-References: <20220523090822.3035189-1-tzungbi@kernel.org>
-In-Reply-To: <20220523090822.3035189-1-tzungbi@kernel.org>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        mka@chromium.org, devicetree@vger.kernel.org
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220523172209.141504-1-jlayton@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+On 5/24/22 1:22 AM, Jeff Layton wrote:
+> Xiubo has graciously volunteered to take over for me as the Linux cephfs
+> client maintainer. Make it official by changing myself to be a
+> "Reviewer" for libceph and ceph.
+>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>   MAINTAINERS | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d6d879cb0afd..39ec8fd2e996 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4547,8 +4547,8 @@ F:	drivers/power/supply/cw2015_battery.c
+>   
+>   CEPH COMMON CODE (LIBCEPH)
+>   M:	Ilya Dryomov <idryomov@gmail.com>
+> -M:	Jeff Layton <jlayton@kernel.org>
+>   M:	Xiubo Li <xiubli@redhat.com>
+> +R:	Jeff Layton <jlayton@kernel.org>
+>   L:	ceph-devel@vger.kernel.org
+>   S:	Supported
+>   W:	http://ceph.com/
+> @@ -4558,9 +4558,9 @@ F:	include/linux/crush/
+>   F:	net/ceph/
+>   
+>   CEPH DISTRIBUTED FILE SYSTEM CLIENT (CEPH)
+> -M:	Jeff Layton <jlayton@kernel.org>
+>   M:	Xiubo Li <xiubli@redhat.com>
+>   M:	Ilya Dryomov <idryomov@gmail.com>
+> +R:	Jeff Layton <jlayton@kernel.org>
+>   L:	ceph-devel@vger.kernel.org
+>   S:	Supported
+>   W:	http://ceph.com/
 
-On Mon, 23 May 2022 17:08:17 +0800 you wrote:
-> The series adds EC PWM as an backend option for ChromeOS keyboard LED
-> backlight.
-> 
-> The 1st patch reorder the headers alphabetically.
-> 
-> The 2nd patch separates the ACPI backend.
-> 
-> [...]
+Thanks Jeff.
 
-Here is the summary with links:
-  - [v4,1/5] platform/chrome: cros_kbd_led_backlight: sort headers alphabetically
-    https://git.kernel.org/chrome-platform/c/a4da30150ab4
-  - [v4,2/5] platform/chrome: cros_kbd_led_backlight: separate ACPI backend
-    (no matching commit)
-  - [v4,3/5] dt-bindings: add google,cros-kbd-led-backlight
-    (no matching commit)
-  - [v4,4/5] platform/chrome: cros_kbd_led_backlight: support OF match
-    (no matching commit)
-  - [v4,5/5] platform/chrome: cros_kbd_led_backlight: support EC PWM backend
-    (no matching commit)
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Acked-by: Xiubo Li <xiubli@redhat.com>
 

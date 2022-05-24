@@ -2,134 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E33532C4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDF3532C54
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238267AbiEXOef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
+        id S238275AbiEXOgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 10:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237607AbiEXOea (ORCPT
+        with ESMTP id S236719AbiEXOgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 10:34:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6987966F84
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653402868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IATTeiwvknjib2mrV8AsShseYTokKOCsuZyH3XiozGg=;
-        b=DBUJ9oJ26+/FUdoNmc+ifahWN/422WpXCUjLMzl84EgzqPB7V2wpyWS1xFAe+X63KS6fbN
-        rX5+Rdvlyo6I8jZeCqxItNxaSXQVxVLRyCgymEpANg2MkBAL+R2nalaRLgrWV5TbTrvJ0g
-        4O5Zoba497L93x/dwZp+7TUzov41Qto=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-371-NrBM45JvN8msUeNP_0rhTg-1; Tue, 24 May 2022 10:34:25 -0400
-X-MC-Unique: NrBM45JvN8msUeNP_0rhTg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96EA63C10236;
-        Tue, 24 May 2022 14:34:24 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 723F82026D07;
-        Tue, 24 May 2022 14:34:24 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>, stable@vger.kernel.org
-Subject: [PATCH] x86, kvm: use correct GFP flags for preemption disabled
-Date:   Tue, 24 May 2022 10:34:24 -0400
-Message-Id: <20220524143424.6790-1-pbonzini@redhat.com>
+        Tue, 24 May 2022 10:36:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C06E150E0B
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:36:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2FD9F1FB;
+        Tue, 24 May 2022 07:36:20 -0700 (PDT)
+Received: from [10.57.82.55] (unknown [10.57.82.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E7193F66F;
+        Tue, 24 May 2022 07:36:17 -0700 (PDT)
+Message-ID: <f3170016-4d7f-e78e-db48-68305f683349@arm.com>
+Date:   Tue, 24 May 2022 15:36:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v7 03/10] iommu/sva: Add iommu_sva_domain support
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-4-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220519072047.2996983-4-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit ddd7ed842627 ("x86/kvm: Alloc dummy async #PF token outside of
-raw spinlock") leads to the following Smatch static checker warning:
+On 2022-05-19 08:20, Lu Baolu wrote:
+[...]
+> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
+> index 106506143896..210c376f6043 100644
+> --- a/drivers/iommu/iommu-sva-lib.c
+> +++ b/drivers/iommu/iommu-sva-lib.c
+> @@ -69,3 +69,51 @@ struct mm_struct *iommu_sva_find(ioasid_t pasid)
+>   	return ioasid_find(&iommu_sva_pasid, pasid, __mmget_not_zero);
+>   }
+>   EXPORT_SYMBOL_GPL(iommu_sva_find);
+> +
+> +/*
+> + * IOMMU SVA driver-oriented interfaces
+> + */
+> +struct iommu_domain *
+> +iommu_sva_alloc_domain(struct bus_type *bus, struct mm_struct *mm)
 
-	arch/x86/kernel/kvm.c:212 kvm_async_pf_task_wake()
-	warn: sleeping in atomic context
+Argh, please no new bus-based external interfaces! Domain allocation 
+needs to resolve to the right IOMMU instance to solve a number of 
+issues, and cleaning up existing users of iommu_domain_alloc() to 
+prepare for that is already hard enough. This is arguably even more 
+relevant here than for other domain types, since SVA support is more 
+likely to depend on specific features that can vary between IOMMU 
+instances even with the same driver. Please make the external interface 
+take a struct device, then resolve the ops through dev->iommu.
 
-arch/x86/kernel/kvm.c
-    202         raw_spin_lock(&b->lock);
-    203         n = _find_apf_task(b, token);
-    204         if (!n) {
-    205                 /*
-    206                  * Async #PF not yet handled, add a dummy entry for the token.
-    207                  * Allocating the token must be down outside of the raw lock
-    208                  * as the allocator is preemptible on PREEMPT_RT kernels.
-    209                  */
-    210                 if (!dummy) {
-    211                         raw_spin_unlock(&b->lock);
---> 212                         dummy = kzalloc(sizeof(*dummy), GFP_KERNEL);
-                                                                ^^^^^^^^^^
-Smatch thinks the caller has preempt disabled.  The `smdb.py preempt
-kvm_async_pf_task_wake` output call tree is:
+Further nit: the naming inconsistency bugs me a bit - 
+iommu_sva_domain_alloc() seems more natural. Also I'd question the 
+symmetry vs. usability dichotomy of whether we *really* want two 
+different free functions for a struct iommu_domain pointer, where any 
+caller which might mix SVA and non-SVA usage then has to remember how 
+they allocated any particular domain :/
 
-sysvec_kvm_asyncpf_interrupt() <- disables preempt
--> __sysvec_kvm_asyncpf_interrupt()
-   -> kvm_async_pf_task_wake()
+> +{
+> +	struct iommu_sva_domain *sva_domain;
+> +	struct iommu_domain *domain;
+> +
+> +	if (!bus->iommu_ops || !bus->iommu_ops->sva_domain_ops)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	sva_domain = kzalloc(sizeof(*sva_domain), GFP_KERNEL);
+> +	if (!sva_domain)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	mmgrab(mm);
+> +	sva_domain->mm = mm;
+> +
+> +	domain = &sva_domain->domain;
+> +	domain->type = IOMMU_DOMAIN_SVA;
+> +	domain->ops = bus->iommu_ops->sva_domain_ops;
 
-The caller is this:
+I'd have thought it would be logical to pass IOMMU_DOMAIN_SVA to the 
+normal domain_alloc call, so that driver-internal stuff like context 
+descriptors can be still be hung off the domain as usual (rather than 
+all drivers having to implement some extra internal lookup mechanism to 
+handle all the SVA domain ops), but that's something we're free to come 
+back and change later. FWIW I'd just stick the mm pointer in struct 
+iommu_domain, in a union with the fault handler stuff and/or iova_cookie 
+- those are mutually exclusive with SVA, right?
 
-arch/x86/kernel/kvm.c
-   290        DEFINE_IDTENTRY_SYSVEC(sysvec_kvm_asyncpf_interrupt)
-   291        {
-   292                struct pt_regs *old_regs = set_irq_regs(regs);
-   293                u32 token;
-   294
-   295                ack_APIC_irq();
-   296
-   297                inc_irq_stat(irq_hv_callback_count);
-   298
-   299                if (__this_cpu_read(apf_reason.enabled)) {
-   300                        token = __this_cpu_read(apf_reason.token);
-   301                        kvm_async_pf_task_wake(token);
-   302                        __this_cpu_write(apf_reason.token, 0);
-   303                        wrmsrl(MSR_KVM_ASYNC_PF_ACK, 1);
-   304                }
-   305
-   306                set_irq_regs(old_regs);
-   307        }
+Cheers,
+Robin.
 
-The DEFINE_IDTENTRY_SYSVEC() is a wrapper that calls this function
-from the call_on_irqstack_cond().  It's inside the call_on_irqstack_cond()
-where preempt is disabled (unless it's already disabled).  The
-irq_enter/exit_rcu() functions disable/enable preempt.
-
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kernel/kvm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-index 35b3c5836703..1a3658f7e6d9 100644
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -209,7 +209,7 @@ void kvm_async_pf_task_wake(u32 token)
- 		 */
- 		if (!dummy) {
- 			raw_spin_unlock(&b->lock);
--			dummy = kzalloc(sizeof(*dummy), GFP_KERNEL);
-+			dummy = kzalloc(sizeof(*dummy), GFP_ATOMIC);
- 
- 			/*
- 			 * Continue looping on allocation failure, eventually
--- 
-2.31.1
-
+> +
+> +	return domain;
+> +}
+> +
+> +void iommu_sva_free_domain(struct iommu_domain *domain)
+> +{
+> +	struct iommu_sva_domain *sva_domain = to_sva_domain(domain);
+> +
+> +	mmdrop(sva_domain->mm);
+> +	kfree(sva_domain);
+> +}
+> +

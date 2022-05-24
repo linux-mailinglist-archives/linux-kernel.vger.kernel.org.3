@@ -2,132 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDE75325AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 10:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0E7532611
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233718AbiEXIy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 04:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
+        id S234093AbiEXI4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 04:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbiEXIy4 (ORCPT
+        with ESMTP id S230086AbiEXI4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 04:54:56 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13877356E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 01:54:51 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id x137so1299462ybg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 01:54:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uqZD+ogOM6DMMZNvJXo9UtOZIWjh9lX3b715CP395Rw=;
-        b=YalnveRKXo/MmbpOdqU9xl8clAnBE9reOoViC11TCrupa/uAC8igoDuIf3X98aDlr0
-         H9spduLwCrMws7VKbclVVDyvNS+SeJv/VSzmN3fB9isHzsz1ENnXF+krtD7RxE9bkxH8
-         rOqQ5OdY/HBgvkzG9OMNS4P8S/HhS0cHV97ThG5d8PdMP9BWI3TLDafyp+g2WvGb2GMm
-         BLEJQQoYT0B/gLoXkpOmoQZd3rra/n4iHf8wSinAaYNfaKkLSmKZiY2h/WjA1QgUezC0
-         OIF5UOQRmY5VpKS441Rwybtwepuab+IatetBAcDmHu/W9nU8ORpJ6omFL1pw2NJ5gb1j
-         gZAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uqZD+ogOM6DMMZNvJXo9UtOZIWjh9lX3b715CP395Rw=;
-        b=JHk/zaqYB9QLBXvXxF1oSHd3ZjOe8YN58DFngSdA2/zPEsfhNEcrlLJhOL6KY3dQFP
-         kMp3xhCqokLooMyXzAHjEGX3faqRYYO87lCCHcK4RN+fD6Yil/pXvBV/BDbS3tLr/MM1
-         dNghZOHGjAh1QvZTqdYvjUk+8xDzaIoZ1MrE059qiaa6W17DbrW48rVKJ1sxASH+a1HY
-         nuqxqNfmSX4n5KUygkfRqJWkHF0jety/mlCD7HiHF8LkUCcr6UAfqBbHPOnGdNprVy7q
-         T7CHlVBWIcXL0PC3C2H/uSzf8ibYbLUv19bosg4LpWrx8hZ0vZkqdBge9SQ9QbrT8QDS
-         HeiQ==
-X-Gm-Message-State: AOAM533ddouiZKJtA3KLPRI8SGDZxyDtpKennfobwR+wCG7ItuvLf9Nk
-        FNa0a6d6RaS4wLQLxB8cUkKbCKB7zbY2lNurcpuUzg==
-X-Google-Smtp-Source: ABdhPJwmTZMv++iingNx6Cx2coJjp0zLQsy9Binu+PO+H9btH3fjaVRzSwcDgANvXo1lN7abVTZY0I5SNNywjxprtt8=
-X-Received: by 2002:a25:2c82:0:b0:64d:62a1:850b with SMTP id
- s124-20020a252c82000000b0064d62a1850bmr25986931ybs.291.1653382490845; Tue, 24
- May 2022 01:54:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220523174238.28942-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220523174238.28942-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220523174238.28942-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 24 May 2022 10:54:39 +0200
-Message-ID: <CACRpkdYaWmD9PTcGgeP5MTe9bXMgmf=tUSDBQ-4VxSfL4qkoeQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/5] gpio: gpiolib: Allow free() callback to be overridden
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 24 May 2022 04:56:19 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A3652A71F;
+        Tue, 24 May 2022 01:56:17 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1004)
+        id 0CE5C20B71D5; Tue, 24 May 2022 01:56:17 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0CE5C20B71D5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxonhyperv.com;
+        s=default; t=1653382577;
+        bh=q6+10vIn7gksEq8uQbjXxOjVwfFIGP+vMhljlQ+vW7c=;
+        h=From:To:Cc:Subject:Date:Reply-To:From;
+        b=dmgXmJnklCANUE4vQgU1kjm3WH/UOKVEoEoionCCBOLFFNFZh2LCilHxrxA9aEGDX
+         c7PeD4Uyb/69AMK1uSDlR1slho0JQy4h8ygz4TlmLwdgMHNTZ3BG2yUvwS5HXHfXms
+         xY/69ZWKiE3lPhw7fBMxrj2sj//0JLLhZWn1T6yw=
+From:   longli@linuxonhyperv.com
+To:     "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Ajay Sharma <sharmaajay@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Long Li <longli@microsoft.com>
+Subject: [Patch v2 00/12] Introduce Microsoft Azure Network Adapter (MANA) RDMA driver
+Date:   Tue, 24 May 2022 01:56:00 -0700
+Message-Id: <1653382572-14788-1-git-send-email-longli@linuxonhyperv.com>
+X-Mailer: git-send-email 1.8.3.1
+Reply-To: longli@microsoft.com
+X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 7:43 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+From: Long Li <longli@microsoft.com>
 
-> Allow free() callback to be overridden from irq_domain_ops for
-> hierarchical chips.
->
-> This allows drivers to free up resources which are allocated during
-> child_to_parent_hwirq()/populate_parent_alloc_arg() callbacks.
->
-> On Renesas RZ/G2L platform a bitmap is maintained for TINT slots, a slot
-> is allocated in child_to_parent_hwirq() callback which is freed up in free
-> callback hence this override.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+This patchset implements a RDMA driver for Microsoft Azure Network
+Adapter (MANA). In MANA, the RDMA device is modeled as an auxiliary device
+to the Ethernet device.
 
-So that function today looks like this:
+The first 11 patches modify the MANA Ethernet driver to support RDMA driver.
+The last patch implementes the RDMA driver.
 
-static void gpiochip_hierarchy_setup_domain_ops(struct irq_domain_ops *ops)
-{
-        ops->activate = gpiochip_irq_domain_activate;
-        ops->deactivate = gpiochip_irq_domain_deactivate;
-        ops->alloc = gpiochip_hierarchy_irq_domain_alloc;
-        ops->free = irq_domain_free_irqs_common;
+The user-mode of the driver is being reviewed at:
+https://github.com/linux-rdma/rdma-core/pull/1177
 
-        /*
-         * We only allow overriding the translate() function for
-         * hierarchical chips, and this should only be done if the user
-         * really need something other than 1:1 translation.
-         */
-        if (!ops->translate)
-                ops->translate = gpiochip_hierarchy_irq_domain_translate;
-}
 
-(...)
--       ops->free = irq_domain_free_irqs_common;
-(...)
-> +       if (!ops->free)
-> +               ops->free = irq_domain_free_irqs_common;
+Ajay Sharma (3):
+  net: mana: Set the DMA device max segment size
+  net: mana: Define data structures for protection domain and memory
+    registration
+  net: mana: Define and process GDMA response code
+    GDMA_STATUS_MORE_ENTRIES
 
-Marc Z is working on cleaning up the way that gpiolib is (ab)using
-irqchips. We definitely need his ACK if we do things like this.
-This doesn't look like one of the big offenders to me, but I want
-to make sure we don't create new problems while Marc is trying
-to solve the old ones.
+Long Li (9):
+  net: mana: Add support for auxiliary device
+  net: mana: Record the physical address for doorbell page region
+  net: mana: Handle vport sharing between devices
+  net: mana: Add functions for allocating doorbell page from GDMA
+  net: mana: Export Work Queue functions for use by RDMA driver
+  net: mana: Record port number in netdev
+  net: mana: Move header files to a common location
+  net: mana: Define max values for SGL entries
+  RDMA/mana_ib: Add a driver for Microsoft Azure Network Adapter
 
-Yours,
-Linus Walleij
+ MAINTAINERS                                   |   4 +
+ drivers/infiniband/Kconfig                    |   1 +
+ drivers/infiniband/hw/Makefile                |   1 +
+ drivers/infiniband/hw/mana/Kconfig            |   7 +
+ drivers/infiniband/hw/mana/Makefile           |   4 +
+ drivers/infiniband/hw/mana/cq.c               |  79 +++
+ drivers/infiniband/hw/mana/main.c             | 648 ++++++++++++++++++
+ drivers/infiniband/hw/mana/mana_ib.h          | 144 ++++
+ drivers/infiniband/hw/mana/mr.c               | 134 ++++
+ drivers/infiniband/hw/mana/qp.c               | 494 +++++++++++++
+ drivers/infiniband/hw/mana/wq.c               | 115 ++++
+ .../net/ethernet/microsoft/mana/gdma_main.c   |  93 ++-
+ .../net/ethernet/microsoft/mana/hw_channel.c  |   6 +-
+ .../net/ethernet/microsoft/mana/mana_bpf.c    |   2 +-
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 140 +++-
+ .../ethernet/microsoft/mana/mana_ethtool.c    |   2 +-
+ .../net/ethernet/microsoft/mana/shm_channel.c |   2 +-
+ .../microsoft => include/net}/mana/gdma.h     | 191 +++++-
+ .../net}/mana/hw_channel.h                    |   0
+ .../microsoft => include/net}/mana/mana.h     |  26 +-
+ .../net}/mana/shm_channel.h                   |   0
+ include/uapi/rdma/ib_user_ioctl_verbs.h       |   1 +
+ include/uapi/rdma/mana-abi.h                  |  68 ++
+ 23 files changed, 2117 insertions(+), 45 deletions(-)
+ create mode 100644 drivers/infiniband/hw/mana/Kconfig
+ create mode 100644 drivers/infiniband/hw/mana/Makefile
+ create mode 100644 drivers/infiniband/hw/mana/cq.c
+ create mode 100644 drivers/infiniband/hw/mana/main.c
+ create mode 100644 drivers/infiniband/hw/mana/mana_ib.h
+ create mode 100644 drivers/infiniband/hw/mana/mr.c
+ create mode 100644 drivers/infiniband/hw/mana/qp.c
+ create mode 100644 drivers/infiniband/hw/mana/wq.c
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/gdma.h (77%)
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/hw_channel.h (100%)
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/mana.h (94%)
+ rename {drivers/net/ethernet/microsoft => include/net}/mana/shm_channel.h (100%)
+ create mode 100644 include/uapi/rdma/mana-abi.h
+
+-- 
+2.17.1
+

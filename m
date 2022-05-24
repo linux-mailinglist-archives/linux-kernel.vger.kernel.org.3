@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2594D5321E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 06:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECB95321DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 06:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233628AbiEXEGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 00:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
+        id S234174AbiEXEGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 00:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234135AbiEXEGC (ORCPT
+        with ESMTP id S234143AbiEXEGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 00:06:02 -0400
+        Tue, 24 May 2022 00:06:03 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1232A6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 21:05:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801CA100C
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 21:06:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653365159; x=1684901159;
+  t=1653365162; x=1684901162;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hDDJt6MYhoCh7Rj4OmR2N48edxZ1+wqyexSmp2CDOh0=;
-  b=WtxXLKpWDHXzOL7yzRV0f99RdT7B6jS1V+sVVI3oaOy36Nz1SzcyYFfS
-   4nz1ljaSYMEYnOi9ceeZApdFUIjJSPgNUUfE2771B/ro8BhqgEp//pFeX
-   b8Uv5j17Y6Rl5qpWF34Ry4yoxi8kdvPsi5x+wFudx/I25JarNrs6fjtgH
-   948DQQrMKA+KIUlHDmhG3VEB7dmpi4FRdKhsY7wDS1D05EbhMF8ybX9TJ
-   KqCkqUBns6P8EgCi7rsLulUJQO0M12vE5glAzZfbydNHjZ+bqxjDHyRSg
-   QRpnwBvQzZu16Bj1E0r7dy08tBvood9HYOQNDbszjIT6cF+sKMPT3bU3b
+  bh=axd6CIMkKKwgPL8PgFH1WkIgbrXV7y44ZdJBhgbW0e0=;
+  b=S6tLWdDYGDPswjrq3xgDFgd7FnpDUXCWbhdlYAB9nmdFI8ndf2VE0llc
+   KiJ57gGhB3lJL91qyA0poFM7IjtAE+3cSBEH02QnVtlnOGVO8RggRPsmK
+   Cu1DeuhS98YsvYvLc6UUAYGKwjg6J1XXwiP9tPKdQBShnKZR57mz/SuBY
+   rX0xwZIVSTLcEtiN7H0nA7WGK5IE8Ux7b6O+Hhlg5VRrSopQuoL9SPSz6
+   szZ5i/FOCyfXv3PoVNj9+A/nkHp/iaNj6pnKJ0Hc5kkwoO4YQ8jQfRAKk
+   Q+21lRH/E78q6JEv8Od8bjJGU6abQGRaODmoLm1pEepJmg6Xjej1lUTbC
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="336479187"
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="336479188"
 X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="336479187"
+   d="scan'208";a="336479188"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 21:05:56 -0700
 X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="526242033"
+   d="scan'208";a="526242039"
 Received: from jwosulli-mobl1.ger.corp.intel.com (HELO skuppusw-desk1.home) ([10.212.165.122])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 21:05:55 -0700
 From:   Kuppuswamy Sathyanarayanan 
@@ -54,9 +54,9 @@ Cc:     "H . Peter Anvin" <hpa@zytor.com>,
         marcelo.cerri@canonical.com, tim.gardner@canonical.com,
         khalid.elmously@canonical.com, philip.cox@canonical.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v7 2/5] x86/tdx: Add TDX Guest event notify interrupt support
-Date:   Mon, 23 May 2022 21:05:14 -0700
-Message-Id: <20220524040517.703581-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v7 3/5] x86/mm: Make tdx_enc_status_changed() vmalloc address compatible
+Date:   Mon, 23 May 2022 21:05:15 -0700
+Message-Id: <20220524040517.703581-4-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -72,232 +72,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Host-guest event notification via configured interrupt vector is useful
-in cases where a guest makes an asynchronous request and needs a
-callback from the host to indicate the completion or to let the host
-notify the guest about events like device removal. One usage example is,
-callback requirement of GetQuote asynchronous hypercall.
+set_memory_*crypted() APIs are used to change encryption or decryption
+page attributes for the given address. It also by default support the
+conversion for the vmalloc'ed memory address.
 
-In TDX guest, SetupEventNotifyInterrupt hypercall can be used by the
-guest to specify which interrupt vector to use as an event-notify
-vector to the VMM. Details about the SetupEventNotifyInterrupt
-hypercall can be found in TDX Guest-Host Communication Interface
-(GHCI) Specification, sec 3.5 "VP.VMCALL<SetupEventNotifyInterrupt>".
-Add a tdx_hcall_set_notify_intr() helper function to implement the
-SetupEventNotifyInterrupt hypercall.
+In TDX Guest, tdx_enc_status_changed() function is triggered by
+set_memory_*crypted() APIs when converting memory from/to shared or
+private. Internally this function uses __pa() for physical address
+conversion, which breaks the vmalloc address compatibility of the
+set_memory_*crypted() APIs.
 
-Reserve 0xec IRQ vector address for TDX guest to receive the event
-completion notification from VMM. Also add related IDT handler to
-process the notification event.
+So add support to fix the vmalloc'ed address compatibility issue.
 
-Add support to track the notification event status via
-/proc/interrupts.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Acked-by: Wander Lairson Costa <wander@redhat.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- arch/x86/coco/tdx/tdx.c            | 73 ++++++++++++++++++++++++++++++
- arch/x86/include/asm/hardirq.h     |  3 ++
- arch/x86/include/asm/idtentry.h    |  4 ++
- arch/x86/include/asm/irq_vectors.h |  7 ++-
- arch/x86/include/asm/tdx.h         |  4 ++
- arch/x86/kernel/irq.c              |  7 +++
- 6 files changed, 97 insertions(+), 1 deletion(-)
+ arch/x86/coco/tdx/tdx.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 03deb4d6920d..b49211994864 100644
+index b49211994864..37d58675ccf1 100644
 --- a/arch/x86/coco/tdx/tdx.c
 +++ b/arch/x86/coco/tdx/tdx.c
-@@ -11,6 +11,10 @@
- #include <asm/insn.h>
- #include <asm/insn-eval.h>
- #include <asm/pgtable.h>
-+#include <asm/apic.h>
-+#include <asm/idtentry.h>
-+#include <asm/irq_regs.h>
-+#include <asm/desc.h>
+@@ -15,6 +15,7 @@
+ #include <asm/idtentry.h>
+ #include <asm/irq_regs.h>
+ #include <asm/desc.h>
++#include <asm/io.h>
  
  /* TDX module Call Leaf IDs */
  #define TDX_GET_INFO			1
-@@ -19,6 +23,7 @@
- 
- /* TDX hypercall Leaf IDs */
- #define TDVMCALL_MAP_GPA		0x10001
-+#define TDVMCALL_SETUP_NOTIFY_INTR	0x10004
- 
- /* MMIO direction */
- #define EPT_READ	0
-@@ -34,6 +39,28 @@
- #define VE_GET_PORT_NUM(e)	((e) >> 16)
- #define VE_IS_IO_STRING(e)	((e) & BIT(4))
- 
-+/*
-+ * Handler used to report notifications about
-+ * TDX_GUEST_EVENT_NOTIFY_VECTOR IRQ. Currently it will be
-+ * used only by the attestation driver. So, race condition
-+ * with read/write operation is not considered.
-+ */
-+static void (*tdx_event_notify_handler)(void);
-+
-+/* Helper function to register tdx_event_notify_handler */
-+void tdx_setup_ev_notify_handler(void (*handler)(void))
-+{
-+	tdx_event_notify_handler = handler;
-+}
-+EXPORT_SYMBOL_GPL(tdx_setup_ev_notify_handler);
-+
-+/* Helper function to unregister tdx_event_notify_handler */
-+void tdx_remove_ev_notify_handler(void)
-+{
-+	tdx_event_notify_handler = NULL;
-+}
-+EXPORT_SYMBOL_GPL(tdx_remove_ev_notify_handler);
-+
- /*
-  * Wrapper for standard use of __tdx_hypercall with no output aside from
-  * return code.
-@@ -98,6 +125,46 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- 		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
- }
- 
-+/* TDX guest event notification handler */
-+DEFINE_IDTENTRY_SYSVEC(sysvec_tdx_event_notify)
-+{
-+	struct pt_regs *old_regs = set_irq_regs(regs);
-+
-+	inc_irq_stat(irq_tdx_event_notify_count);
-+
-+	if (tdx_event_notify_handler)
-+		tdx_event_notify_handler();
-+
-+	ack_APIC_irq();
-+
-+	set_irq_regs(old_regs);
-+}
-+
-+/*
-+ * tdx_hcall_set_notify_intr() - Setup Event Notify Interrupt Vector.
-+ *
-+ * @vector: Vector address to be used for notification.
-+ *
-+ * return 0 on success or failure error number.
-+ */
-+static long tdx_hcall_set_notify_intr(u8 vector)
-+{
-+	/* Minimum vector value allowed is 32 */
-+	if (vector < 32)
-+		return -EINVAL;
-+
-+	/*
-+	 * Register callback vector address with VMM. More details
-+	 * about the ABI can be found in TDX Guest-Host-Communication
-+	 * Interface (GHCI), sec titled
-+	 * "TDG.VP.VMCALL<SetupEventNotifyInterrupt>".
-+	 */
-+	if (_tdx_hypercall(TDVMCALL_SETUP_NOTIFY_INTR, vector, 0, 0, 0))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
- static u64 get_cc_mask(void)
+@@ -680,8 +681,14 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
+  */
+ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
  {
- 	struct tdx_module_output out;
-@@ -688,5 +755,11 @@ void __init tdx_early_init(void)
- 	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
- 	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
- 
-+	alloc_intr_gate(TDX_GUEST_EVENT_NOTIFY_VECTOR,
-+			asm_sysvec_tdx_event_notify);
+-	phys_addr_t start = __pa(vaddr);
+-	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
++	phys_addr_t start, end;
 +
-+	if (tdx_hcall_set_notify_intr(TDX_GUEST_EVENT_NOTIFY_VECTOR))
-+		pr_warn("Setting event notification interrupt failed\n");
++	if (is_vmalloc_addr((void *)vaddr))
++		start = vmalloc_to_pfn((void *) vaddr) << PAGE_SHIFT;
++	else
++		start = __pa(vaddr);
 +
- 	pr_info("Guest detected\n");
- }
-diff --git a/arch/x86/include/asm/hardirq.h b/arch/x86/include/asm/hardirq.h
-index 275e7fd20310..582deff56210 100644
---- a/arch/x86/include/asm/hardirq.h
-+++ b/arch/x86/include/asm/hardirq.h
-@@ -44,6 +44,9 @@ typedef struct {
- 	unsigned int irq_hv_reenlightenment_count;
- 	unsigned int hyperv_stimer0_count;
- #endif
-+#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
-+	unsigned int irq_tdx_event_notify_count;
-+#endif
- } ____cacheline_aligned irq_cpustat_t;
++	end = start + numpages * PAGE_SIZE;
  
- DECLARE_PER_CPU_SHARED_ALIGNED(irq_cpustat_t, irq_stat);
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 72184b0b2219..655086dd940e 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -700,6 +700,10 @@ DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_xen_hvm_callback);
- DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_kvm_asyncpf_interrupt);
- #endif
- 
-+#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
-+DECLARE_IDTENTRY_SYSVEC(TDX_GUEST_EVENT_NOTIFY_VECTOR,	sysvec_tdx_event_notify);
-+#endif
-+
- #undef X86_TRAP_OTHER
- 
- #endif
-diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
-index 43dcb9284208..82ac0c0a34b1 100644
---- a/arch/x86/include/asm/irq_vectors.h
-+++ b/arch/x86/include/asm/irq_vectors.h
-@@ -104,7 +104,12 @@
- #define HYPERV_STIMER0_VECTOR		0xed
- #endif
- 
--#define LOCAL_TIMER_VECTOR		0xec
-+#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
-+/* Vector on which TDX Guest event notification is delivered */
-+#define TDX_GUEST_EVENT_NOTIFY_VECTOR	0xec
-+#endif
-+
-+#define LOCAL_TIMER_VECTOR		0xeb
- 
- #define NR_VECTORS			 256
- 
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 020c81a7c729..eb4db837cc44 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -67,6 +67,10 @@ void tdx_safe_halt(void);
- 
- bool tdx_early_handle_ve(struct pt_regs *regs);
- 
-+void tdx_setup_ev_notify_handler(void (*handler)(void));
-+
-+void tdx_remove_ev_notify_handler(void);
-+
- #else
- 
- static inline void tdx_early_init(void) { };
-diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
-index 766ffe3ba313..a96ecd866723 100644
---- a/arch/x86/kernel/irq.c
-+++ b/arch/x86/kernel/irq.c
-@@ -181,6 +181,13 @@ int arch_show_interrupts(struct seq_file *p, int prec)
- 		seq_printf(p, "%10u ",
- 			   irq_stats(j)->kvm_posted_intr_wakeup_ipis);
- 	seq_puts(p, "  Posted-interrupt wakeup event\n");
-+#endif
-+#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
-+	seq_printf(p, "%*s: ", prec, "TGN");
-+	for_each_online_cpu(j)
-+		seq_printf(p, "%10u ",
-+			   irq_stats(j)->irq_tdx_event_notify_count);
-+	seq_puts(p, "  TDX Guest event notification\n");
- #endif
- 	return 0;
- }
+ 	if (!enc) {
+ 		/* Set the shared (decrypted) bits: */
 -- 
 2.25.1
 

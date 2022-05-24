@@ -2,70 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DC5533210
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A901C5331EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241267AbiEXT5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
+        id S240009AbiEXTwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241244AbiEXT5g (ORCPT
+        with ESMTP id S241072AbiEXTwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:57:36 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9840E175BC
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:57:35 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 24OJqGUX030520;
-        Tue, 24 May 2022 14:52:16 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 24OJqGgw030519;
-        Tue, 24 May 2022 14:52:16 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Tue, 24 May 2022 14:52:16 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
-Message-ID: <20220524195216.GL25951@gate.crashing.org>
-References: <20220524093939.30927-1-pali@kernel.org> <20220524175955.GI25951@gate.crashing.org> <20220524181255.bmszzxmbwzv7zed7@pali> <20220524185247.GK25951@gate.crashing.org> <20220524191610.hnodzz2j7mlgthey@pali>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220524191610.hnodzz2j7mlgthey@pali>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 24 May 2022 15:52:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 399235AA53
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653421947;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vsoL5BUtwGtn8srjaBAKLRmvlrQ5HvOClw2yb5AYOdQ=;
+        b=UBrCsITgFApKa9lSS0hQz0i47swfTVDu5GcxRNYGStigCl6ZTpnmSx1OfqlQFsUD0GDdQi
+        Vg1k0jFsrpZBUYRSWE89o55M8lWYacdCnj9cM0IQ8yeZIexOEjsh/CAFwQsYLtUvtTN26n
+        9z5WiC38cZ3lPr8v2pjiFzyL6pvyrAE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-416--36m1xhvMhaLbWszLzkDTg-1; Tue, 24 May 2022 15:52:23 -0400
+X-MC-Unique: -36m1xhvMhaLbWszLzkDTg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 11160185A7B2;
+        Tue, 24 May 2022 19:52:23 +0000 (UTC)
+Received: from [10.22.8.146] (unknown [10.22.8.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 876CE401E4C;
+        Tue, 24 May 2022 19:52:22 +0000 (UTC)
+Message-ID: <78de6197-7de6-9fe7-9567-1321c06c6e9b@redhat.com>
+Date:   Tue, 24 May 2022 15:52:22 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 04/11] mm: vmscan: rework move_pages_to_lru()
+Content-Language: en-US
+To:     Muchun Song <songmuchun@bytedance.com>, hannes@cmpxchg.org,
+        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com
+References: <20220524060551.80037-1-songmuchun@bytedance.com>
+ <20220524060551.80037-5-songmuchun@bytedance.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220524060551.80037-5-songmuchun@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 09:16:10PM +0200, Pali Rohár wrote:
-> On Tuesday 24 May 2022 13:52:47 Segher Boessenkool wrote:
-> > Aha.  Right, because this config forces -mspe it requires one of these
-> > CPUs.
-> > 
-> > You can use a powerpc-linux compiler instead, and everything will just
-> > work.  These CPUs are still supported, in all of GCC 9 .. GCC 12 :-)
-> 
-> Ok. I can use different "generic" powerpc compiler (It should work fine
-> as you said, as it has also -mcpu=8540 option). But I think that
-> compilation of kernel should be supported also by that gcc 8.5.0 e500
-> compiler.
+On 5/24/22 02:05, Muchun Song wrote:
+> In the later patch, we will reparent the LRU pages. The pages moved to
+> appropriate LRU list can be reparented during the process of the
+> move_pages_to_lru(). So holding a lruvec lock by the caller is wrong, we
+> should use the more general interface of folio_lruvec_relock_irq() to
+> acquire the correct lruvec lock.
+>
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>   mm/vmscan.c | 49 +++++++++++++++++++++++++------------------------
+>   1 file changed, 25 insertions(+), 24 deletions(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 1678802e03e7..761d5e0dd78d 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2230,23 +2230,28 @@ static int too_many_isolated(struct pglist_data *pgdat, int file,
+>    * move_pages_to_lru() moves pages from private @list to appropriate LRU list.
+>    * On return, @list is reused as a list of pages to be freed by the caller.
+>    *
+> - * Returns the number of pages moved to the given lruvec.
+> + * Returns the number of pages moved to the appropriate LRU list.
+> + *
+> + * Note: The caller must not hold any lruvec lock.
+>    */
+> -static unsigned int move_pages_to_lru(struct lruvec *lruvec,
+> -				      struct list_head *list)
+> +static unsigned int move_pages_to_lru(struct list_head *list)
+>   {
+> -	int nr_pages, nr_moved = 0;
+> +	int nr_moved = 0;
+> +	struct lruvec *lruvec = NULL;
+>   	LIST_HEAD(pages_to_free);
+> -	struct page *page;
+>   
+>   	while (!list_empty(list)) {
+> -		page = lru_to_page(list);
+> +		int nr_pages;
+> +		struct folio *folio = lru_to_folio(list);
+> +		struct page *page = &folio->page;
+> +
+> +		lruvec = folio_lruvec_relock_irq(folio, lruvec);
+>   		VM_BUG_ON_PAGE(PageLRU(page), page);
+>   		list_del(&page->lru);
+>   		if (unlikely(!page_evictable(page))) {
+> -			spin_unlock_irq(&lruvec->lru_lock);
+> +			unlock_page_lruvec_irq(lruvec);
+>   			putback_lru_page(page);
+> -			spin_lock_irq(&lruvec->lru_lock);
+> +			lruvec = NULL;
+>   			continue;
+>   		}
+>   
+> @@ -2267,20 +2272,16 @@ static unsigned int move_pages_to_lru(struct lruvec *lruvec,
+>   			__clear_page_lru_flags(page);
+>   
+>   			if (unlikely(PageCompound(page))) {
+> -				spin_unlock_irq(&lruvec->lru_lock);
+> +				unlock_page_lruvec_irq(lruvec);
+>   				destroy_compound_page(page);
+> -				spin_lock_irq(&lruvec->lru_lock);
+> +				lruvec = NULL;
+>   			} else
+>   				list_add(&page->lru, &pages_to_free);
+>   
+>   			continue;
+>   		}
+>   
+> -		/*
+> -		 * All pages were isolated from the same lruvec (and isolation
+> -		 * inhibits memcg migration).
+> -		 */
+> -		VM_BUG_ON_PAGE(!folio_matches_lruvec(page_folio(page), lruvec), page);
+> +		VM_BUG_ON_PAGE(!folio_matches_lruvec(folio, lruvec), page);
+>   		add_page_to_lru_list(page, lruvec);
+>   		nr_pages = thp_nr_pages(page);
+>   		nr_moved += nr_pages;
+> @@ -2288,6 +2289,8 @@ static unsigned int move_pages_to_lru(struct lruvec *lruvec,
+>   			workingset_age_nonresident(lruvec, nr_pages);
+>   	}
+>   
+> +	if (lruvec)
+> +		unlock_page_lruvec_irq(lruvec);
+>   	/*
+>   	 * To save our caller's stack, now use input list for pages to free.
+>   	 */
+> @@ -2359,16 +2362,16 @@ shrink_inactive_list(unsigned long nr_to_scan, struct lruvec *lruvec,
+>   
+>   	nr_reclaimed = shrink_page_list(&page_list, pgdat, sc, &stat, false);
+>   
+> -	spin_lock_irq(&lruvec->lru_lock);
+> -	move_pages_to_lru(lruvec, &page_list);
+> +	move_pages_to_lru(&page_list);
+>   
+> +	local_irq_disable();
+>   	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, -nr_taken);
+>   	item = current_is_kswapd() ? PGSTEAL_KSWAPD : PGSTEAL_DIRECT;
+>   	if (!cgroup_reclaim(sc))
+>   		__count_vm_events(item, nr_reclaimed);
+>   	__count_memcg_events(lruvec_memcg(lruvec), item, nr_reclaimed);
+>   	__count_vm_events(PGSTEAL_ANON + file, nr_reclaimed);
+> -	spin_unlock_irq(&lruvec->lru_lock);
+> +	local_irq_enable();
+>   
+>   	lru_note_cost(lruvec, file, stat.nr_pageout);
+>   	mem_cgroup_uncharge_list(&page_list);
+> @@ -2498,18 +2501,16 @@ static void shrink_active_list(unsigned long nr_to_scan,
+>   	/*
+>   	 * Move pages back to the lru list.
+>   	 */
+> -	spin_lock_irq(&lruvec->lru_lock);
+> -
+> -	nr_activate = move_pages_to_lru(lruvec, &l_active);
+> -	nr_deactivate = move_pages_to_lru(lruvec, &l_inactive);
+> +	nr_activate = move_pages_to_lru(&l_active);
+> +	nr_deactivate = move_pages_to_lru(&l_inactive);
+>   	/* Keep all free pages in l_active list */
+>   	list_splice(&l_inactive, &l_active);
+>   
+> +	local_irq_disable();
+>   	__count_vm_events(PGDEACTIVATE, nr_deactivate);
+>   	__count_memcg_events(lruvec_memcg(lruvec), PGDEACTIVATE, nr_deactivate);
+> -
+>   	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, -nr_taken);
+> -	spin_unlock_irq(&lruvec->lru_lock);
+> +	local_irq_enable();
+>   
+>   	mem_cgroup_uncharge_list(&l_active);
+>   	free_unref_page_list(&l_active);
 
-That linuxspe compiler you mean.  Sure, why not, the more the merrier,
-as long as it doesn't get in the way of other stuff, I won't protest.
+Note that the RT engineers will likely change the 
+local_irq_disable()/local_irq_enable() to 
+local_lock_irq()/local_unlock_irq().
 
-But please don't confuse people: you are talking about a
-powerpc-linuxspe compiler, not e500, which is supported just fine by
-current GCC trunk still, and does not have such limitations :-)
+Cheers,
+Longman
 
-
-Segher

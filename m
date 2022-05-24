@@ -2,241 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D00532093
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C233F53209A
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233002AbiEXCDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S233024AbiEXCER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 22:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiEXCDu (ORCPT
+        with ESMTP id S229537AbiEXCEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:03:50 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2116C7CDC3
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:03:49 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id i187so26299946ybg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TaVPaezuXUUrJn/l8xmCpgZkWa6d5zHyRlmrXLhO/ck=;
-        b=uIzHBbGmscqYkk5YohOM8OsjUsXU8fDOwAUtDVPHA75xpn1q6C3X2uZ488g+tzU7zw
-         jVGPPboOxNeROw31pFhfbwxrc3Hw1JRhkvzrvpNBgRt6tOzuixn6zDxKmgKNUuv0wVKC
-         N1LmkUIMPO04+Ji/RnvHBypLFs00fUferBOBIMmVHJAIedsN4WFvzaSV6A73nbU92fnZ
-         KVx3egFCMlWJHy0PLiaMRRhz/zxq9NgD/Ic0G2Gu/vujlyOTcwJwlWaDeJP4jY/OmmeC
-         vlctrc4fY60S78dMlfRUn61/Wjl84AQxoTGEBHs4lc9Z9/ZogxzhAF0Pwp7PoLBW+RDA
-         mL/w==
+        Mon, 23 May 2022 22:04:14 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAF98198C;
+        Mon, 23 May 2022 19:04:13 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-e5e433d66dso20664084fac.5;
+        Mon, 23 May 2022 19:04:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TaVPaezuXUUrJn/l8xmCpgZkWa6d5zHyRlmrXLhO/ck=;
-        b=O3PYuyICVSuTvr3LJW4Nhcni18hDzQIha10rdsYg7Fk7hjzeq3sMz9W5SKesM13qZ6
-         dDnoVBc+dOC1RC6ehG1WicPHVVgS58fSsPZl/zYQuiAXQ66bazYLmhibX50mVYPv3alO
-         +qF+xwXK8YSLhU9htT3ftm8UEmdC1Zm7wBhsyuKvibRbvYS3iBahLy0AuV0Wnyo0JMX+
-         CwjVytLAs+ikzyMocszhIjLr95n6oCsd1r+Jcqx+MJmc9gmqLtt1Gil4HJdCKmF0a9FN
-         MoX0b2aJBSiJeq8ohEs4NXwDxEyRpcYRe7XIQdf9YHBoDp/jYCIcR8mpDkZZibSlddJo
-         nDNg==
-X-Gm-Message-State: AOAM532I+Wi3vyvNt1EBrxWV1izEWHYX7SCluYNDLZpRyCDfg6FgUkvf
-        Q5S7zEIxcjuCG3j1OU6qUO7JMZ2pJo29MtpfgJGgYQ==
-X-Google-Smtp-Source: ABdhPJxvU6BMoSSQay1UgirokJ2A1InFgZ6SALJbt1MZYS+enKWNWgg8+Fs8vfal1/J9ful/7aNSZi7MHchdhXspUWY=
-X-Received: by 2002:a25:814a:0:b0:64f:f06c:cf6d with SMTP id
- j10-20020a25814a000000b0064ff06ccf6dmr6315456ybm.88.1653357828191; Mon, 23
- May 2022 19:03:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oLpFwwL4jxokl8yTJf2sFGQcsIPj9l2jwc979me7pqg=;
+        b=HCqYHKU8y50d4UGS7V1PBhjKNSIPsQ3xcQIwI2MohjAHzzXVxUed98Lq9hRC7bE10w
+         7d9AKx85roFc5mvAadflzPEY08+HdDoy6q1fRsglNy3V9pG09vfiUCwWWzsCxOMHgNTl
+         EoAkRTtQaQxcvzyDzcjpbmryOEmllbMMMhpy43gQ7b3DmsehrdAKjk/B78ChdBGbt+I+
+         mVY3hUJ0MdDzgz6nBZWqAFwXtBygP7x0tumXgbuMcYGVellogaDhIR8Xd+CymCAN2fJv
+         2diepZqrQo+nlJy8zRme8o2x12g8rJsOfvidxSgBTN7SdY9NDbvBC6wE+FjEKi/IlBkS
+         /06g==
+X-Gm-Message-State: AOAM531De8YOYYRKR30B1xlEAYUcDJKkmrstFAlsoYph3OaDHWOk48Fa
+        5g6lb5snhXjeAmQ4KpM7LL6XjHuXpg==
+X-Google-Smtp-Source: ABdhPJzkF4WvkQc0te+BAhyw5JStp+ht1qlShDlUbPCymsX1I3qzyya+73nuYpyX6XzGmyc3X9ZAIg==
+X-Received: by 2002:a05:6870:b006:b0:f2:1cc9:d75 with SMTP id y6-20020a056870b00600b000f21cc90d75mr1184153oae.157.1653357852832;
+        Mon, 23 May 2022 19:04:12 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l17-20020a9d7351000000b0060b02eda329sm3100336otk.14.2022.05.23.19.04.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 19:04:12 -0700 (PDT)
+Received: (nullmailer pid 2602902 invoked by uid 1000);
+        Tue, 24 May 2022 02:04:11 -0000
+Date:   Mon, 23 May 2022 21:04:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH 07/12] dt-bindings: arm: qcom: add missing SDM845 board
+ compatibles
+Message-ID: <20220524020411.GA2602849-robh@kernel.org>
+References: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org>
+ <20220521164550.91115-7-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20220523165830.581652127@linuxfoundation.org>
-In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 24 May 2022 07:33:36 +0530
-Message-ID: <CA+G9fYvc+fogFhRpy4r04A6ch4t58S3i8BnPdz5oCj_yuOf86A@mail.gmail.com>
-Subject: Re: [PATCH 5.17 000/158] 5.17.10-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521164550.91115-7-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 at 22:35, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.17.10 release.
-> There are 158 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.17.10-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sat, 21 May 2022 18:45:45 +0200, Krzysztof Kozlowski wrote:
+> Document board compatibles already present in Linux kernel.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.17.10-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.17.y
-* git commit: 389f9b0047fd0c936414cad5400875652b2711ef
-* git describe: v5.17.9-159-g389f9b0047fd
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17=
-.9-159-g389f9b0047fd
-
-## Test Regressions (compared to v5.17.8-115-g3f3287e39741)
-No test regressions found.
-
-## Metric Regressions (compared to v5.17.8-115-g3f3287e39741)
-No metric regressions found.
-
-## Test Fixes (compared to v5.17.8-115-g3f3287e39741)
-No test fixes found.
-
-## Metric Fixes (compared to v5.17.8-115-g3f3287e39741)
-No metric fixes found.
-
-## Test result summary
-total: 102240, pass: 86820, fail: 722, skip: 13738, xfail: 960
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 296 total, 293 passed, 3 failed
-* arm64: 47 total, 47 passed, 0 failed
-* i386: 44 total, 40 passed, 4 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 59 total, 56 passed, 3 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 26 total, 23 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 47 total, 46 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* prep-inline
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Acked-by: Rob Herring <robh@kernel.org>

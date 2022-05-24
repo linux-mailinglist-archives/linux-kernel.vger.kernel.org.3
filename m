@@ -2,98 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C71532F29
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69408532F30
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239476AbiEXQna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 12:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
+        id S239741AbiEXQpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 12:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbiEXQn0 (ORCPT
+        with ESMTP id S233170AbiEXQp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 12:43:26 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4637C434A4;
-        Tue, 24 May 2022 09:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653410606; x=1684946606;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6UMCM+RBG4JBxylz5LrdwSJ2Dpx/YvGxgj1zkXLPFqU=;
-  b=mm8KztO4bQQJJq/lPq2pbpmiL8iulFLxtKAR2UUQKq14t9sECpMDknYW
-   Nni94xUpT6nAGFIhtGTtHhnGgoGOUWQSLI4nOkd3v1bgWPZ+jT7Bi0tOa
-   t7kYzlVV2I1gXr+8527SiQmYUpWFVryX3uVkrlOLmc4AzKavx24D5Kd+3
-   PFm0Hn/zIaV6R/90ZLftKeqpjaPtH90JNxKC4O42YQRWDRi5F8tzCJmOP
-   YeceXTxETuL8YuFZQRcvfFxtrekLyFiNOtppxFGof6pmD5DfWx8lXl95h
-   fJGdrvBKoi5JZ/FSzLhi7Id/NNZPS1zzJaxw964xZfMiIoAH4iF7jPaBp
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="336634859"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="336634859"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 09:43:25 -0700
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="548544106"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 09:43:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ntXcv-000KF8-7Y;
-        Tue, 24 May 2022 19:43:21 +0300
-Date:   Tue, 24 May 2022 19:43:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCHv2 1/2] i2c: designware: introduce a custom scl recovery
- for SoCFPGA platforms
-Message-ID: <Yo0LKQchQwitJVHm@smile.fi.intel.com>
-References: <20220524135441.420600-1-dinguyen@kernel.org>
+        Tue, 24 May 2022 12:45:27 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF427427FF;
+        Tue, 24 May 2022 09:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1653410713;
+        bh=gLTqESgkAFXqK+taUv6Ift55c8iBixK6EHmM6tkr+gs=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Ntf5/GKPt7waxQaMaK91YXanz0KAshFY6MJ595uEIAJGjwVkzYt11D2x5AiYA0b4L
+         twFxRySc+irwcXFnXYMcXCcV6bmOiofaZRn0+Bbib8yOkx5N2cAqRkOjefbe7J6YES
+         Iqi2teVjOTaqqmn8FakI/Zq7URGni2+MtNEz2W84=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.137.3]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MPokN-1oFtl42BsZ-00MrQe; Tue, 24
+ May 2022 18:45:13 +0200
+Message-ID: <786f58e8-aa61-d439-c9bb-4a27599d2aa5@gmx.de>
+Date:   Tue, 24 May 2022 18:44:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524135441.420600-1-dinguyen@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH AUTOSEL 5.10 2/8] parisc: Disable debug code regarding
+ cache flushes in handle_nadtlb_fault()
+Content-Language: en-US
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     John David Anglin <dave.anglin@bell.net>,
+        James.Bottomley@HansenPartnership.com, akpm@linux-foundation.org,
+        zhengqi.arch@bytedance.com, linux-parisc@vger.kernel.org
+References: <20220524160035.827109-1-sashal@kernel.org>
+ <20220524160035.827109-2-sashal@kernel.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220524160035.827109-2-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:lxjHMfxahx2TQbAWs57lPcq/4pfkYB1LueL12A81ItzRKOHqtC5
+ prI0PdUpPX+ZV+ug1dWE1Y7yDjLaTULuj+7l6JO6U9GOmUDrP2LKSXlcuH3eLy//2gEzQJx
+ rQCRNoz3YEBjeuiS/K6R5a2HK3vGW1GKMQmpK4W1srU3zXvyUyiW4IZYwoOKVlxdMIpOc/T
+ mQX/e4mgmonfqX73Lu0+w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rWhv9GBFGZM=:xV29K9fWzhmf773KfTlsUz
+ Ikf52/0aHB5vOQIBKFABHzm6X5oWLcXySsabm19UtEQZXtfdAhJIo1vNjaZ2W2fLBRBZCqrTT
+ /lio+1p84hJdwbNA6rDXzYkDwcGyt7dpTX3k5eBgN0YRen/FOoQ9OsdqUmBSJF7SEuTAceSwd
+ ZnVy3lbLOt3tdB5YjpAYX7Gpu6p+X0dABKH/e7rh9Y1wxch1RxkldREvqIhjv/iYb9fnMDZi5
+ 8DNLr9WK6wPTSxVrvs7wypDhJV4ogp+aQajIg3KpSVJ7lgxnFKgxUEeHDmATxfmsiUZkSMKmY
+ vSZtgDu+IGyus8QN6NNepGsyfz8vCXS+a+2odmFsdHXwRekxQtwsoJKaGsotS1uCaD6Zi/lcU
+ BuysxZIVSy1nAe5pFiWc+P/nSSffq+4LhQohcJKATQvJXMK2mo3Z0+U5BtWGa0ORy/2rmRyAO
+ CPL+rAkPRsqRtlogQ5XUg7ExSQn2H7mfB09FC+5vPhgxQE3/bGM6VCz5TosHQzuDpzUZtegC6
+ Pby5VvYreBkcsOvDoplsz9u9e+f3Wc7bFsmoVaJO9QNBBGp010y0PStDWONLb0laMRhIb/98V
+ jsS8+cc6xXSwjilMZ3aKdxhekaqpyNa/dw+yKk4sN91HBuagQzXYF6YSlr+dmrKRYkf8OiAqw
+ uSM3itKcDJyy0N5elr+W/c2++Q312XgmoRP1QAOzC7QDTx2RSqRWMM5udX42bJ2LwY7ewAlH2
+ 3riI5TlvuyK6EqKQ2Ko7DkmxnSeiwzUsJtclqZmgKlC+7271iIWIBBeE8Dihi85PcSbsNsbxD
+ 0InxplVOTwNoOS6VKdfNKB3cyKnb9PON3L2hkDHvldS0jkgXOdSQImaYeYZMzLabpePOFpUBV
+ hIOQw5g684ZgL9eB5H2fhKntcSGZYHcn7SUYeR6fO6Cy44U/ZPu+eJ0VtUyA31yEXIhYC+a5r
+ xiI8Co0QpY8gGE467YLTdE/58i4VESW5xHTPMLcROGTbNaxAwYtzzgavX3Z0AWj9iaWdWMxnO
+ pQLncz4W/54Ax76szGC7XTjtcvBv1CbBYFmj7IutA/Nb4Ey7G5qkz3OXAP1liorvUcgkdtLzL
+ 2ICqcEcttdAj1H1mW5MYdSxcZAbvMXw07qN
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 08:54:40AM -0500, Dinh Nguyen wrote:
-> The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
-> thus cannot be recovered by the default method of by doing a GPIO access.
-> Only a reset of the I2C IP block can a recovery be successful.
+Hello Sascha,
 
-Better now, but see my additional comments.
+On 5/24/22 18:00, Sasha Levin wrote:
+> From: John David Anglin <dave.anglin@bell.net>
+>
+> [ Upstream commit 67c35a3b646cc68598ff0bb28de5f8bd7b2e81b3 ]
+>
+> Change the "BUG" to "WARNING" and disable the message because it trigger=
+s
+> occasionally in spite of the check in flush_cache_page_if_present.
 
-...
+Please drop this patch from the backporting-queue (v5.10, v5.15 and v5.17)=
+.
+It's not necessary since the warning will only trigger on v5.18 on machine=
+s
+with PA8800/PA8900 processors.
 
-> +	switch (dev->flags & MODEL_MASK) {
-> +	case MODEL_SOCFPGA:
-> +		rinfo->recover_bus = i2c_socfpga_scl_recovery;
-> +		break;
-> +	default:
-> +		rinfo->recover_bus = i2c_generic_scl_recovery;
-> +		break;
-> +	}
+Thanks.
+Helge
 
-> +	adap->bus_recovery_info = rinfo;
 
-Usually we do not assign the pointer while data structure is incomplete.
-That's said, please leave this line as it was.
-
-On top of that, why you can't move the above switch to the place where old
-function was assigned?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> The pte value extracted for the "from" page in copy_user_highpage is rac=
+y and
+> occasionally the pte is cleared before the flush is complete.  I assume =
+that
+> the page is simultaneously flushed by flush_cache_mm before the pte is c=
+leared
+> as nullifying the fdc doesn't seem to cause problems.
+>
+> I investigated various locking scenarios but I wasn't able to find a way=
+ to
+> sequence the flushes.  This code is called for every COW break and locks=
+ impact
+> performance.
+>
+> This patch is related to the bigger cache flush patch because we need th=
+e pte
+> on PA8800/PA8900 to flush using the vma context.
+> I have also seen this from copy_to_user_page and copy_from_user_page.
+>
+> The messages appear infrequently when enabled.
+>
+> Signed-off-by: John David Anglin <dave.anglin@bell.net>
+> Signed-off-by: Helge Deller <deller@gmx.de>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  arch/parisc/mm/fault.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/parisc/mm/fault.c b/arch/parisc/mm/fault.c
+> index 5faa3cff4738..2472780d4039 100644
+> --- a/arch/parisc/mm/fault.c
+> +++ b/arch/parisc/mm/fault.c
+> @@ -22,6 +22,8 @@
+>
+>  #include <asm/traps.h>
+>
+> +#define DEBUG_NATLB 0
+> +
+>  /* Various important other fields */
+>  #define bit22set(x)		(x & 0x00000200)
+>  #define bits23_25set(x)		(x & 0x000001c0)
+> @@ -449,8 +451,8 @@ handle_nadtlb_fault(struct pt_regs *regs)
+>  		fallthrough;
+>  	case 0x380:
+>  		/* PDC and FIC instructions */
+> -		if (printk_ratelimit()) {
+> -			pr_warn("BUG: nullifying cache flush/purge instruction\n");
+> +		if (DEBUG_NATLB && printk_ratelimit()) {
+> +			pr_warn("WARNING: nullifying cache flush/purge instruction\n");
+>  			show_regs(regs);
+>  		}
+>  		if (insn & 0x20) {
 

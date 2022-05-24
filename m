@@ -2,73 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FD35323AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B8D5323AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234560AbiEXHIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S234579AbiEXHJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234459AbiEXHIj (ORCPT
+        with ESMTP id S234453AbiEXHJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:08:39 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AD28723B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:08:37 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id p4so27862696lfg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1cz4d+fm9aCQbgqKo0PSrrCjJpVOn5py/1Tnn7DmY6o=;
-        b=FWZe8ib2ybH7BFuAYY8yRm68ebP3KMXeHb7240EFYr0TDeXLGkt7Z5BJbQTRXwtwxD
-         2xQ/8ItezylfIl+y22LKPWewIDwVSfD46Wp7c5JcMFC1qAoJ5pZgp2EAlB8OyLyl/4xt
-         SBeLKhpxqvJ8kHvQCqaMsVkel2KojiFh1aNlV+q3ltxEyaLoGVvZZuE2oiEBMC+K3cXf
-         BrEUdesY/oFyXZDwqdL3JpxnRVBSLOQtEt/2Z6pJpaGZvKUBWlsUH9p26WgPJsPHb9hj
-         bq51GhhL4TQY7xqL0Afw3t+CxImKY/ANplKy5Nq0LiP7zmVTaxOW4SyRwSGxg1wXcbu/
-         XS2A==
+        Tue, 24 May 2022 03:09:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F2BC85ED2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:09:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653376153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Jg/VQp3/7T8NXHS/IRW4J+wxsI4fOnWx/NzDoP4bWw=;
+        b=Xvo8VQy8os2gj/QGJ1mq6DDqrGJ1m47J4afzzKhWMnsVPhBI4ZLUT/Cfo8ewJfRKtsPmvk
+        6DGdPdb2PYaBlwI53HutalWaCMoGPRrgUl9XwiLG1w0FGhWZWiEnGpL8cOQuhWxqJ5CkgK
+        0WBc886IjtyK+WvYi2OEQzOXvXhPPD0=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-140-OwdW4ptpPgaWSBcYtJaRRw-1; Tue, 24 May 2022 03:09:12 -0400
+X-MC-Unique: OwdW4ptpPgaWSBcYtJaRRw-1
+Received: by mail-qv1-f72.google.com with SMTP id kk13-20020a056214508d00b004622b4b8762so4698696qvb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:09:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1cz4d+fm9aCQbgqKo0PSrrCjJpVOn5py/1Tnn7DmY6o=;
-        b=SvufliBthFfqTmZjBudZY2BsBqGSQlrXBV8M1sXgJcFqFeMxye4/5IeS18wpNi+7dy
-         SWeyAHm0riSHtLdd0YsWwxamZjyrK81rwWcy3pxxxmBtg/W0zo+SC+n4UitsyztVt1rG
-         tOy0fp/fecixPs7IpLdRUP4GqRe3ZzLowb09ZFRQd+hftNFidm0mz0I6NrjIkLUTuJgm
-         s6J5vNarftCuy7mGZzJgT1fzBDHQXGVKmd9rTIuD393m5vaDWP/Pn4mouGxx6Rjmtvmj
-         Oc6bAJissS4ktvx8+pAnPF42vCWAfRdtOSwYIMee+0qQjBu0UJEkjRUkjwbb5tyVqMJ0
-         fprA==
-X-Gm-Message-State: AOAM530c50qx1GxAX2h1+d+XRlokrnGcN1uh0k6IaOhyjYgGFGll4HKo
-        1Hmn1EXiyjDiLnctLL9bqpBttQ==
-X-Google-Smtp-Source: ABdhPJwR5jUv7Pcg0QWVolnrOC51LAyBbSUWTT9ueRJNtriaNIm/aup3/brxDeoHDbMTVR7odMXJUA==
-X-Received: by 2002:a05:6512:39cc:b0:478:5c35:e7e8 with SMTP id k12-20020a05651239cc00b004785c35e7e8mr11366052lfu.392.1653376115575;
-        Tue, 24 May 2022 00:08:35 -0700 (PDT)
-Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id e12-20020a2e8ecc000000b0024f3d1daebdsm2237655ljl.69.2022.05.24.00.08.34
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=4Jg/VQp3/7T8NXHS/IRW4J+wxsI4fOnWx/NzDoP4bWw=;
+        b=cAm4bB9DuBD8Ddne7Zc6My+KFX+Z6pWNmZX8rJD24O//3qXGuvM80SWWAZ++gmwc4c
+         yUN33L0CsJzY//msHXl62AsVIfA+Bv/HazYKtAsDKaINOvDRf8dymLusWkrKViu88jzL
+         K8tISnDQXrhbj695U5hL4CszuZz//6/h9eM0VzGBEVzZBcWiVtRhKGMknoXIBg/jfRnX
+         RAq8kPHvzbYiG5YX5srTtrimQCVXDxdSj+NVx1QrwFuT0IDq/gyla08ANnNZHBnpzzkF
+         vfG1cDQ+AJWPlXe8JN4ENW9trfAMEFq8SsdhLCajsnn/Utfctx+oxtGAE6v//4YQSoJ7
+         z5cQ==
+X-Gm-Message-State: AOAM530ArUGH+rEM6YqpENau0mAbiH+gTWfldWxJrMO0vnSKhswdb1oy
+        8+85FwWpXOJzfVLZ6UBBmF0J4vDmzl1IiqbvV68Su84IXZRC6rvo/7R8Ivszb7a5oXPmCPBvtmu
+        WS0MiXXFUXz/uru93kkFrpgce
+X-Received: by 2002:a05:6214:194e:b0:45a:d8e3:2d3f with SMTP id q14-20020a056214194e00b0045ad8e32d3fmr19980103qvk.59.1653376151730;
+        Tue, 24 May 2022 00:09:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy7GaMbEtJARwuaEZHhi6Q4+UwgAVZKJMVkhQCWvjA6aMpUiA710enlZjHGU7oXX2vN4IPk8A==
+X-Received: by 2002:a05:6214:194e:b0:45a:d8e3:2d3f with SMTP id q14-20020a056214194e00b0045ad8e32d3fmr19980097qvk.59.1653376151522;
+        Tue, 24 May 2022 00:09:11 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id bs40-20020a05620a472800b006a34918ea64sm6589755qkb.98.2022.05.24.00.09.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 00:08:35 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dan Murphy <dmurphy@ti.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Kyle Swenson <kyle.swenson@est.tech>
-Subject: [PATCH v2 2/2] dt-bindings: leds: fix indentation in examples
-Date:   Tue, 24 May 2022 09:08:15 +0200
-Message-Id: <20220524070815.42997-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220524070815.42997-1-krzysztof.kozlowski@linaro.org>
-References: <20220524070815.42997-1-krzysztof.kozlowski@linaro.org>
+        Tue, 24 May 2022 00:09:10 -0700 (PDT)
+Date:   Tue, 24 May 2022 09:09:00 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Eugenio Perez Martin <eperezma@redhat.com>
+Cc:     Si-Wei Liu <si-wei.liu@oracle.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Jason Wang <jasowang@redhat.com>,
+        kvm list <kvm@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Longpeng <longpeng2@huawei.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>, dinang@xilinx.com,
+        Eli Cohen <elic@nvidia.com>,
+        Laurent Vivier <lvivier@redhat.com>, pabloc@xilinx.com,
+        "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Xie Yongji <xieyongji@bytedance.com>, habetsm.xilinx@gmail.com,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        tanuj.kamde@amd.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        martinpo@xilinx.com, Cindy Lu <lulu@redhat.com>,
+        ecree.xilinx@gmail.com, Parav Pandit <parav@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Zhang Min <zhang.min9@zte.com.cn>
+Subject: Re: [PATCH 1/4] vdpa: Add stop operation
+Message-ID: <20220524070900.ak7a5frwtezjhhrq@sgarzare-redhat>
+References: <20220520172325.980884-1-eperezma@redhat.com>
+ <20220520172325.980884-2-eperezma@redhat.com>
+ <79089dc4-07c4-369b-826c-1c6e12edcaff@oracle.com>
+ <CAJaqyWd3BqZfmJv+eBYOGRwNz3OhNKjvHPiFOafSjzAnRMA_tQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <CAJaqyWd3BqZfmJv+eBYOGRwNz3OhNKjvHPiFOafSjzAnRMA_tQ@mail.gmail.com>
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,431 +99,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The examples were mixing 4-space with 2- and 3-space indentations, so
-correct them to use 4-space one.  No functional change.
+On Mon, May 23, 2022 at 09:20:14PM +0200, Eugenio Perez Martin wrote:
+>On Sat, May 21, 2022 at 12:13 PM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
+>>
+>>
+>>
+>> On 5/20/2022 10:23 AM, Eugenio Pérez wrote:
+>> > This operation is optional: It it's not implemented, backend feature bit
+>> > will not be exposed.
+>> >
+>> > Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+>> > ---
+>> >   include/linux/vdpa.h | 6 ++++++
+>> >   1 file changed, 6 insertions(+)
+>> >
+>> > diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+>> > index 15af802d41c4..ddfebc4e1e01 100644
+>> > --- a/include/linux/vdpa.h
+>> > +++ b/include/linux/vdpa.h
+>> > @@ -215,6 +215,11 @@ struct vdpa_map_file {
+>> >    * @reset:                  Reset device
+>> >    *                          @vdev: vdpa device
+>> >    *                          Returns integer: success (0) or error (< 0)
+>> > + * @stop:                    Stop or resume the device (optional, but it must
+>> > + *                           be implemented if require device stop)
+>> > + *                           @vdev: vdpa device
+>> > + *                           @stop: stop (true), not stop (false)
+>> > + *                           Returns integer: success (0) or error (< 0)
+>> Is this uAPI meant to address all use cases described in the full blown
+>> _F_STOP virtio spec proposal, such as:
+>>
+>> --------------%<--------------
+>>
+>> ...... the device MUST finish any in flight
+>> operations after the driver writes STOP.  Depending on the device, it
+>> can do it
+>> in many ways as long as the driver can recover its normal operation 
+>> if it
+>> resumes the device without the need of resetting it:
+>>
+>> - Drain and wait for the completion of all pending requests until a
+>>    convenient avail descriptor. Ignore any other posterior descriptor.
+>> - Return a device-specific failure for these descriptors, so the driver
+>>    can choose to retry or to cancel them.
+>> - Mark them as done even if they are not, if the kind of device can
+>>    assume to lose them.
+>> --------------%<--------------
+>>
+>
+>Right, this is totally underspecified in this series.
+>
+>I'll expand on it in the next version, but that text proposed to
+>virtio-comment was complicated and misleading. I find better to get
+>the previous version description. Would the next description work?
+>
+>```
+>After the return of ioctl, the device MUST finish any pending operations like
+>in flight requests. It must also preserve all the necessary state (the
+>virtqueue vring base plus the possible device specific states) that is required
+>for restoring in the future.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+For block devices wait for all in-flight requests could take several 
+time.
 
----
+Could this be a problem if the caller gets stuck on this ioctl?
 
-Changes since v1:
-1. None
+If it could be a problem, maybe we should use an eventfd to signal that 
+the device is successfully stopped.
 
-Cc: Kyle Swenson <kyle.swenson@est.tech>
----
- .../devicetree/bindings/leds/leds-lp50xx.yaml | 110 ++++-----
- .../devicetree/bindings/leds/leds-lp55xx.yaml | 222 +++++++++---------
- .../bindings/leds/leds-pwm-multicolor.yaml    |  36 +--
- 3 files changed, 184 insertions(+), 184 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-index 29ce0cb7d449..d11898567313 100644
---- a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-@@ -78,66 +78,66 @@ additionalProperties: false
- 
- examples:
-   - |
--   #include <dt-bindings/gpio/gpio.h>
--   #include <dt-bindings/leds/common.h>
--
--   i2c {
--       #address-cells = <1>;
--       #size-cells = <0>;
--
--       led-controller@14 {
--           compatible = "ti,lp5009";
--           reg = <0x14>;
--           #address-cells = <1>;
--           #size-cells = <0>;
--           enable-gpios = <&gpio1 16>;
--
--           multi-led@1 {
--               #address-cells = <1>;
--               #size-cells = <0>;
--               reg = <0x1>;
--               color = <LED_COLOR_ID_RGB>;
--               function = LED_FUNCTION_CHARGING;
--
--               led@0 {
--                   reg = <0x0>;
--                   color = <LED_COLOR_ID_RED>;
--               };
--
--               led@1 {
--                   reg = <0x1>;
--                   color = <LED_COLOR_ID_GREEN>;
--               };
--
--               led@2 {
--                   reg = <0x2>;
--                   color = <LED_COLOR_ID_BLUE>;
--               };
--          };
--
--          multi-led@3 {
--            #address-cells = <1>;
--            #size-cells = <0>;
--            reg = <0x3>, <0x4>, <0x5>;
--            color = <LED_COLOR_ID_RGB>;
--            function = LED_FUNCTION_STANDBY;
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/leds/common.h>
- 
--            led@3 {
--              reg = <0x3>;
--              color = <LED_COLOR_ID_RED>;
--            };
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
- 
--            led@4 {
--              reg = <0x4>;
--              color = <LED_COLOR_ID_GREEN>;
-+        led-controller@14 {
-+            compatible = "ti,lp5009";
-+            reg = <0x14>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            enable-gpios = <&gpio1 16>;
-+
-+            multi-led@1 {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                reg = <0x1>;
-+                color = <LED_COLOR_ID_RGB>;
-+                function = LED_FUNCTION_CHARGING;
-+
-+                led@0 {
-+                     reg = <0x0>;
-+                     color = <LED_COLOR_ID_RED>;
-+                };
-+
-+                led@1 {
-+                     reg = <0x1>;
-+                     color = <LED_COLOR_ID_GREEN>;
-+                };
-+
-+                led@2 {
-+                     reg = <0x2>;
-+                     color = <LED_COLOR_ID_BLUE>;
-+                };
-             };
- 
--            led@5 {
--              reg = <0x5>;
--              color = <LED_COLOR_ID_BLUE>;
-+            multi-led@3 {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                reg = <0x3>, <0x4>, <0x5>;
-+                color = <LED_COLOR_ID_RGB>;
-+                function = LED_FUNCTION_STANDBY;
-+
-+                led@3 {
-+                    reg = <0x3>;
-+                    color = <LED_COLOR_ID_RED>;
-+                };
-+
-+                led@4 {
-+                    reg = <0x4>;
-+                    color = <LED_COLOR_ID_GREEN>;
-+                };
-+
-+                led@5 {
-+                    reg = <0x5>;
-+                    color = <LED_COLOR_ID_BLUE>;
-+                };
-             };
--         };
--       };
-+        };
-     };
- 
- ...
-diff --git a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
-index f552cd143d5b..7ec676e53851 100644
---- a/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-lp55xx.yaml
-@@ -108,119 +108,119 @@ additionalProperties: false
- 
- examples:
-   - |
--   #include <dt-bindings/leds/common.h>
--
--   i2c {
--       #address-cells = <1>;
--       #size-cells = <0>;
--
--       led-controller@32 {
--           #address-cells = <1>;
--           #size-cells = <0>;
--           compatible = "ti,lp8501";
--           reg = <0x32>;
--           clock-mode = /bits/ 8 <2>;
--           pwr-sel = /bits/ 8 <3>;	/* D1~9 connected to VOUT */
--
--           led@0 {
--               reg = <0>;
--               chan-name = "d1";
--               led-cur = /bits/ 8 <0x14>;
--               max-cur = /bits/ 8 <0x20>;
--           };
--
--           led@1 {
--               reg = <1>;
--               chan-name = "d2";
--               led-cur = /bits/ 8 <0x14>;
--               max-cur = /bits/ 8 <0x20>;
--           };
--
--           led@2 {
--               reg = <2>;
--               chan-name = "d3";
--               led-cur = /bits/ 8 <0x14>;
--               max-cur = /bits/ 8 <0x20>;
--           };
--
--           led@3 {
--               reg = <3>;
--               chan-name = "d4";
--               led-cur = /bits/ 8 <0x14>;
--               max-cur = /bits/ 8 <0x20>;
--           };
--
--           led@4 {
--               reg = <4>;
--               chan-name = "d5";
--               led-cur = /bits/ 8 <0x14>;
--               max-cur = /bits/ 8 <0x20>;
--           };
--
--           led@5 {
--               reg = <5>;
--               chan-name = "d6";
--               led-cur = /bits/ 8 <0x14>;
--               max-cur = /bits/ 8 <0x20>;
--           };
--
--           led@6 {
--               reg = <6>;
--               chan-name = "d7";
--               led-cur = /bits/ 8 <0x14>;
--               max-cur = /bits/ 8 <0x20>;
--           };
--
--           led@7 {
--               reg = <7>;
--               chan-name = "d8";
--               led-cur = /bits/ 8 <0x14>;
--               max-cur = /bits/ 8 <0x20>;
--           };
--
--           led@8 {
--               reg = <8>;
--               chan-name = "d9";
--               led-cur = /bits/ 8 <0x14>;
--               max-cur = /bits/ 8 <0x20>;
--           };
-+    #include <dt-bindings/leds/common.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        led-controller@32 {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            compatible = "ti,lp8501";
-+            reg = <0x32>;
-+            clock-mode = /bits/ 8 <2>;
-+            pwr-sel = /bits/ 8 <3>;	/* D1~9 connected to VOUT */
-+
-+            led@0 {
-+                reg = <0>;
-+                chan-name = "d1";
-+                led-cur = /bits/ 8 <0x14>;
-+                max-cur = /bits/ 8 <0x20>;
-+            };
-+
-+            led@1 {
-+                reg = <1>;
-+                chan-name = "d2";
-+                led-cur = /bits/ 8 <0x14>;
-+                max-cur = /bits/ 8 <0x20>;
-+            };
-+
-+            led@2 {
-+                reg = <2>;
-+                chan-name = "d3";
-+                led-cur = /bits/ 8 <0x14>;
-+                max-cur = /bits/ 8 <0x20>;
-+            };
-+
-+            led@3 {
-+                reg = <3>;
-+                chan-name = "d4";
-+                led-cur = /bits/ 8 <0x14>;
-+                max-cur = /bits/ 8 <0x20>;
-+            };
-+
-+            led@4 {
-+                reg = <4>;
-+                chan-name = "d5";
-+                led-cur = /bits/ 8 <0x14>;
-+                max-cur = /bits/ 8 <0x20>;
-+            };
-+
-+            led@5 {
-+                reg = <5>;
-+                chan-name = "d6";
-+                led-cur = /bits/ 8 <0x14>;
-+                max-cur = /bits/ 8 <0x20>;
-+            };
-+
-+            led@6 {
-+                reg = <6>;
-+                chan-name = "d7";
-+                led-cur = /bits/ 8 <0x14>;
-+                max-cur = /bits/ 8 <0x20>;
-+            };
-+
-+            led@7 {
-+                reg = <7>;
-+                chan-name = "d8";
-+                led-cur = /bits/ 8 <0x14>;
-+                max-cur = /bits/ 8 <0x20>;
-+            };
-+
-+            led@8 {
-+                reg = <8>;
-+                chan-name = "d9";
-+                led-cur = /bits/ 8 <0x14>;
-+                max-cur = /bits/ 8 <0x20>;
-+            };
-         };
- 
--       led-controller@33 {
--           #address-cells = <1>;
--           #size-cells = <0>;
--           compatible = "national,lp5523";
--           reg = <0x33>;
--           clock-mode = /bits/ 8 <0>;
--
--           multi-led@2 {
--               #address-cells = <1>;
--               #size-cells = <0>;
--               reg = <0x2>;
--               color = <LED_COLOR_ID_RGB>;
--               function = LED_FUNCTION_STANDBY;
--               linux,default-trigger = "heartbeat";
--
--               led@0 {
--                   led-cur = /bits/ 8 <50>;
--                   max-cur = /bits/ 8 <100>;
--                   reg = <0x0>;
--                   color = <LED_COLOR_ID_GREEN>;
--               };
--
--               led@1 {
--                   led-cur = /bits/ 8 <50>;
--                   max-cur = /bits/ 8 <100>;
--                   reg = <0x1>;
--                   color = <LED_COLOR_ID_BLUE>;
--               };
--
--               led@6 {
--                   led-cur = /bits/ 8 <50>;
--                   max-cur = /bits/ 8 <100>;
--                   reg = <0x6>;
--                   color = <LED_COLOR_ID_RED>;
--               };
-+        led-controller@33 {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            compatible = "national,lp5523";
-+            reg = <0x33>;
-+            clock-mode = /bits/ 8 <0>;
-+
-+            multi-led@2 {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                reg = <0x2>;
-+                color = <LED_COLOR_ID_RGB>;
-+                function = LED_FUNCTION_STANDBY;
-+                linux,default-trigger = "heartbeat";
-+
-+                led@0 {
-+                    led-cur = /bits/ 8 <50>;
-+                    max-cur = /bits/ 8 <100>;
-+                    reg = <0x0>;
-+                    color = <LED_COLOR_ID_GREEN>;
-+                };
-+
-+                led@1 {
-+                    led-cur = /bits/ 8 <50>;
-+                    max-cur = /bits/ 8 <100>;
-+                    reg = <0x1>;
-+                    color = <LED_COLOR_ID_BLUE>;
-+                };
-+
-+                led@6 {
-+                    led-cur = /bits/ 8 <50>;
-+                    max-cur = /bits/ 8 <100>;
-+                    reg = <0x6>;
-+                    color = <LED_COLOR_ID_RED>;
-+                };
-             };
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/leds/leds-pwm-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-pwm-multicolor.yaml
-index 6625a528f727..fdaf04e03a8d 100644
---- a/Documentation/devicetree/bindings/leds/leds-pwm-multicolor.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-pwm-multicolor.yaml
-@@ -55,24 +55,24 @@ examples:
-         compatible = "pwm-leds-multicolor";
- 
-         multi-led {
--          color = <LED_COLOR_ID_RGB>;
--          function = LED_FUNCTION_INDICATOR;
--          max-brightness = <65535>;
--
--          led-red {
--              pwms = <&pwm1 0 1000000>;
--              color = <LED_COLOR_ID_RED>;
--          };
--
--          led-green {
--              pwms = <&pwm2 0 1000000>;
--              color = <LED_COLOR_ID_GREEN>;
--          };
--
--          led-blue {
--              pwms = <&pwm3 0 1000000>;
--              color = <LED_COLOR_ID_BLUE>;
--          };
-+            color = <LED_COLOR_ID_RGB>;
-+            function = LED_FUNCTION_INDICATOR;
-+            max-brightness = <65535>;
-+
-+            led-red {
-+                pwms = <&pwm1 0 1000000>;
-+                color = <LED_COLOR_ID_RED>;
-+            };
-+
-+            led-green {
-+                pwms = <&pwm2 0 1000000>;
-+                color = <LED_COLOR_ID_GREEN>;
-+            };
-+
-+            led-blue {
-+                pwms = <&pwm3 0 1000000>;
-+                color = <LED_COLOR_ID_BLUE>;
-+            };
-         };
-     };
- 
--- 
-2.34.1
+Thanks,
+Stefano
 

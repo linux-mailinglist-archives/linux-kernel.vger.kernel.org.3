@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C595324C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 10:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0425324C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 10:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235712AbiEXIBs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 24 May 2022 04:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S231852AbiEXICB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 04:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235747AbiEXIB1 (ORCPT
+        with ESMTP id S235749AbiEXIBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 04:01:27 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABEF112D35
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 01:01:22 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-35-ppu1gej3NzGDz7Rk5zJVNA-1; Tue, 24 May 2022 09:01:19 +0100
-X-MC-Unique: ppu1gej3NzGDz7Rk5zJVNA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Tue, 24 May 2022 09:01:18 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Tue, 24 May 2022 09:01:18 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Oleksandr Natalenko' <oleksandr@natalenko.name>,
-        Neal Cardwell <ncardwell@google.com>
-CC:     Yuchung Cheng <ycheng@google.com>,
-        Yousuk Seung <ysseung@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        Adithya Abraham Philip <abrahamphilip@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Konstantin Demin" <rockdrilla@gmail.com>
-Subject: RE: [RFC] tcp_bbr2: use correct 64-bit division
-Thread-Topic: [RFC] tcp_bbr2: use correct 64-bit division
-Thread-Index: AQHYbityIzPXZ3B6u0uaGlDnmUxgKq0tq8zw
-Date:   Tue, 24 May 2022 08:01:18 +0000
-Message-ID: <4bd84c983e77486fbc94dfa2a167afaa@AcuMS.aculab.com>
-References: <4740526.31r3eYUQgx@natalenko.name>
-In-Reply-To: <4740526.31r3eYUQgx@natalenko.name>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 24 May 2022 04:01:43 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAF4205E3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 01:01:37 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id p189so10093226wmp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 01:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ma2nUBxa8PfLpFkWZENKEZQqERw2jeRipPKdsi7/lDQ=;
+        b=FuhZjvAq5Zd9Ni6Pq4Pgxn/GlTbgGLsFc909TJp4uCpK7sKQCS8yeIl3lhbx8JJ5kM
+         FHroFdX5+k+eNVhb+QQrvZnlYhiR7mg7qTJ3BF7VimNAiZmv9nAHO2ia2wy6TCW/Vcdl
+         NmodvR5zrNLs3TOUdc8vgMVUY1zAso9rCRqgnxYZTRXW1aCY59b04rctwlHXy5xhwes/
+         o6HFZ2OyDFwybRMgHVX7XP5W8SapTIlXV/9F+BGxUqsg/MNrEkguBnqaFQMv4CRbPO0b
+         v8fczUD8RzQXtJ8yYKkrp8d8pYFoOZ6M+EppE+W363PO/0vYRl+QPUAOoanka1Qtov1/
+         pe+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ma2nUBxa8PfLpFkWZENKEZQqERw2jeRipPKdsi7/lDQ=;
+        b=rKDE4dsau2i+wLySAcUP5yyDEyfEj6tOwDZH1j6zL/zQcswIzP5zsa2FELE3NTN6T7
+         gZPMCTlO4Sn8FvlSFJWMUk0qofka2+NvXL1N6OguMEbPxXe5zuEafDn0dbLMLa88iaki
+         SKC+j7Wq200DWYOYCk1VoTk5HmWeSL2X6K/vBaOhpVkNPNwo37nspsWZmPrD3DyISyDA
+         SCYM8ZrIPs3NtWLWIcrkaP7uybozWSAiWiPJuchluxwISBJx4pI6EXIV1oAFIZmaDbRO
+         AVUFGd+PF2b5pESYj4TiKkPwMnXlK3oNkNU0Xj/f9L8agGB5KmsChlflAUhW+KUcbPRd
+         J5wQ==
+X-Gm-Message-State: AOAM531G5pO99r+Z1tkjrZdFPoWyPuSI5AmJ1l6LBr2uSz9j65oiCasb
+        wonaXvXAUF9efM0wxbaIazwdjA==
+X-Google-Smtp-Source: ABdhPJz4BI9iIoaky8AaHSBmq9k12VExb0i/NW0Wl66IVb6NhzAjgbwg2S1QWnt5gppcbNRDkA9mPA==
+X-Received: by 2002:a05:600c:3646:b0:397:326d:eac7 with SMTP id y6-20020a05600c364600b00397326deac7mr2587912wmq.43.1653379296486;
+        Tue, 24 May 2022 01:01:36 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id t16-20020a05600c2f9000b003942a244eebsm1213807wmn.48.2022.05.24.01.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 01:01:35 -0700 (PDT)
+Date:   Tue, 24 May 2022 09:01:29 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 1/2] mfd: twl6030: Make twl6030_exit_irq() return void
+Message-ID: <YoyQ2dXqIbHT/sPi@google.com>
+References: <20220113101430.12869-1-u.kleine-koenig@pengutronix.de>
+ <20220113101430.12869-2-u.kleine-koenig@pengutronix.de>
+ <Ymq/tVTo2JIEDEQa@google.com>
+ <20220523212457.3cd5f5afwla2ahxi@pengutronix.de>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220523212457.3cd5f5afwla2ahxi@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,76 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Natalenko
-> Sent: 22 May 2022 23:30
-> To: Neal Cardwell <ncardwell@google.com>
-> 
-> Hello Neal.
-> 
-> It was reported to me [1] by Konstantin (in Cc) that BBRv2 code suffers from integer division issue on
-> 32 bit systems.
+On Mon, 23 May 2022, Uwe Kleine-König wrote:
 
-Do any of these divisions ever actually have 64bit operands?
-Even on x86-64 64bit divide is significantly slower than 32bit divide.
+> Hello Lee,
+> 
+> On Thu, Apr 28, 2022 at 05:24:21PM +0100, Lee Jones wrote:
+> > On Thu, 13 Jan 2022, Uwe Kleine-König wrote:
+> > 
+> > > This function returns 0 unconditionally, so there is no benefit in
+> > > returning a value at all and make the caller do error checking.
+> > > 
+> > > Also the caller (twl_remove()) cannot do anything sensible with an error
+> > > code. Passing it up the call stack isn't a good option because the i2c core
+> > > ignores error codes (apart from emitting an error message).
+> > > 
+> > > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> > > ---
+> > >  drivers/mfd/twl-core.c    | 4 ++--
+> > >  drivers/mfd/twl-core.h    | 2 +-
+> > >  drivers/mfd/twl6030-irq.c | 3 +--
+> > >  3 files changed, 4 insertions(+), 5 deletions(-)
+> > 
+> > Applied, thanks.
+> 
+> I would have expected these to appear in next since you wrote to have
+> applied this series. But they have not though your claim to have applied
+> them is over three weeks old now?! :-\
 
-It is quite clear that x * 8 / 1000 is the same as x / (1000 / 8).
-So promoting to 64bit cannot be needed.
+Don't worry.  They're both applied and will be in v5.19.
 
-	David
-
-> 
-> Konstantin suggested a solution available in the same linked merge request and copy-pasted by me below
-> for your convenience:
-> 
-> ```
-> diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
-> index 664c9e119787..fd3f89e3a8a6 100644
-> --- a/net/ipv4/tcp_bbr.c
-> +++ b/net/ipv4/tcp_bbr.c
-> @@ -312,7 +312,7 @@ static u32 bbr_tso_segs_generic(struct sock *sk, unsigned int mss_now,
->  	bytes = sk->sk_pacing_rate >> sk->sk_pacing_shift;
-> 
->  	bytes = min_t(u32, bytes, gso_max_size - 1 - MAX_TCP_HEADER);
-> -	segs = max_t(u32, bytes / mss_now, bbr_min_tso_segs(sk));
-> +	segs = max_t(u32, div_u64(bytes, mss_now), bbr_min_tso_segs(sk));
->  	return segs;
->  }
-> 
-> diff --git a/net/ipv4/tcp_bbr2.c b/net/ipv4/tcp_bbr2.c
-> index fa49e17c47ca..488429f0f3d0 100644
-> --- a/net/ipv4/tcp_bbr2.c
-> +++ b/net/ipv4/tcp_bbr2.c
-> @@ -588,7 +588,7 @@ static void bbr_debug(struct sock *sk, u32 acked,
->  		 bbr_rate_kbps(sk, bbr_max_bw(sk)), /* bw: max bw */
->  		 0ULL,				    /* lb: [obsolete] */
->  		 0ULL,				    /* ib: [obsolete] */
-> -		 (u64)sk->sk_pacing_rate * 8 / 1000,
-> +		 div_u64((u64)sk->sk_pacing_rate * 8, 1000),
->  		 acked,
->  		 tcp_packets_in_flight(tp),
->  		 rs->is_ack_delayed ? 'd' : '.',
-> @@ -698,7 +698,7 @@ static u32 bbr_tso_segs_generic(struct sock *sk, unsigned int mss_now,
->  	}
-> 
->  	bytes = min_t(u32, bytes, gso_max_size - 1 - MAX_TCP_HEADER);
-> -	segs = max_t(u32, bytes / mss_now, bbr_min_tso_segs(sk));
-> +	segs = max_t(u32, div_u64(bytes, mss_now), bbr_min_tso_segs(sk));
->  	return segs;
->  }
-> ```
-> 
-> Could you please evaluate this report and check whether it is correct, and also check whether the
-> suggested patch is acceptable?
-> 
-> Thanks.
-> 
-> [1] https://gitlab.com/post-factum/pf-kernel/-/merge_requests/6
-> 
-> --
-> Oleksandr Natalenko (post-factum)
-> 
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

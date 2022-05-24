@@ -2,201 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140BB53329A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D471053329E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241709AbiEXUtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
+        id S241730AbiEXUuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241696AbiEXUtR (ORCPT
+        with ESMTP id S241725AbiEXUuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:49:17 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A967737B9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:49:16 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id g184so17269242pgc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e9ahkSLTtuvwLRoOkp0E00xXCsWuniaEqLjpRE+FmXM=;
-        b=AXCr0XgSkVrF9pCBmMIp3f38r3JJf2AjRX5w1UCFvFugMSOA8Se7MLQ1xl6emdyIx8
-         LeVkeS3aM38TUQ7nGBZOro8M5oQFFf+AWzi00HrtsjExVGtL7W9u/n55/660ncvC6u71
-         yFlf5B3NV8qkExYAo9G9O3AQ+mBqAJgEvCy1k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e9ahkSLTtuvwLRoOkp0E00xXCsWuniaEqLjpRE+FmXM=;
-        b=E5UhYBN/+3DmUp8wlMJsCk4/KojaGCoz8ID2n7L4Oj4PuUoIpaC48cpTO/CLbM2zYc
-         ABRbW0+lniumbjKgnN7gp1tJLmU2GNUctXJhpQ+jtUwUHUD+L/uT4Ep/nxHtS6rtQ1dJ
-         J1XGjb5ejiXatJNnFNI4WL3GpWZ+kS4Y/brFxqKsRv7VkJgwbEwRGqDFoeRC3sMFTWr4
-         IGJh6WFofdNN3ZHSyMSRTIfjF2lURyBb8AvbLGHJ/Rv3ASpTwrJ2TFfDTUnzOD3nVbkQ
-         8W9UCZHLd3pKf7RkFxbr+AZtbXozcQmTuXOdks43frMjotAnNWt2NOV9ZriZSNi9YZAy
-         dsQA==
-X-Gm-Message-State: AOAM532nRk69pp7Dv1upCA3bjO/1IXxGJU6HxFgQzx4GPUsEvfwvbGOw
-        dgRkH9U6JYzSUw8wcgsePF/cLQ==
-X-Google-Smtp-Source: ABdhPJwCz55uI2qGOYgI22kmaw7O/6E1G/+i+42mFsW1jnbNomUOjxKNl3/aN6OfdEf3gmO/FAvfvQ==
-X-Received: by 2002:a63:4204:0:b0:3f6:4a4f:5a96 with SMTP id p4-20020a634204000000b003f64a4f5a96mr23128307pga.10.1653425355851;
-        Tue, 24 May 2022 13:49:15 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:e1fc:e14a:1559:6e05])
-        by smtp.gmail.com with ESMTPSA id n11-20020a65450b000000b003fa5b550303sm3988813pgq.68.2022.05.24.13.49.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 13:49:15 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sc7280: Add touchscreen to villager
-Date:   Tue, 24 May 2022 13:48:49 -0700
-Message-Id: <20220524134840.1.I80072b8815ac08c12af8f379a33cc2d83693dc51@changeid>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+        Tue, 24 May 2022 16:50:18 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFA8737A0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:50:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EE7B0219E3;
+        Tue, 24 May 2022 20:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653425411; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MPNHku6piK5dWqvKjQcUMeZr5tFk3g/CcJPmOCuPN4w=;
+        b=g89mcHONl7FFoTjfEH9rg/xl9bqZsVeP1gtdmeBn4sfciROwWBMsijA3TrZ4ruSpBPJOm8
+        bVcjBgmbOk061UAfbBbV52xh+rud8A7DRkCafFQECh0aPlN8izKAai+HBe7vBquODJbzGR
+        K2qxKm8+QqPLQxq85iHrBip1qjdgpvw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653425411;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MPNHku6piK5dWqvKjQcUMeZr5tFk3g/CcJPmOCuPN4w=;
+        b=hPohSqZmXV9soTvNudrt4e4zTBYTBkZHyM73mlA2GYNOAiK+ThC8TSU5evY6Q+hgNLzO6s
+        mSxpv/a4raEjaWCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D476E13ADF;
+        Tue, 24 May 2022 20:50:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gx/pMgNFjWJ1OAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 24 May 2022 20:50:11 +0000
+Message-ID: <d24e9ac9-0903-3c15-c446-2962f44a360f@suse.cz>
+Date:   Tue, 24 May 2022 22:48:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: [CFP LPC 2022] Kernel Memory Management Microconference
+To:     Linux-MM layout <linux-mm@kvack.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the touchscreen to the sc7280-herobrine-villager device
-tree. Note that the touchscreen on villager actually uses the reset
-line and thus we use the more specific "elan,ekth6915" compatible
-which allows us to specify the reset.
+Hi,
 
-The fact that villager's touchscreen uses the reset line can be
-contrasted against the touchscreen for CRD/herobrine-r1. On those
-boards, even though the touchscreen goes to the display, it's not
-hooked up to anything there.
+this year there will be a brand new
 
-In order to keep the line parked on herobrine/CRD, we'll move the
-pullup from the qcard.dtsi file to the specific boards. This allows us
-to disable the pullup in the villager device tree since the pin is an
-output.
+	Kernel Memory Management Microconference
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-This uses bindings introduced in the patch ("dt-bindings: HID:
-i2c-hid: elan: Introduce bindings for Elan eKTH6915") [1].
+co-lead by Matthew Wilcox and myself at the Linux Plumbers Conference
+(LPC), September 12-14, Dublin, Ireland, or remotely.
 
-[1] https://lore.kernel.org/r/20220523142257.v2.1.Iedc61f9ef220a89af6a031200a7850a27a440134@changeid
+This microconference supplements the recently concluded LSF/MM event
+by providing an opportunity to discuss current topics with a different
+audience, in a different location, and at a different time of year.
+We would like to discuss current problems in memory management,
+for example:
 
- .../boot/dts/qcom/sc7280-herobrine-crd.dts    | 11 ++++++++
- .../qcom/sc7280-herobrine-herobrine-r1.dts    | 11 ++++++++
- .../dts/qcom/sc7280-herobrine-villager-r0.dts | 25 +++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |  1 -
- 4 files changed, 47 insertions(+), 1 deletion(-)
+	* Multi-generational LRU vs traditional LRU
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-index a4ac33c4fd59..b79d84d7870a 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
-@@ -134,6 +134,17 @@ &sdhc_2 {
- 	status = "okay";
- };
- 
-+/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
-+
-+/*
-+ * This pin goes to the display panel but then doesn't actually do anything
-+ * on the panel itself (it doesn't connect to the touchscreen controller).
-+ * We'll set a pullup here just to park the line.
-+ */
-+&ts_rst_conn {
-+	bias-pull-up;
-+};
-+
- /* PINCTRL - BOARD-SPECIFIC */
- 
- /*
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-index b69ca09d9bfb..c1647a85a371 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-@@ -128,6 +128,17 @@ &sdhc_2 {
- 	status = "okay";
- };
- 
-+/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
-+
-+/*
-+ * This pin goes to the display panel but then doesn't actually do anything
-+ * on the panel itself (it doesn't connect to the touchscreen controller).
-+ * We'll set a pullup here just to park the line.
-+ */
-+&ts_rst_conn {
-+	bias-pull-up;
-+};
-+
- /* PINCTRL - BOARD-SPECIFIC */
- 
- /*
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
-index d3d6ffad4eff..950b69448109 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dts
-@@ -46,6 +46,25 @@ trackpad: trackpad@2c {
- 	};
- };
- 
-+ts_i2c: &i2c13 {
-+	status = "okay";
-+	clock-frequency = <400000>;
-+
-+	ap_ts: touchscreen@10 {
-+		compatible = "elan,ekth6915";
-+		reg = <0x10>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ts_int_conn>, <&ts_rst_conn>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <55 IRQ_TYPE_LEVEL_LOW>;
-+
-+		reset-gpios = <&tlmm 54 GPIO_ACTIVE_LOW>;
-+
-+		vcc33-supply = <&ts_avdd>;
-+	};
-+};
-+
- &ap_sar_sensor_i2c {
- 	status = "okay";
- };
-@@ -81,6 +100,12 @@ &sdhc_1 {
- 	status = "okay";
- };
- 
-+/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
-+
-+&ts_rst_conn {
-+	bias-disable;
-+};
-+
- /* PINCTRL - BOARD-SPECIFIC */
- 
- /*
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-index d59002d4492e..404936c6bf20 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-@@ -604,7 +604,6 @@ ts_int_conn: ts-int-conn {
- 	ts_rst_conn: ts-rst-conn {
- 		pins = "gpio54";
- 		function = "gpio";
--		bias-pull-up;
- 		drive-strength = <2>;
- 	};
- };
--- 
-2.36.1.124.g0e6072fb45-goog
+	* Do we need three different slab allocators?
 
+	* How far do we take the folio conversion?
+
+	* Can we handle page pinning and page mapcount more
+	  effectively?
+
+	* How can we effectively cache reflinked files?
+
+	* Can we support 1GB pages other than through hugetlbfs?
+
+	* How should we handle memory failures better?
+
+Please submit your proposals at:
+
+	https://lpc.events/event/16/abstracts/
+
+and select "Kernel Memory Management MC" as the track.
+Please do that by the 1st of July to allow us to plan the schedule on time.
+
+We're looking forward to your proposals and seeing you either in Dublin
+or virtually!
+
+Thanks,
+Vlastimil

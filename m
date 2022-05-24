@@ -2,79 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D55532426
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCCC532424
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbiEXHeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S235215AbiEXHdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235275AbiEXHc2 (ORCPT
+        with ESMTP id S229620AbiEXHdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:32:28 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477F25520B;
-        Tue, 24 May 2022 00:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653377545; x=1684913545;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CzzSmeGX2kWdBh6NeYT7O0/RAmfBnBQM0c//KGmVU8I=;
-  b=N7KhQ4U5lIrVduN2gB9cNd1h/bYxlhibSVVzNB90O5RJiKb0OWNJ45Vx
-   fmOp38/zh/+yoy8YqBQW0pPT3/K/5K7IhTURe8WhBB+CWJF7FsRQlROCS
-   yn9/O2MOmKSA0YWI1JONf0O5qhY/boOYjoBGKE/VnSVq2VOddhX45855c
-   8=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 May 2022 00:32:24 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 00:32:24 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 24 May 2022 00:32:23 -0700
-Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 24 May
- 2022 00:32:19 -0700
-Message-ID: <7cde3e83-8176-8391-77db-3ca400a90e91@quicinc.com>
-Date:   Tue, 24 May 2022 15:32:18 +0800
+        Tue, 24 May 2022 03:33:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD93562A20
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653377587;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nc0quxO4J16P5xk58WIaztMrbbSvqm8aAXmU1D9eYJ4=;
+        b=BHyqGHdvfWqzkK/ZYuVxUeDIaeKeuQ7EqtVIwd+soCjy39JXWZSZuOZjAGJHW550pK8CoU
+        jVnRf1LrIndGIP+4s1Ssj5iZVe5xaX0KCfiGifspD25vpmZ2VbMC6NnieW7pe+JFU6hqAx
+        SOLiKTsz+lrJSwX+ziowj+FQsoFz0K8=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-318-K3Ji-fIDPzmFBedbps6Z3A-1; Tue, 24 May 2022 03:33:06 -0400
+X-MC-Unique: K3Ji-fIDPzmFBedbps6Z3A-1
+Received: by mail-qv1-f72.google.com with SMTP id n20-20020a0cc194000000b00461e72ac689so12735160qvh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:33:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=nc0quxO4J16P5xk58WIaztMrbbSvqm8aAXmU1D9eYJ4=;
+        b=5F1kdtBDTPmmZuEPMrn+5Z9Gr30u5iLHSYZFcdFnSSb9T4Hew8IvTkL14qRK5riBWR
+         QiKh+N41T3leRzNnfmTKrRy/oIFsd+MW5vkMYrquR4793MTeNwfxenqIizEqxkcqnEoe
+         ixe27wM5Pdtjxcs1/V+QRz4hI8c14xqgVIGR4tWUJC4ZsK81LeLGak3nVHmiuwnXV+y4
+         t+aiRmUyHb/kGDtQwJhnP1a+WjGAPhCReZcnLrLa9js9uAO1V4/nQH1eoG13E7lm3LIS
+         3g6v3xuLlbL/JVTwYIEVpgp1syYpptcrZtAnD+W4R7n+X633SrYCuy6OoN0RdnayO+x6
+         IuJQ==
+X-Gm-Message-State: AOAM530IknzVCD5qqsYCncTPWwDLh/t8BPZORYSoYF1keQVHPsA6r0dm
+        CGvu1VzE0XfoXi3Ft1YO7dz1NUqFDr9IizyEfaWKF38owaGCDdDWeRbw/wu9GChY3Em67Hberde
+        CDF5H2NkUjLKrQMgSqiIf56TA
+X-Received: by 2002:a05:6214:29ed:b0:462:12c7:e525 with SMTP id jv13-20020a05621429ed00b0046212c7e525mr14337040qvb.103.1653377585611;
+        Tue, 24 May 2022 00:33:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxpE9SJiGYXMMYBtv5GJ5wp83RMZiYPAjWM+XCwHFqeq/+El/4WVAF+CheI3qT9ZUG1nbeKrQ==
+X-Received: by 2002:a05:6214:29ed:b0:462:12c7:e525 with SMTP id jv13-20020a05621429ed00b0046212c7e525mr14337012qvb.103.1653377585290;
+        Tue, 24 May 2022 00:33:05 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id m24-20020ae9e018000000b006a37710ef89sm4011426qkk.115.2022.05.24.00.33.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 00:33:04 -0700 (PDT)
+Date:   Tue, 24 May 2022 09:32:56 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 0/8] virtio/vsock: experimental zerocopy receive
+Message-ID: <20220524073256.fpaknbcm7w5trata@sgarzare-redhat>
+References: <7cdcb1e1-7c97-c054-19cf-5caeacae981d@sberdevices.ru>
+ <20220517151404.vqse5tampdsaaeji@sgarzare-redhat>
+ <413d821f-3893-befa-7009-2f87ef51af7a@sberdevices.ru>
+ <20220519074208.q2bmytl2dphtjgse@sgarzare-redhat>
+ <27f906a8-181f-e6d8-f5a1-035604a2decb@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v7 07/10] Coresight: Add TPDA link driver
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>
-CC:     Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220509133947.20987-1-quic_jinlmao@quicinc.com>
- <20220509133947.20987-8-quic_jinlmao@quicinc.com>
- <362a330e-593a-edbc-4360-4573c97a1479@arm.com>
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-In-Reply-To: <362a330e-593a-edbc-4360-4573c97a1479@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <27f906a8-181f-e6d8-f5a1-035604a2decb@sberdevices.ru>
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,389 +93,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
-
-On 5/23/2022 5:40 PM, Suzuki K Poulose wrote:
-> On 09/05/2022 14:39, Mao Jinlong wrote:
->> TPDA(Trace, Profiling and Diagnostics Aggregator) is
->> to provide packetization, funneling and timestamping of
->> TPDM data. Multiple monitors are connected to different
->> input ports of TPDA.This change is to add tpda
->> enable/disable/probe functions for coresight tpda driver.
+On Fri, May 20, 2022 at 11:09:11AM +0000, Arseniy Krasnov wrote:
+>Hello Stefano,
+>
+>On 19.05.2022 10:42, Stefano Garzarella wrote:
+>> On Wed, May 18, 2022 at 11:04:30AM +0000, Arseniy Krasnov wrote:
+>>> Hello Stefano,
+>>>
+>>> On 17.05.2022 18:14, Stefano Garzarella wrote:
+>>>> Hi Arseniy,
+>>>>
+>>>> On Thu, May 12, 2022 at 05:04:11AM +0000, Arseniy Krasnov wrote:
+>>>>>                              INTRODUCTION
+>>>>>
+>>>>>     Hello, this is experimental implementation of virtio vsock zerocopy
+>>>>> receive. It was inspired by TCP zerocopy receive by Eric Dumazet. This API uses
+>>>>> same idea: call 'mmap()' on socket's descriptor, then every 'getsockopt()' will
+>>>>> fill provided vma area with pages of virtio RX buffers. After received data was
+>>>>> processed by user, pages must be freed by 'madvise()'  call with MADV_DONTNEED
+>>>>> flag set(if user won't call 'madvise()', next 'getsockopt()' will fail).
+>>>>
+>>>> Sounds cool, but maybe we would need some socket/net experts here for review.
+>>>
+>>> Yes, that would be great
+>>>
+>>>>
+>>>> Could we do something similar for the sending path as well?
+>>>
+>>> Here are thoughts about zerocopy transmission:
+>>>
+>>> I tried to implement this feature in the following way: user creates
+>>> some page aligned buffer, then during tx packet allocation instead of
+>>> creating data buffer with 'kmalloc()', i tried to add user's buffer
+>>> to virtio queue. But found problem: as kernel virtio API uses virtual
+>>> addresses to add new buffers, in the deep of virtio subsystem
+>>> 'virt_to_phys()' is called to get physical address of buffer, so user's
+>>> virtual address won't be translated correctly to physical address(in
+>>> theory, i can perform page walk for such user's va, get physical address
+>>> and pass some "fake" virtual address to virtio API in order to make
+>>> 'virt_to_phys()' return valid physical address(but i think this is ugly).
 >>
->> Â  - - - -Â Â Â Â Â Â Â Â  - - - -Â Â Â Â Â Â Â  - - - -
->> | TPDM 0|Â Â Â Â Â  | TPDM 1 |Â Â Â Â  | TPDM 2|
->> Â  - - - -Â Â Â Â Â Â Â Â  - - - -Â Â Â Â Â Â Â  - - - -
->> Â Â Â Â  |Â Â Â Â Â Â Â Â Â Â Â Â Â Â  |Â Â Â Â Â Â Â Â Â Â Â Â  |
->> Â Â Â Â  |_ _ _ _ _ _Â Â Â  |Â Â Â Â  _ _ _ _ |
->> Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  |Â Â  |Â Â Â  |
->> Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  |Â Â  |Â Â Â  |
->> Â Â Â Â Â Â Â Â Â Â Â  ------------------
->> Â Â Â Â Â Â Â Â Â Â  |Â Â Â Â Â Â Â  TPDAÂ Â Â Â Â  |
->> Â Â Â Â Â Â Â Â Â Â Â  ------------------
+>> And maybe we should also pin the pages to prevent them from being replaced.
 >>
->> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
->> ---
->> Â  drivers/hwtracing/coresight/KconfigÂ Â Â Â Â Â Â Â Â  |Â  11 +
->> Â  drivers/hwtracing/coresight/MakefileÂ Â Â Â Â Â Â Â  |Â Â  1 +
->> Â  drivers/hwtracing/coresight/coresight-tpda.c | 201 +++++++++++++++++++
->> Â  drivers/hwtracing/coresight/coresight-tpda.h |Â  33 +++
->> Â  4 files changed, 246 insertions(+)
->> Â  create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
->> Â  create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+>> I think we should do something similar to what we do in vhost-vdpa.
+>> Take a look at vhost_vdpa_pa_map() in drivers/vhost/vdpa.c
+>
+>Hm, ok. I'll read about vdpa...
+>
 >>
->> diff --git a/drivers/hwtracing/coresight/Kconfig 
->> b/drivers/hwtracing/coresight/Kconfig
->> index 5c506a1cd08f..447919565326 100644
->> --- a/drivers/hwtracing/coresight/Kconfig
->> +++ b/drivers/hwtracing/coresight/Kconfig
->> @@ -205,6 +205,7 @@ config CORESIGHT_TRBE
->> Â  config CORESIGHT_TPDM
->> Â Â Â Â Â  tristate "CoreSight Trace, Profiling & Diagnostics Monitor driver"
->> Â Â Â Â Â  select CORESIGHT_LINKS_AND_SINKS
->> +Â Â Â  select CORESIGHT_TPDA
->> Â Â Â Â Â  help
->> Â Â Â Â Â Â Â  This driver provides support for configuring monitor. 
->> Monitors are
->> Â Â Â Â Â Â Â  primarily responsible for data set collection and support the
->> @@ -214,4 +215,14 @@ config CORESIGHT_TPDM
->> Â Â Â Â Â Â Â  To compile this driver as a module, choose M here: the module 
->> will be
->> Â Â Â Â Â Â Â  called coresight-tpdm.
->> Â  +config CORESIGHT_TPDA
->> +Â Â Â  tristate "CoreSight Trace, Profiling & Diagnostics Aggregator 
->> driver"
->> +Â Â Â  help
->> +Â Â Â Â Â  This driver provides support for configuring aggregator. This is
->> +Â Â Â Â Â  primarily useful for pulling the data sets from one or more
->> +Â Â Â Â Â  attached monitors and pushing the resultant data out. Multiple
->> +Â Â Â Â Â  monitors are connected on different input ports of TPDA.
->> +
->> +Â Â Â Â Â  To compile this driver as a module, choose M here: the module 
->> will be
->> +Â Â Â Â Â  called coresight-tpda.
->> Â  endif
->> diff --git a/drivers/hwtracing/coresight/Makefile 
->> b/drivers/hwtracing/coresight/Makefile
->> index 6bb9b1746bc7..1712d82e7260 100644
->> --- a/drivers/hwtracing/coresight/Makefile
->> +++ b/drivers/hwtracing/coresight/Makefile
->> @@ -26,5 +26,6 @@ obj-$(CONFIG_CORESIGHT_CATU) += coresight-catu.o
->> Â  obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
->> Â  obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
->> Â  obj-$(CONFIG_CORESIGHT_TPDM) += coresight-tpdm.o
->> +obj-$(CONFIG_CORESIGHT_TPDA) += coresight-tpda.o
->> Â  coresight-cti-y := coresight-cti-core.o coresight-cti-platform.o \
->> Â Â Â Â Â Â Â Â Â Â Â Â  coresight-cti-sysfs.o
->> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c 
->> b/drivers/hwtracing/coresight/coresight-tpda.c
->> new file mode 100644
->> index 000000000000..126286e89679
->> --- /dev/null
->> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
->> @@ -0,0 +1,201 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights 
->> reserved.
->> + */
->> +
->> +#include <linux/amba/bus.h>
->> +#include <linux/bitmap.h>
->> +#include <linux/coresight.h>
->> +#include <linux/device.h>
->> +#include <linux/err.h>
->> +#include <linux/fs.h>
->> +#include <linux/io.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/platform_device.h>
->> +
->> +#include "coresight-priv.h"
->> +#include "coresight-tpda.h"
->> +#include "coresight-trace-id.h"
->> +
->> +DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
->> +
->> +/* Settings pre enabling port control register */
->> +static void tpda_enable_pre_port(struct tpda_drvdata *drvdata)
->> +{
->> +Â Â Â  u32 val;
->> +
->> +Â Â Â  val = readl_relaxed(drvdata->base + TPDA_CR);
->> +Â Â Â  /* Bits 6 ~ 12 is for atid value */
+>>>
+>>>
+>>> If we are talking about 'mmap()' way, i think we can do the following:
+>>> user calls 'mmap()' on socket, kernel fills newly created mapping with
+>>> allocated pages(all pages have rw permissions). Now user can use pages
+>>> of this mapping(e.g. fill it with data). Finally, to start transmission,
+>>> user calls 'getsockopt()' or some 'ioctl()' and kernel processes data of
+>>> this mapping. Also as this call will return immediately(e.g. it is
+>>> asynchronous), some completion logic must be implemented. For example
+>>> use same way as MSG_ZEROCOPY uses - poll error queue of socket to get
+>>> message that pages could be reused, or don't allow user to work with
+>>> these pages: unmap it, perform transmission and finally free pages.
+>>> To start new transmission user need to call 'mmap()' again.
+>>>
+>>>                            OR
+>>>
+>>> I think there is another unusual way for zerocopy tx: let's use 'vmsplice()'
+>>> /'splice()'. In this approach to transmit something, user does the following
+>>> steps:
+>>> 1) Creates pipe.
+>>> 2) Calls 'vmsplice(SPLICE_F_GIFT)' on this pipe, insert data pages to it.
+>>>   SPLICE_F_GIFT allows user to forget about allocated pages - kernel will
+>>>   free it.
+>>> 3) Calls 'splice(SPLICE_F_MOVE)' from pipe to socket. SPLICE_F_MOVE will
+>>>   move pages from pipe to socket(e.g. in special socket callback we got
+>>>   set of pipe's pages as input argument and all pages will be inserted
+>>>   to virtio queue).
+>>>
+>>> But as SPLICE_F_MOVE support is disabled, it must be repaired first.
+>>
+>> Splice seems interesting, but it would be nice If we do something similar to TCP. IIUC they use a flag for send(2):
+>>
+>>     send(fd, buf, sizeof(buf), MSG_ZEROCOPY);
+>>
 >
-> minor nit, please could we use FIELD_PREP() and define the
-> ATID field in the TPDA_CR accordingly ?
-I will check and update.
->
->> +Â Â Â  val |= (drvdata->atid << 6)
->
-> then we could have :
->
-> Â Â Â Â val |= FIELD_PREP(TPDA_CR_ATID, drvdata->atid);
->
->> +Â Â Â  writel_relaxed(val, drvdata->base + TPDA_CR);
->> +}
->> +
->> +static void tpda_enable_port(struct tpda_drvdata *drvdata, int port)
->> +{
->> +Â Â Â  u32 val;
->> +
->> +Â Â Â  val = readl_relaxed(drvdata->base + TPDA_Pn_CR(port));
->> +Â Â Â  /* Enable the port */
->> +Â Â Â  val |= TPDA_Pn_CR_ENA;
->> +Â Â Â  writel_relaxed(val, drvdata->base + TPDA_Pn_CR(port));
->> +}
->> +
->> +static void _tpda_enable(struct tpda_drvdata *drvdata, int port)
->
-> minor nit: Similar to the tpdm, comment please use 
-> __tpda_{enable,disable}()
-I will address this.
->
->> +{
->> +Â Â Â  CS_UNLOCK(drvdata->base);
->> +
->> +Â Â Â  if (!drvdata->enable)
->> +Â Â Â Â Â Â Â  tpda_enable_pre_port(drvdata);
->> +
->> +Â Â Â  tpda_enable_port(drvdata, port);
->> +
->> +Â Â Â  CS_LOCK(drvdata->base);
->> +}
->> +
->> +static int tpda_enable(struct coresight_device *csdev, int inport, 
->> int outport)
->> +{
->> +Â Â Â  struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->> +
->> +Â Â Â  mutex_lock(&drvdata->lock);
->> +Â Â Â  _tpda_enable(drvdata, inport);
->> +Â Â Â  drvdata->enable = true;
->
-> I am wondering if this is good enough ? Do we need a refcount ?
-> e.g, multiple TPDMs could be enabled independently and disabled
-> indpendently. And the tpda must stay alive until the last "source"
-> is gone away ?
-it makes sense.
->
->> +Â Â Â  mutex_unlock(&drvdata->lock);
->> +
->> +Â Â Â  dev_info(drvdata->dev, "TPDA inport %d enabled\n", inport);
->> +Â Â Â  return 0;
->> +}
->> +
->> +static void _tpda_disable(struct tpda_drvdata *drvdata, int port)
->> +{
->> +Â Â Â  u32 val;
->> +
->> +Â Â Â  CS_UNLOCK(drvdata->base);
->> +
->> +Â Â Â  val = readl_relaxed(drvdata->base + TPDA_Pn_CR(port));
->> +Â Â Â  val &= ~TPDA_Pn_CR_ENA;
->> +Â Â Â  writel_relaxed(val, drvdata->base + TPDA_Pn_CR(port));
->> +
->> +Â Â Â  CS_LOCK(drvdata->base);
->> +}
->> +
->> +static void tpda_disable(struct coresight_device *csdev, int inport,
->> +Â Â Â Â Â Â Â Â Â Â Â Â Â Â  int outport)
->> +{
->> +Â Â Â  struct tpda_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->> +
->> +Â Â Â  mutex_lock(&drvdata->lock);
->> +Â Â Â  _tpda_disable(drvdata, inport);
->> +Â Â Â  drvdata->enable = false;
->
-> This is not sufficient. We need to make sure the TPDA has a refcount of
-> the enabled ports.
-I will update.
->
->> +Â Â Â  mutex_unlock(&drvdata->lock);
->> +
->> +Â Â Â  dev_info(drvdata->dev, "TPDA inport %d disabled\n", inport);
->> +}
->> +
->> +static const struct coresight_ops_link tpda_link_ops = {
->> +Â Â Â  .enableÂ Â Â Â Â Â Â  = tpda_enable,
->> +Â Â Â  .disableÂ Â Â  = tpda_disable,
->> +};
->> +
->> +static const struct coresight_ops tpda_cs_ops = {
->> +Â Â Â  .link_opsÂ Â Â  = &tpda_link_ops,
->> +};
->> +
->> +static int tpda_init_default_data(struct tpda_drvdata *drvdata)
->> +{
->> +Â Â Â  int atid;
->> +Â Â Â  /*
->> +Â Â Â Â  * TPDA must has a unique atid. This atid can uniquely
->> +Â Â Â Â  * identify the TPDM trace source connect to the TPDA.
->
-> nit: s/connect/connected/
->
-> Also how do we identify the different TPDM sources
-> connected using a single atid ? Looking at the patch description
-> it is possible to have multiple TPDMs connected to a single TPDA.
->
->> +Â Â Â Â  */
->> +Â Â Â  atid = 
->> coresight_trace_id_get_system_id(coresight_get_trace_id_map());
->> +Â Â Â  if (atid < 0)
->> +Â Â Â Â Â Â Â  return atid;
->> +
->> +Â Â Â  drvdata->atid = atid;
->> +Â Â Â  return 0;
->> +}
->> +
->> +static int tpda_probe(struct amba_device *adev, const struct amba_id 
->> *id)
->> +{
->> +Â Â Â  int ret;
->> +Â Â Â  struct device *dev = &adev->dev;
->> +Â Â Â  struct coresight_platform_data *pdata;
->> +Â Â Â  struct tpda_drvdata *drvdata;
->> +Â Â Â  struct coresight_desc desc = { 0 };
->> +
->> +Â Â Â  pdata = coresight_get_platform_data(dev);
->> +Â Â Â  if (IS_ERR(pdata))
->> +Â Â Â Â Â Â Â  return PTR_ERR(pdata);
->> +Â Â Â  adev->dev.platform_data = pdata;
->> +
->> +Â Â Â  drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
->> +Â Â Â  if (!drvdata)
->> +Â Â Â Â Â Â Â  return -ENOMEM;
->> +
->> +Â Â Â  drvdata->dev = &adev->dev;
->> +Â Â Â  dev_set_drvdata(dev, drvdata);
->> +
->> +Â Â Â  drvdata->base = devm_ioremap_resource(dev, &adev->res);
->> +Â Â Â  if (!drvdata->base)
->> +Â Â Â Â Â Â Â  return -ENOMEM;
->> +
->> +Â Â Â  mutex_init(&drvdata->lock);
->> +
->> +Â Â Â  ret = tpda_init_default_data(drvdata);
->> +Â Â Â  if (ret)
->> +Â Â Â Â Â Â Â  return ret;
->> +
->> +Â Â Â  desc.name = coresight_alloc_device_name(&tpda_devs, dev);
->> +Â Â Â  if (!desc.name)
->> +Â Â Â Â Â Â Â  return -ENOMEM;
->> +Â Â Â  desc.type = CORESIGHT_DEV_TYPE_LINK;
->> +Â Â Â  desc.subtype.link_subtype = CORESIGHT_DEV_SUBTYPE_LINK_MERG;
->> +Â Â Â  desc.ops = &tpda_cs_ops;
->> +Â Â Â  desc.pdata = adev->dev.platform_data;
->> +Â Â Â  desc.dev = &adev->dev;
->
-> desc.access must be initialised.
-I will address it.
->
->> +Â Â Â  drvdata->csdev = coresight_register(&desc);
->> +Â Â Â  if (IS_ERR(drvdata->csdev))
->> +Â Â Â Â Â Â Â  return PTR_ERR(drvdata->csdev);
->> +
->> +Â Â Â  pm_runtime_put(&adev->dev);
->> +
->> +Â Â Â  dev_dbg(drvdata->dev, "TPDA initialized\n");
->> +Â Â Â  return 0;
->> +}
->> +
->> +static void __exit tpda_remove(struct amba_device *adev)
->> +{
->> +Â Â Â  struct tpda_drvdata *drvdata = dev_get_drvdata(&adev->dev);
->> +
->> +Â Â Â  coresight_unregister(drvdata->csdev);
->> +}
->> +
->> +/*
->> + * Different TPDA has different periph id.
->> + * The difference is 0-7 bits' value. So ignore 0-7 bits.
->> + */
->> +static struct amba_id tpda_ids[] = {
->> +Â Â Â  {
->> +Â Â Â Â Â Â Â  .idÂ Â Â Â  = 0x000f0f00,
->> +Â Â Â Â Â Â Â  .maskÂ Â  = 0x000fff00,
->> +Â Â Â  },
->> +Â Â Â  { 0, 0},
->> +};
->> +
->> +static struct amba_driver tpda_driver = {
->> +Â Â Â  .drv = {
->> +Â Â Â Â Â Â Â  .nameÂ Â  = "coresight-tpda",
->> +Â Â Â Â Â Â Â  .ownerÂ Â Â  = THIS_MODULE,
->> +Â Â Â Â Â Â Â  .suppress_bind_attrs = true,
->> +Â Â Â  },
->> +Â Â Â  .probeÂ Â Â Â Â Â Â Â Â  = tpda_probe,
->> +Â Â Â  .removeÂ Â Â Â Â Â Â  = tpda_remove,
->> +Â Â Â  .id_tableÂ Â Â  = tpda_ids,
->> +};
->> +
->> +module_amba_driver(tpda_driver);
->> +
->> +MODULE_LICENSE("GPL v2");
->> +MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Aggregator driver");
->> diff --git a/drivers/hwtracing/coresight/coresight-tpda.h 
->> b/drivers/hwtracing/coresight/coresight-tpda.h
->> new file mode 100644
->> index 000000000000..6df1b72b3b76
->> --- /dev/null
->> +++ b/drivers/hwtracing/coresight/coresight-tpda.h
->> @@ -0,0 +1,33 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights 
->> reserved.
->> + */
->> +
->> +#ifndef _CORESIGHT_CORESIGHT_TPDA_H
->> +#define _CORESIGHT_CORESIGHT_TPDA_H
->> +
->> +#define TPDA_CRÂ Â Â Â Â Â Â Â Â Â Â  (0x000)
->> +#define TPDA_Pn_CR(n)Â Â Â Â Â Â Â  (0x004 + (n * 4))
->> +/* Aggregator port enable bit */
->> +#define TPDA_Pn_CR_ENAÂ Â Â Â Â Â Â  BIT(0)
->> +
->> +#define TPDA_MAX_INPORTSÂ Â Â  32
->
-> Please add the bit fields forÂ  TPDA_CR_ATID here and use
-> the FIELD_PREP()
->
-> #define TPDA_CR_ATIDÂ Â Â Â Â Â Â Â Â Â Â  GENMASK(12, 6)
-I will check and update.
->
->> +
->> +/**
->> + * struct tpda_drvdata - specifics associated to an TPDA component
->> + * @base:Â Â Â Â Â Â  memory mapped base address for this component.
->> + * @dev:Â Â Â Â Â Â Â  The device entity associated to this component.
->> + * @csdev:Â Â Â Â Â  component vitals needed by the framework.
->> + * @lock:Â Â Â Â Â Â  lock for the enable value.
->> + * @enable:Â Â Â Â  enable status of the component.
->> + */
->> +struct tpda_drvdata {
->> +Â Â Â  void __iomemÂ Â Â Â Â Â Â  *base;
->> +Â Â Â  struct deviceÂ Â Â Â Â Â Â  *dev;
->> +Â Â Â  struct coresight_deviceÂ Â Â  *csdev;
->> +Â Â Â  struct mutexÂ Â Â Â Â Â Â  lock;
->
-> Why mutex and not spinlock ?
+>Yes, but in this way i think:
+>1) What is 'buf'? It can't be user's address, since this buffer must be inserted to tx queue.
+>   E.g. it must be allocated by kernel and then returned to user for tx purposes. In TCP
+>   case, 'buf' is user's address(of course page aligned) because TCP logic uses sk_buff which
+>   allows to use such memory as data buffer.
 
-Same as tpdm.
+IIUC we can pin that buffer like we do in vhost-vdpa, and use it in the 
+VQ.
 
-1. There is no irq for TPDA
-2. There will be many registers to configure during enable/disable which 
-may cause
-some time.
+>2) To wait tx process is done(e.g. pages can be used again), such 
+>API(send + MSG_ZEROCOPY),
+>   uses socket's error queue - poll events that tx is finished. So same 
+>   way must be
+>   implemented for virtio vsock.
+
+Yeah, I think so.
+
 >
->> +Â Â Â  boolÂ Â Â Â Â Â Â Â Â Â Â  enable;
->> +Â Â Â  u32Â Â Â Â Â Â Â Â Â Â Â  atid;
+>>  
+>>>
+>>>>
+>>>>>
+>>>>>                                 DETAILS
+>>>>>
+>>>>>     Here is how mapping with mapped pages looks exactly: first page mapping
+>>>>> contains array of trimmed virtio vsock packet headers (in contains only length
+>>>>> of data on the corresponding page and 'flags' field):
+>>>>>
+>>>>>     struct virtio_vsock_usr_hdr {
+>>>>>         uint32_t length;
+>>>>>         uint32_t flags;
+>>>>>     };
+>>>>>
+>>>>> Field  'length' allows user to know exact size of payload within each sequence
+>>>>> of pages and 'flags' allows user to handle SOCK_SEQPACKET flags(such as message
+>>>>> bounds or record bounds). All other pages are data pages from RX queue.
+>>>>>
+>>>>>             Page 0      Page 1      Page N
+>>>>>
+>>>>>     [ hdr1 .. hdrN ][ data ] .. [ data ]
+>>>>>           |        |       ^           ^
+>>>>>           |        |       |           |
+>>>>>           |        *-------------------*
+>>>>>           |                |
+>>>>>           |                |
+>>>>>           *----------------*
+>>>>>
+>>>>>     Of course, single header could represent array of pages (when packet's
+>>>>> buffer is bigger than one page).So here is example of detailed mapping layout
+>>>>> for some set of packages. Lets consider that we have the following sequence  of
+>>>>> packages: 56 bytes, 4096 bytes and 8200 bytes. All pages: 0,1,2,3,4 and 5 will
+>>>>> be inserted to user's vma(vma is large enough).
+>>>>>
+>>>>>     Page 0: [[ hdr0 ][ hdr 1 ][ hdr 2 ][ hdr 3 ] ... ]
+>>>>>     Page 1: [ 56 ]
+>>>>>     Page 2: [ 4096 ]
+>>>>>     Page 3: [ 4096 ]
+>>>>>     Page 4: [ 4096 ]
+>>>>>     Page 5: [ 8 ]
+>>>>>
+>>>>>     Page 0 contains only array of headers:
+>>>>>     'hdr0' has 56 in length field.
+>>>>>     'hdr1' has 4096 in length field.
+>>>>>     'hdr2' has 8200 in length field.
+>>>>>     'hdr3' has 0 in length field(this is end of data marker).
+>>>>>
+>>>>>     Page 1 corresponds to 'hdr0' and has only 56 bytes of data.
+>>>>>     Page 2 corresponds to 'hdr1' and filled with data.
+>>>>>     Page 3 corresponds to 'hdr2' and filled with data.
+>>>>>     Page 4 corresponds to 'hdr2' and filled with data.
+>>>>>     Page 5 corresponds to 'hdr2' and has only 8 bytes of data.
+>>>>>
+>>>>>     This patchset also changes packets allocation way: today implementation
+>>>>> uses only 'kmalloc()' to create data buffer. Problem happens when we try to map
+>>>>> such buffers to user's vma - kernel forbids to map slab pages to user's vma(as
+>>>>> pages of "not large" 'kmalloc()' allocations are marked with PageSlab flag and
+>>>>> "not large" could be bigger than one page). So to avoid this, data buffers now
+>>>>> allocated using 'alloc_pages()' call.
+>>>>>
+>>>>>                                   TESTS
+>>>>>
+>>>>>     This patchset updates 'vsock_test' utility: two tests for new feature
+>>>>> were added. First test covers invalid cases. Second checks valid transmission
+>>>>> case.
+>>>>
+>>>> Thanks for adding the test!
+>>>>
+>>>>>
+>>>>>                                BENCHMARKING
+>>>>>
+>>>>>     For benchmakring I've added small utility 'rx_zerocopy'. It works in
+>>>>> client/server mode. When client connects to server, server starts sending exact
+>>>>> amount of data to client(amount is set as input argument).Client reads data and
+>>>>> waits for next portion of it. Client works in two modes: copy and zero-copy. In
+>>>>> copy mode client uses 'read()' call while in zerocopy mode sequence of 'mmap()'
+>>>>> /'getsockopt()'/'madvise()' are used. Smaller amount of time for transmission
+>>>>> is better. For server, we can set size of tx buffer and for client we can set
+>>>>> size of rx buffer or rx mapping size(in zerocopy mode). Usage of this utility
+>>>>> is quiet simple:
+>>>>>
+>>>>> For client mode:
+>>>>>
+>>>>> ./rx_zerocopy --mode client [--zerocopy] [--rx]
+>>>>>
+>>>>> For server mode:
+>>>>>
+>>>>> ./rx_zerocopy --mode server [--mb] [--tx]
+>>>>>
+>>>>> [--mb] sets number of megabytes to transfer.
+>>>>> [--rx] sets size of receive buffer/mapping in pages.
+>>>>> [--tx] sets size of transmit buffer in pages.
+>>>>>
+>>>>> I checked for transmission of 4000mb of data. Here are some results:
+>>>>>
+>>>>>                           size of rx/tx buffers in pages
+>>>>>               *---------------------------------------------------*
+>>>>>               |    8   |    32    |    64   |   256    |   512    |
+>>>>> *--------------*--------*----------*---------*----------*----------*
+>>>>> |   zerocopy   |   24   |   10.6   |  12.2   |   23.6   |    21    | secs to
+>>>>> *--------------*---------------------------------------------------- process
+>>>>> | non-zerocopy |   13   |   16.4   |  24.7   |   27.2   |   23.9   | 4000 mb
+>>>>> *--------------*----------------------------------------------------
+>>>>>
+>>>>> I think, that results are not so impressive, but at least it is not worse than
+>>>>> copy mode and there is no need to allocate memory for processing date.
+>>>>
+>>>> Why is it twice as slow in the first column?
+>>>
+>>> May be this is because memory copying for small buffers is very fast... i'll
+>>> analyze it deeply.
+>>
+>> Maybe I misunderstood, by small buffers here what do you mean?
+>>
+>> I thought 8 was the number of pages, so 32KB buffers.
 >
-> Â Â Â Â u8 atid ?
-I will check.
->
->
-> Suzuki
+>Yes, 8 is size in pages. Anyway, i need to check it more deeply.
+
+Okay, thanks!
+
+Stefano
+

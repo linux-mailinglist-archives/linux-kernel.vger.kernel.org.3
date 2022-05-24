@@ -2,146 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AB0532ABA
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC064532AC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237503AbiEXM5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
+        id S237533AbiEXNDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232013AbiEXM5h (ORCPT
+        with ESMTP id S231294AbiEXNDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:57:37 -0400
-Received: from corp-front09-corp.i.nease.net (corp-front09-corp.i.nease.net [59.111.134.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8809027FF6;
-        Tue, 24 May 2022 05:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
-        Date:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:
-        Content-Transfer-Encoding; bh=Yt7B0KucM2nqy+KyVy3N/Gqg5XShwOIM39
-        x08j9SOA0=; b=RsFe2cG2ulHWNUz/b9CMyHQi+1UkeiICypCPbvQ5kahiXcpymN
-        tpwjeSfpnFI31x/ENuttA9vJlPRnr62RS97/srA0cnPxGaeXqoXBB0QU6FRx0xkD
-        lef2CnUFJR9zCJVVTNQejVhX7hslIiZeUlt18us8WTOe25XcdFo6zGi48=
-Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
-        by corp-front09-corp.i.nease.net (Coremail) with SMTP id nxDICgDn6V411oxiVBZhAA--.16490S2;
-        Tue, 24 May 2022 20:57:26 +0800 (HKT)
-From:   liuyacan@corp.netease.com
-To:     kgraul@linux.ibm.com
-Cc:     davem@davemloft.net, guangguan.wang@linux.alibaba.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com
-Subject: Re: [PATCH net-next v2] net/smc: align the connect behaviour with TCP
-Date:   Tue, 24 May 2022 20:57:25 +0800
-Message-Id: <20220524125725.951315-1-liuyacan@corp.netease.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <26d43c65-1f23-5b83-6377-3327854387c4@linux.ibm.com>
-References: <26d43c65-1f23-5b83-6377-3327854387c4@linux.ibm.com>
+        Tue, 24 May 2022 09:03:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77374644E2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653397391;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VuA+hQIP5NuMWzKci8Ce7ATCFxGvl8XcBeLDZ4SQZrw=;
+        b=Xb+D9eUA/cAvD2E4+VfGAFE004kxNmi85GWwlATNQZmtCYYwOPXk8a4/bUwftWi4sneb9B
+        cnDALIKT9LGSoLXv7hHgolR3Fn3bv7jJG+nYCBrL+BO/SztBRQR6eulXA4OLic9DNQXDjR
+        kTcDwRgzryvhIFgW3d20KKcKKTFkwjE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-444-CLSOGblpOlahh7p4EKebVg-1; Tue, 24 May 2022 09:03:10 -0400
+X-MC-Unique: CLSOGblpOlahh7p4EKebVg-1
+Received: by mail-wm1-f72.google.com with SMTP id k35-20020a05600c1ca300b003946a9764baso1273771wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:03:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=VuA+hQIP5NuMWzKci8Ce7ATCFxGvl8XcBeLDZ4SQZrw=;
+        b=1RcAi6gRZeEo8dVB9RDW4B0eFiJPpEWS46Oq48Xd8JPWKpsFaKjSntoikeIyeH8u6G
+         y4ff3SRYRDnWYaTO+E/x0DCQonRiusnJ7bXH9ip0VeouZx47MwmszqqtAQEuV4GodjLH
+         6YMrZxWnE2U41yutAJKj+F39mkYXgkZHlN/S5kIniPgZUNYgC8WuX5/IX8YUEJabhKtX
+         9IKaVnuDUTPn68Ldf11Sy9CuZzrf/ezzz9a7DJ6Wa/ZtHJZLGueztFFo7C2WpoppVruI
+         J5nvpRJuXV7o9cb6tryAyzYRTa9rOOzuTbxmBZNhEdbhCGzLL29+k/v6JAzI+TSp05mo
+         lJkg==
+X-Gm-Message-State: AOAM530m8fJ/t1WEXMhvjScc8kOe8f49mfND9vRmBbEgnlQv7PbflsBV
+        yvRAT8AMXEa7YnhXnKeAZBUXA/jG85W7+P+BojqU9SBZ/n0nBV0nl/LSCri6e5ZM2kaKse67Q5Z
+        4jU65wFcaugXMeswxnAJNh22y
+X-Received: by 2002:a05:6000:184d:b0:20f:e9a0:dad6 with SMTP id c13-20020a056000184d00b0020fe9a0dad6mr5473137wri.317.1653397388921;
+        Tue, 24 May 2022 06:03:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy6FGiz36BIprlRrTIAV1mNT8gxPmWO8Z7EZuutiOcqaDrFguXdDtGyDfOJNR44VniSl70yKQ==
+X-Received: by 2002:a05:6000:184d:b0:20f:e9a0:dad6 with SMTP id c13-20020a056000184d00b0020fe9a0dad6mr5473116wri.317.1653397388723;
+        Tue, 24 May 2022 06:03:08 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
+        by smtp.gmail.com with ESMTPSA id g17-20020adfbc91000000b0020e6c51f070sm12972975wrh.112.2022.05.24.06.03.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 06:03:08 -0700 (PDT)
+Message-ID: <6dc4367dc75d3f7baf9f61e2691045066b3716e1.camel@redhat.com>
+Subject: Re: [PATCH] r8152: Return true/false (not 1/0) from bool functions
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        davem@davemloft.net
+Cc:     edumazet@google.com, kuba@kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Date:   Tue, 24 May 2022 15:03:07 +0200
+In-Reply-To: <20220524093733.9537-1-jiapeng.chong@linux.alibaba.com>
+References: <20220524093733.9537-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: nxDICgDn6V411oxiVBZhAA--.16490S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw1UWF1DGr45Zw4UAFyUGFg_yoWrXr1Upr
-        yIka9akrWDJr13urnIv3WDCFsayws5JF45GryxWFy8CwnFvFnxJrZ7KrWj9a17ZFykGryU
-        Zr48ZFZxKFZ8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUJGb7IF0VCFI7km07C26c804VAKzcIF0wAYjsxI4VWDJwAYFVCj
-        jxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67
-        AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IY
-        x2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4vE1TuYJxuj
-        qTIEc-sFP3VYkVW5Jr1DJw4UKVWUGwAawVACjsI_Ar4v6c8GOVW06r1DJrWUAwAawVACjs
-        I_Ar4v6c8GOVWY6r1DJrWUAwAawVCFI7vE04vSzxk24VAqrcv_Gr1UXr18M2vj6xkI62vS
-        6c8GOVWUtr1rJFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCE34x0Y48IcwAqx4xG64
-        xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j
-        6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwAKzVCY07xG64k0F24l7I
-        0Y64k_MxkI7II2jI8vz4vEwIxGrwCF04k20xvY0x0EwIxGrwCF72vEw2IIxxk0rwCFx2Iq
-        xVCFs4IE7xkEbVWUJVW8JwCFI7vE0wC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
-        wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j6wZ7UUUUU=
-X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAQCVt761lFGAAFsW
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > 
-> > 
-> > On 2022/5/23 20:24, Karsten Graul wrote:
-> >> On 13/05/2022 04:24, Guangguan Wang wrote:
-> >>> Connect with O_NONBLOCK will not be completed immediately
-> >>> and returns -EINPROGRESS. It is possible to use selector/poll
-> >>> for completion by selecting the socket for writing. After select
-> >>> indicates writability, a second connect function call will return
-> >>> 0 to indicate connected successfully as TCP does, but smc returns
-> >>> -EISCONN. Use socket state for smc to indicate connect state, which
-> >>> can help smc aligning the connect behaviour with TCP.
-> >>>
-> >>> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
-> >>> Acked-by: Karsten Graul <kgraul@linux.ibm.com>
-> >>> ---
-> >>>  net/smc/af_smc.c | 50 ++++++++++++++++++++++++++++++++++++++++++++----
-> >>>  1 file changed, 46 insertions(+), 4 deletions(-)
-> >>>
-> >>> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-> >>> index fce16b9d6e1a..5f70642a8044 100644
-> >>> --- a/net/smc/af_smc.c
-> >>> +++ b/net/smc/af_smc.c
-> >>> @@ -1544,9 +1544,29 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
-> >>>  		goto out_err;
-> >>>  
-> >>>  	lock_sock(sk);
-> >>> +	switch (sock->state) {
-> >>> +	default:
-> >>> +		rc = -EINVAL;
-> >>> +		goto out;
-> >>> +	case SS_CONNECTED:
-> >>> +		rc = sk->sk_state == SMC_ACTIVE ? -EISCONN : -EINVAL;
-> >>> +		goto out;
-> >>> +	case SS_CONNECTING:
-> >>> +		if (sk->sk_state == SMC_ACTIVE)
-> >>> +			goto connected;
-> >>
-> >> I stumbled over this when thinking about the fallback processing. If for whatever reason
-> >> fallback==true during smc_connect(), the "if (smc->use_fallback)" below would set sock->state
-> >> to e.g. SS_CONNECTED. But in the fallback case sk_state keeps SMC_INIT. So during the next call
-> >> the SS_CONNECTING case above would break because sk_state in NOT SMC_ACTIVE, and we would end
-> >> up calling kernel_connect() again. Which seems to be no problem when kernel_connect() returns 
-> >> -EISCONN and we return this to the caller. But is this how it should work, or does it work by chance?
-> >>
-> > 
-> > Since the sk_state keeps SMC_INIT and does not correctly indicate the state of clcsock, it should end
-> > up calling kernel_connect() again to get the actual connection state of clcsock.
-> > 
-> > And I'm sorry there is a problem that if sock->state==SS_CONNECTED and sk_state==SMC_INIT, further call
-> > of smc_connect will return -EINVAL where -EISCONN is preferred. 
-> > The steps to reproduce:
-> > 1）switch fallback before connect, such as setsockopt TCP_FASTOPEN
-> > 2）connect with noblocking and returns -EINPROGRESS. (sock->state changes to SS_CONNECTING)
-> > 3) end up calling connect with noblocking again and returns 0. (kernel_connect() returns 0 and sock->state changes to
-> >    SS_CONNECTED but sk->sk_state stays SMC_INIT)
-> > 4) call connect again, maybe by mistake, will return -EINVAL, but -EISCONN is preferred.
-> > 
-> > What do you think about if we synchronize the sk_state to SMC_ACTIVE instead of keeping SMC_INIT when clcsock
-> > connected successfully in fallback case described above.
-> > 
-> > ...
+On Tue, 2022-05-24 at 17:37 +0800, Jiapeng Chong wrote:
+> Return statements in functions returning bool should use true/false
+> instead of 1/0.
 > 
-> I start thinking that the fix in 86434744 introduced a problem. Before that fix a connect with
-> fallback always reached __smc_connect() and on top of that function in case of fallback
-> smc_connect_fallback() is called, which itself sets sk_state to SMC_ACTIVE.
+> Clean the following coccicheck warning:
 > 
-> 86434744 removed that code path and I wonder what it actually fixed, because at this time the 
-> fallback check in __smc_connect() was already present.
+> ./drivers/net/usb/r8152.c:9579:10-11: WARNING: return of 0/1 in function
+> 'rtl8152_supports_lenovo_macpassthru' with return type bool.
 > 
-> Without that "goto out;" the state would be set correctly in smc_connect_fallback(), and the 
-> socket close processing would work as expected.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  drivers/net/usb/r8152.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> index 7389d6ef8569..7b7704b4b500 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+> @@ -9576,15 +9576,15 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
+>  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
+>  		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
+>  		case DEVICE_ID_THINKPAD_USB_C_DONGLE:
+> -			return 1;
+> +			return true;
+>  		}
+>  	} else if (vendor_id == VENDOR_ID_REALTEK && parent_vendor_id == VENDOR_ID_LENOVO) {
+>  		switch (product_id) {
+>  		case 0x8153:
+> -			return 1;
+> +			return true;
+>  		}
+>  	}
+> -	return 0;
+> +	return false;
+>  }
+>  
+>  static int rtl8152_probe(struct usb_interface *intf,
 
-I think it is OK without that "goto out;". And I guess the purpose of "goto out;" is to avoid calling __smc_connect(), 
-because it is impossible to establish an rdma channel at this time.
+This looks like net-next material, and net-next is currently closed,
+please resubmit in ~2weeks specifying the target tree in the subj.
+
+Thanks
+
+Paolo
 

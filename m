@@ -2,213 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAFC5327B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE205327D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236253AbiEXKef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 06:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
+        id S236267AbiEXKgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 06:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiEXKec (ORCPT
+        with ESMTP id S236044AbiEXKgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:34:32 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E9D6EC71
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:34:30 -0700 (PDT)
+        Tue, 24 May 2022 06:36:49 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476DAFD1C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:36:48 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 137so16003879pgb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:36:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1653388471;
-  x=1684924471;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tTO9KlSLvwJ5fB+7S3O+zA2j/+7fp0U+77neSmOoPwU=;
-  b=T3EZslUqH0c1V09MbEht8LXAPbIDIrVwRokQ5O6qA8W7L54nQo2q8wqR
-   fmyV+YYa19oxxl7xmRm1bd2hYc4G3KXaMwJxcarEWG/bsp1TtaozPNTEY
-   R+f/pSZ1T1a9x0XIZ64qFN4LLliPhZF+s4ZWTlsPyMLxyspzVqIk5P4WV
-   Q8A5NWtWuJBzaVuMM5rmYy7q8R7xhlZ8ARRwXoxRHbNoSXcgLNHLbZJbY
-   RM6X9Mk41flu6q16ulE+3yhSGlksxtAPSjto+aXkTdf5ZXAcFIzRLCHk+
-   L4piO17CAqBegCWIjN4cJc9nB2TfaYmQHbtOgHDZ+5eH6D+tDY5k3NW3y
-   A==;
-Date:   Tue, 24 May 2022 12:34:28 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Johannes Berg <johannes@sipsolutions.net>
-CC:     Patricia Alfonso <trishalfonso@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        <anton.ivanov@cambridgegreys.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        <linux-um@lists.infradead.org>
-Subject: Re: [PATCH] UML: add support for KASAN under x86_64
-Message-ID: <20220524103423.GA13239@axis.com>
-References: <20200226004608.8128-1-trishalfonso@google.com>
- <CAKFsvULd7w21T_nEn8QiofQGMovFBmi94dq2W_-DOjxf5oD-=w@mail.gmail.com>
- <4b8c1696f658b4c6c393956734d580593b55c4c0.camel@sipsolutions.net>
- <CAKFsvULGSQRx3hL8HgbYbEt_8GOorZj96CoMVhx6sw=xWEwSwA@mail.gmail.com>
- <1fb57ec2a830deba664379f3e0f480e08e6dec2f.camel@sipsolutions.net>
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mv0h03Fi/OtxPp/Z+fPoItRmuRgY3cwaQPU9funRX9c=;
+        b=XSkF/bmPvGekW75aBNlxtn4mVjVNuZkS8BypyCMs1G5idGF4Ty3XbFkec8vlHBZMaj
+         zZwD2LVcBdYOOHEDFY9XAoWlv78XpR6SeHp/n21hGalRs7qtlO8pDMhAQzN6/Sm7kUfI
+         aiBO9h/VWkiDCNG8a5iZDWtmuNe/raMvjMRrCW9B4u8ZWES3W7Fdd2QnMvwP02HDxhRl
+         yR+gXercw+VgwdzFpA171XoYDBJ4URP3bB0ZcxwNifVs6zwanO703O+XCetzwpoBPHl5
+         1sxVk7U579O7sNBv8XzyWH3IHvyjibFJeXc8o4euBduT94QIJ6oZN+m0+ssKCU/X9GmZ
+         j1jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mv0h03Fi/OtxPp/Z+fPoItRmuRgY3cwaQPU9funRX9c=;
+        b=AXD2rOdWpzRiBbJX2QnIdYsBU1truKRPSl07infzDFKALO7oiYzYx7NWrqSB1q54TU
+         09kE9HnKJFKVMm9ZwCe/aMxPmhmY1VFwCgF5j8N+ZhRnCK4hagEOtxYX8jpQyGZJoIax
+         hpqR7WjwLWEUc9Mwhl1OB6CtVMMtOK905gpnZWp79FYsS5gbIJwr0NXrdH1RLaQ9HIvG
+         mBfpIb7YmsccxvGgc6+C7KmO035/jLR8qyWWjVosEqjISkO7yg7JzA5IY0UKF5R2xOgG
+         gJE0lsV7V4YJwqne6+IBoqEAyG9XczZS86CTrwYzASXiLgJctWVONRN2aiiJaX1+/+TG
+         lkrA==
+X-Gm-Message-State: AOAM532r93TwweDaesiFTgt/A1ueu34sfff48a/PcEOIs1Q6883TKja1
+        /AzvcwVXLei7zXNmEvOhank1eQ==
+X-Google-Smtp-Source: ABdhPJzU0XpiMdHt9AZg3iIPm1ofoXx4H5Mz44HKUELtKJUbPAnWeRAYPyeFGF6qI+8tBZMmdL6dOA==
+X-Received: by 2002:a63:fc08:0:b0:3f9:e159:b114 with SMTP id j8-20020a63fc08000000b003f9e159b114mr14550018pgi.526.1653388607832;
+        Tue, 24 May 2022 03:36:47 -0700 (PDT)
+Received: from R911R1VA-1UT.bytedance.net ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id j12-20020a170903024c00b00161823de53csm6913010plh.282.2022.05.24.03.36.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 03:36:47 -0700 (PDT)
+From:   hezhongkun <hezhongkun.hzk@bytedance.com>
+To:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, lizefan.x@bytedance.com,
+        Hezhongkun <hezhongkun.hzk@bytedance.com>
+Subject: [PATCH] mm: memcontrol: add the mempolicy interface for cgroup v2.
+Date:   Tue, 24 May 2022 18:36:38 +0800
+Message-Id: <20220524103638.473-1-hezhongkun.hzk@bytedance.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1fb57ec2a830deba664379f3e0f480e08e6dec2f.camel@sipsolutions.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 11, 2020 at 11:44:37PM +0100, Johannes Berg wrote:
-> On Wed, 2020-03-11 at 15:32 -0700, Patricia Alfonso wrote:
-> > I'll need some time to investigate these all myself. Having just
-> > gotten my first module to run about an hour ago, any more information
-> > about how you got these errors would be helpful so I can try to
-> > reproduce them on my own.
-> 
-> See the other emails, I was basically just loading random modules. In my
-> case cfg80211, mac80211, mac80211-hwsim - those are definitely available
-> without any (virtio) hardware requirements, so you could use them.
-> 
-> Note that doing a bunch of vmalloc would likely result in similar
-> issues, since the module and vmalloc space is the same on UML.
+From: Hezhongkun <hezhongkun.hzk@bytedance.com>
 
-Old thread, but I had a look at this the other day and I think I got it
-working.  Since the entire shadow area is mapped at init, we don't need
-to do any mappings later.
+Mempolicy is difficult to use because it is set in-process
+via a system call. We want to make it easier to use mempolicy
+in cgroups, so that we can control low-priority cgroups to
+allocate memory in specified nodes. So this patch want to
+adds the mempolicy interface.
 
-It works both with and without KASAN_VMALLOC.  KASAN_STACK works too
-after I disabled sanitization of the stacktrace code.  All kasan kunit
-tests pass and the test_kasan.ko module works too.
+the mempolicy priority of memcgroup is higher than the priority
+of task. The order of getting the policy is,
+memcgroup->policy,task->policy or vma policy, default policy.
+memcgroup's policy is owned by itself, so descendants will
+not inherit it.
 
-Delta patch against Patricia's is below.  The CONFIG_UML checks need to
-be replaced with something more appropriate (new config? __weak
-functions?) and the free functions should probably be hooked up to
-madvise(MADV_DONTNEED) so we discard unused pages in the shadow mapping.
+Signed-off-by: Hezhongkun <hezhongkun.hzk@bytedance.com>
+---
+ include/linux/memcontrol.h |  1 +
+ mm/memcontrol.c            | 42 ++++++++++++++++++++++++++++++++++++++
+ mm/mempolicy.c             | 30 ++++++++++++++++++++++-----
+ 3 files changed, 68 insertions(+), 5 deletions(-)
 
-Note that there's a KASAN stack-out-of-bounds splat on startup when just
-booting UML.  That looks like a real (17-year-old) bug, I've posted a
-fix for that:
-
- https://lore.kernel.org/lkml/20220523140403.2361040-1-vincent.whitchurch@axis.com/
-
-8<-----------
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index a1bd8c07ce14..5f3a4d25d57e 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -12,6 +12,7 @@ config UML
- 	select ARCH_NO_PREEMPT
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_KASAN if X86_64
-+	select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_UID16
-@@ -223,7 +224,7 @@ config UML_TIME_TRAVEL_SUPPORT
- config KASAN_SHADOW_OFFSET
- 	hex
- 	depends on KASAN
--	default 0x7fff8000
-+	default 0x100000000000
- 	help
- 	  This is the offset at which the ~2.25TB of shadow memory is
- 	  mapped and used by KASAN for memory debugging. This can be any
-diff --git a/arch/um/kernel/Makefile b/arch/um/kernel/Makefile
-index 1c2d4b29a3d4..a089217e2f0e 100644
---- a/arch/um/kernel/Makefile
-+++ b/arch/um/kernel/Makefile
-@@ -27,6 +27,9 @@ obj-$(CONFIG_EARLY_PRINTK) += early_printk.o
- obj-$(CONFIG_STACKTRACE) += stacktrace.o
- obj-$(CONFIG_GENERIC_PCI_IOMAP) += ioport.o
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 89b14729d59f..2261eeb6100c 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -343,6 +343,7 @@ struct mem_cgroup {
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ 	struct deferred_split deferred_split_queue;
+ #endif
++	struct mempolicy *mempolicy;
  
-+KASAN_SANITIZE_stacktrace.o := n
-+KASAN_SANITIZE_sysrq.o := n
-+
- USER_OBJS := config.o
+ 	struct mem_cgroup_per_node *nodeinfo[];
+ };
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 598fece89e2b..38108fd4df64 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -6332,6 +6332,42 @@ static int memory_numa_stat_show(struct seq_file *m, void *v)
  
- include arch/um/scripts/Makefile.rules
-diff --git a/arch/um/kernel/mem.c b/arch/um/kernel/mem.c
-index 7c3196c297f7..a32cfce53efb 100644
---- a/arch/um/kernel/mem.c
-+++ b/arch/um/kernel/mem.c
-@@ -33,7 +33,7 @@ void kasan_init(void)
+ 	return 0;
  }
- 
- static void (*kasan_init_ptr)(void)
--__section(.kasan_init) __used
-+__section(".kasan_init") __used
- = kasan_init;
++
++static int memory_policy_show(struct seq_file *m, void *v)
++{
++	char buffer[64];
++	struct mempolicy *mpol = mem_cgroup_from_seq(m)->mempolicy;
++
++	memset(buffer, 0, sizeof(buffer));
++
++	if (!mpol || mpol->mode == MPOL_DEFAULT)
++		return 0;
++
++	mpol_to_str(buffer, sizeof(buffer), mpol);
++	seq_printf(m, buffer);
++	seq_putc(m, '\n');
++	return 0;
++}
++
++static ssize_t memory_policy_write(struct kernfs_open_file *of,
++				char *buf, size_t nbytes, loff_t off)
++{
++	int err = 1;
++	struct mempolicy *mpol, *old;
++	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
++
++	old = memcg->mempolicy;
++	buf = strstrip(buf);
++	err = mpol_parse_str(buf, &mpol);
++
++	if (err)
++		goto out;
++	mpol_put(old);
++	memcg->mempolicy = mpol;
++out:
++	return nbytes;
++}
++
  #endif
  
-diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-index 1113cf5fea25..1f3e620188a2 100644
---- a/lib/Kconfig.kasan
-+++ b/lib/Kconfig.kasan
-@@ -152,7 +152,7 @@ config KASAN_STACK
- 	bool "Enable stack instrumentation (unsafe)" if CC_IS_CLANG && !COMPILE_TEST
- 	depends on KASAN_GENERIC || KASAN_SW_TAGS
- 	depends on !ARCH_DISABLE_KASAN_INLINE
--	default y if CC_IS_GCC && !UML
-+	default y if CC_IS_GCC
- 	help
- 	  The LLVM stack address sanitizer has a know problem that
- 	  causes excessive stack usage in a lot of functions, see
-diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-index a4f07de21771..d8c518bd0e7d 100644
---- a/mm/kasan/shadow.c
-+++ b/mm/kasan/shadow.c
-@@ -295,8 +295,14 @@ int kasan_populate_vmalloc(unsigned long addr, unsigned long size)
- 		return 0;
- 
- 	shadow_start = (unsigned long)kasan_mem_to_shadow((void *)addr);
--	shadow_start = ALIGN_DOWN(shadow_start, PAGE_SIZE);
- 	shadow_end = (unsigned long)kasan_mem_to_shadow((void *)addr + size);
-+
-+	if (IS_ENABLED(CONFIG_UML)) {
-+		__memset(kasan_mem_to_shadow((void *)addr), KASAN_VMALLOC_INVALID, shadow_end - shadow_start);
-+		return 0;
-+	}
-+
-+	shadow_start = ALIGN_DOWN(shadow_start, PAGE_SIZE);
- 	shadow_end = ALIGN(shadow_end, PAGE_SIZE);
- 
- 	ret = apply_to_page_range(&init_mm, shadow_start,
-@@ -466,6 +472,10 @@ void kasan_release_vmalloc(unsigned long start, unsigned long end,
- 
- 	if (shadow_end > shadow_start) {
- 		size = shadow_end - shadow_start;
-+		if (IS_ENABLED(CONFIG_UML)) {
-+			__memset(shadow_start, KASAN_SHADOW_INIT, shadow_end - shadow_start);
-+			return;
-+		}
- 		apply_to_existing_page_range(&init_mm,
- 					     (unsigned long)shadow_start,
- 					     size, kasan_depopulate_vmalloc_pte,
-@@ -531,6 +541,11 @@ int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
- 	if (WARN_ON(!PAGE_ALIGNED(shadow_start)))
- 		return -EINVAL;
- 
-+	if (IS_ENABLED(CONFIG_UML)) {
-+		__memset((void *)shadow_start, KASAN_SHADOW_INIT, shadow_size);
-+		return 0;
-+	}
-+
- 	ret = __vmalloc_node_range(shadow_size, 1, shadow_start,
- 			shadow_start + shadow_size,
- 			GFP_KERNEL,
-@@ -554,6 +569,9 @@ int kasan_alloc_module_shadow(void *addr, size_t size, gfp_t gfp_mask)
- 
- void kasan_free_module_shadow(const struct vm_struct *vm)
- {
-+	if (IS_ENABLED(CONFIG_UML))
-+		return;
-+
- 	if (vm->flags & VM_KASAN)
- 		vfree(kasan_mem_to_shadow(vm->addr));
+ static int memory_oom_group_show(struct seq_file *m, void *v)
+@@ -6416,6 +6452,12 @@ static struct cftype memory_files[] = {
+ 		.name = "numa_stat",
+ 		.seq_show = memory_numa_stat_show,
+ 	},
++	{
++		.name = "policy",
++		.flags = CFTYPE_NOT_ON_ROOT,
++		.seq_show = memory_policy_show,
++		.write = memory_policy_write,
++	},
+ #endif
+ 	{
+ 		.name = "oom.group",
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index 8c74107a2b15..5153b046f8c3 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -176,6 +176,16 @@ struct mempolicy *get_task_policy(struct task_struct *p)
+ 	return &default_policy;
  }
+ 
++struct mempolicy *get_cgrp_or_task_policy(struct task_struct *p)
++{
++	struct mempolicy *pol;
++	struct mem_cgroup *memcg = mem_cgroup_from_task(p);
++
++	pol = (memcg && memcg->mempolicy) ? memcg->mempolicy : get_task_policy(p);
++	return pol;
++}
++
++
+ static const struct mempolicy_operations {
+ 	int (*create)(struct mempolicy *pol, const nodemask_t *nodes);
+ 	void (*rebind)(struct mempolicy *pol, const nodemask_t *nodes);
+@@ -1782,6 +1792,16 @@ static struct mempolicy *get_vma_policy(struct vm_area_struct *vma,
+ 	return pol;
+ }
+ 
++static struct mempolicy *get_cgrp_or_vma_policy(struct vm_area_struct *vma,
++						unsigned long addr)
++{
++	struct mempolicy *pol;
++	struct mem_cgroup *memcg = mem_cgroup_from_task(current);
++
++	pol = (memcg && memcg->mempolicy) ? memcg->mempolicy : get_vma_policy(vma, addr);
++	return pol;
++}
++
+ bool vma_policy_mof(struct vm_area_struct *vma)
+ {
+ 	struct mempolicy *pol;
+@@ -1896,7 +1916,7 @@ unsigned int mempolicy_slab_node(void)
+ 	if (!in_task())
+ 		return node;
+ 
+-	policy = current->mempolicy;
++	policy = get_cgrp_or_task_policy(current);
+ 	if (!policy)
+ 		return node;
+ 
+@@ -2005,7 +2025,7 @@ int huge_node(struct vm_area_struct *vma, unsigned long addr, gfp_t gfp_flags,
+ 	int nid;
+ 	int mode;
+ 
+-	*mpol = get_vma_policy(vma, addr);
++	*mpol = get_cgrp_or_vma_policy(vma, addr);
+ 	*nodemask = NULL;
+ 	mode = (*mpol)->mode;
+ 
+@@ -2158,7 +2178,7 @@ struct page *alloc_pages_vma(gfp_t gfp, int order, struct vm_area_struct *vma,
+ 	int preferred_nid;
+ 	nodemask_t *nmask;
+ 
+-	pol = get_vma_policy(vma, addr);
++	pol = get_cgrp_or_vma_policy(vma, addr);
+ 
+ 	if (pol->mode == MPOL_INTERLEAVE) {
+ 		unsigned nid;
+@@ -2257,7 +2277,7 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
+ 	struct page *page;
+ 
+ 	if (!in_interrupt() && !(gfp & __GFP_THISNODE))
+-		pol = get_task_policy(current);
++		pol = get_cgrp_or_task_policy(current);
+ 
+ 	/*
+ 	 * No reference counting needed for current->mempolicy
+@@ -2562,7 +2582,7 @@ int mpol_misplaced(struct page *page, struct vm_area_struct *vma, unsigned long
+ 	int polnid = NUMA_NO_NODE;
+ 	int ret = NUMA_NO_NODE;
+ 
+-	pol = get_vma_policy(vma, addr);
++	pol = get_cgrp_or_vma_policy(vma, addr);
+ 	if (!(pol->flags & MPOL_F_MOF))
+ 		goto out;
+ 
+-- 
+2.17.1
+

@@ -2,160 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE665320DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7278532048
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbiEXCWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S232688AbiEXBag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 21:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbiEXCWU (ORCPT
+        with ESMTP id S230404AbiEXBac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:22:20 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3577C62A2F
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:22:18 -0700 (PDT)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220524022215epoutp03a14b9741652b225d1b3bb72d465c9d22~x6TElq2zM2185621856epoutp03U
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:22:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220524022215epoutp03a14b9741652b225d1b3bb72d465c9d22~x6TElq2zM2185621856epoutp03U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1653358935;
-        bh=ySh4VBTwTZYqs5uHmfByRcOgkoy7vH0TFw3CRIHx+K8=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=U5imAkWdIDxLJ1BzwfFN6hr6sbvGAu0ZMELAVK9URUfz20i3nw81DDoAJyQ1qAiUg
-         eDWSgcdrYaGizRoAeu+9NJcnweNFLn7pZzrK2oaiUYXhqBM04R719D50opaZoTdnux
-         dJpba8RM0udU9IhgXyt+tLGC+pcUANEs8iLxR/bc=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220524022215epcas1p17a6dc24bf7e9ffa4344ec3616c30bbde~x6TESDgVY1351013510epcas1p1B;
-        Tue, 24 May 2022 02:22:15 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.38.247]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4L6dJ64fLTz4x9QF; Tue, 24 May
-        2022 02:22:14 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BA.37.09785.6514C826; Tue, 24 May 2022 11:22:14 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220524022214epcas1p28d7b7de846e44cedf825eb4f5973932d~x6TDdoOCq2147121471epcas1p2B;
-        Tue, 24 May 2022 02:22:14 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220524022214epsmtrp2956ccbc9e81f31696c8be62e11880dea~x6TDc1w7d0845208452epsmtrp2C;
-        Tue, 24 May 2022 02:22:14 +0000 (GMT)
-X-AuditID: b6c32a36-4ad09a8000002639-75-628c4156fcb3
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7A.6A.11276.6514C826; Tue, 24 May 2022 11:22:14 +0900 (KST)
-Received: from U20PB1-0435.tn.corp.samsungelectronics.net (unknown
-        [10.91.133.14]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220524022214epsmtip1da14c599fd7db98f448d6b37c4626a7b~x6TDPhvJw2607926079epsmtip1K;
-        Tue, 24 May 2022 02:22:14 +0000 (GMT)
-From:   Sungjong Seo <sj1557.seo@samsung.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
-        daehojeong@google.com
-Subject: [PATCH] f2fs: allow compression for mmap files in
- compress_mode=user
-Date:   Tue, 24 May 2022 10:29:11 +0900
-Message-Id: <20220524012911.725783-1-sj1557.seo@samsung.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 23 May 2022 21:30:32 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA106FD01;
+        Mon, 23 May 2022 18:30:31 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id a10so17026542ioe.9;
+        Mon, 23 May 2022 18:30:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WWmcSlMLXyPAtUCAvd6HT22Q24cwWlGO+SKtL9DeqKU=;
+        b=g2y1NFt4Sseyx742KMl6xBdUityeBuD37EEwViwqBrkw+a2f6FepgoHeNqAcHs4pnS
+         0d1Nacm02K76ckrC3k60Cc4C8TIqbozizgZCpdm9jM366ElB583C3x0+qMEiKbQa79DU
+         YHDMuqpINrn+W61mvf7NC/5707+lHWwF+Tx1zT+xJQt83X08GyKfcGSLHmDD3wcDUyir
+         po18oBXtV7uTSIYeNHC59VElipZiBC9rlK0g45oJrdVu0oHLfbAF5/b+3h665gFYveW/
+         UjseAlbhaDpLGIt8CVLkZtoWQnBcZcOnoemVbm/5tZaLqXOTTdnmZXZGuhjPdA4Nr1ff
+         j5mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WWmcSlMLXyPAtUCAvd6HT22Q24cwWlGO+SKtL9DeqKU=;
+        b=ANCSUm8y4iPMs/k1ZgOeYd9zz5DtxYtFR11Ky0uYDfp6lOT9DPn63VA4o+Fos2UsKZ
+         x8thq+MWlYGvKMQh+E9ZKYoJU0m+r0vAywNdDlmCW1n4QlVMi6T1JQ3sZfBd/vPJaZ4A
+         JRTT4F0RM52fkMhSIHmThfswutA1OoF/N/yG/yjHkzKGOqe+ooZIGE5YL9ql6BdJ65G3
+         nIHzzeaRmUg8L7Sp9OGGWsCbzChBklpu2WFLYXfqxem7pZBCbXbDd8pOXRXQyGYmMpyh
+         7rRUQKPHeTgnP4Bb+Ltcduw83ynwpByJBuOANJ1LbhP0sFF9iMGedFmr8dwCBiVDJYYp
+         zkTQ==
+X-Gm-Message-State: AOAM5327Qs8gNlxvjDEtZ++tX+3qPGxVtCMwPJF+nZul+dfLxFZqwAlx
+        13UQGZcrFppArHfmhXDqwPHSuwA0QS7aSZJFXlA=
+X-Google-Smtp-Source: ABdhPJwJ0HxGpuHzjlxDM9gFmOF4eLOzadWHpqw1yyOV7Hg8tQXEiwNz+geTsT3zy8fXNVnYebhfAjqXReaLuaUp2N8=
+X-Received: by 2002:a05:6638:2393:b0:32e:319d:c7cc with SMTP id
+ q19-20020a056638239300b0032e319dc7ccmr12749526jat.103.1653355831019; Mon, 23
+ May 2022 18:30:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrOJsWRmVeSWpSXmKPExsWy7bCmgW6YY0+SwfxVihanp55lspjavpfR
-        4sn6WcwWlxa5W1zeNYfNYsu/I6wObB4LNpV6bFrVyeaxe8FnJo++LasYPT5vkgtgjWpgtEks
-        Ss7ILEtVSM1Lzk/JzEu3VQoNcdO1UFLIyC8usVWKNjQ00jM0MNczMjLSM7aMtTIyVVLIS8xN
-        tVWq0IXqVVIoSi4Aqs2tLAYakJOqBxXXK07NS3HIyi8FOVqvODG3uDQvXS85P1dJoSwxpxRo
-        hJJ+wjfGjLeT+9gLWrgq9k/dy97AOIGji5GDQ0LAROLXZuEuRi4OIYEdjBI7f7xkhHA+MUo0
-        PPrABOF8Y5RYP+UScxcjJ1jHq//rWSASexklvm9Yxg6SEBJoZ5LY/CESxGYT0JZY3rQMrEFE
-        QF3i1KSlLCA2s0ClxPqDb1hBbGEBf4mzzzaAxVkEVCWurJ4IZvMK2EjcuHMXapm8xMxL39kh
-        4oISJ2c+gZojL9G8dTYzyBESAsfYJZZ8fscE0eAicefYQTYIW1ji1fEt7BC2lMTnd3uh4s2M
-        Es2NRhB2B6PE042ykLCwl3h/yQLEZBbQlFi/Sx+iQlFi5++5jBC2oMTpa93MECfwSbz72sMK
-        0ckr0dEmBFGiIvH9w04WmKVXflyFOsxD4sr9U9CQipU4f+oW6wRGhVlIHpuF5LFZCEcsYGRe
-        xSiWWlCcm55abFhghBzDmxjBaVTLbAfjpLcf9A4xMnEwHmKU4GBWEuHdntiRJMSbklhZlVqU
-        H19UmpNafIgxGRjUE5mlRJPzgYk8ryTe0MTYwMAImPDMLc2NiRC2NDAxMzKxMLY0NlMS5101
-        7XSikEB6YklqdmpqQWoRzBYmDk6pBiYmhk+M/C83sLl33Yh7pLheQ23blF/Xeq4Z8Vp7SnH9
-        7p3VG7OQca/UQeGN7zMWHbIK15utUCNw5/XNY+9CVL9MNUvnCvuc1bYyq1NhsuBTdRHLs0f1
-        LnJOW3R2xmWNQI33HA2LggO23fP/HmX28UBzOfMZu0uMm/7FT7zw02WGqftt27drt/aIcvEe
-        kVlovNBryqmqhOTHFye/9rv1R8Zpf+V0lZDzh1x+FzJKbcnw32z49L9/kJfCq0XGHceUL826
-        oP0t6Cr7rM/MvAlyv1qnvlExujE1dd+7qRxNbgt4Z9ySTo9jDft86chjVzeHDR2ShrYZczdO
-        P63pNPH0d8/okp82rquXPVq6uPinm6KsEktxRqKhFnNRcSIA+Tdu71oEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKLMWRmVeSWpSXmKPExsWy7bCSnG6YY0+Swc/dPBanp55lspjavpfR
-        4sn6WcwWlxa5W1zeNYfNYsu/I6wObB4LNpV6bFrVyeaxe8FnJo++LasYPT5vkgtgjeKySUnN
-        ySxLLdK3S+DKeDu5j72ghati/9S97A2MEzi6GDk5JARMJF79X8/SxcjFISSwm1Gi5eYPpi5G
-        DqCElMTBfZoQprDE4cPFECWtTBJPZr1iA+llE9CWWN60jBnEFhHQlDjSOZMdxGYWqJVYveUn
-        I0ivsICvxIoOGZAwi4CqxJXVE1lAbF4BG4kbd+4yQ5wgLzHz0nd2iLigxMmZT1ggxshLNG+d
-        zTyBkW8WktQsJKkFjEyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNzNzGCQ1JLcwfj9lUf
-        9A4xMnEwHmKU4GBWEuHdntiRJMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU
-        1ILUIpgsEwenVAPT1jQPbqY/S71PV8lsrtPljBRiLRYM9a+fqf+if+bDa/IxZrvsPb+v+F6u
-        w9lUG5teOjG1TfvlrcZlAaFbWA1fFe/Zrh8WcdSI8cyfmXocZWYL3GzmJEqfiPd7HVG9zLKf
-        ccaOP7vPX39/MuhXg6f9QrGpzauu6x7zmRxqcORctKadpkhFQbb2qn+/P3VqTkz57eoiFfpN
-        ITXr367TN2UOzTD06ahm+n3+RrOAmvG/AtXAjSdvbnifOc14SRGTRn39izvvV+Z1aTR9PprQ
-        /lX39dZ3JxRTsgPblu8ROZaiwHzHPpM7f9atnjOs/RGvtugzXa/KVC6c0aU1P1c7V74mNSbj
-        mMirOOY3BiH/1yixFGckGmoxFxUnAgABde8yuAIAAA==
-X-CMS-MailID: 20220524022214epcas1p28d7b7de846e44cedf825eb4f5973932d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-ArchiveUser: EV
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220524022214epcas1p28d7b7de846e44cedf825eb4f5973932d
-References: <CGME20220524022214epcas1p28d7b7de846e44cedf825eb4f5973932d@epcas1p2.samsung.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220520012133.1217211-4-yosryahmed@google.com> <YodGI73xq8aIBrNM@slm.duckdns.org>
+ <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
+ <YodNLpxut+Zddnre@slm.duckdns.org> <73fd9853-5dab-8b59-24a0-74c0a6cae88e@fb.com>
+ <YofFli6UCX4J5YnU@slm.duckdns.org> <CA+khW7gjWVKrwCgDD-4ZdCf5CMcA4-YL0bLm6aWM74+qNQ4c0A@mail.gmail.com>
+ <CAJD7tkaJQjfSy+YARFRkqQ8m7OGJHO9v91mSk-cFeo9Z5UVJKg@mail.gmail.com>
+ <20220520221919.jnqgv52k4ajlgzcl@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <Yogc0Kb5ZVDaQ0oU@slm.duckdns.org> <5b301151-0a65-df43-3a3a-6d57e10cfc2d@fb.com>
+ <CA+khW7gGrwTrDsfWp7wj=QaCg01FNj381a1QLs1ThsjAkW85eQ@mail.gmail.com>
+ <CAEf4BzbaHeyaHK1sChPMF=L4aQsaBGNtU+R3veqCOFz0A+svEA@mail.gmail.com> <CA+khW7h-fgo+X=OUxAWDe2sPMyWDXUmp574Kq_J884j9whoBfw@mail.gmail.com>
+In-Reply-To: <CA+khW7h-fgo+X=OUxAWDe2sPMyWDXUmp574Kq_J884j9whoBfw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 23 May 2022 18:30:20 -0700
+Message-ID: <CAEf4BzZOE0zXnRs3rEiO4+KZix7Druu5TqkJH+xX01tgMfQOtQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
+To:     Hao Luo <haoluo@google.com>
+Cc:     Yonghong Song <yhs@fb.com>, Tejun Heo <tj@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit e3c548323d32 ("f2fs: let's allow compression for mmap files"),
-it has been allowed to compress mmap files. However, in compress_mode=user,
-it is not allowed yet. To keep the same concept in both compress_modes,
-f2fs_ioc_(de)compress_file() should also allow it.
+On Mon, May 23, 2022 at 5:53 PM Hao Luo <haoluo@google.com> wrote:
+>
+> On Mon, May 23, 2022 at 4:58 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Fri, May 20, 2022 at 7:35 PM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > On Fri, May 20, 2022 at 5:59 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > On 5/20/22 3:57 PM, Tejun Heo wrote:
+> > > > > Hello,
+> > > > >
+> > > > > On Fri, May 20, 2022 at 03:19:19PM -0700, Alexei Starovoitov wrote:
+> > > > >> We have bpf_map iterator that walks all bpf maps.
+> > > > >> When map iterator is parametrized with map_fd the iterator walks
+> > > > >> all elements of that map.
+> > > > >> cgroup iterator should have similar semantics.
+> > > > >> When non-parameterized it will walk all cgroups and their descendent
+> > > > >> depth first way. I believe that's what Yonghong is proposing.
+> > > > >> When parametrized it will start from that particular cgroup and
+> > > > >> walk all descendant of that cgroup only.
+> > > > >> The bpf prog can stop the iteration right away with ret 1.
+> > > > >> Maybe we can add two parameters. One -> cgroup_fd to use and another ->
+> > > > >> the order of iteration css_for_each_descendant_pre vs _post.
+> > > > >> wdyt?
+> > > > >
+> > > > > Sounds perfectly reasonable to me.
+> > > >
+> > > > This works for me too. Thanks!
+> > > >
+> > >
+> > > This sounds good to me. Thanks. Let's try to do it in the next iteration.
+> >
+> > Can we, in addition to descendant_pre and descendant_post walk
+> > algorithms also add the one that does ascendants walk (i.e., start
+> > from specified cgroup and walk up to the root cgroup)? I don't have
+> > specific example, but it seems natural to include it for "cgroup
+> > iterator" in general. Hopefully it won't add much code to the
+> > implementation.
+>
+> Yep. Sounds reasonable and doable. It's just adding a flag to specify
+> traversal order, like:
+>
+> {
+>   WALK_DESCENDANT_PRE,
+>   WALK_DESCENDANT_POST,
+>   WALK_PARENT_UP,
 
-Let's remove checking mmap files in f2fs_ioc_(de)compress_file() so that
-the compression for mmap files is also allowed in compress_mode=user.
+Probably something more like BPF_CG_WALK_DESCENDANT_PRE and so on?
 
-Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
----
- fs/f2fs/file.c | 10 ----------
- 1 file changed, 10 deletions(-)
-
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 7aac53ac5acf..a05d842a7e72 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -3945,11 +3945,6 @@ static int f2fs_ioc_decompress_file(struct file *filp, unsigned long arg)
- 		goto out;
- 	}
- 
--	if (f2fs_is_mmap_file(inode)) {
--		ret = -EBUSY;
--		goto out;
--	}
--
- 	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
- 	if (ret)
- 		goto out;
-@@ -4017,11 +4012,6 @@ static int f2fs_ioc_compress_file(struct file *filp, unsigned long arg)
- 		goto out;
- 	}
- 
--	if (f2fs_is_mmap_file(inode)) {
--		ret = -EBUSY;
--		goto out;
--	}
--
- 	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
- 	if (ret)
- 		goto out;
--- 
-2.25.1
-
+> };
+>
+> In bpf_iter's seq_next(), change the algorithm to yield the parent of
+> the current cgroup.

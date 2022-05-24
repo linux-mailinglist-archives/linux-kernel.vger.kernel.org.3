@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226775331E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2FE5331EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241041AbiEXTvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S241040AbiEXTv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241023AbiEXTv2 (ORCPT
+        with ESMTP id S240075AbiEXTvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:51:28 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30E96586;
-        Tue, 24 May 2022 12:51:26 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id s3so24374104edr.9;
-        Tue, 24 May 2022 12:51:26 -0700 (PDT)
+        Tue, 24 May 2022 15:51:54 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8D42BB1D;
+        Tue, 24 May 2022 12:51:53 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id n10so37467625ejk.5;
+        Tue, 24 May 2022 12:51:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wdD0A3kORFytdCCRrXtE2cJ7QFpxw6dHdpuZCvNkIJ8=;
-        b=YCFHbapgZuqrkMAYNMyL91yyz1Id7fkewk9HKhlwiE0Szz4shNaUwuhQT01QSaSS83
-         M2V+Xpc9L8Pu3zbvrbHKLktnGakP57wEKM+y/rJdjxghH4R+0OrwxUEwsd6hNlKsOKgt
-         l4xutCO0YN9RSyHArXYMR4cOGCAzQnsauJP5wS93toC24lliRYfwBDtThCZyqBpSGDYa
-         4ve5TSgRs4JuCQSydxcoJKnft+KVdW2j5EoiLPELYLUXKTVJXUxLy/6wAjn3rmZ04zlX
-         UFUcV77m9EsrETz7IKJUVloU6aM2uqcGDIXKFKb/N2NfgopJhXFSXUH6KYDnSLSGoI1i
-         mqSw==
+        bh=1DOFxqMaGUuRJeEsN0C0OkqduzwbXmrH3gQj+T82Log=;
+        b=CHJboM1wl7TpJH/i5KVC+sbAGyKD0yHuVZxVhLbJlOmipuSRcAex8DroB7MVKOdkSt
+         AYWR8RfhH14j7WourBRjYnVKrTTqMhC+6tB7woqv+CWwk3TwSV8qUEg5AbC9Nwx+3+Tl
+         byfJQF4gFRecuqOLwvTfIStphMGbhSy6f1okmLwTk9ch74Ba0mOArWi6U9kAaYC838fC
+         cHCp3suAitWiLALMB9fnBdnIYl8wqRRShSZyPyZgU2OfwpfNcpvOlbC2O+OYxiE5VD4G
+         wFoYpzAOzc/XVuJ8vj7C9xUZ3EUGYM2MoTZYuTbfIfNBHp5e4AawcrcQhyU2DB5A4Sh0
+         sS9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wdD0A3kORFytdCCRrXtE2cJ7QFpxw6dHdpuZCvNkIJ8=;
-        b=klKbmCdMBpDzCp3CwGKrQQlU30CWS0nybAcLZLel6rGvi5bCgyQ8OO7YgaztUcY6Pc
-         BNNkwNChp3/ZpXe7JeQZz0pjAsxF1cWVnB91SACd3cMxLxfyW2D2XRaEwrQW5vIEapL6
-         rbo/Wv+nUNp3qYwuCUT7l7V5eutVFlA8C/b8SO/ShyMNx3m5LXoIZahT+NNDK5U+Nl0r
-         hy5nfyFurCJAYHBRdokAtKjBsMTnMNeFYAQhfYTzvosieN7gCVVS+cbl+gJDVxP42860
-         5In9sB5YoqxoYUW9Dw6kWLZCLlN730RJEZZWiilBDoU71bXSs8ftj7Pkl0MaOBBzW1I8
-         mbeQ==
-X-Gm-Message-State: AOAM531hSTJl0b6ty8r7LOqDEJpQL2xoTL625XjNYW1AYdgK3UK9TgoW
-        KU/mgmKcz6XSUauNXyuX6FFAthwm1dgtwkpt77Q=
-X-Google-Smtp-Source: ABdhPJxcr5wi7NoyUzqNXB4eWjFpJzYZCWIURW2i4YY4VifxNp0dUtpsVGCp0fU1ZNKf2XdKAuJNOnjDZQawNYnpdDg=
-X-Received: by 2002:a05:6402:2806:b0:42b:67fc:8565 with SMTP id
- h6-20020a056402280600b0042b67fc8565mr12563925ede.230.1653421885286; Tue, 24
- May 2022 12:51:25 -0700 (PDT)
+        bh=1DOFxqMaGUuRJeEsN0C0OkqduzwbXmrH3gQj+T82Log=;
+        b=T9VTEgFnAIhSII+G90yhVTluTupUzOLn/KjHZKgWm97jBwXez4a91TXwapOWZm0feX
+         1s1sk40Z5I4TMg6CQ9NqEztaQpyBi8CkWImmg0jgQuiePz/sY67Lo5KdeD13FqOoZQAB
+         idvF3uih+4mNLbsXgWOLnH64EGoKE5qj2uxqvf+sgd9tvuKEers4m+bkQevYk3jqqz58
+         SqsaZRBcp/1Bq24i2ATzyZueoy/dLXThLXSgO1S7qC/HmgAqA2Plpenv8sR3vxNEVjXf
+         B2BT4YHuC00ygXMcagKpNG32Bkaamkl+jPDWGyLEyA/WBnVyVSE9zaiqwoTBTuq/UmFe
+         GMOg==
+X-Gm-Message-State: AOAM532ZUN+fkQR6NrAQ3x7YAi9BOR5V88UIc57+wcBvdXWzoCE8yeLk
+        er4NmPYNXFBYX+fQRaWBslK/sjbdkEkgGvTlJDo=
+X-Google-Smtp-Source: ABdhPJwtZYGdgX4z2ltjTKfzDUHn4PJ8nZTHlVIBOInrURZ90FbOTXpI8uqkaX4D2cktvAP3mpCdrqCs181v9OE+HtI=
+X-Received: by 2002:a17:907:6e04:b0:6f4:d6f3:c72a with SMTP id
+ sd4-20020a1709076e0400b006f4d6f3c72amr25485859ejc.636.1653421911628; Tue, 24
+ May 2022 12:51:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220524181150.9240-1-ddrokosov@sberdevices.ru> <20220524181150.9240-4-ddrokosov@sberdevices.ru>
-In-Reply-To: <20220524181150.9240-4-ddrokosov@sberdevices.ru>
+References: <20220524181150.9240-1-ddrokosov@sberdevices.ru> <20220524181150.9240-5-ddrokosov@sberdevices.ru>
+In-Reply-To: <20220524181150.9240-5-ddrokosov@sberdevices.ru>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 24 May 2022 21:50:49 +0200
-Message-ID: <CAHp75Vft+i4KcY2REP2PaF-srf=E+j2H0WBowvTcfpCEQMHppw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] iio:accel:mxc4005: rearrange iio trigger get and register
+Date:   Tue, 24 May 2022 21:51:15 +0200
+Message-ID: <CAHp75VdDJow59VQoDQa-Q0R7YCu63h5M5g82uc+fCrXJd_k15w@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] iio:chemical:ccs811: rearrange iio trigger get and register
 To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
 Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "jic23@kernel.org" <jic23@kernel.org>,
@@ -88,34 +88,30 @@ On Tue, May 24, 2022 at 8:14 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
 
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> Fixes: 47196620c82f ("iio: mxc4005: add data ready trigger for mxc4005")
+> Fixes: f1f065d7ac30 ("iio: chemical: ccs811: Add support for data ready trigger")
 > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 > ---
->  drivers/iio/accel/mxc4005.c | 4 ++--
+>  drivers/iio/chemical/ccs811.c | 4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/iio/accel/mxc4005.c b/drivers/iio/accel/mxc4005.c
-> index b3afbf064915..df600d2917c0 100644
-> --- a/drivers/iio/accel/mxc4005.c
-> +++ b/drivers/iio/accel/mxc4005.c
-> @@ -456,8 +456,6 @@ static int mxc4005_probe(struct i2c_client *client,
+> diff --git a/drivers/iio/chemical/ccs811.c b/drivers/iio/chemical/ccs811.c
+> index 847194fa1e46..80ef1aa9aae3 100644
+> --- a/drivers/iio/chemical/ccs811.c
+> +++ b/drivers/iio/chemical/ccs811.c
+> @@ -499,11 +499,11 @@ static int ccs811_probe(struct i2c_client *client,
 >
->                 data->dready_trig->ops = &mxc4005_trigger_ops;
->                 iio_trigger_set_drvdata(data->dready_trig, indio_dev);
-> -               indio_dev->trig = data->dready_trig;
+>                 data->drdy_trig->ops = &ccs811_trigger_ops;
+>                 iio_trigger_set_drvdata(data->drdy_trig, indio_dev);
+> -               indio_dev->trig = data->drdy_trig;
 > -               iio_trigger_get(indio_dev->trig);
->                 ret = devm_iio_trigger_register(&client->dev,
->                                                 data->dready_trig);
->                 if (ret) {
-> @@ -465,6 +463,8 @@ static int mxc4005_probe(struct i2c_client *client,
->                                 "failed to register trigger\n");
->                         return ret;
->                 }
+>                 ret = iio_trigger_register(data->drdy_trig);
+>                 if (ret)
+>                         goto err_poweroff;
 > +
-> +               indio_dev->trig = iio_trigger_get(data->dready_trig);
+> +               indio_dev->trig = iio_trigger_get(data->drdy_trig);
 >         }
 >
->         return devm_iio_device_register(&client->dev, indio_dev);
+>         ret = iio_triggered_buffer_setup(indio_dev, NULL,
 > --
 > 2.36.0
 

@@ -2,84 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C80E532058
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E042753205D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbiEXBqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 21:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
+        id S232771AbiEXBsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 21:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiEXBqr (ORCPT
+        with ESMTP id S229783AbiEXBsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 21:46:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7500266F96
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 18:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653356805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IMCSafXGdmuY2thLWOyQ96BnlXt8iWQ0Jbeb4u86zi0=;
-        b=CAKI7+2/EUOIt8mXleUK92SFNl8pcX15/qz+XHhem6gPQ8FrExBJYZUnutD5gURzq1kfsp
-        bnK37dyCcfHsXxahVGNscheGJpOpIiePQWXAJRKdi/+vqqOkLQZ1w1QaK2j44NW0SwqP8l
-        zilfFYgexK89fJKXpgzLdckpehRgemY=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-346-XNdGvzENMMOJeGCZc1H3Eg-1; Mon, 23 May 2022 21:46:44 -0400
-X-MC-Unique: XNdGvzENMMOJeGCZc1H3Eg-1
-Received: by mail-pj1-f71.google.com with SMTP id t15-20020a17090a3e4f00b001dfe714e279so6643911pjm.7
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 18:46:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=IMCSafXGdmuY2thLWOyQ96BnlXt8iWQ0Jbeb4u86zi0=;
-        b=fKYYRFT4SytE+DQV6Vwd8DMF+3N84g+LNuFDRbD+O1LHgmakXJTmC9cdmENgQk3qK7
-         e+prnYmG22fsvyKtCxOTFutdnqkpH9bUVpcpkywPbSZPYC+DDX4+0Xc4A2PM2dbPkiMG
-         f3WDD7vnfKUBYHtS3e38rbhOi7tjd3JUaHPfqPObcRdrY3M4IDvPCMqwMndQz0xG+oSu
-         S2iKqWJ0Q5Lr/rg+Gc1mKHUkdd+fvjivHwwDu1FIjoaWEa12aykGDO8BtWJdXHi+/G3Z
-         BXFQW6o+d3GdSuxZCD0kWhrlxClLwAiyDEVTNToMRNP+b3yZYDqw5qfjY75wAwl2No2w
-         qkYQ==
-X-Gm-Message-State: AOAM533143lg3fKOjcGlr29B955rTYUtkqcES2dxp9NHHuwPfb/iYZbn
-        5kJaa814J2K3peOEz4fZ6K9wJcEHjBkW6WM9HYt34mj+aCR0OJHSmI2/NjJ97SWaoG3nw9LAvty
-        cfyA97zFyz0TLCwv6er4axMo2ID2Q0WxQBErQYxp0IUVELz26BlqObBORR95kOG+Ei7oeycRDyg
-        ==
-X-Received: by 2002:a17:90b:3c50:b0:1df:7b1f:8b79 with SMTP id pm16-20020a17090b3c5000b001df7b1f8b79mr2011794pjb.71.1653356802892;
-        Mon, 23 May 2022 18:46:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzmLKzJlzwvLHI4ZZ+EhG8vgjK7IyZ53D6A6JhDfQIllhjiR9qUwgx4HwRIGf8jCR7j9tp7vw==
-X-Received: by 2002:a17:90b:3c50:b0:1df:7b1f:8b79 with SMTP id pm16-20020a17090b3c5000b001df7b1f8b79mr2011771pjb.71.1653356802565;
-        Mon, 23 May 2022 18:46:42 -0700 (PDT)
-Received: from [10.72.12.81] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id s10-20020a170903214a00b001623cf06dc5sm449354ple.61.2022.05.23.18.46.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 May 2022 18:46:42 -0700 (PDT)
-Subject: Re: [PATCH v5 1/2] fs/dcache: add d_compare() helper support
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     jlayton@kernel.org, idryomov@gmail.com, viro@zeniv.linux.org.uk,
-        willy@infradead.org, vshankar@redhat.com,
-        ceph-devel@vger.kernel.org, arnd@arndb.de,
-        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220519101847.87907-1-xiubli@redhat.com>
- <20220519101847.87907-2-xiubli@redhat.com>
- <YovK86vEmOUUoBn6@bombadil.infradead.org>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <2f43382d-3ab1-3562-c527-5cfef9ac069e@redhat.com>
-Date:   Tue, 24 May 2022 09:46:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 23 May 2022 21:48:03 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04177093F;
+        Mon, 23 May 2022 18:48:01 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L6cXY58Kpz4xXg;
+        Tue, 24 May 2022 11:47:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653356880;
+        bh=K1+revtH/yv0Qrw2WEGJdkSco7dLfoks/ykFPLpkllA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VdzKFCZzKZYHAMW/GlIgod3jp04n1EdFzULjxFha9Yr3cCMoPn8uE6POS/ZhIw12L
+         Iu8moSpWKqx3uTjGIc+QtwJfA9dzcdNKLNm6R+OeWuaq+ze+DCYcHkokMUI2JqTKyg
+         vfz7WsfEHvEKJXPEs1TqnonZmiTx2dxHCvfOIoiL6Z7xK/0umxkxzQAmJJ6HHoVjbH
+         ddw9Plx2Hza9grT+R9FvnKY3f4t1rHrTIsFKexngOoGuus3mscu19GieaEb+/NIn7k
+         OJEyK+L3en2dC++/SOcG3+YkKnwwXOMMhTWn3LXv8N5RMG+h2p8a6qt3UjM7gKIrW5
+         3lQOxWYhze5+Q==
+Date:   Tue, 24 May 2022 11:47:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yan Zhu <zhuyan34@huawei.com>,
+        tangmeng <tangmeng@uniontech.com>
+Subject: Re: linux-next: manual merge of the tip tree with the bpf-next,
+ sysctl trees
+Message-ID: <20220524114756.7cf12f51@canb.auug.org.au>
+In-Reply-To: <20220414112812.652190b5@canb.auug.org.au>
+References: <20220414112812.652190b5@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <YovK86vEmOUUoBn6@bombadil.infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/.jZxa_kqH6=AjqA_rdVtqsZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,58 +63,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/.jZxa_kqH6=AjqA_rdVtqsZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 5/24/22 1:57 AM, Luis Chamberlain wrote:
-> On Thu, May 19, 2022 at 06:18:45PM +0800, Xiubo Li wrote:
->> Reviewed-by: Jeff Layton <jlayton@kernel.org>
->> Signed-off-by: Xiubo Li <xiubli@redhat.com>
->> ---
->>   fs/dcache.c            | 15 +++++++++++++++
->>   include/linux/dcache.h |  2 ++
->>   2 files changed, 17 insertions(+)
->>
->> diff --git a/fs/dcache.c b/fs/dcache.c
->> index 93f4f5ee07bf..95a72f92a94b 100644
->> --- a/fs/dcache.c
->> +++ b/fs/dcache.c
->> @@ -2262,6 +2262,21 @@ static inline bool d_same_name(const struct dentry *dentry,
->>   				       name) == 0;
->>   }
->>   
->> +/**
->> + * d_compare - compare dentry name with case-exact name
->> + * @parent: parent dentry
->> + * @dentry: the negative dentry that was passed to the parent's lookup func
->> + * @name:   the case-exact name to be associated with the returned dentry
->> + *
->> + * Return: 0 if names are same, or 1
->> + */
->> +bool d_compare(const struct dentry *parent, const struct dentry *dentry,
->> +	       const struct qstr *name)
->> +{
->> +	return !d_same_name(dentry, parent, name);
-> What's wrong with d_same_name()? Why introduce a whole new operation
-> and export it when you the same prototype except first and second
-> argument moved with an even more confusing name?
+Hi all,
 
-Sounds resonable, will export the d_same_name instead.
-
->> +}
->> +EXPORT_SYMBOL(d_compare);
-> New symbols should go with EXPORT_SYMBOL_GPL() instead.
-
-Not familiar with the story about this, before I checked the Doc and 
-didn't find any where says we must use it and just followed what recent 
-commits did.
-
-If this is what we should use I will switch to it in the next version.
-
-Thanks
-
--- Xiubo
-
-
+On Thu, 14 Apr 2022 11:29:05 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
->    Luis
->
+> Today's linux-next merge of the tip tree got a conflict in:
+>=20
+>   kernel/sysctl.c
+>=20
+> between commit:
+>=20
+>   2900005ea287 ("bpf: Move BPF sysctls from kernel/sysctl.c to BPF core")
+>=20
+> from the bpf-next, sysctl trees and commit:
+>=20
+>   efaa0227f6c6 ("timers: Move timer sysctl into the timer code")
+>=20
+> from the tip tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> diff --cc kernel/sysctl.c
+> index 47139877f62d,5b7b1a82ae6a..000000000000
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@@ -2227,17 -2288,24 +2227,6 @@@ static struct ctl_table kern_table[] =
+=3D=20
+>   		.extra1		=3D SYSCTL_ZERO,
+>   		.extra2		=3D SYSCTL_ONE,
+>   	},
+> - #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+>  -#ifdef CONFIG_BPF_SYSCALL
+> --	{
+> - 		.procname	=3D "timer_migration",
+> - 		.data		=3D &sysctl_timer_migration,
+> - 		.maxlen		=3D sizeof(unsigned int),
+>  -		.procname	=3D "unprivileged_bpf_disabled",
+>  -		.data		=3D &sysctl_unprivileged_bpf_disabled,
+>  -		.maxlen		=3D sizeof(sysctl_unprivileged_bpf_disabled),
+> --		.mode		=3D 0644,
+> - 		.proc_handler	=3D timer_migration_handler,
+>  -		.proc_handler	=3D bpf_unpriv_handler,
+> --		.extra1		=3D SYSCTL_ZERO,
+> - 		.extra2		=3D SYSCTL_ONE,
+>  -		.extra2		=3D SYSCTL_TWO,
+>  -	},
+>  -	{
+>  -		.procname	=3D "bpf_stats_enabled",
+>  -		.data		=3D &bpf_stats_enabled_key.key,
+>  -		.maxlen		=3D sizeof(bpf_stats_enabled_key),
+>  -		.mode		=3D 0644,
+>  -		.proc_handler	=3D bpf_stats_handler,
+> --	},
+> --#endif
+>   #if defined(CONFIG_TREE_RCU)
+>   	{
+>   		.procname	=3D "panic_on_rcu_stall",
 
+This is now a conflict between the tip tree and the net-next and sysctl tre=
+es.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.jZxa_kqH6=AjqA_rdVtqsZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKMOUwACgkQAVBC80lX
+0GxKdAf/VCapTkpdl2TaeRrxWy6kUnx1mUsopvgKxcTGlBtnTkjj4IjJxpxpzV2K
+06qL9ivblASgnykiDHGdf3viUrVdkqVIxQahO2PO6BW9ZFAcWo4y7odNTPDViQUM
+wqbGX3JtiJ98CAcMzZHbTYu29MFjMVmBOe1fpC4zsC/iDZoVCn3rNnxSf+lppsvo
+n9zdrCafsonn2Q1NC3GfpikS3YvZESgeOteHtP/9MMLHw+o6cDVlgqMD7SNvZQrM
+sFpiZO2TQ1PQunZ6W1ikN8DQPHlckXT4xRkv6BDgHKqW/FNf0rsLvZGouM7QpjVJ
+nMqaakNeTv15xhlxO/SXx1SM32YUgw==
+=+mp5
+-----END PGP SIGNATURE-----
+
+--Sig_/.jZxa_kqH6=AjqA_rdVtqsZ--

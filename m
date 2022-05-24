@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22966531FE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 02:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87562531FE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 02:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbiEXAfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 20:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S232271AbiEXAfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 20:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiEXAe6 (ORCPT
+        with ESMTP id S232214AbiEXAfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 20:34:58 -0400
+        Mon, 23 May 2022 20:35:00 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4489BAFA;
-        Mon, 23 May 2022 17:34:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CB99BAFA;
+        Mon, 23 May 2022 17:34:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653352497; x=1684888497;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xE7F46MotMjr8xH+TDvIW0Oiehk7XJmZ/wn6Ap1/F6E=;
-  b=Rju06uFQ4TkPnurBjt+Cj7GOorF6lpV0sUge5PkbBsGGDFylZQWpCE8k
-   4pOIl6HfzJF/LXqHqUfBhEk+9ihbCArQ99Y9VvlSDjeiHgLJksBjNNLo0
-   VOeDFmGNquHZNWNKjjg7gV0XJNtBpdo2kJ+oG1IuupiBRgOpMcy1pOPga
-   lPMAyL7Of+d9oxLOJfXqlEWqoH1ZdtQ3cZaQrVWe3aY8NmHljp9eZu3Ge
-   isDUywPYaDe+LQkeqyaoXbW/oUaiitYWu11jI8Up0ZySfU5s4CGOJsOHQ
-   PqPlTUDSN8aNNgV2xy0wzBYbgiXVqocz5BxqQbh4wOzlpV49EiO8XOmuv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273509531"
+  t=1653352499; x=1684888499;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cn//lySDkZnoisvjz9SADhbX/aP26ag0T/ZF0md/lDg=;
+  b=ZY9dayXL3bvYEu6+3b9TgGE5N6zXl3Fv09D8ZAt/PNT4DIUQbOokhQTP
+   Av7dqC1PbbvCsZd6sRQXFzJaUev1k5kmJLhOfYk9zOd4OXQiS3XneAM/q
+   iC3oOsf6xBqWhyr0p/IYj0ZWIkvqnmA6MhPoRAIqybFF3YdkW8GJJnu1v
+   Y1EA5ZXRhs/UkPue6Q3JJI/VEJWZIKsgVpDql268UL9yuVRZQJXAmJvQd
+   ZtA97VM8uPxC75Yxb3NuO9cYREPTvhSY/yX5P72en47VpqaKe4EEWjOLk
+   mEOWqYSHbjdsice7yQn9pV6wA9QLiYCq4oQi/QCFADfUnLfk/xu0uxF+f
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273509532"
 X-IronPort-AV: E=Sophos;i="5.91,247,1647327600"; 
-   d="scan'208";a="273509531"
+   d="scan'208";a="273509532"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 17:34:56 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 17:34:59 -0700
 X-IronPort-AV: E=Sophos;i="5.91,247,1647327600"; 
-   d="scan'208";a="600952739"
+   d="scan'208";a="600952749"
 Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 17:34:55 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 17:34:57 -0700
 From:   Zqiang <qiang1.zhang@intel.com>
 To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] Add no-idle tasks check which in dyntick-idle state
-Date:   Tue, 24 May 2022 08:34:52 +0800
-Message-Id: <20220524003454.1887414-1-qiang1.zhang@intel.com>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v3 1/2] rcu-tasks: Stop RCU Tasks scanning no-idle tasks which record on dyntick-idle entry
+Date:   Tue, 24 May 2022 08:34:53 +0800
+Message-Id: <20220524003454.1887414-2-qiang1.zhang@intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220524003454.1887414-1-qiang1.zhang@intel.com>
+References: <20220524003454.1887414-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,22 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These commit stop scanning no-idle tasks which in dyntick-idle state and
-remove idle-tasks check from warnings.
+When the RCU Tasks scanning on-rq tasks, there is no need to scanning
+no-idle tasks(have invoked rcu_user_enter()) which record on dyntick-idle
+entry, at this time, these tasks are not remain within an RCU Tasks
+read-side critical section.
 
-v1->v2:
-fix build error when CONFIG_TASKS_RCU=n
-v2->v3:
-remove idle-tasks check from task_is_on_dyntick_idle()
+This commit skip scanning tasks which record on dyntick-idle entry in
+rcu_tasks_pertask().
 
-Zqiang (2):
-  rcu-tasks: Stop RCU Tasks scanning no-idle tasks which record on
-    dyntick-idle entry
-  rcu-tasks: Remove is_idle_task() from warnings in check_holdout_task()
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tasks.h | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
- kernel/rcu/tasks.h | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index 195c97e85bcb..a28337f280e4 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -809,10 +809,16 @@ static void rcu_tasks_pregp_step(struct list_head *hop)
+ 	synchronize_rcu();
+ }
+ 
++static bool task_is_on_dyntick_idle(struct task_struct *t)
++{
++	return IS_ENABLED(CONFIG_NO_HZ_FULL) && t->rcu_tasks_idle_cpu >= 0;
++}
++
+ /* Per-task initial processing. */
+ static void rcu_tasks_pertask(struct task_struct *t, struct list_head *hop)
+ {
+-	if (t != current && READ_ONCE(t->on_rq) && !is_idle_task(t)) {
++	if (t != current && READ_ONCE(t->on_rq) && !is_idle_task(t) &&
++				!task_is_on_dyntick_idle(t)) {
+ 		get_task_struct(t);
+ 		t->rcu_tasks_nvcsw = READ_ONCE(t->nvcsw);
+ 		WRITE_ONCE(t->rcu_tasks_holdout, true);
+@@ -842,8 +848,7 @@ static void check_holdout_task(struct task_struct *t,
+ 	if (!READ_ONCE(t->rcu_tasks_holdout) ||
+ 	    t->rcu_tasks_nvcsw != READ_ONCE(t->nvcsw) ||
+ 	    !READ_ONCE(t->on_rq) ||
+-	    (IS_ENABLED(CONFIG_NO_HZ_FULL) &&
+-	     !is_idle_task(t) && t->rcu_tasks_idle_cpu >= 0)) {
++	    task_is_on_dyntick_idle(t)) {
+ 		WRITE_ONCE(t->rcu_tasks_holdout, false);
+ 		list_del_init(&t->rcu_tasks_holdout_list);
+ 		put_task_struct(t);
 -- 
 2.25.1
 

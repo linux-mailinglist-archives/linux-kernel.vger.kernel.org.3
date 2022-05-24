@@ -2,181 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6809B532DB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A91532DD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238994AbiEXPjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S239081AbiEXPsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238884AbiEXPjH (ORCPT
+        with ESMTP id S237597AbiEXPsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:39:07 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C8F633B2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:39:05 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id p10so7641568wrg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=h7r5aQ2w5OifNsIkpCoXMifoXPvuX3aY8xJJkG9EXtw=;
-        b=N8KrblnWf/1Gd8SH3jlgYJfY/xNV2wjof6Mna4pghYvc1UdsO31fVScY0vu9Ah65TX
-         angBNbUaT55stx0kDug7PuDc4Y8kQfIzfr2Pgya95z2eAHlAMgbAQuuiIi3mkBGNdRV4
-         lk2Y2Xwi5Dce4uJVhCRAMzVM9yk4i/pZ6WMA8Vy5yvZp3sYUybbkTwKPrn9d0MOhY6E7
-         yhygy3oLUNBEZ8Tk4f++J/+babcMzzMP/k+htNTxiYp1y/kyfoBI4Xe+M4mlr3QGU2OP
-         kfl83txIR5FOrW9ELEHpoG8QmtxDT3xifA/jb/+EdQqurvlISqH8Ey+Q0peJtNhNiTat
-         OVsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=h7r5aQ2w5OifNsIkpCoXMifoXPvuX3aY8xJJkG9EXtw=;
-        b=VE4xKEDJ4u8UJaxv4TTcRmOc2SYNK4jjtnXZZCWXROZ5RhfNEPg49YTS9AzhNsSzAm
-         3lgIcQjyQW0o6Ax00+bExyVHnzCctxaxzqu/hPpCoAXWPE+9zVY0Eunud12eEe12lF/L
-         XlhbnllgnmuFHqphIvlMkJyiwVgRJcEsPaiuLKCdZ/lvGheh7CSBze9gv7ycpN/um1C/
-         wSu7hdvFda+SbxB4qPefz4GwCcs5dWJoZFSurqWaCGoGwgYtrGMdWIC+5VPc5qpVbQ8S
-         kV5Sdcq+m1jKGdzWHtd0N+sVXdK6eQpNUkqAGVmeSuGQGNwb4PFFbnchhIQ4Wul6NiYQ
-         N0Xg==
-X-Gm-Message-State: AOAM532IUwgAqHi4kUxAK2oJwqE5vhQ5NJ0Ad2zn8GKuKT0sLhdjvutQ
-        YqpN/iX1pMpniErURqYWrFUduA==
-X-Google-Smtp-Source: ABdhPJyLc8Hoyt2GuHKUKSWnfiyo0dtTUxgy0oarseFAy0Arfimt0aCjeNBFi1oFUYlcolmCYAXauQ==
-X-Received: by 2002:adf:fb10:0:b0:207:af88:1eb9 with SMTP id c16-20020adffb10000000b00207af881eb9mr24509733wrr.238.1653406744205;
-        Tue, 24 May 2022 08:39:04 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id c13-20020adfc04d000000b0020fee88d0f2sm3196776wrf.0.2022.05.24.08.39.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 08:39:03 -0700 (PDT)
-Message-ID: <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
-Date:   Tue, 24 May 2022 18:39:02 +0300
+        Tue, 24 May 2022 11:48:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0256D4F3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:48:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7711C61710
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A901CC34113;
+        Tue, 24 May 2022 15:48:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653407287;
+        bh=BA+6CwXsTUOz/2MTwxnWu1ecx/28wj3mScYI844rIM4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AkmOMbIfumvCekpkT5mJRQ4izpUicDyQz1NlZSlJ/oEtpMYt+J7YvyFlvrCkGFmen
+         saYRDsr5jkTHq8cgtrJpHRjBxfvnjgpmIIlP4PdBlvnaNS9kzeRxaTEz57pxI7TBst
+         MAXjdRIwzR2o1lLryWL6D6WRUGD146J0C8KwEdlrefnnqU+fOptWBkytb+HnSMJ/dB
+         6AOyy+TRZGKdkYfw7VGoQ36rzP2l+rQpIQVGCI9n8hCr7lmCzpdbQD9fM5p0VpJHZu
+         30S7xfRSMOQjq6kMmV3mNzYZ7QwGnBBoqGO5tujUpk0B5ivaC+jpmH+KwwczGMF9+9
+         yvsIZyP04BFJQ==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] riscv: add irq stack support
+Date:   Tue, 24 May 2022 23:39:28 +0800
+Message-Id: <20220524153928.2488-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/2022 18:21, Hans Schultz wrote:
-> Add an intermediate state for clients behind a locked port to allow for
-> possible opening of the port for said clients. This feature corresponds
-> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
-> latter defined by Cisco.
-> Locked FDB entries will be limited in number, so as to prevent DOS
-> attacks by spamming the port with random entries. The limit will be
-> a per port limit as it is a port based feature and that the port flushes
-> all FDB entries on link down.
-> 
-> Only the kernel can set this FDB entry flag, while userspace can read
-> the flag and remove it by deleting the FDB entry.
-> 
-> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
-> ---
->  include/uapi/linux/neighbour.h |  1 +
->  net/bridge/br_fdb.c            | 11 +++++++++++
->  net/bridge/br_if.c             |  1 +
->  net/bridge/br_input.c          | 11 ++++++++++-
->  net/bridge/br_private.h        |  7 ++++++-
->  5 files changed, 29 insertions(+), 2 deletions(-)
-> 
+Currently, IRQs are still handled on the kernel stack of the current
+task on riscv platforms. If the task has a deep call stack at the time
+of interrupt, and handling the interrupt also requires a deep stack,
+it's possible to see stack overflow.
 
-Hi Hans,
-So this approach has a fundamental problem, f->dst is changed without any synchronization
-you cannot rely on it and thus you cannot account for these entries properly. We must be very
-careful if we try to add any new synchronization not to affect performance as well.
-More below...
+Before this patch, the stack_max_size of a v5.17-rc1 kernel running on
+a lichee RV board gave:
+~ # cat /sys/kernel/debug/tracing/stack_max_size
+3736
 
-> diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbour.h
-> index 39c565e460c7..76d65b481086 100644
-> --- a/include/uapi/linux/neighbour.h
-> +++ b/include/uapi/linux/neighbour.h
-> @@ -53,6 +53,7 @@ enum {
->  #define NTF_ROUTER	(1 << 7)
->  /* Extended flags under NDA_FLAGS_EXT: */
->  #define NTF_EXT_MANAGED	(1 << 0)
-> +#define NTF_EXT_LOCKED	(1 << 1)
->  
->  /*
->   *	Neighbor Cache Entry States.
-> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-> index e7f4fccb6adb..6b83e2d6435d 100644
-> --- a/net/bridge/br_fdb.c
-> +++ b/net/bridge/br_fdb.c
-> @@ -105,6 +105,7 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
->  	struct nda_cacheinfo ci;
->  	struct nlmsghdr *nlh;
->  	struct ndmsg *ndm;
-> +	u32 ext_flags = 0;
->  
->  	nlh = nlmsg_put(skb, portid, seq, type, sizeof(*ndm), flags);
->  	if (nlh == NULL)
-> @@ -125,11 +126,16 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
->  		ndm->ndm_flags |= NTF_EXT_LEARNED;
->  	if (test_bit(BR_FDB_STICKY, &fdb->flags))
->  		ndm->ndm_flags |= NTF_STICKY;
-> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))
-> +		ext_flags |= NTF_EXT_LOCKED;
->  
->  	if (nla_put(skb, NDA_LLADDR, ETH_ALEN, &fdb->key.addr))
->  		goto nla_put_failure;
->  	if (nla_put_u32(skb, NDA_MASTER, br->dev->ifindex))
->  		goto nla_put_failure;
-> +	if (nla_put_u32(skb, NDA_FLAGS_EXT, ext_flags))
-> +		goto nla_put_failure;
-> +
->  	ci.ndm_used	 = jiffies_to_clock_t(now - fdb->used);
->  	ci.ndm_confirmed = 0;
->  	ci.ndm_updated	 = jiffies_to_clock_t(now - fdb->updated);
-> @@ -171,6 +177,7 @@ static inline size_t fdb_nlmsg_size(void)
->  	return NLMSG_ALIGN(sizeof(struct ndmsg))
->  		+ nla_total_size(ETH_ALEN) /* NDA_LLADDR */
->  		+ nla_total_size(sizeof(u32)) /* NDA_MASTER */
-> +		+ nla_total_size(sizeof(u32)) /* NDA_FLAGS_EXT */
->  		+ nla_total_size(sizeof(u16)) /* NDA_VLAN */
->  		+ nla_total_size(sizeof(struct nda_cacheinfo))
->  		+ nla_total_size(0) /* NDA_FDB_EXT_ATTRS */
-> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
->  	if (test_bit(BR_FDB_STATIC, &f->flags))
->  		fdb_del_hw_addr(br, f->key.addr.addr);
->  
-> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
-> +		atomic_dec(&f->dst->locked_entry_cnt);
+After this patch,
+~ # cat /sys/kernel/debug/tracing/stack_max_size
+3176
 
-Sorry but you cannot do this for multiple reasons:
- - f->dst can be NULL
- - f->dst changes without any synchronization
- - there is no synchronization between fdb's flags and its ->dst
+We reduce the max kernel stack usage by 560 bytes!
 
-Cheers,
- Nik
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+---
+since v3:
+ - Always use vmalloc to allocate irq stack. Thank Arnd.
+
+since v2:
+ - rebase on v5.18-rcN
+ - update commit msg, I.E remove the "it's possible to reduce the
+THREAD_SIZE to 8KB for RV64 platforms..."
+
+since v1:
+ - add __ro_after_init to the irq_stack[] array.
+
+ arch/riscv/include/asm/thread_info.h |  1 +
+ arch/riscv/kernel/asm-offsets.c      |  2 ++
+ arch/riscv/kernel/entry.S            | 33 +++++++++++++++++++++++++---
+ arch/riscv/kernel/irq.c              | 12 ++++++++++
+ 4 files changed, 45 insertions(+), 3 deletions(-)
+
+diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+index 74d888c8d631..98ea73721a0b 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -25,6 +25,7 @@
+ #endif
+ #define THREAD_SIZE		(PAGE_SIZE << THREAD_SIZE_ORDER)
+ 
++#define IRQ_STACK_SIZE		THREAD_SIZE
+ /*
+  * By aligning VMAP'd stacks to 2 * THREAD_SIZE, we can detect overflow by
+  * checking sp & (1 << THREAD_SHIFT), which we can do cheaply in the entry
+diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+index df9444397908..9e32748af0e8 100644
+--- a/arch/riscv/kernel/asm-offsets.c
++++ b/arch/riscv/kernel/asm-offsets.c
+@@ -37,6 +37,8 @@ void asm_offsets(void)
+ 	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+ 	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+ 	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
++	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
++	OFFSET(TASK_STACK, task_struct, stack);
+ 
+ 	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+ 	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index c8b9ce274b9a..e91cae183ef4 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -126,12 +126,39 @@ skip_context_tracking:
+ 	 */
+ 	bge s4, zero, 1f
+ 
+-	la ra, ret_from_exception
++	/* preserve the sp */
++	move s0, sp
+ 
+-	/* Handle interrupts */
+ 	move a0, sp /* pt_regs */
++
++	/*
++	 * Compare sp with the base of the task stack.
++	 * If the top ~(THREAD_SIZE - 1) bits match, we are on a task stack,
++	 * and should switch to the irq stack.
++	 */
++	REG_L t0, TASK_STACK(tp)
++	xor t0, t0, s0
++	li t1, ~(THREAD_SIZE - 1)
++	and t0, t0, t1
++	bnez t0, 2f
++
++	la t1, irq_stack
++	REG_L t2, TASK_TI_CPU(tp)
++	slli t2, t2, RISCV_LGPTR
++	add t1, t1, t2
++	REG_L t2, 0(t1)
++	li t1, IRQ_STACK_SIZE
++	/* switch to the irq stack */
++	add sp, t2, t1
++
++2:
++	/* Handle interrupts */
+ 	la a1, generic_handle_arch_irq
+-	jr a1
++	jalr a1
++
++	/* Restore sp */
++	move sp, s0
++	j ret_from_exception
+ 1:
+ 	/*
+ 	 * Exceptions run with interrupts enabled or disabled depending on the
+diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+index 7207fa08d78f..6b26960e2e17 100644
+--- a/arch/riscv/kernel/irq.c
++++ b/arch/riscv/kernel/irq.c
+@@ -10,6 +10,8 @@
+ #include <linux/seq_file.h>
+ #include <asm/smp.h>
+ 
++void *irq_stack[NR_CPUS] __ro_after_init;
++
+ int arch_show_interrupts(struct seq_file *p, int prec)
+ {
+ 	show_ipi_stats(p, prec);
+@@ -18,7 +20,17 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+ 
+ void __init init_IRQ(void)
+ {
++	int cpu;
++
+ 	irqchip_init();
+ 	if (!handle_arch_irq)
+ 		panic("No interrupt controller found.");
++
++	for_each_possible_cpu(cpu) {
++		void *s = __vmalloc_node(IRQ_STACK_SIZE, THREAD_ALIGN,
++					 THREADINFO_GFP, cpu_to_node(cpu),
++					 __builtin_return_address(0));
++
++		irq_stack[cpu] = s;
++	}
+ }
+-- 
+2.34.1
+

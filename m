@@ -2,100 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACEA532870
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B516F532877
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236478AbiEXLAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
+        id S236397AbiEXLDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236459AbiEXLAj (ORCPT
+        with ESMTP id S232964AbiEXLDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 07:00:39 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490F48DDFB
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:00:38 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OAMfUe011417;
-        Tue, 24 May 2022 11:00:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=l1ypN9taGE14tYRN2P3CTjdOnlwFHQ8jvCb3saYBbPs=;
- b=WVSD8S7RmEZshz/nsv0J3ZQVrszo6I2bJsnTLhBO78bIAjR+kix0mfSRBOt3BGlMX+L5
- /TH0rs6HuH2C3nH6qSXOxhIhS1qghtiU3pv6J8qd/uEdHpfwwkPEtE2oBvqNL8RzqXID
- GL4bKoiNsGKsEkTykD//yIpKcRq92Of5IngAw/brFpluhP9OblKKktb0EaPf4PzECmDX
- K2FivHEPDhascGx3FugISEvnaFX7WT1cM0tk1hLAh9b7zp1Hj8OdfM1v1FLzXmlCcIqp
- pvmXqj2tcSfO3dFZpQ7z2/FstmStqrm9TyoS7ja0ojVzRvdt+kVZ+rd9rNBbdHUQil+6 mQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8wjbrnku-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 11:00:22 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OArLlr003404;
-        Tue, 24 May 2022 11:00:21 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8wjbrnjr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 11:00:21 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OAwDDX014510;
-        Tue, 24 May 2022 11:00:19 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3g6qbjcahv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 11:00:19 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OB0Haw48759118
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 11:00:17 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1979C4204B;
-        Tue, 24 May 2022 11:00:17 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CC10042042;
-        Tue, 24 May 2022 11:00:14 +0000 (GMT)
-Received: from [9.109.198.201] (unknown [9.109.198.201])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 24 May 2022 11:00:14 +0000 (GMT)
-Message-ID: <59170f18-1356-1140-70e3-30cb627f00bc@linux.vnet.ibm.com>
-Date:   Tue, 24 May 2022 16:30:13 +0530
+        Tue, 24 May 2022 07:03:38 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F85D74DE7;
+        Tue, 24 May 2022 04:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653390217; x=1684926217;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=CntG2zT79s+rUqc/RwF4HmNc6O2cBy1aTPUYDsYRjjE=;
+  b=dh2PDazC+Hias72hL+YjkQm+4NV8DToFrS9UKRxKmiS3wgYrkk72n1tB
+   4HB9DvustuCf75leTsWV2XTHhp/g+hpBKnjrdGuwzenebYvPq94XzybWQ
+   s1zPvooRPuxUqQc58hHj1Cq7cjoBqvpzVDjfb98Wbo4j8xSw5I9hLE9wb
+   tRHKJV2SdjpVuqjKnF7vHEArIBNa7kuAcpq7eJf2rKGc5fr5CAZ5dQyk1
+   VdQKcyihYFN9IuqXbLDzGRljMC7A+9nwHXaUA/KRi9xsK8iRezZJCDrWe
+   y61FScKe9PRfstwWtCrQcDW0AHHOXQVMLSQa0AVm+V4d3ZYUIquxtL5Bu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273611125"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="273611125"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:03:37 -0700
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="745175110"
+Received: from zychseba-mobl.ger.corp.intel.com (HELO localhost) ([10.249.136.104])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:03:33 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     kernel-janitors@vger.kernel.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/i915: fix typos in comments
+In-Reply-To: <20220521111145.81697-90-Julia.Lawall@inria.fr>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220521111145.81697-90-Julia.Lawall@inria.fr>
+Date:   Tue, 24 May 2022 14:03:29 +0300
+Message-ID: <87ee0jw5tq.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH 4/4] objtool/powerpc: Add --mcount specific
- implementation
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>, "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <20220523175548.922671-1-sv@linux.ibm.com>
- <20220523175548.922671-5-sv@linux.ibm.com>
- <6be5c941-07b0-64d5-7f36-fe5770fb5244@csgroup.eu>
-From:   Sathvika Vasireddy <sv@linux.vnet.ibm.com>
-In-Reply-To: <6be5c941-07b0-64d5-7f36-fe5770fb5244@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: pYfqGtsuBBWosW0OwsrrNaUoak1WyouL
-X-Proofpoint-GUID: VNLL2SE_JACZnBwHMb2QGiKHjV3pcto3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_06,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- spamscore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
- mlxlogscore=999 impostorscore=0 phishscore=0 adultscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205240053
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -104,138 +65,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 24/05/22 15:05, Christophe Leroy wrote:
+On Sat, 21 May 2022, Julia Lawall <Julia.Lawall@inria.fr> wrote:
+> Spelling mistakes (triple letters) in comments.
+> Detected with the help of Coccinelle.
 >
-> Le 23/05/2022 à 19:55, Sathvika Vasireddy a écrit :
->> This patch enables objtool --mcount on powerpc, and
->> adds implementation specific to powerpc.
->>
->> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
->> ---
->>    arch/powerpc/Kconfig                |  1 +
->>    tools/objtool/arch/powerpc/decode.c | 14 ++++++++++++++
->>    tools/objtool/check.c               | 12 +++++++-----
->>    tools/objtool/elf.c                 | 13 +++++++++++++
->>    tools/objtool/include/objtool/elf.h |  1 +
->>    5 files changed, 36 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->> index 732a3f91ee5e..3373d44a1298 100644
->> --- a/arch/powerpc/Kconfig
->> +++ b/arch/powerpc/Kconfig
->> @@ -233,6 +233,7 @@ config PPC
->>    	select HAVE_NMI				if PERF_EVENTS || (PPC64 && PPC_BOOK3S)
->>    	select HAVE_OPTPROBES
->>    	select HAVE_OBJTOOL			if PPC64
->> +	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
->>    	select HAVE_PERF_EVENTS
->>    	select HAVE_PERF_EVENTS_NMI		if PPC64
->>    	select HAVE_PERF_REGS
->> diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
->> index e3b77a6ce357..ad3d79fffac2 100644
->> --- a/tools/objtool/arch/powerpc/decode.c
->> +++ b/tools/objtool/arch/powerpc/decode.c
->> @@ -40,12 +40,26 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
->>    			    struct list_head *ops_list)
->>    {
->>    	u32 insn;
->> +	unsigned int opcode;
->>    
->>    	*immediate = 0;
->>    	memcpy(&insn, sec->data->d_buf+offset, 4);
->>    	*len = 4;
->>    	*type = INSN_OTHER;
->>    
->> +	opcode = (insn >> 26);
-> You dont need the brackets here.
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+
+Thanks, pushed to drm-intel-next.
+
+BR,
+Jani.
+
 >
->> +
->> +	switch (opcode) {
->> +	case 18: /* bl */
->> +		if ((insn & 3) == 1) {
->> +			*type = INSN_CALL;
->> +			*immediate = insn & 0x3fffffc;
->> +			if (*immediate & 0x2000000)
->> +				*immediate -= 0x4000000;
->> +		}
->> +		break;
->> +	}
->> +
->>    	return 0;
->>    }
->>    
->> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
->> index 056302d58e23..fd8bad092f89 100644
->> --- a/tools/objtool/check.c
->> +++ b/tools/objtool/check.c
->> @@ -832,7 +832,7 @@ static int create_mcount_loc_sections(struct objtool_file *file)
->>    
->>    		if (elf_add_reloc_to_insn(file->elf, sec,
->>    					  idx * sizeof(unsigned long),
->> -					  R_X86_64_64,
->> +					  elf_reloc_type_long(file->elf),
->>    					  insn->sec, insn->offset))
->>    			return -1;
->>    
->> @@ -2183,7 +2183,7 @@ static int classify_symbols(struct objtool_file *file)
->>    			if (arch_is_retpoline(func))
->>    				func->retpoline_thunk = true;
->>    
->> -			if (!strcmp(func->name, "__fentry__"))
->> +			if ((!strcmp(func->name, "__fentry__")) || (!strcmp(func->name, "_mcount")))
->>    				func->fentry = true;
->>    
->>    			if (is_profiling_func(func->name))
->> @@ -2259,9 +2259,11 @@ static int decode_sections(struct objtool_file *file)
->>    	 * Must be before add_jump_destinations(), which depends on 'func'
->>    	 * being set for alternatives, to enable proper sibling call detection.
->>    	 */
->> -	ret = add_special_section_alts(file);
->> -	if (ret)
->> -		return ret;
->> +	if (opts.stackval || opts.orc || opts.uaccess || opts.noinstr) {
->> +		ret = add_special_section_alts(file);
->> +		if (ret)
->> +			return ret;
->> +	}
-> I think this change should be a patch by itself, it's not related to
-> powerpc.
-Makes sense. I'll make this a separate patch in the next revision.
+> ---
+>  drivers/gpu/drm/i915/display/intel_color.c           |    2 +-
+>  drivers/gpu/drm/i915/display/intel_pps.c             |    2 +-
+>  drivers/gpu/drm/i915/gt/intel_execlists_submission.c |    2 +-
+>  drivers/gpu/drm/i915/gt/uc/intel_guc_log.c           |    2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
 >
->>    
->>    	ret = add_jump_destinations(file);
->>    	if (ret)
->> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
->> index c25e957c1e52..95763060d551 100644
->> --- a/tools/objtool/elf.c
->> +++ b/tools/objtool/elf.c
->> @@ -793,6 +793,19 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
->>    	return sym;
->>    }
->>    
->> +int elf_reloc_type_long(struct elf *elf)
-> Not sure it's a good name, because for 32 bits we have to use 'int'.
-Sure, I'll rename it to elf_reloc_type() or some such.
+> diff --git a/drivers/gpu/drm/i915/display/intel_color.c b/drivers/gpu/drm/i915/display/intel_color.c
+> index 34128c9c635c..a27ce874a9e8 100644
+> --- a/drivers/gpu/drm/i915/display/intel_color.c
+> +++ b/drivers/gpu/drm/i915/display/intel_color.c
+> @@ -1638,7 +1638,7 @@ static u32 icl_gamma_mode(const struct intel_crtc_state *crtc_state)
+>  	/*
+>  	 * Enable 10bit gamma for D13
+>  	 * ToDo: Extend to Logarithmic Gamma once the new UAPI
+> -	 * is acccepted and implemented by a userspace consumer
+> +	 * is accepted and implemented by a userspace consumer
+>  	 */
+>  	else if (DISPLAY_VER(i915) >= 13)
+>  		gamma_mode |= GAMMA_MODE_MODE_10BIT;
+> diff --git a/drivers/gpu/drm/i915/display/intel_pps.c b/drivers/gpu/drm/i915/display/intel_pps.c
+> index 5a598dd06039..4bc0563dde92 100644
+> --- a/drivers/gpu/drm/i915/display/intel_pps.c
+> +++ b/drivers/gpu/drm/i915/display/intel_pps.c
+> @@ -509,7 +509,7 @@ static void wait_panel_power_cycle(struct intel_dp *intel_dp)
+>  
+>  	drm_dbg_kms(&i915->drm, "Wait for panel power cycle\n");
+>  
+> -	/* take the difference of currrent time and panel power off time
+> +	/* take the difference of current time and panel power off time
+>  	 * and then make panel wait for t11_t12 if needed. */
+>  	panel_power_on_time = ktime_get_boottime();
+>  	panel_power_off_duration = ktime_ms_delta(panel_power_on_time, intel_dp->pps.panel_power_off_time);
+> diff --git a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+> index 86f7a9ac1c39..aa0d2bbbbcc4 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+> @@ -1350,7 +1350,7 @@ static void execlists_dequeue(struct intel_engine_cs *engine)
+>  			 * submission. If we don't cancel the timer now,
+>  			 * we will see that the timer has expired and
+>  			 * reschedule the tasklet; continually until the
+> -			 * next context switch or other preeemption event.
+> +			 * next context switch or other preemption event.
+>  			 *
+>  			 * Since we have decided to reschedule based on
+>  			 * consumption of this timeslice, if we submit the
+> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_log.c b/drivers/gpu/drm/i915/gt/uc/intel_guc_log.c
+> index 78d2989fe917..02311ad90264 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc_log.c
+> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_log.c
+> @@ -588,7 +588,7 @@ int intel_guc_log_relay_open(struct intel_guc_log *log)
+>  	/*
+>  	 * We require SSE 4.1 for fast reads from the GuC log buffer and
+>  	 * it should be present on the chipsets supporting GuC based
+> -	 * submisssions.
+> +	 * submissions.
+>  	 */
+>  	if (!i915_has_memcpy_from_wc()) {
+>  		ret = -ENXIO;
 >
->> +{
->> +	switch (elf->ehdr.e_machine) {
->> +	case EM_X86_64:
->> +		return R_X86_64_64;
->> +	case EM_PPC64:
->> +		return R_PPC64_ADDR64;
->> +	default:
->> +		WARN("unknown machine...");
->> +		exit(-1);
->> +	}
->> +}
-> Wouldn't it be better to make that function arch specific ?
 
-This is so that we can support cross architecture builds.
-
-
-Thanks for reviewing!
-
-- Sathvika
-
-
+-- 
+Jani Nikula, Intel Open Source Graphics Center

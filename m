@@ -2,222 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBE0532B21
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E713C532B1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237715AbiEXNUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
+        id S237740AbiEXNUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235487AbiEXNUC (ORCPT
+        with ESMTP id S237722AbiEXNUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:20:02 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495D198095;
-        Tue, 24 May 2022 06:20:01 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OCjcAb029586;
-        Tue, 24 May 2022 13:19:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qZODpqFwVOu9imLO2DLb89vkcW+eAv0FCCFk93WM9fQ=;
- b=raCpb/Wvwimv+0qs58BtbqK29AbF0EbRuF+oRdpZtLs4XGYlbn1b711MbZu2xR5Deai7
- HjXFfHg9+0j+So74CmMyp52dIZdkY1wHv2PRD1a66Oc8fs4BWDGv/IuOmNn2JT5Zgf5+
- fFK2NE/ypHwENKE365U38WDeZH6BbROAt7C++stztTGyp83Za5kq1Ur49apAwyPBPLMC
- jHWcLTnoK8v6YXtgYSYgu2tgLrYfk8SNW7n5Of9/emwVrPtjYYqX2wp87CLk3jgPPUXF
- rPmgdlF5UYYwiUX9vCrSoGcGxMxsxXIvnJ5go0/QHxyAlLrc5PIVwFzRuaY9cN48UsVF kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8yna8shk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 13:19:31 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OD7aif027682;
-        Tue, 24 May 2022 13:19:31 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8yna8sha-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 13:19:31 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24ODIuH6012350;
-        Tue, 24 May 2022 13:19:30 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma03wdc.us.ibm.com with ESMTP id 3g6qq9r4fv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 13:19:30 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24ODJTas24576346
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 13:19:29 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2080978063;
-        Tue, 24 May 2022 13:19:29 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9DF7878067;
-        Tue, 24 May 2022 13:19:26 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 24 May 2022 13:19:26 +0000 (GMT)
-Message-ID: <e1c3941e-80d4-f8f2-774e-01bd89fd474a@linux.ibm.com>
-Date:   Tue, 24 May 2022 09:19:26 -0400
+        Tue, 24 May 2022 09:20:07 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED6D980A9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:20:06 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id y199so16408032pfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:20:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=pm+h7FgyVcw6FPu3neF0tg9OqCxJcsWM13fqLtMUno0=;
+        b=UXHnnKdtJR4P3hgd5fy87XVQuGpu+aVdjYst1hUquXXNO6dN72wfptvsmsBQ2vc3n7
+         yhVIW7t0z1QEn6Fe3GSOTOd6F40orO3V9x4ReJXaD9/lyEVZTi/EXHdWqUqoAEETVetm
+         jMTZNDFGNv/yK7d14Alt+JIDFL09lXrAeYjzFOxljiYwX8b46+h5LKCPwy8QNWM8P4Rg
+         +Py8A2R0Ob9Rs6M6tI1raCbtUrFQEFZRh4h6cZch3ypIn65VUKdYm1F2yk9Vcq3twX5J
+         gShHWl6Lt6R9U/6eP3N77qWekZrvmU42r501kslBgworqEx0+HsGPyp3L202yXMKMXR0
+         ZUGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pm+h7FgyVcw6FPu3neF0tg9OqCxJcsWM13fqLtMUno0=;
+        b=MQFSRY/jH9dykZKpKTm95j6h4iNjsGGCKMearXQq0qBgcmTK+3ozOMHrRUCSUT8YIp
+         pxdec1z1K7hshwPWOs7gLCJHTn4Fc9glVzj3mBvLHCVKtvYugtDELmkF130tfIZydAmz
+         c3mCKZHbCjxzx/zkUdyK3XNHGmsHS+yo5bQ5m41aybx6/mYFf5gzc8B0aC4V+kQrx3Iw
+         M1AvetGCtRbCFEpt+rTnxEKKqxy8vEFDYyTjJqU4HWjp1mF0oyVeVBHTJuXxpiR3uXB+
+         HL5wUYGGP9la1Y6VY4/dMhNQiovqbWWUjPillKY5YqisZROOGTM6ff6hDOkBD379mPng
+         yHLw==
+X-Gm-Message-State: AOAM5301BnSLt3DNG59rH6AaKlRRgIgIpTRhiIDfEyecx7YTP7rHUElv
+        w+CSmka/jaf9QgiOTgUUKSY2
+X-Google-Smtp-Source: ABdhPJzejR8mK2jCqzKVM5D8tPWy+Bu4JMl9VEjAKH1ffnsi36QNt8JkxUSKliUpKMYN3iLUUFgz4Q==
+X-Received: by 2002:a62:5c3:0:b0:50d:4274:4e9d with SMTP id 186-20020a6205c3000000b0050d42744e9dmr28513554pff.54.1653398406431;
+        Tue, 24 May 2022 06:20:06 -0700 (PDT)
+Received: from thinkpad ([59.92.99.145])
+        by smtp.gmail.com with ESMTPSA id k22-20020a17090a591600b001cd4989ff62sm1703763pji.41.2022.05.24.06.20.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 06:20:06 -0700 (PDT)
+Date:   Tue, 24 May 2022 18:49:59 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 23/26] dmaengine: dw-edma: Bypass dma-ranges mapping
+ for the local setup
+Message-ID: <20220524131959.GA5745@thinkpad>
+References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
+ <20220503225104.12108-24-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v12 23/26] ima: Show owning user namespace's uid and gid
- when displaying policy
-Content-Language: en-US
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        jpenumak@redhat.com
-References: <20220420140633.753772-1-stefanb@linux.ibm.com>
- <20220420140633.753772-24-stefanb@linux.ibm.com>
- <20220522175452.GB24519@mail.hallyn.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220522175452.GB24519@mail.hallyn.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rtUV8HzU-sn-srON6l5ot-o0FFSQ1kLt
-X-Proofpoint-ORIG-GUID: ksryRKuSnqf6b1Ga2LNHDakXKDApaO99
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_07,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 adultscore=0 spamscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 clxscore=1015 mlxscore=0 priorityscore=1501 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205240066
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220503225104.12108-24-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/22/22 13:54, Serge E. Hallyn wrote:
-> On Wed, Apr 20, 2022 at 10:06:30AM -0400, Stefan Berger wrote:
->> Show the uid and gid values relative to the user namespace that is
->> currently active. The effect of this changes is that when one displays
+On Wed, May 04, 2022 at 01:51:01AM +0300, Serge Semin wrote:
+> DW eDMA doesn't perform any translation of the traffic generated on the
+> CPU/Application side. It just generates read/write AXI-bus requests with
+> the specified addresses. But in case if the dma-ranges DT-property is
+> specified for a platform device node, Linux will use it to map the CPU
+> memory regions into the DMAable bus ranges. This isn't what we want for
+> the eDMA embedded into the locally accessed DW PCIe Root Port and
+> End-point. In order to work that around let's set the chan_dma_dev flag
+> for each DW eDMA channel thus forcing the client drivers to getting a
+> custom dma-ranges-less parental device for the mappings.
 > 
-> When you say "is currently active", in my mind it's not clear whether you
-> mean in the process which opened the seq_file, or is active in the ima_ns,
-> or the reader (which might I guess be differenet still).  The code of
-> course does make it clear.  Can you change it to say "the user namespace
-> which opened the policy_show file" or something like that?
+> Note it will only work for the client drivers using the
+> dmaengine_get_dma_device() method to get the parental DMA device.
 > 
-> Also, s/The effect of this changes/The effect of this change/.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > 
->> the policy from the user namespace that originally set the policy,
->> the same uid and gid values are shown in the policy as those that were
->> used when the policy was set.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->>
+> ---
 > 
-> Reviewed-by: Serge Hallyn <serge@hallyn.com>
+> Changelog v2:
+> - Fix the comment a bit to being clearer. (@Manivannan)
+> ---
+>  drivers/dma/dw-edma/dw-edma-core.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> index 6a8282eaebaf..908607785401 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> @@ -716,6 +716,21 @@ static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
+>  	if (chan->status != EDMA_ST_IDLE)
+>  		return -EBUSY;
+>  
+> +	/* Bypass the dma-ranges based memory regions mapping for the eDMA
+> +	 * controlled from the CPU/Application side since in that case
+> +	 * the local memory address is left untranslated.
+> +	 */
+> +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+> +		dchan->dev->chan_dma_dev = true;
+> +
+> +		dchan->dev->device.dma_coherent = chan->dw->chip->dev->dma_coherent;
 
-I modified the  text above now to state:
+I happen to test this series on Qcom ARM32 machine and it errors out during the
+compilation due to "dma_coherent" not available on !SWIOTLB ARM32 configs.
 
-Show the uid and gid values relative to the user namespace that opened
-the IMA policy file. The effect of this change is that when one displays
-the policy from the user namespace that originally set the policy,
-the same uid and gid values are shown in the policy as those that were
-used when the policy was set.
+Thanks,
+Mani
 
-Thanks.
-    Stefan
+> +		dma_coerce_mask_and_coherent(&dchan->dev->device,
+> +					     dma_get_mask(chan->dw->chip->dev));
+> +		dchan->dev->device.dma_parms = chan->dw->chip->dev->dma_parms;
+> +	} else {
+> +		dchan->dev->chan_dma_dev = false;
+> +	}
+> +
+>  	pm_runtime_get(chan->dw->chip->dev);
+>  
+>  	return 0;
+> -- 
+> 2.35.1
 > 
->> ---
->> v9:
->>    - use seq_user_ns and from_k{g,u}id_munged()
->> ---
->>   security/integrity/ima/ima_policy.c | 19 +++++++++++++------
->>   1 file changed, 13 insertions(+), 6 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->> index eb10d895923d..4f8c50ddb777 100644
->> --- a/security/integrity/ima/ima_policy.c
->> +++ b/security/integrity/ima/ima_policy.c
->> @@ -2018,6 +2018,7 @@ static void ima_policy_show_appraise_algos(struct seq_file *m,
->>   
->>   int ima_policy_show(struct seq_file *m, void *v)
->>   {
->> +	struct user_namespace *user_ns = seq_user_ns(m);
->>   	struct ima_rule_entry *entry = v;
->>   	int i;
->>   	char tbuf[64] = {0,};
->> @@ -2103,7 +2104,8 @@ int ima_policy_show(struct seq_file *m, void *v)
->>   	}
->>   
->>   	if (entry->flags & IMA_UID) {
->> -		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->uid));
->> +		snprintf(tbuf, sizeof(tbuf),
->> +			 "%d", from_kuid_munged(user_ns, entry->uid));
->>   		if (entry->uid_op == &uid_gt)
->>   			seq_printf(m, pt(Opt_uid_gt), tbuf);
->>   		else if (entry->uid_op == &uid_lt)
->> @@ -2114,7 +2116,8 @@ int ima_policy_show(struct seq_file *m, void *v)
->>   	}
->>   
->>   	if (entry->flags & IMA_EUID) {
->> -		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->uid));
->> +		snprintf(tbuf, sizeof(tbuf),
->> +			 "%d", from_kuid_munged(user_ns, entry->uid));
->>   		if (entry->uid_op == &uid_gt)
->>   			seq_printf(m, pt(Opt_euid_gt), tbuf);
->>   		else if (entry->uid_op == &uid_lt)
->> @@ -2125,7 +2128,8 @@ int ima_policy_show(struct seq_file *m, void *v)
->>   	}
->>   
->>   	if (entry->flags & IMA_GID) {
->> -		snprintf(tbuf, sizeof(tbuf), "%d", __kgid_val(entry->gid));
->> +		snprintf(tbuf, sizeof(tbuf),
->> +			 "%d", from_kgid_munged(user_ns, entry->gid));
->>   		if (entry->gid_op == &gid_gt)
->>   			seq_printf(m, pt(Opt_gid_gt), tbuf);
->>   		else if (entry->gid_op == &gid_lt)
->> @@ -2136,7 +2140,8 @@ int ima_policy_show(struct seq_file *m, void *v)
->>   	}
->>   
->>   	if (entry->flags & IMA_EGID) {
->> -		snprintf(tbuf, sizeof(tbuf), "%d", __kgid_val(entry->gid));
->> +		snprintf(tbuf, sizeof(tbuf),
->> +			 "%d", from_kgid_munged(user_ns, entry->gid));
->>   		if (entry->gid_op == &gid_gt)
->>   			seq_printf(m, pt(Opt_egid_gt), tbuf);
->>   		else if (entry->gid_op == &gid_lt)
->> @@ -2147,7 +2152,8 @@ int ima_policy_show(struct seq_file *m, void *v)
->>   	}
->>   
->>   	if (entry->flags & IMA_FOWNER) {
->> -		snprintf(tbuf, sizeof(tbuf), "%d", __kuid_val(entry->fowner));
->> +		snprintf(tbuf, sizeof(tbuf),
->> +			 "%d", from_kuid_munged(user_ns, entry->fowner));
->>   		if (entry->fowner_op == &uid_gt)
->>   			seq_printf(m, pt(Opt_fowner_gt), tbuf);
->>   		else if (entry->fowner_op == &uid_lt)
->> @@ -2158,7 +2164,8 @@ int ima_policy_show(struct seq_file *m, void *v)
->>   	}
->>   
->>   	if (entry->flags & IMA_FGROUP) {
->> -		snprintf(tbuf, sizeof(tbuf), "%d", __kgid_val(entry->fgroup));
->> +		snprintf(tbuf, sizeof(tbuf),
->> +			 "%d", from_kgid_munged(user_ns, entry->fgroup));
->>   		if (entry->fgroup_op == &gid_gt)
->>   			seq_printf(m, pt(Opt_fgroup_gt), tbuf);
->>   		else if (entry->fgroup_op == &gid_lt)
->> -- 
->> 2.34.1
+
+-- 
+மணிவண்ணன் சதாசிவம்

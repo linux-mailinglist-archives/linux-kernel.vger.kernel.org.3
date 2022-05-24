@@ -2,266 +2,493 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5ECE532C8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA0D532C92
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238369AbiEXOuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
+        id S238378AbiEXOuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 10:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236171AbiEXOuC (ORCPT
+        with ESMTP id S238373AbiEXOuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 10:50:02 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D41E9B186;
-        Tue, 24 May 2022 07:50:01 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24ODnmr9004777;
-        Tue, 24 May 2022 14:49:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : reply-to : subject : to : cc : references : from :
- in-reply-to : content-type : content-transfer-encoding; s=pp1;
- bh=MXePOJYBtScFAHW0ImvXEgD630tDNgvr1jNMzrR4k2w=;
- b=Rqq78+ffxULIISd5KS0XGcbTSfoLL51U6rpeRkv2nnLE/fsDT14IIZ2OzIK1j2F4ZaFQ
- ty+hAQyYAnXpuqu7Vt7Vci+9RzvGXUW1aaRFYtOclmKiz31PW55P+kfNfHmvMA/nyDRo
- tk0kbMRAKvulOowWet6v4lQvN48tJJFl6QhPgbzMTV+wblkt9bleUatu0X2nYqM8MHY+
- 3XFtpqko8tEH0yYJm7o/oTeKMLQS5rTPIOpO8SEC06sXaGLFXkMNDeOxg/I1DpCNXcHj
- uQVNb4zi4C9b9w6Ek+INgScyCaJ3RhqG0SpKogr8OgXhcLYWOheSuD/TqoLSulo8oLiZ PQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8ypp31md-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 14:49:59 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OElIed005222;
-        Tue, 24 May 2022 14:49:58 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8ypp31m2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 14:49:58 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OEhxU7031748;
-        Tue, 24 May 2022 14:49:57 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma04dal.us.ibm.com with ESMTP id 3g6qq9pu03-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 14:49:57 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OEnult44630526
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 14:49:56 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A80E6112067;
-        Tue, 24 May 2022 14:49:56 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5ADE3112063;
-        Tue, 24 May 2022 14:49:56 +0000 (GMT)
-Received: from [9.60.75.219] (unknown [9.60.75.219])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 24 May 2022 14:49:56 +0000 (GMT)
-Message-ID: <c705be10-bbe2-7d44-3057-005299ab6785@linux.ibm.com>
-Date:   Tue, 24 May 2022 10:49:56 -0400
+        Tue, 24 May 2022 10:50:17 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFBA9C2CB;
+        Tue, 24 May 2022 07:50:14 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t6so26079421wra.4;
+        Tue, 24 May 2022 07:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kIY8SwXkyQHVWu+ZYCWYINzybbhqc/eSn/MnJ0CVSeg=;
+        b=fpXZ2z7K+jtT26hMRH7ShiF9SE+89YRbSVhNSdIqKjGOqiWi3ZN1HcRb+3yGjBHq47
+         Z5UL7WefFLba4BOX225Ci6oPRtxOay2CG3ceJfuf8MU1JMSJoWdNz4WUZ5nKXdfFobo3
+         wiOryevVFsgkf4aBkhsvjGt3HzwnlF7L/1OzQ3ZIwGQksnPt+Pgx3M+hMEiQDtsi6TxG
+         3OqCpKmO/scCjBezH+NCrUfunVOs6K7XRD1JGjA8uu8Gs7p3/Q4wm13Lpg+0LXQnghg5
+         wSjvTCdXujqJacZ/ObJtL+4RsvsOF5fiVCeDmdLFw16K+C/c+A5boWTCSbol7H1rNHut
+         HPZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kIY8SwXkyQHVWu+ZYCWYINzybbhqc/eSn/MnJ0CVSeg=;
+        b=mhi/goKcD0FvAkT3vILxDQkhKCXI0N6PdQPjxz6dIb3og+mMTm7Ld/23ZHlLExlCKv
+         /7EYgw34Av+3hrnRTwVRG4LHf9F6MgitKEsCNJmKuyQMEwI7LhaHg5mQ1eIhUSDRLB1J
+         pF/LTnYiLLijP6zKj7dnixd3+lUH58vwm1s6rieTUGEBI0Y1q3C4VqtaHWaO7Fz97PwD
+         602gsc+tMC1XqVw8k9syiLNl12vXT4l+6zh6vfk8201QQ9Q0+0vlUjvlkM/sDyhyNaGL
+         BKOp0I8n3+KZktRiw/p+mKY3v+anLTmYABRob5xgTSgZpBqxIff2IiaVEFKho6M03RBT
+         RBcw==
+X-Gm-Message-State: AOAM5319Y3QYyyl/6ZibzlW6hd+wIB4vxRkuNkih49lR+WY6gRcMtAf2
+        6XRxpAX5V2lm0W0ZGV+6FTO/1F8vNLegCn2xJl0=
+X-Google-Smtp-Source: ABdhPJyJPJGQNdXm00PRx0f7dWblPP276+2SaSmi1JmN/5N63sEYUqWW6/NHnpdDgiFyIEizNKaZz3jGLZmJpVQ3yqg=
+X-Received: by 2002:adf:f645:0:b0:20e:652d:2a4e with SMTP id
+ x5-20020adff645000000b0020e652d2a4emr24054581wrp.344.1653403812398; Tue, 24
+ May 2022 07:50:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Reply-To: jjherne@linux.ibm.com
-Subject: Re: [PATCH v19 02/20] s390/vfio-ap: move probe and remove callbacks
- to vfio_ap_ops.c
-Content-Language: en-US
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
- <20220404221039.1272245-3-akrowiak@linux.ibm.com>
-From:   "Jason J. Herne" <jjherne@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <20220404221039.1272245-3-akrowiak@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dKI-1TACc6OYDsR85RPuWf0zh6i8pcaG
-X-Proofpoint-GUID: cy2iRTZEnlycvZvzp56j-nAQr3VVGQVi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_07,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- phishscore=0 adultscore=0 priorityscore=1501 suspectscore=0 spamscore=0
- mlxscore=0 clxscore=1015 mlxlogscore=999 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205240074
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20210728010632.2633470-1-robdclark@gmail.com> <20210728010632.2633470-13-robdclark@gmail.com>
+ <84e03c5f-a3af-6592-d19a-a2f5d20b92fb@linux.intel.com> <CAJs_Fx6Nc337LPNh=p2GT2d2yDTdLWH934o4Cof3urDGhUJB6A@mail.gmail.com>
+ <904ae104-1c30-d130-129f-ccae381261d5@linux.intel.com>
+In-Reply-To: <904ae104-1c30-d130-129f-ccae381261d5@linux.intel.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Tue, 24 May 2022 07:50:00 -0700
+Message-ID: <CAF6AEGsH=K1Hut7QBmF1kX40xS+9px=BrtZecAXVQopNs67Feg@mail.gmail.com>
+Subject: Re: [PATCH v4 12/13] drm/msm: Utilize gpu scheduler priorities
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Sharat Masetty <smasetty@codeaurora.org>,
+        Akhil P Oommen <akhilpo@codeaurora.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>, Sean Paul <sean@poorly.run>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 18:10, Tony Krowiak wrote:
-> Let's move the probe and remove callbacks into the vfio_ap_ops.c
-> file to keep all code related to managing queues in a single file. This
-> way, all functions related to queue management can be removed from the
-> vfio_ap_private.h header file defining the public interfaces for the
-> vfio_ap device driver.
-> 
-> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
-> Reviewed-by: Halil Pasic <pasic@linux.ibm.com>
-> ---
->   drivers/s390/crypto/vfio_ap_drv.c     | 59 +--------------------------
->   drivers/s390/crypto/vfio_ap_ops.c     | 31 +++++++++++++-
->   drivers/s390/crypto/vfio_ap_private.h |  5 ++-
->   3 files changed, 34 insertions(+), 61 deletions(-)
-> 
-> diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
-> index 29ebd54f8919..9a300dd3b6f7 100644
-> --- a/drivers/s390/crypto/vfio_ap_drv.c
-> +++ b/drivers/s390/crypto/vfio_ap_drv.c
-> @@ -104,64 +104,9 @@ static const struct attribute_group vfio_queue_attr_group = {
->   	.attrs = vfio_queue_attrs,
->   };
->   
-> -/**
-> - * vfio_ap_queue_dev_probe: Allocate a vfio_ap_queue structure and associate it
-> - *			    with the device as driver_data.
-> - *
-> - * @apdev: the AP device being probed
-> - *
-> - * Return: returns 0 if the probe succeeded; otherwise, returns an error if
-> - *	   storage could not be allocated for a vfio_ap_queue object or the
-> - *	   sysfs 'status' attribute could not be created for the queue device.
-> - */
-> -static int vfio_ap_queue_dev_probe(struct ap_device *apdev)
-> -{
-> -	int ret;
-> -	struct vfio_ap_queue *q;
-> -
-> -	q = kzalloc(sizeof(*q), GFP_KERNEL);
-> -	if (!q)
-> -		return -ENOMEM;
-> -
-> -	mutex_lock(&matrix_dev->lock);
-> -	dev_set_drvdata(&apdev->device, q);
-> -	q->apqn = to_ap_queue(&apdev->device)->qid;
-> -	q->saved_isc = VFIO_AP_ISC_INVALID;
-> -
-> -	ret = sysfs_create_group(&apdev->device.kobj, &vfio_queue_attr_group);
-> -	if (ret) {
-> -		dev_set_drvdata(&apdev->device, NULL);
-> -		kfree(q);
-> -	}
-> -
-> -	mutex_unlock(&matrix_dev->lock);
-> -
-> -	return ret;
-> -}
-> -
-> -/**
-> - * vfio_ap_queue_dev_remove: Free the associated vfio_ap_queue structure.
-> - *
-> - * @apdev: the AP device being removed
-> - *
-> - * Takes the matrix lock to avoid actions on this device while doing the remove.
-> - */
-> -static void vfio_ap_queue_dev_remove(struct ap_device *apdev)
-> -{
-> -	struct vfio_ap_queue *q;
-> -
-> -	mutex_lock(&matrix_dev->lock);
-> -	sysfs_remove_group(&apdev->device.kobj, &vfio_queue_attr_group);
-> -	q = dev_get_drvdata(&apdev->device);
-> -	vfio_ap_mdev_reset_queue(q, 1);
-> -	dev_set_drvdata(&apdev->device, NULL);
-> -	kfree(q);
-> -	mutex_unlock(&matrix_dev->lock);
-> -}
-> -
->   static struct ap_driver vfio_ap_drv = {
-> -	.probe = vfio_ap_queue_dev_probe,
-> -	.remove = vfio_ap_queue_dev_remove,
-> +	.probe = vfio_ap_mdev_probe_queue,
-> +	.remove = vfio_ap_mdev_remove_queue,
->   	.ids = ap_queue_ids,
->   };
->   
-> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
-> index 2227919fde13..16220157dbe3 100644
-> --- a/drivers/s390/crypto/vfio_ap_ops.c
-> +++ b/drivers/s390/crypto/vfio_ap_ops.c
-> @@ -1314,8 +1314,7 @@ static struct vfio_ap_queue *vfio_ap_find_queue(int apqn)
->   	return q;
->   }
->   
-> -int vfio_ap_mdev_reset_queue(struct vfio_ap_queue *q,
-> -			     unsigned int retry)
-> +static int vfio_ap_mdev_reset_queue(struct vfio_ap_queue *q, unsigned int retry)
->   {
->   	struct ap_queue_status status;
->   	int ret;
-> @@ -1524,3 +1523,31 @@ void vfio_ap_mdev_unregister(void)
->   	mdev_unregister_device(&matrix_dev->device);
->   	mdev_unregister_driver(&vfio_ap_matrix_driver);
->   }
-> +
-> +int vfio_ap_mdev_probe_queue(struct ap_device *apdev)
-> +{
-> +	struct vfio_ap_queue *q;
-> +
-> +	q = kzalloc(sizeof(*q), GFP_KERNEL);
-> +	if (!q)
-> +		return -ENOMEM;
-> +	mutex_lock(&matrix_dev->lock);
-> +	q->apqn = to_ap_queue(&apdev->device)->qid;
-> +	q->saved_isc = VFIO_AP_ISC_INVALID;
-> +	dev_set_drvdata(&apdev->device, q);
-> +	mutex_unlock(&matrix_dev->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +void vfio_ap_mdev_remove_queue(struct ap_device *apdev)
-> +{
-> +	struct vfio_ap_queue *q;
-> +
-> +	mutex_lock(&matrix_dev->lock);
-> +	q = dev_get_drvdata(&apdev->device);
-> +	vfio_ap_mdev_reset_queue(q, 1);
-> +	dev_set_drvdata(&apdev->device, NULL);
-> +	kfree(q);
-> +	mutex_unlock(&matrix_dev->lock);
-> +}
-> diff --git a/drivers/s390/crypto/vfio_ap_private.h b/drivers/s390/crypto/vfio_ap_private.h
-> index 648fcaf8104a..3cade25a1620 100644
-> --- a/drivers/s390/crypto/vfio_ap_private.h
-> +++ b/drivers/s390/crypto/vfio_ap_private.h
-> @@ -119,7 +119,8 @@ struct vfio_ap_queue {
->   
->   int vfio_ap_mdev_register(void);
->   void vfio_ap_mdev_unregister(void);
-> -int vfio_ap_mdev_reset_queue(struct vfio_ap_queue *q,
-> -			     unsigned int retry);
-> +
-> +int vfio_ap_mdev_probe_queue(struct ap_device *queue);
-> +void vfio_ap_mdev_remove_queue(struct ap_device *queue);
->   
->   #endif /* _VFIO_AP_PRIVATE_H_ */
+On Tue, May 24, 2022 at 6:45 AM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
+>
+>
+> On 23/05/2022 23:53, Rob Clark wrote:
+> > On Mon, May 23, 2022 at 7:45 AM Tvrtko Ursulin
+> > <tvrtko.ursulin@linux.intel.com> wrote:
+> >>
+> >>
+> >> Hi Rob,
+> >>
+> >> On 28/07/2021 02:06, Rob Clark wrote:
+> >>> From: Rob Clark <robdclark@chromium.org>
+> >>>
+> >>> The drm/scheduler provides additional prioritization on top of that
+> >>> provided by however many number of ringbuffers (each with their own
+> >>> priority level) is supported on a given generation.  Expose the
+> >>> additional levels of priority to userspace and map the userspace
+> >>> priority back to ring (first level of priority) and schedular priorit=
+y
+> >>> (additional priority levels within the ring).
+> >>>
+> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>> Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> >>> ---
+> >>>    drivers/gpu/drm/msm/adreno/adreno_gpu.c |  4 +-
+> >>>    drivers/gpu/drm/msm/msm_gem_submit.c    |  4 +-
+> >>>    drivers/gpu/drm/msm/msm_gpu.h           | 58 +++++++++++++++++++++=
++++-
+> >>>    drivers/gpu/drm/msm/msm_submitqueue.c   | 35 +++++++--------
+> >>>    include/uapi/drm/msm_drm.h              | 14 +++++-
+> >>>    5 files changed, 88 insertions(+), 27 deletions(-)
+> >>>
+> >>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/dr=
+m/msm/adreno/adreno_gpu.c
+> >>> index bad4809b68ef..748665232d29 100644
+> >>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> >>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> >>> @@ -261,8 +261,8 @@ int adreno_get_param(struct msm_gpu *gpu, uint32_=
+t param, uint64_t *value)
+> >>>                        return ret;
+> >>>                }
+> >>>                return -EINVAL;
+> >>> -     case MSM_PARAM_NR_RINGS:
+> >>> -             *value =3D gpu->nr_rings;
+> >>> +     case MSM_PARAM_PRIORITIES:
+> >>> +             *value =3D gpu->nr_rings * NR_SCHED_PRIORITIES;
+> >>>                return 0;
+> >>>        case MSM_PARAM_PP_PGTABLE:
+> >>>                *value =3D 0;
+> >>> diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/m=
+sm/msm_gem_submit.c
+> >>> index 450efe59abb5..c2ecec5b11c4 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_gem_submit.c
+> >>> +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+> >>> @@ -59,7 +59,7 @@ static struct msm_gem_submit *submit_create(struct =
+drm_device *dev,
+> >>>        submit->gpu =3D gpu;
+> >>>        submit->cmd =3D (void *)&submit->bos[nr_bos];
+> >>>        submit->queue =3D queue;
+> >>> -     submit->ring =3D gpu->rb[queue->prio];
+> >>> +     submit->ring =3D gpu->rb[queue->ring_nr];
+> >>>        submit->fault_dumped =3D false;
+> >>>
+> >>>        INIT_LIST_HEAD(&submit->node);
+> >>> @@ -749,7 +749,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, =
+void *data,
+> >>>        /* Get a unique identifier for the submission for logging purp=
+oses */
+> >>>        submitid =3D atomic_inc_return(&ident) - 1;
+> >>>
+> >>> -     ring =3D gpu->rb[queue->prio];
+> >>> +     ring =3D gpu->rb[queue->ring_nr];
+> >>>        trace_msm_gpu_submit(pid_nr(pid), ring->id, submitid,
+> >>>                args->nr_bos, args->nr_cmds);
+> >>>
+> >>> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_=
+gpu.h
+> >>> index b912cacaecc0..0e4b45bff2e6 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_gpu.h
+> >>> +++ b/drivers/gpu/drm/msm/msm_gpu.h
+> >>> @@ -250,6 +250,59 @@ struct msm_gpu_perfcntr {
+> >>>        const char *name;
+> >>>    };
+> >>>
+> >>> +/*
+> >>> + * The number of priority levels provided by drm gpu scheduler.  The
+> >>> + * DRM_SCHED_PRIORITY_KERNEL priority level is treated specially in =
+some
+> >>> + * cases, so we don't use it (no need for kernel generated jobs).
+> >>> + */
+> >>> +#define NR_SCHED_PRIORITIES (1 + DRM_SCHED_PRIORITY_HIGH - DRM_SCHED=
+_PRIORITY_MIN)
+> >>> +
+> >>> +/**
+> >>> + * msm_gpu_convert_priority - Map userspace priority to ring # and s=
+ched priority
+> >>> + *
+> >>> + * @gpu:        the gpu instance
+> >>> + * @prio:       the userspace priority level
+> >>> + * @ring_nr:    [out] the ringbuffer the userspace priority maps to
+> >>> + * @sched_prio: [out] the gpu scheduler priority level which the use=
+rspace
+> >>> + *              priority maps to
+> >>> + *
+> >>> + * With drm/scheduler providing it's own level of prioritization, ou=
+r total
+> >>> + * number of available priority levels is (nr_rings * NR_SCHED_PRIOR=
+ITIES).
+> >>> + * Each ring is associated with it's own scheduler instance.  Howeve=
+r, our
+> >>> + * UABI is that lower numerical values are higher priority.  So mapp=
+ing the
+> >>> + * single userspace priority level into ring_nr and sched_prio takes=
+ some
+> >>> + * care.  The userspace provided priority (when a submitqueue is cre=
+ated)
+> >>> + * is mapped to ring nr and scheduler priority as such:
+> >>> + *
+> >>> + *   ring_nr    =3D userspace_prio / NR_SCHED_PRIORITIES
+> >>> + *   sched_prio =3D NR_SCHED_PRIORITIES -
+> >>> + *                (userspace_prio % NR_SCHED_PRIORITIES) - 1
+> >>> + *
+> >>> + * This allows generations without preemption (nr_rings=3D=3D1) to h=
+ave some
+> >>> + * amount of prioritization, and provides more priority levels for g=
+ens
+> >>> + * that do have preemption.
+> >>
+> >> I am exploring how different drivers handle priority levels and this
+> >> caught my eye.
+> >>
+> >> Is the implication of the last paragraphs that on hw with nr_rings > 1=
+,
+> >> ring + 1 preempts ring?
+> >
+> > Other way around, at least from the uabi standpoint.  Ie. ring[0]
+> > preempts ring[1]
+>
+> Ah yes, I figure it out from the comments but then confused myself when
+> writing the email.
+>
+> >> If so I am wondering does the "spreading" of
+> >> user visible priorities by NR_SCHED_PRIORITIES creates a non-preemptab=
+le
+> >> levels within every "bucket" or how does that work?
+> >
+> > So, preemption is possible between any priority level before run_job()
+> > gets called, which writes the job into the ringbuffer.  After that
+>
+> Hmm how? Before run_job() the jobs are not runnable, sitting in the
+> scheduler queues, right?
 
+I mean, if prio[0]+prio[1]+prio[2] map to a single ring, submit A on
+prio[1] could be executed after submit B on prio[2] provided that
+run_job(submitA) hasn't happened yet.  So I guess it isn't "really"
+preemption because the submit hasn't started running on the GPU yet.
+But rather just scheduling according to priority.
 
-With this commit, you did more than just move the probe/remove functions. You also changed 
-their behavior. The call to sysfs_create_group has been removed. So the following in 
-vfop_ap_drv.c becomes dead code:
+> > point, you only have "bucket" level preemption, because
+> > NR_SCHED_PRIORITIES levels of priority get mapped to a single FIFO
+> > ringbuffer.
+>
+> Right, and you have one GPU with four rings, which means you expose 12
+> priority levels to userspace, did I get that right?
 
-     vfio_ap_mdev_for_queue
-     status_show
-     static DEVICE_ATTR_RO(status);
-     vfio_queue_attrs
-     vfio_queue_attr_group
+Correct
 
-Is this what you intended? If so, I assume we can live without the status attribute?
-If this is the case then you'll want to remove all the dead code.
+> If so how do you convey in the ABI that not all there priority levels
+> are equal? Like userspace can submit at prio 4 and expect prio 3 to
+> preempt, as would prio 2 preempt prio 3. While actual behaviour will not
+> match - 3 will not preempt 4.
 
--- 
--- Jason J. Herne (jjherne@linux.ibm.com)
+It isn't really exposed to userspace, but perhaps it should be..
+Userspace just knows that, to the extent possible, the kernel will try
+to execute prio 3 before prio 4.
+
+> Also, does your userspace stack (EGL/Vulkan) use the priorities? I had a
+> quick peek in Mesa but did not spot it - although I am not really at
+> home there yet so maybe I missed it.
+
+Yes, there is an EGL extension:
+
+https://www.khronos.org/registry/EGL/extensions/IMG/EGL_IMG_context_priorit=
+y.txt
+
+It is pretty limited, it only exposes three priority levels.
+
+BR,
+-R
+
+> > -----
+> >
+> > btw, one fun (but unrelated) issue I'm hitting with scheduler... I'm
+> > trying to add an igt test to stress shrinker/eviction, similar to the
+> > existing tests/i915/gem_shrink.c.  But we hit an unfortunate
+> > combination of circumstances:
+> > 1. Pinning memory happens in the synchronous part of the submit ioctl,
+> > before enqueuing the job for the kthread to handle.
+> > 2. The first run_job() callback incurs a slight delay (~1.5ms) while
+> > resuming the GPU
+> > 3. Because of that delay, userspace has a chance to queue up enough
+> > more jobs to require locking/pinning more than the available system
+> > RAM..
+>
+> Is that one or multiple threads submitting jobs?
+>
+> > I'm not sure if we want a way to prevent userspace from getting *too*
+> > far ahead of the kthread.  Or maybe at some point the shrinker should
+> > sleep on non-idle buffers?
+>
+> On the direct reclaim path when invoked from the submit ioctl? In i915
+> we only shrink idle objects on direct reclaim and leave active ones for
+> the swapper. It depends on how your locking looks like whether you could
+> do them, whether there would be coupling of locks and fs-reclaim context.
+>
+> Regards,
+>
+> Tvrtko
+>
+> > BR,
+> > -R
+> >
+> >>
+> >> Regards,
+> >>
+> >> Tvrtko
+> >>
+> >>> + */
+> >>> +static inline int msm_gpu_convert_priority(struct msm_gpu *gpu, int =
+prio,
+> >>> +             unsigned *ring_nr, enum drm_sched_priority *sched_prio)
+> >>> +{
+> >>> +     unsigned rn, sp;
+> >>> +
+> >>> +     rn =3D div_u64_rem(prio, NR_SCHED_PRIORITIES, &sp);
+> >>> +
+> >>> +     /* invert sched priority to map to higher-numeric-is-higher-
+> >>> +      * priority convention
+> >>> +      */
+> >>> +     sp =3D NR_SCHED_PRIORITIES - sp - 1;
+> >>> +
+> >>> +     if (rn >=3D gpu->nr_rings)
+> >>> +             return -EINVAL;
+> >>> +
+> >>> +     *ring_nr =3D rn;
+> >>> +     *sched_prio =3D sp;
+> >>> +
+> >>> +     return 0;
+> >>> +}
+> >>> +
+> >>>    /**
+> >>>     * A submitqueue is associated with a gl context or vk queue (or e=
+quiv)
+> >>>     * in userspace.
+> >>> @@ -257,7 +310,8 @@ struct msm_gpu_perfcntr {
+> >>>     * @id:        userspace id for the submitqueue, unique within the=
+ drm_file
+> >>>     * @flags:     userspace flags for the submitqueue, specified at c=
+reation
+> >>>     *             (currently unusued)
+> >>> - * @prio:      the submitqueue priority
+> >>> + * @ring_nr:   the ringbuffer used by this submitqueue, which is det=
+ermined
+> >>> + *             by the submitqueue's priority
+> >>>     * @faults:    the number of GPU hangs associated with this submit=
+queue
+> >>>     * @ctx:       the per-drm_file context associated with the submit=
+queue (ie.
+> >>>     *             which set of pgtables do submits jobs associated wi=
+th the
+> >>> @@ -272,7 +326,7 @@ struct msm_gpu_perfcntr {
+> >>>    struct msm_gpu_submitqueue {
+> >>>        int id;
+> >>>        u32 flags;
+> >>> -     u32 prio;
+> >>> +     u32 ring_nr;
+> >>>        int faults;
+> >>>        struct msm_file_private *ctx;
+> >>>        struct list_head node;
+> >>> diff --git a/drivers/gpu/drm/msm/msm_submitqueue.c b/drivers/gpu/drm/=
+msm/msm_submitqueue.c
+> >>> index 682ba2a7c0ec..32a55d81b58b 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_submitqueue.c
+> >>> +++ b/drivers/gpu/drm/msm/msm_submitqueue.c
+> >>> @@ -68,6 +68,8 @@ int msm_submitqueue_create(struct drm_device *drm, =
+struct msm_file_private *ctx,
+> >>>        struct msm_gpu_submitqueue *queue;
+> >>>        struct msm_ringbuffer *ring;
+> >>>        struct drm_gpu_scheduler *sched;
+> >>> +     enum drm_sched_priority sched_prio;
+> >>> +     unsigned ring_nr;
+> >>>        int ret;
+> >>>
+> >>>        if (!ctx)
+> >>> @@ -76,8 +78,9 @@ int msm_submitqueue_create(struct drm_device *drm, =
+struct msm_file_private *ctx,
+> >>>        if (!priv->gpu)
+> >>>                return -ENODEV;
+> >>>
+> >>> -     if (prio >=3D priv->gpu->nr_rings)
+> >>> -             return -EINVAL;
+> >>> +     ret =3D msm_gpu_convert_priority(priv->gpu, prio, &ring_nr, &sc=
+hed_prio);
+> >>> +     if (ret)
+> >>> +             return ret;
+> >>>
+> >>>        queue =3D kzalloc(sizeof(*queue), GFP_KERNEL);
+> >>>
+> >>> @@ -86,24 +89,13 @@ int msm_submitqueue_create(struct drm_device *drm=
+, struct msm_file_private *ctx,
+> >>>
+> >>>        kref_init(&queue->ref);
+> >>>        queue->flags =3D flags;
+> >>> -     queue->prio =3D prio;
+> >>> +     queue->ring_nr =3D ring_nr;
+> >>>
+> >>> -     ring =3D priv->gpu->rb[prio];
+> >>> +     ring =3D priv->gpu->rb[ring_nr];
+> >>>        sched =3D &ring->sched;
+> >>>
+> >>> -     /*
+> >>> -      * TODO we can allow more priorities than we have ringbuffers b=
+y
+> >>> -      * mapping:
+> >>> -      *
+> >>> -      *    ring =3D prio / 3;
+> >>> -      *    ent_prio =3D DRM_SCHED_PRIORITY_MIN + (prio % 3);
+> >>> -      *
+> >>> -      * Probably avoid using DRM_SCHED_PRIORITY_KERNEL as that is
+> >>> -      * treated specially in places.
+> >>> -      */
+> >>>        ret =3D drm_sched_entity_init(&queue->entity,
+> >>> -                     DRM_SCHED_PRIORITY_NORMAL,
+> >>> -                     &sched, 1, NULL);
+> >>> +                     sched_prio, &sched, 1, NULL);
+> >>>        if (ret) {
+> >>>                kfree(queue);
+> >>>                return ret;
+> >>> @@ -134,16 +126,19 @@ int msm_submitqueue_create(struct drm_device *d=
+rm, struct msm_file_private *ctx,
+> >>>    int msm_submitqueue_init(struct drm_device *drm, struct msm_file_p=
+rivate *ctx)
+> >>>    {
+> >>>        struct msm_drm_private *priv =3D drm->dev_private;
+> >>> -     int default_prio;
+> >>> +     int default_prio, max_priority;
+> >>>
+> >>>        if (!priv->gpu)
+> >>>                return -ENODEV;
+> >>>
+> >>> +     max_priority =3D (priv->gpu->nr_rings * NR_SCHED_PRIORITIES) - =
+1;
+> >>> +
+> >>>        /*
+> >>> -      * Select priority 2 as the "default priority" unless nr_rings =
+is less
+> >>> -      * than 2 and then pick the lowest priority
+> >>> +      * Pick a medium priority level as default.  Lower numeric valu=
+e is
+> >>> +      * higher priority, so round-up to pick a priority that is not =
+higher
+> >>> +      * than the middle priority level.
+> >>>         */
+> >>> -     default_prio =3D clamp_t(uint32_t, 2, 0, priv->gpu->nr_rings - =
+1);
+> >>> +     default_prio =3D DIV_ROUND_UP(max_priority, 2);
+> >>>
+> >>>        INIT_LIST_HEAD(&ctx->submitqueues);
+> >>>
+> >>> diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
+> >>> index f075851021c3..6b8fffc28a50 100644
+> >>> --- a/include/uapi/drm/msm_drm.h
+> >>> +++ b/include/uapi/drm/msm_drm.h
+> >>> @@ -73,11 +73,19 @@ struct drm_msm_timespec {
+> >>>    #define MSM_PARAM_MAX_FREQ   0x04
+> >>>    #define MSM_PARAM_TIMESTAMP  0x05
+> >>>    #define MSM_PARAM_GMEM_BASE  0x06
+> >>> -#define MSM_PARAM_NR_RINGS   0x07
+> >>> +#define MSM_PARAM_PRIORITIES 0x07  /* The # of priority levels */
+> >>>    #define MSM_PARAM_PP_PGTABLE 0x08  /* =3D> 1 for per-process paget=
+ables, else 0 */
+> >>>    #define MSM_PARAM_FAULTS     0x09
+> >>>    #define MSM_PARAM_SUSPENDS   0x0a
+> >>>
+> >>> +/* For backwards compat.  The original support for preemption was ba=
+sed on
+> >>> + * a single ring per priority level so # of priority levels equals t=
+he #
+> >>> + * of rings.  With drm/scheduler providing additional levels of prio=
+rity,
+> >>> + * the number of priorities is greater than the # of rings.  The par=
+am is
+> >>> + * renamed to better reflect this.
+> >>> + */
+> >>> +#define MSM_PARAM_NR_RINGS   MSM_PARAM_PRIORITIES
+> >>> +
+> >>>    struct drm_msm_param {
+> >>>        __u32 pipe;           /* in, MSM_PIPE_x */
+> >>>        __u32 param;          /* in, MSM_PARAM_x */
+> >>> @@ -304,6 +312,10 @@ struct drm_msm_gem_madvise {
+> >>>
+> >>>    #define MSM_SUBMITQUEUE_FLAGS (0)
+> >>>
+> >>> +/*
+> >>> + * The submitqueue priority should be between 0 and MSM_PARAM_PRIORI=
+TIES-1,
+> >>> + * a lower numeric value is higher priority.
+> >>> + */
+> >>>    struct drm_msm_submitqueue {
+> >>>        __u32 flags;   /* in, MSM_SUBMITQUEUE_x */
+> >>>        __u32 prio;    /* in, Priority level */

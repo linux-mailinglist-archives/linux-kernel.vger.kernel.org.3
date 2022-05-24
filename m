@@ -2,115 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9583C53286E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7728753286B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236384AbiEXK63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 06:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S236414AbiEXK7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 06:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbiEXK60 (ORCPT
+        with ESMTP id S233509AbiEXK7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:58:26 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6E68BD00
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:58:26 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id o9so2681539wmd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eCjI61TxF/VhR4kH8WebLIwDAZqQH5lWWY5eksn1pk4=;
-        b=vv0TNhcIJ4S4bv7c//57PxGJKqkVJwPgBpjuTOpLp+J5+358caS7gCJhwUY2f80H4Z
-         Jgrh6OAVm1iAgDWdWVCBmf8NS9N7XjpDJ6LyhL3rzY3YxKDb44cHx8KemQcVBPkmexP6
-         9w5aUBbryD0GbFuSEpJEysh3VHFFpD4S1pKgJ4DkOaPQ5qigvL5UMaT2urRAxdsXUS5e
-         FDpv5zmJ64vnO5oSkS9A5eO+xAvBWaSMvk5BwkPSfPrM8dzNi6LkjvMSn8+d2yjSpGlY
-         3XFx9G9TUqrsUeO/Fo1kcCoR108PWVQtJiYIH+d4lw3m7XUPjJxJVOl0qMIgwDtrsI/l
-         VQ3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eCjI61TxF/VhR4kH8WebLIwDAZqQH5lWWY5eksn1pk4=;
-        b=6L9GmGZPkKww6mQDs46odWhpXcrUcKNK/++IZEQjJCBmCimFixuGQTShT1gDkhRtrM
-         1oW0GD/+vzT5V43JnYJcAxvTThaxDQKVxAHmmrIcdhjTSL8js17y2r/erZQAR5NnswVi
-         UbLN5sxnbZrzkSJnGBQUMb0FHwRYx0smP7tyyxiUCiPzpObv6/py1XNW30sh9J5mYTf5
-         3D0dP57NkzmVw5+g25gC+7zI/Mfrta6vcCSvAZEhlPiiHdHKu6rUU7QPdq6bHPH4Qhmt
-         hLvabGFmAb9+d7AY+lqkCZNsUh0WXCk50mFh3g+Edy6J7wNZM5SfHwEPJ2TQAWVYpQqa
-         URTA==
-X-Gm-Message-State: AOAM530kCb9YH+53toOVPN0k0Ls+kvLML0M8WQN4OMKSPwH34wMFfBXP
-        /JTNMMfPl5/NQpsHih8ggs9BIQ==
-X-Google-Smtp-Source: ABdhPJxFTJkFYuZB+CyKxNj/VjuwuSt9WMAzvZj8TN9N3ciewWRevYgqK0102jXTQ5oECXV7bU5aGQ==
-X-Received: by 2002:a05:600c:29d3:b0:397:4730:ee75 with SMTP id s19-20020a05600c29d300b003974730ee75mr3185384wmd.149.1653389904595;
-        Tue, 24 May 2022 03:58:24 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id o16-20020adf8b90000000b0020fc3e24041sm10338214wra.106.2022.05.24.03.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 03:58:24 -0700 (PDT)
-Date:   Tue, 24 May 2022 11:57:59 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 06/10] iommu/sva: Refactoring
- iommu_sva_bind/unbind_device()
-Message-ID: <Yoy6NxroLLZup0sE@myrica>
-References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
- <20220519072047.2996983-7-baolu.lu@linux.intel.com>
- <BN9PR11MB5276E462E3B32DDE54DD66418CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Tue, 24 May 2022 06:59:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFABE8BD01;
+        Tue, 24 May 2022 03:59:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8ADB71F8A8;
+        Tue, 24 May 2022 10:59:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653389952; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7NEjm8TbLkASNUN8YDLrp/m7e0j21/9HBactdTlGXXM=;
+        b=i1l7yTMRNn9ZxkqZx56APrIUcyUb8nb+r3EMmUiJgfYQUFKaq3NHrU3zaHSbOEYSH2ZyHe
+        OnaSzGmsUucBRd/n1YicLUZuFQKrImnwybiFEmeFQ9jzko1cYAn8llxZtYxTmEYpHm45WP
+        AnmcJyG+BNc5u0F7EnYPniWbxuFsZzA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653389952;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7NEjm8TbLkASNUN8YDLrp/m7e0j21/9HBactdTlGXXM=;
+        b=LtxHqZKIDDpx4O91CGEWFnrehFUapw8MnfY3Eyik8OLktGF3pHX8Z4BjXhoZpfm/l+rz3X
+        21Yc2UDeRmFcqpCw==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4F5E62C141;
+        Tue, 24 May 2022 10:59:12 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id F1EBCA0632; Tue, 24 May 2022 12:59:10 +0200 (CEST)
+Date:   Tue, 24 May 2022 12:59:10 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Hillf Danton <hdanton@sina.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        syzbot <syzbot+9c3fb12e9128b6e1d7eb@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzkaller <syzkaller@googlegroups.com>,
+        Aleksandr Nogikh <nogikh@google.com>
+Subject: Re: [syzbot] INFO: task hung in jbd2_journal_commit_transaction (3)
+Message-ID: <20220524105910.ijkcppxzddrfrmop@quack3.lan>
+References: <00000000000032992d05d370f75f@google.com>
+ <20211219023540.1638-1-hdanton@sina.com>
+ <Yb6zKVoxuD3lQMA/@casper.infradead.org>
+ <20211221090804.1810-1-hdanton@sina.com>
+ <20211222022527.1880-1-hdanton@sina.com>
+ <YcKrHc11B/2tcfRS@mit.edu>
+ <CACT4Y+YHxkL5aAgd4wXPe-J+RG6_VBcPs=e8QpRM8=3KJe+GCg@mail.gmail.com>
+ <YogL6MCdYVrqGcRf@mit.edu>
+ <CACT4Y+ZHCawp__HvJAFPXp+z6XdiVEgwrh8dvDR+cDfQywr20w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276E462E3B32DDE54DD66418CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CACT4Y+ZHCawp__HvJAFPXp+z6XdiVEgwrh8dvDR+cDfQywr20w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 10:22:28AM +0000, Tian, Kevin wrote:
-> > From: Lu Baolu <baolu.lu@linux.intel.com>
-> > Sent: Thursday, May 19, 2022 3:21 PM
-> > 
-> > The existing iommu SVA interfaces are implemented by calling the SVA
-> > specific iommu ops provided by the IOMMU drivers. There's no need for
-> > any SVA specific ops in iommu_ops vector anymore as we can achieve
-> > this through the generic attach/detach_dev_pasid domain ops.
+On Mon 23-05-22 13:34:23, Dmitry Vyukov wrote:
+> +Aleksandr added this feature recently.
 > 
-> set/block_pasid_dev, to be consistent.
+> Console output will contain strace output for reproducers (when the
+> run under strace reproduced the same kernel crash as w/o strace).
 > 
-> > +
-> > +	mutex_lock(&iommu_sva_lock);
-> > +	/* Search for an existing domain. */
-> > +	domain = iommu_get_domain_for_dev_pasid(dev, mm->pasid);
-> > +	if (domain) {
-> > +		sva_domain = to_sva_domain(domain);
-> > +		refcount_inc(&sva_domain->bond.users);
-> > +		goto out_success;
-> > +	}
-> > +
+> Here is a recently reported bug:
+> https://syzkaller.appspot.com/bug?id=53c9bd2ca0e16936e45ff1333a22b838d91da0a2
 > 
-> why would one device/pasid be bound to a mm more than once?
+> "log" link for the reproducer crash shows:
+> https://syzkaller.appspot.com/text?tag=CrashLog&x=14f791aef00000
+> ...
+> 
+> [   26.757008][ T3179] 8021q: adding VLAN 0 to HW filter on device bond0
+> [   26.766878][ T3179] eql: remember to turn off Van-Jacobson
+> compression on your slave devices
+> Starting sshd: OK
+> Warning: Permanently added '10.128.0.110' (ECDSA) to the list of known hosts.
+> execve("./syz-executor1865045535", ["./syz-executor1865045535"],
+> 0x7ffdc91edf40 /* 10 vars */) = 0
+> brk(NULL)                               = 0x555557248000
+> brk(0x555557248c40)                     = 0x555557248c40
+> arch_prctl(ARCH_SET_FS, 0x555557248300) = 0
+> uname({sysname="Linux", nodename="syzkaller", ...}) = 0
+> readlink("/proc/self/exe", "/root/syz-executor1865045535", 4096) = 28
+> brk(0x555557269c40)                     = 0x555557269c40
+> brk(0x55555726a000)                     = 0x55555726a000
+> mprotect(0x7f37f8ecc000, 16384, PROT_READ) = 0
+> mmap(0x1ffff000, 4096, PROT_NONE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS,
+> -1, 0) = 0x1ffff000
+> mmap(0x20000000, 16777216, PROT_READ|PROT_WRITE|PROT_EXEC,
+> MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x20000000
+> mmap(0x21000000, 4096, PROT_NONE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS,
+> -1, 0) = 0x21000000
+> socket(AF_NETLINK, SOCK_RAW, NETLINK_NETFILTER) = 3
+> syzkaller login: [   58.834018][ T3600] ------------[ cut here ]------------
+> [   58.839772][ T3600] WARNING: CPU: 0 PID: 3600 at
+> net/netfilter/nfnetlink.c:703 nfnetlink_unbind+0x357/0x3b0
+> [   58.849856][ T3600] Modules linked in:
+> ...
+> 
+> 
+> The same is available in the report emails, e.g.:
+> https://lore.kernel.org/all/000000000000ff239c05df391402@google.com/
+> ...
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14f791aef00000
+> ...
 
-Device drivers can call bind() multiple times for the same device and mm,
-for example if one process wants to open multiple accelerator queues.
+Wow, cool! Thanks for adding that! This was often one of the first steps I
+did when looking into what the problem could be so it saves me some manual
+work :)
 
-Thanks,
-Jean
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,131 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829785321B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D7B5321BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234013AbiEXDsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 23:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S233913AbiEXDte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 23:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiEXDse (ORCPT
+        with ESMTP id S229484AbiEXDtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 23:48:34 -0400
-Received: from relay3.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2C26C0FB
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 20:48:30 -0700 (PDT)
-Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay12.hostedemail.com (Postfix) with ESMTP id 8940C12122F;
-        Tue, 24 May 2022 03:48:26 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 1286133;
-        Tue, 24 May 2022 03:48:24 +0000 (UTC)
-Message-ID: <059725f837c8a869cc2358d2850f6776b05a9fe2.camel@perches.com>
-Subject: Re: [PATCH V2] octeon_ep: Remove unnecessary cast
-From:   Joe Perches <joe@perches.com>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     aayarekar@marvell.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, vburru@marvell.com
-Date:   Mon, 23 May 2022 20:48:23 -0700
-In-Reply-To: <1653362915-22831-1-git-send-email-baihaowen@meizu.com>
-References: <53b4a92efb83d893230f47ae9988282f3875b355.camel@perches.com>
-         <1653362915-22831-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Mon, 23 May 2022 23:49:25 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8EF6C0FB
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 20:49:23 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id j4so17006586edq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 20:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HrSaLFBv+wFUHGHP931GMzrLFNO3Q02iw48W8VHUISo=;
+        b=FhE+2La7sDO8tvvWjLC8PJ1eUNbTwgikvbSV2bpx3bGlrcQsgeMwE9whBrTEizoiZt
+         S2l2SWj8I8nqbsDGcPiulfIybMrCbJgoempKOYL4W4Xa3ZNoJit6QBG37pzgdLRtiDUH
+         Zeb5+9b/+xITqlFLojbmAb/wAJ23VTwu4nuZQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HrSaLFBv+wFUHGHP931GMzrLFNO3Q02iw48W8VHUISo=;
+        b=Fdh/RZNTRtNSpy+Kqofy5lWdUhKiqg5MsVxkYurA4WflI6DM3o461MHX331cym34nu
+         NzsQpf9awF/IFmNPfdbIIjMhSoz78AJ60tvKgextUafGPBAh8S2UNz1rKmi+GrA2HkUZ
+         4iAZ2GpwJJSVBmnj8aCSWeHaa9bbnL3YoIChseLR/va7/5q4TRR0ULnBtCFCe8/BPFKP
+         v9dEINxF6DKZpFWc8B9aKVWxDuYPn+IkfPtb1UyGnbp+qGJ/wkPBbWyl5Ip0EbpCFRlF
+         2wO9spTtMaBSJ1kHRslCTBNPUIEKq7bFqtDh+lvPuiqlbQF7ZK3J1H+3Yq/EAeMCgs5R
+         b4JA==
+X-Gm-Message-State: AOAM531OA4k2FIdRpM+kbsS8jL/PV4PwbtN7MtttdPCoJyiRbAfcv7o2
+        dKFzlntPt6VMRnqf1BM4W/2LEWpR/VMc5OsnIWc=
+X-Google-Smtp-Source: ABdhPJzDPRUeypXR2zA3fZWdEkT5iuu2fBhzmGtPg2w71cp4lkiSHVb8eLKWQapzUVosd9zoZ0CQSw==
+X-Received: by 2002:a05:6402:1654:b0:42a:c4c7:e85e with SMTP id s20-20020a056402165400b0042ac4c7e85emr26513629edx.181.1653364161513;
+        Mon, 23 May 2022 20:49:21 -0700 (PDT)
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
+        by smtp.gmail.com with ESMTPSA id w5-20020a170906b18500b006fecf74395bsm2264778ejy.8.2022.05.23.20.49.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 20:49:20 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id u27so23037849wru.8
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 20:49:20 -0700 (PDT)
+X-Received: by 2002:a5d:59ac:0:b0:20e:6fd6:88c1 with SMTP id
+ p12-20020a5d59ac000000b0020e6fd688c1mr18980311wrr.442.1653364160189; Mon, 23
+ May 2022 20:49:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 1286133
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: nbi59nttrgdusdhc88kjjkmud95f4jgs
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+zKR9n5HX/Xvgk3N8wPQegGzzObIC9pgQ=
-X-HE-Tag: 1653364104-300972
+References: <13e61c61-0d4b-5f48-6373-f056bf8b603f@redhat.com>
+In-Reply-To: <13e61c61-0d4b-5f48-6373-f056bf8b603f@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 23 May 2022 20:49:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgV8zqiLi5p-SNZ2zSi95CkkFXqPZJjtneVXeobgAohJg@mail.gmail.com>
+Message-ID: <CAHk-=wgV8zqiLi5p-SNZ2zSi95CkkFXqPZJjtneVXeobgAohJg@mail.gmail.com>
+Subject: Re: [GIT PULL] platform-drivers-x86 for 5.19-1
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mark.gross@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-24 at 11:28 +0800, Haowen Bai wrote:
-> ./drivers/net/ethernet/marvell/octeon_ep/octep_rx.c:161:18-40: WARNING:
-> casting value returned by memory allocation function to (struct
-> octep_rx_buffer *) is useless.
-[]
-> diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-[]
-> @@ -158,8 +158,7 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
->  		goto desc_dma_alloc_err;
->  	}
->  
-> -	oq->buff_info = (struct octep_rx_buffer *)
-> -			vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
-> +	oq->buff_info = vcalloc(oq->max_count, OCTEP_OQ_RECVBUF_SIZE);
+On Sun, May 22, 2022 at 1:00 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.19-1
 
-trivia:
+Hmm.
 
-Perhaps better to remove the used once #define OCTEP_OQ_RECVBUF_SIZE
-and use the more obvious
+Your diffstat doesn't match what I get, and it seems to be because
+you've generated the diffstat based off v5.18-rc1, but you already
+sent me two pull requests with fixes since.
 
-	oq->buff_info = vcalloc(oq->max_count, sizeof(struct octep_rx_buffer));
+So your diffstat contained the diffs from those fixes I had already gotten.
 
-though I believe the vcalloc may be better as kvcalloc as max_count isn't
-particularly high and struct octep_rx_buffer is small.
+If  you just do "git fetch origin" (replace 'origin' with whatever you
+call the upstream tree) before doing the pull request, git would have
+figured that out.
 
-Maybe:
----
- drivers/net/ethernet/marvell/octeon_ep/octep_rx.c | 8 ++++----
- drivers/net/ethernet/marvell/octeon_ep/octep_rx.h | 2 --
- 2 files changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-index d9ae0937d17a8..d6a0da61db449 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-@@ -158,8 +158,8 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
- 		goto desc_dma_alloc_err;
- 	}
- 
--	oq->buff_info = (struct octep_rx_buffer *)
--			vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
-+	oq->buff_info = kvcalloc(oq->max_count, sizeof(struct octep_rx_buffer),
-+				 GFP_KERNEL);
- 	if (unlikely(!oq->buff_info)) {
- 		dev_err(&oct->pdev->dev,
- 			"Failed to allocate buffer info for OQ-%d\n", q_no);
-@@ -176,7 +176,7 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
- 	return 0;
- 
- oq_fill_buff_err:
--	vfree(oq->buff_info);
-+	kvfree(oq->buff_info);
- 	oq->buff_info = NULL;
- buf_list_err:
- 	dma_free_coherent(oq->dev, desc_ring_size,
-@@ -230,7 +230,7 @@ static int octep_free_oq(struct octep_oq *oq)
- 
- 	octep_oq_free_ring_buffers(oq);
- 
--	vfree(oq->buff_info);
-+	kvfree(oq->buff_info);
- 
- 	if (oq->desc_ring)
- 		dma_free_coherent(oq->dev,
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
-index 782a24f27f3e0..34a32d95cd4b3 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
-@@ -67,8 +67,6 @@ struct octep_rx_buffer {
- 	u64 len;
- };
- 
--#define OCTEP_OQ_RECVBUF_SIZE    (sizeof(struct octep_rx_buffer))
--
- /* Output Queue statistics. Each output queue has four stats fields. */
- struct octep_oq_stats {
- 	/* Number of packets received from the Device. */
-
-
+                Linus

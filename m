@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F76A533291
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D6F533295
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241677AbiEXUqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        id S241689AbiEXUrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238638AbiEXUqS (ORCPT
+        with ESMTP id S238638AbiEXUrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:46:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922811D0EF;
-        Tue, 24 May 2022 13:46:17 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OKfl3T023555;
-        Tue, 24 May 2022 20:46:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=kH0Eo06/kOo+BFgEy06WUnmU7pV7b9nWWZ0T3lV3sls=;
- b=s93vvosrGYeHDwUb3VX0O+PQsOHNmICHPUtLkuLs776pl7tUuWCSESaQdF+1hwRXrhI3
- BRmracdPuq0eLTyHQvpRsh+Kl9UE9GQhh2E40zfEK63I2qcfVScdJDXswx6B2VNN58Mc
- Pu8iNre24W8luPlFvB20gitu2MzwQ8AW15wyHQ4TgFrUGjQKZ7MooWOZPVi+qVDv8ogk
- VkByd3c7uO2xgrU/F2CekoOhMkfW2eK6Z+UBVNbe0F0OHnTJn2ayY7p9khNvML4FOWqk
- r9npnHwheFUrZD80fJe+nqKRFjvj7UrlhMcwLPCOMkZGDMuERwMWS22ITeEH20a4/J13 sQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g96mdg26b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 20:46:16 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OKaIwY006216;
-        Tue, 24 May 2022 20:46:14 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3g93wdr45x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 20:46:13 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OKkBLA43778366
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 20:46:11 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 944CDAE055;
-        Tue, 24 May 2022 20:46:11 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 03894AE053;
-        Tue, 24 May 2022 20:46:11 +0000 (GMT)
-Received: from sig-9-65-93-242.ibm.com (unknown [9.65.93.242])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 24 May 2022 20:46:10 +0000 (GMT)
-Message-ID: <223e46039b44b2f31814be02a3c2b75e84af3823.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity subsystem updates for v5.19
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 24 May 2022 16:46:10 -0400
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HT1jKMLOd69V4MaiH8x-Aywe2VI48iIR
-X-Proofpoint-ORIG-GUID: HT1jKMLOd69V4MaiH8x-Aywe2VI48iIR
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 24 May 2022 16:47:46 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85BA7379F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:47:44 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id p8so17447051pfh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3uRtfrODZaP6cR0RkQJZ2+zsYii1OwcOLnuKabGpEK8=;
+        b=T5b5Xt9YaoxgVs4sV5AT0c/hlVtaFZxKefza3PoOUmHqZGiuEVXrmgipbywdk0MUHv
+         LbZp53m4VRovrykWpWKYmL9BXOcQcpPZA4yDAC7jlOBrVu8qPWjzrtyG6soLeWcGb2xe
+         njsftnjDBPYSxiLtaUKBxgn/7Nj/DEF3jdTA35hYa2v32+lALhxanhYg10oaanHqAU91
+         YlUx7iVa9M7JLF5z/JY7Tsuyn8T7My41ilTf3t6j8p4cRJ/xefmDHyRGgeswxSr/9Eef
+         M4QVseQ8pftKqFsh4YfF14layFOZRoYWN/Y8vuEn8Zw3muUO5KqAZbQhByGQqabHdLXW
+         5U0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3uRtfrODZaP6cR0RkQJZ2+zsYii1OwcOLnuKabGpEK8=;
+        b=GWSRmiMcdmGQnAhKy6AlJUwvuFJS1gDpjq0mKKXaXOK9QR7JiixSEkH8cMinQ9HkP8
+         Yx2Q6SRyooHN7lPVjHuvMbRZo8ugIgAZn70fgNlBYpyKwP/ORnp2QrHYzbqoUX43Zl27
+         ln6JpqoUv3BywlT16Y+Tl9XOWiFrGnNYcgGNcMOA6dRcvkqRLP21pW+o1HyR+omEfFS5
+         OA+saqPkLcTJwsQioH4t5fNmoMnH4kfmQFVIOFUw/jlJMFxiTVSt4JBTgLypdnqzwhyK
+         pGmympHrUDDWqN+0v3pGYjEaUPg9/QOf1cxL4/yWwhHF8YvN0w541//aeoNif6exyv5w
+         dIfQ==
+X-Gm-Message-State: AOAM531QZJEszc6/NNmCYgIvK6xoLmcqBxD8IbYFhElQQZJAEyqTyyxU
+        Qsk0DPd4BUQNOFbMmNSWdUmxLmyPjAQZoQ==
+X-Google-Smtp-Source: ABdhPJwwpVXtrpCz9jVGk8iP4WrNBX+WMLN52wp4D2psv/hI+w3spN+5vdPNbAvKQkjySp4B6lh9jg==
+X-Received: by 2002:a05:6a00:1145:b0:4f6:3ebc:a79b with SMTP id b5-20020a056a00114500b004f63ebca79bmr30284723pfm.41.1653425264154;
+        Tue, 24 May 2022 13:47:44 -0700 (PDT)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id r8-20020a17090a690800b001dfffd861cbsm216333pjj.21.2022.05.24.13.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 13:47:43 -0700 (PDT)
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     netdev@vger.kernel.org
+Cc:     Stephen Hemminger <stephen@networkplumber.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [RFC] xfrm: convert alg_key to flexible array member
+Date:   Tue, 24 May 2022 13:47:40 -0700
+Message-Id: <20220524204741.980721-1-stephen@networkplumber.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_10,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- phishscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
- clxscore=1011 spamscore=0 impostorscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205240101
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,88 +71,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Iproute2 build generates a warning when built with gcc-12.
+This is because the alg_key in xfrm.h API has zero size
+array element instead of flexible array.
 
-New is IMA support for including fs-verity file digests and signatures
-in the IMA
-measurement list as well as verifying the fs-verity file digest based
-signatures, both based on policy.
+    CC       xfrm_state.o
+In function ‘xfrm_algo_parse’,
+    inlined from ‘xfrm_state_modify.constprop’ at xfrm_state.c:573:5:
+xfrm_state.c:162:32: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+  162 |                         buf[j] = val;
+      |                         ~~~~~~~^~~~~
 
-In addition, are two bug fixes:
-- avoid reading UEFI variables, which cause a page fault, on Apple Macs
-with T2 chips.
-- remove the original "ima" template Kconfig option to address a boot
-command line ordering issue.
+This patch convert the alg_key into flexible array member.
+There are other zero size arrays here that should be converted as
+well.
 
-The rest is a mixture of code/documentation cleanup.
+This patch is RFC only since it is only compile tested and
+passes trivial iproute2 tests.
 
-thanks,
+Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+---
+ include/uapi/linux/xfrm.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Mimi
-
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.19
-
-for you to fetch changes up to 048ae41bb0806cde340f4e5d5030398037ab0be8:
-
-  integrity: Fix sparse warnings in keyring_handler (2022-05-16 17:06:16 -0400)
-
-----------------------------------------------------------------
-integrity-v5.19
-
-----------------------------------------------------------------
-Aditya Garg (1):
-      efi: Do not import certificates from UEFI Secure Boot for T2 Macs
-
-Colin Ian King (1):
-      ima: remove redundant initialization of pointer 'file'.
-
-GUO Zihua (1):
-      ima: remove the IMA_TEMPLATE Kconfig option
-
-Mimi Zohar (8):
-      ima: fix 'd-ng' comments and documentation
-      ima: use IMA default hash algorithm for integrity violations
-      fs-verity: define a function to return the integrity protected file digest
-      ima: define a new template field named 'd-ngv2' and templates
-      ima: permit fsverity's file digests in the IMA measurement list
-      ima: support fs-verity file digest based version 3 signatures
-      fsverity: update the documentation
-      Merge branch 'next-integrity.fsverity-v9' into next-integrity
-
-Stefan Berger (3):
-      evm: Return INTEGRITY_PASS for enum integrity_status value '0'
-      evm: Clean up some variables
-      integrity: Fix sparse warnings in keyring_handler
-
- Documentation/ABI/testing/ima_policy               |  45 +++++++-
- Documentation/admin-guide/kernel-parameters.txt    |   3 +-
- Documentation/filesystems/fsverity.rst             |  35 ++++---
- Documentation/security/IMA-templates.rst           |  11 +-
- fs/verity/Kconfig                                  |   1 +
- fs/verity/fsverity_private.h                       |   7 --
- fs/verity/measure.c                                |  43 ++++++++
- include/linux/fsverity.h                           |  18 ++++
- security/integrity/digsig.c                        |   3 +-
- security/integrity/evm/evm.h                       |   3 -
- security/integrity/evm/evm_crypto.c                |   2 +-
- security/integrity/evm/evm_main.c                  |   2 +-
- security/integrity/ima/Kconfig                     |  14 ++-
- security/integrity/ima/ima_api.c                   |  47 ++++++++-
- security/integrity/ima/ima_appraise.c              | 114 ++++++++++++++++++++-
- security/integrity/ima/ima_main.c                  |   4 +-
- security/integrity/ima/ima_policy.c                |  82 +++++++++++++--
- security/integrity/ima/ima_template.c              |   4 +
- security/integrity/ima/ima_template_lib.c          |  94 ++++++++++++++---
- security/integrity/ima/ima_template_lib.h          |   4 +
- security/integrity/integrity.h                     |  27 ++++-
- .../integrity/platform_certs/keyring_handler.c     |   6 +-
- .../integrity/platform_certs/keyring_handler.h     |   8 ++
- security/integrity/platform_certs/load_uefi.c      |  33 ++++++
- 24 files changed, 531 insertions(+), 79 deletions(-)
+diff --git a/include/uapi/linux/xfrm.h b/include/uapi/linux/xfrm.h
+index 65e13a099b1a..3ed61df9cc91 100644
+--- a/include/uapi/linux/xfrm.h
++++ b/include/uapi/linux/xfrm.h
+@@ -102,21 +102,21 @@ struct xfrm_replay_state_esn {
+ struct xfrm_algo {
+ 	char		alg_name[64];
+ 	unsigned int	alg_key_len;    /* in bits */
+-	char		alg_key[0];
++	char		alg_key[];
+ };
+ 
+ struct xfrm_algo_auth {
+ 	char		alg_name[64];
+ 	unsigned int	alg_key_len;    /* in bits */
+ 	unsigned int	alg_trunc_len;  /* in bits */
+-	char		alg_key[0];
++	char		alg_key[];
+ };
+ 
+ struct xfrm_algo_aead {
+ 	char		alg_name[64];
+ 	unsigned int	alg_key_len;	/* in bits */
+ 	unsigned int	alg_icv_len;	/* in bits */
+-	char		alg_key[0];
++	char		alg_key[];
+ };
+ 
+ struct xfrm_stats {
+-- 
+2.35.1
 

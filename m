@@ -2,158 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C011533106
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3D753311C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240650AbiEXTAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S237265AbiEXTBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240663AbiEXTAL (ORCPT
+        with ESMTP id S240720AbiEXTA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:00:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9D75D18B;
-        Tue, 24 May 2022 11:59:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2438A615D9;
-        Tue, 24 May 2022 18:59:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06077C34100;
-        Tue, 24 May 2022 18:59:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653418787;
-        bh=+h+ieYCTWkYVako7OctaUrToDWnh7uksB1QAVUpZpic=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=juO+rQ74GC8VC0mAtTo7BoGHdi+NZ5QVbJeSLyx2Ep1+1RqUgR1ZiYBGmDP5M3f84
-         N+wussL4mt8XimZG49naSJ09N4HHTh4S3A7xQb57SfyJzEsY9JU2wrAakv2XkdNM2S
-         Buwq3mWQTnqQXpeL0tQXNDzxEtLxsewy7mgfrW57PT2J1+FD4qNpmjIZBccIirVgGW
-         a0EVoXWK8a+xmsQXfRQ8nyqhrdN3QFufGkGBD588pjcBruvLM7H0xCnosngohuLuir
-         WTAuJ0VDPlZuPUVu/1fRCAWuZrau+hExu9I9RrcuzWyMYLDA/Wd+5YgLlBjio9iV6L
-         zlINC49r2Zz9Q==
-Date:   Tue, 24 May 2022 13:59:44 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>, linuxarm@huawei.com,
-        mauro.chehab@huawei.com,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Songxiaowei <songxiaowei@hisilicon.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>
-Subject: Re: [PATCH v14 04/11] PCI: kirin: Add support for bridge slot DT
- schema
-Message-ID: <20220524185944.GA260276@bhelgaas>
+        Tue, 24 May 2022 15:00:29 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90087.outbound.protection.outlook.com [40.107.9.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4468BD0A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:59:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JMengaZFVda0p1Uxn/9yxNH1Z3JlJV5UsHYB/yrj/zzaLEkRFCSxSUlPfZDyEyALuYUqjnL+U3jfSjuQ3x72zTk1yoXUuDm7Y5TyujTKX3U2arw8y0Hk7F2P5+E7V8rrvZFODCC9nZGzkrCfjG4rhRBA1399tqPUaY+OQo3lGuLvhjTOBkzgAwxiTrFTXOJPPA2/dA+bR1ddrInhYVydZpzUlOyvPHuzcNpjPNpshVYs+XhTxBjk/oduJ/VbqX+UpFRcMZIlmdf3WXsJwc6P4Zjl96pwcvBRKlT2Emzvc7VPwGVkS6cF7MIsckpXtHN3oVVR9m4lt5y8bdwAXnL9wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8uxpwC0hKaMX7r1D0khsBknFP+yYSk50cryadXv++TY=;
+ b=HIy/udJqXBmyCtg6XB53Iz+lICCU6IwSgDtvJ7ivoB8BdFThESyKDATNPOGIEibB1FII1Jnk5w5SgDvZIuDsaU92JJmYuKB8S1M1OlBclsEHxUhTaMGhBiHEg2Tl8xYtWuqVla3f+b1UUeCACRqNmcG1Sk2Nfma3PZzcmMf+GLnIYFuCJTmQLvLqZqW3ECEyjaMKHDwf32z5OBtQj1DP+7nLHpf4QQxiN7SdnHGOHUweY9N9vU9LVxCYRLNrsVIyfUtHN4L1PFVYpYZphgdmatQOrgEsQn99ZwogqOghu2at0cwgGpduR6bmDT3y21ylXYXTW2uvMdy6PWawXNTk0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PAZP264MB2573.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e4::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Tue, 24 May
+ 2022 18:59:50 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5273.023; Tue, 24 May 2022
+ 18:59:50 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "sv@linux.ibm.com" <sv@linux.ibm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [RFC PATCH v2 5/7] objtool: Enable objtool to run only on files
+ with ftrace enabled
+Thread-Topic: [RFC PATCH v2 5/7] objtool: Enable objtool to run only on files
+ with ftrace enabled
+Thread-Index: AQHYb3C3+FDfMnlFSkC4VtW4SXKXga0uUcCAgAAAJwCAABAZgA==
+Date:   Tue, 24 May 2022 18:59:50 +0000
+Message-ID: <5cb959a2-7e88-5aff-2f8e-be8fdecd002c@csgroup.eu>
+References: <cover.1653398233.git.christophe.leroy@csgroup.eu>
+ <cf3013dfad89ad5ac7d16d56dced72d7c138a20e.1653398233.git.christophe.leroy@csgroup.eu>
+ <Yo0dgyqAOuwU6gHq@hirez.programming.kicks-ass.net>
+ <Yo0dpDuK3ilphNAA@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yo0dpDuK3ilphNAA@hirez.programming.kicks-ass.net>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 69bf4e55-0f20-4724-fea8-08da3db79491
+x-ms-traffictypediagnostic: PAZP264MB2573:EE_
+x-microsoft-antispam-prvs: <PAZP264MB2573298E277185A6E4D6FAE3EDD79@PAZP264MB2573.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YYKaL7rYig3riysv0fnWhgSXesyFdcMlymdCyWMbzZwbKbt0BcJ+MVW1vGoFRBOW+Hh+Pi9yRFizifP9qp3E8LvJV6+e62N+SJ5zNR+DBlx7iovPnCgrYwObU0GZd059odZg4Ivn1R/IIWURYKrfjdvCuKE1qifQcfcH540a70QBRI9nrffHElRY8Q8nzTrUZ/dlIq7DUQQpOkS+zAzRvM5a041W4ej6o/bj+f3lSxKuvpZPfpocGgcq3RrvZj1DXZvZ95v8mDJF5PAyaUZd/0irRq3kXxJ6ei8EHUYlZ9lLGZIMJc/zNPGn+IpqFqhCyZPm5Yr5hmxrxJVW73EwflheGw8y+01ID1ZKuSU6+dKtwC2mqURSl+CGgik7PSIvyqfJn+03T6tZM07iY/LYnYEUby6wgXEuLV/jKv1UCjHNKipVycXiCGTfCHSFFnv1WXhZinK9Lb2JvY3In1pmo765CFFxt4xO/cZAwNbavqnGKohHjJrnyyQuuknxlnbDfzw919yvB4JDfDzvOuQP9KpLuCsYD4bABjtlwmmAnKtB9FnayEq/9tpjjefm5MyhG53JvVPIHBRf12xaDR7O4abv5WUi/u6QloNNXJ/M2t5TpfmVdja1TNGkINDSFXUESuNgEiEKwLkeMD3/+4b6MOBxiKeFO0iu1k1hPCjcWFytkobWUPRrJVktxvyDUHNr42tPcpF2S41H4BaIUMzRT3BrkS0xFSAtiQ7OZlpxBphETvANAED7Ub//qCl0sz+fWrBn/WGRavqqqBfw+OIpS//YyneghwoopEL8ZlEfYYkgJknX+HDIKf88kVox3Rivyu68Vfc5jZstOhFehaz0PdlkI+MDAshFJ9uZzdgX6Gk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(76116006)(91956017)(64756008)(4326008)(66574015)(31686004)(86362001)(2616005)(66946007)(8936002)(54906003)(122000001)(36756003)(83380400001)(186003)(5660300002)(66556008)(66476007)(7416002)(2906002)(66446008)(316002)(508600001)(38070700005)(38100700002)(6916009)(6506007)(6486002)(966005)(6512007)(26005)(71200400001)(44832011)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MjNoWUdoKytpTE9vK2Eyai83bTJ1RWNJSnNGMjY3TXg4Z0lWUGc5azFJWnRQ?=
+ =?utf-8?B?YzFtdlF2WnB3MmFVV3h2dHBZTlBMOEJESkpDTzdhM05hTUN4dTNvNkxyaWdr?=
+ =?utf-8?B?eTZiaDBIbmRKaG5WVk1Vd0FVS0hWMzFicDJQNG9md2RFblF3THRkRmNjSk5J?=
+ =?utf-8?B?a3BxWi8zMkpSV05NbVh4blpkY1NjNzVGYW9XS2xPN3p4NnVJMDYyZGlUNGk2?=
+ =?utf-8?B?dDc4NlBWSFlyNTFmdTBydllQQnd2QU1KS3F5UlZOZHd5bEY0SWo0Rkt2ZUF3?=
+ =?utf-8?B?bnFLSGdydkJmNlZqZ2x0ajZENlF5YnhlRFMxNUZYZHBQNGM3Ny92eHNvM1kz?=
+ =?utf-8?B?VDFPWXRoL1IxT1RibEVKRFJ0UnBpa1hVVzdCM1pWdnJla1ZtYnduU2F4ejdW?=
+ =?utf-8?B?S2dkMzAyT3JEM0g0TUVJTnMvelpKdXh2dG0vY1BKb2J1MnhzRHAvL3ZtRmJ3?=
+ =?utf-8?B?TGZHUVZ3bEF3WGs3VGJCZnNUc0o5MStMMVVKbzhja2F5cFRRc001S01zbDV3?=
+ =?utf-8?B?QkxmUG9yRlE2RVpJZHFFVDRMTjk3WTMydDVuNThkMmdLVFBoS1hRakdaL1dN?=
+ =?utf-8?B?eFJRR2ZBOUdqYnhYdGcyaDFMT1EwR053Rm1GWEsyZ2xLUjJCQmFGSDNiMHI1?=
+ =?utf-8?B?eklUS3RxaEJ4bE9KNjRjdUo2N0pBWS9mK3FnRDdnWi9DUXhsR3pIK1dYcGVl?=
+ =?utf-8?B?TTNnQllrZnpjNXJUaFJhNFlpL0VvSU1kUlltZVNaN1FrcnAveHJ1WnJCYmZv?=
+ =?utf-8?B?NEpPRmdEZi9XYjFobmRaVVBhREtPVjFmbHpDbU5jNjNjMEhsMFhuRjBqendS?=
+ =?utf-8?B?SXlxT3pOcEJvY3VtN2tHcjFhNkpuUlFUUnU2SHhVVi9TazRINEdGZWVPamp2?=
+ =?utf-8?B?UzYzR2d5ODhFQ2ZQeHh0M1dsakhBNkNTMGYvUXU0d1dGWVdNOVBaVEo3Y2pP?=
+ =?utf-8?B?ckNjVnd5QytlaDlEY0t6NklNMjIxRzZBUGxGeHhOUzExa0Y0TDJKYlRLNjF3?=
+ =?utf-8?B?OGd4Z09VWEZDM0swVlEyQzlybWRuM2hTdXVvcTFnWFVsM3pObzFNbmJiRVU2?=
+ =?utf-8?B?UG1yLzc1cXBWZWRWQnVDZjl6VURYVjFLbHNqbkhUcXo5TzlFVmZ1WlkvZDBm?=
+ =?utf-8?B?RStkOXZ0dTNybURuQ2VySUlKNFNNakFrME1uVVZ2MDVvUWpYa0pzdGw1WG9x?=
+ =?utf-8?B?aGcvejFVQnYwbmdnY2pXamdEL2RVN3BOaDJPYzdlTVJtdjFPdUtFMk53L2hq?=
+ =?utf-8?B?RU5jZWtSd1BnT0s2MEc0WEJ1WTk5c1UrNGJkVjhFYysyVk1Ha05yMzV5cXdL?=
+ =?utf-8?B?bDlpa2NxdzZSbmF5Nkc4OXp5ekt2Q2tSMitVbldRODR4bW9oaTlWUGNDdWx3?=
+ =?utf-8?B?aVhZV1RncUFDRmFoSHMxVnpLN2E0MVFUbW9Xa0lCRWRXeGw4UTRvREtGbnE0?=
+ =?utf-8?B?cEZVa1VXTFFIcVlyekRvaXhVa3MybElybk9lR2NzQTRsNmdTMlp4N1N4N1hz?=
+ =?utf-8?B?aHFNOVVSZkFYbEdhc1ZUQzVBdHBDUWk4b3VXL09USkpRL2FJbUZzTEJhYTFE?=
+ =?utf-8?B?M3NGNWFzUDhtSlZoMmdrdnQ4V1czNjFXTWN4eFBHL21SVS9QRGxKN2pNTVRp?=
+ =?utf-8?B?bUg3d1RvTzhsYzRqeHY4NzQ1TnlET3dabVFtc2svbVlUcHNHcENpMlV2NHdF?=
+ =?utf-8?B?Zi9BNGZGdXJxdTM1eEVLZ3kvNC9pLytYT2dKVi9UZGRQQlhsbXRoNDNFdVU1?=
+ =?utf-8?B?Nkx4aGpIVTNhRG9kbEg5TUY4dkdNeHFRYXlrWFdTdk5Dalo1bS9VZlFLcnli?=
+ =?utf-8?B?YVloR2RZbXBrMUd6L3E2cTAyT1RZZ0lvamgxTldSRnR6ZVY2NmNmOVA1bW9S?=
+ =?utf-8?B?QklsQUJUR3BrNHJqZWJJV3lOb0YrQVRGMU5uaHZINGRpUld0TitmYVZjYUxq?=
+ =?utf-8?B?SGt0Vk12Rm9QU3g5eUtMWEExcTJPa3E5dUVYUDl3c3U2emdtQ3dXV2Uxa1pz?=
+ =?utf-8?B?ZUFIdHhBdG5OUElUV1BEOXJFQndNNjBpOEtDTWI5T3dNLytiSG1nSG96TXZq?=
+ =?utf-8?B?OWovdkJYN2RmMkUrenhHM04xWmJKNFM0WWZOZStlQ0daaTRTUkM2QVNsTVpq?=
+ =?utf-8?B?YU9sdjZYQUIvdkJvbHovekF5RGk1cUlXQzN3Sks2ZytwNkpCTG5oaktnWkp6?=
+ =?utf-8?B?b2UrbWhHcWp5S2dsMW1FQzVGTnBHVlpWVUZrbVVoMS9ST1N3Q3BRd1pqOTFo?=
+ =?utf-8?B?ZTl6cy9ib1hRLzZLTUI0MG9paUlabmtuUUx1VXFlaXp0YzJ6M0dHa1RMcW5O?=
+ =?utf-8?B?SmRJRE1SZXhscFlJT1RydGNZM0Z2Y1p3RUo4SlhtYnMrQW1LVnRyTW1tSU1W?=
+ =?utf-8?Q?376+7XBre9q+ZeH17R7grAdQg3cdC5zO1UnQ3?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <699A7A3B5D5C034C8C6B506D550A2766@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524171947.GA255208@bhelgaas>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69bf4e55-0f20-4724-fea8-08da3db79491
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2022 18:59:50.6939
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: n8ABDedbhzqsL1QbmUao2Z9D6/Q6hcZ4YrrCjU50B/TBwWJG8bDLV7FH7egT1jgd3+JOGbm82QjisImzDG0w/ONHgRQjmBoRT9T4DDMY6OU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB2573
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[resending with updated address for Mauro]
-
-On Tue, May 24, 2022 at 12:19:50PM -0500, Bjorn Helgaas wrote:
-> On Tue, Oct 19, 2021 at 07:06:41AM +0100, Mauro Carvalho Chehab wrote:
-> > On HiKey970, there's a PEX 8606 PCI bridge on its PHY with
-> > 6 lanes. Only 4 lanes are connected:
-> > 
-> > 	lane 0 - connected to Kirin 970;
-> > 	lane 4 - M.2 slot;
-> > 	lane 5 - mini PCIe slot;
-> > 	lane 6 - in-board Ethernet controller.
-> > 
-> > Each lane has its own PERST# gpio pin, and needs a clock
-> > request.
-> > 
-> > Add support to parse a DT schema containing the above data.
-> > 
-> > Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> > Acked-by: Xiaowei Song <songxiaowei@hisilicon.com>
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> > ---
-> > 
-> > See [PATCH v14 00/11] at: https://lore.kernel.org/all/cover.1634622716.git.mchehab+huawei@kernel.org/
-> > 
-> >  drivers/pci/controller/dwc/pcie-kirin.c | 262 +++++++++++++++++++++---
-> >  1 file changed, 231 insertions(+), 31 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-kirin.c b/drivers/pci/controller/dwc/pcie-kirin.c
-> > index 86c13661e02d..de375795a3b8 100644
-> > --- a/drivers/pci/controller/dwc/pcie-kirin.c
-> > +++ b/drivers/pci/controller/dwc/pcie-kirin.c
-> > @@ -52,6 +52,19 @@
-> >  #define PCIE_DEBOUNCE_PARAM	0xF0F400
-> >  #define PCIE_OE_BYPASS		(0x3 << 28)
-> >  
-> > +/*
-> > + * Max number of connected PCI slots at an external PCI bridge
-> > + *
-> > + * This is used on HiKey 970, which has a PEX 8606 bridge with has
-> > + * 4 connected lanes (lane 0 upstream, and the other tree lanes,
-> > + * one connected to an in-board Ethernet adapter and the other two
-> > + * connected to M.2 and mini PCI slots.
-> > + *
-> > + * Each slot has a different clock source and uses a separate PERST#
-> > + * pin.
-> > ...
-> 
-> > +static int kirin_pcie_add_bus(struct pci_bus *bus)
-> > +{
-> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(bus->sysdata);
-> > +	struct kirin_pcie *kirin_pcie = to_kirin_pcie(pci);
-> > +	int i, ret;
-> > +
-> > +	if (!kirin_pcie->num_slots)
-> > +		return 0;
-> > +
-> > +	/* Send PERST# to each slot */
-> > +	for (i = 0; i < kirin_pcie->num_slots; i++) {
-> > +		ret = gpio_direction_output(kirin_pcie->gpio_id_reset[i], 1);
-> > +		if (ret) {
-> > +			dev_err(pci->dev, "PERST# %s error: %d\n",
-> > +				kirin_pcie->reset_names[i], ret);
-> > +		}
-> > +	}
-> > +	usleep_range(PERST_2_ACCESS_MIN, PERST_2_ACCESS_MAX);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +
-> >  static struct pci_ops kirin_pci_ops = {
-> >  	.read = kirin_pcie_rd_own_conf,
-> >  	.write = kirin_pcie_wr_own_conf,
-> > +	.add_bus = kirin_pcie_add_bus,
-> 
-> This seems a little weird.  Can you educate me?
-> 
-> From [1], it looks like the topology here is:
-> 
->   00:00.0 Root Port
->   01:00.0 PEX 8606 Upstream Port
->   02:01.0 PEX 8606 Downstream Port
->   02:04.0 PEX 8606 Downstream Port
->   02:05.0 PEX 8606 Downstream Port
->   02:07.0 PEX 8606 Downstream Port
->   02:09.0 PEX 8606 Downstream Port
->   06:00.0 RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller 
-> 
-> The .add_bus() callback will be called for *every* child bus we want
-> to enumerate.  So if any of those PEX 8606 Downstream Ports are
-> connected to another switch, when we enumerate the secondary buses of
-> that other switch, it looks like we'll send PERST# to all the slots
-> again, which doesn't sound right.  Am I missing something?
-> 
-> Bjorn
-> 
-> [1] https://lore.kernel.org/all/20210129173057.30288c9d@coco.lan/
+DQoNCkxlIDI0LzA1LzIwMjIgw6AgMjA6MDIsIFBldGVyIFppamxzdHJhIGEgw6ljcml0wqA6DQo+
+IE9uIFR1ZSwgTWF5IDI0LCAyMDIyIGF0IDA4OjAxOjM5UE0gKzAyMDAsIFBldGVyIFppamxzdHJh
+IHdyb3RlOg0KPj4gT24gVHVlLCBNYXkgMjQsIDIwMjIgYXQgMDM6MTc6NDVQTSArMDIwMCwgQ2hy
+aXN0b3BoZSBMZXJveSB3cm90ZToNCj4+PiBGcm9tOiBTYXRodmlrYSBWYXNpcmVkZHkgPHN2QGxp
+bnV4LmlibS5jb20+DQo+Pj4NCj4+PiBUaGlzIHBhdGNoIG1ha2VzIHN1cmUgb2JqdG9vbCBydW5z
+IG9ubHkgb24gdGhlIG9iamVjdCBmaWxlcw0KPj4+IHRoYXQgaGF2ZSBmdHJhY2UgZW5hYmxlZCwg
+aW5zdGVhZCBvZiBydW5uaW5nIG9uIGFsbCB0aGUgb2JqZWN0DQo+Pj4gZmlsZXMuDQo+Pj4NCj4+
+PiBTaWduZWQtb2ZmLWJ5OiBOYXZlZW4gTi4gUmFvIDxuYXZlZW4ubi5yYW9AbGludXgudm5ldC5p
+Ym0uY29tPg0KPj4+IFNpZ25lZC1vZmYtYnk6IFNhdGh2aWthIFZhc2lyZWRkeSA8c3ZAbGludXgu
+aWJtLmNvbT4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RvcGhlIExlcm95IDxjaHJpc3RvcGhl
+Lmxlcm95QGNzZ3JvdXAuZXU+DQo+Pj4gLS0tDQo+Pj4gICBzY3JpcHRzL01ha2VmaWxlLmJ1aWxk
+IHwgNCArKy0tDQo+Pj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0
+aW9ucygtKQ0KPj4+DQo+Pj4gZGlmZiAtLWdpdCBhL3NjcmlwdHMvTWFrZWZpbGUuYnVpbGQgYi9z
+Y3JpcHRzL01ha2VmaWxlLmJ1aWxkDQo+Pj4gaW5kZXggMmUwYzNmOWMxNDU5Li4wNmNlZmZkOTI5
+MjEgMTAwNjQ0DQo+Pj4gLS0tIGEvc2NyaXB0cy9NYWtlZmlsZS5idWlsZA0KPj4+ICsrKyBiL3Nj
+cmlwdHMvTWFrZWZpbGUuYnVpbGQNCj4+PiBAQCAtMjU4LDggKzI1OCw4IEBAIGVsc2UNCj4+PiAg
+ICMgJ09CSkVDVF9GSUxFU19OT05fU1RBTkRBUkRfZm9vLm8gOj0gJ3knOiBza2lwIG9ianRvb2wg
+Y2hlY2tpbmcgZm9yIGEgZmlsZQ0KPj4+ICAgIyAnT0JKRUNUX0ZJTEVTX05PTl9TVEFOREFSRF9m
+b28ubyA6PSAnbic6IG92ZXJyaWRlIGRpcmVjdG9yeSBza2lwIGZvciBhIGZpbGUNCj4+PiAgIA0K
+Pj4+IC0kKG9iaikvJS5vOiBvYmp0b29sLWVuYWJsZWQgPSAkKGlmICQoZmlsdGVyLW91dCB5JSwg
+XA0KPj4+IC0JJChPQkpFQ1RfRklMRVNfTk9OX1NUQU5EQVJEXyQoYmFzZXRhcmdldCkubykkKE9C
+SkVDVF9GSUxFU19OT05fU1RBTkRBUkQpbikseSkNCj4+PiArJChvYmopLyUubzogb2JqdG9vbC1l
+bmFibGVkID0gJChhbmQgJChpZiAkKGZpbHRlci1vdXQgeSUsICQoT0JKRUNUX0ZJTEVTX05PTl9T
+VEFOREFSRF8kKGJhc2V0YXJnZXQpLm8pJChPQkpFQ1RfRklMRVNfTk9OX1NUQU5EQVJEKW4pLHkp
+LCAgICAgICAgXA0KPj4+ICsgICAgICAgICQoaWYgJChmaW5kc3RyaW5nICQoc3RyaXAgJChDQ19G
+TEFHU19GVFJBQ0UpKSwkKF9jX2ZsYWdzKSkseSkseSkNCj4+DQo+PiBJIHRoaW5rIHRoaXMgYnJl
+YWtzIHg4NiwgcXVpdGUgYSBiaXQgb2YgZmlsZXMgaGF2ZSBmdHJhY2UgZGlzYWJsZWQgYnV0DQo+
+PiB2ZXJ5IG11Y2ggbXVzdCBydW4gb2JqdG9vbCBhbnl3YXkuDQo+IA0KPiBBbHNvOyBzaW5jZSB0
+aGUgQ2hhbmdlbG9nIGdpdmVzIDAgY2x1ZSBhcyB0byB3aGF0IHByb2JsZW0gaXQncyB0cnlpbmcg
+dG8NCj4gc29sdmUsIEkgY2FuJ3Qgc3VnZ2VzdCBhbnl0aGluZy4NCg0KSSBhc2tlZCBTYXRodmlr
+YSBvbiB0aGUgcHJldmlvdXMgc2VyaWVzLCBzZWUgDQpodHRwczovL3BhdGNod29yay5vemxhYnMu
+b3JnL3Byb2plY3QvbGludXhwcGMtZGV2L3BhdGNoLzIwMjIwNTIzMTc1NTQ4LjkyMjY3MS0zLXN2
+QGxpbnV4LmlibS5jb20vDQoNCkhlIHNheXMgaXQgaXMgdG8gc29sdmUgdGhlIHByb2JsZW0gSSBy
+ZXBvcnRlZCBhdCANCmh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVjdC9saW51eHBw
+Yy1kZXYvcGF0Y2gvMjAyMjAzMTgxMDUxNDAuNDM5MTQtNC1zdkBsaW51eC5pYm0uY29tLyMyODYx
+MTI4DQoNCkNocmlzdG9waGU=

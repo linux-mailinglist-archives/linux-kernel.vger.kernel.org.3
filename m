@@ -2,39 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72D85327CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E752B5327C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236224AbiEXKc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 06:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
+        id S236205AbiEXKcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 06:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236219AbiEXKcS (ORCPT
+        with ESMTP id S236203AbiEXKcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:32:18 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E21F3389D;
-        Tue, 24 May 2022 03:32:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FDA01FB;
-        Tue, 24 May 2022 03:32:17 -0700 (PDT)
-Received: from pluto.guestnet.cambridge.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FD773F66F;
-        Tue, 24 May 2022 03:32:16 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        skhan@linuxfoundation.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH] kselftest/arm64: signal: Skip SVE signal test if not enough VLs supported
-Date:   Tue, 24 May 2022 11:31:49 +0100
-Message-Id: <20220524103149.2802-1-cristian.marussi@arm.com>
+        Tue, 24 May 2022 06:32:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1963A40910;
+        Tue, 24 May 2022 03:31:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DABF160A2A;
+        Tue, 24 May 2022 10:31:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9503C385AA;
+        Tue, 24 May 2022 10:31:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653388316;
+        bh=XBE2UPj4mf6M8L4Bath0SuXETkQ8FaDwLmUk5rSVXdc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sLWRaUGnpbT7yzK+xeEd1V6oKAbiyGZkfBfBjGXprxhUFoYLYwaqSzdWxhHN9f1jx
+         cNV/5zgmBNOnI/4Ugc68XfGdr+EXtj3YhUZevaQ3mpWI8gBA0K9nEdSmA0w8FeKh+a
+         mV9DbSDbwYmnJS+lD5i+Zm6BTCkCY25EwKtrLHcmvEO0bye1Y5EgWzluP05dQmemlF
+         c5G3DWARm1HBtdamWPHE5RexxmmnYfyG9hAPgxKJhlcXdicKsotAHP+Yh3KTCWVeH3
+         XNFL7yLipS19Qe5aWfAFLUbo+AzHuR3A5/XBFhNzQf//pqG5lsQxRU/HIOwkdfIxEH
+         ueHNSpmJjy1Ig==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, chuck.lever@oracle.com
+Subject: [PATCH] MAINTAINERS: reciprocal co-maintainership for file locking and nfsd
+Date:   Tue, 24 May 2022 06:31:54 -0400
+Message-Id: <20220524103154.10827-1-jlayton@kernel.org>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -43,37 +51,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On platform where SVE is supported but there are less than 2 VLs available
-the signal SVE change test should be skipped instead of failing.
+Chuck has agreed to backstop me as maintainer of the file locking code,
+and I'll do the same for him on knfsd.
 
-Reported-by: Andre Przywara <andre.przywara@arm.com>
-Tested-by: Andre Przywara <andre.przywara@arm.com>
-Cc: Mark Brown <broonie@kernel.org>
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- .../arm64/signal/testcases/fake_sigreturn_sve_change_vl.c       | 2 ++
+ MAINTAINERS | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
-index bb50b5adbf10..915821375b0a 100644
---- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
-@@ -6,6 +6,7 @@
-  * supported and is expected to segfault.
-  */
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 50eeb7e837b6..397a97913bfb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7571,6 +7571,7 @@ F:	include/uapi/scsi/fc/
  
-+#include <kselftest.h>
- #include <signal.h>
- #include <ucontext.h>
- #include <sys/prctl.h>
-@@ -40,6 +41,7 @@ static bool sve_get_vls(struct tdescr *td)
- 	/* We need at least two VLs */
- 	if (nvls < 2) {
- 		fprintf(stderr, "Only %d VL supported\n", nvls);
-+		td->result = KSFT_SKIP;
- 		return false;
- 	}
+ FILE LOCKING (flock() and fcntl()/lockf())
+ M:	Jeff Layton <jlayton@kernel.org>
++M:	Chuck Lever <chuck.lever@oracle.com>
+ L:	linux-fsdevel@vger.kernel.org
+ S:	Maintained
+ F:	fs/fcntl.c
+@@ -10653,6 +10654,7 @@ W:	http://kernelnewbies.org/KernelJanitors
  
+ KERNEL NFSD, SUNRPC, AND LOCKD SERVERS
+ M:	Chuck Lever <chuck.lever@oracle.com>
++M:	Jeff Layton <jlayton@kernel.org>
+ L:	linux-nfs@vger.kernel.org
+ S:	Supported
+ W:	http://nfs.sourceforge.net/
 -- 
 2.36.1
 

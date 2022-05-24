@@ -2,101 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8100F532D01
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1732532D04
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238701AbiEXPMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
+        id S237982AbiEXPMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238713AbiEXPMR (ORCPT
+        with ESMTP id S233654AbiEXPMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:12:17 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D502A63BC2;
-        Tue, 24 May 2022 08:12:12 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id t13so5151443ilm.9;
-        Tue, 24 May 2022 08:12:12 -0700 (PDT)
+        Tue, 24 May 2022 11:12:39 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3498A33D;
+        Tue, 24 May 2022 08:12:38 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id t5so105514edc.2;
+        Tue, 24 May 2022 08:12:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Gu6XrP09brfzVASce66siSDhg75Ij5bF3a/2sse9FTI=;
-        b=Gx5DLI2+S6FgASvjmxzOMLEBTLLzoAeOJHUNf3qse7ftzHJRZNKIGlYfA7vzGBgRTO
-         qTgrr/QrMpssZBVPExxUekM5wFpDSCMG20g+mdIisIrrqbSj8j8ach4aeT+H+1CPDjcY
-         ofuIYAFZ0a1ST0nZaCgMaH9g0s8MDKoG8WUVuGjlCh3vgQMUp8zwHIFKbe8dhL1HhQTe
-         sZWf5vyTao7FwxYkNnBY5UxCjXGw7WvpGDwAKwR0hZcAz9ljJn2ttXMG4oHl2DC/BtQd
-         krQkv/WkL/ceZkaPabiR+mwCrn4tbOibG9mbSGHQ9sK9s67DEn4CdB96hUXVE/XXsJbF
-         NRiQ==
+        bh=1XavLDdHzelFmWJ9+pgUk0yb2GJUxOMHo5yqFSbed4U=;
+        b=fY+byTLZNmtu1GIwmP23F/BSNvSazTj6nd4gKVeAHYsn4dfxYU93P2qbeoPlKoTLQ3
+         BhpE8Ea1lSmDsyCT/b7pUD7+yPX7X5LYOgbCdfhx0VCeupGtjN8SMKIqHmWhVzEe9TQ4
+         +Kb2F7qtu1XmgF1H4Kl10s7a99sjyu02cBY/cPAUa1P8K8NreLDysfBma4Xzsk07HZmw
+         5p+zQC55tJqc2BDufOLrFSUizgpVyEQId4EHgmveDC15wtKFKXnGe6lif3X6k25fGn0W
+         WSu7s7gvPTveMipa2e/ngcG47lVBGYM8nQLkysIFhcga+c72qQIJ5A5IekOQ50AsSG2B
+         eANQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Gu6XrP09brfzVASce66siSDhg75Ij5bF3a/2sse9FTI=;
-        b=437c6i0vOdcyGq0Uidsdb1DAZmgoVljbw7JpnkngKVCpx16FoqkIVmhVun+Hgudw0G
-         T0hkN4P0iBWDOSEUEWRmEseyEYosihqvyTiJvHNJmbrP4WRuDpyAkR20xtTcaBXUF/L7
-         jdqaFmv+iCpofuroh0gKTXoEDH+/veq0p3L5qKsjb91EKfDaMTPigjCZumSCMKPp4chS
-         E8HcqhTnZChw6GZP4yd963dNqBUdHeowEQocttVICM67T/uSTMPWeSVliZzE4izO/wiW
-         jmQGU27nKAyZMTjKTCAB9zvxP6jYV8HLLf+G+KUVpi4fm96wS4MWcD3a2I/iYF9+CgZZ
-         b4vw==
-X-Gm-Message-State: AOAM530Aq8eg1igwpWpM1xNfdAUmNjiDhbP++NXEQsBpsev3SFxnmT3b
-        2MVKlPKozSIAe9OLjdbXyh94uOvHhk6kRvzk7o+TVmHh1qPEnQ==
-X-Google-Smtp-Source: ABdhPJxToNDnooDvM+F5z9jrpwZB87LsQbRXfl7xzsJlSJuT69wEeUzQA9y0IHhR27j6+JEjpMOS30/zFL5koffPamM=
-X-Received: by 2002:a05:6e02:170b:b0:2cf:970f:6050 with SMTP id
- u11-20020a056e02170b00b002cf970f6050mr14549964ill.5.1653405130972; Tue, 24
- May 2022 08:12:10 -0700 (PDT)
+        bh=1XavLDdHzelFmWJ9+pgUk0yb2GJUxOMHo5yqFSbed4U=;
+        b=TA1qTDvvdS9VUqwICXuIVO5RWbO5DwSU2awfN23pN3+cK77uiLpGamvl08SQTBXWjK
+         o+dBBPtbsJfV/j9ptFUxvvoQ3wWMvl7HZRhiaDhOJaO/WXdMNxzLLEHRg6Ei0SlBdnC+
+         3DrUuScr6b5ksBgJEGgFQI9QlRFYDtFNsTv/yu61tEaWgsm7bXY52gXA5EEw1b5AV6ox
+         IiwByMDK0QHxMxqNRRGA5EULGjGpMUa/jHBxEvO2J4C8SsgQRvt6JF8GZOw3TdNTX76B
+         H8twFT4l9UThe9WV9a3DxJXS4sSVvvC697VudH1hOSTF4SLq1vivHMLt6vmAbnFbeldr
+         17MQ==
+X-Gm-Message-State: AOAM532kTWX7GSTIz+ZWcrFivQqWakABXXV/3XSp0MZgUciIfIxR2JE2
+        Okego/VTO8SMcHZjSXD0XVp52GDVb7r+QV2TgXA=
+X-Google-Smtp-Source: ABdhPJxe3+1zeD4MOFcUnzIuExnm4pSPOWOaFzSYeK3ztpYZqG7hqNhYP1Mt6DNvpUnCuOo6ST9rGP235P2bYTJPDs4=
+X-Received: by 2002:aa7:da8d:0:b0:42a:aa60:8af3 with SMTP id
+ q13-20020aa7da8d000000b0042aaa608af3mr29264843eds.94.1653405156815; Tue, 24
+ May 2022 08:12:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523020209.11810-1-ojeda@kernel.org> <20220523020209.11810-22-ojeda@kernel.org>
- <CAKwvOdkTjxNEmCTnuH5f41WB50ef6ErBM2Kp2zJ-t9q_5U8rBA@mail.gmail.com>
-In-Reply-To: <CAKwvOdkTjxNEmCTnuH5f41WB50ef6ErBM2Kp2zJ-t9q_5U8rBA@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 24 May 2022 17:12:00 +0200
-Message-ID: <CANiq72=QJsScPweqWO8w6t4wDKKd3ZWFkA6Dcto6qpJ8QcfgOg@mail.gmail.com>
-Subject: Re: [PATCH v7 21/25] Kbuild: add Rust support
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, Miguel Cano <macanroj@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um@lists.infradead.org
+References: <20220520113728.12708-1-shung-hsi.yu@suse.com> <20220520113728.12708-3-shung-hsi.yu@suse.com>
+ <f9511485-cda4-4e5e-fe1f-60ffe57e27d1@fb.com> <0cf50c32-ab67-ef23-7b84-ef1d4e007c33@fb.com>
+ <YoyEbYGIoiULPQEk@syu-laptop>
+In-Reply-To: <YoyEbYGIoiULPQEk@syu-laptop>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 24 May 2022 08:12:24 -0700
+Message-ID: <CAADnVQ+gJ8ksqGRgYn0kbfTBm2BsvZyc-hRAMbAWhj05LdW6Lw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] bpf: verifier: explain opcode check in check_ld_imm()
+To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc:     Yonghong Song <yhs@fb.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -108,35 +76,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 8:45 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Tue, May 24, 2022 at 12:11 AM Shung-Hsi Yu <shung-hsi.yu@suse.com> wrote:
 >
-> I'm super not into having the rust optimization level differ from the
-> C optimization level.  This is just someone having too much fun
-> wrapping every compiler flag in a kbuild option.  Either folks wan't
+> On Fri, May 20, 2022 at 05:25:36PM -0700, Yonghong Song wrote:
+> > On 5/20/22 4:50 PM, Yonghong Song wrote:
+> > > On 5/20/22 4:37 AM, Shung-Hsi Yu wrote:
+> > > > The BPF_SIZE check in the beginning of check_ld_imm() actually guard
+> > > > against program with JMP instructions that goes to the second
+> > > > instruction of BPF_LD_IMM64, but may be easily dismissed as an simple
+> > > > opcode check that's duplicating the effort of bpf_opcode_in_insntable().
+> > > >
+> > > > Add comment to better reflect the importance of the check.
+> > > >
+> > > > Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> > > > ---
+> > > >   kernel/bpf/verifier.c | 4 ++++
+> > > >   1 file changed, 4 insertions(+)
+> > > >
+> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > index 79a2695ee2e2..133929751f80 100644
+> > > > --- a/kernel/bpf/verifier.c
+> > > > +++ b/kernel/bpf/verifier.c
+> > > > @@ -9921,6 +9921,10 @@ static int check_ld_imm(struct
+> > > > bpf_verifier_env *env, struct bpf_insn *insn)
+> > > >       struct bpf_map *map;
+> > > >       int err;
+> > > > +    /* checks that this is not the second part of BPF_LD_IMM64, which is
+> > > > +     * skipped over during opcode check, but a JMP with invalid
+> > > > offset may
+> > > > +     * cause check_ld_imm() to be called upon it.
+> > > > +     */
+> > >
+> > > The check_ld_imm() call context is:
+> > >
+> > >                  } else if (class == BPF_LD) {
+> > >                          u8 mode = BPF_MODE(insn->code);
+> > >
+> > >                          if (mode == BPF_ABS || mode == BPF_IND) {
+> > >                                  err = check_ld_abs(env, insn);
+> > >                                  if (err)
+> > >                                          return err;
+> > >
+> > >                          } else if (mode == BPF_IMM) {
+> > >                                  err = check_ld_imm(env, insn);
+> > >                                  if (err)
+> > >                                          return err;
+> > >
+> > >                                  env->insn_idx++;
+> > >                                  sanitize_mark_insn_seen(env);
+> > >                          } else {
+> > >                                  verbose(env, "invalid BPF_LD mode\n");
+> > >                                  return -EINVAL;
+> > >                          }
+> > >                  }
+> > >
+> > > which is a normal checking of LD_imm64 insn.
+> > >
+> > > I think the to-be-added comment is incorrect and unnecessary.
+> >
+> > Okay, double check again and now I understand what happens
+> > when hitting the second insn of ldimm64 with a branch target.
+> > Here we have BPF_LD = 0 and BPF_IMM = 0, so for a branch
+> > target to the 2nd part of ldimm64, it will come to
+> > check_ld_imm() and have error "invalid BPF_LD_IMM insn"
+>
+> Yes, the 2nd instruction uses the reserved opcode 0, which could be
+> interpreted as BPF_LD | BPF_W | BPF_IMM.
+>
+> > So check_ld_imm() is to check whether the insn is a
+> > *legal* insn for the first part of ldimm64.
+> >
+> > So the comment may be rewritten as below.
+> >
+> > This is to verify whether an insn is a BPF_LD_IMM64
+> > or not. But since BPF_LD = 0 and BPF_IMM = 0, if the branch
+> > target comes to the second part of BPF_LD_IMM64,
+> > the control may come here as well.
+> >
+> > > >       if (BPF_SIZE(insn->code) != BPF_DW) {
+> > > >           verbose(env, "invalid BPF_LD_IMM insn\n");
+> > > >           return -EINVAL;
+>
+> After giving it a bit more though, maybe it'd be clearer if we simply detect
+> such case in the JMP branch of do_check().
+>
+> Something like this instead. Though I haven't tested yet, and it still check
+> the jump destination even it's a dead branch.
+>
+> ---
+>  kernel/bpf/verifier.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index aedac2ac02b9..59228806884e 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12191,6 +12191,25 @@ static int do_check(struct bpf_verifier_env *env)
+>                         u8 opcode = BPF_OP(insn->code);
+>
+>                         env->jmps_processed++;
+> +
+> +                       /* check jump offset */
+> +                       if (opcode != BPF_CALL && opcode != BPF_EXIT) {
+> +                               u32 dst_insn_idx = env->insn_idx + insn->off + 1;
+> +                               struct bpf_insn *dst_insn = &insns[dst_insn_idx];
+> +
+> +                               if (dst_insn_idx > insn_cnt) {
+> +                                       verbose(env, "invalid JMP idx %d off %d beyond end of program insn_cnt %d\n", env->insn_idx, insn->off, insn_cnt);
+> +                                       return -EFAULT;
+> +                               }
+> +                               if (!bpf_opcode_in_insntable(dst_insn->code)) {
+> +                                       /* Should we simply tell the user that it's a
+> +                                        * jump to the 2nd LD_IMM64 instruction
+> +                                        * here? */
+> +                                       verbose(env, "idx %d JMP to idx %d with unknown opcode %02x\n", env->insn_idx, dst_insn_idx, insn->code);
+> +                                       return -EINVAL;
+> +                               }
+> +                       }
+> +
 
-I mean, `Makefile`s are not my favorite pastime... :)
-
-> smaller size or more optimizations. Allowing for RUST_OPT_LEVEL_S and
-> CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE or RUST_OPT_LEVEL_3 and
-> CONFIG_CC_OPTIMIZE_FOR_SIZE is just wacky nonsense that's going to
-> make randconfig bug reports more confusing to tease out.
-
-I think what is important is to decide whether extra levels, for C and
-Rust, should be kept compile-able/maintained or not (I also replied in
-the `-O1` for C thread [1]).
-
-Note that the Rust side can be compiled as `-O0` or `-O1` at the
-moment, which is something we do not have for the C side; thus having
-only the C == Rust option means we will not have a configuration with
-those anymore.
-
-For me it is less complex to not have them, and I have not heard more
-opinions on this, either for or against (apart from that thread
-suggesting `-O1` for the C side), so if nobody else chimes in, I will
-remove them.
-
-[1] https://lore.kernel.org/lkml/CANiq72kySVvOQ7eqwe0Jzz3V0JTtrcqODHR9Ty4-sfDMdzP6XQ@mail.gmail.com/
-
-Cheers,
-Miguel
+This makes the code worse.
+There is no need for these patches.

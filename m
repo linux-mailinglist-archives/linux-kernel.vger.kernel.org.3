@@ -2,92 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD83853284E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7365532857
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236432AbiEXKyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 06:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S234061AbiEXK4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 06:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232919AbiEXKyQ (ORCPT
+        with ESMTP id S229703AbiEXK4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:54:16 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1537B69713;
-        Tue, 24 May 2022 03:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653389649; x=1684925649;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fH9O4UdqFEL6xKyH3yJM1r2FmPTgxb1CDCnokkfH+pE=;
-  b=IO+2zlSDlODm3oQq6ZW4HOm9kL68pWDfbzEYjlyCIedDodQPWsYXBTfA
-   f7D1IjpelL3w2TGv840IIpMI+1CSF0dUW9zkdvIc+OGursVXGilk/ckpg
-   oDTO9fIzpUrKXRm2j8rAu3m55lzgHadzHRnkuS3WCA+vceHPfjGaUdHkX
-   4nmUTw/XhnHbin4WA2sJ5AUSNKFtx3ukTeUirW0B/HwMJIN04mUwfQDiE
-   6hq7BzKUT7vIqo4DnDz1E/+mBopLVfn+dcW8EbpXGgmuxIkE1zUb5cjDm
-   pe4Ag63nTgoHlkX7fpfs2qVwKpZgY3GW5tTN0Py5sNCWH7Tm4ctnkS2qg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273222378"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273222378"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 03:54:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="717121870"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 May 2022 03:54:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 May 2022 13:54:05 +0300
-Date:   Tue, 24 May 2022 13:54:04 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        kernel-janitors@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: fix typo in comment
-Message-ID: <Yoy5TDJBLMaNUUvl@kuha.fi.intel.com>
-References: <20220521111145.81697-52-Julia.Lawall@inria.fr>
+        Tue, 24 May 2022 06:56:43 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7275B183BC
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:56:42 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L6rjd50SgzDqLZ;
+        Tue, 24 May 2022 18:56:37 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 18:56:39 +0800
+Subject: Re: [PATCH v4 4/5] mm/shmem: fix infinite loop when swap in shmem
+ error at swapoff time
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hughd@google.com" <hughd@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "apopple@nvidia.com" <apopple@nvidia.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "surenb@google.com" <surenb@google.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "rcampbell@nvidia.com" <rcampbell@nvidia.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220519125030.21486-1-linmiaohe@huawei.com>
+ <20220519125030.21486-5-linmiaohe@huawei.com>
+ <20220520063433.GA584983@hori.linux.bs1.fc.nec.co.jp>
+ <970aee34-c377-2b8c-c6bb-45e2a96e84b9@huawei.com>
+ <20220522235326.GA713751@hori.linux.bs1.fc.nec.co.jp>
+ <7269c0c4-7648-a9dc-10fa-3645da5be441@huawei.com>
+ <139b521b-f477-d108-79ed-4ea2bd76bdf3@huawei.com>
+ <20220524064416.GB774480@hori.linux.bs1.fc.nec.co.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <f1af5390-70f1-a231-cc37-c1fc671729d8@huawei.com>
+Date:   Tue, 24 May 2022 18:56:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220521111145.81697-52-Julia.Lawall@inria.fr>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220524064416.GB774480@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 01:11:02PM +0200, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
+On 2022/5/24 14:44, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Mon, May 23, 2022 at 07:23:53PM +0800, Miaohe Lin wrote:
+> ...
+>>>
+>>> I reproduced the deadloop issues when swapin error occurs at swapoff time in my linux-next-next-20220520 env,
+>>> and I found this patch could solve the issue now with the fix in my another email.
+>>>
+>>> BTW: When I use dm-dust to inject the swapin IO error, I don't see non-uptodate folio when shmem_swapin_folio
+>>> and swapoff succeeds. There might be some issues around that module (so I resort to the another way to inject
+>>> the swapin error), but the patch itself works anyway. ;)
+>>
+>> Sorry, the reason I don't see non-uptodate folio when shmem_swapin_folio is that all the shmem pages are still
+>> in the swapcache. They're not read from disk so there is no really IO error. :) When they're indeed freed, the
+>> deadloop issue occurs.
+>>
+>> I am thinking about extending the function of MADV_PAGEOUT to free the swapcache page. The page resides in the
+>> swapcache does not save the system memory anyway. And this could help test the swapin behavior. But I'm not
+>> sure whether it's needed.
 > 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> The extension make MADV_PAGEOUT free swapcaches makes sense to me,
+> so I'll support it if the original implementer agrees the change.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I'd like trying to do it when I have time. :) Thanks!
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3bc2f4ebd1fe..7039383eac6d 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -471,7 +471,7 @@ struct tcpm_port {
->  
->  	/*
->  	 * When set, port requests PD_P_SNK_STDBY_MW upon entering SNK_DISCOVERY and
-> -	 * the actual currrent limit after RX of PD_CTRL_PSRDY for PD link,
-> +	 * the actual current limit after RX of PD_CTRL_PSRDY for PD link,
->  	 * SNK_READY for non-pd link.
->  	 */
->  	bool slow_charger_loop;
+> Thanks,
+> Naoya Horiguchi
+> 
 
--- 
-heikki

@@ -2,295 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1171532431
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75A453242C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235386AbiEXHgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
+        id S235311AbiEXHgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235344AbiEXHgk (ORCPT
+        with ESMTP id S233812AbiEXHgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:36:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F41506D1A7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653377798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v9L11SjTsj62SbwNjoc/BXEoQMgxev81E9+gPbEhuK8=;
-        b=RqYXIhed1oA8+uD3M9Jk30OModRSaw5T4DT7B+mtNaUBqWYW1iCGc27sp4c9PhbwnqZImf
-        f4VJO5QyFdKxwFEsus4FddfuCS7u4NWyIM7dIevJXSvO4EHiCKZ94VM5U0GcGdYeA9o07R
-        lZNgGMWA+ZyvJaLZaRCW/SgI+56PSB8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-281-kjR0Z_T_OsWo1_m5HnELtw-1; Tue, 24 May 2022 03:36:28 -0400
-X-MC-Unique: kjR0Z_T_OsWo1_m5HnELtw-1
-Received: by mail-wm1-f69.google.com with SMTP id n30-20020a05600c3b9e00b00397335edc7dso139099wms.7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:36:28 -0700 (PDT)
+        Tue, 24 May 2022 03:36:24 -0400
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A3A41611;
+        Tue, 24 May 2022 00:36:21 -0700 (PDT)
+Received: by mail-qv1-f54.google.com with SMTP id cv1so1528713qvb.5;
+        Tue, 24 May 2022 00:36:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=v9L11SjTsj62SbwNjoc/BXEoQMgxev81E9+gPbEhuK8=;
-        b=qkEClUG7pOZ0hFVEF7LkutXcVn72dkc30iHoJ+g6y3tb8RdZYtD+BYyCK8PrzUeZtS
-         PH/gwbfda/XOBa0Txbga6Jmx5zt0GAt/X/lHbOWVNK53BoFXiMJ8HB1964neSKq8wVvN
-         oDyK25Gv93Ybn0yW1vD+Zu+of9mAoE0JU/BF3x/jLkhdJjQEy0xKXtZDnLofnrfsTYu4
-         yIXvSl3bo42uYsdurWcza/43UPN1E70zHpYFpSzZlW5zf9FIdGnOelICj7ys0d06P37V
-         23zLnbwLP2fpNovjPm/17J9ZlhKH2JdZzVLbXx4nfCBoNrvuLoxpn3aKPp06JycFUlzt
-         jTlQ==
-X-Gm-Message-State: AOAM533LQ+3tIHf2sm2ppQkkWP+BFlJP6NPZCTOFx/myUu3RR3hhzbu0
-        1kvAKDpHQ75XzhUhVtvlC8+gUv7oY+RArjHcEO+3gc1kUfwntVBud1NLPMyFk4JGIkcA5g661Gv
-        VIL4V2xPAfgUYnSMNbIMC/0hzMEnQ9km12fDqima8EpWBZgrwHelbi87gKgpr/QHxPdfQOapHt0
-        Y=
-X-Received: by 2002:a7b:cd95:0:b0:397:3c5e:9639 with SMTP id y21-20020a7bcd95000000b003973c5e9639mr2486018wmj.12.1653377786945;
-        Tue, 24 May 2022 00:36:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzLdafaAxTC7fiyyLNOo5Eud6DnInNC5/4SszhjaKLVsKC0JaDcFNsdPy3iOf0SgAltaEI6bg==
-X-Received: by 2002:a7b:cd95:0:b0:397:3c5e:9639 with SMTP id y21-20020a7bcd95000000b003973c5e9639mr2485991wmj.12.1653377786670;
-        Tue, 24 May 2022 00:36:26 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id f2-20020adfc982000000b0020c5253d927sm12202174wrh.115.2022.05.24.00.36.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 00:36:26 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Chung-Chiang Cheng <cccheng@synology.com>,
-        Lennart Poettering <lennart@poettering.net>,
-        Colin Walters <walters@verbum.org>,
-        Peter Jones <pjones@redhat.com>,
-        Alexander Larsson <alexl@redhat.com>,
-        Alberto Ruiz <aruiz@redhat.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 3/3] selftests/filesystems: add a vfat RENAME_EXCHANGE test
-Date:   Tue, 24 May 2022 09:36:04 +0200
-Message-Id: <20220524073604.247790-4-javierm@redhat.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220524073604.247790-1-javierm@redhat.com>
-References: <20220524073604.247790-1-javierm@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hHz2dkZf9qf9PMGkX8HB6FwtvylKwYDKEt4PSRoOrRg=;
+        b=5604KnZJRPq7BHqRN+r0CdJrgPevS3I0gpY5ik8NHtpYCAk2x0tZGmO/6o6T1W76Yn
+         zV9Ua0cpCko3LoDH4MrsOF6DYfNCn9P4v9JvNInWeqn3ZZmT9/Q5v1KBEs3LujV8J4B4
+         2j1Ge8pS2BNjxbbJy7J5x15bi94iA11YiM+0AXGdZwRntqoSxskvbGH/UhFTCLlNkb6G
+         xbdTaKhdk9FMAVgmMPU85M49/p7R1wKK6owyNwJKkv55HbdOHmXfXGr0vh1uH6nugPmx
+         zbFBVubmxrK3WdEeFIGEe2Iza/c+3iXt/Ofd1pbtJm7jncBFoQuVxHkymF5qbZoiqCwX
+         XbDw==
+X-Gm-Message-State: AOAM5307JJYuKKVr+/bn5BNtbaqlecYWqjfs1HWwFh1R/mn/qkp8BVFl
+        63lB/AgivRGOeTaJMPowXafid0kyqKjohtRe
+X-Google-Smtp-Source: ABdhPJyUl/U3qUC3xs1tPrxczkJco8UcbDi7mKK1iFwhrt2cm4sV5otciSDdm9mSlzIfJgfdjP9uIA==
+X-Received: by 2002:ad4:5ba3:0:b0:462:1b10:e16e with SMTP id 3-20020ad45ba3000000b004621b10e16emr12994063qvq.40.1653377780983;
+        Tue, 24 May 2022 00:36:20 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id ey18-20020a05622a4c1200b002f937991969sm3015467qtb.24.2022.05.24.00.36.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 00:36:20 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id p190so2517005ybg.4;
+        Tue, 24 May 2022 00:36:20 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr25463870ybu.604.1653377780467; Tue, 24
+ May 2022 00:36:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <c7ccee444dbc50a61a703cabeffe28e73de4cda7.1653375268.git.geert@linux-m68k.org>
+ <f8a95dcd-4a9f-ddd2-b322-96720f666b37@redhat.com>
+In-Reply-To: <f8a95dcd-4a9f-ddd2-b322-96720f666b37@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 24 May 2022 09:36:08 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU+fFaKoK0RYjGrkwadafjZ9MTzA-LSzD6pZnoB26HAsg@mail.gmail.com>
+Message-ID: <CAMuHMdU+fFaKoK0RYjGrkwadafjZ9MTzA-LSzD6pZnoB26HAsg@mail.gmail.com>
+Subject: Re: [PATCH] efi: EFI_DISABLE_RUNTIME should depend on EFI
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test for the renameat2 RENAME_EXCHANGE support in vfat, but split it
-in a tool that just does the rename exchange and a script that is run by
-the kselftests framework on `make TARGETS="filesystems/fat" kselftest`.
+Hi Javier,
 
-That way the script can be easily extended to test other file operations.
+On Tue, May 24, 2022 at 9:22 AM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> On 5/24/22 08:54, Geert Uytterhoeven wrote:
+> > The EFI_DISABLE_RUNTIME config option controls the use of Extensible
+> > Firmware Interface (EFI) runtime services, which matters only if EFI
+> > support is enabled.
+> >
+>
+> Indeed. Sorry for forgetting that dependency when adding the symbol.
+>
+> > Hence add a dependency on EFI, to prevent asking the user about this
+> > control knob when configuring a kernel with EFI support.
+> >
+>
+> I think you wanted to write here "without EFI support" ?
 
-The script creates a 1 MiB disk image, that is then formated with a vfat
-filesystem and mounted using a loop device. That way all file operations
-are done on an ephemeral filesystem.
+Oops, sorry for that. Need... morning... coffee...
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+> > Fixes: a031651ff2144a3d ("efi: Allow to enable EFI runtime services by default on RT")
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > ---
+>
+> Acked-by: Javier Martinez Canillas <javierm@redhat.com>
 
-Changes in v2:
-- Call sync to flush the page cache before checking the file contents
-  (Alex Larsson).
+Thanks!
 
- MAINTAINERS                                   |  1 +
- tools/testing/selftests/Makefile              |  1 +
- .../selftests/filesystems/fat/Makefile        |  7 ++
- .../testing/selftests/filesystems/fat/config  |  2 +
- .../filesystems/fat/rename_exchange.c         | 37 +++++++++
- .../filesystems/fat/run_fat_tests.sh          | 82 +++++++++++++++++++
- 6 files changed, 130 insertions(+)
- create mode 100644 tools/testing/selftests/filesystems/fat/Makefile
- create mode 100644 tools/testing/selftests/filesystems/fat/config
- create mode 100644 tools/testing/selftests/filesystems/fat/rename_exchange.c
- create mode 100755 tools/testing/selftests/filesystems/fat/run_fat_tests.sh
+Gr{oetje,eeting}s,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4fdbbd6c1984..158771bb7755 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20841,6 +20841,7 @@ M:	OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
- S:	Maintained
- F:	Documentation/filesystems/vfat.rst
- F:	fs/fat/
-+F:	tools/testing/selftests/filesystems/fat/
- 
- VFIO DRIVER
- M:	Alex Williamson <alex.williamson@redhat.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 0aedcd76cf0f..fc59ad849a90 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -16,6 +16,7 @@ TARGETS += exec
- TARGETS += filesystems
- TARGETS += filesystems/binderfs
- TARGETS += filesystems/epoll
-+TARGETS += filesystems/fat
- TARGETS += firmware
- TARGETS += fpu
- TARGETS += ftrace
-diff --git a/tools/testing/selftests/filesystems/fat/Makefile b/tools/testing/selftests/filesystems/fat/Makefile
-new file mode 100644
-index 000000000000..93ee73c16828
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fat/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+TEST_PROGS := run_fat_tests.sh
-+TEST_GEN_PROGS_EXTENDED := rename_exchange
-+CFLAGS += -O2 -g -Wall -I../../../../usr/include/
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/filesystems/fat/config b/tools/testing/selftests/filesystems/fat/config
-new file mode 100644
-index 000000000000..6cf95e787a17
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fat/config
-@@ -0,0 +1,2 @@
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_VFAT_FS=y
-diff --git a/tools/testing/selftests/filesystems/fat/rename_exchange.c b/tools/testing/selftests/filesystems/fat/rename_exchange.c
-new file mode 100644
-index 000000000000..e488ad354fce
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fat/rename_exchange.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Program that atomically exchanges two paths using
-+ * the renameat2() system call RENAME_EXCHANGE flag.
-+ *
-+ * Copyright 2022 Red Hat Inc.
-+ * Author: Javier Martinez Canillas <javierm@redhat.com>
-+ */
-+
-+#define _GNU_SOURCE
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+
-+void print_usage(const char *program)
-+{
-+	printf("Usage: %s [oldpath] [newpath]\n", program);
-+	printf("Atomically exchange oldpath and newpath\n");
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int ret;
-+
-+	if (argc != 3) {
-+		print_usage(argv[0]);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	ret = renameat2(AT_FDCWD, argv[1], AT_FDCWD, argv[2], RENAME_EXCHANGE);
-+	if (ret) {
-+		perror("rename exchange failed");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	exit(EXIT_SUCCESS);
-+}
-diff --git a/tools/testing/selftests/filesystems/fat/run_fat_tests.sh b/tools/testing/selftests/filesystems/fat/run_fat_tests.sh
-new file mode 100755
-index 000000000000..7f35dc3d15df
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/fat/run_fat_tests.sh
-@@ -0,0 +1,82 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Run filesystem operations tests on an 1 MiB disk image that is formatted with
-+# a vfat filesystem and mounted in a temporary directory using a loop device.
-+#
-+# Copyright 2022 Red Hat Inc.
-+# Author: Javier Martinez Canillas <javierm@redhat.com>
-+
-+set -e
-+set -u
-+set -o pipefail
-+
-+BASE_DIR="$(dirname $0)"
-+TMP_DIR="$(mktemp -d /tmp/fat_tests_tmp.XXXX)"
-+IMG_PATH="${TMP_DIR}/fat.img"
-+MNT_PATH="${TMP_DIR}/mnt"
-+
-+cleanup()
-+{
-+    mountpoint -q "${MNT_PATH}" && unmount_image
-+    rm -rf "${TMP_DIR}"
-+}
-+trap cleanup SIGINT SIGTERM EXIT
-+
-+create_loopback()
-+{
-+    touch "${IMG_PATH}"
-+    chattr +C "${IMG_PATH}" >/dev/null 2>&1 || true
-+
-+    truncate -s 1M "${IMG_PATH}"
-+    mkfs.vfat "${IMG_PATH}" >/dev/null 2>&1
-+}
-+
-+mount_image()
-+{
-+    mkdir -p "${MNT_PATH}"
-+    sudo mount -o loop "${IMG_PATH}" "${MNT_PATH}"
-+}
-+
-+rename_exchange_test()
-+{
-+    local rename_exchange="${BASE_DIR}/rename_exchange"
-+    local old_path="${MNT_PATH}/old_file"
-+    local new_path="${MNT_PATH}/new_file"
-+
-+    echo old | sudo tee "${old_path}" >/dev/null 2>&1
-+    echo new | sudo tee "${new_path}" >/dev/null 2>&1
-+    sudo "${rename_exchange}" "${old_path}" "${new_path}" >/dev/null 2>&1
-+    sudo sync -f "${MNT_PATH}"
-+    grep new "${old_path}" >/dev/null 2>&1
-+    grep old "${new_path}" >/dev/null 2>&1
-+}
-+
-+rename_exchange_subdir_test()
-+{
-+    local rename_exchange="${BASE_DIR}/rename_exchange"
-+    local dir_path="${MNT_PATH}/subdir"
-+    local old_path="${MNT_PATH}/old_file"
-+    local new_path="${dir_path}/new_file"
-+
-+    sudo mkdir -p "${dir_path}"
-+    echo old | sudo tee "${old_path}" >/dev/null 2>&1
-+    echo new | sudo tee "${new_path}" >/dev/null 2>&1
-+    sudo "${rename_exchange}" "${old_path}" "${new_path}" >/dev/null 2>&1
-+    sudo sync -f "${MNT_PATH}"
-+    grep new "${old_path}" >/dev/null 2>&1
-+    grep old "${new_path}" >/dev/null 2>&1
-+}
-+
-+unmount_image()
-+{
-+    sudo umount "${MNT_PATH}" &> /dev/null
-+}
-+
-+create_loopback
-+mount_image
-+rename_exchange_test
-+rename_exchange_subdir_test
-+unmount_image
-+
-+exit 0
--- 
-2.36.1
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

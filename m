@@ -2,147 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4700053266B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB90532674
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235591AbiEXJ3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 05:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
+        id S229622AbiEXJai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 05:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235581AbiEXJ3k (ORCPT
+        with ESMTP id S233022AbiEXJad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 05:29:40 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C72C340ED
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:29:38 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id z7so8582072ybf.7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:29:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HVD805PIWF+vPNoBSV15VHHtEetrJAxgrnMmdyS5kRQ=;
-        b=S0mvoueLkkCMEb0khGrKphavMKc90PQbW1hZrqOzWs1cit1wqnOgBEbOhwC2Gm1gcj
-         kIHM1+IQNCQTcaoja5VpEYpV4co8AzCNNu+83KAIk53kLqOmI2hfP1Ar9xXxIieD16Om
-         xjzFu5740eVTIKeVCbdUJGmwGM0Rkl5LQ+ZYKyjPu4YPaP+cGshdi94MjFCF/XNepcPw
-         oYZJyyObKJcD+Yod/TT0w5hVunqVNuqN1+xGJPHLYopcydm+GoghNABwOFA16ah6fLCU
-         dQB3qPEbBbhUjnXIz4bp3atdEuAhPeAjinnOqRPhWOrHjmxFQ8/GB4oqJh3UN8Mnv3dI
-         /e3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HVD805PIWF+vPNoBSV15VHHtEetrJAxgrnMmdyS5kRQ=;
-        b=Y5BZdCs/okqS7VbRh1yJ33gHW+oLeBthkaZR0RcXaV3jrBRR5+PRvwzca0GK21Ygob
-         NW7szoMoAn9QxxmcWrq631Bdn7oVtbgXDK+9R30lPgybCtr3SPtL33NENl3osye6DIlr
-         ZpOGXJTxYTXGcgaJ/buZsJcs658jkQPN9QviCZfmzc5/SwCid4g052rlU1gLPBm9RPmr
-         fZC/H7mWOXpcLAWTMfC0+acVym683oQvr3jSoz6iMC6+Rh5ZAQBiJugfF0MvECb7erP8
-         9ynr329L/fwtzrdzIAHV0b5EFgH3ZCPclbiQVAKD297oGKFyJkc1goAM9d3rW8YPlbov
-         DHNA==
-X-Gm-Message-State: AOAM533MConsnWbwXHINQUh3QY6DtN8J1FaRfjhOtE6oS2FW7sz8kBUL
-        2nURgeZL5/przgn3KcBb3wWXt+scgRgq6ptAOZpjxA==
-X-Google-Smtp-Source: ABdhPJwSufTp3IMXxz6Jk+46mDzRwOrdHVqjcyhgQZKrft4yGeS0BqvUhfbsZIAkn9moT48nyJeOgOP8pXv2k6Y8YBs=
-X-Received: by 2002:a05:6902:704:b0:64d:f270:22b0 with SMTP id
- k4-20020a056902070400b0064df27022b0mr25054247ybt.626.1653384577755; Tue, 24
- May 2022 02:29:37 -0700 (PDT)
+        Tue, 24 May 2022 05:30:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6208933A29;
+        Tue, 24 May 2022 02:30:31 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 08ED01F8A8;
+        Tue, 24 May 2022 09:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653384630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YTLMAlKFXed5mNbgIwLQssLfi5LZ10Xj5iVod4JD3QI=;
+        b=AE2r3QTuoCrsyPKvWRsLjZdg3lX+1MHH9u8FCEizTVpWlMgJTtb0qo7TZn1zNHVlQMqZmO
+        6GJQNmaoDXtfLMluZKSiJQqlmH69NTmkxDgoMWXvtDPmwLcz17ivaFz6SO0eZiw3Xx/L0O
+        8jU0jolceUkEI5QZnxBGGNuhJhZGLFg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653384630;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YTLMAlKFXed5mNbgIwLQssLfi5LZ10Xj5iVod4JD3QI=;
+        b=WmOc7rqKrAOnd8Ekh1AAZrCw+7wpgU9yq9t/XqriaP5XOzF/TX7NDc9X0eU3bD5aY2QN1U
+        6KeiLjz/tVlpW9CA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B50EE2C141;
+        Tue, 24 May 2022 09:30:29 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C677AA0632; Tue, 24 May 2022 11:30:26 +0200 (CEST)
+Date:   Tue, 24 May 2022 11:30:26 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     "libaokun (A)" <libaokun1@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, lczerner@redhat.com,
+        linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH 2/2] ext4: correct the judgment of BUG in
+ ext4_mb_normalize_request
+Message-ID: <20220524093026.qhwyibhgg6ulsw6r@quack3.lan>
+References: <20220521134217.312071-1-libaokun1@huawei.com>
+ <20220521134217.312071-3-libaokun1@huawei.com>
+ <20220523094023.e3rnile4wh7uiich@quack3.lan>
+ <3755e40b-f817-83df-b239-b0697976c272@huawei.com>
 MIME-Version: 1.0
-References: <20220523174238.28942-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220523174238.28942-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CACRpkdYaWmD9PTcGgeP5MTe9bXMgmf=tUSDBQ-4VxSfL4qkoeQ@mail.gmail.com> <CA+V-a8s+dWMwL6zQnWwFAa15sMgPGYrW+GZ=WhSW1tPxgpLOqA@mail.gmail.com>
-In-Reply-To: <CA+V-a8s+dWMwL6zQnWwFAa15sMgPGYrW+GZ=WhSW1tPxgpLOqA@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 24 May 2022 11:29:26 +0200
-Message-ID: <CACRpkdb43hCCp43p5wmmfhh_6Qr-bAB2vYo7tX27MTGwfjbPGw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/5] gpio: gpiolib: Allow free() callback to be overridden
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3755e40b-f817-83df-b239-b0697976c272@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 11:07 AM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Tue, May 24, 2022 at 9:54 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > On Mon, May 23, 2022 at 7:43 PM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > > Allow free() callback to be overridden from irq_domain_ops for
-> > > hierarchical chips.
-> > >
-> > > This allows drivers to free up resources which are allocated during
-> > > child_to_parent_hwirq()/populate_parent_alloc_arg() callbacks.
-> > >
-> > > On Renesas RZ/G2L platform a bitmap is maintained for TINT slots, a slot
-> > > is allocated in child_to_parent_hwirq() callback which is freed up in free
-> > > callback hence this override.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> >
-> > So that function today looks like this:
-> >
-> > static void gpiochip_hierarchy_setup_domain_ops(struct irq_domain_ops *ops)
-> > {
-> >         ops->activate = gpiochip_irq_domain_activate;
-> >         ops->deactivate = gpiochip_irq_domain_deactivate;
-> >         ops->alloc = gpiochip_hierarchy_irq_domain_alloc;
-> >         ops->free = irq_domain_free_irqs_common;
-> >
-> >         /*
-> >          * We only allow overriding the translate() function for
-> >          * hierarchical chips, and this should only be done if the user
-> >          * really need something other than 1:1 translation.
-> >          */
-> >         if (!ops->translate)
-> >                 ops->translate = gpiochip_hierarchy_irq_domain_translate;
-> > }
-> >
-> > (...)
-> > -       ops->free = irq_domain_free_irqs_common;
-> > (...)
-> > > +       if (!ops->free)
-> > > +               ops->free = irq_domain_free_irqs_common;
-> >
-> > Marc Z is working on cleaning up the way that gpiolib is (ab)using
-> > irqchips. We definitely need his ACK if we do things like this.
-> > This doesn't look like one of the big offenders to me, but I want
-> > to make sure we don't create new problems while Marc is trying
-> > to solve the old ones.
-> >
-> Agreed, I had a discussion with Marc on v3 series [0].
+On Mon 23-05-22 21:04:16, libaokun (A) wrote:
+> 在 2022/5/23 17:40, Jan Kara 写道:
+> > On Sat 21-05-22 21:42:17, Baokun Li wrote:
+> > > When either of the "start + size <= ac->ac_o_ex.fe_logical" or
+> > > "start > ac->ac_o_ex.fe_logical" conditions is met, it indicates
+> > > that the fe_logical is not in the allocated range.
+> > > In this case, it should be bug_ON.
+> > > 
+> > > Fixes: dfe076c106f6 ("ext4: get rid of code duplication")
+> > > Signed-off-by: Baokun Li<libaokun1@huawei.com>
+> > I think this is actually wrong. The original condition checks whether
+> > start + size does not overflow the used integer type. Your condition is
+> > much stronger and I don't think it always has to be true. E.g. allocation
+> > goal block (start variable) can be pushed to larger values by existing
+> > preallocation or so.
+> > 
+> > 								Honza
+> > 
+> I think there are two reasons for this:
+> 
+> First of all, the code here is as follows.
+> ```
+>         size = end - start;
+>         [...]
+> if (start + size <= ac->ac_o_ex.fe_logical &&
+>                         start > ac->ac_o_ex.fe_logical) {
+>                 ext4_msg(ac->ac_sb, KERN_ERR,
+>                          "start %lu, size %lu, fe_logical %lu",
+>                          (unsigned long) start, (unsigned long) size,
+>                          (unsigned long) ac->ac_o_ex.fe_logical);
+> BUG();
+> }
+>         BUG_ON(size <= 0 || size > EXT4_BLOCKS_PER_GROUP(ac->ac_sb));
+> ```
+> First of all, there is no need to compare with ac_o_ex.fe_logical if it is
+> to determine whether there is an overflow.
+> Because the previous logic guarantees start < = ac_o_ex.fe_logical, and
 
-Hm yeah I guess I am just stepping on Marc's toes with all my mails :(
+How does it guarantee that? The logic:
 
-I'll try to just wait for Marc's Reviewed-by instead and not add to the noise,
-I'm probably just wrong.
+        if (ar->pleft && start <= ar->lleft) {
+                size -= ar->lleft + 1 - start;
+                start = ar->lleft + 1;
+        }
 
-Yours,
-Linus Walleij
+can move 'start' to further blocks...
+
+> limits the scope of size in
+> "BUG_ON (size < = 0 | | size > EXT4_BLOCKS_PER_GROUP (ac- > ac_sb))"
+> immediately following.
+
+OK, but what guarantees that ac_o_ex.fe_logical < UINT_MAX - size?
+
+> Secondly, the following code flow also reflects this logic.
+> 
+>            ext4_mb_normalize_request
+>             >>> start + size <= ac->ac_o_ex.fe_logical
+>            ext4_mb_regular_allocator
+>             ext4_mb_simple_scan_group
+>              ext4_mb_use_best_found
+>               ext4_mb_new_preallocation
+>                ext4_mb_new_inode_pa
+>                 ext4_mb_use_inode_pa
+>                  >>> set ac->ac_b_ex.fe_len <= 0
+>            ext4_mb_mark_diskspace_used
+>             >>> BUG_ON(ac->ac_b_ex.fe_len <= 0);
+> 
+> In ext4_mb_use_inode_pa, you have the following code.
+> ```
+> start = pa->pa_pstart + (ac->ac_o_ex.fe_logical - pa->pa_lstart);
+> end = min(pa->pa_pstart + EXT4_C2B(sbi, pa->pa_len), start + EXT4_C2B(sbi,
+> ac->ac_o_ex.fe_len));
+> len = EXT4_NUM_B2C(sbi, end - start);
+> ac->ac_b_ex.fe_len = len;
+> ```
+> The starting position in ext4_mb_mark_diskspace_used will be assert.
+> BUG_ON(ac->ac_b_ex.fe_len <= 0);
+>  
+> When end == start + EXT4_C2B(sbi, ac->ac_o_ex.fe_len) is used, the value of
+> end - start must be greater than 0.
+> However, when end == pa->pa_pstart + EXT4_C2B(sbi, pa->pa_len) occurs, this
+> bug_ON may be triggered.
+> When this bug_ON is triggered, that is,
+> 
+> ac->ac_b_ex.fe_len <= 0
+> end - start <= 0
+> end <= start
+> pa->pa_pstart + EXT4_C2B(sbi, pa->pa_len) <= pa->pa_pstart +
+> (ac->ac_o_ex.fe_logical - pa->pa_lstart)
+> pa->pa_len <= ac->ac_o_ex.fe_logical - pa->pa_lstart
+> pa->pa_lstart + pa->pa_len <= ac->ac_o_ex.fe_logical
+> start + size <= ac->ac_o_ex.fe_logical
+> 
+> So I think that "&&" here should be changed to "||".
+
+Sorry, I still disagree. After some more code reading I agree that
+ac->ac_o_ex.fe_logical is the logical block where we want allocated blocks
+to be placed in the inode so logical extent of allocated blocks should include
+ac->ac_o_ex.fe_logical. But I would be reluctant to make assertion you
+suggest unless we make sure ac->ac_o_ex.fe_logical in unallocated (in which
+case we can also remove some other code from ext4_mb_normalize_request()).
+
+									Honza 
+
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

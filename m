@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A5C532DCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0861532DD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239072AbiEXPrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S238939AbiEXPsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239065AbiEXPrG (ORCPT
+        with ESMTP id S235881AbiEXPse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:47:06 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AB46D957;
-        Tue, 24 May 2022 08:47:05 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-f1eafa567cso19316622fac.8;
-        Tue, 24 May 2022 08:47:05 -0700 (PDT)
+        Tue, 24 May 2022 11:48:34 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A1E6D4D4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:48:33 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id e20so14513949qvr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hWo9Bh8Rusf7eYw4FNO2yhUn6v5U25aYOQhsBBIC7XE=;
+        b=KVed7RtXba0869bB9np3IE7JU4RHUTooAjzTeCZv0y8jHUUnpfrWQk4XpHzA9gt/b0
+         z24JdkfMCQfox9fBonuKsyL8qnNOfHVcBqivjKRVsoIrVpZnUcziUJzQ4pO8GLle6cyu
+         HAiEmGUWHdTd2ptoKbvfWtUV7WMKpt5+AgNNvDrlbfIgfU9cDs/bMIsudtMjgc58wv4m
+         BdJoBDUIZqpsnENvN5635RLIsLyGDrYpUCA38O0o7OfjL042ivcaX3T0HBQglhAsXz3Q
+         t5qgU6RRp+YfSv1pBwhWVOxJsQDZu9BEouftxbuwmUOFVZiENMKVyw8Vep0K3aureq89
+         9wGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Z//6WfrePUVSRJ8xvhdm8OGFD1fAIoJvz+KPrDeYZiU=;
-        b=W2DLnVyq8ImLujMtgFA5MPrqxzCbBNAuNm6ITdBVS7TvCH4fYGISd6Di48Frv6JuWw
-         Mh51NERR6odX9L8UJ0hY+Smrrx5FwbVK+5jMWP//QfwR8kVEysd5e58g/1kgD3ULSHIP
-         AtILP2HIO1Auog469Bmrc3bL1omzVQ/kifpfnCfx/CfvdAQszprkEJpmrOqjGW8DRD7z
-         93YjwEmmLtdZEThheWmlxq4c6XjJNQ2QWnE+rROzBJwzMua+usiOc2sE+XkEghbplnfF
-         tvOFUTa4QhQZeQaEM1HpZkfHaS00cAWYW1yQiL+7MsC82dj98HqF1gtfqmwzD5nF/5nQ
-         W8gA==
-X-Gm-Message-State: AOAM5313FyOgBQ0DClTfBmBSjS81DzkcRiUnIdNNrqxhbTwnMA60rG9N
-        F7e5FsepZI9ajpne97vesJE1ccS6ZA==
-X-Google-Smtp-Source: ABdhPJxGHjUK+uccKHWZgjUZy9Ltn4kUmiM2LhZTy6e+gub3ldkNmSr6OrRkD5zYtjUTOhUHJkgJLA==
-X-Received: by 2002:a05:6870:61ca:b0:f1:aaef:e2b9 with SMTP id b10-20020a05687061ca00b000f1aaefe2b9mr2834492oah.130.1653407224977;
-        Tue, 24 May 2022 08:47:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j15-20020a9d7f0f000000b006060322124esm5100262otq.30.2022.05.24.08.47.03
+        bh=hWo9Bh8Rusf7eYw4FNO2yhUn6v5U25aYOQhsBBIC7XE=;
+        b=MdQyfAADDmE3dJ7/1wwRUXwmkOsDuTHNm9Zgvj1IdEakfHDvq/TRrnd8Y3KV48OVUM
+         15I4AT/eMjRuEvB94tfZn2peImdD30p5SiwsX1HhWgMj0D5RqTCexZIHCmQ+T9SmRsTB
+         w7sDhCn2MQeTBePG5EQhpaQNe5VL42EXvD7B69mkpH9WhgFU8yHbLliE7qglvk55i38x
+         XFiMvf01ID/O31D4eaGBaBU8bNY483n63ufr/z9ysvFSyYLTA5aajGvd1hcU1yBGqEjB
+         ENgCALd/7MWUeEjbObcm/4VGiJhNlUDhrQh8t/sSFY9qORuiiQ3dLeAZWrDByShONi19
+         EpoQ==
+X-Gm-Message-State: AOAM5338TAMGasR/GDJKtMoQI1TFWot/A1ycktWK8vrdGpbIji1pDn6O
+        zh2mNG04g8KBXp2AioZzEMaPCw==
+X-Google-Smtp-Source: ABdhPJwCagbsFvuDCCmZfoGWTxPXfWGu0wSXS88thKs9HBOg8xwa5wwPEEi44z/h89tY+75XEIlI7g==
+X-Received: by 2002:a05:6214:d03:b0:462:344c:554a with SMTP id 3-20020a0562140d0300b00462344c554amr10026099qvh.104.1653407312650;
+        Tue, 24 May 2022 08:48:32 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id c13-20020ac85a8d000000b002f39b99f6bfsm6705923qtc.89.2022.05.24.08.48.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 08:47:04 -0700 (PDT)
-Received: (nullmailer pid 3860327 invoked by uid 1000);
-        Tue, 24 May 2022 15:47:03 -0000
-Date:   Tue, 24 May 2022 10:47:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, Zhigang.Shi@liteon.com,
-        krisman@collabora.com, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, alvaro.soliverez@collabora.com,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH v4 1/3] dt-bindings: vendor-prefixes: Add 'ltr' as
- deprecated vendor prefix
-Message-ID: <20220524154703.GD3730540-robh@kernel.org>
-References: <20220511094024.175994-1-shreeya.patel@collabora.com>
- <20220511094024.175994-2-shreeya.patel@collabora.com>
- <20220516170058.GA2825626-robh@kernel.org>
- <83907dd2-2a53-2448-576b-ae26462d432a@collabora.com>
- <20220518163255.GE3302100-robh@kernel.org>
- <f37bccaf-233c-a244-3d81-849a988b1a92@collabora.com>
+        Tue, 24 May 2022 08:48:32 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1ntWlr-00BPZd-7s; Tue, 24 May 2022 12:48:31 -0300
+Date:   Tue, 24 May 2022 12:48:31 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Dias <joaodias@google.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
+Message-ID: <20220524154831.GC2661880@ziepe.ca>
+References: <YnyCqwY4DxcZ/NjM@google.com>
+ <20220517140049.GF63055@ziepe.ca>
+ <ef901bdb-6117-bad4-2f26-c80df270b86e@nvidia.com>
+ <20220517192825.GM63055@ziepe.ca>
+ <b6eef200-43d1-7913-21ed-176b05fcb4fe@nvidia.com>
+ <You3Q/VFaCoS0mC8@google.com>
+ <bcb95d6b-4507-8836-cf17-7c3cd179a3da@nvidia.com>
+ <YoxqSud9fvNXqo89@google.com>
+ <20220524141937.GA2661880@ziepe.ca>
+ <Yoz9H95uXbjoKwdC@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f37bccaf-233c-a244-3d81-849a988b1a92@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <Yoz9H95uXbjoKwdC@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,83 +87,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 08:27:56PM +0530, Shreeya Patel wrote:
-> 
-> On 18/05/22 22:02, Rob Herring wrote:
-> > On Tue, May 17, 2022 at 04:07:33PM +0530, Shreeya Patel wrote:
-> > > On 16/05/22 22:30, Rob Herring wrote:
-> > > > On Wed, May 11, 2022 at 03:10:22PM +0530, Shreeya Patel wrote:
-> > > > > 'liteon' is the correct vendor prefix for devices released by
-> > > > > LITE-ON Technology Corp. But one of the released device which uses
-> > > > > ltr216a light sensor exposes the vendor prefix name as 'ltr' through
-> > > > > ACPI.
-> > > > ACPI? NAK.
+On Tue, May 24, 2022 at 08:43:27AM -0700, Minchan Kim wrote:
+> On Tue, May 24, 2022 at 11:19:37AM -0300, Jason Gunthorpe wrote:
+> > On Mon, May 23, 2022 at 10:16:58PM -0700, Minchan Kim wrote:
+> > > On Mon, May 23, 2022 at 07:55:25PM -0700, John Hubbard wrote:
+> > > > On 5/23/22 09:33, Minchan Kim wrote:
+> > > > ...
+> > > > > > So then:
+> > > > > > 
+> > > > > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > > > > > index 0e42038382c1..b404f87e2682 100644
+> > > > > > +++ b/mm/page_alloc.c
+> > > > > > @@ -482,7 +482,12 @@ unsigned long __get_pfnblock_flags_mask(const struct page *page,
+> > > > > >          word_bitidx = bitidx / BITS_PER_LONG;
+> > > > > >          bitidx &= (BITS_PER_LONG-1);
+> > > > > > 
+> > > > > > -       word = bitmap[word_bitidx];
+> > > > > > +       /*
+> > > > > > +        * This races, without locks, with set_pageblock_migratetype(). Ensure
+> > > > >                                               set_pfnblock_flags_mask would be better?
+> > > > > > +        * a consistent (non-tearing) read of the memory array, so that results,
+> > > > > 
+> > > > > Thanks for proceeding and suggestion, John.
+> > > > > 
+> > > > > IIUC, the load tearing wouldn't be an issue since [1] fixed the issue.
 > > > > 
-> > > > There are no cases of 'ltr' for DT, so fix ACPI.
-> > > Hi Rob,
+> > > > Did it? [1] fixed something, but I'm not sure we can claim that that
+> > > > code is now safe against tearing in all possible cases, especially given
+> > > > the recent discussion here. Specifically, having this code do a read,
+> > > > then follow that up with calculations, seems correct. Anything else is
 > > > 
-> > > Yes, we understand there are no cases of 'ltr', but we have released devices
-> > > which uses this string for probing the ltrf216a light sensor driver ( x86
-> > > with DT )
-> > That's not what your commit message says.
+> > > The load tearing you are trying to explain in the comment would be
+> > > solved by [1] since the bits will always align on a word and accessing
+> > > word size based on word aligned address is always atomic so there is
+> > > no load tearing problem IIUC.
 > > 
-> > Even if this is DT based, given an undocumented vendor string is used,
-> > it seems doubtful the rest of the binding would match upstream. What
-> > about the rest of the DTB? Got a pointer to it or want to publish it?
-> > 
-> > > If we don't document this in vendor-prefixes.yaml, then the following
-> > > warning
-> > > is generated.
-> > > 
-> > > WARNING: DT compatible string vendor "ltr" appears un-documented -- check
-> > > ./Documentation/devicetree/bindings/vendor-prefixes.yaml 364: FILE:
-> > > drivers/iio/light/ltrf216a.c:313: + { .compatible = "ltr,ltrf216a" },
-> > > 
-> > > 
-> > > Can you suggest us what would be the right way to fix this warning if not
-> > > documenting
-> > > in vendor-prefixes.yaml?
-> > Fix the DT. We don't accept bindings simply because they are already
-> > used in the field. If this was the only issue, it would be fine, but I
-> > suspect it's the tip of the iceberg.
+> > That is not technically true. It is exactly the sort of thing
+> > READ_ONCE is intended to guard against.
 > 
+> Oh, does word access based on the aligned address still happen
+> load tearing? 
 > 
-> Hi Rob,
+> I just referred to
+> https://elixir.bootlin.com/linux/latest/source/Documentation/memory-barriers.txt#L1759
+
+I read that as saying load tearing is technically allowed but doesn't
+happen in gcc, and so must use the _ONCE macros.
+
+> I didn't say it doesn't refetch the value without the READ_ONCE.
 > 
-> To make things more clear, following is the modalias info of the device.
-> 
-> (B+)(root@linux iio:device0)# cat
-> /sys/bus/i2c/devices/i2c-PRP0001\:01/modalias
-> of:NltrfTCltr,ltrf216a
-> 
-> It's a dt namespace on an ACPI based device. We used an of_device_id table
-> to be able to probe the driver
-> using the vendor prefix and compatible string.
+> What I am saying is READ_ONCE(bitmap_word_bitidx] prevents "refetching"
+> issue rather than "tearing" issue in specific __get_pfnblock_flags_mask
+> context because I though there is no load-tearing issue there since
+> bitmap is word-aligned/accessed. No?
 
-Again, it's ACPI so I don't care. If someone cares about using DT 
-bindings in ACPI they can step up and help maintain them. It's not a DT 
-vs. ACPI thing, but just that I can only maintain so much and have to 
-draw the line somewhere.
+It does both. AFAIK our memory model has no guarentees on what naked C
+statements will do. Tearing, multi-load, etc - it is all technically
+permitted. Use the proper accessors.
 
-> But when we compile the driver, we get the following warning and hence we
-> documented it in vendor-prefixes.yaml
-> and also added a complete device tree file [Patch 3/3] just to get rid of
-> the warning. In real life we are not using
-> the device tree file at all.
-> 
-> WARNING: DT compatible string vendor "ltr" appears un-documented -- check
-> ./Documentation/devicetree/bindings/vendor-prefixes.yaml 364: FILE:
-> drivers/iio/light/ltrf216a.c:313: + { .compatible = "ltr,ltrf216a" },
-
-So, is someone telling you to fix this?
-
-
-> There are many existing devices used by people which has the vendor prefix
-> name as 'ltr'
-> and it won't be possible to change that hence we are trying to upstream it.
-
-There are millions if not billions of DT based devices using 
-undocumented bindings. If those used "ltr,ltrf216a", I wouldn't accept 
-it either.
-
-Rob
+Jason

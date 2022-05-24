@@ -2,81 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747D05333D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 01:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9838F5333DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 01:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242550AbiEXXVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 19:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S242572AbiEXXWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 19:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242546AbiEXXVw (ORCPT
+        with ESMTP id S242568AbiEXXWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 19:21:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE0B2B1B0;
-        Tue, 24 May 2022 16:21:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A92D617F1;
-        Tue, 24 May 2022 23:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842DAC34100;
-        Tue, 24 May 2022 23:21:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653434510;
-        bh=jJRdmY226rcXG6WyLUQy/E35Pt/+iqJ5g9CtUu6UmQ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hd85dbavWBp+HBnV6V2bwpgrTg29e9JJCGJORcsMsqGHyM0h240qGrIqe55GLMUkx
-         DmjUJV2lFBrSJQEuJHAuCo0Wrkqj6qBv3cwK9k70y8Jcu4A8dveuvu+8B7zRya+lE5
-         Jtr35rJ1fAIG7IY9Ky13wk6IB8NMjTWZUXDgZhILxLa0t1nhY6Fit0UD/WlAx9Gm8i
-         q7K2JKgg9shZMxGmYBDLSrJDPs/2Jo3Kj6vQN9ARneg6GQmiGKPog+UYrgOcR42njv
-         A07+322mb6s8JpCj1rH8KEFYsq2F6lHriHMQvOmMOo7NGHtKtoT/PFQ1Zr8LskkN3H
-         RiPSbvHe4bDOg==
-Date:   Tue, 24 May 2022 16:21:49 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marco Bonelli <marco@mebeim.net>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ethtool: Fix and optimize
- ethtool_convert_link_mode_to_legacy_u32()
-Message-ID: <20220524162149.7789df7f@kernel.org>
-In-Reply-To: <20220524223818.259303-1-marco@mebeim.net>
-References: <20220524223818.259303-1-marco@mebeim.net>
+        Tue, 24 May 2022 19:22:03 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD342BB1D
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 16:21:58 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id m1so17124506plx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 16:21:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M6ibtN+tkzyjMGp3wPL66xycMPufdrhzmfDOY7iX60k=;
+        b=kt22Jdr99111DhfjKgHjr/LHKxyH1S9/yFGXXUNma4i2GW79ZUv6vwgVgBAz29Uu8Q
+         /uT1GYJittlWhqAVzwcZUwbEQCDnBMYiIOqWEHcPRwYmwM8UR3IuU0F/qwrHrPHqa5IG
+         C6/cjEnR4wioV4Wq23KaERGCaQYWw6AT5PmB0zDdNMz/clJa8Da69sanaGPJXQCIe3gY
+         HvQNN3E6kk9vrXwJvhLy73lgrBVCG6vk4671pBVvhjAHp23QNuzQABgyVDDZFC51hvqw
+         9NPsG0Nlfa5ElmGRIAyEZOgQ7SbcPGivBPa1DFeFzVDjvxNYDNVJduIubjjaYgPwo5pp
+         8kUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M6ibtN+tkzyjMGp3wPL66xycMPufdrhzmfDOY7iX60k=;
+        b=cBAzPtrUJIuwc+6P395zmDbzXpDHZvy/ryx5uAPTaXEI0Gm4fGTZOjN5VUGCnUf2X4
+         0SGTuMIDTmUdmaiHWyJcnoU9wg/65+NSwuBU3kFo0MT5M0k+M5kAEgKQvbIC3zi5+VBi
+         rZSDY7DobOTkU6TMesQarNV87IUcva9w2MHCOZjMkvxl9iyTSF7ANtJq4lnZAIbhPD5V
+         l+wgPddIQjqEkxAmLxVUF7nxDl3xq07gWZhEWO3NZfRdnikmSLwNCepvtqhnYaOv5xwD
+         rSIVUYFdcxCD/dOUW2YTI62xWHNLa129c4TwLJIm5bj8wQE724S0Bu2raJQNKbNIDw57
+         X9NA==
+X-Gm-Message-State: AOAM533DPLyovsyYx2HoQyuPShCo1YKttUBhI2oCAAwMo/ZiuQ2p21yk
+        2WYFwJ0HajxTjQbBNmUQRjicWg==
+X-Google-Smtp-Source: ABdhPJzbpLoaUDt61YcqyxApz+8iQD3U4DO9atJPZZabEDleRRRIFHO93GAFnLI0B6ItqQ2t5gfNCQ==
+X-Received: by 2002:a17:90b:1b03:b0:1dc:a80b:8004 with SMTP id nu3-20020a17090b1b0300b001dca80b8004mr7044789pjb.182.1653434517536;
+        Tue, 24 May 2022 16:21:57 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i5-20020a170902eb4500b0015e8d4eb248sm4819049pli.146.2022.05.24.16.21.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 16:21:56 -0700 (PDT)
+Date:   Tue, 24 May 2022 23:21:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lei Wang <lei4.wang@intel.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 5/8] KVM: MMU: Add helper function to get pkr bits
+Message-ID: <Yo1okaacf2kbvrxh@google.com>
+References: <20220424101557.134102-1-lei4.wang@intel.com>
+ <20220424101557.134102-6-lei4.wang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220424101557.134102-6-lei4.wang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 00:38:19 +0200 Marco Bonelli wrote:
-> Fix the implementation of ethtool_convert_link_mode_to_legacy_u32(), which
-> is supposed to return false if src has bits higher than 31 set. The current
-> implementation uses the complement of bitmap_fill(ext, 32) to test high
-> bits of src, which is wrong as bitmap_fill() fills _with long granularity_,
-> and sizeof(long) can be > 4. No users of this function currently check the
-> return value, so the bug was dormant.
+On Sun, Apr 24, 2022, Lei Wang wrote:
+> Extra the PKR stuff to a separate, non-inline helper, which is a
+
+s/Extra/Extract
+
+> preparation to introduce pks support.
+
+Please provide more justification.  The change is justified, by random readers of
+this patch/commit will be clueless.
+
+  Extract getting the effective PKR bits to a helper that lives in mmu.c
+  in order to keep the is_cr4_*() helpers contained to mmu.c.  Support for
+  PKRS (versus just PKRU) will require querying MMU state to see if the
+  relevant CR4 bit is enabled because pkr_mask will be non-zero if _either_
+  bit is enabled).
+
+  PKR{U,S} are exposed to the guest if and only if TDP is enabled, and
+  while permission_fault() is performance critical for ia32 shadow paging,
+  it's a rarely used path with TDP is enabled.  I.e. moving the PKR code
+  out-of-line is not a performance concern.
+
+> Signed-off-by: Lei Wang <lei4.wang@intel.com>
+> ---
+>  arch/x86/kvm/mmu.h     | 20 +++++---------------
+>  arch/x86/kvm/mmu/mmu.c | 21 +++++++++++++++++++++
+>  2 files changed, 26 insertions(+), 15 deletions(-)
 > 
-> Also remove the check for __ETHTOOL_LINK_MODE_MASK_NBITS > 32, as the enum
-> ethtool_link_mode_bit_indices contains far beyond 32 values. Using
-> find_next_bit() to test the src bitmask works regardless of this anyway.
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index cb3f07e63778..cea03053a153 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -204,6 +204,9 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>  	return vcpu->arch.mmu->page_fault(vcpu, &fault);
+>  }
+>  
+> +u32 kvm_mmu_pkr_bits(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+
+kvm_mmu_get_pkr_bits() so that there's a verb in there.
+
+> +		     unsigned pte_access, unsigned pte_pkey, unsigned int pfec);
+> +
+>  /*
+>   * Check if a given access (described through the I/D, W/R and U/S bits of a
+>   * page fault error code pfec) causes a permission fault with the given PTE
+> @@ -240,21 +243,8 @@ static inline u8 permission_fault(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+>  
+>  	WARN_ON(pfec & (PFERR_PK_MASK | PFERR_RSVD_MASK));
+>  	if (unlikely(mmu->pkr_mask)) {
+> -		u32 pkr_bits, offset;
+> -
+> -		/*
+> -		* PKRU defines 32 bits, there are 16 domains and 2
+> -		* attribute bits per domain in pkru.  pte_pkey is the
+> -		* index of the protection domain, so pte_pkey * 2 is
+> -		* is the index of the first bit for the domain.
+> -		*/
+> -		pkr_bits = (vcpu->arch.pkru >> (pte_pkey * 2)) & 3;
+> -
+> -		/* clear present bit, replace PFEC.RSVD with ACC_USER_MASK. */
+> -		offset = (pfec & ~1) +
+> -			((pte_access & PT_USER_MASK) << (PFERR_RSVD_BIT - PT_USER_SHIFT));
+> -
+> -		pkr_bits &= mmu->pkr_mask >> offset;
+> +		u32 pkr_bits =
+> +			kvm_mmu_pkr_bits(vcpu, mmu, pte_access, pte_pkey, pfec);
+
+Nit, I prefer wrapping in the params, that way the first line shows the most
+important information, e.g. what variable is being set and how (by a function call).
+And then there won't be overflow with the longer helper name:
+
+		u32 pkr_bits = kvm_mmu_get_pkr_bits(vcpu, mmu, pte_access,
+						    pte_pkey, pfec);
+
+>  		errcode |= -pkr_bits & PFERR_PK_MASK;
+>  		fault |= (pkr_bits != 0);
+>  	}
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index de665361548d..6d3276986102 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -6477,3 +6477,24 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
+>  	if (kvm->arch.nx_lpage_recovery_thread)
+>  		kthread_stop(kvm->arch.nx_lpage_recovery_thread);
+>  }
+> +
+> +u32 kvm_mmu_pkr_bits(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> +		     unsigned pte_access, unsigned pte_pkey, unsigned int pfec)
+> +{
+> +	u32 pkr_bits, offset;
+> +
+> +	/*
+> +	* PKRU defines 32 bits, there are 16 domains and 2
+
+Comment needs to be aligned, and it can be adjust to wrap at 80 chars (its
+indentation has changed).
+
+
+	/*
+	 * PKRU and PKRS both define 32 bits. There are 16 domains and 2
+	 * attribute bits per domain in them. pte_key is the index of the
+	 * protection domain, so pte_pkey * 2 is the index of the first bit for
+	 * the domain. The use of PKRU versus PKRS is selected by the address
+	 * type, as determined by the U/S bit in the paging-structure entries.
+	 */
+
+> +	* attribute bits per domain in pkru.  pte_pkey is the
+> +	* index of the protection domain, so pte_pkey * 2 is
+> +	* is the index of the first bit for the domain.
+> +	*/
+> +	pkr_bits = (vcpu->arch.pkru >> (pte_pkey * 2)) & 3;
+> +
+> +	/* clear present bit, replace PFEC.RSVD with ACC_USER_MASK. */
+> +	offset = (pfec & ~1) + ((pte_access & PT_USER_MASK)
+> +				<< (PFERR_RSVD_BIT - PT_USER_SHIFT));
+> +
+> +	pkr_bits &= mmu->pkr_mask >> offset;
+> +	return pkr_bits;
+> +}
+> -- 
+> 2.25.1
 > 
-> Signed-off-by: Marco Bonelli <marco@mebeim.net>
-
-# Form letter - net-next is closed
-
-We have already sent the networking pull request for 5.19
-and therefore net-next is closed for new drivers, features,
-code refactoring and optimizations. We are currently accepting
-bug fixes only.
-
-Please repost when net-next reopens after 5.19-rc1 is cut.
-
-RFC patches sent for review only are obviously welcome at any time.

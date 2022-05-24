@@ -2,105 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2FB1533130
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D24533138
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240772AbiEXTDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        id S240913AbiEXTDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240728AbiEXTDE (ORCPT
+        with ESMTP id S240923AbiEXTDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:03:04 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAF53DA66
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:01:28 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id g3so15424752qtb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:01:28 -0700 (PDT)
+        Tue, 24 May 2022 15:03:16 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338525BD10
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:01:33 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id d22so577676edj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:01:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N1NyblKLcbohBQoY7VD4CeyW8jWo8CQASjSrNPOY/Yo=;
-        b=5jbLkbR/uOOEGcHuRkQuqxaY6Whn0WWZJI73E9T6SlozE5nWJfDFv28tOhdw2Irpoo
-         ynu/oD5zPSoRnvOuieUuisexDncUJ9EhvY4IxA0FYIs846o/GA08BcTErhQHfklV/qf0
-         jg0IcxxINtvlr2Bxdr4w1FKtN4Hr/+eb58jqrlcI8O9fldRZrzN4qtR3yJ5NQHkSSx87
-         QVBY1FH1zFqA1zpBb6JeXcIx3cjBFrwrFWuWBTy1j0DS5ZAGQwmItNhPF5kCU5Dw8Pmf
-         843ZDy7B/DAg+XUmHuEO5HppBvbMLLsifaMMzS6+fo5EuIPCFt1xQwZG7gG/nNEj74ye
-         IG2w==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=p/LRcRqLMyeqKvQf1eqR0kvhGi6WSgrWgvB3HWqz/40=;
+        b=bvixvnK/jmXe4FX2KH6IkCO+rTvQ6XL9e+QaLOKUvAH5zBa+Rb55pQnSQJJdbFMZ0D
+         b3agVkbri00VAYLSh6NMoVS8VR6qW7+6/ORLbqC47T57yGA4LTQ/JzC5ViZILu4GY2m8
+         VMmuhZe9Rn+2LrIp3dPGye/TpDpwhDKmHm+TIhPgd7oY2ppk7296jJSmuNs9cfdwSzg1
+         AJFllVILBf1gApb6M4AamjsocrjHSXoApSzwd8eoicdgXhOYWz0jigDcXyTSeFaEa2in
+         797VPsBzH8cf52zjuWFh79RGZijrVyANrha/9GbbsOWt2FxJ/V3iFh7bHcMU8bet2ld9
+         4jnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N1NyblKLcbohBQoY7VD4CeyW8jWo8CQASjSrNPOY/Yo=;
-        b=F15Jd4/MQPzgjQxOR9swKWAFlsYQmy0b38IyJP5arI5AYP8xfxCEsXy8Cj/bXxwv0a
-         s9UQOX7/YGuVhATjPXJ//5zOW0F1Cf0L2URNrytwX92gmPQQN99JkxG5uqEeqVyoSPp0
-         CGUdBSU9/7tdUa6qe8RgZFh024Czl1hTlQjWPzXrELWnqAD5yb5Pfj7GVF+tEZPw1Kft
-         UPf1hKeR1I074KF1LBcCAdGWs5SBt1asCY7IhrBbqFpRnT47sVENY/KKcUcn3wL8Eidf
-         +SNI0fGHFa4EbxdGUa1fpO2UvphPj8gdqDQLHfE7aFxAZHC2qUxNUOUzlITXS0EuHm5Z
-         eDdg==
-X-Gm-Message-State: AOAM530FdZnfi175hYC+6PCHkJSMnNiW5ovfi4j0a9rSn0ZVKgI4VCu4
-        Xu62IUa5wRaVsxU+KTouiszOD9S6/ZRUBQ==
-X-Google-Smtp-Source: ABdhPJwyJDma/cDSH1QDMd/26bP9vKjCHlXwU76/B8cVC9D3MAicjzWFuXlvICvkqo3oAg4VMZPAjQ==
-X-Received: by 2002:a05:622a:110c:b0:2f3:d347:6f8d with SMTP id e12-20020a05622a110c00b002f3d3476f8dmr21461556qty.403.1653418886409;
-        Tue, 24 May 2022 12:01:26 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:741f])
-        by smtp.gmail.com with ESMTPSA id l11-20020ac84a8b000000b002f39b99f6c4sm48783qtq.94.2022.05.24.12.01.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=p/LRcRqLMyeqKvQf1eqR0kvhGi6WSgrWgvB3HWqz/40=;
+        b=owipiW1+spQ5diDrWmM3fOYk2KKFnyP08DqG7O8Zpzcdsfg5tjn3QAZTVzdZTI/WZ8
+         07EIJ47xAvCLdhOdZW9bGhoVfbetOwZO2JPqcR5hVseF0XRxKgytQ0CRKnQY43pc0XPO
+         HiYr7zjPgV1acGJ38owZfnsn1EZwPrH6C8f/i0v14cTJXt1blKPO/yDLk5oDs7F1K0d4
+         +LK7/YrChAO3PgRX5wxhezTDxAf5LawbuCr+kLFiKpJlCn2bAJTrVPs33EkgCWlSME0r
+         S6xwQPPAWpdd8YvQGXk9bV2jSzcHsistcsRvbibiGPP8H75DsmX1E3hzn2R6Ns/zc7zY
+         JC9w==
+X-Gm-Message-State: AOAM531IWuHit0ovv5jif3lfJTcUOKp7lTpAfOQva3WvlLwzrNLcTOHO
+        bNwlhvb1y6XGfPkctVHD7QcdoXhK21mdLQ==
+X-Google-Smtp-Source: ABdhPJyXfVLVAhAn3Vtb2xtg0915wucMnM2SyXUZW1SXcuju6qSLOZ8ENWrXeCTRFzFNOP/hv35G8g==
+X-Received: by 2002:a05:6402:390b:b0:42a:acb3:bb5 with SMTP id fe11-20020a056402390b00b0042aacb30bb5mr29413164edb.236.1653418891911;
+        Tue, 24 May 2022 12:01:31 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id hh15-20020a170906a94f00b006fec41b21e1sm3576351ejb.171.2022.05.24.12.01.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 12:01:26 -0700 (PDT)
-Date:   Tue, 24 May 2022 15:01:25 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        longman@redhat.com
-Subject: Re: [PATCH v4 01/11] mm: memcontrol: prepare objcg API for non-kmem
- usage
-Message-ID: <Yo0rhX2LFNPTv47b@cmpxchg.org>
-References: <20220524060551.80037-1-songmuchun@bytedance.com>
- <20220524060551.80037-2-songmuchun@bytedance.com>
+        Tue, 24 May 2022 12:01:31 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Icenowy Zheng <icenowy@aosc.io>, mripard@kernel.org, wens@csie.org,
+        Genfu Pan <benlypan@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] drm/sun4i: mixer: fix scanline for V3s and D1
+Date:   Tue, 24 May 2022 21:01:29 +0200
+Message-ID: <5568249.DvuYhMxLoT@kista>
+In-Reply-To: <86a208c1-9277-32de-3f8f-8976eab15524@sholland.org>
+References: <20220521133443.1114749-1-benlypan@gmail.com> <70b43ac2910ce9b3e3776d31eda7a791fbae5454.camel@aosc.io> <86a208c1-9277-32de-3f8f-8976eab15524@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524060551.80037-2-songmuchun@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 02:05:41PM +0800, Muchun Song wrote:
-> Pagecache pages are charged at the allocation time and holding a
-> reference to the original memory cgroup until being reclaimed.
-> Depending on the memory pressure, specific patterns of the page
-> sharing between different cgroups and the cgroup creation and
-> destruction rates, a large number of dying memory cgroups can be
-> pinned by pagecache pages. It makes the page reclaim less efficient
-> and wastes memory.
-> 
-> We can convert LRU pages and most other raw memcg pins to the objcg
-> direction to fix this problem, and then the page->memcg will always
-> point to an object cgroup pointer.
-> 
-> Therefore, the infrastructure of objcg no longer only serves
-> CONFIG_MEMCG_KMEM. In this patch, we move the infrastructure of the
-> objcg out of the scope of the CONFIG_MEMCG_KMEM so that the LRU pages
-> can reuse it to charge pages.
-> 
-> We know that the LRU pages are not accounted at the root level. But
-> the page->memcg_data points to the root_mem_cgroup. So the
-> page->memcg_data of the LRU pages always points to a valid pointer.
-> But the root_mem_cgroup dose not have an object cgroup. If we use
-> obj_cgroup APIs to charge the LRU pages, we should set the
-> page->memcg_data to a root object cgroup. So we also allocate an
-> object cgroup for the root_mem_cgroup.
-> 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Dne torek, 24. maj 2022 ob 19:07:27 CEST je Samuel Holland napisal(a):
+> On 5/23/22 8:14 AM, Icenowy Zheng wrote:
+> > =E5=9C=A8 2022-05-22=E6=98=9F=E6=9C=9F=E6=97=A5=E7=9A=84 10:36 +0200=EF=
+=BC=8CJernej =C5=A0krabec=E5=86=99=E9=81=93=EF=BC=9A
+> >> Hi!
+> >>
+> >> Dne sobota, 21. maj 2022 ob 15:34:43 CEST je Genfu Pan napisal(a):
+> >>> Accrording the SDK from Allwinner, the scanline value of yuv and
+> >>> rgb for
+> >>> V3s are both 1024.
+> >>
+> >> s/scanline value/scanline length/
+> >>
+> >> Which SDK? All SDKs that I have or found on internet don't mention
+> >> YUV nor RGB=20
+> >> scanline limit. That doesn't mean there is none, I'm just unable to
+> >> verify=20
+> >> your claim. Did you test this by yourself? Also, please make YUV
+> >> scanline=20
+> >> change separate patch with fixes tag.
+> >=20
+> > BTW I think chip manuals all say that the chip supports NxN resolution
+> > in DE2 chapter, e.g. the V3 datasheet says DE2 "Output size up to
+> > 1024x1024".
+> >=20
+> > However there's no information about D1's second mixer.
+>=20
+> My information comes from the BSP driver[0]:
+>=20
+> static const int sun8iw20_de_scale_line_buffer[] =3D {
+>         /* DISP0 */
+>         2048,
+>         /* DISP1 */
+>         1024,
+> };
+>=20
+> It looks like the value returned from de_feat_get_scale_linebuf() may be=
+=20
+used
+> for RGB as well, if scaling is enabled. This appears to be the "format =
+=3D=3D 3"
+> case in de_rtmx_get_coarse_fac[1]. On the other hand, the code for V3 has
+> specific code for the RGB limit[2].
+>=20
+> Is there some test I can do on D1 to see what the right value for RGB is?
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+I use modetest for such tests. It's part of libdrm. In general, you want to=
+=20
+make plane wider than scanline and then scale it down. Obviously you want t=
+o=20
+test this once with RGB and once with YUV format. This is all done with=20
+"modetest -P".
 
-Looks good to me. Also gets rid of some use_hierarchy cruft.
+Best regards,
+Jernej
+
+>=20
+> Regards,
+> Samuel
+>=20
+> [0]:
+> https://github.com/Tina-Linux/tina-d1x-linux-5.4/blob/master/drivers/vide=
+o/
+fbdev/sunxi/disp2/disp/de/lowlevel_v2x/de_feat.c#L182
+> [1]:
+> https://github.com/Tina-Linux/tina-d1x-linux-5.4/blob/master/drivers/vide=
+o/
+fbdev/sunxi/disp2/disp/de/lowlevel_v2x/de_rtmx.c#L1588
+> [2]:
+> https://github.com/Tina-Linux/tina-d1x-linux-5.4/blob/master/drivers/vide=
+o/
+fbdev/sunxi/disp2/disp/de/lowlevel_sun8iw8/de_rtmx.c#L1211
+>=20
+> >>> The is also the same for mixer 1 of D1. Currently the
+> >>> scanline value of rgb is hardcoded to 2048 for all SOCs.
+> >>>
+> >>> Change the scanline_yuv property of V3s to 1024. > Add the
+> >>> scanline_rgb
+> >>> property to the mixer config and replace the hardcoded value with
+> >>> it before
+> >>> scaling.
+> >>
+> >> I guess RGB scanline patch would also need fixes tag, since it fixes
+> >> existing=20
+> >> bug.
+> >>
+> >>>
+> >>> Signed-off-by: Genfu Pan <benlypan@gmail.com>
+> >>> ---
+> >>>  drivers/gpu/drm/sun4i/sun8i_mixer.c    | 13 ++++++++++++-
+> >>>  drivers/gpu/drm/sun4i/sun8i_mixer.h    |  1 +
+> >>>  drivers/gpu/drm/sun4i/sun8i_vi_layer.c |  3 +--
+> >>>  3 files changed, 14 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> >>> b/drivers/gpu/drm/sun4i/sun8i_mixer.c index 875a1156c..e64e08207
+> >>> 100644
+> >>> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> >>> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> >>> @@ -567,6 +567,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun8i_a83t_mixer0_cfg =3D { .ccsc         =3D CCSC_MIXER0_LAYOUT,
+> >>>         .scaler_mask    =3D 0xf,
+> >>>         .scanline_yuv   =3D 2048,
+> >>> +       .scanline_rgb   =3D 2048,
+> >>>         .ui_num         =3D 3,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> @@ -575,6 +576,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun8i_a83t_mixer1_cfg =3D { .ccsc         =3D CCSC_MIXER1_LAYOUT,
+> >>>         .scaler_mask    =3D 0x3,
+> >>>         .scanline_yuv   =3D 2048,
+> >>> +       .scanline_rgb   =3D 2048,
+> >>>         .ui_num         =3D 1,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> @@ -584,6 +586,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun8i_h3_mixer0_cfg
+> >>> =3D { .mod_rate   =3D 432000000,
+> >>>         .scaler_mask    =3D 0xf,
+> >>>         .scanline_yuv   =3D 2048,
+> >>> +       .scanline_rgb   =3D 2048,
+> >>>         .ui_num         =3D 3,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> @@ -593,6 +596,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun8i_r40_mixer0_cfg
+> >>> =3D { .mod_rate   =3D 297000000,
+> >>>         .scaler_mask    =3D 0xf,
+> >>>         .scanline_yuv   =3D 2048,
+> >>> +       .scanline_rgb   =3D 2048,
+> >>>         .ui_num         =3D 3,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> @@ -602,6 +606,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun8i_r40_mixer1_cfg
+> >>> =3D { .mod_rate   =3D 297000000,
+> >>>         .scaler_mask    =3D 0x3,
+> >>>         .scanline_yuv   =3D 2048,
+> >>> +       .scanline_rgb   =3D 2048,
+> >>>         .ui_num         =3D 1,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> @@ -610,7 +615,8 @@ static const struct sun8i_mixer_cfg
+> >>> sun8i_v3s_mixer_cfg
+> >>> =3D { .vi_num =3D 2,
+> >>>         .ui_num =3D 1,
+> >>>         .scaler_mask =3D 0x3,
+> >>> -       .scanline_yuv =3D 2048,
+> >>> +       .scanline_yuv =3D 1024,
+> >>> +       .scanline_rgb =3D 1024,
+> >>>         .ccsc =3D CCSC_MIXER0_LAYOUT,
+> >>>         .mod_rate =3D 150000000,
+> >>>  };
+> >>> @@ -620,6 +626,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun20i_d1_mixer0_cfg
+> >>> =3D { .mod_rate   =3D 297000000,
+> >>>         .scaler_mask    =3D 0x3,
+> >>>         .scanline_yuv   =3D 2048,
+> >>> +       .scanline_rgb   =3D 2048,
+> >>>         .ui_num         =3D 1,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> @@ -629,6 +636,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun20i_d1_mixer1_cfg
+> >>> =3D { .mod_rate   =3D 297000000,
+> >>>         .scaler_mask    =3D 0x1,
+> >>>         .scanline_yuv   =3D 1024,
+> >>> +       .scanline_rgb   =3D 1024,
+> >>>         .ui_num         =3D 0,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> @@ -638,6 +646,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun50i_a64_mixer0_cfg =3D { .mod_rate     =3D 297000000,
+> >>>         .scaler_mask    =3D 0xf,
+> >>>         .scanline_yuv   =3D 4096,
+> >>> +       .scanline_rgb   =3D 2048,
+> >>>         .ui_num         =3D 3,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> @@ -647,6 +656,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun50i_a64_mixer1_cfg =3D { .mod_rate     =3D 297000000,
+> >>>         .scaler_mask    =3D 0x3,
+> >>>         .scanline_yuv   =3D 2048,
+> >>> +       .scanline_rgb   =3D 2048,
+> >>>         .ui_num         =3D 1,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> @@ -657,6 +667,7 @@ static const struct sun8i_mixer_cfg
+> >>> sun50i_h6_mixer0_cfg
+> >>> =3D { .mod_rate   =3D 600000000,
+> >>>         .scaler_mask    =3D 0xf,
+> >>>         .scanline_yuv   =3D 4096,
+> >>> +       .scanline_rgb   =3D 2048,
+> >>>         .ui_num         =3D 3,
+> >>>         .vi_num         =3D 1,
+> >>>  };
+> >>> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.h
+> >>> b/drivers/gpu/drm/sun4i/sun8i_mixer.h index 85c94884f..c01b3e9d6
+> >>> 100644
+> >>> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.h
+> >>> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.h
+> >>> @@ -172,6 +172,7 @@ struct sun8i_mixer_cfg {
+> >>>         unsigned long   mod_rate;
+> >>>         unsigned int    is_de3 : 1;
+> >>>         unsigned int    scanline_yuv;
+> >>> +       unsigned int    scanline_rgb;
+> >>
+> >> This quirk needs to be documented above in the comment.
+> >>
+> >> Best regards,
+> >> Jernej
+> >>
+> >>>  };
+> >>>
+> >>>  struct sun8i_mixer {
+> >>> diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+> >>> b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c index f7d0b082d..30e6bde92
+> >>> 100644
+> >>> --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+> >>> +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+> >>> @@ -188,8 +188,7 @@ static int sun8i_vi_layer_update_coord(struct
+> >>> sun8i_mixer *mixer, int channel, src_h =3D vn;
+> >>>                 }
+> >>>
+> >>> -               /* it seems that every RGB scaler has buffer for
+> >>> 2048=20
+> >> pixels */
+> >>> -               scanline =3D subsampled ? mixer->cfg->scanline_yuv :=
+=20
+> >> 2048;
+> >>> +               scanline =3D subsampled ? mixer->cfg->scanline_yuv :
+> >>> mixer->cfg->scanline_rgb;
+> >>>
+> >>>                 if (src_w > scanline) {
+> >>>                         DRM_DEBUG_DRIVER("Using horizontal coarse=20
+> >> scaling\n");
+> >>
+> >>
+> >>
+> >>
+> >>
+> >=20
+> >=20
+>=20
+>=20
+
+

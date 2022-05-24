@@ -2,101 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7D753234F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235D5532355
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbiEXGhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 02:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
+        id S233059AbiEXGjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 02:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbiEXGh3 (ORCPT
+        with ESMTP id S233019AbiEXGjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 02:37:29 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F2197284
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653374247; x=1684910247;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CWIdFV7kd+q4a+RvZstYFwNN6bwBAfhOCJj1RrbERKQ=;
-  b=W2KRew4INvZKyBwxf9TasRR/qtSKPg00T6W6LeGql1Rg4gmBXvnoH4JK
-   2jBIAKhjRbTaBQjzJQRdfqGoCaBZLae/CexyNR680XlF6iexGsR9UxEix
-   ioT58vmQHoJBCvGD2nCrxHVx6QLsVPkSGDN7r4pfgodtTH1xK4c0hDvC4
-   xshlHCJD7LjNzoxWVig9kTxmv3caSR06oluVL4P+qTYVGQaXGdwJgU5hl
-   fpUDT2LR1kLPEJupy66bIhCTp3Kt+5M/419+FybM4kRqFCOD1rBnEeSrM
-   xuEio3ZlL8BmEwr9x5Uw9yJX4qe+iQkACOLAI5AraHOywshx+MCWD/3HW
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273440388"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273440388"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 23:37:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="717046628"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 23 May 2022 23:37:11 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntOAI-0001p8-Lw;
-        Tue, 24 May 2022 06:37:10 +0000
-Date:   Tue, 24 May 2022 14:36:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [hverkuil-media-tree:hdmi-dbg 16/19] kismet: WARNING: unmet direct
- dependencies detected for COMMON_CLK_HIFIBERRY_DACPRO when selected by
- SND_BCM2708_SOC_HIFIBERRY_DACPLUSADC
-Message-ID: <202205241452.l7BgDioy-lkp@intel.com>
+        Tue, 24 May 2022 02:39:10 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C54197282
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:39:08 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bq30so29224091lfb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vBkx9/je7nDyB+6MMJGNSqtAxz9DvJ1+u+v1K7otlCo=;
+        b=oCve/KDFWOvJXlCjrDxr59ZkXz3gpAMriZ1CVyW2u3n/AfE5CYatZcPDTesNJ0T2+X
+         q8037e5u8YjM1/cpy44xNB2+W6t/XDb9b/ON+b+w9ZxeF1f5amqqXObaxe281MkPgrsa
+         oxy2ABaoZ5hyijHZQaYHOn2zCbFDj87w9KHQ5EJhmp5Kj0tQ9JNr/TqI8IBdAKrn4jzM
+         GFuDOzeYweicfF9LiGHCLZ08mNrywURmSVwk52tQIGnuDmUW2/wrj1zNfCQefQqh7MxX
+         WJ9RQy7xEElthYpYHKyglDr5DpfqYxhPzBhGgiuGcnv3Ms1WNqMCOIim0RpxH9RCs0Pr
+         irUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vBkx9/je7nDyB+6MMJGNSqtAxz9DvJ1+u+v1K7otlCo=;
+        b=GP+aEVSJfB6b4Pf+5to3mCgM0wb5gTyxTN6KvKGLdkMBrKkHi8+r4toHhL5EW292S+
+         NCJkmq4aPQxUvBadevOLV4Y0rVjTNoPOKOYTPAYRYNwKzzveMslIQINCFsK8S+SP5IsU
+         uEn/DjqXNAD1P6M8PrL3vhABsekS8W0990Iz+CJmEciEySeO5bjIoj+vIV07ZIqws6Ft
+         gv2CeisBmyepIfSXwiPLuUp6kYRxdSAi1qEF53fawtTKFiztLH2omh4OU8NxRWzrdnLs
+         D175S94i6LzSe7p6XzwaOWpSD8Tx2C82NER+MFk+p7+OX+h0PCsFqLFaOJERWp4pNKRI
+         GtbQ==
+X-Gm-Message-State: AOAM530cSnQ0cKwj680EDi7Syg2YzNwU+CsD9fV0Cs1kN8xIJGdtiYgv
+        NZlppyl94o7PfrHiFe1r04qKvi4/bdp4Eod/dmdQAwr9yVM=
+X-Google-Smtp-Source: ABdhPJztRg4T8Us1w5pTgz+J6eeww3XGCvYO3WlS+ASr7kqjcJOlQmdPW25my3rLDm+Hp0RLs8IZnK0IpTwCljZ0Ygg=
+X-Received: by 2002:a05:6512:3da0:b0:478:5b79:d76e with SMTP id
+ k32-20020a0565123da000b004785b79d76emr11591958lfv.540.1653374346548; Mon, 23
+ May 2022 23:39:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220523053531.1572793-1-liu3101@purdue.edu> <CACT4Y+Y9bx0Yrn=kntwcRwdrZh+O7xMKvPWgg=aMjyXb9P4dLw@mail.gmail.com>
+ <MWHPR2201MB1072A5D51631B60BF02E2F3DD0D79@MWHPR2201MB1072.namprd22.prod.outlook.com>
+In-Reply-To: <MWHPR2201MB1072A5D51631B60BF02E2F3DD0D79@MWHPR2201MB1072.namprd22.prod.outlook.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 24 May 2022 08:38:55 +0200
+Message-ID: <CACT4Y+Y7cvG-iHjGuca4rCA9jHRa8LsjQ=bfayNKkOeUjU_4Lg@mail.gmail.com>
+Subject: Re: [PATCH v2] kcov: update pos before writing pc in trace function
+To:     "Liu, Congyu" <liu3101@purdue.edu>
+Cc:     "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git hdmi-dbg
-head:   ee615790d156297c4b230eff7aabfd4865e2e6b9
-commit: 46edebc1ac787bb2e7bdd1bfa4d69821cf32a291 [16/19] hifiberry_dacplusadc: add support for the Hifiberry DAC+ ADC
-config: (https://download.01.org/0day-ci/archive/20220524/202205241452.l7BgDioy-lkp@intel.com/config)
-reproduce:
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree hdmi-dbg
-        git checkout 46edebc1ac787bb2e7bdd1bfa4d69821cf32a291
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_COMMON_CLK_HIFIBERRY_DACPRO --selectors CONFIG_SND_BCM2708_SOC_HIFIBERRY_DACPLUSADC -a=x86_64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=x86_64 olddefconfig
+On Tue, 24 May 2022 at 05:08, Liu, Congyu <liu3101@purdue.edu> wrote:
+>
+> It was actually first found in the kernel trace module I wrote for my research
+> project. For each call instruction I instrumented one trace function before it
+> and one trace function after it, then expected traces generated from
+> them would match since I only instrumented calls that return. But it turns
+> out that it didn't match from time to time in a non-deterministic manner.
+> Eventually I figured out it was actually caused by the overwritten issue
+> from interrupt. I then referred to kcov for a solution but it also suffered from
+> the same issue...so here's this patch :).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Ah, interesting. Thanks for sharing.
 
-
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for COMMON_CLK_HIFIBERRY_DACPRO when selected by SND_BCM2708_SOC_HIFIBERRY_DACPLUSADC
-   
-   WARNING: unmet direct dependencies detected for SND_SOC_PCM512x_I2C
-     Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && I2C [=n]
-     Selected by [y]:
-     - SND_BCM2708_SOC_HIFIBERRY_DACPLUSADC [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && (SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S [=y])
-   
-   WARNING: unmet direct dependencies detected for COMMON_CLK_HIFIBERRY_DACPRO
-     Depends on [n]: COMMON_CLK [=n]
-     Selected by [y]:
-     - SND_BCM2708_SOC_HIFIBERRY_DACPLUSADC [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && (SND_BCM2708_SOC_I2S || SND_BCM2835_SOC_I2S [=y])
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ________________________________________
+> From: Dmitry Vyukov <dvyukov@google.com>
+> Sent: Monday, May 23, 2022 4:38
+> To: Liu, Congyu
+> Cc: andreyknvl@gmail.com; kasan-dev@googlegroups.com; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v2] kcov: update pos before writing pc in trace function
+>
+> On Mon, 23 May 2022 at 07:35, Congyu Liu <liu3101@purdue.edu> wrote:
+> >
+> > In __sanitizer_cov_trace_pc(), previously we write pc before updating pos.
+> > However, some early interrupt code could bypass check_kcov_mode()
+> > check and invoke __sanitizer_cov_trace_pc(). If such interrupt is raised
+> > between writing pc and updating pos, the pc could be overitten by the
+> > recursive __sanitizer_cov_trace_pc().
+> >
+> > As suggested by Dmitry, we cold update pos before writing pc to avoid
+> > such interleaving.
+> >
+> > Apply the same change to write_comp_data().
+> >
+> > Signed-off-by: Congyu Liu <liu3101@purdue.edu>
+>
+> This version looks good to me.
+> I wonder how you encountered this? Do you mind sharing a bit about
+> what you are doing with kcov?
+>
+> Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+>
+> Thanks
+>
+> > ---
+> > PATCH v2:
+> > * Update pos before writing pc as suggested by Dmitry.
+> >
+> > PATCH v1:
+> > https://lore.kernel.org/lkml/20220517210532.1506591-1-liu3101@purdue.edu/
+> > ---
+> >  kernel/kcov.c | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/kcov.c b/kernel/kcov.c
+> > index b3732b210593..e19c84b02452 100644
+> > --- a/kernel/kcov.c
+> > +++ b/kernel/kcov.c
+> > @@ -204,8 +204,16 @@ void notrace __sanitizer_cov_trace_pc(void)
+> >         /* The first 64-bit word is the number of subsequent PCs. */
+> >         pos = READ_ONCE(area[0]) + 1;
+> >         if (likely(pos < t->kcov_size)) {
+> > -               area[pos] = ip;
+> > +               /* Previously we write pc before updating pos. However, some
+> > +                * early interrupt code could bypass check_kcov_mode() check
+> > +                * and invoke __sanitizer_cov_trace_pc(). If such interrupt is
+> > +                * raised between writing pc and updating pos, the pc could be
+> > +                * overitten by the recursive __sanitizer_cov_trace_pc().
+> > +                * Update pos before writing pc to avoid such interleaving.
+> > +                */
+> >                 WRITE_ONCE(area[0], pos);
+> > +               barrier();
+> > +               area[pos] = ip;
+> >         }
+> >  }
+> >  EXPORT_SYMBOL(__sanitizer_cov_trace_pc);
+> > @@ -236,11 +244,13 @@ static void notrace write_comp_data(u64 type, u64 arg1, u64 arg2, u64 ip)
+> >         start_index = 1 + count * KCOV_WORDS_PER_CMP;
+> >         end_pos = (start_index + KCOV_WORDS_PER_CMP) * sizeof(u64);
+> >         if (likely(end_pos <= max_pos)) {
+> > +               /* See comment in __sanitizer_cov_trace_pc(). */
+> > +               WRITE_ONCE(area[0], count + 1);
+> > +               barrier();
+> >                 area[start_index] = type;
+> >                 area[start_index + 1] = arg1;
+> >                 area[start_index + 2] = arg2;
+> >                 area[start_index + 3] = ip;
+> > -               WRITE_ONCE(area[0], count + 1);
+> >         }
+> >  }
+> >
+> > --
+> > 2.34.1
+> >

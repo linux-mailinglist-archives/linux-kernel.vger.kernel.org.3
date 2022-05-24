@@ -2,89 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25E2532E3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F9E532E05
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234191AbiEXQBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 12:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S239180AbiEXP7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239388AbiEXQAS (ORCPT
+        with ESMTP id S239163AbiEXP7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 12:00:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D472DA2071;
-        Tue, 24 May 2022 09:00:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27345B81A50;
-        Tue, 24 May 2022 16:00:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1441C36AE3;
-        Tue, 24 May 2022 16:00:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653408006;
-        bh=UIvOGU9ezNqd/V+eh1/mLYA2MyU4xUyFduSUC7Zg0Ms=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DyIzsUUMdy2+3Mgx7hmadgjiYxEniyFYsKNiBZp1Y3whY5dVUtB6Lcp8UbwRQyAzX
-         TXiNPUscxuXGw9Ksh0MAdmLmEPGJuDR3N6QqI6PWg6ied8DbCGinymk7c28o1I7HwX
-         k8BmaXm23xYJ3ZgPDxegsLI355DwH8YCcIQHN9s7Gzu+7syWsk20NhYJgDcTnKEbrN
-         6DgbGFe10cnKt1sxZ14dpD2QWPjXMgvPqCbCyzKsAW220wy0RZvnqJMqASAt8hiRLt
-         AdASl9SDXcR1b8KZ6n28mhSYteCFk0vE31d+AZbImycMrlF3Hy4IgLAfG3xn5hVnoU
-         DUXdTJwJuTV5g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Piyush Malgujar <pmalgujar@marvell.com>,
-        Szymon Balcerak <sbalcerak@marvell.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        rric@kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 12/12] drivers: i2c: thunderx: Allow driver to work with ACPI defined TWSI controllers
-Date:   Tue, 24 May 2022 11:59:26 -0400
-Message-Id: <20220524155929.826793-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220524155929.826793-1-sashal@kernel.org>
-References: <20220524155929.826793-1-sashal@kernel.org>
+        Tue, 24 May 2022 11:59:39 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48845986DA;
+        Tue, 24 May 2022 08:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=IlWWOeHUyxI87/ZUi6NS9TFLsUJi3lbfeazdE29uhPk=; b=imemdAQIiSRD+gdiClRe4DzWb/
+        YiHPsg+seb3ku5EAdgvOL0M0uJXCBJMn0HD6abbC/k2c3FzHpAWoJruiwsP1lumXw2uAh0yzmvD2M
+        OSij1AM/47VXlq9dxn/9kN63aufFLnEVFLFBmrleegqL9RotRZ0cT3VQIj0aWyAtyd4ScIEL5Rjms
+        p6626v6FHEzo9lXf9Uy5zwo5ubha/PFBevop7luQPA0eY1MOLnwKX8N5JWfuu4w86T2fiGk3UuAPR
+        VuvtbU+XESWfe2k3axgOH3BtOIqkaC3YWY7yWAcdmN7eFSwrgTGgeo5CRuaB1vgySJQQxS/RH2ROr
+        YyiNEW4w==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1ntWwV-006RAB-Da; Tue, 24 May 2022 09:59:32 -0600
+Message-ID: <f270d92d-7c34-2f58-89c5-ccb7a8a37872@deltatee.com>
+Date:   Tue, 24 May 2022 09:59:30 -0600
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-CA
+To:     Song Liu <song@kernel.org>, Donald Buczek <buczek@molgen.mpg.de>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>
+References: <20220519191311.17119-1-logang@deltatee.com>
+ <20220519191311.17119-13-logang@deltatee.com>
+ <62b09487-9223-db3d-2165-789a51230060@molgen.mpg.de>
+ <CAPhsuW5FKh7VKgU+=eU4_ad4btFMwU7ymMNMZ5TZVQbv82MaHg@mail.gmail.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <CAPhsuW5FKh7VKgU+=eU4_ad4btFMwU7ymMNMZ5TZVQbv82MaHg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: song@kernel.org, buczek@molgen.mpg.de, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, hch@infradead.org, guoqing.jiang@linux.dev, xni@redhat.com, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v1 12/15] md/raid5-cache: Add RCU protection to conf->log
+ accesses
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Piyush Malgujar <pmalgujar@marvell.com>
 
-[ Upstream commit 03a35bc856ddc09f2cc1f4701adecfbf3b464cb3 ]
 
-Due to i2c->adap.dev.fwnode not being set, ACPI_COMPANION() wasn't properly
-found for TWSI controllers.
+On 2022-05-23 00:47, Song Liu wrote:
+>> A problem here is that `struct r5l_log` of `conf->log` is private to raid5-cache.c and gcc below version 10 (wrongly) regards the `typeof(*p) *local` declaration of __rcu_access_pointer as a dereference:
+>>
+>>    CC      drivers/md/raid5.o
+>>
+>> In file included from ./include/linux/rculist.h:11:0,
+>>
+>>                   from ./include/linux/dcache.h:8,
+>>
+>>                   from ./include/linux/fs.h:8,
+>>
+>>                   from ./include/linux/highmem.h:5,
+>>
+>>                   from ./include/linux/bvec.h:10,
+>>
+>>                   from ./include/linux/blk_types.h:10,
+>>
+>>                   from ./include/linux/blkdev.h:9,
+>>
+>>                   from drivers/md/raid5.c:38:
+>>
+>> drivers/md/raid5-log.h: In function ‘log_stripe’:
+>>
+>> ./include/linux/rcupdate.h:384:9: error: dereferencing pointer to incomplete type ‘struct r5l_log’
+>>
+>>    typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+>>
+>>           ^
+>>
+>> ./include/linux/rcupdate.h:495:31: note: in expansion of macro ‘__rcu_access_pointer’
+>>
+>>   #define rcu_access_pointer(p) __rcu_access_pointer((p), __UNIQUE_ID(rcu), __rcu)
+>>
+>>                                 ^~~~~~~~~~~~~~~~~~~~
+>>
+>> drivers/md/raid5-log.h:61:6: note: in expansion of macro ‘rcu_access_pointer’
+>>
+>>    if (rcu_access_pointer(conf->log)) {
+>>
+>>        ^~~~~~~~~~~~~~~~~~
+>>
+>> make[2]: *** [scripts/Makefile.build:288: drivers/md/raid5.o] Error 1
+>>
+>> make[1]: *** [scripts/Makefile.build:550: drivers/md] Error 2
+>>
+>> make: *** [Makefile:1834: drivers] Error 2
+> 
+> This is annoying.. And there are a few other cases in raid5-log.h and
+> raid5.c.
+> 
+> Maybe we should move the definition of r5l_log to raid5-log.h?
 
-Signed-off-by: Szymon Balcerak <sbalcerak@marvell.com>
-Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-thunderx-pcidrv.c | 1 +
- 1 file changed, 1 insertion(+)
+That's the only solution I can think of, and what I'll likely do for v2.
+If anyone has a better solution I'm open to it.
 
-diff --git a/drivers/i2c/busses/i2c-thunderx-pcidrv.c b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-index 12c90aa0900e..a77cd86fe75e 100644
---- a/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-thunderx-pcidrv.c
-@@ -213,6 +213,7 @@ static int thunder_i2c_probe_pci(struct pci_dev *pdev,
- 	i2c->adap.bus_recovery_info = &octeon_i2c_recovery_info;
- 	i2c->adap.dev.parent = dev;
- 	i2c->adap.dev.of_node = pdev->dev.of_node;
-+	i2c->adap.dev.fwnode = dev->fwnode;
- 	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
- 		 "Cavium ThunderX i2c adapter at %s", dev_name(dev));
- 	i2c_set_adapdata(&i2c->adap, i2c);
--- 
-2.35.1
-
+Logan

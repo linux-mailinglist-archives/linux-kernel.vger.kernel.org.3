@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C586B532C09
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128A4532C0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236310AbiEXOMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
+        id S238023AbiEXOQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 10:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiEXOME (ORCPT
+        with ESMTP id S229586AbiEXOQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 10:12:04 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2C750012
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:12:01 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:4593:272c:6293:e2cc])
-        by baptiste.telenet-ops.be with bizsmtp
-        id aeBv270132jQL2A01eBvKB; Tue, 24 May 2022 16:11:59 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ntVGN-001Uwr-33; Tue, 24 May 2022 16:11:55 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ntVGM-000POV-KT; Tue, 24 May 2022 16:11:54 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Michael Hennerich <michael.hennerich@analog.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Josua Mayer <josua@solid-run.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] dt-bindings: net: adin: Fix adi,phy-output-clock description syntax
-Date:   Tue, 24 May 2022 16:11:53 +0200
-Message-Id: <6fcef2665a6cd86a021509a84c5956ec2efd93ed.1653401420.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Tue, 24 May 2022 10:16:54 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523724C419;
+        Tue, 24 May 2022 07:16:53 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id i74so11763427ioa.4;
+        Tue, 24 May 2022 07:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r6SGlowYHrtRFDegHTjmNFDhKSVxwF4/004ZPrVPYsc=;
+        b=gF9J4IdP0xoCiyDi83UAUS9lApmwlilAjLoVSO6fmL3vktAkpGWOXo1kmZfbAaishU
+         G6dQ7pF6d7m9bvGPdGXZi8il67MB6b7ZRZ//5KaZhhT75VkqJ4va4CYN+uBQoeBHB1QT
+         ulO0aZJ+90shfFAfBrQBsx4npX7aHsAlo8WT9ESMYPiB97122F1uXrIbJNaWyAEJ4LGe
+         ltlSjpZZDKGCz5iWlZ7tI/1NS9+ayUniNU2pVQW35z+/P13Bpn5InwRKj/mlvQlWWxnM
+         SvbsV3bvlIdoqcRK0xIriOcJ6iyjpxa20xSm1pyTU7YbLw+MgOTy8/UJuUbcMy5cbcn+
+         bwXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r6SGlowYHrtRFDegHTjmNFDhKSVxwF4/004ZPrVPYsc=;
+        b=5u1w3ISH0TgLllEjW3wUztT2+w7n/ybRxQhcNXSBqvuVStIMklCNvf0KLL9Up31XPo
+         6/3aTRGjYEbBGBqY22GRlhpu7Vf5BvbD4vbQzfPtqr6bzHf5hCAHIMhv67Ac5nH9DYC2
+         bEuKyHuro4PZbend4sssgrxgpOrM9w3LfP05ceTsdLp67OlGE+R+kEdteSQ5Shs7bnPg
+         mXNRJdYv4fOwl95dROO4wOs8n9kjerrETFIY3T/veg3k7ETa/RIhoge95hD5V5OTF2TB
+         k7CtINVwGdOh4oaM1yi53SYigmPB619O1pztFTm0pLVbxVj23Wvv8k/848eRNE3NNySZ
+         PrDQ==
+X-Gm-Message-State: AOAM532uVfrxMj1WQ8GA/4+byxz6P1JCfJ589lWnEbrJIZErgYlGcv95
+        1aKbZOJ81QN4Whw3HL6il1Zg2hT/Y0LXIU85ajk=
+X-Google-Smtp-Source: ABdhPJxwdv0rv6Uvq71G2pfuM/bF/D02MITsYb66ekSraCXxy0HndJF8nsxaH94TE+rkAMIXnGM9JJZKWdNDHgzD6J8=
+X-Received: by 2002:a05:6602:59d:b0:665:7450:16d with SMTP id
+ v29-20020a056602059d00b006657450016dmr2056631iox.44.1653401811403; Tue, 24
+ May 2022 07:16:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <23e0ba7863d51ab629498762a97d477645aeafea.1653123744.git.christophe.jaillet@wanadoo.fr>
+ <CAKwvOdneqUvq+Nz_zPmJmuPFfAvWQgnzrw1AJt=WqQF2hThF-A@mail.gmail.com>
+In-Reply-To: <CAKwvOdneqUvq+Nz_zPmJmuPFfAvWQgnzrw1AJt=WqQF2hThF-A@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 24 May 2022 16:16:39 +0200
+Message-ID: <CANiq72kySVvOQ7eqwe0Jzz3V0JTtrcqODHR9Ty4-sfDMdzP6XQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] kbuild: Add an option to enable -O1 and speed-up
+ compilation time
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan <dan.carpenter@oracle.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"make dt_binding_check":
+On Mon, May 23, 2022 at 8:27 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> As with the Rust series, I'm not a fan of this (or
+> CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3):
+> https://lore.kernel.org/lkml/CAKwvOd=7QTUH69+ZbT7e8einvgcosTbDkyohmPaUBv6_y8RfrQ@mail.gmail.com/
 
-    Documentation/devicetree/bindings/net/adi,adin.yaml:40:77: [error] syntax error: mapping values are not allowed here (syntax)
+I think it should be decided whether we want extra levels or not, and
+apply that policy to both the C and Rust sides.
 
-The first line of the description ends with a colon, hence the block
-needs to be marked with a "|".
+If we don't, then yeah, let's remove them in both sides and just let
+users modify `CFLAGS` as needed.
 
-Fixes: 1f77204e11f8b9e5 ("dt-bindings: net: adin: document phy clock output properties")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- Documentation/devicetree/bindings/net/adi,adin.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+If we do, then having them as config options makes sense so that they
+can be kept working.
 
-diff --git a/Documentation/devicetree/bindings/net/adi,adin.yaml b/Documentation/devicetree/bindings/net/adi,adin.yaml
-index 77750df0c2c45e19..88611720545df2ce 100644
---- a/Documentation/devicetree/bindings/net/adi,adin.yaml
-+++ b/Documentation/devicetree/bindings/net/adi,adin.yaml
-@@ -37,7 +37,8 @@ properties:
-     default: 8
- 
-   adi,phy-output-clock:
--    description: Select clock output on GP_CLK pin. Two clocks are available:
-+    description: |
-+      Select clock output on GP_CLK pin. Two clocks are available:
-       A 25MHz reference and a free-running 125MHz.
-       The phy can alternatively automatically switch between the reference and
-       the 125MHz clocks based on its internal state.
--- 
-2.25.1
-
+Cheers,
+Miguel

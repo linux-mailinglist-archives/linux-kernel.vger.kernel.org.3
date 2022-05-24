@@ -2,117 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 158C2532365
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271F4532372
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiEXGlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 02:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
+        id S234016AbiEXGnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 02:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiEXGlV (ORCPT
+        with ESMTP id S229945AbiEXGnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 02:41:21 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDC21836E;
-        Mon, 23 May 2022 23:41:18 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 24 May
- 2022 14:41:13 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 24 May
- 2022 14:41:10 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Veerasenareddy Burru <vburru@marvell.com>,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Haowen Bai <baihaowen@meizu.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V3] octeon_ep: Remove unnecessary cast
-Date:   Tue, 24 May 2022 14:41:08 +0800
-Message-ID: <1653374469-30555-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 24 May 2022 02:43:47 -0400
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F497CB1F
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:43:47 -0700 (PDT)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id B43ED10047F9C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:43:46 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id tOGgnZLd1wPf0tOGgn9XMn; Tue, 24 May 2022 06:43:46 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=KpOIZUaN c=1 sm=1 tr=0 ts=628c7ea2
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=oZkIemNP1mAA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Um+lJsmom1evKLmv0TS2POJdkosp2k84+u0Ar1sEbvw=; b=lD/T/zNrazyhBgT9VQqeqyRKtS
+        0Bioi6bKKyVx7ql5o3dIUXZSAjeRt2ru2DEdmasK4BK0XyKC4pZXDgMXRBIyc3T6gG+AwBhN8VAcx
+        UeqI0crz4pXDsQqLCovJyw6hAVIDDEbsYxFNz3mqB4XTaS3iWdJGrWdTxLXuzYpDYGN6a7XidvaDF
+        4gtJKsg4l0PlOT3DiR4gtSOBgbPOtCWJaK/aI6i8pTNIvzQfj4MrvNoyM+JCOVZSWXDDUi2ZurcQp
+        aZcD5JA1fqSDvf6QJmypAn0NjGcCCv46vsKmmv+UXzTGrIKFOYGmrR7r7FdeYcBffJI3WRpSW9M2m
+        jXJbPlhQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:52006 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1ntOGe-003oWV-R8; Tue, 24 May 2022 00:43:44 -0600
+Subject: Re: [PATCH 5.17 000/158] 5.17.10-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220523165830.581652127@linuxfoundation.org>
+In-Reply-To: <20220523165830.581652127@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <53925135-eda7-9c5a-d019-bb618366ed7e@w6rz.net>
+Date:   Mon, 23 May 2022 23:43:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1ntOGe-003oWV-R8
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:52006
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-./drivers/net/ethernet/marvell/octeon_ep/octep_rx.c:161:18-40: WARNING:
-casting value returned by memory allocation function to (struct
-octep_rx_buffer *) is useless.
+On 5/23/22 10:02 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.10 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.10-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-and we do more optimization:
-1. remove casting value
-2. use obvious size
-3. use kvcalloc instead of vzalloc
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
-V1->V2: change vzalloc to vcalloc as suggestion.
-V2->V3: use obvious size; use kvcalloc instead of vzalloc.
-
- drivers/net/ethernet/marvell/octeon_ep/octep_rx.c | 8 ++++----
- drivers/net/ethernet/marvell/octeon_ep/octep_rx.h | 2 --
- 2 files changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-index d9ae0937d17a..d6a0da61db44 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
-@@ -158,8 +158,8 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
- 		goto desc_dma_alloc_err;
- 	}
- 
--	oq->buff_info = (struct octep_rx_buffer *)
--			vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
-+	oq->buff_info = kvcalloc(oq->max_count, sizeof(struct octep_rx_buffer),
-+				 GFP_KERNEL);
- 	if (unlikely(!oq->buff_info)) {
- 		dev_err(&oct->pdev->dev,
- 			"Failed to allocate buffer info for OQ-%d\n", q_no);
-@@ -176,7 +176,7 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
- 	return 0;
- 
- oq_fill_buff_err:
--	vfree(oq->buff_info);
-+	kvfree(oq->buff_info);
- 	oq->buff_info = NULL;
- buf_list_err:
- 	dma_free_coherent(oq->dev, desc_ring_size,
-@@ -230,7 +230,7 @@ static int octep_free_oq(struct octep_oq *oq)
- 
- 	octep_oq_free_ring_buffers(oq);
- 
--	vfree(oq->buff_info);
-+	kvfree(oq->buff_info);
- 
- 	if (oq->desc_ring)
- 		dma_free_coherent(oq->dev,
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
-index 782a24f27f3e..34a32d95cd4b 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
-@@ -67,8 +67,6 @@ struct octep_rx_buffer {
- 	u64 len;
- };
- 
--#define OCTEP_OQ_RECVBUF_SIZE    (sizeof(struct octep_rx_buffer))
--
- /* Output Queue statistics. Each output queue has four stats fields. */
- struct octep_oq_stats {
- 	/* Number of packets received from the Device. */
--- 
-2.7.4
+Tested-by: Ron Economos <re@w6rz.net>
 

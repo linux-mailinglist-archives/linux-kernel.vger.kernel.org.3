@@ -2,86 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BE65330AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52105330C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240458AbiEXSuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 14:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        id S240513AbiEXS6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 14:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234121AbiEXSuT (ORCPT
+        with ESMTP id S238576AbiEXS6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 14:50:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B3D167FA;
-        Tue, 24 May 2022 11:50:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67C9BB81B87;
-        Tue, 24 May 2022 18:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 08F07C34113;
-        Tue, 24 May 2022 18:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653418216;
-        bh=bPYLomqq+IDt+hcVr24VNY6CkBAitCaV+xfKCuRVj0k=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DtC4dsctItMJoAE9ABWo0L2f8qotyqGWqeW3XP1EH0DdAuPD3d6T8YJW+QYKvcpDi
-         J6TZUE8ZXTv8NY0UPY7h3GRJ5hEfcz+QejZjCNE4AI47ioyT9I4Zycu8anbwzPK0mQ
-         FJbKE7lRQlRf8yXc/yDvQiXfRzi/g3pFWNouptrBTC33AiuHyxnQPbTq2t6aq+GKKo
-         euWwHPH6fGg4vrCxrirlQwGXWfOrA6X65INF6zfdCSt2wJeA1zdZZ5W/+07Win10Q3
-         XSqTRvJyoPFA0iaLCZ1hxCvzP0hFPxfHk4cMJ05THNTIVF2x0ZQ394knTGvSBMaxnq
-         iAwGQxd/wEbIA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DA9B1F03945;
-        Tue, 24 May 2022 18:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        Tue, 24 May 2022 14:58:13 -0400
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 514075B3C6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:58:12 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 24OIqnf7028066;
+        Tue, 24 May 2022 13:52:49 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 24OIqmBx028065;
+        Tue, 24 May 2022 13:52:48 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Tue, 24 May 2022 13:52:47 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc: e500: Fix compilation with gcc e500 compiler
+Message-ID: <20220524185247.GK25951@gate.crashing.org>
+References: <20220524093939.30927-1-pali@kernel.org> <20220524175955.GI25951@gate.crashing.org> <20220524181255.bmszzxmbwzv7zed7@pali>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 net] Revert "net/smc: fix listen processing for SMC-Rv2"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165341821589.16038.88620820798797922.git-patchwork-notify@kernel.org>
-Date:   Tue, 24 May 2022 18:50:15 +0000
-References: <20220524090230.2140302-1-liuyacan@corp.netease.com>
-In-Reply-To: <20220524090230.2140302-1-liuyacan@corp.netease.com>
-To:     None <liuyacan@corp.netease.com>
-Cc:     pabeni@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kgraul@linux.ibm.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, ubraun@linux.ibm.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220524181255.bmszzxmbwzv7zed7@pali>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 24 May 2022 17:02:30 +0800 you wrote:
-> From: liuyacan <liuyacan@corp.netease.com>
+On Tue, May 24, 2022 at 08:12:55PM +0200, Pali Rohár wrote:
+> On Tuesday 24 May 2022 12:59:55 Segher Boessenkool wrote:
+> > On Tue, May 24, 2022 at 11:39:39AM +0200, Pali Rohár wrote:
+> > > gcc e500 compiler does not support -mcpu=powerpc option. When it is
+> > > specified then gcc throws compile error:
+> > > 
+> > >   gcc: error: unrecognized argument in option ‘-mcpu=powerpc’
+> > >   gcc: note: valid arguments to ‘-mcpu=’ are: 8540 8548 native
+> > 
+> > What?  Are you using some modified version of GCC, perhaps?
 > 
-> This reverts commit 8c3b8dc5cc9bf6d273ebe18b16e2d6882bcfb36d.
+> Hello! I'm using official gcc version, no special modification.
 > 
-> Some rollback issue will be fixed in other patches in the future.
+> > No version of GCC that isn't hamstrung can have this output.
 > 
-> Link: https://lore.kernel.org/all/20220523055056.2078994-1-liuyacan@corp.netease.com/
+> gcc for e500 cores has really this output when you pass -mcpu=powerpc.
 > 
-> [...]
+> Upstream gcc dropped support for e500 cores during development of
+> version 9.
 
-Here is the summary with links:
-  - [v3,net] Revert "net/smc: fix listen processing for SMC-Rv2"
-    https://git.kernel.org/netdev/net-next/c/9029ac03f20a
+This isn't true.  The SPE instruction extension is no longer supported
+(because it wasn't maintained).  Everything else still works.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> But you can still compile and install gcc 8.5.0 (last version
+> of gcc 8) which has this full e500 support.
+> 
+> Really, you can easily try it. Debian 10 (Buster) has gcc 8.3.0 in its
+> default installation and also provides packages with cross compilers.
+> Just run 'sudo apt install gcc-powerpc-linux-gnuspe' on desktop amd64
+> version of Debian 10, it will install e500 cross compiler.
+> 
+> -mcpu=8540 specify e500v1 and -mcpu=8548 specify e500v2
+
+Aha.  Right, because this config forces -mspe it requires one of these
+CPUs.
+
+You can use a powerpc-linux compiler instead, and everything will just
+work.  These CPUs are still supported, in all of GCC 9 .. GCC 12 :-)
 
 
+Segher

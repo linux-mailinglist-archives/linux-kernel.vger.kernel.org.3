@@ -2,169 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D711532BC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE098532B99
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238020AbiEXN6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S237955AbiEXNuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiEXN6U (ORCPT
+        with ESMTP id S237945AbiEXNuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:58:20 -0400
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3041EAFF;
-        Tue, 24 May 2022 06:58:19 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 24ODuUKh017802;
-        Tue, 24 May 2022 22:56:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 24ODuUKh017802
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653400590;
-        bh=sjzxfQyA5cu7vCUn9H7rwWsrKIkATdI1T3gWr3+EvFM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GUY4tcCCIQYGrBcVGWciRSY8U7mlxzTBftlQnpLAwi6pKuI9k5rkoo0ywSWbefzRr
-         Y22j04/QpwYz9Rze2QXBBzhDa5kKOH8khZWnon1TgKLF6106GcZttWzQzQRFRD8V26
-         aHiE4WkJ5Mwk6EARm/KdgFicHD3xVI5h6aHhJK04/DDwk7nE1NojUapUe+ZXdLGtuX
-         GxYYzc446rfeSX6BmNQKuAZNmIZ1Bg4vGVjumSUIRVGgTNxULvsqTPy0jrWUyFm0rB
-         +J4q2QoyTJdwF/rVw5nNe6S0xxLZpvDqR4pQ/zp0i0MawT35B5V4iGZ15PcdSK4xUm
-         iuAJ0Ib/CSDjQ==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH] gcc-plugins: use KERNELVERSION for plugin version
-Date:   Tue, 24 May 2022 22:55:41 +0900
-Message-Id: <20220524135541.1453693-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 24 May 2022 09:50:13 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2356C95DD5;
+        Tue, 24 May 2022 06:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653400213; x=1684936213;
+  h=from:to:cc:subject:date:message-id;
+  bh=zDknRWoz/4PyOLzohzgxcN97VkyYE+Alkf3vq8P2JJE=;
+  b=SEVJonxntjcpDvaEXKNYvqWVH6L3Wpi/SHkP98lWIGyKcZFviW+Pb+G2
+   6oxCmJq32bq86nWHpvS5psRUiddkwyH8a7VoVBxCBEq9KvbiMP2XuvEYc
+   NYWXmKwYeB3dycNBUVEidXvhBjs6rhKFuer7N6ZqBd/yT+nLt8byG/XOk
+   NfApDYxj95SiEDR8FbWuFBdCn1N9N6gR0ifr/n0rLrsxvZwPqKfrUUmwJ
+   WODyBj7lHKCuy7fdkm5tU65i1mqWI4SrjsKvWVc3TcpCJSrl2rOfcKG5s
+   JzQRnO0CJC5WbB/6gXQLa0i1BbNsPZvgAVTo74Y3Mjgqib9jLUbUn9K6d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="272351824"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="272351824"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 06:50:12 -0700
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="601311965"
+Received: from chenyi-pc.sh.intel.com ([10.239.159.73])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 06:50:10 -0700
+From:   Chenyi Qiang <chenyi.qiang@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/4] Introduce Notify VM exit
+Date:   Tue, 24 May 2022 21:56:20 +0800
+Message-Id: <20220524135624.22988-1-chenyi.qiang@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 61f60bac8c05 ("gcc-plugins: Change all version strings match
-kernel") broke parallel builds.
+Virtual machines can exploit Intel ISA characterstics to cause
+functional denial of service to the VMM. This series introduces a new
+feature named Notify VM exit, which can help mitigate such kind of
+attacks.
 
-Instead of adding the dependency between GCC plugins and utsrelease.h,
-let's use KERNELVERSION, which does not require any build artifact.
+Patch 1: An extension of KVM_SET_VCPU_EVENTS ioctl to inject a
+synthesized shutdown event from user space. This is also a fix for other
+synthesized triple fault, e.g. the RSM patch or nested_vmx_abort(),
+which could get lost when exit to userspace to do migrate.
 
-Another reason why I want to avoid utsrelease.h is because it depends
-on CONFIG_LOCALVERSION(_AUTO) and localversion* files.
+Patch 2: A selftest about get/set triple fault event.
 
-(include/generated/utsrelease.h depends on include/config/kernel.release,
-which is generated by scripts/setlocalversion)
+Patch 3: Introduce struct kvm_caps to track misc global KVM cap/setting.
 
-I want to keep host tools independent of the kernel configuration.
+Patch 4: The main patch to enable Notify VM exit.
 
-There is no good reason to rebuild GCC plugins just because of
-CONFIG_LOCALVERSION being changed.
+---
+Change logs:
+v6 -> v7
+- Introduce a new cap KVM_CAP_TRIPLE_FAULT_EVENT to guard the extension
+  of get/set triple fault event. (Sean)
+- Add patch 3 from Sean to integrate misc kvm cap/settings. (Sean)
+- Add the kvm lock around the notify_window and flag setting. (Sean)
+- v6: https://lore.kernel.org/lkml/20220421072958.16375-1-chenyi.qiang@intel.com/
 
-We just want to associate the plugin versions with the kernel source
-version. KERNELVERSION should be enough for our purpose.
+v5 -> v6
+- Do some changes in document.
+- Add a selftest about get/set triple fault event. (Sean)
+- extend the argument to include both the notify window and some flags
+  when enabling KVM_CAP_X86_BUS_LOCK_EXIT CAP. (Sean)
+- Change to use KVM_VCPUEVENT_VALID_TRIPE_FAULT in flags field and add
+  pending_triple_fault field in struct kvm_vcpu_events, which allows
+  userspace to make/clear triple fault request. (Sean)
+- Add a flag in kvm_x86_ops to avoid the kvm_has_notify_vmexit global
+  varialbe and its export.(Sean)
+- v5: https://lore.kernel.org/lkml/20220318074955.22428-1-chenyi.qiang@intel.com/
 
-Fixes: 61f60bac8c05 ("gcc-plugins: Change all version strings match kernel")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/linux-mm/202205230239.EZxeZ3Fv-lkp@intel.com
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+v4 -> v5
+- rename KVM_VCPUEVENTS_SHUTDOWN to KVM_VCPUEVENTS_TRIPLE_FAULT. Make it
+  bidirection and add it to get_vcpu_events. (Sean)
+- v4: https://lore.kernel.org/all/20220310084001.10235-1-chenyi.qiang@intel.com/
+
+v3 -> v4
+- Change this feature to per-VM scope. (Jim)
+- Once VM_CONTEXT_INVALID set in exit_qualification, exit to user space
+  notify this fatal case, especially the notify VM exit happens in L2.
+  (Jim)
+- extend KVM_SET_VCPU_EVENTS to allow user space to inject a shutdown
+  event. (Jim)
+- A minor code changes.
+- Add document for the new KVM capability.
+- v3: https://lore.kernel.org/lkml/20220223062412.22334-1-chenyi.qiang@intel.com/
+
+v2 -> v3
+- add a vcpu state notify_window_exits to record the number of
+  occurence as well as a pr_warn output. (Sean)
+- Add the handling in nested VM to prevent L1 bypassing the restriction
+  through launching a L2. (Sean)
+- Only kill L2 when L2 VM is context invalid, synthesize a
+  EXIT_REASON_TRIPLE_FAULT to L1 (Sean)
+- To ease the current implementation, make module parameter
+  notify_window read-only. (Sean)
+- Disable notify window exit by default.
+- v2: https://lore.kernel.org/lkml/20210525051204.1480610-1-tao3.xu@intel.com/
+
+v1 -> v2
+- Default set notify window to 0, less than 0 to disable.
+- Add more description in commit message.
 ---
 
- scripts/gcc-plugins/Makefile                  | 2 +-
- scripts/gcc-plugins/latent_entropy_plugin.c   | 2 +-
- scripts/gcc-plugins/randomize_layout_plugin.c | 2 +-
- scripts/gcc-plugins/sancov_plugin.c           | 2 +-
- scripts/gcc-plugins/stackleak_plugin.c        | 2 +-
- scripts/gcc-plugins/structleak_plugin.c       | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+Chenyi Qiang (2):
+  KVM: x86: Extend KVM_{G,S}ET_VCPU_EVENTS to support pending triple
+    fault
+  KVM: selftests: Add a test to get/set triple fault event
 
-diff --git a/scripts/gcc-plugins/Makefile b/scripts/gcc-plugins/Makefile
-index 6f0aecad5d67..b34d11e22636 100644
---- a/scripts/gcc-plugins/Makefile
-+++ b/scripts/gcc-plugins/Makefile
-@@ -28,7 +28,7 @@ GCC_PLUGINS_DIR = $(shell $(CC) -print-file-name=plugin)
- 
- plugin_cxxflags	= -Wp,-MMD,$(depfile) $(KBUILD_HOSTCXXFLAGS) -fPIC \
- 		  -include $(srctree)/include/linux/compiler-version.h \
--		  -include $(objtree)/include/generated/utsrelease.h \
-+		  -DPLUGIN_VERSION=$(call stringify,$(KERNELVERSION)) \
- 		  -I $(GCC_PLUGINS_DIR)/include -I $(obj) -std=gnu++11 \
- 		  -fno-rtti -fno-exceptions -fasynchronous-unwind-tables \
- 		  -ggdb -Wno-narrowing -Wno-unused-variable \
-diff --git a/scripts/gcc-plugins/latent_entropy_plugin.c b/scripts/gcc-plugins/latent_entropy_plugin.c
-index 5d415b2572a8..848918764174 100644
---- a/scripts/gcc-plugins/latent_entropy_plugin.c
-+++ b/scripts/gcc-plugins/latent_entropy_plugin.c
-@@ -82,7 +82,7 @@ __visible int plugin_is_GPL_compatible;
- static GTY(()) tree latent_entropy_decl;
- 
- static struct plugin_info latent_entropy_plugin_info = {
--	.version	= UTS_RELEASE,
-+	.version	= PLUGIN_VERSION,
- 	.help		= "disable\tturn off latent entropy instrumentation\n",
- };
- 
-diff --git a/scripts/gcc-plugins/randomize_layout_plugin.c b/scripts/gcc-plugins/randomize_layout_plugin.c
-index ea2aea570404..951b74ba1b24 100644
---- a/scripts/gcc-plugins/randomize_layout_plugin.c
-+++ b/scripts/gcc-plugins/randomize_layout_plugin.c
-@@ -34,7 +34,7 @@ __visible int plugin_is_GPL_compatible;
- static int performance_mode;
- 
- static struct plugin_info randomize_layout_plugin_info = {
--	.version	= UTS_RELEASE,
-+	.version	= PLUGIN_VERSION,
- 	.help		= "disable\t\t\tdo not activate plugin\n"
- 			  "performance-mode\tenable cacheline-aware layout randomization\n"
- };
-diff --git a/scripts/gcc-plugins/sancov_plugin.c b/scripts/gcc-plugins/sancov_plugin.c
-index f3d629555b84..b76cb9c42cec 100644
---- a/scripts/gcc-plugins/sancov_plugin.c
-+++ b/scripts/gcc-plugins/sancov_plugin.c
-@@ -26,7 +26,7 @@ __visible int plugin_is_GPL_compatible;
- tree sancov_fndecl;
- 
- static struct plugin_info sancov_plugin_info = {
--	.version	= UTS_RELEASE,
-+	.version	= PLUGIN_VERSION,
- 	.help		= "sancov plugin\n",
- };
- 
-diff --git a/scripts/gcc-plugins/stackleak_plugin.c b/scripts/gcc-plugins/stackleak_plugin.c
-index de817d54b8af..ff91885f9470 100644
---- a/scripts/gcc-plugins/stackleak_plugin.c
-+++ b/scripts/gcc-plugins/stackleak_plugin.c
-@@ -44,7 +44,7 @@ static bool verbose = false;
- static GTY(()) tree track_function_decl;
- 
- static struct plugin_info stackleak_plugin_info = {
--	.version = UTS_RELEASE,
-+	.version = PLUGIN_VERSION,
- 	.help = "track-min-size=nn\ttrack stack for functions with a stack frame size >= nn bytes\n"
- 		"arch=target_arch\tspecify target build arch\n"
- 		"disable\t\tdo not activate the plugin\n"
-diff --git a/scripts/gcc-plugins/structleak_plugin.c b/scripts/gcc-plugins/structleak_plugin.c
-index 86b608a24ec0..8bc04068ed39 100644
---- a/scripts/gcc-plugins/structleak_plugin.c
-+++ b/scripts/gcc-plugins/structleak_plugin.c
-@@ -37,7 +37,7 @@
- __visible int plugin_is_GPL_compatible;
- 
- static struct plugin_info structleak_plugin_info = {
--	.version	= UTS_RELEASE,
-+	.version	= PLUGIN_VERSION,
- 	.help		= "disable\tdo not activate plugin\n"
- 			  "byref\tinit structs passed by reference\n"
- 			  "byref-all\tinit anything passed by reference\n"
+Sean Christopherson (1):
+  KVM: x86: Introduce "struct kvm_caps" to track misc caps/settings
+
+Tao Xu (1):
+  KVM: VMX: Enable Notify VM exit
+
+ Documentation/virt/kvm/api.rst                |  57 +++++++
+ arch/x86/include/asm/kvm_host.h               |  24 ++-
+ arch/x86/include/asm/vmx.h                    |   7 +
+ arch/x86/include/asm/vmxfeatures.h            |   1 +
+ arch/x86/include/uapi/asm/kvm.h               |   6 +-
+ arch/x86/include/uapi/asm/vmx.h               |   4 +-
+ arch/x86/kvm/cpuid.c                          |   8 +-
+ arch/x86/kvm/debugfs.c                        |   4 +-
+ arch/x86/kvm/lapic.c                          |   2 +-
+ arch/x86/kvm/svm/nested.c                     |   4 +-
+ arch/x86/kvm/svm/svm.c                        |  13 +-
+ arch/x86/kvm/vmx/capabilities.h               |   6 +
+ arch/x86/kvm/vmx/nested.c                     |  12 +-
+ arch/x86/kvm/vmx/vmx.c                        |  62 ++++++--
+ arch/x86/kvm/x86.c                            | 140 +++++++++++-------
+ arch/x86/kvm/x86.h                            |  33 ++++-
+ include/uapi/linux/kvm.h                      |  11 ++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../kvm/x86_64/triple_fault_event_test.c      | 101 +++++++++++++
+ 20 files changed, 390 insertions(+), 107 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/triple_fault_event_test.c
+
 -- 
-2.32.0
+2.17.1
 

@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CCD532A73
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC70532A76
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237379AbiEXMfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S237387AbiEXMg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 08:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232680AbiEXMfr (ORCPT
+        with ESMTP id S234396AbiEXMg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:35:47 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A8313F20
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:35:46 -0700 (PDT)
-Received: from mail-yb1-f178.google.com ([209.85.219.178]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MuluN-1ncV6p2OlH-00rn6L for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022
- 14:35:44 +0200
-Received: by mail-yb1-f178.google.com with SMTP id s14so3268017ybc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:35:44 -0700 (PDT)
-X-Gm-Message-State: AOAM532HVzq86NpMQWhQDw99CLVyqkFtPi7jwl+vdkVwU5cN4GTQqkZe
-        xUF8OCdr4bmrcJgLKD+Z8VlBTpQiEEpXAXikNXQ=
-X-Google-Smtp-Source: ABdhPJz9m9ORZ9D9BvYMed+3CBOfj9iqcDQAfnck/FOZ2NFPYY/aPURrCNWdk7JUo0ug0DMQDbzsidcl1E/w96/ZJ20=
-X-Received: by 2002:a25:5e09:0:b0:64d:8543:627d with SMTP id
- s9-20020a255e09000000b0064d8543627dmr26382655ybb.394.1653395743407; Tue, 24
- May 2022 05:35:43 -0700 (PDT)
+        Tue, 24 May 2022 08:36:56 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334A955202
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:36:55 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L6tss54HDzQkFP;
+        Tue, 24 May 2022 20:33:53 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 20:36:52 +0800
+Subject: Re: [PATCH v2 1/4] mm/migration: reduce the rcu lock duration
+To:     David Hildenbrand <david@redhat.com>
+CC:     <ying.huang@intel.com>, <hch@lst.de>, <dhowells@redhat.com>,
+        <cl@linux.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <naoya.horiguchi@nec.com>
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+ <20220425132723.34824-2-linmiaohe@huawei.com>
+ <eeda05fb-b0bb-3e1d-37e0-0021dd72e144@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <794b30f7-eea4-d254-9c1e-2fcd8a6aa16a@huawei.com>
+Date:   Tue, 24 May 2022 20:36:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220519082552.117736-5-wangkefeng.wang@huawei.com>
- <202205240657.BXxrhbgp-lkp@intel.com> <c4ea8f50-f445-f4ee-1d17-f21954e52a83@huawei.com>
-In-Reply-To: <c4ea8f50-f445-f4ee-1d17-f21954e52a83@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 24 May 2022 14:35:27 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1qEk3hLUOijtzXRhT4-nZO8KUe1a_3mvUVSSzaGt2itg@mail.gmail.com>
-Message-ID: <CAK8P3a1qEk3hLUOijtzXRhT4-nZO8KUe1a_3mvUVSSzaGt2itg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] mm: ioremap: Add arch_ioremap/iounmap()
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kbuild-all@lists.01.org, Linux-MM <linux-mm@kvack.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:5WSYV9p9l8D8Rx2OhPaKKjoiyxoWYbDr7kObijWVWfVx0f/kEgc
- OvPAFrxJNEHQd5zD1eb24vVFP4Evb0BolBYhcRyH97ntusYgXXN0wbadQpX+v7lCKcIw7Df
- Uac1qCNaxTp8RJE307Bd78MRoL+i35QhNdHKZnG8hn1IOhac0+6k0u3bazOX6tu+8JeV9B8
- FURo0BWoTIiE6Q++avB2g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7toOWGWTT8g=:dhIHCU18s1llDyTH3YN98d
- LVaSopTcRG39ykXFM8QJMAuowcIdw7rEViID7ePG9PxncVBMaQrqD5aDxw6rXoT54sy6NzlHK
- tLbnfM0h4A90S8VZkUpVu+o3alvA4lyzF2I1u9+4mPT9J3UMg2NiqrXcgZA7H246aTPoNPhfm
- wPLSzTrLknpOOT9/FgR68L+bhcRdTuY26etUOJb1K3MjdzcsV+HNy3Xfxw0WDfnBRhq80nUzx
- 8wwLdQHPUDBfjB1ovzdMGbuDpZjzk/q2b4/lZmIcg/OomeEXki4HK7ZFMm1vmDiEV8SEH6Joe
- QiflF+sB3aMhLSYJ2AmoxA6v341uHtjGIhyrzbz7QJKnZ7QBrrEbg/gzc7nTnxlTxGG+KfiM+
- b+z8IcijFLXyHLcNADiDzuiKmhK67cRJUS0O1tVDu9xJSC4wnVobXKsgAZCmOQyLsAbMqzFdf
- KsHl48O9SrCSyojVkIkKIrHNBrOGT/MBSUjMtAfxU3X+2gtz12mbVeRRoXrsKqunXyHPDtiLj
- AklTOjBn6QDh2lUBUtROoYyMyw3ebSLHS3+hs7HTQnYL5+Ymwcs5kvjVCjL+0oy4lgDs+0I2X
- 3jEkgF8iFokz8xH74ZcD3d/+91UOksWc/TwCn293UWn3VnQUldX9HTRSc0xpeTvVQn2v8coQv
- bA7/4Xd7pYbCm06+HKc8V0dehjwEBqO7qKKNkxtDdq0/eCs+IvX6ASHdfDoLDNAvFKYAqvpaD
- AcZI+29EvICo8+EmvUildjmQLVWCAoY07dsDKaaRDWKQvuGlo5D3g3xmOpopIi01RUPXiuTbV
- Xg4YusigGdOtHSo2dOswIWXCAACrSAaKWRdxeREUdHD9rMSWsP2W7cgQsP+0b4ljswJuFqTlI
- fxilcmMoY7ThJXv1vr0dOTBmvTZVeOrqiNfiWbNFY=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <eeda05fb-b0bb-3e1d-37e0-0021dd72e144@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 11:48 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-> >>> mm/ioremap.c:59:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *addr @@     got void [noderef] __iomem *vaddr @@
-> >     mm/ioremap.c:59:16: sparse:     expected void const *addr
-> >     mm/ioremap.c:59:16: sparse:     got void [noderef] __iomem *vaddr
-> >
-> > vim +59 mm/ioremap.c
-> >
-> >      51
-> >      52       void iounmap(volatile void __iomem *addr)
-> >      53       {
-> >      54               void __iomem *vaddr = (void __iomem *)((unsigned long)addr & PAGE_MASK);
-> >      55
-> >      56               if (arch_iounmap(vaddr))
-> >      57                       return;
-> >      58
-> >    > 59               vunmap(vaddr);
->
-> 1) Will add generic "arch_ioremap/arch_iounmap define"
->
-> 2) and change this to vunmap((void *)vaddr);
+On 2022/4/29 17:54, David Hildenbrand wrote:
+> On 25.04.22 15:27, Miaohe Lin wrote:
+>> rcu_read_lock is required by grabbing the task refcount but it's not
+>> needed for ptrace_may_access. So we could release the rcu lock after
+>> task refcount is successfully grabbed to reduce the rcu holding time.
+>>
+>> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+>> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> Cc: Huang Ying <ying.huang@intel.com>
+>> Cc: David Howells <dhowells@redhat.com>
+>> Cc: Christoph Lameter <cl@linux.com>
+>> ---
+>>  mm/migrate.c | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index b2678279eb43..b779646665fe 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1902,17 +1902,16 @@ static struct mm_struct *find_mm_struct(pid_t pid, nodemask_t *mem_nodes)
+>>  		return ERR_PTR(-ESRCH);
+>>  	}
+>>  	get_task_struct(task);
+>> +	rcu_read_unlock();
+>>  
+>>  	/*
+>>  	 * Check if this process has the right to modify the specified
+>>  	 * process. Use the regular "ptrace_may_access()" checks.
+>>  	 */
+>>  	if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
+>> -		rcu_read_unlock();
+>>  		mm = ERR_PTR(-EPERM);
+>>  		goto out;
+>>  	}
+>> -	rcu_read_unlock();
+>>  
+>>  	mm = ERR_PTR(security_task_movememory(task));
+>>  	if (IS_ERR(mm))
+> 
+> Similar pattern in:
+> 
+> mm/mempolicy.c:kernel_migrate_pages()
+> kernel/futex/syscalls.c:get_robust_list()
+> kernel/nsproxy.c:validate_nsset()
+> 
+> Exception:
+> 
+> sched/core_sched.c:sched_core_share_pid()
+> 
+> 
+> Should we unify -- i.e., adjust the remaining 3 as well?
+> 
 
-I think this need an extra __force to actually suppress the sparse
-warning, as in
+I verified that this code change applies to kernel_migrate_pages(), but not get_robust_list()
+and validate_nsset(). It's because task_struct reference is not grabbed for later ones. Will
+send the new patch soon.
 
-        vunmap((void __force *)vaddr);
-
-Using __force is usually wrong, this is one of the exceptions, so
-maybe add a comment
-as well.
-
-         Arnd
+Thanks!

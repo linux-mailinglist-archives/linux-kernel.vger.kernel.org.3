@@ -2,146 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F92532B84
+	by mail.lfdr.de (Postfix) with ESMTP id BDCA4532B86
 	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237900AbiEXNnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
+        id S237672AbiEXNog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbiEXNn0 (ORCPT
+        with ESMTP id S232626AbiEXNo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:43:26 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC1174DFE;
-        Tue, 24 May 2022 06:43:26 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id i11so30929541ybq.9;
-        Tue, 24 May 2022 06:43:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gF0TUV/f1EYPh7LzpbylOlyjLRvO0rS2Z8aSd7vESdM=;
-        b=rwc7InZVARa4UImFOH28MSER2NINZZvdPOS6LawmXEEdJm4suds/ImaINBQAfgJkvC
-         YoMCIWD6C3z+VQQ1mdWSuhxEkVi+uqBIMXfRAqN5orZBtl12zNFz/wGoAjQvu4BT06Ww
-         prntmf0f1VCUzA6KA9USF7BA+vlUm0ILWHjZMQrEGN3NOq9tFPyazLWUJtI5/dqV+og7
-         WPODhNggo5aVPvslr+01MNnC5V1P7K1f+4gzCK6IyeT16r5Hkp4ZLTuL9fbYV1Qqf0id
-         yGDda2umZ6krD93L6eaoqGhFyGm1z3wau9Om2Bl77ExP6eTjOvV1KjN1u4LPtCgNYJT/
-         qfIA==
-X-Gm-Message-State: AOAM533Iq2Q1sZnybdasilgS5xGizLqMgJ8BDUE1utBnPUa3WUDZBiPG
-        Mt7CgFa2oRUovA8hAPqfFFx2JX9IL0fzYJKOZz0=
-X-Google-Smtp-Source: ABdhPJxrx+4PyTpojs6STJF90N5O3lVotlMS1F5ewlefJhltMPRleCLQ6INTFZNdlhzglSskVKU04pl4oHllKVWle+Q=
-X-Received: by 2002:a05:6902:100a:b0:64f:44ec:13ff with SMTP id
- w10-20020a056902100a00b0064f44ec13ffmr24477246ybt.137.1653399805346; Tue, 24
- May 2022 06:43:25 -0700 (PDT)
+        Tue, 24 May 2022 09:44:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F8A9549D;
+        Tue, 24 May 2022 06:44:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E09F61605;
+        Tue, 24 May 2022 13:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3846C385AA;
+        Tue, 24 May 2022 13:44:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653399865;
+        bh=6tzj2bQqziY/R4MbzyX8Q5MPCotBU7hx6/IHvu6e0Bs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mV1IjR+iyqSgo8y7KGs2vyJNaPo+/6PQlc0uU9kQsGFNzfhxTc8QpTIkEmodH7dmH
+         Fy0FEJ6e2bfbka70QNqu9w2BhBZWgtFSJYguXFQuEv9MmZ1wbNE28WQf+2A0NHi1Fk
+         0MN0qOyQWL8GNp7MjIGo7tPyiz1eF/swdAp6tE2zIE75KmU1yYFWd41zHQXleA5iyM
+         se99C2dczn6CodqYhRyXH3whpOwnGbSxTS5usMktPJOsY+UlKlGSCPVEYTk0f9v1fy
+         T1DRdGans1uM4jDFyC2GvUPlcAiU0HhvwFSZOOXwbIfXHUCU9VPSn/qZdxq3KSOuHS
+         Mo7sIBC93LzXg==
+Date:   Tue, 24 May 2022 19:14:18 +0530
+From:   "mani@kernel.org" <mani@kernel.org>
+To:     =?utf-8?B?6LCtIOawuOaelw==?= <yonglin.tan@outlook.com>
+Cc:     "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "quic_hemantk@quicinc.com" <quic_hemantk@quicinc.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mhi@lists.linux.dev" <mhi@lists.linux.dev>
+Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQw==?= =?utf-8?Q?H?= v2] bus: mhi:
+ host: Add support for Quectel EM120 FCCL.
+Message-ID: <20220524134418.GB5745@thinkpad>
+References: <MEYP282MB2374837FFCB18B12BFDEDE80FDCF9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+ <MEYP282MB23746F19B1CF42D811D43AFCFDD49@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
- <CAJZ5v0jhWs-8ChHddebTZcaH6kA05sLEMsXM9Op7kHWAQDxeYA@mail.gmail.com> <CAMuHMdVbWpgubaA0V_tau3O=czAb3RQV9AwJsoQ+LWjf-wjMkA@mail.gmail.com>
-In-Reply-To: <CAMuHMdVbWpgubaA0V_tau3O=czAb3RQV9AwJsoQ+LWjf-wjMkA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 May 2022 15:43:14 +0200
-Message-ID: <CAJZ5v0jar8GONkAZfLuRpKHuYRu1Y_0AecmGxayM00AHCJkYVg@mail.gmail.com>
-Subject: Re: [PATCH v8 00/27] Introduce power-off+restart call chain API
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <MEYP282MB23746F19B1CF42D811D43AFCFDD49@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Mon, May 23, 2022 at 02:14:15AM +0000, 谭 永林 wrote:
+> Hi Mani,
+> 
+> Do you have any concern about this patch? 
 
-On Mon, May 23, 2022 at 8:08 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Rafael,
->
-> On Wed, May 18, 2022 at 4:46 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
->
-> > >   m68k: Switch to new sys-off handler API
->
-> Sorry, I didn't realize this was going to interact with the new m68k
-> virtual machine support, which is included in the m68k pull request
-> for v5.19.
->
-> > However, I'm going to send a pull request with it in the second half
-> > of the merge window, after the majority of the other changes in the
-> > subsystems touched by it have been integrated.
->
-> And presumably you will have to merge in v5.19-rc1, too?
+Merge window for 5.19 is open now. I'll start picking up patches once it
+closes (approx. 2 weeks).
 
-I will merge this series on top of the Linus' merges of my pull
-requests sent yesterday (assuming that he pulls them, that is).
+Thanks for the patience!
 
-> I've sent a fix.  It should appear at
-> https://lore.kernel.org/r/20220523175520.949681-1-geert@linux-m68k.org
-> soon.
->
-> Can you please include that in your PR?
+Thanks,
+Mani
 
-I will.
+> 
+> -----邮件原件-----
+> 发件人: Yonglin Tan <yonglin.tan@outlook.com> 
+> 发送时间: 2022年5月16日 14:38
+> 收件人: mani@kernel.org; loic.poulain@linaro.org; gregkh@linuxfoundation.org; quic_hemantk@quicinc.com
+> 抄送: linux-arm-msm@vger.kernel.org; linux-kernel@vger.kernel.org; mhi@lists.linux.dev; Yonglin Tan <yonglin.tan@outlook.com>
+> 主题: [PATCH v2] bus: mhi: host: Add support for Quectel EM120 FCCL.
+> 
+> The product's enumeration align with previous 
+> Quectel EM120R-GL, so the EM120 FCCL would use 
+> the same config as Quectel EM120R-GL. 
+> 
+> Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
+> ---
+> 
+> V2:
+> Fixed the format errors in the patch description.
+> 
+>  drivers/bus/mhi/host/pci_generic.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> index 8416267..0a6469c 100644
+> --- a/drivers/bus/mhi/host/pci_generic.c
+> +++ b/drivers/bus/mhi/host/pci_generic.c
+> @@ -557,6 +557,8 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+>  	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
+>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> +	{ PCI_DEVICE(0x1eac, 0x2001), /* EM120R-GL for FCCL (sdx24) */
+> +		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+>  	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
+>  		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
+> -- 
+> 2.7.4
+> 
 
-Thanks!
+-- 
+மணிவண்ணன் சதாசிவம்

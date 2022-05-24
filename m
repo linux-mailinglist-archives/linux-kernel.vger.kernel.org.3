@@ -2,132 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6DD532C1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23D5532C22
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238135AbiEXOTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S238151AbiEXOW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 10:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234426AbiEXOTl (ORCPT
+        with ESMTP id S236990AbiEXOWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 10:19:41 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FDD5E77B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:19:39 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id l82so10416597qke.3
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QIFSK7+q86peBNyVF83M929mz5YDWsMa1JplQe+w7Nk=;
-        b=Inf+g6txiTsyfphgQvO6mWRJ0v2To4UMd2hLgKSIOSaHtvXY9tUdBiG+GrrEWQMeK2
-         rWOuSOQTj/E5eMu/jSqWLm7Nbe8hdaxY6Ggwc4waFUwhOuvk9hlhjwxdWpAoBlbtoKPN
-         +SOriD+ZQERrpaJIrmNopEBCZ2I3BI8eH49U+QHxrGYEXxEBFT8RQ8sKJSWa6dzw0tzL
-         eK04TQZtOe7bCaXApA7M4/uIcyLGkys5YB3GAzxwHtwmLg14bMbQazrJJ7m6K5PSukNM
-         HDQA6l1EQ/0e1NLgpwTzX+g/77xLqkvirgqiANe0VnOa81F3Zze9KIf1Wcz5nQbUl2j+
-         JAkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QIFSK7+q86peBNyVF83M929mz5YDWsMa1JplQe+w7Nk=;
-        b=CzKNrbHH1MiPUGb4K+QIEWm0OJ+Ij2cYSeXgIu41HiYvHCmOW09XDXWTAZHB/R4Dqv
-         LMaDV3oTOs8nfD+A4kULU+PfwGxJBv/cZUSgwPz2sAshxubr3zOrqOWLBgBBD5KlHxV/
-         sA1fDBoL1rFITcvviJN2LFBF/8qBhp0pIVS7dQtCyuW6PnLKWrdvIuOEYb6MmehElgIM
-         HhRnaVwCrNzFkFXENYN2VB6FcUXzY2BhAZiJ8mu1VNJtcazVjCW+gXja/PSY7AUUkaxs
-         3mXJyu9nplMIpuTpmD/ro6UawsWCN8GoD1Jy3owrmO3qwcxDME4u8mZrzFJIxZBRTPEi
-         MLlA==
-X-Gm-Message-State: AOAM530A038VoBMt2+yf+NsXptm2TOjQIUOmLN+QDacDa9De1nydYM9R
-        UNotWN1FLS9NX5QdaXHdUBC/iA==
-X-Google-Smtp-Source: ABdhPJxOzDiG7VBFbmRvLO2WitMeyjUue0KUWacGzqB401AecLJ3spFnkhPVFUrtg2jKOjn3gxJ22A==
-X-Received: by 2002:a05:620a:4544:b0:6a0:40ef:ca7a with SMTP id u4-20020a05620a454400b006a040efca7amr16839267qkp.754.1653401979010;
-        Tue, 24 May 2022 07:19:39 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id w7-20020ac857c7000000b002f9303ce545sm5996376qta.39.2022.05.24.07.19.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 07:19:38 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ntVNp-00BBym-J3; Tue, 24 May 2022 11:19:37 -0300
-Date:   Tue, 24 May 2022 11:19:37 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Dias <joaodias@google.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
-Message-ID: <20220524141937.GA2661880@ziepe.ca>
-References: <0accce46-fac6-cdfb-db7f-d08396bf9d35@nvidia.com>
- <aafc0954-80df-dceb-03f2-2caea29cbbda@nvidia.com>
- <YnyCqwY4DxcZ/NjM@google.com>
- <20220517140049.GF63055@ziepe.ca>
- <ef901bdb-6117-bad4-2f26-c80df270b86e@nvidia.com>
- <20220517192825.GM63055@ziepe.ca>
- <b6eef200-43d1-7913-21ed-176b05fcb4fe@nvidia.com>
- <You3Q/VFaCoS0mC8@google.com>
- <bcb95d6b-4507-8836-cf17-7c3cd179a3da@nvidia.com>
- <YoxqSud9fvNXqo89@google.com>
+        Tue, 24 May 2022 10:22:55 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A8862237
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:22:53 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 684124228E;
+        Tue, 24 May 2022 14:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1653402171; bh=YeoPwINgF/K0Y1Y2RiM2xpjnuyhOyxS+KRYgH/Qk2Ng=;
+        h=From:To:Cc:Subject:Date;
+        b=Ybg3YcRtKyfMcYJvL+qv5KD8h6BYyPG31xTox/HctaoDPATqjeU8Vvry6cyahTcrx
+         FRMRfT+Y4YTZUduP5CtYem1pra+k63BOPP/lqDvpMd8/7bfm6+8vHMissaKcqV6lKx
+         wi5VckpbOsTAT3wOKtL0hhTK5yvgiBevPhMoPw3JrdAoQ0mOoVHeWdZ41QeGkZuYmN
+         4xHQ6R1+DIcu5meo0SYkgtclWrGTLtUu8rjwCnzqwhhENiOzC2k1Rf4CZZYeGZacpt
+         I4biLY0BXxFXYbEWWHZSQYfb9DQoLcqWreWq3qjK5J/tflLv43Qw9idrKTgQ0P0okI
+         UA2SuuuI3RVvA==
+From:   Hector Martin <marcan@marcan.st>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
+        Hector Martin <marcan@marcan.st>
+Subject: [PATCH] pinctrl: apple: Use a raw spinlock for the regmap
+Date:   Tue, 24 May 2022 23:22:06 +0900
+Message-Id: <20220524142206.18833-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoxqSud9fvNXqo89@google.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 10:16:58PM -0700, Minchan Kim wrote:
-> On Mon, May 23, 2022 at 07:55:25PM -0700, John Hubbard wrote:
-> > On 5/23/22 09:33, Minchan Kim wrote:
-> > ...
-> > > > So then:
-> > > > 
-> > > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > > > index 0e42038382c1..b404f87e2682 100644
-> > > > +++ b/mm/page_alloc.c
-> > > > @@ -482,7 +482,12 @@ unsigned long __get_pfnblock_flags_mask(const struct page *page,
-> > > >          word_bitidx = bitidx / BITS_PER_LONG;
-> > > >          bitidx &= (BITS_PER_LONG-1);
-> > > > 
-> > > > -       word = bitmap[word_bitidx];
-> > > > +       /*
-> > > > +        * This races, without locks, with set_pageblock_migratetype(). Ensure
-> > >                                               set_pfnblock_flags_mask would be better?
-> > > > +        * a consistent (non-tearing) read of the memory array, so that results,
-> > > 
-> > > Thanks for proceeding and suggestion, John.
-> > > 
-> > > IIUC, the load tearing wouldn't be an issue since [1] fixed the issue.
-> > 
-> > Did it? [1] fixed something, but I'm not sure we can claim that that
-> > code is now safe against tearing in all possible cases, especially given
-> > the recent discussion here. Specifically, having this code do a read,
-> > then follow that up with calculations, seems correct. Anything else is
-> 
-> The load tearing you are trying to explain in the comment would be
-> solved by [1] since the bits will always align on a word and accessing
-> word size based on word aligned address is always atomic so there is
-> no load tearing problem IIUC.
+The irqchip ops are called with a raw spinlock held, so the subsequent
+regmap usage cannot use a plain spinlock.
 
-That is not technically true. It is exactly the sort of thing
-READ_ONCE is intended to guard against.
+spi-hid-apple-of spi0.0: spihid_apple_of_probe:74
 
-> Instead of the tearing problem, what we are trying to solve with
-> READ_ONCE is to prevent refetching when the function would be
-> inlined in the future.
+=============================
+[ BUG: Invalid wait context ]
+5.18.0-asahi-00176-g0fa3ab03bdea #1337 Not tainted
+-----------------------------
+kworker/u20:3/86 is trying to lock:
+ffff8000166b5018 (pinctrl_apple_gpio:462:(&regmap_config)->lock){....}-{3:3}, at: regmap_lock_spinlock+0x18/0x30
+other info that might help us debug this:
+context-{5:5}
+7 locks held by kworker/u20:3/86:
+ #0: ffff800017725d48 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x1c8/0x670
+ #1: ffff80001e33bdd0 (deferred_probe_work){+.+.}-{0:0}, at: process_one_work+0x1c8/0x670
+ #2: ffff800017d629a0 (&dev->mutex){....}-{4:4}, at: __device_attach+0x30/0x17c
+ #3: ffff80002414e618 (&ctlr->add_lock){+.+.}-{4:4}, at: spi_add_device+0x40/0x80
+ #4: ffff800024116990 (&dev->mutex){....}-{4:4}, at: __device_attach+0x30/0x17c
+ #5: ffff800022d4be58 (request_class){+.+.}-{4:4}, at: __setup_irq+0xa8/0x720
+ #6: ffff800022d4bcc8 (lock_class){....}-{2:2}, at: __setup_irq+0xcc/0x720
 
-It is the same problem, who is to say it doesn't refetch while doing
-the maths?
+Fixes: a0f160ffcb83 ("pinctrl: add pinctrl/GPIO driver for Apple SoCs")
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/pinctrl/pinctrl-apple-gpio.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Jason
+diff --git a/drivers/pinctrl/pinctrl-apple-gpio.c b/drivers/pinctrl/pinctrl-apple-gpio.c
+index 3a33731b8cdb..b02dad2b2f69 100644
+--- a/drivers/pinctrl/pinctrl-apple-gpio.c
++++ b/drivers/pinctrl/pinctrl-apple-gpio.c
+@@ -72,6 +72,7 @@ struct regmap_config regmap_config = {
+ 	.max_register = 512 * sizeof(u32),
+ 	.num_reg_defaults_raw = 512,
+ 	.use_relaxed_mmio = true,
++	.use_raw_spinlock = true,
+ };
+ 
+ /* No locking needed to mask/unmask IRQs as the interrupt mode is per pin-register. */
+-- 
+2.35.1
+

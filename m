@@ -2,102 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D84532AA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C159F532AA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237466AbiEXMqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S237469AbiEXMrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 08:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236553AbiEXMqh (ORCPT
+        with ESMTP id S234791AbiEXMrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:46:37 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA73237E3;
-        Tue, 24 May 2022 05:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653396397; x=1684932397;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=N3Xf5bmejGKFxtZK+8/nPOKH7zCaWbe4gqpegVg1phk=;
-  b=A7+6jTdhtYKcJWPPxNbj2OwwXol140K7mQIqQtNXCHJ8fmp+BXr+MHNq
-   ry4U37SokRVOKh6AmVF/VIYTcbTeb5v2+DWYkZ7uvbssxPdVdSuyUK0lH
-   mbJ8V0egTlZ+HseUHRXSUBbkIu9xJdIPIHUGqVn77/OUfp1gP7f7cbLkB
-   0=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 24 May 2022 05:46:36 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 05:46:36 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 24 May 2022 05:45:55 -0700
-Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 24 May 2022 05:45:53 -0700
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-To:     <bjorn.andersson@linaro.org>
-CC:     <agross@kernel.org>, <mathieu.poirier@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [V4 2/2] remoteproc: qcom_q6v5: Introduce panic handler for MSS
-Date:   Tue, 24 May 2022 18:15:35 +0530
-Message-ID: <1653396335-6295-3-git-send-email-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1653396335-6295-1-git-send-email-quic_sibis@quicinc.com>
-References: <1653396335-6295-1-git-send-email-quic_sibis@quicinc.com>
+        Tue, 24 May 2022 08:47:16 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BC043498
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:47:14 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L6v7W34Vkz1JBq9;
+        Tue, 24 May 2022 20:45:43 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 20:47:12 +0800
+Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
+ PageMovable check
+To:     David Hildenbrand <david@redhat.com>
+CC:     <ying.huang@intel.com>, <hch@lst.de>, <dhowells@redhat.com>,
+        <cl@linux.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <mike.kravetz@oracle.com>, <naoya.horiguchi@nec.com>,
+        Minchan Kim <minchan@kernel.org>
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+ <20220425132723.34824-3-linmiaohe@huawei.com>
+ <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
+ <f5f933dc-450c-f3ac-34e6-d6dc1d901efd@huawei.com>
+ <4cf144a9-fff5-d993-4fcb-7f2dfa6e71bb@redhat.com>
+ <924de987-202b-a97e-e6d2-6bdab530f190@huawei.com>
+ <c566dc2c-fc70-e410-5272-767fa28cbba4@redhat.com>
+ <025d0dc8-a446-b720-14a8-97c041055f48@huawei.com>
+ <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <948ea45e-3b2b-e16c-5b8c-4c34de0ea593@huawei.com>
+Date:   Tue, 24 May 2022 20:47:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <143ab5dd-85a9-3338-53b7-e46c9060b20e@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the MSS q6v5 remoteproc drivers implement the panic handler
-that will invoke a stop to prepare the remoteprocs for post mortem
-debugging.
+On 2022/5/13 0:50, David Hildenbrand wrote:
+> On 12.05.22 15:26, Miaohe Lin wrote:
+>> On 2022/5/12 15:10, David Hildenbrand wrote:
+>>>>> If PG_isolated is still set, it will get cleared in the buddy when
+>>>>> freeing the page via
+>>>>>
+>>>>> 	page->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
+>>>>
+>>>> Yes, check_free_page only complains about flags belonging to PAGE_FLAGS_CHECK_AT_FREE and PG_isolated
+>>>> will be cleared in the buddy when freeing the page. But it might not be a good idea to reply on this ?
+>>>> IMHO, it should be better to clear the PG_isolated explicitly ourselves.
+>>>
+>>> I think we can pretty much rely on this handling in the buddy :)
+>>
+>> So is the below code change what you're suggesting?
+>>
+>> 	if (page_count(page) == 1) {
+>> 		/* page was freed from under us. So we are done. */
+>> 		ClearPageActive(page);
+>> 		ClearPageUnevictable(page);
+>> -		if (unlikely(__PageMovable(page)))
+>> -			ClearPageIsolated(page);
+>> 		goto out;
+>> 	}
+> 
+> Yeah, unless I am missing something important :)
+> 
+>>>
+>>>>
+>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> Also, I am not sure how reliable that page count check is here: if we'd
+>>>>>>> have another speculative reference to the page, we might see
+>>>>>>> "page_count(page) > 1" and not take that path, although the previous
+>>>>>>> owner released the last reference.
+>>>>>>
+>>>>>> IIUC, there should not be such speculative reference. The driver should have taken care
+>>>>>> of it.
+>>>>>
+>>>>> How can you prevent any kind of speculative references?
+>>>>>
+>>>>> See isolate_movable_page() as an example, which grabs a speculative
+>>>>> reference to then find out that the page is already isolated by someone
+>>>>> else, to then back off.
+>>>>
+>>>> You're right. isolate_movable_page will be an speculative references case. But the page count check here
+>>>> is just an optimization. If we encounter speculative references, it still works with useless effort of
+>>>> migrating to be released page.
+>>>
+>>>
+>>> Not really. The issue is that PAGE_FLAGS_CHECK_AT_FREE contains
+>>> PG_active and PG_unevictable.
+>>>
+>>> We only clear those 2 flags if "page_count(page) == 1". Consequently,
+>>> with a speculative reference, we'll run into the check_free_page_bad()
+>>> when dropping the last reference.
+>>
+>> It seems if a speculative reference happens after the "page_count(page) == 1" check,
+>> it's ok because we cleared the PG_active and PG_unevictable. And if it happens before
+>> the check, this code block is skipped and the page will be freed after migration. The
+>> PG_active and PG_unevictable will be correctly cleared when page is actually freed via
+>> __folio_clear_active. (Please see below comment)
+>>
+>>>
+>>> This is just shaky. Special casing on "page_count(page) == 1" for
+>>> detecting "was this freed by the owner" is not 100% water proof.
+>>>
+>>> In an ideal world, we'd just get rid of that whole block of code and let
+>>> the actual freeing code clear PG_active and PG_unevictable. But that
+>>> would require changes to free_pages_prepare().
+>>>
+>>>
+>>> Now I do wonder, if we ever even have PG_active or PG_unevictable still
+>>> set when the page was freed by the owner in this code. IOW, maybe that
+>>> is dead code as well and we can just remove the whole shaky
+>>> "page_count(page) == 1" code block.
+>>
+>> Think about below common scene: Anonymous page is actively used by the sole owner process, so it
+>> will have PG_active set. Then process exited while vm tries to migrate that page. So the page
+>> should have refcnt == 1 while PG_active is set? Note normally PG_active should be cleared when
+>> the page is released:
+>>
+>> __put_single_page
+>>   PageLRU
+>>     __clear_page_lru_flags
+>>       __folio_clear_active
+>>       __folio_clear_unevictable
+>>
+>> But for isolated page, PageLRU is cleared. So when the isolated page is released, __clear_page_lru_flags
+>> won't be called. So we have to clear the PG_active and PG_unevictable here manully. So I think
+>> this code block works. Or am I miss something again?
+> 
+> Let's assume the following: page as freed by the owner and we enter
+> unmap_and_move().
+> 
+> 
+> #1: enter unmap_and_move() // page_count is 1
+> #2: enter isolate_movable_page() // page_count is 1
+> #2: get_page_unless_zero() // page_count is now 2
+> #1: if (page_count(page) == 1) { // does not trigger
+> #2: put_page(page); // page_count is now 1
+> #1: put_page(page); // page_count is now 0 -> freed
+> 
+> 
+> #1 will trigger __put_page() -> __put_single_page() ->
+> __page_cache_release() will not clear the flags because it's not an LRU
+> page at that point in time, right (-> isolated)?
+> 
+> We did not run that code block that would clear PG_active and
+> PG_unevictable.
+> 
+> Which still leaves the questions:
+> 
+> a) If PG_active and PG_unevictable was cleared, where?
+> b) Why is that code block that conditionally clears the flags of any
+> value and why can't we simply drop it?
+> 
 
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
----
- drivers/remoteproc/qcom_q6v5_mss.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+I took a more close look of the code today. And I think the current code works:
+There are 3 cases in unmap_and_move:
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 46ca841371c8..8a66e70e3bfd 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -1623,11 +1623,19 @@ static int qcom_q6v5_register_dump_segments(struct rproc *rproc,
- 	return ret;
- }
- 
-+static unsigned long q6v5_panic(struct rproc *rproc)
-+{
-+	struct q6v5 *qproc = (struct q6v5 *)rproc->priv;
-+
-+	return qcom_q6v5_panic(&qproc->q6v5);
-+}
-+
- static const struct rproc_ops q6v5_ops = {
- 	.start = q6v5_start,
- 	.stop = q6v5_stop,
- 	.parse_fw = qcom_q6v5_register_dump_segments,
- 	.load = q6v5_load,
-+	.panic = q6v5_panic,
- };
- 
- static void qcom_msa_handover(struct qcom_q6v5 *q6v5)
--- 
-2.7.4
+1.page is freed through "if (page_count(page) == 1)" code block. This works
+as PG_active and PG_unevictable are cleared here.
 
+2. Failed to migrate the page. The page won't be release so we don't care about it.
+
+3. The page is migrated successfully. The PG_active and PG_unevictable are cleared
+via folio_migrate_flags():
+
+	if (folio_test_clear_active(folio)) {
+		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
+		folio_set_active(newfolio);
+	} else if (folio_test_clear_unevictable(folio))
+		folio_set_unevictable(newfolio);
+
+For the above race case, the page won't be freed through "if (page_count(page) == 1)" code block.
+It will just be migrated and freed via put_page() after folio_migrate_flags() having cleared PG_active
+and PG_unevictable.
+
+Am I miss something again ? ;)
+
+Thanks a lot!

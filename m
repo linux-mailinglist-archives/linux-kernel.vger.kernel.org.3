@@ -2,120 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D278A532195
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CF2532199
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbiEXD3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 23:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S233744AbiEXD3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 23:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbiEXD3P (ORCPT
+        with ESMTP id S233522AbiEXD3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 23:29:15 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15996996AA;
-        Mon, 23 May 2022 20:29:15 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id cs3-20020a17090af50300b001e0808b5838so61544pjb.1;
-        Mon, 23 May 2022 20:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=chsCh2ddSCkGriuAaT3W/gLAbDBmBFGcAXjDbZAAsck=;
-        b=LU4+uYppoarzT9XpfW7N7FXaVEaojsCjxslu+M+SUHazDjSsdhQLudmOwft7H+Spon
-         3MA83hS0WgLQ0HyqIY8pRVEiksGL4HTjl6WKW0SZ/NV9eY2DM6BLqfdTdk71ZgeGvyQb
-         twvN9cuFqC27bUjk7qZWHyE/1/qT0w6JMo/UIiCnuc4eQLG91/M7cooGJdvvA0X2iBzb
-         ZK68GrCSmKvefTNupclOyU6fRaQ1irzxSagsoVFjwpGLvUWsgLTi+/AslLsozuvyEGRY
-         SHloMhol+pVksqr+8MpkSsiI0toW80ooOTw9cfMgZD7hjdUt1+me5yqVHGhD0Os9101m
-         Sx0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=chsCh2ddSCkGriuAaT3W/gLAbDBmBFGcAXjDbZAAsck=;
-        b=kCzmDod4pUNJqBKH74G0y69i3lczmKSswTA8lIbPv0Ys9jc8IbEysE69ur+R/n7icV
-         QSHkWFEYWzGJfumeqkMJZsvInNC+a7Kyn9TqWGGw/+EoiaDuGU3/8dl4twGW6LHSsIkv
-         76D0j64tKoT1/w9CO5iCQH0+HnT/VGXn9TkHUqP+CcoRqIpdoibAPDaZRyt7rLhsAieD
-         XLFz5Em/cVwXGMSCp0UcLUyFSt2vNGSHE25REiD7CGEaOxSX+kp0SkrZZuqx8FAMlfK6
-         mVqSGrct8DW90QB++uck4fuhrtbfgE6Rsc6Nhch4Tl364kTxfuRc99SgXRRT0J3DiZq4
-         GhzQ==
-X-Gm-Message-State: AOAM530yQ7Wwdt3amFScHcsy46HXV6IMurwIklc3SZrEz3aLyhTYAuB2
-        gFAY/mfX/YgNwL7tbu+nNzY=
-X-Google-Smtp-Source: ABdhPJy+/+ZYbSjad/VNd4WxI0IAynwMTTJXgre/Mk7BfEWoNi7kJkVmyaJnnz5qxXi4Hw2YKEk7hg==
-X-Received: by 2002:a17:90a:b295:b0:1df:8462:b96e with SMTP id c21-20020a17090ab29500b001df8462b96emr2430989pjr.162.1653362954590;
-        Mon, 23 May 2022 20:29:14 -0700 (PDT)
-Received: from localhost.localdomain ([103.167.134.51])
-        by smtp.gmail.com with ESMTPSA id c123-20020a621c81000000b0050dc7628202sm7840573pfc.220.2022.05.23.20.29.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 20:29:13 -0700 (PDT)
-From:   Genjian Zhang <zhanggenjian123@gmail.com>
-X-Google-Original-From: Genjian Zhang <zhanggenjian@kylinos.cn>
-To:     tsbogend@alpha.franken.de, maz@kernel.org, keescook@chromium.org,
-        mark.rutland@arm.com, nathan@kernel.org, siyanteng01@gmail.com,
-        yyuasa@linux.com, ralf@linux-mips.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huhai@kylinos.cn, zhanggenjian123@gmail.com,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH v2] gpio: vr41xx: Use spurious_interrupt() and export it to modules
-Date:   Tue, 24 May 2022 11:28:47 +0800
-Message-Id: <20220524032847.3244853-1-zhanggenjian@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 23 May 2022 23:29:38 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B0C9A99F;
+        Mon, 23 May 2022 20:29:35 -0700 (PDT)
+X-UUID: 5a719f18c2c6450882ea7ce05a4f03bb-20220524
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:28cf4b3c-13b5-47c8-82ed-22aecfad8be9,OB:0,LO
+        B:10,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:76
+X-CID-INFO: VERSION:1.1.5,REQID:28cf4b3c-13b5-47c8-82ed-22aecfad8be9,OB:0,LOB:
+        10,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:76
+X-CID-META: VersionHash:2a19b09,CLOUDID:77bf617a-5ef6-470b-96c9-bdb8ced32786,C
+        OID:387ed2adb1b8,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 5a719f18c2c6450882ea7ce05a4f03bb-20220524
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 236856401; Tue, 24 May 2022 11:29:31 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 24 May 2022 11:29:30 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 24 May 2022 11:29:28 +0800
+Message-ID: <d58f73dc0d50b9704399c080503151bea6791694.camel@mediatek.com>
+Subject: Re: [PATCH v10 01/21] dt-bindings: mediatek,dpi: Add DPINTF
+ compatible
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "David Airlie" <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "Vinod Koul" <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
+CC:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-fbdev@vger.kernel.org>
+Date:   Tue, 24 May 2022 11:29:28 +0800
+In-Reply-To: <20220523104758.29531-2-granquet@baylibre.com>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+         <20220523104758.29531-2-granquet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: huhai <huhai@kylinos.cn>
+On Mon, 2022-05-23 at 12:47 +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> DPINTF is similar to DPI but does not have the exact same feature set
+> or register layouts.
+> 
+> DPINTF is the sink of the display pipeline that is connected to the
+> DisplayPort controller and encoder unit. It takes the same clocks as
+> DPI.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>  .../bindings/display/mediatek/mediatek,dpi.yaml     | 13 ++++++++---
+> --
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> index dd2896a40ff0..6d9f6c11806e 100644
+> ---
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> +++
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> @@ -4,16 +4,16 @@
+>  $id: 
+> http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: mediatek DPI Controller Device Tree Bindings
+> +title: mediatek DPI/DPINTF Controller
+>  
+>  maintainers:
+>    - CK Hu <ck.hu@mediatek.com>
+>    - Jitao shi <jitao.shi@mediatek.com>
+>  
+>  description: |
+> -  The Mediatek DPI function block is a sink of the display subsystem
+> and
+> -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
+> parallel
+> -  output bus.
+> +  The Mediatek DPI and DPINTF function blocks are a sink of the
+> display
+> +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422
+> pixel data on a
+> +  parallel output bus.
+>  
+>  properties:
+>    compatible:
+> @@ -23,6 +23,7 @@ properties:
+>        - mediatek,mt8173-dpi
+>        - mediatek,mt8183-dpi
+>        - mediatek,mt8192-dpi
+> +      - mediatek,mt8195-dpintf
+>  
+>    reg:
+>      maxItems: 1
+> @@ -35,12 +36,14 @@ properties:
+>        - description: Pixel Clock
+>        - description: Engine Clock
+>        - description: DPI PLL
+> +      - description: Optional CK CG Clock
+>  
+>    clock-names:
+>      items:
+>        - const: pixel
+>        - const: engine
+>        - const: pll
+> +      - const: ck_cg
+'ck_cg' seems not a exact clock names, could you pleas check it again
+with DE.
 
-modpost complains once these drivers become modules.
-  ERROR: modpost: "irq_err_count" [drivers/gpio/gpio-vr41xx.ko] undefined!
-
-Fix it by use spurious_interrupt() and export spurious_interrupt() when
-that symbol is =m.
-
-Fixes: 27fdd325dace ("MIPS: Update VR41xx GPIO driver to use gpiolib")
-Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: huhai <huhai@kylinos.cn>
----
- arch/mips/kernel/irq.c     | 3 +++
- drivers/gpio/gpio-vr41xx.c | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/kernel/irq.c b/arch/mips/kernel/irq.c
-index 5e11582fe308..69f9a46bf9e5 100644
---- a/arch/mips/kernel/irq.c
-+++ b/arch/mips/kernel/irq.c
-@@ -49,6 +49,9 @@ asmlinkage void spurious_interrupt(void)
- {
- 	atomic_inc(&irq_err_count);
- }
-+#ifdef CONFIG_GPIO_VR41XX_MODULE
-+EXPORT_SYMBOL_GPL(spurious_interrupt);
-+#endif
- 
- void __init init_IRQ(void)
- {
-diff --git a/drivers/gpio/gpio-vr41xx.c b/drivers/gpio/gpio-vr41xx.c
-index 98cd715ccc33..8f27a0e0ad99 100644
---- a/drivers/gpio/gpio-vr41xx.c
-+++ b/drivers/gpio/gpio-vr41xx.c
-@@ -217,7 +217,7 @@ static int giu_get_irq(unsigned int irq)
- 	printk(KERN_ERR "spurious GIU interrupt: %04x(%04x),%04x(%04x)\n",
- 	       maskl, pendl, maskh, pendh);
- 
--	atomic_inc(&irq_err_count);
-+	spurious_interrupt();
- 
- 	return -EINVAL;
- }
--- 
-2.27.0
+>  
+>    pinctrl-0: true
+>    pinctrl-1: true
+> @@ -54,7 +57,7 @@ properties:
+>      $ref: /schemas/graph.yaml#/properties/port
+>      description:
+>        Output port node. This port should be connected to the input
+> port of an
+> -      attached HDMI or LVDS encoder chip.
+> +      attached HDMI, LVDS or DisplayPort encoder chip.
+>  
+>  required:
+>    - compatible
 

@@ -2,506 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488D5532EAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F4D532EA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239512AbiEXQML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 12:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S239133AbiEXQJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 12:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239847AbiEXQLr (ORCPT
+        with ESMTP id S233549AbiEXQJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 12:11:47 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9700320184;
-        Tue, 24 May 2022 09:11:44 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id l13so24970391lfp.11;
-        Tue, 24 May 2022 09:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=qm9weLaNL4nn8FQertxYN6C+mkrhTu3vRp9alXEDss4=;
-        b=C3hl1VyjK6sleZh5X3NsN4HkcpazdnD3DvB91rml+7SI+bM/M9WlbinHobisvAdCDx
-         TIFsLkor6QMpQ+FOcvltP6Y7vjOIApbqfERArF1rBmpDxNUuwx3fmpXDfcy1X6WJZ1og
-         H6LBMwkKrwG7NZRW7NvQL17o1gKB/CEveeaG+/NsUinUz1IQJ2lOgsAm2oLcM9shofvf
-         To0dJAOR5lz51Pr9hSJZi6WTUIs5PHuUhUWSAW33LrcpoG/AfTRe7fR2ArBOLDc+GaWJ
-         WEvDxgUBgJqU4u56STpTuQ0nSE3Y18JCw5qNaFyUpBmtM610Ul9uM7WhuYgYqw7rD9G3
-         ABzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=qm9weLaNL4nn8FQertxYN6C+mkrhTu3vRp9alXEDss4=;
-        b=241HTSX+KxbkQ6Vj7CmpvEMArqsgoJtwEbxg9Qd8WPNCrV8KZBHwzcDaewtXmHMals
-         Go/LTJANh8uhBx+xe7u8rFDQBYM3udkp1lW/Jxojwp3koSxKQNq/EL++I+tTE3Exr51n
-         zE9IMfZ0bs5XUVqadiqFOpIglpt7tUA2x0l9Fi9CybiS/4KfWHK5W+Ip5r8XjecDxwQ3
-         xMoNsq6lyh6Y1RV9HP/Jf/mqdJfjWcL6lrx2QAwffMfIdDuROrFtZwytccJUkDg4jkGB
-         TyEPoVzVm7C+dw+TdFM1LZzPHXd1r64UI1ZbHCElUeGtIql7vQR9bBni2JrZlm9BhoM+
-         FM3w==
-X-Gm-Message-State: AOAM531wDFoJTgJfGOCP+DQsno860BmgLtn1Ul7xWmQEEJHi83E2/vdT
-        ONlrKoTNlHKbiURlicU+uV8=
-X-Google-Smtp-Source: ABdhPJymEImVNMQVJEQurd3WYXxyCnU02Ld7OWJwHzzYYlnnKByiq/YpRyTQbxag9jFDkQ9qyPIpBA==
-X-Received: by 2002:a05:6512:1316:b0:473:fda3:8dc8 with SMTP id x22-20020a056512131600b00473fda38dc8mr20057105lfu.529.1653408702637;
-        Tue, 24 May 2022 09:11:42 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id r5-20020a19ac45000000b0047255d21167sm2602292lfc.150.2022.05.24.09.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 09:11:42 -0700 (PDT)
-Subject: Re: [PATCH V2 5/7] dt-bindings: Add xen,dev-domid property
- description for xen-grant DMA ops
-To:     Stefano Stabellini <sstabellini@kernel.org>
-Cc:     xen-devel <xen-devel@lists.xenproject.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
- <1651947548-4055-6-git-send-email-olekstysh@gmail.com>
- <CAK8P3a2cAnXr8TDDYTiFxTWzQxa67sGnYDQRRD+=Q8_cSb1mEw@mail.gmail.com>
- <56e8c32d-6771-7179-005f-26ca58555659@gmail.com>
- <CAK8P3a1YhkEZ8gcbXHEa5Bwx-4VVRJO8SUHf8=RNWRsc2Yo-+A@mail.gmail.com>
- <460a746c-6b61-214b-4653-44a1430e314d@gmail.com>
- <alpine.DEB.2.22.394.2205181802310.1905099@ubuntu-linux-20-04-desktop>
- <6f469e9c-c26e-f4be-9a85-710afb0d77eb@gmail.com>
- <390ba7bb-ee9e-b7b7-5f08-71a7245fa4ec@gmail.com>
- <alpine.DEB.2.22.394.2205231856330.1905099@ubuntu-linux-20-04-desktop>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <606dfdcc-ec10-0c4a-04e9-72cd73ee6676@gmail.com>
-Date:   Tue, 24 May 2022 19:11:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 24 May 2022 12:09:01 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9B9BD6;
+        Tue, 24 May 2022 09:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653408540; x=1684944540;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=5Gcuxx4a6dpgfqmvk6ReqxoKJmrbkWXrK0zygSxYLWc=;
+  b=ConMUETlXye9adA/pIsAy3HIYsEQfhQ2/9m3jKY+F1rwzZTjeVM/94No
+   JWFY9KZ4cHm02HZjeqdWqnt234QdVSUpR+2Wpy0tV6vkYy+FWJdV+gAAL
+   WepZ1y9q/23cqpLuN6HtLI3KsfIXNivAaq9HbeEaxxqKC6VueSw/CApgd
+   qOQMkFKRUGpf0SAJNGJXspyllTSyq/dcuCSqJa9YIJlhkLp56F5hNHIQa
+   EGlvfLzOx3sYzrgCaN+IdTAUg5QR+eDuCHb4i+/JdMT4fm5A6LRWx+wYQ
+   qw+x2QLp8TlSgV+VhRhIyB4sx7D91A0NqJGv75sDuqFr8Bo8c3wW2sqpo
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="271147410"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="271147410"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 09:08:42 -0700
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="703531762"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 09:08:42 -0700
+Date:   Tue, 24 May 2022 09:12:35 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Christoph Hellwig <hch@infradead.org>, vkoul@kernel.org,
+        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v4 3/6] iommu/vt-d: Implement domain ops for
+ attach_dev_pasid
+Message-ID: <20220524091235.6dddfab4@jacob-builder>
+In-Reply-To: <20220524135135.GV1343366@nvidia.com>
+References: <20220518182120.1136715-1-jacob.jun.pan@linux.intel.com>
+        <20220518182120.1136715-4-jacob.jun.pan@linux.intel.com>
+        <20220524135135.GV1343366@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.22.394.2205231856330.1905099@ubuntu-linux-20-04-desktop>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jason,
 
-On 24.05.22 04:58, Stefano Stabellini wrote:
+On Tue, 24 May 2022 10:51:35 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Hello Stefano, all
+> On Wed, May 18, 2022 at 11:21:17AM -0700, Jacob Pan wrote:
+> > On VT-d platforms with scalable mode enabled, devices issue DMA requests
+> > with PASID need to attach PASIDs to given IOMMU domains. The attach
+> > operation involves the following:
+> > - Programming the PASID into the device's PASID table
+> > - Tracking device domain and the PASID relationship
+> > - Managing IOTLB and device TLB invalidations
+> > 
+> > This patch add attach_dev_pasid functions to the default domain ops
+> > which is used by DMA and identity domain types. It could be extended to
+> > support other domain types whenever necessary.
+> > 
+> > Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> >  drivers/iommu/intel/iommu.c | 72 +++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 70 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> > index 1c2c92b657c7..75615c105fdf 100644
+> > +++ b/drivers/iommu/intel/iommu.c
+> > @@ -1556,12 +1556,18 @@ static void __iommu_flush_dev_iotlb(struct
+> > device_domain_info *info, u64 addr, unsigned int mask)
+> >  {
+> >  	u16 sid, qdep;
+> > +	ioasid_t pasid;
+> >  
+> >  	if (!info || !info->ats_enabled)
+> >  		return;
+> >  
+> >  	sid = info->bus << 8 | info->devfn;
+> >  	qdep = info->ats_qdep;
+> > +	pasid = iommu_get_pasid_from_domain(info->dev,
+> > &info->domain->domain);  
+> 
+> No, a simgple domain can be attached to multiple pasids, all need to
+> be flushed.
+> 
+Here is device TLB flush, why would I want to flush PASIDs other than my
+own device attached?
 
-> On Mon, 23 May 2022, Oleksandr wrote:
->>>> On Thu, 19 May 2022, Oleksandr wrote:
->>>>>> On Wed, May 18, 2022 at 5:06 PM Oleksandr <olekstysh@gmail.com> wrote:
->>>>>>> On 18.05.22 17:32, Arnd Bergmann wrote:
->>>>>>>> On Sat, May 7, 2022 at 7:19 PM Oleksandr Tyshchenko
->>>>>>>> <olekstysh@gmail.com> wrote:
->>>>>>>>      This would mean having a device
->>>>>>>> node for the grant-table mechanism that can be referred to using
->>>>>>>> the
->>>>>>>> 'iommus'
->>>>>>>> phandle property, with the domid as an additional argument.
->>>>>>> I assume, you are speaking about something like the following?
->>>>>>>
->>>>>>>
->>>>>>> xen_dummy_iommu {
->>>>>>>        compatible = "xen,dummy-iommu";
->>>>>>>        #iommu-cells = <1>;
->>>>>>> };
->>>>>>>
->>>>>>> virtio@3000 {
->>>>>>>        compatible = "virtio,mmio";
->>>>>>>        reg = <0x3000 0x100>;
->>>>>>>        interrupts = <41>;
->>>>>>>
->>>>>>>        /* The device is located in Xen domain with ID 1 */
->>>>>>>        iommus = <&xen_dummy_iommu 1>;
->>>>>>> };
->>>>>> Right, that's that's the idea,
->>>>> thank you for the confirmation
->>>>>
->>>>>
->>>>>
->>>>>>     except I would not call it a 'dummy'.
->>>>>>    From the perspective of the DT, this behaves just like an IOMMU,
->>>>>> even if the exact mechanism is different from most hardware IOMMU
->>>>>> implementations.
->>>>> well, agree
->>>>>
->>>>>
->>>>>>>> It does not quite fit the model that Linux currently uses for
->>>>>>>> iommus,
->>>>>>>> as that has an allocator for dma_addr_t space
->>>>>>> yes (# 3/7 adds grant-table based allocator)
->>>>>>>
->>>>>>>
->>>>>>>> , but it would think it's
->>>>>>>> conceptually close enough that it makes sense for the binding.
->>>>>>> Interesting idea. I am wondering, do we need an extra actions for
->>>>>>> this
->>>>>>> to work in Linux guest (dummy IOMMU driver, etc)?
->>>>>> It depends on how closely the guest implementation can be made to
->>>>>> resemble a normal iommu. If you do allocate dma_addr_t addresses,
->>>>>> it may actually be close enough that you can just turn the grant-table
->>>>>> code into a normal iommu driver and change nothing else.
->>>>> Unfortunately, I failed to find a way how use grant references at the
->>>>> iommu_ops level (I mean to fully pretend that we are an IOMMU driver). I
->>>>> am
->>>>> not too familiar with that, so what is written below might be wrong or
->>>>> at
->>>>> least not precise.
->>>>>
->>>>> The normal IOMMU driver in Linux doesn’t allocate DMA addresses by
->>>>> itself, it
->>>>> just maps (IOVA-PA) what was requested to be mapped by the upper layer.
->>>>> The
->>>>> DMA address allocation is done by the upper layer (DMA-IOMMU which is
->>>>> the glue
->>>>> layer between DMA API and IOMMU API allocates IOVA for PA?). But, all
->>>>> what we
->>>>> need here is just to allocate our specific grant-table based DMA
->>>>> addresses
->>>>> (DMA address = grant reference + offset in the page), so let’s say we
->>>>> need an
->>>>> entity to take a physical address as parameter and return a DMA address
->>>>> (what
->>>>> actually commit #3/7 is doing), and that’s all. So working at the
->>>>> dma_ops
->>>>> layer we get exactly what we need, with the minimal changes to guest
->>>>> infrastructure. In our case the Xen itself acts as an IOMMU.
->>>>>
->>>>> Assuming that we want to reuse the IOMMU infrastructure somehow for our
->>>>> needs.
->>>>> I think, in that case we will likely need to introduce a new specific
->>>>> IOVA
->>>>> allocator (alongside with a generic one) to be hooked up by the
->>>>> DMA-IOMMU
->>>>> layer if we run on top of Xen. But, even having the specific IOVA
->>>>> allocator to
->>>>> return what we indeed need (DMA address = grant reference + offset in
->>>>> the
->>>>> page) we will still need the specific minimal required IOMMU driver to
->>>>> be
->>>>> present in the system anyway in order to track the mappings(?) and do
->>>>> nothing
->>>>> with them, returning a success (this specific IOMMU driver should have
->>>>> all
->>>>> mandatory callbacks implemented).
->>>>>
->>>>> I completely agree, it would be really nice to reuse generic IOMMU
->>>>> bindings
->>>>> rather than introducing Xen specific property if what we are trying to
->>>>> implement in current patch series fits in the usage of "iommus" in Linux
->>>>> more-less. But, if we will have to add more complexity/more components
->>>>> to the
->>>>> code for the sake of reusing device tree binding, this raises a question
->>>>> whether that’s worthwhile.
->>>>>
->>>>> Or I really missed something?
->>>> I think Arnd was primarily suggesting to reuse the IOMMU Device Tree
->>>> bindings, not necessarily the IOMMU drivers framework in Linux (although
->>>> that would be an added bonus.)
->>>>
->>>> I know from previous discussions with you that making the grant table
->>>> fit in the existing IOMMU drivers model is difficult, but just reusing
->>>> the Device Tree bindings seems feasible?
->>> I started experimenting with that. As wrote in a separate email, I got a
->>> deferred probe timeout,
->>>
->>> after inserting required nodes into guest device tree, which seems to be a
->>> consequence of the unavailability of IOMMU, I will continue to investigate
->>> this question.
->>
->> I have experimented with that. Yes, just reusing the Device Tree bindings is
->> technically feasible (and we are able to do this by only touching
->> grant-dma-ops.c), although deferred probe timeout still stands (as there is no
->> IOMMU driver being present actually).
->>
->> [    0.583771] virtio-mmio 2000000.virtio: deferred probe timeout, ignoring
->> dependency
->> [    0.615556] virtio_blk virtio0: [vda] 4096000 512-byte logical blocks (2.10
->> GB/1.95 GiB)
->>
->>
->> Below the working diff (on top of current series):
->>
->> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
->> index da9c7ff..6586152 100644
->> --- a/drivers/xen/grant-dma-ops.c
->> +++ b/drivers/xen/grant-dma-ops.c
->> @@ -272,17 +272,24 @@ static const struct dma_map_ops xen_grant_dma_ops = {
->>
->>   bool xen_is_grant_dma_device(struct device *dev)
->>   {
->> +       struct device_node *iommu_np;
->> +       bool has_iommu;
->> +
->>          /* XXX Handle only DT devices for now */
->>          if (!dev->of_node)
->>                  return false;
->>
->> -       return of_property_read_bool(dev->of_node, "xen,backend-domid");
->> +       iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
->> +       has_iommu = iommu_np && of_device_is_compatible(iommu_np,
->> "xen,grant-dma");
->> +       of_node_put(iommu_np);
->> +
->> +       return has_iommu;
->>   }
->>
->>   void xen_grant_setup_dma_ops(struct device *dev)
->>   {
->>          struct xen_grant_dma_data *data;
->> -       uint32_t domid;
->> +       struct of_phandle_args iommu_spec;
->>
->>          data = find_xen_grant_dma_data(dev);
->>          if (data) {
->> @@ -294,16 +301,30 @@ void xen_grant_setup_dma_ops(struct device *dev)
->>          if (!dev->of_node)
->>                  goto err;
->>
->> -       if (of_property_read_u32(dev->of_node, "xen,backend-domid", &domid)) {
->> -               dev_err(dev, "xen,backend-domid property is not present\n");
->> +       if (of_parse_phandle_with_args(dev->of_node, "iommus", "#iommu-cells",
->> +                       0, &iommu_spec)) {
->> +               dev_err(dev, "Cannot parse iommus property\n");
->> +               goto err;
->> +       }
->> +
->> +       if (!of_device_is_compatible(iommu_spec.np, "xen,grant-dma") ||
->> +                       iommu_spec.args_count != 1) {
->> +               dev_err(dev, "Incompatible IOMMU node\n");
->> +               of_node_put(iommu_spec.np);
->>                  goto err;
->>          }
->>
->> +       of_node_put(iommu_spec.np);
->> +
->>          data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->>          if (!data)
->>                  goto err;
->>
->> -       data->backend_domid = domid;
->> +       /*
->> +        * The endpoint ID here means the ID of the domain where the
->> corresponding
->> +        * backend is running
->> +        */
->> +       data->backend_domid = iommu_spec.args[0];
->>
->>          if (xa_err(xa_store(&xen_grant_dma_devices, (unsigned long)dev, data,
->>                          GFP_KERNEL))) {
->> (END)
->>
->>
->>
->> Below, the nodes generated by Xen toolstack:
->>
->>          xen_grant_dma {
->>                  compatible = "xen,grant-dma";
->>                  #iommu-cells = <0x01>;
->>                  phandle = <0xfde9>;
->>          };
->>
->>          virtio@2000000 {
->>                  compatible = "virtio,mmio";
->>                  reg = <0x00 0x2000000 0x00 0x200>;
->>                  interrupts = <0x00 0x01 0xf01>;
->>                  interrupt-parent = <0xfde8>;
->>                  dma-coherent;
->>                  iommus = <0xfde9 0x01>;
->>          };
->   
-> Not bad! I like it.
+At one level up, we do have a list of device to be flushed.
+	list_for_each_entry(info, &domain->devices, link)
+		__iommu_flush_dev_iotlb(info, addr, mask);
+
+	
+Note that RID2PASID is not in the pasid_array, its DEVTLB flush also needs
+special handling in that the device is doing DMA w/o PASID, thus not aware
+of RID2PASID.
 
 
-Good.
+> This whole API isn't suitable.
+> 
+> Jason
 
 
+Thanks,
 
->   
->   
->> I am wondering, would be the proper solution to eliminate deferred probe
->> timeout issue in our particular case (without introducing an extra IOMMU
->> driver)?
-> In reality I don't think there is a way to do that. I would create an
-> empty skelethon IOMMU driver for xen,grant-dma.
-
-Ok, I found yet another option how we can avoid deferred probe timeout 
-issue. I am not sure whether it will be welcome. But it doesn't really 
-require introducing stub IOMMU driver or other changes in the guest. The 
-idea is to make IOMMU device unavailable (status = "disabled"), this way 
-of_iommu_configure() will treat that as success condition also.
-
-https://elixir.bootlin.com/linux/v5.18/source/drivers/iommu/of_iommu.c#L31
-https://elixir.bootlin.com/linux/v5.18/source/drivers/iommu/of_iommu.c#L149
-
-         xen_grant_dma {
-                 compatible = "xen,grant-dma";
-                 #iommu-cells = <0x01>;
-                 phandle = <0xfde9>;
-                 status = "disabled";
-         };
-         virtio@2000000 {
-                 compatible = "virtio,mmio";
-                 reg = <0x00 0x2000000 0x00 0x200>;
-                 interrupts = <0x00 0x01 0xf01>;
-                 interrupt-parent = <0xfde8>;
-                 dma-coherent;
-                 iommus = <0xfde9 0x01>;
-         };
-
-I have checked, this "fixes" deferred probe timeout issue.
-
-
-Or we indeed need to introduce stub IOMMU driver (I placed it to 
-driver/xen instead of driver/iommu, also we can even squash it with 
-grant-dma-ops.c?).
-This stub driver also results in NO_IOMMU condition (as "of_xlate" 
-callback is not implemented).
-
-diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-index a7bd8ce..35b91b9 100644
---- a/drivers/xen/Kconfig
-+++ b/drivers/xen/Kconfig
-@@ -335,6 +335,10 @@ config XEN_UNPOPULATED_ALLOC
-           having to balloon out RAM regions in order to obtain physical 
-memory
-           space to create such mappings.
-
-+config XEN_GRANT_DMA_IOMMU
-+       bool
-+       select IOMMU_API
-+
-  config XEN_GRANT_DMA_OPS
-         bool
-         select DMA_OPS
-@@ -343,6 +347,7 @@ config XEN_VIRTIO
-         bool "Xen virtio support"
-         depends on VIRTIO
-         select XEN_GRANT_DMA_OPS
-+       select XEN_GRANT_DMA_IOMMU
-         help
-           Enable virtio support for running as Xen guest. Depending on the
-           guest type this will require special support on the backend side
-diff --git a/drivers/xen/Makefile b/drivers/xen/Makefile
-index 1a23cb0..c0503f1 100644
---- a/drivers/xen/Makefile
-+++ b/drivers/xen/Makefile
-@@ -40,3 +40,4 @@ xen-privcmd-y                         := privcmd.o 
-privcmd-buf.o
-  obj-$(CONFIG_XEN_FRONT_PGDIR_SHBUF)    += xen-front-pgdir-shbuf.o
-  obj-$(CONFIG_XEN_UNPOPULATED_ALLOC)    += unpopulated-alloc.o
-  obj-$(CONFIG_XEN_GRANT_DMA_OPS)                += grant-dma-ops.o
-+obj-$(CONFIG_XEN_GRANT_DMA_IOMMU)      += grant-dma-iommu.o
-diff --git a/drivers/xen/grant-dma-iommu.c b/drivers/xen/grant-dma-iommu.c
-new file mode 100644
-index 00000000..b8aad8a
---- /dev/null
-+++ b/drivers/xen/grant-dma-iommu.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Stub IOMMU driver which does nothing.
-+ * The main purpose of it being present is to reuse generic device-tree 
-IOMMU
-+ * bindings by Xen grant DMA-mapping layer.
-+ */
-+
-+#include <linux/iommu.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+struct grant_dma_iommu_device {
-+       struct device *dev;
-+       struct iommu_device iommu;
-+};
-+
-+/* Nothing is really needed here */
-+static const struct iommu_ops grant_dma_iommu_ops;
-+
-+static const struct of_device_id grant_dma_iommu_of_match[] = {
-+       { .compatible = "xen,grant-dma" },
-+       { },
-+};
-+
-+static int grant_dma_iommu_probe(struct platform_device *pdev)
-+{
-+       struct grant_dma_iommu_device *mmu;
-+       int ret;
-+
-+       mmu = devm_kzalloc(&pdev->dev, sizeof(*mmu), GFP_KERNEL);
-+       if (!mmu)
-+               return -ENOMEM;
-+
-+       mmu->dev = &pdev->dev;
-+
-+       ret = iommu_device_register(&mmu->iommu, &grant_dma_iommu_ops, 
-&pdev->dev);
-+       if (ret)
-+               return ret;
-+
-+       platform_set_drvdata(pdev, mmu);
-+
-+       return 0;
-+}
-+
-+static int grant_dma_iommu_remove(struct platform_device *pdev)
-+{
-+       struct grant_dma_iommu_device *mmu = platform_get_drvdata(pdev);
-+
-+       platform_set_drvdata(pdev, NULL);
-+       iommu_device_unregister(&mmu->iommu);
-+
-+       return 0;
-+}
-+
-+static struct platform_driver grant_dma_iommu_driver = {
-+       .driver = {
-+               .name = "grant-dma-iommu",
-+               .of_match_table = grant_dma_iommu_of_match,
-+       },
-+       .probe = grant_dma_iommu_probe,
-+       .remove = grant_dma_iommu_remove,
-+};
-+
-+static int __init grant_dma_iommu_init(void)
-+{
-+       struct device_node *iommu_np;
-+
-+       iommu_np = of_find_matching_node(NULL, grant_dma_iommu_of_match);
-+       if (!iommu_np)
-+               return 0;
-+
-+       of_node_put(iommu_np);
-+
-+       return platform_driver_register(&grant_dma_iommu_driver);
-+}
-+subsys_initcall(grant_dma_iommu_init);
-
-I have checked, this also "fixes" deferred probe timeout issue.
-
-Personally I would prefer the first option, but I would be also happy to 
-use second option in order to unblock the series.
-
-What do the maintainers think?
-
-
--- 
-Regards,
-
-Oleksandr Tyshchenko
-
+Jacob

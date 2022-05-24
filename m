@@ -2,182 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A96533330
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0047A53333E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242016AbiEXWDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 18:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
+        id S242029AbiEXWG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 18:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242004AbiEXWDQ (ORCPT
+        with ESMTP id S236103AbiEXWGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 18:03:16 -0400
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DA76620D;
-        Tue, 24 May 2022 15:03:15 -0700 (PDT)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 36B4520596;
-        Wed, 25 May 2022 00:03:13 +0200 (CEST)
-Date:   Wed, 25 May 2022 00:03:12 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Subject: Re: [PATCH 0/9] drm/msm/dsi_phy: Replace parent names with clk_hw
- pointers
-Message-ID: <20220524220312.jrdkolu7eoxtcyju@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rajeev Nandan <quic_rajeevny@quicinc.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jonathan Marek <jonathan@marek.ca>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-References: <20220523213837.1016542-1-marijn.suijten@somainline.org>
- <CAA8EJprEjOWRh98V3sprjXZJZMeR25Bz1U3a_uX_KhRbU48srQ@mail.gmail.com>
+        Tue, 24 May 2022 18:06:50 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838662F020;
+        Tue, 24 May 2022 15:06:49 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id v9so18386760oie.5;
+        Tue, 24 May 2022 15:06:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nazAJnmKC29W9OE3p4jtrAjcYB6KyAUjKMWBeLzTPEM=;
+        b=pcnkDXAe5YvTRgJxeRg3matW3Bv2wtdSXK2Y9Hhj3sk6qgF61Ruuf0leQFCEirgQ7C
+         TtUxSytvQlTV0hrf7SgFsfLm4pPUSiAEwfEAiDfG+gThPQcLXdGJSK6JHNeep3tRNJ7+
+         YDxIKarQEOKdoCzcTVFB7JZVwvNYK5/lER5aExjEL2QXKzNws3LspaPVFgYSsz+Df5OO
+         AwYS+zoL7QF5PiLOdJpQg4nnSt/V9RUgdEJ5wZMHdPTNEuVr8PebFOltKY2dkCe/XFbt
+         Uhc/lImMGV4sNqpIxtqzD3SJUdxInK/NOcl8uFrZ2Zr5Q6VjdDZrqJ6pPfQznwY5JKmN
+         CRvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=nazAJnmKC29W9OE3p4jtrAjcYB6KyAUjKMWBeLzTPEM=;
+        b=elKfla4XlC3NjI+Guyj3mIUzkn2OnxrZnBkvwhq5geiw3NkXXwUz73pT+i2Lt/G8R4
+         zFMD2O6PZBGLAF8slNQEtei90/CzEeImKVQyZhnNRWdGpfdtuVDlpd2mcvMV1gzl37Oq
+         4OkNg3ufqLafURFy14QLXSCJnw4/moWPucDYe3OLaaux/luPmQyHeIEFx8XEXYC4wl9L
+         cJy6DExOZUhi5m2Eti/T28oPoKyT8Y0KennW9UOlZCBqJWVVsa/kM/HUUZp+8a9dk2Y+
+         yBYqaAGSQztIxggfb8BYo9qYV8f/BluAJa7X8vs8gdgdEoolMpWCGB29fLOCej9xiRrW
+         r76w==
+X-Gm-Message-State: AOAM533nZn7+H8Q+V/CrtL1W1O5r4ZNI7K4n9qJ9ZzW9f4VUMdeCxhiE
+        pXpdVsTtEUew7xEZ29XvQYY=
+X-Google-Smtp-Source: ABdhPJylOJvDhga94lACYzo4DYHszPBVfc6hKDFXDCn+ItVVcIHVwPQKrHsoO+UpMTYhmFLK0bMmjw==
+X-Received: by 2002:aca:5a0a:0:b0:32b:a51:6cd8 with SMTP id o10-20020aca5a0a000000b0032b0a516cd8mr3580050oib.112.1653430008860;
+        Tue, 24 May 2022 15:06:48 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q7-20020aca4307000000b00325cda1ffa2sm5734695oia.33.2022.05.24.15.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 15:06:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 24 May 2022 15:06:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal
+ support
+Message-ID: <20220524220646.GA3990738@roeck-us.net>
+References: <20220322144003.2357128-1-guoren@kernel.org>
+ <20220322144003.2357128-21-guoren@kernel.org>
+ <20220523054550.GA1511899@roeck-us.net>
+ <CAJF2gTQ5RS8wGfSDPoB4JLtPBoM=ainuz_EJ9Tweq0mqPM=ALA@mail.gmail.com>
+ <CAJF2gTSa=roJOiKFiL8nSQ12E-emz-xrXs=RNAc4zSFaPuRAzw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJprEjOWRh98V3sprjXZJZMeR25Bz1U3a_uX_KhRbU48srQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJF2gTSa=roJOiKFiL8nSQ12E-emz-xrXs=RNAc4zSFaPuRAzw@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-24 02:43:01, Dmitry Baryshkov wrote:
-> Hi,
+On Wed, May 25, 2022 at 01:46:38AM +0800, Guo Ren wrote:
+[ ... ]
+
+> > The problem is come from "__dls3's vdso decode part in musl's
+> > ldso/dynlink.c". The ehdr->e_phnum & ehdr->e_phentsize are wrong.
+> >
+> > I think the root cause is from musl's implementation with the wrong
+> > elf parser. I would fix that soon.
+> Not elf parser, it's "aux vector just past environ[]". I think I could
+> solve this, but anyone who could help dig in is welcome.
 > 
-> On Tue, 24 May 2022 at 00:38, Marijn Suijten
-> <marijn.suijten@somainline.org> wrote:
-> >
-> > As stated in [1] I promised to tackle and send this series.
-> >
-> > parent_hw pointers are easier to manage and cheaper to use than
-> > repeatedly formatting the parent name and subsequently leaving the clk
-> > framework to perform lookups based on that name.
-> >
-> > This series starts out by adding extra constructors for divider, mux and
-> > fixed-factor clocks that have parent_hw(s) pointer argument(s) instead
-> > of some DT index or name.  Followed by individual patches performing the
-> > conversion, one DSI PHY at a time.
-> >
-> > dsi_phy_28nm_8960 includes an extra fixup to replace "eternal"
-> > devm_kzalloc allocations (for the lifetime of the device) with
-> > stack-local char arrays, like all the other DSI PHY drivers.
-> >
-> > I couldn't help but notice that clock names are wildly varying:
-> >
-> > - Some use underscores in the _clk suffix where others have nothing;
-> > - Some have an _ after the %d, others have not;
-> > - Some use a _pll suffix after dsi%d or even _phy_pll suffix.
-> >
-> > Are there any thoughts or feelings towards unifying these?
-> > Theoretically no clock names are used anywhere in the kernel, and
-> > everything is based on a phandle + index in DT (I have yet to validate
-> > this).  Obviously no .name/.fw_name will be updated to not break DT.
-> 
-> I'd say, leave them as is. Even if they are historical, we don't have
-> a strong pressure to change them.
 
-Leave them as it is, or - as suggested below - clean them up?
+I am not sure I understand what you are saying here. Point is that my
+root file system, generated with musl a year or so ago, crashes with
+your patch set applied. That is a regression, even if there is a bug
+in musl.
 
-> Significant number of older platforms still use names to identify the
-> clock. And moreover apq8096/msm8960 uses dsi1/dsi2 instead of
-> dsi0/dsi1.
-> 
-> Probably we should call the next cycle "The Cycle of clocks cleaning".
-> I can volunteer to take care of 8960/8064/8016/8996, as at least I can
-> test them. But if you wish, you (or anybody else of course) can take
-> any of these platforms too, just ping me, so that I won't spend time
-> duplicating somebody's efforts.
-
-We can at least clean up the names of clocks that are not "exported" by
-the drivers.  However, we should also convert all other clk drivers to
-utilize DT to define clk dependencies instead of depending on global
-names, and already got quite some platforms tackled.  At that point we
-can just convert all names (give or take the often discussed "backwards
-compatbility" between the kernel and some ancient DT someone may still
-be running on their device).
-
-I don't own any device for the SoCs you mentioned, all good from my
-side if you take them.  We should probably note down all clock drivers
-that still need conversion and split them across devs with physical
-access, then I can check what I still have lying around here as well.
-
-> > Which, by the way, is there a particular reason for:
-> >
-> >   #define DSI_BYTE_PLL_CLK              0
-> >   #define DSI_PIXEL_PLL_CLK             1
-> >
-> > To not be in the dt-bindings and used in the DT?
-> 
-> Before my restructure of the DSI PHY subsys, each driver defined them
-> separately. And the idea of moving them to a dt-bindings header didn't
-> come to my mind. Feel free to do so, it looks like a good idea.
-> Just as a note, DP PHY also uses 0 for the link clock and 1 for the
-> pixel clock. What do you think about having a single header for these
-> names?
-
-No worries, it's already much better to have them defined once :), now
-we can just go one step further and move it to dt-bindings.  Great to
-clean up the "magic constant indices" for the DP PHY as well
-(phy-qcom-qmp.c is the only one defining these clocks, right?) and I
-think we're fine having them in one header, pending someone suggesting a
-name as I have no idea what to call it nor where to put it.  Under
-dt-bindings/clock most likely, but what common name would we choose?
-Something including qcom and mdss?
-
-> 
-> >
-> > And with enough future improvements out of the way, let's round out this
-> > patch-series by stating that it has been successfully tested on:
-> >
-> > - Sony Nile Discovery (Xperia XA2 Ultra): 14nm;
-> > - Sony Seine PDX201 (Xperia 10II): 14nm;
-> > - Sony Loire Suzu (Xperia X): 28nm.
-> >
-> > And no diff is observed in debugfs's clk_summary.
-> >
-> > Unfortunately all other devices in my collection with a 7/10nm DSI PHY
-> > have a DSC panel which we have yet to get working.
-> 
-> I will test it on RB3 (10nm) and RB5 (7nm) during one of the next few days.
-
-Lovely, thanks a ton - also for reviewing this so quickly!
-
-- Marijn
+Guenter

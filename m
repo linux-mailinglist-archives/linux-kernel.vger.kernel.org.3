@@ -2,55 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1DC532069
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0D3532070
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbiEXBvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 21:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S232855AbiEXByy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 21:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbiEXBvN (ORCPT
+        with ESMTP id S229854AbiEXByv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 21:51:13 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDA017061;
-        Mon, 23 May 2022 18:51:11 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L6cXp2hSrzQkKB;
-        Tue, 24 May 2022 09:48:10 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 09:51:09 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 09:51:08 +0800
-Subject: Re: [PATCH -next v3 3/6] nbd: don't clear 'NBD_CMD_INFLIGHT' flag if
- request is not completed
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     Josef Bacik <josef@toxicpanda.com>
-CC:     <axboe@kernel.dk>, <ming.lei@redhat.com>,
-        <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220521073749.3146892-1-yukuai3@huawei.com>
- <20220521073749.3146892-4-yukuai3@huawei.com>
- <YouWXEcyoBNUXLb7@localhost.localdomain>
- <6a549193-909b-6f6e-532b-99cd2898ad80@huawei.com>
-Message-ID: <ee5ee5f2-74ea-cac1-00e1-0645c04893ee@huawei.com>
-Date:   Tue, 24 May 2022 09:51:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 23 May 2022 21:54:51 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 08AF37B9F5;
+        Mon, 23 May 2022 18:54:47 -0700 (PDT)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Tue, 24 May 2022 09:54:29
+ +0800 (GMT+08:00)
+X-Originating-IP: [124.236.130.193]
+Date:   Tue, 24 May 2022 09:54:29 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Brian Norris" <briannorris@chromium.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        "amit karwar" <amitkarwar@gmail.com>,
+        "Ganapathi Bhat" <ganapathi017@gmail.com>,
+        "Sharvari Harisangam" <sharvari.harisangam@nxp.com>,
+        "Xinming Hu" <huxinming820@gmail.com>, kvalo@kernel.org,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
+        "Linux Kernel" <linux-kernel@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Johannes Berg" <johannes@sipsolutions.net>
+Subject: Re: [PATCH v3] mwifiex: fix sleep in atomic context bugs caused by
+ dev_coredumpv
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <CA+ASDXNBeN6k6y+eY06FkheNTNWN02P2uT9bB09KtBok0LVFfQ@mail.gmail.com>
+References: <20220523052810.24767-1-duoming@zju.edu.cn>
+ <87o7zoxrdf.fsf@email.froward.int.ebiederm.org>
+ <6a270950.2c659.180f1a46e8c.Coremail.duoming@zju.edu.cn>
+ <CA+ASDXNBeN6k6y+eY06FkheNTNWN02P2uT9bB09KtBok0LVFfQ@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-In-Reply-To: <6a549193-909b-6f6e-532b-99cd2898ad80@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Message-ID: <4fe65d9a.2cf82.180f3c5d1d6.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: by_KCgBXX4vVOoxi5OanAA--.8720W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgsAAVZdtZ1uzAABsI
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,100 +65,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/24 9:07, Yu Kuai 写道:
-> 在 2022/05/23 22:12, Josef Bacik 写道:
->> On Sat, May 21, 2022 at 03:37:46PM +0800, Yu Kuai wrote:
->>> Otherwise io will hung because request will only be completed if the
->>> cmd has the flag 'NBD_CMD_INFLIGHT'.
->>>
->>> Fixes: 07175cb1baf4 ("nbd: make sure request completion won't 
->>> concurrent")
->>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>> ---
->>>   drivers/block/nbd.c | 18 ++++++++++++++----
->>>   1 file changed, 14 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
->>> index 2ee1e376d5c4..a0d0910dae2a 100644
->>> --- a/drivers/block/nbd.c
->>> +++ b/drivers/block/nbd.c
->>> @@ -403,13 +403,14 @@ static enum blk_eh_timer_return 
->>> nbd_xmit_timeout(struct request *req,
->>>       if (!mutex_trylock(&cmd->lock))
->>>           return BLK_EH_RESET_TIMER;
->>> -    if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
->>> +    if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
->>>           mutex_unlock(&cmd->lock);
->>>           return BLK_EH_DONE;
->>>       }
->>>       if (!refcount_inc_not_zero(&nbd->config_refs)) {
->>>           cmd->status = BLK_STS_TIMEOUT;
->>> +        __clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
->>>           mutex_unlock(&cmd->lock);
->>>           goto done;
->>>       }
->>> @@ -478,6 +479,7 @@ static enum blk_eh_timer_return 
->>> nbd_xmit_timeout(struct request *req,
->>>       dev_err_ratelimited(nbd_to_dev(nbd), "Connection timed out\n");
->>>       set_bit(NBD_RT_TIMEDOUT, &config->runtime_flags);
->>>       cmd->status = BLK_STS_IOERR;
->>> +    __clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
->>>       mutex_unlock(&cmd->lock);
->>>       sock_shutdown(nbd);
->>>       nbd_config_put(nbd);
->>> @@ -745,7 +747,7 @@ static struct nbd_cmd *nbd_handle_reply(struct 
->>> nbd_device *nbd, int index,
->>>       cmd = blk_mq_rq_to_pdu(req);
->>>       mutex_lock(&cmd->lock);
->>> -    if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
->>> +    if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
->>>           dev_err(disk_to_dev(nbd->disk), "Suspicious reply %d 
->>> (status %u flags %lu)",
->>>               tag, cmd->status, cmd->flags);
->>>           ret = -ENOENT;
->>> @@ -854,8 +856,16 @@ static void recv_work(struct work_struct *work)
->>>           }
->>>           rq = blk_mq_rq_from_pdu(cmd);
->>> -        if (likely(!blk_should_fake_timeout(rq->q)))
->>> -            blk_mq_complete_request(rq);
->>> +        if (likely(!blk_should_fake_timeout(rq->q))) {
->>> +            bool complete;
->>> +
->>> +            mutex_lock(&cmd->lock);
->>> +            complete = __test_and_clear_bit(NBD_CMD_INFLIGHT,
->>> +                            &cmd->flags);
->>> +            mutex_unlock(&cmd->lock);
->>> +            if (complete)
->>> +                blk_mq_complete_request(rq);
->>> +        }
->>
->> I'd rather this be handled in nbd_handle_reply.  We should return with it
->> cleared if it's ready to be completed.  Thanks,
-> Hi,
-> 
-> Thanks for your advice, I'll do that in next version. I'll still have to
-> hold the lock to set the bit again in case blk_should_fake_timeout()
-> pass...
-
-Hi, Josef
-
-I just found out that this way is problematic:
-t1:			t2:
-recv_work
-  nbd_handle_reply
-   __clear_bit
-			nbd_xmit_timeout
-			 test_bit(NBD_CMD_INFLIGHT, &cmd->flags) -> fail
-			 return BLK_EH_DONE -> rq can't complete
-  blk_should_fake_timeout -> true
-  __set_bit
-
-__clear_bit and then __set_bit from recv_work leaves a window, and
-concurrent nbd_xmit_timeout() may lead to that request can't be
-completed through both timeout and recv_work().
-
-Do you think it's ok to keep the current implementation with some
-comments to explain the above scenario?
-
-Thanks,
-Kuai
+SGVsbG8sCgpPbiBNb24sIDIzIE1heSAyMDIyIDEyOjQyOjQ0IC0wNzAwIEJyaWFuIHdyb3RlOgoK
+PiAoSSB0aGluayBwZW9wbGUgZ2VuZXJhbGx5IGFncmVlZCBvbiB0aGlzIGFwcHJvYWNoLCBidXQg
+cGxlYXNlIHN1Ym1pdCBhCj4gbmV3IHNlcmllcywgd2l0aCBzZXBhcmF0ZSBwYXRjaGVzKQo+IAo+
+IE9uIE1vbiwgTWF5IDIzLCAyMDIyIGF0IDEyOjI3IFBNIDxkdW9taW5nQHpqdS5lZHUuY24+IHdy
+b3RlOgo+ID4gV2hhdCdzIG1vcmUsIEkgbW92ZSB0aGUgb3BlcmF0aW9ucyB0aGF0IG1heSBzbGVl
+cCBpbnRvIGEgd29yayBpdGVtIGFuZCB1c2UKPiA+IHNjaGVkdWxlX3dvcmsoKSB0byBjYWxsIGEg
+a2VybmVsIHRocmVhZCB0byBkbyB0aGUgb3BlcmF0aW9ucyB0aGF0IG1heSBzbGVlcC4KPiAKPiBZ
+b3UgZW5kIHVwIHdpdGggYSB0aW1lciB0aGF0IGp1c3QgZXhpc3RzIHRvIGtpY2sgYSB3b3JrIGl0
+ZW0uIEVyaWMKPiBzdWdnZXN0ZWQgeW91IGp1c3QgdXNlIGEgZGVsYXllZF93b3JrLCBhbmQgdGhl
+biB5b3UgZG9uJ3QgbmVlZCBib3RoIGEKPiB0aW1lciBhbmQgYSB3b3JrIHN0cnVjdC4KCkkgd2ls
+bCBzdWJtaXQgYSBuZXcgc2VyaWVzLCBvbmUgaXMgcmVtb3ZpbmcgdGhlIGdmcF90IHBhcmFtZXRl
+ciBvZiBkZXZfY29yZWR1bXB2LAphbm90aGVyIGlzIHVzaW5nIGl0IHByb3Blcmx5IGluIG13aWZp
+ZXgocHV0IHRoZSBkZXZfY29yZWR1bXB2IGluIHRoZSBkZWxheWVkX3dvcmspLgpUaGFuayB5b3Ug
+Zm9yIHlvdXIgc3VnZ2VzdGlvbnMhCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQ==

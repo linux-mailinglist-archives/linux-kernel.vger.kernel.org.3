@@ -2,42 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED6E532A5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB2E532A6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237371AbiEXMbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S237372AbiEXMee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 08:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbiEXMa6 (ORCPT
+        with ESMTP id S232416AbiEXMec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:30:58 -0400
-Received: from cmccmta1.chinamobile.com (cmccmta1.chinamobile.com [221.176.66.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80F98941BD
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:30:55 -0700 (PDT)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.87])
-        by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee4628ccffe99c-f110b;
-        Tue, 24 May 2022 20:30:54 +0800 (CST)
-X-RM-TRANSID: 2ee4628ccffe99c-f110b
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[223.108.79.97])
-        by rmsmtp-syy-appsvrnew04-12029 (RichMail) with SMTP id 2efd628ccffa4f6-ad1ba;
-        Tue, 24 May 2022 20:30:53 +0800 (CST)
-X-RM-TRANSID: 2efd628ccffa4f6-ad1ba
-From:   Tang Bin <tangbin@cmss.chinamobile.com>
-To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tang Bin <tangbin@cmss.chinamobile.com>
-Subject: [PATCH] opp: Fix error check in dev_pm_opp_attach_genpd()
-Date:   Tue, 24 May 2022 20:31:51 +0800
-Message-Id: <20220524123151.1416-1-tangbin@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.20.1.windows.1
+        Tue, 24 May 2022 08:34:32 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB3895A32
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:34:31 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2fee010f509so179779537b3.11
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JJhwxfwW7n7VLkGPMvpANvwbmPIJmDkcwtkzvJnYyJk=;
+        b=biww96eDtZOSmJhMMIl0jKPsL5VhgecE1zdzoSokTJqL2yKrSOr2xVnEPWPH1VY4O2
+         P+fHfPP/calICpdhAf4RdlGk/ot6MKOLOgjnLxZM7CKwlW9G6gd3iBCshLFMGwMG/fM5
+         3P/ii6fpdR/JtE68MCJAXRbQeasPH4hMU2+Po+MlEy9QtRWNmllxrUGSXWqTDuGCjxq+
+         qO7QGxxBnkT4/bfqvJlL1Sz7dxpwQEk0ZiNE5qZV1cVWEO1UizcsdOEhrpnSuB5mEfJ5
+         kEILaOY46Lu8rwsGe25PQ5D1KzxWmKRQhG1vWE/cLcSWyihd+egdRaBxRwM6ToLBIsKw
+         TsVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JJhwxfwW7n7VLkGPMvpANvwbmPIJmDkcwtkzvJnYyJk=;
+        b=XnRxFMEvKxvaLW6dgnmaHwQ84NbedT1Y4qLJTlSKhJ3lbnuU1TbMZpe7q1sjwEyX+i
+         nBj+Ng5HJX6vueJ2g9VoBx+ZHNmxf/iMrQFhnQlGMOb92wdCDo1ZHg3Ej8WAuOL4UMWF
+         ya7bnfrCqv0SxPkJxr+DQvAoBHO5jLxFsfb0BDEQisDqHfzsqoeCgEkOdeo8n+FatjlZ
+         riklShfVQK3pa53hK+dQ2jpYfLEFjJwamwWIuiSpj8qYS+vMTHqm1VIrwvllVK0SCek2
+         OTRpTTcEZrBF9u6LxcdVfH28cGhJuAc5LQV/NBJP2oUY4hgM+w7/1rZThJTwQ98Ww6Sl
+         CTuQ==
+X-Gm-Message-State: AOAM533BpcaZzzr9x9VNKmv2L4FuhkQ2DisXStoOsTibYAfgqK3oTGa9
+        ju2w2yGly6eS5P4M+OKWrD8Mbr95FekG7tOuFuoeCy0W21+tiw==
+X-Google-Smtp-Source: ABdhPJw9XyKlYZWLxvVbRuzoifixIo/Au5GciofjDzJUooDwGxnk79ZQnTT5HbOkUkzNGZdIkXcrM4yISawI6me1ea0=
+X-Received: by 2002:a81:4c8e:0:b0:300:37ba:2c1e with SMTP id
+ z136-20020a814c8e000000b0030037ba2c1emr1445603ywa.141.1653395670220; Tue, 24
+ May 2022 05:34:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+References: <20220523165752.797318097@linuxfoundation.org>
+In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 24 May 2022 18:04:18 +0530
+Message-ID: <CA+G9fYuj7-BSEcm8_+4DCjr5WgGdbKDkLn=hf1s6v6-bxAFOyw@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/44] 4.19.245-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,32 +71,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dev_pm_domain_attach_by_name() may return NULL in some cases,
-so IS_ERR() doesn't meet the requirements. Thus fix it.
+On Mon, 23 May 2022 at 22:35, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.245 release.
+> There are 44 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.245-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Fixes: 6319aee10e53 ("opp: Attach genpds to devices from within OPP core")
-Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
----
- drivers/opp/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 2945f3c1c..56cae6ee2 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2409,8 +2409,8 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
- 		}
- 
- 		virt_dev = dev_pm_domain_attach_by_name(dev, *name);
--		if (IS_ERR(virt_dev)) {
--			ret = PTR_ERR(virt_dev);
-+		if (IS_ERR_OR_NULL(virt_dev)) {
-+			ret = PTR_ERR(virt_dev) ? : -ENODATA;
- 			dev_err(dev, "Couldn't attach to pm_domain: %d\n", ret);
- 			goto err;
- 		}
--- 
-2.20.1.windows.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 4.19.245-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: e88efc48b31fe3946b6e39d613eeae6d96ada4fb
+* git describe: v4.19.244-45-ge88efc48b31f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.244-45-ge88efc48b31f
 
+## Test Regressions (compared to v4.19.244)
+No test regressions found.
 
+## Metric Regressions (compared to v4.19.244)
+No metric regressions found.
+
+## Test Fixes (compared to v4.19.244)
+No test fixes found.
+
+## Metric Fixes (compared to v4.19.244)
+No metric fixes found.
+
+## Test result summary
+total: 85385, pass: 70036, fail: 859, skip: 12899, xfail: 1591
+
+## Build Summary
+* arm: 275 total, 275 passed, 0 failed
+* arm64: 39 total, 39 passed, 0 failed
+* i386: 18 total, 18 passed, 0 failed
+* mips: 27 total, 27 passed, 0 failed
+* powerpc: 55 total, 54 passed, 1 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 38 total, 38 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

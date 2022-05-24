@@ -2,121 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73946532CEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9021B532CF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238677AbiEXPGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S238662AbiEXPHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238643AbiEXPGR (ORCPT
+        with ESMTP id S236350AbiEXPHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:06:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E3310D2;
-        Tue, 24 May 2022 08:06:13 -0700 (PDT)
+        Tue, 24 May 2022 11:07:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80ED63DDE1;
+        Tue, 24 May 2022 08:06:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A03E8CE1A79;
-        Tue, 24 May 2022 15:06:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F584C34115;
-        Tue, 24 May 2022 15:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653404770;
-        bh=O7X4vE0GlOx06lgMAdKQm11gzb+06yXdlSRL4alplco=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nXf8Pp4fGvt+fnXcEdHe0oVPOpJaZqbDkmhh9pIhlpLW55pk3P060FwGGr2d1dG7Q
-         8yNT5+f8qiNXIUrXFCuduVvciw6f7N+G/STt1HSyXMXFcTrBwEU6o+Adp57HsbWD2h
-         fGM0fTuPFz8UJVl90erQPksltcKDZ0t1ZkqphJHA=
-Date:   Tue, 24 May 2022 17:06:06 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 4.9 00/25] 4.9.316-rc1 review
-Message-ID: <Yoz0Xv59MrUwFkMT@kroah.com>
-References: <20220523165743.398280407@linuxfoundation.org>
- <6f4034a5-f692-8a64-a09d-8bfe49767b78@nvidia.com>
- <YozK4DvamHBJ1qdX@kroah.com>
- <fbeb9833-4166-1919-e6ab-9ac7625a21d6@nvidia.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDE6EB81722;
+        Tue, 24 May 2022 15:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C1FC34115;
+        Tue, 24 May 2022 15:06:51 +0000 (UTC)
+From:   Greg Ungerer <gerg@linux-m68k.org>
+To:     linux-m68k@vger.kernel.org
+Cc:     geert@linux-m68k.org, linux-kernel@vger.kernel.org, arnd@arndb.de,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 1/3] m68knommu: fix undefined reference to `mach_get_rtc_pll'
+Date:   Wed, 25 May 2022 01:06:15 +1000
+Message-Id: <20220524150615.52206-1-gerg@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fbeb9833-4166-1919-e6ab-9ac7625a21d6@nvidia.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 03:55:58PM +0100, Jon Hunter wrote:
-> 
-> On 24/05/2022 13:09, Greg Kroah-Hartman wrote:
-> 
-> ...
-> 
-> > > I am seeing a boot regression on tegra124-jetson-tk1 and reverting the above
-> > > commit is fixing the problem. This also appears to impact linux-4.14.y,
-> > > 4.19.y and 5.4.y.
-> > > 
-> > > Test results for stable-v4.9:
-> > >      8 builds:	8 pass, 0 fail
-> > >      18 boots:	16 pass, 2 fail
-> > >      18 tests:	18 pass, 0 fail
-> > > 
-> > > Linux version:	4.9.316-rc1-gbe4ec3e3faa1
-> > > Boards tested:	tegra124-jetson-tk1, tegra20-ventana,
-> > >                  tegra210-p2371-2180, tegra30-cardhu-a04
-> > > 
-> > > Boot failures:	tegra124-jetson-tk1
-> > 
-> > Odd.  This is also in 5.10.y, right?  No issues there?  Are we missing
-> > something?
-> 
-> 
-> Actually, the more I look at this, the more I see various intermittent
-> reports with this and it is also impacting the mainline.
-> 
-> The problem is that the commit in question is causing a ton of messages to
-> be printed a boot and this sometimes is causing the boot test to fail
-> because the boot is taking too long. The console shows ...
-> 
-> [ 1233.327547] CPU0: Spectre BHB: using loop workaround
-> [ 1233.327795] CPU1: Spectre BHB: using loop workaround
-> [ 1233.328270] CPU1: Spectre BHB: using loop workaround
-> [ 1233.328700] CPU1: Spectre BHB: using loop workaround
-> [ 1233.355477] CPU2: Spectre BHB: using loop workaround
-> ** 7 printk messages dropped **
-> [ 1233.366271] CPU0: Spectre BHB: using loop workaround
-> [ 1233.366580] CPU0: Spectre BHB: using loop workaround
-> [ 1233.366815] CPU1: Spectre BHB: using loop workaround
-> [ 1233.405475] CPU1: Spectre BHB: using loop workaround
-> [ 1233.405874] CPU0: Spectre BHB: using loop workaround
-> [ 1233.406041] CPU1: Spectre BHB: using loop workaround
-> ** 1 printk messages dropped **
-> 
-> There is a similar report of this [0] and I believe that we need a similar
-> fix for the above prints as well. I have reported this to Ard [1]. So I am
-> not sure that these Spectre BHB patches are quite ready for stable.
+Configuring for a nommu classic m68k target and enabling the generic rtc
+driver (CONFIG_RTC_DRV_GENERIC) will result in the following compile
+error:
 
-These patches are quite small, and just enable it for this known-broken
-cpu type.
+   m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
+   time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
+   m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
+   m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
 
-If there is an issue enabling it for this cpu type, then we can work on
-that upstream, but there shouldn't be a reason to prevent this from
-being merged now, especially given that it is supposed to be fixing a
-known issue.
+There are no definitions of "mach_set_rtc_pll" and "mach_get_rtc_pll" in the
+nommu code paths. Move these definitions and the associated "mach_hwclk",
+so that they are around their use case in time.c. This means they will
+always be defined on the builds that require them, and not on those that
+cannot use them - such as ColdFire (both with and without MMU enabled).
 
-thanks,
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+---
+ arch/m68k/kernel/setup_mm.c | 7 -------
+ arch/m68k/kernel/setup_no.c | 1 -
+ arch/m68k/kernel/time.c     | 9 +++++++++
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-greg k-h
+v2: move definition of mach_set_rtc_pll/mach_get_rtc_pll to fix no rtc q40 build
+
+diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
+index 8f94feed969c..07317367ead8 100644
+--- a/arch/m68k/kernel/setup_mm.c
++++ b/arch/m68k/kernel/setup_mm.c
+@@ -87,15 +87,8 @@ void (*mach_sched_init) (void) __initdata = NULL;
+ void (*mach_init_IRQ) (void) __initdata = NULL;
+ void (*mach_get_model) (char *model);
+ void (*mach_get_hardware_list) (struct seq_file *m);
+-/* machine dependent timer functions */
+-int (*mach_hwclk) (int, struct rtc_time*);
+-EXPORT_SYMBOL(mach_hwclk);
+ unsigned int (*mach_get_ss)(void);
+-int (*mach_get_rtc_pll)(struct rtc_pll_info *);
+-int (*mach_set_rtc_pll)(struct rtc_pll_info *);
+ EXPORT_SYMBOL(mach_get_ss);
+-EXPORT_SYMBOL(mach_get_rtc_pll);
+-EXPORT_SYMBOL(mach_set_rtc_pll);
+ void (*mach_reset)( void );
+ void (*mach_halt)( void );
+ void (*mach_power_off)( void );
+diff --git a/arch/m68k/kernel/setup_no.c b/arch/m68k/kernel/setup_no.c
+index 5e4104f07a44..19eea73d3c17 100644
+--- a/arch/m68k/kernel/setup_no.c
++++ b/arch/m68k/kernel/setup_no.c
+@@ -50,7 +50,6 @@ char __initdata command_line[COMMAND_LINE_SIZE];
+ 
+ /* machine dependent timer functions */
+ void (*mach_sched_init)(void) __initdata = NULL;
+-int (*mach_hwclk) (int, struct rtc_time*);
+ 
+ /* machine dependent reboot functions */
+ void (*mach_reset)(void);
+diff --git a/arch/m68k/kernel/time.c b/arch/m68k/kernel/time.c
+index 340ffeea0a9d..a97600b2af50 100644
+--- a/arch/m68k/kernel/time.c
++++ b/arch/m68k/kernel/time.c
+@@ -63,6 +63,15 @@ void timer_heartbeat(void)
+ #endif /* CONFIG_HEARTBEAT */
+ 
+ #ifdef CONFIG_M68KCLASSIC
++/* machine dependent timer functions */
++int (*mach_hwclk) (int, struct rtc_time*);
++EXPORT_SYMBOL(mach_hwclk);
++
++int (*mach_get_rtc_pll)(struct rtc_pll_info *);
++int (*mach_set_rtc_pll)(struct rtc_pll_info *);
++EXPORT_SYMBOL(mach_get_rtc_pll);
++EXPORT_SYMBOL(mach_set_rtc_pll);
++
+ #if !IS_BUILTIN(CONFIG_RTC_DRV_GENERIC)
+ void read_persistent_clock64(struct timespec64 *ts)
+ {
+-- 
+2.25.1
+

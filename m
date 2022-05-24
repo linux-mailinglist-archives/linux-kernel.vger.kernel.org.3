@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904B5532AFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EE5532AFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237644AbiEXNOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
+        id S237627AbiEXNOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237637AbiEXNOX (ORCPT
+        with ESMTP id S237640AbiEXNOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:14:23 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8344A980AD;
-        Tue, 24 May 2022 06:14:11 -0700 (PDT)
+        Tue, 24 May 2022 09:14:25 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A0E994D0;
+        Tue, 24 May 2022 06:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653398051; x=1684934051;
+  t=1653398054; x=1684934054;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=yCA5R7X8kuiJXERTZ/XpQcgdVm+7hfmhEn452RpwlX0=;
-  b=oIP3gFknMdFEcRaDVG7OD6ACpzQ8I0bI8nBJoDT1ccIBRacyGquxuDan
-   DLj1SrJA1RmXnshjdwRxcySRhyW7NyEwu9qnInLHmZ3iVoBNwmszRcQgb
-   8SvewMwzTXMzP+s2BsDZOQWDnL5Qa2UPV/902q6yEpWtQGgI7LqIky6qG
-   s=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 24 May 2022 06:14:11 -0700
+  bh=JtpqNLkr2AzoYexv1DC/Ncnax3AR0f+Qp0xCSIOrSWY=;
+  b=uNLoXVZRNDwVAH40jnHy4heyCTU0mJXdqUM0vONmiNE2B504QIHI2VKa
+   CEwnSAyxWWruavDKSMNPh/OptFbaLCANJ91O98zy1BpSO794G48eUQMAL
+   JoiBxjKoWBL81hB71s67Kba+zEXivdsFo8acrXjumyouNzV9U9Qk600is
+   I=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 May 2022 06:14:14 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 06:14:11 -0700
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 06:14:14 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 24 May 2022 06:14:10 -0700
+ 15.2.986.22; Tue, 24 May 2022 06:14:14 -0700
 Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 24 May 2022 06:14:07 -0700
+ 15.2.986.22; Tue, 24 May 2022 06:14:10 -0700
 From:   Sibi Sankar <quic_sibis@quicinc.com>
 To:     <bjorn.andersson@linaro.org>
 CC:     <agross@kernel.org>, <mathieu.poirier@linaro.org>,
@@ -45,9 +45,9 @@ CC:     <agross@kernel.org>, <mathieu.poirier@linaro.org>,
         <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Siddharth Gupta <sidgup@codeaurora.org>,
         Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [PATCH 4/7] remoteproc: qcom: pas: Mark devices as wakeup capable
-Date:   Tue, 24 May 2022 18:43:34 +0530
-Message-ID: <1653398017-28426-5-git-send-email-quic_sibis@quicinc.com>
+Subject: [PATCH 5/7] remoteproc: qcom: pas: Check if coredump is enabled
+Date:   Tue, 24 May 2022 18:43:35 +0530
+Message-ID: <1653398017-28426-6-git-send-email-quic_sibis@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1653398017-28426-1-git-send-email-quic_sibis@quicinc.com>
 References: <1653398017-28426-1-git-send-email-quic_sibis@quicinc.com>
@@ -56,8 +56,8 @@ Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,33 +68,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Siddharth Gupta <sidgup@codeaurora.org>
 
-device_wakeup_enable() on its own is not capable of setting
-device as wakeup capable, it needs to be used in conjunction
-with device_set_wakeup_capable(). The device_init_wakeup()
-calls both these functions on the device passed.
+Client drivers need to check if coredump is enabled for the rproc before
+continuing with coredump generation. This change adds a check in the PAS
+driver.
 
-Fixes: a781e5aa5911 ("remoteproc: core: Prevent system suspend during remoteproc recovery")
+Fixes: 8ed8485c4f05 ("remoteproc: qcom: Add capability to collect minidumps")
 Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
 Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 ---
- drivers/remoteproc/qcom_q6v5_pas.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/remoteproc/qcom_q6v5_pas.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index a53f8a04f4af..e25b9315c26d 100644
+index e25b9315c26d..815ef2c14475 100644
 --- a/drivers/remoteproc/qcom_q6v5_pas.c
 +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -492,7 +492,9 @@ static int adsp_probe(struct platform_device *pdev)
- 	adsp->decrypt_shutdown = desc->decrypt_shutdown;
- 	platform_set_drvdata(pdev, adsp);
+@@ -93,6 +93,9 @@ static void adsp_minidump(struct rproc *rproc)
+ {
+ 	struct qcom_adsp *adsp = rproc->priv;
  
--	device_wakeup_enable(adsp->dev);
-+	ret = device_init_wakeup(adsp->dev, true);
-+	if (ret)
-+		goto free_rproc;
++	if (rproc->dump_conf == RPROC_COREDUMP_DISABLED)
++		return;
++
+ 	qcom_minidump(rproc, adsp->minidump_id);
+ }
  
- 	ret = adsp_alloc_memory_region(adsp);
- 	if (ret)
 -- 
 2.7.4
 

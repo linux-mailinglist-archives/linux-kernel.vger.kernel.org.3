@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB2E532A6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CCD532A73
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237372AbiEXMee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
+        id S237379AbiEXMfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 08:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbiEXMec (ORCPT
+        with ESMTP id S232680AbiEXMfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:34:32 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB3895A32
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:34:31 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2fee010f509so179779537b3.11
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JJhwxfwW7n7VLkGPMvpANvwbmPIJmDkcwtkzvJnYyJk=;
-        b=biww96eDtZOSmJhMMIl0jKPsL5VhgecE1zdzoSokTJqL2yKrSOr2xVnEPWPH1VY4O2
-         P+fHfPP/calICpdhAf4RdlGk/ot6MKOLOgjnLxZM7CKwlW9G6gd3iBCshLFMGwMG/fM5
-         3P/ii6fpdR/JtE68MCJAXRbQeasPH4hMU2+Po+MlEy9QtRWNmllxrUGSXWqTDuGCjxq+
-         qO7QGxxBnkT4/bfqvJlL1Sz7dxpwQEk0ZiNE5qZV1cVWEO1UizcsdOEhrpnSuB5mEfJ5
-         kEILaOY46Lu8rwsGe25PQ5D1KzxWmKRQhG1vWE/cLcSWyihd+egdRaBxRwM6ToLBIsKw
-         TsVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JJhwxfwW7n7VLkGPMvpANvwbmPIJmDkcwtkzvJnYyJk=;
-        b=XnRxFMEvKxvaLW6dgnmaHwQ84NbedT1Y4qLJTlSKhJ3lbnuU1TbMZpe7q1sjwEyX+i
-         nBj+Ng5HJX6vueJ2g9VoBx+ZHNmxf/iMrQFhnQlGMOb92wdCDo1ZHg3Ej8WAuOL4UMWF
-         ya7bnfrCqv0SxPkJxr+DQvAoBHO5jLxFsfb0BDEQisDqHfzsqoeCgEkOdeo8n+FatjlZ
-         riklShfVQK3pa53hK+dQ2jpYfLEFjJwamwWIuiSpj8qYS+vMTHqm1VIrwvllVK0SCek2
-         OTRpTTcEZrBF9u6LxcdVfH28cGhJuAc5LQV/NBJP2oUY4hgM+w7/1rZThJTwQ98Ww6Sl
-         CTuQ==
-X-Gm-Message-State: AOAM533BpcaZzzr9x9VNKmv2L4FuhkQ2DisXStoOsTibYAfgqK3oTGa9
-        ju2w2yGly6eS5P4M+OKWrD8Mbr95FekG7tOuFuoeCy0W21+tiw==
-X-Google-Smtp-Source: ABdhPJw9XyKlYZWLxvVbRuzoifixIo/Au5GciofjDzJUooDwGxnk79ZQnTT5HbOkUkzNGZdIkXcrM4yISawI6me1ea0=
-X-Received: by 2002:a81:4c8e:0:b0:300:37ba:2c1e with SMTP id
- z136-20020a814c8e000000b0030037ba2c1emr1445603ywa.141.1653395670220; Tue, 24
- May 2022 05:34:30 -0700 (PDT)
+        Tue, 24 May 2022 08:35:47 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A8313F20
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:35:46 -0700 (PDT)
+Received: from mail-yb1-f178.google.com ([209.85.219.178]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MuluN-1ncV6p2OlH-00rn6L for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022
+ 14:35:44 +0200
+Received: by mail-yb1-f178.google.com with SMTP id s14so3268017ybc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:35:44 -0700 (PDT)
+X-Gm-Message-State: AOAM532HVzq86NpMQWhQDw99CLVyqkFtPi7jwl+vdkVwU5cN4GTQqkZe
+        xUF8OCdr4bmrcJgLKD+Z8VlBTpQiEEpXAXikNXQ=
+X-Google-Smtp-Source: ABdhPJz9m9ORZ9D9BvYMed+3CBOfj9iqcDQAfnck/FOZ2NFPYY/aPURrCNWdk7JUo0ug0DMQDbzsidcl1E/w96/ZJ20=
+X-Received: by 2002:a25:5e09:0:b0:64d:8543:627d with SMTP id
+ s9-20020a255e09000000b0064d8543627dmr26382655ybb.394.1653395743407; Tue, 24
+ May 2022 05:35:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523165752.797318097@linuxfoundation.org>
-In-Reply-To: <20220523165752.797318097@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 24 May 2022 18:04:18 +0530
-Message-ID: <CA+G9fYuj7-BSEcm8_+4DCjr5WgGdbKDkLn=hf1s6v6-bxAFOyw@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/44] 4.19.245-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+References: <20220519082552.117736-5-wangkefeng.wang@huawei.com>
+ <202205240657.BXxrhbgp-lkp@intel.com> <c4ea8f50-f445-f4ee-1d17-f21954e52a83@huawei.com>
+In-Reply-To: <c4ea8f50-f445-f4ee-1d17-f21954e52a83@huawei.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 24 May 2022 14:35:27 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1qEk3hLUOijtzXRhT4-nZO8KUe1a_3mvUVSSzaGt2itg@mail.gmail.com>
+Message-ID: <CAK8P3a1qEk3hLUOijtzXRhT4-nZO8KUe1a_3mvUVSSzaGt2itg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] mm: ioremap: Add arch_ioremap/iounmap()
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kbuild-all@lists.01.org, Linux-MM <linux-mm@kvack.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Provags-ID: V03:K1:5WSYV9p9l8D8Rx2OhPaKKjoiyxoWYbDr7kObijWVWfVx0f/kEgc
+ OvPAFrxJNEHQd5zD1eb24vVFP4Evb0BolBYhcRyH97ntusYgXXN0wbadQpX+v7lCKcIw7Df
+ Uac1qCNaxTp8RJE307Bd78MRoL+i35QhNdHKZnG8hn1IOhac0+6k0u3bazOX6tu+8JeV9B8
+ FURo0BWoTIiE6Q++avB2g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7toOWGWTT8g=:dhIHCU18s1llDyTH3YN98d
+ LVaSopTcRG39ykXFM8QJMAuowcIdw7rEViID7ePG9PxncVBMaQrqD5aDxw6rXoT54sy6NzlHK
+ tLbnfM0h4A90S8VZkUpVu+o3alvA4lyzF2I1u9+4mPT9J3UMg2NiqrXcgZA7H246aTPoNPhfm
+ wPLSzTrLknpOOT9/FgR68L+bhcRdTuY26etUOJb1K3MjdzcsV+HNy3Xfxw0WDfnBRhq80nUzx
+ 8wwLdQHPUDBfjB1ovzdMGbuDpZjzk/q2b4/lZmIcg/OomeEXki4HK7ZFMm1vmDiEV8SEH6Joe
+ QiflF+sB3aMhLSYJ2AmoxA6v341uHtjGIhyrzbz7QJKnZ7QBrrEbg/gzc7nTnxlTxGG+KfiM+
+ b+z8IcijFLXyHLcNADiDzuiKmhK67cRJUS0O1tVDu9xJSC4wnVobXKsgAZCmOQyLsAbMqzFdf
+ KsHl48O9SrCSyojVkIkKIrHNBrOGT/MBSUjMtAfxU3X+2gtz12mbVeRRoXrsKqunXyHPDtiLj
+ AklTOjBn6QDh2lUBUtROoYyMyw3ebSLHS3+hs7HTQnYL5+Ymwcs5kvjVCjL+0oy4lgDs+0I2X
+ 3jEkgF8iFokz8xH74ZcD3d/+91UOksWc/TwCn293UWn3VnQUldX9HTRSc0xpeTvVQn2v8coQv
+ bA7/4Xd7pYbCm06+HKc8V0dehjwEBqO7qKKNkxtDdq0/eCs+IvX6ASHdfDoLDNAvFKYAqvpaD
+ AcZI+29EvICo8+EmvUildjmQLVWCAoY07dsDKaaRDWKQvuGlo5D3g3xmOpopIi01RUPXiuTbV
+ Xg4YusigGdOtHSo2dOswIWXCAACrSAaKWRdxeREUdHD9rMSWsP2W7cgQsP+0b4ljswJuFqTlI
+ fxilcmMoY7ThJXv1vr0dOTBmvTZVeOrqiNfiWbNFY=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,167 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 at 22:35, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, May 24, 2022 at 11:48 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+> >>> mm/ioremap.c:59:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *addr @@     got void [noderef] __iomem *vaddr @@
+> >     mm/ioremap.c:59:16: sparse:     expected void const *addr
+> >     mm/ioremap.c:59:16: sparse:     got void [noderef] __iomem *vaddr
+> >
+> > vim +59 mm/ioremap.c
+> >
+> >      51
+> >      52       void iounmap(volatile void __iomem *addr)
+> >      53       {
+> >      54               void __iomem *vaddr = (void __iomem *)((unsigned long)addr & PAGE_MASK);
+> >      55
+> >      56               if (arch_iounmap(vaddr))
+> >      57                       return;
+> >      58
+> >    > 59               vunmap(vaddr);
 >
-> This is the start of the stable review cycle for the 4.19.245 release.
-> There are 44 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> 1) Will add generic "arch_ioremap/arch_iounmap define"
 >
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.245-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> 2) and change this to vunmap((void *)vaddr);
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+I think this need an extra __force to actually suppress the sparse
+warning, as in
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+        vunmap((void __force *)vaddr);
 
-## Build
-* kernel: 4.19.245-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: e88efc48b31fe3946b6e39d613eeae6d96ada4fb
-* git describe: v4.19.244-45-ge88efc48b31f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.244-45-ge88efc48b31f
+Using __force is usually wrong, this is one of the exceptions, so
+maybe add a comment
+as well.
 
-## Test Regressions (compared to v4.19.244)
-No test regressions found.
-
-## Metric Regressions (compared to v4.19.244)
-No metric regressions found.
-
-## Test Fixes (compared to v4.19.244)
-No test fixes found.
-
-## Metric Fixes (compared to v4.19.244)
-No metric fixes found.
-
-## Test result summary
-total: 85385, pass: 70036, fail: 859, skip: 12899, xfail: 1591
-
-## Build Summary
-* arm: 275 total, 275 passed, 0 failed
-* arm64: 39 total, 39 passed, 0 failed
-* i386: 18 total, 18 passed, 0 failed
-* mips: 27 total, 27 passed, 0 failed
-* powerpc: 55 total, 54 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 38 total, 38 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+         Arnd

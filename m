@@ -2,124 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36145329BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 294DE5329C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237046AbiEXLxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        id S237054AbiEXLyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236667AbiEXLxs (ORCPT
+        with ESMTP id S237053AbiEXLyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 07:53:48 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3166E5C87A;
-        Tue, 24 May 2022 04:53:43 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f83983782fso178788997b3.6;
-        Tue, 24 May 2022 04:53:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BoiYeaDjs15JekgURHYc+TLJ+J0nfYc/PIk2wBIW2ng=;
-        b=yo7r8dw5K62i/0OSSBOhlFLgnIt4R/YU7E6r4PiTIdSUSDtsW6IoIRavipKYZOI4YD
-         1exbTS2QYTVjvEoDgIPIuBd4kc8t52wg/vrBVF2vYophX7/FIHG7U6FTciD9W16ilf4R
-         McOAWt21xzKPgqSy8BrlyJUOT+NyQSR6t2EEifDP9Gm+OxUKbbzxTY1qLoxwtk/cL8su
-         TcjUHNQVX204ZQMcxBzMuHHivpIS/qoqiYN82dtkNQ+HjaD0qJkzCOT+GWmHBgQZ96X8
-         jiaCYlzRXCi/DvpT1th17g9swTqrHgm6X0SsdDB0MfZqhz3ssoI4Qgfu6kHyWiemzCd2
-         ev1g==
-X-Gm-Message-State: AOAM530LT0/T+h+XUT3Jd67srpNfPcfcswuA4IMKmy1I6Ma4vw9hW7Dz
-        4wWHcls4SfbJX4nvteK15wQeU+rX3sRYpsmiyMs=
-X-Google-Smtp-Source: ABdhPJxxhebXn0C3eLDhe4i9ZzjnVgQWEnsfCVOME28CuSjNmUyzCvyA2ceDnIGiynqz4RzvVCViHBJYZztQAezuUJ0=
-X-Received: by 2002:a0d:c442:0:b0:2fe:beab:1fef with SMTP id
- g63-20020a0dc442000000b002febeab1fefmr28721987ywd.196.1653393222323; Tue, 24
- May 2022 04:53:42 -0700 (PDT)
+        Tue, 24 May 2022 07:54:19 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EDA5D192
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:54:13 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220524115409euoutp0286ada8a227741c4e75a6f4030b752904~yCGZ1yVyn1698716987euoutp02J
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:54:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220524115409euoutp0286ada8a227741c4e75a6f4030b752904~yCGZ1yVyn1698716987euoutp02J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1653393249;
+        bh=yT/79pn8tfNbkmklbfRodID9kX1dePZImAH6HmhhX8I=;
+        h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
+        b=gnlxr01a0kcn1+hNmLjNHo9QRrSMmysU8kgyE8VEVvC8qxyFpMRckQc/sO3r6NT7M
+         mxKYxgTutkJTmNwZmKL17Lhc5Hso9SNdmACK6m12dYszBNISiBfdkRfkKqHlQwJKSg
+         FLbGi6jHjJwwtIJddCdiZyFghR1HGZ9wBorqn9F0=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220524115408eucas1p1a7b32022daa40fceed58ddd532a2bebb~yCGZaqBFb0501305013eucas1p1l;
+        Tue, 24 May 2022 11:54:08 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 4D.24.10260.067CC826; Tue, 24
+        May 2022 12:54:08 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220524115408eucas1p1ddda7aae4db0a65a7d67d6f8c59d404b~yCGZA2Wvx0273402734eucas1p1a;
+        Tue, 24 May 2022 11:54:08 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220524115408eusmtrp1d3c1948dd7b38679ed339ac66513e630~yCGY-7yRG1897318973eusmtrp1c;
+        Tue, 24 May 2022 11:54:08 +0000 (GMT)
+X-AuditID: cbfec7f5-bddff70000002814-1d-628cc760f75e
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id CA.D4.09404.067CC826; Tue, 24
+        May 2022 12:54:08 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220524115407eusmtip2b29283fa052f60b6370ab701558e655a~yCGYa_tCb2983429834eusmtip2g;
+        Tue, 24 May 2022 11:54:07 +0000 (GMT)
+Message-ID: <3866c083-0064-ac9a-4587-91a83946525d@samsung.com>
+Date:   Tue, 24 May 2022 13:54:07 +0200
 MIME-Version: 1.0
-References: <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
- <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
- <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
- <20220512065623.q4aa6y52pst3zpxu@vireshk-i7> <CAJZ5v0jeYiZ6esdxnJbOyDztNqOAbjcjxmpca3JTFWRh+cwdBw@mail.gmail.com>
- <20220513042705.nbnd6vccuiu6lb7a@vireshk-i7> <20220524111456.hw4qugsvt4bm7reh@vireshk-i7>
- <CAJZ5v0i_qpcaUwdZY=KR_e=HC6MZUw2aDGL=hxgo866dF1zwOA@mail.gmail.com>
- <20220524112917.apcvvvblksg7jdu4@vireshk-i7> <CAJZ5v0jRtYcscWjUras9RC9LOTHf=qu1SPBhnC=52Gb3KKAQNw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jRtYcscWjUras9RC9LOTHf=qu1SPBhnC=52Gb3KKAQNw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 May 2022 13:53:31 +0200
-Message-ID: <CAJZ5v0hHcW-JkXyOZ7ftR+sUQxysEV2--j29owdojYbg_dR_iw@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Schspa Shi <schspa@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [V4] serial: core: Do stop_rx in suspend path for console if
+ console_suspend is disabled
+Content-Language: en-US
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org
+In-Reply-To: <bf7eec57-6ad6-2c1a-ea61-0e1d06fc77f5@samsung.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMKsWRmVeSWpSXmKPExsWy7djPc7oJx3uSDD51GlucXXaQzaJ58Xo2
+        i3dzZSwu75rDZnFmcS+7xecNjxktFl9ayWbx9dJkZovjd54yOXB6zG64yOKxaVUnm8f+uWvY
+        PSbuqfP4vEkugDWKyyYlNSezLLVI3y6BK+Pr+wuMBZMlKqZ0fmRrYHwv3MXIySEhYCIx8e1L
+        NhBbSGAFo8TqLwldjFxA9hdGibO/77BDOJ8ZJfYducIK0/H32FNGiMRyRoldN/cxQTgfGSXe
+        /GxkBqniFbCTuNP/AGwui4CqxNedi5gg4oISJ2c+YQGxRQWSJN68uQpWLyyQLvFk4TawGmYB
+        cYlbT+aD2WwChhJdb7vYQBaICKxklFh09Q8LRFGsRMejl0AncXBwCthLXGgthAjLSzRvnc0M
+        Ui8h8IJDorljPjvE2S4SE3d+gnpBWOLV8S1QcRmJ05N7WEDmSAjkS/ydYQwRrpC49noNM4Rt
+        LXHn3C82kBJmAU2J9bv0IcKOElOvNzNCdPJJ3HgrCHEBn8SkbdOZIcK8Eh1tQhDVahKzjq+D
+        23nwwiXmCYxKs5DCZBaS32ch+WUWwt4FjCyrGMVTS4tz01OLjfNSy/WKE3OLS/PS9ZLzczcx
+        AtPR6X/Hv+5gXPHqo94hRiYOxkOMEhzMSiK8KWE9SUK8KYmVValF+fFFpTmpxYcYpTlYlMR5
+        kzM3JAoJpCeWpGanphakFsFkmTg4pRqY5ErZal27H5yef+F6s5qJ/fxF59ac4md/tVn3caw+
+        S9LFfCMGzdyOXWnJltKKJzw+qfb9+P3NOSffW/CErOdr7sm16RpZZ2843tyg9cVcbXPIod3+
+        L9o5589pvTBJjfNIxh8WHRHBqBg2Ho/Y7QvYTrLf3bmnWa33ePYpvfBPLiXedkdufE9d+vXW
+        14NX9/ybm5p24sPDvaV/fLqnpk+okfq+6zh71s6Q8PuPuz3Wb+OVXqHE/PRF4mUtyfsp8x39
+        aiJOuumIvmX8oly6J32TlVLbES6NI5Gi81/FZnXpcxVeCd7TslnR5FaqM4vr9f218Xtu17aZ
+        eK2dJXLo7JSp0Stf6N3l7Xq0YsuK/MAXSizFGYmGWsxFxYkAY0pknrYDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOIsWRmVeSWpSXmKPExsVy+t/xe7oJx3uSDDYeEbY4u+wgm0Xz4vVs
+        Fu/mylhc3jWHzeLM4l52i88bHjNaLL60ks3i66XJzBbH7zxlcuD0mN1wkcVj06pONo/9c9ew
+        e0zcU+fxeZNcAGuUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5m
+        WWqRvl2CXsbX9xcYCyZLVEzp/MjWwPheuIuRk0NCwETi77GnjF2MXBxCAksZJZZdeMUIkZCR
+        ODmtgRXCFpb4c62LDaLoPaPE5MePwBK8AnYSd/ofsIHYLAKqEl93LmKCiAtKnJz5hKWLkYND
+        VCBJ4shhfpCwsEC6xJOF28BKmAXEJW49mQ9mswkYSnS9hZgvIrCSUWLqpmPMEEWxEq8OPmMB
+        sYUE6iTeHwcp4uDgFLCXuNBaCFFiJtG1tYsRwpaXaN46m3kCo9AsJFfMQrJuFpKWWUhaFjCy
+        rGIUSS0tzk3PLTbSK07MLS7NS9dLzs/dxAiMwW3Hfm7Zwbjy1Ue9Q4xMHIyHGCU4mJVEeFPC
+        epKEeFMSK6tSi/Lji0pzUosPMZoCg2Iis5Rocj4wCeSVxBuaGZgamphZGphamhkrifN6FnQk
+        CgmkJ5akZqemFqQWwfQxcXBKNTCx8XbcsT7669/zzjv37JNM7G5vK8tw5xN/6HL3TezptxMm
+        rlm78cCOqZ7OWw9Oqb6jeHlVx8Trf545tx4LEu/aeH3ZI5Gtx2pmPb1ePOOiiUHsyixhw9XK
+        866FfJnO8Sjw3mMv+b1KrR5q+xlUGOT3JVfLbuJXuT2PwUZ39mYL87vix7/Y+caEtyU67Hy0
+        ik0oI820Ppzxdua738HnWOMKuVemWW/uv2L+6s3mbaufHL3JN3PCjrsRDh/eXVBYOXPr7mlf
+        e1l4C3f27nk0Vdqxu6G/c15VYcZHnXSnLTzFV5veVD1MOq35z/757b1KCU4muUs3ajN1/T0Y
+        ddhqxuPjXQnhf8rLDrx8lhkS7q16RomlOCPRUIu5qDgRAFo4T8NKAwAA
+X-CMS-MailID: 20220524115408eucas1p1ddda7aae4db0a65a7d67d6f8c59d404b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220524115408eucas1p1ddda7aae4db0a65a7d67d6f8c59d404b
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220524115408eucas1p1ddda7aae4db0a65a7d67d6f8c59d404b
+References: <1652692810-31148-1-git-send-email-quic_vnivarth@quicinc.com>
+        <bf7eec57-6ad6-2c1a-ea61-0e1d06fc77f5@samsung.com>
+        <CGME20220524115408eucas1p1ddda7aae4db0a65a7d67d6f8c59d404b@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 1:48 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On 23.05.2022 23:32, Marek Szyprowski wrote:
+> Hi,
 >
-> On Tue, May 24, 2022 at 1:29 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 24-05-22, 13:22, Rafael J. Wysocki wrote:
-> > > On Tue, May 24, 2022 at 1:15 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > >
-> > > > On 13-05-22, 09:57, Viresh Kumar wrote:
-> > > > > On 12-05-22, 12:49, Rafael J. Wysocki wrote:
-> > > > > > > > Moreover, I'm not sure why the locking dance in store() is necessary.
-> > > > > > >
-> > > > > > > commit fdd320da84c6 ("cpufreq: Lock CPU online/offline in cpufreq_register_driver()")
-> > > > > >
-> > > > > > I get that, but I'm wondering if locking CPU hotplug from store() is
-> > > > > > needed at all.  I mean, if we are in store(), we are holding an active
-> > > > > > reference to the policy kobject, so the policy cannot go away until we
-> > > > > > are done anyway.  Thus it should be sufficient to use the policy rwsem
-> > > > > > for synchronization.
-> > > > >
-> > > > > I think after the current patchset is applied and we have the inactive
-> > > > > policy check in store(), we won't required the dance after all.
-> > > >
-> > > > I was writing a patch for this and then thought maybe look at mails
-> > > > around this time, when you sent the patch, and found the reason why we
-> > > > need the locking dance :)
-> > > >
-> > > > https://lore.kernel.org/lkml/20150729091136.GN7557@n2100.arm.linux.org.uk/
-> >
-> > Actually no, this is for the lock in cpufreq_driver_register().
-> >
-> > > Well, again, if we are in store(), we are holding a reference to the
-> > > policy kobject, so this is not initialization time.
-> >
-> > This is the commit which made the change.
-> >
-> > commit 4f750c930822 ("cpufreq: Synchronize the cpufreq store_*() routines with CPU hotplug")
+> On 16.05.2022 11:20, Vijaya Krishna Nivarthi wrote:
+>> For the case of console_suspend disabled, if back to back suspend/resume
+>> test is executed, at the end of test, sometimes console would appear to
+>> be frozen not responding to input. This would happen because, during
+>> resume, rx transactions can come in before system is ready, malfunction
+>> of rx happens in turn resulting in console appearing to be stuck.
+>>
+>> Do a stop_rx in suspend sequence to prevent this.
+>>
+>> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+>> ---
+>> v4: moved the change to serial core to apply for all drivers
+>> v3: swapped the order of conditions to be more human readable
+>> v2: restricted patch to contain only stop_rx in suspend sequence
+>> v1: intial patch contained 2 additional unrelated changes in vicinity
+>> ---
 >
-> So this was done before the entire CPU hotplug rework and it was
-> useful at that time.
+> This patch landed recently in linux-next as commit c9d2325cdb92 
+> ("serial: core: Do stop_rx in suspend path for console if 
+> console_suspend is disabled").
 >
-> The current code always runs cpufreq_set_policy() under policy->rwsem
-> and governors are stopped under policy->rwsem, so this particular race
-> cannot happen AFAICS.
+> Unfortunately it breaks console operation on my test systems after 
+> system suspend/resume cycle if 'no_console_suspend' kernel parameter 
+> is present. System properly resumes from suspend, the console displays 
+> all the messages and even command line prompt, but then doesn't react 
+> on any input. If I remove the 'no_console_suspend' parameter, the 
+> console is again operational after system suspend/resume cycle. Before 
+> this patch it worked fine regardless the 'no_console_suspend' parameter.
 >
-> Locking CPU hotplug prevents CPUs from going away while store() is
-> running, but in order to run store(), the caller must hold an active
-> reference to the policy kobject.  That prevents the policy from being
-> freed and so policy->rwsem can be acquired.  After policy->rwsem has
-> been acquired, policy->cpus can be checked to determine whether or not
-> there are any online CPUs for the given policy (there may be none),
-> because policy->cpus is only manipulated under policy->rwsem.
->
-> If a CPU that belongs to the given policy is going away,
-> cpufreq_offline() has to remove it from policy->cpus under
-> policy->rwsem, so either it has to wait for store() to release
-> policy->rwsem, or store() will acquire policy->rwsem after it and will
-> find that policy->cpus is empty.
+> If this matters, the test system is ARM 32bit Samsung Exynos5422-based 
+> Odroid XU3lite board.
 
-Moreover, locking CPU hotplug doesn't actually prevent
-cpufreq_remove_dev() from running which can happen when the cpufreq
-driver is unregistered, for example.
+
+One more information. This issue can be easily reproduced with QEMU. It 
+happens both on ARM 32bit and ARM 64bit QEMU's 'virt' machines when 
+'no_console_suspend' is added to kernel's cmdline.
+
+
+>
+>>   drivers/tty/serial/serial_core.c | 11 +++++++++--
+>>   1 file changed, 9 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/tty/serial/serial_core.c 
+>> b/drivers/tty/serial/serial_core.c
+>> index 82a1770..9a85b41 100644
+>> --- a/drivers/tty/serial/serial_core.c
+>> +++ b/drivers/tty/serial/serial_core.c
+>> @@ -2211,9 +2211,16 @@ int uart_suspend_port(struct uart_driver *drv, 
+>> struct uart_port *uport)
+>>       }
+>>       put_device(tty_dev);
+>>   -    /* Nothing to do if the console is not suspending */
+>> -    if (!console_suspend_enabled && uart_console(uport))
+>> +    /*
+>> +     * Nothing to do if the console is not suspending
+>> +     * except stop_rx to prevent any asynchronous data
+>> +     * over RX line. Re-start_rx, when required, is
+>> +     * done by set_termios in resume sequence
+>> +     */
+>> +    if (!console_suspend_enabled && uart_console(uport)) {
+>> +        uport->ops->stop_rx(uport);
+>>           goto unlock;
+>> +    }
+>>         uport->suspended = 1;
+>
+> Best regards
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+

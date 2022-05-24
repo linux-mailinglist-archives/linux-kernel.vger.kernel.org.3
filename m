@@ -2,61 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DEE532034
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2595B532038
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbiEXBNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 21:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        id S232588AbiEXBQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 21:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiEXBNq (ORCPT
+        with ESMTP id S232591AbiEXBQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 21:13:46 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52118939C7;
-        Mon, 23 May 2022 18:13:44 -0700 (PDT)
-Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L6bmz63z7zDqMC;
-        Tue, 24 May 2022 09:13:39 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 09:13:42 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 09:13:41 +0800
-Subject: Re: [PATCH -next v5 0/3] support concurrent sync io for bfq on a
- specail occasion
-To:     Jan Kara <jack@suse.cz>
-CC:     <paolo.valente@linaro.org>, <tj@kernel.org>,
-        <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20220428120837.3737765-1-yukuai3@huawei.com>
- <d50df657-d859-79cf-c292-412eaa383d2c@huawei.com>
- <61b67d5e-829c-8130-7bda-81615d654829@huawei.com>
- <81411289-e13c-20f5-df63-c059babca57a@huawei.com>
- <d5a90a08-1ac6-587a-e900-0436bd45543a@kernel.dk>
- <55919e29-1f22-e8aa-f3d2-08c57d9e1c22@huawei.com>
- <20220523085902.wmxoebyq3crerecr@quack3.lan>
- <25f6703e-9e10-75d9-a893-6df1e6b75254@kernel.dk>
- <20220523152516.7sr247i3bzwhr44w@quack3.lan>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <13ad158e-7859-ca61-209e-7d1fe99d0bdb@huawei.com>
-Date:   Tue, 24 May 2022 09:13:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 23 May 2022 21:16:05 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C4AE37;
+        Mon, 23 May 2022 18:16:03 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id i23so19183473ljb.4;
+        Mon, 23 May 2022 18:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=xfZDqs28oyhSqhq27xEhsDuOI5suqfnf7ndJ0VongrY=;
+        b=V9WvkSLF3IrBDVZuHj1fncXQbS4UZP8Bl4vGoQ4cP40GscD6acASvvt3KvV3y2kJbT
+         YRvKI1ek80h6KhZw+b+gzPB6B8GXVuEoXFrqSifxHKEspJKZw7sxwx4Gzoji8uY0Df0M
+         bOvd2jeiBvUM5bbTVTV8eZM2lk/AsAhU/EGkgD3Wh7WUffY6jyjRizHUgtPxZlDyGtsE
+         RiTWo0/o9HaUPCnfFmONEty2uj/HVqALZZwQfzAH1xSY6o44XeVndcsckzs1j7iIbytz
+         4H4DyEiZYzHZCud6z92NKr0NeOT3ij5at8mzNzN6v8DFQ+ZGtsBS69occFDvNVFcII5r
+         hZ+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xfZDqs28oyhSqhq27xEhsDuOI5suqfnf7ndJ0VongrY=;
+        b=GbbXOXTXAbvHDUvPw5EJe/x/1KvFxHsDcFL7jdECN4Vq2i9FYyRqLdTwlh/TpzmLgW
+         q1TtCS8lIxt4uGsCwSjEsfgKxH53r5PSWGuX21/XRHwSBTjYPKucPU6P512OhJSntCfY
+         y8y8/9nC5K4qO0wA8hP5AGDezO4l170/xM6fBSt2IG7iD0tf/IJXsfqaxPFzacLWz00x
+         YisEQnwAMqowzBu4G+KrA9OvmmBRvMuzlk3h2PK8/m+I/u5cEb5hIkzd4INC7/4wE8yq
+         3ZvtLDSQuc4UT6y/MoU8MiS/ZSEE4uKsVzKt8kTu2jUux3oceAHY9DmkHvWuN2c4LHDv
+         E3Mw==
+X-Gm-Message-State: AOAM531DGFcnnQGRh5dROH9LQhBW7TdRDKA0VH5nsXTIHKggoKpnf7CF
+        M7r4+otIjceUWNhPbioA5YzlG+pCxex9pxW33LlXZJKHIKRSmg==
+X-Google-Smtp-Source: ABdhPJyMUAWa9cyvBzye0KjjHaKA88ye8dYHy9GbuVdYLtpagId1ddjvvlKbtYqmSMfU8sIThkAM9ZCbSrzqE3dTMAc=
+X-Received: by 2002:a2e:a602:0:b0:253:d7e2:4d8a with SMTP id
+ v2-20020a2ea602000000b00253d7e24d8amr12468397ljp.284.1653354961223; Mon, 23
+ May 2022 18:16:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220523152516.7sr247i3bzwhr44w@quack3.lan>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-2-ctcchien@nuvoton.com>
+ <YoUwe6Tj4Uh6ukc8@zn.tnic> <CAHpyw9fjThEP4NuU08aNJ_raHpq9-j9KgBb8YuZ_shXTjhm3JA@mail.gmail.com>
+ <YoYPGWreQuF9QZzc@zn.tnic> <CAHpyw9es-n+bW9SsGBmmr3ghBFk8Q8E6ZTbE42BpU-6p8LfHtw@mail.gmail.com>
+ <YoeE8cBhUkF3K44/@zn.tnic> <CAHpyw9fAfNf8j++JtLhuudSWj6N1-KAxA_fxEGL998WNVXTPdQ@mail.gmail.com>
+ <YotVJ+ExcrQshM4A@zn.tnic>
+In-Reply-To: <YotVJ+ExcrQshM4A@zn.tnic>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Tue, 24 May 2022 09:15:50 +0800
+Message-ID: <CAHpyw9eALo=39N15omAFLA28LySBfPom7ejCfOgW9aS5gTa3Lg@mail.gmail.com>
+Subject: Re: [PATCH v9 1/3] ARM: dts: nuvoton: Add memory controller node
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,72 +83,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/05/23 23:25, Jan Kara Ð´µÀ:
-> On Mon 23-05-22 06:36:58, Jens Axboe wrote:
->> On 5/23/22 2:59 AM, Jan Kara wrote:
->>> On Mon 23-05-22 09:10:38, yukuai (C) wrote:
->>>> ? 2022/05/21 20:21, Jens Axboe ??:
->>>>> On 5/21/22 1:22 AM, yukuai (C) wrote:
->>>>>> ? 2022/05/14 17:29, yukuai (C) ??:
->>>>>>> ? 2022/05/05 9:00, yukuai (C) ??:
->>>>>>>> Hi, Paolo
->>>>>>>>
->>>>>>>> Can you take a look at this patchset? It has been quite a long time
->>>>>>>> since we spotted this problem...
->>>>>>>>
->>>>>>>
->>>>>>> friendly ping ...
->>>>>> friendly ping ...
->>>>>
->>>>> I can't speak for Paolo, but I've mentioned before that the majority
->>>>> of your messages end up in my spam. That's still the case, in fact
->>>>> I just marked maybe 10 of them as not spam.
->>>>>
->>>>> You really need to get this issued sorted out, or you will continue
->>>>> to have patches ignore because folks may simply not see them.
->>>>>
->>>> Hi,
->>>>
->>>> Thanks for your notice.
->>>>
->>>> Is it just me or do you see someone else's messages from *huawei.com
->>>> end up in spam? I tried to seek help from our IT support, however, they
->>>> didn't find anything unusual...
->>>
->>> So actually I have noticed that a lot of (valid) email from huawei.com (not
->>> just you) ends up in the spam mailbox. For me direct messages usually pass
->>> (likely matching SPF records for originating mail server save the email
->>> from going to spam) but messages going through mailing lists are flagged as
->>> spam because the emails are missing valid DKIM signature but huawei.com
->>> DMARC config says there should be DKIM signature (even direct messages are
->>> missing DKIM so this does not seem as a mailing list configuration issue).
->>> So this seems as some misconfiguration of the mails on huawei.com side
->>> (likely missing DKIM signing of outgoing email).
->>
->> SPF/DKIM was indeed a problem earlier for yukaui patches, but I don't
->> see that anymore. Maybe it's still an issue for some emails, from them
->> or Huawei in general?
-> 
-> Hum, for me all emails from Huawei I've received even today fail the DKIM
-> check. After some more digging there is interesting inconsistency in DMARC
-> configuration for huawei.com domain. There is DMARC record for huawei.com
-> like:
-> 
-> huawei.com.		600	IN	TXT	"v=DMARC1;p=none;rua=mailto:dmarc@edm.huawei.com"
-> 
-> which means no DKIM is required but _dmarc.huawei.com has:
-> 
-> _dmarc.huawei.com.	600	IN	TXT	"v=DMARC1;p=quarantine;ruf=mailto:dmarc@huawei.com;rua=mailto:dmarc@huawei.com"
-> 
-> which says that DKIM is required. I guess this inconsistency may be the
-> reason why there are problems with DKIM validation for senders from
-> huawei.com. Yu Kuai, can you perhaps take this to your IT support to fix
-> this? Either make sure huawei.com emails get properly signed with DKIM or
-> remove the 'quarantine' record from _dmarc.huawei.com. Thanks!
-Of course, I'll try to contact our IT support.
+Dear Borislav,
 
-Thanks,
-Kuai
-> 
-> 								Honza
-> 
+thanks for your help.
+
+Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8823=E6=97=A5=
+ =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=885:34=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Mon, May 23, 2022 at 05:06:07PM +0800, Medad Young wrote:
+> > I did do "git commit --amend",
+> > I beleve the issue is about the mail server I used,
+> > I use gmail to send the mail due to the mail server of my company
+> > does't support smtp
+> > so now I should sign the commit with my gmail account.
+>
+> No, you should supply --author too - I had forgotten about that.
+>
+> commit 0876b99e4aa2bf7113070c9c0f5d0ade7ad91697 (HEAD -> refs/heads/test)
+> Author: Medad CChien <medadyoung@gmail.com>
+> Date:   Tue May 10 11:10:54 2022 +0800
+>
+>     ARM: dts: nuvoton: Add memory controller node
+>
+>     ECC must be configured in the BootBlock header.
+>     Then, you can read error counts via the EDAC kernel framework.
+>
+>     Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+>
+> $  git commit --amend --author=3D"Medad CChien <ctcchien@nuvoton.com>"
+> [test 5d6cd85171d1] ARM: dts: nuvoton: Add memory controller node
+>  Author: Medad CChien <ctcchien@nuvoton.com>
+>  Date: Tue May 10 11:10:54 2022 +0800
+>  1 file changed, 7 insertions(+)
+> $ git log -p -1
+> commit 5d6cd85171d14e67840e672e2f96a16981243424 (HEAD -> refs/heads/test)
+> Author: Medad CChien <ctcchien@nuvoton.com>
+> Date:   Tue May 10 11:10:54 2022 +0800
+>
+>     ARM: dts: nuvoton: Add memory controller node
+>
+>     ECC must be configured in the BootBlock header.
+>     Then, you can read error counts via the EDAC kernel framework.
+>
+>     Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+>
+> $ git format-patch -1 -o /tmp/
+> /tmp/0001-ARM-dts-nuvoton-Add-memory-controller-node.patch
+>
+> $ head /tmp/0001-ARM-dts-nuvoton-Add-memory-controller-node.patch
+> From 5d6cd85171d14e67840e672e2f96a16981243424 Mon Sep 17 00:00:00 2001
+> From: Medad CChien <ctcchien@nuvoton.com>
+>                     ^^^^^^^^^^^^^^^^^^^^^^
+>
+>
+> Don't hesitate to look at the manpages if a tool doesn't do what you
+> expect it to do.
+
+OK, I will try to supply --author with my original mail server
+
+>
+> HTH.
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
+
+B.R.
+Medad

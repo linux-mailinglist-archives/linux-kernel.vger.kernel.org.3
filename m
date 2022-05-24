@@ -2,150 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF760532386
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97F5532389
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbiEXGzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 02:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
+        id S233532AbiEXG54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 02:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiEXGzE (ORCPT
+        with ESMTP id S229456AbiEXG5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 02:55:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179A293476
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:55:03 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1ntORP-0000Uo-HF; Tue, 24 May 2022 08:54:51 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1ntORN-0006Mn-Mh; Tue, 24 May 2022 08:54:49 +0200
-Date:   Tue, 24 May 2022 08:54:49 +0200
-From:   "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-To:     Ping-Ke Shih <pkshih@realtek.com>
-Cc:     "linux@ulli-kroll.de" <linux@ulli-kroll.de>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "neojou@gmail.com" <neojou@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH 00/10] RTW88: Add support for USB variants
-Message-ID: <20220524065449.GR25578@pengutronix.de>
-References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
- <55f569899e4e894970b826548cd5439f5def2183.camel@ulli-kroll.de>
- <20220523065348.GK25578@pengutronix.de>
- <68a979f3fe3c80a460528605f03d85c2a265ff50.camel@realtek.com>
+        Tue, 24 May 2022 02:57:52 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8689544C5
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:57:51 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id p8so15658632pfh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XnhPJWRti5irdiFCJ82HXC9jEWYkqiMNZIjhk1PChYM=;
+        b=Atux7LbREZXCCH4u0g+KBxF1ChuFjZ+2Dz+Rt3WWPxbwFE3pcgfIySu+/GuxEVjGLJ
+         6+WOrnRsmElAXa+hGg9S4dmzG5JIb3PV3kzf/GxmIer3lr9F6yK0ME1VOBE49uSWv8hl
+         S5R26XrucgnUIYmd6NnVyj44/5dXDteX7lM2LVBJg1quRDuffYNcImRSQdODkInSMaPk
+         fKJn8aKkZCMV+P3GrvkbwbtB2X0Gj9MgR3TvkV7qD7dNOS426ZThdY6ht2VFJWyVva8a
+         16Ct5cZtvDQYXxyX2PVSG+KAmxza+U6qfVXNoGnvM++VdU05NVsF8ETIAkB1l9DBY+IM
+         XsUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XnhPJWRti5irdiFCJ82HXC9jEWYkqiMNZIjhk1PChYM=;
+        b=myNCYDY8OdQkemFZQuYIiTyYb4ijMeUzRjlGfaSLR0bNsYdx/vtcAUj33DZ0c17Wqa
+         QZCPGWH+EYISud8t4uVv0MGlyaxdyqHRBfCDROwF/Gk2au81PWtXr6E03eIVHoAXfQAz
+         3KzbdHSzJ79tuT4eW/qbLqQdtYSSZN7ohSzLLxhXAZT7D1MKAdMiO3+IWd6RuGJTUKKM
+         Jjl35aGPfD+m/hF5BS28UrlVHOXb7noyZsGYViDKCT53LnPDdP9YdiJ1E2JxqHyPDcKW
+         Q4Pr4ADDzWmqle4lW502WS21vRKd0T9t77kql0vD8818HnlH8WtZmat1ftVD8KdGS4GC
+         nZ9Q==
+X-Gm-Message-State: AOAM533orBgK+YwNZ/BHvPWY5qej7RklhkSwC11lKewYyUB6MXyocJch
+        wkZKXnO46xDOdqiUzu0CHok=
+X-Google-Smtp-Source: ABdhPJxjCHLfeE5M+/EvxtMUDVpKvze/ODF+6ndhlHLMXll9vfEzQqL6ESlbbAmma2BfFYzfrI8N+A==
+X-Received: by 2002:a63:5a13:0:b0:3c6:3d28:87e5 with SMTP id o19-20020a635a13000000b003c63d2887e5mr24008160pgb.452.1653375471366;
+        Mon, 23 May 2022 23:57:51 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id t1-20020a17090aae0100b001cd4989ff53sm882847pjq.26.2022.05.23.23.57.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 May 2022 23:57:51 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] meson-mx-socinfo: Fix refcount leak in meson_mx_socinfo_init
+Date:   Tue, 24 May 2022 10:57:29 +0400
+Message-Id: <20220524065729.33689-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68a979f3fe3c80a460528605f03d85c2a265ff50.camel@realtek.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:50:09 up 54 days, 19:19, 58 users,  load average: 0.26, 0.18,
- 0.19
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 11:39:49AM +0000, Ping-Ke Shih wrote:
-> On Mon, 2022-05-23 at 08:53 +0200, Sascha Hauer wrote:
-> > Hi Hans Ulli,
-> > 
-> > On Mon, May 23, 2022 at 06:07:16AM +0200, Hans Ulli Kroll wrote:
-> > > On Wed, 2022-05-18 at 10:23 +0200, Sascha Hauer wrote:
-> > > > This series adds support for the USB chip variants to the RTW88 driver.
-> > > > 
-> > > 
-> > > Hi Sascha
-> > > 
-> > > glad you found some *working* devices for rtw88 !
-> > 
-> > Well, not fully. I had to add [3] = RTW_DEF_RFE(8822c, 0, 0), to the
-> > rtw8822c_rfe_defs array.
-> > 
-> > > I spend some of the weekend testing your driver submission.
-> > > 
-> > > for rtl8821cu devices I get following output
-> > > 
-> > > some Logilink device
-> > > 
-> > > [ 1686.605567] usb 1-5.1.2: New USB device found, idVendor=0bda, idProduct=c811, bcdDevice=
-> > > 2.00
-> > > [ 1686.614186] usb 1-5.1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> > > [ 1686.621721] usb 1-5.1.2: Product: 802.11ac NIC
-> > > [ 1686.626227] usb 1-5.1.2: Manufacturer: Realtek
-> > > [ 1686.630695] usb 1-5.1.2: SerialNumber: 123456
-> > > [ 1686.640480] rtw_8821cu 1-5.1.2:1.0: Firmware version 24.5.0, H2C version 12
-> > > [ 1686.932828] rtw_8821cu 1-5.1.2:1.0: failed to download firmware
-> > > [ 1686.945206] rtw_8821cu 1-5.1.2:1.0: failed to setup chip efuse info
-> > > [ 1686.951538] rtw_8821cu 1-5.1.2:1.0: failed to setup chip information
-> > > [ 1686.958402] rtw_8821cu: probe of 1-5.1.2:1.0 failed with error -22
-> > > 
-> > > above is same with some from Comfast
-> > > 
-> > > The worst in the list is one from EDUP
-> > > 
-> > > [ 1817.855704] rtw_8821cu 1-5.1.2:1.2: Firmware version 24.5.0, H2C version 12
-> > > [ 1818.153918] rtw_8821cu 1-5.1.2:1.2: rfe 255 isn't supported
-> > > [ 1818.165176] rtw_8821cu 1-5.1.2:1.2: failed to setup chip efuse info
-> > > [ 1818.171505] rtw_8821cu 1-5.1.2:1.2: failed to setup chip information
-> > 
-> > Do these chips work with your out of tree variant of this driver?
-> > 
-> > Is the efuse info completely 0xff or only the field indicating the rfe
-> > option?
-> 
-> I check RFE allocation of 8821c. 255 isn't defined.
-> If efuse info isn't complete 0xff, try to force RFE 0 to see if it works.
-> 
-> > 
-> > > rtl8822bu devices are working fine ...
-> > 
-> > Nice. Did you test a rtw8723du device as well?
-> > 
-> 
-> I have a 8723DU module.
-> 
-> With this patchset, it can find AP, but can't estiablish connection.
-> I check air capture, but no TX packets found.
-> That says RX works, but TX doesn't.
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-The rtw88 repository has 8723DU support added with:
+Fixes: 5e68c0fc8df8 ("soc: amlogic: Add Meson6/Meson8/Meson8b/Meson8m2 SoC Information driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/soc/amlogic/meson-mx-socinfo.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-	initial for RTW8723DU devices
-
-    	not tested, no Device
-	Hints are found in rtl8822bu code
-
-No active commits to this file since then, so it's probably not supposed
-to work.  Unless somebody comes up with fixes I'll remove support for
-this chip for now.
-
-Sascha
-
+diff --git a/drivers/soc/amlogic/meson-mx-socinfo.c b/drivers/soc/amlogic/meson-mx-socinfo.c
+index 78f0f1aeca57..92125dd65f33 100644
+--- a/drivers/soc/amlogic/meson-mx-socinfo.c
++++ b/drivers/soc/amlogic/meson-mx-socinfo.c
+@@ -126,6 +126,7 @@ static int __init meson_mx_socinfo_init(void)
+ 	np = of_find_matching_node(NULL, meson_mx_socinfo_analog_top_ids);
+ 	if (np) {
+ 		analog_top_regmap = syscon_node_to_regmap(np);
++		of_node_put(np);
+ 		if (IS_ERR(analog_top_regmap))
+ 			return PTR_ERR(analog_top_regmap);
+ 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
+

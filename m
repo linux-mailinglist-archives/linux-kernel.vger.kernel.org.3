@@ -2,149 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7278532048
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEC553204B
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 03:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbiEXBag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 21:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S232707AbiEXBcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 21:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiEXBac (ORCPT
+        with ESMTP id S232301AbiEXBc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 21:30:32 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA106FD01;
-        Mon, 23 May 2022 18:30:31 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id a10so17026542ioe.9;
-        Mon, 23 May 2022 18:30:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WWmcSlMLXyPAtUCAvd6HT22Q24cwWlGO+SKtL9DeqKU=;
-        b=g2y1NFt4Sseyx742KMl6xBdUityeBuD37EEwViwqBrkw+a2f6FepgoHeNqAcHs4pnS
-         0d1Nacm02K76ckrC3k60Cc4C8TIqbozizgZCpdm9jM366ElB583C3x0+qMEiKbQa79DU
-         YHDMuqpINrn+W61mvf7NC/5707+lHWwF+Tx1zT+xJQt83X08GyKfcGSLHmDD3wcDUyir
-         po18oBXtV7uTSIYeNHC59VElipZiBC9rlK0g45oJrdVu0oHLfbAF5/b+3h665gFYveW/
-         UjseAlbhaDpLGIt8CVLkZtoWQnBcZcOnoemVbm/5tZaLqXOTTdnmZXZGuhjPdA4Nr1ff
-         j5mA==
+        Mon, 23 May 2022 21:32:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFE3D42A0D
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 18:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653355947;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mDqY6e/ZCTT5vbybB6QpEFM89saOLe+qmuOxqy77J64=;
+        b=Z+0jiaKbBW4iyB44JN23CSUvfmo2DsHTTWxUMN7f4E/a4+DKa0uV2Zv2fYQjtVWgdz/icg
+        tuf5XWDAs/+H2xbUMGoCfJVxBtW8wolOL57yGTrFPmOHYJxF2byWxgGkVI41QbEHppxuiy
+        BPXwCJB7JUIzeQNLdlNBxT3aVCx9S/M=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-107-8PyXtfBrOcCr2IesayOlEg-1; Mon, 23 May 2022 21:32:25 -0400
+X-MC-Unique: 8PyXtfBrOcCr2IesayOlEg-1
+Received: by mail-pj1-f70.google.com with SMTP id gn21-20020a17090ac79500b001dc8a800410so556647pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 18:32:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WWmcSlMLXyPAtUCAvd6HT22Q24cwWlGO+SKtL9DeqKU=;
-        b=ANCSUm8y4iPMs/k1ZgOeYd9zz5DtxYtFR11Ky0uYDfp6lOT9DPn63VA4o+Fos2UsKZ
-         x8thq+MWlYGvKMQh+E9ZKYoJU0m+r0vAywNdDlmCW1n4QlVMi6T1JQ3sZfBd/vPJaZ4A
-         JRTT4F0RM52fkMhSIHmThfswutA1OoF/N/yG/yjHkzKGOqe+ooZIGE5YL9ql6BdJ65G3
-         nIHzzeaRmUg8L7Sp9OGGWsCbzChBklpu2WFLYXfqxem7pZBCbXbDd8pOXRXQyGYmMpyh
-         7rRUQKPHeTgnP4Bb+Ltcduw83ynwpByJBuOANJ1LbhP0sFF9iMGedFmr8dwCBiVDJYYp
-         zkTQ==
-X-Gm-Message-State: AOAM5327Qs8gNlxvjDEtZ++tX+3qPGxVtCMwPJF+nZul+dfLxFZqwAlx
-        13UQGZcrFppArHfmhXDqwPHSuwA0QS7aSZJFXlA=
-X-Google-Smtp-Source: ABdhPJwJ0HxGpuHzjlxDM9gFmOF4eLOzadWHpqw1yyOV7Hg8tQXEiwNz+geTsT3zy8fXNVnYebhfAjqXReaLuaUp2N8=
-X-Received: by 2002:a05:6638:2393:b0:32e:319d:c7cc with SMTP id
- q19-20020a056638239300b0032e319dc7ccmr12749526jat.103.1653355831019; Mon, 23
- May 2022 18:30:31 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=mDqY6e/ZCTT5vbybB6QpEFM89saOLe+qmuOxqy77J64=;
+        b=gOpRCZrRRp7UBSP+n0hKq8wQaEElbBZlbRweaFOVmwZNP1htuALwazH8n9KrM4Yy08
+         4qeiCVsYG7XfPAdu4zSH4iSkMkDaNBBlCDQj4nnFXe2uWyY0TyxdihZvFaL3Mk1q8S4E
+         KoLkaYmbv1riSTPolQYjc0mcCujCRrwAy/Jp4tksUVVamtkT1WWTrT4saF424oRUBihW
+         3aNcOx7VaRhlcxn3I3Waoc52voIEHJgV5BEkH6D/sqdBb95vx868vraUSch7Jp/ZBp0o
+         aUIzl8xTSKswK3MXgUitVUbHjP7rzf/gxwL4uDsVh2NPaoBHbuV7qlIczUus8nB6xPq5
+         Fi5Q==
+X-Gm-Message-State: AOAM531zIJvDKjuWsItS8bWC9C2e97kP6eQkK8+pEtq2UE28awf37Tff
+        mhijYixR2jViu46sbia15QQFNO7A6iqu6xepXPlx/NpqtnvBUu3rGXbI+qxnUufq8ZvxqyhNBUs
+        a/QPaIMsv4l4p/CQKjipYf4/oSRIxTVELedcOKDRtFrkL4d9z94ofl65g9LvnmiuBaBxzPb3Amg
+        ==
+X-Received: by 2002:a17:90b:33ca:b0:1dc:e5b8:482b with SMTP id lk10-20020a17090b33ca00b001dce5b8482bmr1907566pjb.165.1653355943799;
+        Mon, 23 May 2022 18:32:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxE4PFaKoyH4N/WVGpnU5+sYV8dbMj6GNSkjOf7FxYsNhFUq1QPHd7EEfxpYHEOMscQ1+Qy9w==
+X-Received: by 2002:a17:90b:33ca:b0:1dc:e5b8:482b with SMTP id lk10-20020a17090b33ca00b001dce5b8482bmr1907529pjb.165.1653355943372;
+        Mon, 23 May 2022 18:32:23 -0700 (PDT)
+Received: from [10.72.12.81] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id x64-20020a628643000000b0050e006279bfsm7707332pfd.137.2022.05.23.18.32.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 May 2022 18:32:22 -0700 (PDT)
+Subject: Re: [PATCH v5 1/2] fs/dcache: add d_compare() helper support
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     jlayton@kernel.org, idryomov@gmail.com, viro@zeniv.linux.org.uk,
+        vshankar@redhat.com, ceph-devel@vger.kernel.org, arnd@arndb.de,
+        mcgrof@kernel.org, akpm@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220519101847.87907-1-xiubli@redhat.com>
+ <20220519101847.87907-2-xiubli@redhat.com>
+ <YovqeybXUKEmhvsi@casper.infradead.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <2bda8367-0f85-027c-33ef-6d631c791c75@redhat.com>
+Date:   Tue, 24 May 2022 09:32:14 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220520012133.1217211-1-yosryahmed@google.com>
- <20220520012133.1217211-4-yosryahmed@google.com> <YodGI73xq8aIBrNM@slm.duckdns.org>
- <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
- <YodNLpxut+Zddnre@slm.duckdns.org> <73fd9853-5dab-8b59-24a0-74c0a6cae88e@fb.com>
- <YofFli6UCX4J5YnU@slm.duckdns.org> <CA+khW7gjWVKrwCgDD-4ZdCf5CMcA4-YL0bLm6aWM74+qNQ4c0A@mail.gmail.com>
- <CAJD7tkaJQjfSy+YARFRkqQ8m7OGJHO9v91mSk-cFeo9Z5UVJKg@mail.gmail.com>
- <20220520221919.jnqgv52k4ajlgzcl@MBP-98dd607d3435.dhcp.thefacebook.com>
- <Yogc0Kb5ZVDaQ0oU@slm.duckdns.org> <5b301151-0a65-df43-3a3a-6d57e10cfc2d@fb.com>
- <CA+khW7gGrwTrDsfWp7wj=QaCg01FNj381a1QLs1ThsjAkW85eQ@mail.gmail.com>
- <CAEf4BzbaHeyaHK1sChPMF=L4aQsaBGNtU+R3veqCOFz0A+svEA@mail.gmail.com> <CA+khW7h-fgo+X=OUxAWDe2sPMyWDXUmp574Kq_J884j9whoBfw@mail.gmail.com>
-In-Reply-To: <CA+khW7h-fgo+X=OUxAWDe2sPMyWDXUmp574Kq_J884j9whoBfw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 23 May 2022 18:30:20 -0700
-Message-ID: <CAEf4BzZOE0zXnRs3rEiO4+KZix7Druu5TqkJH+xX01tgMfQOtQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
-To:     Hao Luo <haoluo@google.com>
-Cc:     Yonghong Song <yhs@fb.com>, Tejun Heo <tj@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YovqeybXUKEmhvsi@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 5:53 PM Hao Luo <haoluo@google.com> wrote:
->
-> On Mon, May 23, 2022 at 4:58 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, May 20, 2022 at 7:35 PM Hao Luo <haoluo@google.com> wrote:
-> > >
-> > > On Fri, May 20, 2022 at 5:59 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > On 5/20/22 3:57 PM, Tejun Heo wrote:
-> > > > > Hello,
-> > > > >
-> > > > > On Fri, May 20, 2022 at 03:19:19PM -0700, Alexei Starovoitov wrote:
-> > > > >> We have bpf_map iterator that walks all bpf maps.
-> > > > >> When map iterator is parametrized with map_fd the iterator walks
-> > > > >> all elements of that map.
-> > > > >> cgroup iterator should have similar semantics.
-> > > > >> When non-parameterized it will walk all cgroups and their descendent
-> > > > >> depth first way. I believe that's what Yonghong is proposing.
-> > > > >> When parametrized it will start from that particular cgroup and
-> > > > >> walk all descendant of that cgroup only.
-> > > > >> The bpf prog can stop the iteration right away with ret 1.
-> > > > >> Maybe we can add two parameters. One -> cgroup_fd to use and another ->
-> > > > >> the order of iteration css_for_each_descendant_pre vs _post.
-> > > > >> wdyt?
-> > > > >
-> > > > > Sounds perfectly reasonable to me.
-> > > >
-> > > > This works for me too. Thanks!
-> > > >
-> > >
-> > > This sounds good to me. Thanks. Let's try to do it in the next iteration.
-> >
-> > Can we, in addition to descendant_pre and descendant_post walk
-> > algorithms also add the one that does ascendants walk (i.e., start
-> > from specified cgroup and walk up to the root cgroup)? I don't have
-> > specific example, but it seems natural to include it for "cgroup
-> > iterator" in general. Hopefully it won't add much code to the
-> > implementation.
->
-> Yep. Sounds reasonable and doable. It's just adding a flag to specify
-> traversal order, like:
->
-> {
->   WALK_DESCENDANT_PRE,
->   WALK_DESCENDANT_POST,
->   WALK_PARENT_UP,
 
-Probably something more like BPF_CG_WALK_DESCENDANT_PRE and so on?
+On 5/24/22 4:11 AM, Matthew Wilcox wrote:
+> On Thu, May 19, 2022 at 06:18:45PM +0800, Xiubo Li wrote:
+>> Reviewed-by: Jeff Layton <jlayton@kernel.org>
+>> Signed-off-by: Xiubo Li <xiubli@redhat.com>
+> ... empty commit message?
 
-> };
->
-> In bpf_iter's seq_next(), change the algorithm to yield the parent of
-> the current cgroup.
+Will add it.
+
+Thanks.
+
+
+>> ---
+>>   fs/dcache.c            | 15 +++++++++++++++
+>>   include/linux/dcache.h |  2 ++
+>>   2 files changed, 17 insertions(+)
+>>
+>> diff --git a/fs/dcache.c b/fs/dcache.c
+>> index 93f4f5ee07bf..95a72f92a94b 100644
+>> --- a/fs/dcache.c
+>> +++ b/fs/dcache.c
+>> @@ -2262,6 +2262,21 @@ static inline bool d_same_name(const struct dentry *dentry,
+>>   				       name) == 0;
+>>   }
+>>   
+>> +/**
+>> + * d_compare - compare dentry name with case-exact name
+>> + * @parent: parent dentry
+>> + * @dentry: the negative dentry that was passed to the parent's lookup func
+>> + * @name:   the case-exact name to be associated with the returned dentry
+>> + *
+>> + * Return: 0 if names are same, or 1
+>> + */
+>> +bool d_compare(const struct dentry *parent, const struct dentry *dentry,
+>> +	       const struct qstr *name)
+>> +{
+>> +	return !d_same_name(dentry, parent, name);
+>> +}
+>> +EXPORT_SYMBOL(d_compare);
+>> +
+>>   /**
+>>    * __d_lookup_rcu - search for a dentry (racy, store-free)
+>>    * @parent: parent dentry
+>> diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+>> index f5bba51480b2..444b2230e5c3 100644
+>> --- a/include/linux/dcache.h
+>> +++ b/include/linux/dcache.h
+>> @@ -233,6 +233,8 @@ extern struct dentry * d_alloc_parallel(struct dentry *, const struct qstr *,
+>>   					wait_queue_head_t *);
+>>   extern struct dentry * d_splice_alias(struct inode *, struct dentry *);
+>>   extern struct dentry * d_add_ci(struct dentry *, struct inode *, struct qstr *);
+>> +extern bool d_compare(const struct dentry *parent, const struct dentry *dentry,
+>> +		      const struct qstr *name);
+>>   extern struct dentry * d_exact_alias(struct dentry *, struct inode *);
+>>   extern struct dentry *d_find_any_alias(struct inode *inode);
+>>   extern struct dentry * d_obtain_alias(struct inode *);
+>> -- 
+>> 2.36.0.rc1
+>>
+

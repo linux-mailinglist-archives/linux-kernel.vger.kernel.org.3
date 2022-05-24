@@ -2,43 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BED35333CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 01:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A255333CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 01:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242511AbiEXXHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 19:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
+        id S242525AbiEXXMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 19:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239226AbiEXXHX (ORCPT
+        with ESMTP id S239226AbiEXXMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 19:07:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7096C6971B;
-        Tue, 24 May 2022 16:07:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3610B617D6;
-        Tue, 24 May 2022 23:07:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F3CC34100;
-        Tue, 24 May 2022 23:07:18 +0000 (UTC)
-Date:   Tue, 24 May 2022 19:07:16 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     sunliming <kelulanainsley@gmail.com>
-Cc:     mingo@redhat.com, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        akpm@linux-foundation.org, sunliming@kylinos.cn
-Subject: Re: [PATCH v2 RESEND] x86,trace: Remove unused headers
-Message-ID: <20220524190716.6d2bb3d9@gandalf.local.home>
-In-Reply-To: <CAJncD7SNDAFXFTaSf07P6-OK6j9iTHj1Xj_ssBccB-XLDZWaMA@mail.gmail.com>
-References: <CAJncD7SNDAFXFTaSf07P6-OK6j9iTHj1Xj_ssBccB-XLDZWaMA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 24 May 2022 19:12:49 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED785BE49
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 16:12:48 -0700 (PDT)
+Message-ID: <a9cd5385-5a26-c410-2609-4575cc0d6adf@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653433965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mk7xRNKNX0AOjCU5G7KogWbcujD8+WpYXrtI2ETV4XE=;
+        b=jbyXtlbZqNLrbFY1S2vnVXbfwQVr7DceO1EXyKdR6qAsHKO5XsshFKzXtd3RxBrN866jNM
+        yQBnKE2abWf1OfF+EvaXxqIq1sNo05pgot/iYufWGjiRK/GBOJy0xPePZYOgo8uUXrdYeN
+        m1yUzychkjRXcWo7joeT7mC8/u+Op6c=
+Date:   Wed, 25 May 2022 02:12:44 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   vasily.averin@linux.dev
+Subject: Re: [PATCH] ipc: Remove dead code in perform_atomic_semop()
+Content-Language: en-US
+To:     Gautam Menghani <gautammenghani201@gmail.com>,
+        akpm@linux-foundation.org, shakeelb@google.com, mhocko@suse.com,
+        manfred@colorfullife.com
+Cc:     linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        skhan@linuxfoundation.org
+References: <20220524182244.42987-1-gautammenghani201@gmail.com>
+In-Reply-To: <20220524182244.42987-1-gautammenghani201@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,43 +53,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 5 May 2022 13:41:29 +0800
-sunliming <kelulanainsley@gmail.com> wrote:
-
-> From: sunliming <sunliming@kylinos.cn>
-> To: mingo@redhat.com, rostedt@goodmis.org, tglx@linutronix.de,
-> 	bp@alien8.de, dave.hansen@linux.intel.com
-> Cc: linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-> 	x86@kernel.org, linux-trace-devel@vger.kernel.org, sunliming
-> <sunliming@kylinos.cn>
-> Subject: [PATCH v2 RESEND] x86,trace: Remove unused headers
-> <https://lore.kernel.org/all/20220426120950.495950-1-sunliming@kylinos.cn/#r>
-> Date: Tue, 26 Apr 2022 20:09:50 +0800
+On 5/24/22 21:22, Gautam Menghani wrote:
+> Remove the line which is dead code. Fixes the clang scan warning:
+> warning: Value stored to 'result' is never read [deadcode.DeadStores]
+>                 result = curr->semval;
 > 
-> Commit 4b9a8dca0e58 ("x86/idt: Remove the tracing IDT completely")
-> removed the tracing IDT from the file arch/x86/kernel/tracepoint.c,
-> but left the related headers unused, remove it.
-> 
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
 > ---
->  arch/x86/kernel/tracepoint.c
-> <https://lore.kernel.org/all/20220426120950.495950-1-sunliming@kylinos.cn/#Z31arch:x86:kernel:tracepoint.c>
-> | 3 ---
->  1 file changed, 3 deletions(-)
-> diff <https://lore.kernel.org/all/20220426120950.495950-1-sunliming@kylinos.cn/#iZ31arch:x86:kernel:tracepoint.c>
-> --git a/arch/x86/kernel/tracepoint.c b/arch/x86/kernel/tracepoint.c
-> index fcfc077afe2d..f39aad69fb64 100644
-> --- a/arch/x86/kernel/tracepoint.c
-> +++ b/arch/x86/kernel/tracepoint.c@@ -8,10 +8,7 @@ #include <linux/jump_label.h>
->  #include <linux/atomic.h>
->  -#include <asm/hw_irq.h>
-> -#include <asm/desc.h> #include <asm/trace/exceptions.h>-#include
-> <asm/trace/irq_vectors.h>
->  DEFINE_STATIC_KEY_FALSE(trace_pagefault_key);
+>  ipc/sem.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
+> diff --git a/ipc/sem.c b/ipc/sem.c
+> index 0dbdb98fdf2d..156824bcda47 100644
+> --- a/ipc/sem.c
+> +++ b/ipc/sem.c
+> @@ -766,7 +766,6 @@ static int perform_atomic_semop(struct sem_array *sma, struct sem_queue *q)
+>  	for (sop = sops; sop < sops + nsops; sop++) {
+>  		curr = &sma->sems[sop->sem_num];
+>  		sem_op = sop->sem_op;
+> -		result = curr->semval;
+>  
+>  		if (sop->sem_flg & SEM_UNDO) {
+>  			int undo = un->semadj[sop->sem_num] - sem_op;
 
-Your email client mangled the patch.
+Perhaps it would be better to keep the "result" but use it in the
+marked line below, like it was done in previous part of this function?
 
--- Steve
+                        un->semadj[sop->sem_num] = undo;
+                }
+                curr->semval += sem_op; <<<<<< VvS: here ?
+                ipc_update_pid(&curr->sempid, q->pid);
 
-
+Thank you,
+	Vasily Averin

@@ -2,114 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D471053329E
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0057B53329D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241730AbiEXUuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        id S241722AbiEXUuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241725AbiEXUuS (ORCPT
+        with ESMTP id S239028AbiEXUuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:50:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFA8737A0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:50:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EE7B0219E3;
-        Tue, 24 May 2022 20:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653425411; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MPNHku6piK5dWqvKjQcUMeZr5tFk3g/CcJPmOCuPN4w=;
-        b=g89mcHONl7FFoTjfEH9rg/xl9bqZsVeP1gtdmeBn4sfciROwWBMsijA3TrZ4ruSpBPJOm8
-        bVcjBgmbOk061UAfbBbV52xh+rud8A7DRkCafFQECh0aPlN8izKAai+HBe7vBquODJbzGR
-        K2qxKm8+QqPLQxq85iHrBip1qjdgpvw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653425411;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MPNHku6piK5dWqvKjQcUMeZr5tFk3g/CcJPmOCuPN4w=;
-        b=hPohSqZmXV9soTvNudrt4e4zTBYTBkZHyM73mlA2GYNOAiK+ThC8TSU5evY6Q+hgNLzO6s
-        mSxpv/a4raEjaWCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D476E13ADF;
-        Tue, 24 May 2022 20:50:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gx/pMgNFjWJ1OAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 24 May 2022 20:50:11 +0000
-Message-ID: <d24e9ac9-0903-3c15-c446-2962f44a360f@suse.cz>
-Date:   Tue, 24 May 2022 22:48:56 +0200
+        Tue, 24 May 2022 16:50:07 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B041737A0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:50:06 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id w14so32760944lfl.13
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xu6EHDS01LsOIawXUSDVH/r2oXuTsWqPdMuqTq7O8gE=;
+        b=Z2hxmeMr7k/9U4EfcQyebztkuf6MneNT2zAKD72w7RpTggD7ZjCpMMA+AG0iEZYZKM
+         nOv7+3nIHvnBr5jgJfjTANm4EXdEmDCo8F/IpMM9lU6y+ts6orITJzVAE8boMr5q+Eoa
+         ByPPQHu+fV51HhIJ8ProKLOEOz2Xtc7SmJo/AGhQGcfaeKUFha4vIjRO+ML3+eEZfL7V
+         q/J83Wecu938JJEhD81Z1yrhLoS8N0dkLwtyvSWexc3D+ObPIISMyWEpfg6lOtYCkh4c
+         aNwCpw7UoT3wICVZZlCRluqnisVWjS5dvL9P6H0hxrfkZk2Z3uD+2bzaO7XMNSuuZ/6C
+         jrSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xu6EHDS01LsOIawXUSDVH/r2oXuTsWqPdMuqTq7O8gE=;
+        b=aDzlALbGo5Zaau97DI4PtiSOYGMZQeFRMleSMXQq2lNAWKhftWSeq3nBL5EQjDSC3f
+         0+4PxIB8yeD62gqZxbe+a7j/u1a943H5/0hZFmeOX5TnuGhoqFliBNn7rfMfgZBcKB3q
+         eXnWFMBcMNxDjht4NLUM7vv8E2K3Nl+QeGp7H2lNBvINlJJhPZCKhRy84TxJJTJHZJCW
+         jh1o7eqcnz9bKLD/p6UFt5pmK1dWsR1DvponJRAWCTpMjD0m9qzp2deQb1/DzEHuTd6Y
+         2KpykGrjjUfPPz2xYIjO6ut51yP+nr3u/5Ny894YeEcO25TmVt2HQHUbmQMTvJbBxX8o
+         9LMQ==
+X-Gm-Message-State: AOAM533XfXwrgZap4JmhDbHDdz/G/jrEKbbgqqsLqu/jmn8nlNO4q7+t
+        htSnAGafJFy1NAPr3k4ILT1nT6EB5X0in31gDJxT9nZgqvs=
+X-Google-Smtp-Source: ABdhPJyQjBwigtLjvLrVIrEOtKpFLfkTj0wS9QvXw6Cn04KWi9naGQql0vuzXi7YhavlMsx6rr6NzVNT2XkyQjqwJTY=
+X-Received: by 2002:a05:6512:ace:b0:478:9af3:d9cb with SMTP id
+ n14-20020a0565120ace00b004789af3d9cbmr1136279lfu.103.1653425404449; Tue, 24
+ May 2022 13:50:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: [CFP LPC 2022] Kernel Memory Management Microconference
-To:     Linux-MM layout <linux-mm@kvack.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220523164626.858340-1-masahiroy@kernel.org> <20220523164626.858340-4-masahiroy@kernel.org>
+In-Reply-To: <20220523164626.858340-4-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 24 May 2022 13:49:53 -0700
+Message-ID: <CAKwvOd=6GHg7z_0-2wsF0Z9Jk1Cb_j=Z4_roYBRpHvj-MCzwTw@mail.gmail.com>
+Subject: Re: [PATCH 4/5] modpost: reuse ARRAY_SIZE() macro for section_mismatch()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, May 23, 2022 at 9:48 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Move ARRAY_SIZE() from file2alias.c to modpost.h to reuse it in
+> section_mismatch().
+>
+> Also, move the variable 'check' inside the for-loop.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-this year there will be a brand new
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-	Kernel Memory Management Microconference
+> ---
+>
+>  scripts/mod/file2alias.c | 2 --
+>  scripts/mod/modpost.c    | 7 +++----
+>  scripts/mod/modpost.h    | 3 +++
+>  3 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index 5258247d78ac..e8a9c6816fec 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -734,8 +734,6 @@ static int do_vio_entry(const char *filename, void *symval,
+>         return 1;
+>  }
+>
+> -#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+> -
+>  static void do_input(char *alias,
+>                      kernel_ulong_t *arr, unsigned int min, unsigned int max)
+>  {
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 77c315dea1a3..48a18b59f908 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1049,8 +1049,6 @@ static const struct sectioncheck *section_mismatch(
+>                 const char *fromsec, const char *tosec)
+>  {
+>         int i;
+> -       int elems = sizeof(sectioncheck) / sizeof(struct sectioncheck);
+> -       const struct sectioncheck *check = &sectioncheck[0];
+>
+>         /*
+>          * The target section could be the SHT_NUL section when we're
+> @@ -1061,14 +1059,15 @@ static const struct sectioncheck *section_mismatch(
+>         if (*tosec == '\0')
+>                 return NULL;
+>
+> -       for (i = 0; i < elems; i++) {
+> +       for (i = 0; i < ARRAY_SIZE(sectioncheck); i++) {
+> +               const struct sectioncheck *check = &sectioncheck[i];
+> +
+>                 if (match(fromsec, check->fromsec)) {
+>                         if (check->bad_tosec[0] && match(tosec, check->bad_tosec))
+>                                 return check;
+>                         if (check->good_tosec[0] && !match(tosec, check->good_tosec))
+>                                 return check;
+>                 }
+> -               check++;
+>         }
+>         return NULL;
+>  }
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index d9daeff07b83..044bdfb894b7 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -97,6 +97,9 @@ static inline void __endian(const void *src, void *dest, unsigned int size)
+>  #endif
+>
+>  #define NOFAIL(ptr)   do_nofail((ptr), #ptr)
+> +
+> +#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+> +
+>  void *do_nofail(void *ptr, const char *expr);
+>
+>  struct buffer {
+> --
+> 2.32.0
+>
 
-co-lead by Matthew Wilcox and myself at the Linux Plumbers Conference
-(LPC), September 12-14, Dublin, Ireland, or remotely.
 
-This microconference supplements the recently concluded LSF/MM event
-by providing an opportunity to discuss current topics with a different
-audience, in a different location, and at a different time of year.
-We would like to discuss current problems in memory management,
-for example:
-
-	* Multi-generational LRU vs traditional LRU
-
-	* Do we need three different slab allocators?
-
-	* How far do we take the folio conversion?
-
-	* Can we handle page pinning and page mapcount more
-	  effectively?
-
-	* How can we effectively cache reflinked files?
-
-	* Can we support 1GB pages other than through hugetlbfs?
-
-	* How should we handle memory failures better?
-
-Please submit your proposals at:
-
-	https://lpc.events/event/16/abstracts/
-
-and select "Kernel Memory Management MC" as the track.
-Please do that by the 1st of July to allow us to plan the schedule on time.
-
-We're looking forward to your proposals and seeing you either in Dublin
-or virtually!
-
+-- 
 Thanks,
-Vlastimil
+~Nick Desaulniers

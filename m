@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2398C5331A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DA15331A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240550AbiEXTOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S240742AbiEXTOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240554AbiEXTOF (ORCPT
+        with ESMTP id S240532AbiEXTOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:14:05 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF8D5EBEC;
-        Tue, 24 May 2022 12:14:03 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id 2so9488754iou.5;
-        Tue, 24 May 2022 12:14:03 -0700 (PDT)
+        Tue, 24 May 2022 15:14:09 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37275DE5E
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:14:05 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id n10so37292165ejk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 12:14:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=Q4PbAGgy/EEp8A8G2Df0NnYKeJLXOrfA0y/iY8AyNZ8=;
-        b=H1lcHbCjc53VxXFo4/gneCT+dqmMMJadq8sH448Ze+pPwqj8Hb6MVj8Q6t21mp6X+3
-         AgIhlrWU4PxM8HQUFN2Nx+y505jB/FpvO+86ZHXqz9NgcY2kZ7Bwk6QIqmgDiI929a7k
-         gQPEKLNLPFkMqulxGKR2Rd3F0mP0QN6wxhANxxhvjY1NQ09PuMTELsrRFLtVqFVK49RM
-         TldlOI50L1APzrIFq6Su69wsQ4ILD3ExZnykHgF1uKw6uKwP5aeHsaPjJ6AT76t5Of1L
-         4XBCKZ8JNx8X6trT5yCQ0caZhVo4nY2GVrHf0n3C9t+gNoI8N4iX3YvI15RWjwLiv4pP
-         Ecyw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZUNbIM3O9IVgMuURLoH1enWN67UzqQk+sae4XN4TllE=;
+        b=i5W5Hr3TnPWdLCB0yyT/B6rlkC5BY9u1hPBetlVyy3/9wyZlcUkPyuq/uZSfouPrmj
+         7zxfYmw6VMvMW77zOYDZ/46ckoGLiX0+vMRvUhyuch4GzskvhC87e5ogtTmLSPEC6o0I
+         21TVLo5M+A2PIcQZZyZMpG2Femy4fhFEH8E3dmUZJkyGmdk6XnDbkiBDd73wKI6lPC70
+         X5iU8RSEqhnVQ+0JAI94/8SuDk0KklDE+92ihtHb8Vwd6ccdyf411ykhpqCg7eyeYHaD
+         xVUJQ2aQK850GVmNVJdJFsx+fJwqqXLNIf6NWV+VVI7JGjsaeBDbp7b4gtICECuv4fY1
+         PCgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=Q4PbAGgy/EEp8A8G2Df0NnYKeJLXOrfA0y/iY8AyNZ8=;
-        b=OiPhdVDkoo94Q8HlcgAg+k0w9mDto2HghsimaIvRVUrJk4ih5ByyIIyX5wBueUML4i
-         TwQnFoShS8fv2yj5m8DOaHtIum6T1DHgScPA1Iai5DLOVpxHpFsQJ2T2/CE1NBTtQzAN
-         aCwSdk+TFB+gfONgLbrlgcxE/XLCNQAzglAB4TdGniHreP4rqMhhxFLBMEDEDfHCA9wT
-         Xev6tmUJPEk1lFXJ9Xk/g6bcU+iGsdZChBuufA8vZBT/L9KhGXalInYzoqLvQMSHr5Ly
-         Zqp2kIZ4oMY4BxCseKApCao4HPJygrn2Ur2jF0vmCL9XdyVySH919qoo6ES6wzEezbgS
-         Vdtw==
-X-Gm-Message-State: AOAM5321SDA1x9EienbGJGMORh5l0fUb4ORZ+itCSJORd1JfRynLvkSc
-        a63t7MMt90qAKI3Sj3SSIR7Cdy3HwVfB+rqmU5c8gxDxyF4W9g==
-X-Google-Smtp-Source: ABdhPJx4eaPDpI48UhW0021618hMu9tKyVzxbrsQTAGSLCXvILv/xcYzByMcJ1zJqEmOov6+JkgpkQH8uymupY6tvcU=
-X-Received: by 2002:a05:6638:25d3:b0:32e:e5ee:496c with SMTP id
- u19-20020a05663825d300b0032ee5ee496cmr2525941jat.52.1653419642892; Tue, 24
- May 2022 12:14:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZUNbIM3O9IVgMuURLoH1enWN67UzqQk+sae4XN4TllE=;
+        b=I13Cq/bDZtAIBpN6OKUNABn3E2Q+V/6TNtSTC7+iVAz0KNOM5eZWHlONDzc+wfk1jT
+         22LmupeRQAKrZUOswsGosZnLHPlQuWFZGTAPsKbqVwm/zJt7fsCEjabg+V6maifJWJKn
+         rmdAmSkTxBGqe/16Jd65GjyHrEQsHK3YZgayFNF9KGHvuPkit7oPa9DTo5AX549Vogzd
+         RtD0Rjw3sdOLBnU3lBMMcV5OtLdA49Xp06btJm+JvGGJmkpAhYa2KX1dB/aUF0hMvXI2
+         yDPxwSSmigqjS4lOFgK44HZVtUB6V99KbphLd9dttFg5tBf+tLY4O56m19WrwWtXdg1m
+         7IXg==
+X-Gm-Message-State: AOAM5308dZtXFRSe9wqzi0hlTiBqEwuwz9pU//QfkiMlKPv9kVCb4KPw
+        x0OlBjR1GZBUmrXE+ALQD6U=
+X-Google-Smtp-Source: ABdhPJy55BARM8sTDIdGNAvfeVy4m0ARiKvAodu9th+WWcY2lPc3PErfQprwXDlrx7DmiVmvM8dwug==
+X-Received: by 2002:a17:906:d552:b0:6f5:942e:bc5f with SMTP id cr18-20020a170906d55200b006f5942ebc5fmr25761129ejc.110.1653419644250;
+        Tue, 24 May 2022 12:14:04 -0700 (PDT)
+Received: from kista.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id r17-20020a056402019100b0042abf2affebsm9767860edv.67.2022.05.24.12.14.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 12:14:03 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Roman Stratiienko <r.stratiienko@gmail.com>
+Cc:     mripard@kernel.org, wens@csie.org, airlied@linux.ie,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz
+Subject: Re: Re: Re: [PATCH] drm/sun4i: Fix blend registers corruption for DE2.0/DE3.0
+Date:   Tue, 24 May 2022 21:14:02 +0200
+Message-ID: <3174733.44csPzL39Z@kista>
+In-Reply-To: <CAGphcdnbAS64yUomkaAMWqStO6mO3nLq2qrOU-W99htH0_Fz-g@mail.gmail.com>
+References: <20220524135249.49993-1-roman.o.stratiienko@globallogic.com> <CAGphcdn=7r1p217m0DczgYZeGV+STe9PAAAuMjb0qXq2cteEwg@mail.gmail.com> <CAGphcdnbAS64yUomkaAMWqStO6mO3nLq2qrOU-W99htH0_Fz-g@mail.gmail.com>
 MIME-Version: 1.0
-References: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
- <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
-In-Reply-To: <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Tue, 24 May 2022 21:13:26 +0200
-Message-ID: <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com>
-Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
- and OpenSSL v3.0.x
-To:     Kees Cook <keescook@chromium.org>
-Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        David Howells <dhowells@redhat.com>
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -71,188 +74,400 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 12:01 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> [ CC Kees and Salvatore ]
->
-> The Debian kernel-team ships a fix (4 hours young):
->
-> commit: 13e234d459c11946efba647c3daf15e03abb0d99
-> "sign-file: Convert API usage to support OpenSSL v3"
->
-> *untested*
+Dne torek, 24. maj 2022 ob 19:14:35 CEST je Roman Stratiienko napisal(a):
+> By the way, not related to this issue:
+>=20
+> I cherry-picked
+> https://patchwork.kernel.org/project/dri-devel/patch/20220424162633.12369=
+=2D9-samuel@sholland.org/
+> and got a blank FB console on OPI3.
+> Can you check it please?
 
-@Kees:
+Reply to that patch and we'll talk.
 
-Any updates on the part of certs/extract-cert.c?
+Best regards,
+Jernej
 
--Sedat-
+>=20
+> Regards,
+> Roman
+>=20
+>=20
+>=20
+> =D0=B2=D1=82, 24 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 20:10, Roman Stra=
+tiienko <r.stratiienko@gmail.com>:
+> >
+> > Please draft a test for the zpos issue you're mentioning.
+> >
+> > It's very easy to do with kmsxx using python wrapper.
+> >
+> > Or explain steps to reproduce here, I will write it by myself.
+> >
+> > Thanks.
+> > Regards
+> > Roman
+> >
+> > =D0=B2=D1=82, 24 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 19:21, Jernej =
+=C5=A0krabec <jernej.skrabec@gmail.com>:
+> > >
+> > > Dne torek, 24. maj 2022 ob 17:31:13 CEST je Roman Stratiienko=20
+napisal(a):
+> > > > NAK for this. Further testing showed such an approach is not reliab=
+le
+> > > > due to .atomic_update() callback called only in case planes have so=
+me
+> > > > changes.
+> > >
+> > > Additionally, I think it would be better to fix underlaying zpos issu=
+e=20
+first
+> > > (attempted many times) and then worry about blending.
+> > >
+> > > Best regards,
+> > > Jernej
+> > >
+> > > >
+> > > > =D0=B2=D1=82, 24 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 16:52, Roma=
+n Stratiienko=20
+<r.stratiienko@gmail.com>:
+> > > > >
+> > > > > Corruption happens when plane zpos is updated
+> > > > >
+> > > > > Example scenario:
+> > > > >
+> > > > > Initial frame blender state:
+> > > > >     PLANE_ZPOS =3D {0, 1, 2, 3}
+> > > > >     BLD_ROUTE  =3D {0, 1, 2, 0}
+> > > > >     BLD_EN     =3D {1, 1, 1, 0}
+> > > > >
+> > > > > New frame commit (Only ZPOS has been changed):
+> > > > >
+> > > > >     PLANE_ZPOS =3D {0->2, 1->0, 2->1, 3}
+> > > > >
+> > > > > Expected results after plane state update:
+> > > > >                 Z0 Z1 Z2 Z3
+> > > > >     BLD_ROUTE =3D {1, 2, 0, 0}
+> > > > >     BLD_EN    =3D {1, 1, 1, 0}
+> > > > >
+> > > > > What is currently happening:
+> > > > >
+> > > > > 1. sun8i_vi_layer_enable(enabled=3Dtrue, zpos=3D2, old_zpos=3D0):
+> > > > >     BLD_ROUTE =3D {1->0, 1, 2->0, 0}
+> > > > >     BLD_EN    =3D {1->0, 1, 1->1, 0}
+> > > > >
+> > > > > 2. sun8i_ui_layer_enable(enabled=3Dtrue, zpos=3D0, old_zpos=3D1):
+> > > > >     BLD_ROUTE =3D {0->1, 1->0, 0, 0}
+> > > > >     BLD_EN    =3D {0->1, 1->0, 1, 0}
+> > > > >
+> > > > > 3. sun8i_ui_layer_enable(enabled=3Dtrue, zpos=3D1, old_zpos=3D2):
+> > > > >     BLD_ROUTE =3D {1, 0->2, 0->0, 0}
+> > > > >     BLD_EN    =3D {1, 0->2, 1->0, 0}
+> > > > >
+> > > > > After updating of all the planes we are ending up with BLD_EN[2]=
+=3D0,
+> > > > > which makes this channel disabled.
+> > > > >
+> > > > > To fix this issue, clear BLEND registers before updating the plan=
+es
+> > > > > and do not clear the old state while processing every plane.
+> > > > >
+> > > > > Signed-off-by: Roman Stratiienko=20
+<roman.o.stratiienko@globallogic.com>
+> > > > > ---
+> > > > >  drivers/gpu/drm/sun4i/sun8i_mixer.c    | 16 +++++++++++++++
+> > > > >  drivers/gpu/drm/sun4i/sun8i_ui_layer.c | 28 +++
++----------------------
+> > > > >  drivers/gpu/drm/sun4i/sun8i_vi_layer.c | 28 +++
++----------------------
+> > > > >  3 files changed, 24 insertions(+), 48 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/dr=
+m/
+sun4i/
+> > > sun8i_mixer.c
+> > > > > index f5e8aeaa3cdf..004377a000fc 100644
+> > > > > --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> > > > > +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> > > > > @@ -248,6 +248,21 @@ int sun8i_mixer_drm_format_to_hw(u32 format,=
+=20
+u32
+> > > *hw_format)
+> > > > >         return -EINVAL;
+> > > > >  }
+> > > > >
+> > > > > +static void sun8i_atomic_begin(struct sunxi_engine *engine,
+> > > > > +                              struct drm_crtc_state *old_state)
+> > > > > +{
+> > > > > +       struct sun8i_mixer *mixer =3D engine_to_sun8i_mixer(engin=
+e);
+> > > > > +       u32 bld_base =3D sun8i_blender_base(mixer);
+> > > > > +
+> > > > > +       regmap_write(engine->regs,
+> > > > > +                    SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
+> > > > > +                    0);
+> > > > > +
+> > > > > +       regmap_write(engine->regs,
+> > > > > +                    SUN8I_MIXER_BLEND_ROUTE(bld_base),
+> > > > > +                    0);
+> > > > > +}
+> > > > > +
+> > > > >  static void sun8i_mixer_commit(struct sunxi_engine *engine)
+> > > > >  {
+> > > > >         DRM_DEBUG_DRIVER("Committing changes\n");
+> > > > > @@ -299,6 +314,7 @@ static struct drm_plane=20
+**sun8i_layers_init(struct
+> > > drm_device *drm,
+> > > > >  }
+> > > > >
+> > > > >  static const struct sunxi_engine_ops sun8i_engine_ops =3D {
+> > > > > +       .atomic_begin   =3D sun8i_atomic_begin,
+> > > > >         .commit         =3D sun8i_mixer_commit,
+> > > > >         .layers_init    =3D sun8i_layers_init,
+> > > > >  };
+> > > > > diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c b/drivers/gpu/
+drm/
+> > > sun4i/sun8i_ui_layer.c
+> > > > > index 7845c2a53a7f..b294a882626a 100644
+> > > > > --- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+> > > > > +++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+> > > > > @@ -24,8 +24,7 @@
+> > > > >  #include "sun8i_ui_scaler.h"
+> > > > >
+> > > > >  static void sun8i_ui_layer_enable(struct sun8i_mixer *mixer, int=
+=20
+channel,
+> > > > > -                                 int overlay, bool enable, unsig=
+ned=20
+int
+> > > zpos,
+> > > > > -                                 unsigned int old_zpos)
+> > > > > +                                 int overlay, bool enable, unsig=
+ned=20
+int
+> > > zpos)
+> > > > >  {
+> > > > >         u32 val, bld_base, ch_base;
+> > > > >
+> > > > > @@ -44,18 +43,6 @@ static void sun8i_ui_layer_enable(struct=20
+sun8i_mixer
+> > > *mixer, int channel,
+> > > > >                            SUN8I_MIXER_CHAN_UI_LAYER_ATTR(ch_base,
+> > > overlay),
+> > > > >                            SUN8I_MIXER_CHAN_UI_LAYER_ATTR_EN, val=
+);
+> > > > >
+> > > > > -       if (!enable || zpos !=3D old_zpos) {
+> > > > > -               regmap_update_bits(mixer->engine.regs,
+> > > > > -                                 =20
+SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
+> > > > > -
+> > > SUN8I_MIXER_BLEND_PIPE_CTL_EN(old_zpos),
+> > > > > -                                  0);
+> > > > > -
+> > > > > -               regmap_update_bits(mixer->engine.regs,
+> > > > > -                                 =20
+SUN8I_MIXER_BLEND_ROUTE(bld_base),
+> > > > > -
+> > > SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(old_zpos),
+> > > > > -                                  0);
+> > > > > -       }
+> > > > > -
+> > > > >         if (enable) {
+> > > > >                 val =3D SUN8I_MIXER_BLEND_PIPE_CTL_EN(zpos);
+> > > > >
+> > > > > @@ -291,31 +278,24 @@ static int sun8i_ui_layer_atomic_check(stru=
+ct
+> > > drm_plane *plane,
+> > > > >  static void sun8i_ui_layer_atomic_disable(struct drm_plane *plan=
+e,
+> > > > >                                           struct drm_atomic_state=
+=20
+*state)
+> > > > >  {
+> > > > > -       struct drm_plane_state *old_state =3D
+> > > drm_atomic_get_old_plane_state(state,
+> > > > > -
+> > > plane);
+> > > > >         struct sun8i_ui_layer *layer =3D=20
+plane_to_sun8i_ui_layer(plane);
+> > > > > -       unsigned int old_zpos =3D old_state->normalized_zpos;
+> > > > >         struct sun8i_mixer *mixer =3D layer->mixer;
+> > > > >
+> > > > > -       sun8i_ui_layer_enable(mixer, layer->channel, layer->overl=
+ay,
+> > > false, 0,
+> > > > > -                             old_zpos);
+> > > > > +       sun8i_ui_layer_enable(mixer, layer->channel, layer->overl=
+ay,
+> > > false, 0);
+> > > > >  }
+> > > > >
+> > > > >  static void sun8i_ui_layer_atomic_update(struct drm_plane *plane,
+> > > > >                                          struct drm_atomic_state=
+=20
+*state)
+> > > > >  {
+> > > > > -       struct drm_plane_state *old_state =3D
+> > > drm_atomic_get_old_plane_state(state,
+> > > > > -
+> > > plane);
+> > > > >         struct drm_plane_state *new_state =3D
+> > > drm_atomic_get_new_plane_state(state,
+> > > > >
+> > > plane);
+> > > > >         struct sun8i_ui_layer *layer =3D=20
+plane_to_sun8i_ui_layer(plane);
+> > > > >         unsigned int zpos =3D new_state->normalized_zpos;
+> > > > > -       unsigned int old_zpos =3D old_state->normalized_zpos;
+> > > > >         struct sun8i_mixer *mixer =3D layer->mixer;
+> > > > >
+> > > > >         if (!new_state->visible) {
+> > > > >                 sun8i_ui_layer_enable(mixer, layer->channel,
+> > > > > -                                     layer->overlay, false, 0,=20
+old_zpos);
+> > > > > +                                     layer->overlay, false, 0);
+> > > > >                 return;
+> > > > >         }
+> > > > >
+> > > > > @@ -328,7 +308,7 @@ static void sun8i_ui_layer_atomic_update(stru=
+ct
+> > > drm_plane *plane,
+> > > > >         sun8i_ui_layer_update_buffer(mixer, layer->channel,
+> > > > >                                      layer->overlay, plane);
+> > > > >         sun8i_ui_layer_enable(mixer, layer->channel, layer->overl=
+ay,
+> > > > > -                             true, zpos, old_zpos);
+> > > > > +                             true, zpos);
+> > > > >  }
+> > > > >
+> > > > >  static const struct drm_plane_helper_funcs=20
+sun8i_ui_layer_helper_funcs =3D
+> > > {
+> > > > > diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/
+drm/
+> > > sun4i/sun8i_vi_layer.c
+> > > > > index bb7c43036dfa..4653244b2fd8 100644
+> > > > > --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+> > > > > +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+> > > > > @@ -18,8 +18,7 @@
+> > > > >  #include "sun8i_vi_scaler.h"
+> > > > >
+> > > > >  static void sun8i_vi_layer_enable(struct sun8i_mixer *mixer, int=
+=20
+channel,
+> > > > > -                                 int overlay, bool enable, unsig=
+ned=20
+int
+> > > zpos,
+> > > > > -                                 unsigned int old_zpos)
+> > > > > +                                 int overlay, bool enable, unsig=
+ned=20
+int
+> > > zpos)
+> > > > >  {
+> > > > >         u32 val, bld_base, ch_base;
+> > > > >
+> > > > > @@ -38,18 +37,6 @@ static void sun8i_vi_layer_enable(struct=20
+sun8i_mixer
+> > > *mixer, int channel,
+> > > > >                            SUN8I_MIXER_CHAN_VI_LAYER_ATTR(ch_base,
+> > > overlay),
+> > > > >                            SUN8I_MIXER_CHAN_VI_LAYER_ATTR_EN, val=
+);
+> > > > >
+> > > > > -       if (!enable || zpos !=3D old_zpos) {
+> > > > > -               regmap_update_bits(mixer->engine.regs,
+> > > > > -                                 =20
+SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
+> > > > > -
+> > > SUN8I_MIXER_BLEND_PIPE_CTL_EN(old_zpos),
+> > > > > -                                  0);
+> > > > > -
+> > > > > -               regmap_update_bits(mixer->engine.regs,
+> > > > > -                                 =20
+SUN8I_MIXER_BLEND_ROUTE(bld_base),
+> > > > > -
+> > > SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(old_zpos),
+> > > > > -                                  0);
+> > > > > -       }
+> > > > > -
+> > > > >         if (enable) {
+> > > > >                 val =3D SUN8I_MIXER_BLEND_PIPE_CTL_EN(zpos);
+> > > > >
+> > > > > @@ -395,31 +382,24 @@ static int sun8i_vi_layer_atomic_check(stru=
+ct
+> > > drm_plane *plane,
+> > > > >  static void sun8i_vi_layer_atomic_disable(struct drm_plane *plan=
+e,
+> > > > >                                           struct drm_atomic_state=
+=20
+*state)
+> > > > >  {
+> > > > > -       struct drm_plane_state *old_state =3D
+> > > drm_atomic_get_old_plane_state(state,
+> > > > > -
+> > > plane);
+> > > > >         struct sun8i_vi_layer *layer =3D=20
+plane_to_sun8i_vi_layer(plane);
+> > > > > -       unsigned int old_zpos =3D old_state->normalized_zpos;
+> > > > >         struct sun8i_mixer *mixer =3D layer->mixer;
+> > > > >
+> > > > > -       sun8i_vi_layer_enable(mixer, layer->channel, layer->overl=
+ay,
+> > > false, 0,
+> > > > > -                             old_zpos);
+> > > > > +       sun8i_vi_layer_enable(mixer, layer->channel, layer->overl=
+ay,
+> > > false, 0);
+> > > > >  }
+> > > > >
+> > > > >  static void sun8i_vi_layer_atomic_update(struct drm_plane *plane,
+> > > > >                                          struct drm_atomic_state=
+=20
+*state)
+> > > > >  {
+> > > > > -       struct drm_plane_state *old_state =3D
+> > > drm_atomic_get_old_plane_state(state,
+> > > > > -
+> > > plane);
+> > > > >         struct drm_plane_state *new_state =3D
+> > > drm_atomic_get_new_plane_state(state,
+> > > > >
+> > > plane);
+> > > > >         struct sun8i_vi_layer *layer =3D=20
+plane_to_sun8i_vi_layer(plane);
+> > > > >         unsigned int zpos =3D new_state->normalized_zpos;
+> > > > > -       unsigned int old_zpos =3D old_state->normalized_zpos;
+> > > > >         struct sun8i_mixer *mixer =3D layer->mixer;
+> > > > >
+> > > > >         if (!new_state->visible) {
+> > > > >                 sun8i_vi_layer_enable(mixer, layer->channel,
+> > > > > -                                     layer->overlay, false, 0,=20
+old_zpos);
+> > > > > +                                     layer->overlay, false, 0);
+> > > > >                 return;
+> > > > >         }
+> > > > >
+> > > > > @@ -432,7 +412,7 @@ static void sun8i_vi_layer_atomic_update(stru=
+ct
+> > > drm_plane *plane,
+> > > > >         sun8i_vi_layer_update_buffer(mixer, layer->channel,
+> > > > >                                      layer->overlay, plane);
+> > > > >         sun8i_vi_layer_enable(mixer, layer->channel, layer->overl=
+ay,
+> > > > > -                             true, zpos, old_zpos);
+> > > > > +                             true, zpos);
+> > > > >  }
+> > > > >
+> > > > >  static const struct drm_plane_helper_funcs=20
+sun8i_vi_layer_helper_funcs =3D
+> > > {
+> > > > > --
+> > > > > 2.30.2
+> > > > >
+> > > >
+> > >
+> > >
+>=20
 
-> [1] https://salsa.debian.org/kernel-team/linux/-/commit/13e234d459c11946efba647c3daf15e03abb0d99
->
-> On Thu, May 19, 2022 at 11:55 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > here, I am on Debian/unstable AMD64.
-> >
-> > Recently (or still) there is/was a transition to OpenSSL see below link.
-> >
-> > The warnings look like:
-> >
-> > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
-> > deprecated [-Wdeprecated-declarations]
-> > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
-> > deprecated [-Wdeprecated-declarations]
-> > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
-> > is deprecated [-Wdeprecated-declarations]
-> > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
-> > [-Wdeprecated-declarations]
-> > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-> > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > deprecated [-Wdeprecated-declarations]
-> > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
-> > deprecated [-Wdeprecated-declarations]
-> > 395:certs/extract-cert.c:46:14: warning: 'ERR_get_error_line' is
-> > deprecated [-Wdeprecated-declarations]
-> > 407:certs/extract-cert.c:59:9: warning: 'ERR_get_error_line' is
-> > deprecated [-Wdeprecated-declarations]
-> > 420:certs/extract-cert.c:124:3: warning: 'ENGINE_load_builtin_engines'
-> > is deprecated [-Wdeprecated-declarations]
-> > 432:certs/extract-cert.c:126:7: warning: 'ENGINE_by_id' is deprecated
-> > [-Wdeprecated-declarations]
-> > 444:certs/extract-cert.c:128:7: warning: 'ENGINE_init' is deprecated
-> > [-Wdeprecated-declarations]
-> > 456:certs/extract-cert.c:133:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > deprecated [-Wdeprecated-declarations]
-> > 468:certs/extract-cert.c:134:3: warning: 'ENGINE_ctrl_cmd' is
-> > deprecated [-Wdeprecated-declarations]
-> >
-> > More detailed output:
-> >
-> > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
-> > deprecated [-Wdeprecated-declarations]
-> > 190-        while ((e = ERR_get_error_line(&file, &line))) {
-> > 191-                    ^
-> > 192-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
-> > been explicitly marked deprecated here
-> > 193-OSSL_DEPRECATEDIN_3_0
-> > 194-^
-> > 195-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > 'OSSL_DEPRECATEDIN_3_0'
-> > 196-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > 197-                                                ^
-> > 198-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > 'OSSL_DEPRECATED'
-> > 199-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > 200-                                                   ^
-> > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
-> > deprecated [-Wdeprecated-declarations]
-> > 202-        while (ERR_get_error_line(&file, &line)) {}
-> > 203-               ^
-> > 204-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
-> > been explicitly marked deprecated here
-> > 205-OSSL_DEPRECATEDIN_3_0
-> > 206-^
-> > 207-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > 'OSSL_DEPRECATEDIN_3_0'
-> > 208-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > 209-                                                ^
-> > 210-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > 'OSSL_DEPRECATED'
-> > 211-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > 212-                                                   ^
-> > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
-> > is deprecated [-Wdeprecated-declarations]
-> > 214-                ENGINE_load_builtin_engines();
-> > 215-                ^
-> > 216-/usr/include/openssl/engine.h:358:1: note:
-> > 'ENGINE_load_builtin_engines' has been explicitly marked deprecated
-> > here
-> > 217-OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
-> > 218-^
-> > 219-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > 'OSSL_DEPRECATEDIN_3_0'
-> > 220-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > 221-                                                ^
-> > 222-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > 'OSSL_DEPRECATED'
-> > 223-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > 224-                                                   ^
-> > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
-> > [-Wdeprecated-declarations]
-> > 226-                e = ENGINE_by_id("pkcs11");
-> > 227-                    ^
-> > 228-/usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been
-> > explicitly marked deprecated here
-> > 229-OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
-> > 230-^
-> > 231-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > 'OSSL_DEPRECATEDIN_3_0'
-> > 232-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > 233-                                                ^
-> > 234-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > 'OSSL_DEPRECATED'
-> > 235-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > 236-                                                   ^
-> > 237-scripts/sign-file.c:   ld.lld -r -o
-> > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/objtool-in.o
-> > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86
-> > /special.o /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/decode.o
-> > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-> > 239-                if (ENGINE_init(e))
-> > 240-                    ^
-> > 241-/usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been
-> > explicitly marked deprecated here
-> > 242-OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
-> > 243-^
-> > 244-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > 'OSSL_DEPRECATEDIN_3_0'
-> > 245-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > 246-                                                ^
-> > 247-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > 'OSSL_DEPRECATED'
-> > 248-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > 249-                                                   ^
-> > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > deprecated [-Wdeprecated-declarations]
-> > 251-                        ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
-> > 252-                             ^
-> > 253-/usr/include/openssl/engine.h:478:1: note:
-> > 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
-> > 254-OSSL_DEPRECATEDIN_3_0
-> > 255-^
-> > 256-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > 'OSSL_DEPRECATEDIN_3_0'
-> > 257-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > 258-                                                ^
-> > 259-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > 'OSSL_DEPRECATED'
-> > 260-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > 261-                                                   ^
-> > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
-> > deprecated [-Wdeprecated-declarations]
-> > 263-                private_key = ENGINE_load_private_key(e, private_key_name,
-> > 264-                              ^
-> > 265-/usr/include/openssl/engine.h:637:1: note:
-> > 'ENGINE_load_private_key' has been explicitly marked deprecated here
-> > 266-OSSL_DEPRECATEDIN_3_0
-> > 267-^
-> > 268-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > 'OSSL_DEPRECATEDIN_3_0'
-> > 269-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > 270-                                                ^
-> > 271-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > 'OSSL_DEPRECATED'
-> > 272-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > 273-
-> >
-> > Relevant OpenSSL v3.0.3 header files are attached.
-> > My kernel-config, too.
-> >
-> > If you need further information, please let me know.
-> >
-> > Regards,
-> > -Sedat-
-> >
-> > [1] https://release.debian.org/transitions/html/auto-openssl.html
+

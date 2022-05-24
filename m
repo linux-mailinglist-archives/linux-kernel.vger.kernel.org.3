@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4899B53240A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13D6532409
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbiEXH1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S235223AbiEXH1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235297AbiEXH1G (ORCPT
+        with ESMTP id S235228AbiEXH1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 24 May 2022 03:27:06 -0400
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9CA21276
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:27:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAB332EF1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:27:03 -0700 (PDT)
 Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EDB033F1D6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:27:00 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F315D3F1EB
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:27:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
         s=20210705; t=1653377221;
-        bh=FZJ29gR3RITTCNW7L3h9rL5l5X5VZ+qG2aniJR7EDIc=;
+        bh=0rT4bj4pR8OO9Q6o/yjLqXZgacVnXSfmsD8U6qzZ7qY=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=QM3zMHrpeLkclZR6XOgSacuk8ShWCjhoopd+gxfesNkErLGc3V1DHAxC+Vn/075ip
-         u1qFoyGawEun/ar1VfwWsPMVl0YUynTGJV4P5uruiGoW/wDFBqautnqzubm/8GkKEP
-         H1Zi9MdGjx51HA9YOs/eVaxG7A5tg/CCMwXJ71IvvlCRDuUiMT2EDS1tSpC6zaLYNA
-         uFY+v8OSyxpKFSqZyRTcRdNirD7Y0mtLp1vYHPxTLjugRu6sKT+Fn09t8zDz7WBPoZ
-         f7MNzZp9RGfasmLmrwe0gHGkkK9oUMQlMHZdvtnsCZ7IbJv1TaQmtSspggegl9N7GC
-         Wgb4qOuG6byOg==
-Received: by mail-ed1-f71.google.com with SMTP id g10-20020a056402180a00b0042ab515d6c5so12053930edy.13
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:27:00 -0700 (PDT)
+        b=DXSENph0bPVElsCdge+Nbj9BwKJtFJPIIPWzckwKiQSEUrnuSdUxrieoqfxvZg2BN
+         MsR65Uz4y/u1hDpvQD4b6+W9NPJFu84LCNs3hk2NbtwxwP+lM08Mk+e1ZNdf29rr3l
+         2dlo9nPtTGlKU54Pfbfs4tB2ZKK7RMfRrXek052acvbREwXs17N6okwtSq3Qk+SS71
+         3cLwnIBQlpzDrJwz0D7sYOpnkHW8Q3lderKbeQSvgdqGNkG90pHPBbKnjn3Nhazmm6
+         QyTE1vqXz7VDeDgeXs8tifyhPNPLaoePYToLQwG927DW1U2A0k0pOcOZcBEIMXiOuU
+         JngSSk2mu7nDg==
+Received: by mail-ed1-f71.google.com with SMTP id q12-20020a056402040c00b0042a84f9939dso12193737edv.7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:27:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FZJ29gR3RITTCNW7L3h9rL5l5X5VZ+qG2aniJR7EDIc=;
-        b=y7vPBlJBfvWC49Dma6W8eZtObMe3KsAme7wOJFn279nEMFRXeStrMwmnbricw1j2HD
-         psiEN0Jn4O3D9CWtzRkKxT+ZJBU0PdiXBuCiOmhtNSWj/YgnQq2DZ3339L0G/V1zdR4O
-         QFrGN6YiOk89dcMbFA/SGi7sZisuKeIYhhNJbo9lP+oOqHrcwwbCdJi8mrBz0WacssKZ
-         jbDkOnt2roHqM4gkWRmOujUdkGm3X44sNfqgdSS5bCJJFlKK9xgpG5G7YszQJPS7qdSb
-         rVOrLL3S361h6ECOJZEt2UgKuRATbp2gGsg+1OB0qE6GHcYfvNBjDCNuy5BZhxKQFEom
-         bKZw==
-X-Gm-Message-State: AOAM531YdqSLEKlQY17WsIUJ+gak0hydSnzk2oLzR7cySl6YZi27/1Uh
-        0LpEJLLwGVezkrAWCow2cMse8RBzYrnjBlmLqqdhQ+HxzUXu8klixa48BGt5ahTcptxZqG3aSgR
-        G4FqivhrGCB9AVWYod72O0//saWp3IB+XJOL+2Fl0Cg==
-X-Received: by 2002:a05:6402:11c7:b0:428:5fdc:80c5 with SMTP id j7-20020a05640211c700b004285fdc80c5mr27465547edw.332.1653377220808;
-        Tue, 24 May 2022 00:27:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwa6H1EqXzLXKi+lLTrxdQTXlf+LwLMdZLhjn6vZhDzCLbY7I1InithsB8YgoGh6Ptrk44U9A==
-X-Received: by 2002:a05:6402:11c7:b0:428:5fdc:80c5 with SMTP id j7-20020a05640211c700b004285fdc80c5mr27465539edw.332.1653377220655;
-        Tue, 24 May 2022 00:27:00 -0700 (PDT)
+        bh=0rT4bj4pR8OO9Q6o/yjLqXZgacVnXSfmsD8U6qzZ7qY=;
+        b=6c3EeyitT21TrZcGCiLDT56AhIVlxRTyDEKQCb+jnxwUDaBeQxOqg+yK5I3y9pdDzD
+         QLGQFG9ooyLCbOFTX81z+NJr5zpwtZ3pWZAeTMmXTBMiO5Sol23+8QG1Zc+Mgt6Axh7B
+         PW+wPzEpf1LoO305W5ZDipi1YeKg2uOhSQCPiGuIufFMdVVp2QYshBkOK1bd4+6b6YH+
+         TzYFmzvt6M3AbjdhSnnhzdpb+GDDYZQLOvrhubnbUAs6zmi/dLAhe4W/PDiki4x0hSGv
+         6z+naIktVHNbUcVjomdLAvkgR/CM5g5yUZX8o/7/hECf96QbmUHisSm+uAKKSSvvnj76
+         CNZQ==
+X-Gm-Message-State: AOAM530EZ6f63Pof+1HohcaywsYPScd1L72VY9j8XVxtr/Ji/BJL4eRW
+        IOODMzJTyahCbCISDGlJvI2bs9eOMIGHDO0DOTKtsK3PbQmEHeE45v9MWnvPGb/YitEWpNvMhOU
+        CTJHjGSED/T8JxZyoxUu4G9ZPnud/3aWRnzWbzqHI7Q==
+X-Received: by 2002:a17:907:97c9:b0:6fe:bcb1:661d with SMTP id js9-20020a17090797c900b006febcb1661dmr12937547ejc.269.1653377221734;
+        Tue, 24 May 2022 00:27:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwg7bLKBJNYM07T/gQbJ4eNVo0EoDmbJCsrFAdy5B7rq+aqBrbvTgbtQnj2FE8gxRVGQr0lOA==
+X-Received: by 2002:a17:907:97c9:b0:6fe:bcb1:661d with SMTP id js9-20020a17090797c900b006febcb1661dmr12937534ejc.269.1653377221456;
+        Tue, 24 May 2022 00:27:01 -0700 (PDT)
 Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906329100b006f3ef214dd2sm6924353ejw.56.2022.05.24.00.26.59
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906329100b006f3ef214dd2sm6924353ejw.56.2022.05.24.00.27.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 00:27:00 -0700 (PDT)
+        Tue, 24 May 2022 00:27:01 -0700 (PDT)
 From:   Juerg Haefliger <juerg.haefliger@canonical.com>
 X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
 To:     ysato@users.sourceforge.jp, uclinux-h8-devel@lists.sourceforge.jp
 Cc:     linux-kernel@vger.kernel.org,
         Juerg Haefliger <juergh@canonical.com>
-Subject: [PATCH 1/2] h8300: Kconfig: Fix indentation
-Date:   Tue, 24 May 2022 09:26:55 +0200
-Message-Id: <20220524072656.20152-2-juergh@canonical.com>
+Subject: [PATCH 2/2] h8300: Kconfig.cpu: Fix indentation
+Date:   Tue, 24 May 2022 09:26:56 +0200
+Message-Id: <20220524072656.20152-3-juergh@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220524072656.20152-1-juergh@canonical.com>
 References: <20220524072656.20152-1-juergh@canonical.com>
@@ -86,30 +86,36 @@ violate these rules.
 
 Signed-off-by: Juerg Haefliger <juergh@canonical.com>
 ---
- arch/h8300/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/h8300/Kconfig.cpu | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/h8300/Kconfig b/arch/h8300/Kconfig
-index fe48c4f26cc8..0dc57672d93e 100644
---- a/arch/h8300/Kconfig
-+++ b/arch/h8300/Kconfig
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- config H8300
--        def_bool y
-+	def_bool y
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_HAS_BINFMT_FLAT
- 	select BINFMT_FLAT_ARGVP_ENVP_ON_STACK
-@@ -36,7 +36,7 @@ config NO_IOPORT_MAP
- 	def_bool y
+diff --git a/arch/h8300/Kconfig.cpu b/arch/h8300/Kconfig.cpu
+index c30baa0499fc..172e8be0f0c3 100644
+--- a/arch/h8300/Kconfig.cpu
++++ b/arch/h8300/Kconfig.cpu
+@@ -26,7 +26,7 @@ config ROMKERNEL
+ menu "Processor type and features"
  
- config GENERIC_CSUM
--        def_bool y
-+	def_bool y
+ choice
+-prompt "H8/300 platform"
++	prompt "H8/300 platform"
  
- config HZ
- 	int
+ config H8300_AE3068
+ 	bool "AE-3068/69"
+@@ -89,11 +89,11 @@ config H8S_SIM
+ endchoice
+ 
+ config H8300_BUILTIN_DTB
+-        string "Builtin DTB"
++	string "Builtin DTB"
+ 	default ""
+ 
+ config OFFSET
+-        hex "Load offset"
++	hex "Load offset"
+ 	default 0
+ 
+ endmenu
 -- 
 2.32.0
 

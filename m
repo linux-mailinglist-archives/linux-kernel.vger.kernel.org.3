@@ -2,75 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F3C5332A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE3C5332BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241762AbiEXUxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S241313AbiEXU57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241671AbiEXUxv (ORCPT
+        with ESMTP id S241766AbiEXU4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:53:51 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB391719C6;
-        Tue, 24 May 2022 13:53:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2C66ECE1D61;
-        Tue, 24 May 2022 20:53:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8AB63C34100;
-        Tue, 24 May 2022 20:53:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653425627;
-        bh=dGCERO7mHLWk8NHpeP7MAGHw4wAGAvs4eK9K6Atkh7k=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=cS0ni5CEwuQBFdAGYOzjpRXOzxZJ4+IvETT7alUKOViTq2vzWHpz0RGj9KYcNWvTq
-         6VoxVdPTF9hGXWvV2DAMsCtzS8bueO+7vPIzJ7YwG5l+qnrJz3jTSD/yQxX2nw/ZQe
-         HZSd+CIaVzgdYHTmuNwR+C8NaSOeiyzbmBZlwKyqO3tgCq6RCQ1DgwsN1hIvRCtP3u
-         sMBILjdoKx/bGj7IrzTu6VQKP4y4xQi9C77MUYr35wmA3zu0DR6xLS9n4Fs6/0qPW7
-         5pRbJaPlh735OAqut4DcyDZo50LDQiUjv5O4nJ34IwcAuMdhucIsB6UUOohGEEDWWc
-         zyMKjDqmJ8AWA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 731A9E8DD61;
-        Tue, 24 May 2022 20:53:47 +0000 (UTC)
-Subject: Re: [GIT PULL] integrity subsystem updates for v5.19
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <223e46039b44b2f31814be02a3c2b75e84af3823.camel@linux.ibm.com>
-References: <223e46039b44b2f31814be02a3c2b75e84af3823.camel@linux.ibm.com>
-X-PR-Tracked-List-Id: <linux-integrity.vger.kernel.org>
-X-PR-Tracked-Message-Id: <223e46039b44b2f31814be02a3c2b75e84af3823.camel@linux.ibm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.19
-X-PR-Tracked-Commit-Id: 048ae41bb0806cde340f4e5d5030398037ab0be8
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0350785b0a092c99c5ddd2ace0260dbe7b3f919f
-Message-Id: <165342562746.19576.15003303284276169248.pr-tracker-bot@kernel.org>
-Date:   Tue, 24 May 2022 20:53:47 +0000
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 24 May 2022 16:56:00 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C45987A2C
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:55:59 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id 202so10475442pfu.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MjBnehvEwPZLzs4+i+dSICYOgzejGL+XMwwqgLCtq0s=;
+        b=SnIB/h6p4zajI9jK5p01v04JiMknxosV5tXu1PwEktHSgnIWXEpfHyR2S3Be+3UG28
+         yFauwPfd3tTs/f4FbQIlgs5Jc9knP3OFyCbTFABsuQZS9m7EYwJxdjWpxt934TFKM2s+
+         bZ3aF3I/mWXhcVIStndN+jv7z6i33Y6690bwZoyixkHIHZncsG6ii3+2uyDk6dY5N3Lz
+         BvQ1dgVKgqBVM0SatIkNhVrtyAljHCdpDGp27xJ5S+qUlIw8PPxUEz6TmV9UTVo6XycR
+         xvt7S/XVXLWY+ETb8VsgspdHFvOf/5ZRPJIvUIbRrnQPf8pDaLDlvG35MiAwUZ3vT2v4
+         78gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MjBnehvEwPZLzs4+i+dSICYOgzejGL+XMwwqgLCtq0s=;
+        b=MTuKreCkt6NAFIBSE3hYI3ky6mpCgDadC7YC3JzqhpFkZdtFi8UWt0hR/faPskc5wQ
+         G3VhHxyQEZIdy7mQVfjQ1Df7iwt4A41kRBJ/6YjyEBtnjwpSriYrKVCEVEzXltlPWDhl
+         VMxdcOXpXRn+rYDdB3PH64PMlgaGWyG86TppS7CGiaM/AUXC+ORUo80e++JSrDU5pAKg
+         Mqa1VXVwQW351m2hAwR+xKmEo8gwkPZFjzltKh2Mb2urwBxLS/ahXfE3cdPZzLEbKtU9
+         u/JoI5rrLvqIUBqv4zqM+uCDoGLv9reT7hMCSVn2HeF4CrdmsAb4YCf3ysp8zYFgA3gZ
+         QqUw==
+X-Gm-Message-State: AOAM533Pju+k1guayW9BMD9C5QQMzHnAEr6b9Ms/xCWuPim/12Kqovox
+        wK9T/3sN7cF8hOXMmDef4wEWpQ==
+X-Google-Smtp-Source: ABdhPJyItd5TkRoDL/PBRi8x67lR4NgEpz+M4QMVvCsc5IPE1+rTorq3tadhk7sNyXDFG+M53CQ1ig==
+X-Received: by 2002:a05:6a00:2391:b0:50a:3ea9:e84d with SMTP id f17-20020a056a00239100b0050a3ea9e84dmr29943750pfc.21.1653425758967;
+        Tue, 24 May 2022 13:55:58 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z6-20020a170902708600b0015e8d4eb285sm561336plk.207.2022.05.24.13.55.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 13:55:58 -0700 (PDT)
+Date:   Tue, 24 May 2022 20:55:55 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lei Wang <lei4.wang@intel.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/8] KVM: VMX: Introduce PKS VMCS fields
+Message-ID: <Yo1GW/7OuRooi3nT@google.com>
+References: <20220424101557.134102-1-lei4.wang@intel.com>
+ <20220424101557.134102-2-lei4.wang@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220424101557.134102-2-lei4.wang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 24 May 2022 16:46:10 -0400:
+On Sun, Apr 24, 2022, Lei Wang wrote:
+> From: Chenyi Qiang <chenyi.qiang@intel.com>
+> 
+> PKS(Protection Keys for Supervisor Pages) is a feature that extends the
+> Protection Key architecture to support thread-specific permission
+> restrictions on supervisor pages.
+> 
+> A new PKS MSR(PKRS) is defined in kernel to support PKS, which holds a
+> set of permissions associated with each protection domain.
+> 
+> Two VMCS fields {HOST,GUEST}_IA32_PKRS are introduced in
+> {host,guest}-state area to store the respective values of PKRS.
+> 
+> Every VM exit saves PKRS into guest-state area.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git tags/integrity-v5.19
+Uber nit, PKRS isn't saved if VMX doesn't support the entry control.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0350785b0a092c99c5ddd2ace0260dbe7b3f919f
+  Every VM exit saves PKRS into guest-state area if VM_ENTRY_LOAD_IA32_PKRS
+  is supported by the CPU.
 
-Thank you!
+With that tweak,
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Sean Christopherson <seanjc@google.com>

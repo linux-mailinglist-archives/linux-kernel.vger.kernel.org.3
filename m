@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE3C5332BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124DA5332AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241313AbiEXU57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S241738AbiEXU4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241766AbiEXU4A (ORCPT
+        with ESMTP id S233786AbiEXU4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:56:00 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C45987A2C
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:55:59 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id 202so10475442pfu.0
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MjBnehvEwPZLzs4+i+dSICYOgzejGL+XMwwqgLCtq0s=;
-        b=SnIB/h6p4zajI9jK5p01v04JiMknxosV5tXu1PwEktHSgnIWXEpfHyR2S3Be+3UG28
-         yFauwPfd3tTs/f4FbQIlgs5Jc9knP3OFyCbTFABsuQZS9m7EYwJxdjWpxt934TFKM2s+
-         bZ3aF3I/mWXhcVIStndN+jv7z6i33Y6690bwZoyixkHIHZncsG6ii3+2uyDk6dY5N3Lz
-         BvQ1dgVKgqBVM0SatIkNhVrtyAljHCdpDGp27xJ5S+qUlIw8PPxUEz6TmV9UTVo6XycR
-         xvt7S/XVXLWY+ETb8VsgspdHFvOf/5ZRPJIvUIbRrnQPf8pDaLDlvG35MiAwUZ3vT2v4
-         78gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MjBnehvEwPZLzs4+i+dSICYOgzejGL+XMwwqgLCtq0s=;
-        b=MTuKreCkt6NAFIBSE3hYI3ky6mpCgDadC7YC3JzqhpFkZdtFi8UWt0hR/faPskc5wQ
-         G3VhHxyQEZIdy7mQVfjQ1Df7iwt4A41kRBJ/6YjyEBtnjwpSriYrKVCEVEzXltlPWDhl
-         VMxdcOXpXRn+rYDdB3PH64PMlgaGWyG86TppS7CGiaM/AUXC+ORUo80e++JSrDU5pAKg
-         Mqa1VXVwQW351m2hAwR+xKmEo8gwkPZFjzltKh2Mb2urwBxLS/ahXfE3cdPZzLEbKtU9
-         u/JoI5rrLvqIUBqv4zqM+uCDoGLv9reT7hMCSVn2HeF4CrdmsAb4YCf3ysp8zYFgA3gZ
-         QqUw==
-X-Gm-Message-State: AOAM533Pju+k1guayW9BMD9C5QQMzHnAEr6b9Ms/xCWuPim/12Kqovox
-        wK9T/3sN7cF8hOXMmDef4wEWpQ==
-X-Google-Smtp-Source: ABdhPJyItd5TkRoDL/PBRi8x67lR4NgEpz+M4QMVvCsc5IPE1+rTorq3tadhk7sNyXDFG+M53CQ1ig==
-X-Received: by 2002:a05:6a00:2391:b0:50a:3ea9:e84d with SMTP id f17-20020a056a00239100b0050a3ea9e84dmr29943750pfc.21.1653425758967;
-        Tue, 24 May 2022 13:55:58 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z6-20020a170902708600b0015e8d4eb285sm561336plk.207.2022.05.24.13.55.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 13:55:58 -0700 (PDT)
-Date:   Tue, 24 May 2022 20:55:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lei Wang <lei4.wang@intel.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/8] KVM: VMX: Introduce PKS VMCS fields
-Message-ID: <Yo1GW/7OuRooi3nT@google.com>
-References: <20220424101557.134102-1-lei4.wang@intel.com>
- <20220424101557.134102-2-lei4.wang@intel.com>
+        Tue, 24 May 2022 16:56:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1253B10FE2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=x0ETksflVZigcIVkU0HLK0p3rGL2Xh3mtq7gP4huqAE=; b=hdIfUeITUVqORPi1YsA7D4NGCv
+        ORWXPaSA9UJ7FXS3UBuv8cfxcE2S+Pml23zRWxsqq01js07dMWXAzQd32SFr6luJvD+FLZrXXKJdR
+        v6Q+ThWflMaJ2k7+41mMjJs5SmDhoQxfzYuKc1IxlufVnGjLKMZomibJj3pWQ7e8VFZdI0mKrT0ei
+        D2wpJgTVcB7gjgPDYI5VUVFJskbGZoT2FiqkcPp2gJw6iYrXBtuXf6TGsnq8SCCIsZa5Ym5PngbOQ
+        CzU2PS2jWv49xjTnsD5er+/DihoxO23xGHaXVag/XYB4jWLfoUTNDwwVH+b7NAIfVnPrC2+XT4ilQ
+        SDc9/tGw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ntbZk-00HPVt-3K; Tue, 24 May 2022 20:56:20 +0000
+Message-ID: <8aa4094d-2a15-bab4-13be-eb064beac942@infradead.org>
+Date:   Tue, 24 May 2022 13:56:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220424101557.134102-2-lei4.wang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: arch/riscv/mm/init.c:782:83: warning: suggest braces around empty
+ body in an 'if' statement
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+References: <202205230554.bQhtkCTA-lkp@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202205230554.bQhtkCTA-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 24, 2022, Lei Wang wrote:
-> From: Chenyi Qiang <chenyi.qiang@intel.com>
-> 
-> PKS(Protection Keys for Supervisor Pages) is a feature that extends the
-> Protection Key architecture to support thread-specific permission
-> restrictions on supervisor pages.
-> 
-> A new PKS MSR(PKRS) is defined in kernel to support PKS, which holds a
-> set of permissions associated with each protection domain.
-> 
-> Two VMCS fields {HOST,GUEST}_IA32_PKRS are introduced in
-> {host,guest}-state area to store the respective values of PKRS.
-> 
-> Every VM exit saves PKRS into guest-state area.
+Hi Palmer,
 
-Uber nit, PKRS isn't saved if VMX doesn't support the entry control.
+On 5/22/22 14:19, kernel test robot wrote:
+> Hi Qinglin,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+> commit: 677b9eb8810edc6c616a699018a83e24ed0cccab riscv: mm: Prepare pt_ops helper functions for sv57
+> date:   3 months ago
+> config: riscv-randconfig-r042-20220522 (https://download.01.org/0day-ci/archive/20220523/202205230554.bQhtkCTA-lkp@intel.com/config)
+> compiler: riscv32-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=677b9eb8810edc6c616a699018a83e24ed0cccab
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 677b9eb8810edc6c616a699018a83e24ed0cccab
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    arch/riscv/mm/init.c: In function 'create_fdt_early_page_table':
+>>> arch/riscv/mm/init.c:782:83: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+>      782 |                                    (uintptr_t)early_dtb_pud, P4D_SIZE, PAGE_TABLE);
+>          |                                                                                   ^
+>    arch/riscv/mm/init.c:786:83: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+>      786 |                                    (uintptr_t)early_dtb_pmd, PUD_SIZE, PAGE_TABLE);
+>          |                                                                                   ^
+>    arch/riscv/mm/init.c: At top level:
+>    arch/riscv/mm/init.c:813:13: warning: no previous prototype for 'pt_ops_set_early' [-Wmissing-prototypes]
+>      813 | void __init pt_ops_set_early(void)
+>          |             ^~~~~~~~~~~~~~~~
+>    arch/riscv/mm/init.c:835:13: warning: no previous prototype for 'pt_ops_set_fixmap' [-Wmissing-prototypes]
+>      835 | void __init pt_ops_set_fixmap(void)
+>          |             ^~~~~~~~~~~~~~~~~
+>    arch/riscv/mm/init.c:853:13: warning: no previous prototype for 'pt_ops_set_late' [-Wmissing-prototypes]
+>      853 | void __init pt_ops_set_late(void)
+>          |             ^~~~~~~~~~~~~~~
 
-  Every VM exit saves PKRS into guest-state area if VM_ENTRY_LOAD_IA32_PKRS
-  is supported by the CPU.
+What is the status of your patch for this build warning?
 
-With that tweak,
+[PATCH v2 1/4] RISC-V: Avoid empty create_*_mapping definitions
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Thanks.
+
+-- 
+~Randy

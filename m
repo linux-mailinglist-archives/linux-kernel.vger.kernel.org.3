@@ -2,156 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136D653214C
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341F8532156
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbiEXC7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S233995AbiEXC7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 22:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233142AbiEXC70 (ORCPT
+        with ESMTP id S232036AbiEXC7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:59:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60C9E9CF06
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:59:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653361163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jgi47uEDCSDEBXMjON2icaSZ1qxn/LW2b7pS1wUdrEA=;
-        b=BBFg4Pkv1q4cPU/jsh8mozVXsWCq5wNnwKQH57qvpuAyg1EAbtEROdB/lN42qNjTQW+6js
-        8rNYH2FXrIdx9aibasgkwzoNlTu2SQ3GJynmvdMo6bSGtcO2aXg9Htriu7qeH76R2t76pF
-        XbBOQpCLf2jFdrRbOmHwbVnfu5FVz/w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-55gLLX85O-6cowadX8_jrw-1; Mon, 23 May 2022 22:59:19 -0400
-X-MC-Unique: 55gLLX85O-6cowadX8_jrw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B6298032E5;
-        Tue, 24 May 2022 02:59:19 +0000 (UTC)
-Received: from T590 (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3FDB440D1B98;
-        Tue, 24 May 2022 02:59:11 +0000 (UTC)
-Date:   Tue, 24 May 2022 10:59:06 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Liu Xiaodong <xiaodong.liu@intel.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, ming.lei@redhat.com
-Subject: Re: [PATCH V2 0/1] ubd: add io_uring based userspace block driver
-Message-ID: <YoxJ+tagaYY8Lre9@T590>
-References: <20220518063808.GA168577@storage2.sh.intel.com>
- <YoTyNVccpIYDpx9q@T590>
- <20220523145643.GA232396@storage2.sh.intel.com>
+        Mon, 23 May 2022 22:59:52 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E859CF12;
+        Mon, 23 May 2022 19:59:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R341e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=guangguan.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VEG.hal_1653361186;
+Received: from 30.43.105.196(mailfrom:guangguan.wang@linux.alibaba.com fp:SMTPD_---0VEG.hal_1653361186)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 24 May 2022 10:59:47 +0800
+Message-ID: <45a19f8b-1b64-3459-c28c-aebab4fd8f1e@linux.alibaba.com>
+Date:   Tue, 24 May 2022 10:59:46 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523145643.GA232396@storage2.sh.intel.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH net-next v2] net/smc: align the connect behaviour with TCP
+Content-Language: en-US
+To:     Karsten Graul <kgraul@linux.ibm.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220513022453.7256-1-guangguan.wang@linux.alibaba.com>
+ <3f0405e7-d92b-e8d0-cc61-b25a11644264@linux.ibm.com>
+From:   Guangguan Wang <guangguan.wang@linux.alibaba.com>
+In-Reply-To: <3f0405e7-d92b-e8d0-cc61-b25a11644264@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-13.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 10:56:43AM -0400, Liu Xiaodong wrote:
-> On Wed, May 18, 2022 at 09:18:45PM +0800, Ming Lei wrote:
-> > Hello Liu,
-> > 
-> > On Wed, May 18, 2022 at 02:38:08AM -0400, Liu Xiaodong wrote:
-> > > On Tue, May 17, 2022 at 01:53:57PM +0800, Ming Lei wrote:
-> > > > Hello Guys,
-> > > > 
-> > > > ubd driver is one kernel driver for implementing generic userspace block
-> > > > device/driver, which delivers io request from ubd block device(/dev/ubdbN) into
-> > > > ubd server[1] which is the userspace part of ubd for communicating
-> > > > with ubd driver and handling specific io logic by its target module.
-> > > > 
-> > > > Another thing ubd driver handles is to copy data between user space buffer
-> > > > and request/bio's pages, or take zero copy if mm is ready for support it in
-> > > > future. ubd driver doesn't handle any IO logic of the specific driver, so
-> > > > it is small/simple, and all io logics are done by the target code in ubdserver.
-> > > > 
-> > > > The above two are main jobs done by ubd driver.
-> > > 
-> > > Not like UBD which is straightforward and starts from scratch, VDUSE is
-> > > embedded in virtio framework. So its implementation is more complicated, but
-> > > all virtio frontend utilities can be leveraged.
-> > > When considering security/permission issues, feels UBD would be easier to
-> > > solve them.
-> > 
-> > Stefan Hajnoczi and I are discussing related security/permission
-> > issues, can you share more details in your case?
+
+
+On 2022/5/23 20:24, Karsten Graul wrote:
+> On 13/05/2022 04:24, Guangguan Wang wrote:
+>> Connect with O_NONBLOCK will not be completed immediately
+>> and returns -EINPROGRESS. It is possible to use selector/poll
+>> for completion by selecting the socket for writing. After select
+>> indicates writability, a second connect function call will return
+>> 0 to indicate connected successfully as TCP does, but smc returns
+>> -EISCONN. Use socket state for smc to indicate connect state, which
+>> can help smc aligning the connect behaviour with TCP.
+>>
+>> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+>> Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+>> ---
+>>  net/smc/af_smc.c | 50 ++++++++++++++++++++++++++++++++++++++++++++----
+>>  1 file changed, 46 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+>> index fce16b9d6e1a..5f70642a8044 100644
+>> --- a/net/smc/af_smc.c
+>> +++ b/net/smc/af_smc.c
+>> @@ -1544,9 +1544,29 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
+>>  		goto out_err;
+>>  
+>>  	lock_sock(sk);
+>> +	switch (sock->state) {
+>> +	default:
+>> +		rc = -EINVAL;
+>> +		goto out;
+>> +	case SS_CONNECTED:
+>> +		rc = sk->sk_state == SMC_ACTIVE ? -EISCONN : -EINVAL;
+>> +		goto out;
+>> +	case SS_CONNECTING:
+>> +		if (sk->sk_state == SMC_ACTIVE)
+>> +			goto connected;
 > 
-> Hi, Ming
-> Security/permission things covered by your discussion are more than I've
-> considered.
+> I stumbled over this when thinking about the fallback processing. If for whatever reason
+> fallback==true during smc_connect(), the "if (smc->use_fallback)" below would set sock->state
+> to e.g. SS_CONNECTED. But in the fallback case sk_state keeps SMC_INIT. So during the next call
+> the SS_CONNECTING case above would break because sk_state in NOT SMC_ACTIVE, and we would end
+> up calling kernel_connect() again. Which seems to be no problem when kernel_connect() returns 
+> -EISCONN and we return this to the caller. But is this how it should work, or does it work by chance?
+> 
 
-BTW, I'd rather make a summery about the discussion:
+Since the sk_state keeps SMC_INIT and does not correctly indicate the state of clcsock, it should end
+up calling kernel_connect() again to get the actual connection state of clcsock.
 
-1) Stefan suggested that ubd device may be made as one container block
-device, which can be isolated from others, such as, the ubd device
-created in one container can only be controlled and read write inside
-this container, and this way is useful for container use case.
+And I'm sorry there is a problem that if sock->state==SS_CONNECTED and sk_state==SMC_INIT, further call
+of smc_connect will return -EINVAL where -EISCONN is preferred. 
+The steps to reproduce:
+1）switch fallback before connect, such as setsockopt TCP_FASTOPEN
+2）connect with noblocking and returns -EINPROGRESS. (sock->state changes to SS_CONNECTING)
+3) end up calling connect with noblocking again and returns 0. (kernel_connect() returns 0 and sock->state changes to
+   SS_CONNECTED but sk->sk_state stays SMC_INIT)
+4) call connect again, maybe by mistake, will return -EINVAL, but -EISCONN is preferred.
 
-2) the requirement actually needs both /dev/ubdcN and /dev/ubdbN to
-be allowed for unprivileged user; so it could be solved by existed
-process privilege & file ownership; let user of the process creating
-the two devices owns the two devices, and apply FS's file permission
-on the two devices;
+What do you think about if we synchronize the sk_state to SMC_ACTIVE instead of keeping SMC_INIT when clcsock
+connected successfully in fallback case described above.
 
-3) it shouldn't be hard to allow unprivileged user to control
-/dev/ubdcN or /dev/ubd-control
+...
+if (smc->use_fallback) {
+	sock->state = rc ? SS_CONNECTING : SS_CONNECTED;
+	if (!rc)
+		sk->sk_state = SMC_ACTIVE;    /* synchronize sk_state from SMC_INIT to SMC_ACTIVE */
+	goto out;
+}
+...
 
-- every user can create ubd by sending ADD_DEV command to
-  /dev/ubd-control; only user with permission to /dev/ubdcN can send
-  other control commands to /dev/ubd-control for controlling/querying
-  the specified device
-
-- ubd driver is simple, both in interface and implementation, so we
-can make it stable from the beginning
-
-- only the daemon can communicate with /dev/ubdcN, which is only
-  allowed to be opened by one process
-
-4) the challenge is in allowing unprivileged user to access /dev/ubdbN:
-
-- no any serious bug in io path(io hang, kernel panic), such as ubd io
-  hang may cause sync() hang
-
-- can't affect other users or processes or system, such as, one
-  malicious may make a extremely slow device to dirty lots of pages, or
-  prevent device from being deleted
-
-- ...
-
-5) as Stefan mentioned, we may start by:
-- not allow unprivileged ubd device to be mounted
-- not allow unprivileged ubd device's partition table to be read from
-  kernel
-- not support buffered io for unprivileged ubd device, and only direct io
-  is allowed
-- maybe more limit for minimizing security risk.
-
-
-ubd for container is hard, and it should be one extra feature added
-in future, especially after fully review/verification.
-
-
-Thanks,
-Ming
-
+>> +		break;
+>> +	case SS_UNCONNECTED:
+>> +		sock->state = SS_CONNECTING;
+>> +		break;
+>> +	}
+>> +
+>>  	switch (sk->sk_state) {
+>>  	default:
+>>  		goto out;
+>> +	case SMC_CLOSED:
+>> +		rc = sock_error(sk) ? : -ECONNABORTED;
+>> +		sock->state = SS_UNCONNECTED;
+>> +		goto out;
+>>  	case SMC_ACTIVE:
+>>  		rc = -EISCONN;
+>>  		goto out;
+>> @@ -1565,20 +1585,24 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
+>>  		goto out;
+>>  
+>>  	sock_hold(&smc->sk); /* sock put in passive closing */
+>> -	if (smc->use_fallback)
+>> +	if (smc->use_fallback) {
+>> +		sock->state = rc ? SS_CONNECTING : SS_CONNECTED;
+>>  		goto out;
+>> +	}
+>>  	if (flags & O_NONBLOCK) {
+>>  		if (queue_work(smc_hs_wq, &smc->connect_work))
+>>  			smc->connect_nonblock = 1;
+>>  		rc = -EINPROGRESS;
+>> +		goto out;
+>>  	} else {
+>>  		rc = __smc_connect(smc);
+>>  		if (rc < 0)
+>>  			goto out;
+>> -		else
+>> -			rc = 0; /* success cases including fallback */
+>>  	}
+>>  
+>> +connected:
+>> +	rc = 0;
+>> +	sock->state = SS_CONNECTED;
+>>  out:
+>>  	release_sock(sk);
+>>  out_err:

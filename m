@@ -2,181 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB90532674
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A543532677
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiEXJai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 05:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
+        id S235660AbiEXJbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 05:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbiEXJad (ORCPT
+        with ESMTP id S231778AbiEXJbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 05:30:33 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6208933A29;
-        Tue, 24 May 2022 02:30:31 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 08ED01F8A8;
-        Tue, 24 May 2022 09:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653384630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YTLMAlKFXed5mNbgIwLQssLfi5LZ10Xj5iVod4JD3QI=;
-        b=AE2r3QTuoCrsyPKvWRsLjZdg3lX+1MHH9u8FCEizTVpWlMgJTtb0qo7TZn1zNHVlQMqZmO
-        6GJQNmaoDXtfLMluZKSiJQqlmH69NTmkxDgoMWXvtDPmwLcz17ivaFz6SO0eZiw3Xx/L0O
-        8jU0jolceUkEI5QZnxBGGNuhJhZGLFg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653384630;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YTLMAlKFXed5mNbgIwLQssLfi5LZ10Xj5iVod4JD3QI=;
-        b=WmOc7rqKrAOnd8Ekh1AAZrCw+7wpgU9yq9t/XqriaP5XOzF/TX7NDc9X0eU3bD5aY2QN1U
-        6KeiLjz/tVlpW9CA==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B50EE2C141;
-        Tue, 24 May 2022 09:30:29 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C677AA0632; Tue, 24 May 2022 11:30:26 +0200 (CEST)
-Date:   Tue, 24 May 2022 11:30:26 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "libaokun (A)" <libaokun1@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, lczerner@redhat.com,
-        linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yebin10@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH 2/2] ext4: correct the judgment of BUG in
- ext4_mb_normalize_request
-Message-ID: <20220524093026.qhwyibhgg6ulsw6r@quack3.lan>
-References: <20220521134217.312071-1-libaokun1@huawei.com>
- <20220521134217.312071-3-libaokun1@huawei.com>
- <20220523094023.e3rnile4wh7uiich@quack3.lan>
- <3755e40b-f817-83df-b239-b0697976c272@huawei.com>
+        Tue, 24 May 2022 05:31:47 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF104D63F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:31:44 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id t25so29840080lfg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9nrI7YiSyYQ7Y/X0QFQ+SqgqG6o8iofh9fkLStbCKSA=;
+        b=AdCDXmVIvkLD95zyxngXCxPArySis6nnzTDFoOS/AHX6lNFbSnK2tArP/ANsSMcfwB
+         r+SWu81KcvPVKroFGu8s2JJVBTg1j6/cDvGIJCI+s5q1Kd0tO2CcC2e5m0x6517E35pV
+         F6pXBV09ZEiLjGe0suJcvtEW3NPXLlT1EJ5BrRbeGQyGq6eA0RHkFLcm2zICD/Sjih4P
+         IMfzWJ+8iBAFcIpEpIJUDaGnQboFnHFeLFsApdprNTXgeRgepGXkcj2crgSQKcmOr1ll
+         OmSOhYMOGqgyg0qfk9yI3L9S6Vf2sPdSjE/TacO3oouOmTh0fnp1ZNQihKjIe0CYTIxq
+         r6KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9nrI7YiSyYQ7Y/X0QFQ+SqgqG6o8iofh9fkLStbCKSA=;
+        b=CKafS6NE0NLfKBaCakguwh9DZUik4miObmQhn++jVspYAizNDik0VNgTamgh7+uwcb
+         pT2WowfSfGS5NsmL6Su712fcSpFgZzxHS3ip39O/jLl/2bqNx+ArLc7cHUNoc+OL0d6d
+         emAh7E35EfvnE2FXLIMbhEXvfnJh0swSUywMYfaaIi6wD/ERYli7hgow6vIHKec5+g1M
+         j0d6eALhfmLo+caKPyFjO1Y8yJWW1NIuIVifN9GS3ANLdccWmuSS5uhmMwqujzDkbkAq
+         MLL7VkFsqlXBXgdRhJ3o1tv1k4JA/HYvSxxGrah8AuxGi6I3rP6Sf88JHo7VsVsUgUFa
+         ytow==
+X-Gm-Message-State: AOAM532hwDT42YtgG2x/SE8Jx9mUKObLqvFH0Z9IK6hema7RI+REYb2t
+        KgPpCbDwy6+GpuANyUjcFBG6/Q==
+X-Google-Smtp-Source: ABdhPJwFxrAvDTuvMQYljVIrHPBvZF52hEqcTEDK4dnVxRLtDEczUbqMN3la4jkBhGwCJ+/VU8CNpw==
+X-Received: by 2002:a05:6512:3d8c:b0:478:7996:935d with SMTP id k12-20020a0565123d8c00b004787996935dmr5158485lfv.542.1653384703330;
+        Tue, 24 May 2022 02:31:43 -0700 (PDT)
+Received: from krzk-bin.. ([91.221.145.6])
+        by smtp.gmail.com with ESMTPSA id q30-20020ac2515e000000b0047255d2112asm2443218lfd.89.2022.05.24.02.31.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 02:31:42 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH] dt-bindings: input: use generic node names
+Date:   Tue, 24 May 2022 11:31:36 +0200
+Message-Id: <20220524093136.7980-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3755e40b-f817-83df-b239-b0697976c272@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 23-05-22 21:04:16, libaokun (A) wrote:
-> 在 2022/5/23 17:40, Jan Kara 写道:
-> > On Sat 21-05-22 21:42:17, Baokun Li wrote:
-> > > When either of the "start + size <= ac->ac_o_ex.fe_logical" or
-> > > "start > ac->ac_o_ex.fe_logical" conditions is met, it indicates
-> > > that the fe_logical is not in the allocated range.
-> > > In this case, it should be bug_ON.
-> > > 
-> > > Fixes: dfe076c106f6 ("ext4: get rid of code duplication")
-> > > Signed-off-by: Baokun Li<libaokun1@huawei.com>
-> > I think this is actually wrong. The original condition checks whether
-> > start + size does not overflow the used integer type. Your condition is
-> > much stronger and I don't think it always has to be true. E.g. allocation
-> > goal block (start variable) can be pushed to larger values by existing
-> > preallocation or so.
-> > 
-> > 								Honza
-> > 
-> I think there are two reasons for this:
-> 
-> First of all, the code here is as follows.
-> ```
->         size = end - start;
->         [...]
-> if (start + size <= ac->ac_o_ex.fe_logical &&
->                         start > ac->ac_o_ex.fe_logical) {
->                 ext4_msg(ac->ac_sb, KERN_ERR,
->                          "start %lu, size %lu, fe_logical %lu",
->                          (unsigned long) start, (unsigned long) size,
->                          (unsigned long) ac->ac_o_ex.fe_logical);
-> BUG();
-> }
->         BUG_ON(size <= 0 || size > EXT4_BLOCKS_PER_GROUP(ac->ac_sb));
-> ```
-> First of all, there is no need to compare with ac_o_ex.fe_logical if it is
-> to determine whether there is an overflow.
-> Because the previous logic guarantees start < = ac_o_ex.fe_logical, and
+Devicetree specification expects nodes to have generic names, if
+possible, so replace custom ones with something generic.  For gpio-keys,
+the more popular format is "key-xxx" instead of "xxx-key", so choose the
+first one.
 
-How does it guarantee that? The logic:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-        if (ar->pleft && start <= ar->lleft) {
-                size -= ar->lleft + 1 - start;
-                start = ar->lleft + 1;
-        }
+---
 
-can move 'start' to further blocks...
+Cc: Andreas Kemnade <andreas@kemnade.info>
+---
+ .../devicetree/bindings/input/fsl,mpr121-touchkey.yaml        | 4 ++--
+ Documentation/devicetree/bindings/input/gpio-keys.yaml        | 4 ++--
+ Documentation/devicetree/bindings/input/iqs269a.yaml          | 2 +-
+ Documentation/devicetree/bindings/input/iqs626a.yaml          | 2 +-
+ .../devicetree/bindings/input/microchip,cap11xx.yaml          | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-> limits the scope of size in
-> "BUG_ON (size < = 0 | | size > EXT4_BLOCKS_PER_GROUP (ac- > ac_sb))"
-> immediately following.
-
-OK, but what guarantees that ac_o_ex.fe_logical < UINT_MAX - size?
-
-> Secondly, the following code flow also reflects this logic.
-> 
->            ext4_mb_normalize_request
->             >>> start + size <= ac->ac_o_ex.fe_logical
->            ext4_mb_regular_allocator
->             ext4_mb_simple_scan_group
->              ext4_mb_use_best_found
->               ext4_mb_new_preallocation
->                ext4_mb_new_inode_pa
->                 ext4_mb_use_inode_pa
->                  >>> set ac->ac_b_ex.fe_len <= 0
->            ext4_mb_mark_diskspace_used
->             >>> BUG_ON(ac->ac_b_ex.fe_len <= 0);
-> 
-> In ext4_mb_use_inode_pa, you have the following code.
-> ```
-> start = pa->pa_pstart + (ac->ac_o_ex.fe_logical - pa->pa_lstart);
-> end = min(pa->pa_pstart + EXT4_C2B(sbi, pa->pa_len), start + EXT4_C2B(sbi,
-> ac->ac_o_ex.fe_len));
-> len = EXT4_NUM_B2C(sbi, end - start);
-> ac->ac_b_ex.fe_len = len;
-> ```
-> The starting position in ext4_mb_mark_diskspace_used will be assert.
-> BUG_ON(ac->ac_b_ex.fe_len <= 0);
->  
-> When end == start + EXT4_C2B(sbi, ac->ac_o_ex.fe_len) is used, the value of
-> end - start must be greater than 0.
-> However, when end == pa->pa_pstart + EXT4_C2B(sbi, pa->pa_len) occurs, this
-> bug_ON may be triggered.
-> When this bug_ON is triggered, that is,
-> 
-> ac->ac_b_ex.fe_len <= 0
-> end - start <= 0
-> end <= start
-> pa->pa_pstart + EXT4_C2B(sbi, pa->pa_len) <= pa->pa_pstart +
-> (ac->ac_o_ex.fe_logical - pa->pa_lstart)
-> pa->pa_len <= ac->ac_o_ex.fe_logical - pa->pa_lstart
-> pa->pa_lstart + pa->pa_len <= ac->ac_o_ex.fe_logical
-> start + size <= ac->ac_o_ex.fe_logical
-> 
-> So I think that "&&" here should be changed to "||".
-
-Sorry, I still disagree. After some more code reading I agree that
-ac->ac_o_ex.fe_logical is the logical block where we want allocated blocks
-to be placed in the inode so logical extent of allocated blocks should include
-ac->ac_o_ex.fe_logical. But I would be reluctant to make assertion you
-suggest unless we make sure ac->ac_o_ex.fe_logical in unallocated (in which
-case we can also remove some other code from ext4_mb_normalize_request()).
-
-									Honza 
-
+diff --git a/Documentation/devicetree/bindings/input/fsl,mpr121-touchkey.yaml b/Documentation/devicetree/bindings/input/fsl,mpr121-touchkey.yaml
+index 878464f128dc..5139af287d3e 100644
+--- a/Documentation/devicetree/bindings/input/fsl,mpr121-touchkey.yaml
++++ b/Documentation/devicetree/bindings/input/fsl,mpr121-touchkey.yaml
+@@ -57,7 +57,7 @@ examples:
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
+-        mpr121@5a {
++        touchkey@5a {
+             compatible = "fsl,mpr121-touchkey";
+             reg = <0x5a>;
+             interrupt-parent = <&gpio1>;
+@@ -77,7 +77,7 @@ examples:
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
+-        mpr121@5a {
++        touchkey@5a {
+             compatible = "fsl,mpr121-touchkey";
+             reg = <0x5a>;
+             poll-interval = <20>;
+diff --git a/Documentation/devicetree/bindings/input/gpio-keys.yaml b/Documentation/devicetree/bindings/input/gpio-keys.yaml
+index 7fe1966ea28a..93f601c58984 100644
+--- a/Documentation/devicetree/bindings/input/gpio-keys.yaml
++++ b/Documentation/devicetree/bindings/input/gpio-keys.yaml
+@@ -127,13 +127,13 @@ examples:
+         compatible = "gpio-keys";
+         autorepeat;
+ 
+-        up {
++        key-up {
+             label = "GPIO Key UP";
+             linux,code = <103>;
+             gpios = <&gpio1 0 1>;
+         };
+ 
+-        down {
++        key-down {
+             label = "GPIO Key DOWN";
+             linux,code = <108>;
+             interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
+diff --git a/Documentation/devicetree/bindings/input/iqs269a.yaml b/Documentation/devicetree/bindings/input/iqs269a.yaml
+index 9c154e5e1a91..d84d69f5455d 100644
+--- a/Documentation/devicetree/bindings/input/iqs269a.yaml
++++ b/Documentation/devicetree/bindings/input/iqs269a.yaml
+@@ -475,7 +475,7 @@ examples:
+             #address-cells = <1>;
+             #size-cells = <0>;
+ 
+-            iqs269a@44 {
++            touch@44 {
+                     #address-cells = <1>;
+                     #size-cells = <0>;
+ 
+diff --git a/Documentation/devicetree/bindings/input/iqs626a.yaml b/Documentation/devicetree/bindings/input/iqs626a.yaml
+index 0cb736c541c9..dd727befe564 100644
+--- a/Documentation/devicetree/bindings/input/iqs626a.yaml
++++ b/Documentation/devicetree/bindings/input/iqs626a.yaml
+@@ -751,7 +751,7 @@ examples:
+             #address-cells = <1>;
+             #size-cells = <0>;
+ 
+-            iqs626a@44 {
++            touch@44 {
+                     #address-cells = <1>;
+                     #size-cells = <0>;
+ 
+diff --git a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+index d5d6bced3148..96358b12f9b2 100644
+--- a/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
++++ b/Documentation/devicetree/bindings/input/microchip,cap11xx.yaml
+@@ -112,7 +112,7 @@ examples:
+       #address-cells = <1>;
+       #size-cells = <0>;
+ 
+-      cap1188@28 {
++      touch@28 {
+         compatible = "microchip,cap1188";
+         interrupt-parent = <&gpio1>;
+         interrupts = <0 0>;
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.34.1
+

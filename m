@@ -2,193 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DE0532454
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04300532459
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbiEXHm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S234322AbiEXHpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiEXHmt (ORCPT
+        with ESMTP id S229451AbiEXHp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:42:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2D9974DF7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653378165;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xr0lHvjXTVWXEeMcpfBHikGqMQxP8Brjy+Y5r5qUUtk=;
-        b=ZVLaeawmXC3KZGRg2OWYidAXhTcuuo9CeMvFvsgXf6SiJx6G9EWYUtLCZ7BXd4G9npZ1b0
-        1l6NYdJjv6O+V8LnnzOrSK7z0TNZ6bXf/Ou64cJfemmxMK7b0QLPf35I3LubdWmvLMgCGS
-        WpshDWj/mRt+TQ93TrAUsRKWM1I3z3w=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-MmPUUE1DND6WWshmb25XUw-1; Tue, 24 May 2022 03:42:43 -0400
-X-MC-Unique: MmPUUE1DND6WWshmb25XUw-1
-Received: by mail-qt1-f199.google.com with SMTP id cn8-20020a05622a248800b002f3c7be2744so13301160qtb.17
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:42:43 -0700 (PDT)
+        Tue, 24 May 2022 03:45:27 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23BE74DF7;
+        Tue, 24 May 2022 00:45:26 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id bo5so15765622pfb.4;
+        Tue, 24 May 2022 00:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WE8ECtKBbnGRy9b4snuHYoLN1QU8z6Hzzxc9CUtUoTc=;
+        b=Xy7izo/V1daPixmOFDL9+o47bqTLCqXVmkJpwdW6Bu6aZ1GdGV0Uv2jH200W7X4L2t
+         HbhCOI17YL5VKsc4eM+n+KwdFpCC6r4TMru8Y8GRN8mBoruJ0s+hqc2e8hikHtEO674V
+         4ur4SQy8yiNry+WUnwgf3xs3k0hLh/+ysXaLGblXH+ZMto44ebbOFCee3ot/62ets94W
+         CPLbI9rHKUawzEVj1b74cB07nPJtSMEaPtjtynu3f2qHIUC7JkcrW5bgO+qzR03/rTK0
+         LU8iPucnab9r6bzSz+VlRFttw7YoCW7O37aPLU/PRThG/RXb4V/WgdEpGoPvQ3iQv1dz
+         a73A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Xr0lHvjXTVWXEeMcpfBHikGqMQxP8Brjy+Y5r5qUUtk=;
-        b=annYXx2RHSWId11M9YSW8FYJWKnOuQwWFJXj4QGs4BqlQiotcV3XDY2E61KG6+uTiB
-         QUuix/lWzlXhNCmD7OdS9/5MdjogUwfcAiWIPesMywBHXM3NUjD0OdFVRP5TB9Vhva8j
-         a0EjADXpoWMwkq7UCTHSqczd6oSh6qREt5vD+AsVhJc/J4WhlN6D+3mLpUEWCXrQdRd6
-         fLTHAKYJUwN1iueO5b+NsukQqH8m63H/dNip5Ske6GoOiPdfh3g3ZYGAdgVhrpaTeriz
-         LeVrgo1Y0A1tKxfChSztTlrpfsU4h8hdYaTJGgEVR0ct4dR2bpDhLWgC/oSe8MOwkLIy
-         XR6Q==
-X-Gm-Message-State: AOAM530AITWaGedI4RcuUAJJWmHGokGgPbPCwyJ7D4FxAwn/dh7cPNDo
-        G9dMyo7abLM8hnYFPt2na67jF+acu0T9tAU3imtgUGm9sboL1IO9i9FHGbkJJ/KHOnjoXQymWLn
-        cVblU177I1iI277gZAafBXEwrhhK1OkhEf0L1d0M2
-X-Received: by 2002:a05:622a:110c:b0:2f3:d347:6f8d with SMTP id e12-20020a05622a110c00b002f3d3476f8dmr19024580qty.403.1653378162807;
-        Tue, 24 May 2022 00:42:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxZwara4ZmEInMFe1WFL9gKd2OmNz8F+sra8z+TxWhKQWbJJN2UQupe5aSNcHPJXZgH8axKvjIUqARkW1ymK/g=
-X-Received: by 2002:a05:622a:110c:b0:2f3:d347:6f8d with SMTP id
- e12-20020a05622a110c00b002f3d3476f8dmr19024558qty.403.1653378162580; Tue, 24
- May 2022 00:42:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WE8ECtKBbnGRy9b4snuHYoLN1QU8z6Hzzxc9CUtUoTc=;
+        b=FfMuycEXvD1Zx0JmD7aaTRS/WAC++pm7AZGO7Lcod9JARplQiUVo5gAFi9FxCohMiA
+         qpjkOH1v+HC5AMRajp2LYX4qWwNxK9bPhjV03yYZoHLasPJDTyzMDD5CXr7egb7gWbQj
+         ll2oi5Z7EN/sHhUwr/HtN5a3bXjjvcyKep5W+ty1nPL+Fqi1YFsGUqyjsjazBcaizPgk
+         XUMDpVj1EtlfE5kBuR3JDdhPJ/gJJZ3sSzjp6iuua5WNyCJMdTtTqcoTCINwzQhLZSta
+         h6xWJhzLvfwl6XVDEbZPmeRhUkuNz8l14l6MwUwV0H07rWtPMIMAqWsdvKDI9r4C82a5
+         MOQA==
+X-Gm-Message-State: AOAM530w/xTiV9u/aBlpvwpMTlIBSZ4ObwtYI090eHX0sIPRa1zzYfK3
+        B9kl0XgbmEM3QqL9RmP3wK0=
+X-Google-Smtp-Source: ABdhPJzDd6wR58FdjkqushS/72CayCU1FIViGtU12UpYsxM/6WUfeQMyNvdxKwcO3wsxeL4MLPO2Hw==
+X-Received: by 2002:a63:f921:0:b0:3f2:6c2f:a166 with SMTP id h33-20020a63f921000000b003f26c2fa166mr23506883pgi.124.1653378326143;
+        Tue, 24 May 2022 00:45:26 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id f20-20020a17090ace1400b001deb3cbd8f1sm990983pju.27.2022.05.24.00.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 00:45:25 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] iio: adc: adi-axi-adc: Fix refcount leak in adi_axi_adc_attach_client
+Date:   Tue, 24 May 2022 11:45:17 +0400
+Message-Id: <20220524074517.45268-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220520172325.980884-1-eperezma@redhat.com> <20220520172325.980884-2-eperezma@redhat.com>
- <79089dc4-07c4-369b-826c-1c6e12edcaff@oracle.com> <CAJaqyWd3BqZfmJv+eBYOGRwNz3OhNKjvHPiFOafSjzAnRMA_tQ@mail.gmail.com>
- <20220524070900.ak7a5frwtezjhhrq@sgarzare-redhat>
-In-Reply-To: <20220524070900.ak7a5frwtezjhhrq@sgarzare-redhat>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Tue, 24 May 2022 09:42:06 +0200
-Message-ID: <CAJaqyWeiNWnWUzEUEo8HeuuF8XMPtKw9SapxLxLJECWJ0zNTUA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] vdpa: Add stop operation
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Si-Wei Liu <si-wei.liu@oracle.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Jason Wang <jasowang@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Longpeng <longpeng2@huawei.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>, dinang@xilinx.com,
-        Eli Cohen <elic@nvidia.com>,
-        Laurent Vivier <lvivier@redhat.com>, pabloc@xilinx.com,
-        "Dawar, Gautam" <gautam.dawar@amd.com>,
-        Xie Yongji <xieyongji@bytedance.com>, habetsm.xilinx@gmail.com,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        tanuj.kamde@amd.com, Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        martinpo@xilinx.com, Cindy Lu <lulu@redhat.com>,
-        ecree.xilinx@gmail.com, Parav Pandit <parav@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Zhang Min <zhang.min9@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 9:09 AM Stefano Garzarella <sgarzare@redhat.com> wr=
-ote:
->
-> On Mon, May 23, 2022 at 09:20:14PM +0200, Eugenio Perez Martin wrote:
-> >On Sat, May 21, 2022 at 12:13 PM Si-Wei Liu <si-wei.liu@oracle.com> wrot=
-e:
-> >>
-> >>
-> >>
-> >> On 5/20/2022 10:23 AM, Eugenio P=C3=A9rez wrote:
-> >> > This operation is optional: It it's not implemented, backend feature=
- bit
-> >> > will not be exposed.
-> >> >
-> >> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> >> > ---
-> >> >   include/linux/vdpa.h | 6 ++++++
-> >> >   1 file changed, 6 insertions(+)
-> >> >
-> >> > diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-> >> > index 15af802d41c4..ddfebc4e1e01 100644
-> >> > --- a/include/linux/vdpa.h
-> >> > +++ b/include/linux/vdpa.h
-> >> > @@ -215,6 +215,11 @@ struct vdpa_map_file {
-> >> >    * @reset:                  Reset device
-> >> >    *                          @vdev: vdpa device
-> >> >    *                          Returns integer: success (0) or error =
-(< 0)
-> >> > + * @stop:                    Stop or resume the device (optional, b=
-ut it must
-> >> > + *                           be implemented if require device stop)
-> >> > + *                           @vdev: vdpa device
-> >> > + *                           @stop: stop (true), not stop (false)
-> >> > + *                           Returns integer: success (0) or error =
-(< 0)
-> >> Is this uAPI meant to address all use cases described in the full blow=
-n
-> >> _F_STOP virtio spec proposal, such as:
-> >>
-> >> --------------%<--------------
-> >>
-> >> ...... the device MUST finish any in flight
-> >> operations after the driver writes STOP.  Depending on the device, it
-> >> can do it
-> >> in many ways as long as the driver can recover its normal operation
-> >> if it
-> >> resumes the device without the need of resetting it:
-> >>
-> >> - Drain and wait for the completion of all pending requests until a
-> >>    convenient avail descriptor. Ignore any other posterior descriptor.
-> >> - Return a device-specific failure for these descriptors, so the drive=
-r
-> >>    can choose to retry or to cancel them.
-> >> - Mark them as done even if they are not, if the kind of device can
-> >>    assume to lose them.
-> >> --------------%<--------------
-> >>
-> >
-> >Right, this is totally underspecified in this series.
-> >
-> >I'll expand on it in the next version, but that text proposed to
-> >virtio-comment was complicated and misleading. I find better to get
-> >the previous version description. Would the next description work?
-> >
-> >```
-> >After the return of ioctl, the device MUST finish any pending operations=
- like
-> >in flight requests. It must also preserve all the necessary state (the
-> >virtqueue vring base plus the possible device specific states) that is r=
-equired
-> >for restoring in the future.
->
-> For block devices wait for all in-flight requests could take several
-> time.
->
-> Could this be a problem if the caller gets stuck on this ioctl?
->
-> If it could be a problem, maybe we should use an eventfd to signal that
-> the device is successfully stopped.
->
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-For that particular problem I'd very much prefer to add directly an
-ioctl to get the inflight descriptors. We know for sure we will need
-them, and it will be cleaner in the long run.
+Fixes: ef04070692a2 ("iio: adc: adi-axi-adc: add support for AXI ADC IP core")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/iio/adc/adi-axi-adc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-As I understand the vdpa block simulator, there is no need to return
-the inflight descriptors since all of the requests are processed in a
-synchronous way. So, for this iteration, we could offer the stop
-feature to qemu.
-
-Other non-simulated devices would need it. Could it be delayed to
-future development?
-
-Thanks!
-
-> Thanks,
-> Stefano
->
+diff --git a/drivers/iio/adc/adi-axi-adc.c b/drivers/iio/adc/adi-axi-adc.c
+index a73e3c2d212f..a9e655e69eaa 100644
+--- a/drivers/iio/adc/adi-axi-adc.c
++++ b/drivers/iio/adc/adi-axi-adc.c
+@@ -322,16 +322,19 @@ static struct adi_axi_adc_client *adi_axi_adc_attach_client(struct device *dev)
+ 
+ 		if (!try_module_get(cl->dev->driver->owner)) {
+ 			mutex_unlock(&registered_clients_lock);
++			of_node_put(cln);
+ 			return ERR_PTR(-ENODEV);
+ 		}
+ 
+ 		get_device(cl->dev);
+ 		cl->info = info;
+ 		mutex_unlock(&registered_clients_lock);
++		of_node_put(cln);
+ 		return cl;
+ 	}
+ 
+ 	mutex_unlock(&registered_clients_lock);
++	of_node_put(cln);
+ 
+ 	return ERR_PTR(-EPROBE_DEFER);
+ }
+-- 
+2.25.1
 

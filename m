@@ -2,142 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7950C53328B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6602653328D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241613AbiEXUly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
+        id S241662AbiEXUmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241651AbiEXUlw (ORCPT
+        with ESMTP id S229962AbiEXUmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:41:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D9E562E6;
-        Tue, 24 May 2022 13:41:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D2176174E;
-        Tue, 24 May 2022 20:41:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AFBC34100;
-        Tue, 24 May 2022 20:41:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653424910;
-        bh=vjQXFrW/4pQSmN/wiLeQFiNqCMCEP01hMakAH3EECAE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OO9tuR72VqbQdiyCYRImCA9LPZjvDJNIoZhUr0Dz3Cs8GwVnBaahWQ5jmGzg+Z1Po
-         D3XdOf6SHrwrHsSp4ETyYAs7IMNMnq+Pen2Lx7N42UAshqzwUcL1BYXpKSAheN5Em7
-         3qTukxn3RgwNAaJBSF+LITfw1ojKeUsUKwjOvsea9jJpsjKpIT8XbPNiwyxboFG9Fq
-         4yfu5gSYvNGjkW/MY7rovwRAVoMlzuSHOhODeak+grzO0YF2HYyW9Xxhmcb6rwvW9g
-         2MGt3DjO+yu9yCfz5MIJ/+CSCcfYNlf38HV+U7BYO8Nw4sUEs228y1uaQOlT4QZo4M
-         saCLRBeyS10+A==
-Received: by mail-ed1-f51.google.com with SMTP id n23so24627980edy.0;
-        Tue, 24 May 2022 13:41:49 -0700 (PDT)
-X-Gm-Message-State: AOAM530SiB/+MPIeJ7H2Kz/SWGkHYXY1xKjcoSV+WzEOFzKiCirn/Jsx
-        PWtThqnzkMeOqPoEknj4vWo28IJvSwZEGVpUnw==
-X-Google-Smtp-Source: ABdhPJwPT/cnj3XH0pgU4BNxBBinFvHRkEXNoG/EB11zsFXL1H5/aPWtujbL6r7dDcTJlLXtuIu8Tqdy38eMwbZusQs=
-X-Received: by 2002:a05:6402:4316:b0:42b:4d3d:c064 with SMTP id
- m22-20020a056402431600b0042b4d3dc064mr16930879edc.194.1653424908200; Tue, 24
- May 2022 13:41:48 -0700 (PDT)
+        Tue, 24 May 2022 16:42:22 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94CB6E8F0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:42:19 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id s20so497442ljd.10
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:42:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L2IMR3qnRYTC2ifKlTEprymQ23atlDm3rUUvrvgkX3c=;
+        b=ryjPOJRcDOrpY1Kc/6TKon40kQIBpKO7a4H3wZLVw8V+dBVtTMjVXPNRuQQxqgLAjF
+         clkN1r0ETSpPnFDRTaGrlsRsSK6ZFXyHTaoHWprvzV34PsIxwWZpJlw1EWhzTUwaDq3e
+         aq0aCm119ANhWTb9oCRUHFie9vPB/IEiW/QCwp0yO9UvNMmuAizwMcngUywG2ZiQdpss
+         zCqCaYwu7pHyAu1ZNjIP1YfASIKX5Mbl3ZwE3fxrS6B1/R9qXFBj9LakquKxrZvoS1Qi
+         NqxePdKdgjL6esYMrA6ComcGu66yb08stflO8J6mY6/lFC6gSxULw5u7mSPcfBFXCZy7
+         FrTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L2IMR3qnRYTC2ifKlTEprymQ23atlDm3rUUvrvgkX3c=;
+        b=mWUrwWDeL5UndkiNGMZecYXGQP44kB+6vIZ/WRpORCuzPcc3CztPUNDGzmmJHDmBNz
+         4QkR9FRr0VQxRmC6gWXZ+tDOM0zJ4OeWlQbfB9EQSKPwnRNNZCIYBH+daqG8iGZAahZ3
+         Wmc3B71JkT/yK1A8T8xTFd+q2+aqKXBxj3EwGCp6VS1Ktat7AMh2ZqqzGJhEJfLz9h3G
+         3xenw9NOS2tadx47UacUguFKJAWTbvjkrwVlF3g8uxtWKwKIEISxgfT8Skgw/UlYahOb
+         pS0cVjoCCs12sVf8gzVxC6wkFaBqnHrdoqvhjLhnZ5Bf1xlvdY5YWwoZrHEUVWc2OWMm
+         f/Vw==
+X-Gm-Message-State: AOAM532rgXslS0U7Um3TACZVCTKuuP5GCcXXCGWS3zUPba31CXusauxO
+        eU+dZ5J6lY8xIlpY5X0K5iFWgLWaU7hIJ0NlVw44Pw==
+X-Google-Smtp-Source: ABdhPJzsxiF1QJFARs3RtG3t2Oqk3wVbaKE5OmP7uI7VZTff5ZDKjiDUk4bqK6Mkmqx466OMjmIFaIDxaqcVveNJ6lI=
+X-Received: by 2002:a2e:b1c7:0:b0:253:dfbf:56cf with SMTP id
+ e7-20020a2eb1c7000000b00253dfbf56cfmr12601797lja.513.1653424937882; Tue, 24
+ May 2022 13:42:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <Yo0soniFborDl7+C@google.com>
-In-Reply-To: <Yo0soniFborDl7+C@google.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 24 May 2022 15:41:36 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJh=d-B51b6yPBRq0tOwbChN=AFPr-a19U1QdQZAE7c1A@mail.gmail.com>
-Message-ID: <CAL_JsqJh=d-B51b6yPBRq0tOwbChN=AFPr-a19U1QdQZAE7c1A@mail.gmail.com>
-Subject: Re: Bug when mapping designware PCIe MSI msg
-To:     William McVicker <willmcvicker@google.com>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        PCI <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
+References: <20220523164626.858340-1-masahiroy@kernel.org>
+In-Reply-To: <20220523164626.858340-1-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 24 May 2022 13:42:06 -0700
+Message-ID: <CAKwvOdkzNaJhM9PGBY_Ae+B34F2H_4aGjD+kBEC_5ZcQUuDm2g@mail.gmail.com>
+Subject: Re: [PATCH 1/5] modpost: fix undefined behavior of is_arm_mapping_symbol()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 2:06 PM William McVicker
-<willmcvicker@google.com> wrote:
+On Mon, May 23, 2022 at 9:48 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> Hi All,
+> The return value of is_arm_mapping_symbol() is unpredictable when
+> "$" is passed in.
 >
-> I've been debugging a PCIe dma mapping issue and I believe I have tracked the
-> bug down to how the designware PCIe host driver is mapping the MSI msg. In
-> commit 07940c369a6b ("PCI: dwc: Fix MSI page leakage in suspend/resume") [1],
-> the PCIe driver was re-worked to drop allocating a page for the MSI msg in
-> favor of using an address from the driver data. Then in commit 660c486590aa
-> ("PCI: dwc: Set 32-bit DMA mask for MSI target address allocation") [2],
-> a 32-bit DMA mask was enforced for this MSI msg address in order to support
-> both 32-bit and 64-bit MSI address capable hardware. Both of these changes
-> together expose a bug on hardware that supports an MSI address greather than
-> 32-bits. For example, the Pixel 6 supports a 36-bit MSI address and therefore
-> calls:
+> strchr(3) says:
+>   The strchr() and strrchr() functions return a pointer to the matched
+>   character or NULL if the character is not found. The terminating null
+>   byte is considered part of the string, so that if c is specified as
+>   '\0', these functions return a pointer to the terminator.
 >
->   dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(36));
+> When str[1] is '\0', strchr("axtd", str[1]) is not NULL, and str[2] is
+> referenced (i.e. buffer overrun).
 >
-> Before [2], this was fine because getting an address for the driver data that
-> was less than or equal to 36-bits was common enough to not hit this issue, but
-> after [2] I started hitting the below DMA buffer overflow when the driver data
-> address was greater than 32-bits:
+> Test code
+> ---------
 >
->   exynos-pcie-rc 14520000.pcie: DMA addr 0x000000088536d908+2 overflow (mask ffffffff, bus limit 0).
->           : WARNING: CPU: 3 PID: 8 at kernel/dma/direct.h:99 dma_map_page_attrs+0x254/0x278
->   ...
->   Hardware name: Oriole DVT (DT)
->   Workqueue: events_unbound deferred_probe_work_func
->   pstate  : 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->   pc      : dma_map_page_attrs+0x254/0x278
->   lr      : dma_map_page_attrs+0x250/0x278
->   sp      : ffffffc0080938b0
->   ...
->   Call trace:
->           : dma_map_page_attrs+0x254/0x278
->           : dma_map_single_attrs+0xdc/0x10c
->           : dw_pcie_host_init+0x4a0/0x78c
->           : exynos_pcie_rc_add_port+0x7c/0x104 [pcie_exynos_gs]
->           : exynos_pcie_rc_probe+0x4c8/0x6ec [pcie_exynos_gs]
->           : platform_probe+0x80/0x200
->           : really_probe+0x1cc/0x458
->           : __driver_probe_device+0x204/0x260
->           : driver_probe_device+0x44/0x4b0
->           : __device_attach_driver+0x200/0x308
->           : __device_attach+0x20c/0x330
+>   char str1[] = "abc";
+>   char str2[] = "ab";
 >
+>   strcpy(str1, "$");
+>   strcpy(str2, "$");
 >
-> The underlying issue is that using the driver data (which can be a 64-bit
-> address) for the MSI msg mapping causes a DMA_MAPPING_ERROR when the dma mask
-> is less than 64-bits. I'm not familiar enough with the dma mapping code to
-> suggest a full-proof solution to solve this; however, I don't think reverting
-> [1] is a great solution since it addresses a valid issue and reverting [2]
-> doesn't actually solve the bug since the driver data address isn't restricted
-> by the dma mask.
+>   printf("test1: %d\n", is_arm_mapping_symbol(str1));
+>   printf("test2: %d\n", is_arm_mapping_symbol(str2));
 >
-> I hope that helps explain the issue. Please let me know your thoughts on how we
-> should address this.
+> Result
+> ------
+>
+>   test1: 0
+>   test2: 1
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I think the alloc for the msi_msg just needs a GFP_DMA32 flag.
-Unfortunately that is done in each driver and would be kind of odd.
+I guess this is shorter than a call to strlen then conditional call to strchr.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-The thing is I'm pretty sure the actual address doesn't matter. The
-MSI never actually writes to memory but is terminated by the MSI
-controller. It just can't be an address you would want to DMA to (such
-as driver data allocations). And it needs to account for any bus
-translations, which the DMA API conveniently handles.
+> ---
+>
+>  scripts/mod/modpost.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 6f5c605ab0fb..845bc438ca49 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1179,7 +1179,8 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
+>
+>  static inline int is_arm_mapping_symbol(const char *str)
+>  {
+> -       return str[0] == '$' && strchr("axtd", str[1])
+> +       return str[0] == '$' &&
+> +              (str[1] == 'a' || str[1] == 'd' || str[1] == 't' || str[1] == 'x')
+>                && (str[2] == '\0' || str[2] == '.');
+>  }
+>
+> --
+> 2.32.0
+>
 
-So maybe it needs to be its own alloc as before but avoiding the leak
-and also setting GFP_DMA32. Unless others have ideas.
 
-Rob
+-- 
+Thanks,
+~Nick Desaulniers

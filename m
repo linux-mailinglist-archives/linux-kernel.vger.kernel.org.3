@@ -2,223 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7C1532ACF
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A27B532ACC
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237547AbiEXNFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S237560AbiEXNFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiEXNFN (ORCPT
+        with ESMTP id S237549AbiEXNFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:05:13 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDCE6338A
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:05:12 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-30007f11f88so49255017b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 06:05:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=To11RlxqH6GZH9FPXLaskPjRkQ4yZEZUtKkrlfgzx5k=;
-        b=SrW38l8zVhjzS5d1qhwscRSJD9CHrJ94L1YtUj2PSUrek8Q4I7M76lx9Tjp9YCIPin
-         VnJpGJySVKfX9k4N75W/rAbbLF/042yIyXfK8RYxmqDIiIRyiAORoTWxM6TFGHrFrJmw
-         tIJNmxS3MirfiFwahPq+Vpf9QSgaRKQ55w+ZNdrQfZEL+V6j+cnx6wJibhAXS4/CvwFF
-         sVIx2a3XAHdN57woOVQkznef6tZO2/slDq8dQch0zZw3DhjIHCZVDRzkfmmTPLTXIeEL
-         QBWka+mgfr1UEvo9+bEv7bYB2GH9yYBoTniOR8ixJ7/hJNQijQczQBTPjM67QqbmVrjs
-         qJQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=To11RlxqH6GZH9FPXLaskPjRkQ4yZEZUtKkrlfgzx5k=;
-        b=DNkwTEQvXD6+NKuskTxrzjWWNN7KhdGxCtNRxCyjZyFJfLEzYMhsz9Ltvqx9hNwIEP
-         vKenvMMYsQUlu5FI05vtglQJfj02tMjfikH79Me38IIsFCTtkWhn8zmp699wcSAOl+s9
-         cuAvaOgfn8rCZ+3z2Tu0FjDF6AMPX0/bUVE8fUr5uehDJ5u6waBSIyXyecQOBOYI7xsz
-         5/gvndnV6FVqQhi4Z37PDPtQbzP06Vz6KN40lQdlAcCFCI9tfpMk+cym3/2bZJvVRWwm
-         BWD68H7n1JCDDQeW4FGjG/xm3BHaGcow+nkZ0XBcmO4vfbzNPytKabmYajlF/pRnQ6I+
-         HspA==
-X-Gm-Message-State: AOAM530VDDqGG9ky8FRF/h5O7TEACBzYLJOVwkBemayLTJ4PfkqWD50X
-        kA1B0zJK/GSaec51LEMwKHf7br2vZKP3yBA+1Fi7eA==
-X-Google-Smtp-Source: ABdhPJywoisxT8mLcMdZ7yPKHGZUw3cETrNIIeg59RUrd4PF3W8NNkIwn9gPARS0L/KBaowMI2wfHaK7Kv3Fgmey1ds=
-X-Received: by 2002:a81:442:0:b0:300:2add:cd21 with SMTP id
- 63-20020a810442000000b003002addcd21mr2720910ywe.189.1653397511146; Tue, 24
- May 2022 06:05:11 -0700 (PDT)
+        Tue, 24 May 2022 09:05:46 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3E4915BB;
+        Tue, 24 May 2022 06:05:44 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OCmTT5009976;
+        Tue, 24 May 2022 13:05:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=4a02P7CwzQE7rJFeSSIkifhto597iNOCRT9Q3Xdads0=;
+ b=sZ62Q3Sx0GYwkncyIN7dvZXN6kSXQYtFPA8CyqlwwJDVhEEQ7XaMyBcQ6mUYTFQVkedp
+ us81ieGDj/iCLrq25n+VBC431h8ki01MkXpcfJS4J17917eHR9yZ7qOfpAicOJRn501V
+ sl6/TjicjSROrk1qQgnoyzeBcu5QMDVXFYENixdV+ykDt8QewKe6bA3Rg+psAZDSaCGZ
+ pGdOTNl3Y6FxCqNV/5CVAmk+HD6AiO3dnXknhuU2MnCXP4+SRthSjHANcAyY1rm+IYFb
+ NbHjYCuS4e88yXxq18oXUiddac391NO79+WBe94nqcVtlYX1cF5hzWR+nywRGNTdJQST RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8ypp0ckm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 13:05:38 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OCwX53015800;
+        Tue, 24 May 2022 13:05:38 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g8ypp0cj4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 13:05:38 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OD2wja018845;
+        Tue, 24 May 2022 13:05:35 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3g6qq9cg59-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 13:05:35 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OD5Xkh41091496
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 May 2022 13:05:33 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C53D42059;
+        Tue, 24 May 2022 13:05:33 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8C75542054;
+        Tue, 24 May 2022 13:05:32 +0000 (GMT)
+Received: from [9.171.67.153] (unknown [9.171.67.153])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 24 May 2022 13:05:32 +0000 (GMT)
+Message-ID: <3bb9366d-f271-a603-a280-b70ae2d59c00@linux.ibm.com>
+Date:   Tue, 24 May 2022 15:05:32 +0200
 MIME-Version: 1.0
-References: <20220523165743.398280407@linuxfoundation.org>
-In-Reply-To: <20220523165743.398280407@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 24 May 2022 18:35:00 +0530
-Message-ID: <CA+G9fYv_TYDmJZg8__NqAw-QDWo0jx-=4DwXG6N2xES2qP=iKA@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/25] 4.9.316-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH net-next v2] net/smc: align the connect behaviour with TCP
+Content-Language: en-US
+To:     liuyacan@corp.netease.com
+Cc:     davem@davemloft.net, guangguan.wang@linux.alibaba.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com
+References: <26d43c65-1f23-5b83-6377-3327854387c4@linux.ibm.com>
+ <20220524125725.951315-1-liuyacan@corp.netease.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20220524125725.951315-1-liuyacan@corp.netease.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: EbIdf1uvrDDLu7lzyKTYwM9kL8ycI-13
+X-Proofpoint-GUID: TMR7-1BRReiakQPwFydyWLd3M1H1qbrK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-24_06,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ phishscore=0 adultscore=0 priorityscore=1501 suspectscore=0 spamscore=0
+ mlxscore=0 clxscore=1015 mlxlogscore=999 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205240066
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 at 22:33, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.316 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.316-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 24/05/2022 14:57, liuyacan@corp.netease.com wrote:
+>>>
+>>>
+>>> On 2022/5/23 20:24, Karsten Graul wrote:
+>>>> On 13/05/2022 04:24, Guangguan Wang wrote:
+>>>>> Connect with O_NONBLOCK will not be completed immediately
+>>>>> and returns -EINPROGRESS. It is possible to use selector/poll
+>>>>> for completion by selecting the socket for writing. After select
+>>>>> indicates writability, a second connect function call will return
+>>>>> 0 to indicate connected successfully as TCP does, but smc returns
+>>>>> -EISCONN. Use socket state for smc to indicate connect state, which
+>>>>> can help smc aligning the connect behaviour with TCP.
+>>>>>
+>>>>> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+>>>>> Acked-by: Karsten Graul <kgraul@linux.ibm.com>
+>>>>> ---
+>>>>>  net/smc/af_smc.c | 50 ++++++++++++++++++++++++++++++++++++++++++++----
+>>>>>  1 file changed, 46 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+>>>>> index fce16b9d6e1a..5f70642a8044 100644
+>>>>> --- a/net/smc/af_smc.c
+>>>>> +++ b/net/smc/af_smc.c
+>>>>> @@ -1544,9 +1544,29 @@ static int smc_connect(struct socket *sock, struct sockaddr *addr,
+>>>>>  		goto out_err;
+>>>>>  
+>>>>>  	lock_sock(sk);
+>>>>> +	switch (sock->state) {
+>>>>> +	default:
+>>>>> +		rc = -EINVAL;
+>>>>> +		goto out;
+>>>>> +	case SS_CONNECTED:
+>>>>> +		rc = sk->sk_state == SMC_ACTIVE ? -EISCONN : -EINVAL;
+>>>>> +		goto out;
+>>>>> +	case SS_CONNECTING:
+>>>>> +		if (sk->sk_state == SMC_ACTIVE)
+>>>>> +			goto connected;
+>>>>
+>>>> I stumbled over this when thinking about the fallback processing. If for whatever reason
+>>>> fallback==true during smc_connect(), the "if (smc->use_fallback)" below would set sock->state
+>>>> to e.g. SS_CONNECTED. But in the fallback case sk_state keeps SMC_INIT. So during the next call
+>>>> the SS_CONNECTING case above would break because sk_state in NOT SMC_ACTIVE, and we would end
+>>>> up calling kernel_connect() again. Which seems to be no problem when kernel_connect() returns 
+>>>> -EISCONN and we return this to the caller. But is this how it should work, or does it work by chance?
+>>>>
+>>>
+>>> Since the sk_state keeps SMC_INIT and does not correctly indicate the state of clcsock, it should end
+>>> up calling kernel_connect() again to get the actual connection state of clcsock.
+>>>
+>>> And I'm sorry there is a problem that if sock->state==SS_CONNECTED and sk_state==SMC_INIT, further call
+>>> of smc_connect will return -EINVAL where -EISCONN is preferred. 
+>>> The steps to reproduce:
+>>> 1）switch fallback before connect, such as setsockopt TCP_FASTOPEN
+>>> 2）connect with noblocking and returns -EINPROGRESS. (sock->state changes to SS_CONNECTING)
+>>> 3) end up calling connect with noblocking again and returns 0. (kernel_connect() returns 0 and sock->state changes to
+>>>    SS_CONNECTED but sk->sk_state stays SMC_INIT)
+>>> 4) call connect again, maybe by mistake, will return -EINVAL, but -EISCONN is preferred.
+>>>
+>>> What do you think about if we synchronize the sk_state to SMC_ACTIVE instead of keeping SMC_INIT when clcsock
+>>> connected successfully in fallback case described above.
+>>>
+>>> ...
+>>
+>> I start thinking that the fix in 86434744 introduced a problem. Before that fix a connect with
+>> fallback always reached __smc_connect() and on top of that function in case of fallback
+>> smc_connect_fallback() is called, which itself sets sk_state to SMC_ACTIVE.
+>>
+>> 86434744 removed that code path and I wonder what it actually fixed, because at this time the 
+>> fallback check in __smc_connect() was already present.
+>>
+>> Without that "goto out;" the state would be set correctly in smc_connect_fallback(), and the 
+>> socket close processing would work as expected.
+> 
+> I think it is OK without that "goto out;". And I guess the purpose of "goto out;" is to avoid calling __smc_connect(), 
+> because it is impossible to establish an rdma channel at this time.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Yes that was the purpose, but this disabled all the extra processing that should be done
+for fallback sockets during connect().
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.9.316-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.9.y
-* git commit: be4ec3e3faa1cfbe1ee62a6f6dc29c1b341a90f0
-* git describe: v4.9.315-26-gbe4ec3e3faa1
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
-15-26-gbe4ec3e3faa1
-
-## Test Regressions (compared to v4.9.315)
-No test regressions found.
-
-## Metric Regressions (compared to v4.9.315)
-No metric regressions found.
-
-## Test Fixes (compared to v4.9.315)
-No test fixes found.
-
-## Metric Fixes (compared to v4.9.315)
-No metric fixes found.
-
-## Test result summary
-total: 72713, pass: 57877, fail: 683, skip: 11880, xfail: 2273
-
-## Build Summary
-* arm: 238 total, 238 passed, 0 failed
-* arm64: 32 total, 32 passed, 0 failed
-* i386: 18 total, 18 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

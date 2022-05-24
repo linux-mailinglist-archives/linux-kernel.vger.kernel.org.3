@@ -2,137 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C42D532A5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB235532A60
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237336AbiEXMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S237329AbiEXMaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 08:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237304AbiEXMah (ORCPT
+        with ESMTP id S237203AbiEXMaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:30:37 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1296393981;
-        Tue, 24 May 2022 05:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653395435; x=1684931435;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QesgYJtIYpO+DLyYwVVFn+Dd5yDLs1Cg8cnWq0AHJy4=;
-  b=kl5jbeps4TByGf8RdP2CJ+dJ/DRSjyJxwo/WnD0oUMhD06Tz7kYk6rH7
-   utcIX7hL2IzzZJnIjicpIsf9LMmQ/XtCX0b5Z4vI9cupi1XYVCURK1oVX
-   RszUpatFvTyvakpFwxxTYIrj8XvjPdzw3EMWHwN5HG7sR7Uha12V6Ia9N
-   LAfZ6APXv5ofNPWk//xYzrcT0xh2/D0WZaL2XuilTiHtJj4NVKMbMoWvd
-   /rMQHHBk2qrQQB7HK7HbN/foznqQX35dXAS/iJYdGXgw5tNbzOtoD7jJh
-   0STGK8WpNO1b4hFj2L5ACAMgTbfHYevOWz3e/qf4aBDTp1XZLkymIZKTV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273512409"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273512409"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 05:30:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="663892709"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 May 2022 05:30:31 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntTgF-00021e-6N;
-        Tue, 24 May 2022 12:30:31 +0000
-Date:   Tue, 24 May 2022 20:29:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muchun Song <songmuchun@bytedance.com>, hannes@cmpxchg.org,
-        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com
-Cc:     kbuild-all@lists.01.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, longman@redhat.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v4 09/11] mm: memcontrol: use obj_cgroup APIs to charge
- the LRU pages
-Message-ID: <202205242030.FAaW4e04-lkp@intel.com>
-References: <20220524060551.80037-10-songmuchun@bytedance.com>
+        Tue, 24 May 2022 08:30:04 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EE49398D;
+        Tue, 24 May 2022 05:30:03 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id z16so5527537ilp.5;
+        Tue, 24 May 2022 05:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0oJvDE3rqw1POgMlD+U//hql5RM2jeKo+o/vwbI7DRw=;
+        b=ljA7Qx9wZeM3JXxhMCZDEpmHllMrC5husOlVjnjkG54MrLWMicRWxFdMUSmQ1bXOfa
+         jZ434/DcRZzGRG8AD8WkjF0QhaYw5+LJC2O5VvCRj0ZM7hms602wP72tWv2pkBqbevU1
+         sOpOaTZgVE82VZ8pP1KIxFOyUwkVU/DvimAPTeq+C3iRPZjTTDH63XGhiGdaszAGNEf/
+         RoLFK4OMy4Mmj8uYEOn7hbaiu1GBB/5arFpU4liVoqWf86Ylu3wN423MuHbEFfSbu1L/
+         FmXSmwh/+xcry9R+F9hK6h3xGOUWSZHAZql9xGvsV+ber4bQWusB6sAMpbett7Ho4Py9
+         ALWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0oJvDE3rqw1POgMlD+U//hql5RM2jeKo+o/vwbI7DRw=;
+        b=3pvwwH+GVNvyrV5+DttJF7KD57+GcIy9iB5WtS4gJM8GLV8V7uqFswwdvU/VNN2a8F
+         k3ztr+3ihpegmqZw7gfsKFJjmy3bgO/VdTGzZ0/zuZhtMnT8OH2H2DCCDBb7AGxBSzXe
+         pQuRW27Lg4NRtRToFLS6sbOpToK2ed0AlE6nbnt4m4sFInvd40DSoeAC17CM0ahCYS4O
+         5ilCpOi3YDhWzIECuHKvoxri73+gDTd56l/QAPLCQPcujxsVgc2/WLEKK1XU/zQvA7zl
+         td6ADDNzXn6w9r4O5D47yVIUnex54ACnOINXKmAGCNgPOJ+ikEZtEx7CNAaqLj8UksTZ
+         eaNg==
+X-Gm-Message-State: AOAM531j5zUWVq44Q/bP3bktqetBW15IouBLGoZTSb9Jlzm8a8lT2ehu
+        rP4ltL1nWjoIZciEFrmN9cFkaMTD/sCDRfJIhn1s3sOgbq8=
+X-Google-Smtp-Source: ABdhPJwt/V4ZI5PCZH8bI1yKUtKl2skmZn0Mo4mHdveSh2+tCMfr9XZ5iliMBpE1y7hVWvmfS9tbiBytXMDrh0lRQ58=
+X-Received: by 2002:a05:6e02:1c81:b0:2d1:3971:9343 with SMTP id
+ w1-20020a056e021c8100b002d139719343mr14028193ill.237.1653395402449; Tue, 24
+ May 2022 05:30:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524060551.80037-10-songmuchun@bytedance.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220523020209.11810-1-ojeda@kernel.org> <20220523020209.11810-7-ojeda@kernel.org>
+ <CAKwvOd=mFhxjKRP_qt3Yu69dj_P6VUMSUSQm7fY6yS2bsO8Y2w@mail.gmail.com>
+In-Reply-To: <CAKwvOd=mFhxjKRP_qt3Yu69dj_P6VUMSUSQm7fY6yS2bsO8Y2w@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 24 May 2022 14:29:51 +0200
+Message-ID: <CANiq72nT1=+2AFe9sdesf7hyAnkAR41fMaFi9JV4-ci2NZFD+Q@mail.gmail.com>
+Subject: Re: [PATCH v7 06/25] rust: add `compiler_builtins` crate
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Muchun,
+On Mon, May 23, 2022 at 8:37 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> ^ Any progress on this? Got any links to any feature requests or bug reports.
 
-Thank you for the patch! Yet something to improve:
+We got the floating point ones removed via a new feature flag
+(https://github.com/rust-lang/rust/pull/86048) that Gary added (they
+were already removed by the time of the message you link), so upstream
+Rust is willing to add this sort of thing for us.
 
-[auto build test ERROR on 4b0986a3613c92f4ec1bdc7f60ec66fea135991f]
+For the `i128`/`u128` ones, no change; but upstream Rust is aware of
+this need (e.g. we presented them in the Rust CTCFT from November:
+https://youtu.be/azcrUzeY3Pw?t=751).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muchun-Song/Use-obj_cgroup-APIs-to-charge-the-LRU-pages/20220524-143056
-base:   4b0986a3613c92f4ec1bdc7f60ec66fea135991f
-config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220524/202205242030.FAaW4e04-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/bec0ae12106e0cf12dd4e0e21eb0754b99be0ba2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muchun-Song/Use-obj_cgroup-APIs-to-charge-the-LRU-pages/20220524-143056
-        git checkout bec0ae12106e0cf12dd4e0e21eb0754b99be0ba2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+See also https://github.com/Rust-for-Linux/linux/issues/2 and linked
+issues there for more information.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> Also, I'm not sure my concern about explicit build failures for C code
+> was ever addressed?  We have a constant problem with `long long`
+> division on ARCH=arm32 and ARCH=i386 in C code.
+> https://lore.kernel.org/lkml/CAKwvOdk+A2PBdjSFVUhj4xyCGCKujtej1uPgywQgrKPiK2ksPw@mail.gmail.com/
 
-All errors (new ones prefixed by >>):
+In my reply to that message I mentioned that the goal is to avoid the
+panicking intrinsics to begin with. We already removed some, so I
+would try to continue down that path. If that proves not possible,
+then yeah, we would need something different.
 
-   mm/memcontrol.c: In function 'charge_memcg':
->> mm/memcontrol.c:6826:17: error: implicit declaration of function '__get_obj_cgroup_from_memcg'; did you mean 'get_mem_cgroup_from_mm'? [-Werror=implicit-function-declaration]
-    6826 |         objcg = __get_obj_cgroup_from_memcg(memcg);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                 get_mem_cgroup_from_mm
-   mm/memcontrol.c:6826:15: warning: assignment to 'struct obj_cgroup *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    6826 |         objcg = __get_obj_cgroup_from_memcg(memcg);
-         |               ^
-   cc1: some warnings being treated as errors
-
-
-vim +6826 mm/memcontrol.c
-
-  6818	
-  6819	static int charge_memcg(struct folio *folio, struct mem_cgroup *memcg,
-  6820				gfp_t gfp)
-  6821	{
-  6822		struct obj_cgroup *objcg;
-  6823		long nr_pages = folio_nr_pages(folio);
-  6824		int ret = 0;
-  6825	
-> 6826		objcg = __get_obj_cgroup_from_memcg(memcg);
-  6827		/* Do not account at the root objcg level. */
-  6828		if (!obj_cgroup_is_root(objcg))
-  6829			ret = try_charge(memcg, gfp, nr_pages);
-  6830		if (ret)
-  6831			goto out;
-  6832	
-  6833		obj_cgroup_get(objcg);
-  6834		commit_charge(folio, objcg);
-  6835	
-  6836		local_irq_disable();
-  6837		mem_cgroup_charge_statistics(memcg, nr_pages);
-  6838		memcg_check_events(memcg, folio_nid(folio));
-  6839		local_irq_enable();
-  6840	out:
-  6841		obj_cgroup_put(objcg);
-  6842		return ret;
-  6843	}
-  6844	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+Miguel

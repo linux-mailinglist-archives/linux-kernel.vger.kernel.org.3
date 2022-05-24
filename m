@@ -2,88 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95742532643
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DBB532641
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235318AbiEXJTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 05:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S231841AbiEXJTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 05:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235356AbiEXJTd (ORCPT
+        with ESMTP id S235376AbiEXJTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 05:19:33 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306947892E
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:19:30 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C0A7121979;
-        Tue, 24 May 2022 09:19:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653383968; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cJqPgN87UYNRsdNeSSFsjzHet7+5vgEzk9S+L5xumcg=;
-        b=tUzJal9KdPkQ2D1bI89IAWjfabnibPussPwISv+c1Np0EMzF/hXlodVqFI/FHKtEftyrYy
-        3FhvIxUFBMEFTpjiJFaSpdhkrWTNJjBPvbShUi5FA2/hILoJWOCecoC0wnr9EGPI17xZoc
-        GFfyJDWADknjZjU23vvCcEKozuGnUjw=
-Received: from suse.cz (unknown [10.100.201.202])
+        Tue, 24 May 2022 05:19:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0D574DC6;
+        Tue, 24 May 2022 02:19:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A256D2C141;
-        Tue, 24 May 2022 09:19:28 +0000 (UTC)
-Date:   Tue, 24 May 2022 11:19:28 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Chris Down <chris@chrisdown.name>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH] printk: console: Allow each console to have its own
- loglevel
-Message-ID: <YoyjIFI0LTvUHGQr@alley>
-References: <YoUBh5BSsURDO71Z@chrisdown.name>
- <YoUR6RlzkCNG7BU0@kroah.com>
- <YoVM+KbdyJm8RSSr@chrisdown.name>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBB486164F;
+        Tue, 24 May 2022 09:19:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C40DC385AA;
+        Tue, 24 May 2022 09:19:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653383981;
+        bh=CQoTVzWSYGPxn/PhSbq4IWD9fRMZJsmF2LJ5awP5PHE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HUS4ndvoSW4jDh9uLc2sMoq07gNQKuNlkXCVuvpm70SYFzpoFAVIw9+8bFTCS5nN4
+         c2Vr7C0pSA+Z0ajJa7F653EIvX7VeAjvqA4Jd/0BPBXEQ8KgnsnDuK2tJDGkHkIhb6
+         l848JIxyN0vasK+LwzRIdyhI5RwI42zCrF6xqRSyiyabinDErgtRRmPUS9yCpBHWca
+         b68Et/UjPcwUZ9scNm9mVcKNByCcGx1XbhI/vGHTMWVWeTV6nbJhyo5nY2ZyMkxFHa
+         sFYOVTSREW5+Scr5L4KD+ZL6Zxv6mU/VnGQkeNV1t5MOZ3lJpAqRcNcpG053nGMoXC
+         e9WU0cYJ1UVcA==
+Received: by pali.im (Postfix)
+        id BF8C49ED; Tue, 24 May 2022 11:19:38 +0200 (CEST)
+Date:   Tue, 24 May 2022 11:19:38 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/85xx: P2020: Add fsl,mpc8548-pmc node
+Message-ID: <20220524091938.myq5pf4imaczgbqa@pali>
+References: <20220506203621.26314-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YoVM+KbdyJm8RSSr@chrisdown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220506203621.26314-1-pali@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-05-18 20:46:00, Chris Down wrote:
-> Greg Kroah-Hartman writes:
-> > > +static int printk_sysctl_deprecated(struct ctl_table *table, int write,
-> > > +				    void __user *buffer, size_t *lenp,
-> > > +				    loff_t *ppos)
-> > > +{
-> > > +	int res = proc_dointvec(table, write, buffer, lenp, ppos);
-> > > +
-> > > +	if (write)
-> > > +		pr_warn_ratelimited(
-> > > +			"printk: The kernel.printk sysctl is deprecated and will be removed soon. Use kernel.force_console_loglevel, kernel.default_message_loglevel, kernel.minimum_console_loglevel, or kernel.default_console_loglevel instead.\n"
-> > 
-> > Please define "soon".
+On Friday 06 May 2022 22:36:21 Pali Rohár wrote:
+> P2020 also contains Power Management Controller and their registers at
+> offset 0xe0070 compatible with mpc8548. So add PMC node into DTS include
+> file fsl/p2020si-post.dtsi
+
+PING?
+
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  arch/powerpc/boot/dts/fsl/p2020si-post.dtsi | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> Petr, what do you think about the timebounds here? :-)
-
-Good question. Honestly, I do not have experience with deprecating
-such interfaces. Any advice would be helpful.
-
-We might investigate the kernel log whether and how some sysctl
-interface was deprecated.
-
-I would personally keep the interface between 10-20 kernel
-releases.
-
-Best Regards,
-Petr
-
-PS: I still have to look deeper at the patchset. It might take
-    some more days. It seems that nature is not the only one who
-    woke up after the winter.
+> diff --git a/arch/powerpc/boot/dts/fsl/p2020si-post.dtsi b/arch/powerpc/boot/dts/fsl/p2020si-post.dtsi
+> index 6345629524fe..81b9ab2119be 100644
+> --- a/arch/powerpc/boot/dts/fsl/p2020si-post.dtsi
+> +++ b/arch/powerpc/boot/dts/fsl/p2020si-post.dtsi
+> @@ -201,4 +201,9 @@
+>  		reg = <0xe0000 0x1000>;
+>  		fsl,has-rstcr;
+>  	};
+> +
+> +	pmc: power@e0070 {
+> +		compatible = "fsl,mpc8548-pmc";
+> +		reg = <0xe0070 0x20>;
+> +	};
+>  };
+> -- 
+> 2.20.1
+> 

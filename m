@@ -2,191 +2,836 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1CBD532627
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2AB532629
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 11:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235093AbiEXJLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 05:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S235140AbiEXJMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 05:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbiEXJLc (ORCPT
+        with ESMTP id S229464AbiEXJMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 05:11:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC32ADF35
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:11:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32943615F5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 09:11:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80696C385AA;
-        Tue, 24 May 2022 09:11:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653383488;
-        bh=nm267qQMC+ijTPFmPNwaNVgihYuezEhC/N8QJDt3XLY=;
-        h=Date:From:To:cc:Subject:From;
-        b=HmuUWEKnT8tk3KvfWOecJ+TQi7MbbgaNtLoCfVwvf+gfSffh2b/mT3xDsSFjMI9ex
-         cbp24/LQzdN0uOHzPwPSs42iZrqGQZbq7lDvCUhFdzpEI2bLviAEAhMosXuui/S7ix
-         MqmrYTu9VeKG09cAtn9+LBxNbO1oPds7Z5HYEjU6S/CR3KuCiFFbCWnv0VzYQ8sTrj
-         7sklCqJnSdhp5mQYaO6vrGk5XQpGBldHD0XYLk33znACqpjj6eVxioTLICk5H5e+C1
-         F8iF/ccGWyh8KTVUxi0f1O3KMQLiL8OYTa+gkTiP5Uhd1V6X5Ceaz6IRezJh3RTlxy
-         3yHc6bgahQM6w==
-Date:   Tue, 24 May 2022 11:11:25 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [GIT PULL] HID for 5.19
-Message-ID: <nycvar.YFH.7.76.2205241107530.28985@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Tue, 24 May 2022 05:12:17 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289C6880D6
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:12:15 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so1578655pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 02:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=X6glWX1RQ8uRjJqaJDVLY30UlqwzIVTxXstx+jpZgLk=;
+        b=S7H7xSvgjuUsFHYKGgmdW01HGi7PyLkfNBDblTzLz6Rl5YaGGDjazsez1QC+TR2BUB
+         x+NGZ6DaZNwY4JFAySeW8AQCxxXSuwKrpcOxsS/Jp+5f4ZkTktBIW4eyoM653ms0ZPG4
+         xaPj0m/dJfFuSYZ/ObMRUgeCFH6kchyEIX+9ZSocxR6YPiAs3HYKAvDlf2HEDd6ksE3k
+         aAGBIJ/UL3ovDdIvJldoDk37rPffqyZXFvzi7eJJhiBUjN54jKphrKrATvki6vnFII1g
+         kmuqlPqU4UpTgDVVNVkLM6qyszF4nzwy7i53F2C6w3uzBsACLivasXI0eA1WHZ6k3w/E
+         J9dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X6glWX1RQ8uRjJqaJDVLY30UlqwzIVTxXstx+jpZgLk=;
+        b=KryuFKrct9jkVQKwHdsKN9gPV8eCTmTVcRAXUhf95atpjcUeKmk1n8bPB3JGR8WDwN
+         DQP6rp4wvzVzk7F91UgNO27Ar+/LNOokPR2e+PkhqMu4p+vUquTIlFhJce1pj18aHF4R
+         I24uRpX66YnIBIK8tgjXdjFIZWKiqTpJQK5tUQ7TdDe/umTYtosHc4hD04NCPDXU9J1l
+         3R2a7nkOHx0arHeRfxk1fC6CBsOUDSez8ASYxmuiMtHzSxiT/vcO7FN70DbFTLFNrHys
+         mbEIXe6B7x/0uicy+grlX12L/OamS5rKr9Q5rDqn6kFRRWDCCtnRJl0TBdH5j0mCCpBu
+         Kyag==
+X-Gm-Message-State: AOAM5329SI+l8p/ezo8q8yd4n77J+jfM9IH0meB9ycCPh4/vdFGtpjrc
+        Al8hqVV+Ti0SdjT+W0ReampvWA==
+X-Google-Smtp-Source: ABdhPJz4/nXto+Zz8WAcGpFvdBWmIfPOl6WmGXBvfGPyYxQ1oNUNlAAq77lKoctlIysT84Fut+J2Vg==
+X-Received: by 2002:a17:90b:4fc6:b0:1e0:6535:c7a1 with SMTP id qa6-20020a17090b4fc600b001e06535c7a1mr3660500pjb.168.1653383534540;
+        Tue, 24 May 2022 02:12:14 -0700 (PDT)
+Received: from localhost ([2408:8207:18da:2310:f940:af17:c2f5:8656])
+        by smtp.gmail.com with ESMTPSA id f24-20020a17090aa79800b001d792761e2esm1163347pjq.47.2022.05.24.02.12.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 02:12:14 -0700 (PDT)
+Date:   Tue, 24 May 2022 17:12:08 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v3 3/6] mm: shrinkers: provide shrinkers with names
+Message-ID: <YoyhaOF91dIl1McL@FVFYT0MHHV2J.googleapis.com>
+References: <20220509183820.573666-1-roman.gushchin@linux.dev>
+ <20220509183820.573666-4-roman.gushchin@linux.dev>
+ <YooZqOc7MBX0m/oJ@FVFYT0MHHV2J.usts.net>
+ <YowFXoh9awP3LuBf@carbon>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-2
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YowFXoh9awP3LuBf@carbon>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Mon, May 23, 2022 at 03:06:22PM -0700, Roman Gushchin wrote:
+> On Sun, May 22, 2022 at 07:08:24PM +0800, Muchun Song wrote:
+> > On Mon, May 09, 2022 at 11:38:17AM -0700, Roman Gushchin wrote:
+> > > Currently shrinkers are anonymous objects. For debugging purposes they
+> > > can be identified by count/scan function names, but it's not always
+> > > useful: e.g. for superblock's shrinkers it's nice to have at least
+> > > an idea of to which superblock the shrinker belongs.
+> > > 
+> > > This commit adds names to shrinkers. register_shrinker() and
+> > > prealloc_shrinker() functions are extended to take a format and
+> > > arguments to master a name.
+> > > 
+> > > In some cases it's not possible to determine a good name at the time
+> > > when a shrinker is allocated. For such cases shrinker_debugfs_rename()
+> > > is provided.
+> > > 
+> > > After this change the shrinker debugfs directory looks like:
+> > >   $ cd /sys/kernel/debug/shrinker/
+> > >   $ ls
+> > >     dqcache-16          sb-hugetlbfs-17  sb-rootfs-2      sb-tmpfs-50
+> > >     kfree_rcu-0         sb-hugetlbfs-33  sb-securityfs-6  sb-tracefs-13
+> > >     sb-aio-20           sb-iomem-12      sb-selinuxfs-22  sb-xfs:vda1-36
+> > >     sb-anon_inodefs-15  sb-mqueue-21     sb-sockfs-8      sb-zsmalloc-19
+> > >     sb-bdev-3           sb-nsfs-4        sb-sysfs-26      shadow-18
+> > >     sb-bpf-32           sb-pipefs-14     sb-tmpfs-1       thp_deferred_split-10
+> > >     sb-btrfs:vda2-24    sb-proc-25       sb-tmpfs-27      thp_zero-9
+> > >     sb-cgroup2-30       sb-proc-39       sb-tmpfs-29      xfs_buf-37
+> > >     sb-configfs-23      sb-proc-41       sb-tmpfs-35      xfs_inodegc-38
+> > >     sb-dax-11           sb-proc-45       sb-tmpfs-40      zspool-34
+> > >     sb-debugfs-7        sb-proc-46       sb-tmpfs-42
+> > >     sb-devpts-28        sb-proc-47       sb-tmpfs-43
+> > >     sb-devtmpfs-5       sb-pstore-31     sb-tmpfs-44
+> > > 
+> > > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > > ---
+> > >  arch/x86/kvm/mmu/mmu.c                        |  2 +-
+> > >  drivers/android/binder_alloc.c                |  2 +-
+> > >  drivers/gpu/drm/i915/gem/i915_gem_shrinker.c  |  3 +-
+> > >  drivers/gpu/drm/msm/msm_gem_shrinker.c        |  2 +-
+> > >  .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |  2 +-
+> > >  drivers/gpu/drm/ttm/ttm_pool.c                |  2 +-
+> > >  drivers/md/bcache/btree.c                     |  2 +-
+> > >  drivers/md/dm-bufio.c                         |  2 +-
+> > >  drivers/md/dm-zoned-metadata.c                |  2 +-
+> > >  drivers/md/raid5.c                            |  2 +-
+> > >  drivers/misc/vmw_balloon.c                    |  2 +-
+> > >  drivers/virtio/virtio_balloon.c               |  2 +-
+> > >  drivers/xen/xenbus/xenbus_probe_backend.c     |  2 +-
+> > >  fs/btrfs/super.c                              |  2 +
+> > >  fs/erofs/utils.c                              |  2 +-
+> > >  fs/ext4/extents_status.c                      |  3 +-
+> > >  fs/f2fs/super.c                               |  2 +-
+> > >  fs/gfs2/glock.c                               |  2 +-
+> > >  fs/gfs2/main.c                                |  2 +-
+> > >  fs/jbd2/journal.c                             |  2 +-
+> > >  fs/mbcache.c                                  |  2 +-
+> > >  fs/nfs/nfs42xattr.c                           |  7 ++-
+> > >  fs/nfs/super.c                                |  2 +-
+> > >  fs/nfsd/filecache.c                           |  2 +-
+> > >  fs/nfsd/nfscache.c                            |  2 +-
+> > >  fs/quota/dquot.c                              |  2 +-
+> > >  fs/super.c                                    |  6 +-
+> > >  fs/ubifs/super.c                              |  2 +-
+> > >  fs/xfs/xfs_buf.c                              |  2 +-
+> > >  fs/xfs/xfs_icache.c                           |  2 +-
+> > >  fs/xfs/xfs_qm.c                               |  2 +-
+> > >  include/linux/shrinker.h                      | 12 +++-
+> > >  kernel/rcu/tree.c                             |  2 +-
+> > >  mm/huge_memory.c                              |  4 +-
+> > >  mm/shrinker_debug.c                           | 45 +++++++++++++-
+> > >  mm/vmscan.c                                   | 58 ++++++++++++++++++-
+> > >  mm/workingset.c                               |  2 +-
+> > >  mm/zsmalloc.c                                 |  2 +-
+> > >  net/sunrpc/auth.c                             |  2 +-
+> > >  39 files changed, 154 insertions(+), 46 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index c623019929a7..8cfabdd63406 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -6283,7 +6283,7 @@ int kvm_mmu_vendor_module_init(void)
+> > >  	if (percpu_counter_init(&kvm_total_used_mmu_pages, 0, GFP_KERNEL))
+> > >  		goto out;
+> > >  
+> > > -	ret = register_shrinker(&mmu_shrinker);
+> > > +	ret = register_shrinker(&mmu_shrinker, "mmu");
+> > >  	if (ret)
+> > >  		goto out;
+> > >  
+> > > diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> > > index 2ac1008a5f39..951343c41ba8 100644
+> > > --- a/drivers/android/binder_alloc.c
+> > > +++ b/drivers/android/binder_alloc.c
+> > > @@ -1084,7 +1084,7 @@ int binder_alloc_shrinker_init(void)
+> > >  	int ret = list_lru_init(&binder_alloc_lru);
+> > >  
+> > >  	if (ret == 0) {
+> > > -		ret = register_shrinker(&binder_shrinker);
+> > > +		ret = register_shrinker(&binder_shrinker, "binder");
+> > >  		if (ret)
+> > >  			list_lru_destroy(&binder_alloc_lru);
+> > >  	}
+> > > diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c b/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
+> > > index 6a6ff98a8746..85524ef92ea4 100644
+> > > --- a/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
+> > > +++ b/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
+> > > @@ -426,7 +426,8 @@ void i915_gem_driver_register__shrinker(struct drm_i915_private *i915)
+> > >  	i915->mm.shrinker.count_objects = i915_gem_shrinker_count;
+> > >  	i915->mm.shrinker.seeks = DEFAULT_SEEKS;
+> > >  	i915->mm.shrinker.batch = 4096;
+> > > -	drm_WARN_ON(&i915->drm, register_shrinker(&i915->mm.shrinker));
+> > > +	drm_WARN_ON(&i915->drm, register_shrinker(&i915->mm.shrinker,
+> > > +						  "drm_i915_gem"));
+> > >  
+> > >  	i915->mm.oom_notifier.notifier_call = i915_gem_shrinker_oom;
+> > >  	drm_WARN_ON(&i915->drm, register_oom_notifier(&i915->mm.oom_notifier));
+> > > diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c b/drivers/gpu/drm/msm/msm_gem_shrinker.c
+> > > index 086dacf2f26a..2d3cf4f13dfd 100644
+> > > --- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
+> > > +++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
+> > > @@ -221,7 +221,7 @@ void msm_gem_shrinker_init(struct drm_device *dev)
+> > >  	priv->shrinker.count_objects = msm_gem_shrinker_count;
+> > >  	priv->shrinker.scan_objects = msm_gem_shrinker_scan;
+> > >  	priv->shrinker.seeks = DEFAULT_SEEKS;
+> > > -	WARN_ON(register_shrinker(&priv->shrinker));
+> > > +	WARN_ON(register_shrinker(&priv->shrinker, "drm_msm_gem"));
+> > >  
+> > >  	priv->vmap_notifier.notifier_call = msm_gem_shrinker_vmap;
+> > >  	WARN_ON(register_vmap_purge_notifier(&priv->vmap_notifier));
+> > > diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> > > index 77e7cb6d1ae3..0d028266ee9e 100644
+> > > --- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> > > +++ b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> > > @@ -103,7 +103,7 @@ void panfrost_gem_shrinker_init(struct drm_device *dev)
+> > >  	pfdev->shrinker.count_objects = panfrost_gem_shrinker_count;
+> > >  	pfdev->shrinker.scan_objects = panfrost_gem_shrinker_scan;
+> > >  	pfdev->shrinker.seeks = DEFAULT_SEEKS;
+> > > -	WARN_ON(register_shrinker(&pfdev->shrinker));
+> > > +	WARN_ON(register_shrinker(&pfdev->shrinker, "drm_panfrost"));
+> > >  }
+> > >  
+> > >  /**
+> > > diff --git a/drivers/gpu/drm/ttm/ttm_pool.c b/drivers/gpu/drm/ttm/ttm_pool.c
+> > > index 1bba0a0ed3f9..b8b41d242197 100644
+> > > --- a/drivers/gpu/drm/ttm/ttm_pool.c
+> > > +++ b/drivers/gpu/drm/ttm/ttm_pool.c
+> > > @@ -722,7 +722,7 @@ int ttm_pool_mgr_init(unsigned long num_pages)
+> > >  	mm_shrinker.count_objects = ttm_pool_shrinker_count;
+> > >  	mm_shrinker.scan_objects = ttm_pool_shrinker_scan;
+> > >  	mm_shrinker.seeks = 1;
+> > > -	return register_shrinker(&mm_shrinker);
+> > > +	return register_shrinker(&mm_shrinker, "drm_ttm_pool");
+> > >  }
+> > >  
+> > >  /**
+> > > diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+> > > index ad9f16689419..c1f734ab86b3 100644
+> > > --- a/drivers/md/bcache/btree.c
+> > > +++ b/drivers/md/bcache/btree.c
+> > > @@ -812,7 +812,7 @@ int bch_btree_cache_alloc(struct cache_set *c)
+> > >  	c->shrink.seeks = 4;
+> > >  	c->shrink.batch = c->btree_pages * 2;
+> > >  
+> > > -	if (register_shrinker(&c->shrink))
+> > > +	if (register_shrinker(&c->shrink, "btree"))
+> > >  		pr_warn("bcache: %s: could not register shrinker\n",
+> > >  				__func__);
+> > >  
+> > > diff --git a/drivers/md/dm-bufio.c b/drivers/md/dm-bufio.c
+> > > index 5ffa1dcf84cf..bcc95898c341 100644
+> > > --- a/drivers/md/dm-bufio.c
+> > > +++ b/drivers/md/dm-bufio.c
+> > > @@ -1806,7 +1806,7 @@ struct dm_bufio_client *dm_bufio_client_create(struct block_device *bdev, unsign
+> > >  	c->shrinker.scan_objects = dm_bufio_shrink_scan;
+> > >  	c->shrinker.seeks = 1;
+> > >  	c->shrinker.batch = 0;
+> > > -	r = register_shrinker(&c->shrinker);
+> > > +	r = register_shrinker(&c->shrinker, "dm_bufio");
+> > >  	if (r)
+> > >  		goto bad;
+> > >  
+> > > diff --git a/drivers/md/dm-zoned-metadata.c b/drivers/md/dm-zoned-metadata.c
+> > > index d1ea66114d14..05f2fd12066b 100644
+> > > --- a/drivers/md/dm-zoned-metadata.c
+> > > +++ b/drivers/md/dm-zoned-metadata.c
+> > > @@ -2944,7 +2944,7 @@ int dmz_ctr_metadata(struct dmz_dev *dev, int num_dev,
+> > >  	zmd->mblk_shrinker.seeks = DEFAULT_SEEKS;
+> > >  
+> > >  	/* Metadata cache shrinker */
+> > > -	ret = register_shrinker(&zmd->mblk_shrinker);
+> > > +	ret = register_shrinker(&zmd->mblk_shrinker, "md_meta");
+> > >  	if (ret) {
+> > >  		dmz_zmd_err(zmd, "Register metadata cache shrinker failed");
+> > >  		goto err;
+> > > diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+> > > index 59f91e392a2a..34ddebd3aff7 100644
+> > > --- a/drivers/md/raid5.c
+> > > +++ b/drivers/md/raid5.c
+> > > @@ -7383,7 +7383,7 @@ static struct r5conf *setup_conf(struct mddev *mddev)
+> > >  	conf->shrinker.count_objects = raid5_cache_count;
+> > >  	conf->shrinker.batch = 128;
+> > >  	conf->shrinker.flags = 0;
+> > > -	if (register_shrinker(&conf->shrinker)) {
+> > > +	if (register_shrinker(&conf->shrinker, "md-%s", mdname(mddev))) {
+> > >  		pr_warn("md/raid:%s: couldn't register shrinker.\n",
+> > >  			mdname(mddev));
+> > >  		goto abort;
+> > > diff --git a/drivers/misc/vmw_balloon.c b/drivers/misc/vmw_balloon.c
+> > > index f1d8ba6d4857..6c9ddf1187dd 100644
+> > > --- a/drivers/misc/vmw_balloon.c
+> > > +++ b/drivers/misc/vmw_balloon.c
+> > > @@ -1587,7 +1587,7 @@ static int vmballoon_register_shrinker(struct vmballoon *b)
+> > >  	b->shrinker.count_objects = vmballoon_shrinker_count;
+> > >  	b->shrinker.seeks = DEFAULT_SEEKS;
+> > >  
+> > > -	r = register_shrinker(&b->shrinker);
+> > > +	r = register_shrinker(&b->shrinker, "vmw_balloon");
+> > >  
+> > >  	if (r == 0)
+> > >  		b->shrinker_registered = true;
+> > > diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+> > > index f4c34a2a6b8e..093e06e19d0e 100644
+> > > --- a/drivers/virtio/virtio_balloon.c
+> > > +++ b/drivers/virtio/virtio_balloon.c
+> > > @@ -875,7 +875,7 @@ static int virtio_balloon_register_shrinker(struct virtio_balloon *vb)
+> > >  	vb->shrinker.count_objects = virtio_balloon_shrinker_count;
+> > >  	vb->shrinker.seeks = DEFAULT_SEEKS;
+> > >  
+> > > -	return register_shrinker(&vb->shrinker);
+> > > +	return register_shrinker(&vb->shrinker, "virtio_valloon");
+> > >  }
+> > >  
+> > >  static int virtballoon_probe(struct virtio_device *vdev)
+> > > diff --git a/drivers/xen/xenbus/xenbus_probe_backend.c b/drivers/xen/xenbus/xenbus_probe_backend.c
+> > > index 5abded97e1a7..a6c5e344017d 100644
+> > > --- a/drivers/xen/xenbus/xenbus_probe_backend.c
+> > > +++ b/drivers/xen/xenbus/xenbus_probe_backend.c
+> > > @@ -305,7 +305,7 @@ static int __init xenbus_probe_backend_init(void)
+> > >  
+> > >  	register_xenstore_notifier(&xenstore_notifier);
+> > >  
+> > > -	if (register_shrinker(&backend_memory_shrinker))
+> > > +	if (register_shrinker(&backend_memory_shrinker, "xen_backend"))
+> > >  		pr_warn("shrinker registration failed\n");
+> > >  
+> > >  	return 0;
+> > > diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
+> > > index 206f44005c52..062dbd8071e2 100644
+> > > --- a/fs/btrfs/super.c
+> > > +++ b/fs/btrfs/super.c
+> > > @@ -1790,6 +1790,8 @@ static struct dentry *btrfs_mount_root(struct file_system_type *fs_type,
+> > >  			error = -EBUSY;
+> > >  	} else {
+> > >  		snprintf(s->s_id, sizeof(s->s_id), "%pg", bdev);
+> > > +		shrinker_debugfs_rename(&s->s_shrink, "sb-%s:%s", fs_type->name,
+> > > +					s->s_id);
+> > >  		btrfs_sb(s)->bdev_holder = fs_type;
+> > >  		if (!strstr(crc32c_impl(), "generic"))
+> > >  			set_bit(BTRFS_FS_CSUM_IMPL_FAST, &fs_info->flags);
+> > > diff --git a/fs/erofs/utils.c b/fs/erofs/utils.c
+> > > index ec9a1d780dc1..67eb64fadd4f 100644
+> > > --- a/fs/erofs/utils.c
+> > > +++ b/fs/erofs/utils.c
+> > > @@ -282,7 +282,7 @@ static struct shrinker erofs_shrinker_info = {
+> > >  
+> > >  int __init erofs_init_shrinker(void)
+> > >  {
+> > > -	return register_shrinker(&erofs_shrinker_info);
+> > > +	return register_shrinker(&erofs_shrinker_info, "erofs");
+> > >  }
+> > >  
+> > >  void erofs_exit_shrinker(void)
+> > > diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
+> > > index 9a3a8996aacf..a7aa79d580e5 100644
+> > > --- a/fs/ext4/extents_status.c
+> > > +++ b/fs/ext4/extents_status.c
+> > > @@ -1650,11 +1650,10 @@ int ext4_es_register_shrinker(struct ext4_sb_info *sbi)
+> > >  	err = percpu_counter_init(&sbi->s_es_stats.es_stats_shk_cnt, 0, GFP_KERNEL);
+> > >  	if (err)
+> > >  		goto err3;
+> > > -
+> > >  	sbi->s_es_shrinker.scan_objects = ext4_es_scan;
+> > >  	sbi->s_es_shrinker.count_objects = ext4_es_count;
+> > >  	sbi->s_es_shrinker.seeks = DEFAULT_SEEKS;
+> > > -	err = register_shrinker(&sbi->s_es_shrinker);
+> > > +	err = register_shrinker(&sbi->s_es_shrinker, "ext4_es");
+> > >  	if (err)
+> > >  		goto err4;
+> > >  
+> > > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> > > index 4368f90571bd..2fc40a1635f3 100644
+> > > --- a/fs/f2fs/super.c
+> > > +++ b/fs/f2fs/super.c
+> > > @@ -4579,7 +4579,7 @@ static int __init init_f2fs_fs(void)
+> > >  	err = f2fs_init_sysfs();
+> > >  	if (err)
+> > >  		goto free_garbage_collection_cache;
+> > > -	err = register_shrinker(&f2fs_shrinker_info);
+> > > +	err = register_shrinker(&f2fs_shrinker_info, "f2fs");
+> > >  	if (err)
+> > >  		goto free_sysfs;
+> > >  	err = register_filesystem(&f2fs_fs_type);
+> > > diff --git a/fs/gfs2/glock.c b/fs/gfs2/glock.c
+> > > index 26169cedcefc..791c23d9f7e7 100644
+> > > --- a/fs/gfs2/glock.c
+> > > +++ b/fs/gfs2/glock.c
+> > > @@ -2549,7 +2549,7 @@ int __init gfs2_glock_init(void)
+> > >  		return -ENOMEM;
+> > >  	}
+> > >  
+> > > -	ret = register_shrinker(&glock_shrinker);
+> > > +	ret = register_shrinker(&glock_shrinker, "gfs2_glock");
+> > >  	if (ret) {
+> > >  		destroy_workqueue(gfs2_delete_workqueue);
+> > >  		destroy_workqueue(glock_workqueue);
+> > > diff --git a/fs/gfs2/main.c b/fs/gfs2/main.c
+> > > index 28d0eb23e18e..dde981b78488 100644
+> > > --- a/fs/gfs2/main.c
+> > > +++ b/fs/gfs2/main.c
+> > > @@ -150,7 +150,7 @@ static int __init init_gfs2_fs(void)
+> > >  	if (!gfs2_trans_cachep)
+> > >  		goto fail_cachep8;
+> > >  
+> > > -	error = register_shrinker(&gfs2_qd_shrinker);
+> > > +	error = register_shrinker(&gfs2_qd_shrinker, "gfs2_qd");
+> > >  	if (error)
+> > >  		goto fail_shrinker;
+> > >  
+> > > diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
+> > > index c0cbeeaec2d1..e7786445ecc1 100644
+> > > --- a/fs/jbd2/journal.c
+> > > +++ b/fs/jbd2/journal.c
+> > > @@ -1418,7 +1418,7 @@ static journal_t *journal_init_common(struct block_device *bdev,
+> > >  	if (percpu_counter_init(&journal->j_checkpoint_jh_count, 0, GFP_KERNEL))
+> > >  		goto err_cleanup;
+> > >  
+> > > -	if (register_shrinker(&journal->j_shrinker)) {
+> > > +	if (register_shrinker(&journal->j_shrinker, "jbd2_journal")) {
+> > >  		percpu_counter_destroy(&journal->j_checkpoint_jh_count);
+> > >  		goto err_cleanup;
+> > >  	}
+> > > diff --git a/fs/mbcache.c b/fs/mbcache.c
+> > > index 97c54d3a2227..379dc5b0b6ad 100644
+> > > --- a/fs/mbcache.c
+> > > +++ b/fs/mbcache.c
+> > > @@ -367,7 +367,7 @@ struct mb_cache *mb_cache_create(int bucket_bits)
+> > >  	cache->c_shrink.count_objects = mb_cache_count;
+> > >  	cache->c_shrink.scan_objects = mb_cache_scan;
+> > >  	cache->c_shrink.seeks = DEFAULT_SEEKS;
+> > > -	if (register_shrinker(&cache->c_shrink)) {
+> > > +	if (register_shrinker(&cache->c_shrink, "mb_cache")) {
+> > >  		kfree(cache->c_hash);
+> > >  		kfree(cache);
+> > >  		goto err_out;
+> > > diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
+> > > index e7b34f7e0614..147b8a2f2dc6 100644
+> > > --- a/fs/nfs/nfs42xattr.c
+> > > +++ b/fs/nfs/nfs42xattr.c
+> > > @@ -1017,15 +1017,16 @@ int __init nfs4_xattr_cache_init(void)
+> > >  	if (ret)
+> > >  		goto out2;
+> > >  
+> > > -	ret = register_shrinker(&nfs4_xattr_cache_shrinker);
+> > > +	ret = register_shrinker(&nfs4_xattr_cache_shrinker, "nfs_xattr_cache");
+> > >  	if (ret)
+> > >  		goto out1;
+> > >  
+> > > -	ret = register_shrinker(&nfs4_xattr_entry_shrinker);
+> > > +	ret = register_shrinker(&nfs4_xattr_entry_shrinker, "nfs_xattr_entry");
+> > >  	if (ret)
+> > >  		goto out;
+> > >  
+> > > -	ret = register_shrinker(&nfs4_xattr_large_entry_shrinker);
+> > > +	ret = register_shrinker(&nfs4_xattr_large_entry_shrinker,
+> > > +				"nfs_xattr_large_entry");
+> > >  	if (!ret)
+> > >  		return 0;
+> > >  
+> > > diff --git a/fs/nfs/super.c b/fs/nfs/super.c
+> > > index 6ab5eeb000dc..c7a2aef911f1 100644
+> > > --- a/fs/nfs/super.c
+> > > +++ b/fs/nfs/super.c
+> > > @@ -149,7 +149,7 @@ int __init register_nfs_fs(void)
+> > >  	ret = nfs_register_sysctl();
+> > >  	if (ret < 0)
+> > >  		goto error_2;
+> > > -	ret = register_shrinker(&acl_shrinker);
+> > > +	ret = register_shrinker(&acl_shrinker, "nfs_acl");
+> > >  	if (ret < 0)
+> > >  		goto error_3;
+> > >  #ifdef CONFIG_NFS_V4_2
+> > > diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
+> > > index 2c1b027774d4..9c2879a3c3c0 100644
+> > > --- a/fs/nfsd/filecache.c
+> > > +++ b/fs/nfsd/filecache.c
+> > > @@ -666,7 +666,7 @@ nfsd_file_cache_init(void)
+> > >  		goto out_err;
+> > >  	}
+> > >  
+> > > -	ret = register_shrinker(&nfsd_file_shrinker);
+> > > +	ret = register_shrinker(&nfsd_file_shrinker, "nfsd_filecache");
+> > >  	if (ret) {
+> > >  		pr_err("nfsd: failed to register nfsd_file_shrinker: %d\n", ret);
+> > >  		goto out_lru;
+> > > diff --git a/fs/nfsd/nfscache.c b/fs/nfsd/nfscache.c
+> > > index 0b3f12aa37ff..f1cfb06d0be5 100644
+> > > --- a/fs/nfsd/nfscache.c
+> > > +++ b/fs/nfsd/nfscache.c
+> > > @@ -176,7 +176,7 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
+> > >  	nn->nfsd_reply_cache_shrinker.scan_objects = nfsd_reply_cache_scan;
+> > >  	nn->nfsd_reply_cache_shrinker.count_objects = nfsd_reply_cache_count;
+> > >  	nn->nfsd_reply_cache_shrinker.seeks = 1;
+> > > -	status = register_shrinker(&nn->nfsd_reply_cache_shrinker);
+> > > +	status = register_shrinker(&nn->nfsd_reply_cache_shrinker, "nfsd_reply");
+> > >  	if (status)
+> > >  		goto out_stats_destroy;
+> > >  
+> > > diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
+> > > index a74aef99bd3d..854d2b1d0914 100644
+> > > --- a/fs/quota/dquot.c
+> > > +++ b/fs/quota/dquot.c
+> > > @@ -2985,7 +2985,7 @@ static int __init dquot_init(void)
+> > >  	pr_info("VFS: Dquot-cache hash table entries: %ld (order %ld,"
+> > >  		" %ld bytes)\n", nr_hash, order, (PAGE_SIZE << order));
+> > >  
+> > > -	if (register_shrinker(&dqcache_shrinker))
+> > > +	if (register_shrinker(&dqcache_shrinker, "dqcache"))
+> > >  		panic("Cannot register dquot shrinker");
+> > >  
+> > >  	return 0;
+> > > diff --git a/fs/super.c b/fs/super.c
+> > > index 60f57c7bc0a6..4fca6657f442 100644
+> > > --- a/fs/super.c
+> > > +++ b/fs/super.c
+> > > @@ -265,7 +265,7 @@ static struct super_block *alloc_super(struct file_system_type *type, int flags,
+> > >  	s->s_shrink.count_objects = super_cache_count;
+> > >  	s->s_shrink.batch = 1024;
+> > >  	s->s_shrink.flags = SHRINKER_NUMA_AWARE | SHRINKER_MEMCG_AWARE;
+> > > -	if (prealloc_shrinker(&s->s_shrink))
+> > > +	if (prealloc_shrinker(&s->s_shrink, "sb-%s", type->name))
+> > >  		goto fail;
+> > >  	if (list_lru_init_memcg(&s->s_dentry_lru, &s->s_shrink))
+> > >  		goto fail;
+> > > @@ -1288,6 +1288,8 @@ int get_tree_bdev(struct fs_context *fc,
+> > >  	} else {
+> > >  		s->s_mode = mode;
+> > >  		snprintf(s->s_id, sizeof(s->s_id), "%pg", bdev);
+> > > +		shrinker_debugfs_rename(&s->s_shrink, "sb-%s:%s",
+> > > +					fc->fs_type->name, s->s_id);
+> > >  		sb_set_blocksize(s, block_size(bdev));
+> > >  		error = fill_super(s, fc);
+> > >  		if (error) {
+> > > @@ -1363,6 +1365,8 @@ struct dentry *mount_bdev(struct file_system_type *fs_type,
+> > >  	} else {
+> > >  		s->s_mode = mode;
+> > >  		snprintf(s->s_id, sizeof(s->s_id), "%pg", bdev);
+> > > +		shrinker_debugfs_rename(&s->s_shrink, "sb-%s:%s",
+> > > +					fs_type->name, s->s_id);
+> > >  		sb_set_blocksize(s, block_size(bdev));
+> > >  		error = fill_super(s, data, flags & SB_SILENT ? 1 : 0);
+> > >  		if (error) {
+> > > diff --git a/fs/ubifs/super.c b/fs/ubifs/super.c
+> > > index bad67455215f..a3663d201f64 100644
+> > > --- a/fs/ubifs/super.c
+> > > +++ b/fs/ubifs/super.c
+> > > @@ -2430,7 +2430,7 @@ static int __init ubifs_init(void)
+> > >  	if (!ubifs_inode_slab)
+> > >  		return -ENOMEM;
+> > >  
+> > > -	err = register_shrinker(&ubifs_shrinker_info);
+> > > +	err = register_shrinker(&ubifs_shrinker_info, "ubifs");
+> > >  	if (err)
+> > >  		goto out_slab;
+> > >  
+> > > diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
+> > > index e1afb9e503e1..5645e92df0c9 100644
+> > > --- a/fs/xfs/xfs_buf.c
+> > > +++ b/fs/xfs/xfs_buf.c
+> > > @@ -1986,7 +1986,7 @@ xfs_alloc_buftarg(
+> > >  	btp->bt_shrinker.scan_objects = xfs_buftarg_shrink_scan;
+> > >  	btp->bt_shrinker.seeks = DEFAULT_SEEKS;
+> > >  	btp->bt_shrinker.flags = SHRINKER_NUMA_AWARE;
+> > > -	if (register_shrinker(&btp->bt_shrinker))
+> > > +	if (register_shrinker(&btp->bt_shrinker, "xfs_buf"))
+> > >  		goto error_pcpu;
+> > >  	return btp;
+> > >  
+> > > diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
+> > > index bffd6eb0b298..d0c4e74ff763 100644
+> > > --- a/fs/xfs/xfs_icache.c
+> > > +++ b/fs/xfs/xfs_icache.c
+> > > @@ -2198,5 +2198,5 @@ xfs_inodegc_register_shrinker(
+> > >  	shrink->flags = SHRINKER_NONSLAB;
+> > >  	shrink->batch = XFS_INODEGC_SHRINKER_BATCH;
+> > >  
+> > > -	return register_shrinker(shrink);
+> > > +	return register_shrinker(shrink, "xfs_inodegc");
+> > >  }
+> > > diff --git a/fs/xfs/xfs_qm.c b/fs/xfs/xfs_qm.c
+> > > index f165d1a3de1d..93ded9e81f49 100644
+> > > --- a/fs/xfs/xfs_qm.c
+> > > +++ b/fs/xfs/xfs_qm.c
+> > > @@ -686,7 +686,7 @@ xfs_qm_init_quotainfo(
+> > >  	qinf->qi_shrinker.seeks = DEFAULT_SEEKS;
+> > >  	qinf->qi_shrinker.flags = SHRINKER_NUMA_AWARE;
+> > >  
+> > > -	error = register_shrinker(&qinf->qi_shrinker);
+> > > +	error = register_shrinker(&qinf->qi_shrinker, "xfs_qm");
+> > >  	if (error)
+> > >  		goto out_free_inos;
+> > >  
+> > > diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
+> > > index 2ced8149c513..64416f3e0a1f 100644
+> > > --- a/include/linux/shrinker.h
+> > > +++ b/include/linux/shrinker.h
+> > > @@ -75,6 +75,7 @@ struct shrinker {
+> > >  #endif
+> > >  #ifdef CONFIG_SHRINKER_DEBUG
+> > >  	int debugfs_id;
+> > > +	const char *name;
+> > >  	struct dentry *debugfs_entry;
+> > >  #endif
+> > >  	/* objs pending delete, per node */
+> > > @@ -92,9 +93,9 @@ struct shrinker {
+> > >   */
+> > >  #define SHRINKER_NONSLAB	(1 << 3)
+> > >  
+> > > -extern int prealloc_shrinker(struct shrinker *shrinker);
+> > > +extern int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...);
+> > >  extern void register_shrinker_prepared(struct shrinker *shrinker);
+> > > -extern int register_shrinker(struct shrinker *shrinker);
+> > > +extern int register_shrinker(struct shrinker *shrinker, const char *fmt, ...);
+> > >  extern void unregister_shrinker(struct shrinker *shrinker);
+> > >  extern void free_prealloced_shrinker(struct shrinker *shrinker);
+> > >  extern void synchronize_shrinkers(void);
+> > > @@ -102,6 +103,8 @@ extern void synchronize_shrinkers(void);
+> > >  #ifdef CONFIG_SHRINKER_DEBUG
+> > >  extern int shrinker_debugfs_add(struct shrinker *shrinker);
+> > >  extern void shrinker_debugfs_remove(struct shrinker *shrinker);
+> > > +extern int shrinker_debugfs_rename(struct shrinker *shrinker,
+> > > +				   const char *fmt, ...);
+> > >  #else /* CONFIG_SHRINKER_DEBUG */
+> > >  static inline int shrinker_debugfs_add(struct shrinker *shrinker)
+> > >  {
+> > > @@ -110,5 +113,10 @@ static inline int shrinker_debugfs_add(struct shrinker *shrinker)
+> > >  static inline void shrinker_debugfs_remove(struct shrinker *shrinker)
+> > >  {
+> > >  }
+> > > +static inline int shrinker_debugfs_rename(struct shrinker *shrinker,
+> > > +					  const char *fmt, ...)
+> > > +{
+> > > +	return 0;
+> > > +}
+> > >  #endif /* CONFIG_SHRINKER_DEBUG */
+> > >  #endif /* _LINUX_SHRINKER_H */
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index 5c587e00811c..b4c66916bea9 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -4978,7 +4978,7 @@ static void __init kfree_rcu_batch_init(void)
+> > >  		INIT_DELAYED_WORK(&krcp->page_cache_work, fill_page_cache_func);
+> > >  		krcp->initialized = true;
+> > >  	}
+> > > -	if (register_shrinker(&kfree_rcu_shrinker))
+> > > +	if (register_shrinker(&kfree_rcu_shrinker, "kfree_rcu"))
+> > >  		pr_err("Failed to register kfree_rcu() shrinker!\n");
+> > >  }
+> > >  
+> > > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > > index fa6a1623976a..a40df19c0e38 100644
+> > > --- a/mm/huge_memory.c
+> > > +++ b/mm/huge_memory.c
+> > > @@ -423,10 +423,10 @@ static int __init hugepage_init(void)
+> > >  	if (err)
+> > >  		goto err_slab;
+> > >  
+> > > -	err = register_shrinker(&huge_zero_page_shrinker);
+> > > +	err = register_shrinker(&huge_zero_page_shrinker, "thp_zero");
+> > >  	if (err)
+> > >  		goto err_hzp_shrinker;
+> > > -	err = register_shrinker(&deferred_split_shrinker);
+> > > +	err = register_shrinker(&deferred_split_shrinker, "thp_deferred_split");
+> > >  	if (err)
+> > >  		goto err_split_shrinker;
+> > >  
+> > > diff --git a/mm/shrinker_debug.c b/mm/shrinker_debug.c
+> > > index fd1f805a581a..28b1c1ab60ef 100644
+> > > --- a/mm/shrinker_debug.c
+> > > +++ b/mm/shrinker_debug.c
+> > > @@ -104,7 +104,7 @@ DEFINE_SHOW_ATTRIBUTE(shrinker_debugfs_count);
+> > >  int shrinker_debugfs_add(struct shrinker *shrinker)
+> > >  {
+> > >  	struct dentry *entry;
+> > > -	char buf[16];
+> > > +	char buf[128];
+> > >  	int id;
+> > >  
+> > >  	lockdep_assert_held(&shrinker_rwsem);
+> > > @@ -118,7 +118,7 @@ int shrinker_debugfs_add(struct shrinker *shrinker)
+> > >  		return id;
+> > >  	shrinker->debugfs_id = id;
+> > >  
+> > > -	snprintf(buf, sizeof(buf), "%d", id);
+> > > +	snprintf(buf, sizeof(buf), "%s-%d", shrinker->name, id);
+> > >  
+> > >  	/* create debugfs entry */
+> > >  	entry = debugfs_create_dir(buf, shrinker_debugfs_root);
+> > > @@ -133,10 +133,51 @@ int shrinker_debugfs_add(struct shrinker *shrinker)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +int shrinker_debugfs_rename(struct shrinker *shrinker, const char *fmt, ...)
+> > > +{
+> > > +	struct dentry *entry;
+> > > +	char buf[128];
+> > > +	const char *old;
+> > > +	va_list ap;
+> > > +	int ret = 0;
+> > > +
+> > > +	down_write(&shrinker_rwsem);
+> > > +
+> > > +	old = shrinker->name;
+> > > +
+> > > +	va_start(ap, fmt);
+> > > +	shrinker->name = kvasprintf_const(GFP_KERNEL, fmt, ap);
+> > > +	va_end(ap);
+> > > +	if (!shrinker->name) {
+> > > +		shrinker->name = old;
+> > > +		ret = -ENOMEM;
+> > 
+> > Seems we could move those 6 lines out of shrinker_rwsem.  I know
+> > this function is not in a hot path, but it it better to improve
+> > it if it is easy, right?
+> 
+> Not sure if it worth it, but ok, it's indeed easy.
+> 
+> > 
+> > > +	} else if (shrinker->debugfs_entry) {
+> > > +		snprintf(buf, sizeof(buf), "%s-%d", shrinker->name,
+> > > +			 shrinker->debugfs_id);
+> > > +
+> > > +		entry = debugfs_rename(shrinker_debugfs_root,
+> > > +				       shrinker->debugfs_entry,
+> > > +				       shrinker_debugfs_root, buf);
+> > > +		if (IS_ERR(entry))
+> > > +			ret = PTR_ERR(entry);
+> > > +		else
+> > > +			shrinker->debugfs_entry = entry;
+> > > +
+> > > +		kfree_const(old);
+> > > +	}
+> > > +
+> > > +	up_write(&shrinker_rwsem);
+> > > +
+> > > +	return ret;
+> > > +}
+> > > +EXPORT_SYMBOL(shrinker_debugfs_rename);
+> > > +
+> > >  void shrinker_debugfs_remove(struct shrinker *shrinker)
+> > >  {
+> > >  	lockdep_assert_held(&shrinker_rwsem);
+> > >  
+> > > +	kfree_const(shrinker->name);
+> > > +
+> > >  	if (!shrinker->debugfs_entry)
+> > >  		return;
+> > >  
+> > > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > > index 024f7056b98c..42bae0fd0442 100644
+> > > --- a/mm/vmscan.c
+> > > +++ b/mm/vmscan.c
+> > > @@ -613,7 +613,7 @@ static unsigned long lruvec_lru_size(struct lruvec *lruvec, enum lru_list lru,
+> > >  /*
+> > >   * Add a shrinker callback to be called from the vm.
+> > >   */
+> > > -int prealloc_shrinker(struct shrinker *shrinker)
+> > > +static int __prealloc_shrinker(struct shrinker *shrinker)
+> > >  {
+> > >  	unsigned int size;
+> > >  	int err;
+> > > @@ -637,8 +637,36 @@ int prealloc_shrinker(struct shrinker *shrinker)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +#ifdef CONFIG_SHRINKER_DEBUG
+> > > +int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...)
+> > > +{
+> > > +	va_list ap;
+> > > +	int err;
+> > > +
+> > > +	va_start(ap, fmt);
+> > > +	shrinker->name = kvasprintf_const(GFP_KERNEL, fmt, ap);
+> > > +	va_end(ap);
+> > > +	if (!shrinker->name)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	err = __prealloc_shrinker(shrinker);
+> > > +	if (err)
+> > > +		kfree_const(shrinker->name);
+> > > +
+> > > +	return err;
+> > > +}
+> > > +#else
+> > > +int prealloc_shrinker(struct shrinker *shrinker, const char *fmt, ...)
+> > > +{
+> > > +	return __prealloc_shrinker(shrinker);
+> > > +}
+> > > +#endif
+> > > +
+> > >  void free_prealloced_shrinker(struct shrinker *shrinker)
+> > >  {
+> > > +#ifdef CONFIG_SHRINKER_DEBUG
+> > > +	kfree_const(shrinker->name);
+> > > +#endif
+> > >  	if (shrinker->flags & SHRINKER_MEMCG_AWARE) {
+> > >  		down_write(&shrinker_rwsem);
+> > >  		unregister_memcg_shrinker(shrinker);
+> > > @@ -659,15 +687,39 @@ void register_shrinker_prepared(struct shrinker *shrinker)
+> > >  	up_write(&shrinker_rwsem);
+> > >  }
+> > >  
+> > > -int register_shrinker(struct shrinker *shrinker)
+> > > +static int __register_shrinker(struct shrinker *shrinker)
+> > >  {
+> > > -	int err = prealloc_shrinker(shrinker);
+> > > +	int err = __prealloc_shrinker(shrinker);
+> > >  
+> > >  	if (err)
+> > >  		return err;
+> > >  	register_shrinker_prepared(shrinker);
+> > >  	return 0;
+> > >  }
+> > > +
+> > > +#ifdef CONFIG_SHRINKER_DEBUG
+> > > +int register_shrinker(struct shrinker *shrinker, const char *fmt, ...)
+> > > +{
+> > > +	va_list ap;
+> > > +	int err;
+> > > +
+> > > +	va_start(ap, fmt);
+> > > +	shrinker->name = kvasprintf_const(GFP_KERNEL, fmt, ap);
+> > > +	va_end(ap);
+> > > +	if (!shrinker->name)
+> > > +		return -ENOMEM;
+> > > +
+> > 
+> > How about moving those initialization of name into shrinker_debugfs_add()?
+> > Then maybe we could hide handling to "name" from vmscan.c.
+> 
+> shrinker_debugfs_add() can be delayed up to the moment when debugfs is
+> initialized. Some shrinkers are registered earlier. So it's not (easily)
+> possible.
+>
 
-please pull from
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2022052401
-
-to receive HID subsystem patch queue for 5.19 merge window. Highlights:
-
-=====
-- support for pens with 3 buttons with Wacom driver (Joshua Dickens)
-- support for HID_DG_SCANTIME to report the timestamp for pen and touch 
-  events in Wacom driver (Joshua Dickens)
-- support for sensor discovery in amd-sfh driver (Basavaraj Natikar)
-- support for wider variety of Huion tablets ported from DIGImend project 
-  (José Expósito, Nikolai Kondrashov)
-- new device IDs and other assorted small code cleanups
-=====
+You are right. I just tried it and then I gave up.
+It it not easy as you said.
 
 Thanks.
-
-----------------------------------------------------------------
-Basavaraj Natikar (7):
-      HID: amd_sfh: Add support for sensor discovery
-      HID: amd_sfh: Add sensor name by index for debug info
-      HID: amd_sfh: Modify the bus name
-      HID: amd_sfh: Modify the hid name
-      HID: amd_sfh: Add physical location to HID device
-      HID: amd_sfh: Move bus declaration outside of amd-sfh
-      HID: core: Display "SENSOR HUB" for sensor hub bus string in hid_info
-
-Bastien Nocera (1):
-      HID: wacom: Correct power_supply type
-
-Bryan Cain (1):
-      HID: apple: Properly handle function keys on Keychron keyboards
-
-Dongliang Mu (1):
-      HID: bigben: fix slab-out-of-bounds Write in bigben_probe
-
-Even Xu (1):
-      HID: intel-ish-hid: ipc: add ADL and RPL device id
-
-Jonathan Teh (1):
-      HID: hid-led: fix maximum brightness for Dream Cheeky
-
-Joshua-Dickens (2):
-      HID: wacom: Adding Support for new usages
-      Hid: wacom: Fix kernel test robot warning
-
-Marek Ma¶lanka (1):
-      HID: multitouch: Add support for Google Whiskers Touchpad
-
-Miaoqian Lin (1):
-      HID: elan: Fix potential double free in elan_input_configured
-
-Nehal Bakulchandra Shah (1):
-      HID: amd_sfh: Remove name from maintainers list
-
-Nikolai Kondrashov (19):
-      HID: uclogic: Add support for touch ring reports
-      HID: uclogic: Support custom device suffix for frames
-      HID: uclogic: Allow three frame parameter sets
-      HID: uclogic: Add support for Huion touch ring reports
-      HID: uclogic: Compress params format string
-      HID: uclogic: Reduce indent for params format str/args
-      HID: uclogic: Add support for bitmap dials
-      HID: uclogic: Add support for Huion Q620M
-      HID: uclogic: Clarify params desc_size description
-      HID: uclogic: Clarify pen/frame desc_ptr description
-      HID: uclogic: Pass keyboard reports as is
-      HID: uclogic: Support disabling pen usage
-      HID: uclogic: Disable pen usage for Huion keyboard interfaces
-      HID: uclogic: Move param printing to a function
-      HID: uclogic: Return raw parameters from v2 pen init
-      HID: uclogic: Do not focus on touch ring only
-      HID: uclogic: Always shift touch reports to zero
-      HID: uclogic: Differentiate touch ring and touch strip
-      HID: uclogic: Switch to Digitizer usage for styluses
-
-Ping Cheng (1):
-      MAINTAINERS: Add Wacom driver maintainers
-
-Roman Romanenko (1):
-      HID: uclogic: Add pen support for XP-PEN Star 06
-
-Tao Jin (1):
-      HID: multitouch: add quirks to enable Lenovo X12 trackpoint
-
-Tom Rix (1):
-      HID: amd_sfh: change global variables to static
-
-ValdikSS (3):
-      HID: lenovo: Add support for ThinkPad TrackPoint Keyboard II
-      HID: lenovo: Sync Fn-lock state on button press for Compact and TrackPoint II keyboards
-      HID: lenovo: Add note about different report numbers
-
-frank zago (1):
-      HID: Add support for Mega World controller force feedback
-
- MAINTAINERS                                        |   9 +-
- drivers/hid/Kconfig                                |   8 +
- drivers/hid/Makefile                               |   1 +
- drivers/hid/amd-sfh-hid/amd_sfh_client.c           |  45 +++-
- drivers/hid/amd-sfh-hid/amd_sfh_hid.c              |   9 +-
- drivers/hid/amd-sfh-hid/amd_sfh_hid.h              |   1 -
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.c             |  17 +-
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.h             |   5 +
- .../hid_descriptor/amd_sfh_hid_report_desc.h       |   6 +-
- drivers/hid/hid-apple.c                            |  22 +-
- drivers/hid/hid-bigbenff.c                         |   6 +
- drivers/hid/hid-core.c                             |   4 +
- drivers/hid/hid-elan.c                             |   2 -
- drivers/hid/hid-ids.h                              |   7 +
- drivers/hid/hid-kye.c                              |  12 +-
- drivers/hid/hid-led.c                              |   2 +-
- drivers/hid/hid-lenovo.c                           | 174 ++++++++++++-
- drivers/hid/hid-megaworld.c                        | 125 +++++++++
- drivers/hid/hid-multitouch.c                       |   9 +
- drivers/hid/hid-uclogic-core.c                     | 113 ++++++--
- drivers/hid/hid-uclogic-params.c                   | 288 +++++++++++++++++----
- drivers/hid/hid-uclogic-params.h                   | 105 ++++----
- drivers/hid/hid-uclogic-rdesc.c                    | 181 +++++++++++--
- drivers/hid/hid-uclogic-rdesc.h                    |  34 ++-
- drivers/hid/hid-viewsonic.c                        |   2 +-
- drivers/hid/intel-ish-hid/ipc/hw-ish.h             |   2 +
- drivers/hid/intel-ish-hid/ipc/pci-ish.c            |   2 +
- drivers/hid/wacom_sys.c                            |   2 +-
- drivers/hid/wacom_wac.c                            |  43 ++-
- drivers/hid/wacom_wac.h                            |   5 +
- include/uapi/linux/input.h                         |   1 +
- 31 files changed, 1054 insertions(+), 188 deletions(-)
- create mode 100644 drivers/hid/hid-megaworld.c
-
--- 
-Jiri Kosina
-SUSE Labs
 

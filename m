@@ -2,129 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FB6532CFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6EA532DCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238394AbiEXPKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
+        id S239061AbiEXPq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235238AbiEXPKu (ORCPT
+        with ESMTP id S236171AbiEXPq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:10:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62A538B094
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653405036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XEo1NssAVGQZOfwlIMOHsifxPwTmlidTFKTUs0/1OgM=;
-        b=L7dDmUE4h7qchINggUWBPsW/PXLkUMQ+xM/7/SPh349wAzf24VaQVWZw5gbGtoFgPTqrO9
-        uut4jyr00R0MGwUmlSful/QZaK9X+w2jYyjx105SLg+00//2HbZ6TYJduPrVK9QTe1XpGb
-        qBIcdI++u7p/qMOZpDOBYS6GvRvtieE=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-447-bmIhUIT_NuKIzN2YWpP2Wg-1; Tue, 24 May 2022 11:09:09 -0400
-X-MC-Unique: bmIhUIT_NuKIzN2YWpP2Wg-1
-Received: by mail-oi1-f198.google.com with SMTP id f2-20020aca3802000000b0032b0a4dc9a8so4164016oia.12
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:09:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=XEo1NssAVGQZOfwlIMOHsifxPwTmlidTFKTUs0/1OgM=;
-        b=SFtg0TXjwJ5gInr9MLKZ+0dHeYie2pn0BFcrXVql8sl9jxwlGNrtfLCEcRIXzN8nyD
-         806686FEu9gc/gPPERDmOqCODPYd6I+1MgL5wyU3BlMw3SK08a/m7FxkonDgCMXFT+cp
-         cpEa6Ht39+Ooloy6t6amSC02zCR13Fd4wGkwxfLwWmF6XjUmj22KdNL4XHCNsV21BXua
-         S79AXv4t7Thrs57uWK1wLYnc3ZwlZYgC0rf8tpuc4gLGmyTNfx+kvt8tsudB6Kpd6H5c
-         oX9/R8BOEoUrEmq0Td2V8MM5cvIfF4jY1Lw5uBT+CgMxvkvowLtN+wIN4cuNGL2vNIlY
-         7TNg==
-X-Gm-Message-State: AOAM533nMsHcQOBNNIJ1+D5UREJbdfmFOx3D9cuFgG/qfobE/alk10+S
-        g4NnVr6Ey/Sb/0SgBxnC+WcIAwJ7MKM/265Hlut4mcNlGvFHcGsTEGGG+InqRtswt8AYpq6gzFL
-        2TaqJkd60pJrJoYj37lMwR0k1
-X-Received: by 2002:a9d:811:0:b0:60a:b6f2:ab85 with SMTP id 17-20020a9d0811000000b0060ab6f2ab85mr6516333oty.9.1653404948239;
-        Tue, 24 May 2022 08:09:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy2Rrz8fDExW7WCjRqyXrFYjg5Q3G0iEtos25IWByh96ynkYINF5ql63GdcjlrT4RcCKJU4fg==
-X-Received: by 2002:a9d:811:0:b0:60a:b6f2:ab85 with SMTP id 17-20020a9d0811000000b0060ab6f2ab85mr6516299oty.9.1653404947414;
-        Tue, 24 May 2022 08:09:07 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id k17-20020a9d1991000000b0060b0b638583sm3021001otk.13.2022.05.24.08.09.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 08:09:07 -0700 (PDT)
-Subject: Re: [PATCH] ath6kl: Use cc-disable-warning to disable
- -Wdangling-pointer
-To:     Nathan Chancellor <nathan@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "kernelci.org bot" <bot@kernelci.org>
-References: <20220524145655.869822-1-nathan@kernel.org>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <c7a804ed-e00c-8a32-db21-c689312e0073@redhat.com>
-Date:   Tue, 24 May 2022 08:09:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <20220524145655.869822-1-nathan@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 24 May 2022 11:46:57 -0400
+X-Greylist: delayed 2197 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 May 2022 08:46:55 PDT
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207E369CD4;
+        Tue, 24 May 2022 08:46:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=T9kVwBVV655q2jjBqBTVTMqSm4y1htgJfQgySVDPZwA=; b=cqpbUo6/iaW2vwimgwGk1A2w6E
+        eUNVFPgjnZyOUhl+jzmlBAg9kYIk7E0H0BEDtSxzbP2dAF+eK78oKcrQANB/NJ5iXxMFqO1usG6Fi
+        HHCFDzdr+eq983CCGF5eE1DlKufzd++Lc7koKQUSm8SAm8naP4MoeBHd5M3WxzmkfW5k=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:50202 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1ntWAe-0005Ct-U1; Tue, 24 May 2022 11:10:12 -0400
+Date:   Tue, 24 May 2022 11:10:04 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <20220524111004.7b0fd6c492c835e7f1ee22b7@hugovil.com>
+In-Reply-To: <YjNs4YykJWZi/t/z@piout.net>
+References: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
+        <20220309162301.61679-11-alexandre.belloni@bootlin.com>
+        <20220310110918.41a681474f5a0e11abdedc39@hugovil.com>
+        <Yiplnqlz2DSXCvi8@piout.net>
+        <20220317112820.7617d0d68f50f24ad0c3739e@hugovil.com>
+        <YjNs4YykJWZi/t/z@piout.net>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH 11/29] rtc: pcf2127: set RTC_FEATURE_ALARM_RES_2S
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 17 Mar 2022 18:16:17 +0100
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-On 5/24/22 7:56 AM, Nathan Chancellor wrote:
-> Clang does not support this option so the build fails:
->
->    error: unknown warning option '-Wno-dangling-pointer' [-Werror,-Wunknown-warning-option]
->
-> Use cc-disable-warning so that the option is only added when it is
-> supported.
->
-> Fixes: bd1d129daa3e ("wifi: ath6k: silence false positive -Wno-dangling-pointer warning on GCC 12")
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Hi,
+> 
+> On 17/03/2022 11:28:20-0400, Hugo Villeneuve wrote:
+> > On Thu, 10 Mar 2022 21:58:49 +0100
+> > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > 
+> > > On 10/03/2022 11:09:18-0500, Hugo Villeneuve wrote:
+> > > > On Wed,  9 Mar 2022 17:22:42 +0100
+> > > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > > > 
+> > > > > The PCF2127 doesn't support UIE because setting an alarm to fire every
+> > > > > second confuses the chip and the fastest we can go is an alarm every 2
+> > > > > seconds.
+> > > > 
+> > > > Hi Alexandre,
+> > > > can you describe what "confuses the chip" means?
+> > > > 
+> > > > In my experimental PCF2131 driver, I activated UIE and it seems to be working fine at 1s intervals, but since it is similar to PCF2127, maybe there is still a problem and I just didn't see it.
+> > > > 
+> > > 
+> > > Did you remove uie_unsupported? Else, you may have been using uie
+> > > emulation. In my tests last year, the pcf2127 was failing to reassert
+> > > the interrupt if an alarm was set every second. The same happens on
+> > > other NXP based RTCs (i.e. including microcrystal ones).
+> > > 
+> > > I'm going to test again soon (and also reply to your series).
+> > 
+> > Hi,
+> > I have now access to a board with a PCF2129T.
+> > 
+> 
+> I actually did the test again this afternoon with a pcf2127...
+> 
+> > I have been able to test with it by sending ioctl RTC_UIE_ON and
+> > confirm that it exhibits the problem you reported. Basically, the
+> > first alarm triggers the IRQ after 1s, as expected, but the next
+> > configured alarm 1s into the future never triggers the IRQ again. But
+> > the time/date registers seem to be updating (incrementin) correctly
+> > after that.
+> > 
+> 
+> ...and so we agree on what we observe. My guess is that the alarm
+> comparator has a latch that triggers only every second update and so you
+> need 2 seconds between each alarms.
+> 
+> [...]
+> 
+> > I even did some tests where, in pcf2127_rtc_set_alarm(), I disabled
+> > all the alarm registers (set to 0x80), except for the SECONDS alarm
+> > register. In this case, I observed that the IRQ is triggered after
+> > 61s. This seems to indicate that the alarm detection circuitry is
+> > still somewhat operating (AF flag / INT pin), but there is probably a
+> > bug in the IC when the configured alarm is close to current time after
+> > AF is set once...
+> > 
+> > I also have done other tests by disabling then re-enabling AIE,
+> > stopping and restarting the oscillator (STOP bit), etc, but to no
+> > avail.
+> > 
+> > However, in pcf2127_rtc_set_alarm(), if I set the alarm 2s past the
+> > current time, instead of 1s, then the IRQ is always triggered after
+> > 2s.
+> > 
+> > I have opened a support case with NXP to investigate this strange
+> > behavior.
+> 
+> Let me know if you ever get a reply.
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+Hi Alexandre,
+after two months and a lot of emails with NXP awful technical support, I was never able to have a valid answer to the problem, apart from "Use a new device as the PCF2127 is not recommended for new designs" :(
 
-Thanks
+On the other hand, have you had time to look at my patch series for the PCF2131 driver?
 
-Tom
+Thank you, Hugo.
 
-> ---
->   drivers/net/wireless/ath/ath6kl/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/ath/ath6kl/Makefile b/drivers/net/wireless/ath/ath6kl/Makefile
-> index 01cc0d50fee6..a75bfa9fd1cf 100644
-> --- a/drivers/net/wireless/ath/ath6kl/Makefile
-> +++ b/drivers/net/wireless/ath/ath6kl/Makefile
-> @@ -38,7 +38,7 @@ ath6kl_core-y += recovery.o
->   
->   # FIXME: temporarily silence -Wdangling-pointer on non W=1+ builds
->   ifndef KBUILD_EXTRA_WARN
-> -CFLAGS_htc_mbox.o += -Wno-dangling-pointer
-> +CFLAGS_htc_mbox.o += $(call cc-disable-warning, dangling-pointer)
->   endif
->   
->   ath6kl_core-$(CONFIG_NL80211_TESTMODE) += testmode.o
->
-> base-commit: 677fb7525331375ba2f90f4bc94a80b9b6e697a3
 
+> > > > > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > > > > ---
+> > > > >  drivers/rtc/rtc-pcf2127.c | 1 +
+> > > > >  1 file changed, 1 insertion(+)
+> > > > > 
+> > > > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > > > > index f8469b134411..63b275b014bd 100644
+> > > > > --- a/drivers/rtc/rtc-pcf2127.c
+> > > > > +++ b/drivers/rtc/rtc-pcf2127.c
+> > > > > @@ -656,6 +656,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > > > >  	pcf2127->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> > > > >  	pcf2127->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> > > > >  	pcf2127->rtc->set_start_time = true; /* Sets actual start to 1970 */
+> > > > > +	set_bit(RTC_FEATURE_ALARM_RES_2S, pcf2127->rtc->features);
+> > > > >  	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, pcf2127->rtc->features);
+> > > > >  	clear_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+> > > > >  
+> > > > > -- 
+> > > > > 2.35.1
+> > > > > 
+> > > > 
+> > > > 
+> > > > -- 
+> > > > Hugo Villeneuve <hugo@hugovil.com>
+> > > 
+> > > -- 
+> > > Alexandre Belloni, co-owner and COO, Bootlin
+> > > Embedded Linux and Kernel engineering
+> > > https://bootlin.com
+> > > 
+> > 
+> > 
+> > -- 
+> > Hugo Villeneuve <hugo@hugovil.com>
+> 
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
+
+
+-- 
+Hugo Villeneuve <hugo@hugovil.com>

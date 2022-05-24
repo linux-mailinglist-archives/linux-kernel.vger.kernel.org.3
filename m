@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2911532701
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D34532709
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 12:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235982AbiEXKDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 06:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        id S235994AbiEXKDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 06:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbiEXKDh (ORCPT
+        with ESMTP id S235971AbiEXKDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 06:03:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 818BC72225
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 03:03:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F1441FB;
-        Tue, 24 May 2022 03:03:35 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.3.68])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DBC63F66F;
-        Tue, 24 May 2022 03:03:32 -0700 (PDT)
-Date:   Tue, 24 May 2022 11:03:23 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexander Popov <alex.popov@linux.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, linux-kernel@vger.kernel.org,
-        luto@kernel.org, will@kernel.org
-Subject: Re: [PATCH v2 03/13] stackleak: remove redundant check
-Message-ID: <YoytaxHgqw5w1kIf@FVFF77S0Q05N>
-References: <20220427173128.2603085-1-mark.rutland@arm.com>
- <20220427173128.2603085-4-mark.rutland@arm.com>
- <a604fa2b-e7c3-3fff-dd81-1a0585a9e2fa@linux.com>
- <YnpQqBwYjlVffJk8@FVFF77S0Q05N>
- <202205101958.2A33DE20@keescook>
- <YnttpThLX0tgrw5i@FVFF77S0Q05N>
- <33711C66-BB24-4A75-8756-3CDDA02BC0CD@chromium.org>
- <YnzQDWTw1qdtVJMJ@FVFF77S0Q05N>
- <8d8061c4-2a3e-cb3a-00c9-677fa8899058@linux.com>
+        Tue, 24 May 2022 06:03:38 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83177220D;
+        Tue, 24 May 2022 03:03:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653386616; x=1684922616;
+  h=subject:from:to:cc:references:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=+lUhJq6lPcMXtDJjczyhfBhO0UQMN1XOtJ1PSE9n+js=;
+  b=nHhxwpFsqoTXaiuMpIECOJYV3FbzRpKCH+HjhpyijUWhLecWCkMIGiYp
+   Kkzf/d0oJ0fufpRtp55b9tnf+vNEyqK263kX7dQL2bp8raNECF1mSITrd
+   G/rRrEYnZHAJD/Tuvc2T2YiSsnYC0Kc5xxCmdvXWl9lgWa9F+reasZi/a
+   0=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 24 May 2022 03:03:36 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 03:03:36 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 24 May 2022 03:03:36 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 24 May
+ 2022 03:03:33 -0700
+Subject: Re: [PATCH 2/2 V2] remoteproc: qcom: Add full coredump fallback
+ mechanism
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+To:     Yogesh Lal <quic_ylal@quicinc.com>, <bjorn.andersson@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Siddharth Gupta <sidgup@codeaurora.org>
+References: <1652181930-22212-1-git-send-email-quic_ylal@quicinc.com>
+ <1652181930-22212-2-git-send-email-quic_ylal@quicinc.com>
+ <271132da-4a6a-afd9-4509-47035dd18a8e@quicinc.com>
+Message-ID: <b581789c-2c0c-b06e-924b-002b32f1a52a@quicinc.com>
+Date:   Tue, 24 May 2022 15:33:30 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d8061c4-2a3e-cb3a-00c9-677fa8899058@linux.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <271132da-4a6a-afd9-4509-47035dd18a8e@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,132 +70,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 15, 2022 at 07:17:16PM +0300, Alexander Popov wrote:
-> On 12.05.2022 12:14, Mark Rutland wrote:
-> > On Wed, May 11, 2022 at 07:44:41AM -0700, Kees Cook wrote:
-> > > 
-> > > 
-> > > On May 11, 2022 1:02:45 AM PDT, Mark Rutland <mark.rutland@arm.com> wrote:
-> > > > On Tue, May 10, 2022 at 08:00:38PM -0700, Kees Cook wrote:
-> > > > > On Tue, May 10, 2022 at 12:46:48PM +0100, Mark Rutland wrote:
-> > > > > > On Sun, May 08, 2022 at 09:17:01PM +0300, Alexander Popov wrote:
-> > > > > > > On 27.04.2022 20:31, Mark Rutland wrote:
-> > > > > > > > In __stackleak_erase() we check that the `erase_low` value derived from
-> > > > > > > > `current->lowest_stack` is above the lowest legitimate stack pointer
-> > > > > > > > value, but this is already enforced by stackleak_track_stack() when
-> > > > > > > > recording the lowest stack value.
-> > > > > > > > 
-> > > > > > > > Remove the redundant check.
-> > > > > > > > 
-> > > > > > > > There should be no functional change as a result of this patch.
-> > > > > > > 
-> > > > > > > Mark, I can't agree here. I think this check is important.
-> > > > > > > The performance profit from dropping it is less than the confidence decrease :)
-> > > > > > > 
-> > > > > > > With this check, if the 'lowest_stack' value is corrupted, stackleak doesn't
-> > > > > > > overwrite some wrong kernel memory, but simply clears the whole thread
-> > > > > > > stack, which is safe behavior.
-> > > > > > 
-> > > > > > If you feel strongly about it, I can restore the check, but I struggle to
-> > > > > > believe that it's worthwhile. The `lowest_stack` value lives in the
-> > > > > > task_struct, and if you have the power to corrupt that you have the power to do
-> > > > > > much more interesting things.
-> > > > > > 
-> > > > > > If we do restore it, I'd like to add a big fat comment explaining the
-> > > > > > rationale (i.e. that it only matter if someone could corrupt
-> > > > > > `current->lowest_stack`, as otherwise that's guarnateed to be within bounds).
-> > > > > 
-> > > > > Yeah, let's restore it and add the comment. While I do agree it's likely
-> > > > > that such an corruption would likely mean an attacker had significant
-> > > > > control over kernel memory already, it is not uncommon that an attack
-> > > > > only has a limited index from a given address, etc. Or some manipulation
-> > > > > is possible via weird gadgets, etc. It's unlikely, but not impossible,
-> > > > > and a bounds-check for that value is cheap compared to the rest of the
-> > > > > work happening. :)
-> > > > 
-> > > > Fair enough; I can go spin a patch restoring this. I'm somewhat unhappy with
-> > > > silently fixing that up, though -- IMO it'd be better to BUG() or similar in
-> > > > that case.
-> > > 
-> > > I share your desires, and this was exactly what Alexander originally proposed, but Linus rejected it violently. :(
-> > > https://lore.kernel.org/lkml/CA+55aFy6jNLsywVYdGp83AMrXBo_P-pkjkphPGrO=82SPKCpLQ@mail.gmail.com/
-> > 
-> > I see. :/
-> > 
-> > Thinking about this some more, if we assume someone can corrupt *some* word of
-> > memory, then we need to consider that instead of corrupting
-> > task_struct::lowest_stack, they could corrupt task_struct::stack (or x86's
-> > cpu_current_top_of_stack prior to this series).
-> > 
-> > With that in mind, if we detect that task_struct::lowest_stack is
-> > out-of-bounds, we have no idea whether it has been corrupted or the other bound
-> > values have been corrupted, and so we can't do the erase safely anyway.
+
+
+On 5/21/22 11:44 AM, Sibi Sankar wrote:
+> Hey Yogesh,
+> Looks like you missed adding the patch that uses the exported
+> rproc_cleanup api.
 > 
-> :)
 > 
-> IMO, even if a kernel thread stack is moved somewhere for any weird reason,
-> stackleak must erase it at the end of syscall and do its job.
-
-I'm not talking about the stack being *moved*. I'm talking about the pointers
-to it being *corrupted* (wince we use those to determine the bounds).
-
-The problem is that we don't have a single source of truth here that we can
-rely upon. 
-
-We're stuck between a dichotomy:
-
-* If we assume an attacker *can* corrupt a word of memory, they can corrupt any
-  of the in-memory values we use to find the stack in the first place. If we
-  detect a mismatch we cannot know which is bad, and if the attacker can
-  corrupt the one(s) we choose to blindly trust, then they can weaponize the
-  erasing code to corrupt memory.
-
-  That's *worse* than the info leak problem stackleak was originally trying to
-  solve.
-
-  See below for one way we could avoid that.
-
-* If we assume the attacker *cannot* corrupt a word of memory, then we know the
-  values must always be within bounds, and there's no need for the check.
-
-> > So AFAICT we must *avoid* erasing when that goes wrong. Maybe we could WARN()
-> > instead of BUG()?
+> On 5/10/22 4:55 PM, Yogesh Lal wrote:
+>> From: Siddharth Gupta <sidgup@codeaurora.org>
+>>
+>> If a remoteproc's firmware does not support minidump but the driver
+>> adds an ID, the minidump driver does not collect any coredumps when
+>> the remoteproc crashes. This hinders the purpose of coredump
+>> collection. This change adds a fallback mechanism in the event of a
+>> crash.
+>>
 > 
-> Mark, I think security features must not go out of service.
->
-> The 'lowest_stack' value is for making stackleak faster. I believe if the
-> 'lowest_stack' value is invalid, stackleak must not skip its main job and
-> should erase the whole kernel thread stack.
+> Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+> 
+>> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+>> Signed-off-by: Yogesh Lal <quic_ylal@quicinc.com>
+>> ---
+>>   drivers/remoteproc/qcom_common.c   | 7 +++++--
+>>   drivers/remoteproc/qcom_q6v5_pas.c | 1 +
+>>   2 files changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/qcom_common.c 
+>> b/drivers/remoteproc/qcom_common.c
+>> index 4b91e3c..b3fdc66 100644
+>> --- a/drivers/remoteproc/qcom_common.c
+>> +++ b/drivers/remoteproc/qcom_common.c
+>> @@ -163,8 +163,11 @@ void qcom_minidump(struct rproc *rproc, unsigned 
+>> int minidump_id)
+>>        */
+>>       if (subsystem->regions_baseptr == 0 ||
+>>           le32_to_cpu(subsystem->status) != 1 ||
+>> -        le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED ||
+>> -        le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
+>> +        le32_to_cpu(subsystem->enabled) != MD_SS_ENABLED) {
+>> +        return rproc_coredump(rproc);
+>> +    }
+>> +
+>> +    if (le32_to_cpu(subsystem->encryption_status) != MD_SS_ENCR_DONE) {
+>>           dev_err(&rproc->dev, "Minidump not ready, skipping\n");
+>>           return;
+>>       }
 
-My point is that the conditions which permit `lowest_stack` to become invalid
-(e.g. an attacker having an arbitrary or constrained write gadget) also permit
-all the other stack boundariy values to become invalid.
+Yogesh,
 
-If we detect `lowest_stack` is out of bounds, we have no idea which of
-`lowest_stack` or the bounds are corrupt -- so we *cannot* safely erase: if the
-bounds are corrupt we'll corrupt arbitrary memory.
+  /**
 
-We *could* do better by always deriving the bounds from an SP value (current
-for on-stack, passed in by asm for off-stack). If we did that, we could more
-reasonably treat the bounds values as more reliable than the `lowest_stack`
-value, and with that I'd be happy with the bounds check (though I still think
-we want to make this WARN()).
+   * Clear out the dump segments populated by parse_fw before
 
-> When I developed 'stackleak_erase()' I tried adding 'WARN_ON()', but it
-> didn't work properly there, as I remember. Warning handling code is very
-> complex. So I dropped that fragile part.
+   * re-populating them with minidump segments.
 
-Do you recall any specific problem, or just that there were problems?
+   */
+   rproc_coredump_cleanup(rproc);
 
-I ask because the entry code, and handling of BUG() and WARN() has changed
-quite a bit over the last couple of years. We've fixed some latent issues
-there, though IIUC this late in the exception return flow there are still some
-potential issues with the RCU/lockdep/etc context that would need to be
-saved/restored.
+You'll still need to cleanup segments populated by parse_fw
+before you move onto to minidumps.
 
-We need to solve some of that in general anyuway, since there are other BUG()
-and WARN() instances hidden in noinstr entry code. I'm happy to dig into that
-(time permitting).
-
-Thanks,
-Mark.
+>> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c 
+>> b/drivers/remoteproc/qcom_q6v5_pas.c
+>> index 401b1ec..6e5cbca 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+>> @@ -274,6 +274,7 @@ static const struct rproc_ops adsp_minidump_ops = {
+>>       .start = adsp_start,
+>>       .stop = adsp_stop,
+>>       .da_to_va = adsp_da_to_va,
+>> +    .parse_fw = qcom_register_dump_segments,
+>>       .load = adsp_load,
+>>       .panic = adsp_panic,
+>>       .coredump = adsp_minidump,
+>>

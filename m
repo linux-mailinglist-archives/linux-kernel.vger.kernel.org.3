@@ -2,122 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA602532462
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D29D53246C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbiEXHtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S235415AbiEXHvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiEXHtm (ORCPT
+        with ESMTP id S235136AbiEXHvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:49:42 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F797994CF;
-        Tue, 24 May 2022 00:49:41 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id g3so14203828qtb.7;
-        Tue, 24 May 2022 00:49:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eFuesu4eXOzVy5OiyTe49D1dgIorHEfZWrHJUHl/IrQ=;
-        b=5moe+8LIVlj0hQKkYp8fdAtqM2S3lgWdW/pw7q2djMV1xtEUqwInMtxpjWG0EaGgZK
-         87P3d7ixl3cAwB8kyXd7xOI1wKVsmdvCrgeV6s+HxRl+m5C76zJbTtB3hRmfUIIW+l8g
-         BygAzeEtubjjBIAebV0Rw0oHyUghXlYiXYHGMT3vYDGhLNgEidK7q7k52xnKDgFg2Bxx
-         0dlvD3u4SBqqmZgpOXnFk7kC3y5K+KIqCi/bt9ZoDowQ4/cty5+k1UUg3sfg1qvT2Jgl
-         +zx6qDRIPNNlXxDaXyAxxGCJX7YKOcEr7Fg3H+lniAqmiw8s1/iUbVlhGRU3u/ajIzJh
-         NDkQ==
-X-Gm-Message-State: AOAM533f0gy/FHs7Sws2drAoSV2uTcMOoeP/oDmUhtfrE2/CHbQMjD5Q
-        /AvcJs7CYnrMgrEKpYV26Y4IhFkaOoCLkP7o
-X-Google-Smtp-Source: ABdhPJwF2Akp7K9TnywwQv70mnuOh+hFX8SnrDepWBxlTKCf70T+3+cPUlmlVGq+s04YURznEvnKIQ==
-X-Received: by 2002:a05:622a:1389:b0:2f9:46b4:2990 with SMTP id o9-20020a05622a138900b002f946b42990mr217397qtk.237.1653378580567;
-        Tue, 24 May 2022 00:49:40 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id g1-20020a379d01000000b0069fc13ce1fesm5623169qke.47.2022.05.24.00.49.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 00:49:40 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id z7so8208377ybf.7;
-        Tue, 24 May 2022 00:49:40 -0700 (PDT)
-X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
- s14-20020a056902120e00b006346f296b84mr25491340ybu.604.1653378579929; Tue, 24
- May 2022 00:49:39 -0700 (PDT)
+        Tue, 24 May 2022 03:51:39 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE69F344F6;
+        Tue, 24 May 2022 00:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653378697; x=1684914697;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ezuwNC3Ri6ziJQDL1WtU/NytA9dM8Bj444NnFMP1PZ0=;
+  b=TYpjlE5ipDQq9yRs3SGxZWyg9KaEJ67991Cg9ibJD7pL8jWoAXXxAEeD
+   8TRVYCD/O5VIV0ALB8R4ag+Le09EktcciaPwVZ5iUpizAtWHVt+H/V5n8
+   iKdNUTg58PtSACk4CpHNODPFh+uVhzbC5e61zi5GcddTBXU95bKsfOePi
+   AhWWsLCq0WZD3v5Omcbukg7SxxAGdRuJ5DY+nDatHKhIg3Azb9gGx08yH
+   ubGAUjZ7c9sOgC32NAevHI0mP5CiRJzKdaX1dvwoerISe9fveTfqmvvWC
+   kkYgOpJfH4ypbhaelyJ7h7Wjq7pxkizMLlOEcj/U1ZZpXv1Bny1SQNl0P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="261067825"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="261067825"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 00:51:37 -0700
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="572506245"
+Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 00:51:35 -0700
+Date:   Tue, 24 May 2022 08:51:31 +0100
+From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+To:     yoan.picchi@arm.com
+Cc:     ardb@kernel.org, davem@davemloft.net, herbert@gondor.apana.org.au,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, andre.przywara@arm.com
+Subject: Re: [RFC PATCH 2/2] Removes the x86 dependency on the QAT drivers
+Message-ID: <YoyOg/kYGtO+nQac@silpixa00400314>
+References: <CAMj1kXGAiA-SkTFD5EgcacYao0RKT7oK0AxvxkR7Ho_KZSGXCw@mail.gmail.com>
+ <8f6d8d1f-2872-15b9-d38b-1e8eb26f781b@foss.arm.com>
 MIME-Version: 1.0
-References: <20220518065639.2432213-1-gerg@linux-m68k.org> <20220518065639.2432213-2-gerg@linux-m68k.org>
- <CAMuHMdXTn6ysmjg5cr2RvYG=8f3azC1B4v=via0ePua_hv6TgA@mail.gmail.com>
-In-Reply-To: <CAMuHMdXTn6ysmjg5cr2RvYG=8f3azC1B4v=via0ePua_hv6TgA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 24 May 2022 09:49:28 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV+k4kGv+vKSGNnwhKCk3eYv5uQd=UgNJQ1HVYxuOUv5g@mail.gmail.com>
-Message-ID: <CAMuHMdV+k4kGv+vKSGNnwhKCk3eYv5uQd=UgNJQ1HVYxuOUv5g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] m68knommu: fix undefined reference to `mach_get_rtc_pll'
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8f6d8d1f-2872-15b9-d38b-1e8eb26f781b@foss.arm.com>
+Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
+ Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Tue, May 24, 2022 at 9:46 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Wed, May 18, 2022 at 8:56 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
-> > Configuring for a nommu classic m68k target and enabling the generic rtc
-> > driver (CONFIG_RTC_DRV_GENERIC) will result in the following compile
-> > error:
+On Wed, May 18, 2022 at 02:00:40PM +0100, Yoan Picchi wrote:
+> >> From: Yoan Picchi <yoan.picchi@arm.com>
+> >>
+> >> The QAT acceleration card can be very helpfull for some tasks like
+> >> dealing with IPSEC but it is currently restricted to be used only on x86
+> machine.
+> >> Looking at the code we didn't see any reasons why those drivers might
+> >> not work on other architectures. We've successfully built all of them
+> >> on x86, arm64, arm32, mips64, powerpc64, riscv64 and sparc64.
+> >>
+> >> We also have tested the driver with an Intel Corporation C62x Chipset
+> >> QuickAssist Technology (rev 04) PCIe card on an arm64 server. After
+> >> the numa patch, it works with the AF_ALG crypto userland interface,
+> >> allowing us to encrypt some data with cbc for instance. We've also
+> >> successfully created some VF, bound them to DPDK, and used the card
+> >> this way, thus showing some real life usecases of x86 do work on arm64
+> too.
+> >>
+> >> Please let us know if we missed something that would warrants some
+> >> further testing.
+> >Thanks Yoan.
 > >
-> >    m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
-> >    time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
-> >    m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
-> >    m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
+> >Can you please confirm that you tested the driver on the platform you
+> reported using a kernel with CONFIG_CRYPTO_MANAGER_DISABLE_TESTS not set and
+> CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y and the self test >is passing?
+> >You can check it by running
+> >    $ cat /proc/crypto | grep -B 4 passed | grep -e "qat_\|qat-" | sort
+> This should report:
+> >    driver       : qat_aes_cbc
+> >    driver       : qat_aes_cbc_hmac_sha1
+> >    driver       : qat_aes_cbc_hmac_sha256
+> >    driver       : qat_aes_cbc_hmac_sha512
+> >    driver       : qat_aes_ctr
+> >    driver       : qat_aes_xts
+> >    driver       : qat-dh
+> >    driver       : qat-rsa
 > >
-> > There is no definitions of "mach_set_rtc_pll" and "mach_get_rtc_pll" in the
-> > nommu code paths. Move these definitions and the associated "mach_hwclk",
-> > so that they are around their use case in time.c. This means they will
-> > always be defined on the builds that require them, and not on those that
-> > cannot use them - such as ColdFire (both with and without MMU enabled).
+> >Note that if you are using the HEAD of cryptodev-2.6 you will have to
+> either revert 8893d27ffcaf6ec6267038a177cb87bcde4dd3de or apply
+> >https://patchwork.kernel.org/project/linux-crypto/list/?series=639755 as
+> the algorithms have been temporarily disabled.
 > >
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
->
-> > --- a/arch/m68k/kernel/time.c
-> > +++ b/arch/m68k/kernel/time.c
-> > @@ -82,6 +86,11 @@ void read_persistent_clock64(struct timespec64 *ts)
-> >  #endif
+> >Regards,
 > >
-> >  #if IS_ENABLED(CONFIG_RTC_DRV_GENERIC)
-> > +int (*mach_get_rtc_pll)(struct rtc_pll_info *);
-> > +int (*mach_set_rtc_pll)(struct rtc_pll_info *);
-> > +EXPORT_SYMBOL(mach_get_rtc_pll);
-> > +EXPORT_SYMBOL(mach_set_rtc_pll);
->
-> Oops, this causes build failures for Q40 with CONFIG_RTC_DRV_GENERIC=n,
-> as arch/m68k/q40/config.c uses mach_]gs]et_rtc_pll() unconditionally.
+> >--
+> >Giovanni
+> 
+> Hi Giovanni.
+> 
+> Thanks for the instructions, I did not know of this test.
+> I rebuilt my kernel on arm64 with those parameter and I confirm I get the
+> same output with
+> $ cat /proc/crypto | grep -B 4 passed | grep -e "qat_\|qat-" | sort
+Thats great. Thanks.
 
-I think the simplest solution is to move these up, next to mach_hwclk.
+Is the platform where you ran the tests little or big endian?
+If little endian, can you re-test on a big endian system?
 
->
-> > +
-> >  static int rtc_generic_get_time(struct device *dev, struct rtc_time *tm)
-> >  {
-> >         mach_hwclk(0, tm);
+Thanks,
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Giovanni

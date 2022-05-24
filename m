@@ -2,103 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BE4532C33
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF28532C45
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 16:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238182AbiEXOal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 10:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S238299AbiEXOcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 10:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiEXOag (ORCPT
+        with ESMTP id S238217AbiEXOby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 10:30:36 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3526A01F;
-        Tue, 24 May 2022 07:30:36 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id 14so9003263qkl.6;
-        Tue, 24 May 2022 07:30:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mRVor7wHTRh8bvxUqyPVkNeugs0nGyo/FpT2aSmbf6Q=;
-        b=iSFoulr6mqws1PUGqxhaLrL7skUbmGevXTDcSv3D3C4DaDzfI5sLWmEsophD2hgKpZ
-         AJB0w/VlMOrxtXN9KdfZ7jKoyEAApH2+BIWpFcqTW0SmD51Efb1K0Mo+45JLiuJKahZq
-         FZEYALWonrecNZWo8SZSuv2gcXtjoeLBcU0ea1nzhAN6aacXUc52lxwREZkf8pZIJdiC
-         O/QldQkz2JhE0YzRYb2Uaz18l8RMIdpnR3BftI8ZxCOSnNi83JAoGEABBfvqYrIGL0gC
-         pC9Q+YZLW449fgqXa2EPHz7JB6WcJ20xiMOADX87E4v262IkJTPwDGQDCcNmdK6Vbhwt
-         ATaA==
-X-Gm-Message-State: AOAM5319MUaWG3hxv0dNL3rnjjg67w23+LYhlTrYXdEMjDTvximA0hxe
-        QB6b4G/8sBirGqQiwtpsCvWM5x+U7aaT09i2
-X-Google-Smtp-Source: ABdhPJwSFgFBqRGuJVjq+34rF1w85EpkTpJZnSOR5szvW518rmkak4CZXbN5PX3wrFEBcd7lwHzQ1Q==
-X-Received: by 2002:a05:620a:bcb:b0:67d:1b1c:a988 with SMTP id s11-20020a05620a0bcb00b0067d1b1ca988mr16877190qki.587.1653402635175;
-        Tue, 24 May 2022 07:30:35 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id g15-20020ae9e10f000000b0069fc13ce1e9sm5877533qkm.26.2022.05.24.07.30.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 07:30:31 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id q184so2328780ybg.11;
-        Tue, 24 May 2022 07:30:30 -0700 (PDT)
-X-Received: by 2002:a25:4150:0:b0:64d:7747:9d93 with SMTP id
- o77-20020a254150000000b0064d77479d93mr27501539yba.36.1653402630217; Tue, 24
- May 2022 07:30:30 -0700 (PDT)
+        Tue, 24 May 2022 10:31:54 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE7C42ED8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 07:31:50 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OD9lI2006610;
+        Tue, 24 May 2022 16:30:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=AQKsEZBpRPgvOP9pH7S/TD4toEUBrB462VVqfLm/lIg=;
+ b=5vp8d10b91pQwCDM64drMqKGwHc5+FDSrh6uBPoLyCI0i42OlptsPwe+5J9lyYa8Dk1h
+ GpVs+BkZVx4v3eb7QAELGQebfGvN8ZoiY+dP24PwjD2PlmtUmSEu4ZCOfdsdr+pxISC/
+ TkPctLdGreD7CSfD9skaBTsCvrrNpTZz4x8wOziWNBjFI8aVY7VTT1Bne02vOcb593mF
+ +3MxGBBbnchvs9YXFg5RKF+Mx/vtkCxedo+0cF/vWd0jmdGgMk74zEivMo7Xy3DZ4rdy
+ vnT8pn7p10xwjQzcbkLlvC/SKsFcYGcI9AHKy5YpRvtdziEGpArWDaZgKMO+Yn6RenCf aA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g6rv6rfhk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 May 2022 16:30:41 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9A8C110002A;
+        Tue, 24 May 2022 16:30:40 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 08D1323152E;
+        Tue, 24 May 2022 16:30:40 +0200 (CEST)
+Received: from [10.211.10.185] (10.75.127.46) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 24 May
+ 2022 16:30:39 +0200
+Message-ID: <d5ab354a-eb10-d31c-d55e-46a4c4d1a4ce@foss.st.com>
+Date:   Tue, 24 May 2022 16:30:38 +0200
 MIME-Version: 1.0
-References: <6fcef2665a6cd86a021509a84c5956ec2efd93ed.1653401420.git.geert+renesas@glider.be>
-In-Reply-To: <6fcef2665a6cd86a021509a84c5956ec2efd93ed.1653401420.git.geert+renesas@glider.be>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 24 May 2022 16:30:18 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU3efmsc0-o6DJb013dg83pfdM-e3WiS+CjgzSuTceEQA@mail.gmail.com>
-Message-ID: <CAMuHMdU3efmsc0-o6DJb013dg83pfdM-e3WiS+CjgzSuTceEQA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: net: adin: Fix adi,phy-output-clock
- description syntax
-To:     Michael Hennerich <michael.hennerich@analog.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Josua Mayer <josua@solid-run.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] ASoC: stm32: sai: Use of_device_get_match_data()
+ tosimplify code
+Content-Language: en-US
+To:     tangbin <tangbin@cmss.chinamobile.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <arnaud.pouliquen@foss.st.com>, <lgirdwood@gmail.com>,
+        <perex@perex.cz>, <tiwai@suse.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <alsa-devel@alsa-project.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220519124235.21100-1-tangbin@cmss.chinamobile.com>
+ <69d5cef3-57c0-9bc7-a83b-a85ef1c4cf29@foss.st.com>
+ <YovZAf4S0XphBsco@sirena.org.uk>
+ <3fb8d7f8-4506-3b28-22cb-863bda1f21c8@cmss.chinamobile.com>
+From:   Olivier MOYSAN <olivier.moysan@foss.st.com>
+In-Reply-To: <3fb8d7f8-4506-3b28-22cb-863bda1f21c8@cmss.chinamobile.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-24_07,2022-05-23_01,2022-02-23_01
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 4:12 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
-> "make dt_binding_check":
->
->     Documentation/devicetree/bindings/net/adi,adin.yaml:40:77: [error] syntax error: mapping values are not allowed here (syntax)
->
-> The first line of the description ends with a colon, hence the block
-> needs to be marked with a "|".
->
-> Fixes: 1f77204e11f8b9e5 ("dt-bindings: net: adin: document phy clock output properties")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  Documentation/devicetree/bindings/net/adi,adin.yaml | 3 ++-
+Hi Tang,
 
-Alexandru Ardelean's email address bounces, while he is listed as
-a maintainer in several DT bindings files.
+On 5/24/22 03:44, tangbin wrote:
+> Hi Mark & Olivier：
+> 
+> On 2022/5/24 2:57, Mark Brown wrote:
+>> On Mon, May 23, 2022 at 03:28:48PM +0200, Olivier MOYSAN wrote:
+>>
+>>> The current patch requires a change in the driver.
+>>> Either changing STM_SAI_x_ID enums, or replacing data by a struct.
+>>> For instance:
+>>> struct stm32_sai_comp_data {
+>>>     unsigned int id;
+>>> }
+>>> struct stm32_sai_comp_data stm32_sai_comp_data_a = {
+>>>     .id = STM_SAI_A_ID;
+>>> }
+>>> struct of_device_id stm32_sai_sub_ids[] = {
+>>>     .data = &stm32_sai_comp_data_a},
+>>> }
+>> Either approach works for me (or a revert for that matter).
+> 
+>      Thanks for your advice, I was thoughtless.
+> 
+>      I think change the date of STM_SAI_x_ID maybe simple. But if we 
+> don't change the id,
+> 
+> what about add a "#define" like the line 47:
+> 
+> #define STM_SAI_IS_SUB(x) ((x)->id == STM_SAI_A_ID || (x)->id == 
+> STM_SAI_B_ID)
+> 
+> then in the judgement, wu use:
+> 
+>      sai->id = (uintptr_t)of_device_get_match_data(&pdev->dev);
+> 
+>      if (!STM_SAI_IS_SUB(sai))
+> 
+>              return -EINVAL;
+> 
+> 
+> if you think that's ok, I will send patch v2 for you .
+> 
 
-Gr{oetje,eeting}s,
+If we allow null value in STM_SAI_IS_SUB(sai) check, we can miss real 
+NULL pointer error from of_device_get_match_data().
 
-                        Geert
+The simplest way is to change STM_SAI_x_ID enums I think.
+But honnestly, I feel more comfortable to let the driver unchanged.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+BRs
+Olivier
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Thanks
+> 
+> Tang Bin
+> 
+> 

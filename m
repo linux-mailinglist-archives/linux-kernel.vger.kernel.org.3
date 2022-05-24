@@ -2,130 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847A75321C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663C75321CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 05:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234062AbiEXDwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 23:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53502 "EHLO
+        id S233888AbiEXD4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 23:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbiEXDv5 (ORCPT
+        with ESMTP id S233309AbiEXDzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 23:51:57 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008BA37AB6;
-        Mon, 23 May 2022 20:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653364314; x=1684900314;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=9X7DrN1lEuucjb6wajZyNblT7a4IsVJl41aKORMvCwQ=;
-  b=G5l6QtUYzBBhsDg1v7n9F1gnXgdgDYN1xQHP0M/7w78h94gaHGIlb+EX
-   2oqi8zuKEeexspGQV2jrKf6m1i3N6bXgKj1o6z+YT00gDErcvX8Hy0kCp
-   wL04sAujUBrv24r6+b3OCo5YzLpKcUI6g3qNs+rg1KubfXT3syjuw2eiA
-   t0A9kTToc+r4tTQzAh9O2Vm+dZwZ/xGfuha4XdMTI+oYPUysHh9gfaX1m
-   5UVCAQiSK8wsdoC3MxfA2mqDNoKwMQY7iiyYAj0kK6kinnsBV+atc6GRZ
-   WGz0LHzo5ED38LX24UzIQX15wLy//Jmlgh3vbBvDNXYJYFYI9gxPhwTPX
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273147886"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273147886"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 20:51:53 -0700
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="577716050"
-Received: from samuelal-mobl.amr.corp.intel.com ([10.212.199.128])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 20:51:52 -0700
-Date:   Mon, 23 May 2022 20:51:52 -0700 (PDT)
-From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Subject: Re: [PATCH 5.17 114/158] mptcp: strict local address ID selection
-In-Reply-To: <20220523165849.851212488@linuxfoundation.org>
-Message-ID: <fa953ec-288f-7715-c6fb-47a222e85270@linux.intel.com>
-References: <20220523165830.581652127@linuxfoundation.org> <20220523165849.851212488@linuxfoundation.org>
+        Mon, 23 May 2022 23:55:54 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA99D19C39;
+        Mon, 23 May 2022 20:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653364553; x=1684900553;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DGcCckkF61WltcMI0jqjRYtrSETEtm9cvQ4zcqOtcFk=;
+  b=RV9lpIQKg8UArEAMrMQp7wlCVnCPAfezDxkEUBuGB7yt7ZWv6llZjECT
+   lefJ3PMCPgOCxQShIvSkTL1MR2qPTDy40/4MMgzJBOO//eoqy1fxmBsxv
+   dUGbLL6CaDhP7A7G8HJ/CrzOyZB8ILAiGqZ0dE8JkCZnrW9sjJC8EJW7r
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 23 May 2022 20:55:52 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 20:55:52 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 23 May 2022 20:55:51 -0700
+Received: from [10.50.42.127] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 23 May
+ 2022 20:55:48 -0700
+Message-ID: <28d8529c-28bb-a97a-b421-fcf83760788a@quicinc.com>
+Date:   Tue, 24 May 2022 09:25:45 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] iommu/arm-smmu-qcom: Add debug support for TLB sync
+ timeouts
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        "Joerg Roedel" <joro@8bytes.org>
+CC:     <iommu@lists.linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Clark <robdclark@chromium.org>, <quic_guptap@quicinc.com>
+References: <20220523171847.21929-1-quic_saipraka@quicinc.com>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <20220523171847.21929-1-quic_saipraka@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022, Greg Kroah-Hartman wrote:
-
-> From: Paolo Abeni <pabeni@redhat.com>
+On 5/23/2022 10:48 PM, Sai Prakash Ranjan wrote:
+> TLB sync timeouts can be due to various reasons such as TBU power down
+> or pending TCU/TBU invalidation/sync and so on. Debugging these often
+> require dumping of some implementation defined registers to know the
+> status of TBU/TCU operations and some of these registers are not
+> accessible in non-secure world such as from kernel and requires SMC
+> calls to read them in the secure world. So, add this debug support
+> to dump implementation defined registers for TLB sync timeout issues.
 >
-> [ Upstream commit 4cf86ae84c718333928fd2d43168a1e359a28329 ]
->
-> The address ID selection for MPJ subflows created in response
-> to incoming ADD_ADDR option is currently unreliable: it happens
-> at MPJ socket creation time, when the local address could be
-> unknown.
->
-> Additionally, if the no local endpoint is available for the local
-> address, a new dummy endpoint is created, confusing the user-land.
->
-> This change refactor the code to move the address ID selection inside
-> the rebuild_header() helper, when the local address eventually
-> selected by the route lookup is finally known. If the address used
-> is not mapped by any endpoint - and thus can't be advertised/removed
-> pick the id 0 instead of allocate a new endpoint.
->
-> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
 > ---
-> net/mptcp/pm_netlink.c | 13 --------
-> net/mptcp/protocol.c   |  3 ++
-> net/mptcp/protocol.h   |  3 +-
-> net/mptcp/subflow.c    | 67 ++++++++++++++++++++++++++++++++++++------
-> 4 files changed, 63 insertions(+), 23 deletions(-)
+>   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 50 ++++++++++++++++++++++
+>   drivers/iommu/arm/arm-smmu/arm-smmu.c      |  2 +
+>   drivers/iommu/arm/arm-smmu/arm-smmu.h      |  4 ++
+>   3 files changed, 56 insertions(+)
 >
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> index 7820711c4560..22e9a0085475 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> @@ -5,11 +5,19 @@
+>   
+>   #include <linux/acpi.h>
+>   #include <linux/adreno-smmu-priv.h>
+> +#include <linux/delay.h>
+>   #include <linux/of_device.h>
+>   #include <linux/qcom_scm.h>
+>   
+>   #include "arm-smmu.h"
+>   
+> +#define QCOM_DUMMY_VAL	-1
+> +
+> +/* Implementation Defined Register Space 0 registers */
+> +#define QCOM_SMMU_STATS_SYNC_INV_TBU_ACK	0x5dc
+> +#define QCOM_SMMU_TBU_PWR_STATUS		0x2204
+> +#define QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR	0x2670
+> +
+>   struct qcom_smmu {
+>   	struct arm_smmu_device smmu;
+>   	bool bypass_quirk;
+> @@ -22,6 +30,46 @@ static struct qcom_smmu *to_qcom_smmu(struct arm_smmu_device *smmu)
+>   	return container_of(smmu, struct qcom_smmu, smmu);
+>   }
+>   
+> +static void qcom_smmu_tlb_sync(struct arm_smmu_device *smmu, int page,
+> +				int sync, int status)
+> +{
+> +	u32 sync_inv_ack, sync_inv_progress, tbu_pwr_status;
+> +	unsigned int spin_cnt, delay;
+> +	u32 reg;
+> +	int ret;
+> +
+> +	arm_smmu_writel(smmu, page, sync, QCOM_DUMMY_VAL);
+> +	for (delay = 1; delay < TLB_LOOP_TIMEOUT; delay *= 2) {
+> +		for (spin_cnt = TLB_SPIN_COUNT; spin_cnt > 0; spin_cnt--) {
+> +			reg = arm_smmu_readl(smmu, page, status);
+> +			if (!(reg & ARM_SMMU_sTLBGSTATUS_GSACTIVE))
+> +				return;
+> +			cpu_relax();
+> +		}
+> +		udelay(delay);
+> +	}
+> +
+> +	sync_inv_ack = arm_smmu_readl(smmu, ARM_SMMU_IMPL_DEF0,
+> +				      QCOM_SMMU_STATS_SYNC_INV_TBU_ACK);
 
-Greg, Sasha -
+Sorry, this doesn't work always, looks like on earlier chipsets this is a secure register and
+reading it from non-secure world would probably blow. Also this register can be in other
+implementation defined space for different chipsets. So I think we can use SCM call here
+and have a device specific data based on already existing compatible for QCOM SoCs to
+identify IMP_DEF space used.
 
-Is it possible to drop this one patch? It makes one of the mptcp 
-selftests fail (mptcp_join.sh, "single address, backup").
+> +	ret = qcom_scm_io_readl(smmu->ioaddr + QCOM_SMMU_TBU_PWR_STATUS,
+> +				&tbu_pwr_status);
+> +	if (ret)
+> +		dev_err_ratelimited(smmu->dev,
+> +				    "Failed to read TBU power status: %d\n", ret);
+> +
+> +	ret = qcom_scm_io_readl(smmu->ioaddr + QCOM_SMMU_MMU2QSS_AND_SAFE_WAIT_CNTR,
+> +				&sync_inv_progress);
+> +	if (ret)
+> +		dev_err_ratelimited(smmu->dev,
+> +				    "Failed to read SAFE WAIT counter: %d\n", ret);
+> +
+> +	dev_err_ratelimited(smmu->dev,
+> +			    "TLB sync timed out -- SMMU may be deadlocked\n"
+> +			    "TBU: sync_inv_ack %#x power_status %#x sync_inv_progress %#x\n",
+> +			    sync_inv_ack, tbu_pwr_status, sync_inv_progress);
+> +}
+> +
+>   static void qcom_adreno_smmu_write_sctlr(struct arm_smmu_device *smmu, int idx,
+>   		u32 reg)
+>   {
+> @@ -374,6 +422,7 @@ static const struct arm_smmu_impl qcom_smmu_impl = {
+>   	.def_domain_type = qcom_smmu_def_domain_type,
+>   	.reset = qcom_smmu500_reset,
+>   	.write_s2cr = qcom_smmu_write_s2cr,
+> +	.tlb_sync = qcom_smmu_tlb_sync,
+>   };
+>   
+>   static const struct arm_smmu_impl qcom_adreno_smmu_impl = {
+> @@ -382,6 +431,7 @@ static const struct arm_smmu_impl qcom_adreno_smmu_impl = {
+>   	.reset = qcom_smmu500_reset,
+>   	.alloc_context_bank = qcom_adreno_smmu_alloc_context_bank,
+>   	.write_sctlr = qcom_adreno_smmu_write_sctlr,
+> +	.tlb_sync = qcom_smmu_tlb_sync,
+>   };
+>   
+>   static struct arm_smmu_device *qcom_smmu_create(struct arm_smmu_device *smmu,
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> index 2ed3594f384e..4c5b51109835 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> @@ -2099,6 +2099,8 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+>   	if (IS_ERR(smmu->base))
+>   		return PTR_ERR(smmu->base);
+>   	ioaddr = res->start;
+> +	smmu->ioaddr = ioaddr;
+> +
+>   	/*
+>   	 * The resource size should effectively match the value of SMMU_TOP;
+>   	 * stash that temporarily until we know PAGESIZE to validate it with.
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.h b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> index 2b9b42fb6f30..8cf6567d970f 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> @@ -278,6 +278,7 @@ struct arm_smmu_device {
+>   	struct device			*dev;
+>   
+>   	void __iomem			*base;
+> +	phys_addr_t			ioaddr;
+>   	unsigned int			numpage;
+>   	unsigned int			pgshift;
+>   
+> @@ -502,6 +503,9 @@ static inline void arm_smmu_writeq(struct arm_smmu_device *smmu, int page,
+>   
+>   #define ARM_SMMU_GR0		0
+>   #define ARM_SMMU_GR1		1
+> +
+> +#define ARM_SMMU_IMPL_DEF0	2
+> +
+>   #define ARM_SMMU_CB(s, n)	((s)->numpage + (n))
+>   
+>   #define arm_smmu_gr0_read(s, o)		\
 
-Looks like this patch has been included in stable because of this single 
-hunk that helps "mptcp: Do TCP fallback on early DSS checksum failure" 
-apply cleanly:
-
-> diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-> index aec767ee047a..e4413b3e50c2 100644
-> --- a/net/mptcp/protocol.h
-> +++ b/net/mptcp/protocol.h
-> @@ -442,7 +442,8 @@ struct mptcp_subflow_context {
-> 		rx_eof : 1,
-> 		can_ack : 1,        /* only after processing the remote a key */
-> 		disposable : 1,	    /* ctx can be free at ulp release time */
-> -		stale : 1;	    /* unable to snd/rcv data, do not use for xmit */
-> +		stale : 1,	    /* unable to snd/rcv data, do not use for xmit */
-> +		local_id_valid : 1; /* local_id is correctly initialized */
-> 	enum mptcp_data_avail data_avail;
-> 	u32	remote_nonce;
-> 	u64	thmac;
-
-"mptcp: Do TCP fallback on early DSS checksum failure" also adds a bit to 
-that bitfield, but there is no functional dependency between the patches.
-
-If you need to drop the "mptcp: Do TCP fallback..." patch too, I can send 
-a backported version tomorrow that accounts for that bitfield change.
-
-
-Thanks!
-
---
-Mat Martineau
-Intel

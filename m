@@ -2,364 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE25532F06
+	by mail.lfdr.de (Postfix) with ESMTP id 025F8532F04
 	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239738AbiEXQam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 12:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S239753AbiEXQa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 12:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239671AbiEXQaR (ORCPT
+        with ESMTP id S239794AbiEXQat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 12:30:17 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F375D661;
-        Tue, 24 May 2022 09:30:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D58E621A1E;
-        Tue, 24 May 2022 16:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653409812; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MgDcGy2HGZHoFIxp9YRQq/LcvV4yVV/hIqOQDLhYAM0=;
-        b=DcXBLRLY4+IqwLQZE1RhqsdHYUCEHY4OS0dpn9adsiqAitjNteZLOMDWQ/cfdIqdC0ufc2
-        X4CVWFT9k6UFqNNN0RO981wnpgn2yiQ08hFCUlQcw/qd53f9ZklcPYwv4XbrA4im19ex0x
-        ThkX6fB0GdaLr/YhNRhMC0M3p3rdVmw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9319013ADF;
-        Tue, 24 May 2022 16:30:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sJJyIhQIjWJaWgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 24 May 2022 16:30:12 +0000
-From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To:     cgroups@vger.kernel.org, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Richard Palethorpe <rpalethorpe@suse.de>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [PATCH v3 5/5] selftests: memcg: Factor out common parts of memory.{low,min} tests
-Date:   Tue, 24 May 2022 18:29:55 +0200
-Message-Id: <20220524162955.8635-6-mkoutny@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220524162955.8635-1-mkoutny@suse.com>
-References: <20220524162955.8635-1-mkoutny@suse.com>
+        Tue, 24 May 2022 12:30:49 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4334D5EBD5;
+        Tue, 24 May 2022 09:30:37 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id n18so16291780plg.5;
+        Tue, 24 May 2022 09:30:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Q2gMJw1ZmAVIkKFyONaRXBbSho1N5Bi+EIY2WJ8x/7M=;
+        b=HWkf7rdLEBVd4E1jJ9d2FhSSavnGuCpYLmnGdO1TuU/mxAjVldST3aAKO8z9NDxyxa
+         ZWwrFEc12bmH1VRGPylO30y3klkyRFqIydGo0g2k4RmKJjeVRAnq9S1Im/+yXZIs27YP
+         4k6Az4yUX8QNu0Twsht/N4T8ZUCy7pm5KAAm0W+L0zofJVA2VGC3cKpFc0PmQX5a0LjR
+         m5YU4HAx4rbf73+j7vBiFMrb3Ir9CeR8MUmVwjzSifyywVtvd27z6r3098tTP+NamfUa
+         cMxd//1+bL88jE5rWuLPLwIhGPKtHUvbAsahXa/GMrS0ymUN9ICJpeTN0rl+JzZRjtV8
+         m1jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q2gMJw1ZmAVIkKFyONaRXBbSho1N5Bi+EIY2WJ8x/7M=;
+        b=sw4YeEdz3jHp1xyGmEbsP70s2PmXdrUP/ELf8PnoTHoR/y8Ki/eFY/0V4X/ThMa3Qd
+         CqGXg6GbaGmh3wTzTAUOa42UbgeVYx0rNpQV9VUval4eQ+tUe50IaMtQbAVKsr8HK/0J
+         InCb0m3wmu/IlW5F0P/eiN6GXlmrkmfAenzMRyjJx/g2yNoxAY6oZyIiwgQ/1wKV+yJ3
+         66xXPoUUreVt78CN0z2krGnj/ueafEtWO3hYH3KK+r1cjhq91UrdSOzS0dbsGvRLkkgW
+         pZtwLzf9EoKdwpJx3zfWwfSaE/99hh5VZ18Yf91WxEZgZJjjNHyo/epsXvMDVsw6YbhE
+         s8kg==
+X-Gm-Message-State: AOAM5332VoFCTDWzI7Y0Kb13mlj9M6eutJ4l+nDNs5tHgySFP87o/zG9
+        /NoDsi/S1JwCgalEq8UkKUE=
+X-Google-Smtp-Source: ABdhPJxxjt9PhhF/Qfg1O/+UB6ZOEnQgdywnFvtHUQP92Hky43iajQQzzW1PGKxcC8S/JknBAeF8aQ==
+X-Received: by 2002:a17:902:cec9:b0:162:43f0:ba8a with SMTP id d9-20020a170902cec900b0016243f0ba8amr3273966plg.85.1653409836325;
+        Tue, 24 May 2022 09:30:36 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id ev8-20020a17090aeac800b001cb6527ca39sm9630pjb.0.2022.05.24.09.30.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 09:30:35 -0700 (PDT)
+Message-ID: <883fc4cf-dce0-a433-5cf7-7de68be17ffb@gmail.com>
+Date:   Tue, 24 May 2022 09:30:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 4.9 00/25] 4.9.316-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20220523165743.398280407@linuxfoundation.org>
+ <6f4034a5-f692-8a64-a09d-8bfe49767b78@nvidia.com>
+ <YozK4DvamHBJ1qdX@kroah.com>
+ <fbeb9833-4166-1919-e6ab-9ac7625a21d6@nvidia.com>
+ <Yoz0Xv59MrUwFkMT@kroah.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <Yoz0Xv59MrUwFkMT@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory protection test setup and runtime is almost equal for
-memory.low and memory.min cases.
-It makes modification of the common parts prone to mistakes, since the
-protections are similar not only in setup but also in principle, factor
-the common part out.
+On 5/24/22 08:06, Greg Kroah-Hartman wrote:
+> On Tue, May 24, 2022 at 03:55:58PM +0100, Jon Hunter wrote:
+>>
+>> On 24/05/2022 13:09, Greg Kroah-Hartman wrote:
+>>
+>> ...
+>>
+>>>> I am seeing a boot regression on tegra124-jetson-tk1 and reverting the above
+>>>> commit is fixing the problem. This also appears to impact linux-4.14.y,
+>>>> 4.19.y and 5.4.y.
+>>>>
+>>>> Test results for stable-v4.9:
+>>>>       8 builds:	8 pass, 0 fail
+>>>>       18 boots:	16 pass, 2 fail
+>>>>       18 tests:	18 pass, 0 fail
+>>>>
+>>>> Linux version:	4.9.316-rc1-gbe4ec3e3faa1
+>>>> Boards tested:	tegra124-jetson-tk1, tegra20-ventana,
+>>>>                   tegra210-p2371-2180, tegra30-cardhu-a04
+>>>>
+>>>> Boot failures:	tegra124-jetson-tk1
+>>>
+>>> Odd.  This is also in 5.10.y, right?  No issues there?  Are we missing
+>>> something?
+>>
+>>
+>> Actually, the more I look at this, the more I see various intermittent
+>> reports with this and it is also impacting the mainline.
+>>
+>> The problem is that the commit in question is causing a ton of messages to
+>> be printed a boot and this sometimes is causing the boot test to fail
+>> because the boot is taking too long. The console shows ...
+>>
+>> [ 1233.327547] CPU0: Spectre BHB: using loop workaround
+>> [ 1233.327795] CPU1: Spectre BHB: using loop workaround
+>> [ 1233.328270] CPU1: Spectre BHB: using loop workaround
+>> [ 1233.328700] CPU1: Spectre BHB: using loop workaround
+>> [ 1233.355477] CPU2: Spectre BHB: using loop workaround
+>> ** 7 printk messages dropped **
+>> [ 1233.366271] CPU0: Spectre BHB: using loop workaround
+>> [ 1233.366580] CPU0: Spectre BHB: using loop workaround
+>> [ 1233.366815] CPU1: Spectre BHB: using loop workaround
+>> [ 1233.405475] CPU1: Spectre BHB: using loop workaround
+>> [ 1233.405874] CPU0: Spectre BHB: using loop workaround
+>> [ 1233.406041] CPU1: Spectre BHB: using loop workaround
+>> ** 1 printk messages dropped **
+>>
+>> There is a similar report of this [0] and I believe that we need a similar
+>> fix for the above prints as well. I have reported this to Ard [1]. So I am
+>> not sure that these Spectre BHB patches are quite ready for stable.
+> 
+> These patches are quite small, and just enable it for this known-broken
+> cpu type.
+> 
+> If there is an issue enabling it for this cpu type, then we can work on
+> that upstream, but there shouldn't be a reason to prevent this from
+> being merged now, especially given that it is supposed to be fixing a
+> known issue.
 
-Past exceptions between the tests:
-- missing memory.min is fine (kept),
-- test_memcg_low protected orphaned pagecache (adapted like
-  test_memcg_min and we keep the processes of protected memory running).
+Jonathan any chance this is Tegra specific? Our ARCH_BRCMSTB SoCs which 
+use a Brahma-B15 which uses nearly the same ca15 processor functions 
+defined in arch/arm/mm/proc-v7.S reports the following *before* changes:
 
-The evaluation in two tests is different (OOM of allocator vs low events
-of protégés), this is kept different.
+[    0.001641] CPU: Testing write buffer coherency: ok
+[    0.001685] CPU0: Spectre v2: using ICIALLU workaround
+[    0.001703] ftrace: allocating 30541 entries in 120 pages
+[    0.044600] CPU0: update cpu_capacity 1024
+[    0.044633] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+[    0.044662] Setting up static identity map for 0x200000 - 0x200060
+[    0.047410] brcmstb: biuctrl: MCP: Write pairing already disabled
+[    0.048974] CPU1: update cpu_capacity 1024
+[    0.048978] CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+[    0.048981] CPU1: Spectre v2: using ICIALLU workaround
+[    0.050234] CPU2: update cpu_capacity 1024
+[    0.050238] CPU2: thread -1, cpu 2, socket 0, mpidr 80000002
+[    0.050241] CPU2: Spectre v2: using ICIALLU workaround
+[    0.051437] CPU3: update cpu_capacity 1024
+[    0.051441] CPU3: thread -1, cpu 3, socket 0, mpidr 80000003
+[    0.051444] CPU3: Spectre v2: using ICIALLU workaround
+[    0.051532] Brought up 4 CPUs
 
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- .../selftests/cgroup/test_memcontrol.c        | 199 ++++--------------
- 1 file changed, 36 insertions(+), 163 deletions(-)
+and this *after* merging 4.9.316-rc1:
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 63c6a683a8c1..c3d0d5f7b19c 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -190,13 +190,6 @@ static int test_memcg_current(const char *root)
- 	return ret;
- }
- 
--static int alloc_pagecache_50M(const char *cgroup, void *arg)
--{
--	int fd = (long)arg;
--
--	return alloc_pagecache(fd, MB(50));
--}
--
- static int alloc_pagecache_50M_noexit(const char *cgroup, void *arg)
- {
- 	int fd = (long)arg;
-@@ -254,7 +247,9 @@ static int cg_test_proc_killed(const char *cgroup)
-  * A/B/E   memory.min = 0,    memory.current = 50M
-  * A/B/F   memory.min = 500M, memory.current = 0
-  *
-- * Usages are pagecache, but the test keeps a running
-+ * (or memory.low if we test soft protection)
-+ *
-+ * Usages are pagecache and the test keeps a running
-  * process in every leaf cgroup.
-  * Then it creates A/G and creates a significant
-  * memory pressure in A.
-@@ -268,15 +263,16 @@ static int cg_test_proc_killed(const char *cgroup)
-  * (for origin of the numbers, see model in memcg_protection.m.)
-  *
-  * After that it tries to allocate more than there is
-- * unprotected memory in A available, and checks
-- * checks that memory.min protects pagecache even
-- * in this case.
-+ * unprotected memory in A available, and checks that:
-+ * a) memory.min protects pagecache even in this case,
-+ * b) memory.low allows reclaiming page cache with low events.
-  */
--static int test_memcg_min(const char *root)
-+static int test_memcg_protection(const char *root, bool min)
- {
--	int ret = KSFT_FAIL;
-+	int ret = KSFT_FAIL, rc;
- 	char *parent[3] = {NULL};
- 	char *children[4] = {NULL};
-+	const char *attribute = min ? "memory.min" : "memory.low";
- 	long c[4];
- 	int i, attempts;
- 	int fd;
-@@ -300,8 +296,10 @@ static int test_memcg_min(const char *root)
- 	if (cg_create(parent[0]))
- 		goto cleanup;
- 
--	if (cg_read_long(parent[0], "memory.min")) {
--		ret = KSFT_SKIP;
-+	if (cg_read_long(parent[0], attribute)) {
-+		/* No memory.min on older kernels is fine */
-+		if (min)
-+			ret = KSFT_SKIP;
- 		goto cleanup;
- 	}
- 
-@@ -338,15 +336,15 @@ static int test_memcg_min(const char *root)
- 			      (void *)(long)fd);
- 	}
- 
--	if (cg_write(parent[1], "memory.min", "50M"))
-+	if (cg_write(parent[1],   attribute, "50M"))
- 		goto cleanup;
--	if (cg_write(children[0], "memory.min", "75M"))
-+	if (cg_write(children[0], attribute, "75M"))
- 		goto cleanup;
--	if (cg_write(children[1], "memory.min", "25M"))
-+	if (cg_write(children[1], attribute, "25M"))
- 		goto cleanup;
--	if (cg_write(children[2], "memory.min", "0"))
-+	if (cg_write(children[2], attribute, "0"))
- 		goto cleanup;
--	if (cg_write(children[3], "memory.min", "500M"))
-+	if (cg_write(children[3], attribute, "500M"))
- 		goto cleanup;
- 
- 	attempts = 0;
-@@ -375,161 +373,26 @@ static int test_memcg_min(const char *root)
- 	if (c[3] != 0)
- 		goto cleanup;
- 
--	if (!cg_run(parent[2], alloc_anon, (void *)MB(170)))
--		goto cleanup;
--
--	if (!values_close(cg_read_long(parent[1], "memory.current"), MB(50), 3))
--		goto cleanup;
--
--	ret = KSFT_PASS;
--
--cleanup:
--	for (i = ARRAY_SIZE(children) - 1; i >= 0; i--) {
--		if (!children[i])
--			continue;
--
--		cg_destroy(children[i]);
--		free(children[i]);
--	}
--
--	for (i = ARRAY_SIZE(parent) - 1; i >= 0; i--) {
--		if (!parent[i])
--			continue;
--
--		cg_destroy(parent[i]);
--		free(parent[i]);
--	}
--	close(fd);
--	return ret;
--}
--
--/*
-- * First, this test creates the following hierarchy:
-- * A       memory.low = 0,    memory.max = 200M
-- * A/B     memory.low = 50M
-- * A/B/C   memory.low = 75M,  memory.current = 50M
-- * A/B/D   memory.low = 25M,  memory.current = 50M
-- * A/B/E   memory.low = 0,    memory.current = 50M
-- * A/B/F   memory.low = 500M, memory.current = 0
-- *
-- * Usages are pagecache.
-- * Then it creates A/G an creates a significant
-- * memory pressure in it.
-- *
-- * Then it checks actual memory usages and expects that:
-- * A/B    memory.current ~= 50M
-- * A/B/C  memory.current ~= 29M
-- * A/B/D  memory.current ~= 21M
-- * A/B/E  memory.current ~= 0
-- * A/B/F  memory.current  = 0
-- * (for origin of the numbers, see model in memcg_protection.m.)
-- *
-- * After that it tries to allocate more than there is
-- * unprotected memory in A available,
-- * and checks low and oom events in memory.events.
-- */
--static int test_memcg_low(const char *root)
--{
--	int ret = KSFT_FAIL;
--	char *parent[3] = {NULL};
--	char *children[4] = {NULL};
--	long low, oom;
--	long c[4];
--	int i;
--	int fd;
--
--	fd = get_temp_fd();
--	if (fd < 0)
--		goto cleanup;
--
--	parent[0] = cg_name(root, "memcg_test_0");
--	if (!parent[0])
--		goto cleanup;
--
--	parent[1] = cg_name(parent[0], "memcg_test_1");
--	if (!parent[1])
--		goto cleanup;
--
--	parent[2] = cg_name(parent[0], "memcg_test_2");
--	if (!parent[2])
--		goto cleanup;
--
--	if (cg_create(parent[0]))
--		goto cleanup;
--
--	if (cg_read_long(parent[0], "memory.low"))
--		goto cleanup;
--
--	if (cg_write(parent[0], "cgroup.subtree_control", "+memory"))
-+	rc = cg_run(parent[2], alloc_anon, (void *)MB(170));
-+	if (min && !rc)
- 		goto cleanup;
--
--	if (cg_write(parent[0], "memory.max", "200M"))
--		goto cleanup;
--
--	if (cg_write(parent[0], "memory.swap.max", "0"))
--		goto cleanup;
--
--	if (cg_create(parent[1]))
--		goto cleanup;
--
--	if (cg_write(parent[1], "cgroup.subtree_control", "+memory"))
--		goto cleanup;
--
--	if (cg_create(parent[2]))
-+	else if (!min && rc) {
-+		fprintf(stderr,
-+			"memory.low prevents from allocating anon memory\n");
- 		goto cleanup;
--
--	for (i = 0; i < ARRAY_SIZE(children); i++) {
--		children[i] = cg_name_indexed(parent[1], "child_memcg", i);
--		if (!children[i])
--			goto cleanup;
--
--		if (cg_create(children[i]))
--			goto cleanup;
--
--		if (i > 2)
--			continue;
--
--		if (cg_run(children[i], alloc_pagecache_50M, (void *)(long)fd))
--			goto cleanup;
- 	}
- 
--	if (cg_write(parent[1], "memory.low", "50M"))
--		goto cleanup;
--	if (cg_write(children[0], "memory.low", "75M"))
--		goto cleanup;
--	if (cg_write(children[1], "memory.low", "25M"))
--		goto cleanup;
--	if (cg_write(children[2], "memory.low", "0"))
--		goto cleanup;
--	if (cg_write(children[3], "memory.low", "500M"))
--		goto cleanup;
--
--	if (cg_run(parent[2], alloc_anon, (void *)MB(148)))
--		goto cleanup;
--
- 	if (!values_close(cg_read_long(parent[1], "memory.current"), MB(50), 3))
- 		goto cleanup;
- 
--	for (i = 0; i < ARRAY_SIZE(children); i++)
--		c[i] = cg_read_long(children[i], "memory.current");
--
--	if (!values_close(c[0], MB(29), 10))
--		goto cleanup;
--
--	if (!values_close(c[1], MB(21), 10))
--		goto cleanup;
--
--	if (c[3] != 0)
--		goto cleanup;
--
--	if (cg_run(parent[2], alloc_anon, (void *)MB(166))) {
--		fprintf(stderr,
--			"memory.low prevents from allocating anon memory\n");
-+	if (min) {
-+		ret = KSFT_PASS;
- 		goto cleanup;
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(children); i++) {
- 		int no_low_events_index = 1;
-+		long low, oom;
- 
- 		oom = cg_read_key_long(children[i], "memory.events", "oom ");
- 		low = cg_read_key_long(children[i], "memory.events", "low ");
-@@ -565,6 +428,16 @@ static int test_memcg_low(const char *root)
- 	return ret;
- }
- 
-+static int test_memcg_min(const char *root)
-+{
-+	return test_memcg_protection(root, true);
-+}
-+
-+static int test_memcg_low(const char *root)
-+{
-+	return test_memcg_protection(root, false);
-+}
-+
- static int alloc_pagecache_max_30M(const char *cgroup, void *arg)
- {
- 	size_t size = MB(50);
+[    0.001626] CPU: Testing write buffer coherency: ok
+[    0.001670] CPU0: Spectre v2: using ICIALLU workaround
+[    0.001689] CPU0: Spectre BHB: using loop workaround
+[    0.001705] ftrace: allocating 30542 entries in 120 pages
+[    0.043752] CPU0: update cpu_capacity 1024
+[    0.043784] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+[    0.043813] Setting up static identity map for 0x200000 - 0x200060
+[    0.046547] brcmstb: biuctrl: MCP: Write pairing already disabled
+[    0.048121] CPU1: update cpu_capacity 1024
+[    0.048124] CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+[    0.048129] CPU1: Spectre v2: using ICIALLU workaround
+[    0.048165] CPU1: Spectre BHB: using loop workaround
+[    0.049398] CPU2: update cpu_capacity 1024
+[    0.049402] CPU2: thread -1, cpu 2, socket 0, mpidr 80000002
+[    0.049405] CPU2: Spectre v2: using ICIALLU workaround
+[    0.049440] CPU2: Spectre BHB: using loop workaround
+[    0.050613] CPU3: update cpu_capacity 1024
+[    0.050617] CPU3: thread -1, cpu 3, socket 0, mpidr 80000003
+[    0.050619] CPU3: Spectre v2: using ICIALLU workaround
+[    0.050653] CPU3: Spectre BHB: using loop workaround
+[    0.050722] Brought up 4 CPUs
+[    0.050738] SMP: Total of 4 processors activated (216.00 BogoMIPS).
+[    0.050753] CPU: All CPU(s) started in HYP mode.
 -- 
-2.35.3
-
+Florian

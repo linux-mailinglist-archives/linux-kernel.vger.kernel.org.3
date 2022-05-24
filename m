@@ -2,166 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107BF532CCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B0E532CCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238606AbiEXPDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S238517AbiEXPDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236693AbiEXPDQ (ORCPT
+        with ESMTP id S236693AbiEXPDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:03:16 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05908AE6B;
-        Tue, 24 May 2022 08:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653404594; x=1684940594;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NAtbRL6rOJ7RfXXVkiq9+gyiENENpvBI07+NLn2VSMw=;
-  b=c1bdDpux4Sfd5IHYdQSdQ6WSYVmHxybh9l3M+Iv7qA60wduzv0tOOUJC
-   xi8TmqJaSms+vB4NcKwAObmfHm/exAnNwiT/cIdqXnMvJwxli8Yyk8xQu
-   ipuZKvxDillUdqPaf4/RKCpKl90YbNrO7U0R9uLdH4owUnEjNzx7B3CqQ
-   8q1RPsfhaOKy0quVQxl4id6MtOkTh//yGhz+K/9/T3X/1/pznW90uKfx4
-   vvy2qGbNx9P3h5yO8KSzQqwa5apcjDaBBVT/ZB/V3Ks07MbhAcrFUApGd
-   icgC4/5shiNYySbTlaOtKSywNAJ0yKX/q16yMQR1zZbsbJPDQ9VofzhNE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="273280997"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273280997"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 08:03:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="559147778"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 24 May 2022 08:03:11 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntW3z-0002A2-9L;
-        Tue, 24 May 2022 15:03:11 +0000
-Date:   Tue, 24 May 2022 23:02:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     hezhongkun <hezhongkun.hzk@bytedance.com>, hannes@cmpxchg.org,
-        mhocko@kernel.org, roman.gushchin@linux.dev
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, lizefan.x@bytedance.com,
-        Hezhongkun <hezhongkun.hzk@bytedance.com>
-Subject: Re: [PATCH] mm: memcontrol: add the mempolicy interface for cgroup
- v2.
-Message-ID: <202205242200.VGAUIGvw-lkp@intel.com>
-References: <20220524103638.473-1-hezhongkun.hzk@bytedance.com>
+        Tue, 24 May 2022 11:03:04 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A761E8A339
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:03:03 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id rs12so24188915ejb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DlQEZ/gCc3QpUXehaN1GEEfOCVI81XCJ2rd4OltFdLY=;
+        b=CbNc1wxia4KBEnPojOwiwyFFW4lhBKRf4AQt/+oQ3TR8JoKODULUGG36Ybz8lklHLj
+         L6zd81OhoNFtQdzWk3JnSpvvQeD9/k+wmO7sOhIrSK0u/1YI/HJngN7SSxXuQ9A23p0/
+         PBjADz9nDQP9Py1zA+vYmC/eIvp1CfMTlYZN0zZ1Wxx+rIxWfIc6Umoo1SMLcZVFwvHL
+         +8Rg9i8OTAnChsU+N3sBsft+ZwPVVRVipal3rAR2RxAv0D+b1O9anbkY6UfjcMkyHzi0
+         zbrTbd7o8+x9SZDqISgByUttWLIFYko/kvdNsMpBgxE9GAw28KiuSo/i2w15EPbM1r4t
+         io9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DlQEZ/gCc3QpUXehaN1GEEfOCVI81XCJ2rd4OltFdLY=;
+        b=Uzsk5bqpubcWs9O0C1JUdhgUfVMPaVn1p11ba1pZHNOCdILjVyw8xsOESXkCVHByEr
+         x1KFmIObrZ2zv3qUVwb2ltNrX1T95D6cQqtZJq5Y/CYc11z9ME6TerQnwWFRAeSSiPG8
+         eOu0UdXvhcQFpSxiHrTH7lcCRpndeqX4lTUYgycNwBVXN48UQUfgGyapqJiOalDXlgGh
+         Dx2oXjUeXCvy7Le3IJxw+PVIsZuoGwvyqsZbHo8tEVR4eFAUaBub6oMISLxpWL/eKZu9
+         551/lPgZkuIa6gqLYiXpM1PcMVDvp/vGIYbYIf5kuZFgU4Yq7ouwuWuWpdb2ozJwhwLo
+         Ivxg==
+X-Gm-Message-State: AOAM531yJrzcaxGa5JA9j3gYfZ8906Va373MpHJ1sdNeIK1NQkaZ6W+f
+        8F/vqUc+0Cpd8Jya9RwMY+K5IyAo4DTsR/TBlwcdLsyXYgQEYg==
+X-Google-Smtp-Source: ABdhPJzT/FI/PkyFzW9TIbfxwAFTxWm8y8bCfFXrNT9T+t7BemqsE+qUfpfq2j+/xSzZ88zaoNI8smzlJkq8rYwpRc0=
+X-Received: by 2002:a17:906:974c:b0:6fa:8c68:62a8 with SMTP id
+ o12-20020a170906974c00b006fa8c6862a8mr25615119ejy.293.1653404582161; Tue, 24
+ May 2022 08:03:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524103638.473-1-hezhongkun.hzk@bytedance.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20170323055435.29197-1-bjorn.andersson@linaro.org> <20220523163038.GA9124@duo.ucw.cz>
+In-Reply-To: <20220523163038.GA9124@duo.ucw.cz>
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Tue, 24 May 2022 10:02:51 -0500
+Message-ID: <CAOCOHw7N9EHcxSSe6n8828oy2fh6xNxRYf9OUXkY4SQh6gtVLw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] leds: Add driver for Qualcomm LPG
+To:     Pavel Machek <pavel@ucw.cz>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Richard Purdie <rpurdie@rpsys.net>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi hezhongkun,
+On Mon, May 23, 2022 at 11:30 AM Pavel Machek <pavel@ucw.cz> wrote:
+>
+> Hi!
+>
+> > The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
+> > PMICs from Qualcomm. It can operate on fixed parameters or based on a
+> > lookup-table, altering the duty cycle over time - which provides the
+> > means for e.g. hardware assisted transitions of LED brightness.
+> >
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>
+> I'd really like to see the patch fixing the pattern interface (or
+> disabling it). I don't want to push the tree to Linus with that bug.
+>
 
-Thank you for the patch! Yet something to improve:
+Please find a proposed update to lpg_pattern_set() and the documentation at:
+https://lore.kernel.org/linux-arm-msm/20220523233719.1496297-1-bjorn.andersson@linaro.org/T/#u
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18 next-20220524]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+@Marijn, would love to get your input on this proposal.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hezhongkun/mm-memcontrol-add-the-mempolicy-interface-for-cgroup-v2/20220524-183922
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 143a6252e1b8ab424b4b293512a97cca7295c182
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220524/202205242200.VGAUIGvw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6adb0a02c27c8811bee9783451ee25155baf490e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review hezhongkun/mm-memcontrol-add-the-mempolicy-interface-for-cgroup-v2/20220524-183922
-        git checkout 6adb0a02c27c8811bee9783451ee25155baf490e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> mm/mempolicy.c:182:29: error: call to undeclared function 'mem_cgroup_from_task'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct mem_cgroup *memcg = mem_cgroup_from_task(p);
-                                      ^
-   mm/mempolicy.c:182:29: note: did you mean 'mem_cgroup_from_css'?
-   include/linux/memcontrol.h:1267:20: note: 'mem_cgroup_from_css' declared here
-   struct mem_cgroup *mem_cgroup_from_css(struct cgroup_subsys_state *css)
-                      ^
->> mm/mempolicy.c:182:21: warning: incompatible integer to pointer conversion initializing 'struct mem_cgroup *' with an expression of type 'int' [-Wint-conversion]
-           struct mem_cgroup *memcg = mem_cgroup_from_task(p);
-                              ^       ~~~~~~~~~~~~~~~~~~~~~~~
->> mm/mempolicy.c:184:23: error: incomplete definition of type 'struct mem_cgroup'
-           pol = (memcg && memcg->mempolicy) ? memcg->mempolicy : get_task_policy(p);
-                           ~~~~~^
-   include/linux/mm_types.h:31:8: note: forward declaration of 'struct mem_cgroup'
-   struct mem_cgroup;
-          ^
-   mm/mempolicy.c:184:43: error: incomplete definition of type 'struct mem_cgroup'
-           pol = (memcg && memcg->mempolicy) ? memcg->mempolicy : get_task_policy(p);
-                                               ~~~~~^
-   include/linux/mm_types.h:31:8: note: forward declaration of 'struct mem_cgroup'
-   struct mem_cgroup;
-          ^
-   mm/mempolicy.c:179:19: warning: no previous prototype for function 'get_cgrp_or_task_policy' [-Wmissing-prototypes]
-   struct mempolicy *get_cgrp_or_task_policy(struct task_struct *p)
-                     ^
-   mm/mempolicy.c:179:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct mempolicy *get_cgrp_or_task_policy(struct task_struct *p)
-   ^
-   static 
-   mm/mempolicy.c:1799:29: error: call to undeclared function 'mem_cgroup_from_task'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           struct mem_cgroup *memcg = mem_cgroup_from_task(current);
-                                      ^
-   mm/mempolicy.c:1799:21: warning: incompatible integer to pointer conversion initializing 'struct mem_cgroup *' with an expression of type 'int' [-Wint-conversion]
-           struct mem_cgroup *memcg = mem_cgroup_from_task(current);
-                              ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/mempolicy.c:1801:23: error: incomplete definition of type 'struct mem_cgroup'
-           pol = (memcg && memcg->mempolicy) ? memcg->mempolicy : get_vma_policy(vma, addr);
-                           ~~~~~^
-   include/linux/mm_types.h:31:8: note: forward declaration of 'struct mem_cgroup'
-   struct mem_cgroup;
-          ^
-   mm/mempolicy.c:1801:43: error: incomplete definition of type 'struct mem_cgroup'
-           pol = (memcg && memcg->mempolicy) ? memcg->mempolicy : get_vma_policy(vma, addr);
-                                               ~~~~~^
-   include/linux/mm_types.h:31:8: note: forward declaration of 'struct mem_cgroup'
-   struct mem_cgroup;
-          ^
-   3 warnings and 6 errors generated.
-
-
-vim +/mem_cgroup_from_task +182 mm/mempolicy.c
-
-   178	
-   179	struct mempolicy *get_cgrp_or_task_policy(struct task_struct *p)
-   180	{
-   181		struct mempolicy *pol;
- > 182		struct mem_cgroup *memcg = mem_cgroup_from_task(p);
-   183	
- > 184		pol = (memcg && memcg->mempolicy) ? memcg->mempolicy : get_task_policy(p);
-   185		return pol;
-   186	}
-   187	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Bjorn

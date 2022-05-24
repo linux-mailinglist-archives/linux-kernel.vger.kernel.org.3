@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B634533048
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89229533046
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240280AbiEXSPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 14:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33990 "EHLO
+        id S240228AbiEXSPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 14:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbiEXSO7 (ORCPT
+        with ESMTP id S238069AbiEXSO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 24 May 2022 14:14:59 -0400
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6F569702;
-        Tue, 24 May 2022 11:14:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC3C6C54F;
+        Tue, 24 May 2022 11:14:54 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id A6E6B5FD08;
-        Tue, 24 May 2022 21:14:51 +0300 (MSK)
+        by mail.sberdevices.ru (Postfix) with ESMTP id 6C46B5FD09;
+        Tue, 24 May 2022 21:14:52 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1653416091;
-        bh=wD7xCf5kPvxtcNl5Q5TxVB7RgfbUWeGyNLGzYEBaNHI=;
+        s=mail; t=1653416092;
+        bh=qgYEDOiqZYS47KPb+xFuxK7tgHcFYsBBq4aS6RNbuaQ=;
         h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=CTOUnzjn/ACJVkoRa975ESziYQa1zuKoHYBFncmfreyqQv8h4KbmjZz6tO2KLA81h
-         8pO5BrB7YJkROPMl7IDWMwWHfspkqPe2Z4mmDuVVXsQYd7zQsUKiV94ybmI+yemrkD
-         B055bpRtvmx5/Aosl2NIP8lDkKtgs3LBBI3RRQQpuVHnGCNrmE1Pu1M/POEUvYSaIX
-         NDD4kzZDwmyTtgUFHsBV0sIKVUkweDHKmtSxHxPxuofI4gLVKalQo6DkQifQG7IQUj
-         4z8nqM5tleaJeKUrXgVhZdR+ozXjmtECKlnuo6tHyFyEcmJa/2UDOyWbOwAoDrWWCr
-         VJzn1WQv6gSfg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        b=lyZTxqT1f9vowUaWcXgZAqtE7ogHVbp61ESEu5MrnbUqBUKfPu6K6xuh9C8ZKqkSn
+         hApnz4okd+YqrD++Z/aENMfQ7qOOVFmgExXpxxQY9yzQUL/QoGGzcOQDw5oYB7i8ED
+         TKi9DoJpMqGMWD+cQXJ4laaNLyzdkKJfOdmXX+CjsKZn2SVlmQoEG9aiyQO6EUYSRI
+         Gp9MRkWHUGoxD7piHauc5y9K5nOUFLhzLyvdFKalxk1AvJv0f6WH79oK3rVTsF0aQg
+         g7vS91KkPCfFzNli8PWI7c7XeqkoMrHLgs7X/K6qJCda/h7Q9VYVtX0hpc9Ra7wAjC
+         2bmF9LAGEdNtQ==
+Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
         by mail.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 24 May 2022 21:14:51 +0300 (MSK)
+        Tue, 24 May 2022 21:14:52 +0300 (MSK)
 From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
 To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "jic23@kernel.org" <jic23@kernel.org>,
@@ -45,13 +45,13 @@ CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         kernel <kernel@sberdevices.ru>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v2 3/5] iio:accel:mxc4005: rearrange iio trigger get and
+Subject: [PATCH v2 4/5] iio:chemical:ccs811: rearrange iio trigger get and
  register
-Thread-Topic: [PATCH v2 3/5] iio:accel:mxc4005: rearrange iio trigger get and
- register
-Thread-Index: AQHYb5okhfALIwJfFkukmT/Sx6kzbg==
-Date:   Tue, 24 May 2022 18:14:43 +0000
-Message-ID: <20220524181150.9240-4-ddrokosov@sberdevices.ru>
+Thread-Topic: [PATCH v2 4/5] iio:chemical:ccs811: rearrange iio trigger get
+ and register
+Thread-Index: AQHYb5olzVWMeGfB9k26hyqb2INtTA==
+Date:   Tue, 24 May 2022 18:14:45 +0000
+Message-ID: <20220524181150.9240-5-ddrokosov@sberdevices.ru>
 References: <20220524181150.9240-1-ddrokosov@sberdevices.ru>
 In-Reply-To: <20220524181150.9240-1-ddrokosov@sberdevices.ru>
 Accept-Language: ru-RU, en-US
@@ -87,33 +87,30 @@ If this call order is wrong, the next iio_trigger_put() (from sysfs
 callback or "delete module" path) will dereference "default" module
 refcnt, which is incorrect behaviour.
 
-Fixes: 47196620c82f ("iio: mxc4005: add data ready trigger for mxc4005")
+Fixes: f1f065d7ac30 ("iio: chemical: ccs811: Add support for data ready tri=
+gger")
 Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 ---
- drivers/iio/accel/mxc4005.c | 4 ++--
+ drivers/iio/chemical/ccs811.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/accel/mxc4005.c b/drivers/iio/accel/mxc4005.c
-index b3afbf064915..df600d2917c0 100644
---- a/drivers/iio/accel/mxc4005.c
-+++ b/drivers/iio/accel/mxc4005.c
-@@ -456,8 +456,6 @@ static int mxc4005_probe(struct i2c_client *client,
+diff --git a/drivers/iio/chemical/ccs811.c b/drivers/iio/chemical/ccs811.c
+index 847194fa1e46..80ef1aa9aae3 100644
+--- a/drivers/iio/chemical/ccs811.c
++++ b/drivers/iio/chemical/ccs811.c
+@@ -499,11 +499,11 @@ static int ccs811_probe(struct i2c_client *client,
 =20
- 		data->dready_trig->ops =3D &mxc4005_trigger_ops;
- 		iio_trigger_set_drvdata(data->dready_trig, indio_dev);
--		indio_dev->trig =3D data->dready_trig;
+ 		data->drdy_trig->ops =3D &ccs811_trigger_ops;
+ 		iio_trigger_set_drvdata(data->drdy_trig, indio_dev);
+-		indio_dev->trig =3D data->drdy_trig;
 -		iio_trigger_get(indio_dev->trig);
- 		ret =3D devm_iio_trigger_register(&client->dev,
- 						data->dready_trig);
- 		if (ret) {
-@@ -465,6 +463,8 @@ static int mxc4005_probe(struct i2c_client *client,
- 				"failed to register trigger\n");
- 			return ret;
- 		}
+ 		ret =3D iio_trigger_register(data->drdy_trig);
+ 		if (ret)
+ 			goto err_poweroff;
 +
-+		indio_dev->trig =3D iio_trigger_get(data->dready_trig);
++		indio_dev->trig =3D iio_trigger_get(data->drdy_trig);
  	}
 =20
- 	return devm_iio_device_register(&client->dev, indio_dev);
+ 	ret =3D iio_triggered_buffer_setup(indio_dev, NULL,
 --=20
 2.36.0

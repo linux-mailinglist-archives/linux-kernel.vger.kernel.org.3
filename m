@@ -2,271 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B566F532479
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1064F53247F
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235424AbiEXHxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S235465AbiEXHzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235456AbiEXHxm (ORCPT
+        with ESMTP id S235425AbiEXHzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:53:42 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA958721B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:53:31 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id x12so15670499pgj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:53:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wV0DpKXatddjDbJCjTJofvulVU/99t8+gdCbNaoZbpM=;
-        b=KA1pZeloa4+9p56nYDJMi/agE/umtXJKAy7AbfgNIM0jOuC5MFFdUc3MGY1OD7YwVX
-         EL6/PSLALvaRWZeO0+V+2+gf4CS7DtkspoPvrmlC3tByyaZlbilbP3+DrOZW+XLk4b3c
-         F/495q2T9EV7hGQNvVpfNMYLYeeg7XtGDCxmK3WQzRkZ/r1ejx0LUmNw+iTCXk/JMXvo
-         7zN2FoQYP9NXh2LCAI0HiCSXwxsVyEomVVv7k1VZ/BXs8Thsv0KWTU2rCfZyGALbl81B
-         HP1jA2bTwTg1MoooDPess+wnu6N8qp1+hItLooVZkrNVoXQ75+fcLXcdoNIy9wy3425Y
-         aJuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wV0DpKXatddjDbJCjTJofvulVU/99t8+gdCbNaoZbpM=;
-        b=Or+jLbbmsfXjLCXnIVaRmuzp64PaPh2KQO5u02aBc/m73y7+JJLYd1jwJneddj/XF6
-         Xu7r+cEddW/KkoDH0Wu1vYWpfjuNqo8ufLKAC/rS02BlDkYxn1f6TWS9kAt/chYxJxqY
-         pcrf+RQpv/Vu83JJqrsfZjMaOotR/ryK61EqFQPTeB+5auTUUjoWYSZNQ4yqSqikAh5/
-         uax76nsKEiLZVBhYoYf6Pp6KoH7mSlWwuTePAfM6VnxCtNh3HLWYA+sPMzuSpnHX+LTf
-         YOOUrE9obmrGo6PnIkHErE7ewXz1TsZm83rCuSuNUdgPw+M2NIj/knaEMlsf5f7RUyI6
-         nJaw==
-X-Gm-Message-State: AOAM531khXCvZ9dj2tpcuhEdYZ4Tm3Qh/nWV9DAgC9DSXQEMFZNYKk8j
-        eN4DKKshpq4alC9Q2QzHG7LoTg==
-X-Google-Smtp-Source: ABdhPJw1lV/AnIKXMFK++/pxRxsIkuT1tsDXuJeG2hGTxeRGAav7QzcnjK9gJbM7LScExUgEBgqQyQ==
-X-Received: by 2002:a63:df0f:0:b0:3db:2d4:ded9 with SMTP id u15-20020a63df0f000000b003db02d4ded9mr23094534pgg.267.1653378810601;
-        Tue, 24 May 2022 00:53:30 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id m3-20020a62a203000000b00518327b7d23sm8682136pff.46.2022.05.24.00.53.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 24 May 2022 00:53:30 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH v2 2/2] selftest/bpf/benchs: Add bpf_map benchmark
-Date:   Tue, 24 May 2022 15:53:06 +0800
-Message-Id: <20220524075306.32306-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220524075306.32306-1-zhoufeng.zf@bytedance.com>
-References: <20220524075306.32306-1-zhoufeng.zf@bytedance.com>
+        Tue, 24 May 2022 03:55:06 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E44985AC
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 00:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653378905; x=1684914905;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LwejdRyVv+pfwyT3YLqpqBhrKOTcuxVfihOUoNBOtrM=;
+  b=TyEoy84v6tn8U6I3x4dZ80QzPzJaiCLCMRX0C/reZu99NagOMLtxye0j
+   GBccNblxiBuic9U64q50TvIt5D5bv3kFYza8dUET3V+lRFTyhPHJK80IL
+   RZtim8RAs0PVCFFLqb2U8bRQDmAaIcJieq6dKYVEGuf9yM/r3QqmUFdAj
+   5xxiGmv13jqa4zBdIdLQFP81sKaaD67tVCNEayKRyIi0h+VMGj2gVij2h
+   eaefr42PPN+dfwkWb+t1pkLqz0skSbroWDqrut8Bo9K5IxD79Qkd5uUjv
+   wezjksursIpnDVcUcHtF4yrcc7NkIjTpk9QIRImWNx5RvGECT3q/cABKD
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273455411"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="273455411"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 00:55:04 -0700
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="717072330"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.52.210])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 00:55:01 -0700
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH V4 00/15] perf intel-pt: Better support for perf record --cpu
+Date:   Tue, 24 May 2022 10:54:21 +0300
+Message-Id: <20220524075436.29144-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+Hi
 
-Add benchmark for hash_map to reproduce the worst case
-that non-stop update when map's free is zero.
+Here are V4 patches to support capturing Intel PT sideband events such as
+mmap, task, context switch, text poke etc, on every CPU even when tracing
+selected user_requested_cpus.  That is, when using the perf record -C or
+ --cpu option.
 
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- tools/testing/selftests/bpf/Makefile          |  4 +-
- tools/testing/selftests/bpf/bench.c           |  2 +
- .../selftests/bpf/benchs/bench_bpf_map.c      | 78 +++++++++++++++++++
- .../selftests/bpf/benchs/run_bench_bpf_map.sh | 10 +++
- .../selftests/bpf/progs/bpf_map_bench.c       | 27 +++++++
- 5 files changed, 120 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_map.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_map_bench.c
+This is needed for:
+1. text poke: a text poke on any CPU affects all CPUs
+2. tracing user space: a user space process can migrate between CPUs so
+mmap events that happen on a different CPU can be needed to decode a
+user_requested_cpus CPU.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3820608faf57..cd2fada21ed7 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -549,6 +549,7 @@ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
- $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
- $(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
- $(OUTPUT)/bench_strncmp.o: $(OUTPUT)/strncmp_bench.skel.h
-+$(OUTPUT)/bench_bpf_map.o: $(OUTPUT)/bpf_map_bench.skel.h
- $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
- $(OUTPUT)/bench: LDLIBS += -lm
- $(OUTPUT)/bench: $(OUTPUT)/bench.o \
-@@ -560,7 +561,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_ringbufs.o \
- 		 $(OUTPUT)/bench_bloom_filter_map.o \
- 		 $(OUTPUT)/bench_bpf_loop.o \
--		 $(OUTPUT)/bench_strncmp.o
-+		 $(OUTPUT)/bench_strncmp.o \
-+		 $(OUTPUT)/bench_bpf_map.o
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
- 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index f973320e6dbf..32644c4adc84 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -397,6 +397,7 @@ extern const struct bench bench_hashmap_with_bloom;
- extern const struct bench bench_bpf_loop;
- extern const struct bench bench_strncmp_no_helper;
- extern const struct bench bench_strncmp_helper;
-+extern const struct bench bench_bpf_map;
- 
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -431,6 +432,7 @@ static const struct bench *benchs[] = {
- 	&bench_bpf_loop,
- 	&bench_strncmp_no_helper,
- 	&bench_strncmp_helper,
-+	&bench_bpf_map,
- };
- 
- static void setup_benchmark()
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_map.c b/tools/testing/selftests/bpf/benchs/bench_bpf_map.c
-new file mode 100644
-index 000000000000..4db08ed23f1f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_map.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedadnce */
-+
-+#include <argp.h>
-+#include "bench.h"
-+#include "bpf_map_bench.skel.h"
-+
-+/* BPF triggering benchmarks */
-+static struct ctx {
-+	struct bpf_map_bench *skel;
-+	struct counter hits;
-+} ctx;
-+
-+static void validate(void)
-+{
-+	if (env.consumer_cnt != 1) {
-+		fprintf(stderr, "benchmark doesn't support multi-consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	while (true) {
-+		/* trigger the bpf program */
-+		syscall(__NR_getpgid);
-+		atomic_inc(&ctx.hits.value);
-+	}
-+
-+	return NULL;
-+}
-+
-+static void *consumer(void *input)
-+{
-+	return NULL;
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+	res->hits = atomic_swap(&ctx.hits.value, 0);
-+}
-+
-+static void setup(void)
-+{
-+	struct bpf_link *link;
-+	int map_fd, i, max_entries;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = bpf_map_bench__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	link = bpf_program__attach(ctx.skel->progs.benchmark);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+
-+	//fill hash_map
-+	map_fd = bpf_map__fd(ctx.skel->maps.hash_map_bench);
-+	max_entries = bpf_map__max_entries(ctx.skel->maps.hash_map_bench);
-+	for (i = 0; i < max_entries; i++)
-+		bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
-+}
-+
-+const struct bench bench_bpf_map = {
-+	.name = "bpf-map",
-+	.validate = validate,
-+	.setup = setup,
-+	.producer_thread = producer,
-+	.consumer_thread = consumer,
-+	.measure = measure,
-+	.report_progress = ops_report_progress,
-+	.report_final = ops_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
-new file mode 100755
-index 000000000000..d7cc969e4f85
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
-@@ -0,0 +1,10 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ./benchs/run_common.sh
-+
-+set -eufo pipefail
-+
-+nr_threads=`expr $(cat /proc/cpuinfo | grep "processor"| wc -l) - 1`
-+summary=$($RUN_BENCH -p $nr_threads bpf-map)
-+printf "$summary"
-diff --git a/tools/testing/selftests/bpf/progs/bpf_map_bench.c b/tools/testing/selftests/bpf/progs/bpf_map_bench.c
-new file mode 100644
-index 000000000000..655366e6e0f4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_map_bench.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Bytedance */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define MAX_ENTRIES 1000
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, u32);
-+	__type(value, u64);
-+	__uint(max_entries, MAX_ENTRIES);
-+} hash_map_bench SEC(".maps");
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int benchmark(void *ctx)
-+{
-+	u32 key = bpf_get_prandom_u32();
-+	u64 init_val = 1;
-+
-+	bpf_map_update_elem(&hash_map_bench, &key, &init_val, BPF_ANY);
-+	return 0;
-+}
--- 
-2.20.1
+For example:
 
+	Trace on CPU 1:
+
+	perf record --kcore -C 1 -e intel_pt// &
+
+	Start a task on CPU 0:
+
+	taskset 0x1 testprog &
+
+	Migrate it to CPU 1:
+
+	taskset -p 0x2 <testprog pid>
+
+	Stop tracing:
+
+	kill %1
+
+	Prior to these changes there will be errors decoding testprog
+	in userspace because the comm and mmap events for testprog will not
+	have been captured.
+
+There is quite a bit of preparation:
+
+The first patch is a small Intel PT test for system-wide side band.  The
+test fails before the patches are applied, passed afterwards.
+
+      perf intel-pt: Add a test for system-wide side band [new in V1]
+
+The next 5 patches (now already applied) stop auxtrace mixing up mmap idx
+between evlist and evsel.  That is going to matter when
+evlist->all_cpus != evlist->user_requested_cpus != evsel->cpus:
+
+      libperf evsel: Factor out perf_evsel__ioctl() [now applied]
+      libperf evsel: Add perf_evsel__enable_thread()
+      perf evlist: Use libperf functions in evlist__enable_event_idx()
+      perf auxtrace: Move evlist__enable_event_idx() to auxtrace.c
+      perf auxtrace: Do not mix up mmap idx
+
+The next 6 patches (first 4 now already applied) stop attempts to auxtrace
+mmap when it is not an auxtrace event e.g. when mmapping the CPUs on which
+only sideband is captured:
+
+      libperf evlist: Remove ->idx() per_cpu parameter
+      libperf evlist: Move ->idx() into mmap_per_evsel()
+      libperf evlist: Add evsel as a parameter to ->idx()
+      perf auxtrace: Record whether an auxtrace mmap is needed
+      perf auxctrace: Add mmap_needed to auxtrace_mmap_params
+      perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
+
+The next 5 patches switch to setting up dummy event maps before adding the
+evsel so that the evsel is subject to map propagation, primarily to cause
+addition of the evsel's CPUs to all_cpus.
+
+      perf evlist: Factor out evlist__dummy_event()
+      perf evlist: Add evlist__add_system_wide_dummy()
+      perf record: Use evlist__add_system_wide_dummy() in record__config_text_poke()
+      perf intel-pt: Use evlist__add_system_wide_dummy() for switch tracking
+      perf intel-pt: Track sideband system-wide when needed
+
+The remaining patches make more significant changes.
+
+First change from using user_requested_cpus to using all_cpus where necessary:
+
+      perf tools: Allow all_cpus to be a superset of user_requested_cpus
+
+Secondly, mmap all per-thread and all per-cpu events:
+
+      libperf evlist: Allow mixing per-thread and per-cpu mmaps
+      libperf evlist: Check nr_mmaps is correct [new in V1]
+
+Stop using system_wide flag for uncore because it will not work anymore:
+
+      perf stat: Add requires_cpu flag for uncore
+      libperf evsel: Add comments for booleans [new in V1]
+
+Finally change map propagation so that system-wide events retain their cpus and
+(dummy) threads:
+
+      perf tools: Allow system-wide events to keep their own CPUs
+      perf tools: Allow system-wide events to keep their own threads
+
+
+Changes in V4:
+
+      Added Acked-by: Namhyung Kim <namhyung@kernel.org>
+      Added a couple Acked-by: Ian Rogers <irogers@google.com>
+
+      perf intel-pt: Add a test for system-wide side band
+	Put in commit message that test succeeds only after other
+	patches applied
+
+      libperf evsel: Add perf_evsel__enable_thread()
+      perf evlist: Use libperf functions in evlist__enable_event_idx()
+      perf auxtrace: Move evlist__enable_event_idx() to auxtrace.c
+      perf auxtrace: Do not mix up mmap idx
+      libperf evlist: Remove ->idx() per_cpu parameter
+      libperf evlist: Move ->idx() into mmap_per_evsel()
+      libperf evlist: Add evsel as a parameter to ->idx()
+      perf auxtrace: Record whether an auxtrace mmap is needed
+	Omitted because already applied
+
+      libperf evsel: Add comments for booleans
+	Amended comment about own_cpus
+
+
+Changes in V3:
+
+      perf auxtrace: Add mmap_needed to auxtrace_mmap_params
+	Amended mmap_needed comment
+
+      perf evlist: Add evlist__add_dummy_on_all_cpus()
+	Amended comment about all CPUs.
+
+
+Changes in V2:
+
+      Added some Acked-by: Ian Rogers <irogers@google.com>
+
+      libperf evsel: Add perf_evsel__enable_thread()
+	Use perf_cpu_map__for_each_cpu()
+
+      perf auxtrace: Add mmap_needed to auxtrace_mmap_params
+	Add documentation comment for mmap_needed
+
+      perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
+	Fix missing auxtrace_mmap_params__set_idx change
+
+      libperf evlist: Check nr_mmaps is correct
+	Remove unused code
+
+      libperf evsel: Add comments for booleans
+	Amend comments
+
+      perf evlist: Add evlist__add_dummy_on_all_cpus()
+	Rename evlist__add_system_wide -> evlist__add_on_all_cpus
+	Changed patch subject accordingly
+
+      perf record: Use evlist__add_dummy_on_all_cpus() in record__config_text_poke()
+	Rename evlist__add_system_wide -> evlist__add_on_all_cpus
+	Changed patch subject accordingly
+
+      perf intel-pt: Use evlist__add_dummy_on_all_cpus() for switch tracking
+	Rename evlist__add_system_wide -> evlist__add_on_all_cpus
+	Changed patch subject accordingly
+
+
+Changes in V1:
+
+      perf intel-pt: Add a test for system-wide side band
+	New patch
+
+      libperf evsel: Factor out perf_evsel__ioctl()
+	Dropped because it has been applied.
+
+      libperf evsel: Add perf_evsel__enable_thread()
+	Rename variable i -> idx
+
+      perf auxtrace: Do not mix up mmap idx
+	Rename variable cpu to cpu_map_idx
+
+      perf tools: Allow all_cpus to be a superset of user_requested_cpus
+	Add Acked-by: Ian Rogers <irogers@google.com>
+
+      libperf evlist: Allow mixing per-thread and per-cpu mmaps
+	Fix perf_evlist__nr_mmaps() calculation
+
+      libperf evlist: Check nr_mmaps is correct
+	New patch
+
+      libperf evsel: Add comments for booleans
+	New patch
+
+      perf tools: Allow system-wide events to keep their own CPUs
+      perf tools: Allow system-wide events to keep their own threads
+
+
+Adrian Hunter (15):
+      perf intel-pt: Add a test for system-wide side band
+      perf auxtrace: Add mmap_needed to auxtrace_mmap_params
+      perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
+      perf evlist: Factor out evlist__dummy_event()
+      perf evlist: Add evlist__add_dummy_on_all_cpus()
+      perf record: Use evlist__add_dummy_on_all_cpus() in record__config_text_poke()
+      perf intel-pt: Use evlist__add_dummy_on_all_cpus() for switch tracking
+      perf intel-pt: Track sideband system-wide when needed
+      perf tools: Allow all_cpus to be a superset of user_requested_cpus
+      libperf evlist: Allow mixing per-thread and per-cpu mmaps
+      libperf evlist: Check nr_mmaps is correct
+      perf stat: Add requires_cpu flag for uncore
+      libperf evsel: Add comments for booleans
+      perf tools: Allow system-wide events to keep their own CPUs
+      perf tools: Allow system-wide events to keep their own threads
+
+ tools/lib/perf/evlist.c                 | 71 ++++++++++++++-------------------
+ tools/lib/perf/include/internal/evsel.h | 11 +++++
+ tools/perf/arch/x86/util/intel-pt.c     | 31 ++++++--------
+ tools/perf/builtin-record.c             | 39 +++++++-----------
+ tools/perf/builtin-stat.c               |  5 +--
+ tools/perf/tests/shell/test_intel_pt.sh | 71 +++++++++++++++++++++++++++++++++
+ tools/perf/util/auxtrace.c              | 15 +++++--
+ tools/perf/util/auxtrace.h              | 13 ++++--
+ tools/perf/util/evlist.c                | 61 +++++++++++++++++++++++++---
+ tools/perf/util/evlist.h                |  5 +++
+ tools/perf/util/evsel.c                 |  1 +
+ tools/perf/util/mmap.c                  |  4 +-
+ tools/perf/util/parse-events.c          |  2 +-
+ 13 files changed, 226 insertions(+), 103 deletions(-)
+ create mode 100755 tools/perf/tests/shell/test_intel_pt.sh
+
+
+Regards
+Adrian

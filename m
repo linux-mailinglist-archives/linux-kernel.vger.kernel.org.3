@@ -2,118 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F225329AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F075329B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237014AbiEXLsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
+        id S237017AbiEXLub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbiEXLsU (ORCPT
+        with ESMTP id S235951AbiEXLu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 07:48:20 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68F722BCA;
-        Tue, 24 May 2022 04:48:19 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-30007f11f88so47080867b3.7;
-        Tue, 24 May 2022 04:48:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p8BgjPR75xXU784y1E9IpwjBGFVwhDEOmbSXQMTZJNI=;
-        b=L5klvGbovapfMhJKruKmDk0BCWvGQ8WlFGPKz8bw2sGbvTl5IRGS1aEd2chI8EcF50
-         kXBua6Iul2VWw5tktT1o5iY0kZk7XKRQfzeQVY76Dt4wYpwmiieszPcEiOiQjtZ3B3nY
-         DTPHNzUfcaCMCCJ9AQqqJtjk2PswDfxCGDhENW6+JwL+P4T7fOht14bYl7RyP9b0xptm
-         DvwCl0TZpUlGtpX7Dzdk5kJWlh6vzxXsRCx8TfH9zglf08m0IUowDmmia56QWHigNH1y
-         s+Qv5zskbkUqamneWOzDtZgid8aJSPFGJi0Eyilrq1z/0fFGIpg9m1SpMcgF0hb8H51p
-         JmxQ==
-X-Gm-Message-State: AOAM533+GUHRWZIeEKh1RhjkUfMhahFoYnL3/nkdN+Z/2URs/qvisK7D
-        gx5qLB0ijaAqXGBFqC/sBOgJXL6nRWpP9M9i0UxO602K
-X-Google-Smtp-Source: ABdhPJwIksFiH36EcdjExwNKIRCQVW1lwZKevy5F/LJChCNsmlcDU6QnUfYZHSUrJXIeE7OUMuVyJmLg5HwjIA+jkGA=
-X-Received: by 2002:a81:91d4:0:b0:2fe:e300:3581 with SMTP id
- i203-20020a8191d4000000b002fee3003581mr27973637ywg.7.1653392899108; Tue, 24
- May 2022 04:48:19 -0700 (PDT)
+        Tue, 24 May 2022 07:50:29 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615A72A709;
+        Tue, 24 May 2022 04:50:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E59EC1F43B14
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653393025;
+        bh=jeLT50JLqlVRVb/Mw9cwiM57a6SZA+DS0GFPVnc6CFQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Xs3kmbfBIDlWtUB9pUgMRmNwjQFDRQpVvpDP033s7nYE8OBbS+Vmyo2rU/4l8izM7
+         3t5VEG/ygQHG1FvC91j/slt9hK0d5g6JFb2/vzwHBq2vINL8kbrZpH9zLeVR2uSD2N
+         B0Lj6H9GrZ110YPiVjISuIvEk2Vcn6zCBk0iLnqqpkyDqk6vuGW5ppDV1H0JZexBtX
+         veWBs0YsqXRA9dPeh7OoRoJSiHepv67/MJ3t46rw37MBXEB0dDmQCf+h2hpDuQ0Z0q
+         wqq8btiM7WrPJSKI6Di4rMVuGsT/1fb8oN8iWn+g91c0ZB5jdLnvhSL2EqbrcbRoH7
+         lYcGoKBmA4b0Q==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     gregkh@linuxfoundation.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3] dt-bindings: serial: mtk-uart: Convert txt to json-schema
+Date:   Tue, 24 May 2022 13:50:19 +0200
+Message-Id: <20220524115019.97246-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
- <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
- <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
- <20220512065623.q4aa6y52pst3zpxu@vireshk-i7> <CAJZ5v0jeYiZ6esdxnJbOyDztNqOAbjcjxmpca3JTFWRh+cwdBw@mail.gmail.com>
- <20220513042705.nbnd6vccuiu6lb7a@vireshk-i7> <20220524111456.hw4qugsvt4bm7reh@vireshk-i7>
- <CAJZ5v0i_qpcaUwdZY=KR_e=HC6MZUw2aDGL=hxgo866dF1zwOA@mail.gmail.com> <20220524112917.apcvvvblksg7jdu4@vireshk-i7>
-In-Reply-To: <20220524112917.apcvvvblksg7jdu4@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 May 2022 13:48:08 +0200
-Message-ID: <CAJZ5v0jRtYcscWjUras9RC9LOTHf=qu1SPBhnC=52Gb3KKAQNw@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Schspa Shi <schspa@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 1:29 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 24-05-22, 13:22, Rafael J. Wysocki wrote:
-> > On Tue, May 24, 2022 at 1:15 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > On 13-05-22, 09:57, Viresh Kumar wrote:
-> > > > On 12-05-22, 12:49, Rafael J. Wysocki wrote:
-> > > > > > > Moreover, I'm not sure why the locking dance in store() is necessary.
-> > > > > >
-> > > > > > commit fdd320da84c6 ("cpufreq: Lock CPU online/offline in cpufreq_register_driver()")
-> > > > >
-> > > > > I get that, but I'm wondering if locking CPU hotplug from store() is
-> > > > > needed at all.  I mean, if we are in store(), we are holding an active
-> > > > > reference to the policy kobject, so the policy cannot go away until we
-> > > > > are done anyway.  Thus it should be sufficient to use the policy rwsem
-> > > > > for synchronization.
-> > > >
-> > > > I think after the current patchset is applied and we have the inactive
-> > > > policy check in store(), we won't required the dance after all.
-> > >
-> > > I was writing a patch for this and then thought maybe look at mails
-> > > around this time, when you sent the patch, and found the reason why we
-> > > need the locking dance :)
-> > >
-> > > https://lore.kernel.org/lkml/20150729091136.GN7557@n2100.arm.linux.org.uk/
->
-> Actually no, this is for the lock in cpufreq_driver_register().
->
-> > Well, again, if we are in store(), we are holding a reference to the
-> > policy kobject, so this is not initialization time.
->
-> This is the commit which made the change.
->
-> commit 4f750c930822 ("cpufreq: Synchronize the cpufreq store_*() routines with CPU hotplug")
+Convert the mtk-uart documentation from freeform text to a json-schema.
 
-So this was done before the entire CPU hotplug rework and it was
-useful at that time.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
 
-The current code always runs cpufreq_set_policy() under policy->rwsem
-and governors are stopped under policy->rwsem, so this particular race
-cannot happen AFAICS.
+v3: Addressed issues found in Krzysztof's review
+v2: Changed to also accept just "mediatek,mt6577-uart" as compatible.
 
-Locking CPU hotplug prevents CPUs from going away while store() is
-running, but in order to run store(), the caller must hold an active
-reference to the policy kobject.  That prevents the policy from being
-freed and so policy->rwsem can be acquired.  After policy->rwsem has
-been acquired, policy->cpus can be checked to determine whether or not
-there are any online CPUs for the given policy (there may be none),
-because policy->cpus is only manipulated under policy->rwsem.
+ .../bindings/serial/mediatek,uart.yaml        | 120 ++++++++++++++++++
+ .../devicetree/bindings/serial/mtk-uart.txt   |  59 ---------
+ 2 files changed, 120 insertions(+), 59 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/serial/mediatek,uart.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/mtk-uart.txt
 
-If a CPU that belongs to the given policy is going away,
-cpufreq_offline() has to remove it from policy->cpus under
-policy->rwsem, so either it has to wait for store() to release
-policy->rwsem, or store() will acquire policy->rwsem after it and will
-find that policy->cpus is empty.
+diff --git a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
+new file mode 100644
+index 000000000000..4ff27d6d4d5b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
+@@ -0,0 +1,120 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/serial/mediatek,uart.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek Universal Asynchronous Receiver/Transmitter (UART)
++
++maintainers:
++  - Matthias Brugger <matthias.bgg@gmail.com>
++
++allOf:
++  - $ref: serial.yaml#
++
++description: |
++  The MediaTek UART is based on the basic 8250 UART and compatible
++  with 16550A, with enhancements for high speed baud rates and
++  support for DMA.
++
++properties:
++  compatible:
++    oneOf:
++      - const: mediatek,mt6577-uart
++      - items:
++          - enum:
++              - mediatek,mt2701-uart
++              - mediatek,mt2712-uart
++              - mediatek,mt6580-uart
++              - mediatek,mt6582-uart
++              - mediatek,mt6589-uart
++              - mediatek,mt6755-uart
++              - mediatek,mt6765-uart
++              - mediatek,mt6779-uart
++              - mediatek,mt6795-uart
++              - mediatek,mt6797-uart
++              - mediatek,mt7622-uart
++              - mediatek,mt7623-uart
++              - mediatek,mt7629-uart
++              - mediatek,mt7986-uart
++              - mediatek,mt8127-uart
++              - mediatek,mt8135-uart
++              - mediatek,mt8173-uart
++              - mediatek,mt8183-uart
++              - mediatek,mt8186-uart
++              - mediatek,mt8192-uart
++              - mediatek,mt8195-uart
++              - mediatek,mt8516-uart
++          - const: mediatek,mt6577-uart
++
++  reg:
++    description: The base address of the UART register bank
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++    items:
++      - description: The clock the baudrate is derived from
++      - description: The bus clock for register accesses
++
++  clock-names:
++    minItems: 1
++    items:
++      - const: baud
++      - const: bus
++
++  dmas:
++    items:
++      - description: phandle to TX DMA
++      - description: phandle to RX DMA
++
++  dma-names:
++    items:
++      - const: tx
++      - const: rx
++
++  interrupts:
++    minItems: 1
++    maxItems: 2
++
++  interrupt-names:
++    description:
++      The UART interrupt and optionally the RX in-band wakeup interrupt.
++    minItems: 1
++    items:
++      - const: uart
++      - const: wakeup
++
++  pinctrl-0: true
++  pinctrl-1: true
++
++  pinctrl-names:
++    minItems: 1
++    items:
++      - const: default
++      - const: sleep
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    serial@11006000 {
++        compatible = "mediatek,mt6589-uart", "mediatek,mt6577-uart";
++        reg = <0x11006000 0x400>;
++        interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
++                     <GIC_SPI 52 IRQ_TYPE_EDGE_FALLING>;
++        interrupt-names = "uart", "wakeup";
++        clocks = <&uart_clk>, <&bus_clk>;
++        clock-names = "baud", "bus";
++        pinctrl-0 = <&uart_pin>;
++        pinctrl-1 = <&uart_pin_sleep>;
++        pinctrl-names = "default", "sleep";
++    };
+diff --git a/Documentation/devicetree/bindings/serial/mtk-uart.txt b/Documentation/devicetree/bindings/serial/mtk-uart.txt
+deleted file mode 100644
+index 113b5d6a2245..000000000000
+--- a/Documentation/devicetree/bindings/serial/mtk-uart.txt
++++ /dev/null
+@@ -1,59 +0,0 @@
+-* MediaTek Universal Asynchronous Receiver/Transmitter (UART)
+-
+-Required properties:
+-- compatible should contain:
+-  * "mediatek,mt2701-uart" for MT2701 compatible UARTS
+-  * "mediatek,mt2712-uart" for MT2712 compatible UARTS
+-  * "mediatek,mt6580-uart" for MT6580 compatible UARTS
+-  * "mediatek,mt6582-uart" for MT6582 compatible UARTS
+-  * "mediatek,mt6589-uart" for MT6589 compatible UARTS
+-  * "mediatek,mt6755-uart" for MT6755 compatible UARTS
+-  * "mediatek,mt6765-uart" for MT6765 compatible UARTS
+-  * "mediatek,mt6779-uart" for MT6779 compatible UARTS
+-  * "mediatek,mt6795-uart" for MT6795 compatible UARTS
+-  * "mediatek,mt6797-uart" for MT6797 compatible UARTS
+-  * "mediatek,mt7622-uart" for MT7622 compatible UARTS
+-  * "mediatek,mt7623-uart" for MT7623 compatible UARTS
+-  * "mediatek,mt7629-uart" for MT7629 compatible UARTS
+-  * "mediatek,mt7986-uart", "mediatek,mt6577-uart" for MT7986 compatible UARTS
+-  * "mediatek,mt8127-uart" for MT8127 compatible UARTS
+-  * "mediatek,mt8135-uart" for MT8135 compatible UARTS
+-  * "mediatek,mt8173-uart" for MT8173 compatible UARTS
+-  * "mediatek,mt8183-uart", "mediatek,mt6577-uart" for MT8183 compatible UARTS
+-  * "mediatek,mt8186-uart", "mediatek,mt6577-uart" for MT8183 compatible UARTS
+-  * "mediatek,mt8192-uart", "mediatek,mt6577-uart" for MT8192 compatible UARTS
+-  * "mediatek,mt8195-uart", "mediatek,mt6577-uart" for MT8195 compatible UARTS
+-  * "mediatek,mt8516-uart" for MT8516 compatible UARTS
+-  * "mediatek,mt6577-uart" for MT6577 and all of the above
+-
+-- reg: The base address of the UART register bank.
+-
+-- interrupts:
+-  index 0: an interrupt specifier for the UART controller itself
+-  index 1: optional, an interrupt specifier with edge sensitivity on Rx pin to
+-           support Rx in-band wake up. If one would like to use this feature,
+-           one must create an addtional pinctrl to reconfigure Rx pin to normal
+-           GPIO before suspend.
+-
+-- clocks : Must contain an entry for each entry in clock-names.
+-  See ../clocks/clock-bindings.txt for details.
+-- clock-names:
+-  - "baud": The clock the baudrate is derived from
+-  - "bus": The bus clock for register accesses (optional)
+-
+-For compatibility with older device trees an unnamed clock is used for the
+-baud clock if the baudclk does not exist. Do not use this for new designs.
+-
+-Example:
+-
+-	uart0: serial@11006000 {
+-		compatible = "mediatek,mt6589-uart", "mediatek,mt6577-uart";
+-		reg = <0x11006000 0x400>;
+-		interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
+-			     <GIC_SPI 52 IRQ_TYPE_EDGE_FALLING>;
+-		clocks = <&uart_clk>, <&bus_clk>;
+-		clock-names = "baud", "bus";
+-		pinctrl-names = "default", "sleep";
+-		pinctrl-0 = <&uart_pin>;
+-		pinctrl-1 = <&uart_pin_sleep>;
+-	};
+-- 
+2.35.1
+

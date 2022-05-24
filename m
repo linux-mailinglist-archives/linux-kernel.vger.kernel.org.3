@@ -2,617 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1D7532DA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23B4532D8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238972AbiEXPhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        id S237409AbiEXPbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238970AbiEXPg5 (ORCPT
+        with ESMTP id S229920AbiEXPb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:36:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70555366A1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:36:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6A996170D
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:36:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EB97C34113;
-        Tue, 24 May 2022 15:36:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653406614;
-        bh=FK+fH+gsk8AUKncLUw9iUnmTRBj+NqJwaTXqsmi9q+g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fs4MoVwQoIk+7yqD/y9xa5cMa5NFiLRlR0J9OD8YYcyvql+q7DL1Shgkti+xMCFyj
-         btbJP1bMVeXWKeEQxBkP02kdPVQfHq7XYRx7HW5DqpcWpgRSy5UqB0dTjPdFgpt6lV
-         BYvmRcA5Cg+6bFIbY4dnvtPSQjia9JffWlk/dsHucmyuQfLUiyp8KOF5zJYgkGjB/j
-         Bzqw6znOyvctbW+zcvrX5Ozw+nG1vMxpfGR6NlLnAfksH0vaCsWYpMELY1GxR6N9GR
-         fh3NBhRjYSgybskmgu8F4C1XqyxCkbTd2WuJyzqJwW9sCMr3uOOdaTFNDOCC+AkH5h
-         U2GHPvrfFLB3A==
-Date:   Tue, 24 May 2022 23:28:14 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        kasan-dev@googlegroups.com
-Subject: Re: [PATCH v3 2/2] riscv: turn pgtable_l4|[l5]_enabled to static key
- for RV64
-Message-ID: <Yoz5juajva8ld7TE@xhacker>
-References: <20220519155918.3882-1-jszhang@kernel.org>
- <20220519155918.3882-3-jszhang@kernel.org>
- <CAAhSdy1qUukKxSBiVeHNGo84qqf-O54-Mx574VTQwb3LGF-pPg@mail.gmail.com>
+        Tue, 24 May 2022 11:31:27 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EA01B792
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:31:25 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id y15so10682841qtx.4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=24+aqcwK0Ad9K0gZRiF7OddgspvzBsX08PG7AgjtZXU=;
+        b=aBBlcbxZlQ9PwGGM3qTG5M0kKlBfakQF/ihGMeZCikTXHKpDvPooHDxwCOBHiWFARX
+         BKZmXmpGXtR/1VtZx600SfanHT/xvLbLYQhYaBeQqwPuWXaMZWTFuGoyITjLaf3BIyZy
+         c+JxVEbRtrK+li2SWdy4kT0aUUi/hCJuf/cyQ5meY4rpPTie99UxRmzu3F4a5tfPgKqa
+         i4IcAmMAnBud8qgAfsq5y86ufkxM8TlXDb14Owbbhtttz+MdmT1hwdDN+X34B/B9nPcw
+         oBwZJdW9nxRh7hz/F0jJMmN5qS6tL6oXT9hArpi4k7Hi4ZVwl8uOr8NtgHa9Uubdteny
+         rOGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=24+aqcwK0Ad9K0gZRiF7OddgspvzBsX08PG7AgjtZXU=;
+        b=EqNFClw8HYTGcgd87X35NXDgADO2qxNbtjcL5fXnWiBES25Vx1jrJ+ViPs7fAzSus0
+         E+mqWEK/wtYtHZtMCHHFvuT5bhpB5QNDug41KpDi6LjxZR3DbpLLz8lf6W/FQz2fxnvB
+         s4fIWs+5TrCboLG5wbjfLYPHYr9m/vkcBtG16FCNVA5Nf6PHljv3CyEhfv+SH+RnGy0a
+         AUjo4wvL0lE5x8ZsQzZ/EFvxCyHgLe5UltnS2LqDKchNATzzukV9hS37F/ZDLzDvrm1j
+         rRqkFNJ71o1+eBL+HrEHNDR6VbAicEv9u+NdcceJ/Bu8GYhrx4WSsQwv4Pu9orHuX/o/
+         mOXA==
+X-Gm-Message-State: AOAM5331M32TUZiDG7nQDNK+Rac/j72Htjsjvh0U7gEV2vftaJ2errRR
+        0jnvY0glELZKLzD3IHQVW80wlZlt9LUiMqF30NE=
+X-Google-Smtp-Source: ABdhPJwz8oNxE0TWNQ5Wsc55k7vDZ2sdPE4eYjk1JQqeyf/XWgJ9Z4Ur9tTAeswaaAuIFGvsPq/lMuP2r/LOJtyhdzM=
+X-Received: by 2002:ac8:7dd5:0:b0:2f3:d8bd:19e4 with SMTP id
+ c21-20020ac87dd5000000b002f3d8bd19e4mr20691978qte.103.1653406284647; Tue, 24
+ May 2022 08:31:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAAhSdy1qUukKxSBiVeHNGo84qqf-O54-Mx574VTQwb3LGF-pPg@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220524135249.49993-1-roman.o.stratiienko@globallogic.com>
+In-Reply-To: <20220524135249.49993-1-roman.o.stratiienko@globallogic.com>
+From:   Roman Stratiienko <r.stratiienko@gmail.com>
+Date:   Tue, 24 May 2022 18:31:13 +0300
+Message-ID: <CAGphcd=wTPnTqNxP+TQ8YCDsT=7EUVssAKDpG2J_G=R-7N=YKQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/sun4i: Fix blend registers corruption for DE2.0/DE3.0
+To:     mripard@kernel.org, wens@csie.org,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        airlied@linux.ie, Daniel Vetter <daniel@ffwll.ch>,
+        Samuel Holland <samuel@sholland.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, megi@xff.cz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 09:32:46PM +0530, Anup Patel wrote:
-> On Thu, May 19, 2022 at 9:38 PM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >
-> > On a specific HW platform, pgtable_l4|[l5]_enabled won't change after
-> > boot, and the check sits at hot code path, this characteristic makes it
-> > suitable for optimization with static key.
-> >
-> > _pgtable_l4|[l5]_enabled is used very early during boot, even is used
-> > with MMU off, so the static key mechanism isn't ready. For this case,
-> > we use another static key _pgtable_lx_ready to indicate whether we
-> > have finalised pgtable_l4|[l5]_enabled or not, then fall back to
-> > _pgtable_l4|[l5]_enabled_early bool.
-> >
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> 
-> Overall, this patch looks good to me. Please fix the errors reported by
-> autobuilders.
-> 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
+NAK for this. Further testing showed such an approach is not reliable
+due to .atomic_update() callback called only in case planes have some
+changes.
 
-Thank Anup. I sent the v4 two days ago
-https://lore.kernel.org/linux-riscv/20220521143456.2759-1-jszhang@kernel.org/T/#t
-
-> 
-> Regards,
-> Anup
-> 
-> > ---
-> >  arch/riscv/include/asm/pgalloc.h    | 16 ++++----
-> >  arch/riscv/include/asm/pgtable-32.h |  3 ++
-> >  arch/riscv/include/asm/pgtable-64.h | 59 +++++++++++++++++---------
-> >  arch/riscv/include/asm/pgtable.h    |  5 +--
-> >  arch/riscv/kernel/cpu.c             |  4 +-
-> >  arch/riscv/mm/init.c                | 64 ++++++++++++++++++-----------
-> >  arch/riscv/mm/kasan_init.c          | 16 ++++----
-> >  7 files changed, 102 insertions(+), 65 deletions(-)
-> >
-> > diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
-> > index 947f23d7b6af..0280eeb4756f 100644
-> > --- a/arch/riscv/include/asm/pgalloc.h
-> > +++ b/arch/riscv/include/asm/pgalloc.h
-> > @@ -41,7 +41,7 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
-> >
-> >  static inline void p4d_populate(struct mm_struct *mm, p4d_t *p4d, pud_t *pud)
-> >  {
-> > -       if (pgtable_l4_enabled) {
-> > +       if (pgtable_l4_enabled()) {
-> >                 unsigned long pfn = virt_to_pfn(pud);
-> >
-> >                 set_p4d(p4d, __p4d((pfn << _PAGE_PFN_SHIFT) | _PAGE_TABLE));
-> > @@ -51,7 +51,7 @@ static inline void p4d_populate(struct mm_struct *mm, p4d_t *p4d, pud_t *pud)
-> >  static inline void p4d_populate_safe(struct mm_struct *mm, p4d_t *p4d,
-> >                                      pud_t *pud)
-> >  {
-> > -       if (pgtable_l4_enabled) {
-> > +       if (pgtable_l4_enabled()) {
-> >                 unsigned long pfn = virt_to_pfn(pud);
-> >
-> >                 set_p4d_safe(p4d,
-> > @@ -61,7 +61,7 @@ static inline void p4d_populate_safe(struct mm_struct *mm, p4d_t *p4d,
-> >
-> >  static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, p4d_t *p4d)
-> >  {
-> > -       if (pgtable_l5_enabled) {
-> > +       if (pgtable_l5_enabled()) {
-> >                 unsigned long pfn = virt_to_pfn(p4d);
-> >
-> >                 set_pgd(pgd, __pgd((pfn << _PAGE_PFN_SHIFT) | _PAGE_TABLE));
-> > @@ -71,7 +71,7 @@ static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, p4d_t *p4d)
-> >  static inline void pgd_populate_safe(struct mm_struct *mm, pgd_t *pgd,
-> >                                      p4d_t *p4d)
-> >  {
-> > -       if (pgtable_l5_enabled) {
-> > +       if (pgtable_l5_enabled()) {
-> >                 unsigned long pfn = virt_to_pfn(p4d);
-> >
-> >                 set_pgd_safe(pgd,
-> > @@ -82,7 +82,7 @@ static inline void pgd_populate_safe(struct mm_struct *mm, pgd_t *pgd,
-> >  #define pud_alloc_one pud_alloc_one
-> >  static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 return __pud_alloc_one(mm, addr);
-> >
-> >         return NULL;
-> > @@ -91,7 +91,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
-> >  #define pud_free pud_free
-> >  static inline void pud_free(struct mm_struct *mm, pud_t *pud)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 __pud_free(mm, pud);
-> >  }
-> >
-> > @@ -100,7 +100,7 @@ static inline void pud_free(struct mm_struct *mm, pud_t *pud)
-> >  #define p4d_alloc_one p4d_alloc_one
-> >  static inline p4d_t *p4d_alloc_one(struct mm_struct *mm, unsigned long addr)
-> >  {
-> > -       if (pgtable_l5_enabled) {
-> > +       if (pgtable_l5_enabled()) {
-> >                 gfp_t gfp = GFP_PGTABLE_USER;
-> >
-> >                 if (mm == &init_mm)
-> > @@ -120,7 +120,7 @@ static inline void __p4d_free(struct mm_struct *mm, p4d_t *p4d)
-> >  #define p4d_free p4d_free
-> >  static inline void p4d_free(struct mm_struct *mm, p4d_t *p4d)
-> >  {
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 __p4d_free(mm, p4d);
-> >  }
-> >
-> > diff --git a/arch/riscv/include/asm/pgtable-32.h b/arch/riscv/include/asm/pgtable-32.h
-> > index 5b2e79e5bfa5..8af36d76b70d 100644
-> > --- a/arch/riscv/include/asm/pgtable-32.h
-> > +++ b/arch/riscv/include/asm/pgtable-32.h
-> > @@ -16,4 +16,7 @@
-> >
-> >  #define MAX_POSSIBLE_PHYSMEM_BITS 34
-> >
-> > +#define pgtable_l5_enabled() 0
-> > +#define pgtable_l4_enabled() 0
-> > +
-> >  #endif /* _ASM_RISCV_PGTABLE_32_H */
-> > diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-> > index 7e246e9f8d70..c56bbeacd369 100644
-> > --- a/arch/riscv/include/asm/pgtable-64.h
-> > +++ b/arch/riscv/include/asm/pgtable-64.h
-> > @@ -8,16 +8,35 @@
-> >
-> >  #include <linux/const.h>
-> >
-> > -extern bool pgtable_l4_enabled;
-> > -extern bool pgtable_l5_enabled;
-> > +extern bool _pgtable_l5_enabled_early;
-> > +extern bool _pgtable_l4_enabled_early;
-> > +extern struct static_key_false _pgtable_l5_enabled;
-> > +extern struct static_key_false _pgtable_l4_enabled;
-> > +extern struct static_key_false _pgtable_lx_ready;
-> > +
-> > +static __always_inline bool pgtable_l5_enabled(void)
-> > +{
-> > +       if (static_branch_likely(&_pgtable_lx_ready))
-> > +               return static_branch_likely(&_pgtable_l5_enabled);
-> > +       else
-> > +               return _pgtable_l5_enabled_early;
-> > +}
-> > +
-> > +static __always_inline bool pgtable_l4_enabled(void)
-> > +{
-> > +       if (static_branch_likely(&_pgtable_lx_ready))
-> > +               return static_branch_likely(&_pgtable_l4_enabled);
-> > +       else
-> > +               return _pgtable_l4_enabled_early;
-> > +}
-> >
-> >  #define PGDIR_SHIFT_L3  30
-> >  #define PGDIR_SHIFT_L4  39
-> >  #define PGDIR_SHIFT_L5  48
-> >  #define PGDIR_SIZE_L3   (_AC(1, UL) << PGDIR_SHIFT_L3)
-> >
-> > -#define PGDIR_SHIFT     (pgtable_l5_enabled ? PGDIR_SHIFT_L5 : \
-> > -               (pgtable_l4_enabled ? PGDIR_SHIFT_L4 : PGDIR_SHIFT_L3))
-> > +#define PGDIR_SHIFT     (pgtable_l5_enabled() ? PGDIR_SHIFT_L5 : \
-> > +               (pgtable_l4_enabled() ? PGDIR_SHIFT_L4 : PGDIR_SHIFT_L3))
-> >  /* Size of region mapped by a page global directory */
-> >  #define PGDIR_SIZE      (_AC(1, UL) << PGDIR_SHIFT)
-> >  #define PGDIR_MASK      (~(PGDIR_SIZE - 1))
-> > @@ -119,7 +138,7 @@ static inline struct page *pud_page(pud_t pud)
-> >  #define mm_p4d_folded  mm_p4d_folded
-> >  static inline bool mm_p4d_folded(struct mm_struct *mm)
-> >  {
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 return false;
-> >
-> >         return true;
-> > @@ -128,7 +147,7 @@ static inline bool mm_p4d_folded(struct mm_struct *mm)
-> >  #define mm_pud_folded  mm_pud_folded
-> >  static inline bool mm_pud_folded(struct mm_struct *mm)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 return false;
-> >
-> >         return true;
-> > @@ -159,7 +178,7 @@ static inline unsigned long _pmd_pfn(pmd_t pmd)
-> >
-> >  static inline void set_p4d(p4d_t *p4dp, p4d_t p4d)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 *p4dp = p4d;
-> >         else
-> >                 set_pud((pud_t *)p4dp, (pud_t){ p4d_val(p4d) });
-> > @@ -167,7 +186,7 @@ static inline void set_p4d(p4d_t *p4dp, p4d_t p4d)
-> >
-> >  static inline int p4d_none(p4d_t p4d)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 return (p4d_val(p4d) == 0);
-> >
-> >         return 0;
-> > @@ -175,7 +194,7 @@ static inline int p4d_none(p4d_t p4d)
-> >
-> >  static inline int p4d_present(p4d_t p4d)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 return (p4d_val(p4d) & _PAGE_PRESENT);
-> >
-> >         return 1;
-> > @@ -183,7 +202,7 @@ static inline int p4d_present(p4d_t p4d)
-> >
-> >  static inline int p4d_bad(p4d_t p4d)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 return !p4d_present(p4d);
-> >
-> >         return 0;
-> > @@ -191,7 +210,7 @@ static inline int p4d_bad(p4d_t p4d)
-> >
-> >  static inline void p4d_clear(p4d_t *p4d)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 set_p4d(p4d, __p4d(0));
-> >  }
-> >
-> > @@ -207,7 +226,7 @@ static inline unsigned long _p4d_pfn(p4d_t p4d)
-> >
-> >  static inline pud_t *p4d_pgtable(p4d_t p4d)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
-> >
-> >         return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
-> > @@ -224,7 +243,7 @@ static inline struct page *p4d_page(p4d_t p4d)
-> >  #define pud_offset pud_offset
-> >  static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
-> >  {
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 return p4d_pgtable(*p4d) + pud_index(address);
-> >
-> >         return (pud_t *)p4d;
-> > @@ -232,7 +251,7 @@ static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
-> >
-> >  static inline void set_pgd(pgd_t *pgdp, pgd_t pgd)
-> >  {
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 *pgdp = pgd;
-> >         else
-> >                 set_p4d((p4d_t *)pgdp, (p4d_t){ pgd_val(pgd) });
-> > @@ -240,7 +259,7 @@ static inline void set_pgd(pgd_t *pgdp, pgd_t pgd)
-> >
-> >  static inline int pgd_none(pgd_t pgd)
-> >  {
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 return (pgd_val(pgd) == 0);
-> >
-> >         return 0;
-> > @@ -248,7 +267,7 @@ static inline int pgd_none(pgd_t pgd)
-> >
-> >  static inline int pgd_present(pgd_t pgd)
-> >  {
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 return (pgd_val(pgd) & _PAGE_PRESENT);
-> >
-> >         return 1;
-> > @@ -256,7 +275,7 @@ static inline int pgd_present(pgd_t pgd)
-> >
-> >  static inline int pgd_bad(pgd_t pgd)
-> >  {
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 return !pgd_present(pgd);
-> >
-> >         return 0;
-> > @@ -264,13 +283,13 @@ static inline int pgd_bad(pgd_t pgd)
-> >
-> >  static inline void pgd_clear(pgd_t *pgd)
-> >  {
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 set_pgd(pgd, __pgd(0));
-> >  }
-> >
-> >  static inline p4d_t *pgd_pgtable(pgd_t pgd)
-> >  {
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 return (p4d_t *)pfn_to_virt(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
-> >
-> >         return (p4d_t *)p4d_pgtable((p4d_t) { pgd_val(pgd) });
-> > @@ -288,7 +307,7 @@ static inline struct page *pgd_page(pgd_t pgd)
-> >  #define p4d_offset p4d_offset
-> >  static inline p4d_t *p4d_offset(pgd_t *pgd, unsigned long address)
-> >  {
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 return pgd_pgtable(*pgd) + p4d_index(address);
-> >
-> >         return (p4d_t *)pgd;
-> > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> > index 046b44225623..ae01a9b83ac4 100644
-> > --- a/arch/riscv/include/asm/pgtable.h
-> > +++ b/arch/riscv/include/asm/pgtable.h
-> > @@ -63,8 +63,8 @@
-> >   * position vmemmap directly below the VMALLOC region.
-> >   */
-> >  #ifdef CONFIG_64BIT
-> > -#define VA_BITS                (pgtable_l5_enabled ? \
-> > -                               57 : (pgtable_l4_enabled ? 48 : 39))
-> > +#define VA_BITS                (pgtable_l5_enabled() ? \
-> > +                               57 : (pgtable_l4_enabled() ? 48 : 39))
-> >  #else
-> >  #define VA_BITS                32
-> >  #endif
-> > @@ -738,7 +738,6 @@ extern uintptr_t _dtb_early_pa;
-> >  #define dtb_early_pa   _dtb_early_pa
-> >  #endif /* CONFIG_XIP_KERNEL */
-> >  extern u64 satp_mode;
-> > -extern bool pgtable_l4_enabled;
-> >
-> >  void paging_init(void);
-> >  void misc_mem_init(void);
-> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > index ccb617791e56..29bb0ef75248 100644
-> > --- a/arch/riscv/kernel/cpu.c
-> > +++ b/arch/riscv/kernel/cpu.c
-> > @@ -141,9 +141,9 @@ static void print_mmu(struct seq_file *f)
-> >  #if defined(CONFIG_32BIT)
-> >         strncpy(sv_type, "sv32", 5);
-> >  #elif defined(CONFIG_64BIT)
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 strncpy(sv_type, "sv57", 5);
-> > -       else if (pgtable_l4_enabled)
-> > +       else if (pgtable_l4_enabled())
-> >                 strncpy(sv_type, "sv48", 5);
-> >         else
-> >                 strncpy(sv_type, "sv39", 5);
-> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> > index 05ed641a1134..42c79388e6fd 100644
-> > --- a/arch/riscv/mm/init.c
-> > +++ b/arch/riscv/mm/init.c
-> > @@ -44,10 +44,16 @@ u64 satp_mode __ro_after_init = SATP_MODE_32;
-> >  #endif
-> >  EXPORT_SYMBOL(satp_mode);
-> >
-> > -bool pgtable_l4_enabled = IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_XIP_KERNEL);
-> > -bool pgtable_l5_enabled = IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_XIP_KERNEL);
-> > -EXPORT_SYMBOL(pgtable_l4_enabled);
-> > -EXPORT_SYMBOL(pgtable_l5_enabled);
-> > +DEFINE_STATIC_KEY_FALSE(_pgtable_l4_enabled);
-> > +DEFINE_STATIC_KEY_FALSE(_pgtable_l5_enabled);
-> > +DEFINE_STATIC_KEY_FALSE(_pgtable_lx_ready);
-> > +EXPORT_SYMBOL(_pgtable_l4_enabled);
-> > +EXPORT_SYMBOL(_pgtable_l5_enabled);
-> > +EXPORT_SYMBOL(_pgtable_lx_ready);
-> > +bool _pgtable_l4_enabled_early = IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_XIP_KERNEL);
-> > +bool _pgtable_l5_enabled_early = IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_XIP_KERNEL);
-> > +EXPORT_SYMBOL(_pgtable_l4_enabled_early);
-> > +EXPORT_SYMBOL(_pgtable_l5_enabled_early);
-> >
-> >  phys_addr_t phys_ram_base __ro_after_init;
-> >  EXPORT_SYMBOL(phys_ram_base);
-> > @@ -555,26 +561,26 @@ static void __init create_p4d_mapping(p4d_t *p4dp,
-> >  }
-> >
-> >  #define pgd_next_t             p4d_t
-> > -#define alloc_pgd_next(__va)   (pgtable_l5_enabled ?                   \
-> > -               pt_ops.alloc_p4d(__va) : (pgtable_l4_enabled ?          \
-> > +#define alloc_pgd_next(__va)   (pgtable_l5_enabled() ?                 \
-> > +               pt_ops.alloc_p4d(__va) : (pgtable_l4_enabled() ?        \
-> >                 pt_ops.alloc_pud(__va) : pt_ops.alloc_pmd(__va)))
-> > -#define get_pgd_next_virt(__pa)        (pgtable_l5_enabled ?                   \
-> > -               pt_ops.get_p4d_virt(__pa) : (pgd_next_t *)(pgtable_l4_enabled ? \
-> > +#define get_pgd_next_virt(__pa)        (pgtable_l5_enabled() ?                 \
-> > +               pt_ops.get_p4d_virt(__pa) : (pgd_next_t *)(pgtable_l4_enabled() ?       \
-> >                 pt_ops.get_pud_virt(__pa) : (pud_t *)pt_ops.get_pmd_virt(__pa)))
-> >  #define create_pgd_next_mapping(__nextp, __va, __pa, __sz, __prot)     \
-> > -                               (pgtable_l5_enabled ?                   \
-> > +                               (pgtable_l5_enabled() ?                 \
-> >                 create_p4d_mapping(__nextp, __va, __pa, __sz, __prot) : \
-> > -                               (pgtable_l4_enabled ?                   \
-> > +                               (pgtable_l4_enabled() ?                 \
-> >                 create_pud_mapping((pud_t *)__nextp, __va, __pa, __sz, __prot) :        \
-> >                 create_pmd_mapping((pmd_t *)__nextp, __va, __pa, __sz, __prot)))
-> > -#define fixmap_pgd_next                (pgtable_l5_enabled ?                   \
-> > -               (uintptr_t)fixmap_p4d : (pgtable_l4_enabled ?           \
-> > +#define fixmap_pgd_next                (pgtable_l5_enabled() ?                 \
-> > +               (uintptr_t)fixmap_p4d : (pgtable_l4_enabled() ?         \
-> >                 (uintptr_t)fixmap_pud : (uintptr_t)fixmap_pmd))
-> > -#define trampoline_pgd_next    (pgtable_l5_enabled ?                   \
-> > -               (uintptr_t)trampoline_p4d : (pgtable_l4_enabled ?       \
-> > +#define trampoline_pgd_next    (pgtable_l5_enabled() ?                 \
-> > +               (uintptr_t)trampoline_p4d : (pgtable_l4_enabled() ?     \
-> >                 (uintptr_t)trampoline_pud : (uintptr_t)trampoline_pmd))
-> > -#define early_dtb_pgd_next     (pgtable_l5_enabled ?                   \
-> > -               (uintptr_t)early_dtb_p4d : (pgtable_l4_enabled ?        \
-> > +#define early_dtb_pgd_next     (pgtable_l5_enabled() ?                 \
-> > +               (uintptr_t)early_dtb_p4d : (pgtable_l4_enabled() ?      \
-> >                 (uintptr_t)early_dtb_pud : (uintptr_t)early_dtb_pmd))
-> >  #else
-> >  #define pgd_next_t             pte_t
-> > @@ -680,14 +686,14 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
-> >  #ifdef CONFIG_64BIT
-> >  static void __init disable_pgtable_l5(void)
-> >  {
-> > -       pgtable_l5_enabled = false;
-> > +       _pgtable_l5_enabled_early = false;
-> >         kernel_map.page_offset = PAGE_OFFSET_L4;
-> >         satp_mode = SATP_MODE_48;
-> >  }
-> >
-> >  static void __init disable_pgtable_l4(void)
-> >  {
-> > -       pgtable_l4_enabled = false;
-> > +       _pgtable_l4_enabled_early = false;
-> >         kernel_map.page_offset = PAGE_OFFSET_L3;
-> >         satp_mode = SATP_MODE_39;
-> >  }
-> > @@ -816,11 +822,11 @@ static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
-> >                            PGDIR_SIZE,
-> >                            IS_ENABLED(CONFIG_64BIT) ? PAGE_TABLE : PAGE_KERNEL);
-> >
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 create_p4d_mapping(early_dtb_p4d, DTB_EARLY_BASE_VA,
-> >                                    (uintptr_t)early_dtb_pud, P4D_SIZE, PAGE_TABLE);
-> >
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 create_pud_mapping(early_dtb_pud, DTB_EARLY_BASE_VA,
-> >                                    (uintptr_t)early_dtb_pmd, PUD_SIZE, PAGE_TABLE);
-> >
-> > @@ -961,11 +967,11 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
-> >
-> >  #ifndef __PAGETABLE_PMD_FOLDED
-> >         /* Setup fixmap P4D and PUD */
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 create_p4d_mapping(fixmap_p4d, FIXADDR_START,
-> >                                    (uintptr_t)fixmap_pud, P4D_SIZE, PAGE_TABLE);
-> >         /* Setup fixmap PUD and PMD */
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 create_pud_mapping(fixmap_pud, FIXADDR_START,
-> >                                    (uintptr_t)fixmap_pmd, PUD_SIZE, PAGE_TABLE);
-> >         create_pmd_mapping(fixmap_pmd, FIXADDR_START,
-> > @@ -973,10 +979,10 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
-> >         /* Setup trampoline PGD and PMD */
-> >         create_pgd_mapping(trampoline_pg_dir, kernel_map.virt_addr,
-> >                            trampoline_pgd_next, PGDIR_SIZE, PAGE_TABLE);
-> > -       if (pgtable_l5_enabled)
-> > +       if (pgtable_l5_enabled())
-> >                 create_p4d_mapping(trampoline_p4d, kernel_map.virt_addr,
-> >                                    (uintptr_t)trampoline_pud, P4D_SIZE, PAGE_TABLE);
-> > -       if (pgtable_l4_enabled)
-> > +       if (pgtable_l4_enabled())
-> >                 create_pud_mapping(trampoline_pud, kernel_map.virt_addr,
-> >                                    (uintptr_t)trampoline_pmd, PUD_SIZE, PAGE_TABLE);
-> >  #ifdef CONFIG_XIP_KERNEL
-> > @@ -1165,8 +1171,18 @@ static void __init reserve_crashkernel(void)
-> >         crashk_res.end = crash_base + crash_size - 1;
-> >  }
-> >
-> > +static void __init riscv_finalise_pgtable_lx(void)
-> > +{
-> > +       if (_pgtable_l5_enabled_early)
-> > +               static_branch_enable(&_pgtable_l5_enabled);
-> > +       if (_pgtable_l4_enabled_early)
-> > +               static_branch_enable(&_pgtable_l4_enabled);
-> > +       static_branch_enable(&_pgtable_lx_ready);
-> > +}
-> > +
-> >  void __init paging_init(void)
-> >  {
-> > +       riscv_finalise_pgtable_lx();
-> >         setup_bootmem();
-> >         setup_vm_final();
-> >  }
-> > diff --git a/arch/riscv/mm/kasan_init.c b/arch/riscv/mm/kasan_init.c
-> > index a22e418dbd82..356044498e8a 100644
-> > --- a/arch/riscv/mm/kasan_init.c
-> > +++ b/arch/riscv/mm/kasan_init.c
-> > @@ -209,15 +209,15 @@ static void __init kasan_populate_p4d(pgd_t *pgd,
-> >                 set_pgd(pgd, pfn_pgd(PFN_DOWN(__pa(base_p4d)), PAGE_TABLE));
-> >  }
-> >
-> > -#define kasan_early_shadow_pgd_next                    (pgtable_l5_enabled ?   \
-> > +#define kasan_early_shadow_pgd_next                    (pgtable_l5_enabled() ? \
-> >                                 (uintptr_t)kasan_early_shadow_p4d :             \
-> > -                                                       (pgtable_l4_enabled ?   \
-> > +                                                       (pgtable_l4_enabled() ? \
-> >                                 (uintptr_t)kasan_early_shadow_pud :             \
-> >                                 (uintptr_t)kasan_early_shadow_pmd))
-> >  #define kasan_populate_pgd_next(pgdp, vaddr, next, early)                      \
-> > -               (pgtable_l5_enabled ?                                           \
-> > +               (pgtable_l5_enabled() ?                                         \
-> >                 kasan_populate_p4d(pgdp, vaddr, next, early) :                  \
-> > -               (pgtable_l4_enabled ?                                           \
-> > +               (pgtable_l4_enabled() ?                                         \
-> >                         kasan_populate_pud(pgdp, vaddr, next, early) :          \
-> >                         kasan_populate_pmd((pud_t *)pgdp, vaddr, next)))
-> >
-> > @@ -274,7 +274,7 @@ asmlinkage void __init kasan_early_init(void)
-> >                                 (__pa((uintptr_t)kasan_early_shadow_pte)),
-> >                                 PAGE_TABLE));
-> >
-> > -       if (pgtable_l4_enabled) {
-> > +       if (pgtable_l4_enabled()) {
-> >                 for (i = 0; i < PTRS_PER_PUD; ++i)
-> >                         set_pud(kasan_early_shadow_pud + i,
-> >                                 pfn_pud(PFN_DOWN
-> > @@ -282,7 +282,7 @@ asmlinkage void __init kasan_early_init(void)
-> >                                         PAGE_TABLE));
-> >         }
-> >
-> > -       if (pgtable_l5_enabled) {
-> > +       if (pgtable_l5_enabled()) {
-> >                 for (i = 0; i < PTRS_PER_P4D; ++i)
-> >                         set_p4d(kasan_early_shadow_p4d + i,
-> >                                 pfn_p4d(PFN_DOWN
-> > @@ -393,9 +393,9 @@ static void __init kasan_shallow_populate_p4d(pgd_t *pgdp,
-> >  }
-> >
-> >  #define kasan_shallow_populate_pgd_next(pgdp, vaddr, next)                     \
-> > -               (pgtable_l5_enabled ?                                           \
-> > +               (pgtable_l5_enabled() ?                                         \
-> >                 kasan_shallow_populate_p4d(pgdp, vaddr, next) :                 \
-> > -               (pgtable_l4_enabled ?                                           \
-> > +               (pgtable_l4_enabled() ?                                         \
-> >                 kasan_shallow_populate_pud(pgdp, vaddr, next) :                 \
-> >                 kasan_shallow_populate_pmd(pgdp, vaddr, next)))
-> >
-> > --
-> > 2.34.1
-> >
+=D0=B2=D1=82, 24 =D0=BC=D0=B0=D1=8F 2022 =D0=B3. =D0=B2 16:52, Roman Strati=
+ienko <r.stratiienko@gmail.com>:
+>
+> Corruption happens when plane zpos is updated
+>
+> Example scenario:
+>
+> Initial frame blender state:
+>     PLANE_ZPOS =3D {0, 1, 2, 3}
+>     BLD_ROUTE  =3D {0, 1, 2, 0}
+>     BLD_EN     =3D {1, 1, 1, 0}
+>
+> New frame commit (Only ZPOS has been changed):
+>
+>     PLANE_ZPOS =3D {0->2, 1->0, 2->1, 3}
+>
+> Expected results after plane state update:
+>                 Z0 Z1 Z2 Z3
+>     BLD_ROUTE =3D {1, 2, 0, 0}
+>     BLD_EN    =3D {1, 1, 1, 0}
+>
+> What is currently happening:
+>
+> 1. sun8i_vi_layer_enable(enabled=3Dtrue, zpos=3D2, old_zpos=3D0):
+>     BLD_ROUTE =3D {1->0, 1, 2->0, 0}
+>     BLD_EN    =3D {1->0, 1, 1->1, 0}
+>
+> 2. sun8i_ui_layer_enable(enabled=3Dtrue, zpos=3D0, old_zpos=3D1):
+>     BLD_ROUTE =3D {0->1, 1->0, 0, 0}
+>     BLD_EN    =3D {0->1, 1->0, 1, 0}
+>
+> 3. sun8i_ui_layer_enable(enabled=3Dtrue, zpos=3D1, old_zpos=3D2):
+>     BLD_ROUTE =3D {1, 0->2, 0->0, 0}
+>     BLD_EN    =3D {1, 0->2, 1->0, 0}
+>
+> After updating of all the planes we are ending up with BLD_EN[2]=3D0,
+> which makes this channel disabled.
+>
+> To fix this issue, clear BLEND registers before updating the planes
+> and do not clear the old state while processing every plane.
+>
+> Signed-off-by: Roman Stratiienko <roman.o.stratiienko@globallogic.com>
+> ---
+>  drivers/gpu/drm/sun4i/sun8i_mixer.c    | 16 +++++++++++++++
+>  drivers/gpu/drm/sun4i/sun8i_ui_layer.c | 28 ++++----------------------
+>  drivers/gpu/drm/sun4i/sun8i_vi_layer.c | 28 ++++----------------------
+>  3 files changed, 24 insertions(+), 48 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c b/drivers/gpu/drm/sun4i/=
+sun8i_mixer.c
+> index f5e8aeaa3cdf..004377a000fc 100644
+> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> @@ -248,6 +248,21 @@ int sun8i_mixer_drm_format_to_hw(u32 format, u32 *hw=
+_format)
+>         return -EINVAL;
+>  }
+>
+> +static void sun8i_atomic_begin(struct sunxi_engine *engine,
+> +                              struct drm_crtc_state *old_state)
+> +{
+> +       struct sun8i_mixer *mixer =3D engine_to_sun8i_mixer(engine);
+> +       u32 bld_base =3D sun8i_blender_base(mixer);
+> +
+> +       regmap_write(engine->regs,
+> +                    SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
+> +                    0);
+> +
+> +       regmap_write(engine->regs,
+> +                    SUN8I_MIXER_BLEND_ROUTE(bld_base),
+> +                    0);
+> +}
+> +
+>  static void sun8i_mixer_commit(struct sunxi_engine *engine)
+>  {
+>         DRM_DEBUG_DRIVER("Committing changes\n");
+> @@ -299,6 +314,7 @@ static struct drm_plane **sun8i_layers_init(struct dr=
+m_device *drm,
+>  }
+>
+>  static const struct sunxi_engine_ops sun8i_engine_ops =3D {
+> +       .atomic_begin   =3D sun8i_atomic_begin,
+>         .commit         =3D sun8i_mixer_commit,
+>         .layers_init    =3D sun8i_layers_init,
+>  };
+> diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c b/drivers/gpu/drm/sun=
+4i/sun8i_ui_layer.c
+> index 7845c2a53a7f..b294a882626a 100644
+> --- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+> +++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+> @@ -24,8 +24,7 @@
+>  #include "sun8i_ui_scaler.h"
+>
+>  static void sun8i_ui_layer_enable(struct sun8i_mixer *mixer, int channel=
+,
+> -                                 int overlay, bool enable, unsigned int =
+zpos,
+> -                                 unsigned int old_zpos)
+> +                                 int overlay, bool enable, unsigned int =
+zpos)
+>  {
+>         u32 val, bld_base, ch_base;
+>
+> @@ -44,18 +43,6 @@ static void sun8i_ui_layer_enable(struct sun8i_mixer *=
+mixer, int channel,
+>                            SUN8I_MIXER_CHAN_UI_LAYER_ATTR(ch_base, overla=
+y),
+>                            SUN8I_MIXER_CHAN_UI_LAYER_ATTR_EN, val);
+>
+> -       if (!enable || zpos !=3D old_zpos) {
+> -               regmap_update_bits(mixer->engine.regs,
+> -                                  SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
+> -                                  SUN8I_MIXER_BLEND_PIPE_CTL_EN(old_zpos=
+),
+> -                                  0);
+> -
+> -               regmap_update_bits(mixer->engine.regs,
+> -                                  SUN8I_MIXER_BLEND_ROUTE(bld_base),
+> -                                  SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(old_z=
+pos),
+> -                                  0);
+> -       }
+> -
+>         if (enable) {
+>                 val =3D SUN8I_MIXER_BLEND_PIPE_CTL_EN(zpos);
+>
+> @@ -291,31 +278,24 @@ static int sun8i_ui_layer_atomic_check(struct drm_p=
+lane *plane,
+>  static void sun8i_ui_layer_atomic_disable(struct drm_plane *plane,
+>                                           struct drm_atomic_state *state)
+>  {
+> -       struct drm_plane_state *old_state =3D drm_atomic_get_old_plane_st=
+ate(state,
+> -                                                                        =
+  plane);
+>         struct sun8i_ui_layer *layer =3D plane_to_sun8i_ui_layer(plane);
+> -       unsigned int old_zpos =3D old_state->normalized_zpos;
+>         struct sun8i_mixer *mixer =3D layer->mixer;
+>
+> -       sun8i_ui_layer_enable(mixer, layer->channel, layer->overlay, fals=
+e, 0,
+> -                             old_zpos);
+> +       sun8i_ui_layer_enable(mixer, layer->channel, layer->overlay, fals=
+e, 0);
+>  }
+>
+>  static void sun8i_ui_layer_atomic_update(struct drm_plane *plane,
+>                                          struct drm_atomic_state *state)
+>  {
+> -       struct drm_plane_state *old_state =3D drm_atomic_get_old_plane_st=
+ate(state,
+> -                                                                        =
+  plane);
+>         struct drm_plane_state *new_state =3D drm_atomic_get_new_plane_st=
+ate(state,
+>                                                                          =
+  plane);
+>         struct sun8i_ui_layer *layer =3D plane_to_sun8i_ui_layer(plane);
+>         unsigned int zpos =3D new_state->normalized_zpos;
+> -       unsigned int old_zpos =3D old_state->normalized_zpos;
+>         struct sun8i_mixer *mixer =3D layer->mixer;
+>
+>         if (!new_state->visible) {
+>                 sun8i_ui_layer_enable(mixer, layer->channel,
+> -                                     layer->overlay, false, 0, old_zpos)=
+;
+> +                                     layer->overlay, false, 0);
+>                 return;
+>         }
+>
+> @@ -328,7 +308,7 @@ static void sun8i_ui_layer_atomic_update(struct drm_p=
+lane *plane,
+>         sun8i_ui_layer_update_buffer(mixer, layer->channel,
+>                                      layer->overlay, plane);
+>         sun8i_ui_layer_enable(mixer, layer->channel, layer->overlay,
+> -                             true, zpos, old_zpos);
+> +                             true, zpos);
+>  }
+>
+>  static const struct drm_plane_helper_funcs sun8i_ui_layer_helper_funcs =
+=3D {
+> diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/drm/sun=
+4i/sun8i_vi_layer.c
+> index bb7c43036dfa..4653244b2fd8 100644
+> --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+> +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+> @@ -18,8 +18,7 @@
+>  #include "sun8i_vi_scaler.h"
+>
+>  static void sun8i_vi_layer_enable(struct sun8i_mixer *mixer, int channel=
+,
+> -                                 int overlay, bool enable, unsigned int =
+zpos,
+> -                                 unsigned int old_zpos)
+> +                                 int overlay, bool enable, unsigned int =
+zpos)
+>  {
+>         u32 val, bld_base, ch_base;
+>
+> @@ -38,18 +37,6 @@ static void sun8i_vi_layer_enable(struct sun8i_mixer *=
+mixer, int channel,
+>                            SUN8I_MIXER_CHAN_VI_LAYER_ATTR(ch_base, overla=
+y),
+>                            SUN8I_MIXER_CHAN_VI_LAYER_ATTR_EN, val);
+>
+> -       if (!enable || zpos !=3D old_zpos) {
+> -               regmap_update_bits(mixer->engine.regs,
+> -                                  SUN8I_MIXER_BLEND_PIPE_CTL(bld_base),
+> -                                  SUN8I_MIXER_BLEND_PIPE_CTL_EN(old_zpos=
+),
+> -                                  0);
+> -
+> -               regmap_update_bits(mixer->engine.regs,
+> -                                  SUN8I_MIXER_BLEND_ROUTE(bld_base),
+> -                                  SUN8I_MIXER_BLEND_ROUTE_PIPE_MSK(old_z=
+pos),
+> -                                  0);
+> -       }
+> -
+>         if (enable) {
+>                 val =3D SUN8I_MIXER_BLEND_PIPE_CTL_EN(zpos);
+>
+> @@ -395,31 +382,24 @@ static int sun8i_vi_layer_atomic_check(struct drm_p=
+lane *plane,
+>  static void sun8i_vi_layer_atomic_disable(struct drm_plane *plane,
+>                                           struct drm_atomic_state *state)
+>  {
+> -       struct drm_plane_state *old_state =3D drm_atomic_get_old_plane_st=
+ate(state,
+> -                                                                        =
+  plane);
+>         struct sun8i_vi_layer *layer =3D plane_to_sun8i_vi_layer(plane);
+> -       unsigned int old_zpos =3D old_state->normalized_zpos;
+>         struct sun8i_mixer *mixer =3D layer->mixer;
+>
+> -       sun8i_vi_layer_enable(mixer, layer->channel, layer->overlay, fals=
+e, 0,
+> -                             old_zpos);
+> +       sun8i_vi_layer_enable(mixer, layer->channel, layer->overlay, fals=
+e, 0);
+>  }
+>
+>  static void sun8i_vi_layer_atomic_update(struct drm_plane *plane,
+>                                          struct drm_atomic_state *state)
+>  {
+> -       struct drm_plane_state *old_state =3D drm_atomic_get_old_plane_st=
+ate(state,
+> -                                                                        =
+  plane);
+>         struct drm_plane_state *new_state =3D drm_atomic_get_new_plane_st=
+ate(state,
+>                                                                          =
+  plane);
+>         struct sun8i_vi_layer *layer =3D plane_to_sun8i_vi_layer(plane);
+>         unsigned int zpos =3D new_state->normalized_zpos;
+> -       unsigned int old_zpos =3D old_state->normalized_zpos;
+>         struct sun8i_mixer *mixer =3D layer->mixer;
+>
+>         if (!new_state->visible) {
+>                 sun8i_vi_layer_enable(mixer, layer->channel,
+> -                                     layer->overlay, false, 0, old_zpos)=
+;
+> +                                     layer->overlay, false, 0);
+>                 return;
+>         }
+>
+> @@ -432,7 +412,7 @@ static void sun8i_vi_layer_atomic_update(struct drm_p=
+lane *plane,
+>         sun8i_vi_layer_update_buffer(mixer, layer->channel,
+>                                      layer->overlay, plane);
+>         sun8i_vi_layer_enable(mixer, layer->channel, layer->overlay,
+> -                             true, zpos, old_zpos);
+> +                             true, zpos);
+>  }
+>
+>  static const struct drm_plane_helper_funcs sun8i_vi_layer_helper_funcs =
+=3D {
+> --
+> 2.30.2
+>

@@ -2,128 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F9E532E05
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E83532E36
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239180AbiEXP7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S239263AbiEXQBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 12:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239163AbiEXP7j (ORCPT
+        with ESMTP id S237666AbiEXQAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:59:39 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48845986DA;
-        Tue, 24 May 2022 08:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=IlWWOeHUyxI87/ZUi6NS9TFLsUJi3lbfeazdE29uhPk=; b=imemdAQIiSRD+gdiClRe4DzWb/
-        YiHPsg+seb3ku5EAdgvOL0M0uJXCBJMn0HD6abbC/k2c3FzHpAWoJruiwsP1lumXw2uAh0yzmvD2M
-        OSij1AM/47VXlq9dxn/9kN63aufFLnEVFLFBmrleegqL9RotRZ0cT3VQIj0aWyAtyd4ScIEL5Rjms
-        p6626v6FHEzo9lXf9Uy5zwo5ubha/PFBevop7luQPA0eY1MOLnwKX8N5JWfuu4w86T2fiGk3UuAPR
-        VuvtbU+XESWfe2k3axgOH3BtOIqkaC3YWY7yWAcdmN7eFSwrgTGgeo5CRuaB1vgySJQQxS/RH2ROr
-        YyiNEW4w==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1ntWwV-006RAB-Da; Tue, 24 May 2022 09:59:32 -0600
-Message-ID: <f270d92d-7c34-2f58-89c5-ccb7a8a37872@deltatee.com>
-Date:   Tue, 24 May 2022 09:59:30 -0600
+        Tue, 24 May 2022 12:00:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DA2A30B6;
+        Tue, 24 May 2022 09:00:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A60836175C;
+        Tue, 24 May 2022 16:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD9AC34113;
+        Tue, 24 May 2022 16:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653408012;
+        bh=6Cm8N7iGoLf4zRP7xWJkH3JlP5PHe89qcww/m1kqHZs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BCx66EXnkT5X2sso95W6sgv51Ov/eCOfBHae3jYYR6V8A0s22LjcJBxKJ6EMyVFQ2
+         ZReBSE6dEv4GtRA/l5RZSA96aXVSAc1iL7U1zsw4L43uGTRQJgJgp/8qQoFVIMXO4G
+         aIq+qQGBDqIyQ8iQuhgynfWxilCvQwQk5TqUGunjv0bAN2mLDf1lvPQvEGo21O8d91
+         8SFwKDvIUfvk+SpAlJZ2yzwDOHxdPlE9CtQtjC0Q8GDD4rcVws3Eb87Fi29mli5gbH
+         nccJAoqYULPE9+XToPkSqybY1hsQwq7JSxoi76VzOFgOtGK+Ovth0nCCAeOGnZi7tN
+         ow4I6BlsjTnHg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Forest Crossman <cyrozap@gmail.com>, Takashi Iwai <tiwai@suse.de>,
+        Sasha Levin <sashal@kernel.org>, perex@perex.cz,
+        tiwai@suse.com, alexander@tsoy.me, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.15 01/10] ALSA: usb-audio: Don't get sample rate for MCT Trigger 5 USB-to-HDMI
+Date:   Tue, 24 May 2022 11:59:58 -0400
+Message-Id: <20220524160009.826957-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-CA
-To:     Song Liu <song@kernel.org>, Donald Buczek <buczek@molgen.mpg.de>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-References: <20220519191311.17119-1-logang@deltatee.com>
- <20220519191311.17119-13-logang@deltatee.com>
- <62b09487-9223-db3d-2165-789a51230060@molgen.mpg.de>
- <CAPhsuW5FKh7VKgU+=eU4_ad4btFMwU7ymMNMZ5TZVQbv82MaHg@mail.gmail.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <CAPhsuW5FKh7VKgU+=eU4_ad4btFMwU7ymMNMZ5TZVQbv82MaHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: song@kernel.org, buczek@molgen.mpg.de, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, hch@infradead.org, guoqing.jiang@linux.dev, xni@redhat.com, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v1 12/15] md/raid5-cache: Add RCU protection to conf->log
- accesses
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Forest Crossman <cyrozap@gmail.com>
 
+[ Upstream commit d7be213849232a2accb219d537edf056d29186b4 ]
 
-On 2022-05-23 00:47, Song Liu wrote:
->> A problem here is that `struct r5l_log` of `conf->log` is private to raid5-cache.c and gcc below version 10 (wrongly) regards the `typeof(*p) *local` declaration of __rcu_access_pointer as a dereference:
->>
->>    CC      drivers/md/raid5.o
->>
->> In file included from ./include/linux/rculist.h:11:0,
->>
->>                   from ./include/linux/dcache.h:8,
->>
->>                   from ./include/linux/fs.h:8,
->>
->>                   from ./include/linux/highmem.h:5,
->>
->>                   from ./include/linux/bvec.h:10,
->>
->>                   from ./include/linux/blk_types.h:10,
->>
->>                   from ./include/linux/blkdev.h:9,
->>
->>                   from drivers/md/raid5.c:38:
->>
->> drivers/md/raid5-log.h: In function ‘log_stripe’:
->>
->> ./include/linux/rcupdate.h:384:9: error: dereferencing pointer to incomplete type ‘struct r5l_log’
->>
->>    typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
->>
->>           ^
->>
->> ./include/linux/rcupdate.h:495:31: note: in expansion of macro ‘__rcu_access_pointer’
->>
->>   #define rcu_access_pointer(p) __rcu_access_pointer((p), __UNIQUE_ID(rcu), __rcu)
->>
->>                                 ^~~~~~~~~~~~~~~~~~~~
->>
->> drivers/md/raid5-log.h:61:6: note: in expansion of macro ‘rcu_access_pointer’
->>
->>    if (rcu_access_pointer(conf->log)) {
->>
->>        ^~~~~~~~~~~~~~~~~~
->>
->> make[2]: *** [scripts/Makefile.build:288: drivers/md/raid5.o] Error 1
->>
->> make[1]: *** [scripts/Makefile.build:550: drivers/md] Error 2
->>
->> make: *** [Makefile:1834: drivers] Error 2
-> 
-> This is annoying.. And there are a few other cases in raid5-log.h and
-> raid5.c.
-> 
-> Maybe we should move the definition of r5l_log to raid5-log.h?
+This device doesn't support reading the sample rate, so we need to apply
+this quirk to avoid a 15-second delay waiting for three timeouts.
 
-That's the only solution I can think of, and what I'll likely do for v2.
-If anyone has a better solution I'm open to it.
+Signed-off-by: Forest Crossman <cyrozap@gmail.com>
+Link: https://lore.kernel.org/r/20220504002444.114011-2-cyrozap@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/usb/quirks.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Logan
+diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+index ab9f3da49941..fbbe59054c3f 100644
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -1822,6 +1822,8 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
+ 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
+ 	DEVICE_FLG(0x06f8, 0xd002, /* Hercules DJ Console (Macintosh Edition) */
+ 		   QUIRK_FLAG_IGNORE_CTL_ERROR),
++	DEVICE_FLG(0x0711, 0x5800, /* MCT Trigger 5 USB-to-HDMI */
++		   QUIRK_FLAG_GET_SAMPLE_RATE),
+ 	DEVICE_FLG(0x074d, 0x3553, /* Outlaw RR2150 (Micronas UAC3553B) */
+ 		   QUIRK_FLAG_GET_SAMPLE_RATE),
+ 	DEVICE_FLG(0x08bb, 0x2702, /* LineX FM Transmitter */
+-- 
+2.35.1
+

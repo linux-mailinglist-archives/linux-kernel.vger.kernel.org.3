@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DD8532A18
+	by mail.lfdr.de (Postfix) with ESMTP id EFE68532A1A
 	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 14:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237202AbiEXMLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 08:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S237211AbiEXMMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 08:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbiEXMLr (ORCPT
+        with ESMTP id S237205AbiEXMLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 08:11:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978BF3BBE9;
-        Tue, 24 May 2022 05:11:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 24 May 2022 08:11:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EE154739B
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 05:11:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653394309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sEI/Dcu3+QzIxfHlZeMPW7wnTyUUPuRL46h4raxehBI=;
+        b=apfQSue7HFJjuJY3Lx9aMjMzS0lM28ZcDJI9lM74Jw8IsaNIFOUHN6HsdVJTzvvJ1dRu+J
+        N02Bc+kJ+2hiBGN4nMH295UZV2IvCYocxMQICxrSO/zYoUuj76r1RjlZZwcifPMWWybuKi
+        A+oVq9wqnNH5UTOR2gDsq8kaDM2md1s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-646-Zy6FR-paNJqN21ixPH2u8g-1; Tue, 24 May 2022 08:11:44 -0400
+X-MC-Unique: Zy6FR-paNJqN21ixPH2u8g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32F126153C;
-        Tue, 24 May 2022 12:11:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC7CC34115;
-        Tue, 24 May 2022 12:11:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653394305;
-        bh=WAxME2jCqnYq3zOI/E/rWkFD9vU/aHCVb7JhmBT2ysw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YuGTtIFcMl/M2mNRzQsW3c95pU2bnO87GRa0mpvwQXShnVBnHT4PyToI6EEbHsLtB
-         1fd5jNBVYxYvjFgkARs8v1vMdQk5qFfoR3r3bc3LEJcG1dHwbl6kZhhJ/LWl7RcxR7
-         jgf6LtM5vcIlLpNu6msGi4/M0AColxzN51jgAJaXw+mqMXwHOUFSHMz1gThkj90Uh8
-         BNobRS/FHuYMLFAzigLzcIjyd5TyZy3ncOM/8t3ej6wto9kyWet1LyK/Unq4P56jhn
-         0nXbS0uvJS4yHG/dmTKuwxM/lxgjsFI7YnD75oPPohOukEY69KvO5Z2bXEMYkZjt/Q
-         6zgYWVvsrKBiw==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-e93bbb54f9so21923324fac.12;
-        Tue, 24 May 2022 05:11:45 -0700 (PDT)
-X-Gm-Message-State: AOAM533gucPHWLhZGqmtNl298VeHuGPe9wnLgPaqTbc5r3t2Wn9bkdyH
-        UBBBHrXAEhRXjV6NyNEgt8Jy6tcbTGHFooa+JZY=
-X-Google-Smtp-Source: ABdhPJztDF5PV1kXacwpIMJOpIfgEFC8mJZ6y0CYNryPpsBU9wmRW7bvPayvDt7TraMnf5JrVtNBHJo/yPK7N8NbKjM=
-X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
- s37-20020a056870eaa500b000da0b3f2b45mr2447846oap.228.1653394304682; Tue, 24
- May 2022 05:11:44 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DB9501C3E985;
+        Tue, 24 May 2022 12:11:43 +0000 (UTC)
+Received: from fedora (unknown [10.40.194.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E84401121315;
+        Tue, 24 May 2022 12:11:41 +0000 (UTC)
+Date:   Tue, 24 May 2022 14:11:39 +0200
+From:   Lukas Czerner <lczerner@redhat.com>
+To:     "libaokun (A)" <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yebin10@huawei.com, yukuai3@huawei.com,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH 1/2] ext4: fix bug_on ext4_mb_use_inode_pa
+Message-ID: <20220524121139.cm6475vnmkupsp5q@fedora>
+References: <20220521134217.312071-1-libaokun1@huawei.com>
+ <20220521134217.312071-2-libaokun1@huawei.com>
+ <20220523095803.gomx2q62ymocrkrz@fedora>
+ <2525e39a-5be9-bae1-b77d-60f583892868@huawei.com>
 MIME-Version: 1.0
-References: <1653360644-28872-1-git-send-email-baihaowen@meizu.com>
- <CAAhV-H7Xw-LPdHg1mVF1aZ67RQACBP0kans+moZ3GaRb5PF6VA@mail.gmail.com>
- <CAAhV-H4Qcj9y6opY3WMTbE8myo77fYRb8Z42C+MPYuScz8N67g@mail.gmail.com> <CAAhV-H6tKeyeo3L7=C2NUQyw_cJpusWYmGUrm8LVVidvjB3MgQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H6tKeyeo3L7=C2NUQyw_cJpusWYmGUrm8LVVidvjB3MgQ@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 24 May 2022 14:11:33 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEEjCNedgBqfLLXGTD1FgfoTSREMT8Xjn7Ec4_1twrNmg@mail.gmail.com>
-Message-ID: <CAMj1kXEEjCNedgBqfLLXGTD1FgfoTSREMT8Xjn7Ec4_1twrNmg@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: take size of pointed value, not pointer
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Haowen Bai <baihaowen@meizu.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2525e39a-5be9-bae1-b77d-60f583892868@huawei.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,34 +68,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 May 2022 at 13:41, Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> Hi, Haowen,
->
-> On Tue, May 24, 2022 at 12:03 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> >
-> > On Tue, May 24, 2022 at 11:06 AM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > >
-> > > Hi, Haowen,
-> > >
-> > > On Tue, May 24, 2022 at 10:52 AM Haowen Bai <baihaowen@meizu.com> wrote:
-> > > >
-> > > > Sizeof a pointer-typed expression returns the size of the pointer, not
-> > > > that of the pointed data.
-> > > Your patch is correct, but the original patch hasn't been upstream, I don't
-> > > know how to handle it.
-> > I've squash your patch to the original one and add a Co-developed-by:,
-> > not sure it is the best solution. Thanks.
-> I was suggested that a "Suggested-by" is suitable.
-> https://lore.kernel.org/lkml/CAAhV-H6k=xC-fDYnwsqSeoj7QPPn8RAcR+waQMa8yTs5J-XOSg@mail.gmail.com/T/#t
->
+On Mon, May 23, 2022 at 08:19:03PM +0800, libaokun (A) wrote:
+> 在 2022/5/23 17:58, Lukas Czerner 写道:
+> > On Sat, May 21, 2022 at 09:42:16PM +0800, Baokun Li wrote:
+> > > Hulk Robot reported a BUG_ON:
+> > > ==================================================================
+> > > kernel BUG at fs/ext4/mballoc.c:3211!
+> > > [...]
+> > > RIP: 0010:ext4_mb_mark_diskspace_used.cold+0x85/0x136f
+> > > [...]
+> > > Call Trace:
+> > >   ext4_mb_new_blocks+0x9df/0x5d30
+> > >   ext4_ext_map_blocks+0x1803/0x4d80
+> > >   ext4_map_blocks+0x3a4/0x1a10
+> > >   ext4_writepages+0x126d/0x2c30
+> > >   do_writepages+0x7f/0x1b0
+> > >   __filemap_fdatawrite_range+0x285/0x3b0
+> > >   file_write_and_wait_range+0xb1/0x140
+> > >   ext4_sync_file+0x1aa/0xca0
+> > >   vfs_fsync_range+0xfb/0x260
+> > >   do_fsync+0x48/0xa0
+> > > [...]
+> > > ==================================================================
+> > > 
+> > > Above issue may happen as follows:
+> > > -------------------------------------
+> > > do_fsync
+> > >   vfs_fsync_range
+> > >    ext4_sync_file
+> > >     file_write_and_wait_range
+> > >      __filemap_fdatawrite_range
+> > >       do_writepages
+> > >        ext4_writepages
+> > >         mpage_map_and_submit_extent
+> > >          mpage_map_one_extent
+> > >           ext4_map_blocks
+> > >            ext4_mb_new_blocks
+> > >             ext4_mb_normalize_request
+> > >              >>> start + size <= ac->ac_o_ex.fe_logical
+> > >             ext4_mb_regular_allocator
+> > >              ext4_mb_simple_scan_group
+> > >               ext4_mb_use_best_found
+> > >                ext4_mb_new_preallocation
+> > >                 ext4_mb_new_inode_pa
+> > >                  ext4_mb_use_inode_pa
+> > >                   >>> set ac->ac_b_ex.fe_len <= 0
+> > >             ext4_mb_mark_diskspace_used
+> > >              >>> BUG_ON(ac->ac_b_ex.fe_len <= 0);
+> > > 
+> > > we can easily reproduce this problem with the following commands:
+> > > 	`fallocate -l100M disk`
+> > > 	`mkfs.ext4 -b 1024 -g 256 disk`
+> > > 	`mount disk /mnt`
+> > > 	`fsstress -d /mnt -l 0 -n 1000 -p 1`
+> > > 
+> > > The size must be smaller than or equal to EXT4_BLOCKS_PER_GROUP.
+> > > Therefore, "start + size <= ac->ac_o_ex.fe_logical" may occur
+> > > when the size is truncated. So start should be the start position of
+> > > the group where ac_o_ex.fe_logical is located after alignment.
+> > > In addition, when the value of fe_logical or EXT4_BLOCKS_PER_GROUP
+> > > is very large, the value calculated by start_off is more accurate.
+> > > 
+> > > Fixes: cd648b8a8fd5 ("ext4: trim allocation requests to group size")
+> > > Reported-by: Hulk Robot<hulkci@huawei.com>
+> > > Signed-off-by: Baokun Li<libaokun1@huawei.com>
+> > > ---
+> > >   fs/ext4/mballoc.c | 11 +++++++++++
+> > >   1 file changed, 11 insertions(+)
+> > > 
+> > > diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> > > index ea653d19f9ec..32410b79b664 100644
+> > > --- a/fs/ext4/mballoc.c
+> > > +++ b/fs/ext4/mballoc.c
+> > > @@ -4107,6 +4107,17 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+> > >   	size = size >> bsbits;
+> > >   	start = start_off >> bsbits;
+> > > +	/*
+> > > +	 * Because size must be less than or equal to
+> > > +	 * EXT4_BLOCKS_PER_GROUP, start should be the start position of
+> > > +	 * the group where ac_o_ex.fe_logical is located after alignment.
+> > > +	 * In addition, when the value of fe_logical or
+> > > +	 * EXT4_BLOCKS_PER_GROUP is very large, the value calculated
+> > > +	 * by start_off is more accurate.
+> > > +	 */
+> > > +	start = max(start, round_down(ac->ac_o_ex.fe_logical,
+> > > +			EXT4_BLOCKS_PER_GROUP(ac->ac_sb)));
+> > This does not look right. The second argument in round_down() must be a
+> > power of two, but there is no such restriction on blocks per group.
+> 
+> Indeed, block peer group size should be a multiple of 8. I forgot.
+> 
+> Thank you very much for your correction.
+> 
+> > Also I am not quite sure why do we adjust the start in this way at all?
+> > If we found what seems to be a preallocated extent which we can use and
+> > we're actually going to use 0 lenght extent it seems like the problem is
+> > somewhere else? Can you desribe the problem a bit more in detail?
+> > 
+> > Maybe I need to look at the ext4_mb_normalize_request() some more.
+> > 
+> > -Lukas
+> The logical block map reached before the problem stack was 1011.
+> 
+> The estimated location of the size logical block of the inde plus the
+> required allocation length 7, the size is 1018.
+> 
+> But the i_size of inode is 1299, so the size is 1299, the aligned size is
+> 2048, and the end is 2048.
+> 
+> Because of the restriction of ar -> pleft, start==648.
+> 
+> EXT4_BLOCKS_PER_GROUP (ac- > ac_sb) is 256, so the size is 256 and the end
+> is 904.
+> 
+> It is not normal to truncate here, the end is less than 1299 of the target
+> logical block,
+> that is, the allocated range does not contain the target logical block.
+> 
+> Then this new scope conflicts with the previous PA, as follows:
+> 
+>           pa_start-506           pa_end-759
+>  |____________P________V_________P__________V_____________l________|
+>  0                       start-648                   end-904 logical-1299 
+> 2048
+> 
+> In this case, start is changed to pa_end, that is, 759.
+> In this case, a bug_ON is reported in ext4_mb_mark_diskspace_used.
+> 
+> The problem is caused by the truncation introduced in the
+> cd648b8a8fd5 ("ext4: trim allocation requests to group size").
+> The size must be smaller than or equal to EXT4_BLOCKS_PER_GROUP.
+> However, the truncation method is incorrect. The group where the logical is
+> located should be used for allocation. If the value of EXT4_BLOCKS_PER_GROUP
+> is 256, size 2048 can be divided into eight groups. If the value of logical
+> is 1299,
+> the value of logical must be in the sixth group, that is,
+> start=1299/256*256=5*256=1280, end=size+1280=1536.
+> Then, the value range can be further narrowed down based on other
+> restrictions.
+> 
+>                                    1024     1280     1536
+> |________|________|________|________|________|__l______|________|________|
+> 0 group1 group2 group3 group4 group5 group6 group7 group8 2048
 
-Finding and fixing mistakes is the normal review process, and not
-every addressed comment needs to be reflected in the tags, even if the
-contributor sent it as a separate patch. Adding 'Suggested-by' to the
-entire patch falsely implies that the author of the bugfix suggested
-the entire work, which is not desirable either.
+Ok, thanks for the explanation it makes sense now, although should not
+we just adjust the start only when the size is being truncated to the
+EXT4_BLOCKS_PER_GROUP?
 
-In this case, the bugfix is a well-known anti-pattern which is not
-specific to the introduced code. I don't think this warrants a tag
-tbh.
+-Lukas
+
+> 
+> > > +
+> > >   	/* don't cover already allocated blocks in selected range */
+> > >   	if (ar->pleft && start <= ar->lleft) {
+> > >   		size -= ar->lleft + 1 - start;
+> > > -- 
+> > > 2.31.1
+> > > 
+> > .
+> 
+> -- 
+> With Best Regards,
+> Baokun Li
+

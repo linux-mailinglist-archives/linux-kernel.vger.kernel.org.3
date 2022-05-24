@@ -2,127 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D6F533295
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BC6533297
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241689AbiEXUrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S241703AbiEXUsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238638AbiEXUrq (ORCPT
+        with ESMTP id S241696AbiEXUsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:47:46 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85BA7379F
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:47:44 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id p8so17447051pfh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:47:44 -0700 (PDT)
+        Tue, 24 May 2022 16:48:09 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD16E74DCC
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:48:08 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id s20so511729ljd.10
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:48:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3uRtfrODZaP6cR0RkQJZ2+zsYii1OwcOLnuKabGpEK8=;
-        b=T5b5Xt9YaoxgVs4sV5AT0c/hlVtaFZxKefza3PoOUmHqZGiuEVXrmgipbywdk0MUHv
-         LbZp53m4VRovrykWpWKYmL9BXOcQcpPZA4yDAC7jlOBrVu8qPWjzrtyG6soLeWcGb2xe
-         njsftnjDBPYSxiLtaUKBxgn/7Nj/DEF3jdTA35hYa2v32+lALhxanhYg10oaanHqAU91
-         YlUx7iVa9M7JLF5z/JY7Tsuyn8T7My41ilTf3t6j8p4cRJ/xefmDHyRGgeswxSr/9Eef
-         M4QVseQ8pftKqFsh4YfF14layFOZRoYWN/Y8vuEn8Zw3muUO5KqAZbQhByGQqabHdLXW
-         5U0Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7VF1h9VoAjTirhiTdduIUPLKqTj+n1pCpzbChlFIzhY=;
+        b=n2Ms+d/2wyZrpq84XEvd1spFFzFVV5DC3dX27H3EnH0INSQBrRkDaGGliChTegAiRT
+         MjFhrlI2Ssk5UuDUrM3ymBYmD10lwCG2p/vtWqksDNh/rfjqsWKR4bS7uaR6+a+0W1fo
+         k4TlnYdpXaYMoNoDKdo4nhjKPYicW3iyx/UqkA5mphCFj7/IMhDcHdGAIOHqrkBGanAO
+         FrWi+bV5nxmNlS6jUMryeebiHsx6TY+aymnM6giAfAZGgA3vSWfWRjBJhKymugS7Cns8
+         0TV83mKGRjUI5EgOGXVPmT3cs4xPXyf0q4bQTFeRKFin5iwXgmhMD2ivzK5By/j1x/1V
+         JRRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3uRtfrODZaP6cR0RkQJZ2+zsYii1OwcOLnuKabGpEK8=;
-        b=GWSRmiMcdmGQnAhKy6AlJUwvuFJS1gDpjq0mKKXaXOK9QR7JiixSEkH8cMinQ9HkP8
-         Yx2Q6SRyooHN7lPVjHuvMbRZo8ugIgAZn70fgNlBYpyKwP/ORnp2QrHYzbqoUX43Zl27
-         ln6JpqoUv3BywlT16Y+Tl9XOWiFrGnNYcgGNcMOA6dRcvkqRLP21pW+o1HyR+omEfFS5
-         OA+saqPkLcTJwsQioH4t5fNmoMnH4kfmQFVIOFUw/jlJMFxiTVSt4JBTgLypdnqzwhyK
-         pGmympHrUDDWqN+0v3pGYjEaUPg9/QOf1cxL4/yWwhHF8YvN0w541//aeoNif6exyv5w
-         dIfQ==
-X-Gm-Message-State: AOAM531QZJEszc6/NNmCYgIvK6xoLmcqBxD8IbYFhElQQZJAEyqTyyxU
-        Qsk0DPd4BUQNOFbMmNSWdUmxLmyPjAQZoQ==
-X-Google-Smtp-Source: ABdhPJwwpVXtrpCz9jVGk8iP4WrNBX+WMLN52wp4D2psv/hI+w3spN+5vdPNbAvKQkjySp4B6lh9jg==
-X-Received: by 2002:a05:6a00:1145:b0:4f6:3ebc:a79b with SMTP id b5-20020a056a00114500b004f63ebca79bmr30284723pfm.41.1653425264154;
-        Tue, 24 May 2022 13:47:44 -0700 (PDT)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id r8-20020a17090a690800b001dfffd861cbsm216333pjj.21.2022.05.24.13.47.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 13:47:43 -0700 (PDT)
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     netdev@vger.kernel.org
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC] xfrm: convert alg_key to flexible array member
-Date:   Tue, 24 May 2022 13:47:40 -0700
-Message-Id: <20220524204741.980721-1-stephen@networkplumber.org>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7VF1h9VoAjTirhiTdduIUPLKqTj+n1pCpzbChlFIzhY=;
+        b=Epgl0zr2Fbbl+IpnXfF001Fg+I4kDUAbLE2Cz+Hg6sWUiDg7h6wqly6t8biM/EdQNX
+         V5Uyvc7RkTCTG4kUEdkQ5PU3fUrGH/eoKtLfo6qHsVpzK2zph4i5+VwWMPKkLRHhohaa
+         ebO4FeQHMA966/TUIOAazZq1OQIaoZubUUCYKTJSIU6Za71X/54vPMm9N2ucyMVulUR5
+         HR9H8VpsDRJ4kTbln52jKEkXxGTQoDKpkuQI4f7GHnw/R1wocah9uf0z8CAtiL4wPWRI
+         SX+vDw7DX/ABfzDX6vHCPqZJufBmL0sZqslvVSoyQEw1ZcfN2E9Ohl4H/Y1QNe5+CebA
+         nhJw==
+X-Gm-Message-State: AOAM531kPH3grYUC1qH3khPfo4n0E3ZHreICEFh8l7+73c1bgRsPXztp
+        dcbMl9aHREi62bU3JUQ9ZVw25SEktY3IeYmhqr5NyQ==
+X-Google-Smtp-Source: ABdhPJyQO8qS6aGD8XnCH+3Zo+UOwCbzqSC96vwlTbaTtq667oU9uZ0xjiA6D4lx6SD4k6nIcMbrxGib2ITUyM88tn4=
+X-Received: by 2002:a2e:b04d:0:b0:253:e5e3:ec1c with SMTP id
+ d13-20020a2eb04d000000b00253e5e3ec1cmr9600787ljl.360.1653425286864; Tue, 24
+ May 2022 13:48:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220523164626.858340-1-masahiroy@kernel.org> <20220523164626.858340-3-masahiroy@kernel.org>
+In-Reply-To: <20220523164626.858340-3-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 24 May 2022 13:47:55 -0700
+Message-ID: <CAKwvOdnCQUSOUHqL20nAFJ1FcUGQOSz9DWkyS5UU-8C9M-wcNA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] modpost: simplify mod->name allocation
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Iproute2 build generates a warning when built with gcc-12.
-This is because the alg_key in xfrm.h API has zero size
-array element instead of flexible array.
+On Mon, May 23, 2022 at 9:48 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> mod->name is set to the ELF filename with the suffix ".o" stripped.
+>
+> The current code calls strdup() and free() to manipulate the string,
+> but a simpler approach is to pass new_module() with the name length
+> subtracted by 2.
+>
+> Also, check if the passed filename ends with ".o" before stripping it.
+>
+> The current code blindly chops the suffix
+>
+>     tmp[strlen(tmp) - 2] = '\0'
+>
+> but it will cause buffer under-run if strlen(tmp) < 2;
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-    CC       xfrm_state.o
-In function ‘xfrm_algo_parse’,
-    inlined from ‘xfrm_state_modify.constprop’ at xfrm_state.c:573:5:
-xfrm_state.c:162:32: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-  162 |                         buf[j] = val;
-      |                         ~~~~~~~^~~~~
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-This patch convert the alg_key into flexible array member.
-There are other zero size arrays here that should be converted as
-well.
+> ---
+>
+>  scripts/mod/modpost.c | 25 ++++++++++++-------------
+>  1 file changed, 12 insertions(+), 13 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 843c64eebe8b..77c315dea1a3 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -172,11 +172,11 @@ static struct module *find_module(const char *modname)
+>         return NULL;
+>  }
+>
+> -static struct module *new_module(const char *modname)
+> +static struct module *new_module(const char *name, size_t namelen)
+>  {
+>         struct module *mod;
+>
+> -       mod = NOFAIL(malloc(sizeof(*mod) + strlen(modname) + 1));
+> +       mod = NOFAIL(malloc(sizeof(*mod) + namelen + 1));
+>         memset(mod, 0, sizeof(*mod));
+>
+>         INIT_LIST_HEAD(&mod->exported_symbols);
+> @@ -184,8 +184,9 @@ static struct module *new_module(const char *modname)
+>         INIT_LIST_HEAD(&mod->missing_namespaces);
+>         INIT_LIST_HEAD(&mod->imported_namespaces);
+>
+> -       strcpy(mod->name, modname);
+> -       mod->is_vmlinux = (strcmp(modname, "vmlinux") == 0);
+> +       memcpy(mod->name, name, namelen);
+> +       mod->name[namelen] = '\0';
+> +       mod->is_vmlinux = (strcmp(mod->name, "vmlinux") == 0);
+>
+>         /*
+>          * Set mod->is_gpl_compatible to true by default. If MODULE_LICENSE()
+> @@ -2022,16 +2023,14 @@ static void read_symbols(const char *modname)
+>         if (!parse_elf(&info, modname))
+>                 return;
+>
+> -       {
+> -               char *tmp;
+> -
+> -               /* strip trailing .o */
+> -               tmp = NOFAIL(strdup(modname));
+> -               tmp[strlen(tmp) - 2] = '\0';
+> -               mod = new_module(tmp);
+> -               free(tmp);
+> +       if (!strends(modname, ".o")) {
+> +               error("%s: filename must be suffixed with .o\n", modname);
+> +               return;
+>         }
+>
+> +       /* strip trailing .o */
+> +       mod = new_module(modname, strlen(modname) - strlen(".o"));
+> +
+>         if (!mod->is_vmlinux) {
+>                 license = get_modinfo(&info, "license");
+>                 if (!license)
+> @@ -2493,7 +2492,7 @@ static void read_dump(const char *fname)
+>
+>                 mod = find_module(modname);
+>                 if (!mod) {
+> -                       mod = new_module(modname);
+> +                       mod = new_module(modname, strlen(modname));
+>                         mod->from_dump = true;
+>                 }
+>                 s = sym_add_exported(symname, mod, gpl_only);
+> --
+> 2.32.0
+>
 
-This patch is RFC only since it is only compile tested and
-passes trivial iproute2 tests.
 
-Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
----
- include/uapi/linux/xfrm.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/uapi/linux/xfrm.h b/include/uapi/linux/xfrm.h
-index 65e13a099b1a..3ed61df9cc91 100644
---- a/include/uapi/linux/xfrm.h
-+++ b/include/uapi/linux/xfrm.h
-@@ -102,21 +102,21 @@ struct xfrm_replay_state_esn {
- struct xfrm_algo {
- 	char		alg_name[64];
- 	unsigned int	alg_key_len;    /* in bits */
--	char		alg_key[0];
-+	char		alg_key[];
- };
- 
- struct xfrm_algo_auth {
- 	char		alg_name[64];
- 	unsigned int	alg_key_len;    /* in bits */
- 	unsigned int	alg_trunc_len;  /* in bits */
--	char		alg_key[0];
-+	char		alg_key[];
- };
- 
- struct xfrm_algo_aead {
- 	char		alg_name[64];
- 	unsigned int	alg_key_len;	/* in bits */
- 	unsigned int	alg_icv_len;	/* in bits */
--	char		alg_key[0];
-+	char		alg_key[];
- };
- 
- struct xfrm_stats {
 -- 
-2.35.1
-
+Thanks,
+~Nick Desaulniers

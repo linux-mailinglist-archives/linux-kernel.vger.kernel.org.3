@@ -2,125 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B955332A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E21C5332A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238737AbiEXUvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        id S241757AbiEXUvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 16:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241809AbiEXUvd (ORCPT
+        with ESMTP id S241768AbiEXUvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:51:33 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A93D31354
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:51:32 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id w14so32766548lfl.13
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:51:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FmogMWNp0qvu2mm31zmFjP6h+axm+XxtnUaHfKWv+xM=;
-        b=RR6mv2dpN07ZtLDjgj/gqKwZLXyst5QN24l2SvqPkG15iuStCrKQ41Fl3l85Lg6Tdf
-         vo4zP0ogMNAYQkmt5LjmX2wvt9aMXCU9tI7A8BYlyHSJ3w0lGXEts6mPqi2wakkKfsAq
-         iBcQfmsq1u/dCBzyJ3eyDOwHDoWMIQbF0qe91RsjQ1jotJ9Klr82gRna/odaaQYjAV7p
-         LHIOtPbttOTW9Hcb8kEmiBcBI0HJiKQ+5r18GF5O5uLCzY8rr7PNDf5/Ad1BdnxtkDll
-         i3Eh0+X8VOOVyAfZ0SIC2bAZIkMnFNADAzOGmGOhWEJMWh52/l9sNRt4biSBxBs/AxUd
-         7UvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FmogMWNp0qvu2mm31zmFjP6h+axm+XxtnUaHfKWv+xM=;
-        b=O9BHVJDmcjqBty5HF4kYG/qQBA/P0siONo0r+slO+sN5lcIAAWTe2cUSgpmLD74y3b
-         P/HsFLzv+HN/1shX4RJV4T8XwmoftCF1Go/6mSqmghI8OpAUuOzUOZMwOcJVkpsDlmwG
-         qBu6Kdy3ZOP+A70buIz5pQnLzdLsU6HoMTWRGTxbMgICFh8e+3j7UnTTjMCuAun3LKV4
-         M4qMgdrDcYFLJRaQ97JhtFE8UMySHAepoJb9X/6KYY4UGexdU83Jbm5SZJei/m3Djyk/
-         y6hmxhi+agC08Lhy/yZtWoZxj/zvcgedMSrkqcotxU7ezgGw3EogVuqcLtUrq5Btrc6O
-         E65g==
-X-Gm-Message-State: AOAM5339sQOE6P0ApY/ZJeBTXRaWj4qbyY/TsR/isAhHG56IFOfzHgwP
-        +cZbV3cPSjQPMdnW8tf98lrv8xhgXbLD6jT2IUIx4+yYPW8=
-X-Google-Smtp-Source: ABdhPJzleqZnjuGchdQgqqN8WkUodSeI7NY6Jg+gW6AX7R8T4w34/0v35vDm+YNngitG5zX+TsGnV80HTTcpTjrvAUg=
-X-Received: by 2002:a05:6512:48e:b0:477:c024:1a1c with SMTP id
- v14-20020a056512048e00b00477c0241a1cmr21489946lfq.100.1653425490353; Tue, 24
- May 2022 13:51:30 -0700 (PDT)
+        Tue, 24 May 2022 16:51:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446211C93E
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 13:51:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C70316171F
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 20:51:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D2CC34100;
+        Tue, 24 May 2022 20:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653425485;
+        bh=3eQ2hBlWGUpOpUNaEJFu6V++Da8u1SCVIXJFCtpyb9A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ifSN5L5tItZR9IYTJIwvgBDiIsbIVjNt9LHLdLyNwrBBbmTU4DstIJI9sWZaGlM+r
+         KRRKs2ghOQoL5VnXpiDZJN1+MxG6qt3R6ypZCwGT7rOhJ4yIOBkyVOhCzUX2XKZ7zu
+         XNKBLM7rRmfyB4P9sFnNAFZ4EgmffPAdUZmpANAft6HyYC9gprauHjYs45wOlUiLmw
+         AGEOD4H0QRwXXKQbduXJWfhj6CEW0hxAEUTNfoGr9/l9z42s13KM3NpXdQ3sjD929I
+         19Oo/5O78W1MPB62pqFWN8bzioDfCDvTE/AvmH2DXogw9Qm0CJc49S0yN1BQCzN0+/
+         nrHsePNFDQVxA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id CF6BE5C0A31; Tue, 24 May 2022 13:51:24 -0700 (PDT)
+Date:   Tue, 24 May 2022 13:51:24 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes
+ address space '__rcu' of expression
+Message-ID: <20220524205124.GS1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202205222029.xpW3PM1y-lkp@intel.com>
+ <87y1yspmmh.fsf@toke.dk>
 MIME-Version: 1.0
-References: <20220523164626.858340-1-masahiroy@kernel.org> <20220523164626.858340-5-masahiroy@kernel.org>
-In-Reply-To: <20220523164626.858340-5-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 24 May 2022 13:51:19 -0700
-Message-ID: <CAKwvOdn00NxJo+_SCHcBx2JO0doZQx9cL0TdFDfQAwMOXDMc8w@mail.gmail.com>
-Subject: Re: [PATCH 5/5] modpost: squash if...else if in find_elf_symbol2()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87y1yspmmh.fsf@toke.dk>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 9:48 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
->     if ((addr - sym->st_value) < distance) {
->             distance = addr - sym->st_value;
->             near = sym;
->     } else if ((addr - sym->st_value) == distance) {
->             near = sym;
->     }
->
-> is equivalent to:
->
->     if ((addr - sym->st_value) <= distance) {
->             distance = addr - sym->st_value;
->             near = sym;
->     }
->
-> (The else-if part can overwrite 'distance' with the same value).
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Mon, May 23, 2022 at 12:30:14PM +0200, Toke Høiland-Jørgensen wrote:
+> kernel test robot <lkp@intel.com> writes:
+> 
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   eaea45fc0e7b6ae439526b4a41d91230c8517336
+> > commit: 782347b6bcad07ddb574422e01e22c92e05928c8 xdp: Add proper __rcu annotations to redirect map entries
+> > date:   11 months ago
+> > config: ia64-randconfig-s031-20220522 (https://download.01.org/0day-ci/archive/20220522/202205222029.xpW3PM1y-lkp@intel.com/config)
+> > compiler: ia64-linux-gcc (GCC) 11.3.0
+> 
+> Hmm, so this is ia64-only? Some kind of macro breakage? Paul, any ideas?
 
-Sure, thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Line 1030 looks to me like it is doing everything correctly.  I am not
+sure why sparse would care about the architecture, but perhaps it does.
+The unrcu_pointer() macro has not changed since March of 2020.
 
-> ---
->
->  scripts/mod/modpost.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 48a18b59f908..8c8d2a4bc0b0 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1270,13 +1270,9 @@ static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
->                         continue;
->                 if (!is_valid_name(elf, sym))
->                         continue;
-> -               if (sym->st_value <= addr) {
-> -                       if ((addr - sym->st_value) < distance) {
-> -                               distance = addr - sym->st_value;
-> -                               near = sym;
-> -                       } else if ((addr - sym->st_value) == distance) {
-> -                               near = sym;
-> -                       }
-> +               if (sym->st_value <= addr && addr - sym->st_value <= distance) {
-> +                       distance = addr - sym->st_value;
-> +                       near = sym;
->                 }
->         }
->         return near;
-> --
-> 2.32.0
->
+All I can suggest is to break that line up to make it easier to figure
+out exactly what sparse is upset about.
 
+							Thanx, Paul
 
--- 
-Thanks,
-~Nick Desaulniers
+> -Toke
+> 
+> > reproduce:
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # apt-get install sparse
+> >         # sparse version: v0.6.4-dirty
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=782347b6bcad07ddb574422e01e22c92e05928c8
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout 782347b6bcad07ddb574422e01e22c92e05928c8
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash kernel/bpf/
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> >
+> > sparse warnings: (new ones prefixed by >>)
+> >    kernel/bpf/devmap.c:561:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct bpf_dtab_netdev *dst @@     got struct bpf_dtab_netdev [noderef] __rcu * @@
+> >    kernel/bpf/devmap.c:561:29: sparse:     expected struct bpf_dtab_netdev *dst
+> >    kernel/bpf/devmap.c:561:29: sparse:     got struct bpf_dtab_netdev [noderef] __rcu *
+> >    kernel/bpf/devmap.c:657:29: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct bpf_dtab_netdev *dst @@     got struct bpf_dtab_netdev [noderef] __rcu * @@
+> >    kernel/bpf/devmap.c:657:29: sparse:     expected struct bpf_dtab_netdev *dst
+> >    kernel/bpf/devmap.c:657:29: sparse:     got struct bpf_dtab_netdev [noderef] __rcu *
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >>> kernel/bpf/devmap.c:1030:40: sparse: sparse: cast removes address space '__rcu' of expression
+> >
+> > vim +/__rcu +1030 kernel/bpf/devmap.c
+> >
+> >    990	
+> >    991	static int dev_map_notification(struct notifier_block *notifier,
+> >    992					ulong event, void *ptr)
+> >    993	{
+> >    994		struct net_device *netdev = netdev_notifier_info_to_dev(ptr);
+> >    995		struct bpf_dtab *dtab;
+> >    996		int i, cpu;
+> >    997	
+> >    998		switch (event) {
+> >    999		case NETDEV_REGISTER:
+> >   1000			if (!netdev->netdev_ops->ndo_xdp_xmit || netdev->xdp_bulkq)
+> >   1001				break;
+> >   1002	
+> >   1003			/* will be freed in free_netdev() */
+> >   1004			netdev->xdp_bulkq = alloc_percpu(struct xdp_dev_bulk_queue);
+> >   1005			if (!netdev->xdp_bulkq)
+> >   1006				return NOTIFY_BAD;
+> >   1007	
+> >   1008			for_each_possible_cpu(cpu)
+> >   1009				per_cpu_ptr(netdev->xdp_bulkq, cpu)->dev = netdev;
+> >   1010			break;
+> >   1011		case NETDEV_UNREGISTER:
+> >   1012			/* This rcu_read_lock/unlock pair is needed because
+> >   1013			 * dev_map_list is an RCU list AND to ensure a delete
+> >   1014			 * operation does not free a netdev_map entry while we
+> >   1015			 * are comparing it against the netdev being unregistered.
+> >   1016			 */
+> >   1017			rcu_read_lock();
+> >   1018			list_for_each_entry_rcu(dtab, &dev_map_list, list) {
+> >   1019				if (dtab->map.map_type == BPF_MAP_TYPE_DEVMAP_HASH) {
+> >   1020					dev_map_hash_remove_netdev(dtab, netdev);
+> >   1021					continue;
+> >   1022				}
+> >   1023	
+> >   1024				for (i = 0; i < dtab->map.max_entries; i++) {
+> >   1025					struct bpf_dtab_netdev *dev, *odev;
+> >   1026	
+> >   1027					dev = rcu_dereference(dtab->netdev_map[i]);
+> >   1028					if (!dev || netdev != dev->dev)
+> >   1029						continue;
+> >> 1030					odev = unrcu_pointer(cmpxchg(&dtab->netdev_map[i], RCU_INITIALIZER(dev), NULL));
+> >   1031					if (dev == odev)
+> >   1032						call_rcu(&dev->rcu,
+> >   1033							 __dev_map_entry_free);
+> >   1034				}
+> >   1035			}
+> >   1036			rcu_read_unlock();
+> >   1037			break;
+> >   1038		default:
+> >   1039			break;
+> >   1040		}
+> >   1041		return NOTIFY_OK;
+> >   1042	}
+> >   1043	
+> >
+> > -- 
+> > 0-DAY CI Kernel Test Service
+> > https://01.org/lkp
+> 

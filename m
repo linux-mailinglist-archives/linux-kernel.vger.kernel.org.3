@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFA75328B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844095328C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 13:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236636AbiEXLRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 07:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
+        id S234215AbiEXLUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 07:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236639AbiEXLRQ (ORCPT
+        with ESMTP id S232649AbiEXLUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 07:17:16 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E65986ED
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:16:46 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id m6so20499842ljb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:16:46 -0700 (PDT)
+        Tue, 24 May 2022 07:20:17 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6282E9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:20:15 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id l13so23606979lfp.11
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 04:20:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xNw7LrBTg5witOvFihOmp1AXVpa1kkgs/O9ROK/zEZ4=;
-        b=so+P5zIvJb4xvcv4LtGNWVQOzHBkfikB2mojxL71HaNmFT32Gwy/TrJxGjXXNJ8X4X
-         gcGEzYp7IUPT4UYmGtjpICLxu25/V44WTnm2aLdi7r8k6U0gJi7eDZ+0btAIl0o7ZBAC
-         cdC5VXdcwI2/kBNI9Rdib9tsyCu+GsqwPCtbDF9coIW/nAqkkouzvIj/85dhNRAFRJgC
-         d2OzkotRYv00AT+/7DOUZLpbZ576Nfk5B/xzXPWf7D9A1tn2qrnTueAglVEip2b0H6Z5
-         QgkAMW/1cge883ssPfkSjkvVb2lB0ClQLHh14Ew1jR+RcljdvYpKXRpTLaE5MWNS+ANB
-         +bIA==
+        bh=o+P126SPmH870R49rZnjVtAQ0lLibINOxU3kSrrv/z8=;
+        b=SMvYItxQoIa4+8n2A81HdVNR5Z/Hx33wm5H0xD1nUqEQdCWbeN4tMO0ZjR0AUGJ2mY
+         lPNI5rWq8KDx0D8vwOee98mhmo4a1oAh1SDdvTU/gdlscLL6Sxu6nakF2OyBWeaK0h75
+         FCXZjRYMvXglCUp20LO+/9U91BjDAiB1jiksNdcA/q7Wgu3xF1Nq4huPDYm/YQNgRDKU
+         P3mANTADrLRpTSgtapYACgbxYFGIxB26u93BNoYNHVhjKTbAxFOEOxBD3pY+X24NawYM
+         x53/fxFrDPIOyUPjVIqUif3Y6rAYtEN5464K1gdnn2r3Zfs7kfcdnw+U87gzDWBJtNx0
+         rxsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=xNw7LrBTg5witOvFihOmp1AXVpa1kkgs/O9ROK/zEZ4=;
-        b=o7AdJT5zik2JiQC1JBETC+Emu1EI5UJnj3O3enxLWuGehGyPrLgE9JXoxe6tUoqLc9
-         EDt4nU8nqOXbywA5H2FP0hctPrcZsnXJV3Q/1VeaQhILUrtEUCsMk8pqG4xthF3aTm3R
-         JeRHVXihBItYswg9j0oMhtspKSBrtKZsY3A1XyE2gvMmj/PDUw2xukJYTLFjCa1QsfyN
-         Z07pw/VC3ju6UUzQq2DRYLrkIRWHW3z13jrTmAJWk0EnSlA/xbRxHwkcrF92ltA+bzB7
-         ktXdR75cR3uOX7yyT2TURfQeGm0pOWdqrBErztzOwRNuLju+F10gI4x6ezl7kAWPmxbZ
-         7NMw==
-X-Gm-Message-State: AOAM533ufCYcP7Y6++5drmwI4rKctJW5k390t+yzg+WtG8cF8hxx/nsT
-        GMPXdxjl+8rZ7jUZDv/zPzGSgg==
-X-Google-Smtp-Source: ABdhPJz+lx+iMVXCLSd0N+qqf6vPl237rq1dEPT3DWIOqNMRqpMCyclgt7wE8RtUgZVGeOnk1rv2bQ==
-X-Received: by 2002:a2e:1614:0:b0:253:d71b:cf6d with SMTP id w20-20020a2e1614000000b00253d71bcf6dmr14147086ljd.80.1653391004531;
-        Tue, 24 May 2022 04:16:44 -0700 (PDT)
+        bh=o+P126SPmH870R49rZnjVtAQ0lLibINOxU3kSrrv/z8=;
+        b=7sbTHGgcgRnw7TcPJqPNTXciN0DtX0W5+F83U0I05kAoZM9OVmg3gm0JQOmBr49fTy
+         SpNH51WGZbXokrif5CkA8c2lOnTyXQIWMkXrLxgpYFiWpr1ESLgnCb4ltUQnK7ULHdOB
+         bz1neZZ8roFYneacKtRPpOEqC6LHNlswMIBy0Yo+pQMjU/TyuvQXjZjygJ4HzN3UHmvN
+         duXwER+PzfscfjnpgpFN5tk2XRmUtCXiVid306hDzjYEvRjiMkRCgLckNXjZz9S7U3oy
+         VjR0nWeS8vjhKX5SwFKF5kSea1NohdoPdLLXQatIa6ChqEdCCa06onshSYZH6qy3ccf5
+         FCYA==
+X-Gm-Message-State: AOAM533a0O2gA/TuHGvnlSk9WCYpTsynG9siMwbAxGIWc6Fhne9qp5J5
+        tbWS5/QKVGPYcKVojvN0XCUp3g==
+X-Google-Smtp-Source: ABdhPJzmHrk/56T37ils6m/MiRllzq9R03TSRVqArMoj3ScLBwg+xIn7CZIv4hN266uJZrfvwWpf1w==
+X-Received: by 2002:a05:6512:3a96:b0:478:7abd:52e with SMTP id q22-20020a0565123a9600b004787abd052emr5245487lfu.446.1653391214165;
+        Tue, 24 May 2022 04:20:14 -0700 (PDT)
 Received: from [172.20.68.48] ([91.221.145.6])
-        by smtp.gmail.com with ESMTPSA id u1-20020ac24c21000000b0047255d2118csm2486056lfq.187.2022.05.24.04.16.43
+        by smtp.gmail.com with ESMTPSA id g7-20020a2ea4a7000000b00253d8962fffsm2445974ljm.18.2022.05.24.04.20.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 04:16:44 -0700 (PDT)
-Message-ID: <027c4fd9-194d-79c9-2ebe-e7bd1824b313@linaro.org>
-Date:   Tue, 24 May 2022 13:16:40 +0200
+        Tue, 24 May 2022 04:20:13 -0700 (PDT)
+Message-ID: <94bf86ee-2458-924e-1a7f-b7723bfcf04e@linaro.org>
+Date:   Tue, 24 May 2022 13:20:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 1/7] dt-bindings: soc: add bindings for i.MX93 SRC
+Subject: Re: [PATCH 2/7] dt-bindings: soc: add bindings for i.MX93 mediamix
+ blk ctrl
 Content-Language: en-US
 To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
@@ -65,9 +66,9 @@ Cc:     aisheng.dong@nxp.com, l.stach@pengutronix.de,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
 References: <20220523113029.842753-1-peng.fan@oss.nxp.com>
- <20220523113029.842753-2-peng.fan@oss.nxp.com>
+ <20220523113029.842753-3-peng.fan@oss.nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220523113029.842753-2-peng.fan@oss.nxp.com>
+In-Reply-To: <20220523113029.842753-3-peng.fan@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,29 +82,101 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 23/05/2022 13:30, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add DT bindings for i.MX93 MEDIAMIX BLK CTRL.
 
-One more comment.
+In the subject - you duplicate "bindings", so just "dt-bindings: soc:
+add i.MX93 mediamix blk ctrl"
 
-> diff --git a/include/dt-bindings/power/imx93-power.h b/include/dt-bindings/power/imx93-power.h
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     | 81 +++++++++++++++++++
+>  include/dt-bindings/power/imx93-power.h       |  6 ++
+>  2 files changed, 87 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
 > new file mode 100644
-> index 000000000000..27fb7df80f93
+> index 000000000000..775c08d763b8
 > --- /dev/null
-> +++ b/include/dt-bindings/power/imx93-power.h
+> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctrl.yaml
+> @@ -0,0 +1,81 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/imx/fsl,imx93-media-blk-ctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP i.MX93 Media blk-ctrl
+> +
+> +maintainers:
+> +  - Peng Fan <peng.fan@nxp.com>
+> +
+> +description:
+> +  The i.MX93 MEDIAMIX domain contains control and status registers known
+> +  as MEDIAMIX Block Control (MEDIAMIX BLK_CTRL). These registers include
+> +  clocking, reset, and miscellaneous top-level controls for peripherals
+> +  within the MEDIAMIX domain
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: fsl,imx93-media-blk-ctrl
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#power-domain-cells':
+> +    const: 1
 
-File name with vendor, so "fsl,imx93-power.h"
+Missing ref to power domains.
 
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-> +/*
-> + *  Copyright 2022 NXP
-> + */
 > +
-> +#ifndef __DT_BINDINGS_IMX93_POWER_H__
-> +#define __DT_BINDINGS_IMX93_POWER_H__
+> +  power-domains:
+> +    maxItems: 1
 > +
-> +#define IMX93_POWER_DOMAIN_MEDIAMIX		0
+> +  clocks:
+> +    minItems: 10
+
+minItems is not needed in such case.
+
+> +    maxItems: 10
 > +
-> +#endif
+> +  clock-names:
+> +    items:
+> +      - const: apb
+> +      - const: axi
+> +      - const: nic
+> +      - const: disp
+> +      - const: cam
+> +      - const: pxp
+> +      - const: lcdif
+> +      - const: isi
+> +      - const: csi
+> +      - const: dsi
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - power-domains
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx93-clock.h>
+> +    #include <dt-bindings/power/imx93-power.h>
+> +
+> +    media_blk_ctrl: blk_ctrl@4ac10000 {
+
+No underscores in node names. Generic node name, so "system-controller"
+or "power-controller"?
+
 
 
 Best regards,

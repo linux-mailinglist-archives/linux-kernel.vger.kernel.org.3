@@ -2,151 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA365532119
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F1753211E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 04:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbiEXCml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 23 May 2022 22:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        id S231575AbiEXCnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 23 May 2022 22:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233387AbiEXCmi (ORCPT
+        with ESMTP id S229684AbiEXCnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 23 May 2022 22:42:38 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84103A5E5;
-        Mon, 23 May 2022 19:42:36 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24NMhufe006485;
-        Tue, 24 May 2022 02:42:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=oTV71mzj3vpkFCfQLMhqeVhXnAwGLQCF7CcXXyArTVU=;
- b=rLtfSpf1OZCW6KhBtgm/d7opeRDK4vBJoG8OSoUDvig1zk5wG+ny8cu0l98cKp/1IJ48
- Un2SJd//c7NPT1Bs5En/HDkuIlcVGjwv2jdLF2AISs0ynfHOgu0UZtu3EFoZLK3aT8At
- RB4xzRohFa4rB6NjMxy4zz2EGksh+DrpyiGZemuAhYKPtRGYpugSgiwoWKue0QQmvoXB
- oKkphETxjkY6mKhbdZWMDCfozUCOmXwpANJFDgiKEnzR8HiubvrKqHm9iNvkp3s3IXyQ
- WFKSWYdwgZhFNS4GDCm6/+3OrBr4hxpuGj0eDQ1GwFYepKjBI24RQCuPzYhCFmt8nU87 og== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g6pv256p8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 02:42:04 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24O2fKe2022851;
-        Tue, 24 May 2022 02:42:03 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g6ph21bqh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 02:42:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YaMSFT//vHtHnIKsHzCP4m1qaOzAvFJa6L9qNGotBDZdlj6TiT8P3wmnmQBpgLCSxXKY0tkE9Qm3KgQDm245jaXfEt1au5Br7iTwDBLyFZgbgyRIC1PvUMG2oo9EG4rsGOnDjJbLytpmJG5eyEXn9lVNhhPZqy4f3qLc9Xoz06Mqig8beYne0HupETdpxvo7QFTNTNNkyBWP1YqbNKDf7V0/a8i+AgwHUujUkHzBPnXwvAyPPXPwvbnzj8/zGX7KG6cl1SNRp6Hz4INt8aE9T5wC1xOVAJkLvH/b2gVoBHXrHQo83AorNuMaAMU+Q7BvTxQiALKM2lD6t+nySjLH+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oTV71mzj3vpkFCfQLMhqeVhXnAwGLQCF7CcXXyArTVU=;
- b=SgAweo11QgALPoPH3ypd6tKdZkF3VfICel3XtvRr79zhaibY7GSnQseP/5PkiczpAnnK+p4pzt9feYnnIuY/sweceKpmz+3WBfXuGPz4QFoizPU8wN1MzOhvbJ0Qn+4RWAUDUvNUTV+OOlmj0VGGsBHNJjLgIzYSQ47b9iPn1eckVwxiRkzDxXqRhTq9BK6jkLP8BR2iM5HbViAJxAElyNuv6lHyQCA1/GErhOtJR453Qwk24RniMY0PpC7UfmAfwZWO4L+aOl8XtFo4Qyh4N5WWvSaqXtL6cjN2UasEImfKCnrXVA0b4kppAeqtKM4uWRyqzqNpUwe2r5TKakcsTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oTV71mzj3vpkFCfQLMhqeVhXnAwGLQCF7CcXXyArTVU=;
- b=Ib5h4/3DKz20ZrE3fEq6ZiUmKm+QYnsR5G51sEc06OXmEl0cHYDGrz8WlyXE73VKVaAEggWGqJ2lEcF9rzzLE8JjsluI3YarB4QB4E0iV8yuOi5UDj4t3+IfbW7WDf4aOPmbXKLcUJKuZ4nkqr9YcHISa3w2urQ1KDwXNrLDRm0=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by BN8PR10MB3155.namprd10.prod.outlook.com (2603:10b6:408:c2::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Tue, 24 May
- 2022 02:42:01 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::d1db:de4e:9b71:3192]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::d1db:de4e:9b71:3192%9]) with mapi id 15.20.5273.023; Tue, 24 May 2022
- 02:42:01 +0000
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     John Garry <john.garry@huawei.com>,
-        damien.lemoal@opensource.wdc.com, joro@8bytes.org, will@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org, liyihang6@hisilicon.com,
-        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com
-Subject: Re: [PATCH 0/4] DMA mapping changes for SCSI core
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1tu9firdv.fsf@ca-mkp.ca.oracle.com>
-References: <1653035003-70312-1-git-send-email-john.garry@huawei.com>
-        <20220522131345.GB25785@lst.de>
-Date:   Mon, 23 May 2022 22:41:59 -0400
-In-Reply-To: <20220522131345.GB25785@lst.de> (Christoph Hellwig's message of
-        "Sun, 22 May 2022 15:13:45 +0200")
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0073.namprd03.prod.outlook.com
- (2603:10b6:a03:331::18) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        Mon, 23 May 2022 22:43:22 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDAF38BC0
+        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 19:43:21 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L6dmN6Y3pzDqNd;
+        Tue, 24 May 2022 10:43:16 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 10:43:19 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 24 May 2022 10:43:18 +0800
+Message-ID: <0ee08b72-d8a7-e016-f47f-213064a6c9ed@huawei.com>
+Date:   Tue, 24 May 2022 10:43:18 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9eb1ba75-ad13-4233-2691-08da3d2efaf9
-X-MS-TrafficTypeDiagnostic: BN8PR10MB3155:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR10MB31557834D47154A20F03B07B8ED79@BN8PR10MB3155.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yUAHBZxgQ6sV5g6w3Mcnh3uciRHQdEnodVgzMCgvwmurGo5n6xPkV5Ut9mXnI4vMocJD95Qy+ToFtJrKdKDQQlPgdD3/tretzV1tj8ag9WiqlhyRTfYQnQqX9O6TshHtUSvCvqO5ilbkTpfICNtQjhaTt4Z4e12RQTY9na2CwyYlB8W0Xkp8jm/jhVIgskG5CIwRBlwOBRS+iNAW5OKk8zneUuE9QmHUHzYQPRaKVE8s1GldAXIAQcCOl4DMSqGQQuUhrJfXtR28+y6d5OBc2DB6oPyRqS3MH2Ip9LlgChaKscJjIxE5cHXiGyi03fA58G2ZuUQWJ8VyNOnsK3D301O6V2yzGqinZbugCs42/OmI6CIBrKjRUJA4HHM0T7lCRXC8VHDF7gVNBumIkVFjaAHjjd7GGMLXbV+Ewd0MbiYifTnXEAYXjsw+lGfE9eFy1EEhYRMpiznsbWqxkEY97h8m9OnhOGd/+2LvlVQT4ufnDfhz5chYH2vI3qBA6uJmnOzGeAegmb0SekAtclTZL9CIpC864HXOqQiGPni4Cgon8t4zubBBfem46r/8pXBA1/KxQsIPNnyFMcRT2UhZS1FIh9S3e4rljQvBlOxblTFY5ipzN7/Lv66tJ7qFRuPgz4ugi5Qb1BP0QlGi4hPoowyXe7zs6SWK4txFLUObcQSxm6PgkQBO41x9AgcIpMf9W8CU7wlNhxNUt5K5yoQ2YA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36916002)(52116002)(6506007)(8936002)(7416002)(5660300002)(558084003)(2906002)(66946007)(66556008)(66476007)(8676002)(4326008)(86362001)(6486002)(38100700002)(38350700002)(26005)(6512007)(186003)(6916009)(316002)(508600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7kHgKzT5EoTQjtLXCx99FOmMg1r7CpzJtcQeLqFrnmM7xy9ZfKWsBhBLfVGU?=
- =?us-ascii?Q?h5iAdWG58KfCgxJejlv2X6o4JbI26/u8Mu/UKrlrdoC80IplilxqQ7joYm3m?=
- =?us-ascii?Q?4bvexUePevKvC7eDznnBtHhM9t8V8nQEyWcDN8pKp12HVNWzi7OLkiQGdIvc?=
- =?us-ascii?Q?aFPCx9HgQNb7XB3E3unvSVKvQNLrmoVGnaCTZi1PLrLIoxdyYsvvF1l7SyCh?=
- =?us-ascii?Q?dooiIFhBfYEq6KnCsWvPNtuds/AMYGM8pSLNCkwjKzIfwfF9J90lCUmz+wxe?=
- =?us-ascii?Q?wLU1UHcRHaDU9DUYWli4L7fBL8lay6nA/QNrYiLLzZXJW2By+ux4xC48pW52?=
- =?us-ascii?Q?ryL3bTZqgWb+dEIvVD390yTVoCaugrpLPJcPbw+FOsaycrCm9JgrtCGRg0SO?=
- =?us-ascii?Q?uqLku2+Dpbq8BARv7Gt9WN25lXWUQXDhJQrtMiqSXMaQ65t5VbeYsgTgVTHz?=
- =?us-ascii?Q?ZKBI3O/BOqmi4Sam+NpiQgN2PZokcPcuJxjk2fhOgIzSP2de/iaHc2BhbJGK?=
- =?us-ascii?Q?xwr5x0OVVRYdAXCJX076srsBCtmL2EC/C3w+sAXSbLkEFR0cL5Ahnriv/0gO?=
- =?us-ascii?Q?T1AEFw/OlxSuOrIT1WKUV0GemLtz0IE3X+V+p36QF7vUgbTH1d5tmGaBAcw3?=
- =?us-ascii?Q?uCP+qfjSM4Y+dTURqfyKJmmbxH8syajKs0q8gYZ3E3OMEV6eT9+fQIpx8MNU?=
- =?us-ascii?Q?Qa6NjE9bJqII95O4B62+sLLUfKWfHWJRx93z66ZjH8mbztAv84SRfOjdtxii?=
- =?us-ascii?Q?tWCzakNP+zXRQv2YJDwGpjX8Coj6H2mu+bmaMvhCfGTIoN6qQJ3IxaCs/ja9?=
- =?us-ascii?Q?WN/Gk02PkUocpzS/Ueam5ULlyt37AUPIGWCvVGn1igVHgKh8FP0IXZ/4FGlx?=
- =?us-ascii?Q?RvJ7rb/46r0iU0L2gmez2rVtE3Engtka0qwz03Bp/Jm+SAXfMoN+d3z7kfc0?=
- =?us-ascii?Q?8cw3fnzFhem5S6cP6vmIYeN/kRGKCcrxrX22HdZMVxKPXiMfXUI3EmEDuIEq?=
- =?us-ascii?Q?my1EJOD4vn02JFkNvejKxo0K1UNq4mtIqaphCd1DFTcueaAM6VuiigWFK447?=
- =?us-ascii?Q?tdzoksIG3nwZ/kd/L1oiWQY1Xe3WlWoBKxg/xO1cDeZfY2TLuZ27JrbzUnJz?=
- =?us-ascii?Q?CUp61w2mHhoohGAI28UvYu0JmvJ5P05xUb4XqBZeXNse0AwZ839PT6nYKOjZ?=
- =?us-ascii?Q?m0Fn2Ov3CSY7djxbJ/fTHh0lT7r1Z8nTDfwclgpgeBItrqcL0lMLLmJ13Svm?=
- =?us-ascii?Q?ZIozgmbgBPjik1Ey71w9oAVfUOxJ0rlriP/zG3vJLBsIGflw0NqZgZQG1y0e?=
- =?us-ascii?Q?YNmp/gdvXa3MemmNCC2BISEJkU5JPz9vsl7rKdFmxttt7hOkuTm8h0fOx3bH?=
- =?us-ascii?Q?tT0UVBjVQPEi8WeDeMpin2xewP9mo+jqUxedTV6dQ+9jnWoSGUKIAZcXH1z8?=
- =?us-ascii?Q?d+jFYik86rWJNky3aAX5JXkWv00YTL6vnqgaStEXlnc9GWb0W/1F5G6fycKE?=
- =?us-ascii?Q?PL+eG/Be9dgXVA6EtwRqzwRDn0ydP/g7lhfLe2yVh1NkbpJs4kNfiTWmy5yX?=
- =?us-ascii?Q?wE56IDxLEiy8eEfpauCsHAdCeqTfMV2VGChPgu7lUxZDp2Fz5iaR82GUzN+8?=
- =?us-ascii?Q?Bp8ASaTCKy+achkf96d0xfmM031ehwb4eKmd7q2PgAG2oL/NhS/ViLBmihCr?=
- =?us-ascii?Q?Yx/Kuv6BK9acEVn61ZzO8kDFt1kczR5plxIaouVjCF/j1UmwL36//Ql3VhPc?=
- =?us-ascii?Q?zH+vjhN+WnCZCPOob6O35raqX8VqAaY=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9eb1ba75-ad13-4233-2691-08da3d2efaf9
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2022 02:42:01.6331
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R0eTWCkoLhq/BRnFOWTEDMHEt4XT4xRGWLshtMPimyJW/MnFV1fmXUQ9Mbtx47Bb8FpfOkYgJpcD4nLOitaRWWB4wp6TlA3yuaOHJ7c5JrY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3155
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
- definitions=2022-05-23_10:2022-05-23,2022-05-23 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 phishscore=0
- spamscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205240012
-X-Proofpoint-GUID: PoQRiLxp8MW2fbHfoUUw7G619aac8lJY
-X-Proofpoint-ORIG-GUID: PoQRiLxp8MW2fbHfoUUw7G619aac8lJY
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] ARM: 9192/1: amba: fix memory leak in
+ amba_device_try_add()
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Russell King <linux@armlinux.org.uk>,
+        <linux-kernel@vger.kernel.org>
+References: <20220523211700.GA236401@roeck-us.net>
+ <85df3427-1dc8-aac0-71fc-1a8b81a731d9@huawei.com>
+ <92cecde5-3a7e-54c5-de62-12a133f2de88@roeck-us.net>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <92cecde5-3a7e-54c5-de62-12a133f2de88@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -155,14 +58,164 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Christoph,
+On 2022/5/24 10:33, Guenter Roeck wrote:
+> On 5/23/22 18:57, Kefeng Wang wrote:
+>>
+>> On 2022/5/24 5:17, Guenter Roeck wrote:
+>>> On Mon, Apr 18, 2022 at 07:07:14AM +0100, Wang Kefeng wrote:
+>>>> If amba_device_try_add() return error code (not EPROBE_DEFER),
+>>>> memory leak occurred when amba device fails to read periphid.
+>>>>
+>>> This patch results in a refcount underflow.
+>>>
+>>> NET: Registered PF_NETLINK/PF_ROUTE protocol family
+>>> DMA: preallocated 256 KiB pool for atomic coherent allocations
+>>> platform vga: Fixing up cyclic dependency with bridge
+>>> OF: amba_device_add() failed (-19) for /amba/smc@10100000
+>>> ------------[ cut here ]------------
+>>> WARNING: CPU: 0 PID: 1 at lib/refcount.c:28 
+>>> of_platform_bus_create+0x33c/0x3dc
+>>> refcount_t: underflow; use-after-free.
+>>> Modules linked in:
+>>> CPU: 0 PID: 1 Comm: swapper Not tainted 5.18.0-next-20220523 #1
+>>> Hardware name: ARM-Versatile (Device Tree Support)
+>>>   unwind_backtrace from show_stack+0x10/0x14
+>>>   show_stack from dump_stack_lvl+0x38/0x5c
+>>>   dump_stack_lvl from __warn+0xc8/0x1d4
+>>>   __warn from warn_slowpath_fmt+0x90/0xc8
+>>>   warn_slowpath_fmt from of_platform_bus_create+0x33c/0x3dc
+>>>   of_platform_bus_create from of_platform_bus_create+0x1ec/0x3dc
+>>>   of_platform_bus_create from of_platform_populate+0x68/0xd8
+>>>   of_platform_populate from customize_machine+0x1c/0x30
+>>>   customize_machine from do_one_initcall+0x8c/0x2fc
+>>>   do_one_initcall from kernel_init_freeable+0x190/0x220
+>>>   kernel_init_freeable from kernel_init+0x10/0x108
+>>>   kernel_init from ret_from_fork+0x14/0x3c
+>>
+>> Thank,  I use vexpress-v2p-ca15-tc1 and can't reproduce , but after 
+>> check the code,
+>>
+>> amba_device_try_add() is called amba_deferred_retry() and 
+>> amba_device_add(),
+>>
+>> 1) for amba_device_add(), called by of_amba_device_create() and 
+>> amba_handler_attach(),
+>>
+>> which has called amba_device_put() to release resource when meet 
+>> error, my
+>>
+>> patch leads to the above issue.
+>>
+>> 2) for amba_deferred_retry(),  it only releases the  struct 
+>> deferred_device, but forget
+>>
+>> to call amba_device_put() to release amba device and device name
+>>
+>> so we only need to call amba_device_put() in amba_deferred_retry(), 
+>> could you
+>>
+>> help me to try the following patch, thanks.
+>>
+>
+> It doesn't apply; it looks like you used cut-and-paste, which replaced
+> tabs with spaces. I tried to fix it up, but it didn't work.
+> Please send a clean patch.
+Please use this one,
 
-> The whole series looks fine to me.  I'll happily queue it up in the
-> dma-mapping tree if the SCSI and ATA maintainers are ok with that.
+https://lore.kernel.org/all/20220524025139.40212-1-wangkefeng.wang@huawei.com/T/#u
 
-Works for me.
-
-Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+>
+> Thanks,
+> Guenter
+>
+>>
+>> diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+>> index 0e3ed5eb367b..0cb20324da16 100644
+>> --- a/drivers/amba/bus.c
+>> +++ b/drivers/amba/bus.c
+>> @@ -493,13 +493,8 @@ static int amba_device_try_add(struct 
+>> amba_device *dev, struct resource *parent)
+>>                  goto skip_probe;
+>>
+>>          ret = amba_read_periphid(dev);
+>> -       if (ret) {
+>> -               if (ret != -EPROBE_DEFER) {
+>> -                       amba_device_put(dev);
+>> -                       goto err_out;
+>> -               }
+>> +       if (ret)
+>>                  goto err_release;
+>> -       }
+>>
+>>   skip_probe:
+>>          ret = device_add(&dev->dev);
+>> @@ -546,6 +541,7 @@ static int amba_deferred_retry(void)
+>>                          continue;
+>>
+>>                  list_del_init(&ddev->node);
+>> +               amba_device_put(ddev->dev);
+>>                  kfree(ddev);
+>>          }
+>>
+>>
+>>
+>>>
+>>> Guenter
+>>>
+>>> ---
+>>> # bad: [cc63e8e92cb872081f249ea16e6c460642f3e4fb] Add linux-next 
+>>> specific files for 20220523
+>>> # good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+>>> git bisect start 'HEAD' 'v5.18'
+>>> # bad: [a812cac8ff60a3f57d59225eaf668f574fd36a65] Merge branch 
+>>> 'master' of 
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+>>> git bisect bad a812cac8ff60a3f57d59225eaf668f574fd36a65
+>>> # bad: [ad67b5f981704e575b24e3b650653bae607980dc] Merge branch 
+>>> 'for-next' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git
+>>> git bisect bad ad67b5f981704e575b24e3b650653bae607980dc
+>>> # bad: [793dd6392ef951ae61473acfc7e7016ea22c40f4] Merge branch 
+>>> 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
+>>> git bisect bad 793dd6392ef951ae61473acfc7e7016ea22c40f4
+>>> # good: [00ad84f582be91dd03132c133917cc6b62d754e2] Merge branch 
+>>> 'arm/dt' into for-next
+>>> git bisect good 00ad84f582be91dd03132c133917cc6b62d754e2
+>>> # bad: [5c4a49fbe99c7c9b814d677ac99e3efcc43d019a] Merge branch 
+>>> 'for-next/core' of 
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux
+>>> git bisect bad 5c4a49fbe99c7c9b814d677ac99e3efcc43d019a
+>>> # good: [33cd6948f953ab47ffa493bac6c0f34feb191e0d] Merge branch 
+>>> 'clang-format' of https://github.com/ojeda/linux.git
+>>> git bisect good 33cd6948f953ab47ffa493bac6c0f34feb191e0d
+>>> # good: [d6fc5db0f82828c74742319cb6c988c4a8aac535] Merge branch 
+>>> 'for-next/kselftest' into for-next/core
+>>> git bisect good d6fc5db0f82828c74742319cb6c988c4a8aac535
+>>> # good: [d7015e50a9ed180dcc3947635bb2b5711c37f48b] perf intel-pt: 
+>>> Add support for emulated ptwrite
+>>> git bisect good d7015e50a9ed180dcc3947635bb2b5711c37f48b
+>>> # good: [5b86b659fa4b3dd45acbdce13f2e94f882a3d125] Merge branch 
+>>> 'for-next' of git://git.infradead.org/users/hch/dma-mapping.git
+>>> git bisect good 5b86b659fa4b3dd45acbdce13f2e94f882a3d125
+>>> # good: [945980a9ba0744038659769e9f04e83e8f6b494b] Merge branch 
+>>> 'master' of 
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+>>> git bisect good 945980a9ba0744038659769e9f04e83e8f6b494b
+>>> # bad: [b6f21d14f1ac1261579b691673a0c823275cbaf8] ARM: 9204/2: 
+>>> module: Add all unwind tables when load module
+>>> git bisect bad b6f21d14f1ac1261579b691673a0c823275cbaf8
+>>> # bad: [c4f486f1e7b34b27ec578494a236061b337d50ae] ARM: 9198/1: 
+>>> spectre-bhb: simplify BPIALL vector macro
+>>> git bisect bad c4f486f1e7b34b27ec578494a236061b337d50ae
+>>> # bad: [7719a68b2fa404fa8af6b0b7119a38c406c74858] ARM: 9192/1: amba: 
+>>> fix memory leak in amba_device_try_add()
+>>> git bisect bad 7719a68b2fa404fa8af6b0b7119a38c406c74858
+>>> # good: [1f44de0f5e309e8699b569b49a8e89ef4e7527c7] ARM: 9193/1: 
+>>> amba: Add amba_read_periphid() helper
+>>> git bisect good 1f44de0f5e309e8699b569b49a8e89ef4e7527c7
+>>> # first bad commit: [7719a68b2fa404fa8af6b0b7119a38c406c74858] ARM: 
+>>> 9192/1: amba: fix memory leak in amba_device_try_add()
+>>>
+>>>
+>>> .
+>
+> .

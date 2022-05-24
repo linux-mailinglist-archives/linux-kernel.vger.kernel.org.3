@@ -2,134 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D955332C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 22:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E4A5332C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 23:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241815AbiEXU6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 16:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S241836AbiEXVAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 17:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241776AbiEXU6t (ORCPT
+        with ESMTP id S241820AbiEXVAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 16:58:49 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA334AE2D;
-        Tue, 24 May 2022 13:58:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 954D2CE1D57;
-        Tue, 24 May 2022 20:58:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97DA6C34100;
-        Tue, 24 May 2022 20:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653425925;
-        bh=co8rmso/X/9KSryJdR6dHk17tc5T5WiA0FcvA4bAgWo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qxov/uCEnvuyYCwQB6yKH37c+PrG3ORg97DLE/3mRnqtSs68wwRDShxraD4nkZDqw
-         GEpL/5SYaiSzFvdam6vNCn0EI9qAIOwDlSyf2Op4PwxznHdshGcNEuKD5FemBcT3sx
-         qzZO8Ho4rnWPtv4STbswUgAkqFLr75SNrKEsPfwnLT++mqyAbrOThenAdUEOZaGu6l
-         EqlegieAVBuyv94I8FuakXb2EuB0YgHwuJIrtwWE5JYDKklbxzB8bHbj7A3ims7SAk
-         VMy/K3PQ4WG4icmqgOx9vqPzhIrUGmxkC8CFg/5EOmWqkq7xGpcStMq8V4YGElcFM/
-         lybtYoq5kHB/w==
-Date:   Tue, 24 May 2022 15:58:42 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [RESEND PATCH v5] PCI: Make sure the bus bridge powered on when
- scanning bus
-Message-ID: <20220524205842.GA269611@bhelgaas>
+        Tue, 24 May 2022 17:00:47 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C880149FA7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:00:46 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id l14so17910923pjk.2
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 14:00:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rMLYZe5seQUfoZme6gT+f7ho5aBgGSwYKaK8wl4oIOI=;
+        b=Jdq0OntSmdnICnvNK2eFTZxT61bSqvUXQKXNf9sJcTRf6WWrBI+p4+ISllQFwJOYiq
+         mGYoUFqlXDn6F1g3U+eGkdn550HQp8EJEboxtOxs2Ln9QjKkD8HEyKMYpVKCj+9tATmj
+         IKsIL/6t+sfWkYUM2dBTcj/oA4hFiZpdvq/KfscvVifP5AjUm6zpXX5uqgWZ0yLr3Pt9
+         dejr/Cf8Y4DD457wcFdMbI1WD+bI2+st8wBumCl8GDAOUjYpf5kT7ehM72/4x375R6sL
+         p2y+G4mwQuYEgZ3Yq7ypvdDOlh0DAS6XiW8U2JuDPPWtfHaW05JO35mUXAK+wdBsShux
+         C8VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rMLYZe5seQUfoZme6gT+f7ho5aBgGSwYKaK8wl4oIOI=;
+        b=bdtLaZslql/lVLemEKqurw1YX97duYnuPD0JAL3yQ7poGW81wmbygCeIuwkVFWUQ/f
+         y9+K6E3YoUPDBsWVpopwiAGQmM9f+dhf9OTigiGMM15hFPGDTfOmKaDt/gkTeauCGl6m
+         SrlAqky76rtwEO+RtoJ9Grw994qBFtHyM1NI1iXdp2E7a2u7CBKEW0iTTFnks0cnCiNE
+         eiEfWSY/hsSGpPHkLXI2UvdfYEUuaE6HQd+/i3laBlzSWsPFZrXem5R3aZrqlS+bdylD
+         e8nRLvk1jSa8sYyrNfDGY+wHZQoOO4QrNgS62N195gQuwpKdXjD1iFCJw5tEMjr2fUQa
+         cOrQ==
+X-Gm-Message-State: AOAM533jIQKYu+RR++e2mcqLehu/QzITfvh1Vm9boDyLzjp3campUdCf
+        WnIED+pR67AOwVm1oDtOXh2VTA==
+X-Google-Smtp-Source: ABdhPJw9/Di5LxyocJDf+ROoCJVnY2Q1BO5rz35C4l3MU+cXIMynyJ7S3gX5d5JrduYr/4f5CGNuvg==
+X-Received: by 2002:a17:902:b703:b0:158:2667:7447 with SMTP id d3-20020a170902b70300b0015826677447mr28871066pls.92.1653426046115;
+        Tue, 24 May 2022 14:00:46 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id r18-20020a170903411200b001619b47ae61sm7565011pld.245.2022.05.24.14.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 14:00:45 -0700 (PDT)
+Date:   Tue, 24 May 2022 21:00:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lei Wang <lei4.wang@intel.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/8] KVM: VMX: Add proper cache tracking for PKRS
+Message-ID: <Yo1Hemue8+l5CPIT@google.com>
+References: <20220424101557.134102-1-lei4.wang@intel.com>
+ <20220424101557.134102-3-lei4.wang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220517124319.47125-1-yangyicong@hisilicon.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220424101557.134102-3-lei4.wang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 08:43:19PM +0800, Yicong Yang wrote:
-> When the bus bridge is runtime suspended, we'll fail to rescan
-> the devices through sysfs as we cannot access the configuration
-> space correctly when the bridge is in D3hot.
+On Sun, Apr 24, 2022, Lei Wang wrote:
+> From: Chenyi Qiang <chenyi.qiang@intel.com>
+> 
+> Add PKRS caching into the standard register caching mechanism in order
+> to take advantage of the availability checks provided by regs_avail.
+> 
+> This is because vcpu->arch.pkrs will be rarely acceesed by KVM, only in
+> the case of host userspace MSR reads and GVA->GPA translation in
+> following patches. It is unnecessary to keep it up-to-date at all times.
+> 
+> It also should be noted that the potential benefits of this caching are
+> tenuous because the MSR read is not a hot path. it's nice-to-have so that
+> we don't hesitate to rip it out in the future if there's a strong reason
+> to drop the caching.
 
-Is the "D3hot" above a typo?  I think devices are supposed to respond
-to config accesses when in D3hot.  PCIe r6.0, sec 5.3.1.4.1:
 
-  Configuration and Message requests are the only TLPs accepted by a
-  Function in the D3Hot state. ...
+The patch looks fine, but this needs to be moved to the end of the series.
+Definitely after "KVM: VMX: Expose PKS to guest", and maybe even after "KVM: VMX:
+Enable PKS for nested VM".
 
-  Functions that are in D3Hot are permitted to be transitioned by
-  software (writing to their PMCSR PowerState field) to the D0active
-  state or the D0uninitialized state. Functions that are in D3Hot must
-  respond to Configuration Space accesses as long as power and clock
-  are supplied so that they can be returned to D0 by software.
-
-> It can be reproduced like:
-> 
-> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
-> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
-> 
-> 0000:80:00.0 is a Root Port and it is runtime-suspended, so
-> 0000:81:00.1 is unreachable after a rescan.
-> 
-> Power up the bridge when scanning the child bus and allow it to
-> suspend again by adding pm_runtime_get_sync()/pm_runtime_put()
-> in pci_scan_child_bus_extend().
-> 
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/pci/probe.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 17a969942d37..b108e72b6586 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -2859,11 +2859,20 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
->  	unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
->  	unsigned int start = bus->busn_res.start;
->  	unsigned int devfn, fn, cmax, max = start;
-> +	struct pci_dev *bridge = bus->self;
->  	struct pci_dev *dev;
->  	int nr_devs;
->  
->  	dev_dbg(&bus->dev, "scanning bus\n");
->  
-> +	/*
-> +	 * Make sure the bus bridge is powered on, otherwise we may not be
-> +	 * able to scan the devices as we may fail to access the configuration
-> +	 * space of subordinates.
-> +	 */
-> +	if (bridge)
-> +		pm_runtime_get_sync(&bridge->dev);
-> +
->  	/* Go find them, Rover! */
->  	for (devfn = 0; devfn < 256; devfn += 8) {
->  		nr_devs = pci_scan_slot(bus, devfn);
-> @@ -2976,6 +2985,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
->  		}
->  	}
->  
-> +	if (bridge)
-> +		pm_runtime_put(&bridge->dev);
-> +
->  	/*
->  	 * We've scanned the bus and so we know all about what's on
->  	 * the other side of any bridges that may be on this bus plus
-> -- 
-> 2.24.0
-> 
+If there's a bug with the caching logic, I want to be able to bisect to that.  By
+implementing caching before any of the other PKS support, a bug in either the
+caching or the virtualization will bisect to the PKS virtualization

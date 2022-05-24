@@ -2,98 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC67532F13
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C95A532F16
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 18:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238048AbiEXQgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 12:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S237992AbiEXQhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 12:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiEXQgM (ORCPT
+        with ESMTP id S233418AbiEXQhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 12:36:12 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094D6642F;
-        Tue, 24 May 2022 09:36:10 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id a8so2993252ilh.3;
-        Tue, 24 May 2022 09:36:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nmFSjcbYRYlOqfImBD2OeIVBU5WwbZg80H+QTxIdQPU=;
-        b=mciQwgJaWq7HwzCb8KvTWDOP2zWsZae+0/adx/6lhqIctodu1qtPPyt9035Cze/Heq
-         q35dm9UuaPHLZLxslEs1mbzpfW0TzsemtzTvDrqYKDEX1J1zJ13XrgZQSrM+vfhTzy4C
-         Oc6SYF046ZDQbKLW8q/ei3gbmKf2rvK5wXHg/tSqupWjXPFraQtswRs1pUvA3IEedGzm
-         GkZi47JeJ57CgAwMFGZGs8QTBhrI20LU1R+O7cHBhNmu7eRby+yApmVKjdwWIQjK9SvR
-         4tdUt7NdsurhQt9cPFItmCZbejv69RNe0mXJggwt1K6z4bIo3UBLr19BpJcve0SPA2J8
-         Gang==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nmFSjcbYRYlOqfImBD2OeIVBU5WwbZg80H+QTxIdQPU=;
-        b=zV3t5uE0teQqsagfoYOvD1GgiSa7TjkoZyGLUMUXanJf7vz+P49agNhi4YbJp290NR
-         21uettTLLWfCP3BPGxFUjevOw8JEvwLEoO0bAjxiVV4/q0L04FDAxagQzdJalZz5zZvu
-         X5bf9yYZ3T7L12bUf+qeS5apVENE/NIT89YtvmCmzVRO7uKxVxPDaXdA9toVe9PBxKxd
-         op2Pp5Ym23lKGhkfP0AFik9tL4YJMQ7sQ+ReFWWFXaXL9yQbc2qHrM5Cicm7IJnIf2zc
-         az2eUVq5/7oV1gFd4/yDFUf/1f29NZRb4yRdHGcPiQX59ZiuDV0AtxmadQ13bPbBtGTl
-         cf9g==
-X-Gm-Message-State: AOAM531FBKUQjMwy6ACJt/XDpjfRGdgZwC4bdMaMqhW5Rzjy08Aza/cK
-        X1pTXWceqzJr67s5Xyp4XPK8a6ZMvMGTchLJTa8=
-X-Google-Smtp-Source: ABdhPJywJhE/YIF+b6PILr84uXn8uYcGO+p8BLwgZ+ThM3pV+lrwRjWdVZdHbYceReu8+NDab6Yvf1ef2V1xhADA4Is=
-X-Received: by 2002:a05:6e02:1c88:b0:2d1:87ea:18c with SMTP id
- w8-20020a056e021c8800b002d187ea018cmr9279443ill.321.1653410169415; Tue, 24
- May 2022 09:36:09 -0700 (PDT)
+        Tue, 24 May 2022 12:37:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E485CE023
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 09:37:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FAB4B81802
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 16:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC82C34115;
+        Tue, 24 May 2022 16:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653410249;
+        bh=vvGHSyTSQoD32553zowylQZDuq/Dd/Xycf277l12l3A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=qDk7C1uGg7Rl1YLLlZmO8RkOH5lXUc49Jn912boOAKy4m1vVg8Re7zaIXrRQIIl1n
+         9OHLaj0LviXw/atAy2xJ92dOPqXdlWqDyI962E6KUqHiY3uPxALcB+5pEU8bQppfiU
+         OxfYuERn4TU4UudxNti08UxM6WXY5AVTrj+SJk5Jl0la30QudhpUKLiE51SKnPvt3v
+         FsjTEmm9ti2JpEQjAOLVAknpIyvljmyp/g0fiqgxH7BZmucHYwCIGR5rv9n2CI9ufE
+         jCmMvECHxmyYvqBtUltLDLF+mZTtbng9btGoW662/25kLVgS2eiBAb4uaVzaYTgrt4
+         LR/EOQCzUjdxQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id F09605C0378; Tue, 24 May 2022 09:37:28 -0700 (PDT)
+Date:   Tue, 24 May 2022 09:37:28 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Dias <joaodias@google.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v4] mm: fix is_pinnable_page against on cma page
+Message-ID: <20220524163728.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220517140049.GF63055@ziepe.ca>
+ <ef901bdb-6117-bad4-2f26-c80df270b86e@nvidia.com>
+ <20220517192825.GM63055@ziepe.ca>
+ <b6eef200-43d1-7913-21ed-176b05fcb4fe@nvidia.com>
+ <You3Q/VFaCoS0mC8@google.com>
+ <bcb95d6b-4507-8836-cf17-7c3cd179a3da@nvidia.com>
+ <YoxqSud9fvNXqo89@google.com>
+ <20220524141937.GA2661880@ziepe.ca>
+ <Yoz9H95uXbjoKwdC@google.com>
+ <20220524154831.GC2661880@ziepe.ca>
 MIME-Version: 1.0
-References: <20220523020209.11810-1-ojeda@kernel.org> <20220523020209.11810-16-ojeda@kernel.org>
- <9ff72e47bf89977efe00df6db6ebbdd7b22a9972.camel@perches.com>
-In-Reply-To: <9ff72e47bf89977efe00df6db6ebbdd7b22a9972.camel@perches.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 24 May 2022 18:35:58 +0200
-Message-ID: <CANiq72ktk0_drMnCCJGMRhQ6SCDEgz1R1Lc0bDSWjsAHgvdbhA@mail.gmail.com>
-Subject: Re: [PATCH v7 15/25] scripts: checkpatch: diagnose uses of `%pA` in
- the C side
-To:     Joe Perches <joe@perches.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524154831.GC2661880@ziepe.ca>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 4:17 AM Joe Perches <joe@perches.com> wrote:
->
-> How many developers are required for a trivial patch?
+On Tue, May 24, 2022 at 12:48:31PM -0300, Jason Gunthorpe wrote:
+> On Tue, May 24, 2022 at 08:43:27AM -0700, Minchan Kim wrote:
+> > On Tue, May 24, 2022 at 11:19:37AM -0300, Jason Gunthorpe wrote:
+> > > On Mon, May 23, 2022 at 10:16:58PM -0700, Minchan Kim wrote:
+> > > > On Mon, May 23, 2022 at 07:55:25PM -0700, John Hubbard wrote:
+> > > > > On 5/23/22 09:33, Minchan Kim wrote:
+> > > > > ...
+> > > > > > > So then:
+> > > > > > > 
+> > > > > > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > > > > > > index 0e42038382c1..b404f87e2682 100644
+> > > > > > > +++ b/mm/page_alloc.c
+> > > > > > > @@ -482,7 +482,12 @@ unsigned long __get_pfnblock_flags_mask(const struct page *page,
+> > > > > > >          word_bitidx = bitidx / BITS_PER_LONG;
+> > > > > > >          bitidx &= (BITS_PER_LONG-1);
+> > > > > > > 
+> > > > > > > -       word = bitmap[word_bitidx];
+> > > > > > > +       /*
+> > > > > > > +        * This races, without locks, with set_pageblock_migratetype(). Ensure
+> > > > > >                                               set_pfnblock_flags_mask would be better?
+> > > > > > > +        * a consistent (non-tearing) read of the memory array, so that results,
+> > > > > > 
+> > > > > > Thanks for proceeding and suggestion, John.
+> > > > > > 
+> > > > > > IIUC, the load tearing wouldn't be an issue since [1] fixed the issue.
+> > > > > 
+> > > > > Did it? [1] fixed something, but I'm not sure we can claim that that
+> > > > > code is now safe against tearing in all possible cases, especially given
+> > > > > the recent discussion here. Specifically, having this code do a read,
+> > > > > then follow that up with calculations, seems correct. Anything else is
+> > > > 
+> > > > The load tearing you are trying to explain in the comment would be
+> > > > solved by [1] since the bits will always align on a word and accessing
+> > > > word size based on word aligned address is always atomic so there is
+> > > > no load tearing problem IIUC.
+> > > 
+> > > That is not technically true. It is exactly the sort of thing
+> > > READ_ONCE is intended to guard against.
+> > 
+> > Oh, does word access based on the aligned address still happen
+> > load tearing? 
+> > 
+> > I just referred to
+> > https://elixir.bootlin.com/linux/latest/source/Documentation/memory-barriers.txt#L1759
+> 
+> I read that as saying load tearing is technically allowed but doesn't
+> happen in gcc, and so must use the _ONCE macros.
 
-We are sending the core series as a team, so by default I acknowledge
-all the maintainers. But yeah, I could drop some of the
-Co-developed-by's.
+This is in fact the intent, except...
 
-> and this should now use elsif
+And as that passage goes on to state, there really are compilers (such
+as GCC) that tear stores of constants to machine aligned/sized locations.
 
-Yeah, will change.
+In short, use of the _ONCE() macros can save you a lot of pain.
 
-By the way, I also thought about skipping the warning if the error is
-there, e.g. wrapping everything else in an `else`, if you prefer.
+> > I didn't say it doesn't refetch the value without the READ_ONCE.
+> > 
+> > What I am saying is READ_ONCE(bitmap_word_bitidx] prevents "refetching"
+> > issue rather than "tearing" issue in specific __get_pfnblock_flags_mask
+> > context because I though there is no load-tearing issue there since
+> > bitmap is word-aligned/accessed. No?
+> 
+> It does both. AFAIK our memory model has no guarentees on what naked C
+> statements will do. Tearing, multi-load, etc - it is all technically
+> permitted. Use the proper accessors.
 
-Thanks for the very quick review!
+I am with Jason on this one.
 
-Cheers,
-Miguel
+In fact, I believe that any naked C-language access to mutable shared
+variables should have a comment stating why the compiler cannot mangle
+that access.
+
+							Thanx, Paul

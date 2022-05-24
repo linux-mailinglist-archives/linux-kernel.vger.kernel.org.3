@@ -2,122 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3395953312B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A115330C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 20:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240821AbiEXTCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
+        id S240518AbiEXS7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 14:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240984AbiEXTBP (ORCPT
+        with ESMTP id S233193AbiEXS7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:01:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49DB9344F;
-        Tue, 24 May 2022 12:00:40 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OIIiHT015021;
-        Tue, 24 May 2022 19:00:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=B91he0hy+fU6+0g/pHCLsPD5d3U8lZovlWG0ZRgG3K8=;
- b=MgHnb+S7/CFHLdH8SQ1GLASWeQzh+rG8m0npCerWDVXLcOD6rFacw3knaI98grL2yYqO
- wCBr8o/zz4GQRmHC6NgDfnRjstzvUGR23rzSqL6r92Q3O+U08WARLurzdM5dj6bqoe4S
- F/jldpwalBzagrFN7ny1Y7OPvbaiU3Eci+MMHjCHyHFcTm6HCfOAjepl9XcfyV9Iy4qJ
- A6AQqMCVEm94xK21AoCZDbFD8CWIKfK9tC+itGb4QpvWw+uEkQVBFhOLwygq1BUaX9HZ
- YxtcuY7Y5llp0JHUVVCp795T3/wsQHdve1P2tFDIEQNGEOuARwmygDu4ESbuOQdFZ31Z Sg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g94hggqa5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 19:00:07 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24OImUb7031966;
-        Tue, 24 May 2022 19:00:07 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g94hggq9c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 19:00:07 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24OIsADN023499;
-        Tue, 24 May 2022 19:00:06 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 3g93uw0hnu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 24 May 2022 19:00:06 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24OJ04U642074566
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 19:00:05 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E0EB0BE05D;
-        Tue, 24 May 2022 19:00:04 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9DD89BE054;
-        Tue, 24 May 2022 19:00:02 +0000 (GMT)
-Received: from li-c92d2ccc-254b-11b2-a85c-a700b5bfb098.ibm.com.com (unknown [9.163.3.233])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 24 May 2022 19:00:02 +0000 (GMT)
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-To:     linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v8 22/22] MAINTAINERS: additional files related kvm s390 pci passthrough
-Date:   Tue, 24 May 2022 14:59:07 -0400
-Message-Id: <20220524185907.140285-23-mjrosato@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220524185907.140285-1-mjrosato@linux.ibm.com>
-References: <20220524185907.140285-1-mjrosato@linux.ibm.com>
+        Tue, 24 May 2022 14:59:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 197AB5B3E8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653418754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/u3XlUG6KtQr1BQPpeDQC4OLmlAGTwSNLNWZkdYSkog=;
+        b=YfICYk1DtlgD5jQRw+BhJIfe4ve8rvI87YHCO9ZkdHxoUqiWfo7t7BI1nCWNNGn8l3jBul
+        pTOH0RV7onGljkYVZYO9ze2M7skLkS159PQb/yEfPrGfhjHhFjEdwC8q5i9rv/Vuwv17Cj
+        8pnj7q51Y8wNYptFE3S1EGJMxJ9je80=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-144-tC-OfNboMlCRdW6ksfwmtA-1; Tue, 24 May 2022 14:59:13 -0400
+X-MC-Unique: tC-OfNboMlCRdW6ksfwmtA-1
+Received: by mail-wm1-f72.google.com with SMTP id n25-20020a05600c3b9900b0039733081b4dso1635147wms.7
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 11:59:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=/u3XlUG6KtQr1BQPpeDQC4OLmlAGTwSNLNWZkdYSkog=;
+        b=n7DVlg1jFiRxnD7K0jTGkVu+I0QYLoR0xcrDErFZPvqKUdBTAp2i5EuzucYaBtlRtW
+         67YJnRlQymuzkVgVHLfIKdgx3ds24vjWn2RzoXXQboHvu0wGtFqxSz1k9otTFQKLtVPN
+         uLjUwxyyRp4ay5+dKCvUAjCY/RgEXSMljfgzwHAa5S9mE0l02YJf1O9J4egnmmOA+Pyp
+         H98TdMMVcXAi8sGOVS4Sf/T7RFGSQL4DSCmcSmjPDeM2+2a99LnThXl1g3FXo1Z3Vgzy
+         fhkuYFADYLFQcoAWvAkJ+RmFuwOOA/6W3KiM5AZRic7ogCQZufA8UmFKbtUXNNPfDngs
+         ZiJQ==
+X-Gm-Message-State: AOAM532Ka+RQdWK9+B5vQZpx5Hut7098IxGZnHe40fMw9TQM/QRzdF6O
+        m10bNpghESkHc35sEamHSTelXvX/KV2mhrImJB3UJxHZVKV2a5duc+GKKsFuZAVczyFkqf9q+T+
+        xOyjfELDSPW+c2jy1mqu0LLkR
+X-Received: by 2002:adf:c80a:0:b0:20c:ffa0:6a3 with SMTP id d10-20020adfc80a000000b0020cffa006a3mr23572796wrh.360.1653418751819;
+        Tue, 24 May 2022 11:59:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyGSz2pcp7eL3O58tziWOYGbUj4OEBI4+pd8yfPiv1mrR1trcb64B+iGECL8KJSWE+HJH27zw==
+X-Received: by 2002:adf:c80a:0:b0:20c:ffa0:6a3 with SMTP id d10-20020adfc80a000000b0020cffa006a3mr23572784wrh.360.1653418751530;
+        Tue, 24 May 2022 11:59:11 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70a:5200:b78b:b654:3bbe:992? (p200300cbc70a5200b78bb6543bbe0992.dip0.t-ipconnect.de. [2003:cb:c70a:5200:b78b:b654:3bbe:992])
+        by smtp.gmail.com with ESMTPSA id r15-20020a056000014f00b0020e609dd274sm187544wrx.76.2022.05.24.11.59.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 11:59:10 -0700 (PDT)
+Message-ID: <68a4a96b-9c66-6509-e75d-b1bea6cd55d1@redhat.com>
+Date:   Tue, 24 May 2022 20:59:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vUpCW-OM52lhya483GBrf_K1glKAQC2N
-X-Proofpoint-ORIG-GUID: KkZGMcv3oVJYOb5ZwGBGmuRpqZ-OBzaJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-24_09,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- clxscore=1015 bulkscore=0 mlxscore=0 suspectscore=0 adultscore=0
- malwarescore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501
- mlxlogscore=899 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205240090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 0/3] recover hardware corrupted page by virtio balloon
+Content-Language: en-US
+To:     zhenwei pi <pizhenwei@bytedance.com>, akpm@linux-foundation.org,
+        naoya.horiguchi@nec.com, mst@redhat.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        pbonzini@redhat.com, peterx@redhat.com, qemu-devel@nongnu.org
+References: <20220520070648.1794132-1-pizhenwei@bytedance.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220520070648.1794132-1-pizhenwei@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add entries from the s390 kvm subdirectory related to pci passthrough.
+On 20.05.22 09:06, zhenwei pi wrote:
+> Hi,
+> 
+> I'm trying to recover hardware corrupted page by virtio balloon, the
+> workflow of this feature like this:
+> 
+> Guest              5.MF -> 6.RVQ FE    10.Unpoison page
+>                     /           \            /
+> -------------------+-------------+----------+-----------
+>                    |             |          |
+>                 4.MCE        7.RVQ BE   9.RVQ Event
+>  QEMU             /               \       /
+>              3.SIGBUS              8.Remap
+>                 /
+> ----------------+------------------------------------
+>                 |
+>             +--2.MF
+>  Host       /
+>        1.HW error
+> 
+> 1, HardWare page error occurs randomly.
+> 2, host side handles corrupted page by Memory Failure mechanism, sends
+>    SIGBUS to the user process if early-kill is enabled.
+> 3, QEMU handles SIGBUS, if the address belongs to guest RAM, then:
+> 4, QEMU tries to inject MCE into guest.
+> 5, guest handles memory failure again.
+> 
+> 1-5 is already supported for a long time, the next steps are supported
+> in this patch(also related driver patch):
+> 
+> 6, guest balloon driver gets noticed of the corrupted PFN, and sends
+>    request to host side by Recover VQ FrontEnd.
+> 7, QEMU handles request from Recover VQ BackEnd, then:
+> 8, QEMU remaps the corrupted HVA fo fix the memory failure, then:
+> 9, QEMU acks the guest side the result by Recover VQ.
+> 10, guest unpoisons the page if the corrupted page gets recoverd
+>     successfully.
+> 
+> Test:
+> This patch set can be tested with QEMU(also in developing):
+> https://github.com/pizhenwei/qemu/tree/balloon-recover
+> 
+> Emulate MCE by QEMU(guest RAM normal page only, hugepage is not supported):
+> virsh qemu-monitor-command vm --hmp mce 0 9 0xbd000000000000c0 0xd 0x61646678 0x8c
+> 
+> The guest works fine(on Intel Platinum 8260):
+>  mce: [Hardware Error]: Machine check events logged
+>  Memory failure: 0x61646: recovery action for dirty LRU page: Recovered
+>  virtio_balloon virtio5: recovered pfn 0x61646
+>  Unpoison: Unpoisoned page 0x61646 by virtio-balloon
+>  MCE: Killing stress:24502 due to hardware memory corruption fault at 7f5be2e5a010
+> 
+> And the 'HardwareCorrupted' in /proc/meminfo also shows 0 kB.
+> 
+> About the protocol of virtio balloon recover VQ, it's undefined and in
+> developing currently:
+> - 'struct virtio_balloon_recover' defines the structure which is used to
+>   exchange message between guest and host.
+> - '__le32 corrupted_pages' in struct virtio_balloon_config is used in the next
+>   step:
+>   1, a VM uses RAM of 2M huge page, once a MCE occurs, the 2M becomes
+>      unaccessible. Reporting 512 * 4K 'corrupted_pages' to the guest, the guest
+>      has a chance to isolate the 512 pages ahead of time.
+> 
+>   2, after migrating to another host, the corrupted pages are actually recovered,
+>      once the guest gets the 'corrupted_pages' with 0, then the guest could
+>      unpoison all the poisoned pages which are recorded in the balloon driver.
+> 
 
-Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Hi,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e8c52d0192a6..2442ff168d93 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17264,6 +17264,7 @@ M:	Eric Farman <farman@linux.ibm.com>
- L:	linux-s390@vger.kernel.org
- L:	kvm@vger.kernel.org
- S:	Supported
-+F:	arch/s390/kvm/pci*
- F:	drivers/vfio/pci/vfio_pci_zdev.c
- F:	include/uapi/linux/vfio_zdev.h
- 
+I'm still on vacation this week, I'll try to have a look when I'm back
+(and flushed out my overflowing inbox :D).
+
+
 -- 
-2.27.0
+Thanks,
+
+David / dhildenb
 

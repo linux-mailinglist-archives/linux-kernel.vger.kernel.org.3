@@ -2,153 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6DC532D00
+	by mail.lfdr.de (Postfix) with ESMTP id 8100F532D01
 	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 17:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237888AbiEXPMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 11:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S238701AbiEXPMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 11:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238872AbiEXPMD (ORCPT
+        with ESMTP id S238713AbiEXPMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 11:12:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B98F3D4BB
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653405121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ofqhF7B0Lhr9XDJpCI5NspBe7jXyy3A5iExBePEO86M=;
-        b=hWN9iqCPVXBmCJ0YMMvLsB3VW+sjxTObcrcS642M4fkbZxk1Mhm7HkRuD13H5SUnLZ77EO
-        qcIp5IRj0ktw9Jv7FvbtyjKClEt4JRcA4twu6KjY6aQ+UEpSnshUVAntCmJUzvsaB+K0Gm
-        iTYop9+vHW+dz9Hh5BpIDEKeM6TEwww=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-368-ORQeLfTsMK6bE3vVpY43bw-1; Tue, 24 May 2022 11:11:54 -0400
-X-MC-Unique: ORQeLfTsMK6bE3vVpY43bw-1
-Received: by mail-wr1-f69.google.com with SMTP id e17-20020adfe391000000b0020e64e7dd15so4399432wrm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 08:11:54 -0700 (PDT)
+        Tue, 24 May 2022 11:12:17 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D502A63BC2;
+        Tue, 24 May 2022 08:12:12 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id t13so5151443ilm.9;
+        Tue, 24 May 2022 08:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Gu6XrP09brfzVASce66siSDhg75Ij5bF3a/2sse9FTI=;
+        b=Gx5DLI2+S6FgASvjmxzOMLEBTLLzoAeOJHUNf3qse7ftzHJRZNKIGlYfA7vzGBgRTO
+         qTgrr/QrMpssZBVPExxUekM5wFpDSCMG20g+mdIisIrrqbSj8j8ach4aeT+H+1CPDjcY
+         ofuIYAFZ0a1ST0nZaCgMaH9g0s8MDKoG8WUVuGjlCh3vgQMUp8zwHIFKbe8dhL1HhQTe
+         sZWf5vyTao7FwxYkNnBY5UxCjXGw7WvpGDwAKwR0hZcAz9ljJn2ttXMG4oHl2DC/BtQd
+         krQkv/WkL/ceZkaPabiR+mwCrn4tbOibG9mbSGHQ9sK9s67DEn4CdB96hUXVE/XXsJbF
+         NRiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=ofqhF7B0Lhr9XDJpCI5NspBe7jXyy3A5iExBePEO86M=;
-        b=RTMX77vBkxYYgKlsGyM8qeVkCpGdkHtFkjlMoTfePhPaZmFxlNUhxeL9p9zb81lGl+
-         tIvKkvWEwftZeYqunHJ8AMe2A0EdzcBx8fDAJSIUjEaJG+H40pTeb6XxMowbKTp+8DUB
-         X4XAAWQNCF1b5jHmOvyNRnMnyy4RRexM8A3hh2BC2OkWg3okqPCaBaWAV1ehJYjtsHyy
-         eOqsz0bEOYHyW78ZsnYdEowDgbxAz9++CgqAfG3XCkm0vOVZ2McCbX5yDNxaQtVXhsNg
-         8XBYV6Q5QSLrfig3XxzoiNKMrxzjJRQgw0O/vzEXndBv/YwMrbh1A8peLuecp4HG7FcO
-         59eQ==
-X-Gm-Message-State: AOAM530ShI+wZ9rka/df3f6ltZRbNR26aZ1q+Mo4k2yGQ22Z0OMthMM1
-        tlJnSqz59EIyig6EF9ZLvSqtamQMcA2ZM+i+tcnHkv+wnA82nzzRHjdqL+SVLNzG/YySz0E1X00
-        Bdwlp6REB0Rn7rhXb/5Vwg2x+
-X-Received: by 2002:a05:600c:354a:b0:394:8fa4:73bc with SMTP id i10-20020a05600c354a00b003948fa473bcmr4204448wmq.37.1653405112862;
-        Tue, 24 May 2022 08:11:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzN72fmnvYSWbgO8JmvvLE5huJ+2BUFJSTipvlRfySv+pMVULvp/Gj0OiXV+/iI8xQuds0lrA==
-X-Received: by 2002:a05:600c:354a:b0:394:8fa4:73bc with SMTP id i10-20020a05600c354a00b003948fa473bcmr4204425wmq.37.1653405112626;
-        Tue, 24 May 2022 08:11:52 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id m6-20020adfa3c6000000b0020fc4cd81f6sm10619841wrb.60.2022.05.24.08.11.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 08:11:52 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] cpuhp: make target_store() a nop when target == state
-In-Reply-To: <20220523144728.32414-1-pauld@redhat.com>
-References: <20220523144728.32414-1-pauld@redhat.com>
-Date:   Tue, 24 May 2022 16:11:51 +0100
-Message-ID: <xhsmh35gzj77s.mognet@vschneid.remote.csb>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gu6XrP09brfzVASce66siSDhg75Ij5bF3a/2sse9FTI=;
+        b=437c6i0vOdcyGq0Uidsdb1DAZmgoVljbw7JpnkngKVCpx16FoqkIVmhVun+Hgudw0G
+         T0hkN4P0iBWDOSEUEWRmEseyEYosihqvyTiJvHNJmbrP4WRuDpyAkR20xtTcaBXUF/L7
+         jdqaFmv+iCpofuroh0gKTXoEDH+/veq0p3L5qKsjb91EKfDaMTPigjCZumSCMKPp4chS
+         E8HcqhTnZChw6GZP4yd963dNqBUdHeowEQocttVICM67T/uSTMPWeSVliZzE4izO/wiW
+         jmQGU27nKAyZMTjKTCAB9zvxP6jYV8HLLf+G+KUVpi4fm96wS4MWcD3a2I/iYF9+CgZZ
+         b4vw==
+X-Gm-Message-State: AOAM530Aq8eg1igwpWpM1xNfdAUmNjiDhbP++NXEQsBpsev3SFxnmT3b
+        2MVKlPKozSIAe9OLjdbXyh94uOvHhk6kRvzk7o+TVmHh1qPEnQ==
+X-Google-Smtp-Source: ABdhPJxToNDnooDvM+F5z9jrpwZB87LsQbRXfl7xzsJlSJuT69wEeUzQA9y0IHhR27j6+JEjpMOS30/zFL5koffPamM=
+X-Received: by 2002:a05:6e02:170b:b0:2cf:970f:6050 with SMTP id
+ u11-20020a056e02170b00b002cf970f6050mr14549964ill.5.1653405130972; Tue, 24
+ May 2022 08:12:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220523020209.11810-1-ojeda@kernel.org> <20220523020209.11810-22-ojeda@kernel.org>
+ <CAKwvOdkTjxNEmCTnuH5f41WB50ef6ErBM2Kp2zJ-t9q_5U8rBA@mail.gmail.com>
+In-Reply-To: <CAKwvOdkTjxNEmCTnuH5f41WB50ef6ErBM2Kp2zJ-t9q_5U8rBA@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 24 May 2022 17:12:00 +0200
+Message-ID: <CANiq72=QJsScPweqWO8w6t4wDKKd3ZWFkA6Dcto6qpJ8QcfgOg@mail.gmail.com>
+Subject: Re: [PATCH v7 21/25] Kbuild: add Rust support
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Douglas Su <d0u9.su@outlook.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Daniel Xu <dxu@dxuuu.xyz>, Miguel Cano <macanroj@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-um@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/22 10:47, Phil Auld wrote:
-> writing the current state back into hotplug/target calls cpu_down()
-> which will set cpu dying even when it isn't and then nothing will
-> ever clear it. A stress test that reads values and writes them back
-> for all cpu device files in sysfs will trigger the BUG() in
-> select_fallback_rq once all cpus are marked as dying.
+On Mon, May 23, 2022 at 8:45 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
 >
-> kernel/cpu.c::target_store()
-> 	...
->         if (st->state < target)
->                 ret = cpu_up(dev->id, target);
->         else
->                 ret = cpu_down(dev->id, target);
->
-> cpu_down() -> cpu_set_state()
-> 	 bool bringup = st->state < target;
-> 	 ...
-> 	 if (cpu_dying(cpu) != !bringup)
-> 		set_cpu_dying(cpu, !bringup);
->
-> Make this safe by catching the case where target == state
-> and bailing early.
->
-> Signed-off-by: Phil Auld <pauld@redhat.com>
-> ---
->
-> Yeah, I know... don't do that. But it's still messy.
->
-> !< != > 
->
->  kernel/cpu.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index d0a9aa0b42e8..8a71b1149c60 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -2302,6 +2302,9 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
->  		return -EINVAL;
->  #endif
->  
-> +	if (target == st->state)
-> +		return count;
-> +
+> I'm super not into having the rust optimization level differ from the
+> C optimization level.  This is just someone having too much fun
+> wrapping every compiler flag in a kbuild option.  Either folks wan't
 
-The current checks are against static boundaries, this has to compare
-against st->state - AFAICT this could race with another hotplug operation
-to the same CPU, e.g.
+I mean, `Makefile`s are not my favorite pastime... :)
 
-  CPU42.cpuhp_state
-    ->state  == CPUHP_AP_SCHED_STARTING
-    ->target == CPUHP_ONLINE
+> smaller size or more optimizations. Allowing for RUST_OPT_LEVEL_S and
+> CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE or RUST_OPT_LEVEL_3 and
+> CONFIG_CC_OPTIMIZE_FOR_SIZE is just wacky nonsense that's going to
+> make randconfig bug reports more confusing to tease out.
 
-  <write CPUHP_ONLINE via sysfs, OK because current state != CPUHP_ONLINE>
+I think what is important is to decide whether extra levels, for C and
+Rust, should be kept compile-able/maintained or not (I also replied in
+the `-O1` for C thread [1]).
 
-  CPU42.cpuhp_state == CPUHP_ONLINE
-  
-  <issues ensue>
+Note that the Rust side can be compiled as `-O0` or `-O1` at the
+moment, which is something we do not have for the C side; thus having
+only the C == Rust option means we will not have a configuration with
+those anymore.
 
+For me it is less complex to not have them, and I have not heard more
+opinions on this, either for or against (apart from that thread
+suggesting `-O1` for the C side), so if nobody else chimes in, I will
+remove them.
 
-_cpu_up() has:
+[1] https://lore.kernel.org/lkml/CANiq72kySVvOQ7eqwe0Jzz3V0JTtrcqODHR9Ty4-sfDMdzP6XQ@mail.gmail.com/
 
-	/*
-	 * The caller of cpu_up() might have raced with another
-	 * caller. Nothing to do.
-	 */
-	if (st->state >= target)
-		goto out;
-
-Looks like we want an equivalent in _cpu_down(), what do you think?
-
->  	ret = lock_device_hotplug_sysfs();
->  	if (ret)
->  		return ret;
-> -- 
-> 2.18.0
-
+Cheers,
+Miguel

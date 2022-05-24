@@ -2,89 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA3953336B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAEA53338A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242130AbiEXWT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 18:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
+        id S242240AbiEXWaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 18:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238086AbiEXWTz (ORCPT
+        with ESMTP id S242222AbiEXWaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 18:19:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8DE3AA7E;
-        Tue, 24 May 2022 15:19:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8859C617D0;
-        Tue, 24 May 2022 22:19:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 546EEC34100;
-        Tue, 24 May 2022 22:19:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653430792;
-        bh=aQTROfTFdXi36U6mLYseBrPAPoPIYLg9rd9UBL8XdpU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=i3JzHY6x2dWBF05YSG9bArKSvLQu29plyYJe7tqeNGh5mu+JMd3KkovUQW+JqjHRt
-         4PhxqIZxrlHBXDtSAePCyqJ4YihTpVmr5VF5/iTnkqy6Q0/lERxadE0gcXxo0kLOrB
-         zWf+plMdLyG21zKylkSk43f0xMNk00Hf5iQNJ7/o/krI1IlgeeCuiimhGwqjjctYXY
-         NSpar9kQXBjj03S3U4qw2Xs5gti/cfPx0K8hDG+SBmlPvMm2+dI16pP3w36/fQjQaY
-         J/L3xdm2JhiCxEpF0PTRoQH+p6WVBWkcZqKH0tXWBrGs545Al07oamJWs6dshU/EFr
-         QJSJ5jMnkFqMw==
-Date:   Tue, 24 May 2022 17:29:27 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [GIT PULL] checkpatch.pl changes for 5.19-rc1
-Message-ID: <20220524222927.GA7839@embeddedor>
+        Tue, 24 May 2022 18:30:01 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA09635855
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:30:00 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id ck4so33873591ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:30:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UoL8UouejxI345jMXPVubIHv74eQbvQqgzHXEHWV0Bw=;
+        b=bVAfAmfQZrFwKusE/UDZf5VLi4/7Q4AYN/Crlhf+AalFHGbJ39jaE09Y65EIvpnsY/
+         SzrEHsXxPp7TYD2nPlsE1UzawIHmWgEcBDL6yhGt0BJuX7PzHtjD3qHoKKb6ObTW2aYA
+         1IGjY3efPWV/VlRFnXm8r2LOneJc03/SwsCjA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UoL8UouejxI345jMXPVubIHv74eQbvQqgzHXEHWV0Bw=;
+        b=jHiI8jDCEttrMZ4fQvP9MJJGrQF6Ba/yE6IsZUYwTkmOy2ijlEZtc3ZZD/e18fMDMk
+         V/XeAYcoMcwkMccxQb0GUXVkHkFR/QG181RmGX2IpYFT789s5k1vtyIylLIwisrOX0ET
+         7pUFeq/v8jYgaFZDrbPngwfyr3AKw4AkHPbWEgdefTeWu39bMZ7kkJoGaaAdd0K4mdaD
+         RIYX+82e4sKOmCQFilUWl1JW2OaDMMVwqxJbNSZAZFvE5zkq0Q+0hvWBJK/8XcqN9UTi
+         PnDKguIMauEBOxCy5qyTso/4EQn22Il0DHXMzqHHctFyN2UBQcLM5T3QJDxNFKlAO2iq
+         GymQ==
+X-Gm-Message-State: AOAM532qKuFfLYaaTgiX7BXINqed6I0YGwYe/fS5vZtT6j6ylSZGhMTx
+        qFa2WXcS4UkGfI9a1WfhHzp4/RmM1ZKkQO7D
+X-Google-Smtp-Source: ABdhPJypvZxCEF4hRkp9vpQAVizYhnaZg1kuw6MNdE4eyOchTm+JZvaXjobXChSLm6HMUo2IdtSCfg==
+X-Received: by 2002:a17:906:a186:b0:6fe:8a06:849b with SMTP id s6-20020a170906a18600b006fe8a06849bmr26223142ejy.635.1653431398974;
+        Tue, 24 May 2022 15:29:58 -0700 (PDT)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id zd20-20020a17090698d400b006fe960c5c5asm6339652ejb.126.2022.05.24.15.29.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 15:29:58 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id o29-20020a05600c511d00b00397697f172dso318779wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:29:58 -0700 (PDT)
+X-Received: by 2002:a7b:cb91:0:b0:397:3225:244 with SMTP id
+ m17-20020a7bcb91000000b0039732250244mr5664550wmi.68.1653431397793; Tue, 24
+ May 2022 15:29:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <nycvar.YFH.7.76.2205241107530.28985@cbobk.fhfr.pm>
+In-Reply-To: <nycvar.YFH.7.76.2205241107530.28985@cbobk.fhfr.pm>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 24 May 2022 15:29:41 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh91nMR037ps4B=AUOEemZVr_UKDdUmpSTpYGtV2909kw@mail.gmail.com>
+Message-ID: <CAHk-=wh91nMR037ps4B=AUOEemZVr_UKDdUmpSTpYGtV2909kw@mail.gmail.com>
+Subject: Re: [GIT PULL] HID for 5.19
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+On Tue, May 24, 2022 at 2:11 AM Jiri Kosina <jikos@kernel.org> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2022052401
 
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+I've pulled this as you can tell from the pr-tracker-bot reply, but
+please improve your merge messages.
 
-are available in the Git repository at:
+Some of them are fine (eg that uclogic merge has explanation of what
+it does), but others really only say "Merge branch xyz into for-linus"
+with no actual information about what the branch does.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git tags/checkpatch-new-alloc-check-5.19-rc1
+Please?
 
-for you to fetch changes up to 73f1d07e5f8a1dec989a5ec964f5f2ce5b6f8825:
-
-  checkpatch: add new alloc functions to alloc with multiplies check (2022-04-26 01:30:33 -0500)
-
-----------------------------------------------------------------
-Add new functions to alloc check for 5.19-rc1
-
-Hi Linus,
-
-Please, pull the following patch that adds new alloc functions to alloc
-with multiplies check.
-
-kvmalloc() and kvzalloc() functions have now 2-factor multiplication
-argument forms kvmalloc_array() and kvcalloc().
-
-Add alloc-with-multiplies checks for these new functions.
-
-Thanks
---
-Gustavo
-
-----------------------------------------------------------------
-Gustavo A. R. Silva (1):
-      checkpatch: add new alloc functions to alloc with multiplies check
-
- scripts/checkpatch.pl | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+                  Linus

@@ -2,286 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE84533351
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414C9533355
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 00:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239100AbiEXWME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 18:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
+        id S240379AbiEXWMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 18:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235617AbiEXWMB (ORCPT
+        with ESMTP id S238914AbiEXWMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 18:12:01 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05552FFF4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:11:59 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id a38so14529142pgl.9
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:11:59 -0700 (PDT)
+        Tue, 24 May 2022 18:12:42 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D0D5DD27
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:12:40 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id gg20so18045022pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 15:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=WTfihyvwgyLGsq66iS5in5m2V+CuATt3dZAIwdmKLdg=;
-        b=mWR1RSToQywG01H9fAiGKDeFxaZFkisxbDrx4EiQkqMlWTudU9PxWbYspGMm2Er0Ns
-         xKHHGyLnx1Qp4layVesgr+W5C5EGvhaWFMISqZONL0gQ2F/jJU6Rz8roskFCqm+4gxlY
-         UYTghDdRWvD1gK7L5sb643VO1SJRs6d866a/6NCcCD/3/ZQ0twoW+gPGM3KmDBs/ehn8
-         pRl40akkjQQ+GCkpwfnasuZgmz+CCqsaRk220cn9liyDXu//cOf4AjRHl+dQxttkXxtN
-         Cwh8NSrsUizEmPO61bU3GdwL0I7jnpNCDEN6mzH2fkc2if2EYy3vy48TksjNoSsAELYL
-         7rWw==
+        bh=u8CD/oP1dRwpstmWmx4PFVLSC5EU/3DeFLUGGUSnZB0=;
+        b=jLj+T7+1Hfq7NpU3hWA1j/dqSqZGIxKK2h7MRyu+Xdp3NbnM6i3JiEOdS9voRiJYBK
+         dI57J846prVWNRcRGFP0bCLmKv6S5ZV+Szzn8qS9yQuBtkat0pvdelOHYF8RvpWlmCaP
+         ZWJwz+M+SNRKzqA5LAQlIr9lRe+1YYbHfy1+0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=WTfihyvwgyLGsq66iS5in5m2V+CuATt3dZAIwdmKLdg=;
-        b=zSzFcRUTZ32LTeWgRoPVUHzowg8Zsso8xC3oUepgwZFnm9G9qH0OmqfFAP426ErP5X
-         /rXmIHxxHaICKOgD/UBTPpOxqqZVjwPsry2rPD1BQREwynCvxBPmkAzXACcB2HN7EoP/
-         yllfB3pW4iCcP4QaUCY6xDndOuzZXNLMxfiUEB7j+JiTjPXCXVBQvgvhwuTHkN+pC2aO
-         hp9t369VEIecl5kkGHRy+6AbeiARRcMgvYeNZm+Ft5sFzKw8sdMkmHAdQP1Et+lTAuWU
-         GBcl9T7HpitGdwNho0phR5SgO3UcoOzV/oxgZoFytic8jcxapOAPKxJfZcWL+/mk/zmI
-         KeRA==
-X-Gm-Message-State: AOAM530d8PgtCEmgE4zpMwvQKQoR4gbD+E/RMDV3c4LGa1boDOB29wZI
-        RsLIBGkk57sIdCBnmog2lhxv7Q==
-X-Google-Smtp-Source: ABdhPJyl+208+pRZnzpJ2kLLfuZ6d1y/xNwp/T44hnZZZl2vHWEdtCJ+vBGTSnOSw53uJ48X1PDaqw==
-X-Received: by 2002:a05:6a00:729:b0:4f7:77ed:c256 with SMTP id 9-20020a056a00072900b004f777edc256mr30488100pfm.1.1653430318990;
-        Tue, 24 May 2022 15:11:58 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g3-20020a170902d5c300b0015e8d4eb2b9sm7721999plh.259.2022.05.24.15.11.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 15:11:58 -0700 (PDT)
-Date:   Tue, 24 May 2022 22:11:54 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lei Wang <lei4.wang@intel.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 3/8] KVM: X86: Expose IA32_PKRS MSR
-Message-ID: <Yo1YKoUOPOLpZnqn@google.com>
-References: <20220424101557.134102-1-lei4.wang@intel.com>
- <20220424101557.134102-4-lei4.wang@intel.com>
+        bh=u8CD/oP1dRwpstmWmx4PFVLSC5EU/3DeFLUGGUSnZB0=;
+        b=s15p8d/nT50wQWO4+0j055EbjqdnGNg4URZ3NxdqibLkkiyu4mgLVll6ruOSfHNaO1
+         UwQMxK7mWKa5WaFyf+KugQtKrPySZHe89lYbPDCRrojVNtLJfyZLsfjRMWMPmvF0dkYD
+         PBe6478GAxhidNYELUgQtWH8vxNvhv89SYjpCS9KS0NRLzoJfvIyIeWN6tSQribEchOX
+         wTuw9qbsdU7cBjyIuIsScR8BRG2F3J8xLfc+4pRBW7v3Vpp6O18zsg+eAd1/nKxG1FYN
+         gTfX00dZTaIXdjy9yXyQ6UZwiqt/5cFFvNCdSju/Gbjd7IA6BDxinCgCFIjZ6WAaiuzJ
+         8qvA==
+X-Gm-Message-State: AOAM533exPpEUslwAgAyc1RB82RuO6f7XLTpYjRxv/TGvQdiGphEFqiF
+        rF7dqvOTUoXVUmWwBbXgfL/cIA==
+X-Google-Smtp-Source: ABdhPJylZSxgbbxQTXu74nYTjl6enFdemPoZ3wjsjlyZ3DSDQI0D9YnLX2MmUg34d1UzfDnnWFjv9A==
+X-Received: by 2002:a17:90b:4a90:b0:1df:e3af:c6ad with SMTP id lp16-20020a17090b4a9000b001dfe3afc6admr6734751pjb.41.1653430360054;
+        Tue, 24 May 2022 15:12:40 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:4d83:f549:9abd:427])
+        by smtp.gmail.com with UTF8SMTPSA id ji3-20020a170903324300b0015e8d4eb25csm1831169plb.166.2022.05.24.15.12.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 15:12:39 -0700 (PDT)
+Date:   Tue, 24 May 2022 15:12:38 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v17 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <Yo1YVi2/k1Iu1ovl@google.com>
+References: <1653387228-28110-1-git-send-email-quic_kriskura@quicinc.com>
+ <1653387228-28110-3-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220424101557.134102-4-lei4.wang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <1653387228-28110-3-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nit, something like:
+On Tue, May 24, 2022 at 03:43:45PM +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> 
+> Check wakeup-source property for dwc3 core node to set the
+> wakeup capability. Drop the device_init_wakeup call from
+> runtime suspend and resume.
+> 
+> If the dwc3 is wakeup capable, don't power down the USB PHY(s).
+> The glue drivers are expected to take care of configuring the
+> additional wakeup settings if needed based on the dwc3 wakeup
+> capability status. In some SOC designs, powering off the PHY is
+> resulting in higher leakage, so this patch save power on such boards.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 
-  KVM: X86: Virtualize and pass-through IA32_PKRS MSR when supported
-
-because "expose" doesn't precisely cover the pass-through behavior
-
-On Sun, Apr 24, 2022, Lei Wang wrote:
-> @@ -1111,6 +1113,7 @@ void vmx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
->  #endif
->  	unsigned long fs_base, gs_base;
->  	u16 fs_sel, gs_sel;
-> +	u32 host_pkrs;
->  	int i;
->  
->  	vmx->req_immediate_exit = false;
-> @@ -1146,6 +1149,17 @@ void vmx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
->  	 */
->  	host_state->ldt_sel = kvm_read_ldt();
->  
-> +	/*
-> +	 * Update the host pkrs vmcs field before vcpu runs.
-> +	 * The setting of VM_EXIT_LOAD_IA32_PKRS can ensure
-> +	 * kvm_cpu_cap_has(X86_FEATURE_PKS) &&
-> +	 * guest_cpuid_has(vcpu, X86_FEATURE_PKS)
-> +	 */
-
-Eh, I don't think this comment adds anything.  And practically speaking, whether
-or not X86_FEATURE_PKS is reported by kvm_cpu_cap_has() and/or guest_cpuid_has()
-is irrelevant.  If KVM is loading PKRS on exit, then the VMCS needs to hold an
-up-to-date value.  E.g. if for some reason KVM enables the control even if PKS
-isn't exposed to the guest (see below), this code still needs to refresh the value.
-
-> +	if (vm_exit_controls_get(vmx) & VM_EXIT_LOAD_IA32_PKRS) {
-> +		host_pkrs = get_current_pkrs();
-
-No need for an intermediate host_pkrs.  I.e. this can simply be:
-
-	if (vm_exit_controls_get(vmx) & VM_EXIT_LOAD_IA32_PKRS)
-		vmx_set_host_pkrs(host_state, get_current_pkrs());
-
-> +		vmx_set_host_pkrs(host_state, host_pkrs);
-> +	}
-> +
->  #ifdef CONFIG_X86_64
->  	savesegment(ds, host_state->ds_sel);
->  	savesegment(es, host_state->es_sel);
-> @@ -1901,6 +1915,13 @@ static int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  	case MSR_IA32_DEBUGCTLMSR:
->  		msr_info->data = vmcs_read64(GUEST_IA32_DEBUGCTL);
->  		break;
-> +	case MSR_IA32_PKRS:
-> +		if (!kvm_cpu_cap_has(X86_FEATURE_PKS) ||
-> +		    (!msr_info->host_initiated &&
-> +		    !guest_cpuid_has(vcpu, X86_FEATURE_PKS)))
-
-Nit, please align the lines that are inside a pair of parantheses, i.e.
-
-		if (!kvm_cpu_cap_has(X86_FEATURE_PKS) ||
-		    (!msr_info->host_initiated &&
-		     !guest_cpuid_has(vcpu, X86_FEATURE_PKS)))
-			return 1;
-
-> +			return 1;
-> +		msr_info->data = kvm_read_pkrs(vcpu);
-
-A comment on the caching patch, please use kvm_pkrs_read() to follow the GPR, RIP,
-PDPTR, etc... terminology (CR0/3/4 got grandfathered in).
-
-> +		break;
->  	default:
->  	find_uret_msr:
->  		msr = vmx_find_uret_msr(vmx, msr_info->index);
-> @@ -2242,7 +2263,17 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  		}
->  		ret = kvm_set_msr_common(vcpu, msr_info);
->  		break;
-> -
-> +	case MSR_IA32_PKRS:
-> +		if (!kvm_pkrs_valid(data))
-> +			return 1;
-
-Nit, please move this to after the capability checks.  Does not affect functionality
-at all, but logically it doesn't make sense to check for a valid value of a register
-that doesn't exist.
-
-> +		if (!kvm_cpu_cap_has(X86_FEATURE_PKS) ||
-> +		    (!msr_info->host_initiated &&
-> +		    !guest_cpuid_has(vcpu, X86_FEATURE_PKS)))
-> +			return 1;
-> +		vcpu->arch.pkrs = data;
-> +		kvm_register_mark_available(vcpu, VCPU_EXREG_PKRS);
-> +		vmcs_write64(GUEST_IA32_PKRS, data);
-
-The caching patch should add kvm_write_pkrs().  And in there, I think I'd vote for
-a WARN_ON_ONCE() that the incoming value doesn't set bits 63:32.  It's redundant
-with kvm_pkrs_valid()
-
-
-> +		break;
->  	default:
->  	find_uret_msr:
->  		msr = vmx_find_uret_msr(vmx, msr_index);
-
-...
-
-> @@ -7406,6 +7445,20 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  
->  	/* Refresh #PF interception to account for MAXPHYADDR changes. */
->  	vmx_update_exception_bitmap(vcpu);
-> +
-> +	if (kvm_cpu_cap_has(X86_FEATURE_PKS)) {a
-> +		if (guest_cpuid_has(vcpu, X86_FEATURE_PKS)) {
-> +			vmx_disable_intercept_for_msr(vcpu, MSR_IA32_PKRS, MSR_TYPE_RW);
-> +
-> +			vm_entry_controls_setbit(vmx, VM_ENTRY_LOAD_IA32_PKRS);
-> +			vm_exit_controls_setbit(vmx, VM_EXIT_LOAD_IA32_PKRS);
-
-Ugh, toggling the entry/exit controls here won't do the correct thing if L2 is
-active.  The MSR intercept logic works because it always operates on vmcs01's bitmap.
-
-Let's keep this as simple as possible and set the controls if they're supported.
-KVM will waste a few cycles on entry/exit if PKS is supported in the host but not
-exposed to the guest, but that's not the end of the world.  If we want to optimize
-that, then we can do that in the future and in a more generic way.
-
-So this becomes:
-
-	if (kvm_cpu_cap_has(X86_FEATURE_PKS))
-		vmx_set_intercept_for_msr(vcpu, MSR_IA32_PKRS, MSR_TYPE_RW,
-					  !guest_cpuid_has(vcpu, X86_FEATURE_PKS));
-
-And please hoist that up to be next to the handling of X86_FEATURE_XFD to try and
-bunch together code that does similar things.
-
-The last edge case to deal with is if only one of the controls is supported, e.g. if
-an L0 hypervisor is being evil.  Big surprise, BNDCFGS doesn't get this right and
-needs a bug fix patch, e.g. it could retain the guest's value after exit, or host's
-value after entry.  It's a silly case because it basically requires broken host
-"hardware", but it'd be nice to get it right in KVM.  And that'd also be a good
-opportunity to handle all of the pairs, i.e. clear the bits during setup_vmcs_config()
-instead of checking both the entry and exit flags in cpu_has_load_*().
-
-So for this series, optimistically assume my idea will pan out and a
-adjust_vm_entry_exit_pair() helper will exit by the time this is fully baked.
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 6927f6e8ec31..53e12e6006af 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2434,6 +2434,16 @@ static bool cpu_has_sgx(void)
-        return cpuid_eax(0) >= 0x12 && (cpuid_eax(0x12) & BIT(0));
- }
-
-+static __init void adjust_vm_entry_exit_pair(u32 *entry_controls, u32 entry_bit,
-+                                            u32 *exit_controls, u32 exit_bit)
-+{
-+       if ((*entry_controls & entry_bit) && (*exit_controls & exit_bit))
-+               return;
-+
-+       *entry_controls &= ~entry_bit;
-+       *exit_controls &= ~exit_bit;
-+}
-+
- static __init int adjust_vmx_controls(u32 ctl_min, u32 ctl_opt,
-                                      u32 msr, u32 *result)
- {
-@@ -2614,6 +2624,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
-                                &_vmentry_control) < 0)
-                return -EIO;
-
-+       adjust_vm_entry_exit_pair(&_vmentry_control, VM_ENTRY_LOAD_IA32_PKRS,
-+                                 &_vmexit_control, VM_EXIT_LOAD_IA32_PKRS);
-+
-        /*
-         * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
-         * can't be used due to an errata where VM Exit may incorrectly clear
-@@ -7536,6 +7549,9 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
-                vmx_set_intercept_for_msr(vcpu, MSR_IA32_XFD_ERR, MSR_TYPE_R,
-                                          !guest_cpuid_has(vcpu, X86_FEATURE_XFD));
-
-+       if (kvm_cpu_cap_has(X86_FEATURE_PKS))
-+               vmx_set_intercept_for_msr(vcpu, MSR_IA32_PKRS, MSR_TYPE_RW,
-+                                         !guest_cpuid_has(vcpu, X86_FEATURE_PKS));
-
-        set_cr4_guest_host_mask(vmx);
-
-
-> +		} else {
-> +			vmx_enable_intercept_for_msr(vcpu, MSR_IA32_PKRS, MSR_TYPE_RW);
-> +
-> +			vm_entry_controls_clearbit(vmx, VM_ENTRY_LOAD_IA32_PKRS);
-> +			vm_exit_controls_clearbit(vmx, VM_EXIT_LOAD_IA32_PKRS);
-> +		}
-> +	}
->  }
->  
-
-...
-
-> @@ -11410,6 +11414,9 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->  	kvm_set_rflags(vcpu, X86_EFLAGS_FIXED);
->  	kvm_rip_write(vcpu, 0xfff0);
->  
-> +	if (!init_event && kvm_cpu_cap_has(X86_FEATURE_PKS))
-> +		__kvm_set_msr(vcpu, MSR_IA32_PKRS, 0, true);
-
-Please put this with the other !init_event stuff, e.g. look for MSR_IA32_XSS.
-
->  	vcpu->arch.cr3 = 0;
->  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
->  
- 
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

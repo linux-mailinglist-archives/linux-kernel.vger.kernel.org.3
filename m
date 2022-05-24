@@ -2,73 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4085532F69
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 19:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A45F532F74
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 19:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239858AbiEXRG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 13:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S238079AbiEXRHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 13:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239883AbiEXRGy (ORCPT
+        with ESMTP id S239639AbiEXRHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 13:06:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2E8A8199B
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:06:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653412006;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NRVyuXQ2anZsMTN0V2Kp61WOvAM/LWYlpRTqMTKf390=;
-        b=iOg2BOjLLNPpZOFMYo7dFoUNRnTOsun9EvJ7OyFhBc5rr+1lDPvUl/tdw7U9A/XInJzS5Q
-        bh1PjnIQa1NNKopJUyjDrbAHS/RlYGNBIbKg3z41+EzY0YEtDi//faksPsf/lnnP/rg/PP
-        9RQM6LimSKWCZHPiDLMDZKG0zPW9WfY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-hHqKpHFUOOKaGi6FSPlasQ-1; Tue, 24 May 2022 13:06:42 -0400
-X-MC-Unique: hHqKpHFUOOKaGi6FSPlasQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F5121C08973;
-        Tue, 24 May 2022 17:06:36 +0000 (UTC)
-Received: from eperezma.remote.csb (unknown [10.39.195.73])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 12CC92026D64;
-        Tue, 24 May 2022 17:06:31 +0000 (UTC)
-From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-To:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
+        Tue, 24 May 2022 13:07:32 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0598D7CB25
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 10:07:30 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 30B225C0048;
+        Tue, 24 May 2022 13:07:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 24 May 2022 13:07:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1653412050; x=
+        1653498450; bh=yBU13/O/dwDmfkl/Fn0N6p1Wyp+RzcYRjeN8hm6Con0=; b=j
+        3+5jMQdMhy3SoPicB3G4ObLm9CF7hTMokMZy/h9Wcvr+Qocodk2qgwNS/6qm0tlS
+        d4oWyjRzRNJ1TXfS6XModGbhxMtBRwOj7pknswA9ygYNcitHTlu8oijhrRlsIHdy
+        AWYKuy9clGhqxZDNEMUVkuHcAjliuHdnVaPoqBSD3St2a8ksDTBI0eMLwOEWqRs4
+        /4YK1B1N1anaI9Rl0gRN1j/mpndFJe1CKkZDQZNQT052RtlmWurkmefrz4kuKzoV
+        Uy2DsHYeKasziVwEuLhd3SkJPhaxdYLRYM1j/iqu5psuJVRhAs0FK1HfdEFWPcrr
+        8IgWCAfM48aj+DuyIBgLA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1653412050; x=
+        1653498450; bh=yBU13/O/dwDmfkl/Fn0N6p1Wyp+RzcYRjeN8hm6Con0=; b=A
+        ozhPIevaUkOE7sgsKJwymeFAyWHh9FYLIcI81EWRgbR1Ecgt+IQR9xjH0hTHiV6i
+        p7KOK0tUUp4SFlgF1Pu8sLWvypPmaBFN5h4gU4ZO2Kz7KiZY7A3rZrKz5Or+gw0c
+        aPuk2sF3ClVgpO1NkJ3S/bbBBcFcj0IvGEKAxLfNuacMuiX+KrACIs6QlAxpJunb
+        WH3W1A3JjmcfcoF6+ZB8MHGrsSXCT/SfA6nLnK8zj46LcQJ6eYwe/jpTyu4OzThQ
+        gr60WD6H/hlAA+E9zJd2913Z42rGS62QaCbHlXFo0HAAGwMlMGaEY9kCjhPp6Q7Y
+        i41WUKjlCtvvSkei4ke9g==
+X-ME-Sender: <xms:0BCNYsFaunY88350akg8pBVVceL2FDyRNMHaJ76SYFHLpyft5GeVqA>
+    <xme:0BCNYlUmxEpS0_ORXKl_v0tnESFKFBtalbaSsfnPFOcjULUHTPVcAo0eF6GlQGdNT
+    BEUmmVfIb4_fDEeAg>
+X-ME-Received: <xmr:0BCNYmIIsROyy4sg485DDk-XfIzWcf8W-5qMRu5c03SDQ_u53CDt-_bVE6fTJbez_qZSBQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeefgddutdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedtvddvudelveeuleegveduiefggeegheffgefhjeduhfeigfei
+    vedthfduleegueenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
+    rghnugdrohhrgh
+X-ME-Proxy: <xmx:0BCNYuEJJGtoH9hs30FOSgsMjMsWetOfEyoaqw8w01gcUc0NqLVVPA>
+    <xmx:0BCNYiUf6HTVMwaDX5o-GPEViQT5NHskm9cT5wp1yMdpW4fueMdtlg>
+    <xmx:0BCNYhMd05_tDcRZGWoxEHZ4UqC9-So5cORyi9LelsdzeHveRDSAAw>
+    <xmx:0hCNYuRkQ3MDcnuYaa6d5hIH8UBD8LWh9qQaGI8mUcucluDAXu8gFQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 24 May 2022 13:07:27 -0400 (EDT)
+Subject: Re: [PATCH] drm/sun4i: mixer: fix scanline for V3s and D1
+To:     Icenowy Zheng <icenowy@aosc.io>,
+        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        mripard@kernel.org, wens@csie.org, Genfu Pan <benlypan@gmail.com>
+Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Cc:     Parav Pandit <parav@nvidia.com>, Zhang Min <zhang.min9@zte.com.cn>,
-        hanand@xilinx.com, Zhu Lingshan <lingshan.zhu@intel.com>,
-        tanuj.kamde@amd.com, gautam.dawar@amd.com,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xie Yongji <xieyongji@bytedance.com>, dinang@xilinx.com,
-        habetsm.xilinx@gmail.com, Eli Cohen <elic@nvidia.com>,
-        pabloc@xilinx.com, lvivier@redhat.com,
-        Dan Carpenter <dan.carpenter@oracle.com>, lulu@redhat.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        eperezma@redhat.com, ecree.xilinx@gmail.com,
-        Piotr.Uminski@intel.com, martinpo@xilinx.com,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Longpeng <longpeng2@huawei.com>, martinh@xilinx.com
-Subject: [PATCH v2 4/4] vdpa_sim: Implement stop vdpa op
-Date:   Tue, 24 May 2022 19:06:10 +0200
-Message-Id: <20220524170610.2255608-5-eperezma@redhat.com>
-In-Reply-To: <20220524170610.2255608-1-eperezma@redhat.com>
-References: <20220524170610.2255608-1-eperezma@redhat.com>
+References: <20220521133443.1114749-1-benlypan@gmail.com>
+ <3173956.44csPzL39Z@jernej-laptop>
+ <70b43ac2910ce9b3e3776d31eda7a791fbae5454.camel@aosc.io>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <86a208c1-9277-32de-3f8f-8976eab15524@sholland.org>
+Date:   Tue, 24 May 2022 12:07:27 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <70b43ac2910ce9b3e3776d31eda7a791fbae5454.camel@aosc.io>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,129 +94,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
-that backend feature and userspace can effectively stop the device.
+On 5/23/22 8:14 AM, Icenowy Zheng wrote:
+> 在 2022-05-22星期日的 10:36 +0200，Jernej Škrabec写道：
+>> Hi!
+>>
+>> Dne sobota, 21. maj 2022 ob 15:34:43 CEST je Genfu Pan napisal(a):
+>>> Accrording the SDK from Allwinner, the scanline value of yuv and
+>>> rgb for
+>>> V3s are both 1024.
+>>
+>> s/scanline value/scanline length/
+>>
+>> Which SDK? All SDKs that I have or found on internet don't mention
+>> YUV nor RGB 
+>> scanline limit. That doesn't mean there is none, I'm just unable to
+>> verify 
+>> your claim. Did you test this by yourself? Also, please make YUV
+>> scanline 
+>> change separate patch with fixes tag.
+> 
+> BTW I think chip manuals all say that the chip supports NxN resolution
+> in DE2 chapter, e.g. the V3 datasheet says DE2 "Output size up to
+> 1024x1024".
+> 
+> However there's no information about D1's second mixer.
 
-This is a must before get virtqueue indexes (base) for live migration,
-since the device could modify them after userland gets them. There are
-individual ways to perform that action for some devices
-(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
-way to perform it for any vhost device (and, in particular, vhost-vdpa).
+My information comes from the BSP driver[0]:
 
-After the return of ioctl with stop != 0, the device MUST finish any
-pending operations like in flight requests. It must also preserve all
-the necessary state (the virtqueue vring base plus the possible device
-specific states) that is required for restoring in the future. The
-device must not change its configuration after that point.
+static const int sun8iw20_de_scale_line_buffer[] = {
+        /* DISP0 */
+        2048,
+        /* DISP1 */
+        1024,
+};
 
-After the return of ioctl with stop == 0, the device can continue
-processing buffers as long as typical conditions are met (vq is enabled,
-DRIVER_OK status bit is enabled, etc).
+It looks like the value returned from de_feat_get_scale_linebuf() may be used
+for RGB as well, if scaling is enabled. This appears to be the "format == 3"
+case in de_rtmx_get_coarse_fac[1]. On the other hand, the code for V3 has
+specific code for the RGB limit[2].
 
-In the future, we will provide features similar to
-VHOST_USER_GET_INFLIGHT_FD so the device can save pending operations.
+Is there some test I can do on D1 to see what the right value for RGB is?
 
-Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
----
- drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++++++
- drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
- 4 files changed, 28 insertions(+)
+Regards,
+Samuel
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 50d721072beb..0515cf314bed 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -107,6 +107,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
- 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
- 		vhost_iotlb_reset(&vdpasim->iommu[i]);
- 
-+	vdpasim->running = true;
- 	spin_unlock(&vdpasim->iommu_lock);
- 
- 	vdpasim->features = 0;
-@@ -505,6 +506,24 @@ static int vdpasim_reset(struct vdpa_device *vdpa)
- 	return 0;
- }
- 
-+static int vdpasim_stop(struct vdpa_device *vdpa, bool stop)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	int i;
-+
-+	spin_lock(&vdpasim->lock);
-+	vdpasim->running = !stop;
-+	if (vdpasim->running) {
-+		/* Check for missed buffers */
-+		for (i = 0; i < vdpasim->dev_attr.nvqs; ++i)
-+			vdpasim_kick_vq(vdpa, i);
-+
-+	}
-+	spin_unlock(&vdpasim->lock);
-+
-+	return 0;
-+}
-+
- static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-@@ -694,6 +713,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.get_status             = vdpasim_get_status,
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
-+	.stop			= vdpasim_stop,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-@@ -726,6 +746,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.get_status             = vdpasim_get_status,
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
-+	.stop			= vdpasim_stop,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 622782e92239..061986f30911 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -66,6 +66,7 @@ struct vdpasim {
- 	u32 generation;
- 	u64 features;
- 	u32 groups;
-+	bool running;
- 	/* spinlock to synchronize iommu table */
- 	spinlock_t iommu_lock;
- };
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index 42d401d43911..bcdb1982c378 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -204,6 +204,9 @@ static void vdpasim_blk_work(struct work_struct *work)
- 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
- 
-+	if (!vdpasim->running)
-+		goto out;
-+
- 	for (i = 0; i < VDPASIM_BLK_VQ_NUM; i++) {
- 		struct vdpasim_virtqueue *vq = &vdpasim->vqs[i];
- 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index 5125976a4df8..886449e88502 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -154,6 +154,9 @@ static void vdpasim_net_work(struct work_struct *work)
- 
- 	spin_lock(&vdpasim->lock);
- 
-+	if (!vdpasim->running)
-+		goto out;
-+
- 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
- 
--- 
-2.27.0
+[0]:
+https://github.com/Tina-Linux/tina-d1x-linux-5.4/blob/master/drivers/video/fbdev/sunxi/disp2/disp/de/lowlevel_v2x/de_feat.c#L182
+[1]:
+https://github.com/Tina-Linux/tina-d1x-linux-5.4/blob/master/drivers/video/fbdev/sunxi/disp2/disp/de/lowlevel_v2x/de_rtmx.c#L1588
+[2]:
+https://github.com/Tina-Linux/tina-d1x-linux-5.4/blob/master/drivers/video/fbdev/sunxi/disp2/disp/de/lowlevel_sun8iw8/de_rtmx.c#L1211
+
+>>> The is also the same for mixer 1 of D1. Currently the
+>>> scanline value of rgb is hardcoded to 2048 for all SOCs.
+>>>
+>>> Change the scanline_yuv property of V3s to 1024. > Add the
+>>> scanline_rgb
+>>> property to the mixer config and replace the hardcoded value with
+>>> it before
+>>> scaling.
+>>
+>> I guess RGB scanline patch would also need fixes tag, since it fixes
+>> existing 
+>> bug.
+>>
+>>>
+>>> Signed-off-by: Genfu Pan <benlypan@gmail.com>
+>>> ---
+>>>  drivers/gpu/drm/sun4i/sun8i_mixer.c    | 13 ++++++++++++-
+>>>  drivers/gpu/drm/sun4i/sun8i_mixer.h    |  1 +
+>>>  drivers/gpu/drm/sun4i/sun8i_vi_layer.c |  3 +--
+>>>  3 files changed, 14 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+>>> b/drivers/gpu/drm/sun4i/sun8i_mixer.c index 875a1156c..e64e08207
+>>> 100644
+>>> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+>>> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+>>> @@ -567,6 +567,7 @@ static const struct sun8i_mixer_cfg
+>>> sun8i_a83t_mixer0_cfg = { .ccsc         = CCSC_MIXER0_LAYOUT,
+>>>         .scaler_mask    = 0xf,
+>>>         .scanline_yuv   = 2048,
+>>> +       .scanline_rgb   = 2048,
+>>>         .ui_num         = 3,
+>>>         .vi_num         = 1,
+>>>  };
+>>> @@ -575,6 +576,7 @@ static const struct sun8i_mixer_cfg
+>>> sun8i_a83t_mixer1_cfg = { .ccsc         = CCSC_MIXER1_LAYOUT,
+>>>         .scaler_mask    = 0x3,
+>>>         .scanline_yuv   = 2048,
+>>> +       .scanline_rgb   = 2048,
+>>>         .ui_num         = 1,
+>>>         .vi_num         = 1,
+>>>  };
+>>> @@ -584,6 +586,7 @@ static const struct sun8i_mixer_cfg
+>>> sun8i_h3_mixer0_cfg
+>>> = { .mod_rate   = 432000000,
+>>>         .scaler_mask    = 0xf,
+>>>         .scanline_yuv   = 2048,
+>>> +       .scanline_rgb   = 2048,
+>>>         .ui_num         = 3,
+>>>         .vi_num         = 1,
+>>>  };
+>>> @@ -593,6 +596,7 @@ static const struct sun8i_mixer_cfg
+>>> sun8i_r40_mixer0_cfg
+>>> = { .mod_rate   = 297000000,
+>>>         .scaler_mask    = 0xf,
+>>>         .scanline_yuv   = 2048,
+>>> +       .scanline_rgb   = 2048,
+>>>         .ui_num         = 3,
+>>>         .vi_num         = 1,
+>>>  };
+>>> @@ -602,6 +606,7 @@ static const struct sun8i_mixer_cfg
+>>> sun8i_r40_mixer1_cfg
+>>> = { .mod_rate   = 297000000,
+>>>         .scaler_mask    = 0x3,
+>>>         .scanline_yuv   = 2048,
+>>> +       .scanline_rgb   = 2048,
+>>>         .ui_num         = 1,
+>>>         .vi_num         = 1,
+>>>  };
+>>> @@ -610,7 +615,8 @@ static const struct sun8i_mixer_cfg
+>>> sun8i_v3s_mixer_cfg
+>>> = { .vi_num = 2,
+>>>         .ui_num = 1,
+>>>         .scaler_mask = 0x3,
+>>> -       .scanline_yuv = 2048,
+>>> +       .scanline_yuv = 1024,
+>>> +       .scanline_rgb = 1024,
+>>>         .ccsc = CCSC_MIXER0_LAYOUT,
+>>>         .mod_rate = 150000000,
+>>>  };
+>>> @@ -620,6 +626,7 @@ static const struct sun8i_mixer_cfg
+>>> sun20i_d1_mixer0_cfg
+>>> = { .mod_rate   = 297000000,
+>>>         .scaler_mask    = 0x3,
+>>>         .scanline_yuv   = 2048,
+>>> +       .scanline_rgb   = 2048,
+>>>         .ui_num         = 1,
+>>>         .vi_num         = 1,
+>>>  };
+>>> @@ -629,6 +636,7 @@ static const struct sun8i_mixer_cfg
+>>> sun20i_d1_mixer1_cfg
+>>> = { .mod_rate   = 297000000,
+>>>         .scaler_mask    = 0x1,
+>>>         .scanline_yuv   = 1024,
+>>> +       .scanline_rgb   = 1024,
+>>>         .ui_num         = 0,
+>>>         .vi_num         = 1,
+>>>  };
+>>> @@ -638,6 +646,7 @@ static const struct sun8i_mixer_cfg
+>>> sun50i_a64_mixer0_cfg = { .mod_rate     = 297000000,
+>>>         .scaler_mask    = 0xf,
+>>>         .scanline_yuv   = 4096,
+>>> +       .scanline_rgb   = 2048,
+>>>         .ui_num         = 3,
+>>>         .vi_num         = 1,
+>>>  };
+>>> @@ -647,6 +656,7 @@ static const struct sun8i_mixer_cfg
+>>> sun50i_a64_mixer1_cfg = { .mod_rate     = 297000000,
+>>>         .scaler_mask    = 0x3,
+>>>         .scanline_yuv   = 2048,
+>>> +       .scanline_rgb   = 2048,
+>>>         .ui_num         = 1,
+>>>         .vi_num         = 1,
+>>>  };
+>>> @@ -657,6 +667,7 @@ static const struct sun8i_mixer_cfg
+>>> sun50i_h6_mixer0_cfg
+>>> = { .mod_rate   = 600000000,
+>>>         .scaler_mask    = 0xf,
+>>>         .scanline_yuv   = 4096,
+>>> +       .scanline_rgb   = 2048,
+>>>         .ui_num         = 3,
+>>>         .vi_num         = 1,
+>>>  };
+>>> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.h
+>>> b/drivers/gpu/drm/sun4i/sun8i_mixer.h index 85c94884f..c01b3e9d6
+>>> 100644
+>>> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.h
+>>> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.h
+>>> @@ -172,6 +172,7 @@ struct sun8i_mixer_cfg {
+>>>         unsigned long   mod_rate;
+>>>         unsigned int    is_de3 : 1;
+>>>         unsigned int    scanline_yuv;
+>>> +       unsigned int    scanline_rgb;
+>>
+>> This quirk needs to be documented above in the comment.
+>>
+>> Best regards,
+>> Jernej
+>>
+>>>  };
+>>>
+>>>  struct sun8i_mixer {
+>>> diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+>>> b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c index f7d0b082d..30e6bde92
+>>> 100644
+>>> --- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+>>> +++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+>>> @@ -188,8 +188,7 @@ static int sun8i_vi_layer_update_coord(struct
+>>> sun8i_mixer *mixer, int channel, src_h = vn;
+>>>                 }
+>>>
+>>> -               /* it seems that every RGB scaler has buffer for
+>>> 2048 
+>> pixels */
+>>> -               scanline = subsampled ? mixer->cfg->scanline_yuv : 
+>> 2048;
+>>> +               scanline = subsampled ? mixer->cfg->scanline_yuv :
+>>> mixer->cfg->scanline_rgb;
+>>>
+>>>                 if (src_w > scanline) {
+>>>                         DRM_DEBUG_DRIVER("Using horizontal coarse 
+>> scaling\n");
+>>
+>>
+>>
+>>
+>>
+> 
+> 
 

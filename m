@@ -2,96 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE20532361
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158C2532365
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbiEXGkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 02:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S232511AbiEXGlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 02:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbiEXGkL (ORCPT
+        with ESMTP id S229945AbiEXGlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 02:40:11 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B393097298
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653374410; x=1684910410;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HtCin+nAwOXG3nZ+p4h+iXUr/5UlMzCjdj1v1QwpFPc=;
-  b=icB5zedglgHLscp4FExFFiZMH8XSUQ990+jXBavsbAwlgnVBDD3l69AX
-   fA0HhrYY0n275+iqtQxgxt3LgLPXjc/2dSOlqRHPL52OylBYiVZkPB9gh
-   8YDrWKiUdAiFhbVQinQNrhwb85EuwzV+Cwn9tT6WpZtMgV7rMMNmZ7e6w
-   gQU7wXPcmY7vIioJa6uqcuIRd4At3Cmk3q+HHDUleSCT8KaRiWqfyl5Az
-   3NaMdMCV04muVSPVDP0dx7I6Nt60NA9yWQddUOIcOAAbpo6XmI4qohAtV
-   G8Up0jZXAq/elyYuM24nashQqAPkAT4S/ah1UE0Fs1S0u/17vIMAxHoo/
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273440835"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="273440835"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 23:40:10 -0700
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="526280931"
-Received: from woonjonx-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.3.168])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 23:40:06 -0700
-Message-ID: <2db114898222afd86eee77bf8ac46099c75f154e.camel@intel.com>
-Subject: Re: [PATCH v7 2/5] x86/tdx: Add TDX Guest event notify interrupt
- support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 24 May 2022 18:40:04 +1200
-In-Reply-To: <20220524040517.703581-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220524040517.703581-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 24 May 2022 02:41:21 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDC21836E;
+        Mon, 23 May 2022 23:41:18 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 24 May
+ 2022 14:41:13 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 24 May
+ 2022 14:41:10 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     Veerasenareddy Burru <vburru@marvell.com>,
+        Abhijit Ayarekar <aayarekar@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Haowen Bai <baihaowen@meizu.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH V3] octeon_ep: Remove unnecessary cast
+Date:   Tue, 24 May 2022 14:41:08 +0800
+Message-ID: <1653374469-30555-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-23 at 21:05 -0700, Kuppuswamy Sathyanarayanan wrote:
-> +/* Helper function to register tdx_event_notify_handler */
-> +void tdx_setup_ev_notify_handler(void (*handler)(void))
-> +{
-> +	tdx_event_notify_handler = handler;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_setup_ev_notify_handler);
-> +
-> +/* Helper function to unregister tdx_event_notify_handler */
-> +void tdx_remove_ev_notify_handler(void)
-> +{
-> +	tdx_event_notify_handler = NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_remove_ev_notify_handler);
+./drivers/net/ethernet/marvell/octeon_ep/octep_rx.c:161:18-40: WARNING:
+casting value returned by memory allocation function to (struct
+octep_rx_buffer *) is useless.
 
-I don't think you need to export the two symbols now.
+and we do more optimization:
+1. remove casting value
+2. use obvious size
+3. use kvcalloc instead of vzalloc
 
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+V1->V2: change vzalloc to vcalloc as suggestion.
+V2->V3: use obvious size; use kvcalloc instead of vzalloc.
+
+ drivers/net/ethernet/marvell/octeon_ep/octep_rx.c | 8 ++++----
+ drivers/net/ethernet/marvell/octeon_ep/octep_rx.h | 2 --
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
+index d9ae0937d17a..d6a0da61db44 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.c
+@@ -158,8 +158,8 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
+ 		goto desc_dma_alloc_err;
+ 	}
+ 
+-	oq->buff_info = (struct octep_rx_buffer *)
+-			vzalloc(oq->max_count * OCTEP_OQ_RECVBUF_SIZE);
++	oq->buff_info = kvcalloc(oq->max_count, sizeof(struct octep_rx_buffer),
++				 GFP_KERNEL);
+ 	if (unlikely(!oq->buff_info)) {
+ 		dev_err(&oct->pdev->dev,
+ 			"Failed to allocate buffer info for OQ-%d\n", q_no);
+@@ -176,7 +176,7 @@ static int octep_setup_oq(struct octep_device *oct, int q_no)
+ 	return 0;
+ 
+ oq_fill_buff_err:
+-	vfree(oq->buff_info);
++	kvfree(oq->buff_info);
+ 	oq->buff_info = NULL;
+ buf_list_err:
+ 	dma_free_coherent(oq->dev, desc_ring_size,
+@@ -230,7 +230,7 @@ static int octep_free_oq(struct octep_oq *oq)
+ 
+ 	octep_oq_free_ring_buffers(oq);
+ 
+-	vfree(oq->buff_info);
++	kvfree(oq->buff_info);
+ 
+ 	if (oq->desc_ring)
+ 		dma_free_coherent(oq->dev,
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
+index 782a24f27f3e..34a32d95cd4b 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_rx.h
+@@ -67,8 +67,6 @@ struct octep_rx_buffer {
+ 	u64 len;
+ };
+ 
+-#define OCTEP_OQ_RECVBUF_SIZE    (sizeof(struct octep_rx_buffer))
+-
+ /* Output Queue statistics. Each output queue has four stats fields. */
+ struct octep_oq_stats {
+ 	/* Number of packets received from the Device. */
 -- 
-Thanks,
--Kai
-
+2.7.4
 

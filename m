@@ -2,109 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04300532459
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4F953245C
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 09:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbiEXHpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 03:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S234811AbiEXHrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 03:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiEXHp1 (ORCPT
+        with ESMTP id S229451AbiEXHrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 03:45:27 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23BE74DF7;
-        Tue, 24 May 2022 00:45:26 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id bo5so15765622pfb.4;
-        Tue, 24 May 2022 00:45:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WE8ECtKBbnGRy9b4snuHYoLN1QU8z6Hzzxc9CUtUoTc=;
-        b=Xy7izo/V1daPixmOFDL9+o47bqTLCqXVmkJpwdW6Bu6aZ1GdGV0Uv2jH200W7X4L2t
-         HbhCOI17YL5VKsc4eM+n+KwdFpCC6r4TMru8Y8GRN8mBoruJ0s+hqc2e8hikHtEO674V
-         4ur4SQy8yiNry+WUnwgf3xs3k0hLh/+ysXaLGblXH+ZMto44ebbOFCee3ot/62ets94W
-         CPLbI9rHKUawzEVj1b74cB07nPJtSMEaPtjtynu3f2qHIUC7JkcrW5bgO+qzR03/rTK0
-         LU8iPucnab9r6bzSz+VlRFttw7YoCW7O37aPLU/PRThG/RXb4V/WgdEpGoPvQ3iQv1dz
-         a73A==
+        Tue, 24 May 2022 03:47:05 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781BF8AE6E;
+        Tue, 24 May 2022 00:47:04 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id c9so13054484qvx.8;
+        Tue, 24 May 2022 00:47:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WE8ECtKBbnGRy9b4snuHYoLN1QU8z6Hzzxc9CUtUoTc=;
-        b=FfMuycEXvD1Zx0JmD7aaTRS/WAC++pm7AZGO7Lcod9JARplQiUVo5gAFi9FxCohMiA
-         qpjkOH1v+HC5AMRajp2LYX4qWwNxK9bPhjV03yYZoHLasPJDTyzMDD5CXr7egb7gWbQj
-         ll2oi5Z7EN/sHhUwr/HtN5a3bXjjvcyKep5W+ty1nPL+Fqi1YFsGUqyjsjazBcaizPgk
-         XUMDpVj1EtlfE5kBuR3JDdhPJ/gJJZ3sSzjp6iuua5WNyCJMdTtTqcoTCINwzQhLZSta
-         h6xWJhzLvfwl6XVDEbZPmeRhUkuNz8l14l6MwUwV0H07rWtPMIMAqWsdvKDI9r4C82a5
-         MOQA==
-X-Gm-Message-State: AOAM530w/xTiV9u/aBlpvwpMTlIBSZ4ObwtYI090eHX0sIPRa1zzYfK3
-        B9kl0XgbmEM3QqL9RmP3wK0=
-X-Google-Smtp-Source: ABdhPJzDd6wR58FdjkqushS/72CayCU1FIViGtU12UpYsxM/6WUfeQMyNvdxKwcO3wsxeL4MLPO2Hw==
-X-Received: by 2002:a63:f921:0:b0:3f2:6c2f:a166 with SMTP id h33-20020a63f921000000b003f26c2fa166mr23506883pgi.124.1653378326143;
-        Tue, 24 May 2022 00:45:26 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id f20-20020a17090ace1400b001deb3cbd8f1sm990983pju.27.2022.05.24.00.45.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 00:45:25 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] iio: adc: adi-axi-adc: Fix refcount leak in adi_axi_adc_attach_client
-Date:   Tue, 24 May 2022 11:45:17 +0400
-Message-Id: <20220524074517.45268-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l+/c66tcW1UPtlOwW1gPqYcJBORO2y8teG2WaFRyasM=;
+        b=tZwGwiwI24HgZP6YekR6euldEA80dtYmPhfbRcyXYZj/gIrL+By/012768r0GwlKBW
+         sHhYaxFJ5afhS20SXOOXih2DV7uUpQl8s/190lFUhmTzeNhImlL8IiF9cKjq8WE8iA4T
+         ahzIbuevPoYRl6Yl+epdJaarUcwvbUNsaEdLBG43gm9jfmuHbVDzerTephOxTxvd4NDJ
+         w8Crp9toKy1PWB4Dtc8qQ8XEbvu2FbmJpGWvmnqjz5s6GKhIQGcafZu14k4sC7M/0Vr7
+         ukQpjeDm2dctd5pbyPhIYpeOmuhmlogpHu1QxU4ksgcqF2yGcGdYIbrs6CbsyNTwt94M
+         iamg==
+X-Gm-Message-State: AOAM532fCPGLPhZvYJmgWmFh1K+NrBdNORVkteK8DOkX4g3l6/YPdozt
+        FjVVa4a2VEIUSCrwgWs5rOGmeiW05XQldhCx
+X-Google-Smtp-Source: ABdhPJxZWFRAwaXpu56ZBrEgXW0hSOsydODsqj/8bkALBejFa6xmFYNO/wkf4obJ+HXIL09VoRjgjw==
+X-Received: by 2002:a05:6214:1c8f:b0:443:8505:14b3 with SMTP id ib15-20020a0562141c8f00b00443850514b3mr20676020qvb.7.1653378423390;
+        Tue, 24 May 2022 00:47:03 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id c8-20020a05620a164800b006a36059ed59sm5643717qko.27.2022.05.24.00.47.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 00:47:03 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-300312ba5e2so6833467b3.0;
+        Tue, 24 May 2022 00:47:02 -0700 (PDT)
+X-Received: by 2002:a81:ad11:0:b0:2fe:fb00:a759 with SMTP id
+ l17-20020a81ad11000000b002fefb00a759mr27306259ywh.283.1653378422664; Tue, 24
+ May 2022 00:47:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220518065639.2432213-1-gerg@linux-m68k.org> <20220518065639.2432213-2-gerg@linux-m68k.org>
+In-Reply-To: <20220518065639.2432213-2-gerg@linux-m68k.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 24 May 2022 09:46:51 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXTn6ysmjg5cr2RvYG=8f3azC1B4v=via0ePua_hv6TgA@mail.gmail.com>
+Message-ID: <CAMuHMdXTn6ysmjg5cr2RvYG=8f3azC1B4v=via0ePua_hv6TgA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] m68knommu: fix undefined reference to `mach_get_rtc_pll'
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+Hi Greg,
 
-Fixes: ef04070692a2 ("iio: adc: adi-axi-adc: add support for AXI ADC IP core")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/iio/adc/adi-axi-adc.c | 3 +++
- 1 file changed, 3 insertions(+)
+On Wed, May 18, 2022 at 8:56 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
+> Configuring for a nommu classic m68k target and enabling the generic rtc
+> driver (CONFIG_RTC_DRV_GENERIC) will result in the following compile
+> error:
+>
+>    m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
+>    time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
+>    m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
+>    m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
+>
+> There is no definitions of "mach_set_rtc_pll" and "mach_get_rtc_pll" in the
+> nommu code paths. Move these definitions and the associated "mach_hwclk",
+> so that they are around their use case in time.c. This means they will
+> always be defined on the builds that require them, and not on those that
+> cannot use them - such as ColdFire (both with and without MMU enabled).
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
 
-diff --git a/drivers/iio/adc/adi-axi-adc.c b/drivers/iio/adc/adi-axi-adc.c
-index a73e3c2d212f..a9e655e69eaa 100644
---- a/drivers/iio/adc/adi-axi-adc.c
-+++ b/drivers/iio/adc/adi-axi-adc.c
-@@ -322,16 +322,19 @@ static struct adi_axi_adc_client *adi_axi_adc_attach_client(struct device *dev)
- 
- 		if (!try_module_get(cl->dev->driver->owner)) {
- 			mutex_unlock(&registered_clients_lock);
-+			of_node_put(cln);
- 			return ERR_PTR(-ENODEV);
- 		}
- 
- 		get_device(cl->dev);
- 		cl->info = info;
- 		mutex_unlock(&registered_clients_lock);
-+		of_node_put(cln);
- 		return cl;
- 	}
- 
- 	mutex_unlock(&registered_clients_lock);
-+	of_node_put(cln);
- 
- 	return ERR_PTR(-EPROBE_DEFER);
- }
--- 
-2.25.1
+> --- a/arch/m68k/kernel/time.c
+> +++ b/arch/m68k/kernel/time.c
+> @@ -82,6 +86,11 @@ void read_persistent_clock64(struct timespec64 *ts)
+>  #endif
+>
+>  #if IS_ENABLED(CONFIG_RTC_DRV_GENERIC)
+> +int (*mach_get_rtc_pll)(struct rtc_pll_info *);
+> +int (*mach_set_rtc_pll)(struct rtc_pll_info *);
+> +EXPORT_SYMBOL(mach_get_rtc_pll);
+> +EXPORT_SYMBOL(mach_set_rtc_pll);
 
+Oops, this causes build failures for Q40 with CONFIG_RTC_DRV_GENERIC=n,
+as arch/m68k/q40/config.c uses mach_]gs]et_rtc_pll() unconditionally.
+
+> +
+>  static int rtc_generic_get_time(struct device *dev, struct rtc_time *tm)
+>  {
+>         mach_hwclk(0, tm);
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

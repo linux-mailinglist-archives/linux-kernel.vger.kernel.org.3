@@ -2,121 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AC3533208
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D3153320D
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 21:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241529AbiEXTyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 15:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
+        id S241215AbiEXT4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 15:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241642AbiEXTyV (ORCPT
+        with ESMTP id S241260AbiEXT4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 15:54:21 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1697CB20;
-        Tue, 24 May 2022 12:54:10 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id gi33so28978082ejc.3;
-        Tue, 24 May 2022 12:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BM1TcEJ1rSjvHQ3DiiP4bMrjTXo3on1VRj5jI+ImT0c=;
-        b=nCBYghWbLbxT1ChNXklDtLZuce4dbmnHu4mmcoCKiXKulovNPkWF6cvFuz0npHmOHu
-         P6JoUKY3m46hiYVPUUpFXvyC1HWTxuErhziuokLysk//JdpZXUIUb/7k/9iZmc/LcsuC
-         c7SqApT0As3pqSCB7nsqDZz6GkKfZkhjLhDl3BkPVzNi4bQIm6W5CxuvjwubJNfzTEQo
-         /bfv0V4go7FpoYIn8m8aPPgrleSvI6HKX6bzvUZW0n3mbzUg7DpBnhLWqDwOiL/UkSJL
-         j7QC6rUolyr1AtXktjGgJOWNpci+LVv15/7ukGgCbSQdQHYC7v6S8Why7cbLYEydPykh
-         LHbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BM1TcEJ1rSjvHQ3DiiP4bMrjTXo3on1VRj5jI+ImT0c=;
-        b=jLdXFMDk0nVKV7Uf5SLVo8MQrWZXF5UfosU1L+oulPclhb5zpiPj6GARUGCgQYqvNg
-         Hega44erT2qhlWdm5+oKsn2q7oDAawF6tOpG1c9Ygu/1ETKetNqSrXrh0cjR1EtLM/ow
-         jVFrCciyAa7p5sL6ehei8VOnL2iC1qX4GNB4PCUETAicARJCkYAjrNQgB9yEFORFWlG0
-         bnvRWE2mJr573FHGfFz5lWhIWf25K95NXW7Nkmi6pJUe7CjtE6hhrMhhN6/x9K42YK6j
-         qalGwPdvBH5tUDKCGbFAx8TUX9tjd4Ywkn200EAxIEPuUNYyqvOZVgfFWgq9xueLdq0X
-         3ugQ==
-X-Gm-Message-State: AOAM533sI8VZjkqouKHdywNyp+AdXxGSVx76dRDBv08kWvp1pzMumDtE
-        FDLFAaPhYjr93i8w8x76NSB1J9Yv/1o5qPEiYK8=
-X-Google-Smtp-Source: ABdhPJzaOr1HrCCGCXVK5emjnaADAxldeFs8V//J5maGXkNHQVLCXsf5Lv3+INcjE2Vx4JJ8UDsszGRT5egoZfefRS8=
-X-Received: by 2002:a17:906:c115:b0:6ff:6e5:b4b1 with SMTP id
- do21-20020a170906c11500b006ff06e5b4b1mr3780602ejc.497.1653422048613; Tue, 24
- May 2022 12:54:08 -0700 (PDT)
+        Tue, 24 May 2022 15:56:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B313D5996A;
+        Tue, 24 May 2022 12:55:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C3A261706;
+        Tue, 24 May 2022 19:55:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48563C34100;
+        Tue, 24 May 2022 19:55:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653422158;
+        bh=ppXwp3AFhZxMxsZQy6/rHu4sr/pNBbixuS9DVQfRyZU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VKoIQxyMMYqDZXtXrHWNpP0rBh0ZiGL63jAb9ugCiYlZYTvmNfhOQDhLTn7HpmHrT
+         L/X99TeJ5PeMoycQpShVs3685ihwoHDX8nxkdSko2ZZ3mdCvjiPVJDMeVthqvPcNpZ
+         rPaT2BxBxTDnxo4q0CS84iMWReqOTtOEuPPI965CUvszbJnzOZM8DATa60bwBSN8Yb
+         zQw+KG8nLVuNo5QV392a4Z9i4caZvMojoAy3VX3NFFQAbJn2dWrw2KSkCoGirOGkA8
+         emIrgcaMGY4WTG2RUYoOrkbyhh7jiXvp8KuYdF5qT0rl1htAcSX/gnFJRTUKpBInZz
+         YxLFD6HNE8eGw==
+Date:   Tue, 24 May 2022 21:55:41 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>, linuxarm@huawei.com,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Songxiaowei <songxiaowei@hisilicon.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>
+Subject: Re: [PATCH v14 04/11] PCI: kirin: Add support for bridge slot DT
+ schema
+Message-ID: <20220524215507.16e97815@coco.lan>
+In-Reply-To: <20220524171947.GA255208@bhelgaas>
+References: <f838165c9d279cd1abbacb61fccb74e2a1fbb793.1634622716.git.mchehab+huawei@kernel.org>
+        <20220524171947.GA255208@bhelgaas>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220524181150.9240-1-ddrokosov@sberdevices.ru> <20220524181150.9240-2-ddrokosov@sberdevices.ru>
-In-Reply-To: <20220524181150.9240-2-ddrokosov@sberdevices.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 24 May 2022 21:53:32 +0200
-Message-ID: <CAHp75Vdyk0228iPX+-D12DcogS0mDBNzUmjAaO=VGT6brH0eyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] iio:accel:bma180: rearrange iio trigger get and register
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "lorenzo.bianconi83@gmail.com" <lorenzo.bianconi83@gmail.com>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "teodora.baluta@intel.com" <teodora.baluta@intel.com>,
-        "narcisaanamaria12@gmail.com" <narcisaanamaria12@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 8:14 PM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
->
-> IIO trigger interface function iio_trigger_get() should be called after
-> iio_trigger_register() (or its devm analogue) strictly, because of
-> iio_trigger_get() acquires module refcnt based on the trigger->owner
-> pointer, which is initialized inside iio_trigger_register() to
-> THIS_MODULE.
-> If this call order is wrong, the next iio_trigger_put() (from sysfs
-> callback or "delete module" path) will dereference "default" module
-> refcnt, which is incorrect behaviour.
+Hi Bjorn,
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Em Tue, 24 May 2022 12:19:47 -0500
+Bjorn Helgaas <helgaas@kernel.org> escreveu:
 
-> Fixes: 0668a4e4d297 ("iio: accel: bma180: Fix indio_dev->trig assignment")
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> ---
->  drivers/iio/accel/bma180.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/iio/accel/bma180.c b/drivers/iio/accel/bma180.c
-> index d8a454c266d5..5d0bd0fc3018 100644
-> --- a/drivers/iio/accel/bma180.c
-> +++ b/drivers/iio/accel/bma180.c
-> @@ -1006,11 +1006,12 @@ static int bma180_probe(struct i2c_client *client,
->
->                 data->trig->ops = &bma180_trigger_ops;
->                 iio_trigger_set_drvdata(data->trig, indio_dev);
-> -               indio_dev->trig = iio_trigger_get(data->trig);
->
->                 ret = iio_trigger_register(data->trig);
->                 if (ret)
->                         goto err_trigger_free;
-> +
-> +               indio_dev->trig = iio_trigger_get(data->trig);
->         }
->
->         ret = iio_triggered_buffer_setup(indio_dev, NULL,
-> --
-> 2.36.0
+> On Tue, Oct 19, 2021 at 07:06:41AM +0100, Mauro Carvalho Chehab wrote:
+> > On HiKey970, there's a PEX 8606 PCI bridge on its PHY with
+> > 6 lanes. Only 4 lanes are connected:
+> > 
+> > 	lane 0 - connected to Kirin 970;
+> > 	lane 4 - M.2 slot;
+> > 	lane 5 - mini PCIe slot;
+> > 	lane 6 - in-board Ethernet controller.
+> > 
+> > Each lane has its own PERST# gpio pin, and needs a clock
+> > request.
+> > 
+> > Add support to parse a DT schema containing the above data.
+> > 
+> > Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> > Acked-by: Xiaowei Song <songxiaowei@hisilicon.com>
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > ---
+> > 
+> > See [PATCH v14 00/11] at: https://lore.kernel.org/all/cover.1634622716.git.mchehab+huawei@kernel.org/
+> > 
+> >  drivers/pci/controller/dwc/pcie-kirin.c | 262 +++++++++++++++++++++---
+> >  1 file changed, 231 insertions(+), 31 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-kirin.c b/drivers/pci/controller/dwc/pcie-kirin.c
+> > index 86c13661e02d..de375795a3b8 100644
+> > --- a/drivers/pci/controller/dwc/pcie-kirin.c
+> > +++ b/drivers/pci/controller/dwc/pcie-kirin.c
+> > @@ -52,6 +52,19 @@
+> >  #define PCIE_DEBOUNCE_PARAM	0xF0F400
+> >  #define PCIE_OE_BYPASS		(0x3 << 28)
+> >  
+> > +/*
+> > + * Max number of connected PCI slots at an external PCI bridge
+> > + *
+> > + * This is used on HiKey 970, which has a PEX 8606 bridge with has
+> > + * 4 connected lanes (lane 0 upstream, and the other tree lanes,
+> > + * one connected to an in-board Ethernet adapter and the other two
+> > + * connected to M.2 and mini PCI slots.
+> > + *
+> > + * Each slot has a different clock source and uses a separate PERST#
+> > + * pin.
+> > ...  
+> 
+> > +static int kirin_pcie_add_bus(struct pci_bus *bus)
+> > +{
+> > +	struct dw_pcie *pci = to_dw_pcie_from_pp(bus->sysdata);
+> > +	struct kirin_pcie *kirin_pcie = to_kirin_pcie(pci);
+> > +	int i, ret;
+> > +
+> > +	if (!kirin_pcie->num_slots)
+> > +		return 0;
+> > +
+> > +	/* Send PERST# to each slot */
+> > +	for (i = 0; i < kirin_pcie->num_slots; i++) {
+> > +		ret = gpio_direction_output(kirin_pcie->gpio_id_reset[i], 1);
+> > +		if (ret) {
+> > +			dev_err(pci->dev, "PERST# %s error: %d\n",
+> > +				kirin_pcie->reset_names[i], ret);
+> > +		}
+> > +	}
+> > +	usleep_range(PERST_2_ACCESS_MIN, PERST_2_ACCESS_MAX);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +
+> >  static struct pci_ops kirin_pci_ops = {
+> >  	.read = kirin_pcie_rd_own_conf,
+> >  	.write = kirin_pcie_wr_own_conf,
+> > +	.add_bus = kirin_pcie_add_bus,  
+> 
+> This seems a little weird.  Can you educate me?
+> 
+> From [1], it looks like the topology here is:
+> 
+>   00:00.0 Root Port
+>   01:00.0 PEX 8606 Upstream Port
+>   02:01.0 PEX 8606 Downstream Port
+>   02:04.0 PEX 8606 Downstream Port
+>   02:05.0 PEX 8606 Downstream Port
+>   02:07.0 PEX 8606 Downstream Port
+>   02:09.0 PEX 8606 Downstream Port
+>   06:00.0 RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller 
+> 
+> The .add_bus() callback will be called for *every* child bus we want
+> to enumerate.  So if any of those PEX 8606 Downstream Ports are
+> connected to another switch, when we enumerate the secondary buses of
+> that other switch, it looks like we'll send PERST# to all the slots
+> again, which doesn't sound right.  Am I missing something?
 
+The implementation made on Kirin 960/970 for PCI is to not have a
+PERST# bus. Instead, it has one independent GPIO driving the PERST#
+signal for each single individual port that is physically connected.
 
+See the schematics at:
 
--- 
-With Best Regards,
-Andy Shevchenko
+	- https://www.96boards.org/documentation/consumer/hikey/hikey970/hardware-docs/files/hikey970-schematics.pdf
+	- https://github.com/96boards/documentation/blob/master/consumer/hikey/hikey960/hardware-docs/HiKey960_Schematics.pdf
+
+Yet, my first proposal were to send all GPIOs altogether. See, for
+instance:
+
+	https://lore.kernel.org/all/3acf2c073e8ea67efaae91074dda0763bf7a2ab9.1626768323.git.mchehab+huawei@kernel.org/
+
+There, the PERST# signals are initialized altogether, at the end
+of hi3670_pcie_phy_power_on():
+
+	/* perst assert Endpoints */
+	usleep_range(21000, 23000);
+	for (i = 0; i < phy->n_gpio_resets; i++) {
+		ret = gpio_direction_output(phy->gpio_id_reset[i], 1);
+		if (ret)
+			return ret;
+	}
+	usleep_range(10000, 11000);
+
+	ret = is_pipe_clk_stable(phy);
+	if (!ret)
+		goto disable_clks;
+
+	hi3670_pcie_set_eyeparam(phy);
+
+	ret = hi3670_pcie_noc_power(phy, false);
+	if (ret)
+		goto disable_clks;
+
+During the review process, I was requested to change it in order to do it
+via .add_bus. On my tests at the boards, I didn't see the same PERST#
+signal to hit more than once, and the driver is working fine. 
+So, this wasn't an actual issue, as far as I can tell. 
+
+That's what it ended getting merged upstream.
+
+I don't mind if somewone wants to return it to use the previous approach of
+sending all per-port PERST# signals at the same time, just before calling 
+is_pipe_clk_stable(), like the above. However, I don't have access to the 
+hardware anymore, so I can't test any patches for it.
+
+Thanks,
+Mauro

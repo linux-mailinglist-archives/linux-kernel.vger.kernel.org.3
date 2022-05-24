@@ -2,65 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE8B53231B
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FBC53231E
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 08:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234900AbiEXGZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 02:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S234908AbiEXG1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 02:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiEXGZw (ORCPT
+        with ESMTP id S230475AbiEXG06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 02:25:52 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDA55DA79
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:25:51 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id n10so33197490ejk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 23 May 2022 23:25:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D6CrZTvd23rvlgUVmBlktvH0Lw16RsXxIKRFjL+U34c=;
-        b=QXnt/DwtsuMT9HJBssgL3VJNo9GWJaQqQaVDMl+s0Hm2bPiuqcNnZn5lqx/D2ev8x1
-         0nb13D8QWy4GI9MsPHyK3mU6aaMU8vWqc5TO1yb9nZahDepktJeY87rv784dh5+WqCmK
-         lsJiDsyIY3gmrrz2qzfxCih9mP5ndvlImauw4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D6CrZTvd23rvlgUVmBlktvH0Lw16RsXxIKRFjL+U34c=;
-        b=JXjJHjrqdeW5bgSXWaCVBQBlBtWNXUdIxyXOrGi3um/aMckgHwuGaC4OwTMXokG9Av
-         iPvDKFTaTzC92CgKOpftVvjvA5OW8SRe6RJZzmA+F5dtUHQJzh28nDAmm919shUPqBED
-         plIOm4ItpjQoxipwmjDh4JNKBAQcjmw9msArtvSmaFTiZIBvJo4K2oB8i4m/RnHMA714
-         eFhjSFwl0ktXUI/kvOphC/yIb8Bam8ntrizMbNWMmgXB18iuXuWmDlrn3IyU+/5Vq6za
-         3Y53zE1B3jwGw73h0tKw/l5g/XZdz62ovrh42EzlBX4lPesYPGj9Fv7Kcme+XS5vdrma
-         U7Fg==
-X-Gm-Message-State: AOAM533WSqrCtpPB3HTCFQnMwuYiCOECCZny1RqPTaU5X7yWA6a8WkwM
-        2b9RB66e3c2kqdW3NEouPakY9kKSJXwZ5G5z5UaZ5A==
-X-Google-Smtp-Source: ABdhPJyJ4eZQIwLnHC81UPge6C/F40nOdAKPI+hfZ0h+dhfs8oDDZ0QMG8iJQXX0hFsf5XrQuRjqGuQCwPKXFrhXFIA=
-X-Received: by 2002:a17:907:9717:b0:6fe:b4cd:e0a with SMTP id
- jg23-20020a170907971700b006feb4cd0e0amr16054099ejc.152.1653373549810; Mon, 23
- May 2022 23:25:49 -0700 (PDT)
+        Tue, 24 May 2022 02:26:58 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4756D199;
+        Mon, 23 May 2022 23:26:56 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24O6Qj3g025449;
+        Tue, 24 May 2022 01:26:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1653373605;
+        bh=Sb45dTrApxFaeFEfp/c5MUaXF8wbmHfKv5XN2SAovx0=;
+        h=From:To:CC:Subject:Date;
+        b=hqiBOUCLI4dKt+jz6hysBr06tMpJM33QLUXk/8k/lgUgMNdx68kACGYHdWDjp5bZE
+         woYjk8Go6lx4pA64UPZGfGZ2C+ohukriZejks0rijzhbzqGNnJ+6JaBtnXXNSjWYGD
+         vwLHXB7JuOI3iScJz4Wt46taoqY2TbNzIyFGXLx8=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24O6QjV1013216
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 24 May 2022 01:26:45 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 24
+ May 2022 01:26:44 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 24 May 2022 01:26:44 -0500
+Received: from ula0492258.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24O6Qe6r053215;
+        Tue, 24 May 2022 01:26:41 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <linux@armlinux.org.uk>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kishon@ti.com>, <vigneshr@ti.com>, <grygorii.strashko@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Subject: [PATCH] net: ethernet: ti: am65-cpsw: Fix fwnode passed to phylink_create()
+Date:   Tue, 24 May 2022 11:55:58 +0530
+Message-ID: <20220524062558.19296-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20220523160053.1922-1-miles.chen@mediatek.com> <20220523160053.1922-9-miles.chen@mediatek.com>
-In-Reply-To: <20220523160053.1922-9-miles.chen@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 24 May 2022 14:25:38 +0800
-Message-ID: <CAGXv+5Gswa7UWD-P3SwMFOHpRbZ+d10z3Aerh=zMbNXzfyA0tg@mail.gmail.com>
-Subject: Re: [PATCH 8/8] clk: mediatek: mt8192: add mtk_clk_simple_remove
-To:     Miles Chen <miles.chen@mediatek.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,13 +63,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 12:01 AM Miles Chen <miles.chen@mediatek.com> wrote:
->
-> mt8192 is already using mtk_clk_simple_probe,
-> but not mtk_clk_simple_remove.
->
-> Let's add mtk_clk_simple_remove for mt8192.
->
-> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+am65-cpsw-nuss driver incorrectly uses fwnode member of common
+ethernet device's "struct device_node" instead of using fwnode
+member of the port's "struct device_node" in phylink_create().
+This results in all ports having the same phy data when there
+are multiple ports with their phy properties populated in their
+respective nodes rather than the common ethernet device node.
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Fix it here by using fwnode member of the port's node.
+
+Fixes: e8609e69470f ("net: ethernet: ti: am65-cpsw: Convert to PHYLINK")
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+index 34197c67f8d9..77bdda97b2b0 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+@@ -9,6 +9,7 @@
+ #include <linux/etherdevice.h>
+ #include <linux/if_vlan.h>
+ #include <linux/interrupt.h>
++#include <linux/irqdomain.h>
+ #include <linux/kernel.h>
+ #include <linux/kmemleak.h>
+ #include <linux/module.h>
+@@ -1981,7 +1982,9 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
+ 
+ 	phy_interface_set_rgmii(port->slave.phylink_config.supported_interfaces);
+ 
+-	phylink = phylink_create(&port->slave.phylink_config, dev->fwnode, port->slave.phy_if,
++	phylink = phylink_create(&port->slave.phylink_config,
++				 of_node_to_fwnode(port->slave.phy_node),
++				 port->slave.phy_if,
+ 				 &am65_cpsw_phylink_mac_ops);
+ 	if (IS_ERR(phylink))
+ 		return PTR_ERR(phylink);
+-- 
+2.36.0
+

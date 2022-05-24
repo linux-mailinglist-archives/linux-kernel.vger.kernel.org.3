@@ -2,162 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7D3532BC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110D0532BCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 24 May 2022 15:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237993AbiEXN5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 09:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
+        id S238025AbiEXN6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 09:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiEXN5r (ORCPT
+        with ESMTP id S231878AbiEXN6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 09:57:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4646187A01;
-        Tue, 24 May 2022 06:57:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6667615FD;
-        Tue, 24 May 2022 13:57:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E74FC385AA;
-        Tue, 24 May 2022 13:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653400663;
-        bh=7EPAVyGw4FJEo+Mq2KYGYXHGHQj1HBWBkXyw+Zrf6ZI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WyjH87XhmyYaPHMnfIiS7A+kpm/hM+RKzsovZO1jOXTFgwzqkQJfzzoKfwYzm24v3
-         IWek3evaJdi1j5RKfLE2taJsalyjewq7F5NjTwdgvMEmmjq1DpHHLRaX9enic9J87O
-         MeD8p1t+4yREHV5oY/NqNx2caN6JMrv3yyxuz8dVw2oK691PPpGKGDXfWmvXiTqsx7
-         xDce7Kldw7/3y6iZSVO3mFGXL48DSDQFSCu+2+02VFGVKGbXskCwJ5KhK1hTpVx4qh
-         pHi6NMW+3bD0c4OgG55/A7b4mW210d/8SgTrcjsCKMkPoI9bE61UU8B9WZqp+nQTRT
-         xFHmOG+AabMhQ==
-Date:   Tue, 24 May 2022 19:27:35 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org,
-        jassisinghbrar@gmail.com, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        Prasad Sodagudi <quic_psodagud@quicinc.com>
-Subject: Re: [PATCH v3] mailbox: qcom-ipcc: Log the pending interrupt during
- resume
-Message-ID: <20220524135735.GD5745@thinkpad>
-References: <1652784180-10142-1-git-send-email-quic_sibis@quicinc.com>
- <20220524134825.GA4188122@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220524134825.GA4188122@roeck-us.net>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 24 May 2022 09:58:40 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 292211EAFF;
+        Tue, 24 May 2022 06:58:39 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.91,248,1647270000"; 
+   d="scan'208";a="120738317"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 24 May 2022 22:58:38 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8E2C1434C214;
+        Tue, 24 May 2022 22:58:35 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2] Input: gpio-keys - Cancel delayed work only in case of GPIO
+Date:   Tue, 24 May 2022 14:58:22 +0100
+Message-Id: <20220524135822.14764-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 06:48:25AM -0700, Guenter Roeck wrote:
-> On Tue, May 17, 2022 at 04:13:00PM +0530, Sibi Sankar wrote:
-> > From: Prasad Sodagudi <quic_psodagud@quicinc.com>
-> > 
-> > Enable logging of the pending interrupt that triggered device wakeup. This
-> > logging information helps to debug IRQs that cause periodic device wakeups
-> > by printing the detailed information of pending IPCC interrupts.
-> > 
-> > Scenario: Device wakeup caused by Modem crash
-> > Logs:
-> > qcom-ipcc mailbox: virq: 182 triggered client-id: 2; signal-id: 2
-> > 
-> > >From the IPCC bindings it can further be understood that the client here is
-> > IPCC_CLIENT_MPSS and the signal was IPCC_MPROC_SIGNAL_SMP2P.
-> > 
-> > Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-> > Signed-off-by: Prasad Sodagudi <quic_psodagud@quicinc.com>
-> > Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> > ---
-> > 
-> > V3:
-> >  * Use pm_sleep_ptr and convert info to dbg [Mani]
-> 
-> Unfortunately, this results in
-> 
-> drivers/mailbox/qcom-ipcc.c:258:12: error: 'qcom_ipcc_pm_resume' defined but not used
-> 
-> on builds with PM disabled, as seen in next-20220524.
-> 
+gpio_keys module can either accept gpios or interrupts. The module
+initializes delayed work in case of gpios only and is only used if
+debounce timer is not used, so make sure cancel_delayed_work_sync()
+is called only when its gpio-backed and debounce_use_hrtimer is false.
 
-Yep, I missed it during review :(
+This fixes the issue seen below when the gpio_keys module is unloaded and
+an interrupt pin is used instead of GPIO:
 
-But the fix has been submitted:
-https://patchwork.kernel.org/project/linux-arm-msm/patch/20220523224702.2002652-1-nathan@kernel.org/
+[  360.297569] ------------[ cut here ]------------
+[  360.302303] WARNING: CPU: 0 PID: 237 at kernel/workqueue.c:3066 __flush_work+0x414/0x470
+[  360.310531] Modules linked in: gpio_keys(-)
+[  360.314797] CPU: 0 PID: 237 Comm: rmmod Not tainted 5.18.0-rc5-arm64-renesas-00116-g73636105874d-dirty #166
+[  360.324662] Hardware name: Renesas SMARC EVK based on r9a07g054l2 (DT)
+[  360.331270] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  360.338318] pc : __flush_work+0x414/0x470
+[  360.342385] lr : __cancel_work_timer+0x140/0x1b0
+[  360.347065] sp : ffff80000a7fba00
+[  360.350423] x29: ffff80000a7fba00 x28: ffff000012b9c5c0 x27: 0000000000000000
+[  360.357664] x26: ffff80000a7fbb80 x25: ffff80000954d0a8 x24: 0000000000000001
+[  360.364904] x23: ffff800009757000 x22: 0000000000000000 x21: ffff80000919b000
+[  360.372143] x20: ffff00000f5974e0 x19: ffff00000f5974e0 x18: ffff8000097fcf48
+[  360.379382] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000053f40
+[  360.386622] x14: ffff800009850e88 x13: 0000000000000002 x12: 000000000000a60c
+[  360.393861] x11: 000000000000a610 x10: 0000000000000000 x9 : 0000000000000008
+[  360.401100] x8 : 0101010101010101 x7 : 00000000a473c394 x6 : 0080808080808080
+[  360.408339] x5 : 0000000000000001 x4 : 0000000000000000 x3 : ffff80000919b458
+[  360.415578] x2 : ffff8000097577f0 x1 : 0000000000000001 x0 : 0000000000000000
+[  360.422818] Call trace:
+[  360.425299]  __flush_work+0x414/0x470
+[  360.429012]  __cancel_work_timer+0x140/0x1b0
+[  360.433340]  cancel_delayed_work_sync+0x10/0x18
+[  360.437931]  gpio_keys_quiesce_key+0x28/0x58 [gpio_keys]
+[  360.443327]  devm_action_release+0x10/0x18
+[  360.447481]  release_nodes+0x8c/0x1a0
+[  360.451194]  devres_release_all+0x90/0x100
+[  360.455346]  device_unbind_cleanup+0x14/0x60
+[  360.459677]  device_release_driver_internal+0xe8/0x168
+[  360.464883]  driver_detach+0x4c/0x90
+[  360.468509]  bus_remove_driver+0x54/0xb0
+[  360.472485]  driver_unregister+0x2c/0x58
+[  360.476462]  platform_driver_unregister+0x10/0x18
+[  360.481230]  gpio_keys_exit+0x14/0x828 [gpio_keys]
+[  360.486088]  __arm64_sys_delete_module+0x1e0/0x270
+[  360.490945]  invoke_syscall+0x40/0xf8
+[  360.494661]  el0_svc_common.constprop.3+0xf0/0x110
+[  360.499515]  do_el0_svc+0x20/0x78
+[  360.502877]  el0_svc+0x48/0xf8
+[  360.505977]  el0t_64_sync_handler+0x88/0xb0
+[  360.510216]  el0t_64_sync+0x148/0x14c
+[  360.513930] irq event stamp: 4306
+[  360.517288] hardirqs last  enabled at (4305): [<ffff8000080b0300>] __cancel_work_timer+0x130/0x1b0
+[  360.526359] hardirqs last disabled at (4306): [<ffff800008d194fc>] el1_dbg+0x24/0x88
+[  360.534204] softirqs last  enabled at (4278): [<ffff8000080104a0>] _stext+0x4a0/0x5e0
+[  360.542133] softirqs last disabled at (4267): [<ffff8000080932ac>] irq_exit_rcu+0x18c/0x1b0
+[  360.550591] ---[ end trace 0000000000000000 ]---
 
-Thanks,
-Mani
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+v1->v2
+* Fixed review comment suggested by Dmitry.
+---
+ drivers/input/keyboard/gpio_keys.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Guenter
-> 
-> >  * Fixup commit message
-> > 
-> > V2:
-> >  * Fix build error when ipcc is a module [Kernel Test Bot]
-> > 
-> >  drivers/mailbox/qcom-ipcc.c | 23 +++++++++++++++++++++++
-> >  1 file changed, 23 insertions(+)
-> > 
-> > diff --git a/drivers/mailbox/qcom-ipcc.c b/drivers/mailbox/qcom-ipcc.c
-> > index c5d963222014..5a42bc2a1083 100644
-> > --- a/drivers/mailbox/qcom-ipcc.c
-> > +++ b/drivers/mailbox/qcom-ipcc.c
-> > @@ -254,6 +254,24 @@ static int qcom_ipcc_setup_mbox(struct qcom_ipcc *ipcc,
-> >  	return devm_mbox_controller_register(dev, mbox);
-> >  }
-> >  
-> > +static int qcom_ipcc_pm_resume(struct device *dev)
-> > +{
-> > +	struct qcom_ipcc *ipcc = dev_get_drvdata(dev);
-> > +	u32 hwirq;
-> > +	int virq;
-> > +
-> > +	hwirq = readl(ipcc->base + IPCC_REG_RECV_ID);
-> > +	if (hwirq == IPCC_NO_PENDING_IRQ)
-> > +		return 0;
-> > +
-> > +	virq = irq_find_mapping(ipcc->irq_domain, hwirq);
-> > +
-> > +	dev_dbg(dev, "virq: %d triggered client-id: %ld; signal-id: %ld\n", virq,
-> > +		FIELD_GET(IPCC_CLIENT_ID_MASK, hwirq), FIELD_GET(IPCC_SIGNAL_ID_MASK, hwirq));
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int qcom_ipcc_probe(struct platform_device *pdev)
-> >  {
-> >  	struct qcom_ipcc *ipcc;
-> > @@ -324,6 +342,10 @@ static const struct of_device_id qcom_ipcc_of_match[] = {
-> >  };
-> >  MODULE_DEVICE_TABLE(of, qcom_ipcc_of_match);
-> >  
-> > +static const struct dev_pm_ops qcom_ipcc_dev_pm_ops = {
-> > +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, qcom_ipcc_pm_resume)
-> > +};
-> > +
-> >  static struct platform_driver qcom_ipcc_driver = {
-> >  	.probe = qcom_ipcc_probe,
-> >  	.remove = qcom_ipcc_remove,
-> > @@ -331,6 +353,7 @@ static struct platform_driver qcom_ipcc_driver = {
-> >  		.name = "qcom-ipcc",
-> >  		.of_match_table = qcom_ipcc_of_match,
-> >  		.suppress_bind_attrs = true,
-> > +		.pm = pm_sleep_ptr(&qcom_ipcc_dev_pm_ops),
-> >  	},
-> >  };
-> >  
-> > -- 
-> > 2.7.4
-> > 
-
+diff --git a/drivers/input/keyboard/gpio_keys.c b/drivers/input/keyboard/gpio_keys.c
+index d75a8b179a8a..a5dc4ab87fa1 100644
+--- a/drivers/input/keyboard/gpio_keys.c
++++ b/drivers/input/keyboard/gpio_keys.c
+@@ -131,7 +131,7 @@ static void gpio_keys_quiesce_key(void *data)
+ 
+ 	if (!bdata->gpiod)
+ 		hrtimer_cancel(&bdata->release_timer);
+-	if (bdata->debounce_use_hrtimer)
++	else if (bdata->debounce_use_hrtimer)
+ 		hrtimer_cancel(&bdata->debounce_timer);
+ 	else
+ 		cancel_delayed_work_sync(&bdata->work);
 -- 
-மணிவண்ணன் சதாசிவம்
+2.17.1
+

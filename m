@@ -2,124 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130B7533CA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2076533CB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235487AbiEYM3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
+        id S238624AbiEYMbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238624AbiEYM2u (ORCPT
+        with ESMTP id S229590AbiEYMbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:28:50 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8D46D3B5;
-        Wed, 25 May 2022 05:28:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653481730; x=1685017730;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=FwtFR9xmp2GlSe86mLIUtQ+27qGOvB2x+BZIKUG5EzM=;
-  b=VfyN7CTC7Lk2ZCl0y5wo6WqF8ZeAOgTZlwaDQcJ4AxrgYRPgVG/SUyXM
-   Nwv0Qba0ESukRI33hjsJS2RRuDBm2itn94sROsQE9L9eTr8+tN+0pEptT
-   UPWu1CO70V2ZTSNZN+dp/6q5f0rvFcSupKaLIXWZiJQt+C/f26Cg7HWzy
-   E=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 25 May 2022 05:28:50 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 25 May 2022 05:28:48 -0700
-X-QCInternal: smtphost
-Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 25 May 2022 17:58:30 +0530
-Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
-        id C837116F8; Wed, 25 May 2022 17:58:28 +0530 (IST)
-From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, p.zabel@pengutronix.de,
-        chris@printf.net, venkatg@codeaurora.org, gdjakov@mm-sol.com,
-        quic_asutoshd@quicinc.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rampraka@quicinc.com,
-        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
-        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>,
-        Liangliang Lu <quic_luliang@quicinc.com>,
-        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>
-Subject: [PATCH V7 4/4] mmc: debugfs: Add debug fs error state entry for mmc driver
-Date:   Wed, 25 May 2022 17:58:21 +0530
-Message-Id: <1653481701-19642-5-git-send-email-quic_c_sbhanu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1653481701-19642-1-git-send-email-quic_c_sbhanu@quicinc.com>
-References: <1653481701-19642-1-git-send-email-quic_c_sbhanu@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 May 2022 08:31:16 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0579410FD0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:31:14 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PCK9qm022732;
+        Wed, 25 May 2022 14:30:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=bPVKOjeRLgXhCaHSGPSwKkUnur7RswwoIBP9rTXhPjQ=;
+ b=jCDdo5yiVDPtLuDw4vitdYjaky4ixEwyDDa//s/LwSA+o1NuoKVKs6DK6TKzVxFvkmtP
+ qWpzv0rUNCdU6bZssDznIsZHKp5EycQgTe7D6UhvUJdzcx7Poi2hV7O/XlfGPgLfzMex
+ HjzSmEBK3RnQpxj7hkHKUIh8McLyh3Vh0GAZIqGBQr1QfLI8RR5iiNkYptBQlB2EY3g3
+ xH/iPLzvbApkgc1+lKG6lapfF/tfdZe38lKZDmzUMU7CmAfPpHlNu0z6TyATDdr94yTx
+ OhIKgeRRtqE4nPAgszg/iQCiJXs6zDzy99XQoP7SeUgxWJ0lO+kOddgLxGk1ls1StD4D +A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g93v864rq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 14:30:16 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EEDD9100034;
+        Wed, 25 May 2022 14:30:14 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A28FE229A8D;
+        Wed, 25 May 2022 14:30:14 +0200 (CEST)
+Received: from [10.211.12.178] (10.75.127.47) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 25 May
+ 2022 14:30:13 +0200
+Message-ID: <b346eb00-fde1-2dc0-e6e3-09dbf1359c20@foss.st.com>
+Date:   Wed, 25 May 2022 14:30:13 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] ASoC: stm32: sai: Use
+ of_device_get_match_data()tosimplify code
+Content-Language: en-US
+To:     tangbin <tangbin@cmss.chinamobile.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <arnaud.pouliquen@foss.st.com>, <lgirdwood@gmail.com>,
+        <perex@perex.cz>, <tiwai@suse.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <alsa-devel@alsa-project.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220519124235.21100-1-tangbin@cmss.chinamobile.com>
+ <69d5cef3-57c0-9bc7-a83b-a85ef1c4cf29@foss.st.com>
+ <YovZAf4S0XphBsco@sirena.org.uk>
+ <3fb8d7f8-4506-3b28-22cb-863bda1f21c8@cmss.chinamobile.com>
+ <d5ab354a-eb10-d31c-d55e-46a4c4d1a4ce@foss.st.com>
+ <cd375914-a3e6-37c7-4a16-551937006f92@cmss.chinamobile.com>
+From:   Olivier MOYSAN <olivier.moysan@foss.st.com>
+In-Reply-To: <cd375914-a3e6-37c7-4a16-551937006f92@cmss.chinamobile.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-25_03,2022-05-25_02,2022-02-23_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add debug fs entry error state to query eMMC and SD card errors statistics.
-If any errors occurred in eMMC and SD card driver level then
-err_state value will be set to 1.
+Hi Tang,
 
-Signed-off-by: Liangliang Lu <quic_luliang@quicinc.com>
-Signed-off-by: Sayali Lokhande <quic_sayalil@quicinc.com>
-Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
----
- drivers/mmc/core/debugfs.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+On 5/25/22 09:36, tangbin wrote:
+> Hi Olivier：
+> 
+> On 2022/5/24 22:30, Olivier MOYSAN wrote:
+>> Hi Tang,
+>>
+>> On 5/24/22 03:44, tangbin wrote:
+>>> Hi Mark & Olivier：
+>>>
+>>> On 2022/5/24 2:57, Mark Brown wrote:
+>>>> On Mon, May 23, 2022 at 03:28:48PM +0200, Olivier MOYSAN wrote:
+>>>>
+>>>>> The current patch requires a change in the driver.
+>>>>> Either changing STM_SAI_x_ID enums, or replacing data by a struct.
+>>>>> For instance:
+>>>>> struct stm32_sai_comp_data {
+>>>>>     unsigned int id;
+>>>>> }
+>>>>> struct stm32_sai_comp_data stm32_sai_comp_data_a = {
+>>>>>     .id = STM_SAI_A_ID;
+>>>>> }
+>>>>> struct of_device_id stm32_sai_sub_ids[] = {
+>>>>>     .data = &stm32_sai_comp_data_a},
+>>>>> }
+>>>> Either approach works for me (or a revert for that matter).
+>>>
+>>>      Thanks for your advice, I was thoughtless.
+>>>
+>>>      I think change the date of STM_SAI_x_ID maybe simple. But if we 
+>>> don't change the id,
+>>>
+>>> what about add a "#define" like the line 47:
+>>>
+>>> #define STM_SAI_IS_SUB(x) ((x)->id == STM_SAI_A_ID || (x)->id == 
+>>> STM_SAI_B_ID)
+>>>
+>>> then in the judgement, wu use:
+>>>
+>>>      sai->id = (uintptr_t)of_device_get_match_data(&pdev->dev);
+>>>
+>>>      if (!STM_SAI_IS_SUB(sai))
+>>>
+>>>              return -EINVAL;
+>>>
+>>>
+>>> if you think that's ok, I will send patch v2 for you .
+>>>
+>>
+>> If we allow null value in STM_SAI_IS_SUB(sai) check, we can miss real 
+>> NULL pointer error from of_device_get_match_data().
+>>
+>> The simplest way is to change STM_SAI_x_ID enums I think.
+>> But honnestly, I feel more comfortable to let the driver unchanged.
+>>
+> Oh，you are right, I am sorry.
+> 
+> Please forget this patch, I'm sorry to have wasted your time.
+> 
+> But I saw some codes is useless in the line 48 & line 49, I think we can 
+> remove it.
+> 
 
-diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c
-index f9fb51f..d8ff66f 100644
---- a/drivers/mmc/core/debugfs.c
-+++ b/drivers/mmc/core/debugfs.c
-@@ -234,6 +234,27 @@ static int mmc_clock_opt_set(void *data, u64 val)
- DEFINE_SIMPLE_ATTRIBUTE(mmc_clock_fops, mmc_clock_opt_get, mmc_clock_opt_set,
- 	"%llu\n");
- 
-+static int mmc_err_state_get(void *data, u64 *val)
-+{
-+	struct mmc_host *host = data;
-+	int i;
-+
-+	if (!host)
-+		return -EINVAL;
-+
-+	*val = 0;
-+	for (i = 0; i < MMC_ERR_MAX; i++) {
-+		if (host->err_stats[i]) {
-+			*val = 1;
-+			break;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+DEFINE_DEBUGFS_ATTRIBUTE(mmc_err_state, mmc_err_state_get, NULL, "%llu\n");
-+
- static int mmc_err_stats_show(struct seq_file *file, void *data)
- {
- 	struct mmc_host *host = (struct mmc_host *)file->private;
-@@ -309,6 +330,10 @@ void mmc_add_host_debugfs(struct mmc_host *host)
- 			&mmc_clock_fops))
- 		goto err_node;
- 
-+	if (!debugfs_create_file_unsafe("err_state", 0600, root, host,
-+			&mmc_err_state))
-+		goto err_node;
-+
- 	if (!debugfs_create_file("err_stats", 0600, root, host,
- 			&mmc_err_stats_fops))
- 		goto err_node;
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+Yes, these two defines are no more useful.
+Feel free to send a cleanup patch.
 
+BRs
+
+Olivier
+
+> If you think so, I will send this patch for you.
+> 
+> 
+> Thanks
+> 
+> Tang Bin
+> 
+> 
+>> BRs
+>> Olivier
+>>
+>>> Thanks
+>>>
+>>> Tang Bin
+>>>
+>>>
+> 
+> 

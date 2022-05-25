@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AC9533B2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0D2533B34
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbiEYLAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52374 "EHLO
+        id S239922AbiEYLBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242633AbiEYLAc (ORCPT
+        with ESMTP id S242754AbiEYLBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:00:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C9B875221
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:00:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653476421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ovY2VffbNgFSVd4EdA9lKw3OU/gUQCdeGqQ5LnkLao8=;
-        b=G8Uz2pzVQ7WLjQYjdOZUrfw5Kt1bR8EcZE9URxeciCqk8L12Bs1YPw5Rkt4ys5MNDoxBTV
-        I004hYZ/eOHvbj792H9YyXuoBVF0AcXnU7isiGhyzJcejqXnGIlnaCC8Mb2l0qabcps9zs
-        0qheGu1aXQeKz0yo2vi/++0QSCRuk9Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-225-vIufvyjGMG2OnI2MXWAsig-1; Wed, 25 May 2022 07:00:12 -0400
-X-MC-Unique: vIufvyjGMG2OnI2MXWAsig-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 25 May 2022 07:01:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E5A9E9E6
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:00:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5DD04100F84A;
-        Wed, 25 May 2022 11:00:11 +0000 (UTC)
-Received: from eperezma.remote.csb (unknown [10.39.192.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E820E1730C;
-        Wed, 25 May 2022 11:00:04 +0000 (UTC)
-From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Jason Wang <jasowang@redhat.com>
-Cc:     Zhu Lingshan <lingshan.zhu@intel.com>, martinh@xilinx.com,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        ecree.xilinx@gmail.com, Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>, dinang@xilinx.com,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xie Yongji <xieyongji@bytedance.com>, gautam.dawar@amd.com,
-        lulu@redhat.com, martinpo@xilinx.com, pabloc@xilinx.com,
-        Longpeng <longpeng2@huawei.com>, Piotr.Uminski@intel.com,
-        tanuj.kamde@amd.com, Si-Wei Liu <si-wei.liu@oracle.com>,
-        habetsm.xilinx@gmail.com, lvivier@redhat.com,
-        Zhang Min <zhang.min9@zte.com.cn>, hanand@xilinx.com
-Subject: [PATCH v3 4/4] vdpa_sim: Implement stop vdpa op
-Date:   Wed, 25 May 2022 12:59:22 +0200
-Message-Id: <20220525105922.2413991-5-eperezma@redhat.com>
-In-Reply-To: <20220525105922.2413991-1-eperezma@redhat.com>
-References: <20220525105922.2413991-1-eperezma@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A2CEB81C87
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:00:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B036C385B8;
+        Wed, 25 May 2022 11:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653476448;
+        bh=xn4+7bfIEFj4nSenN53s2MMlezcHcafG/6EhhHwEeSw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FqN7ZxCOLGUohfnUD35g//slUwfY3YyVOgDDQ0c5RBE3cN1nBgBgdEraym0wNcqQN
+         4IMoBW32O8D5J2vWhk7VmnyYw6aKqTBkT3kmEasQNMQ6orlBpwClAooCGROb/aXwlR
+         oGJn3ajuJVwJxPr6vbAhhtKmcQObIaItZYi6e+RlZ94Gz9StyoCYpiQMb6IWUcfNeT
+         q1/an/+eMAvW5ZH9A/CPeQl6r0KrAD9jfJzHGLJQ1rgS/XFB2tHLvvsAkx4iXPVTmb
+         iPXllk6Fo/cznS8biw1uPkHRrZQCalr2rwl34QCVDT3ujPM/POp37M/HwDVQX33jQL
+         BFAR9N+9gCQYQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6C1774007E; Wed, 25 May 2022 08:00:45 -0300 (-03)
+Date:   Wed, 25 May 2022 08:00:45 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 00/15] perf intel-pt: Better support for perf record
+ --cpu
+Message-ID: <Yo4MXQXUmvrJWHZq@kernel.org>
+References: <20220524075436.29144-1-adrian.hunter@intel.com>
+ <CAP-5=fW3Av3e+LZy_RBWNrMPqYF7OZVf0rOe-upznDrfdeJ1CA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fW3Av3e+LZy_RBWNrMPqYF7OZVf0rOe-upznDrfdeJ1CA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,116 +62,249 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
-that backend feature and userspace can effectively stop the device.
+Em Tue, May 24, 2022 at 10:01:01PM -0700, Ian Rogers escreveu:
+> On Tue, May 24, 2022 at 12:55 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >
+> > Hi
+> >
+> > Here are V4 patches to support capturing Intel PT sideband events such as
+> > mmap, task, context switch, text poke etc, on every CPU even when tracing
+> > selected user_requested_cpus.  That is, when using the perf record -C or
+> >  --cpu option.
+> >
+> > This is needed for:
+> > 1. text poke: a text poke on any CPU affects all CPUs
+> > 2. tracing user space: a user space process can migrate between CPUs so
+> > mmap events that happen on a different CPU can be needed to decode a
+> > user_requested_cpus CPU.
+> >
+> > For example:
+> >
+> >         Trace on CPU 1:
+> >
+> >         perf record --kcore -C 1 -e intel_pt// &
+> >
+> >         Start a task on CPU 0:
+> >
+> >         taskset 0x1 testprog &
+> >
+> >         Migrate it to CPU 1:
+> >
+> >         taskset -p 0x2 <testprog pid>
+> >
+> >         Stop tracing:
+> >
+> >         kill %1
+> >
+> >         Prior to these changes there will be errors decoding testprog
+> >         in userspace because the comm and mmap events for testprog will not
+> >         have been captured.
+> >
+> > There is quite a bit of preparation:
+> >
+> > The first patch is a small Intel PT test for system-wide side band.  The
+> > test fails before the patches are applied, passed afterwards.
+> >
+> >       perf intel-pt: Add a test for system-wide side band [new in V1]
+> >
+> > The next 5 patches (now already applied) stop auxtrace mixing up mmap idx
+> > between evlist and evsel.  That is going to matter when
+> > evlist->all_cpus != evlist->user_requested_cpus != evsel->cpus:
+> >
+> >       libperf evsel: Factor out perf_evsel__ioctl() [now applied]
+> >       libperf evsel: Add perf_evsel__enable_thread()
+> >       perf evlist: Use libperf functions in evlist__enable_event_idx()
+> >       perf auxtrace: Move evlist__enable_event_idx() to auxtrace.c
+> >       perf auxtrace: Do not mix up mmap idx
+> >
+> > The next 6 patches (first 4 now already applied) stop attempts to auxtrace
+> > mmap when it is not an auxtrace event e.g. when mmapping the CPUs on which
+> > only sideband is captured:
+> >
+> >       libperf evlist: Remove ->idx() per_cpu parameter
+> >       libperf evlist: Move ->idx() into mmap_per_evsel()
+> >       libperf evlist: Add evsel as a parameter to ->idx()
+> >       perf auxtrace: Record whether an auxtrace mmap is needed
+> >       perf auxctrace: Add mmap_needed to auxtrace_mmap_params
+> >       perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
+> >
+> > The next 5 patches switch to setting up dummy event maps before adding the
+> > evsel so that the evsel is subject to map propagation, primarily to cause
+> > addition of the evsel's CPUs to all_cpus.
+> >
+> >       perf evlist: Factor out evlist__dummy_event()
+> >       perf evlist: Add evlist__add_system_wide_dummy()
+> >       perf record: Use evlist__add_system_wide_dummy() in record__config_text_poke()
+> >       perf intel-pt: Use evlist__add_system_wide_dummy() for switch tracking
+> >       perf intel-pt: Track sideband system-wide when needed
+> >
+> > The remaining patches make more significant changes.
+> >
+> > First change from using user_requested_cpus to using all_cpus where necessary:
+> >
+> >       perf tools: Allow all_cpus to be a superset of user_requested_cpus
+> >
+> > Secondly, mmap all per-thread and all per-cpu events:
+> >
+> >       libperf evlist: Allow mixing per-thread and per-cpu mmaps
+> >       libperf evlist: Check nr_mmaps is correct [new in V1]
+> >
+> > Stop using system_wide flag for uncore because it will not work anymore:
+> >
+> >       perf stat: Add requires_cpu flag for uncore
+> >       libperf evsel: Add comments for booleans [new in V1]
+> >
+> > Finally change map propagation so that system-wide events retain their cpus and
+> > (dummy) threads:
+> >
+> >       perf tools: Allow system-wide events to keep their own CPUs
+> >       perf tools: Allow system-wide events to keep their own threads
+> >
+> >
+> > Changes in V4:
+> >
+> >       Added Acked-by: Namhyung Kim <namhyung@kernel.org>
+> >       Added a couple Acked-by: Ian Rogers <irogers@google.com>
+> 
+> Would love to see this merged Arnaldo, I can do an:
+> 
+> Acked-by: Ian Rogers <irogers@google.com>
+> 
+> in case it helps you with b4 a little :-)
 
-This is a must before get virtqueue indexes (base) for live migration,
-since the device could modify them after userland gets them. There are
-individual ways to perform that action for some devices
-(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
-way to perform it for any vhost device (and, in particular, vhost-vdpa).
+I'll add your Acked-by manually now to the patches missing it, as I had merged this yesterday.
 
-Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
----
- drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++++++
- drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
- 4 files changed, 28 insertions(+)
+- Arnaldo
+ 
+> Thanks,
+> Ian
+> 
+> >       perf intel-pt: Add a test for system-wide side band
+> >         Put in commit message that test succeeds only after other
+> >         patches applied
+> >
+> >       libperf evsel: Add perf_evsel__enable_thread()
+> >       perf evlist: Use libperf functions in evlist__enable_event_idx()
+> >       perf auxtrace: Move evlist__enable_event_idx() to auxtrace.c
+> >       perf auxtrace: Do not mix up mmap idx
+> >       libperf evlist: Remove ->idx() per_cpu parameter
+> >       libperf evlist: Move ->idx() into mmap_per_evsel()
+> >       libperf evlist: Add evsel as a parameter to ->idx()
+> >       perf auxtrace: Record whether an auxtrace mmap is needed
+> >         Omitted because already applied
+> >
+> >       libperf evsel: Add comments for booleans
+> >         Amended comment about own_cpus
+> >
+> >
+> > Changes in V3:
+> >
+> >       perf auxtrace: Add mmap_needed to auxtrace_mmap_params
+> >         Amended mmap_needed comment
+> >
+> >       perf evlist: Add evlist__add_dummy_on_all_cpus()
+> >         Amended comment about all CPUs.
+> >
+> >
+> > Changes in V2:
+> >
+> >       Added some Acked-by: Ian Rogers <irogers@google.com>
+> >
+> >       libperf evsel: Add perf_evsel__enable_thread()
+> >         Use perf_cpu_map__for_each_cpu()
+> >
+> >       perf auxtrace: Add mmap_needed to auxtrace_mmap_params
+> >         Add documentation comment for mmap_needed
+> >
+> >       perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
+> >         Fix missing auxtrace_mmap_params__set_idx change
+> >
+> >       libperf evlist: Check nr_mmaps is correct
+> >         Remove unused code
+> >
+> >       libperf evsel: Add comments for booleans
+> >         Amend comments
+> >
+> >       perf evlist: Add evlist__add_dummy_on_all_cpus()
+> >         Rename evlist__add_system_wide -> evlist__add_on_all_cpus
+> >         Changed patch subject accordingly
+> >
+> >       perf record: Use evlist__add_dummy_on_all_cpus() in record__config_text_poke()
+> >         Rename evlist__add_system_wide -> evlist__add_on_all_cpus
+> >         Changed patch subject accordingly
+> >
+> >       perf intel-pt: Use evlist__add_dummy_on_all_cpus() for switch tracking
+> >         Rename evlist__add_system_wide -> evlist__add_on_all_cpus
+> >         Changed patch subject accordingly
+> >
+> >
+> > Changes in V1:
+> >
+> >       perf intel-pt: Add a test for system-wide side band
+> >         New patch
+> >
+> >       libperf evsel: Factor out perf_evsel__ioctl()
+> >         Dropped because it has been applied.
+> >
+> >       libperf evsel: Add perf_evsel__enable_thread()
+> >         Rename variable i -> idx
+> >
+> >       perf auxtrace: Do not mix up mmap idx
+> >         Rename variable cpu to cpu_map_idx
+> >
+> >       perf tools: Allow all_cpus to be a superset of user_requested_cpus
+> >         Add Acked-by: Ian Rogers <irogers@google.com>
+> >
+> >       libperf evlist: Allow mixing per-thread and per-cpu mmaps
+> >         Fix perf_evlist__nr_mmaps() calculation
+> >
+> >       libperf evlist: Check nr_mmaps is correct
+> >         New patch
+> >
+> >       libperf evsel: Add comments for booleans
+> >         New patch
+> >
+> >       perf tools: Allow system-wide events to keep their own CPUs
+> >       perf tools: Allow system-wide events to keep their own threads
+> >
+> >
+> > Adrian Hunter (15):
+> >       perf intel-pt: Add a test for system-wide side band
+> >       perf auxtrace: Add mmap_needed to auxtrace_mmap_params
+> >       perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
+> >       perf evlist: Factor out evlist__dummy_event()
+> >       perf evlist: Add evlist__add_dummy_on_all_cpus()
+> >       perf record: Use evlist__add_dummy_on_all_cpus() in record__config_text_poke()
+> >       perf intel-pt: Use evlist__add_dummy_on_all_cpus() for switch tracking
+> >       perf intel-pt: Track sideband system-wide when needed
+> >       perf tools: Allow all_cpus to be a superset of user_requested_cpus
+> >       libperf evlist: Allow mixing per-thread and per-cpu mmaps
+> >       libperf evlist: Check nr_mmaps is correct
+> >       perf stat: Add requires_cpu flag for uncore
+> >       libperf evsel: Add comments for booleans
+> >       perf tools: Allow system-wide events to keep their own CPUs
+> >       perf tools: Allow system-wide events to keep their own threads
+> >
+> >  tools/lib/perf/evlist.c                 | 71 ++++++++++++++-------------------
+> >  tools/lib/perf/include/internal/evsel.h | 11 +++++
+> >  tools/perf/arch/x86/util/intel-pt.c     | 31 ++++++--------
+> >  tools/perf/builtin-record.c             | 39 +++++++-----------
+> >  tools/perf/builtin-stat.c               |  5 +--
+> >  tools/perf/tests/shell/test_intel_pt.sh | 71 +++++++++++++++++++++++++++++++++
+> >  tools/perf/util/auxtrace.c              | 15 +++++--
+> >  tools/perf/util/auxtrace.h              | 13 ++++--
+> >  tools/perf/util/evlist.c                | 61 +++++++++++++++++++++++++---
+> >  tools/perf/util/evlist.h                |  5 +++
+> >  tools/perf/util/evsel.c                 |  1 +
+> >  tools/perf/util/mmap.c                  |  4 +-
+> >  tools/perf/util/parse-events.c          |  2 +-
+> >  13 files changed, 226 insertions(+), 103 deletions(-)
+> >  create mode 100755 tools/perf/tests/shell/test_intel_pt.sh
+> >
+> >
+> > Regards
+> > Adrian
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 50d721072beb..0515cf314bed 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -107,6 +107,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
- 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
- 		vhost_iotlb_reset(&vdpasim->iommu[i]);
- 
-+	vdpasim->running = true;
- 	spin_unlock(&vdpasim->iommu_lock);
- 
- 	vdpasim->features = 0;
-@@ -505,6 +506,24 @@ static int vdpasim_reset(struct vdpa_device *vdpa)
- 	return 0;
- }
- 
-+static int vdpasim_stop(struct vdpa_device *vdpa, bool stop)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	int i;
-+
-+	spin_lock(&vdpasim->lock);
-+	vdpasim->running = !stop;
-+	if (vdpasim->running) {
-+		/* Check for missed buffers */
-+		for (i = 0; i < vdpasim->dev_attr.nvqs; ++i)
-+			vdpasim_kick_vq(vdpa, i);
-+
-+	}
-+	spin_unlock(&vdpasim->lock);
-+
-+	return 0;
-+}
-+
- static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-@@ -694,6 +713,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.get_status             = vdpasim_get_status,
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
-+	.stop			= vdpasim_stop,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-@@ -726,6 +746,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.get_status             = vdpasim_get_status,
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
-+	.stop			= vdpasim_stop,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 622782e92239..061986f30911 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -66,6 +66,7 @@ struct vdpasim {
- 	u32 generation;
- 	u64 features;
- 	u32 groups;
-+	bool running;
- 	/* spinlock to synchronize iommu table */
- 	spinlock_t iommu_lock;
- };
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index 42d401d43911..bcdb1982c378 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -204,6 +204,9 @@ static void vdpasim_blk_work(struct work_struct *work)
- 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
- 
-+	if (!vdpasim->running)
-+		goto out;
-+
- 	for (i = 0; i < VDPASIM_BLK_VQ_NUM; i++) {
- 		struct vdpasim_virtqueue *vq = &vdpasim->vqs[i];
- 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index 5125976a4df8..886449e88502 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -154,6 +154,9 @@ static void vdpasim_net_work(struct work_struct *work)
- 
- 	spin_lock(&vdpasim->lock);
- 
-+	if (!vdpasim->running)
-+		goto out;
-+
- 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
- 
 -- 
-2.27.0
 
+- Arnaldo

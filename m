@@ -2,136 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3648E534308
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 20:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE9053430A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 20:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343753AbiEYSd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 14:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S1343757AbiEYSeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 14:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343746AbiEYSds (ORCPT
+        with ESMTP id S232391AbiEYSeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 14:33:48 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A36B2243
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:33:47 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id l67-20020a6b3e46000000b00660b8c61a31so8601853ioa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:33:47 -0700 (PDT)
+        Wed, 25 May 2022 14:34:13 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B21B2244;
+        Wed, 25 May 2022 11:34:12 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id m11so13987860ljc.1;
+        Wed, 25 May 2022 11:34:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=uLCxwXmuTwQ8C9070PRskofFlyqWbZ6vlVTSeVYHQj0=;
+        b=jN7fM96z/L77Nuens9WkcAd9bhAHI0LWawwzLDmEQdUnoJUZbD0cpFTGqiZ3qKZ6Cn
+         PUaWssfsHCBi3GpfEFGPYBqyRUciE0WnBmkRF73GIxYyCu5qGbSTQveRKPZfSx3E0ibs
+         9/mVWbeOYTjTiIYSt+KH6T+9MPRt6anCdxbQjqUYLwWw9+r8VQFcJhI5gwa+zZFMzuLS
+         uB6YjsvMsb7xPG+QAEnePND7D2C+7vxnyR8Bct3e5Kx9YH63tduAyKAivRigqoPk90NJ
+         STYO2zVv+0dqW3Wx/94p3lpXsoQvTGoT8ajdgCyzJjLdiU7hvDgBleUZiwOA8p3ezck2
+         x+ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc;
-        bh=jBh+sSzl4wfXD/kPQJA89QqmrKGas63PcudsVVN500M=;
-        b=orOWBhbKxiYO7gWAZeDv+AbEf5fbkIq0wcd8GWI7j0RpLXLq7LKRNI8KYnGETa09YE
-         GNY1TlZGU+xtVa9taGj0jXEK8TO81u9VBRSVqiepdp3Gwx9a4swV8Q7+p8VarqxJ1Ak8
-         kTjv7RPJxEzUbQq6ktL1xzGGJP8dq64dMFxLgO3LJ4VQjR3sd8rsSt98zxqVFUDMqib9
-         +FwDALl+dAtHHfMZ6I9n3JIAuH3onjw4oo/Et/MT45+DVvV/ZFH3nvYGLwQW58LSiZrX
-         8iBSnhCc7HvP5CMrVLwIcyJ7mQOnrGcd3dMmXyc4kUHHGFy/nHtjWImOWtHQ4er8hxj3
-         Gz2Q==
-X-Gm-Message-State: AOAM5317LChnE74DkgKElxFlFjbs7WJm3IyBcthr++jAu7PhiMDEcdeR
-        6jNVdBwO+wROFrCkL/XIrffKHRlFY5OQYGQl6s25VJB84+cb
-X-Google-Smtp-Source: ABdhPJyAHVM+GHbGuvRjp+RpiuOF4QyRyVcQFg7NsXY8j80zDGnjoXHBvqgzEfTImjNZ9asqN8GB4m/9gi1NXkTy9w/J7uW8/aCC
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uLCxwXmuTwQ8C9070PRskofFlyqWbZ6vlVTSeVYHQj0=;
+        b=ax/jFzfgx5sAEgzoemFaX5s24w5FEJwg5xd8bODPZXeYP2GfYgAXfy06J19kMFL5/R
+         QQakKNx+T6J6T+Ud5/EYyuhLXRWgYE3AJdbeHcKbp0xR1Km6c9aXrSK8AA53WZASHnvf
+         WWWuX7ck6nXG6Y7O24VRyb19BOMONy/uIOcYOc7ITDrkTPL8EWN06gUjZ9Y1kMx/lvu5
+         OOnS3hsDzL5RUZzmlgSIv38Gxl3RFFtXP4PGHfQ2RkWj2co4/pQKT8k4jMhQi0Ph0Le0
+         COi7TFqBqysSYniSCxtdPXiURVBDCeom3sOQGneH6p+sCwyevZYcX8cjzJIbgfV51zxA
+         6rWw==
+X-Gm-Message-State: AOAM531U2c1rs1UMdPCA4xpxxzCuuXMbx+PE5TgTfBzLAjyh8ESYB/Ke
+        nNAPEh9EdsE521gcneW2ySazivIAuqs=
+X-Google-Smtp-Source: ABdhPJy9ygyklvsU/x9oaDw/g7iaKhq9nfD38vAqYxsCJpNGeCJCPspFsf23AwrTecxOJ6LK1Ziv2w==
+X-Received: by 2002:a2e:b78e:0:b0:253:cee8:629e with SMTP id n14-20020a2eb78e000000b00253cee8629emr18750228ljo.244.1653503650947;
+        Wed, 25 May 2022 11:34:10 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.76.139])
+        by smtp.gmail.com with ESMTPSA id u7-20020ac251c7000000b00477a97cb50bsm3229072lfm.32.2022.05.25.11.34.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 11:34:10 -0700 (PDT)
+Subject: Re: [PATCH 3/4] sh/boards: Kconfig: Fix indentation
+To:     Juerg Haefliger <juerg.haefliger@canonical.com>,
+        ysato@users.sourceforge.jp, dalias@libc.org,
+        linux-sh@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220525124007.45328-1-juerg.haefliger@canonical.com>
+ <20220525124007.45328-4-juerg.haefliger@canonical.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <c371fcc7-08ad-7de7-cb9a-aa316a98047c@gmail.com>
+Date:   Wed, 25 May 2022 21:34:09 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1481:b0:330:4470:b7a4 with SMTP id
- j1-20020a056638148100b003304470b7a4mr3502656jak.61.1653503626838; Wed, 25 May
- 2022 11:33:46 -0700 (PDT)
-Date:   Wed, 25 May 2022 11:33:46 -0700
-In-Reply-To: <Yo52gzYYOpU0NwDo@casper.infradead.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000500bbb05dfda50af@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in do_sync_mmap_readahead
-From:   syzbot <syzbot+5b96d55e5b54924c77ad@syzkaller.appspotmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220525124007.45328-4-juerg.haefliger@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, May 25, 2022 at 06:57:55PM +0100, Matthew Wilcox wrote:
->> 
->> Ohh, that makes sense.  We unlocked the mmap_sem, so the file is
->> pinned, but the VMA isn't.  I'll whip up a patch.
->
-> #syz test
+On 5/25/22 3:40 PM, Juerg Haefliger wrote:
 
-want 2 args (repo, branch), got 7
+> The convention for indentation seems to be a single tab. Help text is
+> further indented by an additional two whitespaces. Fix the lines that
+> violate these rules.
+> 
+> While at it, remove stray tabs/spaces from a seemingly empty line.
 
->
-> From 01a4917c4cfe400eb310eba4f2fa466d381623c1 Mon Sep 17 00:00:00 2001
-> From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> Date: Wed, 25 May 2022 14:23:45 -0400
-> Subject: [PATCH] mm/filemap: Cache the value of vm_flags
->
-> After we have unlocked the mmap_lock for I/O, the file is pinned, but
-> the VMA is not.  Checking this flag after that can be a use-after-free.
-> It's not a terribly interesting use-after-free as it can only read one
-> bit, and it's used to decide whether to read 2MB or 4MB.  But it
-> upsets the automated tools and it's generally bad practice anyway,
-> so let's fix it.
->
-> Reported-by: syzbot+5b96d55e5b54924c77ad@syzkaller.appspotmail.com
-> Fixes: 4687fdbb805a ("mm/filemap: Support VM_HUGEPAGE for file mappings")
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+   That prolly counts as trailing whitespace which you're also removing
+in the 1st hunk...
+
+> Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
 > ---
->  mm/filemap.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 9a1eef6c5d35..61dd39990fda 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -2991,11 +2991,12 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
->  	struct address_space *mapping = file->f_mapping;
->  	DEFINE_READAHEAD(ractl, file, ra, mapping, vmf->pgoff);
->  	struct file *fpin = NULL;
-> +	unsigned long vm_flags = vmf->vma->vm_flags;
->  	unsigned int mmap_miss;
->  
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
->  	/* Use the readahead code, even if readahead is disabled */
-> -	if (vmf->vma->vm_flags & VM_HUGEPAGE) {
-> +	if (vm_flags & VM_HUGEPAGE) {
->  		fpin = maybe_unlock_mmap_for_io(vmf, fpin);
->  		ractl._index &= ~((unsigned long)HPAGE_PMD_NR - 1);
->  		ra->size = HPAGE_PMD_NR;
-> @@ -3003,7 +3004,7 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
->  		 * Fetch two PMD folios, so we get the chance to actually
->  		 * readahead, unless we've been told not to.
->  		 */
-> -		if (!(vmf->vma->vm_flags & VM_RAND_READ))
-> +		if (!(vm_flags & VM_RAND_READ))
->  			ra->size *= 2;
->  		ra->async_size = HPAGE_PMD_NR;
->  		page_cache_ra_order(&ractl, ra, HPAGE_PMD_ORDER);
-> @@ -3012,12 +3013,12 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
->  #endif
->  
->  	/* If we don't want any read-ahead, don't bother */
-> -	if (vmf->vma->vm_flags & VM_RAND_READ)
-> +	if (vm_flags & VM_RAND_READ)
->  		return fpin;
->  	if (!ra->ra_pages)
->  		return fpin;
->  
-> -	if (vmf->vma->vm_flags & VM_SEQ_READ) {
-> +	if (vm_flags & VM_SEQ_READ) {
->  		fpin = maybe_unlock_mmap_for_io(vmf, fpin);
->  		page_cache_sync_ra(&ractl, ra->ra_pages);
->  		return fpin;
-> -- 
-> 2.34.1
->
-> -- 
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/Yo52gzYYOpU0NwDo%40casper.infradead.org.
+>  arch/sh/boards/Kconfig | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/sh/boards/Kconfig b/arch/sh/boards/Kconfig
+> index 83bcb6d2daca..fbdb3fbfb976 100644
+> --- a/arch/sh/boards/Kconfig
+> +++ b/arch/sh/boards/Kconfig
+> @@ -36,7 +36,7 @@ config SH_SOLUTION_ENGINE
+>  	select CPU_HAS_IPR_IRQ
+>  	depends on CPU_SUBTYPE_SH7705 || CPU_SUBTYPE_SH7709 || CPU_SUBTYPE_SH7710 || \
+>  	  CPU_SUBTYPE_SH7712 || CPU_SUBTYPE_SH7750 || CPU_SUBTYPE_SH7750S || \
+> -	  CPU_SUBTYPE_SH7750R 
+> +	  CPU_SUBTYPE_SH7750R
+>  	help
+>  	  Select SolutionEngine if configuring for a Hitachi SH7705, SH7709,
+>  	  SH7710, SH7712, SH7750, SH7750S or SH7750R evaluation board.
+[...]
+
+MBR, Sergey

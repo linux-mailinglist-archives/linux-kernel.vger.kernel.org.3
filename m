@@ -2,198 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7016F533E0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72981533E11
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244462AbiEYNkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S244458AbiEYNlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233713AbiEYNkk (ORCPT
+        with ESMTP id S233713AbiEYNlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:40:40 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5FA69705
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653486039; x=1685022039;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=s3H8kUFS5EZ9xdODf2g6cGpmBoLjlpVKIXmQisxr5Gk=;
-  b=JSx6HAm2P2LOlLYu8dQBmxNSJ7IZUnaWoTQ5JYuAsjbQ6sY16NGjw5+a
-   JI6hYVBvRF9W5BboyjV9fjRK8ao2FX7sz+93ENbbuyn8Zr4fnIpiTRsmn
-   Cse+V6DxA93a3/GI4NW+rk14t6ZI0tw99QNclSeIYCECPhGYpW5tW6gab
-   vIxmVVxHLfz0yRQJAQlLMEkNIWOgbq/VYcb3OW1u10+WzHF8VLzECxcl/
-   DwCdQuxrAF8X06GXSPLiijlj3jd+hCGvBbxnNEsP0MAnT/tKajmnR+6VP
-   SRoBOM63brsAU0LOkyBjZuhDxH1BbRnzhCPSH3VQvYzVIrrmg3J5Z94hw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="272633168"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="272633168"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 06:40:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="609136266"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga001.jf.intel.com with ESMTP; 25 May 2022 06:40:35 -0700
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     alexander.shishkin@linux.intel.com, ak@linux.intel.com,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [RESEND PATCH 2/2] perf/x86/intel: Fix PEBS data source encoding for ADL
-Date:   Wed, 25 May 2022 06:40:22 -0700
-Message-Id: <20220525134022.1660684-2-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220525134022.1660684-1-kan.liang@linux.intel.com>
-References: <20220525134022.1660684-1-kan.liang@linux.intel.com>
+        Wed, 25 May 2022 09:41:19 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DD4633B4;
+        Wed, 25 May 2022 06:41:17 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id o29-20020a05600c511d00b00397697f172dso1130705wms.0;
+        Wed, 25 May 2022 06:41:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+Rn9yjKh215bpY7auwukJu0S8qK5W3YXbK+MSktpduU=;
+        b=EOjPQPW0mcEnepIFbzBmobZ2A70gO1Sr44nK0FBTKb5DS8IJzLQ8cYWZX2XZ/Nynx/
+         mQIpCeQm8ThG4yRlCuseiVNlPeRdNkEEAXVcbrKjGq8ao1Phzr8ZAEE/XnnjBL69f9P2
+         YddhgIPz2YDikWKYJz54hKQNF90s86XkwO5PoBVkQT8yW2TCEYUxgHAYICFoWaQq0biY
+         +9InBO3O4ZvPKXia/SxgEJ0wihVsAzg1tTgbbmBKbcAoHWuo/62F3TXVRaP0VgfMhye2
+         5KDM77UVpNki43MQX6s1XUMeXoK/Q4AvpPVq5vgRNtjECzVtUJXgH5NBBHI7y+PNG6yG
+         UvbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+Rn9yjKh215bpY7auwukJu0S8qK5W3YXbK+MSktpduU=;
+        b=gvmVDm81ZZmnKj4bnKugK/Yf3U0jsX5LSD3kU9bRau8iaSYEkReBG+WhRQnmzJq6nB
+         E663C4MTqbhAQVqZ8OC3KOgHRJJLI7iCvQ4Q001rHW8lLI+aiDAYkNX4Ix3SjUQSHmbA
+         LrEVL8fGDZmhVVssMgaXQdcS83qPn1A/juM/l6ZsBWTVBrLcwv8WrukQrdp6SH5KpHjb
+         vPdOvCuw8ZkriJS01+xU8msbe/v5x+YWiYnrtnFEPiT4ifpTtGXQaY+C07g8yVyQhow5
+         c/1u/aPtVGhMR+9gi9hkkJVKCNrekYa2irGULtm3kne6YIOHUtvbcE9DpM0gIRqWFh5c
+         qOAg==
+X-Gm-Message-State: AOAM532cUJarhz2C3/sV1bftm3nbOJ6Enf5XfLrL6DeDdFquFzc9MP+t
+        xG89iCdS1m6Ixkdfd54VyRUZW7zNimPl7YI+Z1M=
+X-Google-Smtp-Source: ABdhPJzF87lAe8rfLoVNj8H1nmHxKAUsJmB0ezdqMtSTV4cj2PiMVVJufheJsxrWKfETg3BdugFWee/9MerkP/cJP/8=
+X-Received: by 2002:a05:600c:3d89:b0:397:104:b1c9 with SMTP id
+ bi9-20020a05600c3d8900b003970104b1c9mr8481489wmb.84.1653486076174; Wed, 25
+ May 2022 06:41:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20210728010632.2633470-1-robdclark@gmail.com> <20210728010632.2633470-13-robdclark@gmail.com>
+ <84e03c5f-a3af-6592-d19a-a2f5d20b92fb@linux.intel.com> <CAJs_Fx6Nc337LPNh=p2GT2d2yDTdLWH934o4Cof3urDGhUJB6A@mail.gmail.com>
+ <904ae104-1c30-d130-129f-ccae381261d5@linux.intel.com> <CAF6AEGsH=K1Hut7QBmF1kX40xS+9px=BrtZecAXVQopNs67Feg@mail.gmail.com>
+ <1cd913da-6e51-509c-a6e6-83bf79cae20b@linux.intel.com>
+In-Reply-To: <1cd913da-6e51-509c-a6e6-83bf79cae20b@linux.intel.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 25 May 2022 06:41:13 -0700
+Message-ID: <CAF6AEGs_+mhY9x1HG=jHmpwGU6jUS1G4mF6bJCd3yN0JRhocsQ@mail.gmail.com>
+Subject: Re: [PATCH v4 12/13] drm/msm: Utilize gpu scheduler priorities
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        David Airlie <airlied@linux.ie>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        Sharat Masetty <smasetty@codeaurora.org>,
+        Akhil P Oommen <akhilpo@codeaurora.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>, Sean Paul <sean@poorly.run>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Wed, May 25, 2022 at 2:46 AM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
+>
+>
+> On 24/05/2022 15:50, Rob Clark wrote:
+> > On Tue, May 24, 2022 at 6:45 AM Tvrtko Ursulin
+> > <tvrtko.ursulin@linux.intel.com> wrote:
+> >>
+> >>
+> >> On 23/05/2022 23:53, Rob Clark wrote:
+> >>> On Mon, May 23, 2022 at 7:45 AM Tvrtko Ursulin
+> >>> <tvrtko.ursulin@linux.intel.com> wrote:
+> >>>>
+> >>>>
+> >>>> Hi Rob,
+> >>>>
+> >>>> On 28/07/2021 02:06, Rob Clark wrote:
+> >>>>> From: Rob Clark <robdclark@chromium.org>
+> >>>>>
+> >>>>> The drm/scheduler provides additional prioritization on top of that
+> >>>>> provided by however many number of ringbuffers (each with their own
+> >>>>> priority level) is supported on a given generation.  Expose the
+> >>>>> additional levels of priority to userspace and map the userspace
+> >>>>> priority back to ring (first level of priority) and schedular prior=
+ity
+> >>>>> (additional priority levels within the ring).
+> >>>>>
+> >>>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>>>> Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> >>>>> ---
+> >>>>>     drivers/gpu/drm/msm/adreno/adreno_gpu.c |  4 +-
+> >>>>>     drivers/gpu/drm/msm/msm_gem_submit.c    |  4 +-
+> >>>>>     drivers/gpu/drm/msm/msm_gpu.h           | 58 ++++++++++++++++++=
+++++++-
+> >>>>>     drivers/gpu/drm/msm/msm_submitqueue.c   | 35 +++++++--------
+> >>>>>     include/uapi/drm/msm_drm.h              | 14 +++++-
+> >>>>>     5 files changed, 88 insertions(+), 27 deletions(-)
+> >>>>>
+> >>>>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/=
+drm/msm/adreno/adreno_gpu.c
+> >>>>> index bad4809b68ef..748665232d29 100644
+> >>>>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> >>>>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> >>>>> @@ -261,8 +261,8 @@ int adreno_get_param(struct msm_gpu *gpu, uint3=
+2_t param, uint64_t *value)
+> >>>>>                         return ret;
+> >>>>>                 }
+> >>>>>                 return -EINVAL;
+> >>>>> -     case MSM_PARAM_NR_RINGS:
+> >>>>> -             *value =3D gpu->nr_rings;
+> >>>>> +     case MSM_PARAM_PRIORITIES:
+> >>>>> +             *value =3D gpu->nr_rings * NR_SCHED_PRIORITIES;
+> >>>>>                 return 0;
+> >>>>>         case MSM_PARAM_PP_PGTABLE:
+> >>>>>                 *value =3D 0;
+> >>>>> diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm=
+/msm/msm_gem_submit.c
+> >>>>> index 450efe59abb5..c2ecec5b11c4 100644
+> >>>>> --- a/drivers/gpu/drm/msm/msm_gem_submit.c
+> >>>>> +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+> >>>>> @@ -59,7 +59,7 @@ static struct msm_gem_submit *submit_create(struc=
+t drm_device *dev,
+> >>>>>         submit->gpu =3D gpu;
+> >>>>>         submit->cmd =3D (void *)&submit->bos[nr_bos];
+> >>>>>         submit->queue =3D queue;
+> >>>>> -     submit->ring =3D gpu->rb[queue->prio];
+> >>>>> +     submit->ring =3D gpu->rb[queue->ring_nr];
+> >>>>>         submit->fault_dumped =3D false;
+> >>>>>
+> >>>>>         INIT_LIST_HEAD(&submit->node);
+> >>>>> @@ -749,7 +749,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev=
+, void *data,
+> >>>>>         /* Get a unique identifier for the submission for logging p=
+urposes */
+> >>>>>         submitid =3D atomic_inc_return(&ident) - 1;
+> >>>>>
+> >>>>> -     ring =3D gpu->rb[queue->prio];
+> >>>>> +     ring =3D gpu->rb[queue->ring_nr];
+> >>>>>         trace_msm_gpu_submit(pid_nr(pid), ring->id, submitid,
+> >>>>>                 args->nr_bos, args->nr_cmds);
+> >>>>>
+> >>>>> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/ms=
+m_gpu.h
+> >>>>> index b912cacaecc0..0e4b45bff2e6 100644
+> >>>>> --- a/drivers/gpu/drm/msm/msm_gpu.h
+> >>>>> +++ b/drivers/gpu/drm/msm/msm_gpu.h
+> >>>>> @@ -250,6 +250,59 @@ struct msm_gpu_perfcntr {
+> >>>>>         const char *name;
+> >>>>>     };
+> >>>>>
+> >>>>> +/*
+> >>>>> + * The number of priority levels provided by drm gpu scheduler.  T=
+he
+> >>>>> + * DRM_SCHED_PRIORITY_KERNEL priority level is treated specially i=
+n some
+> >>>>> + * cases, so we don't use it (no need for kernel generated jobs).
+> >>>>> + */
+> >>>>> +#define NR_SCHED_PRIORITIES (1 + DRM_SCHED_PRIORITY_HIGH - DRM_SCH=
+ED_PRIORITY_MIN)
+> >>>>> +
+> >>>>> +/**
+> >>>>> + * msm_gpu_convert_priority - Map userspace priority to ring # and=
+ sched priority
+> >>>>> + *
+> >>>>> + * @gpu:        the gpu instance
+> >>>>> + * @prio:       the userspace priority level
+> >>>>> + * @ring_nr:    [out] the ringbuffer the userspace priority maps t=
+o
+> >>>>> + * @sched_prio: [out] the gpu scheduler priority level which the u=
+serspace
+> >>>>> + *              priority maps to
+> >>>>> + *
+> >>>>> + * With drm/scheduler providing it's own level of prioritization, =
+our total
+> >>>>> + * number of available priority levels is (nr_rings * NR_SCHED_PRI=
+ORITIES).
+> >>>>> + * Each ring is associated with it's own scheduler instance.  Howe=
+ver, our
+> >>>>> + * UABI is that lower numerical values are higher priority.  So ma=
+pping the
+> >>>>> + * single userspace priority level into ring_nr and sched_prio tak=
+es some
+> >>>>> + * care.  The userspace provided priority (when a submitqueue is c=
+reated)
+> >>>>> + * is mapped to ring nr and scheduler priority as such:
+> >>>>> + *
+> >>>>> + *   ring_nr    =3D userspace_prio / NR_SCHED_PRIORITIES
+> >>>>> + *   sched_prio =3D NR_SCHED_PRIORITIES -
+> >>>>> + *                (userspace_prio % NR_SCHED_PRIORITIES) - 1
+> >>>>> + *
+> >>>>> + * This allows generations without preemption (nr_rings=3D=3D1) to=
+ have some
+> >>>>> + * amount of prioritization, and provides more priority levels for=
+ gens
+> >>>>> + * that do have preemption.
+> >>>>
+> >>>> I am exploring how different drivers handle priority levels and this
+> >>>> caught my eye.
+> >>>>
+> >>>> Is the implication of the last paragraphs that on hw with nr_rings >=
+ 1,
+> >>>> ring + 1 preempts ring?
+> >>>
+> >>> Other way around, at least from the uabi standpoint.  Ie. ring[0]
+> >>> preempts ring[1]
+> >>
+> >> Ah yes, I figure it out from the comments but then confused myself whe=
+n
+> >> writing the email.
+> >>
+> >>>> If so I am wondering does the "spreading" of
+> >>>> user visible priorities by NR_SCHED_PRIORITIES creates a non-preempt=
+able
+> >>>> levels within every "bucket" or how does that work?
+> >>>
+> >>> So, preemption is possible between any priority level before run_job(=
+)
+> >>> gets called, which writes the job into the ringbuffer.  After that
+> >>
+> >> Hmm how? Before run_job() the jobs are not runnable, sitting in the
+> >> scheduler queues, right?
+> >
+> > I mean, if prio[0]+prio[1]+prio[2] map to a single ring, submit A on
+> > prio[1] could be executed after submit B on prio[2] provided that
+> > run_job(submitA) hasn't happened yet.  So I guess it isn't "really"
+> > preemption because the submit hasn't started running on the GPU yet.
+> > But rather just scheduling according to priority.
+> >
+> >>> point, you only have "bucket" level preemption, because
+> >>> NR_SCHED_PRIORITIES levels of priority get mapped to a single FIFO
+> >>> ringbuffer.
+> >>
+> >> Right, and you have one GPU with four rings, which means you expose 12
+> >> priority levels to userspace, did I get that right?
+> >
+> > Correct
+> >
+> >> If so how do you convey in the ABI that not all there priority levels
+> >> are equal? Like userspace can submit at prio 4 and expect prio 3 to
+> >> preempt, as would prio 2 preempt prio 3. While actual behaviour will n=
+ot
+> >> match - 3 will not preempt 4.
+> >
+> > It isn't really exposed to userspace, but perhaps it should be..
+> > Userspace just knows that, to the extent possible, the kernel will try
+> > to execute prio 3 before prio 4.
+> >
+> >> Also, does your userspace stack (EGL/Vulkan) use the priorities? I had=
+ a
+> >> quick peek in Mesa but did not spot it - although I am not really at
+> >> home there yet so maybe I missed it.
+> >
+> > Yes, there is an EGL extension:
+> >
+> > https://www.khronos.org/registry/EGL/extensions/IMG/EGL_IMG_context_pri=
+ority.txt
+> >
+> > It is pretty limited, it only exposes three priority levels.
+>
+> Right, is that wired up on msm? And if it is, or could be, how do/would
+> you map the three priority levels for GPUs which expose 3 priority
+> levels versus the one which exposes 12?
 
-The PEBS data source encoding for the e-core is different from the
-p-core.
+We don't yet, but probably should, expose a cap to indicate to
+userspace the # of hw rings vs # of levels of sched priority
 
-Add the pebs_data_source[] in the struct x86_hybrid_pmu to store the
-data source encoding for each type of the core.
+> Is it doable properly without leaking the fact drm/sched internal
+> implementation detail of three priority levels? Or if you went the other
+> way and only exposed up to max 3 levels, then you lose one priority
+> level your hardware suppose which is also not good.
+>
+> It is all quite interesting because your hardware is completely
+> different from ours in this respect. In our case i915 decides when to
+> preempt, hardware has no concept of priority (*).
 
-Add intel_pmu_pebs_data_source_grt() for the e-core.
-There is nothing changed for the data source encoding of the p-core,
-which still reuse the intel_pmu_pebs_data_source_skl().
+It is really pretty much all in firmware.. a6xx is the first gen that
+could do actual (non-cooperative) preemption (but that isn't
+implemented yet in upstream driver)
 
-Fixes: f83d2f91d259 ("perf/x86/intel: Add Alder Lake Hybrid support")
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- arch/x86/events/intel/core.c |  2 +-
- arch/x86/events/intel/ds.c   | 41 +++++++++++++++++++++++++++++-------
- arch/x86/events/perf_event.h |  6 ++++++
- 3 files changed, 40 insertions(+), 9 deletions(-)
+BR,
+-R
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index ee3ee4b5c53a..66342a176a7d 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -6240,7 +6240,7 @@ __init int intel_pmu_init(void)
- 		x86_pmu.flags |= PMU_FL_INSTR_LATENCY;
- 		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
- 		x86_pmu.lbr_pt_coexist = true;
--		intel_pmu_pebs_data_source_skl(false);
-+		intel_pmu_pebs_data_source_adl();
- 		x86_pmu.num_topdown_events = 8;
- 		x86_pmu.update_topdown_event = adl_update_topdown_event;
- 		x86_pmu.set_topdown_event_period = adl_set_topdown_event_period;
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index 98370650525d..c58660589502 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -94,15 +94,40 @@ void __init intel_pmu_pebs_data_source_nhm(void)
- 	pebs_data_source[0x07] = OP_LH | P(LVL, L3) | LEVEL(L3) | P(SNOOP, HITM);
- }
- 
--void __init intel_pmu_pebs_data_source_skl(bool pmem)
-+static void __init __intel_pmu_pebs_data_source_skl(bool pmem, u64 *data_source)
- {
- 	u64 pmem_or_l4 = pmem ? LEVEL(PMEM) : LEVEL(L4);
- 
--	pebs_data_source[0x08] = OP_LH | pmem_or_l4 | P(SNOOP, HIT);
--	pebs_data_source[0x09] = OP_LH | pmem_or_l4 | REM | P(SNOOP, HIT);
--	pebs_data_source[0x0b] = OP_LH | LEVEL(RAM) | REM | P(SNOOP, NONE);
--	pebs_data_source[0x0c] = OP_LH | LEVEL(ANY_CACHE) | REM | P(SNOOPX, FWD);
--	pebs_data_source[0x0d] = OP_LH | LEVEL(ANY_CACHE) | REM | P(SNOOP, HITM);
-+	data_source[0x08] = OP_LH | pmem_or_l4 | P(SNOOP, HIT);
-+	data_source[0x09] = OP_LH | pmem_or_l4 | REM | P(SNOOP, HIT);
-+	data_source[0x0b] = OP_LH | LEVEL(RAM) | REM | P(SNOOP, NONE);
-+	data_source[0x0c] = OP_LH | LEVEL(ANY_CACHE) | REM | P(SNOOPX, FWD);
-+	data_source[0x0d] = OP_LH | LEVEL(ANY_CACHE) | REM | P(SNOOP, HITM);
-+}
-+
-+void __init intel_pmu_pebs_data_source_skl(bool pmem)
-+{
-+	__intel_pmu_pebs_data_source_skl(pmem, pebs_data_source);
-+}
-+
-+static void __init intel_pmu_pebs_data_source_grt(u64 *data_source)
-+{
-+	data_source[0x05] = OP_LH | P(LVL, L3) | LEVEL(L3) | P(SNOOP, HIT);
-+	data_source[0x06] = OP_LH | P(LVL, L3) | LEVEL(L3) | P(SNOOP, HITM);
-+	data_source[0x08] = OP_LH | P(LVL, L3) | LEVEL(L3) | P(SNOOPX, FWD);
-+}
-+
-+void __init intel_pmu_pebs_data_source_adl(void)
-+{
-+	u64 *data_source;
-+
-+	data_source = x86_pmu.hybrid_pmu[X86_HYBRID_PMU_CORE_IDX].pebs_data_source;
-+	memcpy(data_source, pebs_data_source, sizeof(u64) * PERF_PEBS_DATA_SOURCE_MAX);
-+	__intel_pmu_pebs_data_source_skl(false, data_source);
-+
-+	data_source = x86_pmu.hybrid_pmu[X86_HYBRID_PMU_ATOM_IDX].pebs_data_source;
-+	memcpy(data_source, pebs_data_source, sizeof(u64) * PERF_PEBS_DATA_SOURCE_MAX);
-+	intel_pmu_pebs_data_source_grt(data_source);
- }
- 
- static u64 precise_store_data(u64 status)
-@@ -198,7 +223,7 @@ static u64 load_latency_data(struct perf_event *event, u64 status)
- 	/*
- 	 * use the mapping table for bit 0-3
- 	 */
--	val = pebs_data_source[dse.ld_dse];
-+	val = hybrid_var(event->pmu, pebs_data_source)[dse.ld_dse];
- 
- 	/*
- 	 * Nehalem models do not support TLB, Lock infos
-@@ -264,7 +289,7 @@ static u64 store_latency_data(struct perf_event *event, u64 status)
- 	/*
- 	 * use the mapping table for bit 0-3
- 	 */
--	val = pebs_data_source[dse.st_lat_dse];
-+	val = hybrid_var(event->pmu, pebs_data_source)[dse.st_lat_dse];
- 
- 	if (x86_pmu.pebs_adl_atom_dse)
- 		pebs_dse_adl(event, &dse);
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index 0ed1413b0eb7..63e54f911d2c 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -635,6 +635,8 @@ enum {
- 	x86_lbr_exclusive_max,
- };
- 
-+#define PERF_PEBS_DATA_SOURCE_MAX	0x10
-+
- struct x86_hybrid_pmu {
- 	struct pmu			pmu;
- 	const char			*name;
-@@ -662,6 +664,8 @@ struct x86_hybrid_pmu {
- 	unsigned int			late_ack	:1,
- 					mid_ack		:1,
- 					enabled_ack	:1;
-+
-+	u64				pebs_data_source[PERF_PEBS_DATA_SOURCE_MAX];
- };
- 
- static __always_inline struct x86_hybrid_pmu *hybrid_pmu(struct pmu *pmu)
-@@ -1407,6 +1411,8 @@ void intel_pmu_pebs_data_source_nhm(void);
- 
- void intel_pmu_pebs_data_source_skl(bool pmem);
- 
-+void intel_pmu_pebs_data_source_adl(void);
-+
- int intel_pmu_setup_lbr_filter(struct perf_event *event);
- 
- void intel_pt_interrupt(void);
--- 
-2.35.1
-
+> Regards,
+>
+> Tvrtko
+>
+> (*) Almost no concept of priority in hardware - we do have it on new
+> GPUs and only on a subset of engine classes where render and compute
+> share the EUs. But I think it's way different from Ardenos.

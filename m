@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5746B533F36
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86905533F39
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240572AbiEYO3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
+        id S240182AbiEYOam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244859AbiEYO3P (ORCPT
+        with ESMTP id S231465AbiEYOak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 10:29:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EA8FA7747
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653488953;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rJXBSsswS1QbSCIORAlXaRxJTnMr6MqFIgMIGnJ+Qao=;
-        b=HzzBTY80BSnVxYCIWwCbTcsQzuxpAk3xUvMim/xXm2E/+m5ZU2dVxZ6W+iE1LOKrSXfraR
-        /weKm7fYgz5ryMDNlXFdmhGb/EzEUSOrrlnIF8weHckBRmidZL2Tn3mooA5MCClCuSXvyA
-        KdDyCXLzL9OOrshVF5wSBl/xJEiWtT8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-252-YR06shO1OwSFVnlHewrk4w-1; Wed, 25 May 2022 10:29:09 -0400
-X-MC-Unique: YR06shO1OwSFVnlHewrk4w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 25 May 2022 10:30:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3CE12AB9;
+        Wed, 25 May 2022 07:30:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1E95485A5BC;
-        Wed, 25 May 2022 14:29:08 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.81])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 8E4F5C15E71;
-        Wed, 25 May 2022 14:28:47 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 25 May 2022 16:29:07 +0200 (CEST)
-Date:   Wed, 25 May 2022 16:28:46 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH 07/16] signal: Wake up the designated parent
-Message-ID: <20220525142845.GA2687@redhat.com>
-References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
- <20220518225355.784371-7-ebiederm@xmission.com>
- <20220524132553.GD14347@redhat.com>
- <20220524162808.GF14347@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16B24B81DC3;
+        Wed, 25 May 2022 14:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD8BAC3411B;
+        Wed, 25 May 2022 14:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653489036;
+        bh=8HyHVyybo/0tZkV/fgwThFXRZPUG5Hduds4Oad/Ax4E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Seststo4IX6giDvmM3hP0SuPLNctoXJml402CKuZ1HVbxLTBQ1cLdWMJDV290f0/k
+         adtTg915kQ+NfThzVKkEC5tuH7O/1bD5UN0TcxMRfSOE455CCDYdKmIv30G3XR2bN9
+         sJWKO6NCjeik/v2ULR5a4AXJtUwXSn+YU/hNhc+gun1FZO4pPrJJgEw3P5A0hC3lTb
+         ey2nOO6/wgaQvaKb1Fj6Vdg1o8cbyu6TjCL174F7VruyjRT9IvwVyF8A9MKdJCZbSJ
+         PiSlXCPs26JARvoSNWRi+2E6BY32JXmMq0vYc/GxuKsti7sxbBZDV2maxADOEZrgpA
+         aDu7mGKBDKjXg==
+Received: by mail-ej1-f45.google.com with SMTP id f21so28395425ejh.11;
+        Wed, 25 May 2022 07:30:36 -0700 (PDT)
+X-Gm-Message-State: AOAM5316okwfWnWFLIss9rjqjr9ktar/S0BGiJw5+X3dcLCkPETQwSxJ
+        rwWBRnb6dDoKsx6K7G2qxboqdsOxJo+qvtB/Tg==
+X-Google-Smtp-Source: ABdhPJxJjLiunW5d2So/1U+3/Kl7ANSlIu+TXdQXon7zGOmAxDWIwpH2r+gIYlFBI5+GwQd36/nrkgYpz7pHo6jUMC4=
+X-Received: by 2002:a17:907:2daa:b0:6fe:b449:6a8f with SMTP id
+ gt42-20020a1709072daa00b006feb4496a8fmr22130827ejc.318.1653489034973; Wed, 25
+ May 2022 07:30:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524162808.GF14347@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <b36280be-9993-9a78-0960-4094efeed1aa@linaro.org>
+ <CAMuHMdWL93+r0cofwHKj1k-gUo9nk3OzUf6gtY68sK4JNibyNg@mail.gmail.com> <eb5ab9553c419b8259f5494664865597b6c5d4db.camel@infradead.org>
+In-Reply-To: <eb5ab9553c419b8259f5494664865597b6c5d4db.camel@infradead.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 25 May 2022 09:30:22 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJ49bnBe84PXYY6caN0rxEEgL=mcWqKktzbK94McgYNfw@mail.gmail.com>
+Message-ID: <CAL_JsqJ49bnBe84PXYY6caN0rxEEgL=mcWqKktzbK94McgYNfw@mail.gmail.com>
+Subject: Re: Getting rid of infradead.org - corrupted subjects
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        mark@msapiro.net, workflows@vger.kernel.org,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,33 +74,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/24, Oleg Nesterov wrote:
+On Wed, May 25, 2022 at 4:55 AM David Woodhouse <dwmw2@infradead.org> wrote=
+:
 >
-> On 05/24, Oleg Nesterov wrote:
-> >
-> > I fail to understand this patch...
-> >
-> > On 05/18, Eric W. Biederman wrote:
-> > >
-> > > Today if a process is ptraced only the ptracer will ever be woken up in
-> > > wait
-> >
-> > and why is this wrong?
-> >
-> > > Fixes: 75b95953a569 ("job control: Add @for_ptrace to do_notify_parent_cldstop()")
-> >
-> > how does this change fix 75b95953a569?
+> On Wed, 2022-05-25 at 10:34 +0200, Geert Uytterhoeven wrote:
+> > CC dwmw2
 >
-> OK, I guess you mean the 2nd do_notify_parent_cldstop() in ptrace_stop(),
-> the problematic case is current->ptrace == T. Right?
+> Thanks, Geert.
 >
-> I dislike this patch anyway, but let me think more about it.
+> > On Wed, May 25, 2022 at 10:07 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >
+> > > The address list is semi-random as I don't know whom to approach.
+> > > Problem: infradead.org corrupts email subjects by changing:
+> > > s/,/, /
+>
+> I found an old thread on mailman-users which appears to be claiming
+> that it's just standard folding as described in RFC2822 =C2=A72.2.3.
+>
+> https://mail.python.org/pipermail/mailman-users/2007-May/057119.html
+>
+> 2.2.3. Long Header Fields
+>
+>    Each header field is logically a single line of characters comprising
+>    the field name, the colon, and the field body.  For convenience
+>    however, and to deal with the 998/78 character limitations per line,
+>    the field body portion of a header field can be split into a multiple
+>    line representation; this is called "folding".  The general rule is
+>    that wherever this standard allows for folding white space (not
+>    simply WSP characters), a CRLF may be inserted before any WSP.  For
+>    example, the header field:
+>
+>            Subject: This is a test
+>
+>    can be represented as:
+>
+>            Subject: This
+>             is a test
+>
+> But this is folding at a *comma*, not at whitespace. The original
+> subject line was (in a single line):
+>
+> Subject: [PATCH v2] dt-bindings: mtd: jedec,spi-nor: remove unneeded prop=
+erties
+>
+> ... and Mailman 'folded' it in the wrong place to:
+>
+> Subject: [PATCH v2] dt-bindings: mtd: jedec,
+>  spi-nor: remove unneeded properties
+>
+> That *isn't* proper folding because it didn't happen at a whitespace.
+>
+> I do need to upgrade to Mailman 3 at some point; I've been
+> procrastinating on the basis that it "ain't broke". For the time being
+> I've just disabled folding in MM2 with a trivial hack:
 
-OK, now that I understand the problem, the patch doesn't look bad to me,
-although I'd ask to make the changelog more clear.
+Yay!!! I should have asked years ago...
 
-After this change __wake_up_parent() can't accept any "parent" from
-p->parent thread group, but all callers look fine except ptrace_detach().
+Any chance the appending of footers can be stopped as it causes lore
+to report duplicates and b4 dmarc attestation to fail?
 
-Oleg.
-
+Rob

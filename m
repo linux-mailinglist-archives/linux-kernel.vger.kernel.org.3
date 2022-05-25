@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7769534255
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67707534260
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242741AbiEYRnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 13:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
+        id S245760AbiEYRrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbiEYRn3 (ORCPT
+        with ESMTP id S245758AbiEYRq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 13:43:29 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A479D06A
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:43:28 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id 2so2616389ilg.13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:43:28 -0700 (PDT)
+        Wed, 25 May 2022 13:46:57 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455BB46B3D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:46:56 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id c15-20020a9d684f000000b0060b097c71ecso7735827oto.10
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:46:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9Y1ppk7B46JVKK7NkaOrpQ5493dk2qksQrupKiexSz0=;
-        b=Lz+Il6ThJJatz8Ur6i5iU0ceuVC5VFUAZpYN1elm5YYuqfTkQEOKa0EySEnREG2MZT
-         4pu5E5+TM9kOKMH27rA1UGkf+EfhhucDE/6hKaO41QOJXiTJyRh6OFKozsgeUQjVJW/l
-         GAuYsrXl6F+mt+SSgVXvCPj+xipn+/dVXoB+QSyoRcAJ1/FQYyzs9gqR00UNrkz9uWEK
-         31vYtGQovUIWTwpMptXgaSxwUHSkehWRIHWrJ4fPTm3gUqm10Ru2R2YyglBLmwh30atk
-         f36RboKM/w9WhKkHz9kggxr2qm3IajSI7sRJMeKldeA2f+qgswGR4CHgCEHVnEPuY4zM
-         JdyA==
+         :cc:content-transfer-encoding;
+        bh=tsEdLKvObPS7G8Z2sQJhN9Qv1wSfra+nvCaaXzSR3NE=;
+        b=TPnIR59MQ45wZoYaGmL9O8worQ137EbRsvzppbPyS1whsq0eOeIpSRl+fYbYGKYU8l
+         X30g8eKP+oGDmMHHKGkodCqfuh3KmP3trn/mrXHSBGS9ytHpirPwoESMELyEwL7drh8i
+         VD6AGeyGlDOZ2EKmkoTsu/UHywH1C8Ar9cV6oyPzecPth3ANRjY1/7pVeXISKns7zJv/
+         BlEkvE6dcmUr5lEp491jGCQZeEZkpGQ7JMwJmr8W/L1F0+mtVzegIBrSov65CWaev1py
+         YMI7xfBe0+JlXfSL+HVk3H0ZwkvQ1oWXgcK3aRJB2LxWd+N0IaE6Y6//JkENHMzUiP2v
+         eRZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9Y1ppk7B46JVKK7NkaOrpQ5493dk2qksQrupKiexSz0=;
-        b=JCbVnS6T+byXCXNkXAkV7bZn3B7FF+d0NnPtQQeAdFrVxCJCrWRq+IMckXmdw6ihNx
-         ZU5fldQPM+QOlsMo5xdSp/YNk7rDXzPJOw0xSfLMVxQSF0+k7szhjj0MWEirdYuz2jbL
-         Qp8iTmG0/Ba/5nDkVBP3JoUbHYOw7sRzhBdrjU7vMNvQpk/5I94oAYeA9H+OZ2XJfGNw
-         2ACefOorQLSLN78QQfouFTyt+/FvOuOdBt6nhXkdTKSPLUTBhcsRygWFndGo0HdfFiZl
-         TVi9RbADgyIrh49qdAzURjBvEKX2UKbjfXf0wqazQmlNBgKHW5pm+iINiWTCr1A2bLHc
-         GrtA==
-X-Gm-Message-State: AOAM533s0zY5QxYXv55+ToZoVX/s6f/iXxGutrjP2KM1cqH2qf1R+eEK
-        QE9fvjhIfbLty97qZegJAqC8oa6FmWFaxig7taA=
-X-Google-Smtp-Source: ABdhPJwCZm28XqJGp5fTvbYI6LME8/48+6CYtKjsPdgnXp2pOicpNbew0hzH6nlz5DM54/lnJeEi7kh2+sMcZqIDc1g=
-X-Received: by 2002:a05:6e02:1be2:b0:2d1:5818:a454 with SMTP id
- y2-20020a056e021be200b002d15818a454mr18036546ilv.248.1653500608130; Wed, 25
- May 2022 10:43:28 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tsEdLKvObPS7G8Z2sQJhN9Qv1wSfra+nvCaaXzSR3NE=;
+        b=lFSGwmrr8gaIZRdVlKR34+kydPzTGIlU85IDB465/1TiSm34EKNMuFgbkdvwAJqAIo
+         yNEFrhOd3nK+Lck5NsCW1kWt1Hgoq7rE27oWgsMBHWJXuUrI1q5txJOKpnl8Md/KT1gd
+         LqoS3zqiPidhkPN22iSfdE159MiOhIu4qcUCfi4t6J4KdEjLsrBjbmUtfZ8wlJJ6Ef1h
+         QiXPdiVdbXuSgSkLzlBDbhP48nIthqAe6D4oq7P+TWSI+qQcUogsYfzjOuKTUZDm7qNe
+         lqixKHdls9Orh0b51nFy1Ol5pD80dCJAlkhnqpP1N7ljz1TO2zdR8p1QpMqct5I6+6tD
+         3J9A==
+X-Gm-Message-State: AOAM532Vqxy6I27yopKm37hSip6JS+uWg+tEhCBTvNyTRU1fIl8r9jxb
+        /mZG9CCTLmM7SE4o2sWi1PudiyZumsGn+XHQ0GakFQ==
+X-Google-Smtp-Source: ABdhPJz4Y/uMvAYhmybXBKj+F5v37DNaWFYTJeREhWLMq2o9Zp3w+cBQ09c3LR8ST4KN+ehpHHfJiB+AO1m3nW7zoN0=
+X-Received: by 2002:a05:6830:280e:b0:606:ae45:6110 with SMTP id
+ w14-20020a056830280e00b00606ae456110mr12927454otu.14.1653500815319; Wed, 25
+ May 2022 10:46:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220525120804.38155-1-wangkefeng.wang@huawei.com>
-In-Reply-To: <20220525120804.38155-1-wangkefeng.wang@huawei.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 25 May 2022 19:43:17 +0200
-Message-ID: <CA+fCnZf_Aphbje1aJCyp0Sarz3DgbfGLXHLisiHjT=ttS6pjWg@mail.gmail.com>
-Subject: Re: [PATCH] mm: kasan: Fix input of vmalloc_to_page()
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
+References: <20220520204115.67580-1-jon@nutanix.com> <Yo5hmcdRvE1UrI4y@google.com>
+ <3C8F5313-2830-46E3-A512-CFA4A24C24D7@nutanix.com>
+In-Reply-To: <3C8F5313-2830-46E3-A512-CFA4A24C24D7@nutanix.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 25 May 2022 10:46:43 -0700
+Message-ID: <CALMp9eT2=tEijnxUxFfv-1r5LJG4MyezqjnTsrysjuWGeko7_w@mail.gmail.com>
+Subject: Re: [PATCH v3] KVM: VMX: do not disable interception for
+ MSR_IA32_SPEC_CTRL on eIBRS
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,34 +84,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 1:58 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+On Wed, May 25, 2022 at 10:14 AM Jon Kohler <jon@nutanix.com> wrote:
 >
-> When print virtual mapping info for vmalloc address, it should pass
-> the addr not page, fix it.
 >
-> Fixes: c056a364e954 ("kasan: print virtual mapping info in reports")
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  mm/kasan/report.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> index 199d77cce21a..b341a191651d 100644
-> --- a/mm/kasan/report.c
-> +++ b/mm/kasan/report.c
-> @@ -347,7 +347,7 @@ static void print_address_description(void *addr, u8 tag)
->                                va->addr, va->addr + va->size, va->caller);
->                         pr_err("\n");
+> > On May 25, 2022, at 1:04 PM, Sean Christopherson <seanjc@google.com> wr=
+ote:
+> >
+> > On Fri, May 20, 2022, Jon Kohler wrote:
+> >> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> >> index 610355b9ccce..1c725d17d984 100644
+> >> --- a/arch/x86/kvm/vmx/vmx.c
+> >> +++ b/arch/x86/kvm/vmx/vmx.c
+> >> @@ -2057,20 +2057,32 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, =
+struct msr_data *msr_info)
+> >>                      return 1;
+> >>
+> >>              vmx->spec_ctrl =3D data;
+> >> -            if (!data)
+> >> +
+> >> +            /*
+> >> +             * Disable interception on the first non-zero write, unle=
+ss the
+> >> +             * guest is hosted on an eIBRS system and setting only
+> >
+> > The "unless guest is hosted on an eIBRS system" blurb is wrong and does=
+n't match
 >
-> -                       page = vmalloc_to_page(page);
-> +                       page = vmalloc_to_page(addr);
->                 }
->         }
+> Ah right, thanks for catching that
 >
-> --
-> 2.35.3
+> > the code.  Again, it's all about whether eIBRS is advertised to the gue=
+st.  With
+> > some other minor tweaking to wrangle the comment to 80 chars...
 >
+> RE 80 chars - quick question (and forgive the silly question here), but h=
+ow are you
+> counting that? I=E2=80=99ve got my editor cutting at 79 cols, where tab s=
+ize is accounted
+> for as 4 cols, so the longest line on my side for this patch is 72-73 or =
+so.
 
-Nice catch, thanks!
-
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Tab stops are every 8 characters. :-)

@@ -2,189 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20ADA534580
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72756534587
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345193AbiEYVCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 17:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S1345218AbiEYVCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 17:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbiEYVB5 (ORCPT
+        with ESMTP id S232019AbiEYVCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 17:01:57 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE96435DC7;
-        Wed, 25 May 2022 14:01:55 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id w130so63142oig.0;
-        Wed, 25 May 2022 14:01:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eV5yBS00qx48PlZZxn5CpCblfq4K2A5juZQWoz0DTyQ=;
-        b=b009C+VN1TgeqTm+J8R6jdce0SR5YNYrSxEPGW8kSQQCigU57F8upkRebDJ/+QcSyv
-         /q4WfXhx05ExazXQIsQ4sG3EYa0B8ujxdCKtG9dieR2kaRkHIUFjdQrggoEegX0FaC5O
-         vaPexiJhDmD246s4TOuy2ix9iUyUQ2Zcx4J6dONqY58d5jbpqk8xlaO0Nivo+0iUQ6zq
-         +A3japseOp6nmM6ah2gRgPN+mhpYfjJdQEbB05SC9SNxNAaCBPfmob+0hp2Hq8PTDGM5
-         PIEch3z5L2HClMmXX148q+zmtKH4/Oo+6a/WHs/vTYOLKjL373HOVfJjzJ2Z6SHz/VxN
-         AwxQ==
-X-Gm-Message-State: AOAM532eCqsb+1yZJa8F/pOVi9ZvtfCXYhmkZndrNnUkf20aOicZUOs6
-        4fgvflEJOiF5Mfvp4wSUydNcGoRx4w==
-X-Google-Smtp-Source: ABdhPJw5CRPGykueFSEUBPahgULvafvqctVKF09HWJ0vw1MdPECO0kDWuHEbnvLjKh6QNPWctp7Eqg==
-X-Received: by 2002:a05:6808:16a1:b0:2f9:bfea:e5f3 with SMTP id bb33-20020a05680816a100b002f9bfeae5f3mr6603644oib.28.1653512515113;
-        Wed, 25 May 2022 14:01:55 -0700 (PDT)
-Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id w19-20020a056870431300b000f26a4e2cdfsm3723564oah.18.2022.05.25.14.01.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 14:01:54 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: [PATCH] dt-bindings: memory-controllers: ingenic: Split out child node properties
-Date:   Wed, 25 May 2022 16:01:40 -0500
-Message-Id: <20220525210140.2489866-1-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 25 May 2022 17:02:32 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B96369DB;
+        Wed, 25 May 2022 14:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653512551; x=1685048551;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=7n9MLxzBDgKF6LPs4nyTmtg6zXPaQxaLYtHHHINXZKA=;
+  b=g6Dwn9HeRyf7f165eADUWAj7017LQJeIMt2bo5mIpci3Z21bGmEUO5wO
+   S/II8TrKkDHrsgBEgW8J7TxOjvZrx4M7lsrQ2OmRSoYk5ewv4jvVStyO2
+   iFNwz+Tfc2Wr8BJUOuYfcimHzqXNPaHOtxuKE0uFEf3j+KD8v2oGQt7XW
+   o=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 May 2022 14:02:31 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 14:02:30 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 25 May 2022 14:02:30 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 25 May 2022 14:02:29 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v13 0/3] eDP/DP Phy vdda realted function
+Date:   Wed, 25 May 2022 14:02:17 -0700
+Message-ID: <1653512540-21956-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Binding schemas which define child node properties such as memory
-controllers with timing properties need a separate schema which can be
-referenced from child device schemas. This is necessary for
-unevaluatedProperties checks to work properly.
+1) add regulator_set_load() to eDP phy
+2) add regulator_set_load() to DP phy
+3) remove vdda related function out of eDP/DP controller
 
-Move the ingenic,nemc child properties to its own file and reference
-from ingenic,nand.yaml which describes a child NAND controller.
+Kuogee Hsieh (3):
+  phy: qcom-edp: add regulator_set_load to edp phy
+  phy: qcom-qmp: add regulator_set_load to dp phy
+  drm/msm/dp: delete vdda regulator related functions from eDP/DP
+    controller
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../ingenic,nemc-peripherals.yaml             | 46 +++++++++++++++++++
- .../memory-controllers/ingenic,nemc.yaml      | 32 -------------
- .../devicetree/bindings/mtd/ingenic,nand.yaml |  1 +
- 3 files changed, 47 insertions(+), 32 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ingenic,nemc-peripherals.yaml
+ drivers/gpu/drm/msm/dp/dp_parser.c  | 14 ------
+ drivers/gpu/drm/msm/dp/dp_parser.h  |  8 ----
+ drivers/gpu/drm/msm/dp/dp_power.c   | 95 +------------------------------------
+ drivers/phy/qualcomm/phy-qcom-edp.c | 12 +++++
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 40 ++++++++++++----
+ 5 files changed, 45 insertions(+), 124 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc-peripherals.yaml b/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc-peripherals.yaml
-new file mode 100644
-index 000000000000..b8ed52a44d57
---- /dev/null
-+++ b/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc-peripherals.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/memory-controllers/ingenic,nemc-peripherals.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Ingenic SoCs NAND / External Memory Controller (NEMC) devicetree bindings
-+
-+maintainers:
-+  - Paul Cercueil <paul@crapouillou.net>
-+
-+properties:
-+  reg:
-+    minItems: 1
-+    maxItems: 255
-+
-+  ingenic,nemc-bus-width:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [8, 16]
-+    description: Specifies the bus width in bits.
-+
-+  ingenic,nemc-tAS:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Address setup time in nanoseconds.
-+
-+  ingenic,nemc-tAH:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Address hold time in nanoseconds.
-+
-+  ingenic,nemc-tBP:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Burst pitch time in nanoseconds.
-+
-+  ingenic,nemc-tAW:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Address wait time in nanoseconds.
-+
-+  ingenic,nemc-tSTRV:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Static memory recovery time in nanoseconds.
-+
-+required:
-+  - reg
-+
-+additionalProperties: true
-+...
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml b/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
-index 24f9e1982028..dd13a5106d6c 100644
---- a/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
-@@ -39,38 +39,6 @@ properties:
- patternProperties:
-   ".*@[0-9]+$":
-     type: object
--    properties:
--      reg:
--        minItems: 1
--        maxItems: 255
--
--      ingenic,nemc-bus-width:
--        $ref: /schemas/types.yaml#/definitions/uint32
--        enum: [8, 16]
--        description: Specifies the bus width in bits.
--
--      ingenic,nemc-tAS:
--        $ref: /schemas/types.yaml#/definitions/uint32
--        description: Address setup time in nanoseconds.
--
--      ingenic,nemc-tAH:
--        $ref: /schemas/types.yaml#/definitions/uint32
--        description: Address hold time in nanoseconds.
--
--      ingenic,nemc-tBP:
--        $ref: /schemas/types.yaml#/definitions/uint32
--        description: Burst pitch time in nanoseconds.
--
--      ingenic,nemc-tAW:
--        $ref: /schemas/types.yaml#/definitions/uint32
--        description: Address wait time in nanoseconds.
--
--      ingenic,nemc-tSTRV:
--        $ref: /schemas/types.yaml#/definitions/uint32
--        description: Static memory recovery time in nanoseconds.
--
--    required:
--      - reg
- 
- required:
-   - compatible
-diff --git a/Documentation/devicetree/bindings/mtd/ingenic,nand.yaml b/Documentation/devicetree/bindings/mtd/ingenic,nand.yaml
-index 9de8ef6e59ca..8c272c842bfd 100644
---- a/Documentation/devicetree/bindings/mtd/ingenic,nand.yaml
-+++ b/Documentation/devicetree/bindings/mtd/ingenic,nand.yaml
-@@ -11,6 +11,7 @@ maintainers:
- 
- allOf:
-   - $ref: nand-controller.yaml#
-+  - $ref: /schemas/memory-controllers/ingenic,nemc-peripherals.yaml#
- 
- properties:
-   compatible:
 -- 
-2.34.1
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

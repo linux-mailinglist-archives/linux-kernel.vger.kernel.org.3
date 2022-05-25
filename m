@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1365341C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DB45341C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245455AbiEYQyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 12:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
+        id S245470AbiEYQ46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 12:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234485AbiEYQys (ORCPT
+        with ESMTP id S234420AbiEYQ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 12:54:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340758A32E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:54:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA8F7616EF
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 16:54:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D9DC385B8;
-        Wed, 25 May 2022 16:54:42 +0000 (UTC)
-Date:   Wed, 25 May 2022 17:54:39 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        hanchuanhua <hanchuanhua@oppo.com>,
-        =?utf-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
-        <zhangshiming@oppo.com>, =?utf-8?B?6YOt5YGl?= <guojian@oppo.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>, Shaohua Li <shli@kernel.org>,
-        Rik van Riel <riel@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Steven Price <steven.price@arm.com>
-Subject: Re: [PATCH] arm64: enable THP_SWAP for arm64
-Message-ID: <Yo5fTzEUFW6lbwnI@arm.com>
-References: <20220524071403.128644-1-21cnbao@gmail.com>
- <YoyTWaDmSiBUkaeg@arm.com>
- <CAGsJ_4xPFkc6Kn2G5pPPk8XJ4iZV=atzan=Quq6Ljc_5vr1fnA@mail.gmail.com>
- <Yo0ufMHXPL5mJ5t6@arm.com>
- <CAGsJ_4wSmZo9+Anzq_WjF=xACRT7p0EJ86de6C=8xhGpTBOHQg@mail.gmail.com>
+        Wed, 25 May 2022 12:56:56 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB0B92D14
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:56:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=x1KHQf+5TwZyXYUK4oyCaJhl7u0Ap341ZJfy/U4kYRI=; b=DcFrQwYCoCWppcb9ObmbQ+YZmV
+        12bc7CEroUdanI2WNNXMaHvT/bFywgZkiyj6zINd5uMxNA+ozoPkhrnUvp8pLQ0tuNzhQFt5gV+D2
+        2t8hl9dXG8blYn7IysH+U7QuOekrn+opnqzjO36itTqaTbcC/C2lXsQmZEFWM0FUNjUu11pLJyGPm
+        jVpYNf7dXev3HKpm7vuyik4g0CivLzVyGIy6i1eFCgkxZ41xAuYW+PsOjjG/DFjftUhzzcxf1IdyS
+        txRlgGqd4Pdn0jrmT8tf3OnY0Ml2f+ylxcqA/dblqB8WswNtxs7OSDv/42i4Du2wY8BR5aVBa2VaQ
+        hBtswZiw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ntuIX-001fkg-Cd; Wed, 25 May 2022 16:55:49 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 616EC980E04; Wed, 25 May 2022 18:55:48 +0200 (CEST)
+Date:   Wed, 25 May 2022 18:55:48 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Wyes Karny <wyes.karny@amd.com>
+Cc:     linux-kernel@vger.kernel.org, Lewis.Carroll@amd.com,
+        Mario.Limonciello@amd.com, gautham.shenoy@amd.com,
+        Ananth.Narayan@amd.com, bharata@amd.com, len.brown@intel.com,
+        x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        chang.seok.bae@intel.com, keescook@chromium.org, metze@samba.org,
+        zhengqi.arch@bytedance.com, mark.rutland@arm.com,
+        rui.zhang@intel.com, puwen@hygon.cn, rafael.j.wysocki@intel.com,
+        andrew.cooper3@citrix.com, jing2.liu@intel.com,
+        jmattson@google.com, pawan.kumar.gupta@linux.intel.com
+Subject: Re: [PATCH v4 2/3] x86: Remove vendor checks from
+ prefer_mwait_c1_over_halt
+Message-ID: <20220525165548.GJ2578@worktop.programming.kicks-ass.net>
+References: <cover.7d2ba81d1918bbfd8ae5e6774db8da0502f7ed67.1653324016.git-series.wyes.karny@amd.com>
+ <67ca737f7cdabfc75f930cf59b49d910d8c491d6.1653324016.git-series.wyes.karny@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGsJ_4wSmZo9+Anzq_WjF=xACRT7p0EJ86de6C=8xhGpTBOHQg@mail.gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <67ca737f7cdabfc75f930cf59b49d910d8c491d6.1653324016.git-series.wyes.karny@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 11:10:41PM +1200, Barry Song wrote:
-> On Wed, May 25, 2022 at 7:14 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > I think this should work and with your other proposal it would be
-> > limited to MTE pages:
-> >
-> > #define arch_thp_swp_supported(page)    (!test_bit(PG_mte_tagged, &page->flags))
-> >
-> > Are THP pages loaded from swap as a whole or are they split? IIRC the
-> 
-> i can confirm thp is written as a whole through:
-> [   90.622863]  __swap_writepage+0xe8/0x580
-> [   90.622881]  swap_writepage+0x44/0xf8
-> [   90.622891]  pageout+0xe0/0x2a8
-> [   90.622906]  shrink_page_list+0x9dc/0xde0
-> [   90.622917]  shrink_inactive_list+0x1ec/0x3c8
-> [   90.622928]  shrink_lruvec+0x3dc/0x628
-> [   90.622939]  shrink_node+0x37c/0x6a0
-> [   90.622950]  balance_pgdat+0x354/0x668
-> [   90.622961]  kswapd+0x1e0/0x3c0
-> [   90.622972]  kthread+0x110/0x120
-> 
-> but i have never got a backtrace in which thp is loaded as a whole though it
-> seems the code has this path:
-> int swap_readpage(struct page *page, bool synchronous)
-> {
->         ...
->         bio = bio_alloc(sis->bdev, 1, REQ_OP_READ, GFP_KERNEL);
->         bio->bi_iter.bi_sector = swap_page_sector(page);
->         bio->bi_end_io = end_swap_bio_read;
->         bio_add_page(bio, page, thp_size(page), 0);
->         ...
->         submit_bio(bio);
-> }
-> 
-> > splitting still happens but after the swapping out finishes. Even if
-> > they are loaded as 4K pages, we still have the mte_save_tags() that only
-> > understands small pages currently, so rejecting THP pages is probably
-> > best.
-> 
-> as anyway i don't have a mte-hardware to do a valid test to go any
-> further, so i will totally disable thp_swp for hardware having mte for
-> this moment in patch v2.
+On Mon, May 23, 2022 at 10:25:50PM +0530, Wyes Karny wrote:
 
-It makes sense. If we decide to improve this for MTE, we'll change the
-arch check.
+> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> index 4e0178b066c5..7bf4d73c9522 100644
+> --- a/arch/x86/kernel/process.c
+> +++ b/arch/x86/kernel/process.c
+> @@ -813,28 +813,43 @@ static void amd_e400_idle(void)
+>  }
+>  
+>  /*
+> - * Intel Core2 and older machines prefer MWAIT over HALT for C1.
+> - * We can't rely on cpuidle installing MWAIT, because it will not load
+> - * on systems that support only C1 -- so the boot default must be MWAIT.
+> + * Prefer MWAIT over HALT if MWAIT is supported, MWAIT_CPUID leaf
+> + * exists and whenever MONITOR/MWAIT extensions are present there is at
+> + * least one C1 substate.
+>   *
+> - * Some AMD machines are the opposite, they depend on using HALT.
+> - *
+> - * So for default C1, which is used during boot until cpuidle loads,
+> - * use MWAIT-C1 on Intel HW that has it, else use HALT.
+> + * Do not prefer MWAIT if MONITOR instruction has a bug or idle=nomwait
+> + * is passed to kernel commandline parameter.
+>   */
+>  static int prefer_mwait_c1_over_halt(const struct cpuinfo_x86 *c)
+>  {
+> +	u32 eax, ebx, ecx, edx;
+> +
+>  	/* User has disallowed the use of MWAIT. Fallback to HALT */
+>  	if (boot_option_idle_override == IDLE_NOMWAIT)
+>  		return 0;
+>  
+> -	if (c->x86_vendor != X86_VENDOR_INTEL)
+> +	/* MWAIT is not supported on this platform. Fallback to HALT */
+> +	if (!cpu_has(c, X86_FEATURE_MWAIT))
+>  		return 0;
+>  
+> -	if (!cpu_has(c, X86_FEATURE_MWAIT) || boot_cpu_has_bug(X86_BUG_MONITOR))
+> +	/* Monitor has a bug. Fallback to HALT */
+> +	if (boot_cpu_has_bug(X86_BUG_MONITOR))
+>  		return 0;
+>  
+> -	return 1;
+> +	cpuid(CPUID_MWAIT_LEAF, &eax, &ebx, &ecx, &edx);
+> +
+> +	/*
+> +	 * If MWAIT extensions are not available, it is safe to use MWAIT
+> +	 * with EAX=0, ECX=0.
+> +	 */
+> +	if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED))
+> +		return 1;
+> +
+> +	/*
+> +	 * If MWAIT extensions are available, there should be at least one
+> +	 * MWAIT C1 substate present.
+> +	 */
+> +	return (edx & MWAIT_C1_SUBSTATE_MASK);
+>  }
 
-Thanks.
+Seems reasonable enough to me,
 
--- 
-Catalin
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>

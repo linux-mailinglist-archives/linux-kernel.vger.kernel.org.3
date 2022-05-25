@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5D95346D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B2A5346D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243724AbiEYWvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 18:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
+        id S1344264AbiEYWv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 18:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiEYWvT (ORCPT
+        with ESMTP id S230280AbiEYWvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 18:51:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A05E24092;
-        Wed, 25 May 2022 15:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2LbSngeeObuFPL7ErF2AoPAHTv4dJXye4aEdBeQeQNc=; b=pKt+abZAcRwTjLPiIuUJ63udl/
-        LnZRnektXGIrQifOO2P7wqD5PIlFZuz1FEsn7dG3uIrD0Zcm9nJmRg6jzQ00L28dKnVvU64/SnM0V
-        WgngpftvIhbvNa1nF/R2cpMNn3GHQsnpskfqcbowHfbfnCnG1RrjqLx3YEKODPnz/gZccpnduZ+6k
-        cHd90+71zdAoZiw3qkosD0UdzDJHfo8IRph+0ZBS+nlISrFAZFqB3LRXClk3O3Qm5udZsMgkKdDCD
-        1Y1R04KKoSlNcDEDVZAsI/f126QGimL6tkIM7vsK6kH7EaZ5DS6vQWIFBmABtfvqfKaQQ/st2szcq
-        5SRd4ZOA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ntzqR-00CuyK-CE; Wed, 25 May 2022 22:51:11 +0000
-Date:   Wed, 25 May 2022 15:51:11 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Song Liu <song@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [GIT PULL] Modules fixes for v5.19-rc1
-Message-ID: <Yo6y37M4oyv5z4+D@bombadil.infradead.org>
-References: <Yo6kboq8M8nUwy45@bombadil.infradead.org>
+        Wed, 25 May 2022 18:51:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF492409F;
+        Wed, 25 May 2022 15:51:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B5CB31F91C;
+        Wed, 25 May 2022 22:51:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653519112; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QP07LDyVTEoT20uTedwg+UGDjLkX645oy3+oI/k9KRs=;
+        b=Un5rEjXdkXJRg/7BDQ4WUW/5PsCCqQ5kj5pJaQp7Co5y558JEvVWkwTggBiPxw9IsU/Jgz
+        VkB5iahLfTOZjyEDs8pggBJHpKHHjfSOlosX/O9wN7Tobvg5sArOIb3hJ9uVgCoKf2SLP6
+        rx7GDfcaa0DgZ9PwdWMgZNWZGf5fT90=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7EB2813487;
+        Wed, 25 May 2022 22:51:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id p/zbHAizjmLuLgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 25 May 2022 22:51:52 +0000
+Date:   Thu, 26 May 2022 00:51:46 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     shisiyuan19870131@gmail.com
+Cc:     Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup: Return if dst_cgrp equals to src_cgrp
+Message-ID: <Yo6zAi+Y/uXLYUI7@blackbook>
+References: <1653066120-21262-1-git-send-email-shisiyuan@xiaomi.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yo6kboq8M8nUwy45@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <1653066120-21262-1-git-send-email-shisiyuan@xiaomi.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,15 +62,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry the subject should say "Modules changes".
+Hello.
 
-I also forgot to itemize possible merge conflicts and resolutions
-which linux-next reported:
+On Sat, May 21, 2022 at 01:02:00AM +0800, shisiyuan <shisiyuan19870131@gmail.com> wrote:
+> In function cgroup_migrate_add_src(), if dst_cgrp
+> equals to src_cgroup which the tasks link, dont
+> go on migrating tasks to another css_set.
 
-powerpc:
-https://lkml.kernel.org/r/20220520154055.7f964b76@canb.auug.org.au
+Do you have an example which operations lead to this situation?
 
-kbuild:
-https://lkml.kernel.org/r/20220523120859.570f7367@canb.auug.org.au
+> This can save the cost of unnecessary migration.
 
-  Luis
+How much are the savings visible?
+
+(Note, I suspect the shortcut on `src_cgrp == dst_cgrp` might not be
+always correct when called from cgroup_update_dfl_csses() but not 100%
+sure now.)
+
+Thanks,
+Michal

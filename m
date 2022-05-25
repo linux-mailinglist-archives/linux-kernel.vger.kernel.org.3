@@ -2,260 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722855337E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5805337EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiEYIBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S233999AbiEYIBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiEYIBN (ORCPT
+        with ESMTP id S229560AbiEYIBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:01:13 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD4142ED8;
-        Wed, 25 May 2022 01:01:12 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id h9so11873660qtx.2;
-        Wed, 25 May 2022 01:01:12 -0700 (PDT)
+        Wed, 25 May 2022 04:01:47 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA627CB20
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:01:45 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id p123so6633795qke.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=5llnQ0HkqBxFbZt5az1NecvFrmyi/1RVbD73twHaCqM=;
+        b=zZwgi2desRjXdWtXNwoEvX6wsB2Qhsj85lZVg/nLI8ghYM7OjRBlJ9Pi4V/DxPJ1Bb
+         WZX+2l4VDbos162+9LTh3lTgITVULB14ootMx8ZWnHPxrGJl2hSY1UiFq7OVYQweoBuf
+         qLOsguArxFrn6puv/z2Fc8rEjxR89d2kRFl2uwfq2nLOr2Q9fmjIB22aheH10RuXhgoY
+         6WODq69uvHhKl7jHwDQ+87jmzfLIflNyEp6/gCudMQhdFsI2Gj2Ztk6y9qG+CLJgxYb0
+         QOn/cB9uBnLShJowJr7E7LNRBNZ1wicPBHkaF0wf+jwMbmIYLpWF6Kaw2b0mBrZXddfy
+         pgLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rlhkBuzRG2HpsdoImNR9zGgXgfkVtL8VEEmP1MsIdp4=;
-        b=e/dGJoHTdDLkXLNsUeOnQo+c0/GOI+Z8ysk2EYWXuen8VmyvdkuCPEP1bk47021cCn
-         tUU9okQTvpvZxXOP5NYuNfilOMlrtiibo+79lCjHmyM8Hl39FTL2C0meP+snFhc184uu
-         LslRNuFFUgHUjSDi7lFJ3cqwAb3PvputEjMkmMVbGImZYClfbcGZ5RzsNEceUB+DWrRr
-         IGsRRnFVgtyARaV279qlQejA9ow2yHe5o9V/4qn9dLTvkCBWYmEuoMAAS5Ua4ESrdFxw
-         GUxX1K8D5MK/Ok0tYPEm9jdVCgfVm5qOiLp8XoPI518poWDwuqCiB3Wkxec3Tja/XTCy
-         /HNw==
-X-Gm-Message-State: AOAM531OFArkgFw8g39P5rGdXNAlqemCwhEn/wIjOgmeHtYBYSrXnQBA
-        bkFbHEnrwpp7Gd2lVVd4nsco0EpGyFtqIA==
-X-Google-Smtp-Source: ABdhPJyn968E+lnfj0Y4TJSLlb6EF9DLEeRadKECc2P+iM3t5kQtZIWu3sf/mZbnaKMmD1i445JXqw==
-X-Received: by 2002:a05:622a:1108:b0:2f3:d7d1:cf28 with SMTP id e8-20020a05622a110800b002f3d7d1cf28mr23015938qty.481.1653465671266;
-        Wed, 25 May 2022 01:01:11 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id g25-20020ac870d9000000b002f9433ed963sm923254qtp.64.2022.05.25.01.01.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 01:01:10 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-30007f11f88so74701107b3.7;
-        Wed, 25 May 2022 01:01:09 -0700 (PDT)
-X-Received: by 2002:a81:ad11:0:b0:2fe:fb00:a759 with SMTP id
- l17-20020a81ad11000000b002fefb00a759mr32321342ywh.283.1653465668841; Wed, 25
- May 2022 01:01:08 -0700 (PDT)
+         :message-id:subject:to;
+        bh=5llnQ0HkqBxFbZt5az1NecvFrmyi/1RVbD73twHaCqM=;
+        b=gE7I7rziCD0w+v7xouKntF8W1TdOgUDDxx5NPvl1u4QaG946/P5F+rWenooH6ifRqX
+         Xsh1b45oHEUV2TQHlMGp5yskOd11jmT5qHYbRSCwICp32N67rSE5zSXVU+hxV1Ij2TYu
+         C+4fa8i12muI0NkaEkm8WKR15hN9jnMUKjnLBvYEluaPLIUTFepjghtoOPZJAyHnBb9R
+         lGdmpr3D2o0aGVEaCSkbL+GuMjOia104Jo0kqkp7Btqs+VwBgDDYwhanSBzkgNHTCs2c
+         Yxn4lRMX0KlPWXGlx2pd0txbx6TiBfvniVJMRhRQLhsQ6KpxqVK/mRzEKMr+5XaNy5ce
+         JGBQ==
+X-Gm-Message-State: AOAM533+sBzxGwP/TUs5vUrUfOPLsjVkU9bKff0luljRu80Ie2ko2MEe
+        nFZDZvj/dGJ2Ly7iUfXPNnpVb6o4V6IzXF55jkJavw==
+X-Google-Smtp-Source: ABdhPJyLzdihFq5P1mvTRP2MzB7lIfIvefw77o57mf6LyputxZqyr2pOmunz6FAsXzFu9/HvX3f2WImcrWg1neFlU9Y=
+X-Received: by 2002:a05:620a:414e:b0:6a5:8dec:57bb with SMTP id
+ k14-20020a05620a414e00b006a58dec57bbmr1765575qko.30.1653465704537; Wed, 25
+ May 2022 01:01:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220524172214.5104-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220524172214.5104-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220524172214.5104-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 25 May 2022 10:00:56 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX0pqr8pmbX8OfUyTeEwiFGSG5uyP4nLG1LPy7_zzLPbQ@mail.gmail.com>
-Message-ID: <CAMuHMdX0pqr8pmbX8OfUyTeEwiFGSG5uyP4nLG1LPy7_zzLPbQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/2] irqchip/sifive-plic: Add support for Renesas
- RZ/Five SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220523213837.1016542-1-marijn.suijten@somainline.org>
+ <CAA8EJprEjOWRh98V3sprjXZJZMeR25Bz1U3a_uX_KhRbU48srQ@mail.gmail.com> <20220524220312.jrdkolu7eoxtcyju@SoMainline.org>
+In-Reply-To: <20220524220312.jrdkolu7eoxtcyju@SoMainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 25 May 2022 11:01:33 +0300
+Message-ID: <CAA8EJpofvyxH22qWs5HLqG-EkKkecbFySXd36YDmK8cdeNaGUg@mail.gmail.com>
+Subject: Re: [PATCH 0/9] drm/msm/dsi_phy: Replace parent names with clk_hw pointers
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Tue, May 24, 2022 at 7:22 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
-> NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
-> case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
-> edge until the previous completion message has been received and
-> NCEPLIC100 doesn't support pending interrupt counter, hence losing the
-> interrupts if not acknowledged in time.
+On Wed, 25 May 2022 at 01:03, Marijn Suijten
+<marijn.suijten@somainline.org> wrote:
 >
-> So the workaround for edge-triggered interrupts to be handled correctly
-> and without losing is that it needs to be acknowledged first and then
-> handler must be run so that we don't miss on the next edge-triggered
-> interrupt.
+> On 2022-05-24 02:43:01, Dmitry Baryshkov wrote:
+> > Hi,
+> >
+> > On Tue, 24 May 2022 at 00:38, Marijn Suijten
+> > <marijn.suijten@somainline.org> wrote:
+> > >
+> > > As stated in [1] I promised to tackle and send this series.
+> > >
+> > > parent_hw pointers are easier to manage and cheaper to use than
+> > > repeatedly formatting the parent name and subsequently leaving the clk
+> > > framework to perform lookups based on that name.
+> > >
+> > > This series starts out by adding extra constructors for divider, mux and
+> > > fixed-factor clocks that have parent_hw(s) pointer argument(s) instead
+> > > of some DT index or name.  Followed by individual patches performing the
+> > > conversion, one DSI PHY at a time.
+> > >
+> > > dsi_phy_28nm_8960 includes an extra fixup to replace "eternal"
+> > > devm_kzalloc allocations (for the lifetime of the device) with
+> > > stack-local char arrays, like all the other DSI PHY drivers.
+> > >
+> > > I couldn't help but notice that clock names are wildly varying:
+> > >
+> > > - Some use underscores in the _clk suffix where others have nothing;
+> > > - Some have an _ after the %d, others have not;
+> > > - Some use a _pll suffix after dsi%d or even _phy_pll suffix.
+> > >
+> > > Are there any thoughts or feelings towards unifying these?
+> > > Theoretically no clock names are used anywhere in the kernel, and
+> > > everything is based on a phandle + index in DT (I have yet to validate
+> > > this).  Obviously no .name/.fw_name will be updated to not break DT.
+> >
+> > I'd say, leave them as is. Even if they are historical, we don't have
+> > a strong pressure to change them.
 >
-> This patch adds a new compatible string for Renesas RZ/Five SoC and adds
-> support to change interrupt flow based on the interrupt type. It also
-> implements irq_ack and irq_set_type callbacks.
+> Leave them as it is, or - as suggested below - clean them up?
+
+Let's leave the names as is for now, convert all clock drivers to
+fetch clocks from DT and decide how to continue with clock names
+afterwards.
+
+> > Significant number of older platforms still use names to identify the
+> > clock. And moreover apq8096/msm8960 uses dsi1/dsi2 instead of
+> > dsi0/dsi1.
+> >
+> > Probably we should call the next cycle "The Cycle of clocks cleaning".
+> > I can volunteer to take care of 8960/8064/8016/8996, as at least I can
+> > test them. But if you wish, you (or anybody else of course) can take
+> > any of these platforms too, just ping me, so that I won't spend time
+> > duplicating somebody's efforts.
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-
-Thanks for your patch!
-
-> --- a/drivers/irqchip/irq-sifive-plic.c
-> +++ b/drivers/irqchip/irq-sifive-plic.c
-> @@ -60,10 +60,13 @@
->  #define        PLIC_DISABLE_THRESHOLD          0x7
->  #define        PLIC_ENABLE_THRESHOLD           0
+> We can at least clean up the names of clocks that are not "exported" by
+> the drivers.  However, we should also convert all other clk drivers to
+> utilize DT to define clk dependencies instead of depending on global
+> names, and already got quite some platforms tackled.  At that point we
+> can just convert all names (give or take the often discussed "backwards
+> compatbility" between the kernel and some ancient DT someone may still
+> be running on their device).
 >
-> +#define RENESAS_R9A07G043_PLIC         1
-> +
->  struct plic_priv {
->         struct cpumask lmask;
->         struct irq_domain *irqdomain;
->         void __iomem *regs;
-> +       u8 of_data;
+> I don't own any device for the SoCs you mentioned, all good from my
+> side if you take them.  We should probably note down all clock drivers
+> that still need conversion and split them across devs with physical
+> access, then I can check what I still have lying around here as well.
 
-Usually it's cleaner to use feature bits instead of enum types.
+Can you please make a google spreadsheet? Then anybody can take a look
+and volunteer (or check that the platform is being taken care of).
+I have 8064 (and thus I can cover 8960 too), 8016, 8096 on my desk and
+qcs404 and 8998 in the remote lab (but I can leave them to somebody
+else).
 
->  };
+> > > Which, by the way, is there a particular reason for:
+> > >
+> > >   #define DSI_BYTE_PLL_CLK              0
+> > >   #define DSI_PIXEL_PLL_CLK             1
+> > >
+> > > To not be in the dt-bindings and used in the DT?
+> >
+> > Before my restructure of the DSI PHY subsys, each driver defined them
+> > separately. And the idea of moving them to a dt-bindings header didn't
+> > come to my mind. Feel free to do so, it looks like a good idea.
+> > Just as a note, DP PHY also uses 0 for the link clock and 1 for the
+> > pixel clock. What do you think about having a single header for these
+> > names?
 >
->  struct plic_handler {
-> @@ -163,10 +166,31 @@ static int plic_set_affinity(struct irq_data *d,
->  }
->  #endif
->
-> +static void plic_irq_ack(struct irq_data *d)
-> +{
-> +       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
-> +
+> No worries, it's already much better to have them defined once :), now
+> we can just go one step further and move it to dt-bindings.  Great to
+> clean up the "magic constant indices" for the DP PHY as well
+> (phy-qcom-qmp.c is the only one defining these clocks, right?)
 
-No check for RZ/Five or irq type?
-.irq_ack() seems to be called for level interrupts, too
-(from handle_level_irq() through mask_ack_irq()).
+No, phy-qcom-edp.c also uses these magic numbers.
 
-> +       if (irqd_irq_masked(d)) {
-> +               plic_irq_unmask(d);
-> +               writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
-> +               plic_irq_mask(d);
-> +       } else {
-> +               writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
-> +       }
-> +}
+> and I
+> think we're fine having them in one header, pending someone suggesting a
+> name as I have no idea what to call it nor where to put it.  Under
+> dt-bindings/clock most likely, but what common name would we choose?
+> Something including qcom and mdss?
 
-The above is identical to the old plic_irq_eoi()...
+dt-bindings/phy/phy-qcom-dsi.h and dt-bindings/phy/phy-qcom-dp.h?
 
-> +
->  static void plic_irq_eoi(struct irq_data *d)
->  {
->         struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
->
-> +       /*
-> +        * For Renesas R9A07G043 SoC if the interrupt type is EDGE
-> +        * we have already acknowledged it in ack callback.
-> +        */
-> +       if (handler->priv->of_data == RENESAS_R9A07G043_PLIC &&
-> +           !irqd_is_level_type(d))
-> +               return;
-> +
 
-... so you can just call into plic_irq_ack() here?
-
->         if (irqd_irq_masked(d)) {
->                 plic_irq_unmask(d);
->                 writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
-> @@ -176,11 +200,37 @@ static void plic_irq_eoi(struct irq_data *d)
->         }
->  }
->
-> +static int plic_irq_set_type(struct irq_data *d, unsigned int type)
-> +{
-> +       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
-> +
-> +       if (handler->priv->of_data != RENESAS_R9A07G043_PLIC)
-> +               return 0;
-> +
-> +       switch (type) {
-> +       case IRQ_TYPE_LEVEL_HIGH:
-> +               irq_set_handler_locked(d, handle_fasteoi_irq);
-> +               break;
-> +
-> +       case IRQ_TYPE_EDGE_RISING:
-> +               irq_set_handler_locked(d, handle_fasteoi_ack_irq);
-> +               break;
-> +
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static struct irq_chip plic_chip = {
-
-I think this can be const.
-
->         .name           = "SiFive PLIC",
->         .irq_mask       = plic_irq_mask,
->         .irq_unmask     = plic_irq_unmask,
-> +       .irq_ack        = plic_irq_ack,
-
-This causes extra processing on non-affected PLICs.
-Perhaps use a separate irq_chip instance?
-
->         .irq_eoi        = plic_irq_eoi,
-> +       .irq_set_type   = plic_irq_set_type,
-> +
->  #ifdef CONFIG_SMP
->         .irq_set_affinity = plic_set_affinity,
->  #endif
-> @@ -198,6 +248,19 @@ static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
->         return 0;
->  }
->
-> +static int plic_irq_domain_translate(struct irq_domain *d,
-> +                                    struct irq_fwspec *fwspec,
-> +                                    unsigned long *hwirq,
-> +                                    unsigned int *type)
-> +{
-> +       struct plic_priv *priv = d->host_data;
-> +
-> +       if (priv->of_data == RENESAS_R9A07G043_PLIC)
-> +               return irq_domain_translate_twocell(d, fwspec, hwirq, type);
-> +
-> +       return irq_domain_translate_onecell(d, fwspec, hwirq, type);
-
-This one clearly shows the discerning feature: onecell or twocell...
-
-> +}
-> +
->  static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
->                                  unsigned int nr_irqs, void *arg)
->  {
-
-> @@ -293,6 +356,9 @@ static int __init plic_init(struct device_node *node,
->         if (!priv)
->                 return -ENOMEM;
->
-> +       if (of_device_is_compatible(node, "renesas-r9a07g043-plic"))
-> +               priv->of_data = RENESAS_R9A07G043_PLIC;
-> +
-
-So perhaps instead just look at #interrupt-cells, and use the onecell
-or twocell irq_chip/irq_domain_ops based on that?
-
->         priv->regs = of_iomap(node, 0);
->         if (WARN_ON(!priv->regs)) {
->                 error = -EIO;
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+With best wishes
+Dmitry

@@ -2,104 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F9E533B49
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC35533B3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237383AbiEYLJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S236451AbiEYLHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiEYLJH (ORCPT
+        with ESMTP id S232745AbiEYLHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:09:07 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557CF4B1CE;
-        Wed, 25 May 2022 04:09:04 -0700 (PDT)
-Received: from mail-yb1-f169.google.com ([209.85.219.169]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MmlfS-1nRwNd1dw6-00jup3; Wed, 25 May 2022 13:03:59 +0200
-Received: by mail-yb1-f169.google.com with SMTP id s14so8286681ybc.10;
-        Wed, 25 May 2022 04:03:59 -0700 (PDT)
-X-Gm-Message-State: AOAM530rmeqk08WjlN/QYC+WZuXpvM7ioxV96Ps+P10BEN4XaNoCxpPg
-        tzi129E65eoTjSXGI1o88lqPdydVXe/0hMUrZdg=
-X-Google-Smtp-Source: ABdhPJz1e+LfMuPz0MS9sNMc0xEtyj2vb1IvtyZSxvk0REhKPHlgJ8aBK7ZaMaZoGJN/t/2EL3imcUVYNZICVyESX2c=
-X-Received: by 2002:a25:9b89:0:b0:655:8454:dc92 with SMTP id
- v9-20020a259b89000000b006558454dc92mr3917386ybo.550.1653476637990; Wed, 25
- May 2022 04:03:57 -0700 (PDT)
+        Wed, 25 May 2022 07:07:13 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C6E3B298
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:07:10 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t13so10442078wrg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=joRdFOrikAvLBCPLRckLtagnr5zAnbbJe1mok1pXiSw=;
+        b=ZUCXEQxRycox4CR+XIe37Y/zMHlkCMd0dT68FX0waAx1GkzWURFMnfELqyxuQGZR/T
+         mg+fiyemIz0D8Y/JwhX8LiTotWRgJ7/381Qc3jxsJ1kyAh0jrdY0i3I0MMjN2PYCfY4X
+         tmjLRKQ9uh1RJsyLlfHrUmtCu6tsXRxb5dpf8pG4/mOhvcewaJs1AqWTCYkEQn9dGe5f
+         k/M7rP1GoX9dH2gH2aRjUUMrrg/meRnh/kJNy+C0uerR6Mc2VSgpkGDTV7QjUckM+4jZ
+         oHGOsxAUkFsW+xnn2zbXR7/5EbdF3sifZs6Th0VlQ0bQubEelqdaIh9fVg0nROLEwZus
+         pUwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=joRdFOrikAvLBCPLRckLtagnr5zAnbbJe1mok1pXiSw=;
+        b=YAWQ0S0E+QRi0c8skIZO34UxpkVfhegDynVzGgMg+DbaeogFeq0qduSx5OJyKk4Tmb
+         pjMBvtI3/Dqu/KeYaOBCc1GM6nJt2iX04AIV1PZMgB/IYxOmI56TxexM8x97PYHjhpmY
+         MPlttg3G4izXryH7mth27eofuwuIAMnLByBQ/aUCU/rA3C2WhnEfbx3aWqk4JKGSvU40
+         sXYAYTbaOcX1UBlODxz5sVOEYWnU5vWK4CjRN67mUswghwxovnRHelKEKyYzwIhtBEZQ
+         xzSr32sioCtOBhRiSsKA9X9iLKC9MMfWz0Xk0Ce+wlBSHsvcWX6DIVnQL5fMGR4jHr2y
+         WNNg==
+X-Gm-Message-State: AOAM532laM2IeBOShpju2rcB0mv1mCEdmP2MaCRaisVw/goWhnAcEgtH
+        nCxHM7a9a5iMtJlWwEb1vtfqFA==
+X-Google-Smtp-Source: ABdhPJzrYJnqGw1yZiQCDAklTrlieqOiqwchoSzelXSLzjGcwtCmct9j1gilMqHVnxUp+Q5VzeMrEA==
+X-Received: by 2002:adf:d1c9:0:b0:20f:c3dc:e980 with SMTP id b9-20020adfd1c9000000b0020fc3dce980mr18878297wrd.552.1653476828879;
+        Wed, 25 May 2022 04:07:08 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id i7-20020a5d55c7000000b0020c5253d8d3sm1797656wrw.31.2022.05.25.04.07.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 04:07:08 -0700 (PDT)
+Date:   Wed, 25 May 2022 12:06:43 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>
+Subject: Re: [PATCH v7 03/10] iommu/sva: Add iommu_sva_domain support
+Message-ID: <Yo4Nw9QyllT1RZbd@myrica>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-4-baolu.lu@linux.intel.com>
+ <f3170016-4d7f-e78e-db48-68305f683349@arm.com>
+ <ff8f23c0-8763-1fac-6526-9095101ca0e5@linux.intel.com>
+ <567dffd4-8f15-ffb2-da69-4f47017c35fd@arm.com>
 MIME-Version: 1.0
-References: <20220419211658.11403-1-apais@linux.microsoft.com>
- <20220419211658.11403-2-apais@linux.microsoft.com> <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
-In-Reply-To: <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 25 May 2022 13:03:41 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
-Message-ID: <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
-Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Allen Pais <apais@linux.microsoft.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, olivier.dautricourt@orolia.com,
-        Stefan Roese <sr@denx.de>, Vinod Koul <vkoul@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Eugeniy.Paltsev@synopsys.com,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Leo Li <leoyang.li@nxp.com>, zw@zh-kernel.org,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        green.wan@sifive.com, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Lyra Zhang <zhang.lyra@gmail.com>,
-        Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        dmaengine@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:f/6k2PCsIE8z9nVIcZyFl7FQM76NaSb/7sgHOxM2nu/nvieFW5T
- iWAJyvMLPoTlX5/UMfaYOUfCK3rlzw0wg3KHxasWD0dv00v0UVwJoiFG51yrVU5XSQhDLvH
- H/45U5SOj90pRYFmRgUXqlTYtUldRhVTOPzs75PlT6jhXCzj+i4ggaZjYT1o2p89Bq7LeR1
- SJRII9RZBL7zF+8VRnHhQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vAWSt4/6Mzo=:dVQVOYp3ErokFgL6PgU6Le
- DIVX82jZfj7TFfkBwmSpvYtFk7yDRssUEkj5KaMwYGbscdcqRPtuhTXpgenwrHapb6prMiqeA
- eG7MjIO58GlMUOuu6IECsFNhZLP38r6PPuModfjhHhxe+3qtRS9+V8MVJ+1opcGgS6pn8XThK
- T8KfdIs3eZwS/XbKErZeT/isjuKS8yA3/0NwsgZt1UXxlKT3PkbF78xoVa9rZ2ozWhdzcMKQy
- uXHG9aMHsaLdaPCayCWa8bDDVfsvZ5cH/Kbf01uIZkkUWfLLF0U/viNfN7C/2HtvnyVGb1S+D
- uYT0rcZWn2/omsVbL5ShE5qfswMYGctv1BcWEnx1xCFVuy0wB3EwEF+yyh3yWI7eboiBjxbZi
- YbaowDmeexg2N6mDM8LV3Jhx4JbKujXyP+EKEj21c0rnCi6j8y9W87vrfDUJXdtpZYqcyhpd3
- hjp9Zt3z4iEMtxzX/ZJ4j2yjGKt6dQ6OFdro/DjFINeIkkNErne2x9SE3zMpjaAKeCT7DJi1v
- VdpYCYLqLR3kjV9QlqZQ1cTxH3EKQI3N+bL9bZuqEKA8DllMaC4y8tkkxqGERa+/qmVS25DjF
- BLFYX4+evjBzpC/tHzMCcaeaZbQTRA1iqbtAKk2Lf25VjollbFDrV4CdTZYyTQsvbGmUaiUgI
- 4pDrxHTsjBtBOtND+E+BQmF2K3FBCwfVp91ad6e6jPTk1Zhu6nGwqweOOr3kKngceBrYWmvlR
- U36MUcbOiqCjxbKqNfQtWrmwEfgvsSkFe2Lb34PSR367TGqchO/7cktGock4ka/5zqE9RbpEc
- 7QiHrIQ/R+iRuY1wGpJfqr5zG/sHLSrKaTcqEpm3kUlZpiiVy+Vexhj636eT8oV4AcBP6JjWE
- YnNg7L69pOttvhimJJeg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <567dffd4-8f15-ffb2-da69-4f47017c35fd@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,71 +85,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 11:24 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Tue, Apr 19, 2022 at 11:17 PM Allen Pais <apais@linux.microsoft.com> wrote:
->
-> > The tasklet is an old API which will be deprecated, workqueue API
-> > cab be used instead of them.
-> >
-> > This patch replaces the tasklet usage in drivers/dma/* with a
-> > simple work.
-> >
-> > Github: https://github.com/KSPP/linux/issues/94
-> >
-> > Signed-off-by: Allen Pais <apais@linux.microsoft.com>
->
-> Paging Vincent Guittot and Arnd Bergmann on the following question
-> on this patch set:
->
-> - Will replacing tasklets with workque like this negatively impact the
->   performance on DMA engine bottom halves?
+On Wed, May 25, 2022 at 11:07:49AM +0100, Robin Murphy wrote:
+> > Did you mean @handler and @handler_token staffs below?
+> > 
+> > struct iommu_domain {
+> >          unsigned type;
+> >          const struct iommu_domain_ops *ops;
+> >          unsigned long pgsize_bitmap;    /* Bitmap of page sizes in use */
+> >          iommu_fault_handler_t handler;
+> >          void *handler_token;
+> >          struct iommu_domain_geometry geometry;
+> >          struct iommu_dma_cookie *iova_cookie;
+> > };
+> > 
+> > Is it only for DMA domains? From the point view of IOMMU faults, it
+> > seems to be generic.
+> 
+> Yes, it's the old common iommu_set_fault_handler() stuff (which arguably is
+> more of a "notifier" than a "handler"), but I assume that that's irrelevant
+> if SVA is using IOPF instead?
 
-I think it will in some cases but not others. The problem I see is that
-the short patch description makes it sound like a trivial conversion of a
-single subsystem, but in reality this interacts with all the drivers using
-DMA engines, including tty/serial, sound, mmc and spi.
+Yes IOMMU drivers call either the newer iommu_report_device_fault() or the
+old report_iommu_fault(), and only the former can support IOPF/SVA. I've
+tried to merge them before but never completed it. I think the main issue
+was with finding the endpoint that caused the fault from the fault
+handler. Some IOMMU drivers just pass the IOMMU device to
+report_iommu_fault(). I'll probably pick that up at some point.
 
-In many cases, the change is an improvement, but I can see a number
-of ways this might go wrong:
-
-- for audio, waiting to schedule the workqueue task may add enough
-  latency to lead to audible skips
-
-- for serial, transferring a few characters through DMA is probably
-  more expensive now than using MMIO, which might mean that
-  there may no longer be a point in using DMA in the first place.
-
-- Some drivers such as dw_mmc schedule another tasklet from the
-  callback. If the tasklet is turned into a workqueue, this becomes
-  a bit pointless unless we change the called drivers first.
-
-What might work better in the case of the dmaengine API would
-be an approach like:
-
-1. add helper functions to call the callback functions from a
-    tasklet locally defined in drivers/dma/dmaengine.c to allow
-    deferring it from hardirq context
-
-2. Change all  tasklets that are not part of the callback
-    mechanism to work queue functions, I only see
-    xilinx_dpdma_chan_err_task in the patch, but there
-    may be more
-
-3. change all drivers to move their custom tasklets back into
-    hardirq context and instead call the new helper for deferring
-    the callback.
-
-4. Extend the dmaengine callback API to let slave drivers
-    pick hardirq, tasklet or task context for the callback.
-    task context can mean either a workqueue, or a threaded
-    IRQ here, with the default remaining the tasklet version.
-
-5. Change slave drivers to pick either hardirq or task context
-    depending on their requirements
-
-6. Remove the tasklet version.
-
-This is of course a lot more complicated than Allen's
-approach, but I think the end result would be much better.
-
-         Arnd
+Thanks,
+Jean

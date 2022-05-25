@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBDE533569
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A0053356A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243658AbiEYCkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 22:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S243663AbiEYClQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 22:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiEYCkN (ORCPT
+        with ESMTP id S243620AbiEYClB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 22:40:13 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F066F4AF;
-        Tue, 24 May 2022 19:40:12 -0700 (PDT)
-Date:   Tue, 24 May 2022 19:40:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1653446411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KAxO13FUFJl5HNca6Xvp5Gx3Mgidd0SxL8fHIYPeSTs=;
-        b=mSuHENlGfnxO3FTaUSRUpf/IIEViYyJ4mGmgEBelAUTW+xU6c6mZ7AXfEM6XNqh69TPTWG
-        OpBdtK4UK8Q7NF6A7JieL458LvOR+8Mu97azYnXm3cv3lmn3v2aWVElLkktoeZiWBWjYvv
-        D5D98KSYGsIN2RS4Ak1JcE6tlSKmSgM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        longman@redhat.com
-Subject: Re: [PATCH v4 10/11] mm: lru: add VM_BUG_ON_FOLIO to lru maintenance
- function
-Message-ID: <Yo2XBdLxcJ/J6KJp@carbon>
-References: <20220524060551.80037-1-songmuchun@bytedance.com>
- <20220524060551.80037-11-songmuchun@bytedance.com>
+        Tue, 24 May 2022 22:41:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1E76F4B5;
+        Tue, 24 May 2022 19:41:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653446460; x=1684982460;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EoglK7wI9wFrWezRsQe3Br0zDO3xeXDwJ23PuVxLiPA=;
+  b=F1MWyDkGsYyryrQWkUEZ9WW1qcuNNi100Dq/cUJG5awqxsUKN3XFaNkQ
+   yZ2uHb/98ahsN2+gjC50OClCDE7b7q0gKQ2lBowg2ibusFeOh/rYtMJka
+   AdiTMtJIRQxpgBbU3ztr6vx0zLEC9untcWYqzl8mexRn5DeO/bimHQRTi
+   c6yGHp6xcZGTUlG+FdPH6GWwIX+31yT3EDMV3tzWBVanHRqwRxTlkNIV0
+   KxWCBngBZn9rfaYvXepvaJ2oA9jeXWKLYjYILYX8D8sbSjigvjUwdMV2j
+   0j2Y32LcSOJUdI5DHhCgiPn2diyEmGARks8yxaFAs6zawe3VGt4xqR8LU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="253572689"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="253572689"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 19:40:59 -0700
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="601612579"
+Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.254.211.184]) ([10.254.211.184])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 19:40:56 -0700
+Message-ID: <9f675446-7028-6f45-7e06-1efde012afb4@intel.com>
+Date:   Wed, 25 May 2022 10:40:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524060551.80037-11-songmuchun@bytedance.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH] KVM: VMX: Read BNDCFGS if not from_vmentry
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220421091331.11196-1-lei4.wang@intel.com>
+ <YoaFknp7Swj0DdRw@google.com>
+From:   "Wang, Lei" <lei4.wang@intel.com>
+In-Reply-To: <YoaFknp7Swj0DdRw@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 02:05:50PM +0800, Muchun Song wrote:
-> We need to make sure that the page is deleted from or added to the
-> correct lruvec list. So add a VM_BUG_ON_FOLIO() to catch invalid
-> users.
-> 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> ---
->  include/linux/mm_inline.h | 6 ++++++
->  mm/vmscan.c               | 1 -
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-> index ac32125745ab..30d2393da613 100644
-> --- a/include/linux/mm_inline.h
-> +++ b/include/linux/mm_inline.h
-> @@ -97,6 +97,8 @@ void lruvec_add_folio(struct lruvec *lruvec, struct folio *folio)
->  {
->  	enum lru_list lru = folio_lru_list(folio);
->  
-> +	VM_BUG_ON_FOLIO(!folio_matches_lruvec(folio, lruvec), folio);
-> +
->  	update_lru_size(lruvec, lru, folio_zonenum(folio),
->  			folio_nr_pages(folio));
->  	if (lru != LRU_UNEVICTABLE)
-> @@ -114,6 +116,8 @@ void lruvec_add_folio_tail(struct lruvec *lruvec, struct folio *folio)
->  {
->  	enum lru_list lru = folio_lru_list(folio);
->  
-> +	VM_BUG_ON_FOLIO(!folio_matches_lruvec(folio, lruvec), folio);
-> +
->  	update_lru_size(lruvec, lru, folio_zonenum(folio),
->  			folio_nr_pages(folio));
->  	/* This is not expected to be used on LRU_UNEVICTABLE */
-> @@ -131,6 +135,8 @@ void lruvec_del_folio(struct lruvec *lruvec, struct folio *folio)
->  {
->  	enum lru_list lru = folio_lru_list(folio);
->  
-> +	VM_BUG_ON_FOLIO(!folio_matches_lruvec(folio, lruvec), folio);
-> +
->  	if (lru != LRU_UNEVICTABLE)
->  		list_del(&folio->lru);
->  	update_lru_size(lruvec, lru, folio_zonenum(folio),
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 761d5e0dd78d..6c9e2eafc8f9 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -2281,7 +2281,6 @@ static unsigned int move_pages_to_lru(struct list_head *list)
->  			continue;
->  		}
->  
-> -		VM_BUG_ON_PAGE(!folio_matches_lruvec(folio, lruvec), page);
+On 5/20/2022 1:59 AM, Sean Christopherson wrote:
+> On Thu, Apr 21, 2022, Lei Wang wrote:
+>> In the migration case, if nested state is set after MSR state, the value
+>> needs to come from the current MSR value.
+>>
+>> Signed-off-by: Lei Wang <lei4.wang@intel.com>
+>> Reported-by: Sean Christopherson <seanjc@google.com>
+>> ---
+>>   arch/x86/kvm/vmx/nested.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+>> index f18744f7ff82..58a1fa7defc9 100644
+>> --- a/arch/x86/kvm/vmx/nested.c
+>> +++ b/arch/x86/kvm/vmx/nested.c
+>> @@ -3381,7 +3381,8 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+>>   	if (!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_DEBUG_CONTROLS))
+>>   		vmx->nested.vmcs01_debugctl = vmcs_read64(GUEST_IA32_DEBUGCTL);
+>>   	if (kvm_mpx_supported() &&
+>> -		!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS))
+>> +	    (!from_vmentry ||
+> Gah, my bad, this isn't correct either.  The minor issue is that it should check
+> vmx->nested.nested_run_pending, not just from_vmentry.  If nested state is restored
+> and a VM-Entry is pending, then the MSRs that were saved+restore were L1's MSRs,
+> not L2's MSRs.
+>
+> That won't cause problems because the consumption correctly checks nested_run_pending,
+> it's just confusing and an unnecessary VMREAD.
+>
+> But that's a moot point because vmcs01 will not hold the correct value in the SMM
+> case.  Luckily, BNDCFGS is easy to handle because it's unconditionally saved on
+> VM-Exit, which means that vmcs12 is guaranteed to hold the correct value for both
+> SMM and state restore (without pending entry) because the pseudo-VM-Exit for both
+> will always save vmcs02's value into vmcs12.
+>
+> GUEST_IA32_DEBUGCTL is a much bigger pain because it's conditionally saved on
+> exit.   I think the least awful approach would be to save L2's value into
+> vmcs01_debugctl prior to the forced exit in vmx_enter_smm(), but that will require
+> more changes to the state restore flow.  Grr.
+>
+> I'll send patches for both BNDCFGS and IA32_DEBUGCTL, and will take a careful look
+> at the PKS stuff too.  I'm guessing it should follow the BNDCFGS logic.
+>
+> Sorry for the runaround.
 
-The commit log describes well why we need to add new BUG_ON's. Please, add
-something on why this is removed.
+Thanks for your detailed reviewing, no need for sorry.
 
+Looking forward to your fix patches.
 
-Thanks!

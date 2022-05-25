@@ -2,97 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D6053449C
+	by mail.lfdr.de (Postfix) with ESMTP id CF82A53449D
 	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235259AbiEYT4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 15:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S240175AbiEYT4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 15:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346466AbiEYT4T (ORCPT
+        with ESMTP id S1346533AbiEYT4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 15:56:19 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A80528718;
-        Wed, 25 May 2022 12:56:18 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id p8so20125185pfh.8;
-        Wed, 25 May 2022 12:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=URc4hQQOFWu8kbxQu3QsbQGjnzXbOZhtvLuWIaavPVo=;
-        b=RZi+79Hik/m6u3wnR25JW2Eu4n1JgneXWTduAnjWgkibjAUptWSbRpJ/yAkrdLMjD2
-         zVtQrJbZvvXIbaN/kJoEuTcBz6tB/iee0q14OliDGrfzioIgl0m3OgDlE1isO5jQ5M0U
-         Hf23JVDQ/CwVGy+7Sm5UGNzwt977TJUB3VgbByqxwV7r8zrqKiDxC4OF+i4K4Xn1pFi6
-         WwPsrbOGhlzEftQRcxP5RFv0Q6eW4lNDFABhcKo7fyqy8bOVX6fqm/72xWOA1s9Xt7/U
-         hZk44k/5mvppgUzxRkGckH0bPkbgdvkowstF1bfh3lckOFCuOXdD1Rr1K5o+Ucy/LSHf
-         rmSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=URc4hQQOFWu8kbxQu3QsbQGjnzXbOZhtvLuWIaavPVo=;
-        b=sejuCXRbH7YD3sYnUeClCl0lzu1+VkxB4AOtjwto1FPkSInzITKaokln/yatrVw+/Q
-         Ytv1HQT0+jGvwpM7ibtrHRrinhBSQo0dx9sXDhGNPUUUvQCtvv1oVvfE7q5hfmrZFMMR
-         PxfEtSFxjDWcYENLgXmphkfxUy2Gx4jIaFGW2H4vP0/qGH9oS97HOTvThAxaJA3RkUM8
-         BGjAWRD0aJPOK11KdclQTNA8sJ/mrC+uExHvkIqEbVRJZF8XhO7VxhQJOzddUBkA9oxk
-         Qlvn/HU2km8lWPQ9sAEy8fAb70/e6hlejtbGZz0FaIPelYFI8ppWWtiBugfJTubEZzq8
-         FeVw==
-X-Gm-Message-State: AOAM532HS2tBcPZgZeT8lkTLr0MdNcJdqHXHRfcOgJrIobKSez0GPZXA
-        2VqFUT1vaj5Hh7LgHYyfHlM=
-X-Google-Smtp-Source: ABdhPJzAhUcVtGFwJmSmE72i8FoA9WsdPAkuCadrn+f6PQSHiI/29tdM+Z+WIXkHG9f4bv6joyAIEQ==
-X-Received: by 2002:aa7:83d0:0:b0:50c:eb2b:8e8a with SMTP id j16-20020aa783d0000000b0050ceb2b8e8amr35026479pfn.31.1653508577737;
-        Wed, 25 May 2022 12:56:17 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:aafd])
-        by smtp.gmail.com with ESMTPSA id cx19-20020a17090afd9300b001dcf49d92a1sm2224252pjb.28.2022.05.25.12.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 12:56:17 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 25 May 2022 09:56:15 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>
-Subject: Re: [GIT PULL] cgroup changes for v5.19-rc1
-Message-ID: <Yo6J3/cVHu4huZH1@slm.duckdns.org>
-References: <Yowcc/ZOBIIs2JtZ@slm.duckdns.org>
- <CAHk-=wiGsJgFTJ=yqYwWA2vcTWQy=2QQ6to6vd3ETutaE0cDxQ@mail.gmail.com>
- <Yo6HMpEodz36o4Dc@slm.duckdns.org>
- <CAHk-=wj4Q2++KfQ4NhMtjmJF_1bjC-573U61o1acuHfqmsvCKA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj4Q2++KfQ4NhMtjmJF_1bjC-573U61o1acuHfqmsvCKA@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Wed, 25 May 2022 15:56:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DEE2CDD4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:56:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 538C4B81EA1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4CD6C34117;
+        Wed, 25 May 2022 19:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1653508589;
+        bh=X7C0hmbhpTB3GvF0P9XEj7WCHI8xPxoJdQtXCB0lpQE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Vkuk7I4YJwHwtgvQIjGGD67euU0yYsX+7dtU16FLwEvLwi8PlinTP7bamF/qsXX/R
+         IemM4F1pZ/EVFJHycMBf5kl0RU9XRXgUsO0QL9o39JffkmNZtp/VWKGSmqu7oh8ZQC
+         UU4QOnoINatpfxKdNgO8djo5bg0LXrduj8PpsVzg=
+Date:   Wed, 25 May 2022 12:56:27 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Baoquan He <bhe@redhat.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org
+Subject: Re: [PATCH] kexec_file: Drop weak attribute from
+ arch_kexec_apply_relocations[_add]
+Message-Id: <20220525125627.acf27b28bb67417a6683a1d9@linux-foundation.org>
+In-Reply-To: <877d6g0zxq.fsf@email.froward.int.ebiederm.org>
+References: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com>
+        <87ee0q7b92.fsf@email.froward.int.ebiederm.org>
+        <YoWySwbszfdZS9LU@MiWiFi-R3L-srv>
+        <87bkvt4d56.fsf@email.froward.int.ebiederm.org>
+        <20220520104641.GB194232@MiWiFi-R3L-srv>
+        <877d6g0zxq.fsf@email.froward.int.ebiederm.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 12:47:48PM -0700, Linus Torvalds wrote:
-> On Wed, May 25, 2022 at 12:44 PM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > Hahaha, yeah, I lost my private key many years ago, so gotta get that sorted
-> > out first. Will do the signed pull from now on.
+On Fri, 20 May 2022 14:25:05 -0500 "Eric W. Biederman" <ebiederm@xmission.com> wrote:
+
+> > I am not strongly against taking off __weak, just wondering if there's
+> > chance to fix it in recordmcount, and the cost comparing with kernel fix;
+> > except of this issue, any other weakness of __weak. Noticed Andrew has
+> > picked this patch, as a witness of this moment, raise a tiny concern.
 > 
-> You have a pgp key for your kernel.org account, you can just use that. No?
->
-> (That way I'll also be able to just pick it up from the pgp key repo
-> that Konstantin maintains).
+> I just don't see what else we can realistically do.
 
-I don't have the private part of that pgp key anymore and have been just
-using the same ssh key. Nothing really requires the private key that I lost
-at least 5 years ago. On the plus side, the pgp key has been as secure as it
-gets. :) So, I gotta generate new keys, get it signed and replace the korg
-key and so on. I've just been really lazy.
+I think converting all of the kexec __weaks to use the ifdef approach
+makes sense, if only because kexec is now using two different styles.
 
-Thanks.
+But for now, I'll send Naveen's v2 patch in to Linus to get us out of
+trouble.
 
--- 
-tejun
+I'm thinking that we should add cc:stable to that patch as well, to
+reduce the amount of problems which people experience when using newer
+binutils on older kernels?
+

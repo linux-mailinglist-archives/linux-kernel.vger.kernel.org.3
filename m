@@ -2,128 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D732533E09
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D2A533E0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243810AbiEYNj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S244468AbiEYNkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234086AbiEYNjz (ORCPT
+        with ESMTP id S244481AbiEYNkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:39:55 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9642289AB
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:39:54 -0700 (PDT)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5D35C3FD8F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 13:39:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653485993;
-        bh=YxMHNNo7yhfXfhg4oP8VVxFgO1u9JXBVrJrSswFRrJY=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=luXaulxSoQQR9C5zOY2xinXYME3xPQbSb79b8iDd9YyAbv/lWWdBFhjjihV9fbtxB
-         /APy3jVdR7WHfsIUiTMx6IOw4VtfIB2HnxgsIeVxULlg7u7k8W1jXnZI6yVcauQrO0
-         JyMRafwv4LUqhP+Y4ostEYRv/cAMJEYXEScFmT8q06q1WattDrdCT9ne3FIo3mFptD
-         BZsJ3hqmKtKbgR7GtkCWLkBx8aG4i5dLePkhYwSgveQJzQ1SsBXH5ukLEIkMc3P27p
-         tzjt6ePNZIXN7Gq6/T5xdwKGe5umerqI7qW40iJUJWpYGnWNZnrnP1ZSx3MPNUExg0
-         ZeKGlgWMMloVw==
-Received: by mail-ej1-f72.google.com with SMTP id gr1-20020a170906e2c100b006fefea3ec0aso3388866ejb.14
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:39:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YxMHNNo7yhfXfhg4oP8VVxFgO1u9JXBVrJrSswFRrJY=;
-        b=o18ewGogNBybJDx/ohUA93AgcfbfPJUA7Y5icizTVSKpEYDB2lPXp6xTid2Mes6fhP
-         EkV0w6ZlI27SNuMxcUzWnAEw2oaYALg0zHxXkwRsV3PmJyuNzA8ssiKWovaJgFZDdk6V
-         u/4B27hafNOthOPGKpZxPLW0PM09LN+okmRREny08ciQ7Ax+ZFH5Af1slDeR+pFmF7rr
-         KmH30FAQFvmEdyccgQhJkUL1Chl6C5j1OoxXJp4SaFjUFyxNCAtENwFRXDVYmvzcVeZO
-         b0Jzg/YCEgOBs+nXVQfXypc2nrm8z3dhdwumofMNAKA6lzXdcPS3EQgLLe23S5kIRtNk
-         yn/Q==
-X-Gm-Message-State: AOAM531BwSkq+m0Vm7x6fy6oB2X8dtKJb00zaPa/h4OfAS0r1u50CIT/
-        iuyljFC5YTbWhTEK1gSPKZkAoNuCmWxQaC2/GHat90uuA+I084FC0Z3tqf2DBL8j0mU9+WptqYs
-        TRthMnaQDDLUpdbGbtNsAK/06Ep57ObD0UdTAV2Demw==
-X-Received: by 2002:a17:907:948a:b0:6ff:14dc:2fe7 with SMTP id dm10-20020a170907948a00b006ff14dc2fe7mr2353534ejc.299.1653485992587;
-        Wed, 25 May 2022 06:39:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy2axYjo493ViwTotKYqEg/RE3TxvUkH76euuzDljStK+89C0yRXXkrtYPcybPJyXiOnDYmGg==
-X-Received: by 2002:a17:907:948a:b0:6ff:14dc:2fe7 with SMTP id dm10-20020a170907948a00b006ff14dc2fe7mr2353512ejc.299.1653485992400;
-        Wed, 25 May 2022 06:39:52 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id b12-20020a170906150c00b006ff045d7c9bsm1689131ejd.173.2022.05.25.06.39.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:39:51 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-perf-users@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juerg.haefliger@canonical.com>
-Subject: [PATCH] x86/events: Kconfig: Fix indentation
-Date:   Wed, 25 May 2022 15:39:49 +0200
-Message-Id: <20220525133949.53730-1-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 25 May 2022 09:40:07 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCEE6B7F9;
+        Wed, 25 May 2022 06:40:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653486005; x=1685022005;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6fgOY4yRCD1pn9WhNnWd8R4cc1xx6y0cS6SMBeS9pjU=;
+  b=Y1DJzx2Y6GhybEueCWSiqBKPdj+Fpx/m8b8Q02mMvGx3s6wQdRH/TNz6
+   alvdmEzTWgZ244VeGo4yY2JmMiid8ZVJmJBAJRKnFudkUp0z2fXkHwWez
+   0Mxxo+rzRinjThL1dejZMCVLy8FbHEe6Bzi8TL6jnFeolDfrFK7aH33Vs
+   5ufdM3h4ol4JMylGv1TCfjuAcS7bBLJnidHkNvVHO0PD+mtuhKvmvPdEv
+   VttLPQaf4s1xAwSARZP0zjt4VmY4mRdBllMvphjl+/w0Ad/GbKNLqpu2d
+   IRY3Wc5s4SOVYzL7k7PenyuQiWEWGuw4QxtKoEvFyWuJsOPVsJyBqrkey
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="299147798"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="299147798"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 06:40:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="820740846"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmsmga006.fm.intel.com with ESMTP; 25 May 2022 06:40:04 -0700
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     alexander.shishkin@linux.intel.com, ak@linux.intel.com,
+        Kan Liang <kan.liang@linux.intel.com>, stable@vger.kernel.org
+Subject: [RESEND PATCH] perf/x86/intel: Update event constraints for ICL
+Date:   Wed, 25 May 2022 06:39:52 -0700
+Message-Id: <20220525133952.1660658-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two whitespaces. Fix the lines that
-violate these rules.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+According to the latest event list, the event encoding 0x55
+INST_DECODED.DECODERS and 0x56 UOPS_DECODED.DEC0 are only available on
+the first 4 counters. Add them into the event constraints table.
+
+Fixes: 6017608936c1 ("perf/x86/intel: Add Icelake support")
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: stable@vger.kernel.org
 ---
- arch/x86/events/Kconfig | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/x86/events/intel/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/Kconfig b/arch/x86/events/Kconfig
-index d6cdfe631674..6b5df277ed58 100644
---- a/arch/x86/events/Kconfig
-+++ b/arch/x86/events/Kconfig
-@@ -6,24 +6,24 @@ config PERF_EVENTS_INTEL_UNCORE
- 	depends on PERF_EVENTS && CPU_SUP_INTEL && PCI
- 	default y
- 	help
--	Include support for Intel uncore performance events. These are
--	available on NehalemEX and more modern processors.
-+	  Include support for Intel uncore performance events. These are
-+	  available on NehalemEX and more modern processors.
- 
- config PERF_EVENTS_INTEL_RAPL
- 	tristate "Intel/AMD rapl performance events"
- 	depends on PERF_EVENTS && (CPU_SUP_INTEL || CPU_SUP_AMD) && PCI
- 	default y
- 	help
--	Include support for Intel and AMD rapl performance events for power
--	monitoring on modern processors.
-+	  Include support for Intel and AMD rapl performance events for power
-+	  monitoring on modern processors.
- 
- config PERF_EVENTS_INTEL_CSTATE
- 	tristate "Intel cstate performance events"
- 	depends on PERF_EVENTS && CPU_SUP_INTEL && PCI
- 	default y
- 	help
--	Include support for Intel cstate performance events for power
--	monitoring on modern processors.
-+	  Include support for Intel cstate performance events for power
-+	  monitoring on modern processors.
- 
- config PERF_EVENTS_AMD_POWER
- 	depends on PERF_EVENTS && CPU_SUP_AMD
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index ed70d04e2d62..80966acac525 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -276,7 +276,7 @@ static struct event_constraint intel_icl_event_constraints[] = {
+ 	INTEL_EVENT_CONSTRAINT_RANGE(0x03, 0x0a, 0xf),
+ 	INTEL_EVENT_CONSTRAINT_RANGE(0x1f, 0x28, 0xf),
+ 	INTEL_EVENT_CONSTRAINT(0x32, 0xf),	/* SW_PREFETCH_ACCESS.* */
+-	INTEL_EVENT_CONSTRAINT_RANGE(0x48, 0x54, 0xf),
++	INTEL_EVENT_CONSTRAINT_RANGE(0x48, 0x56, 0xf),
+ 	INTEL_EVENT_CONSTRAINT_RANGE(0x60, 0x8b, 0xf),
+ 	INTEL_UEVENT_CONSTRAINT(0x04a3, 0xff),  /* CYCLE_ACTIVITY.STALLS_TOTAL */
+ 	INTEL_UEVENT_CONSTRAINT(0x10a3, 0xff),  /* CYCLE_ACTIVITY.CYCLES_MEM_ANY */
 -- 
-2.32.0
+2.35.1
 

@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4269E534204
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89E453420A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbiEYRJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 13:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S245604AbiEYRLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245098AbiEYRJI (ORCPT
+        with ESMTP id S231668AbiEYRLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 13:09:08 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33529ABF69
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:09:05 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id e4so24649115ljb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=XH75s2ibfYOnYvdn8gNCgozNpY03+JL9zHVitvmbL7o=;
-        b=W6RomVh8+2pw0mKlmg9fXmIEeZvIHkem2uMvEqHf1zVpKgGtKrHJ0gifzyutYouqcT
-         FrdiiYrsnZIy0ZjHQ82V1DFUjOtQ2fxuEzLjeyxcj1nBM0HLcnTm2Uf+Z5B+QBP0ORgC
-         kbcojdgmazItre//BUH3KtXBicqPPlRXNT4Wm+p/6RLHXpq9n7JHaXZVZLbrQ4inKqoV
-         uZT1jP3PLT3MlsuBWxxzUUsT5FSvzF8mZO/OTgqW8OOv7q6SLa7Oa+delRALjVnAu0dR
-         Rnb0beTAkCIcmdMO9xjI7AjfnvjYTgRGkeysxajRRq+9vhuuUjq9x4dSsUnZom8xkeyU
-         R9kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XH75s2ibfYOnYvdn8gNCgozNpY03+JL9zHVitvmbL7o=;
-        b=i4kAniUSZ3oyVh1JHcXCx1y+9bwc4/4HwmTU/NJ+pzlx6lMw4H41r5681XVjGOjbVw
-         UVclHNr2phgxN5uw8cSEEVkhKSc1kxhtluK6/Qx9wNNBwXd/+KIJQ2u6cLjxIHJkw5/a
-         z6eGxJ6w13u5KuXzRNnzpwnbxtRSqoEgH8PEJN0MJPd0+uMGTi27HLsKqQIbcYT2r+ZQ
-         MqjCpJbBZnvXzxrJgCTxLeACsuKSJp0sWXbfoZx4iQ8TFCWJNEy0fuN+PJIunhK5X58t
-         xsBmFSvEzbLnXoNoXSgs3Vj2E8QdL1mvztO1XhC+1de1bG2d4pVKH4oY1VVkeR+qUsjs
-         REQA==
-X-Gm-Message-State: AOAM5310rysgCUMbJMcwXQX2u2Do+7MNDkTTzMCVKluxoviJMYGSbJH5
-        kPrVACXSGo4RSdJDoyzcuyiIzQ==
-X-Google-Smtp-Source: ABdhPJwOx4xSigkJYaEAd82a2/KIUm7V2pXrOMfC5VXgjwlfxVNMBS8pwPkw/Q0jxG+QmZoCutuopA==
-X-Received: by 2002:a05:651c:211a:b0:253:df5a:f821 with SMTP id a26-20020a05651c211a00b00253df5af821mr15175594ljq.414.1653498543429;
-        Wed, 25 May 2022 10:09:03 -0700 (PDT)
-Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
-        by smtp.gmail.com with ESMTPSA id l9-20020a2e8689000000b0024f3d1daeb5sm3131649lji.61.2022.05.25.10.09.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 10:09:02 -0700 (PDT)
-Date:   Wed, 25 May 2022 19:09:02 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0
- support
-Message-ID: <Yo5irmDuQokhfZdN@oden.dyn.berto.se>
-References: <20220525151040.24024-1-wsa+renesas@sang-engineering.com>
+        Wed, 25 May 2022 13:11:00 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BD9A7E3E;
+        Wed, 25 May 2022 10:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZxWGWDeNIjBTZ3yADnXAVGs8gsX4RbH3lsSPJIQk2xA=; b=NY/GaE0QNpODMGKM+vGMi9TgQ2
+        eWPa6Biwv/mD663b20rie6GLJSFWZ6m365AWpE8duk35nt115T/gbvgKRSJdAbXKGNMR68TP+LywH
+        GJnoKmJ8kBlchSnkLmNiSMNtvwrttGZZMyU9TZlL1DQFCSxgN70x03EH+pIK+3YaxVjsdb29Pe8XP
+        SrdfQR6c5YJldB03qpLN21yuuwjRpSQOeko5SYZMstTOi5LSrCMYS5Q2mZMcPx72lLR53H1eg7sT5
+        schNm3faRVcQ8XVU9iJLyrM2B6DPp8z5t3YXMuAGK9QoA8qUAsoffPWE9cl6EVzxRIm9+eGXwb9ev
+        8Rmwut0g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ntuX2-00Bwlx-CJ; Wed, 25 May 2022 17:10:48 +0000
+Date:   Wed, 25 May 2022 10:10:48 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <fontana@sharpeleven.org>
+Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, jeyu@kernel.org, shuah@kernel.org,
+        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
+        keescook@chromium.org, rostedt@goodmis.org, minchan@kernel.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Kuno Woudt <kuno@frob.nl>,
+        copyleft-next@lists.fedorahosted.org,
+        Ciaran Farrell <Ciaran.Farrell@suse.com>,
+        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
+Message-ID: <Yo5jGMMctUP7i2dI@bombadil.infradead.org>
+References: <20211029184500.2821444-1-mcgrof@kernel.org>
+ <20211029184500.2821444-2-mcgrof@kernel.org>
+ <87h75g0xbm.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220525151040.24024-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <87h75g0xbm.ffs@tglx>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,53 +66,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
-
-Thanks for your work.
-
-On 2022-05-25 17:10:40 +0200, Wolfram Sang wrote:
-> Add support for R-Car S4. The S4 IP differs a bit from its siblings in
-> such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
-> are not routed to the INTC-AP but to the ECM.
+On Mon, May 23, 2022 at 11:10:37PM +0200, Thomas Gleixner wrote:
+> On Fri, Oct 29 2021 at 11:44, Luis Chamberlain wrote:
+> > preferred. A summary of benefits why projects outside of Linux might
+> > prefer to use copyleft-next >= 0.3.1 over GPLv2:
+> >
+> <snip>
+> >
+> > o copyleft-next has a 'built-in or-later' provision
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Not convinced that this is a benefit under all circumstances,
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+I'll just drop it.
 
-> ---
->  .../devicetree/bindings/thermal/rcar-gen3-thermal.yaml    | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+> but that's
+> a philosopical problem. The real problem is this:
+
+
+> > +Valid-License-Identifier: copyleft-next-0.3.1
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> index 1368d90da0e8..b863c0a935ec 100644
-> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> @@ -8,9 +8,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Renesas R-Car Gen3 Thermal Sensor
->  
->  description:
-> -  On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
-> -  sensors (THS) which are the analog circuits for measuring temperature (Tj)
-> -  inside the LSI.
-> +
-> +  On most R-Car Gen3 and later SoCs, the thermal sensor controllers (TSC)
-> +  control the thermal sensors (THS) which are the analog circuits for
-> +  measuring temperature (Tj) inside the LSI.
->  
->  maintainers:
->    - Niklas Söderlund <niklas.soderlund@ragnatech.se>
-> @@ -27,6 +28,7 @@ properties:
->        - renesas,r8a77965-thermal # R-Car M3-N
->        - renesas,r8a77980-thermal # R-Car V3H
->        - renesas,r8a779a0-thermal # R-Car V3U
-> +      - renesas,r8a779f0-thermal # R-Car S4
->  
->    reg: true
->  
-> -- 
-> 2.35.1
-> 
+> and
 
--- 
-Kind Regards,
-Niklas Söderlund
+Why is this an issue?
+
+> > +11. Later License Versions
+> > +
+> > +    The Copyleft-Next Project may release new versions of copyleft-next,
+> > +    designated by a distinguishing version number ("Later Versions").
+> > +    Unless I explicitly remove the option of Distributing Covered Works
+> > +    under Later Versions, You may Distribute Covered Works under any Later
+> > +    Version.
+> 
+> If I want to remove this option, then how do I express this with a SPDX
+> license identifier?
+
+Good question, souinds like generic semantics for SPDX evolution?
+
+  Luis

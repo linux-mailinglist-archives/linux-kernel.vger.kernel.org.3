@@ -2,177 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA8853447B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6349534480
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238448AbiEYTqJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 25 May 2022 15:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S1344435AbiEYTqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 15:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236479AbiEYTqB (ORCPT
+        with ESMTP id S241728AbiEYTqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 15:46:01 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B87C3615A;
-        Wed, 25 May 2022 12:45:58 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1ntwx4-0007tM-W8; Wed, 25 May 2022 21:45:51 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     palmer@rivosinc.com, arnd@arndb.de, linux@roeck-us.net,
-        palmer@dabbelt.com, guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: Re: [PATCH] riscv: compat: Using seperated vdso_maps for compat_vdso_info
-Date:   Wed, 25 May 2022 21:45:50 +0200
-Message-ID: <4595022.rnE6jSC6OK@diego>
-In-Reply-To: <2757790.88bMQJbFj6@diego>
-References: <20220525160404.2930984-1-guoren@kernel.org> <2757790.88bMQJbFj6@diego>
+        Wed, 25 May 2022 15:46:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 351F7606C6
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653507989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FlY4/miZ0ZZ5mykQm8iKYxJ93QNr/0vOOCu9Zd6xe4s=;
+        b=e3wFUfMm+0+vx4TFtKk8WLrGHMS1HdibqBDS7DkAMo/gRy09B2Ga5cbl+xrzawV+IXxTnx
+        CX8GiwcjvwP5BqyEAX3cgh/cOP93v5e72u6iMePbtOOaKH7+qaAtIRh/qJh1prRLI8+eHt
+        zSp8s5zqGRBqXq4HLAYgL5Ks+HHXuTE=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-m-yYsS-bP0iUs7gOTwUUcQ-1; Wed, 25 May 2022 15:46:27 -0400
+X-MC-Unique: m-yYsS-bP0iUs7gOTwUUcQ-1
+Received: by mail-wr1-f69.google.com with SMTP id z5-20020a5d4d05000000b0020e6457f2b4so5374660wrt.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:46:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FlY4/miZ0ZZ5mykQm8iKYxJ93QNr/0vOOCu9Zd6xe4s=;
+        b=6K/w3VjnXo+7Hla3x7PDhsN99HGIF/qDxbSG8EzBwyC6MPljl+xMW5E6GY/gQm9zly
+         s79MWYu9jJhdbn5Mi6gNn8nEM2443zF2xUCqTUoiNmVxdL8ZxsyIzUiPn9WiGw1ALxwk
+         f1yL9QsARBqD7zr6aA/ZKAQCsjsXBnDu/PLsiOLVp2DatCHS4RFJEuS36uTcYo4YFKJj
+         FQjxreIWUT0cyT0xup22xkmYkktNdrjwFeoeP09S2nliiDxeWzqZmAJ/At6X6baSTZ9J
+         gB7pEN1oAo5a/mxXd32lVRWU+Po8Z1O1ul/ECBn8Uvb14HANQGv6LpZFGUQKiaDUNEG/
+         lATQ==
+X-Gm-Message-State: AOAM531+320dGJj7xck8kIpE2OgJT0NnxrPMO4wtnBqj/Ivhsf8bl8a1
+        ka6XeyfemKFru+ebKtxuQH7kRu6VGhipuQ9X6nRCBNTmla3REUE7T45IB96aTt6NQAPyCOugmN5
+        +g/LA4elPxu73m+km5d19v3DC
+X-Received: by 2002:adf:e10d:0:b0:20c:dc8f:e5a5 with SMTP id t13-20020adfe10d000000b0020cdc8fe5a5mr28558850wrz.265.1653507986466;
+        Wed, 25 May 2022 12:46:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzN6am5Dh8UvetDovx7vfD9hTP6i2AqQoA9EwjhjbLeWDqxc/tSG2JvHPjMZ6Nuy7uMwB9blw==
+X-Received: by 2002:adf:e10d:0:b0:20c:dc8f:e5a5 with SMTP id t13-20020adfe10d000000b0020cdc8fe5a5mr28558829wrz.265.1653507986094;
+        Wed, 25 May 2022 12:46:26 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id p23-20020a1c7417000000b003972dcfb614sm2827756wmc.14.2022.05.25.12.46.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 12:46:25 -0700 (PDT)
+Message-ID: <536d4700-6f28-176d-7883-5793f5cd7c8e@redhat.com>
+Date:   Wed, 25 May 2022 21:46:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED displays
+Content-Language: en-US
+To:     Dominik Kierner <dkierner@dh-electronics.com>
+Cc:     "airlied@linux.ie" <airlied@linux.ie>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "maxime@cerno.tech" <maxime@cerno.tech>,
+        "noralf@tronnes.org" <noralf@tronnes.org>,
+        "sam@ravnborg.org" <sam@ravnborg.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>
+References: <5d817ea54144414aa7865a72694b5811@dh-electronics.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <5d817ea54144414aa7865a72694b5811@dh-electronics.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 25. Mai 2022, 21:36:16 CEST schrieb Heiko Stübner:
-> Am Mittwoch, 25. Mai 2022, 18:04:04 CEST schrieb guoren@kernel.org:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> > 
-> > This is a fixup for vdso implementation which caused musl to
-> > fail.
-> > 
-> > [   11.600082] Run /sbin/init as init process
-> > [   11.628561] init[1]: unhandled signal 11 code 0x1 at
-> > 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
-> > [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted
-> > 5.18.0-rc7-next-20220520 #1
-> > [   11.629462] Hardware name: riscv-virtio,qemu (DT)
-> > [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp :
-> > 00ffffffc58199f0
-> > [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 :
-> > ffffffffffffffff
-> > [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 :
-> > 00ffffff8ade0cc0
-> > [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 :
-> > 00ffffffc5819a00
-> > [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 :
-> > 00ffffffc5819b00
-> > [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 :
-> > 0000000000000000
-> > [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 :
-> > 00ffffff8ade0728
-> > [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 :
-> > 00ffffffc5819e40
-> > [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10:
-> > 0000000000000000
-> > [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 :
-> > 0000000000000001
-> > [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
-> > [   11.629699] status: 0000000000004020 badaddr: 0000000000000000
-> > cause: 000000000000000d
-> > 
-> > The last __vdso_init(&compat_vdso_info) replaces the data in normal
-> > vdso_info. This is an obvious bug.
-> > 
-> > Reported-by: Guenter Roeck <linux@roeck-us.net>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > Cc: Heiko Stübner <heiko@sntech.de>
-> 
-> on palmer's for-next branch and a Debian riscv64 rootfs:
-> 
-> - WITHOUT this patch I end up with:
-> [    3.142030] Unable to handle kernel paging request at virtual address ff60007265776f78
-> [    3.144398] Oops [#1]
-> [    3.144882] Modules linked in:
-> [    3.145620] CPU: 1 PID: 1 Comm: init Not tainted 5.18.0-rc1-00049-g8810d7feee5a #225
-> [    3.146698] Hardware name: riscv-virtio,qemu (DT)
-> [    3.147441] epc : special_mapping_fault+0x4c/0x8e
-> [    3.148352]  ra : __do_fault+0x28/0x11c
-> [    3.149005] epc : ffffffff8011ce3e ra : ffffffff80113216 sp : ff2000000060bd20
-> [    3.149851]  gp : ffffffff810de540 tp : ff600000012a8000 t0 : ffffffff80008af0
-> [    3.150651]  t1 : ffffffff80c001e0 t2 : ffffffff80c00260 s0 : ff2000000060bd30
-> [    3.151434]  s1 : ff2000000060bd78 a0 : ff600000013165f0 a1 : ff60000001dbc450
-> [    3.152734]  a2 : ff2000000060bd78 a3 : 00fffffffffff000 a4 : ff6000003f0337c8
-> [    3.153821]  a5 : ff60007265776f70 a6 : 0000000000000000 a7 : 0000000000000007
-> [    3.154709]  s2 : ff60000001dbc450 s3 : ff60000001dbc450 s4 : ffffffff810ddd69
-> [    3.155557]  s5 : ff60000001dbc450 s6 : 0000000000000254 s7 : 000000000000000c
-> [    3.156369]  s8 : 000000000000000f s9 : 000000000000000d s10: ff60000001cf8080
-> [    3.157242]  s11: 000000000000000d t3 : 00ffffff8232d000 t4 : 000000006ffffdff
-> [    3.158094]  t5 : 000000006ffffe35 t6 : 000000000000000a
-> [    3.158742] status: 0000000200000120 badaddr: ff60007265776f78 cause: 000000000000000d
-> [    3.160000] [<ffffffff80113216>] __do_fault+0x28/0x11c
-> [    3.160881] [<ffffffff80116f3e>] __handle_mm_fault+0x6ec/0x9c8
-> [    3.161619] [<ffffffff8011729c>] handle_mm_fault+0x82/0x136
-> [    3.162308] [<ffffffff80008c10>] do_page_fault+0x120/0x31c
-> [    3.163006] [<ffffffff800032dc>] ret_from_exception+0x0/0xc
-> [    3.164607] ---[ end trace 0000000000000000 ]---
-> -> a different error
-> 
-> 
-> - WITH this patch applied on top, the error above goes away and the
->   qemu-system can boot normally.
+Hello Dominik,
 
-The linux-next tree that failed for me yesterday, also works again
-after this patch is applied.
+I missed this email before and never answered. Sorry about that.
 
-Heiko
-
-
-> So, while my error is different and I don't think there is any musl in
-> my rootfs, this patch definitly fixes the issue for me, so
+On 3/10/22 14:11, Dominik Kierner wrote:
+> Hello Javier,
 > 
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-> 
-> 
-> > ---
-> >  arch/riscv/kernel/vdso.c | 15 +++++++++++++--
-> >  1 file changed, 13 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
-> > index 50fe4c877603..69b05b6c181b 100644
-> > --- a/arch/riscv/kernel/vdso.c
-> > +++ b/arch/riscv/kernel/vdso.c
-> > @@ -206,12 +206,23 @@ static struct __vdso_info vdso_info __ro_after_init = {
-> >  };
-> >  
-> >  #ifdef CONFIG_COMPAT
-> > +static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
-> > +	[RV_VDSO_MAP_VVAR] = {
-> > +		.name   = "[vvar]",
-> > +		.fault = vvar_fault,
-> > +	},
-> > +	[RV_VDSO_MAP_VDSO] = {
-> > +		.name   = "[vdso]",
-> > +		.mremap = vdso_mremap,
-> > +	},
-> > +};
-> > +
-> >  static struct __vdso_info compat_vdso_info __ro_after_init = {
-> >  	.name = "compat_vdso",
-> >  	.vdso_code_start = compat_vdso_start,
-> >  	.vdso_code_end = compat_vdso_end,
-> > -	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
-> > -	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
-> > +	.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
-> > +	.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
-> >  };
-> >  #endif
-> >  
-> > 
-> 
-> 
+> I was working on a SSD130x driver as well, although with a different
+> (drm_panel) approach and hit a bit of a roadblock.
 
+My first attempt also was using a panel driver but then decided that it didn't
+fit that well and a standalone DRM driver would be a better option.
 
+> Now that Your driver is quite a bit maturer than mine,
+> I will happily provide You with the source of my draft,
+> so that any useful bits can be incorporated in Your driver.
+> I know that links are a bit frowned upon,
+> but I'd rather avoid cluttering the thread with my draft code,
+> which is unfinished and incompatible with the code in this thread.
+> 
+> https://github.com/dh-electronics/panel-solomon-ssd130x-draft
+> https://github.com/dh-electronics/panel-solomon-ssd130x-draft/tree/drm-ssd130x/drivers/gpu/drm/panel
+>
 
+Thanks, I looked at the code briefly and think that there are things there that we
+could use. I.e the 3-wire SPI support that's in panel-solomon-ssd130x-spi-3wire.c.
+ 
+> The code was designed as a rewrite from scratch, as I assumed that a new
+> DRM driver that accommodates for I2C, 3- and 4-wire-SPI,
+> will probably need a new DTS interface for differentiating the
+> protocol-specific drivers, which would obviously break compatibility.
+>
+
+I wondered this too but then the drivers/staging/fbtft/fb_ssd1306.c supports both
+both 4-wire/8-bit shift register and 3-wire/9-bits shift register SPI transports.
+
+The driver does this by using a "buswidth" DT property to figure out which mode is
+used. Since 4-wire seems to be the most common case and (at least with all the SPI
+OLED displays I could find) one need to do some hardware modifications to support
+the 3-wire SPI mode, I decided to just support 4-wire in the ssd130x-spi.c that is
+going to be in v5.19.
+ 
+> I do have few suggestions though:
+> 
+> # Atomic Configuration of Display Driving Regulator and the Charge Pump
+> 
+> The regulator VBAT is the SSD1306-specific low-voltage (3.3 V to 5 V)
+> regulator for the charge pump and takes the place of the voltage
+> regulator VCC, that would otherwise supply the OLED driver block with
+> 7 V to 15 V.
+> The charge pump is never enabled when a VCC with 7 V to 15 V is present.
+> Configuring the charge pump based on the available regulators,
+> would provide an atomic configuration for either low-voltage +
+> charge pump or the regular voltage.
+>
+
+Ah I see, I didn't notice this when reading the ssd1306 datasheet.
+ 
+> This way, the device tree boolean for enabling the charge pump could be
+> removed by probing for an optional VBAT first, which replaces VCC,
+> and falling back to a mandatory VCC otherwise:
+>
+
+Interesting, this makes sense to me.
+ 
+> ```
+> [...]
+> struct ssd130x_panel {
+> ...
+> 	struct regulator *vdd;		/* Core logic supply */
+> 	union {
+> 		struct regulator *vcc;	/* Panel driving supply */
+> 		struct regulator *vbat;	/* Charge pump regulator supply */
+> 	};
+> 	struct backlight_device *backlight;
+> 		struct {
+> 		unsigned int com_scan_dir_inv : 1;
+> 		unsigned int com_seq_pin_cfg : 1;
+> 		unsigned int com_lr_remap : 1;
+> 		unsigned int seg_remap : 1;
+> 		unsigned int inverse_display : 1;
+> 		unsigned int use_charge_pump : 1;
+> 		uint8_t height;
+> 		uint8_t width;
+> 		uint8_t height_mm;
+> 		uint8_t width_mm;
+> 		uint8_t display_start_line;
+> 		uint8_t com_offset ;
+> 		uint8_t contrast;
+> 		uint8_t pre_charge_period_dclocks_phase1;
+> 		uint8_t pre_charge_period_dclocks_phase2;
+> 		uint8_t vcomh_deselect_level;
+> 		uint8_t clock_divide_ratio;
+> 		uint8_t oscillator_frequency;
+> 	} display_settings;
+> 	bool prepared;
+> 	bool enabled;
+> 
+> [...]
+> 
+> ssd130x->vbat = devm_regulator_get_optional(dev, "vbat");
+> if (IS_ERR(ssd130x->vbat)) {
+> 	ret = PTR_ERR(ssd130x->vbat);
+> 
+> 	if (ret != -ENODEV) {
+> 		if (ret != -EPROBE_DEFER)
+> 			dev_err(dev,
+> 				"failed to request regulator: %d\n",
+> 				ret);
+> 		return ret;
+> 	}
+> 
+> 	ssd130x->vbat = NULL;
+> }
+> else {
+> 	ssd130x->display_settings.use_charge_pump = true;
+> }
+> 
+> /* Get panel driving supply */
+> If (!ssd130x->vbat) {
+> 	ssd130x->vcc = devm_regulator_get(dev, "vcc");
+> 	if (IS_ERR(ssd130x->vcc)){
+> 		ret = PTR_ERR(ssd130x->vcc);
+> 		return ret;
+> 	}
+> 	else {
+> 		ssd130x->display_settings.use_charge_pump = false;
+> 	}
+> }
+> ```
+> 
+> Splitting in VCC/VBAT and VDD and enforcing their presence is
+> of course compatibility breaking.
+>
+> https://github.com/dh-electronics/panel-solomon-ssd130x-draft/blob/drm-ssd130x/drivers/gpu/drm/panel/panel-solomon-ssd130x.h#L85
+> https://github.com/dh-electronics/panel-solomon-ssd130x-draft/blob/drm-ssd130x/drivers/gpu/drm/panel/panel-solomon-ssd130x.c#L80
+>
+
+It is a break in the DT binding indeed but on the other hand it seems that the
+regulator story is lacking in the current solomon,ssd1307fb.yaml anyways.
+
+That is, the binding schema only mentions a "vbat-supply" but the DRM driver is
+not looking for that but instead for "vcc-supply" (I think that was changed due
+some feedback I got on some revisions, but didn't update the DT binding). The
+fbdev drivers/video/fbdev/ssd1307fb.c driver does lookup "vbat-supply" but all
+the DTS and DTS overlays I find don't set one.
+
+Also the "vbat-supply" is not a required property in the current binding. One
+thing to notice is that regulator_get() and regulator_get_optional() semantics
+are confusing (at least for me). Since doesn't mean whether the regulator must
+be present or not but rather if a dummy regulator must be provided if a supply
+is not found.
+
+In other words, I don't think that any of these supplies should be made required
+in the DT binding but just leave the current "vbat-supply" and add properties for
+"vcc-supply" and explain the relationship between these and just make the logic in
+the driver to override struct ssd130x_deviceinfo .need_chargepump if are present.
+
+> 
+> # Static or Dynamic Configuration for SPI-Modes 3-Wire and 4-Wire
+> 
+> For the SPI-protocol drivers I see two possible approaches:
+> * Dynamic configuration by determining the presence/absence of the
+>   D/C-GPIO and assigning the functions accordingly.
+>   This way a single driver file for both SPI modes could be sufficient.
+> * Static configuration by using the device-tree names
+>   (ssd130x-spi-3wire/-4wire) to differentiate between the SPI protocol
+>   drivers.
+>   This would obviously necessitate two drivers files.
+> 
+> Which one do you think would be the best approach for this?
+>
+
+I think that prefer the first approach. As mentioned the staging driver has a
+"buswidth" property but as you said we could just use the "dc-gpios" presence
+as indication on whether is a 4-wire or 3-wire SPI mode.
+ 
+> 
+> # DRM Mode Configuration via Device Tree
+> 
+> In the old fbdev driver, the display modes are hard-coded, which means
+> for every new display configuration, a new patch needs to be mainlined,
+> which slows down official Kernel support and
+> puts burden on the maintainers.
+> Additionally, with the DRM-subsystem supporting height and length
+> information, for scaling, this opens up a lot of new combinations.
+> The SSD1306 for example, is available in multiple resolutions like
+> 128x64 and 96x16 and comes in different sizes per resolution as well.
+> Just to name a few:
+> * 128x64 0.96" (22x11mm)
+> * 128x64 1.3" (30x15mm)
+> * 96x16 0.69" (18x3mm)
+>> Instead of hard-coding, I would suggest something along the lines of
+> of_get_drm_display_mode().
+> The displays won't need to support multiple modes at the same time,
+> let alone support for switching between them,
+> so the one-time invocation of this expensive function might be worth it. 
+> maybe a new and simpler function that could be named:
+> of_get_drm_display_mode_simple()
+>
+
+This makes sense to me as well.
+ 
+> Providing a mode could later prove useful for a conversion to
+> drm_panel, if that is feasible.
+> 
+> But for a function like this, I have to chicken out.
+> 
+> 
+> # DRM Panel
+> 
+> The reason why I decided for the drm_panel approach in my code,
+> was power management and a clean handling of the software backlight
+> dependency, which requires powered display regulators to be powered.
+> 
+> Prepare/unprepare would power on/off the display logic regulator VDD.
+> 
+> Enable/disable would power on/off VCC/VBAT, optionally turn on/off
+> the charge pump and send the DISPLAY_ON/OFF commands.
+
+Yes, that's the reason why I started with a drm_panel driver as well.
+
+> The SSD1305's PWM part would likely be placed in enable/disable as well.
+> 
+> What is Your opinion on using drm_panel for Your driver?
+>
+
+I can't remember exactly why I decided to stop using drm_panel, but I think
+that was because struct drm_panel doesn't have a DRM device and so couldn't
+use any of the helper functions that needed one?
+
+At the end I found that having a standalone DRM driver and using the simple
+display pipeline infrastructure was a much better way to implement it.
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

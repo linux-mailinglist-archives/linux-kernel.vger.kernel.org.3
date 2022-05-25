@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BCF53466F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6381F534676
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345426AbiEYW0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 18:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        id S231669AbiEYW0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 18:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344944AbiEYW0K (ORCPT
+        with ESMTP id S1345368AbiEYW0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 18:26:10 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F93AA
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:26:08 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id c14-20020a170903234e00b0016374194948so319270plh.19
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:26:08 -0700 (PDT)
+        Wed, 25 May 2022 18:26:13 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5285B10F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:26:10 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id on14-20020a17090b1d0e00b001c7a548e4f7so2003614pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=k1BthjPgV7bQ6cNfFTK+8rBrGBtp639pLinxXU1m8Ho=;
-        b=Lejy4SDHGOTx73pYIreEYpHBRj1zlEZ7dvsywLDPdUJ5zzZEumvyp3uLGgex5dHGEk
-         vjEYzYudLsWug+4MQc8jfCHJ1+P+E7tHOGFTR8q/Yk2Lo7LaxhBAIEdcAal9nr+nqY3l
-         9JS8D9tFUfoS2J68w03A4N6+5dSXXG3DVvMBFQ01L9fCiwXmBJRK67Tl3fw6GO0YVBF6
-         5D5b0uSPPM/c3duxVeOz8+MjJy7NxRr0Cwdll5cKMbnPRwIgM0FkXcdwkfmL1w1iu41j
-         3p4wMo9wSOXPT4ceYsFLuVqrFhY+EVLAFWXhpRZRBfyrtiMWNnESRwB1u0hkKFE+O63+
-         PlYg==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=1+sE54bQx2t4fwpbWEt17sU4LeDI45Rz3nd8Z1fxEVM=;
+        b=ShFQVD12P8JMQ//0COOqBxO64VBS2rO4ICn0VoixRym+8gf7yxI5GUCZwQa/dMooZZ
+         zNj9bZnqXh6tAOLyWobqHp7Yo6b1qsvfxeaDZbVB87VtxVPq2wCD/RGxCYYFLaCe5kAy
+         bUrnz0suGuIVrHH3yNidW0GXjtZYuxoRBQfPYnPVmhB0JYIb/Q0LZKfmmDM1rq12GeE4
+         sWjYbFS8TWnaTCjTouv4h7bs6aW21oT6MGJjHjqGSf0Ej0oPq9jCCHZjuzPdTMBqdSj7
+         0iv2lnADB6batSLynOoQ5dB9Vg2lm7vggQz5JVZroRUQhzavtTSt6sQU6nnRTKGGZHwb
+         tdQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=k1BthjPgV7bQ6cNfFTK+8rBrGBtp639pLinxXU1m8Ho=;
-        b=HNXWUw2LwG89rn0VqkIgtUN1f64rG2ghfMmfrxOAw5MUphlLAZmE/CYMd1+7tdRIYi
-         FBerXM0YN6xApr86/AW7wNWuAiBqAIrkbej5qS38L9EGifVtcap9NYWct1aGfB9aCD9b
-         EtGaZjdJOTnUbluV3JWi9WcO8NwJaUESjJUC8PjP0BoPKyvaoMM52ntgRAfbNXjmjHnl
-         GUY+aD8TnU96CfyAXnfdmrBsJTdosyM0xdwTZqp+MKThksuhbCH0mY06nG30cMlMTJTk
-         Fitkve5gED2KtqBb25ZfuPkDZDtzkJt9Mztc1thRq0UWdwaK4E8YcBR/uiTL7aHf94hs
-         XnUg==
-X-Gm-Message-State: AOAM530xLRhh3+WBUJ3cKnX5fNfSAorVtAKjLGsnjA3CYxdkLoZlg6rL
-        Vugr0qU7iybZzL3qaRuJVFVFbHjnVz8=
-X-Google-Smtp-Source: ABdhPJzpK80n4XXnmnAuMG6yeiR7ZWEUUH/froE6+s05Poen8FWFQfnGnzxvOExtdBw3LmjaHO0EqiwCxkM=
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=1+sE54bQx2t4fwpbWEt17sU4LeDI45Rz3nd8Z1fxEVM=;
+        b=ngC2r8quACrPUbB9is6nPyml5ABInONGU6UYjnaA08YFlhHr1DgBkBUtPbWcQjIxiD
+         ZEooMlVddgDnrUrQIffDvLKWr6PGB14u56aBQ3YNI2Wos41BsTivblrlzY6nUh6N0FZ7
+         hdG7KgBHKGLq24pgonoD+67JdamdguOl9D5r27HemdERfbcmVU7wZ6EJqjKmXZy0ra1D
+         q5Cav5Ojg5jrsooaegGYb33ZrdgsReY+nKxNhXWNVImYNz8XuY0eEnWAJTa2ZJwhG4AO
+         GlZCtqrT5fPSwTIJi6gAs/9+Mctb6TRHpUB+Och/huP8KYDKuAA6dnnbZUA3V4o9rrl+
+         6aMg==
+X-Gm-Message-State: AOAM533GxsXNfnCMTDrUPkCu9OJWXtj+s6wJfAz5XBC+Mpl9ikb+s9N2
+        XCPIAplztT8geIC8nwBlML7+V56w49s=
+X-Google-Smtp-Source: ABdhPJxzEOOjvl7kgGks3plOPdNixXYXYcduS3W+WrJEIL+vcj1zZdB3vif0SZDFUx6i5RTW5fMkKhe71nU=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:6487:b0:1df:7e0f:c93e with SMTP id
- h7-20020a17090a648700b001df7e0fc93emr12833136pjj.77.1653517567858; Wed, 25
- May 2022 15:26:07 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:38ce:b0:1e0:5bb2:9316 with SMTP id
+ nn14-20020a17090b38ce00b001e05bb29316mr12652709pjb.51.1653517569704; Wed, 25
+ May 2022 15:26:09 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 25 May 2022 22:26:00 +0000
-Message-Id: <20220525222604.2810054-1-seanjc@google.com>
+Date:   Wed, 25 May 2022 22:26:01 +0000
+In-Reply-To: <20220525222604.2810054-1-seanjc@google.com>
+Message-Id: <20220525222604.2810054-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20220525222604.2810054-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH 0/4] KVM: x86: Emulator _regs fixes and cleanups
+Subject: [PATCH 1/4] KVM: x86: Grab regs_dirty in local 'unsigned long'
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -71,29 +74,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up and harden the use of the x86_emulate_ctxt._regs, which is
-surrounded by a fair bit of magic.  This series was prompted by bug reports
-by Kees and Robert where GCC-12 flags an out-of-bounds _regs access.  I'm
-99% certain GCC-12 is wrong and is generating a false positive, but just in
-case...
+Capture ctxt->regs_dirty in a local 'unsigned long' instead of casting
+ctxt->regs_dirty to an 'unsigned long *' for use in for_each_set_bit().
+The bitops helpers really do read the entire 'unsigned long', even though
+the walking of the read value is capped at the specified size.  I.e. KVM
+is reading memory beyond ctxt->regs_dirty.  Functionally it's not an
+issue because regs_dirty is in the middle of x86_emulate_ctxt, i.e. KVM
+is just reading its own memory, but relying on that coincidence is gross
+and unsafe.
 
-I didn't tag patch 2 with Fixes or Cc: stable@; if it turns out to "fix"
-the GCC-12 compilation error, it's probably worth sending to v5.18 stable
-tree (KVM hasn't changed, but the warning=>error was "introdued in v5.18
-by commit e6148767825c ("Makefile: Enable -Warray-bounds")).
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/emulate.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Sean Christopherson (4):
-  KVM: x86: Grab regs_dirty in local 'unsigned long'
-  KVM: x86: Harden _regs accesses to guard against buggy input
-  KVM: x86: Omit VCPU_REGS_RIP from emulator's _regs array
-  KVM: x86: Use 16-bit fields to track dirty/valid emulator GPRs
-
- arch/x86/kvm/emulate.c     | 14 ++++++++++++--
- arch/x86/kvm/kvm_emulate.h | 14 +++++++++++---
- 2 files changed, 23 insertions(+), 5 deletions(-)
-
-
-base-commit: 90bde5bea810d766e7046bf5884f2ccf76dd78e9
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 89b11e7dca8a..7226a127ccb4 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -269,9 +269,10 @@ static ulong *reg_rmw(struct x86_emulate_ctxt *ctxt, unsigned nr)
+ 
+ static void writeback_registers(struct x86_emulate_ctxt *ctxt)
+ {
++	unsigned long dirty = ctxt->regs_dirty;
+ 	unsigned reg;
+ 
+-	for_each_set_bit(reg, (ulong *)&ctxt->regs_dirty, 16)
++	for_each_set_bit(reg, &dirty, 16)
+ 		ctxt->ops->write_gpr(ctxt, reg, ctxt->_regs[reg]);
+ }
+ 
 -- 
 2.36.1.124.g0e6072fb45-goog
 

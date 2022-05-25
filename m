@@ -2,145 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F57D533C20
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCE6533C21
 	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiEYL5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
+        id S243197AbiEYL52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243268AbiEYL4t (ORCPT
+        with ESMTP id S243392AbiEYL5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:56:49 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D7095A9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:56:45 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id h9so12167807qtx.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:56:45 -0700 (PDT)
+        Wed, 25 May 2022 07:57:15 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28BE1FCC5;
+        Wed, 25 May 2022 04:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lEk6v60gkjFT68Gj4bJNaNs7k2gNzwxPhiEY5nNwaQQ=;
-        b=XXcCcSNfXU4ZumvEofzKMhDBd7cN4uUTScIpzCQEM+hzYYKUfsKNiF4P7UVF51FKtd
-         5RMh2GAnDESjADbuXOd1AqGedzaXh0w5A9T12BqTWJPxR4mUsbYzVpqI1DeLqcj+jRCv
-         g4Mbz8Isqpigexjq2xgBfxvEZ6XOCfbhrEWV/D3mKfrw49MZYSOCSMLcFNY4bPWoBIIQ
-         R5QYWFwAz8og1bHFYOMrTQ4s+e/PEPEozRRHKxlX3pJQbF9dxpvlI9pbg9wJj7C5geki
-         qkYRTvMTxuO0dTaFgb5ZebuX4LpE/ZIxHighxOWhBpx05saqXnbfuwd4MPhQ1tJOvxUj
-         hZDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lEk6v60gkjFT68Gj4bJNaNs7k2gNzwxPhiEY5nNwaQQ=;
-        b=HxrVer8bJxwE/fvH9kvpYvmTvveNzeAuow0akali5sowCva9mfxnaemNdROHe2slJu
-         TN4za/lJcl6WByYnQxNOOAXnk744KCJkgTbA8sez7v8VYbBVsXfdEYtf0IMD2yilSACA
-         pdFjuqyI3CCVkFWY27PmF1ixXxuspjqXpE9naamSdCDa7AxSZ4oAfwHclJZRO5+LlNDR
-         DlXuQFFv99gkwvTtC//KJpnaAlKMNqr4AX+X2hayeFvS6UHo5P2T0gexUrykF7X83LAH
-         5zflzIE+XKn8jznMhtU0VoeKZzE+sUd4REcCE1lwruGX2LZ8tpnN45N6US1mZK9fe2u0
-         AY4w==
-X-Gm-Message-State: AOAM532HOVKsu4nDl1QeX8Zq//cs6bal4SP5nB0lNOMUiL/cVIKNz7OC
-        KIBDsXG6WIWc9GP/oGKU8aFECw==
-X-Google-Smtp-Source: ABdhPJwFHUkIBHNUiY22IoYqV5QV59CSwCqYRuCiU7sPHckigA3yOeAfSHjhUNo+n/aWFHPqKI7LJA==
-X-Received: by 2002:ac8:4e81:0:b0:2f9:34e4:8955 with SMTP id 1-20020ac84e81000000b002f934e48955mr11600672qtp.459.1653479804938;
-        Wed, 25 May 2022 04:56:44 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:741f])
-        by smtp.gmail.com with ESMTPSA id m25-20020ac84459000000b002f94737333bsm1152559qtn.21.2022.05.25.04.56.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 04:56:44 -0700 (PDT)
-Date:   Wed, 25 May 2022 07:56:43 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Oliver Upton <oupton@google.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v4 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
- page table uses.
-Message-ID: <Yo4Ze+DZrLqn0PeU@cmpxchg.org>
-References: <87ilqoi77b.wl-maz@kernel.org>
- <CAJD7tkY7JF25XXUFq2mGroetMkfo-2zGOaQC94pjZE3D42+oaw@mail.gmail.com>
- <Yn2TGJ4vZ/fst+CY@cmpxchg.org>
- <Yn2YYl98Vhh/UL0w@google.com>
- <Yn5+OtZSSUZZgTQj@cmpxchg.org>
- <Yn6DeEGLyR4Q0cDp@google.com>
- <CALvZod6nERq4j=L0V+pc-rd5+QKi4yb_23tWV-1MF53xL5KE6Q@mail.gmail.com>
- <CAJD7tka-5+XRkthNV4qCg8woPCpjcwynQoRBame-3GP1L8y+WQ@mail.gmail.com>
- <YoeoLJNQTam5fJSu@cmpxchg.org>
- <CAJD7tkYjcmwBeUx-=MTQeUf78uqFDvfpy7OuKy4OvoS7HiVO1Q@mail.gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653479820; x=1685015820;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nEAyTJOdRBehDHHmeCA8nAnq7gmElWIt7+YFR+MXpkU=;
+  b=v1zKIWBS0d/5Esa7+dQ4SoPNvIZSnHXheQuDUaDu02s5jFb1frij+FdE
+   cQ/6C7eHY3h6t8dVn+OXNHu0a+BI2S+mbRk8iQvxIuLiRgDYRn+CCN0p0
+   Ow1munqTRf+r2QrPyK9GBTErbGZUW6yLADvitNpILgE2buDlah2EkPSo/
+   s=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 May 2022 04:57:00 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 04:56:59 -0700
+Received: from [10.216.2.173] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 25 May
+ 2022 04:56:57 -0700
+Message-ID: <7b641200-88b1-8d45-7068-3e9f4d9e0530@quicinc.com>
+Date:   Wed, 25 May 2022 17:26:52 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkYjcmwBeUx-=MTQeUf78uqFDvfpy7OuKy4OvoS7HiVO1Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] rcu: Fix incorrect judgment condition in
+ show_rcu_nocb_state()
+Content-Language: en-US
+To:     Zqiang <qiang1.zhang@intel.com>, <paulmck@kernel.org>,
+        <frederic@kernel.org>
+CC:     <rcu@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220525033430.1953349-1-qiang1.zhang@intel.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20220525033430.1953349-1-qiang1.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 03:31:52PM -0700, Yosry Ahmed wrote:
-> On Fri, May 20, 2022 at 7:39 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > I agree that this memory should show up in vmstat/memory.stat in some
-> > form or another.
-> >
-> > The arguments on whether this should be part of NR_PAGETABLE or a
-> > separate entry seem a bit vague to me. I was hoping somebody more
-> > familiar with KVM could provide a better picture of memory consumption
-> > in that area.
-> >
-> > Sean had mentioned that these allocations already get tracked through
-> > GFP_KERNEL_ACCOUNT. That's good, but if they are significant enough to
-> > track, they should be represented in memory.stat in some form. Sean
-> > also pointed out though that those allocations tend to scale rather
-> > differently than the page tables, so it probably makes sense to keep
-> > those two things separate at least.
-> >
-> > Any thoughts on putting shadow page tables and iommu page tables into
-> > the existing NR_PAGETABLE item? If not, what are the cons?
-> >
-> > And creating (maybe later) a separate NR_VIRT for the other
-> > GPF_KERNEL_ACCOUNT allocations in kvm?
+
+
+On 5/25/2022 9:04 AM, Zqiang wrote:
+> When check the 'rdp->nocb_cb_kthread' tasks exists, if is true, however
+> the output is the cpu where 'rdp->nocb_gp_kthread' is located. this
+> ensure that the tasks in the judgment condition and the tasks of the
+> cpu where the output tasks are located are the same tasks.
 > 
-> I agree with Sean that a NR_VIRT stat would be inaccurate by omission,
-> unless we account for all KVM allocations under this stat. This might
-> be an unnecessary burden according to what Sean said, as most other
-> allocations scale linearly with the number of vCPUs or the memory
-> assigned to the VM.
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>   kernel/rcu/tree_nocb.h | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index fa8e4f82e60c..f4ee81d119c8 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -1438,8 +1438,8 @@ static void show_rcu_nocb_gp_state(struct rcu_data *rdp)
+>   		(long)rdp->nocb_gp_seq,
+>   		rnp->grplo, rnp->grphi, READ_ONCE(rdp->nocb_gp_loops),
+>   		rdp->nocb_gp_kthread ? task_state_to_char(rdp->nocb_gp_kthread) : '.',
+> -		rdp->nocb_cb_kthread ? (int)task_cpu(rdp->nocb_gp_kthread) : -1,
+> -		show_rcu_should_be_on_cpu(rdp->nocb_cb_kthread));
+> +		rdp->nocb_gp_kthread ? (int)task_cpu(rdp->nocb_gp_kthread) : -1,
+> +		show_rcu_should_be_on_cpu(rdp->nocb_gp_kthread));
+>   }
+>   
+>   /* Dump out nocb kthread state for the specified rcu_data structure. */
+> @@ -1483,7 +1483,7 @@ static void show_rcu_nocb_state(struct rcu_data *rdp)
+>   		".B"[!!rcu_cblist_n_cbs(&rdp->nocb_bypass)],
+>   		rcu_segcblist_n_cbs(&rdp->cblist),
+>   		rdp->nocb_cb_kthread ? task_state_to_char(rdp->nocb_cb_kthread) : '.',
+> -		rdp->nocb_cb_kthread ? (int)task_cpu(rdp->nocb_gp_kthread) : -1,
+> +		rdp->nocb_cb_kthread ? (int)task_cpu(rdp->nocb_cb_kthread) : -1,
+>   		show_rcu_should_be_on_cpu(rdp->nocb_cb_kthread));
+>   
 
-I think it's fine to table the addition of NR_VIRT for now. My
-conclusion from this discussion was just that if we do want to add
-more KVM-related allocation sites later on, they likely would be
-something separate and not share an item with the shadow tables. This
-simplifies the discussion around how to present the shadow tables.
+Nice !!
+Reviewed-by: quic_mojha@quicinc.com
 
-That said, stats can be incremental and still useful. memory.current
-itself lies by ommission. It's more important to catch what's of
-significance and allow users to narrow down pathological cases.
+-Mukesh
 
-> I don't have enough context to say whether we should piggyback KVM MMU
-> pages to the existing NR_PAGETABLE item, but from a high level it
-> seems like it would be more helpful if they are a separate stat.
-> Anyway, I am willing to go with whatever Sean thinks is best.
-
-Somebody should work this out and put it into a changelog. It's
-permanent ABI.
+>   	/* It is OK for GP kthreads to have GP state. */

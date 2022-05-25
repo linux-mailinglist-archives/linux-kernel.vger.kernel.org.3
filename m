@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5694953402A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66090534027
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbiEYPPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S244775AbiEYPPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245076AbiEYPPZ (ORCPT
+        with ESMTP id S245152AbiEYPPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:15:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4D3DB0A7A
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653491721;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=gcTixSZTkvL/w/7L1HwLNEqSifq3qq6EouMS7B6x8F4=;
-        b=F/dfPQP5oqOdhKXnv5KmE8m4/REJe3wFZGl3hcvAarXwZjR9dF0YhCVHJoZ3FTioM+wkI0
-        pJNow9+fqNGKOCYC+Ln3nXHHqQtXPRRbGcj5/6djF2xbxnQ0ffaJshm/38AsA8SFWTemBQ
-        wKd9RPmadpedNxXt8jbmGFinypEeFoo=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-4_fxuDUvMWSoI3dK1IN28Q-1; Wed, 25 May 2022 11:15:19 -0400
-X-MC-Unique: 4_fxuDUvMWSoI3dK1IN28Q-1
-Received: by mail-ed1-f69.google.com with SMTP id j7-20020a056402238700b0042b9c2e9c64so2719893eda.19
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:15:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gcTixSZTkvL/w/7L1HwLNEqSifq3qq6EouMS7B6x8F4=;
-        b=PFYs/hhC+9bwAEtUspV+hx1HfbrEiSpoOIVXYWA8Jy0ba5pur2+PmDjT8Lb4kechXH
-         bps8b68Q9NG2P2m2fuJIV8y86jPDtDQzdYvynpWqF3kyuuWhG7IVe7hmqZb8e4aWyS9A
-         /3q1JljHVPC4++LuhSWmhLmJ0jHPQUKT+vRP43E2pXm57XNWh7kh/a2O31nfxxO7nE/i
-         CrnXB1j1BCcufZ5dvT/l4YhEbZ2DJkbqV+5i2o09dupGRFKJThJovH6TWfnLwGxtOJzN
-         V9wzlqU/7NSNfVH3orS28ad+g3oXq2nssKz75gxQaEavkIkEF3qpeJfUmYrBJ5PjAZ/9
-         Lpsg==
-X-Gm-Message-State: AOAM5327Qo+ay9tNYsbcnrzrNY5E8wAbys6suErn9KfVT5599FZnF8oP
-        qYFMCt6IAy8ge7hVEJMNDP+zWcxQLoaPlfPaXFR60F8a89y7CvbFsLUpWHLAiE110zl22xNWhmO
-        kABwTt8rgNs+wXYKcodmCC/8=
-X-Received: by 2002:a17:906:2416:b0:6fe:a0be:91d5 with SMTP id z22-20020a170906241600b006fea0be91d5mr26367688eja.132.1653491718360;
-        Wed, 25 May 2022 08:15:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxTgN7zmlntoiNwoEyCgikQcdFrAhVHRko25ErlIb+NvzlhfgJXKvym4ZuzCjZcuR88JwVR7Q==
-X-Received: by 2002:a17:906:2416:b0:6fe:a0be:91d5 with SMTP id z22-20020a170906241600b006fea0be91d5mr26367677eja.132.1653491718216;
-        Wed, 25 May 2022 08:15:18 -0700 (PDT)
-Received: from auir.redhat.com (net-188-216-46-176.cust.vodafonedsl.it. [188.216.46.176])
-        by smtp.gmail.com with ESMTPSA id n17-20020aa7c791000000b0042ab02e3485sm10762135eds.44.2022.05.25.08.15.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 08:15:17 -0700 (PDT)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
-Cc:     Marco Pagani <marpagan@redhat.com>, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] fpga: altera-pr-ip: fix unsigned comparison with less than zero
-Date:   Wed, 25 May 2022 17:14:52 +0200
-Message-Id: <20220525151453.55725-1-marpagan@redhat.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 25 May 2022 11:15:04 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 702C3AFAF1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:15:00 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-139-Xco2DS7JNnqZ9dGANxt50w-1; Wed, 25 May 2022 16:14:57 +0100
+X-MC-Unique: Xco2DS7JNnqZ9dGANxt50w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Wed, 25 May 2022 16:14:55 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Wed, 25 May 2022 16:14:55 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Arnd Bergmann' <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>
+CC:     Allen Pais <apais@linux.microsoft.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "olivier.dautricourt@orolia.com" <olivier.dautricourt@orolia.com>,
+        Stefan Roese <sr@denx.de>, Vinod Koul <vkoul@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "Ludovic Desroches" <ludovic.desroches@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "Ray Jui" <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "Nicolas Saenz Julienne" <nsaenz@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "Eugeniy.Paltsev@synopsys.com" <Eugeniy.Paltsev@synopsys.com>,
+        "Gustavo Pimentel" <gustavo.pimentel@synopsys.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        "zw@zh-kernel.org" <zw@zh-kernel.org>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        =?utf-8?B?QW5kcmVhcyBGw6RyYmVy?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "green.wan@sifive.com" <green.wan@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Lyra Zhang <zhang.lyra@gmail.com>,
+        Patrice CHOTARD <patrice.chotard@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        =?utf-8?B?SmVybmVqIMWga3JhYmVj?= <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
+Thread-Topic: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
+Thread-Index: AQHYcCfd7aGmAIzi9kCYuZw9gbAMOK0vsf4g
+Date:   Wed, 25 May 2022 15:14:55 +0000
+Message-ID: <9947cfa64667406996de191f07b9e8b9@AcuMS.aculab.com>
+References: <20220419211658.11403-1-apais@linux.microsoft.com>
+ <20220419211658.11403-2-apais@linux.microsoft.com>
+ <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
+ <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
+In-Reply-To: <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,33 +106,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the "comparison with less than zero" warning reported by
-cppcheck for the unsigned (size_t) parameter count of the
-alt_pr_fpga_write() function.
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
-Changes v1 -> v2:
-- Coding style fix
----
- drivers/fpga/altera-pr-ip-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/fpga/altera-pr-ip-core.c b/drivers/fpga/altera-pr-ip-core.c
-index be0667968d33..df8671af4a92 100644
---- a/drivers/fpga/altera-pr-ip-core.c
-+++ b/drivers/fpga/altera-pr-ip-core.c
-@@ -108,7 +108,7 @@ static int alt_pr_fpga_write(struct fpga_manager *mgr, const char *buf,
- 	u32 *buffer_32 = (u32 *)buf;
- 	size_t i = 0;
- 
--	if (count <= 0)
-+	if (!count)
- 		return -EINVAL;
- 
- 	/* Write out the complete 32-bit chunks */
--- 
-2.35.3
+RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyNSBNYXkgMjAyMiAxMjowNA0KPiANCj4gT24g
+V2VkLCBNYXkgMjUsIDIwMjIgYXQgMTE6MjQgQU0gTGludXMgV2FsbGVpaiA8bGludXMud2FsbGVp
+akBsaW5hcm8ub3JnPiB3cm90ZToNCj4gPiBPbiBUdWUsIEFwciAxOSwgMjAyMiBhdCAxMToxNyBQ
+TSBBbGxlbiBQYWlzIDxhcGFpc0BsaW51eC5taWNyb3NvZnQuY29tPiB3cm90ZToNCj4gPg0KPiA+
+ID4gVGhlIHRhc2tsZXQgaXMgYW4gb2xkIEFQSSB3aGljaCB3aWxsIGJlIGRlcHJlY2F0ZWQsIHdv
+cmtxdWV1ZSBBUEkNCj4gPiA+IGNhYiBiZSB1c2VkIGluc3RlYWQgb2YgdGhlbS4NCj4gPiA+DQo+
+ID4gPiBUaGlzIHBhdGNoIHJlcGxhY2VzIHRoZSB0YXNrbGV0IHVzYWdlIGluIGRyaXZlcnMvZG1h
+Lyogd2l0aCBhDQo+ID4gPiBzaW1wbGUgd29yay4NCj4gPiA+DQo+ID4gPiBHaXRodWI6IGh0dHBz
+Oi8vZ2l0aHViLmNvbS9LU1BQL2xpbnV4L2lzc3Vlcy85NA0KPiA+ID4NCj4gPiA+IFNpZ25lZC1v
+ZmYtYnk6IEFsbGVuIFBhaXMgPGFwYWlzQGxpbnV4Lm1pY3Jvc29mdC5jb20+DQo+ID4NCj4gPiBQ
+YWdpbmcgVmluY2VudCBHdWl0dG90IGFuZCBBcm5kIEJlcmdtYW5uIG9uIHRoZSBmb2xsb3dpbmcg
+cXVlc3Rpb24NCj4gPiBvbiB0aGlzIHBhdGNoIHNldDoNCj4gPg0KPiA+IC0gV2lsbCByZXBsYWNp
+bmcgdGFza2xldHMgd2l0aCB3b3JrcXVlIGxpa2UgdGhpcyBuZWdhdGl2ZWx5IGltcGFjdCB0aGUN
+Cj4gPiAgIHBlcmZvcm1hbmNlIG9uIERNQSBlbmdpbmUgYm90dG9tIGhhbHZlcz8NCj4gDQo+IEkg
+dGhpbmsgaXQgd2lsbCBpbiBzb21lIGNhc2VzIGJ1dCBub3Qgb3RoZXJzLiBUaGUgcHJvYmxlbSBJ
+IHNlZSBpcyB0aGF0DQo+IHRoZSBzaG9ydCBwYXRjaCBkZXNjcmlwdGlvbiBtYWtlcyBpdCBzb3Vu
+ZCBsaWtlIGEgdHJpdmlhbCBjb252ZXJzaW9uIG9mIGENCj4gc2luZ2xlIHN1YnN5c3RlbSwgYnV0
+IGluIHJlYWxpdHkgdGhpcyBpbnRlcmFjdHMgd2l0aCBhbGwgdGhlIGRyaXZlcnMgdXNpbmcNCj4g
+RE1BIGVuZ2luZXMsIGluY2x1ZGluZyB0dHkvc2VyaWFsLCBzb3VuZCwgbW1jIGFuZCBzcGkuDQo+
+IA0KPiBJbiBtYW55IGNhc2VzLCB0aGUgY2hhbmdlIGlzIGFuIGltcHJvdmVtZW50LCBidXQgSSBj
+YW4gc2VlIGEgbnVtYmVyDQo+IG9mIHdheXMgdGhpcyBtaWdodCBnbyB3cm9uZzoNCg0KSWYgdGhl
+ICd0YXNrbGV0JyBBUEkgaXMgYmFzZWQgb24gdGhlIHNvZnRpbnQgKG9yIHNpbWlsYXIpDQp0aGVu
+IGNoYW5naW5nIHRvIHdvcmtxdWV1ZSB3aWxsIGNhdXNlIHNlcmlvdXMgZ3JpZWYgaW4gbWFueSBj
+YXNlcw0KdW5sZXNzIHRoZSB3b3JrcXVldWUgcHJvY2VzcyBydW5zIGF0IGEgaGlnaCBwcmlvcml0
+eS4NCg0KQ3VycmVudGx5IHNvZnRpbnQgY2FsbGJhY2tzIGFyZSB1c3VhbGx5IGhpZ2hlciBwcmlv
+cml0eSB0aGFuDQphbnkgdGFzay9wcm9jZXNzLg0KU28gb24gYSBidXN5IHN5c3RlbSB0aGV5IGFs
+bW9zdCBhbHdheXMgcnVuLg0KKFRoZXkgY2FuIGdldCBjYXVnaHQgb3V0IGJ5IGEgbmVlZF9yZXNj
+aGVkKCkgY2FsbCBhbmQgc3VkZGVubHkNCmJlIGZpZ2h0aW5nIHdpdGggbm9ybWFsIHVzZXIgcHJv
+Y2Vzc2VzIGZvciBjcHUgdGltZS4pDQoNCkFzIGFybmQgc2FpZCwgSSBzdXNwZWN0IHRoaXMgd2ls
+bCBicmVhayBhbnl0aGluZyB1c2luZyB0YXNrbGV0cw0KdG8gY2hhaW4gdG9nZXRoZXIgYXVkaW8g
+b3IgdmlkZW8gYnVmZmVycy4NCkFueSBwcm9jZXNzIGNvZGUgZG9pbmcgdGhhdCB3b3VsZCBuZWVk
+IHByb2JiYWx5IHRvIHJ1biBhdCBhDQonbWlkZGxpbmcnIFJUIHByaW9yaXR5Lg0KDQoJRGF2aWQN
+Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
+cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
+KFdhbGVzKQ0K
 

@@ -2,583 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1193D5336B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 08:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA7B5336B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 08:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244113AbiEYGQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 02:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        id S244126AbiEYGZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 02:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242007AbiEYGQR (ORCPT
+        with ESMTP id S233737AbiEYGZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 02:16:17 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4E96373
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 23:16:13 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id h11so24550776eda.8
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 23:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ReZJCEJTDXCb5jCpkN5l0PGrXQJfL73jVMkfYBLDRbU=;
-        b=zDTcYIJO2iFJAA71366d9AcJCUx78ZBxxjF7E/iPMtOa7Zotd44jd0A2KddsXtYgpd
-         t4bxymsQQTXSoabox6YKKJ9gCzasqH+80w0jhMdgVHnQiVG1JVlwSOY1P9q7Jcje2fMG
-         rUPMCdkFtmifWwPXNOlFmRY0dRSZR0EM/rB05VPq+SUF1pqKXKhc/SGvN+7K0pINCGfO
-         MP7/RfaOWeSis/LjMsiUA69EbzRDhFHnD3BZfDDHa4mPcPDTTg7opRnZKQG/3zxQaFxH
-         FoNz47U4If8+MykimZVeZKhuvLNrC81nBbPCsfjc5SemVA+WeXcs9IRXDrPmNxPvRBlG
-         hrKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ReZJCEJTDXCb5jCpkN5l0PGrXQJfL73jVMkfYBLDRbU=;
-        b=1/9e5Q/InJSgXHRa4LsEoQl3aTlzOXdJvEbfSHEfYeslWxvN+JNbOE6Ie6FHC2/CI8
-         7eAwJyAFGLzYXd8sIIYGD8JyOLfg3fCJZhs8NbzvAtauWV5vhqRAF6llsuQAFuV/7ChH
-         01hnlRpam5Ku4pkQHhiriYVI5r/KC9xGZ6wnnjp6GggYsYw17F0k5+UGrZMF3hWZOjts
-         hSbrW+lnUzP4fLlGxDz2UubDMLQhCWZldHtBEMqqBo+P+6QTURGSZJzsUYIis5RVGQD/
-         dM3ohfYCRLATOMsfSDSSRcGpx81sTsPWVkqJ7aW8cQU7geXIO8TAopDoRdIHjKs1I5p4
-         nWyQ==
-X-Gm-Message-State: AOAM532qVtPI3n0SzA4dAt4hmfseHI6g6Yp7MAAa/Hh+NPi3W6I5XpG3
-        6N21yY+Ve5TuNi3VjpXiQJ/haQ==
-X-Google-Smtp-Source: ABdhPJyuzIUcI5fub4u7iPx5A49Tp+rqum58QDIHwMYhQ5uiKjtqBao70eM1enlTu0lkwtDfzDUXFQ==
-X-Received: by 2002:a05:6402:26ce:b0:42b:6bc4:ce16 with SMTP id x14-20020a05640226ce00b0042b6bc4ce16mr13803104edd.61.1653459372052;
-        Tue, 24 May 2022 23:16:12 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ej23-20020a056402369700b0042a2d9af0f8sm10471355edb.79.2022.05.24.23.16.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 23:16:11 -0700 (PDT)
-Message-ID: <b41cd12f-b803-f291-cfe5-24c952a2196e@linaro.org>
-Date:   Wed, 25 May 2022 08:16:10 +0200
+        Wed, 25 May 2022 02:25:50 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26989562D3
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 23:25:47 -0700 (PDT)
+X-UUID: 3c36d3ca9e5344d78943b17b2c10186c-20220525
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:3613b146-b665-4da4-981e-990b996cccb0,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:579426b8-3c45-407b-8f66-25095432a27a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 3c36d3ca9e5344d78943b17b2c10186c-20220525
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 828095885; Wed, 25 May 2022 14:25:41 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 25 May 2022 14:25:39 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Wed, 25 May 2022 14:25:38 +0800
+From:   <yf.wang@mediatek.com>
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
+        Georgi Djakov <quic_c_gdjako@quicinc.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Yunfei Wang <yf.wang@mediatek.com>,
+        "moderated list:ARM SMMU DRIVERS" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
+        Ning Li <Ning.Li@mediatek.com>, Ning Li <ning.li@mediatek.com>
+Subject: [PATCH v6 1/2] iommu/io-pgtable-arm-v7s: Add a quirk to allow pgtable PA up to 35bit
+Date:   Wed, 25 May 2022 14:18:33 +0800
+Message-ID: <20220525061836.30292-2-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220525061836.30292-1-yf.wang@mediatek.com>
+References: <20220525061836.30292-1-yf.wang@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] ARM: dts: aspeed: Adding Jabil Rubypass BMC
-Content-Language: en-US
-To:     David Wang <David_Wang6097@jabil.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     edward_chen@jabil.com, ben_pai@jabil.com
-References: <20220525034211.1402577-1-David_Wang6097@jabil.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220525034211.1402577-1-David_Wang6097@jabil.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2022 05:42, David Wang wrote:
-> The initial introduction of the jabil server with AST2600 BMC SoC.
-> 
-> ---
-> 
-> v2
-> - Disable empty i2c bus.
-> - Remove gfx node because aspeed-g6.dtsi isn't supported.
-> - Modify the led format and add some properties.
-> - Fix wrong indentation.
-> - Add stdout property in chosen node.
-> - Rename temp to temperature-sensor in i2c bus 0.
-> 
-> ---
-> 
-> Signed-off-by: David Wang <David_Wang6097@jabil.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |   3 +-
->  .../boot/dts/aspeed-bmc-jabil-rubypass.dts    | 449 ++++++++++++++++++
->  2 files changed, 451 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 7c16f8a2b738..9c395178fc89 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1566,4 +1566,5 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->  	aspeed-bmc-tyan-s8036.dtb \
->  	aspeed-bmc-vegman-n110.dtb \
->  	aspeed-bmc-vegman-rx20.dtb \
-> -	aspeed-bmc-vegman-sx20.dtb
-> +	aspeed-bmc-vegman-sx20.dtb \
-> +	aspeed-bmc-jabil-rubypass.dtb
+From: Yunfei Wang <yf.wang@mediatek.com>
 
-The entries are ordered by name and your new name looks out of order...
+The calling to kmem_cache_alloc for level 2 pgtable allocation may run
+in atomic context, and it fails sometimes when DMA32 zone runs out of
+memory.
 
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts b/arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts
-> new file mode 100644
-> index 000000000000..0e1450f66372
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts
-> @@ -0,0 +1,449 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +/dts-v1/;
-> +
-> +#include "aspeed-g6.dtsi"
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	model = "Jabil rbp";
-> +	compatible = "aspeed,ast2600";
-> +
-> +	chosen {
-> +		stdout-path = &uart5;
-> +		bootargs = "console=ttyS4,115200n8";
+Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
+so add a quirk to allow the PA of pgtables support up to bit35.
 
-You do not need bootargs. Use stdout-path.
+Signed-off-by: Ning Li <ning.li@mediatek.com>
+Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+---
+ drivers/iommu/io-pgtable-arm-v7s.c | 56 ++++++++++++++++++++++--------
+ include/linux/io-pgtable.h         | 15 +++++---
+ 2 files changed, 52 insertions(+), 19 deletions(-)
 
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		reg = <0x80000000 0x80000000>;
-> +	};
-> +
-> +	vcc_sdhci0: regulator-vcc-sdhci0 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "SDHCI0 Vcc";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		gpios = <&gpio0 ASPEED_GPIO(V, 0) GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
-> +
-> +	vccq_sdhci0: regulator-vccq-sdhci0 {
-> +		compatible = "regulator-gpio";
-> +		regulator-name = "SDHCI0 VccQ";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		gpios = <&gpio0 ASPEED_GPIO(V, 1) GPIO_ACTIVE_HIGH>;
-> +		gpios-states = <1>;
-> +		states = <3300000 1>,
-> +			 <1800000 0>;
-> +	};
-> +
-> +	vcc_sdhci1: regulator-vcc-sdhci1 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "SDHCI1 Vcc";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		gpios = <&gpio0 ASPEED_GPIO(V, 2) GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
-> +	vccq_sdhci1: regulator-vccq-sdhci1 {
-> +		compatible = "regulator-gpio";
-> +		regulator-name = "SDHCI1 VccQ";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		gpios = <&gpio0 ASPEED_GPIO(V, 3) GPIO_ACTIVE_HIGH>;
-> +		gpios-states = <1>;
-> +		states = <3300000 1>,
-> +			 <1800000 0>;
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-names = "default";
-> +
-> +		led-0 {
-> +			label = "identify";
-> +			color = <LED_COLOR_ID_BLUE>;
-> +			function = LED_FUNCTION_INDICATOR;
-> +			retain-state-shutdown;
-> +			gpios = <&gpio0 ASPEED_GPIO(B, 7) GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		led-1 {
-> +			label = "status_amber";
-> +			color = <LED_COLOR_ID_AMBER>;
-> +			function = LED_FUNCTION_STATUS;
-> +			gpios = <&gpio0 ASPEED_GPIO(G, 3) GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		led-2 {
-> +			label = "status_green";
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			default-state = "keep";
-> +			function = LED_FUNCTION_STATUS;
-> +			gpios = <&gpio0 ASPEED_GPIO(G, 2) GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		led-3 {
-> +			label = "status_susack";
-> +			function = LED_FUNCTION_STATUS;
-> +			gpios = <&gpio0 ASPEED_GPIO(V, 6) GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		led-4{
-> +			label = "power-amber";
-> +			color = <LED_COLOR_ID_AMBER>;
-> +			function = LED_FUNCTION_POWER;
-> +			gpios = <&gpio0 ASPEED_GPIO(Y, 0) GPIO_ACTIVE_LOW>;
-> +		};
-> +	};
-> +
-> +	fan_fault {
+diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
+index be066c1503d3..d6e0afddcbfd 100644
+--- a/drivers/iommu/io-pgtable-arm-v7s.c
++++ b/drivers/iommu/io-pgtable-arm-v7s.c
+@@ -149,6 +149,10 @@
+ #define ARM_V7S_TTBR_IRGN_ATTR(attr)					\
+ 	((((attr) & 0x1) << 6) | (((attr) & 0x2) >> 1))
+ 
++/* Mediatek extend ttbr bits[2:0] for PA bits[34:32] */
++#define ARM_V7S_TTBR_35BIT_PA(ttbr, pa)					\
++	((ttbr & ((u32)(~0U << 3))) | ((pa & GENMASK_ULL(34, 32)) >> 32))
++
+ #ifdef CONFIG_ZONE_DMA32
+ #define ARM_V7S_TABLE_GFP_DMA GFP_DMA32
+ #define ARM_V7S_TABLE_SLAB_FLAGS SLAB_CACHE_DMA32
+@@ -182,14 +186,8 @@ static bool arm_v7s_is_mtk_enabled(struct io_pgtable_cfg *cfg)
+ 		(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_EXT);
+ }
+ 
+-static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+-				    struct io_pgtable_cfg *cfg)
++static arm_v7s_iopte to_iopte_mtk(phys_addr_t paddr, arm_v7s_iopte pte)
+ {
+-	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
+-
+-	if (!arm_v7s_is_mtk_enabled(cfg))
+-		return pte;
+-
+ 	if (paddr & BIT_ULL(32))
+ 		pte |= ARM_V7S_ATTR_MTK_PA_BIT32;
+ 	if (paddr & BIT_ULL(33))
+@@ -199,6 +197,17 @@ static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+ 	return pte;
+ }
+ 
++static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
++				    struct io_pgtable_cfg *cfg)
++{
++	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
++
++	if (!arm_v7s_is_mtk_enabled(cfg))
++		return pte;
++
++	return to_iopte_mtk(paddr, pte);
++}
++
+ static phys_addr_t iopte_to_paddr(arm_v7s_iopte pte, int lvl,
+ 				  struct io_pgtable_cfg *cfg)
+ {
+@@ -234,6 +243,7 @@ static arm_v7s_iopte *iopte_deref(arm_v7s_iopte pte, int lvl,
+ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+ 				   struct arm_v7s_io_pgtable *data)
+ {
++	gfp_t gfp_l1 = __GFP_ZERO | ARM_V7S_TABLE_GFP_DMA;
+ 	struct io_pgtable_cfg *cfg = &data->iop.cfg;
+ 	struct device *dev = cfg->iommu_dev;
+ 	phys_addr_t phys;
+@@ -241,9 +251,11 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+ 	size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
+ 	void *table = NULL;
+ 
++	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
++		gfp_l1 = GFP_KERNEL | __GFP_ZERO;
++
+ 	if (lvl == 1)
+-		table = (void *)__get_free_pages(
+-			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
++		table = (void *)__get_free_pages(gfp_l1, get_order(size));
+ 	else if (lvl == 2)
+ 		table = kmem_cache_zalloc(data->l2_tables, gfp);
+ 
+@@ -251,7 +263,8 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+ 		return NULL;
+ 
+ 	phys = virt_to_phys(table);
+-	if (phys != (arm_v7s_iopte)phys) {
++	if (phys != (arm_v7s_iopte)phys &&
++	    !(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)) {
+ 		/* Doesn't fit in PTE */
+ 		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
+ 		goto out_free;
+@@ -457,9 +470,14 @@ static arm_v7s_iopte arm_v7s_install_table(arm_v7s_iopte *table,
+ 					   arm_v7s_iopte curr,
+ 					   struct io_pgtable_cfg *cfg)
+ {
++	phys_addr_t phys = virt_to_phys(table);
+ 	arm_v7s_iopte old, new;
+ 
+-	new = virt_to_phys(table) | ARM_V7S_PTE_TYPE_TABLE;
++	new = phys | ARM_V7S_PTE_TYPE_TABLE;
++
++	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
++		new = to_iopte_mtk(phys, new);
++
+ 	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
+ 		new |= ARM_V7S_ATTR_NS_TABLE;
+ 
+@@ -778,7 +796,9 @@ static phys_addr_t arm_v7s_iova_to_phys(struct io_pgtable_ops *ops,
+ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+ 						void *cookie)
+ {
++	slab_flags_t slab_flag = ARM_V7S_TABLE_SLAB_FLAGS;
+ 	struct arm_v7s_io_pgtable *data;
++	phys_addr_t paddr;
+ 
+ 	if (cfg->ias > (arm_v7s_is_mtk_enabled(cfg) ? 34 : ARM_V7S_ADDR_BITS))
+ 		return NULL;
+@@ -788,7 +808,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+ 
+ 	if (cfg->quirks & ~(IO_PGTABLE_QUIRK_ARM_NS |
+ 			    IO_PGTABLE_QUIRK_NO_PERMS |
+-			    IO_PGTABLE_QUIRK_ARM_MTK_EXT))
++			    IO_PGTABLE_QUIRK_ARM_MTK_EXT |
++			    IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT))
+ 		return NULL;
+ 
+ 	/* If ARM_MTK_4GB is enabled, the NO_PERMS is also expected. */
+@@ -801,10 +822,12 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+ 		return NULL;
+ 
+ 	spin_lock_init(&data->split_lock);
++	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
++		slab_flag = 0;
+ 	data->l2_tables = kmem_cache_create("io-pgtable_armv7s_l2",
+ 					    ARM_V7S_TABLE_SIZE(2, cfg),
+ 					    ARM_V7S_TABLE_SIZE(2, cfg),
+-					    ARM_V7S_TABLE_SLAB_FLAGS, NULL);
++					    slab_flag, NULL);
+ 	if (!data->l2_tables)
+ 		goto out_free_data;
+ 
+@@ -850,12 +873,17 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+ 	wmb();
+ 
+ 	/* TTBR */
+-	cfg->arm_v7s_cfg.ttbr = virt_to_phys(data->pgd) | ARM_V7S_TTBR_S |
++	paddr = virt_to_phys(data->pgd);
++	cfg->arm_v7s_cfg.ttbr = paddr | ARM_V7S_TTBR_S |
+ 				(cfg->coherent_walk ? (ARM_V7S_TTBR_NOS |
+ 				 ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_WBWA) |
+ 				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_WBWA)) :
+ 				(ARM_V7S_TTBR_IRGN_ATTR(ARM_V7S_RGN_NC) |
+ 				 ARM_V7S_TTBR_ORGN_ATTR(ARM_V7S_RGN_NC)));
++
++	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
++		cfg->arm_v7s_cfg.ttbr =
++			ARM_V7S_TTBR_35BIT_PA(cfg->arm_v7s_cfg.ttbr, paddr);
+ 	return &data->iop;
+ 
+ out_free_data:
+diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
+index 86af6f0a00a2..7ed15ad4710c 100644
+--- a/include/linux/io-pgtable.h
++++ b/include/linux/io-pgtable.h
+@@ -74,17 +74,22 @@ struct io_pgtable_cfg {
+ 	 *	to support up to 35 bits PA where the bit32, bit33 and bit34 are
+ 	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
+ 	 *
++	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek IOMMUs
++	 *	extend the translation table support up to 35 bits PA, the
++	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
++	 *
+ 	 * IO_PGTABLE_QUIRK_ARM_TTBR1: (ARM LPAE format) Configure the table
+ 	 *	for use in the upper half of a split address space.
+ 	 *
+ 	 * IO_PGTABLE_QUIRK_ARM_OUTER_WBWA: Override the outer-cacheability
+ 	 *	attributes set in the TCR for a non-coherent page-table walker.
+ 	 */
+-	#define IO_PGTABLE_QUIRK_ARM_NS		BIT(0)
+-	#define IO_PGTABLE_QUIRK_NO_PERMS	BIT(1)
+-	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT	BIT(3)
+-	#define IO_PGTABLE_QUIRK_ARM_TTBR1	BIT(5)
+-	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA	BIT(6)
++	#define IO_PGTABLE_QUIRK_ARM_NS			BIT(0)
++	#define IO_PGTABLE_QUIRK_NO_PERMS		BIT(1)
++	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT		BIT(3)
++	#define IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT	BIT(4)
++	#define IO_PGTABLE_QUIRK_ARM_TTBR1		BIT(5)
++	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA		BIT(6)
+ 	unsigned long			quirks;
+ 	unsigned long			pgsize_bitmap;
+ 	unsigned int			ias;
+-- 
+2.18.0
 
-No underscores in node names, generic node names, so leds-1 (and
-previous leds-0). Although main question - why do you need two instances
-of drivers?
-
-> +		compatible = "gpio-leds";
-> +		pinctrl-names = "default";
-> +
-> +		led-0 {
-> +			label = "fan1-fault";
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			function = LED_FUNCTION_FAULT;
-> +			retain-state-shutdown;
-> +			gpios = <&gpio3_71 0 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		led-1 {
-> +			label = "fan2-fault";
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			function = LED_FUNCTION_FAULT;
-> +			retain-state-shutdown;
-> +			gpios = <&gpio3_71 1 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		led-2 {
-> +			label = "fan3-fault";
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			function = LED_FUNCTION_FAULT;
-> +			retain-state-shutdown;
-> +			gpios = <&gpio3_71 2 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		led-3 {
-> +			label = "fan4-fault";
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			function = LED_FUNCTION_FAULT;
-> +			retain-state-shutdown;
-> +			gpios = <&gpio3_71 3 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		led-4 {
-> +			label = "fan5-fault";
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			function = LED_FUNCTION_FAULT;
-> +			retain-state-shutdown;
-> +			gpios = <&gpio3_71 4 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		led-5 {
-> +			label = "fan6-fault";
-> +			color = <LED_COLOR_ID_YELLOW>;
-> +			function = LED_FUNCTION_FAULT;
-> +			retain-state-shutdown;
-> +			gpios = <&gpio3_71 5 GPIO_ACTIVE_HIGH>;
-> +		};
-> +	};
-> +};
-> +
-> +&mdio0 {
-> +	status = "okay";
-> +
-> +	ethphy0: ethernet-phy@0 {
-> +		compatible = "ethernet-phy-ieee802.3-c22";
-> +		reg = <0>;
-> +	};
-> +};
-> +
-> +&mdio1 {
-> +	status = "okay";
-> +
-> +	ethphy1: ethernet-phy@0 {
-> +		compatible = "ethernet-phy-ieee802.3-c22";
-> +		reg = <0>;
-> +	};
-> +};
-> +
-> +&mdio2 {
-> +	status = "okay";
-> +
-> +	ethphy2: ethernet-phy@0 {
-> +		compatible = "ethernet-phy-ieee802.3-c22";
-> +		reg = <0>;
-> +	};
-> +};
-> +
-> +&mdio3 {
-> +	status = "okay";
-> +
-> +	ethphy3: ethernet-phy@0 {
-> +		compatible = "ethernet-phy-ieee802.3-c22";
-> +		reg = <0>;
-> +	};
-> +};
-> +
-> +&mac0 {
-> +	status = "okay";
-> +
-> +	phy-mode = "rgmii-rxid";
-> +	phy-handle = <&ethphy0>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_rgmii1_default>;
-> +};
-> +
-> +&mac1 {
-> +	status = "okay";
-> +
-> +	phy-mode = "rgmii-rxid";
-> +	phy-handle = <&ethphy1>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_rgmii2_default>;
-> +};
-> +
-> +&mac2 {
-> +	status = "okay";
-> +
-> +	phy-mode = "rgmii";
-> +	phy-handle = <&ethphy2>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_rgmii3_default>;
-> +};
-> +
-> +&mac3 {
-> +	status = "okay";
-> +
-> +	phy-mode = "rgmii";
-> +	phy-handle = <&ethphy3>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_rgmii4_default>;
-> +};
-> +
-> +&emmc_controller {
-> +	status = "okay";
-> +};
-> +
-> +&emmc {
-> +	non-removable;
-> +	bus-width = <4>;
-> +	max-frequency = <100000000>;
-> +	clk-phase-mmc-hs200 = <9>, <225>;
-> +};
-> +
-> +&rtc {
-> +	status = "okay";
-> +};
-> +
-> +&fmc {
-> +	status = "okay";
-> +	flash@0 {
-> +		status = "okay";
-> +		m25p,fast-read;
-> +		label = "bmc";
-> +		spi-max-frequency = <50000000>;
-> +#include "openbmc-flash-layout-128.dtsi"
-> +	};
-> +};
-> +
-> +&spi1 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_spi1_default>;
-> +
-> +	flash@0 {
-> +		status = "okay";
-> +		m25p,fast-read;
-> +		label = "pnor";
-> +		spi-max-frequency = <100000000>;
-> +	};
-> +};
-> +
-> +&uart1 {
-> +	status = "okay";
-> +	pinctrl-0 = <&pinctrl_txd1_default
-> +			&pinctrl_rxd1_default
-> +			&pinctrl_nrts1_default
-> +			&pinctrl_ndtr1_default
-> +			&pinctrl_ndsr1_default
-> +			&pinctrl_ncts1_default
-> +			&pinctrl_ndcd1_default
-> +			&pinctrl_nri1_default>;
-> +};
-> +
-> +&uart2 {
-> +	status = "okay";
-> +	pinctrl-0 = <&pinctrl_txd2_default
-> +			&pinctrl_rxd2_default
-> +			&pinctrl_nrts2_default
-> +			&pinctrl_ndtr2_default
-> +			&pinctrl_ndsr2_default
-> +			&pinctrl_ncts2_default
-> +			&pinctrl_ndcd2_default
-> +			&pinctrl_nri2_default>;
-> +};
-> +
-> +&uart3 {
-> +	status = "okay";
-> +};
-> +
-> +&uart4 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +
-> +	temperature-sensor@2e {
-> +		compatible = "adi,adt7490";
-> +		reg = <0x2e>;
-> +	};
-> +};
-> +
-> +&i2c3 {
-> +	multi-master;
-> +	status = "okay";
-> +
-> +	gpio@70 {
-> +		compatible = "nxp,pca9538";
-> +		reg = <0x70>;
-> +		interrupt-parent = <&gpio0>;
-> +		interrupts = <ASPEED_GPIO(O, 7) IRQ_TYPE_EDGE_FALLING>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		gpio-line-names =
-> +			"presence-fan1-n", "presence-fan2-n", "presence-fan3-n", "presence-fan4-n",
-> +			"presence-fan5-n", "presence-fan6-n", "", "";
-> +	};
-> +
-> +	gpio3_71:gpio@71 {
-
-Missing space after :.
-
-> +		compatible = "nxp,pca9538";
-> +		reg = <0x71>;
-> +		gpio-controller;
-> +		#gpio-cells = <2>;
-> +		gpio-line-names =
-> +			"led-fan1-fault", "led-fan2-fault", "led-fan3-fault", "led-fan4-fault",
-> +			"led-fan5-fault", "led-fan6-fault", "", "";
-> +	};
-> +};
-> +
-> +&fsim0 {
-> +	status = "okay";
-> +};
-> +
-> +&ehci1 {
-> +	status = "okay";
-> +};
-> +
-> +&uhci {
-> +	status = "okay";
-> +};
-> +
-> +&sdc {
-> +	status = "okay";
-> +};
-> +
-> +/*
-> + * The signal voltage of sdhci0 and sdhci1 on AST2600-A2 EVB is able to be
-> + * toggled by GPIO pins.
-> + * In the reference design, GPIOV0 of AST2600-A2 EVB is connected to the
-> + * power load switch that provides 3.3v to sdhci0 vdd, GPIOV1 is connected to
-> + * a 1.8v and a 3.3v power load switch that provides signal voltage to
-> + * sdhci0 bus.
-> + * If GPIOV0 is active high, sdhci0 is enabled, otherwise, sdhci0 is disabled.
-> + * If GPIOV1 is active high, 3.3v power load switch is enabled, sdhci0 signal
-> + * voltage is 3.3v, otherwise, 1.8v power load switch will be enabled,
-> + * sdhci0 signal voltage becomes 1.8v.
-> + * AST2600-A2 EVB also supports toggling signal voltage for sdhci1.
-> + * The design is the same as sdhci0, it uses GPIOV2 as power-gpio and GPIOV3
-> + * as power-switch-gpio.
-> + */
-> +&sdhci0 {
-> +	status = "okay";
-> +	bus-width = <4>;
-> +	max-frequency = <100000000>;
-> +	sdhci-drive-type = /bits/ 8 <3>;
-> +	sdhci-caps-mask = <0x7 0x0>;
-> +	sdhci,wp-inverted;
-> +	vmmc-supply = <&vcc_sdhci0>;
-> +	vqmmc-supply = <&vccq_sdhci0>;
-> +	clk-phase-sd-hs = <7>, <200>;
-> +};
-> +
-> +&sdhci1 {
-> +	status = "okay";
-> +	bus-width = <4>;
-> +	max-frequency = <100000000>;
-> +	sdhci-drive-type = /bits/ 8 <3>;
-> +	sdhci-caps-mask = <0x7 0x0>;
-> +	sdhci,wp-inverted;
-> +	vmmc-supply = <&vcc_sdhci1>;
-> +	vqmmc-supply = <&vccq_sdhci1>;
-> +	clk-phase-sd-hs = <7>, <200>;
-> +};
-> +
-> +&gpio0 {
-> +	status = "okay";
-> +	gpio-line-names =
-> +	/*A0-A7*/       "","","","","","","","",
-> +	/*B0-B7*/       "presence-ncsi-i210-n","","","","","","","led-identify-n",
-> +	/*C0-C7*/       "","","","","","","","",
-> +	/*D0-D7*/       "","","","","","","","",
-> +	/*E0-E7*/       "","","","","","","","",
-> +	/*F0-F7*/       "","","","","","","id-button","",
-> +	/*G0-G7*/       "","","led-status-green-n","led-status-amber-n","","","","",
-> +	/*H0-H7*/       "","","","","","cpu-caterr","","cpu1-caterr-n",
-> +	/*I0-I7*/       "","","","","","","","",
-> +	/*J0-J7*/       "","","","","","","","",
-> +	/*K0-K7*/       "","","","","","","","",
-> +	/*L0-L7*/       "","","","","","","","",
-> +	/*M0-M7*/       "","","","","","","","",
-> +	/*N0-N7*/       "","","","","","","","",
-> +	/*O0-O7*/       "","","","","","","nmi-button","",
-> +	/*P0-P7*/       "reset-button","reset-out","power-button","power-out","","","",
-> +					"led-hartbeat-n",
-> +	/*Q0-Q7*/       "","","","","","","","",
-> +	/*R0-R7*/       "","","","","","","","",
-> +	/*S0-S7*/       "","","","","","","","",
-> +	/*T0-T7*/       "","","","","","","","",
-> +	/*U0-U7*/       "","","","","","","","",
-> +	/*V0-V7*/       "regulator-vcc-sdhci0","regulator-vccq-sdhci0","regulator-vcc-sdhci1",
-> +					"regulator-vccq-sdhci1","sio-power-good",
-> +					"led-bmc-fw-config-done-n","","",
-> +	/*W0-W7*/       "","","","","","","","",
-> +	/*X0-X7*/       "cpu-err2","","","","","","","",
-> +	/*Y0-Y7*/       "led-power-amber","","","","","","","",
-> +	/*Z0-Z7*/       "cpu-err0","cpu-err1","","","","","","";
-> +	};
-> +
-> +&gpio1 {
-> +	status = "okay";
-> +};
-> +
-> +&kcs3 {
-> +	aspeed,lpc-io-reg = <0xCA2>;
-> +	status = "okay";
-> +};
-> +
-> +&kcs4 {
-> +	aspeed,lpc-io-reg = <0xCA4>;
-> +	status = "okay";
-> +};
-> +
-> +&lpc_snoop {
-> +	snoop-ports = <0x80>;
-> +	status = "okay";
-> +};
-> +
-
-Unneeded blank line at the end.
-
-Best regards,
-Krzysztof

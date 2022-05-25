@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382185336EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 08:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250575336F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 08:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244244AbiEYGve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 02:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
+        id S244253AbiEYGvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 02:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiEYGv3 (ORCPT
+        with ESMTP id S243504AbiEYGve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 02:51:29 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A44245AC
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 23:51:27 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id b5so10747126plx.10
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 23:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1OInmO8rSFsmcKxeQtJzT8W8mmV7pww/rcBlhAxG24c=;
-        b=NdeTwUAK0mIJ9uNUIXjugJjyZR97tAm7onnDGPVrDJNsamWTpq4soNelwQZbjHtcRb
-         ZQ9mAiNXmu3v7+xljofd50MBlb6m2jqGRbj2YatGDryT8jrv3iVH8qrZrwN3mRMwvayp
-         GWMDHQnS9WcSO3iu/aVnzo9JKAUtfPs2hUoq5yIWKXQA245O5+GK9ZsfrfibXiOc6Bk7
-         Oz53qrPN5S26eAzH3DvPHZtaQoI5EodeJ9VdjYObZlxF4IBLgxGj8RFMSiFm588sZud0
-         oAfpN5ZROawjFT+3JZMmBRgMDV4e2pwxl9QYgXEQYi3QMXdv4mI1V3OgFFw8WUimYGj/
-         26DA==
+        Wed, 25 May 2022 02:51:34 -0400
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B476252A6;
+        Tue, 24 May 2022 23:51:33 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id f2so28752790wrc.0;
+        Tue, 24 May 2022 23:51:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=1OInmO8rSFsmcKxeQtJzT8W8mmV7pww/rcBlhAxG24c=;
-        b=U2xdhbMcVlC2kKu+mhzCO1d1xsXhoEG41FLLfHqePbofTPogD1s7KRSErfXihDJ+/W
-         HgUwPSXzrQTeMEwkPjb66Nkb89nclZR4EsQMMDi9fYLQQ805u0Pe+yaoxukk1ojGOWlB
-         vE02nbb5Q7COns1oho00ct3xLlXfhZCJ6vrraibxiC6GYUJ9rNXEpOT+6nz30DsHMJXD
-         8oG6gKetcvCVLl+o7Nrdc9xPNMXm55O1ZspK1JsfqSAxlvnWCVn8eInqchqpXx2V6xF0
-         FWBh9ngFQmDnRQt4Dc8nG+eylxnnBFJ/iPDVGBSQzEOt1W1isoTTgQXa/clGE/AAVSSV
-         ZUDA==
-X-Gm-Message-State: AOAM530/Ch3NcILT+XXyTf98Y4ndL7PNsVwZ0ECuTG6jAyNHWi3pAU0V
-        SnUY15621kjUVR074BcLsuGj6ASIg+aX3Q==
-X-Google-Smtp-Source: ABdhPJzbE466iFdZbKYpe1PIot8CbHomaZN9j8/BKjulSVhO8bzwNzlsoAEUZLvS6bLYcMcSnRxbvg==
-X-Received: by 2002:a17:902:e889:b0:163:4f15:8a11 with SMTP id w9-20020a170902e88900b001634f158a11mr3128660plg.11.1653461486817;
-        Tue, 24 May 2022 23:51:26 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([2408:8207:18da:2310:c40f:7b5:4fa8:df3f])
-        by smtp.gmail.com with ESMTPSA id y12-20020a62ce0c000000b0050dc762812esm10631922pfg.8.2022.05.24.23.51.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 23:51:26 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     willy@infradead.org, duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Subject: [PATCH v3] sysctl: handle table->maxlen robustly for proc_dobool
-Date:   Wed, 25 May 2022 14:50:50 +0800
-Message-Id: <20220525065050.38905-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
+        bh=qIXc7ckxpaycTNNbZsrqsqmLIc4KjcKf1nyaCXgDayU=;
+        b=uL12SN4RH3iInFIny8QWfzSS2oI2DLQt15tNAqna5tkEyTJgJbWPi8ubPUABYk0aWQ
+         6UYA+HdNGhXrf3m00xvfuUlkLtSJxjy7/9jUo9ITcsjZpUbYnShI6w+4tee/Wvb707Vj
+         Kf855Wgqc2wpEzewM7slRBOWgzuYN7Z5gVnk1a4wctPGMMDCWf2tCkP930X4hFFvUF3B
+         aL70Dzbqq0fmly+53gEIRUd+2cYE+BUhH1YVpiH3gVxHQ1jNw+PpchuFA7zsRV08v8GO
+         SRBYhfiCELdHPMdWbdQkqrExixY3yMD+o45ja//6TTQ870XL69B8wATsVM+Cahts8l6Y
+         tdQQ==
+X-Gm-Message-State: AOAM531RHl/bDF4I3knEP+7Gu3NsGCjIZ8vbnc2Gch5jeKAgcDtinylI
+        VPlBtkI5K1eIFR8x/NNKhNMRbqU0C6KVjw==
+X-Google-Smtp-Source: ABdhPJzjgBw8F3g0LVeI/WFTG/JhCJXju5CTp4OT98sW0FAjmZZeiN2PfdDBVCtCtRFQm0oaJnvsew==
+X-Received: by 2002:a05:6000:1861:b0:20f:c91e:bd3b with SMTP id d1-20020a056000186100b0020fc91ebd3bmr15504720wri.705.1653461491247;
+        Tue, 24 May 2022 23:51:31 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id l8-20020a05600002a800b0020cd8f1d25csm1471671wry.8.2022.05.24.23.51.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 23:51:30 -0700 (PDT)
+Message-ID: <b5c0a68d-8387-4909-beea-f70ab9e6e3d5@kernel.org>
+Date:   Wed, 25 May 2022 08:51:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 1/2] linux/types.h: Remove unnecessary __bitwise__
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220315153048.621328-1-helgaas@kernel.org>
+ <20220315153048.621328-2-helgaas@kernel.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220315153048.621328-2-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,104 +70,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setting ->proc_handler to proc_dobool at the same time setting ->maxlen
-to sizeof(int) is counter-intuitive, it is easy to make mistakes in the
-future (When I first use proc_dobool() in my driver, I assign
-sizeof(variable) to table->maxlen.  Then I found it was wrong, it should
-be sizeof(int) which was very counter-intuitive).  For robustness,
-rework proc_dobool() robustly.  So it is an improvement not a real bug
-fix.
+On 15. 03. 22, 16:30, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> There are no users of "__bitwise__" except the definition of "__bitwise".
+> Remove __bitwise__ and define __bitwise directly.
+> 
+> This is a follow-up to 05de97003c77 ("linux/types.h: enable endian checks
+> for all sparse builds").
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Michael S. Tsirkin <mst@redhat.com>
+> ---
+>   include/uapi/linux/types.h  | 5 ++---
+>   tools/include/linux/types.h | 5 ++---
+>   2 files changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
+> index f6d2f83cbe29..71696f424ac8 100644
+> --- a/include/uapi/linux/types.h
+> +++ b/include/uapi/linux/types.h
+> @@ -20,11 +20,10 @@
+>    */
+>   
+>   #ifdef __CHECKER__
+> -#define __bitwise__ __attribute__((bitwise))
+> +#define __bitwise	__attribute__((bitwise))
+>   #else
+> -#define __bitwise__
+> +#define __bitwise
+>   #endif
+> -#define __bitwise __bitwise__
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Iurii Zaikin <yzaikin@google.com>
----
-v3:
- - Update commit log.
+Hi,
 
-v2:
- - Reimplementing proc_dobool().
+this broke userspace, like open-iscsi:
+> [   34s] In file included from session_info.h:9,
+> [   34s]                  from iscsi_util.c:38:
+> [   34s] ../include/iscsi_proto.h:66:30: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'itt_t'
+> [   34s]    66 | typedef uint32_t __bitwise__ itt_t;
+> [   34s]       |                              ^~~~~
 
- fs/lockd/svc.c  |  2 +-
- kernel/sysctl.c | 38 +++++++++++++++++++-------------------
- 2 files changed, 20 insertions(+), 20 deletions(-)
+It looks like we need __bitwise__ back.
 
-diff --git a/fs/lockd/svc.c b/fs/lockd/svc.c
-index 59ef8a1f843f..6e48ee787f49 100644
---- a/fs/lockd/svc.c
-+++ b/fs/lockd/svc.c
-@@ -496,7 +496,7 @@ static struct ctl_table nlm_sysctls[] = {
- 	{
- 		.procname	= "nsm_use_hostnames",
- 		.data		= &nsm_use_hostnames,
--		.maxlen		= sizeof(int),
-+		.maxlen		= sizeof(nsm_use_hostnames),
- 		.mode		= 0644,
- 		.proc_handler	= proc_dobool,
- 	},
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index e52b6e372c60..50a2c29efc94 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -423,21 +423,6 @@ static void proc_put_char(void **buf, size_t *size, char c)
- 	}
- }
- 
--static int do_proc_dobool_conv(bool *negp, unsigned long *lvalp,
--				int *valp,
--				int write, void *data)
--{
--	if (write) {
--		*(bool *)valp = *lvalp;
--	} else {
--		int val = *(bool *)valp;
--
--		*lvalp = (unsigned long)val;
--		*negp = false;
--	}
--	return 0;
--}
--
- static int do_proc_dointvec_conv(bool *negp, unsigned long *lvalp,
- 				 int *valp,
- 				 int write, void *data)
-@@ -708,16 +693,31 @@ int do_proc_douintvec(struct ctl_table *table, int write,
-  * @lenp: the size of the user buffer
-  * @ppos: file position
-  *
-- * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
-- * values from/to the user buffer, treated as an ASCII string.
-+ * Reads/writes up to table->maxlen/sizeof(bool) bool values from/to
-+ * the user buffer, treated as an ASCII string.
-  *
-  * Returns 0 on success.
-  */
- int proc_dobool(struct ctl_table *table, int write, void *buffer,
- 		size_t *lenp, loff_t *ppos)
- {
--	return do_proc_dointvec(table, write, buffer, lenp, ppos,
--				do_proc_dobool_conv, NULL);
-+	struct ctl_table tmp = *table;
-+	bool *data = table->data;
-+	unsigned int val = READ_ONCE(*data);
-+	int ret;
-+
-+	/* Do not support arrays yet. */
-+	if (table->maxlen != sizeof(bool))
-+		return -EINVAL;
-+
-+	tmp.maxlen = sizeof(val);
-+	tmp.data = &val;
-+	ret = do_proc_douintvec(&tmp, write, buffer, lenp, ppos, NULL, NULL);
-+	if (ret)
-+		return ret;
-+	if (write)
-+		WRITE_ONCE(*data, val ? true : false);
-+	return 0;
- }
- 
- /**
+thanks,
 -- 
-2.11.0
-
+js
+suse labs

@@ -2,268 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED12533F59
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AEB533F57
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239846AbiEYOjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S237255AbiEYOia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiEYOjR (ORCPT
+        with ESMTP id S231761AbiEYOi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 10:39:17 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B96340F3;
-        Wed, 25 May 2022 07:39:14 -0700 (PDT)
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 24PEcjBp021016;
-        Wed, 25 May 2022 23:38:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 24PEcjBp021016
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653489525;
-        bh=Lp03uVXMPQlmSiBowOZMUCLROOhnHg+rTLt9h5CDAoY=;
-        h=From:Date:Subject:To:Cc:From;
-        b=0YRxdES1gpi/Wxr7oO2pZplzkux01SKoU4kQ+MrFPd/AGxWOCRh+IJhcvrZd3PaRh
-         MHyH5u6Sujtt24ttWAtbI5xTa7jENrj/Qo2SkiNPPFuGUODyikE/XRLt2bA28ACbkx
-         wjv5yhELfKKgS3x8dFpQ76oWpfk3o4jsY31jr+4ZcISW+sprxjIvzyQh2mCEC6Zc1Z
-         ry0wJxjUwn0GiA4+08wA02gs+2u6Hv0kHI+S9nr52kOAdDCwYO3gTnl4VX8/taWvCA
-         KJfDUA2cmjOjnWlrJCo/F0rrOqwIxQWI1ipcw/PAuuvLrCKhyb5W+BAschENrbpxZY
-         7iDxg9sdxnOWA==
-X-Nifty-SrcIP: [209.85.214.179]
-Received: by mail-pl1-f179.google.com with SMTP id d22so18730060plr.9;
-        Wed, 25 May 2022 07:38:45 -0700 (PDT)
-X-Gm-Message-State: AOAM533Q91g7zZh6ohiqwUZ8O8aVdjF5r6mGjKaOyv3LRwllBbaShcDN
-        lcxVF+pZxYidydSl0w6dvl8ebS5kIDpDEk/jTPI=
-X-Google-Smtp-Source: ABdhPJzt72aesK1C/ucD/FdILkN7b5tEansPbXFJ0N3dRhffVd5O4npq/oZtCz02Diz91oql/Ut7Lh0tV5cPSkOgyCI=
-X-Received: by 2002:a17:902:f68f:b0:162:23c6:e61b with SMTP id
- l15-20020a170902f68f00b0016223c6e61bmr15434702plg.136.1653489524424; Wed, 25
- May 2022 07:38:44 -0700 (PDT)
+        Wed, 25 May 2022 10:38:28 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D8832079
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:38:26 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id j25so5987545wrb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:38:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=EgY0jaM9vHozFElUnQ8vjV07u7clksrPr+0iIxlv5TU=;
+        b=ZSAPAZI1ZzKFU26CKEpOFJwGxkDb48U0LhHGHNPMF66cJksDw2s26PhE92m2sP0/Lt
+         0CrCMZVem2RauRgZf+QX2owKSP9hBndUIrO6pTxX6yjcvxSobJbCppPOaTGaOss3ce5s
+         styIG9bn7WYlE9VRwM63fyU/WLG9nLL5z0hBQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=EgY0jaM9vHozFElUnQ8vjV07u7clksrPr+0iIxlv5TU=;
+        b=KWl7AIzT6nfWpYdH/BjXIAWJAaIbM4wEU7J+tK/woJ2qmgCc4sw+aknnm8d8Kc5K9/
+         IPSH/66NFYyjbXRlZN3GNKlsq/tFjfdhgHCaST3Eu84FY2T4LPXr6Wo4RBoVW+bfOm0r
+         PQ5t1KUOEfvQheGnrd5nxGbTHZfBeVXmu1O897RmofUFo8imokod3y5QvFPnKCeT0Hk4
+         UycBU+QtOaQfc3rTi8688HKvU5ofeglrgy/Sk0lMUA+zbTSgH4uH48MxzwgGLkUeGyZ6
+         hYtzLShCGr8cBi6IIDc81V5O0Iu6KxkacVxwJ9qRVIg3g+koTZJ7GnKfrFXQgpWkjuRj
+         csPw==
+X-Gm-Message-State: AOAM530OmQiA4PbIfwQl6irV8Wb3cbh7GOAM4nG5/R/r0ulOzVgefGnx
+        SILABukU2JLrhtfXC9o47eWR9A==
+X-Google-Smtp-Source: ABdhPJzLNNEykkR4Jh5XLHgXxwE9aky/euCfurPFRV26dc5jYUXygZu7DY5BbEHKBLSkPW+aTFGinA==
+X-Received: by 2002:a05:6000:246:b0:20f:fff4:e1ec with SMTP id m6-20020a056000024600b0020ffff4e1ecmr2580893wrz.485.1653489505042;
+        Wed, 25 May 2022 07:38:25 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id h15-20020adf9ccf000000b0020e58b3e064sm2292198wre.74.2022.05.25.07.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 07:38:24 -0700 (PDT)
+Date:   Wed, 25 May 2022 16:38:22 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "T.J. Mercier" <tjmercier@google.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Greg Kroah-Hartman <gregkh@google.com>,
+        John Stultz <jstultz@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
+Message-ID: <Yo4/XhWQkACWaPIh@phenom.ffwll.local>
+Mail-Followup-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Greg Kroah-Hartman <gregkh@google.com>,
+        John Stultz <jstultz@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220516171315.2400578-1-tjmercier@google.com>
+ <175c5af3-9224-9c8e-0784-349dad9a2954@amd.com>
+ <CABdmKX2GcgCs1xANYPBp8OEtk9qqH7AvCzpdppj9rHXvMqWSAw@mail.gmail.com>
+ <0875fa95-3a25-a354-1433-201fca81ed3e@amd.com>
+ <CABdmKX1+VYfdzyVYOS5MCsr4ptGTygmuUP9ikyh-vW6DgKk2kg@mail.gmail.com>
+ <YoM9BAwybcjG7K/H@kroah.com>
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 25 May 2022 23:37:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATy1o89+KwgDmJ3tDDxnF2JvhVBm702JbRe6jREWH8MYQ@mail.gmail.com>
-Message-ID: <CAK7LNATy1o89+KwgDmJ3tDDxnF2JvhVBm702JbRe6jREWH8MYQ@mail.gmail.com>
-Subject: [GIT PULL] Kbuild updates for v5.19-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YoM9BAwybcjG7K/H@kroah.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, May 17, 2022 at 08:13:24AM +0200, Greg Kroah-Hartman wrote:
+> On Mon, May 16, 2022 at 05:08:05PM -0700, T.J. Mercier wrote:
+> > On Mon, May 16, 2022 at 12:21 PM Christian König
+> > <christian.koenig@amd.com> wrote:
+> > >
+> > > Am 16.05.22 um 20:08 schrieb T.J. Mercier:
+> > > > On Mon, May 16, 2022 at 10:20 AM Christian König
+> > > > <christian.koenig@amd.com> wrote:
+> > > >> Am 16.05.22 um 19:13 schrieb T.J. Mercier:
+> > > >>> Recently, we noticed an issue where a process went into direct reclaim
+> > > >>> while holding the kernfs rw semaphore for sysfs in write (exclusive)
+> > > >>> mode. This caused processes who were doing DMA-BUF exports and releases
+> > > >>> to go into uninterruptible sleep since they needed to acquire the same
+> > > >>> semaphore for the DMA-BUF sysfs entry creation/deletion. In order to avoid
+> > > >>> blocking DMA-BUF export for an indeterminate amount of time while
+> > > >>> another process is holding the sysfs rw semaphore in exclusive mode,
+> > > >>> this patch moves the per-buffer sysfs file creation to the default work
+> > > >>> queue. Note that this can lead to a short-term inaccuracy in the dmabuf
+> > > >>> sysfs statistics, but this is a tradeoff to prevent the hot path from
+> > > >>> being blocked. A work_struct is added to dma_buf to achieve this, but as
+> > > >>> it is unioned with the kobject in the sysfs_entry, dma_buf does not
+> > > >>> increase in size.
+> > > >> I'm still not very keen of this approach as it strongly feels like we
+> > > >> are working around shortcoming somewhere else.
+> > > >>
+> > > > My read of the thread for the last version is that we're running into
+> > > > a situation where sysfs is getting used for something it wasn't
+> > > > originally intended for, but we're also stuck with this sysfs
+> > > > functionality for dmabufs.
+> > > >
+> > > >>> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
+> > > >>> Originally-by: Hridya Valsaraju <hridya@google.com>
+> > > >>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > > >>>
+> > > >>> ---
+> > > >>> See the originally submitted patch by Hridya Valsaraju here:
+> > > >>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F1%2F4%2F1066&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C794614324d114880a25508da37672e4b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637883213566903705%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=bGlA2FeubfSeL5XDHYyWMZqUXfScoCphZjjK4jrqQJs%3D&amp;reserved=0
+> > > >>>
+> > > >>> v2 changes:
+> > > >>> - Defer only sysfs creation instead of creation and teardown per
+> > > >>> Christian König
+> > > >>>
+> > > >>> - Use a work queue instead of a kthread for deferred work per
+> > > >>> Christian König
+> > > >>> ---
+> > > >>>    drivers/dma-buf/dma-buf-sysfs-stats.c | 56 ++++++++++++++++++++-------
+> > > >>>    include/linux/dma-buf.h               | 14 ++++++-
+> > > >>>    2 files changed, 54 insertions(+), 16 deletions(-)
+> > > >>>
+> > > >>> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
+> > > >>> index 2bba0babcb62..67b0a298291c 100644
+> > > >>> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
+> > > >>> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
+> > > >>> @@ -11,6 +11,7 @@
+> > > >>>    #include <linux/printk.h>
+> > > >>>    #include <linux/slab.h>
+> > > >>>    #include <linux/sysfs.h>
+> > > >>> +#include <linux/workqueue.h>
+> > > >>>
+> > > >>>    #include "dma-buf-sysfs-stats.h"
+> > > >>>
+> > > >>> @@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
+> > > >>>        kset_unregister(dma_buf_stats_kset);
+> > > >>>    }
+> > > >>>
+> > > >>> +static void sysfs_add_workfn(struct work_struct *work)
+> > > >>> +{
+> > > >>> +     struct dma_buf_sysfs_entry *sysfs_entry =
+> > > >>> +             container_of(work, struct dma_buf_sysfs_entry, sysfs_add_work);
+> > > >>> +     struct dma_buf *dmabuf = sysfs_entry->dmabuf;
+> > > >>> +
+> > > >>> +     /*
+> > > >>> +      * A dmabuf is ref-counted via its file member. If this handler holds the only
+> > > >>> +      * reference to the dmabuf, there is no need for sysfs kobject creation. This is an
+> > > >>> +      * optimization and a race; when the reference count drops to 1 immediately after
+> > > >>> +      * this check it is not harmful as the sysfs entry will still get cleaned up in
+> > > >>> +      * dma_buf_stats_teardown, which won't get called until the final dmabuf reference
+> > > >>> +      * is released, and that can't happen until the end of this function.
+> > > >>> +      */
+> > > >>> +     if (file_count(dmabuf->file) > 1) {
+> > > >> Please completely drop that. I see absolutely no justification for this
+> > > >> additional complexity.
+> > > >>
+> > > > This case gets hit around 5% of the time in my testing so the else is
+> > > > not a completely unused branch.
+> > >
+> > > Well I can only repeat myself: This means that your userspace is
+> > > severely broken!
+> > >
+> > > DMA-buf are meant to be long living objects
+> > This patch addresses export *latency* regardless of how long-lived the
+> > object is. Even a single, long-lived export will benefit from this
+> > change if it would otherwise be blocked on adding an object to sysfs.
+> > I think attempting to improve this latency still has merit.
+> 
+> Fixing the latency is nice, but as it's just pushing the needed work off
+> to another code path, it will take longer overall for the sysfs stuff to
+> be ready for userspace to see.
+> 
+> Perhaps we need to step back and understand what this code is supposed
+> to be doing.  As I recall, it was created because some systems do not
+> allow debugfs anymore, and they wanted the debugging information that
+> the dmabuf code was exposing to debugfs on a "normal" system.  Moving
+> that logic to sysfs made sense, but now I am wondering why we didn't see
+> these issues in the debugfs code previously?
+> 
+> Perhaps we should go just one step further and make a misc device node
+> for dmabug debugging information to be in and just have userspace
+> poll/read on the device node and we spit the info that used to be in
+> debugfs out through that?  That way this only affects systems when they
+> want to read the information and not normal code paths?  Yeah that's a
+> hack, but this whole thing feels overly complex now.
 
-Please pull Kbuild updates for v5.19-rc1.
-Thank you.
+A bit late on this discussion, but just wanted to add my +1 that we should
+either redesign the uapi, or fix the underlying latency issue in sysfs, or
+whatever else is deemed the proper fix.
 
+Making uapi interfaces async in ways that userspace can't discover is a
+hack that we really shouldn't consider, at least for upstream. All kinds
+of hilarious things might start to happen when an object exists, but not
+consistently in all the places where it should be visible. There's a
+reason sysfs has all these neat property groups so that absolutely
+everything is added atomically. Doing stuff later on just because usually
+no one notices that the illusion falls apart isn't great.
 
+Unfortunately I don't have a clear idea here what would be the right
+solution :-/ One idea perhaps: Should we dynamically enumerate the objects
+when userspace does a readdir()? That's absolutely not how sysfs works,
+but procfs works like that and there's discussions going around about
+moving these optimizations to other kernfs implementations. At least there
+was a recent lwn article on this:
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+https://lwn.net/Articles/895111/
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-v5.19
-
-for you to fetch changes up to 5ce2176b81f77366bd02c27509b83049f0020544:
-
-  genksyms: adjust the output format to modpost (2022-05-24 16:33:20 +0900)
-
-----------------------------------------------------------------
-Kbuild updates for v5.19
-
- - Add HOSTPKG_CONFIG env variable to allow users to override pkg-config
-
- - Support W=e as a shorthand for KCFLAGS=-Werror
-
- - Fix CONFIG_IKHEADERS build to support toybox cpio
-
- - Add scripts/dummy-tools/pahole to ease distro packagers' life
-
- - Suppress false-positive warnings from checksyscalls.sh for W=2 build
-
- - Factor out the common code of arch/*/boot/install.sh into
-   scripts/install.sh
-
- - Support 'kernel-install' tool in scripts/prune-kernel
-
- - Refactor module-versioning to link the symbol versions at the final
-   link of vmlinux and modules
-
- - Remove CONFIG_MODULE_REL_CRCS because module-versioning now works in
-   an arch-agnostic way
-
- - Refactor modpost, Makefiles
-
-----------------------------------------------------------------
-Chun-Tse Shao (1):
-      kbuild: Allow kernel installation packaging to override pkg-config
-
-Daniel Mentz (1):
-      kheaders: Have cpio unconditionally replace files
-
-Jiri Slaby (1):
-      scripts: dummy-tools, add pahole
-
-Masahiro Yamada (47):
-      kbuild: factor out genksyms command from cmd_gensymtypes_{c,S}
-      kbuild: do not remove empty *.symtypes explicitly
-      modpost: remove useless export_from_sec()
-      modpost: move export_from_secname() call to more relevant place
-      modpost: remove redundant initializes for static variables
-      modpost: remove annoying namespace_from_kstrtabns()
-      kbuild: refactor cmd_modversions_c
-      kbuild: refactor cmd_modversions_S
-      kbuild: reuse suffix-search to refactor multi_depend
-      kbuild: make multi_depend work with targets in subdirectory
-      kbuild: reuse real-search to simplify cmd_mod
-      kbuild: split the second line of *.mod into *.usyms
-      kbuild: get rid of duplication in *.mod files
-      kbuild: make *.mod not depend on *.o
-      kbuild: read *.mod to get objects passed to $(LD) or $(AR)
-      modpost: use snprintf() instead of sprintf() for safety
-      modpost: do not write out any file when error occurred
-      modpost: remove stale comment about sym_add_exported()
-      modpost: add a separate error for exported symbols without definition
-      modpost: retrieve the module dependency and CRCs in check_exports()
-      modpost: move struct namespace_list to modpost.c
-      kbuild: drop $(objtree)/ prefix support for clean-files
-      ia64: make the install target not depend on any build artifact
-      modpost: use bool type where appropriate
-      modpost: change mod->gpl_compatible to bool type
-      modpost: import include/linux/list.h
-      modpost: traverse modules in order
-      modpost: add sym_add_unresolved() helper
-      modpost: traverse unresolved symbols in order
-      modpost: use doubly linked list for dump_lists
-      modpost: traverse the namespace_list in order
-      modpost: dump Module.symvers in the same order of modules.order
-      modpost: make multiple export error
-      modpost: make sym_add_exported() always allocate a new symbol
-      modpost: split new_symbol() to symbol allocation and hash table addition
-      kbuild: factor out the common installation code into scripts/install.sh
-      modpost: merge add_{intree_flag,retpoline,staging_flag} to add_header
-      modpost: move *.mod.c generation to write_mod_c_files()
-      kbuild: generate a list of objects in vmlinux
-      kbuild: record symbol versions in *.cmd files
-      modpost: remove left-over cross_compile declaration
-      modpost: change the license of EXPORT_SYMBOL to bool type
-      modpost: add sym_find_with_module() helper
-      modpost: extract symbol versions from *.cmd files
-      kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
-      kbuild: stop merging *.symversions
-      genksyms: adjust the output format to modpost
-
-Necip Fazil Yildiran (1):
-      docs: kbuild: add references on Kconfig semantics
-
-Nick Desaulniers (1):
-      kbuild: uapi: use -fsyntax-only rather than -S
-
-Randy Dunlap (1):
-      Makefile: fix 2 typos
-
-Reza Arbab (1):
-      scripts/prune-kernel: Use kernel-install if available
-
-Vincent Mailhol (1):
-      checksyscalls: ignore -Wunused-macros
-
-Yann Droneaud (1):
-      kbuild: support W=e to make build abort in case of warning
-
- .gitignore                                |   1 +
- Documentation/kbuild/kconfig-language.rst |   6 +
- Makefile                                  |  16 +-
- arch/arm/Makefile                         |   4 +-
- arch/arm/boot/install.sh                  |  21 --
- arch/arm64/Makefile                       |   6 +-
- arch/arm64/boot/install.sh                |  21 --
- arch/ia64/Makefile                        |   5 +-
- arch/ia64/install.sh                      |  10 -
- arch/m68k/Makefile                        |   3 +-
- arch/m68k/include/asm/Kbuild              |   1 +
- arch/m68k/include/asm/export.h            |   2 -
- arch/m68k/install.sh                      |  22 --
- arch/nios2/Makefile                       |   3 +-
- arch/nios2/boot/install.sh                |  22 --
- arch/parisc/Makefile                      |  11 +-
- arch/parisc/install.sh                    |  28 --
- arch/powerpc/Kconfig                      |   1 -
- arch/powerpc/Makefile                     |   3 +-
- arch/powerpc/boot/Makefile                |   4 +-
- arch/powerpc/boot/install.sh              |  23 --
- arch/riscv/Makefile                       |   7 +-
- arch/riscv/boot/install.sh                |  21 --
- arch/s390/Kconfig                         |   1 -
- arch/s390/Makefile                        |   3 +-
- arch/s390/boot/install.sh                 |   6 -
- arch/sparc/Makefile                       |   3 +-
- arch/sparc/boot/install.sh                |  22 --
- arch/um/Kconfig                           |   1 -
- arch/x86/Makefile                         |   3 +-
- arch/x86/boot/install.sh                  |  22 --
- certs/Makefile                            |   4 +-
- include/asm-generic/export.h              |  22 +-
- include/linux/export-internal.h           |  17 +
- include/linux/export.h                    |  30 +-
- init/Kconfig                              |   4 -
- kernel/gen_kheaders.sh                    |   2 +-
- kernel/module.c                           |  10 +-
- scripts/Makefile                          |   4 +-
- scripts/Makefile.build                    | 133 +++-----
- scripts/Makefile.clean                    |   8 +-
- scripts/Makefile.extrawarn                |  13 +-
- scripts/Makefile.lib                      |   6 +-
- scripts/Makefile.vmlinux                  |  32 ++
- scripts/adjust_autoksyms.sh               |   2 +-
- scripts/checksyscalls.sh                  |   2 +-
- scripts/dummy-tools/pahole                |   4 +
- scripts/gen_autoksyms.sh                  |  18 +-
- scripts/genksyms/genksyms.c               |  18 +-
- scripts/install.sh                        |  40 +++
- scripts/kconfig/gconf-cfg.sh              |  12 +-
- scripts/kconfig/mconf-cfg.sh              |  16 +-
- scripts/kconfig/nconf-cfg.sh              |  16 +-
- scripts/kconfig/qconf-cfg.sh              |  14 +-
- scripts/link-vmlinux.sh                   |  40 +--
- scripts/mod/list.h                        | 213 ++++++++++++
- scripts/mod/modpost.c                     | 674
-++++++++++++++++++++------------------
- scripts/mod/modpost.h                     |  31 +-
- scripts/mod/sumversion.c                  |  19 +-
- scripts/prune-kernel                      |   6 +-
- tools/objtool/Makefile                    |   4 +-
- usr/include/Makefile                      |   2 +-
- 62 files changed, 874 insertions(+), 844 deletions(-)
- mode change 100644 => 100755 arch/arm/boot/install.sh
- mode change 100644 => 100755 arch/arm64/boot/install.sh
- mode change 100644 => 100755 arch/ia64/install.sh
- delete mode 100644 arch/m68k/include/asm/export.h
- mode change 100644 => 100755 arch/m68k/install.sh
- mode change 100644 => 100755 arch/nios2/boot/install.sh
- mode change 100644 => 100755 arch/parisc/install.sh
- mode change 100644 => 100755 arch/powerpc/boot/install.sh
- mode change 100644 => 100755 arch/riscv/boot/install.sh
- mode change 100644 => 100755 arch/s390/boot/install.sh
- mode change 100644 => 100755 arch/sparc/boot/install.sh
- mode change 100644 => 100755 arch/x86/boot/install.sh
- create mode 100644 include/linux/export-internal.h
- create mode 100644 scripts/Makefile.vmlinux
- create mode 100755 scripts/dummy-tools/pahole
- create mode 100755 scripts/install.sh
- create mode 100644 scripts/mod/list.h
-
-
+But that would be serious amounts of work I guess.
+-Daniel
 -- 
-Best Regards
-Masahiro Yamada
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

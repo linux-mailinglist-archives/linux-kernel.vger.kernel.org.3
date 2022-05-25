@@ -2,115 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70A3533E3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8F9533E39
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244522AbiEYNuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S238686AbiEYNuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244596AbiEYNuQ (ORCPT
+        with ESMTP id S244595AbiEYNuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 May 2022 09:50:16 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEA03584D;
-        Wed, 25 May 2022 06:50:15 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-300628e76f3so8260657b3.12;
-        Wed, 25 May 2022 06:50:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D7pNBXTzwb2NC+1B3pkw6XahPKXPrihCDQqGfh0Wnzo=;
-        b=UDr7JM9Zp9EaPbB6flSIhtvB2rBN91LXcTY6rg/XNnEmkypBFmx8VaTIPQWW7V8ljq
-         wo0gjJ8H82RLcuAuAp61ucpo/HIOlDaFBawgJ97i/2HsqrfRjL9czqv5LJDN0NmSwaQM
-         Fzz7epy4GXkt3VAR36Jb+cAbHG4vkJDiUjSnw588eCXVvbFMo43fkZd7K97uY5S3VU7T
-         bCUNYDZbsjmD5a49QjGwRayassCze0fNleUcVCuSgR1vNt5cNbGeA19EQoXkjCYqUFzw
-         vZLKNq5tnPuEX03Mijp75rOZ+5QG3KPuKjO2QLLbfG4l7Xq3EtFGNyVKRR9xkwXaDZ56
-         AHAg==
-X-Gm-Message-State: AOAM532xuiA1s+IhedFnUiIIb/k6AvbWzyRRzdLLPJxt5JqOpzPELD/D
-        awreOjGkSXDody8TroDrslNsU1tLqzuAXdBwspkY56N+
-X-Google-Smtp-Source: ABdhPJweqWSCLXeXw+r+GeogMl1WGgJ5ajSlE51Ud/iUBvqvwf0bA2VMSP4GcN/QX3cCdkBu3ImXYBXI9ubr+DisxJk=
-X-Received: by 2002:a81:87c4:0:b0:2ff:c5dc:72b9 with SMTP id
- x187-20020a8187c4000000b002ffc5dc72b9mr19519391ywf.19.1653486614968; Wed, 25
- May 2022 06:50:14 -0700 (PDT)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFC82C67B;
+        Wed, 25 May 2022 06:50:14 -0700 (PDT)
+Date:   Wed, 25 May 2022 13:50:11 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653486613;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/7QoNTR6KxK6cV3mDhoJv7AZrlbnpX0w8gUZqApLUEw=;
+        b=ezyCEWvcq2DuJP4sIGUq4Y8sMw+91pGs5/Ks3np5C2GTaeCQ5UMNfv7blFkdrUZbtWLCYp
+        zkneGYRNHSfKeB/Kkflj+o+5A4Zj5icohhttnru46JqB8vF9PYXx/mZUlNmGvN5j0FWaYq
+        Bun2rZ+E6mW0P8OgZdN0yx3Im97V0ijaBgu8wTmVDrzMXGoU9n5SZneQu7atzwQsPvOHMJ
+        0XOXdA+cTkA8adMKl68miVNm6lLjDZ4zcyth5IX2dJ1fQgWZGskLI65AbrxqqOcxcq0Ico
+        CzK159g1FhxnhsWPcKag68vHjP678pVIxu11EPG4QpyuBC5TRBwkmZmkmwVDaQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653486613;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/7QoNTR6KxK6cV3mDhoJv7AZrlbnpX0w8gUZqApLUEw=;
+        b=eL6GBSFV30I2O2RKDhZ65qdaaF21lIfR6+VQlaw9x1Czi0Ffz0ydmS8UqLre55WlCSlFZ4
+        uTyTvkSFui49GNBg==
+From:   "tip-bot2 for sunliming" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/idt: Remove unused headers
+Cc:     sunliming <sunliming@kylinos.cn>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220525012827.93464-1-sunliming@kylinos.cn>
+References: <20220525012827.93464-1-sunliming@kylinos.cn>
 MIME-Version: 1.0
-References: <20220523181655.2352470-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20220523181655.2352470-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 May 2022 15:50:04 +0200
-Message-ID: <CAJZ5v0je=rTPG+y-CSd=mi4RTbOq2zni7-1SdKmbNadhUUihCA@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: admin-guide: pm: Add Out of Band mode
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Len Brown <lenb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Prarit Bhargava <prarit@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <165348661199.4207.1899974546551206593.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 8:17 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Update documentation for using the tool to support performance level
-> change via OOB (Out of Band) interface.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> v2:
-> As suggested by Jonathan
-> - Indent literal block
-> - Show output of command
->
->  .../admin-guide/pm/intel-speed-select.rst     | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
->
-> diff --git a/Documentation/admin-guide/pm/intel-speed-select.rst b/Documentation/admin-guide/pm/intel-speed-select.rst
-> index 0a1fbdb54bfe..a2bfb971654f 100644
-> --- a/Documentation/admin-guide/pm/intel-speed-select.rst
-> +++ b/Documentation/admin-guide/pm/intel-speed-select.rst
-> @@ -262,6 +262,28 @@ Which shows that the base frequency now increased from 2600 MHz at performance
->  level 0 to 2800 MHz at performance level 4. As a result, any workload, which can
->  use fewer CPUs, can see a boost of 200 MHz compared to performance level 0.
->
-> +Changing performance level via BMC Interface
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +It is possible to change SST-PP level using out of band (OOB) agent (Via some
-> +remote management console, through BMC "Baseboard Management Controller"
-> +interface). This mode is supported from the Sapphire Rapids processor
-> +generation. The kernel and tool change to support this mode is added to Linux
-> +kernel version 5.18. To enable this feature, kernel config
-> +"CONFIG_INTEL_HFI_THERMAL" is required. The minimum version of the tool
-> +is "v1.12" to support this feature, which is part of Linux kernel version 5.18.
-> +
-> +To support such configuration, this tool can be used as a daemon. Add
-> +a command line option --oob::
-> +
-> + # intel-speed-select --oob
-> + Intel(R) Speed Select Technology
-> + Executing on CPU model:143[0x8f]
-> + OOB mode is enabled and will run as daemon
-> +
-> +In this mode the tool will online/offline CPUs based on the new performance
-> +level.
-> +
->  Check presence of other Intel(R) SST features
->  ---------------------------------------------
->
-> --
+The following commit has been merged into the x86/cleanups branch of tip:
 
-Applied as 5.19-rc material, thanks!
+Commit-ID:     20eb48885b62d5de4ab6be7e08f9f55aa33333fd
+Gitweb:        https://git.kernel.org/tip/20eb48885b62d5de4ab6be7e08f9f55aa33333fd
+Author:        sunliming <kelulanainsley@gmail.com>
+AuthorDate:    Wed, 25 May 2022 09:28:27 +08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 25 May 2022 15:45:00 +02:00
+
+x86/idt: Remove unused headers
+
+Commit:
+
+  4b9a8dca0e58 ("x86/idt: Remove the tracing IDT completely")
+
+removed the 'tracing IDT' from arch/x86/kernel/tracepoint.c,
+but left related headers included - remove them.
+
+[ mingo: Tweak changelog. ]
+
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20220525012827.93464-1-sunliming@kylinos.cn
+---
+ arch/x86/kernel/tracepoint.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/arch/x86/kernel/tracepoint.c b/arch/x86/kernel/tracepoint.c
+index fcfc077..f39aad6 100644
+--- a/arch/x86/kernel/tracepoint.c
++++ b/arch/x86/kernel/tracepoint.c
+@@ -8,10 +8,7 @@
+ #include <linux/jump_label.h>
+ #include <linux/atomic.h>
+ 
+-#include <asm/hw_irq.h>
+-#include <asm/desc.h>
+ #include <asm/trace/exceptions.h>
+-#include <asm/trace/irq_vectors.h>
+ 
+ DEFINE_STATIC_KEY_FALSE(trace_pagefault_key);
+ 

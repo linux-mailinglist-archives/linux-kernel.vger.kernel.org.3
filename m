@@ -2,106 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766BD5341D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF33C5341E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245538AbiEYQ7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 12:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
+        id S245574AbiEYQ7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 12:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245526AbiEYQ7B (ORCPT
+        with ESMTP id S245559AbiEYQ7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 12:59:01 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BC6A5029
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:59:00 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id k30so30947251wrd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:59:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BuZEGOxN6s+QpJ7ff5N18tZNmtTRq26kp+p3466K8F8=;
-        b=PN7c+ZsciJ/kEOjPj7CShyBj/DLMdY+SeuzKoJuV+aZs00rsfGtKPxXYuXkDBJ+S65
-         +uM95I3LPBfkBnNJtlsq3Hb54Vee//W2JCMtzVXiGtQO50V488NIYCi61azqiCWc6O3c
-         Q5lU3W83LYTjnEIjbwpSasu8MmFtG9SIpezhIsHVO5szkxK6XNck9CfoRN9NbVUaLhQ8
-         rYnP9qSQ9RsaMMG4frzZhL/yat5iLtRzzgeCf/MMbJh08/WMAAcFYYbFqaqpNUYbIOLm
-         zw8NrHxtN81kOAdgF/FzYqXwubENk2rIRCDyHk6nuO2yj17cVhEWMQAi40vrNhwTac3X
-         RwsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BuZEGOxN6s+QpJ7ff5N18tZNmtTRq26kp+p3466K8F8=;
-        b=Ma0De95uiazuXv5U8wISaNfiR1XUeT00lTKJjojY4L/YDjlqx+fNY9r8Z4pUoV1oDF
-         m2OBQMpMaRvRkCfBU6PHvV2q3BtLUi/QQuVHBxj0ekL0LFpKutNJ5Piu98PmI5PfRy48
-         3CmKOX2gZvoVQrbenJgxs8ZUe3eL5/DJ7pN/IoYf3IhEYdyKyYdjuNBK9sHFAoCgVgBH
-         6iRJUKfaleLmQaNcAsz9Mw9KiH91BvhNCvYhRpWrBksdvagwI8V3iYpntA8BQVAu11Cl
-         nzMg+ZfVULwSkH8NXLOPvG5YN+3UOyh1LmWL7syo7anawVinVDURxYQ3KKFuFY8+ADdJ
-         vGdw==
-X-Gm-Message-State: AOAM531lfjyf6fl2srgeZu6As23Gsyqm9ivWXNuurwMo69/tPydHkj8V
-        bbZcXIqEhJlL+TsSCVNoe9S02gwRYO2SI3ZFS20eF87p4ZWsnfcz
-X-Google-Smtp-Source: ABdhPJybIyWNzIkBX1luV1MnU9OIiN8pAZht74AaILdEoJbIQZLlkTffZeSVmkFeLQons+gYVBsMhKaLpMV+YAPqwYA=
-X-Received: by 2002:a5d:5954:0:b0:20c:4d55:1388 with SMTP id
- e20-20020a5d5954000000b0020c4d551388mr28019559wri.90.1653497938850; Wed, 25
- May 2022 09:58:58 -0700 (PDT)
+        Wed, 25 May 2022 12:59:12 -0400
+Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF18A5AAC;
+        Wed, 25 May 2022 09:59:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1653497950; x=1685033950;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HBO9Ss+j5oJV7F180f4sho3zlIKYqYepW9KAtp085wE=;
+  b=OxtrVPuB4KBri4rNLSFYbRw9ONO9RLKlRxzr1H6Zhb6cqflSbtV6wwVh
+   U0yBln+nakq550lEy3UZVp0S3fPLhz5rjvkddytXsiiDsl0lCRy7Nz7Vl
+   oVDz+JHuaTd8wxs2apQhfrKXV1tvqBR04YkChWhbDXEI1ee33jou7afn2
+   4=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="123667549"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647298800"; 
+   d="scan'208";a="123667549"
+Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:59:05 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
+        Wed, 25 May 2022 18:59:05 +0200 (CEST)
+Received: from MUCSE817.infineon.com (172.23.29.43) by MUCSE819.infineon.com
+ (172.23.29.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 25 May
+ 2022 18:59:05 +0200
+Received: from ISCNPC0VBFBX.infineon.com (172.23.8.247) by
+ MUCSE817.infineon.com (172.23.29.43) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.26; Wed, 25 May 2022 18:59:04 +0200
+From:   Alexander Steffen <Alexander.Steffen@infineon.com>
+To:     <jarkko@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>
+CC:     Alexander Steffen <Alexander.Steffen@infineon.com>,
+        <peterhuewe@gmx.de>, <jgg@ziepe.ca>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+Subject: [PATCH v4 2/3] tpm: Add tpm_tis_verify_crc to the tpm_tis_phy_ops protocol layer
+Date:   Wed, 25 May 2022 18:58:48 +0200
+Message-ID: <20220525165849.7789-3-Alexander.Steffen@infineon.com>
+X-Mailer: git-send-email 2.28.0.windows.1
+In-Reply-To: <20220525165849.7789-1-Alexander.Steffen@infineon.com>
+References: <20220525165849.7789-1-Alexander.Steffen@infineon.com>
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-5-brad@pensando.io>
- <7363c5bb-89ed-b6aa-b346-f314a058f2a7@linaro.org>
-In-Reply-To: <7363c5bb-89ed-b6aa-b346-f314a058f2a7@linaro.org>
-From:   Brad Larson <brad@pensando.io>
-Date:   Wed, 25 May 2022 09:58:47 -0700
-Message-ID: <CAK9rFnzHOTg9BR-KY7rQttN2Cu2SYqAXfjXLYsH+RKYO8Su01g@mail.gmail.com>
-Subject: Re: [PATCH 04/11] dt-bindings: spi: Add compatible for Pensando Elba SoC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        David Clear <dac2@pensando.io>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE821.infineon.com (172.23.29.47) To
+ MUCSE817.infineon.com (172.23.29.43)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Some TPMs, e.g. those implementing the I2C variant of TIS, can verify
+data transfers to/from the FIFO with a CRC. The CRC is calculated over
+the entirety of the FIFO register. Since the phy_ops layer is not aware
+when the core layer is done reading/writing the FIFO, CRC verification
+must be triggered from the core layer. To this end, add an optional
+phy_ops API call.
 
-On Thu, Apr 7, 2022 at 11:59 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 07/04/2022 01:36, Brad Larson wrote:
-> > Document the cadence qspi controller compatible for Pensando Elba SoC
-> > boards.  The Elba qspi fifo size is 1024.
-> >
+Co-developed-by: Johannes Holland <johannes.holland@infineon.com>
+Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+---
+ drivers/char/tpm/tpm_tis_core.c | 14 ++++++++++++++
+ drivers/char/tpm/tpm_tis_core.h | 10 ++++++++++
+ 2 files changed, 24 insertions(+)
 
-> > @@ -48,7 +49,7 @@ properties:
-> >      description:
-> >        Size of the data FIFO in words.
-> >      $ref: "/schemas/types.yaml#/definitions/uint32"
-> > -    enum: [ 128, 256 ]
-> > +    enum: [ 128, 256, 1024 ]
->
-> Is 1024 valid for other controllers? If not, then probably this should
-> be further constraint in allOf:if:then...
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index dc56b976d816..757623bacfd5 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -289,6 +289,7 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ 	int size = 0;
+ 	int status;
+ 	u32 expected;
++	int rc;
+ 
+ 	if (count < TPM_HEADER_SIZE) {
+ 		size = -EIO;
+@@ -328,6 +329,13 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ 		goto out;
+ 	}
+ 
++	rc = tpm_tis_verify_crc(priv, (size_t)size, buf);
++	if (rc < 0) {
++		dev_err(&chip->dev, "CRC mismatch for response.\n");
++		size = rc;
++		goto out;
++	}
++
+ out:
+ 	tpm_tis_ready(chip);
+ 	return size;
+@@ -443,6 +451,12 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 	if (rc < 0)
+ 		return rc;
+ 
++	rc = tpm_tis_verify_crc(priv, len, buf);
++	if (rc < 0) {
++		dev_err(&chip->dev, "CRC mismatch for command.\n");
++		return rc;
++	}
++
+ 	/* go and do it */
+ 	rc = tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
+ 	if (rc < 0)
+diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+index 6c203f36b8a1..66a5a13cd1df 100644
+--- a/drivers/char/tpm/tpm_tis_core.h
++++ b/drivers/char/tpm/tpm_tis_core.h
+@@ -121,6 +121,8 @@ struct tpm_tis_phy_ops {
+ 			  u8 *result, enum tpm_tis_io_mode mode);
+ 	int (*write_bytes)(struct tpm_tis_data *data, u32 addr, u16 len,
+ 			   const u8 *value, enum tpm_tis_io_mode mode);
++	int (*verify_crc)(struct tpm_tis_data *data, size_t len,
++			  const u8 *value);
+ };
+ 
+ static inline int tpm_tis_read_bytes(struct tpm_tis_data *data, u32 addr,
+@@ -188,6 +190,14 @@ static inline int tpm_tis_write32(struct tpm_tis_data *data, u32 addr,
+ 	return rc;
+ }
+ 
++static inline int tpm_tis_verify_crc(struct tpm_tis_data *data, size_t len,
++				     const u8 *value)
++{
++	if (!data->phy_ops->verify_crc)
++		return 0;
++	return data->phy_ops->verify_crc(data, len, value);
++}
++
+ static inline bool is_bsw(void)
+ {
+ #ifdef CONFIG_X86
+-- 
+2.25.1
 
-I'll change this to allOf:if:then so that the 1024 deep FIFO is
-specific to Elba SoC.
-
-Regards,
-Brad

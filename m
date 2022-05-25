@@ -2,397 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D083D533769
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8EE153376B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244047AbiEYHfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 03:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
+        id S244359AbiEYHfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 03:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244342AbiEYHfF (ORCPT
+        with ESMTP id S234157AbiEYHff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 03:35:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E8954BD6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:35:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D2C151F8F0;
-        Wed, 25 May 2022 07:34:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653464098; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SLarddf+wX/ayFS07daRKVyxyjlUCLN8/0UBPO8pQJE=;
-        b=mgAFnTeRKiTRgqMP8tUcnJHUerji2RHWS8ur7WJP5T4qxBSm5Jw5CIhn8k6R8cyu6jzjhr
-        xpkQ/M40dp8QWh8eUEBLJA0ZuRxkWFVnI4twdEDb0fgAgFiQ95WQCXUJ/cBQLtVnS+QeM8
-        id0CDga/+iw6sN+Pg+M/MIiQ9rnQeWM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653464098;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SLarddf+wX/ayFS07daRKVyxyjlUCLN8/0UBPO8pQJE=;
-        b=8WRVZwDvNjXdBwsb6ECK3WUMcEF91wxLAcBpVWvrcHjXqWS35PcEGJwz5IMzvZzWuKFPSp
-        HMWnQUsyHQ8ypUBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A74BA13487;
-        Wed, 25 May 2022 07:34:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GXrjJyLcjWLWGQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 25 May 2022 07:34:58 +0000
-Message-ID: <b34a75ac-389a-3965-9c56-0b18adc8440d@suse.cz>
-Date:   Wed, 25 May 2022 09:34:58 +0200
+        Wed, 25 May 2022 03:35:35 -0400
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [221.176.66.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB3B454BDE
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:35:30 -0700 (PDT)
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.3])
+        by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee5628ddc3e068-037c0;
+        Wed, 25 May 2022 15:35:27 +0800 (CST)
+X-RM-TRANSID: 2ee5628ddc3e068-037c0
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from [192.168.26.114] (unknown[10.42.68.12])
+        by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee2628ddc3e16d-c8e67;
+        Wed, 25 May 2022 15:35:27 +0800 (CST)
+X-RM-TRANSID: 2ee2628ddc3e16d-c8e67
+Subject: Re: [PATCH] ASoC: stm32: sai: Use
+ of_device_get_match_data()tosimplify code
+To:     Olivier MOYSAN <olivier.moysan@foss.st.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     arnaud.pouliquen@foss.st.com, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, alsa-devel@alsa-project.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220519124235.21100-1-tangbin@cmss.chinamobile.com>
+ <69d5cef3-57c0-9bc7-a83b-a85ef1c4cf29@foss.st.com>
+ <YovZAf4S0XphBsco@sirena.org.uk>
+ <3fb8d7f8-4506-3b28-22cb-863bda1f21c8@cmss.chinamobile.com>
+ <d5ab354a-eb10-d31c-d55e-46a4c4d1a4ce@foss.st.com>
+From:   tangbin <tangbin@cmss.chinamobile.com>
+Message-ID: <cd375914-a3e6-37c7-4a16-551937006f92@cmss.chinamobile.com>
+Date:   Wed, 25 May 2022 15:36:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
+In-Reply-To: <d5ab354a-eb10-d31c-d55e-46a4c4d1a4ce@foss.st.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org,
-        roman.gushchin@linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, smuchun@gmail.com
-References: <20220429123044.37885-1-songmuchun@bytedance.com>
- <86fdbde5-a010-9473-2f5d-807c86620509@suse.cz>
- <Yo2R3VA1LIwx10FM@FVFYT0MHHV2J.googleapis.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v2] mm: slab: optimize memcg_slab_free_hook()
-In-Reply-To: <Yo2R3VA1LIwx10FM@FVFYT0MHHV2J.googleapis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/22 04:18, Muchun Song wrote:
-> On Tue, May 24, 2022 at 07:05:31PM +0200, Vlastimil Babka wrote:
->> On 4/29/22 14:30, Muchun Song wrote:
->> > Most callers of memcg_slab_free_hook() already know the slab,  which could
->> > be passed to memcg_slab_free_hook() directly to reduce the overhead of an
->> > another call of virt_to_slab().  For bulk freeing of objects, the call of
->> > slab_objcgs() in the loop in memcg_slab_free_hook() is redundant as well.
->> > Rework memcg_slab_free_hook() and build_detached_freelist() to reduce
->> > those unnecessary overhead and make memcg_slab_free_hook() can handle bulk
->> > freeing in slab_free().
->> > 
->> > Move the calling site of memcg_slab_free_hook() from do_slab_free() to
->> > slab_free() for slub to make the code clearer since the logic is weird
->> > (e.g. the caller need to judge whether it needs to call
->> > memcg_slab_free_hook()). It is easy to make mistakes like missing calling
->> > of memcg_slab_free_hook() like fixes of:
->> > 
->> >   commit d1b2cf6cb84a ("mm: memcg/slab: uncharge during kmem_cache_free_bulk()")
->> >   commit ae085d7f9365 ("mm: kfence: fix missing objcg housekeeping for SLAB")
->> 
->> Hm is this commit also fixing such bug? in mm/slab.c __cache_free():
+Hi Olivier：
+
+On 2022/5/24 22:30, Olivier MOYSAN wrote:
+> Hi Tang,
+>
+> On 5/24/22 03:44, tangbin wrote:
+>> Hi Mark & Olivier：
 >>
-> 
-> Right.
->  
->> /* KASAN might put objp into memory quarantine, delaying its reuse. */
->> if (kasan_slab_free(cachep, objp, init))
->>         return;
->> 
->> before this patch we do not reach memcg_slab_free_hook() if
->> kasan_slab_free() retuns true, after this patch we do. AFAICS SLUB always
->> did memcg_slab_free_hook() in case of kasan_slab_free() so it's the correct
->> thing to do?
+>> On 2022/5/24 2:57, Mark Brown wrote:
+>>> On Mon, May 23, 2022 at 03:28:48PM +0200, Olivier MOYSAN wrote:
+>>>
+>>>> The current patch requires a change in the driver.
+>>>> Either changing STM_SAI_x_ID enums, or replacing data by a struct.
+>>>> For instance:
+>>>> struct stm32_sai_comp_data {
+>>>>     unsigned int id;
+>>>> }
+>>>> struct stm32_sai_comp_data stm32_sai_comp_data_a = {
+>>>>     .id = STM_SAI_A_ID;
+>>>> }
+>>>> struct of_device_id stm32_sai_sub_ids[] = {
+>>>>     .data = &stm32_sai_comp_data_a},
+>>>> }
+>>> Either approach works for me (or a revert for that matter).
 >>
-> 
-> I don't think it is an issue since memcg_slab_free_hook()
-> mainly does memory accounting housekeeping.  Doing it in
-> advance is not an issue.  Actually, we already have done
-> this since
+>>      Thanks for your advice, I was thoughtless.
+>>
+>>      I think change the date of STM_SAI_x_ID maybe simple. But if we 
+>> don't change the id,
+>>
+>> what about add a "#define" like the line 47:
+>>
+>> #define STM_SAI_IS_SUB(x) ((x)->id == STM_SAI_A_ID || (x)->id == 
+>> STM_SAI_B_ID)
+>>
+>> then in the judgement, wu use:
+>>
+>>      sai->id = (uintptr_t)of_device_get_match_data(&pdev->dev);
+>>
+>>      if (!STM_SAI_IS_SUB(sai))
+>>
+>>              return -EINVAL;
+>>
+>>
+>> if you think that's ok, I will send patch v2 for you .
+>>
+>
+> If we allow null value in STM_SAI_IS_SUB(sai) check, we can miss real 
+> NULL pointer error from of_device_get_match_data().
+>
+> The simplest way is to change STM_SAI_x_ID enums I think.
+> But honnestly, I feel more comfortable to let the driver unchanged.
+>
+Oh，you are right, I am sorry.
 
-Yes, it's not an issue. What is likely an issue is skipping the memcg hook
-it as the accounting will become wrong.
+Please forget this patch, I'm sorry to have wasted your time.
 
->   commit d1b2cf6cb84a ("mm: memcg/slab: uncharge during kmem_cache_free_bulk()")
-> 
-> From this commit, the object freed via kmem_cache_free_bulk()
-> in mm/slub.c have called memcg_slab_free_hook() even if
-> kasan_slab_free() retuns true.  Right?
+But I saw some codes is useless in the line 48 & line 49, I think we can 
+remove it.
 
-Yeah, so that means SLAB will indeed be fixed by this patch.
-We should mention it in the changelog then. I wouldn't cc stable though, as
-it's quite a corner case and your patch is not trivial, backports might
-conflict and/or miss some prerequisity etc. If we cared a lot, a preceding
-small patch fixing just the SLAB case would be safer.
+If you think so, I will send this patch for you.
 
->> > This optimization is mainly for bulk objects freeing.  The following numbers
->> > is shown for 16-object freeing.
->> > 
->> >                            before      after
->> >   kmem_cache_free_bulk:   ~430 ns     ~400 ns
->> > 
->> > The overhead is reduced by about 7% for 16-object freeing.
->> > 
->> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
->> 
->> Otherwise looks good, will add to slab tree for 5.20, thanks.
->> 
->> > ---
->> > v2:
->> >  - Add numbers to commit log.
->> > 
->> >  mm/slab.c |  4 ++--
->> >  mm/slab.h | 30 ++++++++---------------------
->> >  mm/slub.c | 66 +++++++++++++++++++++------------------------------------------
->> >  3 files changed, 32 insertions(+), 68 deletions(-)
->> > 
->> > diff --git a/mm/slab.c b/mm/slab.c
->> > index f8cd00f4ba13..2174962055ae 100644
->> > --- a/mm/slab.c
->> > +++ b/mm/slab.c
->> > @@ -3406,9 +3406,10 @@ static __always_inline void __cache_free(struct kmem_cache *cachep, void *objp,
->> >  {
->> >  	bool init;
->> >  
->> > +	memcg_slab_free_hook(cachep, virt_to_slab(objp), &objp, 1);
->> > +
->> >  	if (is_kfence_address(objp)) {
->> >  		kmemleak_free_recursive(objp, cachep->flags);
->> > -		memcg_slab_free_hook(cachep, &objp, 1);
->> >  		__kfence_free(objp);
->> >  		return;
->> >  	}
->> > @@ -3441,7 +3442,6 @@ void ___cache_free(struct kmem_cache *cachep, void *objp,
->> >  	check_irq_off();
->> >  	kmemleak_free_recursive(objp, cachep->flags);
->> >  	objp = cache_free_debugcheck(cachep, objp, caller);
->> > -	memcg_slab_free_hook(cachep, &objp, 1);
->> >  
->> >  	/*
->> >  	 * Skip calling cache_free_alien() when the platform is not numa.
->> > diff --git a/mm/slab.h b/mm/slab.h
->> > index db9fb5c8dae7..a8d5eb1c323f 100644
->> > --- a/mm/slab.h
->> > +++ b/mm/slab.h
->> > @@ -547,36 +547,22 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
->> >  	obj_cgroup_put(objcg);
->> >  }
->> >  
->> > -static inline void memcg_slab_free_hook(struct kmem_cache *s_orig,
->> > +static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
->> >  					void **p, int objects)
->> >  {
->> > -	struct kmem_cache *s;
->> >  	struct obj_cgroup **objcgs;
->> > -	struct obj_cgroup *objcg;
->> > -	struct slab *slab;
->> > -	unsigned int off;
->> >  	int i;
->> >  
->> >  	if (!memcg_kmem_enabled())
->> >  		return;
->> >  
->> > -	for (i = 0; i < objects; i++) {
->> > -		if (unlikely(!p[i]))
->> > -			continue;
->> > -
->> > -		slab = virt_to_slab(p[i]);
->> > -		/* we could be given a kmalloc_large() object, skip those */
->> > -		if (!slab)
->> > -			continue;
->> > -
->> > -		objcgs = slab_objcgs(slab);
->> > -		if (!objcgs)
->> > -			continue;
->> > +	objcgs = slab_objcgs(slab);
->> > +	if (!objcgs)
->> > +		return;
->> >  
->> > -		if (!s_orig)
->> > -			s = slab->slab_cache;
->> > -		else
->> > -			s = s_orig;
->> > +	for (i = 0; i < objects; i++) {
->> > +		struct obj_cgroup *objcg;
->> > +		unsigned int off;
->> >  
->> >  		off = obj_to_index(s, slab, p[i]);
->> >  		objcg = objcgs[off];
->> > @@ -628,7 +614,7 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
->> >  {
->> >  }
->> >  
->> > -static inline void memcg_slab_free_hook(struct kmem_cache *s,
->> > +static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
->> >  					void **p, int objects)
->> >  {
->> >  }
->> > diff --git a/mm/slub.c b/mm/slub.c
->> > index 1f699ddfff7f..3794afe32b5f 100644
->> > --- a/mm/slub.c
->> > +++ b/mm/slub.c
->> > @@ -3435,9 +3435,6 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
->> >  	struct kmem_cache_cpu *c;
->> >  	unsigned long tid;
->> >  
->> > -	/* memcg_slab_free_hook() is already called for bulk free. */
->> > -	if (!tail)
->> > -		memcg_slab_free_hook(s, &head, 1);
->> >  redo:
->> >  	/*
->> >  	 * Determine the currently cpus per cpu slab.
->> > @@ -3497,9 +3494,10 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
->> >  }
->> >  
->> >  static __always_inline void slab_free(struct kmem_cache *s, struct slab *slab,
->> > -				      void *head, void *tail, int cnt,
->> > +				      void *head, void *tail, void **p, int cnt,
->> >  				      unsigned long addr)
->> >  {
->> > +	memcg_slab_free_hook(s, slab, p, cnt);
->> >  	/*
->> >  	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
->> >  	 * to remove objects, whose reuse must be delayed.
->> > @@ -3521,7 +3519,7 @@ void kmem_cache_free(struct kmem_cache *s, void *x)
->> >  	if (!s)
->> >  		return;
->> >  	trace_kmem_cache_free(_RET_IP_, x, s->name);
->> > -	slab_free(s, virt_to_slab(x), x, NULL, 1, _RET_IP_);
->> > +	slab_free(s, virt_to_slab(x), x, NULL, &x, 1, _RET_IP_);
->> >  }
->> >  EXPORT_SYMBOL(kmem_cache_free);
->> >  
->> > @@ -3562,79 +3560,59 @@ static inline
->> >  int build_detached_freelist(struct kmem_cache *s, size_t size,
->> >  			    void **p, struct detached_freelist *df)
->> >  {
->> > -	size_t first_skipped_index = 0;
->> >  	int lookahead = 3;
->> >  	void *object;
->> >  	struct folio *folio;
->> > -	struct slab *slab;
->> > -
->> > -	/* Always re-init detached_freelist */
->> > -	df->slab = NULL;
->> > -
->> > -	do {
->> > -		object = p[--size];
->> > -		/* Do we need !ZERO_OR_NULL_PTR(object) here? (for kfree) */
->> > -	} while (!object && size);
->> > -
->> > -	if (!object)
->> > -		return 0;
->> > +	size_t same;
->> >  
->> > +	object = p[--size];
->> >  	folio = virt_to_folio(object);
->> >  	if (!s) {
->> >  		/* Handle kalloc'ed objects */
->> >  		if (unlikely(!folio_test_slab(folio))) {
->> >  			free_large_kmalloc(folio, object);
->> > -			p[size] = NULL; /* mark object processed */
->> > +			df->slab = NULL;
->> >  			return size;
->> >  		}
->> >  		/* Derive kmem_cache from object */
->> > -		slab = folio_slab(folio);
->> > -		df->s = slab->slab_cache;
->> > +		df->slab = folio_slab(folio);
->> > +		df->s = df->slab->slab_cache;
->> >  	} else {
->> > -		slab = folio_slab(folio);
->> > +		df->slab = folio_slab(folio);
->> >  		df->s = cache_from_obj(s, object); /* Support for memcg */
->> >  	}
->> >  
->> > -	if (is_kfence_address(object)) {
->> > -		slab_free_hook(df->s, object, false);
->> > -		__kfence_free(object);
->> > -		p[size] = NULL; /* mark object processed */
->> > -		return size;
->> > -	}
->> > -
->> >  	/* Start new detached freelist */
->> > -	df->slab = slab;
->> > -	set_freepointer(df->s, object, NULL);
->> >  	df->tail = object;
->> >  	df->freelist = object;
->> > -	p[size] = NULL; /* mark object processed */
->> >  	df->cnt = 1;
->> >  
->> > +	if (is_kfence_address(object))
->> > +		return size;
->> > +
->> > +	set_freepointer(df->s, object, NULL);
->> > +
->> > +	same = size;
->> >  	while (size) {
->> >  		object = p[--size];
->> > -		if (!object)
->> > -			continue; /* Skip processed objects */
->> > -
->> >  		/* df->slab is always set at this point */
->> >  		if (df->slab == virt_to_slab(object)) {
->> >  			/* Opportunity build freelist */
->> >  			set_freepointer(df->s, object, df->freelist);
->> >  			df->freelist = object;
->> >  			df->cnt++;
->> > -			p[size] = NULL; /* mark object processed */
->> > -
->> > +			same--;
->> > +			if (size != same)
->> > +				swap(p[size], p[same]);
->> >  			continue;
->> >  		}
->> >  
->> >  		/* Limit look ahead search */
->> >  		if (!--lookahead)
->> >  			break;
->> > -
->> > -		if (!first_skipped_index)
->> > -			first_skipped_index = size + 1;
->> >  	}
->> >  
->> > -	return first_skipped_index;
->> > +	return same;
->> >  }
->> >  
->> >  /* Note that interrupts must be enabled when calling this function. */
->> > @@ -3643,7 +3621,6 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
->> >  	if (WARN_ON(!size))
->> >  		return;
->> >  
->> > -	memcg_slab_free_hook(s, p, size);
->> >  	do {
->> >  		struct detached_freelist df;
->> >  
->> > @@ -3651,7 +3628,8 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
->> >  		if (!df.slab)
->> >  			continue;
->> >  
->> > -		slab_free(df.s, df.slab, df.freelist, df.tail, df.cnt, _RET_IP_);
->> > +		slab_free(df.s, df.slab, df.freelist, df.tail, &p[size], df.cnt,
->> > +			  _RET_IP_);
->> >  	} while (likely(size));
->> >  }
->> >  EXPORT_SYMBOL(kmem_cache_free_bulk);
->> > @@ -4554,7 +4532,7 @@ void kfree(const void *x)
->> >  		return;
->> >  	}
->> >  	slab = folio_slab(folio);
->> > -	slab_free(slab->slab_cache, slab, object, NULL, 1, _RET_IP_);
->> > +	slab_free(slab->slab_cache, slab, object, NULL, &object, 1, _RET_IP_);
->> >  }
->> >  EXPORT_SYMBOL(kfree);
->> >  
->> 
->> 
+
+Thanks
+
+Tang Bin
+
+
+> BRs
+> Olivier
+>
+>> Thanks
+>>
+>> Tang Bin
+>>
+>>
+
 

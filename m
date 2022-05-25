@@ -2,86 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA273533E18
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BEC533E19
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238710AbiEYNnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S244507AbiEYNnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236921AbiEYNnO (ORCPT
+        with ESMTP id S236561AbiEYNn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:43:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A316D38F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:43:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D609FB81DA7
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 13:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A261C385B8;
-        Wed, 25 May 2022 13:43:09 +0000 (UTC)
-Date:   Wed, 25 May 2022 09:43:07 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <20220525094307.1f1fb561@gandalf.local.home>
-In-Reply-To: <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
-References: <YmLlmaXF00hPkOID@lakrids>
-        <20220426174749.b5372c5769af7bf901649a05@kernel.org>
-        <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
-        <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
-        <20220509142203.6c4f2913@gandalf.local.home>
-        <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
-        <20220510104446.6d23b596@gandalf.local.home>
-        <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
-        <20220511111207.25d1a693@gandalf.local.home>
-        <20220512210231.f9178a98f20a37981b1e89e3@kernel.org>
-        <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 25 May 2022 09:43:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970746D1AB;
+        Wed, 25 May 2022 06:43:25 -0700 (PDT)
+Date:   Wed, 25 May 2022 13:43:18 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653486200;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=n0T/htAa6Mcy4LUNx5ZyokxP7Whrk84psRqgVebcxrM=;
+        b=JFb2cjdFGxAI+MMyQ9c27wlUHHBDbGdo0VwX/aquxcxFnRYyzwR5z3mbk3sP2tZtO1giQu
+        jDSji4NSFdjt/RwGQjHS5w/AvSlvAUs/D4/cDQDQOdEhvg8VEVQaxF/QcnIkHqBvyJjhLg
+        lQ4jVHt8M381Yg25j0mHij/eXnXnXuB+iYNjq5ZmqZMyeDWiQbTHZcqSfcsN8Mpegx2OpN
+        Qp7krJxojr4LX+qRR13IxQUGC52n3GF06BfB2k6QdiNNn1p10BR9LRrTuZ1/ATuQGdy6I7
+        YEFxCJLT3Tr4PS3DXtZ5vTrkoVUnpy/iegmszw3TQ6m6IAFuJ34iwly5FbJXNg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653486200;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=n0T/htAa6Mcy4LUNx5ZyokxP7Whrk84psRqgVebcxrM=;
+        b=relEWGN/Hzot3AHhyhxyvluKUk/YE5rvvMItM/CxSlFF6yqjf3Q7ia2pETKkIwInzVawwM
+        hYoEgrNlDQialqCA==
+From:   "tip-bot2 for XueBing Chen" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/boot] x86/setup: Use strscpy() to replace deprecated strlcpy()
+Cc:     XueBing Chen <chenxuebing@jari.cn>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <730f0fef.a33.180fa69880f.Coremail.chenxuebing@jari.cn>
+References: <730f0fef.a33.180fa69880f.Coremail.chenxuebing@jari.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-ID: <165348619853.4207.3379558582363552426.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 13:17:30 +0100
-Mark Rutland <mark.rutland@arm.com> wrote:
+The following commit has been merged into the x86/boot branch of tip:
 
-> For arm64 I'd like to make this static, and have ftrace *always* capture a
-> minimal set of ftrace_regs, which would be:
-> 
->   X0 to X8 inclusive
->   SP
->   PC
->   LR
->   FP
-> 
-> Since X0 to X8 + SP is all that we need for arguments and return values (per
-> the calling convention we use), and PC+LR+FP gives us everything we need for
-> unwinding and live patching.
-> 
-> I *might* want to add x18 to that when SCS is enabled, but I'm not immediately
-> sure.
+Commit-ID:     8a33d96bd178d5f49cc5c1898e4cda08e221d2db
+Gitweb:        https://git.kernel.org/tip/8a33d96bd178d5f49cc5c1898e4cda08e221d2db
+Author:        XueBing Chen <chenxuebing@jari.cn>
+AuthorDate:    Wed, 25 May 2022 16:51:01 +08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 25 May 2022 15:34:38 +02:00
 
-Does arm64 have HAVE_DYNAMIC_FTRACE_WITH_ARGS enabled? If so, then having
-the normal ftrace call back save the above so that all functions have it
-available would be useful.
+x86/setup: Use strscpy() to replace deprecated strlcpy()
 
--- Steve
+strlcpy() is marked deprecated and should not be used, because
+it doesn't limit the source length.
 
+The preferred interface for when strlcpy()'s return value is not
+checked (truncation) is strscpy().
+
+[ mingo: Tweaked the changelog ]
+
+Signed-off-by: XueBing Chen <chenxuebing@jari.cn>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/730f0fef.a33.180fa69880f.Coremail.chenxuebing@jari.cn
+---
+ arch/x86/kernel/setup.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 249981b..3ebb853 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -903,18 +903,18 @@ void __init setup_arch(char **cmdline_p)
+ 
+ #ifdef CONFIG_CMDLINE_BOOL
+ #ifdef CONFIG_CMDLINE_OVERRIDE
+-	strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
++	strscpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+ #else
+ 	if (builtin_cmdline[0]) {
+ 		/* append boot loader cmdline to builtin */
+ 		strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
+ 		strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
+-		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
++		strscpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+ 	}
+ #endif
+ #endif
+ 
+-	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
++	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+ 	*cmdline_p = command_line;
+ 
+ 	/*

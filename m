@@ -2,144 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE59A534680
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4067D534683
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242895AbiEYWeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 18:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S1344440AbiEYWeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 18:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233357AbiEYWeA (ORCPT
+        with ESMTP id S244460AbiEYWe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 18:34:00 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF201FD0B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:33:58 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id rj1-20020a17090b3e8100b001e099ea3980so2005942pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ZyIIorKaUER6LtO0NEcxpfUt30IgN+0/p0qPefAvRDM=;
-        b=KEQ8220B+o1IAuHb1yGZnxebmZq0POedJgpa1YqeUfAytXWe34R5nCB8Az52B0eM/M
-         tBlr2pJ62Qb5n59net1LP+4gczmyU+3F1TjQKx1KdBaFEjVbLQi/ROhjkhXY6qfwMMNO
-         2CKQtsBmKqsZF3I2Zhb2SL5E8QarPHLKZ0vMUA8INy2HguvbiG0PtKwzj2yr4LYu7z6t
-         1Ol73eKjkz7ut0ImXV/H4XMQXBMPpTDzm3jEQZtoxLTkY2SReYqnFTlp0trVHmUurRAm
-         yFaJNjvH7qRufXPZzxT0SR3simhLIz4bPyxQnGXKekY96Y10Q9Jg47tPdB4grmJpXAgi
-         mupA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ZyIIorKaUER6LtO0NEcxpfUt30IgN+0/p0qPefAvRDM=;
-        b=dUAr6CfjFlGJCCmTBo5/8FI6yrJaBg34VSI45pp5OyJShSGDVnaDq8bsuX4Js9sgh1
-         7OnYczVwGs/9dgvlTx4pazGiVFcdrv6MztYp1OYUxkQmQ0YNdcP65jkCpb6M+ldl86OG
-         2c6bIhhkomajqtjlJCHZvnBmRzD8GE0BTgqJbLf9vjhf1xbHbvo0mTpwGXY4flc1u2oo
-         a8UCp1eKi15N7gKFmD6W+2lxOoXCPm2K/x1yFsDkgRDzwRQnbtz86z3IGCudtD66ZCcK
-         0p/xgHfBWFrKRrTo0N6cqqBxgr/A+POWYcV+hLS0/xppduoykEbOep680VW22PdhpM8p
-         XtAw==
-X-Gm-Message-State: AOAM532TUMKD0QUkI3i2P+Sl3v/dtqAzmH3XEWdbzfxHqTAfsXVSqIyY
-        Iyq3YPybTMvqctqdC2+rAeQzxB+viN2eKhSiXJ8=
-X-Google-Smtp-Source: ABdhPJzxJKUCpKjTUBjtan2qU2XEohu8OHlV0MifZ+uRWy3GDLz1i97cXxGi8swtD+kf9CiHBjIQjNc+Qxqei4OZWIc=
-X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
- (user=willmcvicker job=sendgmr) by 2002:a17:90a:d3d2:b0:1dd:30bb:6a45 with
- SMTP id d18-20020a17090ad3d200b001dd30bb6a45mr12943653pjw.206.1653518038298;
- Wed, 25 May 2022 15:33:58 -0700 (PDT)
-Date:   Wed, 25 May 2022 22:33:16 +0000
-Message-Id: <20220525223316.388490-1-willmcvicker@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH v1 1/1] PCI: dwc: Fix MSI msi_msg dma mapping
-From:   Will McVicker <willmcvicker@google.com>
-To:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        "=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?=" <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
-        Will McVicker <willmcvicker@google.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        Wed, 25 May 2022 18:34:27 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33304FD0F;
+        Wed, 25 May 2022 15:34:26 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (ip-109-40-242-63.web.vodafone.de [109.40.242.63])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8B09C563;
+        Thu, 26 May 2022 00:34:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1653518063;
+        bh=SEgBW7SHEvO9WqxRVFG1Zg8n5BFJC+ASS7wS2330RpQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K1mboHc48vmbNTO50G6n+zn3SoJnydnuIxaUVlTQIkB34RM85zmmQ39/6Jt7fqfhZ
+         L45dnG4X6HlTI2Xj1IHPy6lvGm6lDQKgnz0L07hpvXknhrBb5zXkaNwOakaVtrHzDi
+         5EEti13iHMTR+YeWbLGOwdazoUBi9f/wtZr2mQOU=
+Date:   Thu, 26 May 2022 01:34:18 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: display: ingenic,jz4780-hdmi: Drop
+ undocumented 'ddc-i2c-bus'
+Message-ID: <Yo6u6jcVSsTQvRiU@pendragon.ideasonboard.com>
+References: <20220525205626.2482584-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220525205626.2482584-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As of commit 07940c369a6b ("PCI: dwc: Fix MSI page leakage in
-suspend/resume"), the PCIe designware host driver has been using the
-driver data allocation for the msi_msg dma mapping which can result in
-a DMA_MAPPING_ERROR due to the DMA overflow check in
-dma_direct_map_page() when the address is greater than 32-bits (reported
-in [1]). The commit was trying to address a memory leak on
-suspend/resume by moving the MSI mapping to dw_pcie_host_init(), but
-subsequently dropped the page allocation thinking it wasn't needed.
+Hi Rob,
 
-To fix the DMA mapping issue as well as make msi_msg DMA'able, let's
-switch back to allocating a 32-bit page for the msi_msg. To avoid the
-suspend/resume leak, we can allocate the page in dw_pcie_host_init()
-since that function shouldn't be called during suspend/resume.
+Thank you for the patch.
 
-[1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
+On Wed, May 25, 2022 at 03:56:26PM -0500, Rob Herring wrote:
+> While 'ddc-i2c-bus' is a common property, it should be in a connector
+> node rather than the HDMI bridge node as the I2C bus goes to a
+> connector and not the HDMI block. Drop it from the example.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Will McVicker <willmcvicker@google.com>
----
- drivers/pci/controller/dwc/pcie-designware-host.c | 14 ++++++++------
- drivers/pci/controller/dwc/pcie-designware.h      |  2 +-
- 2 files changed, 9 insertions(+), 7 deletions(-)
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index 2fa86f32d964..3655c6f88bf1 100644
---- a/drivers/pci/controller/dwc/pcie-designware-host.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -267,8 +267,9 @@ static void dw_pcie_free_msi(struct pcie_port *pp)
- 		struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
- 		struct device *dev = pci->dev;
- 
--		dma_unmap_single_attrs(dev, pp->msi_data, sizeof(pp->msi_msg),
--				       DMA_FROM_DEVICE, DMA_ATTR_SKIP_CPU_SYNC);
-+		dma_unmap_page(dev, pp->msi_data, PAGE_SIZE, DMA_FROM_DEVICE);
-+		if (pp->msi_page)
-+			__free_page(pp->msi_page);
- 	}
- }
- 
-@@ -392,12 +393,13 @@ int dw_pcie_host_init(struct pcie_port *pp)
- 			if (ret)
- 				dev_warn(pci->dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
- 
--			pp->msi_data = dma_map_single_attrs(pci->dev, &pp->msi_msg,
--						      sizeof(pp->msi_msg),
--						      DMA_FROM_DEVICE,
--						      DMA_ATTR_SKIP_CPU_SYNC);
-+			pp->msi_page = alloc_page(GFP_DMA32);
-+			pp->msi_data = dma_map_page(pci->dev, pp->msi_page, 0, PAGE_SIZE,
-+						    DMA_FROM_DEVICE);
- 			if (dma_mapping_error(pci->dev, pp->msi_data)) {
- 				dev_err(pci->dev, "Failed to map MSI data\n");
-+				__free_page(pp->msi_page);
-+				pp->msi_page = NULL;
- 				pp->msi_data = 0;
- 				goto err_free_msi;
- 			}
-diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-index 7d6e9b7576be..b5f528536358 100644
---- a/drivers/pci/controller/dwc/pcie-designware.h
-+++ b/drivers/pci/controller/dwc/pcie-designware.h
-@@ -190,8 +190,8 @@ struct pcie_port {
- 	int			msi_irq;
- 	struct irq_domain	*irq_domain;
- 	struct irq_domain	*msi_domain;
--	u16			msi_msg;
- 	dma_addr_t		msi_data;
-+	struct page		*msi_page;
- 	struct irq_chip		*msi_irq_chip;
- 	u32			num_vectors;
- 	u32			irq_mask[MAX_MSI_CTRLS];
+> ---
+>  .../devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml  | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> index b8219eab4475..89490fdffeb0 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> @@ -55,7 +55,6 @@ examples:
+>          compatible = "ingenic,jz4780-dw-hdmi";
+>          reg = <0x10180000 0x8000>;
+>          reg-io-width = <4>;
+> -        ddc-i2c-bus = <&i2c4>;
+>          interrupt-parent = <&intc>;
+>          interrupts = <3>;
+>          clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
+
 -- 
-2.36.1.124.g0e6072fb45-goog
+Regards,
 
+Laurent Pinchart

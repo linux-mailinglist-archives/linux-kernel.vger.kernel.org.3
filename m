@@ -2,125 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C945338AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669BF5338BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235493AbiEYImC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
+        id S235584AbiEYIod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiEYIlz (ORCPT
+        with ESMTP id S229812AbiEYIo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:41:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE44CFD
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:41:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1E6A1219B9;
-        Wed, 25 May 2022 08:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653468113; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jePr5VZ+W+l9RSA8ra4ij2xbn2TevRksWLlauTlE47w=;
-        b=HPIJ7TIVTH1Neu0j9iQY2qOxzjd3OLblvIm0qwqJJCng9cYlkniJdvDw38RBTXAWK5P+sm
-        9qBU95jW/qHhTLKlbtwBh7pbkEyZFvU/3paAr2n7s09ovn0JnJJn2V9cDxc6uAiZ+cepfu
-        JI6aUTBFEeS2ph8YoSdmxS8ygvxuWUg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653468113;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jePr5VZ+W+l9RSA8ra4ij2xbn2TevRksWLlauTlE47w=;
-        b=JSdQSz5MpNsONqrQkFkCm+KZ4w871BS4eF6IPX6up4upZ4OvZadxucsMQGdolrEIXPJLy5
-        wIT2fY2src7pEmAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0208E13ADF;
-        Wed, 25 May 2022 08:41:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4dZ5OM/rjWKRPAAAMHmgww
-        (envelope-from <osalvador@suse.de>); Wed, 25 May 2022 08:41:51 +0000
-Date:   Wed, 25 May 2022 10:41:47 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        naoya.horiguchi@nec.com, peterx@redhat.com, apopple@nvidia.com,
-        ying.huang@intel.com, david@redhat.com, songmuchun@bytedance.com,
-        hch@lst.de, dhowells@redhat.com, cl@linux.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] mm/migration: return errno when isolate_huge_page
- failed
-Message-ID: <Yo3ry9rRDa5jznHC@localhost.localdomain>
-References: <20220525081822.53547-1-linmiaohe@huawei.com>
- <20220525081822.53547-4-linmiaohe@huawei.com>
+        Wed, 25 May 2022 04:44:27 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5D44B1C5;
+        Wed, 25 May 2022 01:44:26 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id gi33so31733743ejc.3;
+        Wed, 25 May 2022 01:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=E6g5Lb+lud3z6IBBuIB+xMLxh9m0MkwWAWdE3o4ayS0=;
+        b=qfD44tESSCw7bOee8sbiWWI6sjo2GgzH6a0M1B/+nMRqn+KWLIw//KM7sP54cr77ln
+         cgnD2R7x3arzrr8UGqBp+PlXFAxebwGM9IBdDDyobSVVryzyoqvFIL2IcCpiJ63KaFQF
+         UI1sacv2EzpzU1J4ZfYQa8j/HJk7/4mbkjVJ3Xy6MeAwfZpcP+1FsUTQjNn+XXytrnHA
+         tV3gq5tS2/BCs15rPkDhUXe3/PAjYvuSwx2nZCbk/trjIIhFiKbnkoajhodllMO2Iqd+
+         J6kg6Yu8ZA5KSl0vPoKK8OyjYznlPoDN/azt4s0IWJRjIG5Y8rvqb2jA/X0Uem5koMBq
+         +WpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E6g5Lb+lud3z6IBBuIB+xMLxh9m0MkwWAWdE3o4ayS0=;
+        b=RY/U08lwAPABLCIn5AmFEd1tebUeW2PqCjahGP+4LYcDVCLZYdF+7m9U6j+i1CMRmq
+         anDuo+VgIrRUPJfiGDktW18mJGIi9I908p1+dPkPArd5+RWWhDGeRjgvoGW3Jqp0mX0J
+         8dKsDeBlLhRXZiE4NXIKpPB5uQjDAkDXuibJmbzQx/OZrWWIxWyEi8/uAO4MxVdnOvgd
+         eD1l9jRYFfpxlU9DgMKnP14abmXyKvT5vi75q/1iNMRhIRbH1GMPcsR5rtNVWHECd+hG
+         0FIGI/eY8Rq18tqWitcVqM7/xGtcENvcdxP6SGsf/nKoZ1wsaKNBIgOQLPG+agkhC7bR
+         kuMQ==
+X-Gm-Message-State: AOAM533MRFFw9ttNwSjwWxD5poHqkyELoaQAIWXKL/PUnq9beIOWuS2u
+        lXa7BFuq8J9daGtngpvu/bY=
+X-Google-Smtp-Source: ABdhPJy/th87ha2vrnr0+8mjVv4V1E3tMH6MJzoI7W7cZqUdjeh0Iq0zbXC8goO0XRzEy7d2gP5WyA==
+X-Received: by 2002:a17:906:6a0d:b0:6ff:15a8:acbf with SMTP id qw13-20020a1709066a0d00b006ff15a8acbfmr919474ejc.143.1653468264674;
+        Wed, 25 May 2022 01:44:24 -0700 (PDT)
+Received: from michael-VirtualBox (109-186-136-71.bb.netvision.net.il. [109.186.136.71])
+        by smtp.gmail.com with ESMTPSA id hy16-20020a1709068a7000b006f3ef214e27sm7934893ejc.141.2022.05.25.01.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 01:44:24 -0700 (PDT)
+Date:   Wed, 25 May 2022 11:44:21 +0300
+From:   Michael Zaidman <michael.zaidman@gmail.com>
+To:     Guillaume Champagne <champagne.guillaume.c@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mathieu Gallichand <mathieu.gallichand@sonatest.com>
+Subject: Re: [PATCH] HID: ft260: fix multi packet i2c transactions
+Message-ID: <20220525084421.GA7899@michael-VirtualBox>
+References: <20220524192422.13967-1-champagne.guillaume.c@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220525081822.53547-4-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220524192422.13967-1-champagne.guillaume.c@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 04:18:21PM +0800, Miaohe Lin wrote:
-> We might fail to isolate huge page due to e.g. the page is under migration
-> which cleared HPageMigratable. We should return errno in this case rather
-> than always return 1 which could confuse the user, i.e. the caller might
-> think all of the memory is migrated while the hugetlb page is left behind.
-> We make the prototype of isolate_huge_page consistent with isolate_lru_page
-> as suggested by Huang Ying and rename isolate_huge_page to isolate_hugetlb
-> as suggested by Muchun to improve the readability.
+On Tue, May 24, 2022 at 03:24:22PM -0400, Guillaume Champagne wrote:
+> Only trigger START and STOP conditions for the first and last HID
+> packets when i2c writes are split in multiple packets. Otherwise, slave
+> i2c devices receive each packet as standalone i2c transactions. Since
+> i2c slave devices clear their internal state on STOP, this breaks auto
+> increment of the register address written to.
 > 
-> Fixes: e8db67eb0ded ("mm: migrate: move_pages() supports thp migration")
-> Suggested-by: Huang Ying <ying.huang@intel.com>
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Looks good to me, one thing below though:
-
+> Concretely, SCL is now held low between processing of HID packets so i2c
+> slave devices know to keep increment the same register address when the
+> next bytes arrive.
+> 
+> Co-developed-by: Mathieu Gallichand <mathieu.gallichand@sonatest.com>
+> Signed-off-by: Mathieu Gallichand <mathieu.gallichand@sonatest.com>
+> Signed-off-by: Guillaume Champagne <champagne.guillaume.c@gmail.com>
 > ---
->  include/linux/hugetlb.h |  6 +++---
->  mm/gup.c                |  2 +-
->  mm/hugetlb.c            | 11 +++++------
->  mm/memory-failure.c     |  2 +-
->  mm/mempolicy.c          |  2 +-
->  mm/migrate.c            |  5 +++--
->  6 files changed, 14 insertions(+), 14 deletions(-)
+>  drivers/hid/hid-ft260.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-...
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1627,8 +1627,9 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
->  
->  	if (PageHuge(page)) {
->  		if (PageHead(page)) {
-> -			isolate_huge_page(page, pagelist);
-> -			err = 1;
-> +			err = isolate_hugetlb(page, pagelist);
-> +			if (!err)
-> +				err = 1;
->  		}
+> diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
+> index 79505c64dbfe..9c5912a21ccb 100644
+> --- a/drivers/hid/hid-ft260.c
+> +++ b/drivers/hid/hid-ft260.c
+> @@ -390,6 +390,8 @@ static int ft260_i2c_write(struct ft260_device *dev, u8 addr, u8 *data,
+>  	struct hid_device *hdev = dev->hdev;
+>  	struct ft260_i2c_write_request_report *rep =
+>  		(struct ft260_i2c_write_request_report *)dev->write_buf;
+> +	bool multi_packet = data_len > FT260_WR_DATA_MAX;
+> +	u8 packet_flag = multi_packet ? flag & FT260_FLAG_START_REPEATED : flag;
 
-We used to always return 1 which means page has been queued for migration, as we
-did not check isolate_huge_page() return value.
-Now, we either return 1 or 0 depending on isolate_hugetlb(). 
-I guess that was fine because in the end, if isolate_huge_page() failed,
-the page just does not get added to 'pagelist', right? So, it is just
-confusing for the user because he might not get an error so he thinks
-the page will be migrated, and yet will not?
+Please take a look at the https://patchwork.kernel.org/project/linux-input/patch/20220525074757.7519-4-michael.zaidman@gmail.com/
+that addresses the same issue but does it more efficiently by adding one
+conditional statement per ft260_i2c_write call in the main path vs. three
+in this commit. It comes in the patch set with other performance improvements
+published on my GitHub https://github.com/MichaelZaidman/hid-ft260 several
+months ago. I would greatly appreciate it if you could test and feedback
+on the patch set content.
 
+Thanks,
+Michael
 
--- 
-Oscar Salvador
-SUSE Labs

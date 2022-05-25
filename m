@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B4B533858
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0253F53385E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiEYIZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S233089AbiEYI0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiEYIZ2 (ORCPT
+        with ESMTP id S229649AbiEYI0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:25:28 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057717091F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:25:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B2FDE218E5;
-        Wed, 25 May 2022 08:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653467125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J8Z+G+PO5+Yg0Oo0eCVoS7RwcLsrpDjw672Ypw5MmRY=;
-        b=bpN+BmT6Dai8KMk/Y06lwncNzHG9JGYPx7I5kCJuQ7o4a6shAls8i9nBx43Qq23zHtDXLy
-        DszaGd06RgMqoHB3JNWerp3KF33XsgB3mqgwAQ64dLvAhkKodWk+7rLwG79y2t3t4Tx68X
-        HpyonLK0ZjdKcrS94u1hnTplN6/X1rw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653467125;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J8Z+G+PO5+Yg0Oo0eCVoS7RwcLsrpDjw672Ypw5MmRY=;
-        b=JqpYoCuEgi5bDroGS3p3ROsKLUh8JvZrQZ4FadLQ+qgjCTV0dcyrDXUjQRHkTYb1EFcvGZ
-        OguORljHIxf2FSDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2E5DF13ADF;
-        Wed, 25 May 2022 08:25:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id axUvJPTnjWLiMwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Wed, 25 May 2022 08:25:24 +0000
-Date:   Wed, 25 May 2022 10:25:21 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/memory_hotplug: Drop 'reason' argument from
- check_pfn_span()
-Message-ID: <Yo3n8Zagb68zuMqa@localhost.localdomain>
-References: <20220525033910.3781764-1-anshuman.khandual@arm.com>
+        Wed, 25 May 2022 04:26:41 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8158295BA
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:26:40 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id m6so23660258ljb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=TROhytUCmYi1+1zbJFOBdbpnjKvBFc00UACuo78Blu0=;
+        b=t7AXHImYt88F4yFcoFo/qiLCJPnM1PNNZclSW8YTDTfk0sG5d/ZeaKK/dKfcy4dkwO
+         m+7UDPXDNxmpmmTghEnV/L3JOGc6DgyEBn4FBQ1QVEV3PBPP7KeS30IkhMdfrA93FYp8
+         PLy0TxtWuwWlqGG3f/LH4bbArkBwE8muI0nLZSTBzkX6Zcch2vGKOR/gJv3Lpklnfg9Q
+         S924EuMCX97wqhm2YucSMxJEMYugXOIVDrEPipfoDCXxzyLxzenQEIy2ikIVQfGkdDjo
+         IUtvoRKID6OBzFaJ1EqKw6XtStq6bc9kax0JGmM3/XKnJ8INcBu3va9x6rXUG5alpisq
+         KyJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=TROhytUCmYi1+1zbJFOBdbpnjKvBFc00UACuo78Blu0=;
+        b=D1vYYanRK0zqkmi1uxmCbJ9j8pjNkgRqnqQUMZtLlHoPig10OYkksYRe5tJpr6tacB
+         gt1bDAe7wW3myQ9yKjH/eB0mSbz1seO9CceC5OYPSFBlPa+f96/irFxImfPIKo2X44FM
+         lfwpPMPB6psekfSp+9lI55irW1nyqW8UqS/IzijD6Ze77i6VzvJWeYRRQy2WMStfnvYS
+         XQLoFEAqpEMXRi7sT4z3LkU6OhRKIFMTS7JWPuHGxoCldCyO25RangMjIvphn5dDdZb5
+         hZGQ43Qb/y9H69MHLsEvlAoChsgh2IB0sBG3iTFC4c8uGsXOxgySqO+OZhnAK38kuVDb
+         Ks6A==
+X-Gm-Message-State: AOAM5314xpd7zzppyyVrDRHSUSWE7ojAzAw2O7vFLaZ57F43M17p7Ume
+        R+cSGC62k4f2YmgM3iARGWBpFg==
+X-Google-Smtp-Source: ABdhPJyDCQbgxiitG7pP3j+6MDNq9Z3uJ1djPx06ET2ui6tpQIRa8zNilbO2coRGhFru9YrSGRlLjA==
+X-Received: by 2002:a2e:894a:0:b0:253:e36b:83c1 with SMTP id b10-20020a2e894a000000b00253e36b83c1mr11560558ljk.520.1653467198883;
+        Wed, 25 May 2022 01:26:38 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id f24-20020a19ae18000000b0047255d2111dsm2971117lfc.76.2022.05.25.01.26.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 01:26:38 -0700 (PDT)
+Message-ID: <348dc099-737d-94ba-55ad-2db285084c73@openvz.org>
+Date:   Wed, 25 May 2022 11:26:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525033910.3781764-1-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH] XArray: handle XA_FLAGS_ACCOUNT in xas_split_alloc
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 09:09:09AM +0530, Anshuman Khandual wrote:
-> In check_pfn_span(), a 'reason' string is being used to recreate the caller
-> function name, while printing the warning message. It is really unnecessary
-> as the warning message could just be printed inside the caller depending on
-> the return code. Currentlyy there are just two callers for check_pfn_span()
-                   Currently
-> i.e  __add_pages() and __remove_pages(). Let's clean this up.
-> 
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Commit 7b785645e8f1 ("mm: fix page cache convergence regression")
+added support of new XA_FLAGS_ACCOUNT flag into all Xarray allocation
+functions. Later commit 8fc75643c5e1 ("XArray: add xas_split")
+introduced xas_split_alloc() but missed about XA_FLAGS_ACCOUNT
+processing.
 
-One could argue if this is really a cleanup.
-I kind of agree that the "reason" thingy is a bit shaky, but instead of having a
-single place where we call WARN(), we now do have two.
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+ lib/xarray.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> ---
->  mm/memory_hotplug.c | 19 +++++++++----------
->  1 file changed, 9 insertions(+), 10 deletions(-)
-> 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 416b38ca8def..9b3d7295ef93 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -220,8 +220,7 @@ static void release_memory_resource(struct resource *res)
->  	kfree(res);
->  }
->  
-> -static int check_pfn_span(unsigned long pfn, unsigned long nr_pages,
-> -		const char *reason)
-> +static int check_pfn_span(unsigned long pfn, unsigned long nr_pages)
->  {
->  	/*
->  	 * Disallow all operations smaller than a sub-section and only
-> @@ -238,12 +237,8 @@ static int check_pfn_span(unsigned long pfn, unsigned long nr_pages,
->  		min_align = PAGES_PER_SUBSECTION;
->  	else
->  		min_align = PAGES_PER_SECTION;
-> -	if (!IS_ALIGNED(pfn, min_align)
-> -			|| !IS_ALIGNED(nr_pages, min_align)) {
-> -		WARN(1, "Misaligned __%s_pages start: %#lx end: #%lx\n",
-> -				reason, pfn, pfn + nr_pages - 1);
-> +	if (!IS_ALIGNED(pfn, min_align) || !IS_ALIGNED(nr_pages, min_align))
->  		return -EINVAL;
-> -	}
->  	return 0;
->  }
->  
-> @@ -320,9 +315,11 @@ int __ref __add_pages(int nid, unsigned long pfn, unsigned long nr_pages,
->  		altmap->alloc = 0;
->  	}
->  
-> -	err = check_pfn_span(pfn, nr_pages, "add");
-> -	if (err)
-> +	err = check_pfn_span(pfn, nr_pages);
-> +	if (err) {
-> +		WARN(1, "Misaligned %s start: %#lx end: #%lx\n", __func__, pfn, pfn + nr_pages - 1);
->  		return err;
-> +	}
-
-If you want to further clean this up, I would just do 
-
- if (check_pfn_span()) {
-         WARN(....)
-         return -EINVAL;
- }
-
-here as we do in __remove_pages(). check_pfn_span() can either return 0 or -EINVAL,
-so I think it is fine.
-
-
+diff --git a/lib/xarray.c b/lib/xarray.c
+index 54e646e8e6ee..5f5b42e6f842 100644
+--- a/lib/xarray.c
++++ b/lib/xarray.c
+@@ -1013,6 +1013,8 @@ void xas_split_alloc(struct xa_state *xas, void *entry, unsigned int order,
+ 	if (xas->xa_shift + XA_CHUNK_SHIFT > order)
+ 		return;
+ 
++	if (xas->xa->xa_flags & XA_FLAGS_ACCOUNT)
++		gfp |= __GFP_ACCOUNT;
+ 	do {
+ 		unsigned int i;
+ 		void *sibling = NULL;
 -- 
-Oscar Salvador
-SUSE Labs
+2.31.1
+

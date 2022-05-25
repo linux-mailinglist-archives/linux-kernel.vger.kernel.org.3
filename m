@@ -2,139 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21252533C81
+	by mail.lfdr.de (Postfix) with ESMTP id E8B9A533C83
 	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233519AbiEYMRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
+        id S236818AbiEYMSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiEYMRl (ORCPT
+        with ESMTP id S229577AbiEYMSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:17:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1980336318
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:17:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE9C51FB;
-        Wed, 25 May 2022 05:17:39 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.0.228])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A19D3F73D;
-        Wed, 25 May 2022 05:17:37 -0700 (PDT)
-Date:   Wed, 25 May 2022 13:17:30 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
-References: <YmLlmaXF00hPkOID@lakrids>
- <20220426174749.b5372c5769af7bf901649a05@kernel.org>
- <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
- <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
- <20220509142203.6c4f2913@gandalf.local.home>
- <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
- <20220510104446.6d23b596@gandalf.local.home>
- <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
- <20220511111207.25d1a693@gandalf.local.home>
- <20220512210231.f9178a98f20a37981b1e89e3@kernel.org>
+        Wed, 25 May 2022 08:18:11 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB0236318;
+        Wed, 25 May 2022 05:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1653481072;
+        bh=Vbm1SuMqsvu1xxnR71QHy05C7RZ8+ByUzJkNcUNCG2k=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=GDYRz4IFhZeVP1/SPpAim6g7Hj3ghkhZpboJyS3GLTb148pOf3n1n67EDxA9CYg9U
+         P66YfR8/H8LRZNcPT0Oevh3SpjxdIqrRHtTfoCYjr+LisaHOG/ksKMJD1RGdI3yWoO
+         HEZtDETxq2q0AbExORS22kxPNk+Fz2Of2XBwSq54=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.168.145]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MulqD-1ncAW43rT1-00rmvB; Wed, 25
+ May 2022 14:17:52 +0200
+Message-ID: <10ce14c0-f502-4c26-3f7a-8f470822e6f3@gmx.de>
+Date:   Wed, 25 May 2022 14:17:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512210231.f9178a98f20a37981b1e89e3@kernel.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] xen: remove setting of 'transp' parameter
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, tzimmermann@suse.de, javierm@redhat.com,
+        boris.ostrovsky@oracle.com, jgross@suse.com
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220521195942.645048-1-trix@redhat.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220521195942.645048-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:mlFct5aFdpB21j52ArLdUq5BZfKowCmBVVSbPpzviDYy2hrRcW4
+ vGyxCxF2WUhgakMM4uEpHs4e0x+fk40WnTG+BYLKGRO3TEzp9dGbDu52oFl76W9ly65wgDW
+ 1iYVg+KrloxB/SpdLAaJXGyCYNlq1GsOSdEWKvuPlcr/xfq9r2h4AhK4yUKHXMDyocVbOwJ
+ Rmuk978py+loL3+KkzBdw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yDBz1vJ8Z2k=:LCNTO4XQUvlPm9I4w3/04S
+ 8EHOqTys/m5GMDzYtAzFiMkknT9GlXtJQsbKamEQixlfAxaRIGK0PyL3SWDFkvt50clHs1Nj3
+ TRrwy5CUlEfOxcP38Iq9ZsWa6DbBfv6CqHgB2OAN/5AmoSaLFzExtN3U1WGhuQ/RvUqT6zpzj
+ bqHF82hbAhCCOkdgrP+EGg04HjwU3D8ZlYFRPP5n2ak2aRfHdXJN6LKN3EGETywvqZsPe4oBE
+ r6zboPwoAjjkSYkul0DyWuKAcNioCa5j9+MYnPCxM/BhMwAFG7W+MAMs0wgGoQrNpo4Lw+Mqm
+ LtFX2EwtPgsQoObWjk/BuzeLH461BtxthiEqFwEW9AvwljQmEialWsRX4/6ojfHGetw1DiqgY
+ GuySmSwIw7G2hwyWaLsW/zy/97D+7s4o+uCJNoLAorY87cKiiIiMSiwiNQ3JJUARVQ4hCQnG3
+ 70Bh2kFN4ZrOM8PfoF0GBxdck+qzeg36n+qzsRjNgb/L1/4t2K1eNi2Gi7ndoGgBBh0+EMKsP
+ CkKoM1DKZekXDHLgaycJOwV1Pu07DjKl84mTQWA3dhGfr5fvkJEvZwmlHfQMWp72cpow7eU9a
+ +6XFupX9BObwmce8MuoXBdoPOu7v1HAdxWT64clc+0+e3RNnf2MZipmtWsab0UTfZgeJWoZhH
+ D2f0ozQD6ew2SlR6CoOZ5eXKSA0ybUtowcX+S3tqgfDfU3BIuK9/2+AUoDVJ+07LLI9FFf/pS
+ mvw+ylVRWRnO6VUVUZAz3Kmpb4FcsviEuXz32W9uB/pfVFOzdHwNRIX4Ari5ta2YkkJLHQX+A
+ eLzvqjGBVm7O7pi61ub/YrB23KHLDITyDRieTjneH9Wkw8Wd7G5zyMojjpQL6gsJBWE169cSe
+ SnaTLChTFFlHs9uS4nMHixWSdcn6HORGrst8A7zLhfQeu31PAI9tMfP1q+L2FPB6+aqQW9SfK
+ nKULIJexj1dtWuDxV/DcWSky5lzeduRbkbm0FGxd9HPvufAT+ElDw6weuOriRKgGS+hKgDqmf
+ MWA9eRfsgPXWrBXcVxl9MPswaAI1SW0E6qa6OrCfjWRIm3PhWoSbrgAnEUetY3Ms7GG6brb3z
+ rf0DmXZD0zqn44yboe1VkUd9xLQd2q7S+5tSnG5GRooTK4WmsrcRrY2BQ==
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 09:02:31PM +0900, Masami Hiramatsu wrote:
-> On Wed, 11 May 2022 11:12:07 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > On Wed, 11 May 2022 23:34:50 +0900
-> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > 
-> > > OK, so fregs::regs will have a subset of pt_regs, and accessibility of
-> > > the registers depends on the architecture. If we can have a checker like
-> > > 
-> > > ftrace_regs_exist(fregs, reg_offset)
-> > 
-> > Or something. I'd have to see the use case.
-> > 
-> > > 
-> > > kprobe on ftrace or fprobe user (BPF) can filter user's requests.
-> > > I think I can introduce a flag for kprobes so that user can make a
-> > > kprobe handler only using a subset of registers. 
-> > > Maybe similar filter code is also needed for BPF 'user space' library
-> > > because this check must be done when compiling BPF.
-> > 
-> > Is there any other case without full regs that the user would want anything
-> > other than the args, stack pointer and instruction pointer?
-> 
-> For the kprobes APIs/events, yes, it needs to access to the registers
-> which is used for local variables when probing inside the function body.
-> However at the function entry, I think almost no use case. (BTW, pstate
-> is a bit special, that may show the actual processor-level status
-> (context), so for the debugging, user might want to read it.)
+On 5/21/22 21:59, Tom Rix wrote:
+> cppcheck reports
+> [drivers/video/fbdev/xen-fbfront.c:226]: (style) Assignment of function =
+parameter has no effect outside the function.
+>
+> The value parameter 'transp' is not used, so setting it can be removed.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-As before, if we really need PSTATE we *must* take an exception to get a
-reliable snapshot (or to alter the value). So I'd really like to split this
-into two cases:
+applied to the fbdev tree.
+Thanks!
+Helge
 
-* Where users *really* need PSTATE (or arbitrary GPRs), they use kprobes. That
-  always takes an exception and they can have a complete, real struct pt_regs.
+> ---
+>  drivers/video/fbdev/xen-fbfront.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/video/fbdev/xen-fbfront.c b/drivers/video/fbdev/xen=
+-fbfront.c
+> index 3bed357a9870..4d2694d904aa 100644
+> --- a/drivers/video/fbdev/xen-fbfront.c
+> +++ b/drivers/video/fbdev/xen-fbfront.c
+> @@ -223,7 +223,6 @@ static int xenfb_setcolreg(unsigned regno, unsigned =
+red, unsigned green,
+>  	red =3D CNVT_TOHW(red, info->var.red.length);
+>  	green =3D CNVT_TOHW(green, info->var.green.length);
+>  	blue =3D CNVT_TOHW(blue, info->var.blue.length);
+> -	transp =3D CNVT_TOHW(transp, info->var.transp.length);
+>  #undef CNVT_TOHW
+>
+>  	v =3D (red << info->var.red.offset) |
 
-* Where users just need to capture a function call boundary, they use ftrace.
-  That uses a trampoline without taking an exception, and they get the minimal
-  set of registers relevant to the function call boundary (which does not
-  include PSTATE or most GPRs).
- 
-> Thus the BPF use case via fprobes, I think there is no usecase.
-> My concern is that the BPF may allow user program to access any
-> field of pt_regs. Thus if the user miss-programmed, they may see
-> a wrong value (I guess the fregs is not zero-filled) for unsaved
-> registers.
-> 
-> > That is, have a flag that says "only_args" or something, that says they
-> > will only get the registers for arguments, a stack pointer, and the
-> > instruction pointer (note, the fregs may not have the instruction pointer
-> > as that is passed to the the caller via the "ip" parameter. If the fregs
-> > needs that, we can add a "ftrace_regs_set_ip()" before calling the
-> > callback registered to the fprobe).
-> 
-> Yes, that is what I'm thinking. If "only_args" flag is set, BPF runtime
-> must check the user program. And if it finds the program access the
-> unsaved registers, it should stop executing.
-> 
-> BTW, "what register is saved" can be determined statically, thus I think
-> we just need the offset for checking (for fprobe usecase, since it will
-> set the ftrace_ops flag by itself.)
-
-For arm64 I'd like to make this static, and have ftrace *always* capture a
-minimal set of ftrace_regs, which would be:
-
-  X0 to X8 inclusive
-  SP
-  PC
-  LR
-  FP
-
-Since X0 to X8 + SP is all that we need for arguments and return values (per
-the calling convention we use), and PC+LR+FP gives us everything we need for
-unwinding and live patching.
-
-I *might* want to add x18 to that when SCS is enabled, but I'm not immediately
-sure.
-
-Thanks,
-Mark.

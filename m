@@ -2,111 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD315340A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9395A5340A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245287AbiEYPqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S245281AbiEYPtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245265AbiEYPqa (ORCPT
+        with ESMTP id S238194AbiEYPtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:46:30 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1EDAF315
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:46:27 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso1368044wma.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:46:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UrTCiIB5+imBAeHHe5Yk2P2e1nFNoP+klKZAhqbPDdA=;
-        b=MqPIurhFVqpa+pBM1vNQS6bUBZWcTHP2YxERwDnH+bQfrSJK2/72G3Xj7gT+UEioGy
-         thWYm7nOuZQUFNxIv2huTTw/x+VekSpTufiYFUFRGkawxOrxefVaDTY1BSz5YzKXNb3N
-         N68WwPk1+UqgTIjKN5dveLZ8D1OuV7Beewa2kxUojacU7Bp2iSArTdwBToEwZEZGd4Vj
-         mNe2f/owRoeJLfYJRHYnmYyxZRT+hFbQiGMJHYcMVz4o5iqcWa+fTys9HDmTxnnRF79m
-         YZdblvApQE3X8Sz+8/wuOXm/kqKvRy3tyjhXPvV2Tr51KqrC0DPWM7HLycywFd//eT++
-         8jkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UrTCiIB5+imBAeHHe5Yk2P2e1nFNoP+klKZAhqbPDdA=;
-        b=RtaSfNPEAckr2nv30FiKswa74rnGJ52BcyCxyMW0RDHFi5p2turZcMUjACyFxoMScx
-         LPihhUPA5GD5FcfeLFxLeqZ0ZHVuD4WAPmnhpWwoEK9QOnDXw1dtkgixFixDMkzBBwUm
-         N3qB31MtcXs3bYS1mfjyYiQbw1+OY/2qCA8vVu/Atj+rebaUJvyhYv/yOX0ceMVjguZn
-         pFG87RXQIp0ZwZHHoqgofruzakG8Q2MVWIJWUqI7rfsCbsgMVL7Nz6V2llCXBHN2/Vce
-         5v8XIah6DbHXmyun7Os6Sqpe6qJe3qTrM2FpRU2+WOmKCbu7mom1hmz18drYlxhgc/5g
-         Yf1Q==
-X-Gm-Message-State: AOAM530QOf75rKhExgTb+KXVMKYTEnhzVv65JtAb6jJ/MLv3t3oQLurB
-        H4PSONDNpXxwpBfarO9Oihp5bQpB5WtPzMTKF4EOyg==
-X-Google-Smtp-Source: ABdhPJwMCeE2M2oBeMoCYDG8p7UZtY8gBrM+hDCF+s5vsXn/s+B7NoTCVj2dK00lSgGxLjxe2HR3aykRV/KV+QWzz/s=
-X-Received: by 2002:a1c:e903:0:b0:397:36b8:795a with SMTP id
- q3-20020a1ce903000000b0039736b8795amr9116951wmc.98.1653493586128; Wed, 25 May
- 2022 08:46:26 -0700 (PDT)
+        Wed, 25 May 2022 11:49:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46D934649;
+        Wed, 25 May 2022 08:49:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4105A61520;
+        Wed, 25 May 2022 15:49:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C77C34117;
+        Wed, 25 May 2022 15:49:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653493750;
+        bh=bIicfEgP7s139tN40AgWtxDRRKGzaemz0C3u+wU/Nvo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Zu8BQxKJOgVnmy8Qd3W+MW8TvMDQ4wUY7ngpChp1UIxpfL9uhVVt7AmSxzd4JIRVd
+         Ji9Fvgy6dUznbLvDkTxuqwrkO5N7YL3xCam3jVmgNGnydVKb7hVhpqCCXJaY7c495S
+         IK4G2F7g3ZgBjVctlZm9TIRCP9vZV1JsLkp2fRDU1hboXSIUN84t7Nb6eaTzxLV96M
+         xCwTTFvnvBJK/rF95CRD2qVJIwbKIbdK51cwThSzPRV8W/CONMHH68ymqCYCZlTxhw
+         V6V1EZWNU/vpu4HuhVdZQUAROSli/+9QCCmq4nQ6swrCPMkGtanlvLnh4Ln9j9oqoP
+         N7khJpD9nlwlg==
+Received: by mail-oi1-f181.google.com with SMTP id i66so25453118oia.11;
+        Wed, 25 May 2022 08:49:10 -0700 (PDT)
+X-Gm-Message-State: AOAM532bIn9/AHRJ4hZppAypfZYSOLtCJ0VoO0VvTCElxEGsCf0+ueb5
+        8JqCqDqdEOlWfVJ2Nziv21K1d9g32SHfu2Ifii4=
+X-Google-Smtp-Source: ABdhPJxnXJzrIyy8yO9mGD/gM/HbAak5d4lmmJ0bhfehuzIYYF0oUNCap51EuqhgtyNx3s2OqxWIqc1veKX9La0GSYk=
+X-Received: by 2002:a05:6808:e8d:b0:322:bac0:2943 with SMTP id
+ k13-20020a0568080e8d00b00322bac02943mr5701111oil.126.1653493749757; Wed, 25
+ May 2022 08:49:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-4-brad@pensando.io>
- <CAK8P3a2wZwza=tUzxpHTHTnahf-bUS2-e80rW-wzN3aWodD1vQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a2wZwza=tUzxpHTHTnahf-bUS2-e80rW-wzN3aWodD1vQ@mail.gmail.com>
-From:   Brad Larson <brad@pensando.io>
-Date:   Wed, 25 May 2022 08:46:15 -0700
-Message-ID: <CAK9rFnwjeaGALTaDx-0k2OEktSv_UmJK9+uGuy=OFP8dnhNeOQ@mail.gmail.com>
-Subject: Re: [PATCH 03/11] dt-bindings: mmc: Add Pensando Elba SoC binding
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        David Clear <dac2@pensando.io>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220525151106.2176147-1-sunilvl@ventanamicro.com> <20220525151106.2176147-6-sunilvl@ventanamicro.com>
+In-Reply-To: <20220525151106.2176147-6-sunilvl@ventanamicro.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 25 May 2022 17:48:58 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFhEBv7MVCKZuXdx9=hZx3qWbkATdLDwXAe_Zn9Xyx=dg@mail.gmail.com>
+Message-ID: <CAMj1kXFhEBv7MVCKZuXdx9=hZx3qWbkATdLDwXAe_Zn9Xyx=dg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] riscv/efi_stub: Support for 64bit boot-hartid
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Sunil V L <sunil.vl@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
-
-On Wed, Apr 6, 2022 at 11:31 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Wed, 25 May 2022 at 17:11, Sunil V L <sunilvl@ventanamicro.com> wrote:
 >
-> On Thu, Apr 7, 2022 at 1:36 AM Brad Larson <brad@pensando.io> wrote:
-> >
-> > --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> > +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> > @@ -19,10 +19,12 @@ properties:
-> >        - enum:
-> >            - microchip,mpfs-sd4hc
-> >            - socionext,uniphier-sd4hc
-> > +          - pensando,elba-sd4hc
-> >        - const: cdns,sd4hc
-> >
-> >    reg:
-> > -    maxItems: 1
-> > +    minItems: 1
-> > +    maxItems: 2
-> >
+> The boot-hartid can be a 64bit value on RV64 platforms. Currently,
+> the "boot-hartid" in DT is assumed to be 32bit only. This patch
+> detects the size of the "boot-hartid" and uses 32bit or 64bit
+> FDT reads appropriately.
 >
-> Shouldn't the binding describe what the register areas are? If there
-> is only one of them, it is fairly clear, but when you have the choice
-> between one and two, it gets ambiguous, and there is a risk that
-> another SoC might have a different register area in the second entry,
-> making it incompatible.
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> ---
+>  drivers/firmware/efi/libstub/riscv-stub.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
+> index 9e85e58d1f27..d748533f1329 100644
+> --- a/drivers/firmware/efi/libstub/riscv-stub.c
+> +++ b/drivers/firmware/efi/libstub/riscv-stub.c
+> @@ -29,7 +29,7 @@ static int get_boot_hartid_from_fdt(void)
+>  {
+>         const void *fdt;
+>         int chosen_node, len;
+> -       const fdt32_t *prop;
+> +       const void *prop;
+>
+>         fdt = get_efi_config_table(DEVICE_TREE_GUID);
+>         if (!fdt)
+> @@ -40,10 +40,16 @@ static int get_boot_hartid_from_fdt(void)
+>                 return -EINVAL;
+>
+>         prop = fdt_getprop((void *)fdt, chosen_node, "boot-hartid", &len);
+> -       if (!prop || len != sizeof(u32))
+> +       if (!prop)
+> +               return -EINVAL;
+> +
+> +       if (len == sizeof(u32))
+> +               hartid = (unsigned long) fdt32_to_cpu(*(fdt32_t *)prop);
+> +       else if (len == sizeof(u64))
+> +               hartid = (unsigned long) fdt64_to_cpu(*(fdt64_t *)prop);
 
-Thanks for the review.  Changing this to allOf:if:then in updated
-patchset.  The second item is particular to Elba SoC.
+Does RISC-V care about alignment? A 64-bit quantity is not guaranteed
+to appear 64-bit aligned in the DT, and the cast violates C alignment
+rules, so this should probably used get_unaligned_be64() or something
+like that.
 
-Regards,
-Brad
+
+> +       else
+>                 return -EINVAL;
+>
+> -       hartid = fdt32_to_cpu(*prop);
+>         return 0;
+>  }
+>
+> --
+> 2.25.1
+>

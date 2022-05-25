@@ -2,142 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7A253408A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E6253408F
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbiEYPmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S243018AbiEYPoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245230AbiEYPmH (ORCPT
+        with ESMTP id S229811AbiEYPoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:42:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 519D72FE74;
-        Wed, 25 May 2022 08:42:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8894E1474;
-        Wed, 25 May 2022 08:42:05 -0700 (PDT)
-Received: from e121896.arm.com (unknown [10.57.8.252])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D57BB3F73D;
-        Wed, 25 May 2022 08:42:01 -0700 (PDT)
-From:   James Clark <james.clark@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     broonie@kernel.org, german.gomez@arm.com, leo.yan@linaro.org,
-        mathieu.poirier@linaro.org, john.garry@huawei.com,
-        James Clark <james.clark@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 5/5] perf tools: arm64: Add support for VG register
-Date:   Wed, 25 May 2022 16:41:14 +0100
-Message-Id: <20220525154114.718321-6-james.clark@arm.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20220525154114.718321-1-james.clark@arm.com>
-References: <20220525154114.718321-1-james.clark@arm.com>
+        Wed, 25 May 2022 11:44:22 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C712BB1E;
+        Wed, 25 May 2022 08:44:21 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id z7so15682138ybf.7;
+        Wed, 25 May 2022 08:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wW60Ei1LEDr4i3KMNYvUE+Jfx8WzRpVMj4wd8F6Eb8c=;
+        b=V7Nwv9fgiJ0bQxYe49i7Mg37xs4qvR0/vZap13GiBj11xBxeREay48xMpiYK7+qsSw
+         gr1o+Sz549iJ4UO3yv5lW+EXCpNx3bReR2wmFjDJoHyPXAAZpImvTdy9MKj3AYRB26W9
+         VDWaJi0PxjTnYbUbhSgmvEC9qgYP9xSwZOQUuEWmMWtiD4egBW4kSjXETzZOwK/XGdMO
+         ZKTlbBGaDihBrT4ZLdvCGTg+f5bQtY8UCd1f5uR4/RtUnnMu8cDAjHNRkk7jr/7yTw16
+         +Occ6XWlKdwsxGtpfiLSX6fXJCvB0K6eF/oacyz9TXKJxIT4xdXDzRn3aJ7tmsRUUXCR
+         Ov/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wW60Ei1LEDr4i3KMNYvUE+Jfx8WzRpVMj4wd8F6Eb8c=;
+        b=ujrhJwGYi9XxDJPWL2h/KeOMv83BNR3UjArIOhUhE9PGNxkcUpJFB17WOgcTkxMELD
+         WFnCnxhnHh02nWYB7aBrI5u+0evqdg/kefh2NvY7TXhSXEf1l/yPPzQ+vI+hJ2HRfihH
+         p6ANHzb4mg+XB5YsCp54+9KsnWD+Hzyb6MzJ68LDGRf056aMPNtfBnxwYFSmoTv6oZOO
+         6GFh0z8opnV5kwyhXE0cxrkuueU+owH2NZG/fxZNwzge5wLjgydLu9Hl9Lb6kw21YgEZ
+         OT0P8kZPCm7sxpGbUU74PoGGyo+GEFgRyRN4l1M/bE1g+pZBHw9Fx/4k9FwK0m2std31
+         x6+A==
+X-Gm-Message-State: AOAM531/kRoj8Q9AXrgeDTZMtYwhJCZiLJcLUS8efoELj/NEM8hWCWMF
+        reFNvHmeGBlQqA7D0SYxp+MSPH+40/kazRtkrxgfaRW7q/beIQ==
+X-Google-Smtp-Source: ABdhPJwt+NfnKj2VKz+x3FOzOFwAqCKrdsgAFJl5Sq4ANwRciQDuXogfYc1SZ3B3WS7WeNUC5HDUP7kO5cIGzKNpvXA=
+X-Received: by 2002:a25:3447:0:b0:655:b2da:cefc with SMTP id
+ b68-20020a253447000000b00655b2dacefcmr3048383yba.96.1653493460311; Wed, 25
+ May 2022 08:44:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220525074757.7519-1-michael.zaidman@gmail.com> <20220525074757.7519-4-michael.zaidman@gmail.com>
+In-Reply-To: <20220525074757.7519-4-michael.zaidman@gmail.com>
+From:   Guillaume Champagne <champagne.guillaume.c@gmail.com>
+Date:   Wed, 25 May 2022 11:44:09 -0400
+Message-ID: <CAHSN6OfdHfiZRXjnqvnpcbwS0nt0vBuLiwMHcbpsd_AWiJ3i1g@mail.gmail.com>
+Subject: Re: [PATCH v1 3/5] HID: ft260: support i2c writes larger than HID
+ report size
+To:     Michael Zaidman <michael.zaidman@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, wsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Mathieu Gallichand <mathieu.gallichand@sonatest.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the name of the VG register so it can be used in --user-regs
+Le mer. 25 mai 2022 =C3=A0 03:48, Michael Zaidman
+<michael.zaidman@gmail.com> a =C3=A9crit :
+>
+> To support longer than one HID report size write, the driver splits a sin=
+gle
+> i2c message data payload into multiple i2c messages of HID report size.
+> However, it does not replicate the offset bytes within the EEPROM chip in
+> every consequent HID report because it is not and should not be aware of
+> the EEPROM type. It breaks the i2c write message integrity and causes the
+> EEPROM device not to acknowledge the second HID report keeping the i2c bu=
+s
+> busy until the ft260 controller reports failure.
+>
 
-The event will fail to open if the register is requested but not
-available so only add it to the mask if the kernel supports sve and also
-if it supports that specific register.
+I tested this whole patchset and it resolves the issue I raised
+https://patchwork.kernel.org/project/linux-input/patch/20220524192422.13967=
+-1-champagne.guillaume.c@gmail.com/,
+thanks.
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
-Signed-off-by: James Clark <james.clark@arm.com>
----
- tools/perf/arch/arm64/util/perf_regs.c | 34 ++++++++++++++++++++++++++
- tools/perf/util/perf_regs.c            |  2 ++
- 2 files changed, 36 insertions(+)
+> This patch preserves the i2c write message integrity by manipulating the
+> i2c flag bits across multiple HID reports to be seen by the EEPROM device
+> as a single i2c write transfer.
+>
+> Before:
+>
+> $ sudo ./i2cperf -f 2 -o 2 -s 64 -r 0-0xff 13 0x51 -S
+> Error: Sending messages failed: Input/output error
+>
+> [  +3.667741] ft260_i2c_write: rep 0xde addr 0x51 off 0 len 60 d[0] 0x0
+> [  +0.007330] ft260_hid_output_report_check_status: wait 6400 usec, len 6=
+4
+> [  +0.000203] ft260_xfer_status: bus_status 0x40, clock 100
+> [  +0.000001] ft260_i2c_write: rep 0xd1 addr 0x51 off 60 len 6 d[0] 0x0
+> [  +0.002337] ft260_hid_output_report_check_status: wait 1000 usec, len 1=
+0
+> [  +0.000157] ft260_xfer_status: bus_status 0x2e, clock 100
+> [  +0.000241] ft260_i2c_reset: done
+> [  +0.000003] ft260 0003:0403:6030.000E: ft260_i2c_write: failed to start=
+ transfer, ret -5
+>
+> After:
+>
+> $ sudo ./i2cperf -f 2 -o 2 -s 128 -r 0-0xff 13 0x51 -S
+>
+>   Fill block with increment via i2ctransfer by chunks
+>   -------------------------------------------------------------------
+>   data rate(bps)  efficiency(%)  data size(B)  total IOs   IO size(B)
+>   -------------------------------------------------------------------
+>   58986           86             256           2           128
+>
+> Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
+> ---
+>  drivers/hid/hid-ft260.c | 45 ++++++++++++++++++++++++-----------------
+>  1 file changed, 27 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
+> index 44106cadd746..bfda5b191a3a 100644
+> --- a/drivers/hid/hid-ft260.c
+> +++ b/drivers/hid/hid-ft260.c
+> @@ -378,41 +378,50 @@ static int ft260_hid_output_report_check_status(str=
+uct ft260_device *dev,
+>  }
+>
+>  static int ft260_i2c_write(struct ft260_device *dev, u8 addr, u8 *data,
+> -                          int data_len, u8 flag)
+> +                          int len, u8 flag)
+>  {
+> -       int len, ret, idx =3D 0;
+> +       int ret, wr_len, idx =3D 0;
+> +       bool first =3D true;
+>         struct hid_device *hdev =3D dev->hdev;
+>         struct ft260_i2c_write_request_report *rep =3D
+>                 (struct ft260_i2c_write_request_report *)dev->write_buf;
+>
+>         do {
+> -               if (data_len <=3D FT260_WR_DATA_MAX)
+> -                       len =3D data_len;
+> -               else
+> -                       len =3D FT260_WR_DATA_MAX;
+> +               rep->flag =3D 0;
+> +               if (first) {
+> +                       rep->flag =3D FT260_FLAG_START;
 
-diff --git a/tools/perf/arch/arm64/util/perf_regs.c b/tools/perf/arch/arm64/util/perf_regs.c
-index 476b037eea1c..c0a921512a90 100644
---- a/tools/perf/arch/arm64/util/perf_regs.c
-+++ b/tools/perf/arch/arm64/util/perf_regs.c
-@@ -2,9 +2,11 @@
- #include <errno.h>
- #include <regex.h>
- #include <string.h>
-+#include <sys/auxv.h>
- #include <linux/kernel.h>
- #include <linux/zalloc.h>
- 
-+#include "../../../perf-sys.h"
- #include "../../../util/debug.h"
- #include "../../../util/event.h"
- #include "../../../util/perf_regs.h"
-@@ -43,6 +45,7 @@ const struct sample_reg sample_reg_masks[] = {
- 	SMPL_REG(lr, PERF_REG_ARM64_LR),
- 	SMPL_REG(sp, PERF_REG_ARM64_SP),
- 	SMPL_REG(pc, PERF_REG_ARM64_PC),
-+	SMPL_REG(vg, PERF_REG_ARM64_VG),
- 	SMPL_REG_END
- };
- 
-@@ -131,3 +134,34 @@ int arch_sdt_arg_parse_op(char *old_op, char **new_op)
- 
- 	return SDT_ARG_VALID;
- }
-+
-+uint64_t arch__user_reg_mask(void)
-+{
-+	struct perf_event_attr attr = {
-+		.type                   = PERF_TYPE_HARDWARE,
-+		.config                 = PERF_COUNT_HW_CPU_CYCLES,
-+		.sample_type            = PERF_SAMPLE_REGS_USER,
-+		.disabled               = 1,
-+		.exclude_kernel         = 1,
-+		.sample_period		= 1,
-+		.sample_regs_user	= PERF_REGS_MASK
-+	};
-+	int fd;
-+
-+	if (getauxval(AT_HWCAP) & HWCAP_SVE)
-+		attr.sample_regs_user |= SMPL_REG_MASK(PERF_REG_ARM64_VG);
-+
-+	/*
-+	 * Check if the pmu supports perf extended regs, before
-+	 * returning the register mask to sample.
-+	 */
-+	if (attr.sample_regs_user != PERF_REGS_MASK) {
-+		event_attr_init(&attr);
-+		fd = sys_perf_event_open(&attr, 0, -1, -1, 0);
-+		if (fd != -1) {
-+			close(fd);
-+			return attr.sample_regs_user;
-+		}
-+	}
-+	return PERF_REGS_MASK;
-+}
-diff --git a/tools/perf/util/perf_regs.c b/tools/perf/util/perf_regs.c
-index a982e40ee5a9..872dd3d38782 100644
---- a/tools/perf/util/perf_regs.c
-+++ b/tools/perf/util/perf_regs.c
-@@ -103,6 +103,8 @@ static const char *__perf_reg_name_arm64(int id)
- 		return "lr";
- 	case PERF_REG_ARM64_PC:
- 		return "pc";
-+	case PERF_REG_ARM64_VG:
-+		return "vg";
- 	default:
- 		return NULL;
- 	}
--- 
-2.28.0
+I feel like multi packet transactions must still honor flag sent to
+ft20_i2c_write. This adds a START even if ft260_i2c_write is called
+with FT260_FLAG_START_REPEATED or FT260_FLAG_NONE.
 
+> +                       first =3D false;
+> +               }
+> +
+> +               if (len <=3D FT260_WR_DATA_MAX) {
+> +                       wr_len =3D len;
+> +                       if (flag =3D=3D FT260_FLAG_START_STOP)
+> +                               rep->flag |=3D FT260_FLAG_STOP;
+> +               } else {
+> +                       wr_len =3D FT260_WR_DATA_MAX;
+> +               }
+>
+> -               rep->report =3D FT260_I2C_DATA_REPORT_ID(len);
+> +               rep->report =3D FT260_I2C_DATA_REPORT_ID(wr_len);
+>                 rep->address =3D addr;
+> -               rep->length =3D len;
+> -               rep->flag =3D flag;
+> +               rep->length =3D wr_len;
+>
+> -               memcpy(rep->data, &data[idx], len);
+> +               memcpy(rep->data, &data[idx], wr_len);
+>
+> -               ft260_dbg("rep %#02x addr %#02x off %d len %d d[0] %#02x\=
+n",
+> -                         rep->report, addr, idx, len, data[0]);
+> +               ft260_dbg("rep %#02x addr %#02x off %d len %d wlen %d fla=
+g %#x d[0] %#02x\n",
+> +                         rep->report, addr, idx, len, wr_len,
+> +                         rep->flag, data[0]);
+>
+>                 ret =3D ft260_hid_output_report_check_status(dev, (u8 *)r=
+ep,
+> -                                                          len + 4);
+> +                                                          wr_len + 4);
+>                 if (ret < 0) {
+> -                       hid_err(hdev, "%s: failed to start transfer, ret =
+%d\n",
+> -                               __func__, ret);
+> +                       hid_err(hdev, "%s: failed with %d\n", __func__, r=
+et);
+>                         return ret;
+>                 }
+>
+> -               data_len -=3D len;
+> -               idx +=3D len;
+> +               len -=3D wr_len;
+> +               idx +=3D wr_len;
+>
+> -       } while (data_len > 0);
+> +       } while (len > 0);
+>
+>         return 0;
+>  }
+> --
+> 2.25.1
+>

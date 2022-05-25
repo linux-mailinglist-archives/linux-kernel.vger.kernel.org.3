@@ -2,144 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164C9534497
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D6053449C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344785AbiEYTwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 15:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S235259AbiEYT4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 15:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239643AbiEYTw2 (ORCPT
+        with ESMTP id S1346466AbiEYT4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 15:52:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4F3113F15
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653508345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MoWVBq/Srp3PM5Qk/nZzvo63HOw5jDODOMMJjoSaqDU=;
-        b=XIogzBMRNbL7IAItWb489/xhAY/DRfpWOgXH2PzBzsq30Dp/YUJcRHk3zdoJUgTXFywNnx
-        aF5Rca5WaV3Q0ldCe1MP+/eXfxs+NGAhlipZPZc1CwebkapbC1ZYLjehscCZq46d95DKyP
-        4FNTQDMMOw7ER1vJBgKlGBQdYxQbPgs=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-378-mAT3p7_lO1mqkSQ4BefgLw-1; Wed, 25 May 2022 15:52:24 -0400
-X-MC-Unique: mAT3p7_lO1mqkSQ4BefgLw-1
-Received: by mail-il1-f197.google.com with SMTP id p12-20020a056e02144c00b002d196a4d73eso7301006ilo.18
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:52:24 -0700 (PDT)
+        Wed, 25 May 2022 15:56:19 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A80528718;
+        Wed, 25 May 2022 12:56:18 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id p8so20125185pfh.8;
+        Wed, 25 May 2022 12:56:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=URc4hQQOFWu8kbxQu3QsbQGjnzXbOZhtvLuWIaavPVo=;
+        b=RZi+79Hik/m6u3wnR25JW2Eu4n1JgneXWTduAnjWgkibjAUptWSbRpJ/yAkrdLMjD2
+         zVtQrJbZvvXIbaN/kJoEuTcBz6tB/iee0q14OliDGrfzioIgl0m3OgDlE1isO5jQ5M0U
+         Hf23JVDQ/CwVGy+7Sm5UGNzwt977TJUB3VgbByqxwV7r8zrqKiDxC4OF+i4K4Xn1pFi6
+         WwPsrbOGhlzEftQRcxP5RFv0Q6eW4lNDFABhcKo7fyqy8bOVX6fqm/72xWOA1s9Xt7/U
+         hZk44k/5mvppgUzxRkGckH0bPkbgdvkowstF1bfh3lckOFCuOXdD1Rr1K5o+Ucy/LSHf
+         rmSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MoWVBq/Srp3PM5Qk/nZzvo63HOw5jDODOMMJjoSaqDU=;
-        b=f2Tcxw19sSEraA4VXD7dzYeaKfBc/mvPyvQtTAbKEdls4DqymFgSy3WM33JHl+iNWn
-         TBtELcLABHPuU9nZldmh9+5zkXGBntci/eVlbjXTyHJmJV/bViBLNbSivjL8E9PFzWhw
-         mlOBfJYPXkZJzkokXnB9wPOnAK+1qEV+7HMatPW9CVW/gpb5HeFx/9svu16G8hEIc9IV
-         RZ0m85DGYG2MsnxutYDasNs3gjCL4hSAGcQuW6UK8qtjrMsuWalTSfZGe5atN0NhaJv0
-         Jq4s4MTzECjQ+sjjqIltKxaaP6mhCJJaaRLcSgeuXFJLXLnJdIfdnoJrJ0xqtAuG5Xp3
-         KkzQ==
-X-Gm-Message-State: AOAM5304svxPFQCdX7uaQWaR0sxhu890aO4X6pmi68+rFwXuAHXQpmOu
-        SLoGbyldi8glz8WcBZZPNrLufIcgMU1EXryceOKBJ/pK7lVXPXz+iBGup/B+OrrG7rLJuHI7+My
-        RbX3xuQIPdvnAkbHYJTFEXfNPp4l1eByAXMc81eXJzAbLeX3od1jCBI1VW3Vnb7s70Y1ueCjffg
-        ==
-X-Received: by 2002:a05:6602:29ce:b0:609:4f60:59cb with SMTP id z14-20020a05660229ce00b006094f6059cbmr15759286ioq.183.1653508343121;
-        Wed, 25 May 2022 12:52:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy9bqdjvCpdaS834IY1vu+Cs+k6e6lxk4WTcV42PxlupTWCvf9TA9JPzqBYXGpZnofQU3rNkQ==
-X-Received: by 2002:a05:6602:29ce:b0:609:4f60:59cb with SMTP id z14-20020a05660229ce00b006094f6059cbmr15759276ioq.183.1653508342846;
-        Wed, 25 May 2022 12:52:22 -0700 (PDT)
-Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id n25-20020a02a199000000b0032e31eeebc1sm4352021jah.170.2022.05.25.12.52.21
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 25 May 2022 12:52:22 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [PATCH] mm/x86: Remove dead code for hugetlbpage.c
-Date:   Wed, 25 May 2022 15:52:20 -0400
-Message-Id: <20220525195220.10241-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=URc4hQQOFWu8kbxQu3QsbQGjnzXbOZhtvLuWIaavPVo=;
+        b=sejuCXRbH7YD3sYnUeClCl0lzu1+VkxB4AOtjwto1FPkSInzITKaokln/yatrVw+/Q
+         Ytv1HQT0+jGvwpM7ibtrHRrinhBSQo0dx9sXDhGNPUUUvQCtvv1oVvfE7q5hfmrZFMMR
+         PxfEtSFxjDWcYENLgXmphkfxUy2Gx4jIaFGW2H4vP0/qGH9oS97HOTvThAxaJA3RkUM8
+         BGjAWRD0aJPOK11KdclQTNA8sJ/mrC+uExHvkIqEbVRJZF8XhO7VxhQJOzddUBkA9oxk
+         Qlvn/HU2km8lWPQ9sAEy8fAb70/e6hlejtbGZz0FaIPelYFI8ppWWtiBugfJTubEZzq8
+         FeVw==
+X-Gm-Message-State: AOAM532HS2tBcPZgZeT8lkTLr0MdNcJdqHXHRfcOgJrIobKSez0GPZXA
+        2VqFUT1vaj5Hh7LgHYyfHlM=
+X-Google-Smtp-Source: ABdhPJzAhUcVtGFwJmSmE72i8FoA9WsdPAkuCadrn+f6PQSHiI/29tdM+Z+WIXkHG9f4bv6joyAIEQ==
+X-Received: by 2002:aa7:83d0:0:b0:50c:eb2b:8e8a with SMTP id j16-20020aa783d0000000b0050ceb2b8e8amr35026479pfn.31.1653508577737;
+        Wed, 25 May 2022 12:56:17 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:aafd])
+        by smtp.gmail.com with ESMTPSA id cx19-20020a17090afd9300b001dcf49d92a1sm2224252pjb.28.2022.05.25.12.56.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 12:56:17 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 25 May 2022 09:56:15 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Subject: Re: [GIT PULL] cgroup changes for v5.19-rc1
+Message-ID: <Yo6J3/cVHu4huZH1@slm.duckdns.org>
+References: <Yowcc/ZOBIIs2JtZ@slm.duckdns.org>
+ <CAHk-=wiGsJgFTJ=yqYwWA2vcTWQy=2QQ6to6vd3ETutaE0cDxQ@mail.gmail.com>
+ <Yo6HMpEodz36o4Dc@slm.duckdns.org>
+ <CAHk-=wj4Q2++KfQ4NhMtjmJF_1bjC-573U61o1acuHfqmsvCKA@mail.gmail.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wj4Q2++KfQ4NhMtjmJF_1bjC-573U61o1acuHfqmsvCKA@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems to exist since the old times and never used once.  Remove them.
+On Wed, May 25, 2022 at 12:47:48PM -0700, Linus Torvalds wrote:
+> On Wed, May 25, 2022 at 12:44 PM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > Hahaha, yeah, I lost my private key many years ago, so gotta get that sorted
+> > out first. Will do the signed pull from now on.
+> 
+> You have a pgp key for your kernel.org account, you can just use that. No?
+>
+> (That way I'll also be able to just pick it up from the pgp key repo
+> that Konstantin maintains).
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- arch/x86/mm/hugetlbpage.c | 39 ---------------------------------------
- 1 file changed, 39 deletions(-)
+I don't have the private part of that pgp key anymore and have been just
+using the same ssh key. Nothing really requires the private key that I lost
+at least 5 years ago. On the plus side, the pgp key has been as secure as it
+gets. :) So, I gotta generate new keys, get it signed and replace the korg
+key and so on. I've just been really lazy.
 
-diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
-index a0d023cb4292..509408da0da1 100644
---- a/arch/x86/mm/hugetlbpage.c
-+++ b/arch/x86/mm/hugetlbpage.c
-@@ -19,44 +19,6 @@
- #include <asm/tlbflush.h>
- #include <asm/elf.h>
- 
--#if 0	/* This is just for testing */
--struct page *
--follow_huge_addr(struct mm_struct *mm, unsigned long address, int write)
--{
--	unsigned long start = address;
--	int length = 1;
--	int nr;
--	struct page *page;
--	struct vm_area_struct *vma;
--
--	vma = find_vma(mm, addr);
--	if (!vma || !is_vm_hugetlb_page(vma))
--		return ERR_PTR(-EINVAL);
--
--	pte = huge_pte_offset(mm, address, vma_mmu_pagesize(vma));
--
--	/* hugetlb should be locked, and hence, prefaulted */
--	WARN_ON(!pte || pte_none(*pte));
--
--	page = &pte_page(*pte)[vpfn % (HPAGE_SIZE/PAGE_SIZE)];
--
--	WARN_ON(!PageHead(page));
--
--	return page;
--}
--
--int pmd_huge(pmd_t pmd)
--{
--	return 0;
--}
--
--int pud_huge(pud_t pud)
--{
--	return 0;
--}
--
--#else
--
- /*
-  * pmd_huge() returns 1 if @pmd is hugetlb related entry, that is normal
-  * hugetlb entry or non-present (migration or hwpoisoned) hugetlb entry.
-@@ -72,7 +34,6 @@ int pud_huge(pud_t pud)
- {
- 	return !!(pud_val(pud) & _PAGE_PSE);
- }
--#endif
- 
- #ifdef CONFIG_HUGETLB_PAGE
- static unsigned long hugetlb_get_unmapped_area_bottomup(struct file *file,
+Thanks.
+
 -- 
-2.32.0
-
+tejun

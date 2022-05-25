@@ -2,128 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD150533B63
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3786533B6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238237AbiEYLLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S238892AbiEYLOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236920AbiEYLLj (ORCPT
+        with ESMTP id S229726AbiEYLOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:11:39 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BD345781
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:11:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1653477097; x=1685013097;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1ApspzUBKpnPb41FxJK3phqUVQ+mxeo54ozF/QmwScU=;
-  b=aunsX4am2VyTSGSgPI5scKu83WQ56WHALU/lz/0VaCsHzC2H2p6tyBTk
-   egrp5Q7W8dChuyZsy0b7UPsae+IIxwGWkRGl/IdJD/hA9CmFR4x1x1oEC
-   XCKvqRTYVI4+Mjg3UQh3tL9SMKjopPEGvtQ2JRyq2MAVsZrkz0h6q/fqc
-   1EG02l+5zWQIRtjXNybaXt5JtAkjPI4nBagox+ybWjgxh7qc163qoggSo
-   CmbGbYh+H+xrGCrLP8oEQijvuRV8ehy353/hqIuQHoZr222N6BE01F2MO
-   j2UXa5EGZiFHeaL+l8+niuA5vGkBIPYGfiAV6cNgKddWEfDLkC9wvoJ/5
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,250,1647273600"; 
-   d="scan'208";a="200173550"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 25 May 2022 19:11:33 +0800
-IronPort-SDR: TXKxW7QGWOoUZHR9a3dWL7Cae/LJ9kBDyTNkv3jHu1JvRrwuH8sFoLtrrmsHqHEm/b4K+5P9EI
- L4RSVnC/1fZXFKMNppyIYPW7lJ5JTgxhPmZxCXgSpw1XQer7WKwFV+X1dXFhO9n1JuIkK+N9OM
- jlsKndV31uXBuCoZ+7m75zyEmvbCWQ+YzMB8cgVKTtaURXn9rKJW+2kGeMbVPDtz88eL9Zb2is
- NICd8FmegP3cKIx211gyKuofcQ29E4JsKKnmdMH7LbVUevrT70G+606eVu/3+u1jgIsKDURqaD
- e2qsrPLxwLE4DYAbQMjHlXWB
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 May 2022 03:31:05 -0700
-IronPort-SDR: Lfdt1Rety046e7dn0h5wDymP+d0pOhxG6929NLpi/WI3f1oqUT8Ws2IvGUTc1uGunT7PxnoAg8
- 7FjpbWlsSBlw4i6ZxA+ZPvcI5gsrPaqQTwJKx/OK709a2FAmDXfEW0X/ikn6RXXxmm6HXytir+
- h1P35y9aQJk7R5/cm7Qy5sdnrtd3i5j2oebBVuZ3aNvU9skwW0Pfb9EaLsbfOWQ0ciNfDxfUF7
- TP13aGToy1Y5vJI7dBGOxaDDSf42+WHcktJkZFlvQK1CoFRALqE+RPtSnHLZp1hBfWqCrUzMTA
- r8w=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 May 2022 04:11:33 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4L7T0N6Q9zz1SVny
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:11:32 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1653477092; x=1656069093; bh=1ApspzUBKpnPb41FxJK3phqUVQ+mxeo54oz
-        F/QmwScU=; b=gimYfpIJP7lQ4yMAIpoZzyEWNEhMXnRdQibGB1an1gd6dWPOTXj
-        iNvaHhqmQnGrd2kZ+0ikb9Azx+6NjehJfAqfUAJyfsEaA/AwQNhDLhFBQKWYPDHh
-        aoI8M/p/E2Lv7W6D4oO+NC6mKLHZY6zabvT1g4MnExytLEsMmFbPMGnPLcDMLy4H
-        oksHMJ4m0pq5ja2juHcWzzBeO3qDnOdnAO5ed8nDqCc26vVgubMfjZ/3k7SqedN4
-        SKCrISvnEtihumQaXZ75C5AKw/KG1jQ/bxZQxLAM/wGsJIKWMoyPw12/ixPq7ZvP
-        dSBfSl9QfoAQRTnhMzvijKIcKngks9M61BQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VoI8NlYGNMpO for <linux-kernel@vger.kernel.org>;
-        Wed, 25 May 2022 04:11:32 -0700 (PDT)
-Received: from [10.225.163.54] (unknown [10.225.163.54])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4L7T0M2BqLz1Rvlc;
-        Wed, 25 May 2022 04:11:31 -0700 (PDT)
-Message-ID: <48012e6e-f3c0-4436-5f5c-a2b0db89e33b@opensource.wdc.com>
-Date:   Wed, 25 May 2022 20:11:29 +0900
+        Wed, 25 May 2022 07:14:19 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230248BD04;
+        Wed, 25 May 2022 04:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653477258; x=1685013258;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=aohnXcvCSnlM5giWyMapPEnGKssvZQqYjKbDAOPXV60=;
+  b=GZdpiOt4o47nS+MAN6MleTRJgo6g7noOp5rIzcgOoYO8QhYHNSYk/kPn
+   84IX45Ql81eaGhRWubmbqHPtFBnuCTl8lae5nQIXQXYkmKEQulwmopf6U
+   2k0IYF+QRTKdsvoEgiKP4UYRjmX/jr8UfQTiTwvq5WFNLPczvgnwB7DyM
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 May 2022 04:14:17 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 04:14:17 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 25 May 2022 04:14:16 -0700
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 25 May 2022 04:14:12 -0700
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V8 0/7] Add driver support for Data Capture and Compare Engine(DCC) for SM8150,SC7280,SC7180,SDM845
+Date:   Wed, 25 May 2022 16:43:15 +0530
+Message-ID: <cover.1653475467.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/3] ata: ahci: Rename module parameter for lpm policy
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, hdegoede@redhat.com
-References: <20220524170508.563-1-mario.limonciello@amd.com>
- <20220524170508.563-3-mario.limonciello@amd.com>
- <Yo3w/dsaly+gcQNR@infradead.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <Yo3w/dsaly+gcQNR@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/22 18:03, Christoph Hellwig wrote:
-> On Tue, May 24, 2022 at 12:05:07PM -0500, Mario Limonciello wrote:
->> The LPM policy is applied to more chipsets than just mobile designs.
->> Update the module parameter to drop the word "mobile" to make this
->> clearer to users.
->>
->> Also, document this renamed parameter in the admin-guide for users
->> as it was missing previously.
-> 
-> Even if the name is confusing I don't think we should rename it as
-> that breaks existing setups.  I think just updating the documentation
-> is good enough, but if you feel strongly we can just add the new name
-> while keeping the old one as an alias.
+DCC(Data Capture and Compare) is a DMA engine designed for debugging purposes.
+In case of a system crash or manual software triggers by the user the DCC hardware
+stores the value at the register addresses which can be used for debugging purposes.
+The DCC driver provides the user with debugfs interface to configure the register
+addresses. The options that the DCC hardware provides include reading from registers,
+writing to registers, first reading and then writing to registers and looping
+through the values of the same register.
 
-+1 for the alias.
+In certain cases a register write needs to be executed for accessing the rest of the
+registers, also the user might want to record the changing values of a register with
+time for which he has the option to use the loop feature.
 
-The other thing that this series need is to add the changes of the LPM
-policy initialization according to the adapter capabilities (your patch
-and the patches from Runa) as well as accounting for the eventual nolpm
-link horkage flag. Otherwise, I fear that this change will generate many
-regressions.
+The options mentioned above are exposed to the user by debugfs files once the driver
+is probed. The details and usage of this debugfs files are documented in
+Documentation/ABI/testing/debugfs-driver-dcc.
+
+As an example let us consider a couple of debug scenarios where DCC has been proved to be
+effective for debugging purposes:-
+
+i)TimeStamp Related Issue
+
+On SC7180, there was a coresight timestamp issue where it would occasionally be all 0
+instead of proper timestamp values.
+
+Proper timestamp:
+Idx:3373; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x13004d8f5b7aa; CC=0x9e
+
+Zero timestamp:
+Idx:3387; ID:10; I_TIMESTAMP : Timestamp.; Updated val = 0x0; CC=0xa2
+
+Now this is a non-fatal issue and doesn't need a system reset, but still needs
+to be rootcaused and fixed for those who do care about coresight etm traces.
+Since this is a timestamp issue, we would be looking for any timestamp related
+clocks and such.
+
+We get all the clk register details from IP documentation and configure it
+via DCC config_read debugfs node. Before that we set the current linked list.
+
+/* Program the linked list with the addresses */
+echo R 0x10c004 > /sys/kernel/debug/dcc/../3/config
+echo R 0x10c008 > /sys/kernel/debug/dcc/../3/config
+echo R 0x10c00c > /sys/kernel/debug/dcc/../3/config
+echo R 0x10c010 > /sys/kernel/debug/dcc/../3/config
+..... and so on for other timestamp related clk registers
+
+/* Other way of specifying is in "addr len" pair, in below case it
+specifies to capture 4 words starting 0x10C004 */
+
+echo R 0x10C004 4 > /sys/kernel/debug/dcc/../3/config_read
+
+/* Enable DCC */
+echo 1 > /sys/kernel/debug/dcc/../3/enable
+
+/* Run the timestamp test for working case */
+
+/* Send SW trigger */
+echo 1 > /sys/kernel/debug/dcc/../trigger
+
+/* Read SRAM */
+cat /dev/dcc_sram > dcc_sram1.bin
+
+/* Run the timestamp test for non-working case */
+
+/* Send SW trigger */
+echo 1 > /sys/kernel/debug/dcc/../trigger
+
+/* Read SRAM */
+cat /dev/dcc_sram > dcc_sram2.bin
+
+Get the parser from [1] and checkout the latest branch.
+
+/* Parse the SRAM bin */
+python dcc_parser.py -s dcc_sram1.bin --v2 -o output/
+python dcc_parser.py -s dcc_sram2.bin --v2 -o output/
+
+Sample parsed output of dcc_sram1.bin:
+
+<hwioDump version="1">
+        <timestamp>03/14/21</timestamp>
+            <generator>Linux DCC Parser</generator>
+                <chip name="None" version="None">
+                <register address="0x0010c004" value="0x80000000" />
+                <register address="0x0010c008" value="0x00000008" />
+                <register address="0x0010c00c" value="0x80004220" />
+                <register address="0x0010c010" value="0x80000000" />
+            </chip>
+    <next_ll_offset>next_ll_offset : 0x1c </next_ll_offset>
+</hwioDump>
+
+ii)NOC register errors
+
+A particular class of registers called NOC which are functional registers was reporting
+errors while logging the values.To trace these errors the DCC has been used effectively.
+The steps followed were similar to the ones mentioned above.
+In addition to NOC registers a few other dependent registers were configured in DCC to
+monitor it's values during a crash. A look at the dependent register values revealed that
+the crash was happening due to a secured access to one of these dependent registers.
+All these debugging activity and finding the root cause was achieved using DCC.
+
+DCC parser is available at the following open source location
+
+https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/tools/tree/dcc_parser
+
+Changes in V8
+
+*The DCC interface for debugfs has been changed as per comments on v7. 
+ The new interface details are documented in Documentation/ABI/testing/debugfs-driver-dcc.
+
+Souradeep Chowdhury (7):
+  dt-bindings: Added the yaml bindings for DCC
+  soc: qcom: dcc:Add driver support for Data Capture and Compare
+    unit(DCC)
+  MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver
+    support
+  arm64: dts: qcom: sm8150: Add Data Capture and Compare(DCC) support
+    node
+  arm64: dts: qcom: sc7280: Add Data Capture and Compare(DCC) support
+    node
+  arm64: dts: qcom: sc7180: Add Data Capture and Compare(DCC) support
+    node
+  arm64: dts: qcom: sdm845: Add Data Capture and Compare(DCC) support
+    node
+
+ Documentation/ABI/testing/debugfs-driver-dcc       |   95 ++
+ .../devicetree/bindings/arm/msm/qcom,dcc.yaml      |   43 +
+ MAINTAINERS                                        |    8 +
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |    6 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |    6 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |    6 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |    6 +
+ drivers/soc/qcom/Kconfig                           |    8 +
+ drivers/soc/qcom/Makefile                          |    1 +
+ drivers/soc/qcom/dcc.c                             | 1359 ++++++++++++++++++++
+ 10 files changed, 1538 insertions(+)
+ create mode 100644 Documentation/ABI/testing/debugfs-driver-dcc
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,dcc.yaml
+ create mode 100644 drivers/soc/qcom/dcc.c
 
 -- 
-Damien Le Moal
-Western Digital Research
+2.7.4
+

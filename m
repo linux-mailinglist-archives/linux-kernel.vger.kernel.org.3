@@ -2,118 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5AC5335F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 06:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7DB533600
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 06:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243578AbiEYEPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 00:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S243714AbiEYEUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 00:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiEYEPo (ORCPT
+        with ESMTP id S230048AbiEYEUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 00:15:44 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB00527EE;
-        Tue, 24 May 2022 21:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653452143; x=1684988143;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zoLHpPJlHQj1sMadNZjpddoZi4TuvVOAVFg4iO1UKTM=;
-  b=PDdowoHav1Qjqu5ARR3VtCAEI2eXSvI75rEjJTcIF18txAgGoQFiUwpQ
-   AlVlPYEXQsGMwCYLSEBAPyw81uf5IQNtYO0e1P4YCcScj1iEKqPobQHjy
-   3LzMqgkMTytHlolyprUymfBtIpbEefSFPvcTqsFUJ8RmDM25svMXL6iPE
-   ipL5CHNzhWPzZ/qkMz/TyYHXuWuXk9rhq5Ue8bfxNaaM3WGfQcypBarx0
-   Ottzq9ZLRr0EQdIkZms7YbTD9h1OXUjl68BHypul5lDMi2UX+tDHlnEqk
-   UPCEzotp7V4N3WLyaFDP+VrgC4j3pFH+Lj+n9rZrwYKUmV4lhUce98Dl7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="334356165"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="334356165"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 21:15:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="608954990"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 24 May 2022 21:15:40 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntiQu-0002iE-9H;
-        Wed, 25 May 2022 04:15:40 +0000
-Date:   Wed, 25 May 2022 12:15:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: drivers/media/platform/renesas/rcar_drif.c:1470:34: warning: unused
- variable 'rcar_drif_of_table'
-Message-ID: <202205251220.mSx58WJG-lkp@intel.com>
+        Wed, 25 May 2022 00:20:45 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BFD55345
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 21:20:43 -0700 (PDT)
+Message-ID: <3e686290-14e4-a4e9-3825-afb011b8c0e4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653452442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B9G5hUzauDQzBCUae+mMyfXNu37nLvF3U6X5lDAQKU8=;
+        b=Cj4xv31bNF8YNaPcGnC1xELW0EyErW5WTV859fFs4ztuqVR4Xwh+1JDuOk4bTATL1kXrnB
+        /AABN63X9RWpLQ80c7v7K8nrVtjvaj9IXQKIlwxJ0Z0Omt5cChBvbiYz/cGSGViO4ec40c
+        /Eqs7CzNMxJlnO7aNBd/AFf90RDNnno=
+Date:   Wed, 25 May 2022 07:20:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Vasily Averin <vasily.averin@linux.dev>
+Subject: Re: [PATCH] ipc: Remove dead code in perform_atomic_semop()
+Content-Language: en-US
+To:     Gautam Menghani <gautammenghani201@gmail.com>,
+        akpm@linux-foundation.org, shakeelb@google.com, mhocko@suse.com,
+        manfred@colorfullife.com
+Cc:     linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        skhan@linuxfoundation.org
+References: <20220524182244.42987-1-gautammenghani201@gmail.com>
+ <a9cd5385-5a26-c410-2609-4575cc0d6adf@linux.dev>
+In-Reply-To: <a9cd5385-5a26-c410-2609-4575cc0d6adf@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+On 5/25/22 02:12, vasily.averin@linux.dev wrote:
+> On 5/24/22 21:22, Gautam Menghani wrote:
+>> Remove the line which is dead code. Fixes the clang scan warning:
+>> warning: Value stored to 'result' is never read [deadcode.DeadStores]
+>>                 result = curr->semval;
+>>
+>> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+>> ---
+>>  ipc/sem.c | 1 -
+>>  1 file changed, 1 deletion(-)
+>>
+>> diff --git a/ipc/sem.c b/ipc/sem.c
+>> index 0dbdb98fdf2d..156824bcda47 100644
+>> --- a/ipc/sem.c
+>> +++ b/ipc/sem.c
+>> @@ -766,7 +766,6 @@ static int perform_atomic_semop(struct sem_array *sma, struct sem_queue *q)
+>>  	for (sop = sops; sop < sops + nsops; sop++) {
+>>  		curr = &sma->sems[sop->sem_num];
+>>  		sem_op = sop->sem_op;
+>> -		result = curr->semval;
+>>  
+>>  		if (sop->sem_flg & SEM_UNDO) {
+>>  			int undo = un->semadj[sop->sem_num] - sem_op;
+> 
+> Perhaps it would be better to keep the "result" but use it in the
+> marked line below, like it was done in previous part of this function?
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fdaf9a5840acaab18694a19e0eb0aa51162eeeed
-commit: ee4a77a32b39064fdab0aa2b36bbd35ebf57e077 media: platform: place Renesas drivers on a separate dir
-date:   2 months ago
-config: hexagon-buildonly-randconfig-r001-20220525 (https://download.01.org/0day-ci/archive/20220525/202205251220.mSx58WJG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ee4a77a32b39064fdab0aa2b36bbd35ebf57e077
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/ drivers/media/platform/renesas/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/renesas/rcar_drif.c:1470:34: warning: unused variable 'rcar_drif_of_table' [-Wunused-const-variable]
-   static const struct of_device_id rcar_drif_of_table[] = {
-                                    ^
-   1 warning generated.
-
-
-vim +/rcar_drif_of_table +1470 drivers/media/platform/renesas/rcar_drif.c
-
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1466  
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1467  static SIMPLE_DEV_PM_OPS(rcar_drif_pm_ops, rcar_drif_suspend,
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1468  			 rcar_drif_resume);
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1469  
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12 @1470  static const struct of_device_id rcar_drif_of_table[] = {
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1471  	{ .compatible = "renesas,rcar-gen3-drif" },
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1472  	{ }
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1473  };
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1474  MODULE_DEVICE_TABLE(of, rcar_drif_of_table);
-7625ee981af166 drivers/media/platform/rcar_drif.c Ramesh Shanmugasundaram 2017-06-12  1475  
-
-:::::: The code at line 1470 was first introduced by commit
-:::::: 7625ee981af166ddb569e2e6c0006e2af471326f [media] media: platform: rcar_drif: Add DRIF support
-
-:::::: TO: Ramesh Shanmugasundaram <ramesh.shanmugasundaram@bp.renesas.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sorry, I was wrong.
+Reviewed-by: Vasily Averin <vvs@openvz.org>

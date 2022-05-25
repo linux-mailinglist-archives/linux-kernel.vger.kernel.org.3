@@ -2,147 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C452C5337CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540905337CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232619AbiEYHvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 03:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
+        id S235353AbiEYHvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 03:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiEYHv3 (ORCPT
+        with ESMTP id S230202AbiEYHvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 03:51:29 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257B53FBE9;
-        Wed, 25 May 2022 00:51:29 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id h13so12263518pfq.5;
-        Wed, 25 May 2022 00:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=fCV26XsT8ltkw34ERAc6SjsXO4ZxGrWCDVUX/kH81Vk=;
-        b=aMMvHrc2DCz6gzzNskOYahSxyH7xMzBNRVmonJxwlGdAh/IKZW8QywwYepLtbD1t9y
-         9rwFIMVEMX+QaGgKhMYKl5w7En/Xv6eAJGEkNKH7HAYzhsXjdLsf5jCqjovXDn1lBt2s
-         9Vu6NKZKSJASDc1fHaScbH5nKfFHPs9DozECzAKCEEbII9GWPP3JipIWa26iEXNnUPy3
-         Ma0gnIjaUG6NSftBw9xCSAN+IPTd3nq4LYSrPZAcDskTIzbZ357DImTjR6vpo3vG7IIy
-         19Rp+hCjsDhjzqBQ0HB8Bf/mr6IoTW2KFKg9PmFLyRs93aP1OzoCGEjT92J0+P1Nn3Fb
-         c+RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=fCV26XsT8ltkw34ERAc6SjsXO4ZxGrWCDVUX/kH81Vk=;
-        b=zQuwzqToiu3xamlljIkcmz4FLjMo4Z1XcW0NAFI69HnkHHvsGB1cQRSyTEx+4hWunt
-         AnJuhnIOfGBpKMSWDh7H/mVAMgK9gneqAPXhlmGlIL5CerA9AM5qnnMymMmUPbvdLIbE
-         ZL4TC5loU6grMRiXoXCc8gf3DbpQUIN+ZzJq9lh4IdGv30yFW+LcnRSgg29pUK4/z8jd
-         2HJiwaHfPnbSv84yYViChWg+EmBXyJ6G9MCcZh53fkkiSUUq/ulsdZL4l8TFVG949FJe
-         Mh4+cBHYfUbs9TLEApL2e96JZ4hHeIa6TqM4ELl4Tmm5Dx2Z9s0Z10Q4PlKfgWOfZ9Yi
-         6iBQ==
-X-Gm-Message-State: AOAM533ieZOHNW+X6uAeZioyDaT0zRGkful2PLr3w78xP9+4rZYeE073
-        4lheHj4UoZubu4g1XfPYidVOX1+zW4U=
-X-Google-Smtp-Source: ABdhPJy5sSpWNK6ksae+id3CHXoYNnY/dUHroQ67YKg+Z/+4CnmE9yHE8FARWKED+AR5t8oCBMMj/w==
-X-Received: by 2002:a63:5a01:0:b0:3d8:22cb:9224 with SMTP id o1-20020a635a01000000b003d822cb9224mr27350223pgb.548.1653465088611;
-        Wed, 25 May 2022 00:51:28 -0700 (PDT)
-Received: from localhost ([2406:7400:63:4576:a782:286b:de51:79ce])
-        by smtp.gmail.com with ESMTPSA id e5-20020a17090a630500b001dedb8bbe66sm1012980pjj.33.2022.05.25.00.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 00:51:27 -0700 (PDT)
-Date:   Wed, 25 May 2022 13:21:23 +0530
-From:   Ritesh Harjani <ritesh.list@gmail.com>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next] ext4: fix super block checksum incorrect after
- mount
-Message-ID: <20220525075123.rx5v7fe6ocn354wn@riteshh-domain>
-References: <20220525012904.1604737-1-yebin10@huawei.com>
+        Wed, 25 May 2022 03:51:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18832AC6D;
+        Wed, 25 May 2022 00:51:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A2E4B81C95;
+        Wed, 25 May 2022 07:51:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 863F4C34116;
+        Wed, 25 May 2022 07:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653465093;
+        bh=B7jZfU7xnbYdmiqmnR6OSx/k5usfd6C6hfkEddKhG8I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EO8vfeD/bbajJYsszjLXknRwgKkyWnF2d86JWY7wa401Qvq3q+kT4J1xRosqHEInq
+         VrSkTQotovBuBBWYKFsNb6j/WDxhjx3LvOuut/fLJDKBnJzM2yBy7/pnNpSwGAdh/E
+         QIC3wn8L/w16G6d4/6oIgGkQSLWYstyJYbAxN5vk=
+Date:   Wed, 25 May 2022 09:51:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mat Martineau <mathew.j.martineau@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: Re: [PATCH 5.17 114/158] mptcp: strict local address ID selection
+Message-ID: <Yo3gAprjnapHfKar@kroah.com>
+References: <20220523165830.581652127@linuxfoundation.org>
+ <20220523165849.851212488@linuxfoundation.org>
+ <fa953ec-288f-7715-c6fb-47a222e85270@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220525012904.1604737-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <fa953ec-288f-7715-c6fb-47a222e85270@linux.intel.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/25 09:29AM, Ye Bin wrote:
-> We got issue as follows:
-> [home]# mount  /dev/sda  test
-> EXT4-fs (sda): warning: mounting fs with errors, running e2fsck is recommended
-> [home]# dmesg
-> EXT4-fs (sda): warning: mounting fs with errors, running e2fsck is recommended
-> EXT4-fs (sda): Errors on filesystem, clearing orphan list.
-> EXT4-fs (sda): recovery complete
-> EXT4-fs (sda): mounted filesystem with ordered data mode. Quota mode: none.
-> [home]# debugfs /dev/sda
-> debugfs 1.46.5 (30-Dec-2021)
-> Checksum errors in superblock!  Retrying...
->
-> Reason is ext4_orphan_cleanup will reset ‘s_last_orphan’ but not update
-> super block checksum.
-> To solve above issue, defer update super block checksum after ext4_orphan_cleanup.
+On Mon, May 23, 2022 at 08:51:52PM -0700, Mat Martineau wrote:
+> On Mon, 23 May 2022, Greg Kroah-Hartman wrote:
+> 
+> > From: Paolo Abeni <pabeni@redhat.com>
+> > 
+> > [ Upstream commit 4cf86ae84c718333928fd2d43168a1e359a28329 ]
+> > 
+> > The address ID selection for MPJ subflows created in response
+> > to incoming ADD_ADDR option is currently unreliable: it happens
+> > at MPJ socket creation time, when the local address could be
+> > unknown.
+> > 
+> > Additionally, if the no local endpoint is available for the local
+> > address, a new dummy endpoint is created, confusing the user-land.
+> > 
+> > This change refactor the code to move the address ID selection inside
+> > the rebuild_header() helper, when the local address eventually
+> > selected by the route lookup is finally known. If the address used
+> > is not mapped by any endpoint - and thus can't be advertised/removed
+> > pick the id 0 instead of allocate a new endpoint.
+> > 
+> > Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+> > Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > ---
+> > net/mptcp/pm_netlink.c | 13 --------
+> > net/mptcp/protocol.c   |  3 ++
+> > net/mptcp/protocol.h   |  3 +-
+> > net/mptcp/subflow.c    | 67 ++++++++++++++++++++++++++++++++++++------
+> > 4 files changed, 63 insertions(+), 23 deletions(-)
+> > 
+> 
+> Greg, Sasha -
+> 
+> Is it possible to drop this one patch? It makes one of the mptcp selftests
+> fail (mptcp_join.sh, "single address, backup").
 
-I agree with the analysis. However after [1], I think all updates to superblock
-(including checksum computation) should be done within buffer lock.
-(lock_buffer(), unlock_buffer()).
+Does that mean the backport is incorrect, or that the selftest is wrong?
 
-[1]: https://lore.kernel.org/all/20201216101844.22917-4-jack@suse.cz/
+> Looks like this patch has been included in stable because of this single
+> hunk that helps "mptcp: Do TCP fallback on early DSS checksum failure" apply
+> cleanly:
+> 
+> > diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
+> > index aec767ee047a..e4413b3e50c2 100644
+> > --- a/net/mptcp/protocol.h
+> > +++ b/net/mptcp/protocol.h
+> > @@ -442,7 +442,8 @@ struct mptcp_subflow_context {
+> > 		rx_eof : 1,
+> > 		can_ack : 1,        /* only after processing the remote a key */
+> > 		disposable : 1,	    /* ctx can be free at ulp release time */
+> > -		stale : 1;	    /* unable to snd/rcv data, do not use for xmit */
+> > +		stale : 1,	    /* unable to snd/rcv data, do not use for xmit */
+> > +		local_id_valid : 1; /* local_id is correctly initialized */
+> > 	enum mptcp_data_avail data_avail;
+> > 	u32	remote_nonce;
+> > 	u64	thmac;
+> 
+> "mptcp: Do TCP fallback on early DSS checksum failure" also adds a bit to
+> that bitfield, but there is no functional dependency between the patches.
+> 
+> If you need to drop the "mptcp: Do TCP fallback..." patch too, I can send a
+> backported version tomorrow that accounts for that bitfield change.
 
-With lock changes added, feel free to add -
+Yes, I had to drop that second patch because of this.  Both are now
+dropped from 5.15 and 5.17, can you provide a working backport?
 
-Reviewed-by: Ritesh Harjani <ritesh.list@gmail.com>
+thanks,
 
-
->
->
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/ext4/super.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index f9a3ad683b4a..c47204029429 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -5300,14 +5300,6 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->  		err = percpu_counter_init(&sbi->s_freeinodes_counter, freei,
->  					  GFP_KERNEL);
->  	}
-> -	/*
-> -	 * Update the checksum after updating free space/inode
-> -	 * counters.  Otherwise the superblock can have an incorrect
-> -	 * checksum in the buffer cache until it is written out and
-> -	 * e2fsprogs programs trying to open a file system immediately
-> -	 * after it is mounted can fail.
-> -	 */
-> -	ext4_superblock_csum_set(sb);
->  	if (!err)
->  		err = percpu_counter_init(&sbi->s_dirs_counter,
->  					  ext4_count_dirs(sb), GFP_KERNEL);
-> @@ -5365,6 +5357,14 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->  	EXT4_SB(sb)->s_mount_state |= EXT4_ORPHAN_FS;
->  	ext4_orphan_cleanup(sb, es);
->  	EXT4_SB(sb)->s_mount_state &= ~EXT4_ORPHAN_FS;
-> +	/*
-> +	 * Update the checksum after updating free space/inode counters and
-> +	 * ext4_orphan_cleanup. Otherwise the superblock can have an incorrect
-> +	 * checksum in the buffer cache until it is written out and
-> +	 * e2fsprogs programs trying to open a file system immediately
-> +	 * after it is mounted can fail.
-> +	 */
-> +	ext4_superblock_csum_set(sb);
->  	if (needs_recovery) {
->  		ext4_msg(sb, KERN_INFO, "recovery complete");
->  		err = ext4_mark_recovery_complete(sb, es);
-> --
-> 2.31.1
->
+greg k-h

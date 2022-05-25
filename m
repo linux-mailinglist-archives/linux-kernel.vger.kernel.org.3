@@ -2,238 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D253533791
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C711533796
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243402AbiEYHm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 03:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        id S242265AbiEYHpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 03:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiEYHmx (ORCPT
+        with ESMTP id S229621AbiEYHpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 03:42:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B63540A28
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:42:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653464569;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ys9N/aStuUczJG1d59vIuu5WRFG0fOE8qpuySSttVig=;
-        b=C6yCOzrS/O5rMel2k59r+QyBYB6D3iJp6Msr6T0dcs2lDlAixTxTjH/e/eBem4lw93fdy5
-        oy++D2FREGpFsaLHZx7GlMuOJUERzsND2gjUNJyJJuyydg2IE1FyN1ADtlwB4tuXPR6CdN
-        zfxLeY1W96k0bapLzC9S4Bp0gYSgpAk=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-BOyp51BLPRK0ks5jHN_lgQ-1; Wed, 25 May 2022 03:42:45 -0400
-X-MC-Unique: BOyp51BLPRK0ks5jHN_lgQ-1
-Received: by mail-qk1-f198.google.com with SMTP id o18-20020a05620a2a1200b006a0cc3d8463so15135084qkp.4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:42:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Ys9N/aStuUczJG1d59vIuu5WRFG0fOE8qpuySSttVig=;
-        b=ox4DGvLkC61bio86Fu1PXWCVrekcpoLhln33szoahZdHms8bS/6ps7sRE9dNi1U0dD
-         mbzSYfeUaic0c2RmpqqQdHqaXSfmIoJkH0F+vGNZ7LYSAjLNOrj2abyLTT414nDV7H9a
-         39eClXz1JYSG3FvMw7DVUvTE+h6a03By4KtwGHxd9pzMfWQ8feQAYEY7KVUPbSpLCZK/
-         00W0N4+J8kwbRhapT3eUcMZEuk42ZZpz1U6hnAHqTsZQ+ZHCMZYX/r8gjnKYW4+B9FtG
-         e+ydo8Hs/wlEoboQvP+h/AkDzXVpdgirVYIMcUCxDOnaU/eY5fbZH0RcP6Vqi6elBAiL
-         iCbw==
-X-Gm-Message-State: AOAM531RdY/xJeMOOAKmSPia5objr57KSf/sgMzoBB9ihcTLXM95uNok
-        Uf4H15SN1y5yRE6qm69xIJujD0wXNXOMjUNJG1StSOqONhXuaEsXTxutxvcDV18+xR3sA/aHksM
-        pa9Cbi3aIVZcAXxQstmAsbyzQ
-X-Received: by 2002:ac8:5813:0:b0:2fa:a441:ba8a with SMTP id g19-20020ac85813000000b002faa441ba8amr2204477qtg.162.1653464565023;
-        Wed, 25 May 2022 00:42:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz8/milkg51+yfBQTz/8OhX1w5WPXtXVRPuIhObK5HHUAywQzfC8MVhw6rZ751qf/C+5s+Uqg==
-X-Received: by 2002:ac8:5813:0:b0:2fa:a441:ba8a with SMTP id g19-20020ac85813000000b002faa441ba8amr2204464qtg.162.1653464564785;
-        Wed, 25 May 2022 00:42:44 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
-        by smtp.gmail.com with ESMTPSA id b14-20020ac84f0e000000b002f96db4519csm922248qte.37.2022.05.25.00.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 00:42:44 -0700 (PDT)
-Date:   Wed, 25 May 2022 09:41:56 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>
-Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Parav Pandit <parav@nvidia.com>,
-        Zhang Min <zhang.min9@zte.com.cn>, hanand@xilinx.com,
-        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
-        gautam.dawar@amd.com,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xie Yongji <xieyongji@bytedance.com>, dinang@xilinx.com,
-        habetsm.xilinx@gmail.com, Eli Cohen <elic@nvidia.com>,
-        pabloc@xilinx.com, lvivier@redhat.com,
-        Dan Carpenter <dan.carpenter@oracle.com>, lulu@redhat.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        ecree.xilinx@gmail.com, Piotr.Uminski@intel.com,
-        martinpo@xilinx.com, Si-Wei Liu <si-wei.liu@oracle.com>,
-        Longpeng <longpeng2@huawei.com>, martinh@xilinx.com
-Subject: Re: [PATCH v2 4/4] vdpa_sim: Implement stop vdpa op
-Message-ID: <20220525074156.rwyesinlzrza72cn@sgarzare-redhat>
-References: <20220524170610.2255608-1-eperezma@redhat.com>
- <20220524170610.2255608-5-eperezma@redhat.com>
+        Wed, 25 May 2022 03:45:07 -0400
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7CBD7356D;
+        Wed, 25 May 2022 00:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=fO+wi
+        SAiyKS1yMdC8uyIoQTXd6l4aGIJhtZIX/WHYhc=; b=l54Uph3PmLUcHlF67q6Gt
+        Z/1GowreLzAJEdIK1HdBM6f5GvLpumqmMGwD062LO4Iv5qPJK9+0QLZPw6Gbd6dG
+        MMZf22VRpOGSTXHUCg9cdSsfvWyzzpqpuDFvhmNkhOJz0iRlABYA0FwAnFrx4vrp
+        4YsOQlDyXn/umhhJsNN1Dw=
+Received: from carlis (unknown [113.98.63.214])
+        by smtp10 (Coremail) with SMTP id DsCowAD3chFo3o1iE0zTEA--.49691S2;
+        Wed, 25 May 2022 15:44:41 +0800 (CST)
+From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llyz108@163.com, Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+Subject: [PATCH] scsi: scsi_transport_fc: convert sysfs snprintf to sysfs_emit
+Date:   Wed, 25 May 2022 07:44:24 +0000
+Message-Id: <20220525074424.108488-1-zhangxuezhi1@coolpad.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220524170610.2255608-5-eperezma@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: DsCowAD3chFo3o1iE0zTEA--.49691S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3GrW8KFyxXF1UuryDtFyUGFg_yoWxWw4kpF
+        W3Ka45CrWvqF1rur1a9Fs0kF1rZF1xJ3y7JayxX34DuwsrtrWDCF1DCFWI9rn5GrWfG34U
+        JF4qkFZ8Cw47AF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnHUDUUUUU=
+X-Originating-IP: [113.98.63.214]
+Sender: llyz108@163.com
+X-CM-SenderInfo: xoo16iiqy6il2tof0z/xtbBOQkMhV-PNhthYQAAsE
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 07:06:10PM +0200, Eugenio Pérez wrote:
->Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
->that backend feature and userspace can effectively stop the device.
->
->This is a must before get virtqueue indexes (base) for live migration,
->since the device could modify them after userland gets them. There are
->individual ways to perform that action for some devices
->(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
->way to perform it for any vhost device (and, in particular, vhost-vdpa).
->
->After the return of ioctl with stop != 0, the device MUST finish any
->pending operations like in flight requests. It must also preserve all
->the necessary state (the virtqueue vring base plus the possible device
->specific states) that is required for restoring in the future. The
->device must not change its configuration after that point.
->
->After the return of ioctl with stop == 0, the device can continue
->processing buffers as long as typical conditions are met (vq is enabled,
->DRIVER_OK status bit is enabled, etc).
->
->In the future, we will provide features similar to
->VHOST_USER_GET_INFLIGHT_FD so the device can save pending operations.
->
->Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
->---
-> drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++++++
-> drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
-> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
-> drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
-> 4 files changed, 28 insertions(+)
->
->diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->index 50d721072beb..0515cf314bed 100644
->--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
->+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->@@ -107,6 +107,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
-> 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
-> 		vhost_iotlb_reset(&vdpasim->iommu[i]);
->
->+	vdpasim->running = true;
-> 	spin_unlock(&vdpasim->iommu_lock);
->
-> 	vdpasim->features = 0;
->@@ -505,6 +506,24 @@ static int vdpasim_reset(struct vdpa_device *vdpa)
-> 	return 0;
-> }
->
->+static int vdpasim_stop(struct vdpa_device *vdpa, bool stop)
->+{
->+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->+	int i;
->+
->+	spin_lock(&vdpasim->lock);
->+	vdpasim->running = !stop;
->+	if (vdpasim->running) {
->+		/* Check for missed buffers */
->+		for (i = 0; i < vdpasim->dev_attr.nvqs; ++i)
->+			vdpasim_kick_vq(vdpa, i);
->+
->+	}
->+	spin_unlock(&vdpasim->lock);
->+
->+	return 0;
->+}
->+
-> static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
-> {
-> 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->@@ -694,6 +713,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
-> 	.get_status             = vdpasim_get_status,
-> 	.set_status             = vdpasim_set_status,
-> 	.reset			= vdpasim_reset,
->+	.stop			= vdpasim_stop,
-> 	.get_config_size        = vdpasim_get_config_size,
-> 	.get_config             = vdpasim_get_config,
-> 	.set_config             = vdpasim_set_config,
->@@ -726,6 +746,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
-> 	.get_status             = vdpasim_get_status,
-> 	.set_status             = vdpasim_set_status,
-> 	.reset			= vdpasim_reset,
->+	.stop			= vdpasim_stop,
-> 	.get_config_size        = vdpasim_get_config_size,
-> 	.get_config             = vdpasim_get_config,
-> 	.set_config             = vdpasim_set_config,
->diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->index 622782e92239..061986f30911 100644
->--- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
->+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->@@ -66,6 +66,7 @@ struct vdpasim {
-> 	u32 generation;
-> 	u64 features;
-> 	u32 groups;
->+	bool running;
-> 	/* spinlock to synchronize iommu table */
-> 	spinlock_t iommu_lock;
-> };
->diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
->index 42d401d43911..bcdb1982c378 100644
->--- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
->+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
->@@ -204,6 +204,9 @@ static void vdpasim_blk_work(struct work_struct *work)
-> 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
-> 		goto out;
->
->+	if (!vdpasim->running)
->+		goto out;
->+
+Fix the following coccicheck warnings:
+drivers/scsi/scsi_transport_fc.c:1962:9-17:
+WARNING: use scnprintf or sprintf
+drivers/scsi/scsi_transport_fc.c:1886:9-17:
+WARNING: use scnprintf or sprintf
+drivers/scsi/scsi_transport_fc.c:1910:9-17:
+WARNING: use scnprintf or sprintf
+drivers/scsi/scsi_transport_fc.c:1995:8-16:
+WARNING: use scnprintf or sprintf
+drivers/scsi/scsi_transport_fc.c:1299:9-17:
+WARNING: use scnprintf or sprintf
+drivers/scsi/scsi_transport_fc.c:1281:8-16:
+WARNING: use scnprintf or sprintf
+drivers/scsi/scsi_transport_fc.c:1213:10-18:
+WARNING: use scnprintf or sprintf
+drivers/scsi/scsi_transport_fc.c:1118:9-17:
+WARNING: use scnprintf or sprintf
+drivers/scsi/scsi_transport_fc.c:1660:9-17:
+WARNING: use scnprintf or sprintf
 
-Not related to this series, but I think in vdpa_sim_blk.c we should 
-implement something similar to what we already do in vdpa_sim_net.c and 
-re-schedule the work after X requests handled, otherwise we risk never 
-stopping if there are always requests to handle.
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+---
+ drivers/scsi/scsi_transport_fc.c | 38 ++++++++++++++++----------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-Also for supporting multiple queues, that could be a problem, but for 
-now we only support one, so there should be no problem.
-
-I have other patches to send for vdpa_sim_blk.c, so if you want I can do 
-that in my series.
-
-Thanks,
-Stefano
-
-> 	for (i = 0; i < VDPASIM_BLK_VQ_NUM; i++) {
-> 		struct vdpasim_virtqueue *vq = &vdpasim->vqs[i];
->
->diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
->index 5125976a4df8..886449e88502 100644
->--- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
->+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
->@@ -154,6 +154,9 @@ static void vdpasim_net_work(struct work_struct *work)
->
-> 	spin_lock(&vdpasim->lock);
->
->+	if (!vdpasim->running)
->+		goto out;
->+
-> 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
-> 		goto out;
->
->-- 
->2.27.0
->
+diff --git a/drivers/scsi/scsi_transport_fc.c b/drivers/scsi/scsi_transport_fc.c
+index a2524106206d..a47f6e0f8597 100644
+--- a/drivers/scsi/scsi_transport_fc.c
++++ b/drivers/scsi/scsi_transport_fc.c
+@@ -1115,7 +1115,7 @@ show_fc_rport_supported_classes (struct device *dev,
+ {
+ 	struct fc_rport *rport = transport_class_to_rport(dev);
+ 	if (rport->supported_classes == FC_COS_UNSPECIFIED)
+-		return snprintf(buf, 20, "unspecified\n");
++		return sysfs_emit(buf, "unspecified\n");
+ 	return get_fc_cos_names(rport->supported_classes, buf);
+ }
+ static FC_DEVICE_ATTR(rport, supported_classes, S_IRUGO,
+@@ -1210,21 +1210,21 @@ show_fc_rport_roles (struct device *dev, struct device_attribute *attr,
+ 					FC_WELLKNOWN_PORTID_MASK) {
+ 		switch (rport->port_id & FC_WELLKNOWN_ROLE_MASK) {
+ 		case FC_FPORT_PORTID:
+-			return snprintf(buf, 30, "Fabric Port\n");
++			return sysfs_emit(buf, "Fabric Port\n");
+ 		case FC_FABCTLR_PORTID:
+-			return snprintf(buf, 30, "Fabric Controller\n");
++			return sysfs_emit(buf, "Fabric Controller\n");
+ 		case FC_DIRSRVR_PORTID:
+-			return snprintf(buf, 30, "Directory Server\n");
++			return sysfs_emit(buf, "Directory Server\n");
+ 		case FC_TIMESRVR_PORTID:
+-			return snprintf(buf, 30, "Time Server\n");
++			return sysfs_emit(buf, "Time Server\n");
+ 		case FC_MGMTSRVR_PORTID:
+-			return snprintf(buf, 30, "Management Server\n");
++			return sysfs_emit(buf, "Management Server\n");
+ 		default:
+-			return snprintf(buf, 30, "Unknown Fabric Entity\n");
++			return sysfs_emit(buf, "Unknown Fabric Entity\n");
+ 		}
+ 	} else {
+ 		if (rport->roles == FC_PORT_ROLE_UNKNOWN)
+-			return snprintf(buf, 20, "unknown\n");
++			return sysfs_emit(buf, "unknown\n");
+ 		return get_fc_port_roles_names(rport->roles, buf);
+ 	}
+ }
+@@ -1278,7 +1278,7 @@ show_fc_rport_port_state(struct device *dev,
+ 	if (!name)
+ 		return -EINVAL;
+ 
+-	return snprintf(buf, 20, "%s\n", name);
++	return sysfs_emit(buf, "%s\n", name);
+ }
+ 
+ static FC_DEVICE_ATTR(rport, port_state, 0444 | 0200,
+@@ -1296,8 +1296,8 @@ show_fc_rport_fast_io_fail_tmo (struct device *dev,
+ 	struct fc_rport *rport = transport_class_to_rport(dev);
+ 
+ 	if (rport->fast_io_fail_tmo == -1)
+-		return snprintf(buf, 5, "off\n");
+-	return snprintf(buf, 20, "%d\n", rport->fast_io_fail_tmo);
++		return sysfs_emit(buf, "off\n");
++	return sysfs_emit(buf, "%d\n", rport->fast_io_fail_tmo);
+ }
+ 
+ static ssize_t
+@@ -1341,7 +1341,7 @@ static ssize_t fc_rport_fpinstat_##name(struct device *cd,		\
+ {									\
+ 	struct fc_rport *rport = transport_class_to_rport(cd);		\
+ 									\
+-	return snprintf(buf, 20, "0x%llx\n", rport->fpin_stats.name);	\
++	return sysfs_emit(buf, "0x%llx\n", rport->fpin_stats.name);	\
+ }									\
+ static FC_DEVICE_ATTR(rport, fpin_##name, 0444, fc_rport_fpinstat_##name, NULL)
+ 
+@@ -1657,7 +1657,7 @@ show_fc_vport_roles (struct device *dev, struct device_attribute *attr,
+ 	struct fc_vport *vport = transport_class_to_vport(dev);
+ 
+ 	if (vport->roles == FC_PORT_ROLE_UNKNOWN)
+-		return snprintf(buf, 20, "unknown\n");
++		return sysfs_emit(buf, "unknown\n");
+ 	return get_fc_port_roles_names(vport->roles, buf);
+ }
+ static FC_DEVICE_ATTR(vport, roles, S_IRUGO, show_fc_vport_roles, NULL);
+@@ -1883,7 +1883,7 @@ show_fc_host_supported_classes (struct device *dev,
+ 	struct Scsi_Host *shost = transport_class_to_shost(dev);
+ 
+ 	if (fc_host_supported_classes(shost) == FC_COS_UNSPECIFIED)
+-		return snprintf(buf, 20, "unspecified\n");
++		return sysfs_emit(buf, "unspecified\n");
+ 
+ 	return get_fc_cos_names(fc_host_supported_classes(shost), buf);
+ }
+@@ -1907,7 +1907,7 @@ show_fc_host_supported_speeds (struct device *dev,
+ 	struct Scsi_Host *shost = transport_class_to_shost(dev);
+ 
+ 	if (fc_host_supported_speeds(shost) == FC_PORTSPEED_UNKNOWN)
+-		return snprintf(buf, 20, "unknown\n");
++		return sysfs_emit(buf, "unknown\n");
+ 
+ 	return get_fc_port_speed_names(fc_host_supported_speeds(shost), buf);
+ }
+@@ -1959,7 +1959,7 @@ show_fc_host_speed (struct device *dev,
+ 		i->f->get_host_speed(shost);
+ 
+ 	if (fc_host_speed(shost) == FC_PORTSPEED_UNKNOWN)
+-		return snprintf(buf, 20, "unknown\n");
++		return sysfs_emit(buf, "unknown\n");
+ 
+ 	return get_fc_port_speed_names(fc_host_speed(shost), buf);
+ }
+@@ -1992,7 +1992,7 @@ show_fc_private_host_tgtid_bind_type(struct device *dev,
+ 	name = get_fc_tgtid_bind_type_name(fc_host_tgtid_bind_type(shost));
+ 	if (!name)
+ 		return -EINVAL;
+-	return snprintf(buf, FC_BINDTYPE_MAX_NAMELEN, "%s\n", name);
++	return sysfs_emit(buf, "%s\n", name);
+ }
+ 
+ #define get_list_head_entry(pos, head, member) 		\
+@@ -2101,7 +2101,7 @@ fc_stat_show(const struct device *dev, char *buf, unsigned long offset)
+ 	if (i->f->get_fc_host_stats) {
+ 		stats = (i->f->get_fc_host_stats)(shost);
+ 		if (stats)
+-			ret = snprintf(buf, 20, "0x%llx\n",
++			ret = sysfs_emit(buf, "0x%llx\n",
+ 			      (unsigned long long)*(u64 *)(((u8 *) stats) + offset));
+ 	}
+ 	return ret;
+@@ -2160,7 +2160,7 @@ static ssize_t fc_host_fpinstat_##name(struct device *cd,		\
+ 	struct Scsi_Host *shost = transport_class_to_shost(cd);		\
+ 	struct fc_host_attrs *fc_host = shost_to_fc_host(shost);	\
+ 									\
+-	return snprintf(buf, 20, "0x%llx\n", fc_host->fpin_stats.name);	\
++	return sysfs_emit(buf, "0x%llx\n", fc_host->fpin_stats.name);	\
+ }									\
+ static FC_DEVICE_ATTR(host, fpin_##name, 0444, fc_host_fpinstat_##name, NULL)
+ 
+-- 
+2.25.1
 

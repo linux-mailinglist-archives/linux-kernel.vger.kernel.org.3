@@ -2,163 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C295334C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 03:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09855334CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 03:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242442AbiEYBfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 21:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S243294AbiEYBku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 21:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240191AbiEYBe6 (ORCPT
+        with ESMTP id S243037AbiEYBks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 21:34:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C6C53B55;
-        Tue, 24 May 2022 18:34:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6516160B67;
-        Wed, 25 May 2022 01:34:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE334C34100;
-        Wed, 25 May 2022 01:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653442496;
-        bh=W8SLt4tLXE/qgKUWcBGimGv5PBPTXOM6nyfdhFEW/Qw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=vPgk/cToQ4pzVDT1K3hmfF77Kn7lCCBLVhOvLwozICGzIlexpdMuEoHuTDpALX2fu
-         r8IzmrjSGPLTUG9dCrnnip7+28AA874W1nEbnp9xSEMbKR7IWgiZiUmD1xsgOPaE9h
-         /BJCdwhaF6MzMBqBGO62YFE4Wpope+VVYVCPINMMJjdGhc65bd7L6ufjIH8YrEUB9a
-         era3G+gJx6y8s6TZxwFaBkHOLhetd0A5/XJygTkGTPKi+WjgpWAYK7e9BJaYUPJnpL
-         lw2sfVC+9tD3e/5opgQtRm7g17mYwvadJ0k+FeWI5SHF8oON5XwLJTIFE4zy9KAeRE
-         xQGPbU4WEPhIQ==
-Message-ID: <138141eb-6bb9-88bc-cdb0-85f6df8b18cb@kernel.org>
-Date:   Wed, 25 May 2022 09:34:52 +0800
+        Tue, 24 May 2022 21:40:48 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DB37220E
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 18:40:40 -0700 (PDT)
+X-UUID: e56487e752064495a040109dce418dbb-20220525
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:51c6442a-f7bb-4eaa-be1b-5cd552073914,OB:10,L
+        OB:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:50
+X-CID-INFO: VERSION:1.1.5,REQID:51c6442a-f7bb-4eaa-be1b-5cd552073914,OB:10,LOB
+        :0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:50
+X-CID-META: VersionHash:2a19b09,CLOUDID:d2c31ab8-3c45-407b-8f66-25095432a27a,C
+        OID:4f79718f65cf,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: e56487e752064495a040109dce418dbb-20220525
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2115371326; Wed, 25 May 2022 09:40:32 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 25 May 2022 09:40:32 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 25 May 2022 09:40:32 +0800
+Message-ID: <35d23d9ffd1d804fc3253d192f7de3eaebf3fcff.camel@mediatek.com>
+Subject: Re: [PATCH v7, 2/4] drm/mediatek: Separate poweron/poweroff from
+ enable/disable and define new funcs
+From:   CK Hu <ck.hu@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>
+CC:     <jitao.shi@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <rex-bc.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 25 May 2022 09:40:32 +0800
+In-Reply-To: <1653012007-11854-3-git-send-email-xinlei.lee@mediatek.com>
+References: <1653012007-11854-1-git-send-email-xinlei.lee@mediatek.com>
+         <1653012007-11854-3-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH] scsi: support packing multi-segment in UNMAP command
-Content-Language: en-US
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220521113259.3953757-1-chao@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220521113259.3953757-1-chao@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ping,
+Hi, Xinlei:
 
-Any comments?
-
-Thanks,
-
-On 2022/5/21 19:32, Chao Yu wrote:
-> As SPEC describes that it can support unmapping one or more LBA range
-> in single UNMAP command, however, previously we only pack one LBA
-> range in UNMAP command by default no matter device gives the block
-> limits that says it can support in-batch UNMAP.
+On Fri, 2022-05-20 at 10:00 +0800, xinlei.lee@mediatek.com wrote:
+> From: Jitao Shi <jitao.shi@mediatek.com>
 > 
-> This patch tries to set max_discard_segments config according to block
-> limits of device, and supports in-batch UNMAP.
+> In order to match the changes of "Use the drm_panel_bridge API",
+> the poweron/poweroff of dsi is extracted from enable/disable and
+> defined as new funcs (atomic_pre_enable/atomic_post_disable).
 > 
-> Signed-off-by: Chao Yu <chao@kernel.org>
+> Since dsi_poweron is moved from dsi_enable to pre_enable function, in
+> order to avoid poweron failure, the operation of dsi register fails
+> to
+> cause bus hang. Therefore, the protection mechanism is added to the
+> dsi_enable function.
+
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+
+> 
+> Fixes: 2dd8075d2185 ("drm/mediatek: mtk_dsi: Use the drm_panel_bridge
+> API")
+> 
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 > ---
->   drivers/scsi/sd.c | 30 +++++++++++++++++++-----------
->   drivers/scsi/sd.h |  1 +
->   2 files changed, 20 insertions(+), 11 deletions(-)
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 53 +++++++++++++++++++---------
+> --
+>  1 file changed, 34 insertions(+), 19 deletions(-)
 > 
-> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-> index dc6e55761fd1..be070457c78d 100644
-> --- a/drivers/scsi/sd.c
-> +++ b/drivers/scsi/sd.c
-> @@ -790,6 +790,7 @@ static void sd_config_discard(struct scsi_disk *sdkp, unsigned int mode)
->   	q->limits.discard_granularity =
->   		max(sdkp->physical_block_size,
->   		    sdkp->unmap_granularity * logical_block_size);
-> +	blk_queue_max_discard_segments(q, sdkp->max_block_desc_count);
->   	sdkp->provisioning_mode = mode;
->   
->   	switch (mode) {
-> @@ -837,10 +838,10 @@ static blk_status_t sd_setup_unmap_cmnd(struct scsi_cmnd *cmd)
->   {
->   	struct scsi_device *sdp = cmd->device;
->   	struct request *rq = scsi_cmd_to_rq(cmd);
-> +	struct bio *bio;
->   	struct scsi_disk *sdkp = scsi_disk(rq->q->disk);
-> -	u64 lba = sectors_to_logical(sdp, blk_rq_pos(rq));
-> -	u32 nr_blocks = sectors_to_logical(sdp, blk_rq_sectors(rq));
-> -	unsigned int data_len = 24;
-> +	unsigned short segments = blk_rq_nr_discard_segments(rq);
-> +	unsigned int data_len = 8 + 16 * segments, i = 0;
->   	char *buf;
->   
->   	rq->special_vec.bv_page = mempool_alloc(sd_page_pool, GFP_ATOMIC);
-> @@ -853,13 +854,20 @@ static blk_status_t sd_setup_unmap_cmnd(struct scsi_cmnd *cmd)
->   
->   	cmd->cmd_len = 10;
->   	cmd->cmnd[0] = UNMAP;
-> -	cmd->cmnd[8] = 24;
-> +	cmd->cmnd[8] = data_len;
->   
->   	buf = bvec_virt(&rq->special_vec);
-> -	put_unaligned_be16(6 + 16, &buf[0]);
-> -	put_unaligned_be16(16, &buf[2]);
-> -	put_unaligned_be64(lba, &buf[8]);
-> -	put_unaligned_be32(nr_blocks, &buf[16]);
-> +	put_unaligned_be16(6 + 16 * segments, &buf[0]);
-> +	put_unaligned_be16(16 * segments, &buf[2]);
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index f880136cec09..d9a6b928dba8 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -691,16 +691,6 @@ static void mtk_dsi_poweroff(struct mtk_dsi
+> *dsi)
+>  	if (--dsi->refcount != 0)
+>  		return;
+>  
+> -	/*
+> -	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+> -	 * mtk_dsi_stop() should be called after
+> mtk_drm_crtc_atomic_disable(),
+> -	 * which needs irq for vblank, and mtk_dsi_stop() will disable
+> irq.
+> -	 * mtk_dsi_start() needs to be called in
+> mtk_output_dsi_enable(),
+> -	 * after dsi is fully set.
+> -	 */
+> -	mtk_dsi_stop(dsi);
+> -
+> -	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+>  	mtk_dsi_reset_engine(dsi);
+>  	mtk_dsi_lane0_ulp_mode_enter(dsi);
+>  	mtk_dsi_clk_ulp_mode_enter(dsi);
+> @@ -715,17 +705,9 @@ static void mtk_dsi_poweroff(struct mtk_dsi
+> *dsi)
+>  
+>  static void mtk_output_dsi_enable(struct mtk_dsi *dsi)
+>  {
+> -	int ret;
+> -
+>  	if (dsi->enabled)
+>  		return;
+>  
+> -	ret = mtk_dsi_poweron(dsi);
+> -	if (ret < 0) {
+> -		DRM_ERROR("failed to power on dsi\n");
+> -		return;
+> -	}
+> -
+>  	mtk_dsi_set_mode(dsi);
+>  	mtk_dsi_clk_hs_mode(dsi, 1);
+>  
+> @@ -739,7 +721,16 @@ static void mtk_output_dsi_disable(struct
+> mtk_dsi *dsi)
+>  	if (!dsi->enabled)
+>  		return;
+>  
+> -	mtk_dsi_poweroff(dsi);
+> +	/*
+> +	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+> +	 * mtk_dsi_stop() should be called after
+> mtk_drm_crtc_atomic_disable(),
+> +	 * which needs irq for vblank, and mtk_dsi_stop() will disable
+> irq.
+> +	 * mtk_dsi_start() needs to be called in
+> mtk_output_dsi_enable(),
+> +	 * after dsi is fully set.
+> +	 */
+> +	mtk_dsi_stop(dsi);
 > +
-> +	__rq_for_each_bio(bio, rq) {
-> +		u64 lba = sectors_to_logical(sdp, bio->bi_iter.bi_sector);
-> +		u32 nr_blocks = sectors_to_logical(sdp, bio_sectors(bio));
+> +	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+>  
+>  	dsi->enabled = false;
+>  }
+> @@ -776,13 +767,37 @@ static void mtk_dsi_bridge_atomic_enable(struct
+> drm_bridge *bridge,
+>  {
+>  	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+>  
+> +	if (dsi->refcount == 0)
+> +		return;
 > +
-> +		put_unaligned_be64(lba, &buf[8 + 16 * i]);
-> +		put_unaligned_be32(nr_blocks, &buf[8 + 16 * i + 8]);
-> +		i++;
-> +	}
->   
->   	cmd->allowed = sdkp->max_retries;
->   	cmd->transfersize = data_len;
-> @@ -2859,7 +2867,7 @@ static void sd_read_block_limits(struct scsi_disk *sdkp)
->   	sdkp->opt_xfer_blocks = get_unaligned_be32(&buffer[12]);
->   
->   	if (buffer[3] == 0x3c) {
-> -		unsigned int lba_count, desc_count;
-> +		unsigned int lba_count;
->   
->   		sdkp->max_ws_blocks = (u32)get_unaligned_be64(&buffer[36]);
->   
-> @@ -2867,9 +2875,9 @@ static void sd_read_block_limits(struct scsi_disk *sdkp)
->   			goto out;
->   
->   		lba_count = get_unaligned_be32(&buffer[20]);
-> -		desc_count = get_unaligned_be32(&buffer[24]);
-> +		sdkp->max_block_desc_count = get_unaligned_be32(&buffer[24]);
->   
-> -		if (lba_count && desc_count)
-> +		if (lba_count && sdkp->max_block_desc_count)
->   			sdkp->max_unmap_blocks = lba_count;
->   
->   		sdkp->unmap_granularity = get_unaligned_be32(&buffer[28]);
-> diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
-> index 0a33a4b68ffb..e396bcaf76ca 100644
-> --- a/drivers/scsi/sd.h
-> +++ b/drivers/scsi/sd.h
-> @@ -99,6 +99,7 @@ struct scsi_disk {
->   	u32		opt_xfer_blocks;
->   	u32		max_ws_blocks;
->   	u32		max_unmap_blocks;
-> +	u32		max_block_desc_count;
->   	u32		unmap_granularity;
->   	u32		unmap_alignment;
->   	u32		index;
+>  	mtk_output_dsi_enable(dsi);
+>  }
+>  
+> +static void mtk_dsi_bridge_atomic_pre_enable(struct drm_bridge
+> *bridge,
+> +					     struct drm_bridge_state
+> *old_bridge_state)
+> +{
+> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+> +	int ret;
+> +
+> +	ret = mtk_dsi_poweron(dsi);
+> +	if (ret < 0)
+> +		DRM_ERROR("failed to power on dsi\n");
+> +}
+> +
+> +static void mtk_dsi_bridge_atomic_post_disable(struct drm_bridge
+> *bridge,
+> +					       struct drm_bridge_state
+> *old_bridge_state)
+> +{
+> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+> +
+> +	mtk_dsi_poweroff(dsi);
+> +}
+> +
+>  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
+>  	.attach = mtk_dsi_bridge_attach,
+>  	.atomic_disable = mtk_dsi_bridge_atomic_disable,
+>  	.atomic_enable = mtk_dsi_bridge_atomic_enable,
+> +	.atomic_pre_enable = mtk_dsi_bridge_atomic_pre_enable,
+> +	.atomic_post_disable = mtk_dsi_bridge_atomic_post_disable,
+>  	.mode_set = mtk_dsi_bridge_mode_set,
+>  };
+>  
+

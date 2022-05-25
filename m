@@ -2,138 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC10C533584
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB113533587
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243722AbiEYCyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 22:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S243734AbiEYCyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 22:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242338AbiEYCyK (ORCPT
+        with ESMTP id S241637AbiEYCyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 22:54:10 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371BE13FBC
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:54:07 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 24P2r44J094256
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Wed, 25 May 2022 10:53:04 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Wed, 25 May 2022 10:53:03 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>
-Subject: [PATCH] mm: fix racing of vb->va when kasan enabled
-Date:   Wed, 25 May 2022 10:52:44 +0800
-Message-ID: <1653447164-15017-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Tue, 24 May 2022 22:54:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9284613FBC
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653447273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L6n7+yQgn+nVFUYyJzAWXpzjroQrckSxh/1Ms4Uuyq4=;
+        b=QogKXykY8GRczE+uIg9F2Dpya0T9W5csFPscnI+jfJfxi9Mpht4VM1lGesHeD9SItio9jh
+        YJjUZ9A4fxt5aLwyaI85ddIpb7SEM8vXKxDOO7TKKTOIppNnoRdEQ1Ll0Bycj/nPcSqB3y
+        7pA2+gVnV33hG2+IC642QdHU1eRPLBo=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-362-fKFg8ftKMUC5DLvSFe7WVA-1; Tue, 24 May 2022 22:54:32 -0400
+X-MC-Unique: fKFg8ftKMUC5DLvSFe7WVA-1
+Received: by mail-lf1-f69.google.com with SMTP id u13-20020a05651206cd00b00477c7503103so8392076lff.15
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:54:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=L6n7+yQgn+nVFUYyJzAWXpzjroQrckSxh/1Ms4Uuyq4=;
+        b=Psr76bhbw/8esUn8S4/XWxldvaM5mEOibHC4dfMyPR6dPzkaN4h0A6JzYNlUBOedjK
+         kg/S6SrOswVR9XQXW1MU4+2Gj8djWR1rvgJImNYv3Oq8kba59XxZsLMraNVWuzRsufpn
+         lW7vDZBy6/C34KdwertH+XsSDpWxP27pP63Fng5hAp2xE99+wXp5uuGjZEU9uuU3bKer
+         QjnKZLndKroFfIS84geokBM1BGHhFI2yhd680pBE4hsdPZOVw3OcQOfOKBYbEUt3+YZU
+         SSFphsfYs9GmBKMQhrAyQLSdSh0atfrWVDaM1L98Dcii4JaAc5CiVGRlCCoE+QIljivW
+         oCLw==
+X-Gm-Message-State: AOAM530rqiayk132wSgo20zXC5Ezv3cielDDtz9xwP3FzJjWxPQiBqDl
+        nx26UJNsHWljpLo+k0efV9kzcjVZfXUpvHuX9RWDY/MqcGuw40H1B+r+PpxPQRgLmF2wEnCjITl
+        sDN1mIP+3WqJXckPfC3QiIMg+/At5B5560/rDSzT3
+X-Received: by 2002:a2e:1651:0:b0:253:d7ce:22df with SMTP id 17-20020a2e1651000000b00253d7ce22dfmr16348502ljw.315.1653447270769;
+        Tue, 24 May 2022 19:54:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwIeIyQFHdGFnE6GT5C+d47WqLD+jsGOmC4iPh7DCf0Fyx5p+BGfhhylBc3/GXzoRqdQbk+uILqUmEN70ocZiY=
+X-Received: by 2002:a2e:1651:0:b0:253:d7ce:22df with SMTP id
+ 17-20020a2e1651000000b00253d7ce22dfmr16348477ljw.315.1653447270564; Tue, 24
+ May 2022 19:54:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 24P2r44J094256
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220524170610.2255608-1-eperezma@redhat.com> <20220524170610.2255608-5-eperezma@redhat.com>
+In-Reply-To: <20220524170610.2255608-5-eperezma@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 25 May 2022 10:54:19 +0800
+Message-ID: <CACGkMEvCzxy+1BX2FMs5CvsvVvd9oedtgXmpiyAZWZECPypRig@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] vdpa_sim: Implement stop vdpa op
+To:     =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Parav Pandit <parav@nvidia.com>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
+        "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        habetsm.xilinx@gmail.com, Eli Cohen <elic@nvidia.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Cindy Lu <lulu@redhat.com>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        ecree.xilinx@gmail.com, "Uminski, Piotr" <Piotr.Uminski@intel.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Wed, May 25, 2022 at 1:06 AM Eugenio P=C3=A9rez <eperezma@redhat.com> wr=
+ote:
+>
+> Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
+> that backend feature and userspace can effectively stop the device.
+>
+> This is a must before get virtqueue indexes (base) for live migration,
+> since the device could modify them after userland gets them. There are
+> individual ways to perform that action for some devices
+> (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
+> way to perform it for any vhost device (and, in particular, vhost-vdpa).
+>
+> After the return of ioctl with stop !=3D 0, the device MUST finish any
+> pending operations like in flight requests. It must also preserve all
+> the necessary state (the virtqueue vring base plus the possible device
+> specific states) that is required for restoring in the future. The
+> device must not change its configuration after that point.
+>
+> After the return of ioctl with stop =3D=3D 0, the device can continue
+> processing buffers as long as typical conditions are met (vq is enabled,
+> DRIVER_OK status bit is enabled, etc).
+>
+> In the future, we will provide features similar to
+> VHOST_USER_GET_INFLIGHT_FD so the device can save pending operations.
+>
+> Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> ---
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++++++
+>  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
+>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
+>  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
+>  4 files changed, 28 insertions(+)
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdp=
+a_sim.c
+> index 50d721072beb..0515cf314bed 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -107,6 +107,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
+>         for (i =3D 0; i < vdpasim->dev_attr.nas; i++)
+>                 vhost_iotlb_reset(&vdpasim->iommu[i]);
+>
+> +       vdpasim->running =3D true;
+>         spin_unlock(&vdpasim->iommu_lock);
+>
+>         vdpasim->features =3D 0;
+> @@ -505,6 +506,24 @@ static int vdpasim_reset(struct vdpa_device *vdpa)
+>         return 0;
+>  }
+>
+> +static int vdpasim_stop(struct vdpa_device *vdpa, bool stop)
+> +{
+> +       struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
+> +       int i;
+> +
+> +       spin_lock(&vdpasim->lock);
+> +       vdpasim->running =3D !stop;
+> +       if (vdpasim->running) {
+> +               /* Check for missed buffers */
+> +               for (i =3D 0; i < vdpasim->dev_attr.nvqs; ++i)
+> +                       vdpasim_kick_vq(vdpa, i);
+> +
+> +       }
+> +       spin_unlock(&vdpasim->lock);
+> +
+> +       return 0;
+> +}
+> +
+>  static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
+>  {
+>         struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
+> @@ -694,6 +713,7 @@ static const struct vdpa_config_ops vdpasim_config_op=
+s =3D {
+>         .get_status             =3D vdpasim_get_status,
+>         .set_status             =3D vdpasim_set_status,
+>         .reset                  =3D vdpasim_reset,
+> +       .stop                   =3D vdpasim_stop,
+>         .get_config_size        =3D vdpasim_get_config_size,
+>         .get_config             =3D vdpasim_get_config,
+>         .set_config             =3D vdpasim_set_config,
+> @@ -726,6 +746,7 @@ static const struct vdpa_config_ops vdpasim_batch_con=
+fig_ops =3D {
+>         .get_status             =3D vdpasim_get_status,
+>         .set_status             =3D vdpasim_set_status,
+>         .reset                  =3D vdpasim_reset,
+> +       .stop                   =3D vdpasim_stop,
+>         .get_config_size        =3D vdpasim_get_config_size,
+>         .get_config             =3D vdpasim_get_config,
+>         .set_config             =3D vdpasim_set_config,
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdp=
+a_sim.h
+> index 622782e92239..061986f30911 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> @@ -66,6 +66,7 @@ struct vdpasim {
+>         u32 generation;
+>         u64 features;
+>         u32 groups;
+> +       bool running;
+>         /* spinlock to synchronize iommu table */
+>         spinlock_t iommu_lock;
+>  };
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim=
+/vdpa_sim_blk.c
+> index 42d401d43911..bcdb1982c378 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> @@ -204,6 +204,9 @@ static void vdpasim_blk_work(struct work_struct *work=
+)
+>         if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
+>                 goto out;
+>
+> +       if (!vdpasim->running)
+> +               goto out;
+> +
+>         for (i =3D 0; i < VDPASIM_BLK_VQ_NUM; i++) {
+>                 struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[i];
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim=
+/vdpa_sim_net.c
+> index 5125976a4df8..886449e88502 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> @@ -154,6 +154,9 @@ static void vdpasim_net_work(struct work_struct *work=
+)
+>
+>         spin_lock(&vdpasim->lock);
+>
+> +       if (!vdpasim->running)
+> +               goto out;
+> +
 
-Accessing to vb->va could be deemed as use after free when KASAN is
-enabled like bellowing. Fix it by expanding the mutex's range.
+Do we need to check vdpasim->running in vdpasim_kick_vq()?
 
-[   20.232335] ==================================================================
-[   20.232365] BUG: KASAN: use-after-free in _vm_unmap_aliases+0x164/0x364
-[   20.232376] Read of size 8 at addr ffffff80d84af780 by task modprobe/300
-[   20.232380]
-[   20.232395] CPU: 5 PID: 300 Comm: modprobe Tainted: G S       C O      5.4.161-android12-9-03238-gd43329d103de-ab20547 #1
-[   20.232401] Hardware name: Spreadtrum UMS512-1H10 SoC (DT)
-[   20.232407] Call trace:
-[   20.232419]  dump_backtrace+0x0/0x2b4
-[   20.232428]  show_stack+0x24/0x30
-[   20.232443]  dump_stack+0x15c/0x1f4
-[   20.232455]  print_address_description+0x88/0x568
-[   20.232465]  __kasan_report+0x1b8/0x1dc
-[   20.232474]  kasan_report+0x10/0x18
-[   20.232486]  __asan_report_load8_noabort+0x1c/0x24
-[   20.232495]  _vm_unmap_aliases+0x164/0x364
-[   20.232505]  vm_unmap_aliases+0x20/0x28
-[   20.232516]  change_memory_common+0x2c4/0x3ec
-[   20.232524]  set_memory_ro+0x30/0x3c
-[   20.232539]  module_enable_ro+0x144/0x3f0
-[   20.232547]  load_module+0x54c0/0x8248
-[   20.232555]  __se_sys_finit_module+0x174/0x1b0
-[   20.232564]  __arm64_sys_finit_module+0x78/0x88
-[   20.232573]  el0_svc_common+0x19c/0x354
-[   20.232581]  el0_svc_handler+0x48/0x54
-[   20.232591]  el0_svc+0x8/0xc
-[   20.232595]
-[   20.232602] Allocated by task 297:
-[   20.232615]  __kasan_kmalloc+0x130/0x1f8
-[   20.232625]  kasan_slab_alloc+0x14/0x1c
-[   20.232638]  kmem_cache_alloc+0x1dc/0x394
-[   20.232648]  alloc_vmap_area+0xb4/0x1630
-[   20.232657]  vm_map_ram+0x3ac/0x768
-[   20.232671]  z_erofs_decompress_generic+0x2f0/0x844
-[   20.232681]  z_erofs_decompress+0xa8/0x594
-[   20.232692]  z_erofs_decompress_pcluster+0xeb4/0x1458
-[   20.232702]  z_erofs_vle_unzip_wq+0xe4/0x140
-[   20.232715]  process_one_work+0x5c0/0x10ac
-[   20.232724]  worker_thread+0x888/0x1128
-[   20.232733]  kthread+0x290/0x304
-[   20.232744]  ret_from_fork+0x10/0x18
-[   20.232747]
-[   20.232752] Freed by task 51:
-[   20.232762]  __kasan_slab_free+0x1a0/0x270
-[   20.232772]  kasan_slab_free+0x10/0x1c
-[   20.232781]  slab_free_freelist_hook+0xd0/0x1ac
-[   20.232792]  kmem_cache_free+0x110/0x368
-[   20.232803]  __purge_vmap_area_lazy+0x524/0x13e4
-[   20.232813]  _vm_unmap_aliases+0x290/0x364
-[   20.232822]  __vunmap+0x45c/0x5c4
-[   20.232831]  vfree+0x74/0x16c
-[   20.232841]  module_memfree+0x44/0x7c
-[   20.232850]  do_free_init+0x5c/0xac
-[   20.232860]  process_one_work+0x5c0/0x10ac
-[   20.232869]  worker_thread+0xb3c/0x1128
-[   20.232877]  kthread+0x290/0x304
-[   20.232887]  ret_from_fork+0x10/0x18
+Thanks
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- mm/vmalloc.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index d2a00ad..028d65a 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -2081,7 +2081,7 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
- 		return;
- 
- 	might_sleep();
--
-+	mutex_lock(&vmap_purge_lock);
- 	for_each_possible_cpu(cpu) {
- 		struct vmap_block_queue *vbq = &per_cpu(vmap_block_queue, cpu);
- 		struct vmap_block *vb;
-@@ -2106,7 +2106,6 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
- 		rcu_read_unlock();
- 	}
- 
--	mutex_lock(&vmap_purge_lock);
- 	purge_fragmented_blocks_allcpus();
- 	if (!__purge_vmap_area_lazy(start, end) && flush)
- 		flush_tlb_kernel_range(start, end);
--- 
-1.9.1
+>         if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
+>                 goto out;
+>
+> --
+> 2.27.0
+>
 

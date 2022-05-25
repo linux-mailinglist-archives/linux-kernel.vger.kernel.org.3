@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B207C533567
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBDE533569
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243631AbiEYCjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 22:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S243658AbiEYCkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 22:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbiEYCji (ORCPT
+        with ESMTP id S230292AbiEYCkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 22:39:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96CB26F4AF
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653446375;
+        Tue, 24 May 2022 22:40:13 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F066F4AF;
+        Tue, 24 May 2022 19:40:12 -0700 (PDT)
+Date:   Tue, 24 May 2022 19:40:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653446411;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=c29JYqgKyszX3zlDGk0SPP0l42Lw3lpdi4CkManELV8=;
-        b=b26Meo55WJ3uDd8OJTNIZ2iRl+rj6NHaC11PyWQKixe5So++Bci5NBhbV90WVh4EENGLLY
-        t+3nVkCNVJRcaArZBCPXtD3Mwend/p5LcQa79XnVfYrGl82B4Im0/4z3J5kgYXi7KmTu2Z
-        6RRaIY/wlHYa84p8nhCIv4c2APzfNGo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-YS2pbs7MPDKH_uUoHIaD4A-1; Tue, 24 May 2022 22:39:32 -0400
-X-MC-Unique: YS2pbs7MPDKH_uUoHIaD4A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CC3771E7DCD0;
-        Wed, 25 May 2022 02:39:31 +0000 (UTC)
-Received: from localhost (ovpn-13-156.pek2.redhat.com [10.72.13.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9DF9B2166B29;
-        Wed, 25 May 2022 02:39:30 +0000 (UTC)
-Date:   Wed, 25 May 2022 10:39:26 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>,
-        akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dave Young <dyoung@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        David Vernet <void@manifault.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH 0/2] Expose kallsyms data in vmcoreinfo note
-Message-ID: <Yo2W3mH/5uuAJyw5@MiWiFi-R3L-srv>
-References: <20220517000508.777145-1-stephen.s.brennan@oracle.com>
- <YoTIMEPAxLF9t2eo@MiWiFi-R3L-srv>
- <878rqs163s.fsf@stepbren-lnx.us.oracle.com>
+        bh=KAxO13FUFJl5HNca6Xvp5Gx3Mgidd0SxL8fHIYPeSTs=;
+        b=mSuHENlGfnxO3FTaUSRUpf/IIEViYyJ4mGmgEBelAUTW+xU6c6mZ7AXfEM6XNqh69TPTWG
+        OpBdtK4UK8Q7NF6A7JieL458LvOR+8Mu97azYnXm3cv3lmn3v2aWVElLkktoeZiWBWjYvv
+        D5D98KSYGsIN2RS4Ak1JcE6tlSKmSgM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        longman@redhat.com
+Subject: Re: [PATCH v4 10/11] mm: lru: add VM_BUG_ON_FOLIO to lru maintenance
+ function
+Message-ID: <Yo2XBdLxcJ/J6KJp@carbon>
+References: <20220524060551.80037-1-songmuchun@bytedance.com>
+ <20220524060551.80037-11-songmuchun@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <878rqs163s.fsf@stepbren-lnx.us.oracle.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220524060551.80037-11-songmuchun@bytedance.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/23/22 at 11:00am, Stephen Brennan wrote:
-> Baoquan He <bhe@redhat.com> writes:
-> > On 05/16/22 at 05:05pm, Stephen Brennan wrote:
-> >> The kernel can be configured to contain a lot of introspection or
-> >> debugging information built-in, such as ORC for unwinding stack traces,
-> >> BTF for type information, and of course kallsyms. Debuggers could use
-> >> this information to navigate a core dump or live system, but they need
-> >> to be able to find it.
-> >> 
-> >> This patch series adds the necessary symbols into vmcoreinfo, which
-> >> would allow a debugger to find and interpret the kallsyms table. Using
-> >> the kallsyms data, the debugger can then lookup any symbol, allowing it
-> >> to find ORC, BTF, or any other useful data.
-> >> 
-> >> This would allow a live kernel, or core dump, to be debugged without
-> >> any DWARF debuginfo. This is useful for many cases: the debuginfo may
-> >> not have been generated, or you may not want to deploy the large files
-> >> everywhere you need them.
-> >> 
-> >> I've demonstrated a proof of concept for this at LSF/MM+BPF during a
-> >> lighting talk. Using a work-in-progress branch of the drgn debugger, and
-> >> an extended set of BTF generated by a patched version of dwarves, I've
-> >> been able to open a core dump without any DWARF info and do basic tasks
-> >> such as enumerating slab caches, block devices, tasks, and doing
-> >> backtraces. I hope this series can be a first step toward a new
-> >> possibility of "DWARFless debugging".
-> >
-> > Thanks. Seems no reason to reject, even though I haven't tried drgn.
-> > And hope it has no security issue, e.g info leakage, at least I don't
-> > see it has. So,
-> >
-> > Acked-by: Baoquan He <bhe@redhat.com>
+On Tue, May 24, 2022 at 02:05:50PM +0800, Muchun Song wrote:
+> We need to make sure that the page is deleted from or added to the
+> correct lruvec list. So add a VM_BUG_ON_FOLIO() to catch invalid
+> users.
 > 
-> Thanks Baoquan! I don't believe we have any worries regarding security,
-> since the kallsyms data itself is already available to root via
-> /proc/kallsyms, and core dumps should already be treated as highly
-> sensitive data by anybody handling them.
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>  include/linux/mm_inline.h | 6 ++++++
+>  mm/vmscan.c               | 1 -
+>  2 files changed, 6 insertions(+), 1 deletion(-)
 > 
-> Do you know which tree this patch will go through?
+> diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
+> index ac32125745ab..30d2393da613 100644
+> --- a/include/linux/mm_inline.h
+> +++ b/include/linux/mm_inline.h
+> @@ -97,6 +97,8 @@ void lruvec_add_folio(struct lruvec *lruvec, struct folio *folio)
+>  {
+>  	enum lru_list lru = folio_lru_list(folio);
+>  
+> +	VM_BUG_ON_FOLIO(!folio_matches_lruvec(folio, lruvec), folio);
+> +
+>  	update_lru_size(lruvec, lru, folio_zonenum(folio),
+>  			folio_nr_pages(folio));
+>  	if (lru != LRU_UNEVICTABLE)
+> @@ -114,6 +116,8 @@ void lruvec_add_folio_tail(struct lruvec *lruvec, struct folio *folio)
+>  {
+>  	enum lru_list lru = folio_lru_list(folio);
+>  
+> +	VM_BUG_ON_FOLIO(!folio_matches_lruvec(folio, lruvec), folio);
+> +
+>  	update_lru_size(lruvec, lru, folio_zonenum(folio),
+>  			folio_nr_pages(folio));
+>  	/* This is not expected to be used on LRU_UNEVICTABLE */
+> @@ -131,6 +135,8 @@ void lruvec_del_folio(struct lruvec *lruvec, struct folio *folio)
+>  {
+>  	enum lru_list lru = folio_lru_list(folio);
+>  
+> +	VM_BUG_ON_FOLIO(!folio_matches_lruvec(folio, lruvec), folio);
+> +
+>  	if (lru != LRU_UNEVICTABLE)
+>  		list_del(&folio->lru);
+>  	update_lru_size(lruvec, lru, folio_zonenum(folio),
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 761d5e0dd78d..6c9e2eafc8f9 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2281,7 +2281,6 @@ static unsigned int move_pages_to_lru(struct list_head *list)
+>  			continue;
+>  		}
+>  
+> -		VM_BUG_ON_PAGE(!folio_matches_lruvec(folio, lruvec), page);
 
-I would like to ask Andrew to help check and pick this if no concern.
+The commit log describes well why we need to add new BUG_ON's. Please, add
+something on why this is removed.
 
-Thanks
-Baoquan
 
+Thanks!

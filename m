@@ -2,90 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0CE533DF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0313B533E00
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235637AbiEYNf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S236650AbiEYNiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244416AbiEYNfR (ORCPT
+        with ESMTP id S229569AbiEYNin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:35:17 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B467360B94;
-        Wed, 25 May 2022 06:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1653485716; x=1685021716;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jkBj8ysM/XsQcxMgdKHTqDMJDz4jqO5aSUJT7CWKlFg=;
-  b=d2Wexmgd2XtDcWpCtFBnRoT5G5K6hA2nzCva7aSqwXjsw+0x4toDC1mW
-   EvRvE6/h6xQx/zyfukTHOp2KW8LragmnjZvyIOaN7il93bKSWtz0OU6uJ
-   RC1cPRLcXQhoVT21PQ6LSSgCRtbUtwADfI7V3wZI7g1gQiu1FpJW6WLHX
-   CnP4tvnCbKt9486iWW1VYhObGsiGypHTrjHU7vIHfHvkngIOaUmbyUMfm
-   ZQDMH8zqOHUU8SwMtpXyU1t+gg4y0AUZnZhoG3eKHMV/BET4dW2AHsUDp
-   2XEQ9lLYZLY/aOu7Ax5GDwYVd33XQAQxVPFbaRyB8HrSGGS+p35WSSgIh
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="97276335"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2022 06:35:16 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 25 May 2022 06:35:15 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 25 May 2022 06:35:13 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <patrice.chotard@foss.st.com>
-CC:     <linux-serial@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 3/3] serial: st-asc: remove include of pm_runtime.h
-Date:   Wed, 25 May 2022 16:37:33 +0300
-Message-ID: <20220525133733.1051714-4-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220525133733.1051714-1-claudiu.beznea@microchip.com>
-References: <20220525133733.1051714-1-claudiu.beznea@microchip.com>
+        Wed, 25 May 2022 09:38:43 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE34F1837A
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:38:41 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id m20so41742211ejj.10
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:38:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jw5KG+dnEClS1TN7YYmDKYqF5G50ipPJ1bBh+wQLV98=;
+        b=jqJlUvzp5H/I94PPZ8sn8LXDvvuUIsJhYQuyr/RnyJ4R/D7s/Y7FRHW3aJJFYMkR5T
+         lHFLBk7KZb4WWE5tH+Mzi8I46oilLQUrGaFC7lqmzzLHnjq2fcZAFJuBMKKAWNAZRYX/
+         8CZNZftTTa48ueI4kj9FyvMdSpJ7h3OlXd7dQsH8lEUpOQXPJJjOeNRb64fnsu/2Mti5
+         NzN91r/vcPK9Qq7JU7HLT0yWI9Jf7CuUcxpYEGwjDoQbUPHMVENpx4rWRLRXij18k5TF
+         flyRr405EbqnT4M/49sZszLCB7u3b/Oi9kyoYzBfg9CzKZvmQ1WR2iOYlo4lPTj2TooQ
+         sM6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=jw5KG+dnEClS1TN7YYmDKYqF5G50ipPJ1bBh+wQLV98=;
+        b=s2q69fupsIiIbCHGljAVsI+B0IvqAS+M9IaGWaOEoEtKBn/S7cPwOba1lPX2jELOE1
+         /DmzVSMxmB5jfhjBEhwkAzCc8TYufxrIWJ6JXwFQIGYJ9wIu9ZNmhF3snlVLrVpzK1HF
+         jpFeg5Wu1hPV/Sc5k2aS8qoYs/Fy75Y8g0tRp0wY+HObdE+jvkMoeq0RZps4E1kxCf+6
+         aZnRi4ciQIw6HsmLwge73k/DOqtEo8z87yOGQ22Q217rPEKjS8k55AMUT2SZcBb3CWE9
+         wzPRxJqr0PcphRSNByItyG7Rq464PX+iZhm6VkGgrEm8p5ykqPyCjeuxoiIkKHCRaalP
+         C7RQ==
+X-Gm-Message-State: AOAM532xVY3HZi1aA8pJe/1cbTdVNoARZpI+l1vhDQmtdNc8ZJ3XuuOv
+        FMe3sIDq15hDuBcfXw2eVx4=
+X-Google-Smtp-Source: ABdhPJwbZ4H/KKnpf2NVDQLhnNfqYUhiaN0LndyDXac3BrIOafELgUlFJsv2ltkrUT8MnVfqbxl7eQ==
+X-Received: by 2002:a17:907:7f19:b0:6fe:ce26:8f0d with SMTP id qf25-20020a1709077f1900b006fece268f0dmr15010594ejc.27.1653485920420;
+        Wed, 25 May 2022 06:38:40 -0700 (PDT)
+Received: from gmail.com ([5.38.225.110])
+        by smtp.gmail.com with ESMTPSA id m15-20020a056402430f00b0042b607daf7dsm4942815edc.45.2022.05.25.06.38.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 06:38:39 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Wed, 25 May 2022 15:38:35 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Juerg Haefliger <juerg.haefliger@canonical.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] x86: Kconfig: Style cleanups
+Message-ID: <Yo4xW+2u9obEt6Ay@gmail.com>
+References: <20220525133203.52463-1-juerg.haefliger@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525133203.52463-1-juerg.haefliger@canonical.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-st-asc driver doesn't use helpers from pm_runtime.h thus remove its
-include.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/tty/serial/st-asc.c | 1 -
- 1 file changed, 1 deletion(-)
+* Juerg Haefliger <juerg.haefliger@canonical.com> wrote:
 
-diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-index 1b0da603ab54..cce42f4c9bc2 100644
---- a/drivers/tty/serial/st-asc.c
-+++ b/drivers/tty/serial/st-asc.c
-@@ -17,7 +17,6 @@
- #include <linux/tty_flip.h>
- #include <linux/delay.h>
- #include <linux/spinlock.h>
--#include <linux/pm_runtime.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
- #include <linux/serial_core.h>
--- 
-2.34.1
+> The majority of the Kconfig files use a single tab for basic indentation
+> and a single tab followed by two whitespaces for help text indentation.
+> Fix the lines that don't follow this convention.
+> 
+> While at it, add missing trailing endif comments.
+> 
+> Juerg Haefliger (2):
+>   x86: Kconfig: Fix indentation and add endif comments
+>   x86: Kconfig.debug: Fix indentation
+> 
+>  arch/x86/Kconfig       | 101 ++++++++++++++++++++---------------------
+>  arch/x86/Kconfig.debug |  29 ++++++------
+>  2 files changed, 63 insertions(+), 67 deletions(-)
 
+Merged into tip:x86/cleanups, thanks Juerg!
+
+	Ingo

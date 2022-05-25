@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5A45340F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513B6534100
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245135AbiEYQC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 12:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S233745AbiEYQFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 12:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241633AbiEYQCy (ORCPT
+        with ESMTP id S245187AbiEYQF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 12:02:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502DFB41C0;
-        Wed, 25 May 2022 09:02:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 898C360FCF;
-        Wed, 25 May 2022 16:02:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 200D0C385B8;
-        Wed, 25 May 2022 16:02:51 +0000 (UTC)
-Date:   Wed, 25 May 2022 12:02:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, mingo@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joao.m.martins@oracle.com, mtosatti@redhat.com
-Subject: Re: [PATCH v2] cpuidle: haltpoll: Add trace points for
- guest_halt_poll_ns grow/shrink
-Message-ID: <20220525120248.5cb37817@gandalf.local.home>
-In-Reply-To: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
-References: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 25 May 2022 12:05:27 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C89B41E8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:05:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653494720; x=1685030720;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XacTBAWaGoPSK7ToURQLq4UISvcQ3WYB1UZRddunuSM=;
+  b=AGxnkzonfLJAU+CIrFvGwbUP3RAYg7dwVMFGPqKK03YqyGIsDqf7Oy6U
+   VWmTDkE3pSe9vrWvp9ZNymYau1twFXyRhLsdnKxTC7N4Xg3z1HIxnBRrp
+   Tyc9uInhabfKCQ7Ppqr7dnVxDV4Tw3jS4hDofhqIonesrmaQvd/yEz45X
+   b4fhdNeleaCGykli8vB66iGZaQjI+TWoeoi1M3P2tNWTlnh3Zu7jPbG/L
+   Nt+CEOdolg4SmVgrsRVwYUBggsAGxwe0C6Zc5NjV1R2pKI/1DDp+7PFGf
+   W+G5UAsPIuymYKkP/I0mU77DMoEKbPLRZhNxGP5JTgPBX2gvubb2JgD7G
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="273854939"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="273854939"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 09:02:51 -0700
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="717812096"
+Received: from hdovel-mobl2.amr.corp.intel.com (HELO [10.212.167.109]) ([10.212.167.109])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 09:02:50 -0700
+Message-ID: <89f55141-a71c-1fd8-e1be-96355c63c03a@intel.com>
+Date:   Wed, 25 May 2022 09:02:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHv3 2/3] x86/tdx: Clarify RIP adjustments in #VE handler
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, linux-kernel@vger.kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org
+References: <20220524221012.62332-1-kirill.shutemov@linux.intel.com>
+ <20220524221012.62332-3-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220524221012.62332-3-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 23:53:32 +0000
-Eiichi Tsukata <eiichi.tsukata@nutanix.com> wrote:
-
-> @@ -91,16 +95,17 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
->  			val = guest_halt_poll_ns;
->  
->  		dev->poll_limit_ns = val;
-> +		trace_guest_halt_poll_ns_grow(smp_processor_id(), val, old);
-
-Why are you passing in smp_processor_id()?
-
->  	} else if (block_ns > guest_halt_poll_ns &&
->  		   guest_halt_poll_allow_shrink) {
->  		unsigned int shrink = guest_halt_poll_shrink;
->  
-> -		val = dev->poll_limit_ns;
->  		if (shrink == 0)
->  			val = 0;
->  		else
->  			val /= shrink;
->  		dev->poll_limit_ns = val;
-> +		trace_guest_halt_poll_ns_shrink(smp_processor_id(), val, old);
->  	}
->  }
->  
-> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-> index af5018aa9517..db065af9c3c0 100644
-> --- a/include/trace/events/power.h
-> +++ b/include/trace/events/power.h
-> @@ -500,6 +500,39 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
->  
->  	TP_ARGS(name, type, new_value)
->  );
+On 5/24/22 15:10, Kirill A. Shutemov wrote:
+> +static int ve_instr_len(struct ve_info *ve)
+> +{
+> +	/*
+> +	 * If the #VE happened due to instruction execution, GET_VEINFO
+> +	 * provides info on the instruction.
+> +	 *
+> +	 * For #VE due to EPT violation, info provided by GET_VEINFO not usable
+> +	 * and kernel has to decode instruction manually to find out its
+> +	 * length. Catch such cases.
+> +	 */
+> +	if (WARN_ON_ONCE(ve->exit_reason == EXIT_REASON_EPT_VIOLATION))
+> +		return 0;
 > +
-> +TRACE_EVENT(guest_halt_poll_ns,
-> +
-> +	TP_PROTO(bool grow, unsigned int cpu_id,
-> +		 unsigned int new, unsigned int old),
-> +
-> +	TP_ARGS(grow, cpu_id, new, old),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(bool, grow)
-> +		__field(unsigned int, cpu_id)
-> +		__field(unsigned int, new)
-> +		__field(unsigned int, old)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->grow   = grow;
-> +		__entry->cpu_id = cpu_id;
+> +	return ve->instr_len;
+> +}
 
-You are wasting space to save the cpu_id, as the trace event already knows
-what CPU it occurred on.
+I'm not super happy with how this comment ended up.  First, let's put
+the comment next to the code to which it applies, like:
 
- # echo 1 > events/sched/enable
- # cat trace
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
-         systemd-1       [004] .....    15.872715: ftrace_boot_snapshot: ** Boot snapshot taken **
-         systemd-1       [001] .....    22.555418: initcall_start: func=fuse_len_args+0x0/0x30 [fuse]
-         systemd-1       [001] .....    22.555425: initcall_finish: func=fuse_len_args+0x0/0x30 [fuse] ret=0
-        modprobe-643     [006] .....    26.737355: initcall_start: func=wmidev_evaluate_method+0x46/0x100 [wmi]
-        modprobe-643     [006] .....    26.742491: initcall_finish: func=wmidev_evaluate_method+0x46/0x100 [wmi] ret=0
+	/*
+	 * ve->instr_len is not defined for EPT violations.  For those,
+	 * the kernel must decode instructions manually and should not
+	 * be using this function.
+	 */
+	if (WARN_ON_ONCE(ve->exit_reason == EXIT_REASON_EPT_VIOLATION))
+		return 0;
 
--- Steve
+	/*
+	 * Assume that the #VE occurred due to instruction execution.
+	 */
+	return ve->instr_len;
 
+Second, there also needs to be *something* here to link this back to the
+TDX module spec and the VMCS documentation.  To make actual sense of
+this, you need to tie together something like three or four pieces of
+disparate information scattered across two massive documents.
 
-
-> +		__entry->new    = new;
-> +		__entry->old    = old;
-> +	),
-> +
-> +	TP_printk("cpu %u: halt_poll_ns %u (%s %u)",
-> +		__entry->cpu_id,
-> +		__entry->new,
-> +		__entry->grow ? "grow" : "shrink",
-> +		__entry->old)
-> +);
-> +
+Intel really made this quite the scavenger hunt.  Time to atone for the
+sins of your colleagues by tying all of those things together in one place.

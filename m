@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F67533D64
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8ECA533D68
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243596AbiEYNLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
+        id S239583AbiEYNLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236743AbiEYNLA (ORCPT
+        with ESMTP id S244220AbiEYNLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:11:00 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D283A3380
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:10:57 -0700 (PDT)
+        Wed, 25 May 2022 09:11:36 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A32E25
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:11:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653484257; x=1685020257;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yTFmjuVJzZeVwWDM7Bs3IwCz1WgeJQrvSFJ69LNLCgI=;
-  b=Z3iBI/+S/7Btt8ugYoqErR9WyKrz2qAS6dDtfon2GYCPDkfQRICDz476
-   k6R4Tya0tDawMXHgupxpK+qz1Kf6sYoLShyEPHHPtY3WjcmqFf6pxPU5J
-   lCH4uZG8CqA/IztkB3b+hqzJNYihlRjLOqEuj9XoDJ9lbRVZyBilelzlj
-   Tz6xJxleHlJwqTLe8ibjy3a7/XWWtCPaTxFa8NaZApAeA8nlWMWJP3z/8
-   e42z0K/EvsfqJqMHUXr4U59+DFHES+bFzdgpFyylO/65VDJ9Rzr9X4puc
-   msrB2XHaOxHasvWZcHV7vM6X+F5cmiMiv7y5enPknLMo3Gu60dW/cAyY8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="255872361"
+  t=1653484292; x=1685020292;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ymcJkTLYpSMvn3R3fEnLHlEXa0nJaOVJzYIj+XJqO9o=;
+  b=gEi/LDNGPgUumpYY4AtEzheZIP060YieoqnXvUMWBp2J8IrUUNwaGYDQ
+   +Twpys5NnkSCaOMIgoUTlk6h4Ylc7zR/yCMHMBMB5+UXmjLGhByGbm6J4
+   U1UiYmJKWDe/34yEestoaakPpvOQQ2PdPL3Ckroo+qAUsJRHhH/58M6Ev
+   ZcyGdrWTJTQ0PcYwRe9W0jVWd0xsKx31wuKn06ZnTpQpU9QU9E/sbd3p1
+   7FI0lraJiRDkVmWOQWEYrc2rQ6EoVKTb8a/q3Q8O9TtjTLi3IQMnO9lio
+   sD/0ncJtnvHqcKdUGEQcZ3tmY3NoWk9fH0IJ12moawSg7wiZAAbMquHMh
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="336860741"
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="255872361"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 06:10:57 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="336860741"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 06:11:26 -0700
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="703990916"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 25 May 2022 06:10:55 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntqms-00031y-Bx;
-        Wed, 25 May 2022 13:10:54 +0000
-Date:   Wed, 25 May 2022 21:10:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: include/linux/fortify-string.h:336:4: warning: call to
- __read_overflow2_field declared with 'warning' attribute: detected read
- beyond size of field (2nd parameter); maybe use struct_group()?
-Message-ID: <202205252132.Owgo8tkv-lkp@intel.com>
+   d="scan'208";a="601898236"
+Received: from jwang96-mobl.ccr.corp.intel.com (HELO [10.255.29.139]) ([10.255.29.139])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 06:11:22 -0700
+Message-ID: <99f72722-4dd4-b535-1e9b-c8ae3c6ca2f1@linux.intel.com>
+Date:   Wed, 25 May 2022 21:11:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>
+Subject: Re: [PATCH v7 03/10] iommu/sva: Add iommu_sva_domain support
+Content-Language: en-US
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-4-baolu.lu@linux.intel.com>
+ <f3170016-4d7f-e78e-db48-68305f683349@arm.com>
+ <ff8f23c0-8763-1fac-6526-9095101ca0e5@linux.intel.com>
+ <567dffd4-8f15-ffb2-da69-4f47017c35fd@arm.com> <Yo4Nw9QyllT1RZbd@myrica>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Yo4Nw9QyllT1RZbd@myrica>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,155 +75,308 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+On 2022/5/25 19:06, Jean-Philippe Brucker wrote:
+> On Wed, May 25, 2022 at 11:07:49AM +0100, Robin Murphy wrote:
+>>> Did you mean @handler and @handler_token staffs below?
+>>>
+>>> struct iommu_domain {
+>>>           unsigned type;
+>>>           const struct iommu_domain_ops *ops;
+>>>           unsigned long pgsize_bitmap;    /* Bitmap of page sizes in use */
+>>>           iommu_fault_handler_t handler;
+>>>           void *handler_token;
+>>>           struct iommu_domain_geometry geometry;
+>>>           struct iommu_dma_cookie *iova_cookie;
+>>> };
+>>>
+>>> Is it only for DMA domains? From the point view of IOMMU faults, it
+>>> seems to be generic.
+>> Yes, it's the old common iommu_set_fault_handler() stuff (which arguably is
+>> more of a "notifier" than a "handler"), but I assume that that's irrelevant
+>> if SVA is using IOPF instead?
+> Yes IOMMU drivers call either the newer iommu_report_device_fault() or the
+> old report_iommu_fault(), and only the former can support IOPF/SVA. I've
+> tried to merge them before but never completed it. I think the main issue
+> was with finding the endpoint that caused the fault from the fault
+> handler. Some IOMMU drivers just pass the IOMMU device to
+> report_iommu_fault(). I'll probably pick that up at some point.
 
-FYI, the error/warning still remains.
+Thank you all for the comments and suggestions. Below is the refreshed
+patch. Hope that I didn't miss anything.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fdaf9a5840acaab18694a19e0eb0aa51162eeeed
-commit: 281d0c962752fb40866dd8d4cade68656f34bd1f fortify: Add Clang support
-date:   3 months ago
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220525/202205252132.Owgo8tkv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=281d0c962752fb40866dd8d4cade68656f34bd1f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 281d0c962752fb40866dd8d4cade68656f34bd1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
+ From 463c04cada8e8640598f981d8d16157781b9de6f Mon Sep 17 00:00:00 2001
+From: Lu Baolu <baolu.lu@linux.intel.com>
+Date: Wed, 11 May 2022 20:59:24 +0800
+Subject: [PATCH 04/11] iommu: Add sva iommu_domain support
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The sva iommu_domain represents a hardware pagetable that the IOMMU
+hardware could use for SVA translation. This adds some infrastructure
+to support SVA domain in the iommu common layer. It includes:
 
-All warnings (new ones prefixed by >>):
+- Extend the iommu_domain to support a new IOMMU_DOMAIN_SVA domain
+   type. The IOMMU drivers that support SVA should provide the sva
+   domain specific iommu_domain_ops.
+- Add a helper to allocate an SVA domain. The iommu_domain_free()
+   is still used to free an SVA domain.
+- Add helpers to attach an SVA domain to a device and the reverse
+   operation.
 
-   In file included from drivers/nvme/host/core.c:7:
-   In file included from include/linux/blkdev.h:5:
-   In file included from include/linux/sched.h:14:
-   In file included from include/linux/pid.h:5:
-   In file included from include/linux/rculist.h:11:
-   In file included from include/linux/rcupdate.h:27:
-   In file included from include/linux/preempt.h:78:
-   In file included from arch/x86/include/asm/preempt.h:7:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/x86/include/asm/thread_info.h:53:
-   In file included from arch/x86/include/asm/cpufeature.h:5:
-   In file included from arch/x86/include/asm/processor.h:22:
-   In file included from arch/x86/include/asm/msr.h:11:
-   In file included from arch/x86/include/asm/cpumask.h:5:
-   In file included from include/linux/cpumask.h:12:
-   In file included from include/linux/bitmap.h:11:
-   In file included from include/linux/string.h:253:
->> include/linux/fortify-string.h:336:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-                           __read_overflow2_field(q_size_field, size);
-                           ^
->> include/linux/fortify-string.h:336:4: warning: call to __read_overflow2_field declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-   2 warnings generated.
+Some buses, like PCI, route packets without considering the PASID value.
+Thus a DMA target address with PASID might be treated as P2P if the
+address falls into the MMIO BAR of other devices in the group. To make
+things simple, the attach/detach interfaces only apply to devices
+belonging to the singleton groups, and the singleton is immutable in
+fabric i.e. not affected by hotplug.
 
+The iommu_attach/detach_device_pasid() can be used for other purposes,
+such as kernel DMA with pasid, mediation device, etc.
 
-vim +/warning +336 include/linux/fortify-string.h
+Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+---
+  drivers/iommu/iommu.c | 93 +++++++++++++++++++++++++++++++++++++++++++
+  include/linux/iommu.h | 45 ++++++++++++++++++++-
+  2 files changed, 136 insertions(+), 2 deletions(-)
 
-28e77cc1c06866 Kees Cook      2021-06-16  267  
-28e77cc1c06866 Kees Cook      2021-06-16  268  /*
-28e77cc1c06866 Kees Cook      2021-06-16  269   * __builtin_object_size() must be captured here to avoid evaluating argument
-28e77cc1c06866 Kees Cook      2021-06-16  270   * side-effects further into the macro layers.
-28e77cc1c06866 Kees Cook      2021-06-16  271   */
-28e77cc1c06866 Kees Cook      2021-06-16  272  #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
-28e77cc1c06866 Kees Cook      2021-06-16  273  		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
-a28a6e860c6cf2 Francis Laniel 2021-02-25  274  
-f68f2ff91512c1 Kees Cook      2021-04-20  275  /*
-f68f2ff91512c1 Kees Cook      2021-04-20  276   * To make sure the compiler can enforce protection against buffer overflows,
-f68f2ff91512c1 Kees Cook      2021-04-20  277   * memcpy(), memmove(), and memset() must not be used beyond individual
-f68f2ff91512c1 Kees Cook      2021-04-20  278   * struct members. If you need to copy across multiple members, please use
-f68f2ff91512c1 Kees Cook      2021-04-20  279   * struct_group() to create a named mirror of an anonymous struct union.
-f68f2ff91512c1 Kees Cook      2021-04-20  280   * (e.g. see struct sk_buff.) Read overflow checking is currently only
-f68f2ff91512c1 Kees Cook      2021-04-20  281   * done when a write overflow is also present, or when building with W=1.
-f68f2ff91512c1 Kees Cook      2021-04-20  282   *
-f68f2ff91512c1 Kees Cook      2021-04-20  283   * Mitigation coverage matrix
-f68f2ff91512c1 Kees Cook      2021-04-20  284   *					Bounds checking at:
-f68f2ff91512c1 Kees Cook      2021-04-20  285   *					+-------+-------+-------+-------+
-f68f2ff91512c1 Kees Cook      2021-04-20  286   *					| Compile time  |   Run time    |
-f68f2ff91512c1 Kees Cook      2021-04-20  287   * memcpy() argument sizes:		| write | read  | write | read  |
-f68f2ff91512c1 Kees Cook      2021-04-20  288   *        dest     source   length      +-------+-------+-------+-------+
-f68f2ff91512c1 Kees Cook      2021-04-20  289   * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
-f68f2ff91512c1 Kees Cook      2021-04-20  290   * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  291   * memcpy(known,   known,   dynamic)	|   n   |   n   |   B   |   B   |
-f68f2ff91512c1 Kees Cook      2021-04-20  292   * memcpy(known,   unknown, dynamic)	|   n   |   n   |   B   |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  293   * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
-f68f2ff91512c1 Kees Cook      2021-04-20  294   * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  295   * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
-f68f2ff91512c1 Kees Cook      2021-04-20  296   * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
-f68f2ff91512c1 Kees Cook      2021-04-20  297   *					+-------+-------+-------+-------+
-f68f2ff91512c1 Kees Cook      2021-04-20  298   *
-f68f2ff91512c1 Kees Cook      2021-04-20  299   * y = perform deterministic compile-time bounds checking
-f68f2ff91512c1 Kees Cook      2021-04-20  300   * n = cannot perform deterministic compile-time bounds checking
-f68f2ff91512c1 Kees Cook      2021-04-20  301   * n/a = no run-time bounds checking needed since compile-time deterministic
-f68f2ff91512c1 Kees Cook      2021-04-20  302   * B = can perform run-time bounds checking (currently unimplemented)
-f68f2ff91512c1 Kees Cook      2021-04-20  303   * V = vulnerable to run-time overflow (will need refactoring to solve)
-f68f2ff91512c1 Kees Cook      2021-04-20  304   *
-f68f2ff91512c1 Kees Cook      2021-04-20  305   */
-f68f2ff91512c1 Kees Cook      2021-04-20  306  __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
-f68f2ff91512c1 Kees Cook      2021-04-20  307  					 const size_t p_size,
-f68f2ff91512c1 Kees Cook      2021-04-20  308  					 const size_t q_size,
-f68f2ff91512c1 Kees Cook      2021-04-20  309  					 const size_t p_size_field,
-f68f2ff91512c1 Kees Cook      2021-04-20  310  					 const size_t q_size_field,
-f68f2ff91512c1 Kees Cook      2021-04-20  311  					 const char *func)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  312  {
-a28a6e860c6cf2 Francis Laniel 2021-02-25  313  	if (__builtin_constant_p(size)) {
-f68f2ff91512c1 Kees Cook      2021-04-20  314  		/*
-f68f2ff91512c1 Kees Cook      2021-04-20  315  		 * Length argument is a constant expression, so we
-f68f2ff91512c1 Kees Cook      2021-04-20  316  		 * can perform compile-time bounds checking where
-f68f2ff91512c1 Kees Cook      2021-04-20  317  		 * buffer sizes are known.
-f68f2ff91512c1 Kees Cook      2021-04-20  318  		 */
-f68f2ff91512c1 Kees Cook      2021-04-20  319  
-f68f2ff91512c1 Kees Cook      2021-04-20  320  		/* Error when size is larger than enclosing struct. */
-f68f2ff91512c1 Kees Cook      2021-04-20  321  		if (p_size > p_size_field && p_size < size)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  322  			__write_overflow();
-f68f2ff91512c1 Kees Cook      2021-04-20  323  		if (q_size > q_size_field && q_size < size)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  324  			__read_overflow2();
-f68f2ff91512c1 Kees Cook      2021-04-20  325  
-f68f2ff91512c1 Kees Cook      2021-04-20  326  		/* Warn when write size argument larger than dest field. */
-f68f2ff91512c1 Kees Cook      2021-04-20  327  		if (p_size_field < size)
-f68f2ff91512c1 Kees Cook      2021-04-20  328  			__write_overflow_field(p_size_field, size);
-f68f2ff91512c1 Kees Cook      2021-04-20  329  		/*
-f68f2ff91512c1 Kees Cook      2021-04-20  330  		 * Warn for source field over-read when building with W=1
-f68f2ff91512c1 Kees Cook      2021-04-20  331  		 * or when an over-write happened, so both can be fixed at
-f68f2ff91512c1 Kees Cook      2021-04-20  332  		 * the same time.
-f68f2ff91512c1 Kees Cook      2021-04-20  333  		 */
-f68f2ff91512c1 Kees Cook      2021-04-20  334  		if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
-f68f2ff91512c1 Kees Cook      2021-04-20  335  		    q_size_field < size)
-f68f2ff91512c1 Kees Cook      2021-04-20 @336  			__read_overflow2_field(q_size_field, size);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  337  	}
-f68f2ff91512c1 Kees Cook      2021-04-20  338  	/*
-f68f2ff91512c1 Kees Cook      2021-04-20  339  	 * At this point, length argument may not be a constant expression,
-f68f2ff91512c1 Kees Cook      2021-04-20  340  	 * so run-time bounds checking can be done where buffer sizes are
-f68f2ff91512c1 Kees Cook      2021-04-20  341  	 * known. (This is not an "else" because the above checks may only
-f68f2ff91512c1 Kees Cook      2021-04-20  342  	 * be compile-time warnings, and we want to still warn for run-time
-f68f2ff91512c1 Kees Cook      2021-04-20  343  	 * overflows.)
-f68f2ff91512c1 Kees Cook      2021-04-20  344  	 */
-f68f2ff91512c1 Kees Cook      2021-04-20  345  
-f68f2ff91512c1 Kees Cook      2021-04-20  346  	/*
-f68f2ff91512c1 Kees Cook      2021-04-20  347  	 * Always stop accesses beyond the struct that contains the
-f68f2ff91512c1 Kees Cook      2021-04-20  348  	 * field, when the buffer's remaining size is known.
-f68f2ff91512c1 Kees Cook      2021-04-20  349  	 * (The -1 test is to optimize away checks where the buffer
-f68f2ff91512c1 Kees Cook      2021-04-20  350  	 * lengths are unknown.)
-f68f2ff91512c1 Kees Cook      2021-04-20  351  	 */
-f68f2ff91512c1 Kees Cook      2021-04-20  352  	if ((p_size != (size_t)(-1) && p_size < size) ||
-f68f2ff91512c1 Kees Cook      2021-04-20  353  	    (q_size != (size_t)(-1) && q_size < size))
-f68f2ff91512c1 Kees Cook      2021-04-20  354  		fortify_panic(func);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  355  }
-a28a6e860c6cf2 Francis Laniel 2021-02-25  356  
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 63b64b4e8a38..b1a2ad64a413 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -27,6 +27,7 @@
+  #include <linux/module.h>
+  #include <linux/cc_platform.h>
+  #include <trace/events/iommu.h>
++#include <linux/sched/mm.h>
 
-:::::: The code at line 336 was first introduced by commit
-:::::: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
+  static struct kset *iommu_group_kset;
+  static DEFINE_IDA(iommu_group_ida);
+@@ -39,6 +40,7 @@ struct iommu_group {
+  	struct kobject kobj;
+  	struct kobject *devices_kobj;
+  	struct list_head devices;
++	struct xarray pasid_array;
+  	struct mutex mutex;
+  	void *iommu_data;
+  	void (*iommu_data_release)(void *iommu_data);
+@@ -666,6 +668,7 @@ struct iommu_group *iommu_group_alloc(void)
+  	mutex_init(&group->mutex);
+  	INIT_LIST_HEAD(&group->devices);
+  	INIT_LIST_HEAD(&group->entry);
++	xa_init(&group->pasid_array);
 
-:::::: TO: Kees Cook <keescook@chromium.org>
-:::::: CC: Kees Cook <keescook@chromium.org>
+  	ret = ida_simple_get(&iommu_group_ida, 0, 0, GFP_KERNEL);
+  	if (ret < 0) {
+@@ -1961,6 +1964,8 @@ EXPORT_SYMBOL_GPL(iommu_domain_alloc);
 
+  void iommu_domain_free(struct iommu_domain *domain)
+  {
++	if (domain->type == IOMMU_DOMAIN_SVA)
++		mmdrop(domain->mm);
+  	iommu_put_dma_cookie(domain);
+  	domain->ops->free(domain);
+  }
+@@ -3277,3 +3282,91 @@ bool iommu_group_dma_owner_claimed(struct 
+iommu_group *group)
+  	return user;
+  }
+  EXPORT_SYMBOL_GPL(iommu_group_dma_owner_claimed);
++
++struct iommu_domain *iommu_sva_domain_alloc(struct device *dev,
++					    struct mm_struct *mm)
++{
++	const struct iommu_ops *ops = dev_iommu_ops(dev);
++	struct iommu_domain *domain;
++
++	domain = ops->domain_alloc(IOMMU_DOMAIN_SVA);
++	if (!domain)
++		return NULL;
++
++	domain->type = IOMMU_DOMAIN_SVA;
++	mmgrab(mm);
++	domain->mm = mm;
++
++	return domain;
++}
++
++static bool iommu_group_immutable_singleton(struct iommu_group *group,
++					    struct device *dev)
++{
++	int count;
++
++	mutex_lock(&group->mutex);
++	count = iommu_group_device_count(group);
++	mutex_unlock(&group->mutex);
++
++	if (count != 1)
++		return false;
++
++	/*
++	 * The PCI device could be considered to be fully isolated if all
++	 * devices on the path from the device to the host-PCI bridge are
++	 * protected from peer-to-peer DMA by ACS.
++	 */
++	if (dev_is_pci(dev))
++		return pci_acs_path_enabled(to_pci_dev(dev), NULL,
++					    REQ_ACS_FLAGS);
++
++	/*
++	 * Otherwise, the device came from DT/ACPI, assume it is static and
++	 * then singleton can know from the device count in the group.
++	 */
++	return true;
++}
++
++int iommu_attach_device_pasid(struct iommu_domain *domain, struct 
+device *dev,
++			      ioasid_t pasid)
++{
++	struct iommu_group *group;
++	int ret = -EBUSY;
++	void *curr;
++
++	if (!domain->ops->set_dev_pasid)
++		return -EOPNOTSUPP;
++
++	group = iommu_group_get(dev);
++	if (!group || !iommu_group_immutable_singleton(group, dev)) {
++		iommu_group_put(group);
++		return -EINVAL;
++	}
++
++	mutex_lock(&group->mutex);
++	curr = xa_cmpxchg(&group->pasid_array, pasid, NULL, domain, GFP_KERNEL);
++	if (curr)
++		goto out_unlock;
++	ret = domain->ops->set_dev_pasid(domain, dev, pasid);
++	if (ret)
++		xa_erase(&group->pasid_array, pasid);
++out_unlock:
++	mutex_unlock(&group->mutex);
++	iommu_group_put(group);
++
++	return ret;
++}
++
++void iommu_detach_device_pasid(struct iommu_domain *domain, struct 
+device *dev,
++			       ioasid_t pasid)
++{
++	struct iommu_group *group = iommu_group_get(dev);
++
++	mutex_lock(&group->mutex);
++	domain->ops->block_dev_pasid(domain, dev, pasid);
++	xa_erase(&group->pasid_array, pasid);
++	mutex_unlock(&group->mutex);
++
++	iommu_group_put(group);
++}
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 3fbad42c0bf8..9173c5741447 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -64,6 +64,9 @@ struct iommu_domain_geometry {
+  #define __IOMMU_DOMAIN_PT	(1U << 2)  /* Domain is identity mapped   */
+  #define __IOMMU_DOMAIN_DMA_FQ	(1U << 3)  /* DMA-API uses flush queue    */
+
++#define __IOMMU_DOMAIN_SHARED	(1U << 4)  /* Page table shared from CPU  */
++#define __IOMMU_DOMAIN_HOST_VA	(1U << 5)  /* Host CPU virtual address */
++
+  /*
+   * This are the possible domain-types
+   *
+@@ -86,15 +89,24 @@ struct iommu_domain_geometry {
+  #define IOMMU_DOMAIN_DMA_FQ	(__IOMMU_DOMAIN_PAGING |	\
+  				 __IOMMU_DOMAIN_DMA_API |	\
+  				 __IOMMU_DOMAIN_DMA_FQ)
++#define IOMMU_DOMAIN_SVA	(__IOMMU_DOMAIN_SHARED |	\
++				 __IOMMU_DOMAIN_HOST_VA)
+
+  struct iommu_domain {
+  	unsigned type;
+  	const struct iommu_domain_ops *ops;
+  	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
+-	iommu_fault_handler_t handler;
+-	void *handler_token;
+  	struct iommu_domain_geometry geometry;
+  	struct iommu_dma_cookie *iova_cookie;
++	union {
++		struct {	/* IOMMU_DOMAIN_DMA */
++			iommu_fault_handler_t handler;
++			void *handler_token;
++		};
++		struct {	/* IOMMU_DOMAIN_SVA */
++			struct mm_struct *mm;
++		};
++	};
+  };
+
+  static inline bool iommu_is_dma_domain(struct iommu_domain *domain)
+@@ -262,6 +274,8 @@ struct iommu_ops {
+   * struct iommu_domain_ops - domain specific operations
+   * @attach_dev: attach an iommu domain to a device
+   * @detach_dev: detach an iommu domain from a device
++ * @set_dev_pasid: set an iommu domain to a pasid of device
++ * @block_dev_pasid: block pasid of device from using iommu domain
+   * @map: map a physically contiguous memory region to an iommu domain
+   * @map_pages: map a physically contiguous set of pages of the same 
+size to
+   *             an iommu domain.
+@@ -282,6 +296,10 @@ struct iommu_ops {
+  struct iommu_domain_ops {
+  	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
+  	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
++	int (*set_dev_pasid)(struct iommu_domain *domain, struct device *dev,
++			     ioasid_t pasid);
++	void (*block_dev_pasid)(struct iommu_domain *domain, struct device *dev,
++				ioasid_t pasid);
+
+  	int (*map)(struct iommu_domain *domain, unsigned long iova,
+  		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
+@@ -679,6 +697,12 @@ int iommu_group_claim_dma_owner(struct iommu_group 
+*group, void *owner);
+  void iommu_group_release_dma_owner(struct iommu_group *group);
+  bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+
++struct iommu_domain *iommu_sva_domain_alloc(struct device *dev,
++					    struct mm_struct *mm);
++int iommu_attach_device_pasid(struct iommu_domain *domain, struct 
+device *dev,
++			      ioasid_t pasid);
++void iommu_detach_device_pasid(struct iommu_domain *domain, struct 
+device *dev,
++			       ioasid_t pasid);
+  #else /* CONFIG_IOMMU_API */
+
+  struct iommu_ops {};
+@@ -1052,6 +1076,23 @@ static inline bool 
+iommu_group_dma_owner_claimed(struct iommu_group *group)
+  {
+  	return false;
+  }
++
++static inline struct iommu_domain *
++iommu_sva_domain_alloc(struct device *dev, struct mm_struct *mm)
++{
++	return NULL;
++}
++
++static inline int iommu_attach_device_pasid(struct iommu_domain *domain,
++					    struct device *dev, ioasid_t pasid)
++{
++	return -ENODEV;
++}
++
++static inline void iommu_detach_device_pasid(struct iommu_domain *domain,
++					     struct device *dev, ioasid_t pasid)
++{
++}
+  #endif /* CONFIG_IOMMU_API */
+
+  /**
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
+Best regards,
+baolu

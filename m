@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0BB533A31
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFE1533A2B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240985AbiEYJpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 05:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S237713AbiEYJpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 05:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241590AbiEYJol (ORCPT
+        with ESMTP id S241348AbiEYJor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 05:44:41 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2045.outbound.protection.outlook.com [40.107.94.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA07990CC8;
-        Wed, 25 May 2022 02:44:31 -0700 (PDT)
+        Wed, 25 May 2022 05:44:47 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2076.outbound.protection.outlook.com [40.107.101.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C62FD35;
+        Wed, 25 May 2022 02:44:42 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jSEZDLZYQA2vPFiFaoOcUcgvyudU241WydqCrMsF623abRyElrw2S/I5O4AWacFVZewLRwU7Tazh4S5uKf3GtpnkN8+tWL5Z0Kb9NcrT80sLW1oNRf4YZpp6r/fUzYmn3BOjX79cHYsCPyqRFF0Kxb43vN3NOckuLCtrbsd6qKd4WMvVHTLO8bPOfNGEuhbsFcIvXNTLOtdl6C3/MrULXLWxuUN5O+AmXvWaID1+cbD4n0UrPVDJEyWPjLrT5ioVH9VLOaSh8AGQUO+2aSBqgJjclQdK9B17FM7xBQn95J71RinZYNoPVnxbdvDkoPjs9153/Z1Yj2Q4DHWZXpIIiA==
+ b=EGwXzEIuSZRIUiCTZmYjGwX1uEHUXtCXadEOO53MlM7LrwYBSEKi6h5OjBSBS95k+EHf3tbGzWn/Y68v+uoxwUKufgVY6QdYvLSLxKuem1LhvStfil+o7MkZmjwDkyGYzDWA8o/xtaOObA1EzRlnGJR5iEajxIBxMuihPNCtmJw9UcLtgNsCfnqLQDcNC7KXU5MOXVVzuPt7KCwyoMfzTJKlNM/j9+M60kRa/g2MRCBFHblU356KKw8+CFBlSXLN9CqwE4tdC2aUn+y4t0lMo8RkSDvwfLHk8E7aTGYEnNyj/6X6AAMuXP+zV23N8eFjpREUWa9wwUnNguEYRXk7Jg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cJVvGBv9OgF3SluIg+Dyr53H8Xhx67A4orAgfeI99q8=;
- b=dDUtlJUOn6r+TtnxBbQ7advycPWaLdzNbMBcrr4R7BUONxHT4lMr8N2yFgw02aLWjTFGfvO6K8LTTUAY3Syikdf1k6wJAo/LDmqzSQtjPu1xRBb2SKcKQnlzPy+HYh34ljWfp8qbg1NFFPVzwZUeVywIs5lv25teh+YZXBYEbCXF/cB9f5DvHvkkSM2fFrIi3Dly70qxvR7BhkbGUDvYtW+d6hh/KfwE9n1bWv8wzt8Ic+TB2WityQF15davwGJfBXyMb13HIx41czhHwhtrO+yzhOHe99Fyrx5KzCISxBYUSPf5I5wIfrKA0jDeuTDsUTddgyMNsaMjsxTv7n7r/w==
+ bh=cbvlHW0SmcPizpGbkDxSq1c/GhMxwfxf4uWB+qfxxaw=;
+ b=MtngoxfQhUKrHGKFDnQlBsPu5QnKUhMULy3eTqqfv0Bx+gugnDxFx2SEX2oAQCqwnZiG0t4+QoaRWp3u/ObdYg8rea50cKqfT5SfRirI4LQy3s0UzRMz8aZxSOqvz+HXVJoK7gLT+Avypqlj7lBhDAMT/1MHgZnZDSVlaxsIQKG782n5AsNde7JO2lKpLaBSjKzy33GtbMcpD8ceX7W6yWFAxYQeRwETby84WONRdE9rAkdtLCqZcb6pG50CVIKWRhhcv8nvz/4hrWKwATNQYVe7tH1a4zvjZKdGqJ3H5J5Af7zbnHUaYVHIR6P/zlAOmde2qYTCO8QH57MbLblo4Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cJVvGBv9OgF3SluIg+Dyr53H8Xhx67A4orAgfeI99q8=;
- b=oBfFjT96qhFzfOQ+/m9tcb/yUiTKkhTCZU+Bd1zaqmdQLbunuRVpnInMBmWMwUtTlQpul2RxgvPNTvR3DnDcdIT+r9/s6mwQljrEP0dz7DW19qnzxwwJ0lGTg+3MdKKtwY9exReQfeAWCCzZ7nyKDH6zE4QW/UN74VtcGZ/0Tj0=
-Received: from MWHPR14CA0022.namprd14.prod.outlook.com (2603:10b6:300:ae::32)
- by DM8PR12MB5429.namprd12.prod.outlook.com (2603:10b6:8:29::23) with
+ bh=cbvlHW0SmcPizpGbkDxSq1c/GhMxwfxf4uWB+qfxxaw=;
+ b=H6/IXNrRWUxAk2z8rMywsa2oqwfxeuS+GZsWS8Q0q4Q0B8ywbLxlUIfbe9v4m/3y7ivUf1p9fY+PDne/M5iBYQ6IlxwfZeqD4nWyrJ/27e8e6MW5wYIjmvKFON1eAg4EXCsR05F4wNR9PCn6aFUdTO4zbAoV6gk8BdVgAq+tYec=
+Received: from MW4PR03CA0259.namprd03.prod.outlook.com (2603:10b6:303:b4::24)
+ by BL3PR12MB6380.namprd12.prod.outlook.com (2603:10b6:208:3b3::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Wed, 25 May
- 2022 09:44:30 +0000
-Received: from CO1NAM11FT057.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:ae:cafe::b6) by MWHPR14CA0022.outlook.office365.com
- (2603:10b6:300:ae::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.23; Wed, 25 May
+ 2022 09:44:39 +0000
+Received: from CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b4:cafe::ac) by MW4PR03CA0259.outlook.office365.com
+ (2603:10b6:303:b4::24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
- Transport; Wed, 25 May 2022 09:44:29 +0000
+ Transport; Wed, 25 May 2022 09:44:39 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT057.mail.protection.outlook.com (10.13.174.205) with Microsoft SMTP
+ CO1NAM11FT019.mail.protection.outlook.com (10.13.175.57) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5293.13 via Frontend Transport; Wed, 25 May 2022 09:44:29 +0000
+ 15.20.5293.13 via Frontend Transport; Wed, 25 May 2022 09:44:38 +0000
 Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 25 May
- 2022 04:44:12 -0500
+ 2022 04:44:24 -0500
 From:   Ravi Bangoria <ravi.bangoria@amd.com>
 To:     <peterz@infradead.org>, <acme@kernel.org>
 CC:     <ravi.bangoria@amd.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
@@ -66,9 +66,9 @@ CC:     <ravi.bangoria@amd.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
         <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
         <kim.phillips@amd.com>, <santosh.shukla@amd.com>
-Subject: [PATCH 12/13] perf mem/c2c: Avoid printing empty lines for unsupported events
-Date:   Wed, 25 May 2022 15:09:37 +0530
-Message-ID: <20220525093938.4101-13-ravi.bangoria@amd.com>
+Subject: [PATCH 13/13] perf mem: Use more generic term for LFB
+Date:   Wed, 25 May 2022 15:09:38 +0530
+Message-ID: <20220525093938.4101-14-ravi.bangoria@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220525093938.4101-1-ravi.bangoria@amd.com>
 References: <20220525093938.4101-1-ravi.bangoria@amd.com>
@@ -80,24 +80,24 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4313e6b9-4f77-42ad-8345-08da3e332a10
-X-MS-TrafficTypeDiagnostic: DM8PR12MB5429:EE_
-X-Microsoft-Antispam-PRVS: <DM8PR12MB5429C61C1F2B5F2E49AC666EE0D69@DM8PR12MB5429.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: ea413e6f-4036-471a-b775-08da3e332fb4
+X-MS-TrafficTypeDiagnostic: BL3PR12MB6380:EE_
+X-Microsoft-Antispam-PRVS: <BL3PR12MB6380FA4C6A2947873613179AE0D69@BL3PR12MB6380.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bAPR+Hba1oFRoLNC1QJB4TeF3MMmpX8vEKWzB+t7WUTs04gm/EXwaLU2Udacwnt73ZNR0ecpeNBEpPZMOx/pWoNcZOhOqzJwxoo4AqdmF+iPtqA3zPac55FdIBgms/CpZKW4YeXDDRm9nmh7fDOtzA5tDLh4UC63/MU9oJNgNlVS6aoye4SN10OlAIGn084K2GqelxRsO/X3H/6z6AazVHz8TixuijGC1T/q2Br5xeLCJsdyG3Zy9GJLCPOg1bzb+HLu1Ep5E99GfHcNse+SxELruOTdzappOx8oqc0Xtb8H1ltYqTKvqcZQOVodF9IW+NTmW2MAj+OB7RWrPkm1Jamiamn+ks4JFLlRgt5Gb3O1gyfshcYHjDrz4CBJjXAJbHECEY+UvoIBIsMUoVqCf0uwScCa9pVCrZdAVYDGzYUi0fHoxmMVnwt/ysGE/Mbxcw/FLoSKy383DgQdRatv+GwE8Fy9EgJAxVoxLKuTINd5pmJJh/62OHHCjMQ3H5F4YzsaRwQtz2umZKd6I8QDWr+Y2d07GzXCIz48TadxvNf5cD+8lDBKbR+/f38o4qW+l1PsbbrhaScQg+Md+ro19ksRbCGYPXz+7+Tx7fEOAsjQZjwP46k3r43qswGngf679SuFQv4kQL6lKjuphnHuG8XxsKnwUsn8so5MZC+870omQ84F2frCF1IaDMfN/NJOvb3ry4Tkfw0xWhh+zhafEQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(2616005)(40460700003)(70206006)(26005)(2906002)(7696005)(6666004)(86362001)(8676002)(44832011)(82310400005)(8936002)(5660300002)(7416002)(36756003)(70586007)(83380400001)(426003)(4326008)(316002)(508600001)(356005)(16526019)(81166007)(110136005)(54906003)(336012)(1076003)(36860700001)(47076005)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Fv6C2JBh+VvVsQgUBh3zyuXZYdmh+uWjhKxL6BDYwpAp9wDkKJNCUKAj4OM/5FsqyCmK+SBhdldZJIhP5ZU3TV6OlQetQQBhFHLl0c0cfWHC5YHG04bZmbfOdeuDtrBvXbH15dtiysS9zUxECl6OPM8z5XyQ+OQdxtk+f1e1juyW6FRgNr5dXolLHHAEXRadk1ia2FiTRQom1OyhHC9bTfHoqAC0Xhq9e1gzAL9hIYjr6ACLfziKCNH0XBMjGlTywMke5MYQFLDOaoO3U+dKZJovDS5XAtnFDzYbJ97AeBJgQ2IL7UDZRWnrq5L5hHP3VgamoSC8fvGgMm8nX67iEwz6S2T2GEd+smIETF9iNCLN3SLCZCpH/PEguq0tLPZQi4vrkSGIw7h61KWYKYD7BVMtmtOjH7c8+vlkoVov1kj0LZE29DQSk/pkTxSV2VZS3CMgng3Ph6DQffW638tHH7oX8T8d0izEPzOIFboTyhqLS7bBZ1YIspyxWDArs1sNTVG60UNmfUqexbMsD4bHL/HPe9DrEi/HZiF4KX3zRLWnbSAbDm7Z31gnJXFXyd8igxT1wY097JYaV2eMbGoemPBvBOtgtFH6gTxjXQmJgEmknfQITPwt8RpJgrDnX3X8J4SIKFjwN2d+SzVzB1UUPaAXxAeuPY69Z0qvuu+cIsV4mcHC+/tC0PBOLLDzZIWSnWTByvpwnXMW+ytpuBHPR9vfFwtFs911UWQBE7mtWhY=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(186003)(82310400005)(5660300002)(8676002)(70586007)(40460700003)(83380400001)(86362001)(2616005)(16526019)(426003)(110136005)(47076005)(54906003)(8936002)(336012)(81166007)(7696005)(26005)(316002)(356005)(2906002)(44832011)(1076003)(70206006)(508600001)(36756003)(4326008)(36860700001)(7416002)(6666004)(41533002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 09:44:29.4451
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 09:44:38.9098
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4313e6b9-4f77-42ad-8345-08da3e332a10
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea413e6f-4036-471a-b775-08da3e332fb4
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT057.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5429
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6380
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -108,51 +108,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Perf mem and c2c can be used with 3 different events: load, store and
-combined load-store. Some architectures might support only partial set
-of events in which case, perf prints empty line for unsupported events.
-Avoid that.
-
-Ex, AMD Zen cpus supports only combined load-store event and does not
-support individual load store events.
-
-Before patch:
-  $ ./perf mem record -e list
-  
-  
-  mem-ldst     : available
-
-After patch:
-  $ ./perf mem record -e list
-  mem-ldst     : available
+A hw component to track outstanding L1 Data Cache misses is called
+LFB (Line Fill Buffer) on Intel and Arm. However similar component
+exists on other arch with different names, for ex, it's called MAB
+(Miss Address Buffer) on AMD. Replace LFB with generic name "Cache
+Fill Buffer".
 
 Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 ---
- tools/perf/util/mem-events.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ tools/perf/util/mem-events.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
-index 027cd6d62f21..415d754fea8d 100644
+index 415d754fea8d..e3b8e174ceb4 100644
 --- a/tools/perf/util/mem-events.c
 +++ b/tools/perf/util/mem-events.c
-@@ -156,11 +156,12 @@ void perf_mem_events__list(void)
- 	for (j = 0; j < PERF_MEM_EVENTS__MAX; j++) {
- 		struct perf_mem_event *e = perf_mem_events__ptr(j);
- 
--		fprintf(stderr, "%-13s%-*s%s\n",
--			e->tag ?: "",
--			verbose > 0 ? 25 : 0,
--			verbose > 0 ? perf_mem_events__name(j, NULL) : "",
--			e->supported ? ": available" : "");
-+		fprintf(stderr, "%-*s%-*s%s",
-+			e->tag ? 13 : 0,
-+			e->tag ? : "",
-+			e->tag && verbose > 0 ? 25 : 0,
-+			e->tag && verbose > 0 ? perf_mem_events__name(j, NULL) : "",
-+			e->supported ? ": available\n" : "");
- 	}
- }
- 
+@@ -282,7 +282,7 @@ static const char * const mem_lvl[] = {
+ 	"HIT",
+ 	"MISS",
+ 	"L1",
+-	"LFB",
++	"Cache Fill Buffer",
+ 	"L2",
+ 	"L3",
+ 	"Local RAM",
+@@ -298,7 +298,7 @@ static const char * const mem_lvlnum[] = {
+ 	[PERF_MEM_LVLNUM_EXTN_MEM] = "Ext Mem",
+ 	[PERF_MEM_LVLNUM_IO] = "I/O",
+ 	[PERF_MEM_LVLNUM_ANY_CACHE] = "Any cache",
+-	[PERF_MEM_LVLNUM_LFB] = "LFB",
++	[PERF_MEM_LVLNUM_LFB] = "Cache Fill Buffer",
+ 	[PERF_MEM_LVLNUM_RAM] = "RAM",
+ 	[PERF_MEM_LVLNUM_PMEM] = "PMEM",
+ 	[PERF_MEM_LVLNUM_NA] = "N/A",
 -- 
 2.31.1
 

@@ -2,106 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C09B533ADE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CA3533B02
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242700AbiEYKqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 06:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
+        id S235025AbiEYKxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 06:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242740AbiEYKqa (ORCPT
+        with ESMTP id S232603AbiEYKxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 06:46:30 -0400
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE4D3883;
-        Wed, 25 May 2022 03:46:17 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id s28so29406746wrb.7;
-        Wed, 25 May 2022 03:46:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=q9O1OGub18poRLHhomCuCLAnpIgun6gCJciHoCwZhXQ=;
-        b=wA/YoIextkItkfmZItfuS7mejwxz8PsmEAKDT4vZx8EpiRHx1TE8gFkLmtX9xheRc3
-         lK5I0eUiyUKznBvKrM7SH+UgwyXhcoyIB6XIcIUvO/ziJGM2c98Gt+1q+F3U7g3gRgJ8
-         LVYhMIAUUK4PVtoICjP224JC6a9m+RR3JJPS+DzwQ+2YDdQrTAUWL1tTGDQxh9WTBnVQ
-         vwLTo/ozhziXa95gH/K2rFR21SnYalChKlM3KNvAXoRDKA893YMhTOUiPUwuFRhHNE0M
-         1+HbRL4weXl26dZWHv2GekwdHogexfuZWuLgxFZayXrPO/OXY+VnjafyXDRPeikKjtFG
-         OMlQ==
-X-Gm-Message-State: AOAM532XuZTFeb+6kIXgOGq5zzgN1ZyWYcaujBL86lVNcZy0yy5Ufgsf
-        3X3iaXxPlcGixlH+Q8kDmzg=
-X-Google-Smtp-Source: ABdhPJwhLX2ksgGaO2ZVtVM7fwP7bpSx5WD8AGN1rT0/bqTlC+CbpGatSQsTaU+IqjT+1iHA5Laoig==
-X-Received: by 2002:adf:e0c3:0:b0:20c:5672:9577 with SMTP id m3-20020adfe0c3000000b0020c56729577mr26101094wri.466.1653475575536;
-        Wed, 25 May 2022 03:46:15 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05600c19d300b003975c7058bfsm1895136wmq.12.2022.05.25.03.46.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 03:46:15 -0700 (PDT)
-Message-ID: <e17cab70-66cf-492a-fb8a-dca091768345@kernel.org>
-Date:   Wed, 25 May 2022 12:46:14 +0200
+        Wed, 25 May 2022 06:53:24 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2971F9FE1;
+        Wed, 25 May 2022 03:53:19 -0700 (PDT)
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 24PAqdlx027069;
+        Wed, 25 May 2022 19:52:40 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24PAqdlx027069
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653475960;
+        bh=MtfOTBQmTIo5gTOtbY0pPCrvlLY0X0Y8Np1AC0lw+eQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ANejoCLa+JDY7f/QB+aEMkxCqqDRpGJEjfMrNqahapNxAEVC0xF1w5CQsnCL2lS2O
+         1gX3hq/+f+XudCW1fgQzPL47JwdLvbzHvhyX8mJKCHPF2mSwe3Vq0ISv4YiyHKIZIv
+         leBsblGAqcve8Hkc8vS7kamj6WfzeqTIBXvVYMjZHFlpDXO9x9fRxV3FvCfHIzmkm6
+         6ekMWG561FH5H/cIwmvT1IwvSn3PoF5YGsB2EnjObBC+V2xQ8C9PtYbYqcWCEuUTXe
+         FtvL3ESR85ykxh7vzqD+dtq/iEIgS9wLg2QKTL+7ak7YPZEvhuxVk9D9iBFuLCSERp
+         vapW+WHt4GTdA==
+X-Nifty-SrcIP: [209.85.216.49]
+Received: by mail-pj1-f49.google.com with SMTP id ds11so19398988pjb.0;
+        Wed, 25 May 2022 03:52:40 -0700 (PDT)
+X-Gm-Message-State: AOAM533XlS6M7Y/KNExiIldB1TZ0Puh2rZcT+uYdBc7oV3m5P+cR01IU
+        4xJaXuVp6XnW4Xlvk2c4vdCWre6LyEo6GiZqjMs=
+X-Google-Smtp-Source: ABdhPJwTb+MeL125OS2dBICYlt3qN+vGKJTfy+DMPZOd5L6Xfe4wzuDX6+FP55+i15sov9sLfellQ9730AqgGSrqPB0=
+X-Received: by 2002:a17:90a:e004:b0:1e0:7a66:fb3a with SMTP id
+ u4-20020a17090ae00400b001e07a66fb3amr7988416pjy.119.1653475959363; Wed, 25
+ May 2022 03:52:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [GIT PULL for v5.18-rc1] media updates
-Content-Language: en-US
-To:     Sean Young <sean@mess.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220322101406.459e2950@coco.lan>
- <a0470450-ecfd-2918-e04a-7b57c1fd7694@kernel.org>
- <Yo3ddVHgBBlvJEdh@gofer.mess.org>
- <8093277c-5098-e5e3-f606-486de5b2f67b@kernel.org>
- <Yo3yfIim58IWf64z@gofer.mess.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <Yo3yfIim58IWf64z@gofer.mess.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220513113930.10488-1-masahiroy@kernel.org> <20220513113930.10488-7-masahiroy@kernel.org>
+ <20220525083142.GA1952409@roeck-us.net>
+In-Reply-To: <20220525083142.GA1952409@roeck-us.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 25 May 2022 19:51:17 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATifx2c877yEX5VkTQ5h7_7iSnTB0nkR5i98PEBHb=DuQ@mail.gmail.com>
+Message-ID: <CAK7LNATifx2c877yEX5VkTQ5h7_7iSnTB0nkR5i98PEBHb=DuQ@mail.gmail.com>
+Subject: Re: [PATCH v6 06/10] kbuild: check static EXPORT_SYMBOL* by script
+ instead of modpost
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25. 05. 22, 11:10, Sean Young wrote:
-> On Wed, May 25, 2022 at 10:09:38AM +0200, Jiri Slaby wrote:
->> I don't understand how inability to build software is not an uapi breakage
->> -- care to elaborate?
-> 
-> So here is a good compromise suggested by Mauro.
-> 
-> 1. We add the following to the lirc.h uapi header.
-> 
-> #define LIRC_CAN_NOTIFY_DECODE 0
-> #define LIRC_CAN_SET_REC_FILTER 0
+On Wed, May 25, 2022 at 5:31 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Fri, May 13, 2022 at 08:39:26PM +0900, Masahiro Yamada wrote:
+> > The 'static' specifier and EXPORT_SYMBOL() are an odd combination.
+> >
+> > Commit 15bfc2348d54 ("modpost: check for static EXPORT_SYMBOL*
+> > functions") tried to detect it, but this check has false negatives.
+> >
+> > Here is the sample code.
+> >
+> >   Makefile:
+> >
+> >     obj-y += foo1.o foo2.o
+> >
+> >   foo1.c:
+> >
+> >     #include <linux/export.h>
+> >     static void foo(void) {}
+> >     EXPORT_SYMBOL(foo);
+> >
+> >   foo2.c:
+> >
+> >     void foo(void) {}
+> >
+> > foo1.c exports the static symbol 'foo', but modpost cannot catch it
+> > because it is fooled by foo2.c, which has a global symbol with the
+> > same name.
+> >
+> > s->is_static is cleared if a global symbol with the same name is found
+> > somewhere, but EXPORT_SYMBOL() and the global symbol do not necessarily
+> > belong to the same compilation unit.
+> >
+> > This check should be done per compilation unit, but I do not know how
+> > to do it in modpost. modpost runs against vmlinux.o or modules, which
+> > merges multiple objects, then forgets their origin.
+> >
+> > It is true modpost gets access to the lists of all the member objects
+> > (.vmlinux.objs and *.mod), but modpost cannot parse individual objects
+> > because they may not be ELF but LLVM IR when CONFIG_LTO_CLANG=y.
+> >
+> > Add a simple bash script to parse the output from ${NM}. This works for
+> > CONFIG_LTO_CLANG=y because llvm-nm can dump symbols of LLVM IR files.
+> >
+>
+> On parisc builds, this patch results in:
+>
+> Building parisc:allnoconfig ... failed
+> --------------
+> Error log:
+> scripts/check-local-export: sh /opt/buildbot/slave/next-next/build/arch/parisc/nm failed
+>
+> Guenter
 
-The code would do "if (x & 0)" or alike, so I'm not sure this won't 
-result in a warning. But as soon as that thing compiles, I don't really 
-care much. If it produces no warning, in fact, the code could be 
-optimized away out thanks to "& 0".
+Thanks for the report.
 
-Just looked up those defs in the debian code search, only lirc and 
-v4l-utils care about the defines. ANd the latter seems to define their 
-own copies.
+parisc overrides NM:
 
-> 2. Since lirc daemon is unmaintained, I am happy to take on maintainership.
-> 
-> This may require forking, depending on what the maintainer says.
-> 
-> How does that sound?
+NM              = sh $(srctree)/arch/parisc/nm
 
-Great.
 
-thanks,
+I will fix the script to return the correct exit code.
+
+
+
 -- 
-js
-suse labs
+Best Regards
+Masahiro Yamada

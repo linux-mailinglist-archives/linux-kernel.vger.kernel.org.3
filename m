@@ -2,105 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8982053403D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E43534039
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245105AbiEYPRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S244523AbiEYPRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245165AbiEYPQ5 (ORCPT
+        with ESMTP id S245075AbiEYPRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:16:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C991B0A4A
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:16:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 25 May 2022 11:17:30 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3A5B0A6D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:17:29 -0700 (PDT)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA023619FE
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:16:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C93C385B8;
-        Wed, 25 May 2022 15:16:53 +0000 (UTC)
-Date:   Wed, 25 May 2022 11:16:51 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Junwen Wu <wudaemon@163.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] sched: Fix a typo in scheduler
-Message-ID: <20220525111651.6c8f8c31@gandalf.local.home>
-In-Reply-To: <20220521125420.12683-1-wudaemon@163.com>
-References: <20220521125420.12683-1-wudaemon@163.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 520803F804
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:17:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653491847;
+        bh=fsgCZw/xRNXiy6OJN4APf5lDTp10s7xR3Y+a1NWVZTo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=YG2hOYBYE8xF+Kx3G7I/L6ia2jHSrp/S9L3ARxwAwppFtMahOy+LzYoD6dCv8BZwH
+         Hlp4OLMPhv649Z0GEh1FD6ZxiVZOadlANrimdZNR4QFQII4l4WE7+r1lc0PJIkjfl+
+         SHGHXucrc6SIXUpwjNa3v/FpBjlpMSB/QgyTXievUOyTatZom+5NLEM4txbo5LGZrV
+         0s8C0oBmI9YAZ/nkZkX5+zd3DSVC9/SaH8E1xMfSH6o8qENJj4pZ6+QlFnzmklCPzj
+         gykjwE/60YAG55qA4TIPoPeEhj22XJ44D1+KmTrHQAJ09TmAn0uxWwROViLbINL8BT
+         yRehaVa8+oF8Q==
+Received: by mail-ej1-f71.google.com with SMTP id ks1-20020a170906f84100b006fee53b22c2so4676077ejb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:17:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fsgCZw/xRNXiy6OJN4APf5lDTp10s7xR3Y+a1NWVZTo=;
+        b=Xnr5A6rWT+gG2Dh3UzyS5jPPaY0TFdE9+UfQAHgqAymH9RaLr/tjeYmbalaFIyiMQl
+         Lwl7eYugiu5LIFgE9o4VGMQP16tt93v9Bnm9tE2P9jcbnmZZ8kfzvtOLxqGkeTuC9We0
+         WrAt6EAbbA5iF5Wgi5Yj9L7YJVejKfIF8a7hh4o4JdZsDQEYB6OWy5kjEEDgsVkSUHqW
+         Gm2KA6UqVNktmRiiOvIzPTlcNxqbyR74uXV/CM13wq28y9niZkSu2V8GKr2L0DsKAm5Q
+         WUIsIAf416rpzPDbrQYz8YlGvM3GcOwZ4EHtOiQanFNF27ialmzsxW7tZ+9jwRbz2d4o
+         ygIw==
+X-Gm-Message-State: AOAM5308tBPM5d1hUmnMz9vuXDiF9SGFSjX2NDf1HUzUXV4hBFWW4WFR
+        b3d9ls2CH01oLMeaRelMcaQYlm3Ful9EEb2gPdqTRxtI9g0HNxLXaU7FdDwT3xl7cX9aCxBaUa0
+        +iJbgfaWhTf61ufODmf0A1OVfyONjCoYC8v/z7Sz+uQ==
+X-Received: by 2002:a17:906:5d10:b0:6f4:e263:b574 with SMTP id g16-20020a1709065d1000b006f4e263b574mr30507996ejt.435.1653491839756;
+        Wed, 25 May 2022 08:17:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxGEBbYA4ZthguX/6ezk6GsjZqOLHUOp5YalEv0cGTth685wa7GG2o5INcUqyTuzNjzdCdFVA==
+X-Received: by 2002:a17:906:5d10:b0:6f4:e263:b574 with SMTP id g16-20020a1709065d1000b006f4e263b574mr30507981ejt.435.1653491839485;
+        Wed, 25 May 2022 08:17:19 -0700 (PDT)
+Received: from [192.168.123.67] (ip-062-143-094-109.um16.pools.vodafone-ip.de. [62.143.94.109])
+        by smtp.gmail.com with ESMTPSA id y16-20020a056402271000b0042b6a84b230sm4559765edd.90.2022.05.25.08.17.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 08:17:18 -0700 (PDT)
+Message-ID: <09b050e3-b8e2-fc58-c4cf-e1c81c5eac84@canonical.com>
+Date:   Wed, 25 May 2022 17:17:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/5] riscv: cpu_ops_sbi: Support for 64bit hartid
+Content-Language: en-US
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, Sunil V L <sunil.vl@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+References: <20220525151106.2176147-1-sunilvl@ventanamicro.com>
+ <20220525151106.2176147-2-sunilvl@ventanamicro.com>
+From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+In-Reply-To: <20220525151106.2176147-2-sunilvl@ventanamicro.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 21 May 2022 12:54:20 +0000
-Junwen Wu <wudaemon@163.com> wrote:
-
-> Nice value is MIN_NICE(-20) to MAX_NICE(19), it better uses
-> int instead of long.
-
-First of all, the subject is completely incorrect. There's no typo to be
-fixed. Second, why do you think it's better to use an int instead of long?
-Long is the natural word size of an architecture.
-
-Now perhaps for consistency, we could fix all the locations that switch
-between long and int. For example, the sys_nice() definition has nice and
-retval as long and are set by functions that return int. But then again,
-sys_nice() returns long (and that cannot be changed).
-
-Unless there's a real issue to be fixed (which I do not see one), I'd say
-leave it as is, because this change is doing nothing but adding unnecessary
-churn to the git repo.
-
-Hence, NAK.
-
--- Steve
-
-
+On 5/25/22 17:11, Sunil V L wrote:
+> The hartid can be a 64bit value on RV64 platforms. This patch modifies
+> the hartid variable type to unsigned long so that it can hold 64bit
+> value on RV64 platforms.
 > 
-> Signed-off-by: Junwen Wu <wudaemon@163.com>
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+
+Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+
 > ---
->  include/linux/sched.h | 2 +-
->  kernel/sched/core.c   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>   arch/riscv/kernel/cpu_ops_sbi.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 75ba8aa60248..cffc7cbed987 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1830,7 +1830,7 @@ static inline int dl_task_check_affinity(struct task_struct *p, const struct cpu
->  #endif
->  
->  extern int yield_to(struct task_struct *p, bool preempt);
-> -extern void set_user_nice(struct task_struct *p, long nice);
-> +extern void set_user_nice(struct task_struct *p, int nice);
->  extern int task_prio(const struct task_struct *p);
->  
->  /**
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index fcf0c180617c..15c1b63d771b 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -6888,7 +6888,7 @@ static inline int rt_effective_prio(struct task_struct *p, int prio)
->  }
->  #endif
->  
-> -void set_user_nice(struct task_struct *p, long nice)
-> +void set_user_nice(struct task_struct *p, int nice)
->  {
->  	bool queued, running;
->  	int old_prio;
+> diff --git a/arch/riscv/kernel/cpu_ops_sbi.c b/arch/riscv/kernel/cpu_ops_sbi.c
+> index 4f5a6f84e2a4..efa0f0816634 100644
+> --- a/arch/riscv/kernel/cpu_ops_sbi.c
+> +++ b/arch/riscv/kernel/cpu_ops_sbi.c
+> @@ -65,7 +65,7 @@ static int sbi_hsm_hart_get_status(unsigned long hartid)
+>   static int sbi_cpu_start(unsigned int cpuid, struct task_struct *tidle)
+>   {
+>   	unsigned long boot_addr = __pa_symbol(secondary_start_sbi);
+> -	int hartid = cpuid_to_hartid_map(cpuid);
+> +	unsigned long hartid = cpuid_to_hartid_map(cpuid);
+>   	unsigned long hsm_data;
+>   	struct sbi_hart_boot_data *bdata = &per_cpu(boot_data, cpuid);
+>   
+> @@ -107,7 +107,7 @@ static void sbi_cpu_stop(void)
+>   static int sbi_cpu_is_stopped(unsigned int cpuid)
+>   {
+>   	int rc;
+> -	int hartid = cpuid_to_hartid_map(cpuid);
+> +	unsigned long hartid = cpuid_to_hartid_map(cpuid);
+>   
+>   	rc = sbi_hsm_hart_get_status(hartid);
+>   
 

@@ -2,138 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A385337FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5115337FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235872AbiEYIHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S235849AbiEYIHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbiEYIGy (ORCPT
+        with ESMTP id S231421AbiEYIHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:06:54 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE58B814A9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:06:48 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id e28so28347627wra.10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:06:48 -0700 (PDT)
+        Wed, 25 May 2022 04:07:08 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B405381489
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:07:06 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id h11so24858037eda.8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:07:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cVq7pwXv2//Gfr1cHlRRSEheHaq4li61MQakSnDYkHk=;
-        b=NSbOEN1kEirXXcI0n+Rf9Sy90jmua25IOlwq3lBlny6ebWLJYupmHvohFiRfMPOYyq
-         4F5ikMXUckwPZMYV4cy1mkymCR7C/+/APrT91TE45m53C/G8or+AB0C7YnLnAmuFqZxj
-         a/5bJX+7SKQT+s4uAyqsGz5KEfN+/60UTN5yTFZEQNyAHD1BVJT73zQdK0VlccjJONE9
-         6R2aYtGZx2oDjYvCVCmv2sLZ5HSRUx3w3LKH4wb4s0fzsiBa9yitlqNtoveAi/tXQGzZ
-         HxQ1a1kqvyEtO1SgEEEkCr31sl8DHd8EzzaECAtIi2qlVGJgviVNf+Z4TdWIH4CvIbxt
-         nT8g==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=K0TSn2fqvwK9SDiwJiRffb/eDZSZxCAGCJGbT9SkTtc=;
+        b=CPH4puU00SpN4r0xq5dXYT/9N8r3QYL8RRabLLQKg1tmtWnmC9EoFiVIGQNrxhfVeY
+         V3g/XsGz9jrl5z3TuSIDKAynEJ6x3W1KqDPAcg4noVeOLzZWCWYeWxh6Q8WBh1TlEyE1
+         vR7XRtPoKqCSc+EDNGF0rCZQtO4bIq/vafTTflUwzDL89V8JGPdS+nBVBSlJOEF1bTMf
+         JZEceNXOlF/Eyjq+gDZvCD5Yw+tdloey87nLY6T9HdFnlfxQNWjekE2D1HdS0AXGqbLv
+         yX/nCKyOoiGm/xMIopFljwGVDU6F7aJGmwOlsJX+QF03hJOqINjrLILBSqkl83bgvbqd
+         M4DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cVq7pwXv2//Gfr1cHlRRSEheHaq4li61MQakSnDYkHk=;
-        b=xaxQ+e/qQuPmvgk97/IgtJnfE6wNjEP0rhFW+axCD0WKKhdkhlfV1E1BUuv+aYjwr3
-         RGpRo+hHTX918z8nEpmT+PrrO0lbgFJwKxILBSIyLTGgfjIdnibESxDeZuqeFRyQxqXf
-         8doGCze5N3b1Kzq473lM3pKI6zu+prwYNAWPW6+xeBlcxQ/w/chc/g2pPRuxXr52Cua3
-         DFmmjeaMNHjr8zvkEoMEIsT4hb2jWokZ/6SFwNE9OyuMEjZhdCpGJtNtgbXLG/UndhJY
-         Gg/zSc3Jfi5YWZYC/FQwwbCZTuuhEntF5AjNCoN2/H5wQg2/Hj7L6OLuoYVsn7n/ql/u
-         TQiw==
-X-Gm-Message-State: AOAM533K5/sN7r8VeLxhoimQrOHNlDKK8VmlF8iBLHOaAOGJcWdOpdlA
-        A0Xqsud9vr5wb280dRqcdD3ghw==
-X-Google-Smtp-Source: ABdhPJxxUHRzsWG9Ga2j1bOgOyilkp0ZbdgwfH/TcJtO2mh86zxzRwq60XFA/9neVmDozoa29iR3JA==
-X-Received: by 2002:adf:d1a8:0:b0:20f:f808:2ac8 with SMTP id w8-20020adfd1a8000000b0020ff8082ac8mr4694627wrc.495.1653466007320;
-        Wed, 25 May 2022 01:06:47 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id x8-20020a7bc208000000b0039765a7add4sm1038032wmi.29.2022.05.25.01.06.45
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=K0TSn2fqvwK9SDiwJiRffb/eDZSZxCAGCJGbT9SkTtc=;
+        b=ZZ6nSCWSJiKV7KpkivNKRgzrGaxeHCS/iHsgFRPpgreGSP8KIPCnmiuOB5T6L3xFvp
+         oMnLobOUS0YG5z789oU4bERRurN+81Cx0I/KBjLkA2tG0Zg84IEz4qO7p9pgxc/TfyvN
+         0F+zdajrURtHyKTKGAyYnEhXU0BkWqKtUx9wpOYK/05Yt/Cmt6Yk852kuNQqNvZk+aTH
+         PJpa085osDYbenQzGFAl4E3zqnuRM/iS8QgfQXU3YVUA9bwVesx/6F5vEW/mI61/F3Mm
+         3mXchhS25IclX/T7mqMbqKAXbUN7+jRhGTKV29rSjNmMVFXkKxPNxDMOR+XeR6Ycio85
+         wc4A==
+X-Gm-Message-State: AOAM531ferFLZtJHEOyO7rBR74HiHnxPU1O16CsnEyNanXnfMgw8jZU0
+        31txex0qY5Nn90lloDfl6Efu4g==
+X-Google-Smtp-Source: ABdhPJxu0J/w/m+jAc1o4NHhbkNTu7E6Qn+2GZlYcRX8vJJeJnGbs2EzXlc/+SXbjKrJIwqyRkBRtw==
+X-Received: by 2002:a05:6402:3047:b0:42a:fbe9:4509 with SMTP id bs7-20020a056402304700b0042afbe94509mr32502177edb.159.1653466025277;
+        Wed, 25 May 2022 01:07:05 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ot22-20020a170906ccd600b006f4cb79d9a8sm2783035ejb.75.2022.05.25.01.07.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 01:06:46 -0700 (PDT)
-Message-ID: <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org>
-Date:   Wed, 25 May 2022 11:06:44 +0300
+        Wed, 25 May 2022 01:07:04 -0700 (PDT)
+Message-ID: <b36280be-9993-9a78-0960-4094efeed1aa@linaro.org>
+Date:   Wed, 25 May 2022 10:07:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
- <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
- <86zgj6oqa9.fsf@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <86zgj6oqa9.fsf@gmail.com>
+To:     workflows@vger.kernel.org,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Getting rid of infradead.org - corrupted subjects
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/2022 19:21, Hans Schultz wrote:
->>
->> Hi Hans,
->> So this approach has a fundamental problem, f->dst is changed without any synchronization
->> you cannot rely on it and thus you cannot account for these entries properly. We must be very
->> careful if we try to add any new synchronization not to affect performance as well.
->> More below...
->>
->>> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
->>>  	if (test_bit(BR_FDB_STATIC, &f->flags))
->>>  		fdb_del_hw_addr(br, f->key.addr.addr);
->>>  
->>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
->>> +		atomic_dec(&f->dst->locked_entry_cnt);
->>
->> Sorry but you cannot do this for multiple reasons:
->>  - f->dst can be NULL
->>  - f->dst changes without any synchronization
->>  - there is no synchronization between fdb's flags and its ->dst
->>
->> Cheers,
->>  Nik
-> 
-> Hi Nik,
-> 
-> if a port is decoupled from the bridge, the locked entries would of
-> course be invalid, so maybe if adding and removing a port is accounted
-> for wrt locked entries and the count of locked entries, would that not
-> work?
-> 
-> Best,
-> Hans
+Hi all,
 
-Hi Hans,
-Unfortunately you need the correct amount of locked entries per-port if you want
-to limit their number per-port, instead of globally. So you need a consistent
-fdb view with all its attributes when changing its dst in this case, which would
-require new locking because you have multiple dependent struct fields and it will
-kill roaming/learning scalability. I don't think this use case is worth the complexity it
-will bring, so I'd suggest an alternative - you can monitor the number of locked entries
-per-port from a user-space agent and disable port learning or some similar solution that
-doesn't require any complex kernel changes. Is the limit a requirement to add the feature?
+The address list is semi-random as I don't know whom to approach.
 
-I have an idea how to do it and to minimize the performance hit if it really is needed
-but it'll add a lot of complexity which I'd like to avoid if possible.
+Problem: infradead.org corrupts email subjects by changing:
+s/,/, /
 
-Cheers,
- Nik
+Examples:
+1. Previous discussion with Uwe about linux-arm-kernel:
+https://lore.kernel.org/all/20220215125856.es2euyoqo6mp4y2t@pengutronix.de/
 
+2. My last email for MTD
+Modified email:
+https://lore.kernel.org/linux-mtd/20220408063720.12826-1-krzysztof.kozlowski@linaro.org/
+Proper email:
+https://lore.kernel.org/all/3e550deb-7c27-894b-a0b5-62609a60f17f@microchip.com/
+
+When people use Patchwork or b4, the email from the list is being used,
+thus the one with a changed subject. Example:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9547c4e74f6b4b56c2f9e4e7a286ce126fd333fa
+The subject should be "dt-bindings: mtd: jedec,spi-nor: remove unneeded
+properties" (no space after coma)
+
+This leads to real commits with a bit odd subject. At least not the
+original subject.
+
+Can we do something about infradead? Get rid of it and move the mailing
+lists to vger.kernel.org? Or fix it?
+
+Best regards,
+Krzysztof

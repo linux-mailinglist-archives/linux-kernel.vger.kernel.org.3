@@ -2,109 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5115337FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9343D533808
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235849AbiEYIHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        id S235629AbiEYIKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbiEYIHI (ORCPT
+        with ESMTP id S235922AbiEYIJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:07:08 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B405381489
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:07:06 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id h11so24858037eda.8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:07:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=K0TSn2fqvwK9SDiwJiRffb/eDZSZxCAGCJGbT9SkTtc=;
-        b=CPH4puU00SpN4r0xq5dXYT/9N8r3QYL8RRabLLQKg1tmtWnmC9EoFiVIGQNrxhfVeY
-         V3g/XsGz9jrl5z3TuSIDKAynEJ6x3W1KqDPAcg4noVeOLzZWCWYeWxh6Q8WBh1TlEyE1
-         vR7XRtPoKqCSc+EDNGF0rCZQtO4bIq/vafTTflUwzDL89V8JGPdS+nBVBSlJOEF1bTMf
-         JZEceNXOlF/Eyjq+gDZvCD5Yw+tdloey87nLY6T9HdFnlfxQNWjekE2D1HdS0AXGqbLv
-         yX/nCKyOoiGm/xMIopFljwGVDU6F7aJGmwOlsJX+QF03hJOqINjrLILBSqkl83bgvbqd
-         M4DA==
+        Wed, 25 May 2022 04:09:50 -0400
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28F1814B2;
+        Wed, 25 May 2022 01:09:41 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id e2so17358133wrc.1;
+        Wed, 25 May 2022 01:09:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=K0TSn2fqvwK9SDiwJiRffb/eDZSZxCAGCJGbT9SkTtc=;
-        b=ZZ6nSCWSJiKV7KpkivNKRgzrGaxeHCS/iHsgFRPpgreGSP8KIPCnmiuOB5T6L3xFvp
-         oMnLobOUS0YG5z789oU4bERRurN+81Cx0I/KBjLkA2tG0Zg84IEz4qO7p9pgxc/TfyvN
-         0F+zdajrURtHyKTKGAyYnEhXU0BkWqKtUx9wpOYK/05Yt/Cmt6Yk852kuNQqNvZk+aTH
-         PJpa085osDYbenQzGFAl4E3zqnuRM/iS8QgfQXU3YVUA9bwVesx/6F5vEW/mI61/F3Mm
-         3mXchhS25IclX/T7mqMbqKAXbUN7+jRhGTKV29rSjNmMVFXkKxPNxDMOR+XeR6Ycio85
-         wc4A==
-X-Gm-Message-State: AOAM531ferFLZtJHEOyO7rBR74HiHnxPU1O16CsnEyNanXnfMgw8jZU0
-        31txex0qY5Nn90lloDfl6Efu4g==
-X-Google-Smtp-Source: ABdhPJxu0J/w/m+jAc1o4NHhbkNTu7E6Qn+2GZlYcRX8vJJeJnGbs2EzXlc/+SXbjKrJIwqyRkBRtw==
-X-Received: by 2002:a05:6402:3047:b0:42a:fbe9:4509 with SMTP id bs7-20020a056402304700b0042afbe94509mr32502177edb.159.1653466025277;
-        Wed, 25 May 2022 01:07:05 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ot22-20020a170906ccd600b006f4cb79d9a8sm2783035ejb.75.2022.05.25.01.07.04
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CVMOEmGCoID/U7Ok5RtjAgP51rImkcURoHcOEZZPehY=;
+        b=pcqN0BwCcGGIJXctw9Ht+kzET8v48ksElV9QSS390nR41p/XDtqqHHFOPqbwQIp5vZ
+         i6lvddy5C83XC1qKF+oQW3B7vOZv2wjW4q0qa3uzYK5TAFTEjR6GUZQ/ji/UNkudYdqa
+         5T1tI93uFwLjxu48poqHeWokav+ZCAxSYjsU80P6dVjDJEDJU8rrsDqfEmv6lgsKZg5n
+         lwnUap6WZrNSGp4kJASX8dVULrSkcPx46iFQAdWTdmkG53Up+xKRjIcXOoypV9zWbtqH
+         Ub/5RiDnSWWORkJd+hIMMi5z61K8/xAeWUgyv9l9iP34ljhwPSgpu7k/lnkj5sfMjZn2
+         E1MA==
+X-Gm-Message-State: AOAM5307YsBwr3H4lqUGNxQDihO17CCxB9ita4hz33h+V/c6ZQWPSL7c
+        OhRT10KiFEbfNpY9xXlYf6k=
+X-Google-Smtp-Source: ABdhPJy79W5xqYDzU2ooxTjO+0iX0pKT+szGglDG33KejuukZeEQUYrvQTH7cKt/Mv8XXrN5ekYUhA==
+X-Received: by 2002:a5d:4d05:0:b0:20e:6457:f2b1 with SMTP id z5-20020a5d4d05000000b0020e6457f2b1mr25224107wrt.653.1653466179973;
+        Wed, 25 May 2022 01:09:39 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id h1-20020a1ccc01000000b00397342e3830sm4714185wmb.0.2022.05.25.01.09.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 01:07:04 -0700 (PDT)
-Message-ID: <b36280be-9993-9a78-0960-4094efeed1aa@linaro.org>
-Date:   Wed, 25 May 2022 10:07:03 +0200
+        Wed, 25 May 2022 01:09:39 -0700 (PDT)
+Message-ID: <8093277c-5098-e5e3-f606-486de5b2f67b@kernel.org>
+Date:   Wed, 25 May 2022 10:09:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
+ Thunderbird/91.9.0
+Subject: Re: [GIT PULL for v5.18-rc1] media updates
 Content-Language: en-US
-To:     workflows@vger.kernel.org,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Getting rid of infradead.org - corrupted subjects
-Content-Type: text/plain; charset=UTF-8
+To:     Sean Young <sean@mess.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220322101406.459e2950@coco.lan>
+ <a0470450-ecfd-2918-e04a-7b57c1fd7694@kernel.org>
+ <Yo3ddVHgBBlvJEdh@gofer.mess.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <Yo3ddVHgBBlvJEdh@gofer.mess.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 25. 05. 22, 9:40, Sean Young wrote:
+> Hi,
+> 
+> On Wed, May 25, 2022 at 08:42:26AM +0200, Jiri Slaby wrote:
+>> On 22. 03. 22, 10:14, Mauro Carvalho Chehab wrote:
+>>> Hi Linus,
+>>>
+>>> Please pull from:
+>>>     git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.18-1
+>> ...
+>>> Sean Young (10):
+>> ...
+>>>         media: lirc: remove unused lirc features
+>>
+>> Hi,
+>>
+>> this breaks lirc build:
+>>> [   59s] lircd.cpp:489:49: error: 'LIRC_CAN_SET_REC_FILTER' was not declared in this scope; did you mean 'LIRC_CAN_SET_REC_CARRIER'?
+>>> [   59s]   489 |                     || (curr_driver->features & LIRC_CAN_SET_REC_FILTER)) {
+>>> [   59s]       |                                                 ^~~~~~~~~~~~~~~~~~~~~~~
+>>> [   59s]       |                                                 LIRC_CAN_SET_REC_CARRIER
+>>> [   59s] lircd.cpp: In function 'void loop()':
+>>> [   59s] lircd.cpp:2069:82: error: 'LIRC_CAN_NOTIFY_DECODE' was not declared in this scope; did you mean 'DRVCTL_NOTIFY_DECODE'?
+>>> [   59s]  2069 |                         if (curr_driver->drvctl_func && (curr_driver->features & LIRC_CAN_NOTIFY_DECODE))
+>>> [   59s]       |                                                                                  ^~~~~~~~~~~~~~~~~~~~~~
+>>> [   59s]       |                                                                                  DRVCTL_NOTIFY_DECODE
+>>
+>> So the uapi header defines should be brought back, IMO.
+> 
+> The lirc.h uapi defines the lirc chardev uapi. The uapi has not changed in
+> any way, for old or new kernels.
+> 
+> So the lirc header used to have feature flags LIRC_CAN_SET_REC_FILTER and
+> LIRC_CAN_NOTIFY_DECODE which were defined the in the lirc.h header, but
+> never implemented by any out of tree or in tree driver.
+> 
+> Neither feature was or will be ever implemented in the kernel;
+> LIRC_CAN_NOTIFY_DECODE is handled via the led subsytem, and it is unknown
+> what LIRC_CAN_SET_REC_FILTER is even supposed to mean. Again, I have not
+> found any implementation anywhere.
+> 
+> You are trying to build lirc user space daemon which is no longer maintained.
+> The last time the lirc daemon git repo had any commits was in 2019. User
+> space tooling has been replaced with daemon-less ir-ctl and ir-keytable,
+> which uses BPF for IR decoding.
+> 
+> The right fix is to simply delete the offending lines in lircd.cpp and all
+> will be well. Sometimes source code needs a little maintainence.
+> 
+> These changes in the lirc uapi do not change the uapi in any way, just the
+> ability the build some unmaintained software without trivial changes.
 
-The address list is semi-random as I don't know whom to approach.
+Hi,
 
-Problem: infradead.org corrupts email subjects by changing:
-s/,/, /
+I don't understand how inability to build software is not an uapi 
+breakage -- care to elaborate?
 
-Examples:
-1. Previous discussion with Uwe about linux-arm-kernel:
-https://lore.kernel.org/all/20220215125856.es2euyoqo6mp4y2t@pengutronix.de/
+Be it umaintained or not, it's still in distributions (the above is from 
+opensuse build system) and it is broken now. Every single distributor 
+now would have to go and fix this.
 
-2. My last email for MTD
-Modified email:
-https://lore.kernel.org/linux-mtd/20220408063720.12826-1-krzysztof.kozlowski@linaro.org/
-Proper email:
-https://lore.kernel.org/all/3e550deb-7c27-894b-a0b5-62609a60f17f@microchip.com/
+So either you fix it (e.g. re-add only the entries as I suggested) or I 
+will post a revert of your patch. Sorry, no excuses.
 
-When people use Patchwork or b4, the email from the list is being used,
-thus the one with a changed subject. Example:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9547c4e74f6b4b56c2f9e4e7a286ce126fd333fa
-The subject should be "dt-bindings: mtd: jedec,spi-nor: remove unneeded
-properties" (no space after coma)
-
-This leads to real commits with a bit odd subject. At least not the
-original subject.
-
-Can we do something about infradead? Get rid of it and move the mailing
-lists to vger.kernel.org? Or fix it?
-
-Best regards,
-Krzysztof
+thanks,
+-- 
+js
+suse labs

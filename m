@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DF5533BDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEAA533BE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiEYLjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S241073AbiEYLlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiEYLi5 (ORCPT
+        with ESMTP id S237970AbiEYLld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:38:57 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147EC9EB5F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:38:55 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id s68so2385836pgs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:38:55 -0700 (PDT)
+        Wed, 25 May 2022 07:41:33 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2D4A2047
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:41:32 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id a17so2263342plb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:41:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+XvTKuREjiScrS3Wh3we/csDNgvvsNrhuVBevDa5cpg=;
-        b=fVm+KR5uG2kq3XNouhS2R/L94OvDDTU5coc7ipX7iW9rngv/ZEpY3fR7NHUagopxnq
-         NOwZb9CkIdXE0nJjQCctq7BtxhLQ5RH5UDgwn7ez4SWe2+R/yap0p0jr7yj17acjt5hw
-         G2PZoTAJr6pA91fcCSfWMXpeVKvzq6Pj2WOXEWXqJDxveE9fTloLLW0HvKPKCRpfOOvj
-         kTsCQO3/q12cvQi9bx61yDyTEow8FG97UUPM/VzTxV7mxBmQY4NlM1Qjv6zJQds3Twro
-         mlhbxszL5yozEO+IH9fK94imsjOF7jy+Dv2HjJPKoYorkW96w95P6s8sUB0SsP3o98AX
-         0syw==
+        bh=Di7XV4IGWF77tQvxoeiNfKzeIQMl+KEXZAhavQki9xI=;
+        b=4PIrBTtSY7gdXmJ5owF/C1/ZrJroXty20T94JZS01Q1mZd4fgW+U09Ylg34REtQHwg
+         VvHo688nCXJo+Q7+koX9lz+0tbnGoEkPPGZ2AgZ66FiiIBz/6J2zuZ2o6ahZyYplwi5a
+         ZpYwEegz5Et296T5u2GHEruAMZ0J0oFI2MrnGS/px1P5ZBQ3T4Fw9BIIQZ7ilJbngsZX
+         RuccrSfBxgHlo3I+FuYajmX7kRE146DU7yk3DvUqdzSiPKw6IAB1msE3q4MepqWL+Drr
+         HByjp0hRrmK7RyClGTppcHZFzyvg58pywiCu6oaOmRd1JgAsrEtQimpdgiRstKiuADI5
+         INkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+XvTKuREjiScrS3Wh3we/csDNgvvsNrhuVBevDa5cpg=;
-        b=LeihjnmNTkYE0fJ5k0TZFkIEuqqkia0e6M3BT1FN8aa+zBS+rWXXkEuzxke/cTGc5E
-         BKPAmACGxQ9xP18aSEbN2+i2gizCRPQYq5eVvMcaANZ0os9gsQUrv/bB+uda2o3L2sFN
-         LvuUCYAk1A8rRI05bYipTlBXlYST+FZgjkoyrV5dSJpru9WmCepla7SBdODg03TTtFNr
-         JwXqqzQTl3FhqVCSodcwFHo3//ap8ITYaYZw1sZrMCV2JSJrranJsgYtpsgT3Fkwcx6e
-         d7mTYxOix9Pv3oWVvqvZjkt181tP9s4tVOBomHuIxMDg7xQLXv8/gN1tWKnto9O24ife
-         8zAA==
-X-Gm-Message-State: AOAM531mlyCArcwuTgqMXv6oAKC4YhxPqK3+b9awXZAwjvjxL5ALiTps
-        ri0lnwqTmw5KpkTBjndncNv0nw==
-X-Google-Smtp-Source: ABdhPJywMg+/gvLv6CGzubqG5U05Br0QQh9ssP+pJgA5WkDyf0g/dnqlzvymmRS4/K2osf4odF5nUw==
-X-Received: by 2002:a63:9142:0:b0:3fa:dc58:8726 with SMTP id l63-20020a639142000000b003fadc588726mr2648562pge.349.1653478734613;
-        Wed, 25 May 2022 04:38:54 -0700 (PDT)
+        bh=Di7XV4IGWF77tQvxoeiNfKzeIQMl+KEXZAhavQki9xI=;
+        b=RzHsXvzQ1GylWk2ZE7nlipDMGu4ItJd5uUOiN7v87xi9k498zYtWF5GpjOTcMcaB2C
+         ZWhghrzXEuq76yo+A9Ms2zS/mw1oVC5fK2HaRkGxShp3elUzBSql89goQHRJ5+ZLcV3q
+         8zEjGbjviz1kJQ7wGMgWOmGhs668PESYvKNAjOBtJumA7w14afdFc68VxDIA30CkfKyB
+         SRwhAGEhHP40kDAI12Pbb/iBzdIX3wK0gbSUQ+oR+G2J+hMBbdYHfRJdTHFAEWoRr7DS
+         XOd0YJP4sc35FdlTSBUVyny0ZFMYMGoAyW2F81gasdr3RkUDv97wWyFty2twhBdnL92L
+         nTsw==
+X-Gm-Message-State: AOAM530QzFZNHW5wNSiZmjkgL6e8et1PrmQQ2wWpQedAhfFxBf/+2JFg
+        +PCP7h+z1/Jo+b/io9XOrPkKrg==
+X-Google-Smtp-Source: ABdhPJz17xYLcQGQExhrQwEb4JqIELoJYEvW83JIvWk7UhoFB1UVcickRa/OeXecDgwrKutJKIJ8Fg==
+X-Received: by 2002:a17:902:ec85:b0:161:cff5:17c8 with SMTP id x5-20020a170902ec8500b00161cff517c8mr32385262plg.62.1653478891804;
+        Wed, 25 May 2022 04:41:31 -0700 (PDT)
 Received: from localhost ([2408:8207:18da:2310:c40f:7b5:4fa8:df3f])
-        by smtp.gmail.com with ESMTPSA id c27-20020aa7953b000000b0050dc762814fsm11277985pfp.41.2022.05.25.04.38.52
+        by smtp.gmail.com with ESMTPSA id i4-20020aa787c4000000b00518d06efbc8sm3393965pfo.98.2022.05.25.04.41.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 04:38:53 -0700 (PDT)
-Date:   Wed, 25 May 2022 19:38:49 +0800
+        Wed, 25 May 2022 04:41:31 -0700 (PDT)
+Date:   Wed, 25 May 2022 19:41:26 +0800
 From:   Muchun Song <songmuchun@bytedance.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
         cgroups@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
         longman@redhat.com
 Subject: Re: [PATCH v4 04/11] mm: vmscan: rework move_pages_to_lru()
-Message-ID: <Yo4VSbeNRqxzd11c@FVFYT0MHHV2J.usts.net>
+Message-ID: <Yo4V5o0dasZSm2MF@FVFYT0MHHV2J.usts.net>
 References: <20220524060551.80037-1-songmuchun@bytedance.com>
  <20220524060551.80037-5-songmuchun@bytedance.com>
- <Yo00Svsy/N8cJVmf@cmpxchg.org>
+ <Yo2Xt6zFxNrf9M5j@carbon>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yo00Svsy/N8cJVmf@cmpxchg.org>
+In-Reply-To: <Yo2Xt6zFxNrf9M5j@carbon>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -73,7 +73,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 03:38:50PM -0400, Johannes Weiner wrote:
+On Tue, May 24, 2022 at 07:43:03PM -0700, Roman Gushchin wrote:
 > On Tue, May 24, 2022 at 02:05:44PM +0800, Muchun Song wrote:
 > > In the later patch, we will reparent the LRU pages. The pages moved to
 > > appropriate LRU list can be reparented during the process of the
@@ -82,62 +82,11 @@ On Tue, May 24, 2022 at 03:38:50PM -0400, Johannes Weiner wrote:
 > > acquire the correct lruvec lock.
 > > 
 > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > ---
-> >  mm/vmscan.c | 49 +++++++++++++++++++++++++------------------------
-> >  1 file changed, 25 insertions(+), 24 deletions(-)
-> > 
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index 1678802e03e7..761d5e0dd78d 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -2230,23 +2230,28 @@ static int too_many_isolated(struct pglist_data *pgdat, int file,
-> >   * move_pages_to_lru() moves pages from private @list to appropriate LRU list.
-> >   * On return, @list is reused as a list of pages to be freed by the caller.
-> >   *
-> > - * Returns the number of pages moved to the given lruvec.
-> > + * Returns the number of pages moved to the appropriate LRU list.
-> > + *
-> > + * Note: The caller must not hold any lruvec lock.
-> >   */
-> > -static unsigned int move_pages_to_lru(struct lruvec *lruvec,
-> > -				      struct list_head *list)
-> > +static unsigned int move_pages_to_lru(struct list_head *list)
-> >  {
-> > -	int nr_pages, nr_moved = 0;
-> > +	int nr_moved = 0;
-> > +	struct lruvec *lruvec = NULL;
-> >  	LIST_HEAD(pages_to_free);
-> > -	struct page *page;
-> >  
-> >  	while (!list_empty(list)) {
-> > -		page = lru_to_page(list);
-> > +		int nr_pages;
-> > +		struct folio *folio = lru_to_folio(list);
-> > +		struct page *page = &folio->page;
-> > +
-> > +		lruvec = folio_lruvec_relock_irq(folio, lruvec);
-> >  		VM_BUG_ON_PAGE(PageLRU(page), page);
-> >  		list_del(&page->lru);
-> >  		if (unlikely(!page_evictable(page))) {
-> > -			spin_unlock_irq(&lruvec->lru_lock);
-> > +			unlock_page_lruvec_irq(lruvec);
 > 
-> Better to stick with the opencoded unlock. It matches a bit better
-> with the locking function, compared to locking folio and unlocking
-> page...
+> With changes asked by Johannes :
+> 
+> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 >
 
-Seems like we are missing folio unlock variants.
-How about intriducing folio_lruvec_unlock() variants?
-There are a lot of places where locking folio and
-unlocking page.
-
-Thanks.
- 
-> Aside from that, this looks good:
-> 
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
->
-
-Thanks.
+Thanks Roman.
  

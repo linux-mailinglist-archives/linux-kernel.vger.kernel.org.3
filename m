@@ -2,69 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117BE533C94
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F17D533C97
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237199AbiEYM1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S241350AbiEYM1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiEYM1E (ORCPT
+        with ESMTP id S241712AbiEYM1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:27:04 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C88A6D3B5;
-        Wed, 25 May 2022 05:27:02 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id DE4811F44DDB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653481621;
-        bh=/0q+hfmUuKvNHwu+BWOwIhmaeAH+9oVvmGqAAo1KneI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WmpI3+u+D2P5XCFYkAzhTxLRcX0QGnwV3zpOgvU+E0ivdM6Yxx8D5xqeOWKcK4oqx
-         LEu0psFPyajJIlwGL5VYmINtHyHbBhKZGeqV2raQ+0YAEYTXu+ygj2HRnLt4c5tSv7
-         52Cj+yLSxsqsM96oitx7RHERgw6/E3vRYSmjvpZGoN+CmnKm5vnLR0s+I+slY3nXCm
-         UxO1zbbo6/87nSumJuH+h/pUL+W+QtcYhkGEXl+Xa0+COiYyX9dsyJe9XpN2vhl2xH
-         JILO8ki1JJsy442UbTfQ7GjTmTyhaGJdfvQjNnOp1jVkj9NmloJeP9CP2y8pkeonae
-         Yt4PSaGzgUyRA==
-Message-ID: <62abad94-fe4a-2505-506d-6e4bc6b425ff@collabora.com>
-Date:   Wed, 25 May 2022 14:26:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v10 04/21] drm/edid: Add cea_sad helpers for freq/length
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
-Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Wed, 25 May 2022 08:27:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB6A86D868
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:27:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 175201FB;
+        Wed, 25 May 2022 05:27:30 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.0.228])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24A533F73D;
+        Wed, 25 May 2022 05:27:28 -0700 (PDT)
+Date:   Wed, 25 May 2022 13:27:23 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, cj.chengjian@huawei.com,
+        huawei.libin@huawei.com, xiexiuqi@huawei.com, liwei391@huawei.com,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
-References: <20220523104758.29531-1-granquet@baylibre.com>
- <20220523104758.29531-5-granquet@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220523104758.29531-5-granquet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com
+Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
+ allocated trampolines
+Message-ID: <Yo4gq6he3zb/B6kx@FVFF77S0Q05N>
+References: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
+ <20220316100132.244849-4-bobo.shaobowang@huawei.com>
+ <YmFXrBG5AmX3+4f8@lakrids>
+ <20220421100639.03c0d123@gandalf.local.home>
+ <YmF0xYpTMoWOIl00@lakrids>
+ <20220421114201.21228eeb@gandalf.local.home>
+ <YmGF/OpIhAF8YeVq@lakrids>
+ <8f36ebd2-2c56-d896-3a91-c97a5760b344@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8f36ebd2-2c56-d896-3a91-c97a5760b344@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,168 +53,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/05/22 12:47, Guillaume Ranquet ha scritto:
-> This patch adds two helper functions that extract the frequency and word
-> length from a struct cea_sad.
+On Thu, May 05, 2022 at 10:57:35AM +0800, Wangshaobo (bobo) wrote:
 > 
-> For these helper functions new defines are added that help translate the
-> 'freq' and 'byte2' fields into real numbers.
+> 锟斤拷 2022/4/22 0:27, Mark Rutland 写锟斤拷:
+> > On Thu, Apr 21, 2022 at 11:42:01AM -0400, Steven Rostedt wrote:
+> > > On Thu, 21 Apr 2022 16:14:13 +0100
+> > > Mark Rutland <mark.rutland@arm.com> wrote:
+> > > 
+> > > > > Let's say you have 10 ftrace_ops registered (with bpf and kprobes this can
+> > > > > be quite common). But each of these ftrace_ops traces a function (or
+> > > > > functions) that are not being traced by the other ftrace_ops. That is, each
+> > > > > ftrace_ops has its own unique function(s) that they are tracing. One could
+> > > > > be tracing schedule, the other could be tracing ksoftirqd_should_run
+> > > > > (whatever).
+> > > > Ok, so that's when messing around with bpf or kprobes, and not generally
+> > > > when using plain old ftrace functionality under /sys/kernel/tracing/
+> > > > (unless that's concurrent with one of the former, as per your other
+> > > > reply) ?
+> > > It's any user of the ftrace infrastructure, which includes kprobes, bpf,
+> > > perf, function tracing, function graph tracing, and also affects instances.
+> > > 
+> > > > > Without this change, because the arch does not support dynamically
+> > > > > allocated trampolines, it means that all these ftrace_ops will be
+> > > > > registered to the same trampoline. That means, for every function that is
+> > > > > traced, it will loop through all 10 of theses ftrace_ops and check their
+> > > > > hashes to see if their callback should be called or not.
+> > > > Sure; I can see how that can be quite expensive.
+> > > > 
+> > > > What I'm trying to figure out is who this matters to and when, since the
+> > > > implementation is going to come with a bunch of subtle/fractal
+> > > > complexities, and likely a substantial overhead too when enabling or
+> > > > disabling tracing of a patch-site. I'd like to understand the trade-offs
+> > > > better.
+> > > > 
+> > > > > With dynamically allocated trampolines, each ftrace_ops will have their own
+> > > > > trampoline, and that trampoline will be called directly if the function
+> > > > > is only being traced by the one ftrace_ops. This is much more efficient.
+> > > > > 
+> > > > > If a function is traced by more than one ftrace_ops, then it falls back to
+> > > > > the loop.
+> > > > I see -- so the dynamic trampoline is just to get the ops? Or is that
+> > > > doing additional things?
+> > > It's to get both the ftrace_ops (as that's one of the parameters) as well
+> > > as to call the callback directly. Not sure if arm is affected by spectre,
+> > > but the "loop" function is filled with indirect function calls, where as
+> > > the dynamic trampolines call the callback directly.
+> > > 
+> > > Instead of:
+> > > 
+> > >    bl ftrace_caller
+> > > 
+> > > ftrace_caller:
+> > >    [..]
+> > >    bl ftrace_ops_list_func
+> > >    [..]
+> > > 
+> > > 
+> > > void ftrace_ops_list_func(...)
+> > > {
+> > > 	__do_for_each_ftrace_ops(op, ftrace_ops_list) {
+> > > 		if (ftrace_ops_test(op, ip)) // test the hash to see if it
+> > > 					     //	should trace this
+> > > 					     //	function.
+> > > 			op->func(...);
+> > > 	}
+> > > }
+> > > 
+> > > It does:
+> > > 
+> > >    bl dyanmic_tramp
+> > > 
+> > > dynamic_tramp:
+> > >    [..]
+> > >    bl func  // call the op->func directly!
+> > > 
+> > > 
+> > > Much more efficient!
+> > > 
+> > > 
+> > > > There might be a middle-ground here where we patch the ftrace_ops
+> > > > pointer into a literal pool at the patch-site, which would allow us to
+> > > > handle this atomically, and would avoid the issues with out-of-range
+> > > > trampolines.
+> > > Have an example of what you are suggesting?
+> > We can make the compiler to place 2 NOPs before the function entry point, and 2
+> > NOPs after it using `-fpatchable-function-entry=4,2` (the arguments are
+> > <total>,<before>). On arm64 all instructions are 4 bytes, and we'll use the
+> > first two NOPs as an 8-byte literal pool.
+> > 
+> > Ignoring BTI for now, the compiler generates (with some magic labels added here
+> > for demonstration):
+> > 
+> > 	__before_func:
+> > 			NOP
+> > 			NOP
+> > 	func:
+> > 			NOP
+> > 			NOP
+> > 	__remainder_of_func:
+> > 			...
+> > 
+> > At ftrace_init_nop() time we patch that to:
+> > 
+> > 	__before_func:
+> > 			// treat the 2 NOPs as an 8-byte literal-pool
+> > 			.quad	<default ops pointer> // see below
+> > 	func:
+> > 			MOV	X9, X30
+> > 			NOP
+> > 	__remainder_of_func:
+> > 			...
+> > 
+> > When enabling tracing we do
+> > 
+> > 	__before_func:
+> > 			// patch this with the relevant ops pointer
+> > 			.quad	<ops pointer>
+> > 	func:
+> > 			MOV	X9, X30
+> > 			BL	<trampoline>	// common trampoline
 > 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->   drivers/gpu/drm/drm_edid.c | 74 ++++++++++++++++++++++++++++++++++++++
->   include/drm/drm_edid.h     | 14 ++++++++
->   2 files changed, 88 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-> index 561f53831e29..61ef1b1c972c 100644
-> --- a/drivers/gpu/drm/drm_edid.c
-> +++ b/drivers/gpu/drm/drm_edid.c
-> @@ -4758,6 +4758,80 @@ int drm_edid_to_speaker_allocation(struct edid *edid, u8 **sadb)
->   }
->   EXPORT_SYMBOL(drm_edid_to_speaker_allocation);
->   
-> +/**
-> + * drm_cea_sad_get_sample_rate - Extract the sample rate from cea_sad
-> + * @sad: Pointer to the cea_sad struct
-> + *
-> + * Extracts the cea_sad frequency field and returns the sample rate in Hz.
-> + *
-> + * Return: Sample rate in Hz or a negative errno if parsing failed.
-> + */
-> +int drm_cea_sad_get_sample_rate(const struct cea_sad *sad)
-> +{
-> +	switch (sad->freq) {
-> +	case DRM_CEA_SAD_FREQ_32KHZ:
-> +		return 32000;
-> +	case DRM_CEA_SAD_FREQ_44KHZ:
-> +		return 44100;
-> +	case DRM_CEA_SAD_FREQ_48KHZ:
-> +		return 48000;
-> +	case DRM_CEA_SAD_FREQ_88KHZ:
-> +		return 88200;
-> +	case DRM_CEA_SAD_FREQ_96KHZ:
-> +		return 96000;
-> +	case DRM_CEA_SAD_FREQ_176KHZ:
-> +		return 176400;
-> +	case DRM_CEA_SAD_FREQ_192KHZ:
-> +		return 192000;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +EXPORT_SYMBOL(drm_cea_sad_get_sample_rate);
-> +
-> +static bool drm_cea_sad_is_uncompressed(const struct cea_sad *sad)
-> +{
-> +	switch (sad->format) {
-> +	case HDMI_AUDIO_CODING_TYPE_STREAM:
+> I have a question that does this common trampoline allocated by
+> module_alloc()? if yes, how to handle the long jump from traced func to
+> common trampoline if only adding two NOPs in front of func.
 
-As far as I know, bit 0 is reserved, so HDMI_AUDIO_CODING_TYPE_STREAM should
-never occur here?
+No; as today there'd be *one* trampoline in the main kernel image, and where a
+module is out-of-range it will use a PLT the module loader created at load time
+(and any patch-site in that module would use the same PLT and trampoline,
+regardless of what the ops pointer was).
 
-> +	case HDMI_AUDIO_CODING_TYPE_PCM:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
+There might be a PLT between the call and the trampoline, but that wouldn't
+have any functional effect; we'd still get all the arguments, the original LR
+(in x9), and the location of the call (in the LR), as we get today.
 
-Also, I think that implementing a drm_cea_sad_get_compressed_max_bitrate()
-function should be pretty straightforward... the spec says that this is
-8 bits, byte 3 (your byte2) contains the max bitrate divided by 8kHz,
-so to extract it, you read byte2 and multiply it by 8000Hz.
+For how we do that today, see commits:
 
-/**
-  * drm_cea_sad_get_compressed_max_bitrate - Extract maximum bitrate
-  * @sad: Pointer to the cea_sad structure
-  *
-  * Extracts the cea_sad byte2 field and returns the maximum bit rate
-  * of a compressed audio stream.
-  *
-  * Note: This function may only be called for compressed audio.
-  *
-  * Return: Maximum bitrate of compressed audio stream in bit/s or
-  *         negative number for error
-  */
-int drm_cea_sad_get_compressed_max_bitrate(const struct cea_sad *sad)
-{
-	if (drm_cea_sad_is_uncompressed(sad)) {
-		DRM_ERROR("Not supported: tried to get max bitrate for uncompressed format: %u\n",
-			 sad->format);
-		return -EINVAL;
-	}
+* e71a4e1bebaf7fd9 ("arm64: ftrace: add support for far branches to dynamic ftrace")
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e71a4e1bebaf7fd990efbdc04b38e5526914f0f1
 
-	return sad->byte2 * 8000;
-}
+* f1a54ae9af0da4d7 ("arm64: module/ftrace: intialize PLT at load time")
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f1a54ae9af0da4d76239256ed640a93ab3aadac0
 
-> +/**
-> + * drm_cea_sad_get_uncompressed_word_length - Extract word length
-> + * @sad: Pointer to the cea_sad struct
-> + *
-> + * Extracts the cea_sad byte2 field and returns the word length for an
-> + * uncompressed stream.
-> + *
-> + * Note: This function may only be called for uncompressed audio.
-> + *
-> + * Return: Word length in bits or a negative errno if parsing failed.
-> + */
-> +int drm_cea_sad_get_uncompressed_word_length(const struct cea_sad *sad)
-> +{
-> +	if (!drm_cea_sad_is_uncompressed(sad)) {
-> +		DRM_WARN("Unable to get the uncompressed word length for a compressed format: %u\n",
-> +			 sad->format);
-> +		return -EINVAL;
-> +	}
-> +
-> +	switch (sad->byte2) {
-> +	case DRM_CEA_SAD_UNCOMPRESSED_WORD_16BIT:
-> +		return 16;
-> +	case DRM_CEA_SAD_UNCOMPRESSED_WORD_20BIT:
-> +		return 20;
-> +	case DRM_CEA_SAD_UNCOMPRESSED_WORD_24BIT:
-> +		return 24;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +EXPORT_SYMBOL(drm_cea_sad_get_uncompressed_word_length);
-> +
->   /**
->    * drm_av_sync_delay - compute the HDMI/DP sink audio-video sync delay
->    * @connector: connector associated with the HDMI/DP sink
-> diff --git a/include/drm/drm_edid.h b/include/drm/drm_edid.h
-> index 37c420423625..7a939cb95b38 100644
-> --- a/include/drm/drm_edid.h
-> +++ b/include/drm/drm_edid.h
-> @@ -373,6 +373,18 @@ struct cea_sad {
->   	u8 byte2;
->   };
->   
-> +#define DRM_CEA_SAD_FREQ_32KHZ  BIT(0)
-> +#define DRM_CEA_SAD_FREQ_44KHZ  BIT(1)
-> +#define DRM_CEA_SAD_FREQ_48KHZ  BIT(2)
-> +#define DRM_CEA_SAD_FREQ_88KHZ  BIT(3)
-> +#define DRM_CEA_SAD_FREQ_96KHZ  BIT(4)
-> +#define DRM_CEA_SAD_FREQ_176KHZ BIT(5)
-> +#define DRM_CEA_SAD_FREQ_192KHZ BIT(6)
-> +
-> +#define DRM_CEA_SAD_UNCOMPRESSED_WORD_16BIT BIT(0)
-> +#define DRM_CEA_SAD_UNCOMPRESSED_WORD_20BIT BIT(1)
-> +#define DRM_CEA_SAD_UNCOMPRESSED_WORD_24BIT BIT(2)
-> +
->   struct drm_encoder;
->   struct drm_connector;
->   struct drm_connector_state;
-> @@ -380,6 +392,8 @@ struct drm_display_mode;
->   
->   int drm_edid_to_sad(struct edid *edid, struct cea_sad **sads);
->   int drm_edid_to_speaker_allocation(struct edid *edid, u8 **sadb);
-> +int drm_cea_sad_get_sample_rate(const struct cea_sad *sad);
-> +int drm_cea_sad_get_uncompressed_word_length(const struct cea_sad *sad);
->   int drm_av_sync_delay(struct drm_connector *connector,
->   		      const struct drm_display_mode *mode);
->   
+* 3b23e4991fb66f6d ("arm64: implement ftrace with regs")
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3b23e4991fb66f6d152f9055ede271a726ef9f21
 
+Thanks,
+Mark.

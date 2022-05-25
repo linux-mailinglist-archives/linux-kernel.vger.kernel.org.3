@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEA25343A0
+	by mail.lfdr.de (Postfix) with ESMTP id 2C87353439E
 	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238515AbiEYTGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 15:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S245194AbiEYTGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 15:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbiEYTG2 (ORCPT
+        with ESMTP id S234934AbiEYTG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 May 2022 15:06:28 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED64101CC;
-        Wed, 25 May 2022 12:06:25 -0700 (PDT)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456A910FD7;
+        Wed, 25 May 2022 12:06:27 -0700 (PDT)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 866001C0005;
-        Wed, 25 May 2022 19:06:23 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id B66C81C000C;
+        Wed, 25 May 2022 19:06:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1653505584;
+        t=1653505585;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ywAReiQ8b2iwxTXb5E6eI58fMTifkSp/4WkYNadzaMY=;
-        b=KzulqpcYb4TXJAmiCB7hICkBMdvd89ZHWw1cp7VcjJ/x07GLxytViTVdsVHGAuJwHLS41x
-        BBJ/cSsmgHtiZgli1vEiuD//Y9wpZLSXdWDV+ARo4+PxIrFlTkfFmE87/7owElciuC9RoI
-        au7NRrVLKiBw5Ms8GY+dGODxmbd/R6921fOODU7ro3S3OoXwID2AhJ/SBK0sgJnpEbEZ7Q
-        D6mEXuQglqAyQ841cbIw3TV+NwFtgkM15V0Xonf6et/2ENErz4YlSC546lS9OIO87UcHQZ
-        095XOe0WXpsIoelRirBlNTq180+Vuv+QLNZbXLjrw5cA0eLGJtBipp7nJfhk2A==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X3NpzfHsy3MQha8wGjPfAxSdgIQTpR2te2qX4za7JD8=;
+        b=Bv6ttj29dNgDMJX3yQyDNgW575gX2At2jLx3MGEgDAlef+ep0qGobjdjWqqyqnusw13PJ3
+        rxYnq4XP/bp10i3xuPaUCjGDZGmnJxiWMY464U7CAmsKLsA/B7TWE5Leg7FetPSjU7SbNy
+        zf2DvMjAQekUM8tla12Zp5ToijAc7Jt2tzRI5Eokf4LGqUhclyb8wvgNohGGXfwUeuzaQa
+        I4IfokB81KPNJuZajs4DXD16RNCY8a96+FhK5LPaljkEx/eW7hAkiEuim+BHcYhqqBLS6N
+        xbWdMCBNggavuZB3llVf1bPi0diwYlvhGM3K8S0N5pUh+VTzr0XJi8lFi0xicw==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
@@ -40,11 +41,14 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Samuel Holland <samuel@sholland.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v5 00/44] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / CSI Rework
-Date:   Wed, 25 May 2022 21:05:33 +0200
-Message-Id: <20220525190617.696344-1-paul.kocialkowski@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH v5 01/44] media: sun6i-csi: Define and use driver name and (reworked) description
+Date:   Wed, 25 May 2022 21:05:34 +0200
+Message-Id: <20220525190617.696344-2-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220525190617.696344-1-paul.kocialkowski@bootlin.com>
+References: <20220525190617.696344-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,112 +61,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This new version is an offspring from the big "Allwinner A31/A83T
-MIPI CSI-2 Support and A31 ISP Support" series, which was split into
-individual series for better clarity and handling.
+Add proper defines for driver name and description instead of
+MODULE_NAME and hardcoding (cosmetics).
 
-This part only concerns the rework of the CSI driver to support the MIPI CSI-2
-and ISP workflows.
+Also rework the description while at it to mention the hardware
+generation that the driver supports and remove the video capture
+mentions since it applies to the whole media device.
 
-Changes since v4:
-- Removed the v4l2 controls handler from the driver;
-- Removed the info message about video device registration;
-- Fixed "literature" typos;
-- Moved patches dependent on the ISP driver to its dedicated series;
-- Rebased on the latest media tree;
-- Added collected tags;
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+---
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 14 ++++++--------
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h |  3 +++
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-Changes since v3:
-- Updated Kconfig to follow the latest media-wide changes;
-- Rebased on latest changes to the driver (JPEG/sRGB colorspaces);
-- Added helper to get a single enabled link for an entity's pad, to replace
-  source selection at link_validate time and select the remote source at
-  stream on time instead;
-- Kept clock-managed regmap mmio;
-- Added collected review tags;
-- Various cosmetic cleanups;
-
-Changes since all-in-one v2:
-- Reworked capture video device registration, which stays in the main path.
-- Reworked async subdev handling with a dedicated structure holding the
-  corresponding source to avoid matching in the driver;
-- Added mutex for mbus format serialization;
-- Remove useless else in link_validate;
-- Reworked commit logs to include missing information;
-- Cleaned up Kconfig, added PM dependency;
-- Moved platform-specific clock rate to of match data;
-- Added collected Reviewed-by tags;
-- Updated copyright years;
-Paul Kocialkowski (44):
-  media: sun6i-csi: Define and use driver name and (reworked)
-    description
-  media: sun6i-csi: Refactor main driver data structures
-  media: sun6i-csi: Tidy up platform code
-  media: sun6i-csi: Always set exclusive module clock rate
-  media: sun6i-csi: Define and use variant to get module clock rate
-  media: sun6i-csi: Use runtime pm for clocks and reset
-  media: sun6i-csi: Tidy up Kconfig
-  media: sun6i-csi: Tidy up v4l2 code
-  media: sun6i-csi: Tidy up video code
-  media: sun6i-csi: Pass and store csi device directly in video code
-  media: sun6i-csi: Register the media device after creation
-  media: sun6i-csi: Remove controls handler from the driver
-  media: sun6i-csi: Add media ops with link notify callback
-  media: sun6i-csi: Introduce and use video helper functions
-  media: sun6i-csi: Move csi buffer definition to main header file
-  media: media-entity: Add helper to get a single enabled link
-  media: sun6i-csi: Add bridge v4l2 subdev with port management
-  media: sun6i-csi: Rename sun6i_video to sun6i_csi_capture
-  media: sun6i-csi: Add capture state using vsync for page flip
-  media: sun6i-csi: Rework register definitions, invert misleading
-    fields
-  media: sun6i-csi: Add dimensions and format helpers to capture
-  media: sun6i-csi: Implement address configuration without indirection
-  media: sun6i-csi: Split stream sequences and irq code in capture
-  media: sun6i-csi: Move power management to runtime pm in capture
-  media: sun6i-csi: Move register configuration to capture
-  media: sun6i-csi: Rework capture format management with helper
-  media: sun6i-csi: Remove custom format helper and rework configure
-  media: sun6i-csi: Add bridge dimensions and format helpers
-  media: sun6i-csi: Get mbus code from bridge instead of storing it
-  media: sun6i-csi: Tidy capture configure code
-  media: sun6i-csi: Introduce bridge format structure, list and helper
-  media: sun6i-csi: Introduce capture format structure, list and helper
-  media: sun6i-csi: Configure registers from format tables
-  media: sun6i-csi: Introduce format match structure, list and helper
-  media: sun6i-csi: Implement capture link validation with logic
-  media: sun6i-csi: Get bridge subdev directly in capture stream ops
-  media: sun6i-csi: Move hardware control to the bridge
-  media: sun6i-csi: Rename the capture video device to sun6i-csi-capture
-  media: sun6i-csi: Cleanup headers and includes, update copyright lines
-  media: sun6i-csi: Add support for MIPI CSI-2 to the bridge code
-  media: sun6i-csi: Only configure capture when streaming
-  media: sun6i-csi: Add extra checks to the interrupt routine
-  media: sun6i-csi: Request a shared interrupt
-  MAINTAINERS: Add myself as sun6i-csi maintainer and rename/move entry
-
- MAINTAINERS                                   |   17 +-
- drivers/media/mc/mc-entity.c                  |   26 +
- .../media/platform/sunxi/sun6i-csi/Kconfig    |   12 +-
- .../media/platform/sunxi/sun6i-csi/Makefile   |    2 +-
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 1027 ++++------------
- .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  149 +--
- .../sunxi/sun6i-csi/sun6i_csi_bridge.c        |  845 +++++++++++++
- .../sunxi/sun6i-csi/sun6i_csi_bridge.h        |   69 ++
- .../sunxi/sun6i-csi/sun6i_csi_capture.c       | 1089 +++++++++++++++++
- .../sunxi/sun6i-csi/sun6i_csi_capture.h       |   88 ++
- .../platform/sunxi/sun6i-csi/sun6i_csi_reg.h  |  362 +++---
- .../platform/sunxi/sun6i-csi/sun6i_video.c    |  685 -----------
- .../platform/sunxi/sun6i-csi/sun6i_video.h    |   38 -
- include/media/media-entity.h                  |   13 +
- 14 files changed, 2591 insertions(+), 1831 deletions(-)
- create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
- create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.h
- create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
- create mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.h
- delete mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
- delete mode 100644 drivers/media/platform/sunxi/sun6i-csi/sun6i_video.h
-
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+index a971587dbbd1..5ca05f348021 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+@@ -27,8 +27,6 @@
+ #include "sun6i_csi.h"
+ #include "sun6i_csi_reg.h"
+ 
+-#define MODULE_NAME	"sun6i-csi"
+-
+ struct sun6i_csi_dev {
+ 	struct sun6i_csi		csi;
+ 	struct device			*dev;
+@@ -730,7 +728,7 @@ static int sun6i_csi_v4l2_init(struct sun6i_csi *csi)
+ 	int ret;
+ 
+ 	csi->media_dev.dev = csi->dev;
+-	strscpy(csi->media_dev.model, "Allwinner Video Capture Device",
++	strscpy(csi->media_dev.model, SUN6I_CSI_DESCRIPTION,
+ 		sizeof(csi->media_dev.model));
+ 	csi->media_dev.hw_revision = 0;
+ 
+@@ -753,7 +751,7 @@ static int sun6i_csi_v4l2_init(struct sun6i_csi *csi)
+ 		goto free_ctrl;
+ 	}
+ 
+-	ret = sun6i_video_init(&csi->video, csi, "sun6i-csi");
++	ret = sun6i_video_init(&csi->video, csi, SUN6I_CSI_NAME);
+ 	if (ret)
+ 		goto unreg_v4l2;
+ 
+@@ -868,8 +866,8 @@ static int sun6i_csi_resource_request(struct sun6i_csi_dev *sdev,
+ 	if (irq < 0)
+ 		return -ENXIO;
+ 
+-	ret = devm_request_irq(&pdev->dev, irq, sun6i_csi_isr, 0, MODULE_NAME,
+-			       sdev);
++	ret = devm_request_irq(&pdev->dev, irq, sun6i_csi_isr, 0,
++			       SUN6I_CSI_NAME, sdev);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Cannot request csi IRQ\n");
+ 		return ret;
+@@ -922,12 +920,12 @@ static struct platform_driver sun6i_csi_platform_driver = {
+ 	.probe = sun6i_csi_probe,
+ 	.remove = sun6i_csi_remove,
+ 	.driver = {
+-		.name = MODULE_NAME,
++		.name = SUN6I_CSI_NAME,
+ 		.of_match_table = of_match_ptr(sun6i_csi_of_match),
+ 	},
+ };
+ module_platform_driver(sun6i_csi_platform_driver);
+ 
+-MODULE_DESCRIPTION("Allwinner V3s Camera Sensor Interface driver");
++MODULE_DESCRIPTION("Allwinner A31 Camera Sensor Interface driver");
+ MODULE_AUTHOR("Yong Deng <yong.deng@magewell.com>");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+index 3a38d107ae3f..e04f3c3fa27b 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
+@@ -14,6 +14,9 @@
+ 
+ #include "sun6i_video.h"
+ 
++#define SUN6I_CSI_NAME		"sun6i-csi"
++#define SUN6I_CSI_DESCRIPTION	"Allwinner A31 CSI Device"
++
+ struct sun6i_csi;
+ 
+ /**
 -- 
 2.36.1
 

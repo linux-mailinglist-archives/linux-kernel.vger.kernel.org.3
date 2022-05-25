@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0253F53385E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC14533865
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbiEYI0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S233492AbiEYI1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiEYI0l (ORCPT
+        with ESMTP id S229649AbiEYI1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:26:41 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8158295BA
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:26:40 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id m6so23660258ljb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:content-transfer-encoding;
-        bh=TROhytUCmYi1+1zbJFOBdbpnjKvBFc00UACuo78Blu0=;
-        b=t7AXHImYt88F4yFcoFo/qiLCJPnM1PNNZclSW8YTDTfk0sG5d/ZeaKK/dKfcy4dkwO
-         m+7UDPXDNxmpmmTghEnV/L3JOGc6DgyEBn4FBQ1QVEV3PBPP7KeS30IkhMdfrA93FYp8
-         PLy0TxtWuwWlqGG3f/LH4bbArkBwE8muI0nLZSTBzkX6Zcch2vGKOR/gJv3Lpklnfg9Q
-         S924EuMCX97wqhm2YucSMxJEMYugXOIVDrEPipfoDCXxzyLxzenQEIy2ikIVQfGkdDjo
-         IUtvoRKID6OBzFaJ1EqKw6XtStq6bc9kax0JGmM3/XKnJ8INcBu3va9x6rXUG5alpisq
-         KyJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=TROhytUCmYi1+1zbJFOBdbpnjKvBFc00UACuo78Blu0=;
-        b=D1vYYanRK0zqkmi1uxmCbJ9j8pjNkgRqnqQUMZtLlHoPig10OYkksYRe5tJpr6tacB
-         gt1bDAe7wW3myQ9yKjH/eB0mSbz1seO9CceC5OYPSFBlPa+f96/irFxImfPIKo2X44FM
-         lfwpPMPB6psekfSp+9lI55irW1nyqW8UqS/IzijD6Ze77i6VzvJWeYRRQy2WMStfnvYS
-         XQLoFEAqpEMXRi7sT4z3LkU6OhRKIFMTS7JWPuHGxoCldCyO25RangMjIvphn5dDdZb5
-         hZGQ43Qb/y9H69MHLsEvlAoChsgh2IB0sBG3iTFC4c8uGsXOxgySqO+OZhnAK38kuVDb
-         Ks6A==
-X-Gm-Message-State: AOAM5314xpd7zzppyyVrDRHSUSWE7ojAzAw2O7vFLaZ57F43M17p7Ume
-        R+cSGC62k4f2YmgM3iARGWBpFg==
-X-Google-Smtp-Source: ABdhPJyDCQbgxiitG7pP3j+6MDNq9Z3uJ1djPx06ET2ui6tpQIRa8zNilbO2coRGhFru9YrSGRlLjA==
-X-Received: by 2002:a2e:894a:0:b0:253:e36b:83c1 with SMTP id b10-20020a2e894a000000b00253e36b83c1mr11560558ljk.520.1653467198883;
-        Wed, 25 May 2022 01:26:38 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id f24-20020a19ae18000000b0047255d2111dsm2971117lfc.76.2022.05.25.01.26.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 01:26:38 -0700 (PDT)
-Message-ID: <348dc099-737d-94ba-55ad-2db285084c73@openvz.org>
-Date:   Wed, 25 May 2022 11:26:37 +0300
+        Wed, 25 May 2022 04:27:40 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013ED20BDD;
+        Wed, 25 May 2022 01:27:37 -0700 (PDT)
+X-UUID: 96467fc6f1d24a0da4c5d013fd2bf27e-20220525
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:ee338470-198f-485b-81e6-c01d91845684,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:2a19b09,CLOUDID:91236847-4fb1-496b-8f1d-39e733fed1ea,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 96467fc6f1d24a0da4c5d013fd2bf27e-20220525
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 741277775; Wed, 25 May 2022 16:27:34 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 25 May 2022 16:27:33 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 25 May 2022 16:27:33 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 25 May 2022 16:27:33 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     <stable@vger.kernel.org>
+CC:     <mchehab@kernel.org>, <matthias.bgg@gmail.com>,
+        <hverkuil-cisco@xs4all.nl>, <mark-pk.tsai@mediatek.com>,
+        <sakari.ailus@linux.intel.com>, <linux-media@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <yj.chiang@mediatek.com>
+Subject: [PATCH 5.4 0/2] media: vim2m: Fix potential NULL pointer dereference
+Date:   Wed, 25 May 2022 16:27:29 +0800
+Message-ID: <20220525082731.28235-1-mark-pk.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH] XArray: handle XA_FLAGS_ACCOUNT in xas_split_alloc
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7b785645e8f1 ("mm: fix page cache convergence regression")
-added support of new XA_FLAGS_ACCOUNT flag into all Xarray allocation
-functions. Later commit 8fc75643c5e1 ("XArray: add xas_split")
-introduced xas_split_alloc() but missed about XA_FLAGS_ACCOUNT
-processing.
+Backport upstream solution [1][2] to fix below kernel panic:
 
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
- lib/xarray.c | 2 ++
- 1 file changed, 2 insertions(+)
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000208
+...
+pc : _raw_spin_lock_irqsave+0x50/0x90
+lr : v4l2_m2m_cancel_job+0x38/0x1c4 [v4l2_mem2mem]
+sp : ffffffc012d2bcb0
+x29: ffffffc012d2bcb0 x28: ffffff8098d6bb00
+x27: 0000000000000000 x26: ffffffc01009b5c8
+x25: 00000000000e001f x24: ffffff808ff3eb50
+x23: ffffffc01009f5a0 x22: 0000000000000000
+x21: ffffff808ffef000 x20: 0000000000000208
+x19: 0000000000000000 x18: ffffffc012b51048
+x17: ffffffc011e0ef7c x16: 00000000000000c0
+x15: ffffffc010fc78f4 x14: ffffffc0119dd790
+x13: 0000000000001b26 x12: 0000000053555555
+x11: 0000000000000002 x10: 0000000000000001
+x9 : 0000000000000000 x8 : 0000000000000208
+x7 : 2020202020202020 x6 : ffffffc011e313a6
+x5 : 0000000000000000 x4 : 0000000000000008
+x3 : 000000000000002e x2 : 0000000000000001
+x1 : 0000000000000000 x0 : 0000000000000208
+Call trace:
+ _raw_spin_lock_irqsave+0x50/0x90
+ v4l2_m2m_cancel_job+0x38/0x1c4 [v4l2_mem2mem]
+ v4l2_m2m_ctx_release+0x38/0x60 [v4l2_mem2mem]
+ vim2m_release+0x5c/0xe0 [vim2m]
+ v4l2_release+0x90/0x18c
+ __fput+0xdc/0x2cc
+ ____fput+0x10/0x1c
+ task_work_run+0xc4/0x130
+ do_notify_resume+0xdc/0x158
+ work_pending+0x8/0x10
 
-diff --git a/lib/xarray.c b/lib/xarray.c
-index 54e646e8e6ee..5f5b42e6f842 100644
---- a/lib/xarray.c
-+++ b/lib/xarray.c
-@@ -1013,6 +1013,8 @@ void xas_split_alloc(struct xa_state *xas, void *entry, unsigned int order,
- 	if (xas->xa_shift + XA_CHUNK_SHIFT > order)
- 		return;
- 
-+	if (xas->xa->xa_flags & XA_FLAGS_ACCOUNT)
-+		gfp |= __GFP_ACCOUNT;
- 	do {
- 		unsigned int i;
- 		void *sibling = NULL;
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cf7f34777a5b4100a3a44ff95f3d949c62892bdd
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1a28dce222a6ece725689ad58c0cf4a1b48894f4
+
+Mark-PK Tsai (2):
+  media: vim2m: Register video device after setting up internals
+  media: vim2m: initialize the media device earlier
+
+ drivers/media/platform/vim2m.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
 -- 
-2.31.1
+2.18.0
 

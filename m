@@ -2,145 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE1C533691
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC40E533693
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244060AbiEYFvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 01:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        id S241541AbiEYFwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 01:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237723AbiEYFvj (ORCPT
+        with ESMTP id S242912AbiEYFv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 01:51:39 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8581652513;
-        Tue, 24 May 2022 22:51:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FM14m/JDV6SqEUYX4kTRR2TF2b3uauuEyuoVxUhRbGd+lvF1g4sTpBnbeEmxBI12xHkyO6AXaWDFPcfhFaYsb6ekIjoDglRoafNOUmLvGAqXIuY1WeM/R4gN1LZwI4rlgwosSK6Osy8bHQ6GnpLvhhY1qHRe5cZYbD73ku1LhEItuiha/hmM1StXRPir0Ql962g8H0vxf32wKF80RKqokz8mBBIb0pIR5nSLRCRqT+X0+1QeOs/dl8tAPRmatyu9nPattRN4RUmvdvLfrefpaOV+tFS9nGo0Y3M+C0O6ReMsR9oX0wO4jlD8T7gbXm8VdSfAZqEb/DzPSBKCHgqFFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i8RxvayOi4f8YT93+KB6r1fQTH/COpnc6UNHg6Knknc=;
- b=m64ibysU37Sp6wgqNoJf+15xnS/3hzfOzXoX95QMTKl6gmN1S/VulcdtmQ17oNyd3XKNnvUfPw6eGi+T6P5nDUhajgxVSPeKwkQAC5A26UIZOnxDwDUZ7QfbteEIFtBxHRcM6h5e2gsI357N9acPRta6HmsPFjQFURoVqHPqJJqIzYGRj+MoezE8To80MdLsM7G4BRw8IQQsIBHae3p6nWeiE0jJ7Kdlc7K42Hw8NJRa1DbK9Gh8VNN//ofr234vDA18NfnRZkHRiC33qxn1oEY3v/9Esh6aqaNkavfEeSBAlZ+GfSDEf7jEMIUVBbYSH+yNgtkRjAaw1k5g9+OmAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i8RxvayOi4f8YT93+KB6r1fQTH/COpnc6UNHg6Knknc=;
- b=KCefSXNfhZQUmZs8EPAl/YlRoCv5G9lvrsdPHeupQk19P90SNOREgEpR8FdDArgcvOoudmgnB4ZOF5QMdgGVTIQP7sgI+vs/00hfQ+ip2hBfXQuG4VeVSraO3O7nj/SWc7YpwYW32N+kEQpjh5yNja/JmLBvf86fLILxgTktctcvn5bnoaUTuXbtjprxXzEWmcr/4QIrFGOXLnW37aLZiSS9SU6bxfHi5RHktDglEuMA8gLK/KhNou3MThlBvcvDwC0FQPVlnSfG0J00Yx85XZmoG1LGgjbveP4rIFOQWBy+0aWWJbptSH70KQ1Bv7JVhyo4lRAP+nsgEauro/O5rA==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by MN2PR12MB4064.namprd12.prod.outlook.com (2603:10b6:208:1d3::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Wed, 25 May
- 2022 05:51:36 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::d9a5:f1df:5975:a0d6]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::d9a5:f1df:5975:a0d6%7]) with mapi id 15.20.5273.023; Wed, 25 May 2022
- 05:51:36 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Christoph Hellwig <hch@lst.de>
-CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] nvmet: fix typo in comment
-Thread-Topic: [PATCH] nvmet: fix typo in comment
-Thread-Index: AQHYbQObpRgZPB8DQECEJV4e3qoYWa0vHPYA
-Date:   Wed, 25 May 2022 05:51:36 +0000
-Message-ID: <86ea84a6-87a2-856e-75e3-7ff4d52715b0@nvidia.com>
-References: <20220521111145.81697-26-Julia.Lawall@inria.fr>
-In-Reply-To: <20220521111145.81697-26-Julia.Lawall@inria.fr>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c95d08f1-9e6c-40bb-cf80-08da3e12a1a1
-x-ms-traffictypediagnostic: MN2PR12MB4064:EE_
-x-microsoft-antispam-prvs: <MN2PR12MB4064D7FF2C1D52E6FF555516A3D69@MN2PR12MB4064.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /dqE+Pd9fqFT/1D2zpBvUL9SrDXf6+DniOt+Q0hbozUJHP+9kNJA601HMnF/LYDCxxJrU1BlDxFZNWff2KLzFTTKOFlk2LFnRil9IS2a7c5HDehdjqNQzX4rqSRD2ppMy8E0ZRy/IaabSxwypgMc6jNFNbgr/6II3dD9eoTgVyh0BsadsGiy+e38sSDasjUr3UtNWuetN9EOaZTb2cgSWvHWjnhulvip479/6pOOPr7K1UsuDNlpu7G1nKolOZP8THbOOny11OKculyvCsY+gba0vLQqAF86UMEIdje/uBGkX+w+bKyV/MtzQwGqHOiE6GxMFK2xt56a1mIcG1h0k52p1DWWV1Q5XxzzilBHy2Wy2PPyOwosZBfb4QZBGOqH4Qecg2TAajT7uZrschJbQ80FVZR0xuz3propD5Z+nF7j7/WCJ1ToqMQrgJyM/Y4EvplpvWNIv4gZa//H/dD1AZocYgx7avNnkmAmulH443/IV0qlM8Cnxny9gh+W8N9ygwqzRtKenVYnQlD2K9qMZ5jijN7AbusOdKMrwFqWhkIk5XlmRUNUG++ad0e4yj9VjORdZJOwPo++ZBaiKieHWja+1jlrIf6mfzPTt3jcsiIG7Jw/wvycK4dA5FytE69WUwsjPpcl8fyWXPsGwRx6oActeECIuGM8K1v7TqxAHCQBiXcfQH6YVMfbUenh0Gqyv9CRXWyjHHAkEiav+sX3jUZB0zYSy5A2EgXmoeSbrVWwDXCiIffSXWY7GFWvuu3yjjCeaV8H9aJX+/GGet+94g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(316002)(508600001)(5660300002)(36756003)(110136005)(54906003)(71200400001)(31686004)(83380400001)(31696002)(91956017)(6486002)(8676002)(4326008)(558084003)(86362001)(2616005)(38070700005)(38100700002)(76116006)(66446008)(66476007)(66946007)(66556008)(64756008)(122000001)(6506007)(8936002)(6512007)(53546011)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SWtIMW5jTnpjVXo4RkZzUEV0RTcyOVJKL2hOZzRYMUhkSi9HSjk5VGFuMFha?=
- =?utf-8?B?T1JKWTJmRFloamttL0hqRVFkRzJSVGY3bzN2OHAyL3c0UmZFd01ZNU1Jc2VL?=
- =?utf-8?B?a2JGaE9EQ040ektyRFgrQ3NrZnRtelA3UDBzTnV4d2FWeUhxRmlRR1NWV2xP?=
- =?utf-8?B?bzBBbEgyUWlGTjllai9oMnJDUUFPdGdpL0pzSUUrMWpraytkLzNIZHVSOEZ6?=
- =?utf-8?B?Tk9uMzNwalVRNElBUGFqTVpzMndEKzAvcW5SOFBHQnVDUTdVeExkT2x2WnJX?=
- =?utf-8?B?d1lla1EzK0lETmUwOXRRZlZ6RlgwdGdRcDFmdnhrMEl5RmJIcE0yY1dNcVNU?=
- =?utf-8?B?dFFBbjhBNitPeUhJSXNoWXJWNnRSaUdOL1B5aE5WOVNRTmVkS2EvMTZXYW1v?=
- =?utf-8?B?K2hIcVdNWEIvejhKSFVLbkIvRWpqLzJtdEtMeHJRTnhSbTU4eVcrbzJOaTdi?=
- =?utf-8?B?dEpnSk5JcEFSbWZ5amRqdTlGMUlHRG9zSjg5WldpS0p1TnZFbmM0VzNBT3hS?=
- =?utf-8?B?OFNnenFwYmw5YUxNNnl1VHBiaDZHdXh5UmNiU2hra2UreGpZekNKWXBueHd3?=
- =?utf-8?B?bmlaczJxcTExZkFWSlE5NGVrdHlCVWw3L3JJSkFObUdQK2IzOGNJL1RCMDdH?=
- =?utf-8?B?TFc1NlJuRS9OTjRNMDgrSGRBVVFOYVFWMEZCd3puTHZjSnAvWUxCZWR2NGpm?=
- =?utf-8?B?V3dUVFZPaGsrUWtGa3ltMUpBdm1QQjhYM0d6WFZMVk1EOWQxekwvM3ZoNUky?=
- =?utf-8?B?WXhFRVprK1VoRUNTalN3aUJjaGRNd0l4b0NHeU45NmVVNEUvUXlRSFV6a3E4?=
- =?utf-8?B?NjBHZVFFcS9RMVFDaXRMVlZjQldUZVVmWjlhSjE0elU1NG9KL2VvdlNyTWl5?=
- =?utf-8?B?V1pFZ0pLMXkxdFN6VnI4UUVjWFRhZVluZ2pZZlNDMUNxYk1ZenA3b2hPak9L?=
- =?utf-8?B?NUxodUhjOVZGMDBYNDBVRXJMaWd4R1hSKzM5dk9TT01GamdwUVgyV2pKVUJQ?=
- =?utf-8?B?N2M5U3ZmM0dtQ1lMZWVyR1FsVGlqc2xub3daTmNuTjYxY3g4ZXpBSlUrYm1I?=
- =?utf-8?B?RGYzZkdCbklPTHdBa0c2b0E1cVdKc1FnSmpyT3ZJYVNmK1M1Y1llT3ZnN3ZL?=
- =?utf-8?B?R0g4Z3lSMkZyMmUwMWRnSWZwNkx3UUd3cnhOU01sR25BU3h4VHYwV0lueHBj?=
- =?utf-8?B?YlArVnVOTE9haG5yMGRjckpXT2QwSllJNHR1cUljVFlwNU9WbDF1MU1nWGo2?=
- =?utf-8?B?MC9TQzVUeGphRW53WTJ3R2VOZ3l0UXlYN3lXNTdUejdzcVJDQkJEbFBGOVow?=
- =?utf-8?B?Uzk5Q2Iva3BjODdPNEtOaUh3a2JWNmJqUXQzVWE0MWh4NVFxcTdYdGZ2TXFn?=
- =?utf-8?B?QmFXbE1UU0dhd3dLQ05VYThBeG9BVmpjOGNNVkhHbXhPbXZ0clZrclBJTjZO?=
- =?utf-8?B?Zk04NlY3cGZwb1kzMS96eE51bmlycVlMVEhzNnFUWktDZ21qU0RlVWRUeTZp?=
- =?utf-8?B?RHhMR1JFcEVhSzAxakZTaG93QVJWdG5SU3VNaVIvclgzTHlvemJEZm5LK3ha?=
- =?utf-8?B?c1lBWkxBWHFaVkNXalJZV09DMzV4L1FTTFQzV1VBanhaMktUL292dnd4aHBs?=
- =?utf-8?B?RFErTkV3bTJ4ZTRpejgyVkFxVjZqcVlzQ1JiR1JTUEYyeE5ScEUyUGhiRHg0?=
- =?utf-8?B?SUNiMTNad0tFNFVwM1hUTm15czcya3FKNWVENzA2c2pOT0d5OXRUekFwNFMz?=
- =?utf-8?B?TDZ3VEloL3pjTEs4S3ZDUjlmaG9wSXhET0VkQU95RnJmMHBmWVJpWnJVczFL?=
- =?utf-8?B?TXdmM2ZCaitLdnpLSmxmbkJsSkozTDVUNFRKcjMza2dBa0VMNFoxTGJtSFFo?=
- =?utf-8?B?c3hzTlFjWEFvOE1uK2ZHaW0rd2NsUUNHQkdQYXdGL2tDbWVOdTIveFB3U0hl?=
- =?utf-8?B?TjM3aSt1dFFuRFNmOEt5cncyWmZaQUJGbEtVUUZKRGtmUXhMakFsMHhyR2tC?=
- =?utf-8?B?SWFYUG1YbE1TcWo1S3ZMcUdRUktaaERiZTU3c3dsZm5EdDBlUENjOG9vUWw5?=
- =?utf-8?B?cDl4WXluV05xVm9tU25vOThxcG92SFJkc2N6ck0wdW9zSVphMzMxRTZlZmJT?=
- =?utf-8?B?WmI0by9YcHpLbHB3SGZzL0hUMlFLRmVxS05EVHRYUjY3eUw5Qit0eitZb2xt?=
- =?utf-8?B?dmNidXlWKy9CNWRLRlJ2QWJKOVdyaGJUOVNuUm1VNG9pODJkdDg0UmlKQmpF?=
- =?utf-8?B?UkkveUxtWDFhTDZaWDNmVFlHbEdrNEFaVDQ5cTUyZnJaMzlFUXE3K0krbVI1?=
- =?utf-8?B?aVlJeG1aRGhER3JXMk5idW04MGdaSFZjVVAxUW9hVDFmUmVBdnZpc1FIU3gz?=
- =?utf-8?Q?vs9BwYCn1McuNRJr2Y3ZMJEF2wfTI7Uc8cBoCnOlKVBb4?=
-x-ms-exchange-antispam-messagedata-1: ULUVxC1o9ZW+2Q==
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <445F6285CD67474DAF9CDAD8D509D11A@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 25 May 2022 01:51:57 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382245933B;
+        Tue, 24 May 2022 22:51:55 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id q4so17680520plr.11;
+        Tue, 24 May 2022 22:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sGMC9J3i2A0JEMEBRMvIAV6dTYRQjIEP1weGgAQj+xI=;
+        b=DiEqRXuQ0GoU9KOzRPRrrP85Totp4N3hDUUUgE0VkGyrk02TPDqDfZBf70fDXvngz0
+         mRai2GwSRPKbCa31jEvrNpaxeYx36xCanlyV1jjlbx98ff9RWsD6vnYfgrUPrtW7T7kt
+         42JTkzlNn1glDLKL3mN5I69G1L1fgFFgtjELNHlXMA9xZkSV5ip/IzmXs8EG2kRn/BV4
+         k+u4LL7A/ObwbTk+/E5XNX82YHAVXOMHdR0sGY0oaBIJEk6sw415oGineHm28+2MAsy+
+         jz1lMhLLi6AEbMMo26XkRoKRnvYWV1OYi1nNcCotDO2m78AXiwHkYO1Z4hpj0hR1xiUI
+         LfOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sGMC9J3i2A0JEMEBRMvIAV6dTYRQjIEP1weGgAQj+xI=;
+        b=yFrAJfvKS3xvboGBgqlGG9nFznLGMzkUbBsAqPz7QjNlos70MPXC5A4qG/2pKv/y9F
+         5ZvfEiFa8fRQ44LEVXTkA6khkxAAvGsehHv7WD25QJPUgc4+qTljAWd+A27UrsLfGgHc
+         WBqkpIqI5KuYtyqtNS7P6jGtecxgmlv7BiwQd8lvL9s72PsBZirq3aDwgFeTfm2LLw+G
+         BV+LhCPm6KTviP9XB5xuNxJQN+k+AxuTXVsghKjJ1cQwOE+djFY8T/lmd32D3//TvmA3
+         dduRGD8uS7FAs0rAPX9lpDH7r5OeUvBa/GF2ncqajT1lOI/B5sMgiCGACiakQ9GPxj6H
+         UqZw==
+X-Gm-Message-State: AOAM531S/ZXJEiIa6e6z+CJJiwchund2lHBZgZ5YfRNS1D5PIDUubQmt
+        sg5/PBwdKueKIn9Byymdnr8=
+X-Google-Smtp-Source: ABdhPJxNwMIEFHQuS5DfF434R//xq5CeNTJMpPj7HDMaFR3KodwuH3+S+ROhhzxSfE9XyFoU1wt8SA==
+X-Received: by 2002:a17:90b:1e46:b0:1e0:10de:f8e4 with SMTP id pi6-20020a17090b1e4600b001e010def8e4mr8587987pjb.7.1653457914739;
+        Tue, 24 May 2022 22:51:54 -0700 (PDT)
+Received: from localhost ([2406:7400:63:4576:a782:286b:de51:79ce])
+        by smtp.gmail.com with ESMTPSA id x17-20020a170902821100b0015e8d4eb2a8sm8134043pln.242.2022.05.24.22.51.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 22:51:54 -0700 (PDT)
+Date:   Wed, 25 May 2022 11:21:49 +0530
+From:   Ritesh Harjani <ritesh.list@gmail.com>
+To:     Vaibhav Jain <vaibhav@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2] of: check previous kernel's ima-kexec-buffer against
+ memory bounds
+Message-ID: <20220525055149.f4nqx2ocnh3pqnpr@riteshh-domain>
+References: <20220524055042.1527968-1-vaibhav@linux.ibm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c95d08f1-9e6c-40bb-cf80-08da3e12a1a1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 May 2022 05:51:36.7791
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NSWf1OSEXsfaZ2LSWyJyEO/9EREY9gj0bxw6hVN1Vl46jt0eBtyQgKav1vwYC7bv//f6+R+ljaI8Uv3I6fAcmw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4064
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524055042.1527968-1-vaibhav@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gNS8yMS8yMiAwNDoxMCwgSnVsaWEgTGF3YWxsIHdyb3RlOg0KPiBTcGVsbGluZyBtaXN0YWtl
-ICh0cmlwbGUgbGV0dGVycykgaW4gY29tbWVudC4NCj4gRGV0ZWN0ZWQgd2l0aCB0aGUgaGVscCBv
-ZiBDb2NjaW5lbGxlLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogSnVsaWEgTGF3YWxsIDxKdWxpYS5M
-YXdhbGxAaW5yaWEuZnI+DQo+IA0KPiAtLS0NCg0KTG9va3MgZ29vZC4NCg0KUmV2aWV3ZWQtYnk6
-IENoYWl0YW55YSBLdWxrYXJuaSA8a2NoQG52aWRpYS5jb20+DQoNCi1jaw0KDQoNCg==
+
+Just a minor nit which I noticed.
+
+On 22/05/24 11:20AM, Vaibhav Jain wrote:
+> Presently ima_get_kexec_buffer() doesn't check if the previous kernel's
+> ima-kexec-buffer lies outside the addressable memory range. This can result
+> in a kernel panic if the new kernel is booted with 'mem=X' arg and the
+> ima-kexec-buffer was allocated beyond that range by the previous kernel.
+> The panic is usually of the form below:
+>
+> $ sudo kexec --initrd initrd vmlinux --append='mem=16G'
+>
+> <snip>
+>  BUG: Unable to handle kernel data access on read at 0xc000c01fff7f0000
+>  Faulting instruction address: 0xc000000000837974
+>  Oops: Kernel access of bad area, sig: 11 [#1]
+> <snip>
+>  NIP [c000000000837974] ima_restore_measurement_list+0x94/0x6c0
+>  LR [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
+>  Call Trace:
+>  [c00000000371fa80] [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
+>  [c00000000371fb00] [c0000000020512c4] ima_init+0x80/0x108
+>  [c00000000371fb70] [c0000000020514dc] init_ima+0x4c/0x120
+>  [c00000000371fbf0] [c000000000012240] do_one_initcall+0x60/0x2c0
+>  [c00000000371fcc0] [c000000002004ad0] kernel_init_freeable+0x344/0x3ec
+>  [c00000000371fda0] [c0000000000128a4] kernel_init+0x34/0x1b0
+>  [c00000000371fe10] [c00000000000ce64] ret_from_kernel_thread+0x5c/0x64
+>  Instruction dump:
+>  f92100b8 f92100c0 90e10090 910100a0 4182050c 282a0017 3bc00000 40810330
+>  7c0802a6 fb610198 7c9b2378 f80101d0 <a1240000> 2c090001 40820614 e9240010
+>  ---[ end trace 0000000000000000 ]---
+>
+> Fix this issue by checking returned PFN range of previous kernel's
+> ima-kexec-buffer with pfn_valid to ensure correct memory bounds.
+>
+> Fixes: 467d27824920 ("powerpc: ima: get the kexec buffer passed by the previous kernel")
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Cc: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+>
+> ---
+> Changelog
+> ==========
+>
+> v2:
+> * Instead of using memblock to determine the valid bounds use pfn_valid() to do
+> so since memblock may not be available late after the kernel init. [ Mpe ]
+> * Changed the patch prefix from 'powerpc' to 'of' [ Mpe ]
+> * Updated the 'Fixes' tag to point to correct commit that introduced this
+> function. [ Rob ]
+> * Fixed some whitespace/tab issues in the patch description [ Rob ]
+> * Added another check for checking ig 'tmp_size' for ima-kexec-buffer is > 0
+> ---
+>  drivers/of/kexec.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>
+> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+> index 8d374cc552be..879e984fe901 100644
+> --- a/drivers/of/kexec.c
+> +++ b/drivers/of/kexec.c
+> @@ -126,6 +126,7 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
+>  {
+>  	int ret, len;
+>  	unsigned long tmp_addr;
+> +	unsigned int start_pfn, end_pfn;
+
+^^^ Shouldn't this be unsigned long?
+
+-ritesh
+
+>  	size_t tmp_size;
+>  	const void *prop;
+>
+> @@ -140,6 +141,22 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
+>  	if (ret)
+>  		return ret;
+>
+> +	/* Do some sanity on the returned size for the ima-kexec buffer */
+> +	if (!tmp_size)
+> +		return -ENOENT;
+> +
+> +	/*
+> +	 * Calculate the PFNs for the buffer and ensure
+> +	 * they are with in addressable memory.
+> +	 */
+> +	start_pfn = PHYS_PFN(tmp_addr);
+> +	end_pfn = PHYS_PFN(tmp_addr + tmp_size - 1);
+> +	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn)) {
+> +		pr_warn("IMA buffer at 0x%lx, size = 0x%zx beyond memory\n",
+> +			tmp_addr, tmp_size);
+> +		return -EINVAL;
+> +	}
+> +
+>  	*addr = __va(tmp_addr);
+>  	*size = tmp_size;
+>
+> --
+> 2.35.1
+>

@@ -2,573 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE3A533FDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E44533FDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiEYPES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S238433AbiEYPEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245010AbiEYPEJ (ORCPT
+        with ESMTP id S229697AbiEYPEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:04:09 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA55B82FA
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:02:49 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id i9so342722wrc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=yzIXqC+bljwb/nVQt7recKSZ/yGbB3dnQbPurcs6MjI=;
-        b=X8u19sckHO5PeltPANSr49cqX17QY8j84cxsHnKtJvQQoKcnjk0U8Dr8MGDdoyqgnB
-         PHtg0EBRrC9syiWI53xMn/id8L9DjLkpIKytmXv5Pr9ZInEwV1rAV8fF2zFtvsK1pnZJ
-         zZ64BjvjYTI0zwo69nRa/MSz1KqtU5Sq76JTE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=yzIXqC+bljwb/nVQt7recKSZ/yGbB3dnQbPurcs6MjI=;
-        b=db1Pz0VPUtHvIsLrfNnCtwPPhdk8hbsU5vCWsVL4GDQEvCuvQM/mifg6Spirw/UZKG
-         bEhn1JNYqqImXckjrdS6+UZukBxqULikN2M6Gfc9hXuAk7myjo5B6gnxwLcJRsg98bdz
-         xBG3A3qZk5CPQXo8N/o0O9bOZOZdzwmr35rT3OlA3UNgM7OuIavWhozD2XWCQ5Ds8Ce/
-         7l3z3pEm24e1f43GNwXZoSgXHwPjjFTOH2y0AJKpDty8xmeZWQGyf2lUQxuqPBfeh0C0
-         Zn19zsaBlv0nT7izFq6KtxJl4X15Sqnyc41Axf0ex3BcY74G4PxXhEONOaHytAX2SvS6
-         B92A==
-X-Gm-Message-State: AOAM533eTTmPBYCk9nm7zaNhflwBDbFfhGnbtVh40nzIhqWIE+gT+xEv
-        6ydQHoypJB7zSGJRlbXPNWoKqA==
-X-Google-Smtp-Source: ABdhPJxz5/b1J7hGBQH8mr00QCjyYOcf7i9Xmg0eJwMjJSHqIb2EZiWOMUE1BkPJgT4ljx5LmONi/A==
-X-Received: by 2002:a05:6000:1f16:b0:20f:ca9f:8385 with SMTP id bv22-20020a0560001f1600b0020fca9f8385mr16830015wrb.74.1653490967551;
-        Wed, 25 May 2022 08:02:47 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id 5-20020a05600c25c500b003942a244ebfsm2372667wml.4.2022.05.25.08.02.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 08:02:46 -0700 (PDT)
-Date:   Wed, 25 May 2022 17:02:44 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Jim Cromie <jim.cromie@gmail.com>
-Cc:     jbaron@akamai.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, gregkh@linuxfoundation.org,
-        daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
-        rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
-        quic_saipraka@quicinc.com, will@kernel.org,
-        catalin.marinas@arm.com, quic_psodagud@quicinc.com, maz@kernel.org,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, mingo@redhat.com,
-        David Airlie <airlied@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-Subject: Re: [RFC PATCH v2 00/27] DRM.debug on DYNAMIC_DEBUG, add trace events
-Message-ID: <Yo5FFMbNG1Viirj1@phenom.ffwll.local>
-Mail-Followup-To: Jim Cromie <jim.cromie@gmail.com>, jbaron@akamai.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, gregkh@linuxfoundation.org,
-        seanpaul@chromium.org, robdclark@gmail.com, rostedt@goodmis.org,
-        mathieu.desnoyers@efficios.com, quic_saipraka@quicinc.com,
-        will@kernel.org, catalin.marinas@arm.com, quic_psodagud@quicinc.com,
-        maz@kernel.org, arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, mingo@redhat.com,
-        David Airlie <airlied@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-References: <20220516225640.3102269-1-jim.cromie@gmail.com>
+        Wed, 25 May 2022 11:04:13 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBB5BA55D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653490987; x=1685026987;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2WEHTkAKQ8I56RwPl2u9phhDHzaIh3NBVFOIGsl1cHg=;
+  b=Y1bhQJIAmk8fQCnOwxVOe7ORfggF2T/ukerhaZGGoDdxUHTlXdCoRh7w
+   5P9Fivi///jfW67/kJ47lcph3ujHQ6Sg2YGxPk8/6heVDtieIJEejVW7r
+   49GOdQTdVoWODkdJ640z74zeEUIKgA3zwZs5eVJoOkEuksAShKXoy4+fG
+   yUe+37NPM4HbF2kQbtTEWGRRIkUScNUYlTTjUh48wn21uW2V+7xDWnDUz
+   f2xTy1CdC8RsZ8ea7RnubT4/V6n/lqS9ccP0o3OW/neq3n7vH2eks0LxP
+   W6/S6iRE4Axr/eFwCYZRlV4fS/I3+dI6zUSrBTFjXj1OHGlXl0sdXktLX
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="254333837"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="254333837"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 08:02:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="745779216"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 May 2022 08:02:56 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntsXI-00034k-6q;
+        Wed, 25 May 2022 15:02:56 +0000
+Date:   Wed, 25 May 2022 23:02:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [vireshk-pm:opp/config 33/33] drivers/opp/core.c:1961:19: warning:
+ no previous prototype for 'dev_pm_opp_set_supported_hw'
+Message-ID: <202205252210.GxZfRn3E-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220516225640.3102269-1-jim.cromie@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 04:56:13PM -0600, Jim Cromie wrote:
-> DRM.debug API is 23 macros, issuing 10 exclusive categories of debug
-> messages.  By rough count, they are used 5140 times in the kernel.
-> These all call drm_dbg or drm_devdbg, which call drm_debug_enabled(),
-> which checks bits in global __drm_debug.  Some of these are page-flips
-> and vblanks, and get called often.
-> 
-> DYNAMIC_DEBUG (with CONFIG_JUMP_LABEL) is built to avoid this kind of
-> work, with NOOPd jump/callsites.
-> 
-> This patchset is RFC because:
-> - it touches 2.5 subsystems: dyndbg, drm, tracefs (new events)
-> - dyndbg class support is built for drm, needs it for validation
-> - new api, used by drm
-> - big memory impact, with 5100 new pr-debug callsites.
-> - drm class bikeshedding opportunities
-> - others, names etc.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
+head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
+commit: d730dc101c586defb49eeafd8eea9b7bb0baa01b [33/33] OPP: Remove unused APIs
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220525/202205252210.GxZfRn3E-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=d730dc101c586defb49eeafd8eea9b7bb0baa01b
+        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
+        git fetch --no-tags vireshk-pm opp/config
+        git checkout d730dc101c586defb49eeafd8eea9b7bb0baa01b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/opp/
 
-Thanks a lot for keeping on pushing this!
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> DYNAMIC_DEBUG:
-> 
-> Adapt to directly represent 32 exclusive classes / categories.
-> All existing users get _CLASS_DFLT:31, reserving 0-30 for opt-in.
-> 
-> dynamic_debug_register_classes(): Tells dyndbg that caller/client is
-> using .class_id's 0..N, and wants them exposed and manipulatable with
-> names: DRM_UT_KMS etc.
-> 
-> Client invokes DYNAMIC_DEBUG_CLASSES to define the name->id map,
-> then registers it during its initialization.
-> 
-> Then, when a dyndbg command-query has "class FOO":
-> 
->  echo class DRM_UT_KMS +p > /proc/dynamic_debug/control
-> 
-> ddebug_change() will 1st ddebug_validate_classname() for each module,
-> using its registered class-maps; only modules which know DRM_UT_KMS
-> will get those callsite adjustments.  This "protects" each module's
-> class-id space, unlike "class 4" query syntax.
-> 
-> Add bitmap support for:
->   echo 0x02 > /sys/module/drm/parameters/debug
-> 
-> Add symbolic bitmap, because we have the class-names:
->   echo +DRM_UT_KMS,+DRM_UT_ATOMIC > /sys/module/drm/parameters/debug
-> 
-> Add test_dynamic_debug, to prove out the API.
-> 
->  which is (used 3x to prove class-id ranges):
->   - DYNAMIC_DEBUG_CLASSES(var, ... [3 class-name-literals each])
->   - dynamic_debug_register_classes(var)
->   - dynamic_debug_unregister_classes(var)
->  also (6x):
->   +module_param_cb(<node-name>, &param_ops_dyndbg_classes, /[pt][123]_bitmap/, 0600);
-> 
-> Bits 0,1,2 of each of the 6 bitmaps control the 3 named classes in
-> each of 3 groups, toggling their p,T bits respectively.
-> 
-> RFC:
-> 
-> dynamic_debug_register_classes() cannot act early enough to be in
-> effect at module-load.  So this will not work as you'd reasonably
-> expect:
-> 
->   modprobe test_dynamic_debug dyndbg='+pfm; class FOO +pfmlt'
-> 
-> The 1st query:+pfm will be enabled during load, but in the 2nd query,
-> "class FOO" will be unknown at load time.  Early class enablement
-> would be nice.  DYNAMIC_DEBUG_CLASSES is a static initializer, which
-> is certainly early enough, but Im missing a trick, suggestions?
+All warnings (new ones prefixed by >>):
 
-So maybe I'm just totally overloading this work here so feel free to
-ignore or postpone, but: Could we do the dynamic_debug_register_classes()
-automatically at module load as a new special section? And then throw in a
-bit of kbuild so that in a given subsystem every driver gets the same
-class names by default and everything would just work, without having to
-sprinkle calls to dynamic_debug_register_classes() all over the place?
-That kbuild magic could then also insert all the boilerplate to make the
-module options work, or maybe you could push that all into the module
-loader and it would add these special options on its own (yay for more
-consistency across subsystems)?
+>> drivers/opp/core.c:1961:19: warning: no previous prototype for 'dev_pm_opp_set_supported_hw' [-Wmissing-prototypes]
+    1961 | struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:1998:6: warning: no previous prototype for 'dev_pm_opp_put_supported_hw' [-Wmissing-prototypes]
+    1998 | void dev_pm_opp_put_supported_hw(struct opp_table *opp_table)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2026:5: warning: no previous prototype for 'devm_pm_opp_set_supported_hw' [-Wmissing-prototypes]
+    2026 | int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2050:19: warning: no previous prototype for 'dev_pm_opp_set_prop_name' [-Wmissing-prototypes]
+    2050 | struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name)
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2083:6: warning: no previous prototype for 'dev_pm_opp_put_prop_name' [-Wmissing-prototypes]
+    2083 | void dev_pm_opp_put_prop_name(struct opp_table *opp_table)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2107:19: warning: no previous prototype for 'dev_pm_opp_set_regulators' [-Wmissing-prototypes]
+    2107 | struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2186:6: warning: no previous prototype for 'dev_pm_opp_put_regulators' [-Wmissing-prototypes]
+    2186 | void dev_pm_opp_put_regulators(struct opp_table *opp_table)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2238:5: warning: no previous prototype for 'devm_pm_opp_set_regulators' [-Wmissing-prototypes]
+    2238 | int devm_pm_opp_set_regulators(struct device *dev,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2265:19: warning: no previous prototype for 'dev_pm_opp_set_clkname' [-Wmissing-prototypes]
+    2265 | struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
+         |                   ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2309:6: warning: no previous prototype for 'dev_pm_opp_put_clkname' [-Wmissing-prototypes]
+    2309 | void dev_pm_opp_put_clkname(struct opp_table *opp_table)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2336:5: warning: no previous prototype for 'devm_pm_opp_set_clkname' [-Wmissing-prototypes]
+    2336 | int devm_pm_opp_set_clkname(struct device *dev, const char *name)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2359:19: warning: no previous prototype for 'dev_pm_opp_register_set_opp_helper' [-Wmissing-prototypes]
+    2359 | struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2408:6: warning: no previous prototype for 'dev_pm_opp_unregister_set_opp_helper' [-Wmissing-prototypes]
+    2408 | void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2438:5: warning: no previous prototype for 'devm_pm_opp_register_set_opp_helper' [-Wmissing-prototypes]
+    2438 | int devm_pm_opp_register_set_opp_helper(struct device *dev,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2493:19: warning: no previous prototype for 'dev_pm_opp_attach_genpd' [-Wmissing-prototypes]
+    2493 | struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2570:6: warning: no previous prototype for 'dev_pm_opp_detach_genpd' [-Wmissing-prototypes]
+    2570 | void dev_pm_opp_detach_genpd(struct opp_table *opp_table)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/opp/core.c:2603:5: warning: no previous prototype for 'devm_pm_opp_attach_genpd' [-Wmissing-prototypes]
+    2603 | int devm_pm_opp_attach_genpd(struct device *dev, const char * const *names,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Also I think with that the early class stuff should be possible to fix,
-since you can make sure that the classes are all there (in the module
-loader code) before anything else gets done. A bit a special case but oh
-well.
- 
-For the entire class approach, did you spot another subsystem that could
-benefit from this and maybe make a more solid case that this is something
-good?
 
-> Wildcarding on classname is possible, maybe useful:
-> 
->    echo +DRM_UT_\* > /sys/module/drm/parameters/debug
-> 
-> If contemplated in earnest, it should consider the difference between
-> "DRM_*" and "*_KMS", wrt observing across class hierarchies, as well
-> as decide whether that echo means 1st match, or all matching names.
-> 
-> __pr_debug_cls(cls, fmt,...) is just for testing, drm doesnt need it.
-> 
-> 
-> DRM adaptation:
-> 
-> Basically, these patches add another layer of macro indirection, which
-> by CONFIG_DRM_USE_DYNAMIC_DEBUG=y, wraps drm_*dbg() in dyndbg's callsite
-> Factory macro, and adds the new descriptor arg to the funcs.
-> 
-> With these patches, drm.debugs appear as controllable *pr-dbg* callsites:
-> 
-> [   11.804352] dyndbg: register_classes: drm
-> [   11.920715] dyndbg: 234 debug prints in module drm_kms_helper
-> [   11.932135] dyndbg:   2 debug prints in module ttm
-> [   11.936119] dyndbg:   8 debug prints in module video
-> [   12.537543] dyndbg: 1756 debug prints in module i915
-> [   12.555045] dyndbg: register_classes: i915
-> [   12.666727] AMD-Vi: AMD IOMMUv2 functionality not available on this ..
-> [   13.735310] dyndbg: 3859 debug prints in module amdgpu
-> 
-> amdgpu's large count includes:
->    582  direct uses/mentions of pr_debug
->     43  defns of DC_LOG_*, which use either pr_debug or DRM_DEBUG_*
->  ~1000  uses of DC_LOG_*
->   1116  uses of dml_print in drivers/gpu/drm/amd
->     15  drm_dbg_\\w+ drivers/gpu/drm/amd
->    273  DRM_DEBUG_\\w+ drivers/gpu/drm/amd    
-> 
-> i915 has:
->   1072  drm_dbg_\\w+ drivers/gpu/drm/i915/ | wc  -l
->    200  DRM_DEBUG_\\w+ drivers/gpu/drm/i915/
->     46  pr_debug drivers/gpu/drm/i915/
->    144  gvt_dbg_\\w+ drivers/gpu/drm/i915/gvt, using pr_debug
-> 
-> This impacts the data footprint, so everything new/drm is dependent on
-> DRM_USE_DYNAMIC_DEBUG=y.
-> 
-> RFC for DRM:
-> 
-> - decoration flags "fmlt" do not work on drm_*dbg().
->   (drm_*dbg() dont use pr_debug, they *become* one flavor of them)
->   this could (should?) be added, and maybe tailored for drm.
->   some of the device prefixes are very long, a "d" flag could optionalize them.
+vim +/dev_pm_opp_set_supported_hw +1961 drivers/opp/core.c
 
-I'm lost what the fmlt decoration flags are?
+38393409da345cd drivers/base/power/opp.c      Viresh Kumar        2014-11-25  1949  
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1950  /**
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1951   * dev_pm_opp_set_supported_hw() - Set supported platforms
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1952   * @dev: Device for which supported-hw has to be set.
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1953   * @versions: Array of hierarchy of versions to match.
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1954   * @count: Number of elements in the array.
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1955   *
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1956   * This is required only for the V2 bindings, and it enables a platform to
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1957   * specify the hierarchy of versions it supports. OPP layer will then enable
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1958   * OPPs, which are available for those versions, based on its 'opp-supported-hw'
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1959   * property.
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1960   */
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23 @1961  struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  1962  			const u32 *versions, unsigned int count)
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1963  {
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1964  	struct opp_table *opp_table;
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1965  
+32439ac7535a8ed drivers/opp/core.c            Viresh Kumar        2021-01-28  1966  	opp_table = _add_opp_table(dev, false);
+dd461cd9183fe80 drivers/opp/core.c            Stephan Gerhold     2020-07-27  1967  	if (IS_ERR(opp_table))
+dd461cd9183fe80 drivers/opp/core.c            Stephan Gerhold     2020-07-27  1968  		return opp_table;
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1969  
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1970  	/* Make sure there are no concurrent readers while updating opp_table */
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1971  	WARN_ON(!list_empty(&opp_table->opp_list));
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1972  
+25419de1b8dda24 drivers/opp/core.c            Viresh Kumar        2018-05-22  1973  	/* Another CPU that shares the OPP table has set the property ? */
+25419de1b8dda24 drivers/opp/core.c            Viresh Kumar        2018-05-22  1974  	if (opp_table->supported_hw)
+25419de1b8dda24 drivers/opp/core.c            Viresh Kumar        2018-05-22  1975  		return opp_table;
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1976  
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1977  	opp_table->supported_hw = kmemdup(versions, count * sizeof(*versions),
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1978  					GFP_KERNEL);
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1979  	if (!opp_table->supported_hw) {
+25419de1b8dda24 drivers/opp/core.c            Viresh Kumar        2018-05-22  1980  		dev_pm_opp_put_opp_table(opp_table);
+25419de1b8dda24 drivers/opp/core.c            Viresh Kumar        2018-05-22  1981  		return ERR_PTR(-ENOMEM);
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1982  	}
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1983  
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1984  	opp_table->supported_hw_count = count;
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  1985  
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  1986  	return opp_table;
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1987  }
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1988  EXPORT_SYMBOL_GPL(dev_pm_opp_set_supported_hw);
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1989  
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1990  /**
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1991   * dev_pm_opp_put_supported_hw() - Releases resources blocked for supported hw
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  1992   * @opp_table: OPP table returned by dev_pm_opp_set_supported_hw().
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1993   *
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1994   * This is required only for the V2 bindings, and is called for a matching
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1995   * dev_pm_opp_set_supported_hw(). Until this is called, the opp_table structure
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1996   * will not be freed.
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1997   */
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23 @1998  void dev_pm_opp_put_supported_hw(struct opp_table *opp_table)
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1999  {
+c7bf8758c955e62 drivers/opp/core.c            Viresh Kumar        2020-11-06  2000  	if (unlikely(!opp_table))
+c7bf8758c955e62 drivers/opp/core.c            Viresh Kumar        2020-11-06  2001  		return;
+c7bf8758c955e62 drivers/opp/core.c            Viresh Kumar        2020-11-06  2002  
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2003  	kfree(opp_table->supported_hw);
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2004  	opp_table->supported_hw = NULL;
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2005  	opp_table->supported_hw_count = 0;
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2006  
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2007  	dev_pm_opp_put_opp_table(opp_table);
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2008  }
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2009  EXPORT_SYMBOL_GPL(dev_pm_opp_put_supported_hw);
+7de36b0aa51a5a5 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2010  
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2011  static void devm_pm_opp_supported_hw_release(void *data)
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2012  {
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2013  	dev_pm_opp_put_supported_hw(data);
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2014  }
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2015  
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2016  /**
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2017   * devm_pm_opp_set_supported_hw() - Set supported platforms
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2018   * @dev: Device for which supported-hw has to be set.
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2019   * @versions: Array of hierarchy of versions to match.
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2020   * @count: Number of elements in the array.
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2021   *
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2022   * This is a resource-managed variant of dev_pm_opp_set_supported_hw().
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2023   *
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2024   * Return: 0 on success and errorno otherwise.
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2025   */
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14 @2026  int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions,
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2027  				 unsigned int count)
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2028  {
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2029  	struct opp_table *opp_table;
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2030  
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2031  	opp_table = dev_pm_opp_set_supported_hw(dev, versions, count);
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2032  	if (IS_ERR(opp_table))
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2033  		return PTR_ERR(opp_table);
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2034  
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2035  	return devm_add_action_or_reset(dev, devm_pm_opp_supported_hw_release,
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2036  					opp_table);
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2037  }
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2038  EXPORT_SYMBOL_GPL(devm_pm_opp_set_supported_hw);
+9c4f220f3dc260e drivers/opp/core.c            Yangtao Li          2021-03-14  2039  
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2040  /**
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2041   * dev_pm_opp_set_prop_name() - Set prop-extn name
+a5da64477ee79ef drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2042   * @dev: Device for which the prop-name has to be set.
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2043   * @name: name to postfix to properties.
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2044   *
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2045   * This is required only for the V2 bindings, and it enables a platform to
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2046   * specify the extn to be used for certain property names. The properties to
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2047   * which the extension will apply are opp-microvolt and opp-microamp. OPP core
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2048   * should postfix the property name with -<name> while looking for them.
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2049   */
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23 @2050  struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name)
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2051  {
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2052  	struct opp_table *opp_table;
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2053  
+32439ac7535a8ed drivers/opp/core.c            Viresh Kumar        2021-01-28  2054  	opp_table = _add_opp_table(dev, false);
+dd461cd9183fe80 drivers/opp/core.c            Stephan Gerhold     2020-07-27  2055  	if (IS_ERR(opp_table))
+dd461cd9183fe80 drivers/opp/core.c            Stephan Gerhold     2020-07-27  2056  		return opp_table;
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2057  
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2058  	/* Make sure there are no concurrent readers while updating opp_table */
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2059  	WARN_ON(!list_empty(&opp_table->opp_list));
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2060  
+878ec1a9f0e5a6b drivers/opp/core.c            Viresh Kumar        2018-05-22  2061  	/* Another CPU that shares the OPP table has set the property ? */
+878ec1a9f0e5a6b drivers/opp/core.c            Viresh Kumar        2018-05-22  2062  	if (opp_table->prop_name)
+878ec1a9f0e5a6b drivers/opp/core.c            Viresh Kumar        2018-05-22  2063  		return opp_table;
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2064  
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2065  	opp_table->prop_name = kstrdup(name, GFP_KERNEL);
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2066  	if (!opp_table->prop_name) {
+878ec1a9f0e5a6b drivers/opp/core.c            Viresh Kumar        2018-05-22  2067  		dev_pm_opp_put_opp_table(opp_table);
+878ec1a9f0e5a6b drivers/opp/core.c            Viresh Kumar        2018-05-22  2068  		return ERR_PTR(-ENOMEM);
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2069  	}
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2070  
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2071  	return opp_table;
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2072  }
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2073  EXPORT_SYMBOL_GPL(dev_pm_opp_set_prop_name);
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2074  
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2075  /**
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2076   * dev_pm_opp_put_prop_name() - Releases resources blocked for prop-name
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2077   * @opp_table: OPP table returned by dev_pm_opp_set_prop_name().
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2078   *
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2079   * This is required only for the V2 bindings, and is called for a matching
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2080   * dev_pm_opp_set_prop_name(). Until this is called, the opp_table structure
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2081   * will not be freed.
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2082   */
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23 @2083  void dev_pm_opp_put_prop_name(struct opp_table *opp_table)
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2084  {
+c7bf8758c955e62 drivers/opp/core.c            Viresh Kumar        2020-11-06  2085  	if (unlikely(!opp_table))
+c7bf8758c955e62 drivers/opp/core.c            Viresh Kumar        2020-11-06  2086  		return;
+c7bf8758c955e62 drivers/opp/core.c            Viresh Kumar        2020-11-06  2087  
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2088  	kfree(opp_table->prop_name);
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2089  	opp_table->prop_name = NULL;
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2090  
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2091  	dev_pm_opp_put_opp_table(opp_table);
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2092  }
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2093  EXPORT_SYMBOL_GPL(dev_pm_opp_put_prop_name);
+01fb4d3c39d35b7 drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2094  
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2095  /**
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2096   * dev_pm_opp_set_regulators() - Set regulator names for the device
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2097   * @dev: Device for which regulator name is being set.
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2098   * @names: Array of pointers to the names of the regulator.
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2099   * @count: Number of regulators.
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2100   *
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2101   * In order to support OPP switching, OPP layer needs to know the name of the
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2102   * device's regulators, as the core would be required to switch voltages as
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2103   * well.
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2104   *
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2105   * This must be called before any OPPs are initialized for the device.
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2106   */
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01 @2107  struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2108  					    const char * const names[],
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2109  					    unsigned int count)
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2110  {
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2111  	struct dev_pm_opp_supply *supplies;
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2112  	struct opp_table *opp_table;
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2113  	struct regulator *reg;
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2114  	int ret, i;
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2115  
+32439ac7535a8ed drivers/opp/core.c            Viresh Kumar        2021-01-28  2116  	opp_table = _add_opp_table(dev, false);
+dd461cd9183fe80 drivers/opp/core.c            Stephan Gerhold     2020-07-27  2117  	if (IS_ERR(opp_table))
+dd461cd9183fe80 drivers/opp/core.c            Stephan Gerhold     2020-07-27  2118  		return opp_table;
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2119  
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2120  	/* This should be called before OPPs are initialized */
+2c2709dc6921c5d drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2121  	if (WARN_ON(!list_empty(&opp_table->opp_list))) {
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2122  		ret = -EBUSY;
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2123  		goto err;
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2124  	}
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2125  
+779b783cfaa726c drivers/opp/core.c            Viresh Kumar        2018-05-22  2126  	/* Another CPU that shares the OPP table has set the regulators ? */
+779b783cfaa726c drivers/opp/core.c            Viresh Kumar        2018-05-22  2127  	if (opp_table->regulators)
+779b783cfaa726c drivers/opp/core.c            Viresh Kumar        2018-05-22  2128  		return opp_table;
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2129  
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2130  	opp_table->regulators = kmalloc_array(count,
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2131  					      sizeof(*opp_table->regulators),
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2132  					      GFP_KERNEL);
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2133  	if (!opp_table->regulators) {
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2134  		ret = -ENOMEM;
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2135  		goto err;
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2136  	}
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2137  
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2138  	for (i = 0; i < count; i++) {
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2139  		reg = regulator_get_optional(dev, names[i]);
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2140  		if (IS_ERR(reg)) {
+543256d239b4156 drivers/opp/core.c            Krzysztof Kozlowski 2022-04-08  2141  			ret = dev_err_probe(dev, PTR_ERR(reg),
+543256d239b4156 drivers/opp/core.c            Krzysztof Kozlowski 2022-04-08  2142  					    "%s: no regulator (%s) found\n",
+543256d239b4156 drivers/opp/core.c            Krzysztof Kozlowski 2022-04-08  2143  					    __func__, names[i]);
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2144  			goto free_regulators;
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2145  		}
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2146  
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2147  		opp_table->regulators[i] = reg;
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2148  	}
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2149  
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2150  	opp_table->regulator_count = count;
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2151  
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2152  	supplies = kmalloc_array(count * 2, sizeof(*supplies), GFP_KERNEL);
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2153  	if (!supplies) {
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2154  		ret = -ENOMEM;
+947355850fcb3bb drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2155  		goto free_regulators;
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2156  	}
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2157  
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2158  	mutex_lock(&opp_table->lock);
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2159  	opp_table->sod_supplies = supplies;
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2160  	if (opp_table->set_opp_data) {
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2161  		opp_table->set_opp_data->old_opp.supplies = supplies;
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2162  		opp_table->set_opp_data->new_opp.supplies = supplies + count;
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2163  	}
+38bb34393804b79 drivers/opp/core.c            Viresh Kumar        2021-01-19  2164  	mutex_unlock(&opp_table->lock);
+947355850fcb3bb drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2165  
+91291d9ad92faa6 drivers/base/power/opp/core.c Stephen Boyd        2016-11-30  2166  	return opp_table;
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2167  
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2168  free_regulators:
+24957db10043533 drivers/opp/core.c            Marek Szyprowski    2019-10-17  2169  	while (i != 0)
+24957db10043533 drivers/opp/core.c            Marek Szyprowski    2019-10-17  2170  		regulator_put(opp_table->regulators[--i]);
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2171  
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2172  	kfree(opp_table->regulators);
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2173  	opp_table->regulators = NULL;
+46f48aca2e5aef3 drivers/opp/core.c            Viresh Kumar        2018-12-11  2174  	opp_table->regulator_count = -1;
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2175  err:
+fa30184d192ec78 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2176  	dev_pm_opp_put_opp_table(opp_table);
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2177  
+91291d9ad92faa6 drivers/base/power/opp/core.c Stephen Boyd        2016-11-30  2178  	return ERR_PTR(ret);
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2179  }
+dfbe4678d709e25 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2180  EXPORT_SYMBOL_GPL(dev_pm_opp_set_regulators);
+9f8ea969d5cfdd4 drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2181  
 
-> - api use needs review wrt drm life-cycle.
->   enum drm_debug_category and DYNAMIC_DEBUG_CLASSES could be together?
+:::::: The code at line 1961 was first introduced by commit
+:::::: fa30184d192ec78d443cf6d3abc37d9eb3b9253e PM / OPP: Return opp_table from dev_pm_opp_set_*() routines
 
-Hm if they're tied to module lifetime we should be good? Not sure what
-could go wrong here.
-
-> - class-names could stand review, perhaps extension
->   "drm:core:" etc have appeared (maybe just from me)
->   or a "plan" to look at it later
-
-Yeah it's been a bit sprawling. I'm kinda hoping that by firmly
-establishing dyndbg as the drm debug approach we can cut down for the need
-for ad-hoc flags a bit.
-
-> - i915 & amdgpu have pr_debugs (DC_LOG_*, gvt_dbg_*) that have
-> class-ish prefixes that are separate from, but similar to DRM_UT_*,
-> and could stand review and possible unification with reformed or
-> extended drm categories.
-
-Yeah drm is not entirely consistent with how exactly driver debug printing
-should be done. Another reason why I'm hoping that the kitchen sync with
-everything approach you're doing here could help unify things.
-
-> - the change to enum drm_debug_category from bitmask values to 0..31
->   means that we foreclose this possiblility:
-> 
->    drm_dbg(DRM_UT_CORE|DRM_UT_KMS, "wierd double-cat experiment");
-
-Yeah no, that doesn't make much sense to me :-)
-
-> - nouveau has very few drm.debug calls,
->   has NV_DEBUG, VMM_DEBUG, nvkm_printk_, I havent looked deeply.
-
-Yeah see above. There's a pile more drivers (more on the armsoc side of
-things) which are quite big on the raw debug call approach.
-
-Cheers, Daniel
-
-> 
-> DYNDBG/DRM -> TRACEFS
-> 
-> My 1st try was motivated by Sean Paul's patch - DRM.trace:
-> https://patchwork.freedesktop.org/patch/445549/?series=78133&rev=5
-> 
-> Those used trace_printk, so were not good for upstream.
-> 
-> Vincent Whitchurch's code:
-> https://lore.kernel.org/lkml/20200721141105.16034-1-vincent.whitchurch@axis.com/
-> 
-> added similar features, by sending printk:console events from dyndbg.
-> It met with a good reception from Steve Rostedt, so I re-started with
-> that.
-> 
-> The biggest addition (from UI viewpoint) is 4 new trace-events, 2 each
-> from dyndbg (pr_debug, dev_dbg) and drm (drm_dbg, drm_dev_dbg); 2 have
-> dev, other 2 avoid storing nulls.  Im unsure that 4 distinctions is
-> valuable, but it seemed most obvious to reflect them straight thru to
-> tracefs.
-> 
-> RFC: the event/message formats are a bit of a mash-up; 
-> 
-> in /sys/kernel/tracing:
-> drm/drm_debug/format:print fmt: "%s", __get_str(msg)
-> drm/drm_devdbg/format:print fmt: "cat:%d, %s %s", \
-> 	REC->drm_debug_category, dev_name(REC->dev), __get_str(msg)
-> 
-> The 1st prints just the mesg itself, 2nd prints category as int;
-> it'd be better if DRM.class-name replaced (not just augmented) the
-> event-name "drm_devdbg" in the trace, is that possible ?
-> 
-> dyndbg/prdbg/format:
-> print fmt: "%s.%s %s", REC->desc->modname, REC->desc->function, __get_str(msg)
-> dyndbg/devdbg/format:
-> print fmt: "%s.%s %s", REC->desc->modname, REC->desc->function, __get_str(msg)
-> 
-> These add a prefix string similar to dyndbg's decorations, except they
-> don't use dyndbg's "fmlt" decoration flags.
-> 
-> There are also 3 vblank trace-events already,
->   declared in: drivers/gpu/drm/drm_trace.h
-> 15:TRACE_EVENT(drm_vblank_event,
-> 35:TRACE_EVENT(drm_vblank_event_queued,
-> 52:TRACE_EVENT(drm_vblank_event_delivered,
-> 
-> STATUS
-> 
-> kernel-test-robot tested this patchset (on 5.18-rc6).
-> github:[jimc:blead] BUILD SUCCESS 6c59e52ac81dd81ac7da4522a5e15b7ac488d5b5
-> May 15, 2022, 8:39 AM (1 day ago)
-> 
-> 
-> Ive been testing, mostly on virtme, mostly with this:
-> #!/bin/bash
-> 
-> # test class FOO handling of dynamic-debug
-> 
-> alias lmt='modprobe test_dynamic_debug dyndbg=+pmf'
-> alias rmt='rmmod test_dynamic_debug'
-> alias look='grep test_dynamic_debug /proc/dynamic_debug/control'
-> 
-> lookfor() {
->     grep $1 /proc/dynamic_debug/control
-> }
-> 
-> vx() {
->     echo $* > /sys/module/dynamic_debug/parameters/verbose
-> }
-> 
-> # amdgpu has ~2200 pr-debugs (before drm-debug-on-dyndbg),
-> # use them to prove modprobe <mod> dyndbg=+p works
-> 
-> test_param_dyndbg() {
-> 
->     modprobe amdgpu dyndbg=+pfm
->     let count=$(grep =pmf /proc/dynamic_debug/control | grep amdgpu | wc -l)
-> 
->     if [ $count -gt 200 ] ; then
-> 	echo amdgpu has $count pr-dbgs
-> 	return 0
->     else
-> 	echo failed $count
-> 	return -1
->     fi
-> }
-> out=$(test_param_dyndbg)
-> echo out:$out $?
-> [ $? -eq 0 ] || exit $?
-> 
-> qry_cmd() {
->     echo "QCMD: $*   >control" >&2
->     echo $* > /proc/dynamic_debug/control
-> }
-> 
-> # enable dyndbg tracing
-> dynable() {
->     grep -P \\d $SKT/events/dyndbg/{.,*}/enable
->     echo 1 > $SKT/events/dyndbg/enable
->     grep -P \\d $SKT/events/dyndbg/{.,*}/enable
-> }
-> 
-> # enable drm tracing
-> drmable() {
->     grep -P \\d $SKT/events/drm/{.,*}/enable
->     echo 1 > $SKT/events/drm/enable
->     grep -P \\d $SKT/events/drm/{.,*}/enable
-> }
-> 
-> function doit() {
->     cat /sys/module/test_dynamic_debug/parameters/do_prints
-> }
-> 
-> # test class FOO behavior of test_dynamic_debug module
-> ttest_module__() {
->     flg=$1
->     dmesg -C
->     modprobe test_dynamic_debug dyndbg=+pfm
->     doit
-> 
->     for cls in FOO BAR BUZZ; do
-> 	qry_cmd module test_dynamic_debug class $cls $flg
-> 	doit
->     done
->     doit
-> 
->     for cls in Foo Bar Buzz; do
-> 	qry_cmd module test_dynamic_debug class $cls $flg
-> 	doit
->     done
->     doit
-> 
->     for cls in bing bong boom; do
-> 	qry_cmd module test_dynamic_debug class $cls $flg
-> 	doit
->     done
->     doit
-> 
->     dmesg | grep class
-> }
-> 
-> ttest_module() {
-> 
->     ttest_module__ +p
->     ttest_module__ -p
-> 
->     #ttest_module__ +T
->     #ttest_module__ -T
-> }
-> 
-> #dynable
-> #drmable
-> 
-> ttest_module
-> grep test_dyn /proc/dynamic_debug/control
-> 
-> 
-> # use/test bitmaps
-> 
-> set_tddm_() {
->     val=$1;
->     knob=$2;
->     echo "TDDM: $val >$knob" >&2
->     echo $val > /sys/module/test_dynamic_debug/parameters/$knob
->     cat /sys/module/test_dynamic_debug/parameters/$knob
-> }
-> 
-> CLS_1="FOO -FOO +FOO -FOO BAR -BAR +BAR -BAR BUZZ -BUZZ +BUZZ -BUZZ"
-> CLS_2=" Foo  Bar  Buzz -Foo -Bar -Buzz +Foo +Bar +Buzz -Foo -Bar -Buzz"
-> CLS_3=" bing bong boom -bing -bong -boom +bing +bong +boom -bing -bong -boom"
-> 
-> tddm_sysnode_classes__() {
->     targ=$1
->     shift
->     cls=$*
->     for bitsym in $cls;
->     do
-> 	set_tddm_ $bitsym $targ
->     done
-> }
-> 
-> # work all 3 sysfs bitmaps
-> 
-> for sysnode in c1_syslog_bits c2_syslog_bits c3_syslog_bits;
-> do
->     for val in 0 1 2 4 8 0;
->     do
-> 	tddm_sysnode_classes__ $sysnode $val
->     done
-> done
-> 
-> tddm_sysnode_classes__ c1_syslog_bits $CLS_1
-> tddm_sysnode_classes__ c2_syslog_bits $CLS_2
-> tddm_sysnode_classes__ c3_syslog_bits $CLS_3
-> 
-> echo "show unknown: c3-names on c1-knob" >&2
-> tddm_sysnode_classes__ c1_trace_bits $CLS_3
-> 
-> echo "flags look inverted" >&2
-> tddm_sysnode_classes__ c1_syslog_bits $CLS_1
-> 
-> CLS_1_=FOO,-FOO,+FOO,-FOO,BAR,-BAR,+BAR,-BAR,BUZZ,-BUZZ,+BUZZ,-BUZZ
-> CLS_2_=Foo,Bar,Buzz,-Foo,-Bar,-Buzz,+Foo,+Bar,+Buzz,-Foo,-Bar,-Buzz
-> # leading err doesnt wreck the rest
-> CLS_3_=,bing,bong,boom,-bing,-bong,-boom,+bing,+bong,+boom,-bing,-bong,-boom
-> 
-> tddm_sysnode_classes__ c1_syslog_bits $CLS_1_
-> tddm_sysnode_classes__ c2_syslog_bits $CLS_2_
-> tddm_sysnode_classes__ c3_syslog_bits $CLS_3_
-> 
-> 
-> Cc: Sean Paul <seanpaul@chromium.org>
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Pekka Paalanen <ppaalanen@gmail.com>
-> Cc: Rob Clark <robdclark@gmail.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> Cc: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> 
-> Jim Cromie (27):
->   dyndbg: fix static_branch manipulation
->   dyndbg: show both old and new in change-info
->   dyndbg: fix module.dyndbg handling
->   dyndbg: drop EXPORTed dynamic_debug_exec_queries
->   dyndbg: add exclusive class_id to pr_debug callsites
->   dyndbg: add dynamic_debug_(un)register_classes
->   dyndbg: validate class FOO on module
->   dyndbg: add drm.debug style bitmap support
->   Doc/dyndbg: document new class class_name query support
->   dyndbg: let query-modname override defaulting modname
->   dyndbg: support symbolic class-names in bitmap
->   dyndbg: change zero-or-one classes-map to maps list
->   dyndbg: add __pr_debug_cls(class, fmt, ...)
->   dyndbg: add test_dynamic_debug module
->   drm: POC drm on dyndbg - map class-names to drm_debug_category's
->   drm/print: POC drm on dyndbg - use bitmap
->   drm_print: condense enum drm_debug_category
->   drm_print: interpose drm_*dbg with forwarding macros
->   drm_print: wrap drm_*_dbg in dyndbg descriptor factory macro
->   drm_print: refine drm_debug_enabled for jump-label
->   drm_print: prefer bare printk KERN_DEBUG on generic fn
->   drm_print: add _ddebug desc to drm_*dbg prototypes
->   dyndbg: add _DPRINTK_FLAGS_ENABLED
->   dyndbg: add _DPRINTK_FLAGS_TRACE
->   dyndbg: add write-events-to-tracefs code
->   dyndbg: 4 new trace-events: pr_debug, dev_dbg, drm_{,dev}debug
->   dyndbg/drm: POC add tracebits sysfs-knob
-> 
->  .../admin-guide/dynamic-debug-howto.rst       |  12 +
->  MAINTAINERS                                   |   1 +
->  drivers/gpu/drm/Kconfig                       |  12 +
->  drivers/gpu/drm/Makefile                      |   2 +
->  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |   3 +
->  drivers/gpu/drm/drm_drv.c                     |   5 +
->  drivers/gpu/drm/drm_print.c                   |  69 ++-
->  drivers/gpu/drm/i915/i915_module.c            |  11 +
->  drivers/gpu/drm/nouveau/nouveau_drm.c         |   4 +
->  include/drm/drm_drv.h                         |  26 +
->  include/drm/drm_print.h                       |  84 ++-
->  include/linux/dynamic_debug.h                 | 136 ++++-
->  include/trace/events/drm.h                    |  68 +++
->  include/trace/events/dyndbg.h                 |  74 +++
->  lib/Kconfig.debug                             |  11 +
->  lib/Makefile                                  |   1 +
->  lib/dynamic_debug.c                           | 487 +++++++++++++++---
->  lib/test_dynamic_debug.c                      | 172 +++++++
->  18 files changed, 1049 insertions(+), 129 deletions(-)
->  create mode 100644 include/trace/events/drm.h
->  create mode 100644 include/trace/events/dyndbg.h
->  create mode 100644 lib/test_dynamic_debug.c
-> 
-> -- 
-> 2.35.1
-> 
+:::::: TO: Viresh Kumar <viresh.kumar@linaro.org>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+0-DAY CI Kernel Test Service
+https://01.org/lkp

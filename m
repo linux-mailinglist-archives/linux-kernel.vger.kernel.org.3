@@ -2,194 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5AB534649
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0CF534650
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242638AbiEYWQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 18:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
+        id S1344883AbiEYWTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 18:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbiEYWQS (ORCPT
+        with ESMTP id S231497AbiEYWTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 18:16:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EB8674F0;
-        Wed, 25 May 2022 15:16:16 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653516974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V5mqVOpRN7OrcPZs/HUScyADcePdW23SpFj2zCYffFg=;
-        b=A/fPG898MRly5Tc/PqoRr+gojCPZESK+ybSanenHSpRukoYsMgKL1tIdWjQkoXKHh7gnu5
-        3tSns9VEwTZNL5PcrvbeKbCsMiSj5EkMKc4W4Rg8mKMWmbaUqxmJfLkw/CIffaks9obWVx
-        DLzIVsfw0NaQwpMpzW0u+ssndpxa9+cmlUu00WYjEOGNqB/Htj5euMAWbPFagaiSK/TQLJ
-        AkBfTCaYftJAONlvrXRmFFnUC2Jaf7hcD80c3SVdbr+w4vdJf/KpzC+C87Ld3cU+Rsd+F9
-        jWRqfoan51qmLIQ6UW2kGFEGbz/vtCERHAqxw1Z+Ln8GIfbR9YkHWaWteikOgw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653516974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V5mqVOpRN7OrcPZs/HUScyADcePdW23SpFj2zCYffFg=;
-        b=Loxi6Khma+UmYtJGsZe6ptxZj5n1QWv/vTy7oBgCyywSsY1DcTQxk4DEcOolLB/lmIwoU1
-        OxZFhePpCs1jItAw==
-To:     "Bird, Tim" <Tim.Bird@sony.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Richard Fontana <fontana@sharpeleven.org>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "linux-spdx@vger.kernel.org" <linux-spdx@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        "copyleft-next@lists.fedorahosted.org" 
-        <copyleft-next@lists.fedorahosted.org>,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: RE: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
-In-Reply-To: <BN7PR13MB2499BA2AFAC1C79197734D81FDD69@BN7PR13MB2499.namprd13.prod.outlook.com>
-References: <20211029184500.2821444-1-mcgrof@kernel.org>
- <20211029184500.2821444-2-mcgrof@kernel.org> <87bkvo0wjd.ffs@tglx>
- <Yo5cxWghV/v2Fnzf@bombadil.infradead.org>
- <BN7PR13MB24998CAFCFB973C80549F308FDD69@BN7PR13MB2499.namprd13.prod.outlook.com>
- <Yo5xTwGLmbsgJhfM@bombadil.infradead.org>
- <BN7PR13MB2499BA2AFAC1C79197734D81FDD69@BN7PR13MB2499.namprd13.prod.outlook.com>
-Date:   Thu, 26 May 2022 00:16:13 +0200
-Message-ID: <871qwhz2aa.ffs@tglx>
+        Wed, 25 May 2022 18:19:19 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3A5674F2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:19:18 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id bo5so167247pfb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wccjosb8wE1V/MYd73MboMsy8MfUDLYZI409lQYQVEM=;
+        b=LEEEpCI1j7qkx0EGkLbiue2FsrBjxh2KwXKW6ZBOEkQKTEcF18Di/jMced8MbqFXcr
+         6L3YQ+AiFlUNitJ8J6O6gjwMInwS7WSRrVwPJJf1HdjLVaLsES8Ehf0BwLCt+g3BWeYl
+         7x7e+LIizvbSQco6C6eOVFKZV+VK7SUY2Jd/4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wccjosb8wE1V/MYd73MboMsy8MfUDLYZI409lQYQVEM=;
+        b=6XE422DCpdWmH+fo7GWnzZLHBEYN6Paep/VW5UpP6fn1JOSv+yrxj3vfBUZiYRIfgI
+         StXY+YgPtu12ASX1oyrcRHC/GBQRogfqRgkPThLYDqWq1xLfVaiUdfVctCaJKY1VKDUN
+         4M2GcwYZsbSWEsiLnLi3292kn12rJafqv8oSexw3pcl24VjJI8a9NOQN2mqIvhiYzvrR
+         Bvd4So6UpqiBRMmo2kJWEQ2sCdBYb1YaX3fKgSekGArEk6OCmr1dfClr6VmoXSSiILMZ
+         162xWR/NW33NYsFK0Gju4Pt6C2Ol111xTgSXQwb7thfvTh2blBYq40lkD/bKpeq026u1
+         3Icg==
+X-Gm-Message-State: AOAM532K9N0Y3DTidCU8dIgzn+92/qyFtPXPyfbogktai0sSCJQ5zlDA
+        uV+eyfxizRhzFC1HNtKCzJIpLk96eWqhCw==
+X-Google-Smtp-Source: ABdhPJyqH/pFtyzZN0+TTUQ5L+yo+rcr9UoI8vmlcIzhRSepo77v0l0tVNpTbVesHOThrvjl3mkPKw==
+X-Received: by 2002:aa7:8390:0:b0:518:3f2d:1e2 with SMTP id u16-20020aa78390000000b005183f2d01e2mr34558419pfm.36.1653517157612;
+        Wed, 25 May 2022 15:19:17 -0700 (PDT)
+Received: from localhost (132.111.125.34.bc.googleusercontent.com. [34.125.111.132])
+        by smtp.gmail.com with UTF8SMTPSA id w5-20020a170902e88500b0015e8d4eb1d3sm10003803plg.29.2022.05.25.15.19.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 15:19:17 -0700 (PDT)
+From:   pso@chromium.org
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Dmitry Torokhov <dtor@chromium.org>,
+        Paramjit Oberoi <pso@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] pstore/ram: Fix pmsg address when per-cpu ftrace buffers are enabled
+Date:   Wed, 25 May 2022 15:18:55 -0700
+Message-Id: <20220525151809.1.I43128ef59eb08247ec093f8b19d05aa91f721afb@changeid>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tim!
+From: Paramjit Oberoi <pso@chromium.org>
 
-On Wed, May 25 2022 at 19:05, Bird, Tim wrote:
->> From: Luis Chamberlain <mcgrof@infradead.org> On Behalf Of Luis Chamberlain
->> I agree that we want to keep the number of licenses as small as
->> possible but we cannot really dictate which dual licensing options a
->> submitter selects unless the license is GPL-2.0-only incompatible,
->> which copyleft-next is not.
->
-> Um, yes we can dictate that.
+When allocating ftrace pstore zones, there may be space left over at the
+end of the region. The paddr pointer needs to be advanced to account for
+this so that the next region (pmsg) ends up at the correct location.
 
-No!
+Signed-off-by: Paramjit Oberoi <pso@chromium.org>
+---
 
-> There were good reasons that the original BSD dual-licenses were
-> allowed.  Those same reasons don't apply here.
+ fs/pstore/ram.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-That's just wrong. The reason why dual licensing is allowed is to share
-code across licesce preferences. The very same reason applies here.
+diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
+index fefe3d391d3af..3bca6cd34c02a 100644
+--- a/fs/pstore/ram.c
++++ b/fs/pstore/ram.c
+@@ -554,10 +554,12 @@ static int ramoops_init_przs(const char *name,
+ 			goto fail;
+ 		}
+ 		*paddr += zone_sz;
++		mem_sz -= zone_sz;
+ 		prz_ar[i]->type = pstore_name_to_type(name);
+ 	}
+ 
+ 	*przs = prz_ar;
++	*paddr += mem_sz;
+ 	return 0;
+ 
+ fail:
+-- 
+2.36.1.124.g0e6072fb45-goog
 
-> Each license added to the kernel (even when added as an OR), requires
-> additional legal analysis.  Corporate lawyers don't usually rely on
-> the interpretation of novel licenses from external sources.  They do
-> it themselves.  This means that hundreds of lawyers may find
-> themselves reading and trying to interpret the copyleft-next license.
-
-It's none of our problems that corporate lawyers are obviously unable to
-act, cooperate and to agree on something.
-
-     The license in question is around since 2016 and the kernel carries
-     code under that license since 2017.
-
-  So what the hell are you complaining 5 years after the fact? The whole
-  point here is to convert this to SPDX identifiers.
-
-Aside of that I'm impressed by your chutzpah to make up an argument on
-corporate lawyer costs.
-
-  Do you realize how much costs the very same crowd of corporate lawyers
-  created by ill advising their employees to put corporate defined
-  boiler plate into every other kernel source code file or by not
-  advising them at all and let them add random crap?
-
-  Do you realize that the costs to cleanup this mess have been mostly
-  covered by community members with the help from a _very_ small subset
-  of corporate lawyers?
-
-  Do you realize that it's hilarious that your so costly corporate
-  lawyers only need to react now that we are trying to convert licensing
-  information to SPDX 5 years after the fact?
-
-  Do you realize that the SPDX cleanup effort is reducing the costs for
-  everyone including _all_ of the corporate lawyers you are so concerned
-  of?
-
-Sure, complaining about your individual corporate costs is way simpler
-than:
-
-   - contributing to community efforts to reduce those costs
-
-   - acknowledging that the community efforts even without contribution
-     or your particular organization are reducing those costs
-
-Try again.
-
-> And here's the thing.
-> The copyleft-next license has a number of legal issues that make it problematic.
-> Not the least of which are that some of its terms are dependent on external
-> situations that can change over time, in a matter that is uncontrolled by either
-> the licensor or the licensee.  In order to determine what terms are effective, you
-> have to know when the license was granted, and what the FSF and OSI approved
-> licenses were at various points in time.  You literally have to use the Internet
-> Archive wayback machine, and do a bunch of research, to interpret the license terms.
-> It is not, as currently constructed, a good license, due to this lack of legal clarity.
-
-And here is the thing:
-
-    Whether you consider it to be a good license or not, does not matter
-    in this context.
-
-    The license _IS_ GPLv2 compatible which is even understandable for
-    mere mortals, i.e. non lawyers. That's the only relevant point for
-    including code under this license into the kernel.
-
-    Your way-back machine argument is beyond hilarious. Guess what the
-    folks who try to cleanup the corporate lawyers induced mess in the
-    kernel rely on? But that's absolutely not applicable to this
-    problem. Why?
-
-        The kernel has very strict rules for licensing today. Any valid
-        SPDX tag in a source file has to be accompanied with a
-        corresponding machine readable license file.
-
-        This license file is version controlled and if there is a
-        dependency on any other license in the context then the
-        dependency is also available in the git history.
-
-        So no, you do not need Internet archive for this at all simply
-        because if the kernel git history vanishes from the planet
-        then this particular licensing problem is the least of your
-        worries.
-
-Maybe it's about time to move your corporate lawyers, who are
-caught in their own past sins, to the reality of today.
-
-Thanks,
-
-        Thomas

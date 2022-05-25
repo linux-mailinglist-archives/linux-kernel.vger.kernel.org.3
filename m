@@ -2,134 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AE05345F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809A85345F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245597AbiEYVpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 17:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S1344445AbiEYVpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 17:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiEYVpb (ORCPT
+        with ESMTP id S244562AbiEYVpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 17:45:31 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF1B36E5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:45:30 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id bq30so38101601lfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:45:30 -0700 (PDT)
+        Wed, 25 May 2022 17:45:36 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D538CB41EE
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:45:35 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id z11so92355pjc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GoHQcTc7Wsv9SwEZbOghaRKz9fDmm73K2D/ZBJdetK0=;
-        b=irhC+b9v9qZtwxvP5MydHnwGD3VKeav5v58wHWzrGqIIOocpTu3ejs77IIuuwJGB7h
-         mcPgHORLJeyUukYR0PwAvSW9nXBOPYRWqXZAyKhGwseTzyTVIMKbXXLrQSHfR8aoNWXF
-         9ltCVMwyQQJ307rdrK62SEpcg29weRwdeiD+BrqRXnhumwixz8xtlqCRvvb17AsonF1o
-         LyKOosUSQ58CusfD4giLhD/P0+1vPM4qqat49NGeBac2lndV/vjqcljY9leblaqeDURr
-         A9R8voqyNdFslFtP6mBLOSVCmiIF1ipvaPR9uT1aYZWbSTsH95K3l00Qpx3UFqwWkN/T
-         FgRg==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IN7B1Qc2wQvKxwG75W2PmFzu/kAYmOIH2ON1vtcnH3I=;
+        b=nCMUhgnyQce2lMMZ3bdjYejIOHX3m22pUeVsgAvPSzBFX2WkZCLfTQ4vhyMTfDsUDM
+         R+KW8HaSM9ENcBMw96xmd1GpUK3M2bkg/SvBdp7OaoVK+5OdP9Dpwkb+TKfcVPiZp74w
+         vy0fRsftC/z4ZllL09J4wQc7cI9rvXoCh3gcyVzzyjTMEKQM+45cwGpGaDcYbJ/o70HE
+         KTUpLEVrpMb7/8UqoRF3rdb37oLgr9njTTupgFpPnldBr+56BFxsDmQ5Xkis+RWo9zgh
+         hoe2WvU1C+NoExPdzzlV/yxXS3YQ9T0jZmy1rk5vgoQHR3sy72UYi1Mx8kzNHrhWhPbA
+         FuUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GoHQcTc7Wsv9SwEZbOghaRKz9fDmm73K2D/ZBJdetK0=;
-        b=nc+JnzyTNLdc8pvxUvs4Gb9TvERd5+LGf50Kk2MCBeqvDEsX5J6tUm/qPLKE0nS97y
-         zid9o+VEex9Win1iRIp9z8pBACS7Fkk92a+e7acEZ9GXHMRHsUF9s0JUDx094gpxWa1e
-         nQYBcm8ColGIvRsOpYXl25R+DBQKZLLtWE46rVeETtkMTmB3FUOEybZgxXDmu01+Nidt
-         dfK6ffZAq+x0w92QJXKSmzV2wPNppBXFHCMl0Bt7AP51Ot8KIxHeSvPbjnQxIhbdQOCC
-         v2t1LBCOoSQJNyp0q63oW3DeBZEnvr5cKglbNNtOh/YWgykTujCOh380vx6bhyj9TjF3
-         g7ug==
-X-Gm-Message-State: AOAM530qLf1i3Tw3C7onYnlINbhDa21PAc0FPJN7GsQaZNwwj/BHzsTq
-        ukQ5l3XvBNHRXsaE7dMM+tY+XftYfdHYs2m0Lb85Vg==
-X-Google-Smtp-Source: ABdhPJx4Mz3cd/KMdRKZE/U+hy7aV56tDKoTCouAs2sFAgg5UNl6Ryv8KZo3kUlrcSGVwchFApx3oeSzi1EdcQfaT/M=
-X-Received: by 2002:a19:674c:0:b0:448:3f49:e6d5 with SMTP id
- e12-20020a19674c000000b004483f49e6d5mr25211060lfj.518.1653515128361; Wed, 25
- May 2022 14:45:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220415103414.86555-1-jiangshanlai@gmail.com> <YoK3zEVj+DuIBEs7@google.com>
-In-Reply-To: <YoK3zEVj+DuIBEs7@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Wed, 25 May 2022 14:45:01 -0700
-Message-ID: <CALzav=c_WfJ0hvHUFHkLH-+zrDXZSCzKsGHP6kPYd77adwHkUQ@mail.gmail.com>
-Subject: Re: [PATCH] kvm: x86/svm/nested: Cache PDPTEs for nested NPT in PAE
- paging mode
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Avi Kivity <avi@redhat.com>, kvm list <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=IN7B1Qc2wQvKxwG75W2PmFzu/kAYmOIH2ON1vtcnH3I=;
+        b=TD/RC9xncbHsApcpJAtcat/U0J/Ciw8DlsFNol6kja8bOXaiGJEDYKiqXhugiYyswH
+         FUYtdK9bj4xOw2bM78kkPxt0NYdxBuHAnR8yyR1kZCsGWHcRZO31RkArEltd6LoS4IzO
+         wfOrO8fYgW8VSkoCdgGi3aapgAN2nE833bIEnugWIVVYbCA+xfHyZjZlx0UGQwn//dNT
+         oyprdRfHHSwmOw2UpaUGGZWwL9TR1HdPJ2dgKDwICVrepy+83d2h23k/HC5S5PlFZwUN
+         qLIVJZx8ZfJfIWjmAm9gg5xXljCdnGK98ZyiOfgn1D6Rsjk81I0764g5FCpI06XjLlak
+         n2Jg==
+X-Gm-Message-State: AOAM53205A2cJ85CGt7KskniFAZqEa+Q0qSqa7aQHw4oMTAfE5Pg9U6X
+        yW2UWQ6ZnS625zo+lzAtEqryIw==
+X-Google-Smtp-Source: ABdhPJydPIEdq20LuZGkb+rUGUKaOiDkAhLz7ObNc/JyBOQIBagoJ7vjQ+qDXCfTWr7cnXmk76fFNQ==
+X-Received: by 2002:a17:902:f551:b0:162:de7f:76b6 with SMTP id h17-20020a170902f55100b00162de7f76b6mr7544542plf.77.1653515135300;
+        Wed, 25 May 2022 14:45:35 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id 19-20020a170902e9d300b0015e8d4eb263sm10050965plk.173.2022.05.25.14.45.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 14:45:33 -0700 (PDT)
+Date:   Wed, 25 May 2022 14:45:33 -0700 (PDT)
+X-Google-Original-Date: Wed, 25 May 2022 14:45:30 PDT (-0700)
+Subject:     Re: [PATCH v2 3/4] RISC-V: Split out the XIP fixups into their own file
+In-Reply-To: <CAJF2gTTC4V_vSFFranTB6PZrHK08J8KygjfACxfQ91POpRtY-Q@mail.gmail.com>
+CC:     linux-riscv@lists.infradead.org, rdunlap@infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        vincent.chen@sifive.com, Atish Patra <atishp@rivosinc.com>,
+        alexandre.ghiti@canonical.com, jszhang@kernel.org,
+        vitaly.wool@konsulko.com, gatecat@ds0.me,
+        wangkefeng.wang@huawei.com, mick@ics.forth.gr,
+        panqinglin2020@iscas.ac.cn, rppt@kernel.org,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-46c58a80-5b65-4a22-91fa-884bb5df49bc@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 2:06 PM Sean Christopherson <seanjc@google.com> wrote:
+On Wed, 20 Apr 2022 23:45:23 PDT (-0700), guoren@kernel.org wrote:
+> On Thu, Apr 21, 2022 at 2:48 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>>
+>> From: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> This was broken by the original refactoring (as the XIP definitions
+>> depend on <asm/pgtable.h>) and then more broken by the merge (as I
+>> accidentally took the old version).  This fixes both breakages, while
+>> also pulling this out of <asm/asm.h> to avoid polluting most assembly
+>> files with the XIP fixups.
+>>
+>> Fixes: bee7fbc38579 ("RISC-V CPU Idle Support")
+>> Fixes: 63b13e64a829 ("RISC-V: Add arch functions for non-retentive suspend entry/exit")
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> ---
+>>  arch/riscv/include/asm/asm.h       | 26 ------------------------
+>>  arch/riscv/include/asm/xip_fixup.h | 32 ++++++++++++++++++++++++++++++
+>>  arch/riscv/kernel/head.S           |  1 +
+>>  arch/riscv/kernel/suspend_entry.S  |  1 +
+>>  4 files changed, 34 insertions(+), 26 deletions(-)
+>>  create mode 100644 arch/riscv/include/asm/xip_fixup.h
+>>
+>> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
+>> index 8c2549b16ac0..618d7c5af1a2 100644
+>> --- a/arch/riscv/include/asm/asm.h
+>> +++ b/arch/riscv/include/asm/asm.h
+>> @@ -67,30 +67,4 @@
+>>  #error "Unexpected __SIZEOF_SHORT__"
+>>  #endif
+>>
+>> -#ifdef __ASSEMBLY__
+>> -
+>> -/* Common assembly source macros */
+>> -
+>> -#ifdef CONFIG_XIP_KERNEL
+>> -.macro XIP_FIXUP_OFFSET reg
+>> -       REG_L t0, _xip_fixup
+>> -       add \reg, \reg, t0
+>> -.endm
+>> -.macro XIP_FIXUP_FLASH_OFFSET reg
+>> -       la t1, __data_loc
+>> -       REG_L t1, _xip_phys_offset
+>> -       sub \reg, \reg, t1
+>> -       add \reg, \reg, t0
+>> -.endm
+>> -_xip_fixup: .dword CONFIG_PHYS_RAM_BASE - CONFIG_XIP_PHYS_ADDR - XIP_OFFSET
+>> -_xip_phys_offset: .dword CONFIG_XIP_PHYS_ADDR + XIP_OFFSET
+>> -#else
+>> -.macro XIP_FIXUP_OFFSET reg
+>> -.endm
+>> -.macro XIP_FIXUP_FLASH_OFFSET reg
+>> -.endm
+>> -#endif /* CONFIG_XIP_KERNEL */
+>> -
+>> -#endif /* __ASSEMBLY__ */
+>> -
+>>  #endif /* _ASM_RISCV_ASM_H */
+>> diff --git a/arch/riscv/include/asm/xip_fixup.h b/arch/riscv/include/asm/xip_fixup.h
+>> new file mode 100644
+>> index 000000000000..0d0754305324
+>> --- /dev/null
+>> +++ b/arch/riscv/include/asm/xip_fixup.h
+>> @@ -0,0 +1,32 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * XIP fixup macros, only useful in assembly.
+>> + */
+>> +#ifndef _ASM_RISCV_XIP_FIXUP_H
+>> +#define _ASM_RISCV_XIP_FIXUP_H
+>> +
+>> +#include <linux/pgtable.h>
+>> +
+>> +#ifdef CONFIG_XIP_KERNEL
+>> +.macro XIP_FIXUP_OFFSET reg
+>> +        REG_L t0, _xip_fixup
+>> +        add \reg, \reg, t0
+>> +.endm
+>> +.macro XIP_FIXUP_FLASH_OFFSET reg
+>> +        la t1, __data_loc
+>> +        li t0, XIP_OFFSET_MASK
+>> +        and t1, t1, t0
+>> +        li t1, XIP_OFFSET
+> I still prefer the style:
+> REG_L t1, _xip_phys_offset
+> ...
+> _xip_phys_offset: .dword CONFIG_XIP_PHYS_ADDR + XIP_OFFSET
 >
-> On Fri, Apr 15, 2022, Lai Jiangshan wrote:
-> > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> >
-> > When NPT enabled L1 is PAE paging, vcpu->arch.mmu->get_pdptrs() which
-> > is nested_svm_get_tdp_pdptr() reads the guest NPT's PDPTE from memroy
-> > unconditionally for each call.
-> >
-> > The guest PAE root page is not write-protected.
-> >
-> > The mmu->get_pdptrs() in FNAME(walk_addr_generic) might get different
-> > values every time or it is different from the return value of
-> > mmu->get_pdptrs() in mmu_alloc_shadow_roots().
-> >
-> > And it will cause FNAME(fetch) installs the spte in a wrong sp
-> > or links a sp to a wrong parent since FNAME(gpte_changed) can't
-> > check these kind of changes.
-> >
-> > Cache the PDPTEs and the problem is resolved.  The guest is responsible
-> > to info the host if its PAE root page is updated which will cause
-> > nested vmexit and the host updates the cache when next nested run.
->
-> Hmm, no, the guest is responsible for invalidating translations that can be
-> cached in the TLB, but the guest is not responsible for a full reload of PDPTEs.
-> Per the APM, the PDPTEs can be cached like regular PTEs:
->
->   Under SVM, however, when the processor is in guest mode with PAE enabled, the
->   guest PDPT entries are not cached or validated at this point, but instead are
->   loaded and checked on demand in the normal course of address translation, just
->   like page directory and page table entries. Any reserved bit violations ared
->   etected at the point of use, and result in a page-fault (#PF) exception rather
->   than a general-protection (#GP) exception.
+> Because it's more clear and has the same style as your _xip_fixup.
 
-This paragraph from the APM describes the behavior of CR3 loads while
-in SVM guest-mode. But this patch is changing how KVM emulates SVM
-host-mode (i.e. L1), right? It seems like AMD makes no guarantee
-whether or not CR3 loads pre-load PDPTEs while in SVM host-mode.
-(Although the APM does say that "modern processors" do not pre-load
-PDPTEs.)
+Thanks, not quite shure how I pulled the old version over.  I've fixed 
+this one up.
 
+> Others:
+> Reviewed-by: Guo Ren <guoren@kernel.org>
 >
-> So if L1 modifies a PDPTE from !PRESENT (or RESERVED) to PRESENT (and valid), then
-> any active L2 vCPUs should recognize the new PDPTE without a nested VM-Exit because
-> the old entry can't have been cached in the TLB.
->
-> In practice, snapshotting at nested VMRUN would likely work, but architecturally
-> it's wrong and could cause problems if L1+L2 are engange in paravirt shenanigans,
-> e.g. async #PF comes to mind.
->
-> I believe the correct way to fix this is to write-protect nNPT PDPTEs like all other
-> shadow pages, which shouldn't be too awful to do as part of your series to route
-> PDPTEs through kvm_mmu_get_page().
+>> +        sub t0, t0, t1
+>> +        sub \reg, \reg, t0
+>> +.endm
+> -.endm
+>> +
+>> +_xip_fixup: .dword CONFIG_PHYS_RAM_BASE - CONFIG_XIP_PHYS_ADDR - XIP_OFFSET
+>> +#else
+>> +.macro XIP_FIXUP_OFFSET reg
+>> +.endm
+>> +.macro XIP_FIXUP_FLASH_OFFSET reg
+>> +.endm
+>> +#endif /* CONFIG_XIP_KERNEL */
+>> +
+>> +#endif
+>> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+>> index 893b8bb69391..822c33aa7f45 100644
+>> --- a/arch/riscv/kernel/head.S
+>> +++ b/arch/riscv/kernel/head.S
+>> @@ -14,6 +14,7 @@
+>>  #include <asm/hwcap.h>
+>>  #include <asm/image.h>
+>> +#include <asm/xip_fixup.h>
+>>  #include "efi-header.S"
+>>
+>>  __HEAD
+>> diff --git a/arch/riscv/kernel/suspend_entry.S b/arch/riscv/kernel/suspend_entry.S
+>> index 4b07b809a2b8..aafcca58c19d 100644
+>> --- a/arch/riscv/kernel/suspend_entry.S
+>> +++ b/arch/riscv/kernel/suspend_entry.S
+>> @@ -8,6 +8,7 @@
+>>  #include <asm/asm.h>
+>>  #include <asm/asm-offsets.h>
+>>  #include <asm/csr.h>
+>> +#include <asm/xip_fixup.h>
+>>
+>>         .text
+>>         .altmacro
+>> --
+>> 2.34.1
+>>

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF55F533DED
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387CC533DEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243834AbiEYNfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S244434AbiEYNfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244458AbiEYNfK (ORCPT
+        with ESMTP id S233095AbiEYNfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:35:10 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A045EBCC;
-        Wed, 25 May 2022 06:35:09 -0700 (PDT)
+        Wed, 25 May 2022 09:35:14 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A015FF11;
+        Wed, 25 May 2022 06:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1653485709; x=1685021709;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lPcr1Kl7mtugE4RnqH82rEuS7mbXO0sNIAN2KGPqVMo=;
-  b=i/fOWTCu2/M3fMyD63v5sdDuw2pC+U3J0PZ/y/u0O0abU1hCJD3TJSEK
-   fAceBIcgjXTDKpgr01wQ20C7YjrPfvb6LGQXINdo1+Wl3YFJJ/OANgYz2
-   aF3JB6H9ppi/dC9z6xG/2ivFzN6MIZcx9XHpugxN9/hXXdS540jbk2SjU
-   KP4b4BEY6IzFqFpBwxYI96yK15dpVcCykpCB/TjzkXI/cMMyx76AXOWnl
-   b7O3zrHu97kd7exjs108l7jB7MGCCwF3faWabbZ+STjlCUdvvAnsLt6Y1
-   6drtbEVgQzMim43o93x5fzfQFm4J4kTwvf/5Vi+sKlJgjMadd59FNQN8m
-   w==;
+  t=1653485712; x=1685021712;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dXdl9EqY0xUL2lAww0hZ/gbksF94pS+Bbfzc0TVD6E0=;
+  b=Ayb/jdt0OlenRavw8MuBy6EMOuWvZLCuZ4d+3cg/xNF3PHQxqRgbMbK0
+   HSI8Eac4nUmRqwX+Cs64iJ/BT3/PQi3dm8Tu+BXzL0qmA+YOjTBkSEPVG
+   zh2X0EMHJZKcXEm7V6UkK2HDDY2+4QmAwNgyMvr/ZYS7zUDy1XKA5aSrJ
+   kOO2NPDg5B+2b/NSkUZiH0XixvNU1ibyxkuMZyDlu6ajQkLvwrSeLLDAU
+   up/xo5d87rDROqUlDGsMH99lsX45Y2jWOrgrkJ8jeU8xaAzIDy7v63M5z
+   oKO0Tl1lw2u5vEnZgUZdKLzqBQQyBSvr3jx26GtxoddS3bwNSzJgWKLXz
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="175023846"
+   d="scan'208";a="97276327"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2022 06:35:08 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2022 06:35:11 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 25 May 2022 06:35:08 -0700
+ 15.1.2375.17; Wed, 25 May 2022 06:35:10 -0700
 Received: from localhost.localdomain (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 25 May 2022 06:35:05 -0700
+ 15.1.2375.17 via Frontend Transport; Wed, 25 May 2022 06:35:08 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
         <jirislaby@kernel.org>, <nicolas.ferre@microchip.com>,
@@ -47,10 +47,12 @@ CC:     <linux-serial@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 0/3] serial: atmel: cleanup code
-Date:   Wed, 25 May 2022 16:37:30 +0300
-Message-ID: <20220525133733.1051714-1-claudiu.beznea@microchip.com>
+Subject: [PATCH 1/3] tty: serial: atmel: stop using legacy pm ops
+Date:   Wed, 25 May 2022 16:37:31 +0300
+Message-ID: <20220525133733.1051714-2-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220525133733.1051714-1-claudiu.beznea@microchip.com>
+References: <20220525133733.1051714-1-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -64,25 +66,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Stop using legacy PM ops and switch using dev_pm_ops. Along with
+it #ifdef CONFIG_PM are removed and __maybe_unused and pm_ptr() used
+instead. Coding style recommends (at chapter Conditional Compilation)
+to avoid using preprocessor conditional and use __maybe_unused
+instead.
 
-The following patches does some cleanup for atmel_serial driver by
-switching to dev_pm_ops and improving clock management code. Along with
-it I took the chance and introduced a patch for st-asc which removes the
-include of pm_runtime.h.
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ drivers/tty/serial/atmel_serial.c | 28 +++++++++++-----------------
+ 1 file changed, 11 insertions(+), 17 deletions(-)
 
-Thank you,
-Claudiu Beznea
-
-Claudiu Beznea (3):
-  tty: serial: atmel: stop using legacy pm ops
-  tty: serial: atmel: improve clock management
-  serial: st-asc: remove include of pm_runtime.h
-
- drivers/tty/serial/atmel_serial.c | 93 +++++++++----------------------
- drivers/tty/serial/st-asc.c       |  1 -
- 2 files changed, 26 insertions(+), 68 deletions(-)
-
+diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
+index dd1c7e4bd1c9..5c793a23dc54 100644
+--- a/drivers/tty/serial/atmel_serial.c
++++ b/drivers/tty/serial/atmel_serial.c
+@@ -166,7 +166,6 @@ struct atmel_uart_port {
+ 	unsigned int		fidi_min;
+ 	unsigned int		fidi_max;
+ 
+-#ifdef CONFIG_PM
+ 	struct {
+ 		u32		cr;
+ 		u32		mr;
+@@ -177,7 +176,6 @@ struct atmel_uart_port {
+ 		u32		fmr;
+ 		u32		fimr;
+ 	} cache;
+-#endif
+ 
+ 	int (*prepare_rx)(struct uart_port *port);
+ 	int (*prepare_tx)(struct uart_port *port);
+@@ -2711,7 +2709,6 @@ static struct uart_driver atmel_uart = {
+ 	.cons		= ATMEL_CONSOLE_DEVICE,
+ };
+ 
+-#ifdef CONFIG_PM
+ static bool atmel_serial_clk_will_stop(void)
+ {
+ #ifdef CONFIG_ARCH_AT91
+@@ -2721,10 +2718,9 @@ static bool atmel_serial_clk_will_stop(void)
+ #endif
+ }
+ 
+-static int atmel_serial_suspend(struct platform_device *pdev,
+-				pm_message_t state)
++static int __maybe_unused atmel_serial_suspend(struct device *dev)
+ {
+-	struct uart_port *port = platform_get_drvdata(pdev);
++	struct uart_port *port = dev_get_drvdata(dev);
+ 	struct atmel_uart_port *atmel_port = to_atmel_uart_port(port);
+ 
+ 	if (uart_console(port) && console_suspend_enabled) {
+@@ -2749,14 +2745,14 @@ static int atmel_serial_suspend(struct platform_device *pdev,
+ 	}
+ 
+ 	/* we can not wake up if we're running on slow clock */
+-	atmel_port->may_wakeup = device_may_wakeup(&pdev->dev);
++	atmel_port->may_wakeup = device_may_wakeup(dev);
+ 	if (atmel_serial_clk_will_stop()) {
+ 		unsigned long flags;
+ 
+ 		spin_lock_irqsave(&atmel_port->lock_suspended, flags);
+ 		atmel_port->suspended = true;
+ 		spin_unlock_irqrestore(&atmel_port->lock_suspended, flags);
+-		device_set_wakeup_enable(&pdev->dev, 0);
++		device_set_wakeup_enable(dev, 0);
+ 	}
+ 
+ 	uart_suspend_port(&atmel_uart, port);
+@@ -2764,9 +2760,9 @@ static int atmel_serial_suspend(struct platform_device *pdev,
+ 	return 0;
+ }
+ 
+-static int atmel_serial_resume(struct platform_device *pdev)
++static int __maybe_unused atmel_serial_resume(struct device *dev)
+ {
+-	struct uart_port *port = platform_get_drvdata(pdev);
++	struct uart_port *port = dev_get_drvdata(dev);
+ 	struct atmel_uart_port *atmel_port = to_atmel_uart_port(port);
+ 	unsigned long flags;
+ 
+@@ -2801,14 +2797,10 @@ static int atmel_serial_resume(struct platform_device *pdev)
+ 	spin_unlock_irqrestore(&atmel_port->lock_suspended, flags);
+ 
+ 	uart_resume_port(&atmel_uart, port);
+-	device_set_wakeup_enable(&pdev->dev, atmel_port->may_wakeup);
++	device_set_wakeup_enable(dev, atmel_port->may_wakeup);
+ 
+ 	return 0;
+ }
+-#else
+-#define atmel_serial_suspend NULL
+-#define atmel_serial_resume NULL
+-#endif
+ 
+ static void atmel_serial_probe_fifos(struct atmel_uart_port *atmel_port,
+ 				     struct platform_device *pdev)
+@@ -3012,14 +3004,16 @@ static int atmel_serial_remove(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static SIMPLE_DEV_PM_OPS(atmel_serial_pm_ops, atmel_serial_suspend,
++			 atmel_serial_resume);
++
+ static struct platform_driver atmel_serial_driver = {
+ 	.probe		= atmel_serial_probe,
+ 	.remove		= atmel_serial_remove,
+-	.suspend	= atmel_serial_suspend,
+-	.resume		= atmel_serial_resume,
+ 	.driver		= {
+ 		.name			= "atmel_usart_serial",
+ 		.of_match_table		= of_match_ptr(atmel_serial_dt_ids),
++		.pm			= pm_ptr(&atmel_serial_pm_ops),
+ 	},
+ };
+ 
 -- 
 2.34.1
 

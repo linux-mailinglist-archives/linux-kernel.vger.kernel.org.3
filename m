@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C54533820
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49678533821
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbiEYIPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        id S231356AbiEYIPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237187AbiEYIOy (ORCPT
+        with ESMTP id S239169AbiEYIOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:14:54 -0400
+        Wed, 25 May 2022 04:14:55 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8D6E87214
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:14:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEC1584A15
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:14:51 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56AE123A;
-        Wed, 25 May 2022 01:14:49 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B21B1FB;
+        Wed, 25 May 2022 01:14:51 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7C2DC3F73D;
-        Wed, 25 May 2022 01:14:47 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AB6183F73D;
+        Wed, 25 May 2022 01:14:49 -0700 (PDT)
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Sudeep Holla <sudeep.holla@arm.com>,
@@ -32,11 +32,11 @@ Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Qing Wang <wangqing@vivo.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v3 08/16] arm64: topology: Remove redundant setting of llc_id in CPU topology
-Date:   Wed, 25 May 2022 09:14:08 +0100
-Message-Id: <20220525081416.3306043-9-sudeep.holla@arm.com>
+Subject: [PATCH v3 09/16] arch_topology: Drop LLC identifier stash from the CPU topology
+Date:   Wed, 25 May 2022 09:14:09 +0100
+Message-Id: <20220525081416.3306043-10-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220525081416.3306043-8-sudeep.holla@arm.com>
+In-Reply-To: <20220525081416.3306043-9-sudeep.holla@arm.com>
 References: <20220525081416.3306043-1-sudeep.holla@arm.com>
  <20220525081416.3306043-2-sudeep.holla@arm.com>
  <20220525081416.3306043-3-sudeep.holla@arm.com>
@@ -45,6 +45,7 @@ References: <20220525081416.3306043-1-sudeep.holla@arm.com>
  <20220525081416.3306043-6-sudeep.holla@arm.com>
  <20220525081416.3306043-7-sudeep.holla@arm.com>
  <20220525081416.3306043-8-sudeep.holla@arm.com>
+ <20220525081416.3306043-9-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
@@ -57,49 +58,41 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Since the cacheinfo LLC information is used directly in arch_topology,
-there is no need to parse and fetch the LLC ID information only for
-ACPI systems.
+there is no need to parse and store the LLC ID information only for
+ACPI systems in the CPU topology.
 
-Just drop the redundant parsing and setting of llc_id in CPU topology
-from ACPI PPTT.
+Remove the redundant LLC ID from the generic CPU arch_topology information.
 
 Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- arch/arm64/kernel/topology.c | 14 --------------
- 1 file changed, 14 deletions(-)
+ drivers/base/arch_topology.c  | 1 -
+ include/linux/arch_topology.h | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 9ab78ad826e2..869ffc4d4484 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -89,8 +89,6 @@ int __init parse_acpi_topology(void)
- 		return 0;
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 4c486e4e6f2f..76c702c217c5 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -747,7 +747,6 @@ void __init reset_cpu_topology(void)
+ 		cpu_topo->core_id = -1;
+ 		cpu_topo->cluster_id = -1;
+ 		cpu_topo->package_id = -1;
+-		cpu_topo->llc_id = -1;
  
- 	for_each_possible_cpu(cpu) {
--		int i, cache_id;
--
- 		topology_id = find_acpi_cpu_topology(cpu, 0);
- 		if (topology_id < 0)
- 			return topology_id;
-@@ -107,18 +105,6 @@ int __init parse_acpi_topology(void)
- 		cpu_topology[cpu].cluster_id = topology_id;
- 		topology_id = find_acpi_cpu_topology_package(cpu);
- 		cpu_topology[cpu].package_id = topology_id;
--
--		i = acpi_find_last_cache_level(cpu);
--
--		if (i > 0) {
--			/*
--			 * this is the only part of cpu_topology that has
--			 * a direct relationship with the cache topology
--			 */
--			cache_id = find_acpi_cpu_cache_topology(cpu, i);
--			if (cache_id > 0)
--				cpu_topology[cpu].llc_id = cache_id;
--		}
+ 		clear_cpu_topology(cpu);
  	}
- 
- 	return 0;
+diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+index 58cbe18d825c..a07b510e7dc5 100644
+--- a/include/linux/arch_topology.h
++++ b/include/linux/arch_topology.h
+@@ -68,7 +68,6 @@ struct cpu_topology {
+ 	int core_id;
+ 	int cluster_id;
+ 	int package_id;
+-	int llc_id;
+ 	cpumask_t thread_sibling;
+ 	cpumask_t core_sibling;
+ 	cpumask_t cluster_sibling;
 -- 
 2.36.1
 

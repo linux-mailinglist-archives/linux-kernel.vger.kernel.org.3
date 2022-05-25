@@ -2,81 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8D4533EBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83C6533EBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236101AbiEYOHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33226 "EHLO
+        id S236678AbiEYOHZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 25 May 2022 10:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245656AbiEYOFz (ORCPT
+        with ESMTP id S245661AbiEYOF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 10:05:55 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5085C353
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:05:03 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id q184so7581131ybg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:cc;
-        bh=jcv14XD1FEIAH5YEbByn5Xomdekt/dYfYEZFWkwU5FU=;
-        b=keTo4FJJxHZh+gTKCdQdLk8BHiR++6kQVHTSnx9CYaXZ/lifenV2Q6uLlClxmgee/j
-         138aU5Mcy3WEbdxL+Dinm82aFvV3DZtg5mcpkTfF8kOMPsgmkAPcreG/yACVwS6FWrrH
-         nUqwLXKJZIPG0fxObVmKysBHfR1JMnMH6uO+6a/u1mYeEWzTnbKkiVURcffxHX4ai8Fu
-         +RIlvpsjz/bdQ7dgg9RSowiIHdaHhx0uNz0BVfPcoFE00ob9/uARhpWSwPx1uZydBtvg
-         wG+kJ3kVk9bU/e8sym+gbUUFZmfefki+E7DtAtr/CDmsY6FpDHxebQK3Uiyz9J69eSHK
-         P2GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:cc;
-        bh=jcv14XD1FEIAH5YEbByn5Xomdekt/dYfYEZFWkwU5FU=;
-        b=CRd0Jp3EHCUhA406kiJBnWdlSdzZXwmUPWadP53wodPkK5PgLoBphjBnBnr86ITg3o
-         HDRyC5G5aKHtR7jSNlBDfGA/fkRhvvpnbOKXHxdh7oCrJ9B0pPYzeL2Q2P1xbOKrohFE
-         aSBV4q2lgVHdY/v4JUFlYRPTtLVi9kBBWB5yNH2vGScMGTJHnKZjPP6a6sIaGEKjXezq
-         6/2ArqP/rO0+0l2b4WwM5iKFrYwJQZEkF3ySZfcyNhNtEOlCAO0a4iwgUt2tyHNeS9P9
-         i2zBoKwtwk7hbc/0trZu/J5/mNBGL0fEa7f/DqYDjwJ1jGXdHAVPSa1FLtbh85/Eftfo
-         vk0Q==
-X-Gm-Message-State: AOAM531kUBdnkMl0LCqB19xzOEWA0qY5HhEw9de4PRJbN6yXk8q6cCi1
-        DlzLXX99dUl6S+K26aNdb0WXLmo0QlsE3fhYohc=
-X-Received: by 2002:a05:6902:11ca:b0:653:1762:5c5a with SMTP id
- n10-20020a05690211ca00b0065317625c5amt5917038ybu.247.1653487502725; Wed, 25
- May 2022 07:05:02 -0700 (PDT)
+        Wed, 25 May 2022 10:05:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79609CCAC
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:05:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 539826190D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:05:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F9D1C385B8;
+        Wed, 25 May 2022 14:05:28 +0000 (UTC)
+Date:   Wed, 25 May 2022 10:05:26 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jakub =?UTF-8?B?TWF0xJtuYQ==?= <matenajakub@gmail.com>
+Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz, mhocko@kernel.org,
+        mgorman@techsingularity.net, willy@infradead.org,
+        liam.howlett@oracle.com, hughd@google.com, kirill@shutemov.name,
+        riel@surriel.com, peterz@infradead.org, david@redhat.com
+Subject: Re: [RFC PATCH v3 6/6] [PATCH 6/6] mm: add tracing for VMA merges
+Message-ID: <20220525100526.2a7a0eb7@gandalf.local.home>
+In-Reply-To: <20220516125405.1675-7-matenajakub@gmail.com>
+References: <20220516125405.1675-1-matenajakub@gmail.com>
+        <20220516125405.1675-7-matenajakub@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:a81:61c5:0:0:0:0:0 with HTTP; Wed, 25 May 2022 07:05:01
- -0700 (PDT)
-Reply-To: israelbarney287@gmail.com
-In-Reply-To: <CAB+02OHG4qRXR9VtFY_p18=+H448jDJJ4v6mKiBWwz72X+XP9A@mail.gmail.com>
-References: <CAB+02OH=iZbhU6XkKnLMFFeM0KnQDP3q=UTcdx+TuppajzAyRw@mail.gmail.com>
- <CAB+02OFytK3OGxm9qsK+PMogkXgOJDeZpjug062=Kr3i3Tdm9g@mail.gmail.com>
- <CAB+02OH1Oogs0fOSO7BRqS9-ULAwPgXA5hNaZ5d0219RFNzugQ@mail.gmail.com>
- <CAB+02OFqr9q6BZ5ev5Hbz=1p78FfoMoGqFf6u+oi5evDczT8sg@mail.gmail.com>
- <CAB+02OHv1zg=-uOVEwoAM1MC+vuPt118=7Ez2yCd9Nku53K7rg@mail.gmail.com>
- <CAB+02OEpULj-YAvuW7bG7efq13M0SQ+vcJyBQ0aBktioYguQSQ@mail.gmail.com> <CAB+02OHG4qRXR9VtFY_p18=+H448jDJJ4v6mKiBWwz72X+XP9A@mail.gmail.com>
-From:   israel barney <abasszakari0@gmail.com>
-Date:   Wed, 25 May 2022 15:05:01 +0100
-Message-ID: <CAB+02OFE=9turvuGPm-AvWEwX3OWmPt7638jfsQg=eXiRe74uA@mail.gmail.com>
-Subject: hello
-Cc:     israelbarney287@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        MISSING_HEADERS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URG_BIZ autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings to you! Please did you receive my previous message? I need
-your urgent response.
+On Mon, 16 May 2022 14:54:05 +0200
+Jakub Matěna <matenajakub@gmail.com> wrote:
 
-My regards,
-Mr. Israel Barney.
+> +	TP_fast_assign(
+> +		__entry->merged = merged == 0;
+> +		__entry->predecessor_different_av = merge_prev;
+> +		__entry->successor_different_av = merge_next;
+> +		__entry->predecessor_with_successor_different_av = merge_both;
+
+
+> +		__entry->same_count = (merge_prev == AV_MERGE_SAME) +
+> +			(merge_next == AV_MERGE_SAME) +
+> +			(merge_both == AV_MERGE_SAME);
+> +		__entry->diff_count = (merge_prev == AV_MERGE_DIFFERENT) +
+> +			(merge_next == AV_MERGE_DIFFERENT) +
+> +			(merge_both == AV_MERGE_DIFFERENT);
+> +		__entry->failed_count = (merge_prev == AV_MERGE_FAILED) +
+> +			(merge_next == AV_MERGE_FAILED) +
+> +			(merge_both == AV_MERGE_FAILED);
+
+The above looks like it can be moved into the TP_printk(), as you have the
+merge_prev, next and both saved already. Why waste more ring buffer space
+and execution time for information that can be derived at the time of
+reading the trace event?
+
+-- Steve
+
+
+> +	),
+> +
+> +	TP_printk("merged=%d predecessor=%s successor=%s predecessor_with_successor=%s same_count=%d diff_count=%d failed_count=%d",
+> +		__entry->merged,
+> +		__print_symbolic(__entry->predecessor_different_av, AV_MERGE_TYPES),
+> +		__print_symbolic(__entry->successor_different_av, AV_MERGE_TYPES),
+> +		__print_symbolic(__entry->predecessor_with_successor_different_av, AV_MERGE_TYPES),
+> +		__entry->same_count, __entry->diff_count, __entry->failed_count)
+> +
+> +);
+> +

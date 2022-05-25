@@ -2,127 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43899533BD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BB0533BD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234102AbiEYLd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S237651AbiEYLeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbiEYLdZ (ORCPT
+        with ESMTP id S230476AbiEYLeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:33:25 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9568FF9B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:33:23 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id l13so28878569lfp.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:33:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EZsTbG5Ghb36/veeiU7rdV///7+Ve3p/GIrx5IOFMMk=;
-        b=UNaoBdpvQ0Wuh39ejXqVAxIdtogtZgXrbpaaU46uoIDB3jLwniE+a2Gw/eeD8rR8Yx
-         IXV3H3QXBNtA1tMANean66atO0lGhtSaBj/Jzj5RNfrNPf8kn0oSAKPugUTe2FTz20/o
-         5TH60Q4367rsBz1G9RGjIz8XELgZW7TyE43vX+m7/UlPP+AwpSJmlD2QG95/0zMEZsWS
-         tr5G30OGEiKdG5GnVwT8nCeszSZH6QYxn2Btg/docx5if5P9QbJdALM7qEVNf96vCbI4
-         8PVPsXCLlqa2JHW3+x+10k92IUQqj7bsSWQeFQsKgTrtK1cAELhcGiPxPVFOQXESnO70
-         CPFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EZsTbG5Ghb36/veeiU7rdV///7+Ve3p/GIrx5IOFMMk=;
-        b=1tXs0z/1dRjPh+LjN8yBTRkavxwpJQBHekM3y/M1RRbLNHbaTl869q8ElZGhINvSGS
-         DYjMXm5qJ+lEIktYwduN3EbDiRUQ28fhh7occpcuS6icvZ8/T15FVDNE2kCV6/8GU77b
-         EvNZ47yKbRRfVJ2yAQ9fwO6Eka/7NfyRI8C91y1AC++peGhAEGw51tc2HEzu1lZ3PC8O
-         gBmcTsaeDdMCw/fon1lWe6t/UhfdTcOb8wpTjaXccqXdbU3nbQhLlIB1iM80IRa9QW6V
-         tWX/A27Jsoda645cBJs2YilSF8MwzGMmpwFOgwj+XGKmFSzEnY0gEZ6L3k8rOJxKJF8N
-         wSlA==
-X-Gm-Message-State: AOAM532T1ZrNeViEHh35hAPHyg0lJous9yQa9XCR2jKYabHOB7peSEK2
-        82dEWbXzkRnADZXnvqSBt6c06Q==
-X-Google-Smtp-Source: ABdhPJwxUQcyyc6kFYuWc0GAmuft5s7f8VFDf0BcrceocIyXBLKMhyRoxJLAZ62FMvqZdolc+cbblg==
-X-Received: by 2002:a05:6512:10c2:b0:478:8ea5:f6f9 with SMTP id k2-20020a05651210c200b004788ea5f6f9mr5197816lfg.1.1653478402086;
-        Wed, 25 May 2022 04:33:22 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id h26-20020a19701a000000b0047255d210fesm3063191lfc.45.2022.05.25.04.33.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 04:33:20 -0700 (PDT)
-Message-ID: <1abe03bf-5de5-f73e-1043-46872a38e815@linaro.org>
-Date:   Wed, 25 May 2022 14:33:18 +0300
+        Wed, 25 May 2022 07:34:04 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD278FF9B;
+        Wed, 25 May 2022 04:34:03 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L7TVD35hFzDqPV;
+        Wed, 25 May 2022 19:33:56 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 25 May 2022 19:33:59 +0800
+Subject: Re: [PATCH -next] ext4: fix super block checksum incorrect after
+ mount
+To:     Ritesh Harjani <ritesh.list@gmail.com>
+References: <20220525012904.1604737-1-yebin10@huawei.com>
+ <20220525075123.rx5v7fe6ocn354wn@riteshh-domain>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jack@suse.cz>
+From:   yebin <yebin10@huawei.com>
+Message-ID: <628E1427.8080205@huawei.com>
+Date:   Wed, 25 May 2022 19:33:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/7] media: camss: ispif: Correctly reset based on the
- VFE ID
-Content-Language: en-GB
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        kholk11@gmail.com, Robert Foss <robert.foss@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, mchehab@kernel.org,
-        robh+dt@kernel.org, marijns95@gmail.com, konradybcio@gmail.com,
-        martin.botka1@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, todor.too@gmail.com
-References: <20201022174706.8813-1-kholk11@gmail.com>
- <20201022174706.8813-2-kholk11@gmail.com>
- <899412f2-5ee4-cd32-393f-688fc6351437@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <899412f2-5ee4-cd32-393f-688fc6351437@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20220525075123.rx5v7fe6ocn354wn@riteshh-domain>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wow, a patchset from 2020.
 
-On 25/05/2022 12:03, Vladimir Zapolskiy wrote:
-> On 10/22/20 20:47, kholk11@gmail.com wrote:
->> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
+
+On 2022/5/25 15:51, Ritesh Harjani wrote:
+> On 22/05/25 09:29AM, Ye Bin wrote:
+>> We got issue as follows:
+>> [home]# mount  /dev/sda  test
+>> EXT4-fs (sda): warning: mounting fs with errors, running e2fsck is recommended
+>> [home]# dmesg
+>> EXT4-fs (sda): warning: mounting fs with errors, running e2fsck is recommended
+>> EXT4-fs (sda): Errors on filesystem, clearing orphan list.
+>> EXT4-fs (sda): recovery complete
+>> EXT4-fs (sda): mounted filesystem with ordered data mode. Quota mode: none.
+>> [home]# debugfs /dev/sda
+>> debugfs 1.46.5 (30-Dec-2021)
+>> Checksum errors in superblock!  Retrying...
 >>
->> Resetting the ISPIF VFE0 context is wrong if we are using the VFE1
->> for dual-camera or simply because a secondary camera is connected
->> to it: in this case the reset will always happen on the VFE0 ctx
->> of the ISPIF, which is .. useless.
+>> Reason is ext4_orphan_cleanup will reset ‘s_last_orphan’ but not update
+>> super block checksum.
+>> To solve above issue, defer update super block checksum after ext4_orphan_cleanup.
+> I agree with the analysis. However after [1], I think all updates to superblock
+> (including checksum computation) should be done within buffer lock.
+> (lock_buffer(), unlock_buffer()).
+>
+> [1]: https://lore.kernel.org/all/20201216101844.22917-4-jack@suse.cz/
+>
+> With lock changes added, feel free to add -
+>
+> Reviewed-by: Ritesh Harjani <ritesh.list@gmail.com>
+Thanks for your reply.
+I think there should be no concurrent  modification at this time.
+So there's no need to hold buffer lock.
+Am I missing something?
+>
 >>
->> Fix this usecase by adding the ISPIF_RST_CMD_1 address and choose
->> where to do the (or what to) reset based on the VFE line id.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
->> Reviewed-by: Robert Foss <robert.foss@linaro.org>
+>> Signed-off-by: Ye Bin <yebin10@huawei.com>
 >> ---
->>   .../media/platform/qcom/camss/camss-ispif.c   | 85 ++++++++++++-------
->>   .../media/platform/qcom/camss/camss-ispif.h   |  2 +-
->>   2 files changed, 56 insertions(+), 31 deletions(-)
+>>   fs/ext4/super.c | 16 ++++++++--------
+>>   1 file changed, 8 insertions(+), 8 deletions(-)
 >>
+>> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+>> index f9a3ad683b4a..c47204029429 100644
+>> --- a/fs/ext4/super.c
+>> +++ b/fs/ext4/super.c
+>> @@ -5300,14 +5300,6 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+>>   		err = percpu_counter_init(&sbi->s_freeinodes_counter, freei,
+>>   					  GFP_KERNEL);
+>>   	}
+>> -	/*
+>> -	 * Update the checksum after updating free space/inode
+>> -	 * counters.  Otherwise the superblock can have an incorrect
+>> -	 * checksum in the buffer cache until it is written out and
+>> -	 * e2fsprogs programs trying to open a file system immediately
+>> -	 * after it is mounted can fail.
+>> -	 */
+>> -	ext4_superblock_csum_set(sb);
+>>   	if (!err)
+>>   		err = percpu_counter_init(&sbi->s_dirs_counter,
+>>   					  ext4_count_dirs(sb), GFP_KERNEL);
+>> @@ -5365,6 +5357,14 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+>>   	EXT4_SB(sb)->s_mount_state |= EXT4_ORPHAN_FS;
+>>   	ext4_orphan_cleanup(sb, es);
+>>   	EXT4_SB(sb)->s_mount_state &= ~EXT4_ORPHAN_FS;
+>> +	/*
+>> +	 * Update the checksum after updating free space/inode counters and
+>> +	 * ext4_orphan_cleanup. Otherwise the superblock can have an incorrect
+>> +	 * checksum in the buffer cache until it is written out and
+>> +	 * e2fsprogs programs trying to open a file system immediately
+>> +	 * after it is mounted can fail.
+>> +	 */
+>> +	ext4_superblock_csum_set(sb);
+>>   	if (needs_recovery) {
+>>   		ext4_msg(sb, KERN_INFO, "recovery complete");
+>>   		err = ext4_mark_recovery_complete(sb, es);
+>> --
+>> 2.31.1
+>>
+> .
+>
 
-[skipped]
-
->> @@ -355,7 +379,7 @@ static int ispif_set_power(struct v4l2_subdev *sd, 
->> int on)
->>               goto exit;
->>           }
->> -        ret = ispif_reset(ispif);
->> +        ret = ispif_reset(ispif, line->vfe_id);
-> 
-> But in fact here is an error.
-> 
-> line->vfe_id is never set.
-> 
-> I'm unable to test any fix, since I don't have a correspondent hardware,
-> but I can write a fix for someone's testing.
-
-I have a sda660 device, but I don't have cameras attached. So one will 
-have to use TPG.
-
--- 
-With best wishes
-Dmitry

@@ -2,74 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44EC533A3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C6E533A42
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237331AbiEYJtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 05:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S242098AbiEYJuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 05:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236538AbiEYJtA (ORCPT
+        with ESMTP id S241463AbiEYJuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 05:49:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1723A1A81B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 02:49:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653472139;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Cmn5Dd9D3LZtVWPiUVFI46RQ0E8Or8cYY9mPhGTiFco=;
-        b=GZJ9e2JUt3fhX5pPLXyYgU1ar10fNkS1jo1TFJKv+5EVJMxZrimz8PFH+fMr0yhG54eB/u
-        +l/qIuLjE1a6G/+T0ZAMsH48oSre5eXGIzDecq9ktEo9e67Gn+bR2ajUaJ9k2GYphmIEeZ
-        rSO1iSKOirkxYcIdyYnaUwl7hab92eg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-t_vpgfTvN-KcvAipYS_QjQ-1; Wed, 25 May 2022 05:48:57 -0400
-X-MC-Unique: t_vpgfTvN-KcvAipYS_QjQ-1
-Received: by mail-wm1-f71.google.com with SMTP id o3-20020a05600c510300b0039743540ac7so4261013wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 02:48:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Cmn5Dd9D3LZtVWPiUVFI46RQ0E8Or8cYY9mPhGTiFco=;
-        b=grtaMplx1BFpK1yc7GGjHMGMBLwcwpPTf7y0MZNsVyngEzpIVGqXdqaGIh6uyehjg3
-         yI0SjsPkKpyRJcZVg/A4zx+MvkzeQXxqFXZgGquUY0V+F8PZmDVnVH0h5DEhmHWvYUkE
-         1IWkVMsbw05CJQMadnYH+mhRtwj6tjfg4s8EvCy62NsxTiORys7Yh2N2qQo6oLN/QM6D
-         ZUxUqw3gz8/MWIK6Y6tLG1DEIcVwIY8Gngl/XdU1SNvzuyPx9J5hZ7VifMHMJij9gbZv
-         Xx9/m0P+bH7m4R+Gu+/N3yVJu0uKvgrcNbH5MVvnTxJ6dG/SWIaks34q6O/0XtTx/D/R
-         U4iQ==
-X-Gm-Message-State: AOAM531OM4x3GUFq+Qr31dQ6t9E70RXfCtIkMdFK3qdBmrPPM7fqxFWB
-        zkwsQAJx/fTvXCHTFuqSHrH5UTSnKqVn7uroj59gNO3m1+ooRybKDwWmWwPVITZrHtaEttE9fEk
-        eFqGmQFMBuc9IOha495rfz8F3
-X-Received: by 2002:a5d:6daf:0:b0:20f:f1e7:c720 with SMTP id u15-20020a5d6daf000000b0020ff1e7c720mr5782467wrs.584.1653472136653;
-        Wed, 25 May 2022 02:48:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyBfd9tvURlfA43DeSy5H19Fjt9Zo4QuazYxO0ljHjPHfpeDz0gznsyGMUWJdSN/hXe6N+p9g==
-X-Received: by 2002:a5d:6daf:0:b0:20f:f1e7:c720 with SMTP id u15-20020a5d6daf000000b0020ff1e7c720mr5782459wrs.584.1653472136507;
-        Wed, 25 May 2022 02:48:56 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id h15-20020adf9ccf000000b0020e58b3e064sm1630696wre.74.2022.05.25.02.48.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 02:48:56 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] cpuhp: make target_store() a nop when target == state
-In-Reply-To: <Yo0z56Fqgj3gqYlG@lorien.usersys.redhat.com>
-References: <20220523144728.32414-1-pauld@redhat.com>
- <xhsmh35gzj77s.mognet@vschneid.remote.csb>
- <Yo0z56Fqgj3gqYlG@lorien.usersys.redhat.com>
-Date:   Wed, 25 May 2022 10:48:55 +0100
-Message-ID: <xhsmhwneahri0.mognet@vschneid.remote.csb>
+        Wed, 25 May 2022 05:50:06 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4D51D0F8;
+        Wed, 25 May 2022 02:50:05 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 71BAF1F44B84
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653472204;
+        bh=syTUXEsw9/n/6NDfW7WVBL7ZaRtUq32UuldrTBYAPc4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cUME8Mii9tR0Tu01mYdGkHp05qEJkOXwdrQIlvvfG38MQrP5H3GB6ASGPt9iwDqgv
+         d1mRtNNHL1u+o4bjHckBdvy5LqcIiLNB/+TGq8Zt2paL3/AO0a7XCsF1e5I04EVCvn
+         KDTyX8xJHIT1GYRk7c6lh+jl8fnPDZDeJEOak7bxJwGPv/sph7p+SHf8EGqGZYT3Tb
+         cMLALx0Bg0h25UbxIml54g7j5SnPiPH5ZAT5Dp7DFGV3CHcFAJSDpWBxTZlAh3H2gN
+         /6Du8ufh33EOgXlIgWtnnVhCMXYJ7X3BEkwRZgFyrGfd+d5BWEmIGYUL1kB7yJ9fD0
+         RFYnM0I0gTxeg==
+Message-ID: <43a102cf-6971-8083-d24f-629d6d39810f@collabora.com>
+Date:   Wed, 25 May 2022 11:50:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v20 0/8] Add Mediatek Soc DRM (vdosys0) support for mt8195
+Content-Language: en-US
+To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     CK Hu <ck.hu@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jason-jhlin <jason-jh.lin@mediatek.corp-partner.google.com>
+References: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,70 +62,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/22 15:37, Phil Auld wrote:
-> Hi Valentin,
->
-> I did it like this (shown below) and from my test it also works for
-> this case.
->
-> I could move it below the lock and goto out;  instead if you think
-> that is better.
+Il 19/04/22 11:41, jason-jh.lin ha scritto:
+> From: jason-jhlin <jason-jh.lin@mediatek.corp-partner.google.com>
+> 
 
-I *think* the cpu_add_remove_lock mutex should be sufficient here.
+Hello Jason,
 
-> It still seems better to me to stop this higher up
-> because there's work being done in the out path too.  We're not
-> actually doing any hot(un)plug so doing post unplug cleanup seems
-> iffy.
->
+this series does not apply cleanly anymore on next-20220525, can you please
+rebase and resend?
 
-I think so too; I now realize _cpu_up() and _cpu_down() have slightly
-different prologues: _cpu_up() does its hotplug states / cpu_present_mask
-checks *after* grabbing the cpu_hotplug_lock, _cpu_down() does that *before*...
+I hope that with a bit of coordination, we can get the entire display stack
+finally upstreamed in v5.19... it's been quite a while... :-)
 
-So I believe what you have below is fine, modulo whether we want to align
-the prologue of these two functions or not :-)
+Cheers,
+Angelo
 
-> _cpu_down()
-> ...
-> out:
->         cpus_write_unlock();
->         /*
->          * Do post unplug cleanup. This is still protected against
->          * concurrent CPU hotplug via cpu_add_remove_lock.
->          */
->         lockup_detector_cleanup();
->         arch_smt_update();
->         cpu_up_down_serialize_trainwrecks(tasks_frozen);
->       return ret;
-> }
->
-> ----------
->
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 8a71b1149c60..e36788742d18 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -1130,6 +1130,13 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen,
->       if (!cpu_present(cpu))
->               return -EINVAL;
->
-> +	/*
-> +	 * The caller of cpu_down() might have raced with another
-> +	 * caller. Nothing to do.
-> +	 */
-> +	if (st->state <= target)
-> +		return 0;
-> +
->       cpus_write_lock();
->
->       cpuhp_tasks_frozen = tasks_frozen;
->
->
->
->
-> Cheers,
-> Phil
->
-> --
+> Change in v20:
+> - split binding patch to another series 'MediaTek MT8195 display binding':
+>    https://patchwork.ozlabs.org/project/devicetree-bindings/list/?series=295669
+> - fix io_start type from u32 to resource_size_t
+> - fix some commit message for DITHER enum
+> 
+> Change in v19:
+> - fix checking condition for the return vaule of platform resource
+> - drm/mediatek fix build waning for [-Wunused-const-variable]
+> 
+> Change in v18:
+> - change get driver data by io_start and wrap mmsys driver data into
+>    mmsys match data structure to support identifying multi mmsys driver
+>    data with the same compatible name
+> - change DDP_COMPONENT_DITHER to DDP_CONPONENT_DITHER0
+> 
+> Change in v17:
+> - change compatible name from 2 vdosys to 1 mmsys
+> - add get driver data by clk name function to get corresponding
+>    driver data for mt8195 vdosys0
+> - add all routing table setting for mt8195 vdosys0
+> - remove useless mutex define
+> 
+> Change in v16:
+> - rebase on linu-next tag: 'next-20220303'
+> - rebase on series: 'Fix MediaTek display dt-bindings issues'
+> 
+> Change in v15:
+> - remove mt8195-mmsys.h comment for mux settings
+> - define the mask macro to replace using value as mask
+>    to fix zero mask problem
+> - add EOF setting comment for MUTEX sof register
+> 
+> Change in v14:
+> - rebase on mediatek-drm-next-5.17
+> - rebase on "Add mmsys and mutex support for MDP" series
+> - rebase on "media: mediatek: support mdp3 on mt8183 platform" series
+> 
+> Change in v13:
+> - remove dts patch
+> - rebase on kernel-5.16-rc1
+> - rebase on mediatek-drm-next
+> 
+> Change in v12:
+> - add clock-names property to merge yaml
+> - using BIT(nr) macro to define the settings of mmsys routing table
+> - fix clk_get and clk_prepare_enable error handling issue
+> 
+> Change in v11:
+> - rebase on kernel-5.15-rc1
+> - change mbox label to gce0 for dts node of vdosys0
+> - change ovl compatibale to mt8192 to set smi_id_en=true in driver data
+> - move common module from display folder to common folder,
+>    such as AAL, COCLOR, CCORR and MUTEX
+> 
+> Change in v10:
+> - rebase on "drm/mediatek: add support for mediatek SOC MT8192" series
+> - rebase on "soc: mediatek: mmsys: add mt8192 mmsys support" series
+> - fix some typo and "mediatek" start with capital in every dt-bindings
+> - move mutex yaml from dfisplay folder to soc folder
+> - separate merge additional propoerties to an individual dt-bindings patch
+> 
+> Change in v9:
+> - separate power and gce properties of mmsys into another dt-binding patch
+> - rebase on "Separate aal module" series
+> - keep mtk_ddp_clk_enable/disable in the same place
+> - change mtk_dsc_start config register to mtk_drm_ddp_write_mask
+> - remove the 0 setting of merge fifo config function
+> - add CCORR driver data for mt8195
+> 
+> Change in v8:
+> - add DP_INTF0 mux into mmsys routing table
+> - add DP_INTF0 mutex mod and enum into add/remove comp function
+> - remove bypass DSC enum in mtk_ddp_comp_init
+> 
+> Change in v7:
+> - add dt=binding of mmsys and disp path into this series
+> - separate th modidfication of alphabetic order, remove unused define and
+>    rename the define of register offset to individual patch
+> - add comment for MERGE ultra and preultra setting
+> 
+> Change in v6:
+> - adjust alphabetic order for mediatek-drm
+> - move the patch that add mt8195 support for mediatek-drm as
+>    the lastest patch
+> - add MERGE define for const varriable
+> 
+> Change in v5:
+> - add power-domain property into vdosys0 and vdosys1 dts node.
+> - add MT8195 prifix and remove unused VDO1 define in mt8195-mmsys.h
+> 
+> Change in v4:
+> - extract dt-binding patches to another patch series
+> - squash DSC module into mtk_drm_ddp_comp.c
+> - add coment and simplify MERGE config function
+> 
+> Change in v3:
+> - change mmsys and display dt-bindings document from txt to yaml
+> - add MERGE additional description in display dt-bindings document
+> - fix mboxes-cells number of vdosys0 node in dts
+> - drop mutex eof convert define
+> - remove pm_runtime apis in DSC and MERGE
+> - change DSC and MERGE enum to alphabetic order
+> 
+> Change in v2:
+> - add DSC yaml file
+> - add mt8195 drm driver porting parts in to one patch
+> - remove useless define, variable, structure member and function
+> - simplify DSC and MERGE file and switch threre order
+> 
+> jason-jh.lin (8):
+>    soc: mediatek: add mtk-mmsys support for mt8195 vdosys0
+>    soc: mediatek: add mtk-mutex support for mt8195 vdosys0
+>    drm/mediatek: add DSC support for mediatek-drm
+>    drm/mediatek: add MERGE support for mediatek-drm
+>    drm/mediatek: add mediatek-drm of vdosys0 support for mt8195
+>    soc: mediatek: add DDP_DOMPONENT_DITHER0 enum for mt8195 vdosys0
+>    drm/mediatek: add suffix 0 to DDP_COMPONENT_DITHER for mt8195 vdosys0
+>    soc: mediatek: remove DDP_DOMPONENT_DITHER from enum
+> 
+>   drivers/gpu/drm/mediatek/Makefile           |   1 +
+>   drivers/gpu/drm/mediatek/mtk_disp_drv.h     |   8 +
+>   drivers/gpu/drm/mediatek/mtk_disp_merge.c   | 246 +++++++++++++
+>   drivers/gpu/drm/mediatek/mtk_disp_rdma.c    |   6 +
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |  65 +++-
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   2 +
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.c      | 151 +++++++-
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.h      |   7 +
+>   drivers/soc/mediatek/mt8167-mmsys.h         |   2 +-
+>   drivers/soc/mediatek/mt8183-mmsys.h         |   2 +-
+>   drivers/soc/mediatek/mt8186-mmsys.h         |   4 +-
+>   drivers/soc/mediatek/mt8192-mmsys.h         |   4 +-
+>   drivers/soc/mediatek/mt8195-mmsys.h         | 370 ++++++++++++++++++++
+>   drivers/soc/mediatek/mt8365-mmsys.h         |   4 +-
+>   drivers/soc/mediatek/mtk-mmsys.c            | 152 +++++++-
+>   drivers/soc/mediatek/mtk-mmsys.h            |   6 +
+>   drivers/soc/mediatek/mtk-mutex.c            |  95 ++++-
+>   include/linux/soc/mediatek/mtk-mmsys.h      |  13 +-
+>   18 files changed, 1098 insertions(+), 40 deletions(-)
+>   create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_merge.c
+>   create mode 100644 drivers/soc/mediatek/mt8195-mmsys.h
+> 
+
 

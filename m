@@ -2,210 +2,594 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6707D533A1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1F6533A11
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbiEYJmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 05:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S238070AbiEYJkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 05:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239250AbiEYJma (ORCPT
+        with ESMTP id S234941AbiEYJkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 05:42:30 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2078.outbound.protection.outlook.com [40.107.92.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050B963E4;
-        Wed, 25 May 2022 02:42:23 -0700 (PDT)
+        Wed, 25 May 2022 05:40:33 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2096.outbound.protection.outlook.com [40.107.93.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADB9140A1;
+        Wed, 25 May 2022 02:40:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FJG5DgfH0qHcvFhAYkRr77eaWGmHlPg9CIX5A7ixdks4+097GQo8YgEdMjk5mqFfoNqqZh2SpOhXDIlwBAllPdHNbLRxAiuplKQn3+kTUU2EE9sWGdFBmCMiFBqGvPhxJBS5/RB4KXKVnfxjF46njn/i785zm1Cx0Sh6R4b5Ig/iIfamvmobhH0qrGyiM40olb3HK5pSbaYUShGSF9+tMt3sOQO8VC8lccvpm3uR8lFNdHm4Goy0kax6p57DHTYCAz+Gag8BKEt/EWYvqeaOxmAadk1QL/ThStd9RP0BXM6tUDdQ9ECgOkAd5CegZflvueHOE59jw0IAOJDN+tXnxQ==
+ b=LE0KqgHIcxsaldvqfX6kPbeKUSvaOdeaOZl5G+k2pHri2WLHp4Gs33PlcHgYnOMvMeAJZ/UDH+FuwMNcYr3s8e33mggbaSs3z62Wxk9fsastGPzrfuj6dwawv7a01CgKu8iDjweUGconF78Cej4IqcGEngaXPyTL82stmcpQG2mrZawzWMqZDFdIfGqOFBgLnJtJr8ODMtqcPJLIVJiDgVTBB7jWUzX6NjcV19A74nPVbiqKUg+YPYJ2DYwPXlve6SioGTCLn5WUoTE3PdrzB1/wVIauwMiR91RkmQ//VIiexnOKkYM7y9WW4yAjpXcbO+b94af4R4MtMZA6xBX4lg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4aRJZifvG96NThxdAQFXCrkd1/IJ4Kr/DO3T+yZ0EcI=;
- b=RzOfDTHE+W0yUICJRDqetd8jslHxqlVgIB70SoDakA8l4KbuWX2O8p9n7ckAPUzgK4yAglxhLpRkVSHvN6rhTOChztDENmb78dSkN4gvIgo7oLQdvBEbaUzJSN+M2dKH0eAdnGLSzNiYdOZJwNq32GqhnHfTB67220ABNEQFg6onHiAdnAfvAy+sYhZWiU7jDL/RK8IKNh8YmqUsqWQF40aiGB327088e7/8tRTTqgOzWwY9AvzcRsU0WG/O1qP+CtAf4jckW7xPug9kOx5lsac/DmsCmCePEx9f8gEaSqALqH6zdlhvMXsn+G8DkkFbpZxTTj2nv5RcedMi1OxQ3A==
+ bh=LWbXtrHBmIW+THQuRivBCVeR21zlf+u8BqJMAFTfPTQ=;
+ b=S2oRtkSvSNXNSABmqKDSBbJFLfkBlPiAcceV1h6RdGgX6pZAF8iIh3TlqY2rFfkugWCkKHfMQaiwFEFTVfzsEtiKSKcMlwD7/l8I1oVwWD7pFckdekkl63qhMOzIdTkc5zeAQr4CyG3QjTxGZrPeT4klZfiPMatS28m9/XOuUccBROrTLWqHYta5cAGZLeDsPL5oTUTLxd+3xcuDGgXuFy0qDR5Ozu4V3kny2HO/r8t/Dx5zBUk2v09jxdXhnf1JBQ+Y5tRf1gvW4A81JQhh1W2fnWcyhyqHx21RGKYhk5cBgs/CskItK5GGq2GBYE1QiLYZCZnTbTlmcLglhC5byw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
+ 8.14.198.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=jabil.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ header.from=jabil.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jabil.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4aRJZifvG96NThxdAQFXCrkd1/IJ4Kr/DO3T+yZ0EcI=;
- b=E3Di5ZxaN19Q8iF3K4vho+V41mM+MxSnH8p67n1tOuSE2HzlF+Jd4n7cQRpm5sveUE3nvXLzvL1buokLlU4Wvq2FsDdwOXmSjpCqs8OuPQ48tvE+pJbLytDlyeEYpGj6/dtQFVi9L26uSAWq5XVa6d9Jzm52oaV+G0j37Od09so=
-Received: from MW4P223CA0014.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::19)
- by BL1PR12MB5779.namprd12.prod.outlook.com (2603:10b6:208:392::9) with
+ bh=LWbXtrHBmIW+THQuRivBCVeR21zlf+u8BqJMAFTfPTQ=;
+ b=ZHibJcuzHO7CMMDxehzUJ2TfWvZOogwH0KsRtwkdBKYNmSXFev24cpb45zKFjNGIilFSPEdED9BeT5UNYWi5eHFGGMNnrmbgLP7RoAkYVsfpumlf0OMj7qL0ohm1covft1ISZtX2qudN6GtBzV76t4DBoUlkHEFop14LfM2jr4l3ebHhewj7POclBOPkAhuM9ANVsb6aYmVv/+RjVRCXSArdGfVDh3I+wPPtEUCbVvONcjucQRzCZfNpyLgFlICaWWHUP5qz4l10Jk3aZXHQm0S8vmo5xoZGG+RpBVio1qrgT8Mdyz8glrZ3fgtCeDKp+QRQXo2tsxb+j0xJ/xC+TA==
+Received: from MWHPR13CA0033.namprd13.prod.outlook.com (2603:10b6:300:95::19)
+ by MN2PR02MB6464.namprd02.prod.outlook.com (2603:10b6:208:184::29) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.23; Wed, 25 May
- 2022 09:42:20 +0000
-Received: from CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:80:cafe::19) by MW4P223CA0014.outlook.office365.com
- (2603:10b6:303:80::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
- Transport; Wed, 25 May 2022 09:42:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT009.mail.protection.outlook.com (10.13.175.61) with Microsoft SMTP
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Wed, 25 May
+ 2022 09:40:30 +0000
+Received: from CO1NAM11FT021.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:300:95:cafe::eb) by MWHPR13CA0033.outlook.office365.com
+ (2603:10b6:300:95::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.8 via Frontend
+ Transport; Wed, 25 May 2022 09:40:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 8.14.198.161)
+ smtp.mailfrom=jabil.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=jabil.com;
+Received-SPF: Pass (protection.outlook.com: domain of jabil.com designates
+ 8.14.198.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=8.14.198.161; helo=jabil.com; pr=C
+Received: from jabil.com (8.14.198.161) by
+ CO1NAM11FT021.mail.protection.outlook.com (10.13.175.51) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5293.13 via Frontend Transport; Wed, 25 May 2022 09:42:20 +0000
-Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 25 May
- 2022 04:42:05 -0500
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-To:     <peterz@infradead.org>, <acme@kernel.org>
-CC:     <ravi.bangoria@amd.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <eranian@google.com>, <irogers@google.com>, <jmario@redhat.com>,
-        <leo.yan@linaro.org>, <alisaidi@amazon.com>, <ak@linux.intel.com>,
-        <kan.liang@linux.intel.com>, <dave.hansen@linux.intel.com>,
-        <hpa@zytor.com>, <mingo@redhat.com>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <tglx@linutronix.de>,
-        <bp@alien8.de>, <x86@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
-        <kim.phillips@amd.com>, <santosh.shukla@amd.com>
-Subject: [PATCH 02/13] perf/x86/amd: Add IBS OP_DATA2/3 register bit definitions
-Date:   Wed, 25 May 2022 15:09:27 +0530
-Message-ID: <20220525093938.4101-3-ravi.bangoria@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220525093938.4101-1-ravi.bangoria@amd.com>
-References: <20220525093938.4101-1-ravi.bangoria@amd.com>
+ 15.20.5293.13 via Frontend Transport; Wed, 25 May 2022 09:40:29 +0000
+Received: from usplnd0hub02.corp.jabil.org (10.10.47.157) by
+ USPLND0HUB02.corp.JABIL.ORG (10.10.47.157) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 25 May 2022 04:39:31 -0500
+Received: from JDSBuild.corp.JABIL.ORG (10.10.7.5) by
+ usplnd0hub02.corp.jabil.org (10.10.47.157) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Wed, 25 May 2022 04:39:30 -0500
+From:   David Wang <David_Wang6097@jabil.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <edward_chen@jabil.com>, <ben_pai@jabil.com>,
+        David Wang <David_Wang6097@jabil.com>
+Subject: [PATCH v3] ARM: dts: aspeed: Adding Jabil Rubypass BMC
+Date:   Wed, 25 May 2022 17:39:27 +0800
+Message-ID: <20220525093927.368131-1-David_Wang6097@jabil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0ad10555-e877-4a5c-192f-08da3e32dd00
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5779:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB577993D4D30365BD2C4A9821E0D69@BL1PR12MB5779.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 608edfe3-94e3-488e-1044-08da3e329ae0
+X-MS-TrafficTypeDiagnostic: MN2PR02MB6464:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR02MB6464F80DD4A4CB435BD41234EFD69@MN2PR02MB6464.namprd02.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yuYPDcackQmgw84AHXY0frVa6BNr5ZZc5nLSKZoWujad2XJN8E9iCapZKrAMAuk4Sje0rClDkO4ahVbE25th9J71IMk8HZGpgNUq9Swno5GUd/AT5nRQ0T+GvvMDH+QzU6VPKbY4rh2EVURnYxf9Y4DVacLml3BPckneIUXW67gf0TF8zVu/DVa31ys9hdIRpQiSfWBJs3Mg7qirqh86M20HOocm0yd5s9SNAeoDeSDhTnvnAq6CYROePaYEZEsIug+PrjG+CDZyJXNwRPZ+UbaRLV+b01ztVUTJlQIlgMylTc4A0K7oojkxGdpEGTrNJ4+9N1AuF+sgVMj6k2YY/1g7UgX6d4ylJJaogyttUh0N9eSKzOw/ofZM/hG2zadX5Q+AV5oGhFVCIlZ6qu2vs26QriiGgHelaAU3fTcoWWBc1gdl1XvfF293J9kStccr+Q6yyEs/S5VocbPRZR55sZTn51GKqeCYpNxZD63s1uXPpKU1IgZuDv8X+KzIl5JCJPDp1HVqfZIp6vw9JvuUQ26ke8HH//go2Etyx/7rg6FjcAJ7eZPfrpMuYrEqtv+B0tqWd2Ah62OYaS+kD2PlZYmKAUHw8716tPwMkQrBqgqzexzm+vIoOjRv3bzCuIH+MV1ZsGr7yU/tKHxVloPYjqtsUM4GSYKXp15xskgrORM54vnXncAkbqG1ZyQR6M1SRjx0CISwdA2cy+lP856zzA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(70586007)(316002)(40460700003)(2616005)(44832011)(7696005)(36756003)(426003)(70206006)(8936002)(356005)(8676002)(47076005)(26005)(336012)(82310400005)(83380400001)(5660300002)(7416002)(1076003)(186003)(6666004)(81166007)(86362001)(36860700001)(4326008)(508600001)(16526019)(54906003)(110136005)(2906002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 09:42:20.1529
+X-Microsoft-Antispam-Message-Info: jOWN3hi3vNV5AwoFMvDcARM6LN3ANZnM5HGpCTItArgQAYh8q3B9pJucT4OFLj8BJ3zEm13eBZVrNfHpS4JRI+ObvdX/Au2KH94O3PNBirMHI6PXYGdRMpIdCOGBR7uYVMthnm0NiSm8X43i9L3UcbddIxFgh7FmOE7qJm2EhE0PdJeMgLa7qhIt6fVoXa77uTaUI8JtpXrWJfcV8ZUpubsJCmXltDfGll35jzXZU2nWnwIAIPtxkdg2tiDyRg5uF2V4Qhak8Q5nY46jZVJR9RKaOmfi+Qdelj8ntKRuilg2pbEmFu5NnKM2Ge+ReO3p97vzkx+i5jFdwW+VwN6/N86EiaRef7IbsJhi9SbPe1Xzgjp7zkYHloABDjylB93or1T8zEuxc5mJDtvyaFK+VyXn3nRXE23AdaiCE77uwxKxf37YDBO7UKq1YVvGxXYkAlNl8/kMlrn5nGggOAJtJKspo4w9sz9MFNyxDPHfCutPO042waVOl5i8fAbOjVDZkYpDBHeqkm3HeGucBs7BlPj+5v2SLpMyfxaiE1Dls2oANz8/KNibxlMdaHk0jwLCZK5GxxaWgtBTpym4Om8BOYLQbXPwHwO47fRjdqJW0+9h7qy2lScrsae3EviKeihZzWiFDvCuaERN0uLDQnUp29py3QuVK0gCh0FJ7cVjbhyt2qBkpjVwQ/TT5zGZx2lUF/27XSBau1HfRttdrpXwCg==
+X-Forefront-Antispam-Report: CIP:8.14.198.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:jabil.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(86362001)(508600001)(6666004)(2616005)(36756003)(26005)(83380400001)(4326008)(8676002)(70586007)(82310400005)(36860700001)(316002)(45080400002)(81166007)(82960400001)(110136005)(54906003)(356005)(2906002)(30864003)(186003)(47076005)(8936002)(336012)(1076003)(5660300002)(107886003)(70206006)(40460700003)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: jabil.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 09:40:29.2915
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ad10555-e877-4a5c-192f-08da3e32dd00
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 608edfe3-94e3-488e-1044-08da3e329ae0
+X-MS-Exchange-CrossTenant-Id: bc876b21-f134-4c12-a265-8ed26b7f0f3b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bc876b21-f134-4c12-a265-8ed26b7f0f3b;Ip=[8.14.198.161];Helo=[jabil.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT021.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5779
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6464
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD IBS OP_DATA2 and OP_DATA3 provides detail about tagged load/store
-ops. Add definitions for these registers into header file. In addition
-to those, IBS_OP_DATA2 DataSrc provides detail about location of the
-data being accessed from by load ops. Define macros for legacy and
-extended DataSrc values.
+The initial introduction of the jabil server with AST2600 BMC SoC.
 
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 ---
- arch/x86/include/asm/amd-ibs.h | 76 ++++++++++++++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
 
-diff --git a/arch/x86/include/asm/amd-ibs.h b/arch/x86/include/asm/amd-ibs.h
-index aabdbb5ab920..22184fe20cf0 100644
---- a/arch/x86/include/asm/amd-ibs.h
-+++ b/arch/x86/include/asm/amd-ibs.h
-@@ -6,6 +6,82 @@
- 
- #include <asm/msr-index.h>
- 
-+/* IBS_OP_DATA2 Bits */
-+#define IBS_DATA_SRC_HI_SHIFT			6
-+#define IBS_DATA_SRC_HI_MASK			(0x3ULL << IBS_DATA_SRC_HI_SHIFT)
-+#define IBS_CACHE_HIT_ST_SHIFT			5
-+#define IBS_CACHE_HIT_ST_MASK			(0x1ULL << IBS_CACHE_HIT_ST_SHIFT)
-+#define IBS_RMT_NODE_SHIFT			4
-+#define IBS_RMT_NODE_MASK			(0x1ULL << IBS_RMT_NODE_SHIFT)
-+#define IBS_DATA_SRC_LO_SHIFT			0
-+#define IBS_DATA_SRC_LO_MASK			(0x7ULL << IBS_DATA_SRC_LO_SHIFT)
+v3
+- Adjustment entries are ordered by name.
+- Remove the bootargs property and modify the stdout-path property.
+- Group multiple LED devices into a group.
+- Modify the "gpio3_71" node name format.
+- Delete unneeded blank line at the end.
+
+v2
+- Disable empty i2c bus.
+- Remove gfx node because aspeed-g6.dtsi isn't supported.
+- Modify the led format and add some properties.
+- Fix wrong indentation.
+- Add stdout property in chosen node.
+- Rename temp to temperature-sensor in i2c bus 0.
+
+---
+
+Signed-off-by: David Wang <David_Wang6097@jabil.com>
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-jabil-rubypass.dts    | 442 ++++++++++++++++++
+ 2 files changed, 443 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7c16f8a2b738..5339e9339ce4 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1543,6 +1543,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-bmc-intel-s2600wf.dtb \
+ 	aspeed-bmc-inspur-fp5280g2.dtb \
+ 	aspeed-bmc-inspur-nf5280m6.dtb \
++	aspeed-bmc-jabil-rubypass.dtb \
+ 	aspeed-bmc-lenovo-hr630.dtb \
+ 	aspeed-bmc-lenovo-hr855xg2.dtb \
+ 	aspeed-bmc-microsoft-olympus.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts b/arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts
+new file mode 100644
+index 000000000000..3a835f31a1b2
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-jabil-rubypass.dts
+@@ -0,0 +1,442 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +
-+/* IBS_OP_DATA2 DataSrc */
-+#define IBS_DATA_SRC_LOC_CACHE			 2
-+#define IBS_DATA_SRC_DRAM			 3
-+#define IBS_DATA_SRC_REM_CACHE			 4
-+#define IBS_DATA_SRC_IO				 7
++/dts-v1/;
 +
-+/* IBS_OP_DATA2 with DataSrc Extension */
-+#define IBS_DATA_SRC_EXT_LOC_CACHE		 1
-+#define IBS_DATA_SRC_EXT_NEAR_CCX_CACHE		 2
-+#define IBS_DATA_SRC_EXT_DRAM			 3
-+#define IBS_DATA_SRC_EXT_FAR_CCX_CACHE		 5
-+#define IBS_DATA_SRC_EXT_PMEM			 6
-+#define IBS_DATA_SRC_EXT_IO			 7
-+#define IBS_DATA_SRC_EXT_EXT_MEM		 8
-+#define IBS_DATA_SRC_EXT_PEER_AGENT_MEM		12
++#include "aspeed-g6.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++#include <dt-bindings/leds/common.h>
 +
-+/* IBS_OP_DATA3 Bits */
-+#define IBS_TLB_REFILL_LAT_SHIFT		48
-+#define IBS_TLB_REFILL_LAT_MASK			(0xFFFFULL << IBS_TLB_REFILL_LAT_SHIFT)
-+#define IBS_DC_MISS_LAT_SHIFT			32
-+#define IBS_DC_MISS_LAT_MASK			(0xFFFFULL << IBS_DC_MISS_LAT_SHIFT)
-+#define IBS_OP_DC_MISS_OPEN_MEM_REQS_SHIFT	26
-+#define IBS_OP_DC_MISS_OPEN_MEM_REQS_MASK	(0x3FULL << IBS_OP_DC_MISS_OPEN_MEM_REQS_SHIFT)
-+#define IBS_OP_MEM_WIDTH_SHIFT			22
-+#define IBS_OP_MEM_WIDTH_MASK			(0xFULL << IBS_OP_MEM_WIDTH_SHIFT)
-+#define IBS_SW_PF_SHIFT				21
-+#define IBS_SW_PF_MASK				(0x1ULL << IBS_SW_PF_SHIFT)
-+#define IBS_L2_MISS_SHIFT			20
-+#define IBS_L2_MISS_MASK			(0x1ULL << IBS_L2_MISS_SHIFT)
-+#define IBS_DC_L2_TLB_HIT_1G_SHIFT		19
-+#define IBS_DC_L2_TLB_HIT_1G_MASK		(0x1ULL << IBS_DC_L2_TLB_HIT_1G_SHIFT)
-+#define IBS_DC_PHY_ADDR_VALID_SHIFT		18
-+#define IBS_DC_PHY_ADDR_VALID_MASK		(0x1ULL << IBS_DC_PHY_ADDR_VALID_SHIFT)
-+#define IBS_DC_LIN_ADDR_VALID_SHIFT		17
-+#define IBS_DC_LIN_ADDR_VALID_MASK		(0x1ULL << IBS_DC_LIN_ADDR_VALID_SHIFT)
-+#define IBS_DC_MISS_NO_MAB_ALLOC_SHIFT		16
-+#define IBS_DC_MISS_NO_MAB_ALLOC_MASK		(0x1ULL << IBS_DC_MISS_NO_MAB_ALLOC_SHIFT)
-+#define IBS_DC_LOCKED_OP_SHIFT			15
-+#define IBS_DC_LOCKED_OP_MASK			(0x1ULL << IBS_DC_LOCKED_OP_SHIFT)
-+#define IBS_DC_UC_MEM_ACC_SHIFT			14
-+#define IBS_DC_UC_MEM_ACC_MASK			(0x1ULL << IBS_DC_UC_MEM_ACC_SHIFT)
-+#define IBS_DC_WC_MEM_ACC_SHIFT			13
-+#define IBS_DC_WC_MEM_ACC_MASK			(0x1ULL << IBS_DC_WC_MEM_ACC_SHIFT)
-+#define IBS_DC_MIS_ACC_SHIFT			8
-+#define IBS_DC_MIS_ACC_MASK			(0x1ULL << IBS_DC_MIS_ACC_SHIFT)
-+#define IBS_DC_MISS_SHIFT			7
-+#define IBS_DC_MISS_MASK			(0x1ULL << IBS_DC_MISS_SHIFT)
-+#define IBS_DC_L2_TLB_HIT_2M_SHIFT		6
-+#define IBS_DC_L2_TLB_HIT_2M_MASK		(0x1ULL << IBS_DC_L2_TLB_HIT_2M_SHIFT)
++/ {
++	model = "Jabil rbp";
++	compatible = "aspeed,ast2600";
++
++	chosen {
++		stdout-path = "/uart5:115200n8";
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x80000000>;
++	};
++
++	vcc_sdhci0: regulator-vcc-sdhci0 {
++		compatible = "regulator-fixed";
++		regulator-name = "SDHCI0 Vcc";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpios = <&gpio0 ASPEED_GPIO(V, 0) GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
++
++	vccq_sdhci0: regulator-vccq-sdhci0 {
++		compatible = "regulator-gpio";
++		regulator-name = "SDHCI0 VccQ";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <3300000>;
++		gpios = <&gpio0 ASPEED_GPIO(V, 1) GPIO_ACTIVE_HIGH>;
++		gpios-states = <1>;
++		states = <3300000 1>,
++			 <1800000 0>;
++	};
++
++	vcc_sdhci1: regulator-vcc-sdhci1 {
++		compatible = "regulator-fixed";
++		regulator-name = "SDHCI1 Vcc";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpios = <&gpio0 ASPEED_GPIO(V, 2) GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
++	vccq_sdhci1: regulator-vccq-sdhci1 {
++		compatible = "regulator-gpio";
++		regulator-name = "SDHCI1 VccQ";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <3300000>;
++		gpios = <&gpio0 ASPEED_GPIO(V, 3) GPIO_ACTIVE_HIGH>;
++		gpios-states = <1>;
++		states = <3300000 1>,
++			 <1800000 0>;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++
++		led-0 {
++			label = "identify";
++			color = <LED_COLOR_ID_BLUE>;
++			function = LED_FUNCTION_INDICATOR;
++			retain-state-shutdown;
++			gpios = <&gpio0 ASPEED_GPIO(B, 7) GPIO_ACTIVE_LOW>;
++		};
++
++		led-1 {
++			label = "status_amber";
++			color = <LED_COLOR_ID_AMBER>;
++			function = LED_FUNCTION_STATUS;
++			gpios = <&gpio0 ASPEED_GPIO(G, 3) GPIO_ACTIVE_LOW>;
++		};
++
++		led-2 {
++			label = "status_green";
++			color = <LED_COLOR_ID_GREEN>;
++			default-state = "keep";
++			function = LED_FUNCTION_STATUS;
++			gpios = <&gpio0 ASPEED_GPIO(G, 2) GPIO_ACTIVE_LOW>;
++		};
++
++		led-3 {
++			label = "status_susack";
++			function = LED_FUNCTION_STATUS;
++			gpios = <&gpio0 ASPEED_GPIO(V, 6) GPIO_ACTIVE_LOW>;
++		};
++
++		led-4{
++			label = "power-amber";
++			color = <LED_COLOR_ID_AMBER>;
++			function = LED_FUNCTION_POWER;
++			gpios = <&gpio0 ASPEED_GPIO(Y, 0) GPIO_ACTIVE_LOW>;
++		};
++
++		led-5 {
++			label = "fan1-fault";
++			color = <LED_COLOR_ID_YELLOW>;
++			function = LED_FUNCTION_FAULT;
++			retain-state-shutdown;
++			gpios = <&gpio3_71 0 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-6 {
++			label = "fan2-fault";
++			color = <LED_COLOR_ID_YELLOW>;
++			function = LED_FUNCTION_FAULT;
++			retain-state-shutdown;
++			gpios = <&gpio3_71 1 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-7 {
++			label = "fan3-fault";
++			color = <LED_COLOR_ID_YELLOW>;
++			function = LED_FUNCTION_FAULT;
++			retain-state-shutdown;
++			gpios = <&gpio3_71 2 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-8 {
++			label = "fan4-fault";
++			color = <LED_COLOR_ID_YELLOW>;
++			function = LED_FUNCTION_FAULT;
++			retain-state-shutdown;
++			gpios = <&gpio3_71 3 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-9 {
++			label = "fan5-fault";
++			color = <LED_COLOR_ID_YELLOW>;
++			function = LED_FUNCTION_FAULT;
++			retain-state-shutdown;
++			gpios = <&gpio3_71 4 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-10 {
++			label = "fan6-fault";
++			color = <LED_COLOR_ID_YELLOW>;
++			function = LED_FUNCTION_FAULT;
++			retain-state-shutdown;
++			gpios = <&gpio3_71 5 GPIO_ACTIVE_HIGH>;
++		};
++	};
++};
++
++&mdio0 {
++	status = "okay";
++
++	ethphy0: ethernet-phy@0 {
++		compatible = "ethernet-phy-ieee802.3-c22";
++		reg = <0>;
++	};
++};
++
++&mdio1 {
++	status = "okay";
++
++	ethphy1: ethernet-phy@0 {
++		compatible = "ethernet-phy-ieee802.3-c22";
++		reg = <0>;
++	};
++};
++
++&mdio2 {
++	status = "okay";
++
++	ethphy2: ethernet-phy@0 {
++		compatible = "ethernet-phy-ieee802.3-c22";
++		reg = <0>;
++	};
++};
++
++&mdio3 {
++	status = "okay";
++
++	ethphy3: ethernet-phy@0 {
++		compatible = "ethernet-phy-ieee802.3-c22";
++		reg = <0>;
++	};
++};
++
++&mac0 {
++	status = "okay";
++
++	phy-mode = "rgmii-rxid";
++	phy-handle = <&ethphy0>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii1_default>;
++};
++
++&mac1 {
++	status = "okay";
++
++	phy-mode = "rgmii-rxid";
++	phy-handle = <&ethphy1>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii2_default>;
++};
++
++&mac2 {
++	status = "okay";
++
++	phy-mode = "rgmii";
++	phy-handle = <&ethphy2>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii3_default>;
++};
++
++&mac3 {
++	status = "okay";
++
++	phy-mode = "rgmii";
++	phy-handle = <&ethphy3>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rgmii4_default>;
++};
++
++&emmc_controller {
++	status = "okay";
++};
++
++&emmc {
++	non-removable;
++	bus-width = <4>;
++	max-frequency = <100000000>;
++	clk-phase-mmc-hs200 = <9>, <225>;
++};
++
++&rtc {
++	status = "okay";
++};
++
++&fmc {
++	status = "okay";
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "bmc";
++		spi-max-frequency = <50000000>;
++#include "openbmc-flash-layout-128.dtsi"
++	};
++};
++
++&spi1 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_spi1_default>;
++
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "pnor";
++		spi-max-frequency = <100000000>;
++	};
++};
++
++&uart1 {
++	status = "okay";
++	pinctrl-0 = <&pinctrl_txd1_default
++			&pinctrl_rxd1_default
++			&pinctrl_nrts1_default
++			&pinctrl_ndtr1_default
++			&pinctrl_ndsr1_default
++			&pinctrl_ncts1_default
++			&pinctrl_ndcd1_default
++			&pinctrl_nri1_default>;
++};
++
++&uart2 {
++	status = "okay";
++	pinctrl-0 = <&pinctrl_txd2_default
++			&pinctrl_rxd2_default
++			&pinctrl_nrts2_default
++			&pinctrl_ndtr2_default
++			&pinctrl_ndsr2_default
++			&pinctrl_ncts2_default
++			&pinctrl_ndcd2_default
++			&pinctrl_nri2_default>;
++};
++
++&uart3 {
++	status = "okay";
++};
++
++&uart4 {
++	status = "okay";
++};
++
++&i2c0 {
++	status = "okay";
++
++	temperature-sensor@2e {
++		compatible = "adi,adt7490";
++		reg = <0x2e>;
++	};
++};
++
++&i2c3 {
++	multi-master;
++	status = "okay";
++
++	gpio@70 {
++		compatible = "nxp,pca9538";
++		reg = <0x70>;
++		interrupt-parent = <&gpio0>;
++		interrupts = <ASPEED_GPIO(O, 7) IRQ_TYPE_EDGE_FALLING>;
++		gpio-controller;
++		#gpio-cells = <2>;
++		gpio-line-names =
++			"presence-fan1-n", "presence-fan2-n", "presence-fan3-n", "presence-fan4-n",
++			"presence-fan5-n", "presence-fan6-n", "", "";
++	};
++
++	gpio3_71: gpio@71 {
++		compatible = "nxp,pca9538";
++		reg = <0x71>;
++		gpio-controller;
++		#gpio-cells = <2>;
++		gpio-line-names =
++			"led-fan1-fault", "led-fan2-fault", "led-fan3-fault", "led-fan4-fault",
++			"led-fan5-fault", "led-fan6-fault", "", "";
++	};
++};
++
++&fsim0 {
++	status = "okay";
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&uhci {
++	status = "okay";
++};
++
++&sdc {
++	status = "okay";
++};
++
 +/*
-+ * Definition of 5-4 bits is different between Zen3 and Zen4 (Zen2 definition
-+ * is same as Zen4) but the end result is same. So using Zen4 definition here.
++ * The signal voltage of sdhci0 and sdhci1 on AST2600-A2 EVB is able to be
++ * toggled by GPIO pins.
++ * In the reference design, GPIOV0 of AST2600-A2 EVB is connected to the
++ * power load switch that provides 3.3v to sdhci0 vdd, GPIOV1 is connected to
++ * a 1.8v and a 3.3v power load switch that provides signal voltage to
++ * sdhci0 bus.
++ * If GPIOV0 is active high, sdhci0 is enabled, otherwise, sdhci0 is disabled.
++ * If GPIOV1 is active high, 3.3v power load switch is enabled, sdhci0 signal
++ * voltage is 3.3v, otherwise, 1.8v power load switch will be enabled,
++ * sdhci0 signal voltage becomes 1.8v.
++ * AST2600-A2 EVB also supports toggling signal voltage for sdhci1.
++ * The design is the same as sdhci0, it uses GPIOV2 as power-gpio and GPIOV3
++ * as power-switch-gpio.
 + */
-+#define IBS_DC_L1_TLB_HIT_1G_SHIFT		5
-+#define IBS_DC_L1_TLB_HIT_1G_MASK		(0x1ULL << IBS_DC_L1_TLB_HIT_1G_SHIFT)
-+#define IBS_DC_L1_TLB_HIT_2M_SHIFT		4
-+#define IBS_DC_L1_TLB_HIT_2M_MASK		(0x1ULL << IBS_DC_L1_TLB_HIT_2M_SHIFT)
-+#define IBS_DC_L2_TLB_MISS_SHIFT		3
-+#define IBS_DC_L2_TLB_MISS_MASK			(0x1ULL << IBS_DC_L2_TLB_MISS_SHIFT)
-+#define IBS_DC_L1_TLB_MISS_SHIFT		2
-+#define IBS_DC_L1_TLB_MISS_MASK			(0x1ULL << IBS_DC_L1_TLB_MISS_SHIFT)
-+#define IBS_ST_OP_SHIFT				1
-+#define IBS_ST_OP_MASK				(0x1ULL << IBS_ST_OP_SHIFT)
-+#define IBS_LD_OP_SHIFT				0
-+#define IBS_LD_OP_MASK				(0x1ULL << IBS_LD_OP_SHIFT)
++&sdhci0 {
++	status = "okay";
++	bus-width = <4>;
++	max-frequency = <100000000>;
++	sdhci-drive-type = /bits/ 8 <3>;
++	sdhci-caps-mask = <0x7 0x0>;
++	sdhci,wp-inverted;
++	vmmc-supply = <&vcc_sdhci0>;
++	vqmmc-supply = <&vccq_sdhci0>;
++	clk-phase-sd-hs = <7>, <200>;
++};
 +
- /*
-  * IBS Hardware MSRs
-  */
++&sdhci1 {
++	status = "okay";
++	bus-width = <4>;
++	max-frequency = <100000000>;
++	sdhci-drive-type = /bits/ 8 <3>;
++	sdhci-caps-mask = <0x7 0x0>;
++	sdhci,wp-inverted;
++	vmmc-supply = <&vcc_sdhci1>;
++	vqmmc-supply = <&vccq_sdhci1>;
++	clk-phase-sd-hs = <7>, <200>;
++};
++
++&gpio0 {
++	status = "okay";
++	gpio-line-names =
++	/*A0-A7*/       "","","","","","","","",
++	/*B0-B7*/       "presence-ncsi-i210-n","","","","","","","led-identify-n",
++	/*C0-C7*/       "","","","","","","","",
++	/*D0-D7*/       "","","","","","","","",
++	/*E0-E7*/       "","","","","","","","",
++	/*F0-F7*/       "","","","","","","id-button","",
++	/*G0-G7*/       "","","led-status-green-n","led-status-amber-n","","","","",
++	/*H0-H7*/       "","","","","","cpu-caterr","","cpu1-caterr-n",
++	/*I0-I7*/       "","","","","","","","",
++	/*J0-J7*/       "","","","","","","","",
++	/*K0-K7*/       "","","","","","","","",
++	/*L0-L7*/       "","","","","","","","",
++	/*M0-M7*/       "","","","","","","","",
++	/*N0-N7*/       "","","","","","","","",
++	/*O0-O7*/       "","","","","","","nmi-button","",
++	/*P0-P7*/       "reset-button","reset-out","power-button","power-out","","","",
++					"led-hartbeat-n",
++	/*Q0-Q7*/       "","","","","","","","",
++	/*R0-R7*/       "","","","","","","","",
++	/*S0-S7*/       "","","","","","","","",
++	/*T0-T7*/       "","","","","","","","",
++	/*U0-U7*/       "","","","","","","","",
++	/*V0-V7*/       "regulator-vcc-sdhci0","regulator-vccq-sdhci0","regulator-vcc-sdhci1",
++					"regulator-vccq-sdhci1","sio-power-good",
++					"led-bmc-fw-config-done-n","","",
++	/*W0-W7*/       "","","","","","","","",
++	/*X0-X7*/       "cpu-err2","","","","","","","",
++	/*Y0-Y7*/       "led-power-amber","","","","","","","",
++	/*Z0-Z7*/       "cpu-err0","cpu-err1","","","","","","";
++	};
++
++&gpio1 {
++	status = "okay";
++};
++
++&kcs3 {
++	aspeed,lpc-io-reg = <0xCA2>;
++	status = "okay";
++};
++
++&kcs4 {
++	aspeed,lpc-io-reg = <0xCA4>;
++	status = "okay";
++};
++
++&lpc_snoop {
++	snoop-ports = <0x80>;
++	status = "okay";
++};
+\ No newline at end of file
 -- 
-2.31.1
+2.30.2
 

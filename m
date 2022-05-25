@@ -2,164 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8D5533E29
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE636533E2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244511AbiEYNp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
+        id S236595AbiEYNrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232257AbiEYNpY (ORCPT
+        with ESMTP id S229779AbiEYNq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:45:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38A156D395;
-        Wed, 25 May 2022 06:45:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D24C91042;
-        Wed, 25 May 2022 06:45:22 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.0.228])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E24743F66F;
-        Wed, 25 May 2022 06:45:14 -0700 (PDT)
-Date:   Wed, 25 May 2022 14:45:11 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v5 3/6] bpf: Remove is_valid_bpf_tramp_flags()
-Message-ID: <Yo4y54M6Jb41lqX+@FVFF77S0Q05N>
-References: <20220518131638.3401509-1-xukuohai@huawei.com>
- <20220518131638.3401509-4-xukuohai@huawei.com>
+        Wed, 25 May 2022 09:46:59 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EE62C67B;
+        Wed, 25 May 2022 06:46:57 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-3003cb4e064so42622897b3.3;
+        Wed, 25 May 2022 06:46:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sAZ+DgPPDDVzcDc1w8sv+0S0ncjGvCusX7p+z8GYQSA=;
+        b=CTrWiy1je9tiZ2ij1TQfUYG9Z7uNCWZlztLd+exIxrv991R6bWWeLN6ZMgZPdbcUST
+         DshJf8yixzS1k3jIx9IhdgqcnY0CCp4D22Xrbx832euL5KBbc8RmsrF//Xo5kn5Bexkz
+         UWNuyHc2L8lJ3cSHkVndyr4q2PQkpWlbrhRDzRkcWCu15uifi2qiMIkmzoMN68DvmNTy
+         +YfsTinDJxOGcBeA2Q36saoU2MLQP01u++RcfvtWxh9GDWSly1Rkcoo0zUHOL2TUVsYY
+         LhKjtg5VLkKtXiZoKdBXtgcjWTzNuhG9Dc71OO3CoybdeA6HBNTb/PtGQVSMWfdakSF1
+         cf/g==
+X-Gm-Message-State: AOAM533mrS3JT4/u9/+4L+dpcsStVWAWyxOjHMsYdBUWZ6bZJdS27R77
+        to0WlfRb1GejDAO5JBj2MhfjgTGgRtyOFAbFZyE=
+X-Google-Smtp-Source: ABdhPJz2UmrIsRVznag5o2/K+C1hQquZo+a1ndUPE067SJI5JbLTZS/Ql0Vf0ys9oGueNLcirzlmjJxwOrdOphckCpE=
+X-Received: by 2002:a81:8844:0:b0:2fe:a7de:20c2 with SMTP id
+ y65-20020a818844000000b002fea7de20c2mr34059926ywf.515.1653486416716; Wed, 25
+ May 2022 06:46:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518131638.3401509-4-xukuohai@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220523174852.30725-1-sumeet.r.pawnikar@intel.com>
+In-Reply-To: <20220523174852.30725-1-sumeet.r.pawnikar@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 25 May 2022 15:46:45 +0200
+Message-ID: <CAJZ5v0ikhR+fhVz0HW63RhaEJ6C1OxqhBgW1EzRPS0ghmBCCsg@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: int340x: Add Meteor Lake PCI device id
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 09:16:35AM -0400, Xu Kuohai wrote:
-> BPF_TRAM_F_XXX flags are not used by user code and are almost constant
-> at compile time, so run time validation is a bit overkill. Remove
-> is_valid_bpf_tramp_flags() and add some usage comments.
-> 
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> Acked-by: Song Liu <songliubraving@fb.com>
-
-Am I right in thinking this is independent of the arm64-specific bits, and
-could be taken on its own now?
-
-Mark.
-
+On Mon, May 23, 2022 at 7:51 PM Sumeet Pawnikar
+<sumeet.r.pawnikar@intel.com> wrote:
+>
+> Add Meteor Lake PCI ID for processor thermal device.
+>
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > ---
->  arch/x86/net/bpf_jit_comp.c | 20 --------------------
->  kernel/bpf/bpf_struct_ops.c |  3 +++
->  kernel/bpf/trampoline.c     |  3 +++
->  3 files changed, 6 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index a2b6d197c226..7698ef3b4821 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -1922,23 +1922,6 @@ static int invoke_bpf_mod_ret(const struct btf_func_model *m, u8 **pprog,
->  	return 0;
->  }
->  
-> -static bool is_valid_bpf_tramp_flags(unsigned int flags)
-> -{
-> -	if ((flags & BPF_TRAMP_F_RESTORE_REGS) &&
-> -	    (flags & BPF_TRAMP_F_SKIP_FRAME))
-> -		return false;
-> -
-> -	/*
-> -	 * BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
-> -	 * and it must be used alone.
-> -	 */
-> -	if ((flags & BPF_TRAMP_F_RET_FENTRY_RET) &&
-> -	    (flags & ~BPF_TRAMP_F_RET_FENTRY_RET))
-> -		return false;
-> -
-> -	return true;
-> -}
-> -
->  /* Example:
->   * __be16 eth_type_trans(struct sk_buff *skb, struct net_device *dev);
->   * its 'struct btf_func_model' will be nr_args=2
-> @@ -2017,9 +2000,6 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
->  	if (nr_args > 6)
->  		return -ENOTSUPP;
->  
-> -	if (!is_valid_bpf_tramp_flags(flags))
-> -		return -EINVAL;
-> -
->  	/* Generated trampoline stack layout:
->  	 *
->  	 * RBP + 8         [ return address  ]
-> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> index d9a3c9207240..0572cc5aeb28 100644
-> --- a/kernel/bpf/bpf_struct_ops.c
-> +++ b/kernel/bpf/bpf_struct_ops.c
-> @@ -341,6 +341,9 @@ int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_links *tlinks,
->  
->  	tlinks[BPF_TRAMP_FENTRY].links[0] = link;
->  	tlinks[BPF_TRAMP_FENTRY].nr_links = 1;
-> +	/* BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
-> +	 * and it must be used alone.
-> +	 */
->  	flags = model->ret_size > 0 ? BPF_TRAMP_F_RET_FENTRY_RET : 0;
->  	return arch_prepare_bpf_trampoline(NULL, image, image_end,
->  					   model, flags, tlinks, NULL);
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index 93c7675f0c9e..bd3f2e673874 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -358,6 +358,9 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
->  
->  	if (tlinks[BPF_TRAMP_FEXIT].nr_links ||
->  	    tlinks[BPF_TRAMP_MODIFY_RETURN].nr_links)
-> +		/* NOTE: BPF_TRAMP_F_RESTORE_REGS and BPF_TRAMP_F_SKIP_FRAME
-> +		 * should not be set together.
-> +		 */
->  		flags = BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_SKIP_FRAME;
->  
->  	if (ip_arg)
-> -- 
-> 2.30.2
-> 
+> v2: Replaced Signed-off-by with Reviewed-by as per comment from
+>     Srinivas Pandruvada
+> ---
+>  drivers/thermal/intel/int340x_thermal/processor_thermal_device.h | 1 +
+>  .../thermal/intel/int340x_thermal/processor_thermal_device_pci.c | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> index 49932a68abac..7d52fcff4937 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> @@ -24,6 +24,7 @@
+>  #define PCI_DEVICE_ID_INTEL_HSB_THERMAL        0x0A03
+>  #define PCI_DEVICE_ID_INTEL_ICL_THERMAL        0x8a03
+>  #define PCI_DEVICE_ID_INTEL_JSL_THERMAL        0x4E03
+> +#define PCI_DEVICE_ID_INTEL_MTLP_THERMAL       0x7D03
+>  #define PCI_DEVICE_ID_INTEL_RPL_THERMAL        0xA71D
+>  #define PCI_DEVICE_ID_INTEL_SKL_THERMAL        0x1903
+>  #define PCI_DEVICE_ID_INTEL_TGL_THERMAL        0x9A03
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> index ca40b0967cdd..c2dc4c158b9d 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> @@ -358,6 +358,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
+>
+>  static const struct pci_device_id proc_thermal_pci_ids[] = {
+>         { PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+> +       { PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+>         { PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+>         { },
+>  };
+> --
+
+Applied as 5.19-rc material, thanks!

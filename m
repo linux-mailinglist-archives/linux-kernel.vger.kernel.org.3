@@ -2,77 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE93534282
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEDD53428C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343594AbiEYRxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 13:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
+        id S1343546AbiEYRyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343572AbiEYRx1 (ORCPT
+        with ESMTP id S234253AbiEYRyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 13:53:27 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAAFBF78;
-        Wed, 25 May 2022 10:53:24 -0700 (PDT)
+        Wed, 25 May 2022 13:54:49 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9F2E021;
+        Wed, 25 May 2022 10:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653501204; x=1685037204;
+  t=1653501288; x=1685037288;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OBl8VqVg26hgXRW1FrdHxYUiLB4y0jncmZM7TnohZuE=;
-  b=FuNYdouKTfFyKuue9M+iMFEORnfXOZb47tW80Eb7P6gjVWQYTzdkkbJB
-   cJkmQG5RXtsnX4++Om8SoPeFdn0/W4qiLcZKUuluAAp1iAB+TlnDf18sW
-   8/rRhmZKJ0ENlIuT6IevSos7bL0cXryzbSLFYjNOwcojrj1KbgxtNOSwj
-   xKxGo5mq5DWr4Nn+Myolf9uDPjPBaDgzz+AsMtwL5Nzd04/AHo30Cf839
-   1+xd8CpC0SjRQpIfHEOpKCambpXh3GppAcAitYKgseGrGfugFh39me6tt
-   272q8ubjV9FS01iTgo3VcDfE5PTQtpq/6nkYPWfzexcCczZURduuTCmlz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="253763447"
+  bh=vgc3MtIflvORaob8lTqi592HZbL+t/hdZbXZ66gIvX8=;
+  b=j8tnqwWgoth3orU5N9AdlwvCH+wkXlQtflOmQ9o5KPDSfdby1pUFzFiU
+   4LVYiQx+4W1PEYT09l9ElXlIe+sTRI/ao8Nk/XKyqDfPK4WqqbNUD7nrf
+   8xIdqn2pzQGuagshZ/tiIeu8iTqdL7RvSJRAS2/osq46jgdlAzcshy/Zg
+   6qvqipkO97JEo6F4knBQlqG0TXtsSu3mWi0F+/a3cQ+ckWFiyfMCHr1g5
+   eECvVRJ7zHJ/RKZoTo9OhfBxqKFo24l4VfN5R7t3F/F3fSlrBVjtImjDD
+   GDdinyEw+YcXZtr2OR5rzZPzwHJf6ia4/TGYUd6UH02MQW+bUX5zkzWwq
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="336943018"
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="253763447"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:53:11 -0700
+   d="scan'208";a="336943018"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:53:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="664528898"
+   d="scan'208";a="630460953"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 May 2022 10:53:04 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 25 May 2022 10:53:04 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1ntvBv-0003DC-DD;
+        id 1ntvBv-0003DF-Dh;
         Wed, 25 May 2022 17:53:03 +0000
-Date:   Thu, 26 May 2022 01:52:58 +0800
+Date:   Thu, 26 May 2022 01:53:00 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Jason Wang <jasowang@redhat.com>
+To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, jic23@kernel.org,
+        lars@metafoo.de, mchehab+huawei@kernel.org, ardeleanalex@gmail.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, mike.looijmans@topic.nl,
+        devicetree@vger.kernel.org
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Zhu Lingshan <lingshan.zhu@intel.com>, martinh@xilinx.com,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        ecree.xilinx@gmail.com, Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>, dinang@xilinx.com,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xie Yongji <xieyongji@bytedance.com>, gautam.dawar@amd.com,
-        lulu@redhat.com, martinpo@xilinx.com, pabloc@xilinx.com,
-        Longpeng <longpeng2@huawei.com>, Piotr.Uminski@intel.com,
-        tanuj.kamde@amd.com, Si-Wei Liu <si-wei.liu@oracle.com>,
-        habetsm.xilinx@gmail.com, lvivier@redhat.com,
-        Zhang Min <zhang.min9@zte.com.cn>, hanand@xilinx.com
-Subject: Re: [PATCH v3 3/4] vhost-vdpa: uAPI to stop the device
-Message-ID: <202205260121.6V500tTl-lkp@intel.com>
-References: <20220525105922.2413991-4-eperezma@redhat.com>
+        thomas.haemmerle@leica-geosystems.com
+Subject: Re: [PATCH V4 1/6] iio: accel: bmi088: Modified the scale calculate
+Message-ID: <202205260151.TTnXYfeD-lkp@intel.com>
+References: <20220525130828.2394919-2-Qing-wu.Li@leica-geosystems.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220525105922.2413991-4-eperezma@redhat.com>
+In-Reply-To: <20220525130828.2394919-2-Qing-wu.Li@leica-geosystems.com.cn>
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,140 +68,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Eugenio,
+Hi LI,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on mst-vhost/linux-next]
-[also build test ERROR on next-20220525]
-[cannot apply to horms-ipvs/master linux/master linus/master v5.18]
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on v5.18 next-20220525]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eugenio-P-rez/Implement-vdpasim-stop-operation/20220525-190143
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220526/202205260121.6V500tTl-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/LI-Qingwu/iio-accel-bmi088-support-BMI085-BMI090L/20220525-211157
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220526/202205260151.TTnXYfeD-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/515f6b6d2a0164df801ddbe61e1cb1ae4e763873
+        # https://github.com/intel-lab-lkp/linux/commit/71cdfb0a9a6ddbf8737a46bc6161fb921b1ac2f4
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Eugenio-P-rez/Implement-vdpasim-stop-operation/20220525-190143
-        git checkout 515f6b6d2a0164df801ddbe61e1cb1ae4e763873
+        git fetch --no-tags linux-review LI-Qingwu/iio-accel-bmi088-support-BMI085-BMI090L/20220525-211157
+        git checkout 71cdfb0a9a6ddbf8737a46bc6161fb921b1ac2f4
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/vhost/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/vhost/vdpa.c:668:7: error: use of undeclared identifier 'VHOST_STOP'
-           case VHOST_STOP:
-                ^
+>> drivers/iio/accel/bmi088-accel-core.c:341:10: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           reg = FIELD_GET(BMIO088_ACCEL_ACC_RANGE_MSK, reg);
+                                 ^
    1 error generated.
 
 
-vim +/VHOST_STOP +668 drivers/vhost/vdpa.c
+vim +/FIELD_GET +341 drivers/iio/accel/bmi088-accel-core.c
 
-   587	
-   588	static long vhost_vdpa_unlocked_ioctl(struct file *filep,
-   589					      unsigned int cmd, unsigned long arg)
-   590	{
-   591		struct vhost_vdpa *v = filep->private_data;
-   592		struct vhost_dev *d = &v->vdev;
-   593		void __user *argp = (void __user *)arg;
-   594		u64 __user *featurep = argp;
-   595		u64 features;
-   596		long r = 0;
-   597	
-   598		if (cmd == VHOST_SET_BACKEND_FEATURES) {
-   599			if (copy_from_user(&features, featurep, sizeof(features)))
-   600				return -EFAULT;
-   601			if (features & ~(VHOST_VDPA_BACKEND_FEATURES |
-   602					 BIT_ULL(VHOST_BACKEND_F_STOP)))
-   603				return -EOPNOTSUPP;
-   604			if ((features & BIT_ULL(VHOST_BACKEND_F_STOP)) &&
-   605			     !vhost_vdpa_can_stop(v))
-   606				return -EOPNOTSUPP;
-   607			vhost_set_backend_features(&v->vdev, features);
-   608			return 0;
-   609		}
-   610	
-   611		mutex_lock(&d->mutex);
-   612	
-   613		switch (cmd) {
-   614		case VHOST_VDPA_GET_DEVICE_ID:
-   615			r = vhost_vdpa_get_device_id(v, argp);
-   616			break;
-   617		case VHOST_VDPA_GET_STATUS:
-   618			r = vhost_vdpa_get_status(v, argp);
-   619			break;
-   620		case VHOST_VDPA_SET_STATUS:
-   621			r = vhost_vdpa_set_status(v, argp);
-   622			break;
-   623		case VHOST_VDPA_GET_CONFIG:
-   624			r = vhost_vdpa_get_config(v, argp);
-   625			break;
-   626		case VHOST_VDPA_SET_CONFIG:
-   627			r = vhost_vdpa_set_config(v, argp);
-   628			break;
-   629		case VHOST_GET_FEATURES:
-   630			r = vhost_vdpa_get_features(v, argp);
-   631			break;
-   632		case VHOST_SET_FEATURES:
-   633			r = vhost_vdpa_set_features(v, argp);
-   634			break;
-   635		case VHOST_VDPA_GET_VRING_NUM:
-   636			r = vhost_vdpa_get_vring_num(v, argp);
-   637			break;
-   638		case VHOST_VDPA_GET_GROUP_NUM:
-   639			r = copy_to_user(argp, &v->vdpa->ngroups,
-   640					 sizeof(v->vdpa->ngroups));
-   641			break;
-   642		case VHOST_VDPA_GET_AS_NUM:
-   643			r = copy_to_user(argp, &v->vdpa->nas, sizeof(v->vdpa->nas));
-   644			break;
-   645		case VHOST_SET_LOG_BASE:
-   646		case VHOST_SET_LOG_FD:
-   647			r = -ENOIOCTLCMD;
-   648			break;
-   649		case VHOST_VDPA_SET_CONFIG_CALL:
-   650			r = vhost_vdpa_set_config_call(v, argp);
-   651			break;
-   652		case VHOST_GET_BACKEND_FEATURES:
-   653			features = VHOST_VDPA_BACKEND_FEATURES;
-   654			if (vhost_vdpa_can_stop(v))
-   655				features |= BIT_ULL(VHOST_BACKEND_F_STOP);
-   656			if (copy_to_user(featurep, &features, sizeof(features)))
-   657				r = -EFAULT;
-   658			break;
-   659		case VHOST_VDPA_GET_IOVA_RANGE:
-   660			r = vhost_vdpa_get_iova_range(v, argp);
-   661			break;
-   662		case VHOST_VDPA_GET_CONFIG_SIZE:
-   663			r = vhost_vdpa_get_config_size(v, argp);
-   664			break;
-   665		case VHOST_VDPA_GET_VQS_COUNT:
-   666			r = vhost_vdpa_get_vqs_count(v, argp);
-   667			break;
- > 668		case VHOST_STOP:
-   669			r = vhost_vdpa_stop(v, argp);
-   670			break;
-   671		default:
-   672			r = vhost_dev_ioctl(&v->vdev, cmd, argp);
-   673			if (r == -ENOIOCTLCMD)
-   674				r = vhost_vdpa_vring_ioctl(v, cmd, argp);
-   675			break;
-   676		}
-   677	
-   678		mutex_unlock(&d->mutex);
-   679		return r;
-   680	}
-   681	
+   278	
+   279	static int bmi088_accel_read_raw(struct iio_dev *indio_dev,
+   280					 struct iio_chan_spec const *chan,
+   281					 int *val, int *val2, long mask)
+   282	{
+   283		struct bmi088_accel_data *data = iio_priv(indio_dev);
+   284		struct device *dev = regmap_get_device(data->regmap);
+   285		int ret;
+   286		int reg;
+   287	
+   288		switch (mask) {
+   289		case IIO_CHAN_INFO_RAW:
+   290			switch (chan->type) {
+   291			case IIO_TEMP:
+   292				ret = pm_runtime_resume_and_get(dev);
+   293				if (ret)
+   294					return ret;
+   295	
+   296				ret = bmi088_accel_get_temp(data, val);
+   297				goto out_read_raw_pm_put;
+   298			case IIO_ACCEL:
+   299				ret = pm_runtime_resume_and_get(dev);
+   300				if (ret)
+   301					return ret;
+   302	
+   303				ret = iio_device_claim_direct_mode(indio_dev);
+   304				if (ret)
+   305					goto out_read_raw_pm_put;
+   306	
+   307				ret = bmi088_accel_get_axis(data, chan, val);
+   308				iio_device_release_direct_mode(indio_dev);
+   309				if (!ret)
+   310					ret = IIO_VAL_INT;
+   311	
+   312				goto out_read_raw_pm_put;
+   313			default:
+   314				return -EINVAL;
+   315			}
+   316		case IIO_CHAN_INFO_OFFSET:
+   317			switch (chan->type) {
+   318			case IIO_TEMP:
+   319				/* Offset applies before scale */
+   320				*val = BMI088_ACCEL_TEMP_OFFSET/BMI088_ACCEL_TEMP_UNIT;
+   321				return IIO_VAL_INT;
+   322			default:
+   323				return -EINVAL;
+   324			}
+   325		case IIO_CHAN_INFO_SCALE:
+   326			switch (chan->type) {
+   327			case IIO_TEMP:
+   328				/* 0.125 degrees per LSB */
+   329				*val = BMI088_ACCEL_TEMP_UNIT;
+   330				return IIO_VAL_INT;
+   331			case IIO_ACCEL:
+   332				ret = pm_runtime_resume_and_get(dev);
+   333				if (ret)
+   334					return ret;
+   335	
+   336				ret = regmap_read(data->regmap,
+   337						  BMI088_ACCEL_REG_ACC_RANGE, &reg);
+   338				if (ret)
+   339					goto out_read_raw_pm_put;
+   340	
+ > 341				reg = FIELD_GET(BMIO088_ACCEL_ACC_RANGE_MSK, reg);
+   342				*val  = data->chip_info->scale_table[reg][0];
+   343				*val2 = data->chip_info->scale_table[reg][1];
+   344				ret = IIO_VAL_INT_PLUS_MICRO;
+   345	
+   346				goto out_read_raw_pm_put;
+   347			default:
+   348				return -EINVAL;
+   349			}
+   350		case IIO_CHAN_INFO_SAMP_FREQ:
+   351			ret = pm_runtime_resume_and_get(dev);
+   352			if (ret)
+   353				return ret;
+   354	
+   355			ret = bmi088_accel_get_sample_freq(data, val, val2);
+   356			goto out_read_raw_pm_put;
+   357		default:
+   358			break;
+   359		}
+   360	
+   361		return -EINVAL;
+   362	
+   363	out_read_raw_pm_put:
+   364		pm_runtime_mark_last_busy(dev);
+   365		pm_runtime_put_autosuspend(dev);
+   366	
+   367		return ret;
+   368	}
+   369	
 
 -- 
 0-DAY CI Kernel Test Service

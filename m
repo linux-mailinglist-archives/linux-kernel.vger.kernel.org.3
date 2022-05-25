@@ -2,157 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAA8533DB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B543533DC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234257AbiEYNU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S233701AbiEYNV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244522AbiEYNTw (ORCPT
+        with ESMTP id S229621AbiEYNVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:19:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C341AF3D;
-        Wed, 25 May 2022 06:19:39 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PD7pvt012789;
-        Wed, 25 May 2022 13:19:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5gThyaGaWA+mcR/Yr7gUjJjf5ptNc6JGxVkl7LE8FFM=;
- b=DjwvLQanquSEhZG5INJ3XXQ/oH9u7lm/zl+cCj9YPb0LUier2dm64Se3xL04iecENpvz
- p28n9koRrFRuS4s7xHoP9GDS65J1BvaKfs5AGY77Na4xrJ1FWA9izeQgnDFPW/DyMfOH
- bKl0RdzMH7xn1gFAouafN5rn/MsjXT0b9D4RKbIi/41HEW+AKW8fSP1i8Au3kXAqL47K
- 9hKnPSen50nbwE5dQV1sAupKlKX+zVIh+ahtIXlp2kfn4VPub2aLUCpSvzjv83OEThb4
- 3mxjrErT3b8jl6fw8b/2hNs1FiIzD2oer0s5WNlPH85lJ/oSeNncjNUQT4UbyNoGv2wB nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9fxjxn7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 13:19:18 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24PC66Ce008893;
-        Wed, 25 May 2022 13:19:18 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9fxjxn71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 13:19:17 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24PDF68A009255;
-        Wed, 25 May 2022 13:19:16 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma01dal.us.ibm.com with ESMTP id 3g93v8qq0a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 13:19:16 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24PDJFAB26607956
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 May 2022 13:19:15 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 648FFAE05C;
-        Wed, 25 May 2022 13:19:15 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0DE1DAE063;
-        Wed, 25 May 2022 13:19:09 +0000 (GMT)
-Received: from [9.163.3.233] (unknown [9.163.3.233])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 25 May 2022 13:19:08 +0000 (GMT)
-Message-ID: <3b6bdde6-2a6d-4792-ff5c-86b6fc7a2dca@linux.ibm.com>
-Date:   Wed, 25 May 2022 09:19:08 -0400
+        Wed, 25 May 2022 09:21:42 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2982427FF8;
+        Wed, 25 May 2022 06:21:38 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L7Wsr5bJbz67Q1X;
+        Wed, 25 May 2022 21:21:04 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 25 May 2022 15:21:35 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 0/3] bpf: Add support for maps with authenticated values
+Date:   Wed, 25 May 2022 15:21:12 +0200
+Message-ID: <20220525132115.896698-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v8 11/22] KVM: s390: pci: add basic kvm_zdev structure
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     linux-s390@vger.kernel.org, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220524185907.140285-1-mjrosato@linux.ibm.com>
- <20220524185907.140285-12-mjrosato@linux.ibm.com>
- <20220524165046.69f0d84a.alex.williamson@redhat.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20220524165046.69f0d84a.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mm_PGQd2Z4_saabnBYfHgsrkmpzQDUjS
-X-Proofpoint-GUID: pmrdjbA_L2CZLW5FH0VHmC9vXHlcv2JY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-25_03,2022-05-25_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- priorityscore=1501 spamscore=0 suspectscore=0 adultscore=0 mlxscore=0
- malwarescore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205250067
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/22 6:50 PM, Alex Williamson wrote:
-> On Tue, 24 May 2022 14:58:56 -0400
-> Matthew Rosato <mjrosato@linux.ibm.com> wrote:
->> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
->> new file mode 100644
->> index 000000000000..21c2be5c2713
->> --- /dev/null
->> +++ b/arch/s390/kvm/pci.c
->> @@ -0,0 +1,36 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * s390 kvm PCI passthrough support
->> + *
->> + * Copyright IBM Corp. 2022
->> + *
->> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
->> + */
->> +
->> +#include <linux/kvm_host.h>
->> +#include <linux/pci.h>
->> +#include "pci.h"
->> +
->> +static int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
->> +{
->> +	struct kvm_zdev *kzdev;
->> +
->> +	kzdev = kzalloc(sizeof(struct kvm_zdev), GFP_KERNEL);
->> +	if (!kzdev)
->> +		return -ENOMEM;
->> +
->> +	kzdev->zdev = zdev;
->> +	zdev->kzdev = kzdev;
->> +
->> +	return 0;
->> +}
->> +
->> +static void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
->> +{
->> +	struct kvm_zdev *kzdev;
->> +
->> +	kzdev = zdev->kzdev;
->> +	WARN_ON(kzdev->zdev != zdev);
->> +	zdev->kzdev = 0;
-> 
-> I imagine this should be s/0/NULL/, right?  I feel like there was a
-> recent similar discussion, but I can't think of any unique search terms
-> to sort it out of my inbox.  Thanks,
-> 
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
 
-Yup, I recall a similar comment on a prior version but I don't recall if 
-it was this particular patch or not -- anyway will change
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
+
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
+
+The initial idea for this feature was to provide an helper that eBPF
+programs might call to authenticate data whenever necessary. However, this
+restricts the ability to use that helper only in sleepable programs (due to
+crypto operations). Furthermore, data authentication would have been
+responsibility of eBPF programs.
+
+The proposed implementation instead shifts the responsibility of data
+authentication to the eBPF subsystem, upon request by the users. Whenever
+the users desire such feature, they just have to set a new map flag called
+BPF_F_VERIFY_ELEM. The eBPF subsystem ensures that only authenticated data
+can be added to the map. The check is performed during the execution of the
+bpf() system call when the commands are BPF_MAP_UPDATE_ELEM or
+BPF_MAP_UPDATE_BATCH. Since memory regions are not verified, usage of the
+BPF_F_MMAPABLE map flag is forbidden when BPF_F_VERIFY_ELEM is set.
+
+An advantage of shifting the responsibility of data authentication to the
+eBPF subsystem is that it can be offered to any kind of eBPF programs, not
+only the sleepable ones.
+
+When the new map flag BPF_F_VERIFY_ELEM is set, users have to provide a map
+value in the following format:
+
++-------------------------------+---------------+-----+-----------------+
+| verified data+sig size (be32) | verified data | sig | unverified data |
++-------------------------------+---------------+-----+-----------------+
+
+This is mostly the same format adopted for kernel modules, with the
+exception of the first field, as the size cannot be determined otherwise
+due to the fixed map value size. More details can be found in patch 1.
+
+Since the kernel already parses the format above, it was convenient to
+introduce also a new helper, called bpf_map_verified_data_size(), to
+return the size of verified data to the caller. This is done in patch 2.
+
+Finally, the added functionality is tested in patch 3.
+
+Roberto Sassu (3):
+  bpf: Add BPF_F_VERIFY_ELEM to require signature verification on map
+    values
+  bpf: Introduce bpf_map_verified_data_size() helper
+  bpf: Add tests for signed map values
+
+ include/linux/bpf.h                           |   7 +
+ include/uapi/linux/bpf.h                      |  11 +
+ kernel/bpf/arraymap.c                         |   2 +-
+ kernel/bpf/helpers.c                          |  15 ++
+ kernel/bpf/syscall.c                          |  70 ++++++
+ tools/include/uapi/linux/bpf.h                |  11 +
+ .../bpf/prog_tests/test_map_value_sig.c       | 212 ++++++++++++++++++
+ .../selftests/bpf/progs/map_value_sig.c       |  50 +++++
+ 8 files changed, 377 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_map_value_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/map_value_sig.c
+
+-- 
+2.25.1
 

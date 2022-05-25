@@ -2,227 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F46C533A25
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 114B7533A2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236751AbiEYJoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 05:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S240747AbiEYJpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 05:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241183AbiEYJnt (ORCPT
+        with ESMTP id S236444AbiEYJor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 05:43:49 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A687DEC4;
-        Wed, 25 May 2022 02:43:46 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ff7b90e635so142922397b3.5;
-        Wed, 25 May 2022 02:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1O/cnzxLyE24n8oNtE1G8BpY+MDED/QH3SE2yJ32biA=;
-        b=BMhFL5b6E5KwNcVSCHnyQBR/FgHJaQShTBBhNtA64fbaT1zKoX/5V/10/GkyjDfCj5
-         eEpr1Pxj+qGzXRZS9XoI/2yjtClKvlDB0lY8OPR4oGIU4AbgR1sHw0i3exdtmHxh4lV8
-         rGnkKYWdzKoMkbA9/cUHDOSYCx7s9DLpGZdgwNaYZ3qi88cUDBg7xc7Ux1zV7A3DgYNT
-         xbiWWKtha4nFbmlMX9ZY2E+kzoeIoYEPU/RQcziysejpbJC4niDYU+zXWxI4taODdRtg
-         /dWPPfyfEFWY8NgtZAnMFQu4hlzKu7XlJJHHT7tNHM/FWT/16BhgDTPc3RSZP5ykWhhY
-         J6Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1O/cnzxLyE24n8oNtE1G8BpY+MDED/QH3SE2yJ32biA=;
-        b=5MwYpqTE3nKOiX/cYAmW7qhVTl4gV7tI0ud695nKnHNrlMHP5otSYV4x2jv7V+iXVU
-         cqWU/3DoyvdPp66wlSBtMnk01a/BaL1xnuhN7IwCLIeXAVfvxbim+37RSXOviwvXJ42O
-         DTsjwxnXJCfkOBg2A1mYWWpQuvq+SI6XypitpsSx4AC87bv9PNq6fcLdB4JyKBNQN6pU
-         JeYGF4+GsvYgSmXoMd19xZCK6Apjc5Vaw1N/ral/0XrAJLJxZpsZ5zhjUUu6IU5WcDJX
-         Rav7Ygeo38qqeUR9LPT94vtaolan/NmT1bZYWveAabX1yjl29v/5rU/5NW+1saq39XTQ
-         sv0g==
-X-Gm-Message-State: AOAM531FUeuvP6a8i7ut32vjEPEOwTyZmMH05jpWjNeEUQ3Pj4Z4oTzy
-        HZhiZwzJwY3Z9ztZixe3zGZPAGV8AW6f5+Dx3cs=
-X-Google-Smtp-Source: ABdhPJz4goephVaph29ovM6NwmrhGAKSlI3y2GQdztsG+ZmN8Hi5UDI5lr2bY+YLU8cDx55yu6SczHmnq+LS5yw1kyo=
-X-Received: by 2002:a0d:c101:0:b0:2ff:5824:e8a8 with SMTP id
- c1-20020a0dc101000000b002ff5824e8a8mr32467321ywd.413.1653471825732; Wed, 25
- May 2022 02:43:45 -0700 (PDT)
+        Wed, 25 May 2022 05:44:47 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817C964D3;
+        Wed, 25 May 2022 02:44:43 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id B141D2B05006;
+        Wed, 25 May 2022 05:44:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 25 May 2022 05:44:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1653471878; x=1653479078; bh=ys3iQzhNHF
+        k+i8WtIf+H8WQ46WfOZFCztCK2dX/C9P0=; b=N/JRB+WnexRIZ9dX5PcEm/8f/H
+        cPBsMsbDuSTmVpILRSXnNlFoPgXwTnB9sG5c2CBpqvmmZti7TCvET1ygVyPq4fwA
+        fQ5OKTgoJNLZ2M0ZTBEABVgD9xQIGnhTbnxt6XkIAVCIzuLJXBs7WAGfC96irWbw
+        lr6953LnsKHvebopgcw5k3L/zNh8kVTad2/799qbT1ZNmy0HBuUmu2c1k8Ro/kCY
+        bvMC07VkU0pJwn8wysn6o8m1M2Ne1dICZCA2GfRKAkRG+uRlxyGobz3yN2r1jOok
+        pxntt2LaG8S5EYl12Kr5IDS1ImVsXzQyl8d4WYDx7OYzrJX/5YAypClUA6hQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1653471878; x=1653479078; bh=ys3iQzhNHFk+i8WtIf+H8WQ46WfO
+        ZFCztCK2dX/C9P0=; b=XJwcQJysHomLv8q3I/a024YNpcHuA7CVVSfdAKLSNh3e
+        yCo6zETnKg3Mmiy6LoUaiq2nQu9FmR/S85oMTwF7btYoM842Xj+nV71rUSMChwSf
+        dqf2GI+aNWNs5ombF58vGOinb8gsdVPNIx+xirIXrd2MM5HTFxrTtiWm/87u7xJG
+        g2dLVRdU0LdTz2v5YPgzkl1T0mdMsa+3PlpXoMfDj0mFo5gdyV+0rNllM1Gs6YzH
+        v42Dafl6F/jY8Nx/xQNz9BWuJQwjez2vm5rfwevvrJNdAG3j0FQLxK/8UQJ0nJ0c
+        WDUETgLd5XsVCXp/jcUW6Bu92Nyy4tEdyF1vOAVWKg==
+X-ME-Sender: <xms:hfqNYq_j5GFf5Uz1mDgmLdV70fLnuq6aSKWevLqyWIawg4NmhGrHQg>
+    <xme:hfqNYqtHTkLzDuf9wZyjFbHZAlnHbcr-0YckTlhEp7Xi4YnN4O9Rj5_Rgh6byONs6
+    vUf5M6n4txqCdpV9vw>
+X-ME-Received: <xmr:hfqNYgB-vOJM3N79sWpwTBKgf_FqXdlgWKqgCm2OFJA94fiDo67jizwJV9YM_HUjfM0eagMIdOKEsmwTFs1RY076g0I827v4G1dOjck>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeehgddukecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepgfeuuedtfefgveevheejfeeghedvjeejfeehkeffudetuedtgfeiieeiffeu
+    tdffnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:hfqNYicSWVCNxtPjO2OP-dTZTG5RnA-8HT0mTEUaKkDRVcwql_I2Ug>
+    <xmx:hfqNYvOIcwaM76cNjFwwp5PA3zMSONCG2MMRXEw6yETvTmp88gEfoQ>
+    <xmx:hfqNYsk9JgcQt1Fcfw7pvS3BYvWH_sfA1sMh1fLYGKJSYXOJnHLW1A>
+    <xmx:hvqNYpW3xzQCmkMOuNOuoVddp28C1T8FymU-PtWuCJdZO9MFWihypK9P9TQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 May 2022 05:44:36 -0400 (EDT)
+Date:   Wed, 25 May 2022 11:44:34 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Guillaume Ranquet <granquet@baylibre.com>
+Cc:     airlied@linux.ie, angelogioacchino.delregno@collabora.com,
+        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
+        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
+        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
+        p.zabel@pengutronix.de, robh+dt@kernel.org, tzimmermann@suse.de,
+        vkoul@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, markyacoub@google.com,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v9 18/22] drm/mediatek: Add mt8195 Embedded DisplayPort
+ driver
+Message-ID: <20220525094434.7qhycnobrmgiihuf@houat>
+References: <20220327223927.20848-1-granquet@baylibre.com>
+ <20220327223927.20848-19-granquet@baylibre.com>
+ <20220429083933.q3w75q3zuyyuvo4w@houat>
+ <CABnWg9tzhZjrdKT4chkDrY-uH8BMUoxyNLUSwfuG6Sv1J+8ddg@mail.gmail.com>
+ <20220512074446.ihilbbnbuwesxbbg@houat>
+ <CABnWg9tHRc_7VZ1z6NeMEDfQvxam_xOimBnM=hzBUqkhzPOSCA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220524172214.5104-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220524172214.5104-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdX0pqr8pmbX8OfUyTeEwiFGSG5uyP4nLG1LPy7_zzLPbQ@mail.gmail.com>
- <CA+V-a8ubrkDU2B=mJopzFrjhv1nVn5EXZmaprta0oj4p3J_N5Q@mail.gmail.com> <CAMuHMdVncBnD25RLLqL2qDFwboPSVvo5faJvamDxPH_wq9r22Q@mail.gmail.com>
-In-Reply-To: <CAMuHMdVncBnD25RLLqL2qDFwboPSVvo5faJvamDxPH_wq9r22Q@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 25 May 2022 10:43:19 +0100
-Message-ID: <CA+V-a8tHfyqJx9YBFX3hJBEKuCbDpminz_4uSLK=MHV7W8-hJg@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/2] irqchip/sifive-plic: Add support for Renesas
- RZ/Five SoC
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="frqxb4oy2hxaw6mk"
+Content-Disposition: inline
+In-Reply-To: <CABnWg9tHRc_7VZ1z6NeMEDfQvxam_xOimBnM=hzBUqkhzPOSCA@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
 
-On Wed, May 25, 2022 at 10:35 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Wed, May 25, 2022 at 11:01 AM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
-> > On Wed, May 25, 2022 at 9:01 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Tue, May 24, 2022 at 7:22 PM Lad Prabhakar
-> > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
-> > > > NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
-> > > > case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
-> > > > edge until the previous completion message has been received and
-> > > > NCEPLIC100 doesn't support pending interrupt counter, hence losing the
-> > > > interrupts if not acknowledged in time.
-> > > >
-> > > > So the workaround for edge-triggered interrupts to be handled correctly
-> > > > and without losing is that it needs to be acknowledged first and then
-> > > > handler must be run so that we don't miss on the next edge-triggered
-> > > > interrupt.
-> > > >
-> > > > This patch adds a new compatible string for Renesas RZ/Five SoC and adds
-> > > > support to change interrupt flow based on the interrupt type. It also
-> > > > implements irq_ack and irq_set_type callbacks.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > Thanks for your patch!
-> > >
-> > > > --- a/drivers/irqchip/irq-sifive-plic.c
-> > > > +++ b/drivers/irqchip/irq-sifive-plic.c
->
-> > > > @@ -163,10 +166,31 @@ static int plic_set_affinity(struct irq_data *d,
-> > > >  }
-> > > >  #endif
-> > > >
-> > > > +static void plic_irq_ack(struct irq_data *d)
-> > > > +{
-> > > > +       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
-> > > > +
-> > >
-> > > No check for RZ/Five or irq type?
-> > That is because we set the handle_fasteoi_ack_irq() only in case of
-> > RZ/Five and it is already checked in set_type() callback.
+--frqxb4oy2hxaw6mk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, May 19, 2022 at 09:26:59AM -0700, Guillaume Ranquet wrote:
+> On Thu, 12 May 2022 09:44, Maxime Ripard <maxime@cerno.tech> wrote:
+> >Hi,
 > >
-> > > .irq_ack() seems to be called for level interrupts, too
-> > > (from handle_level_irq() through mask_ack_irq()).
-> > >
-> > Right but we are using handle_fasteoi_irq() for level interrupt which
-> > doesn't call mask_ack_irq(). And I have confirmed by adding a print in
-> > ack callback  and just enabling the serial (which has level
-> > interrupts).
->
-> But handle_fasteoi_irq() is configured only on RZ/Five below?
-> Which handler is used on non-RZ/Five?
->
-For non RZ/Five, handle_fasteoi_irq() [0] is used for both edge/level
-interrupts.
+> >On Wed, May 11, 2022 at 05:59:13AM -0700, Guillaume Ranquet wrote:
+> >> >> +#include <drm/drm_atomic_helper.h>
+> >> >> +#include <drm/drm_bridge.h>
+> >> >> +#include <drm/drm_crtc.h>
+> >> >> +#include <drm/dp/drm_dp_helper.h>
+> >> >> +#include <drm/drm_edid.h>
+> >> >> +#include <drm/drm_of.h>
+> >> >> +#include <drm/drm_panel.h>
+> >> >> +#include <drm/drm_print.h>
+> >> >> +#include <drm/drm_probe_helper.h>
+> >> >> +#include <linux/arm-smccc.h>
+> >> >> +#include <linux/clk.h>
+> >> >> +#include <linux/delay.h>
+> >> >> +#include <linux/errno.h>
+> >> >> +#include <linux/kernel.h>
+> >> >> +#include <linux/mfd/syscon.h>
+> >> >> +#include <linux/nvmem-consumer.h>
+> >> >> +#include <linux/of.h>
+> >> >> +#include <linux/of_irq.h>
+> >> >> +#include <linux/of_platform.h>
+> >> >> +#include <linux/phy/phy.h>
+> >> >> +#include <linux/platform_device.h>
+> >> >> +#include <linux/pm_runtime.h>
+> >> >> +#include <linux/regmap.h>
+> >> >> +#include <sound/hdmi-codec.h>
+> >> >> +#include <video/videomode.h>
+> >> >> +
+> >> >> +#include "mtk_dp_reg.h"
+> >> >> +
+> >> >> +#define MTK_DP_AUX_WAIT_REPLY_COUNT 20
+> >> >> +#define MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT 3
+> >> >> +
+> >> >> +//TODO: platform/device data or dts?
+> >> >
+> >> >DTS :)
+> >>
+> >> It's probably going to be a platform_data struct for v10...
+> >> If I have time, I'll change it to a dts property for v10.
+> >
+> >I can't really imagine a case where we would need platform_data
+> >nowadays. If you have a device tree, then it should be part of the
+> >binding.
+> >
+> >What issue would you like to address by using a platform_data?
+> >
+>=20
+> Ok, I'll migrate to dt then. I didn't realize platform_data were deprecia=
+ted.
+>=20
+> Angelo wants the MAX_LINRATE and MAX_LANES defines to be configurable.
+> I imagined platform_data would be more appropriate as (per my understandi=
+ng) the
+> limitation is associated with a specific SoC.
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/irqchip/irq-sifive-plic.c?h=next-20220525#n195
+The entire device tree is nothing but a collection of data associated to
+a specific SoC though :)
 
-> I have to admit I'm not that deep into irq handling, and
-> adding a print indeed doesn't trigger on Starlight Beta.
->
-> > > > @@ -176,11 +200,37 @@ static void plic_irq_eoi(struct irq_data *d)
-> > > >         }
-> > > >  }
-> > > >
-> > > > +static int plic_irq_set_type(struct irq_data *d, unsigned int type)
-> > > > +{
-> > > > +       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
-> > > > +
-> > > > +       if (handler->priv->of_data != RENESAS_R9A07G043_PLIC)
-> > > > +               return 0;
-> > > > +
-> > > > +       switch (type) {
-> > > > +       case IRQ_TYPE_LEVEL_HIGH:
-> > > > +               irq_set_handler_locked(d, handle_fasteoi_irq);
-> > > > +               break;
-> > > > +
-> > > > +       case IRQ_TYPE_EDGE_RISING:
-> > > > +               irq_set_handler_locked(d, handle_fasteoi_ack_irq);
-> > > > +               break;
-> > > > +
-> > > > +       default:
-> > > > +               return -EINVAL;
-> > > > +       }
-> > > > +
-> > > > +       return 0;
-> > > > +}
-> > > > +
-> > > >  static struct irq_chip plic_chip = {
-> > > >         .name           = "SiFive PLIC",
-> > > >         .irq_mask       = plic_irq_mask,
-> > > >         .irq_unmask     = plic_irq_unmask,
-> > > > +       .irq_ack        = plic_irq_ack,
-> > >
-> > > This causes extra processing on non-affected PLICs.
-> > > Perhaps use a separate irq_chip instance?
-> > >
-> > I don't think so as the handle_fasteoi_ack_irq() is installed only in
-> > case of RZ/Five, so irq_ack() will not be called for non-affected
-> > PLIC's. Please correct me if I am wrong.
->
-> Hence I'll leave this to the irq maintainer...
->
-> > > > @@ -293,6 +356,9 @@ static int __init plic_init(struct device_node *node,
-> > > >         if (!priv)
-> > > >                 return -ENOMEM;
-> > > >
-> > > > +       if (of_device_is_compatible(node, "renesas-r9a07g043-plic"))
-> > > > +               priv->of_data = RENESAS_R9A07G043_PLIC;
-> > > > +
-> > >
-> > > So perhaps instead just look at #interrupt-cells, and use the onecell
-> > > or twocell irq_chip/irq_domain_ops based on that?
-> > >
-> > But we do call plic_irq_domain_translate() in the alloc callback and
-> > don't have a node pointer in there to check the interrupt cell count.
-> > Or maybe we can store the interrupt cell count in priv and use it
-> > accordingly above?
->
-> That's a reasonable option.
->
-Ok I will update this in v2.
+> >> >> +static struct edid *mtk_dp_get_edid(struct drm_bridge *bridge,
+> >> >> +				    struct drm_connector *connector)
+> >> >> +{
+> >> >> +	struct mtk_dp *mtk_dp =3D mtk_dp_from_bridge(bridge);
+> >> >> +	bool enabled =3D mtk_dp->enabled;
+> >> >> +	struct edid *new_edid =3D NULL;
+> >> >> +
+> >> >> +	if (!enabled)
+> >> >> +		drm_bridge_chain_pre_enable(bridge);
+> >> >> +
+> >> >> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POWER_D0);
+> >> >> +	usleep_range(2000, 5000);
+> >> >> +
+> >> >> +	if (mtk_dp_plug_state(mtk_dp))
+> >> >> +		new_edid =3D drm_get_edid(connector, &mtk_dp->aux.ddc);
+> >> >> +
+> >> >> +	if (!enabled)
+> >> >> +		drm_bridge_chain_post_disable(bridge);
+> >> >
+> >> >Are you sure we can't get a mode set while get_edid is called?
+> >> >
+> >> >If we can, then you could end up disabling the device while it's being
+> >> >powered on.
+> >>
+> >> I'm a bit unsure, I need to spend more time in the drm stack to make s=
+ure.
+> >> I'll get back to you when I have a definitive answer.
+> >
+> >So, it looks like it's ok.
+> >
+> >get_edid is your implementation of get_modes, which is called by
+> >drm_helper_probe_single_connector_modes
+> >
+> >https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_probe=
+_helper.c#L416
+> >
+> >This is the standard implemantion of fill_modes, which is called
+> >whenever the get_connector ioctl is called (or similar paths, like
+> >drm_client_modeset_probe)
+> >
+> >drm_helper_probe_single_connector_modes is under the assumption that the
+> >mode_config.mutex is held though, and that the big lock. So it should be
+> >serialized there.
+> >
+> >Just for future proofing though, it would be better to use refcounting
+> >there. Would runtime_pm work for you there?
+> >
+>=20
+> Thx for looking into this for me.
+> Not sure runtime_pm works here as it would only refcount if compiled
+> with CONFIG_PM?
 
-Cheers,
-Prabhakar
+It should be enabled in most configurations these days, and you can
+always depend on it in your Kconfig option.
 
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+> I'd rather use the enabled field as a refcounter instead of a boolean.
+
+It's a bit more ad-hoc, but that would work too. Make sure to use a lock
+or atomic operations though
+
+Maxime
+
+--frqxb4oy2hxaw6mk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYo36ggAKCRDj7w1vZxhR
+xZ8uAQD4p9FP6n4HWaV/eeMy9XLCytn17FejCmxsGJ+BVRXkngEA7rKJQeM++TcT
+7XF+Ij2881A16a/1Cfs+sVBCS9T7/Ao=
+=cDEf
+-----END PGP SIGNATURE-----
+
+--frqxb4oy2hxaw6mk--

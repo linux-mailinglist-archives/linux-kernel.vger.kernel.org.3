@@ -2,92 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4504C534567
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 22:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992DC53456E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 22:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344063AbiEYU5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 16:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S244140AbiEYU6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 16:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiEYU53 (ORCPT
+        with ESMTP id S230314AbiEYU6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 16:57:29 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3488B8BE8;
-        Wed, 25 May 2022 13:57:28 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id t144so23208110oie.7;
-        Wed, 25 May 2022 13:57:28 -0700 (PDT)
+        Wed, 25 May 2022 16:58:44 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FAEBA54B;
+        Wed, 25 May 2022 13:58:43 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id l10-20020a9d7a8a000000b0060b151de434so6756010otn.2;
+        Wed, 25 May 2022 13:58:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=PvdkFEtwnY8PQ1QhT5M3rI8a4A3NL4oFFj4uvWw4Njw=;
-        b=qAAYh8z9W9sthSvaFx8Cqas0uLq+3kwhqX5FF3EF62w2/1fPGqD/406S5MSu814iU8
-         haJGxYkPw2zBRzKOcTUFlr2pyXRqKyClHNoys69tIVjUDip+oehB9jUYvI0PMmmE9l7b
-         DSkuioULJbYIzl1VZalpHQe9RShrxbs/J4A5VdJ8uo0nLw2W+NKnyRBO10X03Kx+joMv
-         y4qNx3wrCPIiH6kEFedXSpcvB7OjOqUUk770Hjr+zV+xBI8ulQQyY2Ee0yTYgLRBHkaS
-         NavKvvRf4hSl/XOcAbXN2cd2IoUerjdU6E/6XAdTgP5jwBrhcb+XWWNgCEhlphf1AZzw
-         cn7w==
-X-Gm-Message-State: AOAM5310KgUdqPZlQNnaoYHP5cfu28MYnVK3sV5d8tzLuswPAvO/eeVL
-        qNfCirGPjkePFjfzshk2/w==
-X-Google-Smtp-Source: ABdhPJyRuiJ/assfY1zLs5zrpGcTguyfUw5N+iA1GV/DKuVDEOa45pd2/EegjcXHekwesofSJm644A==
-X-Received: by 2002:a05:6808:f09:b0:328:b61f:1b52 with SMTP id m9-20020a0568080f0900b00328b61f1b52mr6053707oiw.150.1653512238956;
-        Wed, 25 May 2022 13:57:18 -0700 (PDT)
+        bh=+7R0jOM1X4u7urBmc2283Rmo7eHakiDoT/FWr1Vpcl8=;
+        b=IqIGYdzrWDahmOJXfR5Xv0qGOIIyY3y2iE1rpGzSPQueVxMDJC8N0iN4C1ODKw8PCJ
+         s2CimiEkiDWtjzeLLvJyt+8iSO+iRXdVAnd6phKoaSjNq677wyPd5EIRkSiS+BzPiJk0
+         UNBc7yQiVK9jdeuGzM2QkUHPkLPkDSNb41gj47Mvk03q+ZmAq3kJxUNHWPWzvPaseBab
+         CjCDk4wA6uqrGIWdgJro6+NF3oCAeejqVuG4d4Pxdyf0q8++QXe1MuXe1LGyF64KTOru
+         7y7gl5a0p2ErLJRvJ8bIQewGsrRgcrZJksZ+s5C+r4AJDPEbYBNapKfh/8dpZOfn/iv9
+         uS7w==
+X-Gm-Message-State: AOAM5330UT6iAHwwU6D004hOuyYd+v/prjgDNIZVbQnNPfB2zMCp8kDl
+        YO2F9iYGGU5icjvEXT8AXw==
+X-Google-Smtp-Source: ABdhPJz5l3JFyaeKrZTFkTzK+zkeMuXVUREn2S52CFfzx7dHLtxFxgDEfFTcUKndzWb2gdIez3qIeQ==
+X-Received: by 2002:a05:6830:310c:b0:606:66c8:53d4 with SMTP id b12-20020a056830310c00b0060666c853d4mr13372565ots.129.1653512323186;
+        Wed, 25 May 2022 13:58:43 -0700 (PDT)
 Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id r125-20020acada83000000b003289f51c2d7sm6896210oig.34.2022.05.25.13.57.17
+        by smtp.googlemail.com with ESMTPSA id t5-20020a056871054500b000e686d1386asm6398922oal.4.2022.05.25.13.58.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 13:57:18 -0700 (PDT)
+        Wed, 25 May 2022 13:58:42 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: display: ingenic,jz4780-hdmi: Drop undocumented 'ddc-i2c-bus'
-Date:   Wed, 25 May 2022 15:56:26 -0500
-Message-Id: <20220525205626.2482584-1-robh@kernel.org>
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Marek Vasut <marex@denx.de>
+Cc:     Woojung Huh <Woojung.Huh@microchip.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: net/dsa: Add spi-peripheral-props.yaml references
+Date:   Wed, 25 May 2022 15:57:50 -0500
+Message-Id: <20220525205752.2484423-1-robh@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While 'ddc-i2c-bus' is a common property, it should be in a connector
-node rather than the HDMI bridge node as the I2C bus goes to a
-connector and not the HDMI block. Drop it from the example.
+SPI peripheral device bindings need to reference spi-peripheral-props.yaml
+in order to use various SPI controller specific properties. Otherwise,
+the unevaluatedProperties check will reject any controller specific
+properties.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml  | 1 -
- 1 file changed, 1 deletion(-)
+ Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml | 1 +
+ Documentation/devicetree/bindings/net/dsa/realtek.yaml       | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-index b8219eab4475..89490fdffeb0 100644
---- a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-+++ b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-@@ -55,7 +55,6 @@ examples:
-         compatible = "ingenic,jz4780-dw-hdmi";
-         reg = <0x10180000 0x8000>;
-         reg-io-width = <4>;
--        ddc-i2c-bus = <&i2c4>;
-         interrupt-parent = <&intc>;
-         interrupts = <3>;
-         clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
+diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
+index 184152087b60..6bbd8145b6c1 100644
+--- a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
+@@ -12,6 +12,7 @@ maintainers:
+ 
+ allOf:
+   - $ref: dsa.yaml#
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+ 
+ properties:
+   # See Documentation/devicetree/bindings/net/dsa/dsa.yaml for a list of additional
+diff --git a/Documentation/devicetree/bindings/net/dsa/realtek.yaml b/Documentation/devicetree/bindings/net/dsa/realtek.yaml
+index 99ee4b5b9346..4f99aff029dc 100644
+--- a/Documentation/devicetree/bindings/net/dsa/realtek.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/realtek.yaml
+@@ -108,6 +108,7 @@ if:
+     - reg
+ 
+ then:
++  $ref: /schemas/spi/spi-peripheral-props.yaml#
+   not:
+     required:
+       - mdc-gpios
 -- 
 2.34.1
 

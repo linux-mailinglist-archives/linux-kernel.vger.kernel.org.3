@@ -2,180 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C355346DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2837C5346DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241842AbiEYWya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 18:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S235092AbiEYW4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 18:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiEYWyX (ORCPT
+        with ESMTP id S238729AbiEYW4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 18:54:23 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF63A5A8B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653519262; x=1685055262;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=m2aojPMgue6+E5/0+nOyweCRz5sLX+mQS17DDb1TwN8=;
-  b=ChLXQHlS5QAvE9PnOgas2RkaDyI+JH4pNhxt6PF6OZZACf5rs8NoAAd/
-   yNO/Kswk3MLfvgblot31NIUxXvARSpTzDX/h/KARB1buvUNRQ50/D28t9
-   yOB15u13SyzI2zjJDEZFUQBVYFH8UjXp1V++B9WIESthFK+rrXdbKAY+D
-   Tv32qd/r7DtOJYN1YuafDyUmCHlfX7HyBNg/o/8GEQXs6jW2D8Ztsye93
-   EDrY/vyVDSOoPQAM6f49Z3XIFICmJ6QIkV0dEZyCdD7Y5qmy+wkfua1Le
-   KSJ+Yryye4DrBeJ7F81VPT1RseqLUD0/6zNkKD08uRmxd1cXelf6GK2DJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="271529494"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="271529494"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 15:54:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="745981952"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 May 2022 15:54:20 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntztT-0003Nq-MO;
-        Wed, 25 May 2022 22:54:19 +0000
-Date:   Thu, 26 May 2022 06:53:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [vireshk-pm:opp/config 17/33] drivers/cpufreq/ti-cpufreq.c:331:19:
- error: incompatible pointer types initializing 'const u32 *' (aka 'const
- unsigned int *') with an expression of type 'u32 (*)[2]' (aka 'unsigned int
- (*)[2]')
-Message-ID: <202205260656.mE4aquA1-lkp@intel.com>
+        Wed, 25 May 2022 18:56:12 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471622E9D6;
+        Wed, 25 May 2022 15:56:10 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id t144so285549oie.7;
+        Wed, 25 May 2022 15:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DbhXocVdJI108NLqeONWoZkfXcTtzL64FrHc9jEvSMY=;
+        b=h7epTynqVLwlSXxaAhGIjxm24IKossrcYupb3DHhPMA/GpRdJolUTuELfnJuXY+lJO
+         N7R+5/1pvc3LarzWT0gViUaDDMGGhSY6aP6y0OEHm5Ii7dSWk4G/HawIxMNilpECX9VI
+         B4TL3tpmGKQnCc7UioiYqYV6tEVDBN6LKsUkkHRsq+ifHaKiLRADIhbmPhhDahfxI3lm
+         ufoXZOxzOdjS27T4qzfPll/Mk/bOgZvBCnPfr83vKV4Qn3WeWt3FyzyL2DcAtD7I297b
+         QxoqqhpbotMcYNzg1lWtyoukKFKInSg/SAlaPk54whSvzty2CxgrGeDG+tIr6VKP1PTo
+         NF/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DbhXocVdJI108NLqeONWoZkfXcTtzL64FrHc9jEvSMY=;
+        b=zZeUrWw4FaokPb5TOyOc/Z2Y4X5YhUvmqvShmHeMuS4rn5MHrKutNWUTJV3H7CDyle
+         /SrpVuSs3hRN3OBusuH5RUu9eY6Jnqyywg214AdPPouXsMR+91qkQSOHyrIhMk4PN4O1
+         dgSfmMO3C0AjCJkQcmJJ4o+D53Sl8RM355X6DL3JC06n43R/iy99F9xF32QlULRVaVwH
+         isXGTozDvIaeZl9Wxarby/dDVSRZU+1iJgjpLcD23nDRPltdmPkAj2P+IjKMLjEVJG1N
+         Bf+SiIqZg2BeOxU7OIASIcCAa+3LJZXu1xg94ZXKFFE3K1Gkg0AVnKGpbXD2CeqScLIv
+         DzTQ==
+X-Gm-Message-State: AOAM530MrduyCMftMPEqDoj5/0tlkDnXKhSnhZ1rKHxHXQtNlqHlicZZ
+        myjx05cjvKlY2wT9Vjjbc9bZ3hpsEIWF1Q==
+X-Google-Smtp-Source: ABdhPJyBxdz/4uWxT28qO5q67jZnYyhrQB81/44lp3PL6QjvdW6IfSt8sgcLAUT3/by8eikrUG+LgQ==
+X-Received: by 2002:a05:6808:f0b:b0:328:bad3:2d92 with SMTP id m11-20020a0568080f0b00b00328bad32d92mr6515862oiw.277.1653519369605;
+        Wed, 25 May 2022 15:56:09 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id gn9-20020a056870d98900b000f27976b9d9sm32202oab.6.2022.05.25.15.56.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 15:56:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <48ef770c-75bf-6c37-66fe-9719164bc6e0@roeck-us.net>
+Date:   Wed, 25 May 2022 15:56:07 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] riscv: compat: Using seperated vdso_maps for
+ compat_vdso_info
+Content-Language: en-US
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>, heiko@sntech.de,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
+References: <mhng-b37ccc06-67ad-4fd8-bcdb-0e5c9e5a4750@palmer-ri-x1c9>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <mhng-b37ccc06-67ad-4fd8-bcdb-0e5c9e5a4750@palmer-ri-x1c9>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
-head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
-commit: f834c0b7a54d96f6322c544479bbe897309b4a0a [17/33] cpufreq: ti: Migrate to dev_pm_opp_set_config()
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220526/202205260656.mE4aquA1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=f834c0b7a54d96f6322c544479bbe897309b4a0a
-        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
-        git fetch --no-tags vireshk-pm opp/config
-        git checkout f834c0b7a54d96f6322c544479bbe897309b4a0a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+On 5/25/22 14:34, Palmer Dabbelt wrote:
+> On Wed, 25 May 2022 14:15:03 PDT (-0700), linux@roeck-us.net wrote:
+>> On 5/25/22 09:04, guoren@kernel.org wrote:
+>>> From: Guo Ren <guoren@linux.alibaba.com>
+>>>
+>>> This is a fixup for vdso implementation which caused musl to
+>>> fail.
+>>>
+>>> [   11.600082] Run /sbin/init as init process
+>>> [   11.628561] init[1]: unhandled signal 11 code 0x1 at
+>>> 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
+>>> [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted
+>>> 5.18.0-rc7-next-20220520 #1
+>>> [   11.629462] Hardware name: riscv-virtio,qemu (DT)
+>>> [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp :
+>>> 00ffffffc58199f0
+>>> [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 :
+>>> ffffffffffffffff
+>>> [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 :
+>>> 00ffffff8ade0cc0
+>>> [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 :
+>>> 00ffffffc5819a00
+>>> [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 :
+>>> 00ffffffc5819b00
+>>> [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 :
+>>> 0000000000000000
+>>> [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 :
+>>> 00ffffff8ade0728
+>>> [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 :
+>>> 00ffffffc5819e40
+>>> [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10:
+>>> 0000000000000000
+>>> [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 :
+>>> 0000000000000001
+>>> [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
+>>> [   11.629699] status: 0000000000004020 badaddr: 0000000000000000
+>>> cause: 000000000000000d
+>>>
+>>> The last __vdso_init(&compat_vdso_info) replaces the data in normal
+>>> vdso_info. This is an obvious bug.
+>>>
+>>> Reported-by: Guenter Roeck <linux@roeck-us.net>
+>>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+>>> Cc: Heiko Stübner <heiko@sntech.de>
+>>
+>> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> Sorry I'm a bit buried right now, this is fixing the issue you pointed out earlier?
+> 
+Yes.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks,
+Guenter
 
-All errors (new ones prefixed by >>):
+>>
+>>> ---
+>>>   arch/riscv/kernel/vdso.c | 15 +++++++++++++--
+>>>   1 file changed, 13 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+>>> index 50fe4c877603..69b05b6c181b 100644
+>>> --- a/arch/riscv/kernel/vdso.c
+>>> +++ b/arch/riscv/kernel/vdso.c
+>>> @@ -206,12 +206,23 @@ static struct __vdso_info vdso_info __ro_after_init = {
+>>>   };
+>>>
+>>>   #ifdef CONFIG_COMPAT
+>>> +static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
+>>> +    [RV_VDSO_MAP_VVAR] = {
+>>> +        .name   = "[vvar]",
+>>> +        .fault = vvar_fault,
+>>> +    },
+>>> +    [RV_VDSO_MAP_VDSO] = {
+>>> +        .name   = "[vdso]",
+>>> +        .mremap = vdso_mremap,
+>>> +    },
+>>> +};
+>>> +
+>>>   static struct __vdso_info compat_vdso_info __ro_after_init = {
+>>>       .name = "compat_vdso",
+>>>       .vdso_code_start = compat_vdso_start,
+>>>       .vdso_code_end = compat_vdso_end,
+>>> -    .dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+>>> -    .cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+>>> +    .dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
+>>> +    .cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
+>>>   };
+>>>   #endif
+>>>
 
->> drivers/cpufreq/ti-cpufreq.c:331:19: error: incompatible pointer types initializing 'const u32 *' (aka 'const unsigned int *') with an expression of type 'u32 (*)[2]' (aka 'unsigned int (*)[2]') [-Werror,-Wincompatible-pointer-types]
-                   .supported_hw = &version,
-                                   ^~~~~~~~
->> drivers/cpufreq/ti-cpufreq.c:360:8: error: use of undeclared label 'fail_put_node'
-                   goto fail_put_node;
-                        ^
-   2 errors generated.
-
-
-vim +331 drivers/cpufreq/ti-cpufreq.c
-
-   322	
-   323	static int ti_cpufreq_probe(struct platform_device *pdev)
-   324	{
-   325		u32 version[VERSION_COUNT];
-   326		const struct of_device_id *match;
-   327		struct ti_cpufreq_data *opp_data;
-   328		const char * const default_reg_names[] = {"vdd", "vbb"};
-   329		int ret;
-   330		struct dev_pm_opp_config config = {
- > 331			.supported_hw = &version,
-   332			.supported_hw_count = ARRAY_SIZE(version),
-   333		};
-   334	
-   335		match = dev_get_platdata(&pdev->dev);
-   336		if (!match)
-   337			return -ENODEV;
-   338	
-   339		opp_data = devm_kzalloc(&pdev->dev, sizeof(*opp_data), GFP_KERNEL);
-   340		if (!opp_data)
-   341			return -ENOMEM;
-   342	
-   343		opp_data->soc_data = match->data;
-   344	
-   345		opp_data->cpu_dev = get_cpu_device(0);
-   346		if (!opp_data->cpu_dev) {
-   347			pr_err("%s: Failed to get device for CPU0\n", __func__);
-   348			return -ENODEV;
-   349		}
-   350	
-   351		opp_data->opp_node = dev_pm_opp_of_get_opp_desc_node(opp_data->cpu_dev);
-   352		if (!opp_data->opp_node) {
-   353			dev_info(opp_data->cpu_dev,
-   354				 "OPP-v2 not supported, cpufreq-dt will attempt to use legacy tables.\n");
-   355			goto register_cpufreq_dt;
-   356		}
-   357	
-   358		ret = ti_cpufreq_setup_syscon_register(opp_data);
-   359		if (ret)
- > 360			goto fail_put_node;
-   361	
-   362		/*
-   363		 * OPPs determine whether or not they are supported based on
-   364		 * two metrics:
-   365		 *	0 - SoC Revision
-   366		 *	1 - eFuse value
-   367		 */
-   368		ret = ti_cpufreq_get_rev(opp_data, &version[0]);
-   369		if (ret)
-   370			goto fail_put_node;
-   371	
-   372		ret = ti_cpufreq_get_efuse(opp_data, &version[1]);
-   373		if (ret)
-   374			goto fail_put_node;
-   375	
-   376		if (opp_data->soc_data->multi_regulator) {
-   377			config.regulator_count = ARRAY_SIZE(default_reg_names);
-   378	
-   379			if (opp_data->soc_data->reg_names)
-   380				config.regulator_names = opp_data->soc_data->reg_names;
-   381			else
-   382				config.regulator_names = default_reg_names;
-   383		}
-   384	
-   385		opp_data->opp_table = dev_pm_opp_set_config(opp_data->cpu_dev, &config);
-   386		of_node_put(opp_data->opp_node);
-   387	
-   388		if (IS_ERR(opp_data->opp_table)) {
-   389			dev_err(opp_data->cpu_dev, "Failed to set OPP config\n");
-   390			return PTR_ERR(opp_data->opp_table);
-   391		}
-   392	
-   393	register_cpufreq_dt:
-   394		platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
-   395	
-   396		return 0;
-   397	}
-   398	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

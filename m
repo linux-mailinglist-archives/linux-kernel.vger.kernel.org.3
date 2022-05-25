@@ -2,143 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D501F534024
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775A553401E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbiEYPPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S240574AbiEYPOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245067AbiEYPOx (ORCPT
+        with ESMTP id S238266AbiEYPOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:14:53 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CFBB0A56
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=PmJeUcD7gmhS0PYNVlvnsEYDc66
-        oPHymA7qkWS2f7mc=; b=l6xpk6TF26KM1mnnh0+jz50FYpB78xor+ZgrgkGzOa6
-        /AE5kojTiMnLlP2sgBBwW9mnPWd2Spv7hLf4TLCWD4m9nh5Bjx0BlX7RFlB8wC/r
-        EPoJDhAWWgkiPoHLYjKyPthdV/nL9C63iYoaz5aIwR1E4OtFpfi5rvjYBMcreuxw
-        =
-Received: (qmail 1645302 invoked from network); 25 May 2022 17:13:58 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 May 2022 17:13:58 +0200
-X-UD-Smtp-Session: l3s3148p1@hA++hdffyRdZD++C
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Linh Phung <linh.phung.jy@renesas.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: renesas: r8a779f0: Add thermal support
-Date:   Wed, 25 May 2022 17:13:55 +0200
-Message-Id: <20220525151355.24175-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 25 May 2022 11:14:38 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6FEAF32C
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:14:32 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PEDi2e006422;
+        Wed, 25 May 2022 15:14:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=0DjzLnvXS5m4J+knrVU4+eYeKMRxzRvBJCrI0+BLOEk=;
+ b=NCxFnU4JW3DKRstIcl7Y9WrBXZCNM1uDwfIHasQIg8ffLNUC05ejFSPKgdEquAz9Hu2j
+ ydUivPhpkAn46TwRTPQ/iz1H5osHLLqEIPCcU8ccT1A86mS8X2oj/k/YLWQteyD1UyHt
+ 7vWIMa8BUsjq7Yi3TMpStBx+3uWdaSMJDD3lGcFYzCk2pJ07sOAcv2YHN0kgWMVoogni
+ OHD4a9mZoNhFgC/2+CeZDoFRJkxzhkrIGRQ7WyY/aiEoTU8lQ0dwKNQy2fWqdAaxBCmS
+ 6EGSvcj92I56CUyrVrxj2NyK7fHDm82vhfEIEQltjZeP5nXd1ainijszg8LLjhSTWAfv Zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9p1k1cw6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 15:14:09 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24PEYLHm026557;
+        Wed, 25 May 2022 15:14:08 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9p1k1cvd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 15:14:08 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24PFCNAB029478;
+        Wed, 25 May 2022 15:14:06 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g93uw9c4t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 15:14:06 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24PFE41O16515506
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 May 2022 15:14:04 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C31552050;
+        Wed, 25 May 2022 15:14:04 +0000 (GMT)
+Received: from [9.43.97.219] (unknown [9.43.97.219])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EA0CB5204E;
+        Wed, 25 May 2022 15:13:58 +0000 (GMT)
+Message-ID: <311b0834-c675-fd15-8184-82b122f4a9cc@linux.ibm.com>
+Date:   Wed, 25 May 2022 20:43:57 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 0/7] crash: Kernel handling of CPU and memory hot
+ un/plug
+Content-Language: en-US
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220505184603.1548-1-eric.devolder@oracle.com>
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <20220505184603.1548-1-eric.devolder@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6038ib21Rvf4za0EmcR7D5OGLrrgp5HG
+X-Proofpoint-ORIG-GUID: Tu2hJ9EDPatzne2PGr8OnG6cIi89npRg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-25_04,2022-05-25_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ clxscore=1015 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205250079
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linh Phung <linh.phung.jy@renesas.com>
+Hello Eric,
 
-Add support for 3 TSC nodes of thermal. The 4th node is for the control
-domain and not for Linux.
+On 06/05/22 00:15, Eric DeVolder wrote:
+> When the kdump service is loaded, if a CPU or memory is hot
+> un/plugged, the crash elfcorehdr (for x86), which describes the CPUs
+> and memory in the system, must also be updated, else the resulting
+> vmcore is inaccurate (eg. missing either CPU context or memory
+> regions).
+>
+> The current solution utilizes udev to initiate an unload-then-reload
+> of the kdump image (e. kernel, initrd, boot_params, puratory and
+> elfcorehdr) by the userspace kexec utility. In previous posts I have
+> outlined the significant performance problems related to offloading
+> this activity to userspace.
+>
+> This patchset introduces a generic crash hot un/plug handler that
+> registers with the CPU and memory notifiers. Upon CPU or memory
+> changes, this generic handler is invoked and performs important
+> housekeeping, for example obtaining the appropriate lock, and then
+> invokes an architecture specific handler to do the appropriate
+> updates.
+>
+> In the case of x86_64, the arch specific handler generates a new
+> elfcorehdr, and overwrites the old one in memory. No involvement
+> with userspace needed.
+>
+> To realize the benefits/test this patchset, one must make a couple
+> of minor changes to userspace:
+>
+>   - Disable the udev rule for updating kdump on hot un/plug changes.
+>     Add the following as the first two lines to the udev rule file
+>     /usr/lib/udev/rules.d/98-kexec.rules:
 
-Signed-off-by: Linh Phung <linh.phung.jy@renesas.com>
-[wsa: rebased, fixed resource size, removed unused 4th node breaking probe]
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
----
+If we can have a sysfs attribute to advertise this feature then userspace
+utilities (kexec tool/udev rules) can take action accordingly. In short, 
+it will
+help us maintain backward compatibility.
 
-Works fine on my Spider board and allowed me to disconnect the fan :)
+kexec tool can use the new sysfs attribute and allocate additional 
+buffer space
+for elfcorehdr accordingly. Similarly, the checksum-related changes can come
+under this check.
 
- arch/arm64/boot/dts/renesas/r8a779f0.dtsi | 56 +++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+Udev rule can use this sysfs file to decide kdump service reload is 
+required or not.
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
-index df46fb87cffc..d89064f86d85 100644
---- a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
-@@ -157,6 +157,18 @@ sysc: system-controller@e6180000 {
- 			#power-domain-cells = <1>;
- 		};
- 
-+		tsc: thermal@e6198000 {
-+			compatible = "renesas,r8a779f0-thermal";
-+			/* The 4th sensor is in control domain and not for Linux */
-+			reg = <0 0xe6198000 0 0x200>,
-+			      <0 0xe61a0000 0 0x200>,
-+			      <0 0xe61a8000 0 0x200>;
-+			clocks = <&cpg CPG_MOD 919>;
-+			power-domains = <&sysc R8A779F0_PD_ALWAYS_ON>;
-+			resets = <&cpg 919>;
-+			#thermal-sensor-cells = <1>;
-+		};
-+
- 		i2c0: i2c@e6500000 {
- 			compatible = "renesas,i2c-r8a779f0",
- 				     "renesas,rcar-gen4-i2c";
-@@ -360,6 +372,50 @@ prr: chipid@fff00044 {
- 		};
- 	};
- 
-+	thermal-zones {
-+		sensor_thermal1: sensor-thermal1 {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+			thermal-sensors = <&tsc 0>;
-+
-+			trips {
-+				sensor1_crit: sensor1-crit {
-+					temperature = <120000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		sensor_thermal2: sensor-thermal2 {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+			thermal-sensors = <&tsc 1>;
-+
-+			trips {
-+				sensor2_crit: sensor2-crit {
-+					temperature = <120000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		sensor_thermal3: sensor-thermal3 {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+			thermal-sensors = <&tsc 2>;
-+
-+			trips {
-+				sensor3_crit: sensor3-crit {
-+					temperature = <120000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--- 
-2.35.1
+Thanks,
+Sourabh Jain
 

@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A2B534612
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E5553461B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245476AbiEYVwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 17:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
+        id S234857AbiEYVzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 17:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbiEYVwL (ORCPT
+        with ESMTP id S235471AbiEYVzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 17:52:11 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0628A11A3D
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:52:10 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id w21so2010272edi.9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:52:09 -0700 (PDT)
+        Wed, 25 May 2022 17:55:07 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68622B41EE
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:55:00 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso1898281wma.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hyinZ5fnsRrQlBB9/BEXUkJe52nbvOp0IA1YT1qNZLQ=;
-        b=DYNbNTHCGA3+q6Jyj3+tG7U4DthPafd2+ejUYADAkRfzOcAkHUzjIKAcspioJJXPTI
-         68yacIqrEwW9LHvc3A9zE7xMxV3ffJlLhmMe4cPgxySxntvd2KdLuqsUuoIvMQGQj2AD
-         /ZFSdTaAD7ARVQTbB18QRd9WTMBNqNrE2fVh0=
+        bh=/oBh+Znbc88NiDeYaHpcLs3NJcAFoy3MCBRZMNMGpQw=;
+        b=arfvwNzDDLgge/qyXCYs6mi8SFh5fASF9WAvA3CMnMWaUtgiy3QFHT7IU6lKDS2BVh
+         WrL/CARwCWxnEYK5zRUId/2SUMGApf4e7UBK+Zdn3lso/PvChAqUP9DhzLZq2s/6ZgoD
+         7mVF2DH4324yfM97di0AzI26SutPzq4Md+/+M8nW55zkuz+c1CrrYJII0V/mjGbxhM+k
+         TTm4lUAXyVT4A0fFNZA+IKbEmdamDebiDlU6MnFM2Nw4SFeK4zcsDKm4Tyda/deXw34G
+         fHwUjAUPL/WKKTXeekwmgsvqPXjsSnqJnZO1cJ0qoQ2xA501AnbsFOJueL4csev4WMj4
+         Jorw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hyinZ5fnsRrQlBB9/BEXUkJe52nbvOp0IA1YT1qNZLQ=;
-        b=AI4YZ55JiqnL0K3knEONVQs5gzFOlTm1Srw/NT1EakFKM2h0y23Vfr2hll748YbwNy
-         PzkTXUAJtWLlh48qAFWF8PinKwnpiCaxhyPCaVR4LmYnAmYOtGPY2K8dT0/XWYnMlSpv
-         oixTtLPUv5voCFauDvIFiFc8O0eVx9bG0h6CBL0NayaZrBqCEV1EpEhTYzLU2UBNc54U
-         ol5XtnhR2AlKHMBVJ4WNaDBXa5SNviRcpjJXzEWCHoe+9dqsFbe0jOZMEX7hO9Zu2KZ2
-         /1XmoiW0TR7+2w2SlgbVepqBJ1eNGNpMU5+X7MA9yqb06JEke1+7X3RN+2rURppexwpv
-         /Q3Q==
-X-Gm-Message-State: AOAM53143NJHy3tBBfwtimrAwnPThmhF1MAam7iQLgguaKzI3Gycl+eT
-        WAJI6aa+y5I0tR1YfraKIeWB1mUXBrjiWEC9AbE=
-X-Google-Smtp-Source: ABdhPJyq7qvmh0mtI7p3aK7Z3e23JWRYo487+ioNybQ3sZzKlfYs9ui9BMFBquYsNi6Zjklkazw6Gg==
-X-Received: by 2002:aa7:cb8f:0:b0:42a:e9bd:3b5f with SMTP id r15-20020aa7cb8f000000b0042ae9bd3b5fmr36460247edt.8.1653515528350;
-        Wed, 25 May 2022 14:52:08 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id oq17-20020a170906cc9100b006fec4ee28d0sm4471086ejb.189.2022.05.25.14.52.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 14:52:07 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id e2so20239346wrc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:52:07 -0700 (PDT)
-X-Received: by 2002:a5d:59ac:0:b0:20e:6fd6:88c1 with SMTP id
- p12-20020a5d59ac000000b0020e6fd688c1mr26364386wrr.442.1653515526783; Wed, 25
- May 2022 14:52:06 -0700 (PDT)
+        bh=/oBh+Znbc88NiDeYaHpcLs3NJcAFoy3MCBRZMNMGpQw=;
+        b=PJWknzOutSGr5DUOOYIdjZHJ2z6BNMKTMI6/7/E3WZiiDhDHZRRDt7DsvWc4lQpZBR
+         dA7sBx7O63ron94VDeAs05Cg+fOkkxnSeq/qr4HPSOzyGrluQyHB/B6mVK7Xm/5SVZOU
+         enCIsl/AN5F/YiUKNP6DCy4FS2p35UGptVnPEn4pevdjzbi4Yo18vs2Nhs3LKlHXX2bp
+         DaufYoWhSCllDvWwBwH/PbldeMe5IjkDD+rKMKkY4+6l6RuqHjAYO390U2yOYrHstq4A
+         pboNfHdFQuVB/QEjGwI4f01Zqopd9GAqth9KiGoQ72CEs7p2noyoXjAzdNvKjI5t/BIg
+         j85A==
+X-Gm-Message-State: AOAM5309iu14HQ2Gu76wiEzSElL4otQ7TIAjvqrGlPI0NRNS2dMSWFQD
+        U3U0hVYMOgetoMiYxWisPXXZNOArCw4XYOe672Jttg==
+X-Google-Smtp-Source: ABdhPJwEdTcOuaFFxDw66wiF82VdkmXZa5C+ZdHZn9Ask4eKJm/UyqU4NfEyal57N8Yt5HepbbE1akxgZF/HJ+Ov6SQ=
+X-Received: by 2002:a1c:e903:0:b0:397:36b8:795a with SMTP id
+ q3-20020a1ce903000000b0039736b8795amr10328612wmc.98.1653515698905; Wed, 25
+ May 2022 14:54:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220524014938.46153-1-acme@kernel.org>
-In-Reply-To: <20220524014938.46153-1-acme@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 25 May 2022 14:51:50 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh3kZ19JRu_sYft5-=JYUa82ZW6BnfyU8FzU2uXmnJtjQ@mail.gmail.com>
-Message-ID: <CAHk-=wh3kZ19JRu_sYft5-=JYUa82ZW6BnfyU8FzU2uXmnJtjQ@mail.gmail.com>
-Subject: Re: [GIT PULL] perf tools changes for v5.19: 1st batch
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
+References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-11-brad@pensando.io>
+ <20220412110622.2xsk3k63dafqxib5@mobilestation>
+In-Reply-To: <20220412110622.2xsk3k63dafqxib5@mobilestation>
+From:   Brad Larson <brad@pensando.io>
+Date:   Wed, 25 May 2022 14:54:47 -0700
+Message-ID: <CAK9rFnzp0+80dX_-NYidfVXWJ1sru5mNk1vgVDzoV7VeEekpwQ@mail.gmail.com>
+Subject: Re: [PATCH 10/11] spi: dw: Add support for Pensando Elba SoC
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Carsten Haitzler <carsten.haitzler@arm.com>,
-        Dmitriy Vyukov <dvyukov@google.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Eric Lin <eric.lin@sifive.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Ian Rogers <irogers@google.com>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        David Clear <dac2@pensando.io>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 6:49 PM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+Hi Sergey,
+
+On Tue, Apr 12, 2022 at 4:06 AM Serge Semin <fancer.lancer@gmail.com> wrote:
 >
->   - debuginfod support improvements.
+> > +static void elba_spics_set_cs(struct dw_spi_elba *dwselba, int cs, int enable)
+> > +{
+> > +     regmap_update_bits(dwselba->regmap, dwselba->reg, ELBA_SPICS_MASK(cs),
+> > +                        ELBA_SPICS_SET(cs, enable));
+> > +}
+> > +
+> > +static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
+>
+> The methods naming is ambiguous. Moreover it breaks this module naming
+> convention. Could you change them to something like:
+> dw_spi_elba_override_cs()
+> and
+> dw_spi_elba_set_cs()
+> ?
 
-Does this mean that things don't silently come to a screeching halt
-because you don't have some debug info, and it takes half an hour to
-download it all, and you spend the next hour trying to figure out why?
+Yes, changed elba_spics_set_cs() -> dw_spi_elba_override_cs()
 
-I'm not bitter about it. No sirree. I enjoy wondering why something
-isn't responding.
+> > +     /* deassert cs */
+>
+> > +     elba_spics_set_cs(dwselba, 0, 1);
+> > +     elba_spics_set_cs(dwselba, 1, 1);
+>
+> What if the CS lines are of the active-high type? In that case basically
+> you get to do the opposite to what you claim in the comment here.
+>
+> Note the CS setting into the deactivated state is done in the spi_setup()
+> method anyway, at the moment of the peripheral SPI device registration
+> stage (see its calling the spi_set_cs() function). Thus what you are doing
+> here is redundant.
 
-                      Linus
+Yes this is a redundant initialization and is removed.  For Elba these CS lines
+are active-low only.
+
+Regards,
+Brad

@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7F0533C16
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57838533C1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236907AbiEYL4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S243148AbiEYL43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243094AbiEYL4R (ORCPT
+        with ESMTP id S242087AbiEYL4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:56:17 -0400
+        Wed, 25 May 2022 07:56:24 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3EC38A7;
-        Wed, 25 May 2022 04:56:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D070EE75;
+        Wed, 25 May 2022 04:56:22 -0700 (PDT)
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id D8F475C027E;
-        Wed, 25 May 2022 07:56:15 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 3F7475C0281;
+        Wed, 25 May 2022 07:56:22 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 25 May 2022 07:56:15 -0400
+  by compute4.internal (MEProxy); Wed, 25 May 2022 07:56:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
          h=cc:cc:content-transfer-encoding:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1653479775; x=
-        1653566175; bh=2+KoNBAK1Qn+kzqXC6ldLIVvqsTMBGa618ttf6rHbrk=; b=T
-        Jvt693/Gnxlsr/vT5AEvcnbUr56DtwGGanP+3OmQ7VBAm6HiFF0e/HDcXaeHOUzF
-        C32k7fnHZ/05ncV3d8VLJVwDnWJuAV3o5SXx9q/KiL0GEg8IQWaev6meLcNVOSjE
-        DixdnTojb0OOysqqQVaWHmdNPm7MKz8yLUmGjlqAbM6ZUMV/v47JVAI9xt/hmYGK
-        v3TGfLcZNR2sJtWRmyC1cRlL5CmxQglhHEEzA1fIBgKrkFThl9cfIWpcqtb5fmG7
-        GzIyULByxA0v3v/0kwONt9xSaM6kebNdpIa3z5XoFk2+Kq2ItwTA+Q32ldIIijEL
-        AyCAIsMJ1VO59cDxVjTGA==
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1653479782; x=
+        1653566182; bh=oMGSZjzbX1LP2PGoFYsSrfaJh355mkj0HkJRK8r9QFM=; b=N
+        3WMk9NFVaV5ZIIkh1jGR23Sfq8PKuuM+zCveuDI2tlN9krySo9gxFxiJZcfVDdyV
+        OKuBDK3WVSk5kloS+P6A04Fh3tkt5HDQTajmaIHU9ggyWN229Nvc7v0FVhLYK5nm
+        Tnv1MyhBpKbddhOJiwh1uYNOKOhuKJ9XsYZAA8rrVFIXEdHzO00RMe91oPFgQlYb
+        TUTd7QcIPymScizc7HFVAxxoQXuF7ovp10GhcLsmoF55LPQ6aABZLm0OL8qmaBU8
+        B2nJKGJ58d6qoJYgYBekhpnLP3EIlU3Wt/StBTgsDBrrZY/bYqU7SUx3NN8o5X5u
+        qJG7DiTdj0bsqC0I1nvqA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1653479775; x=1653566175; bh=2+KoNBAK1Qn+k
-        zqXC6ldLIVvqsTMBGa618ttf6rHbrk=; b=OfFFrq8s1YvhhuWhfLp6jHgvpmw16
-        sRAm5KHVRUhCxgi1ShB8ng05NNRtuvW1slPX4zWhn3qZ6sfnOXYN1SoX8WKNgs4z
-        qd//xqWZO09Ev3v7i1x1sFWl5ZwNnRcAQCucD7tgp4K+px5T+pJ6oXkFzgVcMd3C
-        DOMJGFFhuLclE7w9hHf44igeHYC1yBSAosjGKlI3m5SY/Yxj7kVMjtFOmrWSbtKl
-        +/qXgypIHyyfsc9K+LIWxXde934TfNhKxiN/mwE0OQvjsRQUeJnCjexKDYt+TFFd
-        KTwQnEW7xFjou9ldibRmOovhwNLmP61SUXhuri2lDjim1jz9wlAfzVMqA==
-X-ME-Sender: <xms:XxmOYgrVZ-NsIuT5R_8rTaW7t5EP_z2HexxdqznQbjgLNtKrYIZ4wQ>
-    <xme:XxmOYmrNynVlZ7ftqHXPmqM1ijLWERU6dT4yqGxr2_Qh08Z_j00O62Hrq5WkmOdNt
-    UMuvr6nU_fHXg018LI>
-X-ME-Received: <xmr:XxmOYlMK_5wvYpGaMqZ6WKPAAcwfZOE9hlDQXGgwdLmSQRd1HnJg8J4SXhPsg9HZvqSiXH_QG4UX>
+        :x-sasl-enc; s=fm1; t=1653479782; x=1653566182; bh=oMGSZjzbX1LP2
+        PGoFYsSrfaJh355mkj0HkJRK8r9QFM=; b=OjTUUhScHh0SKedijEow7d6jYh+dT
+        h1KDmakCqK4D+Au9kI7JYjiA7TIhAAHGx1Sas61XifkziQ5YC9C8WuTruUknNGkK
+        HlkpG4NjTgAIDlUdduPunCZvJteqTcuuUTXcsdmr0hpq6nUuYrrHf+qsFnVXNtau
+        aEXUNhSudtGXP6wXynAVOaiMhDCeRfDhkgJV8XHKf0ojsHbiPSGGe4L396x578Q3
+        BoNdAxTOnzoHUPKY5Bdpi3uUwi6SwZ0CWhhJxQPyWhXnYX7gOumJNpJhMANjwhlM
+        O3Rhj3gDN3Zy5LzazK0Ky+Nk3AzRdVG/YQZb6heDe+3eZiUvo9E/XilXA==
+X-ME-Sender: <xms:ZhmOYr5iaEzv4JysSz3LahmRrE-RvvML_w-I8Oklk_NKMs2hBCx_pA>
+    <xme:ZhmOYg7bRmQLXqn_ug9qhtmWi2Y_rFOSzTcutYcBoFVg6BXhaBhyz0szt91dz2Aii
+    ws_hKwWmAbR3Op_ppI>
+X-ME-Received: <xmr:ZhmOYicxQmch75tzx-5oqBXul83r8xBBn1cNEOZuTIT9V2UUMXeclnw2wsANGOrGHqaDv4Vz0JwA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeehgdeghecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
     dtredttdenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
     ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeeitdefkeetle
     dvleevveeuueejffeugfeuvdetkeevjeejueetudeftefhgfehheenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
+    ufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
     hsthgrihhrvdefrdhmvg
-X-ME-Proxy: <xmx:XxmOYn5jRb_acCPrKkTaa-DKhQoZcMJ4FnXR-q1QqW08fUHgI9iZyQ>
-    <xmx:XxmOYv5UWgBmeRPWVHd0ureaiK9iT0vGoTyox0DSSssA2Qp3VU0LIg>
-    <xmx:XxmOYngA4W20hVL4Q8PJQFYV-J8Ivk_ZCrNE3g7AmE2VYa7sVrzOKQ>
-    <xmx:XxmOYswh-hsDUW2lyClI460elVXeTIZ9rKJlcj76JbcYsZWsmrBvyQ>
+X-ME-Proxy: <xmx:ZhmOYsJjL9YVIcD7RVCNnvwnwo7W6iMjFeFc_QSW98UI3709geZvCw>
+    <xmx:ZhmOYvKJ6TQtXsvBf7VzKfUEfn_Uenp2or4eXz8tUsdUGG8oVgIEmg>
+    <xmx:ZhmOYlzEXeExHtKjTxG1Zl4uL9u5Xl9Fxdv7VEtGVP8wTWI1RUCLGw>
+    <xmx:ZhmOYkBGPurEfNAx6BV2dFyFZykr2EpHeVjFWcKhB9xHC4ysy77E6w>
 Feedback-ID: ifd214418:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 May 2022 07:56:09 -0400 (EDT)
+ 25 May 2022 07:56:16 -0400 (EDT)
 From:   Alistair Francis <alistair@alistair23.me>
 To:     lgirdwood@gmail.com, lee.jones@linaro.org, broonie@kernel.org,
         robh+dt@kernel.org, kernel@pengutronix.de
@@ -72,9 +72,9 @@ Cc:     s.hauer@pengutronix.de, alistair23@gmail.com,
         linux-hwmon@vger.kernel.org, linux-imx@nxp.com, linux@roeck-us.net,
         rui.zhang@intel.com, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, Alistair Francis <alistair@alistair23.me>
-Subject: [PATCH v21 2/4] ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
-Date:   Wed, 25 May 2022 21:55:52 +1000
-Message-Id: <20220525115554.430971-3-alistair@alistair23.me>
+Subject: [PATCH v21 3/4] ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a
+Date:   Wed, 25 May 2022 21:55:53 +1000
+Message-Id: <20220525115554.430971-4-alistair@alistair23.me>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220525115554.430971-1-alistair@alistair23.me>
 References: <20220525115554.430971-1-alistair@alistair23.me>
@@ -90,42 +90,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the silergy,sy7636a and silergy,sy7636a-regulator for the
+Enable the silergy,sy7636a and silergy,sy7636a-regulator on the
 reMarkable2.
 
 Signed-off-by: Alistair Francis <alistair@alistair23.me>
 ---
- arch/arm/configs/imx_v6_v7_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 62 +++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
-index f7498df08dfe..81fe604bf4ec 100644
---- a/arch/arm/configs/imx_v6_v7_defconfig
-+++ b/arch/arm/configs/imx_v6_v7_defconfig
-@@ -223,6 +223,7 @@ CONFIG_RN5T618_POWER=m
- CONFIG_SENSORS_MC13783_ADC=y
- CONFIG_SENSORS_GPIO_FAN=y
- CONFIG_SENSORS_IIO_HWMON=y
-+CONFIG_SENSORS_SY7636A=y
- CONFIG_THERMAL_STATISTICS=y
- CONFIG_THERMAL_WRITABLE_TRIPS=y
- CONFIG_CPU_THERMAL=y
-@@ -238,6 +239,7 @@ CONFIG_MFD_DA9062=y
- CONFIG_MFD_DA9063=y
- CONFIG_MFD_MC13XXX_SPI=y
- CONFIG_MFD_MC13XXX_I2C=y
-+CONFIG_MFD_SY7636A=y
- CONFIG_MFD_RN5T618=y
- CONFIG_MFD_STMPE=y
- CONFIG_REGULATOR_FIXED_VOLTAGE=y
-@@ -251,6 +253,7 @@ CONFIG_REGULATOR_MC13783=y
- CONFIG_REGULATOR_MC13892=y
- CONFIG_REGULATOR_PFUZE100=y
- CONFIG_REGULATOR_RN5T618=y
-+CONFIG_REGULATOR_SY7636A=y
- CONFIG_RC_CORE=y
- CONFIG_RC_DEVICES=y
- CONFIG_IR_GPIO_CIR=y
+diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
+index a2a91bfdd98e..99ac0d242936 100644
+--- a/arch/arm/boot/dts/imx7d-remarkable2.dts
++++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
+@@ -22,6 +22,27 @@ memory@80000000 {
+ 		reg = <0x80000000 0x40000000>;
+ 	};
+ 
++	thermal-zones {
++		epd-thermal {
++			thermal-sensors = <&epd_pmic>;
++			polling-delay-passive = <30000>;
++			polling-delay = <30000>;
++			trips {
++				trip0 {
++					temperature = <49000>;
++					hysteresis = <2000>;
++					type = "passive";
++				};
++
++				trip1 {
++					temperature = <50000>;
++					hysteresis = <2000>;
++					type = "critical";
++				};
++			};
++		};
++	};
++
+ 	reg_brcm: regulator-brcm {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "brcm_reg";
+@@ -84,6 +105,33 @@ wacom_digitizer: digitizer@9 {
+ 	};
+ };
+ 
++&i2c4 {
++	clock-frequency = <100000>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_i2c4>;
++	pinctrl-1 = <&pinctrl_i2c4>;
++	status = "okay";
++
++	epd_pmic: sy7636a@62 {
++		compatible = "silergy,sy7636a";
++		reg = <0x62>;
++		status = "okay";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_epdpmic>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		#thermal-sensor-cells = <0>;
++
++		epd-pwr-good-gpios = <&gpio6 21 GPIO_ACTIVE_HIGH>;
++		regulators {
++			reg_epdpmic: vcom {
++				regulator-name = "vcom";
++				regulator-boot-on;
++			};
++		};
++	};
++};
++
+ &snvs_pwrkey {
+ 	status = "okay";
+ };
+@@ -177,6 +225,13 @@ MX7D_PAD_SAI1_TX_BCLK__GPIO6_IO13	0x14
+ 		>;
+ 	};
+ 
++	pinctrl_epdpmic: epdpmicgrp {
++		fsl,pins = <
++			MX7D_PAD_SAI2_RX_DATA__GPIO6_IO21 0x00000074
++			MX7D_PAD_ENET1_RGMII_TXC__GPIO7_IO11 0x00000014
++		>;
++	};
++
+ 	pinctrl_i2c1: i2c1grp {
+ 		fsl,pins = <
+ 			MX7D_PAD_I2C1_SDA__I2C1_SDA		0x4000007f
+@@ -184,6 +239,13 @@ MX7D_PAD_I2C1_SCL__I2C1_SCL		0x4000007f
+ 		>;
+ 	};
+ 
++	pinctrl_i2c4: i2c4grp {
++		fsl,pins = <
++			MX7D_PAD_I2C4_SDA__I2C4_SDA		0x4000007f
++			MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
++		>;
++	};
++
+ 	pinctrl_uart1: uart1grp {
+ 		fsl,pins = <
+ 			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
 -- 
 2.35.3
 

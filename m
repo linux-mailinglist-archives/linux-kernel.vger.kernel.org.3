@@ -2,95 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590A0533BEC
+	by mail.lfdr.de (Postfix) with ESMTP id F23E6533BEE
 	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242981AbiEYLok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S241171AbiEYLov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242936AbiEYLoi (ORCPT
+        with ESMTP id S242988AbiEYLor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:44:38 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCE8A204F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:44:36 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s68so2396030pgs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nCNfEzGqMIoFCilTHapRIVeS9mBRmJZJ0gWnXehqDrw=;
-        b=KKorYnAd9m8FFqkZWn1KRNBoG7l7TplARvR9C9P62KHQROZ+jCx3jrm3pqL/gal3c9
-         tFxlYeVI5en3DpBcz9uCwkckr9YIthe+s0N26u6nJlmW2jp2woFwMCKEv8tbOJ6Ue3TI
-         WbS9a4byWlYC8V9D8SCd2meKPqDE/U0FTn5968T/hQciYJlyiEq9tZ94pXPADWkvFk0j
-         eBCLDxzMmIeDgmSoxpS+Db6wfsGf6U2Vh4SNWSSt6qCjruPdllqx+6OFrhWa3ZcNnszL
-         b/ePL8Ohf4qX+HlckCZ2au3uCxyAFMSgsiIR8AcKFf1o7nK3X+9eTEmBH7FOmpCbJ/vp
-         WKyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nCNfEzGqMIoFCilTHapRIVeS9mBRmJZJ0gWnXehqDrw=;
-        b=nwSbq9ePTqdumSStETveLbTsFt0MBwLtoGSpcVvjYqxYPfwW563YR7tcnQEhJoFe9S
-         YqjzT53IINEXiRNGYv/xHu0TxhnrVqYLgnsXUi5s76BT2DILW8iIyJ+YHexz+2dwYHqK
-         f2T4kztXWuw04dVC3O8Rvuak1BJMxU6KsS6XCI5oeVYpab4Fu2HWVFgdUGVlZggh+0Sa
-         N6rh+sfntHqE+duAJO7xXqjtbvvCZA0/KYubfn4qL6Wu+wCZ2hh24P1AK8+T7F4/IAoR
-         dom8P2SjhVxY/LMlUx3xNQHOgUGU0a1+E9fPTSWEX+dLYtix64QKNsxZ2BaqColpb+LP
-         vu5g==
-X-Gm-Message-State: AOAM530/R4G30MPvHIODX938MhDgr/CjNrHTLk2BKVCyRU4IzoTsicmD
-        cEOsX7ws8V7W9Ot8BacqynAjXA==
-X-Google-Smtp-Source: ABdhPJwECqnEoVXXBBz8+x+EnBqP+BiRhIpyeDXKNS2lypsKKNocA6JT73IkkBBWb0ZU66Vx2+IUag==
-X-Received: by 2002:a05:6a00:2353:b0:518:96b7:ceb8 with SMTP id j19-20020a056a00235300b0051896b7ceb8mr16934713pfj.5.1653479076348;
-        Wed, 25 May 2022 04:44:36 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:c40f:7b5:4fa8:df3f])
-        by smtp.gmail.com with ESMTPSA id u22-20020a17090ae01600b001df666ebddesm1406580pjy.6.2022.05.25.04.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 04:44:36 -0700 (PDT)
-Date:   Wed, 25 May 2022 19:44:31 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        longman@redhat.com
-Subject: Re: [PATCH v4 06/11] mm: thp: make split queue lock safe when LRU
- pages are reparented
-Message-ID: <Yo4Wn7IBdNBR8dWx@FVFYT0MHHV2J.usts.net>
-References: <20220524060551.80037-1-songmuchun@bytedance.com>
- <20220524060551.80037-7-songmuchun@bytedance.com>
- <Yo2aa661fepAOvjO@carbon>
+        Wed, 25 May 2022 07:44:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E190A205F;
+        Wed, 25 May 2022 04:44:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 589DFB81D26;
+        Wed, 25 May 2022 11:44:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0320C385B8;
+        Wed, 25 May 2022 11:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653479083;
+        bh=GAfjtUV+VWXEWarM+pI0A5+TD8LhpNPOn8YUB/nmqb0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nMZI1c30fdkMelKJmBEEYsjENiErYsHgTNqHWeC3i0pzuYJeazxf2DgHGxw7UjjXv
+         x9d+T6WmiGwye83M7WHABUfNiIqCDr+2TlDVa0vj1dSX4xmC9Y4Ro78sFrwDT+Vtfw
+         qmAYracvjaFf3uMyCcGKNv7xTeGcWbuqVuJOICEsWyhhRGUauQM1caRVIQvhnZSIld
+         3F+AKdR98MQ87737+f70Sr+lh4UP/kBp7F7E47gKgtRA7akUs7JgWepg5oF7FvQeO2
+         Ej0pSsnXJRt7uyhnwy2BPY8BXDl9AJcRWGeqT0snkxrliS7V6oGQ/h12k6hpyDWNPB
+         9y3jXMHVCN/GA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id F0BE34007E; Wed, 25 May 2022 08:44:38 -0300 (-03)
+Date:   Wed, 25 May 2022 08:44:38 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        Milian Wolff <milian.wolff@kdab.com>,
+        bpf <bpf@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Blake Jones <blakejones@google.com>
+Subject: Re: [PATCH 3/6] perf record: Implement basic filtering for off-cpu
+Message-ID: <Yo4Wpqzwp+XmfkMV@kernel.org>
+References: <20220518224725.742882-1-namhyung@kernel.org>
+ <20220518224725.742882-4-namhyung@kernel.org>
+ <CAP-5=fWfZ_MqiAUx-tdO1C=Dyyzno6FbBp+KGAb_MweXs+N7Jw@mail.gmail.com>
+ <CAM9d7cgxdFJJQOg6ivuy4+nh=WME2fgjvM-kSWLv9zd49yxR4A@mail.gmail.com>
+ <Yo4SqnEqzo2Rt+PF@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yo2aa661fepAOvjO@carbon>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yo4SqnEqzo2Rt+PF@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 07:54:35PM -0700, Roman Gushchin wrote:
-> On Tue, May 24, 2022 at 02:05:46PM +0800, Muchun Song wrote:
-> > Similar to the lruvec lock, we use the same approach to make the split
-> > queue lock safe when LRU pages are reparented.
-> > 
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Em Wed, May 25, 2022 at 08:27:38AM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Thu, May 19, 2022 at 02:02:28PM -0700, Namhyung Kim escreveu:
+> > On Wed, May 18, 2022 at 9:02 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > On Wed, May 18, 2022 at 3:47 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > > >
+> > > > It should honor cpu and task filtering with -a, -C or -p, -t options.
+> > > >
+> > > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > > > ---
+> > > >  tools/perf/builtin-record.c            |  2 +-
+> > > >  tools/perf/util/bpf_off_cpu.c          | 78 +++++++++++++++++++++++---
+> > > >  tools/perf/util/bpf_skel/off_cpu.bpf.c | 52 +++++++++++++++--
+> > > >  tools/perf/util/off_cpu.h              |  6 +-
+> > > >  4 files changed, 123 insertions(+), 15 deletions(-)
+> > > >
+> > > > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> > > > index 91f88501412e..7f60d2eac0b4 100644
+> > > > --- a/tools/perf/builtin-record.c
+> > > > +++ b/tools/perf/builtin-record.c
+> > > > @@ -907,7 +907,7 @@ static int record__config_text_poke(struct evlist *evlist)
+> > > >
+> > > >  static int record__config_off_cpu(struct record *rec)
+> > > >  {
+> > > > -       return off_cpu_prepare(rec->evlist);
+> > > > +       return off_cpu_prepare(rec->evlist, &rec->opts.target);
+> > > >  }
+> > > >
+> > > >  static bool record__kcore_readable(struct machine *machine)
+> > > > diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
+> > > > index 9ed7aca3f4ac..b5e2d038da50 100644
+> > > > --- a/tools/perf/util/bpf_off_cpu.c
+> > > > +++ b/tools/perf/util/bpf_off_cpu.c
+> > > > @@ -6,6 +6,9 @@
+> > > >  #include "util/off_cpu.h"
+> > > >  #include "util/perf-hooks.h"
+> > > >  #include "util/session.h"
+> > > > +#include "util/target.h"
+> > > > +#include "util/cpumap.h"
+> > > > +#include "util/thread_map.h"
+> > > >  #include <bpf/bpf.h>
+> > > >
+> > > >  #include "bpf_skel/off_cpu.skel.h"
+> > > > @@ -60,8 +63,23 @@ static int off_cpu_config(struct evlist *evlist)
+> > > >         return 0;
+> > > >  }
+> > > >
+> > > > -static void off_cpu_start(void *arg __maybe_unused)
+> > > > +static void off_cpu_start(void *arg)
+> > > >  {
+> > > > +       struct evlist *evlist = arg;
+> > > > +
+> > > > +       /* update task filter for the given workload */
+> > > > +       if (!skel->bss->has_cpu && !skel->bss->has_task &&
+> > > > +           perf_thread_map__pid(evlist->core.threads, 0) != -1) {
+> > > > +               int fd;
+> > > > +               u32 pid;
+> > > > +               u8 val = 1;
+> > > > +
+> > > > +               skel->bss->has_task = 1;
+> > > > +               fd = bpf_map__fd(skel->maps.task_filter);
+> > > > +               pid = perf_thread_map__pid(evlist->core.threads, 0);
+> > > > +               bpf_map_update_elem(fd, &pid, &val, BPF_ANY);
+> > > > +       }
+> > > > +
+> > > >         skel->bss->enabled = 1;
+> > > >  }
+> > > >
+> > > > @@ -71,31 +89,75 @@ static void off_cpu_finish(void *arg __maybe_unused)
+> > > >         off_cpu_bpf__destroy(skel);
+> > > >  }
+> > > >
+> > > > -int off_cpu_prepare(struct evlist *evlist)
+> > > > +int off_cpu_prepare(struct evlist *evlist, struct target *target)
+> > > >  {
+> > > > -       int err;
+> > > > +       int err, fd, i;
+> > > > +       int ncpus = 1, ntasks = 1;
+> > > >
+> > > >         if (off_cpu_config(evlist) < 0) {
+> > > >                 pr_err("Failed to config off-cpu BPF event\n");
+> > > >                 return -1;
+> > > >         }
+> > > >
+> > > > -       set_max_rlimit();
+> > > > -
+> > > > -       skel = off_cpu_bpf__open_and_load();
+> > > > +       skel = off_cpu_bpf__open();
+> > > >         if (!skel) {
+> > > >                 pr_err("Failed to open off-cpu BPF skeleton\n");
+> > > >                 return -1;
+> > > >         }
+> > > >
+> > > > +       /* don't need to set cpu filter for system-wide mode */
+> > > > +       if (target->cpu_list) {
+> > > > +               ncpus = perf_cpu_map__nr(evlist->core.user_requested_cpus);
+> > > > +               bpf_map__set_max_entries(skel->maps.cpu_filter, ncpus);
+> > > > +       }
+> > > > +
+> > > > +       if (target__has_task(target)) {
+> > > > +               ntasks = perf_thread_map__nr(evlist->core.threads);
+> > > > +               bpf_map__set_max_entries(skel->maps.task_filter, ntasks);
+> > > > +       }
+> > > > +
+> > > > +       set_max_rlimit();
+> > > > +
+> > > > +       err = off_cpu_bpf__load(skel);
+> > > > +       if (err) {
+> > > > +               pr_err("Failed to load off-cpu skeleton\n");
+> > > > +               goto out;
+> > > > +       }
+> > > > +
+> > > > +       if (target->cpu_list) {
+> > > > +               u32 cpu;
+> > > > +               u8 val = 1;
+> > > > +
+> > > > +               skel->bss->has_cpu = 1;
+> > > > +               fd = bpf_map__fd(skel->maps.cpu_filter);
+> > > > +
+> > > > +               for (i = 0; i < ncpus; i++) {
+> > > > +                       cpu = perf_cpu_map__cpu(evlist->core.user_requested_cpus, i).cpu;
+> > > > +                       bpf_map_update_elem(fd, &cpu, &val, BPF_ANY);
+> > >
+> > > Perhaps more concise with a for_each:
+> > >
+> > > perf_cpu_map__for_each_cpu(cpu, idx, evlist->core.user_requested_cpus)
+> > >   bpf_map_update_elem(fd, &cpu.cpu, &val, BPF_ANY);
 > 
-> Please, merge this into the previous patch (like Johannes asked
-> for the lruvec counterpart).
->
+> So I'll wait for a new version of this patchset.
 
-Will do in v5.
- 
-> And add:
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev> .
->
+I take that back, will apply and this can be a follow up patch, right?
 
-Thanks Roman.
-
+- Arnaldo

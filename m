@@ -2,116 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C04534247
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C48C153424B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245717AbiEYRhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 13:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S245727AbiEYRj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiEYRhH (ORCPT
+        with ESMTP id S229837AbiEYRj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 13:37:07 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E497B9158D;
-        Wed, 25 May 2022 10:37:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1653500222;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=LkCr1nDsG4a9WOPwOju1ojVRo2OtcGaGaOl1mrXFyCo=;
-    b=K3J1sP+MSx4Gw/yu+LtUYd9vQc7DGk7hjxZQmHD4RmdNo3qeBVmVpQf3x745IsXgCP
-    FDM7jK6aqyQ36IUXkBra1nhrje94CmYAR7oOEh5JswmXMuORuujAFupbd38qs9nq/cVQ
-    fK/fcvl27P+B06++6MwzPC27/wyxXEmeP0QULj6Rh2emNKKayXNuvi2DJ5KGPwEvNWw8
-    Eo3UGwt+x61M70BS9XIvv4/7ey7KJ89kpogqfnyakiYIgmHaIkdfLT2vUSjw2bGmZvXb
-    uIlHZ0RqodPMwnu4O5CVTLyJQKUp+cwuxQP4GqoCLtD9RL3/tZWwOJJHBv1YjZcFOiIQ
-    EEqA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLUrKsxlg=="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 47.45.0 AUTH)
-    with ESMTPSA id 9056edy4PHb2XpL
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 25 May 2022 19:37:02 +0200 (CEST)
-Date:   Wed, 25 May 2022 19:36:53 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        agross@kernel.org, arnd@arndb.de, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        olof@lixom.net, robh@kernel.org, sboyd@kernel.org
-Subject: Re: Removal of qcom,board-id and qcom,msm-id
-Message-ID: <Yo5pNRq/vBaamk0q@gerhold.net>
-References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
- <20220522195138.35943-1-konrad.dybcio@somainline.org>
- <53d5999b-88ee-24db-fd08-ff9406e2b7b7@linaro.org>
- <YowBtNkZ678ns4Ob@builder.lan>
- <CAA8EJprArSF_363FyS+63XfB=ZK657X81u8TJLTRx5AbTYy1ag@mail.gmail.com>
+        Wed, 25 May 2022 13:39:27 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90059.outbound.protection.outlook.com [40.107.9.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912EAAFADF
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:39:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kWzgjgprANaAjPwTGWbLxfeSG/Kv4YrBt33aU7Dk1jSJonJJuhk4NtPVSMTq0tRNLzOl1WeDFTnyrLnJmVdAAq5XA/x6jPDu6c2661N0j6+Or10i7zzenh0CiTw4NcsJAppMzgSNdEEId15iSS9DJU+Ej/LDyBJC8In2hZrdzA+TR/f6peBqESohhOWYGIPGk2lDwVj44QO71OZaHhMcpb38jDkj/Oq8Cf0nmYS4ybotdvLc1qjsm88z4DWu+USygCfeYfXMW0SUVf8/lP6hS7phLLwPc50CSnp1Skp/6x2YjodBFpv3uWMpEtV+V9bCXVVrDuYYzE7VfOeRXKm2VQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=km/dVeqapOg7KIoRHkbyUlr75InbtugElkCTwtJWTi8=;
+ b=BCfiYAyTP7Y/czT1ga1zKAOE2xSGxbXPRWEdxenrkJvQDvOkLBx/UDuPDw4EkoCIFBFhuvEazIxouLnw5pSKGsNXWKPFCBlH90TcRnEhPxGqISX64SyDnlp4nAXf/0We/8Sq4/mRciWYX8tPKfwWYOIux6zz5WQ/nSmi3D2BCoW0DM7sMv7t/0+Xbp9XO3ELpXzLry8E7UoWVRh7MpP2KnnuFoLuQ9MWMJJmqgVYG6Ong4c3+IccdNqoVuBdt1iWniM8CYdFcDgTr3AysJXuX6bDwDdW350IdlDyBeEbzjs4uhPAW6bLHt/Ipwe59HN/MLRotzFcCjtjE58d1VGpJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PAZP264MB3021.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Wed, 25 May
+ 2022 17:39:24 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5273.023; Wed, 25 May 2022
+ 17:39:24 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Sathvika Vasireddy <sv@linux.vnet.ibm.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Subject: Re: [RFC PATCH v2 0/7] objtool: Enable and implement --mcount option
+ on powerpc
+Thread-Topic: [RFC PATCH v2 0/7] objtool: Enable and implement --mcount option
+ on powerpc
+Thread-Index: AQHYb3C6vgEmcLWl90eZLKe3IHFJVq0vYXAAgAB8bIA=
+Date:   Wed, 25 May 2022 17:39:24 +0000
+Message-ID: <ea64b232-e002-9317-dca1-c5933fb94e03@csgroup.eu>
+References: <cover.1653398233.git.christophe.leroy@csgroup.eu>
+ <ac4e3ceb-7de8-2c3f-4689-1730d811bf3d@linux.vnet.ibm.com>
+In-Reply-To: <ac4e3ceb-7de8-2c3f-4689-1730d811bf3d@linux.vnet.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e5cf7d04-969c-4701-b3f8-08da3e758218
+x-ms-traffictypediagnostic: PAZP264MB3021:EE_
+x-microsoft-antispam-prvs: <PAZP264MB3021F9471131D87676C68994EDD69@PAZP264MB3021.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: V+3d1ptqhZC8WgWNgp3J6TusO7fcA5gM1RCRWkcHhqaWHiSIEYLaPrw259pmAZgLVQQh5BIo1PaC/Ep+ClhxdEtLiC2lxHkx3yCrd98muesqJJeBXUV+442yOvrAQmAmq189PRtdxKV9DUimEPtpNTrm3d4P5Yn/C9/OHeAO7lhVsS2oLcBBKAkArFVJmr+yMZCs3kqtc8mePx+DqP5puc/Rr8GSApP/bWHqZiGk5/LqemKr6I4rWI3aVbpKlu/9ESloEr5DjVCVCYzu1zFzn4UNbA6DwFnhFjPJljfpa6NW044VJxtLreQFgEWqDcogtYBe0ggsBZAebQe8MAD9Kw75MhfDVT+Vjb3wwx+5murORrvkTsg6DR7c0hOUoniQvY+BHFdVv2wA+Eu4K7DfSviJNH3zUFO58AiaowD+URQ/9OLVacZn96/IiZLfzVlf2HnI4k5i3ytJLRK7kAUqvnX0fFlQPFIeY6u8BckxTNn/bid43yf5GEKhRhN+SYxugsAMg4U2WhuhN1QyyWLaF27ShWaWHcSJ66B+OCal5I6QeciBGvhfEhSDcnIi68oGFf9lS4gzr+y0HL+jMLrDm2JKN8NvwG0YkRzcn8386ZPyjdlCHTCsHTTGN94U/oIRtg7eT7mhcQlhXgYlc3p5Ee8VnBPorY6nWvZcWufxE3NHKgRe5ePmQQmbaxDpu8WHrzmcMDYNIHljvg91Bzcgmxmu0AhTfkEDlAQJjWYHwIbuM/NNdDRWKXXLcOmmz87E/FjoXZV6aCoxmAYye4Veug==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(122000001)(36756003)(86362001)(31686004)(2616005)(186003)(7416002)(54906003)(53546011)(5660300002)(44832011)(38070700005)(6916009)(38100700002)(91956017)(64756008)(8676002)(76116006)(66556008)(66946007)(66446008)(316002)(8936002)(4326008)(66476007)(2906002)(31696002)(71200400001)(83380400001)(6512007)(508600001)(26005)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bk1HRmJraXkzdTcraXhDSlNHMGxEZWlmMHpGRkdWYStqUXVRRHZQbkRRZk9J?=
+ =?utf-8?B?bkJtL2hsVVlsaWNqTFdldWNLMXpwVzZxZksza1NRWU1sNTVYSExOYysvbklV?=
+ =?utf-8?B?bUl1QUNydVdRZnNmeEJzVklMS0RWd1VOd01qL1VYMzhoaUdHa3hTa2RoWm1I?=
+ =?utf-8?B?Vkg2TjJyOWVCR2d2MTQ3S1VmNzhuL214dExNaHpsU1hiLzZjSHFUUENmNExv?=
+ =?utf-8?B?bTM1dm9pMzJNK0xoaXc0TlVaVkVNSEZXT3AyTFRjNC9UcUduNnFFZjJxMlp5?=
+ =?utf-8?B?cDdkOHFsMGhvN0VzdHlFSmFYdTdzTDB4UVFxQk4xRXFrRjA4L1R5VUtmbnND?=
+ =?utf-8?B?V0pScjdlYnBwZEJTTjFDZ2pyMTFBT24xTVhSRHJWUnlPWHA4SzhtaHVkd3NZ?=
+ =?utf-8?B?S3FrY2xUeEFxQjJ4ejYvdFpMWXlGeWk5OXdTOSthNlFtdEVVV1RLbzFUZjM5?=
+ =?utf-8?B?YTZoNmd1TEFIT25sWlJuSFJETlk3TFJaV1R5Q2xlNzdoUDk3QnlEckxxTTNO?=
+ =?utf-8?B?QjJXTWc3ejdCNmJEazc3UW1XaU9HUzYwUkl5TzJxcmREV3JCODk4bWFtUVRl?=
+ =?utf-8?B?RnNOR2hLUWxrL0loOUlVdkxrdSszeG1YdzlDTlZVWW1lQmlnM0dzeWFiY3NV?=
+ =?utf-8?B?Wlp6WGNTclkxcEtrZUVyZWdNVjhyUVYxRnk2aGtQSDJ3dzhxdFZJZzZBdkU5?=
+ =?utf-8?B?alBWVU9VYW53T0tsdThiaStuSDBCUVhaY1Z2QVpiOS84VkRET01La0p3THR4?=
+ =?utf-8?B?RmJyRGlZaDJsVisvcmc1cUlxSGt5NVF3NzIzOUlaTW5MandKR2VxTkw3ZWdx?=
+ =?utf-8?B?NStnSHU4SDBrUmRlZjU4SkF1Snl4YWk1anJ6ZkdCZ0lDbnNlMHNjb3FVbita?=
+ =?utf-8?B?b0ZCUlV4dk81TmMrL2YzaDBPMGcvREEzdk1uN1pDRzQrTmlxeDZGT3haUW5L?=
+ =?utf-8?B?eTFQNjRkTTRsajhLNHg4cUtpdURRZUtQWXpLNnlyYmpkc3J0M281YytWOUlI?=
+ =?utf-8?B?N1F1VmpGanhxc1VyUGhTSW8xNlF3Z1pLYTRxcWlsbVNTd1ZKbHBvZDBZYmJM?=
+ =?utf-8?B?Q1Z1MWhzazlpZytEaHc0M0NrOWlDWlNKbThZWmhPeUxpQWFOQTlUQ01LVG5G?=
+ =?utf-8?B?ZXVvZGNzeVNPNkhTVkxsQW5QdElzL2JvTlVlNzUvNS9nUUswQ3VzT2IzVmdW?=
+ =?utf-8?B?Sk9ReEpnTnJnZTdNa3JqNXpQNHAxU2FrVU1zdC9aeEFYOGN5c0lFVWVNbWxX?=
+ =?utf-8?B?ZnFwbWtURWxjRnJRbjQyZUFUMGhkMm55S1Nrbng5YXllUXFtSUNoSDJIalNo?=
+ =?utf-8?B?d1Vpby9zbWYvUlRhSThpMUtTblY2dDdHMklBWStDNDNtV1YrOGZodk9qcE90?=
+ =?utf-8?B?R2p6S2gweDRLenZPTVRUY2pBdXhzeFhEaERsTEpBaUtVV1UyRFEyU25PWHZw?=
+ =?utf-8?B?WFBZUmdFaUxRaHhDVC9udE9FdnFtZlR5RlZoODg3L1NGRXYrR3l1K3Yrc2Mz?=
+ =?utf-8?B?WGNMMmpGRmNJOEU3RTgyUlVBaVY4aEFYNXFEZ25VeHo2VktuRVZXZ2o3WFRT?=
+ =?utf-8?B?VW5KSkxMb1NsdXd1eW85Z2paSWJ5WFRCSmduU2w2SWFobWhkRVg0ZndURlpE?=
+ =?utf-8?B?dlgvS2pObDBvTHJ4ZXNFVFVVblFzZFNYQXBuUXFyendDS2Vpc3VmMnJwRWIz?=
+ =?utf-8?B?Nk1WQk56V2xtcHZQMUNtbkFzZ1FwRUIvOFYxb0NUVGwrOXBlR2xuZ1oyait2?=
+ =?utf-8?B?RjZway9ibFhGNjJURFBONVlHVG5SVG1xS2p4V3I3ZUpiTjJZVVN3d3dDL2NE?=
+ =?utf-8?B?M3VoRXNYVkxQWU8rYWVGNUpzNVFJSi9YV3BZbXdoZVoxTVBUQmEyZ202N2Zz?=
+ =?utf-8?B?MFY5S3ViWWwxYzMxbUMwZnNHa0xielBLMkJza0tLSzhONmhqN1dOdk9DOHo4?=
+ =?utf-8?B?MTR2aVNrVzZaSm00V09VemNkam9rN3ZLclhEa0FNbkQ5TzkrZ1VjOTBTaVVR?=
+ =?utf-8?B?czhqQTZEaFdJV3VxekFEVVlOMHpRTlpESEVPMmFqNTFIZ0ZkUGViaXVkaEJ6?=
+ =?utf-8?B?c0FRSjc4ampFVnlSZmRobFl0OW04OVQ0VlA2djhVMGhtZFpNV1pDZEFpSGRG?=
+ =?utf-8?B?eWppaEVKUWtkaUs5TjQyUjFoQndqZ29jbjJUSWhCQ3RsTkljbUFyTGZXcGRD?=
+ =?utf-8?B?bGVoRDU2djhiZGFXamdqdVd1QmlGcGdjYTNoYThCNGpudmtlZXAzOUN4aWlB?=
+ =?utf-8?B?V244cUsyalkwazZXNGpqVFVKbnN2RzFidUY0YlhibzNDZHQ1eURSNlFnN2ZB?=
+ =?utf-8?B?Y05uS3hYVE9zOUJDVFQ1TkFGdjFUbEk3OTd2a21zVktQVmFJVEM2TVllNnZX?=
+ =?utf-8?Q?54StoQQqfZ/bIPBRn2omaMdtrQd7JeItRElBi?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <601DFE0E458B0F45B2E7BAE785BCE9C5@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJprArSF_363FyS+63XfB=ZK657X81u8TJLTRx5AbTYy1ag@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5cf7d04-969c-4701-b3f8-08da3e758218
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 May 2022 17:39:24.0786
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GOu5ES5Wog/6Y9fEKgaHkOXZwzaNZpKsnyJ3S0OvsOhfShnDMw9KtNMqUIt3VhkJDx9f8rybY+PM8scsYzqKZ9gIr/V3ug0svlTCio8kg9Q=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB3021
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 01:18:53AM +0300, Dmitry Baryshkov wrote:
-> > We're following the bindings and don't pick board-id or msm-id unless
-> > there's a particular reason for it - which typically is that the
-> > downstream bootloader requires it - we don't use the properties on the
-> > kernel side.
-> 
-> Or unless we have another reason (like handling a single RB3+RB5 image).
-> I suspect PmOS might also like shipping a single image for some/all of
-> the supported devices. Or we might use that for the qcom-armv8a OE
-> machine.
-> 
-
-On a larger scale the qcom,msm-id/board-id properties are not very
-useful for automatic DTB selection. This is simply because they are not
-unique when you look beyond just the Qualcomm reference boards. I know
-at least 3 totally different smartphones (from different vendors) where
-the bootloader picks "msm8916-mtp", even though they have little in
-common with Qualcomm's original MTP board.
-
-There are also vendors who made up their own broken numbering scheme,
-broken bootloaders that pick seemingly random DTBs or start modifying
-random properties etc etc. Perhaps it has improved on more recent
-devices but somehow I doubt it...
-
-This means that the qcom,msm-id/board-id properties are really just
-useful for making the bootloader happy, or if you have a number of
-devices in full control. It's not the consistently implemented standard
-that would actually be worth promoting for automatic DTB selection.
-
-> >
-> > > If the dtbTool support for the bindings is there, then there is no
-> > > breakage, because you had to use dtbTool before so you have to use now.
-> > >
-> >
-> > Among all the platforms I maintain, MSM8916 (db410c) is the only one
-> > where I use dtbTool - because it refuses to accept the concatenated
-> > dtb.
-> 
-> It's strange, I have been using concatenated dtb with db410c for ages.
-> 
-
-There is a patch in Linaro's LK fork for DB410c that selects the
-appended DTB even if the qcom,msm-id/board-id properties are missing:
-https://git.linaro.org/landing-teams/working/qualcomm/lk.git/commit/?id=3be1d459a546a24f2bf10b9551663a3e69a8214e
-
-If you don't have this commit or something equivalent, appended DTBs
-must have the qcom,msm-id/board-id properties for LK to accept them.
-
-Stephan
+SGkgU2F0aHZpa2EsDQoNCkxlIDI1LzA1LzIwMjIgw6AgMTI6MTQsIFNhdGh2aWthIFZhc2lyZWRk
+eSBhIMOpY3JpdMKgOg0KPiBIaSBDaHJpc3RvcGhlLA0KPiANCj4gT24gMjQvMDUvMjIgMTg6NDcs
+IENocmlzdG9waGUgTGVyb3kgd3JvdGU6DQo+PiBUaGlzIGRyYWZ0IHNlcmllcyBhZGRzIFBQQzMy
+IHN1cHBvcnQgdG8gU2F0aHZpa2EncyBzZXJpZXMuDQo+PiBWZXJpZmllZCBvbiBwbWFjMzIgb24g
+UUVNVS4NCj4+DQo+PiBJdCBzaG91bGQgaW4gcHJpbmNpcGxlIGFsc28gd29yayBmb3IgUFBDNjQg
+QkUgYnV0IGZvciB0aGUgdGltZSBiZWluZw0KPj4gc29tZXRoaW5nIGdvZXMgd3JvbmcuIEluIHRo
+ZSBiZWdpbm5pbmcgSSBoYWQgYSBzZWdmYXV0IGhlbmNlIHRoZSBmaXJzdA0KPj4gcGF0Y2guIEJ1
+dCBJIHN0aWxsIGdldCBubyBtY291bnQgc2VjdGlvbiBpbiB0aGUgZmlsZXMuDQo+IFNpbmNlIFBQ
+QzY0IEJFIHVzZXMgb2xkZXIgZWxmdjEgQUJJLCBpdCBwcmVwZW5kcyBhIGRvdCB0byBzeW1ib2xz
+Lg0KPiBBbmQgc28sIHRoZSByZWxvY2F0aW9uIHJlY29yZHMgaW4gY2FzZSBvZiBQUEM2NEJFIHBv
+aW50IHRvICIuX21jb3VudCIsDQo+IHJhdGhlciB0aGFuIGp1c3QgIl9tY291bnQiLiBXZSBzaG91
+bGQgYmUgbG9va2luZyBmb3IgIi5fbWNvdW50IiB0byBiZQ0KPiBhYmxlIHRvIGdlbmVyYXRlIG1j
+b3VudF9sb2Mgc2VjdGlvbiBpbiB0aGUgZmlsZXMuDQo+IA0KPiBMaWtlOg0KPiANCj4gZGlmZiAt
+LWdpdCBhL3Rvb2xzL29ianRvb2wvY2hlY2suYyBiL3Rvb2xzL29ianRvb2wvY2hlY2suYw0KPiBp
+bmRleCA3MGJlNWE3MmU4MzguLjdkYTViZjhjNzIzNiAxMDA2NDQNCj4gLS0tIGEvdG9vbHMvb2Jq
+dG9vbC9jaGVjay5jDQo+ICsrKyBiL3Rvb2xzL29ianRvb2wvY2hlY2suYw0KPiBAQCAtMjE4NSw3
+ICsyMTg1LDcgQEAgc3RhdGljIGludCBjbGFzc2lmeV9zeW1ib2xzKHN0cnVjdCBvYmp0b29sX2Zp
+bGUgDQo+ICpmaWxlKQ0KPiAgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBpZiAoYXJjaF9pc19yZXRwb2xpbmUoZnVuYykpDQo+ICDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBmdW5jLT5yZXRw
+b2xpbmVfdGh1bmsgPSB0cnVlOw0KPiANCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIGlmICgoIXN0cmNtcChmdW5jLT5uYW1lLCAiX19mZW50cnlfXyIpKSB8
+fCANCj4gKCFzdHJjbXAoZnVuYy0+bmFtZSwgIl9tY291bnQiKSkpDQo+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoKCFzdHJjbXAoZnVuYy0+bmFtZSwg
+Il9fZmVudHJ5X18iKSkgfHwgDQo+ICghc3RyY21wKGZ1bmMtPm5hbWUsICJfbWNvdW50IikpIHx8
+ICghc3RyY21wKGZ1bmMtPm5hbWUsICIuX21jb3VudCIpKSkNCj4gIMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZ1bmMtPmZlbnRy
+eSA9IHRydWU7DQo+IA0KPiAgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBpZiAoaXNfcHJvZmlsaW5nX2Z1bmMoZnVuYy0+bmFtZSkpDQo+IA0KPiANCj4gV2l0
+aCB0aGlzIGNoYW5nZSwgSSBjb3VsZCBzZWUgX19tY291bnRfbG9jIHNlY3Rpb24gYmVpbmcNCj4g
+Z2VuZXJhdGVkIGluIGluZGl2aWR1YWwgcHBjNjRiZSBvYmplY3QgZmlsZXMuDQo+IA0KDQpPciBz
+aG91bGQgd2UgaW1wbGVtZW50IGFuIGVxdWl2YWxlbnQgb2YgYXJjaF9mdHJhY2VfbWF0Y2hfYWRq
+dXN0KCkgaW4gDQpvYmp0b29sID8NCg0KQ2hyaXN0b3BoZQ==

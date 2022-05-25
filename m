@@ -2,158 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A5D5345CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62145345E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiEYVeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 17:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S245439AbiEYViJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 17:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbiEYVec (ORCPT
+        with ESMTP id S232503AbiEYViH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 17:34:32 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4F3A76DD
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:34:30 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id a17so3613152plb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kPNpHNPesicxzaCcEtEsWOLOzkBCoEdcbvtndvUitaI=;
-        b=GZJ6r6hGPK0878azss/NiKgNXXS1INfpKbEe6Femzd30Ooi7j1VXIikHfRMVoq6p9R
-         yeYCIaiFCxQ0kKm8dHub+AExEfHt1M2nb04Ve3Xe6lGjXDkvbfXRZqitEjfneyLGVx+b
-         PZXY8LkVwv3/T85hUnODR7FpzQ+8176jKYbaJ7RRQ5CGtFKsyb1uJOl6IJWJ9cSjZATr
-         +tAI3PuK3PShNHQLKy0TPikyysz0ahP6i1X6ezZhKXSEa4Tu3lAVBvy9aWdAHkNmPt6Z
-         jMTLgNI+io3vgJsQqikiK/HULD37O+TiNF19fb7DRwZA8H5MrrAuZB6435xh4UBLXHTo
-         Xl8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=kPNpHNPesicxzaCcEtEsWOLOzkBCoEdcbvtndvUitaI=;
-        b=qODjpAl7u2DrG3ppBnIl8rB9YIwZukkgG8gpzCKy6IbcOPq3AAUlmvi2+hnCPGcU7S
-         gf3kBz0EfLw0xZZ3CZQDYk/QyqdUJqPiqry7TUzqQWBnUSfajoVvepF5aMN9o4jHyuJG
-         fw2j3Tt8/jBW3X+FdAH8P3/Ugw9UPaLYOOk/Z4JxBv6yJUT/WkfLtVn8DbyqvCn1+nF1
-         2amHvINUwXlq6K/zq3PwJX9NDdiFU+8DRI9NaRm71f+pmH5xcb9/GTKREyGtCKMm6Bwg
-         BaCwnkKweeY3bmVkeJjm0oRR7Z5DKtxAWs+EFZlJfrZ0t8jD9qToQ+4nesqsyEW/ujSo
-         6wpw==
-X-Gm-Message-State: AOAM532lO2uzIJv410Hlwf8NdEO9VQ94REWivvPKUXo9e/n9fXrbPlMm
-        JPWlZjvMOEN7yXd8VgBcdsNi0w==
-X-Google-Smtp-Source: ABdhPJz/LdGkcESESmnRNERZMScRzqZEi9Ypwrp2YHAI9fkbGLI/uwQgRWDQXU/lIlswtxfVlWycTw==
-X-Received: by 2002:a17:90b:1b42:b0:1df:f6bb:aa2b with SMTP id nv2-20020a17090b1b4200b001dff6bbaa2bmr12798436pjb.99.1653514470426;
-        Wed, 25 May 2022 14:34:30 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id n24-20020a170902969800b0015e8d4eb2e0sm9799934plp.298.2022.05.25.14.34.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 14:34:29 -0700 (PDT)
-Date:   Wed, 25 May 2022 14:34:29 -0700 (PDT)
-X-Google-Original-Date: Wed, 25 May 2022 14:34:28 PDT (-0700)
-Subject:     Re: [PATCH] riscv: compat: Using seperated vdso_maps for compat_vdso_info
-In-Reply-To: <a0bffec3-cf43-417e-3804-9248325266c3@roeck-us.net>
-CC:     guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>, heiko@sntech.de,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     linux@roeck-us.net
-Message-ID: <mhng-b37ccc06-67ad-4fd8-bcdb-0e5c9e5a4750@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+        Wed, 25 May 2022 17:38:07 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0655EAB0C8;
+        Wed, 25 May 2022 14:38:05 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24PLbpnL034943;
+        Wed, 25 May 2022 16:37:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1653514671;
+        bh=unEU3yu6XitRBUF0X3b3HqPGfQ24x1GXFPO/xiQYto8=;
+        h=From:To:CC:Subject:Date;
+        b=LXM/LbXnyVD/xHo53tWgYowMmQtgdVWU0/jqn6R9yjDbK0dZANeS8CKvR6zDWGsTi
+         QUdPGak+SxW1PGd4FR7NXmqHjJW9SnSpX6Wo6eTZi/B5uVmJULbU6K4pRAjMBV4BnX
+         puP/WKbz3ixFWI3uzDTjSDFFriCZcDXqSiA9mpB4=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24PLbpDB007258
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 25 May 2022 16:37:51 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 25
+ May 2022 16:37:51 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 25 May 2022 16:37:51 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24PLbpFS018664;
+        Wed, 25 May 2022 16:37:51 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+CC:     Keerthy <j-keerthy@ti.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Bryan Brattlof <bb@ti.com>
+Subject: [PATCH] thermal: k3_j72xx_bandgap: Fix ref_table memory leak during probe
+Date:   Wed, 25 May 2022 16:36:17 -0500
+Message-ID: <20220525213617.30002-1-bb@ti.com>
+X-Mailer: git-send-email 2.17.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1539; h=from:subject; bh=jAry1GfKB2IXde/WjnhULMOUIPI3IX37C1dJv1gsc9s=; b=owEBbQGS/pANAwAKAcD4q9PiE9cMAcsmYgBijqFQoomfFMXwXhjrDSIGMaT+atNSHe1YzydEHzZY RLtkYHOJATMEAAEKAB0WIQT86LDvkHWcjT+1Kb7A+KvT4hPXDAUCYo6hUAAKCRDA+KvT4hPXDAnDB/ 4jE6Up2Wn5ZbODu6KFyeMvWn5O03dNwlXDj9/pYdo39zDZ3elEKfk5rZXLOXncwzJE/+Q8orPhD9P2 QW99DNp26O/Rm9a0LnTEdnBTsP5KdcRp7DD86G7KqDsYDqYXNVnaNZgiQsX76G4JIllOpsOKps5UKx 7vJExENpewfgdHFyopQg/PXZ+lPwjY9vognA13ehw2Z0jSekmoMjwVpPp1Ci79zp+dNJSdaz3JV/tr RtTr0yyl9AFI82L1kMVjar+1O+npoJqkI36vXEEQb0zKhFhT64xSDmvHbsZC0v89y114omcKOGorBJ Dov0KJBYStFtjCQZEuAMWzlrZBua34
+X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 14:15:03 PDT (-0700), linux@roeck-us.net wrote:
-> On 5/25/22 09:04, guoren@kernel.org wrote:
->> From: Guo Ren <guoren@linux.alibaba.com>
->>
->> This is a fixup for vdso implementation which caused musl to
->> fail.
->>
->> [   11.600082] Run /sbin/init as init process
->> [   11.628561] init[1]: unhandled signal 11 code 0x1 at
->> 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
->> [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted
->> 5.18.0-rc7-next-20220520 #1
->> [   11.629462] Hardware name: riscv-virtio,qemu (DT)
->> [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp :
->> 00ffffffc58199f0
->> [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 :
->> ffffffffffffffff
->> [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 :
->> 00ffffff8ade0cc0
->> [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 :
->> 00ffffffc5819a00
->> [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 :
->> 00ffffffc5819b00
->> [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 :
->> 0000000000000000
->> [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 :
->> 00ffffff8ade0728
->> [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 :
->> 00ffffffc5819e40
->> [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10:
->> 0000000000000000
->> [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 :
->> 0000000000000001
->> [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
->> [   11.629699] status: 0000000000004020 badaddr: 0000000000000000
->> cause: 000000000000000d
->>
->> The last __vdso_init(&compat_vdso_info) replaces the data in normal
->> vdso_info. This is an obvious bug.
->>
->> Reported-by: Guenter Roeck <linux@roeck-us.net>
->> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->> Signed-off-by: Guo Ren <guoren@kernel.org>
->> Cc: Palmer Dabbelt <palmer@dabbelt.com>
->> Cc: Heiko Stübner <heiko@sntech.de>
->
-> Tested-by: Guenter Roeck <linux@roeck-us.net>
+If an error occurs in the k3_j72xx_bandgap_probe() function the memory
+allocated to the 'ref_table' will not be released.
 
-Sorry I'm a bit buried right now, this is fixing the issue you pointed 
-out earlier?
+Add a err_free_ref_table step to the error path to free 'ref_table'
 
->
->> ---
->>   arch/riscv/kernel/vdso.c | 15 +++++++++++++--
->>   1 file changed, 13 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
->> index 50fe4c877603..69b05b6c181b 100644
->> --- a/arch/riscv/kernel/vdso.c
->> +++ b/arch/riscv/kernel/vdso.c
->> @@ -206,12 +206,23 @@ static struct __vdso_info vdso_info __ro_after_init = {
->>   };
->>
->>   #ifdef CONFIG_COMPAT
->> +static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
->> +	[RV_VDSO_MAP_VVAR] = {
->> +		.name   = "[vvar]",
->> +		.fault = vvar_fault,
->> +	},
->> +	[RV_VDSO_MAP_VDSO] = {
->> +		.name   = "[vdso]",
->> +		.mremap = vdso_mremap,
->> +	},
->> +};
->> +
->>   static struct __vdso_info compat_vdso_info __ro_after_init = {
->>   	.name = "compat_vdso",
->>   	.vdso_code_start = compat_vdso_start,
->>   	.vdso_code_end = compat_vdso_end,
->> -	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
->> -	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
->> +	.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
->> +	.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
->>   };
->>   #endif
->>
+Fixes: 72b3fc61c752 ("thermal: k3_j72xx_bandgap: Add the bandgap driver support")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Bryan Brattlof <bb@ti.com>
+---
+ drivers/thermal/k3_j72xx_bandgap.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+index 64e3231589527..3a35aa38ff512 100644
+--- a/drivers/thermal/k3_j72xx_bandgap.c
++++ b/drivers/thermal/k3_j72xx_bandgap.c
+@@ -433,7 +433,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+ 				     GFP_KERNEL);
+ 	if (!derived_table) {
+ 		ret = -ENOMEM;
+-		goto err_alloc;
++		goto err_free_ref_table;
+ 	}
+ 
+ 	/* Workaround not needed if bit30/bit31 is set even for J721e */
+@@ -483,7 +483,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+ 		if (IS_ERR(ti_thermal)) {
+ 			dev_err(bgp->dev, "thermal zone device is NULL\n");
+ 			ret = PTR_ERR(ti_thermal);
+-			goto err_alloc;
++			goto err_free_ref_table;
+ 		}
+ 	}
+ 
+@@ -514,6 +514,9 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ 
++err_free_ref_table:
++	kfree(ref_table);
++
+ err_alloc:
+ 	pm_runtime_put_sync(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+-- 
+2.17.1
+

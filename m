@@ -2,169 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3BA8533B5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BADA533B55
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241660AbiEYLLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
+        id S229787AbiEYLK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241080AbiEYLLK (ORCPT
+        with ESMTP id S230117AbiEYLKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:11:10 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3CA8CCC5;
-        Wed, 25 May 2022 04:11:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TTSfncRF4bwVxkeR+S4pHa2NuE5vU7NkHqU52imXoeo=; b=AZ7NLjulpP1WzqY4jAw9CJ6mzn
-        eNxn6mITLdAkzreesFIusYyJANkaOvbZVslHzJxDDqo/jW9prJ6mSOYajnNAsWgSTZTPCGe4Y+H+t
-        Q7b5K2i3OxODvn+feDcYZuuvagMcqlznlm2xJ6e8wPUzB4c/WkijGr50Z8D32ZlBmwWuMwGQbue1E
-        mrsCyjPGVmj7xf/0/rnV0zIseeyVAHCeyTCYTi0ZFmZwkk1CWC0IMPFglArv51u64lwHpRP8/QuNm
-        TypGtB34O3uGaPoduTA8k7e4jOZswva+y2onGqiOIb4Z5GAtPEnJDGpyLSzDy3ZlKvUO8MvNVaZm2
-        4u9mbK6A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ntouK-001b5l-Bp; Wed, 25 May 2022 11:10:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 59CA2300222;
-        Wed, 25 May 2022 13:10:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 374CD207688E7; Wed, 25 May 2022 13:10:17 +0200 (CEST)
-Date:   Wed, 25 May 2022 13:10:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Richard Henderson <rth@twiddle.net>,
-        David Hildenbrand <david@redhat.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michal Simek <monstr@monstr.eu>,
-        Russell King <linux@armlinux.org.uk>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-riscv@lists.infradead.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jonas Bonn <jonas@southpole.se>, Will Deacon <will@kernel.org>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        openrisc@lists.librecores.org, linux-s390@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k@lists.linux-m68k.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Chris Zankel <chris@zankel.net>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        sparclinux@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-xtensa@linux-xtensa.org, Nicholas Piggin <npiggin@gmail.com>,
-        linux-sh@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Borislav Petkov <bp@alien8.de>, linux-mips@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Helge Deller <deller@gmx.de>, Vineet Gupta <vgupta@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-um@lists.infradead.org, linux-alpha@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-ia64@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-snps-arc@lists.infradead.org,
-        Hugh Dickins <hughd@google.com>, Rich Felker <dalias@libc.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-parisc@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v3] mm: Avoid unnecessary page fault retires on shared
- memory types
-Message-ID: <Yo4OmaNW5YUrGE0S@hirez.programming.kicks-ass.net>
-References: <20220524234531.1949-1-peterx@redhat.com>
+        Wed, 25 May 2022 07:10:55 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DE18A325
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:10:54 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id rq11so18847598ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6bM29bpY/71jdlbrQel2iwJKKK8Us/LpmJJm4YVlh+M=;
+        b=W+1xcp/Zcd/MC4E23T4a4oyTj/9bSBGcGq6DI9X4va/M5ecZShy29tcu7LYgpVpX7D
+         74TJlhFPaT7zmfx1rJY3/oTtZ6+ZK5uWe/0uwWX+l6bsytePcBshhhyI5u3rQUkR2K7f
+         jVkOavworgNrJxcW7HgodojKO/ifovkRJUDhG7L5YoCrfHCbkMmX91WdrUtnWV6PlPJM
+         s45kpLTynJH8/6oArhD+bAGRJMRtr2x3R4cdYqm/cI8WIWS5JU+CTiSlv4TqtvfEid1c
+         ky/nxuHB5KorkViGGOUcMtXKdIbNflzIX75ZAvNrZxa1oaNe2r95KKh+tmkZigxd11Ie
+         Oxhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6bM29bpY/71jdlbrQel2iwJKKK8Us/LpmJJm4YVlh+M=;
+        b=31aamoW0Kk0smwcOESKx58UJ2OdubeHpLr39z5UvBWUhq7g3aHx/X5cVenXYu0sAAF
+         /W1ICCxVrO0+HB4PgiLQgVwd4f8h9ZRbxrNvQZqPJbhAmi5Ns1pjXZZuTOKZuK6+gJHZ
+         bYWEi5Tcmz5YA+quHxorS7lvdJ/LyM1N7jf3WteWzSkctxTbwKBlE9i6L3ciJKdL79BT
+         oBAR3AF0zgA/KLLCQ+fdqSjpG6ej9fhH3FmFEO6S/VEan/YeqGEjeBMLny0LFu8uMVpD
+         r62i2wvJCn9ZR4Z6tc3yA0ps+sIsIC5piK8a/OKTwqJWpeRjlhjC02fAp9V0MwOf4HQJ
+         1Jyw==
+X-Gm-Message-State: AOAM533cBr8OoCPAf0HBxmG9ofljlPkjpeOfLZ0AkZ7bD5QerrmDwJRs
+        CumL6juGVC59ivWktM1mwHOE88u1uqKYgnQvPOUmkErfCNU83g==
+X-Google-Smtp-Source: ABdhPJzvlsX5kXtlav7uMuUZUY4Ce9XVcz4UD+g+LXg1eAxeHlB/Q1YlVAzOZWcHPIiGxSDqu6j1mbLWSr3lUxR2PEA=
+X-Received: by 2002:a17:907:3f92:b0:6ff:19ff:a528 with SMTP id
+ hr18-20020a1709073f9200b006ff19ffa528mr136512ejc.91.1653477053132; Wed, 25
+ May 2022 04:10:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524234531.1949-1-peterx@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220524071403.128644-1-21cnbao@gmail.com> <YoyTWaDmSiBUkaeg@arm.com>
+ <CAGsJ_4xPFkc6Kn2G5pPPk8XJ4iZV=atzan=Quq6Ljc_5vr1fnA@mail.gmail.com> <Yo0ufMHXPL5mJ5t6@arm.com>
+In-Reply-To: <Yo0ufMHXPL5mJ5t6@arm.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Wed, 25 May 2022 23:10:41 +1200
+Message-ID: <CAGsJ_4wSmZo9+Anzq_WjF=xACRT7p0EJ86de6C=8xhGpTBOHQg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: enable THP_SWAP for arm64
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        hanchuanhua <hanchuanhua@oppo.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>, Shaohua Li <shli@kernel.org>,
+        Rik van Riel <riel@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Steven Price <steven.price@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 07:45:31PM -0400, Peter Xu wrote:
-> I observed that for each of the shared file-backed page faults, we're very
-> likely to retry one more time for the 1st write fault upon no page.  It's
-> because we'll need to release the mmap lock for dirty rate limit purpose
-> with balance_dirty_pages_ratelimited() (in fault_dirty_shared_page()).
-> 
-> Then after that throttling we return VM_FAULT_RETRY.
-> 
-> We did that probably because VM_FAULT_RETRY is the only way we can return
-> to the fault handler at that time telling it we've released the mmap lock.
-> 
-> However that's not ideal because it's very likely the fault does not need
-> to be retried at all since the pgtable was well installed before the
-> throttling, so the next continuous fault (including taking mmap read lock,
-> walk the pgtable, etc.) could be in most cases unnecessary.
-> 
-> It's not only slowing down page faults for shared file-backed, but also add
-> more mmap lock contention which is in most cases not needed at all.
-> 
-> To observe this, one could try to write to some shmem page and look at
-> "pgfault" value in /proc/vmstat, then we should expect 2 counts for each
-> shmem write simply because we retried, and vm event "pgfault" will capture
-> that.
-> 
-> To make it more efficient, add a new VM_FAULT_COMPLETED return code just to
-> show that we've completed the whole fault and released the lock.  It's also
-> a hint that we should very possibly not need another fault immediately on
-> this page because we've just completed it.
-> 
-> This patch provides a ~12% perf boost on my aarch64 test VM with a simple
-> program sequentially dirtying 400MB shmem file being mmap()ed and these are
-> the time it needs:
-> 
->   Before: 650.980 ms (+-1.94%)
->   After:  569.396 ms (+-1.38%)
-> 
-> I believe it could help more than that.
-> 
-> We need some special care on GUP and the s390 pgfault handler (for gmap
-> code before returning from pgfault), the rest changes in the page fault
-> handlers should be relatively straightforward.
-> 
-> Another thing to mention is that mm_account_fault() does take this new
-> fault as a generic fault to be accounted, unlike VM_FAULT_RETRY.
-> 
-> I explicitly didn't touch hmm_vma_fault() and break_ksm() because they do
-> not handle VM_FAULT_RETRY even with existing code, so I'm literally keeping
-> them as-is.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+On Wed, May 25, 2022 at 7:14 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Tue, May 24, 2022 at 10:05:35PM +1200, Barry Song wrote:
+> > On Tue, May 24, 2022 at 8:12 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > On Tue, May 24, 2022 at 07:14:03PM +1200, Barry Song wrote:
+> > > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > > > index d550f5acfaf3..8e3771c56fbf 100644
+> > > > --- a/arch/arm64/Kconfig
+> > > > +++ b/arch/arm64/Kconfig
+> > > > @@ -98,6 +98,7 @@ config ARM64
+> > > >       select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
+> > > >       select ARCH_WANT_LD_ORPHAN_WARN
+> > > >       select ARCH_WANTS_NO_INSTR
+> > > > +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+> > >
+> > > I'm not opposed to this but I think it would break pages mapped with
+> > > PROT_MTE. We have an assumption in mte_sync_tags() that compound pages
+> > > are not swapped out (or in). With MTE, we store the tags in a slab
+> >
+> > I assume you mean mte_sync_tags() require that THP is not swapped as a whole,
+> > as without THP_SWP, THP is still swapping after being splitted. MTE doesn't stop
+> > THP from swapping through a couple of splitted pages, does it?
+>
+> That's correct, split THP page are swapped out/in just fine.
+>
+> > > object (128-bytes per swapped page) and restore them when pages are
+> > > swapped in. At some point we may teach the core swap code about such
+> > > metadata but in the meantime that was the easiest way.
+> >
+> > If my previous assumption is true,  the easiest way to enable THP_SWP
+> > for this moment might be always letting mm fallback to the splitting
+> > way for MTE hardware. For this moment, I care about THP_SWP more as
+> > none of my hardware has MTE.
+> >
+> > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> > index 45c358538f13..d55a2a3e41a9 100644
+> > --- a/arch/arm64/include/asm/pgtable.h
+> > +++ b/arch/arm64/include/asm/pgtable.h
+> > @@ -44,6 +44,8 @@
+> >         __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
+> >  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+> >
+> > +#define arch_thp_swp_supported !system_supports_mte
+> > +
+> >  /*
+> >   * Outside of a few very special situations (e.g. hibernation), we always
+> >   * use broadcast TLB invalidation instructions, therefore a spurious page
+> > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> > index 2999190adc22..064b6b03df9e 100644
+> > --- a/include/linux/huge_mm.h
+> > +++ b/include/linux/huge_mm.h
+> > @@ -447,4 +447,16 @@ static inline int split_folio_to_list(struct folio *folio,
+> >         return split_huge_page_to_list(&folio->page, list);
+> >  }
+> >
+> > +/*
+> > + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
+> > + * limitations in the implementation like arm64 MTE can override this to
+> > + * false
+> > + */
+> > +#ifndef arch_thp_swp_supported
+> > +static inline bool arch_thp_swp_supported(void)
+> > +{
+> > +       return true;
+> > +}
+> > +#endif
+> > +
+> >  #endif /* _LINUX_HUGE_MM_H */
+> > diff --git a/mm/swap_slots.c b/mm/swap_slots.c
+> > index 2b5531840583..dde685836328 100644
+> > --- a/mm/swap_slots.c
+> > +++ b/mm/swap_slots.c
+> > @@ -309,7 +309,7 @@ swp_entry_t get_swap_page(struct page *page)
+> >         entry.val = 0;
+> >
+> >         if (PageTransHuge(page)) {
+> > -               if (IS_ENABLED(CONFIG_THP_SWAP))
+> > +               if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
+> >                         get_swap_pages(1, &entry, HPAGE_PMD_NR);
+> >                 goto out;
+>
+> I think this should work and with your other proposal it would be
+> limited to MTE pages:
+>
+> #define arch_thp_swp_supported(page)    (!test_bit(PG_mte_tagged, &page->flags))
+>
+> Are THP pages loaded from swap as a whole or are they split? IIRC the
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+i can confirm thp is written as a whole through:
+[   90.622863]  __swap_writepage+0xe8/0x580
+[   90.622881]  swap_writepage+0x44/0xf8
+[   90.622891]  pageout+0xe0/0x2a8
+[   90.622906]  shrink_page_list+0x9dc/0xde0
+[   90.622917]  shrink_inactive_list+0x1ec/0x3c8
+[   90.622928]  shrink_lruvec+0x3dc/0x628
+[   90.622939]  shrink_node+0x37c/0x6a0
+[   90.622950]  balance_pgdat+0x354/0x668
+[   90.622961]  kswapd+0x1e0/0x3c0
+[   90.622972]  kthread+0x110/0x120
+
+but i have never got a backtrace in which thp is loaded as a whole though it
+seems the code has this path:
+int swap_readpage(struct page *page, bool synchronous)
+{
+        ...
+        bio = bio_alloc(sis->bdev, 1, REQ_OP_READ, GFP_KERNEL);
+        bio->bi_iter.bi_sector = swap_page_sector(page);
+        bio->bi_end_io = end_swap_bio_read;
+        bio_add_page(bio, page, thp_size(page), 0);
+        ...
+        submit_bio(bio);
+}
+
+
+> splitting still happens but after the swapping out finishes. Even if
+> they are loaded as 4K pages, we still have the mte_save_tags() that only
+> understands small pages currently, so rejecting THP pages is probably
+> best.
+
+as anyway i don't have a mte-hardware to do a valid test to go any
+further, so i will totally disable thp_swp for hardware having mte for
+this moment in patch v2.
+
+>
+> --
+> Catalin
+
+Thanks
+Barry

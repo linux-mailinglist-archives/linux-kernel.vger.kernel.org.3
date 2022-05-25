@@ -2,70 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1181E534496
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C2F53441A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344789AbiEYTw3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 25 May 2022 15:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S1344266AbiEYTQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 15:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241221AbiEYTwX (ORCPT
+        with ESMTP id S1344721AbiEYTPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 15:52:23 -0400
-X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 May 2022 12:52:22 PDT
-Received: from protestant.ebb.org (protestant.ebb.org [50.56.179.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D08D630B;
-        Wed, 25 May 2022 12:52:22 -0700 (PDT)
-Received: from localhost (unknown [216.161.86.18])
-        (Authenticated sender: bkuhn)
-        by protestant.ebb.org (Postfix) with ESMTPSA id 9D99C820B4;
-        Wed, 25 May 2022 12:14:38 -0700 (PDT)
-From:   "Bradley M. Kuhn" <bkuhn@ebb.org>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        copyleft-next@lists.fedorahosted.org
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        jeyu@kernel.org, shuah@kernel.org, bvanassche@acm.org,
-        dan.j.williams@intel.com, joe@perches.com, keescook@chromium.org,
-        rostedt@goodmis.org, minchan@kernel.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        Richard Fontana <fontana@sharpeleven.org>,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
-Organization: Opinions expressed in this email are my own and are not necessarily those of any organization with which I have an affiliation.
-References: <20211029184500.2821444-1-mcgrof@kernel.org>
-        <20211029184500.2821444-2-mcgrof@kernel.org> <87h75g0xbm.ffs@tglx>
-Face:   iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABVQ
- TFRFAAAAWjotvpiH/PHt27Sj7sq8lXFeBchlBgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsT
- AQCanBgAAAAHdElNRQfiCx4VFw6omMmeAAACAklEQVQ4y43UPZPbIBAGYGdu0puzQ51bI+qMdXId
- r0F1RoLrwfb+/5+QF307VVR4PDxiF14h7Xa7t3q8LJGjavj7a1euCYiZnaPnv9DF4FyMLKdXOPs4
- XM7KKzzKaF83gem+hUuF8QYUg7Fb4LEQAK1OG3hu4bbC3LpUC87+B9AMfQOg0yv0owEOK4x1+gnu
- M3yaV3jOMGxvKoXEKC9gAoabJtZYlXO8wJcb1hMHQClZgSj7cbzsY4a2vSqltIlz8nMpZnMkEmVw
- N4DtcYJo3AMPXFIMRMax/BjhOxZi2CpKKpWSZCd4C8aZ4CpzjR+Cint9WEp5H12IbbySEpHdaYVh
- OY9onf0Qq9//zDCFEW0MbFjUz7mHD1UdO4B3iErk9whdKdWVRuW5YLl5KnU2rjTBDyPmQImm5mec
- WQx7X3fBNwAzQ9kvBTKR0BwR3Bewhisn2mpkhea3BZwBcdorRlQk9QKecyZukRPeHTmuEL1FdjlJ
- tmTlvoAJPnRaMnKinNICn4QthNaKlNAlLae9sc5UODaelVh+l345u7ZMIY89GNdmWV8cIaTFlLGm
- QKLrzQykh/Aw02WsdoE2l1g7JIPdyWGFL6Hy1uJZsEjavLUXkVyeIdrbpPoXQHxDG0l68wEoW8vG
- BLI6qc2XoUEWCUI26aQfK1wypuwV7v6mtMhtgL8avOP/pBCiigAAAABJRU5ErkJggg==
-X-Disclaimer: Opinions expressed in this email are my own and are not necessarily those of any organization with which I have an affiliation.
-Date:   Wed, 25 May 2022 12:13:45 -0700
-In-Reply-To: <87h75g0xbm.ffs@tglx> (Thomas Gleixner's message of "Mon, 23 May
-        2022 23:10:37 +0200")
-Message-ID: <87y1yph1cm.fsf@ebb.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 25 May 2022 15:15:15 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3820D222A4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:14:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653506049; x=1685042049;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MWjLt/C0+HzwFey4r8iM3vFgAnnhjWJ6ptvZvdqX7W8=;
+  b=ly84XSjWV3z0wGpxY8bA62NcE2KY+ApY5JtE9V1xc3asfl5eyFHMAaWo
+   W/Zi/aA38JDkd3K9tPrXeGJt3Q1NShgvQ63+6XzNlcSn2qIvMItKA/cnY
+   qiVeHOpzJvudSCrgAzi1m242MII7sanuAVzQn+/1aHR6TUtAVy6Laj4V7
+   13VLlsvIK6OnU4Q5UsM/lGFXtIpmQoWS+du2hTmkDEZ4SLcKvlh3k+iUH
+   73TAIEvM00ZFs7qaIXlBv5wlMqi8C9tGIJtcV76QC5bndnWbgSKqY0qE9
+   ptfDrZFKzDbpV4fwTTbqyoD2WaxfjiROtqfrLKslXjTe0DeVWBFLI17Cs
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="255977176"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="255977176"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 12:14:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="527001913"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 May 2022 12:14:07 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntwSM-0003Fu-1y;
+        Wed, 25 May 2022 19:14:06 +0000
+Date:   Thu, 26 May 2022 03:13:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [vireshk-pm:opp/config 26/33]
+ drivers/memory/tegra/tegra124-emc.c:1401:34: error: 'hw_versions'
+ undeclared; did you mean 'hw_version'?
+Message-ID: <202205260337.QJEzLw2I-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,77 +62,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In answering Thomas' question …
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
+head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
+commit: c2dbafb4076bf639babb279975e034a050d9b72a [26/33] media: tegra: Migrate to dev_pm_opp_set_config()
+config: arc-randconfig-r034-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260337.QJEzLw2I-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=c2dbafb4076bf639babb279975e034a050d9b72a
+        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
+        git fetch --no-tags vireshk-pm opp/config
+        git checkout c2dbafb4076bf639babb279975e034a050d9b72a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-Thomas Gleixner wrote at 14:10 (PDT) on Monday:
-> If I want to remove this option, then how do I express this with a SPDX
-> license identifier?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-… some licensing/SPDX background is in order.  (I apologize in advance for a
-few paragraphs of license-splaining, as I know that many on this thread know
-these points already, but I suspect most only have only vague familiarity
-with this issue.)
+All errors (new ones prefixed by >>):
 
-copyleft-next 0.3.1 reads:
->> +11. Later License Versions
->> +    The Copyleft-Next Project may release new versions of copyleft-next,
->> +    designated by a distinguishing version number ("Later Versions").
+   drivers/memory/tegra/tegra124-emc.c: In function 'tegra_emc_opp_table_init':
+>> drivers/memory/tegra/tegra124-emc.c:1401:34: error: 'hw_versions' undeclared (first use in this function); did you mean 'hw_version'?
+    1401 |                 .supported_hw = &hw_versions,
+         |                                  ^~~~~~~~~~~
+         |                                  hw_version
+   drivers/memory/tegra/tegra124-emc.c:1401:34: note: each undeclared identifier is reported only once for each function it appears in
 
-Many don't realize that GPL is (or was, pre-copyleft-next) unique in
-structure among copyleft licenses in that the -or-later clause of all
-licenses in the GPL family is configurable.  That yields the complex forms
-of: GPLv1-only, GPLv1-or-later, GPLv2-only, GPLv2-or-later, etc.  GPLv3 even
-added the proxy upgrade clause (— a formulation SPDX can't handle at all).
 
-Other non-trivial FOSS licenses — such as Mozilla Public License (MPL),
-Common Development and Distribution License (CDDL), and Eclipse Public
-License (EPL) (as just three examples) — all have “automatic -or-later”.
-Thus, “MPLv2.0” *always* means “MPLv2.0-or-later”, so if you use the SPDX
-moniker for that (“MPL-2.0”), it really is akin to using “GPLv2-or-later”.
-Meanwhile, there is no *actual* way to license code under “MPLv2-only” — the
-license text itself prohibits it.
+vim +1401 drivers/memory/tegra/tegra124-emc.c
 
-All that's to say: the GPL has (historically) always been a huge FOSS
-licensing special-case because of the complex configurability of its
-“-or-later” clause.
+  1394	
+  1395	static int tegra_emc_opp_table_init(struct tegra_emc *emc)
+  1396	{
+  1397		u32 hw_version = BIT(tegra_sku_info.soc_speedo_id);
+  1398		struct opp_table *opp_table;
+  1399		int err;
+  1400		struct dev_pm_opp_config config = {
+> 1401			.supported_hw = &hw_versions,
+  1402			.supported_hw_count = 1,
+  1403		};
+  1404	
+  1405		opp_table = dev_pm_opp_set_config(emc->dev, &config);
+  1406		err = PTR_ERR_OR_ZERO(opp_table);
+  1407		if (err) {
+  1408			dev_err(emc->dev, "failed to set OPP config: %d\n", err);
+  1409			return err;
+  1410		}
+  1411	
+  1412		err = dev_pm_opp_of_add_table(emc->dev);
+  1413		if (err) {
+  1414			if (err == -ENODEV)
+  1415				dev_err(emc->dev, "OPP table not found, please update your device tree\n");
+  1416			else
+  1417				dev_err(emc->dev, "failed to add OPP table: %d\n", err);
+  1418	
+  1419			goto put_hw_table;
+  1420		}
+  1421	
+  1422		dev_info_once(emc->dev, "OPP HW ver. 0x%x, current clock rate %lu MHz\n",
+  1423			      hw_version, clk_get_rate(emc->clk) / 1000000);
+  1424	
+  1425		/* first dummy rate-set initializes voltage state */
+  1426		err = dev_pm_opp_set_rate(emc->dev, clk_get_rate(emc->clk));
+  1427		if (err) {
+  1428			dev_err(emc->dev, "failed to initialize OPP clock: %d\n", err);
+  1429			goto remove_table;
+  1430		}
+  1431	
+  1432		return 0;
+  1433	
+  1434	remove_table:
+  1435		dev_pm_opp_of_remove_table(emc->dev);
+  1436	put_hw_table:
+  1437		dev_pm_opp_clear_config(opp_table);
+  1438	
+  1439		return err;
+  1440	}
+  1441	
 
-One of the last activities I did with SPDX (in late 2017) was to help
-negotiate a solution on reworking the GPL identifiers to deal with this
-special case.  The solution was a classic political compromise — where
-*everyone* left unhappy — but that's what led to the deprecation of SPDX's
-“GPL-2.0” identifier in favor of “GPL-2.0-or-later” and “GPL-2.0-only”.
-
-I wasn't involved with SPDX anymore when they (much later) created the
-identifier “copyleft-next-0.3.1” — but it appears it was a case of “those
-who forget the past is condemned to repeat it” — because copyleft-next's
-SPDX identifier indeed has a similarly confusing ambiguity to “GPL-2.0”:
-
-copyleft-next 0.3.1 text reads further:
->> +    Unless I explicitly remove the option of Distributing Covered Works
->> +    under Later Versions, You may Distribute Covered Works under any Later
->> +    Version.
-Thomas Gleixner noted about it at 14:10 (PDT) on Monday:
-> If I want to remove this option, then how do I express this with a SPDX
-> license identifier?  Sigh!
-
-So, this problem that Thomas notes above is definitely an error by the SPDX
-project, *just like* the one that exists for the deprecated “GPL-2.0”
-identifier.  But, that isn't copyleft-next's fault [0], nor Luis's fault.
-IMO, Luis shouldn't be punished (i.e., by being prohibited by the Linux
-project from licensing under the GPLv2-compatible terms of his choosing)
-simply because the SPDX project erred.
-
-Fortunately, the problem *is* hypothetical here because Luis has *not*
-indicated that he's licensing under “copyleft-next-0.3.1 REVOKING
-new-version-upgrade”, so it's not a problem for Luis' patch that SPDX offers
-no way to represent that licensing sub-option in copyleft-next.
-
-[0] Nevertheless, I am wondering, given that (a) opting-out-of-auto-upgrade is
-    *so* GPL-specific, and (b) the auto-upgrade opt out has caused decades
-    of pain and woe throughout the GPL-using community (and for SPDX!),
-    maybe copyleft-next should, in fact, drop that clause entirely in future
-    versions. Discussion of that is likely not of interest to most folks on
-    this wide thread, so I'll pick up that conversation more narrowly just
-    on the copyleft-next list from here …
-
- -- bkuhn
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

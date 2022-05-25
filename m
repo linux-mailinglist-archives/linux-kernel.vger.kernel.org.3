@@ -2,133 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF470533660
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC89D533661
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243943AbiEYFZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 01:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        id S243950AbiEYF0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 01:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242821AbiEYFZo (ORCPT
+        with ESMTP id S240030AbiEYF0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 01:25:44 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD88A5158F
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:25:42 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2ff37db94e8so168863167b3.16
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=FnZF3+YZLg3UFQmraDPfJnhkCIHSpQV9nRiWF2uBduI=;
-        b=n7h4rDY5bqq1Nj/uWMH/BOjjGRxHVlwv0daDi3oPceK1xowU04YOjIO/3FhY9RNxQB
-         NlW5br8u8IyvUC8XXP+1RUMgGNfkrIiUS3xiwoFvkgSh4XjAzATxOx3RKK6OVWfU1okA
-         VELt3MwX8YxpZBuCRqJBZ5i6Qw7i9KkhlCaU7zc4bpMQ2FzwLe4PVfFIo6dhVQtl16P9
-         k0GfRSGF1Iv98TqoAoDGbyfUV7M7+JDsfG6qZvzQHbtLXd3Ia9RJ/mkcxNWnexJOoYDH
-         DgHQh35Gz3YKyuSZ/OidTYUmKgGf03Lc4j6wRIqoAExalNzTWmjDGxpZMjoMVIzkVvop
-         MICw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=FnZF3+YZLg3UFQmraDPfJnhkCIHSpQV9nRiWF2uBduI=;
-        b=RUZRx8IaWm2IdykaiCSne5kzl2BgPe/auXG33OzEDASoNb6rpPv5ixI0CQNvIFFpnQ
-         N1V0+FjPfRkJHAUh2K1ZozCPxcdTSISVOp5O3ItzGj6UXiBUUjJ6GrvfgHXQON3m/Y/Q
-         dXyx7h5/zJ8psmwr3OU4BQqDLCZ7evL05Orlcgw2snnxSFBRGS6yXhyLI0pw6kHgOyNs
-         SFzhlmpL0mPE4nXlKIsC0VnUBFaYc8Idal83L8+lQx6Pp+2ItbcahZdRWKJhK+dTUkvj
-         VQ6uQbi/mQnndDvUDjzLWvjQuEiHLMSzMTn1HyUFPhm6FELa7CPNf7vuzzZQn2REV5mC
-         NsmA==
-X-Gm-Message-State: AOAM530PomeIbY0J1+OG00Yt9F3aHeZFncolNLcahPo6I905jjnroqOM
-        TG97SIgS/NjG8HVrVRrkAD7/I6po6PKxMEhZU/l843HCebWm1UCN5OnKRj10oOVEpjuD496aiWB
-        snHXyJeyki+DLozt0dEqZGMQhDL8VzFZUp396KzTdcxxujezh1U3qZawcZj6ZabE/ajwS2BM3
-X-Google-Smtp-Source: ABdhPJw6Cr/yE0TgWX3Hl/9bUyXZB4vjuoFmuTWgHhQUQLb8N9Z8hgceptJxtdDxGHJy2bavjx8OQyvoqfPN
-X-Received: from mizhang-super2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:61c])
- (user=mizhang job=sendgmr) by 2002:a05:6902:1c4:b0:64d:b1e0:4075 with SMTP id
- u4-20020a05690201c400b0064db1e04075mr28882459ybh.589.1653456341806; Tue, 24
- May 2022 22:25:41 -0700 (PDT)
-Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Wed, 25 May 2022 05:25:38 +0000
-Message-Id: <20220525052538.1753922-1-mizhang@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH] selftests: KVM/x86: Add APIC state into kvm_x86_state
-From:   Mingwei Zhang <mizhang@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jim Mattson <jmattson@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 May 2022 01:26:35 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E331FDFF5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:26:33 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24P3oljh020951;
+        Wed, 25 May 2022 05:26:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2fenIkPHr/IUtCxXauyIc9QCSw5XgA85FUX0zmq9p7c=;
+ b=G72WTdP7B1ULPICw/UxA1GKJqOGc7feGRoRDo47kILK52ilR5WIOFC9BrfACtCwisZ5y
+ R3cjuc6PUigTpie/SsAn5AAacTptpgM1qbntujz9N6u0/zPtxqggo159CqWel/L1pjiR
+ xvoNzGSiH2Cl2kGnDJoz/hxR9GJE7SFWph0RtlXkp2kO3Fslt8WhkTxWpb1IeWaSdt5U
+ q4vpQaFp3/c+pSBkznbzAeWFmetJZbWu2nZKdZEmSllqoegDyz34q/chNMy3E2FPmVhK
+ jg6uA48pmKPFCI6f8yBpDVzBtCaEpkMVBHtBefEoxTMrBSyPDApd8bJPC53/ZNrqtw7h mA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9cwksjq8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 05:26:09 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24P5FQ8L029696;
+        Wed, 25 May 2022 05:26:09 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9cwksjpp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 05:26:09 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24P5MYqt003120;
+        Wed, 25 May 2022 05:26:07 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 3g948n040q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 05:26:07 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24P5Q47A33423714
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 May 2022 05:26:04 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B602152051;
+        Wed, 25 May 2022 05:26:04 +0000 (GMT)
+Received: from [9.43.97.219] (unknown [9.43.97.219])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id AA4FC5204E;
+        Wed, 25 May 2022 05:25:59 +0000 (GMT)
+Message-ID: <60bd09e4-91d6-d81c-3b97-1d5334efe6e7@linux.ibm.com>
+Date:   Wed, 25 May 2022 10:55:58 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 6/7] x86/crash: Add x86 crash hotplug support for
+ kexec_file_load
+Content-Language: en-US
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220505184603.1548-1-eric.devolder@oracle.com>
+ <20220505184603.1548-7-eric.devolder@oracle.com>
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <20220505184603.1548-7-eric.devolder@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ExG6Tf-04b6aLsrpIR4HSwUv1IbKn9PG
+X-Proofpoint-GUID: zwaqoCIM07dz8UgEro0IhQgnQoCeqHIV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-25_01,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015
+ mlxlogscore=999 malwarescore=0 suspectscore=0 mlxscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205250027
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add APIC state into kvm_x86_state and properly save/restore it in
-vcpu_{save,load}_state().
+Hello Eric,
 
-Doing so fix a bug that was triggered internally in Google. The selftest
-(WIP) creates an L1 which then creates an L2 and runs L2 in vcpu0. Before
-L2 finish, it exits to L0, save the state, stops the VM, restarts it and
-add the vcpu back and finally load the state back. The test uses another
-vcpu to shoot a posted interrupt. The result demonstrates that the L2,
-after this vm save/restore, was not able to receive posted interrupt.
+On 06/05/22 00:16, Eric DeVolder wrote:
+> For x86_64, when CPU or memory is hot un/plugged, the crash
+> elfcorehdr, which describes the CPUs and memory in the system,
+> must also be updated.
+>
+> To update the elfcorehdr for x86_64, a new elfcorehdr must be
+> generated from the available CPUs and memory. The new elfcorehdr
+> is prepared into a buffer, and then installed over the top of
+> the existing elfcorehdr.
+>
+> In the patch 'kexec: exclude elfcorehdr from the segment digest'
+> the need to update purgatory due to the change in elfcorehdr was
+> eliminated.  As a result, no changes to purgatory or boot_params
+> (as the elfcorehdr= kernel command line parameter pointer
+> remains unchanged and correct) are needed, just elfcorehdr.
+>
+> To accommodate a growing number of resources via hotplug, the
+> elfcorehdr segment must be sufficiently large enough to accommodate
+> changes, see the CRASH_MAX_MEMORY_RANGES configure item.
+>
+> With this change, crash hotplug for kexec_file_load syscall
+> is supported. When loading the crash kernel via kexec_file_load,
+> the elfcorehdr is identified at load time in crash_load_segments().
+>
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> ---
+>   arch/x86/Kconfig        |  11 ++++
+>   arch/x86/kernel/crash.c | 117 ++++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 128 insertions(+)
+>
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 4bed3abf444d..bf1201fe6981 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -2072,6 +2072,17 @@ config CRASH_DUMP
+>   	  (CONFIG_RELOCATABLE=y).
+>   	  For more details see Documentation/admin-guide/kdump/kdump.rst
+>   
+> +config CRASH_MAX_MEMORY_RANGES
+> +	depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
+> +	int
+> +	default 32768
+> +	help
+> +	  For the kexec_file_load path, specify the maximum number of
+> +	  memory regions, eg. as represented by the 'System RAM' entries
+> +	  in /proc/iomem, that the elfcorehdr buffer/segment can accommodate.
+> +	  This value is combined with NR_CPUS and multiplied by Elf64_Phdr
+> +	  size to determine the final buffer size.
+> +
+>   config KEXEC_JUMP
+>   	bool "kexec jump"
+>   	depends on KEXEC && HIBERNATION
+> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+> index 9db41cce8d97..951ef365f0a7 100644
+> --- a/arch/x86/kernel/crash.c
+> +++ b/arch/x86/kernel/crash.c
+> @@ -25,6 +25,7 @@
+>   #include <linux/slab.h>
+>   #include <linux/vmalloc.h>
+>   #include <linux/memblock.h>
+> +#include <linux/highmem.h>
+>   
+>   #include <asm/processor.h>
+>   #include <asm/hardirq.h>
+> @@ -398,7 +399,17 @@ int crash_load_segments(struct kimage *image)
+>   	image->elf_headers = kbuf.buffer;
+>   	image->elf_headers_sz = kbuf.bufsz;
+>   
+> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+> +	/* Ensure elfcorehdr segment large enough for hotplug changes */
+> +	kbuf.memsz = (CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) * sizeof(Elf64_Phdr);
+> +	/* For marking as usable to crash kernel */
+> +	image->elf_headers_sz = kbuf.memsz;
+> +	/* Record the index of the elfcorehdr segment */
+> +	image->elfcorehdr_index = image->nr_segments;
+> +	image->elfcorehdr_index_valid = true;
+> +#else
+>   	kbuf.memsz = kbuf.bufsz;
+> +#endif
+>   	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
+>   	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+>   	ret = kexec_add_buffer(&kbuf);
+> @@ -413,3 +424,109 @@ int crash_load_segments(struct kimage *image)
+>   	return ret;
+>   }
+>   #endif /* CONFIG_KEXEC_FILE */
+> +
+> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+> +static void *map_crash_pages(unsigned long paddr, unsigned long size)
+> +{
+> +	/*
+> +	 * NOTE: The addresses and sizes passed to this routine have
+> +	 * already been fully aligned on page boundaries. There is no
+> +	 * need for massaging the address or size.
+> +	 */
+> +	void *ptr = NULL;
+> +
+> +	/* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
+> +	if (size > 0) {
+> +		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
+> +
+> +		ptr = kmap(page);
+> +	}
+> +
+> +	return ptr;
+> +}
+> +
+> +static void unmap_crash_pages(void **ptr)
+> +{
+> +	if (ptr) {
+> +		if (*ptr)
+> +			kunmap(*ptr);
+> +		*ptr = NULL;
+> +	}
+> +}
+> +
+> +/**
+> + * arch_crash_handle_hotplug_event() - Handle hotplug elfcorehdr changes
+> + * @image: the active struct kimage
+> + * @hp_action: the hot un/plug action being handled
+> + * @cpu: when KEXEC_CRASH_HP_ADD/REMOVE_CPU, the cpu affected
+> + *
+> + * To accurately reflect hot un/plug changes, the elfcorehdr (which
+> + * is passed to the crash kernel via the elfcorehdr= parameter)
+> + * must be updated with the new list of CPUs and memories. The new
+> + * elfcorehdr is prepared in a kernel buffer, and then it is
+> + * written on top of the existing/old elfcorehdr.
+> + *
+> + * For hotplug changes to elfcorehdr to work, two conditions are
+> + * needed:
+> + * First, the segment containing the elfcorehdr must be large enough
+> + * to permit a growing number of resources. See the
+> + * CONFIG_CRASH_MAX_MEMORY_RANGES description.
+> + * Second, purgatory must explicitly exclude the elfcorehdr from the
+> + * list of segments it checks (since the elfcorehdr changes and thus
+> + * would require an update to purgatory itself to update the digest).
+> + *
+> + */
+> +void arch_crash_handle_hotplug_event(struct kimage *image,
+> +	unsigned int hp_action, unsigned int cpu)
+> +{
+> +	struct kexec_segment *ksegment;
+> +	unsigned char *ptr = NULL;
+> +	unsigned long elfsz = 0;
+> +	void *elfbuf = NULL;
+> +	unsigned long mem, memsz;
+> +
+> +	if (!image->elfcorehdr_index_valid) {
+> +		pr_err("crash hp: unable to locate elfcorehdr segment");
+> +		goto out;
+> +	}
+> +
+> +	ksegment = &image->segment[image->elfcorehdr_index];
+> +	mem = ksegment->mem;
+> +	memsz = ksegment->memsz;
+> +
+> +	/*
+> +	 * Create the new elfcorehdr reflecting the changes to CPU and/or
+> +	 * memory resources.
+> +	 */
+> +	if (prepare_elf_headers(image, &elfbuf, &elfsz)) {
+> +		pr_err("crash hp: unable to prepare elfcore headers");
+> +		goto out;
 
-Our debugging shows that it is the APIC state was software disabled after
-vcpu_load_state(). Adding the APIC state into the kvm_x86_state and loading
-it in vcpu_load_state() fixes the issue.
+Prepare_elf_header uses crash_prepare_elf64_headers function to generate elfcorehdr.
+Since crash_prepare_elf64_headers is defined under CONFIG_KEXEC_FILE option we
+will have build issues if CONFIG_KEXEC is enabled and CONFIG_KEXEC_FILE is disabled.
 
-Cc: Jim Mattson <jmattson@google.com>
-
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
----
- tools/testing/selftests/kvm/include/x86_64/processor.h | 1 +
- tools/testing/selftests/kvm/lib/x86_64/processor.c     | 8 ++++++++
- 2 files changed, 9 insertions(+)
-
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index d0d51adec76eb..e4683429bd8b8 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -123,6 +123,7 @@ struct kvm_x86_state {
- 		struct kvm_nested_state nested;
- 		char nested_[16384];
- 	};
-+	struct kvm_lapic_state apic;
- 	struct kvm_msrs msrs;
- };
- 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 33ea5e9955d9b..113f4ce752579 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1173,6 +1173,10 @@ struct kvm_x86_state *vcpu_save_state(struct kvm_vm *vm, uint32_t vcpuid)
- 	TEST_ASSERT(r == 0, "Unexpected result from KVM_GET_DEBUGREGS, r: %i",
- 		    r);
- 
-+	r = ioctl(vcpu->fd, KVM_GET_LAPIC, &state->apic);
-+	TEST_ASSERT(r == 0, "Unexpected result from KVM_GET_LAPIC, r: %i",
-+		    r);
-+
- 	free(list);
- 	return state;
- }
-@@ -1222,6 +1226,10 @@ void vcpu_load_state(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_x86_state *s
- 		TEST_ASSERT(r == 0, "Unexpected result from KVM_SET_NESTED_STATE, r: %i",
- 			    r);
- 	}
-+
-+	r = ioctl(vcpu->fd, KVM_SET_LAPIC, &state->apic);
-+	TEST_ASSERT(r == 0,
-+		"Unexpected result from KVM_SET_LAPIC, r: %i", r);
- }
- 
- void kvm_x86_state_cleanup(struct kvm_x86_state *state)
-
-base-commit: f3f19f939c11925dadd3f4776f99f8c278a7017b
--- 
-2.36.1.124.g0e6072fb45-goog
+How about moving crash_prepare_elf64_headers function to kernel/kexec_core.c?
+  
+Thanks,
+Sourabh Jain
 

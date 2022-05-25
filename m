@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52FC533A83
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E52533A88
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiEYKSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 06:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
+        id S236028AbiEYKS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 06:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238650AbiEYKSE (ORCPT
+        with ESMTP id S237959AbiEYKS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 06:18:04 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF16F95A21
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:18:01 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id s3so26382967edr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:18:01 -0700 (PDT)
+        Wed, 25 May 2022 06:18:56 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4019728E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:18:53 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id e2so17834750wrc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:18:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20210112.gappssmtp.com; s=20210112;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CWcbS5L85/mEeW1mF6bU3WMw7UT8O3cm3JT79L0gTxk=;
-        b=v4BbHDiSDvL5R73FWR5xbtJy6LNxqmlEePT1FtrfGJ6UkSFioQszcA8rOIeRxf6iHL
-         0+BN0eR8A3ge/2dyAKxSIiwOOmWmxKixLr7vIcI4r97yybZLeJzbp2dfYgZ204c2idzK
-         rmC9K9er1G3Cl5FEEMABQXaepeopRG/evCzlzWUAieWV+DXmRv4sDU5hU3nnp1g7Mpb6
-         He5z/JQV4zJT2NOYtfE1pzQG/7lfdOxPHCrKBk+p/cAqGl3rKL871evgBEGfRGPN3hm2
-         jbV5O54mDau6gzvomfvJpi5gqd2jHaKo03uVpZWZKJuwBOkAUqEhaKHAMCBI/S931Rfj
-         iHig==
+        bh=IKO1wQPqNeafXW7ePx/p6H6D1wFfnLpkgbfwaCOWD9o=;
+        b=CWTtkvYFGef5ey+p035Mn9qClBe5IM61n2d51HyOo6ItqkiavbGG73JXbcGaExiw9d
+         wg00mxcAerlPgWUpzrJ8w6fSjW5TntE/H91PCb0KJYsCdbsqhG0HHYHt/TcVL2g0w/Ot
+         8nHb+85XPzoFVRbf6s2E5ctugD4BfMmxQVRESSUjYMiYDY/bubJsIu4u80siyLDjTWK7
+         4OD/HyNkz1YL4xJBkatPj577T+sZwbDw+4yMFfuIjDdoCJFGA2lsiOjm2TkIgWZHwn+I
+         7ldZ4aH+oyR7xWefpMIn+gtNyZDyj3AkIES6acDXz1k4cAxWd0aCtMJYx0SfvYWgZ9nN
+         J77w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=CWcbS5L85/mEeW1mF6bU3WMw7UT8O3cm3JT79L0gTxk=;
-        b=Xq3+oexTIcd8tUZuqahOrbX7b2kPk077Dn5dC3q6NdED+r/qKf2fxUZFlBhe3DxQLS
-         1PWZl8lulgFax6g9d9SuvoXxOAib2zAgww16hllXv+ZD5WGh06Y1gNhK5UfPNwJTg7B2
-         stU3GKxqgpoga96no62t/ieWyQjPgU9DQVxkCnqT/Bhtnbo2Nvka5TvD7KwF3+xRIlWw
-         O6bkJp2q5WQSnwzND5sDGXJc5rZhSF7FXrYw2MzkguCuD2mUevvPXtWKY53E/3KHK2v4
-         gtOc0+6TaTDPfpqfUyQNX+YaU8bqcA9LvqVidxw7gPTW0IQ2otJfbcFtmL0uorLNgwGl
-         RfWw==
-X-Gm-Message-State: AOAM532L9L9mXDaCYpbK+5CmyeQV/OQh2cZvfcULslqMH4MxTk+8UPrJ
-        wdQWNoo2kzaioO+bDjU5q3u7QA==
-X-Google-Smtp-Source: ABdhPJx71HmX/6m5vDdLrQDBd2fZlBrC5klCkXUMKj3Wv/QHDoe7s+eFtf3w61AtpymFBwhn8Fk1Ew==
-X-Received: by 2002:a05:6402:2996:b0:42b:49a:6d24 with SMTP id eq22-20020a056402299600b0042b049a6d24mr30849124edb.145.1653473880217;
-        Wed, 25 May 2022 03:18:00 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:2c21:b442:2fc3:f06f? ([2a02:578:8593:1200:2c21:b442:2fc3:f06f])
-        by smtp.gmail.com with ESMTPSA id y20-20020aa7c254000000b0042ac4089dabsm10334757edo.17.2022.05.25.03.17.59
+        bh=IKO1wQPqNeafXW7ePx/p6H6D1wFfnLpkgbfwaCOWD9o=;
+        b=2t3Lvli9J+1HECfzsu/cgiLhazj85SvpbynHIlJoOmnBOtuR4/dAtEFMzWjV2NeLDa
+         v5qqxON/lpDnb26ZqbaIO8L982OXBAj0ZrHlP+KN+EelUDPBkoWpNC7XY3JOxL1RX/8V
+         zmSFTtMc9zv2tJ3WbpJBsJwSOOiFYpACPNACH5V0arRVQBMwefyfmbHPHK1go7hD9k91
+         lzhmFmFUIBEKrYRGDOhV1SN5I0A0gMKuZXQ1AxsxvQTpf1pKSCQmFCVcrR9dzP1oFVCn
+         3BlJeQ1x/d6+53Q8sYe1/c9DD5DWG/7u+vxoqY/B1C0eVL98Qwo3vr2tx55UhZZew6LR
+         ea0g==
+X-Gm-Message-State: AOAM531C2R1jrHL09HMeBae6SwT/NS2wMZ8vUbvRoOQplXD+r+KRfs2u
+        LhLeYzyOGjxa/H5elect5bs9MA==
+X-Google-Smtp-Source: ABdhPJxgtLZHCd6/bHzg9r3GWuTdZpprQ2vQ2cJsbS0c885HtYWHWfg4GYMB8tQn4zKYJcJdaeJoiA==
+X-Received: by 2002:adf:fc01:0:b0:20c:ff9a:2c53 with SMTP id i1-20020adffc01000000b0020cff9a2c53mr26042048wrr.142.1653473931814;
+        Wed, 25 May 2022 03:18:51 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id p3-20020a1c7403000000b0039744664af7sm1749957wmc.1.2022.05.25.03.18.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 03:17:59 -0700 (PDT)
-Message-ID: <6207feca-1cd2-be15-e1cf-0ae2ff680b48@tessares.net>
-Date:   Wed, 25 May 2022 12:17:59 +0200
+        Wed, 25 May 2022 03:18:51 -0700 (PDT)
+Message-ID: <4bf1c80d-0f18-f444-3005-59a45797bcfd@blackwall.org>
+Date:   Wed, 25 May 2022 13:18:49 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 5.17 114/158] mptcp: strict local address ID selection
-Content-Language: en-GB
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-References: <20220523165830.581652127@linuxfoundation.org>
- <20220523165849.851212488@linuxfoundation.org>
- <fa953ec-288f-7715-c6fb-47a222e85270@linux.intel.com>
- <Yo3gAprjnapHfKar@kroah.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <Yo3gAprjnapHfKar@kroah.com>
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+Content-Language: en-US
+To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+ <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
+ <86zgj6oqa9.fsf@gmail.com>
+ <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org>
+ <86fskyggdo.fsf@gmail.com>
+ <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org>
+ <86v8tu7za3.fsf@gmail.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <86v8tu7za3.fsf@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,67 +92,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg, Mat,
-
-On 25/05/2022 09:51, Greg Kroah-Hartman wrote:
-> On Mon, May 23, 2022 at 08:51:52PM -0700, Mat Martineau wrote:
->> On Mon, 23 May 2022, Greg Kroah-Hartman wrote:
+On 25/05/2022 12:11, Hans Schultz wrote:
+> On ons, maj 25, 2022 at 11:38, Nikolay Aleksandrov <razor@blackwall.org> wrote:
+>> On 25/05/2022 11:34, Hans Schultz wrote:
+>>> On ons, maj 25, 2022 at 11:06, Nikolay Aleksandrov <razor@blackwall.org> wrote:
+>>>> On 24/05/2022 19:21, Hans Schultz wrote:
+>>>>>>
+>>>>>> Hi Hans,
+>>>>>> So this approach has a fundamental problem, f->dst is changed without any synchronization
+>>>>>> you cannot rely on it and thus you cannot account for these entries properly. We must be very
+>>>>>> careful if we try to add any new synchronization not to affect performance as well.
+>>>>>> More below...
+>>>>>>
+>>>>>>> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
+>>>>>>>  	if (test_bit(BR_FDB_STATIC, &f->flags))
+>>>>>>>  		fdb_del_hw_addr(br, f->key.addr.addr);
+>>>>>>>  
+>>>>>>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
+>>>>>>> +		atomic_dec(&f->dst->locked_entry_cnt);
+>>>>>>
+>>>>>> Sorry but you cannot do this for multiple reasons:
+>>>>>>  - f->dst can be NULL
+>>>>>>  - f->dst changes without any synchronization
+>>>>>>  - there is no synchronization between fdb's flags and its ->dst
+>>>>>>
+>>>>>> Cheers,
+>>>>>>  Nik
+>>>>>
+>>>>> Hi Nik,
+>>>>>
+>>>>> if a port is decoupled from the bridge, the locked entries would of
+>>>>> course be invalid, so maybe if adding and removing a port is accounted
+>>>>> for wrt locked entries and the count of locked entries, would that not
+>>>>> work?
+>>>>>
+>>>>> Best,
+>>>>> Hans
+>>>>
+>>>> Hi Hans,
+>>>> Unfortunately you need the correct amount of locked entries per-port if you want
+>>>> to limit their number per-port, instead of globally. So you need a
+>>>> consistent
+>>>
+>>> Hi Nik,
+>>> the used dst is a port structure, so it is per-port and not globally.
+>>>
+>>> Best,
+>>> Hans
+>>>
 >>
->>> From: Paolo Abeni <pabeni@redhat.com>
->>>
->>> [ Upstream commit 4cf86ae84c718333928fd2d43168a1e359a28329 ]
->>>
->>> The address ID selection for MPJ subflows created in response
->>> to incoming ADD_ADDR option is currently unreliable: it happens
->>> at MPJ socket creation time, when the local address could be
->>> unknown.
->>>
->>> Additionally, if the no local endpoint is available for the local
->>> address, a new dummy endpoint is created, confusing the user-land.
->>>
->>> This change refactor the code to move the address ID selection inside
->>> the rebuild_header() helper, when the local address eventually
->>> selected by the route lookup is finally known. If the address used
->>> is not mapped by any endpoint - and thus can't be advertised/removed
->>> pick the id 0 instead of allocate a new endpoint.
->>>
->>> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
->>> Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
->>> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
->>> Signed-off-by: Sasha Levin <sashal@kernel.org>
->>> ---
->>> net/mptcp/pm_netlink.c | 13 --------
->>> net/mptcp/protocol.c   |  3 ++
->>> net/mptcp/protocol.h   |  3 +-
->>> net/mptcp/subflow.c    | 67 ++++++++++++++++++++++++++++++++++++------
->>> 4 files changed, 63 insertions(+), 23 deletions(-)
->>>
+>> Yeah, I know. :) That's why I wrote it, if the limit is not a feature requirement I'd suggest
+>> dropping it altogether, it can be enforced externally (e.g. from user-space) if needed.
 >>
->> Greg, Sasha -
+>> By the way just fyi net-next is closed right now due to merge window. And one more
+>> thing please include a short log of changes between versions when you send a new one.
+>> I had to go look for v2 to find out what changed.
 >>
->> Is it possible to drop this one patch? It makes one of the mptcp selftests
->> fail (mptcp_join.sh, "single address, backup").
 > 
-> Does that mean the backport is incorrect, or that the selftest is wrong?
+> Okay, I will drop the limit in the bridge module, which is an easy thing
+> to do. :) (It is mostly there to ensure against DOS attacks if someone
+> bombards a locked port with random mac addresses.)
+> I have a similar limitation in the driver, which should then probably be
+> dropped too?
+> 
 
-The backport is correct but the commit that is backported here was part
-of a series that was changing the behaviour. This modification is
-visible in the selftests.
+That is up to you/driver, I'd try looking for similar problems in other switch drivers
+and check how those were handled. There are people in the CC above that can
+directly answer that. :)
 
-If I'm not mistaken, we would need these two commits to fix the
-regression in the selftests:
+> The mayor difference between v2 and v3 is in the mv88e6xxx driver, where
+> I now keep an inventory of locked ATU entries and remove them based on a
+> timer (mv88e6xxx_switchcore.c).
+> 
 
-  69c6ce7b6eca selftests: mptcp: add implicit endpoint test case
+ack
 
-  d045b9eb95a9 mptcp: introduce implicit endpoints
+> I guess the mentioned log should be in the cover letter part?
+> 
 
+Yep, usually a short mention of what changed to make it easier for reviewers.
+Some people also add the patch-specific changes to each patch under the ---
+so they're not included in the log, but I'm fine either way as long as I don't
+have to go digging up the old versions.
 
-But we don't want to change the behaviour in stable and it is better to
-drop this patch ("mptcp: strict local address ID selection"), it is not
-needed for stable from what I see.
+> 
+>>>> fdb view with all its attributes when changing its dst in this case, which would
+>>>> require new locking because you have multiple dependent struct fields and it will
+>>>> kill roaming/learning scalability. I don't think this use case is worth the complexity it
+>>>> will bring, so I'd suggest an alternative - you can monitor the number of locked entries
+>>>> per-port from a user-space agent and disable port learning or some similar solution that
+>>>> doesn't require any complex kernel changes. Is the limit a requirement to add the feature?
+>>>>
+>>>> I have an idea how to do it and to minimize the performance hit if it really is needed
+>>>> but it'll add a lot of complexity which I'd like to avoid if possible.
+>>>>
+>>>> Cheers,
+>>>>  Nik
 
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net

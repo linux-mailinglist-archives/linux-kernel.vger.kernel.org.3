@@ -2,158 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE89A5338A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A08E5338AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234827AbiEYIis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        id S235453AbiEYIlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiEYIio (ORCPT
+        with ESMTP id S232299AbiEYIlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:38:44 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD9C21E13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:38:41 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id o9so4352359wmd.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KtU04oFIh5Z0YSsR5FQRVyG/XaU2MIHApujJFCWuZlw=;
-        b=QqGYFn4Ab/DfOssUeWALroVEeCh9UhII4ToDkKRqMH2XJaQXYENX3C07V7wDmMpuPs
-         JB3nZ4QAR/l9TljZY57Uuupxe1QmncQMTZ5I50aguJnVGNj9v5id7qb2+BG1fcInEp2L
-         b9z2+5kDCMMMCrsXu7n7v40qvPya+hxNYfNUtz0O9ntgyGKdkE02ugcZO98fspQhi80T
-         u/uE2lleR4T3dIgB7EKLlUELP3N/KLVAA7/6/EEP16i87GjgEC6aZW5yNb/sGrVc69iw
-         gxuZU+B3cTUODouyMdi1eNJJ5xxLm0G9V7ka82qlV5C9zfWaWc31Q5mm4ez/nueuTqH5
-         AQfg==
+        Wed, 25 May 2022 04:41:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02700220D9
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653468063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sWhpLcpJcmzzGJ2iM8haayonZZiCVvJa6aMQQNtfVeM=;
+        b=OMlFnyE43cMz4++19Ro8XI5JR5BC61YNALEmcv0SkFsJ4oGxO7Eb12pA9vnsshJGDGNb/R
+        CWrH4IpaM+/Y3jPbf+QCU9tKpbjpcKsIFo30A0hqurDsOq/papiQ2ouGmvOGb0uVa1C3Sa
+        dkSZ9p+1HTPHki1ChXi8VkV5pDNcpfM=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-133-CU-ifHlqNJWZ52T_1adxeQ-1; Wed, 25 May 2022 04:41:01 -0400
+X-MC-Unique: CU-ifHlqNJWZ52T_1adxeQ-1
+Received: by mail-qk1-f198.google.com with SMTP id l26-20020a37f51a000000b006a32d5737d2so13025675qkk.19
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:41:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KtU04oFIh5Z0YSsR5FQRVyG/XaU2MIHApujJFCWuZlw=;
-        b=uJ9WSLm/WxyRlWLkebrjkwOeDt54aS7SHTCN2xkJCUEqlfKFwPG02ZaX2ehx9xoR0D
-         v22IZ0h885eZt8JOZCQaMazhJATPvyr3QRxwwUuK63Pow5gs60/7qCmPnVQdU7MN95N/
-         mK1UvfRJyNY2NN9GiVrPDZcKWb2CbLK+7Z57Ka1AKzqxJ+1HRoUdSW7BgPYTr5f2c6+i
-         CCFSyNXHWpLq6yKqHU9r8lIRXqyWZdyCLper9TYOATER1sQ0RBxrzL19Xn+GlNWMHo+t
-         YWKbcJO2s19zY+ZNdBibkt4Lta0+BaNtxPHz1Ee0Q1bB8JUKHSejX/U3uJdGipVb4JUZ
-         46cw==
-X-Gm-Message-State: AOAM530TA83dCQG1ys+p5ZArjQExLgp6gY1IifmpVQzQ+587VJ7fMRem
-        m2LmVTMcGiEK7Kv/Mt3s1dw1/g==
-X-Google-Smtp-Source: ABdhPJxg30sXPTLAyZtvayj2nwwa80y3xEtCg/2rQQDarGJN5d/Z2NA4PqAO4xPOizxFU+5GcDqMVw==
-X-Received: by 2002:a7b:cf11:0:b0:397:33e3:87b2 with SMTP id l17-20020a7bcf11000000b0039733e387b2mr7086443wmg.152.1653467920448;
-        Wed, 25 May 2022 01:38:40 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id n11-20020a5d598b000000b0020c61af5e1fsm1620689wri.51.2022.05.25.01.38.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 01:38:39 -0700 (PDT)
-Message-ID: <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org>
-Date:   Wed, 25 May 2022 11:38:37 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sWhpLcpJcmzzGJ2iM8haayonZZiCVvJa6aMQQNtfVeM=;
+        b=HhkaSRsNtxbbp43P+ZnOIIIxakzcONsORKonaxnQx50muzNdpuWF83pMcFPzcazGgY
+         fQYvUsYPU/0Bk+vg0YjIf//+haml+OfEAx9dN6SEw7+KTAbL8Ul2GH8TiDtJQPwkDGSg
+         sk2CKdPzeNZnWbSKiH0Rsc8qNyT5il3zlgQexdc2itH9ZB/CR9K8xksybvXLsRNkaiU/
+         +xsGLe5hGHyu8vgG8+cShaROR4EKys1ynnltfjpFy/BIjg602eUud8LWT5BfyvColluQ
+         MUvMwDzaFvObEyvS1Bw018Fk7UNe5hbJ4FnH8o5Q3JDwGL/OZg7wFlR60LJhQVjOv1IR
+         Oykg==
+X-Gm-Message-State: AOAM5308UfsB473RSL1rKr9YhLLv+ZoQflnE2ESi11gGyhpg0t7zDkvB
+        hJxe24uSLKhxioANLGS+6d5ow7o6GlfiuEpcDCzMe3n6Ki6XsAmE2eBU8zFoXY28k2z50aTEPMd
+        /NAOu7ewjObgFaDmcynWoDQoGbSAu7gJyI4kFgH2F
+X-Received: by 2002:ac8:59d6:0:b0:2f3:f521:ed4b with SMTP id f22-20020ac859d6000000b002f3f521ed4bmr23653695qtf.320.1653468060210;
+        Wed, 25 May 2022 01:41:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwUZjfDXKV2TZOhlW7DV8KIWqqQ7N5Fmr6WTaKUlb3oH2yQ3eYGHbrEDNce9XcfwrIGLsGtKUGPeFYNJD6JERI=
+X-Received: by 2002:ac8:59d6:0:b0:2f3:f521:ed4b with SMTP id
+ f22-20020ac859d6000000b002f3f521ed4bmr23653668qtf.320.1653468059954; Wed, 25
+ May 2022 01:40:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
- <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
- <86zgj6oqa9.fsf@gmail.com>
- <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org>
- <86fskyggdo.fsf@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <86fskyggdo.fsf@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220524170610.2255608-1-eperezma@redhat.com> <20220524170610.2255608-5-eperezma@redhat.com>
+ <CACGkMEvCzxy+1BX2FMs5CvsvVvd9oedtgXmpiyAZWZECPypRig@mail.gmail.com>
+In-Reply-To: <CACGkMEvCzxy+1BX2FMs5CvsvVvd9oedtgXmpiyAZWZECPypRig@mail.gmail.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Wed, 25 May 2022 10:40:23 +0200
+Message-ID: <CAJaqyWenRO_NY6=T8hL=VJ7F9Shn2VbicATBKPK7=U6te890ng@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] vdpa_sim: Implement stop vdpa op
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     netdev <netdev@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Parav Pandit <parav@nvidia.com>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
+        "Dawar, Gautam" <gautam.dawar@amd.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        habetsm.xilinx@gmail.com, Eli Cohen <elic@nvidia.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Cindy Lu <lulu@redhat.com>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        ecree.xilinx@gmail.com, "Uminski, Piotr" <Piotr.Uminski@intel.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2022 11:34, Hans Schultz wrote:
-> On ons, maj 25, 2022 at 11:06, Nikolay Aleksandrov <razor@blackwall.org> wrote:
->> On 24/05/2022 19:21, Hans Schultz wrote:
->>>>
->>>> Hi Hans,
->>>> So this approach has a fundamental problem, f->dst is changed without any synchronization
->>>> you cannot rely on it and thus you cannot account for these entries properly. We must be very
->>>> careful if we try to add any new synchronization not to affect performance as well.
->>>> More below...
->>>>
->>>>> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
->>>>>  	if (test_bit(BR_FDB_STATIC, &f->flags))
->>>>>  		fdb_del_hw_addr(br, f->key.addr.addr);
->>>>>  
->>>>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
->>>>> +		atomic_dec(&f->dst->locked_entry_cnt);
->>>>
->>>> Sorry but you cannot do this for multiple reasons:
->>>>  - f->dst can be NULL
->>>>  - f->dst changes without any synchronization
->>>>  - there is no synchronization between fdb's flags and its ->dst
->>>>
->>>> Cheers,
->>>>  Nik
->>>
->>> Hi Nik,
->>>
->>> if a port is decoupled from the bridge, the locked entries would of
->>> course be invalid, so maybe if adding and removing a port is accounted
->>> for wrt locked entries and the count of locked entries, would that not
->>> work?
->>>
->>> Best,
->>> Hans
->>
->> Hi Hans,
->> Unfortunately you need the correct amount of locked entries per-port if you want
->> to limit their number per-port, instead of globally. So you need a
->> consistent
-> 
-> Hi Nik,
-> the used dst is a port structure, so it is per-port and not globally.
-> 
-> Best,
-> Hans
-> 
+On Wed, May 25, 2022 at 4:54 AM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Wed, May 25, 2022 at 1:06 AM Eugenio P=C3=A9rez <eperezma@redhat.com> =
+wrote:
+> >
+> > Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
+> > that backend feature and userspace can effectively stop the device.
+> >
+> > This is a must before get virtqueue indexes (base) for live migration,
+> > since the device could modify them after userland gets them. There are
+> > individual ways to perform that action for some devices
+> > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
+> > way to perform it for any vhost device (and, in particular, vhost-vdpa)=
+.
+> >
+> > After the return of ioctl with stop !=3D 0, the device MUST finish any
+> > pending operations like in flight requests. It must also preserve all
+> > the necessary state (the virtqueue vring base plus the possible device
+> > specific states) that is required for restoring in the future. The
+> > device must not change its configuration after that point.
+> >
+> > After the return of ioctl with stop =3D=3D 0, the device can continue
+> > processing buffers as long as typical conditions are met (vq is enabled=
+,
+> > DRIVER_OK status bit is enabled, etc).
+> >
+> > In the future, we will provide features similar to
+> > VHOST_USER_GET_INFLIGHT_FD so the device can save pending operations.
+> >
+> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > ---
+> >  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++++++
+> >  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
+> >  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
+> >  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
+> >  4 files changed, 28 insertions(+)
+> >
+> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/v=
+dpa_sim.c
+> > index 50d721072beb..0515cf314bed 100644
+> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > @@ -107,6 +107,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasi=
+m)
+> >         for (i =3D 0; i < vdpasim->dev_attr.nas; i++)
+> >                 vhost_iotlb_reset(&vdpasim->iommu[i]);
+> >
+> > +       vdpasim->running =3D true;
+> >         spin_unlock(&vdpasim->iommu_lock);
+> >
+> >         vdpasim->features =3D 0;
+> > @@ -505,6 +506,24 @@ static int vdpasim_reset(struct vdpa_device *vdpa)
+> >         return 0;
+> >  }
+> >
+> > +static int vdpasim_stop(struct vdpa_device *vdpa, bool stop)
+> > +{
+> > +       struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
+> > +       int i;
+> > +
+> > +       spin_lock(&vdpasim->lock);
+> > +       vdpasim->running =3D !stop;
+> > +       if (vdpasim->running) {
+> > +               /* Check for missed buffers */
+> > +               for (i =3D 0; i < vdpasim->dev_attr.nvqs; ++i)
+> > +                       vdpasim_kick_vq(vdpa, i);
+> > +
+> > +       }
+> > +       spin_unlock(&vdpasim->lock);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
+> >  {
+> >         struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
+> > @@ -694,6 +713,7 @@ static const struct vdpa_config_ops vdpasim_config_=
+ops =3D {
+> >         .get_status             =3D vdpasim_get_status,
+> >         .set_status             =3D vdpasim_set_status,
+> >         .reset                  =3D vdpasim_reset,
+> > +       .stop                   =3D vdpasim_stop,
+> >         .get_config_size        =3D vdpasim_get_config_size,
+> >         .get_config             =3D vdpasim_get_config,
+> >         .set_config             =3D vdpasim_set_config,
+> > @@ -726,6 +746,7 @@ static const struct vdpa_config_ops vdpasim_batch_c=
+onfig_ops =3D {
+> >         .get_status             =3D vdpasim_get_status,
+> >         .set_status             =3D vdpasim_set_status,
+> >         .reset                  =3D vdpasim_reset,
+> > +       .stop                   =3D vdpasim_stop,
+> >         .get_config_size        =3D vdpasim_get_config_size,
+> >         .get_config             =3D vdpasim_get_config,
+> >         .set_config             =3D vdpasim_set_config,
+> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/v=
+dpa_sim.h
+> > index 622782e92239..061986f30911 100644
+> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> > @@ -66,6 +66,7 @@ struct vdpasim {
+> >         u32 generation;
+> >         u64 features;
+> >         u32 groups;
+> > +       bool running;
+> >         /* spinlock to synchronize iommu table */
+> >         spinlock_t iommu_lock;
+> >  };
+> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_s=
+im/vdpa_sim_blk.c
+> > index 42d401d43911..bcdb1982c378 100644
+> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> > @@ -204,6 +204,9 @@ static void vdpasim_blk_work(struct work_struct *wo=
+rk)
+> >         if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
+> >                 goto out;
+> >
+> > +       if (!vdpasim->running)
+> > +               goto out;
+> > +
+> >         for (i =3D 0; i < VDPASIM_BLK_VQ_NUM; i++) {
+> >                 struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[i];
+> >
+> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_s=
+im/vdpa_sim_net.c
+> > index 5125976a4df8..886449e88502 100644
+> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> > @@ -154,6 +154,9 @@ static void vdpasim_net_work(struct work_struct *wo=
+rk)
+> >
+> >         spin_lock(&vdpasim->lock);
+> >
+> > +       if (!vdpasim->running)
+> > +               goto out;
+> > +
+>
+> Do we need to check vdpasim->running in vdpasim_kick_vq()?
+>
 
-Yeah, I know. :) That's why I wrote it, if the limit is not a feature requirement I'd suggest
-dropping it altogether, it can be enforced externally (e.g. from user-space) if needed.
+I'd say that not really: The important part is that we don't process
+more buffers, and that is more accurate here. To check it here will
+always avoid it although we queue work.
 
-By the way just fyi net-next is closed right now due to merge window. And one more
-thing please include a short log of changes between versions when you send a new one.
-I had to go look for v2 to find out what changed.
+Maybe we can see it as an optimization: either to check before queuing
+the work as you propose or simply stop polling kick file descriptors?
 
->> fdb view with all its attributes when changing its dst in this case, which would
->> require new locking because you have multiple dependent struct fields and it will
->> kill roaming/learning scalability. I don't think this use case is worth the complexity it
->> will bring, so I'd suggest an alternative - you can monitor the number of locked entries
->> per-port from a user-space agent and disable port learning or some similar solution that
->> doesn't require any complex kernel changes. Is the limit a requirement to add the feature?
->>
->> I have an idea how to do it and to minimize the performance hit if it really is needed
->> but it'll add a lot of complexity which I'd like to avoid if possible.
->>
->> Cheers,
->>  Nik
+Thanks!
+
+> Thanks
+>
+> >         if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
+> >                 goto out;
+> >
+> > --
+> > 2.27.0
+> >
+>
 

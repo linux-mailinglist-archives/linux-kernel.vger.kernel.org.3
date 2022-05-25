@@ -2,93 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC30533688
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB98453367E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244041AbiEYFnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 01:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S244017AbiEYFiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 01:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242356AbiEYFne (ORCPT
+        with ESMTP id S243946AbiEYFiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 01:43:34 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3484160A9A
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:43:26 -0700 (PDT)
-X-UUID: a469481094374202937f5807fca7138d-20220525
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:67c377b9-f005-46ce-a6a0-97813ced0dbe,OB:0,LO
-        B:10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:56
-X-CID-INFO: VERSION:1.1.5,REQID:67c377b9-f005-46ce-a6a0-97813ced0dbe,OB:0,LOB:
-        10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:56
-X-CID-META: VersionHash:2a19b09,CLOUDID:f5cf24b8-3c45-407b-8f66-25095432a27a,C
-        OID:31c0f6e3944e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:0,BEC:nil
-X-UUID: a469481094374202937f5807fca7138d-20220525
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1084376180; Wed, 25 May 2022 13:43:21 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 25 May 2022 13:43:20 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 25 May 2022 13:43:19 +0800
-From:   <yf.wang@mediatek.com>
-To:     <yong.wu@mediatek.com>
-CC:     <Libo.Kang@mediatek.com>, <iommu@lists.linux-foundation.org>,
-        <joro@8bytes.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <ning.li@mediatek.com>, <robin.murphy@arm.com>, <will@kernel.org>,
-        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>
-Subject: Re: [PATCH v5 2/2] iommu/mediatek: Allow page table PA up to 35bit
-Date:   Wed, 25 May 2022 13:36:42 +0800
-Message-ID: <20220525053642.29653-1-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <1625ec1f4cded0f825d93743d3d03fcf83cad5aa.camel@mediatek.com>
-References: <1625ec1f4cded0f825d93743d3d03fcf83cad5aa.camel@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+        Wed, 25 May 2022 01:38:22 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4991B5EDE1
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:38:21 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f4dfd09d7fso170775677b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:38:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=J6AIzYxM94WLDE1VTUM2GvuHGVMYhOjSoUyQI5esYvY=;
+        b=fP6HOquRnsc+5BXSr+ruSg9nh2sJZ+tLEvHFpqfWI3Ce0PRPIgnMN4HTatj309I8mK
+         np2TV1REkwreC5pLx8Ms1vWtAsun+KHEkCo/zuY3CT8BwQ656GwvV4R2MsWTiBtXG7BK
+         NdZUdgU0P9G1pGPyw6PYU+iflcZpLKqFZvoL3uWWY0LztFQQ2MBxuOAJa3nyLVy4+5+Q
+         W/dYWcjdENu15m0VmnfOgMqyY1cH4HSdb0InDw0fyQfUu0zZg4HVsUfzenDbLt14P3Qi
+         MczvjGoEmVjeg2RxYaUMjOwohhSP4jIRHBsYWmIv6SLtXRRfvqRcvOW3sgOwj8h8UTyn
+         KTGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=J6AIzYxM94WLDE1VTUM2GvuHGVMYhOjSoUyQI5esYvY=;
+        b=rzEJj+5k9YV41h9mU87EepuI+Z6edekAh2LMQRSRf4d77aIvB2/WaAKECG0j+NFeMi
+         FAQN2vRSKOwx0ySoiaQ1ok4acUdSxVWLVeW4t1EFYHDwRj9Oo80HNamUiYoDzxtaKZlU
+         p/n7yC6hnoq4ad1zw/QnO8jLDf7wpvaOXtiQqY6ynv+h+MKS321bAhdCUihku+tHKzEP
+         XXefswO2Pp5WLFFihoUY+0qYPPT0a8/CajwBWun22gjXjTiSasRjoZgkFLDJSGlGMMaJ
+         0dO09lhQH7zjD/R2+T9nmdxTZIJtG6IjQZ0jaiitIPnlHYqk4Ap3O6oV6qIADGykZLtH
+         Hsng==
+X-Gm-Message-State: AOAM531oFqaXlJsQNGEoIsoHGWt6XvTWxwy9ZMOFGF9mtmaHNEA/avSL
+        32p77w6vuRTMLsUAca8gGrZhx3Hal2rq
+X-Google-Smtp-Source: ABdhPJxXM4PFYMGr/65uoJQnUDAKa7kF4Mf+9D6qvNvXHP9FCJ3g/oucUObTbbJnfqUoFIGYPUbzXwZdTPJM
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:1ab1:de5:7b7f:3844])
+ (user=irogers job=sendgmr) by 2002:a25:4045:0:b0:64e:a6ae:23b7 with SMTP id
+ n66-20020a254045000000b0064ea6ae23b7mr31701321yba.296.1653457100526; Tue, 24
+ May 2022 22:38:20 -0700 (PDT)
+Date:   Tue, 24 May 2022 22:38:11 -0700
+Message-Id: <20220525053814.3265216-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [PATCH v4 0/3] JSON output for perf stat
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
+        Like Xu <likexu@tencent.com>,
+        James Clark <james.clark@arm.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Claire Jensen <clairej735@gmail.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 14:58 +0800, Yong Wu wrote:
-> On Mon, 2022-05-16 at 22:16 +0800, yf.wang@mediatek.com wrote:
-> > From: Yunfei Wang <yf.wang@mediatek.com>
-> > 
-> > Add the quirk IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT support, so that
-> > allows
-> > page table PA up to 35bit, not only in ZONE_DMA32.
-> 
-> Comment why this is needed.
-> 
-> e.g. For single normal zone.
-> 
+Parsing the CSV or text output of perf stat can be problematic when
+new output is added (columns in CSV format). JSON names values and
+simplifies the job of parsing. Add a JSON output option to perf-stat
+then add unit test that parses and validates the output.
 
-Hi Yong,
+This is a resend of two v2 patches:
+https://lore.kernel.org/lkml/20210813220754.2104922-1-cjense@google.com/
+https://lore.kernel.org/lkml/20210813220936.2105426-1-cjense@google.com/
+with a few formatting changes and improvements to the linter.
 
-There is no DMA32 zone in some mediatek smartphone chip for single normal zone.
+The CSV test/linter is also added to ensure that CSV output doesn't regress:
+https://lore.kernel.org/lkml/20210813192108.2087512-1-cjense@google.com/
 
-The level 1 and level 2 pgtable are both allocated in ZONE_DMA32, and may have two possible problem:
-1.The level 2 pgtable is allocated in ZONE_DMA32 with atomic flag, and it may fail if ZONE_DMA32 memory is used out.
-2.Single memory feature will make ZONE_DMA32 empty, and cause level 1 and level 2 pgtable PA more than 32bit.
+v4. Does some minor fixes to the json linter.
 
-Solution:
-Add the quirk IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT support, so that level 1 and level 2 pgtable can support at most 35bit PA.
+v3. There is some tidy up of CSV code including a potential memory
+    over run in the os.nfields set up caught by sanitizers. To
+    facilitate this an AGGR_MAX value is added. v3 also adds the CSV
+    testing.
 
-I will update the commit message in next version.
+v2. Fixes the system wide no aggregation test to not run if the
+    paranoia is wrong. It also makes the counter-value check handle
+    the "<not counted>" and "<not supported>" cases.
 
-Thanks,
-Yunfei.
+Claire Jensen (3):
+  perf test: Add checking for perf stat CSV output.
+  perf stat: Add JSON output option
+  perf test: Json format checking
+
+ tools/perf/Documentation/perf-stat.txt        |  21 +
+ tools/perf/builtin-stat.c                     |   6 +
+ .../tests/shell/lib/perf_csv_output_lint.py   |  48 +++
+ .../tests/shell/lib/perf_json_output_lint.py  |  94 +++++
+ tools/perf/tests/shell/stat+csv_output.sh     | 147 +++++++
+ tools/perf/tests/shell/stat+json_output.sh    | 147 +++++++
+ tools/perf/util/stat-display.c                | 384 +++++++++++++-----
+ tools/perf/util/stat.c                        |   1 +
+ tools/perf/util/stat.h                        |   2 +
+ 9 files changed, 744 insertions(+), 106 deletions(-)
+ create mode 100644 tools/perf/tests/shell/lib/perf_csv_output_lint.py
+ create mode 100644 tools/perf/tests/shell/lib/perf_json_output_lint.py
+ create mode 100755 tools/perf/tests/shell/stat+csv_output.sh
+ create mode 100755 tools/perf/tests/shell/stat+json_output.sh
+
+-- 
+2.36.1.124.g0e6072fb45-goog
+

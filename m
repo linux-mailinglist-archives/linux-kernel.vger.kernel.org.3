@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816BA533EA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B5C533EB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244760AbiEYOCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S244689AbiEYOCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244740AbiEYN7d (ORCPT
+        with ESMTP id S244650AbiEYN7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 May 2022 09:59:33 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934D6AEE28;
-        Wed, 25 May 2022 06:58:57 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id q10so25102008oia.9;
-        Wed, 25 May 2022 06:58:57 -0700 (PDT)
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14588AEE32;
+        Wed, 25 May 2022 06:58:59 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-f2a4c51c45so5075441fac.9;
+        Wed, 25 May 2022 06:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LpREWf24Z1Y0Q1itAhOByEIa1J2oUjo3qOeVA9rLEjw=;
-        b=WaoJiR91MTH/idKXiWa3Ur+RKayAqk1MMt+wSgfgGTtqEv7XgXbTV9nKsEsnWCMBBR
-         g6hpvrBFWIQDCGIguMUDMeBljm+gYPvyzLDC+8laXLMT2wqzW0jmzC77meYcbjO0AElq
-         MwiVMiyxBqzMeWS1JxoxSjdKJ3LFCsTRCDBKya5FD+9ojd+vcWX5Iz38anEgEBIpwWby
-         gqxiqV2c1/9GpsfbTSb/SLBKm9IN+O8jnwCyl3KcvoxLXhG7VhOUzU4zBSa1Lp3EBpJK
-         vGdU3EM71K83wz3KmjXDyqpcfVdURuUY/5pIJ/MOZDYyVrpoXRo6MxG23ns/gYtqM6oJ
-         nfkA==
+        bh=PPew1VM41xxNGE+qDgXPgSNgmsal/QTwCvqXDhBfHZs=;
+        b=mO7KiIxyOAqn6dba0565pUUarXvLH4mEF9vHL5idhvPoZ25Q755Axhpot89kFdh9XD
+         XAzURRoEt5WboDo7GuSW8YTcps429sKuPCIpVMlTnnnp2jopdtM87kAV9esxjwVZsMGo
+         e+n9RqBk1FFRXMhGkBDvFVxFl3bXK/gUoGykZRIoyo9qlzuk0scAQahohIBaPhQ4M/wn
+         2MGBpuhK23FK3teoU6ZLTpbTs8bgUtJY5HPKbDz7sMnVRA+w/3HC0Wb4X/Zr16cNIp8v
+         QxMmzfv9b4X0Ay11eo6V2o+oBtSC8OVjGKA2rKOueTiHFexDxtAsKfJTNTlOxZY00RX3
+         gGZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=LpREWf24Z1Y0Q1itAhOByEIa1J2oUjo3qOeVA9rLEjw=;
-        b=TRHbTYt57w9JGGZb/sidl8FACW5Q7/W7klKZ09NGwQtUcggascPIGY3tBA2TIox9HF
-         EHv+473zqBL5rWBSad8V1I5R6ODxjNyEJNbh04ligERtEDroPLUkHRLQn/aWTrs8tcJt
-         WsSYOUgqdx99Lx1wq48xkRGmniIM4SFi4/TqG0H8zfk1qNrn5VdqUj02LwUT9TfP+tfc
-         /Vctv/h/FwMNCpafrlnRUGb7nidXOM+fyDh11Mrz8QPcNOwtBcclYj++HFTGLj0kjEcD
-         1zsdKh5JWbi24RnybnRzxLGPd6SNSHMCQ7CeA9bqtJZk3lqx8bnSVM1dRSDgfQ4qqb+G
-         6QnA==
-X-Gm-Message-State: AOAM533a0KbEsN5ZH18/RfjKqWaiuQFi5KiWwlFMpLmhF3dz4de9ror6
-        nFUnSylJsgKfGhmWnA7z+DbXRbCjlVNixw==
-X-Google-Smtp-Source: ABdhPJyqzYTI5CxHYcfBWiZl1wmILD93Q/kyCrfrRCGqsElUrho0z1MGTb2u9Nwm+QCwuAIU0LrfSA==
-X-Received: by 2002:a05:6808:1315:b0:32b:6c09:91f5 with SMTP id y21-20020a056808131500b0032b6c0991f5mr5261285oiv.181.1653487136408;
-        Wed, 25 May 2022 06:58:56 -0700 (PDT)
+        bh=PPew1VM41xxNGE+qDgXPgSNgmsal/QTwCvqXDhBfHZs=;
+        b=NxjZdOzHl669FtHjQPs3pQGTHEs6EGkNMJubFwQEIFQnt6JIHjNGV4ux19EwLghcPu
+         3kuRtJNRq23yvkzto3Fp6ipwp9Q+W64FJlTAUTuj0wjoFNGMqQWgkG6j234uVVnD24+Z
+         JKaUG6hBxluWtf5wzkYvZCLhqCvRUXEYwilwWaMxSNoAQ1fVEsBbETKOREzqctOgcRDI
+         bT028x+D9KRZzcu/7Af+O5z6TgKbjJ+enHdXFn4g7dknXeWncIE7SPd/yjriDUxf9VmJ
+         UZ1Joz+HqBRqGePjbklDy82wPyzd36JXkejdMMg3PbyjE5Q+oa0eO5od57phDLEdK/e0
+         EpVQ==
+X-Gm-Message-State: AOAM530SezkidYAc94nTufPtR7QWig1FtpTSZfiWHJfOwislpOZuyjGU
+        9gJd73mO41C+USQKniMY9wW1hZd25gBGHA==
+X-Google-Smtp-Source: ABdhPJy44reUgxpnPhwKQnRDMnUOrcnOzAMez2ZdHc+3DM2niZOT1sVoa2sQMOJdRMU04ypVAnteHw==
+X-Received: by 2002:a05:6870:e3c1:b0:d7:2dc8:7fd0 with SMTP id y1-20020a056870e3c100b000d72dc87fd0mr5715140oad.104.1653487138159;
+        Wed, 25 May 2022 06:58:58 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o9-20020a4ad149000000b0035eb4e5a6b2sm6551836oor.8.2022.05.25.06.58.55
+        by smtp.gmail.com with ESMTPSA id h16-20020a9d6010000000b0060603221247sm6180119otj.23.2022.05.25.06.58.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:58:55 -0700 (PDT)
+        Wed, 25 May 2022 06:58:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Slawomir Stepien <sst@poczta.fm>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 29/40] hwmon: (lm90) Add support for ADM1021, ADM1021A, and ADM1023
-Date:   Wed, 25 May 2022 06:57:47 -0700
-Message-Id: <20220525135758.2944744-30-linux@roeck-us.net>
+Subject: [PATCH 30/40] hwmon: (lm90) Add remaining chips supported by adm1021 driver
+Date:   Wed, 25 May 2022 06:57:48 -0700
+Message-Id: <20220525135758.2944744-31-linux@roeck-us.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220525135758.2944744-1-linux@roeck-us.net>
 References: <20220525135758.2944744-1-linux@roeck-us.net>
@@ -73,13 +73,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both chips are quite similar to other chips of this series, so add
-support for them to the lm90 driver. Also mention ON Semiconductor NCT210,
-which is pin and register compatible to ADM1021A.
+All chips supported by the ADM1021 driver are also supported by the LM90
+driver. Make that support official.
 
-None of the chips support the secondary manufacturer and chip ID registers
-at 0x3e and 0x3f, but return 0 when reading from those registers.
-Use that information to improve the accuracy of chip detection code.
+After this change, the adm1021 driver is only needed if the lm90 driver
+is disabled. Also, the adm1021 driver misdetects a variety of chips as
+MAX1617A, which is unwanted if any of those chips is in the system.
+For this reason. make the adm1021 driver dependent on !SENSORS_LM90 to
+show that it is not needed if the lm90 driver is enabled, and to avoid
+misdetection if a chip supported by the lm90 driver is in the system.
 
 Devicetree nodes are not added for the added chips since it is quite
 unlikely that such old chips will ever be used in a devicetree based
@@ -87,173 +89,147 @@ system. They can be added later if needed.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Documentation/hwmon/lm90.rst | 23 +++++++++++++++++-
- drivers/hwmon/Kconfig        |  4 +--
- drivers/hwmon/lm90.c         | 47 ++++++++++++++++++++++++++++++++----
- 3 files changed, 66 insertions(+), 8 deletions(-)
+ Documentation/hwmon/lm90.rst | 34 +++++++++++++++++++++++++++++++++-
+ drivers/hwmon/Kconfig        |  1 +
+ drivers/hwmon/lm90.c         | 26 ++++++++++++++++++++++++++
+ 3 files changed, 60 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/hwmon/lm90.rst b/Documentation/hwmon/lm90.rst
-index 8fe9013b9c39..699ac963722b 100644
+index 699ac963722b..dfbdfe11606e 100644
 --- a/Documentation/hwmon/lm90.rst
 +++ b/Documentation/hwmon/lm90.rst
-@@ -51,6 +51,22 @@ Supported chips:
+@@ -355,6 +355,38 @@ Supported chips:
  
- 	       http://www.national.com/mpf/LM/LM86.html
+ 	       https://www.ti.com/lit/gpn/tmp461
  
-+  * Analog Devices ADM1021
++  * Philips NE1617, NE1617A
 +
-+    Prefix: 'adm1021'
++    Prefix: 'max1617' (probably detected as a max1617)
 +
 +    Addresses scanned: I2C 0x18 - 0x1a, 0x29 - 0x2b, 0x4c - 0x4e
 +
-+    Datasheet: Publicly available at the Analog Devices website
++    Datasheets: Publicly available at the Philips website
 +
-+  * Analog Devices ADM1021A/ADM1023
++  * Genesys Logic GL523SM
 +
-+    Prefix: 'adm1023'
++    Prefix: 'gl523sm'
 +
 +    Addresses scanned: I2C 0x18 - 0x1a, 0x29 - 0x2b, 0x4c - 0x4e
 +
-+    Datasheet: Publicly available at the Analog Devices website
++    Datasheet:
 +
-   * Analog Devices ADM1032
++  * TI THMC10
++
++    Prefix: 'thmc10'
++
++    Addresses scanned: I2C 0x18 - 0x1a, 0x29 - 0x2b, 0x4c - 0x4e
++
++    Datasheet: Publicly available at the TI website
++
++  * Onsemi MC1066
++
++    Prefix: 'mc1066'
++
++    Addresses scanned: I2C 0x18 - 0x1a, 0x29 - 0x2b, 0x4c - 0x4e
++
++    Datasheet: Publicly available at the Onsemi website
++
+ Author: Jean Delvare <jdelvare@suse.de>
  
-     Prefix: 'adm1032'
-@@ -369,10 +385,15 @@ features:
+ 
+@@ -385,7 +417,7 @@ features:
  LM84:
    * 8 bit sensor resolution
  
--MAX1617:
-+ADM1021, MAX1617:
+-ADM1021, MAX1617:
++ADM1021, GL523SM, MAX1617, NE1617, NE1617A, THMC10:
    * 8 bit sensor resolution
    * Low temperature limits
  
-+ADM1021A, ADM1023:
-+  * Temperature offset register for remote temperature sensor
-+  * 11 bit resolution for remote temperature sensor
-+  * Low temperature limits
-+
- LM90:
-   * 11 bit resolution for remote temperature sensor
-   * Temperature offset register for remote temperature sensor
 diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 1dd812cf15bb..50fa255b1e3c 100644
+index 50fa255b1e3c..bb952287fcee 100644
 --- a/drivers/hwmon/Kconfig
 +++ b/drivers/hwmon/Kconfig
-@@ -1359,8 +1359,8 @@ config SENSORS_LM90
+@@ -100,6 +100,7 @@ config SENSORS_AD7418
+ config SENSORS_ADM1021
+ 	tristate "Analog Devices ADM1021 and compatibles"
  	depends on I2C
++	depends on SENSORS_LM90=n
  	help
- 	  If you say yes here you get support for National Semiconductor LM84,
--	  LM90, LM86, LM89 and LM99, Analog Devices ADM1032, ADT7461, ADT7461A,
--	  ADT7481, ADT7482, and ADT7483A,
-+	  LM90, LM86, LM89 and LM99, Analog Devices ADM2021, ADM1021A, ADM1023,
-+	  ADM1032, ADT7461, ADT7461A, ADT7481, ADT7482, and ADT7483A,
- 	  Maxim MAX1617, MAX6642, MAX6646, MAX6647, MAX6648, MAX6649, MAX6654,
- 	  MAX6657, MAX6658, MAX6659, MAX6680, MAX6681, MAX6692, MAX6695,
- 	  MAX6696,
+ 	  If you say yes here you get support for Analog Devices ADM1021
+ 	  and ADM1023 sensor chips and clones: Maxim MAX1617 and MAX1617A,
 diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 09c3b9eb2f8b..40c012bc6ca6 100644
+index 40c012bc6ca6..97453a7de1fa 100644
 --- a/drivers/hwmon/lm90.c
 +++ b/drivers/hwmon/lm90.c
-@@ -122,7 +122,8 @@ static const unsigned short normal_i2c[] = {
- 	0x18, 0x19, 0x1a, 0x29, 0x2a, 0x2b, 0x48, 0x49, 0x4a, 0x4b, 0x4c,
- 	0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
- 
--enum chips { adm1032, adt7461, adt7461a, adt7481, g781, lm84, lm86, lm90, lm99,
-+enum chips { adm1023, adm1032, adt7461, adt7461a, adt7481,
-+	g781, lm84, lm86, lm90, lm99,
- 	max1617, max6642, max6646, max6648, max6654, max6657, max6659, max6680, max6696,
- 	sa56004, tmp451, tmp461, w83l771,
- };
-@@ -223,6 +224,8 @@ enum chips { adm1032, adt7461, adt7461a, adt7481, g781, lm84, lm86, lm90, lm99,
-  */
- 
- static const struct i2c_device_id lm90_id[] = {
-+	{ "adm1021", max1617 },
-+	{ "adm1023", adm1023 },
- 	{ "adm1032", adm1032 },
- 	{ "adt7461", adt7461 },
- 	{ "adt7461a", adt7461a },
-@@ -375,6 +378,14 @@ struct lm90_params {
- };
- 
- static const struct lm90_params lm90_params[] = {
-+	[adm1023] = {
-+		.flags = LM90_HAVE_ALARMS | LM90_HAVE_OFFSET | LM90_HAVE_BROKEN_ALERT
-+		  | LM90_HAVE_REM_LIMIT_EXT | LM90_HAVE_LOW | LM90_HAVE_CONVRATE
-+		  | LM90_HAVE_REMOTE_EXT,
-+		.alert_alarms = 0x7c,
-+		.resolution = 8,
-+		.max_convrate = 7,
-+	},
- 	[adm1032] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT
-@@ -1740,19 +1751,43 @@ static const char *lm90_detect_national(struct i2c_client *client, int chip_id,
- 	return name;
+@@ -233,6 +233,7 @@ static const struct i2c_device_id lm90_id[] = {
+ 	{ "adt7482", adt7481 },
+ 	{ "adt7483a", adt7481 },
+ 	{ "g781", g781 },
++	{ "gl523sm", max1617 },
+ 	{ "lm84", lm84 },
+ 	{ "lm86", lm86 },
+ 	{ "lm89", lm86 },
+@@ -254,9 +255,11 @@ static const struct i2c_device_id lm90_id[] = {
+ 	{ "max6692", max6648 },
+ 	{ "max6695", max6696 },
+ 	{ "max6696", max6696 },
++	{ "mc1066", max1617 },
+ 	{ "nct1008", adt7461a },
+ 	{ "w83l771", w83l771 },
+ 	{ "sa56004", sa56004 },
++	{ "thmc10", max1617 },
+ 	{ "tmp451", tmp451 },
+ 	{ "tmp461", tmp461 },
+ 	{ }
+@@ -2125,6 +2128,18 @@ static const char *lm90_detect_gmt(struct i2c_client *client, int chip_id,
+ 	return NULL;
  }
  
--static const char *lm90_detect_analog(struct i2c_client *client, int chip_id,
--				      int config1, int convrate)
-+static const char *lm90_detect_analog(struct i2c_client *client, bool common_address,
-+				      int chip_id, int config1, int convrate)
++static const char *lm90_detect_ti49(struct i2c_client *client, bool common_address,
++				    int chip_id, int config1, int convrate)
++{
++	if (common_address && chip_id == 0x00 && !(config1 & 0x3f) && !(convrate & 0xf8)) {
++		/* THMC10: Unsupported registers return 0xff */
++		if (i2c_smbus_read_byte_data(client, LM90_REG_REMOTE_TEMPL) == 0xff &&
++		    i2c_smbus_read_byte_data(client, LM90_REG_REMOTE_CRIT) == 0xff)
++			return "thmc10";
++	}
++	return NULL;
++}
++
+ static const char *lm90_detect_ti(struct i2c_client *client, int chip_id,
+ 				  int config1, int convrate)
  {
-+	int status = i2c_smbus_read_byte_data(client, LM90_REG_STATUS);
- 	int config2 = i2c_smbus_read_byte_data(client, ADT7481_REG_CONFIG2);
- 	int man_id2 = i2c_smbus_read_byte_data(client, ADT7481_REG_MAN_ID);
- 	int chip_id2 = i2c_smbus_read_byte_data(client, ADT7481_REG_CHIP_ID);
- 	int address = client->addr;
- 	const char *name = NULL;
- 
--	if (config2 < 0 || man_id2 < 0 || chip_id2 < 0)
-+	if (status < 0 || config2 < 0 || man_id2 < 0 || chip_id2 < 0)
- 		return NULL;
- 
- 	switch (chip_id) {
-+	case 0x00 ... 0x0f:	/* ADM1021, undocumented */
-+		if (man_id2 == 0x00 && chip_id2 == 0x00 && common_address &&
-+		    !(status & 0x03) && !(config1 & 0x3f) && !(convrate & 0xf8))
-+			name = "adm1021";
-+		break;
-+	case 0x30 ... 0x3f:	/* ADM1021A, ADM1023 */
-+		/*
-+		 * ADM1021A and compatible chips will be mis-detected as
-+		 * ADM1023. Chips labeled 'ADM1021A' and 'ADM1023' were both
-+		 * found to have a Chip ID of 0x3c.
-+		 * ADM1021A does not officially support low byte registers
-+		 * (0x12 .. 0x14), but a chip labeled ADM1021A does support it.
-+		 * Official support for the temperature offset high byte
-+		 * register (0x11) was added to revision F of the ADM1021A
-+		 * datasheet.
-+		 * It is currently unknown if there is a means to distinguish
-+		 * ADM1021A from ADM1023, and/or if revisions of ADM1021A exist
-+		 * which differ in functionality from ADM1023.
-+		 */
-+		if (man_id2 == 0x00 && chip_id2 == 0x00 && common_address &&
-+		    !(status & 0x03) && !(config1 & 0x3f) && !(convrate & 0xf8))
-+			name = "adm1023";
-+		break;
- 	case 0x40 ... 0x4f:	/* ADM1032 */
- 		if (man_id2 == 0x00 && chip_id2 == 0x00 &&
- 		    (address == 0x4c || address == 0x4d) && !(config1 & 0x3f) &&
-@@ -1793,6 +1828,7 @@ static const char *lm90_detect_analog(struct i2c_client *client, int chip_id,
- 		break;
- 	case 0x94:	/* ADT7483 */
- 		if (man_id2 == 0x41 && chip_id2 == 0x83 &&
-+		    common_address &&
- 		    ((address >= 0x18 && address <= 0x1a) ||
- 		     (address >= 0x29 && address <= 0x2b) ||
- 		     (address >= 0x4c && address <= 0x4e)) &&
-@@ -2173,7 +2209,8 @@ static int lm90_detect(struct i2c_client *client, struct i2c_board_info *info)
+@@ -2208,6 +2223,10 @@ static int lm90_detect(struct i2c_client *client, struct i2c_board_info *info)
+ 	case 0x01:	/* National Semiconductor */
  		name = lm90_detect_national(client, chip_id, config1, convrate);
  		break;
++	case 0x23:	/* Genesys Logic */
++		if (common_address && !(config1 & 0x3f) && !(convrate & 0xf8))
++			name = "gl523sm";
++		break;
  	case 0x41:	/* Analog Devices */
--		name = lm90_detect_analog(client, chip_id, config1, convrate);
-+		name = lm90_detect_analog(client, common_address, chip_id, config1,
-+					  convrate);
- 		break;
+ 		name = lm90_detect_analog(client, common_address, chip_id, config1,
+ 					  convrate);
+@@ -2215,10 +2234,17 @@ static int lm90_detect(struct i2c_client *client, struct i2c_board_info *info)
  	case 0x47:	/* GMT */
  		name = lm90_detect_gmt(client, chip_id, config1, convrate);
+ 		break;
++	case 0x49:	/* TI */
++		name = lm90_detect_ti49(client, common_address, chip_id, config1, convrate);
++		break;
+ 	case 0x4d:	/* Maxim Integrated */
+ 		name = lm90_detect_maxim(client, common_address, chip_id,
+ 					 config1, convrate);
+ 		break;
++	case 0x54:	/* ON MC1066, Microchip TC1068, TCM1617 (originally TelCom) */
++		if (common_address && !(config1 & 0x3f) && !(convrate & 0xf8))
++			name = "mc1066";
++		break;
+ 	case 0x55:	/* TI */
+ 		name = lm90_detect_ti(client, chip_id, config1, convrate);
+ 		break;
 -- 
 2.35.1
 

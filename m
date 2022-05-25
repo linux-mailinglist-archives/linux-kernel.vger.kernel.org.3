@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C656533EBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F94C533EC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244500AbiEYOHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S244673AbiEYOHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245637AbiEYOFy (ORCPT
+        with ESMTP id S245643AbiEYOFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 May 2022 10:05:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC330C6E6B;
-        Wed, 25 May 2022 07:03:35 -0700 (PDT)
-Date:   Wed, 25 May 2022 14:03:33 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653487414;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=55ocFR5c8Yck9KyS67JdgcKAJX3wIgoSeYZFc0YqsWw=;
-        b=0f7I+wCG03Aaugbh2N8LSn5VKr19kU/XFztj04lan53h3cnuDzrkTc1GOyy0FLPKbmjHsj
-        pLKnZNzRxq3Oxqfmsu2d3hIgZDjRQxgYlW5/tvvV3QVsFaw8GpA2kpsUwJ/o9JRRf3ppnt
-        TdvLVgVZnp1flZDYazzLUhTXqxFosVSZPvVoJWpwPoW9cCOjB0TAn4cVB4UvSOld8pd9Lw
-        nSvg0F5AChaZJ1zUhx1yTAMwxQo6kClSaDvf0hkY0UDJLZW1i3N8wNfJhg4J5C0wRt0AIa
-        1CVSiaD2oTX4aOtITopIqM6TYb8lwFccWCDOt+Wjr8fQtPRtHjI1OvKOSdT0NQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653487414;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=55ocFR5c8Yck9KyS67JdgcKAJX3wIgoSeYZFc0YqsWw=;
-        b=sIqUpH8IFMVk9RDjQ4zZ0iNlpK8/cEtwtEBeVfwzDNwy9OPAhc9Gw/MmyoMgkyziN1fsim
-        XxdYOM6hE+g9Y4AQ==
-From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/x86/intel: Fix event constraints for ICL
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220525133952.1660658-1-kan.liang@linux.intel.com>
-References: <20220525133952.1660658-1-kan.liang@linux.intel.com>
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290D78D6BD;
+        Wed, 25 May 2022 07:03:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653487435; x=1685023435;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FdNkUTr3XASwSCxYa3ivhvPYt8r8WXycJZ613rnDCeE=;
+  b=K60NM2e227WWOO6sPbV2DViC1WmF2xeMeRGlN4g6SSkO4aSc31uTT2UJ
+   LROC/FmaLr1X0fmPByESBhqoemKfLICFdoGN1OxReaBTsrJegSh6orBmB
+   1jkgA7G9hwbQ3u749ybOlbkK1TeMDXIdH6u/+0/nC6PDjsJjCE07wpqo5
+   CYjdZ3NGzyobXDMKvXELmS/YCV1199mGh7SYmg92xG9+XYPn+34AKi1PN
+   uxrkBGGijP3/NyXV/a9KLqaN8RV5q9pnEa9mxQw7ve2hG7niuD36XD3FG
+   PxeEWMx7zFKJXpzA1RTCFY+o45bb/sdTL4E8n1hGw1IdnqfRpPJQr6onl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="299154465"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="299154465"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 07:03:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="717694868"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by fmsmga001.fm.intel.com with ESMTP; 25 May 2022 07:03:52 -0700
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
+        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
+Subject: [PATCH] perf jevents: Fix event syntax error caused by ExtSel
+Date:   Wed, 25 May 2022 22:04:10 +0800
+Message-Id: <20220525140410.1706851-1-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <165348741321.4207.8002435699917268067.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/urgent branch of tip:
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-Commit-ID:     86dca369075b3e310c3c0adb0f81e513c562b5e4
-Gitweb:        https://git.kernel.org/tip/86dca369075b3e310c3c0adb0f81e513c562b5e4
-Author:        Kan Liang <kan.liang@linux.intel.com>
-AuthorDate:    Wed, 25 May 2022 06:39:52 -07:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Wed, 25 May 2022 15:55:52 +02:00
+In the origin code, when "ExtSel" is 1, the eventcode will change to
+"eventcode |= 1 << 21”. For event “UNC_Q_RxL_CREDITS_CONSUMED_VN0.DRS",
+its "ExtSel" is "1", its eventcode will change from 0x1E to 0x20001E,
+but in fact the eventcode should <=0x1FF, so this will cause the parse
+fail:
 
-perf/x86/intel: Fix event constraints for ICL
+  # perf stat -e "UNC_Q_RxL_CREDITS_CONSUMED_VN0.DRS" -a sleep 0.1
+event syntax error: '.._RxL_CREDITS_CONSUMED_VN0.DRS'
+                                  \___ value too big for format, maximum is 511
 
-According to the latest event list, the event encoding 0x55
-INST_DECODED.DECODERS and 0x56 UOPS_DECODED.DEC0 are only available on
-the first 4 counters. Add them into the event constraints table.
+On the perf kernel side, the kernel assumes the valid bits are continuous.
+It will adjust the 0x100 (bit 8 for perf tool) to bit 21 in HW.
 
-Fixes: 6017608936c1 ("perf/x86/intel: Add Icelake support")
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Peter Zijlstra <peterz@infradead.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220525133952.1660658-1-kan.liang@linux.intel.com
+DEFINE_UNCORE_FORMAT_ATTR(event_ext, event, "config:0-7,21");
+
+So the perf tool follows the kernel side and just set bit8 other than bit21.
+
+Fixes: fedb2b518239 ("perf jevents: Add support for parsing uncore json files")
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- arch/x86/events/intel/core.c | 2 +-
+ tools/perf/pmu-events/jevents.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 955ae91..45024ab 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -276,7 +276,7 @@ static struct event_constraint intel_icl_event_constraints[] = {
- 	INTEL_EVENT_CONSTRAINT_RANGE(0x03, 0x0a, 0xf),
- 	INTEL_EVENT_CONSTRAINT_RANGE(0x1f, 0x28, 0xf),
- 	INTEL_EVENT_CONSTRAINT(0x32, 0xf),	/* SW_PREFETCH_ACCESS.* */
--	INTEL_EVENT_CONSTRAINT_RANGE(0x48, 0x54, 0xf),
-+	INTEL_EVENT_CONSTRAINT_RANGE(0x48, 0x56, 0xf),
- 	INTEL_EVENT_CONSTRAINT_RANGE(0x60, 0x8b, 0xf),
- 	INTEL_UEVENT_CONSTRAINT(0x04a3, 0xff),  /* CYCLE_ACTIVITY.STALLS_TOTAL */
- 	INTEL_UEVENT_CONSTRAINT(0x10a3, 0xff),  /* CYCLE_ACTIVITY.CYCLES_MEM_ANY */
+diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
+index cee61c4ed59e..e597e4bac90f 100644
+--- a/tools/perf/pmu-events/jevents.c
++++ b/tools/perf/pmu-events/jevents.c
+@@ -605,7 +605,7 @@ static int json_events(const char *fn,
+ 			} else if (json_streq(map, field, "ExtSel")) {
+ 				char *code = NULL;
+ 				addfield(map, &code, "", "", val);
+-				eventcode |= strtoul(code, NULL, 0) << 21;
++				eventcode |= strtoul(code, NULL, 0) << 8;
+ 				free(code);
+ 			} else if (json_streq(map, field, "EventName")) {
+ 				addfield(map, &je.name, "", "", val);
+-- 
+2.25.1
+

@@ -2,107 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585CD533DA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAA8533DB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237631AbiEYNTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
+        id S234257AbiEYNU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244505AbiEYNT2 (ORCPT
+        with ESMTP id S244522AbiEYNTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:19:28 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100B20BF2;
-        Wed, 25 May 2022 06:18:57 -0700 (PDT)
-X-UUID: 3a54a674e22a4dc39038fbbbdd31aa0d-20220525
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:bec41655-ae65-4217-8673-b51cb335cc35,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:2a19b09,CLOUDID:6dad35b8-3c45-407b-8f66-25095432a27a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 3a54a674e22a4dc39038fbbbdd31aa0d-20220525
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1354993977; Wed, 25 May 2022 21:18:44 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 25 May 2022 21:18:42 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 25 May 2022 21:18:42 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 25 May 2022 21:18:42 +0800
-Message-ID: <478ed2945cdf90f465a7828ab9b235254caab311.camel@mediatek.com>
-Subject: Re: [PATCH v20 0/8] Add Mediatek Soc DRM (vdosys0) support for
- mt8195
-From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     CK Hu <ck.hu@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
-        "Singo Chang" <singo.chang@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        jason-jhlin <jason-jh.lin@mediatek.corp-partner.google.com>
-Date:   Wed, 25 May 2022 21:18:42 +0800
-In-Reply-To: <43a102cf-6971-8083-d24f-629d6d39810f@collabora.com>
-References: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
-         <43a102cf-6971-8083-d24f-629d6d39810f@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 25 May 2022 09:19:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C341AF3D;
+        Wed, 25 May 2022 06:19:39 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PD7pvt012789;
+        Wed, 25 May 2022 13:19:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=5gThyaGaWA+mcR/Yr7gUjJjf5ptNc6JGxVkl7LE8FFM=;
+ b=DjwvLQanquSEhZG5INJ3XXQ/oH9u7lm/zl+cCj9YPb0LUier2dm64Se3xL04iecENpvz
+ p28n9koRrFRuS4s7xHoP9GDS65J1BvaKfs5AGY77Na4xrJ1FWA9izeQgnDFPW/DyMfOH
+ bKl0RdzMH7xn1gFAouafN5rn/MsjXT0b9D4RKbIi/41HEW+AKW8fSP1i8Au3kXAqL47K
+ 9hKnPSen50nbwE5dQV1sAupKlKX+zVIh+ahtIXlp2kfn4VPub2aLUCpSvzjv83OEThb4
+ 3mxjrErT3b8jl6fw8b/2hNs1FiIzD2oer0s5WNlPH85lJ/oSeNncjNUQT4UbyNoGv2wB nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9fxjxn7c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 13:19:18 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24PC66Ce008893;
+        Wed, 25 May 2022 13:19:18 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9fxjxn71-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 13:19:17 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24PDF68A009255;
+        Wed, 25 May 2022 13:19:16 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01dal.us.ibm.com with ESMTP id 3g93v8qq0a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 13:19:16 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24PDJFAB26607956
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 May 2022 13:19:15 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 648FFAE05C;
+        Wed, 25 May 2022 13:19:15 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DE1DAE063;
+        Wed, 25 May 2022 13:19:09 +0000 (GMT)
+Received: from [9.163.3.233] (unknown [9.163.3.233])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 25 May 2022 13:19:08 +0000 (GMT)
+Message-ID: <3b6bdde6-2a6d-4792-ff5c-86b6fc7a2dca@linux.ibm.com>
+Date:   Wed, 25 May 2022 09:19:08 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 11/22] KVM: s390: pci: add basic kvm_zdev structure
+Content-Language: en-US
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     linux-s390@vger.kernel.org, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        jgg@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220524185907.140285-1-mjrosato@linux.ibm.com>
+ <20220524185907.140285-12-mjrosato@linux.ibm.com>
+ <20220524165046.69f0d84a.alex.williamson@redhat.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20220524165046.69f0d84a.alex.williamson@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mm_PGQd2Z4_saabnBYfHgsrkmpzQDUjS
+X-Proofpoint-GUID: pmrdjbA_L2CZLW5FH0VHmC9vXHlcv2JY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-25_03,2022-05-25_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ priorityscore=1501 spamscore=0 suspectscore=0 adultscore=0 mlxscore=0
+ malwarescore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205250067
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Angelo,
+On 5/24/22 6:50 PM, Alex Williamson wrote:
+> On Tue, 24 May 2022 14:58:56 -0400
+> Matthew Rosato <mjrosato@linux.ibm.com> wrote:
+>> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+>> new file mode 100644
+>> index 000000000000..21c2be5c2713
+>> --- /dev/null
+>> +++ b/arch/s390/kvm/pci.c
+>> @@ -0,0 +1,36 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * s390 kvm PCI passthrough support
+>> + *
+>> + * Copyright IBM Corp. 2022
+>> + *
+>> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+>> + */
+>> +
+>> +#include <linux/kvm_host.h>
+>> +#include <linux/pci.h>
+>> +#include "pci.h"
+>> +
+>> +static int kvm_s390_pci_dev_open(struct zpci_dev *zdev)
+>> +{
+>> +	struct kvm_zdev *kzdev;
+>> +
+>> +	kzdev = kzalloc(sizeof(struct kvm_zdev), GFP_KERNEL);
+>> +	if (!kzdev)
+>> +		return -ENOMEM;
+>> +
+>> +	kzdev->zdev = zdev;
+>> +	zdev->kzdev = kzdev;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
+>> +{
+>> +	struct kvm_zdev *kzdev;
+>> +
+>> +	kzdev = zdev->kzdev;
+>> +	WARN_ON(kzdev->zdev != zdev);
+>> +	zdev->kzdev = 0;
+> 
+> I imagine this should be s/0/NULL/, right?  I feel like there was a
+> recent similar discussion, but I can't think of any unique search terms
+> to sort it out of my inbox.  Thanks,
+> 
 
-OK, I'll rebase on next-20220525 and resend soon.
-
-Regards,
-Jason-JH.Lin
-
-On Wed, 2022-05-25 at 11:50 +0200, AngeloGioacchino Del Regno wrote:
-> Il 19/04/22 11:41, jason-jh.lin ha scritto:
-> > From: jason-jhlin <jason-jh.lin@mediatek.corp-partner.google.com>
-> > 
-> 
-> Hello Jason,
-> 
-> this series does not apply cleanly anymore on next-20220525, can you
-> please
-> rebase and resend?
-> 
-> I hope that with a bit of coordination, we can get the entire display
-> stack
-> finally upstreamed in v5.19... it's been quite a while... :-)
-> 
-> Cheers,
-> Angelo
-> 
-> > Change in v20:
-> > - split binding patch to another series 'MediaTek MT8195 display
-> > binding':
-> >    
-> > https://patchwork.ozlabs.org/project/devicetree-bindings/list/?series=295669
-> > - fix io_start type from u32 to resource_size_t
-> > - fix some commit message for DITHER enum
-snip...
+Yup, I recall a similar comment on a prior version but I don't recall if 
+it was this particular patch or not -- anyway will change
 

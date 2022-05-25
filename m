@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9333533FE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE2F533FE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237356AbiEYPHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S237417AbiEYPH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbiEYPHP (ORCPT
+        with ESMTP id S237638AbiEYPHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:07:15 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4D26CF5E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:07:13 -0700 (PDT)
-Date:   Wed, 25 May 2022 17:07:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1653491231;
-        bh=rFHjdAfF0vz1/EFBNiyD0IsPskYLMYVsfnaqUJagK+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FZ4+397wV+yur3tcyedrqXlDlkbOodpY5/0kHi7EWFw7Ytp7g51swEj7WCXyxb9oX
-         95j+EaZrQ0fmy6EUJs0cymexxPa6Og5/U7x75SPFWY+2E9jpILiTVSYihazzU2B0ny
-         1nqeLKZ9ng/W9ou0jCLXZkgnDKnL6xgFhfhRsgXE=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH] nvme-pci: fix host memory buffer allocation size
-Message-ID: <b39c568b-338f-45bb-92f9-0175a909c3f8@t-8ch.de>
-References: <20220428101922.14216-1-linux@weissschuh.net>
- <20220428143603.GA20460@lst.de>
- <5060d75e-46c0-4d29-a334-62c7e9714fa7@t-8ch.de>
- <20220428150644.GA22685@lst.de>
- <676c02ef-4bbc-43f3-b3e6-27a7d353f974@t-8ch.de>
- <20220510070356.GA11660@lst.de>
- <6123b484-bf2c-49f0-a657-6085c7333b2e@t-8ch.de>
+        Wed, 25 May 2022 11:07:54 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8316CF5E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=BJEwSF0VFzzm4SSlTnqkx43Dx9ql
+        RDdWcTyYt9+rs48=; b=SZb0r3wH7T3mcvIZbw+oFa9ylQ/zQI6xKloH8Z9oc2Sx
+        JPSKIe5ZwFaoQyQKqR45jwHs0P7DYdfl9cyiNANSe9VuZWdtv/8obzMTBKxke17L
+        fCmkGI1YN0WGIuH+jfqjZH00Z5R3beGiyI0KEHj27djoM72fSuY/NkiuIK/UMZs=
+Received: (qmail 1642742 invoked from network); 25 May 2022 17:07:47 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 May 2022 17:07:47 +0200
+X-UD-Smtp-Session: l3s3148p1@3K89b9ffqjtZD++C
+Date:   Wed, 25 May 2022 17:07:39 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v8 1/1] gpio: add sloppy logic analyzer using polling
+Message-ID: <Yo5GO5RkBC3PQLTg@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20220329091126.4730-1-wsa+renesas@sang-engineering.com>
+ <20220329091126.4730-2-wsa+renesas@sang-engineering.com>
+ <YkRuXtTzd11R9IrY@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jFJpOaCzFEltHHpH"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6123b484-bf2c-49f0-a657-6085c7333b2e@t-8ch.de>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YkRuXtTzd11R9IrY@smile.fi.intel.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-10 12:20+0200, Thomas Weißschuh wrote:
-> [..]
-> > We could look into removing the min with
-> > PAGE_SIZE * MAX_ORDER_NR_PAGES to try to do larger segments for
-> > "segment challenged" controllers now that it could work on a lot
-> > of iommu enabled setups.  But I'd rather have a very good reason for
-> > that.
-> 
-> On my current setup (WD SN770 on ThinkPad X1 Carbon Gen9) frequently the NVME
-> controller stops responding. Switching from no scheduler to mq-deadline reduced
-> this but did not eliminate it.
-> Since switching to HMB of 1 * 200MiB and no scheduler this did not happen anymore.
-> (But I'll need some more time to gain real confidence in this)
 
-So this patch dramatically improves the stability of my disk.
+--jFJpOaCzFEltHHpH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Without it and queue/scheduler=none the controller stops responding after a few
-minutes. mq-deadline reduced it to every few hours.
+On Wed, Mar 30, 2022 at 05:51:10PM +0300, Andy Shevchenko wrote:
+> On Tue, Mar 29, 2022 at 11:11:26AM +0200, Wolfram Sang wrote:
+> > This is a sloppy logic analyzer using GPIOs. It comes with a script to
+> > isolate a CPU for polling. While this is definitely not a production
+> > level analyzer, it can be a helpful first view when remote debugging.
+> > Read the documentation for details.
+>=20
+> Good enough I think,
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-With the patch it happens roughly once a week.
+Thanks, Andy!
 
-I'll still RMA the disk and see if the replacement changes anything.
+To GPIO maintainers: can we apply the "new-driver-rule" and still have
+it in 5.19? There can't be any regression and it has all comments
+addressed. Also, I am talking about this project at Kernel Recipes late
+next week and it would be great to say that it is finally merged :)
 
-Maybe some of the Western Digital employees here could take a look or check if
-there is a new firmware available.
-(The official updater requires Windows and there is no external documentation
-about the firmware)
+All the best,
 
-Not sure if a change from very broken to only slightly broken would be enough
-of a good reason to be honest.
 
-Thomas
+   Wolfram
+
+
+--jFJpOaCzFEltHHpH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKORjcACgkQFA3kzBSg
+KbbzCg//beP7i2WnbH6i79F9nAkbYBPQG5FfgUWlX6KcFnSYmS7TMDuycfwGlOvQ
+xG4PBt4Jq6Agj4t0tV2KXeQMkZx02aQPXJwmF4t/UK00UsaJicg6pLb1uwqKvWAw
+5T5bZT91PTfZHeZP1Di0wV2rdJJNCDbFd4OLI+I+zI+wW34p76IXLRE4/8BOdSDu
+AMgRosikUFLo+UnqLf9u3V9WsSlBUBemLlWdMFLf3i9Ze8XBRa0KtmHulpbVd4XD
+YdrJQiq3sIpR+wNL4FxeuF6KetNanc0VmD5GawL4W05Jad/4u55OXbvMg01vF5SX
+S4AIlkkZ5naP5s9Pzq0DlOrJty81A3zSldSxc/4qxlNyC66j5oIYu0SHm+8YL9T+
+ohUrH90PrfDS/iqzT6oR6jxHkIh++h6rpP5igxTwQTEVgaPAmpcUfT3U6VEGgMEz
+RUqGAohGoLNennpOqSc2rfoS4nPQHcamG3C3nuAeWCldGdFa4Zhfyjf9zHeqMnrj
+LdsYhYaTfJV8zOf+ShxPfWhiWg0uLsX9nWbpTBg6374yrAVLydjZm1nu7f9dPjgq
+4hbjIm6B3bjMpPFa3xA1uP33kf7+bl4P5v8LAQNByT5ZLgPWWl5czXhwBPeMxQpT
+fi7m2BPp+Xo1yD7xfU6KHsHWvITFVAvu1tlGRvNmt3MGujQB0Yw=
+=yfzu
+-----END PGP SIGNATURE-----
+
+--jFJpOaCzFEltHHpH--

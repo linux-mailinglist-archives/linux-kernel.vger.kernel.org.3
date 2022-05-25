@@ -2,67 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08566534264
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2945534267
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343503AbiEYRsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 13:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
+        id S1343522AbiEYRtD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 25 May 2022 13:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243025AbiEYRsP (ORCPT
+        with ESMTP id S245754AbiEYRs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 13:48:15 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A5143EDE;
-        Wed, 25 May 2022 10:48:14 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3003cb4e064so50148747b3.3;
-        Wed, 25 May 2022 10:48:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=j2JUsEMh5hOyegzZyZUxJxVUxQUsXmJ/ErLMrTCdGGA=;
-        b=b40fdQ3QnfjUiOZ/ZnBRzImhI0kuPnDRbuqM4qKrZO/vm9cknubxRB+k+LYgr3o5pc
-         UXe3Q1klrjgCHlswH5PSbrmASEcO+oeNSHlprKBIAnQEa1lZ7rThgVomyxmiTq5A5iOM
-         5MIsFjBz74qXh8u3Y7HLmPEHodX9XSvNlKx0R2GQqXXjWbO1ji9Iky3ylszINc5jwZYs
-         5vmSNoPT/GlgjkraZhr9DoERDSuhXzgnh076peIUwGKjluIPJW+n2CzqHJUvfcT82hpF
-         P8i6mOwvar6uj88hd5WVWC2Wo733qIA3JYvu+iRB0kKugUtSl2U/znfAuWY9hA5TiyEI
-         evdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=j2JUsEMh5hOyegzZyZUxJxVUxQUsXmJ/ErLMrTCdGGA=;
-        b=ecFtDvVL1iwd5TbqR45Z8Qz2fRDB+kwhW5u3rIYsMEb84lgnITYo/PgUluOUDzeDwv
-         HM9kr14qwQlFywqt2HTbYSlIO55KBfLwraGIq4Y5dXstdA0V8r+pzUczCmBniC0snS7W
-         yvS89P3Vj5gP/WCMpofOw/C5Lw8sEzgPqhA94vpZLAHO/hvQJBFPhE4HTwopvyNXjD/B
-         BogmaJKBmfSq2QVsbOrg9Wvffatif4vxMIXvwbTC8qcZh+mNUmhxOIsLC3umQeS04Ix/
-         8o1UUZtpsbb/UqU2QXqhRX3Sqf8ojNMTYbRKL1c7yQCAucpS7ZbGoEqzX6kMPbGIeSba
-         SLdA==
-X-Gm-Message-State: AOAM531R6EHvFVdskNtVbsK8OfQ6LRFILqRAj+ZGdfEdcI21FX4Kvlc7
-        VBc30Rptvx9jbCqAWeWE22RfZajzuwazhYAbIWxxuRK4yGg=
-X-Google-Smtp-Source: ABdhPJzMNL4nDBfqU94XC7qe7W7TLRd4tfmEk8MhM8qxaKCXoB+SbhkG8lO5iC9oOVk7FsRISDBD7zwX0BlkNczVp3U=
-X-Received: by 2002:a81:87c4:0:b0:2ff:c5dc:72b9 with SMTP id
- x187-20020a8187c4000000b002ffc5dc72b9mr20757239ywf.19.1653500893574; Wed, 25
- May 2022 10:48:13 -0700 (PDT)
+        Wed, 25 May 2022 13:48:58 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED4743EDE;
+        Wed, 25 May 2022 10:48:56 -0700 (PDT)
+Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M2fM1-1nqKtN3I7j-004Dtu; Wed, 25 May 2022 19:48:55 +0200
+Received: by mail-yb1-f171.google.com with SMTP id x2so37194248ybi.8;
+        Wed, 25 May 2022 10:48:54 -0700 (PDT)
+X-Gm-Message-State: AOAM532z4B2YsGkU8NqMTxoEHFwQiwnHVwNZYXi3Ob308zaQ5j+FnF0w
+        jni83HTZDNvGbs4RAq2ICINuaLpPa14NdBma8vI=
+X-Google-Smtp-Source: ABdhPJzuiHSmZ8nVYKAXx5dLxFxpNAHZXgLqBiamodT4boGdrCuJxzCCcnQVNo+mB/7OjTNGg0DOAvLa5X1IWqszNVY=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr32038430ybx.472.1653500933346; Wed, 25
+ May 2022 10:48:53 -0700 (PDT)
 MIME-Version: 1.0
-From:   =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>
-Date:   Wed, 25 May 2022 19:48:02 +0200
-Message-ID: <CAJZ5v0hjp2-yLN_UyQvMwhoPreTkA3xU0g3boYtxgLi6TWqabA@mail.gmail.com>
-Subject: [CFP] Power Management and Thermal Control MC at LPC 2022
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>
+References: <20220419211658.11403-1-apais@linux.microsoft.com>
+ <20220419211658.11403-2-apais@linux.microsoft.com> <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
+ <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
+ <9947cfa64667406996de191f07b9e8b9@AcuMS.aculab.com> <6E248F41-6687-4F2B-B847-DB5459BA1344@linux.microsoft.com>
+In-Reply-To: <6E248F41-6687-4F2B-B847-DB5459BA1344@linux.microsoft.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 25 May 2022 19:48:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0mOEMW3N7HB7zTAbqKJMu_RusivjxwuU7_E+O1vGHOEw@mail.gmail.com>
+Message-ID: <CAK8P3a0mOEMW3N7HB7zTAbqKJMu_RusivjxwuU7_E+O1vGHOEw@mail.gmail.com>
+Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
+To:     Allen Pais <apais@linux.microsoft.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "olivier.dautricourt@orolia.com" <olivier.dautricourt@orolia.com>,
+        Stefan Roese <sr@denx.de>, Vinod Koul <vkoul@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "Eugeniy.Paltsev@synopsys.com" <Eugeniy.Paltsev@synopsys.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Leo Li <leoyang.li@nxp.com>,
+        "zw@zh-kernel.org" <zw@zh-kernel.org>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "green.wan@sifive.com" <green.wan@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Lyra Zhang <zhang.lyra@gmail.com>,
+        Patrice CHOTARD <patrice.chotard@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:0oNKE+aYHXzvIhZnI05JLdbh19bMeWgQr7g/ZSVtzRDQ0Xy/8ho
+ UrKFc8cz+xgeYHXnF1gl1iiybnsWi0QqL/iQBfx7lhklR1sawXLchnDW+IMAnSffs4gBf3o
+ Uo6FCKD5LxF3o9guwwJ2lgZrkJMQcw2+hD/Y+EpCyymeLzupaaEdOmH2B/q7mf6ixsOsmtA
+ +vD8UYwxw9lqQe/GqUIKg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rmvH/JoWJlA=:kUTYk+HrtMJMhbxax9LfL4
+ R4J+6jT3qQGVQRXv8YhKYIFA/pIfPn80fhaxobBKSKJtsCyunsNESdo+P0plc0e8Yp7zmctTf
+ QY3xVFRPOAb6jL09p5vOxZAMF0gXsm/Pg+Y5tfhn0lHvWDgLAtMcW2Gc4RvAKrtaaoNaZQ2wq
+ Sm0O+NSbO/uEfjRsBM06JxeFWehWXRylGD7MGF6+9OJDxg94C548F2F9EcVsO+yaPwEpdwa73
+ S/C99mW0h9Slaa/aDosOhWFBX/G1WpHuvV4Pg5jRe08UOmgC9eI6bf/ryE164p5SFtlU/hnIX
+ VwCP85wPNyMArDO50QYOsZR/wyU8jIOhoLkCys0VVNkVmMOBiRL3Um0aVs2vzAuj5JxLlvHJo
+ NxVbkdp1kcv2wy1niWJrMLX0E8otYhhpXmo3DD2LV+8vjK8hlV7dCkCHQi2ByOk3dD2c/RaK7
+ XinJkm61E5JNPpBs1lKmpaCEUfX6dVsoRLia3KSpMMtyEZkXH+uKmST7ywyxVtngIOHT3YLvo
+ 26PWqxyzPGlGqhhtG/XpmG1nXNE5HoD/rNSkRZF0Ibd+yCyR93rcBbtuqF43iMsG1a366LMAd
+ qRlyY66mmhdXvd2h2dWuj8kgDaUmyC3VjVJac6QaOL61MzSCSpD1KPvVeIz6+xKE6ma35O6z1
+ iTUGHkNIxw8TanpGDxbv6RwPyopwX0Rp6EsAwybTRgqWUOZyF5W9RWmfzpsDjeynB9NEyrmVz
+ 8Ir77Lg3Hh0oArE/epwry+GI3bDWl4rFtGzm4uNy7NQbwgxr5wcnd1+RNgkBO4ZMcNgq7HOTx
+ Gp/a84DbgEMF/TRGogdido+ObB6tSesdcyYLUBa4VW+lGUtvtjGqLBAmLoAW9lPdLXhgPho+Z
+ v4rP1Jf+ynDUBxrD5BRQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +114,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On Wed, May 25, 2022 at 6:56 PM Allen Pais <apais@linux.microsoft.com> wrote:
+>
+> Thank you Linus, Arnd, Vincent and David for the feedback.
+>
+> This is a lot more than a just conversion of API’s. I am in the process
+> Of replacing tasklets with threaded irq’s and hopefully that should be
+> A better solution than using workqueues.
 
-The Power Management and Thermal Control micro-conference:
+I don't think that is much better for the case of the DMA engine
+callbacks than the work queue, the problem I pointed out here
+is scheduling into task context, which may be too expensive
+in some cases, but whether it is or not depends on the slave
+driver, not the dmaengine driver.
 
-https://lpc.events/event/16/contributions/1158/
+Even if all the slave drivers are better off using task context
+(threaded irq or workqueue), you need to look at the slave
+drivers first before you can convert the dmaengine drivers.
 
-has been accepted for the LPC 2022, so if you have a topic for
-discussion in that session, please submit it through the LPC web page:
-
-https://lpc.events/event/16/abstracts/
-
-(please choose Power Management and Thermal Control MC as the track).
-Please also submit topics already listed in the MC description.
-
-Please note that the LPC is mostly about discussing work in progress
-and development proposals, so make sure that your topic falls into
-this category.  In particular, please avoid submitting topics
-regarding work that has already been done.
-
-The LPC will be held in Dublin this year, but it should be possible to
-participate in the sessions remotely, so it should be fine to submit a
-topic even if you cannot go to Dublin in person.
-
-Looking forward to seeing you all at the LPC!
-
-Cheers,
-Rafael
+        Arnd

@@ -2,104 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DE5534011
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D501F534024
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238764AbiEYPM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
+        id S236405AbiEYPPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245103AbiEYPMq (ORCPT
+        with ESMTP id S245067AbiEYPOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:12:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EC3B0D03;
-        Wed, 25 May 2022 08:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653491556; x=1685027556;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dcB6j0j2Z3wrogy8OawuEn4BB7M0+1bgI6Iy3Cd0r/8=;
-  b=O/nP8oxQ7KQjkscmmf3pUB25ysZqovznoesalcczOBnt/saPrFhkkOoV
-   2Q7WVqUrptc+6E1+rk1KWMaVuMNFMMLZEc8X+FHytBMjGtN40KIJFjOlo
-   HfCcie0ky+tx/qfYq+jAc2Y52OYCNvVeE9zOxTLLVMhsABrqi9+Rachkl
-   sqv6NuuBU4cHrwEoyq+HKFg+Vj4SHojPQkaARDQ5CR91EB/evEGDala0C
-   DrPE4gF6lnwRyiYYAk+2277dLVKzXjem6wzBbxmJg1n3r0//uA5aVxuzW
-   M8NzD/UrEC9rUvQqpxIjfT+S/PvVH1tO/vPwnxbbaHi4GXnG2U7oedLo/
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="271411558"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="271411558"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 08:12:36 -0700
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="601948889"
-Received: from vlpathak-mobl.amr.corp.intel.com (HELO localhost) ([10.212.116.219])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 08:12:35 -0700
-Date:   Wed, 25 May 2022 08:12:35 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Evgeniy Dushistov <dushistov@mail.ru>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] fs/ufs: Replace kmap() with kmap_local_page()
-Message-ID: <Yo5HY3dzjVigCJ7i@iweiny-desk3>
-References: <20220516101925.15272-1-fmdefrancesco@gmail.com>
- <YoJl+lh0QELbv/TL@casper.infradead.org>
+        Wed, 25 May 2022 11:14:53 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CFBB0A56
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=PmJeUcD7gmhS0PYNVlvnsEYDc66
+        oPHymA7qkWS2f7mc=; b=l6xpk6TF26KM1mnnh0+jz50FYpB78xor+ZgrgkGzOa6
+        /AE5kojTiMnLlP2sgBBwW9mnPWd2Spv7hLf4TLCWD4m9nh5Bjx0BlX7RFlB8wC/r
+        EPoJDhAWWgkiPoHLYjKyPthdV/nL9C63iYoaz5aIwR1E4OtFpfi5rvjYBMcreuxw
+        =
+Received: (qmail 1645302 invoked from network); 25 May 2022 17:13:58 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 May 2022 17:13:58 +0200
+X-UD-Smtp-Session: l3s3148p1@hA++hdffyRdZD++C
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Linh Phung <linh.phung.jy@renesas.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: renesas: r8a779f0: Add thermal support
+Date:   Wed, 25 May 2022 17:13:55 +0200
+Message-Id: <20220525151355.24175-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoJl+lh0QELbv/TL@casper.infradead.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 03:55:54PM +0100, Matthew Wilcox wrote:
-> On Mon, May 16, 2022 at 12:19:25PM +0200, Fabio M. De Francesco wrote:
-> > The use of kmap() is being deprecated in favor of kmap_local_page(). With
-> > kmap_local_page(), the mapping is per thread, CPU local and not globally
-> > visible.
-> > 
-> > The usage of kmap_local_page() in fs/ufs is pre-thread, therefore replace
-> > kmap() / kunmap() calls with kmap_local_page() / kunmap_local().
-> > 
-> > kunmap_local() requires the mapping address, so return that address from
-> > ufs_get_page() to be used in ufs_put_page().
-> > 
-> > These changes are essentially ported from fs/ext2 and are largely based on
-> > commit 782b76d7abdf ("fs/ext2: Replace kmap() with kmap_local_page()").
-> > 
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> 
-> Have you done more than compile-tested this?  I'd like to know that it's
-> been tested on a machine with HIGHMEM enabled (in a VM, presumably).
-> UFS doesn't get a lot of testing, and it'd be annoying to put out a
-> patch that breaks the kmap_local() rules.
+From: Linh Phung <linh.phung.jy@renesas.com>
 
-Do you know of any real users of UFS?
+Add support for 3 TSC nodes of thermal. The 4th node is for the control
+domain and not for Linux.
 
-Fabio and I have been looking into how to test this and it seems like UFS
-support has been dropped in my system.  For example, there is no mkfs.ufs in my
-fc35 system.
+Signed-off-by: Linh Phung <linh.phung.jy@renesas.com>
+[wsa: rebased, fixed resource size, removed unused 4th node breaking probe]
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+---
 
-Searching google, I see that mkfs.ufs turns up a couple of Oracle documents.
-And some other links mention something called newfs which I've never heard of.
+Works fine on my Spider board and allowed me to disconnect the fan :)
 
-The patches follow the same pattern which was added to ext2 a while back and
-have not caused an issue.  So I'm pretty confident they will be ok.
+ arch/arm64/boot/dts/renesas/r8a779f0.dtsi | 56 +++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-However, if it is critical that these be tested I think Fabio will have to hold
-off on these patches for now as there are plenty of other kmap() call sites
-which are more important to be fixed.
+diff --git a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
+index df46fb87cffc..d89064f86d85 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
+@@ -157,6 +157,18 @@ sysc: system-controller@e6180000 {
+ 			#power-domain-cells = <1>;
+ 		};
+ 
++		tsc: thermal@e6198000 {
++			compatible = "renesas,r8a779f0-thermal";
++			/* The 4th sensor is in control domain and not for Linux */
++			reg = <0 0xe6198000 0 0x200>,
++			      <0 0xe61a0000 0 0x200>,
++			      <0 0xe61a8000 0 0x200>;
++			clocks = <&cpg CPG_MOD 919>;
++			power-domains = <&sysc R8A779F0_PD_ALWAYS_ON>;
++			resets = <&cpg 919>;
++			#thermal-sensor-cells = <1>;
++		};
++
+ 		i2c0: i2c@e6500000 {
+ 			compatible = "renesas,i2c-r8a779f0",
+ 				     "renesas,rcar-gen4-i2c";
+@@ -360,6 +372,50 @@ prr: chipid@fff00044 {
+ 		};
+ 	};
+ 
++	thermal-zones {
++		sensor_thermal1: sensor-thermal1 {
++			polling-delay-passive = <250>;
++			polling-delay = <1000>;
++			thermal-sensors = <&tsc 0>;
++
++			trips {
++				sensor1_crit: sensor1-crit {
++					temperature = <120000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++		};
++
++		sensor_thermal2: sensor-thermal2 {
++			polling-delay-passive = <250>;
++			polling-delay = <1000>;
++			thermal-sensors = <&tsc 1>;
++
++			trips {
++				sensor2_crit: sensor2-crit {
++					temperature = <120000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++		};
++
++		sensor_thermal3: sensor-thermal3 {
++			polling-delay-passive = <250>;
++			polling-delay = <1000>;
++			thermal-sensors = <&tsc 2>;
++
++			trips {
++				sensor3_crit: sensor3-crit {
++					temperature = <120000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
++		};
++	};
++
+ 	timer {
+ 		compatible = "arm,armv8-timer";
+ 		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
+-- 
+2.35.1
 
-Ira

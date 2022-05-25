@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E48534265
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7769534255
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343494AbiEYRs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 13:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        id S242741AbiEYRnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245754AbiEYRsx (ORCPT
+        with ESMTP id S231381AbiEYRn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 13:48:53 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A6322285
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:48:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653500932; x=1685036932;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZiIT7udcNT8M512D+GC+EBX7lAzUqW1nxd2x6iQxp44=;
-  b=OjCq26bW9IC2qL46wBDH++2MpZAC0E/EM45mk/wZvK9Fy1nEtTNlslxR
-   5QUi8dm/2QUrZrZzSeZtDSO/y7GZuaDi1dnu/OUwGJBvxxhxHNNfAJll0
-   tDd110SHkPWNxdm1gAdG406Fo/gx03dR2vlmtVdB+10npLmHXmt7c3z3F
-   n3JcnnLz5Vvxhx+dJpAWftxw7yGx5oaKKeE8y8PBafo30dqSvig+qY39I
-   FWXlLzdIv8x5PZf8nhog+yA1nPy37hLaCyZvYBYDTPC/e4EzVtb2FgKO+
-   sDbNvWQMKjivabtXCRlGgLdjYe6va4pQgPQ9g+FqCF7C0K7/+8Rl6TGVC
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="273997789"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="273997789"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:43:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="549123097"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 May 2022 10:43:03 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntv2E-0003CW-U8;
-        Wed, 25 May 2022 17:43:02 +0000
-Date:   Thu, 26 May 2022 01:42:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [tzungbi-chrome-platform:dev 25/25] cros_kunit_util.c:undefined
- reference to `kunit_kmalloc_array'
-Message-ID: <202205260106.u6TwOLMB-lkp@intel.com>
+        Wed, 25 May 2022 13:43:29 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A479D06A
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:43:28 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id 2so2616389ilg.13
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9Y1ppk7B46JVKK7NkaOrpQ5493dk2qksQrupKiexSz0=;
+        b=Lz+Il6ThJJatz8Ur6i5iU0ceuVC5VFUAZpYN1elm5YYuqfTkQEOKa0EySEnREG2MZT
+         4pu5E5+TM9kOKMH27rA1UGkf+EfhhucDE/6hKaO41QOJXiTJyRh6OFKozsgeUQjVJW/l
+         GAuYsrXl6F+mt+SSgVXvCPj+xipn+/dVXoB+QSyoRcAJ1/FQYyzs9gqR00UNrkz9uWEK
+         31vYtGQovUIWTwpMptXgaSxwUHSkehWRIHWrJ4fPTm3gUqm10Ru2R2YyglBLmwh30atk
+         f36RboKM/w9WhKkHz9kggxr2qm3IajSI7sRJMeKldeA2f+qgswGR4CHgCEHVnEPuY4zM
+         JdyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9Y1ppk7B46JVKK7NkaOrpQ5493dk2qksQrupKiexSz0=;
+        b=JCbVnS6T+byXCXNkXAkV7bZn3B7FF+d0NnPtQQeAdFrVxCJCrWRq+IMckXmdw6ihNx
+         ZU5fldQPM+QOlsMo5xdSp/YNk7rDXzPJOw0xSfLMVxQSF0+k7szhjj0MWEirdYuz2jbL
+         Qp8iTmG0/Ba/5nDkVBP3JoUbHYOw7sRzhBdrjU7vMNvQpk/5I94oAYeA9H+OZ2XJfGNw
+         2ACefOorQLSLN78QQfouFTyt+/FvOuOdBt6nhXkdTKSPLUTBhcsRygWFndGo0HdfFiZl
+         TVi9RbADgyIrh49qdAzURjBvEKX2UKbjfXf0wqazQmlNBgKHW5pm+iINiWTCr1A2bLHc
+         GrtA==
+X-Gm-Message-State: AOAM533s0zY5QxYXv55+ToZoVX/s6f/iXxGutrjP2KM1cqH2qf1R+eEK
+        QE9fvjhIfbLty97qZegJAqC8oa6FmWFaxig7taA=
+X-Google-Smtp-Source: ABdhPJwCZm28XqJGp5fTvbYI6LME8/48+6CYtKjsPdgnXp2pOicpNbew0hzH6nlz5DM54/lnJeEi7kh2+sMcZqIDc1g=
+X-Received: by 2002:a05:6e02:1be2:b0:2d1:5818:a454 with SMTP id
+ y2-20020a056e021be200b002d15818a454mr18036546ilv.248.1653500608130; Wed, 25
+ May 2022 10:43:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220525120804.38155-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20220525120804.38155-1-wangkefeng.wang@huawei.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Wed, 25 May 2022 19:43:17 +0200
+Message-ID: <CA+fCnZf_Aphbje1aJCyp0Sarz3DgbfGLXHLisiHjT=ttS6pjWg@mail.gmail.com>
+Subject: Re: [PATCH] mm: kasan: Fix input of vmalloc_to_page()
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git dev
-head:   c8065f6d478990cfc385d1d579972a75fc29605b
-commit: c8065f6d478990cfc385d1d579972a75fc29605b [25/25] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_query_all()
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220526/202205260106.u6TwOLMB-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git/commit/?id=c8065f6d478990cfc385d1d579972a75fc29605b
-        git remote add tzungbi-chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git
-        git fetch --no-tags tzungbi-chrome-platform dev
-        git checkout c8065f6d478990cfc385d1d579972a75fc29605b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+On Wed, May 25, 2022 at 1:58 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+>
+> When print virtual mapping info for vmalloc address, it should pass
+> the addr not page, fix it.
+>
+> Fixes: c056a364e954 ("kasan: print virtual mapping info in reports")
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  mm/kasan/report.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+> index 199d77cce21a..b341a191651d 100644
+> --- a/mm/kasan/report.c
+> +++ b/mm/kasan/report.c
+> @@ -347,7 +347,7 @@ static void print_address_description(void *addr, u8 tag)
+>                                va->addr, va->addr + va->size, va->caller);
+>                         pr_err("\n");
+>
+> -                       page = vmalloc_to_page(page);
+> +                       page = vmalloc_to_page(addr);
+>                 }
+>         }
+>
+> --
+> 2.35.3
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Nice catch, thanks!
 
-All errors (new ones prefixed by >>):
-
-   m68k-linux-ld: drivers/platform/chrome/cros_kunit_util.o: in function `cros_kunit_ec_xfer_mock':
->> cros_kunit_util.c:(.text+0x7c): undefined reference to `kunit_kmalloc_array'
-   m68k-linux-ld: drivers/platform/chrome/cros_kunit_util.o: in function `cros_kunit_ec_xfer_mock_addx':
-   cros_kunit_util.c:(.text+0x12e): undefined reference to `kunit_kmalloc_array'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>

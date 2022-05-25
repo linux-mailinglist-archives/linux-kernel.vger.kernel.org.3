@@ -2,154 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9F5533C07
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62B1533C09
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243089AbiEYLzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
+        id S243030AbiEYL4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233251AbiEYLzS (ORCPT
+        with ESMTP id S232614AbiEYL4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:55:18 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9777A2069;
-        Wed, 25 May 2022 04:55:16 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 893E61F44CFB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653479715;
-        bh=nuxGWQWNesZ/7a6N1/y9rDh1aXO9s7JIDe0xC4nw6GQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=j9yTx8cauhT8UcAVv4U59s0oW4k8pz/Z6K1faqEFRrVipgEVU4Jv55Tslk4Us4zdn
-         qelGzQ1noPB9csE56IIuB+fKDpZc5pnfYXAhBIQLYSItE6nPTl/Y/B6Cv3hGWjYDQP
-         3jjkwRoUKkNMAtFTCNOaYAYgwjlm4+G1FhaN201qJOEwKLkvDbc6FE8kew5EWq8Sgu
-         neVTNTi35gFOCfBXTVj6l2wpwsriJwCvwCwQldtO2r9Dbc+uqLJvHXY4RIU4p27NFI
-         w7ek15EnwpP0EQxN3qTbEFz0J3kygxhtjj2xq6LO+TbHW9GTMMTmgMcqZORZmT5ptW
-         kqVK/YQdIvofg==
-Message-ID: <c1dacdd0-f25e-a522-5d5f-1ef2fe297094@collabora.com>
-Date:   Wed, 25 May 2022 13:55:11 +0200
+        Wed, 25 May 2022 07:56:10 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226EDA2069;
+        Wed, 25 May 2022 04:56:05 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id C412F5C027B;
+        Wed, 25 May 2022 07:56:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 25 May 2022 07:56:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1653479762; x=1653566162; bh=jA
+        xrL7YUz+unCts2ytc9HlFrvuVEdWE6RN2VKDbjh44=; b=d2M9yUxcA9oH1c9dND
+        cwrnYxcvgmYpg5HPKpJwm9AzWNkNaDfrmjcy67JUtPbFe2yR8n+tu1cO5zDomBPS
+        v56nzNvGNXA+5B0FG43hm3jvc8jK7itaS+d1R7zBk/RyNZmNEg3YU6VLoKtzxd4L
+        MMh7vWXX+T/tKTZ4zlhAaXtHn8TA1vMXxoUvYwFD4lAqicYzSp3NoZyCUfWfojnE
+        LpVgwVmTQNCqVDCiteSmgJbrXHkWs1LtVb6bHoVwAfD9Cu22wNWvcSz1t30NlKz9
+        6t4llEzAtFxpbeLrV/z1Han1wIDBx/7a/IySVyOk7vtVJE+j0KeXMvxzcJfIWsiD
+        gEpQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1653479762; x=1653566162; bh=jAxrL7YUz+unC
+        ts2ytc9HlFrvuVEdWE6RN2VKDbjh44=; b=lUkXJuMBL+glesNbfuKUEj0Lbwgaq
+        QtNY04rvwGIivzJBLdLco81JslxvrYgBAa09RU7lXnM9a7ha7KVcJkliLsGbPkUM
+        b1y910IEK5ZUwYhpuuvrtLbVSLQJKDv5I3nYSF42o/mXUBUtCKakpvA2suNiANDq
+        1z2gp1vuimpBa8E0ZEgq876eVVqUOxG00yKKH0fT0OIReJsVRZIxFnTuQsFjpFtj
+        b8YeNlWgScsWVm6zYUXrjZEwpbqkwo9+GzHoYw3xOh45m01/x34MrVRXChZAxriP
+        zHnTf2ZZ/Zm6YAxihfhphTPDlyIWAMHBywwfHMmWNUQQa9pfh3hOufVKA==
+X-ME-Sender: <xms:UhmOYpcBoC1qHV9rOKXvjcJH4nezQbO65uJJI3WY4MHIrdhrS1YAmQ>
+    <xme:UhmOYnNzuN8DNrP3mXnhVj3qVPe1oUoKuWyjfWCMyy7EJx-WxGX5mi9F2hPqJemh5
+    LuhhGitVgI83O0SpqY>
+X-ME-Received: <xmr:UhmOYijSphjgTwUDg-aJ_jlNxeAIOgPsiqtQneA8M8Bl1iLl8PgHd1Xn909IYsJrCRaTj0TJ4Ery>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeehgdeggecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgtggfgsehtkeertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepffekhfelteeggf
+    etieekteekhedtffekvddtveetgeffgfelffeftdehuefgheefnecuvehluhhsthgvrhfu
+    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
+    htrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:UhmOYi_XmhGCZwoj4Kz-3w--1CMVuozb5LBxPuG6HEy8gebi_uwK2A>
+    <xmx:UhmOYlud2fn7DqET4xV0F4lKucKShKxJMJFFUv5B-5YtUdXlo7E49A>
+    <xmx:UhmOYhFe0l-qucpmYp5p7AHRzj2pqPcG7AuIBxiy5W6wMOalFnJ44A>
+    <xmx:UhmOYgnyXF_DRbzCTQ_pPAqW6w_U8ckYxFB0kRQwKXeBUs8RDuJ48Q>
+Feedback-ID: ifd214418:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 May 2022 07:55:56 -0400 (EDT)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     lgirdwood@gmail.com, lee.jones@linaro.org, broonie@kernel.org,
+        robh+dt@kernel.org, kernel@pengutronix.de
+Cc:     s.hauer@pengutronix.de, alistair23@gmail.com,
+        linux-arm-kernel@lists.infradead.org, andreas@kemnade.info,
+        amitk@kernel.org, shawnguo@kernel.org,
+        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
+        linux-hwmon@vger.kernel.org, linux-imx@nxp.com, linux@roeck-us.net,
+        rui.zhang@intel.com, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v21 0/4] Add support for the silergy,sy7636a
+Date:   Wed, 25 May 2022 21:55:50 +1000
+Message-Id: <20220525115554.430971-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.35.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v10 01/21] dt-bindings: mediatek,dpi: Add DPINTF
- compatible
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
-Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
-References: <20220523104758.29531-1-granquet@baylibre.com>
- <20220523104758.29531-2-granquet@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220523104758.29531-2-granquet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/05/22 12:47, Guillaume Ranquet ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> DPINTF is similar to DPI but does not have the exact same feature set
-> or register layouts.
-> 
-> DPINTF is the sink of the display pipeline that is connected to the
-> DisplayPort controller and encoder unit. It takes the same clocks as
-> DPI.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->   .../bindings/display/mediatek/mediatek,dpi.yaml     | 13 ++++++++-----
->   1 file changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
-> index dd2896a40ff0..6d9f6c11806e 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
-> @@ -4,16 +4,16 @@
->   $id: http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
->   $schema: http://devicetree.org/meta-schemas/core.yaml#
->   
-> -title: mediatek DPI Controller Device Tree Bindings
-> +title: mediatek DPI/DPINTF Controller
->   
->   maintainers:
->     - CK Hu <ck.hu@mediatek.com>
->     - Jitao shi <jitao.shi@mediatek.com>
->   
->   description: |
-> -  The Mediatek DPI function block is a sink of the display subsystem and
-> -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a parallel
-> -  output bus.
-> +  The Mediatek DPI and DPINTF function blocks are a sink of the display
-> +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
-> +  parallel output bus.
->   
->   properties:
->     compatible:
-> @@ -23,6 +23,7 @@ properties:
->         - mediatek,mt8173-dpi
->         - mediatek,mt8183-dpi
->         - mediatek,mt8192-dpi
-> +      - mediatek,mt8195-dpintf
->   
->     reg:
->       maxItems: 1
-> @@ -35,12 +36,14 @@ properties:
->         - description: Pixel Clock
->         - description: Engine Clock
->         - description: DPI PLL
-> +      - description: Optional CK CG Clock
->   
->     clock-names:
->       items:
->         - const: pixel
->         - const: engine
->         - const: pll
-> +      - const: ck_cg
+v21:
+ - Rebase on master
+v20:
+ - Remove merged patches
+ - Fixup Kconfig selection based on previous discussions
+v19:
+ - Rebase on linux-next
+v18:
+ - Rebase
+v17:
+ - Rebase and fix build issues
+v16:
+ - Improve vdd regulator comments
+v15:
+ - Address comments on the patches
+v14:
+ - Merge the thermal driver and hwmon
+v13:
+ - Address comments on thermal driver
+ - Rebase on master (without other patches)
+v12:
+ - Rebase
+v11:
+ - Address comments on hwmon
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message
+v10:
+ - Use dev_get_regmap() instead of dev_get_drvdata()
+v9:
+ - Convert to use the simple-mfd-i2c instead
 
-This is my understanding on how the DisplayPort Interface clocks work on 8195:
+Alistair Francis (4):
+  mfd: silergy,sy7636a: Add config option
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
+  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a
+  ARM: dts: imx7d-remarkable2: Enable lcdif
 
-The "engine" clock is for the *VPP Engine's DisplayPort ip/block*,
-"pll" is for TVD PLL divider selection
-"pixel" is the gate for the pixel clock to the connected display.
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 136 ++++++++++++++++++++++++
+ arch/arm/configs/imx_v6_v7_defconfig    |   3 +
+ drivers/hwmon/Kconfig                   |   1 +
+ drivers/mfd/Kconfig                     |  12 ++-
+ drivers/regulator/Kconfig               |   1 +
+ 5 files changed, 152 insertions(+), 1 deletion(-)
 
-"ck_cg" is useless, as that's the parent of "pixel" (and will always be)... for
-example, on mt8195... check clk/mediatek/clk-mt8195-vdo0.c - the
-CLK_VDO0_DP_INTF0_DP_INTF clock already has CLK_TOP_EDP as its parent, hence
-enabling the first will enable the latter.
+-- 
+2.35.3
 
-That said... you can most probably avoid adding the ck_cg clock, as if you try
-to turn that off while it's in use by its children, you'll be only decrementing
-a refcount, but no "real action" will ever take place.
-
-
-Regards,
-Angelo

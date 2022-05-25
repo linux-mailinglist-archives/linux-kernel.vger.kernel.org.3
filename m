@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C3F534333
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 20:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C3E534335
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 20:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244510AbiEYSk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 14:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S245296AbiEYSly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 14:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbiEYSkz (ORCPT
+        with ESMTP id S231151AbiEYSlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 14:40:55 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D317EB2266
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:40:54 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id q4so19302782plr.11
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kcKV1w2nPlwaIbCWnEveE9hseS5PyiFCk/LlY1siP3E=;
-        b=gF4mzOT2oM4CfPgmn1UlSGGEbwf+gvzsFyifnYVIbjNO0iu8sUlx7k25anA+q/KaOi
-         373snxdX0rBgwl3v9kDUgarArIHyNVdS6o43qZlRlc4EcZFit/EVrtVCsh1VFdW6f3hV
-         35T/ena+zbKsnIdkZeM9Mbe6e3JwSsSvQtZO0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kcKV1w2nPlwaIbCWnEveE9hseS5PyiFCk/LlY1siP3E=;
-        b=kuPCL+yOBjxqOCRk4RrKlQ4EajBmQUsDAEeBzIoXY5SHjH7W4qKcmdGWRTu4QTNQ1z
-         Zw90J2tOrpgjQdzWI8kScJI7mrs3I15Ncz0aT0nbC3CrbPJgmz9F9gQbXg/KH7YLviDO
-         jIQU1h1VM5y2jzpGnFzB7YKY9vW5Run/fxTo0QsS4Egaf6XPA2ligA+Ubk5kPsbbP7/C
-         mY5LtJ8ZW5+92EI9aptbOmAgi/PdxX6fl4H6BRKci8br0YRyIan3WSS9yDmnJFFpGCCh
-         FSvLHmMuzwXO5XdxMo/P//nuh//COl6IW2WytkceaSS3GVsq517k7TFbDrEX0CAsL6cO
-         dvsg==
-X-Gm-Message-State: AOAM5334ZjCtUrY3aO9ShyraSi+nGdBJwnFCDIEXAJku+qCTxnKiBklk
-        ee/++M+7gsl6TzEV7T2dwgzNhg==
-X-Google-Smtp-Source: ABdhPJytsR6CP9N4WKNHzCbzIrM1a3ij8m7Yn9JRjYK1/hXrfhC81XsY53KcEwNKFeCSuEw5eHFn4g==
-X-Received: by 2002:a17:903:2445:b0:161:d47e:88cf with SMTP id l5-20020a170903244500b00161d47e88cfmr33393332pls.67.1653504054374;
-        Wed, 25 May 2022 11:40:54 -0700 (PDT)
-Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d1-20020a17090a8d8100b001df93c8e737sm2133845pjo.39.2022.05.25.11.40.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 11:40:53 -0700 (PDT)
-Date:   Wed, 25 May 2022 18:40:52 +0000
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        mka@chromium.org, devicetree@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v4 4/5] platform/chrome: cros_kbd_led_backlight: support
- OF match
-Message-ID: <Yo54NGcb45oNBfUY@chromium.org>
-References: <20220523090822.3035189-1-tzungbi@kernel.org>
- <20220523090822.3035189-5-tzungbi@kernel.org>
+        Wed, 25 May 2022 14:41:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8515EA186
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653504109;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PeYdeRJ5pwyPsHpATDBBHBlwBuqwevcoiqFLwq8BwUg=;
+        b=gYpeZNN6bIrKclwkEDXMDFwF9CaUZeKxvijlZOERNuEtS2y2RRDdisMK2pxRGI206Lz0PZ
+        cFBC1fYEh2FC0RVGAxiREq75Hbzh4UFqCBaJ5cjdWMdw95eOm8dUDaFUBMjxlKLe4aWKQZ
+        ywgBO1TJqwU7QTTRj5kJhPH1nJUK510=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-8wsQMhRjOVKQQyepzQs7CA-1; Wed, 25 May 2022 14:41:44 -0400
+X-MC-Unique: 8wsQMhRjOVKQQyepzQs7CA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45CE18001EA;
+        Wed, 25 May 2022 18:41:44 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.32.214])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A3955492CA2;
+        Wed, 25 May 2022 18:41:43 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 68AAD2208FA; Wed, 25 May 2022 14:41:43 -0400 (EDT)
+Date:   Wed, 25 May 2022 14:41:43 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Dharmendra Singh <dharamhans87@gmail.com>
+Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
+        fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        bschubert@ddn.com, Dharmendra Singh <dsingh@ddn.com>
+Subject: Re: [PATCH v3 1/1] FUSE: Allow non-extending parallel direct writes
+ on the same file.
+Message-ID: <Yo54Z4EQjzsQbMTp@redhat.com>
+References: <20220520043443.17439-1-dharamhans87@gmail.com>
+ <20220520043443.17439-2-dharamhans87@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220523090822.3035189-5-tzungbi@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220520043443.17439-2-dharamhans87@gmail.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,79 +65,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tzung-Bi,
-
-On May 23 17:08, Tzung-Bi Shih wrote:
-> For letting device tree based machines to use the driver, support OF match.
+On Fri, May 20, 2022 at 10:04:43AM +0530, Dharmendra Singh wrote:
+> From: Dharmendra Singh <dsingh@ddn.com>
 > 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> In general, as of now, in FUSE, direct writes on the same file are
+> serialized over inode lock i.e we hold inode lock for the full duration
+> of the write request. I could not found in fuse code a comment which
+> clearly explains why this exclusive lock is taken for direct writes.
+> Our guess is some USER space fuse implementations might be relying
+> on this lock for seralization and also it protects for the issues
+> arising due to file size assumption or write failures.  This patch
+> relaxes this exclusive lock in some cases of direct writes.
+> 
+> With these changes, we allows non-extending parallel direct writes
+> on the same file with the help of a flag called FOPEN_PARALLEL_WRITES.
+> If this flag is set on the file (flag is passed from libfuse to fuse
+> kernel as part of file open/create), we do not take exclusive lock instead
+> use shared lock so that all non-extending writes can run in parallel.
+> 
+> Best practise would be to enable parallel direct writes of all kinds
+> including extending writes as well but we see some issues such as
+> when one write completes and other fails, how we should truncate(if
+> needed) the file if underlying file system does not support holes
+> (For file systems which supports holes, there might be a possibility
+> of enabling parallel writes for all cases).
+> 
+> FUSE implementations which rely on this inode lock for serialisation
+> can continue to do so and this is default behaviour i.e no parallel
+> direct writes.
+> 
+> Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
+> Signed-off-by: Bernd Schubert <bschubert@ddn.com>
 > ---
-> No changes from v3.
+>  fs/fuse/file.c            | 33 ++++++++++++++++++++++++++++++---
+>  include/uapi/linux/fuse.h |  2 ++
+>  2 files changed, 32 insertions(+), 3 deletions(-)
 > 
-> Changes from v2:
-> - Add commit message.
-> - Add R-b tag.
-> 
-> Changes from v1:
-> (https://patchwork.kernel.org/project/chrome-platform/patch/20220214053646.3088298-5-tzungbi@google.com/)
-> - Update email address accordingly.
-> - Use device_get_match_data() per review comment in v1.
-> 
->  drivers/platform/chrome/cros_kbd_led_backlight.c | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/chrome/cros_kbd_led_backlight.c b/drivers/platform/chrome/cros_kbd_led_backlight.c
-> index a86d664854ae..4bca880d7721 100644
-> --- a/drivers/platform/chrome/cros_kbd_led_backlight.c
-> +++ b/drivers/platform/chrome/cros_kbd_led_backlight.c
-> @@ -10,7 +10,9 @@
->  #include <linux/kernel.h>
->  #include <linux/leds.h>
->  #include <linux/module.h>
-> +#include <linux/of.h>
->  #include <linux/platform_device.h>
-> +#include <linux/property.h>
+> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> index 829094451774..1a93fd80a6ce 100644
+> --- a/fs/fuse/file.c
+> +++ b/fs/fuse/file.c
+> @@ -1541,14 +1541,37 @@ static ssize_t fuse_direct_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>  	return res;
+>  }
+>  
+> +static bool fuse_direct_write_extending_i_size(struct kiocb *iocb,
+> +					       struct iov_iter *iter)
+> +{
+> +	struct inode *inode = file_inode(iocb->ki_filp);
+> +
+> +	return (iocb->ki_flags & IOCB_APPEND ||
+> +		iocb->ki_pos + iov_iter_count(iter) > i_size_read(inode));
+> +}
 
-linux/of.h includes linux/property.h [1]
+Hi Dharmendra,
 
-[1] https://elixir.bootlin.com/linux/v5.18/source/include/linux/of.h#L22
+I have a question. What makes i_size stable. This is being read outside
+the inode_lock(). Can it race with truncate. I mean we checked
+i_size and decided to take shared lock. In the mean time another thread
+truncated the file and now our decision to take shared lock is wrong
+as file will be extended due to direct write?
 
->  #include <linux/slab.h>
+Thanks
+Vivek
+
+> +
+>  static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>  {
+>  	struct inode *inode = file_inode(iocb->ki_filp);
+> +	struct file *file = iocb->ki_filp;
+> +	struct fuse_file *ff = file->private_data;
+>  	struct fuse_io_priv io = FUSE_IO_PRIV_SYNC(iocb);
+>  	ssize_t res;
+> +	bool exclusive_lock = !(ff->open_flags & FOPEN_PARALLEL_WRITES) ||
+> +			       fuse_direct_write_extending_i_size(iocb, from);
+> +
+> +	/*
+> +	 * Take exclusive lock if
+> +	 * - parallel writes are disabled.
+> +	 * - parallel writes are enabled and i_size is being extended
+> +	 * Take shared lock if
+> +	 * - parallel writes are enabled but i_size does not extend.
+> +	 */
+> +	if (exclusive_lock)
+> +		inode_lock(inode);
+> +	else
+> +		inode_lock_shared(inode);
+>  
+> -	/* Don't allow parallel writes to the same file */
+> -	inode_lock(inode);
+>  	res = generic_write_checks(iocb, from);
+>  	if (res > 0) {
+>  		if (!is_sync_kiocb(iocb) && iocb->ki_flags & IOCB_DIRECT) {
+> @@ -1559,7 +1582,10 @@ static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>  			fuse_write_update_attr(inode, iocb->ki_pos, res);
+>  		}
+>  	}
+> -	inode_unlock(inode);
+> +	if (exclusive_lock)
+> +		inode_unlock(inode);
+> +	else
+> +		inode_unlock_shared(inode);
+>  
+>  	return res;
+>  }
+> @@ -2901,6 +2927,7 @@ fuse_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
+>  
+>  	if (iov_iter_rw(iter) == WRITE) {
+>  		fuse_write_update_attr(inode, pos, ret);
+> +		/* For extending writes we already hold exclusive lock */
+>  		if (ret < 0 && offset + count > i_size)
+>  			fuse_do_truncate(file);
+>  	}
+> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> index d6ccee961891..ee5379d41906 100644
+> --- a/include/uapi/linux/fuse.h
+> +++ b/include/uapi/linux/fuse.h
+> @@ -301,6 +301,7 @@ struct fuse_file_lock {
+>   * FOPEN_CACHE_DIR: allow caching this directory
+>   * FOPEN_STREAM: the file is stream-like (no file position at all)
+>   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
+> + * FOPEN_PARALLEL_WRITES: Allow concurrent writes on the same inode
+>   */
+>  #define FOPEN_DIRECT_IO		(1 << 0)
+>  #define FOPEN_KEEP_CACHE	(1 << 1)
+> @@ -308,6 +309,7 @@ struct fuse_file_lock {
+>  #define FOPEN_CACHE_DIR		(1 << 3)
+>  #define FOPEN_STREAM		(1 << 4)
+>  #define FOPEN_NOFLUSH		(1 << 5)
+> +#define FOPEN_PARALLEL_WRITES	(1 << 6)
 >  
 >  /**
-> @@ -116,7 +118,7 @@ static int keyboard_led_probe(struct platform_device *pdev)
->  	const struct keyboard_led_drvdata *drvdata;
->  	int error;
->  
-> -	drvdata = acpi_device_get_match_data(&pdev->dev);
-> +	drvdata = device_get_match_data(&pdev->dev);
->  	if (!drvdata)
->  		return -EINVAL;
->  
-> @@ -152,10 +154,21 @@ static const struct acpi_device_id keyboard_led_acpi_match[] = {
->  MODULE_DEVICE_TABLE(acpi, keyboard_led_acpi_match);
->  #endif
->  
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id keyboard_led_of_match[] = {
-> +	{
-> +		.compatible = "google,cros-kbd-led-backlight",
-> +	},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, keyboard_led_of_match);
-> +#endif
-> +
->  static struct platform_driver keyboard_led_driver = {
->  	.driver		= {
->  		.name	= "chromeos-keyboard-leds",
->  		.acpi_match_table = ACPI_PTR(keyboard_led_acpi_match),
-> +		.of_match_table = of_match_ptr(keyboard_led_of_match),
->  	},
->  	.probe		= keyboard_led_probe,
->  };
+>   * INIT request/reply flags
 > -- 
-> 2.36.1.124.g0e6072fb45-goog
+> 2.17.1
 > 
-> 
+

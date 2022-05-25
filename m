@@ -2,119 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14977533747
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DDB53374C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241160AbiEYHVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 03:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S242339AbiEYHWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 03:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbiEYHVK (ORCPT
+        with ESMTP id S235495AbiEYHV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 03:21:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4323FCE1B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653463269; x=1684999269;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PDrc+zj+Py1CX3r9kO8vMCo3ogSP/6yiSd2aUVOEtTw=;
-  b=mBLBSzTq4PEh1Ckfxq8+IEd35S7kYyZYiSoaLAQOkRD37hYD6fzyPuKh
-   ijsHhRwhJABDmAj3Zfe2FKSOcLxit7QiLtRYbrW2/TL7VD5NwhuN7vcuc
-   OZgYpwsPQL1US2v0sJ35uX4LwZMX45eE5iSp+wlntLH/hJxojhW9JYxSa
-   D+hHtTyFdCdWCiaRbCyBcOlJMysIMddEF6q8aQZ68qREa+jBUx/gyvD8S
-   pAG33yUTIIApfYnmV5qF98f1bHO30rY9pfkvfdLQjSkYpXj6U1avR5bpR
-   Sqg7fosjkDuiqbLOmx4I7dROK+fsdfcxct8blNFstBOyDvgQ+UmKLZpAk
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="360131804"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="360131804"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 00:21:00 -0700
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="548873808"
-Received: from she1-mobl2.ccr.corp.intel.com ([10.255.29.30])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 00:20:51 -0700
-Message-ID: <17fd6bd4a159cc23f20e8e3524f0cdcb871b434d.camel@intel.com>
-Subject: Re: [PATCH v3 2/3] x86: Remove vendor checks from
- prefer_mwait_c1_over_halt
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Wyes Karny <wyes.karny@amd.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Lewis.Carroll@amd.com, Mario.Limonciello@amd.com,
-        gautham.shenoy@amd.com, Ananth.Narayan@amd.com, bharata@amd.com,
-        len.brown@intel.com, x86@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, peterz@infradead.org, chang.seok.bae@intel.com,
-        keescook@chromium.org, metze@samba.org, zhengqi.arch@bytedance.com,
-        mark.rutland@arm.com, puwen@hygon.cn, rafael.j.wysocki@intel.com,
-        andrew.cooper3@citrix.com, jing2.liu@intel.com,
-        jmattson@google.com, pawan.kumar.gupta@linux.intel.com
-Date:   Wed, 25 May 2022 15:20:48 +0800
-In-Reply-To: <f1872469-8a4d-5300-2367-0f56fafcb0de@amd.com>
-References: <cover.fba143c82098dffab6bbf0a2f3c4be8bae07ccf1.1652176835.git-series.wyes.karny@amd.com>
-         <cb388b0f7893a10f3808b0d963fb209c9127a6f6.1652176835.git-series.wyes.karny@amd.com>
-         <b1c9fd6c-9f00-9662-d590-b52ce26d0aca@intel.com>
-         <410f36ccecb36644e196d71fef6e46bdc186b409.camel@intel.com>
-         <f1872469-8a4d-5300-2367-0f56fafcb0de@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
+        Wed, 25 May 2022 03:21:57 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314B63B3;
+        Wed, 25 May 2022 00:21:53 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.139]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1Mf0yy-1nN9XI2M5S-00gYvK; Wed, 25 May 2022 09:21:26 +0200
+Message-ID: <427974aa-2152-8397-65df-6808de3d3b5e@i2se.com>
+Date:   Wed, 25 May 2022 09:21:24 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
+ linkup
+Content-Language: en-US
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        James Dutton <james.dutton@gmail.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+References: <CANCKTBvqp7_MSG3aMpp6pmNoPUnYpH0c+8-r7Pzgebuzb4sZPA@mail.gmail.com>
+ <20220523221036.GA130515@bhelgaas>
+ <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:f0Q2OR5Ta0dr7CnmCGZvho+BbpygkgKR6q6eP3GZZYTHeWI4m+u
+ DGPZqAbJylyPwROwLzjIIBTy/1dDetp6cSZzyMrm0bHViOolt7njTrUk+lUraDcIU4IsVgo
+ RnAuyA/3wlPD033YrJo9AceacxRdMNyWP/gzmolxmIXmPZO2B+icLVeRyKuz7NLL+vhzDF7
+ oEDkTlpcT21JtcQdhp9Ww==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HV8TcJvspQw=:Nmsn/lw7cZw0UQJnyOq/Nt
+ cjlSg881Mur6B4zJiXep1sagc+9KzVv8bk/UUpZ0ZxedOkczgm9Nvc23ZPk9ljvgd0Jhfpm5C
+ WA40mI82Xjpl3NbxPe8HaTpAJ1Khkc7kv17ue4bGZyGxGbb7Iq0JDVuyf5h0G6ULOJcO4LtZN
+ nATKk6MUJ/GiO0wA0os9RC/8pLd4CMYgadZEmNZEYbZotjibHej+GB5WSBE8kZqnmxv2wrk44
+ la7zEGoRH+4FBpvkergkHJAJeeI+p+I7tz4c/ZUWzvagAQ8djNvRZvWVzpu1tiepOYcm9AjBs
+ KaBQesekUuBXG2u6o7UPnsQuf9vRSSDpmqztEJNAezNFYKZx0PVEF05i3Nds7ZuK7oNiPQOtJ
+ I+3X+Zouj+Hk+0CwRD5VQP3qmA38KTwjknvvY40ccDRL/gH4NlHaNrz5gWPL13rInnmNqUMJ8
+ bWB9YB71nB9ZDXYJT3r00cY3V0L1Bhw1zKd1M65R4Ut7SqNuDE1AthU355dmKwFjMoy+o+RlJ
+ 4NkhLyGb4gq1EDA/TR/fnTCir5HWiobwnDu22DNG8TjJgiw6+zF4BJY/2Q4mRNOu+uYBOgcuW
+ OsnkgE0jYuSE/2+ScNuusymyiIVHXVOOkBPsouy1CGvJSIfHdltlLs5vAhk+e1uS+1xxgvVi+
+ GvPO2qvuRVBFU2wXZ4RkKHjS2Y62843lhfXQiuyWQhorq8I2BAI34MhtzWctKES3syfOsbepS
+ gfI4Rh1aKTZGG1OLu9yEt0MGHIVHU+392r/qHA5yW2b2l+XuIEMwhn/q6cc=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Wyes,
+Hi Jim,
 
-On Mon, 2022-05-23 at 21:19 +0530, Wyes Karny wrote:
-> Hello Rui,
-> 
-> On 5/20/2022 7:13 PM, Zhang Rui wrote:
-> > On Thu, 2022-05-19 at 09:00 -0700, Dave Hansen wrote:
-> > > On 5/10/22 03:18, Wyes Karny wrote:
-> > > >  static int prefer_mwait_c1_over_halt(const struct cpuinfo_x86
-> > > > *c)
-> > > >  {
-> > > > +	u32 eax, ebx, ecx, edx;
-> > > > +
-> > > >  	/* User has disallowed the use of MWAIT. Fallback to
-> > > > HALT */
-> > > >  	if (boot_option_idle_override == IDLE_NOMWAIT)
-> > > >  		return 0;
-> > > >  
-> > > > -	if (c->x86_vendor != X86_VENDOR_INTEL)
-> > > > +	/* MWAIT is not supported on this platform. Fallback to
-> > > > HALT */
-> > > > +	if (!cpu_has(c, X86_FEATURE_MWAIT))
-> > > >  		return 0;
-> > 
-> > I'm new to x86 code, a dumb question, what about the other vendors?
-> > with this patch, prefer_mwait_c1_over_halt() can return 1 for other
-> > vendors as well?
-> 
-> This decision tree is based on cpuid features, so if the processor
-> advertises MWAIT C1 support we would be choosing MWAIT.
-> If any vendor wants to avoid choosing MWAIT (even cpuid shows MWAIT
-> C1
-> support), they can explicitly mention. Will add exceptions form them.
-> 
-That's my concern.
+Am 24.05.22 um 18:54 schrieb Jim Quinlan:
+> On Mon, May 23, 2022 at 6:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>> On Sat, May 21, 2022 at 02:51:42PM -0400, Jim Quinlan wrote:
+>>> On Sat, May 21,
+>>> 2CONFIG_INITRAMFS_SOURCE="/work3/jq921458/cpio/54-arm64-rootfs.cpio022
+>>> at 12:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>>> On Wed, May 18, 2022 at 03:42:11PM -0400, Jim Quinlan wrote:
+>>>>> commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice
+>>>>> voltage regulators")
+>>>>>
+>>>>> introduced a regression on the PCIe RPi4 Compute Module.  If the
+>>>>> PCIe endpoint node described in [2] was missing, no linkup would
+>>>>> be attempted, and subsequent accesses would cause a panic
+>>>>> because this particular PCIe HW causes a CPU abort on illegal
+>>>>> accesses (instead of returning 0xffffffff).
+>>>>>
+>>>>> We fix this by allowing the DT endpoint subnode to be missing.
+>>>>> This is important for platforms like the CM4 which have a
+>>>>> standard PCIe socket and the endpoint device is unknown.
+>>>> I think the problem here is that on the CM, we try to enumerate
+>>>> devices that are not powered up, isn't it?  The commit log should
+>>>> say something about that power situation and how the driver learns
+>>>> about the power regulators instead of just pointing at an DT
+>>>> endpoint node.
+>>> This is incorrect.  The regression occurred because the code
+>>> mistakenly skips PCIe-linkup if the PCI portdrv DT node does not
+>>> exist. With our RC HW, doing a config space access to bus 1 w/o
+>>> first linking up results in a CPU abort.  This regression has
+>>> nothing to do with EP power at all.
+>> OK, I think I'm starting to see, but I'm still missing some things.
+>>
+>> 67211aadcb4b ("PCI: brcmstb: Add mechanism to turn on subdev
+>> regulators") added pci_subdev_regulators_add_bus() as an .add_bus()
+>> method.  This is called by pci_alloc_child_bus(), and if the DT
+>> describes any regulators for the bridge leading to the new child bus,
+>> we turn them on.
+>>
+>> Then 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage
+>> regulators") added brcm_pcie_add_bus() and made *it* the .add_bus()
+>> method.  It turns on the regulators and brings the link up, but it
+>> skips both if there's no DT node for the bridge to the new bus.
+> Hi Bjorn,
+>
+> Yes, I meant it to skip the turning on of the regulators if the DT
+> node was missing
+> but I failed to notice that it would also skip the pcie linkup as well.  As you
+> may have guessed, all of my test systems have the PCIe root port
+> DT node.
+>
+>> I guess RPi4 CM has no DT node to describe regulators, so we skip both
+>> turning them on *and* bringing the link up?
+> Yes. One repo did not have this node (Cyril/debina?), one did
+> (https://github.com/raspberrypi/firmware/tree/master/boot).
+> Of course there is nothing wrong with omitting the node; it should
+> have pcie linkup regardless.
+Please ignore the vendor tree, because you only have to care about 
+mainline kernel and DT here.
+>
+>> But above you say it's the *endpoint* node that doesn't exist.  The
+>> existing code looks like it's checking for the *bridge* node
+>> (bus->dev->of_node).  We haven't even enumerated the devices on the
+>> child bus, so we don't know about them at this point.
+> You are absolutely correct and I must change the commit message
+> to say the "root port DT node".   I'm sorry; this mistake likely did not
+> help you understand the fix. :-(
+>
+>> What happens if there is a DT node for the bridge, but it doesn't
+>> describe any regulators?  I assume regulator_bulk_get() will fail, and
+>> it looks like that might still keep us from bringing the link up?
+> The regulator_bulk_get()  func does not fail if the regulators are not
+> present.  Instead it "gets"
+> a dummy device and issues a warning per missing regulator.
+> A version of my pullreq submitted code to prescan the DT node and call
+> regulator_bulk_get() with
+> only the names of the regulators present, but IIRC this was NAKd.
+> Hopefully I will not be swamped with RPi developers'  emails when they
+> think these warnings are an issue.
 
-This patch indeed changes the behaviors for vendors other than Intel
-and AMD.
-I don't know the impact of this, but just point out a behavior change
-caused by this patch.
+This won't be the first driver complaining about missing regulators and 
+won't be the last one. So don't expect an email from me ;-)
 
-thanks,
-rui
+Best regards
 

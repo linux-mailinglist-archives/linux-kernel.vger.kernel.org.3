@@ -2,45 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11785533CF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE8C533CFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243597AbiEYMtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
+        id S243885AbiEYMuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234909AbiEYMtk (ORCPT
+        with ESMTP id S243810AbiEYMuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:49:40 -0400
-Received: from outbound-smtp12.blacknight.com (outbound-smtp12.blacknight.com [46.22.139.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB0E7B9FF
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:49:37 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp12.blacknight.com (Postfix) with ESMTPS id B674F1C3865
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 13:49:35 +0100 (IST)
-Received: (qmail 27432 invoked from network); 25 May 2022 12:49:35 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 25 May 2022 12:49:35 -0000
-Date:   Wed, 25 May 2022 13:49:33 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Ying Huang <ying.huang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/4] Mitigate inconsistent NUMA imbalance behaviour
-Message-ID: <20220525124933.GA3441@techsingularity.net>
-References: <20220520103519.1863-1-mgorman@techsingularity.net>
- <CAKfTPtDERvGAsmasGK=xtGEawx1yK6Lf4mV7Cc7JcNFKrxUWKw@mail.gmail.com>
+        Wed, 25 May 2022 08:50:09 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625088D683
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:50:09 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D55633F19E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653483007;
+        bh=rAm0vlTlFHnGFybKw7GdGun3AiUfPwceSrfYbk/I7Zg=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=aidq1KrTTAqytspV1bm3osC8H1MAGrCyshzsT7AjHPpNXNRDPfQR/ypifxF94Z1aC
+         o7qjc4wmlskCy0lVYXy6gBW79mOQ4iuoKDCoNw2FaWwe91GlYxl1rycHIQcAElHhqX
+         imYJ+OLgA3a9fQiKAQK1yNLoovHUbg9oCwe0mCRE/KXARtmzIFoMTLX1dqXkU17Stb
+         fH0q8EIuRBmg9KNBb2a6+lZinUyuB1Zlep7QL99LANjTF430gBrs+QA8sXoxB3Gnd7
+         yu9puleDskIkfkER1q5PmvvbVgc9J1s2Ng+7E+3DHp7EfUW4pt/rJs4VVxj48axvPw
+         fmOozX6s6WP2Q==
+Received: by mail-ed1-f71.google.com with SMTP id r14-20020aa7cfce000000b0042bcefd6109so550418edy.13
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:50:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rAm0vlTlFHnGFybKw7GdGun3AiUfPwceSrfYbk/I7Zg=;
+        b=wpw5zkrzwF1grgveYr1/76lsy/jIy1hZzC72mAzY1oqPx2TL7ySWL0G9B8RMFzuxQ3
+         pQqQLpigH/ypXnSKz/cByQcmvefEYjVj5Owm/VFJo9ZnI1HJCFsao8ffwvbWapEAU+eS
+         ROfaItPUawfrH1OWKgCEGD16bSmKV6Cc+kcml30O1nsBykEmdghrNFnLm6iOCSAWZDkO
+         a+42/YiRQ/wQ8EaeVKQztlBnaeRBXkxg6QFn+nNJR6BNTFpGhPkZeIL4MmrG8YSF+YJD
+         aiuN122Fi+bylo8raHQ1CtgTmkouEBQPdIELDGf7z57v7nWNAbD21ILpl6L8iCSmMBeR
+         XiXg==
+X-Gm-Message-State: AOAM530292fDsPOiTepIalGnxwoojSxjOv2k+a+SM8BPf+WXdtoqBTc/
+        BFiaJbepC9ODJ3vg/r8USzqZ/TKpfnALIXZiq0jEkdt3OqTOTzI10ItBah0ZvLgFe4pkochJ42h
+        vCvOiNt4QsVz9RYzboLKrSkQbGoWhDW/yv8eCu/iQBw==
+X-Received: by 2002:a17:907:2cc5:b0:6f9:1fc:ebef with SMTP id hg5-20020a1709072cc500b006f901fcebefmr28181476ejc.121.1653483007617;
+        Wed, 25 May 2022 05:50:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzvTvCfr2URj1gvVBPwdVrL7eDlhYrXsRoUskI+1RzXgsbrq4SC9HIUuinuM5xzuAqeiXyC7w==
+X-Received: by 2002:a17:907:2cc5:b0:6f9:1fc:ebef with SMTP id hg5-20020a1709072cc500b006f901fcebefmr28181460ejc.121.1653483007466;
+        Wed, 25 May 2022 05:50:07 -0700 (PDT)
+Received: from gollum.fritz.box ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id l8-20020a1709060e0800b006f3ef214e62sm2860566eji.200.2022.05.25.05.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 05:50:07 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, linux-um@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juerg.haefliger@canonical.com>
+Subject: [PATCH 0/2] um: Kconfig: Style cleanups
+Date:   Wed, 25 May 2022 14:49:59 +0200
+Message-Id: <20220525125001.47009-1-juerg.haefliger@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtDERvGAsmasGK=xtGEawx1yK6Lf4mV7Cc7JcNFKrxUWKw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,66 +77,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 06:01:07PM +0200, Vincent Guittot wrote:
-> > This is the min, max and range of run time for mg.D parallelised with ~25%
-> > of the CPUs parallelised by MPICH running on a 2-socket machine (80 CPUs,
-> > 16 active for mg.D due to limitations of mg.D).
-> >
-> > v5.3                                     Min  95.84 Max  96.55 Range   0.71 Mean  96.16
-> > v5.7                                     Min  95.44 Max  96.51 Range   1.07 Mean  96.14
-> > v5.8                                     Min  96.02 Max 197.08 Range 101.06 Mean 154.70
-> > v5.12                                    Min 104.45 Max 111.03 Range   6.58 Mean 105.94
-> > v5.13                                    Min 104.38 Max 170.37 Range  65.99 Mean 117.35
-> > v5.13-revert-c6f886546cb8                Min 104.40 Max 110.70 Range   6.30 Mean 105.68
-> > v5.18rc4-baseline                        Min 110.78 Max 169.84 Range  59.06 Mean 131.22
-> > v5.18rc4-revert-c6f886546cb8             Min 113.98 Max 117.29 Range   3.31 Mean 114.71
-> > v5.18rc4-this_series                     Min  95.56 Max 163.97 Range  68.41 Mean 105.39
-> > v5.18rc4-this_series-revert-c6f886546cb8 Min  95.56 Max 104.86 Range   9.30 Mean  97.00
-> 
-> I'm interested to understand why such instability can be introduced by
-> c6f886546cb8 as it aims to do the opposite by not waking up a random
-> idle cpu but using the current cpu which is becoming idle, instead. I
-> haven't been able to reproduce your problem with my current setup but
-> I assume this is specific to some use cases so I will try to reproduce
-> the mg.D test above. If you have more details on the setup to ease the
-> reproduction of the problem I'm interested.
-> 
+The convention for indentation seems to be a single tab. Help text is
+further indented by an additional two whitespaces. Fix the lines that
+violate these rules.
 
-Thanks Vincent,
+Juerg Haefliger (2):
+  um: Kconfig: Fix indentation
+  um/drivers: Kconfig: Fix indentation
 
-The most straight-forward way to reproduce is via mmtests.
-
-# git clone https://github.com/gormanm/mmtests/
-# cd mmtests
-# ./bin/generate-generic-configs
-# ./run-mmtests.sh --run-monitor --config configs/config-hpc-nas-mpich-quarter-mgD-many test-mgD-many
-# cd work/log
-# ../../compare-kernels.sh
-
-nas-mpich-mg NAS Time
-                                 test
-                             mgD-many
-Min       mg.D       95.80 (   0.00%)
-Amean     mg.D      110.77 (   0.00%)
-Stddev    mg.D       21.55 (   0.00%)
-CoeffVar  mg.D       19.46 (   0.00%)
-Max       mg.D      155.35 (   0.00%)
-BAmean-50 mg.D       96.05 (   0.00%)
-BAmean-95 mg.D      107.83 (   0.00%)
-BAmean-99 mg.D      109.23 (   0.00%)
-
-Note the min of 95.80 seconds, max of 155.35 and high stddev indicating
-the results are not stable.
-
-The generated config is for openSUSE so it may not work for you. After
-installing the mpich package, you'll need to adjust these lines
-
-export NAS_MPICH_PATH=/usr/$MMTESTS_LIBDIR/mpi/gcc/$NAS_MPICH_VERSION/bin
-export NAS_MPICH_LIBPATH=/usr/$MMTESTS_LIBDIR/mpi/gcc/$NAS_MPICH_VERSION/$MMTESTS_LIBDIR
-
-NAS_MPICH_PATH and NAS_MPICH_LIBPATH need to point to the bin and lib
-path for the mpich package your distribution ships.
+ arch/um/Kconfig         |  2 +-
+ arch/um/drivers/Kconfig | 54 ++++++++++++++++++++---------------------
+ 2 files changed, 28 insertions(+), 28 deletions(-)
 
 -- 
-Mel Gorman
-SUSE Labs
+2.32.0
+

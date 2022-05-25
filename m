@@ -2,168 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8E7534443
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3AF534451
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343932AbiEYTgj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 25 May 2022 15:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
+        id S1344251AbiEYThj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 15:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234946AbiEYTgh (ORCPT
+        with ESMTP id S234946AbiEYTh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 15:36:37 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56F625EAB;
-        Wed, 25 May 2022 12:36:34 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1ntwnq-0007ot-Ka; Wed, 25 May 2022 21:36:18 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     palmer@rivosinc.com, arnd@arndb.de, linux@roeck-us.net,
-        palmer@dabbelt.com, guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: Re: [PATCH] riscv: compat: Using seperated vdso_maps for compat_vdso_info
-Date:   Wed, 25 May 2022 21:36:16 +0200
-Message-ID: <2757790.88bMQJbFj6@diego>
-In-Reply-To: <20220525160404.2930984-1-guoren@kernel.org>
-References: <20220525160404.2930984-1-guoren@kernel.org>
+        Wed, 25 May 2022 15:37:26 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C372A725;
+        Wed, 25 May 2022 12:37:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653507446; x=1685043446;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=xgSI95rpTpTz+ETkJIH2nn/yBCp86MLzvUiPkhh4eM0=;
+  b=tv5K3AOYmSNQ35Fz8pkcnzabumLa2DvykpHQDkSKDD/lfVXlc3rTRwc6
+   B9AKZvGB6Nu8dWpajMyoeddnt+SOJT4LD/PVJhWA2wBSbQNkIkHEb2n8i
+   fdNhGfGnK7BMK927Xeri4SQOYMGkrroeXHGqPDszMokCVtiwhBD62j3MI
+   A=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 May 2022 12:37:25 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 12:37:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 25 May 2022 12:37:24 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 25 May 2022 12:37:23 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v12 0/3] eDP/DP Phy vdda realted function
+Date:   Wed, 25 May 2022 12:37:10 -0700
+Message-ID: <1653507433-22585-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 25. Mai 2022, 18:04:04 CEST schrieb guoren@kernel.org:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> This is a fixup for vdso implementation which caused musl to
-> fail.
-> 
-> [   11.600082] Run /sbin/init as init process
-> [   11.628561] init[1]: unhandled signal 11 code 0x1 at
-> 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
-> [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted
-> 5.18.0-rc7-next-20220520 #1
-> [   11.629462] Hardware name: riscv-virtio,qemu (DT)
-> [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp :
-> 00ffffffc58199f0
-> [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 :
-> ffffffffffffffff
-> [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 :
-> 00ffffff8ade0cc0
-> [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 :
-> 00ffffffc5819a00
-> [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 :
-> 00ffffffc5819b00
-> [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 :
-> 0000000000000000
-> [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 :
-> 00ffffff8ade0728
-> [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 :
-> 00ffffffc5819e40
-> [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10:
-> 0000000000000000
-> [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 :
-> 0000000000000001
-> [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
-> [   11.629699] status: 0000000000004020 badaddr: 0000000000000000
-> cause: 000000000000000d
-> 
-> The last __vdso_init(&compat_vdso_info) replaces the data in normal
-> vdso_info. This is an obvious bug.
-> 
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Heiko Stübner <heiko@sntech.de>
+1) add regulator_set_load() to eDP phy
+2) add regulator_set_load() to DP phy
+3) remove vdda related function out of eDP/DP controller
 
-on palmer's for-next branch and a Debian riscv64 rootfs:
+Kuogee Hsieh (3):
+  phy: qcom-edp: add regulator_set_load to edp phy
+  phy: qcom-qmp: add regulator_set_load to dp phy
+  drm/msm/dp: delete vdda regulator related functions from eDP/DP
+    controller
 
-- WITHOUT this patch I end up with:
-[    3.142030] Unable to handle kernel paging request at virtual address ff60007265776f78
-[    3.144398] Oops [#1]
-[    3.144882] Modules linked in:
-[    3.145620] CPU: 1 PID: 1 Comm: init Not tainted 5.18.0-rc1-00049-g8810d7feee5a #225
-[    3.146698] Hardware name: riscv-virtio,qemu (DT)
-[    3.147441] epc : special_mapping_fault+0x4c/0x8e
-[    3.148352]  ra : __do_fault+0x28/0x11c
-[    3.149005] epc : ffffffff8011ce3e ra : ffffffff80113216 sp : ff2000000060bd20
-[    3.149851]  gp : ffffffff810de540 tp : ff600000012a8000 t0 : ffffffff80008af0
-[    3.150651]  t1 : ffffffff80c001e0 t2 : ffffffff80c00260 s0 : ff2000000060bd30
-[    3.151434]  s1 : ff2000000060bd78 a0 : ff600000013165f0 a1 : ff60000001dbc450
-[    3.152734]  a2 : ff2000000060bd78 a3 : 00fffffffffff000 a4 : ff6000003f0337c8
-[    3.153821]  a5 : ff60007265776f70 a6 : 0000000000000000 a7 : 0000000000000007
-[    3.154709]  s2 : ff60000001dbc450 s3 : ff60000001dbc450 s4 : ffffffff810ddd69
-[    3.155557]  s5 : ff60000001dbc450 s6 : 0000000000000254 s7 : 000000000000000c
-[    3.156369]  s8 : 000000000000000f s9 : 000000000000000d s10: ff60000001cf8080
-[    3.157242]  s11: 000000000000000d t3 : 00ffffff8232d000 t4 : 000000006ffffdff
-[    3.158094]  t5 : 000000006ffffe35 t6 : 000000000000000a
-[    3.158742] status: 0000000200000120 badaddr: ff60007265776f78 cause: 000000000000000d
-[    3.160000] [<ffffffff80113216>] __do_fault+0x28/0x11c
-[    3.160881] [<ffffffff80116f3e>] __handle_mm_fault+0x6ec/0x9c8
-[    3.161619] [<ffffffff8011729c>] handle_mm_fault+0x82/0x136
-[    3.162308] [<ffffffff80008c10>] do_page_fault+0x120/0x31c
-[    3.163006] [<ffffffff800032dc>] ret_from_exception+0x0/0xc
-[    3.164607] ---[ end trace 0000000000000000 ]---
--> a different error
+ drivers/gpu/drm/msm/dp/dp_parser.c  | 14 ------
+ drivers/gpu/drm/msm/dp/dp_parser.h  |  8 ----
+ drivers/gpu/drm/msm/dp/dp_power.c   | 95 +------------------------------------
+ drivers/phy/qualcomm/phy-qcom-edp.c | 12 +++++
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 41 ++++++++++++----
+ 5 files changed, 46 insertions(+), 124 deletions(-)
 
-
-- WITH this patch applied on top, the error above goes away and the
-  qemu-system can boot normally.
-
-So, while my error is different and I don't think there is any musl in
-my rootfs, this patch definitly fixes the issue for me, so
-
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-
-> ---
->  arch/riscv/kernel/vdso.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
-> index 50fe4c877603..69b05b6c181b 100644
-> --- a/arch/riscv/kernel/vdso.c
-> +++ b/arch/riscv/kernel/vdso.c
-> @@ -206,12 +206,23 @@ static struct __vdso_info vdso_info __ro_after_init = {
->  };
->  
->  #ifdef CONFIG_COMPAT
-> +static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
-> +	[RV_VDSO_MAP_VVAR] = {
-> +		.name   = "[vvar]",
-> +		.fault = vvar_fault,
-> +	},
-> +	[RV_VDSO_MAP_VDSO] = {
-> +		.name   = "[vdso]",
-> +		.mremap = vdso_mremap,
-> +	},
-> +};
-> +
->  static struct __vdso_info compat_vdso_info __ro_after_init = {
->  	.name = "compat_vdso",
->  	.vdso_code_start = compat_vdso_start,
->  	.vdso_code_end = compat_vdso_end,
-> -	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
-> -	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
-> +	.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
-> +	.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
->  };
->  #endif
->  
-> 
-
-
-
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

@@ -2,85 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EE4533DF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2707533DF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244447AbiEYNgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
+        id S238159AbiEYNgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244269AbiEYNgA (ORCPT
+        with ESMTP id S229613AbiEYNgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:36:00 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26516B029;
-        Wed, 25 May 2022 06:35:58 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2ff90e0937aso140117627b3.4;
-        Wed, 25 May 2022 06:35:58 -0700 (PDT)
+        Wed, 25 May 2022 09:36:43 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D6422A
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:36:40 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id p123so7141864qke.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Grl0Ici88Sz79dptO2NKdwHQ/Da4OTXc3PiSI2iuCc0=;
+        b=a5EvdQu8GXKYLoSSQf4xu1FRP1hgPhOmTbu2FDWWbmOzV5Ntklf9Nlrv3nV6lJ7ekU
+         C4qhdh1Gkmjti9yRGXzDw8ElJUJZ/SJum4YR5Uo3NqUZDhLtHJPHWqASQV7ExreaTWtV
+         yJ7M/ZQarL7+2mOdB991AzntXNdtU+2AKk4hvgCgTgLjyF2OW6nfuGxaObE4LN+ruKRR
+         a5FZ1ibYTUlzCTHLNd9xaqM7mIfxv4HFsfhZZbz0bk+5bC4qqVXMvkZQLnORCqz0iauu
+         /sC+d/9sXN8rqezTGUE1TW/9imq5iX6i4ppYBnBPgmaf9Exgw5UfiIoor/0L0eG+L9vd
+         cpMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cKjjcpLnSifwU6ntjOTqclHj+h8rBziZUbb3L9lxcDg=;
-        b=lgYGhqBepZQKci488ntebJ/0rUbvTS9MHf3P4x/dQfBL6ZkYsfjkI3xiDGwdaaEQ1G
-         eFvvgKTXEdY+BfOrrMqwafHylX9uvbfaITN/oakR7u9pWQ2+YDMah9oPnQ3siplGQ+As
-         Qg71yz+tVJ3vPILsTjairH66IzQre8M3Ebn5/ycbmF6mU2XbrNpyvBgJl51JteHi7/BQ
-         vP1BHRDi5dPZjH+1vm6PFPS1Xp8McgMfrDZ2wYV/R5wwEn1gJmDl0jNgTgSs66z5ysj5
-         YZYk/4RlMe2t3aoDy7HN+sXTYUpEa7Tm3PNTfWw/kdB8TcejFw/sR1oWgYhyGyxPNsqf
-         7kyQ==
-X-Gm-Message-State: AOAM532v8ttno0Jb963ZJco2wILO1VUr4hvO/LZgzmw6Pt7AFIF/ji42
-        mxjKX44igvRfYfbmBEmDbO52POAzC2l+HZdS5Jw=
-X-Google-Smtp-Source: ABdhPJzQUvt3Yu6IiEi8JAkJDQsOorfs7WMwyEkr4paJ5HARc9sR0Jz8djKLhlGx4MgG1bHOvbSE9d2hzMJkr7J/J1k=
-X-Received: by 2002:a81:6d8e:0:b0:2ff:a8d9:d574 with SMTP id
- i136-20020a816d8e000000b002ffa8d9d574mr21948441ywc.301.1653485757927; Wed, 25
- May 2022 06:35:57 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Grl0Ici88Sz79dptO2NKdwHQ/Da4OTXc3PiSI2iuCc0=;
+        b=tIQDwxNmeeeLQE2uzPAsqZo4CQy3lqzyOfAm3MGtsiYMkj7IUmDoIYseEO47UzmWg/
+         Y3eo0GQ0yhOo/yCK3D4MXU2vISKz5d6Hrp3opb+0KJX3g+aa771mY8xv6WcnxmqOw87c
+         P2CVgzgGjFBY3Sn0O+fMGCsjHm0zoEoGWlv9eQyhyK8ROQOOo7kmYbDXcc13rtJEfN1E
+         C98pPRg119COG0MI8Z/qBcuc5dvdbqhcnk18K8euUevvZUJFnq6zibE4VMh2VrWiXSFt
+         oIsxGLOGw9oaXQwIMrzi8aopTqDHCoFYr/pud1ZvkEEYNVmJVCsxv5QVWvt0uP0+TZgE
+         UMWQ==
+X-Gm-Message-State: AOAM532Wa/3h2xjCWC/PEauJ/L4ZOk46p/ylChwucv1q09VDqZYphJy8
+        bvOPQ+WBpylHOruddLsyTJvAEsvFdCUpWk9g5PDW0Q==
+X-Google-Smtp-Source: ABdhPJw57giukrH8SEV/1DnIMT1VYzjINsEONrnCwIvtLMWg5+DgDLaOww+wXaHsR9IN4sMCXzPgBW5H8FKR1oaCfoQ=
+X-Received: by 2002:a05:620a:414e:b0:6a5:8dec:57bb with SMTP id
+ k14-20020a05620a414e00b006a58dec57bbmr2717852qko.30.1653485799502; Wed, 25
+ May 2022 06:36:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220521111145.81697-3-Julia.Lawall@inria.fr>
-In-Reply-To: <20220521111145.81697-3-Julia.Lawall@inria.fr>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 May 2022 15:35:47 +0200
-Message-ID: <CAJZ5v0gatD6rsLS582=yk-h4m2wGyt8g9OJ69iN26Ldm5esr7Q@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: CPPC: fix typo in comment
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        kernel-janitors@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220506123246.21788-1-yuehaibing@huawei.com> <CACRpkdZUwfVNZyS6RgcupJ+TRUZVM+1_3ABj_-f_3+v+wNE6mg@mail.gmail.com>
+ <CACRpkdaKrk+cj9Yvpe3kmR1iJFczi-yckHiKeLGu9F=hRFiU9w@mail.gmail.com>
+In-Reply-To: <CACRpkdaKrk+cj9Yvpe3kmR1iJFczi-yckHiKeLGu9F=hRFiU9w@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 25 May 2022 16:36:28 +0300
+Message-ID: <CAA8EJpq7_V7mZbN+G5fZdK0a4kTcxROAd_bGJtQ5mhzdYr6pNQ@mail.gmail.com>
+Subject: Re: [PATCH v2 -next] drm/display: Fix build error without CONFIG_OF
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     YueHaibing <yuehaibing@huawei.com>, airlied@linux.ie,
+        daniel@ffwll.ch, tzimmermann@suse.de, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 1:12 PM Julia Lawall <Julia.Lawall@inria.fr> wrote:
+On Mon, 23 May 2022 at 15:55, Linus Walleij <linus.walleij@linaro.org> wrot=
+e:
 >
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
+> On Mon, May 23, 2022 at 2:46 PM Linus Walleij <linus.walleij@linaro.org> =
+wrote:
+> > On Fri, May 6, 2022 at 2:33 PM YueHaibing <yuehaibing@huawei.com> wrote=
+:
+> >
+> > > While CONFIG_OF is n but COMPILE_TEST is y, we got this:
+> > >
+> > > WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
+> > >   Depends on [n]: HAS_IOMEM [=3Dy] && DRM [=3Dy] && OF [=3Dn]
+> > >   Selected by [y]:
+> > >   - DRM_MSM [=3Dy] && HAS_IOMEM [=3Dy] && DRM [=3Dy] && (ARCH_QCOM ||=
+ SOC_IMX5 || COMPILE_TEST [=3Dy]) && COMMON_CLK [=3Dy] && IOMMU_SUPPORT [=
+=3Dy] && (QCOM_OCMEM [=3Dn] || QCOM_OCMEM [=3Dn]=3Dn) && (QCOM_LLCC [=3Dy] =
+|| QCOM_LLCC [=3Dy]=3Dn) && (QCOM_COMMAND_DB [=3Dn] || QCOM_COMMAND_DB [=3D=
+n]=3Dn)
+> > >
+> > > Make DRM_DP_AUX_BUS depends on OF || COMPILE_TEST to fix this warning=
+.
+> > >
+> > > Fixes: f5d01644921b ("drm/msm: select DRM_DP_AUX_BUS for the AUX bus =
+support")
+> > > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> >
+> > Patch applied to the DRM tree.
 >
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> Nope, failed:
 >
-> ---
->  drivers/acpi/cppc_acpi.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> $ dim push-branch drm-misc-next
+> dim: ac890b9eeb9b ("drm/display: Fix build error without CONFIG_OF"):
+> Fixes: SHA1 in not pointing at an ancestor:
+> dim:     f5d01644921b ("drm/msm: select DRM_DP_AUX_BUS for the AUX bus su=
+pport")
+> dim: ERROR: issues in commits detected, aborting
 >
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index bc1454789a06..e6c1df0b3cc4 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -305,7 +305,7 @@ static int send_pcc_cmd(int pcc_ss_id, u16 cmd)
->                 goto end;
->         }
->
-> -       /* wait for completion and check for PCC errro bit */
-> +       /* wait for completion and check for PCC error bit */
->         ret = check_pcc_chan(pcc_ss_id, true);
->
->         if (pcc_ss_data->pcc_mrtt)
->
+> I don't know what to do with this, sorry. The other committers are maybe =
+better
+> with this kind of situations. I think it is designed to stop me from
+> shooting myself
+> in the foot.
 
-Applied as 5.19-rc material, thanks!
+Linus, can we get an ack from you (or anybody else from DRM core) to
+merge it through drm/msm tree?
+
+--=20
+With best wishes
+Dmitry

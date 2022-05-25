@@ -2,308 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254665337A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F6B5337A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbiEYHqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 03:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
+        id S242161AbiEYHrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 03:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242161AbiEYHqk (ORCPT
+        with ESMTP id S229854AbiEYHq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 03:46:40 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935DF7CB0E;
-        Wed, 25 May 2022 00:46:09 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ntliT-0002eu-2o; Wed, 25 May 2022 09:46:01 +0200
-Message-ID: <eab9fdb0-11ef-4556-bdd7-f021cc5f10b7@leemhuis.info>
-Date:   Wed, 25 May 2022 09:45:59 +0200
+        Wed, 25 May 2022 03:46:58 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D04479388;
+        Wed, 25 May 2022 00:46:57 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24P6LIbc004833;
+        Wed, 25 May 2022 07:46:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=AxKlKc5CFOm0zoKAftCrN6Z6eRFj3Yw1byWVrpghrWY=;
+ b=ZvVEcwe1PlWUIUWrdVyP3XhQIVr2Q1JUjTqzarGcuRhC2zNnJDf7dm45IFEyz2tpLgee
+ TzYoOrZqWv5ljmRv1oyJzhMnu+LrmKsdF2n9yTvm/x0ZezV7vRA0KlHgoskPJwijIDj5
+ SM0dHInvmSsKgYIPwTgIWg831XjaPf2VjPCofBNVxw2veS3hd2yDDprnTrqa7uz2M5cG
+ Y3QN2GrMky4ID8FSFDb4GW4oKRCEZXgYZpqa0+qjoVn587je8emQlE7F3pwXm765ULCk
+ jClEnVeoQ0r7Mw5xWY7JP/bCgrRlUQTFYMWJO7jdZE8X5CExRInPjlO4xR8dUiM2b8fH aA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9f45hj9p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 07:46:44 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24P7SOYd024306;
+        Wed, 25 May 2022 07:46:43 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9f45hj90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 07:46:43 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24P7NsmE022928;
+        Wed, 25 May 2022 07:46:41 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3g93ur8k9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 07:46:41 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24P7kcHf25559388
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 May 2022 07:46:38 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D97D4C052;
+        Wed, 25 May 2022 07:46:38 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 60FA04C044;
+        Wed, 25 May 2022 07:46:33 +0000 (GMT)
+Received: from vajain21.in.ibm.com (unknown [9.43.93.43])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Wed, 25 May 2022 07:46:33 +0000 (GMT)
+Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Wed, 25 May 2022 13:16:31 +0530
+From:   Vaibhav Jain <vaibhav@linux.ibm.com>
+To:     Ritesh Harjani <ritesh.list@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2] of: check previous kernel's ima-kexec-buffer against
+ memory bounds
+In-Reply-To: <20220525055149.f4nqx2ocnh3pqnpr@riteshh-domain>
+References: <20220524055042.1527968-1-vaibhav@linux.ibm.com>
+ <20220525055149.f4nqx2ocnh3pqnpr@riteshh-domain>
+Date:   Wed, 25 May 2022 13:16:31 +0530
+Message-ID: <87leuqf414.fsf@vajain21.in.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
- availability
-Content-Language: en-US
-To:     Chuck Zmudzinski <brchuckz@netscape.net>,
-        Jan Beulich <jbeulich@suse.com>, regressions@lists.linux.dev,
-        stable@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Juergen Gross <jgross@suse.com>
-References: <20220503132207.17234-1-jgross@suse.com>
- <20220503132207.17234-3-jgross@suse.com>
- <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
- <0dcb05d0-108f-6252-e768-f75b393a7f5c@suse.com>
- <77255e5b-12bf-5390-6910-dafbaff18e96@netscape.net>
- <a2e95587-418b-879f-2468-8699a6df4a6a@suse.com>
- <8b1ebea5-7820-69c4-2e2b-9866d55bc180@netscape.net>
- <c5fa3c3f-e602-ed68-d670-d59b93c012a0@netscape.net>
- <3bff3562-bb1e-04e6-6eca-8d9bc355f2eb@suse.com>
- <3ca084a9-768e-a6f5-ace4-cd347978dec7@netscape.net>
- <9af0181a-e143-4474-acda-adbe72fc6227@suse.com>
- <b2585c19-d38b-9640-64ab-d0c9be24be34@netscape.net>
- <dae4cc45-a1cd-e33f-25ef-c536df9b49e6@leemhuis.info>
- <3fc70595-3dcc-4901-0f3f-193f043b753f@netscape.net>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <3fc70595-3dcc-4901-0f3f-193f043b753f@netscape.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1653464769;b79085a6;
-X-HE-SMSGID: 1ntliT-0002eu-2o
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: manfk7lGh9YjRaxXAgcQiYfILbiqQ7Yv
+X-Proofpoint-ORIG-GUID: ZFyYZaxBpM0_5EbZqJTLcrZOlPRz3P1-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-25_02,2022-05-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ adultscore=0 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 impostorscore=0 bulkscore=0 priorityscore=1501 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205250035
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ritesh,
+thanks for looking into this patch,
 
+Ritesh Harjani <ritesh.list@gmail.com> writes:
 
-On 24.05.22 20:32, Chuck Zmudzinski wrote:
-> On 5/21/22 6:47 AM, Thorsten Leemhuis wrote:
->> On 20.05.22 16:48, Chuck Zmudzinski wrote:
->>> On 5/20/2022 10:06 AM, Jan Beulich wrote:
->>>> On 20.05.2022 15:33, Chuck Zmudzinski wrote:
->>>>> On 5/20/2022 5:41 AM, Jan Beulich wrote:
->>>>>> On 20.05.2022 10:30, Chuck Zmudzinski wrote:
->>>>>>> On 5/20/2022 2:59 AM, Chuck Zmudzinski wrote:
->>>>>>>> On 5/20/2022 2:05 AM, Jan Beulich wrote:
->>>>>>>>> On 20.05.2022 06:43, Chuck Zmudzinski wrote:
->>>>>>>>>> On 5/4/22 5:14 AM, Juergen Gross wrote:
->>>>>>>>>>> On 04.05.22 10:31, Jan Beulich wrote:
->>>>>>>>>>>> On 03.05.2022 15:22, Juergen Gross wrote:
->>>>>>>>>>>>
->>>>>>>>>>>> ... these uses there are several more. You say nothing on why
->>>>>>>>>>>> those want
->>>>>>>>>>>> leaving unaltered. When preparing my earlier patch I did
->>>>>>>>>>>> inspect them
->>>>>>>>>>>> and came to the conclusion that these all would also better
->>>>>>>>>>>> observe the
->>>>>>>>>>>> adjusted behavior (or else I couldn't have left pat_enabled()
->>>>>>>>>>>> as the
->>>>>>>>>>>> only predicate). In fact, as said in the description of my
->>>>>>>>>>>> earlier
->>>>>>>>>>>> patch, in
->>>>>>>>>>>> my debugging I did find the use in i915_gem_object_pin_map()
->>>>>>>>>>>> to be
->>>>>>>>>>>> the
->>>>>>>>>>>> problematic one, which you leave alone.
->>>>>>>>>>> Oh, I missed that one, sorry.
->>>>>>>>>> That is why your patch would not fix my Haswell unless
->>>>>>>>>> it also touches i915_gem_object_pin_map() in
->>>>>>>>>> drivers/gpu/drm/i915/gem/i915_gem_pages.c
->>>>>>>>>>
->>>>>>>>>>> I wanted to be rather defensive in my changes, but I agree at
->>>>>>>>>>> least
->>>>>>>>>>> the
->>>>>>>>>>> case in arch_phys_wc_add() might want to be changed, too.
->>>>>>>>>> I think your approach needs to be more aggressive so it will fix
->>>>>>>>>> all the known false negatives introduced by bdd8b6c98239
->>>>>>>>>> such as the one in i915_gem_object_pin_map().
->>>>>>>>>>
->>>>>>>>>> I looked at Jan's approach and I think it would fix the issue
->>>>>>>>>> with my Haswell as long as I don't use the nopat option. I
->>>>>>>>>> really don't have a strong opinion on that question, but I
->>>>>>>>>> think the nopat option as a Linux kernel option, as opposed
->>>>>>>>>> to a hypervisor option, should only affect the kernel, and
->>>>>>>>>> if the hypervisor provides the pat feature, then the kernel
->>>>>>>>>> should not override that,
->>>>>>>>> Hmm, why would the kernel not be allowed to override that? Such
->>>>>>>>> an override would affect only the single domain where the
->>>>>>>>> kernel runs; other domains could take their own decisions.
->>>>>>>>>
->>>>>>>>> Also, for the sake of completeness: "nopat" used when running on
->>>>>>>>> bare metal has the same bad effect on system boot, so there
->>>>>>>>> pretty clearly is an error cleanup issue in the i915 driver. But
->>>>>>>>> that's orthogonal, and I expect the maintainers may not even care
->>>>>>>>> (but tell us "don't do that then").
->>>>>>> Actually I just did a test with the last official Debian kernel
->>>>>>> build of Linux 5.16, that is, a kernel before bdd8b6c98239 was
->>>>>>> applied. In fact, the nopat option does *not* break the i915 driver
->>>>>>> in 5.16. That is, with the nopat option, the i915 driver loads
->>>>>>> normally on both the bare metal and on the Xen hypervisor.
->>>>>>> That means your presumption (and the presumption of
->>>>>>> the author of bdd8b6c98239) that the "nopat" option was
->>>>>>> being observed by the i915 driver is incorrect. Setting "nopat"
->>>>>>> had no effect on my system with Linux 5.16. So after doing these
->>>>>>> tests, I am against the aggressive approach of breaking the i915
->>>>>>> driver with the "nopat" option because prior to bdd8b6c98239,
->>>>>>> nopat did not break the i915 driver. Why break it now?
->>>>>> Because that's, in my understanding, is the purpose of "nopat"
->>>>>> (not breaking the driver of course - that's a driver bug -, but
->>>>>> having an effect on the driver).
->>>>> I wouldn't call it a driver bug, but an incorrect configuration of the
->>>>> kernel by the user.  I presume X86_FEATURE_PAT is required by the
->>>>> i915 driver
->>>> The driver ought to work fine without PAT (and hence without being
->>>> able to make WC mappings). It would use UC instead and be slow, but
->>>> it ought to work.
->>>>
->>>>> and therefore the driver should refuse to disable
->>>>> it if the user requests to disable it and instead warn the user that
->>>>> the driver did not disable the feature, contrary to what the user
->>>>> requested with the nopat option.
->>>>>
->>>>> In any case, my test did not verify that when nopat is set in Linux
->>>>> 5.16,
->>>>> the thread takes the same code path as when nopat is not set,
->>>>> so I am not totally sure that the reason nopat does not break the
->>>>> i915 driver in 5.16 is that static_cpu_has(X86_FEATURE_PAT)
->>>>> returns true even when nopat is set. I could test it with a custom
->>>>> log message in 5.16 if that is necessary.
->>>>>
->>>>> Are you saying it was wrong for static_cpu_has(X86_FEATURE_PAT)
->>>>> to return true in 5.16 when the user requests nopat?
->>>> No, I'm not saying that. It was wrong for this construct to be used
->>>> in the driver, which was fixed for 5.17 (and which had caused the
->>>> regression I did observe, leading to the patch as a hopefully least
->>>> bad option).
->>>>
->>>>> I think that is
->>>>> just permitting a bad configuration to break the driver that a
->>>>> well-written operating system should not allow. The i915 driver
->>>>> was, in my opinion, correctly ignoring the nopat option in 5.16
->>>>> because that option is not compatible with the hardware the
->>>>> i915 driver is trying to initialize and setup at boot time. At least
->>>>> that is my understanding now, but I will need to test it on 5.16
->>>>> to be sure I understand it correctly.
->>>>>
->>>>> Also, AFAICT, your patch would break the driver when the nopat
->>>>> option is set and only fix the regression introduced by bdd8b6c98239
->>>>> when nopat is not set on my box, so your patch would
->>>>> introduce a regression relative to Linux 5.16 and earlier for the
->>>>> case when nopat is set on my box. I think your point would
->>>>> be that it is not a regression if it is an incorrect user
->>>>> configuration.
->>>> Again no - my view is that there's a separate, pre-existing issue
->>>> in the driver which was uncovered by the change. This may be a
->>>> perceived regression, but is imo different from a real one.
->> Sorry, for you maybe, but I'm pretty sure for Linus it's not when it
->> comes to the "no regressions rule". Just took a quick look at quotes
->> from Linus
->> https://www.kernel.org/doc/html/latest/process/handling-regressions.html
->> and found this statement from Linus to back this up:
+> Just a minor nit which I noticed.
+>
+> On 22/05/24 11:20AM, Vaibhav Jain wrote:
+>> Presently ima_get_kexec_buffer() doesn't check if the previous kernel's
+>> ima-kexec-buffer lies outside the addressable memory range. This can result
+>> in a kernel panic if the new kernel is booted with 'mem=X' arg and the
+>> ima-kexec-buffer was allocated beyond that range by the previous kernel.
+>> The panic is usually of the form below:
 >>
->> ```
->> One _particularly_ last-minute revert is the top-most commit (ignoring
->> the version change itself) done just before the release, and while
->> it's very annoying, it's perhaps also instructive.
+>> $ sudo kexec --initrd initrd vmlinux --append='mem=16G'
 >>
->> What's instructive about it is that I reverted a commit that wasn't
->> actually buggy. In fact, it was doing exactly what it set out to do,
->> and did it very well. In fact it did it _so_ well that the much
->> improved IO patterns it caused then ended up revealing a user-visible
->> regression due to a real bug in a completely unrelated area.
->> ```
+>> <snip>
+>>  BUG: Unable to handle kernel data access on read at 0xc000c01fff7f0000
+>>  Faulting instruction address: 0xc000000000837974
+>>  Oops: Kernel access of bad area, sig: 11 [#1]
+>> <snip>
+>>  NIP [c000000000837974] ima_restore_measurement_list+0x94/0x6c0
+>>  LR [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
+>>  Call Trace:
+>>  [c00000000371fa80] [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
+>>  [c00000000371fb00] [c0000000020512c4] ima_init+0x80/0x108
+>>  [c00000000371fb70] [c0000000020514dc] init_ima+0x4c/0x120
+>>  [c00000000371fbf0] [c000000000012240] do_one_initcall+0x60/0x2c0
+>>  [c00000000371fcc0] [c000000002004ad0] kernel_init_freeable+0x344/0x3ec
+>>  [c00000000371fda0] [c0000000000128a4] kernel_init+0x34/0x1b0
+>>  [c00000000371fe10] [c00000000000ce64] ret_from_kernel_thread+0x5c/0x64
+>>  Instruction dump:
+>>  f92100b8 f92100c0 90e10090 910100a0 4182050c 282a0017 3bc00000 40810330
+>>  7c0802a6 fb610198 7c9b2378 f80101d0 <a1240000> 2c090001 40820614 e9240010
+>>  ---[ end trace 0000000000000000 ]---
 >>
->> He said that here:
->> https://www.kernel.org/doc/html/latest/process/handling-regressions.html
+>> Fix this issue by checking returned PFN range of previous kernel's
+>> ima-kexec-buffer with pfn_valid to ensure correct memory bounds.
 >>
->> The situation is of course different here, but similar enough.
+>> Fixes: 467d27824920 ("powerpc: ima: get the kexec buffer passed by the previous kernel")
+>> Cc: Frank Rowand <frowand.list@gmail.com>
+>> Cc: Prakhar Srivastava <prsriva@linux.microsoft.com>
+>> Cc: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+>> Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+>> Cc: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
 >>
->>> Since it is a regression, I think for now bdd8b6c98239 should
->>> be reverted and the fix backported to Linux 5.17 stable until
->>> the underlying memory subsystem can provide the i915 driver
->>> with an updated test for the PAT feature that also meets the
->>> requirements of the author of bdd8b6c98239 without breaking
->>> the i915 driver.
->> I'm not a developer and I'm don't known the details of this thread and
->> the backstory of the regression, but it sounds like that's the approach
->> that is needed here until someone comes up with a fix for the regression
->> exposed by bdd8b6c98239.
+>> ---
+>> Changelog
+>> ==========
 >>
->> But if I'm wrong, please tell me.
-> 
-> You are mostly right, I think. Reverting bdd8b6c98239 fixes
-> it. There is another way to fix it, though.
+>> v2:
+>> * Instead of using memblock to determine the valid bounds use pfn_valid() to do
+>> so since memblock may not be available late after the kernel init. [ Mpe ]
+>> * Changed the patch prefix from 'powerpc' to 'of' [ Mpe ]
+>> * Updated the 'Fixes' tag to point to correct commit that introduced this
+>> function. [ Rob ]
+>> * Fixed some whitespace/tab issues in the patch description [ Rob ]
+>> * Added another check for checking ig 'tmp_size' for ima-kexec-buffer is > 0
+>> ---
+>>  drivers/of/kexec.c | 17 +++++++++++++++++
+>>  1 file changed, 17 insertions(+)
+>>
+>> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+>> index 8d374cc552be..879e984fe901 100644
+>> --- a/drivers/of/kexec.c
+>> +++ b/drivers/of/kexec.c
+>> @@ -126,6 +126,7 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
+>>  {
+>>  	int ret, len;
+>>  	unsigned long tmp_addr;
+>> +	unsigned int start_pfn, end_pfn;
+>
+> ^^^ Shouldn't this be unsigned long?
+Thanks for catching this. Yes that should be 'unsigned long'. Will
+resend the patch with this fixed.
 
-Yeah, I'm aware of it. But it seems...
+>
+> -ritesh
+>
+>>  	size_t tmp_size;
+>>  	const void *prop;
+>>
+>> @@ -140,6 +141,22 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
+>>  	if (ret)
+>>  		return ret;
+>>
+>> +	/* Do some sanity on the returned size for the ima-kexec buffer */
+>> +	if (!tmp_size)
+>> +		return -ENOENT;
+>> +
+>> +	/*
+>> +	 * Calculate the PFNs for the buffer and ensure
+>> +	 * they are with in addressable memory.
+>> +	 */
+>> +	start_pfn = PHYS_PFN(tmp_addr);
+>> +	end_pfn = PHYS_PFN(tmp_addr + tmp_size - 1);
+>> +	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn)) {
+>> +		pr_warn("IMA buffer at 0x%lx, size = 0x%zx beyond memory\n",
+>> +			tmp_addr, tmp_size);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>>  	*addr = __va(tmp_addr);
+>>  	*size = tmp_size;
+>>
+>> --
+>> 2.35.1
+>>
 
-> The patch proposed
-> by Jan Beulich also fixes the regression on my system, so as
-> the person reporting this is a regression, I would also be satisfied
-> with Jan's patch instead of reverting bdd8b6c98239 as a fix. Jan
-> posted his proposed patch here:
-> 
-> https://lore.kernel.org/lkml/9385fa60-fa5d-f559-a137-6608408f88b0@suse.com/
-
-...that approach is not making any progress either?
-
-Jan, can could provide a short status update here? I'd really like to
-get this regression fixed one way or another rather sooner than later,
-as this is taken way to long already IMHO.
-
-> The only reservation I have about Jan's patch is that the commit
-> message does not clearly explain how the patch changes what
-> the nopat kernel boot option does. It doesn't affect me because
-> I don't use nopat, but it should probably be mentioned in the
-> commit message, as pointed out here:
-> 
-> https://lore.kernel.org/lkml/bd9ed2c2-1337-27bb-c9da-dfc7b31d492c@netscape.net/
-> 
-> 
-> Whatever fix for the regression exposed by bdd8b6c98239 also
-> needs to be backported to the stable versions 5.17 and 5.18.
-
-Sure.
-
-BTW, as you seem to be familiar with the issue: there is another report
-about a regression WRT to Xen and i915 (that is also not making really
-progress):
-https://lore.kernel.org/lkml/Yn%2FTgj1Ehs%2FBdpHp@itl-email/
-
-It's just a wild guess, but bould this somehow be related?
-
-Ciao, Thorsten
-
->>> The i915 driver relies on the memory subsytem
->>> to provide it with an accurate test for the existence of
->>> X86_FEATURE_PAT. I think your patch provides that more accurate
->>> test so that bdd8b6c98239 could be re-applied when your patch is
->>> committed. Juergen's patch would have to touch bdd8b6c98239
->>> with new functions that probably have unknown and unintended
->>> consequences, so I think your approach is also better in that regard.
->>> As regards your patch, there is just a disagreement about how the
->>> i915 driver should behave if nopat is set. I agree the i915 driver
->>> could do a better job handling that case, at least with better error
->>> logs.
->>>
->>> Chuck
->>>
->>>>> I respond by saying a well-written driver should refuse to honor
->>>>> the incorrect configuration requested by the user and instead
->>>>> warn the user that it did not honor the incorrect kernel option.
->>>>>
->>>>> I am only presuming what your patch would do on my box based
->>>>> on what I learned about this problem from my debugging. I can
->>>>> also test your patch on my box to verify that my understanding of
->>>>> it is correct.
->>>>>
->>>>> I also have not yet verified Juergen's patch will not fix it, but
->>>>> I am almost certain it will not unless it is expanded so it also
->>>>> touches i915_gem_object_pin_map() with the fix. I plan to test
->>>>> his patch, but expanded so it touches that function also.
->>>>>
->>>>> I also plan to test your patch with and without nopat and report the
->>>>> results in the thread where you posted your patch. Hopefully
->>>>> by tomorrow I will have the results.
->>>>>
->>>>> Chuck
-> 
-> 
+-- 
+Cheers
+~ Vaibhav

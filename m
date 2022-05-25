@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715B3533456
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 02:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49801533458
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 02:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242230AbiEYAdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 20:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        id S241667AbiEYAfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 20:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242152AbiEYAdO (ORCPT
+        with ESMTP id S235569AbiEYAfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 20:33:14 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9050774DF5
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 17:33:12 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id ob14-20020a17090b390e00b001dff2a43f8cso2722745pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 17:33:12 -0700 (PDT)
+        Tue, 24 May 2022 20:35:19 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D678A5AEEF
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 17:35:18 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so3003124pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 17:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=EBzLSn9HVWsDS5aKAKqdH+OjRWcA6YyVI+fQn8HZhvE=;
-        b=Q8Pp1xsyBbcLZ8lnBwlO3GyQIDC64groD/W/rIHsK+3jnSlVCuwM9GADDdXh6EDi03
-         UaLhVBGwjkLoPzW0lK7iXuY74TFooSZ6+V8uVP66OAmxLtpKDxBUJY85u2feIqMsgbQE
-         ZfyRfMgF9Vq4drZc+byRwYrQxXkjJV759SgSk=
+        h=from:to:cc:subject:date:message-id;
+        bh=BZrTbTRmZCybbMQpgymmMRWSUyET093x1MsMWhBzEH4=;
+        b=C0hQqDB8JMsrR+djqZVmeNIvsF4sG7DJkYF7qKkuYAG5JgCwiKjGePmalwUMwkCM/9
+         J/jnEzWdFFpuFxfdcpau21yklSnNatvzJGTWdnr+6EdYUem7C7JJnh1io7iz6hRCBU5r
+         yxOQFozR41u1aphsjcyJQ0TpUjpbsqEVKCU0c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=EBzLSn9HVWsDS5aKAKqdH+OjRWcA6YyVI+fQn8HZhvE=;
-        b=yKbk7aAkHl9Rlb07TRF1Bwi/02Qv0HHD9wJt8AKZFhvrTFVCHTjbHH9oGgCf20WWXL
-         f9BRcWg24xtWTz6DWxqyvGj6xjdwQQygZzHHiEHKuBdVqGtSrgYjIJtYjDI0FyfcuLBC
-         ZR3wS5t3/4XoRWWkXVL5EoZpK6Wih2ickTZ4ZmJLuO4x8r0FChJl0znYedskXAjxozs0
-         l/sT7XJQcpuzlRX2zvkLWdfPY0Bs3/fflbMoLnhi4Pg+nTRxYm/5lXE39CJYtUf8IfYF
-         QrK4La3s5wuqkBieSKIOxcqT3th9Ua5DgDRF84ipKsYHfPX2UY2CRjlaa5K0t96BHBwl
-         sh3Q==
-X-Gm-Message-State: AOAM5309l0ltIbW7qdeRh6BfpunzHvsXQ4ulDsW6YfpPjzrMR96l2g3y
-        5HJWAynXZqFFaGNJ56LsRS9z+A==
-X-Google-Smtp-Source: ABdhPJwueCYi0nHLrVCkQXroMLexRMJstQccn6kaXppSg809SYHN7KJUKsQA3Yc0nujTisM6kCPHVw==
-X-Received: by 2002:a17:90b:4f91:b0:1cd:3a73:3a5d with SMTP id qe17-20020a17090b4f9100b001cd3a733a5dmr7351987pjb.98.1653438792010;
-        Tue, 24 May 2022 17:33:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=BZrTbTRmZCybbMQpgymmMRWSUyET093x1MsMWhBzEH4=;
+        b=cUeBwfdeqHJ2EsaR8VrbAOO6sL1rX3hM+y7ozFT5TuVpkslxv2sLH6ddd7A9Au+D6q
+         D7euP1dKeFi9f6vyQoJuqs9wXKPKrIHo/ImlHFUMlFL9cLIlmf9EOks4FYEWuT+J4UFG
+         SFCciMHBRaK64DfNiM2B+ntCToAbVqpLhLSjBfAXA9OVSXF6nlGXR7d1VkGejVWkmTES
+         mBvHBfI82XWonorWPkdCYfefx/oiQRsD9Q1VMYTaI2J/BkKFKW5ID2mkI2jmj7iXVcOS
+         bbY9gRAoKmi4lhaglA9svlUNs9AYfVInLEDjGpFAPOtTog2GhmE5Ce4jRdnxG8bj8J85
+         iXYw==
+X-Gm-Message-State: AOAM533dwQwEgoWeM9ao3S3JrV4cAtLab9fgH28I6QHwWjtvWZjzYEvL
+        Uc+pjoCAJfHYQ0/3hPSYpBrGyA==
+X-Google-Smtp-Source: ABdhPJxhna5mL45ttf+LqE3nhKtJR0+ROo4yxnlEnesUR2AwONIa3BIqz7bN5unURWvgMk47OSvpeg==
+X-Received: by 2002:a17:902:bb89:b0:161:ffec:a1b3 with SMTP id m9-20020a170902bb8900b00161ffeca1b3mr20071315pls.141.1653438918296;
+        Tue, 24 May 2022 17:35:18 -0700 (PDT)
 Received: from T3500-3.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id t71-20020a63784a000000b003db610ebdd0sm7087438pgc.65.2022.05.24.17.33.09
+        by smtp.gmail.com with ESMTPSA id 38-20020a17090a09a900b001e08461ceaesm137320pjo.37.2022.05.24.17.35.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 17:33:10 -0700 (PDT)
+        Tue, 24 May 2022 17:35:16 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     samyon.furman@broadcom.com, philippe.reynes@softathome.com,
-        kursad.oney@broadcom.com, florian.fainelli@broadcom.com,
-        joel.peshkin@broadcom.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, tomer.yacoby@broadcom.com,
+Cc:     joel.peshkin@broadcom.com, florian.fainelli@broadcom.com,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, samyon.furman@broadcom.com,
+        tomer.yacoby@broadcom.com, philippe.reynes@softathome.com,
         William Zhang <william.zhang@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Scott Branden <sbranden@broadcom.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] MAINTAINERS: add bcm6846 to bcmbca arch entry
-Date:   Tue, 24 May 2022 17:32:36 -0700
-Message-Id: <20220525003236.2699-4-william.zhang@broadcom.com>
+Subject: [PATCH] ARM: bcmbca: add VFP and NEON fixup for bcm6846 SoC
+Date:   Tue, 24 May 2022 17:35:09 -0700
+Message-Id: <20220525003509.2812-1-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220525003236.2699-1-william.zhang@broadcom.com>
-References: <20220525003236.2699-1-william.zhang@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000df271805dfcb3736"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        boundary="00000000000066f7b905dfcb3f59"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=ham
+        MIME_HEADER_CTYPE_ONLY,MIME_NO_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,37 +74,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000df271805dfcb3736
+--00000000000066f7b905dfcb3f59
 
-Add bcm6846 related files to BCMBCA ARCH maintainer list entry
+BCM6846 SoC only has VFP and NEON support on core 0. So kernel VPF/NEON
+support is disabled in this chip. Add this fixup to manually turn on
+VFP/NEON in case userspace app need to access them on core 0.
 
 Signed-off-by: William Zhang <william.zhang@broadcom.com>
+
 ---
 
- MAINTAINERS | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/arm/mach-bcm/Makefile |  5 ++++
+ arch/arm/mach-bcm/bcmbca.c | 54 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+)
+ create mode 100644 arch/arm/mach-bcm/bcmbca.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4fdbbd6c1984..29770e7cf389 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3774,10 +3774,9 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- T:	git git://github.com/broadcom/stblinux.git
- F:	Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml
--F:	arch/arm/boot/dts/bcm47622.dtsi
--F:	arch/arm/boot/dts/bcm947622.dts
- N:	bcmbca
- N:	bcm[9]?47622
-+N:	bcm[9]?6846
- 
- BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE
- M:	Nicolas Saenz Julienne <nsaenz@kernel.org>
+diff --git a/arch/arm/mach-bcm/Makefile b/arch/arm/mach-bcm/Makefile
+index b2394ddb0558..137b24b52139 100644
+--- a/arch/arm/mach-bcm/Makefile
++++ b/arch/arm/mach-bcm/Makefile
+@@ -68,3 +68,8 @@ CFLAGS_platsmp-brcmstb.o	+= -march=armv7-a
+ obj-y				+= brcmstb.o
+ obj-$(CONFIG_SMP)		+= platsmp-brcmstb.o
+ endif
++
++# BCMBCA
++ifeq ($(CONFIG_ARCH_BCMBCA),y)
++obj-y				+= bcmbca.o
++endif
+diff --git a/arch/arm/mach-bcm/bcmbca.c b/arch/arm/mach-bcm/bcmbca.c
+new file mode 100644
+index 000000000000..6fcdfe0b94c1
+--- /dev/null
++++ b/arch/arm/mach-bcm/bcmbca.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Broadcom Ltd
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License as
++ * published by the Free Software Foundation version 2.
++ *
++ * This program is distributed "as is" WITHOUT ANY WARRANTY of any
++ * kind, whether express or implied; without even the implied warranty
++ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#include <linux/smp.h>
++#include <asm/mach/arch.h>
++#include <asm/vfp.h>
++#include <asm/cp15.h>
++
++#include "../vfp/vfpinstr.h"
++
++/*
++ * In some low end BCA chips, only core 0 has VPF/NEON support. Kernel VPF
++ * NEON are disabled on these platforms. Add this fixup to enable VFP/NEON
++ * on core 0 manually in case some user app need to access vfp/neon on core 0
++ */
++static void __init neon_enable(void *data)
++{
++	u32 access, fpexc;
++	(void)data;
++
++	/* Enable full access to VFP (cp10 and cp11) */
++	access = get_copro_access();
++	set_copro_access(access | CPACC_FULL(10) | CPACC_FULL(11));
++
++	/* enable NEON and VFP extension */
++	fpexc = fmrx(FPEXC);
++	fmxr(FPEXC, fpexc | FPEXC_EN);
++}
++
++static void __init bcmbca_neon_fixup(void)
++{
++	smp_call_function_single(0, neon_enable, NULL, 1);
++}
++
++static const char *const bcmbca_match[] __initconst = {
++	"brcm,bcm6846",
++	NULL
++};
++
++DT_MACHINE_START(BCMBCA, "Broadcom BCMBCA SoC")
++	.dt_compat		= bcmbca_match,
++	.init_late		= bcmbca_neon_fixup,
++MACHINE_END
 -- 
 2.17.1
 
 
---000000000000df271805dfcb3736
+--00000000000066f7b905dfcb3f59
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -172,13 +237,13 @@ W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
 1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
-SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPBE6LKzaLGkkQ02g+vff7QcHrq9
-fk1T9Irm9r70kQi2MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDUyNTAwMzMxMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEPBxNaNgtxmPEFjEmxNZ2uF9Rtb
+DaKCVYMDWKY67QNYMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDUyNTAwMzUxOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCrKHo4Rp5e5t4bSZO5+dNwwz0JebyeBX78BlFVuDNaWkT9
-qe+jzNS7tRVYNkI5vcXr0P086ODSpWvECsFnoVsCqiVrfevOoIiR9SXRniRSKeaNRF4M/2B5Ow48
-pCT/j/S8ekOYHc9ojo09Ug0f+RKdmv8LKTvWzsetzqBtsRoiKVF/QBhc7fTeMTwj8JQqzZRA3sMt
-cK/7t+ohCd3rEu74odpcoe8U+69nNxAk8+IELVvz05UMf/KgvOtky8lszqOTaJGS5QKrmC3u++h6
-EqN3yFpipVq7JMMcCtU3wuHmyupcosvu8Pcew7UwU3Aw4gUhBcirHoT0m3uHQVmweOsg
---000000000000df271805dfcb3736--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQCqWw5dv0GPVvjwMQKNk7Q5gybxn1nMj+LxihwHTxjYKShh
+/603XdiYAQzF2wapKbizGpsdamGNLxyOUr/4WRcYc/Wf/J2MZsnFYI9/iykfbS7I1EL9+9jsV3OS
+Wfg6bQ1t3UOctTI0uN5SiJ4XeysbjhZnJ80sZMEIWdgZs3SFv6KN1e/9+J5yAk3FG7aKOEDNKVk5
+RIct1cAfIPr5JDQeAletvM4c90rt58GnYjHZw07TZhqUK+sfLsOODaV7tMqFYHrEptXDAeNtQBtK
+0v/vOcH92tP0pbGFsePgVXxTbbuygpmER+LUOnIn24r9WAbh0x8GI382YeebRhBoiYen
+--00000000000066f7b905dfcb3f59--

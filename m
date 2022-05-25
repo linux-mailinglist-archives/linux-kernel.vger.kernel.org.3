@@ -2,72 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0801D533658
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB0453365D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243917AbiEYFTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 01:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S243926AbiEYFUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 01:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237251AbiEYFTP (ORCPT
+        with ESMTP id S236574AbiEYFUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 01:19:15 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66981D337
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653455954; x=1684991954;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cjXO8vVlpxnhMYVXhRqJDGd35rZJ3LD3EJ/zDC/ghbU=;
-  b=TNmedrveP5bET7DjkilBoynbfxBthHPTr1Ptmm+JhEiqZuAoRn/RJad+
-   qIG8UkOWnLIrIiI/bdp9xqfCqNHxfvImV20Uj99HDJ27T2jzvdwN7fibg
-   4LCiF/J8ffMVfqgXLoyHGCDSpI1Uz6ShQV373VhNdbWou+GE7VArjavkG
-   wJ/ZdjHbM2XnWEKYQ/MY7Prnd8elkPM7KuEiAXY5JyhFa2JmaPXY5g3b2
-   9BIKJtJd7IMPSDhGAPsBKy9JyyTnhIJsj2z6DabwAg11kvpj1KEiV5JhZ
-   thJSD3Nnxs7ZFaxGQUdHbphsJQZO/caEdPkG60NtyV9zCT2FYKI8BlMtP
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="273715916"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="273715916"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 22:19:14 -0700
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="601660650"
-Received: from jwang96-mobl.ccr.corp.intel.com (HELO [10.255.29.139]) ([10.255.29.139])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 22:19:10 -0700
-Message-ID: <3ce2f162-7b0c-391d-7978-d1703fbe9b79@linux.intel.com>
-Date:   Wed, 25 May 2022 13:19:08 +0800
+        Wed, 25 May 2022 01:20:47 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EA51D337;
+        Tue, 24 May 2022 22:20:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 37D0BCE1DEB;
+        Wed, 25 May 2022 05:20:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 454C9C385B8;
+        Wed, 25 May 2022 05:20:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653456043;
+        bh=Ax7SXV8AbCEPJQ0FyfMaUKPPB7QiTryTXgGkV2IOmoQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bHBQH0lLy+51bYky1vvejahr0d5UTgGUnv5tXk8I7NEdRAYEEb1o4RTpcHsGuOzLy
+         fLV1qiTgxEOnyUz71g++l11EYAa60g8yXPMtaHYnqjOTJA8IEsN1NqRSKGwi0ZJQnZ
+         N0tC6OKY4PPSuMDQtmQwY64wCu/nQAtM87zAxoBScLyh12Wp7K661d/J7P+GUqKttU
+         z9MFFIH6ZkSJwBMnJ3qdmV5f+0OwWWNuFKqPtw8soimQO6DR0LBukwYV3Udx1RBjbA
+         FXWqRobr/Vrn5D7r7VloLszFh81p6qb58UwzGJbJISQRO+i4s99d00dE//D0fLeOFU
+         lDhEt+s/k2XYQ==
+Date:   Tue, 24 May 2022 22:20:42 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Thomas Bartschies <thomas.bartschies@cvk.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.17 08/12] net: af_key: check encryption module
+ availability consistency
+Message-ID: <20220524222042.40557dbb@kernel.org>
+In-Reply-To: <20220524110908.7a237987@kernel.org>
+References: <20220524155929.826793-1-sashal@kernel.org>
+        <20220524155929.826793-8-sashal@kernel.org>
+        <20220524110908.7a237987@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v7 03/10] iommu/sva: Add iommu_sva_domain support
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
- <20220519072047.2996983-4-baolu.lu@linux.intel.com>
- <20220524134440.GT1343366@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220524134440.GT1343366@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,28 +60,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-
-On 2022/5/24 21:44, Jason Gunthorpe wrote:
->> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
->> index 106506143896..210c376f6043 100644
->> +++ b/drivers/iommu/iommu-sva-lib.c
->> @@ -69,3 +69,51 @@ struct mm_struct *iommu_sva_find(ioasid_t pasid)
->>   	return ioasid_find(&iommu_sva_pasid, pasid, __mmget_not_zero);
->>   }
->>   EXPORT_SYMBOL_GPL(iommu_sva_find);
->> +
->> +/*
->> + * IOMMU SVA driver-oriented interfaces
->> + */
->> +struct iommu_domain *
->> +iommu_sva_alloc_domain(struct bus_type *bus, struct mm_struct *mm)
-> This should return the proper type
+On Tue, 24 May 2022 11:09:08 -0700 Jakub Kicinski wrote:
+> On Tue, 24 May 2022 11:59:22 -0400 Sasha Levin wrote:
+> > From: Thomas Bartschies <thomas.bartschies@cvk.de>
+> > 
+> > [ Upstream commit 015c44d7bff3f44d569716117becd570c179ca32 ]
+> > 
+> > Since the recent introduction supporting the SM3 and SM4 hash algos for IPsec, the kernel
+> > produces invalid pfkey acquire messages, when these encryption modules are disabled. This
+> > happens because the availability of the algos wasn't checked in all necessary functions.
+> > This patch adds these checks.
+> > 
+> > Signed-off-by: Thomas Bartschies <thomas.bartschies@cvk.de>
+> > Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>  
 > 
+> I don't see anyone else complaining yet so let me step up.
+> 
+> Please drop this, it's getting reverted.
 
-Can you please elaborate a bit on "return the proper type"? Did you mean
-return iommu_sva_domain instead? That's a wrapper of iommu_domain and
-only for iommu internal usage.
-
-Best regards,
-baolu
+I take that back, sorry, it's a different patch.
+I meant not to backport 4dc2a5a8f6754492180741facf2a8787f2c415d7.

@@ -2,98 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0065253378B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D253533791
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241867AbiEYHkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 03:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S243402AbiEYHm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 03:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiEYHkn (ORCPT
+        with ESMTP id S229693AbiEYHmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 03:40:43 -0400
-Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000AA72E3E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:40:42 -0700 (PDT)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id E8B07101CCD; Wed, 25 May 2022 08:40:37 +0100 (BST)
-Date:   Wed, 25 May 2022 08:40:37 +0100
-From:   Sean Young <sean@mess.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL for v5.18-rc1] media updates
-Message-ID: <Yo3ddVHgBBlvJEdh@gofer.mess.org>
-References: <20220322101406.459e2950@coco.lan>
- <a0470450-ecfd-2918-e04a-7b57c1fd7694@kernel.org>
+        Wed, 25 May 2022 03:42:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B63540A28
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:42:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653464569;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ys9N/aStuUczJG1d59vIuu5WRFG0fOE8qpuySSttVig=;
+        b=C6yCOzrS/O5rMel2k59r+QyBYB6D3iJp6Msr6T0dcs2lDlAixTxTjH/e/eBem4lw93fdy5
+        oy++D2FREGpFsaLHZx7GlMuOJUERzsND2gjUNJyJJuyydg2IE1FyN1ADtlwB4tuXPR6CdN
+        zfxLeY1W96k0bapLzC9S4Bp0gYSgpAk=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-612-BOyp51BLPRK0ks5jHN_lgQ-1; Wed, 25 May 2022 03:42:45 -0400
+X-MC-Unique: BOyp51BLPRK0ks5jHN_lgQ-1
+Received: by mail-qk1-f198.google.com with SMTP id o18-20020a05620a2a1200b006a0cc3d8463so15135084qkp.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:42:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Ys9N/aStuUczJG1d59vIuu5WRFG0fOE8qpuySSttVig=;
+        b=ox4DGvLkC61bio86Fu1PXWCVrekcpoLhln33szoahZdHms8bS/6ps7sRE9dNi1U0dD
+         mbzSYfeUaic0c2RmpqqQdHqaXSfmIoJkH0F+vGNZ7LYSAjLNOrj2abyLTT414nDV7H9a
+         39eClXz1JYSG3FvMw7DVUvTE+h6a03By4KtwGHxd9pzMfWQ8feQAYEY7KVUPbSpLCZK/
+         00W0N4+J8kwbRhapT3eUcMZEuk42ZZpz1U6hnAHqTsZQ+ZHCMZYX/r8gjnKYW4+B9FtG
+         e+ydo8Hs/wlEoboQvP+h/AkDzXVpdgirVYIMcUCxDOnaU/eY5fbZH0RcP6Vqi6elBAiL
+         iCbw==
+X-Gm-Message-State: AOAM531RdY/xJeMOOAKmSPia5objr57KSf/sgMzoBB9ihcTLXM95uNok
+        Uf4H15SN1y5yRE6qm69xIJujD0wXNXOMjUNJG1StSOqONhXuaEsXTxutxvcDV18+xR3sA/aHksM
+        pa9Cbi3aIVZcAXxQstmAsbyzQ
+X-Received: by 2002:ac8:5813:0:b0:2fa:a441:ba8a with SMTP id g19-20020ac85813000000b002faa441ba8amr2204477qtg.162.1653464565023;
+        Wed, 25 May 2022 00:42:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz8/milkg51+yfBQTz/8OhX1w5WPXtXVRPuIhObK5HHUAywQzfC8MVhw6rZ751qf/C+5s+Uqg==
+X-Received: by 2002:ac8:5813:0:b0:2fa:a441:ba8a with SMTP id g19-20020ac85813000000b002faa441ba8amr2204464qtg.162.1653464564785;
+        Wed, 25 May 2022 00:42:44 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id b14-20020ac84f0e000000b002f96db4519csm922248qte.37.2022.05.25.00.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 00:42:44 -0700 (PDT)
+Date:   Wed, 25 May 2022 09:41:56 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>
+Cc:     netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Parav Pandit <parav@nvidia.com>,
+        Zhang Min <zhang.min9@zte.com.cn>, hanand@xilinx.com,
+        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
+        gautam.dawar@amd.com,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xie Yongji <xieyongji@bytedance.com>, dinang@xilinx.com,
+        habetsm.xilinx@gmail.com, Eli Cohen <elic@nvidia.com>,
+        pabloc@xilinx.com, lvivier@redhat.com,
+        Dan Carpenter <dan.carpenter@oracle.com>, lulu@redhat.com,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        ecree.xilinx@gmail.com, Piotr.Uminski@intel.com,
+        martinpo@xilinx.com, Si-Wei Liu <si-wei.liu@oracle.com>,
+        Longpeng <longpeng2@huawei.com>, martinh@xilinx.com
+Subject: Re: [PATCH v2 4/4] vdpa_sim: Implement stop vdpa op
+Message-ID: <20220525074156.rwyesinlzrza72cn@sgarzare-redhat>
+References: <20220524170610.2255608-1-eperezma@redhat.com>
+ <20220524170610.2255608-5-eperezma@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-In-Reply-To: <a0470450-ecfd-2918-e04a-7b57c1fd7694@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220524170610.2255608-5-eperezma@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, May 24, 2022 at 07:06:10PM +0200, Eugenio Pérez wrote:
+>Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
+>that backend feature and userspace can effectively stop the device.
+>
+>This is a must before get virtqueue indexes (base) for live migration,
+>since the device could modify them after userland gets them. There are
+>individual ways to perform that action for some devices
+>(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
+>way to perform it for any vhost device (and, in particular, vhost-vdpa).
+>
+>After the return of ioctl with stop != 0, the device MUST finish any
+>pending operations like in flight requests. It must also preserve all
+>the necessary state (the virtqueue vring base plus the possible device
+>specific states) that is required for restoring in the future. The
+>device must not change its configuration after that point.
+>
+>After the return of ioctl with stop == 0, the device can continue
+>processing buffers as long as typical conditions are met (vq is enabled,
+>DRIVER_OK status bit is enabled, etc).
+>
+>In the future, we will provide features similar to
+>VHOST_USER_GET_INFLIGHT_FD so the device can save pending operations.
+>
+>Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+>---
+> drivers/vdpa/vdpa_sim/vdpa_sim.c     | 21 +++++++++++++++++++++
+> drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
+> drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
+> 4 files changed, 28 insertions(+)
+>
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>index 50d721072beb..0515cf314bed 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>@@ -107,6 +107,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
+> 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
+> 		vhost_iotlb_reset(&vdpasim->iommu[i]);
+>
+>+	vdpasim->running = true;
+> 	spin_unlock(&vdpasim->iommu_lock);
+>
+> 	vdpasim->features = 0;
+>@@ -505,6 +506,24 @@ static int vdpasim_reset(struct vdpa_device *vdpa)
+> 	return 0;
+> }
+>
+>+static int vdpasim_stop(struct vdpa_device *vdpa, bool stop)
+>+{
+>+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>+	int i;
+>+
+>+	spin_lock(&vdpasim->lock);
+>+	vdpasim->running = !stop;
+>+	if (vdpasim->running) {
+>+		/* Check for missed buffers */
+>+		for (i = 0; i < vdpasim->dev_attr.nvqs; ++i)
+>+			vdpasim_kick_vq(vdpa, i);
+>+
+>+	}
+>+	spin_unlock(&vdpasim->lock);
+>+
+>+	return 0;
+>+}
+>+
+> static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
+> {
+> 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>@@ -694,6 +713,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+> 	.get_status             = vdpasim_get_status,
+> 	.set_status             = vdpasim_set_status,
+> 	.reset			= vdpasim_reset,
+>+	.stop			= vdpasim_stop,
+> 	.get_config_size        = vdpasim_get_config_size,
+> 	.get_config             = vdpasim_get_config,
+> 	.set_config             = vdpasim_set_config,
+>@@ -726,6 +746,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+> 	.get_status             = vdpasim_get_status,
+> 	.set_status             = vdpasim_set_status,
+> 	.reset			= vdpasim_reset,
+>+	.stop			= vdpasim_stop,
+> 	.get_config_size        = vdpasim_get_config_size,
+> 	.get_config             = vdpasim_get_config,
+> 	.set_config             = vdpasim_set_config,
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>index 622782e92239..061986f30911 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>@@ -66,6 +66,7 @@ struct vdpasim {
+> 	u32 generation;
+> 	u64 features;
+> 	u32 groups;
+>+	bool running;
+> 	/* spinlock to synchronize iommu table */
+> 	spinlock_t iommu_lock;
+> };
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+>index 42d401d43911..bcdb1982c378 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+>@@ -204,6 +204,9 @@ static void vdpasim_blk_work(struct work_struct *work)
+> 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
+> 		goto out;
+>
+>+	if (!vdpasim->running)
+>+		goto out;
+>+
 
-On Wed, May 25, 2022 at 08:42:26AM +0200, Jiri Slaby wrote:
-> On 22. 03. 22, 10:14, Mauro Carvalho Chehab wrote:
-> > Hi Linus,
-> > 
-> > Please pull from:
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v5.18-1
-> ...
-> > Sean Young (10):
-> ...
-> >        media: lirc: remove unused lirc features
-> 
-> Hi,
-> 
-> this breaks lirc build:
-> > [   59s] lircd.cpp:489:49: error: 'LIRC_CAN_SET_REC_FILTER' was not declared in this scope; did you mean 'LIRC_CAN_SET_REC_CARRIER'?
-> > [   59s]   489 |                     || (curr_driver->features & LIRC_CAN_SET_REC_FILTER)) {
-> > [   59s]       |                                                 ^~~~~~~~~~~~~~~~~~~~~~~
-> > [   59s]       |                                                 LIRC_CAN_SET_REC_CARRIER
-> > [   59s] lircd.cpp: In function 'void loop()':
-> > [   59s] lircd.cpp:2069:82: error: 'LIRC_CAN_NOTIFY_DECODE' was not declared in this scope; did you mean 'DRVCTL_NOTIFY_DECODE'?
-> > [   59s]  2069 |                         if (curr_driver->drvctl_func && (curr_driver->features & LIRC_CAN_NOTIFY_DECODE))
-> > [   59s]       |                                                                                  ^~~~~~~~~~~~~~~~~~~~~~
-> > [   59s]       |                                                                                  DRVCTL_NOTIFY_DECODE
-> 
-> So the uapi header defines should be brought back, IMO.
+Not related to this series, but I think in vdpa_sim_blk.c we should 
+implement something similar to what we already do in vdpa_sim_net.c and 
+re-schedule the work after X requests handled, otherwise we risk never 
+stopping if there are always requests to handle.
 
-The lirc.h uapi defines the lirc chardev uapi. The uapi has not changed in
-any way, for old or new kernels.
+Also for supporting multiple queues, that could be a problem, but for 
+now we only support one, so there should be no problem.
 
-So the lirc header used to have feature flags LIRC_CAN_SET_REC_FILTER and
-LIRC_CAN_NOTIFY_DECODE which were defined the in the lirc.h header, but
-never implemented by any out of tree or in tree driver.
-
-Neither feature was or will be ever implemented in the kernel;
-LIRC_CAN_NOTIFY_DECODE is handled via the led subsytem, and it is unknown
-what LIRC_CAN_SET_REC_FILTER is even supposed to mean. Again, I have not
-found any implementation anywhere.
-
-You are trying to build lirc user space daemon which is no longer maintained.
-The last time the lirc daemon git repo had any commits was in 2019. User
-space tooling has been replaced with daemon-less ir-ctl and ir-keytable,
-which uses BPF for IR decoding.
-
-The right fix is to simply delete the offending lines in lircd.cpp and all
-will be well. Sometimes source code needs a little maintainence. 
-
-These changes in the lirc uapi do not change the uapi in any way, just the
-ability the build some unmaintained software without trivial changes.
+I have other patches to send for vdpa_sim_blk.c, so if you want I can do 
+that in my series.
 
 Thanks,
+Stefano
 
-Sean
+> 	for (i = 0; i < VDPASIM_BLK_VQ_NUM; i++) {
+> 		struct vdpasim_virtqueue *vq = &vdpasim->vqs[i];
+>
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>index 5125976a4df8..886449e88502 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>@@ -154,6 +154,9 @@ static void vdpasim_net_work(struct work_struct *work)
+>
+> 	spin_lock(&vdpasim->lock);
+>
+>+	if (!vdpasim->running)
+>+		goto out;
+>+
+> 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
+> 		goto out;
+>
+>-- 
+>2.27.0
+>
+

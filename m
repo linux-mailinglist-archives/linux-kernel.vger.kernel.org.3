@@ -2,110 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0A553418A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA35534191
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245465AbiEYQb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 12:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S245477AbiEYQc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 12:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245459AbiEYQbX (ORCPT
+        with ESMTP id S230014AbiEYQc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 12:31:23 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8849A37BE4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:31:17 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so3674517wmz.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:31:17 -0700 (PDT)
+        Wed, 25 May 2022 12:32:57 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150D38A325;
+        Wed, 25 May 2022 09:32:55 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id i27so42728991ejd.9;
+        Wed, 25 May 2022 09:32:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v8FV5JUaluu69LdsoN1T9bi2vXC2/Pwgc7627w+7IE0=;
-        b=iiwDTfeN13tL6fGE8/O/41RxuguehByAsXlBv9b9A01c7ZAdTpYS5aHEDpDso1Bu8i
-         kgxKRcKgKhgdGd2vhyTjOKPHBaEWdj2HpQSVJQGGYQQtqyCZteYEFylu+SAto+2sZGmQ
-         TIMe4hYZkvCtphweI93uLlhDGw2X/mIXtW4rcrWnuB26scIT9PZTO9a/7nUydvxGGl/n
-         Tg5m2jtF3h9nn+t8Z0Wj5O1upTZIQcgwL8hln0PFBx5MIgtzPoADsg5J67ysbfmAfhkQ
-         nNjKl5AeJaAYUFQYiyK14bxuDtMDYvnrSSSZuzQIfiShrsucyeJYAgf1Of9gVi3ahuMf
-         hgVw==
+         :cc:content-transfer-encoding;
+        bh=ryx2Ks43HYE8Q7pTv7hpRWZjiZujiJ46sfljr3BjzG0=;
+        b=NPpZSzFaSgHWvSmFoeDIZPsjbed2Di9EuAvKcW/sormA8Ztyk8REmORY9/D0R0M2zw
+         6D2PXv/vXzz7DnmMullebBfyvr1LZFTt5I4QsgQF1/E0PVWF8baCO5iWsVBhYalJuhfl
+         sUGQbqk+i12Kt959pBkWlhQBgGu7n9Hn1aJ1V2V64/fc+dmUvqFPY+9/b7/gzWkFs3VK
+         cZwcovOI0Wu0uw2O+TFZ++4cPASampHPCvuX1fpieI3PVxqNG3LEN+5Ts9GTiv8TdkAS
+         bYwG9IkVeg35G2yTurTi9U+4KxOiju45nY/LCv80tKYC/no7AxdUS8YhJvTgK2N2KXkn
+         kxvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v8FV5JUaluu69LdsoN1T9bi2vXC2/Pwgc7627w+7IE0=;
-        b=j1z1jPU+9TQ5if3RXWh2cvdmH4+m7DXxfBBfaLN1DhMJ7R88bKctPmDDGhmh/2R92w
-         IQLZr02Qxj7bCqf953J5jjb1eePy5Oe3AfdDipMrhJsMSDT0RUxUqWctSrPL9hy1CjqI
-         l8uDQ46Df0Tw3yLawlpW+g5FlMjSicKUutp+m8cDPfkF+m9ctdkL7Z6ymrzq/jHbeCrk
-         /p+c+LUlw5NnJW4SYBdR7r0vf5aODeSEx0o03abh5/2NT4id9FW2hI7CM1/C9R8QMyO7
-         udkVIAlcYsQZy7sJ6nvIpUd7MTVRO3NvFIEvOFj/zmi86Rgv48Ew6tqtRqZ3jIjcslPi
-         RlCA==
-X-Gm-Message-State: AOAM5336kge2SNZURkhX0noY9fgZcH9pBLd2wmiCnsWbHVdeqgHzOLuP
-        /zMgV1pii4LHFpB28qmysPZ9FUbTawifDMjowdE0Sw==
-X-Google-Smtp-Source: ABdhPJwz1YBHr2nIviBFJqClOiHWUWpdPAd4Ni20+aGv2NLGkrG68huw8L/+YWlQH8LdBrC5DevZ27OB4Uat2ZkcfBM=
-X-Received: by 2002:a1c:acc4:0:b0:392:9dd4:fbcc with SMTP id
- v187-20020a1cacc4000000b003929dd4fbccmr8895701wme.78.1653496276038; Wed, 25
- May 2022 09:31:16 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ryx2Ks43HYE8Q7pTv7hpRWZjiZujiJ46sfljr3BjzG0=;
+        b=13LgsFFVEnCoWYDEkOnlOkELKfQlXlkIQQmLBfRLft/FpFEBQiKbkYIji2k/ESFTLt
+         NGQwlv5RCR6qnj1pjxXe7ITMHJVUHqXEWglSIQtxtouDZ+RUKGD8pUgGPC1a4vM9IMno
+         m1nV4N2yZx4Zc9MSB8d0s0PbpCpeqkx+jLJxh1OuFqW2ZlTZob13HhSaBc08Lft7oTNh
+         v9MObJUZhDEm+eA8L6KidG39nRE9XSAok7GQqrL+CGrQ8YzqJNk4FdYDt9mQCvvXYQUp
+         inKxtidNuHwWCAijvhAgAzdZsRxq4hdhiGsLmu2kdyvJaoA17m7RTLIFIrS+rB+43oRd
+         YL2Q==
+X-Gm-Message-State: AOAM530Bq59cCNKzZbkhmnHBqLIAvDcp8eWkQNdcyKStdceZW32TkXJ3
+        2YStPIU8yZ9bEwbUuXtAyldh0eK4R4j3XXTOA9wFgRxMVIs=
+X-Google-Smtp-Source: ABdhPJxUPXCl6qymWwFnPLD1jls52MPyuKxxnBcdzmyhzzkfM57UgruD6kYw9UPb5p38pPas+gd78OSeedEYvX9VJBk=
+X-Received: by 2002:a17:906:9b86:b0:6fe:d37f:b29d with SMTP id
+ dd6-20020a1709069b8600b006fed37fb29dmr16148707ejc.327.1653496374359; Wed, 25
+ May 2022 09:32:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-2-brad@pensando.io>
- <05febd3f-bfdb-13c2-8cce-b9dc422c5eae@linaro.org> <CAK9rFnyRrS_LvoZ_j66cKDHgecqcqzJN5krSxdCquBanViKyHg@mail.gmail.com>
- <49c1d200-8c07-b306-a400-86ee6a637bb4@linaro.org>
-In-Reply-To: <49c1d200-8c07-b306-a400-86ee6a637bb4@linaro.org>
-From:   Brad Larson <brad@pensando.io>
-Date:   Wed, 25 May 2022 09:31:05 -0700
-Message-ID: <CAK9rFnw9+seK_j3gcMrDOqCWcj7C4-eKVGziFF5_J=TnxWx06Q@mail.gmail.com>
-Subject: Re: [PATCH 01/11] dt-bindings: arm: add Pensando boards
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        David Clear <dac2@pensando.io>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220521075736.1225397-1-zenczykowski@gmail.com>
+ <CAADnVQJcDvyeQ3y=uVDj-7JfqtxE+nJk+d5oVQrBhhQpicYk6A@mail.gmail.com>
+ <CANP3RGcn6ta7uZH7onuRwOzx_2UmizEtgOTMKvbMOL8FER0MXQ@mail.gmail.com>
+ <CAADnVQKWxzwAbZFAfOB2hxwOVP1mCfwpx30rcdRkCO-4DMxsZw@mail.gmail.com> <CAHo-Oow9u0QGwGuB4u4Uusv_2N70HbWZT6-cM_av8pqwychT9g@mail.gmail.com>
+In-Reply-To: <CAHo-Oow9u0QGwGuB4u4Uusv_2N70HbWZT6-cM_av8pqwychT9g@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 25 May 2022 09:32:42 -0700
+Message-ID: <CAADnVQJ=wQd7YgZTtTQNv+3z4AwxYS0cWBu_WoJ17vJkjVf65g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: print a little more info about maps via cat /sys/fs/bpf/pinned_name
+To:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Linux Network Development Mailing List 
+        <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        BPF Mailing List <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Sat, Apr 9, 2022 at 3:40 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Wed, May 25, 2022 at 9:14 AM Maciej =C5=BBenczykowski
+<zenczykowski@gmail.com> wrote:
 >
-> On 09/04/2022 04:19, Brad Larson wrote:
-> > On Thu, Apr 7, 2022 at 11:45 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>> Change from V3:
-> >>> - Add description and board compatible
-> >>
-> >> That's a bit confusing... the subject is for v1.
-> >
-> > Goal was to identify in the cover letter patch the key changes from
-> > the V3 patchset to this V4 patchset.  Then in each patch that had a
-> > material change highlight that in the patch itself.  Will try and make
-> > it more clear.
->
-> This is fine, I am talking about the subject - it is marked as a v1, so
-> it's confusing to see a changelog.
->
-> One way to achieve this is: "git format-patch -v4 -11 ..."
+> When it works it's really nice...
 
-That was the problem, thanks!  Missed including -v4 in last use of
-format-patch.  Sorry for the confusion.
-
-Regards,
-Brad
+Load your own bpf map iterator program and pin anywhere
+in bpffs under name of choice and your own access permissions.
+See selftests/bpf/progs/bpf_iter_bpf_map.c

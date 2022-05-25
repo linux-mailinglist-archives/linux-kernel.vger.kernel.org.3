@@ -2,126 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1307C5340D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035055340DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245327AbiEYP5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S244561AbiEYP5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244898AbiEYP53 (ORCPT
+        with ESMTP id S245218AbiEYP5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:57:29 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DDB60A94;
-        Wed, 25 May 2022 08:57:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 1E13E1F45163
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653494245;
-        bh=0eLyTpn4l8dOBzhVfjQH2gNs2dijb43NxkXswcaDsJA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tjkjg18vHS4ohx+g+hOuNKv79erg5X02zmejSMweTsn73dIMwgobW5HRNY/U45jzu
-         +SJUb+bbRY4wtn+nh0480bPCuyTEVGlDIe+olpd0pyKzxFIHRmMU/vPaGHhvrqkQU6
-         nUNiF/K6j3R2p7diQC+sySOZwIO3CDWOn6nr838jxNAtQzU5+eW4eBSEjZRRjxdDv/
-         iklaadfGFqRcBZixOZazlYFJA8Wo7SHAF8/SMp0/NG4KVyMvPcmch72pdGVzLdvjdH
-         2za80sJPraDfvHKHSlk1bmiPWcHZ0Tj8zLT0a24FqRFTkJCmN47OzI1HYd7C+PIqVh
-         aJ0R1Aj3ERh7g==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH v1 2/2] dt-bindings: pinctrl: mt8192: Use generic bias instead of pull-*-adv
-Date:   Wed, 25 May 2022 11:57:14 -0400
-Message-Id: <20220525155714.1837360-3-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220525155714.1837360-1-nfraprado@collabora.com>
-References: <20220525155714.1837360-1-nfraprado@collabora.com>
+        Wed, 25 May 2022 11:57:49 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852D564BDD;
+        Wed, 25 May 2022 08:57:47 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id F2374219F5;
+        Wed, 25 May 2022 15:57:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653494266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M2rR0Mt9aNzbADhl4nuio4a0c9AH3DiINVqGdx50lWk=;
+        b=qy/BfGSwupZVQJgnZi4bTX+kIWc3p4f8hlVX9gW2w6zYBbhmKWS/MxcBrpcA0TY+uDxQ7z
+        5pFAzMWK2jqH2tqNZdXoJRwQfBTaKsyJlfUCiNiQ12JK5ov22e1Y81L9p+sSvEtLhHW0Td
+        YukST6h9DdaKGLmlvMXyhxeCvBxxAis=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653494266;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M2rR0Mt9aNzbADhl4nuio4a0c9AH3DiINVqGdx50lWk=;
+        b=FE3miYJiqnMi5CaTZwTot5BCSM2V85L9RHDM+2vsB9YaPMKlG9E64G1CzVTVMw97UgjDt3
+        nuWKmso6QpJQhoAw==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 8C5DE2C141;
+        Wed, 25 May 2022 15:57:45 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 9E70AA0632; Wed, 25 May 2022 17:57:42 +0200 (CEST)
+Date:   Wed, 25 May 2022 17:57:42 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ritesh Harjani <ritesh.list@gmail.com>
+Cc:     Jan Kara <jack@suse.cz>, Ye Bin <yebin10@huawei.com>,
+        tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] ext4: fix super block checksum incorrect after
+ mount
+Message-ID: <20220525155742.gcqoeidcyii7mzx6@quack3.lan>
+References: <20220525012904.1604737-1-yebin10@huawei.com>
+ <20220525075123.rx5v7fe6ocn354wn@riteshh-domain>
+ <20220525115400.kr3urpp3cf3hybvi@quack3.lan>
+ <20220525151612.an7xysp242urynbp@riteshh-domain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220525151612.an7xysp242urynbp@riteshh-domain>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit cafe19db7751 ("pinctrl: mediatek: Backward compatible to previous
-Mediatek's bias-pull usage") allowed the bias-pull-up and bias-pull-down
-properties to be used for setting PUPD/R1/R0 type bias on mtk-paris
-based SoC's, which was previously only supported by the custom
-mediatek,pull-up-adv and mediatek,pull-down-adv properties.
+On Wed 25-05-22 20:46:12, Ritesh Harjani wrote:
+> On 22/05/25 01:54PM, Jan Kara wrote:
+> > On Wed 25-05-22 13:21:23, Ritesh Harjani wrote:
+> > > On 22/05/25 09:29AM, Ye Bin wrote:
+> > > > We got issue as follows:
+> > > > [home]# mount  /dev/sda  test
+> > > > EXT4-fs (sda): warning: mounting fs with errors, running e2fsck is recommended
+> > > > [home]# dmesg
+> > > > EXT4-fs (sda): warning: mounting fs with errors, running e2fsck is recommended
+> > > > EXT4-fs (sda): Errors on filesystem, clearing orphan list.
+> > > > EXT4-fs (sda): recovery complete
+> > > > EXT4-fs (sda): mounted filesystem with ordered data mode. Quota mode: none.
+> > > > [home]# debugfs /dev/sda
+> > > > debugfs 1.46.5 (30-Dec-2021)
+> > > > Checksum errors in superblock!  Retrying...
+> > > >
+> > > > Reason is ext4_orphan_cleanup will reset ‘s_last_orphan’ but not update
+> > > > super block checksum.
+> > > > To solve above issue, defer update super block checksum after ext4_orphan_cleanup.
+> > >
+> > > I agree with the analysis. However after [1], I think all updates to superblock
+> > > (including checksum computation) should be done within buffer lock.
+> > > (lock_buffer(), unlock_buffer()).
+> > >
+> > > [1]: https://lore.kernel.org/all/20201216101844.22917-4-jack@suse.cz/
+> >
+> > So technically you're right that we should hold buffer lock all the time
+> > from before we modify superblock buffer until we recompute the checksum (so
+> > that we avoid writing superblock with mismatched checksum). To do this we'd
+> > have to put checksum recomputations and superblock buffer locking into
+> > ext4_orphan_cleanup() around setting of es->s_last_orphan (in three places
+> > there AFAICS). A bit tedious but it would actually also fix a (theoretical)
+> > race that someone decides to write out superblock after we set
+> > s_last_orphan but before we set the checksum.
+> 
+> Ok. Although (I think) it can still be done at just one place before returning
+> from ext4_orphan_cleanup().
+> But I agree it is mostly a theoretical race (in fact since this is happening
+> during mount, I am not sure if it is even possible?) and there might not
+> be any value addition in doing so by complicating it too much.
 
-Since the bias-pull-{up,down} properties already have defines associated
-thus being more descriptive and is more universal on MediaTek platforms,
-and given that there are no mediatek,pull-{up,down}-adv users on mt8192
-yet, remove the custom adv properties in favor of the generic ones.
+Well, what could presumably happen is that if someone dirtied superblock
+(say while processing orphan list), then flush worker could come just after
+we set s_last_orphan and before we update the checksum. Now I don't think
+we currently dirty superblock during orphan cleanup but it is certainly
+slightly fragile to rely on this.
 
-Note that only mediatek,pull-up-adv was merged in the binding, but not
-its down counterpart.
-
-Fixes: edbacb36ea50 ("dt-bindings: pinctrl: mt8192: Add mediatek,pull-up-adv property")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
-
- .../bindings/pinctrl/pinctrl-mt8192.yaml      | 29 ++++++++++---------
- 1 file changed, 15 insertions(+), 14 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml
-index 8ede8b750237..e39f5893bf16 100644
---- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml
-@@ -83,20 +83,21 @@ patternProperties:
-           drive-strength-microamp:
-             enum: [125, 250, 500, 1000]
- 
--          mediatek,pull-up-adv:
--            description: |
--              Pull up settings for 2 pull resistors, R0 and R1. User can
--              configure those special pins. Valid arguments are described as below:
--              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
--              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
--              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
--              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
--            $ref: /schemas/types.yaml#/definitions/uint32
--            enum: [0, 1, 2, 3]
--
--          bias-pull-down: true
--
--          bias-pull-up: true
-+          bias-pull-down:
-+            oneOf:
-+              - type: boolean
-+                description: normal pull down.
-+              - enum: [100, 101, 102, 103]
-+                description: PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0_
-+                  defines in dt-bindings/pinctrl/mt65xx.h.
-+
-+          bias-pull-up:
-+            oneOf:
-+              - type: boolean
-+                description: normal pull up.
-+              - enum: [100, 101, 102, 103]
-+                description: PUPD/R1/R0 pull up type. See MTK_PUPD_SET_R1R0_
-+                  defines in dt-bindings/pinctrl/mt65xx.h.
- 
-           bias-disable: true
- 
+								Honza
 -- 
-2.36.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

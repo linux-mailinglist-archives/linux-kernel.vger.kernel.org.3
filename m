@@ -2,59 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0D2533B34
+	by mail.lfdr.de (Postfix) with ESMTP id 90A07533B33
 	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239922AbiEYLBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
+        id S233023AbiEYLC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242754AbiEYLBX (ORCPT
+        with ESMTP id S232745AbiEYLCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:01:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E5A9E9E6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:00:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A2CEB81C87
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:00:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B036C385B8;
-        Wed, 25 May 2022 11:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653476448;
-        bh=xn4+7bfIEFj4nSenN53s2MMlezcHcafG/6EhhHwEeSw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FqN7ZxCOLGUohfnUD35g//slUwfY3YyVOgDDQ0c5RBE3cN1nBgBgdEraym0wNcqQN
-         4IMoBW32O8D5J2vWhk7VmnyYw6aKqTBkT3kmEasQNMQ6orlBpwClAooCGROb/aXwlR
-         oGJn3ajuJVwJxPr6vbAhhtKmcQObIaItZYi6e+RlZ94Gz9StyoCYpiQMb6IWUcfNeT
-         q1/an/+eMAvW5ZH9A/CPeQl6r0KrAD9jfJzHGLJQ1rgS/XFB2tHLvvsAkx4iXPVTmb
-         iPXllk6Fo/cznS8biw1uPkHRrZQCalr2rwl34QCVDT3ujPM/POp37M/HwDVQX33jQL
-         BFAR9N+9gCQYQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6C1774007E; Wed, 25 May 2022 08:00:45 -0300 (-03)
-Date:   Wed, 25 May 2022 08:00:45 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 00/15] perf intel-pt: Better support for perf record
- --cpu
-Message-ID: <Yo4MXQXUmvrJWHZq@kernel.org>
-References: <20220524075436.29144-1-adrian.hunter@intel.com>
- <CAP-5=fW3Av3e+LZy_RBWNrMPqYF7OZVf0rOe-upznDrfdeJ1CA@mail.gmail.com>
+        Wed, 25 May 2022 07:02:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CA2A33A35
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653476570;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U8tsgh1ccs5uN+XjBy58PPjJ8oivnMej95KEP2UBGE8=;
+        b=AxgK0bSYFSBMA5dkCDY5E8+dCYqYxoLbBnEx1g4U0NrvZu30p+vdgDpQEabdqQNNiXUmeZ
+        dhPoETdzc6ZH46ZQ74Om5EHl3ZHx9l0e3a5wGGv5GNocTvwCANHe0VrXp4CLZjURSM+2Hp
+        ivsedqxRcU2tb8BBGRJU7sKLnkAS4jU=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-458-cUAV23h5ORGTVoCS6yeclA-1; Wed, 25 May 2022 07:02:47 -0400
+X-MC-Unique: cUAV23h5ORGTVoCS6yeclA-1
+Received: by mail-ed1-f70.google.com with SMTP id u1-20020aa7d981000000b0042acd1f2253so14597184eds.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:02:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=U8tsgh1ccs5uN+XjBy58PPjJ8oivnMej95KEP2UBGE8=;
+        b=lWgoWUInSbW7MglSTrgNHI7pGmN8tTIF4GJgMeoLKwn839uusutjSV5oqkabBc2+y6
+         X6F+JT9LHBRztX9cEUXa+pXSi8JYniPj/6thITtrFTipUZPAutDEDa9ENJhEAKKgrhYu
+         RNLk1ElT+XYI4w0TabwPhx6PvHglDhea8tBrfBIUFqb5bcrZZhf11yn6CkW6eYg4y7n0
+         9qnKeMcNwl/ZLYi8jxpLf1KnHmsZ9F8iH9Q4ZA1YjV4WgMKa/DcLp/Xd5b/t7ZZyGNpY
+         aGYs6lZ6FV9ulkmfnYcG6laiJwI0LyE5ASq9pgNF9W2PXrew/49z3/8iRPQZHeaLpSnM
+         LJtA==
+X-Gm-Message-State: AOAM530RshUL24CfGV9LNOQmt3uUw0rp6GnJNRHKJBOuUkxNlQmoZTxV
+        r8AOK8PFMrAiNxTYU+gc52vV5i4wyCpR+h+NFdqcHy6Y16cZAJlUSt0J8mJuxCO1dgvUBYq9o0Z
+        wlno0sHBe6tXzOfOVFtlGeK15
+X-Received: by 2002:a05:6402:1399:b0:410:9fa2:60d6 with SMTP id b25-20020a056402139900b004109fa260d6mr33664422edv.35.1653476565627;
+        Wed, 25 May 2022 04:02:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzFYZtxgjMVMnq9mo9h0AR1W6426oamDPgcdGhR/YwkxFKJjd/XVL5U3uNZnOId/fcd5HTUdA==
+X-Received: by 2002:a05:6402:1399:b0:410:9fa2:60d6 with SMTP id b25-20020a056402139900b004109fa260d6mr33664391edv.35.1653476565218;
+        Wed, 25 May 2022 04:02:45 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id l17-20020a50c111000000b0042b9c322348sm1362171edf.35.2022.05.25.04.02.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 04:02:44 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id A925B3DED45; Wed, 25 May 2022 13:02:43 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Baligh Gasmi <gasmibal@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     Baligh Gasmi <gasmibal@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:MAC80211" <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 1/1] mac80211: use AQL airtime for expected throughput.
+In-Reply-To: <20220525103512.3666956-1-gasmibal@gmail.com>
+References: <20220525103512.3666956-1-gasmibal@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 25 May 2022 13:02:43 +0200
+Message-ID: <87r14hoox8.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fW3Av3e+LZy_RBWNrMPqYF7OZVf0rOe-upznDrfdeJ1CA@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,249 +84,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, May 24, 2022 at 10:01:01PM -0700, Ian Rogers escreveu:
-> On Tue, May 24, 2022 at 12:55 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >
-> > Hi
-> >
-> > Here are V4 patches to support capturing Intel PT sideband events such as
-> > mmap, task, context switch, text poke etc, on every CPU even when tracing
-> > selected user_requested_cpus.  That is, when using the perf record -C or
-> >  --cpu option.
-> >
-> > This is needed for:
-> > 1. text poke: a text poke on any CPU affects all CPUs
-> > 2. tracing user space: a user space process can migrate between CPUs so
-> > mmap events that happen on a different CPU can be needed to decode a
-> > user_requested_cpus CPU.
-> >
-> > For example:
-> >
-> >         Trace on CPU 1:
-> >
-> >         perf record --kcore -C 1 -e intel_pt// &
-> >
-> >         Start a task on CPU 0:
-> >
-> >         taskset 0x1 testprog &
-> >
-> >         Migrate it to CPU 1:
-> >
-> >         taskset -p 0x2 <testprog pid>
-> >
-> >         Stop tracing:
-> >
-> >         kill %1
-> >
-> >         Prior to these changes there will be errors decoding testprog
-> >         in userspace because the comm and mmap events for testprog will not
-> >         have been captured.
-> >
-> > There is quite a bit of preparation:
-> >
-> > The first patch is a small Intel PT test for system-wide side band.  The
-> > test fails before the patches are applied, passed afterwards.
-> >
-> >       perf intel-pt: Add a test for system-wide side band [new in V1]
-> >
-> > The next 5 patches (now already applied) stop auxtrace mixing up mmap idx
-> > between evlist and evsel.  That is going to matter when
-> > evlist->all_cpus != evlist->user_requested_cpus != evsel->cpus:
-> >
-> >       libperf evsel: Factor out perf_evsel__ioctl() [now applied]
-> >       libperf evsel: Add perf_evsel__enable_thread()
-> >       perf evlist: Use libperf functions in evlist__enable_event_idx()
-> >       perf auxtrace: Move evlist__enable_event_idx() to auxtrace.c
-> >       perf auxtrace: Do not mix up mmap idx
-> >
-> > The next 6 patches (first 4 now already applied) stop attempts to auxtrace
-> > mmap when it is not an auxtrace event e.g. when mmapping the CPUs on which
-> > only sideband is captured:
-> >
-> >       libperf evlist: Remove ->idx() per_cpu parameter
-> >       libperf evlist: Move ->idx() into mmap_per_evsel()
-> >       libperf evlist: Add evsel as a parameter to ->idx()
-> >       perf auxtrace: Record whether an auxtrace mmap is needed
-> >       perf auxctrace: Add mmap_needed to auxtrace_mmap_params
-> >       perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
-> >
-> > The next 5 patches switch to setting up dummy event maps before adding the
-> > evsel so that the evsel is subject to map propagation, primarily to cause
-> > addition of the evsel's CPUs to all_cpus.
-> >
-> >       perf evlist: Factor out evlist__dummy_event()
-> >       perf evlist: Add evlist__add_system_wide_dummy()
-> >       perf record: Use evlist__add_system_wide_dummy() in record__config_text_poke()
-> >       perf intel-pt: Use evlist__add_system_wide_dummy() for switch tracking
-> >       perf intel-pt: Track sideband system-wide when needed
-> >
-> > The remaining patches make more significant changes.
-> >
-> > First change from using user_requested_cpus to using all_cpus where necessary:
-> >
-> >       perf tools: Allow all_cpus to be a superset of user_requested_cpus
-> >
-> > Secondly, mmap all per-thread and all per-cpu events:
-> >
-> >       libperf evlist: Allow mixing per-thread and per-cpu mmaps
-> >       libperf evlist: Check nr_mmaps is correct [new in V1]
-> >
-> > Stop using system_wide flag for uncore because it will not work anymore:
-> >
-> >       perf stat: Add requires_cpu flag for uncore
-> >       libperf evsel: Add comments for booleans [new in V1]
-> >
-> > Finally change map propagation so that system-wide events retain their cpus and
-> > (dummy) threads:
-> >
-> >       perf tools: Allow system-wide events to keep their own CPUs
-> >       perf tools: Allow system-wide events to keep their own threads
-> >
-> >
-> > Changes in V4:
-> >
-> >       Added Acked-by: Namhyung Kim <namhyung@kernel.org>
-> >       Added a couple Acked-by: Ian Rogers <irogers@google.com>
-> 
-> Would love to see this merged Arnaldo, I can do an:
-> 
-> Acked-by: Ian Rogers <irogers@google.com>
-> 
-> in case it helps you with b4 a little :-)
+Baligh Gasmi <gasmibal@gmail.com> writes:
 
-I'll add your Acked-by manually now to the patches missing it, as I had merged this yesterday.
+> Since the integration of AQL, packet TX airtime estimation is
+> calculated and counted to be used for the dequeue limit.
+>
+> Use this estimated airtime to compute expected throughput for
+> each station.
+>
+> It will be a generic mac80211 implementation. If the driver has
+> get_expected_throughput implementation, it will be used instead.
+>
+> Useful for L2 routing protocols, like B.A.T.M.A.N.
+>
+> Signed-off-by: Baligh Gasmi <gasmibal@gmail.com>
+> ---
+>  net/mac80211/driver-ops.h |  2 ++
+>  net/mac80211/sta_info.h   |  2 ++
+>  net/mac80211/status.c     | 22 ++++++++++++++++++++++
+>  net/mac80211/tx.c         |  3 ++-
+>  4 files changed, 28 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/mac80211/driver-ops.h b/net/mac80211/driver-ops.h
+> index 4e2fc1a08681..4331b79647fa 100644
+> --- a/net/mac80211/driver-ops.h
+> +++ b/net/mac80211/driver-ops.h
+> @@ -1142,6 +1142,8 @@ static inline u32 drv_get_expected_throughput(struct ieee80211_local *local,
+>  	trace_drv_get_expected_throughput(&sta->sta);
+>  	if (local->ops->get_expected_throughput && sta->uploaded)
+>  		ret = local->ops->get_expected_throughput(&local->hw, &sta->sta);
+> +	else
+> +		ret = ewma_avg_est_tp_read(&sta->status_stats.avg_est_tp);
+>  	trace_drv_return_u32(local, ret);
+>  
+>  	return ret;
+> diff --git a/net/mac80211/sta_info.h b/net/mac80211/sta_info.h
+> index 379fd367197f..fe60be4c671d 100644
+> --- a/net/mac80211/sta_info.h
+> +++ b/net/mac80211/sta_info.h
+> @@ -123,6 +123,7 @@ enum ieee80211_sta_info_flags {
+>  #define HT_AGG_STATE_STOP_CB		7
+>  #define HT_AGG_STATE_SENT_ADDBA		8
+>  
+> +DECLARE_EWMA(avg_est_tp, 8, 16)
+>  DECLARE_EWMA(avg_signal, 10, 8)
+>  enum ieee80211_agg_stop_reason {
+>  	AGG_STOP_DECLINED,
+> @@ -641,6 +642,7 @@ struct sta_info {
+>  		s8 last_ack_signal;
+>  		bool ack_signal_filled;
+>  		struct ewma_avg_signal avg_ack_signal;
+> +		struct ewma_avg_est_tp avg_est_tp;
+>  	} status_stats;
+>  
+>  	/* Updated from TX path only, no locking requirements */
+> diff --git a/net/mac80211/status.c b/net/mac80211/status.c
+> index e81e8a5bb774..647ade3719f5 100644
+> --- a/net/mac80211/status.c
+> +++ b/net/mac80211/status.c
+> @@ -1145,6 +1145,28 @@ void ieee80211_tx_status_ext(struct ieee80211_hw *hw,
+>  			sta->status_stats.retry_failed++;
+>  		sta->status_stats.retry_count += retry_count;
+>  
+> +		if (skb && tx_time_est) {
 
-- Arnaldo
- 
-> Thanks,
-> Ian
-> 
-> >       perf intel-pt: Add a test for system-wide side band
-> >         Put in commit message that test succeeds only after other
-> >         patches applied
-> >
-> >       libperf evsel: Add perf_evsel__enable_thread()
-> >       perf evlist: Use libperf functions in evlist__enable_event_idx()
-> >       perf auxtrace: Move evlist__enable_event_idx() to auxtrace.c
-> >       perf auxtrace: Do not mix up mmap idx
-> >       libperf evlist: Remove ->idx() per_cpu parameter
-> >       libperf evlist: Move ->idx() into mmap_per_evsel()
-> >       libperf evlist: Add evsel as a parameter to ->idx()
-> >       perf auxtrace: Record whether an auxtrace mmap is needed
-> >         Omitted because already applied
-> >
-> >       libperf evsel: Add comments for booleans
-> >         Amended comment about own_cpus
-> >
-> >
-> > Changes in V3:
-> >
-> >       perf auxtrace: Add mmap_needed to auxtrace_mmap_params
-> >         Amended mmap_needed comment
-> >
-> >       perf evlist: Add evlist__add_dummy_on_all_cpus()
-> >         Amended comment about all CPUs.
-> >
-> >
-> > Changes in V2:
-> >
-> >       Added some Acked-by: Ian Rogers <irogers@google.com>
-> >
-> >       libperf evsel: Add perf_evsel__enable_thread()
-> >         Use perf_cpu_map__for_each_cpu()
-> >
-> >       perf auxtrace: Add mmap_needed to auxtrace_mmap_params
-> >         Add documentation comment for mmap_needed
-> >
-> >       perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
-> >         Fix missing auxtrace_mmap_params__set_idx change
-> >
-> >       libperf evlist: Check nr_mmaps is correct
-> >         Remove unused code
-> >
-> >       libperf evsel: Add comments for booleans
-> >         Amend comments
-> >
-> >       perf evlist: Add evlist__add_dummy_on_all_cpus()
-> >         Rename evlist__add_system_wide -> evlist__add_on_all_cpus
-> >         Changed patch subject accordingly
-> >
-> >       perf record: Use evlist__add_dummy_on_all_cpus() in record__config_text_poke()
-> >         Rename evlist__add_system_wide -> evlist__add_on_all_cpus
-> >         Changed patch subject accordingly
-> >
-> >       perf intel-pt: Use evlist__add_dummy_on_all_cpus() for switch tracking
-> >         Rename evlist__add_system_wide -> evlist__add_on_all_cpus
-> >         Changed patch subject accordingly
-> >
-> >
-> > Changes in V1:
-> >
-> >       perf intel-pt: Add a test for system-wide side band
-> >         New patch
-> >
-> >       libperf evsel: Factor out perf_evsel__ioctl()
-> >         Dropped because it has been applied.
-> >
-> >       libperf evsel: Add perf_evsel__enable_thread()
-> >         Rename variable i -> idx
-> >
-> >       perf auxtrace: Do not mix up mmap idx
-> >         Rename variable cpu to cpu_map_idx
-> >
-> >       perf tools: Allow all_cpus to be a superset of user_requested_cpus
-> >         Add Acked-by: Ian Rogers <irogers@google.com>
-> >
-> >       libperf evlist: Allow mixing per-thread and per-cpu mmaps
-> >         Fix perf_evlist__nr_mmaps() calculation
-> >
-> >       libperf evlist: Check nr_mmaps is correct
-> >         New patch
-> >
-> >       libperf evsel: Add comments for booleans
-> >         New patch
-> >
-> >       perf tools: Allow system-wide events to keep their own CPUs
-> >       perf tools: Allow system-wide events to keep their own threads
-> >
-> >
-> > Adrian Hunter (15):
-> >       perf intel-pt: Add a test for system-wide side band
-> >       perf auxtrace: Add mmap_needed to auxtrace_mmap_params
-> >       perf auxtrace: Remove auxtrace_mmap_params__set_idx() per_cpu parameter
-> >       perf evlist: Factor out evlist__dummy_event()
-> >       perf evlist: Add evlist__add_dummy_on_all_cpus()
-> >       perf record: Use evlist__add_dummy_on_all_cpus() in record__config_text_poke()
-> >       perf intel-pt: Use evlist__add_dummy_on_all_cpus() for switch tracking
-> >       perf intel-pt: Track sideband system-wide when needed
-> >       perf tools: Allow all_cpus to be a superset of user_requested_cpus
-> >       libperf evlist: Allow mixing per-thread and per-cpu mmaps
-> >       libperf evlist: Check nr_mmaps is correct
-> >       perf stat: Add requires_cpu flag for uncore
-> >       libperf evsel: Add comments for booleans
-> >       perf tools: Allow system-wide events to keep their own CPUs
-> >       perf tools: Allow system-wide events to keep their own threads
-> >
-> >  tools/lib/perf/evlist.c                 | 71 ++++++++++++++-------------------
-> >  tools/lib/perf/include/internal/evsel.h | 11 +++++
-> >  tools/perf/arch/x86/util/intel-pt.c     | 31 ++++++--------
-> >  tools/perf/builtin-record.c             | 39 +++++++-----------
-> >  tools/perf/builtin-stat.c               |  5 +--
-> >  tools/perf/tests/shell/test_intel_pt.sh | 71 +++++++++++++++++++++++++++++++++
-> >  tools/perf/util/auxtrace.c              | 15 +++++--
-> >  tools/perf/util/auxtrace.h              | 13 ++++--
-> >  tools/perf/util/evlist.c                | 61 +++++++++++++++++++++++++---
-> >  tools/perf/util/evlist.h                |  5 +++
-> >  tools/perf/util/evsel.c                 |  1 +
-> >  tools/perf/util/mmap.c                  |  4 +-
-> >  tools/perf/util/parse-events.c          |  2 +-
-> >  13 files changed, 226 insertions(+), 103 deletions(-)
-> >  create mode 100755 tools/perf/tests/shell/test_intel_pt.sh
-> >
-> >
-> > Regards
-> > Adrian
+Shouldn't this be conditioned on actually being used (i.e., existence of
+get_expected_throughput op? Also maybe pull it out into its own function
+to make it clear what it's doing...
 
--- 
+> +			/* max average packet size */
+> +			size_t pkt_size = skb->len > 1024 ? 1024 : skb->len;
+> +
+> +			if (acked) {
+> +				/* ACK packet size */
+> +				pkt_size += 14;
+> +				/* SIFS x 2 */
+> +				tx_time_est += 2 * 2;
+> +			}
+> +
+> +			/* Backoff average x retries */
+> +			tx_time_est += retry_count ? retry_count * 2 : 2;
+> +
+> +			/* failed tx */
+> +			if (!acked && !noack_success)
+> +				pkt_size = 0;
+> +
+> +			ewma_avg_est_tp_add(&sta->status_stats.avg_est_tp,
+> +					    ((pkt_size * 8) * 1000) / tx_time_est);
 
-- Arnaldo
+Could we avoid adding this division in the fast path?
+
+> +		}
+> +
+>  		if (ieee80211_hw_check(&local->hw, REPORTS_TX_ACK_STATUS)) {
+>  			if (sdata->vif.type == NL80211_IFTYPE_STATION &&
+>  			    skb && !(info->flags & IEEE80211_TX_CTL_HW_80211_ENCAP))
+> diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
+> index b6b20f38de0e..d866a721690d 100644
+> --- a/net/mac80211/tx.c
+> +++ b/net/mac80211/tx.c
+> @@ -3793,7 +3793,8 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
+>  	IEEE80211_SKB_CB(skb)->control.vif = vif;
+>  
+>  	if (vif &&
+> -	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL)) {
+> +	    (!local->ops->get_expected_throughput ||
+> +	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL))) {
+
+This implicitly enables AQL for every driver that doesn't set
+get_expected_throughput, no? That is probably not a good idea...
+
+-Toke
+

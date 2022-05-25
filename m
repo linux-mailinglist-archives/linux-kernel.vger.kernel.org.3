@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB9E533FF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A99533FFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235552AbiEYPLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
+        id S244866AbiEYPLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbiEYPLS (ORCPT
+        with ESMTP id S232941AbiEYPL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:11:18 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAAA1120
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version:content-type
-        :content-transfer-encoding; s=k1; bh=HBB+DldoBDJN8+9cmyZ80UpseyD
-        V7NerRossp9DEtzU=; b=Nb/Kv2wayz7C8c09BiS7DBJdcfqZSC2Y2u5ApgHRUy8
-        wj8jb/Cg1i/Bny8hhr02pYVd15JNf1Gl+2ntXMajPItv9LBTQPH00B1/AfZ/ivPs
-        /+sL5rkH054zolftl+5V6EA+3nQlm1hJtcw4bjS8QAvK1Y/n48o0HUWkoy7eZkwA
-        =
-Received: (qmail 1644184 invoked from network); 25 May 2022 17:11:13 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 May 2022 17:11:13 +0200
-X-UD-Smtp-Session: l3s3148p1@DHbde9ffF25ZD++C
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0 support
-Date:   Wed, 25 May 2022 17:10:40 +0200
-Message-Id: <20220525151040.24024-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 25 May 2022 11:11:26 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EF8AFACE
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:11:22 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L7ZJS2Ww8z67tkx;
+        Wed, 25 May 2022 23:10:48 +0800 (CST)
+Received: from lhreml741-chm.china.huawei.com (10.201.108.191) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 25 May 2022 17:11:19 +0200
+Received: from [10.199.170.112] (10.199.170.112) by
+ lhreml741-chm.china.huawei.com (10.201.108.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 25 May 2022 16:11:06 +0100
+Message-ID: <853b6d52-da86-1c06-3604-3085ece331a4@huawei.com>
+Date:   Wed, 25 May 2022 18:10:51 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2] coresight: etm4x: Add Support for HiSilicon ETM device
+Content-Language: en-US
+To:     Qi Liu <liuqi115@huawei.com>, <gregkh@linuxfoundation.org>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <abudankov@huawei.com>,
+        Alexey Budankov <alexey.budankov@huawei.com>
+References: <1597323562-3706-1-git-send-email-liuqi115@huawei.com>
+From:   Alexei Budankov <abudankov@huawei.com>
+In-Reply-To: <1597323562-3706-1-git-send-email-liuqi115@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.199.170.112]
+X-ClientProxiedBy: saopeml500003.china.huawei.com (7.184.65.141) To
+ lhreml741-chm.china.huawei.com (10.201.108.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for R-Car S4. The S4 IP differs a bit from its siblings in
-such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
-are not routed to the INTC-AP but to the ECM.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- .../devicetree/bindings/thermal/rcar-gen3-thermal.yaml    | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Hi Qi Liu,
 
-diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-index 1368d90da0e8..b863c0a935ec 100644
---- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-@@ -8,9 +8,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Renesas R-Car Gen3 Thermal Sensor
- 
- description:
--  On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
--  sensors (THS) which are the analog circuits for measuring temperature (Tj)
--  inside the LSI.
-+
-+  On most R-Car Gen3 and later SoCs, the thermal sensor controllers (TSC)
-+  control the thermal sensors (THS) which are the analog circuits for
-+  measuring temperature (Tj) inside the LSI.
- 
- maintainers:
-   - Niklas Söderlund <niklas.soderlund@ragnatech.se>
-@@ -27,6 +28,7 @@ properties:
-       - renesas,r8a77965-thermal # R-Car M3-N
-       - renesas,r8a77980-thermal # R-Car V3H
-       - renesas,r8a779a0-thermal # R-Car V3U
-+      - renesas,r8a779f0-thermal # R-Car S4
- 
-   reg: true
- 
--- 
-2.35.1
+On 13.08.2020 15:59, Qi Liu wrote:
+> Add ETMv4 periperhal ID for HiSilicon Hip08 and Hip09 platform. Hip08
+> contains ETMv4.2 device and Hip09 contains ETMv4.5 device.
+> 
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-etm4x.c | 2 ++
+>   1 file changed, 2 insertions(+)
 
+Thanks for your patch.
+I would like to test HiSilicon ETM device feature on
+Kunpeng 920 based server.
+I applied the patch and booted the kernel with the changes.
+However I don't see any device files neither here:
+/sys/bus/coresight/devices/
+nor here:
+/sys/bus/event_source/devices/cs_etm/sinks/
+What should a user expect new in os with this patch added?
+
+Thanks,
+Alexei
+
+
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.c b/drivers/hwtracing/coresight/coresight-etm4x.c
+> index 6d7d216..7797a57 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x.c
+> @@ -1587,6 +1587,8 @@ static const struct amba_id etm4_ids[] = {
+>   	CS_AMBA_UCI_ID(0x000bb805, uci_id_etm4),/* Qualcomm Kryo 4XX Cortex-A55 */
+>   	CS_AMBA_UCI_ID(0x000bb804, uci_id_etm4),/* Qualcomm Kryo 4XX Cortex-A76 */
+>   	CS_AMBA_UCI_ID(0x000cc0af, uci_id_etm4),/* Marvell ThunderX2 */
+> +	CS_AMBA_UCI_ID(0x000b6d01, uci_id_etm4),/* HiSilicon-Hip08 */
+> +	CS_AMBA_UCI_ID(0x000b6d02, uci_id_etm4),/* HiSilicon-Hip09 */
+>   	{},
+>   };
+> 
+> --
+> 2.8.1

@@ -2,130 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1E5533F35
+	by mail.lfdr.de (Postfix) with ESMTP id 5746B533F36
 	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244848AbiEYO2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S240572AbiEYO3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244658AbiEYO1t (ORCPT
+        with ESMTP id S244859AbiEYO3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 10:27:49 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B32F1209D
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:27:22 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id p10so11741140wrg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vJ1ZHRktroNtOl8H5m5yxZpwDkzeUzNeSS+Jn6yJC/E=;
-        b=RDQviVNxwnDPtpi7oegoJoeczxVptCjhjqG3k7e2MVyRfnEPXQK1Yh1mUiyt6PZWOT
-         D5kGdb6hYRbfoJVXaQstxQAn4TVO0B4oPNhT5dYC075z4MKUbkwAqLV0yqr71Xn16XQX
-         igoPgt+UJjSW3+kK+cSA/cwXZauSDLvZzvLrQTCHp2bR8oG1WtTDjgC4ZMXM64P5Q75P
-         tCKHM37n6SFwIm3i5s7e2NLzGbZXghMVU7vk+S/fXnvquPunmZUEFClnPbEBtKnHF4aH
-         K7luMHASgIXULLWtjmwvJKmEZmtnQwrgskARoSUNu69cp3HYxDrpSj2e70W5lhfNRAnK
-         vhhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vJ1ZHRktroNtOl8H5m5yxZpwDkzeUzNeSS+Jn6yJC/E=;
-        b=dRuExfg5mEMjkTpiB2IEXMmnbKUa/hyIDdwtuHBKuDJNHycDFRptmeartWGA5bM4HY
-         9cfZkN0DT97RzEqEfxj5qTLP7YqMyAm44dkCTbkID8rKFAZ0GRgO1yWwt0FGaXBGAkgo
-         XFtvEPkBycu7RwF/o2dIsodmiAMcepZAHAixiBtB2kQttYOyhw4b2Ret/FPMW9DAvmu1
-         2WyaxxHdZC4dNXJX2K8PYhCHBH8uQbpIYPjaVE1LqcW5qepo4u5lhWUB6jaGL5p6IPVb
-         EONkeVHOx8nHcRFNddM4Yef/G/zP/TRUph0m7Es66FtA5UGPpyFkGS5G69qEiIEHNaC5
-         dFXA==
-X-Gm-Message-State: AOAM533FoozTwnFZWrr/qZr6bfERqENnAhvQ4WNsFNhTx9OWom8Aeai4
-        Nne1TVdGy0mtvW1I++pbShX4gLR9PiHpwDcWyPWdNg==
-X-Google-Smtp-Source: ABdhPJwO71e56s9S6gZVeAgxZJG9PM+AF+DSN8b3zz0J1VjD/KFjwSYVgU2nlpO1Jp//jjlGO0e0mGWReG0/0XrUcdc=
-X-Received: by 2002:a5d:448d:0:b0:20d:744:7663 with SMTP id
- j13-20020a5d448d000000b0020d07447663mr27630902wrq.654.1653488840849; Wed, 25
- May 2022 07:27:20 -0700 (PDT)
+        Wed, 25 May 2022 10:29:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EA8FA7747
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653488953;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rJXBSsswS1QbSCIORAlXaRxJTnMr6MqFIgMIGnJ+Qao=;
+        b=HzzBTY80BSnVxYCIWwCbTcsQzuxpAk3xUvMim/xXm2E/+m5ZU2dVxZ6W+iE1LOKrSXfraR
+        /weKm7fYgz5ryMDNlXFdmhGb/EzEUSOrrlnIF8weHckBRmidZL2Tn3mooA5MCClCuSXvyA
+        KdDyCXLzL9OOrshVF5wSBl/xJEiWtT8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-252-YR06shO1OwSFVnlHewrk4w-1; Wed, 25 May 2022 10:29:09 -0400
+X-MC-Unique: YR06shO1OwSFVnlHewrk4w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1E95485A5BC;
+        Wed, 25 May 2022 14:29:08 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.81])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 8E4F5C15E71;
+        Wed, 25 May 2022 14:28:47 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 25 May 2022 16:29:07 +0200 (CEST)
+Date:   Wed, 25 May 2022 16:28:46 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH 07/16] signal: Wake up the designated parent
+Message-ID: <20220525142845.GA2687@redhat.com>
+References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+ <20220518225355.784371-7-ebiederm@xmission.com>
+ <20220524132553.GD14347@redhat.com>
+ <20220524162808.GF14347@redhat.com>
 MIME-Version: 1.0
-References: <20220525140410.1706851-1-zhengjun.xing@linux.intel.com>
-In-Reply-To: <20220525140410.1706851-1-zhengjun.xing@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 25 May 2022 07:27:08 -0700
-Message-ID: <CAP-5=fUm4G043v6-pToBiT-psxt-_r4kxtsWwkjLh=ARmhmP_A@mail.gmail.com>
-Subject: Re: [PATCH] perf jevents: Fix event syntax error caused by ExtSel
-To:     zhengjun.xing@linux.intel.com
-Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        adrian.hunter@intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524162808.GF14347@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 7:04 AM <zhengjun.xing@linux.intel.com> wrote:
+On 05/24, Oleg Nesterov wrote:
 >
-> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+> On 05/24, Oleg Nesterov wrote:
+> >
+> > I fail to understand this patch...
+> >
+> > On 05/18, Eric W. Biederman wrote:
+> > >
+> > > Today if a process is ptraced only the ptracer will ever be woken up in
+> > > wait
+> >
+> > and why is this wrong?
+> >
+> > > Fixes: 75b95953a569 ("job control: Add @for_ptrace to do_notify_parent_cldstop()")
+> >
+> > how does this change fix 75b95953a569?
 >
-> In the origin code, when "ExtSel" is 1, the eventcode will change to
-> "eventcode |=3D 1 << 21=E2=80=9D. For event =E2=80=9CUNC_Q_RxL_CREDITS_CO=
-NSUMED_VN0.DRS",
-> its "ExtSel" is "1", its eventcode will change from 0x1E to 0x20001E,
-> but in fact the eventcode should <=3D0x1FF, so this will cause the parse
-> fail:
+> OK, I guess you mean the 2nd do_notify_parent_cldstop() in ptrace_stop(),
+> the problematic case is current->ptrace == T. Right?
 >
->   # perf stat -e "UNC_Q_RxL_CREDITS_CONSUMED_VN0.DRS" -a sleep 0.1
-> event syntax error: '.._RxL_CREDITS_CONSUMED_VN0.DRS'
->                                   \___ value too big for format, maximum =
-is 511
->
-> On the perf kernel side, the kernel assumes the valid bits are continuous=
-.
-> It will adjust the 0x100 (bit 8 for perf tool) to bit 21 in HW.
->
-> DEFINE_UNCORE_FORMAT_ATTR(event_ext, event, "config:0-7,21");
->
-> So the perf tool follows the kernel side and just set bit8 other than bit=
-21.
->
-> Fixes: fedb2b518239 ("perf jevents: Add support for parsing uncore json f=
-iles")
-> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> I dislike this patch anyway, but let me think more about it.
 
-Acked-by: Ian Rogers <irogers@google.com>
+OK, now that I understand the problem, the patch doesn't look bad to me,
+although I'd ask to make the changelog more clear.
 
-Thanks,
-Ian
+After this change __wake_up_parent() can't accept any "parent" from
+p->parent thread group, but all callers look fine except ptrace_detach().
 
-> ---
->  tools/perf/pmu-events/jevents.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jeve=
-nts.c
-> index cee61c4ed59e..e597e4bac90f 100644
-> --- a/tools/perf/pmu-events/jevents.c
-> +++ b/tools/perf/pmu-events/jevents.c
-> @@ -605,7 +605,7 @@ static int json_events(const char *fn,
->                         } else if (json_streq(map, field, "ExtSel")) {
->                                 char *code =3D NULL;
->                                 addfield(map, &code, "", "", val);
-> -                               eventcode |=3D strtoul(code, NULL, 0) << =
-21;
-> +                               eventcode |=3D strtoul(code, NULL, 0) << =
-8;
->                                 free(code);
->                         } else if (json_streq(map, field, "EventName")) {
->                                 addfield(map, &je.name, "", "", val);
-> --
-> 2.25.1
->
+Oleg.
+

@@ -2,147 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F17E533673
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC30533688
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244005AbiEYFd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 01:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S244041AbiEYFnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 01:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243999AbiEYFd4 (ORCPT
+        with ESMTP id S242356AbiEYFne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 01:33:56 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F1D5E74D
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653456835; x=1684992835;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tC5kXzJ2AZTXt2qxLz/QlNtc9RLvHWTtlK4ZRvR3278=;
-  b=P+9eIJ0iqKBOt5fl8p6Khy5jOuGihRyGHIvIdVx2ejCb2/qJYTwf2qUC
-   T1ueCF66F9iZ8BVGLaWhfkntKaDQvpAr+qAWGQufchHjBdTIcY0qu4LtH
-   rzNvYPACceB/tLyND3XWLE+VdIItMabADHQMlAkBA4OnWl+WFWcPNYo47
-   9yK9p9D0cCXpleBkCStIiT3HkeSEkTStgOX+IF5cA9GmWJgvB/TQyRQ4B
-   /c10JKQPadBJYbJnxJRX1Jb/P8KZ1H3G/1N4BGSOiFcy+vgjS/w9NGdty
-   p3pa5jUCpKCEA6norC8BHZiqoWRodq1+jPF/MfD5orO1cs1qT48WUNd71
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="336775076"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="336775076"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 22:33:54 -0700
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="601666278"
-Received: from jwang96-mobl.ccr.corp.intel.com (HELO [10.255.29.139]) ([10.255.29.139])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 22:33:50 -0700
-Message-ID: <11743cbe-c354-8442-d758-764cc59ce01a@linux.intel.com>
-Date:   Wed, 25 May 2022 13:33:48 +0800
+        Wed, 25 May 2022 01:43:34 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3484160A9A
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:43:26 -0700 (PDT)
+X-UUID: a469481094374202937f5807fca7138d-20220525
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:67c377b9-f005-46ce-a6a0-97813ced0dbe,OB:0,LO
+        B:10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:56
+X-CID-INFO: VERSION:1.1.5,REQID:67c377b9-f005-46ce-a6a0-97813ced0dbe,OB:0,LOB:
+        10,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:56
+X-CID-META: VersionHash:2a19b09,CLOUDID:f5cf24b8-3c45-407b-8f66-25095432a27a,C
+        OID:31c0f6e3944e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: a469481094374202937f5807fca7138d-20220525
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1084376180; Wed, 25 May 2022 13:43:21 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 25 May 2022 13:43:20 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 25 May 2022 13:43:19 +0800
+From:   <yf.wang@mediatek.com>
+To:     <yong.wu@mediatek.com>
+CC:     <Libo.Kang@mediatek.com>, <iommu@lists.linux-foundation.org>,
+        <joro@8bytes.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <ning.li@mediatek.com>, <robin.murphy@arm.com>, <will@kernel.org>,
+        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>
+Subject: Re: [PATCH v5 2/2] iommu/mediatek: Allow page table PA up to 35bit
+Date:   Wed, 25 May 2022 13:36:42 +0800
+Message-ID: <20220525053642.29653-1-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <1625ec1f4cded0f825d93743d3d03fcf83cad5aa.camel@mediatek.com>
+References: <1625ec1f4cded0f825d93743d3d03fcf83cad5aa.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v7 03/10] iommu/sva: Add iommu_sva_domain support
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
- <20220519072047.2996983-4-baolu.lu@linux.intel.com>
- <20220524134440.GT1343366@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220524134440.GT1343366@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/24 21:44, Jason Gunthorpe wrote:
->> +{
->> +	struct iommu_sva_domain *sva_domain;
->> +	struct iommu_domain *domain;
->> +
->> +	if (!bus->iommu_ops || !bus->iommu_ops->sva_domain_ops)
->> +		return ERR_PTR(-ENODEV);
->> +
->> +	sva_domain = kzalloc(sizeof(*sva_domain), GFP_KERNEL);
->> +	if (!sva_domain)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	mmgrab(mm);
->> +	sva_domain->mm = mm;
->> +
->> +	domain = &sva_domain->domain;
->> +	domain->type = IOMMU_DOMAIN_SVA;
->> +	domain->ops = bus->iommu_ops->sva_domain_ops;
->> +
->> +	return domain;
->> +}
->> +
->> +void iommu_sva_free_domain(struct iommu_domain *domain)
->> +{
->> +	struct iommu_sva_domain *sva_domain = to_sva_domain(domain);
->> +
->> +	mmdrop(sva_domain->mm);
->> +	kfree(sva_domain);
->> +}
-> No callback to the driver?
-
-Should do this in the next version. This version added an sva-specific
-iommu_domain_ops pointer in iommu_ops. This is not the right way to go.
-
+On Thu, 2022-05-19 at 14:58 +0800, Yong Wu wrote:
+> On Mon, 2022-05-16 at 22:16 +0800, yf.wang@mediatek.com wrote:
+> > From: Yunfei Wang <yf.wang@mediatek.com>
+> > 
+> > Add the quirk IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT support, so that
+> > allows
+> > page table PA up to 35bit, not only in ZONE_DMA32.
 > 
->> +int iommu_sva_set_domain(struct iommu_domain *domain, struct device *dev,
->> +			 ioasid_t pasid)
->> +{
-> Why does this function exist? Just call iommu_set_device_pasid()
-
-Yes, agreed.
-
+> Comment why this is needed.
 > 
->> +int iommu_set_device_pasid(struct iommu_domain *domain, struct device *dev,
->> +			   ioasid_t pasid)
->> +{
-> Here you can continue to use attach/detach language as at this API
-> level we expect strict pairing..
-
-Sure.
-
+> e.g. For single normal zone.
 > 
-> 
->> +void iommu_block_device_pasid(struct iommu_domain *domain, struct device *dev,
->> +			      ioasid_t pasid)
->> +{
->> +	struct iommu_group *group = iommu_group_get(dev);
->> +
->> +	mutex_lock(&group->mutex);
->> +	domain->ops->block_dev_pasid(domain, dev, pasid);
->> +	xa_erase(&group->pasid_array, pasid);
->> +	mutex_unlock(&group->mutex);
-> Should be the blocking domain.
 
-As we discussed, we should change above to blocking domain when the
-blocking domain is supported on at least Intel and arm-smmu-v3 drivers.
-I have started the work for Intel driver support.
+Hi Yong,
 
-Best regards,
-baolu
+There is no DMA32 zone in some mediatek smartphone chip for single normal zone.
 
+The level 1 and level 2 pgtable are both allocated in ZONE_DMA32, and may have two possible problem:
+1.The level 2 pgtable is allocated in ZONE_DMA32 with atomic flag, and it may fail if ZONE_DMA32 memory is used out.
+2.Single memory feature will make ZONE_DMA32 empty, and cause level 1 and level 2 pgtable PA more than 32bit.
+
+Solution:
+Add the quirk IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT support, so that level 1 and level 2 pgtable can support at most 35bit PA.
+
+I will update the commit message in next version.
+
+Thanks,
+Yunfei.

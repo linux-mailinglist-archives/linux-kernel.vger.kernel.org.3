@@ -2,126 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3347253462A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DB653464C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345066AbiEYWC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 18:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S244277AbiEYWRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 18:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiEYWCz (ORCPT
+        with ESMTP id S231497AbiEYWRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 18:02:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604EC666B9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:02:54 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653516167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ko3tVBSTvXmk/EJ63Xa6wkbIGpFeqWXJmZYiv5w7gsE=;
-        b=zWL1+xn9tGuKoGNgX9h/92eiBQWYEolUJ1Og04+18wvN5A6uf2BeavHw7NaCzG2PFm9Mio
-        bS78G+Dpf7cdeSwsOGd5k56NG9KD1Trqz2xakCWFiAbGnJKY2JqGq5U38R+ZdkvcTw0n0E
-        4AzYHZ3ysIpvjgz46Yk8szXcdI2AKXqLWSrp6Qym2mEW+TrD+ZM5Hn/6G5tyzv926/Nk/h
-        NB4UEGYSOpDEeNz/N0mcSFASjM5YUe7RFeGWyzXcWIgV0XJE9g+y5KP/EX1U1fFDRrpnfJ
-        XK1cuHIV4bcjNSfOfiLl+gThRetI5Cw7WLCZ8zyOBLejdkAbSY4pbWP5WLdhww==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653516167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ko3tVBSTvXmk/EJ63Xa6wkbIGpFeqWXJmZYiv5w7gsE=;
-        b=CO6+5Oz/7S35pvsSlVQZP4iIWCSLpHyZ5ii8ZtrZ3erMaZKe/btURKj+zzJhGhdcKtqVqN
-        p63ywilq9VY/NKBg==
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] printk for 5.19
-In-Reply-To: <CAHk-=wgC47n_7E6UtFx_agkJtLmWOXGsjdFjybBFYNA1AheQLQ@mail.gmail.com>
-References: <YouKQw72H7y9EJQK@alley>
- <CAHk-=wgC47n_7E6UtFx_agkJtLmWOXGsjdFjybBFYNA1AheQLQ@mail.gmail.com>
-Date:   Thu, 26 May 2022 00:08:46 +0206
-Message-ID: <87pmk1tgmx.fsf@jogness.linutronix.de>
+        Wed, 25 May 2022 18:17:01 -0400
+X-Greylist: delayed 801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 May 2022 15:16:58 PDT
+Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F955674F2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:16:58 -0700 (PDT)
+X-ASG-Debug-ID: 1653516215-1cf43917f331a700001-xx1T2L
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id Rknskv3T8OKRxMlK; Wed, 25 May 2022 18:03:35 -0400 (EDT)
+X-Barracuda-Envelope-From: tonyb@cybernetics.com
+X-ASG-Whitelist: Client
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
+        bh=sU13TqLXk+7AWmq6eJY05xWo8ZNDJZzve3vZq00wJGg=;
+        h=Content-Transfer-Encoding:Content-Type:Subject:From:Cc:To:Content-Language:
+        MIME-Version:Date:Message-ID; b=P1xnIcbk190Gr/tZ1Jma2N3n4rRPkF12HxtF9jXVvhoK1
+        EOWI0EtKUVPl18rB9UyY1mfuL1RHCE8CqJ1NkjuZnLQnfeVJPtbND7s9FHZ1i6BHvvsv1/9axaFCL
+        xinaOiGWA6nZXUaX0mCn9tV+UrqCPqTC8UYp2Bt/EhA4Pb2Yg=
+Received: from [10.157.2.224] (HELO [192.168.200.1])
+  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
+  with ESMTPS id 11817808; Wed, 25 May 2022 18:03:35 -0400
+Message-ID: <baef87c3-5dad-3b47-44c1-6914bfc90108@cybernetics.com>
+Date:   Wed, 25 May 2022 18:03:34 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Saurav Kashyap <skashyap@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+From:   Tony Battersby <tonyb@cybernetics.com>
+Subject: [REGRESSION] qla2xxx: tape drive not removed after unplug FC cable
+Content-Type: text/plain; charset=UTF-8
+X-ASG-Orig-Subj: [REGRESSION] qla2xxx: tape drive not removed after unplug FC cable
+Content-Transfer-Encoding: 8bit
+X-Barracuda-Connect: UNKNOWN[10.10.4.126]
+X-Barracuda-Start-Time: 1653516215
+X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
+X-Barracuda-BRTS-Status: 1
+X-Virus-Scanned: by bsmtpd at cybernetics.com
+X-Barracuda-Scan-Msg-Size: 2149
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-25, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Mon, May 23, 2022 at 6:21 AM Petr Mladek <pmladek@suse.com> wrote:
->> There are situations when the kthreads are either not available or
->> not reliable, for example, early boot, suspend, or panic. In these
->> situations, printk() uses the legacy mode and tries to handle
->> consoles immediately.
->
-> Let's see how this works out, but I do have one complaint/query about
-> the series.
->
-> Looking through the commits, I don't see how that "printk: wake up all
-> waiters" makes any sense at all.
->
-> It *ALREADY* woke up all waiters as far as I can see.
->
-> Doing a wake_up_interruptible() will stop waking things up only when
-> it hits a *exclusive* waiter, and as far as I can tell, there are no
-> exclusive waiters there.
+#regzbot introduced: 44c57f205876
 
-You are correct. @log_wait never has exclusive waiters. I will post a
-patch to revert the change in question.
+I have several different QLogic FC HBAs (8, 16, 32 Gbps) and several
+different FC LTO tape drives (IBM Ultrium 8 & 9).  When I plug in the FC
+cable, the tape drive shows up as a SCSI device as expected.  With older
+kernels, when I unplug the FC cable, the tape drive SCSI device would
+disappear after about 30 seconds.  But with newer kernels (including
+5.18), when I unplug the FC cable, the tape drive SCSI device never
+disappears.  I have bisected the change in behavior to the following
+commit in kernel 5.15:
 
-Until now, I never took the time to investigate if there were any
-exclusive waiters. I just wanted to be sure that all waiters wake up,
-regardless of their type. But obviously the patch is unnecessary with
-the currently implemented waiters.
+44c57f205876 ("scsi: qla2xxx: Changes to support FCP2 Target")
 
-> That "all()" form is only for when there are exclusive waiters (that
-> are expected to handle the situation entirely, or wake up the next
-> waiter if they don't), *and* you have some exceptional thing that then
-> causes *ALL* waiters to need to be woken up.
->
-> For example, a "read()" might be an exclusive wait, so that multiple
-> potential concurrent readers don't cause a scheduling herd of
-> processes all to wake up when somebody writes to the socket or pipe or
-> whatever.
->
-> So in that situation a write() uses a regular wakeup, so that we only
-> wake up the one waiter that will take care of things.
->
-> But then a *shutdown* event obviously does affect everybody, so that
-> would cause a "wake_up_interruptible_all()".
+This commit has been backported to various -stable kernels, so they are
+also affected.
 
-Thank you for taking the time to clarify the use case for all(). Such a
-use case currently does not exist for printk.
+When testing with two different tape drives:
+1) Plug FC cable into tape drive A.  Tape drive A shows up as a SCSI device.
+2) Unplug FC cable; wait 60 seconds.  Tape drive A does not disappear.
+3) Plug FC cable into tape drive B.  Tape drive A disappears 30 seconds
+later, but tape drive B does not show up.
+4) Unplug FC cable and plug it back into tape drive B.  Tape drive B
+shows up as a SCSI device.
 
-> I'm sure we have lots of drivers that are confused about core things
-> like this, and I don't really care.
->
-> But when I see something really core like printk() get confused and
-> mis-understand basic wait queue behavior, that makes me go "This is
-> WRONG".
+So I can actually make a tape drive disappear by plugging the cable into
+a different tape drive, but then I have to reseat the cable again to
+make the new tape drive show up.
 
-You are correct to question a series when something like this in core
-code is found. I cannot guarantee that every line is perfect, but this
-series does have a great deal of dedicated review, discussion, revision,
-and heavy testing behind it.
+lspci -n
+83:00.0 0c04: 1077:2031 (rev 02)
+83:00.1 0c04: 1077:2031 (rev 02)
 
-Petr has done a great job of requiring these kinds of changes as
-separate commits, which certainly helps to identify any false steps.
+When plugging in cable:
+qla2xxx [0000:83:00.1]-500a:7: LOOP UP detected (8 Gbps).
 
-Thank you for taking extra time to scrutinize this series.
+When unplugging cable with old kernel:
+qla2xxx [0000:83:00.1]-500b:7: LOOP DOWN detected (2 7 0 0).
+rport-7:0-2: blocked FC remote port time out: removing target and saving binding
 
-John Ogness
+When unplugging cable with new kernel:
+qla2xxx [0000:83:00.1]-500b:7: LOOP DOWN detected (2 7 0 0).
+
+/sys/class/fc_remote_ports/rport-*/
+dev_loss_tmo: 30
+supported_classes: Class 3
+port_state: Online
+(port_state remains Online even when FC cable unplugged)
+
+/proc/scsi/scsi
+Host: scsi7 Channel: 00 Id: 01 Lun: 00
+  Vendor: IBM      Model: ULTRIUM-HH8      Rev: K4K1
+  Type:   Sequential-Access                ANSI  SCSI revision: 06
+
+Tony Battersby
+Cybernetics
+

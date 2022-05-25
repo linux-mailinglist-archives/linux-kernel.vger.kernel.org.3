@@ -2,190 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DCD53397B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 544EF5339A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236551AbiEYJGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 05:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S240052AbiEYJMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 05:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242457AbiEYJFZ (ORCPT
+        with ESMTP id S238263AbiEYJMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 05:05:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC6358FF9B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 02:03:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653469376;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j6UcPVGyOBL1GHc+6wAYUv3sopuKDwrkJi4MawVzxo0=;
-        b=apknXBQanEDlFQtjYyP7YNsiJqdv8Nq4PKNr6ZvIAltFp91n6d+def0WxkWZ2e0ZKsva4A
-        U1mOUlYJOPyF3Mn2yJohjG2ryCSY7CNlVeCC/FUCZBA6hyWHB3Xo+h5ZuHV43lFxq6W2sj
-        SR4cL+5XGpIyeVZI17Zh6p2himRagRA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-EDqfyiY0Mka6ZOjBHC_sUA-1; Wed, 25 May 2022 05:02:53 -0400
-X-MC-Unique: EDqfyiY0Mka6ZOjBHC_sUA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CBC0C3C01D9B;
-        Wed, 25 May 2022 09:02:52 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.186])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 24F0A40CFD0A;
-        Wed, 25 May 2022 09:02:51 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 37/37] KVM: selftests: hyperv_svm_test: Introduce L2 TLB flush test
-Date:   Wed, 25 May 2022 11:01:33 +0200
-Message-Id: <20220525090133.1264239-38-vkuznets@redhat.com>
-In-Reply-To: <20220525090133.1264239-1-vkuznets@redhat.com>
-References: <20220525090133.1264239-1-vkuznets@redhat.com>
+        Wed, 25 May 2022 05:12:22 -0400
+Received: from jari.cn (unknown [218.92.28.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7513FB36C7;
+        Wed, 25 May 2022 02:08:16 -0700 (PDT)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Wed, 25 May
+ 2022 17:03:03 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.13.40]
+Date:   Wed, 25 May 2022 17:03:03 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "XueBing Chen" <chenxuebing@jari.cn>
+To:     vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dmaengine: dmatest: use strscpy to replace strlcpy
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Message-ID: <12e4cf06.a35.180fa748c29.Coremail.chenxuebing@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwAHEW_H8I1ibgY4AA--.645W
+X-CM-SenderInfo: hfkh05pxhex0nj6mt2flof0/1tbiAQARCmFEYxsloAAHsF
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR,T_SPF_PERMERROR autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable Hyper-V L2 TLB flush and check that Hyper-V TLB flush hypercalls
-from L2 don't exit to L1 unless 'TlbLockCount' is set in the Partition
-assist page.
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- .../selftests/kvm/x86_64/hyperv_svm_test.c    | 54 +++++++++++++++++--
- 1 file changed, 50 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
-index 21f5ca9197da..cd4969da58a0 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
-@@ -42,6 +42,9 @@ struct hv_enlightenments {
-  */
- #define VMCB_HV_NESTED_ENLIGHTENMENTS (1U << 31)
- 
-+#define HV_SVM_EXITCODE_ENL 0xF0000000
-+#define HV_SVM_ENL_EXITCODE_TRAP_AFTER_FLUSH   (1)
-+
- static inline void vmmcall(void)
- {
- 	__asm__ __volatile__("vmmcall");
-@@ -62,11 +65,25 @@ void l2_guest_code(void)
- 
- 	GUEST_SYNC(5);
- 
-+	/* L2 TLB flush tests */
-+	hyperv_hypercall(HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE |
-+			 HV_HYPERCALL_FAST_BIT, 0x0,
-+			 HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES |
-+			 HV_FLUSH_ALL_PROCESSORS);
-+	rdmsr(MSR_FS_BASE);
-+	hyperv_hypercall(HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE |
-+			 HV_HYPERCALL_FAST_BIT, 0x0,
-+			 HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES |
-+			 HV_FLUSH_ALL_PROCESSORS);
-+	/* Make sure we're not issuing Hyper-V TLB flush call again */
-+	__asm__ __volatile__ ("mov $0xdeadbeef, %rcx");
-+
- 	/* Done, exit to L1 and never come back.  */
- 	vmmcall();
- }
- 
--static void __attribute__((__flatten__)) guest_code(struct svm_test_data *svm)
-+static void __attribute__((__flatten__)) guest_code(struct svm_test_data *svm,
-+						    vm_vaddr_t pgs_gpa)
- {
- 	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
- 	struct vmcb *vmcb = svm->vmcb;
-@@ -75,13 +92,23 @@ static void __attribute__((__flatten__)) guest_code(struct svm_test_data *svm)
- 
- 	GUEST_SYNC(1);
- 
--	wrmsr(HV_X64_MSR_GUEST_OS_ID, (u64)0x8100 << 48);
-+	wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
-+	wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
-+	enable_vp_assist(svm->vp_assist_gpa, svm->vp_assist);
- 
- 	GUEST_ASSERT(svm->vmcb_gpa);
- 	/* Prepare for L2 execution. */
- 	generic_svm_setup(svm, l2_guest_code,
- 			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
- 
-+	/* L2 TLB flush setup */
-+	hve->partition_assist_page = svm->partition_assist_gpa;
-+	hve->hv_enlightenments_control.nested_flush_hypercall = 1;
-+	hve->hv_vm_id = 1;
-+	hve->hv_vp_id = 1;
-+	current_vp_assist->nested_control.features.directhypercall = 1;
-+	*(u32 *)(svm->partition_assist) = 0;
-+
- 	GUEST_SYNC(2);
- 	run_guest(vmcb, svm->vmcb_gpa);
- 	GUEST_ASSERT(vmcb->control.exit_code == SVM_EXIT_VMMCALL);
-@@ -116,6 +143,20 @@ static void __attribute__((__flatten__)) guest_code(struct svm_test_data *svm)
- 	GUEST_ASSERT(vmcb->control.exit_code == SVM_EXIT_MSR);
- 	vmcb->save.rip += 2; /* rdmsr */
- 
-+
-+	/*
-+	 * L2 TLB flush test. First VMCALL should be handled directly by L0,
-+	 * no VMCALL exit expected.
-+	 */
-+	run_guest(vmcb, svm->vmcb_gpa);
-+	GUEST_ASSERT(vmcb->control.exit_code == SVM_EXIT_MSR);
-+	vmcb->save.rip += 2; /* rdmsr */
-+	/* Enable synthetic vmexit */
-+	*(u32 *)(svm->partition_assist) = 1;
-+	run_guest(vmcb, svm->vmcb_gpa);
-+	GUEST_ASSERT(vmcb->control.exit_code == HV_SVM_EXITCODE_ENL);
-+	GUEST_ASSERT(vmcb->control.exit_info_1 == HV_SVM_ENL_EXITCODE_TRAP_AFTER_FLUSH);
-+
- 	run_guest(vmcb, svm->vmcb_gpa);
- 	GUEST_ASSERT(vmcb->control.exit_code == SVM_EXIT_VMMCALL);
- 	GUEST_SYNC(6);
-@@ -126,7 +167,7 @@ static void __attribute__((__flatten__)) guest_code(struct svm_test_data *svm)
- int main(int argc, char *argv[])
- {
- 	vm_vaddr_t nested_gva = 0;
--
-+	vm_vaddr_t hcall_page;
- 	struct kvm_vm *vm;
- 	struct kvm_run *run;
- 	struct ucall uc;
-@@ -141,7 +182,12 @@ int main(int argc, char *argv[])
- 	vcpu_set_hv_cpuid(vm, VCPU_ID);
- 	run = vcpu_state(vm, VCPU_ID);
- 	vcpu_alloc_svm(vm, &nested_gva);
--	vcpu_args_set(vm, VCPU_ID, 1, nested_gva);
-+
-+	hcall_page = vm_vaddr_alloc_pages(vm, 1);
-+	memset(addr_gva2hva(vm, hcall_page), 0x0,  getpagesize());
-+
-+	vcpu_args_set(vm, VCPU_ID, 2, nested_gva, addr_gva2gpa(vm, hcall_page));
-+	vcpu_set_msr(vm, VCPU_ID, HV_X64_MSR_VP_INDEX, VCPU_ID);
- 
- 	for (stage = 1;; stage++) {
- 		_vcpu_run(vm, VCPU_ID);
--- 
-2.35.3
-
+ClRoZSBzdHJsY3B5IHNob3VsZCBub3QgYmUgdXNlZCBiZWNhdXNlIGl0IGRvZXNuJ3QgbGltaXQg
+dGhlIHNvdXJjZQpsZW5ndGguIFByZWZlcnJlZCBpcyBzdHJzY3B5LgoKU2lnbmVkLW9mZi1ieTog
+WHVlQmluZyBDaGVuIDxjaGVueHVlYmluZ0BqYXJpLmNuPgotLS0KIGRyaXZlcnMvZG1hL2RtYXRl
+c3QuYyB8IDEyICsrKysrKy0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwg
+NiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL2RtYS9kbWF0ZXN0LmMgYi9kcml2
+ZXJzL2RtYS9kbWF0ZXN0LmMKaW5kZXggZjY5NjI0NmY1N2ZkLi45MWJmNjVlMDY3NGMgMTAwNjQ0
+Ci0tLSBhL2RyaXZlcnMvZG1hL2RtYXRlc3QuYworKysgYi9kcml2ZXJzL2RtYS9kbWF0ZXN0LmMK
+QEAgLTEwOTUsOCArMTA5NSw4IEBAIHN0YXRpYyB2b2lkIGFkZF90aHJlYWRlZF90ZXN0KHN0cnVj
+dCBkbWF0ZXN0X2luZm8gKmluZm8pCiAKIAkvKiBDb3B5IHRlc3QgcGFyYW1ldGVycyAqLwogCXBh
+cmFtcy0+YnVmX3NpemUgPSB0ZXN0X2J1Zl9zaXplOwotCXN0cmxjcHkocGFyYW1zLT5jaGFubmVs
+LCBzdHJpbSh0ZXN0X2NoYW5uZWwpLCBzaXplb2YocGFyYW1zLT5jaGFubmVsKSk7Ci0Jc3RybGNw
+eShwYXJhbXMtPmRldmljZSwgc3RyaW0odGVzdF9kZXZpY2UpLCBzaXplb2YocGFyYW1zLT5kZXZp
+Y2UpKTsKKwlzdHJzY3B5KHBhcmFtcy0+Y2hhbm5lbCwgc3RyaW0odGVzdF9jaGFubmVsKSwgc2l6
+ZW9mKHBhcmFtcy0+Y2hhbm5lbCkpOworCXN0cnNjcHkocGFyYW1zLT5kZXZpY2UsIHN0cmltKHRl
+c3RfZGV2aWNlKSwgc2l6ZW9mKHBhcmFtcy0+ZGV2aWNlKSk7CiAJcGFyYW1zLT50aHJlYWRzX3Bl
+cl9jaGFuID0gdGhyZWFkc19wZXJfY2hhbjsKIAlwYXJhbXMtPm1heF9jaGFubmVscyA9IG1heF9j
+aGFubmVsczsKIAlwYXJhbXMtPml0ZXJhdGlvbnMgPSBpdGVyYXRpb25zOwpAQCAtMTI0MCw3ICsx
+MjQwLDcgQEAgc3RhdGljIGludCBkbWF0ZXN0X2NoYW5fc2V0KGNvbnN0IGNoYXIgKnZhbCwgY29u
+c3Qgc3RydWN0IGtlcm5lbF9wYXJhbSAqa3ApCiAJCQkJZHRjID0gbGlzdF9sYXN0X2VudHJ5KCZp
+bmZvLT5jaGFubmVscywKIAkJCQkJCSAgICAgIHN0cnVjdCBkbWF0ZXN0X2NoYW4sCiAJCQkJCQkg
+ICAgICBub2RlKTsKLQkJCQlzdHJsY3B5KGNoYW5fcmVzZXRfdmFsLAorCQkJCXN0cnNjcHkoY2hh
+bl9yZXNldF92YWwsCiAJCQkJCWRtYV9jaGFuX25hbWUoZHRjLT5jaGFuKSwKIAkJCQkJc2l6ZW9m
+KGNoYW5fcmVzZXRfdmFsKSk7CiAJCQkJcmV0ID0gLUVCVVNZOwpAQCAtMTI2MywxNCArMTI2Mywx
+NCBAQCBzdGF0aWMgaW50IGRtYXRlc3RfY2hhbl9zZXQoY29uc3QgY2hhciAqdmFsLCBjb25zdCBz
+dHJ1Y3Qga2VybmVsX3BhcmFtICprcCkKIAkJaWYgKChzdHJjbXAoZG1hX2NoYW5fbmFtZShkdGMt
+PmNoYW4pLCBzdHJpbSh0ZXN0X2NoYW5uZWwpKSAhPSAwKQogCQkgICAgJiYgKHN0cmNtcCgiIiwg
+c3RyaW0odGVzdF9jaGFubmVsKSkgIT0gMCkpIHsKIAkJCXJldCA9IC1FSU5WQUw7Ci0JCQlzdHJs
+Y3B5KGNoYW5fcmVzZXRfdmFsLCBkbWFfY2hhbl9uYW1lKGR0Yy0+Y2hhbiksCisJCQlzdHJzY3B5
+KGNoYW5fcmVzZXRfdmFsLCBkbWFfY2hhbl9uYW1lKGR0Yy0+Y2hhbiksCiAJCQkJc2l6ZW9mKGNo
+YW5fcmVzZXRfdmFsKSk7CiAJCQlnb3RvIGFkZF9jaGFuX2VycjsKIAkJfQogCiAJfSBlbHNlIHsK
+IAkJLyogQ2xlYXIgdGVzdF9jaGFubmVsIGlmIG5vIGNoYW5uZWxzIHdlcmUgYWRkZWQgc3VjY2Vz
+c2Z1bGx5ICovCi0JCXN0cmxjcHkoY2hhbl9yZXNldF92YWwsICIiLCBzaXplb2YoY2hhbl9yZXNl
+dF92YWwpKTsKKwkJc3Ryc2NweShjaGFuX3Jlc2V0X3ZhbCwgIiIsIHNpemVvZihjaGFuX3Jlc2V0
+X3ZhbCkpOwogCQlyZXQgPSAtRUJVU1k7CiAJCWdvdG8gYWRkX2NoYW5fZXJyOwogCX0KQEAgLTEy
+OTUsNyArMTI5NSw3IEBAIHN0YXRpYyBpbnQgZG1hdGVzdF9jaGFuX2dldChjaGFyICp2YWwsIGNv
+bnN0IHN0cnVjdCBrZXJuZWxfcGFyYW0gKmtwKQogCW11dGV4X2xvY2soJmluZm8tPmxvY2spOwog
+CWlmICghaXNfdGhyZWFkZWRfdGVzdF9ydW4oaW5mbykgJiYgIWlzX3RocmVhZGVkX3Rlc3RfcGVu
+ZGluZyhpbmZvKSkgewogCQlzdG9wX3RocmVhZGVkX3Rlc3QoaW5mbyk7Ci0JCXN0cmxjcHkodGVz
+dF9jaGFubmVsLCAiIiwgc2l6ZW9mKHRlc3RfY2hhbm5lbCkpOworCQlzdHJzY3B5KHRlc3RfY2hh
+bm5lbCwgIiIsIHNpemVvZih0ZXN0X2NoYW5uZWwpKTsKIAl9CiAJbXV0ZXhfdW5sb2NrKCZpbmZv
+LT5sb2NrKTsKIAotLSAKMi4zNi4xCg==

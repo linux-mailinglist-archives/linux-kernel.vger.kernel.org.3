@@ -2,190 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E52533A88
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192F7533A91
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236028AbiEYKS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 06:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
+        id S242305AbiEYKUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 06:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237959AbiEYKS4 (ORCPT
+        with ESMTP id S241843AbiEYKUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 06:18:56 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4019728E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:18:53 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id e2so17834750wrc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:18:53 -0700 (PDT)
+        Wed, 25 May 2022 06:20:33 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064289728E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:20:32 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p8so18820435pfh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IKO1wQPqNeafXW7ePx/p6H6D1wFfnLpkgbfwaCOWD9o=;
-        b=CWTtkvYFGef5ey+p035Mn9qClBe5IM61n2d51HyOo6ItqkiavbGG73JXbcGaExiw9d
-         wg00mxcAerlPgWUpzrJ8w6fSjW5TntE/H91PCb0KJYsCdbsqhG0HHYHt/TcVL2g0w/Ot
-         8nHb+85XPzoFVRbf6s2E5ctugD4BfMmxQVRESSUjYMiYDY/bubJsIu4u80siyLDjTWK7
-         4OD/HyNkz1YL4xJBkatPj577T+sZwbDw+4yMFfuIjDdoCJFGA2lsiOjm2TkIgWZHwn+I
-         7ldZ4aH+oyR7xWefpMIn+gtNyZDyj3AkIES6acDXz1k4cAxWd0aCtMJYx0SfvYWgZ9nN
-         J77w==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gRkETpW546D+K5h5O8XLnAJjv7rtEZY29yzDIP3tmOw=;
+        b=j79qceaO3IIf0K1tf0l4+0+CmNpeG0hSKDwY/pP0I2qBVzxbKz7dW77SXPVqoxUm7k
+         YWTsHtJJt1EWCVVFDsuqeOk8cjKwOMaFpTRdQv7JYgarlKT1mc5y6cRJliYnKaF1I5+1
+         KThc3Vq/KJz8hUvstWTI4mMdoPz8vMyRX0sEtGrx47BWv48vIoShXtAaVoaZGPqD/u5I
+         5hHBqaXRw7PvpMuyYXmzNC39NQ2sBNR34K8k2POk+EUPbQ+FckglpFSekhwuy7bqcCZZ
+         oJmdSX4vW1yLISd+FCZHwQNG1y92CVkma+Q7iI9N1evtkrh6x/OsPSjBaMoAhxlVb3hl
+         T4hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IKO1wQPqNeafXW7ePx/p6H6D1wFfnLpkgbfwaCOWD9o=;
-        b=2t3Lvli9J+1HECfzsu/cgiLhazj85SvpbynHIlJoOmnBOtuR4/dAtEFMzWjV2NeLDa
-         v5qqxON/lpDnb26ZqbaIO8L982OXBAj0ZrHlP+KN+EelUDPBkoWpNC7XY3JOxL1RX/8V
-         zmSFTtMc9zv2tJ3WbpJBsJwSOOiFYpACPNACH5V0arRVQBMwefyfmbHPHK1go7hD9k91
-         lzhmFmFUIBEKrYRGDOhV1SN5I0A0gMKuZXQ1AxsxvQTpf1pKSCQmFCVcrR9dzP1oFVCn
-         3BlJeQ1x/d6+53Q8sYe1/c9DD5DWG/7u+vxoqY/B1C0eVL98Qwo3vr2tx55UhZZew6LR
-         ea0g==
-X-Gm-Message-State: AOAM531C2R1jrHL09HMeBae6SwT/NS2wMZ8vUbvRoOQplXD+r+KRfs2u
-        LhLeYzyOGjxa/H5elect5bs9MA==
-X-Google-Smtp-Source: ABdhPJxgtLZHCd6/bHzg9r3GWuTdZpprQ2vQ2cJsbS0c885HtYWHWfg4GYMB8tQn4zKYJcJdaeJoiA==
-X-Received: by 2002:adf:fc01:0:b0:20c:ff9a:2c53 with SMTP id i1-20020adffc01000000b0020cff9a2c53mr26042048wrr.142.1653473931814;
-        Wed, 25 May 2022 03:18:51 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id p3-20020a1c7403000000b0039744664af7sm1749957wmc.1.2022.05.25.03.18.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 03:18:51 -0700 (PDT)
-Message-ID: <4bf1c80d-0f18-f444-3005-59a45797bcfd@blackwall.org>
-Date:   Wed, 25 May 2022 13:18:49 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gRkETpW546D+K5h5O8XLnAJjv7rtEZY29yzDIP3tmOw=;
+        b=OhabnbSShlWfRpIEhpf114LJDxWDla9G7B+XakXeJB+QDTKkLP42Yltc6d1MFlT1w+
+         5m5PMGrGCmujTU2/EtyCafbnXIBggBwE6TmpouImATnoYoVxbib2bmRmBrigf7QvtlNE
+         3SgU3yvgIHZzadia1L42EJ4L7QrwBM7YDogcaF6WQJEwoi38bnfjEaeYFTk+Avp4dX5a
+         AcvKivRear5wQ7nrSb6TB0sUW7YtvCWgsBqsoWl6zhWxnuGAfNAHAcz++GUxO2aLG3ZO
+         OOdEN4WcVRMHl9HclUGlfyZ+37MKO0lMQc8aTgUqTvirmN/xfAX7JAsh6WW5QQxqbuWR
+         82nQ==
+X-Gm-Message-State: AOAM5313/b7hSumb1zJ/9+azMvqa0yPY54qftIYndB88oZNm4aNmyIfl
+        TsXUnp1eIxFH9DBrL6RSnbNs0g==
+X-Google-Smtp-Source: ABdhPJwnGqbqw5HTXdnRyp0tJNPYdgRKMkDFpI2l4o88whVchkaDAkKpR9q7Sqzs55hMcECCzNneLw==
+X-Received: by 2002:a63:8941:0:b0:3f7:4ce0:855c with SMTP id v62-20020a638941000000b003f74ce0855cmr22231906pgd.440.1653474031441;
+        Wed, 25 May 2022 03:20:31 -0700 (PDT)
+Received: from localhost ([2408:8207:18da:2310:c40f:7b5:4fa8:df3f])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170902d48100b0015e8d4eb29csm9041589plg.230.2022.05.25.03.20.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 03:20:30 -0700 (PDT)
+Date:   Wed, 25 May 2022 18:20:25 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com
+Subject: Re: [PATCH v4 03/11] mm: memcontrol: make lruvec lock safe when LRU
+ pages are reparented
+Message-ID: <Yo4C6T56O7EBADbX@FVFYT0MHHV2J.googleapis.com>
+References: <20220524060551.80037-1-songmuchun@bytedance.com>
+ <20220524060551.80037-4-songmuchun@bytedance.com>
+ <f55976e6-d209-32c2-504d-f73a9b504511@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
- <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
- <86zgj6oqa9.fsf@gmail.com>
- <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org>
- <86fskyggdo.fsf@gmail.com>
- <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org>
- <86v8tu7za3.fsf@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <86v8tu7za3.fsf@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f55976e6-d209-32c2-504d-f73a9b504511@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2022 12:11, Hans Schultz wrote:
-> On ons, maj 25, 2022 at 11:38, Nikolay Aleksandrov <razor@blackwall.org> wrote:
->> On 25/05/2022 11:34, Hans Schultz wrote:
->>> On ons, maj 25, 2022 at 11:06, Nikolay Aleksandrov <razor@blackwall.org> wrote:
->>>> On 24/05/2022 19:21, Hans Schultz wrote:
->>>>>>
->>>>>> Hi Hans,
->>>>>> So this approach has a fundamental problem, f->dst is changed without any synchronization
->>>>>> you cannot rely on it and thus you cannot account for these entries properly. We must be very
->>>>>> careful if we try to add any new synchronization not to affect performance as well.
->>>>>> More below...
->>>>>>
->>>>>>> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
->>>>>>>  	if (test_bit(BR_FDB_STATIC, &f->flags))
->>>>>>>  		fdb_del_hw_addr(br, f->key.addr.addr);
->>>>>>>  
->>>>>>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
->>>>>>> +		atomic_dec(&f->dst->locked_entry_cnt);
->>>>>>
->>>>>> Sorry but you cannot do this for multiple reasons:
->>>>>>  - f->dst can be NULL
->>>>>>  - f->dst changes without any synchronization
->>>>>>  - there is no synchronization between fdb's flags and its ->dst
->>>>>>
->>>>>> Cheers,
->>>>>>  Nik
->>>>>
->>>>> Hi Nik,
->>>>>
->>>>> if a port is decoupled from the bridge, the locked entries would of
->>>>> course be invalid, so maybe if adding and removing a port is accounted
->>>>> for wrt locked entries and the count of locked entries, would that not
->>>>> work?
->>>>>
->>>>> Best,
->>>>> Hans
->>>>
->>>> Hi Hans,
->>>> Unfortunately you need the correct amount of locked entries per-port if you want
->>>> to limit their number per-port, instead of globally. So you need a
->>>> consistent
->>>
->>> Hi Nik,
->>> the used dst is a port structure, so it is per-port and not globally.
->>>
->>> Best,
->>> Hans
->>>
->>
->> Yeah, I know. :) That's why I wrote it, if the limit is not a feature requirement I'd suggest
->> dropping it altogether, it can be enforced externally (e.g. from user-space) if needed.
->>
->> By the way just fyi net-next is closed right now due to merge window. And one more
->> thing please include a short log of changes between versions when you send a new one.
->> I had to go look for v2 to find out what changed.
->>
+On Tue, May 24, 2022 at 03:23:11PM -0400, Waiman Long wrote:
+> On 5/24/22 02:05, Muchun Song wrote:
+> > The diagram below shows how to make the folio lruvec lock safe when LRU
+> > pages are reparented.
+> > 
+> > folio_lruvec_lock(folio)
+> >      retry:
+> > 	lruvec = folio_lruvec(folio);
+> > 
+> >          // The folio is reparented at this time.
+> >          spin_lock(&lruvec->lru_lock);
+> > 
+> >          if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio)))
+> >              // Acquired the wrong lruvec lock and need to retry.
+> >              // Because this folio is on the parent memcg lruvec list.
+> >              goto retry;
+> > 
+> >          // If we reach here, it means that folio_memcg(folio) is stable.
+> > 
+> > memcg_reparent_objcgs(memcg)
+> >      // lruvec belongs to memcg and lruvec_parent belongs to parent memcg.
+> >      spin_lock(&lruvec->lru_lock);
+> >      spin_lock(&lruvec_parent->lru_lock);
+> > 
+> >      // Move all the pages from the lruvec list to the parent lruvec list.
+> > 
+> >      spin_unlock(&lruvec_parent->lru_lock);
+> >      spin_unlock(&lruvec->lru_lock);
+> > 
+> > After we acquire the lruvec lock, we need to check whether the folio is
+> > reparented. If so, we need to reacquire the new lruvec lock. On the
+> > routine of the LRU pages reparenting, we will also acquire the lruvec
+> > lock (will be implemented in the later patch). So folio_memcg() cannot
+> > be changed when we hold the lruvec lock.
+> > 
+> > Since lruvec_memcg(lruvec) is always equal to folio_memcg(folio) after
+> > we hold the lruvec lock, lruvec_memcg_debug() check is pointless. So
+> > remove it.
+> > 
+> > This is a preparation for reparenting the LRU pages.
+> > 
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> > ---
+> >   include/linux/memcontrol.h | 18 +++-----------
+> >   mm/compaction.c            | 10 +++++++-
+> >   mm/memcontrol.c            | 62 +++++++++++++++++++++++++++++-----------------
+> >   mm/swap.c                  |  4 +++
+> >   4 files changed, 55 insertions(+), 39 deletions(-)
+> > 
+> > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> > index ff1c1dd7e762..4042e4d21fe2 100644
+> > --- a/include/linux/memcontrol.h
+> > +++ b/include/linux/memcontrol.h
+> > @@ -752,7 +752,9 @@ static inline struct lruvec *mem_cgroup_lruvec(struct mem_cgroup *memcg,
+> >    * folio_lruvec - return lruvec for isolating/putting an LRU folio
+> >    * @folio: Pointer to the folio.
+> >    *
+> > - * This function relies on folio->mem_cgroup being stable.
+> > + * The lruvec can be changed to its parent lruvec when the page reparented.
+> > + * The caller need to recheck if it cares about this changes (just like
+> > + * folio_lruvec_lock() does).
+> >    */
+> >   static inline struct lruvec *folio_lruvec(struct folio *folio)
+> >   {
+> > @@ -771,15 +773,6 @@ struct lruvec *folio_lruvec_lock_irq(struct folio *folio);
+> >   struct lruvec *folio_lruvec_lock_irqsave(struct folio *folio,
+> >   						unsigned long *flags);
+> > -#ifdef CONFIG_DEBUG_VM
+> > -void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio);
+> > -#else
+> > -static inline
+> > -void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
+> > -{
+> > -}
+> > -#endif
+> > -
+> >   static inline
+> >   struct mem_cgroup *mem_cgroup_from_css(struct cgroup_subsys_state *css){
+> >   	return css ? container_of(css, struct mem_cgroup, css) : NULL;
+> > @@ -1240,11 +1233,6 @@ static inline struct lruvec *folio_lruvec(struct folio *folio)
+> >   	return &pgdat->__lruvec;
+> >   }
+> > -static inline
+> > -void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
+> > -{
+> > -}
+> > -
+> >   static inline struct mem_cgroup *parent_mem_cgroup(struct mem_cgroup *memcg)
+> >   {
+> >   	return NULL;
+> > diff --git a/mm/compaction.c b/mm/compaction.c
+> > index 817098817302..1692b17db781 100644
+> > --- a/mm/compaction.c
+> > +++ b/mm/compaction.c
+> > @@ -515,6 +515,8 @@ compact_folio_lruvec_lock_irqsave(struct folio *folio, unsigned long *flags,
+> >   {
+> >   	struct lruvec *lruvec;
+> > +	rcu_read_lock();
+> > +retry:
+> >   	lruvec = folio_lruvec(folio);
+> >   	/* Track if the lock is contended in async mode */
+> > @@ -527,7 +529,13 @@ compact_folio_lruvec_lock_irqsave(struct folio *folio, unsigned long *flags,
+> >   	spin_lock_irqsave(&lruvec->lru_lock, *flags);
+> >   out:
+> > -	lruvec_memcg_debug(lruvec, folio);
+> > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
+> > +		spin_unlock_irqrestore(&lruvec->lru_lock, *flags);
+> > +		goto retry;
+> > +	}
+> > +
+> > +	/* See the comments in folio_lruvec_lock(). */
+> > +	rcu_read_unlock();
+> >   	return lruvec;
+> >   }
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index 6de0d3e53eb1..b38a77f6696f 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -1199,23 +1199,6 @@ int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
+> >   	return ret;
+> >   }
+> > -#ifdef CONFIG_DEBUG_VM
+> > -void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
+> > -{
+> > -	struct mem_cgroup *memcg;
+> > -
+> > -	if (mem_cgroup_disabled())
+> > -		return;
+> > -
+> > -	memcg = folio_memcg(folio);
+> > -
+> > -	if (!memcg)
+> > -		VM_BUG_ON_FOLIO(lruvec_memcg(lruvec) != root_mem_cgroup, folio);
+> > -	else
+> > -		VM_BUG_ON_FOLIO(lruvec_memcg(lruvec) != memcg, folio);
+> > -}
+> > -#endif
+> > -
+> >   /**
+> >    * folio_lruvec_lock - Lock the lruvec for a folio.
+> >    * @folio: Pointer to the folio.
+> > @@ -1230,10 +1213,23 @@ void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
+> >    */
+> >   struct lruvec *folio_lruvec_lock(struct folio *folio)
+> >   {
+> > -	struct lruvec *lruvec = folio_lruvec(folio);
+> > +	struct lruvec *lruvec;
+> > +	rcu_read_lock();
+> > +retry:
+> > +	lruvec = folio_lruvec(folio);
+> >   	spin_lock(&lruvec->lru_lock);
+> > -	lruvec_memcg_debug(lruvec, folio);
+> > +
+> > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
+> > +		spin_unlock(&lruvec->lru_lock);
+> > +		goto retry;
+> > +	}
+> > +
+> > +	/*
+> > +	 * Preemption is disabled in the internal of spin_lock, which can serve
+> > +	 * as RCU read-side critical sections.
+> > +	 */
+> What is the point of this comment as preemption is not disabled for
+> PREEMPT_RT kernel?
+>
+
+I'm not familar with PREEMPT_RT kernel. At least you are right,
+preemption is not disabled in this case, I think I should drop
+this assumption.
+
+> > +	rcu_read_unlock();
+> >   	return lruvec;
+> >   }
+> > @@ -1253,10 +1249,20 @@ struct lruvec *folio_lruvec_lock(struct folio *folio)
+> >    */
+> >   struct lruvec *folio_lruvec_lock_irq(struct folio *folio)
+> >   {
+> > -	struct lruvec *lruvec = folio_lruvec(folio);
+> > +	struct lruvec *lruvec;
+> > +	rcu_read_lock();
+> > +retry:
+> > +	lruvec = folio_lruvec(folio);
+> >   	spin_lock_irq(&lruvec->lru_lock);
+> > -	lruvec_memcg_debug(lruvec, folio);
+> > +
+> > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
+> > +		spin_unlock_irq(&lruvec->lru_lock);
+> > +		goto retry;
+> > +	}
+> > +
+> > +	/* See the comments in folio_lruvec_lock(). */
+> > +	rcu_read_unlock();
+> >   	return lruvec;
+> >   }
+> > @@ -1278,10 +1284,20 @@ struct lruvec *folio_lruvec_lock_irq(struct folio *folio)
+> >   struct lruvec *folio_lruvec_lock_irqsave(struct folio *folio,
+> >   		unsigned long *flags)
+> >   {
+> > -	struct lruvec *lruvec = folio_lruvec(folio);
+> > +	struct lruvec *lruvec;
+> > +	rcu_read_lock();
+> > +retry:
+> > +	lruvec = folio_lruvec(folio);
+> >   	spin_lock_irqsave(&lruvec->lru_lock, *flags);
+> > -	lruvec_memcg_debug(lruvec, folio);
+> > +
+> > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
+> > +		spin_unlock_irqrestore(&lruvec->lru_lock, *flags);
+> > +		goto retry;
+> > +	}
+> > +
+> > +	/* See the comments in folio_lruvec_lock(). */
+> > +	rcu_read_unlock();
+> >   	return lruvec;
+> >   }
+> > diff --git a/mm/swap.c b/mm/swap.c
+> > index 7e320ec08c6a..9680f2fc48b1 100644
+> > --- a/mm/swap.c
+> > +++ b/mm/swap.c
+> > @@ -303,6 +303,10 @@ void lru_note_cost(struct lruvec *lruvec, bool file, unsigned int nr_pages)
+> >   void lru_note_cost_folio(struct folio *folio)
+> >   {
+> > +	/*
+> > +	 * The rcu read lock is held by the caller, so we do not need to
+> > +	 * care about the lruvec returned by folio_lruvec() being released.
+> > +	 */
+> Maybe we can add "WARN_ON_ONCE(!rcu_read_lock_held())" to be sure.
+>
+
+Good point. I'll add it.
+
+Thanks.
+ 
+> >   	lru_note_cost(folio_lruvec(folio), folio_is_file_lru(folio),
+> >   			folio_nr_pages(folio));
+> >   }
 > 
-> Okay, I will drop the limit in the bridge module, which is an easy thing
-> to do. :) (It is mostly there to ensure against DOS attacks if someone
-> bombards a locked port with random mac addresses.)
-> I have a similar limitation in the driver, which should then probably be
-> dropped too?
+> Cheers,
+> Longman
 > 
-
-That is up to you/driver, I'd try looking for similar problems in other switch drivers
-and check how those were handled. There are people in the CC above that can
-directly answer that. :)
-
-> The mayor difference between v2 and v3 is in the mv88e6xxx driver, where
-> I now keep an inventory of locked ATU entries and remove them based on a
-> timer (mv88e6xxx_switchcore.c).
 > 
-
-ack
-
-> I guess the mentioned log should be in the cover letter part?
-> 
-
-Yep, usually a short mention of what changed to make it easier for reviewers.
-Some people also add the patch-specific changes to each patch under the ---
-so they're not included in the log, but I'm fine either way as long as I don't
-have to go digging up the old versions.
-
-> 
->>>> fdb view with all its attributes when changing its dst in this case, which would
->>>> require new locking because you have multiple dependent struct fields and it will
->>>> kill roaming/learning scalability. I don't think this use case is worth the complexity it
->>>> will bring, so I'd suggest an alternative - you can monitor the number of locked entries
->>>> per-port from a user-space agent and disable port learning or some similar solution that
->>>> doesn't require any complex kernel changes. Is the limit a requirement to add the feature?
->>>>
->>>> I have an idea how to do it and to minimize the performance hit if it really is needed
->>>> but it'll add a lot of complexity which I'd like to avoid if possible.
->>>>
->>>> Cheers,
->>>>  Nik
-

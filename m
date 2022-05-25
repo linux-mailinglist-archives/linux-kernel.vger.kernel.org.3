@@ -2,315 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192F7533A91
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB35533A9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242305AbiEYKUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 06:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S242242AbiEYK0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 06:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241843AbiEYKUd (ORCPT
+        with ESMTP id S229453AbiEYK0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 06:20:33 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064289728E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:20:32 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id p8so18820435pfh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gRkETpW546D+K5h5O8XLnAJjv7rtEZY29yzDIP3tmOw=;
-        b=j79qceaO3IIf0K1tf0l4+0+CmNpeG0hSKDwY/pP0I2qBVzxbKz7dW77SXPVqoxUm7k
-         YWTsHtJJt1EWCVVFDsuqeOk8cjKwOMaFpTRdQv7JYgarlKT1mc5y6cRJliYnKaF1I5+1
-         KThc3Vq/KJz8hUvstWTI4mMdoPz8vMyRX0sEtGrx47BWv48vIoShXtAaVoaZGPqD/u5I
-         5hHBqaXRw7PvpMuyYXmzNC39NQ2sBNR34K8k2POk+EUPbQ+FckglpFSekhwuy7bqcCZZ
-         oJmdSX4vW1yLISd+FCZHwQNG1y92CVkma+Q7iI9N1evtkrh6x/OsPSjBaMoAhxlVb3hl
-         T4hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gRkETpW546D+K5h5O8XLnAJjv7rtEZY29yzDIP3tmOw=;
-        b=OhabnbSShlWfRpIEhpf114LJDxWDla9G7B+XakXeJB+QDTKkLP42Yltc6d1MFlT1w+
-         5m5PMGrGCmujTU2/EtyCafbnXIBggBwE6TmpouImATnoYoVxbib2bmRmBrigf7QvtlNE
-         3SgU3yvgIHZzadia1L42EJ4L7QrwBM7YDogcaF6WQJEwoi38bnfjEaeYFTk+Avp4dX5a
-         AcvKivRear5wQ7nrSb6TB0sUW7YtvCWgsBqsoWl6zhWxnuGAfNAHAcz++GUxO2aLG3ZO
-         OOdEN4WcVRMHl9HclUGlfyZ+37MKO0lMQc8aTgUqTvirmN/xfAX7JAsh6WW5QQxqbuWR
-         82nQ==
-X-Gm-Message-State: AOAM5313/b7hSumb1zJ/9+azMvqa0yPY54qftIYndB88oZNm4aNmyIfl
-        TsXUnp1eIxFH9DBrL6RSnbNs0g==
-X-Google-Smtp-Source: ABdhPJwnGqbqw5HTXdnRyp0tJNPYdgRKMkDFpI2l4o88whVchkaDAkKpR9q7Sqzs55hMcECCzNneLw==
-X-Received: by 2002:a63:8941:0:b0:3f7:4ce0:855c with SMTP id v62-20020a638941000000b003f74ce0855cmr22231906pgd.440.1653474031441;
-        Wed, 25 May 2022 03:20:31 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:c40f:7b5:4fa8:df3f])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170902d48100b0015e8d4eb29csm9041589plg.230.2022.05.25.03.20.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 03:20:30 -0700 (PDT)
-Date:   Wed, 25 May 2022 18:20:25 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com
-Subject: Re: [PATCH v4 03/11] mm: memcontrol: make lruvec lock safe when LRU
- pages are reparented
-Message-ID: <Yo4C6T56O7EBADbX@FVFYT0MHHV2J.googleapis.com>
-References: <20220524060551.80037-1-songmuchun@bytedance.com>
- <20220524060551.80037-4-songmuchun@bytedance.com>
- <f55976e6-d209-32c2-504d-f73a9b504511@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f55976e6-d209-32c2-504d-f73a9b504511@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 25 May 2022 06:26:39 -0400
+Received: from out199-1.us.a.mail.aliyun.com (out199-1.us.a.mail.aliyun.com [47.90.199.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B3B93463
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:26:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VENAbeB_1653474392;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VENAbeB_1653474392)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 25 May 2022 18:26:33 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        songmuchun@bytedance.com
+Cc:     baolin.wang@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm/hugetlb: Remove unnecessary huge_ptep_set_access_flags() in hugetlb_mcopy_atomic_pte()
+Date:   Wed, 25 May 2022 18:26:24 +0800
+Message-Id: <7cd55152c1a00910afda570d1543a97198b3665b.1653468078.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 03:23:11PM -0400, Waiman Long wrote:
-> On 5/24/22 02:05, Muchun Song wrote:
-> > The diagram below shows how to make the folio lruvec lock safe when LRU
-> > pages are reparented.
-> > 
-> > folio_lruvec_lock(folio)
-> >      retry:
-> > 	lruvec = folio_lruvec(folio);
-> > 
-> >          // The folio is reparented at this time.
-> >          spin_lock(&lruvec->lru_lock);
-> > 
-> >          if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio)))
-> >              // Acquired the wrong lruvec lock and need to retry.
-> >              // Because this folio is on the parent memcg lruvec list.
-> >              goto retry;
-> > 
-> >          // If we reach here, it means that folio_memcg(folio) is stable.
-> > 
-> > memcg_reparent_objcgs(memcg)
-> >      // lruvec belongs to memcg and lruvec_parent belongs to parent memcg.
-> >      spin_lock(&lruvec->lru_lock);
-> >      spin_lock(&lruvec_parent->lru_lock);
-> > 
-> >      // Move all the pages from the lruvec list to the parent lruvec list.
-> > 
-> >      spin_unlock(&lruvec_parent->lru_lock);
-> >      spin_unlock(&lruvec->lru_lock);
-> > 
-> > After we acquire the lruvec lock, we need to check whether the folio is
-> > reparented. If so, we need to reacquire the new lruvec lock. On the
-> > routine of the LRU pages reparenting, we will also acquire the lruvec
-> > lock (will be implemented in the later patch). So folio_memcg() cannot
-> > be changed when we hold the lruvec lock.
-> > 
-> > Since lruvec_memcg(lruvec) is always equal to folio_memcg(folio) after
-> > we hold the lruvec lock, lruvec_memcg_debug() check is pointless. So
-> > remove it.
-> > 
-> > This is a preparation for reparenting the LRU pages.
-> > 
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > ---
-> >   include/linux/memcontrol.h | 18 +++-----------
-> >   mm/compaction.c            | 10 +++++++-
-> >   mm/memcontrol.c            | 62 +++++++++++++++++++++++++++++-----------------
-> >   mm/swap.c                  |  4 +++
-> >   4 files changed, 55 insertions(+), 39 deletions(-)
-> > 
-> > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> > index ff1c1dd7e762..4042e4d21fe2 100644
-> > --- a/include/linux/memcontrol.h
-> > +++ b/include/linux/memcontrol.h
-> > @@ -752,7 +752,9 @@ static inline struct lruvec *mem_cgroup_lruvec(struct mem_cgroup *memcg,
-> >    * folio_lruvec - return lruvec for isolating/putting an LRU folio
-> >    * @folio: Pointer to the folio.
-> >    *
-> > - * This function relies on folio->mem_cgroup being stable.
-> > + * The lruvec can be changed to its parent lruvec when the page reparented.
-> > + * The caller need to recheck if it cares about this changes (just like
-> > + * folio_lruvec_lock() does).
-> >    */
-> >   static inline struct lruvec *folio_lruvec(struct folio *folio)
-> >   {
-> > @@ -771,15 +773,6 @@ struct lruvec *folio_lruvec_lock_irq(struct folio *folio);
-> >   struct lruvec *folio_lruvec_lock_irqsave(struct folio *folio,
-> >   						unsigned long *flags);
-> > -#ifdef CONFIG_DEBUG_VM
-> > -void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio);
-> > -#else
-> > -static inline
-> > -void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
-> > -{
-> > -}
-> > -#endif
-> > -
-> >   static inline
-> >   struct mem_cgroup *mem_cgroup_from_css(struct cgroup_subsys_state *css){
-> >   	return css ? container_of(css, struct mem_cgroup, css) : NULL;
-> > @@ -1240,11 +1233,6 @@ static inline struct lruvec *folio_lruvec(struct folio *folio)
-> >   	return &pgdat->__lruvec;
-> >   }
-> > -static inline
-> > -void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
-> > -{
-> > -}
-> > -
-> >   static inline struct mem_cgroup *parent_mem_cgroup(struct mem_cgroup *memcg)
-> >   {
-> >   	return NULL;
-> > diff --git a/mm/compaction.c b/mm/compaction.c
-> > index 817098817302..1692b17db781 100644
-> > --- a/mm/compaction.c
-> > +++ b/mm/compaction.c
-> > @@ -515,6 +515,8 @@ compact_folio_lruvec_lock_irqsave(struct folio *folio, unsigned long *flags,
-> >   {
-> >   	struct lruvec *lruvec;
-> > +	rcu_read_lock();
-> > +retry:
-> >   	lruvec = folio_lruvec(folio);
-> >   	/* Track if the lock is contended in async mode */
-> > @@ -527,7 +529,13 @@ compact_folio_lruvec_lock_irqsave(struct folio *folio, unsigned long *flags,
-> >   	spin_lock_irqsave(&lruvec->lru_lock, *flags);
-> >   out:
-> > -	lruvec_memcg_debug(lruvec, folio);
-> > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
-> > +		spin_unlock_irqrestore(&lruvec->lru_lock, *flags);
-> > +		goto retry;
-> > +	}
-> > +
-> > +	/* See the comments in folio_lruvec_lock(). */
-> > +	rcu_read_unlock();
-> >   	return lruvec;
-> >   }
-> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > index 6de0d3e53eb1..b38a77f6696f 100644
-> > --- a/mm/memcontrol.c
-> > +++ b/mm/memcontrol.c
-> > @@ -1199,23 +1199,6 @@ int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
-> >   	return ret;
-> >   }
-> > -#ifdef CONFIG_DEBUG_VM
-> > -void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
-> > -{
-> > -	struct mem_cgroup *memcg;
-> > -
-> > -	if (mem_cgroup_disabled())
-> > -		return;
-> > -
-> > -	memcg = folio_memcg(folio);
-> > -
-> > -	if (!memcg)
-> > -		VM_BUG_ON_FOLIO(lruvec_memcg(lruvec) != root_mem_cgroup, folio);
-> > -	else
-> > -		VM_BUG_ON_FOLIO(lruvec_memcg(lruvec) != memcg, folio);
-> > -}
-> > -#endif
-> > -
-> >   /**
-> >    * folio_lruvec_lock - Lock the lruvec for a folio.
-> >    * @folio: Pointer to the folio.
-> > @@ -1230,10 +1213,23 @@ void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
-> >    */
-> >   struct lruvec *folio_lruvec_lock(struct folio *folio)
-> >   {
-> > -	struct lruvec *lruvec = folio_lruvec(folio);
-> > +	struct lruvec *lruvec;
-> > +	rcu_read_lock();
-> > +retry:
-> > +	lruvec = folio_lruvec(folio);
-> >   	spin_lock(&lruvec->lru_lock);
-> > -	lruvec_memcg_debug(lruvec, folio);
-> > +
-> > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
-> > +		spin_unlock(&lruvec->lru_lock);
-> > +		goto retry;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Preemption is disabled in the internal of spin_lock, which can serve
-> > +	 * as RCU read-side critical sections.
-> > +	 */
-> What is the point of this comment as preemption is not disabled for
-> PREEMPT_RT kernel?
->
+There is no need to update the hugetlb access flags after just setting the
+hugetlb page table entry by set_huge_pte_at(), since the page table entry
+value has no changes. Thus remove the unnecessary huge_ptep_set_access_flags()
+in hugetlb_mcopy_atomic_pte().
 
-I'm not familar with PREEMPT_RT kernel. At least you are right,
-preemption is not disabled in this case, I think I should drop
-this assumption.
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+---
+ mm/hugetlb.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-> > +	rcu_read_unlock();
-> >   	return lruvec;
-> >   }
-> > @@ -1253,10 +1249,20 @@ struct lruvec *folio_lruvec_lock(struct folio *folio)
-> >    */
-> >   struct lruvec *folio_lruvec_lock_irq(struct folio *folio)
-> >   {
-> > -	struct lruvec *lruvec = folio_lruvec(folio);
-> > +	struct lruvec *lruvec;
-> > +	rcu_read_lock();
-> > +retry:
-> > +	lruvec = folio_lruvec(folio);
-> >   	spin_lock_irq(&lruvec->lru_lock);
-> > -	lruvec_memcg_debug(lruvec, folio);
-> > +
-> > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
-> > +		spin_unlock_irq(&lruvec->lru_lock);
-> > +		goto retry;
-> > +	}
-> > +
-> > +	/* See the comments in folio_lruvec_lock(). */
-> > +	rcu_read_unlock();
-> >   	return lruvec;
-> >   }
-> > @@ -1278,10 +1284,20 @@ struct lruvec *folio_lruvec_lock_irq(struct folio *folio)
-> >   struct lruvec *folio_lruvec_lock_irqsave(struct folio *folio,
-> >   		unsigned long *flags)
-> >   {
-> > -	struct lruvec *lruvec = folio_lruvec(folio);
-> > +	struct lruvec *lruvec;
-> > +	rcu_read_lock();
-> > +retry:
-> > +	lruvec = folio_lruvec(folio);
-> >   	spin_lock_irqsave(&lruvec->lru_lock, *flags);
-> > -	lruvec_memcg_debug(lruvec, folio);
-> > +
-> > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
-> > +		spin_unlock_irqrestore(&lruvec->lru_lock, *flags);
-> > +		goto retry;
-> > +	}
-> > +
-> > +	/* See the comments in folio_lruvec_lock(). */
-> > +	rcu_read_unlock();
-> >   	return lruvec;
-> >   }
-> > diff --git a/mm/swap.c b/mm/swap.c
-> > index 7e320ec08c6a..9680f2fc48b1 100644
-> > --- a/mm/swap.c
-> > +++ b/mm/swap.c
-> > @@ -303,6 +303,10 @@ void lru_note_cost(struct lruvec *lruvec, bool file, unsigned int nr_pages)
-> >   void lru_note_cost_folio(struct folio *folio)
-> >   {
-> > +	/*
-> > +	 * The rcu read lock is held by the caller, so we do not need to
-> > +	 * care about the lruvec returned by folio_lruvec() being released.
-> > +	 */
-> Maybe we can add "WARN_ON_ONCE(!rcu_read_lock_held())" to be sure.
->
-
-Good point. I'll add it.
-
-Thanks.
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 7c468ac..3ad49bf 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6032,8 +6032,6 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
  
-> >   	lru_note_cost(folio_lruvec(folio), folio_is_file_lru(folio),
-> >   			folio_nr_pages(folio));
-> >   }
-> 
-> Cheers,
-> Longman
-> 
-> 
+ 	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+ 
+-	(void)huge_ptep_set_access_flags(dst_vma, dst_addr, dst_pte, _dst_pte,
+-					dst_vma->vm_flags & VM_WRITE);
+ 	hugetlb_count_add(pages_per_huge_page(h), dst_mm);
+ 
+ 	/* No need to invalidate - it was non-present before */
+-- 
+1.8.3.1
+

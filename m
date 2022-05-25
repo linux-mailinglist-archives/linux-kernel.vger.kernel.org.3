@@ -2,158 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D023A5338E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 372EE5338E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236062AbiEYI4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
+        id S236308AbiEYI5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiEYI42 (ORCPT
+        with ESMTP id S235583AbiEYI5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:56:28 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FE3F67;
-        Wed, 25 May 2022 01:56:27 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id h10so2395811ljb.6;
-        Wed, 25 May 2022 01:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=80aPqe+7Pw6vDZHIq4vmZmpzPyTskcXhhyN+lLUN030=;
-        b=lnCZ97/1gpYTqqBwOO5aCiGlgYpDFzAdVm9dP47LqKGSWmHFYo6f0TOyKFjrjqFG3t
-         VmfUNv5i9FRtx4jcSDF8cUOhNmZ+6evNl6L66zpOFreqtnJVe016NTy0IUDaZJgpZfnv
-         tEDK19nwOkEaMFMF13lgoP0vYtLP9LH+Tz4u+5UERF+fGrUTbDqShxON803ze+X8V+MA
-         k2Tj1Y7lg+bDFA9aKo8KCuI4GhpWvcGuoSOilNXaVS6ICQljhamzLhIQqDLzp1dfbcv/
-         lCQ6gRWjqW1mZf96GC4Icn9J8FqsF77iwKMdWQ7qNPv3CUEXr/qa2ZwqAV57X03PG8+K
-         n4qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=80aPqe+7Pw6vDZHIq4vmZmpzPyTskcXhhyN+lLUN030=;
-        b=uBOnARVIZljwNvV4KHAQqAIS1dEASyWNKUaWh8BPoTbmk8UmcZvAkGmuv0S/Nq0epP
-         qpxu0yukKy32zFJc1WQYgiBomO72I/lNjgY1yOr0HPm8FTu4vPK60U5J2UAt7GywZMdN
-         6kdaQvNySqusfa+2IBujcpoaRaKGk+FhgwC48LSbDRTZ4XeuZN2RNlJmgB2pbzXcj9lX
-         msHuRRixve0D8iqeyH0C9m7+rG08LUqWh/jBaEVI3uJfJhBYTBjuXpxa9O6X3WyzBLoG
-         cSzf2tFq7YqnYhWOzuGuD0Q/Fsow+38JGB+X+gRbJNIUHiH9bijsI5QmBc0vlkLfg3W9
-         AK7g==
-X-Gm-Message-State: AOAM533ElzIoX95qANKoDUvLfFY+LenWPGrehzUhHZ7OEJFLzPFLUVCM
-        GF6H2Cl9gqp4SxV0AWYZFbU=
-X-Google-Smtp-Source: ABdhPJxLVekLSEbQ5D9mfU6jcjvQKQZmERaUxmy/PahOXSMioMIo0S9I4CeYSQs6pkEjLyLBIGpx0g==
-X-Received: by 2002:a05:651c:510:b0:254:11c:8376 with SMTP id o16-20020a05651c051000b00254011c8376mr2997413ljp.45.1653468985455;
-        Wed, 25 May 2022 01:56:25 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id w9-20020a05651c102900b002509783c8f8sm2996277ljm.83.2022.05.25.01.56.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 01:56:24 -0700 (PDT)
-Date:   Wed, 25 May 2022 11:56:21 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 23/26] dmaengine: dw-edma: Bypass dma-ranges mapping
- for the local setup
-Message-ID: <20220525085621.xvxnbvsddp6uqwpm@mobilestation>
-References: <20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru>
- <20220503225104.12108-24-Sergey.Semin@baikalelectronics.ru>
- <20220524131959.GA5745@thinkpad>
+        Wed, 25 May 2022 04:57:22 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118D06F4B8;
+        Wed, 25 May 2022 01:57:20 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24P5QfC4020613;
+        Wed, 25 May 2022 10:57:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=c57UgkWh7O6lvwSTiPRPjjG/R07L2Mni3TEW2sc6zV4=;
+ b=RqurYWClYSvygZrFiEo1tPYrsxTsyeXJMgQvnWsTs+r2wwiG/wXanZ9D++o2B8xUmJub
+ 3STzv8/yjfYMUnXwtPWj3s+aBJCeUo3jVrr9QTN3elX1ZsfYsnZ0pU1RJjDv5Q1mtyXJ
+ +vzAX6v6z9o/K8IeiffrLkgwesk/4lit9LnIICCidwkbHgE8jpvsY3rRi5E3tVhoIfh8
+ TxtZXozB8l9GIXFehb1IpRsBRgz5Scl7wEbpkd1RmL/+6sDWB7TZcBJuaIy8IjYxmtzx
+ Z7dQ1+ru6Pz8qH5Xh5UU7ukufxLzoqI3x7hXhapEm1WvArPfeUD+mSTSd7I5vL/nsytU Yw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g93ur42ck-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 10:57:13 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D5B4310002A;
+        Wed, 25 May 2022 10:57:10 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5027F217B7E;
+        Wed, 25 May 2022 10:57:10 +0200 (CEST)
+Received: from [10.211.8.221] (10.75.127.50) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 25 May
+ 2022 10:57:07 +0200
+Message-ID: <e54bcfcb-8e37-9caa-b330-a7411820b7ce@foss.st.com>
+Date:   Wed, 25 May 2022 10:57:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220524131959.GA5745@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH 00/10] Introduction of rpmsg flow control service
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        Chris Lew <quic_clew@quicinc.com>,
+        Xiang Xiao <xiaoxiang@xiaomi.com>
+References: <20220520082940.2984914-1-arnaud.pouliquen@foss.st.com>
+ <CANLsYkw7wjfVPTvA7SniMV8tBommm5E5w2FA0KMyRYn0BKVDyA@mail.gmail.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+In-Reply-To: <CANLsYkw7wjfVPTvA7SniMV8tBommm5E5w2FA0KMyRYn0BKVDyA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-25_03,2022-05-23_01,2022-02-23_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 06:49:59PM +0530, Manivannan Sadhasivam wrote:
-> On Wed, May 04, 2022 at 01:51:01AM +0300, Serge Semin wrote:
-> > DW eDMA doesn't perform any translation of the traffic generated on the
-> > CPU/Application side. It just generates read/write AXI-bus requests with
-> > the specified addresses. But in case if the dma-ranges DT-property is
-> > specified for a platform device node, Linux will use it to map the CPU
-> > memory regions into the DMAable bus ranges. This isn't what we want for
-> > the eDMA embedded into the locally accessed DW PCIe Root Port and
-> > End-point. In order to work that around let's set the chan_dma_dev flag
-> > for each DW eDMA channel thus forcing the client drivers to getting a
-> > custom dma-ranges-less parental device for the mappings.
-> > 
-> > Note it will only work for the client drivers using the
-> > dmaengine_get_dma_device() method to get the parental DMA device.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > 
-> > ---
-> > 
-> > Changelog v2:
-> > - Fix the comment a bit to being clearer. (@Manivannan)
-> > ---
-> >  drivers/dma/dw-edma/dw-edma-core.c | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> > 
-> > diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> > index 6a8282eaebaf..908607785401 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-core.c
-> > +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> > @@ -716,6 +716,21 @@ static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
-> >  	if (chan->status != EDMA_ST_IDLE)
-> >  		return -EBUSY;
-> >  
-> > +	/* Bypass the dma-ranges based memory regions mapping for the eDMA
-> > +	 * controlled from the CPU/Application side since in that case
-> > +	 * the local memory address is left untranslated.
-> > +	 */
-> > +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
-> > +		dchan->dev->chan_dma_dev = true;
-> > +
-> > +		dchan->dev->device.dma_coherent = chan->dw->chip->dev->dma_coherent;
+Hi Mathieu,
+
+On 5/24/22 17:34, Mathieu Poirier wrote:
+> Hi Arnaud,
 > 
+> I added your patchset to my review list.  Unfortunately it sits behind
+> a sizable backlog and as such I won't be able to get to it for some
+> time.
 
-> I happen to test this series on Qcom ARM32 machine and it errors out during the
-> compilation due to "dma_coherent" not available on !SWIOTLB ARM32 configs.
+No worries, I hope to get some feedbacks and to have discussion on the
+topic from some other people as well 
+FYI, as a similar Pull request exists on OpenAMP github, I requsted in the
+OpenAMP PR to centralize all the discussions around the design choice in this
+thread. The aim is that we have a single discussion thread to find a consensus
+on the way of implementing such service on virtio backend.
 
-Nice catch! Thanks. I'll fix it in the next patchset version.
+Creating a specific rpmsg service is one approach, some other can exist...
 
--Sergey
+Regards,
+Arnaud
+
 
 > 
 > Thanks,
-> Mani
+> Mathieu
 > 
-> > +		dma_coerce_mask_and_coherent(&dchan->dev->device,
-> > +					     dma_get_mask(chan->dw->chip->dev));
-> > +		dchan->dev->device.dma_parms = chan->dw->chip->dev->dma_parms;
-> > +	} else {
-> > +		dchan->dev->chan_dma_dev = false;
-> > +	}
-> > +
-> >  	pm_runtime_get(chan->dw->chip->dev);
-> >  
-> >  	return 0;
-> > -- 
-> > 2.35.1
-> > 
-> 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+> On Fri, 20 May 2022 at 02:30, Arnaud Pouliquen
+> <arnaud.pouliquen@foss.st.com> wrote:
+>>
+>> This series proposes an implementation for the rpmsg virtio transport
+>> backend, of the signaling API proposed by Deepak Kumar Singh:
+>> "rpmsg and glink signaling API support" [1]
+>>
+>> The aim of the series is to offer the possibility for an endpoint to inform
+>> a remote endpoint about its state, based on a software flow control[2].
+>>
+>> For this a new rpmsg service( with a fixed address 64) is proposed.
+>> It is responsible for:
+>> - transmitting local endpoint flow control information to the remote side,
+>> - informing a local endpoint about a remote endpoint flow control.
+>>
+>> For the rpmsg virtio transport layer the service is negotiated thanks to the
+>> virtio feature flag: VIRTIO_RPMSG_F_FC
+>>
+>> Notice that this pull request introduces new feature in the rpmsg protocol,
+>> So it has to be aligned with OpenAMP implementation.
+>> Pending OpenAMP pull request is available here:
+>> https://github.com/OpenAMP/open-amp/pull/394
+>>
+>>
+>> [1]https://lkml.org/lkml/2022/1/18/867
+>> [2]https://en.wikipedia.org/wiki/Software_flow_control
+>>
+>> Arnaud Pouliquen (8):
+>>   rpmsg: core: Add rpmsg device remote flow control announcement ops
+>>   rpmsg: virtio: Implement the announce_remote_fc ops
+>>   rpmsg: Introduce flow control channel driver
+>>   rpmsg: virtio: Add support of the VIRTIO_RPMSG_F_FC feature
+>>   rpmsg: virtio: Implement the set_flow_control ops
+>>   rpmsg: Add the destination address in rpmsg_set_flow_control
+>>   rpmsg: tty : Add the support of the flow control
+>>   rpmsg: virtio: Set default dst address on flow control
+>>
+>> Deepak Kumar Singh (2):
+>>   rpmsg: core: Add signal API support
+>>   rpmsg: char: Add TIOCMGET/TIOCMSET ioctl support
+>>
+>>  drivers/rpmsg/Kconfig            |  11 +++
+>>  drivers/rpmsg/Makefile           |   1 +
+>>  drivers/rpmsg/rpmsg_char.c       |  56 +++++++++++++--
+>>  drivers/rpmsg/rpmsg_core.c       |  47 +++++++++++++
+>>  drivers/rpmsg/rpmsg_fc.c         | 113 +++++++++++++++++++++++++++++++
+>>  drivers/rpmsg/rpmsg_internal.h   |   9 +++
+>>  drivers/rpmsg/virtio_rpmsg_bus.c | 111 +++++++++++++++++++++++++++++-
+>>  drivers/tty/rpmsg_tty.c          |  50 ++++++++++++++
+>>  include/linux/rpmsg.h            |  15 ++++
+>>  include/linux/rpmsg/fc.h         |  51 ++++++++++++++
+>>  10 files changed, 456 insertions(+), 8 deletions(-)
+>>  create mode 100644 drivers/rpmsg/rpmsg_fc.c
+>>  create mode 100644 include/linux/rpmsg/fc.h
+>>
+>> --
+>> 2.25.1
+>>

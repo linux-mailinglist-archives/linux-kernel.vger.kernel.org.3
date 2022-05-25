@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9C9533CC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 986FF533CD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbiEYMk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S237002AbiEYMoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238927AbiEYMkU (ORCPT
+        with ESMTP id S230385AbiEYMoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:40:20 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2B87CB19
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:40:19 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7DB903FD8F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653482418;
-        bh=wxP3HgqlZutRyZ4be1K5ovWzoc7v+dNBukvYrue+SPk=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=urCriZisG0M774CjGi17JsZLvaX0CibGJb6r2h7fDycAFaql9ydbqjgjjAMcDVaHa
-         wPiZO1Skf2pNEx8Li7uqrKP8n1vHhLgUM/FCW6s8XIsgrZcbEBfoREpvCnFY+Uh2vV
-         GPTy+5ebtwf83qjgmbvyMuvZJHh8O1mbCDpt8T5usZYZXZbANiUdZea2CQUUvH+mBg
-         RGTayfv+C6Kp2B8/+OtCkfQR1g5x0hsc8d5fCkLXVIErz2W5hUV6yAd3Bm4H2f7jxz
-         o1RVFau5OKWqfSyd0fGhjWskZ0HAc5HRdHN89HjzVLpv93wxvIpobyssROmJjIbQ3q
-         g+E8uSjaelALw==
-Received: by mail-ed1-f71.google.com with SMTP id r10-20020aa7c14a000000b0042bcc99e4cdso810927edp.18
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:40:18 -0700 (PDT)
+        Wed, 25 May 2022 08:44:06 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9594ED123;
+        Wed, 25 May 2022 05:44:04 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id e189so24868971oia.8;
+        Wed, 25 May 2022 05:44:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wxP3HgqlZutRyZ4be1K5ovWzoc7v+dNBukvYrue+SPk=;
-        b=BCr0QLQTmwXlwt+WBAEBCJCrnVdJF9H2qYq5dIEhmgdb7yqR7/oeLYOcZ6vUt70buM
-         ZCXkR2Eh6WkBEtLTGtSJMtNtr5EK85Ic3s38YZs/jVgv3LgTaspcIr7KfA+Ty1pF/6rK
-         2IY+VOFX0KYn4B8qT93k8xLDmh3Kskus2GX07pm93y4KpmX5OtJL10nauGRUvOCwyCKf
-         N3TRuiJcms1GSNcasi5rZ3HhiD/9yKQy0Nah7rOzYHKy5xFYs/sqQ92fYFd60vxBWXbY
-         mhbSmnDnAC91whs8HoaQwACdmt8IshogUUL8erWnMqzLqMzHy0t4w20sJDK6lNb5QhyN
-         P8Ng==
-X-Gm-Message-State: AOAM533mBkZSQLQZwDoF0xfnuJA5czW4yrWML0CnNULEwwF+uSon2Ce2
-        igLtg3reP1ZCTb+zkyhXeC9XPbwaUd/FN94NpnBo0M6zGHYnD/uETCtv2+0xSsIE3Y1ECSf6XhX
-        axd2DCcjGEq82I2r7W2usckajEXoKo0lhAGjOm58xVQ==
-X-Received: by 2002:a05:6402:190a:b0:42b:60b:592b with SMTP id e10-20020a056402190a00b0042b060b592bmr31295063edz.127.1653482418293;
-        Wed, 25 May 2022 05:40:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwIMAXsEqufeY6FOCVF5hwJzfTKb6LKPU2BWrQTsIhu4mtSwZ/E8Ri0gjrQfdHvSRWC1/8qFw==
-X-Received: by 2002:a05:6402:190a:b0:42b:60b:592b with SMTP id e10-20020a056402190a00b0042b060b592bmr31295046edz.127.1653482418107;
-        Wed, 25 May 2022 05:40:18 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id y20-20020a50eb94000000b0042617ba63c4sm10632614edr.78.2022.05.25.05.40.17
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=1xKn1TwFCEiFxTgut6Nt95ns9umTBM5bV8PgAamEzGI=;
+        b=U4hOSp/+4mz+lSlPH5EfRnsRB1Z1TH2wIGBizl7FjUTpGjeosqOdyPNW60o/hrqktp
+         u9gyZCxGtOUN/lVe3W/QGAaUdoLMCO1uR3OFf2s9EwNv52c8Mtiw5LSEhr7T8xpJuh4o
+         4H0Ad7f7xxp7rka0XAADGarkEDZ0oIl7WKuYQrxxD+BMKxFFP6XPfthClC0RNxJJ54JB
+         CVKJ51f9soBrkhs1kf5mPVfq+xNiP17HnS39fq3aL7rxbRd7yVR0uHTsompD/zdNdBUq
+         tMkvhGoRN4gylWyXi1sxCIVqTFao2rZ7rboUHb7F9uBgUIfYcXwyVm/xGvFdXzEs74q3
+         oxgw==
+X-Gm-Message-State: AOAM530zFho56UCDJmfxnZ7MQDJKpAYHPXTQ98MHrI1X6Ql+q/FMRnjF
+        2bkN6IasHOCzZ16KJuyVgg==
+X-Google-Smtp-Source: ABdhPJyp4RR2/wWLrfrKz/ft7jvpqGKEU8/LjZ5HHq0aDMy4VC3N1ZKM5JQ8agR6C41wBqF0tK49xg==
+X-Received: by 2002:a05:6808:1201:b0:325:75e1:25a8 with SMTP id a1-20020a056808120100b0032575e125a8mr5116618oil.18.1653482643566;
+        Wed, 25 May 2022 05:44:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ec25-20020a0568708c1900b000edae17a8cesm5952127oab.3.2022.05.25.05.44.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 05:40:17 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     ysato@users.sourceforge.jp, dalias@libc.org,
-        linux-sh@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juerg.haefliger@canonical.com>
-Subject: [PATCH 4/4] sh/mm: Kconfig: Fix indentation
-Date:   Wed, 25 May 2022 14:40:07 +0200
-Message-Id: <20220525124007.45328-5-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220525124007.45328-1-juerg.haefliger@canonical.com>
-References: <20220525124007.45328-1-juerg.haefliger@canonical.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 25 May 2022 05:44:02 -0700 (PDT)
+Received: (nullmailer pid 1760895 invoked by uid 1000);
+        Wed, 25 May 2022 12:44:01 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Bailon <abailon@baylibre.com>
+Cc:     linux-pm@vger.kernel.org, khilman@baylibre.com,
+        linux-mediatek@lists.infradead.org, p.zabel@pengutronix.de,
+        james.lo@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        rui.zhang@intel.com, rafael@kernel.org, matthias.bgg@gmail.com,
+        amitk@kernel.org, robh+dt@kernel.org, fan.chen@mediatek.com,
+        daniel.lezcano@linaro.org, krzk+dt@kernel.org,
+        devicetree@vger.kernel.org, rex-bc.chen@mediatek.com,
+        louis.yu@mediatek.com, mka@chromium.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220524152552.246193-3-abailon@baylibre.com>
+References: <20220524152552.246193-1-abailon@baylibre.com> <20220524152552.246193-3-abailon@baylibre.com>
+Subject: Re: [PATCH v7 2/6] dt-bindings: thermal: Add binding document for LVTS thermal controllers
+Date:   Wed, 25 May 2022 07:44:01 -0500
+Message-Id: <1653482641.588144.1760894.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,39 +66,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two whitespaces. Fix the lines that
-violate these rules.
+On Tue, 24 May 2022 17:25:49 +0200, Alexandre Bailon wrote:
+> This patch adds binding document for mt8192 and mt8195 thermal
+> controllers.
+> 
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> ---
+>  .../thermal/mediatek,mt8192-lvts.yaml         | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
+> 
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
----
- arch/sh/mm/Kconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/arch/sh/mm/Kconfig b/arch/sh/mm/Kconfig
-index ba569cfb4368..a563211aeb63 100644
---- a/arch/sh/mm/Kconfig
-+++ b/arch/sh/mm/Kconfig
-@@ -2,7 +2,7 @@
- menu "Memory management options"
- 
- config MMU
--        bool "Support for memory management hardware"
-+	bool "Support for memory management hardware"
- 	depends on !CPU_SH2
- 	default y
- 	help
-@@ -141,8 +141,8 @@ config ARCH_MEMORY_PROBE
- 	depends on MEMORY_HOTPLUG
- 
- config IOREMAP_FIXED
--       def_bool y
--       depends on X2TLB
-+	def_bool y
-+	depends on X2TLB
- 
- config UNCACHED_MAPPING
- 	bool
--- 
-2.32.0
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml: allOf:1:$ref: '/nvmem/nvmem-consumer.yaml#' does not match '^(/schemas/|\\.\\./|#(/|$)|[a-zA-Z0-9]+)'
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml: ignoring, error in schema: allOf: 1: $ref
+Error: Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.example.dts:34.36-37 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1401: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

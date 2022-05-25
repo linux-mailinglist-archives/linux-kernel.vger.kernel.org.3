@@ -2,200 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F17D533C97
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E46C533C5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241350AbiEYM1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
+        id S236306AbiEYMNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241712AbiEYM1j (ORCPT
+        with ESMTP id S243012AbiEYMND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:27:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB6A86D868
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:27:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 175201FB;
-        Wed, 25 May 2022 05:27:30 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.0.228])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24A533F73D;
-        Wed, 25 May 2022 05:27:28 -0700 (PDT)
-Date:   Wed, 25 May 2022 13:27:23 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, cj.chengjian@huawei.com,
-        huawei.libin@huawei.com, xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <Yo4gq6he3zb/B6kx@FVFF77S0Q05N>
-References: <20220316100132.244849-1-bobo.shaobowang@huawei.com>
- <20220316100132.244849-4-bobo.shaobowang@huawei.com>
- <YmFXrBG5AmX3+4f8@lakrids>
- <20220421100639.03c0d123@gandalf.local.home>
- <YmF0xYpTMoWOIl00@lakrids>
- <20220421114201.21228eeb@gandalf.local.home>
- <YmGF/OpIhAF8YeVq@lakrids>
- <8f36ebd2-2c56-d896-3a91-c97a5760b344@huawei.com>
+        Wed, 25 May 2022 08:13:03 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E7A2AC68;
+        Wed, 25 May 2022 05:12:42 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PAu5ij032597;
+        Wed, 25 May 2022 08:12:23 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3g93vddpaf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 08:12:22 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 24PCCLZQ008027
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 25 May 2022 08:12:21 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 25 May
+ 2022 08:12:20 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 25 May 2022 08:12:20 -0400
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 24PCC3xm028274;
+        Wed, 25 May 2022 08:12:05 -0400
+From:   <alexandru.tachici@analog.com>
+To:     <kuba@kernel.org>
+CC:     <alexandru.tachici@analog.com>, <davem@davemloft.net>,
+        <devicetree@vger.kernel.org>, <edumazet@google.com>,
+        <geert+renesas@glider.be>, <geert@linux-m68k.org>,
+        <josua@solid-run.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <michael.hennerich@analog.com>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: net: adin: Fix adi,phy-output-clock description syntax
+Date:   Wed, 25 May 2022 15:28:13 +0300
+Message-ID: <20220525122813.88431-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220524112425.72f8c6e0@kernel.org>
+References: <20220524112425.72f8c6e0@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8f36ebd2-2c56-d896-3a91-c97a5760b344@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: O1MHOuA5jaqGAD2SYyMLIOF5bz-hzPLI
+X-Proofpoint-ORIG-GUID: O1MHOuA5jaqGAD2SYyMLIOF5bz-hzPLI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-25_03,2022-05-25_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ spamscore=0 malwarescore=0 adultscore=0 priorityscore=1501 mlxlogscore=891
+ mlxscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2205250062
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 10:57:35AM +0800, Wangshaobo (bobo) wrote:
+> On Tue, 24 May 2022 16:30:18 +0200 Geert Uytterhoeven wrote:
+> > On Tue, May 24, 2022 at 4:12 PM Geert Uytterhoeven
+> > <geert+renesas@glider.be> wrote:
+> > > "make dt_binding_check":
+> > >
+> > >     Documentation/devicetree/bindings/net/adi,adin.yaml:40:77: [error] syntax error: mapping values are not allowed here (syntax)
+> > >
+> > > The first line of the description ends with a colon, hence the block
+> > > needs to be marked with a "|".
+> > >
+> > > Fixes: 1f77204e11f8b9e5 ("dt-bindings: net: adin: document phy clock output properties")
+> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > ---
+> > >  Documentation/devicetree/bindings/net/adi,adin.yaml | 3 ++-  
+> > 
+> > Alexandru Ardelean's email address bounces, while he is listed as
+> > a maintainer in several DT bindings files.
 > 
-> 锟斤拷 2022/4/22 0:27, Mark Rutland 写锟斤拷:
-> > On Thu, Apr 21, 2022 at 11:42:01AM -0400, Steven Rostedt wrote:
-> > > On Thu, 21 Apr 2022 16:14:13 +0100
-> > > Mark Rutland <mark.rutland@arm.com> wrote:
-> > > 
-> > > > > Let's say you have 10 ftrace_ops registered (with bpf and kprobes this can
-> > > > > be quite common). But each of these ftrace_ops traces a function (or
-> > > > > functions) that are not being traced by the other ftrace_ops. That is, each
-> > > > > ftrace_ops has its own unique function(s) that they are tracing. One could
-> > > > > be tracing schedule, the other could be tracing ksoftirqd_should_run
-> > > > > (whatever).
-> > > > Ok, so that's when messing around with bpf or kprobes, and not generally
-> > > > when using plain old ftrace functionality under /sys/kernel/tracing/
-> > > > (unless that's concurrent with one of the former, as per your other
-> > > > reply) ?
-> > > It's any user of the ftrace infrastructure, which includes kprobes, bpf,
-> > > perf, function tracing, function graph tracing, and also affects instances.
-> > > 
-> > > > > Without this change, because the arch does not support dynamically
-> > > > > allocated trampolines, it means that all these ftrace_ops will be
-> > > > > registered to the same trampoline. That means, for every function that is
-> > > > > traced, it will loop through all 10 of theses ftrace_ops and check their
-> > > > > hashes to see if their callback should be called or not.
-> > > > Sure; I can see how that can be quite expensive.
-> > > > 
-> > > > What I'm trying to figure out is who this matters to and when, since the
-> > > > implementation is going to come with a bunch of subtle/fractal
-> > > > complexities, and likely a substantial overhead too when enabling or
-> > > > disabling tracing of a patch-site. I'd like to understand the trade-offs
-> > > > better.
-> > > > 
-> > > > > With dynamically allocated trampolines, each ftrace_ops will have their own
-> > > > > trampoline, and that trampoline will be called directly if the function
-> > > > > is only being traced by the one ftrace_ops. This is much more efficient.
-> > > > > 
-> > > > > If a function is traced by more than one ftrace_ops, then it falls back to
-> > > > > the loop.
-> > > > I see -- so the dynamic trampoline is just to get the ops? Or is that
-> > > > doing additional things?
-> > > It's to get both the ftrace_ops (as that's one of the parameters) as well
-> > > as to call the callback directly. Not sure if arm is affected by spectre,
-> > > but the "loop" function is filled with indirect function calls, where as
-> > > the dynamic trampolines call the callback directly.
-> > > 
-> > > Instead of:
-> > > 
-> > >    bl ftrace_caller
-> > > 
-> > > ftrace_caller:
-> > >    [..]
-> > >    bl ftrace_ops_list_func
-> > >    [..]
-> > > 
-> > > 
-> > > void ftrace_ops_list_func(...)
-> > > {
-> > > 	__do_for_each_ftrace_ops(op, ftrace_ops_list) {
-> > > 		if (ftrace_ops_test(op, ip)) // test the hash to see if it
-> > > 					     //	should trace this
-> > > 					     //	function.
-> > > 			op->func(...);
-> > > 	}
-> > > }
-> > > 
-> > > It does:
-> > > 
-> > >    bl dyanmic_tramp
-> > > 
-> > > dynamic_tramp:
-> > >    [..]
-> > >    bl func  // call the op->func directly!
-> > > 
-> > > 
-> > > Much more efficient!
-> > > 
-> > > 
-> > > > There might be a middle-ground here where we patch the ftrace_ops
-> > > > pointer into a literal pool at the patch-site, which would allow us to
-> > > > handle this atomically, and would avoid the issues with out-of-range
-> > > > trampolines.
-> > > Have an example of what you are suggesting?
-> > We can make the compiler to place 2 NOPs before the function entry point, and 2
-> > NOPs after it using `-fpatchable-function-entry=4,2` (the arguments are
-> > <total>,<before>). On arm64 all instructions are 4 bytes, and we'll use the
-> > first two NOPs as an 8-byte literal pool.
-> > 
-> > Ignoring BTI for now, the compiler generates (with some magic labels added here
-> > for demonstration):
-> > 
-> > 	__before_func:
-> > 			NOP
-> > 			NOP
-> > 	func:
-> > 			NOP
-> > 			NOP
-> > 	__remainder_of_func:
-> > 			...
-> > 
-> > At ftrace_init_nop() time we patch that to:
-> > 
-> > 	__before_func:
-> > 			// treat the 2 NOPs as an 8-byte literal-pool
-> > 			.quad	<default ops pointer> // see below
-> > 	func:
-> > 			MOV	X9, X30
-> > 			NOP
-> > 	__remainder_of_func:
-> > 			...
-> > 
-> > When enabling tracing we do
-> > 
-> > 	__before_func:
-> > 			// patch this with the relevant ops pointer
-> > 			.quad	<ops pointer>
-> > 	func:
-> > 			MOV	X9, X30
-> > 			BL	<trampoline>	// common trampoline
-> 
-> I have a question that does this common trampoline allocated by
-> module_alloc()? if yes, how to handle the long jump from traced func to
-> common trampoline if only adding two NOPs in front of func.
+> Let's CC Alexandru Tachici, maybe he knows if we need to update 
+> and to what.
 
-No; as today there'd be *one* trampoline in the main kernel image, and where a
-module is out-of-range it will use a PLT the module loader created at load time
-(and any patch-site in that module would use the same PLT and trampoline,
-regardless of what the ops pointer was).
+Yeah, I should have updated this one. You can add me instead or I will come back with a patch.
 
-There might be a PLT between the call and the trampoline, but that wouldn't
-have any functional effect; we'd still get all the arguments, the original LR
-(in x9), and the location of the call (in the LR), as we get today.
+  - Alexandru Tachici <alexandru.tachici@analog.com>
 
-For how we do that today, see commits:
-
-* e71a4e1bebaf7fd9 ("arm64: ftrace: add support for far branches to dynamic ftrace")
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e71a4e1bebaf7fd990efbdc04b38e5526914f0f1
-
-* f1a54ae9af0da4d7 ("arm64: module/ftrace: intialize PLT at load time")
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f1a54ae9af0da4d76239256ed640a93ab3aadac0
-
-* 3b23e4991fb66f6d ("arm64: implement ftrace with regs")
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3b23e4991fb66f6d152f9055ede271a726ef9f21
-
-Thanks,
-Mark.
+Regards,
+Alexandru

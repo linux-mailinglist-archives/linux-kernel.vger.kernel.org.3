@@ -2,101 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2956533ACD
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3448A533AD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234272AbiEYKpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 06:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
+        id S240875AbiEYKqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 06:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiEYKpH (ORCPT
+        with ESMTP id S231326AbiEYKp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 06:45:07 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721E2994CE;
-        Wed, 25 May 2022 03:45:05 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id BC7081C0B92; Wed, 25 May 2022 12:45:03 +0200 (CEST)
-Date:   Wed, 25 May 2022 12:45:03 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sasha Neftin <sasha.neftin@intel.com>,
-        Nechama Kraus <nechamax.kraus@linux.intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Subject: Re: [PATCH 5.10 07/97] igc: Update I226_K device ID
-Message-ID: <20220525104503.GA30018@duo.ucw.cz>
-References: <20220523165812.244140613@linuxfoundation.org>
- <20220523165813.521480921@linuxfoundation.org>
+        Wed, 25 May 2022 06:45:56 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5194A994FD
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:45:54 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id x12so18568712pgj.7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:45:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eZHHJ8xZ0WLnM7kImTEfhllSgT1hYk7RJ6GDlALdclU=;
+        b=kIwQ0plu4qoXAnCshP2TSrFMPv3H7erjIb4M8UZRo0gPSgdP4mlHQ4ZSXgCGx1b7Yt
+         CfApB0TbHw5L4fq+ZFp0SLG3YuxVMbpDyKUPru2o76+7mB+KvWU8Ngf1kQyAgN0gTBP5
+         VRqqfQfBduqFCgV+eSEGwbTGTEK4dePoYvk+U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eZHHJ8xZ0WLnM7kImTEfhllSgT1hYk7RJ6GDlALdclU=;
+        b=OFoTNxjYfNHpIYuKAFK92PCbY6DI9xS49XzK9K5UFFmAsdc7vkKBea7W9bfHwfuk6W
+         dYqUGMx1eil/bts9358h+doizCVw7WY8RO/UsInosHxzI8Ivx0hZMSgznjuXlMpOsHwY
+         69NChpOg2EWJbV8yT6qcpgb1JJiHnQ0tsEKUkf9e3huRcNjY2kIOUYvG3ueSbaP3N6p8
+         3HneOtE7DqJ31xeUA3NaIz/IZtMt466Sr/VE8bJuujiZ45r+gdjeskGOLNr7d72TKO/t
+         28nhI6s7j5AGE8zXOWxllao1vZDwmyFPErNvaPr9zo/rXVRipGiM3CXakDa6UNXHUves
+         oaKA==
+X-Gm-Message-State: AOAM5304+CLhcpxTxH50pZXom5akvSJHISXQxKbG//xzq8NdZ3CH8U2Y
+        atvcgGl1AgYKAU07eXEQRGVQ0w==
+X-Google-Smtp-Source: ABdhPJzJj4xTqY5JKJDxbBncKjKBUh4qwknmOLSqdd/djycNTbStDWrdY3V22flQf8h+rzraqTWtXg==
+X-Received: by 2002:a63:535c:0:b0:3db:69da:1ef7 with SMTP id t28-20020a63535c000000b003db69da1ef7mr28668131pgl.239.1653475553811;
+        Wed, 25 May 2022 03:45:53 -0700 (PDT)
+Received: from localhost (174.71.80.34.bc.googleusercontent.com. [34.80.71.174])
+        by smtp.gmail.com with UTF8SMTPSA id f7-20020a6547c7000000b003db8691008esm8006519pgs.12.2022.05.25.03.45.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 03:45:53 -0700 (PDT)
+From:   Joseph Hwang <josephsih@chromium.org>
+To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        luiz.dentz@gmail.com, pali@kernel.org
+Cc:     josephsih@google.com, chromeos-bluetooth-upstreaming@chromium.org,
+        Joseph Hwang <josephsih@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v5 1/5] Bluetooth: mgmt: add MGMT_OP_SET_QUALITY_REPORT for quality report
+Date:   Wed, 25 May 2022 18:45:41 +0800
+Message-Id: <20220525104545.2314653-1-josephsih@chromium.org>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
-Content-Disposition: inline
-In-Reply-To: <20220523165813.521480921@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch adds a new set_quality_report mgmt handler to set
+the quality report feature. The feature is removed from the
+experimental features at the same time.
 
---yrj/dFKFPuw6o+aM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Joseph Hwang <josephsih@chromium.org>
+---
 
-Hi!
+Changes in v5:
+- This patch becomes the first patch.
+- Remove useless hdev check in get_supported_settings().
+- An additional patch will make quality report survive power off/on
+  cycles.
 
-> From: Sasha Neftin <sasha.neftin@intel.com>
->=20
-> commit 79cc8322b6d82747cb63ea464146c0bf5b5a6bc1 upstream.
->=20
-> The device ID for I226_K was incorrectly assigned, update the device
-> ID to the correct one.
->=20
-> Fixes: bfa5e98c9de4 ("igc: Add new device ID")
+Changes in v4:
+- return current settings for set_quality_report.
 
-I don't see updating the ID, I see adding an unused define. I don't
-think this is suitable for stable. Same thing goes for previous two
-patches, they don't really fix anything.
+Changes in v3:
+- This is a new patch to enable the quality report feature.
+  The reading and setting of the quality report feature are
+  removed from the experimental features.
 
-5106 O   Greg Kroah =E2=94=9C=E2=94=80>[PATCH 5.10 05/97] igc: Remove _I_PH=
-Y_ID checking
-5107 O   Greg Kroah =E2=94=9C=E2=94=80>[PATCH 5.10 06/97] igc: Remove phy->=
-type checking
-5108     Greg Kroah =E2=94=9C=E2=94=80>[PATCH 5.10 07/97] igc: Update I226_=
-K device ID
+ include/net/bluetooth/mgmt.h |   7 ++
+ net/bluetooth/mgmt.c         | 167 +++++++++++++++--------------------
+ 2 files changed, 80 insertions(+), 94 deletions(-)
 
-Best regards,
-								Pavel
-							=09
-> +++ b/drivers/net/ethernet/intel/igc/igc_hw.h
-> @@ -22,6 +22,7 @@
->  #define IGC_DEV_ID_I220_V			0x15F7
->  #define IGC_DEV_ID_I225_K			0x3100
->  #define IGC_DEV_ID_I225_K2			0x3101
-> +#define IGC_DEV_ID_I226_K			0x3102
->  #define IGC_DEV_ID_I225_LMVP			0x5502
->  #define IGC_DEV_ID_I225_IT			0x0D9F
->  #define IGC_DEV_ID_I226_LM			0x125B
->=20
+diff --git a/include/net/bluetooth/mgmt.h b/include/net/bluetooth/mgmt.h
+index 7c1ad0f6fcec..c1c2fd72d9e3 100644
+--- a/include/net/bluetooth/mgmt.h
++++ b/include/net/bluetooth/mgmt.h
+@@ -109,6 +109,7 @@ struct mgmt_rp_read_index_list {
+ #define MGMT_SETTING_STATIC_ADDRESS	0x00008000
+ #define MGMT_SETTING_PHY_CONFIGURATION	0x00010000
+ #define MGMT_SETTING_WIDEBAND_SPEECH	0x00020000
++#define MGMT_SETTING_QUALITY_REPORT	0x00040000
+ 
+ #define MGMT_OP_READ_INFO		0x0004
+ #define MGMT_READ_INFO_SIZE		0
+@@ -838,6 +839,12 @@ struct mgmt_cp_add_adv_patterns_monitor_rssi {
+ } __packed;
+ #define MGMT_ADD_ADV_PATTERNS_MONITOR_RSSI_SIZE	8
+ 
++#define MGMT_OP_SET_QUALITY_REPORT		0x0057
++struct mgmt_cp_set_quality_report {
++	__u8	action;
++} __packed;
++#define MGMT_SET_QUALITY_REPORT_SIZE		1
++
+ #define MGMT_EV_CMD_COMPLETE		0x0001
+ struct mgmt_ev_cmd_complete {
+ 	__le16	opcode;
+diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+index d2d390534e54..1ad84f34097f 100644
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+@@ -857,6 +857,9 @@ static u32 get_supported_settings(struct hci_dev *hdev)
+ 
+ 	settings |= MGMT_SETTING_PHY_CONFIGURATION;
+ 
++	if (aosp_has_quality_report(hdev) || hdev->set_quality_report)
++		settings |= MGMT_SETTING_QUALITY_REPORT;
++
+ 	return settings;
+ }
+ 
+@@ -928,6 +931,9 @@ static u32 get_current_settings(struct hci_dev *hdev)
+ 	if (hci_dev_test_flag(hdev, HCI_WIDEBAND_SPEECH_ENABLED))
+ 		settings |= MGMT_SETTING_WIDEBAND_SPEECH;
+ 
++	if (hci_dev_test_flag(hdev, HCI_QUALITY_REPORT))
++		settings |= MGMT_SETTING_QUALITY_REPORT;
++
+ 	return settings;
+ }
+ 
+@@ -3901,12 +3907,6 @@ static const u8 debug_uuid[16] = {
+ };
+ #endif
+ 
+-/* 330859bc-7506-492d-9370-9a6f0614037f */
+-static const u8 quality_report_uuid[16] = {
+-	0x7f, 0x03, 0x14, 0x06, 0x6f, 0x9a, 0x70, 0x93,
+-	0x2d, 0x49, 0x06, 0x75, 0xbc, 0x59, 0x08, 0x33,
+-};
+-
+ /* a6695ace-ee7f-4fb9-881a-5fac66c629af */
+ static const u8 offload_codecs_uuid[16] = {
+ 	0xaf, 0x29, 0xc6, 0x66, 0xac, 0x5f, 0x1a, 0x88,
+@@ -3928,7 +3928,7 @@ static const u8 rpa_resolution_uuid[16] = {
+ static int read_exp_features_info(struct sock *sk, struct hci_dev *hdev,
+ 				  void *data, u16 data_len)
+ {
+-	char buf[102];   /* Enough space for 5 features: 2 + 20 * 5 */
++	char buf[82];   /* Enough space for 4 features: 2 + 20 * 4 */
+ 	struct mgmt_rp_read_exp_features_info *rp = (void *)buf;
+ 	u16 idx = 0;
+ 	u32 flags;
+@@ -3969,18 +3969,6 @@ static int read_exp_features_info(struct sock *sk, struct hci_dev *hdev,
+ 		idx++;
+ 	}
+ 
+-	if (hdev && (aosp_has_quality_report(hdev) ||
+-		     hdev->set_quality_report)) {
+-		if (hci_dev_test_flag(hdev, HCI_QUALITY_REPORT))
+-			flags = BIT(0);
+-		else
+-			flags = 0;
+-
+-		memcpy(rp->features[idx].uuid, quality_report_uuid, 16);
+-		rp->features[idx].flags = cpu_to_le32(flags);
+-		idx++;
+-	}
+-
+ 	if (hdev && hdev->get_data_path_id) {
+ 		if (hci_dev_test_flag(hdev, HCI_OFFLOAD_CODECS_ENABLED))
+ 			flags = BIT(0);
+@@ -4193,80 +4181,6 @@ static int set_rpa_resolution_func(struct sock *sk, struct hci_dev *hdev,
+ 	return err;
+ }
+ 
+-static int set_quality_report_func(struct sock *sk, struct hci_dev *hdev,
+-				   struct mgmt_cp_set_exp_feature *cp,
+-				   u16 data_len)
+-{
+-	struct mgmt_rp_set_exp_feature rp;
+-	bool val, changed;
+-	int err;
+-
+-	/* Command requires to use a valid controller index */
+-	if (!hdev)
+-		return mgmt_cmd_status(sk, MGMT_INDEX_NONE,
+-				       MGMT_OP_SET_EXP_FEATURE,
+-				       MGMT_STATUS_INVALID_INDEX);
+-
+-	/* Parameters are limited to a single octet */
+-	if (data_len != MGMT_SET_EXP_FEATURE_SIZE + 1)
+-		return mgmt_cmd_status(sk, hdev->id,
+-				       MGMT_OP_SET_EXP_FEATURE,
+-				       MGMT_STATUS_INVALID_PARAMS);
+-
+-	/* Only boolean on/off is supported */
+-	if (cp->param[0] != 0x00 && cp->param[0] != 0x01)
+-		return mgmt_cmd_status(sk, hdev->id,
+-				       MGMT_OP_SET_EXP_FEATURE,
+-				       MGMT_STATUS_INVALID_PARAMS);
+-
+-	hci_req_sync_lock(hdev);
+-
+-	val = !!cp->param[0];
+-	changed = (val != hci_dev_test_flag(hdev, HCI_QUALITY_REPORT));
+-
+-	if (!aosp_has_quality_report(hdev) && !hdev->set_quality_report) {
+-		err = mgmt_cmd_status(sk, hdev->id,
+-				      MGMT_OP_SET_EXP_FEATURE,
+-				      MGMT_STATUS_NOT_SUPPORTED);
+-		goto unlock_quality_report;
+-	}
+-
+-	if (changed) {
+-		if (hdev->set_quality_report)
+-			err = hdev->set_quality_report(hdev, val);
+-		else
+-			err = aosp_set_quality_report(hdev, val);
+-
+-		if (err) {
+-			err = mgmt_cmd_status(sk, hdev->id,
+-					      MGMT_OP_SET_EXP_FEATURE,
+-					      MGMT_STATUS_FAILED);
+-			goto unlock_quality_report;
+-		}
+-
+-		if (val)
+-			hci_dev_set_flag(hdev, HCI_QUALITY_REPORT);
+-		else
+-			hci_dev_clear_flag(hdev, HCI_QUALITY_REPORT);
+-	}
+-
+-	bt_dev_dbg(hdev, "quality report enable %d changed %d", val, changed);
+-
+-	memcpy(rp.uuid, quality_report_uuid, 16);
+-	rp.flags = cpu_to_le32(val ? BIT(0) : 0);
+-	hci_sock_set_flag(sk, HCI_MGMT_EXP_FEATURE_EVENTS);
+-
+-	err = mgmt_cmd_complete(sk, hdev->id, MGMT_OP_SET_EXP_FEATURE, 0,
+-				&rp, sizeof(rp));
+-
+-	if (changed)
+-		exp_feature_changed(hdev, quality_report_uuid, val, sk);
+-
+-unlock_quality_report:
+-	hci_req_sync_unlock(hdev);
+-	return err;
+-}
+-
+ static int set_offload_codec_func(struct sock *sk, struct hci_dev *hdev,
+ 				  struct mgmt_cp_set_exp_feature *cp,
+ 				  u16 data_len)
+@@ -4393,7 +4307,6 @@ static const struct mgmt_exp_feature {
+ 	EXP_FEAT(debug_uuid, set_debug_func),
+ #endif
+ 	EXP_FEAT(rpa_resolution_uuid, set_rpa_resolution_func),
+-	EXP_FEAT(quality_report_uuid, set_quality_report_func),
+ 	EXP_FEAT(offload_codecs_uuid, set_offload_codec_func),
+ 	EXP_FEAT(le_simultaneous_roles_uuid, set_le_simultaneous_roles_func),
+ 
+@@ -8664,6 +8577,71 @@ static int get_adv_size_info(struct sock *sk, struct hci_dev *hdev,
+ 				 MGMT_STATUS_SUCCESS, &rp, sizeof(rp));
+ }
+ 
++static int set_quality_report(struct sock *sk, struct hci_dev *hdev,
++			      void *data, u16 data_len)
++{
++	struct mgmt_cp_set_quality_report *cp = data;
++	bool enable, changed;
++	int err;
++
++	/* Command requires to use a valid controller index */
++	if (!hdev)
++		return mgmt_cmd_status(sk, MGMT_INDEX_NONE,
++				       MGMT_OP_SET_QUALITY_REPORT,
++				       MGMT_STATUS_INVALID_INDEX);
++
++	/* Only 0 (off) and 1 (on) is supported */
++	if (cp->action != 0x00 && cp->action != 0x01)
++		return mgmt_cmd_status(sk, hdev->id,
++				       MGMT_OP_SET_QUALITY_REPORT,
++				       MGMT_STATUS_INVALID_PARAMS);
++
++	hci_req_sync_lock(hdev);
++
++	enable = !!cp->action;
++	changed = (enable != hci_dev_test_flag(hdev, HCI_QUALITY_REPORT));
++
++	if (!aosp_has_quality_report(hdev) && !hdev->set_quality_report) {
++		err = mgmt_cmd_status(sk, hdev->id,
++				      MGMT_OP_SET_QUALITY_REPORT,
++				      MGMT_STATUS_NOT_SUPPORTED);
++		goto unlock_quality_report;
++	}
++
++	if (changed) {
++		if (hdev->set_quality_report)
++			err = hdev->set_quality_report(hdev, enable);
++		else
++			err = aosp_set_quality_report(hdev, enable);
++
++		if (err) {
++			err = mgmt_cmd_status(sk, hdev->id,
++					      MGMT_OP_SET_QUALITY_REPORT,
++					      MGMT_STATUS_FAILED);
++			goto unlock_quality_report;
++		}
++
++		if (enable)
++			hci_dev_set_flag(hdev, HCI_QUALITY_REPORT);
++		else
++			hci_dev_clear_flag(hdev, HCI_QUALITY_REPORT);
++	}
++
++	bt_dev_dbg(hdev, "quality report enable %d changed %d",
++		   enable, changed);
++
++	err = send_settings_rsp(sk, MGMT_OP_SET_QUALITY_REPORT, hdev);
++	if (err < 0)
++		goto unlock_quality_report;
++
++	if (changed)
++		err = new_settings(hdev, sk);
++
++unlock_quality_report:
++	hci_req_sync_unlock(hdev);
++	return err;
++}
++
+ static const struct hci_mgmt_handler mgmt_handlers[] = {
+ 	{ NULL }, /* 0x0000 (no command) */
+ 	{ read_version,            MGMT_READ_VERSION_SIZE,
+@@ -8790,6 +8768,7 @@ static const struct hci_mgmt_handler mgmt_handlers[] = {
+ 	{ add_adv_patterns_monitor_rssi,
+ 				   MGMT_ADD_ADV_PATTERNS_MONITOR_RSSI_SIZE,
+ 						HCI_MGMT_VAR_LEN },
++	{ set_quality_report,      MGMT_SET_QUALITY_REPORT_SIZE },
+ };
+ 
+ void mgmt_index_added(struct hci_dev *hdev)
+-- 
+2.36.1.124.g0e6072fb45-goog
 
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---yrj/dFKFPuw6o+aM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYo4IrwAKCRAw5/Bqldv6
-8kwmAJ9cyWUX2tP3BInVgW7t7yK1iiM1YQCfT1tidpECvUsSK8StZXKtxlG1D7Y=
-=PBmz
------END PGP SIGNATURE-----
-
---yrj/dFKFPuw6o+aM--

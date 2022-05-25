@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B769533837
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506F9533842
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbiEYISq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S232290AbiEYIUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiEYIST (ORCPT
+        with ESMTP id S231300AbiEYIU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:18:19 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A061D7B9C1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 01:18:17 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L7P4z4CQzzQkNy;
-        Wed, 25 May 2022 16:15:15 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 25 May
- 2022 16:18:15 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
-        <naoya.horiguchi@nec.com>
-CC:     <peterx@redhat.com>, <apopple@nvidia.com>, <ying.huang@intel.com>,
-        <david@redhat.com>, <songmuchun@bytedance.com>, <hch@lst.de>,
-        <dhowells@redhat.com>, <cl@linux.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v3 4/4] mm/migration: fix potential pte_unmap on an not mapped pte
-Date:   Wed, 25 May 2022 16:18:22 +0800
-Message-ID: <20220525081822.53547-5-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20220525081822.53547-1-linmiaohe@huawei.com>
-References: <20220525081822.53547-1-linmiaohe@huawei.com>
+        Wed, 25 May 2022 04:20:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6D921E26;
+        Wed, 25 May 2022 01:20:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E3C46182C;
+        Wed, 25 May 2022 08:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631B5C385B8;
+        Wed, 25 May 2022 08:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653466825;
+        bh=SRGr9bBaAAy0ZPMAE/+nMYWecpULf5GsPZfwyOj7qZU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mAzY8Y67YQoKaLcC9i542K0ful3HsFNpPeBwt47U/mRXkeLJ9v1H1GUJC9opimqyR
+         L9BZt3IcalKdL8mGjVp7bkJstApX5eSQEdrhO4F98uuFokYaYlSN0D3vZszh7uAVLB
+         taG+C2FopI0JoaMwICdk9PJQnIUplyQiExLgbt+4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.15.42
+Date:   Wed, 25 May 2022 10:20:21 +0200
+Message-Id: <165346682110712@kroah.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,110 +51,510 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__migration_entry_wait and migration_entry_wait_on_locked assume pte is
-always mapped from caller. But this is not the case when it's called from
-migration_entry_wait_huge and follow_huge_pmd. Add a hugetlbfs variant that
-calls hugetlb_migration_entry_wait(ptep == NULL) to fix this issue.
+I'm announcing the release of the 5.15.42 kernel.
 
-Fixes: 30dad30922cc ("mm: migration: add migrate_entry_wait_huge()")
-Suggested-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Reviewed-by: David Hildenbrand <david@redhat.com>
----
- include/linux/swapops.h | 12 ++++++++----
- mm/hugetlb.c            |  4 ++--
- mm/migrate.c            | 23 +++++++++++++++++++----
- 3 files changed, 29 insertions(+), 10 deletions(-)
+All users of the 5.15 kernel series must upgrade.
 
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index f24775b41880..bb7afd03a324 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -244,8 +244,10 @@ extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
- 					spinlock_t *ptl);
- extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
- 					unsigned long address);
--extern void migration_entry_wait_huge(struct vm_area_struct *vma,
--		struct mm_struct *mm, pte_t *pte);
-+#ifdef CONFIG_HUGETLB_PAGE
-+extern void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl);
-+extern void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte);
-+#endif
- #else
- static inline swp_entry_t make_readable_migration_entry(pgoff_t offset)
- {
-@@ -271,8 +273,10 @@ static inline void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
- 					spinlock_t *ptl) { }
- static inline void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
- 					 unsigned long address) { }
--static inline void migration_entry_wait_huge(struct vm_area_struct *vma,
--		struct mm_struct *mm, pte_t *pte) { }
-+#ifdef CONFIG_HUGETLB_PAGE
-+static inline void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl) { }
-+static inline void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte) { }
-+#endif
- static inline int is_writable_migration_entry(swp_entry_t entry)
- {
- 	return 0;
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 2026fcfc8886..5015270cca12 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5694,7 +5694,7 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 		 */
- 		entry = huge_ptep_get(ptep);
- 		if (unlikely(is_hugetlb_entry_migration(entry))) {
--			migration_entry_wait_huge(vma, mm, ptep);
-+			migration_entry_wait_huge(vma, ptep);
- 			return 0;
- 		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry)))
- 			return VM_FAULT_HWPOISON_LARGE |
-@@ -6912,7 +6912,7 @@ follow_huge_pmd(struct mm_struct *mm, unsigned long address,
- 	} else {
- 		if (is_hugetlb_entry_migration(pte)) {
- 			spin_unlock(ptl);
--			__migration_entry_wait(mm, (pte_t *)pmd, ptl);
-+			__migration_entry_wait_huge((pte_t *)pmd, ptl);
- 			goto retry;
- 		}
- 		/*
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 97c31b87d1a2..581dd2b4dcbb 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -315,13 +315,28 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
- 	__migration_entry_wait(mm, ptep, ptl);
- }
- 
--void migration_entry_wait_huge(struct vm_area_struct *vma,
--		struct mm_struct *mm, pte_t *pte)
-+#ifdef CONFIG_HUGETLB_PAGE
-+void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl)
- {
--	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), mm, pte);
--	__migration_entry_wait(mm, pte, ptl);
-+	pte_t pte;
-+
-+	spin_lock(ptl);
-+	pte = huge_ptep_get(ptep);
-+
-+	if (unlikely(!is_hugetlb_entry_migration(pte)))
-+		spin_unlock(ptl);
-+	else
-+		migration_entry_wait_on_locked(pte_to_swp_entry(pte), NULL, ptl);
- }
- 
-+void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte)
-+{
-+	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), vma->vm_mm, pte);
-+
-+	__migration_entry_wait_huge(pte, ptl);
-+}
-+#endif
-+
- #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
- void pmd_migration_entry_wait(struct mm_struct *mm, pmd_t *pmd)
- {
--- 
-2.23.0
+The updated 5.15.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Documentation/arm64/silicon-errata.rst                                |    3 
+ Documentation/devicetree/bindings/pinctrl/aspeed,ast2600-pinctrl.yaml |    2 
+ Makefile                                                              |    2 
+ arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts                          |   15 
+ arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts                          |   15 
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi                              |    9 
+ arch/arm/boot/dts/aspeed-g6.dtsi                                      |   35 +
+ arch/arm/kernel/entry-armv.S                                          |    2 
+ arch/arm/kernel/stacktrace.c                                          |   10 
+ arch/arm/mm/proc-v7-bugs.c                                            |    1 
+ arch/arm64/kernel/cpu_errata.c                                        |    2 
+ arch/arm64/kernel/mte.c                                               |    3 
+ arch/arm64/kernel/paravirt.c                                          |   29 
+ arch/mips/lantiq/falcon/sysctrl.c                                     |    2 
+ arch/mips/lantiq/xway/gptu.c                                          |    2 
+ arch/mips/lantiq/xway/sysctrl.c                                       |   46 -
+ arch/riscv/boot/dts/sifive/fu540-c000.dtsi                            |    2 
+ arch/s390/kernel/traps.c                                              |    6 
+ arch/s390/pci/pci.c                                                   |    1 
+ arch/s390/pci/pci_bus.h                                               |    3 
+ arch/s390/pci/pci_clp.c                                               |    9 
+ arch/s390/pci/pci_event.c                                             |    7 
+ arch/x86/crypto/chacha-avx512vl-x86_64.S                              |    4 
+ arch/x86/kvm/mmu/mmu.c                                                |   10 
+ arch/x86/um/shared/sysdep/syscalls_64.h                               |    5 
+ drivers/block/drbd/drbd_main.c                                        |    7 
+ drivers/block/floppy.c                                                |   18 
+ drivers/clk/at91/clk-generated.c                                      |    4 
+ drivers/crypto/qcom-rng.c                                             |    1 
+ drivers/crypto/stm32/stm32-crc32.c                                    |    4 
+ drivers/dma-buf/dma-buf.c                                             |    8 
+ drivers/gpio/gpio-mvebu.c                                             |    3 
+ drivers/gpio/gpio-vf610.c                                             |    8 
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h                                   |    2 
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c                              |   14 
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c                               |    2 
+ drivers/gpu/drm/drm_dp_mst_topology.c                                 |    1 
+ drivers/gpu/drm/i915/display/intel_dmc.c                              |   44 +
+ drivers/gpu/drm/i915/display/intel_opregion.c                         |   15 
+ drivers/gpu/drm/i915/i915_reg.h                                       |   16 
+ drivers/i2c/busses/i2c-mt7621.c                                       |   10 
+ drivers/i2c/busses/i2c-piix4.c                                        |  213 +++++-
+ drivers/input/input.c                                                 |   19 
+ drivers/input/touchscreen/ili210x.c                                   |    4 
+ drivers/input/touchscreen/stmfts.c                                    |    8 
+ drivers/net/can/m_can/m_can_pci.c                                     |   48 -
+ drivers/net/ethernet/aquantia/atlantic/aq_ring.c                      |   20 
+ drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c             |    7 
+ drivers/net/ethernet/broadcom/bcmsysport.c                            |    6 
+ drivers/net/ethernet/cadence/macb_main.c                              |    2 
+ drivers/net/ethernet/dec/tulip/tulip_core.c                           |    5 
+ drivers/net/ethernet/intel/ice/ice_base.c                             |    2 
+ drivers/net/ethernet/intel/ice/ice_ethtool.c                          |   38 -
+ drivers/net/ethernet/intel/ice/ice_lib.c                              |   16 
+ drivers/net/ethernet/intel/ice/ice_main.c                             |    7 
+ drivers/net/ethernet/intel/ice/ice_ptp.c                              |   19 
+ drivers/net/ethernet/intel/ice/ice_txrx.h                             |   17 
+ drivers/net/ethernet/intel/igb/igb_main.c                             |    3 
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c                     |    7 
+ drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c          |    6 
+ drivers/net/ethernet/mellanox/mlx5/core/steering/dr_fw.c              |    4 
+ drivers/net/ethernet/mellanox/mlx5/core/steering/dr_types.h           |    3 
+ drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c              |    4 
+ drivers/net/ethernet/mellanox/mlx5/core/steering/mlx5dr.h             |    3 
+ drivers/net/ethernet/qlogic/qla3xxx.c                                 |    3 
+ drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c                      |    4 
+ drivers/net/ipa/gsi.c                                                 |    6 
+ drivers/net/ppp/pppoe.c                                               |    1 
+ drivers/net/vmxnet3/vmxnet3_drv.c                                     |    6 
+ drivers/net/wireless/mediatek/mt76/mt7921/dma.c                       |  115 ---
+ drivers/net/wireless/mediatek/mt76/mt7921/mcu.c                       |   20 
+ drivers/net/wireless/mediatek/mt76/mt7921/pci.c                       |  121 +++
+ drivers/nvme/host/core.c                                              |    1 
+ drivers/nvme/host/multipath.c                                         |   25 
+ drivers/nvme/host/nvme.h                                              |    4 
+ drivers/nvme/host/pci.c                                               |    5 
+ drivers/nvme/target/admin-cmd.c                                       |    2 
+ drivers/nvme/target/configfs.c                                        |    2 
+ drivers/nvme/target/core.c                                            |   24 
+ drivers/nvme/target/fc.c                                              |    8 
+ drivers/nvme/target/fcloop.c                                          |   16 
+ drivers/nvme/target/io-cmd-file.c                                     |    6 
+ drivers/nvme/target/loop.c                                            |    4 
+ drivers/nvme/target/nvmet.h                                           |    1 
+ drivers/nvme/target/passthru.c                                        |    2 
+ drivers/nvme/target/rdma.c                                            |   12 
+ drivers/nvme/target/tcp.c                                             |   10 
+ drivers/pci/controller/pci-aardvark.c                                 |   48 -
+ drivers/pci/pci.c                                                     |   10 
+ drivers/pinctrl/aspeed/pinctrl-aspeed-g6.c                            |   14 
+ drivers/pinctrl/mediatek/pinctrl-mt8365.c                             |    2 
+ drivers/platform/chrome/cros_ec_debugfs.c                             |   12 
+ drivers/rtc/class.c                                                   |    9 
+ drivers/rtc/rtc-mc146818-lib.c                                        |   16 
+ drivers/rtc/rtc-pcf2127.c                                             |    3 
+ drivers/rtc/rtc-sun6i.c                                               |   14 
+ drivers/scsi/device_handler/scsi_dh_alua.c                            |    3 
+ drivers/scsi/qla2xxx/qla_target.c                                     |    3 
+ drivers/scsi/ufs/ufshpb.c                                             |   19 
+ drivers/usb/gadget/legacy/raw_gadget.c                                |    2 
+ drivers/vhost/net.c                                                   |   15 
+ drivers/vhost/vdpa.c                                                  |    5 
+ drivers/video/fbdev/core/fbmem.c                                      |    5 
+ drivers/video/fbdev/core/fbsysfs.c                                    |    4 
+ drivers/watchdog/sp5100_tco.c                                         |  334 ++++++----
+ drivers/watchdog/sp5100_tco.h                                         |    7 
+ fs/afs/inode.c                                                        |   14 
+ fs/gfs2/file.c                                                        |    4 
+ fs/io_uring.c                                                         |    7 
+ fs/ioctl.c                                                            |    2 
+ fs/nilfs2/btnode.c                                                    |   23 
+ fs/nilfs2/btnode.h                                                    |    1 
+ fs/nilfs2/btree.c                                                     |   27 
+ fs/nilfs2/dat.c                                                       |    4 
+ fs/nilfs2/gcinode.c                                                   |    7 
+ fs/nilfs2/inode.c                                                     |  159 ++++
+ fs/nilfs2/mdt.c                                                       |   43 -
+ fs/nilfs2/mdt.h                                                       |    6 
+ fs/nilfs2/nilfs.h                                                     |   16 
+ fs/nilfs2/page.c                                                      |    7 
+ fs/nilfs2/segment.c                                                   |    9 
+ fs/nilfs2/super.c                                                     |    5 
+ include/linux/ceph/osd_client.h                                       |    3 
+ include/linux/ioport.h                                                |    2 
+ include/linux/mc146818rtc.h                                           |    2 
+ include/linux/netdevice.h                                             |    2 
+ include/linux/security.h                                              |    2 
+ include/net/ip.h                                                      |    1 
+ include/net/netns/xfrm.h                                              |    6 
+ include/net/xfrm.h                                                    |   58 -
+ include/uapi/linux/dma-buf.h                                          |    4 
+ kernel/debug/debug_core.c                                             |   24 
+ kernel/debug/kdb/kdb_main.c                                           |   62 +
+ kernel/events/core.c                                                  |   14 
+ mm/kfence/core.c                                                      |   11 
+ net/bridge/br_input.c                                                 |    7 
+ net/ceph/osd_client.c                                                 |  302 +++------
+ net/core/dev.c                                                        |    2 
+ net/core/skbuff.c                                                     |    4 
+ net/ipv4/route.c                                                      |   23 
+ net/key/af_key.c                                                      |    6 
+ net/mac80211/rx.c                                                     |    3 
+ net/mptcp/options.c                                                   |   40 -
+ net/mptcp/protocol.h                                                  |    1 
+ net/mptcp/subflow.c                                                   |   15 
+ net/netfilter/nf_flow_table_core.c                                    |   80 --
+ net/netfilter/nf_flow_table_ip.c                                      |   19 
+ net/netfilter/nft_flow_offload.c                                      |   28 
+ net/nfc/nci/data.c                                                    |    2 
+ net/nfc/nci/hci.c                                                     |    4 
+ net/sched/act_pedit.c                                                 |    4 
+ net/wireless/nl80211.c                                                |   18 
+ net/xfrm/xfrm_policy.c                                                |   10 
+ net/xfrm/xfrm_user.c                                                  |   43 -
+ security/security.c                                                   |    2 
+ security/selinux/ss/hashtab.c                                         |    3 
+ sound/isa/wavefront/wavefront_synth.c                                 |    3 
+ sound/pci/hda/patch_realtek.c                                         |   17 
+ sound/usb/quirks-table.h                                              |    9 
+ tools/build/Makefile.feature                                          |    1 
+ tools/build/feature/Makefile                                          |    4 
+ tools/build/feature/test-libbpf-btf__load_from_kernel_by_id.c         |    7 
+ tools/perf/Makefile.config                                            |    7 
+ tools/perf/arch/x86/util/perf_regs.c                                  |   12 
+ tools/perf/bench/numa.c                                               |    2 
+ tools/perf/util/bpf-event.c                                           |    4 
+ tools/testing/selftests/net/fcnal-test.sh                             |   12 
+ tools/virtio/Makefile                                                 |    3 
+ 168 files changed, 1929 insertions(+), 1059 deletions(-)
+
+Al Viro (1):
+      Fix double fget() in vhost_net_set_backend()
+
+Alex Elder (1):
+      net: ipa: record proper RX transaction count
+
+Andre Przywara (1):
+      rtc: sun6i: Fix time overflow handling
+
+Andreas Gruenbacher (1):
+      gfs2: Disable page faults during lockless buffered reads
+
+Andrew Lunn (1):
+      net: bridge: Clear offload_fwd_mark when passing frame up bridge interface.
+
+Anton Eidelman (1):
+      nvme-multipath: fix hang when disk goes live over reconnect
+
+Anusha Srivatsa (1):
+      drm/i915/dmc: Add MMIO range restrictions
+
+Ard Biesheuvel (2):
+      ARM: 9196/1: spectre-bhb: enable for Cortex-A15
+      ARM: 9197/1: spectre-bhb: fix loop8 sequence for Thumb2
+
+Arkadiusz Kubalewski (1):
+      ice: fix crash when writing timestamp on RX rings
+
+Arnaldo Carvalho de Melo (1):
+      perf build: Fix check for btf__load_from_kernel_by_id() in libbpf
+
+Brian Bunker (1):
+      scsi: scsi_dh_alua: Properly handle the ALUA transitioning state
+
+Catalin Marinas (1):
+      arm64: mte: Ensure the cleared tags are visible before setting the PTE
+
+Charan Teja Kalla (1):
+      dma-buf: ensure unique directory name for dmabuf stats
+
+Christophe JAILLET (2):
+      net: systemport: Fix an error handling path in bcm_sysport_probe()
+      net/qla3xxx: Fix a test in ql_reset_work()
+
+Codrin Ciubotariu (1):
+      clk: at91: generated: consider range when calculating best rate
+
+Daejun Park (1):
+      scsi: ufs: core: Fix referencing invalid rsp field
+
+Daniel Thompson (1):
+      lockdown: also lock down previous kgdb use
+
+Daniel Vetter (1):
+      fbdev: Prevent possible use-after-free in fb_release()
+
+David Gow (1):
+      um: Cleanup syscall_handler_t definition/cast, fix warning
+
+David Howells (1):
+      afs: Fix afs_getattr() to refetch file status if callback break occurred
+
+Duoming Zhou (1):
+      NFC: nci: fix sleep in atomic context bugs caused by nci_skb_alloc
+
+Eddie James (1):
+      ARM: dts: aspeed: Add ADC for AST2600 and enable for Rainier and Everest
+
+Eyal Birger (1):
+      xfrm: fix "disable_policy" flag use when arriving from different devices
+
+Felix Fietkau (5):
+      netfilter: flowtable: fix excessive hw offload attempts after failure
+      netfilter: nft_flow_offload: skip dst neigh lookup for ppp devices
+      net: fix dev_fill_forward_path with pppoe + bridge
+      netfilter: nft_flow_offload: fix offload with pppoe + vlan
+      mac80211: fix rx reordering with non explicit / psmp ack policy
+
+Geliang Tang (2):
+      mptcp: change the parameter of __mptcp_make_csum
+      mptcp: reuse __mptcp_make_csum in validate_data_csum
+
+Gleb Chesnokov (1):
+      scsi: qla2xxx: Fix missed DMA unmap for aborted commands
+
+Grant Grundler (4):
+      net: atlantic: fix "frag[0] not initialized"
+      net: atlantic: reduce scope of is_rsc_complete
+      net: atlantic: add check for MAX_SKB_FRAGS
+      net: atlantic: verify hw_head_ lies within TX buffer ring
+
+Greg Kroah-Hartman (1):
+      Linux 5.15.42
+
+Greg Thelen (1):
+      Revert "drm/i915/opregion: check port number bounds for SWSCI display power state"
+
+Guo Xuenan (1):
+      fs: fix an infinite loop in iomap_fiemap
+
+Haibo Chen (1):
+      gpio: gpio-vf610: do not touch other bits when set the target bit
+
+Hangyu Hua (1):
+      drm/dp/mst: fix a possible memory leak in fetch_monitor_name()
+
+Harini Katakam (1):
+      net: macb: Increment rx bd head after allocating skb and buffer
+
+Heiko Carstens (1):
+      s390/traps: improve panic message for translation-specification exception
+
+Howard Chiu (1):
+      ARM: dts: aspeed: Add video engine to g6
+
+Hugo Villeneuve (1):
+      rtc: pcf2127: fix bug when reading alarm registers
+
+Hyeonggon Yoo (1):
+      mm/kfence: reset PG_slab and memcg_data before freeing __kfence_pool
+
+Ilya Dryomov (1):
+      libceph: fix potential use-after-free on linger ping and resends
+
+Jae Hyun Yoo (4):
+      ARM: dts: aspeed-g6: remove FWQSPID group in pinctrl dtsi
+      pinctrl: pinctrl-aspeed-g6: remove FWQSPID group in pinctrl
+      ARM: dts: aspeed-g6: fix SPI1/SPI2 quad pin group
+      dt-bindings: pinctrl: aspeed-g6: remove FWQSPID group
+
+Jakob Koschel (1):
+      drbd: remove usage of list iterator variable after loop
+
+Jarkko Nikula (1):
+      Revert "can: m_can: pci: use custom bit timings for Elkhart Lake"
+
+Javier Martinez Canillas (1):
+      Revert "fbdev: Make fb_release() return -ENODEV if fbdev was unregistered"
+
+Jeff LaBundy (1):
+      Input: add bounds checking to input_set_capability()
+
+Jiasheng Jiang (1):
+      net: af_key: add check for pfkey_broadcast in function pfkey_process
+
+Joel Stanley (1):
+      ARM: dts: aspeed: Add secure boot controller node
+
+Johannes Berg (1):
+      nl80211: fix locking in nl80211_set_tx_bitrate_mask()
+
+Jérôme Pouiller (1):
+      dma-buf: fix use of DMA_BUF_SET_NAME_{A,B} in userspace
+
+Kai-Heng Feng (1):
+      ALSA: hda/realtek: Enable headset mic on Lenovo P360
+
+Kan Liang (1):
+      perf regs x86: Fix arch__intr_reg_mask() for the hybrid platform
+
+Kevin Mitchell (1):
+      igb: skip phy status check where unavailable
+
+Kieran Frewen (1):
+      nl80211: validate S1G channel width
+
+Krzysztof Kozlowski (1):
+      riscv: dts: sifive: fu540-c000: align dma node name with dtschema
+
+Lina Wang (1):
+      net: fix wrong network header length
+
+Maciej Fijalkowski (1):
+      ice: move ice_container_type onto ice_ring_container
+
+Maor Dickman (1):
+      net/mlx5: DR, Fix missing flow_source when creating multi-destination FW table
+
+Marek Vasut (1):
+      Input: ili210x - fix reset timing
+
+Mario Limonciello (2):
+      rtc: mc146818-lib: Fix the AltCentury for AMD platforms
+      drm/amd: Don't reset dGPUs if the system is going to s2idle
+
+Mattijs Korpershoek (1):
+      pinctrl: mediatek: mt8365: fix IES control pins
+
+Maxim Mikityanskiy (1):
+      net/mlx5e: Properly block LRO when XDP is enabled
+
+Michael S. Tsirkin (1):
+      tools/virtio: compile with -pthread
+
+Michal Wilczynski (1):
+      ice: Fix interrupt moderation settings getting cleared
+
+Monish Kumar R (1):
+      nvme-pci: add quirks for Samsung X5 SSDs
+
+Nicolas Dichtel (2):
+      xfrm: rework default policy structure
+      selftests: add ping test with ping_group_range tuned
+
+Niklas Schnelle (1):
+      s390/pci: improve zpci_dev reference counting
+
+Ondrej Mosnacek (2):
+      selinux: fix bad cleanup on error in hashtab_duplicate()
+      crypto: qcom-rng - fix infinite loop on requests not multiple of WORD_SZ
+
+Pablo Neira Ayuso (2):
+      netfilter: flowtable: fix TCP flow teardown
+      netfilter: flowtable: pass flowtable to nf_flow_table_iterate()
+
+Pali Rohár (1):
+      Revert "PCI: aardvark: Rewrite IRQ code to chained IRQ handler"
+
+Paolo Abeni (2):
+      net/sched: act_pedit: sanitize shift argument before usage
+      mptcp: fix checksum byte order
+
+Paul Greenwalt (1):
+      ice: fix possible under reporting of ethtool Tx and Rx statistics
+
+Pavel Begunkov (1):
+      io_uring: arm poll for non-nowait files
+
+Peter Zijlstra (2):
+      crypto: x86/chacha20 - Avoid spurious jumps to other functions
+      perf: Fix sys_perf_event_open() race against self
+
+Prakruthi Deepak Heragu (1):
+      arm64: paravirt: Use RCU read locks to guard stolen_time
+
+Rafael J. Wysocki (1):
+      PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold
+
+Randy Dunlap (1):
+      ALSA: hda - fix unused Realtek function when PM is not enabled
+
+Ritaro Takenaka (1):
+      netfilter: flowtable: move dst_check to packet path
+
+Ryusuke Konishi (2):
+      nilfs2: fix lockdep warnings in page operations for btree nodes
+      nilfs2: fix lockdep warnings during disk space reclamation
+
+Sagi Grimberg (1):
+      nvmet: use a private workqueue instead of the system workqueue
+
+Schspa Shi (1):
+      usb: gadget: fix race when gadget driver register via ioctl
+
+Sean Christopherson (1):
+      KVM: x86/mmu: Update number of zapped pages even if page list is stable
+
+Sean Wang (1):
+      mt76: mt7921e: fix possible probe failure after reboot
+
+Shreyas K K (1):
+      arm64: Enable repeat tlbi workaround on KRYO4XX gold CPUs
+
+Takashi Iwai (2):
+      ALSA: usb-audio: Restore Rane SL-1 quirk
+      ALSA: wavefront: Proper check of get_user() error
+
+Terry Bowman (13):
+      kernel/resource: Introduce request_mem_region_muxed()
+      i2c: piix4: Replace hardcoded memory map size with a #define
+      i2c: piix4: Move port I/O region request/release code into functions
+      i2c: piix4: Move SMBus controller base address detect into function
+      i2c: piix4: Move SMBus port selection into function
+      i2c: piix4: Add EFCH MMIO support to region request and release
+      i2c: piix4: Add EFCH MMIO support to SMBus base address detect
+      i2c: piix4: Add EFCH MMIO support for SMBus port select
+      i2c: piix4: Enable EFCH MMIO for Family 17h+
+      Watchdog: sp5100_tco: Move timer initialization into function
+      Watchdog: sp5100_tco: Refactor MMIO base address initialization
+      Watchdog: sp5100_tco: Add initialization using EFCH MMIO
+      Watchdog: sp5100_tco: Enable Family 17h+ CPUs
+
+Thomas Richter (1):
+      perf bench numa: Address compiler error on s390
+
+Tzung-Bi Shih (1):
+      platform/chrome: cros_ec_debugfs: detach log reader wq from devm
+
+Uwe Kleine-König (1):
+      gpio: mvebu/pwm: Refuse requests with inverted polarity
+
+Vincent Whitchurch (1):
+      rtc: fix use-after-free on device removal
+
+Werner Sembach (1):
+      ALSA: hda/realtek: Add quirk for TongFang devices with pop noise
+
+Willy Tarreau (1):
+      floppy: use a statically allocated error counter
+
+Xiaoke Wang (1):
+      MIPS: lantiq: check the return value of kzalloc()
+
+Yang Yingliang (3):
+      ethernet: tulip: fix missing pci_disable_device() on error in tulip_init_one()
+      net: stmmac: fix missing pci_disable_device() on error in stmmac_pci_probe()
+      i2c: mt7621: fix missing clk_disable_unprepare() on error in mtk_i2c_probe()
+
+Zheng Yongjun (2):
+      Input: stmfts - fix reference leak in stmfts_input_open
+      crypto: stm32 - fix reference leak in stm32_crc_remove
+
+Zhu Lingshan (1):
+      vhost_vdpa: don't setup irq offloading when irq_num < 0
+
+Zixuan Fu (2):
+      net: vmxnet3: fix possible use-after-free bugs in vmxnet3_rq_alloc_rx_buf()
+      net: vmxnet3: fix possible NULL pointer dereference in vmxnet3_rq_cleanup()
+
+linyujun (1):
+      ARM: 9191/1: arm/stacktrace, kasan: Silence KASAN warnings in unwind_frame()
 

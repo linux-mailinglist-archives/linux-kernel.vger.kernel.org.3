@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F167533E7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3912B533EB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244801AbiEYOAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S244669AbiEYOBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244572AbiEYN6l (ORCPT
+        with ESMTP id S244642AbiEYN6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:58:41 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F10AB0E8;
-        Wed, 25 May 2022 06:58:36 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id c15-20020a9d684f000000b0060b097c71ecso7317866oto.10;
-        Wed, 25 May 2022 06:58:36 -0700 (PDT)
+        Wed, 25 May 2022 09:58:47 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC32DABF5C;
+        Wed, 25 May 2022 06:58:38 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-f2bb84f9edso2957858fac.10;
+        Wed, 25 May 2022 06:58:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kgX0NZH7fDiJQUhAb8gmt+meldKpgisUE8fSxZ9Voms=;
-        b=SmSGRZLh4nDtJaPUUJNmoIqmiM4VYKKYTebXwj7QKvEBhpj4eJ8NV1csfbh4M5s/D+
-         IxgEC3x+QMeMi86ZW4R5krrHQy71kG6MkfGvIQGEiKPnCo7paC4twFinaa5zAkIclLoP
-         ymQlJ5CH02BzRy1EZWPH0BfTBmFciI57xqmqTze4JNNjm9hEtpsvV+x5d+HJ+hO/Op39
-         t6lfhcU8onF216cc12hIChBeVejK9etIT8E9f9U3vftTQLWseXP8n7oc5uMJzwhPQJsN
-         NSbS+socvuHnYYkHzFokJ6p3kfZwK94fdOQUsDeKli8SMK9wMz3+5ruEFkJjhUhon7KL
-         OU7Q==
+        bh=LzGrQA521f4znRunTBtTAMSfpI//uWmIAfNJSo5sNZA=;
+        b=XkgIGJzq6ZsqjOoEOrFai7RDdw8V1TQ1e1GR0XxLJFvITV2bslKd7xaCeZhbda9WSq
+         BOnxqzxs91F12+lUGNvcnD25CW25mRDZbxqhnqz9l+sDcUEPqTMuKRjDzKISLquvbLMk
+         fRdRg8YQNW/lKj5rsW8QLUL6cT419ej0t0nVh1UW7663+5JCwD89Wh4uMFrDYRX0+rhW
+         RMCRNjC0thjBqfzRW9yZ9F3OL/8ELyB8n5pRgeiYlEFiYQYBo9sH38SqLvluXLjrtlD4
+         IlK7KE36p8J6jUrqqmYe9qZoLv0Krg8HQlUoApoLPTah07b/RQF8WNovPyaVHzyLiXA0
+         wOHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=kgX0NZH7fDiJQUhAb8gmt+meldKpgisUE8fSxZ9Voms=;
-        b=TXijp0chv9pJilDpQp2cJnkKs2skPLObfrx6tUcNIgr2vCSRoIOjV2Gh5YYGCTZaOU
-         dKbhXW6pOidPcEK1bQbJwJW7+Phex9ar+vnunRkTOQLGoOZVYsOiBhkf077hidzDDi81
-         DHpySMF76wqKQcr8/6y1faux10AZccPmYh1PfOry17Cl1W7xtdz9w1YUjE/JPlc392NU
-         GY/T36e8pKFhS3fLcbTekJ+t3W3zTnSBWdWfj5dmGReoTwVvf9Myscjh5XU5P/LCGo/D
-         c9gsikdbed081556slJe9iarOCxOGA7WIWkH/E4Of1B/Dm6tMfP4wB//fEqo16G/YGa3
-         0wQQ==
-X-Gm-Message-State: AOAM531xsGO+E4V+B48Kwzm2wpTsC7xi+DSxK2e9iRw9fzaOCZw/JdFj
-        1IUDqND5x4b1gK+aV/aU01waf1IGqvvCkg==
-X-Google-Smtp-Source: ABdhPJx+H4WTIHKANnxe2J9Y83pEM8P72qvXOuDrSHgjNRis8S2G6ID0thNGOhMngirq4VarMMRTug==
-X-Received: by 2002:a05:6830:40c5:b0:60b:39c0:750b with SMTP id h5-20020a05683040c500b0060b39c0750bmr246667otu.97.1653487115898;
-        Wed, 25 May 2022 06:58:35 -0700 (PDT)
+        bh=LzGrQA521f4znRunTBtTAMSfpI//uWmIAfNJSo5sNZA=;
+        b=djVbsty7v5JBgZa9OcyXICkpjapJLS0pXpPi74hVe625+y4x9nHgdfCWUzWqMrTnwE
+         5iHOB0sew7VwiLVUSySIW7Vi5xB3i22aYAHidda+X0v7931hHmlVAE0/9ZMWMgCQ1BlI
+         XJtgjqduhU7+iBi7SU3N7+TNaA8U5Iodgv30YJcwlLZfpxx4mz1VUnmIQqBwDWCMUDyX
+         miWZn3m9qFDJj4WHJc6HL6j/4P990LpGVKWjsKsBOZUoAxwdKysvcj7EjpVmK/YTPtPb
+         uMkEubJZCMP5sF8jREYHlSxxvK4WS16J1WgLFoCtET+oLrLElMLZsbC8X5Q/g9wJdilq
+         thtg==
+X-Gm-Message-State: AOAM531r3MGzAYJh2KZO1KB2fhqktTLNakT4HfE+Mc8XeEjV8TASuNfS
+        bgnQz10AVOuz0dDYNrywBT+bTuKVU9f5IA==
+X-Google-Smtp-Source: ABdhPJw0PX9ox0gioOGRmo3RLhLmQmrs6oy3tl0SO9PrS4QgapbHzFazuXdSSSGKmXp9D+11NopwYQ==
+X-Received: by 2002:a05:6870:d1cd:b0:e1:e7ee:faa0 with SMTP id b13-20020a056870d1cd00b000e1e7eefaa0mr5769865oac.5.1653487117817;
+        Wed, 25 May 2022 06:58:37 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y21-20020a4ae715000000b00333220959b9sm6752729oou.1.2022.05.25.06.58.35
+        by smtp.gmail.com with ESMTPSA id q203-20020acac0d4000000b00325cda1ff94sm6215926oif.19.2022.05.25.06.58.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:58:35 -0700 (PDT)
+        Wed, 25 May 2022 06:58:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Slawomir Stepien <sst@poczta.fm>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 18/40] hwmon: (lm90) Add flag to indicate 'alarms' attribute support
-Date:   Wed, 25 May 2022 06:57:36 -0700
-Message-Id: <20220525135758.2944744-19-linux@roeck-us.net>
+Subject: [PATCH 19/40] hwmon: (lm90) Add explicit support for MAX6648/MAX6692
+Date:   Wed, 25 May 2022 06:57:37 -0700
+Message-Id: <20220525135758.2944744-20-linux@roeck-us.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220525135758.2944744-1-linux@roeck-us.net>
 References: <20220525135758.2944744-1-linux@roeck-us.net>
@@ -73,198 +73,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't want to support the obsolete 'alarms' attribute for new
-chips supported by this driver. Add flag to indicate 'alarms' attribute
-support and use it for existing chips. This flag will not be set for
-additional chips supported by this driver in the future.
+Unlike MAX6646/MAX6647/MAX6649, MAX6648 and MAX6692 only support
+a temperature range of 0..127 degrees C. Separate support for the
+two sets of chips to be able to support maximum temperature ranges
+correctly for all chips. Introduce new feature flag to indicate
+temperature support up to 255 degrees C.
+
+Since the chips are almost identical except for the supported temperature
+range, automatic chip detection is limited. Effectively this means that
+MAX6648 may be mis-detected as MAX6649 when auto-detected, but there is
+nothing we can do about that.
+
+Devicetree nodes are not added for the added chips since it is quite
+unlikely that such old chips will ever be used in a devicetree based
+system. They can be added later if needed.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/lm90.c | 57 +++++++++++++++++++++++++++++---------------
- 1 file changed, 38 insertions(+), 19 deletions(-)
+ Documentation/hwmon/lm90.rst | 12 +++++++++--
+ drivers/hwmon/lm90.c         | 41 ++++++++++++++++++++++++++++++++----
+ 2 files changed, 47 insertions(+), 6 deletions(-)
 
+diff --git a/Documentation/hwmon/lm90.rst b/Documentation/hwmon/lm90.rst
+index 9886a298797f..e947e609990b 100644
+--- a/Documentation/hwmon/lm90.rst
++++ b/Documentation/hwmon/lm90.rst
+@@ -105,7 +105,7 @@ Supported chips:
+ 
+   * Maxim MAX6648
+ 
+-    Prefix: 'max6646'
++    Prefix: 'max6648'
+ 
+     Addresses scanned: I2C 0x4c
+ 
+@@ -191,7 +191,7 @@ Supported chips:
+ 
+   * Maxim MAX6692
+ 
+-    Prefix: 'max6646'
++    Prefix: 'max6648'
+ 
+     Addresses scanned: I2C 0x4c
+ 
+@@ -324,6 +324,14 @@ ADT7461, ADT7461A, NCT1008:
+   * Lower resolution for remote temperature
+   * SMBus PEC support for Write Byte and Receive Byte transactions.
+ 
++MAX6646, MAX6647, MAX6649:
++  * Better local resolution
++  * Extended range unsigned external temperature
++
++MAX6648, MAX6692:
++  * Better local resolution
++  * Unsigned temperature
++
+ MAX6654:
+   * Better local resolution
+   * Selectable address
 diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index b39e31ded2cb..e23dcf299b03 100644
+index e23dcf299b03..df4b861024e3 100644
 --- a/drivers/hwmon/lm90.c
 +++ b/drivers/hwmon/lm90.c
-@@ -178,6 +178,7 @@ enum chips { adm1032, adt7461, adt7461a, g781, lm86, lm90, lm99,
- #define LM90_HAVE_CRIT_ALRM_SWP	BIT(10)	/* critical alarm bits swapped	*/
+@@ -115,7 +115,7 @@ static const unsigned short normal_i2c[] = {
+ 	0x4d, 0x4e, 0x4f, I2C_CLIENT_END };
+ 
+ enum chips { adm1032, adt7461, adt7461a, g781, lm86, lm90, lm99,
+-	max6646, max6654, max6657, max6659, max6680, max6696,
++	max6646, max6648, max6654, max6657, max6659, max6680, max6696,
+ 	sa56004, tmp451, tmp461, w83l771,
+ };
+ 
+@@ -179,6 +179,7 @@ enum chips { adm1032, adt7461, adt7461a, g781, lm86, lm90, lm99,
  #define LM90_HAVE_PEC		BIT(11)	/* Chip supports PEC		*/
  #define LM90_HAVE_PARTIAL_PEC	BIT(12)	/* Partial PEC support (adm1032)*/
-+#define LM90_HAVE_ALARMS	BIT(13)	/* Create 'alarms' attribute	*/
+ #define LM90_HAVE_ALARMS	BIT(13)	/* Create 'alarms' attribute	*/
++#define LM90_HAVE_EXT_UNSIGNED	BIT(14)	/* extended unsigned temperature*/
  
  /* LM90 status */
  #define LM90_STATUS_LTHRM	BIT(0)	/* local THERM limit tripped */
-@@ -347,7 +348,7 @@ static const struct lm90_params lm90_params[] = {
- 	[adm1032] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT
--		  | LM90_HAVE_PARTIAL_PEC,
-+		  | LM90_HAVE_PARTIAL_PEC | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 10,
- 	},
-@@ -359,7 +360,8 @@ static const struct lm90_params lm90_params[] = {
- 		 */
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP
--		  | LM90_HAVE_CRIT | LM90_HAVE_PARTIAL_PEC,
-+		  | LM90_HAVE_CRIT | LM90_HAVE_PARTIAL_PEC
-+		  | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 10,
- 		.resolution = 10,
-@@ -367,55 +369,58 @@ static const struct lm90_params lm90_params[] = {
- 	[adt7461a] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP
--		  | LM90_HAVE_CRIT | LM90_HAVE_PEC,
-+		  | LM90_HAVE_CRIT | LM90_HAVE_PEC | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 10,
- 	},
- 	[g781] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
--		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT,
-+		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_CRIT
-+		  | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 7,
- 	},
- 	[lm86] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
--		  | LM90_HAVE_CRIT,
-+		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7b,
- 		.max_convrate = 9,
- 	},
- 	[lm90] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
--		  | LM90_HAVE_CRIT,
-+		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7b,
- 		.max_convrate = 9,
- 	},
- 	[lm99] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
--		  | LM90_HAVE_CRIT,
-+		  | LM90_HAVE_CRIT | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7b,
- 		.max_convrate = 9,
+@@ -213,6 +214,7 @@ static const struct i2c_device_id lm90_id[] = {
+ 	{ "lm99", lm99 },
+ 	{ "max6646", max6646 },
+ 	{ "max6647", max6646 },
++	{ "max6648", max6648 },
+ 	{ "max6649", max6646 },
+ 	{ "max6654", max6654 },
+ 	{ "max6657", max6657 },
+@@ -220,6 +222,7 @@ static const struct i2c_device_id lm90_id[] = {
+ 	{ "max6659", max6659 },
+ 	{ "max6680", max6680 },
+ 	{ "max6681", max6680 },
++	{ "max6692", max6648 },
+ 	{ "max6695", max6696 },
+ 	{ "max6696", max6696 },
+ 	{ "nct1008", adt7461a },
+@@ -400,7 +403,14 @@ static const struct lm90_params lm90_params[] = {
  	},
  	[max6646] = {
  		.flags = LM90_HAVE_CRIT | LM90_HAVE_BROKEN_ALERT
--		  | LM90_HAVE_UNSIGNED_TEMP,
-+		  | LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_ALARMS,
+-		  | LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_ALARMS,
++		  | LM90_HAVE_EXT_UNSIGNED | LM90_HAVE_ALARMS,
++		.alert_alarms = 0x7c,
++		.max_convrate = 6,
++		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
++	},
++	[max6648] = {
++		.flags = LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_CRIT
++		  | LM90_HAVE_BROKEN_ALERT,
  		.alert_alarms = 0x7c,
  		.max_convrate = 6,
  		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
- 	},
- 	[max6654] = {
--		.flags = LM90_HAVE_BROKEN_ALERT,
-+		.flags = LM90_HAVE_BROKEN_ALERT | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 7,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
- 	},
- 	[max6657] = {
--		.flags = LM90_PAUSE_FOR_CONFIG | LM90_HAVE_CRIT,
-+		.flags = LM90_PAUSE_FOR_CONFIG | LM90_HAVE_CRIT
-+		  | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 8,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
- 	},
- 	[max6659] = {
--		.flags = LM90_HAVE_EMERGENCY | LM90_HAVE_CRIT,
-+		.flags = LM90_HAVE_EMERGENCY | LM90_HAVE_CRIT
-+		  | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 8,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
-@@ -427,19 +432,22 @@ static const struct lm90_params lm90_params[] = {
- 		 * be set).
- 		 */
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_CRIT
--		  | LM90_HAVE_CRIT_ALRM_SWP | LM90_HAVE_BROKEN_ALERT,
-+		  | LM90_HAVE_CRIT_ALRM_SWP | LM90_HAVE_BROKEN_ALERT
-+		  | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 7,
- 	},
- 	[max6696] = {
- 		.flags = LM90_HAVE_EMERGENCY
--		  | LM90_HAVE_EMERGENCY_ALARM | LM90_HAVE_TEMP3 | LM90_HAVE_CRIT,
-+		  | LM90_HAVE_EMERGENCY_ALARM | LM90_HAVE_TEMP3 | LM90_HAVE_CRIT
-+		  | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x1c7c,
- 		.max_convrate = 6,
- 		.reg_local_ext = MAX6657_REG_LOCAL_TEMPL,
- 	},
- 	[w83l771] = {
--		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT | LM90_HAVE_CRIT,
-+		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT | LM90_HAVE_CRIT
-+		  | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 8,
- 	},
-@@ -449,7 +457,8 @@ static const struct lm90_params lm90_params[] = {
- 		 * and treated as negative temperatures (meaning min_alarm will
- 		 * be set).
- 		 */
--		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT | LM90_HAVE_CRIT,
-+		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT | LM90_HAVE_CRIT
-+		  | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7b,
- 		.max_convrate = 9,
- 		.reg_local_ext = SA56004_REG_LOCAL_TEMPL,
-@@ -457,7 +466,7 @@ static const struct lm90_params lm90_params[] = {
- 	[tmp451] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP | LM90_HAVE_CRIT
--		  | LM90_HAVE_UNSIGNED_TEMP,
-+		  | LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 9,
- 		.resolution = 12,
-@@ -465,7 +474,8 @@ static const struct lm90_params lm90_params[] = {
- 	},
- 	[tmp461] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
--		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP | LM90_HAVE_CRIT,
-+		  | LM90_HAVE_BROKEN_ALERT | LM90_HAVE_EXTENDED_TEMP | LM90_HAVE_CRIT
-+		  | LM90_HAVE_ALARMS,
- 		.alert_alarms = 0x7c,
- 		.max_convrate = 9,
- 		.resolution = 12,
-@@ -505,7 +515,9 @@ enum lm90_temp_reg_index {
- struct lm90_data {
- 	struct i2c_client *client;
- 	struct device *hwmon_dev;
-+	u32 chip_config[2];
- 	u32 channel_config[4];
-+	struct hwmon_channel_info chip_info;
- 	struct hwmon_channel_info temp_info;
- 	const struct hwmon_channel_info *info[3];
- 	struct hwmon_chip_info chip;
-@@ -2028,8 +2040,15 @@ static int lm90_probe(struct i2c_client *client)
- 	data->chip.ops = &lm90_ops;
- 	data->chip.info = data->info;
+@@ -1119,7 +1129,7 @@ static int lm90_temp_from_reg(u32 flags, u16 regval, u8 resolution)
  
--	data->info[0] = HWMON_CHANNEL_INFO(chip,
--		HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL | HWMON_C_ALARMS);
-+	data->info[0] = &data->chip_info;
-+	info = &data->chip_info;
-+	info->type = hwmon_chip;
-+	info->config = data->chip_config;
+ 	if (flags & LM90_HAVE_EXTENDED_TEMP)
+ 		val = regval - 0x4000;
+-	else if (flags & LM90_HAVE_UNSIGNED_TEMP)
++	else if (flags & (LM90_HAVE_UNSIGNED_TEMP | LM90_HAVE_EXT_UNSIGNED))
+ 		val = regval;
+ 	else
+ 		val = (s16)regval;
+@@ -1147,6 +1157,8 @@ static u16 lm90_temp_to_reg(u32 flags, long val, u8 resolution)
+ 	if (flags & LM90_HAVE_EXTENDED_TEMP) {
+ 		val = clamp_val(val, -64000, 191000 + fraction);
+ 		val += 64000;
++	} else if (flags & LM90_HAVE_EXT_UNSIGNED) {
++		val = clamp_val(val, 0, 255000 + fraction);
+ 	} else if (flags & LM90_HAVE_UNSIGNED_TEMP) {
+ 		val = clamp_val(val, 0, 127000 + fraction);
+ 	} else {
+@@ -1673,11 +1685,32 @@ static const char *lm90_detect_maxim(struct i2c_client *client, int chip_id,
+ 		 * The chip_id register of the MAX6646/6647/6649 holds the
+ 		 * revision of the chip. The lowest 6 bits of the config1
+ 		 * register are unused and should return zero when read.
++		 * The I2C address of MAX6648/6692 is fixed at 0x4c.
++		 * MAX6646 is at address 0x4d, MAX6647 is at address 0x4e,
++		 * and MAX6649 is at address 0x4c. A slight difference between
++		 * the two sets of chips is that the remote temperature register
++		 * reports different values if the DXP pin is open or shorted.
++		 * We can use that information to help distinguish between the
++		 * chips. MAX6648 will be mis-detected as MAX6649 if the remote
++		 * diode is connected, but there isn't really anything we can
++		 * do about that.
+ 		 */
+ 		if (!(config1 & 0x3f) && convrate <= 0x07) {
++			int temp;
 +
-+	data->chip_config[0] = HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL;
-+	if (data->flags & LM90_HAVE_ALARMS)
-+		data->chip_config[0] |= HWMON_C_ALARMS;
-+
- 	data->info[1] = &data->temp_info;
- 
- 	info = &data->temp_info;
+ 			switch (address) {
+ 			case 0x4c:
+-				name = "max6649";
++				/*
++				 * MAX6649 reports an external temperature
++				 * value of 0xff if DXP is open or shorted.
++				 * MAX6648 reports 0x80 in that case.
++				 */
++				temp = i2c_smbus_read_byte_data(client,
++								LM90_REG_REMOTE_TEMPH);
++				if (temp == 0x80)
++					name = "max6648";
++				else
++					name = "max6649";
+ 				break;
+ 			case 0x4d:
+ 				name = "max6646";
 -- 
 2.35.1
 

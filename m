@@ -2,182 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8299B5340E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FF85340EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245387AbiEYP7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
+        id S245394AbiEYP7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiEYP64 (ORCPT
+        with ESMTP id S245361AbiEYP7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:58:56 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0452B972BD
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:58:55 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4L7bMn2chTz9tFN;
-        Wed, 25 May 2022 17:58:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9vEVZE9HpWyB; Wed, 25 May 2022 17:58:45 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4L7bMk5NFmz9tFP;
-        Wed, 25 May 2022 17:58:42 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9FE958B77A;
-        Wed, 25 May 2022 17:58:42 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id htU6u_JrvheR; Wed, 25 May 2022 17:58:42 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.180])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 28D0E8B778;
-        Wed, 25 May 2022 17:58:42 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 24PFwR0e419152
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 17:58:27 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 24PFwRZn419151;
-        Wed, 25 May 2022 17:58:27 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, peterz@infradead.org,
-        aik@ozlabs.ru, sv@linux.ibm.com, rostedt@goodmis.org,
-        jpoimboe@redhat.com, naveen.n.rao@linux.vnet.ibm.com,
-        mbenes@suse.cz
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [RFC PATCH v1 4/4] powerpc/static_call: Implement inline static calls
-Date:   Wed, 25 May 2022 17:58:17 +0200
-Message-Id: <2e74b10072ca594c394dd1c445d827505725f27a.1653494186.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <cover.1653494186.git.christophe.leroy@csgroup.eu>
-References: <cover.1653494186.git.christophe.leroy@csgroup.eu>
+        Wed, 25 May 2022 11:59:05 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B756AA65
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:59:02 -0700 (PDT)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 520A13FBC8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:59:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1653494340;
+        bh=ceTyIPuj0mdwf7qJM6JGPSBEklD8LtuaTMx0pA8AGQY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=c8Js8xHkJ4fKB3A/KehTCyEvJf2V87eptFJkfui6XZiwXaeZ3HmeP2xY7H8W4alKX
+         cZwNztJTdFITrUJU5rZnkVNjFqfEwSpgqdC52V0s7mcsVmyaJxwVStr6vRSIhsNpB+
+         VKsyNZAdToWpmoysVo/Mxny80eI5NGX+qIIGE3m1Mp+e+EvxlupnCUZJdQ7SqO4ntE
+         gnZ9NdlGmiJSpu4ZvsfxiqTQFK5/cGwCGnCuhKVGpSFaG/IhJwJRCjUmgQxUpHbLMk
+         KVDqZF7Vni7e/oXk054DhRBuUhDZ9JfN97QMFWiAErsmVlkOrULpOrv7jhIYsLLeoh
+         I8zIWhRJKwxMA==
+Received: by mail-ed1-f72.google.com with SMTP id w23-20020aa7da57000000b0042acd76347bso15134574eds.2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:59:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ceTyIPuj0mdwf7qJM6JGPSBEklD8LtuaTMx0pA8AGQY=;
+        b=S85pX7qWPxGNrO6DSqSuOKz8qRYTOJ3heMpidv4SYi2Rym0YXR8XwBYZjVFl0KYWz6
+         dmFf4n1StAEXam6Xq5MC1G9s981lQvTaMd2JMXBFiI7TxBMJrGwdOxQNm8gTYMlIl3YS
+         0n/OBJx2TuZzrdlf/HPul1Xmz4VuOjhd2sHxQG/JEkQhRzL7jraOd1u67dBBJIubwTKp
+         y2i/Z1q95DE1eXXLjDVLmkfZ4OC9MhJ3esBsGUaa06uNbnduEY0SFfApXJH9/XOUzFjd
+         9nRnrtyEps6IfaU2PlSNB4RSdCse8DuVbUOphJSxUD5WhiEGoXuYJAJRnmwuxO741oxa
+         VMsw==
+X-Gm-Message-State: AOAM530Jcwayw2puTEK65JtQXFdAQsH6DvEjCi808B3YEvb+XbixxPF7
+        ZGlqYOGyAHrIvjKTyQcwleglJKRWPPBa5sljUuixH6N7nAep4DEauBj7JjHt3KuGetLYhhLcjR5
+        jB7psPUWxnK9wPVe6qgzjkaoZs751aRtghUjvsB5ACg==
+X-Received: by 2002:aa7:c615:0:b0:42b:cdcc:5844 with SMTP id h21-20020aa7c615000000b0042bcdcc5844mr2769930edq.312.1653494339816;
+        Wed, 25 May 2022 08:58:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx94oaHZAUQqbKeS616bkQPP3+D2aG2FQiBBhy3mgd3CzCggc7oTgSKb95EHir2Xerc0gQJxg==
+X-Received: by 2002:aa7:c615:0:b0:42b:cdcc:5844 with SMTP id h21-20020aa7c615000000b0042bcdcc5844mr2769909edq.312.1653494339621;
+        Wed, 25 May 2022 08:58:59 -0700 (PDT)
+Received: from [192.168.123.67] (ip-062-143-094-109.um16.pools.vodafone-ip.de. [62.143.94.109])
+        by smtp.gmail.com with ESMTPSA id my44-20020a1709065a6c00b006f3ef214de4sm7747900ejc.74.2022.05.25.08.58.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 08:58:59 -0700 (PDT)
+Message-ID: <fff02688-e272-3462-d950-427ebe4ad862@canonical.com>
+Date:   Wed, 25 May 2022 17:58:58 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1653494295; l=4004; s=20211009; h=from:subject:message-id; bh=Si7ViaXO/clzpQWdQFEHD12KLid8Hfc27sgBafOTn9A=; b=1u5j19ZyGAUOZn2Be1bpzfdF3Xi2Yq69UCl1H3WI+qNHuP6EbAvpWnSmUmfc2ZpXvf04Wy3rRcpp U79BvpfHCtkQcDPtHARpwiTtn1Wu3Tw0mXJ4Jt1PDGSvb0bEGsTW
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 3/5] riscv: smp: Support for 64bit hartid
+Content-Language: en-US
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, Sunil V L <sunil.vl@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Marc Zyngier <maz@kernel.org>
+References: <20220525151106.2176147-1-sunilvl@ventanamicro.com>
+ <20220525151106.2176147-4-sunilvl@ventanamicro.com>
+From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+In-Reply-To: <20220525151106.2176147-4-sunilvl@ventanamicro.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement inline static calls:
-- Put a 'bl' to the destination function
-- Put a 'nop' when the destination function is NULL
-- Put a 'li r3,0' when the destination is the RET0 function
+On 5/25/22 17:11, Sunil V L wrote:
+> The hartid can be a 64bit value on RV64 platforms. This patch
+> modifies the hartid parameter in riscv_hartid_to_cpuid() as
+> unsigned long so that it can hold 64bit value on RV64 platforms.
+> 
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 
-For the time being it only works if the destination is
-within 32Mb from the caller.
+Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/Kconfig                          |  1 +
- arch/powerpc/include/asm/static_call.h        |  2 +
- arch/powerpc/kernel/static_call.c             | 41 ++++++++++++-------
- tools/objtool/arch/powerpc/include/arch/elf.h |  1 +
- 4 files changed, 31 insertions(+), 14 deletions(-)
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 5ef8bf8eb202..3257a1c258d8 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -246,6 +246,7 @@ config PPC
- 	select HAVE_STACKPROTECTOR		if PPC32 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r2)
- 	select HAVE_STACKPROTECTOR		if PPC64 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r13)
- 	select HAVE_STATIC_CALL			if PPC32
-+	select HAVE_STATIC_CALL_INLINE		if PPC32
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HAVE_VIRT_CPU_ACCOUNTING
- 	select HUGETLB_PAGE_SIZE_VARIABLE	if PPC_BOOK3S_64 && HUGETLB_PAGE
-diff --git a/arch/powerpc/include/asm/static_call.h b/arch/powerpc/include/asm/static_call.h
-index de1018cc522b..e3d5d3823dac 100644
---- a/arch/powerpc/include/asm/static_call.h
-+++ b/arch/powerpc/include/asm/static_call.h
-@@ -26,4 +26,6 @@
- #define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)	__PPC_SCT(name, "blr")
- #define ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)	__PPC_SCT(name, "b .+20")
- 
-+#define CALL_INSN_SIZE		4
-+
- #endif /* _ASM_POWERPC_STATIC_CALL_H */
-diff --git a/arch/powerpc/kernel/static_call.c b/arch/powerpc/kernel/static_call.c
-index 863a7aa24650..fd25954cfd24 100644
---- a/arch/powerpc/kernel/static_call.c
-+++ b/arch/powerpc/kernel/static_call.c
-@@ -9,25 +9,38 @@ void arch_static_call_transform(void *site, void *tramp, void *func, bool tail)
- 	int err;
- 	bool is_ret0 = (func == __static_call_return0);
- 	unsigned long target = (unsigned long)(is_ret0 ? tramp + PPC_SCT_RET0 : func);
--	bool is_short = is_offset_in_branch_range((long)target - (long)tramp);
--
--	if (!tramp)
--		return;
- 
- 	mutex_lock(&text_mutex);
- 
--	if (func && !is_short) {
--		err = patch_instruction(tramp + PPC_SCT_DATA, ppc_inst(target));
--		if (err)
--			goto out;
-+	if (tramp) {
-+		bool is_short = is_offset_in_branch_range((long)target - (long)tramp);
-+
-+		if (func && !is_short) {
-+			err = patch_instruction(tramp + PPC_SCT_DATA, ppc_inst(target));
-+			if (err)
-+				goto out;
-+		}
-+
-+		if (!func)
-+			err = patch_instruction(tramp, ppc_inst(PPC_RAW_BLR()));
-+		else if (is_short)
-+			err = patch_branch(tramp, target, 0);
-+		else
-+			err = patch_instruction(tramp, ppc_inst(PPC_RAW_NOP()));
- 	}
- 
--	if (!func)
--		err = patch_instruction(tramp, ppc_inst(PPC_RAW_BLR()));
--	else if (is_short)
--		err = patch_branch(tramp, target, 0);
--	else
--		err = patch_instruction(tramp, ppc_inst(PPC_RAW_NOP()));
-+	if (site) {
-+		bool is_short = is_offset_in_branch_range((long)func - (long)site);
-+
-+		if (!func)
-+			err = patch_instruction(site, ppc_inst(PPC_RAW_NOP()));
-+		else if (is_ret0)
-+			err = patch_instruction(site, ppc_inst(PPC_RAW_LI(_R3, 0)));
-+		else if (is_short)
-+			err = patch_branch(site, target, BRANCH_SET_LINK);
-+		else
-+			panic("%s: function %pS is out of reach of %pS\n", __func__, func, site);
-+	}
- out:
- 	mutex_unlock(&text_mutex);
- 
-diff --git a/tools/objtool/arch/powerpc/include/arch/elf.h b/tools/objtool/arch/powerpc/include/arch/elf.h
-index 3c8ebb7d2a6b..18784c764c14 100644
---- a/tools/objtool/arch/powerpc/include/arch/elf.h
-+++ b/tools/objtool/arch/powerpc/include/arch/elf.h
-@@ -4,5 +4,6 @@
- #define _OBJTOOL_ARCH_ELF
- 
- #define R_NONE R_PPC_NONE
-+#define R_REL32	R_PPC_REL32
- 
- #endif /* _OBJTOOL_ARCH_ELF */
--- 
-2.35.3
+> ---
+>   arch/riscv/include/asm/smp.h | 4 ++--
+>   arch/riscv/kernel/smp.c      | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/smp.h b/arch/riscv/include/asm/smp.h
+> index 23170c933d73..d3443be7eedc 100644
+> --- a/arch/riscv/include/asm/smp.h
+> +++ b/arch/riscv/include/asm/smp.h
+> @@ -42,7 +42,7 @@ void arch_send_call_function_ipi_mask(struct cpumask *mask);
+>   /* Hook for the generic smp_call_function_single() routine. */
+>   void arch_send_call_function_single_ipi(int cpu);
+>   
+> -int riscv_hartid_to_cpuid(int hartid);
+> +int riscv_hartid_to_cpuid(unsigned long hartid);
+>   
+>   /* Set custom IPI operations */
+>   void riscv_set_ipi_ops(const struct riscv_ipi_ops *ops);
+> @@ -70,7 +70,7 @@ static inline void show_ipi_stats(struct seq_file *p, int prec)
+>   {
+>   }
+>   
+> -static inline int riscv_hartid_to_cpuid(int hartid)
+> +static inline int riscv_hartid_to_cpuid(unsigned long hartid)
+>   {
+>   	if (hartid == boot_cpu_hartid)
+>   		return 0;
+> diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
+> index b5d30ea92292..018e7dc45df6 100644
+> --- a/arch/riscv/kernel/smp.c
+> +++ b/arch/riscv/kernel/smp.c
+> @@ -47,7 +47,7 @@ static struct {
+>   	unsigned long bits ____cacheline_aligned;
+>   } ipi_data[NR_CPUS] __cacheline_aligned;
+>   
+> -int riscv_hartid_to_cpuid(int hartid)
+> +int riscv_hartid_to_cpuid(unsigned long hartid)
+>   {
+>   	int i;
+>   
+> @@ -55,7 +55,7 @@ int riscv_hartid_to_cpuid(int hartid)
+>   		if (cpuid_to_hartid_map(i) == hartid)
+>   			return i;
+>   
+> -	pr_err("Couldn't find cpu id for hartid [%d]\n", hartid);
+> +	pr_err("Couldn't find cpu id for hartid [%lu]\n", hartid);
+>   	return -ENOENT;
+>   }
+>   
 

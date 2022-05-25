@@ -2,255 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4C4533561
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65385533564
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243640AbiEYCgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 22:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
+        id S243645AbiEYCie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 22:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235106AbiEYCgd (ORCPT
+        with ESMTP id S235106AbiEYCic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 22:36:33 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C4824BDE;
-        Tue, 24 May 2022 19:36:31 -0700 (PDT)
-Date:   Tue, 24 May 2022 19:36:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1653446190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qRF08RH4HX5TQP4tbU3gSrFe2wB3jShQ6zYuVNhxUJU=;
-        b=ntsNkB6oeDaC8TeGD3HFnHBaXzVLiB2xci0QqSb2C0OlLRhzva+sR2pjIT6OPSsThN7HOr
-        MiOyL2HnQrfgd4lMxuibr70BYnBscKnDMctXZsvZMYH19TYHqygnrBMNXyg2msf+K96lNV
-        y46KnLiUruSy+HlYu+u7YesUEiWUAUk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        longman@redhat.com
-Subject: Re: [PATCH v4 01/11] mm: memcontrol: prepare objcg API for non-kmem
- usage
-Message-ID: <Yo2WKADtPy2rekRh@carbon>
-References: <20220524060551.80037-1-songmuchun@bytedance.com>
- <20220524060551.80037-2-songmuchun@bytedance.com>
+        Tue, 24 May 2022 22:38:32 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2E96F4AF
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653446310; x=1684982310;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SdlZnAu2OMh5vWqWaY7d/SJjgLMefXlumhmFyk3EdaY=;
+  b=K3mU2/eXOSz0f2es/+FHstWexn+npCoj0yYUAcGjy6CQ6GGgfUSsJbll
+   dSZZ9ijH6vZIiGXf7TxveFpHjDZgME+tl8P2TOAgxC+QM/DeRTDqms/2J
+   WuM+s6eNb9cIt79RH6ygGM7I1E8Jxt3SIknvmxijFfRC+YueSEzia8pP0
+   acm4aUQ3eSAziVpIzIWurYYXLimDU46nIkNcnjrl4AUIknNElfjBL/Pm5
+   j5IHYC2GT7Hb9qEj6Ar3kj9ryISh/lAG2Y+ieSFX/Ebpw0GqTwmkksFK8
+   L8zWov+WOUX/HFLkb3N0CepHHU3vpYhxmdidBxSHE6ujaB13465RSiI1+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="336752156"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="336752156"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 19:38:30 -0700
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="601611754"
+Received: from jwang96-mobl.ccr.corp.intel.com (HELO [10.255.29.139]) ([10.255.29.139])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 19:38:26 -0700
+Message-ID: <5d1e2178-ac4c-a864-59b4-d297a3366f6a@linux.intel.com>
+Date:   Wed, 25 May 2022 10:38:24 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524060551.80037-2-songmuchun@bytedance.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH v7 03/10] iommu/sva: Add iommu_sva_domain support
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-4-baolu.lu@linux.intel.com>
+ <BN9PR11MB5276982C37DFF0FEFC45BDD68CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20220524133839.GS1343366@nvidia.com>
+ <BN9PR11MB52767C320271EC422B1D55228CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB52767C320271EC422B1D55228CD69@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 02:05:41PM +0800, Muchun Song wrote:
-> Pagecache pages are charged at the allocation time and holding a
-> reference to the original memory cgroup until being reclaimed.
-> Depending on the memory pressure, specific patterns of the page
-> sharing between different cgroups and the cgroup creation and
-> destruction rates, a large number of dying memory cgroups can be
-> pinned by pagecache pages. It makes the page reclaim less efficient
-> and wastes memory.
+On 2022/5/25 08:44, Tian, Kevin wrote:
+>> From: Jason Gunthorpe <jgg@nvidia.com>
+>> Sent: Tuesday, May 24, 2022 9:39 PM
+>>
+>> On Tue, May 24, 2022 at 09:39:52AM +0000, Tian, Kevin wrote:
+>>>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>>>> Sent: Thursday, May 19, 2022 3:21 PM
+>>>>
+>>>> The iommu_sva_domain represents a hardware pagetable that the
+>> IOMMU
+>>>> hardware could use for SVA translation. This adds some infrastructure
+>>>> to support SVA domain in the iommu common layer. It includes:
+>>>>
+>>>> - Add a new struct iommu_sva_domain and new IOMMU_DOMAIN_SVA
+>>>> domain
+>>>>    type.
+>>>> - Add a new domain ops pointer in iommu_ops. The IOMMU drivers that
+>>>>    support SVA should provide the callbacks.
+>>>> - Add helpers to allocate and free an SVA domain.
+>>>> - Add helpers to set an SVA domain to a device and the reverse
+>>>>    operation.
+>>>>
+>>>> Some buses, like PCI, route packets without considering the PASID value.
+>>>> Thus a DMA target address with PASID might be treated as P2P if the
+>>>> address falls into the MMIO BAR of other devices in the group. To make
+>>>> things simple, the attach/detach interfaces only apply to devices
+>>>> belonging to the singleton groups, and the singleton is immutable in
+>>>> fabric i.e. not affected by hotplug.
+>>>>
+>>>> The iommu_set/block_device_pasid() can be used for other purposes,
+>>>> such as kernel DMA with pasid, mediation device, etc. Hence, it is put
+>>>> in the iommu.c.
+>>>
+>>> usually we have 'set/clear' pair or 'allow/block'. Having 'set' paired
+>>> with 'block' doesn't read very clearly.
+>>
+>> I thought we agreed we'd use the blocking domain for this? Why did it
+>> go back to an op?
+>>
 > 
-> We can convert LRU pages and most other raw memcg pins to the objcg
-> direction to fix this problem, and then the page->memcg will always
-> point to an object cgroup pointer.
+> Probably it's based on following discussion:
 > 
-> Therefore, the infrastructure of objcg no longer only serves
-> CONFIG_MEMCG_KMEM. In this patch, we move the infrastructure of the
-> objcg out of the scope of the CONFIG_MEMCG_KMEM so that the LRU pages
-> can reuse it to charge pages.
+> https://lore.kernel.org/all/c8492b29-bc27-ae12-d5c4-9fbbc797e310@linux.intel.com/
 > 
-> We know that the LRU pages are not accounted at the root level. But
-> the page->memcg_data points to the root_mem_cgroup. So the
-> page->memcg_data of the LRU pages always points to a valid pointer.
-> But the root_mem_cgroup dose not have an object cgroup. If we use
-> obj_cgroup APIs to charge the LRU pages, we should set the
-> page->memcg_data to a root object cgroup. So we also allocate an
-> object cgroup for the root_mem_cgroup.
+> --
+>> FWIW from my point of view I'm happy with having a .detach_dev_pasid op
+>> meaning implicitly-blocked access for now.
 > 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> ---
->  include/linux/memcontrol.h |  5 ++--
->  mm/memcontrol.c            | 60 +++++++++++++++++++++++++---------------------
->  2 files changed, 35 insertions(+), 30 deletions(-)
-> 
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index 89b14729d59f..ff1c1dd7e762 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -315,10 +315,10 @@ struct mem_cgroup {
->  
->  #ifdef CONFIG_MEMCG_KMEM
->  	int kmemcg_id;
-> +#endif
->  	struct obj_cgroup __rcu *objcg;
->  	/* list of inherited objcgs, protected by objcg_lock */
->  	struct list_head objcg_list;
-> -#endif
->  
->  	MEMCG_PADDING(_pad2_);
->  
-> @@ -851,8 +851,7 @@ static inline struct mem_cgroup *lruvec_memcg(struct lruvec *lruvec)
->   * parent_mem_cgroup - find the accounting parent of a memcg
->   * @memcg: memcg whose parent to find
->   *
-> - * Returns the parent memcg, or NULL if this is the root or the memory
-> - * controller is in legacy no-hierarchy mode.
-> + * Returns the parent memcg, or NULL if this is the root.
->   */
->  static inline struct mem_cgroup *parent_mem_cgroup(struct mem_cgroup *memcg)
->  {
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 598fece89e2b..6de0d3e53eb1 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -254,9 +254,9 @@ struct mem_cgroup *vmpressure_to_memcg(struct vmpressure *vmpr)
->  	return container_of(vmpr, struct mem_cgroup, vmpressure);
->  }
->  
-> -#ifdef CONFIG_MEMCG_KMEM
->  static DEFINE_SPINLOCK(objcg_lock);
->  
-> +#ifdef CONFIG_MEMCG_KMEM
->  bool mem_cgroup_kmem_disabled(void)
->  {
->  	return cgroup_memory_nokmem;
-> @@ -265,12 +265,10 @@ bool mem_cgroup_kmem_disabled(void)
->  static void obj_cgroup_uncharge_pages(struct obj_cgroup *objcg,
->  				      unsigned int nr_pages);
->  
-> -static void obj_cgroup_release(struct percpu_ref *ref)
-> +static void obj_cgroup_release_bytes(struct obj_cgroup *objcg)
->  {
-> -	struct obj_cgroup *objcg = container_of(ref, struct obj_cgroup, refcnt);
->  	unsigned int nr_bytes;
->  	unsigned int nr_pages;
-> -	unsigned long flags;
->  
->  	/*
->  	 * At this point all allocated objects are freed, and
-> @@ -284,9 +282,9 @@ static void obj_cgroup_release(struct percpu_ref *ref)
->  	 * 3) CPU1: a process from another memcg is allocating something,
->  	 *          the stock if flushed,
->  	 *          objcg->nr_charged_bytes = PAGE_SIZE - 92
-> -	 * 5) CPU0: we do release this object,
-> +	 * 4) CPU0: we do release this object,
->  	 *          92 bytes are added to stock->nr_bytes
-> -	 * 6) CPU0: stock is flushed,
-> +	 * 5) CPU0: stock is flushed,
->  	 *          92 bytes are added to objcg->nr_charged_bytes
->  	 *
->  	 * In the result, nr_charged_bytes == PAGE_SIZE.
-> @@ -298,6 +296,19 @@ static void obj_cgroup_release(struct percpu_ref *ref)
->  
->  	if (nr_pages)
->  		obj_cgroup_uncharge_pages(objcg, nr_pages);
-> +}
-> +#else
-> +static inline void obj_cgroup_release_bytes(struct obj_cgroup *objcg)
-> +{
-> +}
-> +#endif
-> +
-> +static void obj_cgroup_release(struct percpu_ref *ref)
-> +{
-> +	struct obj_cgroup *objcg = container_of(ref, struct obj_cgroup, refcnt);
-> +	unsigned long flags;
-> +
-> +	obj_cgroup_release_bytes(objcg);
->  
->  	spin_lock_irqsave(&objcg_lock, flags);
->  	list_del(&objcg->list);
-> @@ -326,10 +337,10 @@ static struct obj_cgroup *obj_cgroup_alloc(void)
->  	return objcg;
->  }
->  
-> -static void memcg_reparent_objcgs(struct mem_cgroup *memcg,
-> -				  struct mem_cgroup *parent)
-> +static void memcg_reparent_objcgs(struct mem_cgroup *memcg)
->  {
->  	struct obj_cgroup *objcg, *iter;
-> +	struct mem_cgroup *parent = parent_mem_cgroup(memcg);
->  
->  	objcg = rcu_replace_pointer(memcg->objcg, NULL, true);
->  
-> @@ -348,6 +359,7 @@ static void memcg_reparent_objcgs(struct mem_cgroup *memcg,
->  	percpu_ref_kill(&objcg->refcnt);
->  }
->  
-> +#ifdef CONFIG_MEMCG_KMEM
->  /*
->   * A lot of the calls to the cache allocation functions are expected to be
->   * inlined by the compiler. Since the calls to memcg_slab_pre_alloc_hook() are
-> @@ -3589,21 +3601,12 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
->  #ifdef CONFIG_MEMCG_KMEM
->  static int memcg_online_kmem(struct mem_cgroup *memcg)
->  {
-> -	struct obj_cgroup *objcg;
-> -
->  	if (cgroup_memory_nokmem)
->  		return 0;
->  
->  	if (unlikely(mem_cgroup_is_root(memcg)))
->  		return 0;
->  
-> -	objcg = obj_cgroup_alloc();
-> -	if (!objcg)
-> -		return -ENOMEM;
-> -
-> -	objcg->memcg = memcg;
-> -	rcu_assign_pointer(memcg->objcg, objcg);
-> -
->  	static_branch_enable(&memcg_kmem_enabled_key);
->  
->  	memcg->kmemcg_id = memcg->id.id;
-> @@ -3613,27 +3616,19 @@ static int memcg_online_kmem(struct mem_cgroup *memcg)
->  
->  static void memcg_offline_kmem(struct mem_cgroup *memcg)
->  {
-> -	struct mem_cgroup *parent;
-> -
->  	if (cgroup_memory_nokmem)
->  		return;
->  
->  	if (unlikely(mem_cgroup_is_root(memcg)))
->  		return;
->  
-> -	parent = parent_mem_cgroup(memcg);
-> -	if (!parent)
-> -		parent = root_mem_cgroup;
-> -
-> -	memcg_reparent_objcgs(memcg, parent);
-> -
->  	/*
->  	 * After we have finished memcg_reparent_objcgs(), all list_lrus
->  	 * corresponding to this cgroup are guaranteed to remain empty.
->  	 * The ordering is imposed by list_lru_node->lock taken by
->  	 * memcg_reparent_list_lrus().
->  	 */
+> If this is the path then lets not call it attach/detach
+> please. 'set_dev_pasid' and 'set_dev_blocking_pasid' are clearer
+> names.
 
-This comment doesn't look to be correct after these changes. Should it
-be fixed? Or the ordering should be fixed too?
+Yes. Learning from above discussion, we are about to implement the
+set_dev_pasid and blocking domain in parallel. We will convert all
+the callback names to set_dev and set_dev_pasid after blocking domain
+support is merged.
 
-> -	memcg_reparent_list_lrus(memcg, parent);
-> +	memcg_reparent_list_lrus(memcg, parent_mem_cgroup(memcg));
-We effectively dropped this:
-	if (!parent)
-		parent = root_mem_cgroup;
-Is it safe? (assuming v1 non-hierarchical mode, it's usually when all
-is getting complicated)
+> --
+> 
+> Looks Baolu chooses this path and plans to use the blocking domain
+> later.
 
-The rest of the patch looks good to me.
+Yes. I have already started to implement the blocking domain in Intel
+driver. With it as an example, we can extend it to other possible IOMMU
+drivers.
 
-Thanks!
+Best regards,
+baolu

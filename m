@@ -2,73 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7106D533EEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2867533EF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244733AbiEYOO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
+        id S242633AbiEYOTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244111AbiEYOOw (ORCPT
+        with ESMTP id S235155AbiEYOTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 10:14:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75696ABF79
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653488090;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wM9x4B2z5qH/AhZypEbIZLZ9L9qM+TiDof1TvDE3R8I=;
-        b=DiwoCDHY0bTsvjojy12OekRANEYMuWzJA+buu2U80YxiO0E/+6NJumlT6kn9T7ntupg8Kv
-        wvivs/JjDNLd0oBae6dkHXPMlyYhd34kl0xdDlr7Ymjv3el+FtcHeqMjht2w0KfYss+xcc
-        pXhvMEa9+bSFURNw1/pQgYxWdR/U4l8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-aKo3TEKsO7mXUocalVHJtQ-1; Wed, 25 May 2022 10:14:49 -0400
-X-MC-Unique: aKo3TEKsO7mXUocalVHJtQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 25 May 2022 10:19:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8BC9C2CB;
+        Wed, 25 May 2022 07:19:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2AE5185A794;
-        Wed, 25 May 2022 14:14:48 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9794A1121315;
-        Wed, 25 May 2022 14:14:46 +0000 (UTC)
-Message-ID: <d50f564071a7d8cc63a25bb9c96317504f021f49.camel@redhat.com>
-Subject: Re: [PATCH RESEND v12 00/17] KVM: x86/pmu: Add basic support to
- enable guest PEBS via DS
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Date:   Wed, 25 May 2022 17:14:45 +0300
-In-Reply-To: <eb34985a-3f21-f4d7-f25d-28f24c9794be@redhat.com>
-References: <20220411101946.20262-1-likexu@tencent.com>
-         <87fsl5u3bg.fsf@redhat.com>
-         <e0b96ebd-00ee-ead4-cf35-af910e847ada@gmail.com>
-         <d7461fd4-f6ec-1a0b-6768-0008a3092add@gmail.com>
-         <874k1ltw9y.fsf@redhat.com>
-         <f379a933-15b0-6858-eeef-5fbef6e5529c@gmail.com>
-         <0848a2da-c9cf-6973-c774-ff16c3e8a248@redhat.com>
-         <289d0c88-36a0-afd4-4d47-f2db3fb63654@gmail.com>
-         <48b495c5610d25596a268c71b627b2e2136ac0bd.camel@redhat.com>
-         <eb34985a-3f21-f4d7-f25d-28f24c9794be@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51FBC6194E;
+        Wed, 25 May 2022 14:19:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD86C385B8;
+        Wed, 25 May 2022 14:19:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653488372;
+        bh=7bBJlCok73CmtV4Rm+ajB2IXkeRLn3vMxn3dmBMgVvs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=XVL9TT0jdngjLQ2AzVhatAPJryXjpKrdvf3jySU2hsg2wTEGsnI3SKCCiLL/NVLPo
+         A6DyGXI3I445RiRTZ9nuf6OPHkyM0vs2TZ8IiKGsETlPPTijFtl9bhTlALOAJeRNSO
+         uade6xQfgdV5CXdwh6ZoZepevw6/s5sNpCj18G4AGiflBqaJVGusl72hVI24XOsSfU
+         +dp7oMd6EC6pa/mgBbCrG/TFQWJlcp/u3Bb3Wn9tqYuKj+kqYbVLTwlntqnLx7JpGD
+         Szl4Z2syKay/ExvEuGdVklLVoheBcgXj8QJHkdpJk9uslAfVw7hAjgqc3lMDuP3L7O
+         0dCwoDpPa8T7g==
+Date:   Wed, 25 May 2022 09:19:30 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Yicong Yang <yangyicong@hisilicon.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [RESEND PATCH v5] PCI: Make sure the bus bridge powered on when
+ scanning bus
+Message-ID: <20220525141930.GA290827@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iKyVbHqjxH5nqfZ9E8C94EDhXXdkHYoN2smg3V7p6Wuw@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,35 +58,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-25 at 16:13 +0200, Paolo Bonzini wrote:
-> On 5/25/22 16:12, Maxim Levitsky wrote:
-> > FYI, this patch series also break 'msr' test in kvm-unit tests.
-> > (kvm/queue of today, and master of the kvm-unit-tests repo)
-> > 
-> > The test tries to set the MSR_IA32_MISC_ENABLE to 0x400c51889 and gets #GP.
-> > 
-> > 
-> > Commenting this out, gets rid of #GP, but test still fails with unexpected result
-> > 
-> > 		if (!msr_info->host_initiated &&
-> > 		    ((old_val ^ data) & MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL))
-> > 			return 1;
-> > 
-> > 
-> > 
-> > 
-> > It is very possible that the test is broken, I'll check this later.
+On Wed, May 25, 2022 at 01:27:21PM +0200, Rafael J. Wysocki wrote:
+> On Tue, May 24, 2022 at 10:58 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > On Tue, May 17, 2022 at 08:43:19PM +0800, Yicong Yang wrote:
+> > > When the bus bridge is runtime suspended, we'll fail to rescan
+> > > the devices through sysfs as we cannot access the configuration
+> > > space correctly when the bridge is in D3hot.
+> >
+> > Is the "D3hot" above a typo?  I think devices are supposed to respond
+> > to config accesses when in D3hot.  PCIe r6.0, sec 5.3.1.4.1:
+> >
+> >   Configuration and Message requests are the only TLPs accepted by a
+> >   Function in the D3Hot state. ...
+> >
+> >   Functions that are in D3Hot are permitted to be transitioned by
+> >   software (writing to their PMCSR PowerState field) to the D0active
+> >   state or the D0uninitialized state. Functions that are in D3Hot must
+> >   respond to Configuration Space accesses as long as power and clock
+> >   are supplied so that they can be returned to D0 by software.
 > 
-> Yes, for that I've sent a patch already:
+> That applies to the device itself, though, and not to the bus under it.
 > 
-> https://lore.kernel.org/kvm/20220520183207.7952-1-pbonzini@redhat.com/
-> 
-> Paolo
-> 
+> In general, a bridge in D3hot causes the bus segment on the other side
+> of it to be inaccessible even for config space accesses AFAICS.
 
-Thank you very much!
+Oh, thank you!  That was the piece I was missing.  I'll tweak the
+commit log to say something like:
 
+  A bridge in a non-D0 power state does not forward config accesses to
+  its secondary side (PCIe r6.0, sec 5.3.1).  Make sure the bridge is
+  in D0 while we enumerate devices below it.
 
-Best regards,
-	Maxim Levitsky
-
+> > > It can be reproduced like:
+> > >
+> > > $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
+> > > $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
+> > >
+> > > 0000:80:00.0 is a Root Port and it is runtime-suspended, so
+> > > 0000:81:00.1 is unreachable after a rescan.
+> > >
+> > > Power up the bridge when scanning the child bus and allow it to
+> > > suspend again by adding pm_runtime_get_sync()/pm_runtime_put()
+> > > in pci_scan_child_bus_extend().
+> > >
+> > > Cc: Rafael J. Wysocki <rafael@kernel.org>
+> > > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> > > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >  drivers/pci/probe.c | 12 ++++++++++++
+> > >  1 file changed, 12 insertions(+)
+> > >
+> > > diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> > > index 17a969942d37..b108e72b6586 100644
+> > > --- a/drivers/pci/probe.c
+> > > +++ b/drivers/pci/probe.c
+> > > @@ -2859,11 +2859,20 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+> > >       unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
+> > >       unsigned int start = bus->busn_res.start;
+> > >       unsigned int devfn, fn, cmax, max = start;
+> > > +     struct pci_dev *bridge = bus->self;
+> > >       struct pci_dev *dev;
+> > >       int nr_devs;
+> > >
+> > >       dev_dbg(&bus->dev, "scanning bus\n");
+> > >
+> > > +     /*
+> > > +      * Make sure the bus bridge is powered on, otherwise we may not be
+> > > +      * able to scan the devices as we may fail to access the configuration
+> > > +      * space of subordinates.
+> > > +      */
+> > > +     if (bridge)
+> > > +             pm_runtime_get_sync(&bridge->dev);
+> > > +
+> > >       /* Go find them, Rover! */
+> > >       for (devfn = 0; devfn < 256; devfn += 8) {
+> > >               nr_devs = pci_scan_slot(bus, devfn);
+> > > @@ -2976,6 +2985,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+> > >               }
+> > >       }
+> > >
+> > > +     if (bridge)
+> > > +             pm_runtime_put(&bridge->dev);
+> > > +
+> > >       /*
+> > >        * We've scanned the bus and so we know all about what's on
+> > >        * the other side of any bridges that may be on this bus plus
+> > > --
+> > > 2.24.0
+> > >

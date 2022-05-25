@@ -2,114 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813BD533E13
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA273533E18
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244466AbiEYNmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S238710AbiEYNnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233713AbiEYNmU (ORCPT
+        with ESMTP id S236921AbiEYNnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:42:20 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B738560D86
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:42:19 -0700 (PDT)
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 25 May 2022 09:43:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A316D38F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:43:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5AF133F208
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 13:42:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653486137;
-        bh=+VxdaNpJpgbuyYbGPWQ3j6iLwWVMldqSArRiIGoG5Ck=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=MNrR5li2xhugiDoapM5rYXU6WGz2N/CdpT/TSQhRaZjvW/diQsDLN2Zh2IfZVK4Az
-         13qyqVhOxnvlSIRhh1kI5lPcZL6jn6MWlVK7r01zILX+EutXr/8QVABARzV1wF6GF3
-         2nRULvx8ZGLKZZ/h0KMoM0LSOLgBWudLhDxvgGWSOqJ7olQsMKGyJtswu2F1dBGO7R
-         INm4ifOO8iCv9NL9/9jsY7+x6LUZl5XMx6nQwayzBe92Ktq43dmHDK91ejKXtWBj1t
-         hXQDeMJb/A1k9a6IAn8MYukhACo4Dpn2LhE5MSu1MDtTVpI/cGKMzK/uyaJ54aJc7l
-         /Llyzmrvyb6Fg==
-Received: by mail-wm1-f71.google.com with SMTP id o23-20020a05600c511700b0039743cd8093so2870543wms.6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:42:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+VxdaNpJpgbuyYbGPWQ3j6iLwWVMldqSArRiIGoG5Ck=;
-        b=rLVlKfhsbvSextZQm3GfUIuDh3ex4fkREAPbnWd/XFc1X9mscnUWnyVRGzHVfwSU7j
-         +118xROEiS+L6U8zioj3b37t65VPB5UP9Kf53ptWGpWOicvWEqD7rWfECBUvwabvPYtN
-         uRf76dsTkl2Zm9L0JaMnGfTWkmdGVRy9Erld212FuoOkCuh3ZafsRkyt0f+I42G2B+0C
-         BYkkXyUvatBuX5FjJVLL6xoJqfHdmxckYQ14Thai5vmojww/T/xkoz0rG65YijH1vqWG
-         6yllJ9VKtQFtCMAA+2jPNc6aeAABZGEM6ZTTLIzLJmSM9rC6yLWbB5l6Og0xrl5xV2Qr
-         CTqA==
-X-Gm-Message-State: AOAM532EVTuf596yn7f0RsRvy/U/2NR+0Li9/O2U3ul6c/x01wb8WQrF
-        K1Er4kNE9BtfauOXvr8gNfhE8P0i08gscL7M9tKMGbK1Fo5xi9CPXiXjgutcqG3Afh4Xp50H8Dr
-        H25kUiCMDMOMYCxU4XxYgWta4mKPc+HlfHdTuKuWmog==
-X-Received: by 2002:a5d:5885:0:b0:20f:f390:c47e with SMTP id n5-20020a5d5885000000b0020ff390c47emr6442932wrf.133.1653486134742;
-        Wed, 25 May 2022 06:42:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyChDi8V4mTkhBMNVYiG8rb/JvRySCfyubTMbdjD4OIepvluuW4yJL5Nxe4jz+VCB0K8Q0+zA==
-X-Received: by 2002:a5d:5885:0:b0:20f:f390:c47e with SMTP id n5-20020a5d5885000000b0020ff390c47emr6442915wrf.133.1653486134522;
-        Wed, 25 May 2022 06:42:14 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id g5-20020a5d64e5000000b0020d0c9c95d3sm2151947wri.77.2022.05.25.06.42.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:42:13 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     richard@nod.at, anton.ivanov@cambridgegreys.com,
-        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-um@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juerg.haefliger@canonical.com>
-Subject: [PATCH] x86/um: Kconfig: Fix indentation
-Date:   Wed, 25 May 2022 15:42:11 +0200
-Message-Id: <20220525134211.54417-1-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id D609FB81DA7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 13:43:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A261C385B8;
+        Wed, 25 May 2022 13:43:09 +0000 (UTC)
+Date:   Wed, 25 May 2022 09:43:07 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        cj.chengjian@huawei.com, huawei.libin@huawei.com,
+        xiexiuqi@huawei.com, liwei391@huawei.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
+ allocated trampolines
+Message-ID: <20220525094307.1f1fb561@gandalf.local.home>
+In-Reply-To: <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
+References: <YmLlmaXF00hPkOID@lakrids>
+        <20220426174749.b5372c5769af7bf901649a05@kernel.org>
+        <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
+        <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
+        <20220509142203.6c4f2913@gandalf.local.home>
+        <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
+        <20220510104446.6d23b596@gandalf.local.home>
+        <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
+        <20220511111207.25d1a693@gandalf.local.home>
+        <20220512210231.f9178a98f20a37981b1e89e3@kernel.org>
+        <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two whitespaces. Fix the lines that
-violate these rules.
+On Wed, 25 May 2022 13:17:30 +0100
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
----
- arch/x86/um/Kconfig | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+> For arm64 I'd like to make this static, and have ftrace *always* capture a
+> minimal set of ftrace_regs, which would be:
+> 
+>   X0 to X8 inclusive
+>   SP
+>   PC
+>   LR
+>   FP
+> 
+> Since X0 to X8 + SP is all that we need for arguments and return values (per
+> the calling convention we use), and PC+LR+FP gives us everything we need for
+> unwinding and live patching.
+> 
+> I *might* want to add x18 to that when SCS is enabled, but I'm not immediately
+> sure.
 
-diff --git a/arch/x86/um/Kconfig b/arch/x86/um/Kconfig
-index 1bcd42c53039..186f13268401 100644
---- a/arch/x86/um/Kconfig
-+++ b/arch/x86/um/Kconfig
-@@ -32,12 +32,12 @@ config 3_LEVEL_PGTABLES
- 	bool "Three-level pagetables" if !64BIT
- 	default 64BIT
- 	help
--	Three-level pagetables will let UML have more than 4G of physical
--	memory.  All the memory that can't be mapped directly will be treated
--	as high memory.
-+	  Three-level pagetables will let UML have more than 4G of physical
-+	  memory.  All the memory that can't be mapped directly will be treated
-+	  as high memory.
- 
--	However, this it experimental on 32-bit architectures, so if unsure say
--	N (on x86-64 it's automatically enabled, instead, as it's safe there).
-+	  However, this it experimental on 32-bit architectures, so if unsure say
-+	  N (on x86-64 it's automatically enabled, instead, as it's safe there).
- 
- config ARCH_HAS_SC_SIGNALS
- 	def_bool !64BIT
--- 
-2.32.0
+Does arm64 have HAVE_DYNAMIC_FTRACE_WITH_ARGS enabled? If so, then having
+the normal ftrace call back save the above so that all functions have it
+available would be useful.
+
+-- Steve
 

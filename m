@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9611E53405E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9614B534065
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241322AbiEYP2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
+        id S245129AbiEYPaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiEYP2M (ORCPT
+        with ESMTP id S239805AbiEYPaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:28:12 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D472F03F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:28:10 -0700 (PDT)
-Received: from zn.tnic (p200300ea97465795329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:5795:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 418271EC04E4;
-        Wed, 25 May 2022 17:28:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1653492485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ZUUIzFsb6TK4Z5Qa+FJOS644rqweyeaDLz9HrWqm3Es=;
-        b=TeoxIIAh2rbOE0vadCTRzRoe2Zru5o12uFRQcXIYp+4NAL++D5ApN5MIig3NArHYk9rUqo
-        xEatw69pXpRypDUooYyCw0ToK61Ph3s+4MNZAWlIh/k+sQ4BWuL3xTW3+A+3OJiehZEXF4
-        ef4KZkCSs0w7Ko/mr6z2h+jHK1DyIXI=
-Date:   Wed, 25 May 2022 17:28:01 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 3/3] x86/microcode: Taint and warn on late loading
-Message-ID: <Yo5LAenZIsYmM9Ie@zn.tnic>
-References: <20220524185324.28395-1-bp@alien8.de>
- <20220524185324.28395-4-bp@alien8.de>
- <Yo2ASBAElqrQvzh3@agluck-desk3.sc.intel.com>
- <20220525065940.GF2578@worktop.programming.kicks-ass.net>
- <Yo3cpb1yZhwhHEga@zn.tnic>
- <4644ff0530ba40948ed1f0e2e45a24d8@intel.com>
+        Wed, 25 May 2022 11:30:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A5332F03F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:29:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 650E41424;
+        Wed, 25 May 2022 08:29:58 -0700 (PDT)
+Received: from wubuntu (unknown [10.57.65.214])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11A563F73D;
+        Wed, 25 May 2022 08:29:57 -0700 (PDT)
+Date:   Wed, 25 May 2022 16:29:56 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Paul Bone <pbone@mozilla.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Scheduling for heterogeneous computers
+Message-ID: <20220525152956.5oz2chfwlgevvaul@wubuntu>
+References: <20220308092141.GF748856@aluminium>
+ <20220321121611.ssa7o2npy3ahdofk@wubuntu>
+ <CANdLaqA6aHr3K0apZLsXVbx1_zZvK6iMvX+HVcu7888HOeEjhg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4644ff0530ba40948ed1f0e2e45a24d8@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANdLaqA6aHr3K0apZLsXVbx1_zZvK6iMvX+HVcu7888HOeEjhg@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 02:50:59PM +0000, Luck, Tony wrote:
-> Are taint flags in such short supply that you couldn't create a new
-> one?
+Hi Paul
 
-Yes, they can be as many as there are letters in the english alphabet,
-it seems:
-
-struct taint_flag {
-        char c_true;    /* character printed when tainted */
-	^^^^^^^^^^^^
-
-and there are already
-
-#define TAINT_FLAGS_COUNT               18
-
-in use.
-
-> The OUT_OF_SPEC one already seems to be used in some dubious
-> ways:
-> 1) Command line argument to clear a X86_FEATURES bit
-> 2) Forcing PAE
-> 3) Writing to an MSR not on the "approved" list
+On 05/24/22 15:23, Paul Bone wrote:
+> Hi Qais,
 > 
-> As you add more ways to set this taint bit, it becomes less useful
-> for debugging ...
+> That's excellent.
+> 
+> I'll definitely check out those links.  This could be very interesting for
+> people using firefox on a phone/tablet, where we can run background tasks with
+> a lower UCLAMP_MAX
 
-Look at the other taint flags - they're set in a bunch of different
-places so it is hard to unambiguously decide where the taint was set. If
-we wanna use it for debugging, then the taint_flag struct above should
-probably save the caller address which set the taint... or something to
-that effect.
+If you're running on Android, you might find that you won't have permission to
+use uclamp directly. Android restricts access and requires you to use higher
+level APIs sometimes.
 
-> since now you have to dig into which of the possible cases set the bit
-> to decide whether it might have contributed to the OOPS.
+And I'm not sure if they have API to allow you to do what you want. I've seen
+they have the concept of creating Foreground and Background jobs in one of
+their Google IO presentations. But not sure if this will be tied to uclamp_max.
+It might give you similar results still though regardless of the underlying
+mechanism.
 
-So I'm still not convinced this should have a special taint flag.
+If you're running on mainline kernel, then the biggest issue you might
+encounter is that sched_setattr() syscall is not part of any libc yet. So you
+need to create your own wrapper - look at uclampset for an example.
 
--- 
-Regards/Gruss,
-    Boris.
+Laptops can still benefit from this by the way. Hopefully everyone is moving to
+schedutil by default which is a pre-requisite to using uclamp. It can also help
+in SMP environments to avoid driving frequency high for tasks that don't really
+care about performance but otherwise busy.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+You can also use UCLAMP_MIN to boost bursty tasks that are not busy but require
+to get work done within a certain amount of time and DVFS delays can prevent
+them from running at adequate frequency. UCLAMP_MIN will ensure they always
+perceive a performance point specified by UCLAMP_MIN at a minimum when they
+wakeup.
+
+RT tasks respect uclamp values too. You can opt-in to run at a different
+frequency than MAX frequency which leads to high power consumption on battery
+powered devices. RT tasks always run at constant frequency, so need to be
+controlled with UCLAMP_MIN only.
+
+Happy hacking ;-)
+
+Cheers
+
+--
+Qais Yousef

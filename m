@@ -2,213 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E6253408F
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFD1534095
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243018AbiEYPoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S243858AbiEYPpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiEYPoW (ORCPT
+        with ESMTP id S243170AbiEYPo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:44:22 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C712BB1E;
-        Wed, 25 May 2022 08:44:21 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id z7so15682138ybf.7;
-        Wed, 25 May 2022 08:44:21 -0700 (PDT)
+        Wed, 25 May 2022 11:44:58 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AAA5D1B7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:44:56 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id nn14-20020a17090b38ce00b001e00df82de8so1460613pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:44:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wW60Ei1LEDr4i3KMNYvUE+Jfx8WzRpVMj4wd8F6Eb8c=;
-        b=V7Nwv9fgiJ0bQxYe49i7Mg37xs4qvR0/vZap13GiBj11xBxeREay48xMpiYK7+qsSw
-         gr1o+Sz549iJ4UO3yv5lW+EXCpNx3bReR2wmFjDJoHyPXAAZpImvTdy9MKj3AYRB26W9
-         VDWaJi0PxjTnYbUbhSgmvEC9qgYP9xSwZOQUuEWmMWtiD4egBW4kSjXETzZOwK/XGdMO
-         ZKTlbBGaDihBrT4ZLdvCGTg+f5bQtY8UCd1f5uR4/RtUnnMu8cDAjHNRkk7jr/7yTw16
-         +Occ6XWlKdwsxGtpfiLSX6fXJCvB0K6eF/oacyz9TXKJxIT4xdXDzRn3aJ7tmsRUUXCR
-         Ov/w==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=GgY7NSiX6uiGDtMHlohDtQsx1OJlx0SAIigzyTay35s=;
+        b=jowgYFt7SEavOK8Pjjl0zBdyPggQe+XS6DE8u89llg5eDqiCPe3JleZudMhvvt60Tx
+         KUrtmfXVebiCd4AudyFe5/7URbeh3YLBqpZsFGhazkj4rewAPV3pPdlvshEi+2gezxEH
+         mUCy9kHiaL+UHJfSyXq7u34pU5RUrFK90yNOEMZNCllIi+pfkZE6X4qm79Dbbp43dEbH
+         zu3eKe7pzRlHpv61tz2wvEjFc3VHhVpP3WI399rkB44ERWn0kHIDMkzoJZfdkgfUt5m5
+         GdJkcOsLABE6Z3vQprG6bFgxefZJ8FWtiR+cKBLd4ZZf8c7N00hAdGCNokw8ZxfwGHmO
+         8iTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wW60Ei1LEDr4i3KMNYvUE+Jfx8WzRpVMj4wd8F6Eb8c=;
-        b=ujrhJwGYi9XxDJPWL2h/KeOMv83BNR3UjArIOhUhE9PGNxkcUpJFB17WOgcTkxMELD
-         WFnCnxhnHh02nWYB7aBrI5u+0evqdg/kefh2NvY7TXhSXEf1l/yPPzQ+vI+hJ2HRfihH
-         p6ANHzb4mg+XB5YsCp54+9KsnWD+Hzyb6MzJ68LDGRf056aMPNtfBnxwYFSmoTv6oZOO
-         6GFh0z8opnV5kwyhXE0cxrkuueU+owH2NZG/fxZNwzge5wLjgydLu9Hl9Lb6kw21YgEZ
-         OT0P8kZPCm7sxpGbUU74PoGGyo+GEFgRyRN4l1M/bE1g+pZBHw9Fx/4k9FwK0m2std31
-         x6+A==
-X-Gm-Message-State: AOAM531/kRoj8Q9AXrgeDTZMtYwhJCZiLJcLUS8efoELj/NEM8hWCWMF
-        reFNvHmeGBlQqA7D0SYxp+MSPH+40/kazRtkrxgfaRW7q/beIQ==
-X-Google-Smtp-Source: ABdhPJwt+NfnKj2VKz+x3FOzOFwAqCKrdsgAFJl5Sq4ANwRciQDuXogfYc1SZ3B3WS7WeNUC5HDUP7kO5cIGzKNpvXA=
-X-Received: by 2002:a25:3447:0:b0:655:b2da:cefc with SMTP id
- b68-20020a253447000000b00655b2dacefcmr3048383yba.96.1653493460311; Wed, 25
- May 2022 08:44:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220525074757.7519-1-michael.zaidman@gmail.com> <20220525074757.7519-4-michael.zaidman@gmail.com>
-In-Reply-To: <20220525074757.7519-4-michael.zaidman@gmail.com>
-From:   Guillaume Champagne <champagne.guillaume.c@gmail.com>
-Date:   Wed, 25 May 2022 11:44:09 -0400
-Message-ID: <CAHSN6OfdHfiZRXjnqvnpcbwS0nt0vBuLiwMHcbpsd_AWiJ3i1g@mail.gmail.com>
-Subject: Re: [PATCH v1 3/5] HID: ft260: support i2c writes larger than HID
- report size
-To:     Michael Zaidman <michael.zaidman@gmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com, wsa@kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Mathieu Gallichand <mathieu.gallichand@sonatest.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=GgY7NSiX6uiGDtMHlohDtQsx1OJlx0SAIigzyTay35s=;
+        b=ymS1ZyqcTf6RROhpTMTPyF6Jc76g1x5DGqlPwe64PsHEt1QfmGMSPT/+b+JxPudbqx
+         /VRApypDnVt/YYbf6VuUJBPf194SYyWuWhURUFPd977jLknQdU5RPtlfybcW59Hf4TD+
+         SUMw6RZCnp7ajvwOkXuJb18cagqCoR8LG2Fu/YWKAQ0l8InKQVp/5sD6jkmtUgqxxRUP
+         myRaibj/aR8Hm6sNr4NG3lcKA2Ju/WrkfxIRUFmkYgcFfXg871BLDobrNwSGjsHbooSf
+         +Ihu9mlyi8MPDays/XsycR52WrvUWJTfKzEz2Y571ifVvy546OU25ZFOcxxUWRIF+3oc
+         E+/Q==
+X-Gm-Message-State: AOAM533t4BofTUP8R8hTKg1RdBaLfX1ZaNXUlSTZkUeacmryjuQmhQ+T
+        ef15updaXib0UEnIh0zE/SK6Caq5zez8nw==
+X-Google-Smtp-Source: ABdhPJws+4oVrU34s68yHCpWDk1FFIPQdgTM7eK3gFqhOueOd5NicV9AOgO6qRBSK3sF6bdGOWE2XldPmjZXAg==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:5bba:b161:2a8a:2ddd])
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:9318:b0:1e0:b957:ffda with SMTP
+ id p24-20020a17090a931800b001e0b957ffdamr2678266pjo.199.1653493496291; Wed,
+ 25 May 2022 08:44:56 -0700 (PDT)
+Date:   Wed, 25 May 2022 08:44:38 -0700
+Message-Id: <20220525154442.1438081-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [RFC PATCH 0/4] kunit: more assertion reworking
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     ojeda@kernel.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        Daniel Latypov <dlatypov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mer. 25 mai 2022 =C3=A0 03:48, Michael Zaidman
-<michael.zaidman@gmail.com> a =C3=A9crit :
->
-> To support longer than one HID report size write, the driver splits a sin=
-gle
-> i2c message data payload into multiple i2c messages of HID report size.
-> However, it does not replicate the offset bytes within the EEPROM chip in
-> every consequent HID report because it is not and should not be aware of
-> the EEPROM type. It breaks the i2c write message integrity and causes the
-> EEPROM device not to acknowledge the second HID report keeping the i2c bu=
-s
-> busy until the ft260 controller reports failure.
->
+This is a follow up to these three series:
+https://lore.kernel.org/all/20220113165931.451305-1-dlatypov@google.com/
+https://lore.kernel.org/all/20220118223506.1701553-1-dlatypov@google.com/
+https://lore.kernel.org/all/20220125210011.3817742-1-dlatypov@google.com/
 
-I tested this whole patchset and it resolves the issue I raised
-https://patchwork.kernel.org/project/linux-input/patch/20220524192422.13967=
--1-champagne.guillaume.c@gmail.com/,
-thanks.
+The two goals of those series were
+a) reduce the size of struct kunit_assert and friends.
+   (struct kunit_assert went from 48 => 8 bytes on UML.)
+b) simplify the internal code, mostly by deleting macros
 
-> This patch preserves the i2c write message integrity by manipulating the
-> i2c flag bits across multiple HID reports to be seen by the EEPROM device
-> as a single i2c write transfer.
->
-> Before:
->
-> $ sudo ./i2cperf -f 2 -o 2 -s 64 -r 0-0xff 13 0x51 -S
-> Error: Sending messages failed: Input/output error
->
-> [  +3.667741] ft260_i2c_write: rep 0xde addr 0x51 off 0 len 60 d[0] 0x0
-> [  +0.007330] ft260_hid_output_report_check_status: wait 6400 usec, len 6=
-4
-> [  +0.000203] ft260_xfer_status: bus_status 0x40, clock 100
-> [  +0.000001] ft260_i2c_write: rep 0xd1 addr 0x51 off 60 len 6 d[0] 0x0
-> [  +0.002337] ft260_hid_output_report_check_status: wait 1000 usec, len 1=
-0
-> [  +0.000157] ft260_xfer_status: bus_status 0x2e, clock 100
-> [  +0.000241] ft260_i2c_reset: done
-> [  +0.000003] ft260 0003:0403:6030.000E: ft260_i2c_write: failed to start=
- transfer, ret -5
->
-> After:
->
-> $ sudo ./i2cperf -f 2 -o 2 -s 128 -r 0-0xff 13 0x51 -S
->
->   Fill block with increment via i2ctransfer by chunks
->   -------------------------------------------------------------------
->   data rate(bps)  efficiency(%)  data size(B)  total IOs   IO size(B)
->   -------------------------------------------------------------------
->   58986           86             256           2           128
->
-> Signed-off-by: Michael Zaidman <michael.zaidman@gmail.com>
-> ---
->  drivers/hid/hid-ft260.c | 45 ++++++++++++++++++++++++-----------------
->  1 file changed, 27 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/hid/hid-ft260.c b/drivers/hid/hid-ft260.c
-> index 44106cadd746..bfda5b191a3a 100644
-> --- a/drivers/hid/hid-ft260.c
-> +++ b/drivers/hid/hid-ft260.c
-> @@ -378,41 +378,50 @@ static int ft260_hid_output_report_check_status(str=
-uct ft260_device *dev,
->  }
->
->  static int ft260_i2c_write(struct ft260_device *dev, u8 addr, u8 *data,
-> -                          int data_len, u8 flag)
-> +                          int len, u8 flag)
->  {
-> -       int len, ret, idx =3D 0;
-> +       int ret, wr_len, idx =3D 0;
-> +       bool first =3D true;
->         struct hid_device *hdev =3D dev->hdev;
->         struct ft260_i2c_write_request_report *rep =3D
->                 (struct ft260_i2c_write_request_report *)dev->write_buf;
->
->         do {
-> -               if (data_len <=3D FT260_WR_DATA_MAX)
-> -                       len =3D data_len;
-> -               else
-> -                       len =3D FT260_WR_DATA_MAX;
-> +               rep->flag =3D 0;
-> +               if (first) {
-> +                       rep->flag =3D FT260_FLAG_START;
+This series goes further
+a) sizeof(struct kunit_assert) = 0 now
+b) e.g. we delete another class of macros (KUNIT_INIT_*_ASSERT_STRUCT)
 
-I feel like multi packet transactions must still honor flag sent to
-ft20_i2c_write. This adds a START even if ft260_i2c_write is called
-with FT260_FLAG_START_REPEATED or FT260_FLAG_NONE.
+Note: this does change the function signature of
+kunit_do_failed_assertion, so we'd need to update the rust wrapper in https://github.com/Rust-for-Linux/linux/blob/rust/rust/kernel/kunit.rs
+But otherwise, I don't think this series changes anything on the
+rust-side.
 
-> +                       first =3D false;
-> +               }
-> +
-> +               if (len <=3D FT260_WR_DATA_MAX) {
-> +                       wr_len =3D len;
-> +                       if (flag =3D=3D FT260_FLAG_START_STOP)
-> +                               rep->flag |=3D FT260_FLAG_STOP;
-> +               } else {
-> +                       wr_len =3D FT260_WR_DATA_MAX;
-> +               }
->
-> -               rep->report =3D FT260_I2C_DATA_REPORT_ID(len);
-> +               rep->report =3D FT260_I2C_DATA_REPORT_ID(wr_len);
->                 rep->address =3D addr;
-> -               rep->length =3D len;
-> -               rep->flag =3D flag;
-> +               rep->length =3D wr_len;
->
-> -               memcpy(rep->data, &data[idx], len);
-> +               memcpy(rep->data, &data[idx], wr_len);
->
-> -               ft260_dbg("rep %#02x addr %#02x off %d len %d d[0] %#02x\=
-n",
-> -                         rep->report, addr, idx, len, data[0]);
-> +               ft260_dbg("rep %#02x addr %#02x off %d len %d wlen %d fla=
-g %#x d[0] %#02x\n",
-> +                         rep->report, addr, idx, len, wr_len,
-> +                         rep->flag, data[0]);
->
->                 ret =3D ft260_hid_output_report_check_status(dev, (u8 *)r=
-ep,
-> -                                                          len + 4);
-> +                                                          wr_len + 4);
->                 if (ret < 0) {
-> -                       hid_err(hdev, "%s: failed to start transfer, ret =
-%d\n",
-> -                               __func__, ret);
-> +                       hid_err(hdev, "%s: failed with %d\n", __func__, r=
-et);
->                         return ret;
->                 }
->
-> -               data_len -=3D len;
-> -               idx +=3D len;
-> +               len -=3D wr_len;
-> +               idx +=3D wr_len;
->
-> -       } while (data_len > 0);
-> +       } while (len > 0);
->
->         return 0;
->  }
-> --
-> 2.25.1
->
+Daniel Latypov (4):
+  rfc: kunit: remove format func from struct kunit_assert, get it to 0
+    bytes
+  rfc: kunit: rename base KUNIT_ASSERTION macro to _KUNIT_FAILED
+  rfc: kunit: eliminate KUNIT_INIT_*_ASSERT_STRUCT macros
+  kunit: delcare kunit_assert structs as const
+
+ include/kunit/assert.h |  74 ++-----------------------
+ include/kunit/test.h   | 123 ++++++++++++++++++++++-------------------
+ lib/kunit/test.c       |   7 ++-
+ 3 files changed, 76 insertions(+), 128 deletions(-)
+
+
+base-commit: e7eaffce47b7db72b077630dbe836f0c4132496d
+-- 
+2.36.1.124.g0e6072fb45-goog
+

@@ -2,96 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071EF53425E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B358E534234
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245752AbiEYRq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 13:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S232244AbiEYRch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245571AbiEYRqW (ORCPT
+        with ESMTP id S229823AbiEYRce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 13:46:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCA75F9E
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:46:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653500781; x=1685036781;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XaAdaYRmEX4q3+5JloUL5heNfATKBvuMIhBlEAf54yk=;
-  b=UYyLRu93ZqH6ZMld31rA9g+pmG5f4tFkcBPFfycTa8duBJKw+O2eoAb6
-   zDK3pbVta0UsOe186yWhuSyDD0qzA8NZM6vO1JGJvP/RC20AUfoD6gH0t
-   mjnnQf8PuLYy/9LwHiV+luPYZs1rbD79xEvFdHGNQAMopIegWaKLO3WQo
-   GHfe4HqtGZZrUXDLEaIP1/7midd/ZWBjOq5r4R4RUMYSmxJI/634C0Irb
-   Oq9jT1taWZF5qvcUPyRdaA6ChPSroGfdb5jeJbKxtK53OYMiBt6USsRAl
-   /3545/5CFpTpHtG7MpDu1KlyYXSUXpgxrdTgIdCsJHJqgGBmNZ3BrkP7Y
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="360278540"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="360278540"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:33:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="630449881"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 25 May 2022 10:33:03 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntusY-0003C0-J7;
-        Wed, 25 May 2022 17:33:02 +0000
-Date:   Thu, 26 May 2022 01:32:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [tzungbi-chrome-platform:dev 25/25] ERROR: modpost:
- "cros_kunit_ec_xfer_mock_addx"
- [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
-Message-ID: <202205260106.UjRGjFFM-lkp@intel.com>
+        Wed, 25 May 2022 13:32:34 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B28AE271
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:32:33 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id x2-20020a17090a1f8200b001e07a64c461so2237891pja.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uKOzhX8ru6YupzPPVUW9G2G9XsQPjTP3RBRMRT4HCrs=;
+        b=FyAccB0oXpEBuBOxcmix4vQsWmUhUjnf8be7oMXpDUvwUENkgP2x52FT40EnpIwaDw
+         fr7MQg1gH5pfpoKEKmgLmSRpwRlAPv8uoNHjnRignSUoOSY63W//VWSR9MNj3WEMZl9/
+         r2TUYrBLGdbL31Kf1hstHdiIZU1+LVMfCtS1w/GwV0Mal1LlQSx4qu6gSfpjnoR4D23Z
+         MLyKNO6dX/cfK0OfvmedVYFnTH464/YqGeh4FOr7MpVuPDU/EZ0wGow3LN2QFt69oqYc
+         y6DbaDylpoEwuA6Rjyra8npsj12P/Mg+qEJDmSTLh/PY8OhbUdTB0Mry8fiSV0LD/08Z
+         HKvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uKOzhX8ru6YupzPPVUW9G2G9XsQPjTP3RBRMRT4HCrs=;
+        b=c9AKn9lLvHfga4eRaExDCfUqxeTQOhHoC2tXA/s2urgQQ+wScsjVXqYjONC/D3RXOo
+         ZmhBn/GL8jGXHiJAZ191ZNH9YHYDvuFtN1ETMiVYhG41P0k3X6lMDeQvah46leDUvGhU
+         6i3nQqFwUhwTbMh6DmMS84oeKW6w70zradO6LGSRSC7AAXDiA/iADtLJpN4B05WBaykC
+         M95FhlNVBPR6UnRZ4dQG+mXcBfAuRi8g7rR3svoWei6KHPj/oWx/fpeC7viaMKRbBajh
+         wdA9n77Zp+/BMC4/Yb5bIhqt7RQQnBJ+fi3vHNDCrAvvdrucSgycPYCLxTdU5M+LUG8T
+         g5cQ==
+X-Gm-Message-State: AOAM531YgI+osYIvmhksVo8Ma7rkrLndT2F1NNrEY1Y/2dQy2EUSu6JH
+        3AXEojPCdDZ4TPfo/pBT11iJsQ==
+X-Google-Smtp-Source: ABdhPJymqelJmqXaqJ5lvTkskc43UEh4IL2o064fxrk4cTDYfPDuhIiWfzubPs2mkHTO8lG7+q28zQ==
+X-Received: by 2002:a17:90a:5ae1:b0:1db:d0a4:30a4 with SMTP id n88-20020a17090a5ae100b001dbd0a430a4mr11701841pji.128.1653499952316;
+        Wed, 25 May 2022 10:32:32 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170902a9c600b001624dab05edsm3506026plr.8.2022.05.25.10.32.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 10:32:31 -0700 (PDT)
+Date:   Wed, 25 May 2022 17:32:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] KVM: VMX: do not disable interception for
+ MSR_IA32_SPEC_CTRL on eIBRS
+Message-ID: <Yo5oLAzdYurlMQFm@google.com>
+References: <20220520204115.67580-1-jon@nutanix.com>
+ <Yo5hmcdRvE1UrI4y@google.com>
+ <3C8F5313-2830-46E3-A512-CFA4A24C24D7@nutanix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3C8F5313-2830-46E3-A512-CFA4A24C24D7@nutanix.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git dev
-head:   c8065f6d478990cfc385d1d579972a75fc29605b
-commit: c8065f6d478990cfc385d1d579972a75fc29605b [25/25] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_query_all()
-config: arm64-randconfig-r006-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260106.UjRGjFFM-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git/commit/?id=c8065f6d478990cfc385d1d579972a75fc29605b
-        git remote add tzungbi-chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git
-        git fetch --no-tags tzungbi-chrome-platform dev
-        git checkout c8065f6d478990cfc385d1d579972a75fc29605b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Wed, May 25, 2022, Jon Kohler wrote:
+> > On May 25, 2022, at 1:04 PM, Sean Christopherson <seanjc@google.com> wrote:
+> > the code.  Again, it's all about whether eIBRS is advertised to the guest.  With
+> > some other minor tweaking to wrangle the comment to 80 chars...
+> 
+> RE 80 chars - quick question (and forgive the silly question here), but how are you
+> counting that? I’ve got my editor cutting at 79 cols, where tab size is accounted
+> for as 4 cols, so the longest line on my side for this patch is 72-73 or so.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Tabs are 8 cols in the kernel.  FWIW, your patch was totally fine with respect to
+wrapping, my comment was purely to give the heads up that I arbitrarily tweaked
+other bits of the comment to adjust for my suggested reword.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+> These also pass the checkpatch.pl script as well, so I just want to make sure
+> going forward I’m formatting them appropriately.
 
->> ERROR: modpost: "cros_kunit_ec_xfer_mock_addx" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_ec_xfer_mock_next" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_ec_xfer_mock_add" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_reset" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
->> ERROR: modpost: "cros_kunit_ec_xfer_mock" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+For future reference, checkpatch.pl only yells if a line length exceeds 100 chars.
+The 80 char limit is a soft limit, with 100 chars being a mostly-firm limit.
+checkpatch used to yell at 80, but was changed because too many people were
+interpreting 80 chars as a hard limit and blindly wrapping code to make checkpatch
+happy at the cost of yielding less readable code.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Whether or not to run over the soft limit is definitely subjective, just try to
+use common sense.  E.g. overflowing by 1-2 chars, not a big deal, especially if
+the statement would otherwise fit on a single line, i.e. doesn't already wrap.
+
+A decent example is the SGX MSRs, which allows the SGX_LC_ENABLED check to run
+over a little, but wraps the data update.  The reasoning is that
+
+		if (!msr_info->host_initiated &&
+		    (!guest_cpuid_has(vcpu, X86_FEATURE_SGX_LC) ||
+		    ((vmx->msr_ia32_feature_control & FEAT_CTL_LOCKED) &&
+		    !(vmx->msr_ia32_feature_control & FEAT_CTL_SGX_LC_ENABLED))))
+			return 1;
+
+is much more readable than 
+
+		if (!msr_info->host_initiated &&
+		    (!guest_cpuid_has(vcpu, X86_FEATURE_SGX_LC) ||
+		    ((vmx->msr_ia32_feature_control & FEAT_CTL_LOCKED) &&
+		    !(vmx->msr_ia32_feature_control &
+		      FEAT_CTL_SGX_LC_ENABLED))))
+			return 1;
+
+but this
+
+		vmx->msr_ia32_sgxlepubkeyhash
+			[msr_index - MSR_IA32_SGXLEPUBKEYHASH0] = data;
+
+is only isn't _that_ much worse than running the line way out, and ~93 chars gets
+to be a bit too long.
+
+		vmx->msr_ia32_sgxlepubkeyhash[msr_index - MSR_IA32_SGXLEPUBKEYHASH0] = data;

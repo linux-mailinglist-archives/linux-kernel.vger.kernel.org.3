@@ -2,257 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20F2534305
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 20:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B77534307
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 20:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343742AbiEYSdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 14:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
+        id S1343751AbiEYSdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 14:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343734AbiEYSdO (ORCPT
+        with ESMTP id S1343733AbiEYSdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 14:33:14 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDE4B2244;
-        Wed, 25 May 2022 11:33:10 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 68863320095C;
-        Wed, 25 May 2022 14:33:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 25 May 2022 14:33:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1653503587; x=
-        1653589987; bh=XLpxWonmRq/QNBq/fkI4YPPckQU+cClBjO26u6WbxLY=; b=R
-        duT0S70ogz23s1DW4MwE8/UjTcbotvH6+5M/D7H47QszgjJNIg65/dbsUB+dvQ10
-        25qL54EAq2ECaiFHbrA53bLpTV0oMHIk48HshNL194GFQGimQPgCVectL5BwTs7I
-        InZqQiwXONnw2HIOjxIpyUSArvFDnrfXMiQ+C6L4xtxLTd8Zlg2ChvZC3aoE15XZ
-        X2YYQ3yiZx++zLhS0ctz/kvKDMat4hdbybHC715flEEmUiY1XpMokcFUK5Ys8CL6
-        7APDrRTF3bt5WA9s7t3ILdr45z7g9FKpnx4Lv90ojc0eNU+X3h8VYvXWxNbG5dPL
-        U35DUVSvftnkOHcbiuG3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1653503587; x=
-        1653589987; bh=XLpxWonmRq/QNBq/fkI4YPPckQU+cClBjO26u6WbxLY=; b=o
-        k282z8NEnxPIrLE1dxkSstBjQHLUzSIoAUn8IsvBe+D7zhDU9nlwdtzZWEtTuuBE
-        CplGM5qC+hnvZBXaUQlFlK1CvnhQW+Ui3/cM8LKV8WT7F5PD/+vvSoNdqwSRbysQ
-        ICj0C0/pPOZ+D+qZjHM6K/gKZgR2xbwM9Iq4QyrjyEs2CRs4BrQLkyK9x0AJIyox
-        koubErTsUSz0sJgs9mLfy3BVUrnNGwv0wtcVHA+Q8tNf6kMS10a6pf4AHXVR8kV+
-        Lqq3FusF4E+QAz8XKogxgFK1+Me5Iz99Rbp7O20EElLXbK/9+d5z+kToHuItH0z2
-        98W6OsedT/w+f+uqOS7pQ==
-X-ME-Sender: <xms:YnaOYpPtKWXe1ftBib8JI0WiskLvtZ73EKgzGxW0EIg5Dfl5azKdQQ>
-    <xme:YnaOYr9VxoPC_WXnnzU-tYlxd6pksIi8C9k29z1GEr1HQR-bbPkgtyije_ZZDlGXx
-    pqKI_Ma4_2XUkCjC20>
-X-ME-Received: <xmr:YnaOYoR08PErLcXic581ig10Bbqv4nm0IBIOHwnhx-g-2d3JvB3hDyf6KX6Aj20>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeehgdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepudfhkeevvddtueekfeefgfetlefgueegueeltddtieejgeei
-    heevgfehgfdvfeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:YnaOYlugozItnvff7q0FALVsg3xYhqPw6Hv31ciuwuOKRehdBBMBmA>
-    <xmx:YnaOYhfN5IuIoSSr5n5WLg7TWhqZraxdDg9t-k0bmDTMhczUHhYTFg>
-    <xmx:YnaOYh2ZyKRMJYJ_rJfp_2rbrLBPkQJ4gt8_tc7_HZyeE1HDMuycCA>
-    <xmx:Y3aOYs1ju-f2-jOhKdTCGYqCa-cB8yXDn4jBGonfJ4j7ubBB9CIUCQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 May 2022 14:33:04 -0400 (EDT)
-Message-ID: <fe7ca417-6c0f-1558-f5b1-a5ebc31e93c1@flygoat.com>
-Date:   Wed, 25 May 2022 19:33:03 +0100
+        Wed, 25 May 2022 14:33:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2FFB2244
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dE/DLluMiNPsVmhAGFmujsjFgKe2VgiOhEAbM9opcsg=; b=D5mk4y7mqIrm/WfrhoXXCJ4gcg
+        4Dq/9gzxlPAtT/AJGgUP47M+XTX1ltG/ktYBe1jYDkZmFpiGtnRMcwJHSbzj+FXHCJO+6A8MmxJ6X
+        WBXkb+8WMJdLVp8SAzy8nBTsPHfJMLmmoHGtDd5R1IPJuYIwDWWRRHZgXqq9tgTCUASLw23PvRFnL
+        seBTu62XIw1tcpp3L5x3qJIAT2S1XXUxUaq+dXqlp384ukd2zGsgmyKc1p3O6n/eowOXQLLai+pjb
+        POv2LpgYHsHfqr6Q31WjPdgZ1G1dxOcTF8xzTmQsRkWdsTROMYbVHrvamaR2JTgz0K7FvgXC6HIAL
+        hWcjes+A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ntvpD-000bSq-3b; Wed, 25 May 2022 18:33:39 +0000
+Date:   Wed, 25 May 2022 19:33:39 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+5b96d55e5b54924c77ad@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in do_sync_mmap_readahead
+Message-ID: <Yo52gzYYOpU0NwDo@casper.infradead.org>
+References: <0000000000008cfbca05dfd6db81@google.com>
+ <20220525095842.f97b64de9cbcc0e15d1257a6@linux-foundation.org>
+ <Yo5uI9w7lll5B93r@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 02/12] MIPS: GIC: Generate redirect block accessors
-Content-Language: en-GB
-To:     Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Chao-ying Fu <cfu@wavecomp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@kernel.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
- <20220525121030.16054-3-Dragan.Mladjenovic@syrmia.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20220525121030.16054-3-Dragan.Mladjenovic@syrmia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yo5uI9w7lll5B93r@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 25, 2022 at 06:57:55PM +0100, Matthew Wilcox wrote:
+> 
+> Ohh, that makes sense.  We unlocked the mmap_sem, so the file is
+> pinned, but the VMA isn't.  I'll whip up a patch.
 
+#syz test
 
-在 2022/5/25 13:10, Dragan Mladjenovic 写道:
-> From: Paul Burton <paulburton@kernel.org>
->
-> With CM 3.5 the "core-other" register block evolves into the "redirect"
-> register block, which is capable of accessing not only the core local
-> registers of other cores but also the shared/global registers of other
-> clusters.
->
-> This patch generates accessor functions for shared/global registers
-> accessed via the redirect block, with "redir_" inserted after "gic_" in
-> their names. For example the accessor function:
->
->    read_gic_config()
->
-> ...accesses the GIC_CONFIG register of the GIC in the local cluster.
-> With this patch a new function:
->
->    read_gic_redir_config()
->
-> ...is added which accesses the GIC_CONFIG register of the GIC in
-> whichever cluster the GCR_CL_REDIRECT register is configured to access.
->
-> This mirrors the similar redirect block accessors already provided for
-> the CM & CPC.
->
-> Signed-off-by: Paul Burton <paulburton@kernel.org>
-> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
-> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+From 01a4917c4cfe400eb310eba4f2fa466d381623c1 Mon Sep 17 00:00:00 2001
+From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Date: Wed, 25 May 2022 14:23:45 -0400
+Subject: [PATCH] mm/filemap: Cache the value of vm_flags
 
-Checked against I6500 system programming manual.
+After we have unlocked the mmap_lock for I/O, the file is pinned, but
+the VMA is not.  Checking this flag after that can be a use-after-free.
+It's not a terribly interesting use-after-free as it can only read one
+bit, and it's used to decide whether to read 2MB or 4MB.  But it
+upsets the automated tools and it's generally bad practice anyway,
+so let's fix it.
 
-Thanks.
-- Jiaxun
->
-> diff --git a/arch/mips/include/asm/mips-gic.h b/arch/mips/include/asm/mips-gic.h
-> index 084cac1c5ea2..fd9da5e3beaa 100644
-> --- a/arch/mips/include/asm/mips-gic.h
-> +++ b/arch/mips/include/asm/mips-gic.h
-> @@ -28,11 +28,13 @@ extern void __iomem *mips_gic_base;
->   
->   /* For read-only shared registers */
->   #define GIC_ACCESSOR_RO(sz, off, name)					\
-> -	CPS_ACCESSOR_RO(gic, sz, MIPS_GIC_SHARED_OFS + off, name)
-> +	CPS_ACCESSOR_RO(gic, sz, MIPS_GIC_SHARED_OFS + off, name)	\
-> +	CPS_ACCESSOR_RO(gic, sz, MIPS_GIC_REDIR_OFS + off, redir_##name)
->   
->   /* For read-write shared registers */
->   #define GIC_ACCESSOR_RW(sz, off, name)					\
-> -	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_SHARED_OFS + off, name)
-> +	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_SHARED_OFS + off, name)	\
-> +	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_REDIR_OFS + off, redir_##name)
->   
->   /* For read-only local registers */
->   #define GIC_VX_ACCESSOR_RO(sz, off, name)				\
-> @@ -45,7 +47,7 @@ extern void __iomem *mips_gic_base;
->   	CPS_ACCESSOR_RW(gic, sz, MIPS_GIC_REDIR_OFS + off, vo_##name)
->   
->   /* For read-only shared per-interrupt registers */
-> -#define GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)			\
-> +#define _GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
->   static inline void __iomem *addr_gic_##name(unsigned int intr)		\
->   {									\
->   	return mips_gic_base + (off) + (intr * (stride));		\
-> @@ -58,8 +60,8 @@ static inline unsigned int read_gic_##name(unsigned int intr)		\
->   }
->   
->   /* For read-write shared per-interrupt registers */
-> -#define GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)			\
-> -	GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)			\
-> +#define _GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)		\
-> +	_GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
->   									\
->   static inline void write_gic_##name(unsigned int intr,			\
->   				    unsigned int val)			\
-> @@ -68,22 +70,30 @@ static inline void write_gic_##name(unsigned int intr,			\
->   	__raw_writel(val, addr_gic_##name(intr));			\
->   }
->   
-> +#define GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)			\
-> +	_GIC_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
-> +	_GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off, stride, redir_##name)
-> +
-> +#define GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)			\
-> +	_GIC_ACCESSOR_RW_INTR_REG(sz, off, stride, name)		\
-> +	_GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off, stride, redir_##name)
-> +
->   /* For read-only local per-interrupt registers */
->   #define GIC_VX_ACCESSOR_RO_INTR_REG(sz, off, stride, name)		\
-> -	GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
-> +	_GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
->   				 stride, vl_##name)			\
-> -	GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
-> +	_GIC_ACCESSOR_RO_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
->   				 stride, vo_##name)
->   
->   /* For read-write local per-interrupt registers */
->   #define GIC_VX_ACCESSOR_RW_INTR_REG(sz, off, stride, name)		\
-> -	GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
-> +	_GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_LOCAL_OFS + off,		\
->   				 stride, vl_##name)			\
-> -	GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
-> +	_GIC_ACCESSOR_RW_INTR_REG(sz, MIPS_GIC_REDIR_OFS + off,		\
->   				 stride, vo_##name)
->   
->   /* For read-only shared bit-per-interrupt registers */
-> -#define GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
-> +#define _GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
->   static inline void __iomem *addr_gic_##name(void)			\
->   {									\
->   	return mips_gic_base + (off);					\
-> @@ -106,8 +116,8 @@ static inline unsigned int read_gic_##name(unsigned int intr)		\
->   }
->   
->   /* For read-write shared bit-per-interrupt registers */
-> -#define GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
-> -	GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
-> +#define _GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
-> +	_GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
->   									\
->   static inline void write_gic_##name(unsigned int intr)			\
->   {									\
-> @@ -146,6 +156,14 @@ static inline void change_gic_##name(unsigned int intr,			\
->   	}								\
->   }
->   
-> +#define GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
-> +	_GIC_ACCESSOR_RO_INTR_BIT(off, name)				\
-> +	_GIC_ACCESSOR_RO_INTR_BIT(MIPS_GIC_REDIR_OFS + off, redir_##name)
-> +
-> +#define GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
-> +	_GIC_ACCESSOR_RW_INTR_BIT(off, name)				\
-> +	_GIC_ACCESSOR_RW_INTR_BIT(MIPS_GIC_REDIR_OFS + off, redir_##name)
-> +
->   /* For read-only local bit-per-interrupt registers */
->   #define GIC_VX_ACCESSOR_RO_INTR_BIT(sz, off, name)			\
->   	GIC_ACCESSOR_RO_INTR_BIT(sz, MIPS_GIC_LOCAL_OFS + off,		\
-> @@ -155,10 +173,10 @@ static inline void change_gic_##name(unsigned int intr,			\
->   
->   /* For read-write local bit-per-interrupt registers */
->   #define GIC_VX_ACCESSOR_RW_INTR_BIT(sz, off, name)			\
-> -	GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_LOCAL_OFS + off,		\
-> -				 vl_##name)				\
-> -	GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_REDIR_OFS + off,		\
-> -				 vo_##name)
-> +	_GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_LOCAL_OFS + off,		\
-> +				  vl_##name)				\
-> +	_GIC_ACCESSOR_RW_INTR_BIT(sz, MIPS_GIC_REDIR_OFS + off,		\
-> +				  vo_##name)
->   
->   /* GIC_SH_CONFIG - Information about the GIC configuration */
->   GIC_ACCESSOR_RW(32, 0x000, config)
+Reported-by: syzbot+5b96d55e5b54924c77ad@syzkaller.appspotmail.com
+Fixes: 4687fdbb805a ("mm/filemap: Support VM_HUGEPAGE for file mappings")
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ mm/filemap.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 9a1eef6c5d35..61dd39990fda 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -2991,11 +2991,12 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
+ 	struct address_space *mapping = file->f_mapping;
+ 	DEFINE_READAHEAD(ractl, file, ra, mapping, vmf->pgoff);
+ 	struct file *fpin = NULL;
++	unsigned long vm_flags = vmf->vma->vm_flags;
+ 	unsigned int mmap_miss;
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ 	/* Use the readahead code, even if readahead is disabled */
+-	if (vmf->vma->vm_flags & VM_HUGEPAGE) {
++	if (vm_flags & VM_HUGEPAGE) {
+ 		fpin = maybe_unlock_mmap_for_io(vmf, fpin);
+ 		ractl._index &= ~((unsigned long)HPAGE_PMD_NR - 1);
+ 		ra->size = HPAGE_PMD_NR;
+@@ -3003,7 +3004,7 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
+ 		 * Fetch two PMD folios, so we get the chance to actually
+ 		 * readahead, unless we've been told not to.
+ 		 */
+-		if (!(vmf->vma->vm_flags & VM_RAND_READ))
++		if (!(vm_flags & VM_RAND_READ))
+ 			ra->size *= 2;
+ 		ra->async_size = HPAGE_PMD_NR;
+ 		page_cache_ra_order(&ractl, ra, HPAGE_PMD_ORDER);
+@@ -3012,12 +3013,12 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
+ #endif
+ 
+ 	/* If we don't want any read-ahead, don't bother */
+-	if (vmf->vma->vm_flags & VM_RAND_READ)
++	if (vm_flags & VM_RAND_READ)
+ 		return fpin;
+ 	if (!ra->ra_pages)
+ 		return fpin;
+ 
+-	if (vmf->vma->vm_flags & VM_SEQ_READ) {
++	if (vm_flags & VM_SEQ_READ) {
+ 		fpin = maybe_unlock_mmap_for_io(vmf, fpin);
+ 		page_cache_sync_ra(&ractl, ra->ra_pages);
+ 		return fpin;
+-- 
+2.34.1
 

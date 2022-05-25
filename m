@@ -2,110 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F125341D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D201E5341EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243516AbiEYQ7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 12:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S243595AbiEYRCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245528AbiEYQ7F (ORCPT
+        with ESMTP id S229551AbiEYRCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 12:59:05 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7791A9CC98;
-        Wed, 25 May 2022 09:59:04 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PGwhlc027029;
-        Wed, 25 May 2022 16:59:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=s29TMMaPCeov6Umv4/RKkhW1ulUvZ0bFNKT+MfZefKc=;
- b=jEmQGXjx15Ng6AVbzjonQGKGmIUemdi4xQjoqcOj5gAd7pUAhrMHvcsUGxAQKXudHRud
- vbd/H4hgyiebV2jNXJ75l4YBfqQyCycmzDjL3gL1wVZdQL7lZGzThI12mjnw15cf5zxx
- ZSv/+KUoefOl0c2yRMzGOVioAZcb1eDDqW69005wnElYHa4UlSvBYPihniPMpL1Yz3DE
- qqlK88jB0IANFtqkJpBcPlquEmg3n2Ui2dKQ8Yw9IYrFkV4p/8Qtl1XmydxXld+mZc8J
- uwz2uIcp/auspVq8RiKbTd5M1ma8L32yi41MvJ4qOQZbdtvGkj2NVpZErEs+nOt9wYeu TQ== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9rewr063-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 16:59:01 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24PGcUfD032753;
-        Wed, 25 May 2022 16:59:01 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma04wdc.us.ibm.com with ESMTP id 3g93uyqbb0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 16:59:01 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24PGx0nM27263316
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 May 2022 16:59:00 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D5F9B112061;
-        Wed, 25 May 2022 16:59:00 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 468C1112062;
-        Wed, 25 May 2022 16:59:00 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.60.201])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 25 May 2022 16:59:00 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     broonie@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH 2/2] spi: core: Display return code when failing to transfer message
-Date:   Wed, 25 May 2022 11:58:52 -0500
-Message-Id: <20220525165852.33167-3-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220525165852.33167-1-eajames@linux.ibm.com>
-References: <20220525165852.33167-1-eajames@linux.ibm.com>
+        Wed, 25 May 2022 13:02:42 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBBD35A99;
+        Wed, 25 May 2022 10:02:38 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id v6so14471923qtx.12;
+        Wed, 25 May 2022 10:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LladUyPXqhvy6xFCV+qprs26wq5bXjZ7GMD9uy8dOjU=;
+        b=IDu79vMCzRFhfyNiIh9umbhUvNvLwQDbwqdO72XBwpGHybDDImX0nn3JEQFpbppHmV
+         vVZY/7N32Pflxnga9o13wF6zOWXE8P23YXXk6+BAWj7iuLqpM+yM4Syk4rz6R4AzVNHg
+         HllxDXVz/OyGe95E6fAMy5UQDIIDZZTpqGxwDfYZEpRYjSjLb/TLvQCP58MKQzpKT+Ha
+         lR9kPb6SNIjnnlIk6NGstK2c3xys27hWmkIqCPEUfvnTh1A9MmAgEecp/rWOsZsoZT/I
+         UovQxsDsC19lCZNZUK7ESdanZshG44xMHYI4Ru4whr3uzt3mcbRwIMi7rdctqA2v20S7
+         LKDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LladUyPXqhvy6xFCV+qprs26wq5bXjZ7GMD9uy8dOjU=;
+        b=BXYbdQvRktTk8LdJHQ8g+MHIyU6rVnXaFLdaTB6LBL+/TOaBAg0M2bD3X6godCSkVn
+         FVyYYoKFAPfmSp5s04uVu9HvtWTW3Sml45cFPRJeMTahlGAMeGawBnjGvllPScGk7/ab
+         0hQ0BvOBJ5o1UrZhpIv1oldlv1gOezMfDtq16B0mCyxHhLTFPH/ULGa0iBeS9BWnBy5I
+         ToEnYFSEBZxVy+FTFNNwt2Kw4QKlMRxQdoiDLxiqYGkJT/FC3rUJ/XWz+y2zJIgLLyMM
+         XsN16ro0cAYfABVplzksKvCyudAEVwk5kJZGJY3m3JU5zduHRF8HaddSBe+XJw2VzfUh
+         +lMw==
+X-Gm-Message-State: AOAM531IWNjIRXPYy1O3ioDMnf899ikLdGe0FSeVp7UlCkStWZ243TX3
+        Hfw5jJIw+NFayR7gnSDWvw==
+X-Google-Smtp-Source: ABdhPJywYwBXdqkjWfR3nmyH3B8L06YY/+Y8tE7ULDUzYsdGvA/vpWGoCQ+aannrrdQ65JGPhjLdfg==
+X-Received: by 2002:ac8:7dc3:0:b0:2fa:6788:4fca with SMTP id c3-20020ac87dc3000000b002fa67884fcamr4662969qte.168.1653498155984;
+        Wed, 25 May 2022 10:02:35 -0700 (PDT)
+Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id y3-20020a37f603000000b0069fc13ce1ffsm1579313qkj.48.2022.05.25.10.02.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 10:02:35 -0700 (PDT)
+Date:   Wed, 25 May 2022 13:02:33 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, mcgrof@kernel.org, tytso@mit.edu
+Subject: Re: RFC: Ioctl v2
+Message-ID: <20220525170233.2yxb5pm75dehrjuj@moria.home.lan>
+References: <20220520161652.rmhqlvwvfrvskg4w@moria.home.lan>
+ <Yof6hsC1hLiYITdh@lunn.ch>
+ <20220521164546.h7huckdwvguvmmyy@moria.home.lan>
+ <20220521124559.69414fec@hermes.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: crbBxFRBBMklhPjWNlhgQ79uF7ygIQn4
-X-Proofpoint-GUID: crbBxFRBBMklhPjWNlhgQ79uF7ygIQn4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-25_04,2022-05-25_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 mlxlogscore=999 spamscore=0 bulkscore=0 adultscore=0
- clxscore=1015 phishscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205250085
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521124559.69414fec@hermes.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All the other calls to the controller driver display the error
-return code. The return code is helpful to understand what went
-wrong, so include it when failing to transfer one message.
+On Sat, May 21, 2022 at 12:45:59PM -0700, Stephen Hemminger wrote:
+> On Sat, 21 May 2022 12:45:46 -0400
+> Kent Overstreet <kent.overstreet@gmail.com> wrote:
+> 
+> > On Fri, May 20, 2022 at 10:31:02PM +0200, Andrew Lunn wrote:
+> > > > I want to circulate this and get some comments and feedback, and if
+> > > > no one raises any serious objections - I'd love to get collaborators
+> > > > to work on this with me. Flame away!  
+> > > 
+> > > Hi Kent
+> > > 
+> > > I doubt you will get much interest from netdev. netdev already
+> > > considers ioctl as legacy, and mostly uses netlink and a message
+> > > passing structure, which is easy to extend in a backwards compatible
+> > > manor.  
+> > 
+> > The more I look at netlink the more I wonder what on earth it's targeted at or
+> > was trying to solve. It must exist for a reason, but I've written a few ioctls
+> > myself and I can't fathom a situation where I'd actually want any of the stuff
+> > netlink provides.
+> 
+> Netlink was built for networking operations, you want to set something like a route with a large
+> number of varying parameters in one transaction. And you don't want to have to invent
+> a new system call every time a new option is added.
+> 
+> Also, you want to monitor changes and see these events for a userspace control
+> application such as a routing daemon.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/spi/spi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+That makes sense - perhaps the new mount API could've been done as a netlink
+interface :)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 481edea77c62..ea09d1b42bf6 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1654,7 +1654,8 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
- 	ret = ctlr->transfer_one_message(ctlr, msg);
- 	if (ret) {
- 		dev_err(&ctlr->dev,
--			"failed to transfer one message from queue\n");
-+			"failed to transfer one message from queue: %d\n",
-+			ret);
- 		goto out;
- 	}
- 
--- 
-2.27.0
+But perhaps it makes sense to have both - netlink for the big complicated
+stateful operations, ioctl v2 for the simpler ones. I haven't looked at netlink
+usage at all, but most of the filesystem ioctls I've looked at fall into the the
+simple bucket, for me.
 
+Actually, I have one in bcachefs that might fit better into the netlink bucket -
+maybe while I've got your attention you could tell me what this is like in
+netlink land.
+
+In bcachefs, we have "data jobs", where userspace asks us to do something that
+requires walking data and performing some operation on them - this is used for
+manual rebalance, evacuating data off a device, scrub (when that gets
+implemented), etc.
+
+The way I did this was with an ioctl that takes as a parameter the job to
+perform, then it kicks off a kernel thread to do the work and returns a file
+descriptor, which userspace reads from to find out the current status of the job
+(which it uses to implement a progress indicator). We kill off the kthread if
+the file descriptor is closed, meaning ctrl-c works as expected.
+
+I really like how this turned out, it's not much code and super slick - I was
+considering abstracting it out as generic functionality. But this definitely
+sounds like what netlink is targeted at - thoughts?

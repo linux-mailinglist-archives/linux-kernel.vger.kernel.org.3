@@ -2,146 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E741C533D0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAE9533D12
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243629AbiEYM5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S242054AbiEYM6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiEYM5H (ORCPT
+        with ESMTP id S229831AbiEYM62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:57:07 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C1BA0051
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:57:06 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id g72so8071960ybf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:57:06 -0700 (PDT)
+        Wed, 25 May 2022 08:58:28 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5E8A2053
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:58:27 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id 90so7286249uam.8
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MlfGy88ZCD4lOyKadsaMaTpiuM8NkVCXt/blXBLLSuM=;
+        b=WHFRS+3QBk6oxN3FURojB0WbB+U5Yk4Tva5DSe1TmlglfwC6xSB79PK/twKoeeqJ1Y
+         gQflcIaHygkWIFezpZLWDfiOFK22NGlWiFbkUz+Yj9mUz4IxO5AgavlQVUh0kzFDtPAK
+         a+B3yfQtzc9NgH4DISF44l9SiUYBu3GDdx9ixgMeH5sxMf8Yvs+zgemvkbfX2vO6ONo0
+         r+YOZWI+r7OSj8wrgAO+9rps8TxuTpl3N6RfXJGU/gnwbeyBYfnPaB5nXonXH+0eXJS9
+         D5Hdo1CY2iAnRhw5CeM976/rMLav8uhQr3sPxmOyPXwcb6ZJDQ9mbfgXWWb9SebA8+Lx
+         HtDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XbTQQ3fFsREZ3tUhy2vBlOH2mWBOf5JDmMrH0eHv+2E=;
-        b=d4N0E7Xfbb7foV+cJmtF6eHJT1qjiLSSMK1qK8yL31OosmRjePjL/M9gOulWmnwfGB
-         pcR5iMo0ARzmSTA+C1zaVxN+w9Et1TN/3KBG5I39LLQcaQXwXZoMmr9VDfGk19sML6Oe
-         1Sv2T4tBHR0SUOA2ThXVbNtYPcWD6NnuiTDDVU7KZGGxoUvZymAv/TwzCYeCviHGAzJW
-         GbPlgE6QM2aWCz9I525/ufPVZh/Rep5FTiuv2flyDyiWXrhCkS305/qy7WrvYZ/lVcwo
-         o3lqx33n6r0B/pPaCYtHMmbw77GwzNIRC8bs0RiLwVUrDN2ikCgUvKXR2OPp8bNpM2D7
-         n0NA==
-X-Gm-Message-State: AOAM5314/vBxgSh17DirGkz4zpoHrGyquxCVHemnqop8K67HO6y+SOIi
-        qBdSnBITBkAcJClbPe0OZIIDwqYlbiEMUHOPbdU=
-X-Google-Smtp-Source: ABdhPJwvncEE0+UfXs5AhTYhctr25qdNy+sgvQE0dTu1P4CvXNDCmqtO8eBpQI+dL/SLF8fYYF3bG7NkMvBM0jJMhKE=
-X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
- o16-20020a256b50000000b0064f4b330664mr28570255ybm.153.1653483426127; Wed, 25
- May 2022 05:57:06 -0700 (PDT)
+        bh=MlfGy88ZCD4lOyKadsaMaTpiuM8NkVCXt/blXBLLSuM=;
+        b=qST4jl4eZl0dwuPjhIqk+GI3KsEnc+yyaThclYa7zEfFsoGgnHVDuwgPrsPUXLUVRR
+         wodaDyR49lXzQomWY++7wosoTE15uRfVvxVoqVZUZnHie8fJunTXEGPTIXNQdWkp948W
+         7tlW8qcm1P6gPSGYFVA5u7vljRfVNpPZN5tsF40Cl6a3gK4M+LsFeZ62XOWW+Bh4zpGQ
+         jLxs5fEfFGUla2P9wP17oFig5B9gA9jZb38Y2M+fMxZZFRd3yqqifVwu0xlQVJn5ycJN
+         SqV0mlZcAeXR+cxMIZJC4SmOUUZ0ChZwkOHKu28y//EL0iTm2M7Sqj5KPrWx+zVr6eAK
+         zAjw==
+X-Gm-Message-State: AOAM530N7TAVq61oY9ChXzBZDkIpkZjUTiTNsEer2qkZ/cpQWxC3dyMV
+        BDxoRXqtzJr7MA1RLKG9VscHo4H3ZAUmyEQrVdJP2g==
+X-Google-Smtp-Source: ABdhPJzfhaqn9oVCwhK40BxeJIQuF35mF5wePsIFZ0TXRA5Q0PqzCtwusZwnQpv5NWrM7h8rgrwcPPg78uDjv8XYTps=
+X-Received: by 2002:ab0:310b:0:b0:368:c7b0:5a6c with SMTP id
+ e11-20020ab0310b000000b00368c7b05a6cmr10054921ual.108.1653483506483; Wed, 25
+ May 2022 05:58:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220524212118.425702-1-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220524212118.425702-1-dmitry.osipenko@collabora.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 May 2022 14:56:55 +0200
-Message-ID: <CAJZ5v0gZCMZ3m7gpPNpZf8_9Uob1km01nA9BFOi9BJhb3fDXmA@mail.gmail.com>
-Subject: Re: [PATCH v1] kernel/reboot: Change registration order of legacy
- power-off handler
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220525093938.4101-1-ravi.bangoria@amd.com> <20220525093938.4101-5-ravi.bangoria@amd.com>
+In-Reply-To: <20220525093938.4101-5-ravi.bangoria@amd.com>
+From:   Stephane Eranian <eranian@google.com>
+Date:   Wed, 25 May 2022 15:58:15 +0300
+Message-ID: <CABPqkBQ-4vpG_d-u-Q-pTQ_wDg_HhqNNC3dSLFE6MS5Bp3qTDw@mail.gmail.com>
+Subject: Re: [PATCH 04/13] perf/x86/amd: Support PERF_SAMPLE_WEIGHT using IBS OP_DATA3[IbsDcMissLat]
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     peterz@infradead.org, acme@kernel.org, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, jmario@redhat.com,
+        leo.yan@linaro.org, alisaidi@amazon.com, ak@linux.intel.com,
+        kan.liang@linux.intel.com, dave.hansen@linux.intel.com,
+        hpa@zytor.com, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, tglx@linutronix.de,
+        bp@alien8.de, x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 11:23 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
+On Wed, May 25, 2022 at 12:42 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
 >
-> We're unconditionally registering sys-off handler for the legacy
-> pm_power_off() callback, this causes problem for platforms that don't
-> use power-off handlers at all and should be halted. Now reboot syscall
-> assumes that there is a power-off handler installed and tries to power
-> off system instead of halting it.
+> IBS Op data3 provides data cache miss latency which can be passed as
+> sample->weight along with perf_mem_data_src. Note that sample->weight
+> will be populated only when PERF_SAMPLE_DATA_SRC is also set, although
+> both sample types are independent.
 >
-> To fix the trouble, move the handler's registration to the reboot syscall
-> and check the pm_power_off() presence.
->
-> Fixes: 0e2110d2e910 ("kernel/reboot: Add kernel_can_power_off()")
-> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 > ---
->  kernel/reboot.c | 33 +++++++++++++++++----------------
->  1 file changed, 17 insertions(+), 16 deletions(-)
+>  arch/x86/events/amd/ibs.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> diff --git a/kernel/reboot.c b/kernel/reboot.c
-> index 0bdc64ecf4f6..a091145ee710 100644
-> --- a/kernel/reboot.c
-> +++ b/kernel/reboot.c
-> @@ -569,22 +569,6 @@ static int legacy_pm_power_off(struct sys_off_data *data)
->         return NOTIFY_DONE;
->  }
+> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+> index 6626caeed6a1..5a6e278713f4 100644
+> --- a/arch/x86/events/amd/ibs.c
+> +++ b/arch/x86/events/amd/ibs.c
+> @@ -738,6 +738,12 @@ static void perf_ibs_get_mem_lvl(struct perf_event *event, u64 op_data2,
+>                 return;
+>         }
 >
-> -/*
-> - * Register sys-off handlers for legacy PM callbacks. This allows legacy
-> - * PM callbacks co-exist with the new sys-off API.
-> - *
-> - * TODO: Remove legacy handlers once all legacy PM users will be switched
-> - *       to the sys-off based APIs.
-> - */
-> -static int __init legacy_pm_init(void)
-> -{
-> -       register_sys_off_handler(SYS_OFF_MODE_POWER_OFF, SYS_OFF_PRIO_DEFAULT,
-> -                                legacy_pm_power_off, NULL);
-> -
-> -       return 0;
-> -}
-> -core_initcall(legacy_pm_init);
-> -
->  static void do_kernel_power_off_prepare(void)
->  {
->         blocking_notifier_call_chain(&power_off_prep_handler_list, 0, NULL);
-> @@ -646,6 +630,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
->                 void __user *, arg)
->  {
->         struct pid_namespace *pid_ns = task_active_pid_ns(current);
-> +       struct sys_off_handler *sys_off = NULL;
->         char buffer[256];
->         int ret = 0;
->
-> @@ -670,6 +655,21 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
->         if (ret)
->                 return ret;
->
-> +       /*
-> +        * Register sys-off handlers for legacy PM callback. This allows
-> +        * legacy PM callbacks temporary co-exist with the new sys-off API.
-> +        *
-> +        * TODO: Remove legacy handlers once all legacy PM users will be
-> +        *       switched to the sys-off based APIs.
-> +        */
-> +       if (pm_power_off) {
-> +               sys_off = register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-> +                                                  SYS_OFF_PRIO_DEFAULT,
-> +                                                  legacy_pm_power_off, NULL);
-> +               if (IS_ERR(sys_off))
-> +                       return PTR_ERR(sys_off);
+> +       /* Load latency (Data cache miss latency) */
+> +       if (data_src->mem_op == PERF_MEM_OP_LOAD &&
+> +           event->attr.sample_type & PERF_SAMPLE_WEIGHT) {
+> +               data->weight.full = (op_data3 & IBS_DC_MISS_LAT_MASK) >> IBS_DC_MISS_LAT_SHIFT;
 > +       }
 > +
->         /* Instead of trying to make the power_off code look like
->          * halt when pm_power_off is not set do it the easy way.
->          */
-> @@ -727,6 +727,7 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
->                 break;
->         }
->         mutex_unlock(&system_transition_mutex);
-> +       unregister_sys_off_handler(sys_off);
->         return ret;
->  }
->
-> --
+I think here you also need to handle the WEIGHT_STRUCT case and put
+the cache miss latency in the right
+field. This IBS field covers the cache line movement and not the whole
+instruction latency which is the tag to ret field.
+In the case of WEIGHT_STRUCT you need to fill out the two fields.
 
-Applied, thanks!
+>         /* L2 Hit */
+>         if ((op_data3 & IBS_L2_MISS_MASK) == 0) {
+>                 /* Erratum #1293 */
+> --
+> 2.31.1
+>

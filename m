@@ -2,130 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63F7533F22
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1C8533F33
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244812AbiEYO1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S244847AbiEYO3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244834AbiEYO1B (ORCPT
+        with ESMTP id S244820AbiEYO3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 10:27:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D13410FF3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653488802;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JPjH9LzUL2EEkZyPk4S7m1LZ52Vs/cmjg6eI3uOHDjw=;
-        b=e56LnJrf/3/4/zM/olQMNUmOdyjFr7QGXvpuB3J8vB4+RRzNhoz+VJtivKwzuIhZwuaWU1
-        H+q30c6a6IJHsi3SWpHyufNGLUfANnAliJEMeSIqPs8eHsDKVxxAedoZk+JD8zJeVp+yQw
-        e1NaV6xqFoY5YoeaXzBotYstW7WS58o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-312-ZpfTyUnoOV2hnKXzBcci_g-1; Wed, 25 May 2022 10:26:39 -0400
-X-MC-Unique: ZpfTyUnoOV2hnKXzBcci_g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A72ED811E83;
-        Wed, 25 May 2022 14:26:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4E84F400F3E8;
-        Wed, 25 May 2022 14:26:37 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 4/7] cifs: Add a function to read into an iter from a socket
-From:   David Howells <dhowells@redhat.com>
-To:     Steve French <smfrench@gmail.com>
-Cc:     Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cifs@vger.kernel.org, dhowells@redhat.com,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 25 May 2022 15:26:36 +0100
-Message-ID: <165348879662.2106726.16881134187242702351.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165348876794.2106726.9240233279581920208.stgit@warthog.procyon.org.uk>
-References: <165348876794.2106726.9240233279581920208.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Wed, 25 May 2022 10:29:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D348213F67
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:28:11 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PE4fsN009606;
+        Wed, 25 May 2022 14:26:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=UWZSwr4apSHlTMsRIuz0yVYAH7SCvORDiD4BeImtR8g=;
+ b=I/NmfraU0Jxha0Hh/LwMZODabgAaYxY8BCE+kuQCkdsxN62GvD2v80NUglDlWM+4j+3g
+ Upm9SU1dpGEZm8BNDD8zLLCJ23QeVX8Sxn7FY7GdS5enWgSE4pqbntbsY83/HyJTAk40
+ Q/wXtVOJPd/4EZmKqLurqjHjlT7+1OjnUIfjz+ANsZl5DonGS72Wj2XuvJsYlycgzL/n
+ 3jBs5xa5QJ5SPSGFhwQrtHypHHtRJKwPmxPokDin/6o1SG9/HGKlr7lKTCnvAnDFwesh
+ QwG8JF/fqBam/aFUQbESJwI8XJYt0W/tqLZrkRe/U2Q5cFD6R/w5zdTuDfJHaFgowbLJ Sg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9hfnx94j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 14:26:51 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24PEKBjP019343;
+        Wed, 25 May 2022 14:26:50 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9hfnx93s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 14:26:50 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24PEHl76021115;
+        Wed, 25 May 2022 14:26:48 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma01fra.de.ibm.com with ESMTP id 3g93vc1cap-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 14:26:48 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24PECbVe42008860
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 May 2022 14:12:37 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE4B75204F;
+        Wed, 25 May 2022 14:26:45 +0000 (GMT)
+Received: from [9.43.97.219] (unknown [9.43.97.219])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 400635204E;
+        Wed, 25 May 2022 14:26:40 +0000 (GMT)
+Message-ID: <e9ddbcfe-f8d4-e542-deab-a0fadf86c6eb@linux.ibm.com>
+Date:   Wed, 25 May 2022 19:56:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 7/7] x86/crash: Add x86 crash hotplug support for
+ kexec_load
+Content-Language: en-US
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220505184603.1548-1-eric.devolder@oracle.com>
+ <20220505184603.1548-8-eric.devolder@oracle.com>
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <20220505184603.1548-8-eric.devolder@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZKcWKRMI6loqY-FQfdgB-InlGA8lJt2D
+X-Proofpoint-ORIG-GUID: 1d8G_JNICD8TRwtzEQtoio6Qf331eN2S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-25_04,2022-05-25_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ impostorscore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205250072
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a helper function to read data from a socket into the given iterator.
+Hello Eric,
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <sfrench@samba.org>
-cc: Shyam Prasad N <nspmangalore@gmail.com>
-cc: Rohith Surabattula <rohiths.msft@gmail.com>
-cc: linux-cifs@vger.kernel.org
----
+On 06/05/22 00:16, Eric DeVolder wrote:
+> For kexec_file_load support, the loading of the crash kernel occurs
+> entirely within the kernel, and as such the elfcorehdr is readily
+> identified (so that it can be modified upon hotplug events).
+>
+> This change enables support for kexec_load by identifying the
+> elfcorehdr segment in the arch_crash_handle_hotplug_event(),
+> if it has not already been identified.
+>
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> Acked-by: Baoquan He <bhe@redhat.com>
+> ---
+>   arch/x86/kernel/crash.c | 24 ++++++++++++++++++++++++
+>   1 file changed, 24 insertions(+)
+>
+> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+> index 951ef365f0a7..845d7c77854d 100644
+> --- a/arch/x86/kernel/crash.c
+> +++ b/arch/x86/kernel/crash.c
+> @@ -485,6 +485,30 @@ void arch_crash_handle_hotplug_event(struct kimage *image,
+>   	void *elfbuf = NULL;
+>   	unsigned long mem, memsz;
+>   
+> +	/*
+> +	 * When the struct kimage is alloced, it is wiped to zero, so
+> +	 * the elfcorehdr_index_valid defaults to false. It is set on the
+> +	 * kexec_file_load path, or here for kexec_load, if not already
+> +	 * identified.
+> +	 */
+> +	if (!image->elfcorehdr_index_valid) {
+> +		unsigned int n;
+> +
+> +		for (n = 0; n < image->nr_segments; n++) {
+> +			mem = image->segment[n].mem;
+> +			memsz = image->segment[n].memsz;
+> +			ptr = map_crash_pages(mem, memsz);
+> +			if (ptr) {
+> +				/* The segment containing elfcorehdr */
+> +				if (memcmp(ptr, ELFMAG, SELFMAG) == 0) {
+> +					image->elfcorehdr_index = (int)n;
+> +					image->elfcorehdr_index_valid = true;
 
- fs/cifs/cifsproto.h |    3 +++
- fs/cifs/connect.c   |   16 ++++++++++++++++
- 2 files changed, 19 insertions(+)
+How about finding elfcorehdr index on kexec_load path post 
+kimage_load_segment call in
+do_kexec_load (kernel/kexec.c) or other suitable place? This way we can 
+avoid checking for
+elfcorehdr index for every hotplug. Also we might not need 
+image->elfcorehdr_index_valid.
 
-diff --git a/fs/cifs/cifsproto.h b/fs/cifs/cifsproto.h
-index 0df3b24a0bf4..dd4931308ea6 100644
---- a/fs/cifs/cifsproto.h
-+++ b/fs/cifs/cifsproto.h
-@@ -245,6 +245,9 @@ extern int cifs_read_page_from_socket(struct TCP_Server_Info *server,
- 					unsigned int page_offset,
- 					unsigned int to_read);
- extern int cifs_setup_cifs_sb(struct cifs_sb_info *cifs_sb);
-+extern int cifs_read_iter_from_socket(struct TCP_Server_Info *server,
-+				      struct iov_iter *iter,
-+				      unsigned int to_read);
- extern int cifs_match_super(struct super_block *, void *);
- extern int cifs_mount(struct cifs_sb_info *cifs_sb, struct smb3_fs_context *ctx);
- extern void cifs_umount(struct cifs_sb_info *);
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index 42e14f408856..0d532d559f70 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -764,6 +764,22 @@ cifs_read_page_from_socket(struct TCP_Server_Info *server, struct page *page,
- 	return cifs_readv_from_socket(server, &smb_msg);
- }
- 
-+int
-+cifs_read_iter_from_socket(struct TCP_Server_Info *server, struct iov_iter *iter,
-+			   unsigned int to_read)
-+{
-+	struct msghdr smb_msg;
-+	int ret;
-+
-+	smb_msg.msg_iter = *iter;
-+	if (smb_msg.msg_iter.count > to_read)
-+		smb_msg.msg_iter.count = to_read;
-+	ret = cifs_readv_from_socket(server, &smb_msg);
-+	if (ret > 0)
-+		iov_iter_advance(iter, ret);
-+	return ret;
-+}
-+
- static bool
- is_smb_response(struct TCP_Server_Info *server, unsigned char type)
- {
+Thanks,
+Sourabh Jain
 
 

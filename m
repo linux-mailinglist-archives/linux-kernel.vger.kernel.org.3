@@ -2,145 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B005345C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70085345BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344990AbiEYVbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 17:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
+        id S1343622AbiEYVaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 17:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345345AbiEYVao (ORCPT
+        with ESMTP id S238386AbiEYVaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 17:30:44 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210B08148B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653514240; x=1685050240;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FoPSSUs1/5dO5P26gVSwaImoqHPclA56N3pkOrZONTg=;
-  b=Lj02f7OC4xlexSWEw9kC3SUcGS8J+SoRFmYe9tSFXedCJ7up9lRXLQ5S
-   bs2MMexb0WnBmGql182HbZ6sKQwFXv043X+O7jbkyZopqYYVXceyVIue5
-   aip158UoeB8zfqoj6VhoTASLrUb3uS/P5+ycm6vfUSIsGD7xPAxnD71H/
-   9AbbXbcAubuQwbPVe1qCPDgVU9DJU5rpWba/Hh1BhjGKUTCZhHHBXxphF
-   e5uxpJBscNnkI3ZMqSVnISDEwYvDeRzoRhqR/36rt+F7Ak6/B9Wue+ZaF
-   FZVt43mG4VJD4Jts7sHaUVuD8Sm8wRAG3SP2zu/hwCSNNn021WNdpVt7n
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="271513315"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="271513315"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 14:30:39 -0700
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="745955669"
-Received: from srotter-mobl1.amr.corp.intel.com (HELO [10.212.216.74]) ([10.212.216.74])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 14:30:38 -0700
-Message-ID: <01acfbad-7668-dfc6-b797-a9fa5f402a26@linux.intel.com>
-Date:   Wed, 25 May 2022 16:28:47 -0500
+        Wed, 25 May 2022 17:30:09 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3828E77F3F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:30:05 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id l13so31343584lfp.11
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CN9iEc/6AbDEhSeIoyRVDRtZ+F/iKWAgeW+cCw6K3rg=;
+        b=HP0XCJMzu6+KjtahsVn49yXUZGLjsitCectX4zlL9zReAYpS+lfaTLYj9xRlPa5YKy
+         zdMq9WzVf5n3QNBmYUzG2QZ3u0aX5JH/Vv8EeQ9OEbBqaOr4IZ6u7fy9O6pDkTtuoRoG
+         HsEwWc0qQmgsR0v90SUj6bIVrRIihaeMhjqn1Q/44XwJHHuCsQxE8ZKrvelyrMyDosvf
+         jKCmfkSlzkKq+j2HMDSFuoNNt+K3TUVNOb5H4mdPn69XcLYjzDenNOTg1GRrc/p7YKFY
+         zdRsBHjlK5k8Bm3lhI/vv+UgXUeIFx2dXm3bNZlBIZ4kUnQ4mygqWENIZcpjfl5z+7Tx
+         /tLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CN9iEc/6AbDEhSeIoyRVDRtZ+F/iKWAgeW+cCw6K3rg=;
+        b=4JyU4j6yLzDukz7fAfLymqBuz6Z5V2lIznU8n+JoSEj22IKJSMdJ3wWLylloYSUGYv
+         LwvI5tLy5qa6kR06UogzXr4VuP9YD/A2QAOwYcGCIcTsfyLIltzBdrFL2aUMxa7500dK
+         tgLmKpx4D2x3gSwI48aQAh+5zAR5WGCQL8dkN3NsgEKXcS0Umz+viCf1MF8DaNE778MV
+         V8PC0W/JOebRRcLFHh/nbdQ3U7WJcCdKf+hlK1x7RwOHZVC3kI2ccy96Z98OzeLDKn01
+         KGiBoRC4c9sLqUsePnplVCwGBGvBX+4sCALU+aAzbdokkcPQPy3CKfFEdFc9iESqSpMw
+         +tMg==
+X-Gm-Message-State: AOAM533WMPIxDmPIPYOjMq3rrPdTov8MejDKvKZnyuUdOQ2VIfX4N45O
+        /kWd9lR/eZ2cA7TTG906aB12ovXNAPbDQafO5/mjSQ==
+X-Google-Smtp-Source: ABdhPJyhZ9jtmrfWycnNF67xLRtYk+3UH27SKHU8VpvEjLIF+D46JgX8gLSc8u2HSteNfcYhESzSTK2ZB7QswcV4emU=
+X-Received: by 2002:a05:6512:2614:b0:445:777d:3530 with SMTP id
+ bt20-20020a056512261400b00445777d3530mr24708485lfb.647.1653514203249; Wed, 25
+ May 2022 14:30:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/2] ASoC: amd: acp: Add support for rt5682s and rt1019
- card with hs instance
-Content-Language: en-US
-To:     V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        broonie@kernel.org, alsa-devel@alsa-project.org
-Cc:     Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, ajitkumar.pandey@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220525203415.2227914-1-Vsujithkumar.Reddy@amd.com>
- <20220525203415.2227914-3-Vsujithkumar.Reddy@amd.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220525203415.2227914-3-Vsujithkumar.Reddy@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220523020209.11810-1-ojeda@kernel.org> <20220523020209.11810-7-ojeda@kernel.org>
+ <CAKwvOd=mFhxjKRP_qt3Yu69dj_P6VUMSUSQm7fY6yS2bsO8Y2w@mail.gmail.com> <20220524004156.0000790e@garyguo.net>
+In-Reply-To: <20220524004156.0000790e@garyguo.net>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 25 May 2022 14:29:51 -0700
+Message-ID: <CAKwvOdmDgaG_DT+rr4F7xx=q=bVEaM9z7CBFqSq-0Eg=NwO02w@mail.gmail.com>
+Subject: Re: [PATCH v7 06/25] rust: add `compiler_builtins` crate
+To:     Gary Guo <gary@garyguo.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ On Mon, May 23, 2022 at 4:42 PM Gary Guo <gary@garyguo.net> wrote:
+>
+> On Mon, 23 May 2022 11:37:16 -0700
+> Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> > Also, I'm not sure my concern about explicit build failures for C code
+> > was ever addressed?  We have a constant problem with `long long`
+> > division on ARCH=arm32 and ARCH=i386 in C code.
+> > https://lore.kernel.org/lkml/CAKwvOdk+A2PBdjSFVUhj4xyCGCKujtej1uPgywQgrKPiK2ksPw@mail.gmail.com/
+> >
+> > > +#[cfg(target_arch = "arm")]
+> > > +define_panicking_intrinsics!("`u64` division/modulo should not be
+> > > used", {
+> > > +    __aeabi_uldivmod,
+> > > +    __mulodi4,
+> > > +});
+>
+> Starting in LLVM 14 (used in Rust 1.60+), __mulodi4 will no longer be
+> generated. So that can be removed.
 
+I'm familiar, but good catch. ;)
+https://reviews.llvm.org/D108936
+https://reviews.llvm.org/D108842
+https://reviews.llvm.org/D108844
+https://reviews.llvm.org/D112750
+https://reviews.llvm.org/D108928
+https://reviews.llvm.org/D108939
+https://bugs.llvm.org/show_bug.cgi?id=28629
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=103034
 
-On 5/25/22 15:34, V sujith kumar Reddy wrote:
-> We have new platform with rt5682s as a primary codec and rt1019 as an
-> amp codec. Add machine struct to register sof audio based sound card
-> on such Chrome machine.
-> 
-> Here we are configuring as a soc mclk master and codec slave.
-> 
-> Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
-> ---
->  sound/soc/amd/acp-config.c          |  9 ++++
->  sound/soc/amd/acp/acp-mach-common.c | 69 ++++++++++++++++++++++++-----
->  sound/soc/amd/acp/acp-sof-mach.c    | 15 +++++++
->  3 files changed, 82 insertions(+), 11 deletions(-)
-> 
-> diff --git a/sound/soc/amd/acp-config.c b/sound/soc/amd/acp-config.c
-> index ba9e0adacc4a..39ca48be7be9 100644
-> --- a/sound/soc/amd/acp-config.c
-> +++ b/sound/soc/amd/acp-config.c
-> @@ -147,6 +147,15 @@ struct snd_soc_acpi_mach snd_soc_acpi_amd_rmb_sof_machines[] = {
->  		.fw_filename = "sof-rmb.ri",
->  		.sof_tplg_filename = "sof-acp-rmb.tplg",
->  	},
-> +	{
-> +		.id = "RTL5682",
-> +		.drv_name = "rt5682s-hs-rt1019",
-> +		.pdata = &acp_quirk_data,
-> +		.machine_quirk = snd_soc_acpi_codec_list,
-> +		.quirk_data = &amp_rt1019,
-> +		.fw_filename = "sof-rmb.ri",
-> +		.sof_tplg_filename = "sof-acp-rmb.tplg",
-> +	},
+>
+> As for __aeabi_uldivmod, is there any reason that it can't just be
+> defined in arch/arm/lib? There are quite a few __aeabi functions already
+> defined there.
 
-that means a 3rd entry with the same pair of firmware/topology files?
+Indeed.
+arch/arm/kernel/armksyms.c and
+arch/arm/lib/lib1funcs.S
 
->  	{},
->  };
->  EXPORT_SYMBOL(snd_soc_acpi_amd_rmb_sof_machines);
-> diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
-> index a03b396d96bb..4aad3fee51cf 100644
-> --- a/sound/soc/amd/acp/acp-mach-common.c
-> +++ b/sound/soc/amd/acp/acp-mach-common.c
-> @@ -148,10 +148,15 @@ static int acp_card_hs_startup(struct snd_pcm_substream *substream)
->  	struct snd_soc_card *card = rtd->card;
->  	struct acp_card_drvdata *drvdata = card->drvdata;
->  	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
-> -	int ret;
-> +	unsigned int fmt = 0;
+This is the previous thread I recall w/ Linus:
+https://lore.kernel.org/llvm/CAHk-=wiydA=Oay+NB2m2ewCHpPEcoU51qPFrzsekFoPu7QPtuw@mail.gmail.com/
 
-fmt initialization is overridden below.
+If CONFIG_RUST provides those symbols, it will hide the linkage
+failures that we try to use to spot & avoid 64b division that's open
+coded using the / binary operator, rather than the kernel's do_div()
+and friends.
 
-> +	int ret = 0;
+>
+> The source of __aeabi_uldivmod in compiler-rt seems quite simple, just
+> delegating to __uldivmoddi4. I think just changing that to
+> div64_u64_rem should do the job?
 
-useless init...
+Maybe; send a patch and see what happens. There's probably other 32b
+architectures that will need other symbols that also handle 64b
+division though, so it's not as simple as providing __aeabi_uldivmod
+for ARM.
 
->  
-> -	ret =  snd_soc_dai_set_fmt(codec_dai, SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF
-> -				   | SND_SOC_DAIFMT_CBP_CFP);
-> +	if (drvdata->soc_mclk)
-> +		fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_CBC_CFC;
-> +	else
-> +		fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_CBP_CFP;
-> +
-> +	ret =  snd_soc_dai_set_fmt(codec_dai, fmt);
+There's probably someone from linux-arm-kernel that can provide
+additional context.
+https://lore.kernel.org/linux-arm-kernel/alpine.LFD.2.00.1104271305580.24613@xanadu.home/
+is pretty old, but refers to policies that seem to pre-exist other
+references to __aeabi_uldivmod on that list.
 
-... overridden here
+arch/nios2/kernel/nios2_ksyms.c exports __udivmoddi4, but it also
+explicitly links against libgcc.  I'm guessing that's frowned upon,
+but not out of the question relative to having the kernel ported to
+the architecture at all.
 
->  	if (ret < 0) {
->  		dev_err(rtd->card->dev, "Failed to set dai fmt: %d\n", ret);
->  		return ret;
+>
+> https://android.googlesource.com/toolchain/compiler-rt/+/release_32/lib/arm/aeabi_uldivmod.S
 
+Here's the latest source.
+https://github.com/llvm/llvm-project/blob/main/compiler-rt/lib/builtins/arm/aeabi_uldivmod.S
+and __uldivmoddi4:
+https://github.com/llvm/llvm-project/blob/main/compiler-rt/lib/builtins/udivmoddi4.c
+
+By chance, does any of the rust code in this series use open coded
+division w/ 64 bit operands (rather than using do_div) by accident?
+
+I'm also curious about the panic message for 128b operands. IIUC,
+those are functions that may have `long long` operands.  On 32b ARM,
+which is ILP32, I'd have expected `long long` to be 64b, not 128b.
+Message might be misleading.
+-- 
+Thanks,
+~Nick Desaulniers

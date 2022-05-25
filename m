@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79325346C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9440E5346C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240434AbiEYWm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 18:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        id S244738AbiEYWnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 18:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbiEYWm4 (ORCPT
+        with ESMTP id S245437AbiEYWnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 18:42:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC39A3098;
-        Wed, 25 May 2022 15:42:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A5876104E;
-        Wed, 25 May 2022 22:42:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B81C385B8;
-        Wed, 25 May 2022 22:42:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653518574;
-        bh=Y1+kYhrO5yiZyWR2P6v0Eoi5ETZCFyNeNeSvZUzw6OY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kz1P+f0ND6n7Lx9X5G/TlWlUke8Rv7aKdqnTEmQeq87RpZobKqTKv3/XMQii6ac5U
-         2SqyqDAU6sPk+FDzkxfnFZtUyCA5FqqGsCRKGNlMvaplL1Mk/zJrz2mUP++NXWSyut
-         toAeWMBLc/tI5eC7QVBkKKx5dkTqwpRMVX56xcmFMdrkdjdaIcoK3zu86A9Ym51oYE
-         ZbadWSqLHSobrGOKFgAiemVxHtBG5AWfAkltt3O6Zz0kKMT+Hg0QNKfOHtTrh771Xy
-         Z4eXaMnV7myCd1ZK+3MkjBM7t7W6vphcUOnpe2Wyfgq+hYQdC7vqYG8TIHT40p+eJB
-         Z4reuuLq3D8DQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 634265C0378; Wed, 25 May 2022 15:42:54 -0700 (PDT)
-Date:   Wed, 25 May 2022 15:42:54 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 1/4] rcu/nocb: Pass a cpumask instead of a single CPU to
- offload/deoffload
-Message-ID: <20220525224254.GF1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220525221055.1152307-1-frederic@kernel.org>
- <20220525221055.1152307-2-frederic@kernel.org>
- <20220525221917.GA1151462@lothringen>
+        Wed, 25 May 2022 18:43:05 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277A5A339D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:43:04 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p22so38183654lfo.10
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 15:43:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=oz2gVkV0rfGCK+wdnxIRVq+wPrFjy2J+zLB3pC3weio=;
+        b=wCoRfmCbsxPE19Zmdw6DveiRBya3gLcbPlkCQYJ7N/7yJQLRx8NAwqara8WXe8tq/P
+         7ASVnP6pM7uRxH/yKf6GevmzNtwNP9eOTBanOIHO7McHyYS6UQc4498QARj3NhkhyQi4
+         DWO8di2RJlvJrwGP7g3eQA6l8yJsxaozcbWBVe/+NpD0KSwgUGxPK11xgV7ztKWN0G57
+         pcuZNQ/p0OOspIeOC1NR3n15KY9Yfv+WKI3DOFZlPd5UmrjSy2cSr0MpRucPCxYUwV60
+         z0c4jH+te97AyRx4G1tpAuhALhlcwjmo1KWiRXaeyyxZFRjZaPEOKd8D7mz95QY4c7Ti
+         Om3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=oz2gVkV0rfGCK+wdnxIRVq+wPrFjy2J+zLB3pC3weio=;
+        b=nYJcu31EgUzuQa3ijQuPyW+KxFx2AqGLcHbsKDQLqgM+JqxH98scCsL0Pr7hWpB+E/
+         tONKmaxRiExx9lWtKsEIKe7jqBMhOPzF/Avmt2dNtIoOqFY4MYmPqHzK+C/aPFbOIUcd
+         913qhoir5s1pH6z5XI1y4l4KFNOD/JbsqwFTLRan6xqMIBmDp2IbU6zRItm4nO7gigWD
+         McPgVxLisvBEBGOHtwJb4VHZ7xoHAgNyV+CjIPlw9ngAtAKtDpEyP3LqAQ6TKksFzB9N
+         Aq2D/UhXcU4puEw0LhEDjSQA44nsJ+AD1cPAmemCnBc2YApN6lwuiLngjyiAmsGlpUsc
+         TL+g==
+X-Gm-Message-State: AOAM532CiftSyziq3Q2eA+ntNNcCiA2I1qUEUPoIKiXNT9JFsnkCAKPt
+        ++PLecD8FmI15H+tyWe5c/QQs13Sj8eRow==
+X-Google-Smtp-Source: ABdhPJzfyvl7lu0FBluAxH1xjtbTDlyzPZN0U5W97+zTH7VP0T31OYEE4wxbKw4XNU8aF9swQ9ktgw==
+X-Received: by 2002:a05:6512:12c9:b0:477:c583:ed10 with SMTP id p9-20020a05651212c900b00477c583ed10mr4278948lfg.20.1653518581956;
+        Wed, 25 May 2022 15:43:01 -0700 (PDT)
+Received: from mutt (c-7303e555.07-21-73746f28.bbcust.telenor.se. [85.229.3.115])
+        by smtp.gmail.com with ESMTPSA id g7-20020a056512118700b0047255d21104sm3286144lfr.51.2022.05.25.15.43.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 15:43:01 -0700 (PDT)
+Date:   Thu, 26 May 2022 00:42:59 +0200
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Alexander Popov <alex.popov@linux.com>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] gcc-plugins: Change all version strings match kernel
+Message-ID: <20220525224259.GA16698@mutt>
+References: <20220510235412.3627034-1-keescook@chromium.org>
+ <20220523143054.GA3164771@roeck-us.net>
+ <202205231251.39D012E@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220525221917.GA1151462@lothringen>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <202205231251.39D012E@keescook>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,25 +76,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 12:19:17AM +0200, Frederic Weisbecker wrote:
-> On Thu, May 26, 2022 at 12:10:52AM +0200, Frederic Weisbecker wrote:
-> > @@ -1117,12 +1111,6 @@ static long rcu_nocb_rdp_offload(void *arg)
-> >  	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
-> >  
-> >  	WARN_ON_ONCE(rdp->cpu != raw_smp_processor_id());
-> > -	/*
-> > -	 * For now we only support re-offload, ie: the rdp must have been
-> > -	 * offloaded on boot first.
-> > -	 */
-> > -	if (!rdp->nocb_gp_rdp)
-> > -		return -EINVAL;
-> >  
-> >  	if (WARN_ON_ONCE(!rdp_gp->nocb_gp_kthread))
-> >  		return -EINVAL;
+On 2022-05-23 12:54, Kees Cook wrote:
+> On Mon, May 23, 2022 at 07:30:54AM -0700, Guenter Roeck wrote:
+> > On Tue, May 10, 2022 at 04:54:12PM -0700, Kees Cook wrote:
+> > > It's not meaningful for the GCC plugins to track their versions separately
+> > > from the rest of the kernel. Switch all versions to the kernel version.
+> > > 
+> > > Fix mismatched indenting while we're at it.
+> > > 
+> > > Cc: linux-hardening@vger.kernel.org
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > 
+> > I see random build failures with this patch in linux-next.
+> > 
+> > Error log:
+> > cc1plus: fatal error: ./include/generated/utsrelease.h: No such file or directory
+> > 
+> > The problem doesn't happen all the time. Is there some missing dependency ?
 > 
-> And why did I remove this critical check? I have no answer...
+> Here's a prior report I hadn't been able to repro:
+> https://lore.kernel.org/linux-mm/202205230239.EZxeZ3Fv-lkp@intel.com
+> 
+> But now I can: I see it with a -j1 build. This fixes it for me:
 
-Me, I was going to ask if rcutorture should (de)offload multiple
-CPUs in one go...  ;-)
+I could see this issue when I built an arm64 allmodconfig mainline [1]
+kernel, on sha
+7e062cda7d90 ("Merge tag 'net-next-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next")
 
-							Thanx, Paul
+To reproduce what I built tuxmake [2] can be used:
+$ tuxmake --runtime podman --target-arch arm64 --toolchain gcc-11 --kconfig http://ix.io/3YBi kernel
+
+> 
+> diff --git a/Makefile b/Makefile
+> index 91c91fcf3c24..c04420d5aa3d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1175,7 +1175,7 @@ include/config/kernel.release: FORCE
+>  # Carefully list dependencies so we do not try to build scripts twice
+>  # in parallel
+>  PHONY += scripts
+> -scripts: scripts_basic scripts_dtc
+> +scripts: include/generated/utsrelease.h scripts_basic scripts_dtc
+>  	$(Q)$(MAKE) $(build)=$(@)
+>  
+>  # Things we need to do before we recursively start building the kernel
+> diff --git a/scripts/gcc-plugins/Makefile b/scripts/gcc-plugins/Makefile
+> index 6f0aecad5d67..c29334669a16 100644
+> --- a/scripts/gcc-plugins/Makefile
+> +++ b/scripts/gcc-plugins/Makefile
+> @@ -64,5 +64,5 @@ $(foreach m, $(notdir $(plugin-multi)), $(eval $(obj)/$m: $(addprefix $(obj)/, $
+>  quiet_cmd_plugin_cxx_o_c = HOSTCXX $@
+>        cmd_plugin_cxx_o_c = $(HOSTCXX) $(plugin_cxxflags) -c -o $@ $<
+>  
+> -$(plugin-objs): $(obj)/%.o: $(src)/%.c FORCE
+> +$(plugin-objs): $(obj)/%.o: $(src)/%.c $(objdir)/include/generated/utsrelease.h FORCE
+>  	$(call if_changed_dep,plugin_cxx_o_c)
+> 
+> Both "include/generated/utsrelease.h" and "scripts" were same-level
+> deps, so they were racing. 
+
+This patch patch solved the build error.
+
+Cheers,
+Anders
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+[2] https://tuxmake.org/install-pypi/

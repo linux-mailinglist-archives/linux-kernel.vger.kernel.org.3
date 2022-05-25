@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09904533F5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E73533F60
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243416AbiEYOkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S243425AbiEYOkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiEYOke (ORCPT
+        with ESMTP id S242155AbiEYOke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 May 2022 10:40:34 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2624C32EFF
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:40:31 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id t26so2217417edt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:40:31 -0700 (PDT)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C4233342
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:40:33 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id q21so21928642ejm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:40:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WGRkHo13klUcDKk1KqH40m6REBnbbm7RxrmwOgaIy6M=;
-        b=LtBLbMi9JKvOZMUSCfZdrY+fZA6DYkhA2b98GUXIMdkIVbHThmh2Rnl8mdD1oGUAg2
-         QqbLF/L+mw7FeVB2giyVlbrmzhCOSz6Fki/OwVfZ3TjO6OH2/NYPJeWrRceBg8WwA5BO
-         YmKzPhfJIk8Ez8vbhAEPO5TD6+SUdjej8MxCZ2hSyLsJGCuVX9a3ztvDk49kC1YJQ9Dq
-         /HMe+7mTxxLE4CS8DFEzeSHBXnVQgKYnBmUatmUosY/8sk9g59NXGwwrk0WE/obMuo2j
-         1EhY48pkOTV661H+B821KMC0RpaIrdN0YqSJQbf1WfRG2nbDeVrlxWbawLH3XNkO0PF9
-         1Njw==
+        bh=tR7OctJbspMbqbUoEA7O4BS4I4/S30kEE1/hmftOpxw=;
+        b=RZoplJJ0rcL7jIhuAS3OczoyLDETz8NpWSyFEJfaDebAgMx4KBobCHuvtbGamUy5H1
+         2pq/bwDu4PyMCFl50HHBaDo5Jhn+whzqrgm0KUTAFJqI1EFXXk04Jy1cYJvgU10Aiq8m
+         TbQLvvpltnL5y6H4Iy18yFG54qPvN4a+t80mnCuggbuFHsuIP803d64P2N0C9aLaZ7tJ
+         N7N+9yKzN2yDlQ8/40R2vj5ngNh2EnCuCUuApjyGCoMo7bYEUmXVxUnmHq4HzqdlckFF
+         QJYAN8Ec8bY4zT1mCh37DEMMOmr6CPb4RoHDx5Q7lAx+fKi9X/+aeOVEuzyB7SAMPY12
+         VH6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WGRkHo13klUcDKk1KqH40m6REBnbbm7RxrmwOgaIy6M=;
-        b=abJiTiF9xOdWe3N14cGzhl7pkgvAM5i9sSQERRJ0bqoJaB/zT9Q28HB3al/+p2WNwY
-         Lma7DA1YLuwjGcO+gfvHH6+qk5ToI8fZzZh8+9xItpJ+bTzY0EOVsED4FSluU4+L7cuA
-         fMDREUt3rhMIbMMTkc6ygIUKkjZSq1tnhCTsutiG4jt4stQP8LFUuLjZWUKXmr7GF6BH
-         X9vaNshsrQ6P0UfptUGv5mg75wHrX/R7CILN8JXrqayqyQpabfoeaF3DeEFImvV1R8A0
-         h0ZExWhvHbD6J35hvJleDuYb6ddwCWpD/nQRQDEj/9ERmMP1sD3qCbzCRLBV8TGSJdl9
-         OzFA==
-X-Gm-Message-State: AOAM531G2T3cGMzo3nVl2bXGXmNZMxdBCCCFXIcVHSJKkKqfZBEc63G+
-        qRtdjxFRChGOhXKhLvqAo4s=
-X-Google-Smtp-Source: ABdhPJyz6d3QgFAMa7osg5LGOwJFbHcbyLDyfJGbY6zdbRkJzXiPXZ2Def+pmp2a0fBWm9VAVLW46A==
-X-Received: by 2002:a05:6402:520e:b0:42b:360b:78e1 with SMTP id s14-20020a056402520e00b0042b360b78e1mr25258520edd.186.1653489629653;
-        Wed, 25 May 2022 07:40:29 -0700 (PDT)
+        bh=tR7OctJbspMbqbUoEA7O4BS4I4/S30kEE1/hmftOpxw=;
+        b=BCOsBchtV1LZ6a93dLEDDzIvcrfmTc5LolIzTgktKVtA5SZM7IbOFSxpR/a2jn1VB9
+         IA4Yo+QGnf4zxjNoWCuKnkeLlSDNK5+OefhJt/GTAEpGJIn8hl80dnchgeB+UP9YP/zq
+         RfzlaN3YL+X+7MGZ51lQgr+cYRiMJR1O8GECpAcRO44DOhChZn5x4d44MdJ0rAMzrvvK
+         vDtFLXGcGTNBBiuQCgfrPBTCvdnQxu8xfRYNZCZm0VXQ/WaqZZpRzHNBM/L9fGFFxpYA
+         E2CXJSEqbxKxEwSsDXrbbfSfdc2qNxtiVCTTm5v2crWmdRByyo5oee5k3bHQYJKk1iEY
+         7/VQ==
+X-Gm-Message-State: AOAM531BPjnmKi4lkmmb6C2ygVoNsOvHwlaOjUL2phxCSGixsRzpbsoV
+        NVAmsgfumCqAL6+1iw5ccvw=
+X-Google-Smtp-Source: ABdhPJw96I+UOUQX69+tAG0FsXoVK05GiSIDimSLmEKUHQ+2XTGoJEbTjEHBTCbLrLx6FcdkE7j6zg==
+X-Received: by 2002:a17:907:72c4:b0:6f4:ad52:b9fd with SMTP id du4-20020a17090772c400b006f4ad52b9fdmr29432993ejc.128.1653489632353;
+        Wed, 25 May 2022 07:40:32 -0700 (PDT)
 Received: from localhost.localdomain (93-103-18-160.static.t-2.net. [93.103.18.160])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906224400b006f3ef214da7sm8288262ejr.13.2022.05.25.07.40.28
+        by smtp.gmail.com with ESMTPSA id 4-20020a170906224400b006f3ef214da7sm8288262ejr.13.2022.05.25.07.40.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 07:40:29 -0700 (PDT)
+        Wed, 25 May 2022 07:40:31 -0700 (PDT)
 From:   Uros Bizjak <ubizjak@gmail.com>
 To:     x86@kernel.org, linux-kernel@vger.kernel.org
 Cc:     Uros Bizjak <ubizjak@gmail.com>,
@@ -55,9 +55,9 @@ Cc:     Uros Bizjak <ubizjak@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>, Waiman.Long@hp.com,
         paulmck@linux.vnet.ibm.com
-Subject: [PATCH 1/2] locking/lockref: Use try_cmpxchg64 in CMPXCHG_LOOP macro
-Date:   Wed, 25 May 2022 16:40:12 +0200
-Message-Id: <20220525144013.6481-2-ubizjak@gmail.com>
+Subject: [PATCH 2/2] locking/lockref/x86: Enable ARCH_USE_CMPXCHG_LOCKREF for X86_32 && X86_CMPXCHG64
+Date:   Wed, 25 May 2022 16:40:13 +0200
+Message-Id: <20220525144013.6481-3-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220525144013.6481-1-ubizjak@gmail.com>
 References: <20220525144013.6481-1-ubizjak@gmail.com>
@@ -73,34 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use try_cmpxchg64 instead of cmpxchg64 in CMPXCHG_LOOP macro.
-x86 CMPXCHG instruction returns success in ZF flag, so this
-change saves a compare after cmpxchg (and related move instruction
-in front of cmpxchg). The main loop of lockref_get improves from:
+Commit bc08b449ee14ace4d869adaa1bb35a44ce68d775 enabled lockless
+reference count updates using cmpxchg() only for x86_64 and
+left x86_32 behind due to inability to detect support for
+cmpxchg8b instruction. Nowadays, we can use CONFIG_X86_CMPXCHG64
+for this purpose. Also, by using try_cmpxchg64() instead of cmpxchg()
+in CMPXCHG_LOOP macro, the compiler actually produces sane code,
+improving lockref_get_or_lock main loop from:
 
-  13:	48 89 c1             	mov    %rax,%rcx
-  16:	48 c1 f9 20          	sar    $0x20,%rcx
-  1a:	83 c1 01             	add    $0x1,%ecx
-  1d:	48 89 ce             	mov    %rcx,%rsi
-  20:	89 c1                	mov    %eax,%ecx
-  22:	48 89 d0             	mov    %rdx,%rax
-  25:	48 c1 e6 20          	shl    $0x20,%rsi
-  29:	48 09 f1             	or     %rsi,%rcx
-  2c:	f0 48 0f b1 4d 00    	lock cmpxchg %rcx,0x0(%rbp)
-  32:	48 39 d0             	cmp    %rdx,%rax
-  35:	75 17                	jne    4e <lockref_get+0x4e>
+ 2a5:	8d 48 01             	lea    0x1(%eax),%ecx
+ 2a8:	85 c0                	test   %eax,%eax
+ 2aa:	7e 3c                	jle    2e8 <lockref_get_or_lock+0x78>
+ 2ac:	8b 44 24 08          	mov    0x8(%esp),%eax
+ 2b0:	8b 54 24 0c          	mov    0xc(%esp),%edx
+ 2b4:	8b 74 24 04          	mov    0x4(%esp),%esi
+ 2b8:	f0 0f c7 0e          	lock cmpxchg8b (%esi)
+ 2bc:	8b 4c 24 0c          	mov    0xc(%esp),%ecx
+ 2c0:	89 c3                	mov    %eax,%ebx
+ 2c2:	89 d0                	mov    %edx,%eax
+ 2c4:	8b 74 24 08          	mov    0x8(%esp),%esi
+ 2c8:	31 ca                	xor    %ecx,%edx
+ 2ca:	31 de                	xor    %ebx,%esi
+ 2cc:	09 f2                	or     %esi,%edx
+ 2ce:	75 40                	jne    310 <lockref_get_or_lock+0xa0>
 
 to:
 
-  13:	48 89 ca             	mov    %rcx,%rdx
-  16:	48 c1 fa 20          	sar    $0x20,%rdx
-  1a:	83 c2 01             	add    $0x1,%edx
-  1d:	48 89 d6             	mov    %rdx,%rsi
-  20:	89 ca                	mov    %ecx,%edx
-  22:	48 c1 e6 20          	shl    $0x20,%rsi
-  26:	48 09 f2             	or     %rsi,%rdx
-  29:	f0 48 0f b1 55 00    	lock cmpxchg %rdx,0x0(%rbp)
-  2f:	75 02                	jne    33 <lockref_get+0x33>
+  2d:	8d 4f 01             	lea    0x1(%edi),%ecx
+  30:	85 ff                	test   %edi,%edi
+  32:	7e 1c                	jle    50 <lockref_get_or_lock+0x50>
+  34:	f0 0f c7 0e          	lock cmpxchg8b (%esi)
+  38:	75 36                	jne    70 <lockref_get_or_lock+0x70>
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
@@ -109,30 +112,29 @@ Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Waiman.Long@hp.com
 Cc: paulmck@linux.vnet.ibm.com
 ---
- lib/lockref.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ arch/x86/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/lockref.c b/lib/lockref.c
-index 5b34bbd3eba8..c6f0b183b937 100644
---- a/lib/lockref.c
-+++ b/lib/lockref.c
-@@ -14,12 +14,11 @@
- 	BUILD_BUG_ON(sizeof(old) != 8);						\
- 	old.lock_count = READ_ONCE(lockref->lock_count);			\
- 	while (likely(arch_spin_value_unlocked(old.lock.rlock.raw_lock))) {  	\
--		struct lockref new = old, prev = old;				\
-+		struct lockref new = old;					\
- 		CODE								\
--		old.lock_count = cmpxchg64_relaxed(&lockref->lock_count,	\
--						   old.lock_count,		\
--						   new.lock_count);		\
--		if (likely(old.lock_count == prev.lock_count)) {		\
-+		if (likely(try_cmpxchg64_relaxed(&lockref->lock_count,		\
-+						 &old.lock_count,		\
-+						 new.lock_count))) {		\
- 			SUCCESS;						\
- 		}								\
- 		if (!--retry)							\
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 762a0b6ab8b6..326cfdc4f136 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -27,7 +27,6 @@ config X86_64
+ 	# Options that are inherently 64-bit kernel only:
+ 	select ARCH_HAS_GIGANTIC_PAGE
+ 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+-	select ARCH_USE_CMPXCHG_LOCKREF
+ 	select HAVE_ARCH_SOFT_DIRTY
+ 	select MODULES_USE_ELF_RELA
+ 	select NEED_DMA_MAP_STATE
+@@ -111,6 +110,7 @@ config X86
+ 	select ARCH_SUPPORTS_LTO_CLANG
+ 	select ARCH_SUPPORTS_LTO_CLANG_THIN
+ 	select ARCH_USE_BUILTIN_BSWAP
++	select ARCH_USE_CMPXCHG_LOCKREF	if X86_64 || (X86_32 && X86_CMPXCHG64)
+ 	select ARCH_USE_MEMTEST
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_USE_QUEUED_SPINLOCKS
 -- 
 2.35.3
 

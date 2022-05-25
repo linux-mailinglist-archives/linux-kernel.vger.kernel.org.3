@@ -2,108 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986FF533CD5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AD7533CDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237002AbiEYMoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
+        id S243122AbiEYMod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiEYMoG (ORCPT
+        with ESMTP id S239352AbiEYMoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:44:06 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9594ED123;
-        Wed, 25 May 2022 05:44:04 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id e189so24868971oia.8;
-        Wed, 25 May 2022 05:44:04 -0700 (PDT)
+        Wed, 25 May 2022 08:44:24 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C9F9158D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:44:21 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id b200so8203337qkc.7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w0F6iR9EKs/zIprBUHWYk0xdfCPICb6b6FOC3ooI/Qg=;
+        b=LMEKNyEIRYPV5QWJlwplZCx+Yze+80z3MALcLFPz5jKdddgbR28N/X6bo9Jvgd00MP
+         WWkcUcb1+z91voFM8WjtduJpm5pvevvusNqH0PzjaxsPqwHpEmvLG6H17fO8d+8uqQ/c
+         xW/rbo+trH8MjL1X/foXOCmesnHHx99Tmug43Nb91EXZFTR7KAdlglnJRYtL1NUTbXz5
+         2CGVavB8u5eJ5bdNx8JVu0TNi6KB2NiCnWSVtKfIEdRU3i4wp/Kah2nDHcLAJXmplYfJ
+         xzofRGg4rofGSre9mJv/qm1XS4Pms5gIR+r4L8hjS8Owdd3qkT56i/sicOD/din7w+oO
+         VJFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=1xKn1TwFCEiFxTgut6Nt95ns9umTBM5bV8PgAamEzGI=;
-        b=U4hOSp/+4mz+lSlPH5EfRnsRB1Z1TH2wIGBizl7FjUTpGjeosqOdyPNW60o/hrqktp
-         u9gyZCxGtOUN/lVe3W/QGAaUdoLMCO1uR3OFf2s9EwNv52c8Mtiw5LSEhr7T8xpJuh4o
-         4H0Ad7f7xxp7rka0XAADGarkEDZ0oIl7WKuYQrxxD+BMKxFFP6XPfthClC0RNxJJ54JB
-         CVKJ51f9soBrkhs1kf5mPVfq+xNiP17HnS39fq3aL7rxbRd7yVR0uHTsompD/zdNdBUq
-         tMkvhGoRN4gylWyXi1sxCIVqTFao2rZ7rboUHb7F9uBgUIfYcXwyVm/xGvFdXzEs74q3
-         oxgw==
-X-Gm-Message-State: AOAM530zFho56UCDJmfxnZ7MQDJKpAYHPXTQ98MHrI1X6Ql+q/FMRnjF
-        2bkN6IasHOCzZ16KJuyVgg==
-X-Google-Smtp-Source: ABdhPJyp4RR2/wWLrfrKz/ft7jvpqGKEU8/LjZ5HHq0aDMy4VC3N1ZKM5JQ8agR6C41wBqF0tK49xg==
-X-Received: by 2002:a05:6808:1201:b0:325:75e1:25a8 with SMTP id a1-20020a056808120100b0032575e125a8mr5116618oil.18.1653482643566;
-        Wed, 25 May 2022 05:44:03 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ec25-20020a0568708c1900b000edae17a8cesm5952127oab.3.2022.05.25.05.44.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w0F6iR9EKs/zIprBUHWYk0xdfCPICb6b6FOC3ooI/Qg=;
+        b=JpoHunza15nYa/LDPjqJmLcGtv8bP34udXxzDH8tN3TDFhtgOtRdMI73UuAhcN2/KQ
+         D6cOmPEyoUFNwsPS8fIqcwNpL9+d0MLuhwyUIWolDlVZnYyRX7fY52teXi8Nc0ri2Goa
+         azBDkfSZcTXyP8OJ7aIReDfaMEgFk78+88qSxgwQ3Cz/X91w7H1p0vb+m04VkH8qZT3Z
+         kLqTNI6XS+59VO/fOvamvobE4siQY9s56p+7jzwIYGcL/mDlUCxhoEmvfMXnHRO32r/0
+         8V1JZjFAsqM90W2dfTiwdA1mOrX3B9sYg+0Xn0V28O8tai2nPYmmguIo+Rf+TXxDKDK+
+         wndQ==
+X-Gm-Message-State: AOAM531H01ASvRWNGHQ2tOoDke+6g4L0yPEQWQw1ClvkZuZHq2ySt5gV
+        djIFu3kSMN2ILXLZLbveCiLPxQ==
+X-Google-Smtp-Source: ABdhPJx/POKWSCbmzd2neCxXDwISwEb1wGzjcuEavupLeI/smDQTCNVGAU9PwpCoNv+A6qxiW2wj4Q==
+X-Received: by 2002:a05:620a:4047:b0:6a0:5dae:ad67 with SMTP id i7-20020a05620a404700b006a05daead67mr19946570qko.530.1653482659851;
+        Wed, 25 May 2022 05:44:19 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:741f])
+        by smtp.gmail.com with ESMTPSA id g25-20020ac870d9000000b002f9433ed963sm1207797qtp.64.2022.05.25.05.44.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 05:44:02 -0700 (PDT)
-Received: (nullmailer pid 1760895 invoked by uid 1000);
-        Wed, 25 May 2022 12:44:01 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Bailon <abailon@baylibre.com>
-Cc:     linux-pm@vger.kernel.org, khilman@baylibre.com,
-        linux-mediatek@lists.infradead.org, p.zabel@pengutronix.de,
-        james.lo@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        rui.zhang@intel.com, rafael@kernel.org, matthias.bgg@gmail.com,
-        amitk@kernel.org, robh+dt@kernel.org, fan.chen@mediatek.com,
-        daniel.lezcano@linaro.org, krzk+dt@kernel.org,
-        devicetree@vger.kernel.org, rex-bc.chen@mediatek.com,
-        louis.yu@mediatek.com, mka@chromium.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220524152552.246193-3-abailon@baylibre.com>
-References: <20220524152552.246193-1-abailon@baylibre.com> <20220524152552.246193-3-abailon@baylibre.com>
-Subject: Re: [PATCH v7 2/6] dt-bindings: thermal: Add binding document for LVTS thermal controllers
-Date:   Wed, 25 May 2022 07:44:01 -0500
-Message-Id: <1653482641.588144.1760894.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 25 May 2022 05:44:19 -0700 (PDT)
+Date:   Wed, 25 May 2022 08:44:18 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Richard Henderson <rth@twiddle.net>,
+        David Hildenbrand <david@redhat.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Michal Simek <monstr@monstr.eu>,
+        Russell King <linux@armlinux.org.uk>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        linux-riscv@lists.infradead.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jonas Bonn <jonas@southpole.se>, Will Deacon <will@kernel.org>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        openrisc@lists.librecores.org, linux-s390@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-m68k@lists.linux-m68k.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Chris Zankel <chris@zankel.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        sparclinux@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-xtensa@linux-xtensa.org, Nicholas Piggin <npiggin@gmail.com>,
+        linux-sh@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Borislav Petkov <bp@alien8.de>, linux-mips@vger.kernel.org,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Helge Deller <deller@gmx.de>, Vineet Gupta <vgupta@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-um@lists.infradead.org, linux-alpha@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-ia64@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-snps-arc@lists.infradead.org,
+        Hugh Dickins <hughd@google.com>, Rich Felker <dalias@libc.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        linux-parisc@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v3] mm: Avoid unnecessary page fault retires on shared
+ memory types
+Message-ID: <Yo4kojxZfjNiZI7/@cmpxchg.org>
+References: <20220524234531.1949-1-peterx@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524234531.1949-1-peterx@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 May 2022 17:25:49 +0200, Alexandre Bailon wrote:
-> This patch adds binding document for mt8192 and mt8195 thermal
-> controllers.
+On Tue, May 24, 2022 at 07:45:31PM -0400, Peter Xu wrote:
+> I observed that for each of the shared file-backed page faults, we're very
+> likely to retry one more time for the 1st write fault upon no page.  It's
+> because we'll need to release the mmap lock for dirty rate limit purpose
+> with balance_dirty_pages_ratelimited() (in fault_dirty_shared_page()).
 > 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> ---
->  .../thermal/mediatek,mt8192-lvts.yaml         | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
+> Then after that throttling we return VM_FAULT_RETRY.
 > 
+> We did that probably because VM_FAULT_RETRY is the only way we can return
+> to the fault handler at that time telling it we've released the mmap lock.
+> 
+> However that's not ideal because it's very likely the fault does not need
+> to be retried at all since the pgtable was well installed before the
+> throttling, so the next continuous fault (including taking mmap read lock,
+> walk the pgtable, etc.) could be in most cases unnecessary.
+> 
+> It's not only slowing down page faults for shared file-backed, but also add
+> more mmap lock contention which is in most cases not needed at all.
+> 
+> To observe this, one could try to write to some shmem page and look at
+> "pgfault" value in /proc/vmstat, then we should expect 2 counts for each
+> shmem write simply because we retried, and vm event "pgfault" will capture
+> that.
+> 
+> To make it more efficient, add a new VM_FAULT_COMPLETED return code just to
+> show that we've completed the whole fault and released the lock.  It's also
+> a hint that we should very possibly not need another fault immediately on
+> this page because we've just completed it.
+> 
+> This patch provides a ~12% perf boost on my aarch64 test VM with a simple
+> program sequentially dirtying 400MB shmem file being mmap()ed and these are
+> the time it needs:
+> 
+>   Before: 650.980 ms (+-1.94%)
+>   After:  569.396 ms (+-1.38%)
+> 
+> I believe it could help more than that.
+> 
+> We need some special care on GUP and the s390 pgfault handler (for gmap
+> code before returning from pgfault), the rest changes in the page fault
+> handlers should be relatively straightforward.
+> 
+> Another thing to mention is that mm_account_fault() does take this new
+> fault as a generic fault to be accounted, unlike VM_FAULT_RETRY.
+> 
+> I explicitly didn't touch hmm_vma_fault() and break_ksm() because they do
+> not handle VM_FAULT_RETRY even with existing code, so I'm literally keeping
+> them as-is.
+> 
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml: allOf:1:$ref: '/nvmem/nvmem-consumer.yaml#' does not match '^(/schemas/|\\.\\./|#(/|$)|[a-zA-Z0-9]+)'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml: ignoring, error in schema: allOf: 1: $ref
-Error: Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.example.dts:34.36-37 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>

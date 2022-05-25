@@ -2,83 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8D4533FE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9333533FE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241789AbiEYPEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
+        id S237356AbiEYPHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245145AbiEYPEO (ORCPT
+        with ESMTP id S231159AbiEYPHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:04:14 -0400
-Received: from relay3.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35B1BA569
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:03:19 -0700 (PDT)
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 6FF2235963;
-        Wed, 25 May 2022 15:03:18 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id 707AB39;
-        Wed, 25 May 2022 15:03:17 +0000 (UTC)
-Message-ID: <7a4641e036e4821b76eb4ed5b82a4f24b3029f05.camel@perches.com>
-Subject: Re: checkpatch mistake on XA_STATE?
-From:   Joe Perches <joe@perches.com>
-To:     David Howells <dhowells@redhat.com>,
-        Andy Whitcroft <apw@canonical.com>
-Cc:     willy@infradead.org, linux-kernel@vger.kernel.org
-Date:   Wed, 25 May 2022 08:03:16 -0700
-In-Reply-To: <1962595.1653473587@warthog.procyon.org.uk>
-References: <1962595.1653473587@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Wed, 25 May 2022 11:07:15 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4D26CF5E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:07:13 -0700 (PDT)
+Date:   Wed, 25 May 2022 17:07:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1653491231;
+        bh=rFHjdAfF0vz1/EFBNiyD0IsPskYLMYVsfnaqUJagK+M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FZ4+397wV+yur3tcyedrqXlDlkbOodpY5/0kHi7EWFw7Ytp7g51swEj7WCXyxb9oX
+         95j+EaZrQ0fmy6EUJs0cymexxPa6Og5/U7x75SPFWY+2E9jpILiTVSYihazzU2B0ny
+         1nqeLKZ9ng/W9ou0jCLXZkgnDKnL6xgFhfhRsgXE=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH] nvme-pci: fix host memory buffer allocation size
+Message-ID: <b39c568b-338f-45bb-92f9-0175a909c3f8@t-8ch.de>
+References: <20220428101922.14216-1-linux@weissschuh.net>
+ <20220428143603.GA20460@lst.de>
+ <5060d75e-46c0-4d29-a334-62c7e9714fa7@t-8ch.de>
+ <20220428150644.GA22685@lst.de>
+ <676c02ef-4bbc-43f3-b3e6-27a7d353f974@t-8ch.de>
+ <20220510070356.GA11660@lst.de>
+ <6123b484-bf2c-49f0-a657-6085c7333b2e@t-8ch.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: jpq3cux4ucgb48uxrseiatkawh8x4k5d
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 707AB39
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18evceSDcCS8zC8x07XzapybqBJ010eLz4=
-X-HE-Tag: 1653490997-366959
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6123b484-bf2c-49f0-a657-6085c7333b2e@t-8ch.de>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-25 at 11:13 +0100, David Howells wrote:
-> I see the following:
+On 2022-05-10 12:20+0200, Thomas Weißschuh wrote:
+> [..]
+> > We could look into removing the min with
+> > PAGE_SIZE * MAX_ORDER_NR_PAGES to try to do larger segments for
+> > "segment challenged" controllers now that it could work on a lot
+> > of iommu enabled setups.  But I'd rather have a very good reason for
+> > that.
 > 
-> 	WARNING: Missing a blank line after declarations
-> 	#1921: FILE: fs/cifs/smb2ops.c:4684:
-> 	+       struct folio *folio;
-> 	+       XA_STATE(xas, buffer, 0);
-> 
-> but XA_STATE() technically *is* a declaration.
-> 
-> Should checkpatch treat it as such?
+> On my current setup (WD SN770 on ThinkPad X1 Carbon Gen9) frequently the NVME
+> controller stops responding. Switching from no scheduler to mq-deadline reduced
+> this but did not eliminate it.
+> Since switching to HMB of 1 * 200MiB and no scheduler this did not happen anymore.
+> (But I'll need some more time to gain real confidence in this)
 
-Probably.
----
- scripts/checkpatch.pl | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+So this patch dramatically improves the stability of my disk.
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 503e8abbb2c1e..2cf28014132f6 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -1042,7 +1042,8 @@ our $FuncArg = qr{$Typecast{0,1}($LvalOrFunc|$Constant|$String)};
- our $declaration_macros = qr{(?x:
- 	(?:$Storage\s+)?(?:[A-Z_][A-Z0-9]*_){0,2}(?:DEFINE|DECLARE)(?:_[A-Z0-9]+){1,6}\s*\(|
- 	(?:$Storage\s+)?[HLP]?LIST_HEAD\s*\(|
--	(?:SKCIPHER_REQUEST|SHASH_DESC|AHASH_REQUEST)_ON_STACK\s*\(
-+	(?:SKCIPHER_REQUEST|SHASH_DESC|AHASH_REQUEST)_ON_STACK\s*\(|
-+	(?:$Storage\s+)?(?:XA_ARRAY|XA_ARRAY_ORDER)\s*\(
- )};
- 
- our %allow_repeated_words = (
+Without it and queue/scheduler=none the controller stops responding after a few
+minutes. mq-deadline reduced it to every few hours.
 
+With the patch it happens roughly once a week.
 
+I'll still RMA the disk and see if the replacement changes anything.
+
+Maybe some of the Western Digital employees here could take a look or check if
+there is a new firmware available.
+(The official updater requires Windows and there is no external documentation
+about the firmware)
+
+Not sure if a change from very broken to only slightly broken would be enough
+of a good reason to be honest.
+
+Thomas

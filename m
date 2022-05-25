@@ -2,114 +2,623 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAE9533D12
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E99533D17
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242054AbiEYM6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S229708AbiEYM7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiEYM62 (ORCPT
+        with ESMTP id S229831AbiEYM7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:58:28 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5E8A2053
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:58:27 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id 90so7286249uam.8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MlfGy88ZCD4lOyKadsaMaTpiuM8NkVCXt/blXBLLSuM=;
-        b=WHFRS+3QBk6oxN3FURojB0WbB+U5Yk4Tva5DSe1TmlglfwC6xSB79PK/twKoeeqJ1Y
-         gQflcIaHygkWIFezpZLWDfiOFK22NGlWiFbkUz+Yj9mUz4IxO5AgavlQVUh0kzFDtPAK
-         a+B3yfQtzc9NgH4DISF44l9SiUYBu3GDdx9ixgMeH5sxMf8Yvs+zgemvkbfX2vO6ONo0
-         r+YOZWI+r7OSj8wrgAO+9rps8TxuTpl3N6RfXJGU/gnwbeyBYfnPaB5nXonXH+0eXJS9
-         D5Hdo1CY2iAnRhw5CeM976/rMLav8uhQr3sPxmOyPXwcb6ZJDQ9mbfgXWWb9SebA8+Lx
-         HtDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MlfGy88ZCD4lOyKadsaMaTpiuM8NkVCXt/blXBLLSuM=;
-        b=qST4jl4eZl0dwuPjhIqk+GI3KsEnc+yyaThclYa7zEfFsoGgnHVDuwgPrsPUXLUVRR
-         wodaDyR49lXzQomWY++7wosoTE15uRfVvxVoqVZUZnHie8fJunTXEGPTIXNQdWkp948W
-         7tlW8qcm1P6gPSGYFVA5u7vljRfVNpPZN5tsF40Cl6a3gK4M+LsFeZ62XOWW+Bh4zpGQ
-         jLxs5fEfFGUla2P9wP17oFig5B9gA9jZb38Y2M+fMxZZFRd3yqqifVwu0xlQVJn5ycJN
-         SqV0mlZcAeXR+cxMIZJC4SmOUUZ0ChZwkOHKu28y//EL0iTm2M7Sqj5KPrWx+zVr6eAK
-         zAjw==
-X-Gm-Message-State: AOAM530N7TAVq61oY9ChXzBZDkIpkZjUTiTNsEer2qkZ/cpQWxC3dyMV
-        BDxoRXqtzJr7MA1RLKG9VscHo4H3ZAUmyEQrVdJP2g==
-X-Google-Smtp-Source: ABdhPJzfhaqn9oVCwhK40BxeJIQuF35mF5wePsIFZ0TXRA5Q0PqzCtwusZwnQpv5NWrM7h8rgrwcPPg78uDjv8XYTps=
-X-Received: by 2002:ab0:310b:0:b0:368:c7b0:5a6c with SMTP id
- e11-20020ab0310b000000b00368c7b05a6cmr10054921ual.108.1653483506483; Wed, 25
- May 2022 05:58:26 -0700 (PDT)
+        Wed, 25 May 2022 08:59:01 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A00A0051;
+        Wed, 25 May 2022 05:58:59 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 626C21F44E56
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653483537;
+        bh=eMvqzhr8E9ZbBen1rf+JBZmqK2IOeIBHuQxSh//gCiY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ehPTLWyxP75btaoq8m7YAKop2EHNY2nzai3JTN6BlNlvXNMsaQGF8Bo5JpEiWiINs
+         S8FitoxWMoN5LAiUGcbGopxldxEa/vAKSA+NNbEe7MPnYC+Uq2O96+Ee7m8ZPLLyj1
+         AozQ7u2+wWWFyKxrnkDGMUtBSbXMGieKEYXmET13/FsAjXhus34RTvXmF9PJ5DvmNU
+         yuZgxwYMZauV1L7KJZtNqHOolP9jsI1+k3F3GJGoNP83SE4HCIJkzsUbgFbeX1DPnz
+         X2Ib4YgAUR02h6OOAbGX6AI34nZeiKlcHZNiuwGVj8JbuFX/vSLpvBgmuj284vRnWq
+         DFHegpqq1Blag==
+Message-ID: <71d4856e-f5c8-0ea5-9285-43616c6cdb39@collabora.com>
+Date:   Wed, 25 May 2022 14:58:53 +0200
 MIME-Version: 1.0
-References: <20220525093938.4101-1-ravi.bangoria@amd.com> <20220525093938.4101-5-ravi.bangoria@amd.com>
-In-Reply-To: <20220525093938.4101-5-ravi.bangoria@amd.com>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Wed, 25 May 2022 15:58:15 +0300
-Message-ID: <CABPqkBQ-4vpG_d-u-Q-pTQ_wDg_HhqNNC3dSLFE6MS5Bp3qTDw@mail.gmail.com>
-Subject: Re: [PATCH 04/13] perf/x86/amd: Support PERF_SAMPLE_WEIGHT using IBS OP_DATA3[IbsDcMissLat]
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     peterz@infradead.org, acme@kernel.org, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, jmario@redhat.com,
-        leo.yan@linaro.org, alisaidi@amazon.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, tglx@linutronix.de,
-        bp@alien8.de, x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v10 14/21] drm/mediatek: dpi: Add dpintf support
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
+Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
+References: <20220523104758.29531-1-granquet@baylibre.com>
+ <20220523104758.29531-15-granquet@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220523104758.29531-15-granquet@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 12:42 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->
-> IBS Op data3 provides data cache miss latency which can be passed as
-> sample->weight along with perf_mem_data_src. Note that sample->weight
-> will be populated only when PERF_SAMPLE_DATA_SRC is also set, although
-> both sample types are independent.
->
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> ---
->  arch/x86/events/amd/ibs.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-> index 6626caeed6a1..5a6e278713f4 100644
-> --- a/arch/x86/events/amd/ibs.c
-> +++ b/arch/x86/events/amd/ibs.c
-> @@ -738,6 +738,12 @@ static void perf_ibs_get_mem_lvl(struct perf_event *event, u64 op_data2,
->                 return;
->         }
->
-> +       /* Load latency (Data cache miss latency) */
-> +       if (data_src->mem_op == PERF_MEM_OP_LOAD &&
-> +           event->attr.sample_type & PERF_SAMPLE_WEIGHT) {
-> +               data->weight.full = (op_data3 & IBS_DC_MISS_LAT_MASK) >> IBS_DC_MISS_LAT_SHIFT;
-> +       }
-> +
-I think here you also need to handle the WEIGHT_STRUCT case and put
-the cache miss latency in the right
-field. This IBS field covers the cache line movement and not the whole
-instruction latency which is the tag to ret field.
-In the case of WEIGHT_STRUCT you need to fill out the two fields.
+Il 23/05/22 12:47, Guillaume Ranquet ha scritto:
+> dpintf is the displayport interface hardware unit. This unit is similar
+> to dpi and can reuse most of the code.
+> 
+> This patch adds support for mt8195-dpintf to this dpi driver. Main
+> differences are:
+>   - Some features/functional components are not available for dpintf
+>     which are now excluded from code execution once is_dpintf is set
+>   - dpintf can and needs to choose between different clockdividers based
+>     on the clockspeed. This is done by choosing a different clock parent.
+>   - There are two additional clocks that need to be managed. These are
+>     only set for dpintf and will be set to NULL if not supplied. The
+>     clk_* calls handle these as normal clocks then.
+>   - Some register contents differ slightly between the two components. To
+>     work around this I added register bits/masks with a DPINTF_ prefix
+>     and use them where different.
+> 
+> Based on a separate driver for dpintf created by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
+> 
 
->         /* L2 Hit */
->         if ((op_data3 & IBS_L2_MISS_MASK) == 0) {
->                 /* Erratum #1293 */
-> --
-> 2.31.1
->
+Only after finishing the review, I've noticed that I just wrote the same things
+that I wrote in my review for version 8... and if I recall correctly, this is not
+the first time that something like that happens.
+
+Please pay attention to what reviewers say, as to not waste anyone's time.
+
+
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dpi.c          | 126 +++++++++++++++++---
+>   drivers/gpu/drm/mediatek/mtk_dpi_regs.h     |  35 ++++++
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |   8 ++
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   1 +
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.c      |   5 +-
+>   include/linux/soc/mediatek/mtk-mmsys.h      |   4 +-
+>   6 files changed, 159 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index eb969c5c5c2e..763bfb700135 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -71,6 +71,7 @@ struct mtk_dpi {
+>   	void __iomem *regs;
+>   	struct device *dev;
+>   	struct clk *engine_clk;
+> +	struct clk *dpi_ck_cg;
+>   	struct clk *pixel_clk;
+>   	struct clk *tvd_clk;
+>   	int irq;
+> @@ -126,6 +127,7 @@ struct mtk_dpi_conf {
+>   	const u32 *output_fmts;
+>   	u32 num_output_fmts;
+>   	bool is_ck_de_pol;
+> +	bool is_dpintf;
+>   	bool swap_input_support;
+>   	/* Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and VSYNC_PORCH (no shift) */
+>   	u32 dimension_mask;
+> @@ -438,6 +440,8 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
+>   	mtk_dpi_disable(dpi);
+>   	clk_disable_unprepare(dpi->pixel_clk);
+>   	clk_disable_unprepare(dpi->engine_clk);
+> +	clk_disable_unprepare(dpi->dpi_ck_cg);
+> +	clk_disable_unprepare(dpi->tvd_clk);
+>   }
+>   
+>   static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+> @@ -447,12 +451,24 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>   	if (++dpi->refcount != 1)
+>   		return 0;
+>   
+> +	ret = clk_prepare_enable(dpi->tvd_clk);
+> +	if (ret) {
+> +		dev_err(dpi->dev, "Failed to enable tvd pll: %d\n", ret);
+> +		goto err_pixel;
+> +	}
+> +
+>   	ret = clk_prepare_enable(dpi->engine_clk);
+>   	if (ret) {
+>   		dev_err(dpi->dev, "Failed to enable engine clock: %d\n", ret);
+>   		goto err_refcount;
+>   	}
+>   
+> +	ret = clk_prepare_enable(dpi->dpi_ck_cg);
+> +	if (ret) {
+> +		dev_err(dpi->dev, "Failed to enable dpi_ck_cg clock: %d\n", ret);
+> +		goto err_ck_cg;
+> +	}
+> +
+>   	ret = clk_prepare_enable(dpi->pixel_clk);
+>   	if (ret) {
+>   		dev_err(dpi->dev, "Failed to enable pixel clock: %d\n", ret);
+> @@ -466,6 +482,8 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>   	return 0;
+>   
+>   err_pixel:
+> +	clk_disable_unprepare(dpi->dpi_ck_cg);
+> +err_ck_cg:
+>   	clk_disable_unprepare(dpi->engine_clk);
+>   err_refcount:
+>   	dpi->refcount--;
+> @@ -498,11 +516,11 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>   
+>   	vm.pixelclock = pll_rate / factor;
+>   	if ((dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_LE) ||
+> -	    (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE))
+> +		 (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE)) {
+
+The indentation was perfect before that change...
+
+>   		clk_set_rate(dpi->pixel_clk, vm.pixelclock * 2);
+> -	else
+> +	} else {
+>   		clk_set_rate(dpi->pixel_clk, vm.pixelclock);
+> -
+> +	}
+>   
+>   	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
+>   
+> @@ -515,9 +533,15 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>   			    MTK_DPI_POLARITY_FALLING : MTK_DPI_POLARITY_RISING;
+>   	dpi_pol.vsync_pol = vm.flags & DISPLAY_FLAGS_VSYNC_HIGH ?
+>   			    MTK_DPI_POLARITY_FALLING : MTK_DPI_POLARITY_RISING;
+> -	hsync.sync_width = vm.hsync_len;
+> -	hsync.back_porch = vm.hback_porch;
+> -	hsync.front_porch = vm.hfront_porch;
+> +	if (dpi->conf->is_dpintf) {
+> +		hsync.sync_width = vm.hsync_len / 4;
+> +		hsync.back_porch = vm.hback_porch / 4;
+> +		hsync.front_porch = vm.hfront_porch / 4;
+> +	} else {
+> +		hsync.sync_width = vm.hsync_len;
+> +		hsync.back_porch = vm.hback_porch;
+> +		hsync.front_porch = vm.hfront_porch;
+> +	}
+
+This looks way better:
+
+	hsync.sync_width = vm.hsync_len;
+	hsync.back_porch = vm.hback_porch;
+	hsync.front_porch = vm.hfront_porch;
+
+	/* For DPINTF, we need to divide everything by 4 .. lanes? */
+	if (dpi->conf->is_dpintf) {
+		hsync.sync_width /= 4;
+		hsync.back_porch /= 4;
+		hsync.front_porch /= 4;
+	}
+
+>   	hsync.shift_half_line = false;
+>   	vsync_lodd.sync_width = vm.vsync_len;
+>   	vsync_lodd.back_porch = vm.vback_porch;
+> @@ -559,13 +583,20 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>   	mtk_dpi_config_channel_limit(dpi);
+>   	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
+>   	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
+> -	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+>   	mtk_dpi_config_color_format(dpi, dpi->color_format);
+> -	mtk_dpi_config_2n_h_fre(dpi);
+> -	mtk_dpi_dual_edge(dpi);
+> -	mtk_dpi_config_disable_edge(dpi);
+> +	if (dpi->conf->is_dpintf) {
+> +		mtk_dpi_mask(dpi, DPI_CON, DPINTF_INPUT_2P_EN,
+> +			     DPINTF_INPUT_2P_EN);
+> +	} else {
+> +		mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+> +		mtk_dpi_config_2n_h_fre(dpi);
+> +		mtk_dpi_dual_edge(dpi);
+> +		mtk_dpi_config_disable_edge(dpi);
+> +	}
+>   	mtk_dpi_sw_reset(dpi, false);
+>   
+> +	mtk_dpi_enable(dpi);
+> +
+>   	return 0;
+>   }
+>   
+> @@ -608,7 +639,6 @@ static u32 *mtk_dpi_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
+>   	u32 *input_fmts;
+>   
+>   	*num_input_fmts = 0;
+> -
+
+Removing this line is not part of adding dpintf support, so don't do that.
+
+>   	input_fmts = kcalloc(1, sizeof(*input_fmts),
+>   			     GFP_KERNEL);
+>   	if (!input_fmts)
+> @@ -634,15 +664,18 @@ static int mtk_dpi_bridge_atomic_check(struct drm_bridge *bridge,
+>   		if (dpi->conf->num_output_fmts)
+>   			out_bus_format = dpi->conf->output_fmts[0];
+>   
+> -	dev_dbg(dpi->dev, "input format 0x%04x, output format 0x%04x\n",
+> -		bridge_state->input_bus_cfg.format,
+> -		bridge_state->output_bus_cfg.format);
+> +	dev_info(dpi->dev, "input format 0x%04x, output format 0x%04x\n",
+> +		 bridge_state->input_bus_cfg.format,
+> +		 bridge_state->output_bus_cfg.format);
+
+This message is not giving any constantly changing information, nor any one that
+is interesting for the user: keep this as dev_dbg().
+
+>   
+>   	dpi->output_fmt = out_bus_format;
+>   	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
+>   	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
+>   	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
+> -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
+> +		dpi->color_format = MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
+> +	else
+> +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+>   
+>   	return 0;
+>   }
+> @@ -687,7 +720,7 @@ mtk_dpi_bridge_mode_valid(struct drm_bridge *bridge,
+>   {
+>   	struct mtk_dpi *dpi = bridge_to_dpi(bridge);
+>   
+> -	if (mode->clock > dpi->conf->max_clock_khz)
+> +	if (dpi->conf->max_clock_khz && mode->clock > dpi->conf->max_clock_khz)
+>   		return MODE_CLOCK_HIGH;
+>   
+>   	return MODE_OK;
+> @@ -801,6 +834,16 @@ static unsigned int mt8183_calculate_factor(int clock)
+>   		return 2;
+>   }
+>   
+> +static unsigned int mt8195_dpintf_calculate_factor(int clock)
+> +{
+> +	if (clock < 70000)
+
+is 70000 intentional? Or did you mean 700000?
+
+> +		return 4;
+> +	else if (clock < 200000)
+> +		return 2;
+> +	else
+> +		return 1;
+> +}
+> +
+>   static const u32 mt8173_output_fmts[] = {
+>   	MEDIA_BUS_FMT_RGB888_1X24,
+>   };
+> @@ -810,6 +853,12 @@ static const u32 mt8183_output_fmts[] = {
+>   	MEDIA_BUS_FMT_RGB888_2X12_BE,
+>   };
+>   
+> +static const u32 mt8195_output_fmts[] = {
+> +	MEDIA_BUS_FMT_RGB888_1X24,
+> +	MEDIA_BUS_FMT_YUV8_1X24,
+> +	MEDIA_BUS_FMT_YUYV8_1X16,
+> +};
+> +
+>   static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
+>   	.c_bottom = 0x0010,
+>   	.c_top = 0x0FE0,
+> @@ -817,6 +866,13 @@ static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
+>   	.y_top = 0x0FE0,
+>   };
+>   
+> +static const struct mtk_dpi_yc_limit mtk_dpintf_limit = {
+> +	.c_bottom = 0x0000,
+> +	.c_top = 0xFFF,
+> +	.y_bottom = 0x0000,
+> +	.y_top = 0xFFF,
+> +};
+> +
+>   static const struct mtk_dpi_conf mt8173_conf = {
+>   	.cal_factor = mt8173_calculate_factor,
+>   	.reg_h_fre_con = 0xe0,
+> @@ -882,6 +938,19 @@ static const struct mtk_dpi_conf mt8192_conf = {
+>   	.limit = &mtk_dpi_limit,
+>   };
+>   
+> +static const struct mtk_dpi_conf mt8195_dpintf_conf = {
+> +	.cal_factor = mt8195_dpintf_calculate_factor,
+> +	.output_fmts = mt8195_output_fmts,
+> +	.num_output_fmts = ARRAY_SIZE(mt8195_output_fmts),
+> +	.is_dpintf = true,
+> +	.dimension_mask = DPINTF_HPW_MASK,
+> +	.hvsize_mask = DPINTF_HSIZE_MASK,
+> +	.channel_swap_shift = DPINTF_CH_SWAP,
+> +	.yuv422_en_bit = DPINTF_YUV422_EN,
+> +	.csc_enable_bit = DPINTF_CSC_ENABLE,
+> +	.limit = &mtk_dpintf_limit,
+> +};
+> +
+>   static int mtk_dpi_probe(struct platform_device *pdev)
+>   {
+>   	struct device *dev = &pdev->dev;
+> @@ -929,7 +998,27 @@ static int mtk_dpi_probe(struct platform_device *pdev)
+>   	if (IS_ERR(dpi->engine_clk)) {
+>   		ret = PTR_ERR(dpi->engine_clk);
+>   		if (ret != -EPROBE_DEFER)
+> -			dev_err(dev, "Failed to get engine clock: %d\n", ret);
+> +			dev_err(dev, "Failed to get engine clock: %d\n",
+> +				ret);
+
+Why are you breaking this line?
+
+> +
+> +		return ret;
+> +	}
+> +
+> +	dpi->dpi_ck_cg = devm_clk_get_optional(dev, "ck_cg");
+> +	if (IS_ERR(dpi->dpi_ck_cg)) {
+> +		ret = PTR_ERR(dpi->dpi_ck_cg);
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Failed to get dpi ck cg clock: %d\n",
+> +				ret);
+> +
+> +		return ret;
+> +	}
+> +
+
+You're getting this clock twice, what happened here?
+
+P.S.: As I explained on the dt-bindings patch, you likely don't even need this
+       clock at all.
+
+> +	dpi->dpi_ck_cg = devm_clk_get_optional(dev, "ck_cg");
+> +	if (IS_ERR(dpi->dpi_ck_cg)) {
+> +		ret = PTR_ERR(dpi->dpi_ck_cg);
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Failed to get dpi ck cg clock: %d\n", ret);
+>   
+>   		return ret;
+>   	}
+> @@ -1004,6 +1093,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
+>   	{ .compatible = "mediatek,mt8192-dpi",
+>   	  .data = &mt8192_conf,
+>   	},
+> +	{ .compatible = "mediatek,mt8195-dpintf",
+> +	  .data = &mt8195_dpintf_conf,
+> +	},
+>   	{ },
+>   };
+>   MODULE_DEVICE_TABLE(of, mtk_dpi_of_ids);
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> index 3a02fabe1662..dd47dd3f2e4f 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
+> @@ -40,10 +40,15 @@
+>   #define FAKE_DE_LEVEN			BIT(21)
+>   #define FAKE_DE_RODD			BIT(22)
+>   #define FAKE_DE_REVEN			BIT(23)
+> +#define DPINTF_YUV422_EN		BIT(24)
+> +#define DPINTF_CSC_ENABLE		BIT(26)
+> +#define DPINTF_INPUT_2P_EN		BIT(29)
+>   
+>   #define DPI_OUTPUT_SETTING	0x14
+>   #define CH_SWAP				0
+> +#define DPINTF_CH_SWAP			BIT(1)
+>   #define CH_SWAP_MASK			(0x7 << 0)
+> +#define DPINTF_CH_SWAP_MASK		(0x7 << 1)
+>   #define SWAP_RGB			0x00
+>   #define SWAP_GBR			0x01
+>   #define SWAP_BRG			0x02
+> @@ -80,8 +85,10 @@
+>   #define DPI_SIZE		0x18
+>   #define HSIZE				0
+>   #define HSIZE_MASK			(0x1FFF << 0)
+> +#define DPINTF_HSIZE_MASK		(0xFFFF << 0)
+>   #define VSIZE				16
+>   #define VSIZE_MASK			(0x1FFF << 16)
+> +#define DPINTF_VSIZE_MASK		(0xFFFF << 16)
+>   
+>   #define DPI_DDR_SETTING		0x1C
+>   #define DDR_EN				BIT(0)
+> @@ -93,24 +100,30 @@
+>   #define DPI_TGEN_HWIDTH		0x20
+>   #define HPW				0
+>   #define HPW_MASK			(0xFFF << 0)
+> +#define DPINTF_HPW_MASK			(0xFFFF << 0)
+>   
+>   #define DPI_TGEN_HPORCH		0x24
+>   #define HBP				0
+>   #define HBP_MASK			(0xFFF << 0)
+> +#define DPINTF_HBP_MASK			(0xFFFF << 0)
+>   #define HFP				16
+>   #define HFP_MASK			(0xFFF << 16)
+> +#define DPINTF_HFP_MASK			(0xFFFF << 16)
+>   
+>   #define DPI_TGEN_VWIDTH		0x28
+>   #define DPI_TGEN_VPORCH		0x2C
+>   
+>   #define VSYNC_WIDTH_SHIFT		0
+>   #define VSYNC_WIDTH_MASK		(0xFFF << 0)
+> +#define DPINTF_VSYNC_WIDTH_MASK		(0xFFFF << 0)
+>   #define VSYNC_HALF_LINE_SHIFT		16
+>   #define VSYNC_HALF_LINE_MASK		BIT(16)
+>   #define VSYNC_BACK_PORCH_SHIFT		0
+>   #define VSYNC_BACK_PORCH_MASK		(0xFFF << 0)
+> +#define DPINTF_VSYNC_BACK_PORCH_MASK	(0xFFFF << 0)
+>   #define VSYNC_FRONT_PORCH_SHIFT		16
+>   #define VSYNC_FRONT_PORCH_MASK		(0xFFF << 16)
+> +#define DPINTF_VSYNC_FRONT_PORCH_MASK	(0xFFFF << 16)
+>   
+>   #define DPI_BG_HCNTL		0x30
+>   #define BG_RIGHT			(0x1FFF << 0)
+> @@ -217,4 +230,26 @@
+>   
+>   #define EDGE_SEL_EN			BIT(5)
+>   #define H_FRE_2N			BIT(25)
+> +
+> +#define RGB_TO_JPEG			0x00
+
+This is 0x0
+
+> +#define RGB_TO_FULL709			0x01
+
+0x1
+
+> +#define RGB_TO_BT601			0x02
+
+0x2
+
+...remove the unnecessary leading zeros, but... you're not ever
+using this set of definitions, so why are you even adding them?
+
+> +#define RGB_TO_BT709			0x03
+> +#define JPEG_TO_RGB			0x04
+> +#define FULL709_TO_RGB			0x05
+> +#define BT601_TO_RGB			0x06
+> +#define BT709_TO_RGB			0x07
+> +#define JPEG_TO_BT601			0x08
+> +#define JPEG_TO_BT709			0x09
+> +#define BT601_TO_JPEG			0xA
+> +#define BT709_TO_JPEG			0xB
+> +#define BT709_TO_BT601			0xC
+> +#define BT601_TO_BT709			0xD
+> +#define JPEG_TO_CERGB			0x14
+> +#define FULL709_TO_CERGB		0x15
+> +#define BT601_TO_CERGB			0x16
+> +#define BT709_TO_CERGB			0x17
+> +#define RGB_TO_CERGB			0x1C
+> +#define MATRIX_BIT			BIT(8)
+> +#define EXT_MATRIX_EN			BIT(12)
+>   #endif /* __MTK_DPI_REGS_H */
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> index 245d0074e12d..3738665a712e 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> @@ -419,6 +419,11 @@ static const char * const mtk_ddp_comp_stem[MTK_DDP_COMP_TYPE_MAX] = {
+>   	[MTK_DISP_WDMA] = "wdma",
+>   	[MTK_DPI] = "dpi",
+>   	[MTK_DSI] = "dsi",
+> +	[MTK_DP_INTF] = "dp-intf",
+> +	[MTK_DISP_PWM] = "pwm",
+> +	[MTK_DISP_MUTEX] = "mutex",
+> +	[MTK_DISP_OD] = "od",
+> +	[MTK_DISP_BLS] = "bls",
+
+Please keep alphabetic order.
+
+>   };
+>   
+>   struct mtk_ddp_comp_match {
+> @@ -439,6 +444,8 @@ static const struct mtk_ddp_comp_match mtk_ddp_matches[DDP_COMPONENT_ID_MAX] = {
+>   	[DDP_COMPONENT_DPI1]		= { MTK_DPI,			1, &ddp_dpi },
+>   	[DDP_COMPONENT_DSC0]		= { MTK_DISP_DSC,		0, &ddp_dsc },
+>   	[DDP_COMPONENT_DSC1]		= { MTK_DISP_DSC,		1, &ddp_dsc },
+> +	[DDP_COMPONENT_DP_INTF0]	= { MTK_DP_INTF,	0, &ddp_dpi },
+> +	[DDP_COMPONENT_DP_INTF1]	= { MTK_DP_INTF,	1, &ddp_dpi },
+
+Indentation issue. Fix it.
+
+>   	[DDP_COMPONENT_DSI0]		= { MTK_DSI,			0, &ddp_dsi },
+>   	[DDP_COMPONENT_DSI1]		= { MTK_DSI,			1, &ddp_dsi },
+>   	[DDP_COMPONENT_DSI2]		= { MTK_DSI,			2, &ddp_dsi },
+> @@ -565,6 +572,7 @@ int mtk_ddp_comp_init(struct device_node *node, struct mtk_ddp_comp *comp,
+>   	    type == MTK_DISP_PWM ||
+>   	    type == MTK_DISP_RDMA ||
+>   	    type == MTK_DPI ||
+> +	    type == MTK_DP_INTF ||
+>   	    type == MTK_DSI)
+>   		return 0;
+>   
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> index 825d763d2378..c4e683f46a95 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> @@ -37,6 +37,7 @@ enum mtk_ddp_comp_type {
+>   	MTK_DISP_UFOE,
+>   	MTK_DISP_WDMA,
+>   	MTK_DPI,
+> +	MTK_DP_INTF,
+>   	MTK_DSI,
+>   	MTK_DDP_COMP_TYPE_MAX,
+>   };
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> index a2a783fc580e..e25ac61aac08 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> @@ -690,6 +690,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
+>   	  .data = (void *)MTK_DPI },
+>   	{ .compatible = "mediatek,mt8183-dpi",
+>   	  .data = (void *)MTK_DPI },
+> +	{ .compatible = "mediatek,mt8195-dpintf",
+> +	  .data = (void *)MTK_DP_INTF },
+>   	{ .compatible = "mediatek,mt2701-dsi",
+>   	  .data = (void *)MTK_DSI },
+>   	{ .compatible = "mediatek,mt8173-dsi",
+> @@ -801,8 +803,9 @@ static int mtk_drm_probe(struct platform_device *pdev)
+>   		    comp_type == MTK_DISP_OVL_2L ||
+>   		    comp_type == MTK_DISP_OVL_ADAPTOR ||
+>   		    comp_type == MTK_DISP_RDMA ||
+> +		    comp_type == MTK_DSI ||
+>   		    comp_type == MTK_DPI ||
+> -		    comp_type == MTK_DSI) {
+> +		    comp_type == MTK_DP_INTF) {
+
+These were nice and alphabetically ordered, why are you moving MTK_DSI up there?!
+
+  		    comp_type == MTK_DISP_RDMA ||
+		    comp_type == MTK_DP_INTF ||
+  		    comp_type == MTK_DPI ||
+		    comp_type == MTK_DSI) {
+
+... that's how it should look like.
+
+>   			dev_info(dev, "Adding component match for %pOF\n",
+>   				 node);
+>   			drm_of_component_match_add(dev, &match, component_compare_of,
+> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
+> index 3e998bfb795a..e4b84c347201 100644
+> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> @@ -21,12 +21,12 @@ enum mtk_ddp_comp_id {
+>   	DDP_COMPONENT_COLOR0,
+>   	DDP_COMPONENT_COLOR1,
+>   	DDP_COMPONENT_DITHER,
+> -	DDP_COMPONENT_DP_INTF0,
+> -	DDP_COMPONENT_DP_INTF1,
+>   	DDP_COMPONENT_DPI0,
+>   	DDP_COMPONENT_DPI1,
+>   	DDP_COMPONENT_DSC0,
+>   	DDP_COMPONENT_DSC1,
+> +	DDP_COMPONENT_DP_INTF0,
+> +	DDP_COMPONENT_DP_INTF1,
+
+Why are you moving this?!
+
+>   	DDP_COMPONENT_DSI0,
+>   	DDP_COMPONENT_DSI1,
+>   	DDP_COMPONENT_DSI2,
+
+

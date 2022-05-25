@@ -2,154 +2,452 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8192453407B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01538534082
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiEYPiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S229893AbiEYPlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiEYPij (ORCPT
+        with ESMTP id S245191AbiEYPlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:38:39 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634891A83A
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:38:35 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y189so4467681pfy.10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:38:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XfUA65d3SdbF2oQUu55YnSpsWlaG2pXPKVSvY3AeaaY=;
-        b=HdWmnFghAeH4LB9aqAeQKPfx4YaL1PQAnvmeL63qjEhQAsAKGPbUoWiw805DbWMH7w
-         XoiBlH8sgL6Qd92qTjABYEtmtm8Cg+0qLN6NFvKknvRaO+mJDJqgzHyWB8HEZuWXscrH
-         Xz1wzE6LmtCY4J5IB9STw0NM5YtUlc4+LnGaMH+uaVJ+9hl2W1D75vtJW+gstoCx0AkA
-         d24A8qRFz6/7+LHkWFIXmI8WCtXovRtftQ/wkbSch57kOh30B0HA6YIDAZKaOqrc/HGo
-         AI0GxMStontX+lP5N4q0iFkpJeCCyO1oQ5OEx/TB6KuwVerlzTV7dTM9Yp0K4fMtVoKp
-         48LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XfUA65d3SdbF2oQUu55YnSpsWlaG2pXPKVSvY3AeaaY=;
-        b=O+TDfTqFj7OlMc2StfrfP1eO/TaPeu9FCV5oVvARMt5sPkE4R2Veo8OdEFDHHvz7lN
-         AXyyoe01J21OIXAK5Cuv+R4xpktAAZxA50Fmw+5xUkmSaAqzobuqU2J4JG3712WafrqS
-         Rt2+g4uC1+iX6eXm8J5V98vyAg/sk932SmarfDntWgijt3gQ+wmgqczksA7DH1kxeGUU
-         DH6qrChZ7Mc8KPx/IxUogP3m4yEyjGlF5Xmsx8unuSWnsX94ehmmDYMhqQ9qHbcE0UHm
-         rVcfnAyT9hdbODZ5WueGpDc+EcNHTeRuQhDb1UIFsvRh4NlgbsrhRjMChN4ZHWoaP+42
-         6HAA==
-X-Gm-Message-State: AOAM533CoFtbQWmJz/4cg556V+1tiGzmAQiXh3neivaHMmObYuGrSAtq
-        Q+wj64RqpxEEW9cCDYyy+GrTpA==
-X-Google-Smtp-Source: ABdhPJw8ma6FFkHhjBy1EOWCJFVdGQF0wo4kNYjbEkPmz677E+idKlyhbhGwlIzdJdTyXCoafh/Lkg==
-X-Received: by 2002:a63:1a17:0:b0:3fa:e901:1c68 with SMTP id a23-20020a631a17000000b003fae9011c68mr2278636pga.243.1653493114887;
-        Wed, 25 May 2022 08:38:34 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:c40f:7b5:4fa8:df3f])
-        by smtp.gmail.com with ESMTPSA id t2-20020a170902e84200b001618fee3900sm9707878plg.196.2022.05.25.08.38.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 08:38:34 -0700 (PDT)
-Date:   Wed, 25 May 2022 23:38:30 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        longman@redhat.com
-Subject: Re: [PATCH v4 03/11] mm: memcontrol: make lruvec lock safe when LRU
- pages are reparented
-Message-ID: <Yo5NdncOsqL0xP8Q@FVFYT0MHHV2J.googleapis.com>
-References: <20220524060551.80037-1-songmuchun@bytedance.com>
- <20220524060551.80037-4-songmuchun@bytedance.com>
- <Yo0xmKOkBkhRy+bq@cmpxchg.org>
- <Yo38mlkMBFz2h+yP@FVFYT0MHHV2J.googleapis.com>
- <Yo4hVw7B+bUlMzLX@cmpxchg.org>
- <Yo4pPw+IHPBZvZUv@FVFYT0MHHV2J.googleapis.com>
- <Yo5B1tLcYPUoaACS@cmpxchg.org>
+        Wed, 25 May 2022 11:41:03 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198F7A888A
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:41:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653493260; x=1685029260;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=T7qfmivOPYMhpMaUJm/i7XkSuvOfp/142xDfGOq0ydo=;
+  b=TR26KAG435reXpMJH4Ke3iUkUGwViVynObD1+vnKNOf2net/E4a5fMM+
+   NqrV2EUVd8oOa3fS8d6n2FuSKczXAz+SobAZLVgZy7wE8I4nihQGviKrs
+   1Yyj+FXVqMQg957MWWJOu9Tnc9EYmtYtbPhUa5gTtMq6J6CzbUg4IE4rV
+   hNPrL5WpkcTBTZACnavp0VlT/tXAYoruGVIC4VNPyyFgu2LMc3b/wCDxe
+   68IP0rb/B+3w6jFXq0E0cN8/OKgeaJMgArVeMU/+iE1O0joOD/joqW6U/
+   pp+0zkuimJ1BEzioDr8++hceNJsnT5ax332EDMnAcyixuQ3mNOAhoXgv6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="261455693"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="261455693"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 08:40:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="630400879"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 25 May 2022 08:40:57 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntt84-00035a-MG;
+        Wed, 25 May 2022 15:40:56 +0000
+Date:   Wed, 25 May 2022 23:40:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [vireshk-pm:opp/config 33/33] drivers/opp/core.c:1961:19: warning:
+ no previous prototype for function 'dev_pm_opp_set_supported_hw'
+Message-ID: <202205252313.tlPAoDRf-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yo5B1tLcYPUoaACS@cmpxchg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 10:48:54AM -0400, Johannes Weiner wrote:
-> On Wed, May 25, 2022 at 09:03:59PM +0800, Muchun Song wrote:
-> > On Wed, May 25, 2022 at 08:30:15AM -0400, Johannes Weiner wrote:
-> > > On Wed, May 25, 2022 at 05:53:30PM +0800, Muchun Song wrote:
-> > > > On Tue, May 24, 2022 at 03:27:20PM -0400, Johannes Weiner wrote:
-> > > > > On Tue, May 24, 2022 at 02:05:43PM +0800, Muchun Song wrote:
-> > > > > > @@ -1230,10 +1213,23 @@ void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
-> > > > > >   */
-> > > > > >  struct lruvec *folio_lruvec_lock(struct folio *folio)
-> > > > > >  {
-> > > > > > -	struct lruvec *lruvec = folio_lruvec(folio);
-> > > > > > +	struct lruvec *lruvec;
-> > > > > >  
-> > > > > > +	rcu_read_lock();
-> > > > > > +retry:
-> > > > > > +	lruvec = folio_lruvec(folio);
-> > > > > >  	spin_lock(&lruvec->lru_lock);
-> > > > > > -	lruvec_memcg_debug(lruvec, folio);
-> > > > > > +
-> > > > > > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
-> > > > > > +		spin_unlock(&lruvec->lru_lock);
-> > > > > > +		goto retry;
-> > > > > > +	}
-> > > > > > +
-> > > > > > +	/*
-> > > > > > +	 * Preemption is disabled in the internal of spin_lock, which can serve
-> > > > > > +	 * as RCU read-side critical sections.
-> > > > > > +	 */
-> > > > > > +	rcu_read_unlock();
-> > > > > 
-> > > > > The code looks right to me, but I don't understand the comment: why do
-> > > > > we care that the rcu read-side continues? With the lru_lock held,
-> > > > > reparenting is on hold and the lruvec cannot be rcu-freed anyway, no?
-> > > > >
-> > > > 
-> > > > Right. We could hold rcu read lock until end of reparting.  So you mean
-> > > > we do rcu_read_unlock in folio_lruvec_lock()?
-> > > 
-> > > The comment seems to suggest that disabling preemption is what keeps
-> > > the lruvec alive. But it's the lru_lock that keeps it alive. The
-> > > cgroup destruction path tries to take the lru_lock long before it even
-> > > gets to synchronize_rcu(). Once you hold the lru_lock, having an
-> > > implied read-side critical section as well doesn't seem to matter.
-> > >
-> > 
-> > Well, I thought that spinlocks have implicit read-side critical sections
-> > because it disables preemption (I learned from the comments above
-> > synchronize_rcu() that says interrupts, preemption, or softirqs have been
-> > disabled also serve as RCU read-side critical sections).  So I have a
-> > question: is it still true in a PREEMPT_RT kernel (I am not familiar with
-> > this)?
-> 
-> Yes, but you're missing my point.
-> 
-> > > Should the comment be deleted?
-> > 
-> > I think we could remove the comments. If the above question is false, seems
-> > like we should continue holding rcu read lock.
-> 
-> It's true.
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
+head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
+commit: d730dc101c586defb49eeafd8eea9b7bb0baa01b [33/33] OPP: Remove unused APIs
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220525/202205252313.tlPAoDRf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=d730dc101c586defb49eeafd8eea9b7bb0baa01b
+        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
+        git fetch --no-tags vireshk-pm opp/config
+        git checkout d730dc101c586defb49eeafd8eea9b7bb0baa01b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/opp/
 
-Thanks for your answer.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> But assume it's false for a second. Why would you need to continue
-> holding it? What would it protect? The lruvec would be pinned by the
-> spinlock even if it DIDN'T imply an RCU lock, right?
-> 
-> So I don't understand the point of the comment. If the implied RCU
-> lock is protecting something not covered by the bare spinlock itself,
-> it should be added to the comment. Otherwise, the comment should go.
->
+All warnings (new ones prefixed by >>):
 
-Got it. Thanks for your nice explanation. I'll remove
-the comment here.
+>> drivers/opp/core.c:1961:19: warning: no previous prototype for function 'dev_pm_opp_set_supported_hw' [-Wmissing-prototypes]
+   struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
+                     ^
+   drivers/opp/core.c:1961:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
+   ^
+   static 
+>> drivers/opp/core.c:1998:6: warning: no previous prototype for function 'dev_pm_opp_put_supported_hw' [-Wmissing-prototypes]
+   void dev_pm_opp_put_supported_hw(struct opp_table *opp_table)
+        ^
+   drivers/opp/core.c:1998:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dev_pm_opp_put_supported_hw(struct opp_table *opp_table)
+   ^
+   static 
+>> drivers/opp/core.c:2026:5: warning: no previous prototype for function 'devm_pm_opp_set_supported_hw' [-Wmissing-prototypes]
+   int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions,
+       ^
+   drivers/opp/core.c:2026:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions,
+   ^
+   static 
+>> drivers/opp/core.c:2050:19: warning: no previous prototype for function 'dev_pm_opp_set_prop_name' [-Wmissing-prototypes]
+   struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name)
+                     ^
+   drivers/opp/core.c:2050:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name)
+   ^
+   static 
+>> drivers/opp/core.c:2083:6: warning: no previous prototype for function 'dev_pm_opp_put_prop_name' [-Wmissing-prototypes]
+   void dev_pm_opp_put_prop_name(struct opp_table *opp_table)
+        ^
+   drivers/opp/core.c:2083:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dev_pm_opp_put_prop_name(struct opp_table *opp_table)
+   ^
+   static 
+>> drivers/opp/core.c:2107:19: warning: no previous prototype for function 'dev_pm_opp_set_regulators' [-Wmissing-prototypes]
+   struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+                     ^
+   drivers/opp/core.c:2107:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+   ^
+   static 
+>> drivers/opp/core.c:2186:6: warning: no previous prototype for function 'dev_pm_opp_put_regulators' [-Wmissing-prototypes]
+   void dev_pm_opp_put_regulators(struct opp_table *opp_table)
+        ^
+   drivers/opp/core.c:2186:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dev_pm_opp_put_regulators(struct opp_table *opp_table)
+   ^
+   static 
+>> drivers/opp/core.c:2238:5: warning: no previous prototype for function 'devm_pm_opp_set_regulators' [-Wmissing-prototypes]
+   int devm_pm_opp_set_regulators(struct device *dev,
+       ^
+   drivers/opp/core.c:2238:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int devm_pm_opp_set_regulators(struct device *dev,
+   ^
+   static 
+>> drivers/opp/core.c:2265:19: warning: no previous prototype for function 'dev_pm_opp_set_clkname' [-Wmissing-prototypes]
+   struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
+                     ^
+   drivers/opp/core.c:2265:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
+   ^
+   static 
+>> drivers/opp/core.c:2309:6: warning: no previous prototype for function 'dev_pm_opp_put_clkname' [-Wmissing-prototypes]
+   void dev_pm_opp_put_clkname(struct opp_table *opp_table)
+        ^
+   drivers/opp/core.c:2309:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dev_pm_opp_put_clkname(struct opp_table *opp_table)
+   ^
+   static 
+>> drivers/opp/core.c:2336:5: warning: no previous prototype for function 'devm_pm_opp_set_clkname' [-Wmissing-prototypes]
+   int devm_pm_opp_set_clkname(struct device *dev, const char *name)
+       ^
+   drivers/opp/core.c:2336:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int devm_pm_opp_set_clkname(struct device *dev, const char *name)
+   ^
+   static 
+>> drivers/opp/core.c:2359:19: warning: no previous prototype for function 'dev_pm_opp_register_set_opp_helper' [-Wmissing-prototypes]
+   struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
+                     ^
+   drivers/opp/core.c:2359:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
+   ^
+   static 
+>> drivers/opp/core.c:2408:6: warning: no previous prototype for function 'dev_pm_opp_unregister_set_opp_helper' [-Wmissing-prototypes]
+   void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table)
+        ^
+   drivers/opp/core.c:2408:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dev_pm_opp_unregister_set_opp_helper(struct opp_table *opp_table)
+   ^
+   static 
+>> drivers/opp/core.c:2438:5: warning: no previous prototype for function 'devm_pm_opp_register_set_opp_helper' [-Wmissing-prototypes]
+   int devm_pm_opp_register_set_opp_helper(struct device *dev,
+       ^
+   drivers/opp/core.c:2438:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int devm_pm_opp_register_set_opp_helper(struct device *dev,
+   ^
+   static 
+>> drivers/opp/core.c:2493:19: warning: no previous prototype for function 'dev_pm_opp_attach_genpd' [-Wmissing-prototypes]
+   struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+                     ^
+   drivers/opp/core.c:2493:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+   ^
+   static 
+>> drivers/opp/core.c:2570:6: warning: no previous prototype for function 'dev_pm_opp_detach_genpd' [-Wmissing-prototypes]
+   void dev_pm_opp_detach_genpd(struct opp_table *opp_table)
+        ^
+   drivers/opp/core.c:2570:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dev_pm_opp_detach_genpd(struct opp_table *opp_table)
+   ^
+   static 
+>> drivers/opp/core.c:2603:5: warning: no previous prototype for function 'devm_pm_opp_attach_genpd' [-Wmissing-prototypes]
+   int devm_pm_opp_attach_genpd(struct device *dev, const char * const *names,
+       ^
+   drivers/opp/core.c:2603:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int devm_pm_opp_attach_genpd(struct device *dev, const char * const *names,
+   ^
+   static 
+   17 warnings generated.
+
+
+vim +/dev_pm_opp_set_supported_hw +1961 drivers/opp/core.c
+
+38393409da345c drivers/base/power/opp.c      Viresh Kumar        2014-11-25  1949  
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1950  /**
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1951   * dev_pm_opp_set_supported_hw() - Set supported platforms
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1952   * @dev: Device for which supported-hw has to be set.
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1953   * @versions: Array of hierarchy of versions to match.
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1954   * @count: Number of elements in the array.
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1955   *
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1956   * This is required only for the V2 bindings, and it enables a platform to
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1957   * specify the hierarchy of versions it supports. OPP layer will then enable
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1958   * OPPs, which are available for those versions, based on its 'opp-supported-hw'
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1959   * property.
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1960   */
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23 @1961  struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  1962  			const u32 *versions, unsigned int count)
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1963  {
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1964  	struct opp_table *opp_table;
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1965  
+32439ac7535a8e drivers/opp/core.c            Viresh Kumar        2021-01-28  1966  	opp_table = _add_opp_table(dev, false);
+dd461cd9183fe8 drivers/opp/core.c            Stephan Gerhold     2020-07-27  1967  	if (IS_ERR(opp_table))
+dd461cd9183fe8 drivers/opp/core.c            Stephan Gerhold     2020-07-27  1968  		return opp_table;
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1969  
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1970  	/* Make sure there are no concurrent readers while updating opp_table */
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1971  	WARN_ON(!list_empty(&opp_table->opp_list));
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1972  
+25419de1b8dda2 drivers/opp/core.c            Viresh Kumar        2018-05-22  1973  	/* Another CPU that shares the OPP table has set the property ? */
+25419de1b8dda2 drivers/opp/core.c            Viresh Kumar        2018-05-22  1974  	if (opp_table->supported_hw)
+25419de1b8dda2 drivers/opp/core.c            Viresh Kumar        2018-05-22  1975  		return opp_table;
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1976  
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1977  	opp_table->supported_hw = kmemdup(versions, count * sizeof(*versions),
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1978  					GFP_KERNEL);
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1979  	if (!opp_table->supported_hw) {
+25419de1b8dda2 drivers/opp/core.c            Viresh Kumar        2018-05-22  1980  		dev_pm_opp_put_opp_table(opp_table);
+25419de1b8dda2 drivers/opp/core.c            Viresh Kumar        2018-05-22  1981  		return ERR_PTR(-ENOMEM);
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1982  	}
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1983  
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1984  	opp_table->supported_hw_count = count;
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  1985  
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  1986  	return opp_table;
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1987  }
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1988  EXPORT_SYMBOL_GPL(dev_pm_opp_set_supported_hw);
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1989  
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1990  /**
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1991   * dev_pm_opp_put_supported_hw() - Releases resources blocked for supported hw
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  1992   * @opp_table: OPP table returned by dev_pm_opp_set_supported_hw().
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1993   *
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1994   * This is required only for the V2 bindings, and is called for a matching
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  1995   * dev_pm_opp_set_supported_hw(). Until this is called, the opp_table structure
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1996   * will not be freed.
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1997   */
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23 @1998  void dev_pm_opp_put_supported_hw(struct opp_table *opp_table)
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  1999  {
+c7bf8758c955e6 drivers/opp/core.c            Viresh Kumar        2020-11-06  2000  	if (unlikely(!opp_table))
+c7bf8758c955e6 drivers/opp/core.c            Viresh Kumar        2020-11-06  2001  		return;
+c7bf8758c955e6 drivers/opp/core.c            Viresh Kumar        2020-11-06  2002  
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2003  	kfree(opp_table->supported_hw);
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2004  	opp_table->supported_hw = NULL;
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2005  	opp_table->supported_hw_count = 0;
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2006  
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2007  	dev_pm_opp_put_opp_table(opp_table);
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2008  }
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2009  EXPORT_SYMBOL_GPL(dev_pm_opp_put_supported_hw);
+7de36b0aa51a5a drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2010  
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2011  static void devm_pm_opp_supported_hw_release(void *data)
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2012  {
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2013  	dev_pm_opp_put_supported_hw(data);
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2014  }
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2015  
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2016  /**
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2017   * devm_pm_opp_set_supported_hw() - Set supported platforms
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2018   * @dev: Device for which supported-hw has to be set.
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2019   * @versions: Array of hierarchy of versions to match.
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2020   * @count: Number of elements in the array.
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2021   *
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2022   * This is a resource-managed variant of dev_pm_opp_set_supported_hw().
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2023   *
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2024   * Return: 0 on success and errorno otherwise.
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2025   */
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14 @2026  int devm_pm_opp_set_supported_hw(struct device *dev, const u32 *versions,
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2027  				 unsigned int count)
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2028  {
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2029  	struct opp_table *opp_table;
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2030  
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2031  	opp_table = dev_pm_opp_set_supported_hw(dev, versions, count);
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2032  	if (IS_ERR(opp_table))
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2033  		return PTR_ERR(opp_table);
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2034  
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2035  	return devm_add_action_or_reset(dev, devm_pm_opp_supported_hw_release,
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2036  					opp_table);
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2037  }
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2038  EXPORT_SYMBOL_GPL(devm_pm_opp_set_supported_hw);
+9c4f220f3dc260 drivers/opp/core.c            Yangtao Li          2021-03-14  2039  
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2040  /**
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2041   * dev_pm_opp_set_prop_name() - Set prop-extn name
+a5da64477ee79e drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2042   * @dev: Device for which the prop-name has to be set.
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2043   * @name: name to postfix to properties.
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2044   *
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2045   * This is required only for the V2 bindings, and it enables a platform to
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2046   * specify the extn to be used for certain property names. The properties to
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2047   * which the extension will apply are opp-microvolt and opp-microamp. OPP core
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2048   * should postfix the property name with -<name> while looking for them.
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2049   */
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23 @2050  struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name)
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2051  {
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2052  	struct opp_table *opp_table;
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2053  
+32439ac7535a8e drivers/opp/core.c            Viresh Kumar        2021-01-28  2054  	opp_table = _add_opp_table(dev, false);
+dd461cd9183fe8 drivers/opp/core.c            Stephan Gerhold     2020-07-27  2055  	if (IS_ERR(opp_table))
+dd461cd9183fe8 drivers/opp/core.c            Stephan Gerhold     2020-07-27  2056  		return opp_table;
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2057  
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2058  	/* Make sure there are no concurrent readers while updating opp_table */
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2059  	WARN_ON(!list_empty(&opp_table->opp_list));
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2060  
+878ec1a9f0e5a6 drivers/opp/core.c            Viresh Kumar        2018-05-22  2061  	/* Another CPU that shares the OPP table has set the property ? */
+878ec1a9f0e5a6 drivers/opp/core.c            Viresh Kumar        2018-05-22  2062  	if (opp_table->prop_name)
+878ec1a9f0e5a6 drivers/opp/core.c            Viresh Kumar        2018-05-22  2063  		return opp_table;
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2064  
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2065  	opp_table->prop_name = kstrdup(name, GFP_KERNEL);
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2066  	if (!opp_table->prop_name) {
+878ec1a9f0e5a6 drivers/opp/core.c            Viresh Kumar        2018-05-22  2067  		dev_pm_opp_put_opp_table(opp_table);
+878ec1a9f0e5a6 drivers/opp/core.c            Viresh Kumar        2018-05-22  2068  		return ERR_PTR(-ENOMEM);
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2069  	}
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2070  
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2071  	return opp_table;
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2072  }
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2073  EXPORT_SYMBOL_GPL(dev_pm_opp_set_prop_name);
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2074  
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2075  /**
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2076   * dev_pm_opp_put_prop_name() - Releases resources blocked for prop-name
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2077   * @opp_table: OPP table returned by dev_pm_opp_set_prop_name().
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2078   *
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2079   * This is required only for the V2 bindings, and is called for a matching
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2080   * dev_pm_opp_set_prop_name(). Until this is called, the opp_table structure
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2081   * will not be freed.
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2082   */
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23 @2083  void dev_pm_opp_put_prop_name(struct opp_table *opp_table)
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2084  {
+c7bf8758c955e6 drivers/opp/core.c            Viresh Kumar        2020-11-06  2085  	if (unlikely(!opp_table))
+c7bf8758c955e6 drivers/opp/core.c            Viresh Kumar        2020-11-06  2086  		return;
+c7bf8758c955e6 drivers/opp/core.c            Viresh Kumar        2020-11-06  2087  
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2088  	kfree(opp_table->prop_name);
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2089  	opp_table->prop_name = NULL;
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2090  
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2091  	dev_pm_opp_put_opp_table(opp_table);
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2092  }
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2093  EXPORT_SYMBOL_GPL(dev_pm_opp_put_prop_name);
+01fb4d3c39d35b drivers/base/power/opp/core.c Viresh Kumar        2015-12-09  2094  
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2095  /**
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2096   * dev_pm_opp_set_regulators() - Set regulator names for the device
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2097   * @dev: Device for which regulator name is being set.
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2098   * @names: Array of pointers to the names of the regulator.
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2099   * @count: Number of regulators.
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2100   *
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2101   * In order to support OPP switching, OPP layer needs to know the name of the
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2102   * device's regulators, as the core would be required to switch voltages as
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2103   * well.
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2104   *
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2105   * This must be called before any OPPs are initialized for the device.
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2106   */
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01 @2107  struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2108  					    const char * const names[],
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2109  					    unsigned int count)
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2110  {
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2111  	struct dev_pm_opp_supply *supplies;
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2112  	struct opp_table *opp_table;
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2113  	struct regulator *reg;
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2114  	int ret, i;
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2115  
+32439ac7535a8e drivers/opp/core.c            Viresh Kumar        2021-01-28  2116  	opp_table = _add_opp_table(dev, false);
+dd461cd9183fe8 drivers/opp/core.c            Stephan Gerhold     2020-07-27  2117  	if (IS_ERR(opp_table))
+dd461cd9183fe8 drivers/opp/core.c            Stephan Gerhold     2020-07-27  2118  		return opp_table;
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2119  
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2120  	/* This should be called before OPPs are initialized */
+2c2709dc6921c5 drivers/base/power/opp/core.c Viresh Kumar        2016-02-16  2121  	if (WARN_ON(!list_empty(&opp_table->opp_list))) {
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2122  		ret = -EBUSY;
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2123  		goto err;
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2124  	}
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2125  
+779b783cfaa726 drivers/opp/core.c            Viresh Kumar        2018-05-22  2126  	/* Another CPU that shares the OPP table has set the regulators ? */
+779b783cfaa726 drivers/opp/core.c            Viresh Kumar        2018-05-22  2127  	if (opp_table->regulators)
+779b783cfaa726 drivers/opp/core.c            Viresh Kumar        2018-05-22  2128  		return opp_table;
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2129  
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2130  	opp_table->regulators = kmalloc_array(count,
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2131  					      sizeof(*opp_table->regulators),
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2132  					      GFP_KERNEL);
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2133  	if (!opp_table->regulators) {
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2134  		ret = -ENOMEM;
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2135  		goto err;
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2136  	}
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2137  
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2138  	for (i = 0; i < count; i++) {
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2139  		reg = regulator_get_optional(dev, names[i]);
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2140  		if (IS_ERR(reg)) {
+543256d239b415 drivers/opp/core.c            Krzysztof Kozlowski 2022-04-08  2141  			ret = dev_err_probe(dev, PTR_ERR(reg),
+543256d239b415 drivers/opp/core.c            Krzysztof Kozlowski 2022-04-08  2142  					    "%s: no regulator (%s) found\n",
+543256d239b415 drivers/opp/core.c            Krzysztof Kozlowski 2022-04-08  2143  					    __func__, names[i]);
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2144  			goto free_regulators;
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2145  		}
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2146  
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2147  		opp_table->regulators[i] = reg;
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2148  	}
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2149  
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2150  	opp_table->regulator_count = count;
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2151  
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2152  	supplies = kmalloc_array(count * 2, sizeof(*supplies), GFP_KERNEL);
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2153  	if (!supplies) {
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2154  		ret = -ENOMEM;
+947355850fcb3b drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2155  		goto free_regulators;
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2156  	}
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2157  
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2158  	mutex_lock(&opp_table->lock);
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2159  	opp_table->sod_supplies = supplies;
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2160  	if (opp_table->set_opp_data) {
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2161  		opp_table->set_opp_data->old_opp.supplies = supplies;
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2162  		opp_table->set_opp_data->new_opp.supplies = supplies + count;
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2163  	}
+38bb34393804b7 drivers/opp/core.c            Viresh Kumar        2021-01-19  2164  	mutex_unlock(&opp_table->lock);
+947355850fcb3b drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2165  
+91291d9ad92faa drivers/base/power/opp/core.c Stephen Boyd        2016-11-30  2166  	return opp_table;
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2167  
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2168  free_regulators:
+24957db1004353 drivers/opp/core.c            Marek Szyprowski    2019-10-17  2169  	while (i != 0)
+24957db1004353 drivers/opp/core.c            Marek Szyprowski    2019-10-17  2170  		regulator_put(opp_table->regulators[--i]);
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2171  
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2172  	kfree(opp_table->regulators);
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2173  	opp_table->regulators = NULL;
+46f48aca2e5aef drivers/opp/core.c            Viresh Kumar        2018-12-11  2174  	opp_table->regulator_count = -1;
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2175  err:
+fa30184d192ec7 drivers/base/power/opp/core.c Viresh Kumar        2017-01-23  2176  	dev_pm_opp_put_opp_table(opp_table);
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2177  
+91291d9ad92faa drivers/base/power/opp/core.c Stephen Boyd        2016-11-30  2178  	return ERR_PTR(ret);
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2179  }
+dfbe4678d709e2 drivers/base/power/opp/core.c Viresh Kumar        2016-12-01  2180  EXPORT_SYMBOL_GPL(dev_pm_opp_set_regulators);
+9f8ea969d5cfdd drivers/base/power/opp/core.c Viresh Kumar        2016-02-09  2181  
+
+:::::: The code at line 1961 was first introduced by commit
+:::::: fa30184d192ec78d443cf6d3abc37d9eb3b9253e PM / OPP: Return opp_table from dev_pm_opp_set_*() routines
+
+:::::: TO: Viresh Kumar <viresh.kumar@linaro.org>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

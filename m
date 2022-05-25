@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250575336F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 08:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D8C5336F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 08:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244253AbiEYGvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 02:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
+        id S242272AbiEYGyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 02:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243504AbiEYGve (ORCPT
+        with ESMTP id S230231AbiEYGyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 02:51:34 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B476252A6;
-        Tue, 24 May 2022 23:51:33 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id f2so28752790wrc.0;
-        Tue, 24 May 2022 23:51:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qIXc7ckxpaycTNNbZsrqsqmLIc4KjcKf1nyaCXgDayU=;
-        b=uL12SN4RH3iInFIny8QWfzSS2oI2DLQt15tNAqna5tkEyTJgJbWPi8ubPUABYk0aWQ
-         6UYA+HdNGhXrf3m00xvfuUlkLtSJxjy7/9jUo9ITcsjZpUbYnShI6w+4tee/Wvb707Vj
-         Kf855Wgqc2wpEzewM7slRBOWgzuYN7Z5gVnk1a4wctPGMMDCWf2tCkP930X4hFFvUF3B
-         aL70Dzbqq0fmly+53gEIRUd+2cYE+BUhH1YVpiH3gVxHQ1jNw+PpchuFA7zsRV08v8GO
-         SRBYhfiCELdHPMdWbdQkqrExixY3yMD+o45ja//6TTQ870XL69B8wATsVM+Cahts8l6Y
-         tdQQ==
-X-Gm-Message-State: AOAM531RHl/bDF4I3knEP+7Gu3NsGCjIZ8vbnc2Gch5jeKAgcDtinylI
-        VPlBtkI5K1eIFR8x/NNKhNMRbqU0C6KVjw==
-X-Google-Smtp-Source: ABdhPJzjgBw8F3g0LVeI/WFTG/JhCJXju5CTp4OT98sW0FAjmZZeiN2PfdDBVCtCtRFQm0oaJnvsew==
-X-Received: by 2002:a05:6000:1861:b0:20f:c91e:bd3b with SMTP id d1-20020a056000186100b0020fc91ebd3bmr15504720wri.705.1653461491247;
-        Tue, 24 May 2022 23:51:31 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id l8-20020a05600002a800b0020cd8f1d25csm1471671wry.8.2022.05.24.23.51.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 23:51:30 -0700 (PDT)
-Message-ID: <b5c0a68d-8387-4909-beea-f70ab9e6e3d5@kernel.org>
-Date:   Wed, 25 May 2022 08:51:29 +0200
+        Wed, 25 May 2022 02:54:49 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1A9762B9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 23:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653461689; x=1684997689;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sNRmLVGfzRJNMK+s8x7hza8MpzNbvyFls3N2bzF/zAI=;
+  b=NmvZZ0QYBnH7mvZLXOyGvDMlOl90aNvO1g5kVH4OiYcVrK7V5nfiSBst
+   fcT9KjsYozP43qUiRd3ggFaY7WmH4HG6XyOY1DgTGS2B8tUbHYtve2NKn
+   S1RMPiocy5KuilGILvcLEInGspiWDhYfCsxsC5szDRH2S1/r5gJmUu95L
+   +6TS1SN18V3WrTYuPfpR+IMqqRl/Cg1g/GZtDHqeQ5J3/t3M9pcYkAq58
+   KButFX6OMrU/o90qirpBOl6aZSx7Mv0NL3kUlqWN/en4W6bmqNdHPkHL7
+   n+tpXTuFOaYN2I0NwQoJ0kgu1uDjwzTt51AKf7yN3gGhKiFvMFfEKtRix
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="272552965"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="272552965"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 23:54:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="608999662"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 24 May 2022 23:54:46 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntkur-0002pC-P9;
+        Wed, 25 May 2022 06:54:45 +0000
+Date:   Wed, 25 May 2022 14:54:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Janne Grunau <j@jannau.net>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/090-spi-hid 11/11]
+ drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
+ prototype for function 'spihid_get_data'
+Message-ID: <202205251434.YLWM26fA-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 1/2] linux/types.h: Remove unnecessary __bitwise__
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220315153048.621328-1-helgaas@kernel.org>
- <20220315153048.621328-2-helgaas@kernel.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220315153048.621328-2-helgaas@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15. 03. 22, 16:30, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> There are no users of "__bitwise__" except the definition of "__bitwise".
-> Remove __bitwise__ and define __bitwise directly.
-> 
-> This is a follow-up to 05de97003c77 ("linux/types.h: enable endian checks
-> for all sparse builds").
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Michael S. Tsirkin <mst@redhat.com>
-> ---
->   include/uapi/linux/types.h  | 5 ++---
->   tools/include/linux/types.h | 5 ++---
->   2 files changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
-> index f6d2f83cbe29..71696f424ac8 100644
-> --- a/include/uapi/linux/types.h
-> +++ b/include/uapi/linux/types.h
-> @@ -20,11 +20,10 @@
->    */
->   
->   #ifdef __CHECKER__
-> -#define __bitwise__ __attribute__((bitwise))
-> +#define __bitwise	__attribute__((bitwise))
->   #else
-> -#define __bitwise__
-> +#define __bitwise
->   #endif
-> -#define __bitwise __bitwise__
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   42af7072aa3351c9a5716b754babb8ded16874ab
+commit: 42af7072aa3351c9a5716b754babb8ded16874ab [11/11] WIP: HID: transport: spi: add Apple SPI transport
+config: arm64-buildonly-randconfig-r005-20220524 (https://download.01.org/0day-ci/archive/20220525/202205251434.YLWM26fA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/42af7072aa3351c9a5716b754babb8ded16874ab
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout 42af7072aa3351c9a5716b754babb8ded16874ab
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hid/spi-hid/
 
-Hi,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-this broke userspace, like open-iscsi:
-> [   34s] In file included from session_info.h:9,
-> [   34s]                  from iscsi_util.c:38:
-> [   34s] ../include/iscsi_proto.h:66:30: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'itt_t'
-> [   34s]    66 | typedef uint32_t __bitwise__ itt_t;
-> [   34s]       |                              ^~~~~
+All warnings (new ones prefixed by >>):
 
-It looks like we need __bitwise__ back.
+>> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for function 'spihid_get_data' [-Wmissing-prototypes]
+   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+                        ^
+   drivers/hid/spi-hid/spi-hid-apple-core.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+   ^
+   static 
+   drivers/hid/spi-hid/spi-hid-apple-core.c:56:17: warning: variable 'spi_hid_apple_status_ok' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+   static const u8 spi_hid_apple_status_ok[4] = { 0xac, 0x27, 0x68, 0xd5 };
+                   ^
+   2 warnings generated.
+--
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for function 'spihid_apple_of_power_on' [-Wmissing-prototypes]
+   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:24:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for function 'spihid_apple_of_power_off' [-Wmissing-prototypes]
+   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for function 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
+   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:50:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
+   ^
+   static 
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for function 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
+   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
+       ^
+   drivers/hid/spi-hid/spi-hid-apple-of.c:59:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
+   ^
+   static 
+   4 warnings generated.
 
-thanks,
+
+vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
+
+   258	
+ > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+   260	{
+   261		switch (idev->id) {
+   262		case SPIHID_DEVICE_ID_KBD:
+   263			return container_of(idev, struct spihid_apple, kbd);
+   264		case SPIHID_DEVICE_ID_TP:
+   265			return container_of(idev, struct spihid_apple, tp);
+   266		default:
+   267			return NULL;
+   268		}
+   269	}
+   270	
+
 -- 
-js
-suse labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp

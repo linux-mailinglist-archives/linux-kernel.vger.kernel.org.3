@@ -2,99 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBFE533A7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52FC533A83
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbiEYKOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 06:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
+        id S232358AbiEYKSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 06:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiEYKOt (ORCPT
+        with ESMTP id S238650AbiEYKSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 06:14:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D79B266A
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:14:47 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24P80eDK015713;
-        Wed, 25 May 2022 10:14:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=phHYpa7z0BJmLquNvAIYPBXZ3dFQoL0/vc58WbYCBWg=;
- b=XzrdeWWalNi3I1kkJERLU8Uu2HHOHd9yTo9XVPU6JcXktd+g4VaM5C2pZeYSVsZ1zocO
- BD4fAQueJfj+urdVVXyvQssMpoqQkwatQJeZ8fX5qE2AbPw8VfrRpJF33OXsbAdcw6/y
- CQoqpH+ei+tnJX/jEFBBEjGCLGah4jq1aVIkP0I7fOyCkkx+BVd1AoIiIWrRbQE4vzRZ
- W217y2+dZmYTFtcz8tmkm8J8SKK0fsLX7+RynAuLZmJwKJhArxG71w9AkIKXAHvimAHE
- NXCqoLB9vSxS6vwaFbOgLLmFqtGWMKTVzY79TJBLrCfYB26XY7gqoJ7uU8E23BDRgwkS 3w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9gjsjeau-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 10:14:15 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24PA6lE1020855;
-        Wed, 25 May 2022 10:14:15 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9gjsjea1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 10:14:15 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24PA8Nco018242;
-        Wed, 25 May 2022 10:14:12 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3g93ux0yds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 10:14:12 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24PAE9po17891596
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 May 2022 10:14:10 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8A5E4C05E;
-        Wed, 25 May 2022 10:14:09 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8CC94C04E;
-        Wed, 25 May 2022 10:14:05 +0000 (GMT)
-Received: from [9.43.54.165] (unknown [9.43.54.165])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 25 May 2022 10:14:05 +0000 (GMT)
-Message-ID: <ac4e3ceb-7de8-2c3f-4689-1730d811bf3d@linux.vnet.ibm.com>
-Date:   Wed, 25 May 2022 15:44:04 +0530
+        Wed, 25 May 2022 06:18:04 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF16F95A21
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:18:01 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id s3so26382967edr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CWcbS5L85/mEeW1mF6bU3WMw7UT8O3cm3JT79L0gTxk=;
+        b=v4BbHDiSDvL5R73FWR5xbtJy6LNxqmlEePT1FtrfGJ6UkSFioQszcA8rOIeRxf6iHL
+         0+BN0eR8A3ge/2dyAKxSIiwOOmWmxKixLr7vIcI4r97yybZLeJzbp2dfYgZ204c2idzK
+         rmC9K9er1G3Cl5FEEMABQXaepeopRG/evCzlzWUAieWV+DXmRv4sDU5hU3nnp1g7Mpb6
+         He5z/JQV4zJT2NOYtfE1pzQG/7lfdOxPHCrKBk+p/cAqGl3rKL871evgBEGfRGPN3hm2
+         jbV5O54mDau6gzvomfvJpi5gqd2jHaKo03uVpZWZKJuwBOkAUqEhaKHAMCBI/S931Rfj
+         iHig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CWcbS5L85/mEeW1mF6bU3WMw7UT8O3cm3JT79L0gTxk=;
+        b=Xq3+oexTIcd8tUZuqahOrbX7b2kPk077Dn5dC3q6NdED+r/qKf2fxUZFlBhe3DxQLS
+         1PWZl8lulgFax6g9d9SuvoXxOAib2zAgww16hllXv+ZD5WGh06Y1gNhK5UfPNwJTg7B2
+         stU3GKxqgpoga96no62t/ieWyQjPgU9DQVxkCnqT/Bhtnbo2Nvka5TvD7KwF3+xRIlWw
+         O6bkJp2q5WQSnwzND5sDGXJc5rZhSF7FXrYw2MzkguCuD2mUevvPXtWKY53E/3KHK2v4
+         gtOc0+6TaTDPfpqfUyQNX+YaU8bqcA9LvqVidxw7gPTW0IQ2otJfbcFtmL0uorLNgwGl
+         RfWw==
+X-Gm-Message-State: AOAM532L9L9mXDaCYpbK+5CmyeQV/OQh2cZvfcULslqMH4MxTk+8UPrJ
+        wdQWNoo2kzaioO+bDjU5q3u7QA==
+X-Google-Smtp-Source: ABdhPJx71HmX/6m5vDdLrQDBd2fZlBrC5klCkXUMKj3Wv/QHDoe7s+eFtf3w61AtpymFBwhn8Fk1Ew==
+X-Received: by 2002:a05:6402:2996:b0:42b:49a:6d24 with SMTP id eq22-20020a056402299600b0042b049a6d24mr30849124edb.145.1653473880217;
+        Wed, 25 May 2022 03:18:00 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:2c21:b442:2fc3:f06f? ([2a02:578:8593:1200:2c21:b442:2fc3:f06f])
+        by smtp.gmail.com with ESMTPSA id y20-20020aa7c254000000b0042ac4089dabsm10334757edo.17.2022.05.25.03.17.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 03:17:59 -0700 (PDT)
+Message-ID: <6207feca-1cd2-be15-e1cf-0ae2ff680b48@tessares.net>
+Date:   Wed, 25 May 2022 12:17:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v2 0/7] objtool: Enable and implement --mcount option
- on powerpc
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>, mbenes@suse.cz,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>, jpoimboe@redhat.com,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <cover.1653398233.git.christophe.leroy@csgroup.eu>
-From:   Sathvika Vasireddy <sv@linux.vnet.ibm.com>
-In-Reply-To: <cover.1653398233.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5XU3ainFsN7w3iSnDAL1z2VB6UmHGCx1
-X-Proofpoint-ORIG-GUID: sLQKkSmvHZNtew25n-df0W8frbzAKxOM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-25_03,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=961 impostorscore=0 malwarescore=0 phishscore=0 spamscore=0
- bulkscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205250046
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 5.17 114/158] mptcp: strict local address ID selection
+Content-Language: en-GB
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+References: <20220523165830.581652127@linuxfoundation.org>
+ <20220523165849.851212488@linuxfoundation.org>
+ <fa953ec-288f-7715-c6fb-47a222e85270@linux.intel.com>
+ <Yo3gAprjnapHfKar@kroah.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <Yo3gAprjnapHfKar@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,42 +80,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+Hi Greg, Mat,
 
-On 24/05/22 18:47, Christophe Leroy wrote:
-> This draft series adds PPC32 support to Sathvika's series.
-> Verified on pmac32 on QEMU.
->
-> It should in principle also work for PPC64 BE but for the time being
-> something goes wrong. In the beginning I had a segfaut hence the first
-> patch. But I still get no mcount section in the files.
-Since PPC64 BE uses older elfv1 ABI, it prepends a dot to symbols.
-And so, the relocation records in case of PPC64BE point to "._mcount",
-rather than just "_mcount". We should be looking for "._mcount" to be
-able to generate mcount_loc section in the files.
+On 25/05/2022 09:51, Greg Kroah-Hartman wrote:
+> On Mon, May 23, 2022 at 08:51:52PM -0700, Mat Martineau wrote:
+>> On Mon, 23 May 2022, Greg Kroah-Hartman wrote:
+>>
+>>> From: Paolo Abeni <pabeni@redhat.com>
+>>>
+>>> [ Upstream commit 4cf86ae84c718333928fd2d43168a1e359a28329 ]
+>>>
+>>> The address ID selection for MPJ subflows created in response
+>>> to incoming ADD_ADDR option is currently unreliable: it happens
+>>> at MPJ socket creation time, when the local address could be
+>>> unknown.
+>>>
+>>> Additionally, if the no local endpoint is available for the local
+>>> address, a new dummy endpoint is created, confusing the user-land.
+>>>
+>>> This change refactor the code to move the address ID selection inside
+>>> the rebuild_header() helper, when the local address eventually
+>>> selected by the route lookup is finally known. If the address used
+>>> is not mapped by any endpoint - and thus can't be advertised/removed
+>>> pick the id 0 instead of allocate a new endpoint.
+>>>
+>>> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+>>> Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+>>> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>>> ---
+>>> net/mptcp/pm_netlink.c | 13 --------
+>>> net/mptcp/protocol.c   |  3 ++
+>>> net/mptcp/protocol.h   |  3 +-
+>>> net/mptcp/subflow.c    | 67 ++++++++++++++++++++++++++++++++++++------
+>>> 4 files changed, 63 insertions(+), 23 deletions(-)
+>>>
+>>
+>> Greg, Sasha -
+>>
+>> Is it possible to drop this one patch? It makes one of the mptcp selftests
+>> fail (mptcp_join.sh, "single address, backup").
+> 
+> Does that mean the backport is incorrect, or that the selftest is wrong?
 
-Like:
+The backport is correct but the commit that is backported here was part
+of a series that was changing the behaviour. This modification is
+visible in the selftests.
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 70be5a72e838..7da5bf8c7236 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2185,7 +2185,7 @@ static int classify_symbols(struct objtool_file *file)
-                         if (arch_is_retpoline(func))
-                                 func->retpoline_thunk = true;
+If I'm not mistaken, we would need these two commits to fix the
+regression in the selftests:
 
--                       if ((!strcmp(func->name, "__fentry__")) || 
-(!strcmp(func->name, "_mcount")))
-+                       if ((!strcmp(func->name, "__fentry__")) || 
-(!strcmp(func->name, "_mcount")) || (!strcmp(func->name, "._mcount")))
-                                 func->fentry = true;
+  69c6ce7b6eca selftests: mptcp: add implicit endpoint test case
 
-                         if (is_profiling_func(func->name))
+  d045b9eb95a9 mptcp: introduce implicit endpoints
 
 
-With this change, I could see __mcount_loc section being
-generated in individual ppc64be object files.
+But we don't want to change the behaviour in stable and it is better to
+drop this patch ("mptcp: strict local address ID selection"), it is not
+needed for stable from what I see.
 
-- Sathvika
-
-
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net

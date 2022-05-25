@@ -2,132 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2094D533D66
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A25533D6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243968AbiEYNMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
+        id S238671AbiEYNMw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 25 May 2022 09:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbiEYNMJ (ORCPT
+        with ESMTP id S231377AbiEYNMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:12:09 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9911B6B
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:12:07 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id q20so7107490qtw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DRlg5c8ylNh5PSHKrNNBpxR43/W9/VLsRV/iCMocZ0U=;
-        b=Ux3JSCmqOoRojgkP0EYey8DO/n8s1DJL5kHW/U7IfULdVVqH2vJJ0mIqHlNtL3mBs/
-         tkIdUp7KLMi8YuXqNZ+h/sL/ESRmtB668iX86lI9dKtr9hydQ4ovURIpNcAJw13pjMrD
-         7iua/1Xlnr53dQwAHKj7yjC9SRe5AeHWJ5VS9/lAI5tNALHL5hloyJ68HC+ulVjvj5xz
-         ra1bXZaxJzmGrxT+M9zmNS7YuGqo+6IV0JcuuirEulHL6Wm3gJpblkVucPbJ+r3opOjK
-         e63qd2PK0MRfDoCruUgqDb8+b8SIPr70j1gGo/LzjYC9HeQouVaR0FpmqNGXE9x6Dgr6
-         vEXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DRlg5c8ylNh5PSHKrNNBpxR43/W9/VLsRV/iCMocZ0U=;
-        b=10l5gFJWTXX/EQy+wq2f1RYPuURntbJBLPVSVe+7lfAZZuo2GxpVXZEdSajbSrg8zz
-         zO0v1TfFRuxVUjToTq0EA134ZhFAEahbgoVHpmBtjhB9kn6Vgvu194Y+6O/pHYgRG+HQ
-         tFRsdwZsboAiPG1+gBXgJX4TgwTeZllH7iWc3hdG5CNjdvLHIOBaZU8XjjcNPafiCXRa
-         Q/H/SdVl6C+UOumtMSbEOMjqU05lyTecBcZAEglJiOk1JScjXGCLdCs4ocTMXOfDWBjI
-         8KdIK6FeRO7NBxGgeh7ZNFb2AS95flNiveCZ0ftP9qzC7BPVB6cOAgmo4qkk7RZoYbGC
-         P/aA==
-X-Gm-Message-State: AOAM530atqrMQmdIzPITb0+z43a4H7z1fN39pMEtI3jDUe4BKHW7vEDl
-        u5sA/WNC2WJ/1xYKks7WZxsh2y3GBTjAZQ==
-X-Google-Smtp-Source: ABdhPJwHuJEO5WEgjEkEkOz/ET7ou1QmBPjdjVacMERfxgWwoIwkd2WANDeV4Hn3VSfBPl+0e+VfRQ==
-X-Received: by 2002:a05:622a:1484:b0:2f3:c837:57a6 with SMTP id t4-20020a05622a148400b002f3c83757a6mr24561524qtx.460.1653484326780;
-        Wed, 25 May 2022 06:12:06 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::1:741f])
-        by smtp.gmail.com with ESMTPSA id s12-20020a05620a030c00b006a36dedb53bsm1197381qkm.45.2022.05.25.06.12.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:12:06 -0700 (PDT)
-Date:   Wed, 25 May 2022 09:12:05 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        Michel Lespinasse <walken.cr@gmail.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: Memory allocation on speculative fastpaths
-Message-ID: <Yo4rJetyMEWqzIho@cmpxchg.org>
-References: <20220503155913.GA1187610@paulmck-ThinkPad-P17-Gen-1>
- <YnFSfc8BR8CadOtw@dhcp22.suse.cz>
- <20220503163905.GM1790663@paulmck-ThinkPad-P17-Gen-1>
- <YnF0RyBaBSC1mdKo@casper.infradead.org>
- <CAJuCfpG8mBCV8O=FWwTJj8zfoh68fH9kBraMEjxKUvCyEw2MFw@mail.gmail.com>
- <YnKocgiWrupyFki3@cmpxchg.org>
- <1a0a859b-1f25-5136-bb86-9efe68aabbb8@suse.cz>
+        Wed, 25 May 2022 09:12:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4157C5FEA;
+        Wed, 25 May 2022 06:12:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0C1F1FB;
+        Wed, 25 May 2022 06:12:43 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 875D73F66F;
+        Wed, 25 May 2022 06:12:42 -0700 (PDT)
+Date:   Wed, 25 May 2022 14:12:39 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Cc:     yoan.picchi@arm.com, ardb@kernel.org, davem@davemloft.net,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, qat-linux@intel.com
+Subject: Re: [RFC PATCH 2/2] Removes the x86 dependency on the QAT drivers
+Message-ID: <20220525141239.48589f25@donnerap.cambridge.arm.com>
+In-Reply-To: <YoyOg/kYGtO+nQac@silpixa00400314>
+References: <CAMj1kXGAiA-SkTFD5EgcacYao0RKT7oK0AxvxkR7Ho_KZSGXCw@mail.gmail.com>
+        <8f6d8d1f-2872-15b9-d38b-1e8eb26f781b@foss.arm.com>
+        <YoyOg/kYGtO+nQac@silpixa00400314>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a0a859b-1f25-5136-bb86-9efe68aabbb8@suse.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 10:37:15PM +0200, Vlastimil Babka wrote:
-> On 5/4/22 18:23, Johannes Weiner wrote:
-> > On Tue, May 03, 2022 at 04:15:46PM -0700, Suren Baghdasaryan wrote:
-> >> On Tue, May 3, 2022 at 11:28 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >>>
-> >>> On Tue, May 03, 2022 at 09:39:05AM -0700, Paul E. McKenney wrote:
-> >>>> On Tue, May 03, 2022 at 06:04:13PM +0200, Michal Hocko wrote:
-> >>>>> On Tue 03-05-22 08:59:13, Paul E. McKenney wrote:
-> >>>>>> Hello!
-> >>>>>>
-> >>>>>> Just following up from off-list discussions yesterday.
-> >>>>>>
-> >>>>>> The requirements to allocate on an RCU-protected speculative fastpath
-> >>>>>> seem to be as follows:
-> >>>>>>
-> >>>>>> 1.        Never sleep.
-> >>>>>> 2.        Never reclaim.
-> >>>>>> 3.        Leave emergency pools alone.
-> >>>>>>
-> >>>>>> Any others?
-> >>>>>>
-> >>>>>> If those rules suffice, and if my understanding of the GFP flags is
-> >>>>>> correct (ha!!!), then the following GFP flags should cover this:
-> >>>>>>
-> >>>>>>   __GFP_NOMEMALLOC | __GFP_NOWARN
-> >>>>>
-> >>>>> GFP_NOWAIT | __GFP_NOMEMALLOC | __GFP_NOWARN
-> >>>>
-> >>>> Ah, good point on GFP_NOWAIT, thank you!
-> >>>
-> >>> Johannes (I think it was?) made the point to me that if we have another
-> >>> task very slowly freeing memory, a task in this path can take advantage
-> >>> of that other task's hard work and never go into reclaim.  So the
-> >>> approach we should take is:
+On Tue, 24 May 2022 08:51:31 +0100
+Giovanni Cabiddu <giovanni.cabiddu@intel.com> wrote:
+
+Hi,
+
+> On Wed, May 18, 2022 at 02:00:40PM +0100, Yoan Picchi wrote:
+> > >> From: Yoan Picchi <yoan.picchi@arm.com>
+> > >>
+> > >> The QAT acceleration card can be very helpfull for some tasks like
+> > >> dealing with IPSEC but it is currently restricted to be used only on x86  
+> > machine.  
+> > >> Looking at the code we didn't see any reasons why those drivers might
+> > >> not work on other architectures. We've successfully built all of them
+> > >> on x86, arm64, arm32, mips64, powerpc64, riscv64 and sparc64.
+> > >>
+> > >> We also have tested the driver with an Intel Corporation C62x Chipset
+> > >> QuickAssist Technology (rev 04) PCIe card on an arm64 server. After
+> > >> the numa patch, it works with the AF_ALG crypto userland interface,
+> > >> allowing us to encrypt some data with cbc for instance. We've also
+> > >> successfully created some VF, bound them to DPDK, and used the card
+> > >> this way, thus showing some real life usecases of x86 do work on arm64  
+> > too.  
+> > >>
+> > >> Please let us know if we missed something that would warrants some
+> > >> further testing.  
+> > >Thanks Yoan.
+> > >
+> > >Can you please confirm that you tested the driver on the platform you  
+> > reported using a kernel with CONFIG_CRYPTO_MANAGER_DISABLE_TESTS not set and
+> > CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y and the self test >is passing?  
+> > >You can check it by running
+> > >ï¿½ï¿½ï¿½ $ cat /proc/crypto | grep -B 4 passed | grep -e "qat_\|qat-" | sort  
+> > This should report:  
+> > >ï¿½ï¿½ï¿½ driverï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : qat_aes_cbc
+> > >ï¿½ï¿½ï¿½ driverï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : qat_aes_cbc_hmac_sha1
+> > >ï¿½ï¿½ï¿½ driverï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : qat_aes_cbc_hmac_sha256
+> > >ï¿½ï¿½ï¿½ driverï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : qat_aes_cbc_hmac_sha512
+> > >ï¿½ï¿½ï¿½ driverï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : qat_aes_ctr
+> > >ï¿½ï¿½ï¿½ driverï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : qat_aes_xts
+> > >ï¿½ï¿½ï¿½ driverï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : qat-dh
+> > >ï¿½ï¿½ï¿½ driverï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : qat-rsa
+> > >
+> > >Note that if you are using the HEAD of cryptodev-2.6 you will have to  
+> > either revert 8893d27ffcaf6ec6267038a177cb87bcde4dd3de or apply  
+> > >https://patchwork.kernel.org/project/linux-crypto/list/?series=639755 as  
+> > the algorithms have been temporarily disabled.  
+> > >
+> > >Regards,
+> > >
+> > >--
+> > >Giovanni  
 > > 
-> > Right, GFP_NOWAIT can starve out other allocations. It can clear out
-> > the freelists without the burden of having to do reclaim like
-> > everybody else wanting memory during a shortage. Including GFP_KERNEL.
+> > Hi Giovanni.
+> > 
+> > Thanks for the instructions, I did not know of this test.
+> > I rebuilt my kernel on arm64 with those parameter and I confirm I get the
+> > same output with
+> > $ cat /proc/crypto | grep -B 4 passed | grep -e "qat_\|qat-" | sort  
+> Thats great. Thanks.
 > 
-> FTR, I wonder if this is really true, given the suggested fallback.
+> Is the platform where you ran the tests little or big endian?
 
-                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+It's definitely little endian.
+The cores in there can be switched between LE and BE, but I think
+realistically no one ever runs a BE configuration. Compiling the kernel
+for BE is rather straight-forward, but I wouldn't know of any serious
+userland to run with it (short of a self-compiled busybox or buildroot).
 
-IIRC adding this fallback was the conclusion of the in-person
-discussion. Above I just tried to summarize for the record the
-original concern that led to it. I could have been more clear.
+> If little endian, can you re-test on a big endian system?
 
-Your analysis is dead on, of course.
+So you can just compile a kernel with CONFIG_CPU_BIG_ENDIAN=y, but you
+cannot boot it easily, since CONFIG_EFI depends on !CPU_BIG_ENDIAN,
+and UEFI is the only way to boot that (server) machine.
+So kexec and a KVM guest are the other options. Kexec has the disadvantage of
+requiring a DT (because ACPI is also incompatible with BE), and for KVM we
+would need to check whether this actually works, since BE guests are much
+less tested, plus the device pass-through imposing more challenges.
+
+So testing this in BE is a bit more involved, and the practicality of such
+a setup is very questionable. If you are concerned, should we just say:
+	depends on PCI && !CPU_BIG_ENDIAN
+At least until we have reports that confirm proper BE operation?
+
+Cheers,
+Andre

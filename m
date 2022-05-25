@@ -2,99 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54B3533F8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1538533FA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235225AbiEYOvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S244805AbiEYO41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbiEYOvC (ORCPT
+        with ESMTP id S241939AbiEYO4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 10:51:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A556CF41
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653490262; x=1685026262;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=SPVKY5jn4vOqp7Zp0zGdbKJTsQST2hT5XGvvO3JQ2ik=;
-  b=WBDMZ0xGXcie/Y2fohSvvMmjPFytoQ2fwzN9XVw6ruGRNQANCzBWe/hD
-   u3oDg0awJigZKc124havW52d3uHsJOEqLoBMNI+vRoTi+SpCQLKcvH989
-   xHhWzFs8HRzleGi5OzGiYmwt3nCkkyegLqMeihd5rN34i27PTMtQED5UL
-   I/y+VZOVPeiMabl4iCTPshg9Noz+o1yvLvquwutAf1WhUGsG+9ysGDQex
-   k4JMXIqNfs1tCNSSwDzFdHWqdciWsr3f94zoi8OdQ7nsV3oxwRCHtfOS3
-   C8Oj0UxJD1DQH1zmuAFD+2yWmP/O3FrfP8MYCbGaNd1Ui6RLZdyHwgiTZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="273557877"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="273557877"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 07:51:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="676894917"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga002.fm.intel.com with ESMTP; 25 May 2022 07:51:00 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 25 May 2022 07:51:00 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 25 May 2022 07:50:59 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Wed, 25 May 2022 07:50:59 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC PATCH 3/3] x86/microcode: Taint and warn on late loading
-Thread-Topic: [RFC PATCH 3/3] x86/microcode: Taint and warn on late loading
-Thread-Index: AQHYb9MymCkCxlrsw0uEltRD6R05Oa0vn7QAgAAKeYCAAAHSoA==
-Date:   Wed, 25 May 2022 14:50:59 +0000
-Message-ID: <4644ff0530ba40948ed1f0e2e45a24d8@intel.com>
-References: <20220524185324.28395-1-bp@alien8.de>
- <20220524185324.28395-4-bp@alien8.de>
- <Yo2ASBAElqrQvzh3@agluck-desk3.sc.intel.com>
- <20220525065940.GF2578@worktop.programming.kicks-ass.net>
- <Yo3cpb1yZhwhHEga@zn.tnic>
-In-Reply-To: <Yo3cpb1yZhwhHEga@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 25 May 2022 10:56:23 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9461D36171
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:56:21 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id t6so30502070wra.4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:56:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GRmrkmCITQkax/Dx9/Fy9p50J8k27ds4oFcgLc3FeZQ=;
+        b=kvCQ65GYzcvSQpaiM0pwVax/xwd/9jvuxahiPnCLkSIX4BdbI1za5P7bpU9VlQK6ea
+         BA61JlkSTP64rbEh2gh6mQSRNVUuHrRLTGz2EaNf9eCTprzJPKjfk4o2EsOhfyWD3wyW
+         qFiFKPSQeqRTBUcI2uZ2EISBz0swMaw4t5qSQWe8jRRV+/EFhQWglN8/iqhPIZ9kvCbG
+         CMiDsuK8/WE5ZlvxLcVOzJCPeSd0PESvhRpCRawDYukzTVVyIFbTR0/1YVsoeS2v55cT
+         E66jCsl5nrzuTTzJUl2/2Z2JWWTxOgRayefQWFGxIoQgLoZopzRzn/1xE6QNoBPY+ll+
+         RZuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GRmrkmCITQkax/Dx9/Fy9p50J8k27ds4oFcgLc3FeZQ=;
+        b=6V2F4mwhDPaNL2lBouVH+o+uD2NwBGdMT1/dj53BhVQeOdr1j7C2tq/gJ+2gyzbqTg
+         AnnXng6IontXOmPSHrx5xrq+RN2V0ks5mz3N7iWviPTSPVC9zhWEREUe8JYZoeV2Fw97
+         7Og29SEziSR0xwuwjhZZC4aKUM0kAIDAk+elH9Vx1O3E5isdPLL7pKde7mGTTpZqs5VN
+         d7D0mQ9N1f97/9OiHKkZJFZ6tjnUGc47xtKHNHZ1ztsWF3OODMT9BxFB5aHwyqOKou4K
+         1bDak7r2FZFyMlP6kbu9jMC5nUCZZVbTZqfLDhlMm2C/k0b2kfYfc7D4oOK7PawAA6n+
+         YGwA==
+X-Gm-Message-State: AOAM531pNMIT/tZU4RDrrp2rottAEM/84JxxCIajVBrL1jNpwgdPqwol
+        BwB0i4FkVWp0JPNqRBoC8/4MlQy3+jg=
+X-Google-Smtp-Source: ABdhPJzN/+hdpLVh3Tf15FuI+QNff0WX1WTfvz9VDPa84g7vY4sBJBxH+JDHaGZnaFnCPPm7JH02NQ==
+X-Received: by 2002:a5d:5310:0:b0:20f:d075:a386 with SMTP id e16-20020a5d5310000000b0020fd075a386mr15953145wrv.619.1653490580047;
+        Wed, 25 May 2022 07:56:20 -0700 (PDT)
+Received: from localhost.localdomain (93-103-18-160.static.t-2.net. [93.103.18.160])
+        by smtp.gmail.com with ESMTPSA id a19-20020a05600c349300b00397071b10dfsm2168896wmq.10.2022.05.25.07.56.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 07:56:19 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>, Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH] iommu/amd: Use try_cmpxchg64 in alloc_pte and free_clear_pte
+Date:   Wed, 25 May 2022 16:54:16 +0200
+Message-Id: <20220525145416.10816-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pj4gVGhlbiB1c2UgZWFybHkgbG9hZGluZy4gVGhlcmUncyB0b28gbWFueSBmYWlscyBhc3NvY2lh
-dGVkIHdpdGggbGF0ZQ0KPj4gbG9hZGluZy4NCj4NCj4gWWVzLCBzaG9ydCBvZg0KPg0KPiBUQUlO
-VF9ZT1VfRElEX1NPTUVUSElOR19EQU5HRVJPVVMNCj4NCj4gd2Ugc2ltcGx5IGRvbid0IGhhdmUg
-YSBiZXR0ZXIgdGFpbnQgZmxhZy4NCg0KQXJlIHRhaW50IGZsYWdzIGluIHN1Y2ggc2hvcnQgc3Vw
-cGx5IHRoYXQgeW91IGNvdWxkbid0IGNyZWF0ZSBhIG5ldyBvbmU/DQoNClRoZSBPVVRfT0ZfU1BF
-QyBvbmUgYWxyZWFkeSBzZWVtcyB0byBiZSB1c2VkIGluIHNvbWUgZHViaW91cw0Kd2F5czoNCjEp
-IENvbW1hbmQgbGluZSBhcmd1bWVudCB0byBjbGVhciBhIFg4Nl9GRUFUVVJFUyBiaXQNCjIpIEZv
-cmNpbmcgUEFFDQozKSBXcml0aW5nIHRvIGFuIE1TUiBub3Qgb24gdGhlICJhcHByb3ZlZCIgbGlz
-dA0KDQpBcyB5b3UgYWRkIG1vcmUgd2F5cyB0byBzZXQgdGhpcyB0YWludCBiaXQsIGl0IGJlY29t
-ZXMgbGVzcyB1c2VmdWwNCmZvciBkZWJ1Z2dpbmcgLi4uIHNpbmNlIG5vdyB5b3UgaGF2ZSB0byBk
-aWcgaW50byB3aGljaCBvZiB0aGUgcG9zc2libGUNCmNhc2VzIHNldCB0aGUgYml0IHRvIGRlY2lk
-ZSB3aGV0aGVyIGl0IG1pZ2h0IGhhdmUgY29udHJpYnV0ZWQgdG8gdGhlDQpPT1BTLg0KDQotVG9u
-eQ0KDQoNCg==
+Use try_cmpxchg64 instead of cmpxchg64 (*ptr, old, new) != old in
+alloc_pte and free_clear_pte.  cmpxchg returns success in ZF flag, so this
+change saves a compare after cmpxchg (and related move instruction
+in front of cmpxchg). Also, remove racy explicit assignment to pteval
+when cmpxchg fails, this is what try_cmpxchg does implicitly from
+*pte in an atomic way.
+
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc: Will Deacon <will@kernel.org>
+---
+ drivers/iommu/amd/io_pgtable.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/iommu/amd/io_pgtable.c b/drivers/iommu/amd/io_pgtable.c
+index 6608d1717574..7d4b61e5db47 100644
+--- a/drivers/iommu/amd/io_pgtable.c
++++ b/drivers/iommu/amd/io_pgtable.c
+@@ -258,7 +258,7 @@ static u64 *alloc_pte(struct protection_domain *domain,
+ 			__npte = PM_LEVEL_PDE(level, iommu_virt_to_phys(page));
+ 
+ 			/* pte could have been changed somewhere. */
+-			if (cmpxchg64(pte, __pte, __npte) != __pte)
++			if (!try_cmpxchg64(pte, &__pte, __npte))
+ 				free_page((unsigned long)page);
+ 			else if (IOMMU_PTE_PRESENT(__pte))
+ 				*updated = true;
+@@ -341,10 +341,8 @@ static void free_clear_pte(u64 *pte, u64 pteval, struct list_head *freelist)
+ 	u64 *pt;
+ 	int mode;
+ 
+-	while (cmpxchg64(pte, pteval, 0) != pteval) {
++	while (!try_cmpxchg64(pte, &pteval, 0))
+ 		pr_warn("AMD-Vi: IOMMU pte changed since we read it\n");
+-		pteval = *pte;
+-	}
+ 
+ 	if (!IOMMU_PTE_PRESENT(pteval))
+ 		return;
+-- 
+2.35.3
+

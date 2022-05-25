@@ -2,153 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BF2533CEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F8E533CF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243090AbiEYMs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
+        id S234887AbiEYMtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiEYMs0 (ORCPT
+        with ESMTP id S229806AbiEYMtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:48:26 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C6547B9FF;
-        Wed, 25 May 2022 05:48:22 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id C04011E80D32;
-        Wed, 25 May 2022 20:40:51 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id t5WVp0BhOMH9; Wed, 25 May 2022 20:40:48 +0800 (CST)
-Received: from ubuntu.localdomain (unknown [101.228.248.89])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 9CD571E80CE5;
-        Wed, 25 May 2022 20:40:48 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH] ext4: add KERN_<LEVEL> for printk()
-Date:   Wed, 25 May 2022 05:48:16 -0700
-Message-Id: <20220525124816.86915-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 25 May 2022 08:49:40 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB8290CFD;
+        Wed, 25 May 2022 05:49:38 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id C867D2B04FC8;
+        Wed, 25 May 2022 08:49:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 25 May 2022 08:49:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1653482973; x=1653490173; bh=eaiu7WjY6z
+        D40HP4rAo3IAZYmjjndrOI/2cEvX4csok=; b=hGkmkh40PbgZX9Of7alO0L4nz/
+        u0KAEfygYZOS7i15rXim5Tk4gqj3x9aJAu1rpxD+TqKSS0pfly3qJ8sSHnoQPG9l
+        T3fo+L5vovWHv1OCASPWKVvE/GFJd0anax4y2QI0avPsZIU6RAzXNKzEl7H0qTt1
+        qDnjTXdNW9FhjeRZ8jfx0cvwtL+zvvZdzP9w/oQvWZ9r7PHY35y+R+aylG/Gbzuo
+        s23Amv8bePoFhHfMInYOh+LVLvSocflrg4iXjXiTrrK/RUu1LBOtklRYs+bl7JbT
+        xcKbrksMk+Va2gKioQ77h8Pi0x7GgVNmwNociaPlP9RSr6aiXNrin9fFvKjA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1653482973; x=1653490173; bh=eaiu7WjY6zD40HP4rAo3IAZYmjjn
+        drOI/2cEvX4csok=; b=BTsEsaWhS8WPM0Vt3HLBg0xiiXsVuvwHCHD/mYfULC51
+        OGXa7NACfrD1NIBmkcngXBzPMXfPZQGwp0KZPVBqLzsWQ0wPYGrkgmCmZZ8mNG3s
+        /olq6eMFMzZWAifGO12cYT1zYRt0p89fid+8eR124vldGNWxNKUQh45powm70WQ7
+        1V/xPHBaWa2ZuLoaqw/44Ob9tAxXud4SnCFO5NUWv5EFiDjT2TISnci0bKM3Ec0t
+        OL2yplu3bRCdBrNAaZLoSoBPPNZ4C2EaToPbEVKnAxWf5l2Sv1iGd7EzIEIDYCaH
+        SbqYp6vbHYshtziMUvo9viX/j3uIRsdMoeCeUrfiLQ==
+X-ME-Sender: <xms:2yWOYsmU3-YEvjZlChEY5l23_N3oJCXBeGrMp2qyQOexmoZnrKWkFg>
+    <xme:2yWOYr0LIewrIqOfkQNFBzNn-hjZhAAG6qnODyOZgtWzZpkTWkzalMP9fmnAhueEv
+    AwTPCJ4dMWYRmJgDLc>
+X-ME-Received: <xmr:2yWOYqolOuo-7Chbr7kYEEVwEBKlliGyAD__t980v-zrWO8DBJSOCAg0pJ_mFg5eirtZqdRQ5eA6EGynVdQ2xCO6PYJtv49VmZwH1Vw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeehgdehhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepledvueduvdegleeufeetjeeuvefhieehjedutddtffekleekgeduiefgffdt
+    hffgnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdr
+    thgvtghh
+X-ME-Proxy: <xmx:2yWOYokxNGLf2r_NPjo4tKepz-vx_Ffssh5GsCQzPjefA-MuzJgLhQ>
+    <xmx:2yWOYq3xSWkbJp29jSovxWrqnYvZQeVqneOSQQiJedUMjPJV-uloIA>
+    <xmx:2yWOYvvw_5WfOM0upiSlM8_i2rA2auiZ9kUe7KytAG57ukGC_Agwxw>
+    <xmx:3SWOYonHU7I6BcZLdqlDu5zzUPBBgPp70dvVRO-pcBzItWWo48M9pWTQXV4>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 May 2022 08:49:31 -0400 (EDT)
+Date:   Wed, 25 May 2022 14:49:28 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Guillaume Ranquet <granquet@baylibre.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v10 01/21] dt-bindings: mediatek,dpi: Add DPINTF
+ compatible
+Message-ID: <20220525124928.wtfzpxr6lm7bdc6k@houat>
+References: <20220523104758.29531-1-granquet@baylibre.com>
+ <20220523104758.29531-2-granquet@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="caypywv3zyehybgx"
+Content-Disposition: inline
+In-Reply-To: <20220523104758.29531-2-granquet@baylibre.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-printk() should include KERN_<LEVEL> facility level, add them.
 
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
----
- fs/ext4/inode.c |  2 +-
- fs/ext4/namei.c | 14 +++++++-------
- fs/ext4/super.c |  4 ++--
- 3 files changed, 10 insertions(+), 10 deletions(-)
+--caypywv3zyehybgx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 3dce7d058985..6d6899191779 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -462,7 +462,7 @@ static void ext4_map_blocks_es_recheck(handle_t *handle,
- 	if (es_map->m_lblk != map->m_lblk ||
- 	    es_map->m_flags != map->m_flags ||
- 	    es_map->m_pblk != map->m_pblk) {
--		printk("ES cache assertion failed for inode: %lu "
-+		printk(KERN_WARNING "ES cache assertion failed for inode: %lu "
- 		       "es_cached ex [%d/%d/%llu/%x] != "
- 		       "found ex [%d/%d/%llu/%x] retval %d flags %x\n",
- 		       inode->i_ino, es_map->m_lblk, es_map->m_len,
-diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
-index 47d0ca4c795b..89445661f71d 100644
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -628,7 +628,7 @@ static struct stats dx_show_leaf(struct inode *dir,
- 	char *base = (char *) de;
- 	struct dx_hash_info h = *hinfo;
- 
--	printk("names: ");
-+	printk(KERN_WARNING "names: ");
- 	while ((char *) de < base + size)
- 	{
- 		if (de->inode)
-@@ -648,7 +648,7 @@ static struct stats dx_show_leaf(struct inode *dir,
- 					/* Directory is not encrypted */
- 					ext4fs_dirhash(dir, de->name,
- 						de->name_len, &h);
--					printk("%*.s:(U)%x.%u ", len,
-+					printk(KERN_WARNING "%*.s:(U)%x.%u ", len,
- 					       name, h.hash,
- 					       (unsigned) ((char *) de
- 							   - base));
-@@ -683,7 +683,7 @@ static struct stats dx_show_leaf(struct inode *dir,
- 					else
- 						ext4fs_dirhash(dir, de->name,
- 						       de->name_len, &h);
--					printk("%*.s:(E)%x.%u ", len, name,
-+					printk(KERN_WARNING "%*.s:(E)%x.%u ", len, name,
- 					       h.hash, (unsigned) ((char *) de
- 								   - base));
- 					fscrypt_fname_free_buffer(
-@@ -693,7 +693,7 @@ static struct stats dx_show_leaf(struct inode *dir,
- 				int len = de->name_len;
- 				char *name = de->name;
- 				ext4fs_dirhash(dir, de->name, de->name_len, &h);
--				printk("%*.s:%x.%u ", len, name, h.hash,
-+				printk(KERN_WARNING "%*.s:%x.%u ", len, name, h.hash,
- 				       (unsigned) ((char *) de - base));
- #endif
- 			}
-@@ -713,14 +713,14 @@ struct stats dx_show_entries(struct dx_hash_info *hinfo, struct inode *dir,
- 	unsigned count = dx_get_count(entries), names = 0, space = 0, i;
- 	unsigned bcount = 0;
- 	struct buffer_head *bh;
--	printk("%i indexed blocks...\n", count);
-+	printk(KERN_WARNING "%i indexed blocks...\n", count);
- 	for (i = 0; i < count; i++, entries++)
- 	{
- 		ext4_lblk_t block = dx_get_block(entries);
- 		ext4_lblk_t hash  = i ? dx_get_hash(entries): 0;
- 		u32 range = i < count - 1? (dx_get_hash(entries + 1) - hash): ~hash;
- 		struct stats stats;
--		printk("%s%3u:%03u hash %8x/%8x ",levels?"":"   ", i, block, hash, range);
-+		printk(KERN_WARNING "%s%3u:%03u hash %8x/%8x ",levels?"":"   ", i, block, hash, range);
- 		bh = ext4_bread(NULL,dir, block, 0);
- 		if (!bh || IS_ERR(bh))
- 			continue;
-@@ -855,7 +855,7 @@ dx_probe(struct ext4_filename *fname, struct inode *dir,
- 		goto fail;
- 	}
- 
--	dxtrace(printk("Look up %x", hash));
-+	dxtrace(printk(KERN_WARNING "Look up %x", hash));
- 	level = 0;
- 	blocks[0] = 0;
- 	while (1) {
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 450c918d68fc..f1f0427b55a6 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -941,9 +941,9 @@ void __ext4_msg(struct super_block *sb,
- 	vaf.fmt = fmt;
- 	vaf.va = &args;
- 	if (sb)
--		printk("%sEXT4-fs (%s): %pV\n", prefix, sb->s_id, &vaf);
-+		printk(KERN_WARNING "%sEXT4-fs (%s): %pV\n", prefix, sb->s_id, &vaf);
- 	else
--		printk("%sEXT4-fs: %pV\n", prefix, &vaf);
-+		printk(KERN_WARNING "%sEXT4-fs: %pV\n", prefix, &vaf);
- 	va_end(args);
- }
- 
--- 
-2.25.1
+Hi,
 
+On Mon, May 23, 2022 at 12:47:34PM +0200, Guillaume Ranquet wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+>=20
+> DPINTF is similar to DPI but does not have the exact same feature set
+> or register layouts.
+>=20
+> DPINTF is the sink of the display pipeline that is connected to the
+> DisplayPort controller and encoder unit. It takes the same clocks as
+> DPI.
+>=20
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>  .../bindings/display/mediatek/mediatek,dpi.yaml     | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
+dpi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.=
+yaml
+> index dd2896a40ff0..6d9f6c11806e 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yaml
+> @@ -4,16 +4,16 @@
+>  $id: http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> =20
+> -title: mediatek DPI Controller Device Tree Bindings
+> +title: mediatek DPI/DPINTF Controller
+> =20
+>  maintainers:
+>    - CK Hu <ck.hu@mediatek.com>
+>    - Jitao shi <jitao.shi@mediatek.com>
+> =20
+>  description: |
+> -  The Mediatek DPI function block is a sink of the display subsystem and
+> -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a parall=
+el
+> -  output bus.
+> +  The Mediatek DPI and DPINTF function blocks are a sink of the display
+> +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel da=
+ta on a
+> +  parallel output bus.
+> =20
+>  properties:
+>    compatible:
+> @@ -23,6 +23,7 @@ properties:
+>        - mediatek,mt8173-dpi
+>        - mediatek,mt8183-dpi
+>        - mediatek,mt8192-dpi
+> +      - mediatek,mt8195-dpintf
+
+Weren't you supposed to change it to have a separator between dp and intf?
+
+If it's no longer in your plans, the second patch should have s/dp_intf/dpi=
+ntf/
+
+Maxime
+
+--caypywv3zyehybgx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYo4l2AAKCRDj7w1vZxhR
+xWKiAP9jtTFxn2122rC75otB3OE+m4SKrY6xBG/6lAdnXBI9owD/bSCJW1MCt4Ee
+lpQaGgsPznT9oNA3vaB9Gk2SKS/dRwk=
+=56gL
+-----END PGP SIGNATURE-----
+
+--caypywv3zyehybgx--

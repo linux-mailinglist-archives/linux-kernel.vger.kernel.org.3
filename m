@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC7C53463D
+	by mail.lfdr.de (Postfix) with ESMTP id B4E5A53463F
 	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345375AbiEYWLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 18:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        id S1345418AbiEYWL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 18:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241245AbiEYWLK (ORCPT
+        with ESMTP id S1345347AbiEYWLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 18:11:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D285E11175;
-        Wed, 25 May 2022 15:11:09 -0700 (PDT)
+        Wed, 25 May 2022 18:11:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75B513CEC;
+        Wed, 25 May 2022 15:11:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38FA161AC3;
-        Wed, 25 May 2022 22:11:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF32BC34117;
-        Wed, 25 May 2022 22:11:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 708C961AD8;
+        Wed, 25 May 2022 22:11:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14C9DC34119;
+        Wed, 25 May 2022 22:11:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653516668;
-        bh=l+U+3vUv8PFPM6xouiNpdZzkfzghAf+GVYpk33ixy3Y=;
+        s=k20201202; t=1653516671;
+        bh=3zniIbPdy7+9dNP1xUFhfBA0uM9hAlLVYqm9/0P36DE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IungJCUJSyEmeFEddWMdpfXZJiNj46GYKCCM61F8vs2ByYOLp6o5YHEHBH7Jh9u/j
-         GRkUNevXlUiBoASF4dH4cjM0rwI097quqixRhTqJ5WbIrHdorMItafK7oRHEc3TS4V
-         Gf0xZYnLQCzk7sEFlVcJqHVeW/RhTCdBDgHX19xTjLVyHsOrYWLutvgB8l6gDyu55w
-         iAPqWp3a5f+W29epwd0Pej40GNf+eGGMfZ5NvTJVWSapSYACEG772YB6pYbr4y5r1S
-         TGSTl5uT2tpfrjgn+0+hWyO9UiE8FX/ThCK7sGLGvCSTLfXVyEaPiXE94Cw4re7xS+
-         cPeaoZtJCYMBQ==
+        b=Z8awa+Mbgjc4sfpESzBF+k72TBoJ7yG8rlly8BaIhqNwqCWJo7o3y2eFhWB/l0oa/
+         Tx9HTmfhNaH8d0u3VIhejG1rh+HTjQoCl1sxu8p01i1l1CqQ/I7ed0yfpF1oYnfFbi
+         WYR8VsejPW7OgHmrYM2C8Qv1wSQg6lYsJb2iTz0s8qsaHKM1vhwd41ipcYjV8i9K+e
+         EQV5HAP3JHE5qGcLYvVPHawJ4dUWU1B7VvMbCTcx4aj0sA86BqyH6BkFEVMnyO5R8o
+         lQOG8ZIbKnqb1yW6wrf27ZJ7engpEfr1QDykVVdZX25aSp9zlokvqbB75qWZE1OF04
+         k3q6HHEXq4MUQ==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Frederic Weisbecker <frederic@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Frederic Weisbecker <frederic@kernel.org>,
         Daniel Bristot de Oliveira <bristot@kernel.org>,
         Nicolas Saenz Julienne <nsaenz@kernel.org>,
         rcu@vger.kernel.org
-Subject: [PATCH 2/4] rcu/nocb: Prepare to change nocb cpumask from CPU-hotplug protected cpuset caller
-Date:   Thu, 26 May 2022 00:10:53 +0200
-Message-Id: <20220525221055.1152307-3-frederic@kernel.org>
+Subject: [PATCH 3/4] sched/isolation: Infrastructure to support rcu nocb cpumask changes
+Date:   Thu, 26 May 2022 00:10:54 +0200
+Message-Id: <20220525221055.1152307-4-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220525221055.1152307-1-frederic@kernel.org>
 References: <20220525221055.1152307-1-frederic@kernel.org>
@@ -65,10 +65,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpusets is going to use the NOCB (de-)offloading interface while
-holding hotplug lock. Therefore pull out the responsibility of protecting
-against concurrent CPU-hotplug changes to the callers of
-rcu_nocb_cpumask_update().
+Provide a minimal infrastructure to change the housekeeping cpumasks.
+For now only RCU NOCB cpumask is handled.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 Cc: Zefan Li <lizefan.x@bytedance.com>
@@ -83,57 +81,90 @@ Cc: Waiman Long <longman@redhat.com>
 Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- kernel/rcu/rcutorture.c | 2 ++
- kernel/rcu/tree_nocb.h  | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ include/linux/sched/isolation.h | 13 +++++++++++
+ kernel/sched/isolation.c        | 38 +++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index f912ff4869b3..5a3029550e83 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -1886,6 +1886,7 @@ static int rcu_nocb_toggle(void *arg)
- 	do {
- 		r = torture_random(&rand);
- 		cpu = (r >> 4) % (maxcpu + 1);
-+		cpus_read_lock();
- 		if (r & 0x1) {
- 			rcu_nocb_cpumask_update(cpumask_of(cpu), true);
- 			atomic_long_inc(&n_nocb_offload);
-@@ -1893,6 +1894,7 @@ static int rcu_nocb_toggle(void *arg)
- 			rcu_nocb_cpumask_update(cpumask_of(cpu), false);
- 			atomic_long_inc(&n_nocb_deoffload);
- 		}
-+		cpus_read_unlock();
- 		toggle_delay = torture_random(&rand) % toggle_fuzz + toggle_interval;
- 		set_current_state(TASK_INTERRUPTIBLE);
- 		schedule_hrtimeout(&toggle_delay, HRTIMER_MODE_REL);
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index 428571ad11e3..6396af6c765a 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1182,12 +1182,13 @@ int rcu_nocb_cpumask_update(struct cpumask *cpumask, bool offload)
- 	int err_cpu;
- 	cpumask_var_t saved_nocb_mask;
+diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
+index 8c15abd67aed..c6d0e3f83a20 100644
+--- a/include/linux/sched/isolation.h
++++ b/include/linux/sched/isolation.h
+@@ -25,6 +25,8 @@ extern const struct cpumask *housekeeping_cpumask(enum hk_type type);
+ extern bool housekeeping_enabled(enum hk_type type);
+ extern void housekeeping_affine(struct task_struct *t, enum hk_type type);
+ extern bool housekeeping_test_cpu(int cpu, enum hk_type type);
++extern int housekeeping_cpumask_set(struct cpumask *cpumask, enum hk_type type);
++extern int housekeeping_cpumask_clear(struct cpumask *cpumask, enum hk_type type);
+ extern void __init housekeeping_init(void);
  
-+	lockdep_assert_cpus_held();
+ #else
+@@ -46,6 +48,17 @@ static inline bool housekeeping_enabled(enum hk_type type)
+ 
+ static inline void housekeeping_affine(struct task_struct *t,
+ 				       enum hk_type type) { }
 +
- 	if (!alloc_cpumask_var(&saved_nocb_mask, GFP_KERNEL))
- 		return -ENOMEM;
++static inline int housekeeping_cpumask_set(struct cpumask *cpumask, enum hk_type type)
++{
++	return -EINVAL;
++}
++
++static inline int housekeeping_cpumask_clear(struct cpumask *cpumask, enum hk_type type)
++{
++	return -EINVAL;
++}
++
+ static inline void housekeeping_init(void) { }
+ #endif /* CONFIG_CPU_ISOLATION */
  
- 	cpumask_copy(saved_nocb_mask, rcu_nocb_mask);
+diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+index 373d42c707bc..ab4aba795c01 100644
+--- a/kernel/sched/isolation.c
++++ b/kernel/sched/isolation.c
+@@ -79,6 +79,44 @@ bool housekeeping_test_cpu(int cpu, enum hk_type type)
+ }
+ EXPORT_SYMBOL_GPL(housekeeping_test_cpu);
  
--	cpus_read_lock();
- 	mutex_lock(&rcu_state.barrier_mutex);
- 	for_each_cpu(cpu, cpumask) {
- 		if (offload) {
-@@ -1221,7 +1222,6 @@ int rcu_nocb_cpumask_update(struct cpumask *cpumask, bool offload)
- 	}
- 
- 	mutex_unlock(&rcu_state.barrier_mutex);
--	cpus_read_unlock();
- 
- 	free_cpumask_var(saved_nocb_mask);
- 
++static int housekeeping_cpumask_update(struct cpumask *cpumask,
++				       enum hk_type type, bool on)
++{
++	int err;
++
++	switch (type) {
++	case HK_TYPE_RCU:
++		err = rcu_nocb_cpumask_update(cpumask, on);
++		break;
++	default:
++		err = -EINVAL;
++	}
++
++	if (err >= 0) {
++		if (on) {
++			cpumask_or(housekeeping.cpumasks[type],
++				   housekeeping.cpumasks[type],
++				   cpumask);
++		} else {
++			cpumask_andnot(housekeeping.cpumasks[type],
++				       housekeeping.cpumasks[type],
++				       cpumask);
++		}
++	}
++
++	return err;
++}
++
++int housekeeping_cpumask_set(struct cpumask *cpumask, enum hk_type type)
++{
++	return housekeeping_cpumask_update(cpumask, type, true);
++}
++
++int housekeeping_cpumask_clear(struct cpumask *cpumask, enum hk_type type)
++{
++	return housekeeping_cpumask_update(cpumask, type, false);
++}
++
+ void __init housekeeping_init(void)
+ {
+ 	enum hk_type type;
 -- 
 2.25.1
 

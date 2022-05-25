@@ -2,214 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F191A533DD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 704AA533DD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241166AbiEYNXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S240130AbiEYNZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiEYNXd (ORCPT
+        with ESMTP id S244434AbiEYNZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:23:33 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F982A719;
-        Wed, 25 May 2022 06:23:31 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PBRW1q004869;
-        Wed, 25 May 2022 13:23:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ldOwhqrdMrG+DfU+2aFY9eV2yzo9XQKZE0zxnYIWkkc=;
- b=n8buIVW+eqo1LjqOVBNi5mAzHr3a8xitkxlcWRmbK0Gz/iHsAggkED+o/3IKhQZ9i7I+
- uZNHu3Dek4vrZY9Ts6uHKdjDhzH5ePpizuM2OFvcfLzwluwgPhx+Hf91cQ9dNMwvXtEC
- kbVj3Gq6slou9zvRQ/KiG3H+JNDhIsddMvbthnLoXRbNX1ME3EkyoR5E+4HdSUWU4Q0/
- 4EZKWRbLSzwn4IDyIthTHbmbBFYZ+xvz2k47ygqP19jyXrsehnUN7Ji+ezfigAAUyCXh
- KOw78Gz8Js7As/0zPSwSO8uesKUPC0teyr/PUpngLpydBoBNouYyEe9wNNpdqyS+NC6s JQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9kkq28c4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 13:23:28 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24PCYG7n000740;
-        Wed, 25 May 2022 13:23:27 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g9kkq28bs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 13:23:27 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24PDEwm1019283;
-        Wed, 25 May 2022 13:23:26 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma02dal.us.ibm.com with ESMTP id 3g93v87rdk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 13:23:26 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24PDNP2d8126862
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 25 May 2022 13:23:25 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 763BFAE064;
-        Wed, 25 May 2022 13:23:25 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA5C3AE062;
-        Wed, 25 May 2022 13:23:20 +0000 (GMT)
-Received: from [9.163.3.233] (unknown [9.163.3.233])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 25 May 2022 13:23:20 +0000 (GMT)
-Message-ID: <f309313b-2bf0-f740-e372-06f20069e7e6@linux.ibm.com>
-Date:   Wed, 25 May 2022 09:23:19 -0400
+        Wed, 25 May 2022 09:25:13 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25902B1B4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:25:12 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so4070738pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TKu3jDxR1qyaoZyxQd8Ts5G700gfE4pahytHEbPkEuo=;
+        b=GXtzlSsV72DJ4r7qA3ECNDCXmSDzD8JR+b7SloEDQLdYm1Ra/ZpSJk2ACoplR9lw4J
+         8fqymQa/ZL0HYinpuFgcXOXxZRd/zF6n72jKlTNQRV9dpq0D6UX0i5on8X/oNtwuLC5U
+         iIK1AyD1hM2JWl5CiM8yckZo7u1n/GdB7j5wbub/+rF3ww76dZXgPymJMPnltPFfmEZN
+         VdpdZz/hpeiVxZRJPlgN/ztZasy+PLIfvkG2Flt3OQAQsyC9oeoKlO/F43PLMwyyQ9P+
+         Pp/9Nvh9eIkub2B8hVSz6WjmJmTsOHnQE4BMc+/lXsld8wAiPyWgPyTTY1qr0q/iz8vf
+         11tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TKu3jDxR1qyaoZyxQd8Ts5G700gfE4pahytHEbPkEuo=;
+        b=yp0mhrGsb35ZLXtZ/gEykCsWyAIvlCRtkox33Xwlg7Dy0SWFK2S0i/BTsUBgFbQVuX
+         SYb5DMf/KzVXipdkJG/d88JPtSEf7Tag5jzG5L37h0Rk99Gc65IUQWUG4IdtMdgdt885
+         kbNgz0fBeqJFLK/IGMTjsxz5jpX2P+O6fmSuO4GtbN6PMnesv82DOmVxTpnTtQeMNRT3
+         aOoO1Bdd9vl3oCzGFaQP4N8teBVjePGZ63RHirCMwDXRd9nTdwEDmW6kY0nZuHH6ixFm
+         5xwF1kdo8pP/VPORROVJM+tGZ8YOuplNFZ5HSHqrwC26YVt7VsFaxv1Ql1eXve2J0HGp
+         XNNg==
+X-Gm-Message-State: AOAM530OAlB+P/A9a3Q88U4b2UHD8AjMegQ9LlDim+iQhOiWq+WtMtGA
+        8WkYX2JB8LzmOu3qcshCiWAC69HjAv8rmg==
+X-Google-Smtp-Source: ABdhPJyN50WS/ZtJCxkiUtPA7dalNKgxc+rog0QkB9FGU0KBuqFIf2s5Rr1fKS9zMJ2Rv4ytEghz5Q==
+X-Received: by 2002:a17:902:eb4d:b0:15e:d25c:4e0a with SMTP id i13-20020a170902eb4d00b0015ed25c4e0amr33288707pli.8.1653485112355;
+        Wed, 25 May 2022 06:25:12 -0700 (PDT)
+Received: from localhost ([2408:8207:18da:2310:c40f:7b5:4fa8:df3f])
+        by smtp.gmail.com with ESMTPSA id d17-20020a170903209100b0015e8e7db067sm9225346plc.4.2022.05.25.06.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 06:25:12 -0700 (PDT)
+Date:   Wed, 25 May 2022 21:25:07 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] mm/hugetlb: Remove unnecessary
+ huge_ptep_set_access_flags() in hugetlb_mcopy_atomic_pte()
+Message-ID: <Yo4uM6sP7Cpx722V@FVFYT0MHHV2J.googleapis.com>
+References: <7cd55152c1a00910afda570d1543a97198b3665b.1653468078.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v8 17/22] vfio-pci/zdev: add open/close device hooks
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
-        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
-        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220524185907.140285-1-mjrosato@linux.ibm.com>
- <20220524185907.140285-18-mjrosato@linux.ibm.com>
- <20220524210815.GB1343366@nvidia.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20220524210815.GB1343366@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RsxTn6jmwLJMmhUPfitBq5PPdvvqlPmn
-X-Proofpoint-GUID: Vm__Pt-8jIcYsMuR8qMX_hkzbxUtc_zJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-25_03,2022-05-25_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- impostorscore=0 clxscore=1015 spamscore=0 adultscore=0 bulkscore=0
- phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205250067
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7cd55152c1a00910afda570d1543a97198b3665b.1653468078.git.baolin.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/22 5:08 PM, Jason Gunthorpe wrote:
-> On Tue, May 24, 2022 at 02:59:02PM -0400, Matthew Rosato wrote:
->> During vfio-pci open_device, pass the KVM associated with the vfio group
->> (if one exists).  This is needed in order to pass a special indicator
->> (GISA) to firmware to allow zPCI interpretation facilities to be used
->> for only the specific KVM associated with the vfio-pci device.  During
->> vfio-pci close_device, unregister the notifier.
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->>   arch/s390/include/asm/pci.h      |  2 ++
->>   drivers/vfio/pci/vfio_pci_core.c | 11 ++++++++++-
->>   drivers/vfio/pci/vfio_pci_zdev.c | 27 +++++++++++++++++++++++++++
->>   include/linux/vfio_pci_core.h    | 12 ++++++++++++
->>   4 files changed, 51 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
->> index 85eb0ef9d4c3..67fbce1ea0c9 100644
->> +++ b/arch/s390/include/asm/pci.h
->> @@ -5,6 +5,7 @@
->>   #include <linux/pci.h>
->>   #include <linux/mutex.h>
->>   #include <linux/iommu.h>
->> +#include <linux/notifier.h>
->>   #include <linux/pci_hotplug.h>
->>   #include <asm-generic/pci.h>
->>   #include <asm/pci_clp.h>
->> @@ -195,6 +196,7 @@ struct zpci_dev {
->>   	struct s390_domain *s390_domain; /* s390 IOMMU domain data */
->>   	struct kvm_zdev *kzdev;
->>   	struct mutex kzdev_lock;
->> +	struct notifier_block nb; /* vfio notifications */
+On Wed, May 25, 2022 at 06:26:24PM +0800, Baolin Wang wrote:
+> There is no need to update the hugetlb access flags after just setting the
+> hugetlb page table entry by set_huge_pte_at(), since the page table entry
+> value has no changes. Thus remove the unnecessary huge_ptep_set_access_flags()
+> in hugetlb_mcopy_atomic_pte().
 > 
-> This is obsolete now right? Same for the #include ?
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-Of course, I forgot to remove them...  Will do
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-> 
->> @@ -418,6 +424,9 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
->>   
->>   	vdev->needs_reset = true;
->>   
->> +	if (vfio_pci_zdev_release(vdev))
->> +		pci_info(pdev, "%s: Couldn't restore zPCI state\n", __func__);
->> +
->>   	/*
->>   	 * If we have saved state, restore it.  If we can reset the device,
->>   	 * even better.  Resetting with current state seems better than
->> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c b/drivers/vfio/pci/vfio_pci_zdev.c
->> index ea4c0d2b0663..d0df85c8b204 100644
->> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
->> @@ -11,6 +11,7 @@
->>   #include <linux/uaccess.h>
->>   #include <linux/vfio.h>
->>   #include <linux/vfio_zdev.h>
->> +#include <linux/kvm_host.h>
->>   #include <asm/pci_clp.h>
->>   #include <asm/pci_io.h>
->>   
->> @@ -136,3 +137,29 @@ int vfio_pci_info_zdev_add_caps(struct vfio_pci_core_device *vdev,
->>   
->>   	return ret;
->>   }
->> +
->> +int vfio_pci_zdev_open(struct vfio_pci_core_device *vdev)
->> +{
->> +	struct zpci_dev *zdev = to_zpci(vdev->pdev);
->> +
->> +	if (!zdev)
->> +		return -ENODEV;
->> +
->> +	if (!vdev->vdev.kvm)
->> +		return 0;
->> +
->> +	return kvm_s390_pci_register_kvm(zdev, vdev->vdev.kvm);
->> +}
->> +
->> +int vfio_pci_zdev_release(struct vfio_pci_core_device *vdev)
->> +{
->> +	struct zpci_dev *zdev = to_zpci(vdev->pdev);
-> 
-> Keeping these functions named open_device/close_device wouuld probably
-> be clearer
-
-Agreed, will rename vfio_pci_zdev_{open,close}_device
-
-> 
->> +	if (!zdev)
->> +		return -ENODEV;
->> +
->> +	if (!vdev->vdev.kvm)
->> +		return 0;
->> +
->> +	return kvm_s390_pci_unregister_kvm(zdev);
->> +}
-> 
-> Again this cannot fail, you should make it return void, not ignore the
-> failure - or at least push the ignoring the failure down to the place
-> that is causing this.
-
-I'll move that handling into kvm_s390_pci_unregister_kvm and make 
-vfio_pci_zdev_close_device return void / will remove the check for the 
-rc in vfio_pci_core_disable.
-
-> 
-> Otherwise it looks fine to me, thanks
-> 
-
-Thanks
-
+Thanks.

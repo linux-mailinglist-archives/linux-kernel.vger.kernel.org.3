@@ -2,174 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ADD53422B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A5F534231
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245676AbiEYR16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 13:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S229790AbiEYR2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235417AbiEYR1z (ORCPT
+        with ESMTP id S235417AbiEYR2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 13:27:55 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8A4344FE
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:27:54 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id z25so436214uan.9
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:27:54 -0700 (PDT)
+        Wed, 25 May 2022 13:28:19 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F462AEE25
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:28:15 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id v4-20020a1cac04000000b00397001398c0so1495011wme.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=pensando.io; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zijcLucoahr/KM0XRPqCphI5ViCGOh6UFjc4PGTwq4Y=;
-        b=gtdQv6bn8yOWe1FGW+kl87jckZbV4SJiVYvJ7mCXXXw0tm7rAKODCYottupNSWmXiU
-         qKn30BjsCkVht5P7kz0a3OAIspZH1Nq6VG8TdN0iHAviS6ypYMwtc+j90L7HmtM0BNVr
-         rB8nivjIMbgLXXJos3NsWu+H8lCfb6NHvDtFEP1jlbS2YJzxHS2T5DLGIZxZJ9dGDqwg
-         /r2fvwfqtpIQ1dkDhnGEVj9YixHnbScGUvk9jLw31f37Qkzc2McZ8XTjrY6H40P0N1bX
-         TnkO08Q0ZIpnF+YThhPHk22XpCxFu6nFAbFfUXl4UVIx5lGg4zMwBuMScNiCUEKa1/VJ
-         67Ew==
+        bh=5wN5Z1sp0tdcSIvXWY7HQoJeIR7CM7NXDblhbKWMdgk=;
+        b=mFI1Wp+Y3Cx5vpGRNPwKaQ7c2A1hROuIUOJG+McCGpIuG0xM+ehtyZ/T6SKyypafAx
+         oPrmJnVM0/wt1tgCIe5Nt2Oe6rjTwF6aNrJlYUGDp3uoI0dOyOfhVfve5iB48qAX0zre
+         f64IRWsxbTTPK6ONiOw1srs14BAxBnCe0LhiKSL4txovloLEWdmSwRBlxkO91tHj6SFh
+         6Qp71YV0tY0UO5OTt2UCizL+n3IJ4fAStWIvm2hGhrJJN/NL2+oN7gyQ0d86pQeVvEkS
+         ck32xhDsjfkz8lsbqQnIFxjD0mfSpAXmSGeZTfSveMRavywgmVWW4G4aQM37JxkawkmU
+         1D2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zijcLucoahr/KM0XRPqCphI5ViCGOh6UFjc4PGTwq4Y=;
-        b=s6mta1HTeMX/be66WFSkbcG0iqvp50O5r/+L2Ed/873WJhdUELMwVIUM+GCMhIhcYx
-         sbcWtN2D7VxhsCMPl3y9i3vuQksxXhToRia8RLU2Vdlg2jFk5yowDa4tfVV9mr4I01FA
-         5TSID7JsNDzU3Dw9ejjtzXZSRscRMVzm9CO7BpB/4ijdE10er2XLz8LquSUBEiYs+Gt2
-         k0zuGmRhbs7T59nGWpLvdBxax+1Twr2tNmpcNsLXHUFL4O70Nz7aeKTHYKdFlSjMwu99
-         PULFqhR+1mJg0IjJ1gggra2eYGFcyVemGr2eh5OO09pbZJGMrkfbQC9pO0TGCnpZ0Kh2
-         lE2Q==
-X-Gm-Message-State: AOAM531pPdPQhFS4zQOLhfbDqWXLvMiRYwroMqzN6yVFlEz33acdf5E8
-        1NnCMJGdX+A5gXupal+lZo159ohM13o4gIl+OsHSZg==
-X-Google-Smtp-Source: ABdhPJy1+s4Gu1zZChXpIjTnE0q75s/SccD4qDFE/02Lgz1c0LK6Jt4wQeM+E5FqKMWp2YAHrA1xU1yAInoYQCLNLBo=
-X-Received: by 2002:ab0:e14:0:b0:360:e13:e5d7 with SMTP id g20-20020ab00e14000000b003600e13e5d7mr11614478uak.95.1653499673748;
- Wed, 25 May 2022 10:27:53 -0700 (PDT)
+        bh=5wN5Z1sp0tdcSIvXWY7HQoJeIR7CM7NXDblhbKWMdgk=;
+        b=yhuduK3WAw6KFWWytwrUNwXEyAtATsDVbrZp3sP9rTDz22tfSF0UPrKpYKVhRbiFQ8
+         yeJfsAWo8XYCV8PBoHpJRnCRfn0vtILKCZJr6WtWgEtTSIOqs4DfeRktIJ3G45phlE6T
+         57vVa39XjgMuEVVXkEIVMFjU2OjVUn6/opKjZAXRGXtRyd4zLwlA+TppUrHrXqZA0E5k
+         D8un0j0jX+itWxPQ3u+GBbfGJP6Z/3s928GSphMYzJ1NivrNKAYleldUKusS1UAqj4rH
+         YimlqIVbZLBq7HTOdVpMGjEpZQoSN63Nxe1tNMt4/aVgRN7+1wghkfkRP01ik859T0OW
+         B6rw==
+X-Gm-Message-State: AOAM533Yomd+Bwh06peaH5LO5LMKngdX44eoZN5KqZDJMEmRficHv3jD
+        qQSJHauEBvMPtRNuJZrzDDI0iBY5BZvudPmv7ZL0RA==
+X-Google-Smtp-Source: ABdhPJx6DRtgAoKLyjqFjkaaX34xnnuGV9Xtj2C2Yh02kMXEfEL4eCaCfewk5Rpm9nkxm+tIIC4hFL0K9GY/vHY4Nes=
+X-Received: by 2002:a1c:acc4:0:b0:392:9dd4:fbcc with SMTP id
+ v187-20020a1cacc4000000b003929dd4fbccmr9101955wme.78.1653499693969; Wed, 25
+ May 2022 10:28:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
- <20220512160010.00005bc4@Huawei.com> <CAAPL-u_diGYEb7+WsgqNBLRix-nRCk2SsDj6p9r8j5JZwOABZQ@mail.gmail.com>
- <6b7c472b50049592cde912f04ca47c696caa2227.camel@intel.com>
- <CAAPL-u-NAJkSXHzQr8OtEEGnnUrsCE9US6c5S5Rv0xutASxv1Q@mail.gmail.com>
- <ad1bc96a86b21b8f46d356f0c0b7449be38b2220.camel@intel.com>
- <CAAPL-u8XzJnrew4vuFq7GgwgjjBff8MwRFGTDmUc9DOwa+q=FA@mail.gmail.com>
- <6ce724e5c67d4f7530457897fa08d0a8ba5dd6d0.camel@intel.com> <594046f8-9ab3-786a-fc48-8a61f1238f52@linux.ibm.com>
-In-Reply-To: <594046f8-9ab3-786a-fc48-8a61f1238f52@linux.ibm.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Wed, 25 May 2022 10:27:42 -0700
-Message-ID: <CAAPL-u-3-iOoSK07TE=gUN8a+TsXNNEiFaEArf7+zvTgxDJnRQ@mail.gmail.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     Ying Huang <ying.huang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Hesham Almatary <hesham.almatary@huawei.com>
+References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-12-brad@pensando.io>
+ <9c08f621be28dba65e811bc9cdedc882@kernel.org> <CAK9rFnyRTX+VM5g9P-ar=3VaExhHcwR8DzLvxtv-tG8cN9gqEQ@mail.gmail.com>
+ <87tub21uoz.wl-maz@kernel.org>
+In-Reply-To: <87tub21uoz.wl-maz@kernel.org>
+From:   Brad Larson <brad@pensando.io>
+Date:   Wed, 25 May 2022 10:28:02 -0700
+Message-ID: <CAK9rFnzbexhS7htxkO9S4-kBF_nTeUkryE7DGTq=a1GHDLwcEQ@mail.gmail.com>
+Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        David Clear <dac2@pensando.io>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 3:01 AM Aneesh Kumar K V
-<aneesh.kumar@linux.ibm.com> wrote:
->
-> On 5/25/22 2:33 PM, Ying Huang wrote:
-> > On Tue, 2022-05-24 at 22:32 -0700, Wei Xu wrote:
-> >> On Tue, May 24, 2022 at 1:24 AM Ying Huang <ying.huang@intel.com> wrote:
-> >>>
-> >>> On Tue, 2022-05-24 at 00:04 -0700, Wei Xu wrote:
-> >>>> On Thu, May 19, 2022 at 8:06 PM Ying Huang <ying.huang@intel.com> wrote:
-> >>>>>
->
-> ...
->
-> >
-> > OK.  Just to confirm.  Does this mean that we will have fixed device ID,
-> > for example,
-> >
-> > GPU                   memtier255
-> > DRAM (with CPU)               memtier0
-> > PMEM                  memtier1
-> >
-> > When we add a new memtier, it can be memtier254, or memter2?  The rank
-> > value will determine the real demotion order.
-> >
-> > I think you may need to send v3 to make sure everyone is at the same
-> > page.
-> >
->
-> What we have implemented which we will send as RFC shortly is below.
->
-> cd /sys/dekvaneesh@ubuntu-guest:~$ cd /sys/devices/system/
-> kvaneesh@ubuntu-guest:/sys/devices/system$ pwd
-> /sys/devices/system
-> kvaneesh@ubuntu-guest:/sys/devices/system$ ls
-> clockevents  clocksource  container  cpu  edac  memory  memtier  mpic
-> node  power
-> kvaneesh@ubuntu-guest:/sys/devices/system$ cd memtier/
-> kvaneesh@ubuntu-guest:/sys/devices/system/memtier$ pwd
-> /sys/devices/system/memtier
-> kvaneesh@ubuntu-guest:/sys/devices/system/memtier$ ls
-> default_rank  max_rank  memtier1  power  uevent
-> kvaneesh@ubuntu-guest:/sys/devices/system/memtier$ cat default_rank
-> 1
-> kvaneesh@ubuntu-guest:/sys/devices/system/memtier$ cat max_rank
-> 3
+Hi Marc,
 
-For flexibility, we don't want max_rank to be interpreted as the
-number of memory tiers.  Also, we want to leave spaces in rank values
-to allow new memtiers to be inserted when needed.  So I'd suggest to
-make max_rank a much larger value (e.g. 255).
+On Sat, Apr 9, 2022 at 2:18 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Sat, 09 Apr 2022 03:38:55 +0100,
+> Brad Larson <brad@pensando.io> wrote:
+> >
 
-> kvaneesh@ubuntu-guest:/sys/devices/system/memtier$ cd memtier1/
-> kvaneesh@ubuntu-guest:/sys/devices/system/memtier/memtier1$ ls
-> nodelist  power  rank  subsystem  uevent
-> kvaneesh@ubuntu-guest:/sys/devices/system/memtier/memtier1$ cat nodelist
-> 0-3
-> kvaneesh@ubuntu-guest:/sys/devices/system/memtier/memtier1$ cat rank
-> 1
-> kvaneesh@ubuntu-guest:/sys/devices/system/memtier/memtier1$ cd
-> ../../node/node1/
-> kvaneesh@ubuntu-guest:/sys/devices/system/node/node1$ cat memtier
-> 1
-> kvaneesh@ubuntu-guest:/sys/devices/system/node/node1$
-> root@ubuntu-guest:/sys/devices/system/node/node1# echo 0 > memtier
-> root@ubuntu-guest:/sys/devices/system/node/node1# cat memtier
-> 0
-> root@ubuntu-guest:/sys/devices/system/node/node1# cd ../../memtier/
-> root@ubuntu-guest:/sys/devices/system/memtier# ls
-> default_rank  max_rank  memtier0  memtier1  power  uevent
-> root@ubuntu-guest:/sys/devices/system/memtier# cd memtier0/
-> root@ubuntu-guest:/sys/devices/system/memtier/memtier0# cat nodelist
-> 1
-> root@ubuntu-guest:/sys/devices/system/memtier/memtier0# cat rank
-> 0
+> > > You are still missing the GICV and GICH regions that are
+> > > provided by the CPU. I already pointed that out in [1].
+> > >
+> > > The Cortex-A72 TRM will tell you where to find them (at
+> > > an offset from PERIPHBASE).
+> >
+> > Hi Marc,
+> >
+> > Got the addresses, neither region is used, and will be included in the
+> > next submission.
+>
+> Not sure what you mean by these regions being unused here (the Linux
+> kernel definitely makes use of them). Note that you'll also need to
+> add GICC (which I forgot to mention above).
 
-It looks like the example here demonstrates the dynamic creation of
-memtier0.  If so, how is the rank of memtier0 determined?  If we want
-to support creating new memtiers at runtime, I think an explicit
-interface that specifies both device ID and rank is preferred to avoid
-implicit dependencies between device IDs and ranks.
+Added missing GICV, GICH and GICC regions.
 
-> root@ubuntu-guest:/sys/devices/system/memtier/memtier0# echo 4 > rank
-> bash: rank: Permission denied
-> root@ubuntu-guest:/sys/devices/system/memtier/memtier0#
+Regards,
+Brad

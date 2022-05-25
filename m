@@ -2,177 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E92533D2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE546533D31
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243802AbiEYNES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
+        id S243783AbiEYNFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243674AbiEYNEM (ORCPT
+        with ESMTP id S243902AbiEYNFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:04:12 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A753A5A92
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:04:11 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id a9so16825150pgv.12
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZwBT4g14vYXymE6X+0Ue3RPk57uheIJlCkFHpAJ6pRk=;
-        b=ZidvWTWQLhs+qxK+czFWiUM2yn05AKjy33y9lcAXvSJqpWLzIj1uMe9jxplyskdO3I
-         5QRSBT/MJanWvJ7tylrvEqtFCJYb9VZsMpscxiot4GDbirdqvsmm2ArflQ894D2CjJqf
-         XdATAsTOsEMMmq06GT0jDJ1C9MYCztghh/capKTccvYcJcoHtRhy4UmdTl7GUsblwRYm
-         NnCEUyS+8i6ozvjD380Wke39KNyXUs14HB2/iXbngP6IcEo6QaGpB33D2GcsVIXgx6wl
-         dlhevHqjO8CcPqo6R+KwbdSG79xYWpXYADNv35I0JXli2cHDSH0yMDPEHc8ikpGfoXX2
-         fyjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZwBT4g14vYXymE6X+0Ue3RPk57uheIJlCkFHpAJ6pRk=;
-        b=dRDKUr75KMQf+fza/fIFVLIpywRWe0rwGoVTsQR8uHZwMyGsrbSFbXIW70iwbKWC4+
-         ueQjUFKzq1IA24pklerTHydZ4xBLv5p5AFdF5Rh2z0Dmoia2K/Ms5pKtMHdbgEtqVKzi
-         A1GVez8/KsUUD3QJ07rsVN5W/OswvMEmHYSUqFPnJ7QP+EqER/qWNa3GXOeNhZPbN5PW
-         LBniiLQs8tkxr/EqICZXhq5XAoOqWJhYkeLhZBAl29NPmnGef0UQ2Jdmnu5cY64ZQ1uB
-         QJVLVQClkKpHnE74af68xlfH+4FbZnlKqt8ZrvwU2fjf2O3NbRFHsGC9CvhlDtLAPIjL
-         h1pw==
-X-Gm-Message-State: AOAM5320hkHNRqDOmMixBYNq0pNJTtqfTCZ4oyZmy/2euRceCRRlLZP/
-        TWxKFzix/Gq9bWYXwTr+f3OmMQ==
-X-Google-Smtp-Source: ABdhPJzu+LJHnKWEci/nJS1Zg1m/v+3VYPOAVa9mbI0JAMOz8ytYQrHbvgWB29jNwjd9XxfBX9RhmQ==
-X-Received: by 2002:a05:6a00:1411:b0:4fd:e594:fac0 with SMTP id l17-20020a056a00141100b004fde594fac0mr33594230pfu.79.1653483850683;
-        Wed, 25 May 2022 06:04:10 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:c40f:7b5:4fa8:df3f])
-        by smtp.gmail.com with ESMTPSA id w198-20020a6282cf000000b005184c9c46dbsm11338684pfd.81.2022.05.25.06.04.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 06:04:10 -0700 (PDT)
-Date:   Wed, 25 May 2022 21:03:59 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        longman@redhat.com
-Subject: Re: [PATCH v4 03/11] mm: memcontrol: make lruvec lock safe when LRU
- pages are reparented
-Message-ID: <Yo4pPw+IHPBZvZUv@FVFYT0MHHV2J.googleapis.com>
-References: <20220524060551.80037-1-songmuchun@bytedance.com>
- <20220524060551.80037-4-songmuchun@bytedance.com>
- <Yo0xmKOkBkhRy+bq@cmpxchg.org>
- <Yo38mlkMBFz2h+yP@FVFYT0MHHV2J.googleapis.com>
- <Yo4hVw7B+bUlMzLX@cmpxchg.org>
+        Wed, 25 May 2022 09:05:05 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46142E9D5;
+        Wed, 25 May 2022 06:05:03 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 098BF1F44E8C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653483902;
+        bh=gViAEDYmrng0CSzEk780jnUimbEF/5qLDHyneG+N2y0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=l1YD1DbCcvxx0b2C9BAQPdR3sMaZT6pjm6m0/b9f9Z53w11xMF/QGKDJdQu4/dO+8
+         Ddj4Wvok1u9FMBprtouSjtEb1qRwZo3tKrnTgJ9ZJG6+bbPtQsrmOnyRs61TuCcFtA
+         JPe3ei96GsuPKoIr9igulzhrqsJCh9+Ie3I5+qTVA8As9U+HjdJpPmu3KPGfmyuFxC
+         NtVRDyRnENOxfwqvpxkopl+p4LDlvsUaQHCnSSsp0iR0FHweY9ZaqME94NXDUQidC8
+         jnUp6b2Wankw5/iPlTSEleo90ERD5EpGQpw0pKy2k2TtVBUyYcdsgidMzBiqLRS6No
+         4OJr/vKoGaM/Q==
+Message-ID: <5cc99fd7-1401-511d-37c3-77f18b08e597@collabora.com>
+Date:   Wed, 25 May 2022 15:04:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yo4hVw7B+bUlMzLX@cmpxchg.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v10 19/21] drm/mediatek: Add mt8195 External DisplayPort
+ support
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Helge Deller <deller@gmx.de>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org
+References: <20220523104758.29531-1-granquet@baylibre.com>
+ <20220523104758.29531-20-granquet@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220523104758.29531-20-granquet@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 08:30:15AM -0400, Johannes Weiner wrote:
-> On Wed, May 25, 2022 at 05:53:30PM +0800, Muchun Song wrote:
-> > On Tue, May 24, 2022 at 03:27:20PM -0400, Johannes Weiner wrote:
-> > > On Tue, May 24, 2022 at 02:05:43PM +0800, Muchun Song wrote:
-> > > > The diagram below shows how to make the folio lruvec lock safe when LRU
-> > > > pages are reparented.
-> > > > 
-> > > > folio_lruvec_lock(folio)
-> > > >     retry:
-> > > > 	lruvec = folio_lruvec(folio);
-> > > > 
-> > > >         // The folio is reparented at this time.
-> > > >         spin_lock(&lruvec->lru_lock);
-> > > > 
-> > > >         if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio)))
-> > > >             // Acquired the wrong lruvec lock and need to retry.
-> > > >             // Because this folio is on the parent memcg lruvec list.
-> > > >             goto retry;
-> > > > 
-> > > >         // If we reach here, it means that folio_memcg(folio) is stable.
-> > > > 
-> > > > memcg_reparent_objcgs(memcg)
-> > > >     // lruvec belongs to memcg and lruvec_parent belongs to parent memcg.
-> > > >     spin_lock(&lruvec->lru_lock);
-> > > >     spin_lock(&lruvec_parent->lru_lock);
-> > > > 
-> > > >     // Move all the pages from the lruvec list to the parent lruvec list.
-> > > > 
-> > > >     spin_unlock(&lruvec_parent->lru_lock);
-> > > >     spin_unlock(&lruvec->lru_lock);
-> > > > 
-> > > > After we acquire the lruvec lock, we need to check whether the folio is
-> > > > reparented. If so, we need to reacquire the new lruvec lock. On the
-> > > > routine of the LRU pages reparenting, we will also acquire the lruvec
-> > > > lock (will be implemented in the later patch). So folio_memcg() cannot
-> > > > be changed when we hold the lruvec lock.
-> > > > 
-> > > > Since lruvec_memcg(lruvec) is always equal to folio_memcg(folio) after
-> > > > we hold the lruvec lock, lruvec_memcg_debug() check is pointless. So
-> > > > remove it.
-> > > > 
-> > > > This is a preparation for reparenting the LRU pages.
-> > > > 
-> > > > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> > > 
-> > > This looks good to me. Just one question:
-> > > 
-> > > > @@ -1230,10 +1213,23 @@ void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
-> > > >   */
-> > > >  struct lruvec *folio_lruvec_lock(struct folio *folio)
-> > > >  {
-> > > > -	struct lruvec *lruvec = folio_lruvec(folio);
-> > > > +	struct lruvec *lruvec;
-> > > >  
-> > > > +	rcu_read_lock();
-> > > > +retry:
-> > > > +	lruvec = folio_lruvec(folio);
-> > > >  	spin_lock(&lruvec->lru_lock);
-> > > > -	lruvec_memcg_debug(lruvec, folio);
-> > > > +
-> > > > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
-> > > > +		spin_unlock(&lruvec->lru_lock);
-> > > > +		goto retry;
-> > > > +	}
-> > > > +
-> > > > +	/*
-> > > > +	 * Preemption is disabled in the internal of spin_lock, which can serve
-> > > > +	 * as RCU read-side critical sections.
-> > > > +	 */
-> > > > +	rcu_read_unlock();
-> > > 
-> > > The code looks right to me, but I don't understand the comment: why do
-> > > we care that the rcu read-side continues? With the lru_lock held,
-> > > reparenting is on hold and the lruvec cannot be rcu-freed anyway, no?
-> > >
-> > 
-> > Right. We could hold rcu read lock until end of reparting.  So you mean
-> > we do rcu_read_unlock in folio_lruvec_lock()?
+Il 23/05/22 12:47, Guillaume Ranquet ha scritto:
+> This patch adds External DisplayPort support to the mt8195 eDP driver.
 > 
-> The comment seems to suggest that disabling preemption is what keeps
-> the lruvec alive. But it's the lru_lock that keeps it alive. The
-> cgroup destruction path tries to take the lru_lock long before it even
-> gets to synchronize_rcu(). Once you hold the lru_lock, having an
-> implied read-side critical section as well doesn't seem to matter.
->
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dp.c | 104 +++++++++++++++++++++++-------
+>   1 file changed, 81 insertions(+), 23 deletions(-)
+> 
 
-Well, I thought that spinlocks have implicit read-side critical sections
-because it disables preemption (I learned from the comments above
-synchronize_rcu() that says interrupts, preemption, or softirqs have been
-disabled also serve as RCU read-side critical sections).  So I have a
-question: is it still true in a PREEMPT_RT kernel (I am not familiar with
-this)?
+Your patch [18/21], contained in this series, introduces mtk_dp.c.
+This patch [19/21] cannot be applied cleanly on top of 18/21.
 
-> Should the comment be deleted?
->
-
-I think we could remove the comments. If the above question is false, seems
-like we should continue holding rcu read lock.
-
-Thanks.
+What happened here?!?

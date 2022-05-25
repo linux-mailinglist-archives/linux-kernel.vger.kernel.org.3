@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55331533643
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 06:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B76533645
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 06:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242193AbiEYErx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 00:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S243522AbiEYEuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 00:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiEYErv (ORCPT
+        with ESMTP id S229653AbiEYEuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 00:47:51 -0400
+        Wed, 25 May 2022 00:50:11 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F7771D81;
-        Tue, 24 May 2022 21:47:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F1771DA8
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 21:50:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653454068; x=1684990068;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mQIssSDOaQfJIXR58jR52N3/AEio4webKzj6b0a2BUc=;
-  b=f/QLtz5KZoBMzJMFe+Nxy1j8syVhorF0fuAe0kGgIc2N/J2WVx8GGriY
-   uUy8hn4L+Xd34gg2nBmOtkdZkATV1lyN0XKe9FjhWoeJjnM8q3FYS3DY0
-   NX4ULDKqWCVUW3moxQhIKMmBS5hNN+yCXeVJEIjB8M8WXykgbxbxT79d7
-   l7hoazRJ+uGhaAAkJg2N06ssvwYcXlcADJAftZyqgwenpt6iwIQg96NtD
-   jgAp0r+yogo8A+lUYPzByVpMHOHcH+Djt/zvIIJOA1PioM7AvgIO/ukLG
-   Hx4q8AOFQgFj7zndpm+ZDsjL6hh3UHdIg7y+5QO0zmTdJfntSShUMKt7k
+  t=1653454210; x=1684990210;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pjZMmEANMCnklIA4vkBd2ENvVE8LwaQZspI3mdFXeHY=;
+  b=Bz07Cdun7geUfgE5rloSint2MN1vCaXC2vhxMSOPIRkM/DudzNfMxO5d
+   G96PK8kHTkR3DNkpoAhOk5B7vMKYLPkzm7Ebndrnb2N3VhbgAcCAamKPh
+   7mywDkNJq8wqUSAzfMzQZXl5XDqKPFy1BBk4/8BkhtPzYRLlR1Wdeetrg
+   KYYmB7pRKHL+ev2oGBSiZ8WlJrpWy7UOeAWMz5w6NGfWTRBImOQyK2wQT
+   mH9A1G8NZGrlU6pw2kOkDFSjyBabZQpnvOb1TZCXYrdj9Z9ctXahJwap7
+   Z/AS6IAe8PmPu/cIyX5MRNJRCFe+Czh94r3vwAoCfSaQjWu5FYM1hTFL+
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="336769404"
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="336769629"
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="336769404"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 21:47:48 -0700
+   d="scan'208";a="336769629"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 21:50:09 -0700
 X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="703747870"
-Received: from canagani-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.35.228])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 21:47:45 -0700
-Message-ID: <a6694c81b4e96a22557fd0af70a81bd2c2e4e3e7.camel@intel.com>
-Subject: Re: [PATCH v3 09/21] x86/virt/tdx: Get information about TDX module
- and convertible memory
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Wed, 25 May 2022 16:47:42 +1200
-In-Reply-To: <4aea41ea-211f-fbde-34e9-4c4467ebc848@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
-         <f929fb7a-5bdc-2567-77aa-762a098c8513@intel.com>
-         <0bab7221179229317a11311386c968bd0d40e344.camel@intel.com>
-         <98f81eed-e532-75bc-d2d8-4e020517b634@intel.com>
-         <be31134cf44a24d6d38fbf39e9e18ef223e216c6.camel@intel.com>
-         <4aea41ea-211f-fbde-34e9-4c4467ebc848@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+   d="scan'208";a="601652421"
+Received: from jwang96-mobl.ccr.corp.intel.com (HELO [10.255.29.139]) ([10.255.29.139])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 21:50:06 -0700
+Message-ID: <caae0926-b8f8-a64d-5c33-441e33d0c1dc@linux.intel.com>
+Date:   Wed, 25 May 2022 12:50:04 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH v7 03/10] iommu/sva: Add iommu_sva_domain support
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>, Vinod Koul <vkoul@kernel.org>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-4-baolu.lu@linux.intel.com>
+ <BN9PR11MB5276982C37DFF0FEFC45BDD68CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276982C37DFF0FEFC45BDD68CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,48 +75,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 10:47 -0700, Dave Hansen wrote:
-> On 4/28/22 16:14, Kai Huang wrote:
-> > On Thu, 2022-04-28 at 07:06 -0700, Dave Hansen wrote:
-> > > On 4/27/22 17:15, Kai Huang wrote:
-> > > > > Couldn't we get rid of that comment if you did something like:
-> > > > > 
-> > > > > 	ret = tdx_get_sysinfo(&tdx_cmr_array, &tdx_sysinfo);
-> > > > 
-> > > > Yes will do.
-> > > > 
-> > > > > and preferably make the variables function-local.
-> > > > 
-> > > > 'tdx_sysinfo' will be used by KVM too.
-> > > 
-> > > In other words, it's not a part of this series so I can't review whether
-> > > this statement is correct or whether there's a better way to hand this
-> > > information over to KVM.
-> > > 
-> > > This (minor) nugget influencing the design also isn't even commented or
-> > > addressed in the changelog.
-> > 
-> > TDSYSINFO_STRUCT is 1024B and CMR array is 512B, so I don't think it should be
-> > in the stack.  I can change to use dynamic allocation at the beginning and free
-> > it at the end of the function.  KVM support patches can change it to static
-> > variable in the file.
+On 2022/5/24 17:39, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Thursday, May 19, 2022 3:21 PM
+>>
+>> The iommu_sva_domain represents a hardware pagetable that the IOMMU
+>> hardware could use for SVA translation. This adds some infrastructure
+>> to support SVA domain in the iommu common layer. It includes:
+>>
+>> - Add a new struct iommu_sva_domain and new IOMMU_DOMAIN_SVA
+>> domain
+>>    type.
+>> - Add a new domain ops pointer in iommu_ops. The IOMMU drivers that
+>>    support SVA should provide the callbacks.
+>> - Add helpers to allocate and free an SVA domain.
+>> - Add helpers to set an SVA domain to a device and the reverse
+>>    operation.
+>>
+>> Some buses, like PCI, route packets without considering the PASID value.
+>> Thus a DMA target address with PASID might be treated as P2P if the
+>> address falls into the MMIO BAR of other devices in the group. To make
+>> things simple, the attach/detach interfaces only apply to devices
+>> belonging to the singleton groups, and the singleton is immutable in
+>> fabric i.e. not affected by hotplug.
+>>
+>> The iommu_set/block_device_pasid() can be used for other purposes,
+>> such as kernel DMA with pasid, mediation device, etc. Hence, it is put
+>> in the iommu.c.
 > 
-> 2k of stack is big, but it isn't a deal breaker for something that's not
-> nested anywhere and that's only called once in a pretty controlled
-> setting and not in interrupt context.  I wouldn't cry about it.
+> usually we have 'set/clear' pair or 'allow/block'. Having 'set' paired
+> with 'block' doesn't read very clearly.
 
-Hi Dave,
+Yes. Let's still use the attach/detach semantics.
 
-I got below complaining when I use local variable for TDSYSINFO_STRUCT and CMR
-array:
+> 
+>> +static bool device_group_immutable_singleton(struct device *dev)
+>> +{
+>> +	struct iommu_group *group = iommu_group_get(dev);
+> 
+> what about passing group as the parameter since the caller will
+> get the group again right after calling this function? In that case
+> the function could be renamed as:
+> 
+> 	iommu_group_immutable_singleton()
+> 
+> or be shorter:
+> 
+> 	iommu_group_fixed_singleton()
 
-arch/x86/virt/vmx/tdx/tdx.c:383:1: warning: the frame size of 3072 bytes is
-larger than 1024 bytes [-Wframe-larger-than=]
-  383 | }
+Fair enough. I will tune it as below:
 
-So I don't think we can use local variable for them.  I'll still use static
-variables to avoid dynamic allocation.  In the commit message, I'll explain they
-are too big to put into the stack, and KVM will need to use TDSYSINFO_STRUCT
-reported by TDX module anyway.
++static bool iommu_group_immutable_singleton(struct iommu_group *group)
++{
++       int count;
++
++       mutex_lock(&group->mutex);
++       count = iommu_group_device_count(group);
++       mutex_unlock(&group->mutex);
++
++       if (count != 1)
++               return false;
++
++       /*
++        * The PCI device could be considered to be fully isolated if all
++        * devices on the path from the device to the host-PCI bridge are
++        * protected from peer-to-peer DMA by ACS.
++        */
++       if (dev_is_pci(dev))
++               return pci_acs_path_enabled(to_pci_dev(dev), NULL,
++                                           REQ_ACS_FLAGS);
++
++       /*
++        * Otherwise, the device came from DT/ACPI, assume it is static and
++        * then singleton can know from the device count in the group.
++        */
++       return true;
++}
 
-Let me know if you don't agree?
+
+> 
+>> +	int count;
+>> +
+>> +	if (!group)
+>> +		return false;
+>> +
+>> +	mutex_lock(&group->mutex);
+>> +	count = iommu_group_device_count(group);
+>> +	mutex_unlock(&group->mutex);
+>> +	iommu_group_put(group);
+>> +
+>> +	if (count != 1)
+>> +		return false;
+> 
+> For non-pci devices above doesn't check anything against immutable.
+> Please add some comment to explain why doing so is correct.
+
+Yes, as above code shows.
+
+> 
+>> +
+>> +	/*
+>> +	 * The PCI device could be considered to be fully isolated if all
+>> +	 * devices on the path from the device to the host-PCI bridge are
+>> +	 * protected from peer-to-peer DMA by ACS.
+>> +	 */
+>> +	if (dev_is_pci(dev))
+>> +		return pci_acs_path_enabled(to_pci_dev(dev), NULL,
+>> +					    REQ_ACS_FLAGS);
+>> +
+>> +	return true;
+>> +}
+>> +
+
+Best regards,
+baolu

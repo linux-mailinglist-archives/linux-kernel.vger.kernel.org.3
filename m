@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6381F5346E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 01:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3910F5346E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 01:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345061AbiEYXIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 19:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S229662AbiEYXJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 19:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiEYXIv (ORCPT
+        with ESMTP id S1343916AbiEYXJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 19:08:51 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD7066ADA;
-        Wed, 25 May 2022 16:08:50 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id s28so46064wrb.7;
-        Wed, 25 May 2022 16:08:50 -0700 (PDT)
+        Wed, 25 May 2022 19:09:10 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7CF8FFBF
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 16:09:09 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id z18-20020a656112000000b003fa0ac4b723so5454825pgu.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 16:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w+b9gdnTinL6wrIHBf3f+AZedWLGvYQrCm3phP+L7gc=;
-        b=SbRB6SK8sQPWbrRGSU761H8nBWHJsfx8Bg9QcJ51xiDXODS7GffWQW83pCHPUbK4cd
-         JW7zAE5piQLv+h+UYcyqjP3uVLqTsdAG/Y69LhJjZqC7Hr0QD8vbC5jHkbWUKH8NnjKv
-         /kYrponui1LJNLNKmTzdqpMCf+y/BTlvfHUo/ZCNCYo8m5BKHYEM3fWlL4AzyR4h2+CG
-         T/GrXrvy6kDgv5sUmM0q1QfPo3Ig4ukwfwpNDTGzfPllUTSIHuD0RNsqyFe96rwccxdB
-         3LMU5/1t+94vFUJ8CnEnkqjMDkcLq3nyWrGqDm99zf6HLQdxDrmKAsyHOQXZf1dFR3KV
-         J4tg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=YrjJHRFdS5VonxkVsAHBuBVkWew0ibSghSiVOFylo/0=;
+        b=gFfiWRVGugXdj5kNECaC63se48jXOxl37x3pQVu/GVdoyQAVtuM/EK0DWrxIz5eUqb
+         HBRcZZA/xAqyUbMfWJ13wlYg4NU2bBktbl2Oh4qqoJSR/gC6M6lpnAQhO84Z7ftzZVXF
+         RjE2gdia/87jx/S7lxbRW3lGpFw4BL/jqQ6NmyogTRAZpLfx26cza5BdYkGwzDcfmBBv
+         CWt2X3uKH3NZChj1746knGWBVJetjBjJ1hcqzxXAxRs3B0V00ZqLdeuaWczFVTmYf6vc
+         00RAmX0eOL3LR8LuFFB9GunMA6l/yWmQetsIsSxvOaKO0SxnO22FxhYc1GuihdOKPkof
+         poqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w+b9gdnTinL6wrIHBf3f+AZedWLGvYQrCm3phP+L7gc=;
-        b=QagwPMhI8dsf9PKRjp5MURSLucsNx9WIHZKykP0j1fRXWwQeHy0bZ63YBsOpXb5M60
-         2AlIL64ukIODKW4bKVLs/dDtk3aa/1vjz+dDT4k6LTkR7ARdyfzWbl8Pw7iO/0ZQo05g
-         KfI6pHC77muZeJEUB1OspsJRoVKjsVJa+caLceM7RZ98HcU4xFrCFioJpXwW0BNHVtaS
-         HnMrPKLpcpe26+16ewxKCZZvWuy5/LI7/3V8Rp/fnNvW0Qc9gimDULyiwkMEB3I3apho
-         aBpNmNqOknZ1NxvVPp1UzGOWCtJgsEFvPpsdsDJmvBqiurXXpNKFygxMFI8Vo0smkX9j
-         fOHw==
-X-Gm-Message-State: AOAM530/aLjU1auEALEBiYnXa33E/TpeSNf9ODGR0F1QQAYLfN3jdGem
-        qGD6NA1PjuMraaGKQOOxyZ8=
-X-Google-Smtp-Source: ABdhPJwfE6vKfOV8ZO5UcmyYQlQzCwmf+EHSy8a8/Hu3S3epV571AJEfewLyUGlpgX20HaW8HMTgLw==
-X-Received: by 2002:a5d:47ce:0:b0:20f:d6b5:4648 with SMTP id o14-20020a5d47ce000000b0020fd6b54648mr16009719wrc.73.1653520127956;
-        Wed, 25 May 2022 16:08:47 -0700 (PDT)
-Received: from xws.localdomain (pd9e5a94a.dip0.t-ipconnect.de. [217.229.169.74])
-        by smtp.gmail.com with ESMTPSA id i7-20020adff307000000b0020fe280aa96sm112627wro.107.2022.05.25.16.08.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 16:08:47 -0700 (PDT)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH] HID: hid-input: add Surface Go battery quirk
-Date:   Thu, 26 May 2022 01:08:27 +0200
-Message-Id: <20220525230827.1019662-1-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=YrjJHRFdS5VonxkVsAHBuBVkWew0ibSghSiVOFylo/0=;
+        b=y8lZVx6EEUy9efkbCCDtU9KsLWr9bBEd2xODK1ywGwCwjL7ce9tF05/89HC7GsdMiK
+         1X7Tv8h17nRtpvZvqHaORzdHfSfmYpF0Fn74DCGw9ZAH8mBr6nuV2wgAjMB/RYpYlMA/
+         G67Jx2G2RxM7caWm97ZOxjWp+eM6Ud996rlXxTM4RynTdtIbpC9DfKyBe0MnaR+wmsE/
+         Xs6bTs+PNzymmDSeAEqyo9h4oAVgcs4yYsoXSNS0+rqElbjFepG8AojPhxZjEoDbzToD
+         gB+aZzjYORSeraXLlDSdji5TS5HXaMdmNm4RC6TxluyIra7PJpJxB2eqmOb4ORE8KLO7
+         o3QA==
+X-Gm-Message-State: AOAM532izQQ5M/LkZBmhBtHbiF3jrwP3VJyhIC+6ptj8hO+DHaHp3hbt
+        O8VS00PMz41BxsxR3ikiDvDT7621tMce
+X-Google-Smtp-Source: ABdhPJx37yu8A24ZMkoDUIBUi5tSrrE6OPryVyWVtHXumbOflxgrCjmDatYIZ+WQA1RdSDVx2Gn3EKpW5B/n
+X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
+ (user=bgardon job=sendgmr) by 2002:aa7:8081:0:b0:518:26c4:ea42 with SMTP id
+ v1-20020aa78081000000b0051826c4ea42mr29589288pff.7.1653520149143; Wed, 25 May
+ 2022 16:09:09 -0700 (PDT)
+Date:   Wed, 25 May 2022 23:09:04 +0000
+Message-Id: <20220525230904.1584480-1-bgardon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [PATCH] KVM: x86/MMU: Zap non-leaf SPTEs when disabling dirty logging
+From:   Ben Gardon <bgardon@google.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,46 +70,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the Surface Go (1), the (Elantech) touchscreen/digitizer in
-the Surface Go 2 mistakenly reports the battery of the stylus. Instead
-of over the touchscreen device, battery information is provided via
-bluetooth and the touchscreen device reports an empty battery.
+When disabling dirty logging, zap non-leaf parent entries to allow
+replacement with huge pages instead of recursing and zapping all of the
+child, leaf entries. This reduces the number of TLB flushes required.
 
-Apply the HID_BATTERY_QUIRK_IGNORE quirk to ignore this battery and
-prevent the erroneous low battery warnings.
+Currently disabling dirty logging with the TDP MMU is extremely slow.
+On a 96 vCPU / 96G VM backed with gigabyte pages, it takes ~200 seconds
+to disable dirty logging with the TDP MMU, as opposed to ~4 seconds with
+the shadow MMU. This patch reduces the disable dirty log time with the
+TDP MMU to ~3 seconds.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+Testing:
+Ran KVM selftests and kvm-unit-tests on an Intel Haswell. This
+patch introduced no new failures.
+
+Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- drivers/hid/hid-ids.h   | 1 +
- drivers/hid/hid-input.c | 2 ++
- 2 files changed, 3 insertions(+)
+ arch/x86/kvm/mmu/tdp_iter.c |  9 +++++++++
+ arch/x86/kvm/mmu/tdp_iter.h |  1 +
+ arch/x86/kvm/mmu/tdp_mmu.c  | 38 +++++++++++++++++++++++++++++++------
+ 3 files changed, 42 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index d9eb676abe96..9c4e92a9c646 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -413,6 +413,7 @@
- #define USB_DEVICE_ID_ASUS_UX550VE_TOUCHSCREEN	0x2544
- #define USB_DEVICE_ID_ASUS_UX550_TOUCHSCREEN	0x2706
- #define I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREEN	0x261A
-+#define I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCREEN	0x2A1C
+diff --git a/arch/x86/kvm/mmu/tdp_iter.c b/arch/x86/kvm/mmu/tdp_iter.c
+index 6d3b3e5a5533..ee4802d7b36c 100644
+--- a/arch/x86/kvm/mmu/tdp_iter.c
++++ b/arch/x86/kvm/mmu/tdp_iter.c
+@@ -145,6 +145,15 @@ static bool try_step_up(struct tdp_iter *iter)
+ 	return true;
+ }
  
- #define USB_VENDOR_ID_ELECOM		0x056e
- #define USB_DEVICE_ID_ELECOM_BM084	0x0061
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index c6b27aab9041..48c1c02c69f4 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -381,6 +381,8 @@ static const struct hid_device_id hid_battery_quirks[] = {
- 	  HID_BATTERY_QUIRK_IGNORE },
- 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREEN),
- 	  HID_BATTERY_QUIRK_IGNORE },
-+	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCREEN),
-+	  HID_BATTERY_QUIRK_IGNORE },
- 	{}
- };
++/*
++ * Step the iterator back up a level in the paging structure. Should only be
++ * used when the iterator is below the root level.
++ */
++void tdp_iter_step_up(struct tdp_iter *iter)
++{
++	WARN_ON(!try_step_up(iter));
++}
++
+ /*
+  * Step to the next SPTE in a pre-order traversal of the paging structure.
+  * To get to the next SPTE, the iterator either steps down towards the goal
+diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
+index f0af385c56e0..adfca0cf94d3 100644
+--- a/arch/x86/kvm/mmu/tdp_iter.h
++++ b/arch/x86/kvm/mmu/tdp_iter.h
+@@ -114,5 +114,6 @@ void tdp_iter_start(struct tdp_iter *iter, struct kvm_mmu_page *root,
+ 		    int min_level, gfn_t next_last_level_gfn);
+ void tdp_iter_next(struct tdp_iter *iter);
+ void tdp_iter_restart(struct tdp_iter *iter);
++void tdp_iter_step_up(struct tdp_iter *iter);
  
+ #endif /* __KVM_X86_MMU_TDP_ITER_H */
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 841feaa48be5..7b9265d67131 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1742,12 +1742,12 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+ 	gfn_t start = slot->base_gfn;
+ 	gfn_t end = start + slot->npages;
+ 	struct tdp_iter iter;
++	int max_mapping_level;
+ 	kvm_pfn_t pfn;
+ 
+ 	rcu_read_lock();
+ 
+ 	tdp_root_for_each_pte(iter, root, start, end) {
+-retry:
+ 		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
+ 			continue;
+ 
+@@ -1755,15 +1755,41 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+ 		    !is_last_spte(iter.old_spte, iter.level))
+ 			continue;
+ 
++		/*
++		 * This is a leaf SPTE. Check if the PFN it maps can
++		 * be mapped at a higher level.
++		 */
+ 		pfn = spte_to_pfn(iter.old_spte);
+-		if (kvm_is_reserved_pfn(pfn) ||
+-		    iter.level >= kvm_mmu_max_mapping_level(kvm, slot, iter.gfn,
+-							    pfn, PG_LEVEL_NUM))
++
++		if (kvm_is_reserved_pfn(pfn))
+ 			continue;
+ 
++		max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot,
++				iter.gfn, pfn, PG_LEVEL_NUM);
++
++		WARN_ON(max_mapping_level < iter.level);
++
++		/*
++		 * If this page is already mapped at the highest
++		 * viable level, there's nothing more to do.
++		 */
++		if (max_mapping_level == iter.level)
++			continue;
++
++		/*
++		 * The page can be remapped at a higher level, so step
++		 * up to zap the parent SPTE.
++		 */
++		while (max_mapping_level > iter.level)
++			tdp_iter_step_up(&iter);
++
+ 		/* Note, a successful atomic zap also does a remote TLB flush. */
+-		if (tdp_mmu_zap_spte_atomic(kvm, &iter))
+-			goto retry;
++		tdp_mmu_zap_spte_atomic(kvm, &iter);
++
++		/*
++		 * If the atomic zap fails, the iter will recurse back into
++		 * the same subtree to retry.
++		 */
+ 	}
+ 
+ 	rcu_read_unlock();
 -- 
-2.36.1
+2.36.1.124.g0e6072fb45-goog
 

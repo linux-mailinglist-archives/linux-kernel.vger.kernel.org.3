@@ -2,90 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2CB5345B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556035345C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 23:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345221AbiEYVR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 17:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
+        id S1344982AbiEYVax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 17:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233855AbiEYVRY (ORCPT
+        with ESMTP id S232123AbiEYVao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 17:17:24 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9513692AD
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:17:23 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id e189so29203oia.8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tQLrwjOVWdPTAmVNl8Oa/wIjk6Qom4wl7csz9KlPVIA=;
-        b=i6kUoS4w1poqdxsnZiuMb3gv1cn4miEZl3VNbmNsybdKYgpRjssVszT219S/7i09+X
-         M5+F/Be7WYTicgyCepDowA5Dckd0fUBBgLHQBlYKBk79QCOxX4B82XbKDkrRqvjFf7Ai
-         yoOlbQxz4Ju5n/UeQ8dhSzX39A0nsEnalDrFdgdQLRS+Jv25KeJK3P5IV6eO35MeUqqi
-         iRg2KqA+QQoAivzTKOh7FqnLzR5nbT3NlRAiQyixMbuX3t/eRaaPca7EHR5Kddn5bH8X
-         r/9/rHCujHcjhOEol/Ww/0Nc2OLAR5aMn1BI+hrmBiPa2Pkke2hzBN/X5NAx5RILpaVi
-         aVqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tQLrwjOVWdPTAmVNl8Oa/wIjk6Qom4wl7csz9KlPVIA=;
-        b=53iB0BaUoSipqmPS7bTlv3pccwv1AtRKnnZrDc/DN3L6ZMmjAl+4dVltfK3YRTO9mh
-         7my0vnLmGLNHB5Iada76p/TCnXy/+8xRCoV7qKxLxwS9Q+1PugQXuGM0Iu5zq1174qyT
-         7b2KH4f9KsFGJbnO7Emf6EaZ0jF3AOsIEzdfdGPqQvUUC1npUcgvCgeaWS7wBG5aOlpS
-         ZmJgC5pcZNAbfplCc9DDucZXI508RYOF9AT9giI3SBMIempNulKe8CixOfLchULuX1qA
-         dhCYOWkWH8tS7zVg/lKU4lqYrkWll31OQhoPzUdUMo3Ph3wN09ThZMX/FkYFKmE/ZF26
-         nONA==
-X-Gm-Message-State: AOAM5336fsdK05IC3gfgQn1YQWAQvf0Wjk7vwM30Nr3rX5CtLR76jgNI
-        igCYFezT888+aLaUVoamu5N3+MbblQyVXHZWGO4+Uw==
-X-Google-Smtp-Source: ABdhPJwCAFHZrdhAieJcMI0QILmcCt6DtqZwi8UYIPkgKGblcBmu88BoGA67mNxlGEsN7i1qtjru1x7pZwwot/BGCEk=
-X-Received: by 2002:a05:6808:13c4:b0:32a:f1cb:fc12 with SMTP id
- d4-20020a05680813c400b0032af1cbfc12mr6485408oiw.13.1653513443045; Wed, 25 May
- 2022 14:17:23 -0700 (PDT)
+        Wed, 25 May 2022 17:30:44 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9E57A80C
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 14:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653514238; x=1685050238;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8GFcT/M1tk9WnUvUZ/xjIR+P+QUrCNq+NkKDve4Se5o=;
+  b=ACoooA5C1uKcp9BfgllUGVqJsyD5thHKtBvAQULQz3Ibe0wbXawC/RcI
+   w8JI9dRdLyhD56TXKUyrsZpPhR1dWYnGY6Lrsk93y4O8D3xo0XnwaXNSC
+   oPNBR9dYq/4Nnu43Knz5g1bDI9YVn71pBuf+U0Bd7YiSfeWHMtDWUp2cD
+   Ecj5VldmXmKUARHjYtSWw1z66L/Rq+4UDBZ+YwTfDVi7enM6a873GhMJ3
+   KJqP3it0of8oWI8PHCXKo+d8XNOqnXlBRPsfnnq3QPIuC0Oawi+KWRyZ/
+   6AwtlyvwA7qDF53jL86Ni7zw7O+DIyTXqvLP8LgkP9LMtuKGIJ0vVHzdQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="271513304"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="271513304"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 14:30:38 -0700
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="745955652"
+Received: from srotter-mobl1.amr.corp.intel.com (HELO [10.212.216.74]) ([10.212.216.74])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 14:30:36 -0700
+Message-ID: <895302ec-f9e5-2b6a-835a-08e73ef8ace3@linux.intel.com>
+Date:   Wed, 25 May 2022 16:25:33 -0500
 MIME-Version: 1.0
-References: <20220525210447.2758436-1-seanjc@google.com> <20220525210447.2758436-3-seanjc@google.com>
-In-Reply-To: <20220525210447.2758436-3-seanjc@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 25 May 2022 14:17:12 -0700
-Message-ID: <CALMp9eRgiPZeGhKHMnwJVSLPvKjPFo4vKzg3=TXTuLL_LSt_fw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: VMX: Add knob to allow rejecting kvm_intel on
- inconsistent VMCS config
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Lei Wang <lei4.wang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v4 1/2] ASoC: amd: acp: Add support for nau8825 and
+ max98360 card
+Content-Language: en-US
+To:     V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        broonie@kernel.org, alsa-devel@alsa-project.org
+Cc:     Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, ajitkumar.pandey@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220525203415.2227914-1-Vsujithkumar.Reddy@amd.com>
+ <20220525203415.2227914-2-Vsujithkumar.Reddy@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220525203415.2227914-2-Vsujithkumar.Reddy@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 2:04 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Add an off-by-default module param, reject_inconsistent_vmcs_config, to
-> allow rejecting the load of kvm_intel if an inconsistent VMCS config is
-> detected.  Continuing on with an inconsistent, degraded config is
-> undesirable when the CPU is expected to support a given set of features,
-> e.g. can result in a misconfigured VM if userspace doesn't cross-check
-> KVM_GET_SUPPORTED_CPUID, and/or can result in poor performance due to
-> lack of fast MSR switching.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
-There are several inconsistent VMCS configs that are not rejected here
-(e.g. "enable XSAVES/XRSTORS" on a CPU that doesn't support XSAVES).
-Do you plan to include more checks in the future, or should this be,
-"reject_some_inconsistent_vmcs_configs"? :-)
+
+
+
+> +struct snd_soc_acpi_mach snd_soc_acpi_amd_rmb_sof_machines[] = {
+> +	{
+> +		.id = "AMDI1019",
+> +		.drv_name = "rmb-dsp",
+> +		.pdata = &acp_quirk_data,
+> +		.fw_filename = "sof-rmb.ri",
+> +		.sof_tplg_filename = "sof-acp-rmb.tplg",
+> +	},
+> +	{
+> +		.id = "10508825",
+> +		.drv_name = "nau8825-max",
+> +		.pdata = &acp_quirk_data,
+> +		.machine_quirk = snd_soc_acpi_codec_list,
+> +		.quirk_data = &amp_max,
+> +		.fw_filename = "sof-rmb.ri",
+> +		.sof_tplg_filename = "sof-acp-rmb.tplg",
+
+this looks rather odd, you have two entries in the table that point to
+the exact same pair of firmware and topology files. This is either
+intentional and missing a comment, or a copy-paste mistake, or some of
+these fields are not required.
+
+> -	clk_disable_unprepare(drvdata->wclk);
+> +	if (!drvdata->soc_mclk)
+> +		clk_disable_unprepare(drvdata->wclk);
+>  }
+
+mclk and wclk are different concepts usually.
+
+
+>  struct acp_card_drvdata {
+> @@ -49,6 +51,7 @@ struct acp_card_drvdata {
+>  	unsigned int dai_fmt;
+>  	struct clk *wclk;
+>  	struct clk *bclk;
+> +	bool soc_mclk;
+
+I wonder if soc_mclk means 'soc_clock_provider' ?
+
+it looks like a configuration instead of a real/physical clock?
+

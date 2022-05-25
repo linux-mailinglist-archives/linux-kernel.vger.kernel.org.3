@@ -2,180 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47105334E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 03:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB4B5334F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 03:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243247AbiEYBqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 21:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
+        id S243381AbiEYBss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 21:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240652AbiEYBqb (ORCPT
+        with ESMTP id S243195AbiEYBsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 21:46:31 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04C1F58
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 18:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653443189; x=1684979189;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=H6qkIbR47T+0X3Xh/6ENrE9zkSWdICP8hBFS5++43AM=;
-  b=A6UFmJJ3nB12DR7MhOD1FOtRv1EJOSsWpIpELyM5OWYHY/cf7MZIlsmx
-   xHJxtP6+ViMSaqyKklaBfXlQ1jM6T0IsuzzKSfJ1p6HZYh4P1cdt60eLl
-   QzIqFcMD4E99nsd0lelktMYCjEQL4VGFa/sorvXJInsctpheRvm5/jRVI
-   +/0vUMOPZMAKZpIIXawLuJr9eLwRKAFAkbrQHxNKk+o9Im6YT05ZORYmG
-   0hMKAzS22zS5UQimyG53T7YfF45VaECGd7PGtNQ+QlZYB5wFEwu/ZwR1a
-   Sx6YLHZmY+c1CfTlOhM7RcuYGENUSUZ7gYLSGCx9TmRrYMg0UP/DwVY2A
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="255753800"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="255753800"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 18:46:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="601596084"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 24 May 2022 18:46:28 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntg6V-0002cS-Bg;
-        Wed, 25 May 2022 01:46:27 +0000
-Date:   Wed, 25 May 2022 09:45:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:axboe/linux-block/for-5.20/io_uring 8/34]
- io_uring/io_uring.c:6533:12: error: redefinition of 'io_shutdown'
-Message-ID: <202205250907.Sf2qeeWV-lkp@intel.com>
+        Tue, 24 May 2022 21:48:43 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99CD15823;
+        Tue, 24 May 2022 18:48:41 -0700 (PDT)
+X-UUID: 1c82a5c1ad1d41ee9022ec0308068440-20220525
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:4ca38fe2-3fb8-42ac-9f85-9c5ec81909e4,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:3f231bb8-3c45-407b-8f66-25095432a27a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 1c82a5c1ad1d41ee9022ec0308068440-20220525
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <axe.yang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1414027722; Wed, 25 May 2022 09:48:35 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 25 May 2022 09:48:34 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 25 May 2022 09:48:33 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 25 May 2022 09:48:32 +0800
+From:   Axe Yang <axe.yang@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Axe Yang <axe.yang@mediatek.com>, Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v12 0/3] mmc: mediatek: add support for SDIO async IRQ
+Date:   Wed, 25 May 2022 09:48:28 +0800
+Message-ID: <20220525014831.32723-1-axe.yang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens,
+Changes in v12:
+- assign NULL to pins_eint directly instead of using kfree()
 
-First bad commit (maybe != root cause):
+Changes in v11:
+- remove '_irq' suffix in interrupts-names property
+- fix yaml example build error
+- refactor msdc_enable_sdio_irq(), free pins_eint if async irq is not supported
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/for-5.20/io_uring
-head:   efc30c3b043b70c4a299df9f10a948b60ef721e3
-commit: 4ad7740c8e760244c249fff910d82f4fcf214bda [8/34] io_uring: move to separate directory
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220525/202205250907.Sf2qeeWV-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/4ad7740c8e760244c249fff910d82f4fcf214bda
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/for-5.20/io_uring
-        git checkout 4ad7740c8e760244c249fff910d82f4fcf214bda
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+Changes in v10:
+- add sample node for SDIO host which support wakeup interrupt in yaml
+- skip MMC_PM_WAKE_SDIO_IRQ check before enable SDIO async interrupt
+- add MMC_PM_KEEP_POWER check before SDIO eint pinstate parsing
+- use dev_pm_set_dedicated_wake_irq_reverse() to correct irq control sequence
+- set dedicated irq in msdc_enable_sdio_irq() rather than msdc_drv_probe()
+- remove unnecessary wake irq control, rpm/dpm system shall manage that
+- move wake irq/msdc irq control back to system suspend phase, use rpm_suspend
+  and rpm_resume to ensure irq control sequence:
+     disable msdc irq -> enable wake irq -> disable wake irq -> enable msdc irq
+- simplify variables, check pins_eint to know whether wakeup settings are managed
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Changes in v9:
+- remove pinctrl "state_dat1"
 
-All errors (new ones prefixed by >>):
+Changes in v8:
+- remove maxItems property under pinctrl-names property
 
-   io_uring/io_uring.c: In function '__io_submit_flush_completions':
-   io_uring/io_uring.c:2937:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
-    2937 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
-   io_uring/io_uring.c: At top level:
->> io_uring/io_uring.c:6533:12: error: redefinition of 'io_shutdown'
-    6533 | static int io_##op(struct io_kiocb *req, unsigned int issue_flags)      \
-         |            ^~~
-   io_uring/io_uring.c:6560:1: note: in expansion of macro 'IO_NETOP_FN'
-    6560 | IO_NETOP_FN(shutdown);
-         | ^~~~~~~~~~~
-   io_uring/io_uring.c:6533:12: note: previous definition of 'io_shutdown' with type 'int(struct io_kiocb *, unsigned int)'
-    6533 | static int io_##op(struct io_kiocb *req, unsigned int issue_flags)      \
-         |            ^~~
-   io_uring/io_uring.c:6539:1: note: in expansion of macro 'IO_NETOP_FN'
-    6539 | IO_NETOP_FN(op)                                                         \
-         | ^~~~~~~~~~~
-   io_uring/io_uring.c:6557:1: note: in expansion of macro 'IO_NETOP_PREP'
-    6557 | IO_NETOP_PREP(shutdown);
-         | ^~~~~~~~~~~~~
-   io_uring/io_uring.c:6533:12: warning: 'io_shutdown' defined but not used [-Wunused-function]
-    6533 | static int io_##op(struct io_kiocb *req, unsigned int issue_flags)      \
-         |            ^~~
-   io_uring/io_uring.c:6539:1: note: in expansion of macro 'IO_NETOP_FN'
-    6539 | IO_NETOP_FN(op)                                                         \
-         | ^~~~~~~~~~~
-   io_uring/io_uring.c:6557:1: note: in expansion of macro 'IO_NETOP_PREP'
-    6557 | IO_NETOP_PREP(shutdown);
-         | ^~~~~~~~~~~~~
+Changes in v7:
+- add device_init_wakeup() to register SDIO host as wakeup source
 
+Changes in v6:
+- abandon cap-sdio-async-irq flag, use wakeup-source flag instead
+- extend interrupts and pinctrls in mediatek mmc host controller DT documents
+- add mmc_card_enable_async_irq() to access enable_async_irq flag
+- simplify wakeup irq implementation with dedicate wake up irq related interface
 
-vim +/io_shutdown +6533 io_uring/io_uring.c
+Changes in v5:
+- resort variables to reversed xmas tree order
+- restore old copyright year range and add current year back
 
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6490  
-889fca73287b0a fs/io_uring.c Pavel Begunkov 2021-02-10  6491  static int io_connect(struct io_kiocb *req, unsigned int issue_flags)
-f8e85cf255ad57 fs/io_uring.c Jens Axboe     2019-11-23  6492  {
-e8c2bc1fb6c949 fs/io_uring.c Jens Axboe     2020-08-15  6493  	struct io_async_connect __io, *io;
-f8e85cf255ad57 fs/io_uring.c Jens Axboe     2019-11-23  6494  	unsigned file_flags;
-3fbb51c18f5c15 fs/io_uring.c Jens Axboe     2019-12-20  6495  	int ret;
-45d189c6062922 fs/io_uring.c Pavel Begunkov 2021-02-10  6496  	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
-f8e85cf255ad57 fs/io_uring.c Jens Axboe     2019-11-23  6497  
-d886e185a128a4 fs/io_uring.c Pavel Begunkov 2021-10-04  6498  	if (req_has_async_data(req)) {
-e8c2bc1fb6c949 fs/io_uring.c Jens Axboe     2020-08-15  6499  		io = req->async_data;
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6500  	} else {
-3529d8c2b353e6 fs/io_uring.c Jens Axboe     2019-12-19  6501  		ret = move_addr_to_kernel(req->connect.addr,
-3529d8c2b353e6 fs/io_uring.c Jens Axboe     2019-12-19  6502  						req->connect.addr_len,
-e8c2bc1fb6c949 fs/io_uring.c Jens Axboe     2020-08-15  6503  						&__io.address);
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6504  		if (ret)
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6505  			goto out;
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6506  		io = &__io;
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6507  	}
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6508  
-3fbb51c18f5c15 fs/io_uring.c Jens Axboe     2019-12-20  6509  	file_flags = force_nonblock ? O_NONBLOCK : 0;
-3fbb51c18f5c15 fs/io_uring.c Jens Axboe     2019-12-20  6510  
-e8c2bc1fb6c949 fs/io_uring.c Jens Axboe     2020-08-15  6511  	ret = __sys_connect_file(req->file, &io->address,
-3fbb51c18f5c15 fs/io_uring.c Jens Axboe     2019-12-20  6512  					req->connect.addr_len, file_flags);
-87f80d623c6c93 fs/io_uring.c Jens Axboe     2019-12-03  6513  	if ((ret == -EAGAIN || ret == -EINPROGRESS) && force_nonblock) {
-d886e185a128a4 fs/io_uring.c Pavel Begunkov 2021-10-04  6514  		if (req_has_async_data(req))
-b7bb4f7da0a1a9 fs/io_uring.c Jens Axboe     2019-12-15  6515  			return -EAGAIN;
-e8c2bc1fb6c949 fs/io_uring.c Jens Axboe     2020-08-15  6516  		if (io_alloc_async_data(req)) {
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6517  			ret = -ENOMEM;
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6518  			goto out;
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6519  		}
-e8c2bc1fb6c949 fs/io_uring.c Jens Axboe     2020-08-15  6520  		memcpy(req->async_data, &__io, sizeof(__io));
-f8e85cf255ad57 fs/io_uring.c Jens Axboe     2019-11-23  6521  		return -EAGAIN;
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6522  	}
-f8e85cf255ad57 fs/io_uring.c Jens Axboe     2019-11-23  6523  	if (ret == -ERESTARTSYS)
-f8e85cf255ad57 fs/io_uring.c Jens Axboe     2019-11-23  6524  		ret = -EINTR;
-f499a021ea8c9f fs/io_uring.c Jens Axboe     2019-12-02  6525  out:
-4e88d6e7793f2f fs/io_uring.c Jens Axboe     2019-12-07  6526  	if (ret < 0)
-93d2bcd2cbfed2 fs/io_uring.c Pavel Begunkov 2021-05-16  6527  		req_set_fail(req);
-889fca73287b0a fs/io_uring.c Pavel Begunkov 2021-02-10  6528  	__io_req_complete(req, issue_flags, ret, 0);
-f8e85cf255ad57 fs/io_uring.c Jens Axboe     2019-11-23  6529  	return 0;
-469956e853ccdb fs/io_uring.c YueHaibing     2020-03-04  6530  }
-469956e853ccdb fs/io_uring.c YueHaibing     2020-03-04  6531  #else /* !CONFIG_NET */
-99a10081647168 fs/io_uring.c Jens Axboe     2021-02-19  6532  #define IO_NETOP_FN(op)							\
-99a10081647168 fs/io_uring.c Jens Axboe     2021-02-19 @6533  static int io_##op(struct io_kiocb *req, unsigned int issue_flags)	\
-99a10081647168 fs/io_uring.c Jens Axboe     2021-02-19  6534  {									\
-99a10081647168 fs/io_uring.c Jens Axboe     2021-02-19  6535  	return -EOPNOTSUPP;						\
-99a10081647168 fs/io_uring.c Jens Axboe     2021-02-19  6536  }
-99a10081647168 fs/io_uring.c Jens Axboe     2021-02-19  6537  
+Changes in v4:
+- add MMC_CAP2_SDIO_ASYNC_IRQ judge before lookup eint pinctrl
+- replace spin_lock_irqsave() variant with spin_lock() in eint irq handler
 
-:::::: The code at line 6533 was first introduced by commit
-:::::: 99a10081647168022745859bb2f1c28b2f70dc83 io_uring: make the !CONFIG_NET helpers a bit more robust
+Changes in v3:
+- correct abbreviations with capital letters in commit message
+- replace copyright year with 2022 in mtk-sd.c
+- remove unnessary pointer casting
+- adjust variable order to reversed xmas tree
+- remove a redundant blank line
+- refine if statement, following standard pattern
 
-:::::: TO: Jens Axboe <axboe@kernel.dk>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+Changes in v2:
+- change flag name from 'cap-sdio-async-int' to 'cap-sdio-async-irq'
+- change corresponding macro names from xxx_INT to xxx_IRQ
+- resort new member in msdc_host structure
+- refine function msdc_request_dat1_eint_irq()
+- rename msdc_{suspend,resume} function names, add suffix '_noirq'
+- add MMC_CAP2_NO_SDIO judgement before parse eint related pin setting
+
+Axe Yang (3):
+  dt-bindings: mmc: mtk-sd: extend interrupts and pinctrls properties
+  mmc: core: Add support for SDIO wakeup interrupt
+  mmc: mediatek: add support for SDIO eint wakup IRQ
+
+ .../devicetree/bindings/mmc/mtk-sd.yaml       | 50 +++++++++++-
+ drivers/mmc/core/sdio.c                       | 14 ++++
+ drivers/mmc/host/mtk-sd.c                     | 80 +++++++++++++++++--
+ include/linux/mmc/card.h                      |  8 +-
+ include/linux/mmc/sdio.h                      |  5 ++
+ 5 files changed, 149 insertions(+), 8 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
+

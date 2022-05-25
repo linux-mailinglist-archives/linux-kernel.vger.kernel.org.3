@@ -2,202 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4172E533C79
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21252533C81
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 14:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbiEYMPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 08:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
+        id S233519AbiEYMRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 08:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiEYMPI (ORCPT
+        with ESMTP id S229577AbiEYMRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 08:15:08 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66550220E0;
-        Wed, 25 May 2022 05:15:06 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gh17so28246531ejc.6;
-        Wed, 25 May 2022 05:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QrBazMljV8YDziKAMrRaGBYt/oCZVqU8ZmRCHkABRKE=;
-        b=kWbxqbhG7dkA/4CuIrYYJRy3XBcWbneF8HnMpMgW5GFIKHkObbpMjpBAqmMwGxhznz
-         7G/0y69Acu1LotVuYVo0Ave84yUrr3Tole7jdUAS83MEVUXCl4MwtY1KDfnmaHBS1ZVu
-         1/+TUCAGUfBwApIA4TEGIUV7wxvgwg0mqBCoA/CM3J2KrVd/txkYONNzY00J8tHr6OMx
-         xjDQPhJaLSO6p1wettAByI7+9qArFiSzY7WZaq4gN3s43NgTfAk46LZVwMB9XrwLWyut
-         S3e4FVm5rhzHddV97dQBTgTvYm9BBZbWCqvzElDvP2te+Hxca1qp1EomJZRkAYqc6QVd
-         Mjwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QrBazMljV8YDziKAMrRaGBYt/oCZVqU8ZmRCHkABRKE=;
-        b=OY1z3Jo2UDnK9bUFKIXEzEZ4JccSVSg1eBDhnC0VlKFfUw7Lq5RXMRaZw1tN1/oqzB
-         VgJKh6y+3+0s4EC7wtmr91c0I22zJOeceiZZLfjmgeBcUH5HT0Ox+yEuVw0RIESop4cC
-         5fOcMD89J78haKjtaxZnK/ZyG9Hh9Fpl0IuoDFJiFbaH4Vz2o7NjuMJR8vAnNkPnBYra
-         QATjBOXJGMfEks0a34DjGrg8DTkfgrex/O/xkQR6AELOP91dqTf8brz21gFK3i+4Jl8S
-         6jrfOUFH0Qg661mSQTqL8CAkVlVCPOXbIexPO0Efz6uDr7pVg1sFX5y54FqPFk276D9Z
-         elRw==
-X-Gm-Message-State: AOAM530kuLMMZZfOJN/5YqsEIZVfmk3uxmudk2x4BUfuXPWI5sHxpI6N
-        3lTwBYzi43OOA+83rKkGOvhS6IgFpKjBGS20GSo=
-X-Google-Smtp-Source: ABdhPJxoicBSY3Ejfl1QZtENI/38t0mu/1ls+RVgsbfCLJbzzktIOa4c05rTt92C8lJUTw/yaF/CxNUyhLfaCCtKmRY=
-X-Received: by 2002:a17:906:9e83:b0:6fe:9f59:a4a4 with SMTP id
- fx3-20020a1709069e8300b006fe9f59a4a4mr25799393ejc.163.1653480904656; Wed, 25
- May 2022 05:15:04 -0700 (PDT)
+        Wed, 25 May 2022 08:17:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1980336318
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 05:17:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE9C51FB;
+        Wed, 25 May 2022 05:17:39 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.0.228])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A19D3F73D;
+        Wed, 25 May 2022 05:17:37 -0700 (PDT)
+Date:   Wed, 25 May 2022 13:17:30 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        cj.chengjian@huawei.com, huawei.libin@huawei.com,
+        xiexiuqi@huawei.com, liwei391@huawei.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
+ allocated trampolines
+Message-ID: <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
+References: <YmLlmaXF00hPkOID@lakrids>
+ <20220426174749.b5372c5769af7bf901649a05@kernel.org>
+ <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
+ <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
+ <20220509142203.6c4f2913@gandalf.local.home>
+ <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
+ <20220510104446.6d23b596@gandalf.local.home>
+ <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
+ <20220511111207.25d1a693@gandalf.local.home>
+ <20220512210231.f9178a98f20a37981b1e89e3@kernel.org>
 MIME-Version: 1.0
-References: <20220525103512.3666956-1-gasmibal@gmail.com> <87r14hoox8.fsf@toke.dk>
-In-Reply-To: <87r14hoox8.fsf@toke.dk>
-From:   Baligh GASMI <gasmibal@gmail.com>
-Date:   Wed, 25 May 2022 14:14:54 +0200
-Message-ID: <CALxDnQa8d8CGXz2Mxvsz5csLj3KuTDW=z65DSzHk5x1Vg+y-rw@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] mac80211: use AQL airtime for expected throughput.
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:MAC80211" <linux-wireless@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512210231.f9178a98f20a37981b1e89e3@kernel.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Since the integration of AQL, packet TX airtime estimation is
-> > calculated and counted to be used for the dequeue limit.
-> >
-> > Use this estimated airtime to compute expected throughput for
-> > each station.
-> >
-> > It will be a generic mac80211 implementation. If the driver has
-> > get_expected_throughput implementation, it will be used instead.
-> >
-> > Useful for L2 routing protocols, like B.A.T.M.A.N.
-> >
-> > Signed-off-by: Baligh Gasmi <gasmibal@gmail.com>
-> > ---
-> >  net/mac80211/driver-ops.h |  2 ++
-> >  net/mac80211/sta_info.h   |  2 ++
-> >  net/mac80211/status.c     | 22 ++++++++++++++++++++++
-> >  net/mac80211/tx.c         |  3 ++-
-> >  4 files changed, 28 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/net/mac80211/driver-ops.h b/net/mac80211/driver-ops.h
-> > index 4e2fc1a08681..4331b79647fa 100644
-> > --- a/net/mac80211/driver-ops.h
-> > +++ b/net/mac80211/driver-ops.h
-> > @@ -1142,6 +1142,8 @@ static inline u32 drv_get_expected_throughput(struct ieee80211_local *local,
-> >       trace_drv_get_expected_throughput(&sta->sta);
-> >       if (local->ops->get_expected_throughput && sta->uploaded)
-> >               ret = local->ops->get_expected_throughput(&local->hw, &sta->sta);
-> > +     else
-> > +             ret = ewma_avg_est_tp_read(&sta->status_stats.avg_est_tp);
-> >       trace_drv_return_u32(local, ret);
-> >
-> >       return ret;
-> > diff --git a/net/mac80211/sta_info.h b/net/mac80211/sta_info.h
-> > index 379fd367197f..fe60be4c671d 100644
-> > --- a/net/mac80211/sta_info.h
-> > +++ b/net/mac80211/sta_info.h
-> > @@ -123,6 +123,7 @@ enum ieee80211_sta_info_flags {
-> >  #define HT_AGG_STATE_STOP_CB         7
-> >  #define HT_AGG_STATE_SENT_ADDBA              8
-> >
-> > +DECLARE_EWMA(avg_est_tp, 8, 16)
-> >  DECLARE_EWMA(avg_signal, 10, 8)
-> >  enum ieee80211_agg_stop_reason {
-> >       AGG_STOP_DECLINED,
-> > @@ -641,6 +642,7 @@ struct sta_info {
-> >               s8 last_ack_signal;
-> >               bool ack_signal_filled;
-> >               struct ewma_avg_signal avg_ack_signal;
-> > +             struct ewma_avg_est_tp avg_est_tp;
-> >       } status_stats;
-> >
-> >       /* Updated from TX path only, no locking requirements */
-> > diff --git a/net/mac80211/status.c b/net/mac80211/status.c
-> > index e81e8a5bb774..647ade3719f5 100644
-> > --- a/net/mac80211/status.c
-> > +++ b/net/mac80211/status.c
-> > @@ -1145,6 +1145,28 @@ void ieee80211_tx_status_ext(struct ieee80211_hw *hw,
-> >                       sta->status_stats.retry_failed++;
-> >               sta->status_stats.retry_count += retry_count;
-> >
-> > +             if (skb && tx_time_est) {
->
-> Shouldn't this be conditioned on actually being used (i.e., existence of
-> get_expected_throughput op? Also maybe pull it out into its own function
-> to make it clear what it's doing...
+On Thu, May 12, 2022 at 09:02:31PM +0900, Masami Hiramatsu wrote:
+> On Wed, 11 May 2022 11:12:07 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > On Wed, 11 May 2022 23:34:50 +0900
+> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > 
+> > > OK, so fregs::regs will have a subset of pt_regs, and accessibility of
+> > > the registers depends on the architecture. If we can have a checker like
+> > > 
+> > > ftrace_regs_exist(fregs, reg_offset)
+> > 
+> > Or something. I'd have to see the use case.
+> > 
+> > > 
+> > > kprobe on ftrace or fprobe user (BPF) can filter user's requests.
+> > > I think I can introduce a flag for kprobes so that user can make a
+> > > kprobe handler only using a subset of registers. 
+> > > Maybe similar filter code is also needed for BPF 'user space' library
+> > > because this check must be done when compiling BPF.
+> > 
+> > Is there any other case without full regs that the user would want anything
+> > other than the args, stack pointer and instruction pointer?
+> 
+> For the kprobes APIs/events, yes, it needs to access to the registers
+> which is used for local variables when probing inside the function body.
+> However at the function entry, I think almost no use case. (BTW, pstate
+> is a bit special, that may show the actual processor-level status
+> (context), so for the debugging, user might want to read it.)
 
-It's already the case I think, since the tx_time_est is not-zero only
-when actually an estimated time is set.
-A dedicated function seems good for me, for clarity, yes.
+As before, if we really need PSTATE we *must* take an exception to get a
+reliable snapshot (or to alter the value). So I'd really like to split this
+into two cases:
 
->
-> > +                     /* max average packet size */
-> > +                     size_t pkt_size = skb->len > 1024 ? 1024 : skb->len;
-> > +
-> > +                     if (acked) {
-> > +                             /* ACK packet size */
-> > +                             pkt_size += 14;
-> > +                             /* SIFS x 2 */
-> > +                             tx_time_est += 2 * 2;
-> > +                     }
-> > +
-> > +                     /* Backoff average x retries */
-> > +                     tx_time_est += retry_count ? retry_count * 2 : 2;
-> > +
-> > +                     /* failed tx */
-> > +                     if (!acked && !noack_success)
-> > +                             pkt_size = 0;
-> > +
-> > +                     ewma_avg_est_tp_add(&sta->status_stats.avg_est_tp,
-> > +                                         ((pkt_size * 8) * 1000) / tx_time_est);
->
-> Could we avoid adding this division in the fast path?
+* Where users *really* need PSTATE (or arbitrary GPRs), they use kprobes. That
+  always takes an exception and they can have a complete, real struct pt_regs.
 
-Maybe we can use the do_div() macro for optimization, I don't see how
-we can avoid it.
+* Where users just need to capture a function call boundary, they use ftrace.
+  That uses a trampoline without taking an exception, and they get the minimal
+  set of registers relevant to the function call boundary (which does not
+  include PSTATE or most GPRs).
+ 
+> Thus the BPF use case via fprobes, I think there is no usecase.
+> My concern is that the BPF may allow user program to access any
+> field of pt_regs. Thus if the user miss-programmed, they may see
+> a wrong value (I guess the fregs is not zero-filled) for unsaved
+> registers.
+> 
+> > That is, have a flag that says "only_args" or something, that says they
+> > will only get the registers for arguments, a stack pointer, and the
+> > instruction pointer (note, the fregs may not have the instruction pointer
+> > as that is passed to the the caller via the "ip" parameter. If the fregs
+> > needs that, we can add a "ftrace_regs_set_ip()" before calling the
+> > callback registered to the fprobe).
+> 
+> Yes, that is what I'm thinking. If "only_args" flag is set, BPF runtime
+> must check the user program. And if it finds the program access the
+> unsaved registers, it should stop executing.
+> 
+> BTW, "what register is saved" can be determined statically, thus I think
+> we just need the offset for checking (for fprobe usecase, since it will
+> set the ftrace_ops flag by itself.)
 
+For arm64 I'd like to make this static, and have ftrace *always* capture a
+minimal set of ftrace_regs, which would be:
 
->
-> > +             }
-> > +
-> >               if (ieee80211_hw_check(&local->hw, REPORTS_TX_ACK_STATUS)) {
-> >                       if (sdata->vif.type == NL80211_IFTYPE_STATION &&
-> >                           skb && !(info->flags & IEEE80211_TX_CTL_HW_80211_ENCAP))
-> > diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-> > index b6b20f38de0e..d866a721690d 100644
-> > --- a/net/mac80211/tx.c
-> > +++ b/net/mac80211/tx.c
-> > @@ -3793,7 +3793,8 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
-> >       IEEE80211_SKB_CB(skb)->control.vif = vif;
-> >
-> >       if (vif &&
-> > -         wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL)) {
-> > +         (!local->ops->get_expected_throughput ||
-> > +         wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL))) {
->
-> This implicitly enables AQL for every driver that doesn't set
-> get_expected_throughput, no? That is probably not a good idea...
+  X0 to X8 inclusive
+  SP
+  PC
+  LR
+  FP
 
-No, AQL will be disabled if it's already the case, according to the
-NL80211_EXT_FEATURE_AQL, only airtime estimation will be activated
-with this diff. The function ieee80211_sta_update_pending_airtime() is
-already checking for NL80211_EXT_FEATURE_AQL.
+Since X0 to X8 + SP is all that we need for arguments and return values (per
+the calling convention we use), and PC+LR+FP gives us everything we need for
+unwinding and live patching.
 
->
-> -Toke
->
+I *might* want to add x18 to that when SCS is enabled, but I'm not immediately
+sure.
 
-Back to the base idea, what do you think about it, can it be a good
-road to take ?
-Other factors can be added progressively to better estimate the throughput...
+Thanks,
+Mark.

@@ -2,143 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66090534027
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C5553403C
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244775AbiEYPPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
+        id S245140AbiEYPPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245152AbiEYPPE (ORCPT
+        with ESMTP id S241797AbiEYPP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:15:04 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 702C3AFAF1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:15:00 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-139-Xco2DS7JNnqZ9dGANxt50w-1; Wed, 25 May 2022 16:14:57 +0100
-X-MC-Unique: Xco2DS7JNnqZ9dGANxt50w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Wed, 25 May 2022 16:14:55 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Wed, 25 May 2022 16:14:55 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     Allen Pais <apais@linux.microsoft.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "olivier.dautricourt@orolia.com" <olivier.dautricourt@orolia.com>,
-        Stefan Roese <sr@denx.de>, Vinod Koul <vkoul@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "Ludovic Desroches" <ludovic.desroches@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "Ray Jui" <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        "Nicolas Saenz Julienne" <nsaenz@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "Eugeniy.Paltsev@synopsys.com" <Eugeniy.Paltsev@synopsys.com>,
-        "Gustavo Pimentel" <gustavo.pimentel@synopsys.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Leo Li <leoyang.li@nxp.com>,
-        "zw@zh-kernel.org" <zw@zh-kernel.org>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        =?utf-8?B?QW5kcmVhcyBGw6RyYmVy?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "green.wan@sifive.com" <green.wan@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Lyra Zhang <zhang.lyra@gmail.com>,
-        Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        =?utf-8?B?SmVybmVqIMWga3JhYmVj?= <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
-Thread-Topic: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
-Thread-Index: AQHYcCfd7aGmAIzi9kCYuZw9gbAMOK0vsf4g
-Date:   Wed, 25 May 2022 15:14:55 +0000
-Message-ID: <9947cfa64667406996de191f07b9e8b9@AcuMS.aculab.com>
-References: <20220419211658.11403-1-apais@linux.microsoft.com>
- <20220419211658.11403-2-apais@linux.microsoft.com>
- <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
- <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
-In-Reply-To: <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 25 May 2022 11:15:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADC0B041F;
+        Wed, 25 May 2022 08:15:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0DA13219D9;
+        Wed, 25 May 2022 15:15:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653491727; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4a7cwmdTvdlgEFSejjSvX4/8ts7XavMCpiK8LNYnCOA=;
+        b=S764p8MSC4ECPdB9CovFD1ktd/0hVWDcubdEvvK8aSmY0UJpusRO6HHKQSsTNcMgWuyCql
+        eBLZQrbPK0PC1oKOoUneaQ6fM2bdgxjIUAxHIpVWqwEAtMxZnfNueDfxUhaB6+kkOGb1xW
+        DRX0/paoMi8hgAvuAuVI1kPl8BHSJv0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D6F5413ADF;
+        Wed, 25 May 2022 15:15:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oCdFMw5IjmLXAwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 25 May 2022 15:15:26 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: [PATCH 0/2] cgroup_subsys_state lifecycle fixups
+Date:   Wed, 25 May 2022 17:15:15 +0200
+Message-Id: <20220525151517.8430-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyNSBNYXkgMjAyMiAxMjowNA0KPiANCj4gT24g
-V2VkLCBNYXkgMjUsIDIwMjIgYXQgMTE6MjQgQU0gTGludXMgV2FsbGVpaiA8bGludXMud2FsbGVp
-akBsaW5hcm8ub3JnPiB3cm90ZToNCj4gPiBPbiBUdWUsIEFwciAxOSwgMjAyMiBhdCAxMToxNyBQ
-TSBBbGxlbiBQYWlzIDxhcGFpc0BsaW51eC5taWNyb3NvZnQuY29tPiB3cm90ZToNCj4gPg0KPiA+
-ID4gVGhlIHRhc2tsZXQgaXMgYW4gb2xkIEFQSSB3aGljaCB3aWxsIGJlIGRlcHJlY2F0ZWQsIHdv
-cmtxdWV1ZSBBUEkNCj4gPiA+IGNhYiBiZSB1c2VkIGluc3RlYWQgb2YgdGhlbS4NCj4gPiA+DQo+
-ID4gPiBUaGlzIHBhdGNoIHJlcGxhY2VzIHRoZSB0YXNrbGV0IHVzYWdlIGluIGRyaXZlcnMvZG1h
-Lyogd2l0aCBhDQo+ID4gPiBzaW1wbGUgd29yay4NCj4gPiA+DQo+ID4gPiBHaXRodWI6IGh0dHBz
-Oi8vZ2l0aHViLmNvbS9LU1BQL2xpbnV4L2lzc3Vlcy85NA0KPiA+ID4NCj4gPiA+IFNpZ25lZC1v
-ZmYtYnk6IEFsbGVuIFBhaXMgPGFwYWlzQGxpbnV4Lm1pY3Jvc29mdC5jb20+DQo+ID4NCj4gPiBQ
-YWdpbmcgVmluY2VudCBHdWl0dG90IGFuZCBBcm5kIEJlcmdtYW5uIG9uIHRoZSBmb2xsb3dpbmcg
-cXVlc3Rpb24NCj4gPiBvbiB0aGlzIHBhdGNoIHNldDoNCj4gPg0KPiA+IC0gV2lsbCByZXBsYWNp
-bmcgdGFza2xldHMgd2l0aCB3b3JrcXVlIGxpa2UgdGhpcyBuZWdhdGl2ZWx5IGltcGFjdCB0aGUN
-Cj4gPiAgIHBlcmZvcm1hbmNlIG9uIERNQSBlbmdpbmUgYm90dG9tIGhhbHZlcz8NCj4gDQo+IEkg
-dGhpbmsgaXQgd2lsbCBpbiBzb21lIGNhc2VzIGJ1dCBub3Qgb3RoZXJzLiBUaGUgcHJvYmxlbSBJ
-IHNlZSBpcyB0aGF0DQo+IHRoZSBzaG9ydCBwYXRjaCBkZXNjcmlwdGlvbiBtYWtlcyBpdCBzb3Vu
-ZCBsaWtlIGEgdHJpdmlhbCBjb252ZXJzaW9uIG9mIGENCj4gc2luZ2xlIHN1YnN5c3RlbSwgYnV0
-IGluIHJlYWxpdHkgdGhpcyBpbnRlcmFjdHMgd2l0aCBhbGwgdGhlIGRyaXZlcnMgdXNpbmcNCj4g
-RE1BIGVuZ2luZXMsIGluY2x1ZGluZyB0dHkvc2VyaWFsLCBzb3VuZCwgbW1jIGFuZCBzcGkuDQo+
-IA0KPiBJbiBtYW55IGNhc2VzLCB0aGUgY2hhbmdlIGlzIGFuIGltcHJvdmVtZW50LCBidXQgSSBj
-YW4gc2VlIGEgbnVtYmVyDQo+IG9mIHdheXMgdGhpcyBtaWdodCBnbyB3cm9uZzoNCg0KSWYgdGhl
-ICd0YXNrbGV0JyBBUEkgaXMgYmFzZWQgb24gdGhlIHNvZnRpbnQgKG9yIHNpbWlsYXIpDQp0aGVu
-IGNoYW5naW5nIHRvIHdvcmtxdWV1ZSB3aWxsIGNhdXNlIHNlcmlvdXMgZ3JpZWYgaW4gbWFueSBj
-YXNlcw0KdW5sZXNzIHRoZSB3b3JrcXVldWUgcHJvY2VzcyBydW5zIGF0IGEgaGlnaCBwcmlvcml0
-eS4NCg0KQ3VycmVudGx5IHNvZnRpbnQgY2FsbGJhY2tzIGFyZSB1c3VhbGx5IGhpZ2hlciBwcmlv
-cml0eSB0aGFuDQphbnkgdGFzay9wcm9jZXNzLg0KU28gb24gYSBidXN5IHN5c3RlbSB0aGV5IGFs
-bW9zdCBhbHdheXMgcnVuLg0KKFRoZXkgY2FuIGdldCBjYXVnaHQgb3V0IGJ5IGEgbmVlZF9yZXNj
-aGVkKCkgY2FsbCBhbmQgc3VkZGVubHkNCmJlIGZpZ2h0aW5nIHdpdGggbm9ybWFsIHVzZXIgcHJv
-Y2Vzc2VzIGZvciBjcHUgdGltZS4pDQoNCkFzIGFybmQgc2FpZCwgSSBzdXNwZWN0IHRoaXMgd2ls
-bCBicmVhayBhbnl0aGluZyB1c2luZyB0YXNrbGV0cw0KdG8gY2hhaW4gdG9nZXRoZXIgYXVkaW8g
-b3IgdmlkZW8gYnVmZmVycy4NCkFueSBwcm9jZXNzIGNvZGUgZG9pbmcgdGhhdCB3b3VsZCBuZWVk
-IHByb2JiYWx5IHRvIHJ1biBhdCBhDQonbWlkZGxpbmcnIFJUIHByaW9yaXR5Lg0KDQoJRGF2aWQN
-Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
-cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
-KFdhbGVzKQ0K
+Two corner cases were hanging around [2][3] related to css lifecycles,
+since they're loosely related I'm sending them together.
+
+The 2nd patch fixes problems encountered in syzbot tests only.
+Alternative solutions could be:
+- daisy-chain css_release_work_fn from the offending css_killed_work_fn call,
+- rework kill_css() not to rely on multi-stage css_killed_work_fn() [1].
+
+The simplest approach was chosen.
+
+The other existing users of percpu_ref_kill_and_confirm are not affected by
+similar issues.
+
+[1] Rough idea is to only synchronize via a completion like e.g.
+nvmet_sq_destroy() does and move most of css_killed_work_fn() at the end of
+kill_css(). kill_css() is only used in process context when de-configuring
+controllers or rmdiring a cgroup.
+
+[2] https://lore.kernel.org/lkml/20220404142535.145975-1-minhquangbui99@gmail.com/
+[3] https://lore.kernel.org/lkml/20220412192459.227740-1-tadeusz.struk@linaro.org/
+
+Michal Koutný (2):
+  cgroup: Wait for cgroup_subsys_state offlining on unmount
+  cgroup: Use separate work structs on css release path
+
+ include/linux/cgroup-defs.h |  5 +++--
+ kernel/cgroup/cgroup.c      | 19 +++++++++++--------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
+
+-- 
+2.35.3
 

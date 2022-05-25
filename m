@@ -2,59 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C6E533A42
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77896533A46
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242098AbiEYJuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 05:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S229456AbiEYJxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 05:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241463AbiEYJuG (ORCPT
+        with ESMTP id S235921AbiEYJxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 05:50:06 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4D51D0F8;
-        Wed, 25 May 2022 02:50:05 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 71BAF1F44B84
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653472204;
-        bh=syTUXEsw9/n/6NDfW7WVBL7ZaRtUq32UuldrTBYAPc4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cUME8Mii9tR0Tu01mYdGkHp05qEJkOXwdrQIlvvfG38MQrP5H3GB6ASGPt9iwDqgv
-         d1mRtNNHL1u+o4bjHckBdvy5LqcIiLNB/+TGq8Zt2paL3/AO0a7XCsF1e5I04EVCvn
-         KDTyX8xJHIT1GYRk7c6lh+jl8fnPDZDeJEOak7bxJwGPv/sph7p+SHf8EGqGZYT3Tb
-         cMLALx0Bg0h25UbxIml54g7j5SnPiPH5ZAT5Dp7DFGV3CHcFAJSDpWBxTZlAh3H2gN
-         /6Du8ufh33EOgXlIgWtnnVhCMXYJ7X3BEkwRZgFyrGfd+d5BWEmIGYUL1kB7yJ9fD0
-         RFYnM0I0gTxeg==
-Message-ID: <43a102cf-6971-8083-d24f-629d6d39810f@collabora.com>
-Date:   Wed, 25 May 2022 11:50:00 +0200
+        Wed, 25 May 2022 05:53:07 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D237C3389E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 02:53:05 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id y141so7914373ybe.13
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 02:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fy5kErNCSVjulngCO8wTqksqb3m3u5ixS1cOApDJqZ0=;
+        b=XxATIGh+VW2QM99KhmsK6/XhLKdRC3xtVDJd2/U4Do3efc2OMQgo2cku/EQ7l6Nds/
+         NN2fg8NVzGcgmcq0BJMswTcwUHlyLK3dt0g9aOeAIs9NaprmnaUUY9Ec+qgFs+shAfc3
+         veGlHHYuPk4YJMnxzDEi6qzxZMQjZpeRdzOJRNN4Gca6RLpYbVmIccrB2c2tFHeZcotY
+         pfLOIjdR8OKBX3XI7FZ+8CLt7ofgEveAZf6gbP0Ypogkm/4FPyiV7hPx888UVD4Z/4bZ
+         bEsnE5yQokNA6NbtNYjaiq6FgGXcDB6bcWeG+F3WwrxwY2UH3pGrnv3bHL11PbZRH2ry
+         HONQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fy5kErNCSVjulngCO8wTqksqb3m3u5ixS1cOApDJqZ0=;
+        b=xxGttiheWCO5gc6xZgVEa5UlSbxJEghOmJ2x/zd9+nsEtqIlnqsbjIL1ZnPKfNrExk
+         25/I4oiRju3ZtIRYekQX25J9dfQURTyEMO+X+u6x2ljAIZJwITZAoqnBu6oSNsJ4kf6s
+         JlbRFuUM8RFye9qqi+t5e1CujzVBGZZIXElnIrbzf3N4xucy9o5XDscaaFyUTIdinMEm
+         hRQ5d4v7uE0IxgDLfvH0PwULl7WWAf8K9LLuWD+nh6sMKjgw0ednO6cMthkr6PuM8vmM
+         OlWmsdjiM24/jq+/OaHmNj5W0xeEetuKzd+jFpq8aN4wAXLEupQajrKuhrcOKTYMZ2Ck
+         CNOg==
+X-Gm-Message-State: AOAM531Xog6b8rEWfBOAWI5YC3/DMC8S7EJOJqqkKZvdVonZBVckIIJw
+        skUK3C6DsXEsNfq4N0ibqsiIqcWOVzIzXbJgOcX4Sg==
+X-Google-Smtp-Source: ABdhPJy+e9FeIuYyB4lfd+KLNRqOu/vowAh7xAaW/+BkIPDsS5jyAsTbb5zYudpqMleKdzCzKBrnMH4392Xuhj3qxh0=
+X-Received: by 2002:a25:d48c:0:b0:64f:5ec6:13b6 with SMTP id
+ m134-20020a25d48c000000b0064f5ec613b6mr23934986ybf.236.1653472384970; Wed, 25
+ May 2022 02:53:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v20 0/8] Add Mediatek Soc DRM (vdosys0) support for mt8195
-Content-Language: en-US
-To:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     CK Hu <ck.hu@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        jason-jhlin <jason-jh.lin@mediatek.corp-partner.google.com>
-References: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <20220419211658.11403-1-apais@linux.microsoft.com>
+ <20220419211658.11403-2-apais@linux.microsoft.com> <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
+In-Reply-To: <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 25 May 2022 11:52:53 +0200
+Message-ID: <CAKfTPtDzsxnsfR8dkyDwcaJvtGF4Ouo0SFj_PKd7W=AUq3jHZA@mail.gmail.com>
+Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Allen Pais <apais@linux.microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>, olivier.dautricourt@orolia.com,
+        sr@denx.de, vkoul@kernel.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, ludovic.desroches@microchip.com,
+        tudor.ambarus@microchip.com, f.fainelli@gmail.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
+        paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
+        gustavo.pimentel@synopsys.com, vireshk@kernel.org,
+        andriy.shevchenko@linux.intel.com, leoyang.li@nxp.com,
+        zw@zh-kernel.org, wangzhou1@hisilicon.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, sean.wang@mediatek.com,
+        matthias.bgg@gmail.com, afaerber@suse.de, mani@kernel.org,
+        logang@deltatee.com, sanju.mehta@amd.com, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski@linaro.org, green.wan@sifive.com,
+        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        patrice.chotard@foss.st.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,162 +86,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/04/22 11:41, jason-jh.lin ha scritto:
-> From: jason-jhlin <jason-jh.lin@mediatek.corp-partner.google.com>
-> 
+On Wed, 25 May 2022 at 11:24, Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Tue, Apr 19, 2022 at 11:17 PM Allen Pais <apais@linux.microsoft.com> wrote:
+>
+> > The tasklet is an old API which will be deprecated, workqueue API
+> > cab be used instead of them.
+> >
+> > This patch replaces the tasklet usage in drivers/dma/* with a
+> > simple work.
+> >
+> > Github: https://github.com/KSPP/linux/issues/94
+> >
+> > Signed-off-by: Allen Pais <apais@linux.microsoft.com>
+>
+> Paging Vincent Guittot and Arnd Bergmann on the following question
+> on this patch set:
+>
+> - Will replacing tasklets with workque like this negatively impact the
+>   performance on DMA engine bottom halves?
 
-Hello Jason,
+workqueue uses cfs thread so they will be scheduled like any other
+thread. Furthermore, schedule_work uses the default system workqueue
+which is shared with a lot of other stuff and doesn't parallel work so
+you can expect some performance impact.
+If you really want to use workqueue, you should at least create your
+own workqueue. But you should also have a look at irq_work; An example
+of usage is kernel/sched/sched_cpufrequtil.c
 
-this series does not apply cleanly anymore on next-20220525, can you please
-rebase and resend?
-
-I hope that with a bit of coordination, we can get the entire display stack
-finally upstreamed in v5.19... it's been quite a while... :-)
-
-Cheers,
-Angelo
-
-> Change in v20:
-> - split binding patch to another series 'MediaTek MT8195 display binding':
->    https://patchwork.ozlabs.org/project/devicetree-bindings/list/?series=295669
-> - fix io_start type from u32 to resource_size_t
-> - fix some commit message for DITHER enum
-> 
-> Change in v19:
-> - fix checking condition for the return vaule of platform resource
-> - drm/mediatek fix build waning for [-Wunused-const-variable]
-> 
-> Change in v18:
-> - change get driver data by io_start and wrap mmsys driver data into
->    mmsys match data structure to support identifying multi mmsys driver
->    data with the same compatible name
-> - change DDP_COMPONENT_DITHER to DDP_CONPONENT_DITHER0
-> 
-> Change in v17:
-> - change compatible name from 2 vdosys to 1 mmsys
-> - add get driver data by clk name function to get corresponding
->    driver data for mt8195 vdosys0
-> - add all routing table setting for mt8195 vdosys0
-> - remove useless mutex define
-> 
-> Change in v16:
-> - rebase on linu-next tag: 'next-20220303'
-> - rebase on series: 'Fix MediaTek display dt-bindings issues'
-> 
-> Change in v15:
-> - remove mt8195-mmsys.h comment for mux settings
-> - define the mask macro to replace using value as mask
->    to fix zero mask problem
-> - add EOF setting comment for MUTEX sof register
-> 
-> Change in v14:
-> - rebase on mediatek-drm-next-5.17
-> - rebase on "Add mmsys and mutex support for MDP" series
-> - rebase on "media: mediatek: support mdp3 on mt8183 platform" series
-> 
-> Change in v13:
-> - remove dts patch
-> - rebase on kernel-5.16-rc1
-> - rebase on mediatek-drm-next
-> 
-> Change in v12:
-> - add clock-names property to merge yaml
-> - using BIT(nr) macro to define the settings of mmsys routing table
-> - fix clk_get and clk_prepare_enable error handling issue
-> 
-> Change in v11:
-> - rebase on kernel-5.15-rc1
-> - change mbox label to gce0 for dts node of vdosys0
-> - change ovl compatibale to mt8192 to set smi_id_en=true in driver data
-> - move common module from display folder to common folder,
->    such as AAL, COCLOR, CCORR and MUTEX
-> 
-> Change in v10:
-> - rebase on "drm/mediatek: add support for mediatek SOC MT8192" series
-> - rebase on "soc: mediatek: mmsys: add mt8192 mmsys support" series
-> - fix some typo and "mediatek" start with capital in every dt-bindings
-> - move mutex yaml from dfisplay folder to soc folder
-> - separate merge additional propoerties to an individual dt-bindings patch
-> 
-> Change in v9:
-> - separate power and gce properties of mmsys into another dt-binding patch
-> - rebase on "Separate aal module" series
-> - keep mtk_ddp_clk_enable/disable in the same place
-> - change mtk_dsc_start config register to mtk_drm_ddp_write_mask
-> - remove the 0 setting of merge fifo config function
-> - add CCORR driver data for mt8195
-> 
-> Change in v8:
-> - add DP_INTF0 mux into mmsys routing table
-> - add DP_INTF0 mutex mod and enum into add/remove comp function
-> - remove bypass DSC enum in mtk_ddp_comp_init
-> 
-> Change in v7:
-> - add dt=binding of mmsys and disp path into this series
-> - separate th modidfication of alphabetic order, remove unused define and
->    rename the define of register offset to individual patch
-> - add comment for MERGE ultra and preultra setting
-> 
-> Change in v6:
-> - adjust alphabetic order for mediatek-drm
-> - move the patch that add mt8195 support for mediatek-drm as
->    the lastest patch
-> - add MERGE define for const varriable
-> 
-> Change in v5:
-> - add power-domain property into vdosys0 and vdosys1 dts node.
-> - add MT8195 prifix and remove unused VDO1 define in mt8195-mmsys.h
-> 
-> Change in v4:
-> - extract dt-binding patches to another patch series
-> - squash DSC module into mtk_drm_ddp_comp.c
-> - add coment and simplify MERGE config function
-> 
-> Change in v3:
-> - change mmsys and display dt-bindings document from txt to yaml
-> - add MERGE additional description in display dt-bindings document
-> - fix mboxes-cells number of vdosys0 node in dts
-> - drop mutex eof convert define
-> - remove pm_runtime apis in DSC and MERGE
-> - change DSC and MERGE enum to alphabetic order
-> 
-> Change in v2:
-> - add DSC yaml file
-> - add mt8195 drm driver porting parts in to one patch
-> - remove useless define, variable, structure member and function
-> - simplify DSC and MERGE file and switch threre order
-> 
-> jason-jh.lin (8):
->    soc: mediatek: add mtk-mmsys support for mt8195 vdosys0
->    soc: mediatek: add mtk-mutex support for mt8195 vdosys0
->    drm/mediatek: add DSC support for mediatek-drm
->    drm/mediatek: add MERGE support for mediatek-drm
->    drm/mediatek: add mediatek-drm of vdosys0 support for mt8195
->    soc: mediatek: add DDP_DOMPONENT_DITHER0 enum for mt8195 vdosys0
->    drm/mediatek: add suffix 0 to DDP_COMPONENT_DITHER for mt8195 vdosys0
->    soc: mediatek: remove DDP_DOMPONENT_DITHER from enum
-> 
->   drivers/gpu/drm/mediatek/Makefile           |   1 +
->   drivers/gpu/drm/mediatek/mtk_disp_drv.h     |   8 +
->   drivers/gpu/drm/mediatek/mtk_disp_merge.c   | 246 +++++++++++++
->   drivers/gpu/drm/mediatek/mtk_disp_rdma.c    |   6 +
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |  65 +++-
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   2 +
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c      | 151 +++++++-
->   drivers/gpu/drm/mediatek/mtk_drm_drv.h      |   7 +
->   drivers/soc/mediatek/mt8167-mmsys.h         |   2 +-
->   drivers/soc/mediatek/mt8183-mmsys.h         |   2 +-
->   drivers/soc/mediatek/mt8186-mmsys.h         |   4 +-
->   drivers/soc/mediatek/mt8192-mmsys.h         |   4 +-
->   drivers/soc/mediatek/mt8195-mmsys.h         | 370 ++++++++++++++++++++
->   drivers/soc/mediatek/mt8365-mmsys.h         |   4 +-
->   drivers/soc/mediatek/mtk-mmsys.c            | 152 +++++++-
->   drivers/soc/mediatek/mtk-mmsys.h            |   6 +
->   drivers/soc/mediatek/mtk-mutex.c            |  95 ++++-
->   include/linux/soc/mediatek/mtk-mmsys.h      |  13 +-
->   18 files changed, 1098 insertions(+), 40 deletions(-)
->   create mode 100644 drivers/gpu/drm/mediatek/mtk_disp_merge.c
->   create mode 100644 drivers/soc/mediatek/mt8195-mmsys.h
-> 
-
-
+>
+> For reference:
+> https://lore.kernel.org/dmaengine/YoI4J8taHehMpjFj@matsya/
+>
+> Yours,
+> Linus Walleij

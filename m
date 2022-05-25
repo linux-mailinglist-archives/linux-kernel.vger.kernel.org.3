@@ -2,181 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A2F53540F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 21:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071EF53425E
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348805AbiEZTpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 15:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
+        id S245752AbiEYRq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347797AbiEZTpI (ORCPT
+        with ESMTP id S245571AbiEYRqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 15:45:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BBDE6A063
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 12:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653594303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wGw3S4Q9Vcbsrn/loM6Su2TerHvvfSdMEurV8a8JpS4=;
-        b=WHCbOQi3YCpmULupJqbys9ph7x6GZgl3hyhkyplzF9CwJlCTeHQX+Ts89YXVtxat5BBPl6
-        Dac4deE1S8ym53PstiaXkXltvMnC9x9rTwO4IgkLNpZuQ09wjtqIcH1fs0aF1YYbzgLiha
-        F2ZqGXSV1MzFhnvqo7a2wbtw+pTs2T4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-574-s_2j5mSHMUeeFkrfH07JZQ-1; Thu, 26 May 2022 15:44:59 -0400
-X-MC-Unique: s_2j5mSHMUeeFkrfH07JZQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 57AF280418B;
-        Thu, 26 May 2022 19:44:59 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2833A2166B26;
-        Thu, 26 May 2022 19:44:59 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 5EA67416F574; Wed, 25 May 2022 14:31:29 -0300 (-03)
-Date:   Wed, 25 May 2022 14:31:29 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, rostedt@goodmis.org,
-        mingo@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joao.m.martins@oracle.com
-Subject: Re: [PATCH v2] cpuidle: haltpoll: Add trace points for
- guest_halt_poll_ns grow/shrink
-Message-ID: <Yo5n8TsSuU9/IxEh@fuller.cnet>
-References: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
+        Wed, 25 May 2022 13:46:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCA75F9E
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653500781; x=1685036781;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=XaAdaYRmEX4q3+5JloUL5heNfATKBvuMIhBlEAf54yk=;
+  b=UYyLRu93ZqH6ZMld31rA9g+pmG5f4tFkcBPFfycTa8duBJKw+O2eoAb6
+   zDK3pbVta0UsOe186yWhuSyDD0qzA8NZM6vO1JGJvP/RC20AUfoD6gH0t
+   mjnnQf8PuLYy/9LwHiV+luPYZs1rbD79xEvFdHGNQAMopIegWaKLO3WQo
+   GHfe4HqtGZZrUXDLEaIP1/7midd/ZWBjOq5r4R4RUMYSmxJI/634C0Irb
+   Oq9jT1taWZF5qvcUPyRdaA6ChPSroGfdb5jeJbKxtK53OYMiBt6USsRAl
+   /3545/5CFpTpHtG7MpDu1KlyYXSUXpgxrdTgIdCsJHJqgGBmNZ3BrkP7Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="360278540"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="360278540"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 10:33:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="630449881"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 25 May 2022 10:33:03 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntusY-0003C0-J7;
+        Wed, 25 May 2022 17:33:02 +0000
+Date:   Thu, 26 May 2022 01:32:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [tzungbi-chrome-platform:dev 25/25] ERROR: modpost:
+ "cros_kunit_ec_xfer_mock_addx"
+ [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+Message-ID: <202205260106.UjRGjFFM-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 11:53:32PM +0000, Eiichi Tsukata wrote:
-> Add trace points as are implemented in KVM host halt polling.
-> This helps tune guest halt polling params.
-> 
-> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-> ---
->  drivers/cpuidle/governors/haltpoll.c | 15 ++++++++-----
->  include/trace/events/power.h         | 33 ++++++++++++++++++++++++++++
->  2 files changed, 43 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
-> index cb2a96eafc02..a5b6ad32956c 100644
-> --- a/drivers/cpuidle/governors/haltpoll.c
-> +++ b/drivers/cpuidle/governors/haltpoll.c
-> @@ -19,6 +19,7 @@
->  #include <linux/sched.h>
->  #include <linux/module.h>
->  #include <linux/kvm_para.h>
-> +#include <trace/events/power.h>
->  
->  static unsigned int guest_halt_poll_ns __read_mostly = 200000;
->  module_param(guest_halt_poll_ns, uint, 0644);
-> @@ -77,13 +78,16 @@ static int haltpoll_select(struct cpuidle_driver *drv,
->  
->  static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
->  {
-> -	unsigned int val;
-> +	unsigned int val, old;
->  
-> -	/* Grow cpu_halt_poll_us if
-> -	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
-> +	val = dev->poll_limit_ns;
-> +	old = val;
-> +
-> +	/* Grow poll_limit_ns if
-> +	 * poll_limit_ns < block_ns < guest_halt_poll_ns
->  	 */
->  	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
-> -		val = dev->poll_limit_ns * guest_halt_poll_grow;
-> +		val *= guest_halt_poll_grow;
->  
->  		if (val < guest_halt_poll_grow_start)
->  			val = guest_halt_poll_grow_start;
-> @@ -91,16 +95,17 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
->  			val = guest_halt_poll_ns;
->  
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git dev
+head:   c8065f6d478990cfc385d1d579972a75fc29605b
+commit: c8065f6d478990cfc385d1d579972a75fc29605b [25/25] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_query_all()
+config: arm64-randconfig-r006-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260106.UjRGjFFM-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git/commit/?id=c8065f6d478990cfc385d1d579972a75fc29605b
+        git remote add tzungbi-chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git
+        git fetch --no-tags tzungbi-chrome-platform dev
+        git checkout c8065f6d478990cfc385d1d579972a75fc29605b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Can do it before the assignment:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-		trace_guest_halt_poll_ns_grow(val, dev->poll_limit_ns);
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->  		dev->poll_limit_ns = val;
-> +		trace_guest_halt_poll_ns_grow(smp_processor_id(), val, old);
->  	} else if (block_ns > guest_halt_poll_ns &&
->  		   guest_halt_poll_allow_shrink) {
->  		unsigned int shrink = guest_halt_poll_shrink;
->  
-> -		val = dev->poll_limit_ns;
->  		if (shrink == 0)
->  			val = 0;
->  		else
->  			val /= shrink;
->  		dev->poll_limit_ns = val;
-> +		trace_guest_halt_poll_ns_shrink(smp_processor_id(), val, old);
->  	}
->  }
->  
-> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-> index af5018aa9517..db065af9c3c0 100644
-> --- a/include/trace/events/power.h
-> +++ b/include/trace/events/power.h
-> @@ -500,6 +500,39 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
->  
->  	TP_ARGS(name, type, new_value)
->  );
-> +
-> +TRACE_EVENT(guest_halt_poll_ns,
-> +
-> +	TP_PROTO(bool grow, unsigned int cpu_id,
-> +		 unsigned int new, unsigned int old),
-> +
-> +	TP_ARGS(grow, cpu_id, new, old),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(bool, grow)
-> +		__field(unsigned int, cpu_id)
-> +		__field(unsigned int, new)
-> +		__field(unsigned int, old)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->grow   = grow;
-> +		__entry->cpu_id = cpu_id;
-> +		__entry->new    = new;
-> +		__entry->old    = old;
-> +	),
-> +
-> +	TP_printk("cpu %u: halt_poll_ns %u (%s %u)",
-> +		__entry->cpu_id,
-> +		__entry->new,
-> +		__entry->grow ? "grow" : "shrink",
-> +		__entry->old)
-> +);
-> +
-> +#define trace_guest_halt_poll_ns_grow(cpu_id, new, old) \
-> +	trace_guest_halt_poll_ns(true, cpu_id, new, old)
-> +#define trace_guest_halt_poll_ns_shrink(cpu_id, new, old) \
-> +	trace_guest_halt_poll_ns(false, cpu_id, new, old)
->  #endif /* _TRACE_POWER_H */
->  
->  /* This part must be outside protection */
-> -- 
-> 2.36.1
-> 
-> 
+>> ERROR: modpost: "cros_kunit_ec_xfer_mock_addx" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_ec_xfer_mock_next" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_ec_xfer_mock_add" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_reset" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
+>> ERROR: modpost: "cros_kunit_ec_xfer_mock" [drivers/platform/chrome/cros_ec_proto_test.ko] undefined!
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,217 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C711533796
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63381533798
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242265AbiEYHpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 03:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
+        id S237215AbiEYHpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 03:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiEYHpH (ORCPT
+        with ESMTP id S229621AbiEYHp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 03:45:07 -0400
-Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7CBD7356D;
-        Wed, 25 May 2022 00:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=fO+wi
-        SAiyKS1yMdC8uyIoQTXd6l4aGIJhtZIX/WHYhc=; b=l54Uph3PmLUcHlF67q6Gt
-        Z/1GowreLzAJEdIK1HdBM6f5GvLpumqmMGwD062LO4Iv5qPJK9+0QLZPw6Gbd6dG
-        MMZf22VRpOGSTXHUCg9cdSsfvWyzzpqpuDFvhmNkhOJz0iRlABYA0FwAnFrx4vrp
-        4YsOQlDyXn/umhhJsNN1Dw=
-Received: from carlis (unknown [113.98.63.214])
-        by smtp10 (Coremail) with SMTP id DsCowAD3chFo3o1iE0zTEA--.49691S2;
-        Wed, 25 May 2022 15:44:41 +0800 (CST)
-From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llyz108@163.com, Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-Subject: [PATCH] scsi: scsi_transport_fc: convert sysfs snprintf to sysfs_emit
-Date:   Wed, 25 May 2022 07:44:24 +0000
-Message-Id: <20220525074424.108488-1-zhangxuezhi1@coolpad.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 25 May 2022 03:45:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB4C40A28;
+        Wed, 25 May 2022 00:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CC971CE1E2F;
+        Wed, 25 May 2022 07:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1498C385B8;
+        Wed, 25 May 2022 07:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653464722;
+        bh=JfZab1z+xt1oDyB1p6UDEYlvFX7gwRpVrT01RQlCjLk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NjK64GrLtVFX5Paeur+9J1OadG3BidkpkGxPzVJhGM0n848JLWqqc3dloehLzBE6x
+         P4MeWFGQbMq0rt7RFHIeAWz9tK0QBRovQBdobuN9NmEel310Rw4R9dB6z9kwiZx5bO
+         eZ3rl+XboRNFsRPPcgjFdWiRkP2AAZoBkbdSHGzk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.4.196
+Date:   Wed, 25 May 2022 09:45:17 +0200
+Message-Id: <165346471818414@kroah.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsCowAD3chFo3o1iE0zTEA--.49691S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3GrW8KFyxXF1UuryDtFyUGFg_yoWxWw4kpF
-        W3Ka45CrWvqF1rur1a9Fs0kF1rZF1xJ3y7JayxX34DuwsrtrWDCF1DCFWI9rn5GrWfG34U
-        JF4qkFZ8Cw47AF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnHUDUUUUU=
-X-Originating-IP: [113.98.63.214]
-Sender: llyz108@163.com
-X-CM-SenderInfo: xoo16iiqy6il2tof0z/xtbBOQkMhV-PNhthYQAAsE
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warnings:
-drivers/scsi/scsi_transport_fc.c:1962:9-17:
-WARNING: use scnprintf or sprintf
-drivers/scsi/scsi_transport_fc.c:1886:9-17:
-WARNING: use scnprintf or sprintf
-drivers/scsi/scsi_transport_fc.c:1910:9-17:
-WARNING: use scnprintf or sprintf
-drivers/scsi/scsi_transport_fc.c:1995:8-16:
-WARNING: use scnprintf or sprintf
-drivers/scsi/scsi_transport_fc.c:1299:9-17:
-WARNING: use scnprintf or sprintf
-drivers/scsi/scsi_transport_fc.c:1281:8-16:
-WARNING: use scnprintf or sprintf
-drivers/scsi/scsi_transport_fc.c:1213:10-18:
-WARNING: use scnprintf or sprintf
-drivers/scsi/scsi_transport_fc.c:1118:9-17:
-WARNING: use scnprintf or sprintf
-drivers/scsi/scsi_transport_fc.c:1660:9-17:
-WARNING: use scnprintf or sprintf
+I'm announcing the release of the 5.4.196 kernel.
 
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
----
- drivers/scsi/scsi_transport_fc.c | 38 ++++++++++++++++----------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+All users of the 5.4 kernel series must upgrade.
 
-diff --git a/drivers/scsi/scsi_transport_fc.c b/drivers/scsi/scsi_transport_fc.c
-index a2524106206d..a47f6e0f8597 100644
---- a/drivers/scsi/scsi_transport_fc.c
-+++ b/drivers/scsi/scsi_transport_fc.c
-@@ -1115,7 +1115,7 @@ show_fc_rport_supported_classes (struct device *dev,
- {
- 	struct fc_rport *rport = transport_class_to_rport(dev);
- 	if (rport->supported_classes == FC_COS_UNSPECIFIED)
--		return snprintf(buf, 20, "unspecified\n");
-+		return sysfs_emit(buf, "unspecified\n");
- 	return get_fc_cos_names(rport->supported_classes, buf);
- }
- static FC_DEVICE_ATTR(rport, supported_classes, S_IRUGO,
-@@ -1210,21 +1210,21 @@ show_fc_rport_roles (struct device *dev, struct device_attribute *attr,
- 					FC_WELLKNOWN_PORTID_MASK) {
- 		switch (rport->port_id & FC_WELLKNOWN_ROLE_MASK) {
- 		case FC_FPORT_PORTID:
--			return snprintf(buf, 30, "Fabric Port\n");
-+			return sysfs_emit(buf, "Fabric Port\n");
- 		case FC_FABCTLR_PORTID:
--			return snprintf(buf, 30, "Fabric Controller\n");
-+			return sysfs_emit(buf, "Fabric Controller\n");
- 		case FC_DIRSRVR_PORTID:
--			return snprintf(buf, 30, "Directory Server\n");
-+			return sysfs_emit(buf, "Directory Server\n");
- 		case FC_TIMESRVR_PORTID:
--			return snprintf(buf, 30, "Time Server\n");
-+			return sysfs_emit(buf, "Time Server\n");
- 		case FC_MGMTSRVR_PORTID:
--			return snprintf(buf, 30, "Management Server\n");
-+			return sysfs_emit(buf, "Management Server\n");
- 		default:
--			return snprintf(buf, 30, "Unknown Fabric Entity\n");
-+			return sysfs_emit(buf, "Unknown Fabric Entity\n");
- 		}
- 	} else {
- 		if (rport->roles == FC_PORT_ROLE_UNKNOWN)
--			return snprintf(buf, 20, "unknown\n");
-+			return sysfs_emit(buf, "unknown\n");
- 		return get_fc_port_roles_names(rport->roles, buf);
- 	}
- }
-@@ -1278,7 +1278,7 @@ show_fc_rport_port_state(struct device *dev,
- 	if (!name)
- 		return -EINVAL;
- 
--	return snprintf(buf, 20, "%s\n", name);
-+	return sysfs_emit(buf, "%s\n", name);
- }
- 
- static FC_DEVICE_ATTR(rport, port_state, 0444 | 0200,
-@@ -1296,8 +1296,8 @@ show_fc_rport_fast_io_fail_tmo (struct device *dev,
- 	struct fc_rport *rport = transport_class_to_rport(dev);
- 
- 	if (rport->fast_io_fail_tmo == -1)
--		return snprintf(buf, 5, "off\n");
--	return snprintf(buf, 20, "%d\n", rport->fast_io_fail_tmo);
-+		return sysfs_emit(buf, "off\n");
-+	return sysfs_emit(buf, "%d\n", rport->fast_io_fail_tmo);
- }
- 
- static ssize_t
-@@ -1341,7 +1341,7 @@ static ssize_t fc_rport_fpinstat_##name(struct device *cd,		\
- {									\
- 	struct fc_rport *rport = transport_class_to_rport(cd);		\
- 									\
--	return snprintf(buf, 20, "0x%llx\n", rport->fpin_stats.name);	\
-+	return sysfs_emit(buf, "0x%llx\n", rport->fpin_stats.name);	\
- }									\
- static FC_DEVICE_ATTR(rport, fpin_##name, 0444, fc_rport_fpinstat_##name, NULL)
- 
-@@ -1657,7 +1657,7 @@ show_fc_vport_roles (struct device *dev, struct device_attribute *attr,
- 	struct fc_vport *vport = transport_class_to_vport(dev);
- 
- 	if (vport->roles == FC_PORT_ROLE_UNKNOWN)
--		return snprintf(buf, 20, "unknown\n");
-+		return sysfs_emit(buf, "unknown\n");
- 	return get_fc_port_roles_names(vport->roles, buf);
- }
- static FC_DEVICE_ATTR(vport, roles, S_IRUGO, show_fc_vport_roles, NULL);
-@@ -1883,7 +1883,7 @@ show_fc_host_supported_classes (struct device *dev,
- 	struct Scsi_Host *shost = transport_class_to_shost(dev);
- 
- 	if (fc_host_supported_classes(shost) == FC_COS_UNSPECIFIED)
--		return snprintf(buf, 20, "unspecified\n");
-+		return sysfs_emit(buf, "unspecified\n");
- 
- 	return get_fc_cos_names(fc_host_supported_classes(shost), buf);
- }
-@@ -1907,7 +1907,7 @@ show_fc_host_supported_speeds (struct device *dev,
- 	struct Scsi_Host *shost = transport_class_to_shost(dev);
- 
- 	if (fc_host_supported_speeds(shost) == FC_PORTSPEED_UNKNOWN)
--		return snprintf(buf, 20, "unknown\n");
-+		return sysfs_emit(buf, "unknown\n");
- 
- 	return get_fc_port_speed_names(fc_host_supported_speeds(shost), buf);
- }
-@@ -1959,7 +1959,7 @@ show_fc_host_speed (struct device *dev,
- 		i->f->get_host_speed(shost);
- 
- 	if (fc_host_speed(shost) == FC_PORTSPEED_UNKNOWN)
--		return snprintf(buf, 20, "unknown\n");
-+		return sysfs_emit(buf, "unknown\n");
- 
- 	return get_fc_port_speed_names(fc_host_speed(shost), buf);
- }
-@@ -1992,7 +1992,7 @@ show_fc_private_host_tgtid_bind_type(struct device *dev,
- 	name = get_fc_tgtid_bind_type_name(fc_host_tgtid_bind_type(shost));
- 	if (!name)
- 		return -EINVAL;
--	return snprintf(buf, FC_BINDTYPE_MAX_NAMELEN, "%s\n", name);
-+	return sysfs_emit(buf, "%s\n", name);
- }
- 
- #define get_list_head_entry(pos, head, member) 		\
-@@ -2101,7 +2101,7 @@ fc_stat_show(const struct device *dev, char *buf, unsigned long offset)
- 	if (i->f->get_fc_host_stats) {
- 		stats = (i->f->get_fc_host_stats)(shost);
- 		if (stats)
--			ret = snprintf(buf, 20, "0x%llx\n",
-+			ret = sysfs_emit(buf, "0x%llx\n",
- 			      (unsigned long long)*(u64 *)(((u8 *) stats) + offset));
- 	}
- 	return ret;
-@@ -2160,7 +2160,7 @@ static ssize_t fc_host_fpinstat_##name(struct device *cd,		\
- 	struct Scsi_Host *shost = transport_class_to_shost(cd);		\
- 	struct fc_host_attrs *fc_host = shost_to_fc_host(shost);	\
- 									\
--	return snprintf(buf, 20, "0x%llx\n", fc_host->fpin_stats.name);	\
-+	return sysfs_emit(buf, "0x%llx\n", fc_host->fpin_stats.name);	\
- }									\
- static FC_DEVICE_ATTR(host, fpin_##name, 0444, fc_host_fpinstat_##name, NULL)
- 
--- 
-2.25.1
+The updated 5.4.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Documentation/DMA-attributes.txt                          |   10 
+ Makefile                                                  |    2 
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi                  |    9 
+ arch/arm/boot/dts/imx7-colibri.dtsi                       |    4 
+ arch/arm/boot/dts/imx7-mba7.dtsi                          |    2 
+ arch/arm/boot/dts/imx7d-nitrogen7.dts                     |    2 
+ arch/arm/boot/dts/imx7d-pico-hobbit.dts                   |    4 
+ arch/arm/boot/dts/imx7d-pico-pi.dts                       |    4 
+ arch/arm/boot/dts/imx7d-sdb.dts                           |    2 
+ arch/arm/boot/dts/imx7s-warp.dts                          |    4 
+ arch/arm/kernel/entry-armv.S                              |    2 
+ arch/arm/kernel/stacktrace.c                              |   10 
+ arch/arm/mm/proc-v7-bugs.c                                |    1 
+ arch/mips/lantiq/falcon/sysctrl.c                         |    2 
+ arch/mips/lantiq/xway/gptu.c                              |    2 
+ arch/mips/lantiq/xway/sysctrl.c                           |   46 ++--
+ arch/x86/crypto/chacha-avx512vl-x86_64.S                  |    4 
+ arch/x86/kvm/mmu.c                                        |   10 
+ arch/x86/um/shared/sysdep/syscalls_64.h                   |    5 
+ arch/x86/xen/smp_pv.c                                     |    3 
+ arch/x86/xen/xen-head.S                                   |   18 +
+ block/bfq-iosched.c                                       |    3 
+ block/blk-merge.c                                         |   15 -
+ block/elevator.c                                          |    3 
+ block/mq-deadline.c                                       |    2 
+ drivers/base/firmware_loader/main.c                       |   17 +
+ drivers/block/drbd/drbd_main.c                            |    7 
+ drivers/block/floppy.c                                    |   20 -
+ drivers/clk/at91/clk-generated.c                          |    4 
+ drivers/crypto/qcom-rng.c                                 |    1 
+ drivers/crypto/stm32/stm32-crc32.c                        |    4 
+ drivers/gpio/gpio-mvebu.c                                 |    3 
+ drivers/gpio/gpio-vf610.c                                 |    8 
+ drivers/gpu/drm/drm_dp_mst_topology.c                     |    1 
+ drivers/i2c/busses/i2c-mt7621.c                           |   10 
+ drivers/input/input.c                                     |   19 +
+ drivers/input/touchscreen/ili210x.c                       |    4 
+ drivers/input/touchscreen/stmfts.c                        |    8 
+ drivers/mmc/core/block.c                                  |    6 
+ drivers/mmc/core/mmc_ops.c                                |   25 +-
+ drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c |    7 
+ drivers/net/ethernet/cadence/macb_main.c                  |    2 
+ drivers/net/ethernet/dec/tulip/tulip_core.c               |    5 
+ drivers/net/ethernet/intel/ice/ice_main.c                 |    7 
+ drivers/net/ethernet/intel/igb/igb_main.c                 |    3 
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c         |    7 
+ drivers/net/ethernet/qlogic/qla3xxx.c                     |    3 
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c         |    2 
+ drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c          |    5 
+ drivers/net/vmxnet3/vmxnet3_drv.c                         |    6 
+ drivers/nvme/host/core.c                                  |    1 
+ drivers/nvme/host/multipath.c                             |   25 ++
+ drivers/nvme/host/nvme.h                                  |    4 
+ drivers/pci/pci.c                                         |   10 
+ drivers/platform/chrome/cros_ec_debugfs.c                 |   12 -
+ drivers/rtc/class.c                                       |    9 
+ drivers/rtc/rtc-mc146818-lib.c                            |   16 +
+ drivers/scsi/qla2xxx/qla_target.c                         |    3 
+ drivers/vhost/net.c                                       |   15 -
+ fs/afs/inode.c                                            |   14 +
+ fs/file_table.c                                           |    1 
+ fs/nilfs2/btnode.c                                        |   23 +-
+ fs/nilfs2/btnode.h                                        |    1 
+ fs/nilfs2/btree.c                                         |   27 +-
+ fs/nilfs2/dat.c                                           |    4 
+ fs/nilfs2/gcinode.c                                       |    7 
+ fs/nilfs2/inode.c                                         |  159 ++++++++++++--
+ fs/nilfs2/mdt.c                                           |   43 ++-
+ fs/nilfs2/mdt.h                                           |    6 
+ fs/nilfs2/nilfs.h                                         |   16 -
+ fs/nilfs2/page.c                                          |    7 
+ fs/nilfs2/segment.c                                       |    9 
+ fs/nilfs2/super.c                                         |    5 
+ include/linux/blkdev.h                                    |   16 +
+ include/linux/dma-mapping.h                               |    8 
+ include/linux/mc146818rtc.h                               |    2 
+ include/linux/stmmac.h                                    |    1 
+ include/linux/sunrpc/xprtsock.h                           |    1 
+ include/uapi/linux/dma-buf.h                              |    4 
+ kernel/dma/swiotlb.c                                      |   13 -
+ kernel/events/core.c                                      |   14 +
+ net/bridge/br_input.c                                     |    7 
+ net/key/af_key.c                                          |    6 
+ net/mac80211/rx.c                                         |    3 
+ net/nfc/nci/data.c                                        |    2 
+ net/nfc/nci/hci.c                                         |    4 
+ net/sched/act_pedit.c                                     |    4 
+ net/sunrpc/xprt.c                                         |   34 +-
+ net/sunrpc/xprtsock.c                                     |   36 ++-
+ sound/isa/wavefront/wavefront_synth.c                     |    3 
+ sound/pci/hda/patch_realtek.c                             |    1 
+ tools/objtool/check.c                                     |    1 
+ tools/perf/bench/numa.c                                   |    2 
+ tools/testing/selftests/net/fcnal-test.sh                 |   12 +
+ 94 files changed, 681 insertions(+), 263 deletions(-)
+
+Abel Vesa (1):
+      ARM: dts: imx7: Use audio_mclk_post_div instead audio_mclk_root_clk
+
+Al Viro (1):
+      Fix double fget() in vhost_net_set_backend()
+
+Andrew Lunn (1):
+      net: bridge: Clear offload_fwd_mark when passing frame up bridge interface.
+
+Anton Eidelman (1):
+      nvme-multipath: fix hang when disk goes live over reconnect
+
+Ard Biesheuvel (2):
+      ARM: 9196/1: spectre-bhb: enable for Cortex-A15
+      ARM: 9197/1: spectre-bhb: fix loop8 sequence for Thumb2
+
+Christophe JAILLET (1):
+      net/qla3xxx: Fix a test in ql_reset_work()
+
+Codrin Ciubotariu (1):
+      clk: at91: generated: consider range when calculating best rate
+
+David Gow (1):
+      um: Cleanup syscall_handler_t definition/cast, fix warning
+
+David Howells (1):
+      afs: Fix afs_getattr() to refetch file status if callback break occurred
+
+Duoming Zhou (1):
+      NFC: nci: fix sleep in atomic context bugs caused by nci_skb_alloc
+
+Felix Fietkau (1):
+      mac80211: fix rx reordering with non explicit / psmp ack policy
+
+Gleb Chesnokov (1):
+      scsi: qla2xxx: Fix missed DMA unmap for aborted commands
+
+Grant Grundler (1):
+      net: atlantic: verify hw_head_ lies within TX buffer ring
+
+Greg Kroah-Hartman (1):
+      Linux 5.4.196
+
+Haibo Chen (1):
+      gpio: gpio-vf610: do not touch other bits when set the target bit
+
+Hangyu Hua (1):
+      drm/dp/mst: fix a possible memory leak in fetch_monitor_name()
+
+Harini Katakam (1):
+      net: macb: Increment rx bd head after allocating skb and buffer
+
+Jae Hyun Yoo (2):
+      ARM: dts: aspeed-g6: remove FWQSPID group in pinctrl dtsi
+      ARM: dts: aspeed-g6: fix SPI1/SPI2 quad pin group
+
+Jakob Koschel (1):
+      drbd: remove usage of list iterator variable after loop
+
+Jeff LaBundy (1):
+      Input: add bounds checking to input_set_capability()
+
+Jiasheng Jiang (1):
+      net: af_key: add check for pfkey_broadcast in function pfkey_process
+
+Juergen Gross (1):
+      x86/xen: fix booting 32-bit pv guest
+
+Jérôme Pouiller (1):
+      dma-buf: fix use of DMA_BUF_SET_NAME_{A,B} in userspace
+
+Kai-Heng Feng (1):
+      ALSA: hda/realtek: Enable headset mic on Lenovo P360
+
+Kevin Mitchell (1):
+      igb: skip phy status check where unavailable
+
+Linus Torvalds (1):
+      Reinstate some of "swiotlb: rework "fix info leak with DMA_FROM_DEVICE""
+
+Marek Vasut (1):
+      Input: ili210x - fix reset timing
+
+Mario Limonciello (1):
+      rtc: mc146818-lib: Fix the AltCentury for AMD platforms
+
+Maxim Mikityanskiy (1):
+      net/mlx5e: Properly block LRO when XDP is enabled
+
+Meena Shanmugam (4):
+      SUNRPC: Clean up scheduling of autoclose
+      SUNRPC: Prevent immediate close+reconnect
+      SUNRPC: Don't call connect() more than once on a TCP socket
+      SUNRPC: Ensure we flush any closed sockets before xs_xprt_free()
+
+Ming Lei (1):
+      block: return ELEVATOR_DISCARD_MERGE if possible
+
+Miroslav Benes (2):
+      x86/xen: Make the boot CPU idle task reliable
+      x86/xen: Make the secondary CPU idle tasks reliable
+
+Nicolas Dichtel (1):
+      selftests: add ping test with ping_group_range tuned
+
+Ondrej Mosnacek (1):
+      crypto: qcom-rng - fix infinite loop on requests not multiple of WORD_SZ
+
+Paolo Abeni (1):
+      net/sched: act_pedit: sanitize shift argument before usage
+
+Paul Greenwalt (1):
+      ice: fix possible under reporting of ethtool Tx and Rx statistics
+
+Peter Zijlstra (3):
+      crypto: x86/chacha20 - Avoid spurious jumps to other functions
+      perf: Fix sys_perf_event_open() race against self
+      x86/xen: Mark cpu_bringup_and_idle() as dead_end_function
+
+Rafael J. Wysocki (1):
+      PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold
+
+Ryusuke Konishi (2):
+      nilfs2: fix lockdep warnings in page operations for btree nodes
+      nilfs2: fix lockdep warnings during disk space reclamation
+
+Sean Christopherson (1):
+      KVM: x86/mmu: Update number of zapped pages even if page list is stable
+
+Takashi Iwai (1):
+      ALSA: wavefront: Proper check of get_user() error
+
+Tan Tee Min (1):
+      net: stmmac: disable Split Header (SPH) for Intel platforms
+
+Thiébaud Weksteen (1):
+      firmware_loader: use kernel credentials when reading firmware
+
+Thomas Richter (1):
+      perf bench numa: Address compiler error on s390
+
+Tzung-Bi Shih (1):
+      platform/chrome: cros_ec_debugfs: detach log reader wq from devm
+
+Ulf Hansson (3):
+      mmc: core: Specify timeouts for BKOPS and CACHE_FLUSH for eMMC
+      mmc: block: Use generic_cmd6_time when modifying INAND_CMD38_ARG_EXT_CSD
+      mmc: core: Default to generic_cmd6_time as timeout in __mmc_switch()
+
+Uwe Kleine-König (1):
+      gpio: mvebu/pwm: Refuse requests with inverted polarity
+
+Vincent Whitchurch (1):
+      rtc: fix use-after-free on device removal
+
+Willy Tarreau (1):
+      floppy: use a statically allocated error counter
+
+Xiaoke Wang (1):
+      MIPS: lantiq: check the return value of kzalloc()
+
+Yang Yingliang (3):
+      ethernet: tulip: fix missing pci_disable_device() on error in tulip_init_one()
+      net: stmmac: fix missing pci_disable_device() on error in stmmac_pci_probe()
+      i2c: mt7621: fix missing clk_disable_unprepare() on error in mtk_i2c_probe()
+
+Zheng Yongjun (2):
+      Input: stmfts - fix reference leak in stmfts_input_open
+      crypto: stm32 - fix reference leak in stm32_crc_remove
+
+Zixuan Fu (2):
+      net: vmxnet3: fix possible use-after-free bugs in vmxnet3_rq_alloc_rx_buf()
+      net: vmxnet3: fix possible NULL pointer dereference in vmxnet3_rq_cleanup()
+
+linyujun (1):
+      ARM: 9191/1: arm/stacktrace, kasan: Silence KASAN warnings in unwind_frame()
 

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB28533683
+	by mail.lfdr.de (Postfix) with ESMTP id 45BE7533681
 	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 07:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244048AbiEYFie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 01:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
+        id S244054AbiEYFik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 01:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244027AbiEYFi2 (ORCPT
+        with ESMTP id S244035AbiEYFi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 01:38:28 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E206F4B8
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:38:26 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id o7-20020a256b47000000b0064ddc3bea70so17682500ybm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:38:26 -0700 (PDT)
+        Wed, 25 May 2022 01:38:29 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DC06F4B5
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:38:28 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id w83-20020a627b56000000b005182702c297so8766222pfc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 22:38:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=zNG/SP9uOa8vueC6UH4edlJSwlkm3xYFjGAlvoL4Mkw=;
-        b=p0WsQbu9N2UtrccYC3wY1LPBiwHTAGmxkehpdfn7W3jX35zZJCRH4WkrCVXPzJwQS0
-         bd8b3Ed37cOU52UgkkGgi/EDfT7ibzQZKVFCTkjUgdbfjFiWhPamVtkAMS1B6D/BzUuh
-         zpzIOgpPT0UW6Sm6L9ISFjecR4lf1Ng7bkP0KPN42RgV9gMQsXQh4hAiGd8DYJLkVd6o
-         afGg8gg64I34ujL96QvQ/RnbXs+YCGpaCk3VbRtzQfEzHwmeDbNfEwxqDjMCojzCBfBT
-         5Gq84wY4aLiZFY+0adqJbQ5I2hpolAn6U9G3EAcqCq0jjr1yp57uNo0cwZvxaiOt7TgX
-         hFWA==
+        bh=NAVfZWpG8Q+tRmL5Yk4KGv9foVwAGiUt0byCTLoh0Qs=;
+        b=mL72ipqwaDSH3H6EU6884wgdwdEXmr9gOlfcpP+Z4OCGlSBavhqxeul9ccA/S1S1/v
+         Vj7s0NsIdlY9xcYnDolsRIWDzKJglmuXBf6D+fXEMOTPPGivP7QXDU9NJXJhPDj6t9eV
+         WF7PC2AWuiSS3oUaAj0gtFpESIQRc4/p3lK5zEXtu27+aPCxL9hXVIiM7NZ4dfPhSKFq
+         k4h0YtfLMeyE4XY8wDYb5FwhzkZdHvQUC330GFlf7sX0MF7hlO/oz0qTkqsQjLX2Gvse
+         qNLngAt6pbNy4UrGxMsdgLA44FRNnYaVaFRzfzetY6UO63svMy1eWft8Eur0xqQn9fMT
+         9FEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=zNG/SP9uOa8vueC6UH4edlJSwlkm3xYFjGAlvoL4Mkw=;
-        b=SfPVGiEkBuQfLa62k9Eiou9MnoKwcMssQ8sMJLi29l51IocY/UQORCqKs6x71Hk+Qe
-         ek4kPGJmxVRid0RMWnXYRiDcPGkwRgt4neQojc3kNwC62o2AI2mGom3iEEi+ADX5aIua
-         OPdbtubnpGGCgNtz34eaUo8SXoVCq9PydmWZGiOcTBR+zEd4WHvW+8Suxgv2jAhOSMyM
-         dhuKViOjDB8YK0gDeXfcyoCG1NE2TVv/fccVzRc1vOAfxjrX3wfgmzvTWMK9gTnZ18Fo
-         LXnPirlrXNURcu6fcmu3KH/SOZiTrTsNQPTA2qAbCsJnhCO9CuNSAOYP/HHJc/Qvk0xE
-         IE0A==
-X-Gm-Message-State: AOAM533rH12iA1sTytterMgFNX9ORopCDg+tfv1Nju+eUa864XL+bVrL
-        mOEiawM4lkQe+r31HQhkfwnO9VvJoycG
-X-Google-Smtp-Source: ABdhPJyHN13ZfP5TxF+UY5vkCamgmXQuyLGfQY/Qf4EpqtY/sLKJ998eXB5f3glqYTApa1EN9YK6ZsendCG5
+        bh=NAVfZWpG8Q+tRmL5Yk4KGv9foVwAGiUt0byCTLoh0Qs=;
+        b=qeQLWsqQUsA8nFDh63ROTTtkrs2GF1P+nBmgC4ch4pkmUs6ixzJhAH0Zuh7tCTcNHE
+         FDBjoPx/2jQ/y21OQhvF8WMpUZm5/06lnRfazO+i2QwpkRySbYN2BzXeogiU2bBSkczm
+         89H8yCmBNXiYKdYFLyQTzMiFRaftXp25VH21Gzq/7xW+jbfeTZQGfKk/3+W3BN0n2K5V
+         SsuMGPkmvl7sVxm8zoMmTEsGS6WL1SFSYGdqEt/xnkQKM3gEbUVDCSC6XLJNDC7hWISz
+         B4YVyrdWV6R4f8Mip4ehj4orE8UsZiHaxm4Rlm4VtKxNncK4uJ2h1zO870V6K7n0mQH5
+         Cjow==
+X-Gm-Message-State: AOAM532bkQLr88MOb+wl05ZwhT5ZC8g8ojy1OO9qz9vsjICk6kJ0J9P4
+        g9g2OssU8LkMFFhBqIgpUKRG4rUc5rQ9
+X-Google-Smtp-Source: ABdhPJyra9MQ1rj4iVIZVM4NumdbENhv0uLRNNRVoaI72bbkeTdcwnpdqlidShiveinndnFZlpymNl2E9bri
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:1ab1:de5:7b7f:3844])
- (user=irogers job=sendgmr) by 2002:a81:3a57:0:b0:2f1:57ee:c671 with SMTP id
- h84-20020a813a57000000b002f157eec671mr31013242ywa.104.1653457105214; Tue, 24
- May 2022 22:38:25 -0700 (PDT)
-Date:   Tue, 24 May 2022 22:38:13 -0700
+ (user=irogers job=sendgmr) by 2002:a63:7c4e:0:b0:380:8ae9:c975 with SMTP id
+ l14-20020a637c4e000000b003808ae9c975mr27908754pgn.25.1653457107713; Tue, 24
+ May 2022 22:38:27 -0700 (PDT)
+Date:   Tue, 24 May 2022 22:38:14 -0700
 In-Reply-To: <20220525053814.3265216-1-irogers@google.com>
-Message-Id: <20220525053814.3265216-3-irogers@google.com>
+Message-Id: <20220525053814.3265216-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20220525053814.3265216-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH v4 2/3] perf stat: Add JSON output option
+Subject: [PATCH v4 3/3] perf test: Json format checking
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -84,735 +84,271 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Claire Jensen <cjense@google.com>
 
-CSV output is tricky to format and column layout changes are susceptible
-to breaking parsers. New JSON-formatted output has variable names to
-identify fields that are consistent and informative, making
-the output parseable.
-
-CSV output example:
-
-1.20,msec,task-clock:u,1204272,100.00,0.697,CPUs utilized
-0,,context-switches:u,1204272,100.00,0.000,/sec
-0,,cpu-migrations:u,1204272,100.00,0.000,/sec
-70,,page-faults:u,1204272,100.00,58.126,K/sec
-
-JSON output example:
-
-{"counter-value" : "3805.723968", "unit" : "msec", "event" :
-"cpu-clock", "event-runtime" : 3805731510100.00, "pcnt-running"
-: 100.00, "metric-value" : 4.007571, "metric-unit" : "CPUs utilized"}
-{"counter-value" : "6166.000000", "unit" : "", "event" :
-"context-switches", "event-runtime" : 3805723045100.00, "pcnt-running"
-: 100.00, "metric-value" : 1.620191, "metric-unit" : "K/sec"}
-{"counter-value" : "466.000000", "unit" : "", "event" :
-"cpu-migrations", "event-runtime" : 3805727613100.00, "pcnt-running"
-: 100.00, "metric-value" : 122.447136, "metric-unit" : "/sec"}
-{"counter-value" : "208.000000", "unit" : "", "event" :
-"page-faults", "event-runtime" : 3805726799100.00, "pcnt-running"
-: 100.00, "metric-value" : 54.654516, "metric-unit" : "/sec"}
-
-Also added documentation for JSON option.
-There is some tidy up of CSV code including a potential memory over run
-in the os.nfields set up. To facilitate this an AGGR_MAX value is added.
+Add field checking tests for perf stat JSON output.
+Sanity checks the expected number of fields are present, that the
+expected keys are present and they have the correct values.
 
 Signed-off-by: Claire Jensen <cjense@google.com>
 ---
- tools/perf/Documentation/perf-stat.txt |  21 ++
- tools/perf/builtin-stat.c              |   6 +
- tools/perf/util/stat-display.c         | 384 ++++++++++++++++++-------
- tools/perf/util/stat.c                 |   1 +
- tools/perf/util/stat.h                 |   2 +
- 5 files changed, 308 insertions(+), 106 deletions(-)
+ .../tests/shell/lib/perf_json_output_lint.py  |  94 +++++++++++
+ tools/perf/tests/shell/stat+json_output.sh    | 147 ++++++++++++++++++
+ 2 files changed, 241 insertions(+)
+ create mode 100644 tools/perf/tests/shell/lib/perf_json_output_lint.py
+ create mode 100755 tools/perf/tests/shell/stat+json_output.sh
 
-diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
-index 8d1cde00b8d6..f9cdfd912b05 100644
---- a/tools/perf/Documentation/perf-stat.txt
-+++ b/tools/perf/Documentation/perf-stat.txt
-@@ -570,6 +570,27 @@ Additional metrics may be printed with all earlier fields being empty.
- 
- include::intel-hybrid.txt[]
- 
-+JSON FORMAT
-+-----------
+diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
+new file mode 100644
+index 000000000000..19477a5f1558
+--- /dev/null
++++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
+@@ -0,0 +1,94 @@
++#!/usr/bin/python
++# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++# Basic sanity check of perf JSON output as specified in the man page.
 +
-+With -j, perf stat is able to print out a JSON format output
-+that can be used for parsing.
++import argparse
++import sys
++import json
 +
-+- timestamp : optional usec time stamp in fractions of second (with -I)
-+- optional aggregate options:
-+		- core : core identifier (with --per-core)
-+		- die : die identifier (with --per-die)
-+		- socket : socket identifier (with --per-socket)
-+		- node : node identifier (with --per-node)
-+		- thread : thread identifier (with --per-thread)
-+- counter-value : counter value
-+- unit : unit of the counter value or empty
-+- event : event name
-+- variance : optional variance if multiple values are collected (with -r)
-+- runtime : run time of counter
-+- metric-value : optional metric value
-+- metric-unit : optional unit of metric
++ap = argparse.ArgumentParser()
++ap.add_argument('--no-args', action='store_true')
++ap.add_argument('--interval', action='store_true')
++ap.add_argument('--system-wide-no-aggr', action='store_true')
++ap.add_argument('--system-wide', action='store_true')
++ap.add_argument('--event', action='store_true')
++ap.add_argument('--per-core', action='store_true')
++ap.add_argument('--per-thread', action='store_true')
++ap.add_argument('--per-die', action='store_true')
++ap.add_argument('--per-node', action='store_true')
++ap.add_argument('--per-socket', action='store_true')
++args = ap.parse_args()
 +
- SEE ALSO
- --------
- linkperf:perf-top[1], linkperf:perf-list[1]
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 7e6cc8bdf061..b6972e18688f 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -1259,6 +1259,8 @@ static struct option stat_options[] = {
- 		    "Merge identical named hybrid events"),
- 	OPT_STRING('x', "field-separator", &stat_config.csv_sep, "separator",
- 		   "print counts with custom separator"),
-+	OPT_BOOLEAN('j', "json-output", &stat_config.json_output,
-+		   "print counts in JSON format"),
- 	OPT_CALLBACK('G', "cgroup", &evsel_list, "name",
- 		     "monitor event in cgroup name only", parse_stat_cgroups),
- 	OPT_STRING(0, "for-each-cgroup", &stat_config.cgroup_list, "name",
-@@ -1445,6 +1447,7 @@ static aggr_cpu_id_get_t aggr_mode__get_aggr(enum aggr_mode aggr_mode)
- 	case AGGR_GLOBAL:
- 	case AGGR_THREAD:
- 	case AGGR_UNSET:
-+	case AGGR_MAX:
- 	default:
- 		return NULL;
- 	}
-@@ -1469,6 +1472,7 @@ static aggr_get_id_t aggr_mode__get_id(enum aggr_mode aggr_mode)
- 	case AGGR_GLOBAL:
- 	case AGGR_THREAD:
- 	case AGGR_UNSET:
-+	case AGGR_MAX:
- 	default:
- 		return NULL;
- 	}
-@@ -1619,6 +1623,7 @@ static aggr_cpu_id_get_t aggr_mode__get_aggr_file(enum aggr_mode aggr_mode)
- 	case AGGR_GLOBAL:
- 	case AGGR_THREAD:
- 	case AGGR_UNSET:
-+	case AGGR_MAX:
- 	default:
- 		return NULL;
- 	}
-@@ -1639,6 +1644,7 @@ static aggr_get_id_t aggr_mode__get_id_file(enum aggr_mode aggr_mode)
- 	case AGGR_GLOBAL:
- 	case AGGR_THREAD:
- 	case AGGR_UNSET:
-+	case AGGR_MAX:
- 	default:
- 		return NULL;
- 	}
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 606f09b09226..2bbd11446fa9 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -28,15 +28,21 @@
- static void print_running(struct perf_stat_config *config,
- 			  u64 run, u64 ena)
- {
--	if (config->csv_output) {
--		fprintf(config->output, "%s%" PRIu64 "%s%.2f",
--					config->csv_sep,
--					run,
--					config->csv_sep,
--					ena ? 100.0 * run / ena : 100.0);
--	} else if (run != ena) {
++Lines = sys.stdin.readlines()
 +
-+	double enabled_percent = 100;
-+
-+	if (run != ena)
-+		enabled_percent = 100 * run / ena;
-+	if (config->json_output)
-+		fprintf(config->output,
-+			"\"event-runtime\" : %lu, \"pcnt-running\" : %.2f, ",
-+			run, enabled_percent);
-+	else if (config->csv_output)
-+		fprintf(config->output,
-+			"%s%" PRIu64 "%s%.2f", config->csv_sep,
-+			run, config->csv_sep, enabled_percent);
-+	else if (run != ena)
- 		fprintf(config->output, "  (%.2f%%)", 100.0 * run / ena);
--	}
- }
- 
- static void print_noise_pct(struct perf_stat_config *config,
-@@ -44,7 +50,9 @@ static void print_noise_pct(struct perf_stat_config *config,
- {
- 	double pct = rel_stddev_stats(total, avg);
- 
--	if (config->csv_output)
-+	if (config->json_output)
-+		fprintf(config->output, "\"variance\" : %.2f, ", pct);
-+	else if (config->csv_output)
- 		fprintf(config->output, "%s%.2f%%", config->csv_sep, pct);
- 	else if (pct)
- 		fprintf(config->output, "  ( +-%6.2f%% )", pct);
-@@ -66,7 +74,11 @@ static void print_cgroup(struct perf_stat_config *config, struct evsel *evsel)
- {
- 	if (nr_cgroups) {
- 		const char *cgrp_name = evsel->cgrp ? evsel->cgrp->name  : "";
--		fprintf(config->output, "%s%s", config->csv_sep, cgrp_name);
-+
-+		if (config->json_output)
-+			fprintf(config->output, "\"cgroup\" : \"%s\", ", cgrp_name);
-+		else
-+			fprintf(config->output, "%s%s", config->csv_sep, cgrp_name);
- 	}
- }
- 
-@@ -74,69 +86,123 @@ static void print_cgroup(struct perf_stat_config *config, struct evsel *evsel)
- static void aggr_printout(struct perf_stat_config *config,
- 			  struct evsel *evsel, struct aggr_cpu_id id, int nr)
- {
++def isfloat(num):
++  try:
++    float(num)
++    return True
++  except ValueError:
++    return False
 +
 +
-+	if (config->json_output && !config->interval)
-+		fprintf(config->output, "{");
++def isint(num):
++  try:
++    int(num)
++    return True
++  except ValueError:
++    return False
 +
- 	switch (config->aggr_mode) {
- 	case AGGR_CORE:
--		fprintf(config->output, "S%d-D%d-C%*d%s%*d%s",
--			id.socket,
--			id.die,
--			config->csv_output ? 0 : -8,
--			id.core,
--			config->csv_sep,
--			config->csv_output ? 0 : 4,
--			nr,
--			config->csv_sep);
-+		if (config->json_output) {
-+			fprintf(config->output,
-+				"\"core\" : \"S%d-D%d-C%d\", \"aggregate-number\" : %d, ",
-+				id.socket,
-+				id.die,
-+				id.core,
-+				nr);
-+		} else {
-+			fprintf(config->output, "S%d-D%d-C%*d%s%*d%s",
-+				id.socket,
-+				id.die,
-+				config->csv_output ? 0 : -8,
-+				id.core,
-+				config->csv_sep,
-+				config->csv_output ? 0 : 4,
-+				nr,
-+				config->csv_sep);
-+		}
- 		break;
- 	case AGGR_DIE:
--		fprintf(config->output, "S%d-D%*d%s%*d%s",
--			id.socket,
--			config->csv_output ? 0 : -8,
--			id.die,
--			config->csv_sep,
--			config->csv_output ? 0 : 4,
--			nr,
--			config->csv_sep);
-+		if (config->json_output) {
-+			fprintf(config->output,
-+				"\"die\" : \"S%d-D%d\", \"aggregate-number\" : %d, ",
-+				id.socket,
-+				id.die,
-+				nr);
-+		} else {
-+			fprintf(config->output, "S%d-D%*d%s%*d%s",
-+				id.socket,
-+				config->csv_output ? 0 : -8,
-+				id.die,
-+				config->csv_sep,
-+				config->csv_output ? 0 : 4,
-+				nr,
-+				config->csv_sep);
-+		}
- 		break;
- 	case AGGR_SOCKET:
--		fprintf(config->output, "S%*d%s%*d%s",
--			config->csv_output ? 0 : -5,
--			id.socket,
--			config->csv_sep,
--			config->csv_output ? 0 : 4,
--			nr,
--			config->csv_sep);
--			break;
-+		if (config->json_output) {
-+			fprintf(config->output,
-+				"\"socket\" : \"S%d\", \"aggregate-number\" : %d, ",
-+				id.socket,
-+				nr);
-+		} else {
-+			fprintf(config->output, "S%*d%s%*d%s",
-+				config->csv_output ? 0 : -5,
-+				id.socket,
-+				config->csv_sep,
-+				config->csv_output ? 0 : 4,
-+				nr,
-+				config->csv_sep);
-+		}
-+		break;
- 	case AGGR_NODE:
--		fprintf(config->output, "N%*d%s%*d%s",
--			config->csv_output ? 0 : -5,
--			id.node,
--			config->csv_sep,
--			config->csv_output ? 0 : 4,
--			nr,
--			config->csv_sep);
--			break;
-+		if (config->json_output) {
-+			fprintf(config->output, "\"node\" : \"N%d\", \"aggregate-number\" : %d, ",
-+				id.node,
-+				nr);
-+		} else {
-+			fprintf(config->output, "N%*d%s%*d%s",
-+				config->csv_output ? 0 : -5,
-+				id.node,
-+				config->csv_sep,
-+				config->csv_output ? 0 : 4,
-+				nr,
-+				config->csv_sep);
-+		}
-+		break;
- 	case AGGR_NONE:
--		if (evsel->percore && !config->percore_show_thread) {
--			fprintf(config->output, "S%d-D%d-C%*d%s",
--				id.socket,
--				id.die,
--				config->csv_output ? 0 : -3,
--				id.core, config->csv_sep);
--		} else if (id.cpu.cpu > -1) {
--			fprintf(config->output, "CPU%*d%s",
--				config->csv_output ? 0 : -7,
--				id.cpu.cpu, config->csv_sep);
-+		if (config->json_output) {
-+			if (evsel->percore && !config->percore_show_thread) {
-+				fprintf(config->output, "\"core\" : \"S%d-D%d-C%d\"",
-+					id.socket,
-+					id.die,
-+					id.core);
-+			} else if (id.core > -1) {
-+				fprintf(config->output, "\"cpu\" : \"%d\", ",
-+					id.cpu.cpu);
-+			}
-+		} else {
-+			if (evsel->percore && !config->percore_show_thread) {
-+				fprintf(config->output, "S%d-D%d-C%*d%s",
-+					id.socket,
-+					id.die,
-+					config->csv_output ? 0 : -3,
-+					id.core, config->csv_sep);
-+			} else if (id.core > -1) {
-+				fprintf(config->output, "CPU%*d%s",
-+					config->csv_output ? 0 : -7,
-+					id.cpu.cpu, config->csv_sep);
-+			}
- 		}
- 		break;
- 	case AGGR_THREAD:
--		fprintf(config->output, "%*s-%*d%s",
--			config->csv_output ? 0 : 16,
--			perf_thread_map__comm(evsel->core.threads, id.thread),
--			config->csv_output ? 0 : -8,
--			perf_thread_map__pid(evsel->core.threads, id.thread),
--			config->csv_sep);
-+		if (config->json_output) {
-+			fprintf(config->output, "\"thread\" : \"%s-%d\", ",
-+				perf_thread_map__comm(evsel->core.threads, id.thread),
-+				perf_thread_map__pid(evsel->core.threads, id.thread));
-+		} else {
-+			fprintf(config->output, "%*s-%*d%s",
-+				config->csv_output ? 0 : 16,
-+				perf_thread_map__comm(evsel->core.threads, id.thread),
-+				config->csv_output ? 0 : -8,
-+				perf_thread_map__pid(evsel->core.threads, id.thread),
-+				config->csv_sep);
-+		}
- 		break;
- 	case AGGR_GLOBAL:
- 	case AGGR_UNSET:
-+	case AGGR_MAX:
- 	default:
- 		break;
- 	}
-@@ -234,6 +300,31 @@ static void print_metric_csv(struct perf_stat_config *config __maybe_unused,
- 	fprintf(out, "%s%s%s%s", config->csv_sep, vals, config->csv_sep, skip_spaces(unit));
- }
- 
-+static void print_metric_json(struct perf_stat_config *config __maybe_unused,
-+			     void *ctx,
-+			     const char *color __maybe_unused,
-+			     const char *fmt __maybe_unused,
-+			     const char *unit, double val)
-+{
-+	struct outstate *os = ctx;
-+	FILE *out = os->fh;
++def is_counter_value(num):
++  return isfloat(num) or num == '<not counted>' or num == '<not supported>'
 +
-+	fprintf(out, "\"metric-value\" : %f, ", val);
-+	fprintf(out, "\"metric-unit\" : \"%s\"", unit);
-+	if (!config->metric_only)
-+		fprintf(out, "}");
-+}
++def check_json_output(expected_items):
++  if expected_items != -1:
++    for line in Lines:
++      if 'failed' not in line:
++        count = 0
++        count = line.count(',')
++        if count != expected_items and count == 1 and 'metric-value' in line:
++          # Events that generate >1 metric may have isolated metric values.
++          continue
++        if count != expected_items:
++          raise RuntimeError(f'wrong number of fields. counted {count} expected {expected_items}'
++                             f' in \'{line}\'')
++  checks = {
++      'aggregate-number': lambda x: isfloat(x),
++      'core': lambda x: True,
++      'counter-value': lambda x: is_counter_value(x),
++      'cgroup': lambda x: True,
++      'cpu': lambda x: isint(x),
++      'die': lambda x: True,
++      'event': lambda x: True,
++      'event-runtime': lambda x: isfloat(x),
++      'interval': lambda x: isfloat(x),
++      'metric-unit': lambda x: True,
++      'metric-value': lambda x: isfloat(x),
++      'node': lambda x: True,
++      'pcnt-running': lambda x: isfloat(x),
++      'socket': lambda x: True,
++      'thread': lambda x: True,
++      'unit': lambda x: True,
++  }
++  input = '[\n' + ','.join(Lines) + '\n]'
++  for item in json.loads(input):
++    for key, value in item.items():
++      if key not in checks:
++        raise RuntimeError(f'Unexpected key: key={key} value={value}')
++      if not checks[key](value):
++        raise RuntimeError(f'Check failed for: key={key} value={value}')
 +
-+static void new_line_json(struct perf_stat_config *config, void *ctx)
-+{
-+	struct outstate *os = ctx;
 +
-+	fputc('\n', os->fh);
-+	if (os->prefix)
-+		fprintf(os->fh, "%s", os->prefix);
-+	aggr_printout(config, os->evsel, os->id, os->nr);
-+}
++try:
++  if args.no_args or args.system_wide or args.event:
++    expected_items = 6
++  elif args.interval or args.per_thread or args.system_wide_no_aggr:
++    expected_items = 7
++  elif args.per_core or args.per_socket or args.per_node or args.per_die:
++    expected_items = 8
++  else:
++    # If no option is specified, don't check the number of items.
++    expected_items = -1
++  check_json_output(expected_items)
++except:
++  print('Test failed for input:\n' + '\n'.join(Lines))
++  raise
+diff --git a/tools/perf/tests/shell/stat+json_output.sh b/tools/perf/tests/shell/stat+json_output.sh
+new file mode 100755
+index 000000000000..7748b677f2f9
+--- /dev/null
++++ b/tools/perf/tests/shell/stat+json_output.sh
+@@ -0,0 +1,147 @@
++#!/bin/bash
++# perf stat JSON output linter
++# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++# Checks various perf stat JSON output commands for the
++# correct number of fields.
 +
- /* Filter out some columns that don't work well in metrics only mode */
- 
- static bool valid_only_metric(const char *unit)
-@@ -300,6 +391,27 @@ static void print_metric_only_csv(struct perf_stat_config *config __maybe_unused
- 	fprintf(out, "%s%s", vals, config->csv_sep);
- }
- 
-+static void print_metric_only_json(struct perf_stat_config *config __maybe_unused,
-+				  void *ctx, const char *color __maybe_unused,
-+				  const char *fmt,
-+				  const char *unit, double val)
-+{
-+	struct outstate *os = ctx;
-+	FILE *out = os->fh;
-+	char buf[64], *vals, *ends;
-+	char tbuf[1024];
++set -e
 +
-+	if (!valid_only_metric(unit))
-+		return;
-+	unit = fixunit(tbuf, os->evsel, unit);
-+	snprintf(buf, sizeof(buf), fmt, val);
-+	ends = vals = skip_spaces(buf);
-+	while (isdigit(*ends) || *ends == '.')
-+		ends++;
-+	*ends = 0;
-+	fprintf(out, "{\"metric-value\" : \"%s\"}", vals);
-+}
-+
- static void new_line_metric(struct perf_stat_config *config __maybe_unused,
- 			    void *ctx __maybe_unused)
- {
-@@ -318,10 +430,13 @@ static void print_metric_header(struct perf_stat_config *config,
- 	    os->evsel->priv != os->evsel->evlist->selected->priv)
- 		return;
- 
--	if (!valid_only_metric(unit))
-+	if (!valid_only_metric(unit) && !config->json_output)
- 		return;
- 	unit = fixunit(tbuf, os->evsel, unit);
--	if (config->csv_output)
-+
-+	if (config->json_output)
-+		fprintf(os->fh, "\"unit\" : \"%s\"", unit);
-+	else if (config->csv_output)
- 		fprintf(os->fh, "%s%s", unit, config->csv_sep);
- 	else
- 		fprintf(os->fh, "%*s ", config->metric_only_len, unit);
-@@ -367,14 +482,28 @@ static void abs_printout(struct perf_stat_config *config,
- 
- 	aggr_printout(config, evsel, id, nr);
- 
--	fprintf(output, fmt, avg, config->csv_sep);
-+	if (config->json_output)
-+		fprintf(output, "\"counter-value\" : \"%f\", ", avg);
++pythonchecker=$(dirname $0)/lib/perf_json_output_lint.py
++if [ "x$PYTHON" == "x" ]
++then
++	if which python3 > /dev/null
++	then
++		PYTHON=python3
++	elif which python > /dev/null
++	then
++		PYTHON=python
 +	else
-+		fprintf(output, fmt, avg, config->csv_sep);
++		echo Skipping test, python not detected please set environment variable PYTHON.
++		exit 2
++	fi
++fi
 +
-+	if (config->json_output) {
-+		if (evsel->unit) {
-+			fprintf(output, "\"unit\" : \"%s\", ",
-+				evsel->unit);
-+		}
-+	} else {
-+		if (evsel->unit)
-+			fprintf(output, "%-*s%s",
-+				config->csv_output ? 0 : config->unit_width,
-+				evsel->unit, config->csv_sep);
-+	}
- 
--	if (evsel->unit)
--		fprintf(output, "%-*s%s",
--			config->csv_output ? 0 : config->unit_width,
--			evsel->unit, config->csv_sep);
- 
--	fprintf(output, "%-*s", config->csv_output ? 0 : 25, evsel__name(evsel));
-+	if (config->json_output)
-+		fprintf(output, "\"event\" : \"%s\", ", evsel__name(evsel));
-+	else
-+		fprintf(output, "%-*s", config->csv_output ? 0 : 25, evsel__name(evsel));
- 
- 	print_cgroup(config, evsel);
- }
-@@ -416,34 +545,30 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
- 		.nr = nr,
- 		.evsel = counter,
- 	};
--	print_metric_t pm = print_metric_std;
-+	print_metric_t pm;
- 	new_line_t nl;
- 
--	if (config->metric_only) {
--		nl = new_line_metric;
--		if (config->csv_output)
--			pm = print_metric_only_csv;
--		else
--			pm = print_metric_only;
--	} else
--		nl = new_line_std;
--
--	if (config->csv_output && !config->metric_only) {
--		static int aggr_fields[] = {
--			[AGGR_GLOBAL] = 0,
--			[AGGR_THREAD] = 1,
-+	if (config->csv_output) {
-+		static const int aggr_fields[AGGR_MAX] = {
- 			[AGGR_NONE] = 1,
-+			[AGGR_GLOBAL] = 0,
- 			[AGGR_SOCKET] = 2,
- 			[AGGR_DIE] = 2,
- 			[AGGR_CORE] = 2,
-+			[AGGR_THREAD] = 1,
-+			[AGGR_UNSET] = 0,
-+			[AGGR_NODE] = 0,
- 		};
- 
--		pm = print_metric_csv;
--		nl = new_line_csv;
--		os.nfields = 3;
--		os.nfields += aggr_fields[config->aggr_mode];
--		if (counter->cgrp)
--			os.nfields++;
-+		pm = config->metric_only ? print_metric_only_csv : print_metric_csv;
-+		nl = config->metric_only ? new_line_metric : new_line_csv;
-+		os.nfields = 3 + aggr_fields[config->aggr_mode] + (counter->cgrp ? 1 : 0);
-+	} else if (config->json_output) {
-+		pm = config->metric_only ? print_metric_only_json : print_metric_json;
-+		nl = config->metric_only ? new_line_metric : new_line_json;
-+	} else {
-+		pm = config->metric_only ? print_metric_only : print_metric_std;
-+		nl = config->metric_only ? new_line_metric : new_line_std;
- 	}
- 
- 	if (!config->no_csv_summary && config->csv_output &&
-@@ -458,10 +583,15 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
- 		}
- 		aggr_printout(config, counter, id, nr);
- 
--		fprintf(config->output, "%*s%s",
--			config->csv_output ? 0 : 18,
--			counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED,
--			config->csv_sep);
-+		if (config->json_output) {
-+			fprintf(config->output, "\"counter-value\" : \"%s\", ",
-+					counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED);
-+		} else {
-+			fprintf(config->output, "%*s%s",
-+				config->csv_output ? 0 : 18,
-+				counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED,
-+				config->csv_sep);
-+		}
- 
- 		if (counter->supported) {
- 			if (!evlist__has_hybrid(counter->evlist)) {
-@@ -471,21 +601,32 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
- 			}
- 		}
- 
--		fprintf(config->output, "%-*s%s",
--			config->csv_output ? 0 : config->unit_width,
--			counter->unit, config->csv_sep);
-+		if (config->json_output) {
-+			fprintf(config->output, "\"unit\" : \"%s\", ", counter->unit);
-+		} else {
-+			fprintf(config->output, "%-*s%s",
-+				config->csv_output ? 0 : config->unit_width,
-+				counter->unit, config->csv_sep);
-+		}
- 
--		fprintf(config->output, "%*s",
--			config->csv_output ? 0 : -25, evsel__name(counter));
-+		if (config->json_output) {
-+			fprintf(config->output, "\"event\" : \"%s\", ",
-+				evsel__name(counter));
-+		} else {
-+			fprintf(config->output, "%*s",
-+				 config->csv_output ? 0 : -25, evsel__name(counter));
-+		}
- 
- 		print_cgroup(config, counter);
- 
--		if (!config->csv_output)
-+		if (!config->csv_output && !config->json_output)
- 			pm(config, &os, NULL, NULL, "", 0);
- 		print_noise(config, counter, noise);
- 		print_running(config, run, ena);
- 		if (config->csv_output)
- 			pm(config, &os, NULL, NULL, "", 0);
-+		else if (config->json_output)
-+			pm(config, &os, NULL, NULL, "", 0);
- 		return;
- 	}
- 
-@@ -500,12 +641,15 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
- 	if (config->csv_output && !config->metric_only) {
- 		print_noise(config, counter, noise);
- 		print_running(config, run, ena);
-+	} else if (config->json_output && !config->metric_only) {
-+		print_noise(config, counter, noise);
-+		print_running(config, run, ena);
- 	}
- 
- 	perf_stat__print_shadow_stats(config, counter, uval,
- 				first_shadow_cpu_map_idx(config, counter, &id),
- 				&out, &config->metric_events, st);
--	if (!config->csv_output && !config->metric_only) {
-+	if (!config->csv_output && !config->metric_only && !config->json_output) {
- 		print_noise(config, counter, noise);
- 		print_running(config, run, ena);
- 	}
-@@ -1004,8 +1148,12 @@ static void print_metric_headers(struct perf_stat_config *config,
- 	struct outstate os = {
- 		.fh = config->output
- 	};
-+	bool first = true;
++# Return true if perf_event_paranoid is > $1 and not running as root.
++function ParanoidAndNotRoot()
++{
++	 [ $(id -u) != 0 ] && [ $(cat /proc/sys/kernel/perf_event_paranoid) -gt $1 ]
++}
 +
-+		if (config->json_output && !config->interval)
-+			fprintf(config->output, "{");
- 
--	if (prefix)
-+	if (prefix && !config->json_output)
- 		fprintf(config->output, "%s", prefix);
- 
- 	if (!config->csv_output && !no_indent)
-@@ -1025,6 +1173,9 @@ static void print_metric_headers(struct perf_stat_config *config,
- 		os.evsel = counter;
- 		out.ctx = &os;
- 		out.print_metric = print_metric_header;
-+		if (!first && config->json_output)
-+			fprintf(config->output, ", ");
-+		first = false;
- 		out.new_line = new_line_metric;
- 		out.force_header = true;
- 		perf_stat__print_shadow_stats(config, counter, 0,
-@@ -1033,6 +1184,8 @@ static void print_metric_headers(struct perf_stat_config *config,
- 					      &config->metric_events,
- 					      &rt_stat);
- 	}
-+	if (config->json_output)
-+		fprintf(config->output, "}");
- 	fputc('\n', config->output);
- }
- 
-@@ -1048,10 +1201,18 @@ static void print_interval(struct perf_stat_config *config,
- 	if (config->interval_clear)
- 		puts(CONSOLE_CLEAR);
- 
--	if (!config->iostat_run)
--		sprintf(prefix, "%6lu.%09lu%s", (unsigned long) ts->tv_sec, ts->tv_nsec, config->csv_sep);
--
--	if ((num_print_interval == 0 && !config->csv_output) || config->interval_clear) {
-+	if (!config->iostat_run && !config->json_output)
-+		sprintf(prefix, "%6lu.%09lu%s", (unsigned long) ts->tv_sec,
-+				 ts->tv_nsec, config->csv_sep);
-+	if (!config->iostat_run && config->json_output && !config->metric_only)
-+		sprintf(prefix, "{\"interval\" : %lu.%09lu, ", (unsigned long)
-+				 ts->tv_sec, ts->tv_nsec);
-+	if (!config->iostat_run && config->json_output && config->metric_only)
-+		sprintf(prefix, "{\"interval\" : %lu.%09lu}", (unsigned long)
-+				 ts->tv_sec, ts->tv_nsec);
++check_no_args()
++{
++	echo -n "Checking json output: no args "
++	perf stat -j true 2>&1 | $PYTHON $pythonchecker --no-args
++	echo "[Success]"
++}
 +
-+	if ((num_print_interval == 0 && !config->csv_output && !config->json_output)
-+			 || config->interval_clear) {
- 		switch (config->aggr_mode) {
- 		case AGGR_NODE:
- 			fprintf(output, "#           time node   cpus");
-@@ -1091,12 +1252,19 @@ static void print_interval(struct perf_stat_config *config,
- 					fprintf(output, "             counts %*s events\n", unit_width, "unit");
- 			}
- 		case AGGR_UNSET:
-+		case AGGR_MAX:
- 			break;
- 		}
- 	}
- 
--	if ((num_print_interval == 0 || config->interval_clear) && metric_only)
-+	if ((num_print_interval == 0 || config->interval_clear)
-+			 && metric_only && !config->json_output)
- 		print_metric_headers(config, evlist, " ", true);
-+	if ((num_print_interval == 0 || config->interval_clear)
-+			 && metric_only && config->json_output) {
-+		fprintf(output, "{");
-+		print_metric_headers(config, evlist, " ", true);
-+	}
- 	if (++num_print_interval == 25)
- 		num_print_interval = 0;
- }
-@@ -1110,7 +1278,7 @@ static void print_header(struct perf_stat_config *config,
- 
- 	fflush(stdout);
- 
--	if (!config->csv_output) {
-+	if (!config->csv_output && !config->json_output) {
- 		fprintf(output, "\n");
- 		fprintf(output, " Performance counter stats for ");
- 		if (_target->bpf_str)
-@@ -1303,6 +1471,9 @@ void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *conf
- 			num_print_iv = 0;
- 		if (config->aggr_mode == AGGR_GLOBAL && prefix && !config->iostat_run)
- 			fprintf(config->output, "%s", prefix);
++check_system_wide()
++{
++	echo -n "Checking json output: system wide "
++	if ParanoidAndNotRoot 0
++	then
++		echo "[Skip] parnoia and not root"
++		return
++	fi
++	perf stat -j -a true 2>&1 | $PYTHON $pythonchecker --system-wide
++	echo "[Success]"
++}
 +
-+		if (config->json_output && !config->metric_only)
-+			fprintf(config->output, "}");
- 	}
- 
- 	switch (config->aggr_mode) {
-@@ -1341,12 +1512,13 @@ void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *conf
- 			}
- 		}
- 		break;
-+	case AGGR_MAX:
- 	case AGGR_UNSET:
- 	default:
- 		break;
- 	}
- 
--	if (!interval && !config->csv_output)
-+	if (!interval && !config->csv_output && !config->json_output)
- 		print_footer(config);
- 
- 	fflush(config->output);
-diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
-index 37ea2d044708..0882b4754fcf 100644
---- a/tools/perf/util/stat.c
-+++ b/tools/perf/util/stat.c
-@@ -401,6 +401,7 @@ process_counter_values(struct perf_stat_config *config, struct evsel *evsel,
- 		aggr->ena += count->ena;
- 		aggr->run += count->run;
- 	case AGGR_UNSET:
-+	case AGGR_MAX:
- 	default:
- 		break;
- 	}
-diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
-index b5aeb8e6d34b..668250022f8c 100644
---- a/tools/perf/util/stat.h
-+++ b/tools/perf/util/stat.h
-@@ -57,6 +57,7 @@ enum aggr_mode {
- 	AGGR_THREAD,
- 	AGGR_UNSET,
- 	AGGR_NODE,
-+	AGGR_MAX
- };
- 
- enum {
-@@ -121,6 +122,7 @@ struct perf_stat_config {
- 	bool			 no_inherit;
- 	bool			 identifier;
- 	bool			 csv_output;
-+	bool			 json_output;
- 	bool			 interval_clear;
- 	bool			 metric_only;
- 	bool			 null_run;
++check_system_wide_no_aggr()
++{
++	echo -n "Checking json output: system wide "
++	if ParanoidAndNotRoot 0
++	then
++		echo "[Skip] parnoia and not root"
++		return
++	fi
++	echo -n "Checking json output: system wide no aggregation "
++	perf stat -j -A -a --no-merge true 2>&1 | $PYTHON $pythonchecker --system-wide-no-aggr
++	echo "[Success]"
++}
++
++check_interval()
++{
++	echo -n "Checking json output: interval "
++	perf stat -j -I 1000 true 2>&1 | $PYTHON $pythonchecker --interval
++	echo "[Success]"
++}
++
++
++check_event()
++{
++	echo -n "Checking json output: event "
++	perf stat -j -e cpu-clock true 2>&1 | $PYTHON $pythonchecker --event
++	echo "[Success]"
++}
++
++check_per_core()
++{
++	echo -n "Checking json output: per core "
++	if ParanoidAndNotRoot 0
++	then
++		echo "[Skip] parnoia and not root"
++		return
++	fi
++	perf stat -j --per-core -a true 2>&1 | $PYTHON $pythonchecker --per-core
++	echo "[Success]"
++}
++
++check_per_thread()
++{
++	echo -n "Checking json output: per thread "
++	if ParanoidAndNotRoot 0
++	then
++		echo "[Skip] parnoia and not root"
++		return
++	fi
++	perf stat -j --per-thread -a true 2>&1 | $PYTHON $pythonchecker --per-thread
++	echo "[Success]"
++}
++
++check_per_die()
++{
++	echo -n "Checking json output: per die "
++	if ParanoidAndNotRoot 0
++	then
++		echo "[Skip] parnoia and not root"
++		return
++	fi
++	perf stat -j --per-die -a true 2>&1 | $PYTHON $pythonchecker --per-die
++	echo "[Success]"
++}
++
++check_per_node()
++{
++	echo -n "Checking json output: per node "
++	if ParanoidAndNotRoot 0
++	then
++		echo "[Skip] parnoia and not root"
++		return
++	fi
++	perf stat -j --per-node -a true 2>&1 | $PYTHON $pythonchecker --per-node
++	echo "[Success]"
++}
++
++check_per_socket()
++{
++	echo -n "Checking json output: per socket "
++	if ParanoidAndNotRoot 0
++	then
++		echo "[Skip] parnoia and not root"
++		return
++	fi
++	perf stat -j --per-socket -a true 2>&1 | $PYTHON $pythonchecker --per-socket
++	echo "[Success]"
++}
++
++check_no_args
++check_system_wide
++check_system_wide_no_aggr
++check_interval
++check_event
++check_per_core
++check_per_thread
++check_per_die
++check_per_node
++check_per_socket
++exit 0
 -- 
 2.36.1.124.g0e6072fb45-goog
 

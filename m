@@ -2,125 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3545338CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AB35338DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 10:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiEYIwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 04:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
+        id S235310AbiEYIy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 04:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiEYIvx (ORCPT
+        with ESMTP id S229546AbiEYIy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 04:51:53 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2523060044;
-        Wed, 25 May 2022 01:51:52 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ntmjl-0003D1-IO; Wed, 25 May 2022 10:51:25 +0200
-Message-ID: <5334d001-af50-eacb-8845-dd83df35be56@leemhuis.info>
-Date:   Wed, 25 May 2022 10:51:24 +0200
+        Wed, 25 May 2022 04:54:56 -0400
+Received: from corp-front10-corp.i.nease.net (corp-front11-corp.i.nease.net [42.186.62.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328489FCC;
+        Wed, 25 May 2022 01:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
+        Date:Message-Id:MIME-Version:Content-Transfer-Encoding; bh=QMdg5
+        WKCqTooQfblhmchfJKA7vl3F5cI8zeOAbsLxwo=; b=i7vYabMvkZspa7Hlmnl97
+        MDoOYTncpRQGINjBEpCbTBT5bjrUbFlqy4pUyuuozY/bC1TekUAo4Q0uNSSwo/g+
+        I8fmBIAE6ywkgdoBlb4re/7SYtjUX3eBH1NJvuQ6XMaX91ui5dJ9nyrx4CgEC2GW
+        1DXJP+VrGxHxUaZkTy1kkY=
+Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
+        by corp-front11-corp.i.nease.net (Coremail) with SMTP id aYG_CgCXrV_P7o1imDAiAA--.8981S2;
+        Wed, 25 May 2022 16:54:39 +0800 (HKT)
+From:   liuyacan@corp.netease.com
+To:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ubraun@linux.ibm.com,
+        liuyacan <liuyacan@corp.netease.com>
+Subject: [PATCH net] net/smc: set ini->smcrv2.ib_dev_v2 to NULL if SMC-Rv2 is unavailable
+Date:   Wed, 25 May 2022 16:54:08 +0800
+Message-Id: <20220525085408.812273-1-liuyacan@corp.netease.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/2] x86/pat: add functions to query specific cache mode
- availability
-Content-Language: en-US
-To:     Jan Beulich <jbeulich@suse.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Juergen Gross <jgross@suse.com>,
-        Chuck Zmudzinski <brchuckz@netscape.net>,
-        regressions@lists.linux.dev, stable@vger.kernel.org
-References: <20220503132207.17234-1-jgross@suse.com>
- <20220503132207.17234-3-jgross@suse.com>
- <1d86d8ff-6878-5488-e8c4-cbe8a5e8f624@suse.com>
- <0dcb05d0-108f-6252-e768-f75b393a7f5c@suse.com>
- <77255e5b-12bf-5390-6910-dafbaff18e96@netscape.net>
- <a2e95587-418b-879f-2468-8699a6df4a6a@suse.com>
- <8b1ebea5-7820-69c4-2e2b-9866d55bc180@netscape.net>
- <c5fa3c3f-e602-ed68-d670-d59b93c012a0@netscape.net>
- <3bff3562-bb1e-04e6-6eca-8d9bc355f2eb@suse.com>
- <3ca084a9-768e-a6f5-ace4-cd347978dec7@netscape.net>
- <9af0181a-e143-4474-acda-adbe72fc6227@suse.com>
- <b2585c19-d38b-9640-64ab-d0c9be24be34@netscape.net>
- <dae4cc45-a1cd-e33f-25ef-c536df9b49e6@leemhuis.info>
- <3fc70595-3dcc-4901-0f3f-193f043b753f@netscape.net>
- <eab9fdb0-11ef-4556-bdd7-f021cc5f10b7@leemhuis.info>
- <83cbd5ce-7f00-9121-44b3-5d1b94d66f02@suse.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <83cbd5ce-7f00-9121-44b3-5d1b94d66f02@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1653468712;2440a18d;
-X-HE-SMSGID: 1ntmjl-0003D1-IO
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: aYG_CgCXrV_P7o1imDAiAA--.8981S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr48WFWkKr1kKw4UXr1xAFb_yoW3KrbEkr
+        yxGryxu3yFyF42k3yxA3y3urZayw1kWr4xX3WDCrW0q3WDXr1UWa98Crnxu347CrWavFy3
+        Gr45KFy3ta47tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbGkYjxAI6xCIbckI1I0E57IF64kEYxAxM7AC8VAFwI0_Gr0_Xr1l
+        1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0I
+        I2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0
+        Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAawVAFpfBj4fn0lVCYm3Zqqf926ryUJw1UKr1v
+        6r18M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6s8CjcxG0xyl5I8CrVACY4xI64kE6c
+        02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
+        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4
+        IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7xC0wCjxxvEw4Wlc2IjII80xcxEwVAK
+        I48JMxAIw28IcxkI7VAKI48JMxCjnVAK0II2c7xJMxC20s026xCaFVCjc4AY6r1j6r4UMx
+        CIbVAxMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfUn_M-DUUUU
+X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQARCVt762GPdAAHsL
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.05.22 10:37, Jan Beulich wrote:
-> On 25.05.2022 09:45, Thorsten Leemhuis wrote:
->> On 24.05.22 20:32, Chuck Zmudzinski wrote:
->>> On 5/21/22 6:47 AM, Thorsten Leemhuis wrote:
->>>> I'm not a developer and I'm don't known the details of this thread and
->>>> the backstory of the regression, but it sounds like that's the approach
->>>> that is needed here until someone comes up with a fix for the regression
->>>> exposed by bdd8b6c98239.
->>>>
->>>> But if I'm wrong, please tell me.
->>>
->>> You are mostly right, I think. Reverting bdd8b6c98239 fixes
->>> it. There is another way to fix it, though.
->>
->> Yeah, I'm aware of it. But it seems...
->>
->>> The patch proposed
->>> by Jan Beulich also fixes the regression on my system, so as
->>> the person reporting this is a regression, I would also be satisfied
->>> with Jan's patch instead of reverting bdd8b6c98239 as a fix. Jan
->>> posted his proposed patch here:
->>>
->>> https://lore.kernel.org/lkml/9385fa60-fa5d-f559-a137-6608408f88b0@suse.com/
->>
->> ...that approach is not making any progress either?
->>
->> Jan, can could provide a short status update here? I'd really like to
->> get this regression fixed one way or another rather sooner than later,
->> as this is taken way to long already IMHO.
-> 
-> What kind of status update could I provide? I've not heard back from
-> anyone of the maintainers, so I have no way to know what (if anything)
-> I need to do.
+From: liuyacan <liuyacan@corp.netease.com>
 
-That is perfectly fine as a status update for me (I track a lot of
-regression and it's easy to miss updated patches, discussion in other
-places, and things like that).
+In the process of checking whether RDMAv2 is available, the current
+implementation first sets ini->smcrv2.ib_dev_v2, and then allocates
+smc buf desc and register rmb, but the latter may fail. In this case,
+the pointer should be reset.
 
-Could you maybe send a reminder to the maintainer that this is a fix for
-regression that is bothering people and needs to be handled with high
-priority? Feel free to tell them the Linux kernel regression tracker is
-pestering you because things are taken so long. :-D
+Fixes: e49300a6bf62 ("net/smc: add listen processing for SMC-Rv2")
+Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+---
+ net/smc/af_smc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 45a24d242..540b32d86 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -2136,6 +2136,7 @@ static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
+ 
+ not_found:
+ 	ini->smcr_version &= ~SMC_V2;
++	ini->smcrv2.ib_dev_v2 = NULL;
+ 	ini->check_smcrv2 = false;
+ }
+ 
+-- 
+2.20.1
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.

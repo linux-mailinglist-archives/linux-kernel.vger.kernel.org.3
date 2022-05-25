@@ -2,125 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EC35335D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 05:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C43E5335B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 05:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241323AbiEYD2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 23:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47392 "EHLO
+        id S238111AbiEYDYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 23:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238884AbiEYD2e (ORCPT
+        with ESMTP id S230402AbiEYDYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 23:28:34 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FEA7A44F
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 20:28:19 -0700 (PDT)
-X-UUID: 01a910ce870243ac929270e8b9848174-20220525
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:c4016c45-e276-4a22-b8f1-b1a8da546e26,OB:10,L
-        OB:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:56
-X-CID-INFO: VERSION:1.1.5,REQID:c4016c45-e276-4a22-b8f1-b1a8da546e26,OB:10,LOB
-        :0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:56
-X-CID-META: VersionHash:2a19b09,CLOUDID:b7f01fb8-3c45-407b-8f66-25095432a27a,C
-        OID:bf78fb8f7416,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:0,BEC:nil
-X-UUID: 01a910ce870243ac929270e8b9848174-20220525
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yf.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1293842912; Wed, 25 May 2022 11:28:13 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 25 May 2022 11:28:12 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Wed, 25 May 2022 11:28:10 +0800
-From:   <yf.wang@mediatek.com>
-To:     <miles.chen@mediatek.com>
-CC:     <Libo.Kang@mediatek.com>, <Yong.Wu@mediatek.com>,
-        <iommu@lists.linux-foundation.org>, <isaacm@codeaurora.org>,
-        <joro@8bytes.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <ning.li@mediatek.com>, <quic_c_gdjako@quicinc.com>,
-        <robin.murphy@arm.com>, <sven@svenpeter.dev>, <will@kernel.org>,
-        <wsd_upstream@mediatek.com>, <yf.wang@mediatek.com>
-Subject: Re: [PATCH v5 1/2] iommu/io-pgtable-arm-v7s: Add a quirk to allow pgtable PA up to 35bit
-Date:   Wed, 25 May 2022 11:21:33 +0800
-Message-ID: <20220525032133.29053-1-yf.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220519062756.14447-1-miles.chen@mediatek.com>
-References: <20220519062756.14447-1-miles.chen@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 24 May 2022 23:24:18 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF508644C4;
+        Tue, 24 May 2022 20:24:16 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id w3so10850658plp.13;
+        Tue, 24 May 2022 20:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=PD/tHInjczHNg1z5c2Rt4gIr9ddVptl5dYEtEWg2i74=;
+        b=pTRYfyFXhq/G+vSbxKuMwUW7CnBZ32P4Wn9QlcVYVGOoFNd1K6gKhrSJtdXn0lVJo3
+         iYx+MKkAFty1i9Phz+dA7MvrC8KdIGyXgSHKAoKAPaQK3ZpJPRrCPKcZd2nOE7PXuVcI
+         UiFTVEO7llLES5/ir+e+sqDEvNCzgyTOOpSc+Kh8+gnAHJtHwFeJOgfpoAI9MXUx1dCJ
+         EQWtbdDdens1n9aIyk0WQ2KrqOchieLgRlbwEM3nCw0KJjn29Pg0tZ4ThfpvxZpaV19a
+         npY5YgxsEXltuO4peEvH+4WzNcId3njzgCwWk4qQ9CFKQibm+Zz4qtv6TUtGI4P8lmyU
+         cXlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=PD/tHInjczHNg1z5c2Rt4gIr9ddVptl5dYEtEWg2i74=;
+        b=kjFHzQW1IShoqnuBJTVyOOuzq358CfRpGo8ti+TZEHHECxmaP6BvIB6G5/l/+BLHgN
+         StQAfn6gJUwpnu+LTUQqYbCm0Fazj+YFhbWrCqyr4bfL19rtq+2a1BbUlswPvEwCpNdA
+         6eclfuaoWErbFNCt18iuBu8PX4KTUE6WztYkRhMyqTwYBIPvNupx7Ssc8jUJYUGQEcuC
+         wGjhCbuWAgKDQuQNDqX9MAlpwIs5738+O17/dre1ktfPxfnDGqFiJxLiTq7FaGwouKKA
+         uPYtyn5O/YAqm+QRJPEFTFZGStvGHUW75fGmxZwiOWdm4pizXLDnq1mcpRLfsE6ffTo4
+         cKyg==
+X-Gm-Message-State: AOAM5336OHpjKdqHxi+3Nonlh21Dam1cBs/IiboAUS2vebRrpcvXJPsQ
+        1dKYCk7VRTs9KGwddnw4NAO2t1i3nrzL
+X-Google-Smtp-Source: ABdhPJzOpq43xVt30v0+isBkmtEzD9PzbUElFki3AfULSLo+QTIwioOU1s2IKqehPpZszN9/3tdQGA==
+X-Received: by 2002:a17:903:230e:b0:163:5942:164f with SMTP id d14-20020a170903230e00b001635942164fmr1033608plh.160.1653449056058;
+        Tue, 24 May 2022 20:24:16 -0700 (PDT)
+Received: from localhost (220-133-130-217.hinet-ip.hinet.net. [220.133.130.217])
+        by smtp.gmail.com with ESMTPSA id c78-20020a621c51000000b0050dc76281fdsm10012126pfc.215.2022.05.24.20.24.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 24 May 2022 20:24:15 -0700 (PDT)
+From:   Tyrone Ting <warp5tw@gmail.com>
+To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wsa@kernel.org, andriy.shevchenko@linux.intel.com,
+        jarkko.nikula@linux.intel.com, semen.protsenko@linaro.org,
+        jie.deng@intel.com, jsd@semihalf.com, sven@svenpeter.dev,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        warp5tw@gmail.com, tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/5] i2c: npcm: Bug fixes timeout, spurious interrupts
+Date:   Wed, 25 May 2022 11:23:36 +0800
+Message-Id: <20220525032341.3182-1-warp5tw@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-19 at 14:27 +0800, Miles Chen wrote:
-> Hi Yunfei,
-> 
-> > The calling to kmem_cache_alloc for level 2 pgtable allocation may
-> > run
-> > in atomic context, and it fails sometimes when DMA32 zone runs out
-> > of
-> > memory.
-> > 
-> > Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
-> > so add a quirk to allow the PA of pgtables support up to bit35.
-> > 
-> > Signed-off-by: Ning Li <ning.li@mediatek.com>
-> > Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-> > ---
-> >  drivers/iommu/io-pgtable-arm-v7s.c | 56 ++++++++++++++++++++++--
-> > ------
-> >  include/linux/io-pgtable.h         | 15 +++++---
-> >  2 files changed, 52 insertions(+), 19 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-
-> > pgtable-arm-v7s.c
-> 
-> ...snip...
-> 
-> > +     gfp_t gfp_l1 = __GFP_ZERO | ARM_V7S_TABLE_GFP_DMA;
-> >       struct io_pgtable_cfg *cfg = &data->iop.cfg;
-> >       struct device *dev = cfg->iommu_dev;
-> >       phys_addr_t phys;
-> > @@ -241,9 +251,11 @@ static void *__arm_v7s_alloc_table(int lvl,
-> > gfp_t gfp,
-> >       size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
-> >       void *table = NULL;
-> > 
-> > +     if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-> > +             gfp_l1 = __GFP_ZERO;
-> 
-> __GFP_ZERO is an action modifier, if we do not want
-> ARM_V7S_TABLE_GFP_DMA (GFP_DMA/GFP_DMA32), use gfp_l1 = (GFP_KERNEL |
-> __GFP_ZERO)
-> 
+From: Tyrone Ting <kfting@nuvoton.com>
 
-Hi Miles,
-Thanks for the suggestion, we will update it in the next version.
+This patchset includes the following fixes:
 
-Thanks,
-Yunfei.
+- Add dt-bindings description for NPCM845.
+- Bug fix for timeout calculation.
+- Better handling of spurious interrupts.
+- Fix for event type in slave mode.
+- Removal of own slave addresses [2:10].
+- Support for next gen BMC (NPCM845).
 
-> > +
-> >       if (lvl == 1)
-> > -             table = (void *)__get_free_pages(
-> > -                     __GFP_ZERO | ARM_V7S_TABLE_GFP_DMA,
-> > get_order(size));
-> > +             table = (void *)__get_free_pages(gfp_l1,
-> > get_order(size));
-> >       else if (lvl == 2)
-> >               table = kmem_cache_zalloc(data->l2_tables, gfp);
-> > 
+The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
+
+Addressed comments from:
+ - Wolfram Sang : https://lkml.org/lkml/2022/5/21/51
+
+Changes since version 5:
+ - Shorten npcm_i2caddr array since the number of supported i2c slave
+   addresses is reduced.
+ - Create a new patch from the original PATCH v5 08/10 to modify the slave
+   transaction logic.
+
+Changes since version 4:
+ - Remove quotes around ref handle to nuvoton,sys-mgr in i2c binding
+   document.
+ - Keep the "longer line first" order.
+ - Correct the SoB chain.
+ - Modify the if statement in one line and add new line characters.
+ - Modify the commit message format in the patch Remove own slave
+   addresses 2:10. Correct the if statement in one line and shorten the
+   debug messages.
+ - Create a new patch to capitalize the one-line comment in the driver.
+
+Changes since version 3:
+ - Correct the const format in if condition in i2c binding document.
+ - Add the oops message statement and register information in register
+   access width patch.
+ - Add the occurring rate of the i2c spurious interrupt issue and more
+   details in driver's behavior to overcome this issue.
+ - Address Andy's comments in the patch to support NPCM845.
+ 
+Changes since version 2:
+ - Keep old code as fallback, if getting nuvoton,sys-mgr property fails.
+ - Fix the error reported by running 'make DT_CHECKER_FLAGS=-m 
+   dt_binding_check'.
+ - Make nuvoton,sys-mgr required for nuvoton,npcm845-i2c.
+ - Correct the patch's subject about changing the way of getting GCR
+   regmap and add the description about keeping old code as fallback
+   if getting nuvoton,sys-mgr property fails.
+ - Correct the patch title and description about removing the unused 
+   variable clk_regmap.
+ - Use the data field directly instead of the macros since macros are
+   not constants anymore in this patch.
+ 
+Changes since version 1:
+ - Add nuvoton,sys-mgr property in NPCM devicetree.
+ - Describe the commit message in imperative mood.
+ - Modify the description in i2c binding document to cover NPCM series.
+ - Add new property in i2c binding document.
+ - Create a new patch for client address calculation.
+ - Create a new patch for updating gcr property name.
+ - Create a new patch for removing unused clock node.
+ - Explain EOB in the commit description.
+ - Create a new patch for correcting NPCM register access width.
+ - Remove some comment since the corresponding logic no longer exists.
+ - Remove fixes tag while the patch adds an additional feature.
+ - Use devicetree data field to support NPCM845.
+
+Tali Perry (2):
+  i2c: npcm: Remove own slave addresses 2:10
+  i2c: npcm: Correct slave role behavior
+
+Tyrone Ting (3):
+  dt-bindings: i2c: npcm: support NPCM845
+  i2c: npcm: Support NPCM845
+  i2c: npcm: Capitalize the one-line comment
+
+ .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     |  25 ++-
+ drivers/i2c/busses/Kconfig                    |   8 +-
+ drivers/i2c/busses/Makefile                   |   2 +-
+ drivers/i2c/busses/i2c-npcm7xx.c              | 176 ++++++++++--------
+ 4 files changed, 124 insertions(+), 87 deletions(-)
+
+-- 
+2.17.1
+

@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE35534004
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9559D534008
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245101AbiEYPMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S245033AbiEYPMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245045AbiEYPLv (ORCPT
+        with ESMTP id S245153AbiEYPMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:11:51 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828B8B0D17
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:11:43 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id x2-20020a17090a1f8200b001e07a64c461so1912517pja.4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JyixjUdddf6I90XP9MdFK6+higCWyl5KeV+gVWtp6WU=;
-        b=f20Va32dKRJKc/hg0L61Ym/jpgUK0f5vPl1fJoIrhHp4ZYZ651lh4oqGY4DK+jeg4J
-         j/5F1rr/CFGPSwCgQSnzLJcizT05k7U/pFvaGcJ5lkhZrGqDWv9IscCatZuGe25yR9q2
-         gcabwG6JEe6AnZbUxaBC1uMGDPQd6VHlNYBrs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JyixjUdddf6I90XP9MdFK6+higCWyl5KeV+gVWtp6WU=;
-        b=VUoAzKOWsXQo60JEUgJSM7kLR9cY+kg+kswGFQOtikalBXdTl4PP3lsu8GtrWylXsF
-         WvS4Q1FBaNRG8RfmGdm4JeRaeFZyhfNELfYo+z6fdDqH+4CZkVN8HvVGnFbfTsMEsrov
-         ZIvtYiY1hBsNOtXboeRm7ZcIQZt6SYVXqQoAw6Tj0mjxt7/DYajGJ32AFl+EoTbXnnK8
-         xnnKT3+AzRjRopzI0cEQvg2v7KC+X1JZYoGQ4LaHv4nfqiN8kc4RewBnXhmXQVjirb1z
-         /b+eQPSvBLxooEMA2dkb/szmwXgo3upmx5aYnvoOAociq5Tw3jho6KPyRsb1jVeijZJu
-         sdvQ==
-X-Gm-Message-State: AOAM530bhWUowF1b5K+SXqrb7xvO4HRZU1sKO5ngui+qqWmv9fFT82qs
-        IENHRFdF65gGqSZuPq+ea0eCPA==
-X-Google-Smtp-Source: ABdhPJxgS1VuqYEu6r9Y57sGqJnQIEGTKr/QvLaXom2H7c4IuIt24COlf9Rl55IoJgxqziOXj1S5PA==
-X-Received: by 2002:a17:90a:6487:b0:1df:7e0f:c93e with SMTP id h7-20020a17090a648700b001df7e0fc93emr10975351pjj.77.1653491502589;
-        Wed, 25 May 2022 08:11:42 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:4d83:f549:9abd:427])
-        by smtp.gmail.com with UTF8SMTPSA id a21-20020a637055000000b003c14af505fesm8581222pgn.22.2022.05.25.08.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 08:11:42 -0700 (PDT)
-Date:   Wed, 25 May 2022 08:11:40 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v4 4/5] platform/chrome: cros_kbd_led_backlight: support
- OF match
-Message-ID: <Yo5HLJs81/KoXSBT@google.com>
-References: <20220523090822.3035189-1-tzungbi@kernel.org>
- <20220523090822.3035189-5-tzungbi@kernel.org>
- <Yo07IDqYuQUzeL+N@google.com>
- <Yo2jhTpsa5Vw4+61@google.com>
+        Wed, 25 May 2022 11:12:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E0DCB225B
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653491520;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oibYPAPXB3rxchD26NN1if0CqTbEEBbCmYMLu9cS348=;
+        b=ii2M3SMSGsupnBRCYku1bw/wjL2Hg9Ab/UZoqj5tesYI3dvlvPeQ3bE+s+L1wMktYC5j6J
+        0e9TxrYWWggW/SL0yufuPY/5ZQkHevLu61QH3HJedGj/V4+xZR6i9T8qtCflf8WSUc3v/Z
+        94mAWRQktWbwJhBqxSlDM1lhTq3oD/M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-650-3WVS63MGNry6uCXFElI4tQ-1; Wed, 25 May 2022 11:11:58 -0400
+X-MC-Unique: 3WVS63MGNry6uCXFElI4tQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88DED811E81;
+        Wed, 25 May 2022 15:11:58 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.39.192.91])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C943F112131B;
+        Wed, 25 May 2022 15:11:56 +0000 (UTC)
+Date:   Wed, 25 May 2022 11:11:52 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] cpuhp: make target_store() a nop when target == state
+Message-ID: <Yo5HOC0yoEBvvgdL@lorien.usersys.redhat.com>
+References: <20220523144728.32414-1-pauld@redhat.com>
+ <xhsmh35gzj77s.mognet@vschneid.remote.csb>
+ <Yo0KRVpfhUb8Ta4N@lorien.usersys.redhat.com>
+ <xhsmhy1yqhrio.mognet@vschneid.remote.csb>
+ <20220525133133.GA5500@pauld.bos.csb>
+ <xhsmhtu9dir86.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yo2jhTpsa5Vw4+61@google.com>
+In-Reply-To: <xhsmhtu9dir86.mognet@vschneid.remote.csb>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,31 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 11:33:25AM +0800, Tzung-Bi Shih wrote:
-> On Tue, May 24, 2022 at 01:08:00PM -0700, Matthias Kaehlcke wrote:
-> > On Mon, May 23, 2022 at 05:08:21PM +0800, Tzung-Bi Shih wrote:
-> > > +#ifdef CONFIG_OF
-> > > +static const struct of_device_id keyboard_led_of_match[] = {
-> > > +	{
-> > > +		.compatible = "google,cros-kbd-led-backlight",
-> > > +	},
-> > > +	{}
-> > > +};
-> > > +MODULE_DEVICE_TABLE(of, keyboard_led_of_match);
-> > > +#endif
-> > > +
-> > >  static struct platform_driver keyboard_led_driver = {
-> > >  	.driver		= {
-> > >  		.name	= "chromeos-keyboard-leds",
-> > >  		.acpi_match_table = ACPI_PTR(keyboard_led_acpi_match),
-> > > +		.of_match_table = of_match_ptr(keyboard_led_of_match),
-> > 
-> > You need to put this assignment inside an '#ifdef CONFIG_OF' block,
-> > otherwise the compiler won't find 'keyboard_led_of_match' when
-> > CONFIG_OF isn't set.
+On Wed, May 25, 2022 at 04:09:29PM +0100 Valentin Schneider wrote:
+> On 25/05/22 09:31, Phil Auld wrote:
+> > On Wed, May 25, 2022 at 10:48:31AM +0100 Valentin Schneider wrote:
+> >>
+> >> Yeah it would be neater to not even enter cpu_{up, down}(), but my paranoia
+> >> makes me think we need the comparison to happen with at least the
+> >> cpu_add_remove_lock held to make sure st->state isn't moving under our
+> >> feet, otherwise we may still end up with target == state in _cpu_down() and
+> >> hit the bug you're describing.
+> >>
+> >
+> > This is what I was originally doing before I tried to "optimize" it:
+> >
+> >          if (st->state < target)
+> >                  ret = cpu_up(dev->id, target);
+> >          else if (st->state > target)
+> >                  ret = cpu_down(dev->id, target);
+> >
+> > This does the check under the lock and just falls through if state==target.
+> > I think I'll go back to that version.
+> >
+> > I also noticed while testing that the boot cpu does not get its target set.
+> > It's got state 233 but target 0.  So reading that out and writing it back
+> > on offlines cpu0.   I'll try to find where that is not getting set.
+> >
 > 
-> It doesn't need as of_match_ptr() already guarded it.
+> If I had to guess I'd say it's because the boot CPU doesn't go through the
+> regular hotplug machinery and sets its state straight to CPUHP_ONLINE
+>
 
-I learned something new today :)
+Yes, that was my thought.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+
+> /me digs
+> 
+> Maybe around this?
+> 
+> void __init boot_cpu_hotplug_init(void)
+> {
+>         this_cpu_write(cpuhp_state.booted_once, true);
+>         this_cpu_write(cpuhp_state.state, CPUHP_ONLINE);
+> }
+> 
+
+Right, just found that too. Probably should set the target there as well.
+
+
+Cheers,
+Phil
+
+-- 
+

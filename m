@@ -2,86 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7586353406F
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BFE534071
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 17:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241234AbiEYPfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 11:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
+        id S240418AbiEYPfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 11:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240418AbiEYPfV (ORCPT
+        with ESMTP id S245157AbiEYPfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 11:35:21 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86501A3B4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:35:19 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id y189so4460350pfy.10
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:35:19 -0700 (PDT)
+        Wed, 25 May 2022 11:35:32 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDCA2B273
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:35:31 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-edeb6c3642so26464039fac.3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 08:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8yJ8zmWYb/frhf47dyKyk6P508V51FYED+q/rbYojp8=;
-        b=NLIBIFGw8WzdD4xISp5HOF7noQo/I9wqMnLnea//gErjyDuNLIh5XvbcvbBv/jS77z
-         1DrKo0vMj7sxu+DVIMw0kT0Gq4+h7P2zSF2YQbJxKECb/TL0mZ63m373tva+LRM8eRvb
-         SUR/A33tvLbp0EvuN8ztfB9JkbSV9Kq3jZH+w=
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=Btm5bdKirAE1edCKMA0iKOdICFrFrxNR7mcM4wXq0Bs=;
+        b=hSLdYyaRRlo2D3KUtOiboPbggLhQQwtRKS/zh4CeGO5oDqyEcC1RN4D5vsxeZuBJeN
+         cELxOupT/Dp975P9eFwd3/uJuz+C2ldi5Hwmu7l+KQrQeJUWtJkSgRER0H8QAFycTP7H
+         TSJ/vaKjSxwLMEksTpeg3DC25jDtEDEhcP6NL58FVtkWB1qYaLii1Nzr9YkgCUz15mmP
+         gee0DOjTxqIL3pjsQArVvymbsmoVGa2KjeJjQIe9z10hSwcNeaIyEtm0ScSNF7TR/7ER
+         YF2TYS83PPhhaaKNtc/rLFB/MLcgmzOJU+dxwUNjXB7lKzxIk18sX3mvPLSCQMisWE7j
+         qxuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8yJ8zmWYb/frhf47dyKyk6P508V51FYED+q/rbYojp8=;
-        b=PBivU0eSaIo+W4JFoK1DuY/yLBaQz525/UlZRmSSH9PgOumimiSyfv+ZbAmRwj/c4u
-         QKNpiPMm/fwai1qWJqrbcZMOdGZ/1dg2fVjvkSq8nED4pyZCyLPr+CUdxHvZmmWPHiOf
-         RQvBjIlkieXE57ZYl0pW+3uP7gAozZqmiwb8yKCby5vJ8m8A0mGGqCM8ZBe2l4nuZhmM
-         nULf5q+qPvXYVHU5f42GbcaGzLbNbsTP/SAHUlURETtXDXbORzwTZt5AP/q+CBXnN762
-         ydhVwopvFhqULBFHzWaJnErejxz/+VGAe7u5ZUijMM4etnvyQX8U/9N/NFsyJnBey+TB
-         wgig==
-X-Gm-Message-State: AOAM533CHNi1UgwZbOKM4ZBw9avz5zG1tp7diEqxOnaVTiakTPRjHi4C
-        9PELJHcfCXPzk0oP9faAM9vLdA==
-X-Google-Smtp-Source: ABdhPJzMVksqNiU4x1P1v8U0C///HyFEuqhGrs9xzkZl7KBKQ5PKzmSj42Izc3FPcsPfEal9GSTNEA==
-X-Received: by 2002:a05:6a00:1487:b0:518:b952:889b with SMTP id v7-20020a056a00148700b00518b952889bmr12193598pfu.43.1653492919381;
-        Wed, 25 May 2022 08:35:19 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:4d83:f549:9abd:427])
-        by smtp.gmail.com with UTF8SMTPSA id g3-20020a170902d5c300b0015e8d4eb2b9sm9510599plh.259.2022.05.25.08.35.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 08:35:19 -0700 (PDT)
-Date:   Wed, 25 May 2022 08:35:17 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Judy Hsiao <judyhsiao@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        dianders@chromium.org, cychiang@google.com, judyhsiao@google.com,
-        tzungbi@chromium.org, swboyd@chromium.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v3 2/3] arm64: dts: qcom: sc7280: Add
- sc7280-herobrine-audio-rt5682.dtsi
-Message-ID: <Yo5Mtfvmk8EZGHg8@google.com>
-References: <20220525014308.1853576-1-judyhsiao@chromium.org>
- <20220525014308.1853576-3-judyhsiao@chromium.org>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=Btm5bdKirAE1edCKMA0iKOdICFrFrxNR7mcM4wXq0Bs=;
+        b=MqvSRRzjUg4nah7oEq9ouBrmJriaMuO7QNQnMaL9WL8tCo5L60IC+LcttVqMo7kVR+
+         4ygCX3XG5aQFbMi/uWVBw7rn4mUkU0xnnZSMSpZDagFdLXrK0neNDeM7CPGmH98cRgdG
+         LnlqhGY88ZsdA4M4hWymMykbvsHl3DLgfRfAgpd/9E4EDD8UiZZqUplMryKPlntnnWJZ
+         i8FuorOYwGormbdO8dMDU1BrMvvZf0q+fcROwbSON5Orhy3if0CghPJHt6a2K56xkMGa
+         sEVBDaSVtwtWDKbwlMBAkh791A2ikZUR75JC5N3O0foimUG8Tw2RPrOcpJURO1EZdlp7
+         AMcQ==
+X-Gm-Message-State: AOAM530RkgpVNfaj95mhMnFvT+jvLGFWXsN+dPjE033ECEJDWahcs7fA
+        2n7nhwN1loLgGTs2j2K87sKZ0y4UmVteDzqS3Ec=
+X-Google-Smtp-Source: ABdhPJyd9jMpGtTf2uKFnVvlk60l0JJ0ghHzTwn/xoqB63mhSFQpYgRdugyXwwF1LjUO2l1KKwd+/4Yv9A1ZWo7B0x4=
+X-Received: by 2002:a05:6870:6196:b0:e1:e1a2:5c65 with SMTP id
+ a22-20020a056870619600b000e1e1a25c65mr6181167oah.190.1653492930642; Wed, 25
+ May 2022 08:35:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220525014308.1853576-3-judyhsiao@chromium.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6830:3498:0:0:0:0 with HTTP; Wed, 25 May 2022 08:35:30
+ -0700 (PDT)
+From:   BARRISTER JOHN COOKE <barrjohncooke10@gmail.com>
+Date:   Wed, 25 May 2022 16:35:30 +0100
+Message-ID: <CALDdX6VqzsB1JPW-amBp_=At6k5Rs28=NnSS4Qb-cED4SrnF3w@mail.gmail.com>
+Subject: ''''''WARNING YOUR LAST NOTIFICATION'''''
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 01:43:07AM +0000, Judy Hsiao wrote:
-> Audio dtsi for sc7280 boards that using rt5682 headset codec:
-> 1. Add dt nodes for sound card which use I2S playback and record
->    through rt5682s and I2S playback through max98357a.
-> 2. Enable lpass cpu node and add pin control and dai-links.
-> 
-> Signed-off-by: Judy Hsiao <judyhsiao@chromium.org>
+Probate & Executors
+HRMC London,
+United Kingdom.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+By a proper analysis of the ESTATE of Late Eng. Richard Carlson, I
+wish to let you know that Late Eng. Richard Carlson made you a
+beneficiary to his WILL.
+
+
+I await your prompt response.
+
+Barrister John Cooke ESQ.
+PRINCIPAL PARTNERS: Barrister Kim Howes, Barrister John Cluster,
+Barrister Morgan Wilson

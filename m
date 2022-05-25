@@ -2,153 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13925342A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 20:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6F45342AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 20:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244356AbiEYSEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 14:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S243863AbiEYSJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 14:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343627AbiEYSER (ORCPT
+        with ESMTP id S229707AbiEYSJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 14:04:17 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4109D4E3;
-        Wed, 25 May 2022 11:04:15 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id bo5so19884198pfb.4;
-        Wed, 25 May 2022 11:04:15 -0700 (PDT)
+        Wed, 25 May 2022 14:09:24 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695838D691
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:09:23 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id q15so4896641edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:09:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=h1TzB6zXHOqKMcJg/Znm0cPLJ3T5vb+uHY7kgpQJECw=;
-        b=eeuP43yZFEXFZNcbgSIVZCLPVZvBoHO+43zuKmEWHeY2uYb7hyM10eQ6yX0ME4TQlH
-         jiezxETkzQdMOFfgQqO9YwxX5MVyJ14DHFiG7b2bxoUQpfT392P4HbaDM8qyTJkRCv3Y
-         JhKBHR9wuWkk35jYgJVYw/lhxCDgc68OvL9fIQ7L0v9oi8bYFf7G648QdEjwPszsUDY7
-         fWxMzRje4vILYRkr2E/edNWfsLFlaxeF0CsncBGH/0lMHxexdQcsOYCzG8ygvvF75vs3
-         ZO61VhCWq82/9PNjPRFUB3BfzeD9viiZ6nM+mN1i2jonymC5b44WuhwrBIXxYBh3SuAO
-         T/lA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iRkHcd8s4ALLVT0dz9R8wU6Dyfv3RsX5g6d95y6kyVg=;
+        b=CcNicq/uL1ohoK3ra8nNfQr0V3hGSWF8YX6N94AENAc3GcjN1oIxB1mjFPYdi2oYvk
+         kDJMNSfWUCSJCHGc/4oY+60TyOp+cpqXrdMFyj/8AFKBF1FrJDB1TjYsHooiDwdeeHX6
+         MGiXHaQlXmjXoCo4H4Ud/47qhGHeN7oBdnY/s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h1TzB6zXHOqKMcJg/Znm0cPLJ3T5vb+uHY7kgpQJECw=;
-        b=GzO5tV97m58bzedj6mZUprpj2dROMvPFDjOexqXZZvL1Rlb6eNtLb8iPNnB07+vwx3
-         Z34SP+RixF2KuSEcCvF6sja4CHPnPZHOeM+jXtxuu1EfOkwFXMJXioad1nQ4YAYfcP9N
-         Z3a7L4JZ6N0FdHniqXtP2mme3vUORV2/SjsXjcqVqZzuKpqO2tS8IoCYBEmxKHuz5xvT
-         yUSU1vEFbBbSIFAISkXzwGKVfiGXrzRIyvF5WdPu+QkhMlMg8JsFAcyL4n/ybM5zVyTU
-         fPQUU3ESixlqNEpDO3vWFJPcvKwSDxkqty0Sozn+R5FBdstHVgPQFSlQ7R5EJnganrYx
-         pwJQ==
-X-Gm-Message-State: AOAM530chzwVFhCMZZNYsnemSQJ9VZYC/oNjTdELgZAHPJNvzgl+wYCg
-        necIbDpqgYALbLrHNAcIPnzoq+vn12Y=
-X-Google-Smtp-Source: ABdhPJwU8NvQlKhpXt6N/mFMMSnIztUWJDhbhyelzS2GIK0RpPcXNYOeEdq2m+c1gA4DoeCW8vFXeQ==
-X-Received: by 2002:a63:ef01:0:b0:3fb:4d0:6b62 with SMTP id u1-20020a63ef01000000b003fb04d06b62mr704946pgh.148.1653501855045;
-        Wed, 25 May 2022 11:04:15 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:150:a0bd:a968:f6a2])
-        by smtp.gmail.com with ESMTPSA id h11-20020a65518b000000b003c644b2180asm8826933pgq.77.2022.05.25.11.04.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 11:04:13 -0700 (PDT)
-Date:   Wed, 25 May 2022 11:04:11 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 4.14 04/33] Input: stmfts - fix reference leak in
- stmfts_input_open
-Message-ID: <Yo5vmwfaJKhg9fzF@google.com>
-References: <20220523165746.957506211@linuxfoundation.org>
- <20220523165747.818755611@linuxfoundation.org>
- <20220525105248.GA31002@duo.ucw.cz>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iRkHcd8s4ALLVT0dz9R8wU6Dyfv3RsX5g6d95y6kyVg=;
+        b=Gn0TJgsZEkfSSForlwD0t/RzRMzVzesYDQLkkPQGc4IVux5xAiuzIajEsKvgzT0dX5
+         0mqJqDAAbytnmCzQsYpaOq7XjpP7i+o2RwBJ1hxSfiWJ3eLqm+a1QvK8hgOjbINSDkr6
+         iH5crOv3eGqAoFYmOpn/sgDvwC4ZMy2dum6nuL4GJg0TwfRAYNFm9reb6iDebCu+X//D
+         Pg0VDqRMA/qXdDKz3jnsnKi1WhtG+fZ90XyNDoQZYjIpleeGDFBHD7Ij9+x32XimIAh4
+         FHmjW5dNnJzjuiNaKCmsGW9HNZRFt8liPz5pBRJOIEWdX2hXMzDgyXfCx8Zko3V2iley
+         9IOw==
+X-Gm-Message-State: AOAM530ORN/0c5ZsHrjB62/nxZt6w35AJo3nhQq1LOdcAGTbNcNm01wY
+        P/TtJopo+kfnpEBeKjToV++3YLIFWdpYxLl6DXo=
+X-Google-Smtp-Source: ABdhPJz1ZEirQZ/xJRWsxcsd5gXPBnFEcxM+SezWMyVSDnq/j1HH2QDHSQeCPMrPXM03SPwHF+Wtpg==
+X-Received: by 2002:a05:6402:48c:b0:42a:e585:103 with SMTP id k12-20020a056402048c00b0042ae5850103mr35781096edv.375.1653502161757;
+        Wed, 25 May 2022 11:09:21 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id m20-20020a170906161400b006feba4ef020sm4975150ejd.180.2022.05.25.11.09.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 11:09:19 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id p189so12943586wmp.3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 11:09:19 -0700 (PDT)
+X-Received: by 2002:a05:600c:4f0e:b0:397:6b94:7469 with SMTP id
+ l14-20020a05600c4f0e00b003976b947469mr4160846wmq.145.1653502159032; Wed, 25
+ May 2022 11:09:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525105248.GA31002@duo.ucw.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <YouKQw72H7y9EJQK@alley>
+In-Reply-To: <YouKQw72H7y9EJQK@alley>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 25 May 2022 11:09:02 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgC47n_7E6UtFx_agkJtLmWOXGsjdFjybBFYNA1AheQLQ@mail.gmail.com>
+Message-ID: <CAHk-=wgC47n_7E6UtFx_agkJtLmWOXGsjdFjybBFYNA1AheQLQ@mail.gmail.com>
+Subject: Re: [GIT PULL] printk for 5.19
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 12:52:48PM +0200, Pavel Machek wrote:
-> Hi!
-> 
-> > From: Zheng Yongjun <zhengyongjun3@huawei.com>
-> > 
-> > [ Upstream commit 26623eea0da3476446909af96c980768df07bbd9 ]
-> > 
-> > pm_runtime_get_sync() will increment pm usage counter even it
-> > failed. Forgetting to call pm_runtime_put_noidle will result
-> > in reference leak in stmfts_input_open, so we should fix it.
-> 
-> This is wrong, AFAICT.
+On Mon, May 23, 2022 at 6:21 AM Petr Mladek <pmladek@suse.com> wrote:
+>
+>   There are situations when the kthreads are either not available or
+>   not reliable, for example, early boot, suspend, or panic. In these
+>   situations, printk() uses the legacy mode and tries to handle consoles
+>   immediately.
 
-Yes, I think you are right. How about below?
+Let's see how this works out, but I do have one complaint/query about
+the series.
 
-Thanks.
+Looking through the commits, I don't see how that "printk: wake up all
+waiters" makes any sense at all.
 
--- 
-Dmitry
+It *ALREADY* woke up all waiters as far as I can see.
 
+Doing a wake_up_interruptible() will stop waking things up only when
+it hits a *exclusive* waiter, and as far as I can tell, there are no
+exclusive waiters there.
 
-Input: stmfts - do not leave device disabled in stmfts_input_open
+And if they were there, the "wake_up_all()" wouldn't be the right thing anyway.
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+So that commit seems to be fundamentally confused about things.
 
-The commit 26623eea0da3 attempted to deal with potential leak of runtime
-PM counter when opening the touchscreen device, however it ended up
-erroneously dropping the counter in the case of successfully enabling the
-device.
+You should NEVER use wake_up_interruptible_all() in any normal code.
 
-Let's address this by using pm_runtime_resume_and_get() and then executing
-pm_runtime_put_sync() only when we fail to send "sense on" command to the
-device.
+That "all()" form is only for when there are exclusive waiters (that
+are expected to handle the situation entirely, or wake up the next
+waiter if they don't), *and* you have some exceptional thing that then
+causes *ALL* waiters to need to be woken up.
 
-Fixes: 26623eea0da3 ("Input: stmfts - fix reference leak in stmfts_input_open")
-Reported-by: Pavel Machek <pavel@denx.de>
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- drivers/input/touchscreen/stmfts.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+For example, a "read()" might be an exclusive wait, so that multiple
+potential concurrent readers don't cause a scheduling herd of
+processes all to wake up when somebody writes to the socket or pipe or
+whatever.
 
-diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
-index 72e0b767e1ba..c175d44c52f3 100644
---- a/drivers/input/touchscreen/stmfts.c
-+++ b/drivers/input/touchscreen/stmfts.c
-@@ -337,13 +337,15 @@ static int stmfts_input_open(struct input_dev *dev)
- 	struct stmfts_data *sdata = input_get_drvdata(dev);
- 	int err;
- 
--	err = pm_runtime_get_sync(&sdata->client->dev);
--	if (err < 0)
--		goto out;
-+	err = pm_runtime_resume_and_get(&sdata->client->dev);
-+	if (err)
-+		return err;
- 
- 	err = i2c_smbus_write_byte(sdata->client, STMFTS_MS_MT_SENSE_ON);
--	if (err)
--		goto out;
-+	if (err) {
-+		pm_runtime_put_sync(&sdata->client->dev);
-+		return err;
-+	}
- 
- 	mutex_lock(&sdata->mutex);
- 	sdata->running = true;
-@@ -366,9 +368,7 @@ static int stmfts_input_open(struct input_dev *dev)
- 				 "failed to enable touchkey\n");
- 	}
- 
--out:
--	pm_runtime_put_noidle(&sdata->client->dev);
--	return err;
-+	return 0;
- }
- 
- static void stmfts_input_close(struct input_dev *dev)
+So in that situation a write() uses a regular wakeup, so that we only
+wake up the one waiter that will take care of things.
+
+But then a *shutdown* event obviously does affect everybody, so that
+would cause a "wake_up_interruptible_all()".
+
+I really don't see why the printk() code decided to use that wakeup
+function, and the commit message doesn't explain why it was done
+either.
+
+I'm sure we have lots of drivers that are confused about core things
+like this, and I don't really care.
+
+But when I see something really core like printk() get confused and
+mis-understand basic wait queue behavior, that makes me go "This is
+WRONG".
+
+Please explain.
+
+                    Linus

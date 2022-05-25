@@ -2,177 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A0A533AD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C09B533ADE
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 12:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242629AbiEYKqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 06:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S242700AbiEYKqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 06:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242522AbiEYKq1 (ORCPT
+        with ESMTP id S242740AbiEYKqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 06:46:27 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CD6D3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:46:08 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id a13so7703577plh.6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 03:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nfd8GuZibV93hv9RFZEH/5/7YZjQFYEI7fvZmGryy4s=;
-        b=TfAvOXi/gD7eAIll7QchzF7Eta8mzPE79DQuQGqufw9MAXxEiSBkUhihxhjy4hVKku
-         Ww6UrrdG8O2dEu71e4mxTyAq68P3xddG05R270g4Jq+MiOX6Ty6F43Xii72x4LZkgUS4
-         QfN498OGx3DN3QY0WPRX0i9eYTrnyKFkAVBVo=
+        Wed, 25 May 2022 06:46:30 -0400
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE4D3883;
+        Wed, 25 May 2022 03:46:17 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id s28so29406746wrb.7;
+        Wed, 25 May 2022 03:46:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nfd8GuZibV93hv9RFZEH/5/7YZjQFYEI7fvZmGryy4s=;
-        b=C+yTfmYt2ddwLoA/6YozPs/H4pwsxyfICVsqDy54rrCRummHFnb+LBX7FphJN8HfKx
-         fsMk140lIUCfb19d0RaRLLrrlRsZniofyL78iAiddiwRsq6yYq4RBVURMkky1MG2sAH9
-         KKaImVlYZL00Zn3GIB1zQ2MYfm2APmxVtgNdcNr62hxZT4xbA2g1f60UMgnX42QLK6Lb
-         jQo7yAT1ZmN7s4rOm64CehRKoavmLfd8sc9Fs40iu+TkHwodEtS4V6T8DMDSeBdwux9v
-         ApN3r9CfJLH3RUpSnwCQKP7+2pYyU9uGjGODu/rNhZ6KffY3QCpK/WZqm6A0n2ytLS/e
-         z1Jg==
-X-Gm-Message-State: AOAM5320B1JsAKdXZ5Tl/gsyHMHEOP8Ts3Xa52H+2pXBPuc4LDpn1Fdn
-        CxfZXh+XaJ0f+uzULodxz0zPag==
-X-Google-Smtp-Source: ABdhPJx+kR3HjBYxdXGooCC+ftVmy/otgl5MmgHXHeoEREOhHWmbCkk17kKT61UumNXFsaWtKwwJGw==
-X-Received: by 2002:a17:90b:4f81:b0:1e0:7643:36ae with SMTP id qe1-20020a17090b4f8100b001e0764336aemr8297282pjb.124.1653475568108;
-        Wed, 25 May 2022 03:46:08 -0700 (PDT)
-Received: from localhost (174.71.80.34.bc.googleusercontent.com. [34.80.71.174])
-        by smtp.gmail.com with UTF8SMTPSA id a21-20020a637055000000b003c14af505fesm8151397pgn.22.2022.05.25.03.46.05
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=q9O1OGub18poRLHhomCuCLAnpIgun6gCJciHoCwZhXQ=;
+        b=wA/YoIextkItkfmZItfuS7mejwxz8PsmEAKDT4vZx8EpiRHx1TE8gFkLmtX9xheRc3
+         lK5I0eUiyUKznBvKrM7SH+UgwyXhcoyIB6XIcIUvO/ziJGM2c98Gt+1q+F3U7g3gRgJ8
+         LVYhMIAUUK4PVtoICjP224JC6a9m+RR3JJPS+DzwQ+2YDdQrTAUWL1tTGDQxh9WTBnVQ
+         vwLTo/ozhziXa95gH/K2rFR21SnYalChKlM3KNvAXoRDKA893YMhTOUiPUwuFRhHNE0M
+         1+HbRL4weXl26dZWHv2GekwdHogexfuZWuLgxFZayXrPO/OXY+VnjafyXDRPeikKjtFG
+         OMlQ==
+X-Gm-Message-State: AOAM532XuZTFeb+6kIXgOGq5zzgN1ZyWYcaujBL86lVNcZy0yy5Ufgsf
+        3X3iaXxPlcGixlH+Q8kDmzg=
+X-Google-Smtp-Source: ABdhPJwhLX2ksgGaO2ZVtVM7fwP7bpSx5WD8AGN1rT0/bqTlC+CbpGatSQsTaU+IqjT+1iHA5Laoig==
+X-Received: by 2002:adf:e0c3:0:b0:20c:5672:9577 with SMTP id m3-20020adfe0c3000000b0020c56729577mr26101094wri.466.1653475575536;
+        Wed, 25 May 2022 03:46:15 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id u19-20020a05600c19d300b003975c7058bfsm1895136wmq.12.2022.05.25.03.46.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 03:46:07 -0700 (PDT)
-From:   Joseph Hwang <josephsih@chromium.org>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com, pali@kernel.org
-Cc:     josephsih@google.com, chromeos-bluetooth-upstreaming@chromium.org,
-        Joseph Hwang <josephsih@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v5 5/5] Bluetooth: let HCI_QUALITY_REPORT persist over adapter power cycle
-Date:   Wed, 25 May 2022 18:45:45 +0800
-Message-Id: <20220525104545.2314653-3-josephsih@chromium.org>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-In-Reply-To: <20220525104545.2314653-1-josephsih@chromium.org>
-References: <20220525104545.2314653-1-josephsih@chromium.org>
+        Wed, 25 May 2022 03:46:15 -0700 (PDT)
+Message-ID: <e17cab70-66cf-492a-fb8a-dca091768345@kernel.org>
+Date:   Wed, 25 May 2022 12:46:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [GIT PULL for v5.18-rc1] media updates
+Content-Language: en-US
+To:     Sean Young <sean@mess.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220322101406.459e2950@coco.lan>
+ <a0470450-ecfd-2918-e04a-7b57c1fd7694@kernel.org>
+ <Yo3ddVHgBBlvJEdh@gofer.mess.org>
+ <8093277c-5098-e5e3-f606-486de5b2f67b@kernel.org>
+ <Yo3yfIim58IWf64z@gofer.mess.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <Yo3yfIim58IWf64z@gofer.mess.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The quality report specifications, including AOSP Bluetooth Quality
-Report and Intel Telemetry Event, do not define what happen when
-the adapter is turned off and then on. To be consistent among
-different specifications and vendors, the quality report feature is
-turned off when the adapter is powered off and is turned on when
-the adapter is powered on if the feature has been on before power
-cycle.
+On 25. 05. 22, 11:10, Sean Young wrote:
+> On Wed, May 25, 2022 at 10:09:38AM +0200, Jiri Slaby wrote:
+>> I don't understand how inability to build software is not an uapi breakage
+>> -- care to elaborate?
+> 
+> So here is a good compromise suggested by Mauro.
+> 
+> 1. We add the following to the lirc.h uapi header.
+> 
+> #define LIRC_CAN_NOTIFY_DECODE 0
+> #define LIRC_CAN_SET_REC_FILTER 0
 
-Signed-off-by: Joseph Hwang <josephsih@chromium.org>
-Reviewed-by: Archie Pusaka <apusaka@chromium.org>
----
+The code would do "if (x & 0)" or alike, so I'm not sure this won't 
+result in a warning. But as soon as that thing compiles, I don't really 
+care much. If it produces no warning, in fact, the code could be 
+optimized away out thanks to "& 0".
 
-Changes in v5:
-- This is a new patch in this series changes version.
+Just looked up those defs in the debian code search, only lirc and 
+v4l-utils care about the defines. ANd the latter seems to define their 
+own copies.
 
- include/net/bluetooth/hci_core.h |  1 -
- net/bluetooth/hci_sync.c         | 35 +++++++++++++++++++++++++++++++-
- 2 files changed, 34 insertions(+), 2 deletions(-)
+> 2. Since lirc daemon is unmaintained, I am happy to take on maintainership.
+> 
+> This may require forking, depending on what the maintainer says.
+> 
+> How does that sound?
 
-diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
-index 9e48d606591e..5788350efa68 100644
---- a/include/net/bluetooth/hci_core.h
-+++ b/include/net/bluetooth/hci_core.h
-@@ -807,7 +807,6 @@ extern struct mutex hci_cb_list_lock;
- 		hci_dev_clear_flag(hdev, HCI_LE_ADV);		\
- 		hci_dev_clear_flag(hdev, HCI_LL_RPA_RESOLUTION);\
- 		hci_dev_clear_flag(hdev, HCI_PERIODIC_INQ);	\
--		hci_dev_clear_flag(hdev, HCI_QUALITY_REPORT);	\
- 	} while (0)
- 
- #define hci_dev_le_state_simultaneous(hdev) \
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index a6ada9dcede5..12a18d046bb6 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -3849,6 +3849,31 @@ static const struct {
- 			 "advertised, but not supported.")
- };
- 
-+static void suspend_resume_quality_report(struct hci_dev *hdev, bool enable)
-+{
-+	int err;
-+
-+	/* Suspend and resume quality report only when the feature has
-+	 * already been enabled. The HCI_QUALITY_REPORT flag, as an indicator
-+	 * whether to re-enable the feature after resume, is not changed by
-+	 * suspend/resume.
-+	 */
-+	if (!hci_dev_test_flag(hdev, HCI_QUALITY_REPORT))
-+		return;
-+
-+	if (hdev->set_quality_report)
-+		err = hdev->set_quality_report(hdev, enable);
-+	else
-+		err = aosp_set_quality_report(hdev, enable);
-+
-+	if (err)
-+		bt_dev_err(hdev, "%s quality report error %d",
-+			   enable ? "resume" : "suspend", err);
-+	else
-+		bt_dev_info(hdev, "%s quality report",
-+			    enable ? "resume" : "suspend");
-+}
-+
- int hci_dev_open_sync(struct hci_dev *hdev)
- {
- 	int ret = 0;
-@@ -4013,6 +4038,7 @@ int hci_dev_open_sync(struct hci_dev *hdev)
- 	if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
- 		msft_do_open(hdev);
- 		aosp_do_open(hdev);
-+		suspend_resume_quality_report(hdev, true);
- 	}
- 
- 	clear_bit(HCI_INIT, &hdev->flags);
-@@ -4095,6 +4121,14 @@ int hci_dev_close_sync(struct hci_dev *hdev)
- 
- 	hci_request_cancel_all(hdev);
- 
-+	/* Disable quality report and close aosp before shutdown()
-+	 * is called. Otherwise, some chips may panic.
-+	 */
-+	if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
-+		suspend_resume_quality_report(hdev, false);
-+		aosp_do_close(hdev);
-+	}
-+
- 	if (!hci_dev_test_flag(hdev, HCI_UNREGISTER) &&
- 	    !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
- 	    test_bit(HCI_UP, &hdev->flags)) {
-@@ -4158,7 +4192,6 @@ int hci_dev_close_sync(struct hci_dev *hdev)
- 	hci_sock_dev_event(hdev, HCI_DEV_DOWN);
- 
- 	if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
--		aosp_do_close(hdev);
- 		msft_do_close(hdev);
- 	}
- 
+Great.
+
+thanks,
 -- 
-2.36.1.124.g0e6072fb45-goog
-
+js
+suse labs

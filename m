@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A197B53353A
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8259C53353D
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243483AbiEYCQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 22:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S241201AbiEYCRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 22:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243770AbiEYCQf (ORCPT
+        with ESMTP id S243775AbiEYCQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 22:16:35 -0400
+        Tue, 24 May 2022 22:16:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BF51D314
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:16:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFDB22BF4
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:16:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C4626153B
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3ED0C6153F
         for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 02:16:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6B500C3411D;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0CF9C3411E;
         Wed, 25 May 2022 02:16:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1653444993;
-        bh=ps3onEs9tU4RQ6uIHduRmySzcnGpiXAe7aevNH/U+EA=;
+        bh=0giMPf1zj6L8fuMbB3tKGpfvBbtCD3z3fIBI7NC5X4Q=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=e+ngpJ/m03TtARLBAa8FikoHobuttetbo/8A/ZTakoOssk/v611X5B2Br/nQYHj+G
-         XMBJFCizyD8eQXxLNqj+asN4oYv29kQ2fcnq33h9CmZQe+LjEfnGquBALAQaE+Q9p3
-         EK4ymKWAw7F8sAnMFfrCZLoNX5wCPWNRCdGIAYHnF1DVA6OgU530LV63Fhgq0WPaRP
-         vD8dy6u3cM8BWqseSuwwcVl4bOj2Tvnlv+aV3iPzSvpDlZCJaJHDQH02O2inn1uicJ
-         XfLuSODd5tzlqwpdQ/vOxzZsdLQPXGYyF3shKhTfSJsdN0ObH8m8TsTzYUOC910+Ev
-         ki+r/zY7O1rIQ==
+        b=fe0ddn4TlAvgIEyKu83vK+H6GbOt1JlUkprMusUtp9yAettPSErpOXbPahFKC4s1p
+         1G7dWQd9zeEMwEp83wB2UPx/bbBhskektBvZjn1jK7UoppDGtsf7Xsv7FaUgazRm3P
+         UtwcfGNR0dQ+Q1LJq1przB7W/+UCNmJpzP+M/b9Si9lBB6cr+sYDdo4RYlehjWHvEG
+         TnEnrcAxBcWaiARTsyOxLfOhRC5Jy2TpxgOR7oKwfNIcGo5vxtrP+YnszF5lNFo41t
+         N2vLK5eSZRTSXl/NqZprXFYihzAae4ogpOcRCw6xwod5S77VZTrjYoBBhXdbFA0qCX
+         KRxgxNxpOXVDg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5AFCAF03938;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8FB30E8DD61;
         Wed, 25 May 2022 02:16:33 +0000 (UTC)
-Subject: Re: [GIT PULL] gfs2 fixes
+Subject: Re: [GIT PULL] dlm updates for 5.19
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220524194145.884805-1-agruenba@redhat.com>
-References: <20220524194145.884805-1-agruenba@redhat.com>
+In-Reply-To: <20220524203155.GA4585@redhat.com>
+References: <20220524203155.GA4585@redhat.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220524194145.884805-1-agruenba@redhat.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.18-rc6-fixes
-X-PR-Tracked-Commit-Id: c360abbb9db298d0548b31e1a86a48ebb157d7cd
+X-PR-Tracked-Message-Id: <20220524203155.GA4585@redhat.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-5.19
+X-PR-Tracked-Commit-Id: 8e51ec6146fdec82f7308f89113497631013f16a
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7208c9842c50f97327aac20be62edc8ad230f05c
-Message-Id: <165344499336.22339.4867902251802449445.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: f289811258552a8a8c15d2446f9ead1d567357f2
+Message-Id: <165344499358.22339.11342820924163109555.pr-tracker-bot@kernel.org>
 Date:   Wed, 25 May 2022 02:16:33 +0000
-To:     Andreas Gruenbacher <agruenba@redhat.com>
+To:     David Teigland <teigland@redhat.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 24 May 2022 21:41:45 +0200:
+The pull request you sent on Tue, 24 May 2022 15:31:55 -0500:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v5.18-rc6-fixes
+> git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-5.19
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7208c9842c50f97327aac20be62edc8ad230f05c
+https://git.kernel.org/torvalds/c/f289811258552a8a8c15d2446f9ead1d567357f2
 
 Thank you!
 

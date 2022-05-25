@@ -2,503 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C179C5336E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 08:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7FA5336EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 08:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241383AbiEYGuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 02:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
+        id S244239AbiEYGua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 02:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237894AbiEYGuC (ORCPT
+        with ESMTP id S243504AbiEYGu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 02:50:02 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2049.outbound.protection.outlook.com [40.107.93.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4351E6F49A;
-        Tue, 24 May 2022 23:50:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y7CxToM9aS6KoEtpbmVRP8XE/LgoQl1Ur1LM2reZhN+0MNtctdDjASAw2qT2sv7Hc3ZypyRixYwguk2RV6E6HykzQRGzD0jYdXHJG34bfQ9KKqRxUdqrmtErJqEXSBn3VWFX/5iIf9+zODmCldyxBhKrlPOY4pxMrAJvr1AJZJucp9nwEAzsjNPhEFx4iWMI+lHbqeTTRVsnzlfk1LXOOPhYCBKqX//J0E56YhX8+VXjtSnLMCcpuDWCjTNH21p+LrW2wThmbNplDeFGPd6aaf2F2u5NCLxbpL+7hOGOJ4Ils357qkZ3G/MD8TQ4ZhOMBdNI05kmKu15ImDi7eZ+yA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kbppUhzliKXdeDVwSnfgACIR4/tltG84+1OIAl6vIRE=;
- b=Sf2535wbICUS43ymAzJsCEwFYgsY/hmtjZ4IXMHsv5v1p8IC9ayqnyDppek43X0VWYgql5OYsM59AqSNwj3Oas5NMx+MNfRR3+NFiKWsC4fzJEK7HXebqEostHgPwg3aaySWcGVetth5NHyDqj6uCSEWYt1cBk31T3vY/jRKyXBgJhsCK1whenY0raeUegyHSA6C4HQBYuNNUfs68DOdvzTM2KBhD9lMc9cFYmTPLh15QI/SUHhD4bdQ6w2h3gCjYn0oFcoVgxUlW7iBHEybdFwZuAg71PQV3Exoq0tePtk3TzVCfaTBsTyqgSSafmJ7E0oPzea1Nup+jUuB+Ny2rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kbppUhzliKXdeDVwSnfgACIR4/tltG84+1OIAl6vIRE=;
- b=ucee9AOoJyhHL6IimQ2sX9HTuHq7PBsQaSYP7uPVXuR8Ip0Jy3tD54x4TZCcMliibQzZJBVuAtbalf0BJqG1C4+er073rXGfXu55UuBJk825RildH0l8mYKN9bbm50oVdE12azxnFXhhKM3VXDcF3klfsH0uubfp92mKuA7xbvNTUys1guClZmgZqrRzty1OZ76BXkceU2HpzH52hR9lAxCOXBpsNB+9yZyPMLUvzG0Z9YxzaLY5V+mgxjKA7yIEVn+9dKCINm5vbeQRhl6c7aVS/xrrfpBAc14AXVrgBRnNcjCMZ6X6siuqhmgCuKo5ZCOrrdqHR8BNDDqpAGWdnA==
-Received: from BN8PR12CA0036.namprd12.prod.outlook.com (2603:10b6:408:60::49)
- by DM5PR1201MB2552.namprd12.prod.outlook.com (2603:10b6:3:e3::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.19; Wed, 25 May
- 2022 06:49:59 +0000
-Received: from BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:60:cafe::c8) by BN8PR12CA0036.outlook.office365.com
- (2603:10b6:408:60::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15 via Frontend
- Transport; Wed, 25 May 2022 06:49:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT013.mail.protection.outlook.com (10.13.176.182) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5293.13 via Frontend Transport; Wed, 25 May 2022 06:49:59 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- DRHQMAIL101.nvidia.com (10.27.9.10) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Wed, 25 May 2022 06:49:58 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 24 May 2022 23:49:57 -0700
-Received: from msst-build.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Tue, 24 May 2022 23:49:57 -0700
-From:   Besar Wicaksono <bwicaksono@nvidia.com>
-To:     <suzuki.poulose@arm.com>, <robin.murphy@arm.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <sudeep.holla@arm.com>, <thanu.rangarajan@arm.com>,
-        <Michael.Williams@arm.com>, <treding@nvidia.com>,
-        <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
-        Besar Wicaksono <bwicaksono@nvidia.com>
-Subject: [PATCH v3 2/2] perf: coresight_pmu: Add support for NVIDIA SCF and MCF attribute
-Date:   Wed, 25 May 2022 01:48:37 -0500
-Message-ID: <20220525064837.7263-3-bwicaksono@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220525064837.7263-1-bwicaksono@nvidia.com>
-References: <20220515163044.50055-1-bwicaksono@nvidia.com>
- <20220525064837.7263-1-bwicaksono@nvidia.com>
-X-NVConfidentiality: public
+        Wed, 25 May 2022 02:50:27 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5E872E3E
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 23:50:25 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id z10-20020a056e0217ca00b002d1a8674f81so5459854ilu.9
+        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 23:50:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Rio2J0uzt02nmiyUruJe4hrtTcsPQzLoIt5Nw1re4R4=;
+        b=MzLcsbtUKC5niyJDHGB93syqSru8Ngb0oXetp+c9gOynMChA582VpmdQn5gRS/alyO
+         uXsV6Jn48jh/1+TAdEteszg2CXlqt+9P+QugtGc+u/3sMSCGhyDsNutja/bLf+AdWR0L
+         C+eUf8W4OZhiGdAszz3Z04SDwSsNe0S10tBmiZFnARM0WExpZmuKpXEx/HtOO96NzM4i
+         1lva6JPuhpYIl/VYXw8rY3lg02glZGD9l7tKQPFHxqnJMSg3nkEYOIfh/IyDpJ8S9JyK
+         rRU59yQ5IY7kF2906n9uBuHX3C6IFjJp1546UsebCP+tm3y4nTKIEJK/ebj9xFu+q6am
+         mGIQ==
+X-Gm-Message-State: AOAM532oN6Ob6fNPgOOBFim7/FCRBV3JadxwZBUBfxoJ4NdW+HX2zXBg
+        HkYF91+BRq6tpaYhofZq+B74as6fVg/wjmtZefvERVZmkLAM
+X-Google-Smtp-Source: ABdhPJywlBTcsLbcIj/mf7X8nu9gGSyp1TjIertxedtbbDkevoWdAwPuoke7KNgWsc0785j1+FOKh73cmpOMuiRX7CUsM/YSdbbi
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5d3cd150-3e7b-480c-558f-08da3e1ac94d
-X-MS-TrafficTypeDiagnostic: DM5PR1201MB2552:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR1201MB25523ECAD2E86DF045747075A0D69@DM5PR1201MB2552.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9L486kOhIrnhIYuH6iM+I2fJgJMQEYmc0/GykhOaLbTLP/aTvyhoY61z1GyKSuO627DhqSLIlp4FZiinAphsvSNplvDU1b9hQcQFCWIJg3FpcvU4neYyWuGoAmO/99sv5U3OWY6w7dWAZlydCFBE1MVAzDjr+eARDy2XBj0ZLqSeYoqJWPnsuGoRTU0HXlmaclB7QsCCj0DqwBvOqW00aAhK7CZRX+G+nJjQX7OylbSYCLzoOjhglFIcNVxzu44jb3NeW36QOniknV4s2cBx8f3XJ2ZgZONtu3vvQia7sqyJkBb1qWhSyNYOQQNyw2eK9jkAa/CkbB0QzaColOO+x8IsAWlr1qp4FINtai2VIoLDM1TwDYY9RTETTNqMumjLPTVSv3DfJjfwLSGJbRYGmTdKpTdHGc6FUBvIgiFOh4B1vwRdJIeylQZ5GqM65rsMD8/vYLgwZJ5gHxiEMKGo6jiZ2y1vQ7DuHE0fYOcdp0W0PzaR53fKfPLkMw4f9aso1XkrqM4l4fp5qe6elMebTXvM/jiBJQnlVk2Qr5WXYPLoGlcw1ha2gFtfNlxBhcewMJQX0t0I0OUcXwHS3tOQ/tGLeg8g17J400b9wYsc6g1IlJxi/MajL3YvPe1rnt9aedi4yalrO9acyNSf5x6/UUulXHe4Yb4yibsiZ/LBTNR2O8+qqcF1Ep+cxzUSN+xWZcJheCzxXfr5tJlIt52WzQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(110136005)(7696005)(186003)(8936002)(70206006)(40460700003)(4326008)(30864003)(6666004)(8676002)(70586007)(36860700001)(7416002)(5660300002)(508600001)(86362001)(81166007)(356005)(1076003)(82310400005)(2616005)(83380400001)(2906002)(336012)(47076005)(316002)(426003)(36756003)(54906003)(26005)(107886003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 06:49:59.1207
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d3cd150-3e7b-480c-558f-08da3e1ac94d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB2552
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:35a1:b0:330:a6c5:bf97 with SMTP id
+ v33-20020a05663835a100b00330a6c5bf97mr1102645jal.250.1653461425315; Tue, 24
+ May 2022 23:50:25 -0700 (PDT)
+Date:   Tue, 24 May 2022 23:50:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e7e75005dfd07cf6@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in __snd_rawmidi_transmit_ack
+From:   syzbot <syzbot+6912c9592caca7ca0e7d@syzkaller.appspotmail.com>
+To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for NVIDIA System Cache Fabric (SCF) and Memory Control
-Fabric (MCF) PMU attributes for CoreSight PMU implementation in
-NVIDIA devices.
+Hello,
 
-Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
+syzbot found the following issue on:
+
+HEAD commit:    3b5e1590a267 Merge tag 'gpio-fixes-for-v5.18' of git://git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1195135ef00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=902c5209311d387c
+dashboard link: https://syzkaller.appspot.com/bug?extid=6912c9592caca7ca0e7d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6912c9592caca7ca0e7d@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in __snd_rawmidi_transmit_ack+0x2cd/0x2f0 sound/core/rawmidi.c:1348
+Read of size 8 at addr ffff888078b36410 by task kworker/1:1H/754
+
+CPU: 1 PID: 754 Comm: kworker/1:1H Not tainted 5.18.0-rc7-syzkaller-00136-g3b5e1590a267 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_highpri snd_usbmidi_out_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ __snd_rawmidi_transmit_ack+0x2cd/0x2f0 sound/core/rawmidi.c:1348
+ snd_rawmidi_transmit+0xae/0xf0 sound/core/rawmidi.c:1415
+ snd_usbmidi_standard_output+0x264/0xc10 sound/usb/midi.c:650
+ snd_usbmidi_do_output+0x200/0x510 sound/usb/midi.c:311
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+
+Allocated by task 9345:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
+ kmalloc include/linux/slab.h:581 [inline]
+ kzalloc include/linux/slab.h:714 [inline]
+ snd_rawmidi_runtime_create sound/core/rawmidi.c:148 [inline]
+ open_substream+0xe9/0x8b0 sound/core/rawmidi.c:306
+ rawmidi_open_priv+0x591/0x6f0 sound/core/rawmidi.c:357
+ snd_rawmidi_kernel_open+0x1b5/0x270 sound/core/rawmidi.c:392
+ midisynth_use+0xee/0x270 sound/core/seq/seq_midi.c:215
+ subscribe_port sound/core/seq/seq_ports.c:412 [inline]
+ check_and_subscribe_port+0x89a/0xb80 sound/core/seq/seq_ports.c:495
+ snd_seq_port_connect+0x382/0x540 sound/core/seq/seq_ports.c:581
+ snd_seq_ioctl_subscribe_port+0x1fc/0x400 sound/core/seq/seq_clientmgr.c:1492
+ snd_seq_kernel_client_ctl+0x102/0x1e0 sound/core/seq/seq_clientmgr.c:2369
+ snd_seq_oss_midi_open+0x582/0x6e0 sound/core/seq/oss/seq_oss_midi.c:359
+ snd_seq_oss_synth_setup_midi+0x12d/0x530 sound/core/seq/oss/seq_oss_synth.c:269
+ snd_seq_oss_open+0x8c3/0xa80 sound/core/seq/oss/seq_oss_init.c:260
+ odev_open+0x6c/0x90 sound/core/seq/oss/seq_oss.c:128
+ soundcore_open+0x44e/0x620 sound/sound_core.c:593
+ chrdev_open+0x266/0x770 fs/char_dev.c:414
+ do_dentry_open+0x4a1/0x11e0 fs/open.c:824
+ do_open fs/namei.c:3476 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3609
+ do_filp_open+0x1aa/0x400 fs/namei.c:3636
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1213
+ do_sys_open fs/open.c:1229 [inline]
+ __do_sys_openat fs/open.c:1245 [inline]
+ __se_sys_openat fs/open.c:1240 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1240
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Freed by task 9345:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1728 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
+ slab_free mm/slub.c:3510 [inline]
+ kfree+0xd6/0x4d0 mm/slub.c:4552
+ snd_rawmidi_runtime_free sound/core/rawmidi.c:177 [inline]
+ close_substream.part.0+0x18d/0x720 sound/core/rawmidi.c:528
+ close_substream sound/core/rawmidi.c:507 [inline]
+ rawmidi_release_priv+0x192/0x270 sound/core/rawmidi.c:547
+ snd_rawmidi_kernel_release+0x39/0xd0 sound/core/rawmidi.c:564
+ midisynth_unuse+0x45/0x80 sound/core/seq/seq_midi.c:244
+ unsubscribe_port sound/core/seq/seq_ports.c:437 [inline]
+ __delete_and_unsubscribe_port+0x270/0x4c0 sound/core/seq/seq_ports.c:537
+ snd_seq_port_disconnect+0x41c/0x5d0 sound/core/seq/seq_ports.c:616
+ snd_seq_ioctl_unsubscribe_port+0x1fc/0x400 sound/core/seq/seq_clientmgr.c:1537
+ snd_seq_kernel_client_ctl+0x102/0x1e0 sound/core/seq/seq_clientmgr.c:2369
+ snd_seq_oss_midi_close+0x44f/0x4d0 sound/core/seq/oss/seq_oss_midi.c:404
+ snd_seq_oss_synth_reset+0x422/0x880 sound/core/seq/oss/seq_oss_synth.c:406
+ snd_seq_oss_reset+0x6f/0x290 sound/core/seq/oss/seq_oss_init.c:435
+ snd_seq_oss_release+0x78/0x1a0 sound/core/seq/oss/seq_oss_init.c:412
+ odev_release+0x4f/0x70 sound/core/seq/oss/seq_oss.c:144
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ get_signal+0x1c5/0x24c0 kernel/signal.c:2641
+ arch_do_signal_or_restart+0x82/0x20f0 arch/x86/kernel/signal.c:867
+ exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The buggy address belongs to the object at ffff888078b36400
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 16 bytes inside of
+ 512-byte region [ffff888078b36400, ffff888078b36600)
+
+The buggy address belongs to the physical page:
+page:ffffea0001e2cd00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x78b34
+head:ffffea0001e2cd00 order:2 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 dead000000000100 dead000000000122 ffff888010c41c80
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 2967, tgid 2967 (udevadm), ts 15461279103, free_ts 12532036824
+ prep_new_page mm/page_alloc.c:2441 [inline]
+ get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4182
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5408
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
+ alloc_slab_page mm/slub.c:1799 [inline]
+ allocate_slab+0x26c/0x3c0 mm/slub.c:1944
+ new_slab mm/slub.c:2004 [inline]
+ ___slab_alloc+0x8df/0xf20 mm/slub.c:3005
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
+ slab_alloc_node mm/slub.c:3183 [inline]
+ __kmalloc_node_track_caller+0x2cb/0x360 mm/slub.c:4947
+ kmalloc_reserve net/core/skbuff.c:354 [inline]
+ __alloc_skb+0xde/0x340 net/core/skbuff.c:426
+ alloc_skb include/linux/skbuff.h:1300 [inline]
+ alloc_uevent_skb+0x7b/0x210 lib/kobject_uevent.c:290
+ uevent_net_broadcast_untagged lib/kobject_uevent.c:326 [inline]
+ kobject_uevent_net_broadcast lib/kobject_uevent.c:409 [inline]
+ kobject_uevent_env+0xc42/0x1660 lib/kobject_uevent.c:593
+ kobject_synth_uevent+0x701/0x850 lib/kobject_uevent.c:208
+ store_uevent+0x12/0x20 kernel/module.c:1166
+ module_attr_store+0x50/0x80 kernel/params.c:919
+ sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
+ kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:291
+ call_write_iter include/linux/fs.h:2050 [inline]
+ new_sync_write+0x38a/0x560 fs/read_write.c:504
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1356 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1406
+ free_unref_page_prepare mm/page_alloc.c:3328 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3423
+ free_contig_range+0xb1/0x180 mm/page_alloc.c:9418
+ destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1018
+ debug_vm_pgtable+0x2a51/0x2ae3 mm/debug_vm_pgtable.c:1332
+ do_one_initcall+0x103/0x650 init/main.c:1298
+ do_initcall_level init/main.c:1371 [inline]
+ do_initcalls init/main.c:1387 [inline]
+ do_basic_setup init/main.c:1406 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1613
+ kernel_init+0x1a/0x1d0 init/main.c:1502
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+
+Memory state around the buggy address:
+ ffff888078b36300: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888078b36380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff888078b36400: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                         ^
+ ffff888078b36480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888078b36500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
 ---
- drivers/perf/coresight_pmu/Makefile           |   3 +-
- .../perf/coresight_pmu/arm_coresight_pmu.c    |   4 +
- .../coresight_pmu/arm_coresight_pmu_nvidia.c  | 312 ++++++++++++++++++
- .../coresight_pmu/arm_coresight_pmu_nvidia.h  |  17 +
- 4 files changed, 335 insertions(+), 1 deletion(-)
- create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c
- create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/perf/coresight_pmu/Makefile b/drivers/perf/coresight_pmu/Makefile
-index a2a7a5fbbc16..181b1b0dbaa1 100644
---- a/drivers/perf/coresight_pmu/Makefile
-+++ b/drivers/perf/coresight_pmu/Makefile
-@@ -3,4 +3,5 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_ARM_CORESIGHT_PMU) += \
--	arm_coresight_pmu.o
-+	arm_coresight_pmu.o \
-+	arm_coresight_pmu_nvidia.o
-diff --git a/drivers/perf/coresight_pmu/arm_coresight_pmu.c b/drivers/perf/coresight_pmu/arm_coresight_pmu.c
-index ba52cc592b2d..12179d029bfd 100644
---- a/drivers/perf/coresight_pmu/arm_coresight_pmu.c
-+++ b/drivers/perf/coresight_pmu/arm_coresight_pmu.c
-@@ -42,6 +42,7 @@
- #include <acpi/processor.h>
- 
- #include "arm_coresight_pmu.h"
-+#include "arm_coresight_pmu_nvidia.h"
- 
- #define PMUNAME "arm_system_pmu"
- 
-@@ -396,6 +397,9 @@ struct impl_match {
- };
- 
- static const struct impl_match impl_match[] = {
-+	{ .pmiidr = 0x36B,
-+	  .mask = PMIIDR_IMPLEMENTER_MASK,
-+	  .impl_init_ops = nv_coresight_init_ops },
- 	{}
- };
- 
-diff --git a/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c b/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c
-new file mode 100644
-index 000000000000..54f4eae4c529
---- /dev/null
-+++ b/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c
-@@ -0,0 +1,312 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES.
-+ *
-+ */
-+
-+/* Support for NVIDIA specific attributes. */
-+
-+#include "arm_coresight_pmu_nvidia.h"
-+
-+#define NV_MCF_PCIE_PORT_COUNT		10ULL
-+#define NV_MCF_PCIE_FILTER_ID_MASK	((1ULL << NV_MCF_PCIE_PORT_COUNT) - 1)
-+
-+#define NV_MCF_GPU_PORT_COUNT		2ULL
-+#define NV_MCF_GPU_FILTER_ID_MASK	((1ULL << NV_MCF_GPU_PORT_COUNT) - 1)
-+
-+#define NV_MCF_NVLINK_PORT_COUNT	4ULL
-+#define NV_MCF_NVLINK_FILTER_ID_MASK	((1ULL << NV_MCF_NVLINK_PORT_COUNT) - 1)
-+
-+#define PMIIDR_PRODUCTID_MASK		0xFFF
-+#define PMIIDR_PRODUCTID_SHIFT		20
-+
-+#define to_nv_pmu_impl(coresight_pmu)	\
-+	(container_of(coresight_pmu->impl.ops, struct nv_pmu_impl, ops))
-+
-+#define CORESIGHT_EVENT_ATTR_4_INNER(_pref, _num, _suff, _config)	\
-+	CORESIGHT_EVENT_ATTR(_pref##_num##_suff, _config)
-+
-+#define CORESIGHT_EVENT_ATTR_4(_pref, _suff, _config)			\
-+	CORESIGHT_EVENT_ATTR_4_INNER(_pref, _0_, _suff, _config),	\
-+	CORESIGHT_EVENT_ATTR_4_INNER(_pref, _1_, _suff, _config + 1),	\
-+	CORESIGHT_EVENT_ATTR_4_INNER(_pref, _2_, _suff, _config + 2),	\
-+	CORESIGHT_EVENT_ATTR_4_INNER(_pref, _3_, _suff, _config + 3)
-+
-+struct nv_pmu_impl {
-+	struct coresight_pmu_impl_ops ops;
-+	const char *name;
-+	u32 filter_mask;
-+	struct attribute **event_attr;
-+	struct attribute **format_attr;
-+};
-+
-+static struct attribute *scf_pmu_event_attrs[] = {
-+	CORESIGHT_EVENT_ATTR(bus_cycles,			0x1d),
-+
-+	CORESIGHT_EVENT_ATTR(scf_cache_allocate,		0xF0),
-+	CORESIGHT_EVENT_ATTR(scf_cache_refill,			0xF1),
-+	CORESIGHT_EVENT_ATTR(scf_cache,				0xF2),
-+	CORESIGHT_EVENT_ATTR(scf_cache_wb,			0xF3),
-+
-+	CORESIGHT_EVENT_ATTR_4(socket, rd_data,			0x101),
-+	CORESIGHT_EVENT_ATTR_4(socket, dl_rsp,			0x105),
-+	CORESIGHT_EVENT_ATTR_4(socket, wb_data,			0x109),
-+	CORESIGHT_EVENT_ATTR_4(socket, ev_rsp,			0x10d),
-+	CORESIGHT_EVENT_ATTR_4(socket, prb_data,		0x111),
-+
-+	CORESIGHT_EVENT_ATTR_4(socket, rd_outstanding,		0x115),
-+	CORESIGHT_EVENT_ATTR_4(socket, dl_outstanding,		0x119),
-+	CORESIGHT_EVENT_ATTR_4(socket, wb_outstanding,		0x11d),
-+	CORESIGHT_EVENT_ATTR_4(socket, wr_outstanding,		0x121),
-+	CORESIGHT_EVENT_ATTR_4(socket, ev_outstanding,		0x125),
-+	CORESIGHT_EVENT_ATTR_4(socket, prb_outstanding,		0x129),
-+
-+	CORESIGHT_EVENT_ATTR_4(socket, rd_access,		0x12d),
-+	CORESIGHT_EVENT_ATTR_4(socket, dl_access,		0x131),
-+	CORESIGHT_EVENT_ATTR_4(socket, wb_access,		0x135),
-+	CORESIGHT_EVENT_ATTR_4(socket, wr_access,		0x139),
-+	CORESIGHT_EVENT_ATTR_4(socket, ev_access,		0x13d),
-+	CORESIGHT_EVENT_ATTR_4(socket, prb_access,		0x141),
-+
-+	CORESIGHT_EVENT_ATTR_4(ocu, gmem_rd_data,		0x145),
-+	CORESIGHT_EVENT_ATTR_4(ocu, gmem_rd_access,		0x149),
-+	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wb_access,		0x14d),
-+	CORESIGHT_EVENT_ATTR_4(ocu, gmem_rd_outstanding,	0x151),
-+	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wr_outstanding,	0x155),
-+
-+	CORESIGHT_EVENT_ATTR_4(ocu, rem_rd_data,		0x159),
-+	CORESIGHT_EVENT_ATTR_4(ocu, rem_rd_access,		0x15d),
-+	CORESIGHT_EVENT_ATTR_4(ocu, rem_wb_access,		0x161),
-+	CORESIGHT_EVENT_ATTR_4(ocu, rem_rd_outstanding,		0x165),
-+	CORESIGHT_EVENT_ATTR_4(ocu, rem_wr_outstanding,		0x169),
-+
-+	CORESIGHT_EVENT_ATTR(gmem_rd_data,			0x16d),
-+	CORESIGHT_EVENT_ATTR(gmem_rd_access,			0x16e),
-+	CORESIGHT_EVENT_ATTR(gmem_rd_outstanding,		0x16f),
-+	CORESIGHT_EVENT_ATTR(gmem_dl_rsp,			0x170),
-+	CORESIGHT_EVENT_ATTR(gmem_dl_access,			0x171),
-+	CORESIGHT_EVENT_ATTR(gmem_dl_outstanding,		0x172),
-+	CORESIGHT_EVENT_ATTR(gmem_wb_data,			0x173),
-+	CORESIGHT_EVENT_ATTR(gmem_wb_access,			0x174),
-+	CORESIGHT_EVENT_ATTR(gmem_wb_outstanding,		0x175),
-+	CORESIGHT_EVENT_ATTR(gmem_ev_rsp,			0x176),
-+	CORESIGHT_EVENT_ATTR(gmem_ev_access,			0x177),
-+	CORESIGHT_EVENT_ATTR(gmem_ev_outstanding,		0x178),
-+	CORESIGHT_EVENT_ATTR(gmem_wr_data,			0x179),
-+	CORESIGHT_EVENT_ATTR(gmem_wr_outstanding,		0x17a),
-+	CORESIGHT_EVENT_ATTR(gmem_wr_access,			0x17b),
-+
-+	CORESIGHT_EVENT_ATTR_4(socket, wr_data,			0x17c),
-+
-+	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wr_data,		0x180),
-+	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wb_data,		0x184),
-+	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wr_access,		0x188),
-+	CORESIGHT_EVENT_ATTR_4(ocu, gmem_wb_outstanding,	0x18c),
-+
-+	CORESIGHT_EVENT_ATTR_4(ocu, rem_wr_data,		0x190),
-+	CORESIGHT_EVENT_ATTR_4(ocu, rem_wb_data,		0x194),
-+	CORESIGHT_EVENT_ATTR_4(ocu, rem_wr_access,		0x198),
-+	CORESIGHT_EVENT_ATTR_4(ocu, rem_wb_outstanding,		0x19c),
-+
-+	CORESIGHT_EVENT_ATTR(gmem_wr_total_bytes,		0x1a0),
-+	CORESIGHT_EVENT_ATTR(remote_socket_wr_total_bytes,	0x1a1),
-+	CORESIGHT_EVENT_ATTR(remote_socket_rd_data,		0x1a2),
-+	CORESIGHT_EVENT_ATTR(remote_socket_rd_outstanding,	0x1a3),
-+	CORESIGHT_EVENT_ATTR(remote_socket_rd_access,		0x1a4),
-+
-+	CORESIGHT_EVENT_ATTR(cmem_rd_data,			0x1a5),
-+	CORESIGHT_EVENT_ATTR(cmem_rd_access,			0x1a6),
-+	CORESIGHT_EVENT_ATTR(cmem_rd_outstanding,		0x1a7),
-+	CORESIGHT_EVENT_ATTR(cmem_dl_rsp,			0x1a8),
-+	CORESIGHT_EVENT_ATTR(cmem_dl_access,			0x1a9),
-+	CORESIGHT_EVENT_ATTR(cmem_dl_outstanding,		0x1aa),
-+	CORESIGHT_EVENT_ATTR(cmem_wb_data,			0x1ab),
-+	CORESIGHT_EVENT_ATTR(cmem_wb_access,			0x1ac),
-+	CORESIGHT_EVENT_ATTR(cmem_wb_outstanding,		0x1ad),
-+	CORESIGHT_EVENT_ATTR(cmem_ev_rsp,			0x1ae),
-+	CORESIGHT_EVENT_ATTR(cmem_ev_access,			0x1af),
-+	CORESIGHT_EVENT_ATTR(cmem_ev_outstanding,		0x1b0),
-+	CORESIGHT_EVENT_ATTR(cmem_wr_data,			0x1b1),
-+	CORESIGHT_EVENT_ATTR(cmem_wr_outstanding,		0x1b2),
-+
-+	CORESIGHT_EVENT_ATTR_4(ocu, cmem_rd_data,		0x1b3),
-+	CORESIGHT_EVENT_ATTR_4(ocu, cmem_rd_access,		0x1b7),
-+	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wb_access,		0x1bb),
-+	CORESIGHT_EVENT_ATTR_4(ocu, cmem_rd_outstanding,	0x1bf),
-+	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wr_outstanding,	0x1c3),
-+
-+	CORESIGHT_EVENT_ATTR(ocu_prb_access,			0x1c7),
-+	CORESIGHT_EVENT_ATTR(ocu_prb_data,			0x1c8),
-+	CORESIGHT_EVENT_ATTR(ocu_prb_outstanding,		0x1c9),
-+
-+	CORESIGHT_EVENT_ATTR(cmem_wr_access,			0x1ca),
-+
-+	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wr_access,		0x1cb),
-+	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wb_data,		0x1cf),
-+	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wr_data,		0x1d3),
-+	CORESIGHT_EVENT_ATTR_4(ocu, cmem_wb_outstanding,	0x1d7),
-+
-+	CORESIGHT_EVENT_ATTR(cmem_wr_total_bytes,		0x1db),
-+
-+	CORESIGHT_EVENT_ATTR(cycles, CORESIGHT_PMU_EVT_CYCLES_DEFAULT),
-+	NULL,
-+};
-+
-+static struct attribute *mcf_pmu_event_attrs[] = {
-+	CORESIGHT_EVENT_ATTR(rd_bytes_loc,			0x0),
-+	CORESIGHT_EVENT_ATTR(rd_bytes_rem,			0x1),
-+	CORESIGHT_EVENT_ATTR(wr_bytes_loc,			0x2),
-+	CORESIGHT_EVENT_ATTR(wr_bytes_rem,			0x3),
-+	CORESIGHT_EVENT_ATTR(total_bytes_loc,			0x4),
-+	CORESIGHT_EVENT_ATTR(total_bytes_rem,			0x5),
-+	CORESIGHT_EVENT_ATTR(rd_req_loc,			0x6),
-+	CORESIGHT_EVENT_ATTR(rd_req_rem,			0x7),
-+	CORESIGHT_EVENT_ATTR(wr_req_loc,			0x8),
-+	CORESIGHT_EVENT_ATTR(wr_req_rem,			0x9),
-+	CORESIGHT_EVENT_ATTR(total_req_loc,			0xa),
-+	CORESIGHT_EVENT_ATTR(total_req_rem,			0xb),
-+	CORESIGHT_EVENT_ATTR(rd_cum_outs_loc,			0xc),
-+	CORESIGHT_EVENT_ATTR(rd_cum_outs_rem,			0xd),
-+	CORESIGHT_EVENT_ATTR(cycles, CORESIGHT_PMU_EVT_CYCLES_DEFAULT),
-+	NULL,
-+};
-+
-+static struct attribute *scf_pmu_format_attrs[] = {
-+	CORESIGHT_FORMAT_EVENT_ATTR,
-+	NULL,
-+};
-+
-+static struct attribute *mcf_pcie_pmu_format_attrs[] = {
-+	CORESIGHT_FORMAT_EVENT_ATTR,
-+	CORESIGHT_FORMAT_ATTR(root_port, "config1:0-9"),
-+	NULL,
-+};
-+
-+static struct attribute *mcf_gpu_pmu_format_attrs[] = {
-+	CORESIGHT_FORMAT_EVENT_ATTR,
-+	CORESIGHT_FORMAT_ATTR(gpu, "config1:0-1"),
-+	NULL,
-+};
-+
-+static struct attribute *mcf_nvlink_pmu_format_attrs[] = {
-+	CORESIGHT_FORMAT_EVENT_ATTR,
-+	CORESIGHT_FORMAT_ATTR(socket, "config1:0-3"),
-+	NULL,
-+};
-+
-+static struct attribute **
-+nv_coresight_pmu_get_event_attrs(const struct coresight_pmu *coresight_pmu)
-+{
-+	const struct nv_pmu_impl *impl = to_nv_pmu_impl(coresight_pmu);
-+
-+	return impl->event_attr;
-+}
-+
-+static struct attribute **
-+nv_coresight_pmu_get_format_attrs(const struct coresight_pmu *coresight_pmu)
-+{
-+	const struct nv_pmu_impl *impl = to_nv_pmu_impl(coresight_pmu);
-+
-+	return impl->format_attr;
-+}
-+
-+static const char *
-+nv_coresight_pmu_get_name(const struct coresight_pmu *coresight_pmu)
-+{
-+	const struct nv_pmu_impl *impl = to_nv_pmu_impl(coresight_pmu);
-+
-+	return impl->name;
-+}
-+
-+static u32 nv_coresight_pmu_event_filter(const struct perf_event *event)
-+{
-+	const struct nv_pmu_impl *impl =
-+		to_nv_pmu_impl(to_coresight_pmu(event->pmu));
-+	return event->attr.config1 & impl->filter_mask;
-+}
-+
-+int nv_coresight_init_ops(struct coresight_pmu *coresight_pmu)
-+{
-+	u32 product_id;
-+	struct device *dev;
-+	struct nv_pmu_impl *impl;
-+	static atomic_t pmu_idx = {0};
-+
-+	dev = coresight_pmu->dev;
-+
-+	impl = devm_kzalloc(dev, sizeof(struct nv_pmu_impl), GFP_KERNEL);
-+	if (!impl)
-+		return -ENOMEM;
-+
-+	product_id = (coresight_pmu->impl.pmiidr >> PMIIDR_PRODUCTID_SHIFT) &
-+		     PMIIDR_PRODUCTID_MASK;
-+
-+	switch (product_id) {
-+	case 0x103:
-+		impl->name =
-+			devm_kasprintf(dev, GFP_KERNEL,
-+				       "nvidia_mcf_pcie_pmu_%u",
-+				       coresight_pmu->apmt_node->proc_affinity);
-+		impl->filter_mask	= NV_MCF_PCIE_FILTER_ID_MASK;
-+		impl->event_attr	= mcf_pmu_event_attrs;
-+		impl->format_attr	= mcf_pcie_pmu_format_attrs;
-+		break;
-+	case 0x104:
-+		impl->name =
-+			devm_kasprintf(dev, GFP_KERNEL,
-+				       "nvidia_mcf_gpuvir_pmu_%u",
-+				       coresight_pmu->apmt_node->proc_affinity);
-+		impl->filter_mask	= NV_MCF_GPU_FILTER_ID_MASK;
-+		impl->event_attr	= mcf_pmu_event_attrs;
-+		impl->format_attr	= mcf_gpu_pmu_format_attrs;
-+		break;
-+	case 0x105:
-+		impl->name =
-+			devm_kasprintf(dev, GFP_KERNEL,
-+				       "nvidia_mcf_gpu_pmu_%u",
-+				       coresight_pmu->apmt_node->proc_affinity);
-+		impl->filter_mask	= NV_MCF_GPU_FILTER_ID_MASK;
-+		impl->event_attr	= mcf_pmu_event_attrs;
-+		impl->format_attr	= mcf_gpu_pmu_format_attrs;
-+		break;
-+	case 0x106:
-+		impl->name =
-+			devm_kasprintf(dev, GFP_KERNEL,
-+				       "nvidia_mcf_nvlink_pmu_%u",
-+				       coresight_pmu->apmt_node->proc_affinity);
-+		impl->filter_mask	= NV_MCF_NVLINK_FILTER_ID_MASK;
-+		impl->event_attr	= mcf_pmu_event_attrs;
-+		impl->format_attr	= mcf_nvlink_pmu_format_attrs;
-+		break;
-+	case 0x2CF:
-+		impl->name =
-+			devm_kasprintf(dev, GFP_KERNEL, "nvidia_scf_pmu_%u",
-+				       coresight_pmu->apmt_node->proc_affinity);
-+		impl->filter_mask	= 0x0;
-+		impl->event_attr	= scf_pmu_event_attrs;
-+		impl->format_attr	= scf_pmu_format_attrs;
-+		break;
-+	default:
-+		impl->name =
-+			devm_kasprintf(dev, GFP_KERNEL, "nvidia_uncore_pmu_%u",
-+				       atomic_fetch_inc(&pmu_idx));
-+		impl->filter_mask = CORESIGHT_FILTER_MASK;
-+		impl->event_attr  = coresight_pmu_get_event_attrs(coresight_pmu);
-+		impl->format_attr =
-+			coresight_pmu_get_format_attrs(coresight_pmu);
-+		break;
-+	}
-+
-+	impl->ops.get_event_attrs	= nv_coresight_pmu_get_event_attrs;
-+	impl->ops.get_format_attrs	= nv_coresight_pmu_get_format_attrs;
-+	impl->ops.get_identifier	= coresight_pmu_get_identifier;
-+	impl->ops.get_name		= nv_coresight_pmu_get_name;
-+	impl->ops.event_filter		= nv_coresight_pmu_event_filter;
-+	impl->ops.event_type		= coresight_pmu_event_type;
-+	impl->ops.event_attr_is_visible	= coresight_pmu_event_attr_is_visible;
-+	impl->ops.is_cc_event		= coresight_pmu_is_cc_event;
-+
-+	coresight_pmu->impl.ops = &impl->ops;
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(nv_coresight_init_ops);
-diff --git a/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h b/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h
-new file mode 100644
-index 000000000000..3c81c16c14f4
---- /dev/null
-+++ b/drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0
-+ *
-+ * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES.
-+ *
-+ */
-+
-+/* Support for NVIDIA specific attributes. */
-+
-+#ifndef __ARM_CORESIGHT_PMU_NVIDIA_H__
-+#define __ARM_CORESIGHT_PMU_NVIDIA_H__
-+
-+#include "arm_coresight_pmu.h"
-+
-+/* Allocate NVIDIA descriptor. */
-+int nv_coresight_init_ops(struct coresight_pmu *coresight_pmu);
-+
-+#endif /* __ARM_CORESIGHT_PMU_NVIDIA_H__ */
--- 
-2.17.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

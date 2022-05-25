@@ -2,129 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE3E533BF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905BA533BF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242685AbiEYLrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
+        id S242873AbiEYLtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241097AbiEYLrl (ORCPT
+        with ESMTP id S237666AbiEYLs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:47:41 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089ABA204F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:47:39 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 93B8161EA1923;
-        Wed, 25 May 2022 13:47:35 +0200 (CEST)
-Message-ID: <acbc72fe-c09f-5cc9-3e4b-88fc3d3fe1b1@molgen.mpg.de>
-Date:   Wed, 25 May 2022 13:47:35 +0200
+        Wed, 25 May 2022 07:48:56 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8210A204F
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 04:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653479334; x=1685015334;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nLr8zu/BnApxziLJ5WuSwuD2RlKgoH0SpJqXh3ifQDk=;
+  b=VgksmvmQyGjtqIXbBfywQhYM8ikOvgbyUNqEKnweIb8Q6UonIns5fwSM
+   kWA1DMsm0xj9th+HIcM5hoZwMe8IUYHR9VJdRiJpTXJhI0ArwAty+C9np
+   GfR0+hUmNAI23pBfU5Zx9FuTZND1aEnlyO7MGmZ9ujzLc9/4HOEhxO44d
+   +3HcVwJA4qkiqOVWC4sjqTngEQVtLJ6ypXNJvS9ybcHZCqcBc0FKiNXht
+   JWi9w3sq2pvTixNGzFgDgcjqf56GHKjoGVUtVTF1GNckBwix0bf3aGiIp
+   ngLHYdcnd0fzBuT4EtmPkjDMzeFvvzy7ixSSSI+ZIvrlms7MUtvIHVwgX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="261402146"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="261402146"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 04:48:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="745717364"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 May 2022 04:48:52 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntpVT-0002zG-UA;
+        Wed, 25 May 2022 11:48:51 +0000
+Date:   Wed, 25 May 2022 19:48:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/110-smc 11/15]
+ drivers/power/reset/macsmc-reboot.c:54:25: error: field has incomplete type
+ 'struct sys_off_handler'
+Message-ID: <202205251917.xV8UIJ5E-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [solved] 2 s boot time regression between 5.17 and 5.18-rc4?
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, LKML <linux-kernel@vger.kernel.org>
-References: <a6688497-e234-ddaa-f371-b9e7539df74d@molgen.mpg.de>
- <YoF+H28BQxoD7rfj@zx2c4.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <YoF+H28BQxoD7rfj@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Jason,
+tree:   https://github.com/AsahiLinux/linux bits/110-smc
+head:   0a0b49938a3205cb2b05078117b87673c37ed319
+commit: 233aeafea99e125604d8d5afa06a37c38cd0b93e [11/15] power: reset: macsmc-reboot: Add driver for rebooting via Apple SMC
+config: arm64-randconfig-r034-20220524 (https://download.01.org/0day-ci/archive/20220525/202205251917.xV8UIJ5E-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/233aeafea99e125604d8d5afa06a37c38cd0b93e
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/110-smc
+        git checkout 233aeafea99e125604d8d5afa06a37c38cd0b93e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/power/reset/macsmc-reboot.c:54:25: error: field has incomplete type 'struct sys_off_handler'
+           struct sys_off_handler sys_off;
+                                  ^
+   drivers/power/reset/macsmc-reboot.c:54:9: note: forward declaration of 'struct sys_off_handler'
+           struct sys_off_handler sys_off;
+                  ^
+   drivers/power/reset/macsmc-reboot.c:142:37: warning: declaration of 'struct power_off_data' will not be visible outside of this function [-Wvisibility]
+   static void macsmc_power_off(struct power_off_data *data)
+                                       ^
+>> drivers/power/reset/macsmc-reboot.c:144:37: error: incomplete definition of type 'struct power_off_data'
+           struct macsmc_reboot *reboot = data->cb_data;
+                                          ~~~~^
+   drivers/power/reset/macsmc-reboot.c:142:37: note: forward declaration of 'struct power_off_data'
+   static void macsmc_power_off(struct power_off_data *data)
+                                       ^
+   drivers/power/reset/macsmc-reboot.c:156:35: warning: declaration of 'struct restart_data' will not be visible outside of this function [-Wvisibility]
+   static void macsmc_restart(struct restart_data *data)
+                                     ^
+>> drivers/power/reset/macsmc-reboot.c:158:37: error: incomplete definition of type 'struct restart_data'
+           struct macsmc_reboot *reboot = data->cb_data;
+                                          ~~~~^
+   drivers/power/reset/macsmc-reboot.c:156:35: note: forward declaration of 'struct restart_data'
+   static void macsmc_restart(struct restart_data *data)
+                                     ^
+   drivers/power/reset/macsmc-reboot.c:170:42: warning: declaration of 'struct reboot_prep_data' will not be visible outside of this function [-Wvisibility]
+   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
+                                            ^
+>> drivers/power/reset/macsmc-reboot.c:172:37: error: incomplete definition of type 'struct reboot_prep_data'
+           struct macsmc_reboot *reboot = data->cb_data;
+                                          ~~~~^
+   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
+   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
+                                            ^
+   drivers/power/reset/macsmc-reboot.c:176:14: error: incomplete definition of type 'struct reboot_prep_data'
+           switch (data->mode) {
+                   ~~~~^
+   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
+   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
+                                            ^
+>> drivers/power/reset/macsmc-reboot.c:289:37: error: use of undeclared identifier 'RESTART_PRIO_HIGH'
+           reboot->sys_off.restart_priority = RESTART_PRIO_HIGH;
+                                              ^
+   drivers/power/reset/macsmc-reboot.c:292:8: error: call to undeclared function 'devm_register_sys_off_handler'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = devm_register_sys_off_handler(&pdev->dev, &reboot->sys_off);
+                 ^
+   3 warnings and 7 errors generated.
 
 
-Thank you for your quick reply.
+vim +54 drivers/power/reset/macsmc-reboot.c
 
+    50	
+    51	struct macsmc_reboot {
+    52		struct device *dev;
+    53		struct apple_smc *smc;
+  > 54		struct sys_off_handler sys_off;
+    55	
+    56		union {
+    57			struct macsmc_reboot_nvmem nvm;
+    58			struct nvmem_cell *nvm_cells[ARRAY_SIZE(nvmem_names)];
+    59		};
+    60	};
+    61	
+    62	/* Helpers to read/write a u8 given a struct nvmem_cell */
+    63	static int nvmem_cell_get_u8(struct nvmem_cell *cell)
+    64	{
+    65		size_t len;
+    66		u8 val;
+    67		void *ret = nvmem_cell_read(cell, &len);
+    68	
+    69		if (IS_ERR(ret))
+    70			return PTR_ERR(ret);
+    71	
+    72		if (len < 1) {
+    73			kfree(ret);
+    74			return -EINVAL;
+    75		}
+    76	
+    77		val = *(u8 *)ret;
+    78		kfree(ret);
+    79		return val;
+    80	}
+    81	
+    82	static int nvmem_cell_set_u8(struct nvmem_cell *cell, u8 val)
+    83	{
+    84		return nvmem_cell_write(cell, &val, sizeof(val));
+    85	}
+    86	
+    87	static ssize_t macsmc_ac_power_mode_store(struct device *dev, struct device_attribute *attr,
+    88						  const char *buf, size_t n)
+    89	{
+    90		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
+    91		int mode;
+    92		int ret;
+    93	
+    94		mode = sysfs_match_string(ac_power_modes, buf);
+    95		if (mode < 0)
+    96			return mode;
+    97	
+    98		ret = nvmem_cell_set_u8(reboot->nvm.pm_setting, ac_power_mode_map[mode]);
+    99		if (ret < 0)
+   100			return ret;
+   101	
+   102		return n;
+   103	}
+   104	
+   105	static ssize_t macsmc_ac_power_mode_show(struct device *dev,
+   106						 struct device_attribute *attr, char *buf)
+   107	{
+   108		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
+   109		int len = 0;
+   110		int i;
+   111		int mode = nvmem_cell_get_u8(reboot->nvm.pm_setting);
+   112	
+   113		if (mode < 0)
+   114			return mode;
+   115	
+   116		for (i = 0; i < ARRAY_SIZE(ac_power_mode_map); i++)
+   117			if (mode == ac_power_mode_map[i])
+   118				len += scnprintf(buf+len, PAGE_SIZE-len,
+   119						 "[%s] ", ac_power_modes[i]);
+   120			else
+   121				len += scnprintf(buf+len, PAGE_SIZE-len,
+   122						 "%s ", ac_power_modes[i]);
+   123		buf[len-1] = '\n';
+   124		return len;
+   125	}
+   126	static DEVICE_ATTR(ac_power_mode, 0644, macsmc_ac_power_mode_show,
+   127			   macsmc_ac_power_mode_store);
+   128	
+   129	/*
+   130	 * SMC 'MBSE' key actions:
+   131	 *
+   132	 * 'offw' - shutdown warning
+   133	 * 'slpw' - sleep warning
+   134	 * 'rest' - restart warning
+   135	 * 'off1' - shutdown (needs PMU bit set to stay on)
+   136	 * 'susp' - suspend
+   137	 * 'phra' - restart ("PE Halt Restart Action"?)
+   138	 * 'panb' - panic beginning
+   139	 * 'pane' - panic end
+   140	 */
+   141	
+   142	static void macsmc_power_off(struct power_off_data *data)
+   143	{
+ > 144		struct macsmc_reboot *reboot = data->cb_data;
+   145	
+   146		dev_info(reboot->dev, "Issuing power off (off1)\n");
+   147	
+   148		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(off1)) < 0) {
+   149			dev_err(reboot->dev, "Failed to issue MBSE = off1 (power_off)\n");
+   150		} else {
+   151			mdelay(100);
+   152			WARN_ON(1);
+   153		}
+   154	}
+   155	
+   156	static void macsmc_restart(struct restart_data *data)
+   157	{
+ > 158		struct macsmc_reboot *reboot = data->cb_data;
+   159	
+   160		dev_info(reboot->dev, "Issuing restart (phra)\n");
+   161	
+   162		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(phra)) < 0) {
+   163			dev_err(reboot->dev, "Failed to issue MBSE = phra (restart)\n");
+   164		} else {
+   165			mdelay(100);
+   166			WARN_ON(1);
+   167		}
+   168	}
+   169	
+ > 170	static void macsmc_reboot_prepare(struct reboot_prep_data *data)
+   171	{
+ > 172		struct macsmc_reboot *reboot = data->cb_data;
+   173		u32 val;
+   174		u8 shutdown_flag;
+   175	
+   176		switch (data->mode) {
+   177			case SYS_RESTART:
+   178				val = SMC_KEY(rest);
+   179				shutdown_flag = 0;
+   180				break;
+   181			case SYS_POWER_OFF:
+   182				val = SMC_KEY(offw);
+   183				shutdown_flag = 1;
+   184				break;
+   185			default:
+   186				return;
+   187		}
+   188	
+   189		dev_info(reboot->dev, "Preparing for reboot (%p4ch)\n", &val);
+   190	
+   191		/* On the Mac Mini, this will turn off the LED for power off */
+   192		if (apple_smc_write_u32(reboot->smc, SMC_KEY(MBSE), val) < 0)
+   193			dev_err(reboot->dev, "Failed to issue MBSE = %p4ch (reboot_prepare)\n", &val);
+   194	
+   195		/* Set the boot_stage to 0, which means we're doing a clean shutdown/reboot. */
+   196		if (reboot->nvm.boot_stage &&
+   197		    nvmem_cell_set_u8(reboot->nvm.boot_stage, BOOT_STAGE_SHUTDOWN) < 0)
+   198			dev_err(reboot->dev, "Failed to write boot_stage\n");
+   199	
+   200		/*
+   201		 * Set the PMU flag to actually reboot into the off state.
+   202		 * Without this, the device will just reboot. We make it optional in case it is no longer
+   203		 * necessary on newer hardware.
+   204		 */
+   205		if (reboot->nvm.shutdown_flag &&
+   206		    nvmem_cell_set_u8(reboot->nvm.shutdown_flag, shutdown_flag) < 0)
+   207			dev_err(reboot->dev, "Failed to write shutdown_flag\n");
+   208	
 
-Am 16.05.22 um 00:26 schrieb Jason A. Donenfeld:
-
-> On Mon, May 16, 2022 at 12:09:20AM +0200, Paul Menzel wrote:
-
->> Looking at the timestamps I only just noticed a two second regression.
->> The line below
->>
->>       systemd[1]: Created slice Slice /system/getty.
-> 
-> Known thing, but not quite a regression, as it does unblock and continue
-> booting. IOW, there's no possibility it will hang forever.
-
-Depends on the definition of *regression*. If you have boottime 
-requirements, than it would be considered one, and would hold me back 
-from always updating the Linux kernel confidently as promised by Linux. 
-But in my case it’s not a product, so I do not care.
-
-> But that's neither here nor there: your log says you're using systemd
-> 250.4. This was fixed and backported to 250.5 (and 251 of course), so
-> try updating, and the issue you're seeing will be gone. If not, do
-> let me know.
-
-systemd 251 was released last week, and entered Debian sid/unstable this 
-week, and I can confirm, the two second delay is gone with Linux 5.18.
-
-```
-[    0.000000] Linux version 5.18.0-00107-geb50eb550f2c 
-(root@4beb429beb4a) (gcc (Debian 11.2.0-12) 11.2.0, GNU ld (GNU Binutils 
-for Debian) 2.37) #360 SMP PREEMPT_DYNAMIC Mon May 23 07:00:41 UTC 2022
-[    0.000000] Command line: 
-BOOT_IMAGE=/boot/vmlinuz-5.18.0-00107-geb50eb550f2c root=/dev/sda3 rw 
-quiet noisapnp cryptomgr.notests ipv6.disable_ipv6=1 selinux=0
-[    0.000000] random: get_random_u32 called from 
-bsp_init_amd+0x142/0x210 with crng_init=0
-[…]
-[    0.000000] DMI: ASUS F2A85-M_PRO/F2A85-M_PRO, BIOS 
-4.16-1133-g923080d1e6 05/25/2022
-[…]
-[    0.541486] Run /sbin/init as init process
-[    0.541487]   with arguments:
-[    0.541488]     /sbin/init
-[    0.541489]     noisapnp
-[    0.541490]   with environment:
-[    0.541491]     HOME=/
-[    0.541491]     TERM=linux
-[    0.541492]     BOOT_IMAGE=/boot/vmlinuz-5.18.0-00107-geb50eb550f2c
-[    0.592867] random: fast init done
-[    0.711960] systemd[1]: Inserted module 'autofs4'
-[    0.725757] NET: Registered PF_INET6 protocol family
-[    0.726491] Segment Routing with IPv6
-[    0.726509] In-situ OAM (IOAM) with IPv6
-[    0.745301] systemd[1]: systemd 251-2 running in system mode (+PAM 
-+AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT +GNUTLS -OPENSSL 
-+ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP 
-+LIBFDISK +PCRE2 -PWQUALITY -P11KIT -QRENCODE +TPM2 +BZIP2 +LZ4 +XZ 
-+ZLIB +ZSTD -BPF_FRAMEWORK -XKBCOMMON +UTMP +SYSVINIT 
-default-hierarchy=unified)
-[    0.745311] systemd[1]: Detected architecture x86-64.
-[    0.747380] systemd[1]: Hostname set to <kodi>.
-[    0.943692] systemd[1]: Queued start job for default target Graphical 
-Interface.
-[    0.946792] systemd[1]: Created slice Slice /system/getty.
-[    0.947738] systemd[1]: Created slice Slice /system/modprobe.
-[    0.948377] systemd[1]: Created slice User and Session Slice.
-[    0.948528] systemd[1]: Started Dispatch Password Requests to Console 
-Directory Watch.
-[    0.948636] systemd[1]: Started Forward Password Requests to Wall 
-Directory Watch.
-[    0.949036] systemd[1]: Set up automount Arbitrary Executable File 
-Formats File System Automount Point.
-```
-
-
-Kind regards,
-
-Paul
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

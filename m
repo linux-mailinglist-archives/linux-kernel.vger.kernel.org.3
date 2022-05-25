@@ -2,203 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23E6533BEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF22533BF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 13:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241171AbiEYLov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 07:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
+        id S237897AbiEYLq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 07:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242988AbiEYLor (ORCPT
+        with ESMTP id S231176AbiEYLq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 07:44:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E190A205F;
-        Wed, 25 May 2022 04:44:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 589DFB81D26;
-        Wed, 25 May 2022 11:44:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0320C385B8;
-        Wed, 25 May 2022 11:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653479083;
-        bh=GAfjtUV+VWXEWarM+pI0A5+TD8LhpNPOn8YUB/nmqb0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nMZI1c30fdkMelKJmBEEYsjENiErYsHgTNqHWeC3i0pzuYJeazxf2DgHGxw7UjjXv
-         x9d+T6WmiGwye83M7WHABUfNiIqCDr+2TlDVa0vj1dSX4xmC9Y4Ro78sFrwDT+Vtfw
-         qmAYracvjaFf3uMyCcGKNv7xTeGcWbuqVuJOICEsWyhhRGUauQM1caRVIQvhnZSIld
-         3F+AKdR98MQ87737+f70Sr+lh4UP/kBp7F7E47gKgtRA7akUs7JgWepg5oF7FvQeO2
-         Ej0pSsnXJRt7uyhnwy2BPY8BXDl9AJcRWGeqT0snkxrliS7V6oGQ/h12k6hpyDWNPB
-         9y3jXMHVCN/GA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id F0BE34007E; Wed, 25 May 2022 08:44:38 -0300 (-03)
-Date:   Wed, 25 May 2022 08:44:38 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Milian Wolff <milian.wolff@kdab.com>,
-        bpf <bpf@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Blake Jones <blakejones@google.com>
-Subject: Re: [PATCH 3/6] perf record: Implement basic filtering for off-cpu
-Message-ID: <Yo4Wpqzwp+XmfkMV@kernel.org>
-References: <20220518224725.742882-1-namhyung@kernel.org>
- <20220518224725.742882-4-namhyung@kernel.org>
- <CAP-5=fWfZ_MqiAUx-tdO1C=Dyyzno6FbBp+KGAb_MweXs+N7Jw@mail.gmail.com>
- <CAM9d7cgxdFJJQOg6ivuy4+nh=WME2fgjvM-kSWLv9zd49yxR4A@mail.gmail.com>
- <Yo4SqnEqzo2Rt+PF@kernel.org>
+        Wed, 25 May 2022 07:46:57 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084F4A205D;
+        Wed, 25 May 2022 04:46:56 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id 14so10934912qkl.6;
+        Wed, 25 May 2022 04:46:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WZEhsrnmH5bWQhJRb1s8S6ZF7bqzQ8zLRH/dG9jf2XA=;
+        b=K9Fo8fHT99W64Tq5wMXujUQrygiKt2jwC2LYB/Fp8IdjGUmuXlW4vD0vPrM2NdebCv
+         SvNe0lUZ2wyva4VCvgamnhIuFEq/WgrzwshnvZR5urJlBmIxCqhcxcgVZYaC/9bT+3e8
+         9J6WAyvSKoUfihvE8lnUOigIrVxmeO+ak/WhnII3SfsDxwwz6bUBA9ggP0p0ThixruQ+
+         H2I2So/tpWAtHDlSiQayORN+eNfBsa2yBGEPAVHZcIoXDjJ/55l7R+MxcdsEjiUNH0t7
+         l5ULZqqgTfyslsTwPKAD2HGPih11uY+LeZ9avjcNBnXUtPm0/aG3ybTk8QWTzDr1t2UM
+         4UBQ==
+X-Gm-Message-State: AOAM530XH4yyzR3p8zp1jTebJ4XOmFADJ2TBIfFUECR3+z+cTkatuGJm
+        ojlk3q70syppEdCXWLPb4QsCy+EcXfbVUQ==
+X-Google-Smtp-Source: ABdhPJy9hyEuoLM663LZg350bTUcyi4EkO1tU/6vEupDEENGK1erELD/OY4LeqWx/UvM47rJzoVL5Q==
+X-Received: by 2002:a05:620a:400e:b0:6a5:7289:c449 with SMTP id h14-20020a05620a400e00b006a57289c449mr5607610qko.561.1653479214997;
+        Wed, 25 May 2022 04:46:54 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id p6-20020a05620a22e600b0069fc13ce250sm1041292qki.129.2022.05.25.04.46.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 04:46:54 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-300312ba5e2so45534747b3.0;
+        Wed, 25 May 2022 04:46:53 -0700 (PDT)
+X-Received: by 2002:a81:234b:0:b0:2f8:4082:bbd3 with SMTP id
+ j72-20020a81234b000000b002f84082bbd3mr32969304ywj.47.1653479213622; Wed, 25
+ May 2022 04:46:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yo4SqnEqzo2Rt+PF@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220524172214.5104-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220524172214.5104-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdX0pqr8pmbX8OfUyTeEwiFGSG5uyP4nLG1LPy7_zzLPbQ@mail.gmail.com>
+ <CA+V-a8ubrkDU2B=mJopzFrjhv1nVn5EXZmaprta0oj4p3J_N5Q@mail.gmail.com>
+ <CAMuHMdVncBnD25RLLqL2qDFwboPSVvo5faJvamDxPH_wq9r22Q@mail.gmail.com> <CA+V-a8tHfyqJx9YBFX3hJBEKuCbDpminz_4uSLK=MHV7W8-hJg@mail.gmail.com>
+In-Reply-To: <CA+V-a8tHfyqJx9YBFX3hJBEKuCbDpminz_4uSLK=MHV7W8-hJg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 25 May 2022 13:46:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWizSaABqAnwQi-Sa3ceiZV2CnAhiio4aCx_Bd7NvN1NQ@mail.gmail.com>
+Message-ID: <CAMuHMdWizSaABqAnwQi-Sa3ceiZV2CnAhiio4aCx_Bd7NvN1NQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/2] irqchip/sifive-plic: Add support for Renesas
+ RZ/Five SoC
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, May 25, 2022 at 08:27:38AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, May 19, 2022 at 02:02:28PM -0700, Namhyung Kim escreveu:
-> > On Wed, May 18, 2022 at 9:02 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > On Wed, May 18, 2022 at 3:47 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > > >
-> > > > It should honor cpu and task filtering with -a, -C or -p, -t options.
-> > > >
-> > > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > > > ---
-> > > >  tools/perf/builtin-record.c            |  2 +-
-> > > >  tools/perf/util/bpf_off_cpu.c          | 78 +++++++++++++++++++++++---
-> > > >  tools/perf/util/bpf_skel/off_cpu.bpf.c | 52 +++++++++++++++--
-> > > >  tools/perf/util/off_cpu.h              |  6 +-
-> > > >  4 files changed, 123 insertions(+), 15 deletions(-)
-> > > >
-> > > > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > > > index 91f88501412e..7f60d2eac0b4 100644
-> > > > --- a/tools/perf/builtin-record.c
-> > > > +++ b/tools/perf/builtin-record.c
-> > > > @@ -907,7 +907,7 @@ static int record__config_text_poke(struct evlist *evlist)
-> > > >
-> > > >  static int record__config_off_cpu(struct record *rec)
-> > > >  {
-> > > > -       return off_cpu_prepare(rec->evlist);
-> > > > +       return off_cpu_prepare(rec->evlist, &rec->opts.target);
-> > > >  }
-> > > >
-> > > >  static bool record__kcore_readable(struct machine *machine)
-> > > > diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-> > > > index 9ed7aca3f4ac..b5e2d038da50 100644
-> > > > --- a/tools/perf/util/bpf_off_cpu.c
-> > > > +++ b/tools/perf/util/bpf_off_cpu.c
-> > > > @@ -6,6 +6,9 @@
-> > > >  #include "util/off_cpu.h"
-> > > >  #include "util/perf-hooks.h"
-> > > >  #include "util/session.h"
-> > > > +#include "util/target.h"
-> > > > +#include "util/cpumap.h"
-> > > > +#include "util/thread_map.h"
-> > > >  #include <bpf/bpf.h>
-> > > >
-> > > >  #include "bpf_skel/off_cpu.skel.h"
-> > > > @@ -60,8 +63,23 @@ static int off_cpu_config(struct evlist *evlist)
-> > > >         return 0;
-> > > >  }
-> > > >
-> > > > -static void off_cpu_start(void *arg __maybe_unused)
-> > > > +static void off_cpu_start(void *arg)
-> > > >  {
-> > > > +       struct evlist *evlist = arg;
-> > > > +
-> > > > +       /* update task filter for the given workload */
-> > > > +       if (!skel->bss->has_cpu && !skel->bss->has_task &&
-> > > > +           perf_thread_map__pid(evlist->core.threads, 0) != -1) {
-> > > > +               int fd;
-> > > > +               u32 pid;
-> > > > +               u8 val = 1;
-> > > > +
-> > > > +               skel->bss->has_task = 1;
-> > > > +               fd = bpf_map__fd(skel->maps.task_filter);
-> > > > +               pid = perf_thread_map__pid(evlist->core.threads, 0);
-> > > > +               bpf_map_update_elem(fd, &pid, &val, BPF_ANY);
-> > > > +       }
-> > > > +
-> > > >         skel->bss->enabled = 1;
-> > > >  }
-> > > >
-> > > > @@ -71,31 +89,75 @@ static void off_cpu_finish(void *arg __maybe_unused)
-> > > >         off_cpu_bpf__destroy(skel);
-> > > >  }
-> > > >
-> > > > -int off_cpu_prepare(struct evlist *evlist)
-> > > > +int off_cpu_prepare(struct evlist *evlist, struct target *target)
-> > > >  {
-> > > > -       int err;
-> > > > +       int err, fd, i;
-> > > > +       int ncpus = 1, ntasks = 1;
-> > > >
-> > > >         if (off_cpu_config(evlist) < 0) {
-> > > >                 pr_err("Failed to config off-cpu BPF event\n");
-> > > >                 return -1;
-> > > >         }
-> > > >
-> > > > -       set_max_rlimit();
-> > > > -
-> > > > -       skel = off_cpu_bpf__open_and_load();
-> > > > +       skel = off_cpu_bpf__open();
-> > > >         if (!skel) {
-> > > >                 pr_err("Failed to open off-cpu BPF skeleton\n");
-> > > >                 return -1;
-> > > >         }
-> > > >
-> > > > +       /* don't need to set cpu filter for system-wide mode */
-> > > > +       if (target->cpu_list) {
-> > > > +               ncpus = perf_cpu_map__nr(evlist->core.user_requested_cpus);
-> > > > +               bpf_map__set_max_entries(skel->maps.cpu_filter, ncpus);
-> > > > +       }
-> > > > +
-> > > > +       if (target__has_task(target)) {
-> > > > +               ntasks = perf_thread_map__nr(evlist->core.threads);
-> > > > +               bpf_map__set_max_entries(skel->maps.task_filter, ntasks);
-> > > > +       }
-> > > > +
-> > > > +       set_max_rlimit();
-> > > > +
-> > > > +       err = off_cpu_bpf__load(skel);
-> > > > +       if (err) {
-> > > > +               pr_err("Failed to load off-cpu skeleton\n");
-> > > > +               goto out;
-> > > > +       }
-> > > > +
-> > > > +       if (target->cpu_list) {
-> > > > +               u32 cpu;
-> > > > +               u8 val = 1;
-> > > > +
-> > > > +               skel->bss->has_cpu = 1;
-> > > > +               fd = bpf_map__fd(skel->maps.cpu_filter);
-> > > > +
-> > > > +               for (i = 0; i < ncpus; i++) {
-> > > > +                       cpu = perf_cpu_map__cpu(evlist->core.user_requested_cpus, i).cpu;
-> > > > +                       bpf_map_update_elem(fd, &cpu, &val, BPF_ANY);
-> > >
-> > > Perhaps more concise with a for_each:
-> > >
-> > > perf_cpu_map__for_each_cpu(cpu, idx, evlist->core.user_requested_cpus)
-> > >   bpf_map_update_elem(fd, &cpu.cpu, &val, BPF_ANY);
-> 
-> So I'll wait for a new version of this patchset.
+Hi Prabhakar,
 
-I take that back, will apply and this can be a follow up patch, right?
+On Wed, May 25, 2022 at 11:43 AM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Wed, May 25, 2022 at 10:35 AM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Wed, May 25, 2022 at 11:01 AM Lad, Prabhakar
+> > <prabhakar.csengg@gmail.com> wrote:
+> > > On Wed, May 25, 2022 at 9:01 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > On Tue, May 24, 2022 at 7:22 PM Lad Prabhakar
+> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > > > The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
+> > > > > NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
+> > > > > case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
+> > > > > edge until the previous completion message has been received and
+> > > > > NCEPLIC100 doesn't support pending interrupt counter, hence losing the
+> > > > > interrupts if not acknowledged in time.
+> > > > >
+> > > > > So the workaround for edge-triggered interrupts to be handled correctly
+> > > > > and without losing is that it needs to be acknowledged first and then
+> > > > > handler must be run so that we don't miss on the next edge-triggered
+> > > > > interrupt.
+> > > > >
+> > > > > This patch adds a new compatible string for Renesas RZ/Five SoC and adds
+> > > > > support to change interrupt flow based on the interrupt type. It also
+> > > > > implements irq_ack and irq_set_type callbacks.
+> > > > >
+> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Thanks for your patch!
+> > > >
+> > > > > --- a/drivers/irqchip/irq-sifive-plic.c
+> > > > > +++ b/drivers/irqchip/irq-sifive-plic.c
+> >
+> > > > > @@ -163,10 +166,31 @@ static int plic_set_affinity(struct irq_data *d,
+> > > > >  }
+> > > > >  #endif
+> > > > >
+> > > > > +static void plic_irq_ack(struct irq_data *d)
+> > > > > +{
+> > > > > +       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+> > > > > +
+> > > >
+> > > > No check for RZ/Five or irq type?
+> > > That is because we set the handle_fasteoi_ack_irq() only in case of
+> > > RZ/Five and it is already checked in set_type() callback.
+> > >
+> > > > .irq_ack() seems to be called for level interrupts, too
+> > > > (from handle_level_irq() through mask_ack_irq()).
+> > > >
+> > > Right but we are using handle_fasteoi_irq() for level interrupt which
+> > > doesn't call mask_ack_irq(). And I have confirmed by adding a print in
+> > > ack callback  and just enabling the serial (which has level
+> > > interrupts).
+> >
+> > But handle_fasteoi_irq() is configured only on RZ/Five below?
+> > Which handler is used on non-RZ/Five?
+> >
+> For non RZ/Five, handle_fasteoi_irq() [0] is used for both edge/level
+> interrupts.
+>
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/irqchip/irq-sifive-plic.c?h=next-20220525#n195
 
-- Arnaldo
+Thanks, that was the missing piece!
+
+Due to the new "select IRQ_FASTEOI_HIERARCHY_HANDLERS", I thought
+your new call to handle_fasteoi_irq() had to be the first one in this
+file...  But that config symbol protects handle_fasteoi_ack_irq(),
+not handle_fasteoi_irq().
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,65 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62205336FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1727A53370A
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 09:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242546AbiEYHAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 03:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S234277AbiEYHKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 03:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233045AbiEYHAC (ORCPT
+        with ESMTP id S233045AbiEYHKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 03:00:02 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D0377F21
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=knJxyUNGfN11AfHmEQy8+c+NDBTRDdOh4tbDriPdvJM=; b=SEcCa1C97AiTpIeWEnxDyYNK+Y
-        q2gZK3QsaUkfYfej1Y7QgMxt9YejfFao8tnj1NaFGX08J8k4GmxAADCN3mBEz3Y+4QXfIfHjcmb/x
-        57elhwKZvdTLZKTF2RNpwXiVjQwTiWGnuVfQgLGbAE2xJ3bXKc8kJ6OW/Edjo0+nHF785ibKZyFaH
-        k5luQYmeZtPOWY2LUwPG8EMqiJ2y64egrAyhjtoko8+5chbT0bJJz/YT49/oUJEdV+alTKUvJatCQ
-        YDoOrIvQKc/bliJD/+rKq9Ueah529Jgr/+CTX11tu9j+z6BtZ5/Fo7c2XBN5Cc036Hv5ZlWg3bLKf
-        WrXRxWsw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ntkze-001Y9V-S2; Wed, 25 May 2022 06:59:43 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D19F5980E04; Wed, 25 May 2022 08:59:40 +0200 (CEST)
-Date:   Wed, 25 May 2022 08:59:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 3/3] x86/microcode: Taint and warn on late loading
-Message-ID: <20220525065940.GF2578@worktop.programming.kicks-ass.net>
-References: <20220524185324.28395-1-bp@alien8.de>
- <20220524185324.28395-4-bp@alien8.de>
- <Yo2ASBAElqrQvzh3@agluck-desk3.sc.intel.com>
+        Wed, 25 May 2022 03:10:36 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1743B62F3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id q4so17806921plr.11
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
+        b=hfxeN4TuHwZ+F26aVi1nDnyqqj9hzVXzKQLyUTyyseJ1iA2d76wNddPr+Rs8dRaw8U
+         6g2vsfECGDI/zklJP00Pvjz5teG9nmAJS5uNj3rHFuswYrxKgIoBmlWZoWXCgNjj86Nw
+         Vkffw8Z9LaoNwuAhLW48PfDj+fbdlnQyCDUcNUnhZPqLLqxucNyPXCbFCdNp7qMzjthM
+         mymx77ceQo5I2XfTuxYjsKmFpGcIReYXyG8UMB03cIeWtS+6g/6It1c3bKwQKOmb7bt/
+         dSvKqMiBn0YuUFNtMVFi8MhtNg134bEF2gpV9ILEW7JMJzgsd+aafYU9xoXS2GUdN3qU
+         /ARQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
+        b=oY1W+jLew5IiN481OMl5WYl1peZYANTjlIuNmoKMGlhtb7ymiW3CDv+Shu7MeV14Bv
+         EYlL19opLStSFB+kuV7xC6iDtEATMxp8L+sznjktNXcpjJzxa/oLcPLLV3ckIf9j4nlr
+         CZplkL/6P/wetkAsHzQ0LCGebHPVMiQiiSjwAec0TP72kMzEvSaUG/EjrmjREQOeSQB4
+         BmhrtZNsYl4uzBZtlaSQ+1yDZM+8yEWGS8/ye4Fqsfj1UtPsRBQb1hoZl/680kbZkjlA
+         RzT/kDRHw+UXezq01yp5GPh7AChHuXpinVWXyjgR0gd8OiyVTKB20iXahePUfQHfz6jE
+         4Prw==
+X-Gm-Message-State: AOAM533UzCSIum83Sp57S9KqDRMtik2sRcxP0+ERzuuA9cecDZia8GDT
+        AFqpWUwAiysLBhrvIDyXSgBWxQ==
+X-Google-Smtp-Source: ABdhPJxXwWFCbgZ5LyQsmogKN6LaNXPGnyZsOSm+FR1qUQynXNNGcC3+iJkueuoaM9Wz9sT5XQO9IQ==
+X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr30978527plg.111.1653462354436;
+        Wed, 25 May 2022 00:05:54 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b001624f2b71b4sm2310001plk.152.2022.05.25.00.05.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 00:05:53 -0700 (PDT)
+Date:   Wed, 25 May 2022 12:35:51 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Message-ID: <20220525070551.guv3csxi5kkqfr4f@vireshk-i7>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+ <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+ <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
+ <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
+ <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
+ <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
+ <20220518235708.1A04CC385A9@smtp.kernel.org>
+ <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
+ <20220520005934.8AB1DC385AA@smtp.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yo2ASBAElqrQvzh3@agluck-desk3.sc.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220520005934.8AB1DC385AA@smtp.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 06:03:04PM -0700, Luck, Tony wrote:
-> On Tue, May 24, 2022 at 08:53:24PM +0200, Borislav Petkov wrote:
-> > +	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
+On 19-05-22, 17:59, Stephen Boyd wrote:
+> This is a general problem with OPP. It is single clk frequency centric,
+> which works well for CPU/GPU devices that work with cpufreq/devfreq.
+> When it comes to other devices though we have to fit OPP into what those
+> devices want, which is something like gears for UFS, or "4k@60" (a
+> resolution) for display hardware.
 > 
-> Seems harsh. Updating microcode to the latest is arguably the
-> way to make sure that your CPU stays "IN_SPEC" (since the microcode
-> may have a fix for a functional issue).
+> Would adding string labels and/or using an index based API work better
+> for these devices? I think we'd want to extend OPP for display devices
+> to have whatever set of use-cases the device driver wants to handle with
+> string labels. That naturally follows how some SoC manufacturers setup
+> their OPP tables anyway. They may want to bump only the bus bandwidth
+> for different display resolutions while maxing out the clk frequency.
+> Then we could let drivers either construct a string at probe time to get
+> a handle to those OPP entries or index directly. The frequency APIs
+> would stick around for OPP tables that have frequencies and for drivers
+> that want to do cpufreq/devfreq stuff.
+> 
+> UFS may want to use an index based API that matches the gears per the
+> spec. I think it could do that with dev_pm_opp_find_level_exact(),
+> right?
 
-Then use early loading. There's too many fails associated with late
-loading.
+I think we can use "level" for all these use cases to find the OPP, if
+it aligns well with the requirements of all these frameworks.
+
+FWIW, we already have three ways to find the OPP currently, via
+frequency, level and bandwidth.
+
+> Then the primary problem is the subject of this patch,
+> controlling multiple clks per OPP table. Could that be done by linking
+> one OPP table (for the gears) to an OPP table for each clk? Maybe
+> through 'required-opps'?
+
+Even in that case we will have an OPP table which will have multiple
+clocks. So it may not matter much which OPP table contains all the
+clocks.
+
+-- 
+viresh

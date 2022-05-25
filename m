@@ -2,90 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A8B53467A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59C05346C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 00:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237925AbiEYW3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 18:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S238585AbiEYWn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 18:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiEYW27 (ORCPT
+        with ESMTP id S240439AbiEYWn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 18:28:59 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A3FAA;
-        Wed, 25 May 2022 15:28:58 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L7m1v2f7Zz4xXF;
-        Thu, 26 May 2022 08:28:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653517735;
-        bh=8sw0EjH/yh4w8LPwC3xKzJioRAkW2JnXa+cOOSbYv8A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YS23RNjAFEhnRbC2Gs4ktZ9kqVe6AyQABs6s/Odf8T1LL01Ic4hVqggyYVpjtzMKT
-         JeWB54NhvyXI9JUUwSeBjzyjve8IBXuRTE+CCSkkG9sJdAV8p4rq0cUW/lvrCNoCGx
-         EcHiYW5I1SXU1DLEHycSYptOkJm2FMqe4Hc1u8g47XE0ZiTPAhyUwxvYr6fSRDHt/k
-         oEegGexvojEzEoG3bs6dxw0lje4AjsmDyztHrePGzX8FyLxezanmeFzuvpNXyS1Y8b
-         4WiBYL+Sv9DWt68UhVOkgDhJfrhUl79cYaoTZbiIUhHy48THFZCvQMCHO3A89riYzY
-         1nAeoOlBBVGog==
-Date:   Thu, 26 May 2022 08:28:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the tip tree
-Message-ID: <20220526082850.5869472e@canb.auug.org.au>
+        Wed, 25 May 2022 18:43:57 -0400
+Received: from protestant.ebb.org (protestant.ebb.org [50.56.179.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D6EA3098;
+        Wed, 25 May 2022 15:43:55 -0700 (PDT)
+Received: from localhost (unknown [216.161.86.18])
+        (Authenticated sender: bkuhn)
+        by protestant.ebb.org (Postfix) with ESMTPSA id 2EF49820B4;
+        Wed, 25 May 2022 15:43:54 -0700 (PDT)
+Date:   Wed, 25 May 2022 15:29:20 -0700
+From:   "Bradley M. Kuhn" <bkuhn@ebb.org>
+To:     linux-spdx@vger.kernel.org, J Lovejoy <opensource@jilayne.com>,
+        copyleft-next@lists.fedorahosted.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Luis Chamberlain <mcgrof@kernel.org>, tj@kernel.org,
+        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
+        jeyu@kernel.org, shuah@kernel.org, bvanassche@acm.org,
+        dan.j.williams@intel.com, joe@perches.com, keescook@chromium.org,
+        rostedt@goodmis.org, minchan@kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Kuno Woudt <kuno@frob.nl>,
+        Richard Fontana <fontana@sharpeleven.org>,
+        Ciaran Farrell <Ciaran.Farrell@suse.com>,
+        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
+Message-ID: <Yo6twJ5rqrB/J/rJ@ebb.org>
+References: <20211029184500.2821444-1-mcgrof@kernel.org>
+ <20211029184500.2821444-2-mcgrof@kernel.org>
+ <87h75g0xbm.ffs@tglx>
+ <87y1yph1cm.fsf@ebb.org>
+ <a8c4636b-707c-2563-c521-2455ac08237c@jilayne.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ghwb6o.H_z6TVvxam3=ChPf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a8c4636b-707c-2563-c521-2455ac08237c@jilayne.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Ghwb6o.H_z6TVvxam3=ChPf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+J Lovejoy wrote:
+> (And to give credit where credit is due, Bradley's input during that
+> challenging "negotiation" was very helpful. :)
 
-Hi all,
+😊 … thank you!
 
-Commit
+I'd written today:
+>> So, this problem that Thomas notes above is definitely an error by the
+>> SPDX project, *just like* the one that exists for the deprecated “GPL-2.0”
 
-  e281c26b08b3 ("Merge branch into tip/master: 'perf/urgent'")
+J Lovejoy replied:
+> To be clear, the GPL-2.0 identifier was never an error by the SPDX team - we
+> were always very clear as to what it meant/means.
 
-is missing a Signed-off-by from its author.
+… but notwithstanding a clear definition of a moniker (which I agree indeed
+you've made for most SPDX identifiers), if that definition fails to
+adequately match historically understanding (and/or fails to take into
+account nuances in the document it represents), confusion ensues for users.
+Users *were* confused about “GPL-2.0” (remember, we did a small (admittedly
+non-scientific) survey at a session at a conference — FOSDEM I think it was?)
 
-And for some reason, it is not actually a merge commit.
+Most SPDX *users* won't speak its defined terms fluently; I suspect most of
+Linux's licensors (and even most licensees) don't speak SPDX fluently, so
+presumably you want SPDX identifiers to have some intuitiveness —
+particularly for the use case of linux-spdx, which requires the identifiers
+to be *both* human-readable and machine-readable.
 
---=20
-Cheers,
-Stephen Rothwell
+This is relevant to the copyleft-next-0.3.1 identifier.  SPDX could define
+“copyleft-next-0.3.1” to mean for SPDX purposes: “the text of copyleft-next
+without any options in its terms exercised/removed” (— although I note
+https://spdx.org/licenses/copyleft-next-0.3.1.html seems to be wholly silent
+regarding options exercising/removing).  However, there is currently
+confusion — shown in the fact that Thomas still asked:
+>>>> If I want to remove this option, then how do I express this with a SPDX
+>>>> license identifier?  Sigh!
+… upon noticing this part of copyleft-next:
+>>> +    Unless I explicitly remove the option of Distributing Covered Works
+>>> +    under Later Versions, You may Distribute Covered Works under any Later
+>>> +    Version.
 
---Sig_/Ghwb6o.H_z6TVvxam3=ChPf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Anyway, I'm pointing out SPDX's shortcomings on this point *not* to
+captiously admonish SPDX, but rather to point out that any issues with SPDX
+identifiers and their formal definitions shouldn't influence a decision about
+what licenses are acceptable for inclusion as dual-license options in Linux.
 
------BEGIN PGP SIGNATURE-----
+Plus, I remain hopeful that over the long-term, the SPDX project will take
+feedback from efforts like linux-spdx to solve the kinds of problems that
+have come up in this thread and others.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKOraIACgkQAVBC80lX
-0Gwo+gf/a4W3BDP7/Z3HDm2zxFuQacYEQhi/oCth/qOLtYzyM9kUyOrywhixabIo
-bn3VXYztL3vs4uTPp6F3hME0ZdLvzP0hX3H5cC/91qk19MWKwgVl60DFVZCuAjah
-lsypWxq1tDNqxKMPfjNcAmQP8NqtCPCRriWniAwCMGm9Z86C996mWGuBrKJdp81h
-Ayip/HywEb3KoO7yUbNsBUWaTnJJ5mnAkvQHEcEwnMlXzSscNP46G35sSAzZm4qZ
-UUXViqlm/unl8W/iiiwXIuA4oKamaGKJ6N6kDR2VR48DSSjadXpFsuIpEbgcQZ4+
-Y//tKALafcnyRqSmcUk7Ms9j3J/jqw==
-=63zc
------END PGP SIGNATURE-----
+Finally, I've already started a sub-thread on the copyleft-next list to start
+discussing maybe the license (in future versions) shouldn't have this option
+anyway (for unrelated policy reasons).  That might yield a side-benefit of
+making the problem evaporate entirely for SPDX.  (Anyway, after 25 years of
+living with GPL's “-or-later vs. -only” mess — I, for one, am convinced new
+licenses like copyleft-next should try very hard to not repeat that mistake.)
 
---Sig_/Ghwb6o.H_z6TVvxam3=ChPf--
+ -- bkuhn

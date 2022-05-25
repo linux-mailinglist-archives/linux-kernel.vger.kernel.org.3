@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46089533446
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 02:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7009B53344B
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 02:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242558AbiEYAXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 20:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
+        id S242896AbiEYA2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 20:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234347AbiEYAXw (ORCPT
+        with ESMTP id S234347AbiEYA2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 20:23:52 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3B65BD21;
-        Tue, 24 May 2022 17:23:51 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id o16so12920292ilq.8;
-        Tue, 24 May 2022 17:23:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Oh7IQWIZ3peE69FCjIauLlZHhes85Wb72An0tykVojE=;
-        b=MiwAbK50xPaA6WyUZqHsYzlwDATpBvsomOGizrUMQhu0LB6Dl4DlOUnfkhYhZTpDRc
-         ZhJO6A8I03MDobNUPTdhA8nZrH2KMxaMp3imgBGlnhT8UKJPF6Tim43JScF3AiB2FK96
-         8zNJU/J+H6WeWTFT81TkxkGQtu8VMDY1MuY7gzL9WEVDAPZOpharJEqABnQQBavPYjmp
-         Z35mAb/wtsRIusrR7t36MsQjUQ7Dqtzm4Vd/nNn3kZMxKjv99KKNpg45E3YPzpprmnEl
-         ymPyhscVcd1dzvMhJ1HjQvvFUOMWYqD9tAIQ3IeJtOf1dsjxOK/7vc1EklaYlGV9fdTA
-         hHuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Oh7IQWIZ3peE69FCjIauLlZHhes85Wb72An0tykVojE=;
-        b=dic1jDvVJv8XY5LX50IOe1JjciK44MzBcvehc6dMH6Om/DygO4LpnI6Jv+Z/LYLlRk
-         oH5PzI68Q/eRn8Fx9tQklBcbx8jldivsIuoydZBCwuienLJt6o7cc/PhhHp7rmQU+WEQ
-         kyRJarmj64Lykt1y6e3GHBnlCB/hniZFXsNcGT6hDTQk3QbUisU6MxVooydPxHJvY0+u
-         AwwpVe6KtNs9AsC+QrfLh6PvjCvh9zHPolP7eSNaGtWKpAcj/dz92bg94LK0yJTLElVD
-         KzhfS7Ah2eahkXo9adD79YYcyPdj2JDVLLzShX/MGYnxgmkssxh8txxC7eaCiHydr5GR
-         kHsQ==
-X-Gm-Message-State: AOAM533ozZlCe0eTHqDUGUyINWv82hTqWV1JqDfz8ZUVc8rA5HDx947F
-        pjLiO3S524VI0PwSEHWW43HJLscMkUi3GdUzasc=
-X-Google-Smtp-Source: ABdhPJxynA3FtMX0PZW2cTomP11Gz9aj0hFtPgBBBo8nCM7bVbaZL7xCEumiMoL9b0tQoXyziDoMcaqyzFKtB+wpVTI=
-X-Received: by 2002:a05:6e02:1ca9:b0:2d1:3c18:a63f with SMTP id
- x9-20020a056e021ca900b002d13c18a63fmr14510403ill.259.1653438230961; Tue, 24
- May 2022 17:23:50 -0700 (PDT)
+        Tue, 24 May 2022 20:28:04 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABCA73796;
+        Tue, 24 May 2022 17:28:01 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L7Bjn0w5Qz4xXF;
+        Wed, 25 May 2022 10:27:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653438477;
+        bh=h8jMTFzzRLDz5WEC/0XmzjbfMm7ffIIAkhGCF9w4eGk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=b4SoyCArsOWuSAuGqni3th0h7lpDx+tTGtU1Dj4wUAD0vk/orXUI5TgaMMtvWwyQ5
+         zEsKBxkvDIQjgQLxAJdBzhjAjGLlYtYfqWuSM/CvLFC5WT7VEu1SmuwFeAAz7a1bZI
+         7fbZIBrmWv3tIF+vK5VHb/+QFCu1U7oUwsPCJFsYM1P4QTgXqy+z+n6oxoaEAVRjN/
+         X+Yoy+YB9kN85nnCHxhYgCuHhfBPbVJvmP4TJx+JW+MwwdMXyvE29fi0Zv8nrQVRfc
+         AfBsC/vWlztV5V44kLxdQCMA47DgigqvvW5ePxsKz96DsF1NSLTunaePqUT/kiEmkf
+         f9naYKch0aklg==
+Date:   Wed, 25 May 2022 10:27:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Zi Yan <ziy@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mm tree
+Message-ID: <20220525102756.368f6c02@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220523165823.492309987@linuxfoundation.org>
-In-Reply-To: <20220523165823.492309987@linuxfoundation.org>
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-Date:   Wed, 25 May 2022 06:23:40 +0600
-Message-ID: <CAABMjtH6c6iFXxONOz19Cixuo6+HwDwvM5u34Hb7DDCUQVecJA@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/132] 5.15.42-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/nWTtp/IluMnOfuCa7y+jZ.3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 11:08 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.42 release.
-> There are 132 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 25 May 2022 16:56:55 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.42-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+--Sig_/nWTtp/IluMnOfuCa7y+jZ.3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Compiled and booted on my arch x86_64 system. No dmesg regressions.
+Hi all,
 
-Tested-by: Khalid Masum<khalid.masum.92@gmail.com>
+In commit
 
-thanks,
--- Khalid Masum
+  29a8af92b874 ("mm: fix a potential infinite loop in start_isolate_page_ra=
+nge()")
+
+Fixes tag
+
+  Fixes: b2c9e2fbba ("mm: make alloc_contig_range work at pageblock granula=
+ri=3D
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+Please do not split Fixes tags over more than one line.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nWTtp/IluMnOfuCa7y+jZ.3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKNeAwACgkQAVBC80lX
+0Gxxdgf/ekHKeqYB4UJLlnCz6LbNXMVC5RRoAUobMx6MnIBBtlZTVkbU84v/TEIc
+I4JiIVYu7HKrgHx6ChtxJWgkyEaoRMYvsrjyBMUA7HVtqbk762gEeC9pEWg786zw
+PPRknxd6zslDSouMsPDFBCdcktDoH+3k1GLutexnec+3AndjGHjVDf+X5U6sWADA
+qe7mOmj6Vb085EXW1IzpUDFVjSkoViEbWKa0i/v6Frn0K5kZsFnVW0qYnX4ZKDo9
+AUzCUzNdBikXEPkJNr+wADzpE22NyuBlUX1nfs7QwF1n+leRihgNJBcOSz/8cyZe
+yzXg2aIeaTAamvWes3VfSMoJt6Tr9w==
+=Kw3D
+-----END PGP SIGNATURE-----
+
+--Sig_/nWTtp/IluMnOfuCa7y+jZ.3--

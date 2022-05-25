@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5DD534436
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4D453443F
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 21:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243684AbiEYTcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 15:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
+        id S243662AbiEYTfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 15:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiEYTcL (ORCPT
+        with ESMTP id S244972AbiEYTfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 15:32:11 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C1B1260C
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:32:09 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id h1so607521ljb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IXpMztYYQ4QZ9paEgJt5rRwpPLlTYoXUEY6IN7/4Tdk=;
-        b=L63c3kKfgx55scShDVzSSAPCzICZQAZucMDNkhmBLt3lpZYOHYjf6IFRvwThwwt9dA
-         ie9veIzlpx17gDEzfrVFbn+zYKskDt/oQ3BMpBjBhuuYOVlYQ3cFKTreuZM+JnBRr6HW
-         skhh+1FHVlmsiheMk/UCl695mgAoZhpwDYKnE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IXpMztYYQ4QZ9paEgJt5rRwpPLlTYoXUEY6IN7/4Tdk=;
-        b=P10y216BkEc8d3kWCE6coD5vC4cFDPuWvZKm/ANVl0lVCaLE/iWe35gIqG9++KUZr6
-         pbD94onFjPh7mi51nya76Mknbju1I4nUB7WX1/BJijdE0+/tNemWY/if2XDUrM7D1c0E
-         gSBdeqykkSaXY7RuLOs5LaOTvN6CJ3JEe4TJ8HA3r8G5nQIHVWQitRsbMnDnDyZ204j3
-         2QxCcZJN20c75RTJkkBpBW92GfwzMlV4Y9mdpcJYTAM2r4gK0wrujU0KJUenuMB9HA4t
-         eJ0+8w2v9e1Oeo8uYMZBotKC4T1EdNsIQc/rPwDGLw4yeEADNvXphm4oGP47Uce/D/q2
-         Dq7g==
-X-Gm-Message-State: AOAM5332T5eku6fllqOUMt3HTeVTecPkmeMI3GNUPgys8JrcInjZnlhL
-        3+dzg09xceHZAxM8pwCSqtLVj3y2RTcjAJZNak7NWg==
-X-Google-Smtp-Source: ABdhPJw63GO2rMlLpUIsGQM6a+RdR8psyKqxOHHdsC3RKlmgYTGSOaxPN5E4fm1KlFc6ZWn9mdLDCpmJFxinVFIW7wY=
-X-Received: by 2002:a2e:a911:0:b0:24f:41c7:81d7 with SMTP id
- j17-20020a2ea911000000b0024f41c781d7mr20398702ljq.309.1653507128026; Wed, 25
- May 2022 12:32:08 -0700 (PDT)
+        Wed, 25 May 2022 15:35:09 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDCC1260C
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 12:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653507308; x=1685043308;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8v4mHTLDfEiLlOFne91JG1tFC6p0/OgpHGPuL8g6CO8=;
+  b=TNiCl3pN2P7MIXpGYnPM2dDwAaELSNHYKF4B8WFs0Mg4aviH2WMSU3RQ
+   iUSrkX3hekcB1f1GY2SABhgx8zG+uu8Y0fNFWXz+rC3zMjn5t4OLgZE4M
+   7HpU7ziWN6/wmTzOrF+EFinAIXJdJh91q8dpYiDwp6vOWqC6LVllK0ZJH
+   fGqn+UWk1Q8KUnHlC8xCythaa0wdZigLlObEHXBKJd/AyoXIsgSpvL0Fe
+   uKHRDjsnZvdk0bnna+0PKlp6SD0ZvsxrtmRjq6qfVzqVO3R6ImDfuwDY3
+   PuMDMOxXEqDiE+w46xL2y+SkzPBlVsFmVGp7G3PIgGekR7RSEzB5xM8SQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="253789330"
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="253789330"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 12:35:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
+   d="scan'208";a="527009023"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 May 2022 12:35:07 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ntwmg-0003GS-Fx;
+        Wed, 25 May 2022 19:35:06 +0000
+Date:   Thu, 26 May 2022 03:34:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [vireshk-pm:opp/config 17/33] drivers/cpufreq/ti-cpufreq.c:331:33:
+ error: initialization of 'const u32 *' {aka 'const unsigned int *'} from
+ incompatible pointer type 'u32 (*)[2]' {aka 'unsigned int (*)[2]'}
+Message-ID: <202205260322.hhkrrLYq-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220510190823.1552920-1-markyacoub@chromium.org> <878rr0fvcs.fsf@intel.com>
-In-Reply-To: <878rr0fvcs.fsf@intel.com>
-From:   Mark Yacoub <markyacoub@chromium.org>
-Date:   Wed, 25 May 2022 15:31:57 -0400
-Message-ID: <CAJUqKUpk4=oOYUmEAqEK2q_+xNiLfpvixPMXiC8sDu1pkwUyfQ@mail.gmail.com>
-Subject: Re: [PATCH] drm: Create support for Write-Only property blob
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        seanpaul@chromium.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>, markyacoub@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,124 +62,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jani, thanks for your review. I got all the user space
-implementation ready to see it in context.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/config
+head:   d730dc101c586defb49eeafd8eea9b7bb0baa01b
+commit: f834c0b7a54d96f6322c544479bbe897309b4a0a [17/33] cpufreq: ti: Migrate to dev_pm_opp_set_config()
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220526/202205260322.hhkrrLYq-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?id=f834c0b7a54d96f6322c544479bbe897309b4a0a
+        git remote add vireshk-pm https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git
+        git fetch --no-tags vireshk-pm opp/config
+        git checkout f834c0b7a54d96f6322c544479bbe897309b4a0a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/cpufreq/
 
-libdrm patch to wrap this functionality:
-https://www.spinics.net/lists/dri-devel/msg347318.html
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Chromium user space implementation making direct use of the new prop flag:
-crrev.com/c/3655850
-The first call made to such functionality is in
-https://chromium-review.googlesource.com/c/chromium/src/+/3655850/2/ui/display/manager/content_protection_key_manager.cc#137
-where the call stack flows to the libdrm wrapper call at
-https://chromium-review.googlesource.com/c/chromium/src/+/3655850/2/ui/ozone/platform/drm/gpu/drm_display.cc#203
+All errors (new ones prefixed by >>):
 
-I also wrote an IGT test to verify the intended behavior:
-https://patchwork.freedesktop.org/patch/487331/?series=104373&rev=1
+   drivers/cpufreq/ti-cpufreq.c: In function 'ti_cpufreq_probe':
+>> drivers/cpufreq/ti-cpufreq.c:331:33: error: initialization of 'const u32 *' {aka 'const unsigned int *'} from incompatible pointer type 'u32 (*)[2]' {aka 'unsigned int (*)[2]'} [-Werror=incompatible-pointer-types]
+     331 |                 .supported_hw = &version,
+         |                                 ^
+   drivers/cpufreq/ti-cpufreq.c:331:33: note: (near initialization for 'config.supported_hw')
+>> drivers/cpufreq/ti-cpufreq.c:374:17: error: label 'fail_put_node' used but not defined
+     374 |                 goto fail_put_node;
+         |                 ^~~~
+   cc1: some warnings being treated as errors
 
-Let me know if I would need to update the commit message with any of
-the aforementioned context.
 
-Thanks!
--Mark Yacoub
+vim +331 drivers/cpufreq/ti-cpufreq.c
 
-On Tue, May 17, 2022 at 3:53 AM Jani Nikula <jani.nikula@linux.intel.com> wrote:
->
-> On Tue, 10 May 2022, Mark Yacoub <markyacoub@chromium.org> wrote:
-> > [Why]
-> > User space might need to inject data into the kernel without allowing it
-> > to be read again by any user space.
-> > An example of where this is particularly useful is secret keys fetched
-> > by user space and injected into the kernel to enable content protection.
->
-> I think we're going to need more than an example in the commit
-> message. See Documentation/gpu/drm-uapi.rst.
->
-> BR,
-> Jani.
->
->
-> >
-> > [How]
-> > Create a DRM_MODE_CREATE_BLOB_WRITE_ONLY flag used by user space to
-> > create a blob and mark the blob as write only.
-> > On reading back the blob, data will be not be copied if it's a write
-> > only blob
-> >
-> > Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
-> >
-> > ---
-> >  drivers/gpu/drm/drm_property.c | 3 ++-
-> >  include/drm/drm_property.h     | 2 ++
-> >  include/uapi/drm/drm_mode.h    | 6 ++++++
-> >  3 files changed, 10 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_property.c b/drivers/gpu/drm/drm_property.c
-> > index dfec479830e4..afedf7109d00 100644
-> > --- a/drivers/gpu/drm/drm_property.c
-> > +++ b/drivers/gpu/drm/drm_property.c
-> > @@ -765,7 +765,7 @@ int drm_mode_getblob_ioctl(struct drm_device *dev,
-> >       if (!blob)
-> >               return -ENOENT;
-> >
-> > -     if (out_resp->length == blob->length) {
-> > +     if (out_resp->length == blob->length && !blob->is_write_only) {
-> >               if (copy_to_user(u64_to_user_ptr(out_resp->data),
-> >                                blob->data,
-> >                                blob->length)) {
-> > @@ -800,6 +800,7 @@ int drm_mode_createblob_ioctl(struct drm_device *dev,
-> >               ret = -EFAULT;
-> >               goto out_blob;
-> >       }
-> > +     blob->is_write_only = out_resp->flags & DRM_MODE_CREATE_BLOB_WRITE_ONLY;
-> >
-> >       /* Dropping the lock between create_blob and our access here is safe
-> >        * as only the same file_priv can remove the blob; at this point, it is
-> > diff --git a/include/drm/drm_property.h b/include/drm/drm_property.h
-> > index 65bc9710a470..700782f021b9 100644
-> > --- a/include/drm/drm_property.h
-> > +++ b/include/drm/drm_property.h
-> > @@ -205,6 +205,7 @@ struct drm_property {
-> >   *   &drm_mode_config.property_blob_list.
-> >   * @head_file: entry on the per-file blob list in &drm_file.blobs list.
-> >   * @length: size of the blob in bytes, invariant over the lifetime of the object
-> > + * @is_write_only: user space can't read the blob data.
-> >   * @data: actual data, embedded at the end of this structure
-> >   *
-> >   * Blobs are used to store bigger values than what fits directly into the 64
-> > @@ -219,6 +220,7 @@ struct drm_property_blob {
-> >       struct list_head head_global;
-> >       struct list_head head_file;
-> >       size_t length;
-> > +     bool is_write_only;
-> >       void *data;
-> >  };
-> >
-> > diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mode.h
-> > index 0a0d56a6158e..de192d3813e9 100644
-> > --- a/include/uapi/drm/drm_mode.h
-> > +++ b/include/uapi/drm/drm_mode.h
-> > @@ -1107,6 +1107,9 @@ struct drm_format_modifier {
-> >       __u64 modifier;
-> >  };
-> >
-> > +#define DRM_MODE_CREATE_BLOB_WRITE_ONLY                                        \
-> > +     (1 << 0) /* data of the blob can't be read by user space */
-> > +
-> >  /**
-> >   * struct drm_mode_create_blob - Create New blob property
-> >   *
-> > @@ -1120,6 +1123,9 @@ struct drm_mode_create_blob {
-> >       __u32 length;
-> >       /** @blob_id: Return: new property ID. */
-> >       __u32 blob_id;
-> > +     /** Flags for special handling. */
-> > +     __u32 flags;
-> > +     __u32 pad;
-> >  };
-> >
-> >  /**
->
-> --
-> Jani Nikula, Intel Open Source Graphics Center
+   322	
+   323	static int ti_cpufreq_probe(struct platform_device *pdev)
+   324	{
+   325		u32 version[VERSION_COUNT];
+   326		const struct of_device_id *match;
+   327		struct ti_cpufreq_data *opp_data;
+   328		const char * const default_reg_names[] = {"vdd", "vbb"};
+   329		int ret;
+   330		struct dev_pm_opp_config config = {
+ > 331			.supported_hw = &version,
+   332			.supported_hw_count = ARRAY_SIZE(version),
+   333		};
+   334	
+   335		match = dev_get_platdata(&pdev->dev);
+   336		if (!match)
+   337			return -ENODEV;
+   338	
+   339		opp_data = devm_kzalloc(&pdev->dev, sizeof(*opp_data), GFP_KERNEL);
+   340		if (!opp_data)
+   341			return -ENOMEM;
+   342	
+   343		opp_data->soc_data = match->data;
+   344	
+   345		opp_data->cpu_dev = get_cpu_device(0);
+   346		if (!opp_data->cpu_dev) {
+   347			pr_err("%s: Failed to get device for CPU0\n", __func__);
+   348			return -ENODEV;
+   349		}
+   350	
+   351		opp_data->opp_node = dev_pm_opp_of_get_opp_desc_node(opp_data->cpu_dev);
+   352		if (!opp_data->opp_node) {
+   353			dev_info(opp_data->cpu_dev,
+   354				 "OPP-v2 not supported, cpufreq-dt will attempt to use legacy tables.\n");
+   355			goto register_cpufreq_dt;
+   356		}
+   357	
+   358		ret = ti_cpufreq_setup_syscon_register(opp_data);
+   359		if (ret)
+   360			goto fail_put_node;
+   361	
+   362		/*
+   363		 * OPPs determine whether or not they are supported based on
+   364		 * two metrics:
+   365		 *	0 - SoC Revision
+   366		 *	1 - eFuse value
+   367		 */
+   368		ret = ti_cpufreq_get_rev(opp_data, &version[0]);
+   369		if (ret)
+   370			goto fail_put_node;
+   371	
+   372		ret = ti_cpufreq_get_efuse(opp_data, &version[1]);
+   373		if (ret)
+ > 374			goto fail_put_node;
+   375	
+   376		if (opp_data->soc_data->multi_regulator) {
+   377			config.regulator_count = ARRAY_SIZE(default_reg_names);
+   378	
+   379			if (opp_data->soc_data->reg_names)
+   380				config.regulator_names = opp_data->soc_data->reg_names;
+   381			else
+   382				config.regulator_names = default_reg_names;
+   383		}
+   384	
+   385		opp_data->opp_table = dev_pm_opp_set_config(opp_data->cpu_dev, &config);
+   386		of_node_put(opp_data->opp_node);
+   387	
+   388		if (IS_ERR(opp_data->opp_table)) {
+   389			dev_err(opp_data->cpu_dev, "Failed to set OPP config\n");
+   390			return PTR_ERR(opp_data->opp_table);
+   391		}
+   392	
+   393	register_cpufreq_dt:
+   394		platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
+   395	
+   396		return 0;
+   397	}
+   398	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,129 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A797533D9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585CD533DA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244428AbiEYNSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
+        id S237631AbiEYNTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244237AbiEYNRq (ORCPT
+        with ESMTP id S244505AbiEYNT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:17:46 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C837810FED;
-        Wed, 25 May 2022 06:17:45 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24P4sXDH020480;
-        Wed, 25 May 2022 06:17:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pfpt0220; bh=E/72e8VKOxD+8FBpU5NQwZrQv3lWXiHnBO1xzZCWuwE=;
- b=CiPeEs3udsmWXMvZFvK1OL8xGpOxF+/vE4kL4UOQJpUMTK0z4WKyxQHsC2CuNHmR/7Jd
- 0qh5Zy3rRndQf2FdQkACQgHUhIn9ApLkYcaVqRDpCCutj75ylhr8icXeAzZUjgw1xuU1
- s4Q/DW+new9sMa35nHcIuKw3DeDCn+HmXa7qy1rdOtmH5q4ajIqHvDYBbgiOS479Ty9n
- wjy+Brr5p2uAJYTRl0RpfyxqisWwggQhXPsqyD1O1q+TMD/oKMPGP8ExS/TI7w3RcPXJ
- aikmiehqg1WBQp44oU+C2zpP2zfWqFoze8/8jVZrLRLR4Y68Yay+5toHvDa2jvXl0VvG /A== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3g93ty3u3u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 25 May 2022 06:17:41 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 25 May
- 2022 06:17:39 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Wed, 25 May 2022 06:17:39 -0700
-Received: from Dell2s-9 (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 4940F3F7061;
-        Wed, 25 May 2022 06:17:39 -0700 (PDT)
-Date:   Wed, 25 May 2022 06:17:38 -0700
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Richter <rric@kernel.org>, <cchavva@marvell.com>,
-        <wsadowski@marvell.com>
-Subject: Re: [PATCH 1/5] gpio: thunderx: avoid potential deadlock
-Message-ID: <20220525131738.GA10532@Dell2s-9>
-References: <20220427144620.9105-1-pmalgujar@marvell.com>
- <20220427144620.9105-2-pmalgujar@marvell.com>
- <CAMRc=Mf91eMF7D6CRtA8-HQ7pdtP343WUGhLG4qti_9zJF4ELQ@mail.gmail.com>
+        Wed, 25 May 2022 09:19:28 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100B20BF2;
+        Wed, 25 May 2022 06:18:57 -0700 (PDT)
+X-UUID: 3a54a674e22a4dc39038fbbbdd31aa0d-20220525
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:bec41655-ae65-4217-8673-b51cb335cc35,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:2a19b09,CLOUDID:6dad35b8-3c45-407b-8f66-25095432a27a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 3a54a674e22a4dc39038fbbbdd31aa0d-20220525
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1354993977; Wed, 25 May 2022 21:18:44 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 25 May 2022 21:18:42 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 25 May 2022 21:18:42 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 25 May 2022 21:18:42 +0800
+Message-ID: <478ed2945cdf90f465a7828ab9b235254caab311.camel@mediatek.com>
+Subject: Re: [PATCH v20 0/8] Add Mediatek Soc DRM (vdosys0) support for
+ mt8195
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     CK Hu <ck.hu@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
+        "Singo Chang" <singo.chang@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        jason-jhlin <jason-jh.lin@mediatek.corp-partner.google.com>
+Date:   Wed, 25 May 2022 21:18:42 +0800
+In-Reply-To: <43a102cf-6971-8083-d24f-629d6d39810f@collabora.com>
+References: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
+         <43a102cf-6971-8083-d24f-629d6d39810f@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Mf91eMF7D6CRtA8-HQ7pdtP343WUGhLG4qti_9zJF4ELQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: mew6VYTl9hxbNuCjapYzrNGAGvB4FPny
-X-Proofpoint-ORIG-GUID: mew6VYTl9hxbNuCjapYzrNGAGvB4FPny
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-25_03,2022-05-25_02,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 01:18:49PM +0200, Bartosz Golaszewski wrote:
-> On Wed, Apr 27, 2022 at 4:46 PM Piyush Malgujar <pmalgujar@marvell.com> wrote:
-> >
-> > Using irqsave/irqrestore locking variants to avoid any deadlock.
-> >
+Hello Angelo,
+
+OK, I'll rebase on next-20220525 and resend soon.
+
+Regards,
+Jason-JH.Lin
+
+On Wed, 2022-05-25 at 11:50 +0200, AngeloGioacchino Del Regno wrote:
+> Il 19/04/22 11:41, jason-jh.lin ha scritto:
+> > From: jason-jhlin <jason-jh.lin@mediatek.corp-partner.google.com>
+> > 
 > 
-> I see you'll be resending this anyway so would you mind providing an
-> example of a deadlock that is possible with no-irqsave variants?
-> Thanks.
+> Hello Jason,
 > 
-> Bart
->
-Hi Bartosz,
+> this series does not apply cleanly anymore on next-20220525, can you
+> please
+> rebase and resend?
+> 
+> I hope that with a bit of coordination, we can get the entire display
+> stack
+> finally upstreamed in v5.19... it's been quite a while... :-)
+> 
+> Cheers,
+> Angelo
+> 
+> > Change in v20:
+> > - split binding patch to another series 'MediaTek MT8195 display
+> > binding':
+> >    
+> > https://patchwork.ozlabs.org/project/devicetree-bindings/list/?series=295669
+> > - fix io_start type from u32 to resource_size_t
+> > - fix some commit message for DITHER enum
+snip...
 
-Thanks for the review.
-
-Please find below the issue scenario:
-In the case when HARDIRQ-safe -> HARDIRQ-unsafe lock order is detected
-and interrupt occurs, deadlock could occur.
-
-========================================================
-WARNING: possible irq lock inversion dependency detected
-5.18.0-rc6 #4 Not tainted
---------------------------------------------------------
-swapper/3/0 just changed the state of lock:
-ffff000110904cd8 (lock_class){-...}-{2:2}, at: handle_fasteoi_ack_irq+0x2c/0x1b0
-but this lock took another, HARDIRQ-unsafe lock in the past:
- (&txgpio->lock){+.+.}-{2:2}
-
-
-and interrupts could create inverse lock ordering between them.
-
-
-other info that might help us debug this:
- Possible interrupt unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&txgpio->lock);
-                               local_irq_disable();
-                               lock(lock_class);
-                               lock(&txgpio->lock);
-  <Interrupt>
-    lock(lock_class);
-
- *** DEADLOCK ***
-
-==========================================================
-
-Thanks,
-Piyush
-> > Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> > ---

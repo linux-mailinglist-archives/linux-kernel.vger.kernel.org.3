@@ -2,92 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA06534210
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EEC534214
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 19:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245628AbiEYRMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 13:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S230490AbiEYRN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 13:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245623AbiEYRMe (ORCPT
+        with ESMTP id S241157AbiEYRNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 13:12:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25246366B6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 10:12:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0AA81424;
-        Wed, 25 May 2022 10:12:33 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.0.228])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CAACE3F66F;
-        Wed, 25 May 2022 10:12:31 -0700 (PDT)
-Date:   Wed, 25 May 2022 18:12:27 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, zengshun.wu@outlook.com,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [RFC PATCH -next v2 3/4] arm64/ftrace: support dynamically
- allocated trampolines
-Message-ID: <Yo5je4lFfticCPIC@FVFF77S0Q05N>
-References: <YnJUTuOIX9YoJq23@FVFF77S0Q05N>
- <20220505121538.04773ac98e2a8ba17f675d39@kernel.org>
- <20220509142203.6c4f2913@gandalf.local.home>
- <20220510181012.d5cba23a2547f14d14f016b9@kernel.org>
- <20220510104446.6d23b596@gandalf.local.home>
- <20220511233450.40136cdf6a53eb32cd825be8@kernel.org>
- <20220511111207.25d1a693@gandalf.local.home>
- <20220512210231.f9178a98f20a37981b1e89e3@kernel.org>
- <Yo4eWqHA/IjNElNN@FVFF77S0Q05N>
- <20220525094307.1f1fb561@gandalf.local.home>
+        Wed, 25 May 2022 13:13:55 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A49A6A045;
+        Wed, 25 May 2022 10:13:51 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id v66so25764351oib.3;
+        Wed, 25 May 2022 10:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2VhfMHntHxmSu4vdA7es7dFU9dUngjl1nXJAN7GN/r8=;
+        b=kZKGzScoXhHCugo7nNQ3aTo4ayafls9LAV0Wuq4fg4ETAYxfvGs92hvMUkGnjxebhO
+         kz77QcfMRiAO4DGVdoZL49u3cU9TGlzdNiAOorusfjEs9ZhNnwjA3O0G2/JpAn34XlS6
+         biptInj2AoI9zZyx6MeFQ64vGIcCZe1jxDeAqpytkypEfI9e9wEQlBfjW3Af7q9jjT/T
+         0z/226gX/uerttVjB9nodKCuRTHgsHRJOkOE1CcKh88VB0t81kAM2FR85Ndn5J7LjTKO
+         +U+kTN2FtWpL/8zfwiDDsluNtVMvVVhsOSZlrJjHU5zhQKF19xGWPE9nfWoWaW6ZAimr
+         Jogw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2VhfMHntHxmSu4vdA7es7dFU9dUngjl1nXJAN7GN/r8=;
+        b=H1nk9Y3+ZZKH6t5f134beehUjqBp+osJeVK/UrzbYNqRjsdYpbjmBw1OcIUsArjws8
+         WM7eVDXzj0ynVXyX7Ouv6bFqlsVUPUWDIwjg3K4i1Zwac263dnrVD92l6kfedKlzQHR1
+         yXgqVEWMACLsS4d0aMrDHViZSnRh5wJMQtWACX0xp1382faa/AZm+/H2dMaf/Mo7//P9
+         AA/OG2jqJ0Oa53ZLR++0L0MWLYIVaCZ72Msl+xKCysSYSJowaveiovOBaU+BQa9ywrML
+         uhoyk/Q5deDMlyfS3JZkMzysyOgYj0uzAht9qCQHEea07teWsgo1VHntFZO3LmqEFyRz
+         hzwA==
+X-Gm-Message-State: AOAM532ZKFYXZksVPlyswl0UUbsi8s8a2EX+//L/qS3TyeKR656To8Mo
+        4FLd4U/I8kZ7j/MKIcSA/rUT2zxhwMmlxFMn6Xs=
+X-Google-Smtp-Source: ABdhPJwAsAcUOElLy2daHM0hVO0+sJA1juSodv5/fTJ9HEOfvONqpQ34BaWqr5s+o3Iy3vKPxYDSPvPVZQ4TBMA1GVY=
+X-Received: by 2002:a54:4688:0:b0:325:9a36:ecfe with SMTP id
+ k8-20020a544688000000b003259a36ecfemr6136170oic.96.1653498830747; Wed, 25 May
+ 2022 10:13:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525094307.1f1fb561@gandalf.local.home>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CANCKTBvqp7_MSG3aMpp6pmNoPUnYpH0c+8-r7Pzgebuzb4sZPA@mail.gmail.com>
+ <20220523221036.GA130515@bhelgaas> <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
+ <20220524235605.rz3cyw7akw3327ip@mraw.org>
+In-Reply-To: <20220524235605.rz3cyw7akw3327ip@mraw.org>
+From:   Jim Quinlan <jim2101024@gmail.com>
+Date:   Wed, 25 May 2022 13:13:38 -0400
+Message-ID: <CANCKTBvieyc-adXFrBrRm5k85Dr700=GmLBvdfLWhbkgN0Pw+Q@mail.gmail.com>
+Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe linkup
+To:     Cyril Brulebois <kibi@debian.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        James Dutton <james.dutton@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 09:43:07AM -0400, Steven Rostedt wrote:
-> On Wed, 25 May 2022 13:17:30 +0100
-> Mark Rutland <mark.rutland@arm.com> wrote:
-> 
-> > For arm64 I'd like to make this static, and have ftrace *always* capture a
-> > minimal set of ftrace_regs, which would be:
-> > 
-> >   X0 to X8 inclusive
-> >   SP
-> >   PC
-> >   LR
-> >   FP
-> > 
-> > Since X0 to X8 + SP is all that we need for arguments and return values (per
-> > the calling convention we use), and PC+LR+FP gives us everything we need for
-> > unwinding and live patching.
-> > 
-> > I *might* want to add x18 to that when SCS is enabled, but I'm not immediately
-> > sure.
-> 
-> Does arm64 have HAVE_DYNAMIC_FTRACE_WITH_ARGS enabled?
+On Tue, May 24, 2022 at 7:56 PM Cyril Brulebois <kibi@debian.org> wrote:
+>
+> Hi Jim,
+>
+> Jim Quinlan <jim2101024@gmail.com> (2022-05-24):
+> > Yes. One repo did not have this node (Cyril/debina?), one did
+> > (https://github.com/raspberrypi/firmware/tree/master/boot).
+> > Of course there is nothing wrong with omitting the node; it should
+> > have pcie linkup regardless.
+>
+> I work/debug stuff on Debian systems, but Debian's just shipping what's
+> in mainline. Raspberry people maintain their own vendor DTBs.
+>
+> > Unless you object, I plan on sending you a v2 of my regression fix
+> > which will correct the commit message, change the "if (busno == 1)"
+> > conditional to only guard the pcie linkup call, and add further
+> > comments.
+> >
+> > I have noted and will also address your other concerns and suggestions
+> > in a future patchset as I think it is best that I get my hands on a
+> > CM4 board before I submit any more changes.
+>
+> For the record, I'm still happy to be cc'ed so that I spend time testing
+> further patches, be it the short-term regression fix (for inclusion in
+> master, but also checking it fixes linux-5.17.y and now linux-5.18.y,
+> if stable maintainers would welcome the extra testing), or the future
+> patchset.
+>
+> I can't guarantee you'll have an answer in a few hours like that
+> happened during the past few days (during which I prioritized testing
+> over anything else so as not to be a blocker in case it could be
+> squeezed into v5.18). But I'm still willing to allocate some time to
+> make sure the CM4 keeps working, even if you don't get your hands on
+> such systems right away.
 
-Not yet. I'd like to implement it, but always only saving the values above and
-never saving a full pt_regs (since as mentioned elsewhere we can't do that
-correctly anyway).
+I really appreciate the help, thank you.  We have ordered a CM4 and I
+will be testing on  it prior to sending pullreqs.
 
-> If so, then having the normal ftrace call back save the above so that all
-> functions have it available would be useful.
+Regards,
+Jim Quinlan
+Broadcom ST
 
-I think that's what I'm saying: I'd want to have one trampoline which always
-saved the above, so all functions would get that.
 
-Thanks,
-Mark.
+>
+>
+> Cheers,
+> --
+> Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+> D-I release manager -- Release team member -- Freelance Consultant

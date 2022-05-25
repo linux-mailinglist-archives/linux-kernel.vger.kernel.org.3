@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD45533D88
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C66533D98
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 15:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244189AbiEYNRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 09:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
+        id S242829AbiEYNRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 09:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241789AbiEYNRB (ORCPT
+        with ESMTP id S244014AbiEYNRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 09:17:01 -0400
+        Wed, 25 May 2022 09:17:02 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8F2DFC6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:16:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745F8DFD4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 06:17:01 -0700 (PDT)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PCRmjJ022096;
-        Wed, 25 May 2022 08:16:47 -0500
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PCRmjK022096;
+        Wed, 25 May 2022 08:16:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=WCDKyNszpTkK132PkGJoQgMJ3LGwxsgI4k0HIIXEq10=;
- b=ea111qRqFbBxflDk2F/Zm8w0Ue0vy+0VmLrsrHcOILt6nTE+gsFzjlr5ZVxQGwGPXEY8
- 6USRUDwto7esljUqo1sfKbOQ9x86/SQora5fymIptsAz+mZLRAU9Edy47a2yoUwoUxyN
- nUowAeXniJrN8wwm4EbvF795nKHeBFqBTno6SNv7Bi0jxbghyx6H8GVVV1EP3QUrZhPz
- yxoTzxnQQ2LCnGc1Sno7xeCXK1eOtvXpbpdhBws6iObPu4CbemZq8wog26c6LuFJPoyw
- DM0rt/6yg2Z6lDnoy/k0U2BNetct1v+68prOxHKybwFVplqS2oSOn4N/d0bXhHCkkB7m qA== 
+ bh=x6uQoyctrHPlWbuzGaH2qzzAbxTQ0aD3UXrmL74s7YY=;
+ b=ZddpSmtVhBv7aKGOzcot4OinWyp6whoxl8GNe/Dbq5xjlwMUuBThBpDWz5ttSFepcRXv
+ KDB+kmrcFva8FUHuC0eh9N93mPtyPxDmUZ3mQa+8XUXJksnA845YbsCmfFFUp8JPat9E
+ Wcdrqh2kYeqsL/rM5dhygfrRJPCoiQol5A/5yLctOg4AAkc0UzGHjY00t8D4CetIHyDI
+ DQjQ2zdseXYyo25/GkNobZg6wUk4ec+VMKClLYDvZ+oyQ1j+lBnQf7Siakzzb4TIKCPB
+ vcujh9RgDzI/AeiLb3Tj0q9gGxH3Z10EBuZ6Lt6CnjyuV2RwrG0AHZGUADratqrcn7y1 Sw== 
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3g93u20we6-9
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3g93u20we6-10
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 25 May 2022 08:16:47 -0500
+        Wed, 25 May 2022 08:16:48 -0500
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 25 May
@@ -39,26 +39,25 @@ Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
  Transport; Wed, 25 May 2022 14:16:44 +0100
 Received: from vitaly-Legion-7-16ACHg6.ad.cirrus.com (unknown [198.90.238.233])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C90B2468;
-        Wed, 25 May 2022 13:16:43 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 495F511D1;
+        Wed, 25 May 2022 13:16:44 +0000 (UTC)
 From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Mark Brown <broonie@kernel.org>
 CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <linux-kernel@vger.kernel.org>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Subject: [PATCH v4 11/17] ASoC: cs35l41: Add common cs35l41 enter hibernate function
-Date:   Wed, 25 May 2022 14:16:32 +0100
-Message-ID: <20220525131638.5512-12-vitalyr@opensource.cirrus.com>
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v4 12/17] ALSA: hda: cs35l41: Support Hibernation during Suspend
+Date:   Wed, 25 May 2022 14:16:33 +0100
+Message-ID: <20220525131638.5512-13-vitalyr@opensource.cirrus.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
 References: <20220525131638.5512-1-vitalyr@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: dyGbDR_D487PA2xikFLn3BxseetkF1-G
-X-Proofpoint-GUID: dyGbDR_D487PA2xikFLn3BxseetkF1-G
+X-Proofpoint-ORIG-GUID: LhCULscjGxo92_th9vUrPZFCohOJ_4Mg
+X-Proofpoint-GUID: LhCULscjGxo92_th9vUrPZFCohOJ_4Mg
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
@@ -71,16 +70,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Stefan Binding <sbinding@opensource.cirrus.com>
 
-Since the CS35L41 HDA driver also support hibernation, it
-makes sense to move code from the ASoC driver to enter
-hibernation into common code.
-
-Since HDA must support laptops which do not support hibernation
-due to lack of external boost GPIO it is necessary to
-ensure the function returns an error when an unsupported
-boost type is in use.
-
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+CS35L41 supports hibernation during suspend when using
+DSP firmware.
+When the driver suspends it will hibernate the part, if
+firmware is running, and resume will wake from hibernation.
+CS35L41 driver will suspend/resume when requested by
+hda driver.
+Note that suspend/resume and hibernation is only supported
+when firmware is running.
 
 Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
@@ -89,75 +86,318 @@ Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
 Changes since v2:
  - No change
  
- include/sound/cs35l41.h        |  2 ++
- sound/soc/codecs/cs35l41-lib.c | 19 +++++++++++++++++++
- sound/soc/codecs/cs35l41.c     | 10 +---------
- 3 files changed, 22 insertions(+), 9 deletions(-)
+ sound/pci/hda/cs35l41_hda.c     | 109 +++++++++++++++++++++++++++++++-
+ sound/pci/hda/cs35l41_hda.h     |   2 +
+ sound/pci/hda/cs35l41_hda_i2c.c |   1 +
+ sound/pci/hda/cs35l41_hda_spi.c |   1 +
+ sound/pci/hda/hda_component.h   |   2 +
+ sound/pci/hda/patch_realtek.c   |  25 +++++++-
+ 6 files changed, 136 insertions(+), 4 deletions(-)
 
-diff --git a/include/sound/cs35l41.h b/include/sound/cs35l41.h
-index f848ba1e75b3..9ac5918269a5 100644
---- a/include/sound/cs35l41.h
-+++ b/include/sound/cs35l41.h
-@@ -885,6 +885,8 @@ void cs35l41_configure_cs_dsp(struct device *dev, struct regmap *reg, struct cs_
- int cs35l41_set_cspl_mbox_cmd(struct device *dev, struct regmap *regmap,
- 			      enum cs35l41_cspl_mbox_cmd cmd);
- int cs35l41_write_fs_errata(struct device *dev, struct regmap *regmap);
-+int cs35l41_enter_hibernate(struct device *dev, struct regmap *regmap,
-+			    enum cs35l41_boost_type b_type);
- int cs35l41_exit_hibernate(struct device *dev, struct regmap *regmap);
- int cs35l41_init_boost(struct device *dev, struct regmap *regmap,
- 		       struct cs35l41_hw_cfg *hw_cfg);
-diff --git a/sound/soc/codecs/cs35l41-lib.c b/sound/soc/codecs/cs35l41-lib.c
-index e726a38f1997..0c7d1c791279 100644
---- a/sound/soc/codecs/cs35l41-lib.c
-+++ b/sound/soc/codecs/cs35l41-lib.c
-@@ -1322,6 +1322,25 @@ int cs35l41_write_fs_errata(struct device *dev, struct regmap *regmap)
+diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+index 1d62a41fbc75..9c622104bf01 100644
+--- a/sound/pci/hda/cs35l41_hda.c
++++ b/sound/pci/hda/cs35l41_hda.c
+@@ -10,6 +10,7 @@
+ #include <linux/module.h>
+ #include <sound/hda_codec.h>
+ #include <sound/soc.h>
++#include <linux/pm_runtime.h>
+ #include "hda_local.h"
+ #include "hda_auto_parser.h"
+ #include "hda_jack.h"
+@@ -425,6 +426,75 @@ static int cs35l41_hda_channel_map(struct device *dev, unsigned int tx_num, unsi
+ 				    rx_slot);
  }
- EXPORT_SYMBOL_GPL(cs35l41_write_fs_errata);
  
-+int cs35l41_enter_hibernate(struct device *dev, struct regmap *regmap,
-+			    enum cs35l41_boost_type b_type)
++static int cs35l41_runtime_suspend(struct device *dev)
 +{
-+	if (!cs35l41_safe_reset(regmap, b_type)) {
-+		dev_dbg(dev, "System does not support Suspend\n");
-+		return -EINVAL;
-+	}
++	struct cs35l41_hda *cs35l41 = dev_get_drvdata(dev);
 +
-+	dev_dbg(dev, "Enter hibernate\n");
-+	regmap_write(regmap, CS35L41_WAKESRC_CTL, 0x0088);
-+	regmap_write(regmap, CS35L41_WAKESRC_CTL, 0x0188);
++	dev_dbg(cs35l41->dev, "Suspend\n");
 +
-+	// Don't wait for ACK since bus activity would wake the device
-+	regmap_write(regmap, CS35L41_DSP_VIRT1_MBOX_1, CSPL_MBOX_CMD_HIBERNATE);
++	if (!cs35l41->firmware_running)
++		return 0;
++
++	if (cs35l41_enter_hibernate(cs35l41->dev, cs35l41->regmap, cs35l41->hw_cfg.bst_type) < 0)
++		return 0;
++
++	regcache_cache_only(cs35l41->regmap, true);
++	regcache_mark_dirty(cs35l41->regmap);
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL_GPL(cs35l41_enter_hibernate);
 +
- static void cs35l41_wait_for_pwrmgt_sts(struct device *dev, struct regmap *regmap)
++static int cs35l41_runtime_resume(struct device *dev)
++{
++	struct cs35l41_hda *cs35l41 = dev_get_drvdata(dev);
++	int ret;
++
++	dev_dbg(cs35l41->dev, "Resume.\n");
++
++	if (cs35l41->hw_cfg.bst_type == CS35L41_EXT_BOOST_NO_VSPK_SWITCH) {
++		dev_dbg(cs35l41->dev, "System does not support Resume\n");
++		return 0;
++	}
++
++	if (!cs35l41->firmware_running)
++		return 0;
++
++	regcache_cache_only(cs35l41->regmap, false);
++
++	ret = cs35l41_exit_hibernate(cs35l41->dev, cs35l41->regmap);
++	if (ret) {
++		regcache_cache_only(cs35l41->regmap, true);
++		return ret;
++	}
++
++	/* Test key needs to be unlocked to allow the OTP settings to re-apply */
++	cs35l41_test_key_unlock(cs35l41->dev, cs35l41->regmap);
++	ret = regcache_sync(cs35l41->regmap);
++	cs35l41_test_key_lock(cs35l41->dev, cs35l41->regmap);
++	if (ret) {
++		dev_err(cs35l41->dev, "Failed to restore register cache: %d\n", ret);
++		return ret;
++	}
++
++	if (cs35l41->hw_cfg.bst_type == CS35L41_EXT_BOOST)
++		cs35l41_init_boost(cs35l41->dev, cs35l41->regmap, &cs35l41->hw_cfg);
++
++	return 0;
++}
++
++static int cs35l41_hda_suspend_hook(struct device *dev)
++{
++	dev_dbg(dev, "Request Suspend\n");
++	pm_runtime_mark_last_busy(dev);
++	return pm_runtime_put_autosuspend(dev);
++}
++
++static int cs35l41_hda_resume_hook(struct device *dev)
++{
++	dev_dbg(dev, "Request Resume\n");
++	return pm_runtime_get_sync(dev);
++}
++
+ static int cs35l41_smart_amp(struct cs35l41_hda *cs35l41)
  {
- 	const int pwrmgt_retries = 10;
-diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-index be7d02517739..a115ea35b92d 100644
---- a/sound/soc/codecs/cs35l41.c
-+++ b/sound/soc/codecs/cs35l41.c
-@@ -1335,15 +1335,7 @@ static int __maybe_unused cs35l41_runtime_suspend(struct device *dev)
- 	if (!cs35l41->dsp.preloaded || !cs35l41->dsp.cs_dsp.running)
- 		return 0;
+ 	int halo_sts;
+@@ -482,17 +552,25 @@ static int cs35l41_hda_bind(struct device *dev, struct device *master, void *mas
+ 	if (comps->dev)
+ 		return -EBUSY;
  
--	dev_dbg(cs35l41->dev, "Enter hibernate\n");
--
--	cs35l41_safe_reset(cs35l41->regmap, cs35l41->hw_cfg.bst_type);
--	regmap_write(cs35l41->regmap, CS35L41_WAKESRC_CTL, 0x0088);
--	regmap_write(cs35l41->regmap, CS35L41_WAKESRC_CTL, 0x0188);
--
--	// Don't wait for ACK since bus activity would wake the device
--	regmap_write(cs35l41->regmap, CS35L41_DSP_VIRT1_MBOX_1,
--		     CSPL_MBOX_CMD_HIBERNATE);
-+	cs35l41_enter_hibernate(dev, cs35l41->regmap, cs35l41->hw_cfg.bst_type);
++	pm_runtime_get_sync(dev);
++
+ 	comps->dev = dev;
+ 	if (!cs35l41->acpi_subsystem_id)
+ 		cs35l41->acpi_subsystem_id = devm_kasprintf(dev, GFP_KERNEL,
+ 							    "%.8x", comps->subsystem_id);
+ 	cs35l41->codec = comps->codec;
+ 	strscpy(comps->name, dev_name(dev), sizeof(comps->name));
+-	comps->playback_hook = cs35l41_hda_playback_hook;
  
- 	regcache_cache_only(cs35l41->regmap, true);
- 	regcache_mark_dirty(cs35l41->regmap);
+ 	if (cs35l41_smart_amp(cs35l41) < 0)
+ 		dev_warn(cs35l41->dev, "Cannot Run Firmware, reverting to dsp bypass...\n");
+ 
++	comps->playback_hook = cs35l41_hda_playback_hook;
++	comps->suspend_hook = cs35l41_hda_suspend_hook;
++	comps->resume_hook = cs35l41_hda_resume_hook;
++
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_put_autosuspend(dev);
++
+ 	return 0;
+ }
+ 
+@@ -588,7 +666,7 @@ static const struct regmap_irq cs35l41_reg_irqs[] = {
+ 	CS35L41_REG_IRQ(IRQ1_STATUS1, AMP_SHORT_ERR),
+ };
+ 
+-static const struct regmap_irq_chip cs35l41_regmap_irq_chip = {
++static struct regmap_irq_chip cs35l41_regmap_irq_chip = {
+ 	.name = "cs35l41 IRQ1 Controller",
+ 	.status_base = CS35L41_IRQ1_STATUS1,
+ 	.mask_base = CS35L41_IRQ1_MASK1,
+@@ -596,6 +674,7 @@ static const struct regmap_irq_chip cs35l41_regmap_irq_chip = {
+ 	.num_regs = 4,
+ 	.irqs = cs35l41_reg_irqs,
+ 	.num_irqs = ARRAY_SIZE(cs35l41_reg_irqs),
++	.runtime_pm = true,
+ };
+ 
+ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
+@@ -1003,13 +1082,23 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
+ 	if (ret)
+ 		goto err;
+ 
++	pm_runtime_set_autosuspend_delay(cs35l41->dev, 3000);
++	pm_runtime_use_autosuspend(cs35l41->dev);
++	pm_runtime_mark_last_busy(cs35l41->dev);
++	pm_runtime_set_active(cs35l41->dev);
++	pm_runtime_get_noresume(cs35l41->dev);
++	pm_runtime_enable(cs35l41->dev);
++
+ 	ret = cs35l41_hda_apply_properties(cs35l41);
+ 	if (ret)
+-		goto err;
++		goto err_pm;
++
++	pm_runtime_put_autosuspend(cs35l41->dev);
+ 
+ 	ret = component_add(cs35l41->dev, &cs35l41_hda_comp_ops);
+ 	if (ret) {
+ 		dev_err(cs35l41->dev, "Register component failed: %d\n", ret);
++		pm_runtime_disable(cs35l41->dev);
+ 		goto err;
+ 	}
+ 
+@@ -1017,6 +1106,10 @@ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int i
+ 
+ 	return 0;
+ 
++err_pm:
++	pm_runtime_disable(cs35l41->dev);
++	pm_runtime_put_noidle(cs35l41->dev);
++
+ err:
+ 	if (cs35l41_safe_reset(cs35l41->regmap, cs35l41->hw_cfg.bst_type))
+ 		gpiod_set_value_cansleep(cs35l41->reset_gpio, 0);
+@@ -1030,17 +1123,27 @@ void cs35l41_hda_remove(struct device *dev)
+ {
+ 	struct cs35l41_hda *cs35l41 = dev_get_drvdata(dev);
+ 
++	pm_runtime_get_sync(cs35l41->dev);
++	pm_runtime_disable(cs35l41->dev);
++
+ 	if (cs35l41->firmware_running)
+ 		cs35l41_remove_dsp(cs35l41);
+ 
+ 	component_del(cs35l41->dev, &cs35l41_hda_comp_ops);
+ 
++	pm_runtime_put_noidle(cs35l41->dev);
++
+ 	if (cs35l41_safe_reset(cs35l41->regmap, cs35l41->hw_cfg.bst_type))
+ 		gpiod_set_value_cansleep(cs35l41->reset_gpio, 0);
+ 	gpiod_put(cs35l41->reset_gpio);
+ }
+ EXPORT_SYMBOL_NS_GPL(cs35l41_hda_remove, SND_HDA_SCODEC_CS35L41);
+ 
++const struct dev_pm_ops cs35l41_hda_pm_ops = {
++	SET_RUNTIME_PM_OPS(cs35l41_runtime_suspend, cs35l41_runtime_resume, NULL)
++};
++EXPORT_SYMBOL_NS_GPL(cs35l41_hda_pm_ops, SND_HDA_SCODEC_CS35L41);
++
+ MODULE_DESCRIPTION("CS35L41 HDA Driver");
+ MODULE_IMPORT_NS(SND_HDA_CS_DSP_CONTROLS);
+ MODULE_AUTHOR("Lucas Tanure, Cirrus Logic Inc, <tanureal@opensource.cirrus.com>");
+diff --git a/sound/pci/hda/cs35l41_hda.h b/sound/pci/hda/cs35l41_hda.h
+index 717b30a2e33b..54521a013e78 100644
+--- a/sound/pci/hda/cs35l41_hda.h
++++ b/sound/pci/hda/cs35l41_hda.h
+@@ -56,6 +56,8 @@ enum halo_state {
+ 	HALO_STATE_CODE_RUN
+ };
+ 
++extern const struct dev_pm_ops cs35l41_hda_pm_ops;
++
+ int cs35l41_hda_probe(struct device *dev, const char *device_name, int id, int irq,
+ 		      struct regmap *regmap);
+ void cs35l41_hda_remove(struct device *dev);
+diff --git a/sound/pci/hda/cs35l41_hda_i2c.c b/sound/pci/hda/cs35l41_hda_i2c.c
+index e810b278fb91..a669090a18e8 100644
+--- a/sound/pci/hda/cs35l41_hda_i2c.c
++++ b/sound/pci/hda/cs35l41_hda_i2c.c
+@@ -55,6 +55,7 @@ static struct i2c_driver cs35l41_i2c_driver = {
+ 	.driver = {
+ 		.name		= "cs35l41-hda",
+ 		.acpi_match_table = ACPI_PTR(cs35l41_acpi_hda_match),
++		.pm		= &cs35l41_hda_pm_ops,
+ 	},
+ 	.id_table	= cs35l41_hda_i2c_id,
+ 	.probe		= cs35l41_hda_i2c_probe,
+diff --git a/sound/pci/hda/cs35l41_hda_spi.c b/sound/pci/hda/cs35l41_hda_spi.c
+index 22e088f28438..d7f15e2abe66 100644
+--- a/sound/pci/hda/cs35l41_hda_spi.c
++++ b/sound/pci/hda/cs35l41_hda_spi.c
+@@ -50,6 +50,7 @@ static struct spi_driver cs35l41_spi_driver = {
+ 	.driver = {
+ 		.name		= "cs35l41-hda",
+ 		.acpi_match_table = ACPI_PTR(cs35l41_acpi_hda_match),
++		.pm		= &cs35l41_hda_pm_ops,
+ 	},
+ 	.id_table	= cs35l41_hda_spi_id,
+ 	.probe		= cs35l41_hda_spi_probe,
+diff --git a/sound/pci/hda/hda_component.h b/sound/pci/hda/hda_component.h
+index fa6df52e7855..72ec0d865a28 100644
+--- a/sound/pci/hda/hda_component.h
++++ b/sound/pci/hda/hda_component.h
+@@ -17,4 +17,6 @@ struct hda_component {
+ 	int subsystem_id;
+ 	struct hda_codec *codec;
+ 	void (*playback_hook)(struct device *dev, int action);
++	int (*suspend_hook)(struct device *dev);
++	int (*resume_hook)(struct device *dev);
+ };
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index b8249c4dcb1d..fc2467d03b8a 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -4006,15 +4006,22 @@ static void alc5505_dsp_init(struct hda_codec *codec)
+ static int alc269_suspend(struct hda_codec *codec)
+ {
+ 	struct alc_spec *spec = codec->spec;
++	int i;
+ 
+ 	if (spec->has_alc5505_dsp)
+ 		alc5505_dsp_suspend(codec);
++
++	for (i = 0; i < HDA_MAX_COMPONENTS; i++)
++		if (spec->comps[i].suspend_hook)
++			spec->comps[i].suspend_hook(spec->comps[i].dev);
++
+ 	return alc_suspend(codec);
+ }
+ 
+ static int alc269_resume(struct hda_codec *codec)
+ {
+ 	struct alc_spec *spec = codec->spec;
++	int i;
+ 
+ 	if (spec->codec_variant == ALC269_TYPE_ALC269VB)
+ 		alc269vb_toggle_power_output(codec, 0);
+@@ -4045,6 +4052,10 @@ static int alc269_resume(struct hda_codec *codec)
+ 	if (spec->has_alc5505_dsp)
+ 		alc5505_dsp_resume(codec);
+ 
++	for (i = 0; i < HDA_MAX_COMPONENTS; i++)
++		if (spec->comps[i].resume_hook)
++			spec->comps[i].resume_hook(spec->comps[i].dev);
++
+ 	return 0;
+ }
+ #endif /* CONFIG_PM */
+@@ -6587,8 +6598,20 @@ static int comp_bind(struct device *dev)
+ {
+ 	struct hda_codec *cdc = dev_to_hda_codec(dev);
+ 	struct alc_spec *spec = cdc->spec;
++	int ret, i;
++
++	ret = component_bind_all(dev, spec->comps);
++	if (ret)
++		return ret;
+ 
+-	return component_bind_all(dev, spec->comps);
++	if (snd_hdac_is_power_on(&cdc->core)) {
++		codec_dbg(cdc, "Resuming after bind.\n");
++		for (i = 0; i < HDA_MAX_COMPONENTS; i++)
++			if (spec->comps[i].resume_hook)
++				spec->comps[i].resume_hook(spec->comps[i].dev);
++	}
++
++	return 0;
+ }
+ 
+ static void comp_unbind(struct device *dev)
 -- 
 2.34.1
 

@@ -2,55 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2867533EF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B625D533EFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 16:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242633AbiEYOTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 10:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S235359AbiEYOU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 10:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235155AbiEYOTe (ORCPT
+        with ESMTP id S233911AbiEYOU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 10:19:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8BC9C2CB;
-        Wed, 25 May 2022 07:19:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51FBC6194E;
-        Wed, 25 May 2022 14:19:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD86C385B8;
-        Wed, 25 May 2022 14:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653488372;
-        bh=7bBJlCok73CmtV4Rm+ajB2IXkeRLn3vMxn3dmBMgVvs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=XVL9TT0jdngjLQ2AzVhatAPJryXjpKrdvf3jySU2hsg2wTEGsnI3SKCCiLL/NVLPo
-         A6DyGXI3I445RiRTZ9nuf6OPHkyM0vs2TZ8IiKGsETlPPTijFtl9bhTlALOAJeRNSO
-         uade6xQfgdV5CXdwh6ZoZepevw6/s5sNpCj18G4AGiflBqaJVGusl72hVI24XOsSfU
-         +dp7oMd6EC6pa/mgBbCrG/TFQWJlcp/u3Bb3Wn9tqYuKj+kqYbVLTwlntqnLx7JpGD
-         Szl4Z2syKay/ExvEuGdVklLVoheBcgXj8QJHkdpJk9uslAfVw7hAjgqc3lMDuP3L7O
-         0dCwoDpPa8T7g==
-Date:   Wed, 25 May 2022 09:19:30 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [RESEND PATCH v5] PCI: Make sure the bus bridge powered on when
- scanning bus
-Message-ID: <20220525141930.GA290827@bhelgaas>
+        Wed, 25 May 2022 10:20:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7FCA30A2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 07:20:55 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ntrsV-0007o9-N1; Wed, 25 May 2022 16:20:47 +0200
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ntrsW-004U3i-9t; Wed, 25 May 2022 16:20:46 +0200
+Received: from mfe by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ntrsU-00FAwM-5x; Wed, 25 May 2022 16:20:46 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     p.zabel@pengutronix.de, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, Marco Felsch <m.felsch@pengutronix.de>
+Subject: [PATCH 1/2] dt-bindings: reset: Add TPS380x documentation
+Date:   Wed, 25 May 2022 16:20:19 +0200
+Message-Id: <20220525142019.3615253-1-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iKyVbHqjxH5nqfZ9E8C94EDhXXdkHYoN2smg3V7p6Wuw@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,94 +50,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 01:27:21PM +0200, Rafael J. Wysocki wrote:
-> On Tue, May 24, 2022 at 10:58 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > On Tue, May 17, 2022 at 08:43:19PM +0800, Yicong Yang wrote:
-> > > When the bus bridge is runtime suspended, we'll fail to rescan
-> > > the devices through sysfs as we cannot access the configuration
-> > > space correctly when the bridge is in D3hot.
-> >
-> > Is the "D3hot" above a typo?  I think devices are supposed to respond
-> > to config accesses when in D3hot.  PCIe r6.0, sec 5.3.1.4.1:
-> >
-> >   Configuration and Message requests are the only TLPs accepted by a
-> >   Function in the D3Hot state. ...
-> >
-> >   Functions that are in D3Hot are permitted to be transitioned by
-> >   software (writing to their PMCSR PowerState field) to the D0active
-> >   state or the D0uninitialized state. Functions that are in D3Hot must
-> >   respond to Configuration Space accesses as long as power and clock
-> >   are supplied so that they can be returned to D0 by software.
-> 
-> That applies to the device itself, though, and not to the bus under it.
-> 
-> In general, a bridge in D3hot causes the bus segment on the other side
-> of it to be inaccessible even for config space accesses AFAICS.
+Add device-tree binding documentation for the tps380x reset driver. The
+binding uses enum to make it easy to add more devices from that family.
 
-Oh, thank you!  That was the piece I was missing.  I'll tweak the
-commit log to say something like:
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+---
+ .../bindings/reset/ti,tps380x-reset.yaml      | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reset/ti,tps380x-reset.yaml
 
-  A bridge in a non-D0 power state does not forward config accesses to
-  its secondary side (PCIe r6.0, sec 5.3.1).  Make sure the bridge is
-  in D0 while we enumerate devices below it.
+diff --git a/Documentation/devicetree/bindings/reset/ti,tps380x-reset.yaml b/Documentation/devicetree/bindings/reset/ti,tps380x-reset.yaml
+new file mode 100644
+index 000000000000..afc835eda0ef
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reset/ti,tps380x-reset.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/reset/ti,tps380x-reset.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI TPS380x reset controller node bindings
++
++maintainers:
++  - Marco Felsch <kernel@pengutronix.de>
++
++description: |
++  The TPS380x family [1] of supervisory circuits monitor supply voltages to
++  provide circuit initialization and timing supervision. The devices assert a
++  RESET signal if the voltage drops below a preset threshold or upon a manual
++  reset input (MR). The RESET output remains asserted for the factory
++  programmed delay after the voltage return above its threshold or after the
++  manual reset input is released.
++
++  [1] https://www.ti.com/product/TPS3801
++
++properties:
++  compatible:
++    enum:
++      - ti,tps3801
++
++  reset-gpios:
++    maxItems: 1
++    description: Reference to the GPIO connected to the MR pin.
++
++  "#reset-cells":
++    const: 0
++
++required:
++  - compatible
++  - reset-gpios
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    reset: reset-controller {
++        compatible = "ti,tps3801";
++        #reset-cells = <0>;
++        reset-gpios = <&gpio3 2 GPIO_ACTIVE_LOW>;
++    };
++...
+-- 
+2.30.2
 
-> > > It can be reproduced like:
-> > >
-> > > $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
-> > > $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
-> > >
-> > > 0000:80:00.0 is a Root Port and it is runtime-suspended, so
-> > > 0000:81:00.1 is unreachable after a rescan.
-> > >
-> > > Power up the bridge when scanning the child bus and allow it to
-> > > suspend again by adding pm_runtime_get_sync()/pm_runtime_put()
-> > > in pci_scan_child_bus_extend().
-> > >
-> > > Cc: Rafael J. Wysocki <rafael@kernel.org>
-> > > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> > > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >  drivers/pci/probe.c | 12 ++++++++++++
-> > >  1 file changed, 12 insertions(+)
-> > >
-> > > diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> > > index 17a969942d37..b108e72b6586 100644
-> > > --- a/drivers/pci/probe.c
-> > > +++ b/drivers/pci/probe.c
-> > > @@ -2859,11 +2859,20 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
-> > >       unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
-> > >       unsigned int start = bus->busn_res.start;
-> > >       unsigned int devfn, fn, cmax, max = start;
-> > > +     struct pci_dev *bridge = bus->self;
-> > >       struct pci_dev *dev;
-> > >       int nr_devs;
-> > >
-> > >       dev_dbg(&bus->dev, "scanning bus\n");
-> > >
-> > > +     /*
-> > > +      * Make sure the bus bridge is powered on, otherwise we may not be
-> > > +      * able to scan the devices as we may fail to access the configuration
-> > > +      * space of subordinates.
-> > > +      */
-> > > +     if (bridge)
-> > > +             pm_runtime_get_sync(&bridge->dev);
-> > > +
-> > >       /* Go find them, Rover! */
-> > >       for (devfn = 0; devfn < 256; devfn += 8) {
-> > >               nr_devs = pci_scan_slot(bus, devfn);
-> > > @@ -2976,6 +2985,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
-> > >               }
-> > >       }
-> > >
-> > > +     if (bridge)
-> > > +             pm_runtime_put(&bridge->dev);
-> > > +
-> > >       /*
-> > >        * We've scanned the bus and so we know all about what's on
-> > >        * the other side of any bridges that may be on this bus plus
-> > > --
-> > > 2.24.0
-> > >

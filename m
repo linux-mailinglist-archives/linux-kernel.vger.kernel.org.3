@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093EB533A1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C519F533A22
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 11:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240393AbiEYJni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 05:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S241168AbiEYJnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 05:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241287AbiEYJnZ (ORCPT
+        with ESMTP id S241348AbiEYJnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 May 2022 05:43:25 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2074.outbound.protection.outlook.com [40.107.95.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514B1DF2A;
-        Wed, 25 May 2022 02:43:14 -0700 (PDT)
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2072.outbound.protection.outlook.com [40.107.94.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908A3AE64;
+        Wed, 25 May 2022 02:43:23 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JcjKVD0Iyl7p6s5EzH5JLICdFd/UYJmSpKHvdK+17TnoEt5YR2FvKRax0/G1ALQ81CscxeDvEEckM1ng0VY94Io3amtjbb9SoHqe22V9xeIHfBNkBj/av2Y8bIkJnOLiPHOVCeovBEPpH6ptEe+5ATG12y7S/VFtBvl2AT8dxPEieG5b3UPA9hnFbaM9XQsX/x4WX6pkhUCeAg22RlJ3HTdjf/ssX+3u6Z5ZmdHFtgMtFnkKjeGTWC2+d0WeT6Duliz99DOUeo8FxPCKKHl3eazmjYCZYZXgg8kcXikfe8lrxEm0a/a1x8vs2OXYOPIeBbCzHEmk02mz5cKMpsb0Jg==
+ b=GROUqNCCvZSqyFomHC2Rj4j97wVAcdQCYcwCXclwKTZv+CeRaO4RAUZcAOAlEs1wOtXgzn71qkR5c/1T09z8a/Du7+Zup4qA7216F1KGz4SjqSJHabmv9CZ0Kx7cNxhHPhrgy0nuVxCq1Jz755AOPgU75lAub4HkaPCrUXiT5/uvrCVw1T5nqniogZXNN2yikzWVE0mHSn9mEjkHAPLJ+sXDunyxoBqitjvfV4uo57OFn5Iu9St1qAqBn6hmA+2u7pajai7FnUrFS2u2HfJGQX8Ef6lZw7LWG1mtGxLms67b/8FDCPOecWum6bEjfZ0qacmef1iiuiNdZVytUCz2qg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=om1DVtBycFpLztTJcz+s6Gl8Y47WUeC6gD9Dv8ExqSU=;
- b=jbm4JNJOVE2WgL7zMEbOr/YBRd+oZha8BLifFOcHT6GQx6jwU/GuEkVpslvw7H2VsuE1OvhOWaLphLnvtjuvKGoPf1980WX0q5kTKm8O24qaq2LbSWe0KxBPpUU0M3fNlZ9JaJstUFcPkPx53FTHBMT/yV9rd2k1HP+EL3gvbn8v9oHMu/djb8NGYvB3vlN5oyrH9EbGLvq5xhLNjnISM3x4RBAG6YK2zOloeAY90w5tJm3ko+TIzs/HNDILPvE83ScUQzAT9l48dOysEV3yoT7vNDpMWCurgV18x9f1zkpgFzBC23Ooqcbem0KQN8Jc0dQ2bRPbtWd5BOcJ7oalBw==
+ bh=ENR+4LziaII21f+R93QY4LuJOSI3+go4bQDIz8S65gE=;
+ b=ivRX4YafFidaGUNErcSxSj8jAuwhiF1vN6gVE/3cbWrXqMjX9DGWaGz0Uj3WC84AU1VfJz61X4bfNNG0KQlYO+NKXBWe4x4IaTZMiTSdT4ty/hOACiktcvvNuSrXFMqIXFDKG2pqkAk6dce6nS37fTjw41z5BAgWJc/ue8OrlGF6pgAA1KCqBBYTr2pouo+XLMedVEpTPOxXf+j2rI33DTBOyAlkwp8piZj44QavUmRFjC9Tmj96qsxouxFwY3q+Mf6lePYdVjDf7XWUU6ZbqpMlASoH1dgNt7HEc4k4fv6wCzCLHhwVkDu15sD+EtAghVLJ39wkm6YOCIgkkNOvOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=om1DVtBycFpLztTJcz+s6Gl8Y47WUeC6gD9Dv8ExqSU=;
- b=qvBhm6GmkJWauNVHAOlEXFiVpB00nXbuAMfdK0D0retFb8PqSgDgBwO461t1XctioifJxxNd3iDyAswvmAv+zyfjlbpbqig4z6RwD2OPHQbOOGHg8Udy0xGU6Gdfpp+eovKon7TnOtsVgn33/kHvBVnw+ITbpOozuhHV9ov8CaY=
-Received: from MWHPR17CA0094.namprd17.prod.outlook.com (2603:10b6:300:c2::32)
- by MN2PR12MB4047.namprd12.prod.outlook.com (2603:10b6:208:1de::20) with
+ bh=ENR+4LziaII21f+R93QY4LuJOSI3+go4bQDIz8S65gE=;
+ b=I2uqHdVI1ConkQY4Q6CtO5MPH5Mu6H6HWr35mEhFwOcIeXjS+hpefJQHkKjd1GzY1t5SfkCcEuGnG2Nu7PxXFA4oDkinFY1jTYGwfP6u3lt1VOxl1sTzvqqMRLLbeSVY6iBcOu+O0+LM8hJrFoGQRCCHJTVB9CZs7RGY6NBCx5M=
+Received: from MWHPR17CA0084.namprd17.prod.outlook.com (2603:10b6:300:c2::22)
+ by CY4PR12MB1815.namprd12.prod.outlook.com (2603:10b6:903:122::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Wed, 25 May
- 2022 09:43:12 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Wed, 25 May
+ 2022 09:43:21 +0000
 Received: from CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:c2:cafe::5a) by MWHPR17CA0094.outlook.office365.com
- (2603:10b6:300:c2::32) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:300:c2:cafe::1c) by MWHPR17CA0084.outlook.office365.com
+ (2603:10b6:300:c2::22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13 via Frontend
- Transport; Wed, 25 May 2022 09:43:11 +0000
+ Transport; Wed, 25 May 2022 09:43:21 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  CO1NAM11FT016.mail.protection.outlook.com (10.13.175.141) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5293.13 via Frontend Transport; Wed, 25 May 2022 09:43:10 +0000
+ 15.20.5293.13 via Frontend Transport; Wed, 25 May 2022 09:43:21 +0000
 Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 25 May
- 2022 04:42:57 -0500
+ 2022 04:43:09 -0500
 From:   Ravi Bangoria <ravi.bangoria@amd.com>
 To:     <peterz@infradead.org>, <acme@kernel.org>
 CC:     <ravi.bangoria@amd.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
@@ -66,9 +66,9 @@ CC:     <ravi.bangoria@amd.com>, <jolsa@kernel.org>, <namhyung@kernel.org>,
         <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
         <kim.phillips@amd.com>, <santosh.shukla@amd.com>
-Subject: [PATCH 06/13] perf/x86/amd: Support PERF_SAMPLE_PHY_ADDR using IBS_DC_PHYSADDR
-Date:   Wed, 25 May 2022 15:09:31 +0530
-Message-ID: <20220525093938.4101-7-ravi.bangoria@amd.com>
+Subject: [PATCH 07/13] perf tool: Sync include/uapi/linux/perf_event.h header
+Date:   Wed, 25 May 2022 15:09:32 +0530
+Message-ID: <20220525093938.4101-8-ravi.bangoria@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220525093938.4101-1-ravi.bangoria@amd.com>
 References: <20220525093938.4101-1-ravi.bangoria@amd.com>
@@ -80,24 +80,24 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8c8f294f-4624-4f2f-b053-08da3e32fb4e
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4047:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4047581F44B363E81EBB77DEE0D69@MN2PR12MB4047.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 72a3b10b-e8e3-4aef-d2ae-08da3e330165
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1815:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1815EB0527AAC3A3896EF17CE0D69@CY4PR12MB1815.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FEwH0JqIOlRSzqwfjVBb6TOQr1o0cC8sDEKJIdoBSJv45aFreVIZjPjegqiO5jHC51mXaNSfGBc681hMF0lZn/8XPT64OkKelCIfLDUs/6V49ACtiQ9ZmCUI1a78odigyVNvYizgn5U/yaiGPwLPtylIcZm/KZmQABn4vF2S6SO1Idk/EZ7jdYAqVyrjrMwNrunVBrN8t5f7aEl2a0fhfDqnxHx/UiGDjvKbTFOUI1BBykhzycqqrdz4FZL28M7/IMEPQIg6ZW6Zt8L2Jz/zFv0s293Cyw4c+XrRLmqGNO+VXyRRcl9uwJyS/rmF2MSGson53ymP5Cbbe1lmNI3rTcGBBffgDUv8aPU2cRt5n85WyLjGdIWq1lUzaHDzrCGWO5C+zrb5pWPDnn/cbZLBjgK+m34SiqxU0jF0kJ92fVhHQu7m+3QGzcPiniHtmETj2ajrJWxhksJ5EV2D/BdryWvKEGeTtokngW67eaoChkoM5/LEdouV9q64Rhr12/VcMSP7jCbNBdlnZy3jVEHuP9PbQFL3aQVWiKj/+iTNZYEYERuwaUAXevjnSpRPDffjt8hILv6qPlmk87P50O0RpZ3/6O29dDpAdxg8twHH1zu3yauDHxNU1h00gS1kzC/hXBaYgJeRlY/xpFEt8bcAysXb6db+7U5gNkHvI4kCUOD3PXt8I5DEc6b8zoSLHPVeCx0A8Jmzfg2UuuewF66oYQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(2616005)(2906002)(1076003)(7696005)(26005)(6666004)(7416002)(40460700003)(5660300002)(336012)(426003)(47076005)(508600001)(16526019)(186003)(83380400001)(86362001)(8936002)(44832011)(36756003)(82310400005)(110136005)(54906003)(81166007)(316002)(356005)(8676002)(36860700001)(4326008)(70206006)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: TU53N56dj4mx0rsLp+gEEtrnfq7n4pYjCVrPjQys2x7Aq8RpHJGt8ScGCUD5HnfSZOVrUWXPNf3O5agivJNw9/fLlIBs/4u3g43yE+ReOdqfl/CsMI4moyiTGFXh/RQ+RdW2rPIJkWMZ1k+SzjAosxzxuZRoEs/4gSio0cHk6ik+QOpV6sVAO+YwzRTya6fBwc3XR62pf5B4K9OAy4q3ac+oNW7+0bNOyZ81lSGkDIzxI8RCmA2p0agNeGDZDEaiFpwLEcvWZbDcYG+3IqnwaiJ9RbWyssnudsGhmbDTxzCuc0f59+CXZFiOKo7xYYO8yMvhplzE51fkkZyFk1ATHmZ8ioRQFMH30FdnkuLiDYiVF5f0A8iZRU0l7C8ZvB9x5mrZ35IxA80aHyj55sKiBgKgLUy4Pp4y8CML3wvhOL17gQPkSTKklY+u+DbNMOGUcHRsOxKKQrQnvdSavdFuVs/94iZPAHT5Nk3FkiM1t7z8aBk3pvLmLYHfPWNm+OP5Rj34xN3mvfZHWw1MpaX/pt0ey1/Yn7et1v6QPeZdS3vjk4vg6ZF4jOo5r0H1u/pqAZki7D9AWaIQt+vnmWBC4qVoO6xC7ioOKCxcDd3rhiHiwcWsNwZdl7QNf5bSePUQzK9rr3+hjTcNDXF0sOUQUpZjY/ZWs2M4kuUQFepTZz0XZhsCEOTS/30mz3Rf+eflK+RX9KPTBfYBdG4f1Zr1MA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(7416002)(5660300002)(4326008)(8676002)(83380400001)(2616005)(70586007)(47076005)(40460700003)(70206006)(110136005)(426003)(186003)(6666004)(54906003)(1076003)(36860700001)(8936002)(16526019)(336012)(508600001)(82310400005)(2906002)(36756003)(356005)(86362001)(316002)(81166007)(7696005)(44832011)(26005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 09:43:10.9996
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2022 09:43:21.2176
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c8f294f-4624-4f2f-b053-08da3e32fb4e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72a3b10b-e8e3-4aef-d2ae-08da3e330165
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4047
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1815
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -108,64 +108,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IBS_DC_PHYSADDR provides the physical data address for the tagged load/
-store operation. Populate perf sample physical address using it.
+Two new fields for mem_lvl_num has been introduced: PERF_MEM_LVLNUM_IO
+and PERF_MEM_LVLNUM_EXTN_MEM. Kernel header already contains those
+definitions. Sync them into tools header as well.
 
 Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 ---
- arch/x86/events/amd/ibs.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ tools/include/uapi/linux/perf_event.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-index b57736357e25..c719020c0e83 100644
---- a/arch/x86/events/amd/ibs.c
-+++ b/arch/x86/events/amd/ibs.c
-@@ -986,13 +986,35 @@ static void perf_ibs_get_data_addr(struct perf_event *event,
- 	data->addr = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSDCLINAD)];
- }
- 
-+static void perf_ibs_get_phy_addr(struct perf_event *event,
-+				  struct perf_ibs_data *ibs_data,
-+				  struct perf_sample_data *data)
-+{
-+	union perf_mem_data_src *data_src = &data->data_src;
-+	u64 op_data3 = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSOPDATA3)];
-+	u64 phy_addr_valid = op_data3 & IBS_DC_PHY_ADDR_VALID_MASK;
-+
-+	if (!(event->attr.sample_type & PERF_SAMPLE_DATA_SRC))
-+		perf_ibs_get_mem_op(op_data3, data);
-+
-+	if ((data_src->mem_op != PERF_MEM_OP_LOAD &&
-+	    data_src->mem_op != PERF_MEM_OP_STORE) ||
-+	    !phy_addr_valid) {
-+		data->phys_addr = 0x0;
-+		return;
-+	}
-+
-+	data->phys_addr = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSDCPHYSAD)];
-+}
-+
- static int perf_ibs_get_offset_max(struct perf_ibs *perf_ibs, u64 sample_type,
- 				   int check_rip)
- {
- 	if (sample_type & PERF_SAMPLE_RAW ||
- 	    (perf_ibs == &perf_ibs_op &&
- 	    (sample_type & PERF_SAMPLE_DATA_SRC ||
--	     sample_type & PERF_SAMPLE_ADDR)))
-+	     sample_type & PERF_SAMPLE_ADDR ||
-+	     sample_type & PERF_SAMPLE_PHYS_ADDR)))
- 		return perf_ibs->offset_max;
- 	else if (check_rip)
- 		return 3;
-@@ -1106,6 +1128,8 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
- 			perf_ibs_get_data_src(event, &ibs_data, &data);
- 		if (event->attr.sample_type & PERF_SAMPLE_ADDR)
- 			perf_ibs_get_data_addr(event, &ibs_data, &data);
-+		if (event->attr.sample_type & PERF_SAMPLE_PHYS_ADDR)
-+			perf_ibs_get_phy_addr(event, &ibs_data, &data);
- 	}
- 
- 	/*
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index d37629dbad72..1c3157c1be9d 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -1292,7 +1292,9 @@ union perf_mem_data_src {
+ #define PERF_MEM_LVLNUM_L2	0x02 /* L2 */
+ #define PERF_MEM_LVLNUM_L3	0x03 /* L3 */
+ #define PERF_MEM_LVLNUM_L4	0x04 /* L4 */
+-/* 5-0xa available */
++/* 5-0x8 available */
++#define PERF_MEM_LVLNUM_EXTN_MEM 0x9 /* Extension memory */
++#define PERF_MEM_LVLNUM_IO	0x0a /* I/O */
+ #define PERF_MEM_LVLNUM_ANY_CACHE 0x0b /* Any cache */
+ #define PERF_MEM_LVLNUM_LFB	0x0c /* LFB */
+ #define PERF_MEM_LVLNUM_RAM	0x0d /* RAM */
 -- 
 2.31.1
 

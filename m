@@ -2,118 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B2453355D
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4C4533561
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 04:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243630AbiEYCd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 24 May 2022 22:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
+        id S243640AbiEYCgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 24 May 2022 22:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235106AbiEYCd1 (ORCPT
+        with ESMTP id S235106AbiEYCgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 24 May 2022 22:33:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D65454F9F
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653446005;
+        Tue, 24 May 2022 22:36:33 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C4824BDE;
+        Tue, 24 May 2022 19:36:31 -0700 (PDT)
+Date:   Tue, 24 May 2022 19:36:24 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653446190;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=TUzlT5FItCjrnkA2ba6GnsAuieiG0tvhuEs/Sgn4WbA=;
-        b=hrw14nzUdIs6S+bNFTz7IB4+0LfnpfvHYiJYz5p2tyAPyrFJlz0XpDaKd0XIqT3hP1Itcs
-        YU0igMqa+xvYSQL86ixDnhjC2QwsV0T8c5IUTz9KW6SKwXy8M7/DlYQ+pWxR/3J8z1Jw9M
-        D3pod14OKPmgmgRriYuKOnsPgFB38vY=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-352-JSPfP9jUNveLpYtSjLd3Lw-1; Tue, 24 May 2022 22:33:24 -0400
-X-MC-Unique: JSPfP9jUNveLpYtSjLd3Lw-1
-Received: by mail-lf1-f72.google.com with SMTP id y12-20020a0565123f0c00b00477bab7c83aso9781261lfa.6
-        for <linux-kernel@vger.kernel.org>; Tue, 24 May 2022 19:33:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TUzlT5FItCjrnkA2ba6GnsAuieiG0tvhuEs/Sgn4WbA=;
-        b=bJEYCMKKZuC5NkuYMJV93AaLA4brOHg3yhXhmcPLMj9zSFs4UrnmWAzsacHlBgXmDP
-         73EdBSSYijP3fwTqeCoxUz/fEFYM3PcospmVd5npnyDxKlm9xhfCw9FNgqgbWrtULp9j
-         SVVCPl1DOsbF/gzLKGVqoAdsmvMybnV6jrWAsqDShfo4bxydal60iG5WFBP+pV2+Mt7L
-         AqasE7VHzm/U6q0zNNmjtIxYSmtpj6kjbqiGBm/qkwbe8vsUX8ADzBZx79kMCG0lsY/6
-         SGJioOq3A+mOQYzR+0nKQ+7+RgkVFKyrmb8F3G5w7K1YOLlZfvEuLMm1dpIYFgD5XjWm
-         +65Q==
-X-Gm-Message-State: AOAM53056agv9EAWGjn/R1zm1QvJnKJ9+O5RmAMUo+RInoBSbc+ATY+4
-        Bbl7Tk6MG4yzLNpMQcRF6V8aUTEA5shxUQtMD3DFPz29tApzw8zHJuhFmmJwbBdKXfnVs2MG5hW
-        EICJ+/DoKMKjwTN2AwUzUnrzzhXRmD3Vm/JM9yCWF
-X-Received: by 2002:a2e:949:0:b0:253:ad20:7638 with SMTP id 70-20020a2e0949000000b00253ad207638mr18213290ljj.73.1653446002509;
-        Tue, 24 May 2022 19:33:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwaIb2y4xSBunj6Y0Pn0HegD61k8wMpUegglnU6deG7dwCx7EXFGAyqLks58kgg00PxIOV7BLaHbKWxgFww6js=
-X-Received: by 2002:a2e:949:0:b0:253:ad20:7638 with SMTP id
- 70-20020a2e0949000000b00253ad207638mr18213276ljj.73.1653446002298; Tue, 24
- May 2022 19:33:22 -0700 (PDT)
+        bh=qRF08RH4HX5TQP4tbU3gSrFe2wB3jShQ6zYuVNhxUJU=;
+        b=ntsNkB6oeDaC8TeGD3HFnHBaXzVLiB2xci0QqSb2C0OlLRhzva+sR2pjIT6OPSsThN7HOr
+        MiOyL2HnQrfgd4lMxuibr70BYnBscKnDMctXZsvZMYH19TYHqygnrBMNXyg2msf+K96lNV
+        y46KnLiUruSy+HlYu+u7YesUEiWUAUk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, shakeelb@google.com,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        longman@redhat.com
+Subject: Re: [PATCH v4 01/11] mm: memcontrol: prepare objcg API for non-kmem
+ usage
+Message-ID: <Yo2WKADtPy2rekRh@carbon>
+References: <20220524060551.80037-1-songmuchun@bytedance.com>
+ <20220524060551.80037-2-songmuchun@bytedance.com>
 MIME-Version: 1.0
-References: <20220518035951.94220-1-jasowang@redhat.com> <20220523105323.58c28d75.pasic@linux.ibm.com>
- <20220524182751.1d4bf02f.pasic@linux.ibm.com>
-In-Reply-To: <20220524182751.1d4bf02f.pasic@linux.ibm.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 25 May 2022 10:33:11 +0800
-Message-ID: <CACGkMEuxdoXoasdAPzAik2Xge7vU5Fp4SMxiqk3eGZCwC8s9eA@mail.gmail.com>
-Subject: Re: [PATCH V5 0/9] rework on the IRQ hardening of virtio
-To:     Halil Pasic <pasic@linux.ibm.com>
-Cc:     mst <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524060551.80037-2-songmuchun@bytedance.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 12:28 AM Halil Pasic <pasic@linux.ibm.com> wrote:
->
-> On Mon, 23 May 2022 10:53:23 +0200
-> Halil Pasic <pasic@linux.ibm.com> wrote:
->
-> > On Wed, 18 May 2022 11:59:42 +0800
-> > Jason Wang <jasowang@redhat.com> wrote:
-> >
-> > > Hi All:
-> >
-> > Sorry for being slow on this one. I'm pretty much under water. Will try
-> > to get some regression-testing done till tomorrow end of day.
-> >
->
-> Did some testing with the two stage indicators disabled. Didn't see any
-> significant difference in performance, and with that also no performance
-> regression. IMHO we are good to go ahead!
+On Tue, May 24, 2022 at 02:05:41PM +0800, Muchun Song wrote:
+> Pagecache pages are charged at the allocation time and holding a
+> reference to the original memory cgroup until being reclaimed.
+> Depending on the memory pressure, specific patterns of the page
+> sharing between different cgroups and the cgroup creation and
+> destruction rates, a large number of dying memory cgroups can be
+> pinned by pagecache pages. It makes the page reclaim less efficient
+> and wastes memory.
+> 
+> We can convert LRU pages and most other raw memcg pins to the objcg
+> direction to fix this problem, and then the page->memcg will always
+> point to an object cgroup pointer.
+> 
+> Therefore, the infrastructure of objcg no longer only serves
+> CONFIG_MEMCG_KMEM. In this patch, we move the infrastructure of the
+> objcg out of the scope of the CONFIG_MEMCG_KMEM so that the LRU pages
+> can reuse it to charge pages.
+> 
+> We know that the LRU pages are not accounted at the root level. But
+> the page->memcg_data points to the root_mem_cgroup. So the
+> page->memcg_data of the LRU pages always points to a valid pointer.
+> But the root_mem_cgroup dose not have an object cgroup. If we use
+> obj_cgroup APIs to charge the LRU pages, we should set the
+> page->memcg_data to a root object cgroup. So we also allocate an
+> object cgroup for the root_mem_cgroup.
+> 
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> ---
+>  include/linux/memcontrol.h |  5 ++--
+>  mm/memcontrol.c            | 60 +++++++++++++++++++++++++---------------------
+>  2 files changed, 35 insertions(+), 30 deletions(-)
+> 
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 89b14729d59f..ff1c1dd7e762 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -315,10 +315,10 @@ struct mem_cgroup {
+>  
+>  #ifdef CONFIG_MEMCG_KMEM
+>  	int kmemcg_id;
+> +#endif
+>  	struct obj_cgroup __rcu *objcg;
+>  	/* list of inherited objcgs, protected by objcg_lock */
+>  	struct list_head objcg_list;
+> -#endif
+>  
+>  	MEMCG_PADDING(_pad2_);
+>  
+> @@ -851,8 +851,7 @@ static inline struct mem_cgroup *lruvec_memcg(struct lruvec *lruvec)
+>   * parent_mem_cgroup - find the accounting parent of a memcg
+>   * @memcg: memcg whose parent to find
+>   *
+> - * Returns the parent memcg, or NULL if this is the root or the memory
+> - * controller is in legacy no-hierarchy mode.
+> + * Returns the parent memcg, or NULL if this is the root.
+>   */
+>  static inline struct mem_cgroup *parent_mem_cgroup(struct mem_cgroup *memcg)
+>  {
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 598fece89e2b..6de0d3e53eb1 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -254,9 +254,9 @@ struct mem_cgroup *vmpressure_to_memcg(struct vmpressure *vmpr)
+>  	return container_of(vmpr, struct mem_cgroup, vmpressure);
+>  }
+>  
+> -#ifdef CONFIG_MEMCG_KMEM
+>  static DEFINE_SPINLOCK(objcg_lock);
+>  
+> +#ifdef CONFIG_MEMCG_KMEM
+>  bool mem_cgroup_kmem_disabled(void)
+>  {
+>  	return cgroup_memory_nokmem;
+> @@ -265,12 +265,10 @@ bool mem_cgroup_kmem_disabled(void)
+>  static void obj_cgroup_uncharge_pages(struct obj_cgroup *objcg,
+>  				      unsigned int nr_pages);
+>  
+> -static void obj_cgroup_release(struct percpu_ref *ref)
+> +static void obj_cgroup_release_bytes(struct obj_cgroup *objcg)
+>  {
+> -	struct obj_cgroup *objcg = container_of(ref, struct obj_cgroup, refcnt);
+>  	unsigned int nr_bytes;
+>  	unsigned int nr_pages;
+> -	unsigned long flags;
+>  
+>  	/*
+>  	 * At this point all allocated objects are freed, and
+> @@ -284,9 +282,9 @@ static void obj_cgroup_release(struct percpu_ref *ref)
+>  	 * 3) CPU1: a process from another memcg is allocating something,
+>  	 *          the stock if flushed,
+>  	 *          objcg->nr_charged_bytes = PAGE_SIZE - 92
+> -	 * 5) CPU0: we do release this object,
+> +	 * 4) CPU0: we do release this object,
+>  	 *          92 bytes are added to stock->nr_bytes
+> -	 * 6) CPU0: stock is flushed,
+> +	 * 5) CPU0: stock is flushed,
+>  	 *          92 bytes are added to objcg->nr_charged_bytes
+>  	 *
+>  	 * In the result, nr_charged_bytes == PAGE_SIZE.
+> @@ -298,6 +296,19 @@ static void obj_cgroup_release(struct percpu_ref *ref)
+>  
+>  	if (nr_pages)
+>  		obj_cgroup_uncharge_pages(objcg, nr_pages);
+> +}
+> +#else
+> +static inline void obj_cgroup_release_bytes(struct obj_cgroup *objcg)
+> +{
+> +}
+> +#endif
+> +
+> +static void obj_cgroup_release(struct percpu_ref *ref)
+> +{
+> +	struct obj_cgroup *objcg = container_of(ref, struct obj_cgroup, refcnt);
+> +	unsigned long flags;
+> +
+> +	obj_cgroup_release_bytes(objcg);
+>  
+>  	spin_lock_irqsave(&objcg_lock, flags);
+>  	list_del(&objcg->list);
+> @@ -326,10 +337,10 @@ static struct obj_cgroup *obj_cgroup_alloc(void)
+>  	return objcg;
+>  }
+>  
+> -static void memcg_reparent_objcgs(struct mem_cgroup *memcg,
+> -				  struct mem_cgroup *parent)
+> +static void memcg_reparent_objcgs(struct mem_cgroup *memcg)
+>  {
+>  	struct obj_cgroup *objcg, *iter;
+> +	struct mem_cgroup *parent = parent_mem_cgroup(memcg);
+>  
+>  	objcg = rcu_replace_pointer(memcg->objcg, NULL, true);
+>  
+> @@ -348,6 +359,7 @@ static void memcg_reparent_objcgs(struct mem_cgroup *memcg,
+>  	percpu_ref_kill(&objcg->refcnt);
+>  }
+>  
+> +#ifdef CONFIG_MEMCG_KMEM
+>  /*
+>   * A lot of the calls to the cache allocation functions are expected to be
+>   * inlined by the compiler. Since the calls to memcg_slab_pre_alloc_hook() are
+> @@ -3589,21 +3601,12 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
+>  #ifdef CONFIG_MEMCG_KMEM
+>  static int memcg_online_kmem(struct mem_cgroup *memcg)
+>  {
+> -	struct obj_cgroup *objcg;
+> -
+>  	if (cgroup_memory_nokmem)
+>  		return 0;
+>  
+>  	if (unlikely(mem_cgroup_is_root(memcg)))
+>  		return 0;
+>  
+> -	objcg = obj_cgroup_alloc();
+> -	if (!objcg)
+> -		return -ENOMEM;
+> -
+> -	objcg->memcg = memcg;
+> -	rcu_assign_pointer(memcg->objcg, objcg);
+> -
+>  	static_branch_enable(&memcg_kmem_enabled_key);
+>  
+>  	memcg->kmemcg_id = memcg->id.id;
+> @@ -3613,27 +3616,19 @@ static int memcg_online_kmem(struct mem_cgroup *memcg)
+>  
+>  static void memcg_offline_kmem(struct mem_cgroup *memcg)
+>  {
+> -	struct mem_cgroup *parent;
+> -
+>  	if (cgroup_memory_nokmem)
+>  		return;
+>  
+>  	if (unlikely(mem_cgroup_is_root(memcg)))
+>  		return;
+>  
+> -	parent = parent_mem_cgroup(memcg);
+> -	if (!parent)
+> -		parent = root_mem_cgroup;
+> -
+> -	memcg_reparent_objcgs(memcg, parent);
+> -
+>  	/*
+>  	 * After we have finished memcg_reparent_objcgs(), all list_lrus
+>  	 * corresponding to this cgroup are guaranteed to remain empty.
+>  	 * The ordering is imposed by list_lru_node->lock taken by
+>  	 * memcg_reparent_list_lrus().
+>  	 */
 
-Great!
+This comment doesn't look to be correct after these changes. Should it
+be fixed? Or the ordering should be fixed too?
 
->
-> Sorry it took so long.
+> -	memcg_reparent_list_lrus(memcg, parent);
+> +	memcg_reparent_list_lrus(memcg, parent_mem_cgroup(memcg));
+We effectively dropped this:
+	if (!parent)
+		parent = root_mem_cgroup;
+Is it safe? (assuming v1 non-hierarchical mode, it's usually when all
+is getting complicated)
 
-No worries and thanks a lot for the help.
+The rest of the patch looks good to me.
 
-I will repost a version with some comments tweaked that is suggested
-by Cornelia Huck.
-
-Thanks
-
->
-> Regards,
-> Halil
->
-
+Thanks!

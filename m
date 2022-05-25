@@ -2,123 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581255340F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5A45340F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 25 May 2022 18:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240450AbiEYQCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 12:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S245135AbiEYQC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 12:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiEYQCn (ORCPT
+        with ESMTP id S241633AbiEYQCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 12:02:43 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690F56B7FC
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:02:41 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id er5so27568577edb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lb8jI+HgCwwCo9V7MBgxPMSbhS6L6pVhhain2dWQdfw=;
-        b=SrcSxh5jk6TjzFY/hFo4GziSI+tKwhTA+Bvj+vAZBzjRzoe5Yq5yUQ8S6OgM7ow5UA
-         I1rF2QLtzS87ewjkBnw11tZEocdxf3LdCJ+RmmexCCKPZsRw7wjUq4DXjoL498yjLWPZ
-         rYUCkLMUhIDW61u3uDHvosCrwx9NoPonecdyQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lb8jI+HgCwwCo9V7MBgxPMSbhS6L6pVhhain2dWQdfw=;
-        b=XDuxkXKuyCozrk2DpFqKIibpzwhIVQnhtYlPfjOsAn3fWSUYtyVnoVhAqO1tRXzxGZ
-         JFQ4qH1sqTAG96vXov/wF7cINFsD+jTTz4HSzJbCdEwyrR+tDt6tVl0lTpLJbfjXL9jm
-         1J/dzirocBXeXqlgz4S5mk8e+kMBE1T97FsXq/JWbpla1cm9ekkBvfsOyY0XyIDLTwmg
-         kgOAwTGcwYAk9er5yg4XBywnNxtSShB5OSA6/xcX4mbpUdB6K/lOTHncpi7OORZWuZf0
-         rDCuXcU/VIIyPVglZ/KaLPDOye4M96HTqYF0shAo0DG0zBgES2unxVCXI+p5QE9FcpfW
-         fjHA==
-X-Gm-Message-State: AOAM530h9lzp1Gl57vcfNUbPsTVaQuIffLY8JJgO851SHdZV9zGAqMFQ
-        /qufXYshufxumPCy5nlFnMOJblONfUdZ2eTn
-X-Google-Smtp-Source: ABdhPJyed6CJ6lNWlKrFqbGgBuXMEEkvAauPEM9ReLmDr9eTi96hbxlbqo/XqiFrgWWtcRbSEbwqoQ==
-X-Received: by 2002:a05:6402:84a:b0:423:fe99:8c53 with SMTP id b10-20020a056402084a00b00423fe998c53mr34809571edz.195.1653494559105;
-        Wed, 25 May 2022 09:02:39 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id 26-20020a170906225a00b006f3ef214db9sm8266378ejr.31.2022.05.25.09.02.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 09:02:36 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id x12so6495435wrg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 09:02:36 -0700 (PDT)
-X-Received: by 2002:a5d:59ac:0:b0:20e:6fd6:88c1 with SMTP id
- p12-20020a5d59ac000000b0020e6fd688c1mr25406709wrr.442.1653494556145; Wed, 25
- May 2022 09:02:36 -0700 (PDT)
+        Wed, 25 May 2022 12:02:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502DFB41C0;
+        Wed, 25 May 2022 09:02:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 898C360FCF;
+        Wed, 25 May 2022 16:02:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 200D0C385B8;
+        Wed, 25 May 2022 16:02:51 +0000 (UTC)
+Date:   Wed, 25 May 2022 12:02:48 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, mingo@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joao.m.martins@oracle.com, mtosatti@redhat.com
+Subject: Re: [PATCH v2] cpuidle: haltpoll: Add trace points for
+ guest_halt_poll_ns grow/shrink
+Message-ID: <20220525120248.5cb37817@gandalf.local.home>
+In-Reply-To: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
+References: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220525144638.293934-1-helgaas@kernel.org>
-In-Reply-To: <20220525144638.293934-1-helgaas@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 25 May 2022 09:02:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whk=ygWsxt=1HhndCwjtXdga9sPmkxFGby5PJWRk5yx9Q@mail.gmail.com>
-Message-ID: <CAHk-=whk=ygWsxt=1HhndCwjtXdga9sPmkxFGby5PJWRk5yx9Q@mail.gmail.com>
-Subject: Re: [PATCH] Revert "linux/types.h: remove unnecessary __bitwise__"
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>, llvm@lists.linux.dev,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 7:46 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> This reverts commit c724c866bb70cb8c607081a26823a1f0ebde4387.
->
-> Jiri Slaby reported that c724c866bb70 ("linux/types.h: remove unnecessary
-> __bitwise__") broke userspace, including open-iscsi, because it uses
-> __bitwise__.
->
-> Restore the __bitwise__ definition.
+On Mon, 23 May 2022 23:53:32 +0000
+Eiichi Tsukata <eiichi.tsukata@nutanix.com> wrote:
 
-Hmm.
+> @@ -91,16 +95,17 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+>  			val = guest_halt_poll_ns;
+>  
+>  		dev->poll_limit_ns = val;
+> +		trace_guest_halt_poll_ns_grow(smp_processor_id(), val, old);
 
-Presumably it's only the uapi case that actually wants to re-instate it.
+Why are you passing in smp_processor_id()?
 
-And I'd rather make that "__bitwise__" case explicitly special, with a
-comment about why it exists when the kernel itself doesn't use it.
+>  	} else if (block_ns > guest_halt_poll_ns &&
+>  		   guest_halt_poll_allow_shrink) {
+>  		unsigned int shrink = guest_halt_poll_shrink;
+>  
+> -		val = dev->poll_limit_ns;
+>  		if (shrink == 0)
+>  			val = 0;
+>  		else
+>  			val /= shrink;
+>  		dev->poll_limit_ns = val;
+> +		trace_guest_halt_poll_ns_shrink(smp_processor_id(), val, old);
+>  	}
+>  }
+>  
+> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
+> index af5018aa9517..db065af9c3c0 100644
+> --- a/include/trace/events/power.h
+> +++ b/include/trace/events/power.h
+> @@ -500,6 +500,39 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
+>  
+>  	TP_ARGS(name, type, new_value)
+>  );
+> +
+> +TRACE_EVENT(guest_halt_poll_ns,
+> +
+> +	TP_PROTO(bool grow, unsigned int cpu_id,
+> +		 unsigned int new, unsigned int old),
+> +
+> +	TP_ARGS(grow, cpu_id, new, old),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(bool, grow)
+> +		__field(unsigned int, cpu_id)
+> +		__field(unsigned int, new)
+> +		__field(unsigned int, old)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->grow   = grow;
+> +		__entry->cpu_id = cpu_id;
 
-IOW, rather than the revert, maybe something like the below
-(whitespace-damaged) instead?
+You are wasting space to save the cpu_id, as the trace event already knows
+what CPU it occurred on.
 
-Jiri, does something like this work for you?
+ # echo 1 > events/sched/enable
+ # cat trace
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+         systemd-1       [004] .....    15.872715: ftrace_boot_snapshot: ** Boot snapshot taken **
+         systemd-1       [001] .....    22.555418: initcall_start: func=fuse_len_args+0x0/0x30 [fuse]
+         systemd-1       [001] .....    22.555425: initcall_finish: func=fuse_len_args+0x0/0x30 [fuse] ret=0
+        modprobe-643     [006] .....    26.737355: initcall_start: func=wmidev_evaluate_method+0x46/0x100 [wmi]
+        modprobe-643     [006] .....    26.742491: initcall_finish: func=wmidev_evaluate_method+0x46/0x100 [wmi] ret=0
 
-                 Linus
+-- Steve
 
----
- include/uapi/linux/types.h | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
-index c4dc597f3dcf..308433be33c2 100644
---- a/include/uapi/linux/types.h
-+++ b/include/uapi/linux/types.h
-@@ -26,6 +26,9 @@
- #define __bitwise
- #endif
 
-+/* The kernel doesn't use this legacy form, but user space does */
-+#define __bitwise__ __bitwise
-+
- typedef __u16 __bitwise __le16;
- typedef __u16 __bitwise __be16;
- typedef __u32 __bitwise __le32;
+> +		__entry->new    = new;
+> +		__entry->old    = old;
+> +	),
+> +
+> +	TP_printk("cpu %u: halt_poll_ns %u (%s %u)",
+> +		__entry->cpu_id,
+> +		__entry->new,
+> +		__entry->grow ? "grow" : "shrink",
+> +		__entry->old)
+> +);
+> +

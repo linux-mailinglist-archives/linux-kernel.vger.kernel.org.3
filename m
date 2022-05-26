@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6539853518A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E23953518F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiEZPhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S1346199AbiEZPkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbiEZPhV (ORCPT
+        with ESMTP id S1347992AbiEZPj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 11:37:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CCB7BDA3A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:37:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653579439;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bj94L2IvxNOeKDHuJZKq8s0G+bkC8HQOBznq/WJnoNY=;
-        b=T+b/sUQxz88KU+vq22j+yIiwTLWmVpVMZrwESV0nzVY10n5jzlYgrnSNy/CcMMdX9Hd1Yg
-        pldPUVK/p9Yz10v0djp7YF7lBqYqxSNEWlwUQFubqvkQRP/cdVEE5QRTHMOSH7wzZOkChB
-        FWrytnSbxJ8BgLS3B6AE5G4YjUpUbg4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-KWe_HMoXMd6iwASx8Oj5Sw-1; Thu, 26 May 2022 11:37:16 -0400
-X-MC-Unique: KWe_HMoXMd6iwASx8Oj5Sw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 58E95858F00;
-        Thu, 26 May 2022 15:37:15 +0000 (UTC)
-Received: from fedora (unknown [10.22.16.201])
-        by smtp.corp.redhat.com (Postfix) with SMTP id C1CB92166B26;
-        Thu, 26 May 2022 15:37:11 +0000 (UTC)
-Date:   Thu, 26 May 2022 12:37:10 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 5/5] x86/tdx: Add Quote generation support
-Message-ID: <Yo+epmvA0U0+m3/C@fedora>
-References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220524040517.703581-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Thu, 26 May 2022 11:39:57 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488BCC03AA
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:39:56 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id cv10so2064201pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xyEiDgKsY1emWGoi/u6fO/EWbKTt6KbucfscPebyqB8=;
+        b=Y5RsMyw7KbhCAFTkVbgxzBS/Gx1QP7m4QuuHPAC5fDZtZXnZzXq+9Nfx5rwzpir4nN
+         JF9OBoKEJce9x03tfK6d8wVZcZs4O/eIUO1mUwclsPoQkWrqL+nADVvhefmqS1cdG8zR
+         tXkSYhNpSP3aL72C+UgrgvDE5t0bexRKdRPH8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xyEiDgKsY1emWGoi/u6fO/EWbKTt6KbucfscPebyqB8=;
+        b=3NHV7j2YeOANczfE4J1wmnSTy6Nu/JDzVpyPpuLWJcB6li2rYaH7x+IAs86wog/3av
+         gV0PRsr07WgacBObqQLB4hI4y9OJ/+fJima/j0yOeWpTSZ9R3EJPdr2fpXA5tMX7hDYM
+         ycZyQi/JB6O/DwhbYbmudV9O4RbYixQ/564kZe1+OhOKaHVZOfpMo8yCpLKv2XCFRAJ4
+         Rx5i15GApu8JlEz5dD6BuZvvBB57nQhW8dP6VxmnRIRpW/PHgwAtq+x2qWdJAj4IM4EL
+         FnrV+CszYU0ZU2wkjYA+oZ1HKcV8mCAiZE10ImGqauWE1KHTPRVpxW8u/m8s1U5UTLTM
+         XI3Q==
+X-Gm-Message-State: AOAM531bCCVV3vmY8Jt34cYRwlmd56ER75ai6sTE12OJLERxcxY98Zyn
+        AwqZRrWZ/DZbN4Sk/9EsTcMGQw==
+X-Google-Smtp-Source: ABdhPJxQs1ACMjRnyzEXIdVpbdckj+t/do563ysPM0bTSfDEme9mmYKy5pPg8nua7Nz4fL95vX4Gkw==
+X-Received: by 2002:a17:90b:1482:b0:1df:5b39:8a4 with SMTP id js2-20020a17090b148200b001df5b3908a4mr3249753pjb.233.1653579595775;
+        Thu, 26 May 2022 08:39:55 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m20-20020a17090a859400b001d952b8f728sm3860113pjn.2.2022.05.26.08.39.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 08:39:54 -0700 (PDT)
+Date:   Thu, 26 May 2022 08:39:52 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Dinse <nanook@eskimo.com>
+Subject: Re: [PATCH 2/4] KVM: x86: Harden _regs accesses to guard against
+ buggy input
+Message-ID: <202205260835.9BC23703@keescook>
+References: <20220525222604.2810054-1-seanjc@google.com>
+ <20220525222604.2810054-3-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220524040517.703581-6-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+In-Reply-To: <20220525222604.2810054-3-seanjc@google.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,187 +73,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 09:05:17PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> +
-> +/* Used for buffer allocation in GetQuote request */
-> +struct quote_buf {
-> +	/* vmapped address of kernel buffer (size is page aligned) */
-> +	void *vmaddr;
-> +	/* Number of pages */
-> +	int count;
-> +};
-> +
-> +/* List entry of quote_list */
-> +struct quote_entry {
-> +	/* Flag to check validity of the GetQuote request */
-> +	bool valid;
-> +	/* Kernel buffer to share data with VMM */
-> +	struct quote_buf *buf;
+On Wed, May 25, 2022 at 10:26:02PM +0000, Sean Christopherson wrote:
+> WARN and truncate the incoming GPR number/index when reading/writing GPRs
+> in the emulator to guard against KVM bugs, e.g. to avoid out-of-bounds
+> accesses to ctxt->_regs[] if KVM generates a bogus index.  Truncate the
+> index instead of returning e.g. zero, as reg_write() returns a pointer
+> to the register, i.e. returning zero would result in a NULL pointer
+> dereference.  KVM could also force the index to any arbitrary GPR, but
+> that's no better or worse, just different.
+> 
+> Open code the restriction to 16 registers; RIP is handled via _eip and
+> should never be accessed through reg_read() or reg_write().  See the
+> comments above the declarations of reg_read() and reg_write(), and the
+> behavior of writeback_registers().  The horrific open coded mess will be
+> cleaned up in a future commit.
+> 
+> There are no such bugs known to exist in the emulator, but determining
+> that KVM is bug-free is not at all simple and requires a deep dive into
+> the emulator.  The code is so convoluted that GCC-12 with the recently
+> enable -Warray-bounds spits out a (suspected) false-positive:
+> 
+>   arch/x86/kvm/emulate.c:254:27: warning: array subscript 32 is above array
+>                                  bounds of 'long unsigned int[17]' [-Warray-bounds]
 
-Instead of a pointer, we can embed the quote_buf object directly into the
-quote_entry. alloc_quote_buf would receive a pointer to quote_buf, and would
-only allocate vmaddr (may we should change the names from alloc/free to
-init/deinit). This way we can save one memory allocation and have a
-simpler code. Not to mention is one less pointer to track its lifetime.
+I can confirm this is one of the instances of the now-isolated GCC 12
+bug:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105679
 
-> +	/* Completion object to track completion of GetQuote request */
-> +	struct completion compl;
-> +	struct list_head list;
-> +};
+Regardless, I think the cleanup is still useful from a robustness
+perspective.  Better to be as defensive as possible in KVM. :)
+
+>     254 |         return ctxt->_regs[nr];
+>         |                ~~~~~~~~~~~^~~~
+>   In file included from arch/x86/kvm/emulate.c:23:
+>   arch/x86/kvm/kvm_emulate.h: In function 'reg_rmw':
+>   arch/x86/kvm/kvm_emulate.h:366:23: note: while referencing '_regs'
+>     366 |         unsigned long _regs[NR_VCPU_REGS];
+>         |                       ^~~~~
+> 
+> Link: https://lore.kernel.org/all/YofQlBrlx18J7h9Y@google.com
+> Cc: Robert Dinse <nanook@eskimo.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/emulate.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 7226a127ccb4..c58366ae4da2 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -247,6 +247,9 @@ enum x86_transfer_type {
 >  
->  static struct miscdevice miscdev;
->  
-> +/*
-> + * To support parallel GetQuote requests, use the list
-> + * to track active GetQuote requests.
-> + */
-> +static LIST_HEAD(quote_list);
-> +
-> +/* Lock to protect quote_list */
-> +static DEFINE_MUTEX(quote_lock);
-> +
-> +/*
-> + * Workqueue to handle Quote data after Quote generation
-> + * notification from VMM.
-> + */
-> +struct workqueue_struct *quote_wq;
-> +struct work_struct quote_work;
-> +
->  static long tdx_get_report(void __user *argp)
+>  static ulong reg_read(struct x86_emulate_ctxt *ctxt, unsigned nr)
 >  {
->  	void *reportdata = NULL, *tdreport = NULL;
-> @@ -71,6 +111,270 @@ static long tdx_get_report(void __user *argp)
->  	return ret;
->  }
->  
-> +/* tdx_get_quote_hypercall() - Request to get TD Quote using TDREPORT */
-> +static long tdx_get_quote_hypercall(struct quote_buf *buf)
-> +{
-> +	struct tdx_hypercall_args args = {0};
-> +
-> +	args.r10 = TDX_HYPERCALL_STANDARD;
-> +	args.r11 = TDVMCALL_GET_QUOTE;
-> +	args.r12 = cc_mkdec(page_to_phys(vmalloc_to_page(buf->vmaddr)));
-> +	args.r13 = buf->count * PAGE_SIZE;
-> +
-> +	/*
-> +	 * Pass the physical address of TDREPORT to the VMM and
-> +	 * trigger the Quote generation. It is not a blocking
-> +	 * call, hence completion of this request will be notified to
-> +	 * the TD guest via a callback interrupt. More info about ABI
-> +	 * can be found in TDX Guest-Host-Communication Interface
-> +	 * (GHCI), sec titled "TDG.VP.VMCALL<GetQuote>".
-> +	 */
-> +	return __tdx_hypercall(&args, 0);
-> +}
-> +
-> +/*
-> + * alloc_quote_buf() - Used to allocate a shared buffer of
-> + *		       given size.
-> + *
-> + * Size is page aligned and the allocated memory is decrypted
-> + * to allow VMM to access it. Uses VMAP to create a virtual
-> + * mapping, which is further used to create a shared mapping
-> + * for the buffer without affecting the direct map.
-> + */
-> +static struct quote_buf *alloc_quote_buf(u64 req_size)
-> +{
-> +	int size = PAGE_ALIGN(req_size);
-> +	void *addr = NULL, *vmaddr = NULL;
-> +	int count = size >> PAGE_SHIFT;
-> +	struct page **pages = NULL;
-> +	struct quote_buf *buf;
-> +	int i;
-> +
-> +	buf = kmalloc(sizeof(*buf), GFP_KERNEL);
-> +	if (!buf)
-> +		return NULL;
-> +
-> +	addr = alloc_pages_exact(size, GFP_KERNEL);
-> +	if (!addr)
-> +		goto alloc_failed;
-> +
-> +	/* Allocate mem for array of page ptrs */
-> +	pages = kcalloc(count, sizeof(*pages), GFP_KERNEL);
-> +	if (!pages)
-> +		goto alloc_failed;
-> +
-> +	for (i = 0; i < count; i++)
-> +		pages[i] = virt_to_page(addr + i * PAGE_SIZE);
-> +
-> +	/*
-> +	 * Use VMAP to create a virtual mapping, which is used
-> +	 * to create shared mapping without affecting the
-> +	 * direct map. Use VM_MAP_PUT_PAGES to allow vmap()
-> +	 * responsible for freeing the pages when using vfree().
-> +	 */
-> +	vmaddr = vmap(pages, count, VM_MAP_PUT_PAGES, PAGE_KERNEL);
-> +	if (!vmaddr)
-> +		goto alloc_failed;
-> +
-> +	/* Use noalias variant to not affect the direct mapping */
-> +	if (set_memory_decrypted_noalias((unsigned long)vmaddr, count))
-> +		goto alloc_failed;
-> +
-> +	buf->vmaddr = vmaddr;
-> +	buf->count = count;
-> +
-> +	return buf;
-> +
-> +alloc_failed:
-> +	if (!vmaddr) {
-> +		kfree(pages);
-> +		if (addr)
-> +			free_pages_exact(addr, size);
-> +	}
-> +	vfree(vmaddr);
-> +	kfree(buf);
-> +	return NULL;
-> +}
-> +
-> +/* Remove the shared mapping and free the buffer */
-> +static void free_quote_buf(struct quote_buf *buf)
-> +{
-> +	if (!buf)
-> +		return;
-> +
-> +	/* Mark pages private */
-> +	if (set_memory_encrypted_noalias((unsigned long)buf->vmaddr,
-> +				buf->count)) {
-> +		pr_warn("Failed to encrypt %d pages at %p", buf->count,
-> +				buf->vmaddr);
-> +		return;
-> +	}
-> +
-> +	vfree(buf->vmaddr);
-> +	kfree(buf);
-> +}
-> +
-> +static struct quote_entry *alloc_quote_entry(u64 buf_len)
-> +{
-> +	struct quote_entry *entry = NULL;
-> +
-> +	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-> +	if (!entry)
-> +		return NULL;
-> +
-> +	/* Allocate buffer for quote request */
-> +	entry->buf = alloc_quote_buf(buf_len);
-> +	if (!entry->buf) {
-> +		kfree(entry);
-> +		return NULL;
-> +	}
-> +
-> +	init_completion(&entry->compl);
-> +	entry->valid = true;
-> +
-> +	return entry;
-> +}
-> +
-> +static void free_quote_entry(struct quote_entry *entry)
-> +{
-> +	free_quote_buf(entry->buf);
-> +	kfree(entry);
-> +}
-> +
+> +	if (WARN_ON_ONCE(nr >= 16))
+> +		nr &= 16 - 1;
 
+Instead of doing a modulo here, what about forcing it into an "unused"
+slot?
+
+i.e. define _regs as an array of [16 + 1], and:
+
+	if (WARN_ON_ONCE(nr >= 16)
+		nr = 16;
+
+Then there is both no out-of-bounds access, but also no weird "actual"
+register indexed?
+
+-Kees
+
+-- 
+Kees Cook

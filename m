@@ -2,100 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22EE535259
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F1A53525E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348022AbiEZQ4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 12:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
+        id S1346557AbiEZRAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 13:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbiEZQ4j (ORCPT
+        with ESMTP id S237076AbiEZRAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 12:56:39 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC4F19035
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:56:38 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id fd25so2531578edb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=isOrsXL0jHLDNpKhO8ZEqLC8ipi0wUCiYFmfhMLBsnU=;
-        b=bE6cq8VXUw1ng5S8fzhwxLsVvpBr5SVM2s8vxx5gkoxKNAfetakdLEGE8CTXa7IJZt
-         K+kt/6HoJEa2Ex44jO8RkS5uhxfCoTX0Grykbi/9zAJ1IlCmATU8zUZE2TcOkYXZGSmN
-         oLQGi/OQ3kqT+160gfv8dAn/LD5zrNzI2mUm4=
+        Thu, 26 May 2022 13:00:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85B5AA3085
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:00:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653584445;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ScB3NEe+9Ln+Tkzu5WY+q2tuSZNjpx/VGcUZnRc1NIc=;
+        b=TyGZgqPmo90bOgltHcH0GwdbclgOPTA6KfkazPVLZi4OHk4JAH4TOuYm5t/YjgRgCDwACU
+        DafnVMHm5KvUBFyzafKKZ2qsKtNG90GLuruxlNJBV/Gn/G+TYI3PPuBtRuPXobsejiWuTV
+        vjRF9gNznDwDNavCHlZCr76GUim1NUc=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-84-Ng8Nmd7oO8ejZDTN24hs2A-1; Thu, 26 May 2022 13:00:44 -0400
+X-MC-Unique: Ng8Nmd7oO8ejZDTN24hs2A-1
+Received: by mail-qk1-f199.google.com with SMTP id b1-20020a05620a118100b006a36dec1b16so1947842qkk.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:00:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=isOrsXL0jHLDNpKhO8ZEqLC8ipi0wUCiYFmfhMLBsnU=;
-        b=xOY3dWP/7BQTuHn/NXKHaaUYIyVtPSDkb50gyfZImiZkBh0STycqXzZAuDMmyX8uMR
-         PtMqpf7cegUVpP06UN0T1VfK7C+K+y2JfsQG9MTcQZr7gdZU6zgD9wjDs3tmEaLSa3/R
-         XC+g2YOWdHCQL7pRf7/bjg7sxTIMK4EuRMKP3YPuPO5vgTHmBPyubUwOklT4Un3xXwDi
-         veR7SFcJXvnKuwtl1SCaDsVxhUGDZLJAb34skfixf1cdX7Teb3QOAd4FtxOTWxEcb3Xl
-         PWVbKqs1s7sQPE8X7yiJ2rOx4mwt4fNjspf6s4DO8/g23seJKLaRy+8JnNsB8njDGQqD
-         QNUQ==
-X-Gm-Message-State: AOAM531sl/OyIRaEp0ybfRShgHV4nvDnbZKaq23tBglhOa2oQqmhzCrh
-        rRn6WiWRxBpQp2PSvr+aZI4ONsqrAZz30u8ab88=
-X-Google-Smtp-Source: ABdhPJzK8fy4Q6MqPhRtdGxI7QVFCr5WZeaVA6mp9ND+XGyxEjDiddss3q/7CoMA0ZjVAsjjtYlAbg==
-X-Received: by 2002:aa7:d591:0:b0:42b:de9d:423b with SMTP id r17-20020aa7d591000000b0042bde9d423bmr3203820edq.359.1653584196913;
-        Thu, 26 May 2022 09:56:36 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id c23-20020a50f617000000b0042b765c2448sm996034edn.80.2022.05.26.09.56.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 09:56:36 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id z15so2848520wrg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:56:36 -0700 (PDT)
-X-Received: by 2002:a5d:6da6:0:b0:20f:bc8a:9400 with SMTP id
- u6-20020a5d6da6000000b0020fbc8a9400mr25595398wrs.274.1653584195719; Thu, 26
- May 2022 09:56:35 -0700 (PDT)
+        bh=ScB3NEe+9Ln+Tkzu5WY+q2tuSZNjpx/VGcUZnRc1NIc=;
+        b=67aLVpDhWtyJnDdoPsmx8JlNGGS+T4fSvshaAtLmkOW6a0i+4h+abr1s5b8e54mPc2
+         Mp/xuW3mI4vbt0e1P9wkLKT8ib9/bkmg0EsoFVPyV8BtvTV0bqK6CN7jyWP2Q5oGKB3P
+         L7GiOLDcSqYEMe22KgDsK5oDGRF7dB6t+aesZnt0yKNFuErxfyTOKdsCQH4RhSL9HVSu
+         F36NI1SXrF2nP2Yxu5eWvc8+vLeVVwhnlLtGOgcVroKvtok2qz9ZrY+Up8+5muDzjrdR
+         YwuhqJwZ/ASyU8Vho64otU8Lh9NCQxKI5PEQTOcSJln0iarKtBfKTfJDWyIf7h1kE3eT
+         jOqA==
+X-Gm-Message-State: AOAM531kFldbAxk6hgCIPjLw15jC+SYQSk81rEVILDWbnxHbzBW2a7Gp
+        LURyn77x65QvlQ+c+Gfg7FjsX/SmEFloOUo2mRdMstreoC8HmmlYpoDgkBXqzqIpvVbORwtICiG
+        Hc6o84gerqiS5U+nMt+64NGhUVds8xUq5J5LRuXjA
+X-Received: by 2002:a05:6214:20ec:b0:461:dc16:163d with SMTP id 12-20020a05621420ec00b00461dc16163dmr31140864qvk.40.1653584443713;
+        Thu, 26 May 2022 10:00:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxNuwW+OIVP4vntmIePKpEQwZ/yx3kjSX7hxVx5Ym3uDYMxGP5HP0I/N0p1Ox7imcOdUzdR7I8xd1xm+yiSe4Q=
+X-Received: by 2002:a05:6214:20ec:b0:461:dc16:163d with SMTP id
+ 12-20020a05621420ec00b00461dc16163dmr31140772qvk.40.1653584443120; Thu, 26
+ May 2022 10:00:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220525144013.6481-1-ubizjak@gmail.com> <20220525144013.6481-2-ubizjak@gmail.com>
- <CAHk-=wh1XeaxWXG5QziGA4ds918UnW1hO924kusgVB-wGj+9Og@mail.gmail.com>
-In-Reply-To: <CAHk-=wh1XeaxWXG5QziGA4ds918UnW1hO924kusgVB-wGj+9Og@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 26 May 2022 09:56:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg1xKLV3aWWvp46295yFkAnzxv3pmehoHk6RuEwB0pa_Q@mail.gmail.com>
-Message-ID: <CAHk-=wg1xKLV3aWWvp46295yFkAnzxv3pmehoHk6RuEwB0pa_Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] locking/lockref: Use try_cmpxchg64 in CMPXCHG_LOOP macro
-To:     Uros Bizjak <ubizjak@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Waiman.Long@hp.com,
-        Paul McKenney <paulmck@linux.vnet.ibm.com>
+References: <20220525105922.2413991-1-eperezma@redhat.com> <20220525105922.2413991-3-eperezma@redhat.com>
+ <BL1PR12MB582520CC9CE024149141327499D69@BL1PR12MB5825.namprd12.prod.outlook.com>
+ <CAJaqyWc9_ErCg4whLKrjNyP5z2DZno-LJm7PN=-9uk7PUT4fJw@mail.gmail.com>
+ <20220526090706.maf645wayelb7mcp@sgarzare-redhat> <CAJaqyWf7PumZXy1g3PbbTNCdn3u1XH3XQF73tw2w8Py5yLkSAg@mail.gmail.com>
+ <20220526132038.GF2168@kadam>
+In-Reply-To: <20220526132038.GF2168@kadam>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Thu, 26 May 2022 19:00:06 +0200
+Message-ID: <CAJaqyWe4311B6SK997eijEJyhwnAxkBUGJ_0iuDNd=wZSt0DmQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] vhost-vdpa: introduce STOP backend feature bit
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        "Dawar, Gautam" <gautam.dawar@amd.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        "martinh@xilinx.com" <martinh@xilinx.com>,
+        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
+        Eli Cohen <elic@nvidia.com>, Parav Pandit <parav@nvidia.com>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        "dinang@xilinx.com" <dinang@xilinx.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "martinpo@xilinx.com" <martinpo@xilinx.com>,
+        "pabloc@xilinx.com" <pabloc@xilinx.com>,
+        Longpeng <longpeng2@huawei.com>,
+        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
+        "lvivier@redhat.com" <lvivier@redhat.com>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        "hanand@xilinx.com" <hanand@xilinx.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 9:47 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, May 26, 2022 at 3:21 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 >
-> Ack on this one regardless of the 32-bit x86 question.
+> On Thu, May 26, 2022 at 02:44:02PM +0200, Eugenio Perez Martin wrote:
+> > > >> +static bool vhost_vdpa_can_stop(const struct vhost_vdpa *v) {
+> > > >> +       struct vdpa_device *vdpa = v->vdpa;
+> > > >> +       const struct vdpa_config_ops *ops = vdpa->config;
+> > > >> +
+> > > >> +       return ops->stop;
+> > > >> [GD>>] Would it be better to explicitly return a bool to match the return type?
+> > > >
+> > > >I'm not sure about the kernel code style regarding that casting. Maybe
+> > > >it's better to return !!ops->stop here. The macros likely and unlikely
+> > > >do that.
+> > >
+> > > IIUC `ops->stop` is a function pointer, so what about
+> > >
+> > >      return ops->stop != NULL;
+> > >
+> >
+> > I'm ok with any method proposed. Both three ways can be found in the
+> > kernel so I think they are all valid (although the double negation is
+> > from bool to integer in (0,1) set actually).
+> >
+> > Maybe Jason or Michael (as maintainers) can state the preferred method here.
+>
+> Always just do whatever the person who responded feels like because
+> they're likely the person who cares the most.  ;)
+>
 
-.. and with confirmation from Michael and Mark (and the analysis from
-Uros on the fallback code), I've applied this to my tree.
+This is interesting and I think it's good advice :). I'm fine with
+whatever we chose, I just wanted to "break the tie" between the three.
 
-NOTE!
+> I don't think there are any static analysis tools which will complain
+> about this.  Smatch will complain if you return a negative literal.
 
-I have *not* applied the second patch with the x86-32 change to enable
-this on 32-bit with CMPXCHG8B enabled. I think that's independent, and
-will leave it up to the x86 maintainers.  Plus I think the patch
-should be simplified.
+Maybe a negative literal is a bad code signal, yes.
 
-             Linus
+> It feels like returning any literal that isn't 1 or 0 should trigger a
+> warning...  I've written that and will check it out tonight.
+>
+
+I'm not sure this should be so strict, or "literal" does not include pointers?
+
+As an experiment, can Smatch be used to count how many times a
+returned pointer is converted to int / bool before returning vs not
+converted?
+
+I find Smatch interesting, especially when switching between projects
+frequently. Does it support changing the code like clang-format? To
+offload cognitive load to tools is usually good :).
+
+Thanks!
+
+> Really anything negative should trigger a warning.  See new Smatch stuff
+> below.
+>
+> regards,
+> dan carpenter
+>
+> ================ TEST CASE =========================
+>
+> int x;
+> _Bool one(int *p)
+> {
+>         if (p)
+>                 x = -2;
+>         return x;
+> }
+> _Bool two(int *p)
+> {
+>         return -4;  // returning 2 triggers a warning now
+> }
+>
+> =============== OUTPUT =============================
+>
+> test.c:10 one() warn: potential negative cast to bool 'x'
+> test.c:14 two() warn: signedness bug returning '(-4)'
+> test.c:14 two() warn: '(-4)' is not bool
+>
+> =============== CODE ===============================
+>
+> #include "smatch.h"
+> #include "smatch_extra.h"
+> #include "smatch_slist.h"
+>
+> static int my_id;
+>
+> static void match_literals(struct expression *ret_value)
+> {
+>         struct symbol *type;
+>         sval_t sval;
+>
+>         type = cur_func_return_type();
+>         if (!type || sval_type_max(type).value != 1)
+>                 return;
+>
+>         if (!get_implied_value(ret_value, &sval))
+>                 return;
+>
+>         if (sval.value == 0 || sval.value == 1)
+>                 return;
+>
+>         sm_warning("'%s' is not bool", sval_to_str(sval));
+> }
+>
+> static void match_any_negative(struct expression *ret_value)
+> {
+>         struct symbol *type;
+>         struct sm_state *extra, *sm;
+>         sval_t sval;
+>         char *name;
+>
+>         type = cur_func_return_type();
+>         if (!type || sval_type_max(type).value != 1)
+>                 return;
+>
+>         extra = get_extra_sm_state(ret_value);
+>         if (!extra)
+>                 return;
+>         FOR_EACH_PTR(extra->possible, sm) {
+>                 if (estate_get_single_value(sm->state, &sval) &&
+>                     sval_is_negative(sval)) {
+>                         name = expr_to_str(ret_value);
+>                         sm_warning("potential negative cast to bool '%s'", name);
+>                         free_string(name);
+>                         return;
+>                 }
+>         } END_FOR_EACH_PTR(sm);
+> }
+>
+> void check_bool_return(int id)
+> {
+>         my_id = id;
+>
+>         add_hook(&match_literals, RETURN_HOOK);
+>         add_hook(&match_any_negative, RETURN_HOOK);
+> }
+>
+

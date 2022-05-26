@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B37D534A43
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 07:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49633534990
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 05:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346007AbiEZFy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 01:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S1345064AbiEZD6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 23:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiEZFyy (ORCPT
+        with ESMTP id S231989AbiEZD6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 01:54:54 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1F8AF1EB;
-        Wed, 25 May 2022 22:54:52 -0700 (PDT)
-X-UUID: f0156b3f023442de83e983fdefdf6daa-20220526
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:bca405fb-0a5b-40e5-a557-59b9c45bfe03,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:e9a38947-4fb1-496b-8f1d-39e733fed1ea,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: f0156b3f023442de83e983fdefdf6daa-20220526
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1055895831; Thu, 26 May 2022 13:54:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 26 May 2022 13:54:44 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 26 May 2022 13:54:44 +0800
-Message-ID: <36568582407c2513028bdd6669b9a6147ebd6132.camel@mediatek.com>
-Subject: Re: [PATCH v3 4/4] soc: mediatek: svs: add support for mt8195
-From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
+        Wed, 25 May 2022 23:58:49 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F4DC0383;
+        Wed, 25 May 2022 20:58:48 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id gh17so762690ejc.6;
+        Wed, 25 May 2022 20:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ryz8jK++qtmZIXX/BrHOdAAZhVGZsYPnM6ClGJVY9A8=;
+        b=S55ylpkB6fuQ1PGbn2P5P5UhWWx3kcHmsG5HZK2jwVXe3Iut3SBezShGT5njxgq0mw
+         U5N6A9FvK3mKOgPk4kgzaVpVF3AppJ77RBHGiOYyY9YZcQD8pZDdfQrZG2sKzkQRH3pZ
+         3keWop+G5WWoLubILTEGID6J4xVzuSjYi+ypH6scBniDH3Rw3FRz2/5g3OiuCAIOSLv9
+         PLH7AIckToq3Cr9HYCRCjXEhNp1/P8aMJOBaZZKTmER9kkM8qT2jzshXPU0UfbIDwVBm
+         X34TpIvBBgFl4PUCRfo38txv0UlYPx1a+P9yEZJMVbxHpmGggLgRjd4sRAP5VNJPP/V7
+         VCrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ryz8jK++qtmZIXX/BrHOdAAZhVGZsYPnM6ClGJVY9A8=;
+        b=XnSmBqvlDfzpIgnASFyY/6a1OD26B3mxB5v/LNKdDXbpDf9BS55K7kjuBDrzBmJ+l5
+         ubDCpuzReWE97O+1p7Gtj7xh3Y72iO3qYkYb4iK6MDrIwdHZCWacnfA8+gBfoI+4WSuD
+         IPDzXRXBSHJu2deG79ejvM/J6+6P4dcPapx+W+virgSOYCA+qU+NacELI7rzP54sAb/c
+         xFWvLAWYjh19tWqCKpQikjuqwsmdwo/G/E3x8l5W6/UBH7AXBHOGaKh07IyK18UNS3mK
+         FTZOKnjyMF853QJXo0FwG7djpyXIP3ZncqQJpywcsi57FjrMs1ptMWV43HT+nMWthPME
+         xX4A==
+X-Gm-Message-State: AOAM531HY5rmkBUMLsBiJED9SjvESZn2HjlEgADVnzPrqAWdpIhHG8Jk
+        KQV57Tk6ZgNdWqml7ORFG2U=
+X-Google-Smtp-Source: ABdhPJwt1RobKJEH1XYuez7hTKhtcGRGQk/3RRcwsTtYnW2cjHSbunaO1Y8OFENQajFFIbcBpkC07A==
+X-Received: by 2002:a17:907:9496:b0:6ff:1012:1b9c with SMTP id dm22-20020a170907949600b006ff10121b9cmr6168784ejc.457.1653537527084;
+        Wed, 25 May 2022 20:58:47 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:ab88:368f:2080:5d6e:322:57b6:5f03])
+        by smtp.googlemail.com with ESMTPSA id c13-20020a50d64d000000b0042617ba63cfsm206621edj.89.2022.05.25.20.58.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 20:58:46 -0700 (PDT)
+From:   David Virag <virag.david003@gmail.com>
+Cc:     David Virag <virag.david003@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Roger Lu <roger.lu@mediatek.com>,
-        Kevin Hilman <khilman@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>
-Date:   Thu, 26 May 2022 13:54:44 +0800
-In-Reply-To: <d9563b65-2391-d32c-8a07-ca7a13cae7c7@collabora.com>
-References: <20220523084034.26802-1-jia-wei.chang@mediatek.com>
-         <20220523084034.26802-5-jia-wei.chang@mediatek.com>
-         <d9563b65-2391-d32c-8a07-ca7a13cae7c7@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH 0/2] Correct "div4" clocks in Exynos7885
+Date:   Thu, 26 May 2022 07:58:38 +0200
+Message-Id: <20220526055840.45209-1-virag.david003@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-23 at 11:38 +0200, AngeloGioacchino Del Regno wrote:
-> Il 23/05/22 10:40, Tim Chang ha scritto:
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > To support svs on MT8195, add corresponding bank information,
-> > platform
-> > data, probe and parsing function.
-> > 
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> 
-> 
-> 
-> > ---
-> >   drivers/soc/mediatek/mtk-svs.c | 151
-> > +++++++++++++++++++++++++++++++++
-> >   1 file changed, 151 insertions(+)
-> > 
-> > diff --git a/drivers/soc/mediatek/mtk-svs.c
-> > b/drivers/soc/mediatek/mtk-svs.c
-> > index 656d0361ff7d..bb5021648143 100644
-> > --- a/drivers/soc/mediatek/mtk-svs.c
-> > +++ b/drivers/soc/mediatek/mtk-svs.c
-> > @@ -1680,6 +1680,89 @@ static int svs_bank_resource_setup(struct
-> > svs_platform *svsp)
-> 
-> ..snip..
-> 
-> > @@ -2559,6 +2697,16 @@ static struct svs_bank svs_mt8183_banks[] =
-> > {
-> >   	},
-> >   };
-> >   
-> > +static const struct svs_platform_data svs_mt8195_platform_data = {
-> > +	.name = "mt8195-svs",
-> > +	.banks = svs_mt8195_banks,
-> > +	.efuse_parsing = svs_mt8195_efuse_parsing,
-> > +	.probe = svs_mt8192_platform_probe,
-> > +	.irqflags = IRQF_TRIGGER_HIGH,
-> 
-> Interrupt flags are specified in devicetree; avoid declaring
-> irqflags.
-> 
-> After that:
-> 
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> 
+The div4 clocks in Exynos7885 were mistakenly set to have the wrong
+parents making them and their children display 2x the actual clockrate.
+This in turn lead to the DTSI getting the wrong clocks for UART, since
+that's the configuration it worked properly with. This was noticed by
+Sam Protsenko [1] but since it worked this way and not the other way
+around, I didn't think much of it.
 
-Hi Angelo,
+[1] https://lore.kernel.org/linux-samsung-soc/CAPLW+4k3Vmg0W0jVsTChHTG8+eeg=5QF+actz1Tk0vNV9w-y-A@mail.gmail.com/
 
-Sure, I will remove it in the next version.
-Thanks.
+David Virag (2):
+  clk: samsung: exynos7885: Correct "div4" clock parents
+  arm64: dts: exynos: Correct UART clocks on Exynos7885
+
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi | 12 ++++++------
+ drivers/clk/samsung/clk-exynos7885.c       |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+-- 
+2.35.1
 

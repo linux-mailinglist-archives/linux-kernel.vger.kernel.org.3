@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F413534DA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8BC534DC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245081AbiEZLBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 07:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S1345962AbiEZLDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 07:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbiEZLBN (ORCPT
+        with ESMTP id S1347089AbiEZLC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 07:01:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7B31D0F3;
-        Thu, 26 May 2022 04:01:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4821EB81F14;
-        Thu, 26 May 2022 11:01:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCE33C385A9;
-        Thu, 26 May 2022 11:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653562868;
-        bh=hfcaxSjEVLVQ76sX/0B4km9ev5zJp72a68slPepbwZs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J9dNX/CYol3rStXoipC4u3m65JQ/CVaYQLLeFR/i3em/BmWPkr6liFYFLsTB73x+2
-         AsmUaVFFeVz7ZNFGd1fXszmwZSbIzc9eBnFF5fLvfmUuJZGybocBoY+BaFL9uPpQAe
-         ns25g2mHLQUqOlfyBZdCH7cHrwSN6s7nq7bUYiY00XpfTe5OmO3XJtHs0cFXqp6uPc
-         r5iTZmfH515no5UYjI8tMSqvh8GPqn+Rffu8JwrjYtZvB+6eEbR+gl+TST/LgjdAyD
-         /zyoM4tNT5p1h5DYZB/tt2QE43L7JUZZaXXKLXVcdTWOoaCcC4TE7SKVHlz5xygH6h
-         fQZ4MpxI6Bd4w==
-Date:   Thu, 26 May 2022 13:01:02 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: mv88e6xxx: Fix refcount leak in
- mv88e6xxx_mdios_register
-Message-ID: <20220526130102.6c532648@dellmb>
-In-Reply-To: <20220526083748.39816-1-linmq006@gmail.com>
-References: <20220526083748.39816-1-linmq006@gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 26 May 2022 07:02:59 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039BFCEB93;
+        Thu, 26 May 2022 04:02:58 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id n8so1169253plh.1;
+        Thu, 26 May 2022 04:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pQUCA+bAk9kVI/8KTFrFISyXPuEQ82dwO725ac3Sycc=;
+        b=mImrJwj6KAgd0728Scm85+G/bDiUAaeeOA3NKofzoL0zUz3ATZra9wQ3f0wz5AdoJd
+         cCFSmNyx5/WJc+nWyl//m/yZXJG0B4bcQXMIM83VVZYafy4uDfrUGVtHHCDYTdKqpfxy
+         Qsn/PlbNfOodNnzS7L+jMl1BOuKxZ6mm/lNR/H3UuwNYRpWd5JpuGs+k9JSkMY1AJTKP
+         hzIL0Wc143ZQ7QvedXICpdL8eW1N9aK+6Td7HkVfgtjqI6VEMUnJhZYGBc+MN8PSCG+D
+         DGKWVUuWVj2yyPGauuXss/WgP6GlwIn/RBvUHt2lF/MQqq93UcyjtL6NrNnZvYMlJ94c
+         udRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pQUCA+bAk9kVI/8KTFrFISyXPuEQ82dwO725ac3Sycc=;
+        b=jwzXhEdkdWBB2mohNqTtHcq4PsuU9jpQUhdOn75dsd8Omb51rRXx+1Se69hFJhM66a
+         Hq1UEybB3oh9Pjw1KcPjKy6KUsi7ghZUmNlWePKfQ6xWc89wo0c6jgKdYIEqTxb9zNwB
+         UGuoKfekzpPCjpqHxGjayqLwXVQDea3fiyYU2eU00HoeoPRQbstpEgCUyKx9xvoUX+6k
+         HWHf+dD1wvx7oujOCxE1K+q+cqAH6QwdwSSn7W9YaY7eh9L+RuYGOddaVRZXZdJJQ6W8
+         wBzRCoZhpzUah8TheOTqOVno7kTfjgbIuJzxUDobat4TETnETI2OgQEfcH53DQKmcLPS
+         F7yA==
+X-Gm-Message-State: AOAM532QZUrKfl2BYti96WKvcE/AWkFk9Rud5ZiF4Uu733pX6jd6NBo9
+        1qxw0bGJ8RSl24ysvQnVXDrrKgQRmbKTL8jV
+X-Google-Smtp-Source: ABdhPJzQNCewyZz5gSKXq3raps72PN4ezX+1KdP2h6rnRD65QUCkIlb9JRWJUGJBbANgZNjY/Ze1HQ==
+X-Received: by 2002:a17:902:cec6:b0:162:50b1:b40a with SMTP id d6-20020a170902cec600b0016250b1b40amr10923335plg.107.1653562977387;
+        Thu, 26 May 2022 04:02:57 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id x1-20020a17090300c100b0015e8d4eb289sm1178902plc.211.2022.05.26.04.02.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 04:02:56 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] PCI: mediatek-gen3: Fix refcount leak in mtk_pcie_init_irq_domains
+Date:   Thu, 26 May 2022 15:02:46 +0400
+Message-Id: <20220526110246.53502-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 May 2022 12:37:48 +0400
-Miaoqian Lin <linmq006@gmail.com> wrote:
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-> of_get_child_by_name() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when done.
-> This function missing of_node_put() in an error path.
-> Add missing of_node_put() to avoid refcount leak.
-> 
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/net/dsa/mv88e6xxx/chip.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-> index 5d2c57a7c708..0726df6aeb1f 100644
-> --- a/drivers/net/dsa/mv88e6xxx/chip.c
-> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
-> @@ -3960,8 +3960,10 @@ static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
->  	 */
->  	child = of_get_child_by_name(np, "mdio");
->  	err = mv88e6xxx_mdio_register(chip, child, false);
-> -	if (err)
-> +	if (err) {
-> +		of_node_put(child);
->  		return err;
-> +	}
->  
->  	/* Walk the device tree, and see if there are any other nodes
->  	 * which say they are compatible with the external mdio
+Fixes: 814cceebba9b ("PCI: mediatek-gen3: Add INTx support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/pci/controller/pcie-mediatek-gen3.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Fix needs Fixes tag so that it can be backported. Please add correct
-Fixes tag.
+diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
+index 3e8d70bfabc6..da8e9db0abdf 100644
+--- a/drivers/pci/controller/pcie-mediatek-gen3.c
++++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+@@ -600,6 +600,7 @@ static int mtk_pcie_init_irq_domains(struct mtk_gen3_pcie *pcie)
+ 						  &intx_domain_ops, pcie);
+ 	if (!pcie->intx_domain) {
+ 		dev_err(dev, "failed to create INTx IRQ domain\n");
++		of_node_put(intc_node);
+ 		return -ENODEV;
+ 	}
+ 
+-- 
+2.25.1
+

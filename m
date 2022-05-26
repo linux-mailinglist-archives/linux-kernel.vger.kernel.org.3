@@ -2,192 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CC2534815
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C132534818
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345413AbiEZB1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
+        id S1345542AbiEZB2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345018AbiEZB07 (ORCPT
+        with ESMTP id S243733AbiEZB2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:26:59 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22109D4E3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:26:56 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id f21so481003pfa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:26:56 -0700 (PDT)
+        Wed, 25 May 2022 21:28:46 -0400
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351849D070
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:28:45 -0700 (PDT)
+Received: by mail-vk1-xa32.google.com with SMTP id b81so142078vkf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:28:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IJTqDFjqCzxzT9sNGwb8smwhndUIJK3si2+NAvjLPes=;
-        b=Fo56R9QSrSXqfV05MSzzv7c9rMI/iX8H4AGbweLENhxpW5nawqk8y+LqBTCmNg/4i+
-         PhXsfFO5c2nBs6fmgjNmwkm+l+iPglwQplWAFk31l2ERXQSR+O8CS83VxWDKHreBauXZ
-         C+tIF31wEw/+dWjT+ZrNsjeJafF81tZHuvLMYl2o87d8VzeDw/ei3kuAdkSOYZY6szYf
-         /cpcSCkjZrMPdcHw8DAxQ8TdyoZqFlv155nOz1bEHxRW2aRtYt4OLf9v5ZlVNxGt8FTQ
-         Ad3jAt5arJXGF/YwYauIPTunz82O+JznzJ+J9Gg2wxJBWktLH8WUbpNHfUT5nZDvCh0n
-         B5Iw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oiTRf6EF/H3TBNBVZIGNJm3A9cOgQLVm1U6yDTQ2d5I=;
+        b=fs1lwK6/6kqEgmHrQX6rxnyuN1F3qSBt6oZlGY/IgJSpxNNazl86s15U+QVeAweXiR
+         e6K+dANWBE/D616R5uaxSIyjtWKMeZSMe8xcAZDhDA5mUPTWA/yrOPlxhZN2BW62jzVY
+         lNQQhdz4wtvTJNq/yaBpzqsMj5a9tBTTmHJsY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=IJTqDFjqCzxzT9sNGwb8smwhndUIJK3si2+NAvjLPes=;
-        b=BtTMswCf10DAacRWxfAzopwhX2t9JbAARhhfVIG14AVdkQ82Q8xB6QS1l62C9pveY8
-         htBdie+dUQ1rCal99YqulxXZ51YIQPhDUjGj9577ifugM97dc/j1EP1P33BE2o/NO/Mo
-         OQhP37tbIEcgtPvbEbpmuJfzIIfOAGnmX7dNA2MLJwvjItN0eQyXiQdpH+P6Me7qGYvd
-         bQLhmPKBFCVZrbrubhC2D6ie7ijpsF19PTYyKmh1WPV1Xk8/znj8fq62+AVTMfJgzUtt
-         XqA96u50TqyRgEfS8cBAVzEc2dPprO+n88cZiP6hdLVV19UG4edYPnv++Tlu6YxhG23t
-         eGhg==
-X-Gm-Message-State: AOAM530SroI4VReugWgxDj/4XcAZJ/k2WXhlLjxNCv9lI4yR9yd9s6a7
-        jSrP0MU5KPOGqEObFcUpNQbzNA==
-X-Google-Smtp-Source: ABdhPJwxw+ZGBVWh2A3SVMACHEfgZ3hR+byOfKJRugCCmYszTXdAzNBFX/0zwN8agIEbo1Dw5NMdUw==
-X-Received: by 2002:a65:6cc3:0:b0:3f6:26e9:5c1 with SMTP id g3-20020a656cc3000000b003f626e905c1mr30607276pgw.28.1653528416310;
-        Wed, 25 May 2022 18:26:56 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id r5-20020a1709028bc500b001608bceb092sm51637plo.124.2022.05.25.18.26.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 18:26:55 -0700 (PDT)
-Date:   Wed, 25 May 2022 18:26:55 -0700 (PDT)
-X-Google-Original-Date: Wed, 25 May 2022 18:26:54 PDT (-0700)
-Subject:     Re: [PATCH V2] riscv: compat: Using seperated vdso_maps for compat_vdso_info
-In-Reply-To: <CAJF2gTQvmKE5UYTmhQMd0MTF-CJm08_VHpcSqS7ik=MGtZ0Jag@mail.gmail.com>
-CC:     jrtc27@jrtc27.com, Arnd Bergmann <arnd@arndb.de>,
-        linux@roeck-us.net, heiko@sntech.de,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     guoren@kernel.org
-Message-ID: <mhng-33d1c05c-e54e-4b8d-a016-18560b855e33@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oiTRf6EF/H3TBNBVZIGNJm3A9cOgQLVm1U6yDTQ2d5I=;
+        b=ehFWHocDjc+wxpvUB7aUtWvqmVawQVQkGqSMMVkIaLMbVyD8tUamoXwvuq6q+4kS3O
+         4QVSSvg6UhrS/EPWfASs7qkuH5FR3ycZTElhLfQIhHyPBD+C5sIuSO0oEgPKxVnouPCS
+         PtYtzeNDLfJJ3LiiiCtJZZkNzjtzlOpYZtwc+SB9FZsyZORWHZ8zVidcbL/6MjcYSotL
+         9RWKvOg0B9n6J5/Kw4MN3+G82bS4piRB34wDw6+OiniP5O0J73LpabXxDFbbk1YCDlDU
+         BEZslDrBUBwwOm6FJjSxPZa22y3A9oE69F0ZoTkmmLuEG219JrkbdRm+tI0LOuavzUzQ
+         NHCg==
+X-Gm-Message-State: AOAM531QSRXQUZqBJgUxat3JHB9O8zPswp/tpAxE0c/FhBe4Sr1SPGW0
+        YUOJd8gCxAPejML2XMYfhVLp/qPkLqUaZb4+
+X-Google-Smtp-Source: ABdhPJyvtcnL/lvUXVH56xjM+mLTpfesPfhQ1PIA1lx1frPP0tHuWQEu98vmam46X8arKp0GR9oH9A==
+X-Received: by 2002:a05:6122:d98:b0:331:47bf:b437 with SMTP id bc24-20020a0561220d9800b0033147bfb437mr13345642vkb.29.1653528524007;
+        Wed, 25 May 2022 18:28:44 -0700 (PDT)
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
+        by smtp.gmail.com with ESMTPSA id k23-20020a67e3d7000000b0032d275e6917sm12026vsm.23.2022.05.25.18.28.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 18:28:41 -0700 (PDT)
+Received: by mail-vk1-f178.google.com with SMTP id ay20so132734vkb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:28:41 -0700 (PDT)
+X-Received: by 2002:a05:6122:221f:b0:343:f3d4:87cb with SMTP id
+ bb31-20020a056122221f00b00343f3d487cbmr12802200vkb.13.1653528520525; Wed, 25
+ May 2022 18:28:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220513130533.v3.1.I31ec454f8d4ffce51a7708a8092f8a6f9c929092@changeid>
+ <5857c510-9783-a483-8414-65d7350618d6@suse.de> <CAD=FV=X99EWmRk82ako7cL7BWPEsTG=L7VVBVDFX5qKc1MifSA@mail.gmail.com>
+ <CAD=FV=U3Wywjev9tEhkL_zE1cV5NwEknH2YwHqyhd5TQtiJ=AQ@mail.gmail.com> <Yo4ufWm5WiXsnRX8@phenom.ffwll.local>
+In-Reply-To: <Yo4ufWm5WiXsnRX8@phenom.ffwll.local>
+From:   Sean Paul <seanpaul@chromium.org>
+Date:   Wed, 25 May 2022 21:28:04 -0400
+X-Gmail-Original-Message-ID: <CAOw6vbLu7TzTppUYv1cynMvn+ykTuGiYBCNhN7FO2kYqZj4DUg@mail.gmail.com>
+Message-ID: <CAOw6vbLu7TzTppUYv1cynMvn+ykTuGiYBCNhN7FO2kYqZj4DUg@mail.gmail.com>
+Subject: Re: [PATCH v3] drm/probe-helper: Make 640x480 first if no EDID
+To:     Doug Anderson <dianders@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Sean Paul <seanpaul@google.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 18:24:01 PDT (-0700), guoren@kernel.org wrote:
-> On Thu, May 26, 2022 at 9:00 AM Jessica Clarke <jrtc27@jrtc27.com> wrote:
->>
->> On 26 May 2022, at 01:33, guoren@kernel.org wrote:
->> >
->> > From: Guo Ren <guoren@linux.alibaba.com>
->> >
->> > This is a fixup for vdso implementation which caused musl to
->> > fail.
->> >
->> > [   11.600082] Run /sbin/init as init process
->> > [   11.628561] init[1]: unhandled signal 11 code 0x1 at
->> > 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
->> > [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted
->> > 5.18.0-rc7-next-20220520 #1
->> > [   11.629462] Hardware name: riscv-virtio,qemu (DT)
->> > [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp :
->> > 00ffffffc58199f0
->> > [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 :
->> > ffffffffffffffff
->> > [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 :
->> > 00ffffff8ade0cc0
->> > [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 :
->> > 00ffffffc5819a00
->> > [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 :
->> > 00ffffffc5819b00
->> > [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 :
->> > 0000000000000000
->> > [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 :
->> > 00ffffff8ade0728
->> > [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 :
->> > 00ffffffc5819e40
->> > [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10:
->> > 0000000000000000
->> > [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 :
->> > 0000000000000001
->> > [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
->> > [   11.629699] status: 0000000000004020 badaddr: 0000000000000000
->> > cause: 000000000000000d
->> >
->> > The last __vdso_init(&compat_vdso_info) replaces the data in normal
->> > vdso_info. This is an obvious bug.
->> >
->> > Reported-by: Guenter Roeck <linux@roeck-us.net>
->> > Tested-by: Guenter Roeck <linux@roeck-us.net>
->> > Tested-by: Heiko Stübner <heiko@sntech.de>
->> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->> > Signed-off-by: Guo Ren <guoren@kernel.org>
->> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
->> > ---
->> > Changes in V2:
->> > - Add Tested-by
->> > - Rename vvar & vdso in /proc/<pid>/maps.
->>
->> Why? No other architecture renames it to that, and various pieces of
->> software look for the magic [vdso] name, including GDB and LLDB, though
->> by my count there are 57 source packages in Debian that contain the
->> string literal "[vdso]" (including quotes), including Firefox,
->> Android's ART, lvm2 and elfutils.
-> Opps, Thx for pointing this out. Abandon the version of the patch. @Palmer
+On Wed, May 25, 2022 at 9:26 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Mon, May 23, 2022 at 05:59:02PM -0700, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Fri, May 20, 2022 at 5:01 PM Doug Anderson <dianders@chromium.org> w=
+rote:
+> > >
+> > > Hi,
+> > >
+> > > On Mon, May 16, 2022 at 3:28 AM Thomas Zimmermann <tzimmermann@suse.d=
+e> wrote:
+> > > >
+> > > > Hi Douglas,
+> > > >
+> > > > I understand that you're trying to tell userspace that the modelist=
+ has
+> > > > been made up, but it's not something that should be done via fragil=
+e
+> > > > heuristics IMHO.
+> > > >
+> > > > I looked at the Chromium source code that you linked, but I cannot =
+say
+> > > > whether it's doing the correct thing. It all depends on what your
+> > > > program needs.
+> > > >
+> > > > In that function, you could also search for 'DRM_MODE_TYPE_USERDEF'=
+.
+> > > > It's the mode that the user specified on the kernel command line. I=
+f
+> > > > Chromium's automatic mode selection fails, you'd give your users di=
+rect
+> > > > control over it.
+> > >
+> > > That doesn't really work for Chrome OS. Certainly a kernel hacker
+> > > could do this, but it's not something I could imagine us exposing to
+> > > an average user of a Chromebook.
+> > >
+> > >
+> > > > When there's no flagged mode or if
+> > > > /sys/class/drm/card<...>/status contains "unconnected", you can ass=
+ume
+> > > > that the modelist is artificial and try the modes in an appropriate=
+ order.
+> > >
+> > > So "no flagged" means that nothing is marked as preferred, correct?
+> > >
+> > > ...so I guess what you're suggesting is that the order that the kerne=
+l
+> > > is presenting the modes to userspace is not ABI. If there are no
+> > > preferred modes then userspace shouldn't necessarily assume that the
+> > > first mode returned is the best mode. Instead it should assume that i=
+f
+> > > there is no preferred mode then the mode list is made up and it shoul=
+d
+> > > make its own decisions about the best mode to start with. If this is
+> > > the ABI from the kernel then plausibly I could convince people to
+> > > change userspace to pick 640x480 first in this case.
+> > >
+> > > > If we really want the kernel to give additional guarantees, we shou=
+ld
+> > > > have a broader discussion about this topic IMHO.
+> > >
+> > > Sure. I've added St=C3=A9phane Marchesin to this thread in case he wa=
+nts to
+> > > chime in about anything.
+> > >
+> > > Overall, my take on the matter:
+> > >
+> > > * Mostly I got involved because, apparently, a DP compliance test was
+> > > failing. The compliance test was upset that when it presented us with
+> > > no EDID that we didn't default to 640x480. There was a push to make a
+> > > fix for this in the Qualcomm specific driver but that didn't sit righ=
+t
+> > > with me.
+> > >
+> > > * On all devices I'm currently working with (laptops), the DP is a
+> > > secondary display. If a user was trying to plug in a display with a
+> > > bad EDID and the max mode (1024x768) didn't work, they could just use
+> > > the primary display to choose a different resolution. It seems
+> > > unlikely a user would truly be upset and would probably be happy they
+> > > could get their broken display to work at all. Even if this is a
+> > > primary display, I believe there are documented key combos to change
+> > > the resolution of the primary display even if you can't see anything.
+> > >
+> > > * That all being said, defaulting to 640x480 when there's no EDID mad=
+e
+> > > sense to me, especially since it's actually defined in the DP spec. S=
+o
+> > > I'm trying to do the right thing and solve this corner case. That
+> > > being said, if it's truly controversial I can just drop it.
+> > >
+> > >
+> > > So I guess my plan will be to give St=C3=A9phane a little while in ca=
+se he
+> > > wants to chime in. If not then I guess I'll try a Chrome patch...
+> > > ...and if that doesn't work, I'll just drop it.
+> >
+> > OK, this userspace code seems to work:
+> >
+> > https://crrev.com/c/3662501 - ozone/drm: Try 640x480 before picking
+> > the first mode if no EDID
+> >
+> > ...so we'll see how review of that goes. :-)
 
-OK, I'll stick with the v1 I had -- everything was still in staging 
-anyway, though the tests probably wouldn't have found this one as I 
-don't run any of those (I'm just running buildroot's defaults).
+Mirroring some of my comments on that review here :-)
+
+IMO, this should be addressed in the kernel, or not at all. The kernel
+ensures other aspects of DisplayPort implementation are compliant, so
+I don't think this would be any exception. Further, the kernel is the
+one creating the "safe" mode list, so it seems odd that userspace
+would override that. Finally, relying on every userspace to do the
+right thing is asking for trouble (we have 3 places which would need
+this logic in CrOS).
 
 >
->>
->> Jess
->>
->> > ---
->> > arch/riscv/kernel/vdso.c | 15 +++++++++++++--
->> > 1 file changed, 13 insertions(+), 2 deletions(-)
->> >
->> > diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
->> > index 50fe4c877603..957f164c9778 100644
->> > --- a/arch/riscv/kernel/vdso.c
->> > +++ b/arch/riscv/kernel/vdso.c
->> > @@ -206,12 +206,23 @@ static struct __vdso_info vdso_info __ro_after_init = {
->> > };
->> >
->> > #ifdef CONFIG_COMPAT
->> > +static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
->> > +     [RV_VDSO_MAP_VVAR] = {
->> > +             .name   = "[compat vvar]",
->> > +             .fault = vvar_fault,
->> > +     },
->> > +     [RV_VDSO_MAP_VDSO] = {
->> > +             .name   = "[compat vdso]",
->> > +             .mremap = vdso_mremap,
->> > +     },
->> > +};
->> > +
->> > static struct __vdso_info compat_vdso_info __ro_after_init = {
->> >       .name = "compat_vdso",
->> >       .vdso_code_start = compat_vdso_start,
->> >       .vdso_code_end = compat_vdso_end,
->> > -     .dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
->> > -     .cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
->> > +     .dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
->> > +     .cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
->> > };
->> > #endif
->> >
->> > --
->> > 2.36.1
->> >
->> >
->> > _______________________________________________
->> > linux-riscv mailing list
->> > linux-riscv@lists.infradead.org
->> > http://lists.infradead.org/mailman/listinfo/linux-riscv
->>
+> Yeah it sucks a bit but I'm mildly afraid that if we muck around with the
+> absolute fallback mode list in upstream we get whacked by a regression
+> report :-/
+
+Yeah, this seems likely (unfortunately).
+
 >
+> There's the additional fun that on modern displays probably 720p (or mayb=
+e
+> 720i) is a lot more likely to work than anything else really, so best we
+> can do here maybe is to make it an uapi guarantee that if there's no
+> preferred mode, then most likely the kernel invent random noise out of
+> thin air, and userspace has to be careful and do its own magic heuristics=
+.
+> Or maybe we should add a flag for "this stuff is invented, buyer beware".
 >
-> -- 
-> Best Regards
->  Guo Ren
->
-> ML: https://lore.kernel.org/linux-csky/
+
+This seems like a reasonable compromise. Perhaps marking 640x480 as
+preferred would be a middle road?
+
+> I think clarifying that would be good. Changing defaults feels a bit too
+> risky, we had some really hilarious regression reports in the past along
+> the lines of the infamous xkcd.
+
+FWIW, I don't really have a strong opinion as to whether this should
+be fixed or not. I have a hard time believing that either 1024x768 or
+640x480 would result in a happy result for the user, so we're really
+just choosing a mode which is bad enough for the user to
+unplug/replug. If 640x480 makes the compliance machine happy, I
+suppose that's a compelling reason, but I don't really feel like this
+is worth special casing each userspace.
+
+Sean
+
+> -Daniel
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch

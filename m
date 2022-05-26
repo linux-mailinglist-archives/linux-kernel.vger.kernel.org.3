@@ -2,129 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 415A4534C75
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC2E534C7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238680AbiEZJVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 05:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
+        id S241511AbiEZJ2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 05:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346871AbiEZJVE (ORCPT
+        with ESMTP id S239161AbiEZJ21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 05:21:04 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2D4C8BC7;
-        Thu, 26 May 2022 02:20:59 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-300628e76f3so8825467b3.12;
-        Thu, 26 May 2022 02:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zq7iRvU+DT19FAVzX4uniBliRdwBdGOqRl/faEG/ylI=;
-        b=m2i8dTElJJQMlWTwrNgOkNd1e9rt1L4VVwccaswvo60HUG80C1sLCc51kflLd3gHWY
-         md7wQrYOrPAFUXRhRlkw0DKOOyfWAA8Lzgytqs7+okZG2u4eO+mJTm8aQnVfxwhTWrJL
-         lcUvCn/ogqv/eoW25GHSJLC1QO3m9297kbQWCXy8VGoQpPEkXwDjGK6ysKSUluCkYs6Y
-         zT+pPm3fCGSdU3PrligH20OFKp5rsSrhRYQieM+GHQiKDcrjIT4KzPDb7Yac7vGRUCoW
-         HdrvtLXh3k4Cgq4tJbIcP4L3ytpx95muZ7ZQZJ9Q5x8zjoIF+Z4z8o4aLliT+CSgWbyq
-         YnHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zq7iRvU+DT19FAVzX4uniBliRdwBdGOqRl/faEG/ylI=;
-        b=u8Ay328u9/4I2XRiHMBJE9+doDoyejtEOzGhWTTMk50LJedNNLK/UeIyY2/eb8jT+4
-         pXoUCw3vCmuKAYR7KA7OfwOGgZ1Nf78qUYYYKHogfiFPhp8I5MCEfbHNBmOCPJwB5vk3
-         p0EpGhRVfXoNAEIROb5OHAY17LRRmhSmzXrwoRcn1HDoZlpoDw8hW0Bq99MOYpekKYI/
-         3xEYLMa06RfikSbMpMO0IwGoDqGJEMMKoe3B6I3CDwBDPyTNA4PifC8HaBFkTu+3I2Bq
-         s4FAFQn0eLv/gfQxAwDBGuQQ5ubWwGhxmYd0nmwz6blZpGY8MUPN6Q4a2JORBSuojlMF
-         geXA==
-X-Gm-Message-State: AOAM533VsV04cI/t6ZXbqBVQ1/tqD8T/ynQLXSLhEbDphc6/LvhfNkav
-        B2zix7IGlh2QU06qZ0qiBWXV2ERmatTr1YUGNU4=
-X-Google-Smtp-Source: ABdhPJz2zB+V0gGBY5O1fQO89IFe56fLLqiBom2Biw/DYMzzuDOcXHEhsDUEPE4FG9QA7BE3YlWjcmRz94f/l3ucczk=
-X-Received: by 2002:a81:250c:0:b0:2ff:ee04:282e with SMTP id
- l12-20020a81250c000000b002ffee04282emr19770445ywl.161.1653556858815; Thu, 26
- May 2022 02:20:58 -0700 (PDT)
+        Thu, 26 May 2022 05:28:27 -0400
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4D665EBDF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:28:25 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAB3fY02SI9i5Yh8Cg--.41227S2;
+        Thu, 26 May 2022 17:28:23 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] mfd: sm501: barco-p50-gpio: Add check for platform_driver_register
+Date:   Thu, 26 May 2022 17:28:19 +0800
+Message-Id: <20220526092819.1469232-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220503150735.32723-1-jiangshanlai@gmail.com>
- <20220503150735.32723-2-jiangshanlai@gmail.com> <Yn7hUe9nyey/CS3J@google.com>
-In-Reply-To: <Yn7hUe9nyey/CS3J@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Thu, 26 May 2022 17:20:47 +0800
-Message-ID: <CAJhGHyDkRnQ56AveqZ=s1YvtRgiOeHQpLhH6MKyyoYNgsgF=xw@mail.gmail.com>
-Subject: Re: [PATCH V2 1/7] KVM: X86/MMU: Add using_special_root_page()
-To:     David Matlack <dmatlack@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAB3fY02SI9i5Yh8Cg--.41227S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw18uF43GFyfuw4DKr13twb_yoWfJrb_Cr
+        18WFyxGr4akFna9F4UJ34fZ340yFs09rs3uF10qFy3ta43trnIqr1UZr47A3W8Cr1xA3Zr
+        KwnFkrWfCryakjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48J
+        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+        v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 6:53 AM David Matlack <dmatlack@google.com> wrote:
->
-> On Tue, May 03, 2022 at 11:07:29PM +0800, Lai Jiangshan wrote:
-> > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> >
-> > In some case, special roots are used in mmu.  It is often using
-> > to_shadow_page(mmu->root.hpa) to check if special roots are used.
-> >
-> > Add using_special_root_page() to directly check if special roots are
-> > used or needed to be used even mmu->root.hpa is not set.
-> >
-> > Prepare for making to_shadow_page(mmu->root.hpa) return non-NULL via
-> > using special shadow pages.
-> >
-> > Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c | 14 +++++++++++---
-> >  1 file changed, 11 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 909372762363..7f20796af351 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -1711,6 +1711,14 @@ static void drop_parent_pte(struct kvm_mmu_page *sp,
-> >       mmu_spte_clear_no_track(parent_pte);
-> >  }
-> >
-> > +static bool using_special_root_page(struct kvm_mmu *mmu)
->
-> Could you enumerate all the scenarios that use special roots and which
-> roots are the special ones? I think that would help a lot with reviewing
-> this series and would be useful to encode in a comment, probably above
-> this function here, for future readers.
+As platform_driver_register() could fail, it should be better
+to deal with the return value in order to maintain the code
+consisitency.
 
-Thank you for the review.
+Fixes: b6d6454fdb66 ("[PATCH] mfd: SM501 core driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/mfd/sm501.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-All the scenarios are listed in v3.
+diff --git a/drivers/mfd/sm501.c b/drivers/mfd/sm501.c
+index bc0a2c38653e..41c8756bbf88 100644
+--- a/drivers/mfd/sm501.c
++++ b/drivers/mfd/sm501.c
+@@ -1720,7 +1720,12 @@ static struct platform_driver sm501_plat_driver = {
+ 
+ static int __init sm501_base_init(void)
+ {
+-	platform_driver_register(&sm501_plat_driver);
++	int ret;
++
++	ret = platform_driver_register(&sm501_plat_driver);
++	if (ret)
++		return ret;
++
+ 	return pci_register_driver(&sm501_pci_driver);
+ }
+ 
+-- 
+2.25.1
 
-And comments are added to prove the code matches the scenarios and
-the scenarios match the code (the proof must be in bi-direction).
-
->
-> Also the term "special" is really vague. Maybe once you enumerate all
-> the scenarios a common theme will arise and we can pick a better name,
-> unless you have any ideas off the top of your head.
-
-"special" is renamed to "local"
-
-thanks
-Lai

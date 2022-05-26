@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918D55354A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1ED5354D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348645AbiEZUk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
+        id S240036AbiEZUot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348626AbiEZUkt (ORCPT
+        with ESMTP id S1349055AbiEZUoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:40:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3409E2755
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:40:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653597647;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qeYoBwClMquOdM4mrLC20XcvsQqVIaRivM3jxGFd6y4=;
-        b=HnW5YvT/CNE98hB+yAgSz4RYvJqP+rhKqlDPhE2XLOeCSr5VifyqjLemmzEEoBUV1fhBRR
-        4JVT67ecmsm9ew+VkKgSSt2El3hYNWYx/QZyYCzTr1J+CcQwiFa9NlUIDyguPFO3rKn4Vz
-        n8d6HUjhSFv1CLRI1eWSfrVfrdurHc0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-112-mc-1D6SBM96eFkb1G_VMfw-1; Thu, 26 May 2022 16:40:40 -0400
-X-MC-Unique: mc-1D6SBM96eFkb1G_VMfw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2A5D185A7A4;
-        Thu, 26 May 2022 20:40:39 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 31DDF1121315;
-        Thu, 26 May 2022 20:40:39 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        keyrings@vger.kernel.org, selinux@vger.kernel.org,
-        serge@hallyn.com, amir73il@gmail.com, kernel-team@cloudflare.com
-Subject: Re: [PATCH v2] cred: Propagate security_prepare_creds() error code
-References: <20220525183703.466936-1-fred@cloudflare.com>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Thu, 26 May 2022 16:43:44 -0400
-In-Reply-To: <20220525183703.466936-1-fred@cloudflare.com> (Frederick Lawler's
-        message of "Wed, 25 May 2022 13:37:03 -0500")
-Message-ID: <x49o7zkvxbz.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 26 May 2022 16:44:06 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2BABF4B
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:43:56 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id u20so3163327edd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dsi9QOKKEq+Gq7K5pC3bfltgznXdiEGEzIyAtjmGd6w=;
+        b=sN5esgzHy1r7EwRHGOK1EJV2hGeoC/W0RBHlEDlv2hQHGJ7OEHtkQqFWASC2zx46MP
+         ghDuKZMrm4pGE5vCoZUYYdcx8o02iKMrd9mVmVIr4VSUUz1QhGz0c9cf+p2GEVeGUcv/
+         P05kttBYygAtI0BgYwqMFgZ7XeCkcj61UTRi1ounkhJ8Yh2GnNyTFzaUQ4aUfxkepSx4
+         5ZngsVua4LQzjirQG5Y8IVlp9UvLj3ppKu0oHe4Z96gXkSdoY93VN8o+81uD9TKAUXVK
+         v8d0vTFaZihcAwDvc3LBLpOPODeyZVti48ZZK2XPSP7UL13hSIZ5JoE3slktoWewLZEC
+         ZlSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dsi9QOKKEq+Gq7K5pC3bfltgznXdiEGEzIyAtjmGd6w=;
+        b=J/l/6IZ++zjzBgW5OEqHR4rwdrXrLF/4oK8o+mD3ZaY6BsdfckUwoVxiDU7QqmBie1
+         Y5bMHMFz0ldUOAfU4eLKvQL9e/dhtcqGiQ98O6RT9TMZYgMLDukNMUhjnWTF74R74Tbg
+         oX2+dbCTSP1t7E7GDhYPPx4/yxzcyZtLuVvzlj6wCgBC+Udgu0tvlFRavy/hT7rE9V0y
+         H69WuAmDndkTDcv8i7sFaG8qiFaahkfqieNO6VujVuJy82IQVFYqOijWXqPl750b4Pom
+         94i0tk9b4viV9HbirBCzKUfJq0OSeyNBoOQuO0ZKb3f7DYBhNaoGnPS5fZXEFanxQ0FA
+         NKqg==
+X-Gm-Message-State: AOAM531eLvj/yeencH4auxF+rtmH6KQJkG9YG+sGzsrpW5FT6JXKCw2h
+        mfxmLlPZgdHD7rcmIRLp7iqDFg==
+X-Google-Smtp-Source: ABdhPJy39XOcWA6QrDYRwoFCG5pXOg3b6bp6ZaoAT2xwYTfDZBle+zPNr3kYUdwVsE9J0/wT97cd/g==
+X-Received: by 2002:a05:6402:12d5:b0:42b:c6a8:ab3 with SMTP id k21-20020a05640212d500b0042bc6a80ab3mr11276378edx.209.1653597836165;
+        Thu, 26 May 2022 13:43:56 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h4-20020a17090619c400b006f3ef214e6esm817635ejd.212.2022.05.26.13.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 13:43:55 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org, Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: arm: adjust whitespace around '='
+Date:   Thu, 26 May 2022 22:43:50 +0200
+Message-Id: <20220526204350.832361-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,33 +74,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Frederick Lawler <fred@cloudflare.com> writes:
+Fix whitespace coding style: use single space instead of tabs or
+multiple spaces around '=' sign in property assignment.  No functional
+changes (same DTB).
 
-> While experimenting with the security_prepare_creds() LSM hook, we
-> noticed that our EPERM error code was not propagated up the callstack.
-> Instead ENOMEM is always returned.  As a result, some tools may send a
-> confusing error message to the user:
->
-> $ unshare -rU
-> unshare: unshare failed: Cannot allocate memory
->
-> A user would think that the system didn't have enough memory, when
-> instead the action was denied.
->
-> This problem occurs because prepare_creds() and prepare_kernel_cred()
-> return NULL when security_prepare_creds() returns an error code. Later,
-> functions calling prepare_creds() and prepare_kernel_cred() return
-> ENOMEM because they assume that a NULL meant there was no memory
-> allocated.
->
-> Fix this by propagating an error code from security_prepare_creds() up
-> the callstack.
->
-> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The fs/aio.c part looks ok to me.  We should probably also update the
-man page for io_submit, though, to document the conditions under which
-EPERM can be returned.
+---
 
-Acked-by: Jeff Moyer <jmoyer@redhat.com>
+Output compared with dtx_diff and fdtdump.
+---
+ arch/arm64/boot/dts/arm/juno-base.dtsi    | 44 +++++++++++------------
+ arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi | 16 ++++-----
+ 2 files changed, 30 insertions(+), 30 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi b/arch/arm64/boot/dts/arm/juno-base.dtsi
+index 065381c1cbf5..8d0d45d168d1 100644
+--- a/arch/arm64/boot/dts/arm/juno-base.dtsi
++++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
+@@ -581,36 +581,36 @@ cti_sys0: cti@20020000 { /* sys_cti_0 */
+ 
+ 		trig-conns@0 {
+ 			reg = <0>;
+-			arm,trig-in-sigs=<2 3>;
+-			arm,trig-in-types=<SNK_FULL SNK_ACQCOMP>;
+-			arm,trig-out-sigs=<0 1>;
+-			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
++			arm,trig-in-sigs = <2 3>;
++			arm,trig-in-types = <SNK_FULL SNK_ACQCOMP>;
++			arm,trig-out-sigs = <0 1>;
++			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+ 			arm,cs-dev-assoc = <&etr_sys>;
+ 		};
+ 
+ 		trig-conns@1 {
+ 			reg = <1>;
+-			arm,trig-in-sigs=<0 1>;
+-			arm,trig-in-types=<SNK_FULL SNK_ACQCOMP>;
+-			arm,trig-out-sigs=<7 6>;
+-			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
++			arm,trig-in-sigs = <0 1>;
++			arm,trig-in-types = <SNK_FULL SNK_ACQCOMP>;
++			arm,trig-out-sigs = <7 6>;
++			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+ 			arm,cs-dev-assoc = <&etf_sys0>;
+ 		};
+ 
+ 		trig-conns@2 {
+ 			reg = <2>;
+-			arm,trig-in-sigs=<4 5 6 7>;
+-			arm,trig-in-types=<STM_TOUT_SPTE STM_TOUT_SW
++			arm,trig-in-sigs = <4 5 6 7>;
++			arm,trig-in-types = <STM_TOUT_SPTE STM_TOUT_SW
+ 					   STM_TOUT_HETE STM_ASYNCOUT>;
+-			arm,trig-out-sigs=<4 5>;
+-			arm,trig-out-types=<STM_HWEVENT STM_HWEVENT>;
++			arm,trig-out-sigs = <4 5>;
++			arm,trig-out-types = <STM_HWEVENT STM_HWEVENT>;
+ 			arm,cs-dev-assoc = <&stm_sys>;
+ 		};
+ 
+ 		trig-conns@3 {
+ 			reg = <3>;
+-			arm,trig-out-sigs=<2 3>;
+-			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
++			arm,trig-out-sigs = <2 3>;
++			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+ 			arm,cs-dev-assoc = <&tpiu_sys>;
+ 		};
+ 	};
+@@ -628,24 +628,24 @@ cti_sys1: cti@20110000 { /* sys_cti_1 */
+ 
+ 		trig-conns@0 {
+ 			reg = <0>;
+-			arm,trig-in-sigs=<0>;
+-			arm,trig-in-types=<GEN_INTREQ>;
+-			arm,trig-out-sigs=<0>;
+-			arm,trig-out-types=<GEN_HALTREQ>;
++			arm,trig-in-sigs = <0>;
++			arm,trig-in-types = <GEN_INTREQ>;
++			arm,trig-out-sigs = <0>;
++			arm,trig-out-types = <GEN_HALTREQ>;
+ 			arm,trig-conn-name = "sys_profiler";
+ 		};
+ 
+ 		trig-conns@1 {
+ 			reg = <1>;
+-			arm,trig-out-sigs=<2 3>;
+-			arm,trig-out-types=<GEN_HALTREQ GEN_RESTARTREQ>;
++			arm,trig-out-sigs = <2 3>;
++			arm,trig-out-types = <GEN_HALTREQ GEN_RESTARTREQ>;
+ 			arm,trig-conn-name = "watchdog";
+ 		};
+ 
+ 		trig-conns@2 {
+ 			reg = <2>;
+-			arm,trig-out-sigs=<1 6>;
+-			arm,trig-out-types=<GEN_HALTREQ GEN_RESTARTREQ>;
++			arm,trig-out-sigs = <1 6>;
++			arm,trig-out-types = <GEN_HALTREQ GEN_RESTARTREQ>;
+ 			arm,trig-conn-name = "g_counter";
+ 		};
+ 	};
+diff --git a/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi b/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
+index 2e43f4531308..ba88d1596f6f 100644
+--- a/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
++++ b/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
+@@ -96,24 +96,24 @@ cti_sys2: cti@20160000 { /* sys_cti_2 */
+ 
+ 		trig-conns@0 {
+ 			reg = <0>;
+-			arm,trig-in-sigs=<0 1>;
+-			arm,trig-in-types=<SNK_FULL SNK_ACQCOMP>;
+-			arm,trig-out-sigs=<0 1>;
+-			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
++			arm,trig-in-sigs = <0 1>;
++			arm,trig-in-types = <SNK_FULL SNK_ACQCOMP>;
++			arm,trig-out-sigs = <0 1>;
++			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+ 			arm,cs-dev-assoc = <&etf_sys1>;
+ 		};
+ 
+ 		trig-conns@1 {
+ 			reg = <1>;
+-			arm,trig-in-sigs=<2 3 4>;
+-			arm,trig-in-types=<ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
++			arm,trig-in-sigs = <2 3 4>;
++			arm,trig-in-types = <ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
+ 			arm,trig-conn-name = "ela_clus_0";
+ 		};
+ 
+ 		trig-conns@2 {
+ 			reg = <2>;
+-			arm,trig-in-sigs=<5 6 7>;
+-			arm,trig-in-types=<ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
++			arm,trig-in-sigs = <5 6 7>;
++			arm,trig-in-types = <ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
+ 			arm,trig-conn-name = "ela_clus_1";
+ 		};
+ 	};
+-- 
+2.34.1
 

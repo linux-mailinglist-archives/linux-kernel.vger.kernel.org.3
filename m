@@ -2,166 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BDA535559
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0655F53555F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346702AbiEZVKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 17:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        id S1347642AbiEZVT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 17:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238132AbiEZVKr (ORCPT
+        with ESMTP id S229835AbiEZVT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 17:10:47 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C739F93995
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:10:44 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id gi33so5281869ejc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=n5ISJ9yLZ548Mz4jCd/68AcqRvOzgjUn9wXGD+ASjI4=;
-        b=lZVmHfF6LYBzFMaqjGMVB2ZPV+hPOKUic6CjH+XhRrRzKSyO43nCBJPvX05Nyk6k4Z
-         OdiUk/r7NaOsPqwT9VJG3jgoNjCBThtKaCQuyOkBv8Vi7eqN0eoTgN9ncK6bkGZcKeyC
-         bsoL/H3dLQIWCQfPyEHsnzG4UGGThjGdhCyn9djsqxIL8GWoLBr5U+0C9TU5YJvtn2XJ
-         niDhVthqOEERTZoQjUTgCkyEYs2WmQ8uU8pSswjn9UeW6Xd7qvg567LHcltuktw5tImZ
-         798/3PEQm5cQFgmBuj4ndBuBAp8jRAjdcvNVCUmzJiRqnvefQy1rm3HsUyR8/7BdpDhv
-         oKmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n5ISJ9yLZ548Mz4jCd/68AcqRvOzgjUn9wXGD+ASjI4=;
-        b=PMZ7iV80YGqqo7nLO1jRRN0kIrqPE4xzoOFXvA7IU78WQMPm0ZQUhYPiNzSBjhZXkz
-         cfawvGYMDAqh4vLoc4TeuG3UBwPTw0SBDnE9DImdJDZxjo1GSi/ST7w9p9HHPvZSs0oG
-         7LTsJZDyu/0xiM7bikhA70hxNn10k8lem28BKFLJJRe4jw1dyQdBuOAkdLaasbw+XxO7
-         v6dvxWUMEe5bYENEt9H7j9zogDrapHXk03j91axZjTkHyATAHueU/1IVVYNxEwz52T8r
-         DxYNLufeWI1qCQGHDJ21ax3FzIcjEqGTs39iXJ4kyQRHZAIAcX7g/CN6ByAGqeIl6Lqs
-         AOIg==
-X-Gm-Message-State: AOAM531OYzJ+JO57mubj51G9NuVIBYvJWfB7kho0gHjcMDEY4EbYOAEj
-        wlS1edl6ZHR/Df4rwcS+Td+NRcWyau3MA9Tv
-X-Google-Smtp-Source: ABdhPJzH2AYsc87sKJTEJvKhEp90igqSe7vZ4SuRlgUhjJrY2/j5+u/fAOVedF+0min99G5EjJX2IA==
-X-Received: by 2002:a17:906:6985:b0:6fe:988b:d248 with SMTP id i5-20020a170906698500b006fe988bd248mr34031598ejr.226.1653599443354;
-        Thu, 26 May 2022 14:10:43 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id s23-20020a1709064d9700b006fe8b3d8cb6sm851155eju.62.2022.05.26.14.10.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 14:10:42 -0700 (PDT)
-Message-ID: <9ad3b26e-5d71-72f4-1a16-9ab3164141de@linaro.org>
-Date:   Thu, 26 May 2022 23:10:41 +0200
+        Thu, 26 May 2022 17:19:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA799D04E
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:19:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97103B8220C
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 21:19:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0ADCC385B8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 21:19:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jjydjG5F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653599989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aeAvJmSvFUWJrZOlMiU0mmnHMiaZt9VEnhhq5hvVRHE=;
+        b=jjydjG5F5KSgIh4SAfFncFRVTIhL0GQkLAO2A3IoY71IVa8UbW5oOglzsUUi6Avy8LR0OD
+        3YuDPZOkLikaXCL8tgQWmNrwd1unt6QYMwiuVfQmilovZOCyr4hwUWo5Ek5FYn3tbtBNQ0
+        4XeELS9EHjBMzvbvWSgQWDh1s8EPuRw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 04b943b0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 26 May 2022 21:19:49 +0000 (UTC)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2fee010f509so28575257b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:19:48 -0700 (PDT)
+X-Gm-Message-State: AOAM533CdcfzfH9IPht4kzK2OTyXqAvPVM5gAoXCKTyS7h6y46KWyaq/
+        7+Hz4lYL1oJ4CSlv1kmKa6cexxgD+zLxbiJa9HA=
+X-Google-Smtp-Source: ABdhPJwDvcjeCn7xjccrAFPbptfsz809iXBfmkXuceGJhqYcU2jRrAGM1p0iJ7EWZ0TWlT32BtKNLplm80IoemCZf6Y=
+X-Received: by 2002:a0d:ea14:0:b0:300:4bc2:ee31 with SMTP id
+ t20-20020a0dea14000000b003004bc2ee31mr10698325ywe.396.1653599988272; Thu, 26
+ May 2022 14:19:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] arm64: dts: renesas: adjust whitespace around '='
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        arm-soc <arm@kernel.org>, arm-soc <soc@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220526204231.832090-1-krzysztof.kozlowski@linaro.org>
- <CAMuHMdWvfbbB3578aFAx6twdKNCkB1T-Uihf3OzGLHmcZG047g@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdWvfbbB3578aFAx6twdKNCkB1T-Uihf3OzGLHmcZG047g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:6403:b0:17b:2ce3:1329 with HTTP; Thu, 26 May 2022
+ 14:19:46 -0700 (PDT)
+In-Reply-To: <938111ca-d3c7-9888-24f8-0017a989002b@kernel.dk>
+References: <20220520095747.123748-1-Jason@zx2c4.com> <938111ca-d3c7-9888-24f8-0017a989002b@kernel.dk>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 26 May 2022 23:19:46 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pSZYZSz3YLRK7onO0E6zq9_B1GNwoTOkEQy_kws200Fw@mail.gmail.com>
+Message-ID: <CAHmME9pSZYZSz3YLRK7onO0E6zq9_B1GNwoTOkEQy_kws200Fw@mail.gmail.com>
+Subject: Re: [PATCH] splice: allow direct splicing with chardevs
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/05/2022 23:05, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Thu, May 26, 2022 at 10:42 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> Fix whitespace coding style: use single space instead of tabs or
->> multiple spaces around '=' sign in property assignment.  No functional
->> changes (same DTB).
+Hey Al,
+
+On 5/20/22, Jens Axboe <axboe@kernel.dk> wrote:
+> On 5/20/22 3:57 AM, Jason A. Donenfeld wrote:
+>> The original direct splicing mechanism from Jens required the input to
+>> be a regular file because it was avoiding the special socket case. It
+>> also recognized blkdevs as being close enough to a regular file. But it
+>> forgot about chardevs, which behave the same way and work fine here.
 >>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Thanks for your patch!
-> 
->> --- a/arch/arm64/boot/dts/renesas/draak.dtsi
->> +++ b/arch/arm64/boot/dts/renesas/draak.dtsi
->> @@ -630,7 +630,7 @@ rsnd_for_ak4613: endpoint {
->>                                 bitclock-master = <&rsnd_for_ak4613>;
->>                                 frame-master = <&rsnd_for_ak4613>;
->>                                 playback = <&ssi3>, <&src5>, <&dvc0>;
->> -                               capture  = <&ssi4>, <&src6>, <&dvc1>;
->> +                               capture = <&ssi4>, <&src6>, <&dvc1>;
-> 
-> I think the idea was to align the playback and capture properties,
-> for easier comparison.
-> Hence I'm a bit undecided if this needs to be fixed or not...
+>> This commit adds the missing S_ISCHR condition so that chardevs such as
+>> /dev/urandom can be directly spliced without strangely returning
+>> -EINVAL.
+>
+> Should be fine to turn this on for char devices:
+>
+> Reviewed-by: Jens Axboe <axboe@kernel.dk>
+>
 
-yeah, but then one should align "frame-master" to "bitclock-master" and
-several other properties.
+Was wondering if this would make 5.19. That'd be nice, as it's the
+release in which we switch to read_iter().
 
-> 
->>                         };
->>                 };
->>         };
-> 
->> --- a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
->> +++ b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
->> @@ -206,12 +206,12 @@ pcm3168a: audio-codec@44 {
->>                                 clocks = <&clksndsel>;
->>                                 clock-names = "scki";
-
-like here ^^^ - clocks with clock-names...
-
->>
->> -                               VDD1-supply     = <&snd_3p3v>;
->> -                               VDD2-supply     = <&snd_3p3v>;
->> -                               VCCAD1-supply   = <&snd_vcc5v>;
->> -                               VCCAD2-supply   = <&snd_vcc5v>;
->> -                               VCCDA1-supply   = <&snd_vcc5v>;
->> -                               VCCDA2-supply   = <&snd_vcc5v>;
->> +                               VDD1-supply = <&snd_3p3v>;
->> +                               VDD2-supply = <&snd_3p3v>;
->> +                               VCCAD1-supply = <&snd_vcc5v>;
->> +                               VCCAD2-supply = <&snd_vcc5v>;
->> +                               VCCDA1-supply = <&snd_vcc5v>;
->> +                               VCCDA2-supply = <&snd_vcc5v>;
-> 
-> Same for the various supplies.
-
-I don't think there is benefit to order few single entries, while entire
-file does not follow that convention. It would be different for some
-multiple-line entries, but that's not the case here.
-
-Anyway that's only my opinion, so I am happy to trim the patch to the
-last part (although then it is a bit churn :) ).
-
-> 
->>
->>                                 ports {
->>                                         #address-cells = <1>;
->> @@ -438,7 +438,7 @@ rsnd_for_pcm3168a_capture: endpoint {
->>                                 bitclock-master;
->>                                 frame-master;
->>                                 dai-tdm-slot-num = <6>;
->> -                               capture  = <&ssi4>;
->> +                               capture = <&ssi4>;
-> 
-> Right, there's nothing to align here.
-
-
-
-Best regards,
-Krzysztof
+Jason

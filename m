@@ -2,134 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D523F535676
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E227535679
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237770AbiEZXnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 19:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S1349333AbiEZXuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 19:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239878AbiEZXnf (ORCPT
+        with ESMTP id S245709AbiEZXuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 19:43:35 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EEA28725
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:43:34 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id a9so2542889pgv.12
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:43:34 -0700 (PDT)
+        Thu, 26 May 2022 19:50:09 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D3B70350
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:50:08 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso3001571pjg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LVT+hnAFEArODTLjjL6u957Oo8LFMcs8Kqe5NqWbyq0=;
-        b=50hwK5Xdsh8uEqJ/XEkV/OV3UKXNHFz0lvEkauUBLEMmhAHpB2I1ZJDnIaewr8qiVI
-         ur+pSBNRGjLPzB3v5Xo8zCb2Njei+xAtlPYL7d6CM2xdqjK145tL17zb2MjQAkU+glSt
-         IBqx0NtBPgM7tpTnWyCRWijLZzv2Unn5dh1FhMlEWqW2fDtS1OVG9yMZqLynaVpSCwNW
-         Ymt8MwkTBQ4RJHE8m453cTATa3GYAGlqS254D124yOv+BR6lD+RkZ+SSqLokLtIBl4uz
-         4amiI4oh13Y2e/KHe4T53m+puWtOEeDEvowWW+S9eua1YxkTcbpGG+054W+/FaBvyAcF
-         Ipag==
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UUylbFb1KzSKx6V2LN4l33pzMzUYLvtXg0/NJazfV4M=;
+        b=Ivrdkxgv1uzZ3QdBcvQXPNdNMNVnU0garR3DHQ8X5F+pg/Liu2rDEiPA0/oL8knS7s
+         w7brWWDPdeka1tgGnlmTBDd0XSSiFenxUBuG6DkbtrT3AohdlU78jNMRDfAkfdAzanSX
+         mASFFsSfwPeAQQGNOQrdWUME+FkHwfZ5wwT5OgCBPcA5V03nE0P3Qtkus8VJugecvo8z
+         KBpEVKifjiOzlKP4FMg/w85gXV577glZfhdKxKFQmHNDAe+jXr78579nICPPi6vUrLo9
+         MskwSfF8vln0UtNcuPOYNxBOOt6SO5jNaqvj+vxyz/iVFhH1BWe0pKV02REPj1vYytg8
+         sY1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-transfer-encoding;
-        bh=LVT+hnAFEArODTLjjL6u957Oo8LFMcs8Kqe5NqWbyq0=;
-        b=DtkGyMMyANkEQ/UXyApK15lTUSMgkbDG0IYtqmnFO3O/hzpvpdt1/0NY3CvrhM4pMu
-         gpWPK9g+JPFT2Q+dmSYFzCJlqal1PT6MkkyqHrumHdQ5Ob8JCK+n3gCbw/zY0FZVdflM
-         746fn2mofZ/NWRM6JGuCMAoiY5xUYYmknLqRabL10rICEU6OfZHh/i2pzAIQ0UsDbsFi
-         26nyAZXai0kd8Ph82P+VJLUK3sgWQYaBWkykGoDp4cO8FuxbAkAcbKnnhBTfoM/NSlgO
-         UXTUyDWEfCLwHsPdEUDR+KhhTOaWGvP23Rg2SYLmCkAw6dCfNM3nMVgapV5rW4Dp2iun
-         OZlg==
-X-Gm-Message-State: AOAM531xQJUtKVmiOXpuvW2XRsUjDPYLNodE7iU9vkOC+iZAh0icNupr
-        83jVFjZRNaGYh+2Y5uGfzGDuAP+NO/L63A==
-X-Google-Smtp-Source: ABdhPJyAS/kjg2C00QbkfvCAuSDQJgvx0IkWdvaLJ7VQSQaTmaTuPrel1QRS5EoXASHMELn4xvaiWw==
-X-Received: by 2002:a62:ae19:0:b0:518:db6a:5b85 with SMTP id q25-20020a62ae19000000b00518db6a5b85mr13085709pff.61.1653608613048;
-        Thu, 26 May 2022 16:43:33 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e6d:c000:9d26:281f:3d89:5507? ([2409:8a28:e6d:c000:9d26:281f:3d89:5507])
-        by smtp.gmail.com with ESMTPSA id i5-20020a17090332c500b00161b797fc42sm2247016plr.106.2022.05.26.16.43.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 16:43:32 -0700 (PDT)
-Message-ID: <d7309ffb-ee19-6097-9f0d-5b811e14e8b7@bytedance.com>
-Date:   Fri, 27 May 2022 07:43:24 +0800
+        bh=UUylbFb1KzSKx6V2LN4l33pzMzUYLvtXg0/NJazfV4M=;
+        b=K91YLFKBd+sJQzxtbGpjRFWPki2RnAOAWHgxD3jmaTaiEPql6WJv7WGxAb07SbKh4J
+         2nejMt8KPTFqFl4H1JoZn3YXeLq1DbUfq9c3jOmk0mKzPNR2vuQ+iWkvZsEEga9ha7EJ
+         jBNBdgHKKbbTcbXX8vew2ZFVwryRYiyKRBtQjMFHVCmxp+/tr4HjsA8g0Aaw+76t3UR+
+         b6j0jHA+agLCofRk6p8QPsDppU1fCJiaHhTbxiSKEyA7wfwJM4rB4T3hh6DTRn9KVecG
+         lsP10kTkMDMW5lQxvkWXGNIY5SodvCPwTzJ5aU9zFFmKO7Ug2EAmgtH51xGWx86GuuFL
+         0e2Q==
+X-Gm-Message-State: AOAM532hiW/ssc9Fxlxht8okKFxZ8urVAEZEnlud7MTnlmfNEg65XYBr
+        ijniRLgJTL3BQbVwMYTx5+P+VK5m/5MZOQ==
+X-Google-Smtp-Source: ABdhPJwggc/hf2WFHEva9uDGQbWdg7gm/GLx1rp0ujqoruvbxnlE8uLxWr3tef7/rwkoB/9isbDZgQ==
+X-Received: by 2002:a17:90a:2844:b0:1df:b47e:c541 with SMTP id p4-20020a17090a284400b001dfb47ec541mr5266687pjf.110.1653609007500;
+        Thu, 26 May 2022 16:50:07 -0700 (PDT)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id e5-20020a170902b78500b001622f07530asm2169417pls.17.2022.05.26.16.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 16:50:07 -0700 (PDT)
+Date:   Thu, 26 May 2022 16:50:04 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [ANNOUNCE] iproute2 5.18.0 release
+Message-ID: <20220526165004.69f0dfba@hermes.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.1
-Subject: Re: [Phishing Risk] [External] Re: [PATCH] blk-iocost: fix false
- positive lagging
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220526133554.21079-1-zhouchengming@bytedance.com>
- <Yo+8K9MrFMl59BGj@slm.duckdns.org>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <Yo+8K9MrFMl59BGj@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This is the release of iproute2 corresponding to the 5.18 kernel.
+There are not many new features in this release.
 
-On 2022/5/27 01:43, Tejun Heo wrote:
-> Hello,
-> 
-> On Thu, May 26, 2022 at 09:35:54PM +0800, Chengming Zhou wrote:
->> I found many false positive lagging during iocost test.
->>
->> Since iocg->vtime will be advanced to (vnow - margins.target)
->> in hweight_after_donation(), which called throw away excess,
->> the iocg->done_vtime will also be advanced that much.
->>
->>        period_at_vtime  <--period_vtime-->  vnow
->>               |                              |
->>   --------------------------------------------------->
->>         |<--->|
->>      margins.target
->>         |->
->>   vtime, done_vtime
-> 
-> All it does is shifting the vtime (and done_vtime) within the current window
-> so that we don't build up budget too lage a budget possibly spanning
-> multiple periods. 
+The build issues with libbpf should be fixed now.
+Building with clang is now supported.
+There are still some warnings with gcc-12 that will need to be
+fixed in the upstream kernel headers.
 
-Yes, this is necessary. Suppose in the last timer, the iocg doesn't have inflights
-and have excess, then iocg->vtime = iocg->done_vtime = (period_at_vtime - margins.target)
 
-> The lagging detection is supposed to detect IOs which are
-> issued two+ periods ago which didn't finish in the last period. So, I don't
+Download:
+    https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-5.18.0.tar.gz
 
-Yes, I understand.
+Repository for current release
+    https://github.com/shemminger/iproute2.git
+    git://git.kernel.org/pub/scm/network/iproute2/iproute2.git
 
-> think the above sliding up the window affects that detection given that the
-> lagging detection is done before the window sliding. All it's checking is
-> whether there still are in-flight IOs which were issued two+ windows ago, so
-> how the last window has been fast forwarded shouldn't affect the detection,
-> no?
+And future release (net-next):
+    git://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git
 
-Right, the lagging detection is done before the window sliding in this period timer.
-The conditions that it checks vtime, done_vtime have been slided in the last timer.
+Contributions:
 
-time_after64(vtime, vdone) &&
-time_after64(vtime, now.vnow - MAX_LAGGING_PERIODS * period_vtime) &&
-time_before64(vdone, now.vnow - period_vtime)
+Andrea Claudi (8):
+      Makefile: move HAVE_MNL check to top-level Makefile
+      configure: add check_libtirpc()
+      ss: remove an implicit dependency on rpcinfo
+      tc: em_u32: fix offset parsing
+      man: devlink-region: fix typo in example
+      man: fix some typos
+      doc: fix 'infact' --> 'in fact' typo
+      tipc: fix keylen check
 
-The first condition says it has some inflights, the second condition is always true
-if vtime has been slided in the last timer, the third condition will be true if the
-cost of io completed since last timer < ioc->margins.target.
+Baowen Zheng (2):
+      tc: add skip_hw and skip_sw to control action offload
+      tc: separate action print for filter and action dump
 
-So I think it doesn't check correctly whether it has inflights that were issued two+
-windows ago.
+Coco Li (1):
+      iplink: add gro_max_size attribute handling
 
-Thanks.
+Daniel Braunwarth (2):
+      lib: add profinet and ethercat as link layer protocol names
+      tc: bash-completion: Add profinet and ethercat to procotol completion list
 
-> 
-> Thanks.
-> 
+David Ahern (17):
+      Update kernel headers
+      Update kernel headers
+      devlink: Remove strtouint64_t in favor of get_u64
+      devlink: Remove strtouint32_t in favor of get_u32
+      devlink: Remove strtouint16_t in favor of get_u16
+      devlink: Remove strtouint8_t in favor of get_u8
+      configure: Allow command line override of toolchain
+      Update kernel headers
+      bpf_glue: Remove use of bpf_load_program from libbpf
+      bpf: Export bpf syscall wrapper
+      bpf: Remove use of bpf_create_map_xattr
+      Revert "configure: Allow command line override of toolchain"
+      Import batman_adv.h header from last kernel sync point
+      Update kernel headers
+      libbpf: Use bpf_object__load instead of bpf_object__load_xattr
+      libbpf: Remove use of bpf_program__set_priv and bpf_program__priv
+      libbpf: Remove use of bpf_map_is_offload_neutral
+
+Davide Caratti (1):
+      ss: display advertised TCP receive window and out-of-order counter
+
+Eli Cohen (5):
+      vdpa: Remove unsupported command line option
+      vdpa: Allow for printing negotiated features of a device
+      vdpa: Support for configuring max VQ pairs for a device
+      vdpa: Support reading device features
+      vdpa: Update man page with added support to configure max vq pair
+
+Eric Dumazet (2):
+      iplink: add ip-link documentation
+      iplink: remove GSO_MAX_SIZE definition
+
+Eyal Birger (1):
+      ip/geneve: add support for IFLA_GENEVE_INNER_PROTO_INHERIT
+
+Gal Pressman (1):
+      tunnel: Fix missing space after local/remote print
+
+Geliang Tang (3):
+      mptcp: add fullmesh check for adding address
+      mptcp: add fullmesh support for setting flags
+      mptcp: add port support for setting flags
+
+Hangbin Liu (1):
+      bond: add ns_ip6_target option
+
+Hans Schultz (4):
+      bridge: link: add command to set port in locked mode
+      ip: iplink_bridge_slave: add locked port flag support
+      man8/bridge.8: add locked port feature description and cmd syntax
+      man8/ip-link.8: add locked port feature description and cmd syntax
+
+Jiri Pirko (1):
+      devlink: fix "devlink health dump" command without arg
+
+Joachim Wiberg (9):
+      bridge: support for controlling flooding of broadcast per port
+      man: bridge: document new bcast_flood flag for bridge ports
+      man: bridge: add missing closing " in bridge show mdb
+      ip: iplink_bridge_slave: support for broadcast flooding
+      man: ip-link: document new bcast_flood flag on bridge ports
+      man: ip-link: mention bridge port's default mcast_flood state
+      man: ip-link: whitespace fixes to odd line breaks mid sentence
+      bridge: support for controlling mcast_router per port
+      man: bridge: document per-port mcast_router settings
+
+Justin Iurman (2):
+      Add support for the IOAM insertion frequency
+      Update documentation
+
+Luca Boccassi (2):
+      man: 'allow to' -> 'allow one to'
+      man: use quote instead of acute accent
+
+Nicolas Escande (1):
+      ip/batadv: allow to specify RA when creating link
+
+Stephen Hemminger (17):
+      tc: add format attribute to tc_print_rate
+      utils: add format attribute
+      netem: fix clang warnings
+      flower: fix clang warnings
+      tc_util: fix clang warning in print_masked_type
+      ipl2tp: fix clang warning
+      can: fix clang warning
+      tipc: fix clang warning about empty format string
+      tunnel: fix clang warning
+      libbpf: fix clang warning about format non-literal
+      json_print: suppress clang format warning
+      tc_util: fix breakage from clang changes
+      tc/f_flower: fix indentation
+      uapi: update from 5.18-rc1
+      uapi: upstream update to stddef.h
+      uapi: update of virtio_ids
+      v5.18.0
+
+Wen Liang (2):
+      tc: u32: add support for json output
+      tc: u32: add json support in `print_raw`, `print_ipv4`, `print_ipv6`
+
+Wojciech Drewek (3):
+      f_flower: fix indentation for enc_key_id and u32
+      ip: GTP support in ip link
+      f_flower: Implement gtp options support
+

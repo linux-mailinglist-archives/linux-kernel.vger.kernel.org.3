@@ -2,170 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17D95348DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 04:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508E45348EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 04:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346195AbiEZCZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 22:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
+        id S234698AbiEZCkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 22:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbiEZCZy (ORCPT
+        with ESMTP id S232004AbiEZCkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 22:25:54 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9731BCEAD
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:25:53 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o10-20020a17090a4e8a00b001df2fcdc165so3246664pjh.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:25:53 -0700 (PDT)
+        Wed, 25 May 2022 22:40:46 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6107663D3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:40:44 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 137so239012pgb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:40:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EEnCAXzIKzBX8a+ZY+aJ2FVWSHOtVfgunLZbATQpn20=;
-        b=W10EKExlpftJBTnBqjNUAtnsiAUfHnABsGE5AlTLAqMh7GqgMpzzub0qFeCKCVsYBI
-         KeJESH3gU6ZRM3zCCloADhZvmBC34vbmJ1A0ux21YgEfEkXyTPMQiAj1FRTZH0dQdDs1
-         Ekim+iwvxZin/MBLGykjoLbPHkGMRd+BmiMjRBL1XO9K9+EB0QkJGrGDG0O4InCtmhGP
-         QtBOPPy1De6lyX/UaZGqAJMFyrpJCiwVTX5Dc+V8HtvDLPtGlskIVhgqJ70ddvHTgkSa
-         zPy1N0vo40lEGaTADUjAp14MDRtNNTIx0XqsyM0IFtrQDE3o5cVsJMRTNTRLKtcEkA/F
-         ox6w==
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=3dcMthtH7n4TL6BIfw9bc4YTWwWt9+20GSo8lo+80/c=;
+        b=YSnvd/xBBjIaxlXFb0s10PkGNLbeKtQPnLmvbbv4th7RWppo1PXvzYnly4MaRlgtbr
+         tCRCFQf9HguH5PJ5GPqxArrHVpYbWsuCtcmn1Gu1C2TzPK10D2qAS3Wiz7aFBTJrFMpI
+         Q1TXH2/KpBT2GxzOXqfTzHqNC91YGACXVCfUfZYsLBV49xy82O5hM3BPzFWz9Q9LQeUM
+         4d/JInLN4q2y0d0Qt9e35H0El3O51aY2cxexkapsMdcucTw3rW/I+oyJCOKwbYki/5kO
+         XqvVsnx//7w2WhZlUOkLNFZePW/8W0EbPhclH87WMkJexlQ3ytRdOdrtNf9J0bD3xUfz
+         DB3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EEnCAXzIKzBX8a+ZY+aJ2FVWSHOtVfgunLZbATQpn20=;
-        b=R95/jD0ct3xX0z0lc8FHbKNWFdlfZsFY7xvjdGWTazVwr64Gv6LdP2dnpIPix24a5N
-         IYNChktg7rRZ9IiBQrEFUUlc9sVUOmnslVEuzkrzCe0FvVMcEcJFLJJEoDcpJsFrnvFS
-         2Kc4Aoe9JVdESTrqGSgysuDeiL+VnO1KVZnBm9u/3jiJvayk2DCGPQ06bO9fpdLSbaPt
-         zejF76WQksUBRKQ0MdZZceZvdc3AU3lvuHH3CtfXJ4JV+/tzHkzw7f/cCv090yIhoC4k
-         MpAlNbDkvrXmXcZ2lDw0/3+t9QTkA7SZKsOPh/uPdaN3OkULrB1I/M7dkwCPL7nGMhsJ
-         FORQ==
-X-Gm-Message-State: AOAM530Z0DTazrKWCPyF9HPibyaZDYhFvUgkr85uP5POM8mJIeSCeIP9
-        hOB8TlVsxaQOegh+2GrMuczNjQ==
-X-Google-Smtp-Source: ABdhPJwt2BGjxkJfOxtlg5m/+6B4LdTBLKQa+0e8AbzcbMWNE7G8FrsvHIdGFRHX3S0IoeNB39MgNg==
-X-Received: by 2002:a17:902:c7cd:b0:161:8b6f:73c3 with SMTP id r13-20020a170902c7cd00b001618b6f73c3mr35562226pla.156.1653531953263;
-        Wed, 25 May 2022 19:25:53 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:c40c:3e14:bb57:48be])
-        by smtp.gmail.com with ESMTPSA id j18-20020a170903025200b001624f2b71b4sm101208plh.152.2022.05.25.19.25.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 19:25:52 -0700 (PDT)
-Date:   Thu, 26 May 2022 10:25:47 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v4 4/6] mm: docs: document shrinker debugfs
-Message-ID: <Yo7lK1wp9fXi4obF@FVFYT0MHHV2J.googleapis.com>
-References: <20220525202600.2910982-1-roman.gushchin@linux.dev>
- <20220525202600.2910982-5-roman.gushchin@linux.dev>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3dcMthtH7n4TL6BIfw9bc4YTWwWt9+20GSo8lo+80/c=;
+        b=4Y4PaaauZMwDBjKlmqVrKeFVordmn1MEzfWJbr4NGRS6XdRq6aAagSEpUYX70a5QQP
+         XcxpYiXYNC8HxVEPz/ZLAsmuN5iGprolmc6fR6fJNdZeGCh8JddTUKmISk0B3eBtsBJr
+         tCVJbWVisRzSmRla2WU2w3oJM8MqoZLvVcBGi7bsxy08uB4WqDkuecLNEbDXGDwdhYbc
+         pusxGRonFLwfXrNhgT7nhYSRPqUkrFiiLxyOyPILUfCCmxmrLLztWUPPnu1953Ox02d+
+         HAKJtaj/rk8Ihv0avFOuY6Kal0gXjw3rwM8WPb35GPErstWEqygqEb31VNRl/Q7qkTMJ
+         iJXA==
+X-Gm-Message-State: AOAM531VKOB83mNhGO1SwbAIOVxGjkvcivgYNwQpfV36Cyenu2CtdSIu
+        h2DKizKwyHwPoJ4cNdXTItx0eQ==
+X-Google-Smtp-Source: ABdhPJx4sDh1hjAhH0HjoZGXlpVLVnS66LfWbCvM5ds3M9BNoWahOpAQWnt8Ct0R3/VLVOGe4nPfWg==
+X-Received: by 2002:a65:6cc3:0:b0:3f6:26e9:5c1 with SMTP id g3-20020a656cc3000000b003f626e905c1mr30801215pgw.28.1653532844127;
+        Wed, 25 May 2022 19:40:44 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id u3-20020a17090a5e4300b001e0abbc3a74sm222108pji.5.2022.05.25.19.40.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 19:40:43 -0700 (PDT)
+Message-ID: <d71f2351-af17-7e20-7f99-d628b7ab5765@bytedance.com>
+Date:   Thu, 26 May 2022 10:40:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525202600.2910982-5-roman.gushchin@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [External] Re: [PATCH v2 2/2] selftest/bpf/benchs: Add bpf_map
+ benchmark
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>
+References: <20220524075306.32306-1-zhoufeng.zf@bytedance.com>
+ <20220524075306.32306-3-zhoufeng.zf@bytedance.com>
+ <CAADnVQL-RQqGcfqn9kTsH=UWAG4ZKduG+zNaptiqwjECTqR37Q@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CAADnVQL-RQqGcfqn9kTsH=UWAG4ZKduG+zNaptiqwjECTqR37Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 01:25:58PM -0700, Roman Gushchin wrote:
-> Add a document describing the shrinker debugfs interface.
-> 
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
->  Documentation/admin-guide/mm/index.rst        |   1 +
->  .../admin-guide/mm/shrinker_debugfs.rst       | 100 ++++++++++++++++++
->  2 files changed, 101 insertions(+)
->  create mode 100644 Documentation/admin-guide/mm/shrinker_debugfs.rst
-> 
-> diff --git a/Documentation/admin-guide/mm/index.rst b/Documentation/admin-guide/mm/index.rst
-> index c21b5823f126..1bd11118dfb1 100644
-> --- a/Documentation/admin-guide/mm/index.rst
-> +++ b/Documentation/admin-guide/mm/index.rst
-> @@ -36,6 +36,7 @@ the Linux memory management.
->     numa_memory_policy
->     numaperf
->     pagemap
-> +   shrinker_debugfs
->     soft-dirty
->     swap_numa
->     transhuge
-> diff --git a/Documentation/admin-guide/mm/shrinker_debugfs.rst b/Documentation/admin-guide/mm/shrinker_debugfs.rst
-> new file mode 100644
-> index 000000000000..2033d696aa59
-> --- /dev/null
-> +++ b/Documentation/admin-guide/mm/shrinker_debugfs.rst
-> @@ -0,0 +1,100 @@
-> +.. _shrinker_debugfs:
-> +
-> +==========================
-> +Shrinker Debugfs Interface
-> +==========================
-> +
-> +Shrinker debugfs interface provides a visibility into the kernel memory
-> +shrinkers subsystem and allows to get information about individual shrinkers.
-> +
-> +For each shrinker registered in the system a directory in **<debugfs>/shrinker/**
-> +is created. The directory's name is composed from the shrinker's name and an
-> +unique id: e.g. *kfree_rcu-0* or *sb-xfs:vda1-36*.
-> +
-> +Each shrinker directory contains the **count** file, which allows to trigger
-> +the *count_objects()* callback for each memcg and numa node (if applicable).
-> +
-> +Usage:
-> +------
-> +
-> +1. *List registered shrinkers*
-> +
-> +  ::
-> +
-> +    $ cd /sys/kernel/debug/shrinker/
-> +    $ ls
-> +    dqcache-16          sb-hugetlbfs-17  sb-rootfs-2      sb-tmpfs-49
-> +    kfree_rcu-0         sb-hugetlbfs-33  sb-securityfs-6  sb-tracefs-13
-> +    sb-aio-20           sb-iomem-12      sb-selinuxfs-22  sb-xfs:vda1-36
-> +    sb-anon_inodefs-15  sb-mqueue-21     sb-sockfs-8      sb-zsmalloc-19
-> +    sb-bdev-3           sb-nsfs-4        sb-sysfs-26      shadow-18
-> +    sb-bpf-32           sb-pipefs-14     sb-tmpfs-1       thp_deferred_split-10
-> +    sb-btrfs:vda2-24    sb-proc-25       sb-tmpfs-27      thp_zero-9
-> +    sb-cgroup2-30       sb-proc-39       sb-tmpfs-29      xfs_buf-vda1-37
-> +    sb-configfs-23      sb-proc-41       sb-tmpfs-35      xfs_inodegc-vda1-38
-> +    sb-dax-11           sb-proc-45       sb-tmpfs-40      zspool-zram0-34
-> +    sb-debugfs-7        sb-proc-46       sb-tmpfs-42
-> +    sb-devpts-28        sb-proc-47       sb-tmpfs-43
-> +    sb-devtmpfs-5       sb-pstore-31     sb-tmpfs-44
-> +
-> +2. *Get information about a specific shrinker*
-> +
-> +  ::
-> +
-> +    $ cd sb-btrfs\:vda2-24/
-> +    $ ls
-> +    count
-> +
-> +3. *Count objects*
-> +
-> +  Each line in the output has the following format::
-> +
-> +    <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1> ...
-> +    <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1> ...
-> +    ...
-> +
-> +  If there are no objects on all numa nodes, a line is omitted. If there
-> +  are no objects at all, the output might be empty.
+在 2022/5/25 上午8:13, Alexei Starovoitov 写道:
+> On Tue, May 24, 2022 at 12:53 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>> +static void setup(void)
+>> +{
+>> +       struct bpf_link *link;
+>> +       int map_fd, i, max_entries;
+>> +
+>> +       setup_libbpf();
+>> +
+>> +       ctx.skel = bpf_map_bench__open_and_load();
+>> +       if (!ctx.skel) {
+>> +               fprintf(stderr, "failed to open skeleton\n");
+>> +               exit(1);
+>> +       }
+>> +
+>> +       link = bpf_program__attach(ctx.skel->progs.benchmark);
+>> +       if (!link) {
+>> +               fprintf(stderr, "failed to attach program!\n");
+>> +               exit(1);
+>> +       }
+>> +
+>> +       //fill hash_map
+>> +       map_fd = bpf_map__fd(ctx.skel->maps.hash_map_bench);
+>> +       max_entries = bpf_map__max_entries(ctx.skel->maps.hash_map_bench);
+>> +       for (i = 0; i < max_entries; i++)
+>> +               bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
+>> +}
+> ...
+>   +SEC("fentry/" SYS_PREFIX "sys_getpgid")
+>> +int benchmark(void *ctx)
+>> +{
+>> +       u32 key = bpf_get_prandom_u32();
+>> +       u64 init_val = 1;
+>> +
+>> +       bpf_map_update_elem(&hash_map_bench, &key, &init_val, BPF_ANY);
+>> +       return 0;
+>> +}
+> This benchmark is artificial at its extreme.
+> First it populates the map till max_entries and then
+> constantly bounces off the max_entries limit in a bpf prog.
+> Sometimes random_u32 will be less than max_entries
+> and map_update_elem will hit a fast path,
+> but most of the time it will fail to alloc_htab_elem()
+> and will fail to map_update_elem.
+>
+> It does demonstrate that percpu_free_list is inefficient
+> when it's empty, but there is no way such a microbenchmark
+> justifies optimizing this corner case.
+>
+> If there is a production use case please code it up in
+> a benchmark.
 
-Should we add the following lines into here?
+This corner case is not easy to reproduce. In the scenario of a surge in 
+network traffic,
+the map is full, and there are still a large number of update operations.
+Just like Yonghong Song says
+'''
+in your use case, you have lots of different keys and your intention is 
+NOT to capture all the keys in
+the hash table. So given a hash table, it is possible that the hash
+will become full even if you increase the hashtable size.
+Maybe you will occasionally delete some keys which will free some
+space but the space will be quickly occupied by the new updates.
+'''
 
-"
-If the shrinker is not memcg-aware or CONFIG_MEMCG is off, 0 is
-printed as cgroup inode id. If the shrinker is not numa-aware, 0's are
-printed for all nodes except the first one.
-"
+>
+> Also there is a lot of other overhead: syscall and atomic-s.
+> To stress map_update_elem please use a for() loop inside bpf prog.
 
-Thanks.
+Ok, I will modify the way the test case is tested.
+And add this benchmark just to reproduce the case. As for whether to 
+optimize this case, I use ftrace
+'''
+cd /sys/kernel/debug/tracing/
+echo > trace
+echo htab_map_update_elem > set_graph_function
+echo function_graph > current_tracer
+cat per_cpu/cpu0/trace
+echo nop > current_tracer
+'''
+To confirm whether the update operation will continue to grab the 
+spin-lock of each cpu when the map is full.
+Then close ftrace, check the time-consuming update and whether there is 
+any improvement before patching.
+
+
+

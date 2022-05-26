@@ -2,58 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617C8535162
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B642535163
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344609AbiEZPZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S1347395AbiEZP0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiEZPZk (ORCPT
+        with ESMTP id S230033AbiEZP0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 11:25:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA29BA9B9;
-        Thu, 26 May 2022 08:25:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F03261C41;
-        Thu, 26 May 2022 15:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9323BC385A9;
-        Thu, 26 May 2022 15:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653578737;
-        bh=Ku4hdE4QnTkWrQu5yxYySdeI4ksk3o3IHLc7K1VuUA4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sRAE54i401ZllZra/r8Zgo2GnB4Xst/GpO+HfIvYSf0CN+kzlUuuV3GGY8NO2kUbe
-         SWpn4lZoXAO0EKJe137ViutbMO4PjkbqtoqQcnU03XsZxN4tgBkkuOCMpQqvGPTxpW
-         s3NMPF9L1fFvAEMhAM9S8BU9PHskO6geqAn44bMwn2+9KgERXUH8ac+o+BrVVyLAxa
-         OlvZolMTP/JJKHgPUZLIoouVmsENjU63URW5g8RoGaWkEI8BBqRFPBdRKOw3YCiHfs
-         5N8dxEeTJlss0eTSXkQ8DWZJZ5K4x/Z9r8mQXgOd+tY/PLM/CREuI43gUr1t3RqxLs
-         WJStMBQUSvQhw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 56F644036D; Thu, 26 May 2022 12:25:35 -0300 (-03)
-Date:   Thu, 26 May 2022 12:25:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     zhengjun.xing@linux.intel.com, peterz@infradead.org,
-        mingo@redhat.com, alexander.shishkin@intel.com, jolsa@redhat.com,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        adrian.hunter@intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com
-Subject: Re: [PATCH] perf jevents: Fix event syntax error caused by ExtSel
-Message-ID: <Yo+b79zg9hsS0H9Q@kernel.org>
-References: <20220525140410.1706851-1-zhengjun.xing@linux.intel.com>
- <CAP-5=fUm4G043v6-pToBiT-psxt-_r4kxtsWwkjLh=ARmhmP_A@mail.gmail.com>
+        Thu, 26 May 2022 11:26:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C975DF20
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:26:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC9091688;
+        Thu, 26 May 2022 08:26:17 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.27.164])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 55F523F66F;
+        Thu, 26 May 2022 08:26:16 -0700 (PDT)
+Date:   Thu, 26 May 2022 16:26:13 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
+        elver@google.com, jbaron@akamai.com, rostedt@goodmis.org,
+        ardb@kernel.org
+Subject: Re: [PATCH 7/7] context_tracking: Always inline empty stubs
+Message-ID: <Yo+cFQkX9fVTOmrv@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220526105252.440440893@infradead.org>
+ <20220526105958.134113388@infradead.org>
+ <20220526150206.rqdiyouxmkdgm2jq@treble>
+ <Yo+YfEWLiCVekG5l@FVFF77S0Q05N.cambridge.arm.com>
+ <20220526151654.k3mxzp5so25we7y3@treble>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fUm4G043v6-pToBiT-psxt-_r4kxtsWwkjLh=ARmhmP_A@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220526151654.k3mxzp5so25we7y3@treble>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,35 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, May 25, 2022 at 07:27:08AM -0700, Ian Rogers escreveu:
-> On Wed, May 25, 2022 at 7:04 AM <zhengjun.xing@linux.intel.com> wrote:
-> >
-> > From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> >
-> > In the origin code, when "ExtSel" is 1, the eventcode will change to
-> > "eventcode |= 1 << 21”. For event “UNC_Q_RxL_CREDITS_CONSUMED_VN0.DRS",
-> > its "ExtSel" is "1", its eventcode will change from 0x1E to 0x20001E,
-> > but in fact the eventcode should <=0x1FF, so this will cause the parse
-> > fail:
-> >
-> >   # perf stat -e "UNC_Q_RxL_CREDITS_CONSUMED_VN0.DRS" -a sleep 0.1
-> > event syntax error: '.._RxL_CREDITS_CONSUMED_VN0.DRS'
-> >                                   \___ value too big for format, maximum is 511
-> >
-> > On the perf kernel side, the kernel assumes the valid bits are continuous.
-> > It will adjust the 0x100 (bit 8 for perf tool) to bit 21 in HW.
-> >
-> > DEFINE_UNCORE_FORMAT_ATTR(event_ext, event, "config:0-7,21");
-> >
-> > So the perf tool follows the kernel side and just set bit8 other than bit21.
-> >
-> > Fixes: fedb2b518239 ("perf jevents: Add support for parsing uncore json files")
-> > Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-> > Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+On Thu, May 26, 2022 at 08:16:54AM -0700, Josh Poimboeuf wrote:
+> On Thu, May 26, 2022 at 04:10:52PM +0100, Mark Rutland wrote:
+> > On Thu, May 26, 2022 at 08:02:06AM -0700, Josh Poimboeuf wrote:
+> > > On Thu, May 26, 2022 at 12:52:59PM +0200, Peter Zijlstra wrote:
+> > > > Because GCC is seriously challenged..
+> > > 
+> > > Or are these CONFIG_DEBUG_SECTION_MISMATCH?
+> > 
+> > Does it matter?
 > 
-> Acked-by: Ian Rogers <irogers@google.com>
+> Yes, because I believe the only thing this option is good for is
+> creating a bunch of useless '__always_inline' patches:
+> 
+>   https://lore.kernel.org/all/7fad83ecde03540e65677959034315f8fbb3755e.1649434832.git.jpoimboe@redhat.com/
 
-Thanks, applied.
+Sure, but as I said, there are other reasons why the compiler can generate code
+in this way, even if that's unlikely. Without `__always_inline` we don't
+actually have a guarantee of inlining, so those warning *is* legitimate, even
+if 99.99% of the time the compiler doesn't decide to generate code in a silly
+way.
 
-- Arnaldo
-
+Thanks,
+Mark.

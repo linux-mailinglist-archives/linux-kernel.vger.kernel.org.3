@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6302E535303
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C21535311
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240286AbiEZR6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 13:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S243610AbiEZSBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233423AbiEZR6F (ORCPT
+        with ESMTP id S233423AbiEZSBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 13:58:05 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BFEDFD7;
-        Thu, 26 May 2022 10:58:03 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id DA6701F458C5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653587881;
-        bh=vKrfmc3boXboPynKhfGf6a+AgAeTRHxWWw/3jLM5Jic=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DGkTuUPwewZwysjZztrVad/lb9S/kXm3+CYcMvUjKexgsyXtFd1nxFQrKIctmAXDE
-         Dg4zWR6Lg/z3Q5upNyDit2RITf3OMKBlmER62SyW0U42xsGGg6QU60mHzng41heGyk
-         NU4P7ccBQDG8c0W5TBR01+lyJcSnh8zyQ8X4MXL0wbrfDi55ocZBn4f47Yq+Qm9r/l
-         dkOwFM8+qVn8evQindIk4K2aIF4MZIQ+S647V8zghD5pI/2CMgkfBp23fAj8XzYIZ6
-         3Mt5DrdIKw58s6+5PISOPPMbS6bEZtDYTHtKIafhS/zxXwZl9zGfofl5uvRKsINlUj
-         HSzFw1AXzb0JQ==
-Message-ID: <45c29859-f7a6-48e5-be48-bd8191ac299a@collabora.com>
-Date:   Thu, 26 May 2022 20:57:56 +0300
+        Thu, 26 May 2022 14:01:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750582AC68;
+        Thu, 26 May 2022 11:01:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 320D4B8210C;
+        Thu, 26 May 2022 18:01:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF361C385A9;
+        Thu, 26 May 2022 18:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653588095;
+        bh=d5ypGyznvLK36nBsMgVlsQ0dlUUAR350qlCPdJGQD5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cyh0X/e8V+zwQVgpwPJOgEryDaxWCAtc6B2VF6H/69jF9cNYE70zkBfcAtw9911BY
+         FCBYOx+J2x5HZmbuJOqGtQiV3ggfvrYSARie5umdupxqEVAIiZs1WKzBNgEUo4WDj/
+         FQ/p7p1wm74QbnItpoRQqaiARE+3Ytde7wW6AaowubTC9rkxYVHXdoqX17Bj59pOtb
+         WZeQA+yFQDyICnLqVbbn0S+QIJFsPr/Jp8LpU7tEA/eqdZJGiTri9kixoftrjtKcIA
+         wCiGMWqNB31YfnSy/5QXiYN49TfazTTYccdGFDh3eByv2cD+RnHqA/pFy6lfnTinPK
+         6Krq+DN13KUCw==
+Date:   Thu, 26 May 2022 11:01:34 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        herbert@gondor.apana.org.au, gaochao <gaochao49@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH crypto] crypto: blake2s - remove shash module
+Message-ID: <Yo/Afs61tFwnaOV8@sol.localdomain>
+References: <20220526092026.207936-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 21/31] soc/tegra: Remove the call to
- devm_pm_opp_set_clkname()
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526092026.207936-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,39 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/22 14:42, Viresh Kumar wrote:
-> The OPP core already performs devm_pm_opp_set_clkname() with name as
-> NULL, the callers shouldn't be doing the same unless they have a
-> different clock name to add here.
-> 
-> Drop the call.
-> 
-> Cc: Dmitry Osipenko <digetx@gmail.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/soc/tegra/common.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-> index 32c346b72635..49a5360f4507 100644
-> --- a/drivers/soc/tegra/common.c
-> +++ b/drivers/soc/tegra/common.c
-> @@ -108,12 +108,6 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
->  	u32 hw_version;
->  	int err;
->  
-> -	err = devm_pm_opp_set_clkname(dev, NULL);
-> -	if (err) {
-> -		dev_err(dev, "failed to set OPP clk: %d\n", err);
-> -		return err;
-> -	}
-> -
->  	/* Tegra114+ doesn't support OPP yet */
->  	if (!of_machine_is_compatible("nvidia,tegra20") &&
->  	    !of_machine_is_compatible("nvidia,tegra30"))
+On Thu, May 26, 2022 at 11:20:26AM +0200, Jason A. Donenfeld wrote:
+> BLAKE2s has no use as an shash and no use is likely to ever come up.
 
-I can't see where OPP core performs devm_pm_opp_set_clkname().
+I'm not sure about that.  Anyone who is already using shash (for supporting
+multiple algorithms) and wants to add blake2s support would need it.  dm-verity,
+dm-integrity, fs-verity, UBIFS authentication, IMA, btrfs checksums, etc.  A
+couple of these are already using blake2b, even.  I guess you might as well
+remove blake2s until someone explicitly says they want it, but I can easily see
+it coming back later.
 
--- 
-Best regards,
-Dmitry
+> Just remove all of this unnecessary plumbing. Removing this shash was
+> something we talked about back when we were making BLAKE2s a built-in,
+> but I simply never got around to doing it. So this completes that
+> project.
+> 
+> This also helps fix a bug in which the lib code depends on
+> crypto_simd_disabled_for_test, which is now unnecessary.
+> 
+> Cc: gaochao <gaochao49@huawei.com>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+
+More importantly, this is removing quite a bit of test coverage because the
+extra self-tests in crypto/testmgr.c are more comprehensive than what
+lib/crypto/blake2s-selftest.c does.  For example they test the case where the
+input data is misaligned, as well as the case where the code is executed in a
+context where SIMD instructions are unavailable.
+
+In order for this to be acceptable, I think you'd need to update
+blake2s-selftest.c to be more comprehensive.
+
+- Eric

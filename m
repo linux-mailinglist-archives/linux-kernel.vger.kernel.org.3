@@ -2,98 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3ACB534EEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4FB534EF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346513AbiEZMPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S1347124AbiEZMQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiEZMPL (ORCPT
+        with ESMTP id S1345140AbiEZMQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:15:11 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97D9C6E51
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:15:09 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L86MB4xFWz4xXj;
-        Thu, 26 May 2022 22:15:02 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1653567305;
-        bh=qdGxLuOgWLxtGXOKT8uILQNK4Btl7FJ5JZwGbkMtGZY=;
-        h=From:To:Cc:Subject:In-Reply-To:Date:From;
-        b=gy/HsX4BcAReBDnH2meEdqv0xBEOfx6GpCJHtCRxUA2TaJxbHBPmt8AFbY5T6mec0
-         pnpSvVoevK98Fo9Y7mkImcHOTfpnXb8bh1O1uVXiJv5Voaey3zNbeOZ976zjqL3heV
-         qyOGYloDmu8j75LG/AEkilOAokL7NxLBEHGStWN065+jzpvOsREi/uA9KlURYKY1Dm
-         eM6wktQ9ce7mUGpT7h6+mqQsLE1OfnCgb24rnWz+DbMrPz2DvsFZ9fuzhp94HJDw9Y
-         o7M0+NMfHXpYF1/iec34epetlmqqblvv3oxZqreh7iA06fLjXXdSkVtXKqZzeU7GW2
-         B4FcFh50RkD7A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     the arch/x86 maintainers <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Waiman.Long@hp.com,
-        Paul McKenney <paulmck@linux.vnet.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 1/2] locking/lockref: Use try_cmpxchg64 in CMPXCHG_LOOP
- macro
-In-Reply-To: <CAHk-=wh1XeaxWXG5QziGA4ds918UnW1hO924kusgVB-wGj+9Og@mail.gmail.com>
-Date:   Thu, 26 May 2022 22:14:59 +1000
-Message-ID: <871qwgmqws.fsf@mpe.ellerman.id.au>
+        Thu, 26 May 2022 08:16:15 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF529286CC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:16:12 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so1556507pjf.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pSsFxHfEMcrHOSBoFMEeUFcZhoPO+KxNjOCmccE7VEc=;
+        b=j1LakW1276mdhdZUQsSFgcp6av448PqaRz7jViMY+GiGwh5iEij2Cm5mimSgVPEdiL
+         Ozj3HVl3aUCQNnL22XjmDerl2WGv3ej+oU5YMVtYH9VIgXAWsX2inzVAfnyQqa2b5xnX
+         W2Y4WrZkxJ+HRox9oe5wjmagh65jqeEWGjW8fstEyuAjiqnZGpAs/+pspSCQIhlehDyP
+         xDU30Ahlo1lxgsqq/URVcKV4vlRa+Ug1dhRi/5993PYb81ygDBtRkwhfgFcpx+IwipjA
+         ioZ7k1tvfTIqVetbCWXoO8xV/OhK2fIufIzWIIGxVrM90tgy7w3bSaH4Mpz4weYTocdg
+         ER1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pSsFxHfEMcrHOSBoFMEeUFcZhoPO+KxNjOCmccE7VEc=;
+        b=bdO6VwU+6gWDr7bjuzkIzfijqn8sCuOKEGQiNw65tnCxyOpcUSqsOmuz85mxdRInMR
+         sFvrVtmFNfU54tv1CQINHleZwuj4jGF1W7HUtI56GAD+ZHCg5soBFU1M6jx3G4cNAN63
+         4hE/RRWS/73+BAkK9FNgg9y5fE8ZLZQiDKjNqDtN2InaI8dHzIeyaev4fANEfNDyqvm8
+         3ERKFzW8UROu+0WXafDvJGmLRTySm3caz9w0J9D6z0Gwb0fCUKDlzXaIkk7caTCvwjXW
+         9R4EM3907pa7np9Cz+atgtU27bBSaMeVvH5dCSMVMgfUIH+immLKVOIus8JvyII9HXM9
+         VngA==
+X-Gm-Message-State: AOAM530xCNgjOBOyNElFBdGoUxy4VAv3LDGyzCgBJghAwTwTj8r6TZbN
+        W10TOuyC15sfaMN2vbdmQCZO9P8+xc1fT9D6rLxx+Q==
+X-Google-Smtp-Source: ABdhPJyPE1Wcb5k1NYZNag1s+hH2MlPohRmJCsdM2BsWrYm5w9w9F6ArFLEhJ5Lmyc8aI7BQaEykL1CgVfGR0Wh+Ecc=
+X-Received: by 2002:a17:902:8f81:b0:161:f4a7:f2fc with SMTP id
+ z1-20020a1709028f8100b00161f4a7f2fcmr30701452plo.117.1653567371993; Thu, 26
+ May 2022 05:16:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220522162802.208275-1-luca@z3ntu.xyz> <20220522162802.208275-12-luca@z3ntu.xyz>
+In-Reply-To: <20220522162802.208275-12-luca@z3ntu.xyz>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 26 May 2022 14:16:01 +0200
+Message-ID: <CAG3jFys4o6vsqhDJXMkL2fFdjDGstdzaB59j=Md6KDinMDNVRg@mail.gmail.com>
+Subject: Re: [RFC PATCH 11/14] ARM: dts: qcom: msm8974: add CCI bus
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        matti.lehtimaki@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> writes:
-> On Wed, May 25, 2022 at 7:40 AM Uros Bizjak <ubizjak@gmail.com> wrote:
->>
->> Use try_cmpxchg64 instead of cmpxchg64 in CMPXCHG_LOOP macro.
->> x86 CMPXCHG instruction returns success in ZF flag, so this
->> change saves a compare after cmpxchg (and related move instruction
->> in front of cmpxchg). The main loop of lockref_get improves from:
+This patch does not apply on upstream-media/master or
+upstream-next/master. Is there another branch this series should be
+applied to?
+
+On Sun, 22 May 2022 at 18:28, Luca Weiss <luca@z3ntu.xyz> wrote:
 >
-> Ack on this one regardless of the 32-bit x86 question.
+> Add a node for the camera-specific i2c bus found on msm8974.
 >
-> HOWEVER.
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  arch/arm/boot/dts/qcom-msm8974.dtsi | 62 +++++++++++++++++++++++++++++
+>  1 file changed, 62 insertions(+)
 >
-> I'd like other architectures to pipe up too, because I think right now
-> x86 is the only one that implements that "arch_try_cmpxchg()" family
-> of operations natively, and I think the generic fallback for when it
-> is missing might be kind of nasty.
+> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> index ffa6f874917a..a80b4ae71745 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> @@ -1434,6 +1434,34 @@ blsp2_i2c5_sleep: blsp2-i2c5-sleep {
 >
-> Maybe it ends up generating ok code, but it's also possible that it
-> just didn't matter when it was only used in one place in the
-> scheduler.
-
-This patch seems to generate slightly *better* code on powerpc.
-
-I see one register-to-register move that gets shifted slightly later, so
-that it's skipped on the path that returns directly via the SUCCESS
-case.
-
-So LGTM.
-
-> The lockref_get() case can be quite hot under some loads, it would be
-> sad if this made other architectures worse.
-
-Do you know of a benchmark that shows it up? I tried a few things but
-couldn't get lockref_get() to count for more than 1-2%.
-
-cheers
+>                         /* BLSP2_I2C6 info is missing - nobody uses it though? */
+>
+> +                       cci0_default: cci0-default {
+> +                               pins = "gpio19", "gpio20";
+> +                               function = "cci_i2c0";
+> +                               drive-strength = <2>;
+> +                               bias-disable;
+> +                       };
+> +
+> +                       cci0_sleep: cci0-sleep {
+> +                               pins = "gpio19", "gpio20";
+> +                               function = "gpio";
+> +                               drive-strength = <2>;
+> +                               bias-disable;
+> +                       };
+> +
+> +                       cci1_default: cci1-default {
+> +                               pins = "gpio21", "gpio22";
+> +                               function = "cci_i2c1";
+> +                               drive-strength = <2>;
+> +                               bias-disable;
+> +                       };
+> +
+> +                       cci1_sleep: cci1-sleep {
+> +                               pins = "gpio21", "gpio22";
+> +                               function = "gpio";
+> +                               drive-strength = <2>;
+> +                               bias-disable;
+> +                       };
+> +
+>                         spi8_default: spi8_default {
+>                                 mosi {
+>                                         pins = "gpio45";
+> @@ -1587,6 +1615,40 @@ dsi0_phy: dsi-phy@fd922a00 {
+>                         };
+>                 };
+>
+> +               cci: cci@fda0c000 {
+> +                       compatible = "qcom,msm8974-cci";
+> +                       #address-cells = <1>;
+> +                       #size-cells = <0>;
+> +                       reg = <0xfda0c000 0x1000>;
+> +                       interrupts = <GIC_SPI 50 IRQ_TYPE_EDGE_RISING>;
+> +                       clocks = <&mmcc CAMSS_TOP_AHB_CLK>,
+> +                                <&mmcc CAMSS_CCI_CCI_AHB_CLK>,
+> +                                <&mmcc CAMSS_CCI_CCI_CLK>;
+> +                       clock-names = "camss_top_ahb",
+> +                                     "cci_ahb",
+> +                                     "cci";
+> +
+> +                       pinctrl-names = "default", "sleep";
+> +                       pinctrl-0 = <&cci0_default &cci1_default>;
+> +                       pinctrl-1 = <&cci0_sleep &cci1_sleep>;
+> +
+> +                       status = "disabled";
+> +
+> +                       cci_i2c0: i2c-bus@0 {
+> +                               reg = <0>;
+> +                               clock-frequency = <400000>;
+> +                               #address-cells = <1>;
+> +                               #size-cells = <0>;
+> +                       };
+> +
+> +                       cci_i2c1: i2c-bus@1 {
+> +                               reg = <1>;
+> +                               clock-frequency = <400000>;
+> +                               #address-cells = <1>;
+> +                               #size-cells = <0>;
+> +                       };
+> +               };
+> +
+>                 gpu: adreno@fdb00000 {
+>                         compatible = "qcom,adreno-330.1", "qcom,adreno";
+>                         reg = <0xfdb00000 0x10000>;
+> --
+> 2.36.0
+>

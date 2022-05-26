@@ -2,91 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D742F5352D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24835352DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344197AbiEZRna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 13:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S239373AbiEZRqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 13:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344062AbiEZRn2 (ORCPT
+        with ESMTP id S232984AbiEZRqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 13:43:28 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E229DFDC
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:43:27 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id f4so2298694iov.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:43:27 -0700 (PDT)
+        Thu, 26 May 2022 13:46:48 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C029EB44;
+        Thu, 26 May 2022 10:46:47 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id r68so2920395oie.12;
+        Thu, 26 May 2022 10:46:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=Cf7d3NdarROeO1DBR6AQD9JX7+zz8hgqvCHij6VuBns=;
-        b=i5RGf+k9walnItpnx9yAiefDNhrFFACOtNsgMSJlDnHnGephcTbEi+zjiQHLzVAo8+
-         k4SOaRKhzngDYnGwYINC/jcFhBXif0tYHZG1v64RMdPBfa37Yi+uID+4jOE5YZBtIxsp
-         /oNXEJf0IJTtKa/P3aFhK+s4XLxW35f0F62le9b/Gv75WZ0HZCkI4qfnO8HskWQDrc6S
-         Ka9onSdDxRZz6vP8LqwtlPVdt1BRWqJ5NGq2vMOkOYPSXEgrqiGy/inAMtVE3RNMsGHZ
-         MPjOhsctJI1j24aSzqOjcdy6C4/LB1SdNH1GTRd7nAlWFgQ1MGj7bYciI3JfvLXyP68P
-         pCfg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aVcKCtr30XetitU4IfTnUZdATlYXh/+qkc69zKkiy3k=;
+        b=nyXEUVC7ggPUw7/rThyQn+vH0xzPgrrtHbmfwIRHoCBtlW3Gw0fYMESmoxAi/oEOlW
+         qgt7heCVqLC4w5lPvA603X5kKccbgssdcRG8da8Flwf/BCNU/5NMfiQd9wTvSJ2mZpbv
+         ivnEJ8nQicjFGDpxySVuXtlmTRt7VMv0wYxWSqzbnX7trKICDoXuCcMbr/6neFqPTBL6
+         uvPLvyP/Z5P4cbD3XQLKXakshlA/VXYVzRF66cXQC/ILb257/ajgEVvz08JF0P0wVFYw
+         4gFipGYpCwhIM3acm1QsVpa9fBjPudgcCiFfpfJpAOZnTogbajpTnCVlOcyHQ/iBHPWf
+         k5xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=Cf7d3NdarROeO1DBR6AQD9JX7+zz8hgqvCHij6VuBns=;
-        b=ctzvsFfvvza81/VdDcfQ/WG+mb+/CL6zunSkQvyZLt/PxsNirzPtgqPTmBAOC9VYso
-         w5OABVYTEiz0UXozSQ5reaZ2fPciVN3ttLt7QTtr2F3yG0m8n1LhoqLPYGEMJUMPM8MG
-         nYYyYhOkMlmN6QeUx8mGgT/0z5ZgfmpLeUXTXOwpdyfOpduR0Qo0nWAQZxJO7EdXFCYQ
-         syR0ABGTMpE05Hbtao8v6d/sDnUwa9LHocaNWHCxvqn7pFlzj76nit7ymdsjNtVou9xf
-         nOaZvDer9BCyO2nVqUBv8iv8gy+leHvQUdO9EUUXQXHn6kquwC06bCQyIRIF0td2xfqJ
-         G6Zg==
-X-Gm-Message-State: AOAM530XFP7Ca7bvgbJaZQBMudkLZ3JKDtZ2EbKqLDrlwFqxct75vZNp
-        B8Bp6gXNGRZit/hhUp5GwT1KaA==
-X-Google-Smtp-Source: ABdhPJzAPHoImUvr5c2HdKzi8nCAIOvgk3aG8fJbLYXnzTkl+x/PRDnKjx1gTAaHdP+CGKkq/NKUiw==
-X-Received: by 2002:a6b:8e0d:0:b0:65e:50f1:afd8 with SMTP id q13-20020a6b8e0d000000b0065e50f1afd8mr14714599iod.112.1653587006740;
-        Thu, 26 May 2022 10:43:26 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id x18-20020a927c12000000b002d149ec2606sm652748ilc.65.2022.05.26.10.43.25
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aVcKCtr30XetitU4IfTnUZdATlYXh/+qkc69zKkiy3k=;
+        b=xPVIlpLk86KJpG+dvBMMUd4Nabl85939hadJ3knRyPgraks0yWatkLwhYegU55T5Sf
+         BB004pQ4Kr9zQZO6EBss2uRwV/EnlPpZdQ97X1n4WJtbyi0RjlpMDLVhALn3rbLXBh1L
+         L1vTZhoceHPOOS0dyjInz0omHNUcR6yYfEauEPPUf316MXztdYyODN/CG/sRmGOxQuES
+         8CavaCbSXiq3p8UzD//xIXVw8VqLkqpW7lkTD3/+E9eMsNSz0+ydovnh+fp9fmkn6Prj
+         1d6jLlaBiv1iVOdy0+gkGYNBJvlPTrr2j7hXcG7dVOJ0s5mtB6nuX3n1upgVdAbGFjrS
+         0w8Q==
+X-Gm-Message-State: AOAM530ZxpSM9DODFMjTOnp05qWkP2zaffgVLUT/Wu52zOvmFvEd9CEq
+        QtWJSf8As7TIiKB9jqfdxYQ=
+X-Google-Smtp-Source: ABdhPJwqrSRXwIbMQu0jQLPeFGvZ3cp7i4Nq5r6Qs5z2Zr5IZk+ubko/L8UBLGBpG2ER1S+nGULEtQ==
+X-Received: by 2002:aca:280c:0:b0:32a:f677:798b with SMTP id 12-20020aca280c000000b0032af677798bmr1759617oix.48.1653587206840;
+        Thu, 26 May 2022 10:46:46 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id dw5-20020a056870770500b000f291be9fa7sm880287oab.31.2022.05.26.10.46.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 10:43:25 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tj@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        bo.liu@linux.alibaba.com, kernel-team@fb.com, josef@toxicpanda.com
-In-Reply-To: <Yn9ScX6Nx2qIiQQi@slm.duckdns.org>
-References: <Yn9ScX6Nx2qIiQQi@slm.duckdns.org>
-Subject: Re: [PATCH block/for-5.19] blk-iolatency: Fix inflight count imbalances and IO hangs on offline
-Message-Id: <165358700562.497212.14751047590663347545.b4-ty@kernel.dk>
-Date:   Thu, 26 May 2022 11:43:25 -0600
+        Thu, 26 May 2022 10:46:45 -0700 (PDT)
+Date:   Thu, 26 May 2022 10:47:20 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Patch for stable
+Message-ID: <Yo+9KLc6VG8CKeH+@yury-laptop>
+References: <Yo+t8QAgVTi2E6B4@yury-laptop>
+ <Yo+vidb+a9Ctqyih@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yo+vidb+a9Ctqyih@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 20:55:45 -1000, Tejun Heo wrote:
-> iolatency needs to track the number of inflight IOs per cgroup. As this
-> tracking can be expensive, it is disabled when no cgroup has iolatency
-> configured for the device. To ensure that the inflight counters stay
-> balanced, iolatency_set_limit() freezes the request_queue while manipulating
-> the enabled counter, which ensures that no IO is in flight and thus all
-> counters are zero.
++ Vitaly Kuznetsov <vkuznets@redhat.com>
++ Paolo Bonzini <pbonzini@redhat.com>
+
+On Thu, May 26, 2022 at 06:49:13PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, May 26, 2022 at 09:42:25AM -0700, Yury Norov wrote:
+> > Hi Greg,
+> > 
+> > Can you please consider taking the patch "KVM: x86: hyper-v: fix type
+> > of valid_bank_mask" into stable?
+> > 
+> > Commit ea8c66fe8d8f4f93df941e52120a3512d7bf5128 upstream.
 > 
-> [...]
+> For what kernel tree(s) should thie be backported?
 
-Applied, thanks!
+For me, Ubuntu LTS is important (4.15 and 5.4). I believe, Vitaly
+and Paolo may know better for Red Hat, and in general.
 
-[1/1] blk-iolatency: Fix inflight count imbalances and IO hangs on offline
-      commit: 8a177a36da6c54c98b8685d4f914cb3637d53c0d
-
-Best regards,
--- 
-Jens Axboe
-
-
+Thanks,
+Yury

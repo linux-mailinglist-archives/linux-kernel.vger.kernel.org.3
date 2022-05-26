@@ -2,71 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD475348C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 04:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640BE5348CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 04:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345514AbiEZCSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 22:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S241346AbiEZCSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 22:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235828AbiEZCR7 (ORCPT
+        with ESMTP id S235828AbiEZCSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 22:17:59 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54B5BC6F6
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:17:57 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id q21so540953ejm.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lV5zgCXHyqPoniN4egpc4ez8v2ywGktu+KT77l1Uk9w=;
-        b=TWlmfSYO1gOTBu4bXnhrBzM1Rv9dK1/PZds8v/pKilDbkkFP21w0PVI58t7co3BHlF
-         ShnTmtragg2Cx23Y2qLdT72mfuoDSuBYjJrJsDUEU7Vtde2CX1jBU9X4X3cgHbRlV4YI
-         MLTPfTDlN5hV/rhUvSb/M5+0OjO3oa3jnaLnU=
+        Wed, 25 May 2022 22:18:22 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03B0BC6F6;
+        Wed, 25 May 2022 19:18:18 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id l9-20020a056830268900b006054381dd35so173354otu.4;
+        Wed, 25 May 2022 19:18:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lV5zgCXHyqPoniN4egpc4ez8v2ywGktu+KT77l1Uk9w=;
-        b=oagC+PTq+OI+7zYgP4bgnKPVIBVTUukknOmck1Di1OUouHkx6imidY1dAYAEW6V5Ux
-         SMnD2l5vYuVKkSl5l3x7PSPuWTbpZyX6EBPmXWuGLCA7d1GtZQ0Ht4Xl41/9ryBAYju8
-         /wqJ2wj7BeSY19EjdaE31FBnea0gGhOKA80au2x7Hdp5SBJvZP+49wSmo2pDwh1SeTj3
-         tapoPSf3TpuWjiN0Bjvat58/QzRK03YlEkCCcPeO2t19pg3B9JFT5sPGAkjEOlWx4x3K
-         /jmJVnEqzqpw0ugBFWyy7xVkF+1UQwYQzPtb9qMjX3EcV8Qhq9OnnQCSf6SAQIND/CDv
-         ZLcg==
-X-Gm-Message-State: AOAM531qqq6sL713nNZ96xRiSzhxA/qOu/At1xuqIgf4c+oxn5hEYr6g
-        9x+DQBhbPHXKBQSkwmbXwBvDffVxY6So5k/yht0=
-X-Google-Smtp-Source: ABdhPJyUnquvcC+o4uJ7bnHCRnPHE58ouEU+DJIwPxELWonpFpQtxcOvN67vIagl+qY1/SKay6Ixww==
-X-Received: by 2002:a17:906:99c2:b0:6fe:1bb4:4795 with SMTP id s2-20020a17090699c200b006fe1bb44795mr31586738ejn.120.1653531475976;
-        Wed, 25 May 2022 19:17:55 -0700 (PDT)
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
-        by smtp.gmail.com with ESMTPSA id p7-20020a170907910700b006fec27575f1sm82390ejq.123.2022.05.25.19.17.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 19:17:55 -0700 (PDT)
-Received: by mail-wm1-f41.google.com with SMTP id 129-20020a1c0287000000b003975cedb52bso92248wmc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:17:55 -0700 (PDT)
-X-Received: by 2002:a05:600c:3d18:b0:397:6531:b585 with SMTP id
- bh24-20020a05600c3d1800b003976531b585mr104467wmb.38.1653531474740; Wed, 25
- May 2022 19:17:54 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NUQ9SiZVPAN24uE2JQeZo4XP8qsZ/j7rMIYhAswoj04=;
+        b=MS6oMGIKO//h3Zz3bxhLLTGFLSmaZwzN0bhupsGCqsBvTP3uHkUDVZXihd1MjNonhj
+         XdVj1k8oahccoSiUVCSaXvax6RbX2w74nLgDx7U2QC9lXiuOXTDd+aruJdFem/6txHdj
+         oBD09CxQ41yak17Stl4BlMpF5kbMYYosDfJmt8fI3ctIAcqNW0Wud1t3Iu+WoJxCK1yU
+         sbf0wX3l0fld4NbSlwzq8D06Cl5ulKbfKAjZJXNohGThvNiAIvlZYYsPPpSCaf11700F
+         8O/aTYGFdJEf+sYh98SmtKhZ3jNn4bTqL70j+1m9h7vAnM/TJD9qLxT0TQgoMZk4kih3
+         ElUw==
+X-Gm-Message-State: AOAM531Xx3Fu3tXOugQOEvKfZ3sD9jqIOSEE0aARtd+IPu2fq1lgvGRK
+        YHXrMmZmwf9N4snvZ0LHHgAbYEykAw==
+X-Google-Smtp-Source: ABdhPJyKdNx1ygST7g1BJvQ+OaZ3sMcoR//b5X22QjXHkasp5LxmvBz87YH+SSFEyb4r8eioLpOzVA==
+X-Received: by 2002:a05:6830:124e:b0:60a:fff3:c05b with SMTP id s14-20020a056830124e00b0060afff3c05bmr9034053otp.264.1653531497982;
+        Wed, 25 May 2022 19:18:17 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id li23-20020a056871421700b000f28a948dd2sm187766oab.21.2022.05.25.19.18.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 19:18:17 -0700 (PDT)
+Received: (nullmailer pid 2930226 invoked by uid 1000);
+        Thu, 26 May 2022 02:18:16 -0000
+Date:   Wed, 25 May 2022 21:18:16 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 01/12] dt-bindings: vendor-prefixes: add Shift GmbH
+Message-ID: <20220526021816.GA2930168-robh@kernel.org>
+References: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <bd25414c73fae85529568c6f5b88bfdad6df7b97.camel@HansenPartnership.com>
-In-Reply-To: <bd25414c73fae85529568c6f5b88bfdad6df7b97.camel@HansenPartnership.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 25 May 2022 19:17:38 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh5SyuAox3QXvmJLwV4VgN_EK4oaAkh5-73FVf36ZdHog@mail.gmail.com>
-Message-ID: <CAHk-=wh5SyuAox3QXvmJLwV4VgN_EK4oaAkh5-73FVf36ZdHog@mail.gmail.com>
-Subject: Re: [GIT PULL] first round of SCSI updates for the 5.18+ merge window
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521164550.91115-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +65,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 7:38 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> Max Gurtovoy (3):
->       scsi: target: iscsi: Rename iscsi_session to iscsit_session
->       scsi: target: iscsi: Rename iscsi_conn to iscsit_conn
->       scsi: target: iscsi: Rename iscsi_cmd to iscsit_cmd
+On Sat, 21 May 2022 18:45:39 +0200, Krzysztof Kozlowski wrote:
+> Add prefix for SHIFT GmbH, phone manufacturer
+> (https://www.shiftphones.com/en/).
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-People, there really isn't some incredible drought of letters in the
-world. It's ok to write out "target" instead of just "t".
-
-Done is done, and renaming things further is probably not worth it,
-but when the commit talks about "more readable code" I really don't
-know if "struct iscsit_session" and friends is conducive to "more
-readable". It looks more like line noise.
-
-Yeah, it's less typing, and maybe "struct iscsi_target_session" would
-have been too long. But still, I had to do a double-take when looking
-at the diff, and aside from it being line noise, having a structure
-name that differs by just one character in the middle between target
-and initiator feels like mistake.
-
-Anyway, pulled despite what feels like an oddity.
-
-                Linus
+Acked-by: Rob Herring <robh@kernel.org>

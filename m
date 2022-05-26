@@ -2,104 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D8853564A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4206653564F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348637AbiEZXFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 19:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
+        id S1349300AbiEZXJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 19:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238168AbiEZXFX (ORCPT
+        with ESMTP id S238168AbiEZXJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 19:05:23 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B941758C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:05:22 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id f23-20020a7bcc17000000b003972dda143eso3632657wmh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:05:22 -0700 (PDT)
+        Thu, 26 May 2022 19:09:26 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA402E5290;
+        Thu, 26 May 2022 16:09:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+I9hUAJO0j4a5c/GJGmruQaMqz4ZWAD5gZXhmzliwZk=;
-        b=J8QrwSxUZ0Y7ODCts54yutQBOc73SmK5IYpXH3ICitGPXNDjHRlGpHmDf8l3SuhXKz
-         SN7RxuVMpmhvcJsEqXfH3Uv0hdEaAi3AU8Nd+ilR8AGPFH2zRUnDJgFqNb/jYdNacU8q
-         GpjrJ3nJL6NN2XdQHIljDtvJ62Shi4brLJOGCA5dk39AcJRYM1YINhrM7BxjOxpbyZfr
-         LzXVH4kEq7JsaEqgR19tVJvGUnCYDIkHgX5no7h4kWGG14DxfW3Ust4DXew3aNK3zqgd
-         u8U1ZS6Qs7azv+Qv3ErS74Bj4F7Yd26BKzsh+rtaCWpzgH5LbKD4LzcDw5Q8CFCno5gm
-         DcKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+I9hUAJO0j4a5c/GJGmruQaMqz4ZWAD5gZXhmzliwZk=;
-        b=FUj6TTA6AziDn42yHnu8OkJGZoUSaz278d5nOkMGugp7C/ZQYSpp6zL9uwDbh+U6J7
-         7sgKKdCPWPSpfVH3CUBbjMmhq478BLGA7NslUBNC9lgfqoNJ8ZnVvXOyT+8IcCY5l3Sh
-         Qe99bGic+GZPWTadtOEMzC87G2OLzZccQwhpZW2FAg6341lpmVg5LXtjERjHxMqOC0BQ
-         M7WKUTE4q7rVICIPa+0ezcHx9FPf/x2WczVRIP6uuo1rfI19qXxD3qw9dGkcacg56re/
-         47dVT0+oo+pTIE6ViVzRw0dCbajvagWhm9teGwlLvDk/k3ieqi/Q1nBQP54v3tKW+puv
-         zkHA==
-X-Gm-Message-State: AOAM532hC2uSqddx5NEI2qk8VuQ5NAN4LOhxiB9xWUQbVy0qqTqRdZ3g
-        j1qpwbK5sOpfaB0hZw85W+l/ErknQFQ2TJkSHOhFGg==
-X-Google-Smtp-Source: ABdhPJwO46jPvSXUkurSbGSLyLEeo/2C/lV3l3eEc34OFVXrkgIBRP8Z90Nn6u2PSBqrAbkfg9eKLzMeBT4jF7iuRws=
-X-Received: by 2002:a7b:c015:0:b0:397:3685:5148 with SMTP id
- c21-20020a7bc015000000b0039736855148mr4290330wmb.174.1653606320753; Thu, 26
- May 2022 16:05:20 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653606566; x=1685142566;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=Eu1TB8lO4RI0dmN05S+4d62yQlVMgFzQS6LVRnYCMCk=;
+  b=Dhpfn3gVlKDIXcFHBFjrWAo2Mip/xxv8xPC3Y3oPlXcSg94Hzo4eho4I
+   WmoHcoiJGKfq4SGlxU4CixEW5SY0NV+Fo5yGnCmDt8wBnKLzDouMk9O2d
+   Zt9zzQcjWyr9WpFqHeSzAyKB+9XiX97iGcnbEC0Rq+m0jAVx7h4P6F8VS
+   A=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 26 May 2022 16:09:25 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 16:09:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 26 May 2022 16:09:24 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 26 May 2022 16:09:23 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/msm/dp: force link training for display resolution change
+Date:   Thu, 26 May 2022 16:09:15 -0700
+Message-ID: <1653606555-18675-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220526213136.193404-1-namhyung@kernel.org>
-In-Reply-To: <20220526213136.193404-1-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 26 May 2022 16:05:07 -0700
-Message-ID: <CAP-5=fXk35KSaNOSsymx=2=Yw5CG7=Rr3X0aRCFaTggfhts7dA@mail.gmail.com>
-Subject: Re: [PATCH] perf lock: Change to synthesize task events
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 2:31 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> With -t/--threads option, it needs to display task names so synthesize
-> task related events at the beginning.
->
-> Fixes: 7c3bcbdf449f ("perf lock: Add -t/--thread option for report")
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+During display resolution changes display have to be disabled first
+followed by display enable with new resolution. This patch force
+main link always be retrained during display enable procedure to
+simplify implementation instead of manually kicking of irq_hpd
+handle.
 
-Acked-by: Ian Rogers <irogers@google.com>
+Changes in v2:
+-- set force_link_train flag on DP only (is_edp == false)
 
-Thanks,
-Ian
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    |  6 +++---
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
+ drivers/gpu/drm/msm/dp/dp_display.c | 15 ++++++++-------
+ 3 files changed, 12 insertions(+), 11 deletions(-)
 
-> ---
->  tools/perf/builtin-lock.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> index b1200b7340a6..23a33ac15e68 100644
-> --- a/tools/perf/builtin-lock.c
-> +++ b/tools/perf/builtin-lock.c
-> @@ -1083,7 +1083,7 @@ static int __cmd_report(bool display_info)
->  static int __cmd_record(int argc, const char **argv)
->  {
->         const char *record_args[] = {
-> -               "record", "-R", "-m", "1024", "-c", "1", "--synth", "no",
-> +               "record", "-R", "-m", "1024", "-c", "1", "--synth", "task",
->         };
->         unsigned int rec_argc, i, j, ret;
->         const char **rec_argv;
-> --
-> 2.36.1.124.g0e6072fb45-goog
->
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index af7a80c..ac226f5 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1551,7 +1551,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
+ 
+ 	ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
+ 	if (!ret)
+-		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl);
++		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl, false);
+ 	else
+ 		DRM_ERROR("failed to enable DP link controller\n");
+ 
+@@ -1807,7 +1807,7 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
+ 	return dp_ctrl_setup_main_link(ctrl, &training_step);
+ }
+ 
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
+ {
+ 	int ret = 0;
+ 	bool mainlink_ready = false;
+@@ -1848,7 +1848,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+ 		return 0;
+ 	}
+ 
+-	if (!dp_ctrl_channel_eq_ok(ctrl))
++	if (force_link_tarin || !dp_ctrl_channel_eq_ok(ctrl))
+ 		dp_ctrl_link_retrain(ctrl);
+ 
+ 	/* stop txing train pattern to end link training */
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+index 0745fde..b563e2e 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+@@ -21,7 +21,7 @@ struct dp_ctrl {
+ };
+ 
+ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train);
+ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
+ int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
+ int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index c388323..370348d 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -872,7 +872,7 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
+ 		return 0;
+ 	}
+ 
+-	rc = dp_ctrl_on_stream(dp->ctrl);
++	rc = dp_ctrl_on_stream(dp->ctrl, data);
+ 	if (!rc)
+ 		dp_display->power_on = true;
+ 
+@@ -1654,6 +1654,7 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 	int rc = 0;
+ 	struct dp_display_private *dp_display;
+ 	u32 state;
++	bool force_link_train = false;
+ 
+ 	dp_display = container_of(dp, struct dp_display_private, dp_display);
+ 	if (!dp_display->dp_mode.drm_mode.clock) {
+@@ -1688,10 +1689,14 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 
+ 	state =  dp_display->hpd_state;
+ 
+-	if (state == ST_DISPLAY_OFF)
++	if (state == ST_DISPLAY_OFF) {
+ 		dp_display_host_phy_init(dp_display);
+ 
+-	dp_display_enable(dp_display, 0);
++		if (!dp->is_edp)
++			force_link_train = true;
++	}
++
++	dp_display_enable(dp_display, force_link_train);
+ 
+ 	rc = dp_display_post_enable(dp);
+ 	if (rc) {
+@@ -1700,10 +1705,6 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 		dp_display_unprepare(dp);
+ 	}
+ 
+-	/* manual kick off plug event to train link */
+-	if (state == ST_DISPLAY_OFF)
+-		dp_add_event(dp_display, EV_IRQ_HPD_INT, 0, 0);
+-
+ 	/* completed connection */
+ 	dp_display->hpd_state = ST_CONNECTED;
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

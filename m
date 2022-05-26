@@ -2,122 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9F9535370
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C6353532F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245728AbiEZSh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 14:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S1345617AbiEZSOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344552AbiEZSgp (ORCPT
+        with ESMTP id S243262AbiEZSOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 14:36:45 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A076F1A81B;
-        Thu, 26 May 2022 11:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=Y+q3Espln8Rodgx5Nn4tnLIErSJz4K4izMOM418Zr7I=;
-        b=CDCDp0lvnT6d+fk+tBBDtnCaSfZEVf3RPpv4f1S6sQ3FucvAtkXbjuUgkoOj9bcGYniuGq3/KuFcz
-         Nc/T9g+gANm7+XT6SVp4bwBsXnLFYO1P8t0V4VtDtTIfNPkOCs0vVNP5mRvCYOHsu3U37mwUNgAv9b
-         rJYexOv/QyxloruGPTNDdt+YuI3NACIrFUGqMidltXOgD01n2Ih9ZvoCcJI/t+Qa3ArIIUFfYfKzIL
-         Zn1JTMBc+HKYRnbzdDyFQ/9mb7Lvw+JFULSteHswxzLI2k6RDewIbnxFTlk6vW7+1kAQkQgnjlxypb
-         3TF4j4/OT60wLMX/aj3D5aqhBxoDoGQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000009,0.008003)], BW: [Enabled, t: (0.000023,0.000001)], RTDA: [Enabled, t: (0.074349), Hit: No, Details: v2.39.0; Id: 15.52keuo.1g40qf8k0.cppb; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([178.70.36.174])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Thu, 26 May 2022 21:36:11 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, Conor.Dooley@microchip.com
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru, Rob Herring <robh@kernel.org>
-Subject: [PATCH v13 3/3] dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
-Date:   Thu, 26 May 2022 21:13:44 +0300
-Message-Id: <20220526181344.2088-4-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220526181344.2088-1-i.bornyakov@metrotek.ru>
-References: <20220526181344.2088-1-i.bornyakov@metrotek.ru>
+        Thu, 26 May 2022 14:14:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41A2FB2272
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653588868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y+/f5rCCX5O2YnIFMqX5A6PQPJ8kjAWayKsnZFb/i6I=;
+        b=gKn7O7G5OA7hIJFsDEqJexdpHcm2myK5PWfPkyTEb+USWkOq5JMajWpCktUdXFeAob2RgN
+        u7u8QsHj69sLrV8BLUomhHQaxQfvh5waMl8JcqQDWouXYBCsHfVbnN7tF9TYOk+ARDliOI
+        P/Fi3Vw91w0uR3+Sp+fSHvR5Pe0sU3c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-331-QGQMv57xNBOCTKB7phssCw-1; Thu, 26 May 2022 14:14:24 -0400
+X-MC-Unique: QGQMv57xNBOCTKB7phssCw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5631E801228;
+        Thu, 26 May 2022 18:14:24 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.18.25.210])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 285D2400F3E8;
+        Thu, 26 May 2022 18:14:24 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id D98762208FA; Thu, 26 May 2022 14:14:23 -0400 (EDT)
+Date:   Thu, 26 May 2022 14:14:23 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Bernd Schubert <bschubert@ddn.com>
+Cc:     Dharmendra Singh <dharamhans87@gmail.com>, miklos@szeredi.hu,
+        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
+Subject: Re: [PATCH v3 1/1] FUSE: Allow non-extending parallel direct writes
+ on the same file.
+Message-ID: <Yo/DfzU7IXZbADK5@redhat.com>
+References: <20220520043443.17439-1-dharamhans87@gmail.com>
+ <20220520043443.17439-2-dharamhans87@gmail.com>
+ <Yo6SBoEgGgnNQv8W@redhat.com>
+ <3350e4e2-bad5-7f2f-2b09-c1807815a29c@ddn.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3350e4e2-bad5-7f2f-2b09-c1807815a29c@ddn.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for Microchip Polarfire FPGA Manager using
-slave SPI to load .dat formatted bitstream image.
+On Wed, May 25, 2022 at 10:49:49PM +0200, Bernd Schubert wrote:
+> 
+> 
+> On 5/25/22 22:31, Vivek Goyal wrote:
+> > On Fri, May 20, 2022 at 10:04:43AM +0530, Dharmendra Singh wrote:
+> > > From: Dharmendra Singh <dsingh@ddn.com>
+> > > 
+> > > In general, as of now, in FUSE, direct writes on the same file are
+> > > serialized over inode lock i.e we hold inode lock for the full duration
+> > > of the write request. I could not found in fuse code a comment which
+> > > clearly explains why this exclusive lock is taken for direct writes.
+> > > Our guess is some USER space fuse implementations might be relying
+> > > on this lock for seralization and also it protects for the issues
+> > > arising due to file size assumption or write failures.  This patch
+> > > relaxes this exclusive lock in some cases of direct writes.
+> > 
+> > I have this question as well. My understanding was that in general,
+> > reads can do shared lock while writes have to take exclusive lock.
+> > And I assumed that extends to both buffered as well as direct
+> > writes.
+> > 
+> > I would also like to understand what's the fundamental restriction
+> > and why O_DIRECT is special that this restriction does not apply.
+> > 
+> > Is any other file system doing this as well?
+> > 
+> > If fuse server dir is shared with other fuse clients, it is possible
+> > that i_size in this client is stale. Will that be a problem. I guess
+> > if that's the problem then, even a single write will be a problem
+> > because two fuse clients might be trying to write.
+> > 
+> > Just trying to make sure that it is safe to allow parallel direct
+> > writes.
+> 
+> I think missing in this series is to add a comment when this lock is needed
+> at all. Our network file system is log structured - any parallel writes to
+> the same file from different remote clients are handled through addition of
+> fragments on the network server side - lockless safe due to byte level
+> accuracy. With the exception of conflicting writes - last client wins -
+> application is then doing 'silly' things - locking would not help either.
+> And random parallel writes from the same (network) client are even an ideal
+> case for us, as that is handled through shared blocks for different
+> fragments (file offset + len). So for us shared writes are totally safe.
+> 
+> When Dharmendra and I discussed about the lock we came up with a few write
+> error handling cases where that lock might be needed - I guess that should
+> be added as comment.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../fpga/microchip,mpf-spi-fpga-mgr.yaml      | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+Right, please add the changelogs to make thought process clear.
 
-diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-new file mode 100644
-index 000000000000..aee45cb15592
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/microchip,mpf-spi-fpga-mgr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip Polarfire FPGA manager.
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description:
-+  Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
-+  load the bitstream in .dat format.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - microchip,mpf-spi-fpga-mgr
-+
-+  reg:
-+    description: SPI chip select
-+    maxItems: 1
-+
-+  spi-max-frequency: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spi {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            fpga_mgr@0 {
-+                    compatible = "microchip,mpf-spi-fpga-mgr";
-+                    spi-max-frequency = <20000000>;
-+                    reg = <0>;
-+            };
-+    };
--- 
-2.35.1
+So there are no restrictions on the fuse client side from parallelism
+point of view on direct write path? 
 
+Why file extending writes are not safe? Is this a restriction from
+fuse client point of view or just being safe from server point of view.
+If fuse user space is talking to another filesystem, I guess then it
+is not problem because that filesystem will take care of locking as
+needed.
+
+I see ext4 is allowing parallel direct writes for certain cases. And
+where they can't allow it, they have documented it in comments.
+(ext4_dio_write_checks()). I think we need similar rationalization,
+especially from fuse client's perspective and have comments in code
+and specify when it is ok to have parallel direct writes and when it
+is not ok and why. This will help people when they are looking at
+the code later.
+
+Thanks
+Vivek
 

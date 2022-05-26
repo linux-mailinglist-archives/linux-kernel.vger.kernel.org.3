@@ -2,233 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4F8535348
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428F453534A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbiEZSVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 14:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
+        id S1348369AbiEZSVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348558AbiEZSVI (ORCPT
+        with ESMTP id S1349387AbiEZSVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 14:21:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED16C506DE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:21:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653589266; x=1685125266;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JXcbP4hOY9Rv62xY9VPi5eg9WbxcPewM+lTqA3pqPJk=;
-  b=mJbVPgJKJZLL6mFOBsacEkjOcgHYxYPDMapATO1KDow6ZoykNLX11lH1
-   3cygxfm6YNNV8W9/a112poymTIQhc+GCVPaq/Xxd82ZCivT4/4j0XhKAA
-   84ZCOiyaAHcI1Icyu4Y+BoN7IonDA5+MgCEpDUsmuJV9Zyu320trYEkiu
-   W+UbDSq74VW5+0BY0sDqh4AZExqSVv+DgGFRbIc78Md/klPdjDsDQN9ZV
-   OfWqWDYj4ajBO0wQ7/ho8vk7iT+5pYqLw9s67N6QIEBZ3YLfpV5m/r3QM
-   05eSZ5tPlDTN7Cyc+XFHKFBw4LrSOl616nsj1Nghs2S7iTjbfOvqlx+6Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274245139"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="274245139"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 11:21:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="704677831"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 May 2022 11:21:03 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuI6Y-000464-AF;
-        Thu, 26 May 2022 18:21:02 +0000
-Date:   Fri, 27 May 2022 02:20:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-sfrench 5/9]
- fs/cifs/file.c:2735:62: error: 'struct smbd_connection' has no member named
- 'max_frmr_depth'
-Message-ID: <202205270237.wVtbeA7b-lkp@intel.com>
+        Thu, 26 May 2022 14:21:18 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4CA1F2;
+        Thu, 26 May 2022 11:21:15 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id q18so2095176pln.12;
+        Thu, 26 May 2022 11:21:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=d0fpBE5F3NBZ+8URTPU18WW4lxXrMNmlzzHMRZ9RPHQ=;
+        b=Jgv1cy1fSegcVuFBb7XtRbtvqraroRghd4FALpubleZyS+6GNvymMX1cVvAW6IrtAE
+         hpIJu3SFz/SYl0SXcl6eOMo4HdsGwEzpeV1X5DE+FLnRSK+ePV36K4wUyxbWUT7D0Zj2
+         p6nNauqH01SYLSXeEbtuJU+30stYEIYSc0JfXbaBzSdKvL78BVj7FRdZSUxTvfZdFEJl
+         ftwP060IqJr4HuaN+DhGm77w+G21dXAUrPxq3RZ2x/alT0jHwSMAK47s6DujCs81BQPB
+         Q1MHu3801obdazhkN+Z/2glllSlmwccWgwHAoQ9bejig/MsY77hI1Nb5/9iqBNajobIZ
+         CNAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=d0fpBE5F3NBZ+8URTPU18WW4lxXrMNmlzzHMRZ9RPHQ=;
+        b=NUbODkXzmW9wtGCEosOiSVz2nyHXV3THDLLHUZ5lNg58vsGL5Nq0Js6loTivxRc7h0
+         LSzsijvCPvIrRnfXT1qbYoSpfQSoVLBBb5lmHo2ul+AHTJMjLfNeeXg3R0QUsX9XERfI
+         CNH2/3Vv7yKkNkqNBcB9c2vJEyMGRt87fPspMCpBentGQ90QDcly/Yv/BkRURUYQ8k5y
+         JWznlvMv01TsQaUyPkhquuH3jCB/ZatMO6LGRLJPYZC21wmAlrKk7vh+Z/HSnGddjKP9
+         JnvwxSEdMX0GpgddWlU65/sM0PBHhbc00EKc1OEHERiiVo2c032ZA2MfImQqqUYoJqzT
+         HF9Q==
+X-Gm-Message-State: AOAM530t28MFAGR3/YGG4YEaVu4SLZV6TZaqcSh+e6b92uXk53rHp2PS
+        DZC4afn8xcnYhgYdXVvz1K5K7uJ2Kp4=
+X-Google-Smtp-Source: ABdhPJy3P33MjfdPZQfI4ErViA8YVXpSHO5EuUvNcQ7uu2BfW7Tnb5XK9Slrzs5WGQofuodD6/OlIg==
+X-Received: by 2002:a17:90b:1808:b0:1e0:4dbc:8781 with SMTP id lw8-20020a17090b180800b001e04dbc8781mr3915707pjb.58.1653589275194;
+        Thu, 26 May 2022 11:21:15 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:aafd])
+        by smtp.gmail.com with ESMTPSA id n4-20020a6563c4000000b003f67294ed87sm1823871pgv.70.2022.05.26.11.21.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 11:21:14 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 26 May 2022 08:21:13 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        rcu@vger.kernel.org
+Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root
+ partitions
+Message-ID: <Yo/FGcG+uiBh88sT@slm.duckdns.org>
+References: <20220525221055.1152307-1-frederic@kernel.org>
+ <20220525221055.1152307-5-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220525221055.1152307-5-frederic@kernel.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-sfrench
-head:   ba04fd019482403a282ad499323f5cdd1ee5216a
-commit: b4eb9ac0feb7aff675a958612c9d2b2052f53690 [5/9] cifs: Change the I/O paths to use an iterator rather than a page list
-config: h8300-buildonly-randconfig-r001-20220524 (https://download.01.org/0day-ci/archive/20220527/202205270237.wVtbeA7b-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/b4eb9ac0feb7aff675a958612c9d2b2052f53690
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/cifs-for-sfrench
-        git checkout b4eb9ac0feb7aff675a958612c9d2b2052f53690
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash fs/cifs/
+On Thu, May 26, 2022 at 12:10:55AM +0200, Frederic Weisbecker wrote:
+> Introduce a new "isolation.rcu_nocb" file within a cgroup2/cpuset
+> directory which provides support for a set of CPUs to either enable ("1")
+> or disable ("0") RCU callbacks offloading (aka. RCU NOCB). This can
+> overwrite previous boot settings towards "rcu_nocbs=" kernel parameter.
+> 
+> The file is only writeable on "root" type partitions to exclude any
+> overlap. The deepest root type partition has the highest priority.
+> This means that given the following setting:
+> 
+>                     Top cpuset (CPUs: 0-7)
+>                     cpuset.isolation.rcu_nocb = 0
+>                               |
+>                               |
+>                     Subdirectory A (CPUs: 5-7)
+>                     cpuset.cpus.partition = root
+>                     cpuset.isolation.rcu_nocb = 0
+>                               |
+>                               |
+>                     Subdirectory B (CPUs: 7)
+>                     cpuset.cpus.partition = root
+>                     cpuset.isolation.rcu_nocb = 1
+> 
+> the result is that only CPU 7 is in rcu_nocb mode.
+> 
+> Note that "rcu_nocbs" kernel parameter must be passed on boot, even
+> without a cpulist, so that nocb support is enabled.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Does it even make sense to make this hierarchical? What's wrong with a
+cpumask under sys/ or proc/?
 
-All errors (new ones prefixed by >>):
-
-   fs/cifs/file.c: In function 'cifs_write_back_from_locked_folio':
->> fs/cifs/file.c:2735:62: error: 'struct smbd_connection' has no member named 'max_frmr_depth'
-    2735 |                                 max_pages = server->smbd_conn->max_frmr_depth;
-         |                                                              ^~
-
-
-vim +2735 fs/cifs/file.c
-
-  2662	
-  2663	/*
-  2664	 * Write back the locked page and any subsequent non-locked dirty pages.
-  2665	 */
-  2666	static ssize_t cifs_write_back_from_locked_folio(struct address_space *mapping,
-  2667							 struct writeback_control *wbc,
-  2668							 struct folio *folio,
-  2669							 loff_t start, loff_t end)
-  2670	{
-  2671		struct inode *inode = mapping->host;
-  2672		struct TCP_Server_Info *server;
-  2673		struct cifs_writedata *wdata;
-  2674		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-  2675		struct cifs_credits credits_on_stack;
-  2676		struct cifs_credits *credits = &credits_on_stack;
-  2677		struct cifsFileInfo *cfile = NULL;
-  2678		unsigned int xid, wsize, len;
-  2679		loff_t i_size = i_size_read(inode);
-  2680		size_t max_len;
-  2681		long count = wbc->nr_to_write;
-  2682		int rc;
-  2683	
-  2684		/* The folio should be locked, dirty and not undergoing writeback. */
-  2685		if (folio_start_writeback(folio))
-  2686			WARN_ON(1);
-  2687	
-  2688		count -= folio_nr_pages(folio);
-  2689		len = folio_size(folio);
-  2690	
-  2691		xid = get_xid();
-  2692		server = cifs_pick_channel(cifs_sb_master_tcon(cifs_sb)->ses);
-  2693	
-  2694		rc = cifs_get_writable_file(CIFS_I(inode), FIND_WR_ANY, &cfile);
-  2695		if (rc) {
-  2696			cifs_dbg(VFS, "No writable handle in writepages rc=%d\n", rc);
-  2697			goto err_xid;
-  2698		}
-  2699	
-  2700		rc = server->ops->wait_mtu_credits(server, cifs_sb->ctx->wsize,
-  2701						   &wsize, credits);
-  2702		if (rc != 0)
-  2703			goto err_close;
-  2704	
-  2705		wdata = cifs_writedata_alloc(cifs_writev_complete);
-  2706		if (!wdata) {
-  2707			rc = -ENOMEM;
-  2708			goto err_uncredit;
-  2709		}
-  2710	
-  2711		wdata->sync_mode = wbc->sync_mode;
-  2712		wdata->offset = folio_pos(folio);
-  2713		wdata->pid = cfile->pid;
-  2714		wdata->credits = credits_on_stack;
-  2715		wdata->cfile = cfile;
-  2716		wdata->server = server;
-  2717		cfile = NULL;
-  2718	
-  2719		/* Find all consecutive lockable dirty pages, stopping when we find a
-  2720		 * page that is not immediately lockable, is not dirty or is missing,
-  2721		 * or we reach the end of the range.
-  2722		 */
-  2723		if (start < i_size) {
-  2724			/* Trim the write to the EOF; the extra data is ignored.  Also
-  2725			 * put an upper limit on the size of a single storedata op.
-  2726			 */
-  2727			max_len = wsize;
-  2728			max_len = min_t(unsigned long long, max_len, end - start + 1);
-  2729			max_len = min_t(unsigned long long, max_len, i_size - start);
-  2730	
-  2731			if (len < max_len) {
-  2732				int max_pages = INT_MAX;
-  2733	
-  2734				if (server->smbd_conn)
-> 2735					max_pages = server->smbd_conn->max_frmr_depth;
-  2736				max_pages -= folio_nr_pages(folio);
-  2737	
-  2738				if (max_pages > 0)
-  2739					cifs_extend_writeback(mapping, &count, start,
-  2740							      max_pages, max_len, &len);
-  2741			}
-  2742			len = min_t(loff_t, len, max_len);
-  2743		}
-  2744	
-  2745		wdata->bytes = len;
-  2746	
-  2747		/* We now have a contiguous set of dirty pages, each with writeback
-  2748		 * set; the first page is still locked at this point, but all the rest
-  2749		 * have been unlocked.
-  2750		 */
-  2751		folio_unlock(folio);
-  2752	
-  2753		if (start < i_size) {
-  2754			iov_iter_xarray(&wdata->iter, WRITE, &mapping->i_pages, start, len);
-  2755	
-  2756			rc = adjust_credits(wdata->server, &wdata->credits, wdata->bytes);
-  2757			if (rc)
-  2758				goto err_wdata;
-  2759	
-  2760			if (wdata->cfile->invalidHandle)
-  2761				rc = -EAGAIN;
-  2762			else
-  2763				rc = wdata->server->ops->async_writev(wdata,
-  2764								      cifs_writedata_release);
-  2765			if (rc >= 0) {
-  2766				kref_put(&wdata->refcount, cifs_writedata_release);
-  2767				goto err_close;
-  2768			}
-  2769		} else {
-  2770			/* The dirty region was entirely beyond the EOF. */
-  2771			cifs_pages_written_back(inode, start, len);
-  2772			rc = 0;
-  2773		}
-  2774	
-  2775	err_wdata:
-  2776		kref_put(&wdata->refcount, cifs_writedata_release);
-  2777	err_uncredit:
-  2778		add_credits_and_wake_if(server, credits, 0);
-  2779	err_close:
-  2780		if (cfile)
-  2781			cifsFileInfo_put(cfile);
-  2782	err_xid:
-  2783		free_xid(xid);
-  2784		if (rc == 0) {
-  2785			wbc->nr_to_write = count;
-  2786		} else if (is_retryable_error(rc)) {
-  2787			cifs_pages_write_redirty(inode, start, len);
-  2788		} else {
-  2789			cifs_pages_write_failed(inode, start, len);
-  2790			mapping_set_error(mapping, rc);
-  2791		}
-  2792		/* Indication to update ctime and mtime as close is deferred */
-  2793		set_bit(CIFS_INO_MODIFIED_ATTR, &CIFS_I(inode)->flags);
-  2794		return rc;
-  2795	}
-  2796	
+Thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+tejun

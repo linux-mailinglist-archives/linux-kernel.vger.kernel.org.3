@@ -2,103 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D3E534A95
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 08:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14281534A9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 09:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244337AbiEZG5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 02:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S236388AbiEZHBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 03:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiEZG5w (ORCPT
+        with ESMTP id S230099AbiEZHBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 02:57:52 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA0F2C667
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 23:57:50 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3EC1E3F1C1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653548263;
-        bh=Ye7eLUY2KVbpTNU7R7EP53lRPzenCCRrRZNY2f0Pw2s=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=XjZO7lqkx+arWLHLPSz6iBnBw78rkn+znXI7Owav+lQ3WLWA2SUIRcRT9n/ZhNcZv
-         RayLVhCsf0xR0goPd4M1+cFljKTOhn2XZmaUGAStuzQ4iEcZCpRVBfgBdVuIuskwZ1
-         STvEniKvQzaIuVVyrw3sYHHBriaHVoBkBBFpb5Zxhr/0JpjYmKsHyZwwBuE2q7GU41
-         zXvj7oJC/8TdRnNhRwbCLN2SGfx3oWpcnZnyZ9fhzFXOz9yZ3zzb12YCzmR5PXhCFH
-         a8NDyxu/EAuFtqRjsF1+i0OWAtgQr0StsOAyQwbtGc8WzBtlc6UVb+ZKjsNulu2SNU
-         s1NSt/upxl9aw==
-Received: by mail-ej1-f70.google.com with SMTP id lf18-20020a170906ae5200b006fec8de9f0cso396682ejb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 23:57:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ye7eLUY2KVbpTNU7R7EP53lRPzenCCRrRZNY2f0Pw2s=;
-        b=XTOc/bULno6IzckYBUcrJiqcqVRhnymxVYC9GqqI2wUuXjJRqamw6mSoBkCZlLaIE+
-         79aMSk+tX6LNTViQ6PvNG2c5h2UI7UtecrbKY1npanrxyxTlZblAhNEngFmjQtkkziaJ
-         GswldyTa2v3V+ou5Hgc2RaRvO2xaoIwM6zgtYTIhfiGYROVmO8x2fF58swNDXSMtMd6o
-         qmlSmwY40Ccrx4Nd1pEN14Rb7fbYndTXUnaECaL3pjBlAeXUj2wRS9nmnSP2Cu+wvWRe
-         Jz/aCofVVfG2e0PLKh1sxZxFfCZPs0Nd3o7ldqB6NA695WrlyTPvT6C6lQQ8A05N2YMa
-         sRcA==
-X-Gm-Message-State: AOAM530y0uBze5agdqneYghEy9tYrG8URBYl89Eaay0zSKhrFjXXAJqX
-        ejxfV0YrZ9RlagzGs4dtNY9l0G3OsSrc3J2z1QsW+oE+AVKWgMQU8DMhGRnzxzsATz7l6L1dkGu
-        pc7jaPkj/3BEKGP80PfnKyDrL90jyv4y+7uusne6i2A==
-X-Received: by 2002:a05:6402:3312:b0:42a:e883:5397 with SMTP id e18-20020a056402331200b0042ae8835397mr18160463eda.74.1653548263135;
-        Wed, 25 May 2022 23:57:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxR4IFmT/fyGSD8rES9S1+NQ2cUFE7jP02xDAxp+UsJlxwdSHoZNNzwFy42v0L4V/6VSI1Tag==
-X-Received: by 2002:a05:6402:3312:b0:42a:e883:5397 with SMTP id e18-20020a056402331200b0042ae8835397mr18160454eda.74.1653548262989;
-        Wed, 25 May 2022 23:57:42 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id w15-20020a17090652cf00b006fed8dfcf78sm220906ejn.225.2022.05.25.23.57.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 23:57:42 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juerg.haefliger@canonical.com>
-Subject: [PATCH 2/2] powerpc: Kconfig.debug: Remove extra empty line
-Date:   Thu, 26 May 2022 08:57:37 +0200
-Message-Id: <20220526065737.86370-3-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220526065737.86370-1-juerg.haefliger@canonical.com>
-References: <20220526065737.86370-1-juerg.haefliger@canonical.com>
+        Thu, 26 May 2022 03:01:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88271255AA
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:01:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C76D31474;
+        Thu, 26 May 2022 00:01:47 -0700 (PDT)
+Received: from [10.162.43.8] (unknown [10.162.43.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 236A63F73D;
+        Thu, 26 May 2022 00:01:44 -0700 (PDT)
+Message-ID: <428c7c69-6ac1-51d5-7c26-5f31de61a909@arm.com>
+Date:   Thu, 26 May 2022 12:31:40 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] mm/hugetlb: Remove unnecessary
+ huge_ptep_set_access_flags() in hugetlb_mcopy_atomic_pte()
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        songmuchun@bytedance.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <7cd55152c1a00910afda570d1543a97198b3665b.1653468078.git.baolin.wang@linux.alibaba.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <7cd55152c1a00910afda570d1543a97198b3665b.1653468078.git.baolin.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove a stray extra empty line.
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
----
- arch/powerpc/Kconfig.debug | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debug
-index 192f0ed0097f..2c019e4ac432 100644
---- a/arch/powerpc/Kconfig.debug
-+++ b/arch/powerpc/Kconfig.debug
-@@ -305,7 +305,6 @@ config PPC_EARLY_DEBUG_OPAL
- 	def_bool y
- 	depends on PPC_EARLY_DEBUG_OPAL_RAW || PPC_EARLY_DEBUG_OPAL_HVSI
- 
--
- config PPC_EARLY_DEBUG_HVSI_VTERMNO
- 	hex "vterm number to use with early debug HVSI"
- 	depends on PPC_EARLY_DEBUG_LPAR_HVSI
--- 
-2.32.0
+On 5/25/22 15:56, Baolin Wang wrote:
+> There is no need to update the hugetlb access flags after just setting the
+> hugetlb page table entry by set_huge_pte_at(), since the page table entry
+> value has no changes. Thus remove the unnecessary huge_ptep_set_access_flags()
 
+WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+#9: 
+value has no changes. Thus remove the unnecessary huge_ptep_set_access_flags()
+
+total: 0 errors, 1 warnings, 8 lines checked
+
+> in hugetlb_mcopy_atomic_pte().
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+
+Otherwise LGTM,
+
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+
+> ---
+>  mm/hugetlb.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 7c468ac..3ad49bf 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6032,8 +6032,6 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+>  
+>  	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+>  
+> -	(void)huge_ptep_set_access_flags(dst_vma, dst_addr, dst_pte, _dst_pte,
+> -					dst_vma->vm_flags & VM_WRITE);
+>  	hugetlb_count_add(pages_per_huge_page(h), dst_mm);
+>  
+>  	/* No need to invalidate - it was non-present before */

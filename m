@@ -2,176 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41299534EF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3ACB534EEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346224AbiEZMPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S1346513AbiEZMPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiEZMPR (ORCPT
+        with ESMTP id S230487AbiEZMPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:15:17 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2079.outbound.protection.outlook.com [40.107.100.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9878B36F9;
-        Thu, 26 May 2022 05:15:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OVlT64rEox+6k4br912vt+cM++X7tIJjrKEkkk4mC1fau0wKOfBDKJhupkbfB1zO9vMixhuuj5a51F+cWu/A200in4eaz6yuwidI4jazms5nqAk+3YHTU5XS+GgJSoWL6P+AKBEa3XfuD6dDuecqB4ETihEOAEfxct4saDhWyeCLVF6kkjA2iY6zKI2F/fCoNhRQ4uiC7GRJKj/pjY15mg90ttKmRNnVjOghmkpbtwd4kOduIqT4uV8KGasU25nr3WH+J1dIInwg7MxgX59hUCxbkcqlCg93MVFN/19OqNIrJF+7xPbOYFuHDFr6CunxH8JyyezRxmGeuT6k6uw8zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o/njkY1jT3r0Z0KtcroeajeKHeomvSvaFy7FnvjmAts=;
- b=Qompk/RrtObcdhw0bUbrC5SpOuMSJwl5I2cyKcXABOA7sdZJGWWYMuZWPEytgauPf9/cmef3SGGdoWPjnAPPaDZLhphz8Vh/hIf9lP3aVsf8la0Z3GZTX/OF4Cs1owTRMGE+RYkr8GntE6qdkIXv54e7k/14ZT5+8VKEk2bimVByr5I45O3+x7Pyv4Nbg153xe91ygglTwjAVvAPs8O8R4VNKqvNgxtPvSc+1DXU0Mpz5lFtkHSLaEge2gbD3C3fQOcjaVr63qLVG9aVx4j65RdNG1B3h2uGLlr1o67m55r1/PNTcXdDz08cNnVElHceQagI7CjxbmZbscOahXqavw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o/njkY1jT3r0Z0KtcroeajeKHeomvSvaFy7FnvjmAts=;
- b=dcsjht3F08JvUchZJ7YcQ8RfXsmgq2ohWFkYA9MhKttfkOEGDxTQnPOvZQyXAUVvVEASZ9JgeTMxRCbsyEs1XyJHhzlygu+0cx3EHz3+ZLBa5hlRHpONcjE6O7XQtT+Elhc15K1nl2akoI4SwVImS3zYMX1LlbeWpzq+OFujcPk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by BN6PR12MB1345.namprd12.prod.outlook.com (2603:10b6:404:18::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Thu, 26 May
- 2022 12:15:13 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::5044:b3eb:8442:fe92]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::5044:b3eb:8442:fe92%7]) with mapi id 15.20.5273.023; Thu, 26 May 2022
- 12:15:13 +0000
-Message-ID: <8b124340-a89b-bd7a-240c-c7f58fffd877@amd.com>
-Date:   Thu, 26 May 2022 17:44:54 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: Re: [PATCH 04/13] perf/x86/amd: Support PERF_SAMPLE_WEIGHT using IBS
- OP_DATA3[IbsDcMissLat]
-To:     Stephane Eranian <eranian@google.com>
-Cc:     peterz@infradead.org, acme@kernel.org, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, jmario@redhat.com,
-        leo.yan@linaro.org, alisaidi@amazon.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, tglx@linutronix.de,
-        bp@alien8.de, x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
-References: <20220525093938.4101-1-ravi.bangoria@amd.com>
- <20220525093938.4101-5-ravi.bangoria@amd.com>
- <CABPqkBQ-4vpG_d-u-Q-pTQ_wDg_HhqNNC3dSLFE6MS5Bp3qTDw@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CABPqkBQ-4vpG_d-u-Q-pTQ_wDg_HhqNNC3dSLFE6MS5Bp3qTDw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0220.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:ea::18) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Thu, 26 May 2022 08:15:11 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97D9C6E51
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:15:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L86MB4xFWz4xXj;
+        Thu, 26 May 2022 22:15:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1653567305;
+        bh=qdGxLuOgWLxtGXOKT8uILQNK4Btl7FJ5JZwGbkMtGZY=;
+        h=From:To:Cc:Subject:In-Reply-To:Date:From;
+        b=gy/HsX4BcAReBDnH2meEdqv0xBEOfx6GpCJHtCRxUA2TaJxbHBPmt8AFbY5T6mec0
+         pnpSvVoevK98Fo9Y7mkImcHOTfpnXb8bh1O1uVXiJv5Voaey3zNbeOZ976zjqL3heV
+         qyOGYloDmu8j75LG/AEkilOAokL7NxLBEHGStWN065+jzpvOsREi/uA9KlURYKY1Dm
+         eM6wktQ9ce7mUGpT7h6+mqQsLE1OfnCgb24rnWz+DbMrPz2DvsFZ9fuzhp94HJDw9Y
+         o7M0+NMfHXpYF1/iec34epetlmqqblvv3oxZqreh7iA06fLjXXdSkVtXKqZzeU7GW2
+         B4FcFh50RkD7A==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     the arch/x86 maintainers <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Waiman.Long@hp.com,
+        Paul McKenney <paulmck@linux.vnet.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 1/2] locking/lockref: Use try_cmpxchg64 in CMPXCHG_LOOP
+ macro
+In-Reply-To: <CAHk-=wh1XeaxWXG5QziGA4ds918UnW1hO924kusgVB-wGj+9Og@mail.gmail.com>
+Date:   Thu, 26 May 2022 22:14:59 +1000
+Message-ID: <871qwgmqws.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 10efc61b-0604-4120-e3ee-08da3f1162d8
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1345:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB13459BD7AEC656D14D45F5A6E0D99@BN6PR12MB1345.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QnWKtbaRg41A0ymVxbTrnYsjYHsFcn09tA0a9mNav1Gq5otrbg2zEnsxjk2AHQ59DtIYm4Xcn+24l2QoonrUuNw3UOv8j1DBE7JtQuLlToGWBw5CNEQUbf6v/Kt0M7+UU1xqma3BcRPJ6RodgZYt7H8eo13hLdUzL5a2BvgVSXgUp+Dc4/3t5EmcMzQw7MSdPy94wRNeUjKMa16iLcONaCU3n7+Ztb+QQfyo4HxrGgdRFiOKlk4/a4GAL+RhJZFnfcS9L3fB7tgctn6ZLRlzmJp8EoqdsKC4zK9+vKWw2ooi2wpvkbXMNdQSOflM4IQX8Yv0jBKaacVCAFWYrCGi7u86ZbQ76YPf3yLPCb7ZcGZEXEN7l+78n2IX4oQsySIG7BoMZqZz+DcBLgIAraYeBudSFVv/HyNjkvF806vvB4oBydMn/cNAeLvn3OmDeNd9O9xb0ozauDgv9wI9yroBPNO364Pg0zzuj/nIoB7cupBp7bkDM0h8O2dUwceSkv6/u5weYE1R5u7YfFmFtWmcVezwjeQLaTrVl1meh+h31pQS4iKYFm/EtyeiIxssm+QtR+Ef5CtKGOZT4QMNKHW9aSBL9K4BdYUAUOo2UUeGOSm1Fvpy1MPr3ZK6fSWowbsRh99nq3LVKnbypfNG4zAvy7TggDrrT5bN3+CogtCL1elSNXbJhPs/pPBcf/LIhcWdqaqO1rjggwmByM+Pitkx3DWeETQPqNoxZvTA2uY6wLgVizU8VM4kUuHcAScFPTufvwZVFeTvHlDgtSuDSZBTFA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(6029001)(4636009)(366004)(6666004)(38100700002)(6486002)(36756003)(316002)(53546011)(31686004)(8676002)(6512007)(26005)(6506007)(508600001)(6916009)(186003)(66556008)(66946007)(86362001)(66476007)(31696002)(2616005)(4326008)(2906002)(44832011)(8936002)(7416002)(5660300002)(16393002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWpnRVIvNHNTcFhvemFsYlhFK1VhNFZDU3RGbEYrU0RWTmxTSXhEYzZpbVpG?=
- =?utf-8?B?cVVTemFpODhndmx6bFZTNlIyQ3FKNDhNM09yUWhtUVNpQ0dxYjNPcWVURmJ5?=
- =?utf-8?B?SmtNaDhqNW1OK25WK25jS2FrZ1BUcHNNNnM5OTYwRlRiQ1M3akQ0Z0JSSmZZ?=
- =?utf-8?B?a3BKNE5JWEl5VFZuSXRBTmFHbUpyZkhWMVZpZHNGZ2FEWnBOU24xTzE0K2Vm?=
- =?utf-8?B?bUIzNk9KOHUxQXlobjZLUytqM3gxM2NMQVlDQmJtTkVTS1V2Q0tMb0NWUE0y?=
- =?utf-8?B?WGxGU3lleEpyNzdhdEczNEEwanJxTTVOUEh2clpYZ2FYcTJqSlNaVWVXYmh2?=
- =?utf-8?B?bTJTM3l2S2hJa3pvYXB5QWxYYlpQZlVwYVcyTHBnNVo2a0x1bllkcmhiUkp5?=
- =?utf-8?B?UUZISmdLZFB6SUJCV1VDb0VMcExTNllZbUJEcnBMMm5uaHgrNk9PUTd0ay9N?=
- =?utf-8?B?eWZxdnllM29Pd1VEeERxU2JCUjhmQ1pZSzRrNEIxRDR6N2Rxd2tWcHFLdkxK?=
- =?utf-8?B?ZGFxWHZmWjEyQ0toVUJ0SXA1enB6bTJjNE1pS0duU1lRRFdCTzRKamJSa0FK?=
- =?utf-8?B?R0N2cDRySXAzQ2dwYmFQa2xzcHIwcnl1VnZQenVqVDF1WS9tcm5RRDVrSm5V?=
- =?utf-8?B?MzB4VlRRUkVPWVlpaEwwbGhXT2YwVjZDYjRXQUYrRmI2bjNFTjdOUU9vRG9I?=
- =?utf-8?B?ejI2elNMTDMvdUZHRnZSWGxoNmNwaXlnUXFtbDBNOGRiT1ZxNUk2VE8vMnpF?=
- =?utf-8?B?aDd0SEdKeldReS9hcGEzNnRFQ0pUQWx2bDBRcG1HZGpnZW9YbmVGNkl1L3FY?=
- =?utf-8?B?V1ZmRnkxSExvNXlSUVJ6Y2dIbEVLTzVGRUZTdVkzOWRsbVI3UnFqV0kxMHVF?=
- =?utf-8?B?NVN6THFGaEhRV1dBeFBSWDhhTVdzaFd5TGZyT1hySy9yc2VjMXJ4NjJheUps?=
- =?utf-8?B?MWZGTVVmMC81QndiMDk2VGE1anZORXVjcUdObGE4R1A4cG5pSmJodklKZ2F3?=
- =?utf-8?B?RSszbTlrYnE2ZDNjQ0JaN0RtR3VWZjZ1L3VEYk5aUDg5UG51ekFFWW5GVWN4?=
- =?utf-8?B?czR3WmIvdVlYd2QvQjZPSXRNT01PemVtSlZNSldyS0VMbGduNEtRbG1HZWFL?=
- =?utf-8?B?aDhIZXJIa0ZQYlNNUy9LMXlsUHlieGxnWXFWb25aM2hYUDNXVVpSRkxKMm52?=
- =?utf-8?B?QlVUUEFkQ3oxUzEyOVk5UDVOdE9NUDlnbkJEQjhmUjdMdHFYU1V2NXZGSkRR?=
- =?utf-8?B?RkRyUXhZMHZ0aTRNck1zTzY1U1BXN3haUHczSzVoMmZGNVk3OURJbmw1R2tv?=
- =?utf-8?B?MmZTR0pUK3lySzZGRkpGOGJlWGRkQ05PUnFDOUNyNmdvdDA5bjNNY0Q4Q1hC?=
- =?utf-8?B?TytUaGdjY09ESkJ3WnUwQVNwcmRYMFZRa01GaW4zOVJnL1pkeUg5bTJWaUVU?=
- =?utf-8?B?REZFM1NmeHV0a1hBSHRFZUpQUnNzZlZaM2h0SXVvS1FZdGFpTVpnU3hFSXdp?=
- =?utf-8?B?VU1Ub3BDRW5UckJtRXc4VkpDbWtyTVdYM1ZaYXQ5eEZmOTdqV0dMMFM1ZUxk?=
- =?utf-8?B?TmJJdmt5U3QyaE80VXJGUXJhU0ZyVVBSVHN0OTFTeWVYaVp1ZEd3emVEN0J5?=
- =?utf-8?B?S0sxcmJDRGZWa1NUV0x3OVpZdG1EZC9lMnVxRGNyRmUxK1FVMU0zcTRFbVJX?=
- =?utf-8?B?RDF5SWxXalBPeFBKMnNxTmRkWGFLRDhKdEQwZkVucjM2bTFCVTdzU0pDaGZY?=
- =?utf-8?B?UmZYWlhWSGZXTUwrd2xvdFM4N3poR0xKSnVOUXYrcXUyZkZra09URW9CODlk?=
- =?utf-8?B?SnFqRXovVDZMRnhuNi8xc08zaVJNYzErYUcwUXYxRGRLM3lkRDdvSk5jbmFt?=
- =?utf-8?B?WExneFh0ZGQ5dmtxTk15YUptSGJpcXJIMEM0WnNMUGhrQkcwWXJ0clBtSDNV?=
- =?utf-8?B?cGNHajRkSjBneU5zbTRoUmgycXZRU28ySzRkVldTSE5hVnpVdFZPSjJlWEZz?=
- =?utf-8?B?VVI3VTA4STdEUy9qWkxvMEt0dmxjazlZa2UxWnNNSENHWkpZdytHZFQ5SGpn?=
- =?utf-8?B?WVJ0SW10RFJpa21NS2czdm9DalJQck5hS2hzQS9VVVNsbXh0SUhwVDF0cHc0?=
- =?utf-8?B?SExib3N6UVVBYXZNbitFQmlKNVNQaHdvSjRFeVFVYmx1S1hhQk45ZVlacm5k?=
- =?utf-8?B?SnEzcWg2UnA1ODdLSVg0WTdSaDduazcyRDdXQUtSNVozRW5ocWdFUGl0eWov?=
- =?utf-8?B?RUlzZmRnVXBsQ2pVaVlvRlkxekc4YjlFWlBXeWx5Wml5akd2bUduRE5IU2JV?=
- =?utf-8?B?WkRKbUpwU2srR2F3Nko3Q0x6WWFWSXMxY3ZVSGp1cXFhSE5VY3plQT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10efc61b-0604-4120-e3ee-08da3f1162d8
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 12:15:13.5159
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: revF0HshM5ba42n9X/0UUMISKzRBve67gTk4coqCkpHyOK/nf2yay/K2KnTcnSGki1kcdEBDPVswAR7nH4Jd4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1345
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-May-22 6:28 PM, Stephane Eranian wrote:
-> On Wed, May 25, 2022 at 12:42 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+Linus Torvalds <torvalds@linux-foundation.org> writes:
+> On Wed, May 25, 2022 at 7:40 AM Uros Bizjak <ubizjak@gmail.com> wrote:
 >>
->> IBS Op data3 provides data cache miss latency which can be passed as
->> sample->weight along with perf_mem_data_src. Note that sample->weight
->> will be populated only when PERF_SAMPLE_DATA_SRC is also set, although
->> both sample types are independent.
->>
->> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
->> ---
->>  arch/x86/events/amd/ibs.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
->> index 6626caeed6a1..5a6e278713f4 100644
->> --- a/arch/x86/events/amd/ibs.c
->> +++ b/arch/x86/events/amd/ibs.c
->> @@ -738,6 +738,12 @@ static void perf_ibs_get_mem_lvl(struct perf_event *event, u64 op_data2,
->>                 return;
->>         }
->>
->> +       /* Load latency (Data cache miss latency) */
->> +       if (data_src->mem_op == PERF_MEM_OP_LOAD &&
->> +           event->attr.sample_type & PERF_SAMPLE_WEIGHT) {
->> +               data->weight.full = (op_data3 & IBS_DC_MISS_LAT_MASK) >> IBS_DC_MISS_LAT_SHIFT;
->> +       }
->> +
-> I think here you also need to handle the WEIGHT_STRUCT case and put
-> the cache miss latency in the right
-> field. This IBS field covers the cache line movement and not the whole
-> instruction latency which is the tag to ret field.
-> In the case of WEIGHT_STRUCT you need to fill out the two fields.
+>> Use try_cmpxchg64 instead of cmpxchg64 in CMPXCHG_LOOP macro.
+>> x86 CMPXCHG instruction returns success in ZF flag, so this
+>> change saves a compare after cmpxchg (and related move instruction
+>> in front of cmpxchg). The main loop of lockref_get improves from:
+>
+> Ack on this one regardless of the 32-bit x86 question.
+>
+> HOWEVER.
+>
+> I'd like other architectures to pipe up too, because I think right now
+> x86 is the only one that implements that "arch_try_cmpxchg()" family
+> of operations natively, and I think the generic fallback for when it
+> is missing might be kind of nasty.
+>
+> Maybe it ends up generating ok code, but it's also possible that it
+> just didn't matter when it was only used in one place in the
+> scheduler.
 
-Yeah, will do. Thanks for pointing it.
+This patch seems to generate slightly *better* code on powerpc.
 
--Ravi
+I see one register-to-register move that gets shifted slightly later, so
+that it's skipped on the path that returns directly via the SUCCESS
+case.
+
+So LGTM.
+
+> The lockref_get() case can be quite hot under some loads, it would be
+> sad if this made other architectures worse.
+
+Do you know of a benchmark that shows it up? I tried a few things but
+couldn't get lockref_get() to count for more than 1-2%.
+
+cheers

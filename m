@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40498534FBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF008534FD5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239549AbiEZNCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 09:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S229580AbiEZNRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 09:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbiEZNCB (ORCPT
+        with ESMTP id S230010AbiEZNR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 09:02:01 -0400
-Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4603FCFE22;
-        Thu, 26 May 2022 06:02:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VESMMfK_1653570115;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VESMMfK_1653570115)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 26 May 2022 21:01:56 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     andreas.noever@gmail.com
-Cc:     michael.jamet@intel.com, mika.westerberg@linux.intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] thunderbolt: Fix some kernel-doc comments
-Date:   Thu, 26 May 2022 21:01:54 +0800
-Message-Id: <20220526130154.89745-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 26 May 2022 09:17:29 -0400
+X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 May 2022 06:17:27 PDT
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D93C6E42;
+        Thu, 26 May 2022 06:17:26 -0700 (PDT)
+Received: from droid10-sz.amlogic.com (10.28.8.20) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Thu, 26 May 2022
+ 21:02:19 +0800
+From:   Zelong Dong <zelong.dong@amlogic.com>
+To:     <devicetree@vger.kernel.org>, <p.zabel@pengutronix.de>,
+        <robh+dt@kernel.org>, <khilman@baylibre.com>,
+        <narmstrong@baylibre.com>, <martin.blumenstingl@googlemail.com>
+CC:     <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <jbrunet@baylibre.com>,
+        Zelong Dong <zelong.dong@amlogic.com>
+Subject: [PATCH] arm64: dts: meson: add reset controller for Meson-S4 SoC
+Date:   Thu, 26 May 2022 21:01:58 +0800
+Message-ID: <20220526130158.36651-1-zelong.dong@amlogic.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.20]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,53 +44,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove some warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
+Add the reset controller device of Meson-S4 SoC family
 
-drivers/thunderbolt/ctl.c:701: warning: expecting prototype for
-tb_cfg_start(). Prototype was for tb_ctl_start() instead
-drivers/thunderbolt/ctl.c:722: warning: expecting prototype for
-tb_ctrl_stop(). Prototype was for tb_ctl_stop() instead
-drivers/thunderbolt/ctl.c:930: warning: expecting prototype for
-tb_cfg_write(). Prototype was for tb_cfg_write_raw() instead
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
 ---
- drivers/thunderbolt/ctl.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
-index e92c658dba1c..e5ede5debfb0 100644
---- a/drivers/thunderbolt/ctl.c
-+++ b/drivers/thunderbolt/ctl.c
-@@ -694,7 +694,7 @@ void tb_ctl_free(struct tb_ctl *ctl)
- }
- 
- /**
-- * tb_cfg_start() - start/resume the control channel
-+ * tb_ctl_start() - start/resume the control channel
-  * @ctl: Control channel to start
-  */
- void tb_ctl_start(struct tb_ctl *ctl)
-@@ -710,7 +710,7 @@ void tb_ctl_start(struct tb_ctl *ctl)
- }
- 
- /**
-- * tb_ctrl_stop() - pause the control channel
-+ * tb_ctl_stop() - pause the control channel
-  * @ctl: Control channel to stop
-  *
-  * All invocations of ctl->callback will have finished after this method
-@@ -912,7 +912,7 @@ struct tb_cfg_result tb_cfg_read_raw(struct tb_ctl *ctl, void *buffer,
- }
- 
- /**
-- * tb_cfg_write() - write from buffer into config space
-+ * tb_cfg_write_raw() - write from buffer into config space
-  * @ctl: Pointer to the control channel
-  * @buffer: Data to write
-  * @route: Route string of the router
+diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+index 480afa2cc61f..c750bc60786f 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+@@ -94,6 +94,12 @@ uart_B: serial@7a000 {
+ 				clocks = <&xtal>, <&xtal>, <&xtal>;
+ 				clock-names = "xtal", "pclk", "baud";
+ 			};
++
++			reset: reset-controller@2000 {
++				compatible = "amlogic,meson-s4-reset";
++				reg = <0x0 0x2000 0x0 0x98>;
++				#reset-cells = <1>;
++			};
+ 		};
+ 	};
+ };
 -- 
-2.20.1.7.g153144c
+2.35.1
 

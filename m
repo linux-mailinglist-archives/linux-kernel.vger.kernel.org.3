@@ -2,122 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C028534C19
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF49534C1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiEZI6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S241277AbiEZI7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346743AbiEZI6A (ORCPT
+        with ESMTP id S232463AbiEZI7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:58:00 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C24C5E71;
-        Thu, 26 May 2022 01:57:56 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id b5so916047plx.10;
-        Thu, 26 May 2022 01:57:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z/aK1HVjWaZDKT3C6HDZPJDX4pSdyTJAvLiL+3q+10I=;
-        b=fnCj85xWRNBNPLSX5Lfd59eeCOL9G6A0HsvjvjG9TEjrlvkEjVEafCo9oZrgtYmnlE
-         1hmS0o+RYbCCSrv6tiaB63enPQuDZqNCieG+OzXRbIz8eZA6okwO7oBZdeDz3af1hA8O
-         n7IDm8EmrYXa/Ht9YUh+XjpbeBE0Yw3fRNpE2+1ZsIA1SS0pYFf6JikdzjCXYnu3j762
-         vMQ072Jwyt1vQas29DPDjt/oSeFqV244vTCtyEX1tZ20uTM6KyKZEeDIIwRFRufvfbkB
-         v0sgdCJjzn2nqnoaIJc65tK8y9dCbsEqY4IWMptAJJDSKT+3rJcGik45r1IHhPEenxq2
-         NfyA==
+        Thu, 26 May 2022 04:59:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E000A8880
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653555568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QBuQubLXsKdHypsOLS0DFxdMqRgrnMQKA1oWPGoQKlI=;
+        b=Ljly1e9wzrW8u5S9J4AMm5uY2/UH3i0p3kWkw38uFTCnONZpVTWSIHgd9fL6XITOIhjf1k
+        vpjYGbHspViSqCnN8VTEUzR+v9/t7wb4WVpyqLUHDxqWAyQFtES3Obg+6TlVEYbBvOvtEx
+        7nxM5S4JJC9ki+H08qci5b5dJX/hHGw=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-577-P4MqsIMZOP2jImVxM-YdsA-1; Thu, 26 May 2022 04:59:26 -0400
+X-MC-Unique: P4MqsIMZOP2jImVxM-YdsA-1
+Received: by mail-wr1-f69.google.com with SMTP id n13-20020a5d67cd000000b0021003b039e0so153041wrw.12
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:59:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z/aK1HVjWaZDKT3C6HDZPJDX4pSdyTJAvLiL+3q+10I=;
-        b=LCO6+L00fxI23cZCVL8IK7fuFlMCdoRsfr7ptopyHG6s7SgZCHKvF7PGu3ksTqsBgB
-         Oe6d/lt/CeIydZYLRWAVujFhnSLv1Np3U0+PZTpIXDlatd3eqUf2MXXmImzbTJ3Rc1iO
-         MNPsn/IRAgUAD+W0ixEsT7Pd0DeoJjNGaOMlrFJ6mWYSwVmavIS+tiqnhRlXS0RmcfgN
-         FjcToQ6L12gN5DsnE0WHP/4VD1YoH1CCivKZgL1aZ4hyfgct6gxXfQlzl8OCJz1M6d+b
-         hNJCTNhcJ80X1MYT1eVlINugLP0TAuI+sFqR5xIFFuScnHZhdyKMxeFowoMTlIQEIHnl
-         yk6A==
-X-Gm-Message-State: AOAM530zP8n5Kr8MgMd/3SeJ29SGK3EpmjCblVeElDYa5AbCE9Z5ayIr
-        sJjiILa7BfCFcMyitrrrw+c=
-X-Google-Smtp-Source: ABdhPJxaHm1sD3Pn9AyRjXJ/E271UjGHMu0ckZ3UGrSIEMkq3gA1c2JPGyBqJnkyw8p5PxLJQGltZA==
-X-Received: by 2002:a17:902:7c96:b0:162:3071:3266 with SMTP id y22-20020a1709027c9600b0016230713266mr16376584pll.119.1653555475792;
-        Thu, 26 May 2022 01:57:55 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.22])
-        by smtp.gmail.com with ESMTPSA id p1-20020a170902f08100b0015eb200cc00sm894378pla.138.2022.05.26.01.57.53
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=QBuQubLXsKdHypsOLS0DFxdMqRgrnMQKA1oWPGoQKlI=;
+        b=hzr0zsFicgJm1HyhIbdaVK8ODziLzVjg2QIEWYm0vaAgpH0+6BGsJXlYqaN0u1zHhK
+         CgBpv6tMxwKBLE4qbZJPLxPr378WEzrLTNHXaTf9t30X6qc2L2sO4tecZeFFA3LOdmWC
+         Iv+ZrsGDqX8ZcWwnXm0nz9kM7PebB+BHxudO/o/0buYiDXiM6VfS6W5kKwYc7YZrTJPN
+         rb+IwlFLmAEi/y2rzhUZRSzCWD4aWjrXMmWa9VSjOJ1mTv6nS9I1q9+HnobcS7YYfiRB
+         htASQQzWd7SDFF6/pbthKYoY/NpZcwUGJTtRvNpaOzvNSOZ4D8hiMCiaCynafFBK4BJC
+         2osw==
+X-Gm-Message-State: AOAM531Hev+L2kmmVK18/Z/IECQpjX6cmDoYSiQpdP0ZU8dEz2Vql5jS
+        IW6HxDPR58ZhPuBnibcq/wK7IyORKPaWXkWZ5w20TbQf4sRI+X9c0MDQDNvSKhU5xK8VKFxsAUg
+        5Fm6SnyecY/YQaxEGj8ePphc4
+X-Received: by 2002:a05:6000:1acc:b0:20f:f12a:a535 with SMTP id i12-20020a0560001acc00b0020ff12aa535mr10151113wry.375.1653555565586;
+        Thu, 26 May 2022 01:59:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxCzonV2Cu3c/gBioAW18CkReONSq7IWRWZkImNQWIDlZfYH8w2iZN8Bzrt8eIEu0exVcGFWg==
+X-Received: by 2002:a05:6000:1acc:b0:20f:f12a:a535 with SMTP id i12-20020a0560001acc00b0020ff12aa535mr10151093wry.375.1653555565296;
+        Thu, 26 May 2022 01:59:25 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
+        by smtp.gmail.com with ESMTPSA id c124-20020a1c3582000000b003973ea7e725sm4616302wma.0.2022.05.26.01.59.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 01:57:55 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Yanfei Xu <yanfei.xu@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/pmu: Update pmu->pebs_enable_mask with actual counter_mask
-Date:   Thu, 26 May 2022 16:57:23 +0800
-Message-Id: <20220526085723.91292-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 26 May 2022 01:59:25 -0700 (PDT)
+Message-ID: <de4aab60766b3de8705b09e36b8050feb92865ec.camel@redhat.com>
+Subject: Re: [PATCH net] net: macsec: Retrieve MACSec-XPN attributes before
+ offloading
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Carlos Fernandez <carlos.escuin@gmail.com>
+Cc:     carlos.fernandez@technica-engineering.de,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Era Mayflower <mayflowerera@gmail.com>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Thu, 26 May 2022 10:59:23 +0200
+In-Reply-To: <20220524114134.366696-1-carlos.fernandez@technica-engineering.de>
+References: <20220524114134.366696-1-carlos.fernandez@technica-engineering.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Tue, 2022-05-24 at 13:41 +0200, Carlos Fernandez wrote:
+> When MACsec offloading is used with XPN, before mdo_add_rxsa
+> and mdo_add_txsa functions are called, the key salt is not
+> copied to the macsec context struct. Offloaded phys will need
+> this data when performing offloading.
+> 
+> Fix by copying salt and id to context struct before calling the
+> offloading functions.
+> 
+> Fixes: 48ef50fa866a ("macsec: Netlink support of XPN cipher suites")
+> Signed-off-by: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
 
-The blamed commit is posted before the PEBS merge in, but is applied after
-the latter is merged in. Fix dependency of pebs_enable_mask on
-a new reusable counter_mask instead of zero-initialized global_ctrl.
+I'm sorry to nick-picking again, but this patch don't pass checkpatch
+validation:
 
-Fixes: 94e05293f839 ("KVM: x86/pmu: Don't overwrite the pmu->global_ctrl when refreshing")
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/kvm/vmx/pmu_intel.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+https://patchwork.kernel.org/project/netdevbpf/patch/20220524114134.366696-1-carlos.fernandez@technica-engineering.de/
 
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index ddf837130d1f..72bbcb3f9f8a 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -621,6 +621,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	struct kvm_cpuid_entry2 *entry;
- 	union cpuid10_eax eax;
- 	union cpuid10_edx edx;
-+	u64 counter_mask;
- 	int i;
- 
- 	pmu->nr_arch_gp_counters = 0;
-@@ -672,8 +673,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 
- 	for (i = 0; i < pmu->nr_arch_fixed_counters; i++)
- 		pmu->fixed_ctr_ctrl_mask &= ~(0xbull << (i * 4));
--	pmu->global_ctrl_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
-+	counter_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
- 		(((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED));
-+	pmu->global_ctrl_mask = counter_mask;
- 	pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask
- 			& ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF |
- 			    MSR_CORE_PERF_GLOBAL_OVF_CTRL_COND_CHGD);
-@@ -713,7 +715,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
- 	if (vcpu->arch.perf_capabilities & PERF_CAP_PEBS_FORMAT) {
- 		vcpu->arch.ia32_misc_enable_msr &= ~MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL;
- 		if (vcpu->arch.perf_capabilities & PERF_CAP_PEBS_BASELINE) {
--			pmu->pebs_enable_mask = ~pmu->global_ctrl;
-+			pmu->pebs_enable_mask = counter_mask;
- 			pmu->reserved_bits &= ~ICL_EVENTSEL_ADAPTIVE;
- 			for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
- 				pmu->fixed_ctr_ctrl_mask &=
--- 
-2.36.1
+Specifically, you should add a 'From:' tag as the first line:
+
+From: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+
+(Or send this patch from the above email address)
+
+Thanks!
 

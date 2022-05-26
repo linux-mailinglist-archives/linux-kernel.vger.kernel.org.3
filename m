@@ -2,161 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539B5534860
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A325534862
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240066AbiEZBwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S243258AbiEZBxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235094AbiEZBwn (ORCPT
+        with ESMTP id S235094AbiEZBxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:52:43 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A10A76E7;
-        Wed, 25 May 2022 18:52:42 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id h9-20020a056830400900b0060b03bfe792so127918ots.12;
-        Wed, 25 May 2022 18:52:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nIzC1T+B7FDF0YpbJTKwhnFmPynXYVhFmPj3hCsebHQ=;
-        b=GD+bJuXSxL7TFNzl4e67maAAGj0HA9HwFjAvln4BF7HKQLb2Lufbye3Oge8TxSJ2R/
-         tjBclEA1FR0Lxc6758C0kDx4F+p2QQbbTVBuFCF6Wxk2qasaSW2VS1VLjicuL+h0NF+I
-         4wdXLmNccDyAm6U9AGXPJjeKQbzdkEX5CeS5gmosq3xbr7WyA3/jraI/6mkuLPcIGK6B
-         UIowYjrCi3SZvwJ2mhjsfMeM6SrfDCB78POJnveC6Zm7Z/tQhpR3g6ARqy49genEOPIT
-         3qQpBz19DvjMPc1Pt1ToZmwWPcuWhHFlCtAYG9TxfH1y8yiOm+4dnPp/tyOwVjmHgWm9
-         e1KA==
-X-Gm-Message-State: AOAM531lbVeZ7cuS+yHdl0oaOELwukB0NCZaF8IXYwN0N+fIqnSPrDPa
-        qfx75buK96rTVd/SFyUvPg==
-X-Google-Smtp-Source: ABdhPJyGLVz2XIk37MGgjfeDK1wCmyQfKDhVcWU1Z8taSkD/ZTIqKmAE+ecAPywpSuZCqzBNd8ypNA==
-X-Received: by 2002:a05:6830:164d:b0:60b:3d2a:42de with SMTP id h13-20020a056830164d00b0060b3d2a42demr830293otr.373.1653529962148;
-        Wed, 25 May 2022 18:52:42 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s3-20020a056808208300b0032ba39d8be6sm202565oiw.14.2022.05.25.18.52.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 18:52:41 -0700 (PDT)
-Received: (nullmailer pid 2888797 invoked by uid 1000);
-        Thu, 26 May 2022 01:52:40 -0000
-Date:   Wed, 25 May 2022 20:52:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Vaibhav Jain <vaibhav@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH v2] of: check previous kernel's ima-kexec-buffer against
- memory bounds
-Message-ID: <20220526015240.GA2884362-robh@kernel.org>
-References: <20220524055042.1527968-1-vaibhav@linux.ibm.com>
+        Wed, 25 May 2022 21:53:19 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA161A76E7
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:53:17 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L7rXw1mvHzjX5h;
+        Thu, 26 May 2022 09:52:32 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 26 May 2022 09:53:15 +0800
+Subject: Re: [PATCH v3 3/4] mm/migration: return errno when isolate_huge_page
+ failed
+To:     Oscar Salvador <osalvador@suse.de>
+CC:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
+        <naoya.horiguchi@nec.com>, <peterx@redhat.com>,
+        <apopple@nvidia.com>, <ying.huang@intel.com>, <david@redhat.com>,
+        <songmuchun@bytedance.com>, <hch@lst.de>, <dhowells@redhat.com>,
+        <cl@linux.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220525081822.53547-1-linmiaohe@huawei.com>
+ <20220525081822.53547-4-linmiaohe@huawei.com>
+ <Yo3ry9rRDa5jznHC@localhost.localdomain>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <5ed70fbc-c582-6e85-22bc-3ccafa0d7a3f@huawei.com>
+Date:   Thu, 26 May 2022 09:53:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524055042.1527968-1-vaibhav@linux.ibm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yo3ry9rRDa5jznHC@localhost.localdomain>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 11:20:42AM +0530, Vaibhav Jain wrote:
-> Presently ima_get_kexec_buffer() doesn't check if the previous kernel's
-> ima-kexec-buffer lies outside the addressable memory range. This can result
-> in a kernel panic if the new kernel is booted with 'mem=X' arg and the
-> ima-kexec-buffer was allocated beyond that range by the previous kernel.
-> The panic is usually of the form below:
+On 2022/5/25 16:41, Oscar Salvador wrote:
+> On Wed, May 25, 2022 at 04:18:21PM +0800, Miaohe Lin wrote:
+>> We might fail to isolate huge page due to e.g. the page is under migration
+>> which cleared HPageMigratable. We should return errno in this case rather
+>> than always return 1 which could confuse the user, i.e. the caller might
+>> think all of the memory is migrated while the hugetlb page is left behind.
+>> We make the prototype of isolate_huge_page consistent with isolate_lru_page
+>> as suggested by Huang Ying and rename isolate_huge_page to isolate_hugetlb
+>> as suggested by Muchun to improve the readability.
+>>
+>> Fixes: e8db67eb0ded ("mm: migrate: move_pages() supports thp migration")
+>> Suggested-by: Huang Ying <ying.huang@intel.com>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > 
-> $ sudo kexec --initrd initrd vmlinux --append='mem=16G'
+> Looks good to me, one thing below though:
 > 
-> <snip>
->  BUG: Unable to handle kernel data access on read at 0xc000c01fff7f0000
->  Faulting instruction address: 0xc000000000837974
->  Oops: Kernel access of bad area, sig: 11 [#1]
-> <snip>
->  NIP [c000000000837974] ima_restore_measurement_list+0x94/0x6c0
->  LR [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
->  Call Trace:
->  [c00000000371fa80] [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
->  [c00000000371fb00] [c0000000020512c4] ima_init+0x80/0x108
->  [c00000000371fb70] [c0000000020514dc] init_ima+0x4c/0x120
->  [c00000000371fbf0] [c000000000012240] do_one_initcall+0x60/0x2c0
->  [c00000000371fcc0] [c000000002004ad0] kernel_init_freeable+0x344/0x3ec
->  [c00000000371fda0] [c0000000000128a4] kernel_init+0x34/0x1b0
->  [c00000000371fe10] [c00000000000ce64] ret_from_kernel_thread+0x5c/0x64
->  Instruction dump:
->  f92100b8 f92100c0 90e10090 910100a0 4182050c 282a0017 3bc00000 40810330
->  7c0802a6 fb610198 7c9b2378 f80101d0 <a1240000> 2c090001 40820614 e9240010
->  ---[ end trace 0000000000000000 ]---
+>> ---
+>>  include/linux/hugetlb.h |  6 +++---
+>>  mm/gup.c                |  2 +-
+>>  mm/hugetlb.c            | 11 +++++------
+>>  mm/memory-failure.c     |  2 +-
+>>  mm/mempolicy.c          |  2 +-
+>>  mm/migrate.c            |  5 +++--
+>>  6 files changed, 14 insertions(+), 14 deletions(-)
+>>
+> ...
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1627,8 +1627,9 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
+>>  
+>>  	if (PageHuge(page)) {
+>>  		if (PageHead(page)) {
+>> -			isolate_huge_page(page, pagelist);
+>> -			err = 1;
+>> +			err = isolate_hugetlb(page, pagelist);
+>> +			if (!err)
+>> +				err = 1;
+>>  		}
 > 
-> Fix this issue by checking returned PFN range of previous kernel's
-> ima-kexec-buffer with pfn_valid to ensure correct memory bounds.
-> 
-> Fixes: 467d27824920 ("powerpc: ima: get the kexec buffer passed by the previous kernel")
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Prakhar Srivastava <prsriva@linux.microsoft.com>
-> Cc: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-> Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
-> 
-> ---
-> Changelog
-> ==========
-> 
-> v2:
-> * Instead of using memblock to determine the valid bounds use pfn_valid() to do
-> so since memblock may not be available late after the kernel init. [ Mpe ]
-> * Changed the patch prefix from 'powerpc' to 'of' [ Mpe ]
-> * Updated the 'Fixes' tag to point to correct commit that introduced this
-> function. [ Rob ]
-> * Fixed some whitespace/tab issues in the patch description [ Rob ]
-> * Added another check for checking ig 'tmp_size' for ima-kexec-buffer is > 0
-> ---
->  drivers/of/kexec.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
-> index 8d374cc552be..879e984fe901 100644
-> --- a/drivers/of/kexec.c
-> +++ b/drivers/of/kexec.c
-> @@ -126,6 +126,7 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
->  {
->  	int ret, len;
->  	unsigned long tmp_addr;
-> +	unsigned int start_pfn, end_pfn;
->  	size_t tmp_size;
->  	const void *prop;
->  
-> @@ -140,6 +141,22 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
->  	if (ret)
->  		return ret;
->  
-> +	/* Do some sanity on the returned size for the ima-kexec buffer */
-> +	if (!tmp_size)
-> +		return -ENOENT;
-> +
-> +	/*
-> +	 * Calculate the PFNs for the buffer and ensure
-> +	 * they are with in addressable memory.
-> +	 */
-> +	start_pfn = PHYS_PFN(tmp_addr);
-> +	end_pfn = PHYS_PFN(tmp_addr + tmp_size - 1);
-> +	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn)) {
+> We used to always return 1 which means page has been queued for migration, as we
+> did not check isolate_huge_page() return value.
+> Now, we either return 1 or 0 depending on isolate_hugetlb(). 
 
-pfn_valid() isn't necessarily RAM, only that you have a struct page 
-AIUI. Maybe page_is_ram() instead?
+Return 1 or -EBUSY just as normal page case.
 
-Thanks to Robin for this.
+> I guess that was fine because in the end, if isolate_huge_page() failed,
+> the page just does not get added to 'pagelist', right? So, it is just
+> confusing for the user because he might not get an error so he thinks
+> the page will be migrated, and yet will not?
 
-Rob
+Yes, the hugetlb page might not be migrated due to error while it's not reported in the
+__user *status. So the caller might think all of the memory is migrated and thus does
+not retry to migrate the hugetlb page in the next round.
+
+Many thanks for your review and comment! :)
+
+> 
+> 
+

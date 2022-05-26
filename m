@@ -2,117 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A325534862
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B533534866
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243258AbiEZBxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S1344810AbiEZBx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235094AbiEZBxT (ORCPT
+        with ESMTP id S1344786AbiEZBxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:53:19 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA161A76E7
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:53:17 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L7rXw1mvHzjX5h;
-        Thu, 26 May 2022 09:52:32 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 26 May 2022 09:53:15 +0800
-Subject: Re: [PATCH v3 3/4] mm/migration: return errno when isolate_huge_page
- failed
-To:     Oscar Salvador <osalvador@suse.de>
-CC:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
-        <naoya.horiguchi@nec.com>, <peterx@redhat.com>,
-        <apopple@nvidia.com>, <ying.huang@intel.com>, <david@redhat.com>,
-        <songmuchun@bytedance.com>, <hch@lst.de>, <dhowells@redhat.com>,
-        <cl@linux.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220525081822.53547-1-linmiaohe@huawei.com>
- <20220525081822.53547-4-linmiaohe@huawei.com>
- <Yo3ry9rRDa5jznHC@localhost.localdomain>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <5ed70fbc-c582-6e85-22bc-3ccafa0d7a3f@huawei.com>
-Date:   Thu, 26 May 2022 09:53:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 25 May 2022 21:53:53 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE9A7769
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:53:52 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id z11so521270pjc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2pxcPCM5VX3sDe5qyFbWo9KsQkuEix+lNtMfCJKnED8=;
+        b=5FR6mDsGsdcRK/I2zLo0w4AmRmztswHxOMlOghEitUIUoFhbADRYuzTLEQOf1nH0ae
+         kaBCxEXhH1e39HsFefV5KmXovUyqB9ZwSqz6pd0qlA1lj2z8Jg/wU1ozt74F2qYbNAZj
+         m63WUwjKmvePg7TjRroTXI6TC2DsdWOCr8bpTkmIrzgpSoCsv1DCodVMB37ZJQLlRvc7
+         yi7w0mLdNpHijHwKxwLJMpwieN/kVBttxwPW5S5CTNG8Rp9ESGT9wK7YnN9kADCpN+A8
+         WL+U47BRmXfRDAoXnxUo1T6Mm6WwQTHpv7u4PSzkqM7Y3jSZh9CIz6DcbAaxzhFN4OQN
+         CsMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2pxcPCM5VX3sDe5qyFbWo9KsQkuEix+lNtMfCJKnED8=;
+        b=zvZhHblNgERf9RAefRnGZTn0qSBAz8OGFBK+rdCjbMRD0EiV9jhV0vpMdBLcC6sZeU
+         aA0pqP+A5hT3i+ZsBjSp3XJHPHhhXWQMwjTGNBhTUD9vNFUilm6aBJt1OcnnwrciVhPM
+         01BjZqgD4CsDzSlcpS9sKAus7RlLLD4jP7mlYCBxKiEFB2Ql6yqP1mQstRHzBv3JRRGa
+         rb7x+/Kv9nZi4Y6zsZ6g919N4KFKf3NDuXayLBIusRs7NV7mEZo+Cr6r99F8g4tmMwTB
+         sf8Qe3QJe1FDyDFWDTKlZkqoOa7QFKy6DYCE+RwgNTrVMnLfCLHyxmuZZFOsJ1nK0SF6
+         prXg==
+X-Gm-Message-State: AOAM533GgkOYxi6qe2M4VnwgsiInf36tOd7dmTcqB7n/CCYoQahSLhn5
+        6KJSDbz0r/UwdQjI6eZA8H+AhQ==
+X-Google-Smtp-Source: ABdhPJxLVXYPbhDTW6AtuaVmmhyNvqcx7+jSSXywyFBxJNlDjtHcVlRLEq4+CwmtINLsa++1kLB5vg==
+X-Received: by 2002:a17:902:b703:b0:158:2667:7447 with SMTP id d3-20020a170902b70300b0015826677447mr35269851pls.92.1653530031588;
+        Wed, 25 May 2022 18:53:51 -0700 (PDT)
+Received: from localhost ([2408:8207:18da:2310:c40c:3e14:bb57:48be])
+        by smtp.gmail.com with ESMTPSA id 65-20020a620644000000b0050dc7628166sm68190pfg.64.2022.05.25.18.53.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 18:53:51 -0700 (PDT)
+Date:   Thu, 26 May 2022 09:53:47 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v4 1/6] mm: memcontrol: introduce mem_cgroup_ino() and
+ mem_cgroup_get_from_ino()
+Message-ID: <Yo7dqwUZhpe2amtF@FVFYT0MHHV2J.googleapis.com>
+References: <20220525202600.2910982-1-roman.gushchin@linux.dev>
+ <20220525202600.2910982-2-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <Yo3ry9rRDa5jznHC@localhost.localdomain>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525202600.2910982-2-roman.gushchin@linux.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/25 16:41, Oscar Salvador wrote:
-> On Wed, May 25, 2022 at 04:18:21PM +0800, Miaohe Lin wrote:
->> We might fail to isolate huge page due to e.g. the page is under migration
->> which cleared HPageMigratable. We should return errno in this case rather
->> than always return 1 which could confuse the user, i.e. the caller might
->> think all of the memory is migrated while the hugetlb page is left behind.
->> We make the prototype of isolate_huge_page consistent with isolate_lru_page
->> as suggested by Huang Ying and rename isolate_huge_page to isolate_hugetlb
->> as suggested by Muchun to improve the readability.
->>
->> Fixes: e8db67eb0ded ("mm: migrate: move_pages() supports thp migration")
->> Suggested-by: Huang Ying <ying.huang@intel.com>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+On Wed, May 25, 2022 at 01:25:55PM -0700, Roman Gushchin wrote:
+> Shrinker debugfs requires a way to represent memory cgroups without
+> using full paths, both for displaying information and getting input
+> from a user.
 > 
-> Looks good to me, one thing below though:
+> Cgroup inode number is a perfect way, already used by bpf.
 > 
->> ---
->>  include/linux/hugetlb.h |  6 +++---
->>  mm/gup.c                |  2 +-
->>  mm/hugetlb.c            | 11 +++++------
->>  mm/memory-failure.c     |  2 +-
->>  mm/mempolicy.c          |  2 +-
->>  mm/migrate.c            |  5 +++--
->>  6 files changed, 14 insertions(+), 14 deletions(-)
->>
-> ...
->> --- a/mm/migrate.c
->> +++ b/mm/migrate.c
->> @@ -1627,8 +1627,9 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
->>  
->>  	if (PageHuge(page)) {
->>  		if (PageHead(page)) {
->> -			isolate_huge_page(page, pagelist);
->> -			err = 1;
->> +			err = isolate_hugetlb(page, pagelist);
->> +			if (!err)
->> +				err = 1;
->>  		}
+> This commit adds a couple of helper functions which will be used
+> to handle memcg-aware shrinkers.
 > 
-> We used to always return 1 which means page has been queued for migration, as we
-> did not check isolate_huge_page() return value.
-> Now, we either return 1 or 0 depending on isolate_hugetlb(). 
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Return 1 or -EBUSY just as normal page case.
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 
-> I guess that was fine because in the end, if isolate_huge_page() failed,
-> the page just does not get added to 'pagelist', right? So, it is just
-> confusing for the user because he might not get an error so he thinks
-> the page will be migrated, and yet will not?
-
-Yes, the hugetlb page might not be migrated due to error while it's not reported in the
-__user *status. So the caller might think all of the memory is migrated and thus does
-not retry to migrate the hugetlb page in the next round.
-
-Many thanks for your review and comment! :)
-
-> 
-> 
-
+Thanks.

@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA50535349
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4F8535348
 	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348549AbiEZSVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 14:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S236352AbiEZSVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348370AbiEZSVH (ORCPT
+        with ESMTP id S1348558AbiEZSVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 14:21:07 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0564E3A2
+        Thu, 26 May 2022 14:21:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED16C506DE
         for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:21:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1653589266; x=1685125266;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8NqVggT4gUzHrI0Lkp1miHSQ0Wr06BT1kkAR0n4u4o0=;
-  b=P/ZCAe8NmS+Jrv4sbZaaj+E+c/nmPBx4YmQ6x3yWFo923IS6IW+Y5PYf
-   dPr662nGdXRYmEoT22h8TL9tR2vmhu0mItRY+EbZW7L12bVRWhdu563lP
-   B10lvIdtYuoFsS+HW+t376bkWoUCVSJ0ju9OUQIhs90YPjHBI2VYCvCO+
-   6tZ8XPZsLFsxOnO/ZYeN9/PNWkxneMmF0vbg357XEAHdkeDsCnMV8eJgu
-   PjxuOXlAPLo+bZ/Z8qO0E2+0kcw2W0LND6s/koLiTSbqcg/IL6oT8Ddxg
-   RYTvjMe0qeKE5gHGOfAebRt7wvrY/gZDSTLDrVfA6QHeTROu5hMUDgXoB
+  bh=JXcbP4hOY9Rv62xY9VPi5eg9WbxcPewM+lTqA3pqPJk=;
+  b=mJbVPgJKJZLL6mFOBsacEkjOcgHYxYPDMapATO1KDow6ZoykNLX11lH1
+   3cygxfm6YNNV8W9/a112poymTIQhc+GCVPaq/Xxd82ZCivT4/4j0XhKAA
+   84ZCOiyaAHcI1Icyu4Y+BoN7IonDA5+MgCEpDUsmuJV9Zyu320trYEkiu
+   W+UbDSq74VW5+0BY0sDqh4AZExqSVv+DgGFRbIc78Md/klPdjDsDQN9ZV
+   OfWqWDYj4ajBO0wQ7/ho8vk7iT+5pYqLw9s67N6QIEBZ3YLfpV5m/r3QM
+   05eSZ5tPlDTN7Cyc+XFHKFBw4LrSOl616nsj1Nghs2S7iTjbfOvqlx+6Q
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="337288556"
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274245139"
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="337288556"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 11:21:05 -0700
+   d="scan'208";a="274245139"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 11:21:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="574016253"
+   d="scan'208";a="704677831"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 26 May 2022 11:21:03 -0700
+  by orsmga004.jf.intel.com with ESMTP; 26 May 2022 11:21:03 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nuI6Y-000462-9P;
+        id 1nuI6Y-000464-AF;
         Thu, 26 May 2022 18:21:02 +0000
-Date:   Fri, 27 May 2022 02:20:14 +0800
+Date:   Fri, 27 May 2022 02:20:15 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+Cc:     kbuild-all@lists.01.org,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org
 Subject: [ammarfaizi2-block:dhowells/linux-fs/cifs-for-sfrench 5/9]
- fs/cifs/file.c:2735:36: error: no member named 'max_frmr_depth' in 'struct
- smbd_connection'
-Message-ID: <202205270254.xD5T2pAa-lkp@intel.com>
+ fs/cifs/file.c:2735:62: error: 'struct smbd_connection' has no member named
+ 'max_frmr_depth'
+Message-ID: <202205270237.wVtbeA7b-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -67,8 +67,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/cifs-for-sfrench
 head:   ba04fd019482403a282ad499323f5cdd1ee5216a
 commit: b4eb9ac0feb7aff675a958612c9d2b2052f53690 [5/9] cifs: Change the I/O paths to use an iterator rather than a page list
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220527/202205270254.xD5T2pAa-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
+config: h8300-buildonly-randconfig-r001-20220524 (https://download.01.org/0day-ci/archive/20220527/202205270237.wVtbeA7b-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.3.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -78,17 +78,17 @@ reproduce (this is a W=1 build):
         git checkout b4eb9ac0feb7aff675a958612c9d2b2052f53690
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/cifs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash fs/cifs/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> fs/cifs/file.c:2735:36: error: no member named 'max_frmr_depth' in 'struct smbd_connection'
-                                   max_pages = server->smbd_conn->max_frmr_depth;
-                                               ~~~~~~~~~~~~~~~~~  ^
-   1 error generated.
+   fs/cifs/file.c: In function 'cifs_write_back_from_locked_folio':
+>> fs/cifs/file.c:2735:62: error: 'struct smbd_connection' has no member named 'max_frmr_depth'
+    2735 |                                 max_pages = server->smbd_conn->max_frmr_depth;
+         |                                                              ^~
 
 
 vim +2735 fs/cifs/file.c

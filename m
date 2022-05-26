@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827ED53517C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7187F53517F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344283AbiEZPdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S1347966AbiEZPdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347947AbiEZPdI (ORCPT
+        with ESMTP id S1346462AbiEZPdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 11:33:08 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5BAC1ECF
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:33:06 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id x12so1590390pgj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:33:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FhSHAPuv3/q3I8JH5CgOANOnHgoQYal4YSK2ZHhUT9M=;
-        b=jNgR2ONfSzMi5sF8c4lE4rL1KM+VXFqG7UB32z+dY14/d7GlVOZ+B3Ba6u4kZmWVlK
-         pJ2yoS0cdUZmmznc1Cz3izQuNut/YzdRMIp2i3+sBoq0+69IqfnRCrqcvDs3nfTDYohx
-         2yxGU4pzxh4mGE0pV9ckE+7x2JlobK98t/uSI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FhSHAPuv3/q3I8JH5CgOANOnHgoQYal4YSK2ZHhUT9M=;
-        b=EEgK5YUKSadQj22SwSd4eap0Rhjeib1kzHrz/UyQEgkKCwlTwTjh1+csZl3KBnFNaf
-         LNI6BUpUwMPQzdUCryAgPJF1b3U6z3q1UGqYyDzq/dT4HnQc2v7QkY90rolGJGUS+H4S
-         e2NE71Lfu021LzY4YCxcajriSbnzR2jQ6VZ+pAh+O1DDiir/OhD+COFQeIgS4yR3iz0f
-         ghLKolCdSiXjzR8WZP99snafU93S1kSrln/xeiklXCQzxhebd0lQuikBsb3XNBDRRavZ
-         2Av6GitGHkkg0E+FLCCqrLtozBVPXhwtXuFCTHvR73QS3fe7EpT6THDObQkiPYg7lu2z
-         aT0g==
-X-Gm-Message-State: AOAM533Iosp5GFOMJc/ujKH8h1aX+OEt5D/wncUGulOH6HJts/7/S+Jp
-        uzn8Xh6zl3aAGJCZBA57WBaDGQ==
-X-Google-Smtp-Source: ABdhPJy3+zSfp7T4ICC3r6iccs66TjUXP7l4W4HM1gJbsh0zao1O+3KFT+JZ476f2vorLGCLmzbWfQ==
-X-Received: by 2002:a62:484:0:b0:50d:a020:88e5 with SMTP id 126-20020a620484000000b0050da02088e5mr39006814pfe.51.1653579186420;
-        Thu, 26 May 2022 08:33:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s8-20020a17090302c800b0015e8d4eb29esm1728109plk.232.2022.05.26.08.33.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 08:33:06 -0700 (PDT)
-Date:   Thu, 26 May 2022 08:33:03 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Robert Dinse <nanook@eskimo.com>
-Subject: Re: [PATCH 1/4] KVM: x86: Grab regs_dirty in local 'unsigned long'
-Message-ID: <202205260832.0301216FB6@keescook>
-References: <20220525222604.2810054-1-seanjc@google.com>
- <20220525222604.2810054-2-seanjc@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525222604.2810054-2-seanjc@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 26 May 2022 11:33:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45412C1ED8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:33:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A04CA61C64
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 15:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A44C385A9;
+        Thu, 26 May 2022 15:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653579215;
+        bh=FT4RzyNJhGH1Xvs0BNepk6mODPann7y9135LL7cckyA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=saerT/+VGvOH8MzSXrAq+VXSokBG5Y3jxqeXe9/5kkx6DjMLknN7mMDFnuOEm/Ww6
+         hXStapOVvQIhG2bEqWF51SUy1np+N5e0Lq1NrGB6fXl+0tpmQkAr7vemq6IGDdretc
+         4e6+ov0k1fgwdGvWJtR2R3uKwaXjJ5o7xxK+m3DctnTnLcYlgtKeotrKxz3iwFwswd
+         G9AZq66oBVufxqZylDP8cB//xx8KA09z0AznzixoVPJG+vsPcqV6aFtRTXuJijHjdd
+         twd58GtstuCxSslhtCacTmuiBMf9AjEpfgtcPNFWhggahO1MI/MOsu947pI495kM1d
+         H+kDD6z+aWDbw==
+Date:   Fri, 27 May 2022 00:33:30 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>,
+        <peterz@infradead.org>, <naveen.n.rao@linux.vnet.ibm.com>,
+        <jszhang@kernel.org>, <guoren@kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] riscv/kprobe: reclaim insn_slot on kprobe
+ unregistration
+Message-Id: <20220527003330.68f1fc0f58ecec812a7d037e@kernel.org>
+In-Reply-To: <20220525014424.20717-1-liaochang1@huawei.com>
+References: <20220525014424.20717-1-liaochang1@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 10:26:01PM +0000, Sean Christopherson wrote:
-> Capture ctxt->regs_dirty in a local 'unsigned long' instead of casting
-> ctxt->regs_dirty to an 'unsigned long *' for use in for_each_set_bit().
-> The bitops helpers really do read the entire 'unsigned long', even though
-> the walking of the read value is capped at the specified size.  I.e. KVM
-> is reading memory beyond ctxt->regs_dirty.  Functionally it's not an
-> issue because regs_dirty is in the middle of x86_emulate_ctxt, i.e. KVM
-> is just reading its own memory, but relying on that coincidence is gross
-> and unsafe.
+On Wed, 25 May 2022 09:44:24 +0800
+Liao Chang <liaochang1@huawei.com> wrote:
 
-Right; there have bean a handful of other bitops-using-stuff-cast-to-ulong
-that has been recently fixed elsewhere. Better to get them all squashed.
-:)
+> On kprobe registration kernel allocate one insn_slot for new kprobe,
+> but it forget to reclaim the insn_slot on unregistration, leading to a
+> potential leakage.
+> 
+> Reported-by: Chen Guokai <chenguokai17@mails.ucas.ac.cn>
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+Looks good to me.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+Cc: stable@vger.kernel.org
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you,
+
+
+> ---
+> v2:
+>   Add Reported-by tag
+> 
+>  arch/riscv/kernel/probes/kprobes.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+> index e6e950b7cf32..f12eb1fbb52c 100644
+> --- a/arch/riscv/kernel/probes/kprobes.c
+> +++ b/arch/riscv/kernel/probes/kprobes.c
+> @@ -110,6 +110,10 @@ void __kprobes arch_disarm_kprobe(struct kprobe *p)
+>  
+>  void __kprobes arch_remove_kprobe(struct kprobe *p)
+>  {
+> +	if (p->ainsn.api.insn) {
+> +		free_insn_slot(p->ainsn.api.insn, 0);
+> +		p->ainsn.api.insn = NULL;
+> +	}
+>  }
+>  
+>  static void __kprobes save_previous_kprobe(struct kprobe_ctlblk *kcb)
+> -- 
+> 2.17.1
+> 
+
 
 -- 
-Kees Cook
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

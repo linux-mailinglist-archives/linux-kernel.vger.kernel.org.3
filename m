@@ -2,224 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D61534C3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88330534C08
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346806AbiEZJFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 05:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S239121AbiEZIzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346821AbiEZJFt (ORCPT
+        with ESMTP id S232907AbiEZIzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 05:05:49 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325A3C6E47
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653555945; x=1685091945;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kEsf6LMdSMOflapG+PvkyXqMVBIJuUPjv9Fs8ZiXKgs=;
-  b=PX+YBLbeQTmdNvnAyKWLrW5G1QomfD9wVTIJO0wY5glUuPgRRbfIOXnl
-   6h8qbnfqE8yPZL9TlW98YEqcGciu4+5IMVlRljs9HzcgZNgMs6dXB06rv
-   awZMX5MQ7lM5eRRYpkn4G1GgqYftPW2cmT5mB+5MR6s6u59VziT2DWMT8
-   S7WqgYIIvDSJ7ZdBP63XS15uGvUCUYbqKeVCfUzFqsb6lxH7XomhGccAr
-   +YuH0Yrlyl9/g83z5xaJwA8r5B/p2rB2NpyB1r8m7E2N5q9Ms5S11LQbQ
-   8lPe1sdk8AAa7a6WnM9Gb8DFi7CISJpjQt5TvmBpDkxPJzQYTU/y1mrsG
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="254590697"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="254590697"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 02:05:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="901923413"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 26 May 2022 02:05:41 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nu9R6-0003jY-DW;
-        Thu, 26 May 2022 09:05:40 +0000
-Date:   Thu, 26 May 2022 16:53:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, odin@uged.al
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: Re: [PATCH v2 2/2] sched/fair: optimize and simplify rq
- leaf_cfs_rq_list
-Message-ID: <202205261617.YUT1ixQ8-lkp@intel.com>
-References: <20220526071354.6426-3-zhouchengming@bytedance.com>
+        Thu, 26 May 2022 04:55:12 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73497C3D1F
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:55:10 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id bl14so17550qtb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:55:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bIETZN5LHnHAH+U1JfhvsbCUrW1/W0Niq8OmHZJ39Os=;
+        b=Q3GGF3sWTGLvm6w8AXmfn1JRu5uam28CQOycDVq8tgBxR4YhCzbv1wJchoJU2ecPzl
+         7XkhJqytQLOrylS76GhAKTHVMhkBC9JC3rzueSF6doyip2ymBVQEcwcWDyiCwi+yEokn
+         npfy1EJDfxkOGJcKLPEIY3xZuW5BGd+aQbK8BnYMMAzpllyWSsV9btD5K2vYRfIaLVhR
+         Jy8jQr5ckZ+bpdELT5NLxFuGOinEL//Ei9nOFwrJMsIYfVDWR1P8qs8cOcDT1w6fYdXK
+         fcAP+a0kf8Swgspl1h969zS7G8iD4r5+DM5dolRKMUbz8wkVIYCutw7PlbddYQqPdOTr
+         FInw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bIETZN5LHnHAH+U1JfhvsbCUrW1/W0Niq8OmHZJ39Os=;
+        b=eDhVj8bjP/bvq0kMQDPc0Z2OTA+zpqMyjam46OWEy38Li+fbxlOGClrUtLR1fnOuQW
+         +DGxfDp8uZhR7hNF1euKgOQKbL4OUaNC76MYwiBx9MTYGzW9j9dxOa7VFzItM05o5jHn
+         WXA0YBQKQbo+bW4fR+KS+zgTgQerlO5KddwOsQMEHtItVfAoOkdEfTqHwxjFR09PN7bu
+         apBBKuoHxu7sQ8UL3gVY3zWvl422i6cGGl5yD84iixvCRPXQuKGXSTgByBxsz8LunUK8
+         bRsIkdLP8ntQVStZLRW+yoqA/J6S07rQvLy1NamOpTuvEqVhTNFlmsST9iarCE9EKrXD
+         VAuw==
+X-Gm-Message-State: AOAM532mEu1v+b987jxZ0lFNihf71mIijaVVl3zsAU4aMCtfvM7kFZZU
+        I5mnAyNqb/t+Y3Ny75+CliQf2YR6iInNZ0+M81A=
+X-Google-Smtp-Source: ABdhPJwelRgMh1nRJ54ZYmK4gx7kA2yWrak2VpuwwdstL51dufOW67pn/MNWjf/4BsKVc+EvNjZk/q8I+rZ/JGd+7LE=
+X-Received: by 2002:a05:622a:c7:b0:2fa:ec2f:a386 with SMTP id
+ p7-20020a05622a00c700b002faec2fa386mr5654121qtw.5.1653555309508; Thu, 26 May
+ 2022 01:55:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526071354.6426-3-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220525144013.6481-1-ubizjak@gmail.com> <20220525144013.6481-2-ubizjak@gmail.com>
+ <CAHk-=wh1XeaxWXG5QziGA4ds918UnW1hO924kusgVB-wGj+9Og@mail.gmail.com>
+In-Reply-To: <CAHk-=wh1XeaxWXG5QziGA4ds918UnW1hO924kusgVB-wGj+9Og@mail.gmail.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Thu, 26 May 2022 10:54:58 +0200
+Message-ID: <CAFULd4bc54+_FmJ=f++zzz99mR8r5c11-Y49pz86Yb8G3dyJpA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] locking/lockref: Use try_cmpxchg64 in CMPXCHG_LOOP macro
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paul McKenney <paulmck@linux.vnet.ibm.com>
+Content-Type: multipart/mixed; boundary="000000000000d7603a05dfe658c4"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chengming,
+--000000000000d7603a05dfe658c4
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for the patch! Yet something to improve:
+On Wed, May 25, 2022 at 6:48 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, May 25, 2022 at 7:40 AM Uros Bizjak <ubizjak@gmail.com> wrote:
+> >
+> > Use try_cmpxchg64 instead of cmpxchg64 in CMPXCHG_LOOP macro.
+> > x86 CMPXCHG instruction returns success in ZF flag, so this
+> > change saves a compare after cmpxchg (and related move instruction
+> > in front of cmpxchg). The main loop of lockref_get improves from:
+>
+> Ack on this one regardless of the 32-bit x86 question.
+>
+> HOWEVER.
+>
+> I'd like other architectures to pipe up too, because I think right now
+> x86 is the only one that implements that "arch_try_cmpxchg()" family
+> of operations natively, and I think the generic fallback for when it
+> is missing might be kind of nasty.
+>
+> Maybe it ends up generating ok code, but it's also possible that it
+> just didn't matter when it was only used in one place in the
+> scheduler.
+>
+> The lockref_get() case can be quite hot under some loads, it would be
+> sad if this made other architectures worse.
+>
+> Anyway, maybe that try_cmpxchg() fallback is fine, and works out well
+> on architectures that use load-locked / store-conditional as-is.
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on tip/master linus/master v5.18 next-20220525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Attached to this message, please find attached the testcase that
+analyses various CMPXCHG_LOOPs. Here you will find the old, the
+fallback and the new cmpxchg loop, together with corresponding
+lockref_get_* functions.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chengming-Zhou/sched-fair-optimize-and-simplify-rq-leaf_cfs_rq_list/20220526-151850
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 991d8d8142cad94f9c5c05db25e67fa83d6f772a
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220526/202205261617.YUT1ixQ8-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cb2b1810aeb3f8f290a932f3e625ab9df1110054
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chengming-Zhou/sched-fair-optimize-and-simplify-rq-leaf_cfs_rq_list/20220526-151850
-        git checkout cb2b1810aeb3f8f290a932f3e625ab9df1110054
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/sched/
+The testcase models the x86 cmpxchg8b and can be compiled for 64bit as
+well as 32bit targets. As can be seen from the experiment, the
+try_cmpxchg fallback creates EXACTLY THE SAME code for 64bit target as
+the unpatched code. For the 32bit target one extra dead reg-reg 32bit
+move remains in the generated fallback code assembly (this is the
+compiler (gcc-10.3) artefact with double-word 64bit moves on x86_32
+target).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+From the above experiment, we can conclude that the patched lockref.c
+creates the same code with the try_cmpxchg fallback as the original
+code. I think the same will be observed also for other targets.
 
-All errors (new ones prefixed by >>):
+When the new code involving try_cmpxchg is compiled, impressive size
+gains for x86_32 can be seen. The main loop size reduces from 44 bytes
+to 30 bytes.
 
-   kernel/sched/fair.c:645:5: warning: no previous prototype for 'sched_update_scaling' [-Wmissing-prototypes]
-     645 | int sched_update_scaling(void)
-         |     ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c: In function 'enqueue_entity':
->> kernel/sched/fair.c:4343:22: error: implicit declaration of function 'throttled_hierarchy' [-Werror=implicit-function-declaration]
-    4343 |                 if (!throttled_hierarchy(cfs_rq))
-         |                      ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c: At top level:
->> kernel/sched/fair.c:5484:19: error: static declaration of 'throttled_hierarchy' follows non-static declaration
-    5484 | static inline int throttled_hierarchy(struct cfs_rq *cfs_rq)
-         |                   ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:4343:22: note: previous implicit declaration of 'throttled_hierarchy' with type 'int()'
-    4343 |                 if (!throttled_hierarchy(cfs_rq))
-         |                      ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:5495:6: warning: no previous prototype for 'init_cfs_bandwidth' [-Wmissing-prototypes]
-    5495 | void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-         |      ^~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:11654:6: warning: no previous prototype for 'free_fair_sched_group' [-Wmissing-prototypes]
-   11654 | void free_fair_sched_group(struct task_group *tg) { }
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:11656:5: warning: no previous prototype for 'alloc_fair_sched_group' [-Wmissing-prototypes]
-   11656 | int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-         |     ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:11661:6: warning: no previous prototype for 'online_fair_sched_group' [-Wmissing-prototypes]
-   11661 | void online_fair_sched_group(struct task_group *tg) { }
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/fair.c:11663:6: warning: no previous prototype for 'unregister_fair_sched_group' [-Wmissing-prototypes]
-   11663 | void unregister_fair_sched_group(struct task_group *tg) { }
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+In the git repository, several transitions from cmpxchg to try_cmpxchg
+can be found. The above experiment confirms, that the generated
+fallback assembly is at least as good as the original unpatched
+version, but can be more optimal when the target provides try_cmpxchg
+instruction. Also, it looks to me that several other hot spots
+throughout the code can be improved by changing them from using
+cmpxchg to try_cmpxchg.
 
+Uros.
 
-vim +/throttled_hierarchy +4343 kernel/sched/fair.c
+--000000000000d7603a05dfe658c4
+Content-Type: text/x-csrc; charset="US-ASCII"; name="lockref-test.c"
+Content-Disposition: attachment; filename="lockref-test.c"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l3ms4e290>
+X-Attachment-Id: f_l3ms4e290
 
-  4263	
-  4264	/*
-  4265	 * MIGRATION
-  4266	 *
-  4267	 *	dequeue
-  4268	 *	  update_curr()
-  4269	 *	    update_min_vruntime()
-  4270	 *	  vruntime -= min_vruntime
-  4271	 *
-  4272	 *	enqueue
-  4273	 *	  update_curr()
-  4274	 *	    update_min_vruntime()
-  4275	 *	  vruntime += min_vruntime
-  4276	 *
-  4277	 * this way the vruntime transition between RQs is done when both
-  4278	 * min_vruntime are up-to-date.
-  4279	 *
-  4280	 * WAKEUP (remote)
-  4281	 *
-  4282	 *	->migrate_task_rq_fair() (p->state == TASK_WAKING)
-  4283	 *	  vruntime -= min_vruntime
-  4284	 *
-  4285	 *	enqueue
-  4286	 *	  update_curr()
-  4287	 *	    update_min_vruntime()
-  4288	 *	  vruntime += min_vruntime
-  4289	 *
-  4290	 * this way we don't have the most up-to-date min_vruntime on the originating
-  4291	 * CPU and an up-to-date min_vruntime on the destination CPU.
-  4292	 */
-  4293	
-  4294	static void
-  4295	enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
-  4296	{
-  4297		bool renorm = !(flags & ENQUEUE_WAKEUP) || (flags & ENQUEUE_MIGRATED);
-  4298		bool curr = cfs_rq->curr == se;
-  4299	
-  4300		/*
-  4301		 * If we're the current task, we must renormalise before calling
-  4302		 * update_curr().
-  4303		 */
-  4304		if (renorm && curr)
-  4305			se->vruntime += cfs_rq->min_vruntime;
-  4306	
-  4307		update_curr(cfs_rq);
-  4308	
-  4309		/*
-  4310		 * Otherwise, renormalise after, such that we're placed at the current
-  4311		 * moment in time, instead of some random moment in the past. Being
-  4312		 * placed in the past could significantly boost this task to the
-  4313		 * fairness detriment of existing tasks.
-  4314		 */
-  4315		if (renorm && !curr)
-  4316			se->vruntime += cfs_rq->min_vruntime;
-  4317	
-  4318		/*
-  4319		 * When enqueuing a sched_entity, we must:
-  4320		 *   - Update loads to have both entity and cfs_rq synced with now.
-  4321		 *   - Add its load to cfs_rq->runnable_avg
-  4322		 *   - For group_entity, update its weight to reflect the new share of
-  4323		 *     its group cfs_rq
-  4324		 *   - Add its new weight to cfs_rq->load.weight
-  4325		 */
-  4326		update_load_avg(cfs_rq, se, UPDATE_TG | DO_ATTACH);
-  4327		se_update_runnable(se);
-  4328		update_cfs_group(se);
-  4329		account_entity_enqueue(cfs_rq, se);
-  4330	
-  4331		if (flags & ENQUEUE_WAKEUP)
-  4332			place_entity(cfs_rq, se, 0);
-  4333	
-  4334		check_schedstat_required();
-  4335		update_stats_enqueue_fair(cfs_rq, se, flags);
-  4336		check_spread(cfs_rq, se);
-  4337		if (!curr)
-  4338			__enqueue_entity(cfs_rq, se);
-  4339		se->on_rq = 1;
-  4340	
-  4341		if (cfs_rq->nr_running == 1) {
-  4342			check_enqueue_throttle(cfs_rq);
-> 4343			if (!throttled_hierarchy(cfs_rq))
-  4344				list_add_leaf_cfs_rq(cfs_rq);
-  4345		}
-  4346	}
-  4347	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I2luY2x1ZGUgPHN0ZGludC5oPgoKI2RlZmluZSBfX2FsaWduZWRfdTY0IHU2NCBfX2F0dHJpYnV0
+ZV9fKChhbGlnbmVkKDgpKSkKCiNkZWZpbmUgTE9DS19QUkVGSVggImxvY2sgIgoKIyBkZWZpbmUg
+bGlrZWx5KHgpCV9fYnVpbHRpbl9leHBlY3QoISEoeCksIDEpCiMgZGVmaW5lIHVubGlrZWx5KHgp
+CV9fYnVpbHRpbl9leHBlY3QoISEoeCksIDApCgp0eXBlZGVmIHVpbnQ2NF90IHU2NDsKdHlwZWRl
+ZiB1aW50MzJfdCB1MzI7CgpzdGF0aWMgaW5saW5lIHZvaWQgY3B1X3JlbGF4KHZvaWQpCnsKCWFz
+bSB2b2xhdGlsZSgicmVwOyBub3AiIDo6OiAibWVtb3J5Iik7Cn0KCnN0YXRpYyBpbmxpbmUgdTY0
+IGNtcHhjaGc2NCh2b2xhdGlsZSB1NjQgKnB0ciwgdTY0IG9sZCwgdTY0IG5ldykKewoJdTY0IHBy
+ZXY7Cglhc20gdm9sYXRpbGUoTE9DS19QUkVGSVggImNtcHhjaGc4YiAlMSIKCQkgICAgIDogIj1B
+IiAocHJldiksCgkJICAgICAgICIrbSIgKCpwdHIpCgkJICAgICA6ICJiIiAoKHUzMiluZXcpLAoJ
+CSAgICAgICAiYyIgKCh1MzIpKG5ldyA+PiAzMikpLAoJCSAgICAgICAiMCIgKG9sZCkKCQkgICAg
+IDogIm1lbW9yeSIpOwoJcmV0dXJuIHByZXY7Cn0KCiNkZWZpbmUgQ01QWENIR19MT09QX09MRChD
+T0RFLCBTVUNDRVNTKSBkbyB7CQkJCVwKCWludCByZXRyeSA9IDEwMDsJCQkJCQlcCglfX2FsaWdu
+ZWRfdTY0IG9sZCA9ICpsb2NrcmVmOwkJCQkJXAoJd2hpbGUgKHQpIHsJCQkJCQkJXAoJCV9fYWxp
+Z25lZF91NjQgbmV3ID0gb2xkLCBwcmV2ID0gb2xkOwkJCVwKCQlDT0RFCQkJCQkJCVwKCQlvbGQg
+PSBjbXB4Y2hnNjQobG9ja3JlZiwgb2xkLCBuZXcpOwkJCVwKCQlpZiAobGlrZWx5KG9sZCA9PSBw
+cmV2KSkgewkJCQlcCgkJCVNVQ0NFU1M7CQkJCQlcCgkJfQkJCQkJCQlcCgkJaWYgKCEtLXJldHJ5
+KQkJCQkJCVwKCQkJYnJlYWs7CQkJCQkJXAoJCWNwdV9yZWxheCgpOwkJCQkJCVwKCX0JCQkJCQkJ
+CVwKfSB3aGlsZSAoMCkKCnZvaWQgbG9ja3JlZl9nZXRfb2xkKHU2NCAqbG9ja3JlZiwgX0Jvb2wg
+dCkKewoJQ01QWENIR19MT09QX09MRCgKCQluZXcrKzsKCSwKCQlyZXR1cm47CgkpOwp9CgojZGVm
+aW5lIHRyeV9jbXB4Y2hnNjRfZmFsbGJhY2soX3B0ciwgX29sZHAsIF9uZXcpCVwKKHsgXAoJdHlw
+ZW9mKCooX3B0cikpICpfX19vcCA9IChfb2xkcCksIF9fX28gPSAqX19fb3AsIF9fX3I7IFwKCV9f
+X3IgPSBjbXB4Y2hnNjQoKF9wdHIpLCBfX19vLCAoX25ldykpOyBcCglpZiAodW5saWtlbHkoX19f
+ciAhPSBfX19vKSkgXAoJCSpfX19vcCA9IF9fX3I7IFwKCWxpa2VseShfX19yID09IF9fX28pOyBc
+Cn0pCgojZGVmaW5lIENNUFhDSEdfTE9PUF9GQUxMQkFDSyhDT0RFLCBTVUNDRVNTKSBkbyB7CQkJ
+CVwKCWludCByZXRyeSA9IDEwMDsJCQkJCQkJXAoJX19hbGlnbmVkX3U2NCBvbGQgPSAqbG9ja3Jl
+ZjsJCQkJCQlcCgl3aGlsZSAodCkgewkJCQkJCQkJXAoJCV9fYWxpZ25lZF91NjQgbmV3ID0gb2xk
+OwkJCQkJXAoJCUNPREUJCQkJCQkJCVwKCQlpZiAobGlrZWx5KHRyeV9jbXB4Y2hnNjRfZmFsbGJh
+Y2sobG9ja3JlZiwgJm9sZCwgbmV3KSkpIHsJXAoJCQlTVUNDRVNTOwkJCQkJCVwKCQl9CQkJCQkJ
+CQlcCgkJaWYgKCEtLXJldHJ5KQkJCQkJCQlcCgkJCWJyZWFrOwkJCQkJCQlcCgkJY3B1X3JlbGF4
+KCk7CQkJCQkJCVwKCX0JCQkJCQkJCQlcCn0gd2hpbGUgKDApCgp2b2lkIGxvY2tyZWZfZ2V0X2Zh
+bGxiYWNrKHU2NCAqbG9ja3JlZiwgX0Jvb2wgdCkKewoJQ01QWENIR19MT09QX0ZBTExCQUNLKAoJ
+CW5ldysrOwoJLAoJCXJldHVybjsKCSk7Cn0KCnN0YXRpYyBpbmxpbmUgX0Jvb2wgdHJ5X2NtcHhj
+aGc2NCh2b2xhdGlsZSB1NjQgKnB0ciwgdTY0ICpwb2xkLCB1NjQgbmV3KQp7CglfQm9vbCBzdWNj
+ZXNzOwoJdTY0IG9sZCA9ICpwb2xkOwoJYXNtIHZvbGF0aWxlKExPQ0tfUFJFRklYICJjbXB4Y2hn
+OGIgJVtwdHJdIgoJCSAgICAgOiAiPUBjY3oiIChzdWNjZXNzKSwKCQkgICAgICAgW3B0cl0gIitt
+IiAoKnB0ciksCgkJICAgICAgICIrQSIgKG9sZCkKCQkgICAgIDogImIiICgodTMyKW5ldyksCgkJ
+ICAgICAgICJjIiAoKHUzMikobmV3ID4+IDMyKSkKCQkgICAgIDogIm1lbW9yeSIpOwoKCWlmICh1
+bmxpa2VseSghc3VjY2VzcykpCgkJKnBvbGQgPSBvbGQ7CglyZXR1cm4gc3VjY2VzczsKfQoKI2Rl
+ZmluZSBDTVBYQ0hHX0xPT1BfTkVXKENPREUsIFNVQ0NFU1MpIGRvIHsJCQkJXAoJaW50IHJldHJ5
+ID0gMTAwOwkJCQkJCVwKCV9fYWxpZ25lZF91NjQgb2xkID0gKmxvY2tyZWY7CQkJCQlcCgl3aGls
+ZSAodCkgewkJCQkJCQlcCgkJX19hbGlnbmVkX3U2NCBuZXcgPSBvbGQ7CQkJCVwKCQlDT0RFCQkJ
+CQkJCVwKCQlpZiAobGlrZWx5KHRyeV9jbXB4Y2hnNjQobG9ja3JlZiwgJm9sZCwgbmV3KSkpIHsJ
+XAoJCQlTVUNDRVNTOwkJCQkJXAoJCX0JCQkJCQkJXAoJCWlmICghLS1yZXRyeSkJCQkJCQlcCgkJ
+CWJyZWFrOwkJCQkJCVwKCQljcHVfcmVsYXgoKTsJCQkJCQlcCgl9CQkJCQkJCQlcCn0gd2hpbGUg
+KDApCgp2b2lkIGxvY2tyZWZfZ2V0X25ldyh1NjQgKmxvY2tyZWYsIF9Cb29sIHQpCnsKCUNNUFhD
+SEdfTE9PUF9ORVcoCgkJbmV3Kys7CgksCgkJcmV0dXJuOwoJKTsKfQo=
+--000000000000d7603a05dfe658c4--

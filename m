@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB99534997
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 05:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70BA534999
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 05:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbiEZD7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 23:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
+        id S1345281AbiEZD7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 23:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345052AbiEZD6v (ORCPT
+        with ESMTP id S1345080AbiEZD7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 23:58:51 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29456C0383;
-        Wed, 25 May 2022 20:58:50 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id j28so326155eda.13;
-        Wed, 25 May 2022 20:58:50 -0700 (PDT)
+        Wed, 25 May 2022 23:59:08 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9E9C0384;
+        Wed, 25 May 2022 20:58:51 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id f9so831812ejc.0;
+        Wed, 25 May 2022 20:58:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sGUo79V8IknEK9RaV+1rr5dfMkYi9KkvLOC/DC9705Q=;
-        b=frTBXxzAzNw1OrGvbM+DJnEXiDhK6abfNuqcoFf6RXZBuVulVhnBMrxirE8v1dy1HN
-         BT54dySSl0TSLpwqmsYoREhIDyA1y4nCE9JaGmr+hlPTZ/sjObzSkuqb6T0aQpZJ8ZQF
-         r32y6L3rwSG09BLDG1lBr7eGDcS6HfNnvw8tB6Gd/G79mNU2qS3gg79xdNc+hNoHL1MD
-         vG1s4xJjiZ9uiTkIZ96BtkUglGcW+lIb5zAAbqo7F3L+P8srUY6aZ6Vmk3HE7jlv/h2U
-         hp6EuGYhY3nsR+gaAO30kja7je4iKTtwRHJ8q/fDTzASaiz4ZZVE1g9WQb0EWIyjYr5d
-         Jp7A==
+        bh=6vcz1woS/V8hYjYMNg45U+o+J4HSC2868vY4RO60vMw=;
+        b=epLA2b0suo+9uDpnG//IXikdMn+Wyxee36k2aA3Kht82S/NLozPxTbhueaH7NO0u29
+         a1b1JvkV4pBMjxaLe8sqmLApCvPmjEp0oU/2AMC1mGmmcjThxVGnXOCk/Lejs1lMcejf
+         ZhhrqKlBJwf0GdRxkrHmfvzL+JG/bSxzIx6/MoqYmGySrSt7mT8sAxtGh+OKTkqD2ice
+         4LcvKvb/azDJH5e8agOWhMT6C1bCUT0CUxt8Gg545XuRKpOMUFsnAUm+BDyHziwnQ0qF
+         2wOmY1W+DpEHcY2OdBu61OGRacNUqCzXMSbdMgSx0+V1NaCg3E9tFL4NVrVQssYS0XyA
+         o7uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sGUo79V8IknEK9RaV+1rr5dfMkYi9KkvLOC/DC9705Q=;
-        b=uqwQM297z6LhN8HS8bPI4gCSx1Tsq1tUfSzMMk2NPTIBeZD+PZEYoxuamZyHfVRpoV
-         U0/IMtOrM8ZjWJBOXWvJlR47YrzemTorWflTvEFGQ3qeN+LB3dHg/tv5ZEUvbSQ7cl2X
-         uDO+9lfMwmJLSZ+Kl6WjoOy32GHpGxP8cLEIFghMre4ZabBD07MD8DoP5PunD5Y5748Y
-         w615a5mChkTZPc6Pwtti6SZy7nvEln6Bhs8phuTgPt7Oxzrr3HcPg4oU54RcsEFFy1F5
-         ocfvkOBLXV1zcVsr0MqmLoKXXqkXp+8SUucl+uNUWGM0TUdS+K0Vd1irtXpJl3BVn0V+
-         yZwg==
-X-Gm-Message-State: AOAM533+PEZHZonT5bODulHBN9inATzr0/ORTFJyzdYFvNEL5V+JBJ5+
-        YJlsTaNFXK2ZAEBZcytik94=
-X-Google-Smtp-Source: ABdhPJxUZkM4WISJm+sH+Os5S6DUAvBQ42HeFS0U92PtCs501xBQl3VhzcIgSaVFAEXnXvQHCp99HQ==
-X-Received: by 2002:a50:d7d7:0:b0:42b:d06c:33a with SMTP id m23-20020a50d7d7000000b0042bd06c033amr4235315edj.363.1653537528675;
-        Wed, 25 May 2022 20:58:48 -0700 (PDT)
+        bh=6vcz1woS/V8hYjYMNg45U+o+J4HSC2868vY4RO60vMw=;
+        b=Rh2/j2ed5wixAw7g9dQSpWxZukPnklgJ+kUIEQxaP7cCG66Rat8S1cIunXN37FktR0
+         kwl0M8Fn5GpNqAwvwljSGKN4wLdue49tvZsY/Scl9NvARcq5SUtzcXrVl0z4ok1Cciqq
+         di9dnq0h4Y3ogaHrWXdAFZiP7Jcf89dAnF5lwxssrvYzMEqJsy/XN3szUiuR/yEICkzo
+         ZbSY2o8PgVUSSPxf2sWSiR7jalOs/V85oq8UoRhCf0wOmsBrz/tCi4Ep1qjDVI1Mtxvc
+         jnS4nRQO6+QhYy6s0w/7My7VozigeeY+Ze2/17US6JEV2ICdgh5GkQ44eGxsYvGbVZnU
+         JcyQ==
+X-Gm-Message-State: AOAM531uw97tmv+wbysr3jJGkW8GxRxbNkOWQ3k9J4DzxMC4zPF3GzUv
+        Gvd6DlHNBONfw2SXVDu+zgA=
+X-Google-Smtp-Source: ABdhPJwqI3vxE35oM5U/7pwVXuajutkWHh5MVFWEkVXgaatShLQx+FQFQRruVUOC49DhkNL5AelnSw==
+X-Received: by 2002:a17:907:a420:b0:6ff:2706:592e with SMTP id sg32-20020a170907a42000b006ff2706592emr495520ejc.192.1653537530244;
+        Wed, 25 May 2022 20:58:50 -0700 (PDT)
 Received: from localhost.localdomain ([2a02:ab88:368f:2080:5d6e:322:57b6:5f03])
-        by smtp.googlemail.com with ESMTPSA id c13-20020a50d64d000000b0042617ba63cfsm206621edj.89.2022.05.25.20.58.47
+        by smtp.googlemail.com with ESMTPSA id c13-20020a50d64d000000b0042617ba63cfsm206621edj.89.2022.05.25.20.58.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 20:58:48 -0700 (PDT)
+        Wed, 25 May 2022 20:58:49 -0700 (PDT)
 From:   David Virag <virag.david003@gmail.com>
 Cc:     David Virag <virag.david003@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,9 +62,9 @@ Cc:     David Virag <virag.david003@gmail.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH 1/2] clk: samsung: exynos7885: Correct "div4" clock parents
-Date:   Thu, 26 May 2022 07:58:39 +0200
-Message-Id: <20220526055840.45209-2-virag.david003@gmail.com>
+Subject: [PATCH 2/2] arm64: dts: exynos: Correct UART clocks on Exynos7885
+Date:   Thu, 26 May 2022 07:58:40 +0200
+Message-Id: <20220526055840.45209-3-virag.david003@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220526055840.45209-1-virag.david003@gmail.com>
 References: <20220526055840.45209-1-virag.david003@gmail.com>
@@ -81,40 +81,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"div4" DIVs which divide PLLs by 4 are actually dividing "div2" DIVs by
-2 to achieve a by 4 division, thus their parents are the respective
-"div2" DIVs. These DIVs were mistakenly set to have the PLLs as parents.
-This leads to the kernel thinking "div4"s and everything under them run
-at 2x the clock speed. Fix this.
+The clocks in the serial UART nodes were swapped by mistake on
+Exynos7885. This only worked correctly because of a mistake in the clock
+driver which has been fixed. With the fixed clock driver in place, the
+baudrate of the UARTs get miscalculated. Fix this by correcting the
+clocks in the dtsi.
 
-Fixes: 45bd8166a1d8 ("clk: samsung: Add initial Exynos7885 clock driver")
+Fixes: 06874015327b ("arm64: dts: exynos: Add initial device tree support for Exynos7885 SoC")
 Signed-off-by: David Virag <virag.david003@gmail.com>
 ---
- drivers/clk/samsung/clk-exynos7885.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/samsung/clk-exynos7885.c b/drivers/clk/samsung/clk-exynos7885.c
-index a7b106302706..368c50badd15 100644
---- a/drivers/clk/samsung/clk-exynos7885.c
-+++ b/drivers/clk/samsung/clk-exynos7885.c
-@@ -182,7 +182,7 @@ static const struct samsung_div_clock top_div_clks[] __initconst = {
- 	    CLK_CON_DIV_PLL_SHARED0_DIV2, 0, 1),
- 	DIV(CLK_DOUT_SHARED0_DIV3, "dout_shared0_div3", "fout_shared0_pll",
- 	    CLK_CON_DIV_PLL_SHARED0_DIV3, 0, 2),
--	DIV(CLK_DOUT_SHARED0_DIV4, "dout_shared0_div4", "fout_shared0_pll",
-+	DIV(CLK_DOUT_SHARED0_DIV4, "dout_shared0_div4", "dout_shared0_div2",
- 	    CLK_CON_DIV_PLL_SHARED0_DIV4, 0, 1),
- 	DIV(CLK_DOUT_SHARED0_DIV5, "dout_shared0_div5", "fout_shared0_pll",
- 	    CLK_CON_DIV_PLL_SHARED0_DIV5, 0, 3),
-@@ -190,7 +190,7 @@ static const struct samsung_div_clock top_div_clks[] __initconst = {
- 	    CLK_CON_DIV_PLL_SHARED1_DIV2, 0, 1),
- 	DIV(CLK_DOUT_SHARED1_DIV3, "dout_shared1_div3", "fout_shared1_pll",
- 	    CLK_CON_DIV_PLL_SHARED1_DIV3, 0, 2),
--	DIV(CLK_DOUT_SHARED1_DIV4, "dout_shared1_div4", "fout_shared1_pll",
-+	DIV(CLK_DOUT_SHARED1_DIV4, "dout_shared1_div4", "dout_shared1_div2",
- 	    CLK_CON_DIV_PLL_SHARED1_DIV4, 0, 1),
- 
- 	/* CORE */
+diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
+index 3170661f5b67..9c233c56558c 100644
+--- a/arch/arm64/boot/dts/exynos/exynos7885.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
+@@ -280,8 +280,8 @@ serial_0: serial@13800000 {
+ 			interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&uart0_bus>;
+-			clocks = <&cmu_peri CLK_GOUT_UART0_EXT_UCLK>,
+-				 <&cmu_peri CLK_GOUT_UART0_PCLK>;
++			clocks = <&cmu_peri CLK_GOUT_UART0_PCLK>,
++				 <&cmu_peri CLK_GOUT_UART0_EXT_UCLK>;
+ 			clock-names = "uart", "clk_uart_baud0";
+ 			samsung,uart-fifosize = <64>;
+ 			status = "disabled";
+@@ -293,8 +293,8 @@ serial_1: serial@13810000 {
+ 			interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>;
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&uart1_bus>;
+-			clocks = <&cmu_peri CLK_GOUT_UART1_EXT_UCLK>,
+-				 <&cmu_peri CLK_GOUT_UART1_PCLK>;
++			clocks = <&cmu_peri CLK_GOUT_UART1_PCLK>,
++				 <&cmu_peri CLK_GOUT_UART1_EXT_UCLK>;
+ 			clock-names = "uart", "clk_uart_baud0";
+ 			samsung,uart-fifosize = <256>;
+ 			status = "disabled";
+@@ -306,8 +306,8 @@ serial_2: serial@13820000 {
+ 			interrupts = <GIC_SPI 279 IRQ_TYPE_LEVEL_HIGH>;
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&uart2_bus>;
+-			clocks = <&cmu_peri CLK_GOUT_UART2_EXT_UCLK>,
+-				 <&cmu_peri CLK_GOUT_UART2_PCLK>;
++			clocks = <&cmu_peri CLK_GOUT_UART2_PCLK>,
++				 <&cmu_peri CLK_GOUT_UART2_EXT_UCLK>;
+ 			clock-names = "uart", "clk_uart_baud0";
+ 			samsung,uart-fifosize = <256>;
+ 			status = "disabled";
 -- 
 2.35.1
 

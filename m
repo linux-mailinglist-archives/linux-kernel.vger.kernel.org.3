@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F145354E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA58D5354D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348879AbiEZUn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        id S1349028AbiEZUoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349046AbiEZUnq (ORCPT
+        with ESMTP id S1349095AbiEZUns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:43:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7185EE52AE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653597801;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=q4+bE63txPRwk8UBc1PGCAMG41oWjfd5z6Jt+rIqLHc=;
-        b=d67C5VotVTt4U0xjBRpcOzTUxyTZFgOfPxAOwN6ybbwUfTuLtM5cTBTUFEg4AuTKxdSlxJ
-        KKR7RFF0o56cCX7tJpVmGmEuepg32gD+efGsNhtMn/XzyJQDIcO/0aI3UxWO4LPspsGkZC
-        koLsYdU7KqIBuBpBs7It3sAbuFhha+g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-117-4-DpyXLeOzud8B87TaADQQ-1; Thu, 26 May 2022 16:43:19 -0400
-X-MC-Unique: 4-DpyXLeOzud8B87TaADQQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C564101A54E;
-        Thu, 26 May 2022 20:43:19 +0000 (UTC)
-Received: from emerald.redhat.com (unknown [10.22.34.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E43D2C27E9D;
-        Thu, 26 May 2022 20:43:18 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     nouveau@lists.freedesktop.org
-Cc:     kherbst@redhat.com, stable@vger.kernel.org,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA
-        GEFORCE/QUADRO GPUS), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/nouveau/kms: Fix failure path for creating DP connectors
-Date:   Thu, 26 May 2022 16:43:13 -0400
-Message-Id: <20220526204313.656473-1-lyude@redhat.com>
+        Thu, 26 May 2022 16:43:48 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE680E64F4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:43:28 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gi33so5174149ejc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=61SDdlI/WkCqCxMIXxDin340q/9pKul5ClTEVboRWS4=;
+        b=ENxKB7k1c/ZGV4wSMizWGUYlXla7EY+KcuTEWIdR4K3LqZXQNQYCdPdonJkglV3hni
+         9Y9kgwkJSPSwkTAwvdtAYawWKgGEZnPBOW3Lu5j4/bG2vLZYFrhxFVJJARdMJMA8kcs8
+         cKt/5reimCGAyjs8yUHgL5EWYvrGMfoDXtxR7KlpfvL1yUB6/byAGfAPRex8yGb+W4RY
+         6m0Yv5E+5x/z7E8Cwyn98M57knnt24VrXeFDtN9UguY32VPeWSSgBCqDlHx1nBTqnpZG
+         UBZOo//HLzdznGWHwe0MRS9o3yOTZHX8A66UM8RsafOue75TDum//Ia5dWPOmyLs8Gdf
+         Q1Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=61SDdlI/WkCqCxMIXxDin340q/9pKul5ClTEVboRWS4=;
+        b=pvYjHxSYE00c2MTkOiWvaLj9c+HSGUbNi2ByP6Dnv6O5t6xDNTJ1Q414U8UCCeK8Di
+         ja6cT0aTqEjyiKrQwRL2jPZSKn34kTiFZYf52HvKmMIUHTezLbwGKYsr7pvqkW+KOKwi
+         hwBAf9UTP8/WlzQvgUchraFH6tU5ElXfQ9Ef/XvoUhmVgkuZOoQlqIRtSPqRNF2IldpA
+         yd37s0gyogPTjAl3YvGK3q5hw8BQDKMP5htgGBt8+crLMoxTzu2ZU0sKy2NmaopzAF1g
+         OzSNARajIPyGp4VVc0qiQDXsvibpPzk9oM6R+bb7VdHfcYmNGczPiduPKgS7H0ud/lvE
+         bIgQ==
+X-Gm-Message-State: AOAM533qmUK0oE06fGKdhIde3BJENlnFUKm3LfWVdp6Zx0EZhhZjCuEv
+        6DpIKWeU3KZKO6riUlfrOi5SrA==
+X-Google-Smtp-Source: ABdhPJxBYTEfl97pyUDWNEiYeiRo028m5NzT74n56sjtRyphUKYAKiajTWdqTYhQWx0qOFaqYwwvEQ==
+X-Received: by 2002:a17:906:cb97:b0:6fe:ec71:a49 with SMTP id mf23-20020a170906cb9700b006feec710a49mr19773575ejb.540.1653597807380;
+        Thu, 26 May 2022 13:43:27 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y11-20020a170906070b00b006fec28bd09fsm816846ejb.22.2022.05.26.13.43.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 13:43:26 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] arm64: dts: exynos: adjust whitespace around '='
+Date:   Thu, 26 May 2022 22:43:22 +0200
+Message-Id: <20220526204323.832243-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,42 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It looks like that when we moved nouveau over to using drm_dp_aux_init()
-and registering it's aux bus during late connector registration, we totally
-forgot to fix the failure codepath in nouveau_connector_create() - as it
-still seems to assume that drm_dp_aux_init() can fail (it can't).
+Fix whitespace coding style: use single space instead of tabs or
+multiple spaces around '=' sign in property assignment.  No functional
+changes (same DTB).
 
-So, let's fix that and also add a missing check to ensure that we've
-properly allocated nv_connector->aux.name while we're at it.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Fixes: fd43ad9d47e7 ("drm/nouveau/kms/nv50-: Move AUX adapter reg to connector late register/early unregister")
-Cc: <stable@vger.kernel.org> # v5.14+
 ---
- drivers/gpu/drm/nouveau/nouveau_connector.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_connector.c b/drivers/gpu/drm/nouveau/nouveau_connector.c
-index 22b83a6577eb..df83c4654e26 100644
---- a/drivers/gpu/drm/nouveau/nouveau_connector.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_connector.c
-@@ -1361,13 +1361,11 @@ nouveau_connector_create(struct drm_device *dev,
- 		snprintf(aux_name, sizeof(aux_name), "sor-%04x-%04x",
- 			 dcbe->hasht, dcbe->hashm);
- 		nv_connector->aux.name = kstrdup(aux_name, GFP_KERNEL);
--		drm_dp_aux_init(&nv_connector->aux);
--		if (ret) {
--			NV_ERROR(drm, "Failed to init AUX adapter for sor-%04x-%04x: %d\n",
--				 dcbe->hasht, dcbe->hashm, ret);
-+		if (!nv_connector->aux.name) {
- 			kfree(nv_connector);
--			return ERR_PTR(ret);
-+			return ERR_PTR(-ENOMEM);
- 		}
-+		drm_dp_aux_init(&nv_connector->aux);
- 		fallthrough;
- 	default:
- 		funcs = &nouveau_connector_funcs;
+Output compared with dtx_diff and fdtdump.
+---
+ arch/arm64/boot/dts/exynos/exynosautov9.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
+index 0ce46ec5cdc3..5827e1228fa9 100644
+--- a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
+@@ -364,7 +364,7 @@ ufs_0_phy: ufs0-phy@17e04000 {
+ 		};
+ 
+ 		ufs_0: ufs0@17e00000 {
+-			compatible ="samsung,exynosautov9-ufs";
++			compatible = "samsung,exynosautov9-ufs";
+ 
+ 			reg = <0x17e00000 0x100>,  /* 0: HCI standard */
+ 				<0x17e01100 0x410>,  /* 1: Vendor-specific */
 -- 
-2.35.3
+2.34.1
 

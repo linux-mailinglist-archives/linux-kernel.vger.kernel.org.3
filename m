@@ -2,209 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1A45351BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4EC5351BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348026AbiEZP5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
+        id S233267AbiEZP6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbiEZP5g (ORCPT
+        with ESMTP id S1348031AbiEZP55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 11:57:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE45EDFC;
-        Thu, 26 May 2022 08:57:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FEDB61CC1;
-        Thu, 26 May 2022 15:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D68C385A9;
-        Thu, 26 May 2022 15:57:29 +0000 (UTC)
-Date:   Thu, 26 May 2022 11:57:28 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Subject: [PATCH v4] ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
- weak function
-Message-ID: <20220526115728.218517df@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 26 May 2022 11:57:57 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B7D62CCC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:57:55 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id v26so3634475ybd.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:57:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vw/Z0MTuWn6e5jQEzUWaV6QYfzZaWvqRsRp1agJKyw4=;
+        b=S9LhIA14NROGEwwJ+ujpEYnhkzl8zYc0ZWijDxo27R5l17Dfo0AxKuwY6TytzrM6+v
+         ekV3USG9J3mXyb6YlaLsDZYxwKjicMLOWNLeWdG/DgGf/iAhuEN8SUP1lc2eMmWFR8ad
+         lFLzrX6bHf4x8oKn4WZ1XCvnUV6qaWAqSowv+U4lF+S/rXt/LLyfrSv36r+fhN6v+xbx
+         df+iKtR52liGmvTrU37JbMYNX7CHfj6hbXGAEXKIGn5/mOtGl1de8wKcXwb7DzsuitnC
+         bk7Cip0OoDMHQmYqJSTk5+cXA2aIJBAONPCS0jpgLpCn93yZIc+D0HsbXhCTKTwuRtye
+         afmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vw/Z0MTuWn6e5jQEzUWaV6QYfzZaWvqRsRp1agJKyw4=;
+        b=z1r16Zj9tgEpn1JXenCZzVU+WuA3MTDtnFNmFXzMY4sk6b6EzjeZs9FwJ+K4e4b8QY
+         b8lSsyhlsKcF32LxUFZrJGAYD67K5EToQbjpzS94+xKD2DlZVKGk8yo/zfBKP2ki6/Na
+         r2hCKgZVMx+H+vSuMirZpmC7GwoVF/05H/7uvH3A0EspkQm43onM3j5ayY1kc1pwfRUD
+         QpxpTiz0LhNhDsbX0zScSu4TfS1wkqwCxBqcn1fvQSF/2Ai6vJJGLUda6NamgI7dbnYb
+         7XG072CcgU9HkUGpH2YbDLdcBfmtsE4VYPOf0Hyh/6kZPSXaGoCA9bNIWUb/ljceAJlg
+         Q9LQ==
+X-Gm-Message-State: AOAM530uUpqZ09DsVoktCKdIWbbBJJDPf9RR1Ky1UZaVc1YBuFwmMNq3
+        yQPgNNVTeENvU8DBXlEoYeYiRwKfxe3I5p1nsiaoJw==
+X-Google-Smtp-Source: ABdhPJxmWAHI1nt6cm3n3IiJY4Zm2kQRc8lv9dLvw5VG4huitwTOPwcVy1yVyB6cHJUqY+iG5WKxUWmu6P6NlQPs0t4=
+X-Received: by 2002:a25:69c7:0:b0:64f:674a:87d6 with SMTP id
+ e190-20020a2569c7000000b0064f674a87d6mr28768174ybc.301.1653580674612; Thu, 26
+ May 2022 08:57:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220525230904.1584480-1-bgardon@google.com> <20220526013010.ag4jzs7bbt5mudrg@yy-desk-7060>
+In-Reply-To: <20220526013010.ag4jzs7bbt5mudrg@yy-desk-7060>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 26 May 2022 08:57:43 -0700
+Message-ID: <CANgfPd-uAXu6aCoEji2BeiHWJnw-PrictuQLOYqLKrQ47WFydw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/MMU: Zap non-leaf SPTEs when disabling dirty logging
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     kvm <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Wed, May 25, 2022 at 6:30 PM Yuan Yao <yuan.yao@linux.intel.com> wrote:
+>
+> On Wed, May 25, 2022 at 11:09:04PM +0000, Ben Gardon wrote:
+> > When disabling dirty logging, zap non-leaf parent entries to allow
+> > replacement with huge pages instead of recursing and zapping all of the
+> > child, leaf entries. This reduces the number of TLB flushes required.
+> >
+> > Currently disabling dirty logging with the TDP MMU is extremely slow.
+> > On a 96 vCPU / 96G VM backed with gigabyte pages, it takes ~200 seconds
+> > to disable dirty logging with the TDP MMU, as opposed to ~4 seconds with
+> > the shadow MMU. This patch reduces the disable dirty log time with the
+> > TDP MMU to ~3 seconds.
+> >
+> > Testing:
+> > Ran KVM selftests and kvm-unit-tests on an Intel Haswell. This
+> > patch introduced no new failures.
+> >
+> > Signed-off-by: Ben Gardon <bgardon@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/tdp_iter.c |  9 +++++++++
+> >  arch/x86/kvm/mmu/tdp_iter.h |  1 +
+> >  arch/x86/kvm/mmu/tdp_mmu.c  | 38 +++++++++++++++++++++++++++++++------
+> >  3 files changed, 42 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/mmu/tdp_iter.c b/arch/x86/kvm/mmu/tdp_iter.c
+> > index 6d3b3e5a5533..ee4802d7b36c 100644
+> > --- a/arch/x86/kvm/mmu/tdp_iter.c
+> > +++ b/arch/x86/kvm/mmu/tdp_iter.c
+> > @@ -145,6 +145,15 @@ static bool try_step_up(struct tdp_iter *iter)
+> >       return true;
+> >  }
+> >
+> > +/*
+> > + * Step the iterator back up a level in the paging structure. Should only be
+> > + * used when the iterator is below the root level.
+> > + */
+> > +void tdp_iter_step_up(struct tdp_iter *iter)
+> > +{
+> > +     WARN_ON(!try_step_up(iter));
+> > +}
+> > +
+> >  /*
+> >   * Step to the next SPTE in a pre-order traversal of the paging structure.
+> >   * To get to the next SPTE, the iterator either steps down towards the goal
+> > diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
+> > index f0af385c56e0..adfca0cf94d3 100644
+> > --- a/arch/x86/kvm/mmu/tdp_iter.h
+> > +++ b/arch/x86/kvm/mmu/tdp_iter.h
+> > @@ -114,5 +114,6 @@ void tdp_iter_start(struct tdp_iter *iter, struct kvm_mmu_page *root,
+> >                   int min_level, gfn_t next_last_level_gfn);
+> >  void tdp_iter_next(struct tdp_iter *iter);
+> >  void tdp_iter_restart(struct tdp_iter *iter);
+> > +void tdp_iter_step_up(struct tdp_iter *iter);
+> >
+> >  #endif /* __KVM_X86_MMU_TDP_ITER_H */
+> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > index 841feaa48be5..7b9265d67131 100644
+> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > @@ -1742,12 +1742,12 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+> >       gfn_t start = slot->base_gfn;
+> >       gfn_t end = start + slot->npages;
+> >       struct tdp_iter iter;
+> > +     int max_mapping_level;
+> >       kvm_pfn_t pfn;
+> >
+> >       rcu_read_lock();
+> >
+> >       tdp_root_for_each_pte(iter, root, start, end) {
+> > -retry:
+> >               if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
+> >                       continue;
+> >
+> > @@ -1755,15 +1755,41 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+> >                   !is_last_spte(iter.old_spte, iter.level))
+> >                       continue;
+> >
+> > +             /*
+> > +              * This is a leaf SPTE. Check if the PFN it maps can
+> > +              * be mapped at a higher level.
+> > +              */
+> >               pfn = spte_to_pfn(iter.old_spte);
+> > -             if (kvm_is_reserved_pfn(pfn) ||
+> > -                 iter.level >= kvm_mmu_max_mapping_level(kvm, slot, iter.gfn,
+> > -                                                         pfn, PG_LEVEL_NUM))
+> > +
+> > +             if (kvm_is_reserved_pfn(pfn))
+> >                       continue;
+> >
+> > +             max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot,
+> > +                             iter.gfn, pfn, PG_LEVEL_NUM);
+> > +
+> > +             WARN_ON(max_mapping_level < iter.level);
+> > +
+> > +             /*
+> > +              * If this page is already mapped at the highest
+> > +              * viable level, there's nothing more to do.
+> > +              */
+> > +             if (max_mapping_level == iter.level)
+> > +                     continue;
+> > +
+> > +             /*
+> > +              * The page can be remapped at a higher level, so step
+> > +              * up to zap the parent SPTE.
+> > +              */
+> > +             while (max_mapping_level > iter.level)
+> > +                     tdp_iter_step_up(&iter);
+>
+> So the benefit from this is:
+> Before: Zap 512 ptes in 4K level page table do TLB flush 512 times.
+> Now: Zap higher level 1 2MB level pte do TLB flush 1 time, event
+>      it also handles all 512 lower level 4K ptes, but just atomic operation
+>      there, see handle_removed_pt().
+>
+> Is my understanding correct ?
 
-If an unused weak function was traced, it's call to fentry will still
-exist, which gets added into the __mcount_loc table. Ftrace will use
-kallsyms to retrieve the name for each location in __mcount_loc to display
-it in the available_filter_functions and used to enable functions via the
-name matching in set_ftrace_filter/notrace. Enabling these functions do
-nothing but enable an unused call to ftrace_caller. If a traced weak
-function is overridden, the symbol of the function would be used for it,
-which will either created duplicate names, or if the previous function was
-not traced, it would be incorrectly listed in available_filter_functions
-as a function that can be traced.
+Yes, that's exactly right.
 
-This became an issue with BPF[1] as there are tooling that enables the
-direct callers via ftrace but then checks to see if the functions were
-actually enabled. The case of one function that was marked notrace, but
-was followed by an unused weak function that was traced. The unused
-function's call to fentry was added to the __mcount_loc section, and
-kallsyms retrieved the untraced function's symbol as the weak function was
-overridden. Since the untraced function would not get traced, the BPF
-check would detect this and fail.
-
-The real fix would be to fix kallsyms to not show address of weak
-functions as the function before it. But that would require adding code in
-the build to add function size to kallsyms so that it can know when the
-function ends instead of just using the start of the next known symbol.
-
-In the mean time, this is a work around. Add a FTRACE_MCOUNT_MAX_OFFSET
-macro that if defined, ftrace will ignore any function that has its call
-to fentry/mcount that has an offset from the symbol that is greater than
-FTRACE_MCOUNT_MAX_OFFSET.
-
-If CONFIG_HAVE_FENTRY is defined for x86, define FTRACE_MCOUNT_MAX_OFFSET
-to zero (unless IBT is enabled), which will have ftrace ignore all locations
-that are not at the start of the function (or one after the ENDBR
-instruction).
-
-[1] https://lore.kernel.org/all/20220412094923.0abe90955e5db486b7bca279@kernel.org/
-
-Acked-by: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v3: https://lore.kernel.org/all/20220526103810.026560dd@gandalf.local.home/
- - Implemented Peter Zijlstra's suggestion of using
-   offset of ENDBR_INSN_SIZE for max on x86.
-
- arch/x86/include/asm/ftrace.h |  8 ++++++
- kernel/trace/ftrace.c         | 50 +++++++++++++++++++++++++++++++++--
- 2 files changed, 56 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-index 024d9797646e..4c9bfdf4dae7 100644
---- a/arch/x86/include/asm/ftrace.h
-+++ b/arch/x86/include/asm/ftrace.h
-@@ -9,6 +9,14 @@
- # define MCOUNT_ADDR		((unsigned long)(__fentry__))
- #define MCOUNT_INSN_SIZE	5 /* sizeof mcount call */
- 
-+#include <asm/ibt.h>
-+
-+/* Ignore unused weak functions which will have non zero offsets */
-+#ifdef CONFIG_HAVE_FENTRY
-+/* Add offset for endbr64 if IBT enabled */
-+# define FTRACE_MCOUNT_MAX_OFFSET	ENDBR_INSN_SIZE
-+#endif
-+
- #ifdef CONFIG_DYNAMIC_FTRACE
- #define ARCH_SUPPORTS_FTRACE_OPS 1
- #endif
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index d653ef4febc5..4a04eaf6436d 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -3654,6 +3654,31 @@ static void add_trampoline_func(struct seq_file *m, struct ftrace_ops *ops,
- 		seq_printf(m, " ->%pS", ptr);
- }
- 
-+#ifdef FTRACE_MCOUNT_MAX_OFFSET
-+static int print_rec(struct seq_file *m, unsigned long ip)
-+{
-+	unsigned long offset;
-+	char str[KSYM_SYMBOL_LEN];
-+	char *modname;
-+	int ret;
-+
-+	ret = kallsyms_lookup(ip, NULL, &offset, &modname, str);
-+	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET)
-+		return -1;
-+
-+	seq_puts(m, str);
-+	if (modname)
-+		seq_printf(m, " [%s]", modname);
-+	return 0;
-+}
-+#else
-+static int print_rec(struct seq_file *m, unsigned long ip)
-+{
-+	seq_printf(m, "%ps", (void *)ip);
-+	return 0;
-+}
-+#endif
-+
- static int t_show(struct seq_file *m, void *v)
- {
- 	struct ftrace_iterator *iter = m->private;
-@@ -3678,7 +3703,9 @@ static int t_show(struct seq_file *m, void *v)
- 	if (!rec)
- 		return 0;
- 
--	seq_printf(m, "%ps", (void *)rec->ip);
-+	if (print_rec(m, rec->ip))
-+		return 0;
-+
- 	if (iter->flags & FTRACE_ITER_ENABLED) {
- 		struct ftrace_ops *ops;
- 
-@@ -3996,6 +4023,24 @@ add_rec_by_index(struct ftrace_hash *hash, struct ftrace_glob *func_g,
- 	return 0;
- }
- 
-+#ifdef FTRACE_MCOUNT_MAX_OFFSET
-+static int lookup_ip(unsigned long ip, char **modname, char *str)
-+{
-+	unsigned long offset;
-+
-+	kallsyms_lookup(ip, NULL, &offset, modname, str);
-+	if (offset > FTRACE_MCOUNT_MAX_OFFSET)
-+		return -1;
-+	return 0;
-+}
-+#else
-+static int lookup_ip(unsigned long ip, char **modname, char *str)
-+{
-+	kallsyms_lookup(ip, NULL, NULL, modname, str);
-+	return 0;
-+}
-+#endif
-+
- static int
- ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
- 		struct ftrace_glob *mod_g, int exclude_mod)
-@@ -4003,7 +4048,8 @@ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
- 	char str[KSYM_SYMBOL_LEN];
- 	char *modname;
- 
--	kallsyms_lookup(rec->ip, NULL, NULL, &modname, str);
-+	if (lookup_ip(rec->ip, &modname, str))
-+		return 0;
- 
- 	if (mod_g) {
- 		int mod_matches = (modname) ? ftrace_match(modname, mod_g) : 0;
--- 
-2.35.1
-
+>
+> > +
+> >               /* Note, a successful atomic zap also does a remote TLB flush. */
+> > -             if (tdp_mmu_zap_spte_atomic(kvm, &iter))
+> > -                     goto retry;
+> > +             tdp_mmu_zap_spte_atomic(kvm, &iter);
+> > +
+> > +             /*
+> > +              * If the atomic zap fails, the iter will recurse back into
+> > +              * the same subtree to retry.
+> > +              */
+> >       }
+> >
+> >       rcu_read_unlock();
+> > --
+> > 2.36.1.124.g0e6072fb45-goog
+> >

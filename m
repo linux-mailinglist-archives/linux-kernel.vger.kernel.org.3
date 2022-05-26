@@ -2,171 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D42534BAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67DB534BB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346648AbiEZIWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S241386AbiEZIYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344875AbiEZIWi (ORCPT
+        with ESMTP id S229590AbiEZIYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:22:38 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80931C1EF1;
-        Thu, 26 May 2022 01:22:36 -0700 (PDT)
-X-UUID: cca026dc720b4357a7fd5e82a9abd24f-20220526
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:6d0ff8da-95d9-42a5-b1b0-56d4e6acc1d3,OB:10,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.5,REQID:6d0ff8da-95d9-42a5-b1b0-56d4e6acc1d3,OB:10,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:2a19b09,CLOUDID:8f9653b8-3c45-407b-8f66-25095432a27a,C
-        OID:22bc0917443f,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: cca026dc720b4357a7fd5e82a9abd24f-20220526
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1728256351; Thu, 26 May 2022 16:22:33 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 26 May 2022 16:22:32 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 26 May 2022 16:22:29 +0800
-Message-ID: <e3202c3ea259329faf9401b7545c7f83191d6fb7.camel@mediatek.com>
-Subject: Re: [PATCH v2 3/7] iommu: mtk_iommu: Lookup phandle to retrieve
- syscon to pericfg
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <joro@8bytes.org>, <will@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <iommu@lists.linux-foundation.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <krzysztof.kozlowski@linaro.org>
-Date:   Thu, 26 May 2022 16:22:28 +0800
-In-Reply-To: <20220518100503.37279-4-angelogioacchino.delregno@collabora.com>
-References: <20220518100503.37279-1-angelogioacchino.delregno@collabora.com>
-         <20220518100503.37279-4-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 26 May 2022 04:24:36 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033F0C1EF1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:24:34 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id f2so1251518wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=19gn52/CILDHcyYZhtfJSaIpE45GA5X4DLumc17J+6E=;
+        b=kxVNDsdjeN8srlZR4+tE9FFTL4P6Tdt70Kom5we3WpF9MTiFXfcVdeCfTU1BLUQKM0
+         Q+2DK0HhNgjnAmJA/gQ2MCwVGYuYVXR0E7KyAoZqmHLBbg1gXDK6NcxeaRWcHfxRRbjg
+         NdE1wQlEk3uyXGL7zxHn2mDGBc28n1wH6k5GnVwiPLOaC6Ai6ij1Qn33hgo9qg9XeZad
+         lkSlmYeV0HztGgJJ0rY05XfRh4Lie/CF+U+JVCJlIhpQE9TCtq7B8H3kCMo6EjD9xN8x
+         EMXTSx3lge9xsEvAnjzopYj8FtZ1BbVMxIuncAzJdfzbLjpUJpWbj/zSjKelKyOrvbwq
+         jFZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=19gn52/CILDHcyYZhtfJSaIpE45GA5X4DLumc17J+6E=;
+        b=CAM3jgWiBw1uIYcKy63fd6YNMZ7eNe3cyA8lqc0b6t69mEwOvZap0Mvzldhcxoxt1P
+         wIH1rHNaLJkYmiyQ/C8y1GPzYWcaMNA0KQpFpHW7DM/2qNGXG+SFJbOK8QZDI7J+jHmO
+         SqUXr9VBfSSkgIbI+aSrIj1FHQNrfcNejsuwZtXI91yBh/rPsvPYPbXLRywXFfzhzPfU
+         Y6lZHak35kKUnrTcGPSSsuX7+19lrTitig9tD2TT8P9QvO7cro09YhC6TWvFcAizC5MJ
+         bx9CGo2dzU2bMyGTUFrRTK099IYIIjW7ouuI8vfXNiIh8Rb3ai57cIPuckHVywM8GvjR
+         t83w==
+X-Gm-Message-State: AOAM5335iZcTqK3Q9+MpdacCG0FrExG2Vu+Mnc4198AAilhmPGEciNLW
+        Y3C6HaOBmcUl58TOATmHxoY/cg==
+X-Google-Smtp-Source: ABdhPJwKuRRw7Ncg19gO8PWVEmbNAVU/0uaj59xksn4OObwl0OodafnRVdem0pKXoyJlW+i/eYT9kA==
+X-Received: by 2002:a5d:5041:0:b0:20e:74e3:1d3b with SMTP id h1-20020a5d5041000000b0020e74e31d3bmr26046786wrt.323.1653553472461;
+        Thu, 26 May 2022 01:24:32 -0700 (PDT)
+Received: from google.com (109.36.187.35.bc.googleusercontent.com. [35.187.36.109])
+        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003942a244f2fsm4277906wmq.8.2022.05.26.01.24.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 01:24:32 -0700 (PDT)
+Date:   Thu, 26 May 2022 09:24:28 +0100
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        vschneid@redhat.com, kernel-team@android.com,
+        Derek Dolney <z23@posteo.net>
+Subject: Re: [PATCH v2] cpu/hotplug: Do not bail-out in DYING/STARTING
+ sections
+Message-ID: <Yo85PLANCnCcMgvD@google.com>
+References: <20220523160536.2889162-1-vdonnefort@google.com>
+ <20220525165248.GI2578@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525165248.GI2578@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-18 at 12:04 +0200, AngeloGioacchino Del Regno wrote:
-> On some SoCs (of which only MT8195 is supported at the time of
-> writing),
-> the "R" and "W" (I/O) enable bits for the IOMMUs are in the
-> pericfg_ao
-> register space and not in the IOMMU space: as it happened already
-> with
-> infracfg, it is expected that this list will grow.
+On Wed, May 25, 2022 at 06:52:48PM +0200, Peter Zijlstra wrote:
+> On Mon, May 23, 2022 at 05:05:36PM +0100, Vincent Donnefort wrote:
+> > The DYING/STARTING callbacks are not expected to fail. However, as reported
+> > by Derek, drivers such as tboot are still free to return errors within
+> > those sections. In that case, there's nothing the hotplug machinery can do,
+> > so let's just proceed and log the failures.
+> > 
 > 
-> Instead of specifying pericfg compatibles on a per-SoC basis,
-> following
-> what was done with infracfg, let's lookup the syscon by phandle
-> instead.
-> Also following the previous infracfg change, add a warning for
-> outdated
-> devicetrees, in hope that the user will take action.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/iommu/mtk_iommu.c | 26 ++++++++++++++++----------
->  1 file changed, 16 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index d16b95e71ded..090cf6e15f85 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -138,6 +138,8 @@
->  /* PM and clock always on. e.g. infra iommu */
->  #define PM_CLK_AO			BIT(15)
->  #define IFA_IOMMU_PCIE_SUPPORT		BIT(16)
-> +/* IOMMU I/O (r/w) is enabled using PERICFG_IOMMU_1 register */
-> +#define HAS_PERI_IOMMU1_REG		BIT(17)
->  
->  #define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)	\
->  				((((pdata)->flags) & (mask)) == (_x))
-> @@ -187,7 +189,6 @@ struct mtk_iommu_plat_data {
->  	u32			flags;
->  	u32			inv_sel_reg;
->  
-> -	char			*pericfg_comp_str;
->  	struct list_head	*hw_list;
->  	unsigned int		iova_region_nr;
->  	const struct mtk_iommu_iova_region	*iova_region;
-> @@ -1214,14 +1215,19 @@ static int mtk_iommu_probe(struct
-> platform_device *pdev)
->  			goto out_runtime_disable;
->  		}
->  	} else if (MTK_IOMMU_IS_TYPE(data->plat_data,
-> MTK_IOMMU_TYPE_INFRA) &&
-> -		   data->plat_data->pericfg_comp_str) {
-> -		infracfg = syscon_regmap_lookup_by_compatible(data-
-> >plat_data->pericfg_comp_str);
-> -		if (IS_ERR(infracfg)) {
-> -			ret = PTR_ERR(infracfg);
-> -			goto out_runtime_disable;
-> -		}
-> +		   MTK_IOMMU_HAS_FLAG(data->plat_data,
-> HAS_PERI_IOMMU1_REG)) {
-> +		data->pericfg = syscon_regmap_lookup_by_phandle(dev-
-> >of_node, "mediatek,pericfg");
+> I'm confused. Why isn't this a driver bug?
 
-I'm not keen to add this property. Currently only mt8195 use this
-setting. In the lastest SoC, we move this setting to ATF. thus I think
-we could keep the current way, no need add a new DT property only for
-mt8195.
-
-> +		if (IS_ERR(data->pericfg)) {
-> +			dev_info(dev, "Cannot find phandle to
-> mediatek,pericfg:"
-> +				      " Please update your
-> devicetree.\n");
->  
-> -		data->pericfg = infracfg;
-> +			p = "mediatek,mt8195-pericfg_ao";
-> +			data->pericfg =
-> syscon_regmap_lookup_by_compatible(p);
-> +			if (IS_ERR(data->pericfg)) {
-> +				ret = PTR_ERR(data->pericfg);
-> +				goto out_runtime_disable;
-> +			}
-> +		}
->  	}
->  
->  	platform_set_drvdata(pdev, data);
-> @@ -1480,8 +1486,8 @@ static const struct mtk_iommu_plat_data
-> mt8192_data = {
->  static const struct mtk_iommu_plat_data mt8195_data_infra = {
->  	.m4u_plat	  = M4U_MT8195,
->  	.flags            = WR_THROT_EN | DCM_DISABLE | STD_AXI_MODE |
-> PM_CLK_AO |
-> -			    MTK_IOMMU_TYPE_INFRA |
-> IFA_IOMMU_PCIE_SUPPORT,
-> -	.pericfg_comp_str = "mediatek,mt8195-pericfg_ao",
-> +			    HAS_PERI_IOMMU1_REG | MTK_IOMMU_TYPE_INFRA
-> |
-> +			    IFA_IOMMU_PCIE_SUPPORT,
->  	.inv_sel_reg      = REG_MMU_INV_SEL_GEN2,
->  	.banks_num	  = 5,
->  	.banks_enable     = {true, false, false, false, true},
-
+It is a entirely a driver bug which has been reported already. but 453e41085183
+(cpu/hotplug: Add cpuhp_invoke_callback_range()) changed the behaviour so I
+thought it would be worth to revert to the original one which is to not break
+the entire up/down for a single driver error.

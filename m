@@ -2,133 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6A1534714
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 01:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D12534740
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 02:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345435AbiEYXyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 19:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S243389AbiEZAAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 20:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiEYXyP (ORCPT
+        with ESMTP id S229843AbiEZAAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 19:54:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147B69D070;
-        Wed, 25 May 2022 16:54:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=l4fKDERpiICSOVgCQ8QwCarZ+nXg0XUnq0ATowURuHc=; b=dzwK7kFgMsM4dtgzFXJxmWXZFa
-        u+Q7RFwB4jvwWWz8PwBDLQpHj4ZK0YGZiyHU+lI4x2bdXw5XdPK1jJ4rxeSbi0iM9LtMiUjwiCMGK
-        sk07Lf4YOWErKZDftjL5EUS6bSB+I4To98jq/cbHVJYzq336XwpuNwFstUEWVUW911uW9NiZh86Dl
-        glQIo5lGtlpAyKujL6jZzNtS5izUCyWSs8RcUticJXAxL0UBNTsem/IXOFrXk02tosz4FEzKSD99r
-        HjN3iYpVp6vLptw5OEzyRio/9aMzIA5bMm9QOG5QhrN7Gz3D7nlgWgRVNkbVz4ahCkN4/pjws9RbT
-        LUmv21/A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nu0pC-00CynK-Py; Wed, 25 May 2022 23:53:58 +0000
-Date:   Wed, 25 May 2022 16:53:58 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Richard Fontana <fontana@sharpeleven.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        jeyu@kernel.org, shuah@kernel.org, bvanassche@acm.org,
-        dan.j.williams@intel.com, joe@perches.com, keescook@chromium.org,
-        rostedt@goodmis.org, minchan@kernel.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        copyleft-next@lists.fedorahosted.org,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
-Message-ID: <Yo7Blhgke3WhZSLe@bombadil.infradead.org>
-References: <20211029184500.2821444-1-mcgrof@kernel.org>
- <20211029184500.2821444-2-mcgrof@kernel.org>
- <87ee0k0wrn.ffs@tglx>
- <Yo5f9nctTwHZqPbl@bombadil.infradead.org>
- <874k1dz674.ffs@tglx>
+        Wed, 25 May 2022 20:00:44 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D278C9E9C9
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:00:43 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id m11so153344ljc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=5zFPj/Lsz3VZ73WXe7ELTaWMJ+ZxRrgEb+Xb7Ni6Ng8=;
+        b=rRb5O2lnxUEM86uGzt4QARS8Zro0rCTRgxDkl72s/BixfUdbeOJwKVcaD6sELjlSeL
+         4wmxYHFoW+AHCNuRytUGE4osuUmVWxyQCJatTr9mFb0JWbVTuj5hDcbb9Bx8ah5Y2ANr
+         oZTJ2gOqyKcx6NfQ1+DdnUw4f+31qvAbu/fiaIekn4aWvMj0V7Z20BLH0f0nR83FZBeU
+         8K4sAyz8DXY7Xn2Bgx2Y+YDU1ceZ5+zxwx6tlN/oN5VCtrNT8SE8QCnKSE4zm7F87OUp
+         ALjVkTFCx/ZYSdNj/vQB71ouBav/PQRWiNsrSOYkR4UPxJwDV5WsXpsy1zIVEox2c/E7
+         8wnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5zFPj/Lsz3VZ73WXe7ELTaWMJ+ZxRrgEb+Xb7Ni6Ng8=;
+        b=Rk4LxUXfApkFTMcNK1VQKNBRm8fGPq4Kg8w85JxWlmQJeiEdZRnJjZ0FQP3VRN1c95
+         rn8SJLNqRorVe44FJGaNQ8Hv5f6mkD+O5/NfYNsGfAmxtdG4djo7APe14iypuL0NAMEX
+         IdT0jQ2ATi0Ls7o2p8xGS9o4e8KW5lUvJt/g7xegILgqTnK0t6dAjcta/6jGmAZj+j05
+         MtKu2pBedwvzISGwAuK762BYyiA7ABTbjkzZFN9afEoXv1RFIMc6B2LOpdqt0VyHwtqO
+         LGBmdvCnKvNqV3f6o5IQpJ5B/cFOL6AXHReyoRIN0BARLhhDcxhS//DsAhJHTQ0GKBFc
+         co4A==
+X-Gm-Message-State: AOAM532YfA1fvpCk7ci8IRCHWp5jm8UjA/7OPxX/vpVdLrsCLASRFyPh
+        QrDxQTjJNr75t0k1SxkPMsV2VA==
+X-Google-Smtp-Source: ABdhPJziV0fg3DLoCNTmn2wELrZo2bGxcnHBlQlnXkE4kaPIaEikeAE1K5M8cxYQfWgnJZf5fwVgtQ==
+X-Received: by 2002:a05:651c:512:b0:253:fd41:12eb with SMTP id o18-20020a05651c051200b00253fd4112ebmr5878583ljp.429.1653523242170;
+        Wed, 25 May 2022 17:00:42 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id d13-20020a19384d000000b0047255d2118fsm16353lfj.190.2022.05.25.17.00.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 17:00:41 -0700 (PDT)
+Message-ID: <941eb91e-cc80-4987-f481-63bd53b739e0@linaro.org>
+Date:   Thu, 26 May 2022 03:00:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874k1dz674.ffs@tglx>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v13 1/3] phy: qcom-edp: add regulator_set_load to edp phy
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1653512540-21956-1-git-send-email-quic_khsieh@quicinc.com>
+ <1653512540-21956-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1653512540-21956-2-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 10:51:43PM +0200, Thomas Gleixner wrote:
-> On Wed, May 25 2022 at 09:57, Luis Chamberlain wrote:
-> > On Mon, May 23, 2022 at 11:22:36PM +0200, Thomas Gleixner wrote:
-> >> This paragraph is not really understandable for Joe Developer.
-> >> 
-> >>   copyleft-next-0.3.1 is explicitly compatible with GPLv2 (or later) and
-> >>   can therefore be used for kernel code. Though the best and recommended
-> >>   practice is to express this in the SPDX license identifier by
-> >>   licensing the code under both licenses expressed by the OR operator.
-> >> 
-> >> Hmm?
-> >
-> > Let me try clarifying this further, how about:
-> >
-> >    copyleft-next-0.3.1 is explicitly compatible with GPLv2 (or later) and
-> >    can therefore be used for kernel code. Despite this, if you use
-> >    copyleft-next-0.3.1 on Linux, the recommended practice is to express
-> >    dual licensing with GPL using in the SPDX license identifiers by
-> >    using by the OR operator.
+On 26/05/2022 00:02, Kuogee Hsieh wrote:
+> This patch add regulator_set_load() before enable regulator at
+> eDP phy driver.
 > 
->   'using in the ..' ?
-> 
-> and
-> 
->   'by using by' is off by one 'by' :)
-> 
-> I'm not seeing how that clarifies stuff further. I might be biased, but
-> the version I suggested is crystal clear.
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-Oh sorry, I didn't realize the paragraph you posted was a suggestion, I
-thought it was the one you were indicating needed further enhancement!
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-I'll just take yours then.
+> ---
+>   drivers/phy/qualcomm/phy-qcom-edp.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
 
-> >> > +  To use the copyleft-next-0.3.1 license put the following SPDX tag/value
-> >> > +  pair into a comment according to the placement guidelines in the
-> >> > +  licensing rules documentation:
-> >> > +    SPDX-License-Identifier: GPL-2.0 OR copyleft-next-0.3.1
-> >> > +    SPDX-License-Identifier: GPL-2.0-only OR copyleft-next 0.3.1
-> >> > +    SPDX-License-Identifier: GPL-2.0+ OR copyleft-next-0.3.1
-> >> > +    SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
-> >> 
-> >> Please don't propagate the GPL-2.0 and GPL-2.0+ tags. They are
-> >> outdated (still valid) in the SPDX spec, which reminds me that I should
-> >> update the relevant documentation...
-> >
-> > OK thanks for the recommendation, I'll leave it at:
-> >
-> > +    SPDX-License-Identifier: GPL-2.0 OR copyleft-next-0.3.1
-> 
-> 	SPDX-License-Identifier: GPL-2.0-only OR copyleft-next-0.3.1
-> 
-> please. See my previous reply quoted above.
-> 
-> > +    SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
-
-Sorry I hadn't had my coffee yet so I should only list:
-
-SPDX-License-Identifier: GPL-2.0-only OR copyleft-next 0.3.1
-SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
-
-Will do this on the next spin.
-
-  Luis
+-- 
+With best wishes
+Dmitry

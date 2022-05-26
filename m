@@ -2,76 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EBF534F13
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC3E534ECD
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345499AbiEZM0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S244364AbiEZMGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240042AbiEZM0k (ORCPT
+        with ESMTP id S229826AbiEZMGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:26:40 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445C35F6C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:26:38 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id rs12so2604239ejb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Y0e4snQi7n2SjF6Ck76whvuOc/klo+1JHia0LyM1puE=;
-        b=zxkEQl7RT17wo8Rs9kNSf6bo13XpGU4njx7LZLYlIraBIzs4x0eo/TEiIP2RBvi3tx
-         X+1MZmvi7e2MKKQ8X9Yg/9qZpCrmwWAWzpK3YxeVTzhEI1iCSWNlpJbpojKQM1nkDH6f
-         36t3mIXT2fDIUysG9c/G/z+QQFu9aiCQU2GbbwVbpGlbOG9ClLaCXNQ2/oXMva0KfuWn
-         W1zzZWW04ZdA00XVOZMlRzIxc4lCksumb8WSV7DCfF3v/X2/wT9PznH+c9FtMDsUxjzq
-         AucK2rtkIIBE4oCZYkB4dKf0sh5OxLcOBaMZ2iyO0B+ZgfRpKXO/IuoGpGIUunEUmMym
-         jJTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Y0e4snQi7n2SjF6Ck76whvuOc/klo+1JHia0LyM1puE=;
-        b=htOEXViBkK8+3GtxrkYmVE1nLOwQnBnC0I8Mp4HrGyQWhz2K7LtJDuX+p7GOt0m66G
-         AzvL/Ynv1YjLZ/BX6YMZ8UuW879sX0mnk/lP15i/R8nE6w1T+yvRMF7g6e32gVLPQunh
-         P0cbgfGMqnDT9N2UyxPx5fDWoIHzasEmcJdEVpMMFgJODctDmZBf463W6DR+1z9EdQ+9
-         VLw5GyAadAfxVj3GYXzBy6wfVF58VJejx3ZoyO1M753DqEyg4+h3tes4ZzFCxAEIbhPw
-         NXeFs9lmXOdt480S+KgbyLx45eFRZfjOkT1mkqedg61NIEsejVaeTX7ZKJVGFs3vv1Of
-         Lokw==
-X-Gm-Message-State: AOAM530/puYAB0bxWDzL3cgGd7WKjz+ymH+ZMrCmpPkczegjM2ICmEUw
-        sMT7/LE/ltxrg96ytRv9sde4/A==
-X-Google-Smtp-Source: ABdhPJzWPJFuN9BjNjbPb5S4iPgNkMLre4lu+a45KZO8S/trrHBCe/pMNabMhSA1PN6VPwaNr+4czQ==
-X-Received: by 2002:a17:907:3faa:b0:6fe:d013:b22a with SMTP id hr42-20020a1709073faa00b006fed013b22amr20091822ejc.425.1653567996822;
-        Thu, 26 May 2022 05:26:36 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170906154200b006fed5247df9sm462398ejd.196.2022.05.26.05.26.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 05:26:36 -0700 (PDT)
-Message-ID: <d816796e-4b2d-77af-afbd-7d54eb18858a@linaro.org>
-Date:   Thu, 26 May 2022 14:26:35 +0200
+        Thu, 26 May 2022 08:06:01 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AB8D02BB;
+        Thu, 26 May 2022 05:06:00 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L865D3rFMzQkQJ;
+        Thu, 26 May 2022 20:02:56 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 26 May 2022 20:05:55 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 26 May 2022 20:05:54 +0800
+From:   Chen Wandun <chenwandun@huawei.com>
+To:     <tj@kernel.org>, <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>,
+        <surenb@google.com>, <cgroups@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] psi: dont alloc memory for psi by default
+Date:   Thu, 26 May 2022 20:26:56 +0800
+Message-ID: <20220526122656.256274-1-chenwandun@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 1/3] dt-bindings: gpio: gpio-mvebu: convert txt binding
- to DT schema format
-Content-Language: en-US
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        andrew@lunn.ch, thomas.petazzoni@free-electrons.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org
-References: <20220526012946.3862776-1-chris.packham@alliedtelesis.co.nz>
- <20220526012946.3862776-2-chris.packham@alliedtelesis.co.nz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220526012946.3862776-2-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,19 +50,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/05/2022 03:29, Chris Packham wrote:
-> Convert the existing device tree binding to DT schema format.
-> 
-> The old binding listed the interrupt-controller and related properties
-> as required but there are sufficiently many existing usages without it
-> that the YAML binding does not make the interrupt properties required.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Memory about struct psi_group is allocated by default for
+each cgroup even if psi_disabled is true, in this case, these
+allocated memory is waste, so alloc memory for struct psi_group
+only when psi_disabled is false.
 
+Signed-off-by: Chen Wandun <chenwandun@huawei.com>
+---
+ include/linux/cgroup-defs.h |  2 +-
+ include/linux/cgroup.h      |  2 +-
+ kernel/cgroup/cgroup.c      |  8 ++++----
+ kernel/sched/psi.c          | 19 +++++++++++++------
+ 4 files changed, 19 insertions(+), 12 deletions(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 1bfcfb1af352..672de25e3ec8 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -475,7 +475,7 @@ struct cgroup {
+ 	struct work_struct release_agent_work;
+ 
+ 	/* used to track pressure stalls */
+-	struct psi_group psi;
++	struct psi_group *psi;
+ 
+ 	/* used to store eBPF programs */
+ 	struct cgroup_bpf bpf;
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 0d1ada8968d7..ed53bfe7c46c 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -674,7 +674,7 @@ static inline void pr_cont_cgroup_path(struct cgroup *cgrp)
+ 
+ static inline struct psi_group *cgroup_psi(struct cgroup *cgrp)
+ {
+-	return &cgrp->psi;
++	return cgrp->psi;
+ }
+ 
+ bool cgroup_psi_enabled(void);
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 1779ccddb734..90a654cb8a1e 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -3609,21 +3609,21 @@ static int cpu_stat_show(struct seq_file *seq, void *v)
+ static int cgroup_io_pressure_show(struct seq_file *seq, void *v)
+ {
+ 	struct cgroup *cgrp = seq_css(seq)->cgroup;
+-	struct psi_group *psi = cgroup_ino(cgrp) == 1 ? &psi_system : &cgrp->psi;
++	struct psi_group *psi = cgroup_ino(cgrp) == 1 ? &psi_system : cgrp->psi;
+ 
+ 	return psi_show(seq, psi, PSI_IO);
+ }
+ static int cgroup_memory_pressure_show(struct seq_file *seq, void *v)
+ {
+ 	struct cgroup *cgrp = seq_css(seq)->cgroup;
+-	struct psi_group *psi = cgroup_ino(cgrp) == 1 ? &psi_system : &cgrp->psi;
++	struct psi_group *psi = cgroup_ino(cgrp) == 1 ? &psi_system : cgrp->psi;
+ 
+ 	return psi_show(seq, psi, PSI_MEM);
+ }
+ static int cgroup_cpu_pressure_show(struct seq_file *seq, void *v)
+ {
+ 	struct cgroup *cgrp = seq_css(seq)->cgroup;
+-	struct psi_group *psi = cgroup_ino(cgrp) == 1 ? &psi_system : &cgrp->psi;
++	struct psi_group *psi = cgroup_ino(cgrp) == 1 ? &psi_system : cgrp->psi;
+ 
+ 	return psi_show(seq, psi, PSI_CPU);
+ }
+@@ -3649,7 +3649,7 @@ static ssize_t cgroup_pressure_write(struct kernfs_open_file *of, char *buf,
+ 		return -EBUSY;
+ 	}
+ 
+-	psi = cgroup_ino(cgrp) == 1 ? &psi_system : &cgrp->psi;
++	psi = cgroup_ino(cgrp) == 1 ? &psi_system : cgrp->psi;
+ 	new = psi_trigger_create(psi, buf, nbytes, res);
+ 	if (IS_ERR(new)) {
+ 		cgroup_put(cgrp);
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index a337f3e35997..ec66b40bdd40 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -957,10 +957,16 @@ int psi_cgroup_alloc(struct cgroup *cgroup)
+ 	if (static_branch_likely(&psi_disabled))
+ 		return 0;
+ 
+-	cgroup->psi.pcpu = alloc_percpu(struct psi_group_cpu);
+-	if (!cgroup->psi.pcpu)
++	cgroup->psi = kmalloc(sizeof(struct psi_group), GFP_KERNEL);
++	if (!cgroup->psi)
+ 		return -ENOMEM;
+-	group_init(&cgroup->psi);
++
++	cgroup->psi->pcpu = alloc_percpu(struct psi_group_cpu);
++	if (!cgroup->psi->pcpu) {
++		kfree(cgroup->psi);
++		return -ENOMEM;
++	}
++	group_init(cgroup->psi);
+ 	return 0;
+ }
+ 
+@@ -969,10 +975,11 @@ void psi_cgroup_free(struct cgroup *cgroup)
+ 	if (static_branch_likely(&psi_disabled))
+ 		return;
+ 
+-	cancel_delayed_work_sync(&cgroup->psi.avgs_work);
+-	free_percpu(cgroup->psi.pcpu);
++	cancel_delayed_work_sync(&cgroup->psi->avgs_work);
++	free_percpu(cgroup->psi->pcpu);
+ 	/* All triggers must be removed by now */
+-	WARN_ONCE(cgroup->psi.poll_states, "psi: trigger leak\n");
++	WARN_ONCE(cgroup->psi->poll_states, "psi: trigger leak\n");
++	kfree(cgroup->psi);
+ }
+ 
+ /**
+-- 
+2.25.1
 
-
-Best regards,
-Krzysztof

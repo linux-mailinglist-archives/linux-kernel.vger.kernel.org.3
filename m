@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0394D535198
+	by mail.lfdr.de (Postfix) with ESMTP id 508E3535199
 	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348009AbiEZPng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S1348017AbiEZPnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239989AbiEZPne (ORCPT
+        with ESMTP id S241189AbiEZPne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 May 2022 11:43:34 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF72FC8BC2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653579813; x=1685115813;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=n319ZaHcVVU7/TnStzhFgifgeVqR0no63HwJF61Gm5A=;
-  b=Cnf41GfFL2U2DRP352flD6AvgoVYFR0/SIMzo+rWEqf1Ff5pHdeXlVCL
-   9xSGIZxDZCaUWJtQC+tRoLSUeuRAFK2Kx885CmtdC/FBwQHBP1cKh7dvU
-   wY9dsCP5dD8Upnnn2SU3h/oKi4w5ngmQUfY9v4QuS7HJsmIfd7PmAMi8l
-   dGJtHLcayjJA7LLbGAATZ6bGCx5QU5tKiqNJs4mghs9eYxVRMlX3TFbPR
-   QBfRDf20pUPXQ5IdBeqWCfRaACbRLti1lLETeGgjpTPR4YBFizRl2pi1m
-   CgSGUSRhSqa8BOKZt1E8IUhP7j43SvYTeFHigJBLsDwwoZkyFocW/QL3h
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="254069297"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="254069297"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 08:43:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="746389007"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 May 2022 08:43:10 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuFdl-0003xw-Sw;
-        Thu, 26 May 2022 15:43:09 +0000
-Date:   Thu, 26 May 2022 23:42:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [peterz-queue:perf/wip.cleanup 9/10]
- arch/x86/events/perf_event.h:1056:23: error: implicit declaration of
- function 'this_cpu_load'; did you mean 'this_cpu_read'?
-Message-ID: <202205262353.IuelPkqA-lkp@intel.com>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B48CFE14;
+        Thu, 26 May 2022 08:43:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AB5761C5D;
+        Thu, 26 May 2022 15:43:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF43C385A9;
+        Thu, 26 May 2022 15:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653579812;
+        bh=pFghZH5p3iCT67+6+qFAycKoXgf4wVflFH4Pzv1Zafg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XS2jyPL+qEzQ2AGzNMdt+HVvmW9X4FKi09Q4984DWRc/B8tYjMNSoDaImK243LIVI
+         sCGUIz1NmcO5WOigq3gHyZ28djV7pWYR6RSMf3Qfng2t8BZyvGKoDOIh0/KFY3QiDV
+         GtabaZtQ1yx4v8LBvW6TBsYHxSlhvVzFKJJtUrJAcBvmaAkRhsFz8jdqxYh7KFzQYD
+         d8CityTroJ8r8lfPjjMZXYX0BOtxtNayOoFWVsnhHQVzGc5i2u6CjNg15a6fLsIhup
+         WymQx36hDU0eSWOFb2/u14sreiLKBY8FN2PoRjnMokW6bUUxzkTwrqR8LgvHLx0San
+         93+IHvfahNeOQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A289D4036D; Thu, 26 May 2022 12:43:29 -0300 (-03)
+Date:   Thu, 26 May 2022 12:43:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Tanmay Jagdale <tanmay@marvell.com>,
+        "zengshun . wu" <zengshun.wu@outlook.com>,
+        Al Grant <al.grant@arm.com>, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] perf scripting python: Expose dso and map
+ information
+Message-ID: <Yo+gIQgElkOg/3EN@kernel.org>
+References: <20220521130446.4163597-1-leo.yan@linaro.org>
+ <20220521130446.4163597-2-leo.yan@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220521130446.4163597-2-leo.yan@linaro.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,117 +73,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.cleanup
-head:   012bb7ae4eb84ae93ded12888ccd1e123c64200f
-commit: c838cb5fbb27ca829668a88691b07ca63f91fde7 [9/10] perf/x86/intel: Optimize short PEBS counters
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220526/202205262353.IuelPkqA-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=c838cb5fbb27ca829668a88691b07ca63f91fde7
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue perf/wip.cleanup
-        git checkout c838cb5fbb27ca829668a88691b07ca63f91fde7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Em Sat, May 21, 2022 at 09:04:45PM +0800, Leo Yan escreveu:
+> This change adds dso build_id and corresponding map's start and end
+> address.  The info of dso build_id can be used to find dso file path,
+> and we can validate if a branch address falls into the range of map's
+> start and end addresses.
+> 
+> In addition, the map's start address can be used as an offset for
+> disassembly.
+> 
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks, applied both patches.
 
-All errors (new ones prefixed by >>):
+- Arnaldo
 
-   In file included from arch/x86/events/core.c:45:
-   arch/x86/events/perf_event.h: In function 'intel_pmu_is_short_pebs':
->> arch/x86/events/perf_event.h:1056:23: error: implicit declaration of function 'this_cpu_load'; did you mean 'this_cpu_read'? [-Werror=implicit-function-declaration]
-    1056 |         s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
-         |                       ^~~~~~~~~~~~~
-         |                       this_cpu_read
->> arch/x86/events/perf_event.h:1057:20: error: implicit declaration of function 'load64_read'; did you mean 'local64_read'? [-Werror=implicit-function-declaration]
-    1057 |         s64 left = load64_read(&hwc->period_left);
-         |                    ^~~~~~~~~~~
-         |                    local64_read
-   cc1: some warnings being treated as errors
---
-   In file included from arch/x86/events/intel/core.c:25:
-   arch/x86/events/intel/../perf_event.h: In function 'intel_pmu_is_short_pebs':
->> arch/x86/events/intel/../perf_event.h:1056:23: error: implicit declaration of function 'this_cpu_load'; did you mean 'this_cpu_read'? [-Werror=implicit-function-declaration]
-    1056 |         s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
-         |                       ^~~~~~~~~~~~~
-         |                       this_cpu_read
->> arch/x86/events/intel/../perf_event.h:1057:20: error: implicit declaration of function 'load64_read'; did you mean 'local64_read'? [-Werror=implicit-function-declaration]
-    1057 |         s64 left = load64_read(&hwc->period_left);
-         |                    ^~~~~~~~~~~
-         |                    local64_read
-   arch/x86/events/intel/core.c: In function 'intel_pmu_handle_short_pebs':
->> arch/x86/events/intel/core.c:2841:33: error: invalid operands to binary & (have 'long unsigned int *' and 'long long unsigned int')
-    2841 |         if (!(cpuc->active_mask & (1ULL << hwc->idx)))
-         |               ~~~~              ^ ~~~~~~~~~~~~~~~~~~
-         |               |                         |
-         |               long unsigned int *       long long unsigned int
-   cc1: some warnings being treated as errors
---
-   In file included from arch/x86/events/intel/bts.c:21:
-   arch/x86/events/intel/../perf_event.h: In function 'intel_pmu_is_short_pebs':
->> arch/x86/events/intel/../perf_event.h:1056:23: error: implicit declaration of function 'this_cpu_load'; did you mean 'this_cpu_read'? [-Werror=implicit-function-declaration]
-    1056 |         s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
-         |                       ^~~~~~~~~~~~~
-         |                       this_cpu_read
->> arch/x86/events/intel/../perf_event.h:1057:20: error: implicit declaration of function 'load64_read'; did you mean 'local64_read'? [-Werror=implicit-function-declaration]
-    1057 |         s64 left = load64_read(&hwc->period_left);
-         |                    ^~~~~~~~~~~
-         |                    local64_read
-   cc1: some warnings being treated as errors
---
-   In file included from arch/x86/events/zhaoxin/core.c:19:
-   arch/x86/events/zhaoxin/../perf_event.h: In function 'intel_pmu_is_short_pebs':
->> arch/x86/events/zhaoxin/../perf_event.h:1056:23: error: implicit declaration of function 'this_cpu_load'; did you mean 'this_cpu_read'? [-Werror=implicit-function-declaration]
-    1056 |         s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
-         |                       ^~~~~~~~~~~~~
-         |                       this_cpu_read
->> arch/x86/events/zhaoxin/../perf_event.h:1057:20: error: implicit declaration of function 'load64_read'; did you mean 'local64_read'? [-Werror=implicit-function-declaration]
-    1057 |         s64 left = load64_read(&hwc->period_left);
-         |                    ^~~~~~~~~~~
-         |                    local64_read
-   cc1: some warnings being treated as errors
---
-   In file included from arch/x86/events/amd/core.c:14:
-   arch/x86/events/amd/../perf_event.h: In function 'intel_pmu_is_short_pebs':
->> arch/x86/events/amd/../perf_event.h:1056:23: error: implicit declaration of function 'this_cpu_load'; did you mean 'this_cpu_read'? [-Werror=implicit-function-declaration]
-    1056 |         s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
-         |                       ^~~~~~~~~~~~~
-         |                       this_cpu_read
->> arch/x86/events/amd/../perf_event.h:1057:20: error: implicit declaration of function 'load64_read'; did you mean 'local64_read'? [-Werror=implicit-function-declaration]
-    1057 |         s64 left = load64_read(&hwc->period_left);
-         |                    ^~~~~~~~~~~
-         |                    local64_read
-   cc1: some warnings being treated as errors
---
-   In file included from arch/x86/kernel/cpu/resctrl/pseudo_lock.c:30:
-   arch/x86/include/uapi/../../events/perf_event.h: In function 'intel_pmu_is_short_pebs':
->> arch/x86/include/uapi/../../events/perf_event.h:1056:23: error: implicit declaration of function 'this_cpu_load'; did you mean 'this_cpu_read'? [-Werror=implicit-function-declaration]
-    1056 |         s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
-         |                       ^~~~~~~~~~~~~
-         |                       this_cpu_read
->> arch/x86/include/uapi/../../events/perf_event.h:1057:20: error: implicit declaration of function 'load64_read'; did you mean 'local64_read'? [-Werror=implicit-function-declaration]
-    1057 |         s64 left = load64_read(&hwc->period_left);
-         |                    ^~~~~~~~~~~
-         |                    local64_read
-   cc1: some warnings being treated as errors
-
-
-vim +1056 arch/x86/events/perf_event.h
-
-  1052	
-  1053	static inline bool intel_pmu_is_short_pebs(struct perf_event *event)
-  1054	{
-  1055		struct hw_perf_event *hwc = &event->hw;
-> 1056		s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
-> 1057		s64 left = load64_read(&hwc->period_left);
-  1058	
-  1059		return counter < left;
-  1060	}
-  1061	
+> ---
+>  .../scripting-engines/trace-event-python.c    | 21 +++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
+> index 659eb4e4b34b..adba01b7d9dd 100644
+> --- a/tools/perf/util/scripting-engines/trace-event-python.c
+> +++ b/tools/perf/util/scripting-engines/trace-event-python.c
+> @@ -755,12 +755,22 @@ static void set_regs_in_dict(PyObject *dict,
+>  }
+>  
+>  static void set_sym_in_dict(PyObject *dict, struct addr_location *al,
+> -			    const char *dso_field, const char *sym_field,
+> -			    const char *symoff_field)
+> +			    const char *dso_field, const char *dso_bid_field,
+> +			    const char *dso_map_start, const char *dso_map_end,
+> +			    const char *sym_field, const char *symoff_field)
+>  {
+> +	char sbuild_id[SBUILD_ID_SIZE];
+> +
+>  	if (al->map) {
+>  		pydict_set_item_string_decref(dict, dso_field,
+>  			_PyUnicode_FromString(al->map->dso->name));
+> +		build_id__sprintf(&al->map->dso->bid, sbuild_id);
+> +		pydict_set_item_string_decref(dict, dso_bid_field,
+> +			_PyUnicode_FromString(sbuild_id));
+> +		pydict_set_item_string_decref(dict, dso_map_start,
+> +			PyLong_FromUnsignedLong(al->map->start));
+> +		pydict_set_item_string_decref(dict, dso_map_end,
+> +			PyLong_FromUnsignedLong(al->map->end));
+>  	}
+>  	if (al->sym) {
+>  		pydict_set_item_string_decref(dict, sym_field,
+> @@ -840,7 +850,8 @@ static PyObject *get_perf_sample_dict(struct perf_sample *sample,
+>  			(const char *)sample->raw_data, sample->raw_size));
+>  	pydict_set_item_string_decref(dict, "comm",
+>  			_PyUnicode_FromString(thread__comm_str(al->thread)));
+> -	set_sym_in_dict(dict, al, "dso", "symbol", "symoff");
+> +	set_sym_in_dict(dict, al, "dso", "dso_bid", "dso_map_start", "dso_map_end",
+> +			"symbol", "symoff");
+>  
+>  	pydict_set_item_string_decref(dict, "callchain", callchain);
+>  
+> @@ -856,7 +867,9 @@ static PyObject *get_perf_sample_dict(struct perf_sample *sample,
+>  	if (addr_al) {
+>  		pydict_set_item_string_decref(dict_sample, "addr_correlates_sym",
+>  			PyBool_FromLong(1));
+> -		set_sym_in_dict(dict_sample, addr_al, "addr_dso", "addr_symbol", "addr_symoff");
+> +		set_sym_in_dict(dict_sample, addr_al, "addr_dso", "addr_dso_bid",
+> +				"addr_dso_map_start", "addr_dso_map_end",
+> +				"addr_symbol", "addr_symoff");
+>  	}
+>  
+>  	if (sample->flags)
+> -- 
+> 2.25.1
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+- Arnaldo

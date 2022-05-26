@@ -2,100 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD090534F93
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC53534F98
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347439AbiEZMoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
+        id S245064AbiEZMqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347482AbiEZMon (ORCPT
+        with ESMTP id S239939AbiEZMqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:44:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04BA8986DA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653569080;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HHe1LaBtedJ5JV6CIRJWahlJ1EFaGN6YwiuH4nEgZ+o=;
-        b=ciYRdY8WaY8hjk16N5ZWvG6uUSXazxyeuoXEzPlQVhBBr4W7pNzNguMnMod1f5vWjVMORY
-        +lwANqaSk2NdUTw9cLg/uI+1tQsXv1+boIqjFlwdfQsrzBJIgqRV4A2Qt51V61Cmm1Z3J5
-        wWYmqZU1zmDixSpzTzDBFtdAzrZUvFU=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-nVtkJpS-PL2GBgRJXQT9Ag-1; Thu, 26 May 2022 08:44:39 -0400
-X-MC-Unique: nVtkJpS-PL2GBgRJXQT9Ag-1
-Received: by mail-qt1-f198.google.com with SMTP id a11-20020a05622a02cb00b002f3d23bdca2so1466777qtx.5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:44:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HHe1LaBtedJ5JV6CIRJWahlJ1EFaGN6YwiuH4nEgZ+o=;
-        b=52TNdKe8uLnPzgMFPW1SB4KsXkdyQyFeBwqSfx4D0pKicrMLnQTSRgKQnyfD2ynHrQ
-         VvFV6x6hNFbytHePU3nXwXJpoWBBuOt1Z/q8qKJFNTygVHlYFH5B03IIHAxeRNawZq+w
-         mSX2eOB29gcL8Rp7Kpvh6XjJILfKpxiTaDvN/rLbyxhocvuqRB6Bqtk27I/5qcs2aWgi
-         dCkEOTviegnnftWGXHJGpy3kojAH3Q47mmRIGu+ri4rgOpUgSvNYEC6DWqEYVoxru7tu
-         jx9JUJrq2Rf2gkjCjUCFVRsl9GnLlbpf1192PGfRIGKeExNAfgGjpejLtu5fTeTaZAqY
-         uHyg==
-X-Gm-Message-State: AOAM5322Z5FCh0aRb9BOyFKjqlg7bpQRKSaByPTNQNcRuz5TwHDmNVG+
-        IvqFeaybuCkETxCQwKHCmtiVKfKz10TYc0NYlX9pFffwlcVeTYpv+vnUcqOLrMfGQK+CzZqEEbM
-        dUWIQCspj2iPkdIj3OjGSCOFacnhC3QUROtz1D5tV
-X-Received: by 2002:ad4:5b8e:0:b0:45e:727e:581 with SMTP id 14-20020ad45b8e000000b0045e727e0581mr30237118qvp.91.1653569078529;
-        Thu, 26 May 2022 05:44:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxTl9yJTk2JrKnbnArl1cV+yqaFHYBSE1pAtknvOk2bGcdp/tAN7eXyHvYiEKU3nIXbW6aFqgIXYPRGcEKbmNI=
-X-Received: by 2002:ad4:5b8e:0:b0:45e:727e:581 with SMTP id
- 14-20020ad45b8e000000b0045e727e0581mr30237079qvp.91.1653569078322; Thu, 26
- May 2022 05:44:38 -0700 (PDT)
+        Thu, 26 May 2022 08:46:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E481C136;
+        Thu, 26 May 2022 05:46:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52F7761A7C;
+        Thu, 26 May 2022 12:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B123BC34116;
+        Thu, 26 May 2022 12:46:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653569187;
+        bh=aX3XkTNFlbddfM2Uz7FkBiXfKfSrDGVietK6gQgDZCM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B0ofxPknLB25PRikCSM7JL2+HYZFxCccCBk/ytV+jnoPy8FCWWj45nqSnDmL/CXlf
+         WnE797DjnXyaKAVoGBV7QnDpKkvdOjhqn19BVljcYXPfmPhcn1RXT39rcf29R7coEC
+         06pdXoQkd+SjQuhBGgade787urI7WT7wy2x2mjhothB8J3FYKC0n5WYc7nLzu7FiTN
+         ZMhuHwhTKW6uuMDh71F/tCGSCm7sTbkg3mCi6GHHsApuCI3tV80A3ng/zEU3i/1MAp
+         sTCOqyK/HkaodGygf0qC1580ELm5uQ6k5YgMjuhJD4uXs0wccTn3VZ5UNLZA71qwQ1
+         J4DHqAxtFfEWw==
+Received: by mail-ej1-f50.google.com with SMTP id y13so2845532eje.2;
+        Thu, 26 May 2022 05:46:27 -0700 (PDT)
+X-Gm-Message-State: AOAM5330szRZVbqr7qg5kksG2thX9MP6a/s1Oq/g9gBpKQOUss0GBXfk
+        4/Wax34Snq4venM6+dBl7m4d2MRXUs9NigyzGg==
+X-Google-Smtp-Source: ABdhPJxdAvZ5Z3oR1GucLvBj6d6cfGXYzMzHQadqJjpxVYxGkdqtexgfAKaP9HSSbaBey8Xgwc/lhfdaEAWDD/9EmGI=
+X-Received: by 2002:a17:906:ae43:b0:6fe:a207:5cc3 with SMTP id
+ lf3-20020a170906ae4300b006fea2075cc3mr29379554ejb.19.1653569185897; Thu, 26
+ May 2022 05:46:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220525105922.2413991-1-eperezma@redhat.com> <20220525105922.2413991-3-eperezma@redhat.com>
- <BL1PR12MB582520CC9CE024149141327499D69@BL1PR12MB5825.namprd12.prod.outlook.com>
- <CAJaqyWc9_ErCg4whLKrjNyP5z2DZno-LJm7PN=-9uk7PUT4fJw@mail.gmail.com> <20220526090706.maf645wayelb7mcp@sgarzare-redhat>
-In-Reply-To: <20220526090706.maf645wayelb7mcp@sgarzare-redhat>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Thu, 26 May 2022 14:44:02 +0200
-Message-ID: <CAJaqyWf7PumZXy1g3PbbTNCdn3u1XH3XQF73tw2w8Py5yLkSAg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] vhost-vdpa: introduce STOP backend feature bit
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     "Dawar, Gautam" <gautam.dawar@amd.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        "martinh@xilinx.com" <martinh@xilinx.com>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Parav Pandit <parav@nvidia.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        "dinang@xilinx.com" <dinang@xilinx.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "martinpo@xilinx.com" <martinpo@xilinx.com>,
-        "pabloc@xilinx.com" <pabloc@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>,
-        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
-        "lvivier@redhat.com" <lvivier@redhat.com>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        "hanand@xilinx.com" <hanand@xilinx.com>
+References: <20220525210117.2489333-1-robh@kernel.org> <35c700f6-ce67-89d5-0f29-426acd33efa9@socionext.com>
+In-Reply-To: <35c700f6-ce67-89d5-0f29-426acd33efa9@socionext.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 26 May 2022 07:46:12 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJqdLrhjCiQ3a1PZvfnW715HhXNMQZea2H78T4U2BqDzA@mail.gmail.com>
+Message-ID: <CAL_JsqJqdLrhjCiQ3a1PZvfnW715HhXNMQZea2H78T4U2BqDzA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: PCI: socionext,uniphier-pcie: Add missing
+ child interrupt controller
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        PCI <linux-pci@vger.kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,86 +67,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 11:07 AM Stefano Garzarella <sgarzare@redhat.com> w=
-rote:
+On Thu, May 26, 2022 at 4:02 AM Kunihiko Hayashi
+<hayashi.kunihiko@socionext.com> wrote:
 >
-> On Thu, May 26, 2022 at 10:57:03AM +0200, Eugenio Perez Martin wrote:
-> >On Wed, May 25, 2022 at 1:23 PM Dawar, Gautam <gautam.dawar@amd.com> wro=
-te:
-> >>
-> >> [AMD Official Use Only - General]
-> >>
-> >> -----Original Message-----
-> >> From: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> >> Sent: Wednesday, May 25, 2022 4:29 PM
-> >> To: Michael S. Tsirkin <mst@redhat.com>; netdev@vger.kernel.org; linux=
--kernel@vger.kernel.org; kvm@vger.kernel.org; virtualization@lists.linux-fo=
-undation.org; Jason Wang <jasowang@redhat.com>
-> >> Cc: Zhu Lingshan <lingshan.zhu@intel.com>; martinh@xilinx.com; Stefano=
- Garzarella <sgarzare@redhat.com>; ecree.xilinx@gmail.com; Eli Cohen <elic@=
-nvidia.com>; Dan Carpenter <dan.carpenter@oracle.com>; Parav Pandit <parav@=
-nvidia.com>; Wu Zongyong <wuzongyong@linux.alibaba.com>; dinang@xilinx.com;=
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>; Xie Yongji <xieyongji@=
-bytedance.com>; Dawar, Gautam <gautam.dawar@amd.com>; lulu@redhat.com; mart=
-inpo@xilinx.com; pabloc@xilinx.com; Longpeng <longpeng2@huawei.com>; Piotr.=
-Uminski@intel.com; Kamde, Tanuj <tanuj.kamde@amd.com>; Si-Wei Liu <si-wei.l=
-iu@oracle.com>; habetsm.xilinx@gmail.com; lvivier@redhat.com; Zhang Min <zh=
-ang.min9@zte.com.cn>; hanand@xilinx.com
-> >> Subject: [PATCH v3 2/4] vhost-vdpa: introduce STOP backend feature bit
-> >>
-> >> [CAUTION: External Email]
-> >>
-> >> Userland knows if it can stop the device or not by checking this featu=
-re bit.
-> >>
-> >> It's only offered if the vdpa driver backend implements the stop() ope=
-ration callback, and try to set it if the backend does not offer that callb=
-ack is an error.
-> >>
-> >> Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> >> ---
-> >>  drivers/vhost/vdpa.c             | 16 +++++++++++++++-
-> >>  include/uapi/linux/vhost_types.h |  2 ++
-> >>  2 files changed, 17 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c index 1f1d1c4=
-25573..32713db5831d 100644
-> >> --- a/drivers/vhost/vdpa.c
-> >> +++ b/drivers/vhost/vdpa.c
-> >> @@ -347,6 +347,14 @@ static long vhost_vdpa_set_config(struct vhost_vd=
-pa *v,
-> >>         return 0;
-> >>  }
-> >>
-> >> +static bool vhost_vdpa_can_stop(const struct vhost_vdpa *v) {
-> >> +       struct vdpa_device *vdpa =3D v->vdpa;
-> >> +       const struct vdpa_config_ops *ops =3D vdpa->config;
-> >> +
-> >> +       return ops->stop;
-> >> [GD>>] Would it be better to explicitly return a bool to match the ret=
-urn type?
-> >
-> >I'm not sure about the kernel code style regarding that casting. Maybe
-> >it's better to return !!ops->stop here. The macros likely and unlikely
-> >do that.
+> Hi Rob,
 >
-> IIUC `ops->stop` is a function pointer, so what about
+> On 2022/05/26 6:01, Rob Herring wrote:
+> > The Socionext interrupt controller internal to the the PCI block isn't
+> > documented which causes warnings when unevaluatedProperties check is
+> > also fixed. Add the 'interrupt-controller' child node and properties and
+> > fixup the example so that interrupt properties can be parsed.
 >
->      return ops->stop !=3D NULL;
+> Surely internal interrupt controller isn't described, and should be documented.
+> And the child node name "legacy-interrupt-controller" also should be fixed.
 >
+> Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 
-I'm ok with any method proposed. Both three ways can be found in the
-kernel so I think they are all valid (although the double negation is
-from bool to integer in (0,1) set actually).
+Thanks.
 
-Maybe Jason or Michael (as maintainers) can state the preferred method here=
-.
+>
+> BTW I can't reproduce such warnings with my environment.
+> Can you show the command line to reproduce the warnings?
 
-Generally I prefer explicit conversions, both signed and from/to
-different types length. But I find conversion to bool to be simple
-enough to be an exception to the rule. Same with void *. Let's see!
+"causes warnings when unevaluatedProperties check is also fixed"
 
-Sending v4 without this changed, waiting for answers.
+You won't. I have a fix in dtschema pending, but first all the
+warnings that appear need to be fixed.
 
-Thanks!
-
+Rob

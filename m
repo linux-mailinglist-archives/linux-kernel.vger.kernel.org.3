@@ -2,57 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02EBF53486F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C22153486E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238130AbiEZBzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345841AbiEZBz1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1345852AbiEZBz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 25 May 2022 21:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240584AbiEZBzZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 25 May 2022 21:55:25 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E3AB0A60
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:55:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFD8ABF79;
+        Wed, 25 May 2022 18:55:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653530126; x=1685066126;
-  h=date:from:to:cc:subject:message-id:mime-version:
+  t=1653530124; x=1685066124;
+  h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=Ue69Q8jhp+d6RQF5cY0iKlqouVz40Cott8+L6TxVyx8=;
-  b=GJPPV/ZKligRE4LG7EkkPbR/ZeZt/BDf6Sa9qUpk7mEG7i4Pj9kLFB4f
-   Tmla4Rjj7CJKm9W1RsWe9KVVwil0HhBYPs4s2idrr1dVwnfB6QRTwl8ch
-   NL2Or9SkMv5II474ChKukUwYnNzHZ3bppUiZ7trxSjfYm5CBJFPwFrf3Z
-   qTentz169e5RFr/t1590qRPjVBG6tirbXzEGxtBxcyAXUVPWAL2qS9jZb
-   ZXDAYxZCGYQNjsO7vuMdUTCZcFN5mQ62/Z6wu6Lu6+9YNOjlpq2GGFLbK
-   8tIP3A8AawPSZOaYXQ+5j3dASNbaBXxQwIZ1ZLtuxmiC7pc4KYmsq7oUJ
+  bh=1pfebO5CWIzGouQot/Szo2SSK2J1j3dTVROMYETyiwQ=;
+  b=dAiKp5JhVHCxputtWeQ02yyJbYwp6LTmbdLr4RP7xDchV/dMzs7OyjMr
+   SkQMLwYQqo8dZ8tQpErjkqRga2dsENylXUr46r2OlLQDaJw+LmnXTGKx3
+   7LjyCK2PWjmdgDsozZWHJBAgPpLbLqlhiZbIBeBmla1UGooD3x+Mv0jI7
+   bBZjmomkoyx1kxa3xrnd1fVf9e7CRscGUW6Rjy/z0aKSruNw5cxFc7b/a
+   UMV2trXUZYJExU57g1UX1N90S+QBWgOyUnZtqzwXoGX3wl9d1S1Mv1QW1
+   mR6pt6xJKb7+ox6vtkIAPc9E2Edv4J7DhhFf7+TIbGpjNuJeOWauFU5pG
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="271564495"
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="271564491"
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="271564495"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:55:26 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="271564491"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:55:24 -0700
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="578599765"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 25 May 2022 18:55:25 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nu2ij-0003Ur-7H;
-        Thu, 26 May 2022 01:55:25 +0000
-Date:   Thu, 26 May 2022 09:54:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- 20eb48885b62d5de4ab6be7e08f9f55aa33333fd
-Message-ID: <628eddd3.AIIiTW1c4MrBKaVz%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="527137344"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:55:15 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rcu: Cleanup RCU urgency state for offline CPU
+Date:   Thu, 26 May 2022 09:55:12 +0800
+Message-Id: <20220526015512.2218046-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,102 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
-branch HEAD: 20eb48885b62d5de4ab6be7e08f9f55aa33333fd  x86/idt: Remove unused headers
+When an RCU grace period starts and at this time the CPU is in
+the process of going offline, if the RCU gp-fqs occurs during the
+time period when the CPU has passed the stop-machine but has not
+yet entered the idle loop, and this CPU have not report quiescent
+state yet, its urgent flags maybe is set, for example due to cbovld
+is true, but this CPUs rcu urgent flags is not cleanup in rcu_report_dead()
+when report qs. however for CPU that have been report qs, its rcu
+urgent flags should cleanup, so add rcu_disable_urgency_upon_qs()
+in rcu_report_dead() when CPU report qs.
 
-elapsed time: 723m
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tree.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-configs tested: 81
-configs skipped: 65
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-sh                         apsh4a3a_defconfig
-nios2                               defconfig
-sh                         ecovec24_defconfig
-sh                           se7712_defconfig
-arm                           h3600_defconfig
-sh                          rsk7201_defconfig
-powerpc                 mpc834x_mds_defconfig
-m68k                           sun3_defconfig
-powerpc                 mpc85xx_cds_defconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220524
-s390                 randconfig-r044-20220524
-riscv                randconfig-r042-20220524
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20220526
-hexagon              randconfig-r041-20220526
-
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 02233b17cce0..6a01a48fe56d 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4536,6 +4536,7 @@ void rcu_report_dead(unsigned int cpu)
+ 	rdp->rcu_ofl_gp_flags = READ_ONCE(rcu_state.gp_flags);
+ 	if (rnp->qsmask & mask) { /* RCU waiting on outgoing CPU? */
+ 		/* Report quiescent state -before- changing ->qsmaskinitnext! */
++		rcu_disable_urgency_upon_qs(rdp);
+ 		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+ 		raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

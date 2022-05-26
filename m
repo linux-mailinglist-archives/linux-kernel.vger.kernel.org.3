@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7187F53517F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E99535183
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347966AbiEZPdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S1347963AbiEZPdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346462AbiEZPdi (ORCPT
+        with ESMTP id S1347969AbiEZPdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 11:33:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45412C1ED8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:33:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A04CA61C64
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 15:33:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A44C385A9;
-        Thu, 26 May 2022 15:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653579215;
-        bh=FT4RzyNJhGH1Xvs0BNepk6mODPann7y9135LL7cckyA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=saerT/+VGvOH8MzSXrAq+VXSokBG5Y3jxqeXe9/5kkx6DjMLknN7mMDFnuOEm/Ww6
-         hXStapOVvQIhG2bEqWF51SUy1np+N5e0Lq1NrGB6fXl+0tpmQkAr7vemq6IGDdretc
-         4e6+ov0k1fgwdGvWJtR2R3uKwaXjJ5o7xxK+m3DctnTnLcYlgtKeotrKxz3iwFwswd
-         G9AZq66oBVufxqZylDP8cB//xx8KA09z0AznzixoVPJG+vsPcqV6aFtRTXuJijHjdd
-         twd58GtstuCxSslhtCacTmuiBMf9AjEpfgtcPNFWhggahO1MI/MOsu947pI495kM1d
-         H+kDD6z+aWDbw==
-Date:   Fri, 27 May 2022 00:33:30 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Liao Chang <liaochang1@huawei.com>
-Cc:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <rostedt@goodmis.org>,
-        <peterz@infradead.org>, <naveen.n.rao@linux.vnet.ibm.com>,
-        <jszhang@kernel.org>, <guoren@kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] riscv/kprobe: reclaim insn_slot on kprobe
- unregistration
-Message-Id: <20220527003330.68f1fc0f58ecec812a7d037e@kernel.org>
-In-Reply-To: <20220525014424.20717-1-liaochang1@huawei.com>
-References: <20220525014424.20717-1-liaochang1@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 May 2022 11:33:49 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C66D80BF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:33:46 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id t13so2584567wrg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=pcOIqjfOGD4mtjARe3uelHp7io5D0VG5aulAy4XSsSE=;
+        b=OyaRzhiBGq19hx91ypN3/Is9e83mqOXLZx5qRmAnt9wJXFDBkel6oX7OZhuAey3yv8
+         dBUH6oZxDP+T4Jw2KCPGiRkPpEELgbqJtbMyUaFrcx/sCUazNduCCOuzRO4aCr12kFEc
+         TmnUEMKCfpamtxsLuO5tixC4NpQcMx0qUrZWD0Stz0EpIRiE6flY+o6K4svj+V+8T034
+         Qz9P5rNVaI0s04Z/aUTdLu7slAUfrh4R/WDQH9J/bo7ARZlWUCCxroQk4RZnCEMnrCvH
+         HGbY5QP0coimTZZ5eXDlO6UGWrH/4TpdhIYTbQvcSkP77Pest3z/aJPwkZbeO3d3ek5+
+         19kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=pcOIqjfOGD4mtjARe3uelHp7io5D0VG5aulAy4XSsSE=;
+        b=OpzHW4NvV/IivEZrrWGN+sXMrpwcZ1AIEf73blpyIzTTsAbzxXONo+H+qxzD3RlQQc
+         CYW1ToOtgRaTRxES8HRpTZWOXqq4dy44ZrMCFOOkhA9cJHxU/RujkVfxShfEuDl5Evx3
+         oU7KFLqLCf/smTBPlfDQE8nvAjk3lXSODtRDHZ7B/UiU5Mawvt3Tad57SvkhydK8aUte
+         HqtEWZTI/9nGfLOaFqjiTUhpw/UwJhLm6gWnJQbrV5QkC1/+Uz5IDBQ3hlAYeNC7vXS4
+         m3wdIwJfZSwEGSf+ZYJlva1fxc6+GFD0/JZU5m6ynqqEDiVBV1RJ0+oNzoJHM1ayQd//
+         qnxg==
+X-Gm-Message-State: AOAM530ccuoiPXgMyWdRG+rN57Sic3i76jSGdfgCJU2jJAblBom0v0+Q
+        0F9cw0a8Ool+myQ2bSYaI6m5O7Gt8EMeTfq/qSg=
+X-Google-Smtp-Source: ABdhPJz4ymsfpZ6XE9nNt+dQEXfMcgEAWohhEJk5D1aVJE7siDYkIb9/O6pw09BM31g5F5i7nVQgAqKRkiMjZDBMmhE=
+X-Received: by 2002:a5d:4892:0:b0:20c:d4eb:1886 with SMTP id
+ g18-20020a5d4892000000b0020cd4eb1886mr33156092wrq.96.1653579224973; Thu, 26
+ May 2022 08:33:44 -0700 (PDT)
+MIME-Version: 1.0
+Reply-To: mr.a.manga99@gmail.com
+Sender: arnettdavid1991@gmail.com
+Received: by 2002:adf:c98a:0:0:0:0:0 with HTTP; Thu, 26 May 2022 08:33:44
+ -0700 (PDT)
+From:   "Mr. Amos Manga" <mr.a.manga99@gmail.com>
+Date:   Thu, 26 May 2022 08:33:44 -0700
+X-Google-Sender-Auth: ykbJWHFNl0fEWNmMObs8GR2XEBA
+Message-ID: <CAPpYQmnBp-S_EEAy1G=syNfWGj5_teDNsmSREFGJKOBrUhoW6w@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FORM_SHORT,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 09:44:24 +0800
-Liao Chang <liaochang1@huawei.com> wrote:
+Good day,
 
-> On kprobe registration kernel allocate one insn_slot for new kprobe,
-> but it forget to reclaim the insn_slot on unregistration, leading to a
-> potential leakage.
-> 
-> Reported-by: Chen Guokai <chenguokai17@mails.ucas.ac.cn>
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+I know this means of communication may not be morally right to you as
+a person but I also have had a great thought about it and I have come
+to conclusion which I am about to share with you.
 
-Looks good to me.
+INTRODUCTION: I am a banker; I hope you will cooperate with me as a
+partner in a project of transferring an abandoned fund of late
+customer of the bank worth $18,000,000 (Eighteen Million Dollars
+only).
 
-Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
-Cc: stable@vger.kernel.org
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+This will be disbursed or shared between the both of us in these
+percentages, 55% for me and 45% for you. Contact me immediately if
+that is alright for you so that we can enter into an agreement before
+we start processing for the transfer of the funds. If you are
+satisfied with this proposal, please provide the below details for the
+Mutual Confidentiality Agreement
 
-Thank you,
+1. Full Name and Address
 
+2. Occupation and Country of Origin
 
-> ---
-> v2:
->   Add Reported-by tag
-> 
->  arch/riscv/kernel/probes/kprobes.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
-> index e6e950b7cf32..f12eb1fbb52c 100644
-> --- a/arch/riscv/kernel/probes/kprobes.c
-> +++ b/arch/riscv/kernel/probes/kprobes.c
-> @@ -110,6 +110,10 @@ void __kprobes arch_disarm_kprobe(struct kprobe *p)
->  
->  void __kprobes arch_remove_kprobe(struct kprobe *p)
->  {
-> +	if (p->ainsn.api.insn) {
-> +		free_insn_slot(p->ainsn.api.insn, 0);
-> +		p->ainsn.api.insn = NULL;
-> +	}
->  }
->  
->  static void __kprobes save_previous_kprobe(struct kprobe_ctlblk *kcb)
-> -- 
-> 2.17.1
-> 
+3. Telephone Number
 
+I wait for your response so that we can commence on this transaction
+as soon as possible.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Regards,
+
+Mr.Amos Manga.

@@ -2,208 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7F353489C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 04:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9AF5348A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 04:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345909AbiEZCJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 22:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
+        id S1345923AbiEZCNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 22:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbiEZCI7 (ORCPT
+        with ESMTP id S230020AbiEZCNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 22:08:59 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8CD69B4C
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:08:59 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id nn3-20020a17090b38c300b001e0e091cf03so23382pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=R7rKNvHXsGzLgjMUdkYaFVed5E2JRJcJJNqZfVZ+5rk=;
-        b=co6cy7kfyLhyWRoqI9xLrDZWZ4RkKwnrUf88l8B6e1qN1ihtUyVs25s3wWNnfPY0kM
-         +mxYx5A8uRu/udu4clhRH0E4qEVWGY98p7D4oJoSshLcEbPjvb08+mXZYFmkYwLBZU0o
-         9ayYBUL7m3SIvvbu4eJZ+EC7Mp9R4qocfaHcfpDwplTFDxIOUWGCecuHw3A4ICWncNVQ
-         0oEefde8JiCMO6/hHIFWCfjVMdqmHrWAF3lz4IlTHicLwIy/Q1himKOYQOtuVr8nNlS6
-         utygQAbCTcWDyekohJJeT8axFIOuiSzq6x/lqJyA3UIol+TFIj9quxF0Yb/U2Gc/RWgy
-         R54w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=R7rKNvHXsGzLgjMUdkYaFVed5E2JRJcJJNqZfVZ+5rk=;
-        b=TjQfK7zt5IzF50hL9KckJl68negJWxpuGfg2m9HRRnLnJBW2a7QVyJ50DqlBweRGZm
-         MEh+rBO3WN8Qtx4bTfutrrYNmyAeEssAPDf36sge/IS6CwAvSYTXJ1Oh2rBbgDLLbMYu
-         OvXRSbTI8cQd7aiA7HQP4DeL/FjJT3qbZneZckk8ZPRlV3970Zy59R3YKDHetVnFq8Y6
-         q4K4XMcIvGP8bGaWvfzXlotntCjN0+fnfCuewkuGzN/9xrWLMmwezYgJ33BbpPqn6nc4
-         JzqaHevIGCWqye8Cor80fds4VQzLRz58XtvoiKBEt9HRvIir7B8Ev2/Y2W1blONpcJAH
-         Fr2g==
-X-Gm-Message-State: AOAM530FU3YZeb5/et47vWKpTOXxn8VW/EKdkJJ+9lB/PBwe7OcOFw3k
-        sdM60XH4o/6hMAM+51El0butb2wWLujLE6FG
-X-Google-Smtp-Source: ABdhPJwGanAZG3Fj5Jtt06ObKLk1KKtCz0LEo3zEuRu6eg3wdFoGtq3zxEAPPb46K4UWT2YaWLQFeQ==
-X-Received: by 2002:a17:902:f605:b0:14f:5d75:4fb0 with SMTP id n5-20020a170902f60500b0014f5d754fb0mr35495209plg.101.1653530938546;
-        Wed, 25 May 2022 19:08:58 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id g1-20020a056a001a0100b0051868677e6dsm82610pfv.51.2022.05.25.19.08.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 19:08:58 -0700 (PDT)
-Message-ID: <1f291e35-808a-92f2-f93a-1bc5c8c3e44d@bytedance.com>
-Date:   Thu, 26 May 2022 10:08:51 +0800
+        Wed, 25 May 2022 22:13:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 326F78BD0A
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:13:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E3421474;
+        Wed, 25 May 2022 19:13:08 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [10.162.43.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 124103F70D;
+        Wed, 25 May 2022 19:13:05 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2] mm/memory_hotplug: Drop 'reason' argument from check_pfn_span()
+Date:   Thu, 26 May 2022 07:42:58 +0530
+Message-Id: <20220526021258.4030749-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [External] Re: [PATCH v2 2/2] selftest/bpf/benchs: Add bpf_map
- benchmark
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        zhouchengming@bytedance.com
-References: <20220524075306.32306-1-zhoufeng.zf@bytedance.com>
- <20220524075306.32306-3-zhoufeng.zf@bytedance.com>
- <CAEf4BzbPrfFe-3TGf=jJxrp9DT6Z1JaEDhWCd3wTYOPsihUmkA@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAEf4BzbPrfFe-3TGf=jJxrp9DT6Z1JaEDhWCd3wTYOPsihUmkA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/25 上午7:29, Andrii Nakryiko 写道:
-> On Tue, May 24, 2022 at 12:53 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>
->> Add benchmark for hash_map to reproduce the worst case
->> that non-stop update when map's free is zero.
->>
->> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->> ---
->>   tools/testing/selftests/bpf/Makefile          |  4 +-
->>   tools/testing/selftests/bpf/bench.c           |  2 +
->>   .../selftests/bpf/benchs/bench_bpf_map.c      | 78 +++++++++++++++++++
->>   .../selftests/bpf/benchs/run_bench_bpf_map.sh | 10 +++
->>   .../selftests/bpf/progs/bpf_map_bench.c       | 27 +++++++
->>   5 files changed, 120 insertions(+), 1 deletion(-)
->>   create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_map.c
->>   create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
->>   create mode 100644 tools/testing/selftests/bpf/progs/bpf_map_bench.c
->>
-> [...]
->
->> +static void setup(void)
->> +{
->> +       struct bpf_link *link;
->> +       int map_fd, i, max_entries;
->> +
->> +       setup_libbpf();
->> +
->> +       ctx.skel = bpf_map_bench__open_and_load();
->> +       if (!ctx.skel) {
->> +               fprintf(stderr, "failed to open skeleton\n");
->> +               exit(1);
->> +       }
->> +
->> +       link = bpf_program__attach(ctx.skel->progs.benchmark);
->> +       if (!link) {
->> +               fprintf(stderr, "failed to attach program!\n");
->> +               exit(1);
->> +       }
->> +
->> +       //fill hash_map
-> don't use C++ comments
+In check_pfn_span(), a 'reason' string is being used to recreate the caller
+function name, while printing the warning message. It is really unnecessary
+as the warning message could just be printed inside the caller depending on
+the return code. Currently there are just two callers for check_pfn_span()
+i.e  __add_pages() and __remove_pages(). Let's clean this up.
 
-Ok, will do. Thanks.
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+Changes in V2:
 
->
->> +       map_fd = bpf_map__fd(ctx.skel->maps.hash_map_bench);
->> +       max_entries = bpf_map__max_entries(ctx.skel->maps.hash_map_bench);
->> +       for (i = 0; i < max_entries; i++)
->> +               bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
->> +}
->> +
->> +const struct bench bench_bpf_map = {
->> +       .name = "bpf-map",
-> this is too generic name, it's testing one particular scenario, so
-> call this out in the name. bpf-hashmap-full-update or something (same
-> for all the relevant function and file names)
->
+- Fixed typo in commit message
+- Dropped using 'ret' to capture check_pfn_span() return value in __add_pages()
 
-Ok, will do. Thanks.
+Changes in V1:
 
->> +       .validate = validate,
->> +       .setup = setup,
->> +       .producer_thread = producer,
->> +       .consumer_thread = consumer,
->> +       .measure = measure,
->> +       .report_progress = ops_report_progress,
->> +       .report_final = ops_report_final,
->> +};
->> diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
->> new file mode 100755
->> index 000000000000..d7cc969e4f85
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
->> @@ -0,0 +1,10 @@
->> +#!/bin/bash
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +source ./benchs/run_common.sh
->> +
->> +set -eufo pipefail
->> +
->> +nr_threads=`expr $(cat /proc/cpuinfo | grep "processor"| wc -l) - 1`
->> +summary=$($RUN_BENCH -p $nr_threads bpf-map)
->> +printf "$summary"
->> diff --git a/tools/testing/selftests/bpf/progs/bpf_map_bench.c b/tools/testing/selftests/bpf/progs/bpf_map_bench.c
->> new file mode 100644
->> index 000000000000..655366e6e0f4
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/bpf_map_bench.c
->> @@ -0,0 +1,27 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/* Copyright (c) 2022 Bytedance */
->> +
->> +#include "vmlinux.h"
->> +#include <bpf/bpf_helpers.h>
->> +#include "bpf_misc.h"
->> +
->> +char _license[] SEC("license") = "GPL";
->> +
->> +#define MAX_ENTRIES 1000
->> +
->> +struct {
->> +       __uint(type, BPF_MAP_TYPE_HASH);
->> +       __type(key, u32);
->> +       __type(value, u64);
->> +       __uint(max_entries, MAX_ENTRIES);
->> +} hash_map_bench SEC(".maps");
->> +
->> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
->> +int benchmark(void *ctx)
->> +{
->> +       u32 key = bpf_get_prandom_u32();
->> +       u64 init_val = 1;
->> +
->> +       bpf_map_update_elem(&hash_map_bench, &key, &init_val, BPF_ANY);
->> +       return 0;
->> +}
->> --
->> 2.20.1
->>
+https://lore.kernel.org/all/20220525033910.3781764-1-anshuman.khandual@arm.com/
+
+ mm/memory_hotplug.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
+
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 416b38ca8def..3b24386e9276 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -220,8 +220,7 @@ static void release_memory_resource(struct resource *res)
+ 	kfree(res);
+ }
+ 
+-static int check_pfn_span(unsigned long pfn, unsigned long nr_pages,
+-		const char *reason)
++static int check_pfn_span(unsigned long pfn, unsigned long nr_pages)
+ {
+ 	/*
+ 	 * Disallow all operations smaller than a sub-section and only
+@@ -238,12 +237,8 @@ static int check_pfn_span(unsigned long pfn, unsigned long nr_pages,
+ 		min_align = PAGES_PER_SUBSECTION;
+ 	else
+ 		min_align = PAGES_PER_SECTION;
+-	if (!IS_ALIGNED(pfn, min_align)
+-			|| !IS_ALIGNED(nr_pages, min_align)) {
+-		WARN(1, "Misaligned __%s_pages start: %#lx end: #%lx\n",
+-				reason, pfn, pfn + nr_pages - 1);
++	if (!IS_ALIGNED(pfn, min_align) || !IS_ALIGNED(nr_pages, min_align))
+ 		return -EINVAL;
+-	}
+ 	return 0;
+ }
+ 
+@@ -320,9 +315,10 @@ int __ref __add_pages(int nid, unsigned long pfn, unsigned long nr_pages,
+ 		altmap->alloc = 0;
+ 	}
+ 
+-	err = check_pfn_span(pfn, nr_pages, "add");
+-	if (err)
+-		return err;
++	if (check_pfn_span(pfn, nr_pages)) {
++		WARN(1, "Misaligned %s start: %#lx end: #%lx\n", __func__, pfn, pfn + nr_pages - 1);
++		return -EINVAL;
++	}
+ 
+ 	for (; pfn < end_pfn; pfn += cur_nr_pages) {
+ 		/* Select all remaining pages up to the next section boundary */
+@@ -518,8 +514,10 @@ void __remove_pages(unsigned long pfn, unsigned long nr_pages,
+ 
+ 	map_offset = vmem_altmap_offset(altmap);
+ 
+-	if (check_pfn_span(pfn, nr_pages, "remove"))
++	if (check_pfn_span(pfn, nr_pages)) {
++		WARN(1, "Misaligned %s start: %#lx end: #%lx\n", __func__, pfn, pfn + nr_pages - 1);
+ 		return;
++	}
+ 
+ 	for (; pfn < end_pfn; pfn += cur_nr_pages) {
+ 		cond_resched();
+-- 
+2.20.1
 

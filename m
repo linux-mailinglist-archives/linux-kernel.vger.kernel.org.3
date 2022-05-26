@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB0F5354EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C665354F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348990AbiEZUpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S1349073AbiEZUpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349309AbiEZUpK (ORCPT
+        with ESMTP id S1349067AbiEZUph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:45:10 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8757E8B84
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:44:58 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id f9so5232246ejc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:44:58 -0700 (PDT)
+        Thu, 26 May 2022 16:45:37 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC8F13D50
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:45:32 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id t26so3206837edt.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:45:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=paw5SYFXWn9NCMynf9wnULxZ3Y1uB+T0pzqFJf4vB4I=;
-        b=G4uZJutz3Gwl/OF4uR7la5EZptfaZ2TFeAvIFIBniosgSQzjJu9mSdRL10o1eSILSn
-         tokalQfQipoWGw8o2DPrHHvny4q5rklGbfJOZCFOXbcOo7OCK4zcuYhMdoAip8iHCmHQ
-         MX6/JOrsFZr163129HlRV6xM3jTbHVPAVcdvSKqRr+4sWp5O2MeFO0NPLIiGiwpXvOY3
-         CO7ArHxh+0O/dlWjoPHLeCGjL22MEVM+ePK9SWYtPpte5Umi803RGvndePSxfllsoFV0
-         XEf9v9RpMGIf9dbSTxLMk93pGP6nzvd58yUqNBbZdeBmhd5tDJbUhTRB90Qn6s15IhVm
-         lLVw==
+        bh=bvEgPuZH0/TIqqUAG/GbAAeJq+KdAL3BojrVlqWVgWU=;
+        b=QNn/HJC2TJeFBNRmYVeRzZjkSKQxtzpJ98EbuTBs6i5Z7ISORvwseIrTl5eTfv0rRk
+         a1u0CUuYcz13vT4lJLK5XduXmmxZJPJiV7YSRGEvDS6XwxWXbm1LtSWgY78+WQE8d6Gt
+         j0+haJyMSYATJHMj8QBm+N/l9lhYUBsecsk4PJzAqqTz/BXNZttKkL1T94+iiGk/6cjb
+         UsbLzP6SujJGX/VdjmUZycYytVdfPdU62XqDycpFLThb4OM4mtPoSrmycEu0YNuXHcwL
+         jK1CeHJsXpyCjNxg2/TLJ93rq8rhvEP6eViLTLWUx4PVZvUV6Vf4I4tIJT4VWR5+g9g/
+         1L9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=paw5SYFXWn9NCMynf9wnULxZ3Y1uB+T0pzqFJf4vB4I=;
-        b=V4e8tEsnfx5zkdmMazNYk6tkXc4dU2UmLgO7XjyzfhCvheo8wRs6gEjBuMmfM9VXNl
-         6Qu+F43NR9l6wtddDHWVIzfGhH4f06oSP751O/YwCeM3vl2GaHVl6q5U8Lc68QABOHK4
-         EDGXJmbAGP8K7pzyS8trZeJJpzYZfPVFKzp9K/uOCIRjV4joi2cgAS7cJGfgtJz8MI2G
-         MjoanCl9YruzxkvhrPwpvqvZl1bHagAKQb+RlLbtjDqLmec0PtR/3O9Bw5uSy4UH7Jca
-         Y6O4/8wrdK9fyBC5Q+LMMpXrZ0693fj7Rah3968zhVIuJ4f1THeQneatY9dTK1qSVoX4
-         CgSA==
-X-Gm-Message-State: AOAM531ZO9UYzNQL8hJZ/36SRmSMjt9bmLfxgHR5v3nLHnXJkEUXUIxc
-        qIFmCdbKBMNzIMlNBO7e2lhdLw==
-X-Google-Smtp-Source: ABdhPJxhuEdarJLR2HwYqRyrz/1r6PmgvWgPUdkDWeAz6mkCle0i8FHB5ebBVjF6tZ92IdprBta6Ig==
-X-Received: by 2002:a17:907:a0c8:b0:6fe:b73c:193f with SMTP id hw8-20020a170907a0c800b006feb73c193fmr27628667ejc.11.1653597897479;
-        Thu, 26 May 2022 13:44:57 -0700 (PDT)
+        bh=bvEgPuZH0/TIqqUAG/GbAAeJq+KdAL3BojrVlqWVgWU=;
+        b=WAkYPR3BGFu9+MlVfWPX6t/3msa7GTd+9D/sFjiB2mYIVtPWhkb01zAErKjAh/C0rv
+         L68oPOMePMQAQBpSep5Aj9anuzpioCRiibE0ABjY3vcRRBKa3l5AMW6T2kCq9y6+jaGK
+         ocnAVqHoU7yFI2QI9fJOUGumexbtsOnDfpwjo2plzXRPqVIf0hcBKB2rx48E/IUD0Jx8
+         /08yjVEFFt+zJlh6rOx72u5ZQt6jX2QSK5970/USuRd2hpIOx0S8c9fvyUMIEcmxuS1+
+         4WCrIK70hAcEpIHPNfA9/jfbrBjgPrGBzK2ugulK2m9LkDWMOt11C16fr5UjQt9b2HJS
+         6TsA==
+X-Gm-Message-State: AOAM531LN8ilwYeldgLFk8qCkgQ6JJOFsPbIPmTLzNwBThTxSnm+HJKR
+        4pZPmFxY3vMOS9GqW+2tgRvy1A==
+X-Google-Smtp-Source: ABdhPJxCy5M4S64WUb2PzZ01dJK2/2KWeckn7YeGrDFAMa680I97Bml3rWNbqOmw6hyFmdAQXaiU6g==
+X-Received: by 2002:aa7:cdd7:0:b0:42a:bbb2:84e5 with SMTP id h23-20020aa7cdd7000000b0042abbb284e5mr41913291edw.91.1653597930721;
+        Thu, 26 May 2022 13:45:30 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g3-20020a1709063b0300b006feb3d65330sm810982ejf.109.2022.05.26.13.44.56
+        by smtp.gmail.com with ESMTPSA id rv3-20020a1709068d0300b006fec69a3978sm769550ejc.207.2022.05.26.13.45.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 13:44:56 -0700 (PDT)
+        Thu, 26 May 2022 13:45:30 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        arm@kernel.org, soc@kernel.org, Wei Xu <xuwei5@hisilicon.com>,
+        arm@kernel.org, soc@kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: hisilicon: adjust whitespace around '='
-Date:   Thu, 26 May 2022 22:44:53 +0200
-Message-Id: <20220526204453.832681-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] arm64: dts: marvell: adjust whitespace around '='
+Date:   Thu, 26 May 2022 22:45:24 +0200
+Message-Id: <20220526204525.832847-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -82,189 +85,82 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Output compared with dtx_diff and fdtdump.
 ---
- arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts | 12 ++++++------
- arch/arm64/boot/dts/hisilicon/hi3660.dtsi         |  8 ++++----
- arch/arm64/boot/dts/hisilicon/hi3670.dtsi         |  2 +-
- arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts    | 12 ++++++------
- arch/arm64/boot/dts/hisilicon/hip06.dtsi          |  6 +++---
- arch/arm64/boot/dts/hisilicon/hip07.dtsi          |  6 +++---
- 6 files changed, 23 insertions(+), 23 deletions(-)
+ arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts    | 4 ++--
+ arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi      | 2 +-
+ arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts | 4 ++--
+ arch/arm64/boot/dts/marvell/cn9130-db.dtsi              | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
-index f68580dc87d8..d2d1809a99b6 100644
---- a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
-+++ b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
-@@ -49,9 +49,9 @@ reserved-memory {
- 		ramoops@32000000 {
- 			compatible = "ramoops";
- 			reg = <0x0 0x32000000 0x0 0x00100000>;
--			record-size	= <0x00020000>;
--			console-size	= <0x00020000>;
--			ftrace-size	= <0x00020000>;
-+			record-size = <0x00020000>;
-+			console-size = <0x00020000>;
-+			ftrace-size = <0x00020000>;
- 		};
+diff --git a/arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts b/arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts
+index 39a8e5e99d79..b9ba7c452a77 100644
+--- a/arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts
++++ b/arch/arm64/boot/dts/marvell/armada-7040-mochabin.dts
+@@ -37,7 +37,7 @@ sfp_eth0: sfp-eth0 {
+ 		los-gpio = <&sfp_gpio 3 GPIO_ACTIVE_HIGH>;
+ 		mod-def0-gpio = <&sfp_gpio 2 GPIO_ACTIVE_LOW>;
+ 		tx-disable-gpio = <&sfp_gpio 1 GPIO_ACTIVE_HIGH>;
+-		tx-fault-gpio  = <&sfp_gpio 0 GPIO_ACTIVE_HIGH>;
++		tx-fault-gpio = <&sfp_gpio 0 GPIO_ACTIVE_HIGH>;
  	};
  
-@@ -63,9 +63,9 @@ reboot-mode {
- 			compatible = "syscon-reboot-mode";
- 			offset = <0x0>;
+ 	/* SFP 1G */
+@@ -47,7 +47,7 @@ sfp_eth2: sfp-eth2 {
+ 		los-gpio = <&sfp_gpio 7 GPIO_ACTIVE_HIGH>;
+ 		mod-def0-gpio = <&sfp_gpio 6 GPIO_ACTIVE_LOW>;
+ 		tx-disable-gpio = <&sfp_gpio 5 GPIO_ACTIVE_HIGH>;
+-		tx-fault-gpio  = <&sfp_gpio 4 GPIO_ACTIVE_HIGH>;
++		tx-fault-gpio = <&sfp_gpio 4 GPIO_ACTIVE_HIGH>;
+ 	};
+ };
  
--			mode-normal	= <0x77665501>;
--			mode-bootloader	= <0x77665500>;
--			mode-recovery	= <0x77665502>;
-+			mode-normal = <0x77665501>;
-+			mode-bootloader = <0x77665500>;
-+			mode-recovery = <0x77665502>;
- 		};
+diff --git a/arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi b/arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi
+index 779cf167c33e..c0389dd17340 100644
+--- a/arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi
++++ b/arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi
+@@ -68,7 +68,7 @@ sfp_eth0: sfp-eth0 {
+ 		los-gpio = <&cp1_gpio1 28 GPIO_ACTIVE_HIGH>;
+ 		mod-def0-gpio = <&cp1_gpio1 27 GPIO_ACTIVE_LOW>;
+ 		tx-disable-gpio = <&cp1_gpio1 29 GPIO_ACTIVE_HIGH>;
+-		tx-fault-gpio  = <&cp1_gpio1 26 GPIO_ACTIVE_HIGH>;
++		tx-fault-gpio = <&cp1_gpio1 26 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&cp1_sfpp0_pins>;
+ 		maximum-power-milliwatt = <2000>;
+diff --git a/arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts b/arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts
+index 74bed79e4f5e..cf868e0bbb9c 100644
+--- a/arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts
++++ b/arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts
+@@ -70,7 +70,7 @@ sfp_cp0_eth0: sfp-cp0-eth0 {
+ 		los-gpio = <&sfpplus_gpio 11 GPIO_ACTIVE_HIGH>;
+ 		mod-def0-gpio = <&sfpplus_gpio 10 GPIO_ACTIVE_LOW>;
+ 		tx-disable-gpio = <&sfpplus_gpio 9 GPIO_ACTIVE_HIGH>;
+-		tx-fault-gpio  = <&sfpplus_gpio 8 GPIO_ACTIVE_HIGH>;
++		tx-fault-gpio = <&sfpplus_gpio 8 GPIO_ACTIVE_HIGH>;
+ 		maximum-power-milliwatt = <3000>;
  	};
  
-diff --git a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
-index 6b3057a09251..8343d0cedde3 100644
---- a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
-+++ b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
-@@ -479,7 +479,7 @@ uart1: serial@fdf00000 {
- 			reg = <0x0 0xfdf00000 0x0 0x1000>;
- 			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
- 			dma-names = "rx", "tx";
--			dmas =  <&dma0 2 &dma0 3>;
-+			dmas = <&dma0 2 &dma0 3>;
- 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART1>,
- 				 <&crg_ctrl HI3660_CLK_GATE_UART1>;
- 			clock-names = "uartclk", "apb_pclk";
-@@ -493,7 +493,7 @@ uart2: serial@fdf03000 {
- 			reg = <0x0 0xfdf03000 0x0 0x1000>;
- 			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
- 			dma-names = "rx", "tx";
--			dmas =  <&dma0 4 &dma0 5>;
-+			dmas = <&dma0 4 &dma0 5>;
- 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART2>,
- 				 <&crg_ctrl HI3660_PCLK>;
- 			clock-names = "uartclk", "apb_pclk";
-@@ -519,7 +519,7 @@ uart4: serial@fdf01000 {
- 			reg = <0x0 0xfdf01000 0x0 0x1000>;
- 			interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
- 			dma-names = "rx", "tx";
--			dmas =  <&dma0 6 &dma0 7>;
-+			dmas = <&dma0 6 &dma0 7>;
- 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART4>,
- 				 <&crg_ctrl HI3660_CLK_GATE_UART4>;
- 			clock-names = "uartclk", "apb_pclk";
-@@ -533,7 +533,7 @@ uart5: serial@fdf05000 {
- 			reg = <0x0 0xfdf05000 0x0 0x1000>;
- 			interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
- 			dma-names = "rx", "tx";
--			dmas =  <&dma0 8 &dma0 9>;
-+			dmas = <&dma0 8 &dma0 9>;
- 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART5>,
- 				 <&crg_ctrl HI3660_CLK_GATE_UART5>;
- 			clock-names = "uartclk", "apb_pclk";
-diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-index 3125c3869c69..886b93c5893a 100644
---- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-+++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
-@@ -324,7 +324,7 @@ gpio3: gpio@e8a0e000 {
- 			interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
- 			gpio-controller;
- 			#gpio-cells = <2>;
--			gpio-ranges =  <&pmx0 0 13 4 &pmx0 7 17 1>;
-+			gpio-ranges = <&pmx0 0 13 4 &pmx0 7 17 1>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
- 			clocks = <&crg_ctrl HI3670_PCLK_GPIO3>;
-diff --git a/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts b/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts
-index 3df2afb2f637..629e604aa281 100644
---- a/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts
-+++ b/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts
-@@ -54,9 +54,9 @@ reserved-memory {
- 		ramoops@21f00000 {
- 			compatible = "ramoops";
- 			reg = <0x0 0x21f00000 0x0 0x00100000>;
--			record-size	= <0x00020000>;
--			console-size	= <0x00020000>;
--			ftrace-size	= <0x00020000>;
-+			record-size = <0x00020000>;
-+			console-size = <0x00020000>;
-+			ftrace-size = <0x00020000>;
- 		};
- 
- 		/* global autoconfigured region for contiguous allocations */
-@@ -76,9 +76,9 @@ reboot-mode {
- 			compatible = "syscon-reboot-mode";
- 			offset = <0x0>;
- 
--			mode-normal	= <0x77665501>;
--			mode-bootloader	= <0x77665500>;
--			mode-recovery	= <0x77665502>;
-+			mode-normal = <0x77665501>;
-+			mode-bootloader = <0x77665500>;
-+			mode-recovery = <0x77665502>;
- 		};
+@@ -80,7 +80,7 @@ sfp_cp1_eth0: sfp-cp1-eth0 {
+ 		los-gpio = <&sfpplus_gpio 3 GPIO_ACTIVE_HIGH>;
+ 		mod-def0-gpio = <&sfpplus_gpio 2 GPIO_ACTIVE_LOW>;
+ 		tx-disable-gpio = <&sfpplus_gpio 1 GPIO_ACTIVE_HIGH>;
+-		tx-fault-gpio  = <&sfpplus_gpio 0 GPIO_ACTIVE_HIGH>;
++		tx-fault-gpio = <&sfpplus_gpio 0 GPIO_ACTIVE_HIGH>;
+ 		maximum-power-milliwatt = <3000>;
  	};
  
-diff --git a/arch/arm64/boot/dts/hisilicon/hip06.dtsi b/arch/arm64/boot/dts/hisilicon/hip06.dtsi
-index 70d7732dd348..2f8b03b0d365 100644
---- a/arch/arm64/boot/dts/hisilicon/hip06.dtsi
-+++ b/arch/arm64/boot/dts/hisilicon/hip06.dtsi
-@@ -537,7 +537,7 @@ port@0 {
- 
- 			port@1 {
- 				reg = <1>;
--				serdes-syscon= <&serdes_ctrl>;
-+				serdes-syscon = <&serdes_ctrl>;
- 				port-rst-offset = <1>;
- 				port-mode-offset = <1>;
- 				media-type = "fiber";
-@@ -546,7 +546,7 @@ port@1 {
- 			port@4 {
- 				reg = <4>;
- 				phy-handle = <&phy0>;
--				serdes-syscon= <&serdes_ctrl>;
-+				serdes-syscon = <&serdes_ctrl>;
- 				port-rst-offset = <4>;
- 				port-mode-offset = <2>;
- 				media-type = "copper";
-@@ -555,7 +555,7 @@ port@4 {
- 			port@5 {
- 				reg = <5>;
- 				phy-handle = <&phy1>;
--				serdes-syscon= <&serdes_ctrl>;
-+				serdes-syscon = <&serdes_ctrl>;
- 				port-rst-offset = <5>;
- 				port-mode-offset = <3>;
- 				media-type = "copper";
-diff --git a/arch/arm64/boot/dts/hisilicon/hip07.dtsi b/arch/arm64/boot/dts/hisilicon/hip07.dtsi
-index 6baf6a686450..1a16662f8867 100644
---- a/arch/arm64/boot/dts/hisilicon/hip07.dtsi
-+++ b/arch/arm64/boot/dts/hisilicon/hip07.dtsi
-@@ -1422,7 +1422,7 @@ port@0 {
- 
- 			port@1 {
- 				reg = <1>;
--				serdes-syscon= <&serdes_ctrl>;
-+				serdes-syscon = <&serdes_ctrl>;
- 				cpld-syscon = <&dsa_cpld 0x4>;
- 				port-rst-offset = <1>;
- 				port-mode-offset = <1>;
-@@ -1433,7 +1433,7 @@ port@1 {
- 			port@4 {
- 				reg = <4>;
- 				phy-handle = <&phy0>;
--				serdes-syscon= <&serdes_ctrl>;
-+				serdes-syscon = <&serdes_ctrl>;
- 				port-rst-offset = <4>;
- 				port-mode-offset = <2>;
- 				mc-mac-mask = [ff f0 00 00 00 00];
-@@ -1443,7 +1443,7 @@ port@4 {
- 			port@5 {
- 				reg = <5>;
- 				phy-handle = <&phy1>;
--				serdes-syscon= <&serdes_ctrl>;
-+				serdes-syscon = <&serdes_ctrl>;
- 				port-rst-offset = <5>;
- 				port-mode-offset = <3>;
- 				mc-mac-mask = [ff f0 00 00 00 00];
+diff --git a/arch/arm64/boot/dts/marvell/cn9130-db.dtsi b/arch/arm64/boot/dts/marvell/cn9130-db.dtsi
+index 7e20987253a3..f58402eb9536 100644
+--- a/arch/arm64/boot/dts/marvell/cn9130-db.dtsi
++++ b/arch/arm64/boot/dts/marvell/cn9130-db.dtsi
+@@ -404,7 +404,7 @@ &cp0_usb3_0 {
+ &cp0_usb3_1 {
+ 	status = "okay";
+ 	usb-phy = <&cp0_usb3_0_phy1>;
+-	phys =  <&cp0_utmi1>;
++	phys = <&cp0_utmi1>;
+ 	phy-names = "utmi";
+ 	dr_mode = "host";
+ };
 -- 
 2.34.1
 

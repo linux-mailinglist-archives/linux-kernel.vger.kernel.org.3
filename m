@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DB6535492
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45065535499
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347662AbiEZUiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        id S1347841AbiEZUiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243335AbiEZUiD (ORCPT
+        with ESMTP id S1348076AbiEZUiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:38:03 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154375A5B8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:38:02 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id f21so5023897ejh.11
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:38:02 -0700 (PDT)
+        Thu, 26 May 2022 16:38:11 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E730EE275D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:38:09 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id v11so2464018qkf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
+        d=soleen.com; s=google;
+        h=from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=QJhc1mTxQ3QecQnzHGouGfH+Ej90dYE0LGaajUy8Apw=;
-        b=uiaFKSXxIGbdrU2GegXIqFhYHTBQl00Bj09Dpe5qx7XEzmarRuR4bgTIiZcO1Tb78y
-         IjZhTvse19YdWDBRZX3UdREoLS5KcK5HSQQlzWkW7q2Ntbl57IjxeO3EditIt4Cu7jLn
-         fM1Txe5w8rZ3YzaYWN3mvLtqnFR5Dx/qWb2sn/UhKJ9bOPmv9jnNzDeVjcQLfePGkYQl
-         Xjo7eaeQ+nhoUZqFwEl5DBW5ZeZww6rWv867e8BdiFEbkodDkvsV5wb2sUAnKpNws34A
-         bgEKWYiB55hOIz38IYPBq/V0xEjvbdNHkBS2IrB3mwkdQLSS/53KMNYpfylAkW14JlNj
-         YhTA==
+        bh=rRoGonP9HfX25x1VUl7zmMTYRYO/5pDsYCe4KdNBzdE=;
+        b=DwU6e3KxjdUUnRv1wd9M2Gs9/WozVUiDGXJovnWPggTGPL9tlM1OIEB1TUmeAsJMdp
+         r6dh3S42iKyv8/FZ1Li4lTgJbpVpn45lneLyt0dDpfUXqmR+bqcKjb4vjaSuHCSBRJVN
+         n753mR+anAVg3ketZH65sBZ0NKkbKf4dDHA2yDwAFbzZhpP65ZIlURFAXTCWUWgr3glv
+         Jk5djArH5WVq2cEyvugg5PmG+kKo2AlMWS3FKURJFclS5FFOa2Xr3Pf0ADA8JS9I4l3Q
+         FtMGazqYu4/2Zw0cgyYWrL1FHd1MUFjaW1tzBah9f2UVeLtejZScPZjF0iiaG67+x6lB
+         5KEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=QJhc1mTxQ3QecQnzHGouGfH+Ej90dYE0LGaajUy8Apw=;
-        b=Y04qliXiOmMJ3GV1hu4DA4V8i3gtss0YEY5aAkgGJZ+Rx1pPci2RToacivEyAUwT+Z
-         1HjbW4oCLFy71G3Bm3y3tZLg/WNux3ly6Bi3j70zqSEasNBplM8JPdNWU5kIOle613Iz
-         TUMHJYgP+3vkPqvY4+icq17iKTUK0PagNVab1MXnFrmFQ9/k934dUHofo2sVt2lA8Rtj
-         PMtWdqyVgX8Hoqk0pYrghKpY/+c2bqQbrv+0Ww7faY55+O/0378MVcKqBJ2K2UyNOMel
-         1Io/8301074pWRBB8VgATQHl030X740oCbVGS6Z18Ug98z3mFtbhiLR7LS+Mk2oqqUrZ
-         IBbQ==
-X-Gm-Message-State: AOAM533X3hWHJMaL1voRMv6t0zy7Sbv1RPUg01CwH2Esya/LBagqbSQr
-        3W2BewS54X41U49G3H0SG+u6eQ==
-X-Google-Smtp-Source: ABdhPJwZZAaiXc9uQE2koBnbYin8GLwTlYJhIRWvb1Cu1PatIOvnAgDe7czOEGMB7VIIb30zWQrgPA==
-X-Received: by 2002:a17:907:3f0d:b0:6ff:43e:bb1a with SMTP id hq13-20020a1709073f0d00b006ff043ebb1amr13600232ejc.52.1653597480679;
-        Thu, 26 May 2022 13:38:00 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b16-20020a50b410000000b0042b5cf75d6esm1160381edh.97.2022.05.26.13.37.59
+        bh=rRoGonP9HfX25x1VUl7zmMTYRYO/5pDsYCe4KdNBzdE=;
+        b=ZiZCFO6ap1H/dkgQUNxhS0cROd3rc9Tw5p19/ZK5D2gB1Mbuxc+JdLXQMfxcNIqcU5
+         ZuHoHMM22D82FpdJroLM2qHJmwrcCKLJDcslmse+MR7m7Uuez8oNdZgC0XrynouWEKhg
+         GaY1L7waC4WmpaKFRjjv+wpU2JGl61ufTmLc1rzmRQNsCMzEQBdHoVTGkMXSOSG+5klS
+         MESO65U1PAXDmsE+SJ5RJC0Xl5jMUElX0KZWyYAzT4mAX66YbZQpCguu7+R4IhrK7oY0
+         tSajf3/WvYQQSZ1YRv2DQkxT3XMYH6MQcZm3pspLnajoAV5NPcbuterbQ0A7TC6e0Stk
+         91zg==
+X-Gm-Message-State: AOAM532pAA+GizpKK92JOH2f9uxi8gm/3htme74l5LZKXysCOcnqQohX
+        bHFop4hwkvLrKwMoJI7OZkke/w==
+X-Google-Smtp-Source: ABdhPJzVBKEN8HOtWhrci8jARirNNqgqDh4wWJNdfELfcn/rJoTmLiEOyhH2wbyuE8mR7HA9bPOrfw==
+X-Received: by 2002:a05:620a:166e:b0:6a5:c6b5:7823 with SMTP id d14-20020a05620a166e00b006a5c6b57823mr2098185qko.12.1653597488761;
+        Thu, 26 May 2022 13:38:08 -0700 (PDT)
+Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
+        by smtp.gmail.com with ESMTPSA id o124-20020a37be82000000b006a32c991501sm1711725qkf.12.2022.05.26.13.38.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 13:38:00 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ARM: dts: ecx: adjust whitespace around '='
-Date:   Thu, 26 May 2022 22:37:58 +0200
-Message-Id: <20220526203758.831301-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 26 May 2022 13:38:08 -0700 (PDT)
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+X-Google-Original-From: Pasha Tatashin <tatashin@google.com>
+To:     pasha.tatashin@soleen.com, sashal@kernel.org,
+        ebiederm@xmission.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rburanyi@google.com,
+        gthelen@google.com
+Subject: [PATCH] kexec_file: Increase maximum file size to 4G
+Date:   Thu, 26 May 2022 20:38:05 +0000
+Message-Id: <20220526203805.3659597-1-tatashin@google.com>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,40 +70,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix whitespace coding style: use single space instead of tabs or
-multiple spaces around '=' sign in property assignment.  No functional
-changes (same DTB).
+In some case initrd can be large. For example, it could be a netboot
+image loaded by u-root, that is kexec'ing into it.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The maximum size of initrd is arbitrary set to 2G. Also, the limit is
+not very obvious because it is hidden behind a generic INT_MAX macro.
 
+Theoretically, we could make it LONG_MAX, but it is safer to keep it
+sane, and just increase it to 4G.
+
+Increase the size to 4G, and make it obvious by having a new macro
+that specifies the maximum file size supported by kexec_file_load()
+syscall: KEXEC_FILE_SIZE_MAX.
+
+Signed-off-by: Pasha Tatashin <tatashin@google.com>
 ---
+ kernel/kexec_file.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Output compared with dtx_diff and fdtdump.
----
- arch/arm/boot/dts/ecx-common.dtsi | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm/boot/dts/ecx-common.dtsi b/arch/arm/boot/dts/ecx-common.dtsi
-index 57a028a69373..ce5221c6b358 100644
---- a/arch/arm/boot/dts/ecx-common.dtsi
-+++ b/arch/arm/boot/dts/ecx-common.dtsi
-@@ -9,11 +9,11 @@ chosen {
- 	};
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 8347fc158d2b..1be2227b33e6 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -31,6 +31,9 @@
  
- 	psci {
--		compatible	= "arm,psci";
--		method		= "smc";
--		cpu_suspend	= <0x84000002>;
--		cpu_off		= <0x84000004>;
--		cpu_on		= <0x84000006>;
-+		compatible = "arm,psci";
-+		method = "smc";
-+		cpu_suspend = <0x84000002>;
-+		cpu_off = <0x84000004>;
-+		cpu_on = <0x84000006>;
- 	};
+ static int kexec_calculate_store_digests(struct kimage *image);
  
- 	soc {
++/* Maximum size in bytes for kernel/initrd files. */
++#define KEXEC_FILE_SIZE_MAX	(4UL << 30)
++
+ /*
+  * Currently this is the only default function that is exported as some
+  * architectures need it to do additional handlings.
+@@ -227,7 +230,8 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ 	void *ldata;
+ 
+ 	ret = kernel_read_file_from_fd(kernel_fd, 0, &image->kernel_buf,
+-				       INT_MAX, NULL, READING_KEXEC_IMAGE);
++				       KEXEC_FILE_SIZE_MAX, NULL,
++				       READING_KEXEC_IMAGE);
+ 	if (ret < 0)
+ 		return ret;
+ 	image->kernel_buf_len = ret;
+@@ -247,7 +251,7 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ 	/* It is possible that there no initramfs is being loaded */
+ 	if (!(flags & KEXEC_FILE_NO_INITRAMFS)) {
+ 		ret = kernel_read_file_from_fd(initrd_fd, 0, &image->initrd_buf,
+-					       INT_MAX, NULL,
++					       KEXEC_FILE_SIZE_MAX, NULL,
+ 					       READING_KEXEC_INITRAMFS);
+ 		if (ret < 0)
+ 			goto out;
 -- 
-2.34.1
+2.36.1.124.g0e6072fb45-goog
 

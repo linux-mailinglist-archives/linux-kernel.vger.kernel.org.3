@@ -2,99 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF0453525C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AD3535258
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244655AbiEZQ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 12:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
+        id S1344128AbiEZQy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 12:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiEZQ6w (ORCPT
+        with ESMTP id S238069AbiEZQy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 12:58:52 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D684A3085
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:58:49 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 1so2374935ljp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KIrgpKkAzwB07gYimrtbZQWgxesfa74CNz+gljHxsDM=;
-        b=Uw2QqULbsgoG8dWkUYz5Wetvt9zrj+w2Z/3KG1NXe+Ga2SYOQA4ahHz0GCrZxRVxxs
-         V+aWCEb61jpbUN2D2snj9yzTr4OzNyUFkAE5Zt5ZRUjf0jixHym11fMEvpdfrn+XIvS7
-         eBQrWbr/A3ETMNkjZcLBXDbPoHW+g5IGealpM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KIrgpKkAzwB07gYimrtbZQWgxesfa74CNz+gljHxsDM=;
-        b=1n5IhervGKYWeA6D4ClCfgIgACbpbfvx1iPph0rGnp3u/oNpbELGzEPokW7t09SO8a
-         59YqF/wS7FLSZXuq242wYXS6O5/RV4NfeYs9CCzw9spYuVJZtPVxlJtr7jbkvBf/WZMR
-         i5fBwQCLtXgW68l8USO71StcLusw81HGQQ6dPLTWsZ15FMnW9V0lOkNCtTzusjgVKPgU
-         hlztf9IpMcK+uOqxbZP+6lEC1hZZ44QAFuQyjfLYitBqcnyLtRgCa+KmAevI2Qmx/ZMh
-         5SlkAV3K1rXLamtRIsucfYuLtBberDaSbhv5j1RC5MGvlS+GpQDDJltJNIzP4q2BncZV
-         ouxg==
-X-Gm-Message-State: AOAM531E3vzIn0kHfEg1PVOlxzrskU9NdsxNzluWNEkW3RHmfmCbk5Ew
-        b9650p4apB+9322a1pTvrvJRNmKZIObKz00Y8h0=
-X-Google-Smtp-Source: ABdhPJy7TVjPe6O2CQ7dFTQfiXVKvT2Ola1gYpvrzQpTtH8asuYK+vfcrUKqpbX+YfiqS/ZeJxkWpg==
-X-Received: by 2002:a05:651c:1246:b0:253:f0b4:a410 with SMTP id h6-20020a05651c124600b00253f0b4a410mr9957896ljh.288.1653584327289;
-        Thu, 26 May 2022 09:58:47 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id e29-20020a19691d000000b0047255d211fesm434070lfc.301.2022.05.26.09.58.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 09:58:47 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id bu29so3327478lfb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:58:46 -0700 (PDT)
-X-Received: by 2002:a5d:58cc:0:b0:20e:643d:e46a with SMTP id
- o12-20020a5d58cc000000b0020e643de46amr30854195wrf.97.1653583940350; Thu, 26
- May 2022 09:52:20 -0700 (PDT)
+        Thu, 26 May 2022 12:54:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0026DFC5;
+        Thu, 26 May 2022 09:54:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 675EFB82176;
+        Thu, 26 May 2022 16:54:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5603C385A9;
+        Thu, 26 May 2022 16:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653584065;
+        bh=3G1ExpudxEkUKLGdVnrmwJ/uiFkyw5RF02cjHtBsAW8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=RL+NcvCPbWw9Ew0REV/3asS3GSQ91R0RFFIQDTW2/7YiDe7+ndSzzBvAQHsLBzTqH
+         8oxv6oGTahVLDIg1gRGspWvSqpyexhEaK0st9HYBNV0Ly52hayPOv4n097H61Jdm45
+         w6h6eWXkj6doRHPeNw/Ytirs3yK+1eSfJxt86uL7YBU8qq6fNIKCuLFgbWcQdKqH1N
+         HR6vs2B+3KmlHGg+SlKFhafJEXh9XzVrdzrfaUitrnHZy9C17S+4IpBQ0504Vwlr7f
+         Gz4MOWPJeylHPSbWa7NOvQEN7BZMi+2cKYYP9u67Z8w22ClK4L/8Fo/cFk7A847mBx
+         Q+/W8cOsirSww==
+Date:   Thu, 26 May 2022 11:54:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH v1 06/11] PCI/PM: Write 0 to PMCSR in pci_power_up() in
+ all cases
+Message-ID: <20220526165422.GA338382@bhelgaas>
 MIME-Version: 1.0
-References: <CAHk-=wh1XeaxWXG5QziGA4ds918UnW1hO924kusgVB-wGj+9Og@mail.gmail.com>
- <871qwgmqws.fsf@mpe.ellerman.id.au>
-In-Reply-To: <871qwgmqws.fsf@mpe.ellerman.id.au>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 26 May 2022 09:52:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjd-RVttYwPc9RYD+x0b=WNYc_PZ2JKwPxc8fm54t0d2w@mail.gmail.com>
-Message-ID: <CAHk-=wjd-RVttYwPc9RYD+x0b=WNYc_PZ2JKwPxc8fm54t0d2w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] locking/lockref: Use try_cmpxchg64 in CMPXCHG_LOOP macro
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Waiman.Long@hp.com,
-        Paul McKenney <paulmck@linux.vnet.ibm.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5748066.MhkbZ0Pkbq@kreacher>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 5:15 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> Do you know of a benchmark that shows it up? I tried a few things but
-> couldn't get lockref_get() to count for more than 1-2%.
+On Thu, May 05, 2022 at 08:10:43PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Make pci_power_up() write 0 to the device's PCI_PM_CTRL register in
+> order to put it into D0 regardless of the power state returned by
+> the previous read from that register which should not matter.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/pci/pci.c |   11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> Index: linux-pm/drivers/pci/pci.c
+> ===================================================================
+> --- linux-pm.orig/drivers/pci/pci.c
+> +++ linux-pm/drivers/pci/pci.c
+> @@ -1230,15 +1230,10 @@ int pci_power_up(struct pci_dev *dev)
+>  	}
+>  
+>  	/*
+> -	 * If we're (effectively) in D3, force entire word to 0. This doesn't
+> -	 * affect PME_Status, disables PME_En, and sets PowerState to 0.
+> +	 * Force the entire word to 0. This doesn't affect PME_Status, disables
+> +	 * PME_En, and sets PowerState to 0.
+>  	 */
+> -	if (state == PCI_D3hot)
+> -		pmcsr = 0;
+> -	else
+> -		pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
+> -
+> -	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
+> +	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, 0);
 
-Heh. 1% for a small instruction sequence that is only handful of
-instructions and is used in just a couple of places counts as "very
-hot" for me.
+Can you reassure me why this is safe and useful?
 
-I assume you did the natural thing: threaded pathname lookup (with
-paths being of the longer variety to not be dominated by system call
-etc costs).
+This is a 16-bit write that includes (PCIe r6.0, sec 7.5.2.2):
 
-               Linus
+  0x0003 PowerState     RW
+  0x0004                RsvdP
+  0x0008 No_Soft_Reset  RO
+  0x00f0                RsvdP
+  0x0100 PME_En         RW/RWS
+  0x1e00 Data_Select    RW, VF ROZ
+  0x6000 Data_Scale     RO, VF ROZ
+  0x8000 PME_Status     RW1CS
+
+We intend to set PowerState to 0 (D0), apparently intend to clear
+PME_En, and PME_Status is "write 1 to clear" to writing 0 does
+nothing, so those look OK.
+
+But the RsvdP fields are reserved for future RW bits and should be
+preserved, and it looks like clearing Data_Select could potentially
+break the Data Register power consumption reporting (which I don't
+think we support today).
+
+It seems like maybe we should do this instead:
+
+  pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL,
+                        pmcsr & ~PCI_PM_CTRL_STATE_MASK)
+
+to just unconditionally clear PowerState?

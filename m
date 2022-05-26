@@ -2,107 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7145853478B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 02:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF06E53478F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 02:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344547AbiEZAix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 20:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
+        id S1344563AbiEZAjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 20:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344494AbiEZAit (ORCPT
+        with ESMTP id S236465AbiEZAi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 20:38:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C4412A86
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:38:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FBDA61699
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:38:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E87C385B8;
-        Thu, 26 May 2022 00:38:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653525527;
-        bh=mcqnCN2YBvUwzyeX7k9K0peIxzEFPkn3xDeteHBJrdo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N81Te+SF1DaTNUMLBN4mZrqMfFtVaNu04yzxkWAlTPTkjjB2gjrpRj4YiUOUG2C9s
-         wVOIhua2ME2fPtnqKDcwdZRp7/toRuiOBEgYWx4yfRor4GbFQhNwSsgZ2baz26jZ0/
-         KqNpbrO/hogCJiuGrST8myIByIeIz52S387T66zjv/KgCiLaCXWTxnbPwLpWDr0PEs
-         zOehz4xfU646b/yq2Q47pM3yfoprinh8TG5y/4ArXluhF2hfpv8nmOrvBtVvQ7bLWC
-         8nf1S1iLaIkPcmLl9wWRXx6wgzMUAbQXC2kLwWp9fb7IkzLsIxXKJFXd9ee9tf44w0
-         XaYPLwyZb1QjQ==
-Date:   Wed, 25 May 2022 17:38:45 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: Re: drivers/dma/imx-dma.c:1048:20: warning: cast to smaller integer
- type 'enum imx_dma_type' from 'const void *'
-Message-ID: <Yo7MFbwDyT+1lzcr@dev-arch.thelio-3990X>
-References: <202205021042.xPjJ6Z4J-lkp@intel.com>
- <CAOMZO5Dg8_vDbW0vau4YFspZZ-RS=in8xEavkyYvBAQB41xTWA@mail.gmail.com>
+        Wed, 25 May 2022 20:38:59 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FA9B82D4
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:38:58 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id 202so438019pfu.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7P8MdhBUHeNYERj02eaiVlo3+1akuXNgpyLjujYYpb0=;
+        b=nGnImQMrxcKuAMPfn2cnaf9VK34koPZI6BdWd8L/dvJkOmKEczFMWc8Yx7hsQFZeVL
+         9KLxd0tBqQk1/z15iyaTJQGyj+rpJcqO/oigF6/cI0x8g+X/Xo/VBfVgAonu8k6z7tAw
+         rX3SONGBqur0M8KowUWh/wmc3aYT+yOgmGgvthbF1GbnQhkOPFYSCTfv0l7sg5kj2jls
+         D/lYOdddeRohuY3mRJGYNVA5mDFRmRi5K+xU9HMyUH4O1+TPylZTZEwi6U0ynqv/r7ZQ
+         PEcsEwLY3XMn7/TlPZPqXhp0uzspbOfW5miRUT3ck3ZbCGUmofEeJzc2ijyz7b5LJr0L
+         9x9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7P8MdhBUHeNYERj02eaiVlo3+1akuXNgpyLjujYYpb0=;
+        b=WyUiarZ+63G3hx8W1Y4bYhv2qxx6QdITGgLqcFpJotjuijw9YQ30daOcWJObr+gGbP
+         hRXLfj01K1Rpe5TzXY7kpZgwf8M8rhaA5J0ni4yhrP5YXbd0JOG6J/f8eUzmalcC1mWt
+         idlsHu/JJY0/YA6j1SQ2Zj3q+r1i0ziyFb+UfGFadgm7t+swyrrM0kHCrL9OavzjCmhS
+         XG+helB/Zur9LK9higoQ5d6G9XKcfq/muSIF8XOS+UeHe0bwD7vavjNrl/BNTOOT/Ser
+         C3v355TfyNn0uQdShd5RMo23fLiTBVRd+LSLvBdAJRF4NdeSP5j+ErfCEog2pNziAwyc
+         IsHA==
+X-Gm-Message-State: AOAM532m+kPzH4s0F2IBTjyPNVuZwkawvLAR+wGU+dkPFMvnPH0iKmrx
+        yRKdpKJs/ThrTJ/3VuEp8tk2KQ==
+X-Google-Smtp-Source: ABdhPJxQ2PEcWk8DK3E2AzHueuX2Pq6jI8vVF9DbxayvJeVzlRCPUepbJ8f3PDiOx87ktlbbZyxBrw==
+X-Received: by 2002:a62:1413:0:b0:518:4259:200e with SMTP id 19-20020a621413000000b005184259200emr34153334pfu.41.1653525537153;
+        Wed, 25 May 2022 17:38:57 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id bh8-20020a056a02020800b003f5cc9c31e2sm141353pgb.38.2022.05.25.17.38.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 17:38:56 -0700 (PDT)
+Date:   Thu, 26 May 2022 00:38:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Marc Zyngier <maz@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Oliver Upton <oupton@google.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH v4 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
+ page table uses.
+Message-ID: <Yo7MHA2aUaprvgl8@google.com>
+References: <CAJD7tkY7JF25XXUFq2mGroetMkfo-2zGOaQC94pjZE3D42+oaw@mail.gmail.com>
+ <Yn2TGJ4vZ/fst+CY@cmpxchg.org>
+ <Yn2YYl98Vhh/UL0w@google.com>
+ <Yn5+OtZSSUZZgTQj@cmpxchg.org>
+ <Yn6DeEGLyR4Q0cDp@google.com>
+ <CALvZod6nERq4j=L0V+pc-rd5+QKi4yb_23tWV-1MF53xL5KE6Q@mail.gmail.com>
+ <CAJD7tka-5+XRkthNV4qCg8woPCpjcwynQoRBame-3GP1L8y+WQ@mail.gmail.com>
+ <YoeoLJNQTam5fJSu@cmpxchg.org>
+ <CAJD7tkYjcmwBeUx-=MTQeUf78uqFDvfpy7OuKy4OvoS7HiVO1Q@mail.gmail.com>
+ <Yo4Ze+DZrLqn0PeU@cmpxchg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOMZO5Dg8_vDbW0vau4YFspZZ-RS=in8xEavkyYvBAQB41xTWA@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yo4Ze+DZrLqn0PeU@cmpxchg.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 09:14:30PM -0300, Fabio Estevam wrote:
-> On Sun, May 1, 2022 at 11:13 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Fabio,
-> >
-> > FYI, the error/warning still remains.
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-> > commit: 0ab785c894e618587e83bb67e8a8e96649868ad1 dmaengine: imx-dma: Remove unused .id_table
-> > date:   1 year, 5 months ago
-> > config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220502/202205021042.xPjJ6Z4J-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm64 cross compiling tool for clang build
-> >         # apt-get install binutils-aarch64-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0ab785c894e618587e83bb67e8a8e96649868ad1
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 0ab785c894e618587e83bb67e8a8e96649868ad1
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/dma/imx-dma.c:1048:20: warning: cast to smaller integer type 'enum imx_dma_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-> >            imxdma->devtype = (enum imx_dma_type)of_device_get_match_data(&pdev->dev);
-> >                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    1 warning generated.
+On Wed, May 25, 2022, Johannes Weiner wrote:
+> On Tue, May 24, 2022 at 03:31:52PM -0700, Yosry Ahmed wrote:
+> > I don't have enough context to say whether we should piggyback KVM MMU
+> > pages to the existing NR_PAGETABLE item, but from a high level it
+> > seems like it would be more helpful if they are a separate stat.
+> > Anyway, I am willing to go with whatever Sean thinks is best.
 > 
-> Does anyone know how to fix this clang warning?
+> Somebody should work this out and put it into a changelog. It's
+> permanent ABI.
 
-Either an intermediate cast to uintptr_t or unsigned long or replacing
-the enum cast with one of those should work. See commits:
+After a lot of waffling, my vote is to add a dedicated NR_SECONDARY_PAGETABLE.
 
-2602dc10f9d9 ("memory: renesas-rpc-if: Silence clang warning")
-10462b3558d4 ("can: mcp251x: mcp251x_can_probe(): silence clang warning")
-83415669d8d8 ("can: hi311x: hi3110_can_probe(): silence clang warning")
-be5aeee30e45 ("scsi: fcoe: Suppress a compiler warning")
+It's somewhat redundant from a KVM perspective, as NR_SECONDARY_PAGETABLE will
+scale with KVM's per-VM pages_{4k,2m,1g} stats unless the guest is doing something
+bizarre, e.g. accessing only 4kb chunks of 2mb pages so that KVM is forced to
+allocate a large number of page tables even though the guest isn't accessing that
+much memory.
 
-Cheers,
-Nathan
+But, someone would need to either understand how KVM works to make that connection,
+or know (or be told) to go look at KVM's stats if they're running VMs to better
+decipher the stats.
+
+And even in the little bit of time I played with this, I found having
+nr_page_table_pages side-by-side with nr_secondary_page_table_pages to be very
+informative.  E.g. when backing a VM with THP versus HugeTLB,
+nr_secondary_page_table_pages is roughly the same, but nr_page_table_pages is an
+order of a magnitude higher with THP.  I'm guessing the THP behavior is due to
+something triggering DoubleMap, but now I want to find out why that's happening.
+
+So while I'm pretty sure a clever user could glean the same info by cross-referencing
+NR_PAGETABLE stats with KVM stats, I think having NR_SECONDARY_PAGETABLE will at the
+very least prove to be helpful for understanding tradeoffs between VM backing types,
+and likely even steer folks towards potential optimizations.
+
+Baseline:
+  # grep page_table /proc/vmstat 
+  nr_page_table_pages 2830
+  nr_secondary_page_table_pages 0
+
+THP:
+  # grep page_table /proc/vmstat 
+  nr_page_table_pages 7584
+  nr_secondary_page_table_pages 140
+
+HugeTLB:
+  # grep page_table /proc/vmstat
+  nr_page_table_pages 3153
+  nr_secondary_page_table_pages 153
+

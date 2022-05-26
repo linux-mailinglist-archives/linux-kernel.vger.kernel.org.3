@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46ABB53484D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCF5534850
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345827AbiEZBmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S1345840AbiEZBmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345828AbiEZBmD (ORCPT
+        with ESMTP id S1344790AbiEZBmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:42:03 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33406A7E13;
-        Wed, 25 May 2022 18:41:59 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id i66so603326oia.11;
-        Wed, 25 May 2022 18:41:59 -0700 (PDT)
+        Wed, 25 May 2022 21:42:14 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D276BA5031;
+        Wed, 25 May 2022 18:42:11 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id f2-20020a4a8f42000000b0035e74942d42so70269ool.13;
+        Wed, 25 May 2022 18:42:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=d+Z9RgiK3EIxVlZZsUbr4/gk0SD8+6Vq2nxSeiDB3Go=;
-        b=lonZS1Pi4KRL8RzO1Z0tiH9qUojyzK/dL5wtw2dI+r1w4Cx/N8mctkpbzYaOD/H6bA
-         wyesyM50Wr738vR+XsMWpb1aoUZ4/V70zOGaCu9YEZocTLH81SOtGINPoTvSS7AOQ48N
-         O0RifAjoxpfpc4KdxSKHs8JlMsMifdoAlh2RP7E419G0enlnvkVQXj7Xp+cEH/n1VDPK
-         AGBa8u4L7fpkr/J8UfGmSEt3cpbELl9SEMWVk7CafzrCW8uocoebncLqrYVMDg8CUldz
-         ioWctwm5+bZhSii5cwwsCWywVmbrptd/zlzjuAi4yiT+fnjwr302z1pVSH1JjC+E1164
-         dvwg==
-X-Gm-Message-State: AOAM53023vTsYNe3gU1hOC+YV5VHFPEaq1qEVqgpcdI7b5CY0KdSQMia
-        e2Vr4agbz1RZdzii4mqSyw==
-X-Google-Smtp-Source: ABdhPJxuUpgwjNNVehgCikH94aM0C278Tato0V32TMxGzCsr8Y3hkxPGQkpU0UbT585q/wH8Oxdo3Q==
-X-Received: by 2002:a05:6808:210a:b0:326:77be:466f with SMTP id r10-20020a056808210a00b0032677be466fmr5336oiw.184.1653529318875;
-        Wed, 25 May 2022 18:41:58 -0700 (PDT)
+        bh=es4Dl3HxibZW+rfFQc8vlolcSAmU2qFD1JzSMoMcVAI=;
+        b=kD7SRJg0uw016Bepf8+U7ep5uBwXBY13xHJqWKF5VKu001BZ+fuAFF5ZKggboasa3r
+         Kpj9QGiT4KgcqKaKLLosknn6BVlbQUHkek458KeOBUVuMHmWzcffHEGqpPvbL7MXMWru
+         wg6l1JRMs9ITDJPMJ7FltBosl98QDdvSLpg7tO+FfTQkIbGM1PA57wJcQurWu2Pf5idM
+         N92jFjqTSpQirUiuHWbnItyIFm24eX3HkEjqAbOvDMJGAjA2j1yIy6n/vRPaGykTWbcf
+         eA9lZfDwtXOaAiiRxW/d4teryAGT0hfJoHvbDw96UXbJISOLamR6NFYyOjoRxzzR1lUk
+         YizQ==
+X-Gm-Message-State: AOAM533Ha9cp0OePWm4vkNQEvwqtC3DQZrOZfZV7APjBr2ELeWwO9UVS
+        MLv3g55Vl+10ctKHUbL9wQ==
+X-Google-Smtp-Source: ABdhPJzflN/TcyuSaeWPrFPWA3VwGVIp/rDi77qRGec5FuOWcIL5jX3B1Wndr9AAvVRoq4Rq8zpRQw==
+X-Received: by 2002:a4a:95c6:0:b0:35f:7f11:7055 with SMTP id p6-20020a4a95c6000000b0035f7f117055mr14079108ooi.87.1653529331123;
+        Wed, 25 May 2022 18:42:11 -0700 (PDT)
 Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.googlemail.com with ESMTPSA id pi12-20020a0568704c8c00b000e9b8376a7bsm162542oab.23.2022.05.25.18.41.57
+        by smtp.googlemail.com with ESMTPSA id c27-20020a9d615b000000b006062d346083sm122822otk.22.2022.05.25.18.42.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 18:41:58 -0700 (PDT)
+        Wed, 25 May 2022 18:42:10 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Biao Huang <biao.huang@mediatek.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] dt-bindings: net: Fix unevaluatedProperties warnings in examples
-Date:   Wed, 25 May 2022 20:41:48 -0500
-Message-Id: <20220526014149.2872762-1-robh@kernel.org>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hu Ziji <huziji@marvell.com>, Al Cooper <alcooperx@gmail.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: mmc: Fix unevaluatedProperties warnings in examples
+Date:   Wed, 25 May 2022 20:42:04 -0500
+Message-Id: <20220526014204.2873107-1-robh@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,69 +66,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The 'unevaluatedProperties' schema checks is not fully working and doesn't
 catch some cases where there's a $ref to another schema. A fix is pending,
 but results in new warnings in examples. Fix the warnings by removing
-spurious properties or adding missing properties to the schema.
+spurious properties or adding a missing property to the schema.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/net/cdns,macb.yaml           | 1 -
- Documentation/devicetree/bindings/net/mediatek,net.yaml        | 3 +++
- Documentation/devicetree/bindings/net/mediatek-dwmac.yaml      | 3 +++
- .../devicetree/bindings/net/wireless/mediatek,mt76.yaml        | 2 +-
- 4 files changed, 7 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml  | 2 --
+ Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml | 3 +++
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-index 337cec4d85ca..86fc31c2d91b 100644
---- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
-+++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-@@ -191,7 +191,6 @@ examples:
-                     clock-names = "pclk", "hclk", "tx_clk", "rx_clk", "tsu_clk";
-                     #address-cells = <1>;
-                     #size-cells = <0>;
--                    #stream-id-cells = <1>;
-                     iommus = <&smmu 0x875>;
-                     power-domains = <&zynqmp_firmware PD_ETH_1>;
-                     resets = <&zynqmp_reset ZYNQMP_RESET_GEM1>;
-diff --git a/Documentation/devicetree/bindings/net/mediatek,net.yaml b/Documentation/devicetree/bindings/net/mediatek,net.yaml
-index 699164dd1295..f5564ecddb62 100644
---- a/Documentation/devicetree/bindings/net/mediatek,net.yaml
-+++ b/Documentation/devicetree/bindings/net/mediatek,net.yaml
-@@ -27,6 +27,9 @@ properties:
-   reg:
-     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+index b672202fff4e..5ecdac9de484 100644
+--- a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
++++ b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+@@ -75,7 +75,6 @@ examples:
+       sd-uhs-sdr104;
+       sdhci,auto-cmd12;
+       interrupts = <0x0 0x26 0x4>;
+-      interrupt-names = "sdio0_0";
+       clocks = <&scmi_clk 245>;
+       clock-names = "sw_sdio";
+     };
+@@ -94,7 +93,6 @@ examples:
+       non-removable;
+       bus-width = <0x8>;
+       interrupts = <0x0 0x27 0x4>;
+-      interrupt-names = "sdio1_0";
+       clocks = <&scmi_clk 245>;
+       clock-names = "sw_sdio";
+     };
+diff --git a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+index c79639e9027e..aca1a4a8daea 100644
+--- a/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/marvell,xenon-sdhci.yaml
+@@ -56,6 +56,9 @@ properties:
+       - const: core
+       - const: axi
  
-+  clocks: true
-+  clock-names: true
-+
-   interrupts:
-     minItems: 3
-     maxItems: 4
-diff --git a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-index 901944683322..61b2fb9e141b 100644
---- a/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-@@ -58,6 +58,9 @@ properties:
-       - const: rmii_internal
-       - const: mac_cg
- 
-+  power-domains:
++  interrupts:
 +    maxItems: 1
 +
-   mediatek,pericfg:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description:
-diff --git a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-index 249967d8d750..5a12dc32288a 100644
---- a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-+++ b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-@@ -51,7 +51,7 @@ properties:
-     description:
-       Specify the consys reset for mt7986.
- 
--  reset-name:
-+  reset-names:
-     const: consys
- 
-   mediatek,infracfg:
+   marvell,xenon-sdhc-id:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     minimum: 0
 -- 
 2.34.1
 

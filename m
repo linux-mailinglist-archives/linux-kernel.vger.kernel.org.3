@@ -2,159 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCFE53487C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E47D5534880
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345843AbiEZB6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S1345910AbiEZB64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234503AbiEZB56 (ORCPT
+        with ESMTP id S1345891AbiEZB6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:57:58 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A284BA997
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:57:57 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id rs12so328522ejb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:57:57 -0700 (PDT)
+        Wed, 25 May 2022 21:58:54 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A228BCE85
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:58:49 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o10-20020a17090a4e8a00b001df2fcdc165so3205994pjh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=mrTdgG+42EN8X3dWh4qUOgxusHGt7dRqQxIX8mfLL8s=;
-        b=Xo34MICH/bcfvd+mHVNmnqv4v+nqJQL1FQEfUM1lVE+n2KGu0I2Rk7EQATD/D4faUt
-         DDaj058Rf9FMbIy0swsYgCDLg0VzWenxBxXfhWX9oetuPtl/IYRsm4WFomaKiMMlpW6K
-         2sm/uWrppJE7PwHwSDppX0uw6Ts0UihuiEyRa79nffKyrvEcGTBZ5i2o77VdctOLPy2b
-         ZaEscPIk4FwZcMoBe71YdOhYOjoJ9gUjILbsMW2TYa8PV+CPvDBtwsSba6sjzCX08Vco
-         XaXcqHNZYDydw8j8nGiWlvBb3nMfHadC4Pk54H0yiltAby6sRIDSPV2y4/4jWCiyQTYt
-         xwuw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kGL6h5v+Jr74W1Yhb+Bf5QfP2tpx/zeVbCOX59bHIDg=;
+        b=6XMugYmG+RUzN2StHKzTsP39OPJNYLJCQObzG+2FFmneHpobDjdWIRdY3HskteR7ZQ
+         +y9BoEU+++ihSyELnRUGFnA1pD6EW3RxiDJ3MuSe7G2PtTnSSz9kmnwqfssiHH2p8MP1
+         inMrblr/tC0RwZDvcfd3jiKeO7VFs9OLhILAiTiKo3dBmGwhwXkQyear1mwraKi36zNo
+         B3vjRDg9YiY7Q1G5L370pM7cScF2zE4oRBjW7I9piLH3jWTwjNzaEqTKaD61xg3cs/lD
+         QbrnO2HfvtvCc+K1/QIK+x85eom8nR7L9KgyQJUGz4/KGDkstI0/Ui2TwMCNdlbuVF3n
+         EMnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=mrTdgG+42EN8X3dWh4qUOgxusHGt7dRqQxIX8mfLL8s=;
-        b=wpXM5EM2kgu6MK2UQYruk4/iH21HZp6/irgNcK9weZgZ75IWYrjMmSTCwiI35Sdbg0
-         lBk1RQjo+kGc2JNFJIl2YzsXZRPOpHfT12QDyufCtgqPcAxCR9IxqibW28p+MRA9BJPH
-         zFlXaB18I0tEcDTtzLWL+7BnEoIN/EfxGwQo5ehBa3w+y9wTpEuKyZT+BVbrLghvZN6z
-         JCrMHY4pdDbI3ohayYofzTz/4FUvyRdbADi0jfzgXmvcJW5/LMvY3M7RW8PItU4jcn5+
-         9I0yBNivWQ35/OospzP+l0zrc9KLCUMCzTkmMRxfK4E+PhbHHznKsoO0/VOdgjEPxzO5
-         M2yQ==
-X-Gm-Message-State: AOAM532RtNxgqRUxn4RY1ppezZaGKMXBIgiv82EtsEe3bIOUdoadet+t
-        bAnstMoJlEHXLmXXJFcJgenkYMJsktZvQjeZGzM=
-X-Google-Smtp-Source: ABdhPJzS2x1ITuBaDNvuE8mv7nzZWD36y7Aku0I5R/v0ar8cJcE1wcX7K36sBMtxJRZS6LLFqdYd9/lUgFTwTtt1hjU=
-X-Received: by 2002:a17:907:8a1c:b0:6fe:e53b:22ca with SMTP id
- sc28-20020a1709078a1c00b006fee53b22camr16431551ejc.407.1653530275971; Wed, 25
- May 2022 18:57:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kGL6h5v+Jr74W1Yhb+Bf5QfP2tpx/zeVbCOX59bHIDg=;
+        b=cWRVxIRJm+M8kaMxQ9nhvXe6HCFNJiSUC4+VQ3ul0bbHq2j+VMgyX/eG3c14TNVmnz
+         UR+AFt6K5ZeYycPVhruioVhC3uIIh6+uOKvbIG7r9Wmc5o5Y8IZN3Kg2YEWJYRTDXttQ
+         /mVbFGqPuE/T733/XbR7hC6tTpbqzUCkSF7jsiwQ20JI9Oibo7nquMwRqSkSSc25YSQH
+         KD5w9VVMYMJQN3wpgg5xGKDehp2BWVZgPLgRbVSr/hi0Dz0VS5WID1fP/mGdBQzazQ5Y
+         49tLlda15n1lslruUx5TTQWnN8lh6os3ZHkOydbfo2aSCmx8NxNwK/tCrpjEdeMWe/zF
+         FRrA==
+X-Gm-Message-State: AOAM531XwrAxabk11POXPlWqYFxe3toeT34JCVopoPgq0RoeeKIL1nQc
+        oO8KKY1ZbtcmI/n7MDqofmWtkw==
+X-Google-Smtp-Source: ABdhPJyecRSqOMMOeKI3i4gTLNfcDTqJwxnemVDUYrbKOQnvinFvVfcOT5vypfUsGRm8USrxsDh9VQ==
+X-Received: by 2002:a17:903:22cd:b0:161:be20:577 with SMTP id y13-20020a17090322cd00b00161be200577mr36110298plg.54.1653530328625;
+        Wed, 25 May 2022 18:58:48 -0700 (PDT)
+Received: from localhost ([2408:8207:18da:2310:c40c:3e14:bb57:48be])
+        by smtp.gmail.com with ESMTPSA id 26-20020a63195a000000b003c6ab6ba06csm188772pgz.79.2022.05.25.18.58.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 18:58:48 -0700 (PDT)
+Date:   Thu, 26 May 2022 09:58:42 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Dave Chinner <dchinner@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v4 2/6] mm: shrinkers: introduce debugfs interface for
+ memory shrinkers
+Message-ID: <Yo7e0st/IiSpkfQR@FVFYT0MHHV2J.googleapis.com>
+References: <20220525202600.2910982-1-roman.gushchin@linux.dev>
+ <20220525202600.2910982-3-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Wed, 25 May 2022 20:57:44 -0500
-Message-ID: <CABb+yY24U_2uwebN_a1M+ABVp0eqBai1c4H7oM7e0mDaGmFi0Q@mail.gmail.com>
-Subject: [GIT PULL] Mailbox changes for v5.19
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525202600.2910982-3-roman.gushchin@linux.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, May 25, 2022 at 01:25:56PM -0700, Roman Gushchin wrote:
+> This commit introduces the /sys/kernel/debug/shrinker debugfs
+> interface which provides an ability to observe the state of
+> individual kernel memory shrinkers.
+> 
+> Because the feature adds some memory overhead (which shouldn't be
+> large unless there is a huge amount of registered shrinkers), it's
+> guarded by a config option (enabled by default).
+> 
+> This commit introduces the "count" interface for each shrinker
+> registered in the system.
+> 
+> The output is in the following format:
+> <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
+> <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
+> ...
+> 
+> To reduce the size of output on machines with many thousands cgroups,
+> if the total number of objects on all nodes is 0, the line is omitted.
+> 
+> If the shrinker is not memcg-aware or CONFIG_MEMCG is off, 0 is
+> printed as cgroup inode id. If the shrinker is not numa-aware, 0's are
+> printed for all nodes except the first one.
+> 
+> This commit gives debugfs entries simple numeric names, which are not
+> very convenient. The following commit in the series will provide
+> shrinkers with more meaningful names.
+> 
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Reviewed-by: Kent Overstreet <kent.overstreet@gmail.com>
 
-The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c=
-:
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 
-  Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
-
-are available in the Git repository at:
-
-  git://git.linaro.org/landing-teams/working/fujitsu/integration.git
-tags/mailbox-v5.19
-
-for you to fetch changes up to 79f9fbe303520d2c32b70f04f2bb02cc2baaa4c3:
-
-  mailbox: qcom-ipcc: Fix -Wunused-function with CONFIG_PM_SLEEP=3Dn
-(2022-05-24 08:08:24 -0500)
-
-----------------------------------------------------------------
-- api: hrtimer fix
-- qcom: log pending irq during resume
-minor cosmetic changes
-- omap: use pm_runtime_resume_and_get
-- imx: use pm_runtime_resume_and_get
-remove redundant initializer
-- mtk: added GCE header for MT8186
-enable support for MT8186
-- tegra: remove redundant NULL check
-added hsp_sm_ops for send/recv api
-support shared mailboxes
-- stm: remove unsupported "wakeup" irq
-- pcc: sanitize mbox allocated memory before use
-- misc: documentation fixes for arm_mhu and qcom-ipcc
-----------------------------------------------------------------
-Bj=C3=B6rn Ard=C3=B6 (1):
-      mailbox: forward the hrtimer if not queued and under a lock
-
-Fabien Dessenne (1):
-      dt-bindings: mailbox: remove the IPCC "wakeup" IRQ
-
-Kartik (3):
-      mailbox: tegra-hsp: Add tegra_hsp_sm_ops
-      dt-bindings: tegra186-hsp: add type for shared mailboxes
-      mailbox: tegra-hsp: Add 128-bit shared mailbox support
-
-Krzysztof Kozlowski (2):
-      dt-bindings: mailbox: qcom-ipcc: simplify the example
-      mailbox: correct kerneldoc
-
-Mario Limonciello (1):
-      mailbox: pcc: Fix an invalid-load caught by the address sanitizer
-
-Nathan Chancellor (1):
-      mailbox: qcom-ipcc: Fix -Wunused-function with CONFIG_PM_SLEEP=3Dn
-
-Prasad Sodagudi (1):
-      mailbox: qcom-ipcc: Log the pending interrupt during resume
-
-Tinghan Shen (2):
-      dt-bindings: mailbox: mtk,adsp-mbox: add mt8186 compatible name
-      mailbox: mediatek: support mt8186 adsp mailbox
-
-Tom Rix (1):
-      mailbox: imx: remove redundant initializer
-
-Xiaomeng Tong (1):
-      mailbox: remove an unneeded NULL check on list iterator
-
-Yongqiang Niu (1):
-      dt-bindings: gce: add the GCE header file for MT8186
-
-ran jianping (2):
-      mailbox:imx: using pm_runtime_resume_and_get
-      mailbox: omap: using pm_runtime_resume_and_get to simplify the code
-
- .../devicetree/bindings/mailbox/mtk,adsp-mbox.yaml |   7 +-
- .../bindings/mailbox/nvidia,tegra186-hsp.yaml      |   9 +
- .../devicetree/bindings/mailbox/qcom-ipcc.yaml     |  29 +-
- .../devicetree/bindings/mailbox/st,stm32-ipcc.yaml |  11 +-
- drivers/mailbox/arm_mhu_db.c                       |   2 +-
- drivers/mailbox/arm_mhuv2.c                        |   3 +-
- drivers/mailbox/imx-mailbox.c                      |   7 +-
- drivers/mailbox/mailbox.c                          |  19 +-
- drivers/mailbox/mtk-adsp-mailbox.c                 |   8 +
- drivers/mailbox/omap-mailbox.c                     |   6 +-
- drivers/mailbox/pcc.c                              |   2 +-
- drivers/mailbox/qcom-ipcc.c                        |  26 +-
- drivers/mailbox/tegra-hsp.c                        | 151 ++++++--
- include/dt-bindings/gce/mt8186-gce.h               | 421 +++++++++++++++++=
-++++
- include/dt-bindings/mailbox/tegra186-hsp.h         |   5 +
- include/linux/mailbox_controller.h                 |   1 +
- 16 files changed, 628 insertions(+), 79 deletions(-)
- create mode 100644 include/dt-bindings/gce/mt8186-gce.h
+Thanks.

@@ -2,86 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B656B534A27
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 07:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBA2534A34
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 07:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345847AbiEZFKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 01:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
+        id S245630AbiEZFYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 01:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbiEZFKP (ORCPT
+        with ESMTP id S230040AbiEZFYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 01:10:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF3ABC6E4;
-        Wed, 25 May 2022 22:10:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A641661A22;
-        Thu, 26 May 2022 05:10:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CCD25C34118;
-        Thu, 26 May 2022 05:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653541812;
-        bh=R0Ebxv8lXFQ/RVHZfkbBb9OGmHlz+FwVvB+dTGMmpTs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Gq8SMsK3dCvgq7sff7Kf0evv143LX/6LZC8ms7BM4TbP7I/+3NJnGXM2ZkgGTL+1A
-         IKPJNcTHhZXroapDLJkZrR5KohYU2aTuuxrK46iiCRxcStsxoyUUKze+33cs0TgPYU
-         DwFY4XYmZ7lLMAAFwoVKpbL9fOI2KIgbURHZXJ4fJvKoBA/jP5tjQ3Sqvp8hl3LsP2
-         7aQ3ZRDA2Vo6DRxYaoWoOfwbpqjml23/Jilew2N4x/gy3fWL57H97C4FMChBDe0Vq/
-         kxLD/ilsKGfpg3BlryDHTa5CQX7M0RsiTaBRgj6vVDctwNA5SEh5isyRRqKrfyhiM5
-         PsBPbYkkqKGMw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2A70F03938;
-        Thu, 26 May 2022 05:10:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 26 May 2022 01:24:19 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5524CA5AAC;
+        Wed, 25 May 2022 22:24:16 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id b11so970017qvv.4;
+        Wed, 25 May 2022 22:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YHO6zM29Kcg3RuIDmSGj1k3u9xjpChjCh4IML1ge/VM=;
+        b=A8ggUJBTgjIruHVO2AGSGC50BJpzccp2JqngUhzLy/tfmWgfIWRDLNwWLNmHNLYw+a
+         hKb8cIblIrrNzbnAl119oFOfmfo5t2kdizwA1SlLIjgcFJ7jsc6CrNpVjgBlAqArbR44
+         bXjDqv3OxphYAQ6HqZVfzo53iG7r6lvHTReeaUNgitl55aMyMk4PouDkSQISzkbPMYxB
+         h3S5KeMYr1TVF4dv5eI3uZaBzydeG7LWtBgw2mTL7nAaKUeYBS+ESjl1DS7OJD0OC3eK
+         CiiGt9mQQTk8/w8c4ZYb/3+Yh0lU4wF5tNoQHCwzRHhZckh4OhBEGVMBm6M+I2eTanpy
+         pi3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YHO6zM29Kcg3RuIDmSGj1k3u9xjpChjCh4IML1ge/VM=;
+        b=uOgdrXwfJby1HuWAXqM9EMprDZaCUoPeev4TuJ0pNS9HkTzxtMyMMQzg/yJo6Av7hg
+         KejWhdYJL7IhWFKI10aKOXbIXMY1GmzbEL1dHb5BMtvcWmulbP+gxfj5lw+0FLgkbmoa
+         V5+G2rAMo+8hDcZp2p5GKUEg+Eni+vZVVyd5Fs/JQ0v1Y+4rms6HVOzio/jjJ4x4sHRf
+         DHp1LY1ClxuESEPfStVAaR9JmQd0NNnLOHoggAeWEQYlMuVoVUiqbrbHtuTFrUmQsPV9
+         2ozCWR/1WUmMC1wbbx9kiiorh8nbA7L/py2qiD37n8PnPAnrvMlTDUQRCD3BGj61v23I
+         Slqw==
+X-Gm-Message-State: AOAM530ZFIQg/HNTP0eOokVR6H+xAJIJNtifsV67u8C3aVwhRXUCdkfl
+        aTs15BeXMo4p9GrC7oItdlHwiWxjPgtNwePBZAYh8NJ3kCw=
+X-Google-Smtp-Source: ABdhPJwb6UvvGofVw7KIoM/B1pA9VRC/+Ovrxd0sIsDmlMbHYWwyso9BrACMyTItqwM3HaImR8+DQK7ZIYa45LflQpk=
+X-Received: by 2002:ad4:5945:0:b0:45a:ff69:47c4 with SMTP id
+ eo5-20020ad45945000000b0045aff6947c4mr28706059qvb.86.1653542655510; Wed, 25
+ May 2022 22:24:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net/smc: set ini->smcrv2.ib_dev_v2 to NULL if SMC-Rv2 is
- unavailable
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165354181272.23912.6206348269992645590.git-patchwork-notify@kernel.org>
-Date:   Thu, 26 May 2022 05:10:12 +0000
-References: <20220525085408.812273-1-liuyacan@corp.netease.com>
-In-Reply-To: <20220525085408.812273-1-liuyacan@corp.netease.com>
-To:     None <liuyacan@corp.netease.com>
-Cc:     kgraul@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ubraun@linux.ibm.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1653478195-21095-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1653478195-21095-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Thu, 26 May 2022 07:24:04 +0200
+Message-ID: <CAMhs-H_5kHmvG5F=KZaDMzQ8VbSQfg_qqVnzCMuntpH9YU+V4Q@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, May 25, 2022 at 8:59 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> kernel test robot reports a build error used with clang compiler and
+> mips-randconfig [1]:
+>
+>     ld.lld: error: undefined symbol: pci_remap_iospace
+>
+> we can see the following configs in the mips-randconfig file:
+>
+>     CONFIG_RALINK=y
+>     CONFIG_SOC_MT7620=y
+>     CONFIG_PCI_DRIVERS_LEGACY=y
+>     CONFIG_PCI=y
+>
+> CONFIG_RALINK is set, so pci_remap_iospace is defined in the related
+> arch/mips/include/asm/mach-ralink/spaces.h header file:
+>
+>     #define pci_remap_iospace pci_remap_iospace
+>
+> CONFIG_PCI is set, so pci_remap_iospace() in drivers/pci/pci.c is not
+> built due to pci_remap_iospace is defined under CONFIG_RALINK.
+>
+>     #ifndef pci_remap_iospace
+>     int pci_remap_iospace(const struct resource *res, ...)
+>
+>     $ objdump -d drivers/pci/pci.o | grep pci_remap_iospace
+>     00004cc8 <devm_pci_remap_iospace>:
+>         4d18:   10400008        beqz    v0,4d3c <devm_pci_remap_iospace+0x74>
+>         4d2c:   1040000c        beqz    v0,4d60 <devm_pci_remap_iospace+0x98>
+>         4d70:   1000fff3        b       4d40 <devm_pci_remap_iospace+0x78>
+>
+> In addition, CONFIG_PCI_DRIVERS_GENERIC is not set, so pci_remap_iospace()
+> in arch/mips/pci/pci-generic.c is not built too.
+>
+>     #ifdef pci_remap_iospace
+>     int pci_remap_iospace(const struct resource *res, ...)
+>
+> For the above reasons, undefined reference pci_remap_iospace() looks like
+> reasonable.
+>
+> Here are simple steps to reproduce used with gcc and defconfig:
+>
+>     cd mips.git
+>     make vocore2_defconfig # set RALINK, SOC_MT7620, PCI_DRIVERS_LEGACY
+>     make menuconfig        # set PCI
+>     make
+>
+> there exists the following build error:
+>
+>       LD      vmlinux.o
+>       MODPOST vmlinux.symvers
+>       MODINFO modules.builtin.modinfo
+>       GEN     modules.builtin
+>       LD      .tmp_vmlinux.kallsyms1
+>     drivers/pci/pci.o: In function `devm_pci_remap_iospace':
+>     pci.c:(.text+0x4d24): undefined reference to `pci_remap_iospace'
+>     Makefile:1158: recipe for target 'vmlinux' failed
+>     make: *** [vmlinux] Error 1
+>
+> Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC can fix the build
+> error, with this patch, no build error remains. This patch is similar with
+> commit e538e8649892 ("MIPS: asm: pci: define arch-specific
+> 'pci_remap_iospace()' dependent on 'CONFIG_PCI_DRIVERS_GENERIC'").
+>
+> [1] https://lore.kernel.org/lkml/202205251247.nQ5cxSV6-lkp@intel.com/
+>
+> Fixes: 09d97da660ff ("MIPS: Only define pci_remap_iospace() for Ralink")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
+>  1 file changed, 2 insertions(+)
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 25 May 2022 16:54:08 +0800 you wrote:
-> From: liuyacan <liuyacan@corp.netease.com>
-> 
-> In the process of checking whether RDMAv2 is available, the current
-> implementation first sets ini->smcrv2.ib_dev_v2, and then allocates
-> smc buf desc and register rmb, but the latter may fail. In this case,
-> the pointer should be reset.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net] net/smc: set ini->smcrv2.ib_dev_v2 to NULL if SMC-Rv2 is unavailable
-    https://git.kernel.org/netdev/net/c/b3b1a17538d3
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>

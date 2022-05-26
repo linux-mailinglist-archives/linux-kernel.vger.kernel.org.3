@@ -2,78 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0BC534F2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7469534F37
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347313AbiEZMcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
+        id S1346219AbiEZMdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347281AbiEZMcn (ORCPT
+        with ESMTP id S1347337AbiEZMdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:32:43 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D5D9596;
-        Thu, 26 May 2022 05:32:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=wF8XuVv4mQ1+nmm8VPTygZ9HsG27ew/AaBd2b5MOd4g=; b=wC8se2ghyF+jb6nNGxIwCKn6/N
-        HcTNdSoruv7771/MS7Vrmvb529ZovFG7BgUiVjo5s7CH85tvFAJ4FYkGP7b4gb9W4OgDcLmV50/Jg
-        oK3i8Y98rAfBC8oNoqOQrAufk2u0k599YYz+sKezh7Bu8ZoajLAZbch1Bq35CD2nvubE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nuCf0-004Lth-Cu; Thu, 26 May 2022 14:32:14 +0200
-Date:   Thu, 26 May 2022 14:32:14 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Tan Tee Min <tee.min.tan@linux.intel.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Dan Murphy <dmurphy@ti.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
-        Sit Michael Wei Hong <michael.wei.hong.sit@intel.com>,
-        Ling Pei Lee <pei.lee.ling@intel.com>,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Wong Vee Khee <vee.khee.wong@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>
-Subject: Re: [PATCH net-next v2 1/1] net: phy: dp83867: retrigger SGMII AN
- when link change
-Message-ID: <Yo9zTmMduwel8XeZ@lunn.ch>
-References: <20220526090347.128742-1-tee.min.tan@linux.intel.com>
+        Thu, 26 May 2022 08:33:05 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2940AE7F
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:32:56 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id j6so1556303pfe.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:32:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=uq65Yc9kCu5ZjE2VXt2sEUmRK2Eh4giDN/mBcKQQ3j0=;
+        b=QoGupt8qrmOwnNhiVyFSJiPevpngkgPfWBCbiokcCcM3h27BsdInR9Dgqo4emdwfPQ
+         sn/1IPdQ1v533T4bDlOJymawvStoDCmyQGLl3NnJXK7YLo9qs+OqPoTmFbv4mEimJPYw
+         pMECzkzhI8kOyTIp/ex6lWL8mZ5kAYzMvzyvQdFlKTyw5wIv5J/mRRVuz3Ru5pzfqfUr
+         flWkFQ9CXbyUA/kLagHzfqWiJI3m8+wot2BWXxdB+GuBkmNFdifzHATLEQCEx46WDpgM
+         vt/Sv2MlH8QeHT/YdrBrRh1XnBbzQD3ux6gfgg0tv3JBGwKA47KKFjWunyzr6K0/jig7
+         qOJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uq65Yc9kCu5ZjE2VXt2sEUmRK2Eh4giDN/mBcKQQ3j0=;
+        b=M/d41SqjloD3TrxfbPCFV2WQo+b6PRm7kbAnc/FcItDYmrYy+mAo22NAAsAjmaHJj/
+         kiQj1ImVCZvUG0znisJGSkJKBa6Du3GYOUHOU/Ye0jc/5+x7EYLWALizrzpWv7W5KGRb
+         Wv9K0kq6ALOY/vfniljvhd8YQY3P61FkbBWksTmJpTOSe+9QuseEUMDDY+mRxTMyh7zT
+         cDzNOgqIS9R5UBjIzdWzJPyn7TUgKD0SBt4ePcyj9xC7Q8DQFXfMlRQG6rpejOXb6BZ3
+         y4SMMRlY25nIPQEz/r2HwAkURREIuwQMTiWR3yidGU87tEGZKax1esQQfV9F3k6s3eSi
+         +rjA==
+X-Gm-Message-State: AOAM531flaFGWQ+ySRNzPAOfOssaumZ3k7CQxSgwZcmGPo2h8czcTApl
+        nM4FtC3o8j/pkx1hNdJ2f2jOpTcC7xRsZxU2yp12Gg==
+X-Google-Smtp-Source: ABdhPJzRXYWySj/H0ovAGxNel6N9wfNcHwmAm4aieUaKbaj1YuK4ixph32MMCv1ewUmnEea9w5A8r0EQlrz4QGU5sz4=
+X-Received: by 2002:a63:31d3:0:b0:3f5:d1f4:5f95 with SMTP id
+ x202-20020a6331d3000000b003f5d1f45f95mr32383282pgx.178.1653568376009; Thu, 26
+ May 2022 05:32:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526090347.128742-1-tee.min.tan@linux.intel.com>
+References: <20220522162802.208275-1-luca@z3ntu.xyz> <20220522162802.208275-3-luca@z3ntu.xyz>
+In-Reply-To: <20220522162802.208275-3-luca@z3ntu.xyz>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 26 May 2022 14:32:45 +0200
+Message-ID: <CAG3jFyvgWYUs7TRL-XP=U_c=-3TJ4XJKzmQqKD2CTfC-6-gwBg@mail.gmail.com>
+Subject: Re: [RFC PATCH 02/14] media: camss: Add CAMSS_8x74 camss version
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        matti.lehtimaki@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 05:03:47PM +0800, Tan Tee Min wrote:
-> There is a limitation in TI DP83867 PHY device where SGMII AN is only
-> triggered once after the device is booted up. Even after the PHY TPI is
-> down and up again, SGMII AN is not triggered and hence no new in-band
-> message from PHY to MAC side SGMII.
-> 
-> This could cause an issue during power up, when PHY is up prior to MAC.
-> At this condition, once MAC side SGMII is up, MAC side SGMII wouldn`t
-> receive new in-band message from TI PHY with correct link status, speed
-> and duplex info.
-> 
-> As suggested by TI, implemented a SW solution here to retrigger SGMII
-> Auto-Neg whenever there is a link change.
+On Sun, 22 May 2022 at 18:28, Luca Weiss <luca@z3ntu.xyz> wrote:
+>
+> From: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
+>
+> Add enum representing the MSM8x74 SOC.
+>
+> Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  drivers/media/platform/qcom/camss/camss.h | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/media/platform/qcom/camss/camss.h b/drivers/media/pl=
+atform/qcom/camss/camss.h
+> index c9b3e0df5be8..663cf24f52d9 100644
+> --- a/drivers/media/platform/qcom/camss/camss.h
+> +++ b/drivers/media/platform/qcom/camss/camss.h
+> @@ -76,6 +76,7 @@ enum pm_domain {
+>
+>  enum camss_version {
+>         CAMSS_8x16,
+> +       CAMSS_8x74,
+>         CAMSS_8x96,
+>         CAMSS_660,
+>         CAMSS_845,
+> --
+> 2.36.0
+>
 
-Is there a bit in the PHY which reports host side link? There is no
-point triggering an AN if there is already link.
-
-      Andrew
+Reviewed-by: Robert Foss <robert.foss@linaro.org>

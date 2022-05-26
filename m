@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3111534D80
+	by mail.lfdr.de (Postfix) with ESMTP id EE8C8534D81
 	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238559AbiEZKjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 06:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S1345048AbiEZKkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 06:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiEZKjv (ORCPT
+        with ESMTP id S241731AbiEZKj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 06:39:51 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9011CC16D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:39:50 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso1420961pjg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:39:50 -0700 (PDT)
+        Thu, 26 May 2022 06:39:57 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619D1CEB85
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:39:56 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id c2so1123415plh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:39:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2nB3L+cKWVC+0i7cUASK6ah3sRfXIWNbzDbdAe4fH/k=;
-        b=lrOCz4T1Kq/4W3W3DfQN6ue+qXNmVXqTe6fzUsfeA/2NQ36CGyDQmRAHR3iSD8a4X8
-         ZOZXWBH7bRSO+cHYu7TugmjR9tcRXkGjOq24Rqtwy9Y2l+4G5PkwLkIDkAwYlsd9Vt4M
-         O2RXvTlBe1yrCKrq0jcyifYZ4KFly/6RPyTlJzYdzOwWJoOyN4ahVNBXw84NIM5ln7Sp
-         4QP3OAWmHCOZOMvO0VVkWmvSWZ2DPEmO2US4EX+Q6vWRwfnnTZAPYdJl6DL9lt9DWHDe
-         4UfH9VORSfwWwzCaFTAarVhRCi7MvEmT4J8ENW5YzRL1CDeOWjGSfrEPeBCU3LWjzcew
-         KzYg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1qF1kRC9LwiJlnC5OgZ6TWXKv8JNcRSCPefpgmCPVd0=;
+        b=3prUM9x8qMxEGp9TN9u5j+Pn+QPRZ6vtKEOOTjfSve4w4ERlYmn9ZrUQHsNqu8f8Ys
+         +BbC1CCUJCQyfky8idKRSKHXDe3b4jwQ4DFLjqVqnrY3Gh74XkTcQaBtmMMsJ+38b4if
+         SAq6SEjqZYA/PkuEpM+RqqrWotZevQ1MMLXCPh0y6o/snlhbqUMfaByKL+2BLBE6delk
+         DHAEYKLanbnXSXyOouIFC2/YQxPc4KEvgAYuulny8sv0JCXxu0nVg5FUqhHERU+MPspA
+         SsXTlCuYc8sKKlTg/gdhOGzAJG5pKX01pv5fZIiH/1EMGcConD8j2sm1RyNgCZi3qlp1
+         6cNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2nB3L+cKWVC+0i7cUASK6ah3sRfXIWNbzDbdAe4fH/k=;
-        b=UGCLNUxjwKmHmyeSf0S4ZhdXRc8muA7h0Tl1qxThI+fLVEAwsmPOllq1fObzM95OuC
-         Es6BFP9HK4JFsPj0dH/vU4Soj8wqyLPLWoJJZEbRIOHQ4R8TyFK27fMCEkBWNOdQjqHQ
-         xrY6tK22EP1O6xVo/ZGnVBWYPeL8MWR+9oEkxsUVO+7jGnK+yJTf17+JCtwvv+vQcqaf
-         VzRVKFVdOJSqop0EjWIGXQ+HT8yrkDxDYH35lhxV3gOYe8Lu9WVcMOyF0FkrZ4k+DDF4
-         N/oTHIKRrhSRTrSsmE0ak7Fk0EvFFQEj66+3zbfEtRCCkz8Y/H4ZcVCa5n8Pnm/3qb4A
-         dzAg==
-X-Gm-Message-State: AOAM533y084JYm7cVtEXy6s7lVyo4Wu8Lk+a+mzekjfwY09U0PSd24or
-        vJU46CAl02sYlq39QLU5Vjegkw==
-X-Google-Smtp-Source: ABdhPJwqmMrK8dU/zABGxmNoJt1CjpCsAmUOcwOZazxgjQ9rXrXLuauYbBMKJBrSd/GHbm4NdNajKQ==
-X-Received: by 2002:a17:90b:3142:b0:1df:77f2:e169 with SMTP id ip2-20020a17090b314200b001df77f2e169mr1883385pjb.245.1653561590489;
-        Thu, 26 May 2022 03:39:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1qF1kRC9LwiJlnC5OgZ6TWXKv8JNcRSCPefpgmCPVd0=;
+        b=FLqapcr7I97iioHKrsvTOm49IhkdnvwdnV5BiW1DhVKM6OgKllc+UTHl5onZ+KYl/C
+         WGAoJpq1edj8d9EWoODks02aEYWPINa1UyGQekuecI9GOiP3MNhnKx6gpYluhLzk6PYl
+         2tRlg6UUjb+iIUx11M0yhsvAgPfKhKlpM5+DXjG3wTtbSJRI/QtPNnptbyHb/rGLcP7K
+         EuWr+4jvdWOP03a4E2Z1MOwT82VMPogFceq43WhOwSCmhaR9zZNypjxXzghBYvQMaj+0
+         7QZQJ5E/kNleWBw+gFPxYHzCrv+t/+A4vszql8JbH4zH3gxUCx57FWzETJJQ9+FNCHT3
+         eCBA==
+X-Gm-Message-State: AOAM530VHuZT7Cm5mluJvOsRmxivz4PHi4vz6rBXSjQ2gs/2WRcEjdCr
+        Z/cVu9U6efAC44EvEF9/5i5X7E9ntXMApw==
+X-Google-Smtp-Source: ABdhPJxgjNHGHZhbqF3mCgZL1AIuiMiG/+kd4oHT3n+gConpQz+Ltl/AIjmdVxqrUx1rFXHmV1v20g==
+X-Received: by 2002:a17:90b:3a89:b0:1de:bad4:b614 with SMTP id om9-20020a17090b3a8900b001debad4b614mr1919898pjb.139.1653561595952;
+        Thu, 26 May 2022 03:39:55 -0700 (PDT)
 Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id u17-20020a17090341d100b0015e8d4eb23dsm1257311ple.135.2022.05.26.03.39.45
+        by smtp.gmail.com with ESMTPSA id u17-20020a17090341d100b0015e8d4eb23dsm1257311ple.135.2022.05.26.03.39.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 03:39:50 -0700 (PDT)
+        Thu, 26 May 2022 03:39:55 -0700 (PDT)
 From:   Chengming Zhou <zhouchengming@bytedance.com>
 To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
@@ -56,10 +56,12 @@ To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
 Cc:     linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
         songmuchun@bytedance.com,
         Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v3 0/2] sched/fair: optimize and simplify rq
-Date:   Thu, 26 May 2022 18:39:27 +0800
-Message-Id: <20220526103929.14976-1-zhouchengming@bytedance.com>
+Subject: [PATCH v3 1/2] sched/fair: fix propagate during synchronous attach/detach
+Date:   Thu, 26 May 2022 18:39:28 +0800
+Message-Id: <20220526103929.14976-2-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220526103929.14976-1-zhouchengming@bytedance.com>
+References: <20220526103929.14976-1-zhouchengming@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,28 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When a task moves from/to a cfs_rq, we first detach/attach the load_avg
+of se from/to that cfs_rq, then propagate the changes across the tg tree
+to make it visible to the root, which did in update_load_avg().
 
-This version is based on [1], which try to not put cfs_rqs in throttled_hierarchy
-on the rq leaf_cfs_rq_list, simplify the leaf_cfs_rq_list maintenance and
-optimize the periodic load decay.
+But the current code will break when encountering a on_list cfs_rq,
+can't propagate up to the root cfs_rq, that also mismatch with the
+comment of propagate_entity_cfs_rq(), which says "Propagate the changes
+of the sched_entity across the tg tree to make it visible to the root".
 
-Vincent suggested moving throttled_hierarchy() outside list_add_leaf_cfs_rq()
-because the task will not be added in this case which is quite misleading.
+The second problem is that it won't update_load_avg() for throttled
+cfs_rq, cause the load changes can't be propagated upwards.
 
-When do that moving in propagate_entity_cfs_rq(), I found it has problem
-with propagation upwards. So add the fix in the first patch to be easier
-to backport, please see the details in its commit message.
+    A
+    |
+    B  --> throttled cfs_rq
+   /
+  C
 
-[1] https://lore.kernel.org/all/20220427160544.40309-1-zhouchengming@bytedance.com/
+The prop_runnable_sum of C won't be propagated to B, so won't be
+propagated to A.
 
-Chengming Zhou (2):
-  sched/fair: fix propagate during synchronous attach/detach
-  sched/fair: optimize and simplify rq leaf_cfs_rq_list
+Fixes: 0258bdfaff5b ("sched/fair: Fix unfairness caused by missing load decay")
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+ kernel/sched/fair.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
- kernel/sched/fair.c | 87 ++++++++++++---------------------------------
- 1 file changed, 22 insertions(+), 65 deletions(-)
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 906b2c7c48d1..c6da204f3068 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -11267,14 +11267,8 @@ static void propagate_entity_cfs_rq(struct sched_entity *se)
+ 	for_each_sched_entity(se) {
+ 		cfs_rq = cfs_rq_of(se);
+ 
+-		if (!cfs_rq_throttled(cfs_rq)){
+-			update_load_avg(cfs_rq, se, UPDATE_TG);
+-			list_add_leaf_cfs_rq(cfs_rq);
+-			continue;
+-		}
+-
+-		if (list_add_leaf_cfs_rq(cfs_rq))
+-			break;
++		update_load_avg(cfs_rq, se, UPDATE_TG);
++		list_add_leaf_cfs_rq(cfs_rq);
+ 	}
+ }
+ #else
 -- 
 2.36.1
 

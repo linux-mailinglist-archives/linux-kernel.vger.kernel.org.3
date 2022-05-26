@@ -2,88 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB85C53474A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 02:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F0553474E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 02:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233068AbiEZAGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 20:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
+        id S1347883AbiEZAIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 20:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345801AbiEZAGb (ORCPT
+        with ESMTP id S1347861AbiEZAI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 20:06:31 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E4748E61
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:06:29 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id h129-20020a1c2187000000b003975cedb52bso333938wmh.1
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:06:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=8Tx5B89wRH0aFtZRAXM3z4Ug2Ls2VMbHaKwqc1lcgtE=;
-        b=jX2jVB2PuEO61dP74cOE7eq4vJdkuomI88a4aklp62TGE3bMzTdOq3ZvgrjcGanJ9x
-         pfJzN51Dm3OFhODlZ8nHrvaPYURi1/sVlDr7PgEjKj2+voRVEaV8jtqXNVFido/CndB4
-         TDCDphpS1W0yIPmkl6Uplc86qK+GsCyD/fpyitHuDEwcEx9PAIvX2AQtdvOT8gAaAh+R
-         wdPolM7KIbK+USwDT2vAlnqDKt+md+4KDSduSjtNMf/9L6TbvEAI+aQ+9hUNU/EIM1aN
-         hI/EfaJ25j//Oo9dP/A8bzDAbtwt/VvrCBnv+B4uLX5TIqhAy30LRc1OE304PsNFAKl1
-         bkNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=8Tx5B89wRH0aFtZRAXM3z4Ug2Ls2VMbHaKwqc1lcgtE=;
-        b=K3LguvZKDnJ4O/hBebIeWyEN+92yrBi15aFewW1yAQovu1pkszVdQwRSB8h6orvMqx
-         VSdTQPJ7IpEy27Q7cOePwyLzgfrkJs0U2DHm85oBDf0PDG0+q7Y9zUorFaOjKjWxOl1z
-         qNQfuI9Yeofn5b8G91UbV0kzplMgaF6YlnWYF7vR81yFps4Lu26orMngHZWs5rm2U92h
-         zi2rippM6a0089fup6uV0OJRaKJqejvcJARn/L+l8zMOQsQ7oQruWMIuks+qH9ZxHRSm
-         8nE2G42sj71QeqBK5CKC8U4V76RCrAuK5WSw80ylvLth/Tn1s4G3w9gVYD5OK4Cq53so
-         q6Aw==
-X-Gm-Message-State: AOAM532DCpMwFHUmzD7h9OFen8f+icH+m/N2kUScqsBBjwAOdGltZcE7
-        4jX2iwLEkQG1yzkbykhWwZzyyw==
-X-Google-Smtp-Source: ABdhPJyIzFHlmQXXDNNZPf3lpOzfpRz9q68yW2F7qmH0Tb9sXVpEVISc1p9gio7TPnqDSk3AyvYnPg==
-X-Received: by 2002:a1c:2184:0:b0:397:7421:7761 with SMTP id h126-20020a1c2184000000b0039774217761mr2902180wmh.14.1653523587899;
-        Wed, 25 May 2022 17:06:27 -0700 (PDT)
-Received: from smtpclient.apple (global-5-141.nat-2.net.cam.ac.uk. [131.111.5.141])
-        by smtp.gmail.com with ESMTPSA id e9-20020a05600c4e4900b003942a244f2esm3087161wmq.7.2022.05.25.17.06.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 May 2022 17:06:27 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH 5/5] riscv/efi_stub: Support for 64bit boot-hartid
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <CAOnJCUKbT88c+_PzEuchEtzjEtiHcMFvRH_G98z1AmpSdRH+BA@mail.gmail.com>
-Date:   Thu, 26 May 2022 01:06:26 +0100
-Cc:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Sunil V L <sunil.vl@gmail.com>,
-        Sunil V L <sunilvl@ventanamicro.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <898EDFB9-D4AE-45CD-AEEC-FAB4BE7AEBF4@jrtc27.com>
-References: <20220525151106.2176147-1-sunilvl@ventanamicro.com>
- <20220525151106.2176147-6-sunilvl@ventanamicro.com>
- <CAMj1kXFhEBv7MVCKZuXdx9=hZx3qWbkATdLDwXAe_Zn9Xyx=dg@mail.gmail.com>
- <1e90b15b-8c73-0de8-2885-1292923b7575@canonical.com>
- <CAOnJCU+r6KgR7bd2dx5QLmmVLjJX8GhETHb6rG65wq0e_m6FVA@mail.gmail.com>
- <5829932A-6E45-46CA-AADA-14EDD903C4AD@jrtc27.com>
- <CAOnJCUKbT88c+_PzEuchEtzjEtiHcMFvRH_G98z1AmpSdRH+BA@mail.gmail.com>
-To:     Atish Patra <atishp@atishpatra.org>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 25 May 2022 20:08:27 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11DEA7769
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653523703; x=1685059703;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=chY8ZtMyrJwsC/V5yz3eoodsBGtY+oChL0hlaavYh80=;
+  b=GC6czQ12xqoQgUB3tJGSY0U/Fn7Y42nxf0uq5g586DJxHJIWXIw2oXrQ
+   WcKOqywetZJaGdzC0LF2HAuelqMf3FFopLzeEeDPq33a1kNXKmQQu3pwO
+   +kymA8uIFv3GvP+T4JZufs/i76nQRewNGw5c7TGPs48BqbfFcLmsgcPtA
+   sOCHwuWMXWtfDjUs14vAcYOcFvi0cNcQA1BcRZbgXkP4g/TWz1UuS8Qcb
+   zAt1WinVg1BzW16i9LIrXsa8NSlgyZNEb0JaqMriur/B3jQcVVpV4zpGA
+   TcSy3krtgjsmRznovqLdtZyCVOjjdCXod2+6Ly8xhXU3iJGhQH8Da9hG3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="360362056"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="360362056"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 17:08:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="704229727"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 25 May 2022 17:08:22 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nu137-0003R4-On;
+        Thu, 26 May 2022 00:08:21 +0000
+Date:   Thu, 26 May 2022 08:08:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [tzungbi-chrome-platform:dev 25/25]
+ cros_kunit_util.c:(.text.cros_kunit_ec_xfer_mock+0x100): undefined reference
+ to `kunit_kmalloc_array'
+Message-ID: <202205260852.vS1QoL3B-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,90 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26 May 2022, at 00:49, Atish Patra <atishp@atishpatra.org> wrote:
->=20
-> On Wed, May 25, 2022 at 4:36 PM Jessica Clarke <jrtc27@jrtc27.com> =
-wrote:
->>=20
->> On 26 May 2022, at 00:11, Atish Patra <atishp@atishpatra.org> wrote:
->>>=20
->>> On Wed, May 25, 2022 at 9:09 AM Heinrich Schuchardt
->>> <heinrich.schuchardt@canonical.com> wrote:
->>>>=20
->>>> On 5/25/22 17:48, Ard Biesheuvel wrote:
->>>>> On Wed, 25 May 2022 at 17:11, Sunil V L <sunilvl@ventanamicro.com> =
-wrote:
->>>>>>=20
->>>>>> The boot-hartid can be a 64bit value on RV64 platforms. =
-Currently,
->>>>>> the "boot-hartid" in DT is assumed to be 32bit only. This patch
->>>>>> detects the size of the "boot-hartid" and uses 32bit or 64bit
->>>>>> FDT reads appropriately.
->>>>>>=20
->>>>>> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
->>>>>> ---
->>>>>> drivers/firmware/efi/libstub/riscv-stub.c | 12 +++++++++---
->>>>>> 1 file changed, 9 insertions(+), 3 deletions(-)
->>>>>>=20
->>>>>> diff --git a/drivers/firmware/efi/libstub/riscv-stub.c =
-b/drivers/firmware/efi/libstub/riscv-stub.c
->>>>>> index 9e85e58d1f27..d748533f1329 100644
->>>>>> --- a/drivers/firmware/efi/libstub/riscv-stub.c
->>>>>> +++ b/drivers/firmware/efi/libstub/riscv-stub.c
->>>>>> @@ -29,7 +29,7 @@ static int get_boot_hartid_from_fdt(void)
->>>>>> {
->>>>>> const void *fdt;
->>>>>> int chosen_node, len;
->>>>>> - const fdt32_t *prop;
->>>>>> + const void *prop;
->>>>>>=20
->>>>>> fdt =3D get_efi_config_table(DEVICE_TREE_GUID);
->>>>>> if (!fdt)
->>>>>> @@ -40,10 +40,16 @@ static int get_boot_hartid_from_fdt(void)
->>>>>> return -EINVAL;
->>>>>>=20
->>>>>> prop =3D fdt_getprop((void *)fdt, chosen_node, "boot-hartid", =
-&len);
->>>>>> - if (!prop || len !=3D sizeof(u32))
->>>>>> + if (!prop)
->>>>>> + return -EINVAL;
->>>>>> +
->>>>>> + if (len =3D=3D sizeof(u32))
->>>>>> + hartid =3D (unsigned long) fdt32_to_cpu(*(fdt32_t *)prop);
->>>>>> + else if (len =3D=3D sizeof(u64))
->>>>>> + hartid =3D (unsigned long) fdt64_to_cpu(*(fdt64_t *)prop);
->>>>>=20
->>>>> Does RISC-V care about alignment? A 64-bit quantity is not =
-guaranteed
->>>>> to appear 64-bit aligned in the DT, and the cast violates C =
-alignment
->>>>> rules, so this should probably used get_unaligned_be64() or =
-something
->>>>> like that.
->>>>=20
->>>> When running in S-mode the SBI handles unaligned access but this =
-has a
->>>> performance penalty.
->>>>=20
->>>> We could use fdt64_to_cpu(__get_unaligned_t(fdt64_t, prop)) here.
->>>>=20
->>>=20
->>> It is better to avoid unaligned access in the kernel. There are some
->>> plans to disable
->>> misaligned load/store emulation in the firmware if user space =
-requests
->>> it via prctl.
->>=20
->> Why?
->>=20
-> To support prctl call with PR_SET_UNALIGN
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git dev
+head:   c8065f6d478990cfc385d1d579972a75fc29605b
+commit: c8065f6d478990cfc385d1d579972a75fc29605b [25/25] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_query_all()
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220526/202205260852.vS1QoL3B-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git/commit/?id=c8065f6d478990cfc385d1d579972a75fc29605b
+        git remote add tzungbi-chrome-platform https://git.kernel.org/pub/scm/linux/kernel/git/tzungbi/chrome-platform.git
+        git fetch --no-tags tzungbi-chrome-platform dev
+        git checkout c8065f6d478990cfc385d1d579972a75fc29605b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Is that needed? It=E2=80=99s almost entirely unused as far as I can =
-tell, with
-all but one use turning unaligned fixups *on*, and the other use being
-IA-64-specific. What is the actual use case other than seeing a thing
-that exists on some architectures and wanting to have it do something
-on RISC-V?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Jess
+All errors (new ones prefixed by >>):
 
+   powerpc-linux-ld: drivers/platform/chrome/cros_kunit_util.o: in function `cros_kunit_ec_xfer_mock':
+>> cros_kunit_util.c:(.text.cros_kunit_ec_xfer_mock+0x100): undefined reference to `kunit_kmalloc_array'
+   powerpc-linux-ld: drivers/platform/chrome/cros_kunit_util.o: in function `cros_kunit_ec_xfer_mock_addx':
+>> cros_kunit_util.c:(.text.cros_kunit_ec_xfer_mock_addx+0x50): undefined reference to `kunit_kmalloc_array'
+>> powerpc-linux-ld: cros_kunit_util.c:(.text.cros_kunit_ec_xfer_mock_addx+0xec): undefined reference to `kunit_kmalloc_array'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

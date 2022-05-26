@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F93534C73
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415A4534C75
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346851AbiEZJUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 05:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
+        id S238680AbiEZJVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 05:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239161AbiEZJUp (ORCPT
+        with ESMTP id S1346871AbiEZJVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 05:20:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DECC6E4F;
-        Thu, 26 May 2022 02:20:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B93361BA0;
-        Thu, 26 May 2022 09:20:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 977BFC385A9;
-        Thu, 26 May 2022 09:20:40 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eO18hYaY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653556836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Y+whKCxSYVocBieB07n4cdl0UK2xbahhGaez6R2ldHc=;
-        b=eO18hYaYUaa4XggXu2m9AdWk3hwMsU5odPCIAOgM7h38AsN/EMFtBPsA1Tsb9yUQi/5oom
-        xfJkUMgrgEVs4PSbp8DYJAx4iQtWykLTflpAoP6M7ltSWxiqSRIxe7Xv0ZPMDkeeuBMG8V
-        HoVC1BIbL2iYjFgx9fGTgr5iqnLOkqM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 663337e2 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 26 May 2022 09:20:35 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        herbert@gondor.apana.org.au
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        gaochao <gaochao49@huawei.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH crypto] crypto: blake2s - remove shash module
-Date:   Thu, 26 May 2022 11:20:26 +0200
-Message-Id: <20220526092026.207936-1-Jason@zx2c4.com>
+        Thu, 26 May 2022 05:21:04 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2D4C8BC7;
+        Thu, 26 May 2022 02:20:59 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-300628e76f3so8825467b3.12;
+        Thu, 26 May 2022 02:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zq7iRvU+DT19FAVzX4uniBliRdwBdGOqRl/faEG/ylI=;
+        b=m2i8dTElJJQMlWTwrNgOkNd1e9rt1L4VVwccaswvo60HUG80C1sLCc51kflLd3gHWY
+         md7wQrYOrPAFUXRhRlkw0DKOOyfWAA8Lzgytqs7+okZG2u4eO+mJTm8aQnVfxwhTWrJL
+         lcUvCn/ogqv/eoW25GHSJLC1QO3m9297kbQWCXy8VGoQpPEkXwDjGK6ysKSUluCkYs6Y
+         zT+pPm3fCGSdU3PrligH20OFKp5rsSrhRYQieM+GHQiKDcrjIT4KzPDb7Yac7vGRUCoW
+         HdrvtLXh3k4Cgq4tJbIcP4L3ytpx95muZ7ZQZJ9Q5x8zjoIF+Z4z8o4aLliT+CSgWbyq
+         YnHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zq7iRvU+DT19FAVzX4uniBliRdwBdGOqRl/faEG/ylI=;
+        b=u8Ay328u9/4I2XRiHMBJE9+doDoyejtEOzGhWTTMk50LJedNNLK/UeIyY2/eb8jT+4
+         pXoUCw3vCmuKAYR7KA7OfwOGgZ1Nf78qUYYYKHogfiFPhp8I5MCEfbHNBmOCPJwB5vk3
+         p0EpGhRVfXoNAEIROb5OHAY17LRRmhSmzXrwoRcn1HDoZlpoDw8hW0Bq99MOYpekKYI/
+         3xEYLMa06RfikSbMpMO0IwGoDqGJEMMKoe3B6I3CDwBDPyTNA4PifC8HaBFkTu+3I2Bq
+         s4FAFQn0eLv/gfQxAwDBGuQQ5ubWwGhxmYd0nmwz6blZpGY8MUPN6Q4a2JORBSuojlMF
+         geXA==
+X-Gm-Message-State: AOAM533VsV04cI/t6ZXbqBVQ1/tqD8T/ynQLXSLhEbDphc6/LvhfNkav
+        B2zix7IGlh2QU06qZ0qiBWXV2ERmatTr1YUGNU4=
+X-Google-Smtp-Source: ABdhPJz2zB+V0gGBY5O1fQO89IFe56fLLqiBom2Biw/DYMzzuDOcXHEhsDUEPE4FG9QA7BE3YlWjcmRz94f/l3ucczk=
+X-Received: by 2002:a81:250c:0:b0:2ff:ee04:282e with SMTP id
+ l12-20020a81250c000000b002ffee04282emr19770445ywl.161.1653556858815; Thu, 26
+ May 2022 02:20:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220503150735.32723-1-jiangshanlai@gmail.com>
+ <20220503150735.32723-2-jiangshanlai@gmail.com> <Yn7hUe9nyey/CS3J@google.com>
+In-Reply-To: <Yn7hUe9nyey/CS3J@google.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 26 May 2022 17:20:47 +0800
+Message-ID: <CAJhGHyDkRnQ56AveqZ=s1YvtRgiOeHQpLhH6MKyyoYNgsgF=xw@mail.gmail.com>
+Subject: Re: [PATCH V2 1/7] KVM: X86/MMU: Add using_special_root_page()
+To:     David Matlack <dmatlack@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,897 +78,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BLAKE2s has no use as an shash and no use is likely to ever come up.
-Just remove all of this unnecessary plumbing. Removing this shash was
-something we talked about back when we were making BLAKE2s a built-in,
-but I simply never got around to doing it. So this completes that
-project.
+On Sat, May 14, 2022 at 6:53 AM David Matlack <dmatlack@google.com> wrote:
+>
+> On Tue, May 03, 2022 at 11:07:29PM +0800, Lai Jiangshan wrote:
+> > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> >
+> > In some case, special roots are used in mmu.  It is often using
+> > to_shadow_page(mmu->root.hpa) to check if special roots are used.
+> >
+> > Add using_special_root_page() to directly check if special roots are
+> > used or needed to be used even mmu->root.hpa is not set.
+> >
+> > Prepare for making to_shadow_page(mmu->root.hpa) return non-NULL via
+> > using special shadow pages.
+> >
+> > Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 14 +++++++++++---
+> >  1 file changed, 11 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 909372762363..7f20796af351 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -1711,6 +1711,14 @@ static void drop_parent_pte(struct kvm_mmu_page *sp,
+> >       mmu_spte_clear_no_track(parent_pte);
+> >  }
+> >
+> > +static bool using_special_root_page(struct kvm_mmu *mmu)
+>
+> Could you enumerate all the scenarios that use special roots and which
+> roots are the special ones? I think that would help a lot with reviewing
+> this series and would be useful to encode in a comment, probably above
+> this function here, for future readers.
 
-This also helps fix a bug in which the lib code depends on
-crypto_simd_disabled_for_test, which is now unnecessary.
+Thank you for the review.
 
-Cc: gaochao <gaochao49@huawei.com>
-Cc: Eric Biggers <ebiggers@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/arm/crypto/Kconfig           |   2 +-
- arch/arm/crypto/Makefile          |   4 +-
- arch/arm/crypto/blake2s-shash.c   |  75 -----------
- arch/x86/crypto/Makefile          |   4 +-
- arch/x86/crypto/blake2s-glue.c    |   3 +-
- arch/x86/crypto/blake2s-shash.c   |  77 -----------
- crypto/Kconfig                    |  20 +--
- crypto/Makefile                   |   1 -
- crypto/blake2s_generic.c          |  75 -----------
- crypto/tcrypt.c                   |  12 --
- crypto/testmgr.c                  |  24 ----
- crypto/testmgr.h                  | 217 ------------------------------
- include/crypto/internal/blake2s.h | 108 ---------------
- lib/crypto/blake2s-selftest.c     |   1 +
- lib/crypto/blake2s.c              |  36 ++++-
- 15 files changed, 35 insertions(+), 624 deletions(-)
- delete mode 100644 arch/arm/crypto/blake2s-shash.c
- delete mode 100644 arch/x86/crypto/blake2s-shash.c
- delete mode 100644 crypto/blake2s_generic.c
+All the scenarios are listed in v3.
 
-diff --git a/arch/arm/crypto/Kconfig b/arch/arm/crypto/Kconfig
-index e4dba5461cb3..149a5bd6b88c 100644
---- a/arch/arm/crypto/Kconfig
-+++ b/arch/arm/crypto/Kconfig
-@@ -63,7 +63,7 @@ config CRYPTO_SHA512_ARM
- 	  using optimized ARM assembler and NEON, when available.
- 
- config CRYPTO_BLAKE2S_ARM
--	tristate "BLAKE2s digest algorithm (ARM)"
-+	bool "BLAKE2s digest algorithm (ARM)"
- 	select CRYPTO_ARCH_HAVE_LIB_BLAKE2S
- 	help
- 	  BLAKE2s digest algorithm optimized with ARM scalar instructions.  This
-diff --git a/arch/arm/crypto/Makefile b/arch/arm/crypto/Makefile
-index 0274f81cc8ea..971e74546fb1 100644
---- a/arch/arm/crypto/Makefile
-+++ b/arch/arm/crypto/Makefile
-@@ -9,8 +9,7 @@ obj-$(CONFIG_CRYPTO_SHA1_ARM) += sha1-arm.o
- obj-$(CONFIG_CRYPTO_SHA1_ARM_NEON) += sha1-arm-neon.o
- obj-$(CONFIG_CRYPTO_SHA256_ARM) += sha256-arm.o
- obj-$(CONFIG_CRYPTO_SHA512_ARM) += sha512-arm.o
--obj-$(CONFIG_CRYPTO_BLAKE2S_ARM) += blake2s-arm.o
--obj-$(if $(CONFIG_CRYPTO_BLAKE2S_ARM),y) += libblake2s-arm.o
-+obj-$(CONFIG_CRYPTO_BLAKE2S_ARM) += libblake2s-arm.o
- obj-$(CONFIG_CRYPTO_BLAKE2B_NEON) += blake2b-neon.o
- obj-$(CONFIG_CRYPTO_CHACHA20_NEON) += chacha-neon.o
- obj-$(CONFIG_CRYPTO_POLY1305_ARM) += poly1305-arm.o
-@@ -32,7 +31,6 @@ sha256-arm-neon-$(CONFIG_KERNEL_MODE_NEON) := sha256_neon_glue.o
- sha256-arm-y	:= sha256-core.o sha256_glue.o $(sha256-arm-neon-y)
- sha512-arm-neon-$(CONFIG_KERNEL_MODE_NEON) := sha512-neon-glue.o
- sha512-arm-y	:= sha512-core.o sha512-glue.o $(sha512-arm-neon-y)
--blake2s-arm-y   := blake2s-shash.o
- libblake2s-arm-y:= blake2s-core.o blake2s-glue.o
- blake2b-neon-y  := blake2b-neon-core.o blake2b-neon-glue.o
- sha1-arm-ce-y	:= sha1-ce-core.o sha1-ce-glue.o
-diff --git a/arch/arm/crypto/blake2s-shash.c b/arch/arm/crypto/blake2s-shash.c
-deleted file mode 100644
-index 763c73beea2d..000000000000
---- a/arch/arm/crypto/blake2s-shash.c
-+++ /dev/null
-@@ -1,75 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * BLAKE2s digest algorithm, ARM scalar implementation
-- *
-- * Copyright 2020 Google LLC
-- */
--
--#include <crypto/internal/blake2s.h>
--#include <crypto/internal/hash.h>
--
--#include <linux/module.h>
--
--static int crypto_blake2s_update_arm(struct shash_desc *desc,
--				     const u8 *in, unsigned int inlen)
--{
--	return crypto_blake2s_update(desc, in, inlen, false);
--}
--
--static int crypto_blake2s_final_arm(struct shash_desc *desc, u8 *out)
--{
--	return crypto_blake2s_final(desc, out, false);
--}
--
--#define BLAKE2S_ALG(name, driver_name, digest_size)			\
--	{								\
--		.base.cra_name		= name,				\
--		.base.cra_driver_name	= driver_name,			\
--		.base.cra_priority	= 200,				\
--		.base.cra_flags		= CRYPTO_ALG_OPTIONAL_KEY,	\
--		.base.cra_blocksize	= BLAKE2S_BLOCK_SIZE,		\
--		.base.cra_ctxsize	= sizeof(struct blake2s_tfm_ctx), \
--		.base.cra_module	= THIS_MODULE,			\
--		.digestsize		= digest_size,			\
--		.setkey			= crypto_blake2s_setkey,	\
--		.init			= crypto_blake2s_init,		\
--		.update			= crypto_blake2s_update_arm,	\
--		.final			= crypto_blake2s_final_arm,	\
--		.descsize		= sizeof(struct blake2s_state),	\
--	}
--
--static struct shash_alg blake2s_arm_algs[] = {
--	BLAKE2S_ALG("blake2s-128", "blake2s-128-arm", BLAKE2S_128_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-160", "blake2s-160-arm", BLAKE2S_160_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-224", "blake2s-224-arm", BLAKE2S_224_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-256", "blake2s-256-arm", BLAKE2S_256_HASH_SIZE),
--};
--
--static int __init blake2s_arm_mod_init(void)
--{
--	return IS_REACHABLE(CONFIG_CRYPTO_HASH) ?
--		crypto_register_shashes(blake2s_arm_algs,
--					ARRAY_SIZE(blake2s_arm_algs)) : 0;
--}
--
--static void __exit blake2s_arm_mod_exit(void)
--{
--	if (IS_REACHABLE(CONFIG_CRYPTO_HASH))
--		crypto_unregister_shashes(blake2s_arm_algs,
--					  ARRAY_SIZE(blake2s_arm_algs));
--}
--
--module_init(blake2s_arm_mod_init);
--module_exit(blake2s_arm_mod_exit);
--
--MODULE_DESCRIPTION("BLAKE2s digest algorithm, ARM scalar implementation");
--MODULE_LICENSE("GPL");
--MODULE_AUTHOR("Eric Biggers <ebiggers@google.com>");
--MODULE_ALIAS_CRYPTO("blake2s-128");
--MODULE_ALIAS_CRYPTO("blake2s-128-arm");
--MODULE_ALIAS_CRYPTO("blake2s-160");
--MODULE_ALIAS_CRYPTO("blake2s-160-arm");
--MODULE_ALIAS_CRYPTO("blake2s-224");
--MODULE_ALIAS_CRYPTO("blake2s-224-arm");
--MODULE_ALIAS_CRYPTO("blake2s-256");
--MODULE_ALIAS_CRYPTO("blake2s-256-arm");
-diff --git a/arch/x86/crypto/Makefile b/arch/x86/crypto/Makefile
-index 2831685adf6f..8ed4597fdf6a 100644
---- a/arch/x86/crypto/Makefile
-+++ b/arch/x86/crypto/Makefile
-@@ -61,9 +61,7 @@ sha256-ssse3-$(CONFIG_AS_SHA256_NI) += sha256_ni_asm.o
- obj-$(CONFIG_CRYPTO_SHA512_SSSE3) += sha512-ssse3.o
- sha512-ssse3-y := sha512-ssse3-asm.o sha512-avx-asm.o sha512-avx2-asm.o sha512_ssse3_glue.o
- 
--obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += blake2s-x86_64.o
--blake2s-x86_64-y := blake2s-shash.o
--obj-$(if $(CONFIG_CRYPTO_BLAKE2S_X86),y) += libblake2s-x86_64.o
-+obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += libblake2s-x86_64.o
- libblake2s-x86_64-y := blake2s-core.o blake2s-glue.o
- 
- obj-$(CONFIG_CRYPTO_GHASH_CLMUL_NI_INTEL) += ghash-clmulni-intel.o
-diff --git a/arch/x86/crypto/blake2s-glue.c b/arch/x86/crypto/blake2s-glue.c
-index 69853c13e8fb..aaba21230528 100644
---- a/arch/x86/crypto/blake2s-glue.c
-+++ b/arch/x86/crypto/blake2s-glue.c
-@@ -4,7 +4,6 @@
-  */
- 
- #include <crypto/internal/blake2s.h>
--#include <crypto/internal/simd.h>
- 
- #include <linux/types.h>
- #include <linux/jump_label.h>
-@@ -33,7 +32,7 @@ void blake2s_compress(struct blake2s_state *state, const u8 *block,
- 	/* SIMD disables preemption, so relax after processing each page. */
- 	BUILD_BUG_ON(SZ_4K / BLAKE2S_BLOCK_SIZE < 8);
- 
--	if (!static_branch_likely(&blake2s_use_ssse3) || !crypto_simd_usable()) {
-+	if (!static_branch_likely(&blake2s_use_ssse3) || !may_use_simd()) {
- 		blake2s_compress_generic(state, block, nblocks, inc);
- 		return;
- 	}
-diff --git a/arch/x86/crypto/blake2s-shash.c b/arch/x86/crypto/blake2s-shash.c
-deleted file mode 100644
-index 59ae28abe35c..000000000000
---- a/arch/x86/crypto/blake2s-shash.c
-+++ /dev/null
-@@ -1,77 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0 OR MIT
--/*
-- * Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-- */
--
--#include <crypto/internal/blake2s.h>
--#include <crypto/internal/simd.h>
--#include <crypto/internal/hash.h>
--
--#include <linux/types.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/sizes.h>
--
--#include <asm/cpufeature.h>
--#include <asm/processor.h>
--
--static int crypto_blake2s_update_x86(struct shash_desc *desc,
--				     const u8 *in, unsigned int inlen)
--{
--	return crypto_blake2s_update(desc, in, inlen, false);
--}
--
--static int crypto_blake2s_final_x86(struct shash_desc *desc, u8 *out)
--{
--	return crypto_blake2s_final(desc, out, false);
--}
--
--#define BLAKE2S_ALG(name, driver_name, digest_size)			\
--	{								\
--		.base.cra_name		= name,				\
--		.base.cra_driver_name	= driver_name,			\
--		.base.cra_priority	= 200,				\
--		.base.cra_flags		= CRYPTO_ALG_OPTIONAL_KEY,	\
--		.base.cra_blocksize	= BLAKE2S_BLOCK_SIZE,		\
--		.base.cra_ctxsize	= sizeof(struct blake2s_tfm_ctx), \
--		.base.cra_module	= THIS_MODULE,			\
--		.digestsize		= digest_size,			\
--		.setkey			= crypto_blake2s_setkey,	\
--		.init			= crypto_blake2s_init,		\
--		.update			= crypto_blake2s_update_x86,	\
--		.final			= crypto_blake2s_final_x86,	\
--		.descsize		= sizeof(struct blake2s_state),	\
--	}
--
--static struct shash_alg blake2s_algs[] = {
--	BLAKE2S_ALG("blake2s-128", "blake2s-128-x86", BLAKE2S_128_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-160", "blake2s-160-x86", BLAKE2S_160_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-224", "blake2s-224-x86", BLAKE2S_224_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-256", "blake2s-256-x86", BLAKE2S_256_HASH_SIZE),
--};
--
--static int __init blake2s_mod_init(void)
--{
--	if (IS_REACHABLE(CONFIG_CRYPTO_HASH) && boot_cpu_has(X86_FEATURE_SSSE3))
--		return crypto_register_shashes(blake2s_algs, ARRAY_SIZE(blake2s_algs));
--	return 0;
--}
--
--static void __exit blake2s_mod_exit(void)
--{
--	if (IS_REACHABLE(CONFIG_CRYPTO_HASH) && boot_cpu_has(X86_FEATURE_SSSE3))
--		crypto_unregister_shashes(blake2s_algs, ARRAY_SIZE(blake2s_algs));
--}
--
--module_init(blake2s_mod_init);
--module_exit(blake2s_mod_exit);
--
--MODULE_ALIAS_CRYPTO("blake2s-128");
--MODULE_ALIAS_CRYPTO("blake2s-128-x86");
--MODULE_ALIAS_CRYPTO("blake2s-160");
--MODULE_ALIAS_CRYPTO("blake2s-160-x86");
--MODULE_ALIAS_CRYPTO("blake2s-224");
--MODULE_ALIAS_CRYPTO("blake2s-224-x86");
--MODULE_ALIAS_CRYPTO("blake2s-256");
--MODULE_ALIAS_CRYPTO("blake2s-256-x86");
--MODULE_LICENSE("GPL v2");
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index 41068811fd0e..f567271ed10d 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -691,26 +691,8 @@ config CRYPTO_BLAKE2B
- 
- 	  See https://blake2.net for further information.
- 
--config CRYPTO_BLAKE2S
--	tristate "BLAKE2s digest algorithm"
--	select CRYPTO_LIB_BLAKE2S_GENERIC
--	select CRYPTO_HASH
--	help
--	  Implementation of cryptographic hash function BLAKE2s
--	  optimized for 8-32bit platforms and can produce digests of any size
--	  between 1 to 32.  The keyed hash is also implemented.
--
--	  This module provides the following algorithms:
--
--	  - blake2s-128
--	  - blake2s-160
--	  - blake2s-224
--	  - blake2s-256
--
--	  See https://blake2.net for further information.
--
- config CRYPTO_BLAKE2S_X86
--	tristate "BLAKE2s digest algorithm (x86 accelerated version)"
-+	bool "BLAKE2s digest algorithm (x86 accelerated version)"
- 	depends on X86 && 64BIT
- 	select CRYPTO_LIB_BLAKE2S_GENERIC
- 	select CRYPTO_ARCH_HAVE_LIB_BLAKE2S
-diff --git a/crypto/Makefile b/crypto/Makefile
-index f754c4d17d6b..40d4c2690a49 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -83,7 +83,6 @@ obj-$(CONFIG_CRYPTO_STREEBOG) += streebog_generic.o
- obj-$(CONFIG_CRYPTO_WP512) += wp512.o
- CFLAGS_wp512.o := $(call cc-option,-fno-schedule-insns)  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79149
- obj-$(CONFIG_CRYPTO_BLAKE2B) += blake2b_generic.o
--obj-$(CONFIG_CRYPTO_BLAKE2S) += blake2s_generic.o
- obj-$(CONFIG_CRYPTO_GF128MUL) += gf128mul.o
- obj-$(CONFIG_CRYPTO_ECB) += ecb.o
- obj-$(CONFIG_CRYPTO_CBC) += cbc.o
-diff --git a/crypto/blake2s_generic.c b/crypto/blake2s_generic.c
-deleted file mode 100644
-index 5f96a21f8788..000000000000
---- a/crypto/blake2s_generic.c
-+++ /dev/null
-@@ -1,75 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0 OR MIT
--/*
-- * shash interface to the generic implementation of BLAKE2s
-- *
-- * Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-- */
--
--#include <crypto/internal/blake2s.h>
--#include <crypto/internal/hash.h>
--
--#include <linux/types.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
--
--static int crypto_blake2s_update_generic(struct shash_desc *desc,
--					 const u8 *in, unsigned int inlen)
--{
--	return crypto_blake2s_update(desc, in, inlen, true);
--}
--
--static int crypto_blake2s_final_generic(struct shash_desc *desc, u8 *out)
--{
--	return crypto_blake2s_final(desc, out, true);
--}
--
--#define BLAKE2S_ALG(name, driver_name, digest_size)			\
--	{								\
--		.base.cra_name		= name,				\
--		.base.cra_driver_name	= driver_name,			\
--		.base.cra_priority	= 100,				\
--		.base.cra_flags		= CRYPTO_ALG_OPTIONAL_KEY,	\
--		.base.cra_blocksize	= BLAKE2S_BLOCK_SIZE,		\
--		.base.cra_ctxsize	= sizeof(struct blake2s_tfm_ctx), \
--		.base.cra_module	= THIS_MODULE,			\
--		.digestsize		= digest_size,			\
--		.setkey			= crypto_blake2s_setkey,	\
--		.init			= crypto_blake2s_init,		\
--		.update			= crypto_blake2s_update_generic, \
--		.final			= crypto_blake2s_final_generic,	\
--		.descsize		= sizeof(struct blake2s_state),	\
--	}
--
--static struct shash_alg blake2s_algs[] = {
--	BLAKE2S_ALG("blake2s-128", "blake2s-128-generic",
--		    BLAKE2S_128_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-160", "blake2s-160-generic",
--		    BLAKE2S_160_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-224", "blake2s-224-generic",
--		    BLAKE2S_224_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-256", "blake2s-256-generic",
--		    BLAKE2S_256_HASH_SIZE),
--};
--
--static int __init blake2s_mod_init(void)
--{
--	return crypto_register_shashes(blake2s_algs, ARRAY_SIZE(blake2s_algs));
--}
--
--static void __exit blake2s_mod_exit(void)
--{
--	crypto_unregister_shashes(blake2s_algs, ARRAY_SIZE(blake2s_algs));
--}
--
--subsys_initcall(blake2s_mod_init);
--module_exit(blake2s_mod_exit);
--
--MODULE_ALIAS_CRYPTO("blake2s-128");
--MODULE_ALIAS_CRYPTO("blake2s-128-generic");
--MODULE_ALIAS_CRYPTO("blake2s-160");
--MODULE_ALIAS_CRYPTO("blake2s-160-generic");
--MODULE_ALIAS_CRYPTO("blake2s-224");
--MODULE_ALIAS_CRYPTO("blake2s-224-generic");
--MODULE_ALIAS_CRYPTO("blake2s-256");
--MODULE_ALIAS_CRYPTO("blake2s-256-generic");
--MODULE_LICENSE("GPL v2");
-diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
-index 2bacf8384f59..66b7ca1ccb23 100644
---- a/crypto/tcrypt.c
-+++ b/crypto/tcrypt.c
-@@ -1669,10 +1669,6 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 		ret += tcrypt_test("rmd160");
- 		break;
- 
--	case 41:
--		ret += tcrypt_test("blake2s-256");
--		break;
--
- 	case 42:
- 		ret += tcrypt_test("blake2b-512");
- 		break;
-@@ -2240,10 +2236,6 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 		test_hash_speed("rmd160", sec, generic_hash_speed_template);
- 		if (mode > 300 && mode < 400) break;
- 		fallthrough;
--	case 316:
--		test_hash_speed("blake2s-256", sec, generic_hash_speed_template);
--		if (mode > 300 && mode < 400) break;
--		fallthrough;
- 	case 317:
- 		test_hash_speed("blake2b-512", sec, generic_hash_speed_template);
- 		if (mode > 300 && mode < 400) break;
-@@ -2352,10 +2344,6 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 		test_ahash_speed("rmd160", sec, generic_hash_speed_template);
- 		if (mode > 400 && mode < 500) break;
- 		fallthrough;
--	case 416:
--		test_ahash_speed("blake2s-256", sec, generic_hash_speed_template);
--		if (mode > 400 && mode < 500) break;
--		fallthrough;
- 	case 417:
- 		test_ahash_speed("blake2b-512", sec, generic_hash_speed_template);
- 		if (mode > 400 && mode < 500) break;
-diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-index 4948201065cc..56facdb63843 100644
---- a/crypto/testmgr.c
-+++ b/crypto/testmgr.c
-@@ -4324,30 +4324,6 @@ static const struct alg_test_desc alg_test_descs[] = {
- 		.suite = {
- 			.hash = __VECS(blake2b_512_tv_template)
- 		}
--	}, {
--		.alg = "blake2s-128",
--		.test = alg_test_hash,
--		.suite = {
--			.hash = __VECS(blakes2s_128_tv_template)
--		}
--	}, {
--		.alg = "blake2s-160",
--		.test = alg_test_hash,
--		.suite = {
--			.hash = __VECS(blakes2s_160_tv_template)
--		}
--	}, {
--		.alg = "blake2s-224",
--		.test = alg_test_hash,
--		.suite = {
--			.hash = __VECS(blakes2s_224_tv_template)
--		}
--	}, {
--		.alg = "blake2s-256",
--		.test = alg_test_hash,
--		.suite = {
--			.hash = __VECS(blakes2s_256_tv_template)
--		}
- 	}, {
- 		.alg = "cbc(aes)",
- 		.test = alg_test_skcipher,
-diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-index 4d7449fc6a65..c29658337d96 100644
---- a/crypto/testmgr.h
-+++ b/crypto/testmgr.h
-@@ -34034,221 +34034,4 @@ static const struct hash_testvec blake2b_512_tv_template[] = {{
- 			  0xae, 0x15, 0x81, 0x15, 0xd0, 0x88, 0xa0, 0x3c, },
- }};
- 
--static const struct hash_testvec blakes2s_128_tv_template[] = {{
--	.digest = (u8[]){ 0x64, 0x55, 0x0d, 0x6f, 0xfe, 0x2c, 0x0a, 0x01,
--			  0xa1, 0x4a, 0xba, 0x1e, 0xad, 0xe0, 0x20, 0x0c, },
--}, {
--	.plaintext = blake2_ordered_sequence,
--	.psize = 64,
--	.digest = (u8[]){ 0xdc, 0x66, 0xca, 0x8f, 0x03, 0x86, 0x58, 0x01,
--			  0xb0, 0xff, 0xe0, 0x6e, 0xd8, 0xa1, 0xa9, 0x0e, },
--}, {
--	.ksize = 16,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 1,
--	.digest = (u8[]){ 0x88, 0x1e, 0x42, 0xe7, 0xbb, 0x35, 0x80, 0x82,
--			  0x63, 0x7c, 0x0a, 0x0f, 0xd7, 0xec, 0x6c, 0x2f, },
--}, {
--	.ksize = 32,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 7,
--	.digest = (u8[]){ 0xcf, 0x9e, 0x07, 0x2a, 0xd5, 0x22, 0xf2, 0xcd,
--			  0xa2, 0xd8, 0x25, 0x21, 0x80, 0x86, 0x73, 0x1c, },
--}, {
--	.ksize = 1,
--	.key = "B",
--	.plaintext = blake2_ordered_sequence,
--	.psize = 15,
--	.digest = (u8[]){ 0xf6, 0x33, 0x5a, 0x2c, 0x22, 0xa0, 0x64, 0xb2,
--			  0xb6, 0x3f, 0xeb, 0xbc, 0xd1, 0xc3, 0xe5, 0xb2, },
--}, {
--	.ksize = 16,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 247,
--	.digest = (u8[]){ 0x72, 0x66, 0x49, 0x60, 0xf9, 0x4a, 0xea, 0xbe,
--			  0x1f, 0xf4, 0x60, 0xce, 0xb7, 0x81, 0xcb, 0x09, },
--}, {
--	.ksize = 32,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 256,
--	.digest = (u8[]){ 0xd5, 0xa4, 0x0e, 0xc3, 0x16, 0xc7, 0x51, 0xa6,
--			  0x3c, 0xd0, 0xd9, 0x11, 0x57, 0xfa, 0x1e, 0xbb, },
--}};
--
--static const struct hash_testvec blakes2s_160_tv_template[] = {{
--	.plaintext = blake2_ordered_sequence,
--	.psize = 7,
--	.digest = (u8[]){ 0xb4, 0xf2, 0x03, 0x49, 0x37, 0xed, 0xb1, 0x3e,
--			  0x5b, 0x2a, 0xca, 0x64, 0x82, 0x74, 0xf6, 0x62,
--			  0xe3, 0xf2, 0x84, 0xff, },
--}, {
--	.plaintext = blake2_ordered_sequence,
--	.psize = 256,
--	.digest = (u8[]){ 0xaa, 0x56, 0x9b, 0xdc, 0x98, 0x17, 0x75, 0xf2,
--			  0xb3, 0x68, 0x83, 0xb7, 0x9b, 0x8d, 0x48, 0xb1,
--			  0x9b, 0x2d, 0x35, 0x05, },
--}, {
--	.ksize = 1,
--	.key = "B",
--	.digest = (u8[]){ 0x50, 0x16, 0xe7, 0x0c, 0x01, 0xd0, 0xd3, 0xc3,
--			  0xf4, 0x3e, 0xb1, 0x6e, 0x97, 0xa9, 0x4e, 0xd1,
--			  0x79, 0x65, 0x32, 0x93, },
--}, {
--	.ksize = 32,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 1,
--	.digest = (u8[]){ 0x1c, 0x2b, 0xcd, 0x9a, 0x68, 0xca, 0x8c, 0x71,
--			  0x90, 0x29, 0x6c, 0x54, 0xfa, 0x56, 0x4a, 0xef,
--			  0xa2, 0x3a, 0x56, 0x9c, },
--}, {
--	.ksize = 16,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 15,
--	.digest = (u8[]){ 0x36, 0xc3, 0x5f, 0x9a, 0xdc, 0x7e, 0xbf, 0x19,
--			  0x68, 0xaa, 0xca, 0xd8, 0x81, 0xbf, 0x09, 0x34,
--			  0x83, 0x39, 0x0f, 0x30, },
--}, {
--	.ksize = 1,
--	.key = "B",
--	.plaintext = blake2_ordered_sequence,
--	.psize = 64,
--	.digest = (u8[]){ 0x86, 0x80, 0x78, 0xa4, 0x14, 0xec, 0x03, 0xe5,
--			  0xb6, 0x9a, 0x52, 0x0e, 0x42, 0xee, 0x39, 0x9d,
--			  0xac, 0xa6, 0x81, 0x63, },
--}, {
--	.ksize = 32,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 247,
--	.digest = (u8[]){ 0x2d, 0xd8, 0xd2, 0x53, 0x66, 0xfa, 0xa9, 0x01,
--			  0x1c, 0x9c, 0xaf, 0xa3, 0xe2, 0x9d, 0x9b, 0x10,
--			  0x0a, 0xf6, 0x73, 0xe8, },
--}};
--
--static const struct hash_testvec blakes2s_224_tv_template[] = {{
--	.plaintext = blake2_ordered_sequence,
--	.psize = 1,
--	.digest = (u8[]){ 0x61, 0xb9, 0x4e, 0xc9, 0x46, 0x22, 0xa3, 0x91,
--			  0xd2, 0xae, 0x42, 0xe6, 0x45, 0x6c, 0x90, 0x12,
--			  0xd5, 0x80, 0x07, 0x97, 0xb8, 0x86, 0x5a, 0xfc,
--			  0x48, 0x21, 0x97, 0xbb, },
--}, {
--	.plaintext = blake2_ordered_sequence,
--	.psize = 247,
--	.digest = (u8[]){ 0x9e, 0xda, 0xc7, 0x20, 0x2c, 0xd8, 0x48, 0x2e,
--			  0x31, 0x94, 0xab, 0x46, 0x6d, 0x94, 0xd8, 0xb4,
--			  0x69, 0xcd, 0xae, 0x19, 0x6d, 0x9e, 0x41, 0xcc,
--			  0x2b, 0xa4, 0xd5, 0xf6, },
--}, {
--	.ksize = 16,
--	.key = blake2_ordered_sequence,
--	.digest = (u8[]){ 0x32, 0xc0, 0xac, 0xf4, 0x3b, 0xd3, 0x07, 0x9f,
--			  0xbe, 0xfb, 0xfa, 0x4d, 0x6b, 0x4e, 0x56, 0xb3,
--			  0xaa, 0xd3, 0x27, 0xf6, 0x14, 0xbf, 0xb9, 0x32,
--			  0xa7, 0x19, 0xfc, 0xb8, },
--}, {
--	.ksize = 1,
--	.key = "B",
--	.plaintext = blake2_ordered_sequence,
--	.psize = 7,
--	.digest = (u8[]){ 0x73, 0xad, 0x5e, 0x6d, 0xb9, 0x02, 0x8e, 0x76,
--			  0xf2, 0x66, 0x42, 0x4b, 0x4c, 0xfa, 0x1f, 0xe6,
--			  0x2e, 0x56, 0x40, 0xe5, 0xa2, 0xb0, 0x3c, 0xe8,
--			  0x7b, 0x45, 0xfe, 0x05, },
--}, {
--	.ksize = 32,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 15,
--	.digest = (u8[]){ 0x16, 0x60, 0xfb, 0x92, 0x54, 0xb3, 0x6e, 0x36,
--			  0x81, 0xf4, 0x16, 0x41, 0xc3, 0x3d, 0xd3, 0x43,
--			  0x84, 0xed, 0x10, 0x6f, 0x65, 0x80, 0x7a, 0x3e,
--			  0x25, 0xab, 0xc5, 0x02, },
--}, {
--	.ksize = 16,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 64,
--	.digest = (u8[]){ 0xca, 0xaa, 0x39, 0x67, 0x9c, 0xf7, 0x6b, 0xc7,
--			  0xb6, 0x82, 0xca, 0x0e, 0x65, 0x36, 0x5b, 0x7c,
--			  0x24, 0x00, 0xfa, 0x5f, 0xda, 0x06, 0x91, 0x93,
--			  0x6a, 0x31, 0x83, 0xb5, },
--}, {
--	.ksize = 1,
--	.key = "B",
--	.plaintext = blake2_ordered_sequence,
--	.psize = 256,
--	.digest = (u8[]){ 0x90, 0x02, 0x26, 0xb5, 0x06, 0x9c, 0x36, 0x86,
--			  0x94, 0x91, 0x90, 0x1e, 0x7d, 0x2a, 0x71, 0xb2,
--			  0x48, 0xb5, 0xe8, 0x16, 0xfd, 0x64, 0x33, 0x45,
--			  0xb3, 0xd7, 0xec, 0xcc, },
--}};
--
--static const struct hash_testvec blakes2s_256_tv_template[] = {{
--	.plaintext = blake2_ordered_sequence,
--	.psize = 15,
--	.digest = (u8[]){ 0xd9, 0x7c, 0x82, 0x8d, 0x81, 0x82, 0xa7, 0x21,
--			  0x80, 0xa0, 0x6a, 0x78, 0x26, 0x83, 0x30, 0x67,
--			  0x3f, 0x7c, 0x4e, 0x06, 0x35, 0x94, 0x7c, 0x04,
--			  0xc0, 0x23, 0x23, 0xfd, 0x45, 0xc0, 0xa5, 0x2d, },
--}, {
--	.ksize = 32,
--	.key = blake2_ordered_sequence,
--	.digest = (u8[]){ 0x48, 0xa8, 0x99, 0x7d, 0xa4, 0x07, 0x87, 0x6b,
--			  0x3d, 0x79, 0xc0, 0xd9, 0x23, 0x25, 0xad, 0x3b,
--			  0x89, 0xcb, 0xb7, 0x54, 0xd8, 0x6a, 0xb7, 0x1a,
--			  0xee, 0x04, 0x7a, 0xd3, 0x45, 0xfd, 0x2c, 0x49, },
--}, {
--	.ksize = 1,
--	.key = "B",
--	.plaintext = blake2_ordered_sequence,
--	.psize = 1,
--	.digest = (u8[]){ 0x22, 0x27, 0xae, 0xaa, 0x6e, 0x81, 0x56, 0x03,
--			  0xa7, 0xe3, 0xa1, 0x18, 0xa5, 0x9a, 0x2c, 0x18,
--			  0xf4, 0x63, 0xbc, 0x16, 0x70, 0xf1, 0xe7, 0x4b,
--			  0x00, 0x6d, 0x66, 0x16, 0xae, 0x9e, 0x74, 0x4e, },
--}, {
--	.ksize = 16,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 7,
--	.digest = (u8[]){ 0x58, 0x5d, 0xa8, 0x60, 0x1c, 0xa4, 0xd8, 0x03,
--			  0x86, 0x86, 0x84, 0x64, 0xd7, 0xa0, 0x8e, 0x15,
--			  0x2f, 0x05, 0xa2, 0x1b, 0xbc, 0xef, 0x7a, 0x34,
--			  0xb3, 0xc5, 0xbc, 0x4b, 0xf0, 0x32, 0xeb, 0x12, },
--}, {
--	.ksize = 32,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 64,
--	.digest = (u8[]){ 0x89, 0x75, 0xb0, 0x57, 0x7f, 0xd3, 0x55, 0x66,
--			  0xd7, 0x50, 0xb3, 0x62, 0xb0, 0x89, 0x7a, 0x26,
--			  0xc3, 0x99, 0x13, 0x6d, 0xf0, 0x7b, 0xab, 0xab,
--			  0xbd, 0xe6, 0x20, 0x3f, 0xf2, 0x95, 0x4e, 0xd4, },
--}, {
--	.ksize = 1,
--	.key = "B",
--	.plaintext = blake2_ordered_sequence,
--	.psize = 247,
--	.digest = (u8[]){ 0x2e, 0x74, 0x1c, 0x1d, 0x03, 0xf4, 0x9d, 0x84,
--			  0x6f, 0xfc, 0x86, 0x32, 0x92, 0x49, 0x7e, 0x66,
--			  0xd7, 0xc3, 0x10, 0x88, 0xfe, 0x28, 0xb3, 0xe0,
--			  0xbf, 0x50, 0x75, 0xad, 0x8e, 0xa4, 0xe6, 0xb2, },
--}, {
--	.ksize = 16,
--	.key = blake2_ordered_sequence,
--	.plaintext = blake2_ordered_sequence,
--	.psize = 256,
--	.digest = (u8[]){ 0xb9, 0xd2, 0x81, 0x0e, 0x3a, 0xb1, 0x62, 0x9b,
--			  0xad, 0x44, 0x05, 0xf4, 0x92, 0x2e, 0x99, 0xc1,
--			  0x4a, 0x47, 0xbb, 0x5b, 0x6f, 0xb2, 0x96, 0xed,
--			  0xd5, 0x06, 0xb5, 0x3a, 0x7c, 0x7a, 0x65, 0x1d, },
--}};
--
- #endif	/* _CRYPTO_TESTMGR_H */
-diff --git a/include/crypto/internal/blake2s.h b/include/crypto/internal/blake2s.h
-index 52363eee2b20..506d56530ca9 100644
---- a/include/crypto/internal/blake2s.h
-+++ b/include/crypto/internal/blake2s.h
-@@ -8,7 +8,6 @@
- #define _CRYPTO_INTERNAL_BLAKE2S_H
- 
- #include <crypto/blake2s.h>
--#include <crypto/internal/hash.h>
- #include <linux/string.h>
- 
- void blake2s_compress_generic(struct blake2s_state *state, const u8 *block,
-@@ -19,111 +18,4 @@ void blake2s_compress(struct blake2s_state *state, const u8 *block,
- 
- bool blake2s_selftest(void);
- 
--static inline void blake2s_set_lastblock(struct blake2s_state *state)
--{
--	state->f[0] = -1;
--}
--
--/* Helper functions for BLAKE2s shared by the library and shash APIs */
--
--static __always_inline void
--__blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen,
--		 bool force_generic)
--{
--	const size_t fill = BLAKE2S_BLOCK_SIZE - state->buflen;
--
--	if (unlikely(!inlen))
--		return;
--	if (inlen > fill) {
--		memcpy(state->buf + state->buflen, in, fill);
--		if (force_generic)
--			blake2s_compress_generic(state, state->buf, 1,
--						 BLAKE2S_BLOCK_SIZE);
--		else
--			blake2s_compress(state, state->buf, 1,
--					 BLAKE2S_BLOCK_SIZE);
--		state->buflen = 0;
--		in += fill;
--		inlen -= fill;
--	}
--	if (inlen > BLAKE2S_BLOCK_SIZE) {
--		const size_t nblocks = DIV_ROUND_UP(inlen, BLAKE2S_BLOCK_SIZE);
--		/* Hash one less (full) block than strictly possible */
--		if (force_generic)
--			blake2s_compress_generic(state, in, nblocks - 1,
--						 BLAKE2S_BLOCK_SIZE);
--		else
--			blake2s_compress(state, in, nblocks - 1,
--					 BLAKE2S_BLOCK_SIZE);
--		in += BLAKE2S_BLOCK_SIZE * (nblocks - 1);
--		inlen -= BLAKE2S_BLOCK_SIZE * (nblocks - 1);
--	}
--	memcpy(state->buf + state->buflen, in, inlen);
--	state->buflen += inlen;
--}
--
--static __always_inline void
--__blake2s_final(struct blake2s_state *state, u8 *out, bool force_generic)
--{
--	blake2s_set_lastblock(state);
--	memset(state->buf + state->buflen, 0,
--	       BLAKE2S_BLOCK_SIZE - state->buflen); /* Padding */
--	if (force_generic)
--		blake2s_compress_generic(state, state->buf, 1, state->buflen);
--	else
--		blake2s_compress(state, state->buf, 1, state->buflen);
--	cpu_to_le32_array(state->h, ARRAY_SIZE(state->h));
--	memcpy(out, state->h, state->outlen);
--}
--
--/* Helper functions for shash implementations of BLAKE2s */
--
--struct blake2s_tfm_ctx {
--	u8 key[BLAKE2S_KEY_SIZE];
--	unsigned int keylen;
--};
--
--static inline int crypto_blake2s_setkey(struct crypto_shash *tfm,
--					const u8 *key, unsigned int keylen)
--{
--	struct blake2s_tfm_ctx *tctx = crypto_shash_ctx(tfm);
--
--	if (keylen == 0 || keylen > BLAKE2S_KEY_SIZE)
--		return -EINVAL;
--
--	memcpy(tctx->key, key, keylen);
--	tctx->keylen = keylen;
--
--	return 0;
--}
--
--static inline int crypto_blake2s_init(struct shash_desc *desc)
--{
--	const struct blake2s_tfm_ctx *tctx = crypto_shash_ctx(desc->tfm);
--	struct blake2s_state *state = shash_desc_ctx(desc);
--	unsigned int outlen = crypto_shash_digestsize(desc->tfm);
--
--	__blake2s_init(state, outlen, tctx->key, tctx->keylen);
--	return 0;
--}
--
--static inline int crypto_blake2s_update(struct shash_desc *desc,
--					const u8 *in, unsigned int inlen,
--					bool force_generic)
--{
--	struct blake2s_state *state = shash_desc_ctx(desc);
--
--	__blake2s_update(state, in, inlen, force_generic);
--	return 0;
--}
--
--static inline int crypto_blake2s_final(struct shash_desc *desc, u8 *out,
--				       bool force_generic)
--{
--	struct blake2s_state *state = shash_desc_ctx(desc);
--
--	__blake2s_final(state, out, force_generic);
--	return 0;
--}
--
- #endif /* _CRYPTO_INTERNAL_BLAKE2S_H */
-diff --git a/lib/crypto/blake2s-selftest.c b/lib/crypto/blake2s-selftest.c
-index 409e4b728770..7b8d53a2dfb0 100644
---- a/lib/crypto/blake2s-selftest.c
-+++ b/lib/crypto/blake2s-selftest.c
-@@ -4,6 +4,7 @@
-  */
- 
- #include <crypto/internal/blake2s.h>
-+#include <linux/kernel.h>
- #include <linux/string.h>
- 
- /*
-diff --git a/lib/crypto/blake2s.c b/lib/crypto/blake2s.c
-index c71c09621c09..716da32cf4dc 100644
---- a/lib/crypto/blake2s.c
-+++ b/lib/crypto/blake2s.c
-@@ -16,16 +16,43 @@
- #include <linux/init.h>
- #include <linux/bug.h>
- 
-+static inline void blake2s_set_lastblock(struct blake2s_state *state)
-+{
-+	state->f[0] = -1;
-+}
-+
- void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen)
- {
--	__blake2s_update(state, in, inlen, false);
-+	const size_t fill = BLAKE2S_BLOCK_SIZE - state->buflen;
-+
-+	if (unlikely(!inlen))
-+		return;
-+	if (inlen > fill) {
-+		memcpy(state->buf + state->buflen, in, fill);
-+		blake2s_compress(state, state->buf, 1, BLAKE2S_BLOCK_SIZE);
-+		state->buflen = 0;
-+		in += fill;
-+		inlen -= fill;
-+	}
-+	if (inlen > BLAKE2S_BLOCK_SIZE) {
-+		const size_t nblocks = DIV_ROUND_UP(inlen, BLAKE2S_BLOCK_SIZE);
-+		blake2s_compress(state, in, nblocks - 1, BLAKE2S_BLOCK_SIZE);
-+		in += BLAKE2S_BLOCK_SIZE * (nblocks - 1);
-+		inlen -= BLAKE2S_BLOCK_SIZE * (nblocks - 1);
-+	}
-+	memcpy(state->buf + state->buflen, in, inlen);
-+	state->buflen += inlen;
- }
- EXPORT_SYMBOL(blake2s_update);
- 
- void blake2s_final(struct blake2s_state *state, u8 *out)
- {
- 	WARN_ON(IS_ENABLED(DEBUG) && !out);
--	__blake2s_final(state, out, false);
-+	blake2s_set_lastblock(state);
-+	memset(state->buf + state->buflen, 0, BLAKE2S_BLOCK_SIZE - state->buflen); /* Padding */
-+	blake2s_compress(state, state->buf, 1, state->buflen);
-+	cpu_to_le32_array(state->h, ARRAY_SIZE(state->h));
-+	memcpy(out, state->h, state->outlen);
- 	memzero_explicit(state, sizeof(*state));
- }
- EXPORT_SYMBOL(blake2s_final);
-@@ -38,12 +65,7 @@ static int __init blake2s_mod_init(void)
- 	return 0;
- }
- 
--static void __exit blake2s_mod_exit(void)
--{
--}
--
- module_init(blake2s_mod_init);
--module_exit(blake2s_mod_exit);
- MODULE_LICENSE("GPL v2");
- MODULE_DESCRIPTION("BLAKE2s hash function");
- MODULE_AUTHOR("Jason A. Donenfeld <Jason@zx2c4.com>");
--- 
-2.35.1
+And comments are added to prove the code matches the scenarios and
+the scenarios match the code (the proof must be in bi-direction).
 
+>
+> Also the term "special" is really vague. Maybe once you enumerate all
+> the scenarios a common theme will arise and we can pick a better name,
+> unless you have any ideas off the top of your head.
+
+"special" is renamed to "local"
+
+thanks
+Lai

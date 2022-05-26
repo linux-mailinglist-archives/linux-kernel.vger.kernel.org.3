@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47D5534880
+	by mail.lfdr.de (Postfix) with ESMTP id 98D1553487F
 	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345910AbiEZB64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S1345903AbiEZB7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345891AbiEZB6y (ORCPT
+        with ESMTP id S1345897AbiEZB6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 25 May 2022 21:58:54 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A228BCE85
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:58:49 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o10-20020a17090a4e8a00b001df2fcdc165so3205994pjh.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kGL6h5v+Jr74W1Yhb+Bf5QfP2tpx/zeVbCOX59bHIDg=;
-        b=6XMugYmG+RUzN2StHKzTsP39OPJNYLJCQObzG+2FFmneHpobDjdWIRdY3HskteR7ZQ
-         +y9BoEU+++ihSyELnRUGFnA1pD6EW3RxiDJ3MuSe7G2PtTnSSz9kmnwqfssiHH2p8MP1
-         inMrblr/tC0RwZDvcfd3jiKeO7VFs9OLhILAiTiKo3dBmGwhwXkQyear1mwraKi36zNo
-         B3vjRDg9YiY7Q1G5L370pM7cScF2zE4oRBjW7I9piLH3jWTwjNzaEqTKaD61xg3cs/lD
-         QbrnO2HfvtvCc+K1/QIK+x85eom8nR7L9KgyQJUGz4/KGDkstI0/Ui2TwMCNdlbuVF3n
-         EMnw==
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B766BCE91;
+        Wed, 25 May 2022 18:58:50 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-f1d5464c48so678973fac.6;
+        Wed, 25 May 2022 18:58:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kGL6h5v+Jr74W1Yhb+Bf5QfP2tpx/zeVbCOX59bHIDg=;
-        b=cWRVxIRJm+M8kaMxQ9nhvXe6HCFNJiSUC4+VQ3ul0bbHq2j+VMgyX/eG3c14TNVmnz
-         UR+AFt6K5ZeYycPVhruioVhC3uIIh6+uOKvbIG7r9Wmc5o5Y8IZN3Kg2YEWJYRTDXttQ
-         /mVbFGqPuE/T733/XbR7hC6tTpbqzUCkSF7jsiwQ20JI9Oibo7nquMwRqSkSSc25YSQH
-         KD5w9VVMYMJQN3wpgg5xGKDehp2BWVZgPLgRbVSr/hi0Dz0VS5WID1fP/mGdBQzazQ5Y
-         49tLlda15n1lslruUx5TTQWnN8lh6os3ZHkOydbfo2aSCmx8NxNwK/tCrpjEdeMWe/zF
-         FRrA==
-X-Gm-Message-State: AOAM531XwrAxabk11POXPlWqYFxe3toeT34JCVopoPgq0RoeeKIL1nQc
-        oO8KKY1ZbtcmI/n7MDqofmWtkw==
-X-Google-Smtp-Source: ABdhPJyecRSqOMMOeKI3i4gTLNfcDTqJwxnemVDUYrbKOQnvinFvVfcOT5vypfUsGRm8USrxsDh9VQ==
-X-Received: by 2002:a17:903:22cd:b0:161:be20:577 with SMTP id y13-20020a17090322cd00b00161be200577mr36110298plg.54.1653530328625;
-        Wed, 25 May 2022 18:58:48 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:c40c:3e14:bb57:48be])
-        by smtp.gmail.com with ESMTPSA id 26-20020a63195a000000b003c6ab6ba06csm188772pgz.79.2022.05.25.18.58.46
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=u1k8n/bnMYLdf6Ge4xddMp84AvG888eR8uyJpk19AXI=;
+        b=zy2FUOExz4TusGKVBn4/T4GZ9APONZf4lrp+bXvQ9oHs4OBT22jZvKA4ztFmfVGTaY
+         WAcUYgFvjlFE3iM9heH9oz1H9yVXO9iK8T/MyTBwHbb5PxTKE4TIY3gtALyon9lihwVH
+         3jnFLAuZRv9qb7eja9vAJylwReZYmLwddsCarUt0XCuo/PTmfV4HkcNILHfi76/cr7MZ
+         fb1ZovQCEXv6WyBh6rXOl32Q7sVk/GlJHOwAGICLvkuYR3e0dIvyPZ3H3ZlOhfJuhcJ3
+         l4+9nFWHxql3tcuxb5Yqrpl07HAUpYH3E4qT4hQT4EEg6RoxJbNR9cwZamYZG07Jpy5A
+         N9Ug==
+X-Gm-Message-State: AOAM530BOdL3W1cA8378+9Bv+BtQj//QWMbAO1zduiHf2N8RZKvmSo9+
+        lY4BzUvj8n1JN8pv/0ER2Q==
+X-Google-Smtp-Source: ABdhPJwm0i+e0VsW1YFMx88HUodQOXevLnzV1/8atr9allVCR9Q5IuKOcmK9q2gmX2vgMB5I2FGcjw==
+X-Received: by 2002:a05:6870:ea8d:b0:e6:135c:1a2e with SMTP id s13-20020a056870ea8d00b000e6135c1a2emr25954oap.9.1653530329601;
+        Wed, 25 May 2022 18:58:49 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 25-20020a544199000000b0032aea9c2c23sm193918oiy.40.2022.05.25.18.58.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 18:58:48 -0700 (PDT)
-Date:   Thu, 26 May 2022 09:58:42 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Dave Chinner <dchinner@redhat.com>,
+        Wed, 25 May 2022 18:58:49 -0700 (PDT)
+Received: (nullmailer pid 2898004 invoked by uid 1000);
+        Thu, 26 May 2022 01:58:48 -0000
+Date:   Wed, 25 May 2022 20:58:48 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
         linux-kernel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v4 2/6] mm: shrinkers: introduce debugfs interface for
- memory shrinkers
-Message-ID: <Yo7e0st/IiSpkfQR@FVFYT0MHHV2J.googleapis.com>
-References: <20220525202600.2910982-1-roman.gushchin@linux.dev>
- <20220525202600.2910982-3-roman.gushchin@linux.dev>
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v1 2/2] dt-bindings: pinctrl: mt8192: Use generic bias
+ instead of pull-*-adv
+Message-ID: <20220526015848.GA2897970-robh@kernel.org>
+References: <20220525155714.1837360-1-nfraprado@collabora.com>
+ <20220525155714.1837360-3-nfraprado@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220525202600.2910982-3-roman.gushchin@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220525155714.1837360-3-nfraprado@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 01:25:56PM -0700, Roman Gushchin wrote:
-> This commit introduces the /sys/kernel/debug/shrinker debugfs
-> interface which provides an ability to observe the state of
-> individual kernel memory shrinkers.
+On Wed, 25 May 2022 11:57:14 -0400, Nícolas F. R. A. Prado wrote:
+> Commit cafe19db7751 ("pinctrl: mediatek: Backward compatible to previous
+> Mediatek's bias-pull usage") allowed the bias-pull-up and bias-pull-down
+> properties to be used for setting PUPD/R1/R0 type bias on mtk-paris
+> based SoC's, which was previously only supported by the custom
+> mediatek,pull-up-adv and mediatek,pull-down-adv properties.
 > 
-> Because the feature adds some memory overhead (which shouldn't be
-> large unless there is a huge amount of registered shrinkers), it's
-> guarded by a config option (enabled by default).
+> Since the bias-pull-{up,down} properties already have defines associated
+> thus being more descriptive and is more universal on MediaTek platforms,
+> and given that there are no mediatek,pull-{up,down}-adv users on mt8192
+> yet, remove the custom adv properties in favor of the generic ones.
 > 
-> This commit introduces the "count" interface for each shrinker
-> registered in the system.
+> Note that only mediatek,pull-up-adv was merged in the binding, but not
+> its down counterpart.
 > 
-> The output is in the following format:
-> <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
-> <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1>...
-> ...
+> Fixes: edbacb36ea50 ("dt-bindings: pinctrl: mt8192: Add mediatek,pull-up-adv property")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
 > 
-> To reduce the size of output on machines with many thousands cgroups,
-> if the total number of objects on all nodes is 0, the line is omitted.
+>  .../bindings/pinctrl/pinctrl-mt8192.yaml      | 29 ++++++++++---------
+>  1 file changed, 15 insertions(+), 14 deletions(-)
 > 
-> If the shrinker is not memcg-aware or CONFIG_MEMCG is off, 0 is
-> printed as cgroup inode id. If the shrinker is not numa-aware, 0's are
-> printed for all nodes except the first one.
-> 
-> This commit gives debugfs entries simple numeric names, which are not
-> very convenient. The following commit in the series will provide
-> shrinkers with more meaningful names.
-> 
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> Reviewed-by: Kent Overstreet <kent.overstreet@gmail.com>
 
-Acked-by: Muchun Song <songmuchun@bytedance.com>
-
-Thanks.
+Reviewed-by: Rob Herring <robh@kernel.org>

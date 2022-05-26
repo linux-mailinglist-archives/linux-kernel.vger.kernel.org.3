@@ -2,86 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E91534FDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4550F534FDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiEZNUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 09:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
+        id S1347517AbiEZNVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 09:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbiEZNUm (ORCPT
+        with ESMTP id S238733AbiEZNVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 09:20:42 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B723D682B;
-        Thu, 26 May 2022 06:20:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VEST7R4_1653571236;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VEST7R4_1653571236)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 26 May 2022 21:20:37 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     vireshk@kernel.org
-Cc:     nm@ti.com, sboyd@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] opp: Fix some kernel-doc comments
-Date:   Thu, 26 May 2022 21:20:35 +0800
-Message-Id: <20220526132035.112026-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 26 May 2022 09:21:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE1E110
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:21:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653571269; x=1685107269;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eVyO1IsIdralPqpLu+kCq5/IiitwqBpeF+FcSSLsc6Y=;
+  b=UfqztTpJSpnLXQcnMHTkbjM2XcdOpx28VGPDSKxpwhD+ePIx87Dub38N
+   I12hKK+NyTuw6S9J0lZcRsQ2nGbQkZWfpKlr/HDBZnw4werSomSwfPaMV
+   tKcIFRA1Zv+r6u7hwwp+Fa0V4YAnkZ7qcfl8PUUdfc4OVEyanM+maNHGv
+   Zs17uE8Bmn0hWrJk1081O/8LOix1slu2j4x3JFR+X8bxC0aALcd1G/H3I
+   wuVp+Jp7cj2NhR9zd9lUPOug29qss1yZaNoYG37+D3pbigwK2Nddq6ok7
+   oi9aZxrBxKbg7UD0qw8cRRu9Sr+MCVPXgoYQIn5JER4fwJTbQiFFDjBQE
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="274156664"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="274156664"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 06:21:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="609688137"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 May 2022 06:21:07 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuDQI-0003tO-Pk;
+        Thu, 26 May 2022 13:21:06 +0000
+Date:   Thu, 26 May 2022 21:20:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>
+Subject: include/linux/netdevice.h:2339:16: error: 'const struct sk_buff' has
+ no member named 'use_ipv'
+Message-ID: <202205262147.gC3FSeHN-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make @freq to @bw in dev_pm_opp_find_bw_ceil() and
-dev_pm_opp_find_bw_floor() kernel-doc comment to
-remove warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220526-173254/Vladimir-Oltean/selftests-forwarding-add-Per-Stream-Filtering-and-Policing-test-for-Ocelot/20220501-193132
+head:   32b52188919f424bfabe1d3c0921ff854fb7f4ee
+commit: 32b52188919f424bfabe1d3c0921ff854fb7f4ee selftests: forwarding: add Per-Stream Filtering and Policing test for Ocelot
+date:   4 hours ago
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220526/202205262147.gC3FSeHN-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/32b52188919f424bfabe1d3c0921ff854fb7f4ee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220526-173254/Vladimir-Oltean/selftests-forwarding-add-Per-Stream-Filtering-and-Policing-test-for-Ocelot/20220501-193132
+        git checkout 32b52188919f424bfabe1d3c0921ff854fb7f4ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/wireless/st/cw1200/ net/sched/
 
-drivers/opp/core.c:753: warning: Function parameter or member 'bw' not
-described in 'dev_pm_opp_find_bw_ceil'
-drivers/opp/core.c:753: warning: Excess function parameter 'freq'
-description in 'dev_pm_opp_find_bw_ceil'
-drivers/opp/core.c:812: warning: Function parameter or member 'bw' not
-described in 'dev_pm_opp_find_bw_floor'
-drivers/opp/core.c:812: warning: Excess function parameter 'freq'
-description in 'dev_pm_opp_find_bw_floor'
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/opp/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 84063eaebb91..e44b73af2824 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -732,7 +732,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_ceil);
- /**
-  * dev_pm_opp_find_bw_ceil() - Search for a rounded ceil bandwidth
-  * @dev:	device for which we do this operation
-- * @freq:	start bandwidth
-+ * @bw:	start bandwidth
-  * @index:	which bandwidth to compare, in case of OPPs with several values
-  *
-  * Search for the matching floor *available* OPP from a starting bandwidth
-@@ -791,7 +791,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_ceil);
- /**
-  * dev_pm_opp_find_bw_floor() - Search for a rounded floor bandwidth
-  * @dev:	device for which we do this operation
-- * @freq:	start bandwidth
-+ * @bw:	start bandwidth
-  * @index:	which bandwidth to compare, in case of OPPs with several values
-  *
-  * Search for the matching floor *available* OPP from a starting bandwidth
+   In file included from include/linux/rtnetlink.h:7,
+                    from net/sched/act_police.c:15:
+   include/linux/netdevice.h: In function 'skb_get_prio_tc_map':
+>> include/linux/netdevice.h:2339:16: error: 'const struct sk_buff' has no member named 'use_ipv'
+    2339 |         if (skb->use_ipv)
+         |                ^~
+>> include/linux/netdevice.h:2340:27: error: 'const struct sk_buff' has no member named 'ipv'
+    2340 |                 prio = skb->ipv;
+         |                           ^~
+--
+   In file included from include/linux/rtnetlink.h:7,
+                    from net/sched/act_gate.c:10:
+   include/linux/netdevice.h: In function 'skb_get_prio_tc_map':
+>> include/linux/netdevice.h:2339:16: error: 'const struct sk_buff' has no member named 'use_ipv'
+    2339 |         if (skb->use_ipv)
+         |                ^~
+>> include/linux/netdevice.h:2340:27: error: 'const struct sk_buff' has no member named 'ipv'
+    2340 |                 prio = skb->ipv;
+         |                           ^~
+   net/sched/act_gate.c: In function 'tcf_gate_act':
+>> net/sched/act_gate.c:145:20: error: 'struct sk_buff' has no member named 'use_ipv'
+     145 |                 skb->use_ipv = true;
+         |                    ^~
+>> net/sched/act_gate.c:146:20: error: 'struct sk_buff' has no member named 'ipv'
+     146 |                 skb->ipv = gact->current_ipv;
+         |                    ^~
+
+
+vim +2339 include/linux/netdevice.h
+
+  2332	
+  2333	static inline int skb_get_prio_tc_map(const struct sk_buff *skb,
+  2334					      const struct net_device *dev)
+  2335	{
+  2336		__u32 prio = skb->priority;
+  2337	
+  2338	#if IS_ENABLED(CONFIG_NET_ACT_GATE)
+> 2339		if (skb->use_ipv)
+> 2340			prio = skb->ipv;
+  2341	#endif
+  2342	
+  2343		return netdev_get_prio_tc_map(dev, prio);
+  2344	}
+  2345	
+
 -- 
-2.20.1.7.g153144c
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,149 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF06E53478F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 02:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A47A553479F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 02:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344563AbiEZAjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 20:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
+        id S233761AbiEZAli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 20:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236465AbiEZAi7 (ORCPT
+        with ESMTP id S242987AbiEZAlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 20:38:59 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FA9B82D4
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:38:58 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 202so438019pfu.0
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7P8MdhBUHeNYERj02eaiVlo3+1akuXNgpyLjujYYpb0=;
-        b=nGnImQMrxcKuAMPfn2cnaf9VK34koPZI6BdWd8L/dvJkOmKEczFMWc8Yx7hsQFZeVL
-         9KLxd0tBqQk1/z15iyaTJQGyj+rpJcqO/oigF6/cI0x8g+X/Xo/VBfVgAonu8k6z7tAw
-         rX3SONGBqur0M8KowUWh/wmc3aYT+yOgmGgvthbF1GbnQhkOPFYSCTfv0l7sg5kj2jls
-         D/lYOdddeRohuY3mRJGYNVA5mDFRmRi5K+xU9HMyUH4O1+TPylZTZEwi6U0ynqv/r7ZQ
-         PEcsEwLY3XMn7/TlPZPqXhp0uzspbOfW5miRUT3ck3ZbCGUmofEeJzc2ijyz7b5LJr0L
-         9x9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7P8MdhBUHeNYERj02eaiVlo3+1akuXNgpyLjujYYpb0=;
-        b=WyUiarZ+63G3hx8W1Y4bYhv2qxx6QdITGgLqcFpJotjuijw9YQ30daOcWJObr+gGbP
-         hRXLfj01K1Rpe5TzXY7kpZgwf8M8rhaA5J0ni4yhrP5YXbd0JOG6J/f8eUzmalcC1mWt
-         idlsHu/JJY0/YA6j1SQ2Zj3q+r1i0ziyFb+UfGFadgm7t+swyrrM0kHCrL9OavzjCmhS
-         XG+helB/Zur9LK9higoQ5d6G9XKcfq/muSIF8XOS+UeHe0bwD7vavjNrl/BNTOOT/Ser
-         C3v355TfyNn0uQdShd5RMo23fLiTBVRd+LSLvBdAJRF4NdeSP5j+ErfCEog2pNziAwyc
-         IsHA==
-X-Gm-Message-State: AOAM532m+kPzH4s0F2IBTjyPNVuZwkawvLAR+wGU+dkPFMvnPH0iKmrx
-        yRKdpKJs/ThrTJ/3VuEp8tk2KQ==
-X-Google-Smtp-Source: ABdhPJxQ2PEcWk8DK3E2AzHueuX2Pq6jI8vVF9DbxayvJeVzlRCPUepbJ8f3PDiOx87ktlbbZyxBrw==
-X-Received: by 2002:a62:1413:0:b0:518:4259:200e with SMTP id 19-20020a621413000000b005184259200emr34153334pfu.41.1653525537153;
-        Wed, 25 May 2022 17:38:57 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id bh8-20020a056a02020800b003f5cc9c31e2sm141353pgb.38.2022.05.25.17.38.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 17:38:56 -0700 (PDT)
-Date:   Thu, 26 May 2022 00:38:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Marc Zyngier <maz@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Oliver Upton <oupton@google.com>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v4 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
- page table uses.
-Message-ID: <Yo7MHA2aUaprvgl8@google.com>
-References: <CAJD7tkY7JF25XXUFq2mGroetMkfo-2zGOaQC94pjZE3D42+oaw@mail.gmail.com>
- <Yn2TGJ4vZ/fst+CY@cmpxchg.org>
- <Yn2YYl98Vhh/UL0w@google.com>
- <Yn5+OtZSSUZZgTQj@cmpxchg.org>
- <Yn6DeEGLyR4Q0cDp@google.com>
- <CALvZod6nERq4j=L0V+pc-rd5+QKi4yb_23tWV-1MF53xL5KE6Q@mail.gmail.com>
- <CAJD7tka-5+XRkthNV4qCg8woPCpjcwynQoRBame-3GP1L8y+WQ@mail.gmail.com>
- <YoeoLJNQTam5fJSu@cmpxchg.org>
- <CAJD7tkYjcmwBeUx-=MTQeUf78uqFDvfpy7OuKy4OvoS7HiVO1Q@mail.gmail.com>
- <Yo4Ze+DZrLqn0PeU@cmpxchg.org>
+        Wed, 25 May 2022 20:41:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732959EB44;
+        Wed, 25 May 2022 17:41:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18B38B81EAA;
+        Thu, 26 May 2022 00:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8414FC385B8;
+        Thu, 26 May 2022 00:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653525681;
+        bh=mEug+FNS3WAXtVD1YTd+ywizxj+k7diM1xohqO66iJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XQPhmP8pgmq6nZ3qk05p/o5hHp6puXPtqeJVhD6j8wjQBFd2MdDJnkUrsJj2SqhYo
+         pcwALRgvkDWrNcknXYYTCYrnyg00EhFKc4U2m6wEzQY/JjO1opRITP8WUBZPBgRjke
+         yulFv7ieKYW0J6bxZmwWRjPy5NU0eD6zLnBRQSrLAmznMnR5cA8ZvlZynrrPpLldV/
+         ZnhoOgXXNcI2dOchczXi6BcGT0Af6jlrjxdgW/9JmzDt48be7qmo/B852JAj+Zc63J
+         NZcxbsTTKVMYBLO/Iw06c4dTLGvHQA7cNImKUkah1oW2cbpsWjkaezoZkN9QjVQyKw
+         cYXKGSBtU7xuA==
+Date:   Thu, 26 May 2022 03:39:39 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, dave.hansen@linux.intel.com
+Cc:     stable@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Borislav Petkov <bp@suse.de>, linux-sgx@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/sgx: add test_encl.elf to TEST_GEN_FILES
+Message-ID: <Yo7MS2+g9kcI39xq@iki.fi>
+References: <20220523181120.54547-1-jarkko@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yo4Ze+DZrLqn0PeU@cmpxchg.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220523181120.54547-1-jarkko@kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022, Johannes Weiner wrote:
-> On Tue, May 24, 2022 at 03:31:52PM -0700, Yosry Ahmed wrote:
-> > I don't have enough context to say whether we should piggyback KVM MMU
-> > pages to the existing NR_PAGETABLE item, but from a high level it
-> > seems like it would be more helpful if they are a separate stat.
-> > Anyway, I am willing to go with whatever Sean thinks is best.
+On Mon, May 23, 2022 at 09:11:20PM +0300, Jarkko Sakkinen wrote:
+> TEST_GEN_FILES contains files that are generated during compilation and are
+> required to be included together with the test binaries, e.g. when
+> performing:
 > 
-> Somebody should work this out and put it into a changelog. It's
-> permanent ABI.
+> make -C tools/testing/selftests install INSTALL_PATH=/some/other/path [*]
+> 
+> Add test_encl.elf to TEST_GEN_FILES because otherwise the installed test
+> binary will fail to run.
+> 
+> [*] https://docs.kernel.org/dev-tools/kselftest.html
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> v2:
+> Use TEST_GEN_FILES in the "all" target, instead of duplicating the path for
+> test_encl.elf.
+> ---
+>  tools/testing/selftests/sgx/Makefile | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
+> index 75af864e07b6..7f60811b5b20 100644
+> --- a/tools/testing/selftests/sgx/Makefile
+> +++ b/tools/testing/selftests/sgx/Makefile
+> @@ -17,9 +17,10 @@ ENCL_CFLAGS := -Wall -Werror -static -nostdlib -nostartfiles -fPIC \
+>  	       -fno-stack-protector -mrdrnd $(INCLUDES)
+>  
+>  TEST_CUSTOM_PROGS := $(OUTPUT)/test_sgx
+> +TEST_GEN_FILES := $(OUTPUT)/test_encl.elf
+>  
+>  ifeq ($(CAN_BUILD_X86_64), 1)
+> -all: $(TEST_CUSTOM_PROGS) $(OUTPUT)/test_encl.elf
+> +all: $(TEST_CUSTOM_PROGS) $(TEST_GEN_FILES)
+>  endif
+>  
+>  $(OUTPUT)/test_sgx: $(OUTPUT)/main.o \
+> -- 
+> 2.36.1
+> 
 
-After a lot of waffling, my vote is to add a dedicated NR_SECONDARY_PAGETABLE.
+Dave, would it be by any means possible to pick this? My workload is
+kernel testing with buildroot [*].
 
-It's somewhat redundant from a KVM perspective, as NR_SECONDARY_PAGETABLE will
-scale with KVM's per-VM pages_{4k,2m,1g} stats unless the guest is doing something
-bizarre, e.g. accessing only 4kb chunks of 2mb pages so that KVM is forced to
-allocate a large number of page tables even though the guest isn't accessing that
-much memory.
+[*] Related:
+    https://lore.kernel.org/buildroot/2c42570b01b2b51cc33d6623b25a736e4f20c601.camel@iki.fi/T/#t
 
-But, someone would need to either understand how KVM works to make that connection,
-or know (or be told) to go look at KVM's stats if they're running VMs to better
-decipher the stats.
-
-And even in the little bit of time I played with this, I found having
-nr_page_table_pages side-by-side with nr_secondary_page_table_pages to be very
-informative.  E.g. when backing a VM with THP versus HugeTLB,
-nr_secondary_page_table_pages is roughly the same, but nr_page_table_pages is an
-order of a magnitude higher with THP.  I'm guessing the THP behavior is due to
-something triggering DoubleMap, but now I want to find out why that's happening.
-
-So while I'm pretty sure a clever user could glean the same info by cross-referencing
-NR_PAGETABLE stats with KVM stats, I think having NR_SECONDARY_PAGETABLE will at the
-very least prove to be helpful for understanding tradeoffs between VM backing types,
-and likely even steer folks towards potential optimizations.
-
-Baseline:
-  # grep page_table /proc/vmstat 
-  nr_page_table_pages 2830
-  nr_secondary_page_table_pages 0
-
-THP:
-  # grep page_table /proc/vmstat 
-  nr_page_table_pages 7584
-  nr_secondary_page_table_pages 140
-
-HugeTLB:
-  # grep page_table /proc/vmstat
-  nr_page_table_pages 3153
-  nr_secondary_page_table_pages 153
-
+BR, Jarkko

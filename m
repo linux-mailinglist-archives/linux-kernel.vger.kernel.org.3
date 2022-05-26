@@ -2,96 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5E8535388
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5B1535395
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244454AbiEZSqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 14:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
+        id S1345559AbiEZSyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348926AbiEZSpy (ORCPT
+        with ESMTP id S231255AbiEZSyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 14:45:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E90E02E089
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:45:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653590753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ODmk396yYTmyZ0DEUNSD4vk11H4s6Zx2e3M7LfpgTu0=;
-        b=PRV1v00PHpfZPq2NUOvz1qPIKfSwtJ+zd/VHv84aqCukq/ctrh8Tc9Qmx8GyGHN235fjUa
-        rRgUA9cQnzBxPsba5vKZX3kKLKh2JgWvOct/ZKpc0OosgVW+TAFH2H9XqwPYAXx7vADnWC
-        nYi/2Gchw93OJlkT+wj7YDMXWaHs2kI=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-550-LJzcqz87NdCcU3jlz1qEwA-1; Thu, 26 May 2022 14:45:51 -0400
-X-MC-Unique: LJzcqz87NdCcU3jlz1qEwA-1
-Received: by mail-io1-f69.google.com with SMTP id r188-20020a6b2bc5000000b0065fc8f23866so1484553ior.16
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:45:51 -0700 (PDT)
+        Thu, 26 May 2022 14:54:11 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F49BC5DBD
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:54:10 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 184-20020a6306c1000000b003f5f304ec78so1174614pgg.20
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=JMJVGg1qZnHH7C8ATRhIwxxHuj2y9HrWKG9Y6P+CVa4=;
+        b=X5QPBT3rcKnwfVEC/ZgYYSC6s8s4hl/iM07SHcdQvxHX45jXMkjkR98a8tHk1s7i5i
+         hljpwk+zr49ln6Bl0myvnXkNbU6M4CQRGem0QlWNioGpY50exkY88Nc0Apae4xthVSQR
+         6MPnaB64Oh1y40FPM2rQ67fKHreHbBRsrQpolC3b5t0SUpG8psfDw5rL6EuTo6QvFEsk
+         pqJWwDC5nMfeXGHP7Yp9zVScxEy42RXSy8T8hend0JQlo9eTB/K55klwydC8EfiAT8Ow
+         Gt+e7E1RE2ynwxJhN+IiRfttkfXCOj2DTeFCcOdejadGU7QPWJ2uPrIKTEdIbNY5XfGa
+         Nnpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ODmk396yYTmyZ0DEUNSD4vk11H4s6Zx2e3M7LfpgTu0=;
-        b=aZX5yT3EGMB0K7AIpcT6Eci1xpJgzyNLxVUrQdxTOlHM0CYJ3rYyhmv83egUv8jvfp
-         nrhFkqoRY8TXN6K4Kt+mGaU/1oPN1C8cfiBeKpCB2K2R5WNw+MGvtkZZrxCWthU4CLPx
-         lpqfmoHQ6EK5vu6skgoiX3tFXJxN8DnLkNmTjGaBCIpy3Fsl6Tumbu4QilnvqXCADB3m
-         xcveZkS/rNX/54tYaH7tSReBoosxr2ZBeFS5z49igrF/alREXhZBVwPp9mWlnAqlF1oR
-         cuTgJIjqjZfur0bxvUs6bplvdLOxLS8Ffsw/HZ5czxydJRiM7GadUThC4+eAzhmALULs
-         AeMw==
-X-Gm-Message-State: AOAM530BNgIA0RN85x/4S805hqsucRobRIcKGze4MKvGPy+K/yc5LVJy
-        desEQ8fmbH+SX9vNGGZYxlcVc85CxYGIXl3Y4v6AhW7viOSxMYijMvCsJ2vBoiJaZtLehI4PnU+
-        wjoznS1TAeyZ1WmkWKzt4bwld
-X-Received: by 2002:a05:6638:1482:b0:32e:bd66:9191 with SMTP id j2-20020a056638148200b0032ebd669191mr12341644jak.134.1653590751033;
-        Thu, 26 May 2022 11:45:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxh6amKbzzvb1F7KtA6vAjHtNku/3C9o4ZBn9vc2jMF1RWid75p2srSYyvZUrM76JTgJ+owew==
-X-Received: by 2002:a05:6638:1482:b0:32e:bd66:9191 with SMTP id j2-20020a056638148200b0032ebd669191mr12341638jak.134.1653590750841;
-        Thu, 26 May 2022 11:45:50 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id o27-20020a02cc3b000000b0032e49fcc241sm568150jap.176.2022.05.26.11.45.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 11:45:50 -0700 (PDT)
-Date:   Thu, 26 May 2022 14:45:48 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v8 11/11] KVM: selftests: Cache binary stats metadata for
- duration of test
-Message-ID: <Yo/K3L62VUh4vW30@xz-m1.local>
-References: <20220526175408.399718-1-bgardon@google.com>
- <20220526175408.399718-12-bgardon@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220526175408.399718-12-bgardon@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=JMJVGg1qZnHH7C8ATRhIwxxHuj2y9HrWKG9Y6P+CVa4=;
+        b=h6fy9tMm2Lb3/vbtR4VwQ2dFnPrjcLoDynLkW64M8Ptk2rbi3Ik8Uaji0JPFf4hdfN
+         DSKS4Ke5tcKjvbw9gxEaHbiGeKztF9GX8c531zPaq5fRbQq1vfi9M5nznpazUZC64lXk
+         PEm/4shiodACKQ6+F5SK+u27HB0ndvOgCI5jZATA6nEVICikpz+QhsUoICeVz21cSs/H
+         Fjq/+cXiP7ObLnKruo5RJDDac0Mmb8E6fO6syKysscLqW79llllM71HR9gqTv1S46Blu
+         zNifbbITRuDevfDAQV0UERytq3UuGAVFk9AVmmuH4NG4YD2EMQJo13l1m+SA+JdmtMvT
+         p51A==
+X-Gm-Message-State: AOAM530ltVEmK1U2InJ3hNbGkooWqm3l178ty40GJfEgijdtqWGlogDq
+        lQTrXf3F1Sxz+L5tBEofnAqjh2YAgRnX+w==
+X-Google-Smtp-Source: ABdhPJwkL12I0XRvEV0PkVlYwPoUUg3RtRs/pjbKCaMCuJjBBTvAJP2uFoE18EfQYR8oMmERKPOp9uUFvMN9/w==
+X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:e2f9:ca60:7aad:75cb])
+ (user=davidgow job=sendgmr) by 2002:a05:6a00:996:b0:505:b6d2:abc8 with SMTP
+ id u22-20020a056a00099600b00505b6d2abc8mr40111331pfg.11.1653591249518; Thu,
+ 26 May 2022 11:54:09 -0700 (PDT)
+Date:   Thu, 26 May 2022 11:54:02 -0700
+Message-Id: <20220526185402.955870-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [PATCH] arch: um: Fix build for statically linked UML w/ constructors
+From:   David Gow <davidgow@google.com>
+To:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     David Gow <davidgow@google.com>, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 05:54:08PM +0000, Ben Gardon wrote:
-> In order to improve performance across multiple reads of VM stats, cache
-> the stats metadata in the VM struct.
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
+If CONFIG_CONSTUCTORS is enabled on a statically linked
+(CONFIG_STATIC_LINK=y) build of UML, the build fails due to the
+.eh_frame section being both used and discarded:
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
+ERROR:root:`.eh_frame' referenced in section `.text' of /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginT.o: defined in discarded section `.eh_frame' of /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginT.o
+`.eh_frame' referenced in section `.text' of /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginT.o: defined in discarded section `.eh_frame' of /usr/lib/gcc/x86_64-linux-gnu/11/crtbeginT.o
 
+Instead, keep the .eh_frame section, as we do in dyn.lds.S for
+dynamically linked UML.
+
+This can be reproduced with:
+./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_STATIC_LINK=y --kconfig_add CONFIG_GCOV_KERNEL=y --kconfig_add CONFIG_DEBUG_FS=y
+
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ arch/um/kernel/uml.lds.S | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/um/kernel/uml.lds.S b/arch/um/kernel/uml.lds.S
+index 7a8e2b123e29..71a59b8adbdc 100644
+--- a/arch/um/kernel/uml.lds.S
++++ b/arch/um/kernel/uml.lds.S
+@@ -95,6 +95,7 @@ SECTIONS
+   }
+ 
+   .got           : { *(.got.plt) *(.got) }
++  .eh_frame       : { KEEP (*(.eh_frame)) }
+   .dynamic       : { *(.dynamic) }
+   .tdata	  : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
+   .tbss		  : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
 -- 
-Peter Xu
+2.36.1.124.g0e6072fb45-goog
 

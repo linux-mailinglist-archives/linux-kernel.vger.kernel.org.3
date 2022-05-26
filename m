@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DD6534B10
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893FD534B13
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346537AbiEZIBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        id S1346556AbiEZIBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234066AbiEZIBB (ORCPT
+        with ESMTP id S1346547AbiEZIBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:01:01 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBE13153F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:00:59 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L80jN1cMDz67MGw;
-        Thu, 26 May 2022 16:00:24 +0800 (CST)
-Received: from lhreml741-chm.china.huawei.com (10.201.108.191) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 26 May 2022 10:00:57 +0200
-Received: from [10.81.194.226] (10.81.194.226) by
- lhreml741-chm.china.huawei.com (10.201.108.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 26 May 2022 09:00:45 +0100
-Message-ID: <13ee708e-17a7-7e0d-7d24-827c3786f007@huawei.com>
-Date:   Thu, 26 May 2022 11:00:27 +0300
+        Thu, 26 May 2022 04:01:18 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA37B58
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:01:14 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so1085483pjt.4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:01:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cPBo1/z66AxJUif/4bPiA1dLl6Egi0hfAP6GvoU1sV0=;
+        b=6NDxIR+6uUjB7dCwGwcfqdek2+lKlTwfSd4MrrZtOi2+ClUTwfkElbtFD8Eis/0Y0K
+         4yzinANtUEfNW6aZ5PgGrCpUDiKmjpMuxDDBuBoNx8J+Ltp630gvBrHk6vVEHJODIJqT
+         H2C/fYRd3/28omWbOUzOTnBOAqisf5q8P8Y/ff38fXBVnD4uQD/pu+t/NpvE0qOca6fs
+         87xzlWTEWFqJeIeqSbDGWHVKqe55zklRpv5o1vKs3+qVQ1s0PyaJIInHW2j4r6Nl7LIZ
+         AqFFcCAYF6n1O5RWdxeTBQYS3DQrroQd6sGgvQCswwxKGSPNyTvhFHu6XWONMl6wHyJC
+         IhDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cPBo1/z66AxJUif/4bPiA1dLl6Egi0hfAP6GvoU1sV0=;
+        b=BsCGtwABshzULgw0mpBGmVGP4plDtHTNeXki3QG0cWPmvR6xJ8GINy2CuWELAqewad
+         aFhQYyGA9MD1tiKU2pyNC5W8dbuic38WgezTYeaYs0TFP1kr6eeEIgR6zGjvfafQJqS0
+         Ee19GOQOZhNAZh2QVvPHyR29idyQvFRQ1sF5sqGWNl8/W6o1xNQ/PXMdSEdguX7Y7C8w
+         XSPIKhhpk68NUDtvfXPbgaeWUmNMv6DDh2AtpKEkw0WK4EzH+jgnKj9v25WSnvdAm91D
+         zBkp5i8jD3IBnBDFSbyt5U8PBwnjAdptYGHV8qLqlfbMrkNuGFfcyuY/xLfle658edGF
+         /lyQ==
+X-Gm-Message-State: AOAM532Va+DdsvnE5iTWA9XIOyyQ6XKHx3K9znpDJplQBJ0bWZ64ISPU
+        xf1ouMiJKHooShs6actXpFDZfhlztoVHcqWL
+X-Google-Smtp-Source: ABdhPJwDoYXHfQff5yRn4D7OgwdsNB7fZai9C6375HvH4oaizoEl5HaKAQtrJ59CkBsSddya7lY9xw==
+X-Received: by 2002:a17:903:240b:b0:14b:1100:aebc with SMTP id e11-20020a170903240b00b0014b1100aebcmr37188416plo.133.1653552074176;
+        Thu, 26 May 2022 01:01:14 -0700 (PDT)
+Received: from localhost ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id e14-20020a170903240e00b0015e8d4eb1fasm806650plo.68.2022.05.26.01.01.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 01:01:13 -0700 (PDT)
+Date:   Thu, 26 May 2022 16:01:10 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] hugetlb: fix huge_pmd_unshare address update
+Message-ID: <Yo8zxk0kCRikYk0x@FVFYT0MHHV2J.googleapis.com>
+References: <20220524205003.126184-1-mike.kravetz@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2] coresight: etm4x: Add Support for HiSilicon ETM device
-Content-Language: en-US
-To:     "liuqi (BA)" <liuqi115@huawei.com>, Linuxarm <linuxarm@huawei.com>,
-        <gregkh@linuxfoundation.org>, <mathieu.poirier@linaro.org>,
-        <suzuki.poulose@arm.com>, <mike.leach@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexey Budankov <alexey.budankov@huawei.com>,
-        <abudankov@huawei.com>
-References: <1597323562-3706-1-git-send-email-liuqi115@huawei.com>
- <853b6d52-da86-1c06-3604-3085ece331a4@huawei.com>
- <5dd1bd83-232a-07e4-8fde-e4f6cd0e5b8c@huawei.com>
- <93b92859-2229-8766-09d2-df16e1ebd4e8@huawei.com>
- <50c25ce8-15bc-80a8-59dc-a20571a6460a@huawei.com>
-From:   Alexei Budankov <abudankov@huawei.com>
-In-Reply-To: <50c25ce8-15bc-80a8-59dc-a20571a6460a@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.81.194.226]
-X-ClientProxiedBy: saopeml00100002.china.huawei.com (7.184.65.84) To
- lhreml741-chm.china.huawei.com (10.201.108.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524205003.126184-1-mike.kravetz@oracle.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,23 +70,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 26.05.2022 10:47, liuqi (BA) wrote:
+On Tue, May 24, 2022 at 01:50:03PM -0700, Mike Kravetz wrote:
+> The routine huge_pmd_unshare is passed a pointer to an address
+> associated with an area which may be unshared.  If unshare is successful
+> this address is updated to 'optimize' callers iterating over huge page
+> addresses.  For the optimization to work correctly, address should be
+> updated to the last huge page in the unmapped/unshared area.  However,
+> in the common case where the passed address is PUD_SIZE aligned, the
+> address is incorrectly updated to the address of the preceding huge
+> page.  That wastes CPU cycles as the unmapped/unshared range is scanned
+> twice.
 > 
-> 
-> On 2022/5/26 15:23, Alexei Budankov wrote:
->> Hi Qi,
->>
-<SNIP>
->>
->> Look like our server firmware should be upgraded, right?
-> 
-> Yes, seems firmware should be upgraded first, and then you could test ETM device :)
+> Cc: <stable@vger.kernel.org>
+> Fixes: 39dde65c9940 ("shared page table for hugetlb page")
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-I would appreciate if you could share some links to upgrade bits and docs, if possible,
-so we could use it to perform the upgrade.
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 
-Thanks,
-Alexei
-
+Thanks.

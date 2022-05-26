@@ -2,274 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3F5534C4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C02E534C32
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346833AbiEZJI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 05:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S242715AbiEZJEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 05:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346823AbiEZJI4 (ORCPT
+        with ESMTP id S231776AbiEZJEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 05:08:56 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EBD1FCC0;
-        Thu, 26 May 2022 02:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653556135; x=1685092135;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BbgZo0fAvzwrr8/AxG79gLLntIyYXKjXVTnVr9TmLbk=;
-  b=SVgZeJbXKOBo9mrpxgOMMYUr8dmEe/CAmRHumIk54DTikZcKKGFhuOfF
-   lanoOGZQ2ayux9AcnfflaGZwN4gHCcTebsPyG+6Yd056IUh1pBKWQ19PM
-   NJaH8VGasGpppcUw82GPySPIBIZmFl+voqji8930s3aeNJMvxzU9HpWCv
-   hIZtu5pedx2dLQOc4Vh6RJXvNNft8qpt1lvUrI7ndhweF3Qn8XtgxHFbq
-   47Hf+8Nxg125Jcecm0y+fqIXNzsCPFvfug6+nCQKSVNAnJYNpQPYxkFRW
-   UikBpGA0LlpL5zll7P4n3o4ygyfIxodIXYgVbSz0TQXq2C2741jhFrEJx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="299428592"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="299428592"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 02:08:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="718170597"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 26 May 2022 02:08:52 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nu9UB-0003jg-Gz;
-        Thu, 26 May 2022 09:08:51 +0000
-Date:   Thu, 26 May 2022 17:02:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jianglei Nie <niejianglei2021@163.com>, pizza@shaftnet.org,
-        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianglei Nie <niejianglei2021@163.com>
-Subject: Re: [PATCH] cw1200: Fix memory leak in cw1200_set_key()
-Message-ID: <202205261656.CWDWN8nG-lkp@intel.com>
-References: <20220526033003.473943-1-niejianglei2021@163.com>
+        Thu, 26 May 2022 05:04:02 -0400
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F52D116D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:04:00 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowAD3_4dyQo9iz1N7Cg--.40442S2;
+        Thu, 26 May 2022 17:03:54 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     santoshkumar.yadav@barco.com, peter.korsgaard@barco.com,
+        hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] platform/x86: barco-p50-gpio: Add check for platform_driver_register
+Date:   Thu, 26 May 2022 17:03:45 +0800
+Message-Id: <20220526090345.1444172-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526033003.473943-1-niejianglei2021@163.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAD3_4dyQo9iz1N7Cg--.40442S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw18uF43GFWkAr1DCF1xXwb_yoWktwc_CF
+        18uFZrWrn5Kas2kF1jyw43uryIkas5WFs3Kw1xtFyaqa4rJa1xCr42vry3tw17Wr1YvFyD
+        G3s7CFWSkrya9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUhNVgUUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jianglei,
+As platform_driver_register() could fail, it should be better
+to deal with the return value in order to maintain the code
+consisitency.
 
-Thank you for the patch! Yet something to improve:
+Fixes: 86af1d02d458 ("platform/x86: Support for EC-connected GPIOs for identify LED/button on Barco P50 board")
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main v5.18 next-20220526]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/platform/x86/barco-p50-gpio.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220526/202205261656.CWDWN8nG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1e40283730dea11a1556d589925313cdca295484
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
-        git checkout 1e40283730dea11a1556d589925313cdca295484
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/st/cw1200/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/wireless/st/cw1200/sta.c:826:26: error: use of undeclared identifier 'idx'
-                           cw1200_free_key(priv, idx);
-                                                 ^
-   1 error generated.
-
-
-vim +/idx +826 drivers/net/wireless/st/cw1200/sta.c
-
-   679	
-   680	int cw1200_set_key(struct ieee80211_hw *dev, enum set_key_cmd cmd,
-   681			   struct ieee80211_vif *vif, struct ieee80211_sta *sta,
-   682			   struct ieee80211_key_conf *key)
-   683	{
-   684		int ret = -EOPNOTSUPP;
-   685		struct cw1200_common *priv = dev->priv;
-   686		struct ieee80211_key_seq seq;
-   687	
-   688		mutex_lock(&priv->conf_mutex);
-   689	
-   690		if (cmd == SET_KEY) {
-   691			u8 *peer_addr = NULL;
-   692			int pairwise = (key->flags & IEEE80211_KEY_FLAG_PAIRWISE) ?
-   693				1 : 0;
-   694			int idx = cw1200_alloc_key(priv);
-   695			struct wsm_add_key *wsm_key = &priv->keys[idx];
-   696	
-   697			if (idx < 0) {
-   698				ret = -EINVAL;
-   699				goto finally;
-   700			}
-   701	
-   702			if (sta)
-   703				peer_addr = sta->addr;
-   704	
-   705			key->flags |= IEEE80211_KEY_FLAG_PUT_IV_SPACE |
-   706				      IEEE80211_KEY_FLAG_RESERVE_TAILROOM;
-   707	
-   708			switch (key->cipher) {
-   709			case WLAN_CIPHER_SUITE_WEP40:
-   710			case WLAN_CIPHER_SUITE_WEP104:
-   711				if (key->keylen > 16) {
-   712					cw1200_free_key(priv, idx);
-   713					ret = -EINVAL;
-   714					goto finally;
-   715				}
-   716	
-   717				if (pairwise) {
-   718					wsm_key->type = WSM_KEY_TYPE_WEP_PAIRWISE;
-   719					memcpy(wsm_key->wep_pairwise.peer,
-   720					       peer_addr, ETH_ALEN);
-   721					memcpy(wsm_key->wep_pairwise.keydata,
-   722					       &key->key[0], key->keylen);
-   723					wsm_key->wep_pairwise.keylen = key->keylen;
-   724				} else {
-   725					wsm_key->type = WSM_KEY_TYPE_WEP_DEFAULT;
-   726					memcpy(wsm_key->wep_group.keydata,
-   727					       &key->key[0], key->keylen);
-   728					wsm_key->wep_group.keylen = key->keylen;
-   729					wsm_key->wep_group.keyid = key->keyidx;
-   730				}
-   731				break;
-   732			case WLAN_CIPHER_SUITE_TKIP:
-   733				ieee80211_get_key_rx_seq(key, 0, &seq);
-   734				if (pairwise) {
-   735					wsm_key->type = WSM_KEY_TYPE_TKIP_PAIRWISE;
-   736					memcpy(wsm_key->tkip_pairwise.peer,
-   737					       peer_addr, ETH_ALEN);
-   738					memcpy(wsm_key->tkip_pairwise.keydata,
-   739					       &key->key[0], 16);
-   740					memcpy(wsm_key->tkip_pairwise.tx_mic_key,
-   741					       &key->key[16], 8);
-   742					memcpy(wsm_key->tkip_pairwise.rx_mic_key,
-   743					       &key->key[24], 8);
-   744				} else {
-   745					size_t mic_offset =
-   746						(priv->mode == NL80211_IFTYPE_AP) ?
-   747						16 : 24;
-   748					wsm_key->type = WSM_KEY_TYPE_TKIP_GROUP;
-   749					memcpy(wsm_key->tkip_group.keydata,
-   750					       &key->key[0], 16);
-   751					memcpy(wsm_key->tkip_group.rx_mic_key,
-   752					       &key->key[mic_offset], 8);
-   753	
-   754					wsm_key->tkip_group.rx_seqnum[0] = seq.tkip.iv16 & 0xff;
-   755					wsm_key->tkip_group.rx_seqnum[1] = (seq.tkip.iv16 >> 8) & 0xff;
-   756					wsm_key->tkip_group.rx_seqnum[2] = seq.tkip.iv32 & 0xff;
-   757					wsm_key->tkip_group.rx_seqnum[3] = (seq.tkip.iv32 >> 8) & 0xff;
-   758					wsm_key->tkip_group.rx_seqnum[4] = (seq.tkip.iv32 >> 16) & 0xff;
-   759					wsm_key->tkip_group.rx_seqnum[5] = (seq.tkip.iv32 >> 24) & 0xff;
-   760					wsm_key->tkip_group.rx_seqnum[6] = 0;
-   761					wsm_key->tkip_group.rx_seqnum[7] = 0;
-   762	
-   763					wsm_key->tkip_group.keyid = key->keyidx;
-   764				}
-   765				break;
-   766			case WLAN_CIPHER_SUITE_CCMP:
-   767				ieee80211_get_key_rx_seq(key, 0, &seq);
-   768				if (pairwise) {
-   769					wsm_key->type = WSM_KEY_TYPE_AES_PAIRWISE;
-   770					memcpy(wsm_key->aes_pairwise.peer,
-   771					       peer_addr, ETH_ALEN);
-   772					memcpy(wsm_key->aes_pairwise.keydata,
-   773					       &key->key[0], 16);
-   774				} else {
-   775					wsm_key->type = WSM_KEY_TYPE_AES_GROUP;
-   776					memcpy(wsm_key->aes_group.keydata,
-   777					       &key->key[0], 16);
-   778	
-   779					wsm_key->aes_group.rx_seqnum[0] = seq.ccmp.pn[5];
-   780					wsm_key->aes_group.rx_seqnum[1] = seq.ccmp.pn[4];
-   781					wsm_key->aes_group.rx_seqnum[2] = seq.ccmp.pn[3];
-   782					wsm_key->aes_group.rx_seqnum[3] = seq.ccmp.pn[2];
-   783					wsm_key->aes_group.rx_seqnum[4] = seq.ccmp.pn[1];
-   784					wsm_key->aes_group.rx_seqnum[5] = seq.ccmp.pn[0];
-   785					wsm_key->aes_group.rx_seqnum[6] = 0;
-   786					wsm_key->aes_group.rx_seqnum[7] = 0;
-   787					wsm_key->aes_group.keyid = key->keyidx;
-   788				}
-   789				break;
-   790			case WLAN_CIPHER_SUITE_SMS4:
-   791				if (pairwise) {
-   792					wsm_key->type = WSM_KEY_TYPE_WAPI_PAIRWISE;
-   793					memcpy(wsm_key->wapi_pairwise.peer,
-   794					       peer_addr, ETH_ALEN);
-   795					memcpy(wsm_key->wapi_pairwise.keydata,
-   796					       &key->key[0], 16);
-   797					memcpy(wsm_key->wapi_pairwise.mic_key,
-   798					       &key->key[16], 16);
-   799					wsm_key->wapi_pairwise.keyid = key->keyidx;
-   800				} else {
-   801					wsm_key->type = WSM_KEY_TYPE_WAPI_GROUP;
-   802					memcpy(wsm_key->wapi_group.keydata,
-   803					       &key->key[0],  16);
-   804					memcpy(wsm_key->wapi_group.mic_key,
-   805					       &key->key[16], 16);
-   806					wsm_key->wapi_group.keyid = key->keyidx;
-   807				}
-   808				break;
-   809			default:
-   810				pr_warn("Unhandled key type %d\n", key->cipher);
-   811				cw1200_free_key(priv, idx);
-   812				ret = -EOPNOTSUPP;
-   813				goto finally;
-   814			}
-   815			ret = wsm_add_key(priv, wsm_key);
-   816			if (!ret)
-   817				key->hw_key_idx = idx;
-   818			else
-   819				cw1200_free_key(priv, idx);
-   820		} else if (cmd == DISABLE_KEY) {
-   821			struct wsm_remove_key wsm_key = {
-   822				.index = key->hw_key_idx,
-   823			};
-   824	
-   825			if (wsm_key.index > WSM_KEY_MAX_INDEX) {
- > 826				cw1200_free_key(priv, idx);
-   827				ret = -EINVAL;
-   828				goto finally;
-   829			}
-   830	
-   831			cw1200_free_key(priv, wsm_key.index);
-   832			ret = wsm_remove_key(priv, &wsm_key);
-   833		} else {
-   834			pr_warn("Unhandled key command %d\n", cmd);
-   835		}
-   836	
-   837	finally:
-   838		mutex_unlock(&priv->conf_mutex);
-   839		return ret;
-   840	}
-   841	
-
+diff --git a/drivers/platform/x86/barco-p50-gpio.c b/drivers/platform/x86/barco-p50-gpio.c
+index 05534287bc26..8dd672339485 100644
+--- a/drivers/platform/x86/barco-p50-gpio.c
++++ b/drivers/platform/x86/barco-p50-gpio.c
+@@ -405,11 +405,14 @@ MODULE_DEVICE_TABLE(dmi, dmi_ids);
+ static int __init p50_module_init(void)
+ {
+ 	struct resource res = DEFINE_RES_IO(P50_GPIO_IO_PORT_BASE, P50_PORT_CMD + 1);
++	int ret;
+ 
+ 	if (!dmi_first_match(dmi_ids))
+ 		return -ENODEV;
+ 
+-	platform_driver_register(&p50_gpio_driver);
++	ret = platform_driver_register(&p50_gpio_driver);
++	if (ret)
++		return ret;
+ 
+ 	gpio_pdev = platform_device_register_simple(DRIVER_NAME, PLATFORM_DEVID_NONE, &res, 1);
+ 	if (IS_ERR(gpio_pdev)) {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6FA535234
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E6453523C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348263AbiEZQhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 12:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S235150AbiEZQhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 12:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346042AbiEZQge (ORCPT
+        with ESMTP id S1348175AbiEZQgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 12:36:34 -0400
+        Thu, 26 May 2022 12:36:33 -0400
 Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C884EDDF;
-        Thu, 26 May 2022 09:36:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938763DA53;
+        Thu, 26 May 2022 09:36:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Cc:To:From:content-disposition;
-        bh=EJp+9sZ34Y9fqOBjq+Gi6IuCQ2335JDwkpGO6bYI9Ak=; b=mn47hcEhuA7bfg8fQQdfCen6LP
-        2RY8KUU6xyftTpn8x/YD+1VI832dC8ieoNAOk4oOqYF50OwBaGMBxQDvBpcJxzpVzSuulK1wQWLuo
-        0I6K8zQtl6I2SzfGlPK090pwUO4ZoK8ky3WD93/sLM2/DzEKPBJfJNi7T0XyaFwU7ZbX3O+QsxQ7H
-        JZJYYsD9OXB/kmejfwat+D0sH0KqojULRWSdwL/LAHBAvCprw8GFhVHYZquXZPJ3chXgRwdVJe2mc
-        oMxeYQzePKmXHfk7U309Ujw9cwatN0Hemv0aUbLl0cxdC5LTYDiGi2PvCFaGPQyIltfXtjddlxfpl
-        lVDEgkDQ==;
+        bh=+Dyt/77+mWlqTxiTO6FVET0axWZRroBByVkNU8RIwCQ=; b=fXeq9jvSJ9kFbrzaqV1w8Lksmt
+        dA89QGcjrCaHzPYQj+8TTmlLALxSmi5ZM/4QYuEFSQwNvy2xn/dtBE9w2MJysnfUhZZBGedJuQI51
+        I6dV7qAqXwHhHXOQL6PHlgGe1KijeTGp0n9/NCUtM+CaJ45C+pPM3ahFsf9pbhC2OWW46gsNxctZe
+        RrM0B4k+CpDrw0UoGTY5VBAZ3Y8vD7xtouwRXGKAZos3ZCMsIAMTdqP6sBbh/B+QsWOZ+QV0a2mbE
+        0+GWU4tIvTIsT9JtdguINhAFq+vwN3e3ruQOLZZTq19C3Y1NjhX8Ng/Il1/9WkYlw8LrNKN1h9leV
+        kG/ixbow==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nuGTG-008A7R-NR; Thu, 26 May 2022 10:36:23 -0600
+        id 1nuGTF-008A7W-Vh; Thu, 26 May 2022 10:36:22 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nuGT9-0008XS-4f; Thu, 26 May 2022 10:36:15 -0600
+        id 1nuGT9-0008XX-GJ; Thu, 26 May 2022 10:36:15 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -43,8 +43,8 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         David Sloan <David.Sloan@eideticom.com>,
         Logan Gunthorpe <logang@deltatee.com>,
         Christoph Hellwig <hch@lst.de>
-Date:   Thu, 26 May 2022 10:35:55 -0600
-Message-Id: <20220526163604.32736-9-logang@deltatee.com>
+Date:   Thu, 26 May 2022 10:35:56 -0600
+Message-Id: <20220526163604.32736-10-logang@deltatee.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220526163604.32736-1-logang@deltatee.com>
 References: <20220526163604.32736-1-logang@deltatee.com>
@@ -59,77 +59,85 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v2 08/17] md/raid5-cache: Pass the log through to r5c_finish_cache_stripe()
+Subject: [PATCH v2 09/17] md/raid5-cache: Don't pass conf to r5c_calculate_new_cp()
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-r5c_finish_cache_stripe() dereferences conf->log, which will need an
-rcu_read_lock(). But that is not necessary here as the log is already
-available in the call sites through other means.
+r5c_calculate_new_cp() only uses conf to dereference the log which
+both callers already have a pointer to and no longer need to
+obtain a conf through a complicated dereference chain for this use.
 
 No functional changes intended.
 
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/md/raid5-cache.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/md/raid5-cache.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-index 24110b687055..8284ce3e5cf6 100644
+index 8284ce3e5cf6..9a8f2a988b03 100644
 --- a/drivers/md/raid5-cache.c
 +++ b/drivers/md/raid5-cache.c
-@@ -507,10 +507,9 @@ static void r5c_handle_parity_cached(struct stripe_head *sh)
-  * Setting proper flags after writing (or flushing) data and/or parity to the
-  * log device. This is called from r5l_log_endio() or r5l_log_flush_endio().
+@@ -1168,10 +1168,9 @@ static void r5l_run_no_space_stripes(struct r5l_log *log)
+  * for write through mode, returns log->next_checkpoint
+  * for write back, returns log_start of first sh in stripe_in_journal_list
   */
--static void r5c_finish_cache_stripe(struct stripe_head *sh)
-+static void r5c_finish_cache_stripe(struct r5l_log *log,
-+				    struct stripe_head *sh)
+-static sector_t r5c_calculate_new_cp(struct r5conf *conf)
++static sector_t r5c_calculate_new_cp(struct r5l_log *log)
  {
--	struct r5l_log *log = sh->raid_conf->log;
+ 	struct stripe_head *sh;
+-	struct r5l_log *log = conf->log;
+ 	sector_t new_cp;
+ 	unsigned long flags;
+ 
+@@ -1179,12 +1178,12 @@ static sector_t r5c_calculate_new_cp(struct r5conf *conf)
+ 		return log->next_checkpoint;
+ 
+ 	spin_lock_irqsave(&log->stripe_in_journal_lock, flags);
+-	if (list_empty(&conf->log->stripe_in_journal_list)) {
++	if (list_empty(&log->stripe_in_journal_list)) {
+ 		/* all stripes flushed */
+ 		spin_unlock_irqrestore(&log->stripe_in_journal_lock, flags);
+ 		return log->next_checkpoint;
+ 	}
+-	sh = list_first_entry(&conf->log->stripe_in_journal_list,
++	sh = list_first_entry(&log->stripe_in_journal_list,
+ 			      struct stripe_head, r5c);
+ 	new_cp = sh->log_start;
+ 	spin_unlock_irqrestore(&log->stripe_in_journal_lock, flags);
+@@ -1193,10 +1192,8 @@ static sector_t r5c_calculate_new_cp(struct r5conf *conf)
+ 
+ static sector_t r5l_reclaimable_space(struct r5l_log *log)
+ {
+-	struct r5conf *conf = log->rdev->mddev->private;
 -
- 	if (log->r5c_journal_mode == R5C_JOURNAL_MODE_WRITE_THROUGH) {
- 		BUG_ON(test_bit(STRIPE_R5C_CACHING, &sh->state));
- 		/*
-@@ -528,14 +527,14 @@ static void r5c_finish_cache_stripe(struct stripe_head *sh)
- 	}
+ 	return r5l_ring_distance(log, log->last_checkpoint,
+-				 r5c_calculate_new_cp(conf));
++				 r5c_calculate_new_cp(log));
  }
  
--static void r5l_io_run_stripes(struct r5l_io_unit *io)
-+static void r5l_io_run_stripes(struct r5l_log *log, struct r5l_io_unit *io)
+ static void r5l_run_no_mem_stripe(struct r5l_log *log)
+@@ -1517,7 +1514,6 @@ static void r5c_do_reclaim(struct r5conf *conf)
+ 
+ static void r5l_do_reclaim(struct r5l_log *log)
  {
- 	struct stripe_head *sh, *next;
- 
- 	list_for_each_entry_safe(sh, next, &io->stripe_list, log_list) {
- 		list_del_init(&sh->log_list);
- 
--		r5c_finish_cache_stripe(sh);
-+		r5c_finish_cache_stripe(log, sh);
- 
- 		set_bit(STRIPE_HANDLE, &sh->state);
- 		raid5_release_stripe(sh);
-@@ -554,7 +553,7 @@ static void r5l_log_run_stripes(struct r5l_log *log)
- 			break;
- 
- 		list_move_tail(&io->log_sibling, &log->finished_ios);
--		r5l_io_run_stripes(io);
-+		r5l_io_run_stripes(log, io);
+-	struct r5conf *conf = log->rdev->mddev->private;
+ 	sector_t reclaim_target = xchg(&log->reclaim_target, 0);
+ 	sector_t reclaimable;
+ 	sector_t next_checkpoint;
+@@ -1546,7 +1542,7 @@ static void r5l_do_reclaim(struct r5l_log *log)
+ 				    log->io_list_lock);
  	}
- }
  
-@@ -1284,7 +1283,7 @@ static void r5l_log_flush_endio(struct bio *bio)
+-	next_checkpoint = r5c_calculate_new_cp(conf);
++	next_checkpoint = r5c_calculate_new_cp(log);
+ 	spin_unlock_irq(&log->io_list_lock);
  
- 	spin_lock_irqsave(&log->io_list_lock, flags);
- 	list_for_each_entry(io, &log->flushing_ios, log_sibling)
--		r5l_io_run_stripes(io);
-+		r5l_io_run_stripes(log, io);
- 	list_splice_tail_init(&log->flushing_ios, &log->finished_ios);
- 	spin_unlock_irqrestore(&log->io_list_lock, flags);
- 
+ 	if (reclaimable == 0 || !write_super)
 -- 
 2.30.2
 

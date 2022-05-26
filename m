@@ -2,107 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47A553479F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 02:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C602534794
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 02:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233761AbiEZAli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 20:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
+        id S1344599AbiEZAjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 20:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242987AbiEZAlZ (ORCPT
+        with ESMTP id S240789AbiEZAjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 20:41:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732959EB44;
-        Wed, 25 May 2022 17:41:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18B38B81EAA;
-        Thu, 26 May 2022 00:41:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8414FC385B8;
-        Thu, 26 May 2022 00:41:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653525681;
-        bh=mEug+FNS3WAXtVD1YTd+ywizxj+k7diM1xohqO66iJ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XQPhmP8pgmq6nZ3qk05p/o5hHp6puXPtqeJVhD6j8wjQBFd2MdDJnkUrsJj2SqhYo
-         pcwALRgvkDWrNcknXYYTCYrnyg00EhFKc4U2m6wEzQY/JjO1opRITP8WUBZPBgRjke
-         yulFv7ieKYW0J6bxZmwWRjPy5NU0eD6zLnBRQSrLAmznMnR5cA8ZvlZynrrPpLldV/
-         ZnhoOgXXNcI2dOchczXi6BcGT0Af6jlrjxdgW/9JmzDt48be7qmo/B852JAj+Zc63J
-         NZcxbsTTKVMYBLO/Iw06c4dTLGvHQA7cNImKUkah1oW2cbpsWjkaezoZkN9QjVQyKw
-         cYXKGSBtU7xuA==
-Date:   Thu, 26 May 2022 03:39:39 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>, dave.hansen@linux.intel.com
-Cc:     stable@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Borislav Petkov <bp@suse.de>, linux-sgx@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/sgx: add test_encl.elf to TEST_GEN_FILES
-Message-ID: <Yo7MS2+g9kcI39xq@iki.fi>
-References: <20220523181120.54547-1-jarkko@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523181120.54547-1-jarkko@kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 25 May 2022 20:39:43 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D066AE264
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:39:42 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id 202so439121pfu.0
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 17:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lmgayds5UtNEFyHbtMEOI/udLkmrlP9KZ5Zh1sLLZwU=;
+        b=Ki9BjClaDu10N/8XW3YdIW+aM9JwTsK5eJ7ZRizWaJukpFsCAC9ZVrj4tbtrzZxBxG
+         q+3cCEvBD0cDVSaL4Tr+XC1OghoMfUyMa4uN2DTbk69pTjL7mdMbSom+dpWfKDxBW6y/
+         xqc91eVk9bYknMBKuiJAKdA7vLgLi7sNExBcT9eaRTbBCMEyBduY+COgJy7RZ8KrViWs
+         vuH+NavQ0uvbD3M8F+vNl1yrN18rEJDYdhcHqWFCy6D3jpCs2l37ztahBQNKMYvjgqop
+         eRzAbYDCBI+hhnfZoV2RHkO+21j4mh7Np3kZeFUYbeSB6fkV+XCclNIDWT5FbtUNjM0k
+         avnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=lmgayds5UtNEFyHbtMEOI/udLkmrlP9KZ5Zh1sLLZwU=;
+        b=ofsD51c6bia/zS+8GnDV/yDrRulZYQOKnp9tuHZy9EWzdBdKt660Q1Zq78i5O/NF2f
+         t2JFPLXaOm0JQLiIeD/JFKlfsR4WnUqzF5iN4jJsQDQuuVI7cXPXdcayM5YeSyHwEaTr
+         PzhjsYOnruaVfNx19ROXjGlB03RbB1FbNFWQstvwJ3sj2uMFsWhEQW+9W2UC/90wzq3w
+         cfFMATgqnniUgTBD46jVj8XCOrnxgP4gN7Y5QCF088LIOVh/aHVS2S5a71yzhUjR+X+O
+         18RWn4dlZib7rAwlkfhF/1kakCZ4Lw2uObQDfPcMeSKCCLi9tTsDwQmR/LadYzTfeZAt
+         TJCw==
+X-Gm-Message-State: AOAM5325v9adjxtV+mNV1UJVhqfoA0SmqUodSrVrLQy1QNtMyzJPirJw
+        CRfpn7oO62ZJ3ZEk2Iocl527gQ==
+X-Google-Smtp-Source: ABdhPJzkH9LzH2tzaLtZljf2U0KKdd7VDbdj19BDT+3tyKSkGkp0zFoN2Hm3IE7OoLNAWn5cRUCeyA==
+X-Received: by 2002:a65:6e9b:0:b0:3c5:f761:2d94 with SMTP id bm27-20020a656e9b000000b003c5f7612d94mr30378283pgb.79.1653525581600;
+        Wed, 25 May 2022 17:39:41 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id z8-20020a17090a170800b001d93118827asm85801pjd.57.2022.05.25.17.39.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 17:39:39 -0700 (PDT)
+Date:   Wed, 25 May 2022 17:39:39 -0700 (PDT)
+X-Google-Original-Date: Wed, 25 May 2022 17:39:37 PDT (-0700)
+Subject:     Re: [PATCH] riscv: compat: Using seperated vdso_maps for compat_vdso_info
+In-Reply-To: <48ef770c-75bf-6c37-66fe-9719164bc6e0@roeck-us.net>
+CC:     guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>, heiko@sntech.de,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     linux@roeck-us.net
+Message-ID: <mhng-7a88227d-dc64-4d87-9e1a-0ea802ddf0a1@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 23, 2022 at 09:11:20PM +0300, Jarkko Sakkinen wrote:
-> TEST_GEN_FILES contains files that are generated during compilation and are
-> required to be included together with the test binaries, e.g. when
-> performing:
-> 
-> make -C tools/testing/selftests install INSTALL_PATH=/some/other/path [*]
-> 
-> Add test_encl.elf to TEST_GEN_FILES because otherwise the installed test
-> binary will fail to run.
-> 
-> [*] https://docs.kernel.org/dev-tools/kselftest.html
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> v2:
-> Use TEST_GEN_FILES in the "all" target, instead of duplicating the path for
-> test_encl.elf.
-> ---
->  tools/testing/selftests/sgx/Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
-> index 75af864e07b6..7f60811b5b20 100644
-> --- a/tools/testing/selftests/sgx/Makefile
-> +++ b/tools/testing/selftests/sgx/Makefile
-> @@ -17,9 +17,10 @@ ENCL_CFLAGS := -Wall -Werror -static -nostdlib -nostartfiles -fPIC \
->  	       -fno-stack-protector -mrdrnd $(INCLUDES)
->  
->  TEST_CUSTOM_PROGS := $(OUTPUT)/test_sgx
-> +TEST_GEN_FILES := $(OUTPUT)/test_encl.elf
->  
->  ifeq ($(CAN_BUILD_X86_64), 1)
-> -all: $(TEST_CUSTOM_PROGS) $(OUTPUT)/test_encl.elf
-> +all: $(TEST_CUSTOM_PROGS) $(TEST_GEN_FILES)
->  endif
->  
->  $(OUTPUT)/test_sgx: $(OUTPUT)/main.o \
-> -- 
-> 2.36.1
-> 
+On Wed, 25 May 2022 15:56:07 PDT (-0700), linux@roeck-us.net wrote:
+> On 5/25/22 14:34, Palmer Dabbelt wrote:
+>> On Wed, 25 May 2022 14:15:03 PDT (-0700), linux@roeck-us.net wrote:
+>>> On 5/25/22 09:04, guoren@kernel.org wrote:
+>>>> From: Guo Ren <guoren@linux.alibaba.com>
+>>>>
+>>>> This is a fixup for vdso implementation which caused musl to
+>>>> fail.
+>>>>
+>>>> [   11.600082] Run /sbin/init as init process
+>>>> [   11.628561] init[1]: unhandled signal 11 code 0x1 at
+>>>> 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
+>>>> [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted
+>>>> 5.18.0-rc7-next-20220520 #1
+>>>> [   11.629462] Hardware name: riscv-virtio,qemu (DT)
+>>>> [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp :
+>>>> 00ffffffc58199f0
+>>>> [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 :
+>>>> ffffffffffffffff
+>>>> [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 :
+>>>> 00ffffff8ade0cc0
+>>>> [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 :
+>>>> 00ffffffc5819a00
+>>>> [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 :
+>>>> 00ffffffc5819b00
+>>>> [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 :
+>>>> 0000000000000000
+>>>> [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 :
+>>>> 00ffffff8ade0728
+>>>> [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 :
+>>>> 00ffffffc5819e40
+>>>> [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10:
+>>>> 0000000000000000
+>>>> [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 :
+>>>> 0000000000000001
+>>>> [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
+>>>> [   11.629699] status: 0000000000004020 badaddr: 0000000000000000
+>>>> cause: 000000000000000d
+>>>>
+>>>> The last __vdso_init(&compat_vdso_info) replaces the data in normal
+>>>> vdso_info. This is an obvious bug.
+>>>>
+>>>> Reported-by: Guenter Roeck <linux@roeck-us.net>
+>>>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>>>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+>>>> Cc: Heiko Stübner <heiko@sntech.de>
+>>>
+>>> Tested-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> Sorry I'm a bit buried right now, this is fixing the issue you pointed out earlier?
+>>
+> Yes.
 
-Dave, would it be by any means possible to pick this? My workload is
-kernel testing with buildroot [*].
+Awosome, I think that was the only big blocker so far.
 
-[*] Related:
-    https://lore.kernel.org/buildroot/2c42570b01b2b51cc33d6623b25a736e4f20c601.camel@iki.fi/T/#t
+I added a musl-based userspace to my test setup, which is rv64-only 
+(buildroot doesn't have rv32 musl, I thought upstream had it but maybe 
+i'm misremembering).  This patch fixes the bug, so I've added it to 
+for-next with
 
-BR, Jarkko
+Fixes: 3092eb456375 ("riscv: compat: vdso: Add setup additional pages implementation")
+
+which I think is correct, but LMK if there's an issue.  
+
+Thanks!
+
+(and also sorry I poked Geert instead of you about this one, oops ;))
+
+>
+> Thanks,
+> Guenter
+>
+>>>
+>>>> ---
+>>>>   arch/riscv/kernel/vdso.c | 15 +++++++++++++--
+>>>>   1 file changed, 13 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+>>>> index 50fe4c877603..69b05b6c181b 100644
+>>>> --- a/arch/riscv/kernel/vdso.c
+>>>> +++ b/arch/riscv/kernel/vdso.c
+>>>> @@ -206,12 +206,23 @@ static struct __vdso_info vdso_info __ro_after_init = {
+>>>>   };
+>>>>
+>>>>   #ifdef CONFIG_COMPAT
+>>>> +static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
+>>>> +    [RV_VDSO_MAP_VVAR] = {
+>>>> +        .name   = "[vvar]",
+>>>> +        .fault = vvar_fault,
+>>>> +    },
+>>>> +    [RV_VDSO_MAP_VDSO] = {
+>>>> +        .name   = "[vdso]",
+>>>> +        .mremap = vdso_mremap,
+>>>> +    },
+>>>> +};
+>>>> +
+>>>>   static struct __vdso_info compat_vdso_info __ro_after_init = {
+>>>>       .name = "compat_vdso",
+>>>>       .vdso_code_start = compat_vdso_start,
+>>>>       .vdso_code_end = compat_vdso_end,
+>>>> -    .dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+>>>> -    .cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+>>>> +    .dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
+>>>> +    .cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
+>>>>   };
+>>>>   #endif
+>>>>

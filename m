@@ -2,110 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED225347C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF855347C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345278AbiEZBDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        id S1345330AbiEZBD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiEZBDg (ORCPT
+        with ESMTP id S1345387AbiEZBDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:03:36 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9968D6AE
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653527016; x=1685063016;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bexwVsjTlj4+OT7BIDQSL12xl4zS/h0VfNF+KXjKZKY=;
-  b=Tn725YmF7ODvxzcqDVHrBnlf7SmXOGcYV0TQsIuTGSq1kw3fjBmx7tjj
-   nJqLUys79vnvVd1AwUP/w7+PdHbBTcw2ntHsPv4d3tIBnPWxSuI+UbWO4
-   PwjCjF1PxFXc/evmgbpLq6e4x/SkBWzzwy75gVLdd+3uru7G0lUUvKJ5h
-   DB2qGrxKgkGZfg0GiVqkFdc3OuLwuxhXbI5PzLOD6lW/IlsXYsijDviWp
-   Morb8XtxD5iCVGRndHsH/fBNQHO31M1SweWr6y4UuWD0XvDyUlime5Ty7
-   +SP2z4jVTJmR1iNsIAdarXm6mwvDcIg8cteV/haPjrJO/0ZJ9si8su6l0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="274089303"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="274089303"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:03:27 -0700
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="602624206"
-Received: from fengyuan-mobl.ccr.corp.intel.com (HELO [10.249.175.132]) ([10.249.175.132])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:03:23 -0700
-Message-ID: <6588c871-a46d-9746-53da-c119d79370b5@linux.intel.com>
-Date:   Thu, 26 May 2022 09:03:21 +0800
+        Wed, 25 May 2022 21:03:54 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B95B8D6AE
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:03:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VEPlGvz_1653527024;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VEPlGvz_1653527024)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 26 May 2022 09:03:45 +0800
+From:   Jeffle Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2] erofs: leave compressed inodes unsupported in fscache mode for now
+Date:   Thu, 26 May 2022 09:03:44 +0800
+Message-Id: <20220526010344.118493-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v7 03/10] iommu/sva: Add iommu_sva_domain support
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
- <20220519072047.2996983-4-baolu.lu@linux.intel.com>
- <20220524134440.GT1343366@nvidia.com>
- <3ce2f162-7b0c-391d-7978-d1703fbe9b79@linux.intel.com>
- <20220525152538.GD1343366@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220525152538.GD1343366@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/25 23:25, Jason Gunthorpe wrote:
-> On Wed, May 25, 2022 at 01:19:08PM +0800, Baolu Lu wrote:
->> Hi Jason,
->>
->> On 2022/5/24 21:44, Jason Gunthorpe wrote:
->>>> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
->>>> index 106506143896..210c376f6043 100644
->>>> +++ b/drivers/iommu/iommu-sva-lib.c
->>>> @@ -69,3 +69,51 @@ struct mm_struct *iommu_sva_find(ioasid_t pasid)
->>>>    	return ioasid_find(&iommu_sva_pasid, pasid, __mmget_not_zero);
->>>>    }
->>>>    EXPORT_SYMBOL_GPL(iommu_sva_find);
->>>> +
->>>> +/*
->>>> + * IOMMU SVA driver-oriented interfaces
->>>> + */
->>>> +struct iommu_domain *
->>>> +iommu_sva_alloc_domain(struct bus_type *bus, struct mm_struct *mm)
->>> This should return the proper type
->>>
->>
->> Can you please elaborate a bit on "return the proper type"? Did you mean
->> return iommu_sva_domain instead? That's a wrapper of iommu_domain and
->> only for iommu internal usage.
-> 
-> If you are exposing special SVA APIs then it is not internal usage
-> only anymore, so expose the type.
+erofs over fscache doesn't support the compressed layout yet. It will
+cause NULL crash if there are compressed inodes contained when working
+in fscache mode.
 
-Ah, got you. Thanks for the explanation.
+So far in the erofs based container image distribution scenarios
+(RAFS v6), the compressed RAFS v6 images are downloaded and then
+decompressed on demand as an uncompressed erofs image. Then the erofs
+image is mounted in fscache mode for containers to use. IOWs, currently
+compressed data is decompressed on the userspace side instead and
+uncompressed erofs images will be finally cached.
 
-Best regards,
-baolu
+The fscache support for the compressed layout is still under
+development and it will be used for runtime decompression feature.
+Anyway, to avoid the potential crash, let's leave the compressed inodes
+unsupported in fscache mode until we support it later.
+
+Fixes: 1442b02b66ad ("erofs: implement fscache-based data read for non-inline layout")
+Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+ fs/erofs/inode.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
+index bcc8335b46b3..95a403720e8c 100644
+--- a/fs/erofs/inode.c
++++ b/fs/erofs/inode.c
+@@ -288,7 +288,10 @@ static int erofs_fill_inode(struct inode *inode, int isdir)
+ 	}
+ 
+ 	if (erofs_inode_is_data_compressed(vi->datalayout)) {
+-		err = z_erofs_fill_inode(inode);
++		if (!erofs_is_fscache_mode(inode->i_sb))
++			err = z_erofs_fill_inode(inode);
++		else
++			err = -EOPNOTSUPP;
+ 		goto out_unlock;
+ 	}
+ 	inode->i_mapping->a_ops = &erofs_raw_access_aops;
+-- 
+2.27.0
+

@@ -2,139 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8966534F9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F010534F9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241449AbiEZMuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S1344573AbiEZMww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347434AbiEZMuJ (ORCPT
+        with ESMTP id S235381AbiEZMwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:50:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430601C136
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653569408; x=1685105408;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TFEtc6n6+D2R1pdxx/1bbjFRAI4nGU6ETu0Ewc5L1Ro=;
-  b=HO8cif0M5AQmTf9FY9+A93hjFljhump5sMoIaQXrN6dO+Sf8u6e32JUV
-   SaqDMcwyTxghQXrp7vNUtL/OgjsNdq8hP8bxrXbNXudFHLK7JjJ+QRvRM
-   pWaTGHKol3CGqn4975lnkTPx8UUElVcEYoHLiPrcWqoEV+x34TruGLHSU
-   C/VWgVYC8KU5osivthPZwLOOlX9TeUbUknpuYQPxQKwEBwfc3lSb+16n0
-   Y+ANCb0BJRbcWSxIm7ER1XCoeBTexqFYlMWrv0VBrQQap7lGxb2TRz16a
-   EuUIl6LHw4tdBTEplXZLQpYGPBcC9xiWK89IKhBdLRTc1lVARx4ROSxac
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="256211519"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="256211519"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 05:50:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="704530413"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 May 2022 05:50:06 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuCwI-0003sQ-4E;
-        Thu, 26 May 2022 12:50:06 +0000
-Date:   Thu, 26 May 2022 20:49:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [sbates130272-p2pmem:md-bug-v2 13/17]
- drivers/md/raid5-cache.c:409:35: sparse: sparse: incorrect type in
- initializer (different address spaces)
-Message-ID: <202205262005.fOq3Ctsn-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 26 May 2022 08:52:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B902ED46
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:52:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BB46B82058
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 12:52:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6244C385A9;
+        Thu, 26 May 2022 12:52:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653569564;
+        bh=Z3C6dkYdPm8lWq2xILiBEXeVjfcYz6sTr481QH2GFp4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YdFlNA8n+XGTjQ7ypalb4t9BC9Ib5TAVbONZ1gNnJ6QPJ51RnQw8NYxoRbM4P0sY6
+         Hiq5RTMPDLMRMWBht8+FYLqcl13WNd7eriPi/WK+O1CFtrgWv8KPUAeCl7J57aTLcx
+         zLhjZqcZD5z954/dlKPhE0YKV+xi2H1Lfv4nTPZ2RbIOBFfRRnWTQq8b8aDdKQzvP2
+         73gR3/f5bsH3sGYVo+jKBUSUR5zC7FOnWfCEY6PHysCBZccqqELZBkdGUoBKXXu3pK
+         Q4vNvS3MfESk3f7723cgVJ4lEr4XEBHQCyAwnCH79X5u2rs+3eR61ZtVf1TrTcD844
+         9dF8AtOxNq2WQ==
+Received: from athedsl-4557779.home.otenet.gr ([94.70.87.219] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nuCyo-00Dquf-Cp; Thu, 26 May 2022 13:52:42 +0100
+Date:   Thu, 26 May 2022 13:52:40 +0100
+Message-ID: <87czg0mp5z.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     richard clark <richard.xnu.clark@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        s32@nxp.com, leoyang.li@nxp.com, catalin-dan.udma@nxp.com,
+        bogdan.hamciuc@nxp.com, bogdan.folea@nxp.com,
+        ciprianmarian.costea@nxp.com, radu-nicolae.pirea@nxp.com,
+        ghennadi.procopciuc@nxp.com
+Subject: Re: Question about SPIs' interrupt trigger type restrictions
+In-Reply-To: <CAJNi4rOHYqL8jN5Ju3ndANc-5Te4WEc-z5YGxCN-2ZtN8vf1cQ@mail.gmail.com>
+References: <CAJNi4rNwPQf747UM_hiYYwL=HDxg8QnPpfFPv1PfrtN9ZP1y1g@mail.gmail.com>
+        <35f95ba3-8a7b-7918-0f9d-e14274a5ffe9@arm.com>
+        <CAJNi4rMbBbLP2Tsv-wnnJKt4Y0moOE5-sNaZN1fCty908pwAKw@mail.gmail.com>
+        <87ee0gn5rq.wl-maz@kernel.org>
+        <CAJNi4rOHYqL8jN5Ju3ndANc-5Te4WEc-z5YGxCN-2ZtN8vf1cQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 94.70.87.219
+X-SA-Exim-Rcpt-To: richard.xnu.clark@gmail.com, robin.murphy@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, s32@nxp.com, leoyang.li@nxp.com, catalin-dan.udma@nxp.com, bogdan.hamciuc@nxp.com, bogdan.folea@nxp.com, ciprianmarian.costea@nxp.com, radu-nicolae.pirea@nxp.com, ghennadi.procopciuc@nxp.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/sbates130272/linux-p2pmem.git md-bug-v2
-head:   1816687fa5c6ba0cecc43d38a583d2ff56da9597
-commit: c6c798f230d28e6ac1e28faa7d255ed7cf5ba3ff [13/17] md/raid5-cache: Add RCU protection to conf->log accesses
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220526/202205262005.fOq3Ctsn-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-14-g5a0004b5-dirty
-        # https://github.com/sbates130272/linux-p2pmem/commit/c6c798f230d28e6ac1e28faa7d255ed7cf5ba3ff
-        git remote add sbates130272-p2pmem https://github.com/sbates130272/linux-p2pmem.git
-        git fetch --no-tags sbates130272-p2pmem md-bug-v2
-        git checkout c6c798f230d28e6ac1e28faa7d255ed7cf5ba3ff
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/md/
+On Thu, 26 May 2022 13:09:32 +0100,
+richard clark <richard.xnu.clark@gmail.com> wrote:
+>=20
+> CC'ing some nxp guys for the S32G274A SOC...
+>=20
+> On Thu, May 26, 2022 at 2:54 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Thu, 26 May 2022 04:44:41 +0100,
+> > richard clark <richard.xnu.clark@gmail.com> wrote:
+> > >
+> > > On Thu, May 26, 2022 at 3:14 AM Robin Murphy <robin.murphy@arm.com> w=
+rote:
+> > > >
+> > > > On 2022-05-25 11:01, richard clark wrote:
+> > > > > Hi Marc,
+> > > > >
+> > > > > For below code snippet about SPI interrupt trigger type:
+> > > > >
+> > > > > static int gic_set_type(struct irq_data *d, unsigned int type)
+> > > > > {
+> > > > >          ...
+> > > > >          /* SPIs have restrictions on the supported types */
+> > > > >          if ((range =3D=3D SPI_RANGE || range =3D=3D ESPI_RANGE) =
+&&
+> > > > >              type !=3D IRQ_TYPE_LEVEL_HIGH && type !=3D IRQ_TYPE_=
+EDGE_RISING)
+> > > > >                  return -EINVAL;
+> > > > >          ...
+> > > > > }
+> > > > >
+> > > > > We have a device at hand whose interrupt type is SPI, Falling edge
+> > > > > will trigger the interrupt. But the request_irq(50, handler,
+> > > > > IRQ_TYPE_EDGE_FALLING, ...) will return -EINVAL.
+> > > > >
+> > > > > The question is, why must the SPI interrupt use IRQ_TYPE_EDGE_RIS=
+ING
+> > > > > instead of IRQ_TYPE_EDGE_FALLING?
+> > > >
+> > > > Because that's what the GIC architecture[1] says. From section 1.2.1
+> > > > "Interrupt Types":
+> > > >
+> > > > "An interrupt that is edge-triggered has the following property:
+> > > >         =E2=80=A2 It is asserted on detection of a rising edge of a=
+n interrupt signal
+> > >
+> > > This rising edge detection is not true, it's also asserted by
+> > > falling edge, just like the GICD_ICFGR register says: Changing the
+> > > interrupt configuration between level-sensitive and *edge-triggered
+> > > (in either direction)* at a time when there is a pending interrupt
+> > > ...,
+> >
+> > Let me finish the sentence for you:
+> >
+> > <quote>
+> > ... will leave the interrupt in an UNKNOWN pending state.
+> > </quote>
+>=20
+> Context sensitive(register-update leaves UNKNOWN pending) and
+>=20
+> >
+> > and the direction here is about the configuration bit, not the edge
+> > direction.
+>=20
+> with this(configuration bit: either level-sensitive or
+> edge-triggered), but it doesn't matter.
+>=20
+> >
+> > > which has been confirmed by GIC-500 on my platform.
+> >
+> > From the GIC500 r1p1 TRM, page 2-8:
+> >
+> > <quote>
+> > SPIs are generated either by wire inputs or by writes to the AXI4
+> > slave programming interface.  The GIC-500 can support up to 960 SPIs
+> > corresponding to the external spi[991:32] signal. The number of SPIs
+> > available depends on the implemented configuration. The permitted
+> > values are 32-960, in steps of 32. The first SPI has an ID number of
+> > 32. You can configure whether each SPI is triggered on a rising edge
+> > or is active-HIGH level-sensitive.
+> > </quote>
+> >
+> > So I have no idea what you are talking about, but you definitely have
+> > the wrong end of the stick. Both the architecture and the
+> > implementations are aligned with what the GIC drivers do.
+>=20
+> What I am talking about is - The SPI is triggered on a rising edge
+> only, while the falling edge is not as the document says. But I've
+> observed the falling edge does trigger the SPI interrupt on my
+> platform (the SOC is NXP S32G274A, an external wakeup signal with high
+> to low transition to wake up the SOC - 'Wakeup/Interrupt Rising-Edge
+> Event Enable Register (WIREER)' and 'Wakeup/Interrupt Falling-Edge
+> Event Enable Register (WIFEER)', WIFEER set 1 and WIREER  set 0
+> works).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This is thus driven by an external piece of HW, which, I expect, would
+perform the signal conversion.
 
+>=20
+> I don't know why the GIC has such a behavior and what the subtle
+> rationale is behind this, so just mark this as a record...
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/md/raid5-cache.c: note: in included file:
-   drivers/md/raid5.h:271:14: sparse: sparse: array of flexible structures
->> drivers/md/raid5-cache.c:409:35: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct r5l_log *log @@     got struct r5l_log [noderef] __rcu *log @@
-   drivers/md/raid5-cache.c:409:35: sparse:     expected struct r5l_log *log
-   drivers/md/raid5-cache.c:409:35: sparse:     got struct r5l_log [noderef] __rcu *log
-   drivers/md/raid5-cache.c:2668:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void **pslot @@     got void [noderef] __rcu ** @@
-   drivers/md/raid5-cache.c:2668:23: sparse:     expected void **pslot
-   drivers/md/raid5-cache.c:2668:23: sparse:     got void [noderef] __rcu **
-   drivers/md/raid5-cache.c:2672:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __rcu **slot @@     got void **pslot @@
-   drivers/md/raid5-cache.c:2672:33: sparse:     expected void [noderef] __rcu **slot
-   drivers/md/raid5-cache.c:2672:33: sparse:     got void **pslot
-   drivers/md/raid5-cache.c:2675:56: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __rcu **slot @@     got void **pslot @@
-   drivers/md/raid5-cache.c:2675:56: sparse:     expected void [noderef] __rcu **slot
-   drivers/md/raid5-cache.c:2675:56: sparse:     got void **pslot
-   drivers/md/raid5-cache.c:2823:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void **pslot @@     got void [noderef] __rcu ** @@
-   drivers/md/raid5-cache.c:2823:23: sparse:     expected void **pslot
-   drivers/md/raid5-cache.c:2823:23: sparse:     got void [noderef] __rcu **
-   drivers/md/raid5-cache.c:2827:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void [noderef] __rcu **slot @@     got void **pslot @@
-   drivers/md/raid5-cache.c:2827:25: sparse:     expected void [noderef] __rcu **slot
-   drivers/md/raid5-cache.c:2827:25: sparse:     got void **pslot
-   drivers/md/raid5-cache.c:2833:56: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __rcu **slot @@     got void **pslot @@
-   drivers/md/raid5-cache.c:2833:56: sparse:     expected void [noderef] __rcu **slot
-   drivers/md/raid5-cache.c:2833:56: sparse:     got void **pslot
+If you can prove that the GIC itself (and not some piece of HW on the
+signal path) latches on a falling edge, then that would be a huge
+bug. I would encourage you (or NXP) to report it to ARM so that it
+would be fixed.
 
-vim +409 drivers/md/raid5-cache.c
+Now, given that GIC500 has been with us for over 8 years, such a bug
+would have been witnessed on tons of existing systems (all the
+SPI-based MSIs would trigger twice, for example). Since there has been
+(to my knowledge) no report of such an issue, I seriously doubt what
+you are seeing is a GIC misbehaviour.
 
-a39f7afde358ca Song Liu 2016-11-17  401  
-2ded370373a400 Song Liu 2016-11-17  402  /*
-2ded370373a400 Song Liu 2016-11-17  403   * Put the stripe into writing-out phase by clearing STRIPE_R5C_CACHING.
-2ded370373a400 Song Liu 2016-11-17  404   * This function should only be called in write-back mode.
-2ded370373a400 Song Liu 2016-11-17  405   */
-a39f7afde358ca Song Liu 2016-11-17  406  void r5c_make_stripe_write_out(struct stripe_head *sh)
-2ded370373a400 Song Liu 2016-11-17  407  {
-2ded370373a400 Song Liu 2016-11-17  408  	struct r5conf *conf = sh->raid_conf;
-2ded370373a400 Song Liu 2016-11-17 @409  	struct r5l_log *log = conf->log;
-2ded370373a400 Song Liu 2016-11-17  410  
-2ded370373a400 Song Liu 2016-11-17  411  	BUG_ON(!r5c_is_writeback(log));
-2ded370373a400 Song Liu 2016-11-17  412  
-2ded370373a400 Song Liu 2016-11-17  413  	WARN_ON(!test_bit(STRIPE_R5C_CACHING, &sh->state));
-2ded370373a400 Song Liu 2016-11-17  414  	clear_bit(STRIPE_R5C_CACHING, &sh->state);
-1e6d690b9334b7 Song Liu 2016-11-17  415  
-1e6d690b9334b7 Song Liu 2016-11-17  416  	if (!test_and_set_bit(STRIPE_PREREAD_ACTIVE, &sh->state))
-1e6d690b9334b7 Song Liu 2016-11-17  417  		atomic_inc(&conf->preread_active_stripes);
-1e6d690b9334b7 Song Liu 2016-11-17  418  }
-1e6d690b9334b7 Song Liu 2016-11-17  419  
+	M.
 
-:::::: The code at line 409 was first introduced by commit
-:::::: 2ded370373a400c20cf0c6e941e724e61582a867 md/r5cache: State machine for raid5-cache write back mode
-
-:::::: TO: Song Liu <songliubraving@fb.com>
-:::::: CC: Shaohua Li <shli@fb.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Without deviation from the norm, progress is not possible.

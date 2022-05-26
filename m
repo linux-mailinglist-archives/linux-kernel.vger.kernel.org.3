@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41394534F6D
+	by mail.lfdr.de (Postfix) with ESMTP id 8C95F534F6E
 	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237749AbiEZMkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
+        id S1347323AbiEZMkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240043AbiEZMkh (ORCPT
+        with ESMTP id S234837AbiEZMki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:40:37 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C1D2F020;
-        Thu, 26 May 2022 05:40:36 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id y66so1979716oia.1;
-        Thu, 26 May 2022 05:40:36 -0700 (PDT)
+        Thu, 26 May 2022 08:40:38 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08032F392;
+        Thu, 26 May 2022 05:40:37 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id t144so1946459oie.7;
+        Thu, 26 May 2022 05:40:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=8QQi9UAdNLHLfBvhZVbeEVs5brcL+rQG9Px5mSwS5Fc=;
-        b=STvQ6hlCLk+S2RsJy789msnRZ+D6U1Q2AoQbneMprIdFT6d7DyRqLdY3DZIKWi2ZyJ
-         rYqdHKBpxT36FYpm1ltGd6A+V9NAYE2AX+3dYWI+LT984aXUbKy6dL873MdP1zaStK3N
-         qpqEo1kQO43Ttey2/1RI/0uHFgMf2Rz7xD2m9mapFXZWuHMgZU4QH8QBykK+wxvnkYA4
-         Ki9l6hz//0hVb0jaQlARQuIYgRW5PGGEzUJ5IGlYF8ldZgSvrEveUNbqi8QP0dF+Zc7A
-         Jr1y8wzqvKdGddlnwCI/27OW4jJGxKGv1KuG3lQTEJAojAbceX8Yz7g7wc3avphm3zEE
-         D3oQ==
-X-Gm-Message-State: AOAM532jlPAdNLzOOBGlNbkbr/uP9Q0lfcJH6VLwXYU4HEO3xX3wZCLZ
-        A/RFbEiQgAZBBPMCk4N0ZA==
-X-Google-Smtp-Source: ABdhPJzSEnsODeFXU35jwjUC1neJG1165yxNM0C9AuIQwkdwRBKk9KKxp3vy0jylqao/4eNol/as0g==
-X-Received: by 2002:aca:6c5:0:b0:325:5bce:bbc1 with SMTP id 188-20020aca06c5000000b003255bcebbc1mr1002134oig.221.1653568835402;
-        Thu, 26 May 2022 05:40:35 -0700 (PDT)
+        bh=AQamHjHqjaBZj2u5yKIBPO/vObcbZFHIk6zDCH1dFck=;
+        b=C3PQAPuoivyAg/rdNzYYLKw/d/5sfxeAG0Cmg0PNpnjMGQ3YPUui2KUav+KuaqWjtl
+         ZeNC+33ZHt8G7gtCnZYnS/cltOE77LKqIrx3d09MdVNOJCAGYzBkcFYyrjRx6oFnGbCb
+         yxssd+wVTnIu5eesez3OpvLS7SuuEGE3q06amm+TWgIL+9Mn7V6UofqBHvgbWtp3oCli
+         zMjByTR1m/kJC9OKWlzfJXM28rBnr7PCpu76Biph1gHAMrmVuZOOcXvu2yO9wLBvia4i
+         acz+3wf3Ml1R3/AogD/Z2xs4hUrxkeHYsjkCCKTLiKcO7SrmVJd7BPRWye+j6Oy6ypD1
+         Xdcg==
+X-Gm-Message-State: AOAM5304SUsxj9OSQz62EqJMd6R6VhUEgcrqVFCywf7LRpUR13ZRHz4p
+        01hQfDxgUiMdTSk93gGP9A==
+X-Google-Smtp-Source: ABdhPJw6v1jlG/aL47HH5i/oSENJYdMRQCjPamtum1PF6Ms/NMUsitb0szo2+sDYTjlq15a5pxAlnw==
+X-Received: by 2002:a54:409a:0:b0:32b:1820:c399 with SMTP id i26-20020a54409a000000b0032b1820c399mr1036653oii.110.1653568837078;
+        Thu, 26 May 2022 05:40:37 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p8-20020a056870a54800b000f169cbbb32sm565161oal.43.2022.05.26.05.40.34
+        by smtp.gmail.com with ESMTPSA id nl15-20020a056871458f00b000f20ac7e5a8sm548087oab.53.2022.05.26.05.40.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 05:40:34 -0700 (PDT)
-Received: (nullmailer pid 3797151 invoked by uid 1000);
+        Thu, 26 May 2022 05:40:36 -0700 (PDT)
+Received: (nullmailer pid 3797154 invoked by uid 1000);
         Thu, 26 May 2022 12:40:33 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Harsh Agarwal <quic_harshq@quicinc.com>
-Cc:     quic_pkondeti@quicinc.com, Philipp Zabel <p.zabel@pengutronix.de>,
-        quic_ppratap@quicinc.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
         linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <1653560029-6937-2-git-send-email-quic_harshq@quicinc.com>
-References: <1653560029-6937-1-git-send-email-quic_harshq@quicinc.com> <1653560029-6937-2-git-send-email-quic_harshq@quicinc.com>
-Subject: Re: [RFC v2 1/2] dt-bindings: usb: dwc3: Add support for multiport related properties
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220526014107.2871787-1-robh@kernel.org>
+References: <20220526014107.2871787-1-robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: PCI: apple: Add missing 'power-domains' property
 Date:   Thu, 26 May 2022 07:40:33 -0500
-Message-Id: <1653568833.732260.3797150.nullmailer@robh.at.kernel.org>
+Message-Id: <1653568833.758093.3797153.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -66,45 +65,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 May 2022 15:43:48 +0530, Harsh Agarwal wrote:
-> Added support for multiport, mport, num-ssphy and num-hsphy
-> properties. These properties are used to support devices having
-> a multiport controller.
+On Wed, 25 May 2022 20:41:07 -0500, Rob Herring wrote:
+> The 'unevaluatedProperties' schema checks is not fully working and doesn't
+> catch some cases where there's a $ref to another schema. A fix is pending,
+> but results in new warnings in examples.
 > 
-> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+> The Apple PCIe host has 3 power domains at least according to the example.
+> Add the 'power-domains' property to the schema.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
+> Ideally, we'd define what each power domain is, but I don't know what
+> they are.
+> ---
+>  Documentation/devicetree/bindings/pci/apple,pcie.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:366:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:367:10: [warning] wrong indentation: expected 11 but found 9 (indentation)
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:369:11: [warning] wrong indentation: expected 11 but found 10 (indentation)
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:86.27-89.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@1: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:91.27-93.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@2: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:95.27-97.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@3: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/usb/snps,dwc3.example.dts:99.27-101.15: Warning (unit_address_vs_reg): /example-2/usb@4a000000/multiport/mport@4: node has a unit name, but no reg or ranges property
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb: usb@4a000000: multiport: 'mport' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+pcie@690000000: power-domains: [[59]] is too short
+	arch/arm64/boot/dts/apple/t8103-j274.dtb
+	arch/arm64/boot/dts/apple/t8103-j293.dtb
+	arch/arm64/boot/dts/apple/t8103-j313.dtb
+	arch/arm64/boot/dts/apple/t8103-j456.dtb
+	arch/arm64/boot/dts/apple/t8103-j457.dtb
 

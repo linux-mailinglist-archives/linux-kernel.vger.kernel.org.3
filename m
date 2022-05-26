@@ -2,817 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423BC534986
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 05:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A973534981
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 05:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344659AbiEZDx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 23:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
+        id S238841AbiEZDwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 23:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344828AbiEZDxs (ORCPT
+        with ESMTP id S229889AbiEZDwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 23:53:48 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272FDBDA2F
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 20:53:46 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id m2so329369vsr.8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 20:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pCLtc+GGnZ02DVHsxmCX4c/a5WMaa8f9AgsdxEumb3Y=;
-        b=pEQd46hsnNQdwOgLzTTKUx49d+LW8eFxESI2L6hylI78qvn+wtPctpp9fq31zgma+N
-         /Ec8HYSpDy2XyrjUwQmkhgxtAryoHTzGiMNiSW6qL329ds1f/muzlE3Ffy4hR2wdddeo
-         Jab8DabpI/eJeKbr9MNBsmAqSzp9u6uS8BmbEWkqkeUVfRAtZfZmFb6uDuJgoeBaAzKZ
-         sRmZ1RiJ70hNtxYER4FGIOvkWwFzyMVIZNBcJthE2fW53WPJfDLc9IHDK8jNQ8bFwRYm
-         R6yEQ4mvEsUYlOOMlzjXVQ1NBrcaLKXhuFl0KGEObZIYTWL+9SBWUmxtT8DHkxBAJZG8
-         74gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pCLtc+GGnZ02DVHsxmCX4c/a5WMaa8f9AgsdxEumb3Y=;
-        b=0145XXdmp5q1zW7WBz9JXWytXMCqnM2fW77JcqKR4kkeQoBOWh8GVKZeDHxzk0CUgq
-         LXIyRVoBk255HH/FP9jYc2nnMvN9iyMq70njXrQALRb+LXa1uFG2LPMpSoB8sJxSlaQf
-         /XPOPHTkVhWRIOqLLshQKjdFAahHvld8+aSKMejZaTVULCXdDkN56hZaq3iWJ3lOwW3D
-         sbyhze6lpCiFmXsIIq8TdhFvVa4axF/TUobCtunny+q1+MlQ4NxkeRqzcRDZ1PhNOEpC
-         k6U2/zyJVL9w16jHcnjip61SNXIlDYQOlLMxZ9X+49sex+opzPppOGP6yw9GbmlngaMO
-         KWWA==
-X-Gm-Message-State: AOAM533p8ypi1NGb4zcDx0jPKsjDm3bSpFbCnlm8fXnW5/qVBgacjcTY
-        +hT5OJ/ZTk/4uWR3VovZSO21lbSkKyKAuhiv19hotQ==
-X-Google-Smtp-Source: ABdhPJzpf7PuIen7gr3K3fKoXsQUwfFvs+ytvMKq7dyAJqk+eKqBTauZs2j7dEgA6dNutsfv1g06lps/ZbHO7HqfErs=
-X-Received: by 2002:a67:ed88:0:b0:328:27d9:1381 with SMTP id
- d8-20020a67ed88000000b0032827d91381mr14740547vsp.12.1653537224845; Wed, 25
- May 2022 20:53:44 -0700 (PDT)
+        Wed, 25 May 2022 23:52:25 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150070.outbound.protection.outlook.com [40.107.15.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545AAA0D31;
+        Wed, 25 May 2022 20:52:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ob3L92aBwNh5q/C6NBzm58guD7bhVNSks6MAc68mMyx7Y+mpy4Mtc7d+V7cuTI8cESoSSnoAn+BiDjFony+YQb4MLDnY0tmrrydfZKWswJSn+vQXBhNRXtRUoIfbw84s8aMQfJbjgtfR7i6/3MdyZy+C9IfFwE169bPhIR8AeDsGArsL4Cc15v7aaeo0km3SgF1znUG1M58yIau/qfhlvQ+HKbSsOZGpErbdFjfar8Y/qb976jftSLW8jnFqkFP22P+7l37R9IdB2FOscWZbZH4OIcNHQtUyulNnzrKq3b7SeZo9Fq393tNsGWmVgBOt6EsXhaZV29sYJST39qbOXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PGz9Xv3jiVF0H+sge+mN/7r0UMryka8h4sEmSqY2ias=;
+ b=SHOI7Z9LJ1m5QajkJJxw/sosV2uxPLs4hV9+Rsvg1D70DmHMw0kayqhij03ThGIpytxu48N/YYKBmAK+x5JnERJYbj00Iz0SkKZZN5ZBAG4k/WfkO/RRj6B0rDv5O5DbTofo6u9R2H70gmqY3MtCwvAjTbwTCnYOE8Us7FThQDRu1GVaUEIiRUC3L7g91BgDyHwfhc6cTDQ6x4leABwVcuUpVNNJ9pkljSqr+Tj95WTvQPBpg3+rcAtaUdhlXZWyUz1Vomqp4cPDPHP2khFoppDx+5ZvPIgVQ2aAxTDwB5jTwnu6dSGwuWWv3uHwd01I+fRCK+J/I0x9PQqjVyj/9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PGz9Xv3jiVF0H+sge+mN/7r0UMryka8h4sEmSqY2ias=;
+ b=b05ZRSzUt9SLOpSx7GH/XP7fqirnm9S4cVy5NcsCUUKdaWhtprWWtm7Wbv4tFVQ/VwyJ5NyXlj9ZI0Q9L4vJk015HfKOg5Mgv6TSnEtBzxErOvPUodW9K0UlIXX6AjwQjC8tUtxLQfTNJbkPmPbro+SuEqvEf77BG+AfutyXKWU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM4PR0401MB2324.eurprd04.prod.outlook.com (2603:10a6:200:4f::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Thu, 26 May
+ 2022 03:52:18 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a892:e4a9:4769:13a5]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a892:e4a9:4769:13a5%7]) with mapi id 15.20.5293.013; Thu, 26 May 2022
+ 03:52:18 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     shawnguo@kernel.org, leoyang.li@nxp.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, evicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH] arm64: dts: ls-10xx: use generic dma node name
+Date:   Thu, 26 May 2022 11:54:05 +0800
+Message-Id: <20220526035405.4062687-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2P153CA0005.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:140::11) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-References: <CAAPL-u-DGLcKRVDnChN9ZhxPkfxQvz9Sb93kVoX_4J2oiJSkUw@mail.gmail.com>
- <20220512160010.00005bc4@Huawei.com> <CAAPL-u_diGYEb7+WsgqNBLRix-nRCk2SsDj6p9r8j5JZwOABZQ@mail.gmail.com>
- <6b7c472b50049592cde912f04ca47c696caa2227.camel@intel.com>
- <CAAPL-u-NAJkSXHzQr8OtEEGnnUrsCE9US6c5S5Rv0xutASxv1Q@mail.gmail.com>
- <ad1bc96a86b21b8f46d356f0c0b7449be38b2220.camel@intel.com>
- <CAAPL-u8XzJnrew4vuFq7GgwgjjBff8MwRFGTDmUc9DOwa+q=FA@mail.gmail.com>
- <6ce724e5c67d4f7530457897fa08d0a8ba5dd6d0.camel@intel.com>
- <CAAPL-u8Hdi5xwafAMRB2+zSpyS9ooRyg-koGvW9wkzQc94_Ufg@mail.gmail.com> <4c712c5aa69efc103091077f1d3579efa56015a7.camel@intel.com>
-In-Reply-To: <4c712c5aa69efc103091077f1d3579efa56015a7.camel@intel.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Wed, 25 May 2022 20:53:31 -0700
-Message-ID: <CAAPL-u9t=9hYfcXyCZwYFmVTUQGrWVq3cndpN+sqPSm5cwE4Yg@mail.gmail.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces (v2)
-To:     Ying Huang <ying.huang@intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Hesham Almatary <hesham.almatary@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 769c0af1-0c27-4ccd-eaa9-08da3ecb2109
+X-MS-TrafficTypeDiagnostic: AM4PR0401MB2324:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <AM4PR0401MB23240EC823E0DF1D1CBE698DC9D99@AM4PR0401MB2324.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4/Bw6+5p1eqf4rMo8F/AoedJZ3BGe1wluql7DFGcvHNt4ruS/p5Eg39j74UwQ9cZppaJn1eR+4MKO01BLVFUBRxQyBE7JAL10V5/RAQUVeb8Oy6FJp6g9mcV9KJ84QSumR0kusry5gYZAs4oJTOrdRxdy2SR9Tu59NodPFFSRrkCh93PQCUr2VVmnsMgzdQi1niKQpQ0nMgAUUvwZk7b7ueSXJ2MZ5r6+32+ru1qUxRG+BhLEHpNx2Jc6W146vJKSaihQ/b4IMP7YRnO1duNyJm9YoeFTVzcS0ctynuk/PhhDIqaOXvEaQu/2ryLgzgZ2vrqhyKVuClaWyBuu1XUP0KS1WfE+CTqHdnwaPH1AZUX7Ebx76qRbCwG170rxp8HOtlgNziL9OoCa7Uq/+A8rKMOphjmO2Yj56vCCFvFmIZXySifZkTrDGCJaF9T2NFa4cnRYcjgesmLTcusx+x8eYRyQiR456sPtprVEsPgCexORUePj9CVEYAIEKQhXtX3LZmgNGWCBip/bql7Hm9842IqIUksmoLLGZ8CpWPTs/Ug3RHomeOdhVeqLlg+QtCrb2wqzVZrAyho7CVpLU9QbTVgSs3+F3M0+BYvFG+syDSB6uLpgS73KsnwbIvGzzRwzBvXO039Xs7ymEJCQU4CrMWPBMtrCKy55y1RuKoEHGqyrBVtmO6c/hc+ZuloLL8cnZxSKzO6/IvbPKG6+awO7hJI5aA1VB+XEbRBv3qYobw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(508600001)(6512007)(316002)(38100700002)(26005)(6486002)(86362001)(1076003)(38350700002)(186003)(83380400001)(6506007)(66476007)(52116002)(66556008)(4326008)(8676002)(66946007)(2616005)(8936002)(6666004)(2906002)(41533002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E54Hj5YfJHEguHuBSfSyiHzhhhPlZ6AN99AlqW/uxRcrU7kpwJdDnTpgTEJZ?=
+ =?us-ascii?Q?/yK4E6Q8foAnr51e10frorg3qCyXpCGnMvmXCuKMIAcBFMCLVQLly30+foUO?=
+ =?us-ascii?Q?cppkEHvA2EU59aXeSSqcJveDDyL8uzLVXTg4RljQWHJwK0UiCQA+PGlVAwC0?=
+ =?us-ascii?Q?26eKRDLGOrpVxIOKboP7uKS+CPju8oQYCBBk3uM3HJzQauQzkKcEoTJaKC8u?=
+ =?us-ascii?Q?0yFZDbcPNkdSqIb8aJxg958UGOOQc2P1sBtEKD/teEHEYmYcYsZi8SkraAwL?=
+ =?us-ascii?Q?s5DZlgnLYjQCHty/XMJd9UTmICi4FlIjecHKjW9v3p4qbtZiMiamsntUYihV?=
+ =?us-ascii?Q?nF/whn8dwBh1Lt7PGi+rCYp55aryGJleiHMBERSS5wKon93IEbExSUoI90FE?=
+ =?us-ascii?Q?D8ulz4O34Hgk/KZ7dqkTWe239n+njJZz8nzl6dNyiKA20/PFQpTEZnHNNKX5?=
+ =?us-ascii?Q?dTvfxvRJdAtTpfmS24zJl7ESJR3IoDK85tPVRaUn8t2agXUSUA1l1jtTBV/A?=
+ =?us-ascii?Q?LKDDny0qil3nDEYpVDXl7O7KfWCHtENtIEeQjjjIa+zODa4sbvmSVA6ngm3K?=
+ =?us-ascii?Q?EdD0zxLTg92AfOqZJMjRUOC3ktcc4JicV8Zo6b5iKS1Uu7J2YFotMkNRsFiA?=
+ =?us-ascii?Q?zOEYjOX8Acv3yfZLgSRNbtj2lmCiAyT+VDWx48kLMFDYXHOO0ZXDEEoVOTRP?=
+ =?us-ascii?Q?Sr7OqSird4QVOGs1uS1vlbOyV0RM2LTFQ/dbv17IESpYKfmMZ60pIzIAeWTe?=
+ =?us-ascii?Q?KjH8UoCLX+RpxyWK6rq6kT7huEosQmcfJ64nqxEUEHBqI7u2jH2OcLlXu67c?=
+ =?us-ascii?Q?gRgJ7Okd9zXsn9YinstxMCgZRKOs3onsv//qPC30PFn/3alXaMBfIGpVHjlJ?=
+ =?us-ascii?Q?dAzG8diE4zcBV47rFRc1Igy5WjSLsq/pF/SXYUYYf6XxtBTgBKawXX5FQ/5x?=
+ =?us-ascii?Q?Z9aBYrNLOMhTq71NjyW3FjWn+seLD3Gwyh7CnuOqhIlTPjGP22xMK0ivjkSb?=
+ =?us-ascii?Q?zRGOcS6YVRx1okWzjcoVYrZNZSjxPnGJ+n/HCqYIArhG5mx2gk7vKenG+7u7?=
+ =?us-ascii?Q?CW4KOUWgKfp3B07tvEtoTF2QYkyGHdwBOD0wgkx6M4YiolXbIqhtzKgErsCE?=
+ =?us-ascii?Q?3tWGQtnfrZEQsmB7KmpAwREXL50BHj5CtOss2o47hXvTafAdHelnxnWTHaQC?=
+ =?us-ascii?Q?+XnhAMk0U+decjb3g5ied0rDhArL+bOfKF2P0ZAq3xyvt/+YvR5wVuBgfo9W?=
+ =?us-ascii?Q?hVWxXBIUH6t/SdU62dQV/p7F42FFLzsOjeZtpUpkW6Z1nZ3hYLgj/LsnbWFQ?=
+ =?us-ascii?Q?8Tp6x6emNvNnv0v2x1I2EUUXAZVh3Nyctbk0SUHuPXAsyx/zHW4pRNwhyMuw?=
+ =?us-ascii?Q?wBKIvNQlbw4tdCF/F7q0f+Ousg4r3OC6fm59ILmY9siaX03YES0w6oLM2KtC?=
+ =?us-ascii?Q?Hw0PGc9yPHcopApTxV43neWMENtI1oOlm+YvSOqjh6l3NeTfbloszUmySeyZ?=
+ =?us-ascii?Q?ua7RW6z383bX/OpCxT0XneYW0sZ3eTW+V4BG944sKdqfklKcziWx8PcbQ0sm?=
+ =?us-ascii?Q?QkNkDPAJOIeeTcB9P0y7ioosqbe58ebrus/Wk8S8mG+S8UQ37p6FBm+x58sz?=
+ =?us-ascii?Q?4TjDE4VjE2OQvXZIjP2nIe0Q5XGGjNHp54Erzp6rHvmFTBRvy8UEq8nujGXD?=
+ =?us-ascii?Q?RXZsWRZgjAMAJMTZBpirgOpe7NsLdAwuzO2a25jQiXJC3S8b90AAao0y2h25?=
+ =?us-ascii?Q?F3jzN3oflg=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 769c0af1-0c27-4ccd-eaa9-08da3ecb2109
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 03:52:18.3208
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Mx+ITqPrTmg8z5/i4pNi7hSZ4brKynPysWRRilval/pCGAizwS3b06sebVUbSgMWdGu7JU6xBKsMbwCra8edVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR0401MB2324
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 6:10 PM Ying Huang <ying.huang@intel.com> wrote:
->
-> On Wed, 2022-05-25 at 08:36 -0700, Wei Xu wrote:
-> > On Wed, May 25, 2022 at 2:03 AM Ying Huang <ying.huang@intel.com> wrote:
-> > >
-> > > On Tue, 2022-05-24 at 22:32 -0700, Wei Xu wrote:
-> > > > On Tue, May 24, 2022 at 1:24 AM Ying Huang <ying.huang@intel.com> wrote:
-> > > > >
-> > > > > On Tue, 2022-05-24 at 00:04 -0700, Wei Xu wrote:
-> > > > > > On Thu, May 19, 2022 at 8:06 PM Ying Huang <ying.huang@intel.com> wrote:
-> > > > > > >
-> > > > > > > On Wed, 2022-05-18 at 00:09 -0700, Wei Xu wrote:
-> > > > > > > > On Thu, May 12, 2022 at 8:00 AM Jonathan Cameron
-> > > > > > > > <Jonathan.Cameron@huawei.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Wed, 11 May 2022 23:22:11 -0700
-> > > > > > > > > Wei Xu <weixugc@google.com> wrote:
-> > > > > > > > > > The current kernel has the basic memory tiering support: Inactive
-> > > > > > > > > > pages on a higher tier NUMA node can be migrated (demoted) to a lower
-> > > > > > > > > > tier NUMA node to make room for new allocations on the higher tier
-> > > > > > > > > > NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
-> > > > > > > > > > migrated (promoted) to a higher tier NUMA node to improve the
-> > > > > > > > > > performance.
-> > > > > > > > > >
-> > > > > > > > > > In the current kernel, memory tiers are defined implicitly via a
-> > > > > > > > > > demotion path relationship between NUMA nodes, which is created during
-> > > > > > > > > > the kernel initialization and updated when a NUMA node is hot-added or
-> > > > > > > > > > hot-removed.  The current implementation puts all nodes with CPU into
-> > > > > > > > > > the top tier, and builds the tier hierarchy tier-by-tier by establishing
-> > > > > > > > > > the per-node demotion targets based on the distances between nodes.
-> > > > > > > > > >
-> > > > > > > > > > This current memory tier kernel interface needs to be improved for
-> > > > > > > > > > several important use cases:
-> > > > > > > > > >
-> > > > > > > > > > * The current tier initialization code always initializes
-> > > > > > > > > >   each memory-only NUMA node into a lower tier.  But a memory-only
-> > > > > > > > > >   NUMA node may have a high performance memory device (e.g. a DRAM
-> > > > > > > > > >   device attached via CXL.mem or a DRAM-backed memory-only node on
-> > > > > > > > > >   a virtual machine) and should be put into a higher tier.
-> > > > > > > > > >
-> > > > > > > > > > * The current tier hierarchy always puts CPU nodes into the top
-> > > > > > > > > >   tier. But on a system with HBM (e.g. GPU memory) devices, these
-> > > > > > > > > >   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
-> > > > > > > > > >   with CPUs are better to be placed into the next lower tier.
-> > > > > > > > > >
-> > > > > > > > > > * Also because the current tier hierarchy always puts CPU nodes
-> > > > > > > > > >   into the top tier, when a CPU is hot-added (or hot-removed) and
-> > > > > > > > > >   triggers a memory node from CPU-less into a CPU node (or vice
-> > > > > > > > > >   versa), the memory tier hierarchy gets changed, even though no
-> > > > > > > > > >   memory node is added or removed.  This can make the tier
-> > > > > > > > > >   hierarchy unstable and make it difficult to support tier-based
-> > > > > > > > > >   memory accounting.
-> > > > > > > > > >
-> > > > > > > > > > * A higher tier node can only be demoted to selected nodes on the
-> > > > > > > > > >   next lower tier as defined by the demotion path, not any other
-> > > > > > > > > >   node from any lower tier.  This strict, hard-coded demotion order
-> > > > > > > > > >   does not work in all use cases (e.g. some use cases may want to
-> > > > > > > > > >   allow cross-socket demotion to another node in the same demotion
-> > > > > > > > > >   tier as a fallback when the preferred demotion node is out of
-> > > > > > > > > >   space), and has resulted in the feature request for an interface to
-> > > > > > > > > >   override the system-wide, per-node demotion order from the
-> > > > > > > > > >   userspace.  This demotion order is also inconsistent with the page
-> > > > > > > > > >   allocation fallback order when all the nodes in a higher tier are
-> > > > > > > > > >   out of space: The page allocation can fall back to any node from
-> > > > > > > > > >   any lower tier, whereas the demotion order doesn't allow that.
-> > > > > > > > > >
-> > > > > > > > > > * There are no interfaces for the userspace to learn about the memory
-> > > > > > > > > >   tier hierarchy in order to optimize its memory allocations.
-> > > > > > > > > >
-> > > > > > > > > > I'd like to propose revised memory tier kernel interfaces based on
-> > > > > > > > > > the discussions in the threads:
-> > > > > > > > > >
-> > > > > > > > > > - https://lore.kernel.org/lkml/20220425201728.5kzm4seu7rep7ndr@offworld/T/
-> > > > > > > > > > - https://lore.kernel.org/linux-mm/20220426114300.00003ad8@Huawei.com/t/
-> > > > > > > > > > - https://lore.kernel.org/linux-mm/867bc216386eb6cbf54648f23e5825830f5b922e.camel@intel.com/T/
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > High-level Design Ideas
-> > > > > > > > > > =======================
-> > > > > > > > > >
-> > > > > > > > > > * Define memory tiers explicitly, not implicitly.
-> > > > > > > > > >
-> > > > > > > > > > * Memory tiers are defined based on hardware capabilities of memory
-> > > > > > > > > >   nodes, not their relative node distances between each other.
-> > > > > > > > > >
-> > > > > > > > > > * The tier assignment of each node is independent from each other.
-> > > > > > > > > >   Moving a node from one tier to another tier doesn't affect the tier
-> > > > > > > > > >   assignment of any other node.
-> > > > > > > > > >
-> > > > > > > > > > * The node-tier association is stable. A node can be reassigned to a
-> > > > > > > > > >   different tier only under the specific conditions that don't block
-> > > > > > > > > >   future tier-based memory cgroup accounting.
-> > > > > > > > > >
-> > > > > > > > > > * A node can demote its pages to any nodes of any lower tiers. The
-> > > > > > > > > >   demotion target node selection follows the allocation fallback order
-> > > > > > > > > >   of the source node, which is built based on node distances.  The
-> > > > > > > > > >   demotion targets are also restricted to only the nodes from the tiers
-> > > > > > > > > >   lower than the source node.  We no longer need to maintain a separate
-> > > > > > > > > >   per-node demotion order (node_demotion[]).
-> > > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > Hi Wei,
-> > > > > > > > >
-> > > > > > > > > This proposal looks good to me, though we'll be having fun
-> > > > > > > > > white boarding topologies from our roadmaps for the next few days :)
-> > > > > > > >
-> > > > > > > > That's good to hear.
-> > > > > > > >
-> > > > > > > > > A few comments inline. It also seems likely to me that there is little
-> > > > > > > > > benefit in starting with 3 tiers as the maximum.  Seems unlikely the
-> > > > > > > > > code will be substantially simpler for 3 than it would be for 4 or 5.
-> > > > > > > > > I've drawn out one simple case that needs 4 to do sensible things.
-> > > > > > > >
-> > > > > > > > We can make the number of tiers a config option. 3 tiers are just what
-> > > > > > > > the kernel can reasonably initialize when there isn't enough hardware
-> > > > > > > > performance information from the firmware.
-> > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Sysfs Interfaces
-> > > > > > > > > > ================
-> > > > > > > > > >
-> > > > > > > > > > * /sys/devices/system/memtier/memtierN/nodelist
-> > > > > > > > > >
-> > > > > > > > > >   where N = 0, 1, 2 (the kernel supports only 3 tiers for now).
-> > > > > > > > > >
-> > > > > > > > > >   Format: node_list
-> > > > > > > > > >
-> > > > > > > > > >   Read-only.  When read, list the memory nodes in the specified tier.
-> > > > > > > > > >
-> > > > > > > > > >   Tier 0 is the highest tier, while tier 2 is the lowest tier.
-> > > > > > > > > >
-> > > > > > > > > >   The absolute value of a tier id number has no specific meaning.
-> > > > > > > > > >   What matters is the relative order of the tier id numbers.
-> > > > > > > > > >
-> > > > > > > > > >   When a memory tier has no nodes, the kernel can hide its memtier
-> > > > > > > > > >   sysfs files.
-> > > > > > > > > >
-> > > > > > > > > > * /sys/devices/system/node/nodeN/memtier
-> > > > > > > > > >
-> > > > > > > > > >   where N = 0, 1, ...
-> > > > > > > > > >
-> > > > > > > > > >   Format: int or empty
-> > > > > > > > > >
-> > > > > > > > > >   When read, list the memory tier that the node belongs to.  Its value
-> > > > > > > > > >   is empty for a CPU-only NUMA node.
-> > > > > > > > > >
-> > > > > > > > > >   When written, the kernel moves the node into the specified memory
-> > > > > > > > > >   tier if the move is allowed.  The tier assignment of all other nodes
-> > > > > > > > > >   are not affected.
-> > > > > > > > > >
-> > > > > > > > > >   Initially, we can make this interface read-only.
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Kernel Representation
-> > > > > > > > > > =====================
-> > > > > > > > > >
-> > > > > > > > > > * All memory tiering code is guarded by CONFIG_TIERED_MEMORY.
-> > > > > > > > > >
-> > > > > > > > > > * #define MAX_MEMORY_TIERS 3
-> > > > > > > > > >
-> > > > > > > > > >   Support 3 memory tiers for now.
-> > > > > > > > > >
-> > > > > > > > > > * #define MEMORY_DEFAULT_TIER 1
-> > > > > > > > > >
-> > > > > > > > > >   The default tier that a memory node is assigned to.
-> > > > > > > > > >
-> > > > > > > > > > * nodemask_t memory_tiers[MAX_MEMORY_TIERS]
-> > > > > > > > > >
-> > > > > > > > > >   Store memory nodes by tiers.
-> > > > > > > > > >
-> > > > > > > > > > * int node_tier_map[MAX_NUMNODES]
-> > > > > > > > > >
-> > > > > > > > > >   Map a node to its tier.
-> > > > > > > > > >
-> > > > > > > > > >   For each CPU-only node c, node_tier_map[c] = -1.
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Memory Tier Initialization
-> > > > > > > > > > ==========================
-> > > > > > > > > >
-> > > > > > > > > > By default, all memory nodes are assigned to the default tier
-> > > > > > > > > > (MEMORY_DEFAULT_TIER).
-> > > > > > > > >
-> > > > > > > > > This is tighter than it needs to be.  In many cases we can easily
-> > > > > > > > > establish if there is any possibility of CPU being hotplugged into
-> > > > > > > > > a memory node.  If it's CXL attached no way CPUs are going to be
-> > > > > > > > > turning up their later :)  If CPU HP into a given node can't happen
-> > > > > > > > > we can be more flexible and I think that often results in better decisions.
-> > > > > > > > > See example below, though obviously I could just use the userspace
-> > > > > > > > > interface to fix that up anyway or have a CXL driver move it around
-> > > > > > > > > if that's relevant.  In some other cases I'm fairly sure we know in
-> > > > > > > > > advance where CPUs can be added but I'd need to check all the
-> > > > > > > > > relevant specs to be sure there aren't any corner cases.  I 'think'
-> > > > > > > > > for ARM for example we know where all possible CPUs can be hotplugged
-> > > > > > > > > (constraint coming from the interrupt controller + the fact that only
-> > > > > > > > > virtual CPU HP is defined).
-> > > > > > > >
-> > > > > > > > We may not always want to put a CXL-attached memory device into a
-> > > > > > > > slower tier because even though CXL does add some additional latency,
-> > > > > > > > both the memory device and CXL can still be very capable in
-> > > > > > > > performance and may not be much slower (if any) than the on-board DRAM
-> > > > > > > > (e.g. DRAM from a remote CPU socket).
-> > > > > > > >
-> > > > > > > > Also, the default tier here is just the initial tier assignment of
-> > > > > > > > each node, which behaves as if there were no tiering.  A tiering
-> > > > > > > > kernel init function can certainly reassign the tier for each node if
-> > > > > > > > it knows enough about the hardware performance for these nodes from
-> > > > > > > > the firmware.
-> > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > A device driver can move up or down its memory nodes from the default
-> > > > > > > > > > tier.  For example, PMEM can move down its memory nodes below the
-> > > > > > > > > > default tier, whereas GPU can move up its memory nodes above the
-> > > > > > > > > > default tier.
-> > > > > > > > > >
-> > > > > > > > > > The kernel initialization code makes the decision on which exact tier
-> > > > > > > > > > a memory node should be assigned to based on the requests from the
-> > > > > > > > > > device drivers as well as the memory device hardware information
-> > > > > > > > > > provided by the firmware.
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Memory Tier Reassignment
-> > > > > > > > > > ========================
-> > > > > > > > > >
-> > > > > > > > > > After a memory node is hot-removed, it can be hot-added back to a
-> > > > > > > > > > different memory tier.  This is useful for supporting dynamically
-> > > > > > > > > > provisioned CXL.mem NUMA nodes, which may connect to different
-> > > > > > > > > > memory devices across hot-plug events.  Such tier changes should
-> > > > > > > > > > be compatible with tier-based memory accounting.
-> > > > > > > > > >
-> > > > > > > > > > The userspace may also reassign an existing online memory node to a
-> > > > > > > > > > different tier.  However, this should only be allowed when no pages
-> > > > > > > > > > are allocated from the memory node or when there are no non-root
-> > > > > > > > > > memory cgroups (e.g. during the system boot).  This restriction is
-> > > > > > > > > > important for keeping memory tier hierarchy stable enough for
-> > > > > > > > > > tier-based memory cgroup accounting.
-> > > > > > > > > >
-> > > > > > > > > > Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Memory Allocation for Demotion
-> > > > > > > > > > ==============================
-> > > > > > > > > >
-> > > > > > > > > > To allocate a new page as the demotion target for a page, the kernel
-> > > > > > > > > > calls the allocation function (__alloc_pages_nodemask) with the
-> > > > > > > > > > source page node as the preferred node and the union of all lower
-> > > > > > > > > > tier nodes as the allowed nodemask.  The actual target node selection
-> > > > > > > > > > then follows the allocation fallback order that the kernel has
-> > > > > > > > > > already defined.
-> > > > > > > > > >
-> > > > > > > > > > The pseudo code looks like:
-> > > > > > > > > >
-> > > > > > > > > >     targets = NODE_MASK_NONE;
-> > > > > > > > > >     src_nid = page_to_nid(page);
-> > > > > > > > > >     src_tier = node_tier_map[src_nid];
-> > > > > > > > > >     for (i = src_tier + 1; i < MAX_MEMORY_TIERS; i++)
-> > > > > > > > > >             nodes_or(targets, targets, memory_tiers[i]);
-> > > > > > > > > >     new_page = __alloc_pages_nodemask(gfp, order, src_nid, targets);
-> > > > > > > > > >
-> > > > > > > > > > The memopolicy of cpuset, vma and owner task of the source page can
-> > > > > > > > > > be set to refine the demotion target nodemask, e.g. to prevent
-> > > > > > > > > > demotion or select a particular allowed node as the demotion target.
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Memory Allocation for Promotion
-> > > > > > > > > > ===============================
-> > > > > > > > > >
-> > > > > > > > > > The page allocation for promotion is similar to demotion, except that (1)
-> > > > > > > > > > the target nodemask uses the promotion tiers, (2) the preferred node can
-> > > > > > > > > > be the accessing CPU node, not the source page node.
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Examples
-> > > > > > > > > > ========
-> > > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > ...
-> > > > > > > > >
-> > > > > > > > > > * Example 3:
-> > > > > > > > > >
-> > > > > > > > > > Node 0 & 1 are DRAM nodes, Node 2 is a memory-only DRAM node.
-> > > > > > > > >
-> > > > > > > > > Node2 is drawn as pmem.
-> > > > > > > >
-> > > > > > > > Typo. Good catch.
-> > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > All nodes are in the same tier.
-> > > > > > > > > >
-> > > > > > > > > >                   20
-> > > > > > > > > >   Node 0 (DRAM)  ----  Node 1 (DRAM)
-> > > > > > > > > >          \                 /
-> > > > > > > > > >           \ 30            / 30
-> > > > > > > > > >            \             /
-> > > > > > > > > >              Node 2 (PMEM)
-> > > > > > > > > >
-> > > > > > > > > > node distances:
-> > > > > > > > > > node   0    1    2
-> > > > > > > > > >    0  10   20   30
-> > > > > > > > > >    1  20   10   30
-> > > > > > > > > >    2  30   30   10
-> > > > > > > > > >
-> > > > > > > > > > $ cat /sys/devices/system/memtier/memtier*/nodelist
-> > > > > > > > > > <empty>
-> > > > > > > > > > 0-2
-> > > > > > > > > > <empty>
-> > > > > > > > > >
-> > > > > > > > > > $ cat /sys/devices/system/node/node*/memtier
-> > > > > > > > > > 1
-> > > > > > > > > > 1
-> > > > > > > > > > 1
-> > > > > > > > > >
-> > > > > > > > > > Demotion fallback order:
-> > > > > > > > > > node 0: empty
-> > > > > > > > > > node 1: empty
-> > > > > > > > > > node 2: empty
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > * Example 4:
-> > > > > > > > > >
-> > > > > > > > > > Node 0 is a DRAM node with CPU.
-> > > > > > > > > > Node 1 is a PMEM node.
-> > > > > > > > > > Node 2 is a GPU node.
-> > > > > > > > > >
-> > > > > > > > > >                   50
-> > > > > > > > > >   Node 0 (DRAM)  ----  Node 2 (GPU)
-> > > > > > > > > >          \                 /
-> > > > > > > > > >           \ 30            / 60
-> > > > > > > > > >            \             /
-> > > > > > > > > >              Node 1 (PMEM)
-> > > > > > > > > >
-> > > > > > > > > > node distances:
-> > > > > > > > > > node   0    1    2
-> > > > > > > > > >    0  10   30   50
-> > > > > > > > > >    1  30   10   60
-> > > > > > > > > >    2  50   60   10
-> > > > > > > > > >
-> > > > > > > > > > $ cat /sys/devices/system/memtier/memtier*/nodelist
-> > > > > > > > > > 2
-> > > > > > > > > > 0
-> > > > > > > > > > 1
-> > > > > > > > > >
-> > > > > > > > > > $ cat /sys/devices/system/node/node*/memtier
-> > > > > > > > > > 1
-> > > > > > > > > > 2
-> > > > > > > > > > 0
-> > > > > > > > > >
-> > > > > > > > > > Demotion fallback order:
-> > > > > > > > > > node 0: 1
-> > > > > > > > > > node 1: empty
-> > > > > > > > > > node 2: 0, 1
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > * Example 5:
-> > > > > > > > > >
-> > > > > > > > > > Node 0 is a DRAM node with CPU.
-> > > > > > > > > > Node 1 is a GPU node.
-> > > > > > > > > > Node 2 is a PMEM node.
-> > > > > > > > > > Node 3 is a large, slow DRAM node without CPU.
-> > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > >      Node 2 (PMEM)  ----
-> > > > > > > > > >    /      |              \
-> > > > > > > > > >   /       | 30            \ 120
-> > > > > > > > > >  |        |         100    \
-> > > > > > > > > >  |   Node 0 (DRAM)  ----  Node 1 (GPU)
-> > > > > > > > > >   \         \                 /
-> > > > > > > > > >     \        \ 40            / 110
-> > > > > > > > > >   80  \       \             /
-> > > > > > > > > >         ---  Node 3 (Slow DRAM)
-> > > > > > > > >
-> > > > > > > > > This is close but not quite what was intended for Hesham's
-> > > > > > > > > example... (note we just checked that Hesham's original node0-1
-> > > > > > > > > timing didn't make any sense.).
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > This was inspired by Hesham's example. But I should have also included
-> > > > > > > > the version that illustrates the need to skip a tier when demoting
-> > > > > > > > from certain nodes.
-> > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > node distances:
-> > > > > > > > > > node    0    1    2    3
-> > > > > > > > > >    0   10  100   30   40
-> > > > > > > > > >    1  100   10  120  110
-> > > > > > > > > >    2   30  120   10   80
-> > > > > > > > > >    3   40  110   80   10
-> > > > > > > > > >
-> > > > > > > > > > $ cat /sys/devices/system/memtier/memtier*/nodelist
-> > > > > > > > > > 1
-> > > > > > > > > > 0,3
-> > > > > > > > > > 2
-> > > > > > > > > >
-> > > > > > > > > > $ cat /sys/devices/system/node/node*/memtier
-> > > > > > > > > > 1
-> > > > > > > > > > 0
-> > > > > > > > > > 2
-> > > > > > > > > > 1
-> > > > > > > > > >
-> > > > > > > > > > Demotion fallback order:
-> > > > > > > > > > node 0: 2
-> > > > > > > > > > node 1: 0, 3, 2
-> > > > > > > > > > node 2: empty
-> > > > > > > > > > node 3: 2
-> > > > > > > > >
-> > > > > > > > > This is close but not quite the same as the example
-> > > > > > > > > Hesham gave (note the node timing 1 to 0 on in the table
-> > > > > > > > > with that example didn't make sense).  I added another
-> > > > > > > > > level of switching to make the numbers more obviously
-> > > > > > > > > different and show how critical it might be.
-> > > > > > > > >
-> > > > > > > > > * Example 6:
-> > > > > > > > >
-> > > > > > > > > Node 0 is a DRAM node with CPU.
-> > > > > > > > > Node 1 is a GPU node.
-> > > > > > > > > Node 2 is a PMEM node.
-> > > > > > > > > Node 3 is an extremely large, DRAM node without CPU.
-> > > > > > > > >   (Key point here being that it probably never makes sense
-> > > > > > > > >    to demote to anywhere else from this memory).
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > I've redone the timings wrt to example 5.
-> > > > > > > > > Basis for this is 0 and 2 are directly connected
-> > > > > > > > > via controllers in an SoC. 1 and 3 are connected
-> > > > > > > > > via a a common switch one switch down switch
-> > > > > > > > > (each hop via this is 100)
-> > > > > > > > > All drams cost 10 once you've reached correct node
-> > > > > > > > > and pmem costs 30 from SoC.
-> > > > > > > > > Numbers get too large as a result but meh, I'm making
-> > > > > > > > > a point not providing real numbers :)
-> > > > > > > > >
-> > > > > > > > >          PMEM Node 2
-> > > > > > > > >             |(30)
-> > > > > > > > >         CPU + DRAM Node0
-> > > > > > > > >             |(100)
-> > > > > > > > >          Switch 1
-> > > > > > > > >             |(100)
-> > > > > > > > >           Switch 2
-> > > > > > > > >     (100)  |      |(100)
-> > > > > > > > > Node 1 GPU     Node3 Large memory.
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > With one level of s
-> > > > > > > > >
-> > > > > > > > >      Node 2 (PMEM)  ----
-> > > > > > > > >     /      |              \
-> > > > > > > > >    /       | 30            \ 330
-> > > > > > > > >   |        |         310    \
-> > > > > > > > >   |   Node 0 (DRAM)  ----  Node 1 (GPU)
-> > > > > > > > >    \         \                 /
-> > > > > > > > >      \        \ 310           / 210
-> > > > > > > > >    330 \       \             /
-> > > > > > > > >          ---  Node 3 (Extremely large DRAM)
-> > > > > > > > >
-> > > > > > > > > To my mind, we should potentially also take into account
-> > > > > > > > > the fact that Node3 can be known to never contain CPUs
-> > > > > > > > > (in at least some architectures we know where the CPUs
-> > > > > > > > >  might be added later, they can't just magically turn up
-> > > > > > > > >  anywhere in the topology).
-> > > > > > > > >
-> > > > > > > > > node distances:
-> > > > > > > > > node    0    1    2    3
-> > > > > > > > >     0   10   310  30   310
-> > > > > > > > >     1   310  10   330  210
-> > > > > > > > >     2   30   330  10   330
-> > > > > > > > >     3   310  210  330   10
-> > > > > > > > >
-> > > > > > > > > So, my ideal would treat node 3 different from other dram nodes
-> > > > > > > > > as we know it can't have CPUs. Trying to come up with an
-> > > > > > > > > always correct order for nodes 3 and 2 is tricky as to a certain
-> > > > > > > > > extent depends on capacity. If node 2 was  big enough to take
-> > > > > > > > > any demotion from node 0 and still have lots of room then demoting
-> > > > > > > > > there form node 3 would make sense and visa versa.
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > >  $ cat /sys/devices/system/memtier/memtier*/nodelist
-> > > > > > > > >  1
-> > > > > > > > >  0
-> > > > > > > > >  2
-> > > > > > > > >  3
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > >  $ cat /sys/devices/system/node/node*/memtier
-> > > > > > > > >   1
-> > > > > > > > >   0
-> > > > > > > > >   2
-> > > > > > > > >   3
-> > > > > > > > >
-> > > > > > > > >  Demotion fallback order:
-> > > > > > > > >  node 0: 2, 3
-> > > > > > > > >  node 1: 3, 0, 2 (key being we will almost always have less pressure on node 3)
-> > > > > > > > >  node 2: 3
-> > > > > > > > >  node 3: empty
-> > > > > > > > >
-> > > > > > > > > or as Hesham just pointed out this can be done with 3 tiers
-> > > > > > > > > because we can put the GPU and CPU in the same tier because
-> > > > > > > > > their is little reason to demote from one to the other.
-> > > > > > > >
-> > > > > > > > Thank you for the example.  It makes sense to me to have node 3 on its
-> > > > > > > > own tier.  We can have either 3 tiers or 4 tiers in total (assuming
-> > > > > > > > that the max number of tiers is a config option).
-> > > > > > > >
-> > > > > > > > > We are also a bit worried about ABI backwards compatibility because
-> > > > > > > > > of potential need to make more space in tiers lower in number than
-> > > > > > > > > CPU attached DDR. I rather liked the negative proposal with
-> > > > > > > > > default as 0 that Huang, Ying made.
-> > > > > > > >
-> > > > > > > > It is hard to have negative values as the device IDs.
-> > > > > > > >
-> > > > > > > > The current proposal equals the tier device ID to the tier hierarchy
-> > > > > > > > level, which makes the interface simpler, but less flexible.  How
-> > > > > > > > about the following proposal (which decouples the tier device ID from
-> > > > > > > > the tier level)?
-> > > > > > > >
-> > > > > > > > /sys/devices/system/memtier/memtierN/nodelist
-> > > > > > > > /sys/devices/system/memtier/memtierN/rank
-> > > > > > > >
-> > > > > > > > Each memory tier N has two sysfs files:
-> > > > > > > > - nodelist: the nodes that are in this tier
-> > > > > > > > - rank: an opaque value that helps decide the level at which this tier
-> > > > > > > > is in the tier hierarchy (smaller value means faster tier)
-> > > > > > > >
-> > > > > > > > The tier hierarchy is determined by "rank", not by the device id
-> > > > > > > > number N from "memtierN".
-> > > > > > > >
-> > > > > > > > The absolute value of "rank" of a memtier doesn't necessarily carry
-> > > > > > > > any meaning. Its value relative to other memtiers decides the level of
-> > > > > > > > this memtier in the tier hierarchy.
-> > > > > > > >
-> > > > > > > > The CPU-attached DRAM nodes are always in memtier0 (the device ID),
-> > > > > > > > but memtier0 may not always be the top-tier, e.g. its level can be 3
-> > > > > > > > in a 5-tier system.
-> > > > > > > >
-> > > > > > > > For the above example (example 6), we can have:
-> > > > > > > >
-> > > > > > > > $ ls /sys/devices/system/memtier
-> > > > > > > > memtier0
-> > > > > > > > memtier1
-> > > > > > > > memtier2
-> > > > > > > > memtier128
-> > > > > > > >
-> > > > > > > > $ cat /sys/devices/system/memtier/memtier*/rank
-> > > > > > > > 50
-> > > > > > > > 60
-> > > > > > > > 70
-> > > > > > > > 10
-> > > > > > >
-> > > > > > > I understand that the device ID cannot be negtive.  So we have to use
-> > > > > > > rank.  Can we make it possible to allow "rank" to be negtive?
-> > > > > >
-> > > > > > It is possible to allow "rank" to be negative, though I think all
-> > > > > > positive values should work equally well.
-> > > > > >
-> > > > > > > Another choice is to do some trick on device ID.  For example, the CPU-
-> > > > > > > attached DRAM node are always memtier100 (the device ID).  Then we can
-> > > > > > > have memtier99, memtier100, memtier101, memteri102, ....  That's not
-> > > > > > > perfect too.
-> > > > > >
-> > > > > > If we go with the device ID tricks, one approach is to use sub-device IDs:
-> > > > > >
-> > > > > > - There are 3 major tiers: tier0 (e.g. GPU), tier1 (e.g.DRAM) and
-> > > > > > tier2 (e.g. PMEM).
-> > > > > >
-> > > > > > - Each major tier can have minor tiers, e.g. tier0.0, tier1.0,
-> > > > > > tier1.1, tier2.0, tier2.1.
-> > > > > >
-> > > > > > The earlier 4-tier example can be represented as:
-> > > > > >
-> > > > > > memtier0.0 -> memtier1.0 -> memtier2.0 -> memtier2.1
-> > > > > >
-> > > > > > We can also omit .0 so that the tiers are:
-> > > > > >
-> > > > > > memtier0 -> memtier1 -> memtier2 -> memtier2.1
-> > > > > >
-> > > > > > This should be flexible enough to support multiple tiers while keeping
-> > > > > > the tier IDs relatively stable.
-> > > > > >
-> > > > > > It is not as flexible as the rank approach. For example, to insert a
-> > > > > > new tier between 2.0 and 2.1, we need to add a tier 2.2 and reassign
-> > > > > > existing nodes to these 3 tiers.  Using "rank", we can insert a new
-> > > > > > tier and only move desired nodes into the new tier.
-> > > > > >
-> > > > > > What do you think?
-> > > > >
-> > > > > The rank approach looks better for.  And if we stick with the device ID
-> > > > > rule as follows,
-> > > > >
-> > > > > ...
-> > > > > 255     GPU
-> > > > > 0       DRAM
-> > > > > 1       PMEM
-> > > > > 2
-> > > > > ...
-> > > > >
-> > > > > 255 is -1 for "s8".
-> > > > >
-> > > > > The device ID should do most tricks at least now.  The rank can provide
-> > > > > more flexibility in the future.  We can even go without rank in the
-> > > > > first version, and introduce it when it's necessary.
-> > > >
-> > > > Given that the "rank" approach is generally favored, let's go with
-> > > > that to avoid compatibility issues that may come from the switch of
-> > > > device ID tricks to ranks.
-> > >
-> > > OK.  Just to confirm.  Does this mean that we will have fixed device ID,
-> > > for example,
-> > >
-> > > GPU                     memtier255
-> > > DRAM (with CPU)         memtier0
-> > > PMEM                    memtier1
-> > >
-> > > When we add a new memtier, it can be memtier254, or memter2?  The rank
-> > > value will determine the real demotion order.
-> >
-> > With the rank approach, the device ID numbering should be flexible and
-> > not mandated by the proposal.
->
-> If so, the rank number will be fixed?  For example,
->
-> GPU                     100
-> DRAM (with CPU)         200
-> PMEM                    300
->
-> When we add a new memtier, its rank can be 50, 150, 250, or 400?
->
-> If so, this makes me think why we don't just make this kind of rank the
-> device ID?  Or I missed something?
->
-> Or, both device IDs and rank values are not fixed?  Why do we need that
-> kind of flexibility?  Sorry, I may not undersand all requirements.
+From: Peng Fan <peng.fan@nxp.com>
 
-Even though the proposal doesn't mandate a particular device ID
-numbering, I expect that the device IDs will be relatively stable once
-a kernel implementation is chosen. For example, it is likely that DRAM
-nodes with CPUs will always be on memtier1, no matter how many tiers
-are higher or lower than these nodes.
+dma-controller is preferred for dma node.
 
-We don't need to mandate a particular way to assign the rank values,
-either.  What matters is the relative order and some reasonable gap
-between these values.
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi | 2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi | 2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-The rank approach allows us to keep memtier device IDs relatively
-stable even though we may change the tier ordering among them.  Its
-flexibility can have many other uses as well.  For example, we can
-insert a new memtier into the tier hierarchy for a new set of nodes
-without affecting the node assignment of any existing memtier,
-provided that there is enough gap in the rank values for the new
-memtier.
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
+index 50a72cda4727..f96df39d5533 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1012a.dtsi
+@@ -465,7 +465,7 @@ QORIQ_CLK_PLL_DIV(4)>,
+ 			status = "disabled";
+ 		};
+ 
+-		edma0: edma@2c00000 {
++		edma0: dma-controller@2c00000 {
+ 			#dma-cells = <2>;
+ 			compatible = "fsl,vf610-edma";
+ 			reg = <0x0 0x2c00000 0x0 0x10000>,
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
+index 21200cbf7161..d91793d113eb 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1043a.dtsi
+@@ -784,7 +784,7 @@ wdog0: watchdog@2ad0000 {
+ 			big-endian;
+ 		};
+ 
+-		edma0: edma@2c00000 {
++		edma0: dma-controller@2c00000 {
+ 			#dma-cells = <2>;
+ 			compatible = "fsl,vf610-edma";
+ 			reg = <0x0 0x2c00000 0x0 0x10000>,
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
+index 0085e83adf65..46285b5710df 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1046a.dtsi
+@@ -683,7 +683,7 @@ wdog0: watchdog@2ad0000 {
+ 			big-endian;
+ 		};
+ 
+-		edma0: edma@2c00000 {
++		edma0: dma-controller@2c00000 {
+ 			#dma-cells = <2>;
+ 			compatible = "fsl,vf610-edma";
+ 			reg = <0x0 0x2c00000 0x0 0x10000>,
+-- 
+2.25.1
 
-Using the rank value directly as the device ID has some disadvantages:
-- It is kind of unconventional to number devices in this way.
-- We cannot assign DRAM nodes with CPUs with a specific memtier device
-ID (even though this is not mandated by the "rank" proposal, I expect
-the device will likely always be memtier1 in practice).
-- It is possible that we may eventually allow the rank value to be
-modified as a way to adjust the tier ordering.  We cannot do that
-easily for device IDs.
-> Best Regards,
-> Huang, Ying
->
-> > > I think you may need to send v3 to make sure everyone is at the same
-> > > page.
-> >
-> > Will do it shortly.
->
-> Good!  Thanks!
->
-> Best Regards,
-> Huang, Ying
->
-> > > Best Regards,
-> > > Huang, Ying
-> > >
-> > > > > Best Regards,
-> > > > > Huang, Ying
-> > > > >
-> > > > > > > > The tier order: memtier128 -> memtier0 -> memtier1 -> memtier2
-> > > > > > > >
-> > > > > > > > $ cat /sys/devices/system/memtier/memtier*/nodelist
-> > > > > > > > 0
-> > > > > > > > 2
-> > > > > > > > 3
-> > > > > > > > 1
-> > > > > > > >
-> > > > > > > > $ ls -l /sys/devices/system/node/node*/memtier
-> > > > > > > > /sys/devices/system/node/node0/memtier -> /sys/devices/system/memtier/memtier0
-> > > > > > > > /sys/devices/system/node/node1/memtier -> /sys/devices/system/memtier/memtier128
-> > > > > > > > /sys/devices/system/node/node2/memtier -> /sys/devices/system/memtier/memtier1
-> > > > > > > > /sys/devices/system/node/node3/memtier -> /sys/devices/system/memtier/memtier2
-> > > > > > > >
-> > > > > > > > To override the memory tier of a node, we can use a new, write-only,
-> > > > > > > > per-node interface file:
-> > > > > > > >
-> > > > > > > > /sys/devices/system/node/nodeN/set_memtier
-> > > > > > > >
-> > > > > > > > e.g.
-> > > > > > > >
-> > > > > > > > $ echo "memtier128" > sys/devices/system/node/node1/set_memtier
-> > > > > > >
-> > > > > > > I prefer the original proposal to make nodeX/memtier a normal file to
-> > > > > > > hold memtier devicde ID instead of a link.
-> > > > > >
-> > > > > > OK. We don't have to use a symlink.
-> > > > > >
-> > > > > > > Best Regards,
-> > > > > > > Huang, Ying
-> > > > > > >
-> > > > > > > > Any comments?
-> > > > > > > >
-> > > > > > > > > Jonathan
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > >
-> > > > >
-> > > > >
-> > >
-> > >
->
->

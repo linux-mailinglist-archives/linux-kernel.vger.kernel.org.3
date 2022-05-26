@@ -2,138 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C6353532F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EB8535331
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345617AbiEZSOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 14:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S1346067AbiEZSPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243262AbiEZSOa (ORCPT
+        with ESMTP id S243262AbiEZSPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 14:14:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41A2FB2272
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653588868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y+/f5rCCX5O2YnIFMqX5A6PQPJ8kjAWayKsnZFb/i6I=;
-        b=gKn7O7G5OA7hIJFsDEqJexdpHcm2myK5PWfPkyTEb+USWkOq5JMajWpCktUdXFeAob2RgN
-        u7u8QsHj69sLrV8BLUomhHQaxQfvh5waMl8JcqQDWouXYBCsHfVbnN7tF9TYOk+ARDliOI
-        P/Fi3Vw91w0uR3+Sp+fSHvR5Pe0sU3c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-331-QGQMv57xNBOCTKB7phssCw-1; Thu, 26 May 2022 14:14:24 -0400
-X-MC-Unique: QGQMv57xNBOCTKB7phssCw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5631E801228;
-        Thu, 26 May 2022 18:14:24 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.18.25.210])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 285D2400F3E8;
-        Thu, 26 May 2022 18:14:24 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id D98762208FA; Thu, 26 May 2022 14:14:23 -0400 (EDT)
-Date:   Thu, 26 May 2022 14:14:23 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Dharmendra Singh <dharamhans87@gmail.com>, miklos@szeredi.hu,
-        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [PATCH v3 1/1] FUSE: Allow non-extending parallel direct writes
- on the same file.
-Message-ID: <Yo/DfzU7IXZbADK5@redhat.com>
-References: <20220520043443.17439-1-dharamhans87@gmail.com>
- <20220520043443.17439-2-dharamhans87@gmail.com>
- <Yo6SBoEgGgnNQv8W@redhat.com>
- <3350e4e2-bad5-7f2f-2b09-c1807815a29c@ddn.com>
+        Thu, 26 May 2022 14:15:22 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741F0B2272;
+        Thu, 26 May 2022 11:15:21 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id x2-20020a17090a1f8200b001e07a64c461so5072292pja.4;
+        Thu, 26 May 2022 11:15:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6qtpXMNwSeKb2/ZB0dn4b9L5gJCZbExzN3Ar6qUIAGk=;
+        b=DvngC5Bk5mSGIVEwnc//TJTs6pULwXNDU5y3gFp4sI2ZDCXte23y1tV1Vb4ZPYlkqC
+         aTfWZl2UvanZ6Xz/ozofK9h1prT+sIi0W6zZqomwx7FPYOdZQItLDJJIu3pOUOL5Xtg0
+         VyYRokizo6Ar77W4aMzNK0Vdz5OzizMyUafqvlWqERKtiJuqHzXNc3vfWCoGxyO0P+Sr
+         JeAP7D1jg66OsWSSGebw1QRpMfN4O8dhRQz0Zqie3pkqGDp83GXkni1SXi98ctQ3catV
+         /rINz2RtcTf2We8eYodn0tL6fzO/3A1gPPEhFRrFoq4GUTKuOtNuRZvz1ea3mTADZsyf
+         Doug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=6qtpXMNwSeKb2/ZB0dn4b9L5gJCZbExzN3Ar6qUIAGk=;
+        b=UQ8MNBG0ylzGUgdoBldJgJlqudqb0+4cLdKn9ua03ELWT39l5e0PaVWHyLVR34pyYV
+         FvJQI9j6v3S5dLzDehWj3DaHo/l80ReWI8+2uZ7k2ZMquii+rV+C8vpGEy2fQzn0vH2z
+         LHEWLu0fDjWr9Z0RxEl8hb9w1kG5JSNTt/qJ/o1dRSxdW3JaEHvJhefpK0755sf965oD
+         547T3HhRkvlAzhgt3LzYxNp/NrzXdBAl+uvdi6L/TJYxKgqhrvDyfB6tydYeyMhPc/b3
+         kjuDSsh2bz09aOIzL2Ozq138swihG+FITj/tQshFhvP7HwrRw9grwhkPbKVAosWSM+Pu
+         TEww==
+X-Gm-Message-State: AOAM5308EXYdsn6RY8uB67Ayw1uj2ED2S+rTsI1yBxz0qxgQH2ftKV6/
+        4Lx5GcfqCqej+gMnw9T/VrA=
+X-Google-Smtp-Source: ABdhPJw0HR5gUdv0QEXdguE37Xg14Jx1/rHIBI+LfikekeFeDFtlCQ/k6Bp1iS+4Wy53FGQQ+UKKug==
+X-Received: by 2002:a17:90b:4b05:b0:1df:db8a:1fcb with SMTP id lx5-20020a17090b4b0500b001dfdb8a1fcbmr3913425pjb.54.1653588920857;
+        Thu, 26 May 2022 11:15:20 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:aafd])
+        by smtp.gmail.com with ESMTPSA id 66-20020a17090a09c800b001d7dd00c231sm1830156pjo.22.2022.05.26.11.15.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 11:15:20 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 26 May 2022 08:15:18 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+Message-ID: <Yo/DtjEU/kYr190u@slm.duckdns.org>
+References: <20220525151517.8430-1-mkoutny@suse.com>
+ <20220525151517.8430-3-mkoutny@suse.com>
+ <20220525161455.GA16134@blackbody.suse.cz>
+ <Yo7KfEOz92kS2z5Y@blackbook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <3350e4e2-bad5-7f2f-2b09-c1807815a29c@ddn.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yo7KfEOz92kS2z5Y@blackbook>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 10:49:49PM +0200, Bernd Schubert wrote:
-> 
-> 
-> On 5/25/22 22:31, Vivek Goyal wrote:
-> > On Fri, May 20, 2022 at 10:04:43AM +0530, Dharmendra Singh wrote:
-> > > From: Dharmendra Singh <dsingh@ddn.com>
-> > > 
-> > > In general, as of now, in FUSE, direct writes on the same file are
-> > > serialized over inode lock i.e we hold inode lock for the full duration
-> > > of the write request. I could not found in fuse code a comment which
-> > > clearly explains why this exclusive lock is taken for direct writes.
-> > > Our guess is some USER space fuse implementations might be relying
-> > > on this lock for seralization and also it protects for the issues
-> > > arising due to file size assumption or write failures.  This patch
-> > > relaxes this exclusive lock in some cases of direct writes.
-> > 
-> > I have this question as well. My understanding was that in general,
-> > reads can do shared lock while writes have to take exclusive lock.
-> > And I assumed that extends to both buffered as well as direct
-> > writes.
-> > 
-> > I would also like to understand what's the fundamental restriction
-> > and why O_DIRECT is special that this restriction does not apply.
-> > 
-> > Is any other file system doing this as well?
-> > 
-> > If fuse server dir is shared with other fuse clients, it is possible
-> > that i_size in this client is stale. Will that be a problem. I guess
-> > if that's the problem then, even a single write will be a problem
-> > because two fuse clients might be trying to write.
-> > 
-> > Just trying to make sure that it is safe to allow parallel direct
-> > writes.
-> 
-> I think missing in this series is to add a comment when this lock is needed
-> at all. Our network file system is log structured - any parallel writes to
-> the same file from different remote clients are handled through addition of
-> fragments on the network server side - lockless safe due to byte level
-> accuracy. With the exception of conflicting writes - last client wins -
-> application is then doing 'silly' things - locking would not help either.
-> And random parallel writes from the same (network) client are even an ideal
-> case for us, as that is handled through shared blocks for different
-> fragments (file offset + len). So for us shared writes are totally safe.
-> 
-> When Dharmendra and I discussed about the lock we came up with a few write
-> error handling cases where that lock might be needed - I guess that should
-> be added as comment.
+Hello, Michal.
 
-Right, please add the changelogs to make thought process clear.
+On Thu, May 26, 2022 at 11:56:34AM +0200, Michal Koutný wrote:
+> // ref=A: initial state
+> kill_css()
+>   css_get // ref+=F == A+F: fuse
+>   percpu_ref_kill_and_confirm
+>     __percpu_ref_switch_to_atomic
+>       percpu_ref_get
+>         // ref += 1 == A+F+1: atomic mode, self-protection
+>     percpu_ref_put
+>       // ref -= 1 == A+F: kill the base reference
+>   [via rcu]
+>   percpu_ref_switch_to_atomic_rcu
+>     percpu_ref_call_confirm_rcu
+>       css_killed_ref_fn == refcnt.confirm_switch
+>         queue_work(css->destroy_work)        (1)
+>                                                      [via css->destroy_work]
+>                                                      css_killed_work_fn == wq.func
+>                                                        offline_css() // needs fuse
+>                                                        css_put // ref -= F == A: de-fuse
+>       percpu_ref_put
+>         // ref -= 1 == A-1: remove self-protection
+>         css_release                                   // A <= 1 -> 2nd queue_work explodes!
 
-So there are no restrictions on the fuse client side from parallelism
-point of view on direct write path? 
+I'm not sure I'm following it but it's perfectly fine to re-use the work
+item at this point. The work item actually can be re-cycled from the very
+beginning of the work function. The only thing we need to make sure is that
+we don't css_put() prematurely to avoid it being freed while we're using it.
 
-Why file extending writes are not safe? Is this a restriction from
-fuse client point of view or just being safe from server point of view.
-If fuse user space is talking to another filesystem, I guess then it
-is not problem because that filesystem will take care of locking as
-needed.
+For the sharing to be a problem, we should be queueing the release work item
+while the destroy instance is still pending, and if that is the case, it
+doesn't really matter whether we use two separate work items or not. We're
+already broken and would just be shifting the problem to explode elsewhere.
 
-I see ext4 is allowing parallel direct writes for certain cases. And
-where they can't allow it, they have documented it in comments.
-(ext4_dio_write_checks()). I think we need similar rationalization,
-especially from fuse client's perspective and have comments in code
-and specify when it is ok to have parallel direct writes and when it
-is not ok and why. This will help people when they are looking at
-the code later.
+The only possibility that I can think of is that somehow we're ending up
+with an extra css_put() somewhere thus triggering the release path
+prematurely. If that's the case, we'll prolly need to trace get/puts to find
+out who's causing the ref imbalance.
 
-Thanks
-Vivek
+Thanks.
 
+-- 
+tejun

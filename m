@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF855347C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239CD5347C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345330AbiEZBD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S1345496AbiEZBEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345387AbiEZBDy (ORCPT
+        with ESMTP id S235621AbiEZBEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:03:54 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B95B8D6AE
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:03:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VEPlGvz_1653527024;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VEPlGvz_1653527024)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 26 May 2022 09:03:45 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2] erofs: leave compressed inodes unsupported in fscache mode for now
-Date:   Thu, 26 May 2022 09:03:44 +0800
-Message-Id: <20220526010344.118493-1-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 25 May 2022 21:04:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5E58D691;
+        Wed, 25 May 2022 18:04:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653527070; x=1685063070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o9Dut7uwRK4DimJ5k0okbFXL72hzra19bcCoT9j7B4s=;
+  b=mFNXTHGVSsEkel2jdOWQMP1UDW8ZO06zketPhX60ZAoPa6tsvBDHjc2Q
+   fia5l9ovVrukOwvqOaip8zVgOoVpxuSk+YOxbF6277DCqAgkslcqJ5C09
+   JO4RVKb3EUCa2XnCsHtmnV6bkH60mdSzyikyayuXY9eiKyV0gtqp6EKEo
+   qfeQYFjl/E30wfX1/+ZRguEaoQgdvuywb7+hAcidNhanI+tcPZlVs1pjA
+   fJvWEvMwGBlQxeXuyqtg5EX78RJ0KE/ELLDANn4w6ZgXW0Gs2sotyWdZc
+   WQRwySMVo3vJCcXwj1SsRmnfM7OULFjd+Vub1sxA1SXJ70dlU+H0td0a4
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="253854254"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="253854254"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:04:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="559940686"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga002.jf.intel.com with ESMTP; 25 May 2022 18:04:27 -0700
+Date:   Thu, 26 May 2022 09:04:26 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Lei Wang <lei4.wang@intel.com>
+Subject: Re: [PATCH 1/2] KVM: VMX: Sanitize VM-Entry/VM-Exit control pairs at
+ kvm_intel load time
+Message-ID: <20220526010426.aayo3qmgylatnkdt@yy-desk-7060>
+References: <20220525210447.2758436-1-seanjc@google.com>
+ <20220525210447.2758436-2-seanjc@google.com>
+ <20220525232744.e6g77merw7pita3s@yy-desk-7060>
+ <Yo7M95ILNsHSBtqj@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yo7M95ILNsHSBtqj@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-erofs over fscache doesn't support the compressed layout yet. It will
-cause NULL crash if there are compressed inodes contained when working
-in fscache mode.
+On Thu, May 26, 2022 at 12:42:31AM +0000, Sean Christopherson wrote:
+> On Thu, May 26, 2022, Yuan Yao wrote:
+> > On Wed, May 25, 2022 at 09:04:46PM +0000, Sean Christopherson wrote:
+> > > @@ -2614,6 +2635,20 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+> > >  				&_vmentry_control) < 0)
+> > >  		return -EIO;
+> > >
+> > > +	for (i = 0; i < ARRAY_SIZE(vmcs_entry_exit_pairs); i++) {
+> > > +		u32 n_ctrl = vmcs_entry_exit_pairs[i].entry_control;
+> > > +		u32 x_ctrl = vmcs_entry_exit_pairs[i].exit_control;
+> > > +
+> > > +		if (!(_vmentry_control & n_ctrl) == !(_vmexit_control & x_ctrl))
+> > > +			continue;
+> > > +
+> > > +		pr_warn_once("Inconsistent VM-Entry/VM-Exit pair, entry = %x, exit = %x\n",
+> > > +			     _vmentry_control & n_ctrl, _vmexit_control & x_ctrl);
+> >
+> > How about "n_ctrl, x_ctrl);" ? In 0/1 or 1/0 case this
+> > outputs all information of real inconsistent bits but not 0.
+>
+> I thought about adding the stringified control name to the output (yay macros),
+> but opted for the simplest approach because this should be a very, very rare
+> event.  All the necessary info is there, it just takes a bit of leg work to get
+> from a single control bit to the related control name and finally to its pair.
+>
+> I'm not totally against printing more info, but if we're going to bother doing so,
+> my vote is to print names instead of numbers.
 
-So far in the erofs based container image distribution scenarios
-(RAFS v6), the compressed RAFS v6 images are downloaded and then
-decompressed on demand as an uncompressed erofs image. Then the erofs
-image is mounted in fscache mode for containers to use. IOWs, currently
-compressed data is decompressed on the userspace side instead and
-uncompressed erofs images will be finally cached.
-
-The fscache support for the compressed layout is still under
-development and it will be used for runtime decompression feature.
-Anyway, to avoid the potential crash, let's leave the compressed inodes
-unsupported in fscache mode until we support it later.
-
-Fixes: 1442b02b66ad ("erofs: implement fscache-based data read for non-inline layout")
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
- fs/erofs/inode.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-index bcc8335b46b3..95a403720e8c 100644
---- a/fs/erofs/inode.c
-+++ b/fs/erofs/inode.c
-@@ -288,7 +288,10 @@ static int erofs_fill_inode(struct inode *inode, int isdir)
- 	}
- 
- 	if (erofs_inode_is_data_compressed(vi->datalayout)) {
--		err = z_erofs_fill_inode(inode);
-+		if (!erofs_is_fscache_mode(inode->i_sb))
-+			err = z_erofs_fill_inode(inode);
-+		else
-+			err = -EOPNOTSUPP;
- 		goto out_unlock;
- 	}
- 	inode->i_mapping->a_ops = &erofs_raw_access_aops;
--- 
-2.27.0
-
+Agree for simplest approach because this should be rare event, thanks.

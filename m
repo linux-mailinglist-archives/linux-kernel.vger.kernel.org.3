@@ -2,126 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A81535583
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 856875355C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346470AbiEZVfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 17:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        id S1347749AbiEZVm7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 26 May 2022 17:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349159AbiEZVfI (ORCPT
+        with ESMTP id S229485AbiEZVm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 17:35:08 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0838A075
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:35:07 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id q18so2489966pln.12
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:35:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ps3rawoSWC/it4y6dQ5wsGYhp9yrFt3MHXORhqDfylw=;
-        b=J4QwXySm0FJ4pZkEFIwaOJRNdMEWqjoPUfIdvss0oDROz3t6t+POWBXXPL5ILLnR2k
-         OTsgFcHq5NDEljf0vTX6r5vVzxGsq4qlw+QBasZOptplqkHHeDNWkx6MXBMKpTez2w1X
-         BfTqzrSz/nV7Utt+cXazsHix/D1/PHLrH071OQdpZ37WFjk+aycNDMUSpK9sArxKDfaE
-         3gD/0UpCt2TolugIInhXmSPfF740c2mRxTd/8v/kqBSq2ZSGs15fgfmcB9NHE3jDdG2X
-         uVmDDYvgYz1khX0V4+Jr7RjUBP2BR5fZLvMSrVXiavnyZyZbvubg8yh00+YzHhC0dnVM
-         /ebQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ps3rawoSWC/it4y6dQ5wsGYhp9yrFt3MHXORhqDfylw=;
-        b=HVN7MVppEXuqIdvyRsdTbJMrHEVK4quPBE74konRoUP62zi0UFcv3dDDfC8KFPJZMQ
-         guPPgRywnfctFWNrT9Huj2g7DaTATZZZTSgqjQ+4i8i1a7szGIi6MMuzR6aVDrReYXG5
-         MU6NaZ8UelMg/PmMqlJX+VPex8GYMlKGY6aDTuEdgPA0wA00F1EFMGFl2VbqlyDiOUsE
-         CTm00LuLOEM7QD2EbPPrT/9WIUucjWabuo6DmYKSma3y0g3xK1oscYhzxGwfUvWnThcP
-         Y9oaFWR0/eLBFT8RaRYEwSJV5lMcr8hxp5SV3TDBv66xXgg7VSQ0qKRnNNQjZwGrCCgV
-         UarA==
-X-Gm-Message-State: AOAM530+p20M+ENPYt7wT7mx488EDhmpjZPZc7+4urMW3Ew+Kc6EmpWD
-        16WOpeK7XG09tTyHgOum9hD+Eya7v+3VOw==
-X-Google-Smtp-Source: ABdhPJxKo/nh9B7qBYXgWNYTcLxoD/M3nwN0MLuE2g2sW6Lv2TIAPNV4NTMGIW3muGPi6Rs5QsyOAA==
-X-Received: by 2002:a17:902:c94c:b0:162:2b70:110f with SMTP id i12-20020a170902c94c00b001622b70110fmr20126687pla.127.1653600906757;
-        Thu, 26 May 2022 14:35:06 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902eac400b001635dc81415sm2025134pld.289.2022.05.26.14.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 14:35:06 -0700 (PDT)
-Date:   Thu, 26 May 2022 21:35:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Lei Wang <lei4.wang@intel.com>
-Subject: Re: [PATCH 1/2] KVM: VMX: Sanitize VM-Entry/VM-Exit control pairs at
- kvm_intel load time
-Message-ID: <Yo/yhiVl++FTSa3S@google.com>
-References: <20220525210447.2758436-1-seanjc@google.com>
- <20220525210447.2758436-2-seanjc@google.com>
- <8baca98e-63d6-f7dd-067b-05f8e0dc381f@redhat.com>
+        Thu, 26 May 2022 17:42:56 -0400
+X-Greylist: delayed 119 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 May 2022 14:42:55 PDT
+Received: from mgw1.mx.zaq.ne.jp (fbsnd00103-jc.im.kddi.ne.jp [222.227.81.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50C3AFB32;
+        Thu, 26 May 2022 14:42:54 -0700 (PDT)
+Received: from mgw1.mx.zaq.ne.jp by osmta0002-jc.im.kddi.ne.jp with ESMTP
+          id <20220526213800089.OBYS.27398.mgw1.mx.zaq.ne.jp@omta0002.jcom.zaq.ne.jp>;
+          Fri, 27 May 2022 06:38:00 +0900
+Received: from [172.31.24.11] by dmta0002-jc.im.kddi.ne.jp with ESMTP
+          id <20220526213759514.UZVF.10774.[172.31.24.11]@dmta0002.jcom.zaq.ne.jp>;
+          Fri, 27 May 2022 06:37:59 +0900
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8baca98e-63d6-f7dd-067b-05f8e0dc381f@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Guten Tag
+To:     Recipients <ysylk172@jcom.zaq.ne.jp>
+From:   "Francis  Crespo" <ysylk172@jcom.zaq.ne.jp>
+Date:   Thu, 26 May 2022 21:36:03 +0000
+Reply-To: franciscoperezcre@gmail.com
+Message-Id: <20220526213759514.UZVF.10774.[172.31.24.11]@dmta0002.jcom.zaq.ne.jp>
+X-VC-DATE: Fri, 27 May 2022 06:38:00 +0900
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022, Paolo Bonzini wrote:
-> On 5/25/22 23:04, Sean Christopherson wrote:
-> > +#define VMCS_ENTRY_EXIT_PAIR(name, entry_action, exit_action) \
-> > +	{ VM_ENTRY_##entry_action##_##name, VM_EXIT_##exit_action##_##name }
-> > +
-> >   static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
-> >   				    struct vmx_capability *vmx_cap)
-> >   {
-> > @@ -2473,6 +2476,24 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
-> >   	u64 _cpu_based_3rd_exec_control = 0;
-> >   	u32 _vmexit_control = 0;
-> >   	u32 _vmentry_control = 0;
-> > +	int i;
-> > +
-> > +	/*
-> > +	 * LOAD/SAVE_DEBUG_CONTROLS are absent because both are mandatory.
-> > +	 * SAVE_IA32_PAT and SAVE_IA32_EFER are absent because KVM always
-> > +	 * intercepts writes to PAT and EFER, i.e. never enables those controls.
-> > +	 */
-> > +	struct {
-> > +		u32 entry_control;
-> > +		u32 exit_control;
-> > +	} vmcs_entry_exit_pairs[] = {
-> > +		VMCS_ENTRY_EXIT_PAIR(IA32_PERF_GLOBAL_CTRL, LOAD, LOAD),
-> > +		VMCS_ENTRY_EXIT_PAIR(IA32_PAT, LOAD, LOAD),
-> > +		VMCS_ENTRY_EXIT_PAIR(IA32_EFER, LOAD, LOAD),
-> > +		VMCS_ENTRY_EXIT_PAIR(BNDCFGS, LOAD, CLEAR),
-> > +		VMCS_ENTRY_EXIT_PAIR(IA32_RTIT_CTL, LOAD, CLEAR),
-> > +		VMCS_ENTRY_EXIT_PAIR(IA32_LBR_CTL, LOAD, CLEAR),
-> 
-> No macros please, it's just as clear to expand them especially since the
-> #define is far from the struct definition.
+Guten Tag,
 
-It's not for clarity, it's to prevent plopping an EXIT control into the ENTRY
-slot and vice versa.  I have a hell of a time trying to visually differentiate
-those, and a buggy pair isn't guaranteed to be detected at runtime, e.g. if both
-are swapped, all bets are off, and if one is duplicated, odds the warn may or may
-not show up unless hardware actually supports at least one of the controls, if not
-both.
+Ich möchte Sie persönlich kontaktieren; Ich weiß, Sie werden überrascht sein, meine E-Mail zu lesen. Bitte seien Sie nicht skeptisch, wenn Sie mir antworten. Mein Name ist Rechtsanwalt Francis Perez Crespo. 
 
-With this, swapping LOAD and LOAD is obviously a nop, and swapping LOAD and CLEAR
-will generate a compiler error.
+Es tut mir leid, Ihren Tag zu unterbrechen, mit gebührendem Respekt, Vertrauen und Demut. Ich schreibe Ihnen diese E-Mail, von der ich glaube, dass sie für Sie von großem Interesse wäre, und um zu sehen, ob Ihre E-Mail funktioniert.
 
-FWIW, I did originally have the array declared as static __initdata immediately
-after the #define.  I moved away from that because __initdata doesn't play nice
-with const, but then of course I forgot to add back the "const".  /facepalm
+Ich habe etwas absolut Wichtiges mit Ihnen zu besprechen. Für weitere Einzelheiten senden Sie mir bitte eine E-Mail mit folgenden Angaben.
+
+
+Vollständiger Name:
+Heimatadresse:
+Telefonnummer:
+Handynummer:
+Geburtsdatum:
+Beruf:
+
+
+
+Mit freundlichen Grüßen.
+
+Francis Pérez Crespo
+RECHTSANWALT

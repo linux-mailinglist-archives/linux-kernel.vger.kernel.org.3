@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1443534969
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 05:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CE5534970
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 05:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244552AbiEZDpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 23:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S245675AbiEZDqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 23:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243945AbiEZDoy (ORCPT
+        with ESMTP id S245127AbiEZDqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 23:44:54 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D30E021
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 20:44:53 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id t26so973971ybt.3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 20:44:53 -0700 (PDT)
+        Wed, 25 May 2022 23:46:25 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19B7BDA2D
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 20:46:14 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id y85-20020a253258000000b0064eaa00a2cbso618362yby.2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 20:46:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vqm3/hRG3VFupBjNaowrJsn6+8n6Q/MlLgSOykyM6ao=;
-        b=Rdq2EDWfNjlToyu3i1KDJ36brOAsakHrEl5hcbEJW4eAVWWqGU5/rq7y16zc+SnLqv
-         EBdnVR4v6xa2tT9ESLo03C2WPDqbq/12c/p/kexJ45pBO+8F5WDQ3vLLNCSNNaiORzOT
-         AcD5dF769nRhCOkWZZHrJTE2EYG4tDmvV6qb1I0JK0ZpUjMswYvuofbV67+YfgRLX4C+
-         djdwO4HQIgLIsTdda/Hz6wKgnwczBQM9jJNIPpUJInA/t7IpAgBeypMGO6U3sSVtc+Q3
-         Jo7mi4SaZCTzOdKJSaYGEpN6ugpfu3EeV831yONPtoIqI5BMGk3V27qrxieEis+/dS7r
-         y82g==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=pOuhR3Pzar7ge+NX8TBbznCApuMPK+u8nzqtMow3X3w=;
+        b=pFtuCq9Ahm+dC/wB/XGsvhVcvqEGv0ncYhOV7eYSKXtiZRQTf/H8Bo6BSHNlckk8MZ
+         giClqLGO+gDIF6i9lvSpvUtkDlZs5eNq9Dtl8PTSv97NS10j31WS74RsTNgADrb8S6jI
+         cWb7d6f+XSRsn3wRfzLEYt2TGsYEQe8TojWOEk2+XvPI15TrI2TS+fR0ukC42HFlU0pK
+         ga1fLXslxACOE+ZDusSSawGhpuwQIN5Uj+U/usag7iGRoMUVgBOUcwZAo41fWFoop1vb
+         ZnAf8UMo/ym1VQYCqIRxI+ir1nzmyZ0KrDK6SoopJw8pKQA5RViJ5A+Lqr6wkBNDN/um
+         YFAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vqm3/hRG3VFupBjNaowrJsn6+8n6Q/MlLgSOykyM6ao=;
-        b=huTkFAT7GMkxABBlRhv/r12CvqRh70sd0PPjsMEsEjrOIJuwczw9xF9idkpA5/2nHL
-         A+7HjPT+nQ+ZpkyJjaKvBAxAsKhImA3mlr5terjasXHDvlhep9AfE06257BfWpvtcutN
-         LG5A7Aypah4NU3WNCqiZIx2drcQlhh0h8MCd1JZRBRUJq9gJRzCtIpsQU7InFXZdqoff
-         bTOClVnz7E7YFIjhM5BH4R5XAcxrC2jLmjt6A1+Uumx22RkzgeCZ2NErcWRKOvgRPAK1
-         JPUPOIYQn6rYpK1wzTyjVTwr73UEboThLN5XwO3r+Y+EkhnhSggBRSvIy01+fhDMRFGF
-         BI1A==
-X-Gm-Message-State: AOAM5305yCZqYOWJjn1i8UamqAHhTcmRUwbl1/Goig3b2+YEYj3j+sCx
-        aFuNIVlWVotEjpE5gENlFgeMlN7Zud6up7vfAzCgWTFMvKc=
-X-Google-Smtp-Source: ABdhPJwrr5Izo/sSMvdH5Mj96mptxHwIoJU9RuKzu2xD4OWsbCBPcWuumUFcAT2RC1OmCOl7pEZQKaKvh4d8sdoLLRE=
-X-Received: by 2002:a25:c8c6:0:b0:651:2cb7:138d with SMTP id
- y189-20020a25c8c6000000b006512cb7138dmr12199396ybf.524.1653536692766; Wed, 25
- May 2022 20:44:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJNi4rNwPQf747UM_hiYYwL=HDxg8QnPpfFPv1PfrtN9ZP1y1g@mail.gmail.com>
- <35f95ba3-8a7b-7918-0f9d-e14274a5ffe9@arm.com>
-In-Reply-To: <35f95ba3-8a7b-7918-0f9d-e14274a5ffe9@arm.com>
-From:   richard clark <richard.xnu.clark@gmail.com>
-Date:   Thu, 26 May 2022 11:44:41 +0800
-Message-ID: <CAJNi4rMbBbLP2Tsv-wnnJKt4Y0moOE5-sNaZN1fCty908pwAKw@mail.gmail.com>
-Subject: Re: Question about SPIs' interrupt trigger type restrictions
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     maz@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=pOuhR3Pzar7ge+NX8TBbznCApuMPK+u8nzqtMow3X3w=;
+        b=ij1m33I/zGz2CW+zw/nvwJfFKJC+QcqJb9xR8f05Ca7UBXKhZRT7R/yo/N0h29SWOf
+         h9eol17vQtGYdh+l1unfnw0JBvmqJysBSh93M7aH5GKgRGgQRL1dMbwhwBhR9G+4krdr
+         C47BWDZCahZUCVwtXk3Z0Kz6KkUEvpNeMNYjSrBo1NOdi8NCYEc5zP92erxpSLQ0aURZ
+         Y5/GRmKrLg3LvIPyzpagDPRZrSbdfm7XALP7Sv+2tmiA7x5o5GS7TNYmlHT4JwykW3ly
+         YuzAZCKmj65eLsMge5xRIZig+gQNM40GcM65mDandIUcgkoB8msG16Tc/KQ0A+RlDiDh
+         v9NQ==
+X-Gm-Message-State: AOAM531H5PWo0BMu+4y0gFxTsFeUEHABkMgRZAx4uqC1n1mG2yR8uPKX
+        uUZPOfvM53MlI7kOuiJBIHZB/thcLVzK6/U=
+X-Google-Smtp-Source: ABdhPJwW5TFihKc5fHoOWh+k/wmtfXHJI7LiYEd2CbsQpL9OfsK+Uu/vuEzg0N01VUgI0MphYYCU7YgT/GtskfQ=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:cbc9:88bf:e847:ab95])
+ (user=saravanak job=sendgmr) by 2002:a25:501:0:b0:657:c41:3734 with SMTP id
+ 1-20020a250501000000b006570c413734mr968289ybf.279.1653536773756; Wed, 25 May
+ 2022 20:46:13 -0700 (PDT)
+Date:   Wed, 25 May 2022 20:46:07 -0700
+Message-Id: <20220526034609.480766-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [PATCH v1 0/2] Fix issues with deferred_probe_timeout being non-zero
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     kernel-team@android.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,84 +67,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 3:14 AM Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2022-05-25 11:01, richard clark wrote:
-> > Hi Marc,
-> >
-> > For below code snippet about SPI interrupt trigger type:
-> >
-> > static int gic_set_type(struct irq_data *d, unsigned int type)
-> > {
-> >          ...
-> >          /* SPIs have restrictions on the supported types */
-> >          if ((range =3D=3D SPI_RANGE || range =3D=3D ESPI_RANGE) &&
-> >              type !=3D IRQ_TYPE_LEVEL_HIGH && type !=3D IRQ_TYPE_EDGE_R=
-ISING)
-> >                  return -EINVAL;
-> >          ...
-> > }
-> >
-> > We have a device at hand whose interrupt type is SPI, Falling edge
-> > will trigger the interrupt. But the request_irq(50, handler,
-> > IRQ_TYPE_EDGE_FALLING, ...) will return -EINVAL.
-> >
-> > The question is, why must the SPI interrupt use IRQ_TYPE_EDGE_RISING
-> > instead of IRQ_TYPE_EDGE_FALLING?
->
-> Because that's what the GIC architecture[1] says. From section 1.2.1
-> "Interrupt Types":
->
-> "An interrupt that is edge-triggered has the following property:
->         =E2=80=A2 It is asserted on detection of a rising edge of an inte=
-rrupt signal
+Setting deferred_probe_timeout to a non-zero default used to cause
+issues with NFS rootfs. But the fix for that is causing other problem.
+So revert the fix and set the default deferred_probe_timeout back to
+zero.
 
-This rising edge detection is not true, it's also asserted by falling
-edge, just like the GICD_ICFGR register says:
-Changing the interrupt configuration between level-sensitive and
-*edge-triggered (in either direction)* at a time when there is a
-pending interrupt ..., which
-has been confirmed by GIC-500 on my platform.
+Most of the Cc list if from commit 35a672363ab3. Please let me know if
+you want to be removed from future patches related to
+deferred_probe_timeout and NFS rootfs issues.
 
-> and then, regardless of the state of the signal, remains asserted until
-> the interrupt is acknowledged by software."
->
-> External signals with the wrong polarity may need external logic to
+-Saravana
 
-IMO, it's not wrong polarity for a device to interrupt the processor
-with a falling edge, it's normal. Actually, the GIC supports
-edge-trigger type:
-'0b10 Corresponding interrupt is edge-triggered', the
-IRQ_TYPE_EDGE_RISING check in gic_set_type(...) is just a sanity check
-from this point of view.
-I would more like to have below changes applied:
+Saravana Kannan (2):
+  driver core: Fix wait_for_device_probe() & deferred_probe_timeout
+    interaction
+  driver core: Set default deferred_probe_timeout back to 0.
 
---- a/linux/drivers/irqchip/irq-gic-v3.c
-+++ b/linux/drivers/irqchip/irq-gic-v3.c
+ drivers/base/dd.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-@@ -560,8 +560,7 @@ static int gic_set_type(struct irq_data *d,
-unsigned int type)
-                return type !=3D IRQ_TYPE_EDGE_RISING ? -EINVAL : 0;
-        /* SPIs have restrictions on the supported types */
--       if ((range =3D=3D SPI_RANGE || range =3D=3D ESPI_RANGE) &&
--           type !=3D IRQ_TYPE_LEVEL_HIGH && type !=3D IRQ_TYPE_EDGE_RISING=
-)
-+       if ((range =3D=3D SPI_RANGE || range =3D=3D ESPI_RANGE) && !(type &=
- 0xf))
-                return -EINVAL;
+-- 
+2.36.1.124.g0e6072fb45-goog
 
- I believe irq-gic.c has the same issue, but can't confirm now.
-
-
-> invert them (which might even be offered by the GIC implementation
-> itself, e.g. [2]), but the programmer's model neither knows nor cares
-> about such details, it only knows notions of "edge-triggered" and
-> "level-sensitive", where from its point of view the asserted states are
-> rising and high respectively.
->
-> Robin.
->
-> [1] https://developer.arm.com/documentation/ihi0069/latest
-> [2]
-> https://developer.arm.com/documentation/100336/0106/components-and-config=
-uration/spi-collator/spi-collator-wires?lang=3Den

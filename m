@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57F15347BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E91AF5347C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345196AbiEZBA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S1345387AbiEZBEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345153AbiEZBAw (ORCPT
+        with ESMTP id S233865AbiEZBE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:00:52 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D1269CF3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:00:51 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id x12so284215wrg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=5TA2OkBhz4fpZ+xneLnEgQmjFfE9fpDr0ZbY4GJw0ZQ=;
-        b=ngjsDrz/yXO+HZIkkuhS2JJUxmT3ktjUn6eljHR4XmffVXt5jrXCSTTSgsKbfi6Oe8
-         JVBB11OTWoE93S5+sJxfHN82ZfWCnSjdakYKPMLRBcDEephAbzm6w/vAfCM6tvHou+bY
-         vIlaEq3fftA4+gNfiQN2N51CUWAnT1lbgdCLfopkfG2HNhDd6SG6dASl41YkNbhGbZwO
-         qbggID4XYAuShraxgUDiMdYtL9HgzC3hPzowZ2J4C0FC4oR8ZNwOk/JGzX1lvtMzvWpY
-         FH5qoQSlqMMrUB3AyOY8r6RA6molqT2tOwvmPP8foHwZlMm2PwKcRSUKjwGr0KJalr7x
-         c4zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=5TA2OkBhz4fpZ+xneLnEgQmjFfE9fpDr0ZbY4GJw0ZQ=;
-        b=s8JYVhPbBD7EcODmtHlZudadZodz23ZxDkYELeLnMuMJSCEaS3PY6Kiauc/1pV+diz
-         jOoQ+YucqwOCLhxXOMIyZ03OEtjWjSF5h/5aNU56sO+DipOAyaM7j0rEG2bvFWirOxVf
-         WY7DQF1K3CxdDiAI9p+q83MMRVULPwM4fyvDYP1MiEV8VuVlH2d5rBvMimTJSBfnsH0O
-         dpkNZk4+4LcjkZi06o4DjFP7p7wmvBmVi49WKbPyrdufYOIGdOGVx+qrXFRfakdZenLN
-         yAvvyobDGkfBd5ouYfLerXpXuQ2LhU7yu4aOgfIPhaucVf/MHWpc6jV30RkHBuM+R7zf
-         FAKA==
-X-Gm-Message-State: AOAM533TbpFGfVkgow5tjRzmI5asM8/y6N3/2BN/01CBd4tqdbJ5xq9A
-        daET/31XlHYczjmyimPfxC9MYw==
-X-Google-Smtp-Source: ABdhPJwrr5kdZD/ajpIquLCdox7ixE/4glrnxGMAf06db+1JZf7fpvikkIUX1ABOhaXULz4UbDL58w==
-X-Received: by 2002:a5d:4601:0:b0:20d:53a:2f39 with SMTP id t1-20020a5d4601000000b0020d053a2f39mr28779139wrq.347.1653526850400;
-        Wed, 25 May 2022 18:00:50 -0700 (PDT)
-Received: from smtpclient.apple (global-5-141.nat-2.net.cam.ac.uk. [131.111.5.141])
-        by smtp.gmail.com with ESMTPSA id v23-20020a7bcb57000000b003958af7d0c8sm213205wmj.45.2022.05.25.18.00.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 May 2022 18:00:49 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH V2] riscv: compat: Using seperated vdso_maps for
- compat_vdso_info
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <20220526003339.2948309-1-guoren@kernel.org>
-Date:   Thu, 26 May 2022 02:00:49 +0100
-Cc:     palmer@rivosinc.com, arnd@arndb.de, linux@roeck-us.net,
-        palmer@dabbelt.com, heiko@sntech.de,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EC36D0A9-AE06-4C05-A31B-CC348881937D@jrtc27.com>
-References: <20220526003339.2948309-1-guoren@kernel.org>
-To:     guoren@kernel.org
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        Wed, 25 May 2022 21:04:27 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387D28D691
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653527066; x=1685063066;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Gjw8BmQvzZc/6kD0fZavvF6Bp+p5MlKm5JDUBKMmivc=;
+  b=HnqNGX4ozuRH21DBezYGe+cyWHV9KSALP9m9xi4oY6rcovDig0Sf4xak
+   5MTt/L+Z0dgNITDE4K92RLjM71xJ5HqFin9gwdBHJY6X4VeZeByWCDlCE
+   CXkYiZ6hKiYi8pSMsnfBVAUBUeC3Y3p8eRG/RQn+6e+g9dImySW7al/NH
+   pZwnvJ4UOMqHlg14mn5SpjpAQ3qRFn7jVOGxS4pDa2Qr+74vHZ2aqms1b
+   w+rPzFvmlswO+m0F4WJUSPBqrFD/7MqcYO158+OfRXIXEj7Rst/+0cdxC
+   huzplqbPmcJXRHkTWnHrHu77DuRWfhmIA2THEKDMQiOl7O6x6JmZ1Nxsk
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="254480742"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="254480742"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:04:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="704252899"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 25 May 2022 18:04:24 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nu1vL-0003Ss-Lh;
+        Thu, 26 May 2022 01:04:23 +0000
+Date:   Thu, 26 May 2022 09:00:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [frederic-dynticks:cpuset/nocb 1/4] kernel/rcu/rcutorture.c:1890:28:
+ error: passing 'const struct cpumask *' to parameter of type 'struct cpumask
+ *' discards qualifiers
+Message-ID: <202205260823.5HeTsoRS-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,107 +63,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26 May 2022, at 01:33, guoren@kernel.org wrote:
->=20
-> From: Guo Ren <guoren@linux.alibaba.com>
->=20
-> This is a fixup for vdso implementation which caused musl to
-> fail.
->=20
-> [   11.600082] Run /sbin/init as init process
-> [   11.628561] init[1]: unhandled signal 11 code 0x1 at
-> 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
-> [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted
-> 5.18.0-rc7-next-20220520 #1
-> [   11.629462] Hardware name: riscv-virtio,qemu (DT)
-> [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp :
-> 00ffffffc58199f0
-> [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 :
-> ffffffffffffffff
-> [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 :
-> 00ffffff8ade0cc0
-> [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 :
-> 00ffffffc5819a00
-> [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 :
-> 00ffffffc5819b00
-> [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 :
-> 0000000000000000
-> [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 :
-> 00ffffff8ade0728
-> [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 :
-> 00ffffffc5819e40
-> [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10:
-> 0000000000000000
-> [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 :
-> 0000000000000001
-> [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
-> [   11.629699] status: 0000000000004020 badaddr: 0000000000000000
-> cause: 000000000000000d
->=20
-> The last __vdso_init(&compat_vdso_info) replaces the data in normal
-> vdso_info. This is an obvious bug.
->=20
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Tested-by: Guenter Roeck <linux@roeck-us.net>
-> Tested-by: Heiko St=C3=BCbner <heiko@sntech.de>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> ---
-> Changes in V2:
-> - Add Tested-by
-> - Rename vvar & vdso in /proc/<pid>/maps.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git cpuset/nocb
+head:   ad895c0b6a5e3c41d46f184900d193e70bfc90d3
+commit: 25db09cc1131b612d5dbb474ea1640b90b2518ca [1/4] rcu/nocb: Pass a cpumask instead of a single CPU to offload/deoffload
+config: hexagon-randconfig-r011-20220524 (https://download.01.org/0day-ci/archive/20220526/202205260823.5HeTsoRS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d52a6e75b0c402c7f3b42a2b1b2873f151220947)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=25db09cc1131b612d5dbb474ea1640b90b2518ca
+        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+        git fetch --no-tags frederic-dynticks cpuset/nocb
+        git checkout 25db09cc1131b612d5dbb474ea1640b90b2518ca
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/rcu/
 
-Why? No other architecture renames it to that, and various pieces of
-software look for the magic [vdso] name, including GDB and LLDB, though
-by my count there are 57 source packages in Debian that contain the
-string literal "[vdso]" (including quotes), including Firefox,
-Android's ART, lvm2 and elfutils.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Jess
+All errors (new ones prefixed by >>):
 
-> ---
-> arch/riscv/kernel/vdso.c | 15 +++++++++++++--
-> 1 file changed, 13 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
-> index 50fe4c877603..957f164c9778 100644
-> --- a/arch/riscv/kernel/vdso.c
-> +++ b/arch/riscv/kernel/vdso.c
-> @@ -206,12 +206,23 @@ static struct __vdso_info vdso_info =
-__ro_after_init =3D {
-> };
->=20
-> #ifdef CONFIG_COMPAT
-> +static struct vm_special_mapping rv_compat_vdso_maps[] =
-__ro_after_init =3D {
-> +	[RV_VDSO_MAP_VVAR] =3D {
-> +		.name   =3D "[compat vvar]",
-> +		.fault =3D vvar_fault,
-> +	},
-> +	[RV_VDSO_MAP_VDSO] =3D {
-> +		.name   =3D "[compat vdso]",
-> +		.mremap =3D vdso_mremap,
-> +	},
-> +};
-> +
-> static struct __vdso_info compat_vdso_info __ro_after_init =3D {
-> 	.name =3D "compat_vdso",
-> 	.vdso_code_start =3D compat_vdso_start,
-> 	.vdso_code_end =3D compat_vdso_end,
-> -	.dm =3D &rv_vdso_maps[RV_VDSO_MAP_VVAR],
-> -	.cm =3D &rv_vdso_maps[RV_VDSO_MAP_VDSO],
-> +	.dm =3D &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
-> +	.cm =3D &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
-> };
-> #endif
->=20
-> --=20
-> 2.36.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>> kernel/rcu/rcutorture.c:1890:28: error: passing 'const struct cpumask *' to parameter of type 'struct cpumask *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                           rcu_nocb_cpumask_update(cpumask_of(cpu), true);
+                                                   ^~~~~~~~~~~~~~~
+   include/linux/cpumask.h:636:25: note: expanded from macro 'cpumask_of'
+   #define cpumask_of(cpu) (get_cpu_mask(cpu))
+                           ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:121:59: note: passing argument to parameter 'cpumask' here
+   static inline int rcu_nocb_cpumask_update(struct cpumask *cpumask, bool offload)
+                                                             ^
+   kernel/rcu/rcutorture.c:1893:28: error: passing 'const struct cpumask *' to parameter of type 'struct cpumask *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                           rcu_nocb_cpumask_update(cpumask_of(cpu), false);
+                                                   ^~~~~~~~~~~~~~~
+   include/linux/cpumask.h:636:25: note: expanded from macro 'cpumask_of'
+   #define cpumask_of(cpu) (get_cpu_mask(cpu))
+                           ^~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:121:59: note: passing argument to parameter 'cpumask' here
+   static inline int rcu_nocb_cpumask_update(struct cpumask *cpumask, bool offload)
+                                                             ^
+   2 errors generated.
 
+
+vim +1890 kernel/rcu/rcutorture.c
+
+  1858	
+  1859	/*
+  1860	 * Randomly Toggle CPUs' callback-offload state.  This uses hrtimers to
+  1861	 * increase race probabilities and fuzzes the interval between toggling.
+  1862	 */
+  1863	static int rcu_nocb_toggle(void *arg)
+  1864	{
+  1865		int cpu;
+  1866		int maxcpu = -1;
+  1867		int oldnice = task_nice(current);
+  1868		long r;
+  1869		DEFINE_TORTURE_RANDOM(rand);
+  1870		ktime_t toggle_delay;
+  1871		unsigned long toggle_fuzz;
+  1872		ktime_t toggle_interval = ms_to_ktime(nocbs_toggle);
+  1873	
+  1874		VERBOSE_TOROUT_STRING("rcu_nocb_toggle task started");
+  1875		while (!rcu_inkernel_boot_has_ended())
+  1876			schedule_timeout_interruptible(HZ / 10);
+  1877		for_each_online_cpu(cpu)
+  1878			maxcpu = cpu;
+  1879		WARN_ON(maxcpu < 0);
+  1880		if (toggle_interval > ULONG_MAX)
+  1881			toggle_fuzz = ULONG_MAX >> 3;
+  1882		else
+  1883			toggle_fuzz = toggle_interval >> 3;
+  1884		if (toggle_fuzz <= 0)
+  1885			toggle_fuzz = NSEC_PER_USEC;
+  1886		do {
+  1887			r = torture_random(&rand);
+  1888			cpu = (r >> 4) % (maxcpu + 1);
+  1889			if (r & 0x1) {
+> 1890				rcu_nocb_cpumask_update(cpumask_of(cpu), true);
+  1891				atomic_long_inc(&n_nocb_offload);
+  1892			} else {
+  1893				rcu_nocb_cpumask_update(cpumask_of(cpu), false);
+  1894				atomic_long_inc(&n_nocb_deoffload);
+  1895			}
+  1896			toggle_delay = torture_random(&rand) % toggle_fuzz + toggle_interval;
+  1897			set_current_state(TASK_INTERRUPTIBLE);
+  1898			schedule_hrtimeout(&toggle_delay, HRTIMER_MODE_REL);
+  1899			if (stutter_wait("rcu_nocb_toggle"))
+  1900				sched_set_normal(current, oldnice);
+  1901		} while (!torture_must_stop());
+  1902		torture_kthread_stopping("rcu_nocb_toggle");
+  1903		return 0;
+  1904	}
+  1905	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

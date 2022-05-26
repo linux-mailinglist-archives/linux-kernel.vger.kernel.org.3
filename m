@@ -2,210 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D7B535242
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29BF535243
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240361AbiEZQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 12:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S244348AbiEZQlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 12:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiEZQka (ORCPT
+        with ESMTP id S229800AbiEZQlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 12:40:30 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297B83DA53
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:40:29 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id a9so1723766pgv.12
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Qm/bVNNdXqTapnzq5a3prBU390ldFSuOXJiLpWHawkQ=;
-        b=R+x1MUxR33XfpedDwvQaiuAUW+Q7ZEcX45T5t+DjlDw+0CKO6rEsBRh61K2L5VY7B0
-         lZfl1BBiXcxYE8Mruw1/QPLIUOXDeQ/hc7m8dtGqLKVnRX0zjb7Uexm2wyMOxftJi9tC
-         f56c9oAqTf0cBZY2+H9f9rE5oWA9ikXykDr4Ghw/bAhX6JahCuIH3yZ/8ih8I8r/2AG6
-         8t5MrmFIJYmmjmPfNwXUwqYyJh+ACyMziAzj5dXUU7LeITI5IANrDMSaWiyOeJbgKjYh
-         MkA8ivnsvzjqXpv2k/bYgr4jb+QuoYuzTDszQaqOB+E/lRytNu5W2LhpBtBaDXyy+tSh
-         IHCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Qm/bVNNdXqTapnzq5a3prBU390ldFSuOXJiLpWHawkQ=;
-        b=xOjRP8Yh85XeOd+Di/T/V0U11Vyj3bk5khJmbaaQg7jY14hI5LuIDUA/lbPZPxugoF
-         f7GKX/nauNkr8nsMxZP4Rl0xXYlhrJObZDtBZKWfLFmxq9XCcbtwoVC63LchQGl8TMDC
-         nlkMy3SiYdLaZgfR2j66XFlBkDRj2U4cEoBV2WrmnDFJ4PDWYcLhnKN57T9K/139kVkH
-         Wdm+EWJvnIwqjzc/m0pHvjJ/HkwurVGis2xgcdExDp7O4xUaMmjTm4G14ntOmpY6J2TH
-         s28yNEaBKORGLXLm8n/4ZHXa+OBSIGW8H9HT4rhqmfnVlPAp0V1wbURqcm5/rjUwR40z
-         KgMw==
-X-Gm-Message-State: AOAM532XXVk7huwMkp0WZ3i8mcOfnIiG3H0QlwYCCqwp7UChCgtXoEhh
-        VVfEoS04JL10KaOxUew/uFJsdQ==
-X-Google-Smtp-Source: ABdhPJyGGDxeevh6Hrci70x5DivpUnSf32p7bYI5avh1GAy878a7gP1PLmaPpluQ5Iefh9lutvBiIg==
-X-Received: by 2002:a05:6a00:1411:b0:4fd:e594:fac0 with SMTP id l17-20020a056a00141100b004fde594fac0mr39518591pfu.79.1653583228391;
-        Thu, 26 May 2022 09:40:28 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id h18-20020a056a00231200b005104c6d7941sm1767647pfh.31.2022.05.26.09.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 09:40:27 -0700 (PDT)
-Date:   Thu, 26 May 2022 16:40:23 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH] KVM: x86/MMU: Zap non-leaf SPTEs when disabling dirty
- logging
-Message-ID: <Yo+td/A+yEK8z7Z/@google.com>
-References: <20220525230904.1584480-1-bgardon@google.com>
+        Thu, 26 May 2022 12:41:09 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA10C3B3C0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653583267; x=1685119267;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tjBaAbh6HrriUT68SvY0WLPr98BrVKnGVpNLD4OjveA=;
+  b=KTDaH4gFvMvaH/yMPmsfyEDwmI0AnUFZwJKawOx8XXg7gmSCaahRAgPy
+   uEEY9X2q8eRZHPq6RIr5nJoNatFb2A7CLbizzOnxCk2xoZn/1xM13/AYz
+   Wx/kKkUbUP/08Uzv59Lz5PZsTics9YhB8AMmFli2RC0HlI46yea6mY7LA
+   Mu33NIGUZbrrZFPdLvnHXLEurh3/X2XeB3wVBX6TywdVrLFafHHtSyRTH
+   stF8UNfe4L1hRWZpGCZqCLmW4eKRWPJotFD7mW+QMJEC0hOl06bizPcej
+   Uu1jkuJ+s0f4HVqmfAS1WU1nLEyfWhOGrSTihBR8MHmcSxvyGZbjm4FOd
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="360599659"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="360599659"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 09:41:07 -0700
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="573973495"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 09:41:07 -0700
+Date:   Thu, 26 May 2022 09:41:06 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Taint addresses
+Message-ID: <Yo+tomN1kNkvXiBk@agluck-desk3.sc.intel.com>
+References: <20220524185324.28395-1-bp@alien8.de>
+ <20220524185324.28395-4-bp@alien8.de>
+ <Yo2ASBAElqrQvzh3@agluck-desk3.sc.intel.com>
+ <20220525065940.GF2578@worktop.programming.kicks-ass.net>
+ <Yo3cpb1yZhwhHEga@zn.tnic>
+ <4644ff0530ba40948ed1f0e2e45a24d8@intel.com>
+ <Yo5LAenZIsYmM9Ie@zn.tnic>
+ <c40151ec88db4b7aa7dcadf6428b019e@intel.com>
+ <Yo5SupgZjT/a1p5m@zn.tnic>
+ <Yo9uYL9eL9KBuzam@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220525230904.1584480-1-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yo9uYL9eL9KBuzam@zn.tnic>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 11:09:04PM +0000, Ben Gardon wrote:
-> When disabling dirty logging, zap non-leaf parent entries to allow
-> replacement with huge pages instead of recursing and zapping all of the
-> child, leaf entries. This reduces the number of TLB flushes required.
+On Thu, May 26, 2022 at 02:11:12PM +0200, Borislav Petkov wrote:
+> I guess something like this:
 > 
-> Currently disabling dirty logging with the TDP MMU is extremely slow.
-> On a 96 vCPU / 96G VM backed with gigabyte pages, it takes ~200 seconds
-> to disable dirty logging with the TDP MMU, as opposed to ~4 seconds with
-> the shadow MMU. This patch reduces the disable dirty log time with the
-> TDP MMU to ~3 seconds.
+> ...
+> [    2.591532] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+> [    2.592678] CPU: 2 PID: 1 Comm: swapper/0 Tainted: G S       C        5.18.0+ #7
+> [    2.593079] Last taint addresses:
+> [    2.593079]  S:start_kernel+0x614/0x634
+> [    2.593079]  C:kernel_init+0x70/0x140
 
-Nice!
+Maybe something a little more user friendly than addresses?
 
-It'd be good to also mention the new WARN. e.g.
+If there was a new macro:
 
-  Opportunistically add a WARN() to catch GFNS that are mapped at a
-  higher level than their max level.
+#define add_taint(flag, lockdep) __add_taint(flag, lockdep, __FILE__, __LINE__)
 
-> 
-> Testing:
-> Ran KVM selftests and kvm-unit-tests on an Intel Haswell. This
-> patch introduced no new failures.
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
+then renmame existing add_taint() to __add_taint() and have it save the
+file/line values.
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+Then you could print filename:line
 
-> ---
->  arch/x86/kvm/mmu/tdp_iter.c |  9 +++++++++
->  arch/x86/kvm/mmu/tdp_iter.h |  1 +
->  arch/x86/kvm/mmu/tdp_mmu.c  | 38 +++++++++++++++++++++++++++++++------
->  3 files changed, 42 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/tdp_iter.c b/arch/x86/kvm/mmu/tdp_iter.c
-> index 6d3b3e5a5533..ee4802d7b36c 100644
-> --- a/arch/x86/kvm/mmu/tdp_iter.c
-> +++ b/arch/x86/kvm/mmu/tdp_iter.c
-> @@ -145,6 +145,15 @@ static bool try_step_up(struct tdp_iter *iter)
->  	return true;
->  }
->  
-> +/*
-> + * Step the iterator back up a level in the paging structure. Should only be
-> + * used when the iterator is below the root level.
-> + */
-> +void tdp_iter_step_up(struct tdp_iter *iter)
-> +{
-> +	WARN_ON(!try_step_up(iter));
-> +}
-> +
->  /*
->   * Step to the next SPTE in a pre-order traversal of the paging structure.
->   * To get to the next SPTE, the iterator either steps down towards the goal
-> diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
-> index f0af385c56e0..adfca0cf94d3 100644
-> --- a/arch/x86/kvm/mmu/tdp_iter.h
-> +++ b/arch/x86/kvm/mmu/tdp_iter.h
-> @@ -114,5 +114,6 @@ void tdp_iter_start(struct tdp_iter *iter, struct kvm_mmu_page *root,
->  		    int min_level, gfn_t next_last_level_gfn);
->  void tdp_iter_next(struct tdp_iter *iter);
->  void tdp_iter_restart(struct tdp_iter *iter);
-> +void tdp_iter_step_up(struct tdp_iter *iter);
->  
->  #endif /* __KVM_X86_MMU_TDP_ITER_H */
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 841feaa48be5..7b9265d67131 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1742,12 +1742,12 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
->  	gfn_t start = slot->base_gfn;
->  	gfn_t end = start + slot->npages;
->  	struct tdp_iter iter;
-> +	int max_mapping_level;
->  	kvm_pfn_t pfn;
->  
->  	rcu_read_lock();
->  
->  	tdp_root_for_each_pte(iter, root, start, end) {
-> -retry:
->  		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
->  			continue;
->  
-> @@ -1755,15 +1755,41 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
->  		    !is_last_spte(iter.old_spte, iter.level))
->  			continue;
->  
-> +		/*
-> +		 * This is a leaf SPTE. Check if the PFN it maps can
-> +		 * be mapped at a higher level.
-> +		 */
->  		pfn = spte_to_pfn(iter.old_spte);
-> -		if (kvm_is_reserved_pfn(pfn) ||
-> -		    iter.level >= kvm_mmu_max_mapping_level(kvm, slot, iter.gfn,
-> -							    pfn, PG_LEVEL_NUM))
-> +
-> +		if (kvm_is_reserved_pfn(pfn))
->  			continue;
->  
-> +		max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot,
-> +				iter.gfn, pfn, PG_LEVEL_NUM);
-> +
-> +		WARN_ON(max_mapping_level < iter.level);
-> +
-> +		/*
-> +		 * If this page is already mapped at the highest
-> +		 * viable level, there's nothing more to do.
-> +		 */
-> +		if (max_mapping_level == iter.level)
-> +			continue;
-> +
-> +		/*
-> +		 * The page can be remapped at a higher level, so step
-> +		 * up to zap the parent SPTE.
-> +		 */
-> +		while (max_mapping_level > iter.level)
-> +			tdp_iter_step_up(&iter);
-> +
->  		/* Note, a successful atomic zap also does a remote TLB flush. */
-> -		if (tdp_mmu_zap_spte_atomic(kvm, &iter))
-> -			goto retry;
-> +		tdp_mmu_zap_spte_atomic(kvm, &iter);
-> +
-> +		/*
-> +		 * If the atomic zap fails, the iter will recurse back into
-> +		 * the same subtree to retry.
-> +		 */
->  	}
->  
->  	rcu_read_unlock();
-> -- 
-> 2.36.1.124.g0e6072fb45-goog
-> 
+Also: Is it more useful to store the most recent taint of each type,
+or the first of each type?
+
+-Tony

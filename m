@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91776535649
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D8853564A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346029AbiEZXCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 19:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S1348637AbiEZXFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 19:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244679AbiEZXCr (ORCPT
+        with ESMTP id S238168AbiEZXFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 19:02:47 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C16140F2;
-        Thu, 26 May 2022 16:02:45 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id y1so2902616pfr.6;
-        Thu, 26 May 2022 16:02:45 -0700 (PDT)
+        Thu, 26 May 2022 19:05:23 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B941758C
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:05:22 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id f23-20020a7bcc17000000b003972dda143eso3632657wmh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qfq77WBg1Op7K9Xp4Sx2ux31tzm9m+8JTsrYrGGZS+Y=;
-        b=lS35t/WYo0rgjYg+4NtMjNyjSEkZ6IY36N5xvEeFDLxe9nhiZleC28hEb3/aQdqpfC
-         KcGlOmS3eqZZ8vI8MqnmgAAGXGw9dUlegX4LqXaGOvNYTbG2TKykB76lxnIhL7Xqgnlm
-         HfoQe7Qa7nkpu1UHbIvpLyUHVzWTWoonhMAL2BSbateS1CwWr2I+zJ7esg6SinsiOD1O
-         z/Ckl0M68fopSnugpq1kOZgI5a/JpbNsoEdcL71sUVXzX6TtJuYF5QLJDfLf+GNX8Fw0
-         MeD9AlyIUhLQ+POK4/mbUvOskALa3g8KJ2Sxi3A3BEccZln4o+DnQtPeUq26F5G//r71
-         MMRA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+I9hUAJO0j4a5c/GJGmruQaMqz4ZWAD5gZXhmzliwZk=;
+        b=J8QrwSxUZ0Y7ODCts54yutQBOc73SmK5IYpXH3ICitGPXNDjHRlGpHmDf8l3SuhXKz
+         SN7RxuVMpmhvcJsEqXfH3Uv0hdEaAi3AU8Nd+ilR8AGPFH2zRUnDJgFqNb/jYdNacU8q
+         GpjrJ3nJL6NN2XdQHIljDtvJ62Shi4brLJOGCA5dk39AcJRYM1YINhrM7BxjOxpbyZfr
+         LzXVH4kEq7JsaEqgR19tVJvGUnCYDIkHgX5no7h4kWGG14DxfW3Ust4DXew3aNK3zqgd
+         u8U1ZS6Qs7azv+Qv3ErS74Bj4F7Yd26BKzsh+rtaCWpzgH5LbKD4LzcDw5Q8CFCno5gm
+         DcKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=qfq77WBg1Op7K9Xp4Sx2ux31tzm9m+8JTsrYrGGZS+Y=;
-        b=mEqZWDlEz43lrCNVfkCXuy1BZA/7eA4wyozYEIa3cwNtlQaAHu35coFSEsuQFD/8Rn
-         e00pNH/9DuCUadVITXjeOSWnQS+4NDGUjlQ7faGaw5TCTKxesvPXGCc7PI/HvxLWnRg0
-         vQn8sFIJOqPWIcuKs1L+eAtoOtiWyWppXPDb06PZY996am9U6vhq3gox8BFTtt/QQW4G
-         9q+SjbHNPUZ/GYEqN6lf8vtfgncphwQ4sE6X68RndNDuOz8AD75mOQpo8PiqMOle3m0b
-         ONODrRn5Go9P6pNo7Sa1YSyslmGHdcNXWMPeu8Z1UqgicPM4COCoA7UGE9edhPGlPPYd
-         4P1Q==
-X-Gm-Message-State: AOAM533VnkYKPdJQIGJbm5K/q2rUx3ZGv2iq2OHCu2AsQ/tzDlncwQZp
-        INtbtqLRUogGJHwSet+wm9gpnpDWuy4=
-X-Google-Smtp-Source: ABdhPJzkSLIgSwaui9Fk8XA6PTS2/nWwAyfQRjNxVBiWrIloSSm4ww0YNZR8/59aznf2j8Eqd8LCcw==
-X-Received: by 2002:a65:5c0c:0:b0:3fa:b2c0:7935 with SMTP id u12-20020a655c0c000000b003fab2c07935mr12778189pgr.600.1653606165137;
-        Thu, 26 May 2022 16:02:45 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:ac0e])
-        by smtp.gmail.com with ESMTPSA id d24-20020a170902729800b00161ea00350bsm2110096pll.277.2022.05.26.16.02.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 16:02:44 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 26 May 2022 13:02:42 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        rcu@vger.kernel.org
-Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root
- partitions
-Message-ID: <YpAHEt0j30vBw9au@slm.duckdns.org>
-References: <20220525221055.1152307-1-frederic@kernel.org>
- <20220525221055.1152307-5-frederic@kernel.org>
- <Yo/FGcG+uiBh88sT@slm.duckdns.org>
- <20220526225141.GA1214445@lothringen>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+I9hUAJO0j4a5c/GJGmruQaMqz4ZWAD5gZXhmzliwZk=;
+        b=FUj6TTA6AziDn42yHnu8OkJGZoUSaz278d5nOkMGugp7C/ZQYSpp6zL9uwDbh+U6J7
+         7sgKKdCPWPSpfVH3CUBbjMmhq478BLGA7NslUBNC9lgfqoNJ8ZnVvXOyT+8IcCY5l3Sh
+         Qe99bGic+GZPWTadtOEMzC87G2OLzZccQwhpZW2FAg6341lpmVg5LXtjERjHxMqOC0BQ
+         M7WKUTE4q7rVICIPa+0ezcHx9FPf/x2WczVRIP6uuo1rfI19qXxD3qw9dGkcacg56re/
+         47dVT0+oo+pTIE6ViVzRw0dCbajvagWhm9teGwlLvDk/k3ieqi/Q1nBQP54v3tKW+puv
+         zkHA==
+X-Gm-Message-State: AOAM532hC2uSqddx5NEI2qk8VuQ5NAN4LOhxiB9xWUQbVy0qqTqRdZ3g
+        j1qpwbK5sOpfaB0hZw85W+l/ErknQFQ2TJkSHOhFGg==
+X-Google-Smtp-Source: ABdhPJwO46jPvSXUkurSbGSLyLEeo/2C/lV3l3eEc34OFVXrkgIBRP8Z90Nn6u2PSBqrAbkfg9eKLzMeBT4jF7iuRws=
+X-Received: by 2002:a7b:c015:0:b0:397:3685:5148 with SMTP id
+ c21-20020a7bc015000000b0039736855148mr4290330wmb.174.1653606320753; Thu, 26
+ May 2022 16:05:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526225141.GA1214445@lothringen>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220526213136.193404-1-namhyung@kernel.org>
+In-Reply-To: <20220526213136.193404-1-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 26 May 2022 16:05:07 -0700
+Message-ID: <CAP-5=fXk35KSaNOSsymx=2=Yw5CG7=Rr3X0aRCFaTggfhts7dA@mail.gmail.com>
+Subject: Re: [PATCH] perf lock: Change to synthesize task events
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 12:51:41AM +0200, Frederic Weisbecker wrote:
-> > Does it even make sense to make this hierarchical? What's wrong with a
-> > cpumask under sys/ or proc/?
-> 
-> I'm usually told that cpusets is the current place where CPU attributes are
-> supposed to go. I personally don't mind much /sys either even though cpusets
-> looks like a more flexible way to partition CPUs with properties and tasks
-> placement altogether...
+On Thu, May 26, 2022 at 2:31 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> With -t/--threads option, it needs to display task names so synthesize
+> task related events at the beginning.
+>
+> Fixes: 7c3bcbdf449f ("perf lock: Add -t/--thread option for report")
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-Yeah, I mean, if it's hierarchical, it's the right place but I have a hard
-time seeing anything hierarchical with this one. Somebody just has to know
-which cpus are up for rcu processing and which aren't. Waiman, what do you
-think?
+Acked-by: Ian Rogers <irogers@google.com>
 
-Thanks.
+Thanks,
+Ian
 
--- 
-tejun
+> ---
+>  tools/perf/builtin-lock.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+> index b1200b7340a6..23a33ac15e68 100644
+> --- a/tools/perf/builtin-lock.c
+> +++ b/tools/perf/builtin-lock.c
+> @@ -1083,7 +1083,7 @@ static int __cmd_report(bool display_info)
+>  static int __cmd_record(int argc, const char **argv)
+>  {
+>         const char *record_args[] = {
+> -               "record", "-R", "-m", "1024", "-c", "1", "--synth", "no",
+> +               "record", "-R", "-m", "1024", "-c", "1", "--synth", "task",
+>         };
+>         unsigned int rec_argc, i, j, ret;
+>         const char **rec_argv;
+> --
+> 2.36.1.124.g0e6072fb45-goog
+>

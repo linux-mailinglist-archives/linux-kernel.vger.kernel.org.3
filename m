@@ -2,56 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88CB5351CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61795351D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348082AbiEZQD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 12:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S1348091AbiEZQEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 12:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiEZQDX (ORCPT
+        with ESMTP id S231881AbiEZQEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 12:03:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615BE53736
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:03:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CEBBB8210D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:03:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550A6C385A9;
-        Thu, 26 May 2022 16:03:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653580998;
-        bh=F/2VHJHMAJ183CYNsQnEB3OqQFGDNhCeq0Ysu1HPf5I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CeHI4FEx/3y2Pdnl2rFNS1eRmJbaNYZR1IYyB3N5JksAqIorcH1RlMC93DfwGr9ht
-         6GnXopRYDHrKNU+41nc71D7PDzI9YcUtTF4bURQRkdx+1VChunVwyg/OiqP2zfGwLX
-         3Uis7iNbCmW41Yq52WhtNOsIYDhJyEXyZnk7x5LihiVEZXmicnxSo1Ktt7HTPXssJn
-         bgSxz7ZDZw5JeOkie8shRXrORZfvhRG5pez8lq62HqpZEd7g9CT8vsErSuu8pEmO3s
-         hBJajBSRT8DH6G7z5w1mzymzP9d9CmFyXQPhUQBKpwb03vxPaUvE/MjDl6cHlj/TmY
-         1gBreoSU+iJjg==
-Date:   Fri, 27 May 2022 01:03:14 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linyu Yuan <quic_linyyuan@quicinc.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH 2/2] tracing/probes: make match function safe
-Message-Id: <20220527010314.e5a2d9418cfdf5500d75b9b2@kernel.org>
-In-Reply-To: <Yo1dW2w1UIF+KZFw@home.goodmis.org>
-References: <1651397651-30454-1-git-send-email-quic_linyyuan@quicinc.com>
-        <1651397651-30454-3-git-send-email-quic_linyyuan@quicinc.com>
-        <Yo1dW2w1UIF+KZFw@home.goodmis.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Thu, 26 May 2022 12:04:50 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8853952E49;
+        Thu, 26 May 2022 09:04:49 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id hh4so2031613qtb.10;
+        Thu, 26 May 2022 09:04:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1fUDgPUJjoEyPa2k3rr2TdMtBiTmn1nIDnXpkDtFd7k=;
+        b=J3kOhJ9pp7Wd/7HJaDzaI8c+RK2ZfmL1Fdlxpdz0jbZclGxGUmhGOlI7vReAapX+zy
+         XPNqPhJ7gnBMo77bXOEQRr0POxCwDRdbPFuedattIzMurb8zAh0wCeBWJcZd0cX92P0l
+         QKsJma4lCoV/4PGAzVOGKGSRES/iChnTJbsQZHUGm8NPwqnu2uG27FVwNUlQPKZM9TyK
+         ZFeMP1FnGqNlxtfwANFYf290S5zPEjHghvLx+Y73ULmhlu3Zf04VDzHQgykSI2ZNXxZN
+         JDMA333GJA8w2RBUgSBdM25DAhjIlaXFLJQXZpsUrUWQxxQfsEkmd7/gbTOoulbHsekd
+         4XVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1fUDgPUJjoEyPa2k3rr2TdMtBiTmn1nIDnXpkDtFd7k=;
+        b=uMZoC5g9fU9ld5dLN8phkYLs8tODyRp2mamvaHJ9s6escEppGgDd4eCxlMOGyPuR0d
+         7LT+Z8BkKg2lp+BY1uPSgAi+9TCZsQUBHvertL3vdTE+TiD7j6X3lP+NB0yAj1hYLwbq
+         6YvcHagCgkykPF2MD8p4TNnZgVqkOBNMOWuLEkNFWCRr3fq9Uqf+vU001N8QFWjyk39R
+         OQYRyFq1L7nlsDn1nCeuJLNvvvEjHmQXS7sF4BUV2jpS3BJzohFeCdygpceok5snLBsZ
+         YxaAIzMS/qpMWFB4jyW1xhKiSOKNYsNm8ErqFTEuqm7o8DogC5lwStd42XsHSvhWwcxd
+         krOg==
+X-Gm-Message-State: AOAM533FgT2YoCzEB+dfWD7BNdyACCR8bHS4/Pjj55QVxMDTTbTu8Tk7
+        wxXb2ocA5R0RmtLuIHYNbVhbXLhHefDdHA5a
+X-Google-Smtp-Source: ABdhPJyn43gA2NZBVmM/aZwaLmLM0L3zKJfWx5ctF3hev++cu9Ud5E6giZSMrNJLP5QO3cb+r85oCA==
+X-Received: by 2002:a0c:f291:0:b0:462:5e34:70c with SMTP id k17-20020a0cf291000000b004625e34070cmr10525404qvl.58.1653581088390;
+        Thu, 26 May 2022 09:04:48 -0700 (PDT)
+Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
+        by smtp.gmail.com with ESMTPSA id m184-20020a37bcc1000000b006a323e60e29sm1359254qkf.135.2022.05.26.09.04.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 09:04:47 -0700 (PDT)
+Date:   Thu, 26 May 2022 12:04:45 -0400
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in
+ drivers/iio/afe/iio-rescale.o
+Message-ID: <Yo+lHSmeIsx144cv@shaak>
+References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
+ <3ae306e0-c6c7-ed12-cacd-62b1c26dba3c@infradead.org>
+ <6671de03-c09c-bfaf-e06c-e45af70d4354@infradead.org>
+ <6601a387-de9a-a0d0-11b5-01e0cfa75657@infradead.org>
+ <7a97bac3-6ade-8e1b-cf0c-4a05c83163a3@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a97bac3-6ade-8e1b-cf0c-4a05c83163a3@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,154 +80,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 May 2022 18:34:03 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hi Randy,
 
-> Masami and Tom, what are you thoughts on this?
+On Thu, May 26, 2022 at 08:36:34AM -0700, Randy Dunlap wrote:
+> Liam:
 > 
-> -- Steve
+> Any comment on this?
+> Otherwise I'll just send a formal patch like this (below).
 
-Thanks for forwarding.
+Apologies for not answering earlier.
+
+I wanted to look more into Masahiro's comment and try to fix the
+Makefile, but that can be done after.
+
+IMO your patch improves the current Kconfig, so I'd recommend sending
+the patch. If it can wait a bit, I can look at the Makefile over the
+weekend.
+
+Cheers,
+Liam
 
 > 
-> On Sun, May 01, 2022 at 05:34:11PM +0800, Linyu Yuan wrote:
-> > When delete one kprobe/uprobe/eprobe event entry
-> > using /sys/kernel/debug/tracing/dynamic_events file,
-> > it will loop all dynamic envent entries,
-> > as user will not input dyn_event_operations type,
-> > when call the match function of kprobe/uprobe/eprobe,
-> > the dynamic event may have different dyn_event_operations type,
-> > but currently match function may return a match.
+> Thanks.
+> 
+> On 5/20/22 20:51, Randy Dunlap wrote:
+> > Ok, one more.
+> > [also adding Liam here]
 > > 
-> > Fix by check dyn_event_operations type first.
-
-Sorry, NACK. That check is not necessary, because the 'match' operation
-is chosen by each event::ops as below.
-
-int dyn_event_release(const char *raw_command, struct dyn_event_operations *type)
-{
-        struct dyn_event *pos, *n;
-...
-        mutex_lock(&event_mutex);
-        for_each_dyn_event_safe(pos, n) {
-                if (type && type != pos->ops)
-                        continue;
-                if (!pos->ops->match(system, event,
-                                argc - 1, (const char **)argv + 1, pos))
-                        continue;
-...
-
-The @pos is dyn_event. Thus @pos->ops must be the appropriate
-dyn_event_operations for that event. For example, if there is an
-eprobe event @ev, then @ev->ops must be eprobe_dyn_event_ops and
-@ev->ops->match must be eprobe_dyn_event_match() (unless the match
-function is shared with another dyn_event_operations.)
-
-Thank you,
-
-
+> > On 5/20/22 20:17, Randy Dunlap wrote:
+> >>
+> >>
+> >> On 5/20/22 20:08, Randy Dunlap wrote:
+> >>>
+> >>>
+> >>> On 5/20/22 19:40, Randy Dunlap wrote:
+> >>>> Hi,
+> >>>>
+> >>>> In March I reported that a randconfig build complained:
+> >>>>
+> >>>> ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
+> >>>>
+> >>>> (https://lore.kernel.org/all/16509fb6-e40c-e31b-2c80-264c44b0beb9@infradead.org/)
+> >>>>
+> >>>> I am still seeing this problem so I tried to dig into it a bit.
+> >>>> However, I don't see why get_next_modinfo() and friends don't find the
+> >>>> MODULE_LICENSE() since it is in the iio-rescale.o file.
+> >>>>
+> >>>> (BTW, I see this build error on many different $ARCH [around 15 tested]
+> >>>> and with 2 different versions of GCC.)
+> >>>>
+> >>>> Q1: Is modpost checking both vmlinux and iio-rescale.o for modinfo license
+> >>>> strings?
+> >>>>
+> >>>> It looks like it is, because it appears (?) that modpost is looking at
+> >>>> drivers/iio/test/iio-test-rescale.o (<<<<< a kunit test, which is builtin
+> >>>> in my .config) and at drivers/iio/afe/iio-rescale.o (which is built as a
+> >>>> loadable module).
+> >>>>
+> >>>> Is this confusing modpost?
+> >>>> I renamed drivers/iio/afe/iio-rescale.c to afe-rescale.c and changed its
+> >>>> Makefile entry accordingly and the MODULE_LICENSE error goes away.
+> >>>
+> >>> Oh well. This rename causes drivers/iio/test/iio-test-rescale.c to have
+> >>> build errors, so that's not a solution, just some info...
+> >>
+> >> and that was due to not updating drivers/iio/test/Makefile.
+> >> When that is done, the missing MODULE_LICENSE() is back in afe-rescale.o.
+> >>
+> >>>
+> >>>> Is this a modpost error or is kunit messing things up?
+> >>>>
+> >>>> thanks for looking.
 > > 
-> > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> > ---
-> >  kernel/trace/trace_eprobe.c | 31 +++++++++++++++++++++++--------
-> >  kernel/trace/trace_kprobe.c |  3 +++
-> >  kernel/trace/trace_uprobe.c |  3 +++
-> >  3 files changed, 29 insertions(+), 8 deletions(-)
+> > Does this look OK? It allows afe/iio-rescale.o to build XOR
+> > test/iio-rescale.o (not both of them).
 > > 
-> > diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> > index b16e067..0029840 100644
-> > --- a/kernel/trace/trace_eprobe.c
-> > +++ b/kernel/trace/trace_eprobe.c
-> > @@ -19,6 +19,21 @@
-> >  
-> >  #define EPROBE_EVENT_SYSTEM "eprobes"
-> >  
-> > +static int eprobe_dyn_event_create(const char *raw_command);
-> > +static int eprobe_dyn_event_show(struct seq_file *m, struct dyn_event *ev);
-> > +static bool eprobe_dyn_event_is_busy(struct dyn_event *ev);
-> > +static int eprobe_dyn_event_release(struct dyn_event *ev);
-> > +static bool eprobe_dyn_event_match(const char *system, const char *event,
-> > +			int argc, const char **argv, struct dyn_event *ev);
-> > +
-> > +static struct dyn_event_operations eprobe_dyn_event_ops = {
-> > +	.create = eprobe_dyn_event_create,
-> > +	.show = eprobe_dyn_event_show,
-> > +	.is_busy = eprobe_dyn_event_is_busy,
-> > +	.free = eprobe_dyn_event_release,
-> > +	.match = eprobe_dyn_event_match,
-> > +};
-> > +
-> >  struct trace_eprobe {
-> >  	/* tracepoint system */
-> >  	const char *event_system;
-> > @@ -39,6 +54,11 @@ struct eprobe_data {
-> >  
-> >  static int __trace_eprobe_create(int argc, const char *argv[]);
-> >  
-> > +static bool is_trace_eprobe(struct dyn_event *ev)
-> > +{
-> > +	return ev->ops == &eprobe_dyn_event_ops;
-> > +}
-> > +
-> >  static void trace_event_probe_cleanup(struct trace_eprobe *ep)
-> >  {
-> >  	if (!ep)
-> > @@ -121,6 +141,9 @@ static bool eprobe_dyn_event_match(const char *system, const char *event,
-> >  	struct trace_eprobe *ep = to_trace_eprobe(ev);
-> >  	const char *slash;
-> >  
-> > +	if (!is_trace_eprobe(ev))
-> > +		return false;
-> > +
-> >  	/*
-> >  	 * We match the following:
-> >  	 *  event only			- match all eprobes with event name
-> > @@ -174,14 +197,6 @@ static bool eprobe_dyn_event_match(const char *system, const char *event,
-> >  	return trace_probe_match_command_args(&ep->tp, argc, argv);
-> >  }
-> >  
-> > -static struct dyn_event_operations eprobe_dyn_event_ops = {
-> > -	.create = eprobe_dyn_event_create,
-> > -	.show = eprobe_dyn_event_show,
-> > -	.is_busy = eprobe_dyn_event_is_busy,
-> > -	.free = eprobe_dyn_event_release,
-> > -	.match = eprobe_dyn_event_match,
-> > -};
-> > -
-> >  static struct trace_eprobe *alloc_event_probe(const char *group,
-> >  					      const char *this_event,
-> >  					      struct trace_event_call *event,
-> > diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> > index 2cd8ef9..f63abfa 100644
-> > --- a/kernel/trace/trace_kprobe.c
-> > +++ b/kernel/trace/trace_kprobe.c
-> > @@ -163,6 +163,9 @@ static bool trace_kprobe_match(const char *system, const char *event,
-> >  {
-> >  	struct trace_kprobe *tk = to_trace_kprobe(ev);
-> >  
-> > +	if (!is_trace_kprobe(ev))
-> > +		return false;
-> > +
-> >  	return (event[0] == '\0' ||
-> >  		strcmp(trace_probe_name(&tk->tp), event) == 0) &&
-> >  	    (!system || strcmp(trace_probe_group_name(&tk->tp), system) == 0) &&
-> > diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> > index a935c08..ee55ed0 100644
-> > --- a/kernel/trace/trace_uprobe.c
-> > +++ b/kernel/trace/trace_uprobe.c
-> > @@ -312,6 +312,9 @@ static bool trace_uprobe_match(const char *system, const char *event,
-> >  {
-> >  	struct trace_uprobe *tu = to_trace_uprobe(ev);
-> >  
-> > +	if (!is_trace_uprobe(ev))
-> > +		return false;
-> > +
-> >  	return (event[0] == '\0' ||
-> >  		strcmp(trace_probe_name(&tu->tp), event) == 0) &&
-> >  	   (!system || strcmp(trace_probe_group_name(&tu->tp), system) == 0) &&
-> > -- 
-> > 2.7.4
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > --- a/drivers/iio/test/Kconfig
+> > +++ b/drivers/iio/test/Kconfig
+> > @@ -6,7 +6,7 @@
+> >  # Keep in alphabetical order
+> >  config IIO_RESCALE_KUNIT_TEST
+> >         bool "Test IIO rescale conversion functions"
+> > -       depends on KUNIT=y && !IIO_RESCALE
+> > +       depends on KUNIT=y && IIO_RESCALE=n
+> >         default KUNIT_ALL_TESTS
+> >         help
+> >           If you want to run tests on the iio-rescale code say Y here.
+> > 
+> > 
+> 
+> -- 
+> ~Randy

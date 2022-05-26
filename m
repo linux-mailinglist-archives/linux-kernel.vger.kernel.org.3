@@ -2,193 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55ABD534893
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 04:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7F353489C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 04:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345864AbiEZCFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 22:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S1345909AbiEZCJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 22:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344428AbiEZCFd (ORCPT
+        with ESMTP id S232001AbiEZCI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 22:05:33 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F53101C2;
-        Wed, 25 May 2022 19:05:32 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id w130so738639oig.0;
-        Wed, 25 May 2022 19:05:32 -0700 (PDT)
+        Wed, 25 May 2022 22:08:59 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8CD69B4C
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:08:59 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id nn3-20020a17090b38c300b001e0e091cf03so23382pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 19:08:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=R7rKNvHXsGzLgjMUdkYaFVed5E2JRJcJJNqZfVZ+5rk=;
+        b=co6cy7kfyLhyWRoqI9xLrDZWZ4RkKwnrUf88l8B6e1qN1ihtUyVs25s3wWNnfPY0kM
+         +mxYx5A8uRu/udu4clhRH0E4qEVWGY98p7D4oJoSshLcEbPjvb08+mXZYFmkYwLBZU0o
+         9ayYBUL7m3SIvvbu4eJZ+EC7Mp9R4qocfaHcfpDwplTFDxIOUWGCecuHw3A4ICWncNVQ
+         0oEefde8JiCMO6/hHIFWCfjVMdqmHrWAF3lz4IlTHicLwIy/Q1himKOYQOtuVr8nNlS6
+         utygQAbCTcWDyekohJJeT8axFIOuiSzq6x/lqJyA3UIol+TFIj9quxF0Yb/U2Gc/RWgy
+         R54w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ChisiLO0bsSW3mWXz6BoXIcubu0hhX1WwidCN2NJ5Xs=;
-        b=dVwbnO22o2lJa7TnL95+9Q8djwItS7TXrq7umduc6XDDiPckVHPFJnW8L9jX+zcGAF
-         KTAmkTtVbc4Y3KujsDNXp0eAlSpelGlqO8//BGd23PGYpG0mnX402n9EiGI+VaDFlQi2
-         oqGqV5929LblJYhKZZHmozP17nO0nGb5YXqpgpe80jVObuLuI023yjSNUrNRPWNNuNOo
-         UVPl2rfcZKOIowyLbEBiZgTE4RPdHABFODTU+GtjK4IM3osXsJRQbcaEvzi1PIKfkvj3
-         ISZlYtQYbPMHGsojVKWNlemnnHraFU8oHUmUI2OISBOxX5A39HvXW50w5lzoVgmCxXIz
-         5Zyw==
-X-Gm-Message-State: AOAM5301KoPm765g6jjz3LiBCJ5hQw32xiYbazzNwj4STYXsay/t4b7c
-        2fJ04q7sZJYYkcTOVJlWiA==
-X-Google-Smtp-Source: ABdhPJw+s4ts1U0RT6Kz+SuPmsS63MroSVk4RpangHXlIlCPwlPCRe4u5Bf1C8W6qkMcBU9s4R3QzQ==
-X-Received: by 2002:a05:6808:199b:b0:329:92c:4a1e with SMTP id bj27-20020a056808199b00b00329092c4a1emr33497oib.214.1653530731400;
-        Wed, 25 May 2022 19:05:31 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bj39-20020a05680819a700b0032b7b588f3asm195674oib.46.2022.05.25.19.05.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 19:05:30 -0700 (PDT)
-Received: (nullmailer pid 2907659 invoked by uid 1000);
-        Thu, 26 May 2022 02:05:29 -0000
-Date:   Wed, 25 May 2022 21:05:29 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Bailon <abailon@baylibre.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        mka@chromium.org, krzk+dt@kernel.org, matthias.bgg@gmail.com,
-        p.zabel@pengutronix.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com
-Subject: Re: [PATCH v7 2/6] dt-bindings: thermal: Add binding document for
- LVTS thermal controllers
-Message-ID: <20220526020529.GA2901912-robh@kernel.org>
-References: <20220524152552.246193-1-abailon@baylibre.com>
- <20220524152552.246193-3-abailon@baylibre.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=R7rKNvHXsGzLgjMUdkYaFVed5E2JRJcJJNqZfVZ+5rk=;
+        b=TjQfK7zt5IzF50hL9KckJl68negJWxpuGfg2m9HRRnLnJBW2a7QVyJ50DqlBweRGZm
+         MEh+rBO3WN8Qtx4bTfutrrYNmyAeEssAPDf36sge/IS6CwAvSYTXJ1Oh2rBbgDLLbMYu
+         OvXRSbTI8cQd7aiA7HQP4DeL/FjJT3qbZneZckk8ZPRlV3970Zy59R3YKDHetVnFq8Y6
+         q4K4XMcIvGP8bGaWvfzXlotntCjN0+fnfCuewkuGzN/9xrWLMmwezYgJ33BbpPqn6nc4
+         JzqaHevIGCWqye8Cor80fds4VQzLRz58XtvoiKBEt9HRvIir7B8Ev2/Y2W1blONpcJAH
+         Fr2g==
+X-Gm-Message-State: AOAM530FU3YZeb5/et47vWKpTOXxn8VW/EKdkJJ+9lB/PBwe7OcOFw3k
+        sdM60XH4o/6hMAM+51El0butb2wWLujLE6FG
+X-Google-Smtp-Source: ABdhPJwGanAZG3Fj5Jtt06ObKLk1KKtCz0LEo3zEuRu6eg3wdFoGtq3zxEAPPb46K4UWT2YaWLQFeQ==
+X-Received: by 2002:a17:902:f605:b0:14f:5d75:4fb0 with SMTP id n5-20020a170902f60500b0014f5d754fb0mr35495209plg.101.1653530938546;
+        Wed, 25 May 2022 19:08:58 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id g1-20020a056a001a0100b0051868677e6dsm82610pfv.51.2022.05.25.19.08.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 19:08:58 -0700 (PDT)
+Message-ID: <1f291e35-808a-92f2-f93a-1bc5c8c3e44d@bytedance.com>
+Date:   Thu, 26 May 2022 10:08:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524152552.246193-3-abailon@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [External] Re: [PATCH v2 2/2] selftest/bpf/benchs: Add bpf_map
+ benchmark
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        duanxiongchun@bytedance.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        zhouchengming@bytedance.com
+References: <20220524075306.32306-1-zhoufeng.zf@bytedance.com>
+ <20220524075306.32306-3-zhoufeng.zf@bytedance.com>
+ <CAEf4BzbPrfFe-3TGf=jJxrp9DT6Z1JaEDhWCd3wTYOPsihUmkA@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CAEf4BzbPrfFe-3TGf=jJxrp9DT6Z1JaEDhWCd3wTYOPsihUmkA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 05:25:49PM +0200, Alexandre Bailon wrote:
-> This patch adds binding document for mt8192 and mt8195 thermal
-> controllers.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> ---
->  .../thermal/mediatek,mt8192-lvts.yaml         | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml b/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
-> new file mode 100644
-> index 000000000000..914c877d1f2f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/mediatek,mt8192-lvts.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek SoC LVTS thermal controller
-> +
-> +maintainers:
-> +  - Yu-Chia Chang <ethan.chang@mediatek.com>
-> +  - Ben Tseng <ben.tseng@mediatek.com>
-> +
-> +allOf:
-> +  - $ref: thermal-sensor.yaml#
-> +  - $ref: /nvmem/nvmem-consumer.yaml#
+在 2022/5/25 上午7:29, Andrii Nakryiko 写道:
+> On Tue, May 24, 2022 at 12:53 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>
+>> Add benchmark for hash_map to reproduce the worst case
+>> that non-stop update when map's free is zero.
+>>
+>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>> ---
+>>   tools/testing/selftests/bpf/Makefile          |  4 +-
+>>   tools/testing/selftests/bpf/bench.c           |  2 +
+>>   .../selftests/bpf/benchs/bench_bpf_map.c      | 78 +++++++++++++++++++
+>>   .../selftests/bpf/benchs/run_bench_bpf_map.sh | 10 +++
+>>   .../selftests/bpf/progs/bpf_map_bench.c       | 27 +++++++
+>>   5 files changed, 120 insertions(+), 1 deletion(-)
+>>   create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_map.c
+>>   create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
+>>   create mode 100644 tools/testing/selftests/bpf/progs/bpf_map_bench.c
+>>
+> [...]
+>
+>> +static void setup(void)
+>> +{
+>> +       struct bpf_link *link;
+>> +       int map_fd, i, max_entries;
+>> +
+>> +       setup_libbpf();
+>> +
+>> +       ctx.skel = bpf_map_bench__open_and_load();
+>> +       if (!ctx.skel) {
+>> +               fprintf(stderr, "failed to open skeleton\n");
+>> +               exit(1);
+>> +       }
+>> +
+>> +       link = bpf_program__attach(ctx.skel->progs.benchmark);
+>> +       if (!link) {
+>> +               fprintf(stderr, "failed to attach program!\n");
+>> +               exit(1);
+>> +       }
+>> +
+>> +       //fill hash_map
+> don't use C++ comments
 
-Besides having an error, there is no need to reference this. It is 
-applied to all nodes and you still have to list the properties here to 
-define how many entries and what they are.
+Ok, will do. Thanks.
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8192-lvts
-> +      - mediatek,mt8195-lvts
-> +
-> +  reg:
-> +    minItems: 2
-> +    maxItems: 4
-> +
-> +  interrupts:
-> +    maxItems: 2
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +  nvmem-cells:
-> +    maxItems: 2
-> +    description: Calibration data for thermal sensors
+>
+>> +       map_fd = bpf_map__fd(ctx.skel->maps.hash_map_bench);
+>> +       max_entries = bpf_map__max_entries(ctx.skel->maps.hash_map_bench);
+>> +       for (i = 0; i < max_entries; i++)
+>> +               bpf_map_update_elem(map_fd, &i, &i, BPF_ANY);
+>> +}
+>> +
+>> +const struct bench bench_bpf_map = {
+>> +       .name = "bpf-map",
+> this is too generic name, it's testing one particular scenario, so
+> call this out in the name. bpf-hashmap-full-update or something (same
+> for all the relevant function and file names)
+>
 
-Need to define what each entry is.
+Ok, will do. Thanks.
 
-> +
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: e_data1
-> +      - const: e_data2
+>> +       .validate = validate,
+>> +       .setup = setup,
+>> +       .producer_thread = producer,
+>> +       .consumer_thread = consumer,
+>> +       .measure = measure,
+>> +       .report_progress = ops_report_progress,
+>> +       .report_final = ops_report_final,
+>> +};
+>> diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh b/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
+>> new file mode 100755
+>> index 000000000000..d7cc969e4f85
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_map.sh
+>> @@ -0,0 +1,10 @@
+>> +#!/bin/bash
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +source ./benchs/run_common.sh
+>> +
+>> +set -eufo pipefail
+>> +
+>> +nr_threads=`expr $(cat /proc/cpuinfo | grep "processor"| wc -l) - 1`
+>> +summary=$($RUN_BENCH -p $nr_threads bpf-map)
+>> +printf "$summary"
+>> diff --git a/tools/testing/selftests/bpf/progs/bpf_map_bench.c b/tools/testing/selftests/bpf/progs/bpf_map_bench.c
+>> new file mode 100644
+>> index 000000000000..655366e6e0f4
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/bpf_map_bench.c
+>> @@ -0,0 +1,27 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* Copyright (c) 2022 Bytedance */
+>> +
+>> +#include "vmlinux.h"
+>> +#include <bpf/bpf_helpers.h>
+>> +#include "bpf_misc.h"
+>> +
+>> +char _license[] SEC("license") = "GPL";
+>> +
+>> +#define MAX_ENTRIES 1000
+>> +
+>> +struct {
+>> +       __uint(type, BPF_MAP_TYPE_HASH);
+>> +       __type(key, u32);
+>> +       __type(value, u64);
+>> +       __uint(max_entries, MAX_ENTRIES);
+>> +} hash_map_bench SEC(".maps");
+>> +
+>> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
+>> +int benchmark(void *ctx)
+>> +{
+>> +       u32 key = bpf_get_prandom_u32();
+>> +       u64 init_val = 1;
+>> +
+>> +       bpf_map_update_elem(&hash_map_bench, &key, &init_val, BPF_ANY);
+>> +       return 0;
+>> +}
+>> --
+>> 2.20.1
+>>
 
-Wow, those are useful names.
-
-> +
-> +  resets:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-
-Already has a type. Need to define how many entries and what each one is 
-(if more than 1).
-
-> +
-> +
-> +required:
-> +  - '#thermal-sensor-cells'
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +  - resets
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/thermal/thermal.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/reset/mt8195-resets.h>
-> +
-> +    lvts: lvts@1100b000 {
-
-Drop unused label.
-
-thermal-sensor@...
-
-> +        compatible = "mediatek,mt8195-lvts";
-> +        #thermal-sensor-cells = <1>;
-> +        reg = <0 0x1100b000 0 0x1000>,
-> +              <0 0x11278000 0 0x1000>;
-> +        interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>,
-> +                     <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-> +        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-> +        resets = <&infracfg_ao MT8195_INFRA_RST0_THERM_CTRL_SWRST>,
-> +                 <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
-> +        nvmem-cells = <&lvts_e_data1 &lvts_e_data2>;
-> +        nvmem-cell-names = "e_data1","e_data2";
-> +    };
-> +...
-> -- 
-> 2.35.1
-> 
-> 

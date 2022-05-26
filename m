@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B458B53520C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E09535212
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347796AbiEZQ24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 12:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
+        id S1348112AbiEZQ3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 12:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiEZQ2w (ORCPT
+        with ESMTP id S231802AbiEZQ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 12:28:52 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E494C7B9FF
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:28:50 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 137so1719888pgb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:28:50 -0700 (PDT)
+        Thu, 26 May 2022 12:29:45 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8185D9BAD0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:29:44 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 202so2141250pfu.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=ZV2y77FSAdklT7BKF+Tws43T4buN/hfHfm1U5B1OUTY=;
-        b=2l+TLfCq3eeZ8fnL4KvNPyIePz/kfWJ3xDqUw9rjbwjbepocHIx4xOokRfKmQZXcjq
-         sB5yKd3QPZI5WpbmUONnogFtTwkfTufAtkNQonFhta858pKIj2mrLBfwaThv1XLZ5qUw
-         HKIfY772DkudNhL4y/3qsv/BKNLOeELnYiOseGovKA4UxOyeMFRh4NyVQGIC8uqaGZim
-         9DhOn5r6/7Sk/fsjJsyGjQPLb6Cq8vkxTNiyMwYleEyaUXMu9ZHZuHnsnYj9aY4063pL
-         anmx7dkc0QrcCB3o/tKUCMuIy3+/gM0QRdQoNMrZ6w6nZ8SVa+ajkscjDC/GqA7XbnmK
-         m6rg==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=pcOIqjfOGD4mtjARe3uelHp7io5D0VG5aulAy4XSsSE=;
+        b=qsX7tZ2WyLRtY66GJBSkIA/fXY4PQcBTX49kCBByX+ju+12FnmPws2UX0mQc5Na4EI
+         XOLv+1a+rXAF4+6PBeIA6S4Juy+VundpqCQbLl7jTQxBZmCX9BB7DclNK93Rpb3MAmKQ
+         G+wT0p9+gBoWCWQGghkVQFmmOQkyhx2t5uF0QprWvta0FJ7tofDdPU0zdMf23TA7RV4f
+         pc3JGE/P1lkbcihC23wX2W8pcqj2hDfSgNNKNyZQRDWTUzC0xTpJIXV9PSyIv1sX6NAr
+         orzFWzJS1LoK/KUWs+I1FGYzIq/7IM1tYDC8UItbOApbDlGXAx+3QAnzzLXJ2MA42Iil
+         x+Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=ZV2y77FSAdklT7BKF+Tws43T4buN/hfHfm1U5B1OUTY=;
-        b=Fpv8ZKh8VUrAMgBiHveCgyzsIhWSmq8Okwf9QMY7egsGaLTWcyEXYfsBIjurZAa9xb
-         AmYFHi1Qk4RuHDfdM65dL5JtUzBqoR354kpwD/lXH3fhKN/zOVQbqRO4DoMWjfq+mcJR
-         rWvw6WifTJT6u3ISgDtnu9+NhLkXau4FJmsw4lWAe2vIpjJDZKRWFd9GDQraaPqJTyr9
-         qmMQ1e+n3uBVAkHOWQjnafWUZ0hWBP41zw0/0tX4djpVGpgteqvb/49PJJyP75BsVooW
-         98GKM2hg5uHOknmzklDEWBb5JL3RSlP8tLgnVIiY96MZzCPwzHJSU1ww1B9WX9wGz2ES
-         dU6g==
-X-Gm-Message-State: AOAM532csenTrC6+QMAsTvDc20V/tpNZhTRlsXJKHNobtkMBz619nROS
-        haLcVZByXQeVCf9eLZTB3h/ZfA==
-X-Google-Smtp-Source: ABdhPJzsd/UhDYfCsKi9Q0HQ1PX++LTeTnaX8uCbHKcHAw1xfbhM6zfM0BCJpYZwUgFFGZu7q+LWNw==
-X-Received: by 2002:a05:6a00:15c2:b0:518:9911:4952 with SMTP id o2-20020a056a0015c200b0051899114952mr22033146pfu.64.1653582530334;
-        Thu, 26 May 2022 09:28:50 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id z12-20020aa785cc000000b0050dc762818bsm1714033pfn.101.2022.05.26.09.28.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 09:28:49 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mtd@lists.infradead.org
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/4] mtd: rawnand: meson: fix the clock
-In-Reply-To: <20220513123404.48513-3-liang.yang@amlogic.com>
-References: <20220513123404.48513-1-liang.yang@amlogic.com>
- <20220513123404.48513-3-liang.yang@amlogic.com>
-Date:   Thu, 26 May 2022 09:28:49 -0700
-Message-ID: <7hwne88dha.fsf@baylibre.com>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=pcOIqjfOGD4mtjARe3uelHp7io5D0VG5aulAy4XSsSE=;
+        b=HnjzCSwSogEDipZp9ihfhCfyqUtzHYS4vpEwkl1FPWWvWtyEmfMI8Noaey8UXxiuBB
+         d8ildH1E9YTR89h3fjMIpcU/JjT5Ur1DTUj+lEJHNSxQyDwF29UjRsYGgnyZEE7Wuh55
+         hXL/3I+377JHYZRxaU7eE/kxmK2Kw1af9MqVYxiGlRJa+yN1NaNeUSz/00bg6AbiwPbU
+         BdUuNppukfBQHeL2Z++n4+fxIEU2ojJ7xFAHhmHsONdCBctV8MHHaCTKciqCQcqH5d56
+         4eQZ058Por4z+GHRGDLqtv62uq16SWlCQ+GN6cfhs53Uke7fwzkTGUi9txazejIEBJQZ
+         UtAA==
+X-Gm-Message-State: AOAM530I5v2HyhAAxnNKTZ8cIrhNckq7/YK5JCnTT+rKwIuH484SnZ6a
+        267HpEQD8z1GWvdgIgl+IYGmMR9lg7OdOGHdNQA=
+X-Google-Smtp-Source: ABdhPJzR4pDeON4Oqc7r91fRBKum6xIG5GjzHU8NvkI1Wwp9ocLze1lUkjBQkrduEjF4d2xrhNG/i4D1sdQu6Uu2kGQ=
+X-Received: by 2002:a63:4:0:b0:3c6:cce2:8457 with SMTP id 4-20020a630004000000b003c6cce28457mr32928452pga.612.1653582583800;
+ Thu, 26 May 2022 09:29:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: mr.a.manga99@gmail.com
+Sender: mrsannahbruun605@gmail.com
+Received: by 2002:a17:90b:4a10:0:0:0:0 with HTTP; Thu, 26 May 2022 09:29:43
+ -0700 (PDT)
+From:   "Mr. Amos Manga" <mr.a.manga99@gmail.com>
+Date:   Thu, 26 May 2022 09:29:43 -0700
+X-Google-Sender-Auth: aK6KCpH-JwwZkP9T4hNAXJiSIRI
+Message-ID: <CAEyYVPEwVLRVBRSuvLW7B-G3LmbtfG-P2WHostH-+uu1+6jX9g@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FORM_SHORT,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liang,
+Good day,
 
-Liang Yang <liang.yang@amlogic.com> writes:
+I know this means of communication may not be morally right to you as
+a person but I also have had a great thought about it and I have come
+to conclusion which I am about to share with you.
 
-> EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK'
-> which is defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is
-> the divider and bit6~7 is the mux for fix pll and xtal. At the beginning,
-> a common MMC and NAND sub-clock was discussed and planed to be implemented
-> as NFC clock provider, but now this series of patches of a common MMC and
-> NAND sub-clock are never being accepted.  the reasons for giving up are:
-> 1. EMMC and NAND, which are mutually exclusive anyway
-> 2. coupling the EMMC and NAND.
-> 3. it seems that a common MMC and NAND sub-clock is over engineered.
-> and let us see the link fot more information:
-> https://lore.kernel.org/all/20220121074508.42168-5-liang.yang@amlogic.com
-> so The meson nfc can't work now, let us rework the clock.
->
-> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+INTRODUCTION: I am a banker; I hope you will cooperate with me as a
+partner in a project of transferring an abandoned fund of late
+customer of the bank worth $18,000,000 (Eighteen Million Dollars
+only).
 
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+This will be disbursed or shared between the both of us in these
+percentages, 55% for me and 45% for you. Contact me immediately if
+that is alright for you so that we can enter into an agreement before
+we start processing for the transfer of the funds. If you are
+satisfied with this proposal, please provide the below details for the
+Mutual Confidentiality Agreement
 
-Thank you for your persistence in working on multiple iterations of this
-until we came to a final agreement.
+1. Full Name and Address
 
-Kevin
+2. Occupation and Country of Origin
+
+3. Telephone Number
+
+I wait for your response so that we can commence on this transaction
+as soon as possible.
+
+Regards,
+
+Mr.Amos Manga.

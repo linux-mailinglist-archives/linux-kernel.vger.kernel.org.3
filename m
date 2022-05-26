@@ -2,184 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CB7534F23
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0137534F27
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347242AbiEZMau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        id S1347237AbiEZMcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239480AbiEZMas (ORCPT
+        with ESMTP id S1347241AbiEZMb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:30:48 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3212B56F8F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:30:47 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id z7so2610084ybf.7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:30:47 -0700 (PDT)
+        Thu, 26 May 2022 08:31:58 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF5221A0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:31:53 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id gi33so2770206ejc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wSzupgGbJymN2DRtVZW8VXb2xMt74vbuMkhbmlvnxwU=;
-        b=cQEQjyfS+5li+iYHCcdK85KAscyRoN36MOD15H2bHVH2UZpeAFlK94cuNfoyVUxgmZ
-         URaLl3BKICPQco7EVZKrLP2PwEpBSgrA6JBvpn14tm5nMM4H4JAXwAxLj9qx0LRenBuA
-         06Lhx4bCfxkV7m6ghOZyi3NllR/BpXac1vtzeWiVAL6MNuphUcMHhgjBcak2EiSLMoAh
-         JKF5ejnHjFoXWCfHHFDE3m8g2Lr0jC53AW32OS5oUYZp2WDtfLuU6HgOThiebiDGgzEq
-         SJ+EuZeVvTIVcaIpckQNJfli0fsmOtrMumPnuqcUgfGRFSFyVDWpIS8dd4WHLJDdXnlP
-         CHMA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LBL/8y8/LUYPF5+lyivMH99zmCcurEDsFooG2UU4WWA=;
+        b=W2zqnFCyFSQ++tFA7S3b0yktYXOz/D9JMCw10nnNav9hy4QfgmkWMui5iFy6xEr8o+
+         X/RCetDX9ZBi2elH8/0Gfd6LCouxCVLgA1/m57R7oJrcvnON0lYJCwccwBX+2Mo+k457
+         AO9y12hotM9p5BJ1m+6i8ruYEapMeDJcKOsXoRyULW/oVhN9tyw2sxd9WpCFKhGsT710
+         BC6B1Z2VamQPSs001O/+GzVlln02VdbV+9zWpRHgNkG2n81tl9nXRDtLAJdNm8Ey2unv
+         m4mZLVNcEYaplBd/SZDQizB3rnLsNlbX2J4a2WS5pneMlKdL+Z7nWRnMHZw/ZM5IESoX
+         JPGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wSzupgGbJymN2DRtVZW8VXb2xMt74vbuMkhbmlvnxwU=;
-        b=YZaMnkU0MQOWVnv6oNUgEb1nBp9df+uzkOiF2q2Bl9pc0URgVGuHKwMGmqHtAlulTW
-         ghj0WoDHr+wuZINXsDu5i5YHDXqvyljYhIm5h+sNlbOzMeQp0y2Ro7mdIWf+s3yuBYoL
-         RN12sc0WmApGBlDe2iptlXPHVJfAPGdZ/EUfKT/cmUeF9NWnZurr/uNxiDDpofQkG3nF
-         8sXXGnZPf7HTymmSV6SLaJ2NINiLffFcfrDnawzbwGabYJBX/dmltmP4XllzqopTSX5Z
-         EWwgIL0WS08EGo0LwM0o9/gSFnVudazo1ZqmIPZdau7X2TmjzAVe0hdvyFgZlJKO8Tib
-         NOVw==
-X-Gm-Message-State: AOAM531hr8ZxvM7F26Cgse0XCEv7OsupvObIGZeltZCnPJ7KXnpGRrkq
-        iTkGlwW+mlcsKlRYUANUBLjjrlp73hBOTD7gxfDoGzIIWUny1A==
-X-Google-Smtp-Source: ABdhPJxmSbICLaRV9EjgyV7YxNhxLYWsXZvLW3/s+Tyn/9Ap//fmHX1MoLbww3qsFfWpQXZpNwwU3LdlxoWpJyTF+2k=
-X-Received: by 2002:a25:d917:0:b0:651:e15e:f334 with SMTP id
- q23-20020a25d917000000b00651e15ef334mr12670099ybg.510.1653568246386; Thu, 26
- May 2022 05:30:46 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LBL/8y8/LUYPF5+lyivMH99zmCcurEDsFooG2UU4WWA=;
+        b=M2LjfD8mhCQsn84/N4D+G3bs6U6iD+r83SGAqsNjjvk75IzgYW9cHPaaj6tzOJ0zf+
+         uqQNA4C6sFI46w4xmDhf6RSaJB/jyG+vJE79H/TntK11KzY0RRNhdkl33w6JLds3d48d
+         G7WAa8L6q2SJR+sAxkr3Em5i8tRm7RXzzEG+/FDU9IRjV4ZEzpw406UHseOKfKUnpxzI
+         o/Dzmn0SV0UQh/aNX/Q4FtblcdxG/DwnxVZP1MhV3Zb8e6KAes7LWGzaYXY7UTQFDU7O
+         zyzmy6dn4v4i+NEaKV0vp9Ubqjb1IBwdKOKUJb2qI0BuB9fMvfIOcdTPrgAsHOWKwy/w
+         BlcA==
+X-Gm-Message-State: AOAM532+GiQw3owSMo9JmJ6iz2/Lm07Xgf0P75JimmHVn05/Cf7XhN9S
+        +bWqsxHInuWVH4E958fQ2lW8ww==
+X-Google-Smtp-Source: ABdhPJwfFQ63TrQfru3/+Z/7dBzyzpa0UwjSeQH0rtIVp+Pb8HIBVLXpCN/yGk2ZdKFzTzOr/OhA4g==
+X-Received: by 2002:a17:906:52c7:b0:6ce:a880:50a3 with SMTP id w7-20020a17090652c700b006cea88050a3mr32905178ejn.437.1653568311744;
+        Thu, 26 May 2022 05:31:51 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d4-20020a50e404000000b0042617ba63c4sm742811edm.78.2022.05.26.05.31.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 05:31:51 -0700 (PDT)
+Message-ID: <4ee1f7e8-d73f-21f7-eaab-4c8fdca34a31@linaro.org>
+Date:   Thu, 26 May 2022 14:31:50 +0200
 MIME-Version: 1.0
-References: <CAJNi4rNwPQf747UM_hiYYwL=HDxg8QnPpfFPv1PfrtN9ZP1y1g@mail.gmail.com>
- <35f95ba3-8a7b-7918-0f9d-e14274a5ffe9@arm.com> <CAJNi4rMbBbLP2Tsv-wnnJKt4Y0moOE5-sNaZN1fCty908pwAKw@mail.gmail.com>
- <87ee0gn5rq.wl-maz@kernel.org> <5a8d5c51-ae02-a335-6768-2bedf809ab63@arm.com>
-In-Reply-To: <5a8d5c51-ae02-a335-6768-2bedf809ab63@arm.com>
-From:   richard clark <richard.xnu.clark@gmail.com>
-Date:   Thu, 26 May 2022 20:30:35 +0800
-Message-ID: <CAJNi4rOtsfzJWsgx7CABczbf3DqqsigErf1YFw6hKOhWnACnHQ@mail.gmail.com>
-Subject: Re: Question about SPIs' interrupt trigger type restrictions
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 3/3] tpm: Add tpm_tis_i2c backend for tpm_tis_core
+Content-Language: en-US
+To:     Alexander Steffen <Alexander.Steffen@infineon.com>,
+        jarkko@kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
+        Johannes Holland <johannes.holland@infineon.com>,
+        Amir Mizinski <amirmizi6@gmail.com>
+References: <20220525165849.7789-1-Alexander.Steffen@infineon.com>
+ <20220525165849.7789-4-Alexander.Steffen@infineon.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220525165849.7789-4-Alexander.Steffen@infineon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 4:41 PM Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2022-05-26 07:54, Marc Zyngier wrote:
-> > On Thu, 26 May 2022 04:44:41 +0100,
-> > richard clark <richard.xnu.clark@gmail.com> wrote:
-> >>
-> >> On Thu, May 26, 2022 at 3:14 AM Robin Murphy <robin.murphy@arm.com> wr=
-ote:
-> >>>
-> >>> On 2022-05-25 11:01, richard clark wrote:
-> >>>> Hi Marc,
-> >>>>
-> >>>> For below code snippet about SPI interrupt trigger type:
-> >>>>
-> >>>> static int gic_set_type(struct irq_data *d, unsigned int type)
-> >>>> {
-> >>>>           ...
-> >>>>           /* SPIs have restrictions on the supported types */
-> >>>>           if ((range =3D=3D SPI_RANGE || range =3D=3D ESPI_RANGE) &&
-> >>>>               type !=3D IRQ_TYPE_LEVEL_HIGH && type !=3D IRQ_TYPE_ED=
-GE_RISING)
-> >>>>                   return -EINVAL;
-> >>>>           ...
-> >>>> }
-> >>>>
-> >>>> We have a device at hand whose interrupt type is SPI, Falling edge
-> >>>> will trigger the interrupt. But the request_irq(50, handler,
-> >>>> IRQ_TYPE_EDGE_FALLING, ...) will return -EINVAL.
-> >>>>
-> >>>> The question is, why must the SPI interrupt use IRQ_TYPE_EDGE_RISING
-> >>>> instead of IRQ_TYPE_EDGE_FALLING?
-> >>>
-> >>> Because that's what the GIC architecture[1] says. From section 1.2.1
-> >>> "Interrupt Types":
-> >>>
-> >>> "An interrupt that is edge-triggered has the following property:
-> >>>          =E2=80=A2 It is asserted on detection of a rising edge of an=
- interrupt signal
-> >>
-> >> This rising edge detection is not true, it's also asserted by
-> >> falling edge, just like the GICD_ICFGR register says: Changing the
-> >> interrupt configuration between level-sensitive and *edge-triggered
-> >> (in either direction)* at a time when there is a pending interrupt
-> >> ...,
-> >
-> > Let me finish the sentence for you:
-> >
-> > <quote>
-> > ... will leave the interrupt in an UNKNOWN pending state.
-> > </quote>
-> >
-> > and the direction here is about the configuration bit, not the edge
-> > direction.
->
-> Indeed it's clearly referring to either direction of *the change*, i.e.
-> from edge to level and from level to edge.
->
-> >> which has been confirmed by GIC-500 on my platform.
-> >
-> >  From the GIC500 r1p1 TRM, page 2-8:
-> >
-> > <quote>
-> > SPIs are generated either by wire inputs or by writes to the AXI4
-> > slave programming interface.  The GIC-500 can support up to 960 SPIs
-> > corresponding to the external spi[991:32] signal. The number of SPIs
-> > available depends on the implemented configuration. The permitted
-> > values are 32-960, in steps of 32. The first SPI has an ID number of
-> > 32. You can configure whether each SPI is triggered on a rising edge
-> > or is active-HIGH level-sensitive.
-> > </quote>
-> >
-> > So I have no idea what you are talking about, but you definitely have
-> > the wrong end of the stick. Both the architecture and the
-> > implementations are aligned with what the GIC drivers do.
-> >
-> > If your system behaves differently, this is because something is
-> > inverting the signal, which is extremely common. Just describe this in
-> > your device tree, or lie to the kernel, whichever way you want.
->
-> I think the important concept to grasp here is that what we describe in
-> DT is not properties of the device in isolation, but properties of its
-> integration into the system as a whole. Consider the "reg" property,
-> which in 99% of cases has nothing to do with the actual device it
-> belongs to, but is instead describing a property of the interconnect,
-> namely how its address map decodes to a particular interface, to which
-> the given device happens to be attached.
+On 25/05/2022 18:58, Alexander Steffen wrote:
+> Implement the TCG I2C Interface driver, as specified in the TCG PC
+> Client Platform TPM Profile (PTP) specification for TPM 2.0 v1.04
+> revision 14, section 8, I2C Interface Definition.
+> 
+> This driver supports Guard Times. That is, if required by the TPM, the
+> driver has to wait by a vendor-specific time after each I2C read/write.
+> The specific time is read from the TPM_I2C_INTERFACE_CAPABILITY register.
+> 
+> Unfortunately, the TCG specified almost but not quite compatible
+> register addresses. Therefore, the TIS register addresses need to be
+> mapped to I2C ones. The locality is stripped because for now, only
+> locality 0 is supported.
+> 
+> Add a sanity check to I2C reads of e.g. TPM_ACCESS and TPM_STS. This is
+> to detect communication errors and issues due to non-standard behaviour
+> (E.g. the clock stretching quirk in the BCM2835, see 4dbfb5f4401f). In
+> case the sanity check fails, attempt a retry.
+> 
+> Co-developed-by: Johannes Holland <johannes.holland@infineon.com>
+> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> Co-developed-by: Amir Mizinski <amirmizi6@gmail.com>
+> Signed-off-by: Amir Mizinski <amirmizi6@gmail.com>
+> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> ---
+>  drivers/char/tpm/Kconfig       |  12 +
+>  drivers/char/tpm/Makefile      |   1 +
+>  drivers/char/tpm/tpm_tis_i2c.c | 406 +++++++++++++++++++++++++++++++++
+>  3 files changed, 419 insertions(+)
+>  create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
+> 
+> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> index 4a5516406c22..927088b2c3d3 100644
+> --- a/drivers/char/tpm/Kconfig
+> +++ b/drivers/char/tpm/Kconfig
+> @@ -74,6 +74,18 @@ config TCG_TIS_SPI_CR50
+>  	  If you have a H1 secure module running Cr50 firmware on SPI bus,
+>  	  say Yes and it will be accessible from within Linux.
+>  
+> +config TCG_TIS_I2C
+> +	tristate "TPM Interface Specification 1.3 Interface / TPM 2.0 FIFO Interface - (I2C - generic)"
+> +	depends on I2C
+> +	select CRC_CCITT
+> +	select TCG_TIS_CORE
+> +	help
+> +	  If you have a TPM security chip, compliant with the TCG TPM PTP
+> +	  (I2C interface) specification and connected to an I2C bus master,
+> +	  say Yes and it will be accessible from within Linux.
+> +	  To compile this driver as a module, choose M here;
+> +	  the module will be called tpm_tis_i2c.
+> +
+>  config TCG_TIS_SYNQUACER
+>  	tristate "TPM Interface Specification 1.2 Interface / TPM 2.0 FIFO Interface (MMIO - SynQuacer)"
+>  	depends on ARCH_SYNQUACER || COMPILE_TEST
+> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+> index 66d39ea6bd10..0222b1ddb310 100644
+> --- a/drivers/char/tpm/Makefile
+> +++ b/drivers/char/tpm/Makefile
+> @@ -29,6 +29,7 @@ tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
+>  
+>  obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
+>  
+> +obj-$(CONFIG_TCG_TIS_I2C) += tpm_tis_i2c.o
+>  obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
+>  obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
+>  obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
+> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> new file mode 100644
+> index 000000000000..8b9218e5405f
+> --- /dev/null
+> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> @@ -0,0 +1,406 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2014-2021 Nuvoton Technology corporation
+> + * Copyright (C) 2019-2022 Infineon Technologies AG
+> + *
+> + * This device driver implements the TPM interface as defined in the TCG PC
+> + * Client Platform TPM Profile (PTP) Specification for TPM 2.0 v1.04
+> + * Revision 14.
+> + *
+> + * It is based on the tpm_tis_spi device driver.
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/moduleparam.h>
+> +#include <linux/slab.h>
+> +#include <linux/interrupt.h>
 
-I don't care about the DT at all... The essential is- does the GIC
-only support rising edge detection really just as the document says,
-I'm doubtful about that ;-)
+Is it used?
 
->
-> At the HDL level, the device block may very well have an output signal
-> which idles at logic-high, and pulses low to indicate an event, however
-> it only becomes an *interrupt* if it is wired up to an interrupt
-> controller; on its own it's just some output signal. What the DT
-> interrupt specifier describes is that wiring, *from the interrupt
-> controller's point of view*. If a pulsed signal is fed into an Arm GIC
-> SPI input then as an interrupt it *is* IRQ_TYPE_EDGE_RISING, because
-> that's how the GIC hardware will treat it. The integration as a whole
+> +#include <linux/wait.h>
+> +#include <linux/acpi.h>
 
-EDGE_RISING can leave its mark in the GIC, that's the *how*, but why
-EDGE_FALLING can't, any reasons to justify this behavior?
-I believe that the drivers still work if the trigger type sanity check
-in the GIC driver is removed.
+Is it used?
 
-Thanks
+> +#include <linux/freezer.h>
 
-> takes care of the details and makes that happen, so what the logic
-> levels at some arbitrary HDL boundary in the middle might be is simply
-> not meaningful.
->
-> Thanks,
-> Robin.
+Is it used?
+
+> +
+> +#include <linux/module.h>
+> +#include <linux/i2c.h>
+
+> +#include <linux/gpio.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/of_gpio.h>
+
+The same for these three.
+
+Best regards,
+Krzysztof

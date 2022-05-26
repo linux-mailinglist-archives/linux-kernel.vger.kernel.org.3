@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED62534853
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B3153486C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbiEZBqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S1345676AbiEZBzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiEZBqr (ORCPT
+        with ESMTP id S1345777AbiEZBzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:46:47 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9218DDD2;
-        Wed, 25 May 2022 18:46:46 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-f2a4c51c45so642179fac.9;
-        Wed, 25 May 2022 18:46:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=6furrOjrDUV85XtAuBJ6m/tHv7Cr2IP2D70aDr3j5Hs=;
-        b=CX0a9LX9eNGbMICfAvHZvynpch4OdwE6wbsOCKp6eQiv5LXl1T5dKjAFX5GaRI1ypS
-         mIlaw+nsowbj4bXrm+41PcgQiI/b0GJXAMsC8DrSNL6lXWDsqQGoDg8eHO1FXAwufNrX
-         D1/FDvVHohuc5u3uO8L2gE20tRi+ym8OtVplIpwcoqDp9B7XnXX8nE9sIl/Ko5BLnyeX
-         N7LsVxgg3/SDo+qt5/ssxRsMXZ+EFv014rGlix4RGDbAeDYqk4ZVgdKDKfps6puY76Aw
-         zt8dtftXD96gF9F6zCFNkZxtn4OeldQl73wG8aqwArqbi50jggjmqZg4Car8nCOK0jZV
-         HPLQ==
-X-Gm-Message-State: AOAM531BsSxauEd+lV2FPNgdQNpt2qzgdFlBUjKPVXiwxX0rpiOMxTgr
-        02pl+Gk/ov7eN2Q/3YPR4ysc0TGV8Q==
-X-Google-Smtp-Source: ABdhPJw0MqIKEAYGSj8vFkwsSBLltgN0uJecV7/4E3iNGQwDikRJ1m1S3Ib8YDRu6U6xOvZfW4rMOA==
-X-Received: by 2002:a05:6870:b609:b0:f2:74e7:9bf1 with SMTP id cm9-20020a056870b60900b000f274e79bf1mr4887oab.141.1653529605213;
-        Wed, 25 May 2022 18:46:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y5-20020a4ad645000000b0040e5ff4a737sm141390oos.26.2022.05.25.18.46.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 18:46:44 -0700 (PDT)
-Received: (nullmailer pid 2880899 invoked by uid 1000);
-        Thu, 26 May 2022 01:46:43 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-media@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-sunxi@lists.linux.dev,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>
-In-Reply-To: <20220525191026.696636-2-paul.kocialkowski@bootlin.com>
-References: <20220525191026.696636-1-paul.kocialkowski@bootlin.com> <20220525191026.696636-2-paul.kocialkowski@bootlin.com>
-Subject: Re: [PATCH v4 1/6] dt-bindings: media: Add Allwinner A31 ISP bindings documentation
-Date:   Wed, 25 May 2022 20:46:43 -0500
-Message-Id: <1653529603.421651.2880898.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 25 May 2022 21:55:00 -0400
+X-Greylist: delayed 358 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 May 2022 18:54:59 PDT
+Received: from mail.eskimo.com (mail.eskimo.com [204.122.16.222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123F7A7E1A;
+        Wed, 25 May 2022 18:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=eskimo.com;
+        s=default; t=1653529739;
+        bh=VhtTl6PFy6AJclvYo5GWavMZF1ZfPH1+J4/x75mDWjI=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=DdT41yPyzKxpmbcaQX5W7TJI+nZKXvXHp0XOaE3t/AshCmDmkknIDvMdC97vgtgHA
+         O7cAuOWYWmXjDsGg3KiuOfxgHhgBAgJ8Iqtm1KGGsk0IGdPE1EHj07aBv/LdLmLoqt
+         2hjfZ6kTEgMmcJkpZFVQDwKPOTq4EKL8fxKVo2zX8UwZmqmMoRkIOBq6K10WmH/RBl
+         BILUDMZ0YxbNiQ9I+AGY3fT7z7ZNwUbUwX1ZATQ/UOFRDnYDZ6rYNWFMtd6hetNmJl
+         2XYJREu+I+OCl89A1OiIRL7Y8wfWyjALHYtRX8d/zdDmn1e3JP0JtF9qQK7jWTYMYH
+         EClu34hVNf57Q==
+Received: from ubuntu.eskimo.com (ubuntu.eskimo.com [204.122.16.33])
+        by mail.eskimo.com (Postfix) with ESMTPS id B64B63C9FF9;
+        Wed, 25 May 2022 18:48:59 -0700 (PDT)
+Date:   Wed, 25 May 2022 18:48:59 -0700 (PDT)
+From:   Robert Dinse <nanook@eskimo.com>
+To:     Sean Christopherson <seanjc@google.com>
+cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 0/4] KVM: x86: Emulator _regs fixes and cleanups
+In-Reply-To: <20220525222604.2810054-1-seanjc@google.com>
+Message-ID: <847a4d9b-e064-fac5-ae5e-3574baa170b@eskimo.com>
+References: <20220525222604.2810054-1-seanjc@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Virus-Scanned: clamav-milter 0.103.6 at mail.eskimo.com
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 21:10:21 +0200, Paul Kocialkowski wrote:
-> This introduces YAML bindings documentation for the Allwinner A31 Image
-> Signal Processor (ISP).
+
+      This set of patches did allow 5.18 to compile without errors using gcc 
+12.1.  Thank you!
+
+-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+  Eskimo North Linux Friendly Internet Access, Shell Accounts, and Hosting.
+    Knowledgeable human assistance, not telephone trees or script readers.
+  See our web site: http://www.eskimo.com/ (206) 812-0051 or (800) 246-6874.
+
+On Wed, 25 May 2022, Sean Christopherson wrote:
+
+> Date: Wed, 25 May 2022 22:26:00 +0000
+> From: Sean Christopherson <seanjc@google.com>
+> To: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>,
+>     Vitaly Kuznetsov <vkuznets@redhat.com>,
+>     Wanpeng Li <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>,
+>     Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+>     linux-kernel@vger.kernel.org, Robert Dinse <nanook@eskimo.com>,
+>     Kees Cook <keescook@chromium.org>
+> Subject: [PATCH 0/4] KVM: x86: Emulator _regs fixes and cleanups
 > 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
->  1 file changed, 97 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml:53:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-./Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml:55:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> Clean up and harden the use of the x86_emulate_ctxt._regs, which is
+> surrounded by a fair bit of magic.  This series was prompted by bug reports
+> by Kees and Robert where GCC-12 flags an out-of-bounds _regs access.  I'm
+> 99% certain GCC-12 is wrong and is generating a false positive, but just in
+> case...
+>
+> I didn't tag patch 2 with Fixes or Cc: stable@; if it turns out to "fix"
+> the GCC-12 compilation error, it's probably worth sending to v5.18 stable
+> tree (KVM hasn't changed, but the warning=>error was "introdued in v5.18
+> by commit e6148767825c ("Makefile: Enable -Warray-bounds")).
+>
+> Sean Christopherson (4):
+>  KVM: x86: Grab regs_dirty in local 'unsigned long'
+>  KVM: x86: Harden _regs accesses to guard against buggy input
+>  KVM: x86: Omit VCPU_REGS_RIP from emulator's _regs array
+>  KVM: x86: Use 16-bit fields to track dirty/valid emulator GPRs
+>
+> arch/x86/kvm/emulate.c     | 14 ++++++++++++--
+> arch/x86/kvm/kvm_emulate.h | 14 +++++++++++---
+> 2 files changed, 23 insertions(+), 5 deletions(-)
+>
+>
+> base-commit: 90bde5bea810d766e7046bf5884f2ccf76dd78e9
+> -- 
+> 2.36.1.124.g0e6072fb45-goog
+>

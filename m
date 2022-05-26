@@ -2,176 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4077E535019
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A2553501D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244883AbiEZNkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 09:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S243771AbiEZNll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 09:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiEZNkT (ORCPT
+        with ESMTP id S243254AbiEZNlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 09:40:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F46B5E767
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:40:18 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24QDbvCI023751;
-        Thu, 26 May 2022 13:39:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5HJ5s9o+3hDPq2NWvfxUbVJWO2R6/Udu9Xp3AxQBuyI=;
- b=UOH2tJMZGkY6fAD5PGn9FTj+HRSOCiXTeZzUftSCF7vCnrSejTG70G7ED5vyK1X/YZoi
- cg/YnM2a7L9/l389kYreLXpPHd4Vqll3iweRq5Gz/wL7V+l3T0bcoRLFCwQOY4kllje7
- v4FP72P43V99QUFx9tcp0u3xonTw6FTfY6AvrSBnzNltIbEhh0nDk5Qysnu6BpUZzKpP
- gCtNya0JCGc3YNtojKV9cldT9gu5wPFKl8K2oulgtnc6lnk5wN5zndbhi2n8QTwA/FVn
- uMIba1PMHPhKCWNQuewSSi7c3ofy6M4ed8LMWBMK0JgSVXfeybF++c5Eyo6wqEQ9X/k7 9Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gaakug0kj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 May 2022 13:39:37 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24QDdEs4026426;
-        Thu, 26 May 2022 13:39:36 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gaakug0k9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 May 2022 13:39:36 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24QDUGXf026642;
-        Thu, 26 May 2022 13:39:34 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 3g94g3a3ge-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 26 May 2022 13:39:34 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24QDdWuO28443022
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 26 May 2022 13:39:32 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0E8114C040;
-        Thu, 26 May 2022 13:39:32 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6ECE04C044;
-        Thu, 26 May 2022 13:39:26 +0000 (GMT)
-Received: from [9.43.96.50] (unknown [9.43.96.50])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 26 May 2022 13:39:26 +0000 (GMT)
-Message-ID: <94fba107-a425-7cf6-2a7b-0562c2dcfce4@linux.ibm.com>
-Date:   Thu, 26 May 2022 19:09:25 +0530
+        Thu, 26 May 2022 09:41:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 893ACC37
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653572493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=psF/SAzkqXSB5iGV88JF4c0l1o2XBFHBME6W1tXw3ac=;
+        b=AmqgL/GsrxjuyOelWRk7em7nlpWf4qDOre00tY/6CIIV7iBN11SyRUj8KPvjYYYfproZLm
+        YMvxmFH0dH8JO8RKp75yj0pBFj3/U79uBS9+4jVxWI8dv6lDd2kBjKwD187nGbRFDTy2U0
+        g1MiD9mVZ8hbHvpqyUSHxEa7bDu9zD0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-cn927Y5WPf-4aiw0WUX__g-1; Thu, 26 May 2022 09:41:32 -0400
+X-MC-Unique: cn927Y5WPf-4aiw0WUX__g-1
+Received: by mail-wm1-f72.google.com with SMTP id bg40-20020a05600c3ca800b00394779649b1so3089319wmb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:41:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=psF/SAzkqXSB5iGV88JF4c0l1o2XBFHBME6W1tXw3ac=;
+        b=ERXidw/61TUnU9Z3BdwCiEsaL1L7W6j9uSHL8Fl/BWFJoc1SiKf5dccY54w7mPw3Ya
+         SdRh4apmaPNayOi6Df58hmH39L+kLnWgplOv4OOKU7Ry/S/tWYMapHi2ZoU8cUWwkmSo
+         7dE6XU2Dhyj7l6urHMLy1HmavDu3vgOS/H6NBDkmQfG/rWzDVgQ+FJ7skM0bCyAs7TyG
+         v5SJtMboiBMmlF+DH/A3b9PKHEdvAYD0dC+A7cFXu9SUEb8m8v50DUj7arIwI7j/N1ZJ
+         AUI1p6oPBabmlZ0hzzN+jNTPzvZX0zaNT271VfR+/MMmNoToDEk1x6uJmzYJmWcyof8o
+         GLZg==
+X-Gm-Message-State: AOAM53310VCz9GpEBiBGDTUQxOcGQIuZtSWP71F/TmtsfGCqsBQzUUjd
+        cVcWnAQ+w/ZFenavXFym/NotuXDBHr8pmRZ/Fslx1kZyfZtaAaA3EHzgAqIptjN5Rv9rHBQ1XfD
+        Ed9pKkpe1ucFjpJb2ieKisrGZuvl/y0iI0IPvP+FxV+dZi3OCjVYQdxOx7K2K/JWoiNffLjlrqM
+        I=
+X-Received: by 2002:a05:600c:3583:b0:397:3d93:75b8 with SMTP id p3-20020a05600c358300b003973d9375b8mr2349336wmq.76.1653572490610;
+        Thu, 26 May 2022 06:41:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJytVlrrsRs5q4UkJKl030m3nelnOfkqzrldHtQRWFAJgXuye49B/o43k9DqzgJar7qeJweWgQ==
+X-Received: by 2002:a05:600c:3583:b0:397:3d93:75b8 with SMTP id p3-20020a05600c358300b003973d9375b8mr2349295wmq.76.1653572490088;
+        Thu, 26 May 2022 06:41:30 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id h6-20020a5d5046000000b0020c547f75easm1765022wrt.101.2022.05.26.06.41.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 06:41:29 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christian Kellner <ckellner@redhat.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Peter Jones <pjones@redhat.com>,
+        Lennart Poettering <lennart@poettering.net>,
+        Colin Walters <walters@verbum.org>,
+        Chung-Chiang Cheng <cccheng@synology.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 0/3] fat: add support for the renameat2 RENAME_EXCHANGE flag
+Date:   Thu, 26 May 2022 15:41:16 +0200
+Message-Id: <20220526134119.242182-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v8 0/7] crash: Kernel handling of CPU and memory hot
- un/plug
-Content-Language: en-US
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20220505184603.1548-1-eric.devolder@oracle.com>
- <311b0834-c675-fd15-8184-82b122f4a9cc@linux.ibm.com>
- <bffb3d9e-1946-f4b6-d58c-9c44bc0bee26@oracle.com>
-From:   Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <bffb3d9e-1946-f4b6-d58c-9c44bc0bee26@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TMtScjGuOPJarKMyIiuaNDW2sNZ9NxBR
-X-Proofpoint-ORIG-GUID: byNRdpRpU3U4J37GkwzqvFC2PANKnG4v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-26_07,2022-05-25_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- bulkscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 suspectscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205260066
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Eric,
+Hello,
 
-On 26/05/22 18:46, Eric DeVolder wrote:
->
->
-> On 5/25/22 10:13, Sourabh Jain wrote:
->> Hello Eric,
->>
->> On 06/05/22 00:15, Eric DeVolder wrote:
->>> When the kdump service is loaded, if a CPU or memory is hot
->>> un/plugged, the crash elfcorehdr (for x86), which describes the CPUs
->>> and memory in the system, must also be updated, else the resulting
->>> vmcore is inaccurate (eg. missing either CPU context or memory
->>> regions).
->>>
->>> The current solution utilizes udev to initiate an unload-then-reload
->>> of the kdump image (e. kernel, initrd, boot_params, puratory and
->>> elfcorehdr) by the userspace kexec utility. In previous posts I have
->>> outlined the significant performance problems related to offloading
->>> this activity to userspace.
->>>
->>> This patchset introduces a generic crash hot un/plug handler that
->>> registers with the CPU and memory notifiers. Upon CPU or memory
->>> changes, this generic handler is invoked and performs important
->>> housekeeping, for example obtaining the appropriate lock, and then
->>> invokes an architecture specific handler to do the appropriate
->>> updates.
->>>
->>> In the case of x86_64, the arch specific handler generates a new
->>> elfcorehdr, and overwrites the old one in memory. No involvement
->>> with userspace needed.
->>>
->>> To realize the benefits/test this patchset, one must make a couple
->>> of minor changes to userspace:
->>>
->>>   - Disable the udev rule for updating kdump on hot un/plug changes.
->>>     Add the following as the first two lines to the udev rule file
->>>     /usr/lib/udev/rules.d/98-kexec.rules:
->>
->> If we can have a sysfs attribute to advertise this feature then 
->> userspace
->> utilities (kexec tool/udev rules) can take action accordingly. In 
->> short, it will
->> help us maintain backward compatibility.
->>
->> kexec tool can use the new sysfs attribute and allocate additional 
->> buffer space
->> for elfcorehdr accordingly. Similarly, the checksum-related changes 
->> can come
->> under this check.
->>
->> Udev rule can use this sysfs file to decide kdump service reload is 
->> required or not.
->
-> Great idea. I've been working on the corresponding udev and 
-> kexec-tools changes and your input/idea here is quite timely.
->
-> I have boolean "crash_hotplug" as a core_param(), so it will show up as:
->
-> # cat /sys/module/kernel/parameters/crash_hotplug
-> N
+This series add support for the renameat2 system call RENAME_EXCHANGE flag
+(which allows to atomically replace two paths) to the vfat filesystem code.
 
-How about using 0-1 instead Y/N?
-0 = crash hotplug not supported
-1 = crash hotplug supported
+There are many use cases for this, but we are particularly interested in
+making possible for vfat filesystems to be part of OSTree [0] deployments.
 
-Also how about keeping sysfs here instead?
-/sys/kernel/kexec_crash_hotplug
+Currently OSTree relies on symbolic links to make the deployment updates
+an atomic transactional operation. But RENAME_EXCHANGE could be used [1]
+to achieve a similar level of robustness when using a vfat filesystem.
 
-Thanks,
-Souabh Jain
+Patch #1 is just a preparatory patch to introduce the RENAME_EXCHANGE
+support in patch #2 and finally patch #3 adds some kselftests to test it.
+
+This is a v3 that addresses issues pointed out in the second version posted:
+
+https://lkml.org/lkml/2022/5/24/137
+
+[0]: https://github.com/ostreedev/ostree
+[1]: https://github.com/ostreedev/ostree/issues/1649
+
+Changes in v3:
+- Add a .gitignore for the rename_exchange binary (Muhammad Usama Anjum).
+- Include $(KHDR_INCLUDES) instead of hardcoding a relative path in Makefile
+  (Muhammad Usama Anjum).
+
+Changes in v2:
+- Only update the new_dir inode version and timestamps if != old_dir
+  (Alex Larsson).
+- Add some helper functions to avoid duplicating code (OGAWA Hirofumi).
+- Use braces for multi-lines blocks even if are one statement (OGAWA Hirofumi).
+- Mention in commit message that the operation is as transactional as possible
+  but within the vfat limitations of not having a journal (Colin Walters).
+- Call sync to flush the page cache before checking the file contents
+  (Alex Larsson).
+- Drop RFC prefix since the patches already got some review.
+
+Javier Martinez Canillas (3):
+  fat: add a vfat_rename2() and make existing .rename callback a helper
+  fat: add renameat2 RENAME_EXCHANGE flag support
+  selftests/filesystems: add a vfat RENAME_EXCHANGE test
+
+ MAINTAINERS                                   |   1 +
+ fs/fat/namei_vfat.c                           | 193 +++++++++++++++++-
+ tools/testing/selftests/Makefile              |   1 +
+ .../selftests/filesystems/fat/.gitignore      |   2 +
+ .../selftests/filesystems/fat/Makefile        |   7 +
+ .../testing/selftests/filesystems/fat/config  |   2 +
+ .../filesystems/fat/rename_exchange.c         |  37 ++++
+ .../filesystems/fat/run_fat_tests.sh          |  82 ++++++++
+ 8 files changed, 318 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/filesystems/fat/.gitignore
+ create mode 100644 tools/testing/selftests/filesystems/fat/Makefile
+ create mode 100644 tools/testing/selftests/filesystems/fat/config
+ create mode 100644 tools/testing/selftests/filesystems/fat/rename_exchange.c
+ create mode 100755 tools/testing/selftests/filesystems/fat/run_fat_tests.sh
+
+-- 
+2.36.1
 

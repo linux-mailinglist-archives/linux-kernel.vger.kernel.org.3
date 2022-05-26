@@ -2,185 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FF2534E91
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC62534E9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347278AbiEZLu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 07:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
+        id S242594AbiEZLwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 07:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbiEZLuA (ORCPT
+        with ESMTP id S238114AbiEZLwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 07:50:00 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B9D13CE7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:49:57 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 3993C240109
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:49:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1653565795; bh=cRcbvpylDEovzuioyUFbmK10HWZL8EtsZHhbUVtRPI0=;
-        h=Subject:To:Cc:From:Date:From;
-        b=SJ2CozR0XtfZ6bF8xNQcF5bqVGtpyVhVp4vw7HjWiVkPW5GClTlJbRdl9fogACn4C
-         3kJ/jgUTfVc1YUBuh4d9mqz8q7wCJWkumo9zvFSAtQTw/f+Tu2FmpzQxenDhRc477D
-         rw0fs0dzSGxu3p3I30NGlng+Zc6VrcO4RsIOKumTbM/fuZaxV/52knY/Ec2LS9oG5r
-         Wwx6Kv52LrRSLSTey7+Qd1WI+Tg4e33pwcqsPrHGbrcZRbFF2ywlcZtBaVBtdSEQrv
-         1Vz9c5Kb4N2y5MQ8YaAsBW6NBk69xCMj4hHFxf6ZoZnc0f2fGsp7nvTMoVoq6ImcqF
-         S/MOPQkcM/brg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4L85p75wHzz6tmY;
-        Thu, 26 May 2022 13:49:51 +0200 (CEST)
-Subject: Re: [PATCH v2] cpu/hotplug: Do not bail-out in DYING/STARTING
- sections
-To:     Vincent Donnefort <vdonnefort@google.com>, peterz@infradead.org,
-        tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, vschneid@redhat.com,
-        kernel-team@android.com
-References: <20220523160536.2889162-1-vdonnefort@google.com>
-From:   Derek Dolney <z23@posteo.net>
-Message-ID: <7083f81f-cded-44f8-1586-46a1e44f0786@posteo.net>
-Date:   Thu, 26 May 2022 11:48:01 +0000
+        Thu, 26 May 2022 07:52:37 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596A3D028A
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:52:36 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24QBhuvC022369;
+        Thu, 26 May 2022 11:51:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ynPlZyBaNKCcm0CiJDgThFxPrRBhCGbeVI8OA7nVc8o=;
+ b=sGJ6FYY0ksdqK5Gilghmv3kKnIMhcL/jN7NS24uSiR2jRRy84JL2psZgB7bPAMz4ALRN
+ 7YMZGsiA0d0WfL8ZMrYHrNAwbpoU1fH945DGoKYYYt7J/qDKlV9FY35iN0g13TlfOAtL
+ LK8UAckdDHDhw8frfEfd1pO2Jdkm5FAt5SJMVl8BWEdXVhJXHrbdcmHa3Dol+V/8Hom3
+ xgtOdK1uMcP2IGsI3u8lCUqQYqPyISVeAoPPOVQrtf5ib0MCGs7MLH3qs+uSBJl7zryh
+ Ny+BKUSWhZiD7yiwEm8cx+7pVWPb2bLrlosLdmbuh9ZlhnthOLKtipz7GAv9gIzNRzIi bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ga8x583xn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 May 2022 11:51:13 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24QBjwD7029256;
+        Thu, 26 May 2022 11:51:12 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ga8x583wr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 May 2022 11:51:12 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24QBmWbP024191;
+        Thu, 26 May 2022 11:51:11 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g93ux2j5j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 May 2022 11:51:10 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24QBp88545678892
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 26 May 2022 11:51:08 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 985C352050;
+        Thu, 26 May 2022 11:51:08 +0000 (GMT)
+Received: from localhost (unknown [9.43.88.34])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EFD345204F;
+        Thu, 26 May 2022 11:51:07 +0000 (GMT)
+Date:   Thu, 26 May 2022 17:21:02 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [RFC PATCH 1/4] objtool: Add --mnop as an option to --mcount
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20220523175548.922671-1-sv@linux.ibm.com>
+        <20220523175548.922671-2-sv@linux.ibm.com>
+        <26c7bfc8-3089-034a-70c0-8857d7cd3a99@csgroup.eu>
+        <1653386854.o7nss9hzc9.naveen@linux.ibm.com>
+        <d45030be-3f6b-ebeb-3d63-bf7a96d3ff3b@csgroup.eu>
+        <1653388084.w21cyb07gc.naveen@linux.ibm.com>
+        <Yo4UysC69UCwhlYp@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yo4UysC69UCwhlYp@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20220523160536.2889162-1-vdonnefort@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1653564857.f06fbbl3vg.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VqH70ghrPi37x42qUQ2pBbdsMKAQow1X
+X-Proofpoint-ORIG-GUID: Peo3i2FCPjcZkXQWaKkjXDOKpPv7Iwnc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-26_06,2022-05-25_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 clxscore=1015 suspectscore=0 bulkscore=0 mlxlogscore=654
+ spamscore=0 adultscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205260054
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I tested this patch on the 5.12 commit that broke suspend and also on
-the latest git 5.18 branch and this is good, suspend and resume are
-working again.
+Peter Zijlstra wrote:
+> On Tue, May 24, 2022 at 04:01:48PM +0530, Naveen N. Rao wrote:
+>=20
+>> We need to know for sure either way. Nop'ing out the _mcount locations a=
+t
+>> boot allows us to discover existing long branch trampolines. If we want =
+to
+>> avoid it, we need to note down those locations during build time.
+>>=20
+>> Do you have a different approach in mind?
+>=20
+> If you put _mcount in a separate section then the compiler cannot tell
+> where it is and is forced to always emit a long branch trampoline.
+>=20
+> Does that help?
 
-Derek
+That's an interesting thought. Depending on the type of trampoline the=20
+compiler emits, I might be able to use this approach. We will still need=20
+objtool on powerpc  so that we can note down those trampoline locations.
 
-On 5/23/22 12:05 PM, Vincent Donnefort wrote:
-> The DYING/STARTING callbacks are not expected to fail. However, as reported
-> by Derek, drivers such as tboot are still free to return errors within
-> those sections. In that case, there's nothing the hotplug machinery can do,
-> so let's just proceed and log the failures.
-> 
-> Fixes: 453e41085183 (cpu/hotplug: Add cpuhp_invoke_callback_range())
-> Reported-by: Derek Dolney <z23@posteo.net>
-> Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
-> 
-> ---
-> 
-> v1 -> v2: 
->    - Commit message rewording.
->    - More details in the warnings.
->    - Some variable renaming
-> 
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index bbad5e375d3b..c3617683459e 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -663,21 +663,51 @@ static bool cpuhp_next_state(bool bringup,
->  	return true;
->  }
->  
-> -static int cpuhp_invoke_callback_range(bool bringup,
-> -				       unsigned int cpu,
-> -				       struct cpuhp_cpu_state *st,
-> -				       enum cpuhp_state target)
-> +static int _cpuhp_invoke_callback_range(bool bringup,
-> +					unsigned int cpu,
-> +					struct cpuhp_cpu_state *st,
-> +					enum cpuhp_state target,
-> +					bool nofail)
->  {
->  	enum cpuhp_state state;
-> -	int err = 0;
-> +	int ret = 0;
->  
->  	while (cpuhp_next_state(bringup, &state, st, target)) {
-> +		int err;
-> +
->  		err = cpuhp_invoke_callback(cpu, state, bringup, NULL, NULL);
-> -		if (err)
-> +		if (!err)
-> +			continue;
-> +
-> +		if (nofail) {
-> +			pr_warn("CPU %u %s state %s (%d) failed (%d)\n",
-> +				cpu, bringup ? "UP" : "DOWN",
-> +				cpuhp_get_step(st->state)->name,
-> +				st->state, err);
-> +			ret = -1;
-> +		} else {
-> +			ret = err;
->  			break;
-> +		}
->  	}
->  
-> -	return err;
-> +	return ret;
-> +}
-> +
-> +static inline int cpuhp_invoke_callback_range(bool bringup,
-> +					      unsigned int cpu,
-> +					      struct cpuhp_cpu_state *st,
-> +					      enum cpuhp_state target)
-> +{
-> +	return _cpuhp_invoke_callback_range(bringup, cpu, st, target, false);
-> +}
-> +
-> +static inline void cpuhp_invoke_callback_range_nofail(bool bringup,
-> +						      unsigned int cpu,
-> +						      struct cpuhp_cpu_state *st,
-> +						      enum cpuhp_state target)
-> +{
-> +	WARN_ON_ONCE(_cpuhp_invoke_callback_range(bringup, cpu, st, target, true));
->  }
->  
->  static inline bool can_rollback_cpu(struct cpuhp_cpu_state *st)
-> @@ -999,7 +1029,6 @@ static int take_cpu_down(void *_param)
->  	struct cpuhp_cpu_state *st = this_cpu_ptr(&cpuhp_state);
->  	enum cpuhp_state target = max((int)st->target, CPUHP_AP_OFFLINE);
->  	int err, cpu = smp_processor_id();
-> -	int ret;
->  
->  	/* Ensure this CPU doesn't handle any more interrupts. */
->  	err = __cpu_disable();
-> @@ -1012,13 +1041,11 @@ static int take_cpu_down(void *_param)
->  	 */
->  	WARN_ON(st->state != (CPUHP_TEARDOWN_CPU - 1));
->  
-> -	/* Invoke the former CPU_DYING callbacks */
-> -	ret = cpuhp_invoke_callback_range(false, cpu, st, target);
-> -
->  	/*
-> +	 * Invoke the former CPU_DYING callbacks
->  	 * DYING must not fail!
->  	 */
-> -	WARN_ON_ONCE(ret);
-> +	cpuhp_invoke_callback_range_nofail(false, cpu, st, target);
->  
->  	/* Give up timekeeping duties */
->  	tick_handover_do_timer();
-> @@ -1296,16 +1323,14 @@ void notify_cpu_starting(unsigned int cpu)
->  {
->  	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
->  	enum cpuhp_state target = min((int)st->target, CPUHP_AP_ONLINE);
-> -	int ret;
->  
->  	rcu_cpu_starting(cpu);	/* Enables RCU usage on this CPU. */
->  	cpumask_set_cpu(cpu, &cpus_booted_once_mask);
-> -	ret = cpuhp_invoke_callback_range(true, cpu, st, target);
->  
->  	/*
->  	 * STARTING must not fail!
->  	 */
-> -	WARN_ON_ONCE(ret);
-> +	cpuhp_invoke_callback_range_nofail(true, cpu, st, target);
->  }
->  
->  /*
-> 
+
+Thanks,
+Naveen

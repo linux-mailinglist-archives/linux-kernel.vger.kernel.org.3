@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C02E534C32
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE751534C10
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242715AbiEZJEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 05:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S237186AbiEZI5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiEZJEC (ORCPT
+        with ESMTP id S232417AbiEZI5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 05:04:02 -0400
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F52D116D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:04:00 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAD3_4dyQo9iz1N7Cg--.40442S2;
-        Thu, 26 May 2022 17:03:54 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     santoshkumar.yadav@barco.com, peter.korsgaard@barco.com,
-        hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] platform/x86: barco-p50-gpio: Add check for platform_driver_register
-Date:   Thu, 26 May 2022 17:03:45 +0800
-Message-Id: <20220526090345.1444172-1-jiasheng@iscas.ac.cn>
+        Thu, 26 May 2022 04:57:02 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AFE3525C;
+        Thu, 26 May 2022 01:57:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653555420; x=1685091420;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VYZcLDoZJWGwpGI3Sm3xsbMDc92hUIeYlIsQC6WcKIA=;
+  b=PvqOM7G0s49LAxFkLgj0huKG2B0hdhKRH7tPWcuGPJ44v/OXfDTiDe8R
+   C9NwcmFoKHIMFRYZmt/Al0Cv4kcmb4+WmDxQRt+ox6R6F9CwqZvTtzxc3
+   jl+QC5ZVWmZcXjfyyOL2lf+KqpgVUrPEf4WtHXn6aAMojlvl+2CVHceHA
+   mu+Px5vrjaLK6p5jZwd22A2/Xegv3/jR++mWRzvLm/0fnJl8i6z13jos4
+   22n4MmaLTFg5cUF5rYYvBRi5lqkYe+J6KmqT6AxQEpcYveVbe2mLPdxYP
+   YoL2xAmH4WvebulPkFqUQo43ye8yZwowMaeHmKbI886MoSpxqoI346mWf
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="337136423"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="337136423"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 01:57:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="609601489"
+Received: from p12hl01tmin.png.intel.com ([10.158.65.216])
+  by orsmga001.jf.intel.com with ESMTP; 26 May 2022 01:56:56 -0700
+From:   Tan Tee Min <tee.min.tan@linux.intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Dan Murphy <dmurphy@ti.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Sit Michael Wei Hong <michael.wei.hong.sit@intel.com>,
+        Ling Pei Lee <pei.lee.ling@intel.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>
+Subject: [PATCH net-next v2 1/1] net: phy: dp83867: retrigger SGMII AN when link change
+Date:   Thu, 26 May 2022 17:03:47 +0800
+Message-Id: <20220526090347.128742-1-tee.min.tan@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAD3_4dyQo9iz1N7Cg--.40442S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw18uF43GFWkAr1DCF1xXwb_yoWktwc_CF
-        18uFZrWrn5Kas2kF1jyw43uryIkas5WFs3Kw1xtFyaqa4rJa1xCr42vry3tw17Wr1YvFyD
-        G3s7CFWSkrya9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUhNVgUUUUU=
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,37 +69,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As platform_driver_register() could fail, it should be better
-to deal with the return value in order to maintain the code
-consisitency.
+There is a limitation in TI DP83867 PHY device where SGMII AN is only
+triggered once after the device is booted up. Even after the PHY TPI is
+down and up again, SGMII AN is not triggered and hence no new in-band
+message from PHY to MAC side SGMII.
 
-Fixes: 86af1d02d458 ("platform/x86: Support for EC-connected GPIOs for identify LED/button on Barco P50 board")
+This could cause an issue during power up, when PHY is up prior to MAC.
+At this condition, once MAC side SGMII is up, MAC side SGMII wouldn`t
+receive new in-band message from TI PHY with correct link status, speed
+and duplex info.
 
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+As suggested by TI, implemented a SW solution here to retrigger SGMII
+Auto-Neg whenever there is a link change.
+
+v2: Add Fixes tag in commit message.
+
+Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
+Cc: <stable@vger.kernel.org> # 5.4.x
+Signed-off-by: Sit, Michael Wei Hong <michael.wei.hong.sit@intel.com>
+Reviewed-by: Voon Weifeng <weifeng.voon@intel.com>
+Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
 ---
- drivers/platform/x86/barco-p50-gpio.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/phy/dp83867.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/drivers/platform/x86/barco-p50-gpio.c b/drivers/platform/x86/barco-p50-gpio.c
-index 05534287bc26..8dd672339485 100644
---- a/drivers/platform/x86/barco-p50-gpio.c
-+++ b/drivers/platform/x86/barco-p50-gpio.c
-@@ -405,11 +405,14 @@ MODULE_DEVICE_TABLE(dmi, dmi_ids);
- static int __init p50_module_init(void)
- {
- 	struct resource res = DEFINE_RES_IO(P50_GPIO_IO_PORT_BASE, P50_PORT_CMD + 1);
-+	int ret;
+diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
+index 8561f2d4443b..13dafe7a29bd 100644
+--- a/drivers/net/phy/dp83867.c
++++ b/drivers/net/phy/dp83867.c
+@@ -137,6 +137,7 @@
+ #define DP83867_DOWNSHIFT_2_COUNT	2
+ #define DP83867_DOWNSHIFT_4_COUNT	4
+ #define DP83867_DOWNSHIFT_8_COUNT	8
++#define DP83867_SGMII_AUTONEG_EN	BIT(7)
  
- 	if (!dmi_first_match(dmi_ids))
- 		return -ENODEV;
+ /* CFG3 bits */
+ #define DP83867_CFG3_INT_OE			BIT(7)
+@@ -855,6 +856,32 @@ static int dp83867_phy_reset(struct phy_device *phydev)
+ 			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
+ }
  
--	platform_driver_register(&p50_gpio_driver);
-+	ret = platform_driver_register(&p50_gpio_driver);
-+	if (ret)
-+		return ret;
++static void dp83867_link_change_notify(struct phy_device *phydev)
++{
++	/* There is a limitation in DP83867 PHY device where SGMII AN is
++	 * only triggered once after the device is booted up. Even after the
++	 * PHY TPI is down and up again, SGMII AN is not triggered and
++	 * hence no new in-band message from PHY to MAC side SGMII.
++	 * This could cause an issue during power up, when PHY is up prior
++	 * to MAC. At this condition, once MAC side SGMII is up, MAC side
++	 * SGMII wouldn`t receive new in-band message from TI PHY with
++	 * correct link status, speed and duplex info.
++	 * Thus, implemented a SW solution here to retrigger SGMII Auto-Neg
++	 * whenever there is a link change.
++	 */
++	if (phydev->interface == PHY_INTERFACE_MODE_SGMII) {
++		int val = 0;
++
++		val = phy_clear_bits(phydev, DP83867_CFG2,
++				     DP83867_SGMII_AUTONEG_EN);
++		if (val < 0)
++			return;
++
++		phy_set_bits(phydev, DP83867_CFG2,
++			     DP83867_SGMII_AUTONEG_EN);
++	}
++}
++
+ static struct phy_driver dp83867_driver[] = {
+ 	{
+ 		.phy_id		= DP83867_PHY_ID,
+@@ -879,6 +906,8 @@ static struct phy_driver dp83867_driver[] = {
  
- 	gpio_pdev = platform_device_register_simple(DRIVER_NAME, PLATFORM_DEVID_NONE, &res, 1);
- 	if (IS_ERR(gpio_pdev)) {
+ 		.suspend	= genphy_suspend,
+ 		.resume		= genphy_resume,
++
++		.link_change_notify = dp83867_link_change_notify,
+ 	},
+ };
+ module_phy_driver(dp83867_driver);
 -- 
 2.25.1
 

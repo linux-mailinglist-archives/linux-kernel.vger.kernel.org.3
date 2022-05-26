@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397585354B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB3A5354B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348849AbiEZUlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S1348933AbiEZUls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348015AbiEZUl2 (ORCPT
+        with ESMTP id S1348938AbiEZUlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:41:28 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E3FCF4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:41:23 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id rq11so5154761ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:41:23 -0700 (PDT)
+        Thu, 26 May 2022 16:41:37 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157A9D8F
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:41:35 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id v15so725117edl.9
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Y5UFb7XgLvBUFKAtSz03uKpF5a++oXIA+TPFT+Sfg2A=;
-        b=VApX7qgRWBBCFLCVF1xPxaMd7iv9/LgwNp1Y8LXMGxeWVzrbwB64hx7Gk+9bO6u0ak
-         KtLAKhV4UOd4bz6QyAwJo94dxJlVZchPMjEfoudMpDwRgfs9vTMEqMH3ZQcw4JWqkeEk
-         c2fjZD6NOkI8unLZcrZITcG9ffdsatwEfU5cVXwArEK33uhYD5aqBIhOC8L1/bzbDbwG
-         OpgfatbrL7eqBfdASSc+5wb7QEESnmJXMbMvcUGPgM8l1VYzqr6DGay/h+906kR9xxfV
-         6bSpajG5HFapAOnszqouS/ziOZwD0NrDxvZ4gpTl02vE+HBsj4X9MQmXJi5uxhLZX8mE
-         bjyA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iDU4xBC5nWMNmyCg1ZxLXPk4J0emRkItlM3WQU2JAnA=;
+        b=njmUR1XglcBE+JRzoM0q8gmFW5nTrNyW5GkBvAmW48aW5lNqDLKUiJkKeJyy1x020d
+         KGucZ+w7ACN9g/i2f2ea68jt6RYW7yUkV+BrvkhA2DzmLVrTr7Z4+1FBdiiKLzh+4XEF
+         q+FP5dBGJxACKOw5iEH2HE1S9y/lqskUuAvYsX/GHiO5rd5F5UmB4mASf9ErNDel3+2H
+         LMHHjG8ZJzCxDm+Nhc7If0LAgoGhgkY88SGQ5Hih7lVjhIeKtsy95SauXk2c9AQCCU+l
+         rZsiSO/L4jpQWNguq1GKmkqUf6NSc6x1TgTLIkPCtsvTvAY48TLYjJ+oH8zan9b6nROK
+         A4xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Y5UFb7XgLvBUFKAtSz03uKpF5a++oXIA+TPFT+Sfg2A=;
-        b=uRNrDX6m6oW2v711zLdyZedGDSBGpYu3GPgRtffyDAL1ML6SPFtnKONujLIpmeYtf2
-         bgg2XFNWVvDjea5HEua74TU/A1gqFJX7r6zuth+3GRsKDsO6+ZDUrzQ1hiF5EkgDNoLQ
-         zHzEWfthtxJfzWFQRQa3ySd4232KECzkFyVA/CZ7cUo7QfWPG651CbvAlJVmNfa6L5sC
-         YFQqBopwA2dXMFiw/X7x9Prez/cH5iIlYqGinWMKGmvFoXqQ161eFVpYNENLeQ7D/X5j
-         5yaRlyt37RivBwvKaZO1gzcgcZIdDVigzDy0hBZdnbHB4JAuTsfKTs0lkRLt8qCKzaKe
-         g6+w==
-X-Gm-Message-State: AOAM530tmgF8v5sXjNQw02YvWm+IWg5XFaidZlVSdyT/oSqb4YSRjP0e
-        Q7Y+ltZAgEn3+dr/aaiw5kAULw==
-X-Google-Smtp-Source: ABdhPJzIXn754ViI7D++cdgXqpxvr6R6U6sEXU1YrC/bZQQt+H5KYd3S3ClJSNe40jNUeszOOd4Ddg==
-X-Received: by 2002:a17:907:7e90:b0:6fe:c5bc:d391 with SMTP id qb16-20020a1709077e9000b006fec5bcd391mr22945381ejc.747.1653597683325;
-        Thu, 26 May 2022 13:41:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iDU4xBC5nWMNmyCg1ZxLXPk4J0emRkItlM3WQU2JAnA=;
+        b=1aWi0AorYktMVKtef6CBXib8jhvsGmwvq5hjTTtCHuv+yr8j9vVEtjyEb0wi+2njEZ
+         qzBB7JLVNvzB6scwNJCG5Gzei7U7qXMJ4uenslkeUvxl+OfedbuAGQBO7W+3dNkMD1H/
+         iIIgxIGh0KiDfSDDQHKCLnW9Bm68eigDmwvJFOc3vMZXrCUx4aPr7p3FGsXqOxqzcOkg
+         OwU5u52CNuVxx1u/prxeyp6kP0PFEFfyFULXH7Uzzgllg42OJP1jlwWjKHRXL+XIG9iN
+         EWhGDw4XNOv8Gbpn77nCKIxTDopnmyOgk18QFmE+2+nhd1vE0H7hPbqgvvPgy9rjInff
+         9+Yw==
+X-Gm-Message-State: AOAM532dXmONy+TO1Nz5Zhl251FRVnrgAUGmwv+eJ/rFymi+X8Nw+13K
+        yl5Oxnj3kEYF+GOf9nC6hmXVvw==
+X-Google-Smtp-Source: ABdhPJw2cOeuIEGTQNwPOb/HuniCTNdhsvrUqMAxNn50imGeVksbRSzX3nol7SaI2Kgsf0CL2JOy6A==
+X-Received: by 2002:a05:6402:1d51:b0:41f:cf6c:35a5 with SMTP id dz17-20020a0564021d5100b0041fcf6c35a5mr42029179edb.25.1653597693596;
+        Thu, 26 May 2022 13:41:33 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y8-20020a50f1c8000000b0042b0dd5db38sm1235470edl.36.2022.05.26.13.41.22
+        by smtp.gmail.com with ESMTPSA id y11-20020a170906070b00b006fec28bd09fsm815590ejb.22.2022.05.26.13.41.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 13:41:22 -0700 (PDT)
+        Thu, 26 May 2022 13:41:32 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] ARM: dts: at91: adjust whitespace around '='
-Date:   Thu, 26 May 2022 22:41:09 +0200
-Message-Id: <20220526204110.831805-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ARM: dts: aspeed: adjust whitespace around '='
+Date:   Thu, 26 May 2022 22:41:27 +0200
+Message-Id: <20220526204127.831853-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220526204110.831805-1-krzysztof.kozlowski@linaro.org>
-References: <20220526204110.831805-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,147 +83,62 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Output compared with dtx_diff and fdtdump.
 ---
- arch/arm/boot/dts/at91-kizbox3-hs.dts         | 2 +-
- arch/arm/boot/dts/at91-sam9x60ek.dts          | 2 +-
- arch/arm/boot/dts/at91-sama5d27_som1.dtsi     | 2 +-
- arch/arm/boot/dts/at91-sama5d27_som1_ek.dts   | 4 ++--
- arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts | 2 +-
- arch/arm/boot/dts/at91-sama5d2_icp.dts        | 4 ++--
- arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts     | 6 +++---
- arch/arm/boot/dts/at91-sama5d2_xplained.dts   | 6 +++---
- arch/arm/boot/dts/sam9x60.dtsi                | 2 +-
- 9 files changed, 15 insertions(+), 15 deletions(-)
+ arch/arm/boot/dts/aspeed-bmc-portwell-neptune.dts | 6 +++---
+ arch/arm/boot/dts/aspeed-bmc-quanta-s6q.dts       | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/boot/dts/at91-kizbox3-hs.dts b/arch/arm/boot/dts/at91-kizbox3-hs.dts
-index 2799b2a1f4d2..224f4d5ac4df 100644
---- a/arch/arm/boot/dts/at91-kizbox3-hs.dts
-+++ b/arch/arm/boot/dts/at91-kizbox3-hs.dts
-@@ -186,7 +186,7 @@ id_usba {
- 
- &pioA {
- 	pinctrl_key_gpio_default: key_gpio_default {
--		pinmux=  <PIN_PA22__GPIO>,
-+		pinmux = <PIN_PA22__GPIO>,
- 		<PIN_PA24__GPIO>,
- 		<PIN_PA26__GPIO>,
- 		<PIN_PA29__GPIO>,
-diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-index 7719ea3d4933..886bc855daa4 100644
---- a/arch/arm/boot/dts/at91-sam9x60ek.dts
-+++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-@@ -85,7 +85,7 @@ gpio_keys {
- 		sw1 {
- 			label = "SW1";
- 			gpios = <&pioD 18 GPIO_ACTIVE_LOW>;
--			linux,code=<KEY_PROG1>;
-+			linux,code = <KEY_PROG1>;
- 			wakeup-source;
+diff --git a/arch/arm/boot/dts/aspeed-bmc-portwell-neptune.dts b/arch/arm/boot/dts/aspeed-bmc-portwell-neptune.dts
+index 61bc74b423cf..a5e64ccc2b3a 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-portwell-neptune.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-portwell-neptune.dts
+@@ -24,17 +24,17 @@ memory@80000000 {
+ 	leds {
+ 		compatible = "gpio-leds";
+ 		postcode0 {
+-			label="BMC_UP";
++			label = "BMC_UP";
+ 			gpios = <&gpio ASPEED_GPIO(H, 0) GPIO_ACTIVE_HIGH>;
+ 			default-state = "on";
  		};
- 	};
-diff --git a/arch/arm/boot/dts/at91-sama5d27_som1.dtsi b/arch/arm/boot/dts/at91-sama5d27_som1.dtsi
-index a4623cc67cc1..e87c4990bf5d 100644
---- a/arch/arm/boot/dts/at91-sama5d27_som1.dtsi
-+++ b/arch/arm/boot/dts/at91-sama5d27_som1.dtsi
-@@ -15,7 +15,7 @@ / {
- 	compatible = "atmel,sama5d27-som1", "atmel,sama5d27", "atmel,sama5d2", "atmel,sama5";
+ 		postcode1 {
+-			label="BMC_HB";
++			label = "BMC_HB";
+ 			gpios = <&gpio ASPEED_GPIO(H, 1) GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "heartbeat";
+ 		};
+ 		postcode2 {
+-			label="FAULT";
++			label = "FAULT";
+ 			gpios = <&gpio ASPEED_GPIO(H, 2) GPIO_ACTIVE_HIGH>;
+ 		};
+ 		// postcode3-7 are GPIOH3-H7
+diff --git a/arch/arm/boot/dts/aspeed-bmc-quanta-s6q.dts b/arch/arm/boot/dts/aspeed-bmc-quanta-s6q.dts
+index 69e1bd256271..46cbba6305b8 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-quanta-s6q.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-quanta-s6q.dts
+@@ -65,19 +65,19 @@ leds {
+ 		compatible = "gpio-leds";
  
- 	aliases {
--		i2c0	= &i2c0;
-+		i2c0 = &i2c0;
- 	};
+ 		BMC_HEARTBEAT_N {
+-			label="BMC_HEARTBEAT_N";
++			label = "BMC_HEARTBEAT_N";
+ 			gpios = <&gpio0 ASPEED_GPIO(P, 7) GPIO_ACTIVE_LOW>;
+ 			linux,default-trigger = "heartbeat";
+ 		};
  
- 	clocks {
-diff --git a/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
-index 08f0d4b995ff..b1c390ae5f98 100644
---- a/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
-+++ b/arch/arm/boot/dts/at91-sama5d27_som1_ek.dts
-@@ -21,8 +21,8 @@ aliases {
- 		serial0 = &uart1;	/* DBGU */
- 		serial1 = &uart4;	/* mikro BUS 1 */
- 		serial2 = &uart2;	/* mikro BUS 2 */
--		i2c1	= &i2c1;
--		i2c2	= &i2c3;
-+		i2c1 = &i2c1;
-+		i2c2 = &i2c3;
- 	};
+ 		BMC_LED_STATUS_AMBER_N {
+-			label="BMC_LED_STATUS_AMBER_N";
++			label = "BMC_LED_STATUS_AMBER_N";
+ 			gpios = <&gpio0 ASPEED_GPIO(S, 6) GPIO_ACTIVE_LOW>;
+ 			default-state = "off";
+ 		};
  
- 	chosen {
-diff --git a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
-index 5e8755f22784..48e85fc3d998 100644
---- a/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
-+++ b/arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts
-@@ -19,7 +19,7 @@ aliases {
- 		serial1 = &uart6;	/* BT */
- 		serial2 = &uart5;	/* mikro BUS 2 */
- 		serial3 = &uart3;	/* mikro BUS 1 */
--		i2c1	= &i2c1;
-+		i2c1 = &i2c1;
- 	};
- 
- 	chosen {
-diff --git a/arch/arm/boot/dts/at91-sama5d2_icp.dts b/arch/arm/boot/dts/at91-sama5d2_icp.dts
-index 806eb1d911d7..5ff692ea8a20 100644
---- a/arch/arm/boot/dts/at91-sama5d2_icp.dts
-+++ b/arch/arm/boot/dts/at91-sama5d2_icp.dts
-@@ -24,8 +24,8 @@ aliases {
- 		serial1 = &uart1;	/* mikro BUS 3 */
- 		serial3 = &uart3;	/* mikro BUS 2 */
- 		serial5 = &uart7;	/* flx2 */
--		i2c0	= &i2c0;
--		i2c1	= &i2c1;
-+		i2c0 = &i2c0;
-+		i2c1 = &i2c1;
- 	};
- 
- 	chosen {
-diff --git a/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts b/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts
-index 8ed58af01391..64c3e63de179 100644
---- a/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts
-+++ b/arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts
-@@ -20,9 +20,9 @@ / {
- 
- 	aliases {
- 		serial0 = &uart0;	/* DBGU */
--		i2c0	= &i2c0;	/* mikroBUS 1 */
--		i2c1	= &i2c1;	/* XPRO EXT1 */
--		i2c2	= &i2c2;
-+		i2c0 = &i2c0;	/* mikroBUS 1 */
-+		i2c1 = &i2c1;	/* XPRO EXT1 */
-+		i2c2 = &i2c2;
- 	};
- 
- 	chosen {
-diff --git a/arch/arm/boot/dts/at91-sama5d2_xplained.dts b/arch/arm/boot/dts/at91-sama5d2_xplained.dts
-index cdfe891f9a9e..5959bf0c2fa3 100644
---- a/arch/arm/boot/dts/at91-sama5d2_xplained.dts
-+++ b/arch/arm/boot/dts/at91-sama5d2_xplained.dts
-@@ -205,10 +205,10 @@ vdd_1v35_reg: REG_DCDC1 {
- 
- 							regulator-state-mem {
- 								regulator-on-in-suspend;
--								regulator-suspend-min-microvolt=<1400000>;
--								regulator-suspend-max-microvolt=<1400000>;
-+								regulator-suspend-min-microvolt = <1400000>;
-+								regulator-suspend-max-microvolt = <1400000>;
- 								regulator-changeable-in-suspend;
--								regulator-mode=<ACT8945A_REGULATOR_MODE_LOWPOWER>;
-+								regulator-mode = <ACT8945A_REGULATOR_MODE_LOWPOWER>;
- 							};
- 						};
- 
-diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
-index c328b67bea0c..a0e21022dbc5 100644
---- a/arch/arm/boot/dts/sam9x60.dtsi
-+++ b/arch/arm/boot/dts/sam9x60.dtsi
-@@ -464,7 +464,7 @@ pwm0: pwm@f8034000 {
- 				interrupts = <18 IRQ_TYPE_LEVEL_HIGH 4>;
- 				clocks = <&pmc PMC_TYPE_PERIPHERAL 18>;
- 				#pwm-cells = <3>;
--				status="disabled";
-+				status = "disabled";
- 			};
- 
- 			hlcdc: hlcdc@f8038000 {
+ 		FM_ID_LED_N {
+-			label="FM_ID_LED_N";
++			label = "FM_ID_LED_N";
+ 			gpios = <&gpio0 ASPEED_GPIO(B, 5) GPIO_ACTIVE_LOW>;
+ 			default-state = "off";
+ 		};
 -- 
 2.34.1
 

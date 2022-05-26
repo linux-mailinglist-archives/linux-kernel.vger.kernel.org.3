@@ -2,162 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D2E534CC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CBB534CC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344002AbiEZJug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 05:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S242124AbiEZJwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 05:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237035AbiEZJuf (ORCPT
+        with ESMTP id S231512AbiEZJwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 05:50:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35B56B492
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:50:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 665981474;
-        Thu, 26 May 2022 02:50:33 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.2.68])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 28ACF3F73D;
-        Thu, 26 May 2022 02:50:27 -0700 (PDT)
-Date:   Thu, 26 May 2022 10:50:23 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Thu, 26 May 2022 05:52:15 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15088C9657;
+        Thu, 26 May 2022 02:52:15 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ec42eae76bso9627707b3.10;
+        Thu, 26 May 2022 02:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5fW3OfjEhzE5YNooV46nflF0oAOwiUDDOMvNtmNpi/w=;
+        b=K2iyAo7Bms6m+fqUFJtfe6CXeLZsYcr916aM41w+5VuE9O0UzmacBX+KtsC+fZJ9+t
+         Lb0f0LJmnN78I1YHKHvn6DTizcHGYIRAfpEm2HVO5pKAz4ohKRZleWWNr0GeZ4CldsgO
+         q2wVwTIpDBQGrfhwRuEjyPC+yM1MYaBU/C3q4gY1no3iZZi/Tij0J20DW25KIxOpDzPX
+         PG4DDlQGYfHnZgWQlS1dnpNLurObhdtbFEEWqa+uiH1mwc2hBGAYJhRxH6UOVS4mkLn7
+         iT8pux43RThpY9Kr6oTYuRb4pXz+8iALq0f8QlwrI3nO60QVKMUyzIsjdttGUUdwE0mW
+         /NLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5fW3OfjEhzE5YNooV46nflF0oAOwiUDDOMvNtmNpi/w=;
+        b=22ZmZ+FcPQm4ZB9Qo3/f6eRMlzqJ+SOyJWN5sFTGExIGT4uyI/ziKxyH999z924TcP
+         PFobCWb8ajvTu2PDZ/jtWTFhmeSTkyNHL76mHDtImN1r42HaA7IJkaVbOys13Y/vTxS9
+         8mWz7ezfUJXOGzgTZc8NPsK7s920Tg4Nm9EnSqswbGPTe8/5NheZ6xurWfWzfQ6J/5pE
+         2vAkaTx2TAdPvcxYCp+hMo/J0MQel/k2rsjqC6hPDR7+MVwrX/e32z1vTMlyULdQ7uY4
+         fA6mYRyotaLpDhOv1rqEA1tPfLyaKjOBfq3Y6IdwSByvJGkMwvx9oSLHBEmcm1vSjB2v
+         hTZg==
+X-Gm-Message-State: AOAM533UVTzRqWm5/nXOX8/S7muGcO3Xn28TwUXrj2j/AWToJRzyyvTT
+        UPUM+YdCOKICwwBpNTvVNmFX1D4NWNTi59aPATU=
+X-Google-Smtp-Source: ABdhPJyv0tBS5V0rb3H2z5vrD2ANb/y+4/drmRomJZR+ESqjjUNxWQapHKACIzIAq2VqcB1rA9fA+j25dCijZo6vaM0=
+X-Received: by 2002:a0d:e60a:0:b0:301:b342:5316 with SMTP id
+ p10-20020a0de60a000000b00301b3425316mr3759640ywe.256.1653558734405; Thu, 26
+ May 2022 02:52:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220415103414.86555-1-jiangshanlai@gmail.com>
+ <YoK3zEVj+DuIBEs7@google.com> <CALzav=c_WfJ0hvHUFHkLH-+zrDXZSCzKsGHP6kPYd77adwHkUQ@mail.gmail.com>
+ <CAJhGHyBtVwZ9G+Mv8FMwC4Uku_gK4-Ng7+x+FqykZLftANm0Yg@mail.gmail.com> <70cec00b-428f-9310-96b6-c6257fe36dec@redhat.com>
+In-Reply-To: <70cec00b-428f-9310-96b6-c6257fe36dec@redhat.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 26 May 2022 17:52:03 +0800
+Message-ID: <CAJhGHyAqNpESB_DKH+Hh4qW+t0MbtmG7JAore=kOPbE6SH3xeQ@mail.gmail.com>
+Subject: Re: [PATCH] kvm: x86/svm/nested: Cache PDPTEs for nested NPT in PAE
+ paging mode
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Subject: Re: [PATCH -next v4 3/7] arm64: add support for machine check error
- safe
-Message-ID: <Yo9NX8BvQQXryHDV@FVFF77S0Q05N>
-References: <20220420030418.3189040-1-tongtiangen@huawei.com>
- <20220420030418.3189040-4-tongtiangen@huawei.com>
- <Yn54mA7KnlAs1dER@lakrids>
- <46e5954c-a9a8-f4a8-07cc-de42e2753051@huawei.com>
- <Yo3pP/Y+6HHuVBns@FVFF77S0Q05N>
- <87bdb1c6-5803-d9c0-9208-432027ae1d8b@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87bdb1c6-5803-d9c0-9208-432027ae1d8b@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Avi Kivity <avi@redhat.com>, kvm list <kvm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 11:36:41AM +0800, Tong Tiangen wrote:
-> 
-> 
-> 在 2022/5/25 16:30, Mark Rutland 写道:
-> > On Thu, May 19, 2022 at 02:29:54PM +0800, Tong Tiangen wrote:
-> > > 
-> > > 
-> > > 在 2022/5/13 23:26, Mark Rutland 写道:
-> > > > On Wed, Apr 20, 2022 at 03:04:14AM +0000, Tong Tiangen wrote:
-> > > > > During the processing of arm64 kernel hardware memory errors(do_sea()), if
-> > > > > the errors is consumed in the kernel, the current processing is panic.
-> > > > > However, it is not optimal.
-> > > > > 
-> > > > > Take uaccess for example, if the uaccess operation fails due to memory
-> > > > > error, only the user process will be affected, kill the user process
-> > > > > and isolate the user page with hardware memory errors is a better choice.
-> > > > 
-> > > > Conceptually, I'm fine with the idea of constraining what we do for a
-> > > > true uaccess, but I don't like the implementation of this at all, and I
-> > > > think we first need to clean up the arm64 extable usage to clearly
-> > > > distinguish a uaccess from another access.
-> > > 
-> > > OK,using EX_TYPE_UACCESS and this extable type could be recover, this is
-> > > more reasonable.
-> > 
-> > Great.
-> > 
-> > > For EX_TYPE_UACCESS_ERR_ZERO, today we use it for kernel accesses in a
-> > > couple of cases, such as
-> > > get_user/futex/__user_cache_maint()/__user_swpX_asm(),
-> > 
-> > Those are all user accesses.
-> > 
-> > However, __get_kernel_nofault() and __put_kernel_nofault() use
-> > EX_TYPE_UACCESS_ERR_ZERO by way of __{get,put}_mem_asm(), so we'd need to
-> > refactor that code to split the user/kernel cases higher up the callchain.
-> > 
-> > > your suggestion is:
-> > > get_user continues to use EX_TYPE_UACCESS_ERR_ZERO and the other cases use
-> > > new type EX_TYPE_FIXUP_ERR_ZERO?
-> > 
-> > Yes, that's the rough shape. We could make the latter EX_TYPE_KACCESS_ERR_ZERO
-> > to be clearly analogous to EX_TYPE_UACCESS_ERR_ZERO, and with that I susepct we
-> > could remove EX_TYPE_FIXUP.
-> > 
-> > Thanks,
-> > Mark.
-> According to your suggestion, i think the definition is like this:
-> 
-> #define EX_TYPE_NONE                    0
-> #define EX_TYPE_FIXUP                   1    --> delete
-> #define EX_TYPE_BPF                     2
-> #define EX_TYPE_UACCESS_ERR_ZERO        3
-> #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD  4
-> #define EX_TYPE_UACCESS		        xx   --> add
-> #define EX_TYPE_KACCESS_ERR_ZERO        xx   --> add
-> [The value defined by the macro here is temporary]
+On Thu, May 26, 2022 at 5:33 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 5/26/22 10:38, Lai Jiangshan wrote:
+> >> (Although the APM does say that "modern processors" do not pre-load
+> >> PDPTEs.)
+>
+> This changed between the Oct 2020 and Nov 2021, so I suppose the change
+> was done in Zen 3.
+>
+> > Oh, I also missed the fact that L1 is the host when emulating it.
+> >
+> > The code is for host-mode (L1)'s nested_cr3 which is using the
+> > traditional PAE PDPTEs loading and checking.
+> >
+> > So using caches is the only correct way, right?
+>
+> The caching behavior for NPT PDPTEs does not matter too much.  What
+> matters is that a PDPTE with reserved bits should cause a #NPF at usage
+> time rather than a VMentry failure or a #NPF immediately after VMentry.
+>
 
-Almost; you don't need to add EX_TYPE_UACCESS here, as you can use
-EX_TYPE_UACCESS_ERR_ZERO for that.
+Since there is mmu->get_pdptrs() in mmu_alloc_shadow_roots(), you can't
+conform this now.
 
-We already have:
-
-| #define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)		\
-|         _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, wzr)
-
-... and we can add:
-
-| #define _ASM_EXTABLE_UACCESS(insn, fixup)			\
-|         _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, wzr, wzr)
-
-
-... and maybe we should use 'xzr' rather than 'wzr' for clarity.
-
-> There are two points to modify:
-> 
-> 1、_get_kernel_nofault() and __put_kernel_nofault()  using
-> EX_TYPE_KACCESS_ERR_ZERO, Other positions using EX_TYPE_UACCESS_ERR_ZERO
-> keep unchanged.
-
-That sounds right to me. This will require refactoring __raw_{get,put}_mem()
-and __{get,put}_mem_asm().
-
-> 2、delete EX_TYPE_FIXUP.
-> 
-> There is no doubt about others. As for EX_TYPE_FIXUP, I think it needs to be
-> retained, _cond_extable(EX_TYPE_FIXUP) is still in use in assembler.h.
-
-We use _cond_extable for cache maintenance uaccesses, so those should be moved
-over to to EX_TYPE_UACCESS_ERR_ZERO. We can rename _cond_extable to
-_cond_uaccess_extable for clarity.
-
-That will require restructuring asm-extable.h a bit. If that turns out to be
-painful I'm happy to take a look.
-
-Thanks,
-Mark.
+It will be easier to only cause a #NPF at usage time after the one-off local
+patchset.

@@ -2,90 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D339534ABC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 09:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F70F534AC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 09:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345753AbiEZHWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 03:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        id S1346359AbiEZHYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 03:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbiEZHWC (ORCPT
+        with ESMTP id S1345474AbiEZHYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 03:22:02 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE26531DC8;
-        Thu, 26 May 2022 00:22:00 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L7zs01vW4z4xD7;
-        Thu, 26 May 2022 17:21:55 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1653549716;
-        bh=5WWR9b/ZDGAu5g9AkjwKCwos2CUqL06PdP8u2JFH55Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AQUc4sS51L+smjQfXn9sHJCIMz4xiaKIxWXPZAwzOC63eZvKyIRUilhAXX66BLNFK
-         fWkzmU16P5ySFd8Maj23fZ0K1v3+QnfrnyfIUes0asCllPbekJvqWyiACdXPrcnZFw
-         SAdarFo4ek6mL9nMCfKHV20XMAOEAIl+9jplI49YoKb2sSzbtKDWM68LZf968uG1YL
-         SbKOZt3bg2ZhNiWvwNV+G7mW+iLFqFEU/pamE5rFA9OPU9G67Ne3snCOeFUgfPmcNE
-         aignWXmhyzayMleyp2Ct+FlUpg5rOBrvESamEe69HimR9byV2ABKsX1cGEPHJAsUHh
-         kMWs62ZYC2bLw==
-Date:   Thu, 26 May 2022 17:21:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sean Young <sean@mess.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings in Linus' tree
-Message-ID: <20220526172154.23853e1c@canb.auug.org.au>
+        Thu, 26 May 2022 03:24:13 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB058B0B4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:24:12 -0700 (PDT)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L7zpp2hbGz6GD9Q;
+        Thu, 26 May 2022 15:20:02 +0800 (CST)
+Received: from lhreml741-chm.china.huawei.com (10.201.108.191) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Thu, 26 May 2022 09:24:09 +0200
+Received: from [10.81.194.226] (10.81.194.226) by
+ lhreml741-chm.china.huawei.com (10.201.108.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 26 May 2022 08:23:57 +0100
+Message-ID: <93b92859-2229-8766-09d2-df16e1ebd4e8@huawei.com>
+Date:   Thu, 26 May 2022 10:23:40 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ycxx3/vyq6wl0ZKorA/XSNI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2] coresight: etm4x: Add Support for HiSilicon ETM device
+Content-Language: en-US
+To:     "liuqi (BA)" <liuqi115@huawei.com>, Linuxarm <linuxarm@huawei.com>,
+        <gregkh@linuxfoundation.org>, <mathieu.poirier@linaro.org>,
+        <suzuki.poulose@arm.com>, <mike.leach@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexey Budankov <alexey.budankov@huawei.com>,
+        <abudankov@huawei.com>
+References: <1597323562-3706-1-git-send-email-liuqi115@huawei.com>
+ <853b6d52-da86-1c06-3604-3085ece331a4@huawei.com>
+ <5dd1bd83-232a-07e4-8fde-e4f6cd0e5b8c@huawei.com>
+From:   Alexei Budankov <abudankov@huawei.com>
+In-Reply-To: <5dd1bd83-232a-07e4-8fde-e4f6cd0e5b8c@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.81.194.226]
+X-ClientProxiedBy: saopeml500001.china.huawei.com (7.184.65.104) To
+ lhreml741-chm.china.huawei.com (10.201.108.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Ycxx3/vyq6wl0ZKorA/XSNI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Qi,
 
-Hi all,
+On 26.05.2022 5:56, liuqi (BA) wrote:
+> 
+> Hi Alexei,
+> 
+> On 2022/5/25 23:10, Alexei Budankov wrote:
+>>
+>> Hi Qi Liu,
+>>
+>> On 13.08.2020 15:59, Qi Liu wrote:
+>>> Add ETMv4 periperhal ID for HiSilicon Hip08 and Hip09 platform. Hip08
+>>> contains ETMv4.2 device and Hip09 contains ETMv4.5 device.
+>>>
+>>> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+>>> ---
+>>>   drivers/hwtracing/coresight/coresight-etm4x.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>
+>> Thanks for your patch.
+>> I would like to test HiSilicon ETM device feature on
+>> Kunpeng 920 based server.
+>> I applied the patch and booted the kernel with the changes.
+>> However I don't see any device files neither here:
+>> /sys/bus/coresight/devices/
+> 
+> Thanks for your test :)
 
-building Linus' tree, today's linux-next build (htmldocs) produced
-these warnings:
+Thanks for quick reply. Appreciate it much. :)
 
-Documentation/output/lirc.h.rst:X: WARNING: undefined label: lirc-can-notif=
-y-decode
-Documentation/output/lirc.h.rst:X: WARNING: undefined l
+> 
+> Kunpeng 920 platform(Non-PG) support tracing CPU instruction, source device is coresight ETM, link device is coresight funnel and sink device is ultrasoc SMB. So you need to insmod coresight-* driver and SMB driver, which patch is :
+> Add support for UltraSoc System Memory Buffer
+> https://lore.kernel.org/linux-arm-kernel/20220416083953.52610-1-liuqi115@huawei.com/
 
-Presumably introduced by commit
+I will try it shortly and let you know.
 
-  e5499dd7253c ("media: lirc: revert removal of unused feature flags")
+> 
+> by the way, can you help to check /sys/bus/amba/devices/, and make sure that the firmware of your board has supported ETM, funnel and SMB devices?
 
---=20
-Cheers,
-Stephen Rothwell
+Here we go:
 
---Sig_/Ycxx3/vyq6wl0ZKorA/XSNI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+huawei@armubuntu:~$ pwd
+/home/huawei
+huawei@armubuntu:~$ ls /sys/bus/amba/devices/
+huawei@armubuntu:~$ 
 
------BEGIN PGP SIGNATURE-----
+Look like our server firmware should be upgraded, right?
+Your help and support is greatly appreciated.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKPKpIACgkQAVBC80lX
-0GxKRQgAoU3/ooBEt6BF+vn0CWq0hWLKyV6WLa+pSvRRwuYUre7g8iCFjJ7IX9L1
-+ss6oAoq2/KCiyNiIkMpaXfjYZqdgQ3+TopKlaCf+x0KV+nl28gCWApj4Ztf2Yy5
-aOanj8+StuH+7hdIx3MCTdPcYYoH1pG3JfLvOtBmTvHasdr4pTH2nMFOu6anY2cs
-yIQffICheLDY8kTBh3YWw97j4SLFG2g2RfJ35jQxjAgO0Hr9dtyaguclxzvcrkUT
-PShbUXgVzfBmZGsJCreOfJq5KsPKIdVVAIHaGNIFrYUn5w6OQmmdW1pL8UgL3Mqe
-/Y39DVa77BvL2F6GNDAd8Rg/W4ZPdA==
-=wmxH
------END PGP SIGNATURE-----
+Thanks,
+Alexei
 
---Sig_/Ycxx3/vyq6wl0ZKorA/XSNI--
+> 
+> Thanks,
+> Qi
+> 
+>> nor here:
+>> /sys/bus/event_source/devices/cs_etm/sinks/
+>> What should a user expect new in os with this patch added?
+> 
+> 
+>>
+>> Thanks,
+>> Alexei
+>>
+> 
+> 
+>>
+>>>
+>>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.c b/drivers/hwtracing/coresight/coresight-etm4x.c
+>>> index 6d7d216..7797a57 100644
+>>> --- a/drivers/hwtracing/coresight/coresight-etm4x.c
+>>> +++ b/drivers/hwtracing/coresight/coresight-etm4x.c
+>>> @@ -1587,6 +1587,8 @@ static const struct amba_id etm4_ids[] = {
+>>>       CS_AMBA_UCI_ID(0x000bb805, uci_id_etm4),/* Qualcomm Kryo 4XX Cortex-A55 */
+>>>       CS_AMBA_UCI_ID(0x000bb804, uci_id_etm4),/* Qualcomm Kryo 4XX Cortex-A76 */
+>>>       CS_AMBA_UCI_ID(0x000cc0af, uci_id_etm4),/* Marvell ThunderX2 */
+>>> +    CS_AMBA_UCI_ID(0x000b6d01, uci_id_etm4),/* HiSilicon-Hip08 */
+>>> +    CS_AMBA_UCI_ID(0x000b6d02, uci_id_etm4),/* HiSilicon-Hip09 */
+>>>       {},
+>>>   };
+>>>
+>>> -- 
+>>> 2.8.1
+>> .
+> .

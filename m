@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33080535158
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0500B53515A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347906AbiEZPXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34992 "EHLO
+        id S234153AbiEZPXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239364AbiEZPXV (ORCPT
+        with ESMTP id S244817AbiEZPXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 May 2022 11:23:21 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC15BA9AD
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:23:19 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id n145so1892425iod.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:23:19 -0700 (PDT)
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009CFC038A
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:23:20 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id e3so1876314ios.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:23:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UlmIoIXHwMXi02CIUIbYx/gDCtgYsd+85qsswfbTi60=;
-        b=lcukDgRzh6gqWw1h4Mle/1Y2mwmaULeGkm0dSvmCLjxX12jRc6cTNrpe3/kQIxT6VR
-         BLFPWnpia3CncNic9LXJLWTKkCBk/Yl5RfugOYnyqcbxW8FC0MPaZUFSo6EOkEb66LyY
-         YyesJnY7SKTCOURIvcjvF2gghQy6pcRElIObu1Q2HpWpBNrHJhkr98uD54pYKMZyj+hU
-         AMxISzEFRMnoio7S9FzHH8F/a6ZkAJKul0WzTN+WSMGfYUVVnvWqSptpab+au9Qrs1Y2
-         9gQpq/vDsHRVDggbiBVgy9IzzOQ+w4ibpW4q9prTuCl0uH78qkayL5VaOxo1saThzq4P
-         N8+w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3FuYWZH+FiljKJENkWoPtISQbamYnIl3gQFtl722jiA=;
+        b=JCJ0wcVFz30z7mdJYRQ1SjWB5/cxg52tEnaNUcX7dIplxUVCw74CoRRZS/xOVFVUM7
+         s/pzcO+MNm62J5nT943NsEYQvJ2z0BFhGyoa2dY7cHIRIQBh9R7iQEDQ5imoZ6BoWAOn
+         4dKll3g71P1z/ZtXyzCupQsqBu0IVVoTpUcHnjwl0SRFloc+vFfi6Q1GQxK83xLHe8Oa
+         4eQCfBWb6k5lhYRT5CJ6jB8kRlwa0gRRzHyEOd6rxQkqwERcfaiGesZm9OBFBmtT3g4G
+         z9kSZydtVvp0j7tHFaXPU+w5tR9xTiZxL15tp0/tfHC9D0TK2JG+5f6h9QbNvaTRu6in
+         lFRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UlmIoIXHwMXi02CIUIbYx/gDCtgYsd+85qsswfbTi60=;
-        b=mX3k7nGdz6+bpPPHw0rmogNGN9GpVZuiIx+muJpP0Pyl47Ze6tv9gERL43oEL3JmZz
-         h5pjLOp5sNaMVOPMveutOqsgUSOGto9v2JxRLY8YkPcUMNHEOExddAU7i1lua7+33zDH
-         Fcdz8MHch5BCzhd7+VhjN84zKyaDeZ2tLdzJhpDddqN+Cxem2dwmImkGY+bdEW+pS8nh
-         P99a+SAX5necQb7FhJkaWI5cXbAAmJ9KFZ8MvGiXjLFQq1QwqJ+vFlrMAeHFRnvKQQrL
-         FwqPySES9XCDKKu2aAWDiESwKzT58qxrvZz/bOcdtn1ZdCpxpDrLPnv3egBS38JYIT+L
-         IiIQ==
-X-Gm-Message-State: AOAM533IODXck1M3ettmi5tWFTiA3Fi6JRd9i75+/msCKOrGZWk2qLrJ
-        oVFnOq8dbmbJbTYq78ryEj6aCg==
-X-Google-Smtp-Source: ABdhPJzWHC3ppTv3zcLqCIdHi4Ug4Ffpqkgm/RakXbW4uD5vam6wSj7sPIjK90QZ8w8eRdXhHFvMrA==
-X-Received: by 2002:a05:6638:1486:b0:32b:e870:b2a7 with SMTP id j6-20020a056638148600b0032be870b2a7mr19634359jak.200.1653578599316;
-        Thu, 26 May 2022 08:23:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3FuYWZH+FiljKJENkWoPtISQbamYnIl3gQFtl722jiA=;
+        b=a8ComKm/RRYmCr5bVSR6g87vPOrw+CbpCcuz2kYzuFWe4qBZ8msaYzZ/i8EoLHKy3s
+         rPZakc/5+1DxPtWzjQIYwRZpOY5hPVCnopFj/oNDb7ImAeVJ8mk7PVkDArxq1gzFI8vb
+         YzR0t6jcjFshUtOBhjfMEF/AIeR7acndzFSZHyqGl6AaGyZK1hb+v9w60If1dUcLt97q
+         IjSizfnVZl+u/WtShhn02nCRVzN6df/DvCzuojuv35kzMD8lwXFZKVpGApyzBm50F2Re
+         neQPFxBPRCDpL1MPjN0wQktHPP0GZwtwKF4c+Dgk3rBk0Gf+I2h4u1S176aefFVqINai
+         9bmw==
+X-Gm-Message-State: AOAM531xnrq9WKTUsLG0qWFAIrcgfgAxskO34jXmB0FMNj0y7VO/rDIu
+        W6v4o1jwBkxtxrUh9JTLu44L6Q==
+X-Google-Smtp-Source: ABdhPJwSwMkwczWccgfG9TdcgTrjzDEinEWUUPdmZXWDZhhvWQEAQXqnS055C5SratTS0Ib/K6kDSw==
+X-Received: by 2002:a05:6638:3490:b0:32e:ec1f:b923 with SMTP id t16-20020a056638349000b0032eec1fb923mr6394074jal.20.1653578600375;
+        Thu, 26 May 2022 08:23:20 -0700 (PDT)
 Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id b59-20020a0295c1000000b0032b3a78176fsm466847jai.51.2022.05.26.08.23.18
+        by smtp.gmail.com with ESMTPSA id b59-20020a0295c1000000b0032b3a78176fsm466847jai.51.2022.05.26.08.23.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 08:23:18 -0700 (PDT)
+        Thu, 26 May 2022 08:23:20 -0700 (PDT)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com
@@ -56,15 +56,17 @@ Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
         quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
         elder@kernel.org, netdev@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 0/2] net: ipa: fix page free in two spots
-Date:   Thu, 26 May 2022 10:23:12 -0500
-Message-Id: <20220526152314.1405629-1-elder@linaro.org>
+Subject: [PATCH net v2 1/2] net: ipa: fix page free in ipa_endpoint_trans_release()
+Date:   Thu, 26 May 2022 10:23:13 -0500
+Message-Id: <20220526152314.1405629-2-elder@linaro.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220526152314.1405629-1-elder@linaro.org>
+References: <20220526152314.1405629-1-elder@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,28 +74,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a receive buffer is not wrapped in an SKB and passed to the
-network stack, the (compound) page gets freed within the IPA driver.
-This is currently quite rare.
+Currently the (possibly compound) page used for receive buffers are
+freed using __free_pages().  But according to this comment above the
+definition of that function, that's wrong:
+    If you want to use the page's reference count to decide when
+    to free the allocation, you should allocate a compound page,
+    and use put_page() instead of __free_pages().
 
-The pages are freed using __free_pages(), but they should instead be
-freed using page_put().  This series fixes this, in two spots.
+Convert the call to __free_pages() in ipa_endpoint_trans_release()
+to use put_page() instead.
 
-These patches work for the current linus/master branch, but won't
-apply cleanly to earlier stable branches.  (Nevertheless, the fix is
-a trivial substitution everwhere __free_pages() is called.)
+Fixes: ed23f02680caa ("net: ipa: define per-endpoint receive buffer size")
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+ drivers/net/ipa/ipa_endpoint.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Version 2 is just rebased on today's net/master branch.
-
-					-Alex
-
-Alex Elder (2):
-  net: ipa: fix page free in ipa_endpoint_trans_release()
-  net: ipa: fix page free in ipa_endpoint_replenish_one()
-
- drivers/net/ipa/ipa_endpoint.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
+diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
+index 385aa63ab4bbc..e92aa9447f6e7 100644
+--- a/drivers/net/ipa/ipa_endpoint.c
++++ b/drivers/net/ipa/ipa_endpoint.c
+@@ -1418,11 +1418,8 @@ void ipa_endpoint_trans_release(struct ipa_endpoint *endpoint,
+ 	} else {
+ 		struct page *page = trans->data;
+ 
+-		if (page) {
+-			u32 buffer_size = endpoint->config.rx.buffer_size;
+-
+-			__free_pages(page, get_order(buffer_size));
+-		}
++		if (page)
++			put_page(page);
+ 	}
+ }
+ 
 -- 
 2.32.0
 

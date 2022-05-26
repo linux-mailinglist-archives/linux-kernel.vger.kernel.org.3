@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D925355CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425F05355D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349285AbiEZVpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 17:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S1348835AbiEZVqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 17:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244735AbiEZVpy (ORCPT
+        with ESMTP id S1345621AbiEZVq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 17:45:54 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E04C1EC0;
-        Thu, 26 May 2022 14:45:52 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id l10-20020a9d7a8a000000b0060b151de434so1851953otn.2;
-        Thu, 26 May 2022 14:45:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PCG4r4X+asFA0jZTA+Ife3/8wPAarl7+c0uuxFcUqiE=;
-        b=JDFIzcLAmfYbfGDx7kE82SI7WwZMoBTNmqVhWXDsztkst/94OV4pW5aixB/V/SRlN9
-         SreK5VJ7D5aWmOXRD4om/8hVYF7gz6xtzotz7mVB+uFv59/xCfomUzuFqzFgV1Rkzyi8
-         WDgg4xjHvqLSEqRzq64nLh2gtEAbQD1PwHMXQuUcccwlFcvbt6THpgoU2s94MXhEK0cj
-         h6+UcWarSGU0GcVZTgN+KMVIN3qJR7b5Y3wwbFLSdiP0IS37T1wj404J3f7B8pC5O9/1
-         KS9q7vpeMKJEyBajbArMYMEJHs1Wbmk1T9g+2h6nXKs5F/cYmcIkS7uilzRkV07yaEBU
-         Bfww==
-X-Gm-Message-State: AOAM531JxC8dznnmQ8bD6+AkcQacAnbYZ16K+w/iwwHB2XsXOTK+UqTq
-        S0cT3VTS+5GNUjRktyw8+w==
-X-Google-Smtp-Source: ABdhPJy9ZcPJjkdrjLie5XqS/prFVhv90S8NFQPbVS8lSLRs2N3IH+W94qTPJpzkcMVN5bqyoYrIDg==
-X-Received: by 2002:a9d:1b42:0:b0:60b:20f9:7849 with SMTP id l60-20020a9d1b42000000b0060b20f97849mr6345709otl.383.1653601552019;
-        Thu, 26 May 2022 14:45:52 -0700 (PDT)
-Received: from robh.at.kernel.org (rrcs-192-154-179-37.sw.biz.rr.com. [192.154.179.37])
-        by smtp.gmail.com with ESMTPSA id h19-20020a9d3e53000000b00606b1f72fcbsm1060327otg.31.2022.05.26.14.45.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 14:45:51 -0700 (PDT)
-Received: (nullmailer pid 317160 invoked by uid 1000);
-        Thu, 26 May 2022 21:45:49 -0000
-Date:   Thu, 26 May 2022 16:45:49 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: PCI: apple: Add missing 'power-domains'
- property
-Message-ID: <20220526214549.GA315754-robh@kernel.org>
-References: <20220526014107.2871787-1-robh@kernel.org>
- <a3636e0e-a804-4701-9240-225a3131b16a@www.fastmail.com>
+        Thu, 26 May 2022 17:46:28 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FE35FFD;
+        Thu, 26 May 2022 14:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=sfRMVadM5DFvb9UkztUPJSueAUQ271E9by4MUwweJIo=; b=grlE4T31u4JkQQZ4JcZrTN7AfI
+        X7vawcJ+xqbIzLvHhQ6G/2VB+nkK1jfwl8c/PGI4ZCIdAD6ZsvbTXkxDsd15G6ys1NuFn7nfMQeVS
+        wKlxNnjNrodkPlzw4l3wiRj51HHnEcu2nrxasnjZLiLAdJdNvM35TJYAOPeoYfijWxuQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nuLJD-004ORC-W8; Thu, 26 May 2022 23:46:19 +0200
+Date:   Thu, 26 May 2022 23:46:19 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Piyush Malgujar <pmalgujar@marvell.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Chandrakala Chavva <cchavva@marvell.com>,
+        Damian Eppel <deppel@marvell.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH] Marvell MDIO clock related changes.
+Message-ID: <Yo/1K5KYivuJM6CA@lunn.ch>
+References: <CH0PR18MB4193CF9786F80101D08A2431A3FC9@CH0PR18MB4193.namprd18.prod.outlook.com>
+ <Ymv1NU6hvCpAo5+F@lunn.ch>
+ <20220526105720.GA4922@Dell2s-9>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a3636e0e-a804-4701-9240-225a3131b16a@www.fastmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220526105720.GA4922@Dell2s-9>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 03:48:15PM +0200, Sven Peter wrote:
-> Hi,
+On Thu, May 26, 2022 at 03:57:20AM -0700, Piyush Malgujar wrote:
+> On Fri, Apr 29, 2022 at 04:24:53PM +0200, Andrew Lunn wrote:
+> > > > > 2) Marvell MDIO clock frequency attribute change:
+> > > > > This MDIO change provides an option for user to have the bus speed set
+> > > > > to their needs which is otherwise set to default(3.125 MHz).
+> > > > 
+> > > > Please read 802.3 Clause 22. The default should be 2.5MHz.
+> > > > 
+> > > 
+> > > These changes are only specific to Marvell Octeon family.
+> > 
+> > Are you saying the Marvell Octeon family decide to ignore 802.3?  Have
+> > you tested every possible PHY that could be connected to this MDIO bus
+> > and they all work for 3.125MHz, even though 802.3 says they only need
+> > to support up to 2.5Mhz?
+> > 
+> >      Andrew
 > 
+> Hi Andrew,
 > 
-> On Thu, May 26, 2022, at 03:41, Rob Herring wrote:
-> > The 'unevaluatedProperties' schema checks is not fully working and doesn't
-> > catch some cases where there's a $ref to another schema. A fix is pending,
-> > but results in new warnings in examples.
-> >
-> > The Apple PCIe host has 3 power domains at least according to the example.
-> > Add the 'power-domains' property to the schema.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> > Ideally, we'd define what each power domain is, but I don't know what
-> > they are.
-> > ---
-> 
-> I think the example is just wrong (or outdated) and we only need a single
-> power-domain for pcie.
-> 
-> The hierarchy is ps_pcie_ref -> ps_apcie -> ps_apcie_gp and the pcie
-> node then only depends on ps_apcie_gp.
+> Yes, but as for Marvell Octeon family it defaults to 3.125 MHz and this
+> driver is already existing in the kernel.
+> This patch is not changing that, only adding support to configure
+> clock-freq from DTS.
+> Also, following PHYs have been verified with it:
+> PHY_MARVELL_88E1548,
+> PHY_MARVELL_5123,
+> PHY_MARVELL_5113,
+> PHY_MARVELL_6141,
+> PHY_MARVELL_88E1514,
+> PHY_MARVELL_3310,
+> PHY_VITESSE_8574
 
-Okay, I'll update the example and schema.
+So if you want to ignore 802.3, please make it very clear in the DT
+binding that the default is 3.125MHz, not 2.5Mhz which the standard
+requires.
+
+As you say, 3.125Mhz will work for some PHYs. And it will fail for
+other PHYs.
+
+	Andrew
+

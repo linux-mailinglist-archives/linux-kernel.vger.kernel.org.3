@@ -2,125 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EB8535331
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54672535332
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346067AbiEZSPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 14:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S1343960AbiEZSPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243262AbiEZSPW (ORCPT
+        with ESMTP id S237702AbiEZSPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 14:15:22 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741F0B2272;
-        Thu, 26 May 2022 11:15:21 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id x2-20020a17090a1f8200b001e07a64c461so5072292pja.4;
-        Thu, 26 May 2022 11:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=6qtpXMNwSeKb2/ZB0dn4b9L5gJCZbExzN3Ar6qUIAGk=;
-        b=DvngC5Bk5mSGIVEwnc//TJTs6pULwXNDU5y3gFp4sI2ZDCXte23y1tV1Vb4ZPYlkqC
-         aTfWZl2UvanZ6Xz/ozofK9h1prT+sIi0W6zZqomwx7FPYOdZQItLDJJIu3pOUOL5Xtg0
-         VyYRokizo6Ar77W4aMzNK0Vdz5OzizMyUafqvlWqERKtiJuqHzXNc3vfWCoGxyO0P+Sr
-         JeAP7D1jg66OsWSSGebw1QRpMfN4O8dhRQz0Zqie3pkqGDp83GXkni1SXi98ctQ3catV
-         /rINz2RtcTf2We8eYodn0tL6fzO/3A1gPPEhFRrFoq4GUTKuOtNuRZvz1ea3mTADZsyf
-         Doug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=6qtpXMNwSeKb2/ZB0dn4b9L5gJCZbExzN3Ar6qUIAGk=;
-        b=UQ8MNBG0ylzGUgdoBldJgJlqudqb0+4cLdKn9ua03ELWT39l5e0PaVWHyLVR34pyYV
-         FvJQI9j6v3S5dLzDehWj3DaHo/l80ReWI8+2uZ7k2ZMquii+rV+C8vpGEy2fQzn0vH2z
-         LHEWLu0fDjWr9Z0RxEl8hb9w1kG5JSNTt/qJ/o1dRSxdW3JaEHvJhefpK0755sf965oD
-         547T3HhRkvlAzhgt3LzYxNp/NrzXdBAl+uvdi6L/TJYxKgqhrvDyfB6tydYeyMhPc/b3
-         kjuDSsh2bz09aOIzL2Ozq138swihG+FITj/tQshFhvP7HwrRw9grwhkPbKVAosWSM+Pu
-         TEww==
-X-Gm-Message-State: AOAM5308EXYdsn6RY8uB67Ayw1uj2ED2S+rTsI1yBxz0qxgQH2ftKV6/
-        4Lx5GcfqCqej+gMnw9T/VrA=
-X-Google-Smtp-Source: ABdhPJw0HR5gUdv0QEXdguE37Xg14Jx1/rHIBI+LfikekeFeDFtlCQ/k6Bp1iS+4Wy53FGQQ+UKKug==
-X-Received: by 2002:a17:90b:4b05:b0:1df:db8a:1fcb with SMTP id lx5-20020a17090b4b0500b001dfdb8a1fcbmr3913425pjb.54.1653588920857;
-        Thu, 26 May 2022 11:15:20 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:aafd])
-        by smtp.gmail.com with ESMTPSA id 66-20020a17090a09c800b001d7dd00c231sm1830156pjo.22.2022.05.26.11.15.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 11:15:20 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 26 May 2022 08:15:18 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Bui Quang Minh <minhquangbui99@gmail.com>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
-Message-ID: <Yo/DtjEU/kYr190u@slm.duckdns.org>
-References: <20220525151517.8430-1-mkoutny@suse.com>
- <20220525151517.8430-3-mkoutny@suse.com>
- <20220525161455.GA16134@blackbody.suse.cz>
- <Yo7KfEOz92kS2z5Y@blackbook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yo7KfEOz92kS2z5Y@blackbook>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 26 May 2022 14:15:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6441B36EE
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:15:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5C60B8219C
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19817C385A9;
+        Thu, 26 May 2022 18:15:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1653588947;
+        bh=eDa5JDlzOG2uepfEmO8AYQmRjiuCz3wWQubHDZpva1c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=io894yW6l2/GaI547yCazzlKFHTxBZJyDq+d85oc6e4RoydxxnEAMrcQ92AygDOVv
+         kUyvwHR+qf6Fci6chzGVLtdCM54BpaiJl+taObTWxwAsY7nPn2sxqRjuU6SEKFQfim
+         dHdXPqpOjcC7lFry6r7mINTz7qO56CyMwofHCiLw=
+Date:   Thu, 26 May 2022 11:15:46 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Rientjes <rientjes@google.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/page_table_check: fix accessing unmapped ptep
+Message-Id: <20220526111546.50102da288cccbe913cadbf4@linux-foundation.org>
+In-Reply-To: <CA+CK2bBBLjr3kGqc=zA6M5773G6gj83LB_kwwOCNuFX8YoUp+w@mail.gmail.com>
+References: <20220526113350.30806-1-linmiaohe@huawei.com>
+        <Yo+B4b0nF+kI35pG@casper.infradead.org>
+        <CA+CK2bBBLjr3kGqc=zA6M5773G6gj83LB_kwwOCNuFX8YoUp+w@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Michal.
+On Thu, 26 May 2022 09:37:43 -0400 Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
 
-On Thu, May 26, 2022 at 11:56:34AM +0200, Michal Koutný wrote:
-> // ref=A: initial state
-> kill_css()
->   css_get // ref+=F == A+F: fuse
->   percpu_ref_kill_and_confirm
->     __percpu_ref_switch_to_atomic
->       percpu_ref_get
->         // ref += 1 == A+F+1: atomic mode, self-protection
->     percpu_ref_put
->       // ref -= 1 == A+F: kill the base reference
->   [via rcu]
->   percpu_ref_switch_to_atomic_rcu
->     percpu_ref_call_confirm_rcu
->       css_killed_ref_fn == refcnt.confirm_switch
->         queue_work(css->destroy_work)        (1)
->                                                      [via css->destroy_work]
->                                                      css_killed_work_fn == wq.func
->                                                        offline_css() // needs fuse
->                                                        css_put // ref -= F == A: de-fuse
->       percpu_ref_put
->         // ref -= 1 == A-1: remove self-protection
->         css_release                                   // A <= 1 -> 2nd queue_work explodes!
+> On Thu, May 26, 2022 at 9:34 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Thu, May 26, 2022 at 07:33:50PM +0800, Miaohe Lin wrote:
+> > > ptep is unmapped too early, so ptep will be accessed while it's unmapped.
+> > > Fix it by deferring pte_unmap() until page table checking is done.
+> > >
+> > > Fixes: 80110bbfbba6 ("mm/page_table_check: check entries at pmd levels")
+> > > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> > > ---
+> > >  mm/page_table_check.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+> > > index 3692bea2ea2c..971c3129b0e3 100644
+> > > --- a/mm/page_table_check.c
+> > > +++ b/mm/page_table_check.c
+> > > @@ -234,11 +234,11 @@ void __page_table_check_pte_clear_range(struct mm_struct *mm,
+> > >               pte_t *ptep = pte_offset_map(&pmd, addr);
+> > >               unsigned long i;
+> > >
+> > > -             pte_unmap(ptep);
+> > >               for (i = 0; i < PTRS_PER_PTE; i++) {
+> > >                       __page_table_check_pte_clear(mm, addr, *ptep);
+> > >                       addr += PAGE_SIZE;
+> > >                       ptep++;
+> > >               }
+> > > +             pte_unmap(ptep);
+> >
+> > But ptep was mutated in the loop.  So surely this needs to be:
+> >
+> >                 pte_unmap(ptep - PTRS_PER_PTE);
+> >
+> > or you'll be unmapping the wrong page.
+> 
+> Right, thank you Matthew.
+> 
+> Miaohe, please store the ptep, or maybe drop this patch entirely.
 
-I'm not sure I'm following it but it's perfectly fine to re-use the work
-item at this point. The work item actually can be re-cycled from the very
-beginning of the work function. The only thing we need to make sure is that
-we don't css_put() prematurely to avoid it being freed while we're using it.
+I think it's best to fix it.  I rewrote the changelog as
 
-For the sharing to be a problem, we should be queueing the release work item
-while the destroy instance is still pending, and if that is the case, it
-doesn't really matter whether we use two separate work items or not. We're
-already broken and would just be shifting the problem to explode elsewhere.
+: ptep is unmapped too early, so ptep could theoretically be accessed while
+: it's unmapped.  This might become a problem if/when CONFIG_HIGHPTE becomes
+: available on riscv.
+:
+: Fix it by deferring pte_unmap() until page table checking is done.
 
-The only possibility that I can think of is that somehow we're ending up
-with an extra css_put() somewhere thus triggering the release path
-prematurely. If that's the case, we'll prolly need to trace get/puts to find
-out who's causing the ref imbalance.
+I'll retain the Fixes:.  This doesn't imply cc:stable in MM, and anyone
+who backports the original patchset will want to know about this fixup.
 
-Thanks.
-
--- 
-tejun
+And I queued a fixup for the thing Matthew noticed.

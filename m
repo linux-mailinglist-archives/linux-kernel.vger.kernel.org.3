@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968C7534FB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73022534FB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239378AbiEZM6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S1345698AbiEZNAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 09:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiEZM6P (ORCPT
+        with ESMTP id S231159AbiEZNAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:58:15 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099545C767;
-        Thu, 26 May 2022 05:58:11 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 996081F45608
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653569889;
-        bh=Pxy52o+lM2XaDOLsjbwjyhew5a/i/1lMjk2kvPzvEYs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=h4XZLqWW1UodqgwGvGfUppm/Pacgx73ML19oAAIJIIBs1+VwHCmw4/hlB6DFCN45i
-         TVenv+dx+YuUHCmLnyQtNwkB/1S0LauCYcJ34pDOAmhYjNJ8oYF1JYBqwJmK7bXApG
-         3w6lsSDO3H1lZiYZvA/YT4nhqlvVVs2XnuJikgv1GJyJFAs3QDlwgrnrqBER0Bmcj9
-         nrG9wJ4xeNqNfuScapX1mEyDSlYk+FN4DC6wt0mju3U5tkeVv20EE+X/rnjG4F+JQe
-         eJCgkq3l+v6/aUEC8sfn6Fckfcoo2lWCb9r9/amXCwm/6cgKS0HofyHilyEtBpj6Mr
-         OdQ6rKgRctCpA==
-Message-ID: <76367ac4-15ad-553e-9c88-6464622f393f@collabora.com>
-Date:   Thu, 26 May 2022 14:58:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v7 2/6] dt-bindings: thermal: Add binding document for
- LVTS thermal controllers
-Content-Language: en-US
-To:     Alexandre Bailon <abailon@baylibre.com>, rafael@kernel.org,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20220524152552.246193-1-abailon@baylibre.com>
- <20220524152552.246193-3-abailon@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220524152552.246193-3-abailon@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        Thu, 26 May 2022 09:00:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5C7CFE00
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:00:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E744DB820CB
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:00:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD6AC385A9;
+        Thu, 26 May 2022 13:00:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653570008;
+        bh=GrNN2j5tqrd/2L9HWmTTDNls2RMClzr1/7nW7pxBuy8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GRKuXugyyT3Tk/2E/Jax28CgLLu8HOB3WfgtbCUPiI/S6Cx+d4X3XW3bHhgU4ldYg
+         iDsnTMF3G8n0kUybLVCcMEPtjPajLCTDQLetrzEFBXwhP8siy6lbGJ4GaJ0x1iavUo
+         zhe4WgRRactOPYqF/ZnHIHW4HnIH6NTfOiHF3hU/DJwcvb0eaWyFecfR5zxf9zrZ4j
+         MVrvHWRKO9mZa4olKHLxUWdyvv/V8gMHAVIwGD8tY5P1gkG/UYHvuNaS0ZNJDyfF2F
+         r9Wnai2yQjRVMGoD1o10zLvI5yj4+xsoC3Wm+IzetIRr64OH/7ETpqjwQtRri2CHIz
+         TP6E9DUdowV1A==
+Received: from athedsl-4557779.home.otenet.gr ([94.70.87.219] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nuD5y-00Dr09-7b; Thu, 26 May 2022 14:00:06 +0100
+Date:   Thu, 26 May 2022 14:00:05 +0100
+Message-ID: <87bkvkmotm.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     richard clark <richard.xnu.clark@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: Question about SPIs' interrupt trigger type restrictions
+In-Reply-To: <CAJNi4rOtsfzJWsgx7CABczbf3DqqsigErf1YFw6hKOhWnACnHQ@mail.gmail.com>
+References: <CAJNi4rNwPQf747UM_hiYYwL=HDxg8QnPpfFPv1PfrtN9ZP1y1g@mail.gmail.com>
+        <35f95ba3-8a7b-7918-0f9d-e14274a5ffe9@arm.com>
+        <CAJNi4rMbBbLP2Tsv-wnnJKt4Y0moOE5-sNaZN1fCty908pwAKw@mail.gmail.com>
+        <87ee0gn5rq.wl-maz@kernel.org>
+        <5a8d5c51-ae02-a335-6768-2bedf809ab63@arm.com>
+        <CAJNi4rOtsfzJWsgx7CABczbf3DqqsigErf1YFw6hKOhWnACnHQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 94.70.87.219
+X-SA-Exim-Rcpt-To: richard.xnu.clark@gmail.com, robin.murphy@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,144 +71,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/05/22 17:25, Alexandre Bailon ha scritto:
-> This patch adds binding document for mt8192 and mt8195 thermal
-> controllers.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> ---
->   .../thermal/mediatek,mt8192-lvts.yaml         | 81 +++++++++++++++++++
->   1 file changed, 81 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml b/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
-> new file mode 100644
-> index 000000000000..914c877d1f2f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/mediatek,mt8192-lvts.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek SoC LVTS thermal controller
-> +
-> +maintainers:
-> +  - Yu-Chia Chang <ethan.chang@mediatek.com>
-> +  - Ben Tseng <ben.tseng@mediatek.com>
-> +
-> +allOf:
-> +  - $ref: thermal-sensor.yaml#
-> +  - $ref: /nvmem/nvmem-consumer.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8192-lvts
-> +      - mediatek,mt8195-lvts
-> +
-> +  reg:
-> +    minItems: 2
-> +    maxItems: 4
-> +
-> +  interrupts:
-> +    maxItems: 2
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +  nvmem-cells:
-> +    maxItems: 2
-> +    description: Calibration data for thermal sensors
-> +
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: e_data1
-> +      - const: e_data2
+On Thu, 26 May 2022 13:30:35 +0100,
+richard clark <richard.xnu.clark@gmail.com> wrote:
+>=20
+> On Thu, May 26, 2022 at 4:41 PM Robin Murphy <robin.murphy@arm.com> wrote:
+> >
+> > On 2022-05-26 07:54, Marc Zyngier wrote:
+> > > On Thu, 26 May 2022 04:44:41 +0100,
+> > > richard clark <richard.xnu.clark@gmail.com> wrote:
+> > >>
+> > >> On Thu, May 26, 2022 at 3:14 AM Robin Murphy <robin.murphy@arm.com> =
+wrote:
+> > >>>
+> > >>> On 2022-05-25 11:01, richard clark wrote:
+> > >>>> Hi Marc,
+> > >>>>
+> > >>>> For below code snippet about SPI interrupt trigger type:
+> > >>>>
+> > >>>> static int gic_set_type(struct irq_data *d, unsigned int type)
+> > >>>> {
+> > >>>>           ...
+> > >>>>           /* SPIs have restrictions on the supported types */
+> > >>>>           if ((range =3D=3D SPI_RANGE || range =3D=3D ESPI_RANGE) =
+&&
+> > >>>>               type !=3D IRQ_TYPE_LEVEL_HIGH && type !=3D IRQ_TYPE_=
+EDGE_RISING)
+> > >>>>                   return -EINVAL;
+> > >>>>           ...
+> > >>>> }
+> > >>>>
+> > >>>> We have a device at hand whose interrupt type is SPI, Falling edge
+> > >>>> will trigger the interrupt. But the request_irq(50, handler,
+> > >>>> IRQ_TYPE_EDGE_FALLING, ...) will return -EINVAL.
+> > >>>>
+> > >>>> The question is, why must the SPI interrupt use IRQ_TYPE_EDGE_RISI=
+NG
+> > >>>> instead of IRQ_TYPE_EDGE_FALLING?
+> > >>>
+> > >>> Because that's what the GIC architecture[1] says. From section 1.2.1
+> > >>> "Interrupt Types":
+> > >>>
+> > >>> "An interrupt that is edge-triggered has the following property:
+> > >>>          =E2=80=A2 It is asserted on detection of a rising edge of =
+an interrupt signal
+> > >>
+> > >> This rising edge detection is not true, it's also asserted by
+> > >> falling edge, just like the GICD_ICFGR register says: Changing the
+> > >> interrupt configuration between level-sensitive and *edge-triggered
+> > >> (in either direction)* at a time when there is a pending interrupt
+> > >> ...,
+> > >
+> > > Let me finish the sentence for you:
+> > >
+> > > <quote>
+> > > ... will leave the interrupt in an UNKNOWN pending state.
+> > > </quote>
+> > >
+> > > and the direction here is about the configuration bit, not the edge
+> > > direction.
+> >
+> > Indeed it's clearly referring to either direction of *the change*, i.e.
+> > from edge to level and from level to edge.
+> >
+> > >> which has been confirmed by GIC-500 on my platform.
+> > >
+> > >  From the GIC500 r1p1 TRM, page 2-8:
+> > >
+> > > <quote>
+> > > SPIs are generated either by wire inputs or by writes to the AXI4
+> > > slave programming interface.  The GIC-500 can support up to 960 SPIs
+> > > corresponding to the external spi[991:32] signal. The number of SPIs
+> > > available depends on the implemented configuration. The permitted
+> > > values are 32-960, in steps of 32. The first SPI has an ID number of
+> > > 32. You can configure whether each SPI is triggered on a rising edge
+> > > or is active-HIGH level-sensitive.
+> > > </quote>
+> > >
+> > > So I have no idea what you are talking about, but you definitely have
+> > > the wrong end of the stick. Both the architecture and the
+> > > implementations are aligned with what the GIC drivers do.
+> > >
+> > > If your system behaves differently, this is because something is
+> > > inverting the signal, which is extremely common. Just describe this in
+> > > your device tree, or lie to the kernel, whichever way you want.
+> >
+> > I think the important concept to grasp here is that what we describe in
+> > DT is not properties of the device in isolation, but properties of its
+> > integration into the system as a whole. Consider the "reg" property,
+> > which in 99% of cases has nothing to do with the actual device it
+> > belongs to, but is instead describing a property of the interconnect,
+> > namely how its address map decodes to a particular interface, to which
+> > the given device happens to be attached.
+>=20
+> I don't care about the DT at all... The essential is- does the GIC
+> only support rising edge detection really just as the document says,
+> I'm doubtful about that ;-)
 
- From what I understand, each nvmem cell has calibration data for each thermal
-sensor, so let's use some more descriptive names...
-some ideas: "lvts1-calib" "lvts1-cal" "calib1".
+Doubt as much as you want. The architecture and implementations are
+crystal clear on the subject.
 
-Also, I think that the best option is to register one driver instance for each
-hardware instance, meaning that you should have only one reg, only one nvmem-cell,
-only one reset, only one interrupt. This makes it possible to have as many
-LVTS instances as possible without any code adjustments in the future.
+>=20
+> >
+> > At the HDL level, the device block may very well have an output signal
+> > which idles at logic-high, and pulses low to indicate an event, however
+> > it only becomes an *interrupt* if it is wired up to an interrupt
+> > controller; on its own it's just some output signal. What the DT
+> > interrupt specifier describes is that wiring, *from the interrupt
+> > controller's point of view*. If a pulsed signal is fed into an Arm GIC
+> > SPI input then as an interrupt it *is* IRQ_TYPE_EDGE_RISING, because
+> > that's how the GIC hardware will treat it. The integration as a whole
+>=20
+> EDGE_RISING can leave its mark in the GIC, that's the *how*, but why
+> EDGE_FALLING can't, any reasons to justify this behavior?
 
-An example for MT8195:
+Err, because there is no bit that allows such a configuration, maybe?
 
-thermal-sensor@1100b000 {
-	compatible = "mediatek,mt8195-lvts";
-	reg = <0 0x1100b000 0 0x1000>;
-	interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>;
-	#thermal-sensor-cells = <1>;
-	clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-	nvmem-cells = <&lvts_e_data1>;
-	nvmem-cell-names = "calibration";
+And that if someone has a falling edge signal, they can drop an
+inverter on the path and be done with it?
 
-	/* is this a reset for lvts1? */
-	resets = <&infracfg_ao MT8195_INFRA_RST0_THERM_CTRL_SWRST>;
-};
+Anyway, if you have an issue with the current behaviour of either
+implementations or architecture, I suggest you take up with ARM.
 
-thermal-sensor@11278000 {
-	compatible = "mediatek,mt8195-lvts";
-	reg = <0 0x11278000 0 0x1000>;
-	interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-	#thermal-sensor-cells = <1>;
-	clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-	nvmem-cells = <&lvts_e_data2>;
-	nvmem-cell-names = "calibration";
+> I believe that the drivers still work if the trigger type sanity check
+> in the GIC driver is removed.
 
-	/* is this a reset for lvts2? */
-	resets = <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
-};
+The driver would then be misrepresenting the architecture, and that
+would be a bug. There are enough bugs in that area that we don't need
+to add an extra one.
 
-In the future, a new MediaTek SoC may simply define more nodes..... :-)
+	M.
 
-> +
-> +  resets:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +
-> +
-> +required:
-> +  - '#thermal-sensor-cells'
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +  - resets
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/thermal/thermal.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8195-clk.h>
-> +    #include <dt-bindings/reset/mt8195-resets.h>
-> +
-> +    lvts: lvts@1100b000 {
-
-Please use generic names: this should be thermal-sensor@1100b000
-
-> +        compatible = "mediatek,mt8195-lvts";
-> +        #thermal-sensor-cells = <1>;
-> +        reg = <0 0x1100b000 0 0x1000>,
-> +              <0 0x11278000 0 0x1000>;
-> +        interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>,
-> +                     <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-> +        clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-> +        resets = <&infracfg_ao MT8195_INFRA_RST0_THERM_CTRL_SWRST>,
-> +                 <&infracfg_ao MT8195_INFRA_RST4_THERM_CTRL_MCU_SWRST>;
-> +        nvmem-cells = <&lvts_e_data1 &lvts_e_data2>;
-> +        nvmem-cell-names = "e_data1","e_data2";
-> +    };
-> +...
-
+--=20
+Without deviation from the norm, progress is not possible.

@@ -2,105 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63469534CEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE67534CF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346921AbiEZKEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 06:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S1346939AbiEZKFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 06:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiEZKEA (ORCPT
+        with ESMTP id S238190AbiEZKFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 06:04:00 -0400
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D461FAF337;
-        Thu, 26 May 2022 03:03:59 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id k30so1514290wrd.5;
-        Thu, 26 May 2022 03:03:59 -0700 (PDT)
+        Thu, 26 May 2022 06:05:17 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBF6C1EF0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:05:14 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id p19so732066wmg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Q2/Vrqz5X77pgoaL4sWT9uNh8P+G0LpsaCXqtANxzbY=;
+        b=alvENUPR1RoIdzdhbyYZL4jZz6a2WTuZVvGMUXOyRzTtSUlFMVkMmroCvum7nmvad0
+         AdI49WUD5g7yY8JcuP+gxSpebiD38sEWgO1fPim74uQNUhuGba7CWd6ST2TMULVxDhh3
+         0cQqbnj6iSKJhPtsNeauBq+EENMJRyWQBxeutx7HagHWHeaJpQxY+HfqNYS9+arSjtlN
+         r3u55+VbMwFVNraRdE26MsV29D3rfy0o3mzDRcCrD6o4KggqSSyMLFZkqeqmgMfMdO9Y
+         5XKl1+e1RicYK3Prq5Dn+WtQ0HGA2x8pbBIXS8E8nVUGeEoksec8o8uDeAXemuuc5oaq
+         AUUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=tDRmsRg9eHIRMMIJkb1fiFBKJkrJH57+pbLbM0Gs91g=;
-        b=dyRhNK6jtTWT3zxI/mL873sTVokc1tUxdZmempgaU1FgHEb20OtgFEFYO0scFX2TQm
-         P72yEdsfxkey1z/YEN8PpSYgrlEk4rNUR2rwPj37tjTKs/0hZnScfXmHu8bHeMS6oP/i
-         s1a6+0+hop+3HQyogY0ASd7ewUKBjNPwiLm9YjYXGC1oeSdlua9zwV0eI4odIxfybF7j
-         CSXm41mRwGB388E1W+2vjbmvEDF1wWlS0yLG7CGjWBOQhOn07RTkVaE4E8A6PfwGAQR/
-         X2jINUCtNqkzjFhNrEs0mh50fEZnT43uLLQJnZZbMhxpow6l9fnUyqoOazuHZHX61aea
-         jNHA==
-X-Gm-Message-State: AOAM532dV56i2Ie3Xl9z60/oMl61kl22zbANxB3euw8h43gPqSAPT8jY
-        7RJQWho/7WlKQF+EWKD8V0s=
-X-Google-Smtp-Source: ABdhPJyrqvqG/bHULPa78r/6vh6qWdO5aa9YtzHtKfOQ3Jh9att+19mGOVmh8MsXZZzJzP6O2+AiDQ==
-X-Received: by 2002:a5d:6c61:0:b0:20f:ef37:a9d0 with SMTP id r1-20020a5d6c61000000b0020fef37a9d0mr10939895wrz.140.1653559438419;
-        Thu, 26 May 2022 03:03:58 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05600c020d00b003942a244eebsm1276081wmi.48.2022.05.26.03.03.57
+        bh=Q2/Vrqz5X77pgoaL4sWT9uNh8P+G0LpsaCXqtANxzbY=;
+        b=WfMzdfPp3ufeni0P/AfKRaTGBnWLV1S7m7HYV3qwDyu5DeP/Vk0qnFv3gzXz7Owee9
+         XY50hL4DZ0BYbX7oiG6oaGrCpXvhW5cM2Azz3FuCPlloSHGgDqh9blO6LOR4CQoRUBGi
+         d98bFeROr7CwyL+8LNCHLJ1zm3bjVjvqRH+O1dPA9iC0RLzIdk4razbneiewPbAE3b5R
+         yP3nNjwNlEODxzu1/EoZPUWQ71iwoQt7jqusCGBhwFeYDisKfsQVmuuXDSiFPNXrpTBN
+         p+1UWkkGV/cYn1YxHpYV95hGldd8LpM3zI6VZnBFMPZYYfYaB8Gg/HgJPUxcOLq64qpd
+         StLQ==
+X-Gm-Message-State: AOAM531QC7I0bMuFnE4ZbqunCDSk9LLicGKDmmFf7hs0Xgb7PJiKFN4e
+        vxeibuGHYRfOrUDmMJx0G/R7kQ==
+X-Google-Smtp-Source: ABdhPJyAMsU2F/RK1cL0bLCBgOBJUZUtMEQOXHjfblUN5C5omG3gZLUaGDIiyuTCzCSNRcdx1vkiyw==
+X-Received: by 2002:a05:600c:1f0a:b0:397:7161:d3bf with SMTP id bd10-20020a05600c1f0a00b003977161d3bfmr1609365wmb.27.1653559513012;
+        Thu, 26 May 2022 03:05:13 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id n4-20020a7bc5c4000000b003974d0d981dsm4227187wmk.35.2022.05.26.03.05.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 03:03:57 -0700 (PDT)
-Date:   Thu, 26 May 2022 10:03:56 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        Long Li <longli@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] scsi: storvsc: Removing Pre Win8 related logic
-Message-ID: <20220526100356.qwvc4qe2rkaja5wm@liuwe-devbox-debian-v2>
-References: <1653478022-26621-1-git-send-email-ssengar@linux.microsoft.com>
- <PH0PR21MB302574301005664B719B5196D7D69@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Thu, 26 May 2022 03:05:12 -0700 (PDT)
+Date:   Thu, 26 May 2022 11:05:10 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        deller@gmx.de, cy_huang@richtek.com, lucas_tsai@richtek.com,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] backlight: rt4831: Add the property parsing for ocp
+ level selection
+Message-ID: <20220526100510.3utwh5bov4ax2jmg@maple.lan>
+References: <1653534995-30794-1-git-send-email-u0084500@gmail.com>
+ <1653534995-30794-3-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR21MB302574301005664B719B5196D7D69@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1653534995-30794-3-git-send-email-u0084500@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 01:52:01PM +0000, Michael Kelley (LINUX) wrote:
-> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Wednesday, May 25, 2022 4:27 AM
-> > 
-> > The latest storvsc code has already removed the support for windows 7 and
-> > earlier. There is still some code logic reamining which is there to support
+On Thu, May 26, 2022 at 11:16:35AM +0800, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> s/reamining/remaining/
-> 
-> > pre Windows 8 OS. This patch removes these stale logic.
-> > This patch majorly does three things :
-> > 
-> > 1. Removes vmscsi_size_delta and its logic, as the vmscsi_request struct is
-> > same for all the OS post windows 8 there is no need of delta.
-> > 2. Simplify sense_buffer_size logic, as there is single buffer size for
-> > all the post windows 8 OS.
-> > 3. Embed the vmscsi_win8_extension structure inside the vmscsi_request,
-> > as there is no separate handling required for different OS.
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> > v4:
-> > * Removed sense_buffer_size variable and used STORVSC_SENSE_BUFFER_SIZE directly
-> > in all places
-> > * Removed the comment along with sense_buffer_size and placed a more simpler
-> > comment for STORVSC_SENSE_BUFFER_SIZE
-> > * Added back WIN6 and WIN7 protocol version macros
-> > 
-> >  drivers/scsi/storvsc_drv.c | 155 ++++++++++---------------------------
-> >  1 file changed, 39 insertions(+), 116 deletions(-)
-> 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> Add the property parsing for ocp level selection.
 
-Fixed the typo and applied to hyperv-next. Thanks.
+Isn't this just restating the Subject: line?
+
+It would be better to provide information useful to the reviewer here.
+Something like:
+
+"Currently this driver simply inherits whatever over-current protection
+level is programmed into the hardware when it is handed over. Typically
+this will be the reset value, <whatever>A, although the bootloader could
+have established a different value.
+
+Allow the correct OCP value to be provided by the DT."
+
+BTW please don't uncritically copy the above into the patch header. It is
+just made something up as an example and I did no fact checking...
+
+
+> 
+> Reported-by: Lucas Tsai <lucas_tsai@richtek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+>  drivers/video/backlight/rt4831-backlight.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/video/backlight/rt4831-backlight.c b/drivers/video/backlight/rt4831-backlight.c
+> index 42155c7..c81f7d9 100644
+> --- a/drivers/video/backlight/rt4831-backlight.c
+> +++ b/drivers/video/backlight/rt4831-backlight.c
+> @@ -12,6 +12,7 @@
+>  #define RT4831_REG_BLCFG	0x02
+>  #define RT4831_REG_BLDIML	0x04
+>  #define RT4831_REG_ENABLE	0x08
+> +#define RT4831_REG_BLOPT2	0x11
+>  
+>  #define RT4831_BLMAX_BRIGHTNESS	2048
+>  
+> @@ -23,6 +24,8 @@
+>  #define RT4831_BLDIML_MASK	GENMASK(2, 0)
+>  #define RT4831_BLDIMH_MASK	GENMASK(10, 3)
+>  #define RT4831_BLDIMH_SHIFT	3
+> +#define RT4831_BLOCP_MASK	GENMASK(1, 0)
+> +#define RT4831_BLOCP_SHIFT	0
+>  
+>  struct rt4831_priv {
+>  	struct device *dev;
+> @@ -120,6 +123,16 @@ static int rt4831_parse_backlight_properties(struct rt4831_priv *priv,
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = device_property_read_u8(dev, "richtek,bled-ocp-sel", &propval);
+> +	if (ret)
+> +		propval = RT4831_BLOCPLVL_1P2A;
+
+Is 1.2A the reset value for the register?
+
+Additionally, it looks like adding a hard-coded default would cause
+problems for existing platforms where the bootloader doesn't use
+richtek,bled-ocp-sel and pre-configures a different value itself.
+
+Would it be safer (in terms of working nicely with older bootloaders)
+to only write to the RT4831_BLOCP_MASK if the new property is set?
+
+
+Daniel.
+
+
+
+> +
+> +	propval = min_t(u8, propval, RT4831_BLOCPLVL_1P8A);
+> +	ret = regmap_update_bits(priv->regmap, RT4831_REG_BLOPT2, RT4831_BLOCP_MASK,
+> +				 propval << RT4831_BLOCP_SHIFT);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ret = device_property_read_u8(dev, "richtek,channel-use", &propval);
+>  	if (ret) {
+>  		dev_err(dev, "richtek,channel-use DT property missing\n");
+> -- 
+> 2.7.4
+> 

@@ -2,100 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0AA534B41
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E961534B43
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346631AbiEZINv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S236575AbiEZIOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237858AbiEZINs (ORCPT
+        with ESMTP id S243536AbiEZINy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:13:48 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5823A5EA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:13:46 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id s14so849278plk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:13:46 -0700 (PDT)
+        Thu, 26 May 2022 04:13:54 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787023D4B2;
+        Thu, 26 May 2022 01:13:51 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id v8so1296718lfd.8;
+        Thu, 26 May 2022 01:13:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sBEKGmkjoE28MCTQbjd5ORFpa77bz/agL9nSVVFspD0=;
-        b=U02aOGk0NHNgLEItlnR/QPW5AvWVU5/iXwA8+xraVYrHhGXGs4D8A9oemFul3CRDFm
-         Gt2101IPsae1+c3fOcEO7oelNwh0RBOar/s8RgV5r/ObBLNGuQPlAqfPsR/s9iRQzP4z
-         WnQfvK3RGHPcxf2SgCQSHORkoo+TIjKSqyZN5Mho/H7WU2D4Rln8imTv5CF0rK/rPwZZ
-         lQxmSkh8REdO1WXzm/032CE8YqTVrI/vXRldYWBrGbnVh2V4l2FiyIPhnDTAe95lfLIO
-         JVtluiWrCItcVn+GTC99TAQPh3839qq5fxie3xX4EiJ15cHjgQBHzVPWjg+nl8WukVh8
-         qo+Q==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6XIUrzcjTsp63WT6KUFudVsfMqzwjs/ISF26+AtGKYc=;
+        b=M473zBFhKBpYDZLMCH3iHGNvgO8yBDEhAs/CCtpeY3diR5OYtHK5Qp2dggVdgz3N2/
+         NDre3BufT92wpRo3Hz/F4U6W/CI1pK6jPKkf3IlY7ax6VtMPPnMFcyfOLSbBFpHIGE1C
+         t0Di2WB5JNJgyvgBOsa81+6649T4/gEhXaU54YTUpNphkCaIJYhC5xV0HIRxF0i04qUp
+         Od6Try1IZD3jc28JPo/cdyackPBRHN9we2AVEv0wEPOZSidbrWBghVQRibpGleeClHgs
+         ipUmtJWVVgAqmM35TGBvfe1pC6XeOesixtOR2NVX6bHhPL+pyC29dQGfqTVorRNZU3vC
+         FHPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=sBEKGmkjoE28MCTQbjd5ORFpa77bz/agL9nSVVFspD0=;
-        b=UXr1z1ti9d570gN4s6x9KJm1lNEIV5u0twChJgGnl9mfYpaFfe3NGc963V9DEKdM0E
-         bnsxJHhAHzU/GjMACxESdPuk9zfmcjGYfbGGpx3EBQ1CJglrU9avuhJ6mV0nF40x8Oki
-         DqbNWBBFRxhY8sWbBXri75/12pgHqCJhdxGblpVFEcNc+uBzEndXEULgKg9Gkb6HS8Vk
-         kQKU67E9z31yrctibYglIKOpz2udsh53wujZJCTI/A+J55c4B0/sDxk4vw+TbAljpANR
-         BhZXOWcJhU1m1SMG8KQXsYGlqOe8yNXDeL0bLVASak8iD0CPfRO01PzxPz+muIMt6IVt
-         F8Hg==
-X-Gm-Message-State: AOAM533dB6sG6x82CsGHpYzIsvAPAfKbC/VLRc7Y2FS1syaIZaPl2/fp
-        J9aDupCNLkijZrc6wiFnkzU=
-X-Google-Smtp-Source: ABdhPJwmyYXrCMYA89cDjci7YDwwnifRlFdnDsevNvEB4OhCP+IR2OqScWdmufnVH87NwZY/G/KuIA==
-X-Received: by 2002:a17:90a:de15:b0:1df:63dd:9cfc with SMTP id m21-20020a17090ade1500b001df63dd9cfcmr1394721pjv.200.1653552826328;
-        Thu, 26 May 2022 01:13:46 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id bg16-20020a056a02011000b003c62fa02f08sm904246pgb.43.2022.05.26.01.13.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 01:13:45 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Christian Daudt <csd@broadcom.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] ARM: bcm: Fix refcount leak in bcm_kona_smc_init
-Date:   Thu, 26 May 2022 12:13:25 +0400
-Message-Id: <20220526081325.30954-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=6XIUrzcjTsp63WT6KUFudVsfMqzwjs/ISF26+AtGKYc=;
+        b=7WfiJVr0GFInQwdrCUgXWcNAChCZTpA3pc5+pBEJy2fw15WMmuEzf18wtiCEa7w/Rv
+         JklRB1m4y+XC8KnSJUslOSnQZcdpDAqzXs/KbynVsAm23xoZhBipp7ZWhGvtp583aqGz
+         ufmFheDZJNtC+awAi02WDSLKhD9CmHE9222ByIGT+p92nor04tqxTCcznNsAPQog8vuj
+         vzGCGoJAfR0CqzhJpRB5c/Bl4ApOUcx7cMhegMB4DkkFWek8WvwW7JmdRXCMlayC5FJy
+         IHmyMYDphR9IMggC6VsnlLwOQ9B0G61g9dESB93G/6pqcDd3bv/BhL7vGfQ0Sgd423cM
+         k6lg==
+X-Gm-Message-State: AOAM533+RCCk6k8i23SzEvPDBLNMbOTkW6I/dIhIo/M8T5l/picIYMgt
+        sP8VR881zkrU9BLzJSgB/SGQDDVg3x0=
+X-Google-Smtp-Source: ABdhPJzH8WmTstQykYFVsAS9QjVDfZgRXQtHx/7ka8Z5KQ7wLl7iBlWFS2b71GlxRV7/nbrKITusFA==
+X-Received: by 2002:a05:6512:3b14:b0:477:cc51:b2c3 with SMTP id f20-20020a0565123b1400b00477cc51b2c3mr24809657lfv.263.1653552829449;
+        Thu, 26 May 2022 01:13:49 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.78.197])
+        by smtp.gmail.com with ESMTPSA id dt14-20020a0565122a8e00b0047255d21202sm205638lfb.305.2022.05.26.01.13.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 01:13:48 -0700 (PDT)
+Subject: Re: [PATCH 4/4] sh/mm: Kconfig: Fix indentation
+To:     Juerg Haefliger <juerg.haefliger@canonical.com>,
+        ysato@users.sourceforge.jp, dalias@libc.org,
+        linux-sh@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220525124007.45328-1-juerg.haefliger@canonical.com>
+ <20220525124007.45328-5-juerg.haefliger@canonical.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <be49dcae-af31-c825-6ab4-05c59deec9d8@gmail.com>
+Date:   Thu, 26 May 2022 11:13:47 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220525124007.45328-5-juerg.haefliger@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_matching_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+On 5/25/22 3:40 PM, Juerg Haefliger wrote:
 
-Fixes: b8eb35fd594a ("ARM: bcm281xx: Add L2 cache enable code")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- arch/arm/mach-bcm/bcm_kona_smc.c | 1 +
- 1 file changed, 1 insertion(+)
+> The convention for indentation seems to be a single tab. Help text is
+> further indented by an additional two whitespaces. Fix the lines that
 
-diff --git a/arch/arm/mach-bcm/bcm_kona_smc.c b/arch/arm/mach-bcm/bcm_kona_smc.c
-index 43829e49ad93..347bfb7f03e2 100644
---- a/arch/arm/mach-bcm/bcm_kona_smc.c
-+++ b/arch/arm/mach-bcm/bcm_kona_smc.c
-@@ -52,6 +52,7 @@ int __init bcm_kona_smc_init(void)
- 		return -ENODEV;
- 
- 	prop_val = of_get_address(node, 0, &prop_size, NULL);
-+	of_node_put(node);
- 	if (!prop_val)
- 		return -EINVAL;
- 
--- 
-2.25.1
+   s/whitespaces/spaces/. And you don't touch the help text here...
 
+> violate these rules.
+> 
+> Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+[...]
+
+MBR, Sergey

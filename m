@@ -2,215 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E227535679
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD0353568D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349333AbiEZXuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 19:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
+        id S239241AbiEZXyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 19:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245709AbiEZXuJ (ORCPT
+        with ESMTP id S236122AbiEZXyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 19:50:09 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D3B70350
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:50:08 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso3001571pjg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UUylbFb1KzSKx6V2LN4l33pzMzUYLvtXg0/NJazfV4M=;
-        b=Ivrdkxgv1uzZ3QdBcvQXPNdNMNVnU0garR3DHQ8X5F+pg/Liu2rDEiPA0/oL8knS7s
-         w7brWWDPdeka1tgGnlmTBDd0XSSiFenxUBuG6DkbtrT3AohdlU78jNMRDfAkfdAzanSX
-         mASFFsSfwPeAQQGNOQrdWUME+FkHwfZ5wwT5OgCBPcA5V03nE0P3Qtkus8VJugecvo8z
-         KBpEVKifjiOzlKP4FMg/w85gXV577glZfhdKxKFQmHNDAe+jXr78579nICPPi6vUrLo9
-         MskwSfF8vln0UtNcuPOYNxBOOt6SO5jNaqvj+vxyz/iVFhH1BWe0pKV02REPj1vYytg8
-         sY1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UUylbFb1KzSKx6V2LN4l33pzMzUYLvtXg0/NJazfV4M=;
-        b=K91YLFKBd+sJQzxtbGpjRFWPki2RnAOAWHgxD3jmaTaiEPql6WJv7WGxAb07SbKh4J
-         2nejMt8KPTFqFl4H1JoZn3YXeLq1DbUfq9c3jOmk0mKzPNR2vuQ+iWkvZsEEga9ha7EJ
-         jBNBdgHKKbbTcbXX8vew2ZFVwryRYiyKRBtQjMFHVCmxp+/tr4HjsA8g0Aaw+76t3UR+
-         b6j0jHA+agLCofRk6p8QPsDppU1fCJiaHhTbxiSKEyA7wfwJM4rB4T3hh6DTRn9KVecG
-         lsP10kTkMDMW5lQxvkWXGNIY5SodvCPwTzJ5aU9zFFmKO7Ug2EAmgtH51xGWx86GuuFL
-         0e2Q==
-X-Gm-Message-State: AOAM532hiW/ssc9Fxlxht8okKFxZ8urVAEZEnlud7MTnlmfNEg65XYBr
-        ijniRLgJTL3BQbVwMYTx5+P+VK5m/5MZOQ==
-X-Google-Smtp-Source: ABdhPJwggc/hf2WFHEva9uDGQbWdg7gm/GLx1rp0ujqoruvbxnlE8uLxWr3tef7/rwkoB/9isbDZgQ==
-X-Received: by 2002:a17:90a:2844:b0:1df:b47e:c541 with SMTP id p4-20020a17090a284400b001dfb47ec541mr5266687pjf.110.1653609007500;
-        Thu, 26 May 2022 16:50:07 -0700 (PDT)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170902b78500b001622f07530asm2169417pls.17.2022.05.26.16.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 16:50:07 -0700 (PDT)
-Date:   Thu, 26 May 2022 16:50:04 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [ANNOUNCE] iproute2 5.18.0 release
-Message-ID: <20220526165004.69f0dfba@hermes.local>
+        Thu, 26 May 2022 19:54:13 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E18B6D946;
+        Thu, 26 May 2022 16:54:11 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 4483D1F40874
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653609249;
+        bh=I1kxpdsP20qNcPlQ3S/qdgM736mICTGXs/ZrSWQ9ttc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SHTmQV0zLXeImrn1UeqN8m/fhyY2ZlGh7b2rESG1aXUjlVDdXNI3FpYp6JOICoEZh
+         5GQ2IQpyAa6+nUjxNM3vdRz+3PsfbOvfvICH/GRnjGtourjs7kudOWxAtn1fOSFI2c
+         R+Cmmthp+WNj6cUZOnsaaoF4uEoyolk89saEo7fhwOlfATSVvHgar+q2KcmLkKQlw4
+         /5kuYHnGiQH0YLWwcbnz9PEUZNMprm1gTg4gWGImZfS3MwxoibI8dRcVa3r8hbKZgf
+         GV+5b/rY9nDxIHehUUckXeVTx9PGzo1xn8PLR5JL69vXvnYsi5M36LXQgDHFmJHYEw
+         wNCXZkqbwXICA==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-tegra@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, kernel@collabora.com
+Subject: [PATCH v6 00/22] Add generic memory shrinker to VirtIO-GPU and Panfrost DRM drivers
+Date:   Fri, 27 May 2022 02:50:18 +0300
+Message-Id: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the release of iproute2 corresponding to the 5.18 kernel.
-There are not many new features in this release.
+Hello,
 
-The build issues with libbpf should be fixed now.
-Building with clang is now supported.
-There are still some warnings with gcc-12 that will need to be
-fixed in the upstream kernel headers.
+This patchset introduces memory shrinker for the VirtIO-GPU DRM driver
+and adds memory purging and eviction support to VirtIO-GPU driver.
 
+The new dma-buf locking convention is introduced here as well.
 
-Download:
-    https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-5.18.0.tar.gz
+During OOM, the shrinker will release BOs that are marked as "not needed"
+by userspace using the new madvise IOCTL, it will also evict idling BOs
+to SWAP. The userspace in this case is the Mesa VirGL driver, it will mark
+the cached BOs as "not needed", allowing kernel driver to release memory
+of the cached shmem BOs on lowmem situations, preventing OOM kills.
 
-Repository for current release
-    https://github.com/shemminger/iproute2.git
-    git://git.kernel.org/pub/scm/network/iproute2/iproute2.git
+The Panfrost driver is switched to use generic memory shrinker.
 
-And future release (net-next):
-    git://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git
+This patchset includes improvements and fixes for various things that
+I found while was working on the shrinker.
 
-Contributions:
+The Mesa and IGT patches will be kept on hold until this kernel series
+will be approved and merged.
 
-Andrea Claudi (8):
-      Makefile: move HAVE_MNL check to top-level Makefile
-      configure: add check_libtirpc()
-      ss: remove an implicit dependency on rpcinfo
-      tc: em_u32: fix offset parsing
-      man: devlink-region: fix typo in example
-      man: fix some typos
-      doc: fix 'infact' --> 'in fact' typo
-      tipc: fix keylen check
+This patchset was tested using Qemu and crosvm, including both cases of
+IOMMU off/on.
 
-Baowen Zheng (2):
-      tc: add skip_hw and skip_sw to control action offload
-      tc: separate action print for filter and action dump
+Mesa: https://gitlab.freedesktop.org/digetx/mesa/-/commits/virgl-madvise
+IGT:  https://gitlab.freedesktop.org/digetx/igt-gpu-tools/-/commits/virtio-madvise
+      https://gitlab.freedesktop.org/digetx/igt-gpu-tools/-/commits/panfrost-madvise
 
-Coco Li (1):
-      iplink: add gro_max_size attribute handling
+Changelog:
 
-Daniel Braunwarth (2):
-      lib: add profinet and ethercat as link layer protocol names
-      tc: bash-completion: Add profinet and ethercat to procotol completion list
+v6: - Added new VirtIO-related fix patch that previously was sent separately
+      and didn't get much attention:
 
-David Ahern (17):
-      Update kernel headers
-      Update kernel headers
-      devlink: Remove strtouint64_t in favor of get_u64
-      devlink: Remove strtouint32_t in favor of get_u32
-      devlink: Remove strtouint16_t in favor of get_u16
-      devlink: Remove strtouint8_t in favor of get_u8
-      configure: Allow command line override of toolchain
-      Update kernel headers
-      bpf_glue: Remove use of bpf_load_program from libbpf
-      bpf: Export bpf syscall wrapper
-      bpf: Remove use of bpf_create_map_xattr
-      Revert "configure: Allow command line override of toolchain"
-      Import batman_adv.h header from last kernel sync point
-      Update kernel headers
-      libbpf: Use bpf_object__load instead of bpf_object__load_xattr
-      libbpf: Remove use of bpf_program__set_priv and bpf_program__priv
-      libbpf: Remove use of bpf_map_is_offload_neutral
+        drm/gem: Properly annotate WW context on drm_gem_lock_reservations() error
 
-Davide Caratti (1):
-      ss: display advertised TCP receive window and out-of-order counter
+    - Added new patch that fixes mapping of imported dma-bufs for
+      Tegra DRM and other affected drivers. It's also handy to have it
+      for switching to the new dma-buf locking convention scheme:
 
-Eli Cohen (5):
-      vdpa: Remove unsupported command line option
-      vdpa: Allow for printing negotiated features of a device
-      vdpa: Support for configuring max VQ pairs for a device
-      vdpa: Support reading device features
-      vdpa: Update man page with added support to configure max vq pair
+        drm/gem: Move mapping of imported dma-bufs to drm_gem_mmap_obj()
 
-Eric Dumazet (2):
-      iplink: add ip-link documentation
-      iplink: remove GSO_MAX_SIZE definition
+    - Added new patch that fixes shrinker list corruption for stable Panfrost
+      driver:
 
-Eyal Birger (1):
-      ip/geneve: add support for IFLA_GENEVE_INNER_PROTO_INHERIT
+        drm/panfrost: Fix shrinker list corruption by madvise IOCTL
 
-Gal Pressman (1):
-      tunnel: Fix missing space after local/remote print
+    - Added new minor patch-fix for drm-shmem:
 
-Geliang Tang (3):
-      mptcp: add fullmesh check for adding address
-      mptcp: add fullmesh support for setting flags
-      mptcp: add port support for setting flags
+        drm/shmem-helper: Add missing vunmap on error
 
-Hangbin Liu (1):
-      bond: add ns_ip6_target option
+    - Added fixes tag to the "Put mapping ..." patch like was suggested by
+      Steven Price.
 
-Hans Schultz (4):
-      bridge: link: add command to set port in locked mode
-      ip: iplink_bridge_slave: add locked port flag support
-      man8/bridge.8: add locked port feature description and cmd syntax
-      man8/ip-link.8: add locked port feature description and cmd syntax
+    - Added new VirtIO-GPU driver improvement patch:
 
-Jiri Pirko (1):
-      devlink: fix "devlink health dump" command without arg
+        drm/virtio: Return proper error codes instead of -1
 
-Joachim Wiberg (9):
-      bridge: support for controlling flooding of broadcast per port
-      man: bridge: document new bcast_flood flag for bridge ports
-      man: bridge: add missing closing " in bridge show mdb
-      ip: iplink_bridge_slave: support for broadcast flooding
-      man: ip-link: document new bcast_flood flag on bridge ports
-      man: ip-link: mention bridge port's default mcast_flood state
-      man: ip-link: whitespace fixes to odd line breaks mid sentence
-      bridge: support for controlling mcast_router per port
-      man: bridge: document per-port mcast_router settings
+    - Reworked shrinker patches like was suggested by Daniel Vetter:
 
-Justin Iurman (2):
-      Add support for the IOAM insertion frequency
-      Update documentation
+        - Introduced the new locking convention for dma-bufs. Tested on
+          VirtIO-GPU, Panfrost, Lima, Tegra and Intel selftests.
 
-Luca Boccassi (2):
-      man: 'allow to' -> 'allow one to'
-      man: use quote instead of acute accent
+        - Dropped separate purge() callback. Now single evict() does
+          everything.
 
-Nicolas Escande (1):
-      ip/batadv: allow to specify RA when creating link
+        - Dropped swap_in() callback from drm-shmem objects. DRM drivers
+          now could and should restore only the required mappings.
 
-Stephen Hemminger (17):
-      tc: add format attribute to tc_print_rate
-      utils: add format attribute
-      netem: fix clang warnings
-      flower: fix clang warnings
-      tc_util: fix clang warning in print_masked_type
-      ipl2tp: fix clang warning
-      can: fix clang warning
-      tipc: fix clang warning about empty format string
-      tunnel: fix clang warning
-      libbpf: fix clang warning about format non-literal
-      json_print: suppress clang format warning
-      tc_util: fix breakage from clang changes
-      tc/f_flower: fix indentation
-      uapi: update from 5.18-rc1
-      uapi: upstream update to stddef.h
-      uapi: update of virtio_ids
-      v5.18.0
+        - Dropped dynamic counting of evictable pages. This simplifies
+          code in exchange to *potentially* burning more CPU time on OOM.
 
-Wen Liang (2):
-      tc: u32: add support for json output
-      tc: u32: add json support in `print_raw`, `print_ipv4`, `print_ipv6`
+v5: - Added new for-stable patch "drm/panfrost: Put mapping instead of
+      shmem obj on panfrost_mmu_map_fault_addr() error" that corrects GEM's
+      refcounting in case of error.
 
-Wojciech Drewek (3):
-      f_flower: fix indentation for enc_key_id and u32
-      ip: GTP support in ip link
-      f_flower: Implement gtp options support
+    - The drm_gem_shmem_v[un]map() now takes a separate vmap_lock for
+      imported GEMs to avoid recursive locking of DMA reservations.
+      This addresses v4 comment from Thomas Zimmermann about the potential
+      deadlocking of vmapping.
+
+    - Added ack from Thomas Zimmermann to "drm/shmem-helper: Correct
+      doc-comment of drm_gem_shmem_get_sg_table()" patch.
+
+    - Dropped explicit shmem states from the generic shrinker patch as
+      was requested by Thomas Zimmermann.
+
+    - Improved variable names and comments of the generic shrinker code.
+
+    - Extended drm_gem_shmem_print_info() with the shrinker-state info in
+      the "drm/virtio: Support memory shrinking" patch.
+
+    - Moved evict()/swap_in()/purge() callbacks from drm_gem_object_funcs
+      to drm_gem_shmem_object in the generic shrinker patch, for more
+      consistency.
+
+    - Corrected bisectability of the patches that was broken in v4
+      by accident.
+
+    - The virtio_gpu_plane_prepare_fb() now uses drm_gem_shmem_pin() instead
+      of drm_gem_shmem_set_unpurgeable_and_unevictable() and does it only for
+      shmem BOs in the "drm/virtio: Support memory shrinking" patch.
+
+    - Made more functions private to drm_gem_shmem_helper.c as was requested
+      by Thomas Zimmermann. This minimizes number of the public shmem helpers.
+
+v4: - Corrected minor W=1 warnings reported by kernel test robot for v3.
+
+    - Renamed DRM_GEM_SHMEM_PAGES_STATE_ACTIVE/INACTIVE to PINNED/UNPINNED,
+      for more clarity.
+
+v3: - Hardened shrinker's count() with usage of READ_ONCE() since we don't
+      use atomic type for counting and technically compiler is free to
+      re-fetch counter's variable.
+
+    - "Correct drm_gem_shmem_get_sg_table() error handling" now uses
+      PTR_ERR_OR_ZERO(), fixing typo that was made in v2.
+
+    - Removed obsoleted shrinker from the Panfrost driver, which I missed to
+      do in v2 by accident and Alyssa Rosenzweig managed to notice it.
+
+    - CCed stable kernels in all patches that make fixes, even the minor ones,
+      like was suggested by Emil Velikov and added his r-b to the patches.
+
+    - Added t-b from Steven Price to the Panfrost's shrinker patch.
+
+    - Corrected doc-comment of drm_gem_shmem_object.madv, like was suggested
+      by Steven Price. Comment now says that madv=1 means "object is purged"
+      instead of saying that value is unused.
+
+    - Added more doc-comments to the new shmem shrinker API.
+
+    - The "Improve DMA API usage for shmem BOs" patch got more improvements
+      by removing the obsoleted drm_dev_set_unique() quirk and its comment.
+
+    - Added patch that makes Virtio-GPU driver to use common dev_is_pci()
+      helper, which was suggested by Robin Murphy.
+
+    - Added new "drm/shmem-helper: Take GEM reservation lock instead of
+      drm_gem_shmem locks" patch, which was suggested by Daniel Vetter.
+
+    - Added new "drm/virtio: Simplify error handling of
+      virtio_gpu_object_create()" patch.
+
+    - Improved "Correct doc-comment of drm_gem_shmem_get_sg_table()" patch,
+      like was suggested by Daniel Vetter, by saying that function returns
+      ERR_PTR() and not errno.
+
+    - virtio_gpu_purge_object() is fenced properly now, turned out
+      virtio_gpu_notify() doesn't do fencing as I was supposing before.
+      Stress testing of memory eviction revealed that.
+
+    - Added new patch that corrects virtio_gpu_plane_cleanup_fb() to use
+      appropriate atomic plane state.
+
+    - SHMEM shrinker got eviction support.
+
+    - VirtIO-GPU driver now supports memory eviction. It's enabled for a
+      non-blob GEMs only, i.e. for VirGL. The blobs don't support dynamic
+      attaching/detaching of guest's memory, so it's not trivial to enable
+      them.
+
+    - Added patch that removes obsoleted drm_gem_shmem_purge()
+
+    - Added patch that makes drm_gem_shmem_get_pages() private.
+
+    - Added patch that fixes lockup on dma_resv_reserve_fences() error.
+
+v2: - Improved shrinker by using a more fine-grained locking to reduce
+      contention during scan of objects and dropped locking from the
+      'counting' callback by tracking count of shrinkable pages. This
+      was suggested by Rob Clark in the comment to v1.
+
+    - Factored out common shrinker code into drm_gem_shmem_helper.c
+      and switched Panfrost driver to use the new common memory shrinker.
+      This was proposed by Thomas Zimmermann in his prototype series that
+      he shared with us in the comment to v1. Note that I only compile-tested
+      the Panfrost driver.
+
+    - Shrinker now takes object_name_lock during scan to prevent racing
+      with dma-buf exporting.
+
+    - Shrinker now takes vmap_lock during scan to prevent racing with shmem
+      vmap/unmap code.
+
+    - Added "Correct doc-comment of drm_gem_shmem_get_sg_table()" patch,
+      which I sent out previously as a standalone change, since the
+      drm_gem_shmem_helper.c is now touched by this patchset anyways and
+      it doesn't hurt to group all the patches together.
+
+Dmitry Osipenko (22):
+  drm/gem: Properly annotate WW context on drm_gem_lock_reservations()
+    error
+  drm/gem: Move mapping of imported dma-bufs to drm_gem_mmap_obj()
+  drm/panfrost: Put mapping instead of shmem obj on
+    panfrost_mmu_map_fault_addr() error
+  drm/panfrost: Fix shrinker list corruption by madvise IOCTL
+  drm/virtio: Correct drm_gem_shmem_get_sg_table() error handling
+  drm/virtio: Check whether transferred 2D BO is shmem
+  drm/virtio: Unlock reservations on virtio_gpu_object_shmem_init()
+    error
+  drm/virtio: Unlock reservations on dma_resv_reserve_fences() error
+  drm/virtio: Use appropriate atomic state in
+    virtio_gpu_plane_cleanup_fb()
+  drm/shmem-helper: Add missing vunmap on error
+  drm/shmem-helper: Correct doc-comment of drm_gem_shmem_get_sg_table()
+  drm/virtio: Simplify error handling of virtio_gpu_object_create()
+  drm/virtio: Improve DMA API usage for shmem BOs
+  dma-buf: Introduce new locking convention
+  drm/shmem-helper: Don't use vmap_use_count for dma-bufs
+  drm/shmem-helper: Use reservation lock
+  drm/shmem-helper: Add generic memory shrinker
+  drm/gem: Add drm_gem_pin_unlocked()
+  drm/virtio: Support memory shrinking
+  drm/virtio: Use dev_is_pci()
+  drm/virtio: Return proper error codes instead of -1
+  drm/panfrost: Switch to generic memory shrinker
+
+ drivers/dma-buf/dma-buf.c                     | 270 ++++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c       |   6 +-
+ drivers/gpu/drm/drm_client.c                  |   4 +-
+ drivers/gpu/drm/drm_gem.c                     |  69 +-
+ drivers/gpu/drm/drm_gem_framebuffer_helper.c  |   6 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c        | 718 ++++++++++++++----
+ drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |  10 +-
+ drivers/gpu/drm/lima/lima_gem.c               |   8 +-
+ drivers/gpu/drm/lima/lima_sched.c             |   4 +-
+ drivers/gpu/drm/panfrost/Makefile             |   1 -
+ drivers/gpu/drm/panfrost/panfrost_device.h    |   4 -
+ drivers/gpu/drm/panfrost/panfrost_drv.c       |  26 +-
+ drivers/gpu/drm/panfrost/panfrost_gem.c       |  33 +-
+ drivers/gpu/drm/panfrost/panfrost_gem.h       |   9 -
+ .../gpu/drm/panfrost/panfrost_gem_shrinker.c  | 122 ---
+ drivers/gpu/drm/panfrost/panfrost_job.c       |  18 +-
+ drivers/gpu/drm/panfrost/panfrost_mmu.c       |  21 +-
+ drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |   6 +-
+ drivers/gpu/drm/qxl/qxl_object.c              |  17 +-
+ drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
+ drivers/gpu/drm/tegra/gem.c                   |   4 +
+ drivers/gpu/drm/virtio/virtgpu_drv.c          |  53 +-
+ drivers/gpu/drm/virtio/virtgpu_drv.h          |  23 +-
+ drivers/gpu/drm/virtio/virtgpu_gem.c          |  59 +-
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c        |  37 +
+ drivers/gpu/drm/virtio/virtgpu_kms.c          |  16 +-
+ drivers/gpu/drm/virtio/virtgpu_object.c       | 203 +++--
+ drivers/gpu/drm/virtio/virtgpu_plane.c        |  28 +-
+ drivers/gpu/drm/virtio/virtgpu_vq.c           |  61 +-
+ .../common/videobuf2/videobuf2-dma-contig.c   |  11 +-
+ .../media/common/videobuf2/videobuf2-dma-sg.c |  11 +-
+ .../common/videobuf2/videobuf2-vmalloc.c      |  11 +-
+ include/drm/drm_device.h                      |   4 +
+ include/drm/drm_gem.h                         |   6 +
+ include/drm/drm_gem_shmem_helper.h            |  99 ++-
+ include/linux/dma-buf.h                       |  14 +-
+ include/uapi/drm/virtgpu_drm.h                |  14 +
+ 37 files changed, 1349 insertions(+), 661 deletions(-)
+ delete mode 100644 drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+
+-- 
+2.35.3
 

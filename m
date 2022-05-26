@@ -2,384 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21115534C2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3F5534C4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346812AbiEZJCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 05:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
+        id S1346833AbiEZJI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 05:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346808AbiEZJCQ (ORCPT
+        with ESMTP id S1346823AbiEZJI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 05:02:16 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6526910D2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:02:14 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ff155c239bso9050177b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e8eAap0O5mLnVTJIKG4gcO6KHqI291hJ3hNkZGUg+4c=;
-        b=ZsrroG74sQBFVp9ZReAmSrzOO3AlxzBbFTPORfgh60DoIDEfK5/C7LI/9CEyzPQUD+
-         AFi0WiOkp1HVHkOuI+zeYHF+bUITtqJnluOhzoSKMVqyaNOdRTMT00G24t4xJHPzQJDH
-         BxEm57uFEPoZBoneeADxik/4+pLVImjepK8BU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e8eAap0O5mLnVTJIKG4gcO6KHqI291hJ3hNkZGUg+4c=;
-        b=1wYPidBOhLXoJM7yfUpUMZe04X3IOSPIlgNxqUcX87t/9FDy20dNr6DvG2N24ry6vg
-         bkTHnzi4+qM5Eqiw6qkpTW8lXthYo/DtGFj8SAZoNGli9xKenclmU/09xZmhno+GQFph
-         yW+T1tLYDZWNb6TSHA0z0VdWVqt3A//A8frvjweMoKTapfgQaMhLapoGFxP7R5dt64BT
-         aiKWWsmNYIOh1OidAS817ARuL2kYzEbwZZK+liw4vBHG5tND8NykHpr3umC12Pf9aWAv
-         qiERU6z8mRsDvRP0U0CZSGDB5WDd86whiRct54KAivcxMau28NPpfImR87iDxJqXmg1a
-         BnsQ==
-X-Gm-Message-State: AOAM533HAsXxbVimtzFvRbH+TkfETjvYpfB52ZCEe8QDRPKG2F4LfQ0n
-        M0UGBicMLorJzIv72IjocJDB2OMmc3DgZi9i+2WP
-X-Google-Smtp-Source: ABdhPJwFMKsD6Mwni6LcKYjRCMR5eDEtJjD8W+JosiFs9Iig9A6+rQ4Qs4T55dUzAaYXIrI3whZ0dP4SljWelq3fdCQ=
-X-Received: by 2002:a81:238e:0:b0:300:642f:fdb2 with SMTP id
- j136-20020a81238e000000b00300642ffdb2mr5036721ywj.373.1653555733414; Thu, 26
- May 2022 02:02:13 -0700 (PDT)
+        Thu, 26 May 2022 05:08:56 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EBD1FCC0;
+        Thu, 26 May 2022 02:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653556135; x=1685092135;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BbgZo0fAvzwrr8/AxG79gLLntIyYXKjXVTnVr9TmLbk=;
+  b=SVgZeJbXKOBo9mrpxgOMMYUr8dmEe/CAmRHumIk54DTikZcKKGFhuOfF
+   lanoOGZQ2ayux9AcnfflaGZwN4gHCcTebsPyG+6Yd056IUh1pBKWQ19PM
+   NJaH8VGasGpppcUw82GPySPIBIZmFl+voqji8930s3aeNJMvxzU9HpWCv
+   hIZtu5pedx2dLQOc4Vh6RJXvNNft8qpt1lvUrI7ndhweF3Qn8XtgxHFbq
+   47Hf+8Nxg125Jcecm0y+fqIXNzsCPFvfug6+nCQKSVNAnJYNpQPYxkFRW
+   UikBpGA0LlpL5zll7P4n3o4ygyfIxodIXYgVbSz0TQXq2C2741jhFrEJx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="299428592"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="299428592"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 02:08:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="718170597"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 26 May 2022 02:08:52 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nu9UB-0003jg-Gz;
+        Thu, 26 May 2022 09:08:51 +0000
+Date:   Thu, 26 May 2022 17:02:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jianglei Nie <niejianglei2021@163.com>, pizza@shaftnet.org,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: Re: [PATCH] cw1200: Fix memory leak in cw1200_set_key()
+Message-ID: <202205261656.CWDWN8nG-lkp@intel.com>
+References: <20220526033003.473943-1-niejianglei2021@163.com>
 MIME-Version: 1.0
-References: <00000000000038779505d5d8b372@google.com> <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
- <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
- <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
- <a0769218-c84a-a1d3-71e7-aefd40bf54fe@ghiti.fr> <CANp29Y4WMhsE_-VWvNbwq18+qvb1Qc-ES80h_j_G-N_hcAnRAw@mail.gmail.com>
- <CANp29Y4ujmz901aE9oiBDx9dYWHti4-Jw=6Ewtotm6ck6MN9FQ@mail.gmail.com>
- <CACT4Y+ZvStiHLYBOcPDoAJnk8hquXwm9BgjQTv=APwh7AvgEUQ@mail.gmail.com>
- <CANp29Y56Or0V1AG7rzBfV_ZTph2Crg4JKKHiuw1kcGFFxeWqiQ@mail.gmail.com>
- <CANp29Y5+MuhKAzVxzEDb_k9voXmKWrUFx8k4wnW5=2+5enVFVA@mail.gmail.com>
- <CA+zEjCtvaT0YsxxUgnEGM+V4b5sWuCAs3=3J+Xocf580uT3t1g@mail.gmail.com>
- <CA+zEjCs1FEUTcM+pgV+_MZnixSO5c2hexZFxGxuCQWc2ZMQiRg@mail.gmail.com>
- <CANp29Y4rDSjrfTOxcQqwh+Qm+ocR0v6Oxr7EkFxScf+24M1tNA@mail.gmail.com>
- <CA+zEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag@mail.gmail.com>
- <CACT4Y+Z=3MWEhVUH3mAH150XpOmhdjsGPOHoP1nvBcBwU_sphQ@mail.gmail.com>
- <5e702296-9ce0-f1e6-dae8-cc719bc040b9@ghiti.fr> <CAOnJCULgP_-D3cY2m39k9N912Q55FS7X9JcrRVoUt0GC92tx7w@mail.gmail.com>
-In-Reply-To: <CAOnJCULgP_-D3cY2m39k9N912Q55FS7X9JcrRVoUt0GC92tx7w@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 26 May 2022 02:02:02 -0700
-Message-ID: <CAOnJCUKBWx+wEKaq8WOPC1j7jgn38iWcrTh4gO+FzfF-mhPkQg@mail.gmail.com>
-Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526033003.473943-1-niejianglei2021@163.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 1:11 AM Atish Patra <atishp@atishpatra.org> wrote:
->
-> On Mon, May 16, 2022 at 5:06 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
-> >
-> >
-> > On 5/12/22 13:48, Dmitry Vyukov wrote:
-> > > On Fri, 18 Feb 2022 at 14:45, Alexandre Ghiti
-> > > <alexandre.ghiti@canonical.com> wrote:
-> > >> Hi Aleksandr,
-> > >>
-> > >> On Thu, Feb 17, 2022 at 6:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > >>> Hi Alex,
-> > >>>
-> > >>> On Thu, Feb 17, 2022 at 5:53 PM Alexandre Ghiti
-> > >>> <alexandre.ghiti@canonical.com> wrote:
-> > >>>> Aleksandr,
-> > >>>>
-> > >>>> On Wed, Feb 16, 2022 at 5:58 PM Alexandre Ghiti
-> > >>>> <alexandre.ghiti@canonical.com> wrote:
-> > >>>>> First, thank you for working on this.
-> > >>>>>
-> > >>>>> On Wed, Feb 16, 2022 at 5:17 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > >>>>>> If I use just defconfig + DEBUG_VIRTUAL, without any KASAN, it begins
-> > >>>>>> to boot, but overwhelms me with tons of `virt_to_phys used for
-> > >>>>>> non-linear address:` errors.
-> > >>>>>>
-> > >>>>>> Like that
-> > >>>>>>
-> > >>>>>> [    2.701271] virt_to_phys used for non-linear address:
-> > >>>>>> 00000000b59e31b6 (0xffffffff806c2000)
-> > >>>>>> [    2.701727] WARNING: CPU: 0 PID: 1 at arch/riscv/mm/physaddr.c:16
-> > >>>>>> __virt_to_phys+0x7e/0x86
-> > >>>>>> [    2.702207] Modules linked in:
-> > >>>>>> [    2.702393] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W
-> > >>>>>>    5.17.0-rc1 #1
-> > >>>>>> [    2.702806] Hardware name: riscv-virtio,qemu (DT)
-> > >>>>>> [    2.703051] epc : __virt_to_phys+0x7e/0x86
-> > >>>>>> [    2.703298]  ra : __virt_to_phys+0x7e/0x86
-> > >>>>>> [    2.703547] epc : ffffffff80008448 ra : ffffffff80008448 sp :
-> > >>>>>> ffff8f800021bde0
-> > >>>>>> [    2.703977]  gp : ffffffff80ed9b30 tp : ffffaf8001230000 t0 :
-> > >>>>>> ffffffff80eea56f
-> > >>>>>> [    2.704704]  t1 : ffffffff80eea560 t2 : 0000000000000000 s0 :
-> > >>>>>> ffff8f800021be00
-> > >>>>>> [    2.705153]  s1 : ffffffff806c2000 a0 : 000000000000004f a1 :
-> > >>>>>> ffffffff80e723d8
-> > >>>>>> [    2.705555]  a2 : 0000000000000010 a3 : fffffffffffffffe a4 :
-> > >>>>>> 0000000000000000
-> > >>>>>> [    2.706027]  a5 : 0000000000000000 a6 : 0000000000000005 a7 :
-> > >>>>>> ffffffffffffffff
-> > >>>>>> [    2.706474]  s2 : ffffffff80b80b08 s3 : 00000000000000c2 s4 :
-> > >>>>>> ffffffff806c2000
-> > >>>>>> [    2.706891]  s5 : ffffffff80edba10 s6 : ffffffff80edb960 s7 :
-> > >>>>>> 0000000000000001
-> > >>>>>> [    2.707290]  s8 : 00000000000000ff s9 : ffffffff80b80b40 s10:
-> > >>>>>> 00000000000000cc
-> > >>>>>> [    2.707689]  s11: ffffaf807e1fcf00 t3 : 0000000000000076 t4 :
-> > >>>>>> ffffffffffffffff
-> > >>>>>> [    2.708092]  t5 : 00000000000001f2 t6 : ffff8f800021bb48
-> > >>>>>> [    2.708433] status: 0000000000000120 badaddr: 0000000000000000
-> > >>>>>> cause: 0000000000000003
-> > >>>>>> [    2.708919] [<ffffffff8011416a>] free_reserved_area+0x72/0x19a
-> > >>>>>> [    2.709296] [<ffffffff80003a5a>] free_initmem+0x6c/0x7c
-> > >>>>>> [    2.709648] [<ffffffff805f60c8>] kernel_init+0x3a/0x10a
-> > >>>>>> [    2.709993] [<ffffffff80002fda>] ret_from_exception+0x0/0xc
-> > >>>>>> [    2.710310] ---[ end trace 0000000000000000 ]---
-> > >>>>>>
-> > >>>>> I was able to reproduce this: the first one regarding init_zero_pfn is
-> > >>>>> legit but not wrong, I have to check when it was introduced and how to
-> > >>>>> fix this.
-> > >>>>> Regarding the huge batch that follows, at first sight, I would say
-> > >>>>> this is linked to my sv48 patchset but that does not seem important as
-> > >>>>> the address is a kernel mapping address so the use of virt_to_phys is
-> > >>>>> right.
-> > >>>>>
-> > >>>>>> On Wed, Feb 16, 2022 at 5:09 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > >>>>>>> On Wed, Feb 16, 2022 at 12:56 PM Dmitry Vyukov <dvyukov@google.com> wrote:
-> > >>>>>>>> On Wed, 16 Feb 2022 at 12:47, Aleksandr Nogikh <nogikh@google.com> wrote:
-> > >>>>>>>>> On Wed, Feb 16, 2022 at 11:37 AM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > >>>>>>>>>> Hi Alex,
-> > >>>>>>>>>>
-> > >>>>>>>>>> On Wed, Feb 16, 2022 at 5:14 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
-> > >>>>>>>>>>> Hi Dmitry,
-> > >>>>>>>>>>>
-> > >>>>>>>>>>> On 2/15/22 18:12, Dmitry Vyukov wrote:
-> > >>>>>>>>>>>> On Wed, 2 Feb 2022 at 14:18, Alexandre Ghiti
-> > >>>>>>>>>>>> <alexandre.ghiti@canonical.com> wrote:
-> > >>>>>>>>>>>>> Hi Aleksandr,
-> > >>>>>>>>>>>>>
-> > >>>>>>>>>>>>> On Wed, Feb 2, 2022 at 12:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > >>>>>>>>>>>>>> Hello,
-> > >>>>>>>>>>>>>>
-> > >>>>>>>>>>>>>> syzbot has already not been able to fuzz its RISC-V instance for 97
-> > >>>>>>>>>>>>> That's a longtime, I'll take a look more regularly.
-> > >>>>>>>>>>>>>
-> > >>>>>>>>>>>>>> days now because the compiled kernel cannot boot. I bisected the issue
-> > >>>>>>>>>>>>>> to the following commit:
-> > >>>>>>>>>>>>>>
-> > >>>>>>>>>>>>>> commit 54c5639d8f507ebefa814f574cb6f763033a72a5
-> > >>>>>>>>>>>>>> Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> > >>>>>>>>>>>>>> Date:   Fri Oct 29 06:59:27 2021 +0200
-> > >>>>>>>>>>>>>>
-> > >>>>>>>>>>>>>>       riscv: Fix asan-stack clang build
-> > >>>>>>>>>>>>>>
-> > >>>>>>>>>>>>>> Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
-> > >>>>>>>>>>>>>> enabled. In the previous message syzbot mentions
-> > >>>>>>>>>>>>>> "riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
-> > >>>>>>>>>>>>>> Binutils for Debian) 2.35.2", but the issue also reproduces finely on
-> > >>>>>>>>>>>>>> a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
-> > >>>>>>>>>>>>>> 11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
-> > >>>>>>>>>>>>>> For convenience, I also duplicate the .config file from the bot's
-> > >>>>>>>>>>>>>> message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
-> > >>>>>>>>>>>>>>
-> > >>>>>>>>>>>>>> Can someone with KASAN and RISC-V expertise please take a look?
-> > >>>>>>>>>>>>> I'll take a look at that today.
-> > >>>>>>>>>>>>>
-> > >>>>>>>>>>>>> Thanks for reporting the issue,
-> > >>>>>>>>>>> I took a quick look, not enough to fix it but I know the issue comes
-> > >>>>>>>>>>> from the inline instrumentation, I have no problem with the outline
-> > >>>>>>>>>>> instrumentation. I need to find some cycles to work on this, my goal is
-> > >>>>>>>>>>> to fix this for 5.17.
-> > >>>>>>>>>> Thanks for the update!
-> > >>>>>>>>>>
-> > >>>>>>>>>> Can you please share the .config with which you tested the outline
-> > >>>>>>>>>> instrumentation?
-> > >>>>>>>>>> I updated the syzbot config to use KASAN_OUTLINE instead of KASAN_INLINE,
-> > >>>>>>>>>> but it still does not boot :(
-> > >>>>>>>>>>
-> > >>>>>>>>>> Here's what I used:
-> > >>>>>>>>>> https://gist.github.com/a-nogikh/279c85c2d24f47efcc3e865c08844138
-> > >>>>>>>>> Update: it doesn't boot with that big config, but boots if I generate
-> > >>>>>>>>> a simple one with KASAN_OUTLINE:
-> > >>>>>>>>>
-> > >>>>>>>>> make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > >>>>>>>>> ./scripts/config -e KASAN -e KASAN_OUTLINE
-> > >>>>>>>>> make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > >>>>>>>>>
-> > >>>>>>>>> And it indeed doesn't work if I use KASAN_INLINE.
-> > >>>>>>>> It may be an issue with code size. Full syzbot config + KASAN + KCOV
-> > >>>>>>>> produce hugely massive .text. It may be hitting some limitation in the
-> > >>>>>>>> bootloader/kernel bootstrap code.
-> > >>>>> I took a quick glance and it traps on a KASAN address that is not
-> > >>>>> mapped, either because it is too soon or because the mapping failed
-> > >>>>> somehow.
-> > >>>>>
-> > >>>>> I'll definitely dive into that tomorrow, sorry for being slow here and
-> > >>>>> thanks again for all your work, that helps a lot.
-> > >>>>>
-> > >>>>> Thanks,
-> > >>>>>
-> > >>>>> Alex
-> > >>>>>
-> > >>>>>>> I bisected the difference between the config we use on syzbot and the
-> > >>>>>>> simple one that was generated like I described above.
-> > >>>>>>> Turns out that it's the DEBUG_VIRTUAL config that makes the difference.
-> > >>>>>>>
-> > >>>>>>> make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > >>>>>>> ./scripts/config -e KASAN -e KASAN_OUTLINE -e DEBUG_VIRTUAL
-> > >>>>>>> make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > >>>>>>>
-> > >>>>>>> And the resulting kernel does not boot.
-> > >>>>>>> My env: the `riscv/fixes` branch, commit
-> > >>>>>>> 6df2a016c0c8a3d0933ef33dd192ea6606b115e3, qemu 6.2.0.
-> > >>>> I fixed a few things today: KASAN + SPARSE_VMEMMAP, DEBUG_VIRTUAL and
-> > >>>> maybe KASAN  + KCOV.
-> > >>>>
-> > >>>> With those small fixes, I was able to boot your large dotconfig with
-> > >>>> KASAN_OUTLINE, the inline version still fails, this is my next target
-> > >>>> :)
-> > >>>> I'll push that tomorrow!
-> > >>> Awesome, thank you very much!
-> > >>> Looking forward to finally seeing the instance run :)
-> > >> I sent a patchset which should fix your config with *outline* instrumentation.
-> > > Was this fix merged? The riscv instance still does not boot:
-> > > https://syzkaller.appspot.com/bug?id=5f2ff52ad42cba9f222202219baebd4e63e35127
-> >
-> >
-> > Yes it has been in Linus tree since 5.18-rc1. I'll take a look at that
-> > this week.
-> >
->
-> Are you seeing this error or a different one ? I used the
-> syzkaller_defconfig from the patch below on v5.18.
->
-> https://lore.kernel.org/all/20220419174952.699-1-palmer@rivosinc.com/
->
-> [   15.076116][    T1] Mandatory Access Control activated.
-> [   15.158241][    T1] AppArmor: AppArmor Filesystem Enabled
-> [   16.150870][    T1] NET: Registered PF_INET protocol family
-> [   16.166167][    T1] IP idents hash table entries: 32768 (order: 6,
-> 262144 bytes, linear)
-> [   16.188727][    T1] Unable to handle kernel paging request at
-> virtual address ffebfffeffff2000
-> [   16.192727][    T1] Oops [#1]
-> [   16.193479][    T1] Modules linked in:
-> [   16.194687][    T1] CPU: 3 PID: 1 Comm: swapper/0 Not tainted
-> 5.18.0-00001-g37ac279268bf-dirty #9
-> [   16.196486][    T1] Hardware name: riscv-virtio,qemu (DT)
-> [   16.197836][    T1] epc : kasan_check_range+0x9e/0x14e
-> [   16.199104][    T1]  ra : memset+0x1e/0x4c
-> [   16.200091][    T1] epc : ffffffff804787e0 ra : ffffffff80478f30 sp
-> : ff600000073ffb70
-> [   16.201420][    T1]  gp : ffffffff85879e80 tp : ff600000073f0000 t0
-> : 7300000000000000
-> [   16.202762][    T1]  t1 : ffebfffeffff21ff t2 : 73746e6564692050 s0
-> : ff600000073ffba0
-> [   16.204047][    T1]  s1 : 0000000000001000 a0 : ffebfffeffff2200 a1
-> : 0000000000001000
-> [   16.205312][    T1]  a2 : 0000000000000001 a3 : ffffffff803a4f32 a4
-> : ff5ffffffff90000
-> [   16.206592][    T1]  a5 : ffebfffeffff2000 a6 : 0000004000000000 a7
-> : ff5ffffffff90fff
-> [   16.207865][    T1]  s2 : ff5ffffffff90000 s3 : 0000000000000000 s4
-> : ffffffff8467ea90
-> [   16.209134][    T1]  s5 : 0000000000000000 s6 : ff5ffffffff90000 s7
-> : 0000000000000000
-> [   16.210394][    T1]  s8 : 0000000000001000 s9 : ffffffff8587ca40
-> s10: 0000000000000004
-> [   16.211952][    T1]  s11: ffffffff858a03a0 t3 : 0000000000000000 t4
-> : 0000000000000040
-> [   16.213469][    T1]  t5 : ffebfffeffff2200 t6 : ff600000073ff738
-> [   16.214853][    T1] status: 0000000200000120 badaddr:
-> ffebfffeffff2000 cause: 000000000000000d
-> [   16.216910][    T1] Call Trace:
-> [   16.217816][    T1] [<ffffffff803a4f32>] pcpu_alloc+0x844/0x1254
-> [   16.219110][    T1] [<ffffffff803a59a0>] __alloc_percpu+0x28/0x34
-> [   16.220244][    T1] [<ffffffff8328824a>] ip_rt_init+0x17e/0x382
-> [   16.221606][    T1] [<ffffffff8328861c>] ip_init+0x18/0x30
-> [   16.222719][    T1] [<ffffffff8328a0ee>] inet_init+0x2a6/0x550
-> [   16.223863][    T1] [<ffffffff80003204>] do_one_initcall+0x130/0x7dc
-> [   16.225002][    T1] [<ffffffff83201fbc>] kernel_init_freeable+0x510/0x5b4
-> [   16.226273][    T1] [<ffffffff8319842a>] kernel_init+0x28/0x21c
-> [   16.227337][    T1] [<ffffffff80005818>] ret_from_exception+0x0/0x10
-> [   16.229910][    T1] ---[ end trace 0000000000000000 ]---
-> [   16.231880][    T1] Kernel panic - not syncing: Fatal exception
->
->
+Hi Jianglei,
 
-Enabling CONFIG_KASAN_VMALLOC=y solves the issue and I am able to boot
-to the userspace.
-I have tried enabling/disabling CONFIG_VMAP_STACK as well. Both works fine.
+Thank you for the patch! Yet something to improve:
 
-Looking at the ARM64 Kconfig, KASAN_VMALLOC is enabled if KASAN is enabled.
-This diff seems to work for me.
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 00fd9c548f26..cbf0fe227c77 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -122,6 +122,7 @@ config RISCV
-        select TRACE_IRQFLAGS_SUPPORT
-        select UACCESS_MEMCPY if !MMU
-        select ZONE_DMA32 if 64BIT
-+       select KASAN_VMALLOC if KASAN
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main v5.18 next-20220526]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I am not a kasan expert so I am not sure if this is the correct fix or
-just hides the real issue. pcpu_alloc seems to use vmalloc though.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220526/202205261656.CWDWN8nG-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1e40283730dea11a1556d589925313cdca295484
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
+        git checkout 1e40283730dea11a1556d589925313cdca295484
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/st/cw1200/
 
-> > Thanks,
-> >
-> > Alex
-> >
-> >
-> > >
-> > >> However, as you'll see in the cover letter, I have an issue with
-> > >> another KASAN config and if you can take a look at the stacktrace and
-> > >> see if that rings a bell, that would be great.
-> > >>
-> > >> Don't hesitate next time to ping me when the riscv syzbot instance fails :)
-> > >>
-> > >> Alex
-> > >>
-> > >>
-> > >>> --
-> > >>> Best Regards,
-> > >>> Aleksandr
-> > >>>
-> > >>>> Thanks again,
-> > >>>>
-> > >>>> Alex
-> > >> --
-> > >> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> > >> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> > >> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/CA%2BzEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag%40mail.gmail.com.
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
->
->
->
-> --
-> Regards,
-> Atish
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/wireless/st/cw1200/sta.c:826:26: error: use of undeclared identifier 'idx'
+                           cw1200_free_key(priv, idx);
+                                                 ^
+   1 error generated.
 
 
+vim +/idx +826 drivers/net/wireless/st/cw1200/sta.c
+
+   679	
+   680	int cw1200_set_key(struct ieee80211_hw *dev, enum set_key_cmd cmd,
+   681			   struct ieee80211_vif *vif, struct ieee80211_sta *sta,
+   682			   struct ieee80211_key_conf *key)
+   683	{
+   684		int ret = -EOPNOTSUPP;
+   685		struct cw1200_common *priv = dev->priv;
+   686		struct ieee80211_key_seq seq;
+   687	
+   688		mutex_lock(&priv->conf_mutex);
+   689	
+   690		if (cmd == SET_KEY) {
+   691			u8 *peer_addr = NULL;
+   692			int pairwise = (key->flags & IEEE80211_KEY_FLAG_PAIRWISE) ?
+   693				1 : 0;
+   694			int idx = cw1200_alloc_key(priv);
+   695			struct wsm_add_key *wsm_key = &priv->keys[idx];
+   696	
+   697			if (idx < 0) {
+   698				ret = -EINVAL;
+   699				goto finally;
+   700			}
+   701	
+   702			if (sta)
+   703				peer_addr = sta->addr;
+   704	
+   705			key->flags |= IEEE80211_KEY_FLAG_PUT_IV_SPACE |
+   706				      IEEE80211_KEY_FLAG_RESERVE_TAILROOM;
+   707	
+   708			switch (key->cipher) {
+   709			case WLAN_CIPHER_SUITE_WEP40:
+   710			case WLAN_CIPHER_SUITE_WEP104:
+   711				if (key->keylen > 16) {
+   712					cw1200_free_key(priv, idx);
+   713					ret = -EINVAL;
+   714					goto finally;
+   715				}
+   716	
+   717				if (pairwise) {
+   718					wsm_key->type = WSM_KEY_TYPE_WEP_PAIRWISE;
+   719					memcpy(wsm_key->wep_pairwise.peer,
+   720					       peer_addr, ETH_ALEN);
+   721					memcpy(wsm_key->wep_pairwise.keydata,
+   722					       &key->key[0], key->keylen);
+   723					wsm_key->wep_pairwise.keylen = key->keylen;
+   724				} else {
+   725					wsm_key->type = WSM_KEY_TYPE_WEP_DEFAULT;
+   726					memcpy(wsm_key->wep_group.keydata,
+   727					       &key->key[0], key->keylen);
+   728					wsm_key->wep_group.keylen = key->keylen;
+   729					wsm_key->wep_group.keyid = key->keyidx;
+   730				}
+   731				break;
+   732			case WLAN_CIPHER_SUITE_TKIP:
+   733				ieee80211_get_key_rx_seq(key, 0, &seq);
+   734				if (pairwise) {
+   735					wsm_key->type = WSM_KEY_TYPE_TKIP_PAIRWISE;
+   736					memcpy(wsm_key->tkip_pairwise.peer,
+   737					       peer_addr, ETH_ALEN);
+   738					memcpy(wsm_key->tkip_pairwise.keydata,
+   739					       &key->key[0], 16);
+   740					memcpy(wsm_key->tkip_pairwise.tx_mic_key,
+   741					       &key->key[16], 8);
+   742					memcpy(wsm_key->tkip_pairwise.rx_mic_key,
+   743					       &key->key[24], 8);
+   744				} else {
+   745					size_t mic_offset =
+   746						(priv->mode == NL80211_IFTYPE_AP) ?
+   747						16 : 24;
+   748					wsm_key->type = WSM_KEY_TYPE_TKIP_GROUP;
+   749					memcpy(wsm_key->tkip_group.keydata,
+   750					       &key->key[0], 16);
+   751					memcpy(wsm_key->tkip_group.rx_mic_key,
+   752					       &key->key[mic_offset], 8);
+   753	
+   754					wsm_key->tkip_group.rx_seqnum[0] = seq.tkip.iv16 & 0xff;
+   755					wsm_key->tkip_group.rx_seqnum[1] = (seq.tkip.iv16 >> 8) & 0xff;
+   756					wsm_key->tkip_group.rx_seqnum[2] = seq.tkip.iv32 & 0xff;
+   757					wsm_key->tkip_group.rx_seqnum[3] = (seq.tkip.iv32 >> 8) & 0xff;
+   758					wsm_key->tkip_group.rx_seqnum[4] = (seq.tkip.iv32 >> 16) & 0xff;
+   759					wsm_key->tkip_group.rx_seqnum[5] = (seq.tkip.iv32 >> 24) & 0xff;
+   760					wsm_key->tkip_group.rx_seqnum[6] = 0;
+   761					wsm_key->tkip_group.rx_seqnum[7] = 0;
+   762	
+   763					wsm_key->tkip_group.keyid = key->keyidx;
+   764				}
+   765				break;
+   766			case WLAN_CIPHER_SUITE_CCMP:
+   767				ieee80211_get_key_rx_seq(key, 0, &seq);
+   768				if (pairwise) {
+   769					wsm_key->type = WSM_KEY_TYPE_AES_PAIRWISE;
+   770					memcpy(wsm_key->aes_pairwise.peer,
+   771					       peer_addr, ETH_ALEN);
+   772					memcpy(wsm_key->aes_pairwise.keydata,
+   773					       &key->key[0], 16);
+   774				} else {
+   775					wsm_key->type = WSM_KEY_TYPE_AES_GROUP;
+   776					memcpy(wsm_key->aes_group.keydata,
+   777					       &key->key[0], 16);
+   778	
+   779					wsm_key->aes_group.rx_seqnum[0] = seq.ccmp.pn[5];
+   780					wsm_key->aes_group.rx_seqnum[1] = seq.ccmp.pn[4];
+   781					wsm_key->aes_group.rx_seqnum[2] = seq.ccmp.pn[3];
+   782					wsm_key->aes_group.rx_seqnum[3] = seq.ccmp.pn[2];
+   783					wsm_key->aes_group.rx_seqnum[4] = seq.ccmp.pn[1];
+   784					wsm_key->aes_group.rx_seqnum[5] = seq.ccmp.pn[0];
+   785					wsm_key->aes_group.rx_seqnum[6] = 0;
+   786					wsm_key->aes_group.rx_seqnum[7] = 0;
+   787					wsm_key->aes_group.keyid = key->keyidx;
+   788				}
+   789				break;
+   790			case WLAN_CIPHER_SUITE_SMS4:
+   791				if (pairwise) {
+   792					wsm_key->type = WSM_KEY_TYPE_WAPI_PAIRWISE;
+   793					memcpy(wsm_key->wapi_pairwise.peer,
+   794					       peer_addr, ETH_ALEN);
+   795					memcpy(wsm_key->wapi_pairwise.keydata,
+   796					       &key->key[0], 16);
+   797					memcpy(wsm_key->wapi_pairwise.mic_key,
+   798					       &key->key[16], 16);
+   799					wsm_key->wapi_pairwise.keyid = key->keyidx;
+   800				} else {
+   801					wsm_key->type = WSM_KEY_TYPE_WAPI_GROUP;
+   802					memcpy(wsm_key->wapi_group.keydata,
+   803					       &key->key[0],  16);
+   804					memcpy(wsm_key->wapi_group.mic_key,
+   805					       &key->key[16], 16);
+   806					wsm_key->wapi_group.keyid = key->keyidx;
+   807				}
+   808				break;
+   809			default:
+   810				pr_warn("Unhandled key type %d\n", key->cipher);
+   811				cw1200_free_key(priv, idx);
+   812				ret = -EOPNOTSUPP;
+   813				goto finally;
+   814			}
+   815			ret = wsm_add_key(priv, wsm_key);
+   816			if (!ret)
+   817				key->hw_key_idx = idx;
+   818			else
+   819				cw1200_free_key(priv, idx);
+   820		} else if (cmd == DISABLE_KEY) {
+   821			struct wsm_remove_key wsm_key = {
+   822				.index = key->hw_key_idx,
+   823			};
+   824	
+   825			if (wsm_key.index > WSM_KEY_MAX_INDEX) {
+ > 826				cw1200_free_key(priv, idx);
+   827				ret = -EINVAL;
+   828				goto finally;
+   829			}
+   830	
+   831			cw1200_free_key(priv, wsm_key.index);
+   832			ret = wsm_remove_key(priv, &wsm_key);
+   833		} else {
+   834			pr_warn("Unhandled key command %d\n", cmd);
+   835		}
+   836	
+   837	finally:
+   838		mutex_unlock(&priv->conf_mutex);
+   839		return ret;
+   840	}
+   841	
 
 -- 
-Regards,
-Atish
+0-DAY CI Kernel Test Service
+https://01.org/lkp

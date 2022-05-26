@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D0E535357
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6833C535356
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236404AbiEZSbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 14:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
+        id S241093AbiEZSbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233171AbiEZSbq (ORCPT
+        with ESMTP id S241367AbiEZSbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 14:31:46 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254052714D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:31:43 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id h11so2795486eda.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:31:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OqaDyen+xHLMjM1+kU3vv7vEUmDoXnKLSHCxr0ki/yI=;
-        b=BkgFlzuGNKyb+uNyGnU6TxJ6tLPcnTTz0fIfAd0G6SJqAnBMulcPqqFv87YZb40zBr
-         45DtchsOB/RWvL1ETS2WM5vNZNWwcoQi6eUXN3Y8ht6azoD9p5U3j+SjLzDTj5jRzMFr
-         mWYp8z+Lw27JzV6nLRO784rXgmDzNNVW1X4rPhGqT9CcDL8N1xECKwkUKmAH6hwNip8o
-         tSoFF1Gw5harFb5i08n4Q7kK2a6o3lPbBYAZ1gbMnFKFovTyzUOrKznNLujUO78M392n
-         snBE7BSEouVeDgQ6JuN5/Yu3lgHzFryGE7lN27p/JX2G+Yeoipo1Iq2B6uT8zo0Dp3kg
-         Y26A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OqaDyen+xHLMjM1+kU3vv7vEUmDoXnKLSHCxr0ki/yI=;
-        b=PEnh+uxf7YKYsHPnrLMROIh8cM/kJIPTNTR3c90qT/ui6X4PKtJUb49bRbJ8q/TTY1
-         O1QH1x9NblGdknx6X+kv4jQhRIf75cqMEIS2xU8tvOE7Z6OVlFzz/0ii3THwOTFRGdi+
-         CxO4TlLK2lofObhLdu0EK9GwQVazmMzZFIbJ+W5NEJvRDJbGrhHg8qMamknhB8yCnEB5
-         YDXYDBbhURpkixWLcTNGBR1FS83Lwxo4rEnDAyRnDdBjtbkkYjkOqTQKlTVnvKBAOX4d
-         k261xtz8V7DgczPOECr8Fx4NuXZjhUWIGGKLzAkN9tJC43cgBWrDRdJmH8g+DcPrcV19
-         EY1Q==
-X-Gm-Message-State: AOAM532zprev/AYBzmKi2ppc94wki+/2mXzE3SU8idI1JV6OhFqbBg3D
-        FoRidq9IKkU9/pRUUI66dN/KgenIFC7D/4ttFMwtcA==
-X-Google-Smtp-Source: ABdhPJx0eHADBVzR9F6OjFXojGL3k6dCwZofMe8lUrMYlUp5GceoNL/vvUAdvoESE6uYkZYs+3Ly5be4VSp7LeVAaXM=
-X-Received: by 2002:aa7:dccd:0:b0:42b:d509:b5b with SMTP id
- w13-20020aa7dccd000000b0042bd5090b5bmr6266347edu.19.1653589902378; Thu, 26
- May 2022 11:31:42 -0700 (PDT)
+        Thu, 26 May 2022 14:31:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5398E245B6;
+        Thu, 26 May 2022 11:31:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 93E29CE237A;
+        Thu, 26 May 2022 18:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF58C34114;
+        Thu, 26 May 2022 18:31:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653589891;
+        bh=u6QRn5T0x1Kw7yKo4gf6qe/2MhS9IdZC71xDGcCMdiQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=Fl6d2qpvdzkvsHowTRn9K+XxrIkljDiz+I4tfbSYjlkMUj6jqnK48OdFaACmr/rJV
+         PN0dMF4goIu9P2PWvqpLVBEjZ98/CIo9i5CUKPLgM1S6WwXeRqu0qXB+czKtM1k7Q5
+         AMh/T5Ey+gRBg48hiRIn4d9K8OybRqyErFo4T4SWQdutQgbMQHf0gJjO+tq3N3tv/C
+         DaRVMEzht704h9RPGV8ER/MB/HrZoZKJQm/0Zyo41cJM1T67o+RPMytYQokgthWUAR
+         ppcimrVsXsZCRG9T647ywZhelC22vvktDMY8qn55EW51EhaoVryM9ZuWxFDqdk/S+M
+         SZ6Pnv+H2aTXw==
+From:   Mark Brown <broonie@kernel.org>
+To:     eajames@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20220525165852.33167-1-eajames@linux.ibm.com>
+References: <20220525165852.33167-1-eajames@linux.ibm.com>
+Subject: Re: [PATCH 0/2] spi: fsi: Fix spurious timeout
+Message-Id: <165358989010.3223918.18351915520044853463.b4-ty@kernel.org>
+Date:   Thu, 26 May 2022 19:31:30 +0100
 MIME-Version: 1.0
-References: <20220526113350.30806-1-linmiaohe@huawei.com> <Yo+B4b0nF+kI35pG@casper.infradead.org>
- <CA+CK2bBBLjr3kGqc=zA6M5773G6gj83LB_kwwOCNuFX8YoUp+w@mail.gmail.com> <20220526111546.50102da288cccbe913cadbf4@linux-foundation.org>
-In-Reply-To: <20220526111546.50102da288cccbe913cadbf4@linux-foundation.org>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Thu, 26 May 2022 14:31:06 -0400
-Message-ID: <CA+CK2bBJ3baj2Qt+9Wy1r==_Uym_UZJ+S-HRwFAsspPamctk_Q@mail.gmail.com>
-Subject: Re: [PATCH] mm/page_table_check: fix accessing unmapped ptep
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Rientjes <rientjes@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,22 +53,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Miaohe, please store the ptep, or maybe drop this patch entirely.
->
-> I think it's best to fix it.  I rewrote the changelog as
->
-> : ptep is unmapped too early, so ptep could theoretically be accessed while
-> : it's unmapped.  This might become a problem if/when CONFIG_HIGHPTE becomes
-> : available on riscv.
-> :
-> : Fix it by deferring pte_unmap() until page table checking is done.
->
-> I'll retain the Fixes:.  This doesn't imply cc:stable in MM, and anyone
-> who backports the original patchset will want to know about this fixup.
-Makes sense.
+On Wed, 25 May 2022 11:58:50 -0500, Eddie James wrote:
+> The driver may return a timeout error even if the status register
+> indicates that the transfer may proceed. Fix this by restructuring
+> the polling loop.
+> Also include a patch to display the error return code when failing
+> to transfer one message, which would have been very helpful in
+> debugging this issue.
+> 
+> [...]
 
+Applied to
 
-> And I queued a fixup for the thing Matthew noticed.
-Thank you Andrew.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Pasha
+Thanks!
+
+[1/2] spi: fsi: Fix spurious timeout
+      commit: 61bf40ef51aa73f6216b33563271b6acf7ea8d70
+[2/2] spi: core: Display return code when failing to transfer message
+      commit: ebf2a3521738520e12849b221fea24928b3f61ff
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

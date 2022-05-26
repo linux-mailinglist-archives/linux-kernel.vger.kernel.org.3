@@ -2,213 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A5453507F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D54535084
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242986AbiEZOWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 10:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
+        id S244905AbiEZOXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 10:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235583AbiEZOWN (ORCPT
+        with ESMTP id S232670AbiEZOXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 10:22:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A2618340
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653574932; x=1685110932;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MExdy0PQ1mm12crzu+MfwurQlT0wcSHvnPQYx0GnPU4=;
-  b=SFRFI33A3AWhtgrW56tRQgi0nTN1W61gxzRc531mgXVaRUrkLOZ0Ty1l
-   EeU+W8GAkf1qzEV4GCjRCEWonLNb2NKxvk7iXLlsOR/3wx6GEz6Q/t/Tr
-   PucQsELgYu9n9dwEqx+M8aobqH7PfA3Cedran8XQW2WRh0qXYfUXzBDPz
-   dSQ6QDCJVopUCtbLp1tqzq7xFZj69UEFZ+4enXGVVe7HLOCbiRGHmiY2a
-   olaXC4nBBPipbEczjO7uPQzrV1DOfdd3b3VYtYM6ex8b0Xjh+fgRxRve4
-   2SEm1QcZtrnRki3SAvvmZ3xtorD/1O6a9pHDuH2gpws+vOFaGVScSR/3X
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="273895574"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="273895574"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 07:22:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="664955508"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 May 2022 07:22:08 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuENL-0003vI-Ro;
-        Thu, 26 May 2022 14:22:07 +0000
-Date:   Thu, 26 May 2022 22:21:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [peterz-queue:perf/wip.cleanup 9/10]
- arch/x86/events/intel/pt.c:719:2: warning: array index -1 is before the
- beginning of the array
-Message-ID: <202205262245.87lBx9Fw-lkp@intel.com>
+        Thu, 26 May 2022 10:23:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C940EC5DB4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653575011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PIs2TnkQYfNX5UnfDwJthJ+utgn6CIbjyk+tWQwa1VU=;
+        b=LXhuK3e4DQT1TfPNgjQITzGr4DXYgZUam0jZVMEb0ZXeHn5v5vTAA+tVT7h5afb7SyyrKw
+        uZhj7dDrYWgb71NX2PA1n5KmQFSe2VzYXmRaTuSzMfkKZZN2/d0AU3lLboutHWFTts7E/Q
+        B6WgySLemdO0sODl9eP52WlMvmFSgZ8=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-362-L_Jj7HwoMHqs87a-n9k22g-1; Thu, 26 May 2022 10:23:29 -0400
+X-MC-Unique: L_Jj7HwoMHqs87a-n9k22g-1
+Received: by mail-qk1-f197.google.com with SMTP id v14-20020a05620a0f0e00b00699f4ea852cso1464994qkl.9
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:23:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PIs2TnkQYfNX5UnfDwJthJ+utgn6CIbjyk+tWQwa1VU=;
+        b=OHq58PuBfR4vMog68mIL4D5WloPsk8nUBMQd5d1xsYkN5Tb0gg4KE5u0xVWEFjAdsu
+         7uWu1SIUR41WIfYG3xK/BY6wThJASnQrNg7ZaGPImkeca7N//kjAoGBg5IXC6gPu0WZ8
+         ZLL2Cx1J5J8wigpa8NzVLvMPB0F7GpBydYlpWlF9YsC3dud2Q1kfrqKAx2YN6CPMTQ6r
+         fdK5iqMdb+sZbjHHhdoaqjU962aoKjl4K7wcEi5OaxZBQ0CcobNAARuOchc/nvWp7u8m
+         d0rscGBv65pEiv+IZiIJz4J8nJ/Mg8bTcQxDIgp7kPoYO6jK/rgWoLxcUEoORE2TG+Ec
+         lhPA==
+X-Gm-Message-State: AOAM5317QbEnERbgNLCrRsHqZI8frdX+l9xKfa1V7tTegfab91xLPeTe
+        jBifC3nZ8mUqu2ooaLz4wtTQQ5epfHh0KQcVPT3DRclEEkTNpmx0K1hvHF2YTvs/XNXt2QwEHly
+        036VNrLT3lN084HrWDWbKr05s
+X-Received: by 2002:ae9:e90d:0:b0:6a3:28eb:1a4f with SMTP id x13-20020ae9e90d000000b006a328eb1a4fmr25047875qkf.21.1653575009379;
+        Thu, 26 May 2022 07:23:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwnsTslbqm3Ty98MkhbvTDM22jLrcctXdBNbGWftZfctg4y2SKQBw+AQi/5d92FEvX7YhHSHQ==
+X-Received: by 2002:ae9:e90d:0:b0:6a3:28eb:1a4f with SMTP id x13-20020ae9e90d000000b006a328eb1a4fmr25047843qkf.21.1653575009105;
+        Thu, 26 May 2022 07:23:29 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id j19-20020ac85f93000000b002f3bbad9e37sm1031494qta.91.2022.05.26.07.23.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 07:23:28 -0700 (PDT)
+Date:   Thu, 26 May 2022 16:23:18 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        netdev@vger.kernel.org, martinh@xilinx.com, martinpo@xilinx.com,
+        lvivier@redhat.com, pabloc@xilinx.com,
+        Parav Pandit <parav@nvidia.com>, Eli Cohen <elic@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>, lulu@redhat.com,
+        Zhu Lingshan <lingshan.zhu@intel.com>, Piotr.Uminski@intel.com,
+        Si-Wei Liu <si-wei.liu@oracle.com>, ecree.xilinx@gmail.com,
+        gautam.dawar@amd.com, habetsm.xilinx@gmail.com,
+        tanuj.kamde@amd.com, hanand@xilinx.com, dinang@xilinx.com,
+        Longpeng <longpeng2@huawei.com>
+Subject: Re: [PATCH v4 1/4] vdpa: Add stop operation
+Message-ID: <20220526142318.mi2kfywbpvuky4lw@sgarzare-redhat>
+References: <20220526124338.36247-1-eperezma@redhat.com>
+ <20220526124338.36247-2-eperezma@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220526124338.36247-2-eperezma@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.cleanup
-head:   012bb7ae4eb84ae93ded12888ccd1e123c64200f
-commit: c838cb5fbb27ca829668a88691b07ca63f91fde7 [9/10] perf/x86/intel: Optimize short PEBS counters
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220526/202205262245.87lBx9Fw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=c838cb5fbb27ca829668a88691b07ca63f91fde7
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue perf/wip.cleanup
-        git checkout c838cb5fbb27ca829668a88691b07ca63f91fde7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/
+On Thu, May 26, 2022 at 02:43:35PM +0200, Eugenio Pérez wrote:
+>This operation is optional: It it's not implemented, backend feature bit
+>will not be exposed.
+>
+>Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+>---
+> include/linux/vdpa.h | 6 ++++++
+> 1 file changed, 6 insertions(+)
+>
+>diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+>index 15af802d41c4..ddfebc4e1e01 100644
+>--- a/include/linux/vdpa.h
+>+++ b/include/linux/vdpa.h
+>@@ -215,6 +215,11 @@ struct vdpa_map_file {
+>  * @reset:			Reset device
+>  *				@vdev: vdpa device
+>  *				Returns integer: success (0) or error (< 0)
+>+ * @stop:			Stop or resume the device (optional, but it must
+>+ *				be implemented if require device stop)
+>+ *				@vdev: vdpa device
+>+ *				@stop: stop (true), not stop (false)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Sorry for just seeing this now, but if you have to send a v5, maybe we 
+could use "resume" here instead of "not stop".
 
-All warnings (new ones prefixed by >>):
+Thanks,
+Stefano
 
-   In file included from arch/x86/events/intel/pt.c:27:
-   arch/x86/events/intel/../perf_event.h:1056:16: error: call to undeclared function 'this_cpu_load'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
-                         ^
-   arch/x86/events/intel/../perf_event.h:1057:13: error: call to undeclared function 'load64_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           s64 left = load64_read(&hwc->period_left);
-                      ^
->> arch/x86/events/intel/pt.c:719:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-           TOPA_ENTRY(last, -1)->base = topa_pfn(topa);
-           ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:720:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-           TOPA_ENTRY(last, -1)->end = 1;
-           ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:769:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-           TOPA_ENTRY(topa, -1)->base = page_to_phys(p) >> TOPA_SHIFT;
-           ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:770:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-           TOPA_ENTRY(topa, -1)->size = order;
-           ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:773:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-                   TOPA_ENTRY(topa, -1)->intr = 1;
-                   ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:774:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-                   TOPA_ENTRY(topa, -1)->stop = 1;
-                   ^                ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:1235:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-                   TOPA_ENTRY(buf->last, -1)->base = topa_pfn(buf->first);
-                   ^                     ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   arch/x86/events/intel/pt.c:1236:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
-                   TOPA_ENTRY(buf->last, -1)->end = 1;
-                   ^                     ~~
-   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
-                   : &topa_to_page(t)->table[(i)])
-                      ^                       ~
-   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
-           struct topa_entry       table[TENTS_PER_PAGE];
-           ^
-   8 warnings and 2 errors generated.
+>+ *				Returns integer: success (0) or error (< 0)
+>  * @get_config_size:		Get the size of the configuration space includes
+>  *				fields that are conditional on feature bits.
+>  *				@vdev: vdpa device
+>@@ -316,6 +321,7 @@ struct vdpa_config_ops {
+> 	u8 (*get_status)(struct vdpa_device *vdev);
+> 	void (*set_status)(struct vdpa_device *vdev, u8 status);
+> 	int (*reset)(struct vdpa_device *vdev);
+>+	int (*stop)(struct vdpa_device *vdev, bool stop);
+> 	size_t (*get_config_size)(struct vdpa_device *vdev);
+> 	void (*get_config)(struct vdpa_device *vdev, unsigned int offset,
+> 			   void *buf, unsigned int len);
+>-- 
+>2.31.1
+>
 
-
-vim +719 arch/x86/events/intel/pt.c
-
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  690  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  691  /**
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  692   * topa_insert_table() - insert a ToPA table into a buffer
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  693   * @buf:	 PT buffer that's being extended.
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  694   * @topa:	 New topa table to be inserted.
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  695   *
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  696   * If it's the first table in this buffer, set up buffer's pointers
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  697   * accordingly; otherwise, add a END=1 link entry to @topa to the current
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  698   * "last" table and adjust the last table pointer to @topa.
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  699   */
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  700  static void topa_insert_table(struct pt_buffer *buf, struct topa *topa)
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  701  {
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  702  	struct topa *last = buf->last;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  703  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  704  	list_add_tail(&topa->list, &buf->tables);
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  705  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  706  	if (!buf->first) {
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  707  		buf->first = buf->last = buf->cur = topa;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  708  		return;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  709  	}
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  710  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  711  	topa->offset = last->offset + last->size;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  712  	buf->last = topa;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  713  
-f6d079ce867d67 arch/x86/events/intel/pt.c                Chao Peng          2018-10-24  714  	if (!intel_pt_validate_hw_cap(PT_CAP_topa_multiple_entries))
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  715  		return;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  716  
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  717  	BUG_ON(last->last != TENTS_PER_PAGE - 1);
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  718  
-91feca5e2ecc97 arch/x86/events/intel/pt.c                Alexander Shishkin 2019-08-21 @719  	TOPA_ENTRY(last, -1)->base = topa_pfn(topa);
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  720  	TOPA_ENTRY(last, -1)->end = 1;
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  721  }
-52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  722  
-
-:::::: The code at line 719 was first introduced by commit
-:::::: 91feca5e2ecc9752894d57c9a72c2645471929c3 perf/x86/intel/pt: Free up space in a ToPA descriptor
-
-:::::: TO: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

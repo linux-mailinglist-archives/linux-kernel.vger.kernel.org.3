@@ -2,47 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00297534A6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 08:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4664534A6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 08:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346103AbiEZGli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 02:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
+        id S1346227AbiEZGm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 02:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344030AbiEZGlc (ORCPT
+        with ESMTP id S1346206AbiEZGm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 02:41:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AA3D44
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 23:41:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C844B81F15
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48603C385A9;
-        Thu, 26 May 2022 06:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653547286;
-        bh=UFXxXVSGz2kuuymoVMkv4OB9NQvHB0/vURPiyo2i+gM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Tdk+JVRsqIsoQR6Iurw/wu/tGV5G1CD3We4BqjlyVlwhh5120FOOlsD8PcXiLaYtM
-         ZT5v6A/bWPaAoXm7U0cC7BQIlfiwsgcVfQChQp1qOOXU/q3rmyv/KId4F2IrWTkkJ4
-         8sj1xbMI8PpF5nwxi1pVZtQtmfQBPMT7+iAVFuug3miBG/75wT4Fc2akSinM4IDfjO
-         9U81s5I1dmDqRFitQqOf6dmScxds9zYm4QJbwV6u2iAbzveUugioYjavR5fqTpovjd
-         M1ww24CMeqLdi2FMsbC5rbWDCZ4w36KOJAo0OPgf/8sDbluN3yLDG0KtiyloIrmJVH
-         vqSp2p0VxXZqQ==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     kishon@ti.com, vkoul@kernel.org
-Cc:     mranostay@ti.com, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH] phy: ti: phy-j721e-wiz: use OF data for device specific data
-Date:   Thu, 26 May 2022 09:41:21 +0300
-Message-Id: <20220526064121.27625-1-rogerq@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        Thu, 26 May 2022 02:42:56 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43856596
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 23:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653547374; x=1685083374;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rfBX3MJeO7FXdJXtV4ef/vKyw1sv1xmgt9pLbLFLblY=;
+  b=CrWF6MGhemc1okZhA65Zd4u07sj+G+9sO7Zh0/1XBETL3HXcJus+O+ZI
+   yDF561mZK1XXXlOWNYTe+N5DyYqXZe/w+8jCGeANRuRwfkGWrLyS88aMf
+   UkQY5zxRBUL5CccX9UffEo9ZIjcU2/Qn4vVp1bzLcdF9PYCNoQXECwMM0
+   e/BRjYiflKcSCej6T7g9ojfEAmgGoWCJe+BHUbzwIdsq4QDNXum3oztsm
+   y8ITac8gG2hRNDvdqN1ifzQ5jf8KuII/t2t2A+vSEYpFI/diIBm0g1EhN
+   UX4kSjDskuhdbG7av5QIh44oQGT6MtJFlEE/Ey09RJ/PJZcvor10ugymJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="274161874"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="274161874"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 23:42:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="560054802"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 25 May 2022 23:42:53 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nu7Cu-0003fI-Ip;
+        Thu, 26 May 2022 06:42:52 +0000
+Date:   Thu, 26 May 2022 14:41:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Eric Biggers <ebiggers@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [ebiggers:f2fs-pending 1/1] fs/f2fs/super.c:520:28: error: implicit
+ declaration of function 'fscrypt_is_dummy_policy_set'; did you mean
+ 'fscrypt_free_dummy_policy'?
+Message-ID: <202205261426.lSpXReh7-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,164 +62,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move device specific data into OF data structure so it
-is easier to maintain and we can get rid of if statements.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git f2fs-pending
+head:   14c933f493ea41e28bbe5317af611dc01d66b489
+commit: 14c933f493ea41e28bbe5317af611dc01d66b489 [1/1] f2fs: use the updated test_dummy_encryption helper functions
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220526/202205261426.lSpXReh7-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=14c933f493ea41e28bbe5317af611dc01d66b489
+        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+        git fetch --no-tags ebiggers f2fs-pending
+        git checkout 14c933f493ea41e28bbe5317af611dc01d66b489
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
 
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
-Reviewed-by: Matt Ranostay <mranostay@ti.com>
----
- drivers/phy/ti/phy-j721e-wiz.c | 75 ++++++++++++++++++++++------------
- 1 file changed, 50 insertions(+), 25 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/drivers/phy/ti/phy-j721e-wiz.c b/drivers/phy/ti/phy-j721e-wiz.c
-index da546c35d1d5..70bac931f99a 100644
---- a/drivers/phy/ti/phy-j721e-wiz.c
-+++ b/drivers/phy/ti/phy-j721e-wiz.c
-@@ -253,6 +253,14 @@ enum wiz_type {
- 	AM64_WIZ_10G,
- };
- 
-+struct wiz_data {
-+	enum wiz_type type;
-+	const struct reg_field *refclk_dig_sel;
-+	const struct reg_field *pma_cmn_refclk1_dig_div;
-+	const struct wiz_clk_mux_sel *clk_mux_sel;
-+	unsigned int clk_div_sel_num;
-+};
-+
- #define WIZ_TYPEC_DIR_DEBOUNCE_MIN	100	/* ms */
- #define WIZ_TYPEC_DIR_DEBOUNCE_MAX	1000
- 
-@@ -290,6 +298,7 @@ struct wiz {
- 	struct clk		*input_clks[WIZ_MAX_INPUT_CLOCKS];
- 	struct clk		*output_clks[WIZ_MAX_OUTPUT_CLOCKS];
- 	struct clk_onecell_data	clk_data;
-+	const struct wiz_data	*data;
- };
- 
- static int wiz_reset(struct wiz *wiz)
-@@ -409,6 +418,7 @@ static int wiz_regfield_init(struct wiz *wiz)
- 	struct regmap *regmap = wiz->regmap;
- 	int num_lanes = wiz->num_lanes;
- 	struct device *dev = wiz->dev;
-+	const struct wiz_data *data = wiz->data;
- 	int i;
- 
- 	wiz->por_en = devm_regmap_field_alloc(dev, regmap, por_en);
-@@ -445,10 +455,10 @@ static int wiz_regfield_init(struct wiz *wiz)
- 		return PTR_ERR(wiz->div_sel_field[CMN_REFCLK_DIG_DIV]);
- 	}
- 
--	if (wiz->type == J721E_WIZ_16G) {
-+	if (data->pma_cmn_refclk1_dig_div) {
- 		wiz->div_sel_field[CMN_REFCLK1_DIG_DIV] =
- 			devm_regmap_field_alloc(dev, regmap,
--						pma_cmn_refclk1_dig_div);
-+						*data->pma_cmn_refclk1_dig_div);
- 		if (IS_ERR(wiz->div_sel_field[CMN_REFCLK1_DIG_DIV])) {
- 			dev_err(dev, "PMA_CMN_REFCLK1_DIG_DIV reg field init failed\n");
- 			return PTR_ERR(wiz->div_sel_field[CMN_REFCLK1_DIG_DIV]);
-@@ -469,15 +479,8 @@ static int wiz_regfield_init(struct wiz *wiz)
- 		return PTR_ERR(wiz->mux_sel_field[PLL1_REFCLK]);
- 	}
- 
--	if (wiz->type == J721E_WIZ_10G || wiz->type == AM64_WIZ_10G)
--		wiz->mux_sel_field[REFCLK_DIG] =
--			devm_regmap_field_alloc(dev, regmap,
--						refclk_dig_sel_10g);
--	else
--		wiz->mux_sel_field[REFCLK_DIG] =
--			devm_regmap_field_alloc(dev, regmap,
--						refclk_dig_sel_16g);
--
-+	wiz->mux_sel_field[REFCLK_DIG] = devm_regmap_field_alloc(dev, regmap,
-+								 *data->refclk_dig_sel);
- 	if (IS_ERR(wiz->mux_sel_field[REFCLK_DIG])) {
- 		dev_err(dev, "REFCLK_DIG_SEL reg field init failed\n");
- 		return PTR_ERR(wiz->mux_sel_field[REFCLK_DIG]);
-@@ -1078,15 +1081,37 @@ static const struct regmap_config wiz_regmap_config = {
- 	.fast_io = true,
- };
- 
-+static struct wiz_data j721e_16g_data = {
-+	.type = J721E_WIZ_16G,
-+	.refclk_dig_sel = &refclk_dig_sel_16g,
-+	.pma_cmn_refclk1_dig_div = &pma_cmn_refclk1_dig_div,
-+	.clk_mux_sel = clk_mux_sel_16g,
-+	.clk_div_sel_num = WIZ_DIV_NUM_CLOCKS_16G,
-+};
-+
-+static struct wiz_data j721e_10g_data = {
-+	.type = J721E_WIZ_10G,
-+	.refclk_dig_sel = &refclk_dig_sel_10g,
-+	.clk_mux_sel = clk_mux_sel_10g,
-+	.clk_div_sel_num = WIZ_DIV_NUM_CLOCKS_10G,
-+};
-+
-+static struct wiz_data am64_10g_data = {
-+	.type = AM64_WIZ_10G,
-+	.refclk_dig_sel = &refclk_dig_sel_10g,
-+	.clk_mux_sel = clk_mux_sel_10g,
-+	.clk_div_sel_num = WIZ_DIV_NUM_CLOCKS_10G,
-+};
-+
- static const struct of_device_id wiz_id_table[] = {
- 	{
--		.compatible = "ti,j721e-wiz-16g", .data = (void *)J721E_WIZ_16G
-+		.compatible = "ti,j721e-wiz-16g", .data = &j721e_16g_data,
- 	},
- 	{
--		.compatible = "ti,j721e-wiz-10g", .data = (void *)J721E_WIZ_10G
-+		.compatible = "ti,j721e-wiz-10g", .data = &j721e_10g_data,
- 	},
- 	{
--		.compatible = "ti,am64-wiz-10g", .data = (void *)AM64_WIZ_10G
-+		.compatible = "ti,am64-wiz-10g", .data = &am64_10g_data,
- 	},
- 	{}
- };
-@@ -1145,12 +1170,20 @@ static int wiz_probe(struct platform_device *pdev)
- 	struct wiz *wiz;
- 	int ret, val, i;
- 	u32 num_lanes;
-+	const struct wiz_data *data;
- 
- 	wiz = devm_kzalloc(dev, sizeof(*wiz), GFP_KERNEL);
- 	if (!wiz)
- 		return -ENOMEM;
- 
--	wiz->type = (enum wiz_type)of_device_get_match_data(dev);
-+	data = of_device_get_match_data(dev);
-+	if (!data) {
-+		dev_err(dev, "NULL device data\n");
-+		return -EINVAL;
-+	}
-+
-+	wiz->data = data;
-+	wiz->type = data->type;
- 
- 	child_node = of_get_child_by_name(node, "serdes");
- 	if (!child_node) {
-@@ -1226,17 +1259,9 @@ static int wiz_probe(struct platform_device *pdev)
- 	wiz->dev = dev;
- 	wiz->regmap = regmap;
- 	wiz->num_lanes = num_lanes;
--	if (wiz->type == J721E_WIZ_10G || wiz->type == AM64_WIZ_10G)
--		wiz->clk_mux_sel = clk_mux_sel_10g;
--	else
--		wiz->clk_mux_sel = clk_mux_sel_16g;
--
-+	wiz->clk_mux_sel = data->clk_mux_sel;
- 	wiz->clk_div_sel = clk_div_sel;
--
--	if (wiz->type == J721E_WIZ_10G || wiz->type == AM64_WIZ_10G)
--		wiz->clk_div_sel_num = WIZ_DIV_NUM_CLOCKS_10G;
--	else
--		wiz->clk_div_sel_num = WIZ_DIV_NUM_CLOCKS_16G;
-+	wiz->clk_div_sel_num = data->clk_div_sel_num;
- 
- 	platform_set_drvdata(pdev, wiz);
- 
+All errors (new ones prefixed by >>):
+
+   fs/f2fs/super.c: In function 'f2fs_set_test_dummy_encryption':
+>> fs/f2fs/super.c:520:28: error: implicit declaration of function 'fscrypt_is_dummy_policy_set'; did you mean 'fscrypt_free_dummy_policy'? [-Werror=implicit-function-declaration]
+     520 |         if (is_remount && !fscrypt_is_dummy_policy_set(policy)) {
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                            fscrypt_free_dummy_policy
+>> fs/f2fs/super.c:525:15: error: implicit declaration of function 'fscrypt_parse_test_dummy_encryption'; did you mean 'fscrypt_set_test_dummy_encryption'? [-Werror=implicit-function-declaration]
+     525 |         err = fscrypt_parse_test_dummy_encryption(&param, policy);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |               fscrypt_set_test_dummy_encryption
+>> fs/f2fs/super.c:538:15: error: implicit declaration of function 'fscrypt_add_test_dummy_key' [-Werror=implicit-function-declaration]
+     538 |         err = fscrypt_add_test_dummy_key(sb, policy);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +520 fs/f2fs/super.c
+
+   489	
+   490	static int f2fs_set_test_dummy_encryption(struct super_block *sb,
+   491						  const char *opt,
+   492						  const substring_t *arg,
+   493						  bool is_remount)
+   494	{
+   495		struct f2fs_sb_info *sbi = F2FS_SB(sb);
+   496		struct fs_parameter param = {
+   497			.type = fs_value_is_string,
+   498			.string = arg->from ? arg->from : "",
+   499		};
+   500		struct fscrypt_dummy_policy *policy =
+   501			&F2FS_OPTION(sbi).dummy_enc_policy;
+   502		int err;
+   503	
+   504		if (!IS_ENABLED(CONFIG_FS_ENCRYPTION)) {
+   505			f2fs_warn(sbi, "test_dummy_encryption option not supported");
+   506			return -EINVAL;
+   507		}
+   508	
+   509		if (!f2fs_sb_has_encrypt(sbi)) {
+   510			f2fs_err(sbi, "Encrypt feature is off");
+   511			return -EINVAL;
+   512		}
+   513	
+   514		/*
+   515		 * This mount option is just for testing, and it's not worthwhile to
+   516		 * implement the extra complexity (e.g. RCU protection) that would be
+   517		 * needed to allow it to be set or changed during remount.  We do allow
+   518		 * it to be specified during remount, but only if there is no change.
+   519		 */
+ > 520		if (is_remount && !fscrypt_is_dummy_policy_set(policy)) {
+   521			f2fs_warn(sbi, "Can't set test_dummy_encryption on remount");
+   522			return -EINVAL;
+   523		}
+   524	
+ > 525		err = fscrypt_parse_test_dummy_encryption(&param, policy);
+   526		if (err) {
+   527			if (err == -EEXIST)
+   528				f2fs_warn(sbi,
+   529					  "Can't change test_dummy_encryption on remount");
+   530			else if (err == -EINVAL)
+   531				f2fs_warn(sbi, "Value of option \"%s\" is unrecognized",
+   532					  opt);
+   533			else
+   534				f2fs_warn(sbi, "Error processing option \"%s\" [%d]",
+   535					  opt, err);
+   536			return -EINVAL;
+   537		}
+ > 538		err = fscrypt_add_test_dummy_key(sb, policy);
+   539		if (err) {
+   540			f2fs_warn(sbi, "Error adding test dummy encryption key [%d]",
+   541				  err);
+   542			return err;
+   543		}
+   544		f2fs_warn(sbi, "Test dummy encryption mode enabled");
+   545		return 0;
+   546	}
+   547	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

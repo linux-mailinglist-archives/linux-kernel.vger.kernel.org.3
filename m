@@ -2,33 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CD3534DD2
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6083F534DD4
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbiEZLIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 07:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
+        id S239534AbiEZLIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 07:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiEZLIP (ORCPT
+        with ESMTP id S236332AbiEZLIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 07:08:15 -0400
+        Thu, 26 May 2022 07:08:30 -0400
 Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032BD6D842;
-        Thu, 26 May 2022 04:08:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746D3C966A;
+        Thu, 26 May 2022 04:08:29 -0700 (PDT)
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 74B2B1C0B8F; Thu, 26 May 2022 13:08:12 +0200 (CEST)
-Date:   Thu, 26 May 2022 13:08:11 +0200
+        id 345161C0B8F; Thu, 26 May 2022 13:08:28 +0200 (CEST)
+Date:   Thu, 26 May 2022 13:08:27 +0200
 From:   Pavel Machek <pavel@ucw.cz>
-To:     Simon Ser <contact@emersion.fr>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: Re: procfs: open("/proc/self/fd/...") allows bypassing O_RDONLY
-Message-ID: <20220526110811.GB5138@localhost>
-References: <lGo7a4qQABKb-u_xsz6p-QtLIy2bzciBLTUJ7-ksv7ppK3mRrJhXqFmCFU4AtQf6EyrZUrYuSLDMBHEUMe5st_iT9VcRuyYPMU_jVpSzoWg=@emersion.fr>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     dmitry.torokhov@gmail.com, matthias.bgg@gmail.com,
+        mkorpershoek@baylibre.com, linux-input@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3]  MediaTek Helio X10 MT6795 - MT6331 PMIC Keys
+Message-ID: <20220526110827.GC5138@localhost>
+References: <20220524093505.85438-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <lGo7a4qQABKb-u_xsz6p-QtLIy2bzciBLTUJ7-ksv7ppK3mRrJhXqFmCFU4AtQf6EyrZUrYuSLDMBHEUMe5st_iT9VcRuyYPMU_jVpSzoWg=@emersion.fr>
+In-Reply-To: <20220524093505.85438-1-angelogioacchino.delregno@collabora.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -41,34 +44,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi!
 
-> I'm a user-space developer working on Wayland. Recently we've been
-> discussing about security considerations related to FD passing between
-> processes [1].
+> In an effort to give some love to the apparently forgotten MT6795 SoC,
+> I am upstreaming more components that are necessary to support platforms
+> powered by this one apart from a simple boot to serial console.
 > 
-> A Wayland compositor often needs to share read-only data with its
-> clients. Examples include a keyboard keymap, or a pixel format table.
-> The clients might be untrusted. The data sharing can happen by having
-> the compositor send a read-only FD (ie, a FD opened with O_RDONLY) to
-> clients.
+> This series performs some cleanups in mtk-pmic-keys and adds support for
+> the MT6331 PMIC's keys.
 > 
-> It was assumed that passing such a FD wouldn't allow Wayland clients to
-> write to the file. However, it was recently discovered that procfs
-> allows to bypass this restriction. A process can open(2)
-> "/proc/self/fd/<fd>" with O_RDWR, and that will return a FD suitable for
-> writing. This also works when running the client inside a user namespace.
-> A PoC is available at [2] and can be tested inside a compositor which
-> uses this O_RDONLY strategy (e.g. wlroots compositors).
+> Adding support to each driver in each subsystem is done in different
+> patch series as to avoid spamming uninteresting patches to maintainers.
 > 
-> Question: is this intended behavior, or is this an oversight? If this is
-> intended behavior, what would be a good way to share a FD to another
-> process without allowing it to write to the underlying file?
+> This series depends on another two series series [1], [2] named
+> "MediaTek Helio X10 MT6795 - MT6331/6332 PMIC Wrapper" and
+> "MediaTek Helio X10 MT6795 - MT6331/6332 PMIC MFD integration"
+> 
+> Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
 
-Sounds like a bug. Not all world is Linux, and 'mount /proc' changing
-security characteristics of fd passing is nasty and surprising.
+Please cc phone-devel with phone stuff...
 
-We should not surprise people when it has security implications.
+...and thanks for all the work. I guess we still don't have an android
+phone with basic phone functionality working on mainline...?
 
 Best regards,
 							Pavel
-
 -- 

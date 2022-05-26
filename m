@@ -2,95 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EA053487D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCFE53487C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344112AbiEZB5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S1345843AbiEZB6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237154AbiEZB5j (ORCPT
+        with ESMTP id S234503AbiEZB56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:57:39 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8453FBA997;
-        Wed, 25 May 2022 18:57:38 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-f2c8c0d5bdso690749fac.4;
-        Wed, 25 May 2022 18:57:38 -0700 (PDT)
+        Wed, 25 May 2022 21:57:58 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A284BA997
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:57:57 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id rs12so328522ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=mrTdgG+42EN8X3dWh4qUOgxusHGt7dRqQxIX8mfLL8s=;
+        b=Xo34MICH/bcfvd+mHVNmnqv4v+nqJQL1FQEfUM1lVE+n2KGu0I2Rk7EQATD/D4faUt
+         DDaj058Rf9FMbIy0swsYgCDLg0VzWenxBxXfhWX9oetuPtl/IYRsm4WFomaKiMMlpW6K
+         2sm/uWrppJE7PwHwSDppX0uw6Ts0UihuiEyRa79nffKyrvEcGTBZ5i2o77VdctOLPy2b
+         ZaEscPIk4FwZcMoBe71YdOhYOjoJ9gUjILbsMW2TYa8PV+CPvDBtwsSba6sjzCX08Vco
+         XaXcqHNZYDydw8j8nGiWlvBb3nMfHadC4Pk54H0yiltAby6sRIDSPV2y4/4jWCiyQTYt
+         xwuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=fBooorBUc9TiuuZP7V/CE0nVyIQJLuFcFSmL3ukgr+0=;
-        b=tKdg0VJFl9dI6sUBLNXdz0c6wp7LFlaQv5nYQSh5mMQznvGVE7Farcp4I2d+iZ/AQv
-         xEijVe1ZY/MLqqKnVXrIminnc7l3lk16xt9mPZZOT7xKeDG7vk5h1Ttr3EEpXSaaxXV6
-         wlFnFBKD2XgDxqMOJB3EedYO2tzGSqSuiWeIw5xs4skNn2B1NispPuGY7q3cXdiNImVP
-         F//xB2w+nSkUusEgrJG3QZL6GVvlPtaevUwUOm+Qs1EwQ9yXdtpHSMswGxLphINZ2vkF
-         AIzslnQA12dOvKxbjTeZeHn/T6vuaVNQeFawStmjHHOTVsBG4IhPsEonQ37vS6LIROOW
-         nQdg==
-X-Gm-Message-State: AOAM530C2TmfSXlBInlBwERRiIy9Mfq6LO2FbtULEtLdNxW48U37Htti
-        hwze+kXs3O51Jg7kbfKmUw==
-X-Google-Smtp-Source: ABdhPJxUeqloFyZQmwKt5j7Tji4hIdlUPLrqi9TrK0/U1U2+xqrrho6dVSvMuYpjlY4QrOa42I+OCA==
-X-Received: by 2002:a05:6870:b68a:b0:f1:8001:1182 with SMTP id cy10-20020a056870b68a00b000f180011182mr37728oab.30.1653530257854;
-        Wed, 25 May 2022 18:57:37 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w27-20020a9d5a9b000000b0060603221240sm134732oth.16.2022.05.25.18.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 18:57:37 -0700 (PDT)
-Received: (nullmailer pid 2896334 invoked by uid 1000);
-        Thu, 26 May 2022 01:57:36 -0000
-Date:   Wed, 25 May 2022 20:57:36 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Sean Wang <sean.wang@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, kernel@collabora.com
-Subject: Re: [PATCH v1 1/2] dt-bindings: pinctrl: mt8192: Add
- drive-strength-microamp
-Message-ID: <20220526015736.GA2896280-robh@kernel.org>
-References: <20220525155714.1837360-1-nfraprado@collabora.com>
- <20220525155714.1837360-2-nfraprado@collabora.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=mrTdgG+42EN8X3dWh4qUOgxusHGt7dRqQxIX8mfLL8s=;
+        b=wpXM5EM2kgu6MK2UQYruk4/iH21HZp6/irgNcK9weZgZ75IWYrjMmSTCwiI35Sdbg0
+         lBk1RQjo+kGc2JNFJIl2YzsXZRPOpHfT12QDyufCtgqPcAxCR9IxqibW28p+MRA9BJPH
+         zFlXaB18I0tEcDTtzLWL+7BnEoIN/EfxGwQo5ehBa3w+y9wTpEuKyZT+BVbrLghvZN6z
+         JCrMHY4pdDbI3ohayYofzTz/4FUvyRdbADi0jfzgXmvcJW5/LMvY3M7RW8PItU4jcn5+
+         9I0yBNivWQ35/OospzP+l0zrc9KLCUMCzTkmMRxfK4E+PhbHHznKsoO0/VOdgjEPxzO5
+         M2yQ==
+X-Gm-Message-State: AOAM532RtNxgqRUxn4RY1ppezZaGKMXBIgiv82EtsEe3bIOUdoadet+t
+        bAnstMoJlEHXLmXXJFcJgenkYMJsktZvQjeZGzM=
+X-Google-Smtp-Source: ABdhPJzS2x1ITuBaDNvuE8mv7nzZWD36y7Aku0I5R/v0ar8cJcE1wcX7K36sBMtxJRZS6LLFqdYd9/lUgFTwTtt1hjU=
+X-Received: by 2002:a17:907:8a1c:b0:6fe:e53b:22ca with SMTP id
+ sc28-20020a1709078a1c00b006fee53b22camr16431551ejc.407.1653530275971; Wed, 25
+ May 2022 18:57:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220525155714.1837360-2-nfraprado@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Wed, 25 May 2022 20:57:44 -0500
+Message-ID: <CABb+yY24U_2uwebN_a1M+ABVp0eqBai1c4H7oM7e0mDaGmFi0Q@mail.gmail.com>
+Subject: [GIT PULL] Mailbox changes for v5.19
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 25 May 2022 11:57:13 -0400, Nícolas F. R. A. Prado wrote:
-> Commit e5fabbe43f3f ("pinctrl: mediatek: paris: Support generic
-> PIN_CONFIG_DRIVE_STRENGTH_UA") added support for using
-> drive-strength-microamp instead of mediatek,drive-strength-adv.
-> 
-> Since there aren't any users of mediatek,drive-strength-adv on mt8192
-> yet, remove this property and add drive-strength-microamp in its place,
-> which has a clearer meaning.
-> 
-> Fixes: 4ac68333ff6d ("dt-bindings: pinctrl: mt8192: Add mediatek,drive-strength-adv property")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
-> ---
-> 
->  .../bindings/pinctrl/pinctrl-mt8192.yaml      | 27 ++-----------------
->  1 file changed, 2 insertions(+), 25 deletions(-)
-> 
+Hi Linus,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c=
+:
+
+  Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
+
+are available in the Git repository at:
+
+  git://git.linaro.org/landing-teams/working/fujitsu/integration.git
+tags/mailbox-v5.19
+
+for you to fetch changes up to 79f9fbe303520d2c32b70f04f2bb02cc2baaa4c3:
+
+  mailbox: qcom-ipcc: Fix -Wunused-function with CONFIG_PM_SLEEP=3Dn
+(2022-05-24 08:08:24 -0500)
+
+----------------------------------------------------------------
+- api: hrtimer fix
+- qcom: log pending irq during resume
+minor cosmetic changes
+- omap: use pm_runtime_resume_and_get
+- imx: use pm_runtime_resume_and_get
+remove redundant initializer
+- mtk: added GCE header for MT8186
+enable support for MT8186
+- tegra: remove redundant NULL check
+added hsp_sm_ops for send/recv api
+support shared mailboxes
+- stm: remove unsupported "wakeup" irq
+- pcc: sanitize mbox allocated memory before use
+- misc: documentation fixes for arm_mhu and qcom-ipcc
+----------------------------------------------------------------
+Bj=C3=B6rn Ard=C3=B6 (1):
+      mailbox: forward the hrtimer if not queued and under a lock
+
+Fabien Dessenne (1):
+      dt-bindings: mailbox: remove the IPCC "wakeup" IRQ
+
+Kartik (3):
+      mailbox: tegra-hsp: Add tegra_hsp_sm_ops
+      dt-bindings: tegra186-hsp: add type for shared mailboxes
+      mailbox: tegra-hsp: Add 128-bit shared mailbox support
+
+Krzysztof Kozlowski (2):
+      dt-bindings: mailbox: qcom-ipcc: simplify the example
+      mailbox: correct kerneldoc
+
+Mario Limonciello (1):
+      mailbox: pcc: Fix an invalid-load caught by the address sanitizer
+
+Nathan Chancellor (1):
+      mailbox: qcom-ipcc: Fix -Wunused-function with CONFIG_PM_SLEEP=3Dn
+
+Prasad Sodagudi (1):
+      mailbox: qcom-ipcc: Log the pending interrupt during resume
+
+Tinghan Shen (2):
+      dt-bindings: mailbox: mtk,adsp-mbox: add mt8186 compatible name
+      mailbox: mediatek: support mt8186 adsp mailbox
+
+Tom Rix (1):
+      mailbox: imx: remove redundant initializer
+
+Xiaomeng Tong (1):
+      mailbox: remove an unneeded NULL check on list iterator
+
+Yongqiang Niu (1):
+      dt-bindings: gce: add the GCE header file for MT8186
+
+ran jianping (2):
+      mailbox:imx: using pm_runtime_resume_and_get
+      mailbox: omap: using pm_runtime_resume_and_get to simplify the code
+
+ .../devicetree/bindings/mailbox/mtk,adsp-mbox.yaml |   7 +-
+ .../bindings/mailbox/nvidia,tegra186-hsp.yaml      |   9 +
+ .../devicetree/bindings/mailbox/qcom-ipcc.yaml     |  29 +-
+ .../devicetree/bindings/mailbox/st,stm32-ipcc.yaml |  11 +-
+ drivers/mailbox/arm_mhu_db.c                       |   2 +-
+ drivers/mailbox/arm_mhuv2.c                        |   3 +-
+ drivers/mailbox/imx-mailbox.c                      |   7 +-
+ drivers/mailbox/mailbox.c                          |  19 +-
+ drivers/mailbox/mtk-adsp-mailbox.c                 |   8 +
+ drivers/mailbox/omap-mailbox.c                     |   6 +-
+ drivers/mailbox/pcc.c                              |   2 +-
+ drivers/mailbox/qcom-ipcc.c                        |  26 +-
+ drivers/mailbox/tegra-hsp.c                        | 151 ++++++--
+ include/dt-bindings/gce/mt8186-gce.h               | 421 +++++++++++++++++=
+++++
+ include/dt-bindings/mailbox/tegra186-hsp.h         |   5 +
+ include/linux/mailbox_controller.h                 |   1 +
+ 16 files changed, 628 insertions(+), 79 deletions(-)
+ create mode 100644 include/dt-bindings/gce/mt8186-gce.h

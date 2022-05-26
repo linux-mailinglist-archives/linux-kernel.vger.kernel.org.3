@@ -2,169 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F6B534833
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D4153482E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235577AbiEZBdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
+        id S233485AbiEZBbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbiEZBdK (ORCPT
+        with ESMTP id S245169AbiEZBao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:33:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21060DE93
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:33:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D1F1AB81EAA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3AB2C34117;
-        Thu, 26 May 2022 01:33:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653528786;
-        bh=pQbwgINLxI21GXXyGtGVeUNfYP2Q2AzNFVmF3Cd0PNM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=pR/NjBZ4wpBqm8YpbrG2oteKBFh9ISJ1Lsqy9sVDxIkoWWhbmk+tjrl0OYyLRwwBc
-         KPQjrE2ffov3+OnxnTcZC/e6o/Dj2bT0IlUgkeJJa3SLDXc/SaUAKarDYB1FhNHheo
-         EEnxfmK4ata+XjIFrezl5mgM3PPaPkPGwtUA9YCP6a8xsXbRvqsrEozx2lY1s/U9lR
-         CsqPYAgwUj3eq1X0kgxy7dU+hnpre9LlGq2PJ1tKGZ9afqdR1cI+6LxswVqQDQToMe
-         Hxl8tBBduHomnnGRIubC+8bEx5NDb2QW4mwqxxk9DStk8cqqxm3oq+NCcTX4KdZAlB
-         LITR1wXkHHB4A==
-Date:   Thu, 26 May 2022 09:33:02 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     pmalani@chromium.org, bleung@chromium.org,
-        linux-kernel@vger.kernel.org, groeck@chromium.org,
-        tzungbi@kernel.org, chrome-platform@lists.linux.dev
-Subject: [GIT PULL] chrome-platform changes for v5.19
-Message-ID: <Yo7YztZklByTINZp@google.com>
+        Wed, 25 May 2022 21:30:44 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19F8A76F4;
+        Wed, 25 May 2022 18:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653528627; x=1685064627;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UaSIPRzQt8djgwCCogviIlJQSqF/rXfZ66henu/ROoY=;
+  b=dTTyDv38O0Oyxwm3H23qgOh7Mmxfcd44npw5Wx54abP0fUA+37piwUgg
+   6JWCiQP+WEoj2CizKCuEvp43H+w9/w3GpxKxY+UkN+/AQW/7LZO7caUR5
+   iOHQtmjYbBAEl/97S2snN+Qf2ewgYe5Y4IDHYrAbvPc7k7VZQYKzUERAe
+   1gkC6pRgmK+uStAU/UgymoeJft26/oVsh3hztSPRCYyTQuUophT8cIQin
+   n8Fm6kRwR7BVO1mnTvWmNCCoqyvqeuX8wsdSuRdES6nq2X2tupDw8tlmY
+   3oslxqf/AgchmI5P1T9gGld+gFDGcWnT48S2z/RL66YDk6TPwHE+osllK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="273713962"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="273713962"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:30:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="718002411"
+Received: from p12hl01tmin.png.intel.com ([10.158.65.216])
+  by fmsmga001.fm.intel.com with ESMTP; 25 May 2022 18:30:23 -0700
+From:   Tan Tee Min <tee.min.tan@linux.intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Voon Wei Feng <weifeng.voon@intel.com>,
+        Sit Michael Wei Hong <michael.wei.hong.sit@intel.com>,
+        Ling Pei Lee <pei.lee.ling@intel.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>
+Subject: [PATCH net-next 1/1] net: phy: dp83867: retrigger SGMII AN when link change
+Date:   Thu, 26 May 2022 09:37:14 +0800
+Message-Id: <20220526013714.4119839-1-tee.min.tan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mIqwI4HpAZfVtEbQ"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is a limitation in TI DP83867 PHY device where SGMII AN is only
+triggered once after the device is booted up. Even after the PHY TPI is
+down and up again, SGMII AN is not triggered and hence no new in-band
+message from PHY to MAC side SGMII.
 
---mIqwI4HpAZfVtEbQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This could cause an issue during power up, when PHY is up prior to MAC.
+At this condition, once MAC side SGMII is up, MAC side SGMII wouldn`t
+receive new in-band message from TI PHY with correct link status, speed
+and duplex info.
 
-Linus,
+As suggested by TI, implemented a SW solution here to retrigger SGMII
+Auto-Neg whenever there is a link change.
 
-Please pull chrome-platform updates for v5.19.
+Signed-off-by: Sit, Michael Wei Hong <michael.wei.hong.sit@intel.com>
+Reviewed-by: Voon Weifeng <weifeng.voon@intel.com>
+Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
+---
+ drivers/net/phy/dp83867.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-Thanks,
-TzungBi
+diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
+index 8561f2d4443b..13dafe7a29bd 100644
+--- a/drivers/net/phy/dp83867.c
++++ b/drivers/net/phy/dp83867.c
+@@ -137,6 +137,7 @@
+ #define DP83867_DOWNSHIFT_2_COUNT	2
+ #define DP83867_DOWNSHIFT_4_COUNT	4
+ #define DP83867_DOWNSHIFT_8_COUNT	8
++#define DP83867_SGMII_AUTONEG_EN	BIT(7)
+ 
+ /* CFG3 bits */
+ #define DP83867_CFG3_INT_OE			BIT(7)
+@@ -855,6 +856,32 @@ static int dp83867_phy_reset(struct phy_device *phydev)
+ 			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
+ }
+ 
++static void dp83867_link_change_notify(struct phy_device *phydev)
++{
++	/* There is a limitation in DP83867 PHY device where SGMII AN is
++	 * only triggered once after the device is booted up. Even after the
++	 * PHY TPI is down and up again, SGMII AN is not triggered and
++	 * hence no new in-band message from PHY to MAC side SGMII.
++	 * This could cause an issue during power up, when PHY is up prior
++	 * to MAC. At this condition, once MAC side SGMII is up, MAC side
++	 * SGMII wouldn`t receive new in-band message from TI PHY with
++	 * correct link status, speed and duplex info.
++	 * Thus, implemented a SW solution here to retrigger SGMII Auto-Neg
++	 * whenever there is a link change.
++	 */
++	if (phydev->interface == PHY_INTERFACE_MODE_SGMII) {
++		int val = 0;
++
++		val = phy_clear_bits(phydev, DP83867_CFG2,
++				     DP83867_SGMII_AUTONEG_EN);
++		if (val < 0)
++			return;
++
++		phy_set_bits(phydev, DP83867_CFG2,
++			     DP83867_SGMII_AUTONEG_EN);
++	}
++}
++
+ static struct phy_driver dp83867_driver[] = {
+ 	{
+ 		.phy_id		= DP83867_PHY_ID,
+@@ -879,6 +906,8 @@ static struct phy_driver dp83867_driver[] = {
+ 
+ 		.suspend	= genphy_suspend,
+ 		.resume		= genphy_resume,
++
++		.link_change_notify = dp83867_link_change_notify,
+ 	},
+ };
+ module_phy_driver(dp83867_driver);
+-- 
+2.25.1
 
-
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/ tags/tag-chrome-platform-for-v5.19
-
-for you to fetch changes up to abd4fd43f2af03e2e852e6b1b98faeee9e3eae55:
-
-  platform/chrome: Use imperative mood for ChromeOS ACPI sysfs ABI descriptions (2022-05-24 08:46:21 +0800)
-
-----------------------------------------------------------------
-chrome platform changes for 5.19
-
-cros_ec:
-* Fix wrong error handling path.
-* Clean-up patches.
-
-cros_ec_chardev:
-* Re-introduce cros_ec_cmd_xfer to fix ABI broken.
-
-cros_ec_lpcs:
-* Support the Framework Laptop.
-
-cros_ec_typec:
-* Fix NULL dereference.
-
-chromeos_acpi:
-* Add ChromeOS ACPI device driver.
-* Fix Sphinx errors when `make htmldocs`.
-
-misc:
-* Drop BUG_ON()s.
-
-----------------------------------------------------------------
-Akihiko Odaki (1):
-      platform/chrome: cros_ec_typec: Check for EC driver
-
-Bagas Sanjaya (2):
-      platform/chrome: Use tables for values lists of ChromeOS ACPI sysfs ABI
-      platform/chrome: Use imperative mood for ChromeOS ACPI sysfs ABI descriptions
-
-Dustin L. Howett (2):
-      platform/chrome: cros_ec_lpcs: detect the Framework Laptop
-      platform/chrome: cros_ec_lpcs: reserve the MEC LPC I/O ports first
-
-Enric Balletbo i Serra (1):
-      platform/chrome: Add ChromeOS ACPI device driver
-
-Guenter Roeck (1):
-      platform/chrome: Re-introduce cros_ec_cmd_xfer and use it for ioctls
-
-Tzung-Bi Shih (12):
-      platform/chrome: cros_ec: fix error handling in cros_ec_register()
-      platform/chrome: cros_ec: remove unused variable `was_wake_device`
-      platform/chrome: cros_ec: determine `wake_enabled` in cros_ec_suspend()
-      platform/chrome: cros_ec: sort header inclusion alphabetically
-      platform/chrome: cros_ec: append newline to all logs
-      platform/chrome: cros_ec_proto: drop unneeded BUG_ON() in prepare_packet()
-      platform/chrome: correct cros_ec_prepare_tx() usage
-      platform/chrome: cros_ec_proto: drop BUG_ON() in cros_ec_prepare_tx()
-      platform/chrome: cros_ec_proto: drop BUG_ON() in cros_ec_get_host_event()
-      platform/chrome: cros_ec_i2c: drop BUG_ON() in cros_ec_pkt_xfer_i2c()
-      platform/chrome: cros_ec_spi: drop unneeded BUG_ON()
-      platform/chrome: cros_ec_spi: drop BUG_ON() if `din` isn't large enough
-
- .../ABI/testing/sysfs-driver-chromeos-acpi         | 137 ++++++++
- .../firmware-guide/acpi/chromeos-acpi-device.rst   | 363 +++++++++++++++++++++
- Documentation/firmware-guide/acpi/index.rst        |   1 +
- drivers/platform/chrome/Kconfig                    |  11 +
- drivers/platform/chrome/Makefile                   |   1 +
- drivers/platform/chrome/chromeos_acpi.c            | 257 +++++++++++++++
- drivers/platform/chrome/cros_ec.c                  |  36 +-
- drivers/platform/chrome/cros_ec_chardev.c          |   2 +-
- drivers/platform/chrome/cros_ec_i2c.c              |  12 +-
- drivers/platform/chrome/cros_ec_ishtp.c            |   4 +-
- drivers/platform/chrome/cros_ec_lpc.c              |  49 ++-
- drivers/platform/chrome/cros_ec_proto.c            |  63 +++-
- drivers/platform/chrome/cros_ec_rpmsg.c            |   2 +
- drivers/platform/chrome/cros_ec_spi.c              |  15 +-
- drivers/platform/chrome/cros_ec_typec.c            |   3 +
- include/linux/platform_data/cros_ec_commands.h     |  10 +-
- include/linux/platform_data/cros_ec_proto.h        |   6 +-
- 17 files changed, 914 insertions(+), 58 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-driver-chromeos-acpi
- create mode 100644 Documentation/firmware-guide/acpi/chromeos-acpi-device.rst
- create mode 100644 drivers/platform/chrome/chromeos_acpi.c
-
---mIqwI4HpAZfVtEbQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQS0yQeDP3cjLyifNRUrxTEGBto89AUCYo7YywAKCRArxTEGBto8
-9MO5AP0YOKlZzovTiBkkpIvTjEymnWL7BZUUyhsvRZ4nPq2+RwEApP4zGGqHEpWQ
-l78mr0S2+GZ/+L9P9U8h/kLv37rahwE=
-=iNyh
------END PGP SIGNATURE-----
-
---mIqwI4HpAZfVtEbQ--

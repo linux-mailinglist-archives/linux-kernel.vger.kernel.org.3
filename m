@@ -2,101 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E99535183
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF837535185
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347963AbiEZPdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S1346462AbiEZPgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347969AbiEZPdt (ORCPT
+        with ESMTP id S237111AbiEZPgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 11:33:49 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C66D80BF
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:33:46 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t13so2584567wrg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=pcOIqjfOGD4mtjARe3uelHp7io5D0VG5aulAy4XSsSE=;
-        b=OyaRzhiBGq19hx91ypN3/Is9e83mqOXLZx5qRmAnt9wJXFDBkel6oX7OZhuAey3yv8
-         dBUH6oZxDP+T4Jw2KCPGiRkPpEELgbqJtbMyUaFrcx/sCUazNduCCOuzRO4aCr12kFEc
-         TmnUEMKCfpamtxsLuO5tixC4NpQcMx0qUrZWD0Stz0EpIRiE6flY+o6K4svj+V+8T034
-         Qz9P5rNVaI0s04Z/aUTdLu7slAUfrh4R/WDQH9J/bo7ARZlWUCCxroQk4RZnCEMnrCvH
-         HGbY5QP0coimTZZ5eXDlO6UGWrH/4TpdhIYTbQvcSkP77Pest3z/aJPwkZbeO3d3ek5+
-         19kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=pcOIqjfOGD4mtjARe3uelHp7io5D0VG5aulAy4XSsSE=;
-        b=OpzHW4NvV/IivEZrrWGN+sXMrpwcZ1AIEf73blpyIzTTsAbzxXONo+H+qxzD3RlQQc
-         CYW1ToOtgRaTRxES8HRpTZWOXqq4dy44ZrMCFOOkhA9cJHxU/RujkVfxShfEuDl5Evx3
-         oU7KFLqLCf/smTBPlfDQE8nvAjk3lXSODtRDHZ7B/UiU5Mawvt3Tad57SvkhydK8aUte
-         HqtEWZTI/9nGfLOaFqjiTUhpw/UwJhLm6gWnJQbrV5QkC1/+Uz5IDBQ3hlAYeNC7vXS4
-         m3wdIwJfZSwEGSf+ZYJlva1fxc6+GFD0/JZU5m6ynqqEDiVBV1RJ0+oNzoJHM1ayQd//
-         qnxg==
-X-Gm-Message-State: AOAM530ccuoiPXgMyWdRG+rN57Sic3i76jSGdfgCJU2jJAblBom0v0+Q
-        0F9cw0a8Ool+myQ2bSYaI6m5O7Gt8EMeTfq/qSg=
-X-Google-Smtp-Source: ABdhPJz4ymsfpZ6XE9nNt+dQEXfMcgEAWohhEJk5D1aVJE7siDYkIb9/O6pw09BM31g5F5i7nVQgAqKRkiMjZDBMmhE=
-X-Received: by 2002:a5d:4892:0:b0:20c:d4eb:1886 with SMTP id
- g18-20020a5d4892000000b0020cd4eb1886mr33156092wrq.96.1653579224973; Thu, 26
- May 2022 08:33:44 -0700 (PDT)
+        Thu, 26 May 2022 11:36:19 -0400
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FC5BCEA6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:36:17 -0700 (PDT)
+Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id 9D598596;
+        Thu, 26 May 2022 15:36:16 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf20.hostedemail.com (Postfix) with ESMTPA id 2E10E2002A;
+        Thu, 26 May 2022 15:36:15 +0000 (UTC)
+Message-ID: <b93a8882649e69819e01b44d621f1fc33a7467da.camel@perches.com>
+Subject: Re: [PATCH v2 01/28] lib/printbuf: New data structure for printing
+ strings
+From:   Joe Perches <joe@perches.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
+        rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, willy@infradead.org
+Date:   Thu, 26 May 2022 08:36:14 -0700
+In-Reply-To: <20220526152127.gw7gb4jnoikop4hl@moria.home.lan>
+References: <20220519172421.162394-1-kent.overstreet@gmail.com>
+         <20220519172421.162394-2-kent.overstreet@gmail.com>
+         <Yo+XZ4YtU9fN/sGE@alley> <20220526152127.gw7gb4jnoikop4hl@moria.home.lan>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Reply-To: mr.a.manga99@gmail.com
-Sender: arnettdavid1991@gmail.com
-Received: by 2002:adf:c98a:0:0:0:0:0 with HTTP; Thu, 26 May 2022 08:33:44
- -0700 (PDT)
-From:   "Mr. Amos Manga" <mr.a.manga99@gmail.com>
-Date:   Thu, 26 May 2022 08:33:44 -0700
-X-Google-Sender-Auth: ykbJWHFNl0fEWNmMObs8GR2XEBA
-Message-ID: <CAPpYQmnBp-S_EEAy1G=syNfWGj5_teDNsmSREFGJKOBrUhoW6w@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
-        LOTS_OF_MONEY,MONEY_FORM_SHORT,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
-        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 2E10E2002A
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Stat-Signature: re8mr6iqgaqckdmzyoqapfn7d6u8ehdi
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/jTM04rXRmp+mKrB2FBSeZQSp0hn9TN9o=
+X-HE-Tag: 1653579375-14664
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day,
+On Thu, 2022-05-26 at 11:21 -0400, Kent Overstreet wrote:
+> On Thu, May 26, 2022 at 05:06:15PM +0200, Petr Mladek wrote:
+> > The "pr_" prefix is a nightmare for me because the same prefix
+> > is used also for printk() API ;-)
+> > 
+> > Could we please use "pb_" instead?
+> 
+> I'm not entirely against that, but I see printbufs as already in this patchset
+> tightly coupled to vsprintf.c and thus quite related to printk, as well - and
+> there aren't that many different pr_ things. So I think the shared prefix makes
+> some sense, I'd like to hear what others think before making that change.
 
-I know this means of communication may not be morally right to you as
-a person but I also have had a great thought about it and I have come
-to conclusion which I am about to share with you.
+I think the reused prefix is not good.
+bufs are not printks.
 
-INTRODUCTION: I am a banker; I hope you will cooperate with me as a
-partner in a project of transferring an abandoned fund of late
-customer of the bank worth $18,000,000 (Eighteen Million Dollars
-only).
 
-This will be disbursed or shared between the both of us in these
-percentages, 55% for me and 45% for you. Contact me immediately if
-that is alright for you so that we can enter into an agreement before
-we start processing for the transfer of the funds. If you are
-satisfied with this proposal, please provide the below details for the
-Mutual Confidentiality Agreement
 
-1. Full Name and Address
-
-2. Occupation and Country of Origin
-
-3. Telephone Number
-
-I wait for your response so that we can commence on this transaction
-as soon as possible.
-
-Regards,
-
-Mr.Amos Manga.

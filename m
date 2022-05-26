@@ -2,68 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C04F6535429
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 21:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAD753542C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 21:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbiEZTz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 15:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S245568AbiEZT6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 15:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239722AbiEZTz4 (ORCPT
+        with ESMTP id S235380AbiEZT6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 15:55:56 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C43D880E5;
-        Thu, 26 May 2022 12:55:55 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id bl14so1747054qtb.1;
-        Thu, 26 May 2022 12:55:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K1mkUeLDGXh6H+DdAZ/Z/GNiMsZS+xgfwmRGEkBJOOM=;
-        b=qREScIhnqP8gtHRLCmwMFZmomqKsVOUsin0bvlBK09yl3E40kv996OFMeNlun3GRiz
-         czz47XNoc3qzDuZVjfb8shSgZs9X6hdB86El6JqCY4i7gTzsydtVJFQVQOuoFPq40lyz
-         ThdWMXCXib6nhbTUIYaU48r8tKRdDL7uHLLK9G3iV2jU9tjIL2sxmLwSJ0vXaQv6zD6g
-         arHF+yqExmQhT0RRb8pefTMczTdgUIu2RkuQGgNeycDSbfDkHBulfR3905xtxQ1m9zof
-         IXXS/28Fs+8rJDF2JFjS8yMLFQ+ljg+hG507/R0LAyJp2+286i+gIVYw7LJRGheeHBuM
-         ttqA==
+        Thu, 26 May 2022 15:58:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE93937AAD
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 12:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653595087;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oOXbG4pXgB/tMHUk6J9HTXNGVb2QU/YqfUjt26GHJWg=;
+        b=GXltilIxu+5RGZ6K847RidaRcjROq6TPi+f0NgIxmfY3EJoVzh4/tUH9F8rVJOH7azjx4X
+        +kYgB28hTbI//UaVSgEIiHXSKnKLguAjgwpOaVxiAQbvBMYiz+Xg6tvUrpGG1m2Be8p4tP
+        BdWffqDrj0kunOUDdPx2+9vFhpHP014=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-260-YLlSNeESPlmRCw6TRZfPxw-1; Thu, 26 May 2022 15:58:05 -0400
+X-MC-Unique: YLlSNeESPlmRCw6TRZfPxw-1
+Received: by mail-ed1-f70.google.com with SMTP id j22-20020aa7ca56000000b0042bd3527f2aso1758845edt.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 12:58:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K1mkUeLDGXh6H+DdAZ/Z/GNiMsZS+xgfwmRGEkBJOOM=;
-        b=xEz7GFBApIGwZ0pJ6qyAQVBYtpQ1eFuItUBqzdSvU8+4lkemogKEtcmvgLXMMZhZNs
-         uQnexGekbNF9x9kipvifmo0zv/ngBY+Jk6D6gxJVmAkk049ZjwqDjei4XiigAMkG53Nl
-         gKgOvCsH3AGnT9CUpaRGNYvbKA+xlUaMH6UXDIoEcuqk0SPrQ3ZREv65SQ8hjj4wkTZX
-         gPNoG1rXPzQqO5qXpWlcHXpIuoQuGejasEVrJZlx6Kbwi6uXHScLBisx/QbLxkwV8Oob
-         /OkrSShg2Sv2tyeQyJAflh/eoV9NOjgVm/D8VeP5/C5LqBOmGAQpLIKaYXuX0ImbMlLw
-         sxcA==
-X-Gm-Message-State: AOAM53172pYn25FA02kPakdtQc9qo15qVwP4WPg9wodussOrfk4FDQE0
-        cc8oVjUGbg2MXL8qq0GnIxw=
-X-Google-Smtp-Source: ABdhPJxIK2WGJAOGsiK2eeVsCS0VF76lh5sWWj2clMWEp+eUQvy4YNwumx+5jzuSiNkODEb6S37Mzw==
-X-Received: by 2002:a05:622a:1450:b0:2fb:6b97:2e10 with SMTP id v16-20020a05622a145000b002fb6b972e10mr6777937qtx.96.1653594954322;
-        Thu, 26 May 2022 12:55:54 -0700 (PDT)
-Received: from debian-BULLSEYE-live-builder-AMD64 (c-73-60-226-25.hsd1.nh.comcast.net. [73.60.226.25])
-        by smtp.gmail.com with ESMTPSA id u126-20020ae9d884000000b006a35ac236c4sm1682359qkf.113.2022.05.26.12.55.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 12:55:53 -0700 (PDT)
-Date:   Thu, 26 May 2022 15:55:51 -0400
-From:   Eric Whitney <enwlinux@gmail.com>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next] ext4: Fix warning in ext4_da_release_space
-Message-ID: <Yo/bRxbM8OBP0JlI@debian-BULLSEYE-live-builder-AMD64>
-References: <20220520025540.3189247-1-yebin10@huawei.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oOXbG4pXgB/tMHUk6J9HTXNGVb2QU/YqfUjt26GHJWg=;
+        b=7REyJMmnj5chzlQy7r+IobF0d7AVtCNFkJUBbDXn0JOvHpwU6YvxdMu7qxpr1F9ztD
+         h6kU4BfqyBrJilwVfu41aIRu/yoAQ3JHZDaUserM8yA0534ynNHWG0vaR5yt7nL2W7Qy
+         Y0zjlQ+at1a8CTiGCB05z/8RKnKrpE0ttXJCdPT+Cd9j4xWU0QaoJ9/jG8cuBAPZqo4I
+         p/c1xxEv8m4xPChEQI95TGOF45vOnp40yGPAlDR1loeFbA0I6mW7bNUg0yCT/2WbUhpJ
+         uWDOc9QLPNEkSOWqurruCctLw9uhYSSQgE3h5xvidg121cM7Ako07jt+5RgJvLzvc47D
+         2ABw==
+X-Gm-Message-State: AOAM532OEW1tVa9YTyzwT96U57qvawdBm48S1URgs/T1BmP28uOMMG6j
+        lK4KwwV2Vcy3Rzwzt9YvDQgaFOoDSB4nK+Lv9bNQMY8eVKFqw1G323pBbmQTM5DvXkfnaLtDYdq
+        vjYMzhyYnWdyPtAvagWzs1mWF
+X-Received: by 2002:a17:907:9483:b0:6ff:b1:467a with SMTP id dm3-20020a170907948300b006ff00b1467amr14411607ejc.683.1653595084284;
+        Thu, 26 May 2022 12:58:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzeFT//mmyuN2iNQEtrbSHEIB8t9ML5kjmZLZsVIz+6dD0vsb29kMps6gyECXnUOqdt4JtkGA==
+X-Received: by 2002:a17:907:9483:b0:6ff:b1:467a with SMTP id dm3-20020a170907948300b006ff00b1467amr14411598ejc.683.1653595084058;
+        Thu, 26 May 2022 12:58:04 -0700 (PDT)
+Received: from [192.168.45.129] ([185.238.218.66])
+        by smtp.gmail.com with ESMTPSA id s25-20020a170906bc5900b006fed40e5564sm773435ejv.83.2022.05.26.12.58.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 12:58:03 -0700 (PDT)
+Message-ID: <82c37e1c-f216-e635-9107-af04f43484e4@redhat.com>
+Date:   Thu, 26 May 2022 21:58:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520025540.3189247-1-yebin10@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [GIT PULL] platform-drivers-x86 for 5.19-1
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mark.gross@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+References: <13e61c61-0d4b-5f48-6373-f056bf8b603f@redhat.com>
+ <CAHk-=wgV8zqiLi5p-SNZ2zSi95CkkFXqPZJjtneVXeobgAohJg@mail.gmail.com>
+ <f39aa9c0-b4e6-1f5d-f556-643442fcbcc5@redhat.com>
+ <CAHk-=wgNP+Dziv=4MDEf-wAW-U_0ZNNsL0gMDs7A46+CACgD4w@mail.gmail.com>
+ <e5ff5023-c3e7-769b-33b0-2c4b376bc4d2@redhat.com>
+ <CAHk-=wgTRT6nQeJpVCKb+m=So6bLzUZQYcY6+RH5W0gZfsp+Fg@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHk-=wgTRT6nQeJpVCKb+m=So6bLzUZQYcY6+RH5W0gZfsp+Fg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,187 +89,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Ye Bin <yebin10@huawei.com>:
-> We got issue as follows:
-> WARNING: CPU: 2 PID: 1936 at fs/ext4/inode.c:1511 ext4_da_release_space+0x1b9/0x266
-> Modules linked in:
-> CPU: 2 PID: 1936 Comm: dd Not tainted 5.10.0+ #344
-> RIP: 0010:ext4_da_release_space+0x1b9/0x266
-> RSP: 0018:ffff888127307848 EFLAGS: 00010292
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffffffff843f67cc
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffed1024e60ed9
-> RBP: ffff888124dc8140 R08: 0000000000000083 R09: ffffed1075da6d23
-> R10: ffff8883aed36917 R11: ffffed1075da6d22 R12: ffff888124dc83f0
-> R13: ffff888124dc844c R14: ffff888124dc8168 R15: 000000000000000c
-> FS:  00007f6b7247d740(0000) GS:ffff8883aed00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ffc1a0b7dd8 CR3: 00000001065ce000 CR4: 00000000000006e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  ext4_es_remove_extent+0x187/0x230
->  mpage_release_unused_pages+0x3af/0x470
->  ext4_writepages+0xb9b/0x1160
->  do_writepages+0xbb/0x1e0
->  __filemap_fdatawrite_range+0x1b1/0x1f0
->  file_write_and_wait_range+0x80/0xe0
->  ext4_sync_file+0x13d/0x800
->  vfs_fsync_range+0x75/0x140
->  do_fsync+0x4d/0x90
->  __x64_sys_fsync+0x1d/0x30
->  do_syscall_64+0x33/0x40
->  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> 
-> Above issue may happens as follows:
-> 	process1                        process2
-> ext4_da_write_begin
->   ext4_da_reserve_space
->     ext4_es_insert_delayed_block[1/1]
->                                     ext4_da_write_begin
-> 				      ext4_es_insert_delayed_block[0/1]
-> ext4_writepages
->   ****Delayed block allocation failed****
->   mpage_release_unused_pages
->     ext4_es_remove_extent[1/1]
->       ext4_da_release_space [reserved 0]
-> 
-> ext4_da_write_begin
->   ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)
->    ->As there exist [0, 1] extent, so will return true
->                                    ext4_writepages
-> 				   ****Delayed block allocation failed****
->                                      mpage_release_unused_pages
-> 				       ext4_es_remove_extent[0/1]
-> 				         ext4_da_release_space [reserved 1]
-> 					   ei->i_reserved_data_blocks [1->0]
-> 
->   ext4_es_insert_delayed_block[1/1]
-> 
-> ext4_writepages
->   ****Delayed block allocation failed****
->   mpage_release_unused_pages
->   ext4_es_remove_extent[1/1]
->    ext4_da_release_space [reserved 1]
->     ei->i_reserved_data_blocks[0, -1]
->     ->As ei->i_reserved_data_blocks already is zero but to_free is 1,
->     will trigger warning.
-> 
+Hi,
 
-Hi:
-
-Do you have a reproducer for this warning?  I'd like to understand the sequence
-of events that led to the initial block allocation failure in process 1.
-
-A question about your notation - what does "[1/1]" in
-"ext4_es_insert_delayed_block[1/1]" mean?
-
-I'm assuming this failure was seen on a bigalloc filesystem with a 4k block
-size and 64K cluster size?
-
-Thanks,
-Eric
-
-> To solve above issue, introduce i_clu_lock to protect insert delayed
-> block and remove block under cluster delay allocate mode.
+On 5/26/22 21:25, Linus Torvalds wrote:
+> On Wed, May 25, 2022 at 5:34 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> 5. run:
+>>
+>> git tag -s platform-drivers-x86-v5.19-1 for-next
+>> git request-pull v5.18-rc1 git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git platform-drivers-x86-v5.19-1 > pull
 > 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/ext4/ext4.h           |  3 +++
->  fs/ext4/extents_status.c |  5 +++++
->  fs/ext4/inode.c          | 11 +++++++++--
->  fs/ext4/super.c          |  1 +
->  4 files changed, 18 insertions(+), 2 deletions(-)
+> So there's your problem.
 > 
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index bcd3b9bf8069..47c88ac4d4a8 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -1169,6 +1169,9 @@ struct ext4_inode_info {
->  	__u32 i_csum_seed;
->  
->  	kprojid_t i_projid;
-> +
-> +	/* Protect concurrent add cluster delayed block and remove block */
-> +	struct mutex i_clu_lock;
->  };
->  
->  /*
-> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
-> index 9a3a8996aacf..dd679014db98 100644
-> --- a/fs/ext4/extents_status.c
-> +++ b/fs/ext4/extents_status.c
-> @@ -1433,6 +1433,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  int ext4_es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  			  ext4_lblk_t len)
->  {
-> +	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
->  	ext4_lblk_t end;
->  	int err = 0;
->  	int reserved = 0;
-> @@ -1455,9 +1456,13 @@ int ext4_es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  	 * so that we are sure __es_shrink() is done with the inode before it
->  	 * is reclaimed.
->  	 */
-> +	if (sbi->s_cluster_ratio != 1)
-> +		mutex_lock(&EXT4_I(inode)->i_clu_lock);
->  	write_lock(&EXT4_I(inode)->i_es_lock);
->  	err = __es_remove_extent(inode, lblk, end, &reserved);
->  	write_unlock(&EXT4_I(inode)->i_es_lock);
-> +	if (sbi->s_cluster_ratio != 1)
-> +		mutex_unlock(&EXT4_I(inode)->i_clu_lock);
->  	ext4_es_print_tree(inode);
->  	ext4_da_release_space(inode, reserved);
->  	return err;
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index 01c9e4f743ba..1109d77ad60b 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -1649,17 +1649,22 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
->  			goto errout;
->  		reserved = true;
->  	} else {   /* bigalloc */
-> +		mutex_lock(&EXT4_I(inode)->i_clu_lock);
->  		if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)) {
->  			if (!ext4_es_scan_clu(inode,
->  					      &ext4_es_is_mapped, lblk)) {
->  				ret = ext4_clu_mapped(inode,
->  						      EXT4_B2C(sbi, lblk));
-> -				if (ret < 0)
-> +				if (ret < 0) {
-> +					mutex_unlock(&EXT4_I(inode)->i_clu_lock);
->  					goto errout;
-> +				}
->  				if (ret == 0) {
->  					ret = ext4_da_reserve_space(inode);
-> -					if (ret != 0)   /* ENOSPC */
-> +					if (ret != 0) {   /* ENOSPC */
-> +						mutex_unlock(&EXT4_I(inode)->i_clu_lock);
->  						goto errout;
-> +					}
->  					reserved = true;
->  				} else {
->  					allocated = true;
-> @@ -1671,6 +1676,8 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
->  	}
->  
->  	ret = ext4_es_insert_delayed_block(inode, lblk, allocated);
-> +	if (sbi->s_cluster_ratio != 1)
-> +		mutex_unlock(&EXT4_I(inode)->i_clu_lock);
->  	if (ret && reserved)
->  		ext4_da_release_space(inode, 1);
->  
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index c5021ca0a28a..aa6f2a68bf41 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -1347,6 +1347,7 @@ static struct inode *ext4_alloc_inode(struct super_block *sb)
->  	INIT_WORK(&ei->i_rsv_conversion_work, ext4_end_io_rsv_work);
->  	ext4_fc_init_inode(&ei->vfs_inode);
->  	mutex_init(&ei->i_fc_lock);
-> +	mutex_init(&ei->i_clu_lock);
->  	return &ei->vfs_inode;
->  }
->  
-> -- 
-> 2.31.1
+> You're basically saying "give me a pull-request against v5.18-rc1".
 > 
+> Which is bogus, since you already sent me part of your pile after rc1,
+> and I already have it, so now your pull request will end up repeating
+> those parts.
+> 
+> So just do
+> 
+>      git fetch origin
+>      git request-pull origin/master git://git....
+> 
+> to let git figure out what the actual common state is with 'origin'
+> (and obviously you may have a different name for my upstream
+> repository, so replace "origin" with whatever that correct name is).
+> 
+> (That "git fetch origin" doesn't have to happen right before the pull
+> request, but it has to be done at *some* point so that your git tree
+> is basically aware of what I've merged from you previously).
+> 
+> Anyway, the important point is that you shouldn't try to remember -
+> incorrectly - what the last common point for us is.  Git knows - as
+> long as you just give it enough info.
+
+Right, I see. I gave this a try locally and indeed reduces the shortlog
++ diffstat a bit. I will remember to use this form when creating
+pull-reqs from now on.
+
+Note that this seems to only help up to the point where my for-next
+and fixes branching start diverging though.
+
+So e.g. the surface bits you pointed out before:
+
+platform/surface:
+ -  aggregator: Fix initialization order when compiling as builtin module
+ -  gpe: Add support for Surface Pro 8
+
++ the matching diffstat bits
+
+Are still present in the shortlog even though they are already in v5.18
+
+Regards,
+
+Hans
+

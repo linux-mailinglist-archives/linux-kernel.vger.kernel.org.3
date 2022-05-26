@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9DF535364
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7387453536F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344485AbiEZSgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 14:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
+        id S244864AbiEZShi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348505AbiEZSfB (ORCPT
+        with ESMTP id S1345254AbiEZShZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 14:35:01 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CA42CE3F;
-        Thu, 26 May 2022 11:34:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1653590089;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=M7rHhEC+oPKEf9TWKS8ix13sY2D6weu957Rrs1ZvcVY=;
-    b=dd3qHsQZHhyXewQU9xvYf6QJ6YwRrNtknNoojN8/ZZ9dF3Ti/UQf26HyAwUlwxsNPx
-    1OgjlXgsoLDvS63Jv/5s75S/xMDHYpv8vu4QywsHj3HQ9QwY7RAVDzI90R32m4vHEHIg
-    6mxGUqCKrY3Q1JZfnpe72GxWRo0cD4WBTM3eUsXQpzTY3YYbXfzI0tTqBMd/C1knfOQD
-    R6KgWUv3VGE2vb6TJscUIJB5fZqQjl8EA8NH82jL6XKtxWD9IuEg1NmqgpiL5/SSqQFs
-    UdnyQ+bRdcX5MdrMMDhjAlNV4drWn37NNOcKYubwGy+bmToIL4oRsmTVEganTzCqC5rm
-    ZRmw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLUrKsxlg=="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 47.45.0 AUTH)
-    with ESMTPSA id 9056edy4QIYmZFe
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 26 May 2022 20:34:48 +0200 (CEST)
-Date:   Thu, 26 May 2022 20:34:41 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Sireesh Kodali <sireeshkodali1@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, bjorn.andersson@linaro.org,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: msm8916: Fix typo in pronto
- remoteproc node
-Message-ID: <Yo/IQU4r6siW3u2Z@gerhold.net>
-References: <20220526141740.15834-1-sireeshkodali1@gmail.com>
- <20220526141740.15834-3-sireeshkodali1@gmail.com>
+        Thu, 26 May 2022 14:37:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 380DF694A5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653590243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iZXZyOBj9K/G+WFDwIrle6dO9n3UzwXZHEEzIr/nzYk=;
+        b=EcN/9lvQ2vCfiG/e2xYWoODYOQEkXUaYtUvRX8268CA1WFkXVfs8Auaql9IoYONSvGMBJ2
+        6mBRqFgpr/pG17PrvReBn5zLlg5IX/OcoO4i8GXSCQbuDVXT7FP6pM8DtGv6bu6c+vKTFY
+        TgD6/kjuAvbgplcnNHYCZRAbPn5ChMU=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-302-Ml5Y1yKDO720KnabuZbwxg-1; Thu, 26 May 2022 14:37:22 -0400
+X-MC-Unique: Ml5Y1yKDO720KnabuZbwxg-1
+Received: by mail-io1-f70.google.com with SMTP id k184-20020a6bbac1000000b0065aeedd4ba8so1472312iof.20
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:37:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iZXZyOBj9K/G+WFDwIrle6dO9n3UzwXZHEEzIr/nzYk=;
+        b=Qqc7th9LrvUPICPzvNwR8R2tpBP5etMFRS+IplhNBP5NBPNVWfocC/Hce1ccK9SgMu
+         kJOACcj9Y4nGCqsbTaAJf2/6tgSSAm8LluYColEfVSkKJTVCiA7LjxrbnTHDXBJ43+s8
+         2iV4v4miIpjareF11+2Hbfkpah5tb3jxcJ8vCZ6umn8MfGJJocKW0BWrDkQ1atWvXR+z
+         qAc8Z2z6s30Vp3BY/MdF0Ak4+UImmkEzSTm1NOms2/FehaNY/SZ6hT4fB5zbijFWfe//
+         pzJVxugxQoZR/zrcchEZzRD5dl+AWkvP4HxZ3uyNhUrv3vuwHJcUC2uICzl6WvGWMiod
+         Q44Q==
+X-Gm-Message-State: AOAM5305A+Wr0v+YB8fO1aSt8gemj83Y3zb8fEzer3DRA/mm1In0PGYF
+        SA+NDyin8YeEULrr9IyJyeCoJPAeT/DfX+VUc49VDzmYCQkcM8pdzmqPH1GVnbfUfE5/Sje7JPz
+        jzDLPFYLAgY+s8Evas2OxtlTG
+X-Received: by 2002:a05:6638:4901:b0:32f:d52c:924c with SMTP id cx1-20020a056638490100b0032fd52c924cmr6248112jab.8.1653590241277;
+        Thu, 26 May 2022 11:37:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzpP2TSvS6e9NpQEMUP3qCECYxWtAnkzb4ugRqwUnJ/Y/Oan//xTqCMVr3HgbEkayorckxxRg==
+X-Received: by 2002:a05:6638:4901:b0:32f:d52c:924c with SMTP id cx1-20020a056638490100b0032fd52c924cmr6248102jab.8.1653590241044;
+        Thu, 26 May 2022 11:37:21 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id x89-20020a0294e2000000b0032e43cb7344sm575684jah.146.2022.05.26.11.37.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 11:37:20 -0700 (PDT)
+Date:   Thu, 26 May 2022 14:37:18 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Jue Wang <juew@google.com>
+Cc:     pizhenwei@bytedance.com, Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>, jasowang@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, mst@redhat.com,
+        HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+jIOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>, Paolo Bonzini <pbonzini@redhat.com>,
+        qemu-devel@nongnu.org, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH 0/3] recover hardware corrupted page by virtio balloon
+Message-ID: <Yo/I3oLkd9OU0ice@xz-m1.local>
+References: <CAPcxDJ5pduUyMA0rf+-aTjK_2eBvig05UTiTptX1nVkWE-_g8w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220526141740.15834-3-sireeshkodali1@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAPcxDJ5pduUyMA0rf+-aTjK_2eBvig05UTiTptX1nVkWE-_g8w@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,38 +81,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 07:47:40PM +0530, Sireesh Kodali wrote:
-> The smem-state properties for the pronto node were incorrectly labelled,
-> reading `qcom,state*` rather than `qcom,smem-state*`. Fix that, allowing
-> the stop state to be used.
-> 
-> Fixes: 88106096cbf8 ("ARM: dts: msm8916: Add and enable wcnss node")
-> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+On Wed, May 25, 2022 at 01:16:34PM -0700, Jue Wang wrote:
+> The hypervisor _must_ emulate poisons identified in guest physical
+> address space (could be transported from the source VM), this is to
+> prevent silent data corruption in the guest. With a paravirtual
+> approach like this patch series, the hypervisor can clear some of the
+> poisoned HVAs knowing for certain that the guest OS has isolated the
+> poisoned page. I wonder how much value it provides to the guest if the
+> guest and workload are _not_ in a pressing need for the extra KB/MB
+> worth of memory.
 
-My review didn't change just because of an unneeded blank line between
-the tags. Thanks again for finding this. :)
+I'm curious the same on how unpoisoning could help here.  The reasoning
+behind would be great material to be mentioned in the next cover letter.
 
-Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+Shouldn't we consider migrating serious workloads off the host already
+where there's a sign of more severe hardware issues, instead?
 
-> ---
->  arch/arm64/boot/dts/qcom/msm8916.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> index e34963505e07..7ecd747dc624 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> @@ -1758,8 +1758,8 @@ pronto: remoteproc@a21b000 {
->  					<&rpmpd MSM8916_VDDMX>;
->  			power-domain-names = "cx", "mx";
->  
-> -			qcom,state = <&wcnss_smp2p_out 0>;
-> -			qcom,state-names = "stop";
-> +			qcom,smem-states = <&wcnss_smp2p_out 0>;
-> +			qcom,smem-state-names = "stop";
->  
->  			pinctrl-names = "default";
->  			pinctrl-0 = <&wcnss_pin_a>;
-> -- 
-> 2.36.1
-> 
+Thanks,
+
+-- 
+Peter Xu
+

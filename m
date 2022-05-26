@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0718534D7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5780F534D7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347066AbiEZKkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 06:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
+        id S1347002AbiEZKkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 06:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344583AbiEZKj7 (ORCPT
+        with ESMTP id S1346086AbiEZKkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 06:39:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10CDCCC16D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:39:57 -0700 (PDT)
+        Thu, 26 May 2022 06:40:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D0AACEB85
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:40:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653561597;
+        s=mimecast20190719; t=1653561601;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+r8IRfW0aiu0JceyLx2VcCldtR76oQiy6OB80vh4MBU=;
-        b=UuKabnlS2KsPcL66OyNh962UV2itohE+kT91gcanIVqYt9MsDU+IGcW6zJLXwRWzzZVEgD
-        4XPvsVjVxQTxHAd4PgGCsLBDj2CP7PE5Sq45ek7m4wHsafvOPth1QRbMGBiFeoRL6HyQF3
-        s8+rTWCr1TP7enVhkNwjBO3N1CGelKg=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=8EWAiYBYk725y81Cip9A4eLxA/2E8LypU9bh49pcKwc=;
+        b=agm06UuEjspG5OFD30hE4GjMcI1hLCJcezlAm1aR3+MvLvMvhDS3pT0/s4hYvkjyejw3Uq
+        OoU+PnAMlwxF/gYkHdEe/Jo1PerQafREsUCcQOnT/w9BF9/7q8osw0rZHQkYCn5n+IBXhA
+        r5jIJpKdYdqRs0z+srw1O8Qf2F6P5c4=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557--pr031zbNSqrd5DnEH0vHg-1; Thu, 26 May 2022 06:39:55 -0400
-X-MC-Unique: -pr031zbNSqrd5DnEH0vHg-1
-Received: by mail-ed1-f69.google.com with SMTP id i8-20020a50fd08000000b0042baef934f5so811137eds.16
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:39:55 -0700 (PDT)
+ us-mta-356-FapKfIr5MaOYObOOzRqP3Q-1; Thu, 26 May 2022 06:39:58 -0400
+X-MC-Unique: FapKfIr5MaOYObOOzRqP3Q-1
+Received: by mail-ej1-f72.google.com with SMTP id sd17-20020a170906ce3100b006ff12a1b982so635099ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:39:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+r8IRfW0aiu0JceyLx2VcCldtR76oQiy6OB80vh4MBU=;
-        b=Yk5835SuxIz3ztzDpuj6dvIh2NGzLn8/WWhNMQ56rgLP9di483ICznuEsovm4IxR6C
-         79LBsR+BRtJxmtVLs38ktc6KuC/H+byy+at6HsIJQ1zxy36Bk5KLlLhVq05Gv79tChcM
-         LaZRJUVc72W29RS7JldSdd885ddz8NFl2PF8mcriVhTzQ1ZiOAFIyVdvnKGFGiRXWmhs
-         /wTkXk5zVPqWoY48Pm+cmttONB+fAQTB8R8yOBHoWnNDv0sQHAXwLJRrwXgqeLdhVAuY
-         I5pTZDJy+z0zImTISJnD4mjRcd+zaCyiGlj2IjeVErek1jTUGTO7G1Rk9qsg9T0i8n13
-         K6Sg==
-X-Gm-Message-State: AOAM531FS3i2RI5AS7ch7W673j4GMY6tkrO+YdIetn9V1L4YLz2a7tKS
-        i4IfK/1VTEOHZWZWY8Y/Yl6UwoZH0/fKVmp37anXsQLlrXhn8DPmLLz4EGwocXRAK0FuJSqon1b
-        /JYM9AnICgDIRfNbouK+SqT53
-X-Received: by 2002:a17:906:f17:b0:6fe:94f6:cb8a with SMTP id z23-20020a1709060f1700b006fe94f6cb8amr31800178eji.456.1653561594741;
-        Thu, 26 May 2022 03:39:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyUSYGuJiw8tlBQEs9M1/lLmuEsmHtBEs/SiLz744J3SQye6+zzJi4pp7socx6vuf4BRlOQcA==
-X-Received: by 2002:a17:906:f17:b0:6fe:94f6:cb8a with SMTP id z23-20020a1709060f1700b006fe94f6cb8amr31800168eji.456.1653561594551;
-        Thu, 26 May 2022 03:39:54 -0700 (PDT)
+        bh=8EWAiYBYk725y81Cip9A4eLxA/2E8LypU9bh49pcKwc=;
+        b=o6IAH0AmqN5k02Aj/J0kVH4HkjuytynDvc9Fbyc48S8zeNXOAfiUJk/yYq5lQ/3yGy
+         oS0q84IYpCygIHN99x9ZoTWrqZkEM5PAozAwKhOEn5HaLs9rU9PfSceXMaGQrUj4hHGS
+         7R0muryxw6BISH+8DoKuDvW5+TH3K6lSJoHicxY5H8gaQDYglzRXV+x1cKlalbb9xx+v
+         BWl7EHOf8iEnnIR4NXCo6oDRizeYUxaQuMh1md114giuUBxmX/XuCf+Pg8oKJ2vijdgD
+         /A06RtBEk0raNOMjwIHNDs2Jhko1ZlR9M0uzxXODSEs0OzbjnVg/cA+FnSzlCuGH63RD
+         nPtQ==
+X-Gm-Message-State: AOAM531z7vEy6C6So4WW4eW2fNJ7qpP36sgDcz4zH0eezTSj4hDoaFSP
+        ZQnklGVMr4sAKKp+IqLDs31wDfGf4ts1/VfQK2+WWPG3KfMEHqKE8h8LjIxJB9n0E375pqPYx/z
+        V1cWQkyzFwhZBu8NoWBjH3nD0
+X-Received: by 2002:a17:906:7d83:b0:6ce:fee:9256 with SMTP id v3-20020a1709067d8300b006ce0fee9256mr33758323ejo.647.1653561596933;
+        Thu, 26 May 2022 03:39:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwtAO6TZgqMXrEm2H/AdlTd7mXLZMlmxf6oRDjQkfiY76qayygnuLVMz3FRQqkQ3im8y4fEOA==
+X-Received: by 2002:a17:906:7d83:b0:6ce:fee:9256 with SMTP id v3-20020a1709067d8300b006ce0fee9256mr33758303ejo.647.1653561596722;
+        Thu, 26 May 2022 03:39:56 -0700 (PDT)
 Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id c10-20020a05640227ca00b0042ab9da73e6sm633908ede.94.2022.05.26.03.39.52
+        by smtp.googlemail.com with ESMTPSA id q14-20020a50c34e000000b0042bb015df6asm641485edb.6.2022.05.26.03.39.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 03:39:53 -0700 (PDT)
-Message-ID: <8288b833-68f0-9fd2-d4d4-21cc9aff5ec2@redhat.com>
-Date:   Thu, 26 May 2022 12:39:51 +0200
+        Thu, 26 May 2022 03:39:56 -0700 (PDT)
+Message-ID: <8baca98e-63d6-f7dd-067b-05f8e0dc381f@redhat.com>
+Date:   Thu, 26 May 2022 12:39:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [PATCH 2/2] KVM: VMX: Add knob to allow rejecting kvm_intel on
- inconsistent VMCS config
+Subject: Re: [PATCH 1/2] KVM: VMX: Sanitize VM-Entry/VM-Exit control pairs at
+ kvm_intel load time
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -73,15 +73,15 @@ Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
         Chenyi Qiang <chenyi.qiang@intel.com>,
         Lei Wang <lei4.wang@intel.com>
 References: <20220525210447.2758436-1-seanjc@google.com>
- <20220525210447.2758436-3-seanjc@google.com>
+ <20220525210447.2758436-2-seanjc@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220525210447.2758436-3-seanjc@google.com>
+In-Reply-To: <20220525210447.2758436-2-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,20 +89,37 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 5/25/22 23:04, Sean Christopherson wrote:
-> Add an off-by-default module param, reject_inconsistent_vmcs_config, to
-> allow rejecting the load of kvm_intel if an inconsistent VMCS config is
-> detected.  Continuing on with an inconsistent, degraded config is
-> undesirable when the CPU is expected to support a given set of features,
-> e.g. can result in a misconfigured VM if userspace doesn't cross-check
-> KVM_GET_SUPPORTED_CPUID, and/or can result in poor performance due to
-> lack of fast MSR switching.
-> 
-> Signed-off-by: Sean Christopherson<seanjc@google.com>
-> ---
->   arch/x86/kvm/vmx/vmx.c | 20 +++++++++++++++++---
->   1 file changed, 17 insertions(+), 3 deletions(-)
+>   
+> +#define VMCS_ENTRY_EXIT_PAIR(name, entry_action, exit_action) \
+> +	{ VM_ENTRY_##entry_action##_##name, VM_EXIT_##exit_action##_##name }
+> +
+>   static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>   				    struct vmx_capability *vmx_cap)
+>   {
+> @@ -2473,6 +2476,24 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>   	u64 _cpu_based_3rd_exec_control = 0;
+>   	u32 _vmexit_control = 0;
+>   	u32 _vmentry_control = 0;
+> +	int i;
+> +
+> +	/*
+> +	 * LOAD/SAVE_DEBUG_CONTROLS are absent because both are mandatory.
+> +	 * SAVE_IA32_PAT and SAVE_IA32_EFER are absent because KVM always
+> +	 * intercepts writes to PAT and EFER, i.e. never enables those controls.
+> +	 */
+> +	struct {
+> +		u32 entry_control;
+> +		u32 exit_control;
+> +	} vmcs_entry_exit_pairs[] = {
+> +		VMCS_ENTRY_EXIT_PAIR(IA32_PERF_GLOBAL_CTRL, LOAD, LOAD),
+> +		VMCS_ENTRY_EXIT_PAIR(IA32_PAT, LOAD, LOAD),
+> +		VMCS_ENTRY_EXIT_PAIR(IA32_EFER, LOAD, LOAD),
+> +		VMCS_ENTRY_EXIT_PAIR(BNDCFGS, LOAD, CLEAR),
+> +		VMCS_ENTRY_EXIT_PAIR(IA32_RTIT_CTL, LOAD, CLEAR),
+> +		VMCS_ENTRY_EXIT_PAIR(IA32_LBR_CTL, LOAD, CLEAR),
 
-Yeah let's do this by default.
+No macros please, it's just as clear to expand them especially since the 
+#define is far from the struct definition.
 
 Paolo
 

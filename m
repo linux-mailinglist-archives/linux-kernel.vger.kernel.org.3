@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F73A534B7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6788C534B71
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346609AbiEZIQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
+        id S241025AbiEZIRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346661AbiEZIQQ (ORCPT
+        with ESMTP id S1346686AbiEZIQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:16:16 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C0F23148
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:16:15 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3004ab92b7aso7398857b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:16:15 -0700 (PDT)
+        Thu, 26 May 2022 04:16:36 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829204C7B6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:16:17 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f4dfd09d7fso8176837b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:16:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=LHvrfQT4UXFPIW7HvFCMhDyzwcScgNhuNK8AAkQqhh0=;
-        b=ckTLEE9Ka8zRBQWZF8bw1bzPyohHSB7lFDGLGx8zTrvE1U6jlLS2u8eGVyiyeggEvU
-         f2EkV92DxtJdRwumDctwEA2IQx70gREKkuzwEB+3OV15TZsv4nnJNeHpcR3jy+FuEHO1
-         E+wXrf/OpSIAmM7QLQFDf1+Hl/jJe7k56R5tSxkJdxRlRw2RMnjPZSIzlQ613IfRTFOa
-         Zx8mX+wckPdc1dHZYVMnSMTwB7wl2UW03yvyEnDwGVANY6EkvB+fRXiLFfl04V8Uv38Y
-         DXO0NJt9s3+k0LJaHseJ6m+c87C0hU/eJug6HuK1f5WfFNhgvCbmyh04c4hNdwY8HvkX
-         PXvg==
+        bh=6dgEjD+4R2dKDRgscs/xv70YgyhfXrRwkUylnVTphfk=;
+        b=XL1eUaOAcssMtqvMAb2JLoXAqGRiBPWRpPBJh6rTDvytgReAH+LjXHDFnDZXS9f9I2
+         35g3JMRGxQZlCvxOhWMcOSoY7fmD/fBdQK3AfpTe4+KDVzo3ISAmWs2bpcJGBQMEHxn2
+         XOrBvHACbTqtONiyNPB/vydyMzterA8qUwVfxsEqd+Vz+8qcEbmdk9FVpwyv4JToLFBL
+         EPR58mdlFaKlltO8fCr0xZCvNvm+F4UFw5xJYUT6ue5rms9F3TPGMAGF7HdiGvNufzye
+         R8r2YJjaY8RuLAuVFWX7SLMYTTkhhepWRDKwQDGC55z4gixqwa9JauWCwnOhgDgX/TTb
+         SoiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=LHvrfQT4UXFPIW7HvFCMhDyzwcScgNhuNK8AAkQqhh0=;
-        b=JFVpLgKpvgBRnjMZ2thoMvn3UiGqbOOBjUjmQw0E1DUWrSUOuO3p6Clzpd0glsZesl
-         x51srz1bjVmuRLXme8n9/LcKpw13R8t9+VUGZu6USfVSGO8P2spp6PK2xibQcm84n8xp
-         OqrcT/K3BsQKg2+x6vVfPSf9b5O9BTt8dk80aaHcLHtwpnVP295ZApKqSfSBi7ib78h+
-         BM+Cdg9gk668ZWz5WcK4kDYfmwMEox9jWgfw7HFURUu37WPp3D9W4yNt3gPjMsEOtjXt
-         1LYDDgKR2/6AuVEeh9OTL3aFVv5NYpR5FvfYITLcqfkS0QmJvqax/+rLNprx+3tQ17oq
-         RgXg==
-X-Gm-Message-State: AOAM533GtcO4N1XJlFLTOjo76Mp9NYIoADAdV7+X+89+zfAnwULXMcze
-        eQpJS7o7wsAkdAkib4yBBatgob538fZF1AU=
-X-Google-Smtp-Source: ABdhPJw4+9jAT07QlqTfVdN89DFF1UyFTJg5uRAxow4srxchUBWqQAUPj+CYeVjLPhmM3eADjwvBI1mMP+o/3L0=
+        bh=6dgEjD+4R2dKDRgscs/xv70YgyhfXrRwkUylnVTphfk=;
+        b=iO/dDRtrRBOUjANtnwGihSK4F9PPoaLcv0PrfzBvwVVd0J8WVtvORrbrjoG3azUb0c
+         CdIjAHUOOu/4YoTOQucKF545yn1Ybv2X/HSSRfK74RbuVu71l8PXfflF8ovuKz4OY7yU
+         pAyPPbSSxgHuNbD1eGOTDZpo/Kr2zkWY25wRMx74Dq8r2a2ciGRSXGFpTF9wR+IY2pi2
+         uKtRRLIgwW0uN4Pj4/o7tFtfNR39jKp5ijudQEV21fcU3SGLSxJoVJ/CF+IHWzKN/DZs
+         8RaRLdDTzM2t79EwRz1JxIa6VmB92t1653WUaF4AfDenmay6E/xqpbYLXVnLKtqPgkoK
+         cnng==
+X-Gm-Message-State: AOAM533Csl1PI+/AILM7B49r7pKNre8yaA+tIFeuiA3CPazk5qWvc36L
+        s91Q/mQqOkEeO66QrFwMpKOpsLzE2aQwOf0=
+X-Google-Smtp-Source: ABdhPJx5hTzSS2LFu7RkqlQ7KLRzxV0Py+PZHVG9x+dcAcINC/1HXYTnTXlf9OdhjLu3DXMEHDG7SkiPohYReIE=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:ff1f:a3b7:b6de:d30f])
- (user=saravanak job=sendgmr) by 2002:a25:928b:0:b0:64a:f505:427f with SMTP id
- y11-20020a25928b000000b0064af505427fmr33415597ybl.146.1653552974289; Thu, 26
- May 2022 01:16:14 -0700 (PDT)
-Date:   Thu, 26 May 2022 01:15:46 -0700
+ (user=saravanak job=sendgmr) by 2002:a25:fb12:0:b0:64d:d6fb:406a with SMTP id
+ j18-20020a25fb12000000b0064dd6fb406amr34790013ybe.433.1653552977155; Thu, 26
+ May 2022 01:16:17 -0700 (PDT)
+Date:   Thu, 26 May 2022 01:15:47 -0700
 In-Reply-To: <20220526081550.1089805-1-saravanak@google.com>
-Message-Id: <20220526081550.1089805-8-saravanak@google.com>
+Message-Id: <20220526081550.1089805-9-saravanak@google.com>
 Mime-Version: 1.0
 References: <20220526081550.1089805-1-saravanak@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [RFC PATCH v1 7/9] driver core: Add fw_devlink_unblock_may_probe()
- helper function
+Subject: [RFC PATCH v1 8/9] net: ipconfig: Force fw_devlink to unblock any
+ devices that might probe
 From:   Saravana Kannan <saravanak@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -74,7 +74,7 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Len Brown <lenb@kernel.org>
+        David Ahern <dsahern@kernel.org>
 Cc:     Saravana Kannan <saravanak@google.com>,
         Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -90,142 +90,40 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This function can be used during the kernel boot sequence to forcefully
-override fw_devlink=on and unblock the probing of all devices that have
-a driver.
+If there are network devices that could probe without some of their
+suppliers probing and those network devices are needed for IP auto
+config to work, then fw_devlink=on might break that usecase by blocking
+the network devices from probing by the time IP auto config starts.
 
-It's mainly meant to be called from late_initcall() or
-late_initcall_sync() where a device needs to probe before the kernel can
-mount rootfs.
+So, when IP auto config is enabled, make sure fw_devlink doesn't block
+the probing of any device that has a driver by the time we get to IP
+auto config.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/base/base.h    |  1 +
- drivers/base/core.c    | 58 ++++++++++++++++++++++++++++++++++++++++++
- drivers/base/dd.c      |  2 +-
- include/linux/fwnode.h |  2 ++
- 4 files changed, 62 insertions(+), 1 deletion(-)
+ net/ipv4/ipconfig.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/base/base.h b/drivers/base/base.h
-index ab71403d102f..b3a43a164dcd 100644
---- a/drivers/base/base.h
-+++ b/drivers/base/base.h
-@@ -160,6 +160,7 @@ extern int devres_release_all(struct device *dev);
- extern void device_block_probing(void);
- extern void device_unblock_probing(void);
- extern void deferred_probe_extend_timeout(void);
-+extern void driver_deferred_probe_trigger(void);
- 
- /* /sys/devices directory */
- extern struct kset *devices_kset;
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 7672f23231c1..7ff7fbb00643 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -1655,6 +1655,64 @@ void fw_devlink_drivers_done(void)
- 	device_links_write_unlock();
- }
- 
-+static int fw_devlink_may_probe(struct device *dev, void *data)
-+{
-+	struct device_link *link = to_devlink(dev);
-+
-+	if (!link->supplier->can_match && link->consumer->can_match)
-+		fw_devlink_relax_link(link);
-+
-+	return 0;
-+}
-+
-+/**
-+ * fw_devlink_unblock_may_probe - Force unblock any device that has a driver
-+ *
-+ * This function is more of a sledge hammer than a scalpel. Use this very
-+ * sparingly.
-+ *
-+ * Some devices might need to be probed and bound successfully before the kernel
-+ * boot sequence can finish and move on to init/userspace. For example, a
-+ * network interface might need to be bound to be able to mount a NFS rootfs.
-+ *
-+ * With fw_devlink=on by default, some of these devices might be blocked from
-+ * probing because they are waiting on a optional supplier that doesn't have a
-+ * driver. While fw_devlink will eventually identify such devices and unblock
-+ * the probing automatically, it might be too late by the time it unblocks the
-+ * probing of devices. For example, the IP4 autoconfig might timeout before
-+ * fw_devlink unblocks probing of the network interface. This function is
-+ * available to unblock the probing of such devices.
-+ *
-+ * Since there's no easy way to know which unprobed device needs to probe for
-+ * boot to succeed, this function makes sure fw_devlink doesn't block any device
-+ * that has a driver at the point in time this function is called.
-+ *
-+ * It does this by relaxing (fw_devlink=permissive behavior) all the device
-+ * links created by fw_devlink where the consumer has a driver and the supplier
-+ * doesn't have a driver.
-+ *
-+ * It's extremely unlikely that a proper use of this function will be outside of
-+ * an initcall. So, until a case is made for that, this function is
-+ * intentionally marked with __init.
-+ */
-+void __init fw_devlink_unblock_may_probe(void)
-+{
-+	struct device_link *link, *ln;
-+
-+	if (!fw_devlink_flags || fw_devlink_is_permissive())
-+		return;
-+
-+	/* Wait for current probes to finish to limit impact. */
-+	wait_for_device_probe();
-+
-+	device_links_write_lock();
-+	class_for_each_device(&devlink_class, NULL, NULL,
-+			      fw_devlink_may_probe);
-+	device_links_write_unlock();
-+
-+	driver_deferred_probe_trigger();
-+}
-+
- static void fw_devlink_unblock_consumers(struct device *dev)
+diff --git a/net/ipv4/ipconfig.c b/net/ipv4/ipconfig.c
+index 9d41d5d5cd1e..aa7b8ba68ca6 100644
+--- a/net/ipv4/ipconfig.c
++++ b/net/ipv4/ipconfig.c
+@@ -1435,6 +1435,8 @@ static int __init wait_for_devices(void)
  {
- 	struct device_link *link;
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index f963d9010d7f..af8138d44e6c 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -172,7 +172,7 @@ static bool driver_deferred_probe_enable;
-  * changes in the midst of a probe, then deferred processing should be triggered
-  * again.
-  */
--static void driver_deferred_probe_trigger(void)
-+void driver_deferred_probe_trigger(void)
- {
- 	if (!driver_deferred_probe_enable)
- 		return;
-diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
-index 9a81c4410b9f..0770edda7068 100644
---- a/include/linux/fwnode.h
-+++ b/include/linux/fwnode.h
-@@ -13,6 +13,7 @@
- #include <linux/list.h>
- #include <linux/bits.h>
- #include <linux/err.h>
-+#include <linux/init.h>
+ 	int i;
  
- struct fwnode_operations;
- struct device;
-@@ -199,5 +200,6 @@ extern bool fw_devlink_is_strict(void);
- int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup);
- void fwnode_links_purge(struct fwnode_handle *fwnode);
- void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode);
-+void __init fw_devlink_unblock_may_probe(void);
- 
- #endif
++	fw_devlink_unblock_may_probe();
++
+ 	for (i = 0; i < DEVICE_WAIT_MAX; i++) {
+ 		struct net_device *dev;
+ 		int found = 0;
 -- 
 2.36.1.124.g0e6072fb45-goog
 

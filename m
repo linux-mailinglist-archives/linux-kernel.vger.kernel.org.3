@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B7F535009
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3EE53500B
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347581AbiEZNe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 09:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S243620AbiEZNed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 09:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346493AbiEZNeL (ORCPT
+        with ESMTP id S1347552AbiEZNeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 09:34:11 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70105.outbound.protection.outlook.com [40.107.7.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DA5D80A4;
-        Thu, 26 May 2022 06:34:10 -0700 (PDT)
+        Thu, 26 May 2022 09:34:14 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150131.outbound.protection.outlook.com [40.107.15.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB50D80AC;
+        Thu, 26 May 2022 06:34:11 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c5SjsPB6QiibQB/zM+th117D9ImD/EkZjT0fdV6FG6YtR4H2a2hcQnbiP9qLcbg3uvCrYhoy6qQ1tpP3sc22FzLdMN3KBbc/VOOajT8NqRni6Zqv29MZSQH4UyNU4QYYzT207LPE33MFW5tQAfJqYQhsujnfAmNlJTW1t6NkNw17bQyJeIuCOkO2hPnzVqJvNgButGQfAUG2Wc61bRklXkrdyqVw9HvktBtKECcNS+3L6G4PGo+ifGhYUmgykKbPCmLbHtDQYvF3MsqpnEC4HWfR7B1mcbYJMb/uF3B0XQnrYxD+H+46CDmHdfbIFt+qz8F7yMXCZTBquTc9OvWUpA==
+ b=DB8B2L3P5fmkkzey3BvQCrXpvKiIrBc73m45xwbL/lYtte5excDXTyOb3+kcCWf2RwoPPtD3JDRcsfEZYo0JkMOyEbuqYq9ys08s4zdc+7+xR1vfa7iaCI0fhq+n6ryvjG0bZv4d9wFqTn36jeC2Up8TQ53iXmbMzCl9clSNQaqrAuDFDzMYbBiJ+nbwxf8KFk6h60lT3Tz5g/XBor1y4knU+UOeBzlWKNSKHveyQzleiayxO5yyJgSzmbb3RoQGUTPK3c57dfsd5/Vqhin4z+Rn8UH8cPp+MV2oufHRuWjHvFLDFW1oiAq+fxAE1LA90mHNQVJFxF+eHSPnzD47Qg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wJlUU6YxySDAwWSlxINHVVG9+kZ8eRSqdrqEm05zcz4=;
- b=XP7jJdflYxxm+Bgd86A9yoyvsWXVlvG17fNOtTSG1ef9Uf338c8mrxq6NnjPTSYCn0Hlar/Z9wzD8ysCVbmTJAp4gc7i85e4egLtriCPWAQl08Cf7RBmKvoUUooxmrLnP2dktlwp/kNgzWOKH6hBNF7vzyPdD+EePXw4FKm2sPYqNw9gVCIPPAbbYwLcxUzQAEYu1wBFPTGKmtlKWDbD3/gxG/AK3ChVyCtgjr9uU4DYF0qQUZgBVGLMiYSGJvHm5BRMfwxtKdTB5x+qyFNaWey0paKSpiRFZq6hfhj/mO3yqQFN58bt4KYFAhrPUblCzQtvkQwsg49gW7v8sXGg1w==
+ bh=MgOWtc0h84OfR0/XgjFODhvBKtLJ+qAcjYntEln1lJc=;
+ b=P2zVj9yvj/mcCnk7PUbkdyBmkbFBy/UBbpGBYckkLAh34ExrkC4XT9V+P+d+Hre/J15dmS6PvVcYoQjKvHef0rXo/Sw982TkOw8TX4DaY7Usba7psslVAX5cgtvdr6qUNiO9nkmHDmLawu6eNE76XAQAjzsdE7Oiu1pfgP6fBqyPefeyXsOR8EKopc3Y7UskOhcbukFUSNwIH5pQ8+2WA2PJXtaoGOpw5v5+mq/NUOBTAvKzIemFUsg2W3SJFXN3fAYwA0JDbPeskckvi9PHdcxeZh4yrIvunrY5eJnbtjh3G5ZdqSsSMjnLuLeVTXVZ9yHQyGtANonw29fkR9kDQw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  193.8.40.94) smtp.rcpttodomain=kernel.org
  smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=quarantine sp=quarantine
@@ -30,18 +30,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=leica-geosystems.com.cn; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wJlUU6YxySDAwWSlxINHVVG9+kZ8eRSqdrqEm05zcz4=;
- b=zGu4EjV6np3w5GE1P42BcAEKLaRFllSK70wEnckTKFTs6JzJJSs0tAYsPagZE0AKeFl3V/wU8pb3mD7BSFx2kiJgTupH4faJVV+PPROKDv+GmzgNZqRx5Rd1NLWr/LwKQHUdIuYkOFPuZXfgJbFvOHj4bl+YejBgE0ujOHzH+OA=
-Received: from AS9PR06CA0029.eurprd06.prod.outlook.com (2603:10a6:20b:462::18)
- by PR1PR06MB5803.eurprd06.prod.outlook.com (2603:10a6:102:2::26) with
+ bh=MgOWtc0h84OfR0/XgjFODhvBKtLJ+qAcjYntEln1lJc=;
+ b=LkPwP9cPR8xmbPbmdhEIV9foJ9Xr1aDHGinMJHBGxjQ4dNz/i5fe5KPNzpMEXaIcDULjmfR6deM+Ps/Oec2JZWcRZ9fykF7I2ezLObn8eaOU5mokwj+MLVAUHMAs0hEovFOtlWs7qOHeUThxVxL2vBrJcgw8tg4mS8ggs+dUuBU=
+Received: from AS9PR06CA0018.eurprd06.prod.outlook.com (2603:10a6:20b:462::11)
+ by VI1PR06MB4430.eurprd06.prod.outlook.com (2603:10a6:803:5a::32) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.19; Thu, 26 May
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Thu, 26 May
  2022 13:34:07 +0000
 Received: from VE1EUR02FT025.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:20b:462:cafe::d6) by AS9PR06CA0029.outlook.office365.com
- (2603:10a6:20b:462::18) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10a6:20b:462:cafe::99) by AS9PR06CA0018.outlook.office365.com
+ (2603:10a6:20b:462::11) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15 via Frontend
- Transport; Thu, 26 May 2022 13:34:06 +0000
+ Transport; Thu, 26 May 2022 13:34:07 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.94)
  smtp.mailfrom=leica-geosystems.com.cn; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=leica-geosystems.com.cn;
@@ -51,7 +51,7 @@ Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
 Received: from aherlnxbspsrv01.lgs-net.com (193.8.40.94) by
  VE1EUR02FT025.mail.protection.outlook.com (10.152.12.109) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5293.13 via Frontend Transport; Thu, 26 May 2022 13:34:06 +0000
+ 15.20.5293.13 via Frontend Transport; Thu, 26 May 2022 13:34:07 +0000
 From:   LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
 To:     jic23@kernel.org, lars@metafoo.de, mchehab+huawei@kernel.org,
         ardeleanalex@gmail.com, linux-iio@vger.kernel.org,
@@ -59,9 +59,9 @@ To:     jic23@kernel.org, lars@metafoo.de, mchehab+huawei@kernel.org,
         robh+dt@kernel.org, mike.looijmans@topic.nl,
         devicetree@vger.kernel.org
 Cc:     thomas.haemmerle@leica-geosystems.com
-Subject: [PATCH V5 5/6] iio: accel: bmi088: Add support for bmi090l accel
-Date:   Thu, 26 May 2022 13:33:58 +0000
-Message-Id: <20220526133359.2261928-6-Qing-wu.Li@leica-geosystems.com.cn>
+Subject: [PATCH V5 6/6] dt-bindings: iio: accel: Add bmi085 and bmi090l bindings
+Date:   Thu, 26 May 2022 13:33:59 +0000
+Message-Id: <20220526133359.2261928-7-Qing-wu.Li@leica-geosystems.com.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220526133359.2261928-1-Qing-wu.Li@leica-geosystems.com.cn>
 References: <20220526133359.2261928-1-Qing-wu.Li@leica-geosystems.com.cn>
@@ -70,24 +70,24 @@ Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: bc0b8792-8a05-4fe0-f877-08da3f1c6857
-X-MS-TrafficTypeDiagnostic: PR1PR06MB5803:EE_
-X-Microsoft-Antispam-PRVS: <PR1PR06MB580377064859481846740722D7D99@PR1PR06MB5803.eurprd06.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: d171cc8c-10ad-4875-68c5-08da3f1c68ca
+X-MS-TrafficTypeDiagnostic: VI1PR06MB4430:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR06MB4430A1DD23E48842873E5616D7D99@VI1PR06MB4430.eurprd06.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5h/cCWX32JqumXFIYTVNjbocFl8MPflwumIoWTq65q/Xg0h+eUB0hkseEOCq4O/yXnlIpa8sSwsn3DTLhQ3wf1mqP3SEKxYeI+OwzqKah6asGu5Vx6OR8Xl2K8vsrOEzqzP850bh0MnLupefNqV6kPhG9P2xxNn2Sik4ihualpTY3uMXJe9xd+uE5R+kF2TqxQGXvdW43Zp+xfkb3sI58IqHBwwpKhLe0sJWqM5PHQHEnBSFN39O8aO3gJ3+aN2BawdyUyhhaeesmov25qkG5zbk7nGd1cH75uXagPJESLXBL0OA6L2xRmojwfgDAcMuIvcElS343VOVPpne7NDHZ4nbJHVX7Aqnj0stv7R/Y9DgfNPNKoDOW2oQyMZGaHxQQtflzZHReN4mVfbXB7y7ctvpmSyQkUMJkVUq1gxALPKdvZK/3mLBrfu+YSQX2SQ+qPSpDXMHlCJlblogHHLtQ6kkvnQeEVQJgccWcDJaxLkQ3F1Ett8wy6ouLNE9geJf5bHiHVfCazeFRHDeW+LHEecZuhLSonvCB1IHfZ0068iL4seq0EBNRNSIZPnke7p1kPVOEKkYV//JuykLnpsxtfGWzx76RI39NmnZDXR8KudHamyg7yZ5M3pG93AP57rPF3HeTijkQJTmtPgGPgyFsRSIAwRVjLhHi7WQOHNHrD1IZ/z3eFTJSRloC7QFwnrzgwxRs+Vr3QzOnDMVrsRa8A==
-X-Forefront-Antispam-Report: CIP:193.8.40.94;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:aherlnxbspsrv01.lgs-net.com;PTR:ahersrvdom50.leica-geosystems.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(2906002)(82310400005)(118246002)(356005)(70206006)(6506007)(6666004)(921005)(336012)(47076005)(70586007)(956004)(1076003)(8676002)(2616005)(107886003)(4326008)(26005)(40460700003)(186003)(5660300002)(6486002)(36736006)(316002)(81166007)(86362001)(508600001)(8936002)(36860700001)(36756003)(6512007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: ZP2hpFKF7oZ43SZk825UTvw47rDxne4vPo2Impd44PNmcHIFZfAX21mU+6Tp4S3UfmuggnYc07/KIhoeg1Z8SM5ZzDt5uLFMp2F5R/vWF9GurswIyd9bXEj8Bs4U4oatWgiJu3Gf/sKM4GPkSQ9vLQMn7gIlw9pxNIgVHNBSAlGzbhmnny5KxZ4vwOwd7b8PmTSzY5EHm0iqs5DWO5jxx5kfvse90gHjyyFONTtsaz5yVy7gJLh/wTA1aVOzRKZerNllpiYnvrGBVwBM5Ul4RuDIaT+2dof1waFRbLNDhZzF0AFnsVu+LokcsYYqtEdjgHgco8IVnoFHE1W36o1lo0k41DTeMZjO4quZNPgW+9j/KkIseOI+Wh4zy3mvniXwOjuVj99wE2uDtTFidez6M8MVdnaOBpccsD5XU1yRQP36zx4Jfy8+QDAAklYZZWmGvQC0e1USyhJ4YyqZQZ4Y+dYqMAnquNb/6fAT7KAwwOgCIbnN4NFIY67w85K+vLZH+hR9LktX2UAaaVU8uiHn55Mxc1ijVEPM7R07a1zS0WGvLylgUlgaQIzIZeuC0yKHzQLkd1yCowxDhXapyZxdr2yPrlh5/n64/x188fahLN2PsQyP/xYtEJRyZtUjxUn3+tlIRFW/2vKcMYZnHYlnb9AnNu9ZjH3C7i4LcuRwhc1+Drdm5fr4QMEhVMe+S8BW85Tp/JlOydjUOf3PKHUj5V0WYnrsC6c+YQ3XpF/TTUsUo9TQQeaq4H/19nGd9Uo5zbAP57g8RpHcdCCJRKRlxMerawasN0UFxccJDirz7iM=
+X-Forefront-Antispam-Report: CIP:193.8.40.94;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:aherlnxbspsrv01.lgs-net.com;PTR:ahersrvdom50.leica-geosystems.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(186003)(1076003)(107886003)(336012)(921005)(83380400001)(356005)(81166007)(36860700001)(47076005)(8936002)(118246002)(36756003)(5660300002)(2906002)(4744005)(82310400005)(70206006)(6512007)(70586007)(508600001)(8676002)(4326008)(36736006)(2616005)(956004)(26005)(6506007)(316002)(6666004)(40460700003)(966005)(6486002)(86362001);DIR:OUT;SFP:1102;
 X-OriginatorOrg: leica-geosystems.com.cn
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 13:34:06.6076
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 13:34:07.3576
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc0b8792-8a05-4fe0-f877-08da3f1c6857
+X-MS-Exchange-CrossTenant-Network-Message-Id: d171cc8c-10ad-4875-68c5-08da3f1c68ca
 X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.94];Helo=[aherlnxbspsrv01.lgs-net.com]
 X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT025.eop-EUR02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1PR06MB5803
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR06MB4430
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -98,70 +98,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add supports for BMI090L, it's a high-performance Inertial
-Measurement Unit, with an accelerometer and gyroscope.
-The commit adds the accelerometer driver for the SPI interface.
-The gyroscope part is already supported by the BMG160 driver.
-Same as BMI088, BMI090L have the range of +/-3, 6, 12, and 24g.
+Adds the device-tree bindings for the Bosch
+BMI085 and BMI090L IMU, the accelerometer part.
 
-Reviewed-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+Datasheet: https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi085-ds001.pdf
+Datasheet: https://media.digikey.com/pdf/Data%20Sheets/Bosch/BST-BMI090L-DS000-00.pdf
 Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
 ---
- drivers/iio/accel/bmi088-accel-core.c | 7 +++++++
- drivers/iio/accel/bmi088-accel-spi.c  | 2 ++
- drivers/iio/accel/bmi088-accel.h      | 1 +
- 3 files changed, 10 insertions(+)
+ Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/iio/accel/bmi088-accel-core.c b/drivers/iio/accel/bmi088-accel-core.c
-index f6ecb081456b..a4e95cf63fab 100644
---- a/drivers/iio/accel/bmi088-accel-core.c
-+++ b/drivers/iio/accel/bmi088-accel-core.c
-@@ -479,6 +479,13 @@ static const struct bmi088_accel_chip_info bmi088_accel_chip_info_tbl[] = {
- 		.num_channels = ARRAY_SIZE(bmi088_accel_channels),
- 		.scale_table = {{0, 897}, {0, 1794}, {0, 3589}, {0, 7178}},
- 	},
-+	[BOSCH_BMI090L] = {
-+		.name = "bmi090l-accel",
-+		.chip_id = 0x1A,
-+		.channels = bmi088_accel_channels,
-+		.num_channels = ARRAY_SIZE(bmi088_accel_channels),
-+		.scale_table = {{0, 897}, {0, 1794}, {0, 3589}, {0, 7178}},
-+	},
- };
+diff --git a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
+index 911a1ae9c83f..272eb48eef5a 100644
+--- a/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
++++ b/Documentation/devicetree/bindings/iio/accel/bosch,bmi088.yaml
+@@ -17,7 +17,9 @@ description: |
+ properties:
+   compatible:
+     enum:
++      - bosch,bmi085-accel
+       - bosch,bmi088-accel
++      - bosch,bmi090l-accel
  
- static const struct iio_info bmi088_accel_info = {
-diff --git a/drivers/iio/accel/bmi088-accel-spi.c b/drivers/iio/accel/bmi088-accel-spi.c
-index b14a1e5b986a..8aa25138f098 100644
---- a/drivers/iio/accel/bmi088-accel-spi.c
-+++ b/drivers/iio/accel/bmi088-accel-spi.c
-@@ -64,6 +64,7 @@ static void bmi088_accel_remove(struct spi_device *spi)
- static const struct of_device_id bmi088_of_match[] = {
- 	{ .compatible = "bosch,bmi085-accel" },
- 	{ .compatible = "bosch,bmi088-accel" },
-+	{ .compatible = "bosch,bmi090l-accel" },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, bmi088_of_match);
-@@ -71,6 +72,7 @@ MODULE_DEVICE_TABLE(of, bmi088_of_match);
- static const struct spi_device_id bmi088_accel_id[] = {
- 	{"bmi085-accel",  BOSCH_BMI085},
- 	{"bmi088-accel",  BOSCH_BMI088},
-+	{"bmi090l-accel", BOSCH_BMI090L},
- 	{}
- };
- MODULE_DEVICE_TABLE(spi, bmi088_accel_id);
-diff --git a/drivers/iio/accel/bmi088-accel.h b/drivers/iio/accel/bmi088-accel.h
-index 044999eb4fd6..80cd396a3141 100644
---- a/drivers/iio/accel/bmi088-accel.h
-+++ b/drivers/iio/accel/bmi088-accel.h
-@@ -11,6 +11,7 @@ struct device;
- enum bmi_device_type {
- 	BOSCH_BMI085,
- 	BOSCH_BMI088,
-+	BOSCH_BMI090L,
- 	BOSCH_UNKNOWN,
- };
- 
+   reg:
+     maxItems: 1
 -- 
 2.25.1
 

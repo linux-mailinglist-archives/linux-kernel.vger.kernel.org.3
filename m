@@ -2,156 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763CF53547E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E91B535481
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343577AbiEZUfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
+        id S243614AbiEZUf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243614AbiEZUfb (ORCPT
+        with ESMTP id S236036AbiEZUfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:35:31 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDC3DFF5B
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:35:28 -0700 (PDT)
-Date:   Thu, 26 May 2022 13:35:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1653597326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qtEaIxsw5G8XbzZIdfhwIUxQJQ2YrDlSK/U8opLS5VE=;
-        b=uJmYv7HWNHzyySdL3Ivc7VcwtzGR77/g/JslvuNg6Kjyo8jmBw/xmbL/rilyPqWHd7qihF
-        u31SUyLUZ67z01O6iul5OQokizMSNpy7CjROd5lMbm+Xd5EypugvQAxfvaD8pg7eKQiWgY
-        KTIv1nPHYAM9BE8qCSThUxGyYqN9C24=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v4 4/6] mm: docs: document shrinker debugfs
-Message-ID: <Yo/kiMysyj1DMbf7@carbon>
-References: <20220525202600.2910982-1-roman.gushchin@linux.dev>
- <20220525202600.2910982-5-roman.gushchin@linux.dev>
- <Yo7lK1wp9fXi4obF@FVFYT0MHHV2J.googleapis.com>
+        Thu, 26 May 2022 16:35:55 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96E4E15EA
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:35:54 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id jx22so5018755ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g/SCC9DI4NqSSW7S/NUXkqtiUZch9ON7hJPhwPKitPQ=;
+        b=tIaDNjPAhNPsJ43tXLVCNZIivpqGDhqstWZA9iDSu2T40KGEgEljzp6Zy4S/Xhs2H0
+         lRK/uMH62oMNOFTOdiwRKGJ8T2RUPylfyw1vk/DZTx4WpQxfOoHx5mx60kUlDCSQjdPP
+         zC4DcR8j49DWqi5Zwq+tM60N27rRRdbQ1bgg+B5LEq/SUzrNrTh8ofqAA17pn2iQvXcn
+         R7Sc7kAMttVR12JfEjxf7sz+DjOzL3XevhG3o/BvAZ75GM3i7bjTWKvW37knhyZsA3Ow
+         itzhBYhSH8eei6TBX9IE+jJzghx/tYuPHs6zCFkvgdasSe944cZrbuQDP/JMpffso76a
+         OrQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g/SCC9DI4NqSSW7S/NUXkqtiUZch9ON7hJPhwPKitPQ=;
+        b=fkokgJIgl3gufb4jALYyfyJe5VP9w08dBzTFDwZf8ZNPCGqgB9OF+jSLsvUCn0RsFG
+         bLc1Gp3xbwfIcjFQshB9qbI45wVKwffktRTw420BTNSq/lB3Yacd1z+ec3lfsW3+nEfl
+         S8g51SvPj6pxVdY6dpuoZ7Mpo5McQjmncoB0kMkMCdfeIj93+aYuXN5DHAgVdtl5E7y/
+         IsGUqDReqBFm9vwC8pZG5cwt7OkCuxeC9c812Aax3r/V0P0YqwCG2vit5+MvNz10xG+c
+         1K+0AhGg0FIdQpvoSHgBqVv2mMVqt4ADMpJFLAVRwDKGQDqzwJiJagPlRtYcYCM3BSLu
+         wjgA==
+X-Gm-Message-State: AOAM531ImkZbw/hTqmdXR5z/zeLWVakY+TS0m7nj8C2XLefGh/d7iEBJ
+        S5Tth1pOStX9zq29XkczjdcCuA==
+X-Google-Smtp-Source: ABdhPJyHNl4pZZppIHg8EzNwgODTRV3IGY7nIC/Ip5fUERyopxZ5Oi+VGZrX3rjj0cMC/hCEOnFGEw==
+X-Received: by 2002:a17:906:25d8:b0:6fe:9f11:3906 with SMTP id n24-20020a17090625d800b006fe9f113906mr31337266ejb.538.1653597353195;
+        Thu, 26 May 2022 13:35:53 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id w15-20020a17090652cf00b006fed8dfcf78sm807631ejn.225.2022.05.26.13.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 13:35:52 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ARM: dts: sun5i: adjust whitespace around '='
+Date:   Thu, 26 May 2022 22:35:46 +0200
+Message-Id: <20220526203547.830848-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yo7lK1wp9fXi4obF@FVFYT0MHHV2J.googleapis.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 10:25:47AM +0800, Muchun Song wrote:
-> On Wed, May 25, 2022 at 01:25:58PM -0700, Roman Gushchin wrote:
-> > Add a document describing the shrinker debugfs interface.
-> > 
-> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> > ---
-> >  Documentation/admin-guide/mm/index.rst        |   1 +
-> >  .../admin-guide/mm/shrinker_debugfs.rst       | 100 ++++++++++++++++++
-> >  2 files changed, 101 insertions(+)
-> >  create mode 100644 Documentation/admin-guide/mm/shrinker_debugfs.rst
-> > 
-> > diff --git a/Documentation/admin-guide/mm/index.rst b/Documentation/admin-guide/mm/index.rst
-> > index c21b5823f126..1bd11118dfb1 100644
-> > --- a/Documentation/admin-guide/mm/index.rst
-> > +++ b/Documentation/admin-guide/mm/index.rst
-> > @@ -36,6 +36,7 @@ the Linux memory management.
-> >     numa_memory_policy
-> >     numaperf
-> >     pagemap
-> > +   shrinker_debugfs
-> >     soft-dirty
-> >     swap_numa
-> >     transhuge
-> > diff --git a/Documentation/admin-guide/mm/shrinker_debugfs.rst b/Documentation/admin-guide/mm/shrinker_debugfs.rst
-> > new file mode 100644
-> > index 000000000000..2033d696aa59
-> > --- /dev/null
-> > +++ b/Documentation/admin-guide/mm/shrinker_debugfs.rst
-> > @@ -0,0 +1,100 @@
-> > +.. _shrinker_debugfs:
-> > +
-> > +==========================
-> > +Shrinker Debugfs Interface
-> > +==========================
-> > +
-> > +Shrinker debugfs interface provides a visibility into the kernel memory
-> > +shrinkers subsystem and allows to get information about individual shrinkers.
-> > +
-> > +For each shrinker registered in the system a directory in **<debugfs>/shrinker/**
-> > +is created. The directory's name is composed from the shrinker's name and an
-> > +unique id: e.g. *kfree_rcu-0* or *sb-xfs:vda1-36*.
-> > +
-> > +Each shrinker directory contains the **count** file, which allows to trigger
-> > +the *count_objects()* callback for each memcg and numa node (if applicable).
-> > +
-> > +Usage:
-> > +------
-> > +
-> > +1. *List registered shrinkers*
-> > +
-> > +  ::
-> > +
-> > +    $ cd /sys/kernel/debug/shrinker/
-> > +    $ ls
-> > +    dqcache-16          sb-hugetlbfs-17  sb-rootfs-2      sb-tmpfs-49
-> > +    kfree_rcu-0         sb-hugetlbfs-33  sb-securityfs-6  sb-tracefs-13
-> > +    sb-aio-20           sb-iomem-12      sb-selinuxfs-22  sb-xfs:vda1-36
-> > +    sb-anon_inodefs-15  sb-mqueue-21     sb-sockfs-8      sb-zsmalloc-19
-> > +    sb-bdev-3           sb-nsfs-4        sb-sysfs-26      shadow-18
-> > +    sb-bpf-32           sb-pipefs-14     sb-tmpfs-1       thp_deferred_split-10
-> > +    sb-btrfs:vda2-24    sb-proc-25       sb-tmpfs-27      thp_zero-9
-> > +    sb-cgroup2-30       sb-proc-39       sb-tmpfs-29      xfs_buf-vda1-37
-> > +    sb-configfs-23      sb-proc-41       sb-tmpfs-35      xfs_inodegc-vda1-38
-> > +    sb-dax-11           sb-proc-45       sb-tmpfs-40      zspool-zram0-34
-> > +    sb-debugfs-7        sb-proc-46       sb-tmpfs-42
-> > +    sb-devpts-28        sb-proc-47       sb-tmpfs-43
-> > +    sb-devtmpfs-5       sb-pstore-31     sb-tmpfs-44
-> > +
-> > +2. *Get information about a specific shrinker*
-> > +
-> > +  ::
-> > +
-> > +    $ cd sb-btrfs\:vda2-24/
-> > +    $ ls
-> > +    count
-> > +
-> > +3. *Count objects*
-> > +
-> > +  Each line in the output has the following format::
-> > +
-> > +    <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1> ...
-> > +    <cgroup inode id> <nr of objects on node 0> <nr of objects on node 1> ...
-> > +    ...
-> > +
-> > +  If there are no objects on all numa nodes, a line is omitted. If there
-> > +  are no objects at all, the output might be empty.
-> 
-> Should we add the following lines into here?
-> 
-> "
-> If the shrinker is not memcg-aware or CONFIG_MEMCG is off, 0 is
-> printed as cgroup inode id. If the shrinker is not numa-aware, 0's are
-> printed for all nodes except the first one.
-> "
+Fix whitespace coding style: use single space instead of tabs or
+multiple spaces around '=' sign in property assignment.  No functional
+changes (same DTB).
 
-Yes, it sounds like a great addition.
-I hope Andrew can merge this in if there will be no v5. Or I'll
-add it by myself otherwise. Thanks!
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-And thank you for reviewing the patches!
+---
+
+Output compared with dtx_diff and fdtdump.
+---
+ arch/arm/boot/dts/sun5i-a13-licheepi-one.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm/boot/dts/sun5i-a13-licheepi-one.dts b/arch/arm/boot/dts/sun5i-a13-licheepi-one.dts
+index 2ce361f8fede..3a6c4bd0a44f 100644
+--- a/arch/arm/boot/dts/sun5i-a13-licheepi-one.dts
++++ b/arch/arm/boot/dts/sun5i-a13-licheepi-one.dts
+@@ -67,18 +67,18 @@ leds {
+ 		compatible = "gpio-leds";
+ 
+ 		led-0 {
+-			label ="licheepi:red:usr";
++			label = "licheepi:red:usr";
+ 			gpios = <&pio 2 5 GPIO_ACTIVE_LOW>;
+ 		};
+ 
+ 		led-1 {
+-			label ="licheepi:green:usr";
++			label = "licheepi:green:usr";
+ 			gpios = <&pio 2 19 GPIO_ACTIVE_LOW>;
+ 			default-state = "on";
+ 		};
+ 
+ 		led-2 {
+-			label ="licheepi:blue:usr";
++			label = "licheepi:blue:usr";
+ 			gpios = <&pio 2 4 GPIO_ACTIVE_LOW>;
+ 		};
+ 
+-- 
+2.34.1
+

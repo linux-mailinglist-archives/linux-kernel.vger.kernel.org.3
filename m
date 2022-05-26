@@ -2,393 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93A153498A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 05:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBBC53499E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 06:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344994AbiEZDyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 23:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S235211AbiEZECi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 00:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344872AbiEZDye (ORCPT
+        with ESMTP id S231209AbiEZECf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 23:54:34 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2057.outbound.protection.outlook.com [40.107.104.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7330BDA27;
-        Wed, 25 May 2022 20:54:32 -0700 (PDT)
+        Thu, 26 May 2022 00:02:35 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370E2BDA0B;
+        Wed, 25 May 2022 21:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653537753; x=1685073753;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=LbkJXR8gaLWM337HxByuB0PJXItTCiwbyNWXTXz146A=;
+  b=kqkfVI3Q6+Kw2i1077lQYGlgvxQbN55vg9E0lIjv8MUA0XMVzwLoDI18
+   IpuFf4jhvED2Xe/qsLGra8TiW+Qz11IP9fN6pK8xiU1XLFbseHKWAg9Jz
+   wp3WvDaWRCRCmqCSztSCBeNOMdJwDAEL9u/z2oSpWODMB7HU5QQJgCwNb
+   UWJV8tr6i0X7p2tRYE8cxIcTiZ2XjRi2ZXCWCfRENAjTT3oNKU/jSRDmW
+   FYe+YSOiLWBqQibdOSIUzsXcm2TodmOSd8zsFz64qFgBN9PqlB0sewk0+
+   Tv6hlYBHoma+ehyX5Nx8OFJcoYtef21AZZhuPDv0bUPiGiHEY58txDFyQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="360413076"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="360413076"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 21:02:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="630698845"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by fmsmga008.fm.intel.com with ESMTP; 25 May 2022 21:02:31 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 25 May 2022 21:02:31 -0700
+Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 25 May 2022 21:02:31 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 25 May 2022 21:02:31 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 25 May 2022 21:02:30 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bJ6o6el/OaUNK8v8ill+7ujCB1zOaS7ee16r3JtULNdwIXsRcuJwwsuRVCdBbcqn3I1xFrjnfVQGrW3GHQy5VS8ULelNJ6hoBjdqi7Caaq8qzYfXIVQladTZhPVvwKNyhWUjzwR0LciH8fgtf7x1DLFFPxgNTB8CJOmqHdUL+pL9+4YjHbCPcYRw6kEi+C49EPUG/DmnhBvuelt+uuOqmPrmMxGlvkewoXeoMy434pIN5hPd1K9sKJVnNBHbbG4zfdMfQuG2Z5Z2nMv+rHxYicuYSeqvJoV8NntcrzF+N9YKa/pgPtwl6IfCRt0+y38QDU0ClpmXsyxwMaI5qeUmlQ==
+ b=n+oA6u54yzv/1AL8RMplhP/o5UEDuXt7C8nuFfBrFthaKUhMCw2PZVC+Dw7C5IR3X4RFUMi9q6Rwhj1WHzlqWUC2T4CS/2n0MVokFXP1vXu6QV0bEuXJ0cGBHFRdh6xUoEC0w3Dz1d0K8iVh7Is64InrjQuwFm6CZD+cpNtUBQorD+ABsF3ZcsrnrOzxV1OPfQfUTzuk/Spbe3maBq+RJ2RqEx8yNjQ7OiRjiUTx3+wEhC2QgRYXCHe50IVWSvEXvQwr2+ce1t530vo7wph0+mXcOwBL9afpnzwKWymKGzQMEXWr8ITbEKyYHeJPooEofP8lRrD9lq7haTkzi8hjuQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X3O0tWYs1pkeUT05i8jp8mnpmY78QFnCaC3qm3KG8RI=;
- b=XP90sBbedpCdtQMeY5fi85EjYPg6HtrHdIpNSW8cIvfGyvoIRx+Ca5VKidBI8gEmdvnLFtwcAURd3ofB/AGyndAIAzsRvqPmFT07TQvqS0Ak1F7EyfArQfHSfZLPl+XFfW3kaa3WtwTpjFh8OInoo6xHAjH8lwEuwvwt0PH1n9tgFin9aidnVilHOJ91HLteXD7GOnkG0c/O4tBa+LOKDeWBM52ieoyUUtArNJ5BSZw5Gul4Wv1L+fBtSEjcaraxmfhKNSwSBuvQiB0zTQsSQAwY/hwVOqLFXlRb+rhOJFRPifLxHNJrD878Fpo67534BxaQKx6G2wgdFuXRaRy7HA==
+ bh=C74dvS2drv/e3p3oT2lTiQI9YJ/9VcAoLTL/Y4eV3TE=;
+ b=j9uMwmVHRPUwRYXvBXCfYcjCzOB35vdCtOrQ1/Y2dxXPdECXmG+3TGsVVqhajeAwt/NK3XXPmWxMfjukIEAl3U7yv8bv1MCa/FGf+jNvWkiK1F3ekwxuK1vKJ65UujPsKNzOBextluQlYm/HE0BOLnsvjbNbHRJgqH2x/PQtNFE+fWwIBOl182GO4rFIzM9BPL16rjdowiQ8fA7gFUZyDMRXAeK6fNA4UErzE27ecFDjxdM+DenSJTDzIXvVjX3PsG9xY2IWy6fG0VDrsD2a1MZBj51LrWp4acc+n5v/YSSyHcGdNOj5XKpKVBJODlFsy5IZKhVFPKrF7E1An85spw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X3O0tWYs1pkeUT05i8jp8mnpmY78QFnCaC3qm3KG8RI=;
- b=GAhtKb8q+SwLF9vIXNBWnX+iI6PdotKymzY6qCJCciSV2gRoMDc/SLSa2BGRRF9KjpO4nkXnzDQz+9pwvNVfoUj3fOjI+QYO/ygetCUnAsLuKyzSlNK3ANLube378TSUFDJr04yKKnmAANCPHzAN/73uh7r9Y41p7vVWIVO9skA=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by PAXPR04MB8222.eurprd04.prod.outlook.com (2603:10a6:102:1bd::10) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM5PR1101MB2235.namprd11.prod.outlook.com (2603:10b6:4:52::15)
+ by SN6PR11MB3263.namprd11.prod.outlook.com (2603:10b6:805:c5::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Thu, 26 May
- 2022 03:54:30 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::a892:e4a9:4769:13a5]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::a892:e4a9:4769:13a5%7]) with mapi id 15.20.5293.013; Thu, 26 May 2022
- 03:54:30 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     vkoul@kernel.org, dmaengine@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, joy.zou@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] dt-bindings: dma: fsl-edma: Convert to DT schema
-Date:   Thu, 26 May 2022 11:56:11 +0800
-Message-Id: <20220526035611.4063102-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.21; Thu, 26 May
+ 2022 04:02:29 +0000
+Received: from DM5PR1101MB2235.namprd11.prod.outlook.com
+ ([fe80::39c6:7b40:e013:1086]) by DM5PR1101MB2235.namprd11.prod.outlook.com
+ ([fe80::39c6:7b40:e013:1086%7]) with mapi id 15.20.5273.023; Thu, 26 May 2022
+ 04:02:28 +0000
+Message-ID: <724e0872-0c7a-d83c-8c7d-cfd0cc2222b3@intel.com>
+Date:   Thu, 26 May 2022 07:02:23 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH 5.10 07/97] igc: Update I226_K device ID
+Content-Language: en-US
+To:     Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Nechama Kraus <nechamax.kraus@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        "Neftin, Sasha" <sasha.neftin@intel.com>
+References: <20220523165812.244140613@linuxfoundation.org>
+ <20220523165813.521480921@linuxfoundation.org>
+ <20220525104503.GA30018@duo.ucw.cz>
+From:   "Neftin, Sasha" <sasha.neftin@intel.com>
+In-Reply-To: <20220525104503.GA30018@duo.ucw.cz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG3P274CA0018.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::30)
- To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+X-ClientProxiedBy: BYAPR05CA0039.namprd05.prod.outlook.com
+ (2603:10b6:a03:74::16) To DM5PR1101MB2235.namprd11.prod.outlook.com
+ (2603:10b6:4:52::15)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cb5f1080-fef3-4c73-5163-08da3ecb6f9d
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8222:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <PAXPR04MB8222A0820AB42B4F4C22ECF1C9D99@PAXPR04MB8222.eurprd04.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 34e2da12-6ad5-4eb6-bd3d-08da3ecc8d0e
+X-MS-TrafficTypeDiagnostic: SN6PR11MB3263:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR11MB32637F0AD8798A72605462C697D99@SN6PR11MB3263.namprd11.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n195r7sIN6qPOypivx+Q8yQf3Nu+l8ao69FuU5Qp1R4I8g2WQ4m8ophoLWTC2rT8CSNeDjblGK/RZg+WeU+M/4p+XX9q78R46gk4iv7CrbFR4GGeDZRnujvWORCxZ45NEU5i8G3Me3KMZD4buEYEM/BUHOG4mXmB8RyfhUzbM8jzQP4Tku7iwb41C8MguBUrcjjDWVOVoXG8ThpHJT6DCmnGI85vbU94m1YSplW+Kea+tOAX/Wz4ApOm+RnKcpH786GHLXUQZH4zw2o7H/zQOpE+hRxI0oYxRz6Tf0OtTj0Li54EMlhhzXhUz/tEp3jJCeoqSE6Jkcc9BkRmbdxViC6LML/sjQpUsu5cVkrSqbrVSe7gT9FJEsgWCtDWy4Vem8KVhCqk6Wyyf5g9t2EbauhjouMIwGPCg8O43IlOcrI3Agv4lSa5YruL147XZt2pumALCd9qW1XKmHQz8SIfidr0d1XvxROS8461/1r3tKsdBiGChD6DGo8E8TGjgtEEv+2LwG1+pfzunNsh/1P5vMe65+U7MXoder6VInGhAL5N64/q+U2qPmmwZHtHCZ5WDoX7uF+kEmkQdmgDjRLKvgqB20GC8v0E9CYw6Lc/da/CvpPz8q+ghQ1U50MpvU5YzxbelOQIf6LKAy0hA17jEHrSBkU7qQJkdCzCisEZLmWU6MmYL5g+8tYP6tRJiX+KHR4fHliketGEiXJ7bE994kBBXZZvY33smVgwXHQGO+ZcHBM/atljgoXSB5I+3slyY9fQEJsoMNvslQMBJErhYFkgeMDYuKnr4ZFbGMHBWPQfAoZeWYQ8XoIPhP9KSWkrX5FPJOG8DaxAd6UKFevlaw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(508600001)(4326008)(6506007)(86362001)(6512007)(2906002)(38100700002)(6666004)(8936002)(8676002)(38350700002)(186003)(66556008)(1076003)(52116002)(316002)(66946007)(66476007)(2616005)(6486002)(966005)(83380400001)(26005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: tUVsox1pcbZ4ZfzZBgcAkNKE+chCPcAv8ezS+G8pLViJdU3FBxvwG+Yo4WnY79cBW6X1iT/hLWYHO2m36fUylPOoPXPdy2CaDjckj2H9CaskUSaxahawUttWlfRlwmRP2pw45EQ5/O+mYios5CbV6oV0k6n5TuZ9oGj77epEhSI8cnEZYT3fZiKclNy/mJvvTy0YxR3WmKJRmSqqpwW8/5t8NEfjKITmfyqfMW4DrFNrAqiJz2Jw6V26x42gyFxpp6EFiRLCtGgp+0P8hxecQwzniIzd29CiuRbmEv+xAYDEeddoE+MBKyi5U4jGTlJURXks6e8p9z/Dvg9ncJCNzP2kaEkD1JWzrMEmUHeayix9d75vnqBNBGJNu0FHeuULx+KqI0+vwoUDlexM4jmHuX/5Klw+vJY1a7PbxRCj79zpLFidTw+frQOf2zuaKbJbR5YtmUtWe54bdqMmVukLVjYn9FIph4WdqKrq5iti1S+vy2nlMPpEMVxbLI7RlhdAL9Pt9oJil4AZ5waAF91nidnzkduBI3x5QXKOSZ8RiOmFsHpto7P7SrIUrNu0uXGKnEh6zWdZVwJUR6FxWaV0mlvi7fZIsBsabO1fIWJLmrRba578RhflHXUt6gUtsKWZ97nuSBUOXkJ1ITw4IhcWHqW4usQfkxuHqI68faWw0ShRowPaX7TNVSkrtfYjqrb7Q70cKU8mxVKDbL0v3hPJ6Qco6hFfCsfOBFVMnBbspBQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1101MB2235.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(186003)(38100700002)(316002)(6666004)(6506007)(26005)(6512007)(15650500001)(31686004)(8936002)(2906002)(5660300002)(4326008)(8676002)(31696002)(66476007)(86362001)(66946007)(82960400001)(66556008)(54906003)(6486002)(36756003)(508600001)(110136005)(53546011)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BCfXK9J2GPz3+GKdxGbDWms6RfsppxXRvbiIeXm18eOjbaAMlIxDN4XoogsI?=
- =?us-ascii?Q?vGT9FDtz5ubFs3RK3BfJ9QSNZyf+jIZPyridjFIcJFfjsNlhXOP7O8ETRmIA?=
- =?us-ascii?Q?u8FxaQ8jLEX1jCJ5Ecm7xOolmvy/2A0NRp5/rGNTL6SxJccDD8tA5VSKmmjI?=
- =?us-ascii?Q?XeNz4/owV3h0INnwS2XRI5CpVZNGQh293WXjEMv2gmRdTQp2MGMmkAMjgjvy?=
- =?us-ascii?Q?Ptt3z9XNy+RVI7zA83r4C2wkV+GfLb1y6YYekqSz73gaGto6sWrIeBmPDJMy?=
- =?us-ascii?Q?tR1BBNPBvFLPNeyys0KkhwSvhdMazF0eYsO8/o+QL3umQTe4rEVTTj5wiJXy?=
- =?us-ascii?Q?uX9b0gN5ZLcAy9rprNo9ESBxHZA86lkOS5C5PfbPbeSjbhoQ8MS1y3BnDfXF?=
- =?us-ascii?Q?5sBtgmCWSbYB0Uy77YikZ5oe6dlMzMN+N7rS7Aoa2Ovu9gutEV7IDVRjyn6O?=
- =?us-ascii?Q?uQzcub2R+WtwKZQ3CJw51tS3kSc8+8Fzpe6P9YWtoZX0MuyXI9RvSrCCdVMh?=
- =?us-ascii?Q?BTMDRr32jEA1aXVHnjvmdCGTvuZRDtsPzoxyvU8qkdjSxTUpoQ2x/O9O8xpR?=
- =?us-ascii?Q?hLCQsq61cgLTm5Qk0nAau9/OhAPr2nCerIQSlXdibIHkAipuuxR+GTsjmHdi?=
- =?us-ascii?Q?Hh9Ewsx9qjM5g3F7wzcxGb3sQjgOxekKIIkVINgdzXJByuHDfZllO0OwiFbq?=
- =?us-ascii?Q?mFJNx7EuLa48XCsFrcxbdCkgjd2Gek0TICimN9zubBLEeUX2tlgPZki4AKek?=
- =?us-ascii?Q?fznnVJS2Uv3h4r10crmzhFB3azcmAlxB0wptLXxI/hCs5/lI4v/4V/yCJ4Jm?=
- =?us-ascii?Q?dMSHLauGJlX0w/2mVA2zjoQ2//209b1xDLImehYjiauC5ZiaM9WseTlhXGXH?=
- =?us-ascii?Q?QUNqVQQ4cU2nJH3xHMfARH4B1Cu1Zem9KbHHZqsyA6tp93LnBfakrvt2qOS6?=
- =?us-ascii?Q?XjpEwqB3sQk43e+o71puxFo874syVseXXhbblYvHYkcJUgKJjhyciGF4Troh?=
- =?us-ascii?Q?/VO+hWCUL6hLrGF1SVgd8uuTaVPt3+GdCzxoFl3caG/zFhl1AAV55eK8sLme?=
- =?us-ascii?Q?1UFoBdKWS6XY246ifprl1g4kdj4M7Nop8NOaNZYzVxKaSkBEaRf3GycUuKaP?=
- =?us-ascii?Q?OG2jl78CjjZFN9HxbXTUCU9Glp6MIRB5tqFtE67N+gkFL/wbtJKmT0FZkfUI?=
- =?us-ascii?Q?NiG0sHXDe9Cgz6ykfjkfypgzo+P/HOzj/4ny3G/55G+V2mXYkyyIuWZQQ+WC?=
- =?us-ascii?Q?Mr0iq87YAGqBSUpjbc977DA7RdtwSY82aQob0MoZoDGKyCURAswgTyo3PU7q?=
- =?us-ascii?Q?DNYO8hmSfnbC5q3YNB8nVhf4QaD+av2MVVzfVtmCt0njCV/UxJY5Qp8wX2fQ?=
- =?us-ascii?Q?FTYdl8mx51UBb9sK+Ctw1BLmGqJOfNoDl1jdjCLe54nFf6knZaij6BVeuFPh?=
- =?us-ascii?Q?qeel/ZCp/J3K0I950hn5QujtdxGOg02ZzXZ4E4eBmqoJy7IN5OpsQfoKyeNE?=
- =?us-ascii?Q?//k1HpK2Aegha6WRsFZAG93fCuAtvHqMRp5ldhO4jQlMh1S4H7cKeyrDb6kx?=
- =?us-ascii?Q?CtewR9EjjQN1Ysuz7E/cBYZZ2i6hKyqA52Ktaotf5/VFJ3TqsfkjVc0fwLI0?=
- =?us-ascii?Q?waR0+F5n8UUmVP2ynGY2kNLJl9N8USKnUcZ15621JkL6y6ex46AvczvpBVnE?=
- =?us-ascii?Q?uPSotX1fwYSX0tUIw7S7c5zcSpTaCmygv5Oct/DAaIyaKwuN1z6mT4F3znb9?=
- =?us-ascii?Q?SePySO4YyQ=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb5f1080-fef3-4c73-5163-08da3ecb6f9d
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SlBWNi9QakZZL2dhS3piM3BEYjVFMi9vQ3NaLzVvOTJLTGgyU0tjUHpSTUJQ?=
+ =?utf-8?B?K0RaR1JTYVRQU1g3QlFyN0txVDVpc1VLaTQwK3A4Rlo1b3NHZlNOSEdzcFEx?=
+ =?utf-8?B?SGF3dzg2RzNSZjdWMkcyZFBwbS9PLzFWN0hSWVMxN0hWMWFFSE9sbHdGQXlD?=
+ =?utf-8?B?d0VUUXo2UjBobjNBU0ZtR2F4bjNlYTJsK0hKc3VhTDVYWDdTSlpNRU9hUWp1?=
+ =?utf-8?B?LzNralliVG0yQk40WmY5bFdZMnNXNVMrblExby8wR3FabGNTUmVTSGg2eDRF?=
+ =?utf-8?B?cXRUWFF0N3dsbEFHRVREK2xEeEJtSyt5RTBrd3Y2YTUrck9WdTE4WEgzR2Zs?=
+ =?utf-8?B?Q0ZraTF1bnUxM1Y0UVNmOTlvbmUzQUplSWgxZTBtN3hkeUIweFN6S0Y4ZVIw?=
+ =?utf-8?B?VWFVSUZnZm5nSFU0WHZVV1FJUHNiS2FybzA1cjc0YlhDNWFJME43Qmxlb1Nz?=
+ =?utf-8?B?RDlWRG9KVmFaRjBLRVlTeGJ5cnQzQmlyR0hPRHFqMSt1bHd2QjhsSUpKcDc3?=
+ =?utf-8?B?aktiR2VGckVtODJ3TUdrTEZwTDdVL3N6YUxPT25JOTg1SG10Rm9UenBDZGxZ?=
+ =?utf-8?B?Q0NKS1pTdFFMclFWelZ6UXJTSFl2VUtjVmZqUUhkV3V4ZjhJeUl4QXp5Ulpl?=
+ =?utf-8?B?SnhtVjZmUk9wTHB2VUhoZXV6ZFcvbmZxR2FGU2phT0ZoU1lxYjdyL2dXdUlV?=
+ =?utf-8?B?Mjk0UW83cHV3L2FISjJZVDFPZ2krVEtJOUtoTUJtUWhqY0l0UEtDU0h3RUhM?=
+ =?utf-8?B?ditNV0lSdkdMeThiTjk5VE4zaTllMDgzcWY3RHMzRGFmSkRQVTNNQUlLdktp?=
+ =?utf-8?B?aDVXWncxVklxanNGcWpSR3I4cUFpUEIyL1UvU3FrTUF1SzFCc045U2NOVXlr?=
+ =?utf-8?B?cXpvNkZlQXBBU2FodXh0K2NySnJ3MEo1VGRQYXJaZW1GSEdnc0k4ZnBlOXhR?=
+ =?utf-8?B?S2Vjd2ozcVc4OUVGcDZ1K2Y3RkZxRlJLWThLVG5iZE42QU5idkZLV1JleVdQ?=
+ =?utf-8?B?czFMa0xOSlUxNURrTG1OL3ExWkMxUXFnTm54WjJ6V3NMMkNzVlRMME40OVdy?=
+ =?utf-8?B?REc0VEFFenpSNENaQ0R3Ky9wYmtoL0dkZ2M0ZTZYZGV3SURnK3RPaG56eUJ0?=
+ =?utf-8?B?RGoydStpZHl5SWdCdDZuSEVvMUc2NmRFL2JERDVWMjVYK29MRGFXZ2FzRm1Z?=
+ =?utf-8?B?MWhpYlQwVzB4dllZOWFLanptSGpuV1BBTHFSSFJPK25aaVRkQnVscU4wd0pv?=
+ =?utf-8?B?eDZXUjV1eThIZzhNL2lZbnlHeUV4UHRBQngrcHlKRUU5UU1YOUt4TmMrK20y?=
+ =?utf-8?B?VGx4SzU1NngydktNbnJTaU5YVldIVFh6cnUweHdXSk53di9YWkZ3WE8rWGhj?=
+ =?utf-8?B?OWZ1TkZRZlNiZFlRU0xacmI4YXRFSjlpaHpvbkRPRkkrZXMzK2w5ckZPMUZ5?=
+ =?utf-8?B?ZjV3Tm9vdjUvSG1kZzdsZEd3MTVxWFpnS1h1UlFreFZFUGdFRkY4eW5CRXhC?=
+ =?utf-8?B?bWw0c3J6OEhQYXgxYW5jaXlWNldEajhjQnp3VHIxK0VjRGU1OWhubm5RMUZ1?=
+ =?utf-8?B?WGVoRVhjU1A1VmRibHlvZEczRzFWYXM4dm5jc0F5ZytqN1RBRlNjUU5rbUZE?=
+ =?utf-8?B?UzRRVWJXNlpqVlN5ZlA1alVEQW9PL2FRSUpSU3Nxc0NzeEFlT3N3d2g1VFB6?=
+ =?utf-8?B?MmdLL04xVzNWdjlHVlY3Z3BwemIvSWZXV25GRjJOQVNuRGFEVUJzYnlPK3JT?=
+ =?utf-8?B?RmlMQmZ4ZHE0THZXb1pZeWxaWkhVYTN2LzA2Rk9yNkpzZ0pjNjRxQnR0TlJa?=
+ =?utf-8?B?b1c0bFNFZ1RBcDNuQVFJU3o5U2c5L3RtTk9ZZnZRU1loMDBqQUFGQU1sY3F4?=
+ =?utf-8?B?bFJSTTZIN0tySjFoTHZYOGp2Qkl4Wmk2OVRiNWswTGpycnJra0dvQzd2UVlP?=
+ =?utf-8?B?WkIzeEs4UXlPT2ZZUWRuYkVpMC95SGhzd3lIQVRJZjREb0pJRllTZGVJSUdY?=
+ =?utf-8?B?V0xqTW9GY1pkL1Z2Nk43emFWMzN5cHFDT3BxZE14QkJYMmhjNHhJUlhOK0gw?=
+ =?utf-8?B?bTB4bHM1WWlpMHBKSW9zWG1GSUtUWDRad2lPenJWcHhIblR2d2xacmI0WDJH?=
+ =?utf-8?B?Y2JLNXRCVXVGbHBHa3puYjMweU42aUY5c1Y4aGtSSFNvcjI3bHBtWTc1Mmdq?=
+ =?utf-8?B?cGdXZkY4Q2RqTDNpNlRkRThRMU04M1g1cEVoZ2YrT2h3dy80Q1FqcFZWc0Nt?=
+ =?utf-8?B?LzlTS3laS1hyeE5TMlFiK2FaWVk1U2liNHpMZXNGc2FwMUdFMkN6VWNGSndG?=
+ =?utf-8?B?cHV1KytKS0lyRjJqbWl2SHlYdEF2Qk42Y2ZZclM1K0Nkc1VhbW5sSWxXU0J1?=
+ =?utf-8?Q?Woc7Wqv9pnYzQPmM=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34e2da12-6ad5-4eb6-bd3d-08da3ecc8d0e
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR1101MB2235.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 03:54:30.0698
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2022 04:02:28.8869
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bo4Al9Q0ZqIidee5yI9XTlisYVj+a7gaKQO41T+ncgRGUx3l6iuygPYNvzDS0SurW5nv0CnAMx/T6Zkyse3XZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8222
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: rBllYUc8LD9+QB4N55HVQp/ZVnStHratY/za/6LRvf1IE32rdIOAFvEqw9ZCUMT0wCvELlpTt53qO93ZX3vs+Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3263
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
-
-Convert the eDMA controller binding to DT schema.
-
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- .../devicetree/bindings/dma/fsl,edma.yaml     | 136 ++++++++++++++++++
- .../devicetree/bindings/dma/fsl-edma.txt      | 111 --------------
- 2 files changed, 136 insertions(+), 111 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/dma/fsl,edma.yaml
- delete mode 100644 Documentation/devicetree/bindings/dma/fsl-edma.txt
-
-diff --git a/Documentation/devicetree/bindings/dma/fsl,edma.yaml b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-new file mode 100644
-index 000000000000..dbb69aca7d67
---- /dev/null
-+++ b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-@@ -0,0 +1,136 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/dma/fsl,edma.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Freescale enhanced Direct Memory Access(eDMA) Controller
-+
-+description: |
-+  The eDMA channels have multiplex capability by programmble
-+  memory-mapped registers. channels are split into two groups, called
-+  DMAMUX0 and DMAMUX1, specific DMA request source can only be multiplexed
-+  by any channel of certain group, DMAMUX0 or DMAMUX1, but not both.
-+
-+maintainers:
-+  - Peng Fan <peng.fan@nxp.com>
-+
-+allOf:
-+  - $ref: "dma-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: fsl,vf610-edma
-+      - const: fsl,imx7ulp-edma
-+      - items:
-+          - const: fsl,ls1028a-edma
-+          - const: fsl,vf610-edma
-+
-+  "#dma-cells":
-+    const: 2
-+
-+  dma-channels:
-+    minItems: 32
-+    maxItems: 64
-+
-+  reg:
-+    minItems: 2
-+    maxItems: 65
-+
-+  interrupts:
-+    minItems: 2
-+    maxItems: 65
-+
-+  clocks:
-+    maxItems: 2
-+
-+  big-endian:
-+    description: |
-+      If present registers and hardware scatter/gather descriptors of the
-+      eDMA are implemented in big endian mode, otherwise in little mode.
-+    type: boolean
-+
-+  interrupt-names:
-+    items:
-+      - const: edma-tx
-+      - const: edma-err
-+
-+required:
-+  - "#dma-cells"
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - dma-channels
-+
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        const: fsl,imx7ulp-edma
-+then:
-+  properties:
-+    clock-names:
-+      items:
-+        - const: dma
-+        - const: dmamux0
-+else:
-+  properties:
-+    clock-names:
-+      items:
-+        - const: dmamux0
-+        - const: dmamux1
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/vf610-clock.h>
-+
-+    edma0: dma-controller@40018000 {
-+      #dma-cells = <2>;
-+      compatible = "fsl,vf610-edma";
-+      reg = <0x40018000 0x2000>,
-+            <0x40024000 0x1000>,
-+            <0x40025000 0x1000>;
-+      interrupts = <0 8 IRQ_TYPE_LEVEL_HIGH>,
-+                   <0 9 IRQ_TYPE_LEVEL_HIGH>;
-+      interrupt-names = "edma-tx", "edma-err";
-+      dma-channels = <32>;
-+      clock-names = "dmamux0", "dmamux1";
-+      clocks = <&clks VF610_CLK_DMAMUX0>, <&clks VF610_CLK_DMAMUX1>;
-+    };
-+
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/imx7ulp-clock.h>
-+
-+    edma1: dma-controller@40080000 {
-+      #dma-cells = <2>;
-+      compatible = "fsl,imx7ulp-edma";
-+      reg = <0x40080000 0x2000>,
-+            <0x40210000 0x1000>;
-+      dma-channels = <32>;
-+      interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>,
-+                   /* last is eDMA2-ERR interrupt */
-+                   <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
-+       clock-names = "dma", "dmamux0";
-+       clocks = <&pcc2 IMX7ULP_CLK_DMA1>, <&pcc2 IMX7ULP_CLK_DMA_MUX1>;
-+    };
-diff --git a/Documentation/devicetree/bindings/dma/fsl-edma.txt b/Documentation/devicetree/bindings/dma/fsl-edma.txt
-deleted file mode 100644
-index ee1754739b4b..000000000000
---- a/Documentation/devicetree/bindings/dma/fsl-edma.txt
-+++ /dev/null
-@@ -1,111 +0,0 @@
--* Freescale enhanced Direct Memory Access(eDMA) Controller
--
--  The eDMA channels have multiplex capability by programmble memory-mapped
--registers. channels are split into two groups, called DMAMUX0 and DMAMUX1,
--specific DMA request source can only be multiplexed by any channel of certain
--group, DMAMUX0 or DMAMUX1, but not both.
--
--* eDMA Controller
--Required properties:
--- compatible :
--	- "fsl,vf610-edma" for eDMA used similar to that on Vybrid vf610 SoC
--	- "fsl,imx7ulp-edma" for eDMA2 used similar to that on i.mx7ulp
--	- "fsl,ls1028a-edma" followed by "fsl,vf610-edma" for eDMA used on the
--	  LS1028A SoC.
--- reg : Specifies base physical address(s) and size of the eDMA registers.
--	The 1st region is eDMA control register's address and size.
--	The 2nd and the 3rd regions are programmable channel multiplexing
--	control register's address and size.
--- interrupts : A list of interrupt-specifiers, one for each entry in
--	interrupt-names on vf610 similar SoC. But for i.mx7ulp per channel
--	per transmission interrupt, total 16 channel interrupt and 1
--	error interrupt(located in the last), no interrupt-names list on
--	i.mx7ulp for clean on dts.
--- #dma-cells : Must be <2>.
--	The 1st cell specifies the DMAMUX(0 for DMAMUX0 and 1 for DMAMUX1).
--	Specific request source can only be multiplexed by specific channels
--	group called DMAMUX.
--	The 2nd cell specifies the request source(slot) ID.
--	See the SoC's reference manual for all the supported request sources.
--- dma-channels : Number of channels supported by the controller
--- clock-names : A list of channel group clock names. Should contain:
--	"dmamux0" - clock name of mux0 group
--	"dmamux1" - clock name of mux1 group
--	Note: No dmamux0 on i.mx7ulp, but another 'dma' clk added on i.mx7ulp.
--- clocks : A list of phandle and clock-specifier pairs, one for each entry in
--	clock-names.
--
--Optional properties:
--- big-endian: If present registers and hardware scatter/gather descriptors
--	of the eDMA are implemented in big endian mode, otherwise in little
--	mode.
--- interrupt-names : Should contain the below on vf610 similar SoC but not used
--	on i.mx7ulp similar SoC:
--	"edma-tx" - the transmission interrupt
--	"edma-err" - the error interrupt
--
--
--Examples:
--
--edma0: dma-controller@40018000 {
--	#dma-cells = <2>;
--	compatible = "fsl,vf610-edma";
--	reg = <0x40018000 0x2000>,
--		<0x40024000 0x1000>,
--		<0x40025000 0x1000>;
--	interrupts = <0 8 IRQ_TYPE_LEVEL_HIGH>,
--		<0 9 IRQ_TYPE_LEVEL_HIGH>;
--	interrupt-names = "edma-tx", "edma-err";
--	dma-channels = <32>;
--	clock-names = "dmamux0", "dmamux1";
--	clocks = <&clks VF610_CLK_DMAMUX0>,
--		<&clks VF610_CLK_DMAMUX1>;
--}; /* vf610 */
--
--edma1: dma-controller@40080000 {
--	#dma-cells = <2>;
--	compatible = "fsl,imx7ulp-edma";
--	reg = <0x40080000 0x2000>,
--		<0x40210000 0x1000>;
--	dma-channels = <32>;
--	interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
--		     <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>,
--		     /* last is eDMA2-ERR interrupt */
--		     <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
--	clock-names = "dma", "dmamux0";
--	clocks = <&pcc2 IMX7ULP_CLK_DMA1>,
--		 <&pcc2 IMX7ULP_CLK_DMA_MUX1>;
--}; /* i.mx7ulp */
--
--* DMA clients
--DMA client drivers that uses the DMA function must use the format described
--in the dma.txt file, using a two-cell specifier for each channel: the 1st
--specifies the channel group(DMAMUX) in which this request can be multiplexed,
--and the 2nd specifies the request source.
--
--Examples:
--
--sai2: sai@40031000 {
--	compatible = "fsl,vf610-sai";
--	reg = <0x40031000 0x1000>;
--	interrupts = <0 86 IRQ_TYPE_LEVEL_HIGH>;
--	clock-names = "sai";
--	clocks = <&clks VF610_CLK_SAI2>;
--	dma-names = "tx", "rx";
--	dmas = <&edma0 0 21>,
--		<&edma0 0 20>;
--};
--- 
-2.25.1
-
+On 5/25/2022 13:45, Pavel Machek wrote:
+> Hi!
+> 
+>> From: Sasha Neftin <sasha.neftin@intel.com>
+>>
+>> commit 79cc8322b6d82747cb63ea464146c0bf5b5a6bc1 upstream.
+>>
+>> The device ID for I226_K was incorrectly assigned, update the device
+>> ID to the correct one.
+>>
+>> Fixes: bfa5e98c9de4 ("igc: Add new device ID")
+> 
+> I don't see updating the ID, I see adding an unused define. I don't
+> think this is suitable for stable. Same thing goes for previous two
+> patches, they don't really fix anything.
+Pavel,
+1. Commit bfa5e98c9de4 added new device ID for i225/226 parts. Commit 
+79cc8322b6d8 just fixed number for IGC_DEV_ID_I226_K. This number comes 
+from NVM and PCIe configuration space initialized with this number. (In 
+case you will use wrong number SW won't work)
+2. Regards PHY_ID: here is two things:
+i225/i226 parts have only one PHY (there is no option for another PHY)
+some unit upon specific power up condition could wrong represent PHY ID 
+and we do not want block SW.
+3. phy->type - just clean. you indeed can skip it.
+> 
+> 5106 O   Greg Kroah ├─>[PATCH 5.10 05/97] igc: Remove _I_PHY_ID checking
+> 5107 O   Greg Kroah ├─>[PATCH 5.10 06/97] igc: Remove phy->type checking
+> 5108     Greg Kroah ├─>[PATCH 5.10 07/97] igc: Update I226_K device ID
+> 
+> Best regards,
+> 								Pavel
+> 								
+>> +++ b/drivers/net/ethernet/intel/igc/igc_hw.h
+>> @@ -22,6 +22,7 @@
+>>   #define IGC_DEV_ID_I220_V			0x15F7
+>>   #define IGC_DEV_ID_I225_K			0x3100
+>>   #define IGC_DEV_ID_I225_K2			0x3101
+>> +#define IGC_DEV_ID_I226_K			0x3102
+>>   #define IGC_DEV_ID_I225_LMVP			0x5502
+>>   #define IGC_DEV_ID_I225_IT			0x0D9F
+>>   #define IGC_DEV_ID_I226_LM			0x125B
+>>
+> 
+Thanks, Sasha

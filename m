@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBC1535487
+	by mail.lfdr.de (Postfix) with ESMTP id 33870535486
 	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245656AbiEZUgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S244520AbiEZUg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242070AbiEZUgw (ORCPT
+        with ESMTP id S1344499AbiEZUgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:36:52 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893A712091
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:36:50 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id t26so3185344edt.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:36:50 -0700 (PDT)
+        Thu, 26 May 2022 16:36:53 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B770022288
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:36:51 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id c93so1817234edf.7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=//MRnXNtSeLfQ5bWtX3v1G4dcnE5lQDmM/+h837nasQ=;
-        b=WXRFeFKzDOkC71nxNRIQXgIyMNK8hNrAszVEILj5pQ9eP8XexBdh7hYcu6D95VAgk0
-         YLCG/VOiQUEEUYjjCx7DV51+E2yG8ouHfOkcsRKwTsIQFrnpyWt0vxj1yxFEcWBnx1Pn
-         UUkqfKaGckf1q8PjCQ+WelSOEYjXVKlYVVPfqcFjqaUXy4zeWACL9VnMrwZS9LXHEwQ9
-         UXkipkCSWyTK/qQWMsXDpkJOcGnWMh1YZcxrLgincIR7gzy7rRJhCN41Hw7GqszuQuYL
-         46h8UZdBa23f4eZNWsPb8ITwPw0WYpwgpxcv1vQahZsqqYl2JuhdABsohrmVQWR7vaj9
-         fZ4w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0xCGQvvUGQaE5nD3AhNgDDTCkjpXLMHYug+OugGhLH0=;
+        b=Twyo2Su5UAgxeN7qKIrQ1vclQVUGHHVefW54I++4vRwJK4H6KWuuy9suuHEq58XgQO
+         8U5a1P6Fgg4qunOy5D7v5am1del8uVkfl1j7RBIZ32TWYuskIV+Z02licFV0tcTUq7G1
+         C2k5R/JPSypSJr9S23eeTizw9keKK6DhIECQJIBBEceEa1S9dZ/qswMr5K9HdielElkq
+         6YtNDqlnzvzlY/lkQtRhtabUd4cySk8AqV8iEc0cs4V5pH8VSXvke6gcFbNrL7mdLjS/
+         tdn/tj+3Hic7PWveY3O0y3AqvP9PYKCdnrmvCE3PwjlCoR5j92RD1OA2zXYcJ1TfpBTT
+         LamQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=//MRnXNtSeLfQ5bWtX3v1G4dcnE5lQDmM/+h837nasQ=;
-        b=5b27vLR/BkuKUtfbGP8cCR3oai3Dwj+d1tvpfD+Yww5FOmisdVPpidSyDCdONmqQcw
-         WxdCOhopwoNBq9+ozIYBOsr9uXUMyJdGIceZlGniQLy0sYtaljblf5rqFeuLvxU7R+tg
-         kiMTCjo/Saa3+wK6fSAZJUJbRoY6ZhEQNKSZrgkz5Xx2wV6vn3lxHAZM/j5A6kYwyFp1
-         78gKLSGZ3+HUY/cspZfiq9Yxah5DqWkkwO77qlYN6F/Gv2yMMmbSNQo2m4bJ005R+IVY
-         pkVL6fXo4LnUkxVFa6FL4GRhI+dJxSnlwrb/1kVglofdgD1los9rzto5ugKgJDxs4RSd
-         PPmQ==
-X-Gm-Message-State: AOAM530E9+RgP5OI/PwNvkkrDHUoQ2X4ptbLbm81TCrG4HgEYX5fhA5A
-        A2Y1ZqaUfgC7DmzcnqgYXt8dNA==
-X-Google-Smtp-Source: ABdhPJxFj38q8x1olmylRRI/if3+8v0VRPgSaKL24LzFdG1RJYtYbE3AN/UWzXPXbVCCko3K67Ok6Q==
-X-Received: by 2002:a05:6402:50d2:b0:42b:2bf0:4dbe with SMTP id h18-20020a05640250d200b0042b2bf04dbemr34617129edb.309.1653597409093;
-        Thu, 26 May 2022 13:36:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0xCGQvvUGQaE5nD3AhNgDDTCkjpXLMHYug+OugGhLH0=;
+        b=et0Xv+KjqFplzGycZhKPu6hBhtTo0elmFJuG+GCjDdTUg90wW+TwQ5vPe7QTIm9sbP
+         aCAV+RoocQBe8PamqUQBEafYMCEQn9aZGuxC9gNjAuccu+eNke5Fzv9JFlX84j8QObhg
+         CI6/XKR/Ychj2cN2nheJX94NByKdxChdtApU4bwUlgleDmsT2sjxJKqq1njIWNXYrzx+
+         FsbojVlByiS+oE1SR1bW1CHmND1uxqbADRCBwFoO9PYczTT0ZswWQ6Lpe6HrOgLpmziI
+         kx2KzhJdcpe1TJ7xH5L7XCNEZqwo6L/uNe7ziXv6jHU8KcDVe1CVr2vWaqPfg2AJHMxN
+         +/iQ==
+X-Gm-Message-State: AOAM531VgjRAi8Y/0ORqZEEep54UY3YaYr1cwDauAIpq5OsFjMnQsMGW
+        Utw78Wymm60UeAsYdQs0BJF2NA==
+X-Google-Smtp-Source: ABdhPJyGbdQkLhMKqhKy+9Q0m93KwcBPYZYVxQ9WwPptqaaBghy4mJi2ZYCq6XT+edUFXgi0KT6qrQ==
+X-Received: by 2002:aa7:cd4b:0:b0:42b:cd71:5e85 with SMTP id v11-20020aa7cd4b000000b0042bcd715e85mr9387536edw.207.1653597410345;
+        Thu, 26 May 2022 13:36:50 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u28-20020a50c05c000000b0042ac43be19dsm1211304edd.3.2022.05.26.13.36.47
+        by smtp.gmail.com with ESMTPSA id u28-20020a50c05c000000b0042ac43be19dsm1211304edd.3.2022.05.26.13.36.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 13:36:48 -0700 (PDT)
+        Thu, 26 May 2022 13:36:49 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/2] ARM: dts: sti: adjust whitespace around '='
-Date:   Thu, 26 May 2022 22:36:31 +0200
-Message-Id: <20220526203632.831039-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] ARM: dts: stm: adjust whitespace around '='
+Date:   Thu, 26 May 2022 22:36:32 +0200
+Message-Id: <20220526203632.831039-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220526203632.831039-1-krzysztof.kozlowski@linaro.org>
+References: <20220526203632.831039-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,336 +85,111 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Output compared with dtx_diff and fdtdump.
 ---
- arch/arm/boot/dts/stih407-family.dtsi | 174 +++++++++++++-------------
- arch/arm/boot/dts/stih407.dtsi        |   4 +-
- arch/arm/boot/dts/stih410.dtsi        |   4 +-
- arch/arm/boot/dts/stihxxx-b2120.dtsi  |   8 +-
- 4 files changed, 95 insertions(+), 95 deletions(-)
+ arch/arm/boot/dts/stm32429i-eval.dts    | 8 ++++----
+ arch/arm/boot/dts/stm32h743.dtsi        | 4 ++--
+ arch/arm/boot/dts/stm32h743i-disco.dts  | 8 ++++----
+ arch/arm/boot/dts/stm32h743i-eval.dts   | 8 ++++----
+ arch/arm/boot/dts/stm32h750i-art-pi.dts | 8 ++++----
+ 5 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stih407-family.dtsi b/arch/arm/boot/dts/stih407-family.dtsi
-index 1713f7878117..33cf54cb46cc 100644
---- a/arch/arm/boot/dts/stih407-family.dtsi
-+++ b/arch/arm/boot/dts/stih407-family.dtsi
-@@ -137,8 +137,8 @@ picophyreset: picophyreset-controller {
- 	};
+diff --git a/arch/arm/boot/dts/stm32429i-eval.dts b/arch/arm/boot/dts/stm32429i-eval.dts
+index 0d98aca01736..3de0e9dbe030 100644
+--- a/arch/arm/boot/dts/stm32429i-eval.dts
++++ b/arch/arm/boot/dts/stm32429i-eval.dts
+@@ -251,10 +251,10 @@ ltdc_out_rgb: endpoint {
  
- 	irq-syscfg {
--		compatible    = "st,stih407-irq-syscfg";
--		st,syscfg     = <&syscfg_core>;
-+		compatible = "st,stih407-irq-syscfg";
-+		st,syscfg = <&syscfg_core>;
- 		st,irq-device = <ST_IRQ_SYSCFG_PMU_0>,
- 				<ST_IRQ_SYSCFG_PMU_1>;
- 		st,fiq-device = <ST_IRQ_SYSCFG_DISABLED>,
-@@ -157,8 +157,8 @@ usb2_picophy0: phy1 {
- 	miphy28lp_phy: miphy28lp {
- 		compatible = "st,miphy28lp-phy";
- 		st,syscfg = <&syscfg_core>;
--		#address-cells	= <1>;
--		#size-cells	= <1>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
- 		ranges;
+ &mac {
+ 	status = "okay";
+-	pinctrl-0	= <&ethernet_mii>;
+-	pinctrl-names	= "default";
+-	phy-mode	= "mii";
+-	phy-handle	= <&phy1>;
++	pinctrl-0 = <&ethernet_mii>;
++	pinctrl-names = "default";
++	phy-mode = "mii";
++	phy-handle = <&phy1>;
+ 	mdio0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+diff --git a/arch/arm/boot/dts/stm32h743.dtsi b/arch/arm/boot/dts/stm32h743.dtsi
+index 91dde07a38ba..2059593da21d 100644
+--- a/arch/arm/boot/dts/stm32h743.dtsi
++++ b/arch/arm/boot/dts/stm32h743.dtsi
+@@ -375,7 +375,7 @@ sdmmc1: mmc@52007000 {
+ 			arm,primecell-periphid = <0x10153180>;
+ 			reg = <0x52007000 0x1000>;
+ 			interrupts = <49>;
+-			interrupt-names	= "cmd_irq";
++			interrupt-names = "cmd_irq";
+ 			clocks = <&rcc SDMMC1_CK>;
+ 			clock-names = "apb_pclk";
+ 			resets = <&rcc STM32H7_AHB3_RESET(SDMMC1)>;
+@@ -389,7 +389,7 @@ sdmmc2: mmc@48022400 {
+ 			arm,primecell-periphid = <0x10153180>;
+ 			reg = <0x48022400 0x400>;
+ 			interrupts = <124>;
+-			interrupt-names	= "cmd_irq";
++			interrupt-names = "cmd_irq";
+ 			clocks = <&rcc SDMMC2_CK>;
+ 			clock-names = "apb_pclk";
+ 			resets = <&rcc STM32H7_AHB2_RESET(SDMMC2)>;
+diff --git a/arch/arm/boot/dts/stm32h743i-disco.dts b/arch/arm/boot/dts/stm32h743i-disco.dts
+index 59e01ce10318..2b452883a708 100644
+--- a/arch/arm/boot/dts/stm32h743i-disco.dts
++++ b/arch/arm/boot/dts/stm32h743i-disco.dts
+@@ -77,10 +77,10 @@ &clk_hse {
  
- 		phy_port0: port@9b22000 {
-@@ -208,26 +208,26 @@ phy_port2: port@8f95000 {
- 	};
+ &mac {
+ 	status = "disabled";
+-	pinctrl-0	= <&ethernet_rmii>;
+-	pinctrl-names	= "default";
+-	phy-mode	= "rmii";
+-	phy-handle	= <&phy0>;
++	pinctrl-0 = <&ethernet_rmii>;
++	pinctrl-names = "default";
++	phy-mode = "rmii";
++	phy-handle = <&phy0>;
  
- 	st231_gp0: st231-gp0 {
--		compatible	= "st,st231-rproc";
--		memory-region	= <&gp0_reserved>;
--		resets		= <&softreset STIH407_ST231_GP0_SOFTRESET>;
--		reset-names	= "sw_reset";
--		clocks		= <&clk_s_c0_flexgen CLK_ST231_GP_0>;
--		clock-frequency	= <600000000>;
--		st,syscfg	= <&syscfg_core 0x22c>;
-+		compatible = "st,st231-rproc";
-+		memory-region = <&gp0_reserved>;
-+		resets = <&softreset STIH407_ST231_GP0_SOFTRESET>;
-+		reset-names = "sw_reset";
-+		clocks = <&clk_s_c0_flexgen CLK_ST231_GP_0>;
-+		clock-frequency = <600000000>;
-+		st,syscfg = <&syscfg_core 0x22c>;
- 		#mbox-cells = <1>;
- 		mbox-names = "vq0_rx", "vq0_tx", "vq1_rx", "vq1_tx";
- 		mboxes = <&mailbox0 0 2>, <&mailbox2 0 1>, <&mailbox0 0 3>, <&mailbox2 0 0>;
- 	};
+ 	mdio0 {
+ 		#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/stm32h743i-eval.dts b/arch/arm/boot/dts/stm32h743i-eval.dts
+index 38cc7faf6884..5c5d8059bdc7 100644
+--- a/arch/arm/boot/dts/stm32h743i-eval.dts
++++ b/arch/arm/boot/dts/stm32h743i-eval.dts
+@@ -115,10 +115,10 @@ &rtc {
  
- 	st231_delta: st231-delta {
--		compatible	= "st,st231-rproc";
--		memory-region	= <&delta_reserved>;
--		resets		= <&softreset STIH407_ST231_DMU_SOFTRESET>;
--		reset-names	= "sw_reset";
--		clocks		= <&clk_s_c0_flexgen CLK_ST231_DMU>;
--		clock-frequency	= <600000000>;
--		st,syscfg	= <&syscfg_core 0x224>;
-+		compatible = "st,st231-rproc";
-+		memory-region = <&delta_reserved>;
-+		resets = <&softreset STIH407_ST231_DMU_SOFTRESET>;
-+		reset-names = "sw_reset";
-+		clocks = <&clk_s_c0_flexgen CLK_ST231_DMU>;
-+		clock-frequency = <600000000>;
-+		st,syscfg = <&syscfg_core 0x224>;
- 		#mbox-cells = <1>;
- 		mbox-names = "vq0_rx", "vq0_tx", "vq1_rx", "vq1_tx";
- 		mboxes = <&mailbox0 0 0>, <&mailbox3 0 1>, <&mailbox0 0 1>, <&mailbox3 0 0>;
-@@ -710,78 +710,78 @@ sata1: sata@9b28000 {
+ &mac {
+ 	status = "disabled";
+-	pinctrl-0	= <&ethernet_rmii>;
+-	pinctrl-names	= "default";
+-	phy-mode	= "rmii";
+-	phy-handle	= <&phy0>;
++	pinctrl-0 = <&ethernet_rmii>;
++	pinctrl-names = "default";
++	phy-mode = "rmii";
++	phy-handle = <&phy0>;
  
+ 	mdio0 {
+ 		#address-cells = <1>;
+diff --git a/arch/arm/boot/dts/stm32h750i-art-pi.dts b/arch/arm/boot/dts/stm32h750i-art-pi.dts
+index 9bb73bb61901..f3e70d3b65ac 100644
+--- a/arch/arm/boot/dts/stm32h750i-art-pi.dts
++++ b/arch/arm/boot/dts/stm32h750i-art-pi.dts
+@@ -126,10 +126,10 @@ &dma2 {
  
- 		st_dwc3: dwc3@8f94000 {
--			compatible	= "st,stih407-dwc3";
--			reg		= <0x08f94000 0x1000>, <0x110 0x4>;
--			reg-names	= "reg-glue", "syscfg-reg";
--			st,syscfg	= <&syscfg_core>;
--			resets		= <&powerdown STIH407_USB3_POWERDOWN>,
--					  <&softreset STIH407_MIPHY2_SOFTRESET>;
--			reset-names	= "powerdown", "softreset";
--			#address-cells	= <1>;
--			#size-cells	= <1>;
--			pinctrl-names	= "default";
--			pinctrl-0	= <&pinctrl_usb3>;
-+			compatible = "st,stih407-dwc3";
-+			reg = <0x08f94000 0x1000>, <0x110 0x4>;
-+			reg-names = "reg-glue", "syscfg-reg";
-+			st,syscfg = <&syscfg_core>;
-+			resets = <&powerdown STIH407_USB3_POWERDOWN>,
-+				 <&softreset STIH407_MIPHY2_SOFTRESET>;
-+			reset-names = "powerdown", "softreset";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&pinctrl_usb3>;
- 			ranges;
+ &mac {
+ 	status = "disabled";
+-	pinctrl-0	= <&ethernet_rmii>;
+-	pinctrl-names	= "default";
+-	phy-mode	= "rmii";
+-	phy-handle	= <&phy0>;
++	pinctrl-0 = <&ethernet_rmii>;
++	pinctrl-names = "default";
++	phy-mode = "rmii";
++	phy-handle = <&phy0>;
  
- 			status = "disabled";
- 
- 			dwc3: dwc3@9900000 {
--				compatible	= "snps,dwc3";
--				reg		= <0x09900000 0x100000>;
--				interrupts	= <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
--				dr_mode		= "host";
--				phy-names	= "usb2-phy", "usb3-phy";
--				phys		= <&usb2_picophy0>,
--						  <&phy_port2 PHY_TYPE_USB3>;
-+				compatible = "snps,dwc3";
-+				reg = <0x09900000 0x100000>;
-+				interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
-+				dr_mode = "host";
-+				phy-names = "usb2-phy", "usb3-phy";
-+				phys = <&usb2_picophy0>,
-+				       <&phy_port2 PHY_TYPE_USB3>;
- 				snps,dis_u3_susphy_quirk;
- 			};
- 		};
- 
- 		/* COMMS PWM Module */
- 		pwm0: pwm@9810000 {
--			compatible	= "st,sti-pwm";
--			#pwm-cells	= <2>;
--			reg		= <0x9810000 0x68>;
--			interrupts      = <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH>;
--			pinctrl-names	= "default";
--			pinctrl-0	= <&pinctrl_pwm0_chan0_default>;
--			clock-names	= "pwm";
--			clocks		= <&clk_sysin>;
-+			compatible = "st,sti-pwm";
-+			#pwm-cells = <2>;
-+			reg = <0x9810000 0x68>;
-+			interrupts = <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&pinctrl_pwm0_chan0_default>;
-+			clock-names = "pwm";
-+			clocks = <&clk_sysin>;
- 			st,pwm-num-chan = <1>;
- 
--			status		= "disabled";
-+			status = "disabled";
- 		};
- 
- 		/* SBC PWM Module */
- 		pwm1: pwm@9510000 {
--			compatible	= "st,sti-pwm";
--			#pwm-cells	= <2>;
--			reg		= <0x9510000 0x68>;
--			interrupts      = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
--			pinctrl-names	= "default";
--			pinctrl-0	= <&pinctrl_pwm1_chan0_default
--					&pinctrl_pwm1_chan1_default
--					&pinctrl_pwm1_chan2_default
--					&pinctrl_pwm1_chan3_default>;
--			clock-names	= "pwm";
--			clocks		= <&clk_sysin>;
-+			compatible = "st,sti-pwm";
-+			#pwm-cells = <2>;
-+			reg = <0x9510000 0x68>;
-+			interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&pinctrl_pwm1_chan0_default
-+				     &pinctrl_pwm1_chan1_default
-+				     &pinctrl_pwm1_chan2_default
-+				     &pinctrl_pwm1_chan3_default>;
-+			clock-names = "pwm";
-+			clocks = <&clk_sysin>;
- 			st,pwm-num-chan = <4>;
- 
--			status		= "disabled";
-+			status = "disabled";
- 		};
- 
- 		rng10: rng@8a89000 {
--			compatible      = "st,rng";
--			reg		= <0x08a89000 0x1000>;
--			clocks          = <&clk_sysin>;
--			status		= "okay";
-+			compatible = "st,rng";
-+			reg = <0x08a89000 0x1000>;
-+			clocks = <&clk_sysin>;
-+			status = "okay";
- 		};
- 
- 		rng11: rng@8a8a000 {
--			compatible      = "st,rng";
--			reg		= <0x08a8a000 0x1000>;
--			clocks          = <&clk_sysin>;
--			status		= "okay";
-+			compatible = "st,rng";
-+			reg = <0x08a8a000 0x1000>;
-+			clocks = <&clk_sysin>;
-+			status = "okay";
- 		};
- 
- 		ethernet0: dwmac@9630000 {
-@@ -812,36 +812,36 @@ ethernet0: dwmac@9630000 {
- 		};
- 
- 		mailbox0: mailbox@8f00000  {
--			compatible	= "st,stih407-mailbox";
--			reg		= <0x8f00000 0x1000>;
--			interrupts	= <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
--			#mbox-cells	= <2>;
--			mbox-name	= "a9";
--			status		= "okay";
-+			compatible = "st,stih407-mailbox";
-+			reg = <0x8f00000 0x1000>;
-+			interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
-+			#mbox-cells = <2>;
-+			mbox-name = "a9";
-+			status = "okay";
- 		};
- 
- 		mailbox1: mailbox@8f01000 {
--			compatible	= "st,stih407-mailbox";
--			reg		= <0x8f01000 0x1000>;
--			#mbox-cells	= <2>;
--			mbox-name	= "st231_gp_1";
--			status		= "okay";
-+			compatible = "st,stih407-mailbox";
-+			reg = <0x8f01000 0x1000>;
-+			#mbox-cells = <2>;
-+			mbox-name = "st231_gp_1";
-+			status = "okay";
- 		};
- 
- 		mailbox2: mailbox@8f02000 {
--			compatible	= "st,stih407-mailbox";
--			reg		= <0x8f02000 0x1000>;
--			#mbox-cells	= <2>;
--			mbox-name	= "st231_gp_0";
--			status		= "okay";
-+			compatible = "st,stih407-mailbox";
-+			reg = <0x8f02000 0x1000>;
-+			#mbox-cells = <2>;
-+			mbox-name = "st231_gp_0";
-+			status = "okay";
- 		};
- 
- 		mailbox3: mailbox@8f03000 {
--			compatible	= "st,stih407-mailbox";
--			reg		= <0x8f03000 0x1000>;
--			#mbox-cells	= <2>;
--			mbox-name	= "st231_audio_video";
--			status		= "okay";
-+			compatible = "st,stih407-mailbox";
-+			reg = <0x8f03000 0x1000>;
-+			#mbox-cells = <2>;
-+			mbox-name = "st231_audio_video";
-+			status = "okay";
- 		};
- 
- 		/* fdma audio */
-@@ -913,7 +913,7 @@ sti_uni_player0: sti-uni-player@8d80000 {
- 			dmas = <&fdma0 2 0 1>;
- 			dma-names = "tx";
- 
--			status		= "disabled";
-+			status = "disabled";
- 		};
- 
- 		sti_uni_player1: sti-uni-player@8d81000 {
-diff --git a/arch/arm/boot/dts/stih407.dtsi b/arch/arm/boot/dts/stih407.dtsi
-index 9e212b0af89d..aca43d2bdaad 100644
---- a/arch/arm/boot/dts/stih407.dtsi
-+++ b/arch/arm/boot/dts/stih407.dtsi
-@@ -13,7 +13,7 @@ sti-display-subsystem@0 {
- 			#address-cells = <1>;
- 			#size-cells = <1>;
- 			reg = <0 0>;
--			assigned-clocks	= <&clk_s_d2_quadfs 0>,
-+			assigned-clocks = <&clk_s_d2_quadfs 0>,
- 					  <&clk_s_d2_quadfs 1>,
- 					  <&clk_s_c0_pll1 0>,
- 					  <&clk_s_c0_flexgen CLK_COMPO_DVP>,
-@@ -106,7 +106,7 @@ sti_hdmi: sti-hdmi@8d04000 {
- 				reg-names = "hdmi-reg";
- 				#sound-dai-cells = <0>;
- 				interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
--				interrupt-names	= "irq";
-+				interrupt-names = "irq";
- 				clock-names = "pix",
- 					      "tmds",
- 					      "phy",
-diff --git a/arch/arm/boot/dts/stih410.dtsi b/arch/arm/boot/dts/stih410.dtsi
-index ce2f62cf129b..a39dd5f7bcae 100644
---- a/arch/arm/boot/dts/stih410.dtsi
-+++ b/arch/arm/boot/dts/stih410.dtsi
-@@ -105,7 +105,7 @@ sti-display-subsystem@0 {
- 			#size-cells = <1>;
- 
- 			reg = <0 0>;
--			assigned-clocks	= <&clk_s_d2_quadfs 0>,
-+			assigned-clocks = <&clk_s_d2_quadfs 0>,
- 					  <&clk_s_d2_quadfs 1>,
- 					  <&clk_s_c0_pll1 0>,
- 					  <&clk_s_c0_flexgen CLK_COMPO_DVP>,
-@@ -198,7 +198,7 @@ sti_hdmi: sti-hdmi@8d04000 {
- 				reg-names = "hdmi-reg";
- 				#sound-dai-cells = <0>;
- 				interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
--				interrupt-names	= "irq";
-+				interrupt-names = "irq";
- 				clock-names = "pix",
- 					      "tmds",
- 					      "phy",
-diff --git a/arch/arm/boot/dts/stihxxx-b2120.dtsi b/arch/arm/boot/dts/stihxxx-b2120.dtsi
-index 4c72dedcd1be..2aa94605d3d4 100644
---- a/arch/arm/boot/dts/stihxxx-b2120.dtsi
-+++ b/arch/arm/boot/dts/stihxxx-b2120.dtsi
-@@ -175,11 +175,11 @@ demux@8a20000 {
- 
- 			/* tsin0 is TSA on NIMA */
- 			tsin0: port {
--				tsin-num	= <0>;
-+				tsin-num = <0>;
- 				serial-not-parallel;
--				i2c-bus		= <&ssc2>;
--				reset-gpios	= <&pio15 4 GPIO_ACTIVE_HIGH>;
--				dvb-card	= <STV0367_TDA18212_NIMA_1>;
-+				i2c-bus = <&ssc2>;
-+				reset-gpios = <&pio15 4 GPIO_ACTIVE_HIGH>;
-+				dvb-card = <STV0367_TDA18212_NIMA_1>;
- 			};
- 		};
- 
+ 	mdio0 {
+ 		#address-cells = <1>;
 -- 
 2.34.1
 

@@ -2,141 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4549534A39
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 07:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D07D534A3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 07:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345699AbiEZFi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 01:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
+        id S1345848AbiEZFrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 01:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239996AbiEZFiy (ORCPT
+        with ESMTP id S231845AbiEZFqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 01:38:54 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C9B38791
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 22:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653543533; x=1685079533;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=x0E2eJhSoB02GqAn050NXHPHIqNim8wXEIwrtG/UOT8=;
-  b=Z/3mPk3U2MnkS4+cPSUNl8nExprkO+GA47HVAOyTfC9pcsU0XlfiAper
-   hmam/zP3d57Vb5LXKP0pTR/SUknxnChcokEuYVE9LTHGUK90rwfLV50t6
-   T+L2pmhsc7ATEJMPRwFQr5mgurD4rTaopWwz+8XhqVydFID4bPpKaIhMQ
-   p8+jH8LpDoFEQk3GkO20eIr6lXD+Gul/lzl+zjIQD+q66Zf3G6SUNDDDX
-   4MNJ0AxvUCv8TTPZgfEratKAyojw5gebz4gfi7pvCEeQik+jgLWRCxj7c
-   8p+yo1+VWEa4O5Tq34aaCaxnzIacz7Mu0pWtdTzYKhQD08LmDFTe+sJUS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="272856338"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="272856338"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 22:38:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="549398576"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 May 2022 22:38:51 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nu6Cw-0003dM-VV;
-        Thu, 26 May 2022 05:38:51 +0000
-Date:   Thu, 26 May 2022 13:38:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 8/19]
- arch/arm/mm/init.c:213: undefined reference to `kernel_sec_start'
-Message-ID: <202205261345.Ua1PVD1d-lkp@intel.com>
+        Thu, 26 May 2022 01:46:54 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAE68A308;
+        Wed, 25 May 2022 22:46:49 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24Q5kiBm083160;
+        Thu, 26 May 2022 00:46:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1653544004;
+        bh=I/YTCXZm5E9ZxaZWf6oiSo905eleVQs4JTl/yNkbmJg=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=kF+i1PmagY0+lsFH5BDXzF756K4I00IT5698UAUkjOzco5ria6XwAtZNAQGCZry8n
+         Mf2E8D65fwfGBllOPm/G3NlcrEk5NMxxn5esAtxPA7B7SuzkL145I7sdwxXYvNzX7F
+         nX+tFKnEmd+/fiY5N6hhseAFCYRJb14TyEnZ1PP0=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24Q5kiCF079732
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 26 May 2022 00:46:44 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 26
+ May 2022 00:46:44 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 26 May 2022 00:46:44 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24Q5khKn055572;
+        Thu, 26 May 2022 00:46:43 -0500
+Date:   Thu, 26 May 2022 11:16:42 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] spi: dt-bindings: Move 'rx-sample-delay-ns' to
+ spi-peripheral-props.yaml
+Message-ID: <20220526054642.zw44mgw2bd2u5v76@ti.com>
+References: <20220525210053.2488756-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220525210053.2488756-1-robh@kernel.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   3e0251249eddfbc62975f7ae9ad77d0a8ec93713
-commit: 01745426f3ddddf6442f6612743c06be252dc2a6 [8/19] ARM: Compile the kernel into VMALLOC
-config: arm-randconfig-c003-20220524 (https://download.01.org/0day-ci/archive/20220526/202205261345.Ua1PVD1d-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=01745426f3ddddf6442f6612743c06be252dc2a6
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout 01745426f3ddddf6442f6612743c06be252dc2a6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Hi Rob,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 25/05/22 04:00PM, Rob Herring wrote:
+> SPI bus per device properties must be defined in spi-peripheral-props.yaml
+> for unevaluatedProperties checks to work correctly on device nodes.
+> 
+> This has the side effect of promoting 'rx-sample-delay-ns' to be a
+> common property, but functionally it's no different if it was defined in
+> a Synopsys specific schema file.
 
-All errors (new ones prefixed by >>):
+Functionally it is no different, but does this property make sense for 
+other controllers? If not then I don't see why we should pollute the 
+common list with controller-specific ones. For one, this now no longer 
+makes it obvious that this property should only be used with the 
+Synopsys controller. And if you keep making small exceptions for other 
+controllers too, soon the common list will be full of controller 
+properties and it will be a mess finding out what belongs to who.
 
-   arm-linux-gnueabi-ld: arch/arm/mm/init.o: in function `arm_memblock_init':
->> arch/arm/mm/init.c:213: undefined reference to `kernel_sec_start'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/drm_gem_shmem_helper.o: in function `drm_gem_shmem_fault':
-   drivers/gpu/drm/drm_gem_shmem_helper.c:561: undefined reference to `vmf_insert_pfn'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_SSD130X && HAS_IOMEM && DRM
-
-
-vim +213 arch/arm/mm/init.c
-
-5f41f9198f29609 Marek Szyprowski 2019-05-28  182  
-3928624812dcfa3 Russell King     2017-01-16  183  void __init arm_memblock_init(const struct machine_desc *mdesc)
-3928624812dcfa3 Russell King     2017-01-16  184  {
-01745426f3ddddf Linus Walleij    2021-04-15  185  	/*
-01745426f3ddddf Linus Walleij    2021-04-15  186  	 * Register the kernel text, kernel data and initrd with memblock.
-01745426f3ddddf Linus Walleij    2021-04-15  187  	 *
-01745426f3ddddf Linus Walleij    2021-04-15  188  	 * When using kernel in vmalloc, we have to round up to the closest
-01745426f3ddddf Linus Walleij    2021-04-15  189  	 * section size, or the temporary section mapping of the tail of the
-01745426f3ddddf Linus Walleij    2021-04-15  190  	 * kernel will be overwritten by memblock allocations. This is not
-01745426f3ddddf Linus Walleij    2021-04-15  191  	 * a problem with the linear kernel map, since the allocations can
-01745426f3ddddf Linus Walleij    2021-04-15  192  	 * use the 1:1 map in that case.
-01745426f3ddddf Linus Walleij    2021-04-15  193  	 */
-01745426f3ddddf Linus Walleij    2021-04-15  194  	if (!IS_ENABLED(CONFIG_ARM_KERNEL_IN_VMALLOC))
-01745426f3ddddf Linus Walleij    2021-04-15  195  		memblock_reserve(kernel_sec_start, KERNEL_END - KERNEL_START);
-01745426f3ddddf Linus Walleij    2021-04-15  196  	else
-01745426f3ddddf Linus Walleij    2021-04-15  197  		memblock_reserve(kernel_sec_start, KERNEL_SECTION_SIZE);
-3928624812dcfa3 Russell King     2017-01-16  198  
-e46e45f00d9ea54 Wang Kefeng      2021-12-22  199  	reserve_initrd_mem();
-2778f62056ada44 Russell King     2010-07-09  200  
-2778f62056ada44 Russell King     2010-07-09  201  	arm_mm_memblock_reserve();
-2778f62056ada44 Russell King     2010-07-09  202  
-8d717a52d1b0959 Russell King     2010-05-22  203  	/* reserve any platform specific memblock areas */
-8d717a52d1b0959 Russell King     2010-05-22  204  	if (mdesc->reserve)
-8d717a52d1b0959 Russell King     2010-05-22  205  		mdesc->reserve();
-8d717a52d1b0959 Russell King     2010-05-22  206  
-bcedb5f9bd74662 Marek Szyprowski 2014-02-28  207  	early_init_fdt_scan_reserved_mem();
-bcedb5f9bd74662 Marek Szyprowski 2014-02-28  208  
-99a468d779f6851 George G. Davis  2015-01-16  209  	/* reserve memory for DMA contiguous allocations */
-95b0e655f914888 Marek Szyprowski 2014-10-09  210  	dma_contiguous_reserve(arm_dma_limit);
-c79095092834a18 Marek Szyprowski 2011-12-29  211  
-716a3dc20084da9 Russell King     2012-01-13  212  	arm_memblock_steal_permitted = false;
-2778f62056ada44 Russell King     2010-07-09 @213  	memblock_dump_all();
-2778f62056ada44 Russell King     2010-07-09  214  }
-2778f62056ada44 Russell King     2010-07-09  215  
-
-:::::: The code at line 213 was first introduced by commit
-:::::: 2778f62056ada442414392d7ccd41188bb631619 ARM: initial LMB trial
-
-:::::: TO: Russell King <rmk+kernel@arm.linux.org.uk>
-:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/spi/snps,dw-apb-ssi.yaml          | 18 +++++++++---------
+>  .../bindings/spi/spi-peripheral-props.yaml     |  5 +++++
+>  2 files changed, 14 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> index d7e08b03e204..e25d44c218f2 100644
+> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -124,9 +124,16 @@ properties:
+>  
+>    rx-sample-delay-ns:
+>      default: 0
+> -    description: Default value of the rx-sample-delay-ns property.
+> +    description: |
+> +      Default value of the rx-sample-delay-ns property.
+>        This value will be used if the property is not explicitly defined
+> -      for a SPI slave device. See below.
+> +      for a SPI slave device.
+> +
+> +      SPI Rx sample delay offset, unit is nanoseconds.
+> +      The delay from the default sample time before the actual sample of the
+> +      rxd input signal occurs. The "rx_sample_delay" is an optional feature
+> +      of the designware controller, and the upper limit is also subject to
+> +      controller configuration.
+>  
+>  patternProperties:
+>    "^.*@[0-9a-f]+$":
+> @@ -142,13 +149,6 @@ patternProperties:
+>        spi-tx-bus-width:
+>          const: 1
+>  
+> -      rx-sample-delay-ns:
+> -        description: SPI Rx sample delay offset, unit is nanoseconds.
+> -          The delay from the default sample time before the actual
+> -          sample of the rxd input signal occurs. The "rx_sample_delay"
+> -          is an optional feature of the designware controller, and the
+> -          upper limit is also subject to controller configuration.
+> -
+>  unevaluatedProperties: false
+>  
+>  required:
+> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> index 5e32928c4fc3..6ffb74352bef 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> @@ -71,6 +71,11 @@ properties:
+>      description:
+>        Delay, in microseconds, after a read transfer.
+>  
+> +  rx-sample-delay-ns:
+> +    description: SPI Rx sample delay offset, unit is nanoseconds.
+> +      The delay from the default sample time before the actual
+> +      sample of the rxd input signal occurs.
+> +
+>    spi-tx-bus-width:
+>      description:
+>        Bus width to the SPI bus used for write transfers.
+> -- 
+> 2.34.1
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

@@ -2,65 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D4153482E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35298534839
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbiEZBbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S241663AbiEZBjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245169AbiEZBao (ORCPT
+        with ESMTP id S229458AbiEZBjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:30:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19F8A76F4;
-        Wed, 25 May 2022 18:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653528627; x=1685064627;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UaSIPRzQt8djgwCCogviIlJQSqF/rXfZ66henu/ROoY=;
-  b=dTTyDv38O0Oyxwm3H23qgOh7Mmxfcd44npw5Wx54abP0fUA+37piwUgg
-   6JWCiQP+WEoj2CizKCuEvp43H+w9/w3GpxKxY+UkN+/AQW/7LZO7caUR5
-   iOHQtmjYbBAEl/97S2snN+Qf2ewgYe5Y4IDHYrAbvPc7k7VZQYKzUERAe
-   1gkC6pRgmK+uStAU/UgymoeJft26/oVsh3hztSPRCYyTQuUophT8cIQin
-   n8Fm6kRwR7BVO1mnTvWmNCCoqyvqeuX8wsdSuRdES6nq2X2tupDw8tlmY
-   3oslxqf/AgchmI5P1T9gGld+gFDGcWnT48S2z/RL66YDk6TPwHE+osllK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="273713962"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="273713962"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:30:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="718002411"
-Received: from p12hl01tmin.png.intel.com ([10.158.65.216])
-  by fmsmga001.fm.intel.com with ESMTP; 25 May 2022 18:30:23 -0700
-From:   Tan Tee Min <tee.min.tan@linux.intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Voon Wei Feng <weifeng.voon@intel.com>,
-        Sit Michael Wei Hong <michael.wei.hong.sit@intel.com>,
-        Ling Pei Lee <pei.lee.ling@intel.com>,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>
-Subject: [PATCH net-next 1/1] net: phy: dp83867: retrigger SGMII AN when link change
-Date:   Thu, 26 May 2022 09:37:14 +0800
-Message-Id: <20220526013714.4119839-1-tee.min.tan@linux.intel.com>
+        Wed, 25 May 2022 21:39:13 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62C049D4FD;
+        Wed, 25 May 2022 18:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=b2P3Q
+        H6vt+McJy25fKhf43Jb4cDyVE2JY2bcEA7mzQo=; b=WDptdQL78j+RaS/nAHlYX
+        1Ce4aKhc4cNCcl5AxJK1AkEFLoy6YFb8SUGN9FUqFWukOvX2K+qSVayAHKuGitqX
+        DHE9c9TyX+fYi6o1XcqZGm/kb/MR8YwojTjisk5yHeYHPRJXQBRWwEVwVe8SGfIG
+        Xq94AeLZ77Q7yb0HmOMjoM=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp4 (Coremail) with SMTP id HNxpCgD3__Mh2o5ig+JFEQ--.3894S4;
+        Thu, 26 May 2022 09:38:46 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     bootc@bootc.net, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] scsi: target: sbp: Fix memory leak in sbp_management_request_logout()
+Date:   Thu, 26 May 2022 09:38:39 +0800
+Message-Id: <20220526013839.471987-1-niejianglei2021@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-CM-TRANSID: HNxpCgD3__Mh2o5ig+JFEQ--.3894S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFykCw47GF4DtF18KrWUXFb_yoWfWrgEkw
+        srW34xurn5Ww4kKF4jkw15CrWavF4kZF1ayF4ktFWakrW7Wr1xXr1q9F93A3srCr48JrnY
+        kFsIvr1Uu3y5ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRibAwPUUUUU==
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiMgQMjFWBzm5eRwABsa
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,80 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a limitation in TI DP83867 PHY device where SGMII AN is only
-triggered once after the device is booted up. Even after the PHY TPI is
-down and up again, SGMII AN is not triggered and hence no new in-band
-message from PHY to MAC side SGMII.
+When req->node_addr != login->sess->node_id, sbp_management_request
+_logout() returns without releasing the login, which may lead to a
+potential memory leak.
 
-This could cause an issue during power up, when PHY is up prior to MAC.
-At this condition, once MAC side SGMII is up, MAC side SGMII wouldn`t
-receive new in-band message from TI PHY with correct link status, speed
-and duplex info.
+We can fix it by calling sbp_login_release() before the function returns.
 
-As suggested by TI, implemented a SW solution here to retrigger SGMII
-Auto-Neg whenever there is a link change.
-
-Signed-off-by: Sit, Michael Wei Hong <michael.wei.hong.sit@intel.com>
-Reviewed-by: Voon Weifeng <weifeng.voon@intel.com>
-Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 ---
- drivers/net/phy/dp83867.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/target/sbp/sbp_target.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
-index 8561f2d4443b..13dafe7a29bd 100644
---- a/drivers/net/phy/dp83867.c
-+++ b/drivers/net/phy/dp83867.c
-@@ -137,6 +137,7 @@
- #define DP83867_DOWNSHIFT_2_COUNT	2
- #define DP83867_DOWNSHIFT_4_COUNT	4
- #define DP83867_DOWNSHIFT_8_COUNT	8
-+#define DP83867_SGMII_AUTONEG_EN	BIT(7)
+diff --git a/drivers/target/sbp/sbp_target.c b/drivers/target/sbp/sbp_target.c
+index 504670994fb4..76f3ec58a24b 100644
+--- a/drivers/target/sbp/sbp_target.c
++++ b/drivers/target/sbp/sbp_target.c
+@@ -575,6 +575,7 @@ static void sbp_management_request_logout(
+ 		req->status.status = cpu_to_be32(
+ 			STATUS_BLOCK_RESP(STATUS_RESP_REQUEST_COMPLETE) |
+ 			STATUS_BLOCK_SBP_STATUS(SBP_STATUS_ACCESS_DENIED));
++		sbp_login_release(login, true);
+ 		return;
+ 	}
  
- /* CFG3 bits */
- #define DP83867_CFG3_INT_OE			BIT(7)
-@@ -855,6 +856,32 @@ static int dp83867_phy_reset(struct phy_device *phydev)
- 			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
- }
- 
-+static void dp83867_link_change_notify(struct phy_device *phydev)
-+{
-+	/* There is a limitation in DP83867 PHY device where SGMII AN is
-+	 * only triggered once after the device is booted up. Even after the
-+	 * PHY TPI is down and up again, SGMII AN is not triggered and
-+	 * hence no new in-band message from PHY to MAC side SGMII.
-+	 * This could cause an issue during power up, when PHY is up prior
-+	 * to MAC. At this condition, once MAC side SGMII is up, MAC side
-+	 * SGMII wouldn`t receive new in-band message from TI PHY with
-+	 * correct link status, speed and duplex info.
-+	 * Thus, implemented a SW solution here to retrigger SGMII Auto-Neg
-+	 * whenever there is a link change.
-+	 */
-+	if (phydev->interface == PHY_INTERFACE_MODE_SGMII) {
-+		int val = 0;
-+
-+		val = phy_clear_bits(phydev, DP83867_CFG2,
-+				     DP83867_SGMII_AUTONEG_EN);
-+		if (val < 0)
-+			return;
-+
-+		phy_set_bits(phydev, DP83867_CFG2,
-+			     DP83867_SGMII_AUTONEG_EN);
-+	}
-+}
-+
- static struct phy_driver dp83867_driver[] = {
- 	{
- 		.phy_id		= DP83867_PHY_ID,
-@@ -879,6 +906,8 @@ static struct phy_driver dp83867_driver[] = {
- 
- 		.suspend	= genphy_suspend,
- 		.resume		= genphy_resume,
-+
-+		.link_change_notify = dp83867_link_change_notify,
- 	},
- };
- module_phy_driver(dp83867_driver);
 -- 
 2.25.1
 

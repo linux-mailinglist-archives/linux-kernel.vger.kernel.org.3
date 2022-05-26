@@ -2,104 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B3153486C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539B5534860
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345676AbiEZBzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
+        id S240066AbiEZBwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345777AbiEZBzA (ORCPT
+        with ESMTP id S235094AbiEZBwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:55:00 -0400
-X-Greylist: delayed 358 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 25 May 2022 18:54:59 PDT
-Received: from mail.eskimo.com (mail.eskimo.com [204.122.16.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123F7A7E1A;
-        Wed, 25 May 2022 18:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=eskimo.com;
-        s=default; t=1653529739;
-        bh=VhtTl6PFy6AJclvYo5GWavMZF1ZfPH1+J4/x75mDWjI=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=DdT41yPyzKxpmbcaQX5W7TJI+nZKXvXHp0XOaE3t/AshCmDmkknIDvMdC97vgtgHA
-         O7cAuOWYWmXjDsGg3KiuOfxgHhgBAgJ8Iqtm1KGGsk0IGdPE1EHj07aBv/LdLmLoqt
-         2hjfZ6kTEgMmcJkpZFVQDwKPOTq4EKL8fxKVo2zX8UwZmqmMoRkIOBq6K10WmH/RBl
-         BILUDMZ0YxbNiQ9I+AGY3fT7z7ZNwUbUwX1ZATQ/UOFRDnYDZ6rYNWFMtd6hetNmJl
-         2XYJREu+I+OCl89A1OiIRL7Y8wfWyjALHYtRX8d/zdDmn1e3JP0JtF9qQK7jWTYMYH
-         EClu34hVNf57Q==
-Received: from ubuntu.eskimo.com (ubuntu.eskimo.com [204.122.16.33])
-        by mail.eskimo.com (Postfix) with ESMTPS id B64B63C9FF9;
-        Wed, 25 May 2022 18:48:59 -0700 (PDT)
-Date:   Wed, 25 May 2022 18:48:59 -0700 (PDT)
-From:   Robert Dinse <nanook@eskimo.com>
-To:     Sean Christopherson <seanjc@google.com>
-cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH 0/4] KVM: x86: Emulator _regs fixes and cleanups
-In-Reply-To: <20220525222604.2810054-1-seanjc@google.com>
-Message-ID: <847a4d9b-e064-fac5-ae5e-3574baa170b@eskimo.com>
-References: <20220525222604.2810054-1-seanjc@google.com>
+        Wed, 25 May 2022 21:52:43 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A10A76E7;
+        Wed, 25 May 2022 18:52:42 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id h9-20020a056830400900b0060b03bfe792so127918ots.12;
+        Wed, 25 May 2022 18:52:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nIzC1T+B7FDF0YpbJTKwhnFmPynXYVhFmPj3hCsebHQ=;
+        b=GD+bJuXSxL7TFNzl4e67maAAGj0HA9HwFjAvln4BF7HKQLb2Lufbye3Oge8TxSJ2R/
+         tjBclEA1FR0Lxc6758C0kDx4F+p2QQbbTVBuFCF6Wxk2qasaSW2VS1VLjicuL+h0NF+I
+         4wdXLmNccDyAm6U9AGXPJjeKQbzdkEX5CeS5gmosq3xbr7WyA3/jraI/6mkuLPcIGK6B
+         UIowYjrCi3SZvwJ2mhjsfMeM6SrfDCB78POJnveC6Zm7Z/tQhpR3g6ARqy49genEOPIT
+         3qQpBz19DvjMPc1Pt1ToZmwWPcuWhHFlCtAYG9TxfH1y8yiOm+4dnPp/tyOwVjmHgWm9
+         e1KA==
+X-Gm-Message-State: AOAM531lbVeZ7cuS+yHdl0oaOELwukB0NCZaF8IXYwN0N+fIqnSPrDPa
+        qfx75buK96rTVd/SFyUvPg==
+X-Google-Smtp-Source: ABdhPJyGLVz2XIk37MGgjfeDK1wCmyQfKDhVcWU1Z8taSkD/ZTIqKmAE+ecAPywpSuZCqzBNd8ypNA==
+X-Received: by 2002:a05:6830:164d:b0:60b:3d2a:42de with SMTP id h13-20020a056830164d00b0060b3d2a42demr830293otr.373.1653529962148;
+        Wed, 25 May 2022 18:52:42 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s3-20020a056808208300b0032ba39d8be6sm202565oiw.14.2022.05.25.18.52.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 18:52:41 -0700 (PDT)
+Received: (nullmailer pid 2888797 invoked by uid 1000);
+        Thu, 26 May 2022 01:52:40 -0000
+Date:   Wed, 25 May 2022 20:52:40 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Vaibhav Jain <vaibhav@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Prakhar Srivastava <prsriva@linux.microsoft.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v2] of: check previous kernel's ima-kexec-buffer against
+ memory bounds
+Message-ID: <20220526015240.GA2884362-robh@kernel.org>
+References: <20220524055042.1527968-1-vaibhav@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Virus-Scanned: clamav-milter 0.103.6 at mail.eskimo.com
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524055042.1527968-1-vaibhav@linux.ibm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-      This set of patches did allow 5.18 to compile without errors using gcc 
-12.1.  Thank you!
-
--_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-  Eskimo North Linux Friendly Internet Access, Shell Accounts, and Hosting.
-    Knowledgeable human assistance, not telephone trees or script readers.
-  See our web site: http://www.eskimo.com/ (206) 812-0051 or (800) 246-6874.
-
-On Wed, 25 May 2022, Sean Christopherson wrote:
-
-> Date: Wed, 25 May 2022 22:26:00 +0000
-> From: Sean Christopherson <seanjc@google.com>
-> To: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Sean Christopherson <seanjc@google.com>,
->     Vitaly Kuznetsov <vkuznets@redhat.com>,
->     Wanpeng Li <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>,
->     Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
->     linux-kernel@vger.kernel.org, Robert Dinse <nanook@eskimo.com>,
->     Kees Cook <keescook@chromium.org>
-> Subject: [PATCH 0/4] KVM: x86: Emulator _regs fixes and cleanups
+On Tue, May 24, 2022 at 11:20:42AM +0530, Vaibhav Jain wrote:
+> Presently ima_get_kexec_buffer() doesn't check if the previous kernel's
+> ima-kexec-buffer lies outside the addressable memory range. This can result
+> in a kernel panic if the new kernel is booted with 'mem=X' arg and the
+> ima-kexec-buffer was allocated beyond that range by the previous kernel.
+> The panic is usually of the form below:
 > 
-> Clean up and harden the use of the x86_emulate_ctxt._regs, which is
-> surrounded by a fair bit of magic.  This series was prompted by bug reports
-> by Kees and Robert where GCC-12 flags an out-of-bounds _regs access.  I'm
-> 99% certain GCC-12 is wrong and is generating a false positive, but just in
-> case...
->
-> I didn't tag patch 2 with Fixes or Cc: stable@; if it turns out to "fix"
-> the GCC-12 compilation error, it's probably worth sending to v5.18 stable
-> tree (KVM hasn't changed, but the warning=>error was "introdued in v5.18
-> by commit e6148767825c ("Makefile: Enable -Warray-bounds")).
->
-> Sean Christopherson (4):
->  KVM: x86: Grab regs_dirty in local 'unsigned long'
->  KVM: x86: Harden _regs accesses to guard against buggy input
->  KVM: x86: Omit VCPU_REGS_RIP from emulator's _regs array
->  KVM: x86: Use 16-bit fields to track dirty/valid emulator GPRs
->
-> arch/x86/kvm/emulate.c     | 14 ++++++++++++--
-> arch/x86/kvm/kvm_emulate.h | 14 +++++++++++---
-> 2 files changed, 23 insertions(+), 5 deletions(-)
->
->
-> base-commit: 90bde5bea810d766e7046bf5884f2ccf76dd78e9
-> -- 
-> 2.36.1.124.g0e6072fb45-goog
->
+> $ sudo kexec --initrd initrd vmlinux --append='mem=16G'
+> 
+> <snip>
+>  BUG: Unable to handle kernel data access on read at 0xc000c01fff7f0000
+>  Faulting instruction address: 0xc000000000837974
+>  Oops: Kernel access of bad area, sig: 11 [#1]
+> <snip>
+>  NIP [c000000000837974] ima_restore_measurement_list+0x94/0x6c0
+>  LR [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
+>  Call Trace:
+>  [c00000000371fa80] [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
+>  [c00000000371fb00] [c0000000020512c4] ima_init+0x80/0x108
+>  [c00000000371fb70] [c0000000020514dc] init_ima+0x4c/0x120
+>  [c00000000371fbf0] [c000000000012240] do_one_initcall+0x60/0x2c0
+>  [c00000000371fcc0] [c000000002004ad0] kernel_init_freeable+0x344/0x3ec
+>  [c00000000371fda0] [c0000000000128a4] kernel_init+0x34/0x1b0
+>  [c00000000371fe10] [c00000000000ce64] ret_from_kernel_thread+0x5c/0x64
+>  Instruction dump:
+>  f92100b8 f92100c0 90e10090 910100a0 4182050c 282a0017 3bc00000 40810330
+>  7c0802a6 fb610198 7c9b2378 f80101d0 <a1240000> 2c090001 40820614 e9240010
+>  ---[ end trace 0000000000000000 ]---
+> 
+> Fix this issue by checking returned PFN range of previous kernel's
+> ima-kexec-buffer with pfn_valid to ensure correct memory bounds.
+> 
+> Fixes: 467d27824920 ("powerpc: ima: get the kexec buffer passed by the previous kernel")
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Prakhar Srivastava <prsriva@linux.microsoft.com>
+> Cc: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+> Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+> 
+> ---
+> Changelog
+> ==========
+> 
+> v2:
+> * Instead of using memblock to determine the valid bounds use pfn_valid() to do
+> so since memblock may not be available late after the kernel init. [ Mpe ]
+> * Changed the patch prefix from 'powerpc' to 'of' [ Mpe ]
+> * Updated the 'Fixes' tag to point to correct commit that introduced this
+> function. [ Rob ]
+> * Fixed some whitespace/tab issues in the patch description [ Rob ]
+> * Added another check for checking ig 'tmp_size' for ima-kexec-buffer is > 0
+> ---
+>  drivers/of/kexec.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
+> index 8d374cc552be..879e984fe901 100644
+> --- a/drivers/of/kexec.c
+> +++ b/drivers/of/kexec.c
+> @@ -126,6 +126,7 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
+>  {
+>  	int ret, len;
+>  	unsigned long tmp_addr;
+> +	unsigned int start_pfn, end_pfn;
+>  	size_t tmp_size;
+>  	const void *prop;
+>  
+> @@ -140,6 +141,22 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
+>  	if (ret)
+>  		return ret;
+>  
+> +	/* Do some sanity on the returned size for the ima-kexec buffer */
+> +	if (!tmp_size)
+> +		return -ENOENT;
+> +
+> +	/*
+> +	 * Calculate the PFNs for the buffer and ensure
+> +	 * they are with in addressable memory.
+> +	 */
+> +	start_pfn = PHYS_PFN(tmp_addr);
+> +	end_pfn = PHYS_PFN(tmp_addr + tmp_size - 1);
+> +	if (!pfn_valid(start_pfn) || !pfn_valid(end_pfn)) {
+
+pfn_valid() isn't necessarily RAM, only that you have a struct page 
+AIUI. Maybe page_is_ram() instead?
+
+Thanks to Robin for this.
+
+Rob

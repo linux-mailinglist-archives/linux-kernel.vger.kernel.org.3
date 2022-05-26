@@ -2,99 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B142535108
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFA15350EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347834AbiEZOuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 10:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49214 "EHLO
+        id S1343831AbiEZOoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 10:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347767AbiEZOuS (ORCPT
+        with ESMTP id S229932AbiEZOo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 10:50:18 -0400
-X-Greylist: delayed 439 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 May 2022 07:50:17 PDT
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953F056FB8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:50:17 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 26 May 2022 10:44:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDF9CFE00;
+        Thu, 26 May 2022 07:44:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7E6A821A0F;
+        Thu, 26 May 2022 14:44:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653576261; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0yFRTzlOP5N16OSUpV/p1TUfusg1eqGKVAkgV3sElqE=;
+        b=MCowPDIgEh6D1WWJx4EFfyi56Sz8jvfiNzdZi5MVl6Kdhyw18mJf9s/Y8J/zJR+yhjn/k7
+        sWx/S69z76XxBKfpUfzaytqgSE6QLD3kbMp+FENcBAiP0qMt610ZcL0EJpwirBnxoJKMnA
+        jRV14OSanw8InYM2WBsMgIkRO87fia4=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 958283FA27;
-        Thu, 26 May 2022 17:05:07 +0200 (CEST)
-Message-ID: <256a5147-82b1-9453-574e-7c96f244d266@somainline.org>
-Date:   Thu, 26 May 2022 16:42:52 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id 17F772C141;
+        Thu, 26 May 2022 14:44:21 +0000 (UTC)
+Date:   Thu, 26 May 2022 16:44:20 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
+        rostedt@goodmis.org, senozhatsky@chromium.org,
+        andriy.shevchenko@linux.intel.com, willy@infradead.org
+Subject: Re: [PATCH v2 00/28] Printbufs (now with more printbufs!)
+Message-ID: <Yo+SRBSu5OdRl0/J@alley>
+References: <20220519172421.162394-1-kent.overstreet@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v7 5/6] arm64: dts: mt8195: Add efuse node to mt8195
-Content-Language: en-US
-To:     Alexandre Bailon <abailon@baylibre.com>, rafael@kernel.org,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20220524152552.246193-1-abailon@baylibre.com>
- <20220524152552.246193-6-abailon@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-In-Reply-To: <20220524152552.246193-6-abailon@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519172421.162394-1-kent.overstreet@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/05/22 17:25, Alexandre Bailon ha scritto:
-> This adds the efuse node. This will be required by the thermal driver
-> to get the calibration data.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 0011a8ba8f96..51443e83d906 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -1238,6 +1238,23 @@ nor_flash: spi@1132c000 {
->   			status = "disabled";
->   		};
->   
-> +		efuse: efuse@11c10000 {
-> +			compatible = "mediatek,efuse";
-> +			reg = <0 0x11c10000 0 0x1000>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			lvts_e_data1: data1 {
+On Thu 2022-05-19 13:23:53, Kent Overstreet wrote:
+> So there's a lot of new stuff since the first posting:
 
-lvts1-calib@1bc
+>  - Printbufs have been broken up into multiple patches that each add distinct
+>    functionality - this is intended to make it easier to review and to see
+>    what's used for what
 
-> +				reg = <0x1bc 0x14>;
-> +			};
-> +			lvts_e_data2: data1-1 {
+It is great that it is split. Also it is great to see all the ideas.
+But I would really prefer to somehow split it to make it easier
+for review and rebasing.
 
-lvts2-calib@1d0
+I see the following "independent" parts:
 
-> +				reg = <0x1d0 0x38>;
-> +			};
-> +			svs_calibration: calib@580 {
-> +				reg = <0x580 0x64>;
-> +			};
-> +		};
-> +
->   		u3phy2: t-phy@11c40000 {
->   			compatible = "mediatek,mt8195-tphy", "mediatek,generic-tphy-v3";
->   			#address-cells = <1>;
+  1. Add simple API that allows to replace @len, @buf, @end in vsprintf.c
+     by @printbuf. I agree that the code looks better and more safe.
 
+  2. Clean up of printf_spec. It would be great. But I do not like
+     some parts. For example, si_units, human_readable_units
+     are not property of the buffer. They are specific for a
+     particular substring.
+
+  3. New %p(%p) format. It really needs deep thinking. It is a
+     ticket for potential big troubles. It is one patch that
+     might be introduced and discussed anytime once we have
+     the simple buffer API.
+
+  3. Replace seq_buf. Steven Rostedt has to agree with it. Honestly,
+     I do not see any improvement. The patches mostly do 1:1 replacement
+     of one API with another.
+
+  4. Heap allocated buffer. I am not sure if it is really needed.
+     The patchset adds 3 users. IMHO, small static buffer would be
+     perfectly fine for 2 of them. I personally do not like the error
+     handling and the need to call exit.
+
+  5. All the fancy stuff (pr_tab(), pr_string_option()). The patchset
+    does not add any user for them.
+
+
+I am going to comment the particular patches. It might take some
+time. The patchset is really huge. It would really help to split it.
+
+Best Regards,
+Petr

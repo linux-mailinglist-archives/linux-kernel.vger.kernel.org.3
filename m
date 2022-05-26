@@ -2,75 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8A55351CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88CB5351CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234595AbiEZQBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 12:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        id S1348082AbiEZQD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 12:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiEZQBj (ORCPT
+        with ESMTP id S231881AbiEZQDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 12:01:39 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D869FD5B
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:01:37 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id g184so1701232pgc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0wDwEbvj2W8EBJJzj5GYa4VDlivxhpjuZEM3P0GFWVg=;
-        b=rzbsOKPxkw1y3rvKMtPj+R0UaslkSSTYVLxXPfnfs4Bu3e0XjOK130UAYTzuBesWze
-         VUXl1FJqWiXGJTzuhhgU/9CRoEQDOI6lVFcdYxDheXj5suqK057rAE8MHMagjNMeE6py
-         enfQJK1lNKpLsbI/VmhivBKOHokHnNUgIp+ydK2pLrH46oU0056NNmHF69wASKmilxIY
-         6TCaQ7cJKCWxiDhLn7dhhJuFhJfkHN9hvG5rc2G5PzWwjDj8jWaTuab6n+xlI/WYVV7j
-         nmf0oceoaLaz0HIQjQkKGwd/66M1ph9If5YNxXevfwxcDY3O/CPHlifSG5rS0IVbhG1s
-         8XCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0wDwEbvj2W8EBJJzj5GYa4VDlivxhpjuZEM3P0GFWVg=;
-        b=EYluWXDqozIVb39GKhgNw+VmOSUOpc+Tx9AwtSHE5ZDmZUvbhxj14y1UIm5Jo0Kpbf
-         1VWPL39O3hlZb65Bz5U4aR7OvQTAaQ86AcNcwhM16j3Nw6+2i8xCIw2V/cZz5abJ4LbM
-         jD4DgZXxT2SeKcLlanzwwdmAbj14HyJ53NA2qeYyVV5OazG2guDTL7t+02Je1aWjuYku
-         NFEf9Qpj4Ly+dPyECAOndE9MErPvJ2690BO8DRm9h2MfkbMsD/kz5zPvhorFejo97LCw
-         TSGr/r6fBgyg0jXA0heJu0RViJgFiFBfou8yWWStg7UW4i+cxYjtr8EuFLjx6wPOeuum
-         0hrA==
-X-Gm-Message-State: AOAM5337PX9Invvq6bPvlA4hXObsyjMWfa13NVu5nCaE04pEf9P+TzEl
-        ULxJNZp+AQtPQrtfq3noXh8wIA==
-X-Google-Smtp-Source: ABdhPJxWeVGhDADcS2EV6MDVYRLZdtTXEe7zHWZmcdKOxfk+OiR5C2jE3xk085AN9iyKigpitEm41g==
-X-Received: by 2002:a65:5601:0:b0:3fb:355:5f2f with SMTP id l1-20020a655601000000b003fb03555f2fmr4661946pgs.78.1653580896440;
-        Thu, 26 May 2022 09:01:36 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p9-20020a170902f08900b0015e8d4eb25fsm1706120pla.169.2022.05.26.09.01.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 09:01:35 -0700 (PDT)
-Date:   Thu, 26 May 2022 16:01:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Robert Dinse <nanook@eskimo.com>
-Subject: Re: [PATCH 2/4] KVM: x86: Harden _regs accesses to guard against
- buggy input
-Message-ID: <Yo+kXEKYAdduOAZX@google.com>
-References: <20220525222604.2810054-1-seanjc@google.com>
- <20220525222604.2810054-3-seanjc@google.com>
- <202205260835.9BC23703@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202205260835.9BC23703@keescook>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        Thu, 26 May 2022 12:03:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615BE53736
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:03:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CEBBB8210D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:03:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550A6C385A9;
+        Thu, 26 May 2022 16:03:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653580998;
+        bh=F/2VHJHMAJ183CYNsQnEB3OqQFGDNhCeq0Ysu1HPf5I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CeHI4FEx/3y2Pdnl2rFNS1eRmJbaNYZR1IYyB3N5JksAqIorcH1RlMC93DfwGr9ht
+         6GnXopRYDHrKNU+41nc71D7PDzI9YcUtTF4bURQRkdx+1VChunVwyg/OiqP2zfGwLX
+         3Uis7iNbCmW41Yq52WhtNOsIYDhJyEXyZnk7x5LihiVEZXmicnxSo1Ktt7HTPXssJn
+         bgSxz7ZDZw5JeOkie8shRXrORZfvhRG5pez8lq62HqpZEd7g9CT8vsErSuu8pEmO3s
+         hBJajBSRT8DH6G7z5w1mzymzP9d9CmFyXQPhUQBKpwb03vxPaUvE/MjDl6cHlj/TmY
+         1gBreoSU+iJjg==
+Date:   Fri, 27 May 2022 01:03:14 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linyu Yuan <quic_linyyuan@quicinc.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH 2/2] tracing/probes: make match function safe
+Message-Id: <20220527010314.e5a2d9418cfdf5500d75b9b2@kernel.org>
+In-Reply-To: <Yo1dW2w1UIF+KZFw@home.goodmis.org>
+References: <1651397651-30454-1-git-send-email-quic_linyyuan@quicinc.com>
+        <1651397651-30454-3-git-send-email-quic_linyyuan@quicinc.com>
+        <Yo1dW2w1UIF+KZFw@home.goodmis.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,57 +59,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022, Kees Cook wrote:
-> On Wed, May 25, 2022 at 10:26:02PM +0000, Sean Christopherson wrote:
-> > Link: https://lore.kernel.org/all/YofQlBrlx18J7h9Y@google.com
-> > Cc: Robert Dinse <nanook@eskimo.com>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/kvm/emulate.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
+On Tue, 24 May 2022 18:34:03 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> Masami and Tom, what are you thoughts on this?
+> 
+> -- Steve
+
+Thanks for forwarding.
+
+> 
+> On Sun, May 01, 2022 at 05:34:11PM +0800, Linyu Yuan wrote:
+> > When delete one kprobe/uprobe/eprobe event entry
+> > using /sys/kernel/debug/tracing/dynamic_events file,
+> > it will loop all dynamic envent entries,
+> > as user will not input dyn_event_operations type,
+> > when call the match function of kprobe/uprobe/eprobe,
+> > the dynamic event may have different dyn_event_operations type,
+> > but currently match function may return a match.
 > > 
-> > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> > index 7226a127ccb4..c58366ae4da2 100644
-> > --- a/arch/x86/kvm/emulate.c
-> > +++ b/arch/x86/kvm/emulate.c
-> > @@ -247,6 +247,9 @@ enum x86_transfer_type {
+> > Fix by check dyn_event_operations type first.
+
+Sorry, NACK. That check is not necessary, because the 'match' operation
+is chosen by each event::ops as below.
+
+int dyn_event_release(const char *raw_command, struct dyn_event_operations *type)
+{
+        struct dyn_event *pos, *n;
+...
+        mutex_lock(&event_mutex);
+        for_each_dyn_event_safe(pos, n) {
+                if (type && type != pos->ops)
+                        continue;
+                if (!pos->ops->match(system, event,
+                                argc - 1, (const char **)argv + 1, pos))
+                        continue;
+...
+
+The @pos is dyn_event. Thus @pos->ops must be the appropriate
+dyn_event_operations for that event. For example, if there is an
+eprobe event @ev, then @ev->ops must be eprobe_dyn_event_ops and
+@ev->ops->match must be eprobe_dyn_event_match() (unless the match
+function is shared with another dyn_event_operations.)
+
+Thank you,
+
+
+> > 
+> > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> > ---
+> >  kernel/trace/trace_eprobe.c | 31 +++++++++++++++++++++++--------
+> >  kernel/trace/trace_kprobe.c |  3 +++
+> >  kernel/trace/trace_uprobe.c |  3 +++
+> >  3 files changed, 29 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> > index b16e067..0029840 100644
+> > --- a/kernel/trace/trace_eprobe.c
+> > +++ b/kernel/trace/trace_eprobe.c
+> > @@ -19,6 +19,21 @@
 > >  
-> >  static ulong reg_read(struct x86_emulate_ctxt *ctxt, unsigned nr)
+> >  #define EPROBE_EVENT_SYSTEM "eprobes"
+> >  
+> > +static int eprobe_dyn_event_create(const char *raw_command);
+> > +static int eprobe_dyn_event_show(struct seq_file *m, struct dyn_event *ev);
+> > +static bool eprobe_dyn_event_is_busy(struct dyn_event *ev);
+> > +static int eprobe_dyn_event_release(struct dyn_event *ev);
+> > +static bool eprobe_dyn_event_match(const char *system, const char *event,
+> > +			int argc, const char **argv, struct dyn_event *ev);
+> > +
+> > +static struct dyn_event_operations eprobe_dyn_event_ops = {
+> > +	.create = eprobe_dyn_event_create,
+> > +	.show = eprobe_dyn_event_show,
+> > +	.is_busy = eprobe_dyn_event_is_busy,
+> > +	.free = eprobe_dyn_event_release,
+> > +	.match = eprobe_dyn_event_match,
+> > +};
+> > +
+> >  struct trace_eprobe {
+> >  	/* tracepoint system */
+> >  	const char *event_system;
+> > @@ -39,6 +54,11 @@ struct eprobe_data {
+> >  
+> >  static int __trace_eprobe_create(int argc, const char *argv[]);
+> >  
+> > +static bool is_trace_eprobe(struct dyn_event *ev)
+> > +{
+> > +	return ev->ops == &eprobe_dyn_event_ops;
+> > +}
+> > +
+> >  static void trace_event_probe_cleanup(struct trace_eprobe *ep)
 > >  {
-> > +	if (WARN_ON_ONCE(nr >= 16))
-> > +		nr &= 16 - 1;
-> 
-> Instead of doing a modulo here, what about forcing it into an "unused"
-> slot?
-> 
-> i.e. define _regs as an array of [16 + 1], and:
-> 
-> 	if (WARN_ON_ONCE(nr >= 16)
-> 		nr = 16;
-> 
-> Then there is both no out-of-bounds access, but also no weird "actual"
-> register indexed?
+> >  	if (!ep)
+> > @@ -121,6 +141,9 @@ static bool eprobe_dyn_event_match(const char *system, const char *event,
+> >  	struct trace_eprobe *ep = to_trace_eprobe(ev);
+> >  	const char *slash;
+> >  
+> > +	if (!is_trace_eprobe(ev))
+> > +		return false;
+> > +
+> >  	/*
+> >  	 * We match the following:
+> >  	 *  event only			- match all eprobes with event name
+> > @@ -174,14 +197,6 @@ static bool eprobe_dyn_event_match(const char *system, const char *event,
+> >  	return trace_probe_match_command_args(&ep->tp, argc, argv);
+> >  }
+> >  
+> > -static struct dyn_event_operations eprobe_dyn_event_ops = {
+> > -	.create = eprobe_dyn_event_create,
+> > -	.show = eprobe_dyn_event_show,
+> > -	.is_busy = eprobe_dyn_event_is_busy,
+> > -	.free = eprobe_dyn_event_release,
+> > -	.match = eprobe_dyn_event_match,
+> > -};
+> > -
+> >  static struct trace_eprobe *alloc_event_probe(const char *group,
+> >  					      const char *this_event,
+> >  					      struct trace_event_call *event,
+> > diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> > index 2cd8ef9..f63abfa 100644
+> > --- a/kernel/trace/trace_kprobe.c
+> > +++ b/kernel/trace/trace_kprobe.c
+> > @@ -163,6 +163,9 @@ static bool trace_kprobe_match(const char *system, const char *event,
+> >  {
+> >  	struct trace_kprobe *tk = to_trace_kprobe(ev);
+> >  
+> > +	if (!is_trace_kprobe(ev))
+> > +		return false;
+> > +
+> >  	return (event[0] == '\0' ||
+> >  		strcmp(trace_probe_name(&tk->tp), event) == 0) &&
+> >  	    (!system || strcmp(trace_probe_group_name(&tk->tp), system) == 0) &&
+> > diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+> > index a935c08..ee55ed0 100644
+> > --- a/kernel/trace/trace_uprobe.c
+> > +++ b/kernel/trace/trace_uprobe.c
+> > @@ -312,6 +312,9 @@ static bool trace_uprobe_match(const char *system, const char *event,
+> >  {
+> >  	struct trace_uprobe *tu = to_trace_uprobe(ev);
+> >  
+> > +	if (!is_trace_uprobe(ev))
+> > +		return false;
+> > +
+> >  	return (event[0] == '\0' ||
+> >  		strcmp(trace_probe_name(&tu->tp), event) == 0) &&
+> >  	   (!system || strcmp(trace_probe_group_name(&tu->tp), system) == 0) &&
+> > -- 
+> > 2.7.4
 
-Eh, IMO it doesn't provide any meaningful value, and requires documenting why
-the emulator allocates an extra register.
 
-The guest is still going to experience data loss/corruption if KVM drops a write
-or reads zeros instead whatever register it was supposed to access.  I.e. the
-guest is equally hosed either way.
-
-One idea along the lines of Vitaly's idea of KVM_BUG_ON() would be to add an
-emulator hook to bug the VM, e.g.
-
-#define KVM_EMULATOR_BUG_ON(cond, ctxt)				\
-({								\
-	int __ret = (cond);					\
-								\
-	if (WARN_ON_ONCE(__ret))				\
-		ctxt->ops->vm_bugged(ctxt);			\
-	unlikely(__ret);					\
-})
-
-to workaround not having access to the 'struct kvm_vcpu' in the emulator.  The
-bad access will still go through, but the VM will be killed before the vCPU can
-re-enter the guest and do more damage.
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

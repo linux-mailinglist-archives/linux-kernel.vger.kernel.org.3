@@ -2,71 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF837535185
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4A9535189
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346462AbiEZPgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
+        id S1347981AbiEZPgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237111AbiEZPgT (ORCPT
+        with ESMTP id S235987AbiEZPgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 11:36:19 -0400
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FC5BCEA6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:36:17 -0700 (PDT)
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id 9D598596;
-        Thu, 26 May 2022 15:36:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf20.hostedemail.com (Postfix) with ESMTPA id 2E10E2002A;
-        Thu, 26 May 2022 15:36:15 +0000 (UTC)
-Message-ID: <b93a8882649e69819e01b44d621f1fc33a7467da.camel@perches.com>
-Subject: Re: [PATCH v2 01/28] lib/printbuf: New data structure for printing
- strings
-From:   Joe Perches <joe@perches.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
-        rostedt@goodmis.org, senozhatsky@chromium.org,
-        andriy.shevchenko@linux.intel.com, willy@infradead.org
-Date:   Thu, 26 May 2022 08:36:14 -0700
-In-Reply-To: <20220526152127.gw7gb4jnoikop4hl@moria.home.lan>
-References: <20220519172421.162394-1-kent.overstreet@gmail.com>
-         <20220519172421.162394-2-kent.overstreet@gmail.com>
-         <Yo+XZ4YtU9fN/sGE@alley> <20220526152127.gw7gb4jnoikop4hl@moria.home.lan>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Thu, 26 May 2022 11:36:51 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FB2BDA3A;
+        Thu, 26 May 2022 08:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=cz2tBlHujupjVKE2JuyYre4LY/Jweg2bry3B8ZlajT4=; b=ALDJYJMy6GstbzTOeqw3GSAx3x
+        EyusWqWlv8+IL9jMBmp9ma04RBhiT1tSpcdmavPfHCCVdYw10lEYgdr8z8fV5NKWEjFmorZSXM1VM
+        o1BfLSrfsjC8rg7srg96SErGKFCUi+TjZo0dw6ByYcTbdqE0KNkpMOwbtt5Qna8TsG7NpCb0hsM9o
+        rPU6ifHlVXzwqDayoGEOQb++vZB2MFTcR6uHpztqatBpZk6TT9PmMHKyfUJj2a9q2lkD4MbUzjFvA
+        WblB7AccPHNZJ22HUzkQr3mSjL1195tzgHL2sKbvEzA7dIZ+6jSvfq4BFWnVkFGBE6TZDQ2g0+qT4
+        STk7kffw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nuFXT-001vPs-KS; Thu, 26 May 2022 15:36:41 +0000
+Message-ID: <7a97bac3-6ade-8e1b-cf0c-4a05c83163a3@infradead.org>
+Date:   Thu, 26 May 2022 08:36:34 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in
+ drivers/iio/afe/iio-rescale.o
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Liam Beguin <liambeguin@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
+ <3ae306e0-c6c7-ed12-cacd-62b1c26dba3c@infradead.org>
+ <6671de03-c09c-bfaf-e06c-e45af70d4354@infradead.org>
+ <6601a387-de9a-a0d0-11b5-01e0cfa75657@infradead.org>
+In-Reply-To: <6601a387-de9a-a0d0-11b5-01e0cfa75657@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 2E10E2002A
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
-X-Stat-Signature: re8mr6iqgaqckdmzyoqapfn7d6u8ehdi
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/jTM04rXRmp+mKrB2FBSeZQSp0hn9TN9o=
-X-HE-Tag: 1653579375-14664
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-26 at 11:21 -0400, Kent Overstreet wrote:
-> On Thu, May 26, 2022 at 05:06:15PM +0200, Petr Mladek wrote:
-> > The "pr_" prefix is a nightmare for me because the same prefix
-> > is used also for printk() API ;-)
-> > 
-> > Could we please use "pb_" instead?
+Liam:
+
+Any comment on this?
+Otherwise I'll just send a formal patch like this (below).
+
+Thanks.
+
+On 5/20/22 20:51, Randy Dunlap wrote:
+> Ok, one more.
+> [also adding Liam here]
 > 
-> I'm not entirely against that, but I see printbufs as already in this patchset
-> tightly coupled to vsprintf.c and thus quite related to printk, as well - and
-> there aren't that many different pr_ things. So I think the shared prefix makes
-> some sense, I'd like to hear what others think before making that change.
+> On 5/20/22 20:17, Randy Dunlap wrote:
+>>
+>>
+>> On 5/20/22 20:08, Randy Dunlap wrote:
+>>>
+>>>
+>>> On 5/20/22 19:40, Randy Dunlap wrote:
+>>>> Hi,
+>>>>
+>>>> In March I reported that a randconfig build complained:
+>>>>
+>>>> ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
+>>>>
+>>>> (https://lore.kernel.org/all/16509fb6-e40c-e31b-2c80-264c44b0beb9@infradead.org/)
+>>>>
+>>>> I am still seeing this problem so I tried to dig into it a bit.
+>>>> However, I don't see why get_next_modinfo() and friends don't find the
+>>>> MODULE_LICENSE() since it is in the iio-rescale.o file.
+>>>>
+>>>> (BTW, I see this build error on many different $ARCH [around 15 tested]
+>>>> and with 2 different versions of GCC.)
+>>>>
+>>>> Q1: Is modpost checking both vmlinux and iio-rescale.o for modinfo license
+>>>> strings?
+>>>>
+>>>> It looks like it is, because it appears (?) that modpost is looking at
+>>>> drivers/iio/test/iio-test-rescale.o (<<<<< a kunit test, which is builtin
+>>>> in my .config) and at drivers/iio/afe/iio-rescale.o (which is built as a
+>>>> loadable module).
+>>>>
+>>>> Is this confusing modpost?
+>>>> I renamed drivers/iio/afe/iio-rescale.c to afe-rescale.c and changed its
+>>>> Makefile entry accordingly and the MODULE_LICENSE error goes away.
+>>>
+>>> Oh well. This rename causes drivers/iio/test/iio-test-rescale.c to have
+>>> build errors, so that's not a solution, just some info...
+>>
+>> and that was due to not updating drivers/iio/test/Makefile.
+>> When that is done, the missing MODULE_LICENSE() is back in afe-rescale.o.
+>>
+>>>
+>>>> Is this a modpost error or is kunit messing things up?
+>>>>
+>>>> thanks for looking.
+> 
+> Does this look OK? It allows afe/iio-rescale.o to build XOR
+> test/iio-rescale.o (not both of them).
+> 
+> --- a/drivers/iio/test/Kconfig
+> +++ b/drivers/iio/test/Kconfig
+> @@ -6,7 +6,7 @@
+>  # Keep in alphabetical order
+>  config IIO_RESCALE_KUNIT_TEST
+>         bool "Test IIO rescale conversion functions"
+> -       depends on KUNIT=y && !IIO_RESCALE
+> +       depends on KUNIT=y && IIO_RESCALE=n
+>         default KUNIT_ALL_TESTS
+>         help
+>           If you want to run tests on the iio-rescale code say Y here.
+> 
+> 
 
-I think the reused prefix is not good.
-bufs are not printks.
-
-
-
+-- 
+~Randy

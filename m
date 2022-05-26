@@ -2,112 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F27453507D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A5453507F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240546AbiEZOVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 10:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S242986AbiEZOWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 10:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237395AbiEZOVI (ORCPT
+        with ESMTP id S235583AbiEZOWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 10:21:08 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4F0C5D84
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:21:07 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id t144so2263985oie.7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MM+qtxGKz879mNqzitALSbMhlKfSORq1ZqH2jijHCJg=;
-        b=GaKufx2mI5nXjXtfZt8EMuYuPpNxKih/+2Hxq0kSszmQDMtopaf46iw4BDxPGrsXjf
-         I2OKjZGnBi7P4Tp5M2A4oOP6W9J+107aFDjY2JvecinWMStU1NGG0B2hFPpKVMHrwNHm
-         jQMIVeKZtabmkemyKyCzklGP11iX2KSGWxWwDFpY5Yx4DsXhgoDvC0UsOULYeLvKuRWZ
-         odAe/+gGXFlt5xbzeq9dV4F7GNxCNAz1tKnc97aP4immka0IDbqIUziSCCiBbql6dR2D
-         m4tHpxX+48qMLD/LlYDxBeoVFrZkFN8p74wBVn0ULMAJWujoSFxK0wAZqyDXkwGtT9Nl
-         oEaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MM+qtxGKz879mNqzitALSbMhlKfSORq1ZqH2jijHCJg=;
-        b=h3Km77t7ldtyX/uSHiTPoIzjMytX+9RK0leA4A94AndZjYGpmUJHBwALIdSUvO03vT
-         6mImKUN8WEXPFW0L9+GwC2rt8DSpl9sKEgIymvpJPwpeLKeJSATy3tAr4ghf5Z6aYnox
-         zWJvX9u48McS4a5Uu23gzC/aDNDYgvbvZzCls26u8FevmlB5CZrC5FWf4lpQZDs42bYc
-         GPBnRmvUlcmuBy5in61tBEGBZjGjixVUngijnTOQYD4sURcvXo9wyszdw0QcOVoTowAT
-         z9sO+RoyL0SknASv7x9csCcDs9NCj8Kw6VXfPDeq8/Nm/6h9qQVVaypGLkrccPAzjz3C
-         BQOw==
-X-Gm-Message-State: AOAM531oNLN6t98BVQYqFD4zGkSX8zxWaBM7JzT8jLZYmFe8uYWt6HCX
-        evG4QoHDq02dM2rqT4PIOMOTVMoyNkCPOUYphlw=
-X-Google-Smtp-Source: ABdhPJyn9uuDHhEo5vOjMv8yt6YVeBekri1NhzBK00Fk3NrSBAJ81qW/8Dvyi9AgHogROUtMsqofNQ==
-X-Received: by 2002:a05:6808:230a:b0:32b:aeac:84db with SMTP id bn10-20020a056808230a00b0032baeac84dbmr1253318oib.167.1653574866935;
-        Thu, 26 May 2022 07:21:06 -0700 (PDT)
-Received: from localhost ([199.180.249.178])
-        by smtp.gmail.com with ESMTPSA id t15-20020a9d590f000000b0060603221280sm617402oth.80.2022.05.26.07.21.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 07:21:06 -0700 (PDT)
-From:   bh1scw@gmail.com
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Fanjun Kong <bh1scw@gmail.com>
-Subject: [PATCH] x86/mm: use PAGE_ALIGNED instead of IS_ALIGNED
-Date:   Thu, 26 May 2022 22:20:39 +0800
-Message-Id: <20220526142038.1582839-1-bh1scw@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 26 May 2022 10:22:13 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A2618340
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653574932; x=1685110932;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MExdy0PQ1mm12crzu+MfwurQlT0wcSHvnPQYx0GnPU4=;
+  b=SFRFI33A3AWhtgrW56tRQgi0nTN1W61gxzRc531mgXVaRUrkLOZ0Ty1l
+   EeU+W8GAkf1qzEV4GCjRCEWonLNb2NKxvk7iXLlsOR/3wx6GEz6Q/t/Tr
+   PucQsELgYu9n9dwEqx+M8aobqH7PfA3Cedran8XQW2WRh0qXYfUXzBDPz
+   dSQ6QDCJVopUCtbLp1tqzq7xFZj69UEFZ+4enXGVVe7HLOCbiRGHmiY2a
+   olaXC4nBBPipbEczjO7uPQzrV1DOfdd3b3VYtYM6ex8b0Xjh+fgRxRve4
+   2SEm1QcZtrnRki3SAvvmZ3xtorD/1O6a9pHDuH2gpws+vOFaGVScSR/3X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="273895574"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="273895574"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 07:22:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="664955508"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 May 2022 07:22:08 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuENL-0003vI-Ro;
+        Thu, 26 May 2022 14:22:07 +0000
+Date:   Thu, 26 May 2022 22:21:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [peterz-queue:perf/wip.cleanup 9/10]
+ arch/x86/events/intel/pt.c:719:2: warning: array index -1 is before the
+ beginning of the array
+Message-ID: <202205262245.87lBx9Fw-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fanjun Kong <bh1scw@gmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.cleanup
+head:   012bb7ae4eb84ae93ded12888ccd1e123c64200f
+commit: c838cb5fbb27ca829668a88691b07ca63f91fde7 [9/10] perf/x86/intel: Optimize short PEBS counters
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220526/202205262245.87lBx9Fw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=c838cb5fbb27ca829668a88691b07ca63f91fde7
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue perf/wip.cleanup
+        git checkout c838cb5fbb27ca829668a88691b07ca63f91fde7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/
 
-The <linux/mm.h> already provides the PAGE_ALIGNED macro. Let's
-use this macro instead of IS_ALIGNED and passing PAGE_SIZE directly.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Fanjun Kong <bh1scw@gmail.com>
----
- arch/x86/mm/init_64.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index cb290a2f0747..39c5246964a9 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -1240,8 +1240,8 @@ remove_pagetable(unsigned long start, unsigned long end, bool direct,
- void __ref vmemmap_free(unsigned long start, unsigned long end,
- 		struct vmem_altmap *altmap)
- {
--	VM_BUG_ON(!IS_ALIGNED(start, PAGE_SIZE));
--	VM_BUG_ON(!IS_ALIGNED(end, PAGE_SIZE));
-+	VM_BUG_ON(!PAGE_ALIGNED(start));
-+	VM_BUG_ON(!PAGE_ALIGNED(end));
- 
- 	remove_pagetable(start, end, false, altmap);
- }
-@@ -1605,8 +1605,8 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
- {
- 	int err;
- 
--	VM_BUG_ON(!IS_ALIGNED(start, PAGE_SIZE));
--	VM_BUG_ON(!IS_ALIGNED(end, PAGE_SIZE));
-+	VM_BUG_ON(!PAGE_ALIGNED(start));
-+	VM_BUG_ON(!PAGE_ALIGNED(end));
- 
- 	if (end - start < PAGES_PER_SECTION * sizeof(struct page))
- 		err = vmemmap_populate_basepages(start, end, node, NULL);
+   In file included from arch/x86/events/intel/pt.c:27:
+   arch/x86/events/intel/../perf_event.h:1056:16: error: call to undeclared function 'this_cpu_load'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 counter = this_cpu_load(pmc_prev_left[hwc->idx]);
+                         ^
+   arch/x86/events/intel/../perf_event.h:1057:13: error: call to undeclared function 'load64_read'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           s64 left = load64_read(&hwc->period_left);
+                      ^
+>> arch/x86/events/intel/pt.c:719:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+           TOPA_ENTRY(last, -1)->base = topa_pfn(topa);
+           ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:720:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+           TOPA_ENTRY(last, -1)->end = 1;
+           ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:769:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+           TOPA_ENTRY(topa, -1)->base = page_to_phys(p) >> TOPA_SHIFT;
+           ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:770:2: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+           TOPA_ENTRY(topa, -1)->size = order;
+           ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:773:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+                   TOPA_ENTRY(topa, -1)->intr = 1;
+                   ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:774:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+                   TOPA_ENTRY(topa, -1)->stop = 1;
+                   ^                ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:1235:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+                   TOPA_ENTRY(buf->last, -1)->base = topa_pfn(buf->first);
+                   ^                     ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   arch/x86/events/intel/pt.c:1236:3: warning: array index -1 is before the beginning of the array [-Warray-bounds]
+                   TOPA_ENTRY(buf->last, -1)->end = 1;
+                   ^                     ~~
+   arch/x86/events/intel/pt.c:619:6: note: expanded from macro 'TOPA_ENTRY'
+                   : &topa_to_page(t)->table[(i)])
+                      ^                       ~
+   arch/x86/events/intel/pt.c:596:2: note: array 'table' declared here
+           struct topa_entry       table[TENTS_PER_PAGE];
+           ^
+   8 warnings and 2 errors generated.
+
+
+vim +719 arch/x86/events/intel/pt.c
+
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  690  
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  691  /**
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  692   * topa_insert_table() - insert a ToPA table into a buffer
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  693   * @buf:	 PT buffer that's being extended.
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  694   * @topa:	 New topa table to be inserted.
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  695   *
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  696   * If it's the first table in this buffer, set up buffer's pointers
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  697   * accordingly; otherwise, add a END=1 link entry to @topa to the current
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  698   * "last" table and adjust the last table pointer to @topa.
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  699   */
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  700  static void topa_insert_table(struct pt_buffer *buf, struct topa *topa)
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  701  {
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  702  	struct topa *last = buf->last;
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  703  
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  704  	list_add_tail(&topa->list, &buf->tables);
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  705  
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  706  	if (!buf->first) {
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  707  		buf->first = buf->last = buf->cur = topa;
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  708  		return;
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  709  	}
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  710  
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  711  	topa->offset = last->offset + last->size;
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  712  	buf->last = topa;
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  713  
+f6d079ce867d67 arch/x86/events/intel/pt.c                Chao Peng          2018-10-24  714  	if (!intel_pt_validate_hw_cap(PT_CAP_topa_multiple_entries))
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  715  		return;
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  716  
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  717  	BUG_ON(last->last != TENTS_PER_PAGE - 1);
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  718  
+91feca5e2ecc97 arch/x86/events/intel/pt.c                Alexander Shishkin 2019-08-21 @719  	TOPA_ENTRY(last, -1)->base = topa_pfn(topa);
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  720  	TOPA_ENTRY(last, -1)->end = 1;
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  721  }
+52ca9ced3f7077 arch/x86/kernel/cpu/perf_event_intel_pt.c Alexander Shishkin 2015-01-30  722  
+
+:::::: The code at line 719 was first introduced by commit
+:::::: 91feca5e2ecc9752894d57c9a72c2645471929c3 perf/x86/intel/pt: Free up space in a ToPA descriptor
+
+:::::: TO: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
 -- 
-2.36.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

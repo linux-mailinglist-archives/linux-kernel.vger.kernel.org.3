@@ -2,90 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E961534B43
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FA8534B46
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbiEZIOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
+        id S1346637AbiEZIOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243536AbiEZINy (ORCPT
+        with ESMTP id S239967AbiEZIO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:13:54 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787023D4B2;
-        Thu, 26 May 2022 01:13:51 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id v8so1296718lfd.8;
-        Thu, 26 May 2022 01:13:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6XIUrzcjTsp63WT6KUFudVsfMqzwjs/ISF26+AtGKYc=;
-        b=M473zBFhKBpYDZLMCH3iHGNvgO8yBDEhAs/CCtpeY3diR5OYtHK5Qp2dggVdgz3N2/
-         NDre3BufT92wpRo3Hz/F4U6W/CI1pK6jPKkf3IlY7ax6VtMPPnMFcyfOLSbBFpHIGE1C
-         t0Di2WB5JNJgyvgBOsa81+6649T4/gEhXaU54YTUpNphkCaIJYhC5xV0HIRxF0i04qUp
-         Od6Try1IZD3jc28JPo/cdyackPBRHN9we2AVEv0wEPOZSidbrWBghVQRibpGleeClHgs
-         ipUmtJWVVgAqmM35TGBvfe1pC6XeOesixtOR2NVX6bHhPL+pyC29dQGfqTVorRNZU3vC
-         FHPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6XIUrzcjTsp63WT6KUFudVsfMqzwjs/ISF26+AtGKYc=;
-        b=7WfiJVr0GFInQwdrCUgXWcNAChCZTpA3pc5+pBEJy2fw15WMmuEzf18wtiCEa7w/Rv
-         JklRB1m4y+XC8KnSJUslOSnQZcdpDAqzXs/KbynVsAm23xoZhBipp7ZWhGvtp583aqGz
-         ufmFheDZJNtC+awAi02WDSLKhD9CmHE9222ByIGT+p92nor04tqxTCcznNsAPQog8vuj
-         vzGCGoJAfR0CqzhJpRB5c/Bl4ApOUcx7cMhegMB4DkkFWek8WvwW7JmdRXCMlayC5FJy
-         IHmyMYDphR9IMggC6VsnlLwOQ9B0G61g9dESB93G/6pqcDd3bv/BhL7vGfQ0Sgd423cM
-         k6lg==
-X-Gm-Message-State: AOAM533+RCCk6k8i23SzEvPDBLNMbOTkW6I/dIhIo/M8T5l/picIYMgt
-        sP8VR881zkrU9BLzJSgB/SGQDDVg3x0=
-X-Google-Smtp-Source: ABdhPJzH8WmTstQykYFVsAS9QjVDfZgRXQtHx/7ka8Z5KQ7wLl7iBlWFS2b71GlxRV7/nbrKITusFA==
-X-Received: by 2002:a05:6512:3b14:b0:477:cc51:b2c3 with SMTP id f20-20020a0565123b1400b00477cc51b2c3mr24809657lfv.263.1653552829449;
-        Thu, 26 May 2022 01:13:49 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.78.197])
-        by smtp.gmail.com with ESMTPSA id dt14-20020a0565122a8e00b0047255d21202sm205638lfb.305.2022.05.26.01.13.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 01:13:48 -0700 (PDT)
-Subject: Re: [PATCH 4/4] sh/mm: Kconfig: Fix indentation
-To:     Juerg Haefliger <juerg.haefliger@canonical.com>,
-        ysato@users.sourceforge.jp, dalias@libc.org,
-        linux-sh@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220525124007.45328-1-juerg.haefliger@canonical.com>
- <20220525124007.45328-5-juerg.haefliger@canonical.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <be49dcae-af31-c825-6ab4-05c59deec9d8@gmail.com>
-Date:   Thu, 26 May 2022 11:13:47 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 26 May 2022 04:14:28 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F09DAAE250;
+        Thu, 26 May 2022 01:14:24 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nu8dS-0000HP-00; Thu, 26 May 2022 10:14:22 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 0A26AC0325; Thu, 26 May 2022 10:14:13 +0200 (CEST)
+Date:   Thu, 26 May 2022 10:14:12 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] MIPS: RALINK: Define pci_remap_iospace under
+ CONFIG_PCI_DRIVERS_GENERIC
+Message-ID: <20220526081412.GA5108@alpha.franken.de>
+References: <1653478195-21095-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <20220525124007.45328-5-juerg.haefliger@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1653478195-21095-1-git-send-email-yangtiezhu@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/22 3:40 PM, Juerg Haefliger wrote:
-
-> The convention for indentation seems to be a single tab. Help text is
-> further indented by an additional two whitespaces. Fix the lines that
-
-   s/whitespaces/spaces/. And you don't touch the help text here...
-
-> violate these rules.
+On Wed, May 25, 2022 at 07:29:55PM +0800, Tiezhu Yang wrote:
+> kernel test robot reports a build error used with clang compiler and
+> mips-randconfig [1]:
 > 
-> Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
-[...]
+>     ld.lld: error: undefined symbol: pci_remap_iospace
+> 
+> we can see the following configs in the mips-randconfig file:
+> 
+>     CONFIG_RALINK=y
+>     CONFIG_SOC_MT7620=y
+>     CONFIG_PCI_DRIVERS_LEGACY=y
+>     CONFIG_PCI=y
+> 
+> CONFIG_RALINK is set, so pci_remap_iospace is defined in the related
+> arch/mips/include/asm/mach-ralink/spaces.h header file:
+> 
+>     #define pci_remap_iospace pci_remap_iospace
+> 
+> CONFIG_PCI is set, so pci_remap_iospace() in drivers/pci/pci.c is not
+> built due to pci_remap_iospace is defined under CONFIG_RALINK.
+> 
+>     #ifndef pci_remap_iospace
+>     int pci_remap_iospace(const struct resource *res, ...)
+> 
+>     $ objdump -d drivers/pci/pci.o | grep pci_remap_iospace
+>     00004cc8 <devm_pci_remap_iospace>:
+>         4d18:	10400008 	beqz	v0,4d3c <devm_pci_remap_iospace+0x74>
+>         4d2c:	1040000c 	beqz	v0,4d60 <devm_pci_remap_iospace+0x98>
+>         4d70:	1000fff3 	b	4d40 <devm_pci_remap_iospace+0x78>
+> 
+> In addition, CONFIG_PCI_DRIVERS_GENERIC is not set, so pci_remap_iospace()
+> in arch/mips/pci/pci-generic.c is not built too.
+> 
+>     #ifdef pci_remap_iospace
+>     int pci_remap_iospace(const struct resource *res, ...)
+> 
+> For the above reasons, undefined reference pci_remap_iospace() looks like
+> reasonable.
+> 
+> Here are simple steps to reproduce used with gcc and defconfig:
+> 
+>     cd mips.git
+>     make vocore2_defconfig # set RALINK, SOC_MT7620, PCI_DRIVERS_LEGACY
+>     make menuconfig        # set PCI
+>     make
+> 
+> there exists the following build error:
+> 
+>       LD      vmlinux.o
+>       MODPOST vmlinux.symvers
+>       MODINFO modules.builtin.modinfo
+>       GEN     modules.builtin
+>       LD      .tmp_vmlinux.kallsyms1
+>     drivers/pci/pci.o: In function `devm_pci_remap_iospace':
+>     pci.c:(.text+0x4d24): undefined reference to `pci_remap_iospace'
+>     Makefile:1158: recipe for target 'vmlinux' failed
+>     make: *** [vmlinux] Error 1
+> 
+> Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC can fix the build
+> error, with this patch, no build error remains. This patch is similar with
+> commit e538e8649892 ("MIPS: asm: pci: define arch-specific
+> 'pci_remap_iospace()' dependent on 'CONFIG_PCI_DRIVERS_GENERIC'").
+> 
+> [1] https://lore.kernel.org/lkml/202205251247.nQ5cxSV6-lkp@intel.com/
+> 
+> Fixes: 09d97da660ff ("MIPS: Only define pci_remap_iospace() for Ralink")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
+> index f7af11e..a9f0570 100644
+> --- a/arch/mips/include/asm/mach-ralink/spaces.h
+> +++ b/arch/mips/include/asm/mach-ralink/spaces.h
+> @@ -6,7 +6,9 @@
+>  #define PCI_IOSIZE	SZ_64K
+>  #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
+>  
+> +#ifdef CONFIG_PCI_DRIVERS_GENERIC
+>  #define pci_remap_iospace pci_remap_iospace
+> +#endif
+>  
+>  #include <asm/mach-generic/spaces.h>
+>  #endif
+> -- 
+> 2.1.0
 
-MBR, Sergey
+applied to mips-next.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

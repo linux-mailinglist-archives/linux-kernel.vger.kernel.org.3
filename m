@@ -2,92 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7787F53546D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFEE535470
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238054AbiEZUbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S230050AbiEZUcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiEZUbB (ORCPT
+        with ESMTP id S232178AbiEZUb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:31:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A62DFF75
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:31:01 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653597057;
+        Thu, 26 May 2022 16:31:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36D8955AC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653597115;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=SAFSnSkV1VEivcDSkrTNQ/mWfwoWqDGa1JHVMaX2nZo=;
-        b=xwiY7PER4zBLAKzqhHJy3sw1qMEn1KYhwhsfqCQt0uju4sN1ROMyoh/OTnwLF8RThG/Xy+
-        RrmqyMGfZSks+LfnRc4+R8sVPYKAUBT2bO3xaW8I6gpO28th6tfOMeehoMTy6bkl8FPRw4
-        L+36TzvgirWbEn+cgP8LocpQrV1rckarhuL4+ic2sgH4NDdqZj/lgwye/mHt3SkhlwuOZ0
-        L7DDCLb34oJPD8TVRtQNrbUOHlHjBql3thZ7U34g0nY32LDqz6XeP6CZ65vqnp4PPXvlml
-        7980bmpLZm2ckjh2Ovxtc9nLr7rePURtHPzXiHkzvbzWa+fslCHHdyiOspuWvg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653597057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=SAFSnSkV1VEivcDSkrTNQ/mWfwoWqDGa1JHVMaX2nZo=;
-        b=eDZldoJCUGXSWw7oL9YSmyeFeQLPu17+U1s7QkaKgPWM/ucZIqUfH/2QPM/r+R+2BSBjZH
-        d4Uf9RQHyvo3oCAA==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Revert "printk: wake up all waiters"
-Date:   Thu, 26 May 2022 22:36:56 +0206
-Message-Id: <20220526203056.81123-1-john.ogness@linutronix.de>
+        bh=wQbOUriGCnynaLUc5Bo76/WwyN+TFwMe7tvzUPT6f20=;
+        b=LteoKDlfxC31tncHiylWAvL02YT0Qg4D5pc5nNLnYQGojfafu8YY7hZbUfzFwyH3JAZ+MQ
+        7iytl4wYNaoXiVTqwvgQY3PUo/OYfb+LeleW6ov0mY/xji/K3j24Ho+GxVU718KPl65xXZ
+        +/tVh4AI0dXWvueHFOS1jNUb8i8ooO4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-bnyKRFf2N3mqFq1B1yJviw-1; Thu, 26 May 2022 16:31:51 -0400
+X-MC-Unique: bnyKRFf2N3mqFq1B1yJviw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 992A6296A60C;
+        Thu, 26 May 2022 20:31:51 +0000 (UTC)
+Received: from darcari.bos.com (unknown [10.22.8.164])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3913D2026D64;
+        Thu, 26 May 2022 20:31:51 +0000 (UTC)
+From:   David Arcari <darcari@redhat.com>
+To:     platform-driver-x86@vger.kernel.org
+Cc:     David Arcari <darcari@redhat.com>,
+        "David E. Box" <david.e.box@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] [PATCH] platform/x86/intel: Fix pmt_crashlog array reference
+Date:   Thu, 26 May 2022 16:31:40 -0400
+Message-Id: <20220526203140.339120-1-darcari@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 938ba4084abcf6fdd21d9078513c52f8fb9b00d0.
+The probe function pmt_crashlog_probe() may incorrectly reference
+the 'priv->entry array' as it uses 'i' to reference the array instead
+of 'priv->num_entries' as it should.  This is similar to the problem
+that was addressed in pmt_telemetry_probe via commit 2cdfa0c20d58
+("platform/x86/intel: Fix 'rmmod pmt_telemetry' panic").
 
-The wait queue @log_wait never has exclusive waiters, so there
-is no need to use wake_up_interruptible_all(). Using
-wake_up_interruptible() was the correct function to wake all
-waiters.
-
-Since there are no exclusive waiters, erroneously changing
-wake_up_interruptible() to wake_up_interruptible_all() did not
-result in any behavior change. However, using
-wake_up_interruptible_all() on a wait queue without exclusive
-waiters is fundamentally wrong.
-
-Go back to using wake_up_interruptible() to wake all waiters.
-
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Cc: "David E. Box" <david.e.box@linux.intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Mark Gross <markgross@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: David Arcari <darcari@redhat.com>
 ---
- kernel/printk/printk.c | 2 +-
+ drivers/platform/x86/intel/pmt/crashlog.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index a3e1035929b0..ea3dd55709e7 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -3904,7 +3904,7 @@ static void wake_up_klogd_work_func(struct irq_work *irq_work)
- 	}
+diff --git a/drivers/platform/x86/intel/pmt/crashlog.c b/drivers/platform/x86/intel/pmt/crashlog.c
+index 34daf9df168b..ace1239bc0a0 100644
+--- a/drivers/platform/x86/intel/pmt/crashlog.c
++++ b/drivers/platform/x86/intel/pmt/crashlog.c
+@@ -282,7 +282,7 @@ static int pmt_crashlog_probe(struct auxiliary_device *auxdev,
+ 	auxiliary_set_drvdata(auxdev, priv);
  
- 	if (pending & PRINTK_PENDING_WAKEUP)
--		wake_up_interruptible_all(&log_wait);
-+		wake_up_interruptible(&log_wait);
- }
+ 	for (i = 0; i < intel_vsec_dev->num_resources; i++) {
+-		struct intel_pmt_entry *entry = &priv->entry[i].entry;
++		struct intel_pmt_entry *entry = &priv->entry[priv->num_entries].entry;
  
- static DEFINE_PER_CPU(struct irq_work, wake_up_klogd_work) =
+ 		ret = intel_pmt_dev_create(entry, &pmt_crashlog_ns, intel_vsec_dev, i);
+ 		if (ret < 0)
 -- 
-2.30.2
+2.27.0
 

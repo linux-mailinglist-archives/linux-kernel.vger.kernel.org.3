@@ -2,119 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9495355D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8905355E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 00:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348713AbiEZVrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 17:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S240673AbiEZWA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 18:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244143AbiEZVrb (ORCPT
+        with ESMTP id S230325AbiEZWAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 17:47:31 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8357E60C9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:47:30 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id g184so2393733pgc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:47:30 -0700 (PDT)
+        Thu, 26 May 2022 18:00:24 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34202E64CC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 15:00:23 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id q18so2538306pln.12
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 15:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qV2UpEJWp4WtdFS1TH/Dq7u8EaIkSboyPOa+IcckSU4=;
-        b=P//S1dZ1qGjkScTl7aNaZgJny3ov/OEo2ZHPRm5Khedg3CRREVHVCF6GA9g4PVubcT
-         yk+HmAUbkoOAJm9vEOFOBw9Q0nA9LaOTstUPo64N2+33eMTvDc5Mz+m9JwDf+rQZXOWN
-         6qA9T2GEbc8P93ipm0oUO6aJwcmpYaU8SrVpHfGaCTjeRjME6GiFw3m8cLd2fVOP1imr
-         7VSk10xk7kok7FxUeEu/ouioosLwifDjK/zLp//SfsAb/VNRSGsT00AL64UxRi8ggRDT
-         GW/azz9ccdOnSqwUJWGt+NG6GM8/dyULdkbslsa0ZB/GGk1YamScq1Zg3FspTBo61KAl
-         qckA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L13M0F9NxiPHveFjyllGolTcp/lf7VfViNUmkBL3NJ4=;
+        b=fxMVfzAma/2UFbX6F1qGIb1S1cQQL4VJIyvgH8veXhWk0USTVuf66u3uaYwgP5ruEt
+         Y3ci3u3oDbv7zjFtf22escAhE63im+kHFjlI4om/p8hcFuK2QKsY5SRbqQbZ6VxbvATv
+         Y72ub3RthKUis/RR8bgyynD7eF2ybhIYjmDE8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qV2UpEJWp4WtdFS1TH/Dq7u8EaIkSboyPOa+IcckSU4=;
-        b=tkjCyddKsegRlxqVMn/Ff8Xxv2iVuuypptlrGOyPHebuXRIKPkE4/k9imIZ0EqEdsN
-         5/utOvH1W61u/O+ReTdi6D/YA5t+DmLqbPV2+tb5QWTTlH7BykjH8C3XsfGgp3J1GV8q
-         eplj0Hq6DG5baRxDt/RQqGhIlzGujCygWjV1zaKMlYlU6lhjevPdq0z7FtWBn/F+4/dq
-         knGSzb5MMA2JRAbzhZKr2m69j1BY3X+EV3XdIDn1Pypwr3lkBh0mABb0pJ49jSirD0mW
-         /SQgH5kAscBWSv5tYaKcKPyZ7bw2LC3JhdSY5IjTG7s6xrYKR1ePbY6a4BcZGqkTWFoX
-         BjOQ==
-X-Gm-Message-State: AOAM530tWJgVhcvf00h4w3BS6X4O6n7ph2vdNAzU/pGjh/hYIe01/YzQ
-        2atd7vFDXHXaMpAg34POorY=
-X-Google-Smtp-Source: ABdhPJy3xXni4JBLDbbYG18eLknPo0GbnZCOlNnoxTTNvOXJ+owmYKObV/emoe4rOZ+SSwm9c+hwUw==
-X-Received: by 2002:a65:6284:0:b0:3f6:298d:dd81 with SMTP id f4-20020a656284000000b003f6298ddd81mr34564393pgv.319.1653601649826;
-        Thu, 26 May 2022 14:47:29 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:3206:ea0b:ce53:ea86])
-        by smtp.gmail.com with ESMTPSA id z187-20020a6233c4000000b0050dc76281aesm1970498pfz.136.2022.05.26.14.47.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L13M0F9NxiPHveFjyllGolTcp/lf7VfViNUmkBL3NJ4=;
+        b=Numzn3tLTIhVQOUmnV89uIhucPGfFK3RYH06psEcxkNcLGhWv8nXJYNHLUBd+WBZ4b
+         N1CwKeCwyDuRK1DtRhRUfZ75ztV9WPCJuPoaM53F12vodITR/awZE/R0yGnZKbztK4DK
+         hej8oGS+MtrIdayzEGV/8Drk+6v0L3r/lsMyZve4PzsxACGFeNnCasMCaSiLNiAb70P4
+         TEbmC2kQT06VQAeXw/F5wcd/D1UG7LMYPnBV/tszM2f2esFYnJHdSZpqNGG7Rk/rzRVC
+         XRfsaldtTgUfV8iuvQ23Udnw08la77y6YJbCxX0XU069H/ZVh8alxIo0RbVWH26mV+5n
+         zp8w==
+X-Gm-Message-State: AOAM533ZZQMSldyN5LPua4KZVubRbwozVDfkcjRqn/wLuome3t3tDypU
+        3sJL1xFnTMoLHdL2IYWFUYsMvQ==
+X-Google-Smtp-Source: ABdhPJzl2g7FolrIOk1zz8wkb91x2ngGdzB1+xPref5V3e98KigQ18H0nesZ8aP4aB+RMO4QZEH2DQ==
+X-Received: by 2002:a17:90b:4c4c:b0:1df:bab5:4f56 with SMTP id np12-20020a17090b4c4c00b001dfbab54f56mr4765771pjb.202.1653602422718;
+        Thu, 26 May 2022 15:00:22 -0700 (PDT)
+Received: from li-cloudtop.c.googlers.com.com (132.111.125.34.bc.googleusercontent.com. [34.125.111.132])
+        by smtp.gmail.com with ESMTPSA id t17-20020a17090ad51100b001e269bb6bedsm127225pju.38.2022.05.26.15.00.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 14:47:28 -0700 (PDT)
-Date:   Thu, 26 May 2022 14:47:26 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     pso@chromium.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH] pstore/ram: Fix pmsg address when per-cpu ftrace buffers
- are enabled
-Message-ID: <Yo/1btY2tKiDDCle@google.com>
-References: <20220525151809.1.I43128ef59eb08247ec093f8b19d05aa91f721afb@changeid>
+        Thu, 26 May 2022 15:00:22 -0700 (PDT)
+From:   Li Li <dualli@chromium.org>
+To:     dualli@google.com, tkjos@google.com, gregkh@linuxfoundation.org,
+        christian@brauner.io, arve@android.com, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, maco@google.com, hridya@google.com,
+        surenb@google.com
+Cc:     joel@joelfernandes.org, kernel-team@android.com
+Subject: [RESEND PATCH v3 0/1] Binder: add TF_UPDATE_TXN to replace outdated txn
+Date:   Thu, 26 May 2022 15:00:17 -0700
+Message-Id: <20220526220018.3334775-1-dualli@chromium.org>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525151809.1.I43128ef59eb08247ec093f8b19d05aa91f721afb@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 03:18:55PM -0700, pso@chromium.org wrote:
-> From: Paramjit Oberoi <pso@chromium.org>
-> 
-> When allocating ftrace pstore zones, there may be space left over at the
-> end of the region. The paddr pointer needs to be advanced to account for
-> this so that the next region (pmsg) ends up at the correct location.
-> 
-> Signed-off-by: Paramjit Oberoi <pso@chromium.org>
+From: Li Li <dualli@google.com>
 
-This looks correct to me.
+Resend [Patch v3] with cover letter in case my previous email failed
+to reach the maillist (no comments for 2 weeks).
 
-Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+The previous comments of the old patch can be found at the following link:
+https://lore.kernel.org/lkml/CANBPYPjkNWsO94nuG1TkR1DgK2W2kBxiJTriyVB7S3czHTZ1Yg@mail.gmail.com/
 
-> ---
-> 
->  fs/pstore/ram.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-> index fefe3d391d3af..3bca6cd34c02a 100644
-> --- a/fs/pstore/ram.c
-> +++ b/fs/pstore/ram.c
-> @@ -554,10 +554,12 @@ static int ramoops_init_przs(const char *name,
->  			goto fail;
->  		}
->  		*paddr += zone_sz;
-> +		mem_sz -= zone_sz;
->  		prz_ar[i]->type = pstore_name_to_type(name);
->  	}
->  
->  	*przs = prz_ar;
-> +	*paddr += mem_sz;
->  	return 0;
->  
->  fail:
-> -- 
-> 2.36.1.124.g0e6072fb45-goog
-> 
+I copy and paste the key information here for your convenience.
 
-Thanks.
+* Question #1
+
+Note, your subject does not say what TF_UPDATE_TXN is, so it's a bit
+hard to determine what is happening here.  Can you clean that up a bit
+and sumarize what this new addition does?
+How was this tested?
+
+* Answer #1 ===
+
+A more descriptive summary has been added to the new version of patch.
+
+*  Question #2
+
+How was this tested?
+
+* Answer #2
+
+Old kernel: without this TF_UPDATE_TXN patch
+New kernel: with this TF_UPDATE_TXN patch
+Old apps: without setting TF_UPDATE_TXN
+New apps: if (flags & TF_ONE_WAY) flags |= TF_UPDATE_TXN;
+
+1. Compatibility: New kernel + Old apps, to verify the original
+behavior doesn't change;
+
+2. Compatibility: Old kernel + New apps, to verify the original
+behavior doesn't change;
+
+3. Unit test: New kernel + New apps, to verify the outdated oneway
+binder transaction is actually superseded by the latest one (by
+enabling BINDER_DEBUG logs);
+
+4. Stress test: New kernel + New apps sending oneway binder
+transactions repeatedly, to verify the size of the available async
+binder buffer over time, and if the transactions fail as before
+(due to async buffer running out).
+
+* Question #3
+
+Did checkpatch pass this?  Please always use --strict and fix up all the
+issues that it reports as this is not a normal kernel coding style.
+
+* Answer #3
+
+Yes, the latest version has passed "./scripts/checkpatch.pl --strict"
+
+* Changelog
+
+v3:
+  - Add this changelog required by "The canonical patch format"
+v2:
+  - Fix alignment warnings reported by checkpatch --strict
+  - Add descriptive summary in patch subject
+
+Li Li (1):
+  Binder: add TF_UPDATE_TXN to replace outdated txn
+
+ drivers/android/binder.c            | 85 ++++++++++++++++++++++++++++-
+ drivers/android/binder_trace.h      |  4 ++
+ include/uapi/linux/android/binder.h |  1 +
+ 3 files changed, 87 insertions(+), 3 deletions(-)
 
 -- 
-Dmitry
+2.36.1.124.g0e6072fb45-goog
+

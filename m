@@ -2,114 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2475534FD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C00534FD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347484AbiEZNR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 09:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S238449AbiEZNUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 09:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345691AbiEZNR4 (ORCPT
+        with ESMTP id S1347514AbiEZNUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 09:17:56 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB9CD02A2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:17:53 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ck4so2897823ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/Tums9sSBFm64JACZICEeaJP4n2qB4OZ4M0MNbuB31s=;
-        b=F04feQsX0xtaTMBBAIJ0ZM+soGiLto1TlYo8OhYxfKtXyZTXTedLY95EAHuqpAQ2Rw
-         vhGMZLsQ0F1Xm8sCodqH/nso/UcewPDGeJPOFABGTeR2sloWV0vVUaiys3f89CFFwhJC
-         p8yE4d5bu5QX+rSvVTcsbQLgksjy/MZlCeJaPrpFmZMCs1Muzb1smSiB9AMbSuJQJ1ut
-         K+eyrNWUC79mn8xF3N5bNPxOBF9ucs4YO3II8PQESLvWiB3303TXV6YMPuAaQA/lKzl1
-         L1vRRV+dKBtm8nPyGLuSBEO0MrJ/MjIHWhLUO8CfCiKO91o0XgLpoYaSo8W3MnkbAmmc
-         JwkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/Tums9sSBFm64JACZICEeaJP4n2qB4OZ4M0MNbuB31s=;
-        b=a4nOzQVecLKWrqowC2HPjEWAuB7n6Pej8z1ItbnsDuKdhadbnCUk1bw/AMQBJRGCEY
-         FOfotO3R0p1/dtsP6urydJzFHobumSzeZDb82YUj244sY8F1lVwURFEBd8qxGQGyoAVr
-         En1awnAAnLLeVVJcY8L5hrp4oFDqm0Z4C0Z4fOu4DSW51o1LLhPDOIm0X2lnhVGqj32X
-         wXSYaZY3L8+ll1Akv8VKo3eLboh1znEeOtMNaaVqVIJU5ekS2h8r5JZD4df3vDmF79q/
-         V2vN7j6Sd7S9erNrKerVKDiC4J51A7/GnsYLX9O9mXsIocu0jyajU+MJ/4e2xrwIH8aG
-         /wbQ==
-X-Gm-Message-State: AOAM533mIYLxq6pImfNUB8GVqaQhYwfORG/Pi15wLcQ0haJ57X0mz0ZU
-        yUFpBomjHZuJ2eYR4mcRBBmEW6lIucpdnNz5ssFlEA==
-X-Google-Smtp-Source: ABdhPJwt2DDvHgTg3x1ZOOEX1n+YPivbXaH4Zo/aUAeNSS2EIe9RQvn5zW/kTp+wlypm6G+UT4rkqjenFUrrI+C6Cwc=
-X-Received: by 2002:a17:907:86a9:b0:6ff:45d:c05b with SMTP id
- qa41-20020a17090786a900b006ff045dc05bmr12015950ejc.492.1653571072192; Thu, 26
- May 2022 06:17:52 -0700 (PDT)
+        Thu, 26 May 2022 09:20:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93D8D682B
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:20:01 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 539D2219FB;
+        Thu, 26 May 2022 13:20:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653571200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QoYDBLxX9BnU+G+6FHIPva/2AM2AhlaFaohhF5jTXUo=;
+        b=HpU41jjz/FvW2F/+inOvSarcXtO2B7pbUzjTH+QRrS2NXXkjN7owGcyutNO4z8qCpJ0ESI
+        sYkIx3PgYKHL6dxtfO6KcJ3qGpKr/sEK5iIGjOYBrv2sRZVUgyLnoZMUe6vSsF8F5u1PCF
+        DKz2AlWoGbFVeDiiavJ2/mLchIghitU=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id EA27A2C141;
+        Thu, 26 May 2022 13:19:58 +0000 (UTC)
+Date:   Thu, 26 May 2022 15:19:57 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        David Howells <dhowells@redhat.com>,
+        Jordan Niethe <jniethe5@gmail.com>
+Subject: Re: dangling pointer to '__str' error on ppc64_defconfig, GCC 12.1.0
+Message-ID: <Yo9+fQ32Br9+NpUW@alley>
+References: <Yo9Fm/hdtac1t9sW@debian.me>
 MIME-Version: 1.0
-References: <20220526113350.30806-1-linmiaohe@huawei.com>
-In-Reply-To: <20220526113350.30806-1-linmiaohe@huawei.com>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Thu, 26 May 2022 09:17:14 -0400
-Message-ID: <CA+CK2bARAVPq6N_V-Wjfzgu9eHPw4eX8DPm2xn6sjbZF14_0Ng@mail.gmail.com>
-Subject: Re: [PATCH] mm/page_table_check: fix accessing unmapped ptep
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yo9Fm/hdtac1t9sW@debian.me>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 7:33 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> ptep is unmapped too early, so ptep will be accessed while it's unmapped.
-> Fix it by deferring pte_unmap() until page table checking is done.
+On Thu 2022-05-26 16:17:15, Bagas Sanjaya wrote:
+> Hi everyone,
+> 
+> Attempting to build ppc64_defconfig kernel with powerpc64-unknown-linux-gnu
+> (GCC 12.1.0) on v5.18, I got build error on ftrace.o:
+> 
+>   CC      arch/powerpc/kernel/trace/ftrace.o
+>   CC      init/init_task.o
+> In file included from ./include/asm-generic/bug.h:22,
+>                  from ./arch/powerpc/include/asm/bug.h:156,
+>                  from ./include/linux/bug.h:5,
+>                  from ./include/linux/thread_info.h:13,
+>                  from ./include/asm-generic/preempt.h:5,
+>                  from ./arch/powerpc/include/generated/asm/preempt.h:1,
+>                  from ./include/linux/preempt.h:78,
+>                  from ./include/linux/spinlock.h:55,
+>                  from arch/powerpc/kernel/trace/ftrace.c:16:
+> arch/powerpc/kernel/trace/ftrace.c: In function 'ftrace_modify_code':
+> ./include/linux/printk.h:446:44: error: using a dangling pointer to '__str' [-Werror=dangling-pointer=]
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                                            ^
+> ./include/linux/printk.h:418:17: note: in definition of macro 'printk_index_wrap'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                 ^~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:75:17: note: in expansion of macro 'pr_err'
+>    75 |                 pr_err("%p: replaced (%s) != old (%s)",
+>       |                 ^~~~~~
+> In file included from ./arch/powerpc/include/asm/code-patching.h:14,
+>                  from arch/powerpc/kernel/trace/ftrace.c:26:
+> ./arch/powerpc/include/asm/inst.h:156:14: note: '__str' declared here
+>   156 |         char __str[PPC_INST_STR_LEN];   \
+>       |              ^~~~~
 
-I would re-word this as a cleanup. While pte_unmap() is currently
-unused, it is still better to call it after we are done with *ptep in
-case of future changes in other architectures.
+IMHO, the problem is in the macro:
 
->
-> Fixes: 80110bbfbba6 ("mm/page_table_check: check entries at pmd levels")
+#define ppc_inst_as_str(x)		\
+({					\
+	char __str[PPC_INST_STR_LEN];	\
+	__ppc_inst_as_str(__str, x);	\
+	__str;				\
+})
 
-This is more a clean-up, there is no existing bug, so no need to
-backport to stable. Please remove the above.
+The buffer __str is defined inside the code block {} and
+the macro passes the pointer to the buffer outside.
+IMHO, from the compiler POV, the buffer does not exist
+outside of the code block.
 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+The macro was added by the commit 50428fdc53ba48f6936b10dfd ("powerpc:
+Add a ppc_inst_as_str() helper").
 
-With the above changes:
-Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Adding Jordan Niethe into Cc.
+
+Best Regards,
+Petr
 
 
-> ---
->  mm/page_table_check.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-> index 3692bea2ea2c..971c3129b0e3 100644
-> --- a/mm/page_table_check.c
-> +++ b/mm/page_table_check.c
-> @@ -234,11 +234,11 @@ void __page_table_check_pte_clear_range(struct mm_struct *mm,
->                 pte_t *ptep = pte_offset_map(&pmd, addr);
->                 unsigned long i;
->
-> -               pte_unmap(ptep);
->                 for (i = 0; i < PTRS_PER_PTE; i++) {
->                         __page_table_check_pte_clear(mm, addr, *ptep);
->                         addr += PAGE_SIZE;
->                         ptep++;
->                 }
-> +               pte_unmap(ptep);
->         }
->  }
-> --
-> 2.23.0
->
+> ./include/linux/printk.h:418:33: note: in expansion of macro 'ppc_inst_as_str'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                                 ^~~~~~~~~~~
+> ./include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                          ^~~~~~~~~~~~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:75:17: note: in expansion of macro 'pr_err'
+>    75 |                 pr_err("%p: replaced (%s) != old (%s)",
+>       |                 ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c: In function '__ftrace_make_nop_kernel':
+> ./include/linux/printk.h:446:44: error: using a dangling pointer to '__str' [-Werror=dangling-pointer=]
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                                            ^
+> ./include/linux/printk.h:418:17: note: in definition of macro 'printk_index_wrap'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                 ^~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:379:17: note: in expansion of macro 'pr_err'
+>   379 |                 pr_err("Not expected bl: opcode is %s\n", ppc_inst_as_str(op));
+>       |                 ^~~~~~
+> ./arch/powerpc/include/asm/inst.h:156:14: note: '__str' declared here
+>   156 |         char __str[PPC_INST_STR_LEN];   \
+>       |              ^~~~~
+> ./include/linux/printk.h:418:33: note: in expansion of macro 'ppc_inst_as_str'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                                 ^~~~~~~~~~~
+> ./include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                          ^~~~~~~~~~~~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:379:17: note: in expansion of macro 'pr_err'
+>   379 |                 pr_err("Not expected bl: opcode is %s\n", ppc_inst_as_str(op));
+>       |                 ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c: In function '__ftrace_make_call_kernel':
+> ./include/linux/printk.h:446:44: error: using a dangling pointer to '__str' [-Werror=dangling-pointer=]
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                                            ^
+> ./include/linux/printk.h:418:17: note: in definition of macro 'printk_index_wrap'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                 ^~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:638:17: note: in expansion of macro 'pr_err'
+>   638 |                 pr_err("Unexpected call sequence at %p: %s\n", ip, ppc_inst_as_str(op));
+>       |                 ^~~~~~
+> ./arch/powerpc/include/asm/inst.h:156:14: note: '__str' declared here
+>   156 |         char __str[PPC_INST_STR_LEN];   \
+>       |              ^~~~~
+> ./include/linux/printk.h:418:33: note: in expansion of macro 'ppc_inst_as_str'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                                 ^~~~~~~~~~~
+> ./include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                          ^~~~~~~~~~~~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:638:17: note: in expansion of macro 'pr_err'
+>   638 |                 pr_err("Unexpected call sequence at %p: %s\n", ip, ppc_inst_as_str(op));
+>       |                 ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c: In function '__ftrace_make_nop':
+> ./include/linux/printk.h:446:44: error: using a dangling pointer to '__str' [-Werror=dangling-pointer=]
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                                            ^
+> ./include/linux/printk.h:418:17: note: in definition of macro 'printk_index_wrap'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                 ^~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:205:17: note: in expansion of macro 'pr_err'
+>   205 |                 pr_err("Expected %08lx found %s\n", PPC_INST_LD_TOC, ppc_inst_as_str(op));
+>       |                 ^~~~~~
+> ./arch/powerpc/include/asm/inst.h:156:14: note: '__str' declared here
+>   156 |         char __str[PPC_INST_STR_LEN];   \
+>       |              ^~~~~
+> ./include/linux/printk.h:418:33: note: in expansion of macro 'ppc_inst_as_str'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                                 ^~~~~~~~~~~
+> ./include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                          ^~~~~~~~~~~~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:205:17: note: in expansion of macro 'pr_err'
+>   205 |                 pr_err("Expected %08lx found %s\n", PPC_INST_LD_TOC, ppc_inst_as_str(op));
+>       |                 ^~~~~~
+> ./include/linux/printk.h:446:44: error: using a dangling pointer to '__str' [-Werror=dangling-pointer=]
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                                            ^
+> ./include/linux/printk.h:418:17: note: in definition of macro 'printk_index_wrap'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                 ^~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:139:17: note: in expansion of macro 'pr_err'
+>   139 |                 pr_err("Not expected bl: opcode is %s\n", ppc_inst_as_str(op));
+>       |                 ^~~~~~
+> ./arch/powerpc/include/asm/inst.h:156:14: note: '__str' declared here
+>   156 |         char __str[PPC_INST_STR_LEN];   \
+>       |              ^~~~~
+> ./include/linux/printk.h:418:33: note: in expansion of macro 'ppc_inst_as_str'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                                 ^~~~~~~~~~~
+> ./include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                          ^~~~~~~~~~~~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:139:17: note: in expansion of macro 'pr_err'
+>   139 |                 pr_err("Not expected bl: opcode is %s\n", ppc_inst_as_str(op));
+>       |                 ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c: In function '__ftrace_make_call':
+> ./include/linux/printk.h:446:44: error: using a dangling pointer to '__str' [-Werror=dangling-pointer=]
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                                            ^
+> ./include/linux/printk.h:418:17: note: in definition of macro 'printk_index_wrap'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                 ^~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:506:17: note: in expansion of macro 'pr_err'
+>   506 |                 pr_err("Unexpected call sequence at %p: %s %s\n",
+>       |                 ^~~~~~
+> ./arch/powerpc/include/asm/inst.h:156:14: note: '__str' declared here
+>   156 |         char __str[PPC_INST_STR_LEN];   \
+>       |              ^~~~~
+> ./include/linux/printk.h:418:33: note: in expansion of macro 'ppc_inst_as_str'
+>   418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>       |                                 ^~~~~~~~~~~
+> ./include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
+>   446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>       |                          ^~~~~~~~~~~~~~~~~
+> ./include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+>   489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+>       |         ^~~~~~
+> arch/powerpc/kernel/trace/ftrace.c:506:17: note: in expansion of macro 'pr_err'
+>   506 |                 pr_err("Unexpected call sequence at %p: %s %s\n",
+>       |                 ^~~~~~
+> cc1: all warnings being treated as errors
+> make[3]: *** [scripts/Makefile.build:288: arch/powerpc/kernel/trace/ftrace.o] Error 1
+> 
+> I also hit this error on current master (commit babf0bb978e3c9
+> ("Merge tag 'xfs-5.19-for-linus' of git://git.kernel.org/pub/scm/fs/xfs/xfs-linux")).
+> 
+> Thanks.
+> 
+> Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+> -- 
+> An old man doll... just what I always wanted! - Clara

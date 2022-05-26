@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A552F53503A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B24053503D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235686AbiEZNxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 09:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S1345560AbiEZNyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 09:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237784AbiEZNxR (ORCPT
+        with ESMTP id S237784AbiEZNyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 09:53:17 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B1A6B679
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:53:15 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id i23so1836038ljb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h9A5g55cyBsOgeoVTQ2s8GjFHkfwy7j0n7q/GUnZ++k=;
-        b=Ong9tOOh4BJ607E6nYKcRWhrJXw1Tg6YpDVA/rSgtkYz4cIANIKVgUhMvfDbTSfpX5
-         jKzhu1sIVuhC+RQbnN7Nf2NFNM4fAwcHA6DsAAqwZypnRXTVmtaESLS9ReVH999A1I+X
-         GrDrUIh7a0GgOQPwkK7tIfwX5VRzOTPcoDjOaDsQmj5r6uskqKrEWtnMYbnlb0gvYm6y
-         p+Ghgj8CsMZ3YtnKbPEVRTK8tdr5qclqoymbFwOdYpMyiCiW8CL1nIOOQe2dtRy5CF9i
-         qQpwLeRXYo15vzLehqWObd+lpOOpg9m7hqqV5OkDifk+h3hl8LM+xxfS2AoJwz3kZLfK
-         MntQ==
+        Thu, 26 May 2022 09:54:07 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A2150E00;
+        Thu, 26 May 2022 06:54:07 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id t14-20020a9d66ce000000b0060af9ed4b87so997771otm.9;
+        Thu, 26 May 2022 06:54:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h9A5g55cyBsOgeoVTQ2s8GjFHkfwy7j0n7q/GUnZ++k=;
-        b=0OW3YVXfv9RsLM3NUWXTOlgt3a/5pkec1V+zZ8Hw77t6REIgvziNhlFXRL4UkXEjLT
-         WAO0bGMh/yQ35hlbwC/C2Wa12GNxo7Fh6gKsZUfh37mNX33/hWLcbtvMpVKHighXB9qK
-         OMgTB5PHRepHYI0wVIVnX3ODN/PXZwZZ6sQ9oYsyUxxvT1ad5aXhUEK8Z2Ld1y4GjdGc
-         is4ryRsy06RiK7vo6orOk6BvYtWfD4whnW2a5Jwu3DhTAwKRVDkZNN/ozL55/WDjuaDI
-         MqdNveVAxxrCMV919IxRP1NstSiVS8ZlgdFUjEjQpirw2cuRmwy2oJo1YT1CZD+98S1N
-         Fvgg==
-X-Gm-Message-State: AOAM5325pbRL7Mq6Etqgfle9wE1bFDFpj+dys3ACQ3ANYKmlmNiLw2IL
-        ITt6f1pYHlNHcnb2TJWPxADprJNfAETkipnXTEm/OA==
-X-Google-Smtp-Source: ABdhPJxi0bItpZ0zTE+ZSYieJTEYcAfu4LVgNNVjvw9v7XF+c/O/vS1m8tyH+DoIHimNWAALRWb35+ezlfCZl98lZHU=
-X-Received: by 2002:a2e:9ccb:0:b0:253:df97:ebd with SMTP id
- g11-20020a2e9ccb000000b00253df970ebdmr16773333ljj.280.1653573193228; Thu, 26
- May 2022 06:53:13 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tWtkq+ZgB9S1oTbgzHdEwf/ab9DFJtwyJBbeHOUfdrU=;
+        b=5+ocknvTOtzVIYPBjlC6i8+Pkej96bVA/TOTRGdeRmwM5M8JCxEkxqyzgzyUMNlWgy
+         UoWNOfYkQnMNWIsFPbRU5Vvsnc4nTWrUX9TxKQvmYya7D0Fe92QbVwufkGxpxTJC4ujT
+         UMumRj+p7XE3f9nVyBM5mWBiXv2wvFIxoJD3q1Ln0n/2NOwD/VkcuoOAyJHKaTvapKvn
+         K+Q6fL0fPMLhJjH7tdzIVt6QUAObWS0E/+iHt6I/jujNFRZpZXmpqbOOIgUn9lQ29zEW
+         LhHRSHO1rjFDRs22TBf6Ssm1MBHGUlTK5fXfUXsvulwJA82RG4pQhxX2ZpmPpE4Mm/iO
+         5BGg==
+X-Gm-Message-State: AOAM531N7F4KIAvAJUNMjehWWzMbCqJ3+oxBi+sNrx9KADD6EShYpBNn
+        0LHIsJ2VA0UHWU4eAKjOBg==
+X-Google-Smtp-Source: ABdhPJyyGTmbEtWbp66qoLi7HJ1+T/K9+fgEDHCLCEfMAAot8n/7o5EARMzXzZdYyNHVM8nb9sy6Jw==
+X-Received: by 2002:a05:6830:44a4:b0:60b:39e7:ab22 with SMTP id r36-20020a05683044a400b0060b39e7ab22mr2274296otv.148.1653573246266;
+        Thu, 26 May 2022 06:54:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g7-20020a9d6a07000000b0060603221279sm591495otn.73.2022.05.26.06.54.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 06:54:05 -0700 (PDT)
+Received: (nullmailer pid 3906910 invoked by uid 1000);
+        Thu, 26 May 2022 13:54:04 -0000
+Date:   Thu, 26 May 2022 08:54:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dt-bindings: Move 'rx-sample-delay-ns' to
+ spi-peripheral-props.yaml
+Message-ID: <20220526135404.GA3831942-robh@kernel.org>
+References: <20220525210053.2488756-1-robh@kernel.org>
+ <20220526054642.zw44mgw2bd2u5v76@ti.com>
 MIME-Version: 1.0
-References: <20220526130945.98601-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20220526130945.98601-1-yang.lee@linux.alibaba.com>
-From:   Haris Iqbal <haris.iqbal@ionos.com>
-Date:   Thu, 26 May 2022 15:53:01 +0200
-Message-ID: <CAJpMwyhG152M9iLWRwLk5ewijj7gzE9rTmv2KFCZODbxLRCcFQ@mail.gmail.com>
-Subject: Re: [PATCH -next] RDMA/rtrs-clt: Fix one kernel-doc comment
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     jinpu.wang@ionos.com, jgg@ziepe.ca, leon@kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526054642.zw44mgw2bd2u5v76@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 3:09 PM Yang Li <yang.lee@linux.alibaba.com> wrote:
->
-> Add the description of @pathname and remove @sessname in rtrs_clt_open()
-> kernel-doc comment to remove warnings found by running scripts/kernel-doc,
-> which is caused by using 'make W=1'.
->
-> drivers/infiniband/ulp/rtrs/rtrs-clt.c:2809: warning: Function parameter
-> or member 'pathname' not described in 'rtrs_clt_open'
-> drivers/infiniband/ulp/rtrs/rtrs-clt.c:2809: warning: Excess function
-> parameter 'sessname' description in 'rtrs_clt_open'
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-Reviewed-by: Md Haris Iqbal <haris.iqbal@ionos.com>
+On Thu, May 26, 2022 at 11:16:42AM +0530, Pratyush Yadav wrote:
+> Hi Rob,
+> 
+> On 25/05/22 04:00PM, Rob Herring wrote:
+> > SPI bus per device properties must be defined in spi-peripheral-props.yaml
+> > for unevaluatedProperties checks to work correctly on device nodes.
+> > 
+> > This has the side effect of promoting 'rx-sample-delay-ns' to be a
+> > common property, but functionally it's no different if it was defined in
+> > a Synopsys specific schema file.
+> 
+> Functionally it is no different, but does this property make sense for 
+> other controllers? If not then I don't see why we should pollute the 
+> common list with controller-specific ones. For one, this now no longer 
+> makes it obvious that this property should only be used with the 
+> Synopsys controller. And if you keep making small exceptions for other 
+> controllers too, soon the common list will be full of controller 
+> properties and it will be a mess finding out what belongs to who.
 
-Thanks
+There's at least one other case already:
 
-> ---
->  drivers/infiniband/ulp/rtrs/rtrs-clt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> index c2c860d0c56e..9809c3883979 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> @@ -2785,7 +2785,7 @@ static void free_clt(struct rtrs_clt_sess *clt)
->  /**
->   * rtrs_clt_open() - Open a path to an RTRS server
->   * @ops: holds the link event callback and the private pointer.
-> - * @sessname: name of the session
-> + * @pathname: name of the path to an RTRS server
->   * @paths: Paths to be established defined by their src and dst addresses
->   * @paths_num: Number of elements in the @paths array
->   * @port: port to be used by the RTRS session
-> --
-> 2.20.1.7.g153144c
->
+  cdns,read-delay:
+    $ref: /schemas/types.yaml#/definitions/uint32
+    description:
+      Delay for read capture logic, in clock cycles.
+
+
+Too many common properties is not a problem we have. Too many custom 
+properties doing the same thing is the problem.
+
+Rob

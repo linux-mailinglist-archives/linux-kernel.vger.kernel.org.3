@@ -2,116 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C2B534EC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F38534EC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244021AbiEZMCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        id S242491AbiEZMCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346519AbiEZMBv (ORCPT
+        with ESMTP id S235180AbiEZMCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:01:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9C62D02BB
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653566507;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=055SoySeYXCWiLn0CzY+x8sr/f0kC8O6z5eyzr7h1MY=;
-        b=N4CAE3oo1tMYh2scOE8dKZp+3n9aWlyF1F1TNbqirg0gY45hx5MmHW7iHnHVGov79+u2cL
-        heQVXClTZjGXTU5UYOc722kRZ3oPuYuOF5NzaQtyPEMjErhuFE+Prf7S5j/Fx+IP/mbhQ2
-        GK2a8OZX1ARl19w0m3GgeO/Y9BS78l8=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-15-AvxagEL0OpW5pujQBj8z3g-1; Thu, 26 May 2022 08:01:46 -0400
-X-MC-Unique: AvxagEL0OpW5pujQBj8z3g-1
-Received: by mail-ej1-f72.google.com with SMTP id nb10-20020a1709071c8a00b006e8f89863ceso721489ejc.18
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:01:46 -0700 (PDT)
+        Thu, 26 May 2022 08:02:41 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DCFC8BEC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:02:40 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id h13so1525437pfq.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=83qsgRrIHOn2RSbwDsfrRxuBXw3apvQPm7JZl44Kav4=;
+        b=O7j7RgMIDxEyauRoBqv46L6OxDslw86kOtq4JcWBN0WQWYndBfKPRlXE5MupB3YSP4
+         puX6G/Qp+y1wStHgi8q0ncU/U7HMbVAk124D/8Bw8/ktk7YdTYnCjSkZIdDrSkratO1+
+         5HlZGcz3dFzPq7k0E8MgXw+Lzgl8HUomCOui+xdsmVPYboqB3ldcell8VoDwfjuobYcz
+         YjEcUTCzfB5oAd4+RLI5eMp3PdTDEYbGDp1lXYjkNWDhAkGy3PdgVKm4C6tvjykR+sMX
+         KeOXZaIXvHr+zDolJmz0FVYFfnIPyZNrR30xadjhwIOr8d7u8vC7gy+6qxtBtwKUwKYu
+         /5iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=055SoySeYXCWiLn0CzY+x8sr/f0kC8O6z5eyzr7h1MY=;
-        b=si1YrOBYYjQO8LDsDZBIb4uloNtNZ9tlg4xnynd2sqZSY9ErkgvmLhoKtGogxE6vmj
-         do1vZlMRSLcIno1owuwtVnsEur8qFNH0Hqr0ikdRJYsR5aINkbtKsX1BcrJsIu0hPgS9
-         PkJM7XsFgOqWzd79xzCWWXC4F8nZF2QFxYB7C4dPNNnl41XuYyue73PLGfESn6AFfrMZ
-         BA3b0HJa0YWq+iViviRRETgROceW6YzqUI46E13cnlNuWvsmAh0LhmIYH64BX6X8PLhM
-         TvY7iOJXh4hO2FV8cmiHIGja6cKlKL3i0otjqV7ox4uXvLCc5itZfvSICXNWWJ1Yo+Pl
-         AncA==
-X-Gm-Message-State: AOAM531++Vvlxy2iL4KCs8td8tqJ/w/VX6Ul9mWShWUkhKFNzHVUtKJh
-        J5U+5VcsnNfB8ggfI25zXVfa+eBV+arrwBZ2atyOgUkpOfp5nTMIcxiH36QcOoAyo6Ck8UYyUOz
-        4brfVaSplghtQeMB2/Kf+b7Um
-X-Received: by 2002:a05:6402:4384:b0:42b:5bf6:6d0a with SMTP id o4-20020a056402438400b0042b5bf66d0amr23209295edc.298.1653566505415;
-        Thu, 26 May 2022 05:01:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKcWoJHWNsYMQzmjLeHxlnKvIV9QJoGSG5PucM9P0VaBH4aybz1rC298akfqvIO/hsmF/cLQ==
-X-Received: by 2002:a05:6402:4384:b0:42b:5bf6:6d0a with SMTP id o4-20020a056402438400b0042b5bf66d0amr23209276edc.298.1653566505226;
-        Thu, 26 May 2022 05:01:45 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id o15-20020a1709062e8f00b006fe9a2874cdsm446934eji.103.2022.05.26.05.01.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 05:01:44 -0700 (PDT)
-Message-ID: <a3ea7446-901f-1d33-47a9-35755b4d86d5@redhat.com>
-Date:   Thu, 26 May 2022 14:01:43 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=83qsgRrIHOn2RSbwDsfrRxuBXw3apvQPm7JZl44Kav4=;
+        b=b3kwMQ8PZcaMZGSfHQMPULAkuRVkAcLggJddRozDllBy15VNyyHfmxQBNUvaKcwxIn
+         0siwvCkayjYO6In/Spj02JXdxwpN/Ysm+aXJxYaCcLWTs4/f3ocBgx4GTXW69nQZ3vVB
+         r+AbV6geAfmTH8vmN35KXvwb6PTTi4603rbfv2hP3qmSs5Zu9h+xx63686C8swC2zX2E
+         B+xlsUtBp9a6MMs8OyM0NZ3/bbabB0vGXQ9drWwHni4zOT3Biv33SSt4grzfMTN3VuMk
+         g/4HHi8e2HqXBp7XJX7h/K2YPPUSRrtpDNrI6DMxFsLPiFrT9pq0/8g6f83YwhrVmng3
+         NzFQ==
+X-Gm-Message-State: AOAM531E8IzHfnuMEzrWzQ06N7HzYnW+bH1LL5T6HF9DBsGRn8KumzEZ
+        QUbpAL6gehZMfqZaAxc2tPJyrCv2BzMzTshH1g==
+X-Google-Smtp-Source: ABdhPJztL84+s7XSysrxuOWWPlqTmfeaaJCotiYXEiVt+StmbnYBKL+zWXUA4kE5KG8msdXJMia4E5K36wTR4HytGC8=
+X-Received: by 2002:a63:4525:0:b0:3db:8a4d:8a77 with SMTP id
+ s37-20020a634525000000b003db8a4d8a77mr33354669pga.542.1653566559987; Thu, 26
+ May 2022 05:02:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] KVM: x86/MMU: Zap non-leaf SPTEs when disabling dirty
- logging
-Content-Language: en-US
-To:     Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-References: <20220525230904.1584480-1-bgardon@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220525230904.1584480-1-bgardon@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Yn9XwHxWsLIJXlHu@kroah.com> <20220514114819.2773691-1-zheyuma97@gmail.com>
+ <Yn+va5fTsuaFTxVR@kroah.com> <CAMhUBj=RMJwn2K+rQC9rQ=QEe5QkiJ29rMd8KzEC8B7vtXo+ug@mail.gmail.com>
+ <Yocp+WZ0On9/wObu@kroah.com> <CAMhUBj=J5-V_D_kucpiWz6ZdOSSR1N9nRXQxOKgmwRA+LxW17Q@mail.gmail.com>
+ <YouxHY48daZt7J/O@kroah.com> <628BBEEB.9010306@gmail.com> <YovBOwJs/A/5Ua7I@kroah.com>
+ <628CCE44.6020007@gmail.com>
+In-Reply-To: <628CCE44.6020007@gmail.com>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Thu, 26 May 2022 20:02:28 +0800
+Message-ID: <CAMhUBjkv-i360rk4NRrMXYoo9u8_UbCzY-mEsd5dybMizTJJQg@mail.gmail.com>
+Subject: Re: [PATCH v2] char: xillybus: Check endpoint type before allocing
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, arnd@arndb.de,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/22 01:09, Ben Gardon wrote:
-> +		WARN_ON(max_mapping_level < iter.level);
-> +
-> +		/*
-> +		 * If this page is already mapped at the highest
-> +		 * viable level, there's nothing more to do.
-> +		 */
-> +		if (max_mapping_level == iter.level)
-> +			continue;
-> +
-> +		/*
-> +		 * The page can be remapped at a higher level, so step
-> +		 * up to zap the parent SPTE.
-> +		 */
-> +		while (max_mapping_level > iter.level)
-> +			tdp_iter_step_up(&iter);
-> +
->   		/* Note, a successful atomic zap also does a remote TLB flush. */
-> -		if (tdp_mmu_zap_spte_atomic(kvm, &iter))
-> -			goto retry;
-> +		tdp_mmu_zap_spte_atomic(kvm, &iter);
-> +
+On Tue, May 24, 2022 at 8:24 PM Eli Billauer <eli.billauer@gmail.com> wrote:
+>
+> On 23/05/22 20:15, Greg KH wrote:
+> >> Rather, it works like this: The driver uses the EP 1 IN and OUT endpoints to
+> >> >  query the device for a data structure, which contains information on the
+> >> >  device's communication channels. The driver sets up device files
+> >> >  accordingly, and it also gets informed on which bulk OUT endpoints are
+> >> >  present.
+> >> >
+> >> >  For what it's worth, I think it's fairly safe to assume that if a device
+> >> >  returns a legal data structure (which passes a CRC test), it's a XillyUSB
+> >> >  device.
+> >>
+> > Why?  You still need to verify that the requested endpoints match up
+> > with what the device really has.
+> >
+> OK. So to summarize:
+>
+> EP 1 IN and EP 1 OUT are always present in XillyUSB devices.
+>
+> On top of these, there might be additional bulk OUT endpoints. The
+> driver resolves which ones in setup_channels(), by scanning a data blob
+> it has received from the device. This takes place in the for-loop inside
+> this function. When (out_desc & 0x80) is true for a given @i in the
+> loop, the device has a bulk OUT endpoint with address i+2 (e.g. if this
+> condition is met for i==2, the device has a bulk OUT EP 4).
+>
+> So it seems like setup_channels() would be the right place to make this
+> check, since it's called during the device's probe.
+>
+> I guess it would likewise make sense to check for EP 1 IN and OUT in
+> xillyusb_setup_base_eps().
+>
+> Thanks,
+>     Eli
 
-Can you make this a sparate function (for example 
-tdp_mmu_zap_collapsible_spte_atomic)?  Otherwise looks great!
+Thanks for the detailed explanation, I will try to send a new version
+of the patch to fix the bug.
 
-Paolo
-
+Thanks,
+Zheyu Ma

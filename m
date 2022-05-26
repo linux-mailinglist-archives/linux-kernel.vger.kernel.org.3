@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6788C534B71
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC65B534B7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241025AbiEZIRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S231450AbiEZIRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346686AbiEZIQg (ORCPT
+        with ESMTP id S1346699AbiEZIQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:16:36 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829204C7B6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:16:17 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f4dfd09d7fso8176837b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:16:17 -0700 (PDT)
+        Thu, 26 May 2022 04:16:42 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234AC4EDDF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:16:21 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id u1-20020a17090a2b8100b001d9325a862fso775380pjd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:16:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=6dgEjD+4R2dKDRgscs/xv70YgyhfXrRwkUylnVTphfk=;
-        b=XL1eUaOAcssMtqvMAb2JLoXAqGRiBPWRpPBJh6rTDvytgReAH+LjXHDFnDZXS9f9I2
-         35g3JMRGxQZlCvxOhWMcOSoY7fmD/fBdQK3AfpTe4+KDVzo3ISAmWs2bpcJGBQMEHxn2
-         XOrBvHACbTqtONiyNPB/vydyMzterA8qUwVfxsEqd+Vz+8qcEbmdk9FVpwyv4JToLFBL
-         EPR58mdlFaKlltO8fCr0xZCvNvm+F4UFw5xJYUT6ue5rms9F3TPGMAGF7HdiGvNufzye
-         R8r2YJjaY8RuLAuVFWX7SLMYTTkhhepWRDKwQDGC55z4gixqwa9JauWCwnOhgDgX/TTb
-         SoiA==
+        bh=2cafqgyvMaG8pnmb2DwUPLH+NwqexHFaoGplVLqjY6c=;
+        b=Qhvec8EM5waM3couwB4Dum8OsNReKnA1EIAEV8LpsepiAu+NTnpIDd6zPzvaScyoHi
+         joLxHL0NnhEkyS300O8xI9N1fgEmoiNW+tHhgRg+C3VgA1m7nuIAVZgpAAN0SCoZaXb3
+         HEB/SDIh21LxIk12AKALJ8PaTt3HoxW0TucqgFk8I+2nWe8sV+SOqE/1qyqqfeteZr3g
+         EufhH6H9hKX80HxUrjS4SaCSZY+0yU4qfhVpbOF9hKztCUUvRR36MTpKRlzF3fXGT8kL
+         xXPgN+vDeTbaZIcJj1bpAuXYJV78EUX8wvpAl/KOGx8ob/jDmnzqVjFH+adTvCIPzWq4
+         hKpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=6dgEjD+4R2dKDRgscs/xv70YgyhfXrRwkUylnVTphfk=;
-        b=iO/dDRtrRBOUjANtnwGihSK4F9PPoaLcv0PrfzBvwVVd0J8WVtvORrbrjoG3azUb0c
-         CdIjAHUOOu/4YoTOQucKF545yn1Ybv2X/HSSRfK74RbuVu71l8PXfflF8ovuKz4OY7yU
-         pAyPPbSSxgHuNbD1eGOTDZpo/Kr2zkWY25wRMx74Dq8r2a2ciGRSXGFpTF9wR+IY2pi2
-         uKtRRLIgwW0uN4Pj4/o7tFtfNR39jKp5ijudQEV21fcU3SGLSxJoVJ/CF+IHWzKN/DZs
-         8RaRLdDTzM2t79EwRz1JxIa6VmB92t1653WUaF4AfDenmay6E/xqpbYLXVnLKtqPgkoK
-         cnng==
-X-Gm-Message-State: AOAM533Csl1PI+/AILM7B49r7pKNre8yaA+tIFeuiA3CPazk5qWvc36L
-        s91Q/mQqOkEeO66QrFwMpKOpsLzE2aQwOf0=
-X-Google-Smtp-Source: ABdhPJx5hTzSS2LFu7RkqlQ7KLRzxV0Py+PZHVG9x+dcAcINC/1HXYTnTXlf9OdhjLu3DXMEHDG7SkiPohYReIE=
+        bh=2cafqgyvMaG8pnmb2DwUPLH+NwqexHFaoGplVLqjY6c=;
+        b=KeelyJ5c6Jj0VxOixTr6YJ1Z31hjIgzoXdToVDIMmUKyt26kfvY6ZLTM8GEUeJoHcA
+         iLBqSBY05d8e1yXaLx8akGLfjpAQgUuM22luz94hydWE8CcUQvAovIujR4x7OmD6Sf2D
+         DjVLEzuOMM0RJqvfx8Uz8KEWfTBxgK6n2gOuaFLfTZzdOC6uoLquJeMsoDYTu+iE0lkY
+         dUpGuMCH0zugsA03N/4DgeocLLdLkt+amB4oFKeRfbpFIAxk+ZlYYV+VM5tDqUF6vhx1
+         j68s4BQz3jC43KSlwoTqJTNiVmqu70jWDfPJmQQlSHI8gsYXLuag5CbI9ZyQOFeKrzgz
+         QITQ==
+X-Gm-Message-State: AOAM531U7SEvMk47YYCmrVjmZFfZJP4JnSDJH6EPN7RYU+5pDDsZ+RYT
+        eEKmVz2CIKhH9qFb4xIOTymmjuMykvM3wYc=
+X-Google-Smtp-Source: ABdhPJyinReesiUqDbMmyw2id5J+MedifDe6OonBttcETpmdQGcuAvMkhqslxCFm255z4G73O9ROU101o9oWZy4=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:ff1f:a3b7:b6de:d30f])
- (user=saravanak job=sendgmr) by 2002:a25:fb12:0:b0:64d:d6fb:406a with SMTP id
- j18-20020a25fb12000000b0064dd6fb406amr34790013ybe.433.1653552977155; Thu, 26
- May 2022 01:16:17 -0700 (PDT)
-Date:   Thu, 26 May 2022 01:15:47 -0700
+ (user=saravanak job=sendgmr) by 2002:a17:902:7004:b0:161:f216:4f3f with SMTP
+ id y4-20020a170902700400b00161f2164f3fmr30173525plk.98.1653552980455; Thu, 26
+ May 2022 01:16:20 -0700 (PDT)
+Date:   Thu, 26 May 2022 01:15:48 -0700
 In-Reply-To: <20220526081550.1089805-1-saravanak@google.com>
-Message-Id: <20220526081550.1089805-9-saravanak@google.com>
+Message-Id: <20220526081550.1089805-10-saravanak@google.com>
 Mime-Version: 1.0
 References: <20220526081550.1089805-1-saravanak@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [RFC PATCH v1 8/9] net: ipconfig: Force fw_devlink to unblock any
- devices that might probe
+Subject: [RFC PATCH v1 9/9] driver core: Delete driver_deferred_probe_check_state()
 From:   Saravana Kannan <saravanak@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -90,40 +89,80 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there are network devices that could probe without some of their
-suppliers probing and those network devices are needed for IP auto
-config to work, then fw_devlink=on might break that usecase by blocking
-the network devices from probing by the time IP auto config starts.
-
-So, when IP auto config is enabled, make sure fw_devlink doesn't block
-the probing of any device that has a driver by the time we get to IP
-auto config.
+The function is no longer used. So delete it.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- net/ipv4/ipconfig.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/base/dd.c             | 30 ------------------------------
+ include/linux/device/driver.h |  1 -
+ 2 files changed, 31 deletions(-)
 
-diff --git a/net/ipv4/ipconfig.c b/net/ipv4/ipconfig.c
-index 9d41d5d5cd1e..aa7b8ba68ca6 100644
---- a/net/ipv4/ipconfig.c
-+++ b/net/ipv4/ipconfig.c
-@@ -1435,6 +1435,8 @@ static int __init wait_for_devices(void)
- {
- 	int i;
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index af8138d44e6c..789b0871dc45 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -274,42 +274,12 @@ static int __init deferred_probe_timeout_setup(char *str)
+ }
+ __setup("deferred_probe_timeout=", deferred_probe_timeout_setup);
  
-+	fw_devlink_unblock_may_probe();
-+
- 	for (i = 0; i < DEVICE_WAIT_MAX; i++) {
- 		struct net_device *dev;
- 		int found = 0;
+-/**
+- * driver_deferred_probe_check_state() - Check deferred probe state
+- * @dev: device to check
+- *
+- * Return:
+- * * -ENODEV if initcalls have completed and modules are disabled.
+- * * -ETIMEDOUT if the deferred probe timeout was set and has expired
+- *   and modules are enabled.
+- * * -EPROBE_DEFER in other cases.
+- *
+- * Drivers or subsystems can opt-in to calling this function instead of directly
+- * returning -EPROBE_DEFER.
+- */
+-int driver_deferred_probe_check_state(struct device *dev)
+-{
+-	if (!IS_ENABLED(CONFIG_MODULES) && initcalls_done) {
+-		dev_warn(dev, "ignoring dependency for device, assuming no driver\n");
+-		return -ENODEV;
+-	}
+-
+-	if (!driver_deferred_probe_timeout && initcalls_done) {
+-		dev_warn(dev, "deferred probe timeout, ignoring dependency\n");
+-		return -ETIMEDOUT;
+-	}
+-
+-	return -EPROBE_DEFER;
+-}
+-EXPORT_SYMBOL_GPL(driver_deferred_probe_check_state);
+-
+ static void deferred_probe_timeout_work_func(struct work_struct *work)
+ {
+ 	struct device_private *p;
+ 
+ 	fw_devlink_drivers_done();
+ 
+-	driver_deferred_probe_timeout = 0;
+ 	driver_deferred_probe_trigger();
+ 	flush_work(&deferred_probe_work);
+ 
+diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+index 700453017e1c..7c245d269feb 100644
+--- a/include/linux/device/driver.h
++++ b/include/linux/device/driver.h
+@@ -241,7 +241,6 @@ driver_find_device_by_acpi_dev(struct device_driver *drv, const void *adev)
+ 
+ extern int driver_deferred_probe_timeout;
+ void driver_deferred_probe_add(struct device *dev);
+-int driver_deferred_probe_check_state(struct device *dev);
+ void driver_init(void);
+ 
+ /**
 -- 
 2.36.1.124.g0e6072fb45-goog
 

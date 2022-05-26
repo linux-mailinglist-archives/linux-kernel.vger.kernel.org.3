@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3AE534CE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3F3534CEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344924AbiEZKBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 06:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
+        id S235739AbiEZKDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 06:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiEZKB3 (ORCPT
+        with ESMTP id S229593AbiEZKDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 06:01:29 -0400
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF885AF337;
-        Thu, 26 May 2022 03:01:27 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id j25so1496757wrb.6;
-        Thu, 26 May 2022 03:01:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lx3v91MKvNWw13VryX1BqqQ6vGw8LXT68T6Hr6cGD/U=;
-        b=wdL7JbaZbyBKl/3Aq036klTHs0Ox+aIiNlXy3n8zjiL3Srcumz5kpBCgVHcvfIP7Vs
-         U459arqbw067Ib0UTJneGKbxQTdYfXWK3pUL2k6yD4VgHxBXkVBSGFAxeviVAgG9RXLE
-         2D2Qy6OmagpPd44gMZuyksJCmImZkpSt6s9M+yO9+Z1scM6sSHfTE831Bjwdp5L/AkpN
-         SYIyJDCz6swY80c2DMdTGBcnFX8+RfdUzepjWZgxpKHdFtTD+ghdXaXSBPopGJvnkqk+
-         GFa1SO0bJ5ZRd9qKpiK3L1WoIvsLWoaS/7deqTs+pzc8KRIK3UpKa/wB1H0bB+/qeqyR
-         EQBw==
-X-Gm-Message-State: AOAM533PKU0x4CkKFIShTyW1p7yaU1DqhgtR9kMFLjT4FnW2LNonPRBI
-        hiEaKYavOGoh7thbvfGp+4A=
-X-Google-Smtp-Source: ABdhPJw6nZtBMTl2VZyXuSX2JE0sT/DXGau2hXPz7tFQ09pul8FdKLkJNBKjvjDTn20p9KIeHuB3Xw==
-X-Received: by 2002:adf:f889:0:b0:210:3c2:2be3 with SMTP id u9-20020adff889000000b0021003c22be3mr4647874wrp.147.1653559286392;
-        Thu, 26 May 2022 03:01:26 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id p14-20020a056000018e00b0020fe7f7129fsm1237717wrx.100.2022.05.26.03.01.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 03:01:25 -0700 (PDT)
-Date:   Thu, 26 May 2022 10:01:23 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        kernel-janitors@vger.kernel.org,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Drivers: hv: vmbus: fix typo in comment
-Message-ID: <20220526100123.427zdetsv4n2pirc@liuwe-devbox-debian-v2>
-References: <20220521111145.81697-60-Julia.Lawall@inria.fr>
+        Thu, 26 May 2022 06:03:11 -0400
+Received: from mail-m973.mail.163.com (mail-m973.mail.163.com [123.126.97.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5587BAF337;
+        Thu, 26 May 2022 03:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=SIdeg
+        1ju9DDQN5SyCoUMa81G3s2La6ZRZRDFK36w+Gs=; b=IT45QKTSbSotUcsxZObUz
+        X/x0mnRaCmfMUDbvpTmu30DDcXk+RYMzFjgtF4l8haYS0UnziqbLhXroCc6DIIAG
+        BcooIfejMSHpSQ2E6pdNkjqKvJcZg7PehLp5WqqZBSX1/hgHSZKGolkFQ0wPuV8R
+        ukHMk7ZJ+pr7Is3O3/cr10=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp3 (Coremail) with SMTP id G9xpCgAXuJk2UI9iK0jaEg--.27316S4;
+        Thu, 26 May 2022 18:02:43 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] ath11k: mhi: fix potential memory leak in ath11k_mhi_register()
+Date:   Thu, 26 May 2022 18:02:27 +0800
+Message-Id: <20220526100227.483609-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220521111145.81697-60-Julia.Lawall@inria.fr>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: G9xpCgAXuJk2UI9iK0jaEg--.27316S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Wr48KryDZrWkKrW8uw1rZwb_yoWkZrg_CF
+        ZYgF17ZrW2kw1rJrWjkr4UZFyS9ay7X3Z5Wa10qFyxJa95Z3yDuryDZFy5JasrKr4jvr13
+        CrnrAFyjy3sI9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREF4i5UUUUU==
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiPhcNjFxBsWDfhwABs9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 21, 2022 at 01:11:10PM +0200, Julia Lawall wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> 
+mhi_alloc_controller() allocates a memory space for mhi_ctrl. When some
+errors occur, mhi_ctrl should be freed by mhi_free_controller(). But
+when ath11k_mhi_read_addr_from_dt() fails, the function returns without
+calling mhi_free_controller(), which will lead to a memory leak.
 
-Applied to hyperv-next. Thanks.
+We can fix it by calling mhi_free_controller() when
+ath11k_mhi_read_addr_from_dt() fails.
 
-> ---
->  drivers/hv/channel_mgmt.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-> index 97d8f5646778..b60f13481bdc 100644
-> --- a/drivers/hv/channel_mgmt.c
-> +++ b/drivers/hv/channel_mgmt.c
-> @@ -443,7 +443,7 @@ void hv_process_channel_removal(struct vmbus_channel *channel)
->  	/*
->  	 * Upon suspend, an in-use hv_sock channel is removed from the array of
->  	 * channels and the relid is invalidated.  After hibernation, when the
-> -	 * user-space appplication destroys the channel, it's unnecessary and
-> +	 * user-space application destroys the channel, it's unnecessary and
->  	 * unsafe to remove the channel from the array of channels.  See also
->  	 * the inline comments before the call of vmbus_release_relid() below.
->  	 */
-> 
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ drivers/net/wireless/ath/ath11k/mhi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ath/ath11k/mhi.c b/drivers/net/wireless/ath/ath11k/mhi.c
+index fc3524e83e52..3318c7c2b32b 100644
+--- a/drivers/net/wireless/ath/ath11k/mhi.c
++++ b/drivers/net/wireless/ath/ath11k/mhi.c
+@@ -376,8 +376,10 @@ int ath11k_mhi_register(struct ath11k_pci *ab_pci)
+ 
+ 	if (test_bit(ATH11K_FLAG_FIXED_MEM_RGN, &ab->dev_flags)) {
+ 		ret = ath11k_mhi_read_addr_from_dt(mhi_ctrl);
+-		if (ret < 0)
++		if (ret < 0) {
++			mhi_free_controller(mhi_ctrl);
+ 			return ret;
++		}
+ 	} else {
+ 		mhi_ctrl->iova_start = 0;
+ 		mhi_ctrl->iova_stop = 0xFFFFFFFF;
+-- 
+2.25.1
+

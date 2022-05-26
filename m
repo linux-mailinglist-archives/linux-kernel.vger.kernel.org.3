@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6276535055
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B517535057
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbiEZODF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 10:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
+        id S236665AbiEZOEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 10:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346294AbiEZODC (ORCPT
+        with ESMTP id S235578AbiEZOEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 10:03:02 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F0F2CDEA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:03:01 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so1054245otr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:03:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xER5qd7NDHJpu21bf/QgYTxPeVwPuTdZeetijhnYaKY=;
-        b=ZoWSLfhYUiiK/8XkSqjEkby5wMNctocjGlTkOpdBbIO1QaY2vum16sC1gBdHNgGi1Y
-         ShUiHX6hftTluYaIeyEL6M0qCsKv8i2OeLLEYj3i1osUSfR3KnPfmw9vfsJxk7auMaI6
-         grK6pROBi7PdUTDh+pFse6U6Vqp+PyQ5U8PISz5X6bTNlzSRmmySssOM6vbqrxYFSgNJ
-         3vr1nWyHDuaQh29Vuc3akSyTStHPapH64avS2ANCf50u3b9dTok0m39igRkOuScJ2ZpI
-         Aet9KTTabL8vg3+QubWRsNBo2pE3PXA+pUO9NeUWmUu7AAkVNnvD/e6TZF1H8/8Waukl
-         N3Eg==
+        Thu, 26 May 2022 10:04:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F6128CB38
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:04:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653573881;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vXIDMXdbWn3CFwJPPtOALPFH0gfKO88GqGt6FTcIcL0=;
+        b=NJNtrj79mG1HJHf9pCYgtT40oqTcBWPFY9k/sW5BkfjeW89k6C+gLz3A+ucHsdsyPyNQnz
+        20y6HUgV0NzB4804vMZeVZEXyqvugfn8iqAfXHZesI79FEjnc+DnGcS2F8RwmnOyeUtDSE
+        GVeB/2rypVlsT0FwJ0sPjru1URNsDxc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-283-BI4rfRWHMii3ED0p-0dhMQ-1; Thu, 26 May 2022 10:04:40 -0400
+X-MC-Unique: BI4rfRWHMii3ED0p-0dhMQ-1
+Received: by mail-wm1-f71.google.com with SMTP id bg13-20020a05600c3c8d00b003974d0ff917so1145305wmb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:04:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xER5qd7NDHJpu21bf/QgYTxPeVwPuTdZeetijhnYaKY=;
-        b=hak0WE4+MAgjy1GpdSS7DlLhneKCX1l7AEJvZbmTOpl0BBIHYGOrvoD7VAzzLxhduU
-         FodVKNP6guMwXMt3+qe0ZU82Gqem9BxcQ7cXT8++ps1B9+S5BTJ1dV8e4JpucPiN+tg0
-         0pq37/JvgwtnSYnSiAQt1QSeB0eO/p8t0uh49QJtwZYrlZp7HvFX7IAcdPciRx9cYLcH
-         p3xoG9FmkCFnm6dxceq6yBS596N2Vq5VgqO21yYwB8ozXbjBBeJQYKKnZ/9KrPnNRKwG
-         HKnNapWXabvqaFHXZ6vUX1m9dGox4B2nTDCz4O/DAJ2lWpwYC4+NpPnh3H/v4W5ah2jF
-         ov1w==
-X-Gm-Message-State: AOAM5317yoDlszmrKPrkHr8QgBTs6BIZGrwOWcZHnjTeVrKtY/q6icIO
-        Dd//Yq0bYnQsTKZd6iaDrDM=
-X-Google-Smtp-Source: ABdhPJw8h/iNW2cKl1ZPDKdZeuN5zOsSrx6KZwv97+IoAil0hgyghxwN2if3xWRvFuhrS9M2ZLr6bw==
-X-Received: by 2002:a9d:479a:0:b0:60b:359f:db6f with SMTP id b26-20020a9d479a000000b0060b359fdb6fmr2839841otf.67.1653573780601;
-        Thu, 26 May 2022 07:03:00 -0700 (PDT)
-Received: from localhost ([199.180.249.178])
-        by smtp.gmail.com with ESMTPSA id b18-20020a4a9fd2000000b0035eb4e5a6b8sm679673oom.14.2022.05.26.07.03.00
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=vXIDMXdbWn3CFwJPPtOALPFH0gfKO88GqGt6FTcIcL0=;
+        b=SjUEYbx+TQmZZl+5jIEUmuGKPOg0Z8ZTjHKbTcewDgZl5zDnWfOMdgcpN5CKIK0WZn
+         hWMB8tQSvleD6geNVuchW+VKetfE35eXky8jF1mJqxltOP/xD88JVOfVeA/gHzKdXFPN
+         NMEX7+sOVf9nv4QGsdJfjXFjrfVS1IMW5DMh/gurK7JmP+wXE/IFPN2ziFSm/GAEfPk6
+         zGZm+DboZq6qvVwo+/mN1HibCWvn1OmxUcqAd2jjQbCt3EZNrqiw39R9jPOKfZPGDQKN
+         yuXptHZB94BOprjBW9zzdawP0cseN4y3m1bFKm82LeF605JoArM+I3tuBf58qqhJHrkG
+         D/+Q==
+X-Gm-Message-State: AOAM531nf7yf/dPZumI8608Y2DZt5bQCOBHhr0keODLKlZG6jJRiYbIM
+        xzs82ctn7F0SlMU0t1qj4yl/ur5/EBW9oue3YJq7Weo2PgxwNIFF3lLShe0f7WmZGUZAa3gm5qm
+        3PbKWOQkp7OOqrcK9RvPu3Sqy
+X-Received: by 2002:a7b:c957:0:b0:397:3f4d:555c with SMTP id i23-20020a7bc957000000b003973f4d555cmr2533243wml.101.1653573879037;
+        Thu, 26 May 2022 07:04:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwsUkpmO+WEr+0K774juxAKra9bm1YWJFZ84phTC7DPfVnt0rczZU3R2XM2/lzjJ/CGKSGZBg==
+X-Received: by 2002:a7b:c957:0:b0:397:3f4d:555c with SMTP id i23-20020a7bc957000000b003973f4d555cmr2533207wml.101.1653573878757;
+        Thu, 26 May 2022 07:04:38 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id ay5-20020a05600c1e0500b003948f4e750fsm5721538wmb.23.2022.05.26.07.04.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 07:03:00 -0700 (PDT)
-From:   bh1scw@gmail.com
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Fanjun Kong <bh1scw@gmail.com>
-Subject: [PATCH] mm: use PAGE_ALIGNED instead of IS_ALIGNED
-Date:   Thu, 26 May 2022 22:02:57 +0800
-Message-Id: <20220526140257.1568744-1-bh1scw@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 26 May 2022 07:04:38 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Dinse <nanook@eskimo.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 1/4] KVM: x86: Grab regs_dirty in local 'unsigned long'
+In-Reply-To: <20220525222604.2810054-2-seanjc@google.com>
+References: <20220525222604.2810054-1-seanjc@google.com>
+ <20220525222604.2810054-2-seanjc@google.com>
+Date:   Thu, 26 May 2022 16:04:37 +0200
+Message-ID: <87tu9cqtje.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fanjun Kong <bh1scw@gmail.com>
+Sean Christopherson <seanjc@google.com> writes:
 
-The <linux/mm.h> already provides the PAGE_ALIGNED macro. Let's
-use this macro instead of IS_ALIGNED and passing PAGE_SIZE directly.
+> Capture ctxt->regs_dirty in a local 'unsigned long' instead of casting
+> ctxt->regs_dirty to an 'unsigned long *' for use in for_each_set_bit().
+> The bitops helpers really do read the entire 'unsigned long', even though
+> the walking of the read value is capped at the specified size.  I.e. KVM
+> is reading memory beyond ctxt->regs_dirty.  Functionally it's not an
+> issue because regs_dirty is in the middle of x86_emulate_ctxt, i.e. KVM
+> is just reading its own memory, but relying on that coincidence is gross
+> and unsafe.
 
-Signed-off-by: Fanjun Kong <bh1scw@gmail.com>
----
- mm/sparse-vmemmap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Your nearly perfect description misses one important part: in 'struct
+x86_emulate_ctxt', 'regs_dirty' is actually 'u32' thus all this buzz :-)
 
-diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-index f4fa61dbbee3..49cb15cbe590 100644
---- a/mm/sparse-vmemmap.c
-+++ b/mm/sparse-vmemmap.c
-@@ -200,8 +200,8 @@ static int vmemmap_remap_range(unsigned long start, unsigned long end,
- 	unsigned long next;
- 	pgd_t *pgd;
- 
--	VM_BUG_ON(!IS_ALIGNED(start, PAGE_SIZE));
--	VM_BUG_ON(!IS_ALIGNED(end, PAGE_SIZE));
-+	VM_BUG_ON(!PAGE_ALIGNED(start));
-+	VM_BUG_ON(!PAGE_ALIGNED(end));
- 
- 	pgd = pgd_offset_k(addr);
- 	do {
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/emulate.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+> index 89b11e7dca8a..7226a127ccb4 100644
+> --- a/arch/x86/kvm/emulate.c
+> +++ b/arch/x86/kvm/emulate.c
+> @@ -269,9 +269,10 @@ static ulong *reg_rmw(struct x86_emulate_ctxt *ctxt, unsigned nr)
+>  
+>  static void writeback_registers(struct x86_emulate_ctxt *ctxt)
+>  {
+> +	unsigned long dirty = ctxt->regs_dirty;
+>  	unsigned reg;
+>  
+> -	for_each_set_bit(reg, (ulong *)&ctxt->regs_dirty, 16)
+> +	for_each_set_bit(reg, &dirty, 16)
+>  		ctxt->ops->write_gpr(ctxt, reg, ctxt->_regs[reg]);
+>  }
+
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+
 -- 
-2.36.0
+Vitaly
 

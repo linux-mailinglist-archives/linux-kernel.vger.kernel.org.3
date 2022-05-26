@@ -2,88 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC61534D75
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E14E534D58
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347078AbiEZKgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 06:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
+        id S1346124AbiEZKcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 06:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347066AbiEZKgN (ORCPT
+        with ESMTP id S1344766AbiEZKcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 06:36:13 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB31CEBA3;
-        Thu, 26 May 2022 03:35:58 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L84442mZDz6GD9M;
-        Thu, 26 May 2022 18:31:48 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 26 May 2022 12:35:56 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 26 May 2022 11:35:52 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hch@lst.de>,
-        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
-        <linux-scsi@vger.kernel.org>, <liyihang6@hisilicon.com>,
-        <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 4/4] libata-scsi: Cap ata_device->max_sectors according to shost->max_sectors
-Date:   Thu, 26 May 2022 18:28:34 +0800
-Message-ID: <1653560914-82185-5-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1653560914-82185-1-git-send-email-john.garry@huawei.com>
-References: <1653560914-82185-1-git-send-email-john.garry@huawei.com>
+        Thu, 26 May 2022 06:32:18 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3112AE26
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:32:15 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id f21so2095972ejh.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:32:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IhOoJiEVW1f9NZEh+LjhXs1p495IAP76V+trW0SBtRo=;
+        b=fHJSBncXPQADirHt+O19VJemtFTXXzyJ9q03nrECjDpx0gclUcHS+ieBBLezoqaGC8
+         fC9IFFI8ajtjcsHFcgywLvOMp38YGvBMAleD8t3/LJ+AzXKH8Ws0VP/al+A5cV+dvndp
+         vbwzgeE6XPTvGSWaBMWaPbxOPw5U6SbRdTI6AzE9Ukhmj4/OFvziEXy8j39zUB7eEJhj
+         FTN8mM+nJh+j543Nxch1kt4Eb2DiZFyFlU6AkDNnAYa7Thb88HRDsTB2Yf2h7GIIM3UL
+         5G3W+O3JObh5EYYc+QDGbPhCcusMC6Vv+6UPGGM5+QCWxR3F7NvdX/5JM+LR+olH2syZ
+         kYmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IhOoJiEVW1f9NZEh+LjhXs1p495IAP76V+trW0SBtRo=;
+        b=zHGRrFH/xtULDAbxWPDtVDN6GNCBUe9RLWSrd9ZugTqYtJ0du6aNUGCurFdnUm1wI/
+         bEMDbdhmGTv3HtKyCIjlzTdooLLyo0VGwFcLM5R9MKyOr7rkFC3EWHeoXP19CeYrBzCu
+         RQXxlly2Ui8uXmVdlNMbiWVpFFGGDJpqtWMOH8Gb5QSI58Labk/ZFIeyjDHh8OXJjszM
+         71As9XXQvUeDSv1e4VuwoCCL/vbw9+bQsDN4kC+v8zK4Xsy66O7CoBI/Whz3vEHZljqI
+         FeWDlf17zE/leDMFkukJr5qNbX0sFjxbWXcUyC03r8UhvEKqZAoceAiJRatbBEDXEvdJ
+         +O/w==
+X-Gm-Message-State: AOAM532mOd4lapESFcWBiyFTVcG16q5d92TkPN9gv8xTGSOaNUNRTW84
+        oTIG1skPZvi8j+tFxIILpWVy9g==
+X-Google-Smtp-Source: ABdhPJytcoRzpFy9P5lbgclcSPwMfqb4FHL8nr2e5PQ5uM1dp3kx1YyMinkEiWBL0zjylUDn4i5I3w==
+X-Received: by 2002:a17:907:d21:b0:6fe:c340:616 with SMTP id gn33-20020a1709070d2100b006fec3400616mr22342567ejc.177.1653561134125;
+        Thu, 26 May 2022 03:32:14 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i8-20020a50c3c8000000b0042617ba63basm610186edf.68.2022.05.26.03.32.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 03:32:13 -0700 (PDT)
+Message-ID: <076d53d3-6062-686f-8e45-14c5f936bbf6@linaro.org>
+Date:   Thu, 26 May 2022 12:32:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] dt-bindings: backlight: rt4831: Add the new property
+ for ocp level selection
+Content-Language: en-US
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        jingoohan1@gmail.com, Pavel Machek <pavel@ucw.cz>, deller@gmx.de,
+        cy_huang <cy_huang@richtek.com>, lucas_tsai@richtek.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <1653534995-30794-1-git-send-email-u0084500@gmail.com>
+ <1653534995-30794-2-git-send-email-u0084500@gmail.com>
+ <1c7ab94c-a736-c629-bd8c-8a974803e2b9@linaro.org>
+ <CADiBU39jZ6TdYZoH80m4R-X2_fUXZOvDA4yUd_TQdPzBJLE+JA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CADiBU39jZ6TdYZoH80m4R-X2_fUXZOvDA4yUd_TQdPzBJLE+JA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ATA devices (struct ata_device) have a max_sectors field which is
-configured internally in libata. This is then used to (re)configure the
-associated sdev request queue max_sectors value from how it is earlier set
-in __scsi_init_queue(). In __scsi_init_queue() the max_sectors value is set
-according to shost limits, which includes host DMA mapping limits.
+On 26/05/2022 10:13, ChiYuan Huang wrote:
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年5月26日 週四 下午4:06寫道：
+>>
+>> On 26/05/2022 05:16, cy_huang wrote:
+>>> From: ChiYuan Huang <cy_huang@richtek.com>
+>>>
+>>> Add the new property for ocp level selection.
+>>>
+>>> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+>>> ---
+>>>  .../bindings/leds/backlight/richtek,rt4831-backlight.yaml         | 8 ++++++++
+>>>  include/dt-bindings/leds/rt4831-backlight.h                       | 5 +++++
+>>>  2 files changed, 13 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/leds/backlight/richtek,rt4831-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/richtek,rt4831-backlight.yaml
+>>> index e0ac686..c1c59de 100644
+>>> --- a/Documentation/devicetree/bindings/leds/backlight/richtek,rt4831-backlight.yaml
+>>> +++ b/Documentation/devicetree/bindings/leds/backlight/richtek,rt4831-backlight.yaml
+>>> @@ -47,6 +47,14 @@ properties:
+>>>      minimum: 0
+>>>      maximum: 3
+>>>
+>>> +  richtek,bled-ocp-sel:
+>>
+>> Skip "sel" as it is a shortcut of selection. Name instead:
+>> "richtek,backlight-ocp"
+>>
+> OK, if so, do I need to rename all properties from 'bled' to 'backlight' ?
+> If  only this property is naming as 'backlight'. it may conflict with
+> the others like as "richtek,bled-ovp-sel".
 
-Cap the ata_device max_sectors according to shost->max_sectors to respect
-this shost limit.
+Ah, no, no need.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
----
- drivers/ata/libata-scsi.c | 1 +
- 1 file changed, 1 insertion(+)
+>>
+>>> +    description: |
+>>> +      Backlight OCP level selection, currently support 0.9A/1.2A/1.5A/1.8A
+>>
+>> Could you explain here what is OCP (unfold the acronym)?
+> Yes. And the full name is 'over current protection'.
 
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index 06c9d90238d9..25fe89791641 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -1036,6 +1036,7 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev)
- 		dev->flags |= ATA_DFLAG_NO_UNLOAD;
- 
- 	/* configure max sectors */
-+	dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors);
- 	blk_queue_max_hw_sectors(q, dev->max_sectors);
- 
- 	if (dev->class == ATA_DEV_ATAPI) {
--- 
-2.26.2
+Thanks and this leads to second thing - you encode register value
+instead of logical value. This must be a logical value in mA, so
+"richtek,bled-ocp-microamp".
 
+I see you already did some register-style for voltage. It's wrong but it
+was done, so let it be. But let's don't make that a pattern...
+
+
+>>
+>>
+>> Best regards,
+>> Krzysztof
+
+
+Best regards,
+Krzysztof

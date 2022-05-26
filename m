@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE76535500
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8291F5354F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242508AbiEZUrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S1348693AbiEZUqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237350AbiEZUqZ (ORCPT
+        with ESMTP id S1349009AbiEZUqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:46:25 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCBC12638
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:46:21 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id c93so1840618edf.7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:46:21 -0700 (PDT)
+        Thu, 26 May 2022 16:46:18 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9EB3BC
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:46:09 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id y32so4066648lfa.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:46:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=N06cOpR0fhGltUp7Tz8+3ysz8vx784Cgbf5RyQDoybc=;
-        b=VjpYF8OdmX+re+xHpO8tjhO+FnfUoFPPtaKdJ++8fS/6WpgR8FMaLAZrJ6nj4dBfQr
-         RIVlo/nG2s5U+jFfh8wMJDPP/tTLUBTEz8gqZwDvra39wWT9Pielk5G0w+LLwVTiTmvc
-         qwtwpEhdN0vdVMESpLNA5TGZSpbnIR6uIb2lXhc0LbmCB1GhV447iFzu/NprYtXGdAnr
-         a6ngjaFmBKFbUjPX5IVFWY/BcmFSOW6rD+TZTckTgvzGTl/1UMHdqCD7kqQ+qcnE+H4k
-         oEcvrmwm2Sjy1w6mFb4mVG16BIdgcVPKduhDdAKUbd4DzrHdIRY5e8juItU3xMYkcrV9
-         KfSg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zKFl69Qf/EfZisA1xjfBE06TiXrFDlro+owcvXYxfLs=;
+        b=OPrJTmWWghJxejBwqiBJKnQTE203iScML6t38O4ge+iX4qrqf9UUL8F1yxMhy9/D2I
+         vtU5EtfG4quCCB2ZCn7woUy8Nlfcnv6W5+2drvtJ1F47aHI0CBGa6KfwacFvANbHiQao
+         m3YW06Doa442ooxkosamZ/z07i70Y14NmNCWJbkzdISVa3PiF39J7UMufwc0qNQQB8ef
+         Z5aLWglU/wPFO1tD7Oz7/WJAfzKfC7X6M5Hm/VD4FRMeOyTIjryxWRjYBVdpBAtWMojw
+         6Qj2YFapZvbVb/Jm/d+V7ugCCRHN1STPy/TpgRt/Xu2neoZSth7ha2V06YLazxgi8ONB
+         CqMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=N06cOpR0fhGltUp7Tz8+3ysz8vx784Cgbf5RyQDoybc=;
-        b=ROjjQqzRowRfDJKvlF9YA3Hkyzd2fja9GoSn183szjG41dOqmsaUcakamX2y4kKpFW
-         VHIE1PzFJ2idbw4J6elyMHTRuO/sDWduLnQguBayg7qJ8mtuLSm0axA3Llz4WHaY2ebm
-         VBdlADc5VG3Pu2kX1/eLgw+FMWeIBJRkH0Kirbe2Azp0vcDE9WxcQpLvDvvPOITJDNrk
-         O13PdyQi9foTRDVZbB3xsx0uZCUvws3SUoH5LmVmpVGRMMDvkNV3upQXKa6HOLmMvELg
-         VdU1Zi06o1Qfw8ZbHtrKRj24Ds2zCWqTWqZtWZGOGXvbo2dXE2iDlCMlyDnN/N6g1GwM
-         0Oxg==
-X-Gm-Message-State: AOAM5317PTi8NAMa5DRWD07luERdCavbsSnjJcLPdSfIEuHWKUQtCPbO
-        AbRRHUjhiKn5NYGR412oXkrC8GTlKknpPSMnLQn7uA==
-X-Google-Smtp-Source: ABdhPJzSjHfFP+9o6W7dtpiuHhbXpOi+Ely6T6jRghUPr+keMXC2TwImJEfBB4K3AtkK7mq6YZqiSSiPE4c7S1mdIWg=
-X-Received: by 2002:a50:ea8b:0:b0:428:7d05:eb7e with SMTP id
- d11-20020a50ea8b000000b004287d05eb7emr40591268edo.185.1653597981396; Thu, 26
- May 2022 13:46:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zKFl69Qf/EfZisA1xjfBE06TiXrFDlro+owcvXYxfLs=;
+        b=IZY5tIjdbiiI1yTXQy6s7ycKBA0XBXulR3VQny2Nk+G8zgm5M6Zjqit/IPl5cbsSZb
+         fE6CTBsrYFDJNt1C+OqjioNj0F+u3BOv7DhZggBbNTIcK4zh1CVhoDLaU46weUvJTpMM
+         QhFCxqZ03ldaC7EY5xc5jOUt6ufVA0pBBepOTZWoYD+IrYZkvR1IJtgpNjzmRR2A2cMv
+         0amH9/ezDLc5xQvKdLN+7Y3WgMZOzARdsOcKrUNiW4NgZixsjLF7iBjB7Q8QUXo7Trr7
+         vzatV8FvluaOnxbunW8cN0X5ndy2eEAr3S9qMpTRNrJREcXtAm1ANSvXY76wMLZ8+Zcd
+         ow6g==
+X-Gm-Message-State: AOAM531H/hrP845JgwlfIAa3GEIUWDzbUzK7M2cmjhEei+4Kv2aiQALt
+        vsPy1LhaIwH56Av3HJMiNz/+jBugvdBr1t8p
+X-Google-Smtp-Source: ABdhPJxjg7MxB9+eNd5wcXXuMUeFFezHj5yR25BZpYg2A0ogiMJQ3jbwAK7yX/hn0Rc1JtM5uBcpOw==
+X-Received: by 2002:a17:907:a414:b0:6ff:2e46:e891 with SMTP id sg20-20020a170907a41400b006ff2e46e891mr2501719ejc.758.1653597956660;
+        Thu, 26 May 2022 13:45:56 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z1-20020a1709067e4100b006fe8ac6bc69sm827633ejr.140.2022.05.26.13.45.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 13:45:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] arm64: dts: amlogic: adjust whitespace around '='
+Date:   Thu, 26 May 2022 22:45:51 +0200
+Message-Id: <20220526204552.832961-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220526203805.3659597-1-tatashin@google.com>
-In-Reply-To: <20220526203805.3659597-1-tatashin@google.com>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Thu, 26 May 2022 16:45:45 -0400
-Message-ID: <CA+CK2bDkKzp6uvy+f09K=COd3xn+EDa5nEu2j2o7Vyhd=aG0AA@mail.gmail.com>
-Subject: Re: [PATCH] kexec_file: Increase maximum file size to 4G
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Sasha Levin <sashal@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        kexec mailing list <kexec@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, rburanyi@google.com,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,67 +75,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 4:38 PM Pasha Tatashin
-<pasha.tatashin@soleen.com> wrote:
->
-> In some case initrd can be large. For example, it could be a netboot
-> image loaded by u-root, that is kexec'ing into it.
->
-> The maximum size of initrd is arbitrary set to 2G. Also, the limit is
-> not very obvious because it is hidden behind a generic INT_MAX macro.
->
-> Theoretically, we could make it LONG_MAX, but it is safer to keep it
-> sane, and just increase it to 4G.
->
-> Increase the size to 4G, and make it obvious by having a new macro
-> that specifies the maximum file size supported by kexec_file_load()
-> syscall: KEXEC_FILE_SIZE_MAX.
->
-> Signed-off-by: Pasha Tatashin <tatashin@google.com>
+Fix whitespace coding style: use single space instead of tabs or
+multiple spaces around '=' sign in property assignment.  No functional
+changes (same DTB).
 
-Should be instead:
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks,
-Pasha
+---
 
-> ---
->  kernel/kexec_file.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 8347fc158d2b..1be2227b33e6 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -31,6 +31,9 @@
->
->  static int kexec_calculate_store_digests(struct kimage *image);
->
-> +/* Maximum size in bytes for kernel/initrd files. */
-> +#define KEXEC_FILE_SIZE_MAX    (4UL << 30)
-> +
->  /*
->   * Currently this is the only default function that is exported as some
->   * architectures need it to do additional handlings.
-> @@ -227,7 +230,8 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
->         void *ldata;
->
->         ret = kernel_read_file_from_fd(kernel_fd, 0, &image->kernel_buf,
-> -                                      INT_MAX, NULL, READING_KEXEC_IMAGE);
-> +                                      KEXEC_FILE_SIZE_MAX, NULL,
-> +                                      READING_KEXEC_IMAGE);
->         if (ret < 0)
->                 return ret;
->         image->kernel_buf_len = ret;
-> @@ -247,7 +251,7 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
->         /* It is possible that there no initramfs is being loaded */
->         if (!(flags & KEXEC_FILE_NO_INITRAMFS)) {
->                 ret = kernel_read_file_from_fd(initrd_fd, 0, &image->initrd_buf,
-> -                                              INT_MAX, NULL,
-> +                                              KEXEC_FILE_SIZE_MAX, NULL,
->                                                READING_KEXEC_INITRAMFS);
->                 if (ret < 0)
->                         goto out;
-> --
-> 2.36.1.124.g0e6072fb45-goog
->
+Output compared with dtx_diff and fdtdump.
+---
+ arch/arm64/boot/dts/amlogic/meson-axg.dtsi                      | 2 +-
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi                       | 2 +-
+ .../boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
+index 3f5254eeb47b..04f797b5a012 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
+@@ -1535,7 +1535,7 @@ aobus: bus@ff800000 {
+ 
+ 			sysctrl_AO: sys-ctrl@0 {
+ 				compatible = "amlogic,meson-axg-ao-sysctrl", "simple-mfd", "syscon";
+-				reg =  <0x0 0x0 0x0 0x100>;
++				reg = <0x0 0x0 0x0 0x100>;
+ 
+ 				clkc_AO: clock-controller {
+ 					compatible = "amlogic,meson-axg-aoclkc";
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+index aa14ea017a61..023a52005494 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+@@ -450,7 +450,7 @@ aobus: bus@c8100000 {
+ 
+ 			sysctrl_AO: sys-ctrl@0 {
+ 				compatible = "amlogic,meson-gx-ao-sysctrl", "simple-mfd", "syscon";
+-				reg =  <0x0 0x0 0x0 0x100>;
++				reg = <0x0 0x0 0x0 0x100>;
+ 
+ 				clkc_AO: clock-controller {
+ 					compatible = "amlogic,meson-gx-aoclkc";
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+index fcb304c5a40f..6831137c5c10 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
+@@ -216,7 +216,7 @@ &uart_A {
+ 
+ 	bluetooth {
+ 		compatible = "realtek,rtl8822cs-bt";
+-		enable-gpios  = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
++		enable-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
+ 		host-wake-gpios = <&gpio GPIOX_18 GPIO_ACTIVE_HIGH>;
+        };
+ };
+-- 
+2.34.1
+

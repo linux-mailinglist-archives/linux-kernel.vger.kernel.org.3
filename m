@@ -2,59 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4664534A6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 08:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BED3534A79
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 08:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346227AbiEZGm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 02:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S1346235AbiEZGts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 02:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346206AbiEZGm4 (ORCPT
+        with ESMTP id S230370AbiEZGto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 02:42:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43856596
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 23:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653547374; x=1685083374;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rfBX3MJeO7FXdJXtV4ef/vKyw1sv1xmgt9pLbLFLblY=;
-  b=CrWF6MGhemc1okZhA65Zd4u07sj+G+9sO7Zh0/1XBETL3HXcJus+O+ZI
-   yDF561mZK1XXXlOWNYTe+N5DyYqXZe/w+8jCGeANRuRwfkGWrLyS88aMf
-   UkQY5zxRBUL5CccX9UffEo9ZIjcU2/Qn4vVp1bzLcdF9PYCNoQXECwMM0
-   e/BRjYiflKcSCej6T7g9ojfEAmgGoWCJe+BHUbzwIdsq4QDNXum3oztsm
-   y8ITac8gG2hRNDvdqN1ifzQ5jf8KuII/t2t2A+vSEYpFI/diIBm0g1EhN
-   UX4kSjDskuhdbG7av5QIh44oQGT6MtJFlEE/Ey09RJ/PJZcvor10ugymJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="274161874"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="274161874"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 23:42:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="560054802"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 25 May 2022 23:42:53 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nu7Cu-0003fI-Ip;
-        Thu, 26 May 2022 06:42:52 +0000
-Date:   Thu, 26 May 2022 14:41:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eric Biggers <ebiggers@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ebiggers:f2fs-pending 1/1] fs/f2fs/super.c:520:28: error: implicit
- declaration of function 'fscrypt_is_dummy_policy_set'; did you mean
- 'fscrypt_free_dummy_policy'?
-Message-ID: <202205261426.lSpXReh7-lkp@intel.com>
+        Thu, 26 May 2022 02:49:44 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CD034B80
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 23:49:43 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id fd25so688966edb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 23:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7Bp9SA/1hFvtEI6hsrX+GVTXLacAaxb75saSLRSbPUs=;
+        b=lZ0UFWMJZR/ScahCDhnrsdiqEMBsXhaUmxwPQYz8kGSkmNB/cfqAcxnwTVkp9xj0aE
+         lsCoXp+eBgAG94q60rWQbm2Ev46NKSs7L0YuVDnsOuzPOSZw4gGFoRmjwrwitLfc/Q1u
+         th3CE0lwu0KKph3kbzIli9VSAOxfe3FBTYhkQfWCArBTLj/bSslh3I5HWo53/4LUlp2Y
+         EFr6Ux9jj1yIdsZLQ2Z0OF4eeKYkdllzrL3pr3b5ZFiR05utU1Q22S/gN01NaCibu8uA
+         QiX4cooIXHCpWZc2KVRtRA0YzG91KtsCjTK6OcNFkVXfJD9Gs0VagoIP14zE/x1qcvgX
+         f50Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7Bp9SA/1hFvtEI6hsrX+GVTXLacAaxb75saSLRSbPUs=;
+        b=5SixJuRTaEr4c8zH8Q8ftb+zFlyTgO5poGtEA1fSxbeEVWpQpYTlMUWaWJrlV3d/SD
+         /qHzcUqDw88XMOdfePDwYFUT54DCnWMqkJNIaQTJSZwLSu5/azMaVjLe3dOffDg0iNnh
+         nhQAe49RrP+Gc1Av0Q1tlanTVlpVSATYsSkpoS4Jy+hRZCHTt1K34YsaFereK4ZqHz4O
+         pMY8ffQxv1Nk9IGxI4eN13J4hMaZjwiw766eURSlSr1UCzK+MU+nQ7sXreaDRp3S6W+x
+         qW139o7lCnMIDHq/ClLv9jmy2dNsfatx8E1p7UXssZ9u5HUocElSZy2qiIPBT7d2wz4i
+         uizA==
+X-Gm-Message-State: AOAM533vAlHsfiOXFxgUCRbbpRs99zLRJQaJ5PF7gaU4vvpl5GaKhUJ4
+        iZFQ04SLam9CcqVQp+gZxs0oog==
+X-Google-Smtp-Source: ABdhPJwr6AzAilZdcZEXaEVY/WvgakJfBGOFvOc7ZLnxseNZb9svTt9d2Rn3vt0YkLTvjnYO5aqOqg==
+X-Received: by 2002:aa7:c4d0:0:b0:42a:ce47:e9c5 with SMTP id p16-20020aa7c4d0000000b0042ace47e9c5mr37950139edr.224.1653547781831;
+        Wed, 25 May 2022 23:49:41 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id kq21-20020a170906abd500b006f3ef214e0csm225570ejb.114.2022.05.25.23.49.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 23:49:41 -0700 (PDT)
+Message-ID: <e8d854c0-e2a5-2382-4b54-c5e879170324@linaro.org>
+Date:   Thu, 26 May 2022 08:49:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
+ properties
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shane Chien <shane.chien@mediatek.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220509205847.607076-1-nfraprado@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220509205847.607076-1-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,102 +86,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git f2fs-pending
-head:   14c933f493ea41e28bbe5317af611dc01d66b489
-commit: 14c933f493ea41e28bbe5317af611dc01d66b489 [1/1] f2fs: use the updated test_dummy_encryption helper functions
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220526/202205261426.lSpXReh7-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=14c933f493ea41e28bbe5317af611dc01d66b489
-        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-        git fetch --no-tags ebiggers f2fs-pending
-        git checkout 14c933f493ea41e28bbe5317af611dc01d66b489
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+On 09/05/2022 22:58, Nícolas F. R. A. Prado wrote:
+> The Mediatek AFE PCM controller for MT8192 allows two I2S interfaces to
+> share the same clock and act as a single interface with both input and
+> output. Add patterns for these properties in the dt-binding. The
+> property is split into two patterns in order to allow all valid
+> interface pairings.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> The series from v1 of this patch was merged although some changes were
+> still needed in this patch, so the v1 of this patch was reverted [1] and
+> this standalone commit addresses the feedback from v1 and readds the
+> property.
+> 
+> [1] https://lore.kernel.org/all/20220509185625.580811-1-nfraprado@collabora.com
+> 
+> v1: https://lore.kernel.org/all/20220429203039.2207848-2-nfraprado@collabora.com/
+> 
+> Changes in v2:
+> - Added "mediatek," prefix to property
+> - Rewrote and added more information to property description
+> - Split into two patterns to validate that output-input pairings are
+>   done
+> 
+>  .../bindings/sound/mt8192-afe-pcm.yaml           | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> index 7a25bc9b8060..2abf43c6c2c3 100644
+> --- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> @@ -54,6 +54,22 @@ properties:
+>        - const: aud_infra_clk
+>        - const: aud_infra_26m_clk
+>  
+> +patternProperties:
+> +  "^mediatek,i2s[13579]-share$":
+> +    description:
+> +      Each I2S interface has a single data line, input if its index is even or
+> +      output if the index is odd. An input and an output I2S interface can be
+> +      used together as if they were a single I2S interface with both input and
+> +      output data lines by sharing the same clock. This property represents this
+> +      pairing. The value should be the name of the interface whose clock is
+> +      used, and the property name the other interface that depends on this
+> +      clock.
+> +    pattern: "^I2S[0268]$"
+> +
+> +  "^mediatek,i2s[0268]-share$":
+> +    description: Same as above.
+> +    pattern: "^I2S[13579]$"
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Rob's question is still valid - why these are not phandles?
 
-All errors (new ones prefixed by >>):
-
-   fs/f2fs/super.c: In function 'f2fs_set_test_dummy_encryption':
->> fs/f2fs/super.c:520:28: error: implicit declaration of function 'fscrypt_is_dummy_policy_set'; did you mean 'fscrypt_free_dummy_policy'? [-Werror=implicit-function-declaration]
-     520 |         if (is_remount && !fscrypt_is_dummy_policy_set(policy)) {
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                            fscrypt_free_dummy_policy
->> fs/f2fs/super.c:525:15: error: implicit declaration of function 'fscrypt_parse_test_dummy_encryption'; did you mean 'fscrypt_set_test_dummy_encryption'? [-Werror=implicit-function-declaration]
-     525 |         err = fscrypt_parse_test_dummy_encryption(&param, policy);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |               fscrypt_set_test_dummy_encryption
->> fs/f2fs/super.c:538:15: error: implicit declaration of function 'fscrypt_add_test_dummy_key' [-Werror=implicit-function-declaration]
-     538 |         err = fscrypt_add_test_dummy_key(sb, policy);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+In any case you miss $ref.
 
 
-vim +520 fs/f2fs/super.c
-
-   489	
-   490	static int f2fs_set_test_dummy_encryption(struct super_block *sb,
-   491						  const char *opt,
-   492						  const substring_t *arg,
-   493						  bool is_remount)
-   494	{
-   495		struct f2fs_sb_info *sbi = F2FS_SB(sb);
-   496		struct fs_parameter param = {
-   497			.type = fs_value_is_string,
-   498			.string = arg->from ? arg->from : "",
-   499		};
-   500		struct fscrypt_dummy_policy *policy =
-   501			&F2FS_OPTION(sbi).dummy_enc_policy;
-   502		int err;
-   503	
-   504		if (!IS_ENABLED(CONFIG_FS_ENCRYPTION)) {
-   505			f2fs_warn(sbi, "test_dummy_encryption option not supported");
-   506			return -EINVAL;
-   507		}
-   508	
-   509		if (!f2fs_sb_has_encrypt(sbi)) {
-   510			f2fs_err(sbi, "Encrypt feature is off");
-   511			return -EINVAL;
-   512		}
-   513	
-   514		/*
-   515		 * This mount option is just for testing, and it's not worthwhile to
-   516		 * implement the extra complexity (e.g. RCU protection) that would be
-   517		 * needed to allow it to be set or changed during remount.  We do allow
-   518		 * it to be specified during remount, but only if there is no change.
-   519		 */
- > 520		if (is_remount && !fscrypt_is_dummy_policy_set(policy)) {
-   521			f2fs_warn(sbi, "Can't set test_dummy_encryption on remount");
-   522			return -EINVAL;
-   523		}
-   524	
- > 525		err = fscrypt_parse_test_dummy_encryption(&param, policy);
-   526		if (err) {
-   527			if (err == -EEXIST)
-   528				f2fs_warn(sbi,
-   529					  "Can't change test_dummy_encryption on remount");
-   530			else if (err == -EINVAL)
-   531				f2fs_warn(sbi, "Value of option \"%s\" is unrecognized",
-   532					  opt);
-   533			else
-   534				f2fs_warn(sbi, "Error processing option \"%s\" [%d]",
-   535					  opt, err);
-   536			return -EINVAL;
-   537		}
- > 538		err = fscrypt_add_test_dummy_key(sb, policy);
-   539		if (err) {
-   540			f2fs_warn(sbi, "Error adding test dummy encryption key [%d]",
-   541				  err);
-   542			return err;
-   543		}
-   544		f2fs_warn(sbi, "Test dummy encryption mode enabled");
-   545		return 0;
-   546	}
-   547	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

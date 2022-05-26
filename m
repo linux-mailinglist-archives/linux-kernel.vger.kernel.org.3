@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DA2534C57
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8092534C59
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346705AbiEZJM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 05:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        id S1346845AbiEZJMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 05:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbiEZJMU (ORCPT
+        with ESMTP id S240989AbiEZJMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 05:12:20 -0400
-Received: from outbound-smtp21.blacknight.com (outbound-smtp21.blacknight.com [81.17.249.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541F85251F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:12:13 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp21.blacknight.com (Postfix) with ESMTPS id D1FBCCCB9F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:12:11 +0100 (IST)
-Received: (qmail 7312 invoked from network); 26 May 2022 09:12:11 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 26 May 2022 09:12:11 -0000
-Date:   Thu, 26 May 2022 10:12:10 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>, Jan Kara <jack@suse.cz>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Linux-NFS <linux-nfs@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux-XFS <linux-xfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] mm/page_alloc: Always attempt to allocate at least one page
- during bulk allocation
-Message-ID: <20220526091210.GC3441@techsingularity.net>
+        Thu, 26 May 2022 05:12:38 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D9B6BFE7;
+        Thu, 26 May 2022 02:12:35 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ff7b90e635so8846647b3.5;
+        Thu, 26 May 2022 02:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kxgT774Qxw4EYAS+7FY5ihsIiTdaohje5ogQP3Nlw3Y=;
+        b=IFoKDCnHMITS1rmf6GIDh0SET6EK6ERswWD44RknloIwWbnABxHBvG0ltlA/h/F20d
+         F1egXvDuPV3Rc+fQpE3hMRr8Lt1goyKzW/+xf77bFqmNQE7KOYDL4i1sbVZUV9d1iV5E
+         pCHEcVwRve02gBXrom4fW+zdOsWGJBZCiXyjjWixdHaGy4mLzn/vygrI/Y3Kzem/H7+C
+         pdwVCpbk2tewPP/dLwZM7CRWAoVm2aLbj9cuX0RG4CtZekIwJY9MiQMJGAZvoqzyZLJ1
+         m0etk1RqQSPdlDZBTzJcwfFdCLfZlDkELIzYCUxbl+NqxTUClYqNnpkiGJTTnqoZPM+f
+         lvHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kxgT774Qxw4EYAS+7FY5ihsIiTdaohje5ogQP3Nlw3Y=;
+        b=r0Qdv3ZcLKrhzscEI5+hIeU+gViQmHLlYsif9tu/j8wxXuUTP0hMfkZSjN7g5Rm0ta
+         YJq2DF7U+R0VOCzVPy7fn24mj6EbzPgGZpJNiF7Cwy2booEsKtCRtMH0Dqzh9n1Ccyzn
+         L1HSVGgjSUcCDsHB/H9dOn1/hVM1Zt9v9Q0WmgAQ6DeVVu/GxkUOZal/co4Kk4BbkSq7
+         MZAW56fYBM7W5wROcLHDC79PkM0Yt0VDzg+vF42NIH9k8tz2EQYK0CPYVN5coskhSf87
+         GNHXd6HYS2/vHs7RdWtltaHr2wBOy3uvsPcj0f+rKXtnA3vlt1sWqASV84ZqCsO2Hdbn
+         Vn3A==
+X-Gm-Message-State: AOAM532Ml282B7pwhGEgsq9QRa4VwAmMPch0IPiR3WI4wzaddIZWKahN
+        WezH8VMDUqBIGf6VPhkfF9JeIoXdkYkmqZb5t00=
+X-Google-Smtp-Source: ABdhPJy5/1a9V5AeBTGx0W1Wv5fKBpBkkU+bJS9RIJdceCEJ1OcJacD4hkRJoVyVdHwwGlp+aFRcniMGq3m6nDgQHbw=
+X-Received: by 2002:a81:b80d:0:b0:2ff:db8b:333a with SMTP id
+ v13-20020a81b80d000000b002ffdb8b333amr20453256ywe.17.1653556354906; Thu, 26
+ May 2022 02:12:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220503150735.32723-1-jiangshanlai@gmail.com>
+ <20220503150735.32723-4-jiangshanlai@gmail.com> <YoLlzcejEDh8VpoB@google.com>
+ <CAJhGHyCKdxti0gDjDP27MDd=bK+0BecXqzExo5t-WAOQLO5WwA@mail.gmail.com> <YoPQV0wDIMBr3HKG@google.com>
+In-Reply-To: <YoPQV0wDIMBr3HKG@google.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 26 May 2022 17:12:23 +0800
+Message-ID: <CAJhGHyD0d_dpfKQ9F-Q7nThGYwzjKv_2gnphKUAVtEYZsDygUw@mail.gmail.com>
+Subject: Re: [PATCH V2 3/7] KVM: X86/MMU: Link PAE root pagetable with its children
+To:     David Matlack <dmatlack@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Pavlisko reported the following problem on kernel bugzilla 216007.
+On Wed, May 18, 2022 at 12:42 AM David Matlack <dmatlack@google.com> wrote:
 
-	When I try to extract an uncompressed tar archive (2.6 milion
-	files, 760.3 GiB in size) on newly created (empty) XFS file system,
-	after first low tens of gigabytes extracted the process hangs in
-	iowait indefinitely. One CPU core is 100% occupied with iowait,
-	the other CPU core is idle (on 2-core Intel Celeron G1610T).
+>
+> Ah of course. e.g. FNAME(fetch) will call is_shadow_present_pte() on PAE
+> PDPTEs.
+>
+> Could you also update the comment above SPTE_MMU_PRESENT_MASK? Right now it
+> says: "Use bit 11, as it is ignored by all flavors of SPTEs and checking a low
+> bit often generates better code than for a high bit, e.g. 56+." I think it
+> would be helpful to also meniton that SPTE_MMU_PRESENT_MASK is also used in
+> PDPTEs which only ignore bits 11:9.
+>
 
-It was bisected to c9fa563072e1 ("xfs: use alloc_pages_bulk_array() for
-buffers") but XFS is only the messenger. The problem is that nothing
-is waking kswapd to reclaim some pages at a time the PCP lists cannot
-be refilled until some reclaim happens. The bulk allocator checks that
-there are some pages in the array and the original intent was that a bulk
-allocator did not necessarily need all the requested pages and it was
-best to return as quickly as possible. This was fine for the first user
-of the API but both NFS and XFS require the requested number of pages
-be available before making progress. Both could be adjusted to call the
-page allocator directly if a bulk allocation fails but it puts a burden on
-users of the API. Adjust the semantics to attempt at least one allocation
-via __alloc_pages() before returning so kswapd is woken if necessary.
+Hello
 
-It was reported via bugzilla that the patch addressed the problem and
-that the tar extraction completed successfully. This may also address
-bug 215975 but has yet to be confirmed.
+Thank you for the review.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216007
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215975
-Fixes: 387ba26fb1cb ("mm/page_alloc: add a bulk page allocator")
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-Cc: <stable@vger.kernel.org> # v5.13+
----
- mm/page_alloc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I think using BUILD_BUG_ON() in the place that requires the constraint
+can avoid exploding comments in the definition since it is a build
+time check and there are not too many constraints.
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 0e42038382c1..5ced6cb260ed 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5324,8 +5324,8 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 		page = __rmqueue_pcplist(zone, 0, ac.migratetype, alloc_flags,
- 								pcp, pcp_list);
- 		if (unlikely(!page)) {
--			/* Try and get at least one page */
--			if (!nr_populated)
-+			/* Try and allocate at least one page */
-+			if (!nr_account)
- 				goto failed_irq;
- 			break;
- 		}
+So I didn't change it in V3.
+
+Or better (still using build-time check rather than comments):
+
+#define PT_PTE_IGNORE_BITS xxxx
+#define PAE_PTE_IGNORE_BITS xxxx
+#define EPT_PTE_IGNORE_BITS xxxx
+
+static_assert(PT_PTE_IGNORE_BITS & PAE_PTE_IGNORE_BITS &
+              EPT_PTE_IGNORE_BITS & SPTE_MMU_PRESENT_MASK);
+
+Thanks
+Lai

@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0D2534E2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A582534E7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241375AbiEZLmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 07:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S233528AbiEZLpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 07:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiEZLme (ORCPT
+        with ESMTP id S1347164AbiEZLos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 07:42:34 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712A82A738;
-        Thu, 26 May 2022 04:42:32 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id j7so1139659vsj.7;
-        Thu, 26 May 2022 04:42:32 -0700 (PDT)
+        Thu, 26 May 2022 07:44:48 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F50D413D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:44:31 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id j6so1463938pfe.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JEe4JTq4HMoZ+I0YWVgsR8sQxwI+sin4+wwLO1J3RKE=;
-        b=JLvO98Fu21sCqp2drA5IfmaUVr0h4lXAXWuPssLA5gtFkyn/FNC1jLwcQi+AGBV7wH
-         uJrpcQYkVYpsRk0cSakfbvPtYDIyFqdskvQJ1qsUHfT+rPBKMNjdeW6IOShNFFKid1b2
-         0vNUdDNqr6zoooiZ0/NarObdmNt80ywVrC/tAsYJTXXogKHxQnQYvkkCFB7b7XWPYvmz
-         KCMVKcwrNpvs/ZDYn28Ru24YXag2mLh0gV/bYbWeabYCR7Oo+d0fh2EC+ynAeCzEApky
-         AvBjMkJrEKG49Q63WoPqYa0sO+vBpxe7FJ5oQ0VotbsdoOrm873KJcD3X0yKlZhjsv8X
-         33jQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=S0NlDi35C5TiI50sHYYZcC2yRcLHKFC/rVdhF6VTtZA=;
+        b=hRbGmYeFezjznrIp6yTfpw+NAJasDPpaj4RCuJ9Zkc9Hx9bRHX1aGwtxb+ttllpkpo
+         HLhzlDBANM4W4V2dV3v0vbi7c0VVdukcxzwN8T0pXIoY1ZhMWW1FfPOqnYocpfV2Au1E
+         R1lxkbwd8ftyzVbS4NwDBGfPVSd3C08h7F1diUnpRcU/XDv1TJc3wkiiJJ/0/cQsGT5Z
+         X/3zjBpy7CG/rrWaeWuVsSnhEM/UcaJX6lImTX20/h1dp/nmXjEoaan8oVGwVw6RmZXO
+         Ko71ST7dsuTWw6JbAzwj6A+8OLpQXwGv7ZiGwmiOHwNWc8I6LRFRf5kr+sYlMMoYtjci
+         8ATw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JEe4JTq4HMoZ+I0YWVgsR8sQxwI+sin4+wwLO1J3RKE=;
-        b=4cnGZV2OYi42H2Mu9Gpq4P0oxgvqtzIJPOO7KDSpV047tTQZlhy9nj/qvCBITtbTzv
-         GDDXKejtCgczoGickWxDAcVLt2vj24B3aWuGR2hDL92dZhVf4FpgeA8hNQUMwe4u9NXX
-         xfFv2j2pcozv+QVtXMQdSnjP8LHwDkKrq1nHHoLt15U50LTEjmUaR4jUVzCF3lj5twi/
-         YDyjUWq6UxJ275QCc9/5qb/O8bMdAxr/MYiSRHm702SLKGvCxTESNkAEI53x/X83scmi
-         3c+hq11sHIpAlRlwax3BFod7g7EsZcHjvTmQ+rPOgF5BnnBJm+TyApjUfF9v7wULvYKe
-         ywqw==
-X-Gm-Message-State: AOAM532713nz082V4MIKoV2WFvz5pG8mBul8hmEabi393K2tiEggWEkE
-        BsHMP2z3cgYSPa8euWx+uk8Z5CYtAPIz1YfYiXI=
-X-Google-Smtp-Source: ABdhPJxIWXKb0kNzslGKXSAJfQCxTBRn9ur413NVMbEzqZ/Rc3zTbpcH1KxoGPjgrUzciHvXWJHHcjItv26rUnsZcWM=
-X-Received: by 2002:a67:e09d:0:b0:335:def7:e939 with SMTP id
- f29-20020a67e09d000000b00335def7e939mr14828589vsl.27.1653565351588; Thu, 26
- May 2022 04:42:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=S0NlDi35C5TiI50sHYYZcC2yRcLHKFC/rVdhF6VTtZA=;
+        b=eCZvEtC2xKJUqh47E4lKW0Cj7XPT7uXLPkRzRfZL/xNQE92SPfpbpvGVQDgBJQnvJz
+         +QuUU+B11TlsP9j7+G5qO2RZIHI67Icq46CVVLyj4u3ER6SJ50CkXRuubwLWN0cAHPVo
+         q+gLrvw3h3oooesmVlFAcPhYrhj6KXWcvwavlmSqKwVdEOwTCg4zgNVcyMaKCuQG17ak
+         vbj2Kq0IyAEbTUSy+L7Z5gC67ij03Ro9h0rLeECekb6msTo6abgrKkwpCbNxaS6mvKgN
+         hHcHOpCwAcQl/e74TiVJc4TZOlwOu80eob1a/aooyY1S31+pMXOPmnRorBLmDTzWjzdW
+         G3/g==
+X-Gm-Message-State: AOAM5307jf8A7xVtwKSvjT5bH4yx0y6HSZbKmWXmi+iglFyYVTOnTsKN
+        CbFOZoHxx02E76kwznecVjaEjg==
+X-Google-Smtp-Source: ABdhPJwHYkyoY4z87/UCZHUe3lYmt8OLgjsm6sOa4UfL7geTmMxhXMYYb7I+ABhdvJyb8MwWGgj82A==
+X-Received: by 2002:a05:6a00:cc9:b0:518:c96f:5c8b with SMTP id b9-20020a056a000cc900b00518c96f5c8bmr13088695pfv.59.1653565471507;
+        Thu, 26 May 2022 04:44:31 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id e13-20020a17090301cd00b0015e8d4eb1cesm1403105plh.24.2022.05.26.04.44.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 04:44:31 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 21/31] soc/tegra: Remove the call to devm_pm_opp_set_clkname()
+Date:   Thu, 26 May 2022 17:12:20 +0530
+Message-Id: <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <cover.1653564321.git.viresh.kumar@linaro.org>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-References: <20220526094100.1494193-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20220526094100.1494193-1-jiasheng@iscas.ac.cn>
-From:   Tali Perry <tali.perry1@gmail.com>
-Date:   Thu, 26 May 2022 14:42:20 +0300
-Message-ID: <CAHb3i=v+LV=sGCX8obuy=sXBFvnP9k-THb=mGw4ze8M5AVCYoQ@mail.gmail.com>
-Subject: Re: [PATCH] i2c: npcm7xx: barco-p50-gpio: Add check for platform_driver_register
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     avifishman70@gmail.com, Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 12:41 PM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
->
-> As platform_driver_register() could fail, it should be better
-> to deal with the return value in order to maintain the code
-> consisitency.
->
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/i2c/busses/i2c-npcm7xx.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-> index 71aad029425d..08737fa2dcbf 100644
-> --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> @@ -2336,8 +2336,7 @@ static struct platform_driver npcm_i2c_bus_driver = {
->  static int __init npcm_i2c_init(void)
->  {
->         npcm_i2c_debugfs_dir = debugfs_create_dir("npcm_i2c", NULL);
-> -       platform_driver_register(&npcm_i2c_bus_driver);
-> -       return 0;
-> +       return platform_driver_register(&npcm_i2c_bus_driver);
->  }
->  module_init(npcm_i2c_init);
->
-> --
-> 2.25.1
->
-thanks, Jiansheng !
+The OPP core already performs devm_pm_opp_set_clkname() with name as
+NULL, the callers shouldn't be doing the same unless they have a
+different clock name to add here.
 
-Acked-by: Tali Perry <tali.perry1@gmail.com>
+Drop the call.
+
+Cc: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/soc/tegra/common.c | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+index 32c346b72635..49a5360f4507 100644
+--- a/drivers/soc/tegra/common.c
++++ b/drivers/soc/tegra/common.c
+@@ -108,12 +108,6 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+ 	u32 hw_version;
+ 	int err;
+ 
+-	err = devm_pm_opp_set_clkname(dev, NULL);
+-	if (err) {
+-		dev_err(dev, "failed to set OPP clk: %d\n", err);
+-		return err;
+-	}
+-
+ 	/* Tegra114+ doesn't support OPP yet */
+ 	if (!of_machine_is_compatible("nvidia,tegra20") &&
+ 	    !of_machine_is_compatible("nvidia,tegra30"))
+-- 
+2.31.1.272.g89b43f80a514
+

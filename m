@@ -2,166 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9008535439
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF13C53543D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348873AbiEZUEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S1348881AbiEZUHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241620AbiEZUEu (ORCPT
+        with ESMTP id S232230AbiEZUHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:04:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B6372209;
-        Thu, 26 May 2022 13:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=S9y6ecfItCHTZPLBWd79nswqv8BapgWNHqq54ASXQBM=; b=QeKozE9pLJjOGGflthiUPaJOya
-        6YTba/dwspp8MnH0ZXYR8HQ2U5/GlCom4CBSacka4YggyCFcx3RTaznZR/qX2oEVK1iAY7yNcYLcI
-        b55N9QKovEI9OREje0zE1kiVBA8SDTdJIWZXhCvNRXt/8r/CWiCOXBYSE1QIcelik89xYD7QKoKNU
-        DKXmOuHox6EHdFImyNFgCDEDFXAPp0zfxbXBO9YsudK1fzgExuCq/NBDk2NZEwIS1pK01lt2mkPsu
-        JWn5eixJRcEkF2XSfoMi+EdPR6AdWHYVpeGHxxsRM+n4epdcW0FHUeaezCKa81dsnKF1V2/GAaF6l
-        EqICNI2w==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nuJiw-001W4J-54; Thu, 26 May 2022 20:04:46 +0000
-Message-ID: <3b7ec693-f4a5-e1aa-3e07-b22a4008d4c9@infradead.org>
-Date:   Thu, 26 May 2022 13:04:41 -0700
+        Thu, 26 May 2022 16:07:15 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEB0BA9B2;
+        Thu, 26 May 2022 13:07:14 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id u23so3963059lfc.1;
+        Thu, 26 May 2022 13:07:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zyoxcfUGkhRLREf2cpRhyhZi5hXxrWkBKr1smYGro+s=;
+        b=LZ8DhRoqO7iGuYrA7HfKAm7AxwpI9bTaSNE3odNBSjH3IGuwo/2Y5dTMMZfJ4EdX9O
+         dLH0HaUxjkyjaX8Od8n311p5OJt91y/lBD1Pt8kQ2Uws7U5gfpSfv7oGEzOyx+TFy5w7
+         DXFmZGjrnwlfVNQdFt3fFHJEvlhD43sLnlt3HJTPKq+NpVq9y2iXtZqfbZNj1b5MctEq
+         Qi6aJFGY7dkv0k7ZTgl/URhsIcB6iTDKxJ4CXPXAJ4rv/MCWR+myMKXzwbEXAO0GNU+k
+         ZyejukdxtazmBPIaAb+svMn37dL04DsMrdiew2pNoKAso/5c3YZ4+Yehob+/hVLEmaMn
+         lp7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zyoxcfUGkhRLREf2cpRhyhZi5hXxrWkBKr1smYGro+s=;
+        b=eD8NTAmmSOP6p+GZKNfkqBbzhMhdFE2AV81Yc67WYHYpkKsxgFaaPzCHbp5+x95KCS
+         sR+HqG231juin430g2kv/QgehreZYBzSeybNNuZydH8EXQhfQfTZn9Nl6fVR72RFzKEN
+         CNqI+eQUl0S7iXhsg6sdZzOSpH/bH1WV4BNlPFa6IWhkcTIcRhL7OkW6HF023g0dTNEf
+         Bae5Hz76RCAKssnuFW/LRU9EF07hY0RxBrn0xWKZ/KrgZumIPB5u2qDTW73f/THb5e1+
+         7gku5Tbu1NCBwBf0NYXhiiN81flHW4M1tR5USelffA1wDvP5mVLXQZwRNxnCL7BKa1Js
+         XldQ==
+X-Gm-Message-State: AOAM5332Kty4kzi5zrdu9VmgqBCuTseqynP/msebGlMYkj6IpJQ04D3P
+        qXwidvVS24v77JKyz6hnmCrNPMgnbyc1PG0XGQM9BsZ8
+X-Google-Smtp-Source: ABdhPJyw+nnuZYOIRPE4qQXN3KXf/9pua2DUaN9KJa8kShmnWZTS0FVsqCr94j4zSQ1e1QRqOnhXBrl4fL1VdQZVfkM=
+X-Received: by 2002:a05:6512:128e:b0:478:67ec:44bc with SMTP id
+ u14-20020a056512128e00b0047867ec44bcmr17359964lfs.381.1653595632789; Thu, 26
+ May 2022 13:07:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: kbuild problem: ERROR: modpost: missing MODULE_LICENSE() in
- drivers/iio/afe/iio-rescale.o
-Content-Language: en-US
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-iio@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-References: <18500f18-9cd5-a81c-4a55-14e999ed4496@infradead.org>
- <3ae306e0-c6c7-ed12-cacd-62b1c26dba3c@infradead.org>
- <6671de03-c09c-bfaf-e06c-e45af70d4354@infradead.org>
- <6601a387-de9a-a0d0-11b5-01e0cfa75657@infradead.org>
- <7a97bac3-6ade-8e1b-cf0c-4a05c83163a3@infradead.org> <Yo+lHSmeIsx144cv@shaak>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Yo+lHSmeIsx144cv@shaak>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512001500.16739-1-fletcher0max@gmail.com>
+ <CAEc3jaBbVT1t1kS_Vvp3EqfheCWr=CAvVgdzw7vkeFyYz9H_7Q@mail.gmail.com>
+ <CAKcX28WpKoP=HVq3zCvBh9knKFEdR0_+NmATpt9D6rFmprkFDA@mail.gmail.com> <CAEc3jaCq9DOa86TAakY7K9Mrzc9qKt5wraTJ7Z2Y5yAu-XqWzg@mail.gmail.com>
+In-Reply-To: <CAEc3jaCq9DOa86TAakY7K9Mrzc9qKt5wraTJ7Z2Y5yAu-XqWzg@mail.gmail.com>
+From:   Maxwell Fletcher <fletcher0max@gmail.com>
+Date:   Thu, 26 May 2022 13:07:01 -0700
+Message-ID: <CAKcX28X+fqzjW3UHqzhbopjqD=eO7x4TTAjC-3x3w7Po-PgKSQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] HID: nintendo: fix face button mappings
+To:     Roderick Colenbrander <thunderbird2k@gmail.com>
+Cc:     "Daniel J. Ogorchock" <djogorchock@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Roderick,
+
+Thank you so much for your time; this has all been very educational
+for me. I'll be following the work on eBPF.
+
+Best,
+Max
 
 
-On 5/26/22 09:04, Liam Beguin wrote:
-> Hi Randy,
-> 
-> On Thu, May 26, 2022 at 08:36:34AM -0700, Randy Dunlap wrote:
->> Liam:
->>
->> Any comment on this?
->> Otherwise I'll just send a formal patch like this (below).
-> 
-> Apologies for not answering earlier.
-> 
-> I wanted to look more into Masahiro's comment and try to fix the
-> Makefile, but that can be done after.
-> 
-> IMO your patch improves the current Kconfig, so I'd recommend sending
-> the patch. If it can wait a bit, I can look at the Makefile over the
-> weekend.
-> 
 
-Liam,
 
-I'll wait until next week to see if you come up with anything.
 
-Thanks.
-
-> 
->>
->> Thanks.
->>
->> On 5/20/22 20:51, Randy Dunlap wrote:
->>> Ok, one more.
->>> [also adding Liam here]
->>>
->>> On 5/20/22 20:17, Randy Dunlap wrote:
->>>>
->>>>
->>>> On 5/20/22 20:08, Randy Dunlap wrote:
->>>>>
->>>>>
->>>>> On 5/20/22 19:40, Randy Dunlap wrote:
->>>>>> Hi,
->>>>>>
->>>>>> In March I reported that a randconfig build complained:
->>>>>>
->>>>>> ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
->>>>>>
->>>>>> (https://lore.kernel.org/all/16509fb6-e40c-e31b-2c80-264c44b0beb9@infradead.org/)
->>>>>>
->>>>>> I am still seeing this problem so I tried to dig into it a bit.
->>>>>> However, I don't see why get_next_modinfo() and friends don't find the
->>>>>> MODULE_LICENSE() since it is in the iio-rescale.o file.
->>>>>>
->>>>>> (BTW, I see this build error on many different $ARCH [around 15 tested]
->>>>>> and with 2 different versions of GCC.)
->>>>>>
->>>>>> Q1: Is modpost checking both vmlinux and iio-rescale.o for modinfo license
->>>>>> strings?
->>>>>>
->>>>>> It looks like it is, because it appears (?) that modpost is looking at
->>>>>> drivers/iio/test/iio-test-rescale.o (<<<<< a kunit test, which is builtin
->>>>>> in my .config) and at drivers/iio/afe/iio-rescale.o (which is built as a
->>>>>> loadable module).
->>>>>>
->>>>>> Is this confusing modpost?
->>>>>> I renamed drivers/iio/afe/iio-rescale.c to afe-rescale.c and changed its
->>>>>> Makefile entry accordingly and the MODULE_LICENSE error goes away.
->>>>>
->>>>> Oh well. This rename causes drivers/iio/test/iio-test-rescale.c to have
->>>>> build errors, so that's not a solution, just some info...
->>>>
->>>> and that was due to not updating drivers/iio/test/Makefile.
->>>> When that is done, the missing MODULE_LICENSE() is back in afe-rescale.o.
->>>>
->>>>>
->>>>>> Is this a modpost error or is kunit messing things up?
->>>>>>
->>>>>> thanks for looking.
->>>
->>> Does this look OK? It allows afe/iio-rescale.o to build XOR
->>> test/iio-rescale.o (not both of them).
->>>
->>> --- a/drivers/iio/test/Kconfig
->>> +++ b/drivers/iio/test/Kconfig
->>> @@ -6,7 +6,7 @@
->>>  # Keep in alphabetical order
->>>  config IIO_RESCALE_KUNIT_TEST
->>>         bool "Test IIO rescale conversion functions"
->>> -       depends on KUNIT=y && !IIO_RESCALE
->>> +       depends on KUNIT=y && IIO_RESCALE=n
->>>         default KUNIT_ALL_TESTS
->>>         help
->>>           If you want to run tests on the iio-rescale code say Y here.
->>>
->>>
->>
->> -- 
->> ~Randy
-
--- 
-~Randy
+On Sat, May 14, 2022 at 8:33 PM Roderick Colenbrander
+<thunderbird2k@gmail.com> wrote:
+>
+> Hi Maxwell,
+>
+> I don't think it is desired to have such kernel module parameters as
+> it essentially adds new kernel APIs, which have to be maintained
+> unless truly needed.
+>
+> However, you may have seen the work Benjamin is doing around eBPF for
+> HID. I'm no expert on it yet, but it could probably allow you to do a
+> similar kind of fixup without having to modify the kernel module.
+>
+> Thanks,
+> Roderick
+>
+> On Sat, May 14, 2022 at 5:57 PM Maxwell Fletcher <fletcher0max@gmail.com>=
+ wrote:
+> >
+> > Hi Roderick,
+> >
+> > Thanks for the explanation. It makes sense that the mappings were never=
+ meant to mirror Xbox controllers. Would it still be possible to merge a pa=
+tch that adds an opt-in module parameter that changes the mappings, similar=
+ to the one in the second part of this patch?
+> >
+> > Thanks,
+> > Max
+> >
+> > On Fri, May 13, 2022 at 12:58 PM Roderick Colenbrander <thunderbird2k@g=
+mail.com> wrote:
+> >>
+> >> Hi Max,
+> >>
+> >> Thanks for your patch, however I must say the patch is not correct for
+> >> 2 reasons.
+> >>
+> >> Over the years different controllers have different layouts. The
+> >> standard which this driver (as well as others such as
+> >> hid-sony/hid-playstation) follow is the Linux gamepad standard (see
+> >> Documentation/input/gamepad.rst). It stays away of the debate what is
+> >> A/B/X/Y. It talks about North/west/.., (yes they are macros which map
+> >> to A/B/X/Y). In case of the Switch it does mean things are flipped,
+> >> but it was not meant to represent an Xbox controller. (Technically one
+> >> could argue that the Xbox controller should be flipped as it was the
+> >> SNES controller back in the days which introduced X/Y and the Switch
+> >> is still consistent with that.)
+> >>
+> >> Second, even if the patch was right it would be tricky to merge. The
+> >> problem is that a changed mapping breaks user spaces and in general
+> >> can't do this unless there is a really good reason. It just would
+> >> break existing applications and libraries (often e.g. SDL)
+> >>
+> >> Thanks,
+> >> Roderick
+> >>
+> >> On Wed, May 11, 2022 at 8:12 PM Max Fletcher <fletcher0max@gmail.com> =
+wrote:
+> >> >
+> >> > Previously, A and B would match the Xbox layout, but X and Y were in=
+correctly swapped. This corrects it so that X and Y match the Xbox layout.
+> >> >
+> >> > Signed-off-by: Max Fletcher <fletcher0max@gmail.com>
+> >> > ---
+> >> >  drivers/hid/hid-nintendo.c | 10 +++++-----
+> >> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >> >
+> >> > diff --git a/drivers/hid/hid-nintendo.c b/drivers/hid/hid-nintendo.c
+> >> > index 2204de889739..7735971ede3f 100644
+> >> > --- a/drivers/hid/hid-nintendo.c
+> >> > +++ b/drivers/hid/hid-nintendo.c
+> >> > @@ -1351,10 +1351,10 @@ static void joycon_parse_report(struct joyco=
+n_ctlr *ctlr,
+> >> >                 input_report_key(dev, BTN_START, btns & JC_BTN_PLUS)=
+;
+> >> >                 input_report_key(dev, BTN_THUMBR, btns & JC_BTN_RSTI=
+CK);
+> >> >                 input_report_key(dev, BTN_MODE, btns & JC_BTN_HOME);
+> >> > -               input_report_key(dev, BTN_WEST, btns & JC_BTN_Y);
+> >> > -               input_report_key(dev, BTN_NORTH, btns & JC_BTN_X);
+> >> > -               input_report_key(dev, BTN_EAST, btns & JC_BTN_A);
+> >> > -               input_report_key(dev, BTN_SOUTH, btns & JC_BTN_B);
+> >> > +               input_report_key(dev, BTN_X, btns & JC_BTN_Y);
+> >> > +               input_report_key(dev, BTN_Y, btns & JC_BTN_X);
+> >> > +               input_report_key(dev, BTN_B, btns & JC_BTN_A);
+> >> > +               input_report_key(dev, BTN_A, btns & JC_BTN_B);
+> >> >         }
+> >> >
+> >> >         input_sync(dev);
+> >> > @@ -1578,7 +1578,7 @@ static const unsigned int joycon_button_inputs=
+_l[] =3D {
+> >> >
+> >> >  static const unsigned int joycon_button_inputs_r[] =3D {
+> >> >         BTN_START, BTN_MODE, BTN_THUMBR,
+> >> > -       BTN_SOUTH, BTN_EAST, BTN_NORTH, BTN_WEST,
+> >> > +       BTN_A, BTN_B, BTN_Y, BTN_X,
+> >> >         BTN_TR, BTN_TR2,
+> >> >         0 /* 0 signals end of array */
+> >> >  };
+> >> > --
+> >> > 2.35.3
+> >> >

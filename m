@@ -2,272 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC9D535267
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8C453526A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243533AbiEZRH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 13:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
+        id S1348228AbiEZRIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 13:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236465AbiEZRH4 (ORCPT
+        with ESMTP id S237695AbiEZRIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 13:07:56 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486B14FC4B
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:07:55 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id er5so2537330edb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:07:55 -0700 (PDT)
+        Thu, 26 May 2022 13:08:49 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88A14F9F4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:08:47 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id x143so2165555pfc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KmROjGleSmP0Q8SmkvRLiLJ4PJ/PkOeCsvLq+FzuZvw=;
-        b=eiXItexUv6JKb5q/26VIC/dSviGcdCxMSyuZ9CBMVkMP9yD3uyHhROwvHJixyYYJQg
-         sPa6KkCqD69ksfO8xCJMbMxJpsN4jR8zWfD0QNcK/ZU/wdOo/cFdfC1E7qBJocdu0GBL
-         0U3ZAtZre/r6nzRECXRqobecfv/oG/XnXRwZo=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=OcC8f2hFYyHfueTeOB0cD4jDBmTaItpMpyDOzwiQxIA=;
+        b=NcW66NRGSofp55oDmy9/TtsSNjTH7zASspQnPWXRX3o3oWzHXB7G6eyb0qndNR8QHw
+         F8yuM2LGaVI8repLaUa6Q9Cvt1wXiMtls+mGyIkWyg9zeqtbkH8MuwclpANBNTwY9NSD
+         khuwdRQBQyJpGHqkHgcFUG8fUudrtHJnJ+Ef6NXpn+OVlnxdowPNEBAhykYf9EXQFtLQ
+         9sGAjxpOH067IYOGBJg8d9bHURznZHUZPlvqCzTa0ZbRlotnyMjMfjJBqXmc1d/5KIBq
+         XB8cf8AeZ0FAl3AjrqJQSaPhg7JDtz1EWYJ8fUtRNt9mmbRzQTgAkDSmGFNMvG3Uw2tE
+         bzdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KmROjGleSmP0Q8SmkvRLiLJ4PJ/PkOeCsvLq+FzuZvw=;
-        b=tmPaiaIF+2mN0vS7Z/8nX3pu5IWG9ioWLHOwywrYqKtiucNgs9W/0CHbDL/oBRwvxO
-         Hj7bgGW1Eo/7eFREo/pX4t1JhFZwto22KZ78lPcHSR+0uzfoVxk9MxKvfY0vXIz1mHQQ
-         Th7eTPWrA6QFdhN/PfquBViidvZSwPeEkzUGWXrC0pAMIXidwuR6QmyRAuxsEXBeWdx4
-         rVv89K1fKIfrn1w7gmdl6GNMnXQnMt7YtRyIKYv6tGWo30DQF97swBUU10raVEJ3SHWV
-         sRiVSPOe9KwHDavJpvZW8IIjxOeSe6AReOFtUlQ2Xp/JthPLD092fxsqrXWDzh1k6xvZ
-         NsmQ==
-X-Gm-Message-State: AOAM533oKgTKxE0tPXFqPfZbRJCHTnol4kP7HkoOhfMcyTa+0DOGYTq9
-        +z/jLLIEsepSZ5SyZyOOERrv7tmzqQvrYSyp7TY=
-X-Google-Smtp-Source: ABdhPJzMQ7/NvzHerGN+0B5xnQLQFjzAkz1VGlh1Nsshes2c28ZM3q4LQIw2MJD3+Iu6m882lY6I4g==
-X-Received: by 2002:a05:6402:b0d:b0:42b:ddcc:6a7e with SMTP id bm13-20020a0564020b0d00b0042bddcc6a7emr3457775edb.258.1653584873533;
-        Thu, 26 May 2022 10:07:53 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id m3-20020a50d7c3000000b0042bc5e8f7fdsm1023205edj.16.2022.05.26.10.07.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 10:07:51 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id p10so2884921wrg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:07:50 -0700 (PDT)
-X-Received: by 2002:a5d:5085:0:b0:20d:5f6:63fa with SMTP id
- a5-20020a5d5085000000b0020d05f663famr31656209wrt.679.1653584869966; Thu, 26
- May 2022 10:07:49 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=OcC8f2hFYyHfueTeOB0cD4jDBmTaItpMpyDOzwiQxIA=;
+        b=REVJ5k37t/QIsICTW6LZPY/mYBSfdYcbPhf4AljFbyeFzxX5TjpXRaRRYMZqSMqlhZ
+         X4dBE7AcMg/VjVb/vea9/uC2SD8AMa2861gQS3IZMQLIxFJhW5PEggqCBJQs5WIQROM/
+         PP+4K0GYo9CJmG6ikHdn7qBv4BJakjknpGrSApmE8x8+n3jTyxYto7Fj/1//uIi/7YL3
+         24Pkl5J6A1gYiFrhtASx8T3RGgizsGMO5i7FbtOIloDsAic4/9IGXONGTXl1ZWGZPdsN
+         s/44VGvxw4jDkA9MdT+gNGphBhxZhzHDZdoJFNcwsJT/FkwsKoolp187m9JESO9Mk007
+         xKuw==
+X-Gm-Message-State: AOAM532JQ23pifGDvb3xSZrfaQRt6e0mQGJRX9W2Sq/IMbDOi11Uou8k
+        1zqRBFtyN5Udzs0QUfeStVBlDrSfNV4=
+X-Google-Smtp-Source: ABdhPJwuup7so9XNpSp/cfKWd4CIzIYeOsKBC/XI92dfbS6cCN2iPa0VV4yfjqtCTw37mZIMG3/twQ==
+X-Received: by 2002:a63:8aca:0:b0:3f9:f9ed:7426 with SMTP id y193-20020a638aca000000b003f9f9ed7426mr22819562pgd.176.1653584927373;
+        Thu, 26 May 2022 10:08:47 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:492b:befb:16f:e62])
+        by smtp.gmail.com with ESMTPSA id m5-20020a63f605000000b003faebbb772esm1800120pgh.25.2022.05.26.10.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 10:08:46 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 26 May 2022 10:08:44 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        John Dias <joaodias@google.com>,
+        Tim Murray <timmurray@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Martin Liu <liumartin@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Subject: [PATCH] mm: throttle LRU pages skipping on rmap_lock contention
+Message-ID: <Yo+0HMJYuhiJv+Ak@google.com>
 MIME-Version: 1.0
-References: <1652697510-30543-1-git-send-email-quic_vnivarth@quicinc.com>
-In-Reply-To: <1652697510-30543-1-git-send-email-quic_vnivarth@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 26 May 2022 10:07:37 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WZQLpYAsdU4yTCGZCGp5+t+rJiadbSeppBaX0b6ZuUxg@mail.gmail.com>
-Message-ID: <CAD=FV=WZQLpYAsdU4yTCGZCGp5+t+rJiadbSeppBaX0b6ZuUxg@mail.gmail.com>
-Subject: Re: [V2] tty: serial: qcom-geni-serial: Remove uart frequency table.
- Instead, find suitable frequency with call to clk_round_rate.
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-serial@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        quic_msavaliy@quicinc.com, Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, May 12, 2022 at 12:55:16PM -0700, Minchan Kim wrote:
+> On Wed, May 11, 2022 at 07:05:23PM -0700, Andrew Morton wrote:
+> > On Wed, 11 May 2022 15:57:09 -0700 Minchan Kim <minchan@kernel.org> wrote:
+> > 
+> > > > 
+> > > > Could we burn much CPU time pointlessly churning though the LRU?  Could
+> > > > it mess up aging decisions enough to be performance-affecting in any
+> > > > workload?
+> > > 
+> > > Yes, correct. However, we are already churning LRUs by several
+> > > ways. For example, isolate and putback from LRU list for page
+> > > migration from several sources(typical example is compaction)
+> > > and trylock_page and sc->gfp_mask not allowing page to be
+> > > reclaimed in shrink_page_list.
+> > 
+> > Well.  "we're already doing a risky thing so it's OK to do more of that
+> > thing"?
+> 
+> I meant the aging is not rocket science.
+> 
+> 
+> > 
+> > > > 
+> > > > Something else?
+> > > 
+> > > One thing I am worry about was the granularity of the churning.
+> > > Example above was page granuarity churning so might be execuse
+> > > but this one is address space's churning, especically for file LRU
+> > > (i_mmap_rwsem) which might cause too many rotating and live-lock
+> > > in the end(keey rotating in small LRU with heavy memory pressure).
+> > > 
+> > > If it could be a problem, maybe we use sc->priority to stop
+> > > the skipping on a certain level of memory pressure.
+> > > 
+> > > Any thought? Do we really need it?
+> > 
+> > Are we able to think of a test which might demonstrate any worst case? 
+> > Whip that up and see what the numbers say?
+> 
+> Yeah, let me create a worst test case to see how it goes.
+> 
+> A thread keep reading a file-backed vma with 2xRAM file but other threads
+> keep changing other vmas mapped at the same file so heavy i_mmap_rwsem
+> contention in aging path.
 
-On Mon, May 16, 2022 at 3:38 AM Vijaya Krishna Nivarthi
-<quic_vnivarth@quicinc.com> wrote:
->
-> Replace the UART frequency table 'root_freq[]' with logic around
-> clk_round_rate() so that SoC details like the available clk frequencies
-> can change and this driver still works. This reduces tight coupling
-> between this UART driver and the SoC clk driver because we no longer
-> have to update the 'root_freq[]' array for new SoCs. Instead the driver
-> determines the available frequencies at runtime.
->
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> ---
-> v2: loops through clk dividers to zero-in quickly
-> v1: intial patch looped through available clk frequencies
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 56 ++++++++++++++++++++++-------------
->  1 file changed, 36 insertions(+), 20 deletions(-)
->
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index f496102..4733a23 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -149,12 +149,6 @@ static unsigned int qcom_geni_serial_tx_empty(struct uart_port *port);
->  static void qcom_geni_serial_stop_rx(struct uart_port *uport);
->  static void qcom_geni_serial_handle_rx(struct uart_port *uport, bool drop);
->
-> -static const unsigned long root_freq[] = {7372800, 14745600, 19200000, 29491200,
-> -                                       32000000, 48000000, 51200000, 64000000,
-> -                                       80000000, 96000000, 100000000,
-> -                                       102400000, 112000000, 120000000,
-> -                                       128000000};
-> -
->  #define to_dev_port(ptr, member) \
->                 container_of(ptr, struct qcom_geni_serial_port, member)
->
-> @@ -946,25 +940,43 @@ static int qcom_geni_serial_startup(struct uart_port *uport)
->         return 0;
->  }
->
-> -static unsigned long get_clk_cfg(unsigned long clk_freq)
-> -{
-> -       int i;
-> -
-> -       for (i = 0; i < ARRAY_SIZE(root_freq); i++) {
-> -               if (!(root_freq[i] % clk_freq))
-> -                       return root_freq[i];
-> -       }
-> -       return 0;
-> -}
-> -
-> -static unsigned long get_clk_div_rate(unsigned int baud,
-> +static unsigned long get_clk_div_rate(struct clk *clk, unsigned int baud,
->                         unsigned int sampling_rate, unsigned int *clk_div)
->  {
->         unsigned long ser_clk;
->         unsigned long desired_clk;
-> +       unsigned long freq, prev;
-> +       unsigned long div, maxdiv;
-> +       int64_t mult;
+Forking new thread
 
-Why is "mult" signed? Shouldn't it be type "u64" or something?
+I checked what happens the worst case. I am not sure how the worst
+case is realistic but would be great to have safety net.
 
->
->         desired_clk = baud * sampling_rate;
-> -       ser_clk = get_clk_cfg(desired_clk);
-> +       if (!desired_clk) {
-> +               pr_err("%s: Invalid frequency\n", __func__);
+From 5ccc8b170af5496f803243732e96b131419d7462 Mon Sep 17 00:00:00 2001
+From: Minchan Kim <minchan@kernel.org>
+Date: Thu, 19 May 2022 19:48:12 -0700
+Subject: [PATCH] mm: throttle LRU pages skipping on rmap_lock contention
 
-nit: IMO printing the __func__ in every printout is not a good
-practice. It uglifies the kernel log buffer. If you personally truly
-want the function in every printout then modify pr_err() to print it.
+On heavy contention on rmap_lock(e.g., i_mmap_rwsem), VM can keep
+skipping LRU pages so reclaim efficiency(steal/scanning) would drop
+from 48% to 27% and workingset would be reclaimed faster than old
+so workingset_refault rate increased to 240%.
 
+We need a safe net to throttle the skipping LRU pages. This patch
+throttle the skipping policy using (DEF_PRIRORITY - 2) magic value
+VM has used for indicating non-light memory pressure.
+IOW, let's skip rmap_lock contendeded pages only when
+only when sc->priority >= (DEF_PRIRORITY - 2).
 
-> +               return 0;
-> +       }
-> +
-> +       maxdiv = CLK_DIV_MSK >> CLK_DIV_SHFT;
-> +       prev = 0;
-> +
-> +       for (div = 1; div <= maxdiv; div++) {
-> +               mult = div * desired_clk;
-> +               if (mult > ULONG_MAX)
-> +                       break;
+The test scenario to see the worst case:
 
-I'm pretty sure your "if" test is always false because you didn't cast
-properly. I even tested it for you:
+1. A thread mmap a big file(e.g., 2x times of RAM) and keep touching
+   the address space up to three times.
+2. B thread keeps doing mmap/munmap with the same file to cause
+   heavy lock contention in i_mmap_rwsem until the A thread finish
+   the job.
+3. measure vmstat and thread A's elapsed time.
 
-{
-    unsigned long a, b;
-    unsigned long long c;
+Thread's elapsed time:
 
-    printf("long size: %d, long long size: %d\n",
-           (int)(sizeof(a)), (int)(sizeof(c)));
+1. vanilla
+24.64sec(5.04%)
 
-    a = 0xffffffff;
-    b = 2;
+2. rmap_skip(i.e., mm-dont-be-stuck-to-rmap-lock-on-reclaim-path.patch)
+25.20sec(4.16%)
 
-    c = a * b;
-    printf("c is %#llx\n", c);
+3. priority(2 + this patch)
+23.62sec(6.61%)
 
-    c = a * (unsigned long long)b;
-    printf("c is %#llx\n", c);
-}
+Vmstat Comparison:
+				     vanilla    rmap_skip    priority
+	     allocstall_movable          582         9772       14643
+		     pgactivate          232        25865        4906
+      		   pgdeactivate           78        17265         651
+        	     pgmajfault           58        10639        1376
+    		 pgsteal_kswapd     15947857     15133195    15095445
+    		 pgsteal_direct       105439       583092      943195
+     	          pgscan_kswapd     24647536     52768898    28103170
+     		  pgscan_direct      8398139      3767100     7966353
+	workingset_refault_file     12582926     12248353    12565934
 
-That prints out:
+B test scenario
 
-long size: 4, long long size: 8
-c is 0xfffffffe
-c is 0x1fffffffe
+1. A thread mmap a big file(e.g., 2x times of RAM) and keep touching
+   the address space up to three times.
+2. B thread keeps doing mmap/munmap with the same file to cause
+   heavy lock contention in i_mmap_rwsem until the A thread finish
+   the job.
+3. C thread keep reading other big file using read(2) syscall
+4. measure vmstat and thread A's elapsed time.
 
+1. vanilla
+27.24sec(5.29%)
 
-> +
-> +               freq = clk_round_rate(clk, (unsigned long)mult);
-> +               if (!(freq % desired_clk)) {
-> +                       ser_clk = freq;
-> +                       break;
-> +               }
-> +
-> +               if (!prev)
-> +                       ser_clk = freq;
+2. rmap_skip
+33.54sec(3.20%)
 
-Instead of the above, why not just init ser_clk to "desired_clk"?
-...or perhaps leave it initted to 0 so your error check after the loop
-isn't dead code?
+3. priority
+28.68sec(1.26%)
 
+Vmstat Comparison:
+				     vanilla    rmap_skip    priority
+	     allocstall_movable        15262        81258       21644
+        	     pgactivate      3042004      3086906     3502959
+      		   pgdeactivate      2307849      8959162     3605768
+        	     pgmajfault          566         1059	  557
+    		 pgsteal_kswapd     17557735     30861283    18385674
+    		 pgsteal_direct       955389      6353527     1233605
+     		  pgscan_kswapd     31622695     59670433    35372575
+		  pgscan_direct      4924052     13939254     4310247
+	workingset_refault_file     13466538     32193161    14588019
 
-> +               else if (prev == freq)
-> +                       break;
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+---
+ include/linux/rmap.h | 5 +++--
+ mm/rmap.c            | 6 ++++--
+ mm/vmscan.c          | 6 ++++--
+ 3 files changed, 11 insertions(+), 6 deletions(-)
 
-Are you sure about this exit condition? It seems wrong. I guess you're
-assuming that clk_round_rate() will round up like it (almost always)
-does for the Qualcomm clock driver. So I guess let's say we're trying
-to make 10000 baud and your oversampling is 16. So "desired_clk" is
-160000, right? Now let's imagine that the clock driver can make three
-rates:
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index 9ec23138e410..2893da3f1cd3 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -296,7 +296,8 @@ static inline int page_try_share_anon_rmap(struct page *page)
+  * Called from mm/vmscan.c to handle paging out
+  */
+ int folio_referenced(struct folio *, int is_locked,
+-			struct mem_cgroup *memcg, unsigned long *vm_flags);
++			struct mem_cgroup *memcg, unsigned long *vm_flags,
++			bool rmap_try_lock);
+ 
+ void try_to_migrate(struct folio *folio, enum ttu_flags flags);
+ void try_to_unmap(struct folio *, enum ttu_flags flags);
+@@ -418,7 +419,7 @@ void page_unlock_anon_vma_read(struct anon_vma *anon_vma);
+ 
+ static inline int folio_referenced(struct folio *folio, int is_locked,
+ 				  struct mem_cgroup *memcg,
+-				  unsigned long *vm_flags)
++				  unsigned long *vm_flags, bool rmap_try_lock)
+ {
+ 	*vm_flags = 0;
+ 	return 0;
+diff --git a/mm/rmap.c b/mm/rmap.c
+index d4cf3ea1b616..a75c7f7a0392 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -888,6 +888,7 @@ static bool invalid_folio_referenced_vma(struct vm_area_struct *vma, void *arg)
+  * @is_locked: Caller holds lock on the folio.
+  * @memcg: target memory cgroup
+  * @vm_flags: A combination of all the vma->vm_flags which referenced the folio.
++ * @rmap_try_lock: bail out if the rmap lock is contended
+  *
+  * Quick test_and_clear_referenced for all mappings of a folio,
+  *
+@@ -895,7 +896,8 @@ static bool invalid_folio_referenced_vma(struct vm_area_struct *vma, void *arg)
+  * the function bailed out due to rmap lock contention.
+  */
+ int folio_referenced(struct folio *folio, int is_locked,
+-		     struct mem_cgroup *memcg, unsigned long *vm_flags)
++		     struct mem_cgroup *memcg, unsigned long *vm_flags,
++		     bool rmap_try_lock)
+ {
+ 	int we_locked = 0;
+ 	struct folio_referenced_arg pra = {
+@@ -906,7 +908,7 @@ int folio_referenced(struct folio *folio, int is_locked,
+ 		.rmap_one = folio_referenced_one,
+ 		.arg = (void *)&pra,
+ 		.anon_lock = folio_lock_anon_vma_read,
+-		.try_lock = true,
++		.try_lock = rmap_try_lock,
+ 	};
+ 
+ 	*vm_flags = 0;
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index ac168f4b0492..f0987e027aba 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1381,7 +1381,8 @@ static enum page_references folio_check_references(struct folio *folio,
+ 	unsigned long vm_flags;
+ 
+ 	referenced_ptes = folio_referenced(folio, 1, sc->target_mem_cgroup,
+-					   &vm_flags);
++					   &vm_flags,
++					   sc->priority >= DEF_PRIORITY - 2);
+ 	referenced_folio = folio_test_clear_referenced(folio);
+ 
+ 	/*
+@@ -2497,7 +2498,8 @@ static void shrink_active_list(unsigned long nr_to_scan,
+ 
+ 		/* Referenced or rmap lock contention: rotate */
+ 		if (folio_referenced(folio, 0, sc->target_mem_cgroup,
+-				     &vm_flags) != 0) {
++				     &vm_flags,
++				     sc->priority >= DEF_PRIORITY - 2) != 0) {
+ 			/*
+ 			 * Identify referenced, file-backed active pages and
+ 			 * give them one more trip around the active list. So
+-- 
+2.36.1.124.g0e6072fb45-goog
 
-7372800, 14745600, 19200000
-
-Your loop will run. The first time through we'll "round" 160000 and
-get back 7372800. It's not a match. Prev will now be 7372800.
-
-The second time through, we'll round (160000 * 2) and get back
-7372800. It's not a match and prev will be equal to freq so we'll
-break.
-
-...but we _should_ have found 19200000
-
-So I think this break condition is wrong.
-
-
-> +
-> +               prev = freq;
-> +       }
-> +
->         if (!ser_clk) {
->                 pr_err("%s: Can't find matching DFS entry for baud %d\n",
->                                                                 __func__, baud);
-
-In the above, you _always_ init "ser_clk" to something, so how can
-this error condition ever occur in your new code?
-
-
-> @@ -972,6 +984,9 @@ static unsigned long get_clk_div_rate(unsigned int baud,
->         }
->
->         *clk_div = ser_clk / desired_clk;
-> +       if (!(*clk_div))
-> +               *clk_div = 1;
-
-I _think_ this can be removed if you just don't allow inexact matches.
-...if you do allow inexact matches, maybe you should put a warning in
-the logs in that case?
-
-
-> +
->         return ser_clk;
->  }
->
-> @@ -1003,7 +1018,8 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
->         if (ver >= QUP_SE_VERSION_2_5)
->                 sampling_rate /= 2;
->
-> -       clk_rate = get_clk_div_rate(baud, sampling_rate, &clk_div);
-> +       clk_rate = get_clk_div_rate(port->se.clk, baud,
-> +               sampling_rate, &clk_div);
-
-IMO it would look better to just let the above line be 81 columns
-rather than the ugly wrapping.

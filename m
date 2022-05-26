@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E09535212
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3660B535216
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348112AbiEZQ3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 12:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
+        id S1343905AbiEZQaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 12:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbiEZQ3p (ORCPT
+        with ESMTP id S238832AbiEZQag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 12:29:45 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8185D9BAD0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:29:44 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 202so2141250pfu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:29:44 -0700 (PDT)
+        Thu, 26 May 2022 12:30:36 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8840E9CF56
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:30:35 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id m1so1873541plx.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:30:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=pcOIqjfOGD4mtjARe3uelHp7io5D0VG5aulAy4XSsSE=;
-        b=qsX7tZ2WyLRtY66GJBSkIA/fXY4PQcBTX49kCBByX+ju+12FnmPws2UX0mQc5Na4EI
-         XOLv+1a+rXAF4+6PBeIA6S4Juy+VundpqCQbLl7jTQxBZmCX9BB7DclNK93Rpb3MAmKQ
-         G+wT0p9+gBoWCWQGghkVQFmmOQkyhx2t5uF0QprWvta0FJ7tofDdPU0zdMf23TA7RV4f
-         pc3JGE/P1lkbcihC23wX2W8pcqj2hDfSgNNKNyZQRDWTUzC0xTpJIXV9PSyIv1sX6NAr
-         orzFWzJS1LoK/KUWs+I1FGYzIq/7IM1tYDC8UItbOApbDlGXAx+3QAnzzLXJ2MA42Iil
-         x+Kg==
+        bh=hft3pFQ744fSdTwXHt92bZsNzbWCW8EWdxZRGP0yF3I=;
+        b=S3SVBC2ysXlMtAljWuti2+MJ2SbWfff+KOU4HhGqrzi0RbdMyzXzMmvBn7gb3HgKQr
+         BMtoEZ7mWkm59aNJ1EqcWVCSyrSoTJSVX0lvCeCGLJKVQSJgonY4yoxlq+5Xq345bF/L
+         Rm0iSs9O1MO0X+0rD2iCVSJq0sslpYlZEje2oxFWQaAmJupGbOyEq9E5TYTx6hKZkZ8x
+         HNaFpVxPwlDjASbhajUejKlHBIaIJkYURunTeT89GaFbILAPmKygbXCA3epFnjiw0R4P
+         jDou3CC8X02jKmxLCE00UmoiWqETaoHzhteSKTQylmwqrPoMkT7FTRF31zQ4IzSlQdWJ
+         sXtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:sender:from:date
          :message-id:subject:to;
-        bh=pcOIqjfOGD4mtjARe3uelHp7io5D0VG5aulAy4XSsSE=;
-        b=HnjzCSwSogEDipZp9ihfhCfyqUtzHYS4vpEwkl1FPWWvWtyEmfMI8Noaey8UXxiuBB
-         d8ildH1E9YTR89h3fjMIpcU/JjT5Ur1DTUj+lEJHNSxQyDwF29UjRsYGgnyZEE7Wuh55
-         hXL/3I+377JHYZRxaU7eE/kxmK2Kw1af9MqVYxiGlRJa+yN1NaNeUSz/00bg6AbiwPbU
-         BdUuNppukfBQHeL2Z++n4+fxIEU2ojJ7xFAHhmHsONdCBctV8MHHaCTKciqCQcqH5d56
-         4eQZ058Por4z+GHRGDLqtv62uq16SWlCQ+GN6cfhs53Uke7fwzkTGUi9txazejIEBJQZ
-         UtAA==
-X-Gm-Message-State: AOAM530I5v2HyhAAxnNKTZ8cIrhNckq7/YK5JCnTT+rKwIuH484SnZ6a
-        267HpEQD8z1GWvdgIgl+IYGmMR9lg7OdOGHdNQA=
-X-Google-Smtp-Source: ABdhPJzR4pDeON4Oqc7r91fRBKum6xIG5GjzHU8NvkI1Wwp9ocLze1lUkjBQkrduEjF4d2xrhNG/i4D1sdQu6Uu2kGQ=
-X-Received: by 2002:a63:4:0:b0:3c6:cce2:8457 with SMTP id 4-20020a630004000000b003c6cce28457mr32928452pga.612.1653582583800;
- Thu, 26 May 2022 09:29:43 -0700 (PDT)
+        bh=hft3pFQ744fSdTwXHt92bZsNzbWCW8EWdxZRGP0yF3I=;
+        b=51D2dlTeKetHkVGQ6xdEeCRS0ymBvpfL0cvlcI3q853MUwdbZ8gFzn+iVj6YkWytKi
+         3LaQoZA+m07/Q5vSOnOp/hP6DzaaQCeKAcgjp6pex60o/sG9IbsIfpS8OWuvaniQE2zy
+         zme9TAPengdPyzyrUyQ6lMeAWPYNXSkpwrvWc0cGbVQpxk2d/KtKbGi5Q2myRLbEENhv
+         wFPA6gOiau5UTOfL7kxeE0BC9JEAlgTtv0dxGi3wrjHB1yryQyIbjV7lv+yAnLb+aV/K
+         S8tBB2ObrSuSvXGSkBUkFOB6Vk7wp84UDA0WPliEKqB1DwkAAfz+jLQARNjHlCJRqHNR
+         67Kw==
+X-Gm-Message-State: AOAM533e+QoRrS/0MDuZ0/02LE+KyWmAtk0KFnNQfq3zhRu9xmjajUv/
+        SfjpQUVK/HTmcMgeiTKcPZdM7fGQsYsl18kqCUM=
+X-Google-Smtp-Source: ABdhPJyarPV38Il+LphIisoxEIdJDNN6+UOc8dXR3pLQ3pJMsa0NMLiUGNPoKSZueOimkwk2d/06o7i2O7Uhy9ve1Nw=
+X-Received: by 2002:a17:90b:4ace:b0:1df:cb33:5e7e with SMTP id
+ mh14-20020a17090b4ace00b001dfcb335e7emr3415455pjb.5.1653582634792; Thu, 26
+ May 2022 09:30:34 -0700 (PDT)
 MIME-Version: 1.0
 Reply-To: mr.a.manga99@gmail.com
 Sender: mrsannahbruun605@gmail.com
-Received: by 2002:a17:90b:4a10:0:0:0:0 with HTTP; Thu, 26 May 2022 09:29:43
+Received: by 2002:a17:90b:4a10:0:0:0:0 with HTTP; Thu, 26 May 2022 09:30:34
  -0700 (PDT)
 From:   "Mr. Amos Manga" <mr.a.manga99@gmail.com>
-Date:   Thu, 26 May 2022 09:29:43 -0700
-X-Google-Sender-Auth: aK6KCpH-JwwZkP9T4hNAXJiSIRI
-Message-ID: <CAEyYVPEwVLRVBRSuvLW7B-G3LmbtfG-P2WHostH-+uu1+6jX9g@mail.gmail.com>
+Date:   Thu, 26 May 2022 09:30:34 -0700
+X-Google-Sender-Auth: relk0xRbkWGB1Z0LR5py3McFfLg
+Message-ID: <CAEyYVPH-h98Wpcds+gW4-cdKwfKsBLJYPMK4Atc_tNRcqrY0zQ@mail.gmail.com>
 Subject: HELLO
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
@@ -75,10 +76,9 @@ I know this means of communication may not be morally right to you as
 a person but I also have had a great thought about it and I have come
 to conclusion which I am about to share with you.
 
-INTRODUCTION: I am a banker; I hope you will cooperate with me as a
-partner in a project of transferring an abandoned fund of late
-customer of the bank worth $18,000,000 (Eighteen Million Dollars
-only).
+I am a banker; I hope you will cooperate with me as a partner in a
+project of transferring an abandoned fund of late customer of the bank
+worth $18,000,000 (Eighteen Million Dollars only).
 
 This will be disbursed or shared between the both of us in these
 percentages, 55% for me and 45% for you. Contact me immediately if

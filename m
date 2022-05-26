@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DE453486D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02EBF53486F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344930AbiEZBzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S238130AbiEZBzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345843AbiEZBz2 (ORCPT
+        with ESMTP id S1345841AbiEZBz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:55:28 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB21B41C3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:55:27 -0700 (PDT)
+        Wed, 25 May 2022 21:55:27 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E3AB0A60
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:55:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653530127; x=1685066127;
+  t=1653530126; x=1685066126;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=P/NghkjHpuPIcqeLRTKNCAEhE3en/f+6JiG9RCqPuNA=;
-  b=IM2cNeHFde66bNO6pFR/CTSleRxICn+6/QGzPiNn6Fgg3MP4fydS6hPW
-   abMb5ShwEdc7BLrmVqoO/1g4qLEkmPJVZEhwmgwp2Iw1xqIRs1YzPQvDY
-   2OEgDksG6VX90nI5rCX97qAVXUutbtv6UjyraLOeeChCzcX4qDm0FWRRC
-   ajyEq1Okg8WGAOHBk7OOsRI5LZaayZfLzLIT8LKBIBbI25tQ6Dx0t3Ltr
-   G4MgcSlDkkfEojFqgVA38UacYrRsnjHYMaKea2Woc+gAhUm9rcD7JZxmP
-   xidd+dIGMcDM3jwc6NOKtmG3QyJ2UPodf23tlJBij6gaqqzvFwqv2liOk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="299330289"
+  bh=Ue69Q8jhp+d6RQF5cY0iKlqouVz40Cott8+L6TxVyx8=;
+  b=GJPPV/ZKligRE4LG7EkkPbR/ZeZt/BDf6Sa9qUpk7mEG7i4Pj9kLFB4f
+   Tmla4Rjj7CJKm9W1RsWe9KVVwil0HhBYPs4s2idrr1dVwnfB6QRTwl8ch
+   NL2Or9SkMv5II474ChKukUwYnNzHZ3bppUiZ7trxSjfYm5CBJFPwFrf3Z
+   qTentz169e5RFr/t1590qRPjVBG6tirbXzEGxtBxcyAXUVPWAL2qS9jZb
+   ZXDAYxZCGYQNjsO7vuMdUTCZcFN5mQ62/Z6wu6Lu6+9YNOjlpq2GGFLbK
+   8tIP3A8AawPSZOaYXQ+5j3dASNbaBXxQwIZ1ZLtuxmiC7pc4KYmsq7oUJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="271564495"
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="299330289"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:55:27 -0700
+   d="scan'208";a="271564495"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 18:55:26 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="630646675"
+   d="scan'208";a="578599765"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 25 May 2022 18:55:25 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 25 May 2022 18:55:25 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nu2ij-0003Um-5u;
+        id 1nu2ij-0003Ur-7H;
         Thu, 26 May 2022 01:55:25 +0000
-Date:   Thu, 26 May 2022 09:54:24 +0800
+Date:   Thu, 26 May 2022 09:54:27 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/boot] BUILD SUCCESS
- 8a33d96bd178d5f49cc5c1898e4cda08e221d2db
-Message-ID: <628eddd0.0wll48G8zTQ7fYDx%lkp@intel.com>
+Subject: [tip:x86/cleanups] BUILD SUCCESS
+ 20eb48885b62d5de4ab6be7e08f9f55aa33333fd
+Message-ID: <628eddd3.AIIiTW1c4MrBKaVz%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/boot
-branch HEAD: 8a33d96bd178d5f49cc5c1898e4cda08e221d2db  x86/setup: Use strscpy() to replace deprecated strlcpy()
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
+branch HEAD: 20eb48885b62d5de4ab6be7e08f9f55aa33333fd  x86/idt: Remove unused headers
 
 elapsed time: 723m
 
@@ -80,8 +80,6 @@ arm64                            allyesconfig
 arm                              allmodconfig
 arm                                 defconfig
 arm                              allyesconfig
-sh                              ul2_defconfig
-m68k                            mac_defconfig
 sh                         apsh4a3a_defconfig
 nios2                               defconfig
 sh                         ecovec24_defconfig
@@ -158,6 +156,8 @@ i386                          randconfig-a004
 x86_64                        randconfig-a012
 x86_64                        randconfig-a014
 x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220526
+hexagon              randconfig-r041-20220526
 
 -- 
 0-DAY CI Kernel Test Service

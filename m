@@ -2,89 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67DB534BB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C996B534BB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241386AbiEZIYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S235794AbiEZIZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiEZIYg (ORCPT
+        with ESMTP id S229590AbiEZIZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:24:36 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033F0C1EF1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:24:34 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id f2so1251518wrc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=19gn52/CILDHcyYZhtfJSaIpE45GA5X4DLumc17J+6E=;
-        b=kxVNDsdjeN8srlZR4+tE9FFTL4P6Tdt70Kom5we3WpF9MTiFXfcVdeCfTU1BLUQKM0
-         Q+2DK0HhNgjnAmJA/gQ2MCwVGYuYVXR0E7KyAoZqmHLBbg1gXDK6NcxeaRWcHfxRRbjg
-         NdE1wQlEk3uyXGL7zxHn2mDGBc28n1wH6k5GnVwiPLOaC6Ai6ij1Qn33hgo9qg9XeZad
-         lkSlmYeV0HztGgJJ0rY05XfRh4Lie/CF+U+JVCJlIhpQE9TCtq7B8H3kCMo6EjD9xN8x
-         EMXTSx3lge9xsEvAnjzopYj8FtZ1BbVMxIuncAzJdfzbLjpUJpWbj/zSjKelKyOrvbwq
-         jFZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=19gn52/CILDHcyYZhtfJSaIpE45GA5X4DLumc17J+6E=;
-        b=CAM3jgWiBw1uIYcKy63fd6YNMZ7eNe3cyA8lqc0b6t69mEwOvZap0Mvzldhcxoxt1P
-         wIH1rHNaLJkYmiyQ/C8y1GPzYWcaMNA0KQpFpHW7DM/2qNGXG+SFJbOK8QZDI7J+jHmO
-         SqUXr9VBfSSkgIbI+aSrIj1FHQNrfcNejsuwZtXI91yBh/rPsvPYPbXLRywXFfzhzPfU
-         Y6lZHak35kKUnrTcGPSSsuX7+19lrTitig9tD2TT8P9QvO7cro09YhC6TWvFcAizC5MJ
-         bx9CGo2dzU2bMyGTUFrRTK099IYIIjW7ouuI8vfXNiIh8Rb3ai57cIPuckHVywM8GvjR
-         t83w==
-X-Gm-Message-State: AOAM5335iZcTqK3Q9+MpdacCG0FrExG2Vu+Mnc4198AAilhmPGEciNLW
-        Y3C6HaOBmcUl58TOATmHxoY/cg==
-X-Google-Smtp-Source: ABdhPJwKuRRw7Ncg19gO8PWVEmbNAVU/0uaj59xksn4OObwl0OodafnRVdem0pKXoyJlW+i/eYT9kA==
-X-Received: by 2002:a5d:5041:0:b0:20e:74e3:1d3b with SMTP id h1-20020a5d5041000000b0020e74e31d3bmr26046786wrt.323.1653553472461;
-        Thu, 26 May 2022 01:24:32 -0700 (PDT)
-Received: from google.com (109.36.187.35.bc.googleusercontent.com. [35.187.36.109])
-        by smtp.gmail.com with ESMTPSA id l6-20020a05600c4f0600b003942a244f2fsm4277906wmq.8.2022.05.26.01.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 01:24:32 -0700 (PDT)
-Date:   Thu, 26 May 2022 09:24:28 +0100
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        vschneid@redhat.com, kernel-team@android.com,
-        Derek Dolney <z23@posteo.net>
-Subject: Re: [PATCH v2] cpu/hotplug: Do not bail-out in DYING/STARTING
- sections
-Message-ID: <Yo85PLANCnCcMgvD@google.com>
-References: <20220523160536.2889162-1-vdonnefort@google.com>
- <20220525165248.GI2578@worktop.programming.kicks-ass.net>
+        Thu, 26 May 2022 04:25:28 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D62C1EF7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1653553525; x=1685089525;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2fzV6PB7rIH8hutqjCCcvjaAmPuVZ2KddaphMUepXFc=;
+  b=dBjE+8hKF3U2ayJrLLiV8m0jw6ZUJOlnNv5lqbLYq1xbUMxpJ6jgiWbD
+   3EbXmcIVUxm6JBCJi1TwWdkwdXpHV+R41TYe1O5P0zJbhoy9AZ0npb7Ro
+   2lkuqWuC1EfIvZm5QE+RH95L9Nl9TYF+KGNjjTtlU9hNWYY2dsGYEqGBV
+   P4xD9/g7VIGcjbPP/Sg8IqkEmy9cDNuSBjT0qcJ5NTbPa5dTzUBh9ZJ2x
+   i4Js/ya0mP0CR3man7MkzEswU/ATMTKOYgzLWPicTMHxyKHtJfOzjXdQR
+   9O1bwwmVwtfPjPnripviymBI6o5G9SMeZXUk47ULlKW+8Mt4gV76UMrjy
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,252,1647273600"; 
+   d="scan'208";a="305723376"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 26 May 2022 16:25:24 +0800
+IronPort-SDR: +TiPziz/t1ngjN9udvNlz/10phM5fHK56qIXnve/q4JnfhDHQKX7/IXPgWsm4DjA7/xlLm93vx
+ knNyUNVGLeHYBMUDHqCxZTeYMZUuUABltOVa1A/ggPJDpm+A7feHUAW3R+KNm5nL9gc4PTlrLy
+ FgjtvImZfYK5Bj/ivWFh4obLEDyyg4knOytvjgsJIfm8rw5t3u1LMa+3Rb81kVEzQzSvsxmhE6
+ YpqcVPgFA90rNMslw6f2+NkLbJ56S8XD+xOjaDW3BQIP/On8HlCd1iY75Jr4zUcAceAa1T0vvx
+ mj16HxgQBRD/6T3OEqNh1qaI
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 May 2022 00:49:19 -0700
+IronPort-SDR: yVLCIci7iNBFRR5XViGBrQXvud/HuKFQ9HIGDt6gzXgudGSxqDjTsaCMCcyHsAHLYd0ad+Xiu/
+ a5mPBfKAxNdoFNivJq2o/YVb9kzTSOjF/xmOcgZnXhJKPWvvsSCruAP1gZCJGfrdFrEIQ6Ymwg
+ ZfWzWVYRvlowA0VTCnSiyG7tk76WLSBs0TLEeku2ukmUdZZEHyJ+0Xzp8CXHVPPBBr28UMZhRW
+ 1jEhHeHlt2HqwCYWKxQJXtgUO8tGX4n6nzYTdOXmiQX+0fl7f1kuDuWA40+C472N7ux0/+1iMc
+ JYQ=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 May 2022 01:25:24 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4L81GC6SrDz1SVp4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:25:23 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1653553522; x=1656145523; bh=2fzV6PB7rIH8hutqjCCcvjaAmPuVZ2Kddap
+        hMUepXFc=; b=E/mS7YlrPtM583nIEsFkcK8t8wBnxJ9gbQuIHuaW989C2ArGadQ
+        PQzaKgmCUFhyRqoJoFsaHo3T5pJ7kBgFbo2L8h1HUgFndIx4ndzPFwb+gvOPsPph
+        SIuHCLYTWe0vbGbpb/FOzwLexJUY8+l/5MRTI48fTaHbluKGdy+NF2qnDKfZxtYd
+        f3jrh/ltG3OHVGXz+Iev615zk3fi+Vwx9hBVf514Z8N569EILYy2kIrip61CN3t/
+        rqyUVXIbF/n/EqWU6It5hMpFIun5CgLTlp10jbOCRV7dO8Df+wEqqMs5Q1Wh1GTg
+        0t7M5fp7Ze+jyp9o/kxbt17xuKDQjrEibLQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 3G5f-pRzz7lJ for <linux-kernel@vger.kernel.org>;
+        Thu, 26 May 2022 01:25:22 -0700 (PDT)
+Received: from [10.225.54.48] (unknown [10.225.54.48])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4L81G76Gmcz1Rvlc;
+        Thu, 26 May 2022 01:25:19 -0700 (PDT)
+Message-ID: <3c04e29f-2c99-c350-bc87-0c0633b4d19d@opensource.wdc.com>
+Date:   Thu, 26 May 2022 17:25:18 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525165248.GI2578@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH v6 8/8] dm: ensure only power of 2 zone sizes are allowed
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, axboe@kernel.dk,
+        snitzer@redhat.com, Johannes.Thumshirn@wdc.com, hch@lst.de,
+        hare@suse.de
+Cc:     dsterba@suse.com, dm-devel@redhat.com, jiangbo.365@bytedance.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, jaegeuk@kernel.org,
+        gost.dev@samsung.com
+References: <20220525154957.393656-1-p.raghav@samsung.com>
+ <CGME20220525155008eucas1p2c843cc9098f2920e961f80ffaf535789@eucas1p2.samsung.com>
+ <20220525154957.393656-9-p.raghav@samsung.com>
+ <9703ca4c-33cf-cb3a-b46b-6b0e5537cfd6@opensource.wdc.com>
+ <0bb57f61-9a33-0273-4b89-2cdf042e56dd@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <0bb57f61-9a33-0273-4b89-2cdf042e56dd@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 06:52:48PM +0200, Peter Zijlstra wrote:
-> On Mon, May 23, 2022 at 05:05:36PM +0100, Vincent Donnefort wrote:
-> > The DYING/STARTING callbacks are not expected to fail. However, as reported
-> > by Derek, drivers such as tboot are still free to return errors within
-> > those sections. In that case, there's nothing the hotplug machinery can do,
-> > so let's just proceed and log the failures.
-> > 
+On 2022/05/26 17:12, Pankaj Raghav wrote:
+> Hi Damien,
+> On 5/26/22 01:13, Damien Le Moal wrote:
+>> On 5/26/22 00:49, Pankaj Raghav wrote:
+>>> Ensure that only power of 2 zoned devices are enabled for dm targets that
+>>> supports zoned devices. This constraint can be relaxed once non power of
+>>> 2 zone size support is added to the DM layer.
+>>>
+>>> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+>>> ---
+>>>  drivers/md/dm-table.c | 6 ++++++
+>>>  1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
+>>> index 03541cfc2317..2a8af70d1d4a 100644
+>>> --- a/drivers/md/dm-table.c
+>>> +++ b/drivers/md/dm-table.c
+>>> @@ -251,6 +251,12 @@ static int device_area_is_invalid(struct dm_target *ti, struct dm_dev *dev,
+>>>  	if (bdev_is_zoned(bdev)) {
+>>>  		unsigned int zone_sectors = bdev_zone_sectors(bdev);
+>>>  
+>>> +		if (!is_power_of_2(zone_sectors)) {
+>>> +			DMWARN("%s: %pg only power of two zone size supported",
+>>> +			       dm_device_name(ti->table->md), bdev);
+>>> +			return 1;
+>>> +		}
+>>> +
+>>>  		if (start & (zone_sectors - 1)) {
+>>>  			DMWARN("%s: start=%llu not aligned to h/w zone size %u of %pg",
+>>>  			       dm_device_name(ti->table->md),
+>>
+>> I thought the agreed upon idea is be to add a dm-linear like target to
+>> emulate power of 2 zone size so that we can keep btrfs and f2fs running on
+>> this new class of device. So why this patch ?
+>>
+>> The entire series as is will fragment zoned block device support, which is
+>> not a good thing at all. Without the new dm target, none of the current
+>> kernel supported zone stuff will work.
+>>
+> I have mentioned this in my cover letter:
+> The support is planned to be added in two phases:
+> - Add npo2 support to block, nvme layer and necessary stop gap patches
+>   in the filesystems
+> - Add dm target for npo2 devices so that they are presented as a po2
+>   device to filesystems
 > 
-> I'm confused. Why isn't this a driver bug?
+> This series is targeting the first phase where we have stop gap patches
+> and add support to the block and nvme layer and in the next phase we
+> will add a dm linear like target for npo2 zone sizes which can be used
+> by all the filesystems. This patch makes sure that we can't use npo2
+> zoned devices without the proper support that will be added in the next
+> phase in the DM.
 
-It is a entirely a driver bug which has been reported already. but 453e41085183
-(cpu/hotplug: Add cpuhp_invoke_callback_range()) changed the behaviour so I
-thought it would be worth to revert to the original one which is to not break
-the entire up/down for a single driver error.
+Personally, I do not want to see a kernel version where zone support is broken
+for some devices. So I definitely prefer everything in one go or nothing.
+
+> 
+> Even though we decided we would like to take the direction of DM, I am
+> still awaiting reply from Christoph who raised concerns about npo2 zoned
+> device support and Mike Snitzer about this approach. That is one of the
+> reason I split this effort into two phases.
+>> The zonefs patch is also gone from the series. Why ? As is, zonefs will
+>> break if it is passed a non power of 2 zone size drive.
+>>
+> I think this was my mistake. If you agree with the above approach, then
+> I can add a stop gap patch also to zonefs npo2 zoned devices. This way
+> all the zone filesystem support goes via DM for npo2 zoned devices. I am
+> proposing this so that initially we always have only one way of
+> accessing a npo2 zoned device (via DM) from **filesystems** until we add
+> native support.
+-- 
+Damien Le Moal
+Western Digital Research

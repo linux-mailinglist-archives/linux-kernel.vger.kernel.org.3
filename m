@@ -2,276 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF505535632
+	by mail.lfdr.de (Postfix) with ESMTP id 63575535631
 	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 00:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349454AbiEZWyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 18:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S1348957AbiEZWyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 18:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348482AbiEZWya (ORCPT
+        with ESMTP id S1349300AbiEZWyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 18:54:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B23E64F2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 15:54:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8B9BB8222B
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 22:54:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E85C385A9;
-        Thu, 26 May 2022 22:54:26 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.95)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1nuMN6-002Th9-W3;
-        Thu, 26 May 2022 18:54:24 -0400
-Message-ID: <20220526225424.832582955@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Thu, 26 May 2022 18:53:51 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Kacur <jkacur@redhat.com>, Tao Zhou <tao.zhou@linux.dev>,
-        Daniel Wagner <dwagner@suse.de>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [for-next][PATCH 6/6] rtla: Remove procps-ng dependency
-References: <20220526225345.068997320@goodmis.org>
+        Thu, 26 May 2022 18:54:35 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADB8EABAF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 15:54:34 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2f83983782fso30669667b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 15:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w9bg+crCjcsCCT/8h3P6Is3peQSYKpx7Yjut2+MuLpo=;
+        b=J9BFbfwXM92YHYo1pMX9ukbHtBF65rYzCKp1SEODqtfOWVCqvC1kpJ6Gx+6e25KsXx
+         7dXCLexRSucYejUcHQzOHbDQkvIK0DDJ1C4R9pGPO9oJyX8xhIz0VeZLSF84V61l4zzO
+         gI/sGQb0hwqh6SzlSHeraOUVufItGmBY08l/A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w9bg+crCjcsCCT/8h3P6Is3peQSYKpx7Yjut2+MuLpo=;
+        b=UFELhZxmwtyPG08YQ8s9sscRw9KXbbaxO3sMXiz+7wSocUS3NB8OgAHOCbi/6N+tZX
+         6tZ3FIPedsil+jUji54S1SvHdVhpWi11aTzxmJMOHSX4T8lsSRHqIGO6ceszAsEaUhH8
+         qc9pQA3lGy89GIeIuQDk3lB1XAzMrPU46qJKRS2Ez28uUPkpjyH6Qm5+oORFGTTps4B7
+         Iea5hzQUfWlOf8AEpLTiGn7TmV1os2Cm+3kLphietV3unV0KMZT3WbQAZN4ciUgs19EO
+         KTO3rTgeHiU+aQlUhmLmnIJbz24vx+B9wOQC57KofG821LIlPbp9VVjIHCoOPS+7ql2k
+         dJOg==
+X-Gm-Message-State: AOAM531/wKQSAK0K1a0jWfUARZs2EKETC5MLul6wv4taYGb+Va/SeyIg
+        wFAGDvKRI6E0xQStiyzuUij3FRph0bdlzgIlAW98
+X-Google-Smtp-Source: ABdhPJzygxe4mJbRicGsvX2RuWGHFEoIpEz1ZlS3KbXSJc+1j/7lums2g1CvEJbfk0hVJxaHTik5jNooh1w7+04S4Jg=
+X-Received: by 2002:a81:238e:0:b0:300:642f:fdb2 with SMTP id
+ j136-20020a81238e000000b00300642ffdb2mr8594216ywj.373.1653605673706; Thu, 26
+ May 2022 15:54:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220526101131.2340729-1-sunilvl@ventanamicro.com> <20220526101131.2340729-2-sunilvl@ventanamicro.com>
+In-Reply-To: <20220526101131.2340729-2-sunilvl@ventanamicro.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 26 May 2022 15:54:22 -0700
+Message-ID: <CAOnJCUJNScpqEY=j6CYFyqea-+GR9J6wLFH6TFG1wvhHwOMtbQ@mail.gmail.com>
+Subject: Re: [PATCH V2 1/5] riscv: cpu_ops_sbi: Support for 64bit hartid
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Sunil V L <sunil.vl@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@kernel.org>
+On Thu, May 26, 2022 at 3:11 AM Sunil V L <sunilvl@ventanamicro.com> wrote:
+>
+> The hartid can be a 64bit value on RV64 platforms. This patch modifies
+> the hartid variable type to unsigned long so that it can hold 64bit
+> value on RV64 platforms.
+>
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+> ---
+>  arch/riscv/kernel/cpu_ops_sbi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/cpu_ops_sbi.c b/arch/riscv/kernel/cpu_ops_sbi.c
+> index 4f5a6f84e2a4..efa0f0816634 100644
+> --- a/arch/riscv/kernel/cpu_ops_sbi.c
+> +++ b/arch/riscv/kernel/cpu_ops_sbi.c
+> @@ -65,7 +65,7 @@ static int sbi_hsm_hart_get_status(unsigned long hartid)
+>  static int sbi_cpu_start(unsigned int cpuid, struct task_struct *tidle)
+>  {
+>         unsigned long boot_addr = __pa_symbol(secondary_start_sbi);
+> -       int hartid = cpuid_to_hartid_map(cpuid);
+> +       unsigned long hartid = cpuid_to_hartid_map(cpuid);
+>         unsigned long hsm_data;
+>         struct sbi_hart_boot_data *bdata = &per_cpu(boot_data, cpuid);
+>
+> @@ -107,7 +107,7 @@ static void sbi_cpu_stop(void)
+>  static int sbi_cpu_is_stopped(unsigned int cpuid)
+>  {
+>         int rc;
+> -       int hartid = cpuid_to_hartid_map(cpuid);
+> +       unsigned long hartid = cpuid_to_hartid_map(cpuid);
+>
+>         rc = sbi_hsm_hart_get_status(hartid);
+>
+> --
+> 2.25.1
+>
 
-Daniel Wagner reported to me that readproc.h got deprecated. Also,
-while the procps-ng library was available on Fedora, it was not available
-on RHEL, which is a piece of evidence that it was not that used.
 
-rtla uses procps-ng only to find the PID of the tracers' workload.
-
-I used the procps-ng library to avoid reinventing the wheel. But in this
-case, reinventing the wheel took me less time than the time we already
-took trying to work around problems.
-
-Implement a function that reads /proc/ entries, checking if:
-	- the entry is a directory
-	- the directory name is composed only of digits (PID)
-	- the directory contains the comm file
-	- the comm file contains a comm that matches the tracers'
-	  workload prefix.
-	- then return true; otherwise, return false.
-
-And use it instead of procps-ng.
-
-Link: https://lkml.kernel.org/r/e8276e122ee9eb2c5a0ba8e673fb6488b924b825.1652423574.git.bristot@kernel.org
-
-Cc: John Kacur <jkacur@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Tao Zhou <tao.zhou@linux.dev>
-Fixes: b1696371d865 ("rtla: Helper functions for rtla")
-Reported-by: Daniel Wagner <dwagner@suse.de>
-Reviewed-by: Daniel Wagner <dwagner@suse.de>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- tools/tracing/rtla/Makefile    |   2 +-
- tools/tracing/rtla/README.txt  |   1 -
- tools/tracing/rtla/src/utils.c | 106 ++++++++++++++++++++++++++-------
- tools/tracing/rtla/src/utils.h |   3 +-
- 4 files changed, 88 insertions(+), 24 deletions(-)
-
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index e28ae3f78264..3822f4ea5f49 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -32,7 +32,7 @@ TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
- 
- CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS)
- LDFLAGS	:=	-ggdb
--LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs) -lprocps
-+LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
- 
- SRC	:=	$(wildcard src/*.c)
- HDR	:=	$(wildcard src/*.h)
-diff --git a/tools/tracing/rtla/README.txt b/tools/tracing/rtla/README.txt
-index 0fbad2640b8c..4af3fd40f171 100644
---- a/tools/tracing/rtla/README.txt
-+++ b/tools/tracing/rtla/README.txt
-@@ -11,7 +11,6 @@ RTLA depends on the following libraries and tools:
- 
-  - libtracefs
-  - libtraceevent
-- - procps
- 
- It also depends on python3-docutils to compile man pages.
- 
-diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
-index 3bd6f64780cf..5352167a1e75 100644
---- a/tools/tracing/rtla/src/utils.c
-+++ b/tools/tracing/rtla/src/utils.c
-@@ -3,7 +3,7 @@
-  * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
-  */
- 
--#include <proc/readproc.h>
-+#include <dirent.h>
- #include <stdarg.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -262,43 +262,107 @@ int __set_sched_attr(int pid, struct sched_attr *attr)
- 
- 	return 0;
- }
-+
-+/*
-+ * procfs_is_workload_pid - check if a procfs entry contains a comm_prefix* comm
-+ *
-+ * Check if the procfs entry is a directory of a process, and then check if the
-+ * process has a comm with the prefix set in char *comm_prefix. As the
-+ * current users of this function only check for kernel threads, there is no
-+ * need to check for the threads for the process.
-+ *
-+ * Return: True if the proc_entry contains a comm file with comm_prefix*.
-+ * Otherwise returns false.
-+ */
-+static int procfs_is_workload_pid(const char *comm_prefix, struct dirent *proc_entry)
-+{
-+	char buffer[MAX_PATH];
-+	int comm_fd, retval;
-+	char *t_name;
-+
-+	if (proc_entry->d_type != DT_DIR)
-+		return 0;
-+
-+	if (*proc_entry->d_name == '.')
-+		return 0;
-+
-+	/* check if the string is a pid */
-+	for (t_name = proc_entry->d_name; t_name; t_name++) {
-+		if (!isdigit(*t_name))
-+			break;
-+	}
-+
-+	if (*t_name != '\0')
-+		return 0;
-+
-+	snprintf(buffer, MAX_PATH, "/proc/%s/comm", proc_entry->d_name);
-+	comm_fd = open(buffer, O_RDONLY);
-+	if (comm_fd < 0)
-+		return 0;
-+
-+	memset(buffer, 0, MAX_PATH);
-+	retval = read(comm_fd, buffer, MAX_PATH);
-+
-+	close(comm_fd);
-+
-+	if (retval <= 0)
-+		return 0;
-+
-+	retval = strncmp(comm_prefix, buffer, strlen(comm_prefix));
-+	if (retval)
-+		return 0;
-+
-+	/* comm already have \n */
-+	debug_msg("Found workload pid:%s comm:%s", proc_entry->d_name, buffer);
-+
-+	return 1;
-+}
-+
- /*
-- * set_comm_sched_attr - set sched params to threads starting with char *comm
-+ * set_comm_sched_attr - set sched params to threads starting with char *comm_prefix
-  *
-- * This function uses procps to list the currently running threads and then
-- * set the sched_attr *attr to the threads that start with char *comm. It is
-+ * This function uses procfs to list the currently running threads and then set the
-+ * sched_attr *attr to the threads that start with char *comm_prefix. It is
-  * mainly used to set the priority to the kernel threads created by the
-  * tracers.
-  */
--int set_comm_sched_attr(const char *comm, struct sched_attr *attr)
-+int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr)
- {
--	int flags = PROC_FILLCOM | PROC_FILLSTAT;
--	PROCTAB *ptp;
--	proc_t task;
-+	struct dirent *proc_entry;
-+	DIR *procfs;
- 	int retval;
- 
--	ptp = openproc(flags);
--	if (!ptp) {
--		err_msg("error openproc()\n");
--		return -ENOENT;
-+	if (strlen(comm_prefix) >= MAX_PATH) {
-+		err_msg("Command prefix is too long: %d < strlen(%s)\n",
-+			MAX_PATH, comm_prefix);
-+		return 1;
- 	}
- 
--	memset(&task, 0, sizeof(task));
-+	procfs = opendir("/proc");
-+	if (!procfs) {
-+		err_msg("Could not open procfs\n");
-+		return 1;
-+	}
- 
--	while (readproc(ptp, &task)) {
--		retval = strncmp(comm, task.cmd, strlen(comm));
--		if (retval)
-+	while ((proc_entry = readdir(procfs))) {
-+
-+		retval = procfs_is_workload_pid(comm_prefix, proc_entry);
-+		if (!retval)
- 			continue;
--		retval = __set_sched_attr(task.tid, attr);
--		if (retval)
-+
-+		/* procfs_is_workload_pid confirmed it is a pid */
-+		retval = __set_sched_attr(atoi(proc_entry->d_name), attr);
-+		if (retval) {
-+			err_msg("Error setting sched attributes for pid:%s\n", proc_entry->d_name);
- 			goto out_err;
--	}
-+		}
- 
--	closeproc(ptp);
-+		debug_msg("Set sched attributes for pid:%s\n", proc_entry->d_name);
-+	}
- 	return 0;
- 
- out_err:
--	closeproc(ptp);
-+	closedir(procfs);
- 	return 1;
- }
- 
-diff --git a/tools/tracing/rtla/src/utils.h b/tools/tracing/rtla/src/utils.h
-index fa08e374870a..5571afd3b549 100644
---- a/tools/tracing/rtla/src/utils.h
-+++ b/tools/tracing/rtla/src/utils.h
-@@ -6,6 +6,7 @@
-  * '18446744073709551615\0'
-  */
- #define BUFF_U64_STR_SIZE	24
-+#define MAX_PATH		1024
- 
- #define container_of(ptr, type, member)({			\
- 	const typeof(((type *)0)->member) *__mptr = (ptr);	\
-@@ -53,5 +54,5 @@ struct sched_attr {
- };
- 
- int parse_prio(char *arg, struct sched_attr *sched_param);
--int set_comm_sched_attr(const char *comm, struct sched_attr *attr);
-+int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr);
- int set_cpu_dma_latency(int32_t latency);
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 -- 
-2.35.1
+Regards,
+Atish

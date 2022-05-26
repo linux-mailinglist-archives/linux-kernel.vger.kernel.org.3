@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7051A534BA3
+	by mail.lfdr.de (Postfix) with ESMTP id 77301534BA4
 	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343882AbiEZIVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
+        id S239488AbiEZIV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244413AbiEZIVn (ORCPT
+        with ESMTP id S244940AbiEZIVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:21:43 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63C2880E5;
+        Thu, 26 May 2022 04:21:44 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AE71ADAB;
+        Thu, 26 May 2022 01:21:43 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id e4so963623ljb.13;
+        Thu, 26 May 2022 01:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1LFjb+AEMb7z82D6ENilph3SWwRvfmyKBpvYsDU8o1E=;
+        b=L+4Ap8XN1HHlwZsMeelkJ+GCXPaL2OG9wfryU9zYd1a9r3hK6NFOFJi3FgTntbzEqk
+         //INeR3wAUN6jxsfnITyvcsA9YtNuMCSpENBvwvrO69+BQN/moKg+8Op5MOLL3cBkCv/
+         gbLy4eoIDTjiJ6uMeTHoTenBCabQNIbzvY5/skEb0/EV89SqBZ5gkTg5NF5lMFu/nEpg
+         O5Nt3ojLu77EB8UWdbioXzLZY3Je3TOK71YeVb67KEH2alLBkTSFCD0PCqF84RbDHoVU
+         ifoqWjaFF2oJOYFY16wJ/AbxDgEBZ73SlHdEwccujvPMLRkDJN3uuJOI3ZJs6sgLMLYn
+         7MDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1LFjb+AEMb7z82D6ENilph3SWwRvfmyKBpvYsDU8o1E=;
+        b=bTyYmQemfrLhNhvbWoCJsuGhNCubRRezahSVbGo2bmc9A7jeeCiNE60b8X8PkkMFcT
+         L2MpuwOzhtP412vNP2h7M0gOZxZAuSdMEzEFgxOg90vJb8KtaDqvfFImnOsygnDZcO9R
+         VQ8nuINit6B9NIo1aBYnDIhzqWLlGn8Nd8jP/ynk1ZhWzjensWJ5ayrCIIAn1vDoaT1u
+         eVPonP2Y2g12jcO3GFjfo2z4b/nxDuPiIoXrh1LmBkSs/UrdGxfTiRHwiopTUCKvlLza
+         4hKiVkEIo0TNuAY0XVvtmNBq8r2EOusPWhWoHN7+J95YowC8rQBGASvkPVHI7l2q5GfC
+         FBdw==
+X-Gm-Message-State: AOAM531S9BS/vtVFvViqt9CWPM1swCfin8YigPiyA+XQUhNa+HSsD9F8
+        Qjp+7Q/AYgCIeB9Ulr0og7R5KN2b5T0=
+X-Google-Smtp-Source: ABdhPJyzvINvKfeNR9ga9kpdjXm6FvmwSTjTIASvaKlRKHPS6yUP0cXyoMr5Ce/DLZl4/MbyGqAsLw==
+X-Received: by 2002:a05:651c:994:b0:253:c449:12f with SMTP id b20-20020a05651c099400b00253c449012fmr21320097ljq.413.1653553301939;
         Thu, 26 May 2022 01:21:41 -0700 (PDT)
-X-UUID: ffc10f9af261439d8942d69317f0502a-20220526
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:005753e9-4ec5-490c-90c3-3461ee58a619,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:2eb18f47-4fb1-496b-8f1d-39e733fed1ea,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: ffc10f9af261439d8942d69317f0502a-20220526
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1049831913; Thu, 26 May 2022 16:21:34 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Thu, 26 May 2022 16:21:34 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Thu, 26 May 2022 16:21:33 +0800
-Message-ID: <56c10d94fe62deb5eba7dbe0f90f92564913d87e.camel@mediatek.com>
-Subject: Re: [PATCH v2 1/7] dt-bindings: iommu: mediatek: Add phandles for
- mediatek infra/pericfg
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-CC:     <joro@8bytes.org>, <will@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <iommu@lists.linux-foundation.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <krzysztof.kozlowski@linaro.org>
-Date:   Thu, 26 May 2022 16:21:33 +0800
-In-Reply-To: <20220518100503.37279-2-angelogioacchino.delregno@collabora.com>
-References: <20220518100503.37279-1-angelogioacchino.delregno@collabora.com>
-         <20220518100503.37279-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Received: from [192.168.1.103] ([178.176.78.197])
+        by smtp.gmail.com with ESMTPSA id h1-20020a056512220100b0047255d211b2sm212464lfu.225.2022.05.26.01.21.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 01:21:41 -0700 (PDT)
+Subject: Re: [PATCH 1/4] sh: Kconfig: Fix indentation
+To:     Juerg Haefliger <juerg.haefliger@canonical.com>,
+        ysato@users.sourceforge.jp, dalias@libc.org,
+        linux-sh@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220525124007.45328-1-juerg.haefliger@canonical.com>
+ <20220525124007.45328-2-juerg.haefliger@canonical.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <0f0c5ce5-3845-c4b4-180e-380dec53b525@gmail.com>
+Date:   Thu, 26 May 2022 11:21:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <20220525124007.45328-2-juerg.haefliger@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-18 at 12:04 +0200, AngeloGioacchino Del Regno wrote:
-> Add properties "mediatek,infracfg" and "mediatek,pericfg" to let the
-> mtk_iommu driver retrieve phandles to the infracfg and pericfg
-> syscon(s)
-> instead of performing a per-soc compatible lookup.
+On 5/25/22 3:40 PM, Juerg Haefliger wrote:
+
+> The convention for indentation seems to be a single tab. Help text is
+> further indented by an additional two whitespaces. Fix the lines that
+> violate these rules.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
+> While at it, remove stray spaces from seemingly empty lines.
+
+   You're also fixing some trailing spaces... that all counts up
+to fixing trailing whitespace.
+
+> Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
 > ---
->  .../devicetree/bindings/iommu/mediatek,iommu.yaml         | 8
-> ++++++++
->  1 file changed, 8 insertions(+)
+>  arch/sh/Kconfig | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
 > 
-> diff --git
-> a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> index 2ae3bbad7f1a..c4af41947593 100644
-> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> @@ -101,6 +101,10 @@ properties:
->      items:
->        - const: bclk
+> diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+> index 5f220e903e5a..fc15fd6b719e 100644
+> --- a/arch/sh/Kconfig
+> +++ b/arch/sh/Kconfig
+[...]
+> @@ -644,7 +644,7 @@ config GUSA
+>  	  This is the default implementation for both UP and non-ll/sc
+>  	  CPUs, and is used by the libc, amongst others.
 >  
-> +  mediatek,infracfg:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle to the mediatek infracfg syscon
-> +
-
-Just curious, why not put this "mediatek,infracfg" and its required
-segment[6/7] into one patch?
-
->    mediatek,larbs:
->      $ref: /schemas/types.yaml#/definitions/phandle-array
->      minItems: 1
-> @@ -112,6 +116,10 @@ properties:
->        Refer to bindings/memory-controllers/mediatek,smi-larb.yaml.
-> It must sort
->        according to the local arbiter index, like larb0, larb1,
-> larb2...
+> -	  For additional information, design information can be found 
+> +	  For additional information, design information can be found
+>  	  in <http://lc.linux.or.jp/lc2002/papers/niibe0919p.pdf>.
 >  
-> +  mediatek,pericfg:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle to the mediatek pericfg syscon
-> +
->    '#iommu-cells':
->      const: 1
->      description: |
+>  	  This should only be disabled for special cases where alternate
+[...]
 
+MBR, Sergey

@@ -2,118 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6921534C01
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2A1534C03
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234703AbiEZIwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S243690AbiEZIwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiEZIwW (ORCPT
+        with ESMTP id S238936AbiEZIwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:52:22 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CD627FF0;
-        Thu, 26 May 2022 01:52:22 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id n18so922809plg.5;
-        Thu, 26 May 2022 01:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O0l0jmgNTZS4lxRaBNrQut0lDAnnNlXWN05NXGO2skU=;
-        b=GkRhcPGhXF0cc0Kd9KWnd4EIDss1xaIf3p71S50DljqPprh5Piyk6KD8mvhTyjdQHZ
-         E8wqfm/ZyBZgCHQq7n4khSkGhbrJBpiIRyZvb17mfVy3Pl4Al+uUFs+MXmJzxp/+XniG
-         1C58GzLG5rcaYcZ0/rmzmxmihSJ/QHlOTYhpAhr+dW6OkdB/UT2+4YGRirL+2Iw0XCEt
-         XOplL2YlU8GfiLiNDOTehWJY3mdIA8fbX1jgX+yP2UlH4XpWc6x3vnhllu+DIRMcStFA
-         zCsm59L50G0NVz4XGwqxGtsa7ACH73gFPjcNAgx27l9l5ocLOhWAxg1JNamxm+37xbZg
-         YE0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O0l0jmgNTZS4lxRaBNrQut0lDAnnNlXWN05NXGO2skU=;
-        b=YXxI3B3lOVT7fih2YUstpKu8Ctyx43dfI36E3VxpLi0dhKN4Skp3KtIgsJGlnmfp6F
-         0WyYVaB5N+QGi6CWbMjNwQ+QmVMv1uUzC9BnLDjdpBi0zoKWHEjP1snP0K1uHgylLfWU
-         03EdkaZKdtWDw5PwzBrHXJI4VxhXpMcJKRn0yxoyXJGSVQ4xvqJyWxRuqJejQ8iW3iLk
-         L4TpfDas1uA4jv69C9CdvEEpR4MPJBq/46dSp6tDws5iZRv+bCcv396Nim0bw0XjOGgR
-         /K2hE1hUiJRllWlzzt5PjGH1SrLrIE8cl9iRlKgL3n/uoBlducsvPGgpxOMtKSummGKM
-         FpCg==
-X-Gm-Message-State: AOAM533orVLywaEG4EWOCcIBiLUY3RmS6KAwCeAkGbohOsBnGH9igW1y
-        8uqmyXlYGKSpUp4f84vltpM=
-X-Google-Smtp-Source: ABdhPJxcQpMISbiUZfTf5fgRewsKF7uFMW5ecepOefgosU2+RzgO+1RQpa0BK5eJUuVvIyUurvq2WA==
-X-Received: by 2002:a17:90b:2250:b0:1df:665c:79d1 with SMTP id hk16-20020a17090b225000b001df665c79d1mr1511629pjb.220.1653555141818;
-        Thu, 26 May 2022 01:52:21 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id o13-20020a17090a4b4d00b001df264610c4sm6039831pjl.0.2022.05.26.01.52.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 01:52:21 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Wang Qing <wangqing@vivo.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>, netdev@vger.kernel.org,
+        Thu, 26 May 2022 04:52:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB2266200;
+        Thu, 26 May 2022 01:52:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 644E761AC2;
+        Thu, 26 May 2022 08:52:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 673B0C385A9;
+        Thu, 26 May 2022 08:52:43 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JQopiloD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653555162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qnQE96J89gWW6Xt2bjqeE1yXmlwBq8cweI2v4GF1/zg=;
+        b=JQopiloDSyeWAiJpxX7kNT2Ze82JEV8yaiSpugrkJWPiH+iVae6sn52dk+yoJsXAC8Z72d
+        kpJbf2d3cEkXoPVlPFE+WE0NMSH4VU1/RoR64HAoMgqUsXRmBYJ+ma23RXwCnKD532RErI
+        ffXvE/WwirovMbGwYv9B7f9Vrne51p8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7df06c13 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 26 May 2022 08:52:41 +0000 (UTC)
+Date:   Thu, 26 May 2022 10:52:26 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Eric Biggers <ebiggers@kernel.org>, gaochao <gaochao49@huawei.com>,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] net: ethernet: ti: am65-cpsw-nuss: Fix some refcount leaks
-Date:   Thu, 26 May 2022 12:52:08 +0400
-Message-Id: <20220526085211.43913-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Subject: Re: [PATCH -next] crypto: Fix build error when CRYPTO_BLAKE2S_X86=m
+ && CRYPTO_ALGAPI2=m && CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y
+Message-ID: <Yo8/ygju0v7D7A1I@zx2c4.com>
+References: <20220517033630.1182-1-gaochao49@huawei.com>
+ <Yo8rUkE1/hxum6gt@sol.localdomain>
+ <Yo85u63lYHQJCIh6@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yo85u63lYHQJCIh6@gondor.apana.org.au>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-am65_cpsw_init_cpts() and am65_cpsw_nuss_probe() don't release
-the refcount in error case.
-Add missing of_node_put() to avoid refcount leak.
+On Thu, May 26, 2022 at 04:26:35PM +0800, Herbert Xu wrote:
+> On Thu, May 26, 2022 at 12:25:06AM -0700, Eric Biggers wrote:
+> >
+> > How about just making CRYPTO_MANAGER_EXTRA_TESTS depend on CRYPTO_ALGAPI=y?
+> 
+> That breaks my setups with ALGAPI=m.
+> 
+> > Or alternatively, move the crypto_simd_disabled_for_test variable into a file in
+> > lib/crypto/.  But the other suggestion would be a bit simpler for now.
+> 
+> Yes please do that instead.  If we ever get some arch-independent
+> file for SIMD then we could move it over there.
 
-Fixes: b1f66a5bee07 ("net: ethernet: ti: am65-cpsw-nuss: enable packet timestamping support")
-Fixes: 93a76530316a ("net: ethernet: ti: introduce am65x/j721e gigabit eth subsystem driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Actually, we were talking about getting rid of the blake2s shash before
+anyway, because it has no purpose. I'll make that change and send a
+series, which will fix the issue a different way.
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 34197c67f8d9..0a398338132c 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -1788,6 +1788,7 @@ static int am65_cpsw_init_cpts(struct am65_cpsw_common *common)
- 	if (IS_ERR(cpts)) {
- 		int ret = PTR_ERR(cpts);
- 
-+		of_node_put(node);
- 		if (ret == -EOPNOTSUPP) {
- 			dev_info(dev, "cpts disabled\n");
- 			return 0;
-@@ -2662,9 +2663,9 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
- 	if (!node)
- 		return -ENOENT;
- 	common->port_num = of_get_child_count(node);
-+	of_node_put(node);
- 	if (common->port_num < 1 || common->port_num > AM65_CPSW_MAX_PORTS)
- 		return -ENOENT;
--	of_node_put(node);
- 
- 	common->rx_flow_id_base = -1;
- 	init_completion(&common->tdown_complete);
--- 
-2.25.1
-
+Jason

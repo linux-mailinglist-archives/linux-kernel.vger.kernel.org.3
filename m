@@ -2,256 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D7C53527A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A537553527E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348269AbiEZRUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 13:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S1348286AbiEZRYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 13:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348266AbiEZRT7 (ORCPT
+        with ESMTP id S233201AbiEZRYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 13:19:59 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 668D64E392
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:19:58 -0700 (PDT)
+        Thu, 26 May 2022 13:24:21 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954B022BD9
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:24:18 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id t5so2621481edc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:24:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653585598; x=1685121598;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I8qvPIhJrelQBmUBJt9wVIVcH5zRa9yRvTKgT+WjOS8=;
-  b=sqEmD9cBWq0LIy0RsKosobpIDqUYiGza/oqVGtAjojuFNjU64MimU2D2
-   SFM+5yv+SzNfIWp3y9e/k4FHUZYLx+i1srl+zNGXTsi7wSzKJoUAYiWkH
-   X1NhqL9JnU0bDyAyTBUQEk6KxtNGOoQNXSpzvEpm/i9und9VXZB0xf2hw
-   I=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 26 May 2022 10:19:58 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 10:19:42 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 26 May 2022 10:19:42 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 26 May
- 2022 10:19:41 -0700
-Date:   Thu, 26 May 2022 13:19:38 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
-Message-ID: <Yo+2qqHqSdpE5l7m@qian>
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yvjEOHLIq9Sh9WWlVm5k1WXdPptfENAsp8rVEPdpX98=;
+        b=UyfTK4zCywPFtXtJFpp3tYElNgd0u8UNemNFJTk/Ovitu+cPDOX36ZHi1LFPGMRUOz
+         eyeBGOphBhoOio8YvUH2x0TGXbaUQNJ6rmMfPipjravKYEHsSSGvsdN3Al5pOmJz3Mzi
+         lpN4yiaO/tJ930XEz0yFzopH6FZYXLfmg8iB0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yvjEOHLIq9Sh9WWlVm5k1WXdPptfENAsp8rVEPdpX98=;
+        b=RJgLSMhcwpbkuzcZZ+i4VGTyn1haMnMrGbS4Tys8XEqkO/jj6KG+OvaN4GYNOQfJA+
+         /hLsGDUFow94cUunAmde0Wu3QCa9u+OyDdVAMDcDZiAV8yeJf9CmiiSurVbsPK8aBl87
+         gAda2G6460cTwlWOkTbCl2gF493GmeVLNAYBY8PuLzNIQM0FSZsedrq4Is81JRYEAW1P
+         EU1u/oZ9e+brfEjeg0B5c36O4FcFDdU/Ot5+JTg4tlHi+cRHTAoklO7bSWtUNdjCxLaG
+         Ed9PCZIS/5BXmDPOxjAwFISoEQgmCF4CmnbrccyfuEw8c3UDh7rBLICIX5UiepS6HRDU
+         J75w==
+X-Gm-Message-State: AOAM5325H0WLuatQG/uN58w651S8EsuYhsqiLHltVokNaFqFhVfzJERg
+        Q1jUkUcVFM7KhdHQ3I+esT2JZsoq4PETI7s61ws=
+X-Google-Smtp-Source: ABdhPJye6LapR8XrtnXId70NkfPMuFTLYvczW8a1Tt1nrrc9f/0kW4MiN8bjgtqqG05n5cmwFYKCHg==
+X-Received: by 2002:aa7:d614:0:b0:42b:f24e:e4c2 with SMTP id c20-20020aa7d614000000b0042bf24ee4c2mr67143edr.322.1653585856936;
+        Thu, 26 May 2022 10:24:16 -0700 (PDT)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id m11-20020a056402510b00b0042b6a84b230sm1023750edd.90.2022.05.26.10.24.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 10:24:15 -0700 (PDT)
+Received: by mail-wr1-f51.google.com with SMTP id t13so2942110wrg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:24:15 -0700 (PDT)
+X-Received: by 2002:a5d:58cc:0:b0:20e:643d:e46a with SMTP id
+ o12-20020a5d58cc000000b0020e643de46amr30956023wrf.97.1653585854913; Thu, 26
+ May 2022 10:24:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220512085043.5234-1-mgorman@techsingularity.net>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220525144013.6481-1-ubizjak@gmail.com> <20220525144013.6481-3-ubizjak@gmail.com>
+ <CAHk-=whXtP1XT2cVDFKK2-Xz5Z=7AFki4zwFzenm4bbf4iPJKg@mail.gmail.com> <48001b3d732b418eb5f36def228c2c9d@AcuMS.aculab.com>
+In-Reply-To: <48001b3d732b418eb5f36def228c2c9d@AcuMS.aculab.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 26 May 2022 10:23:58 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjcOMsxThmFoUJYQ+BUmtzMk2J1XJiRWXFsd1LLXyRMZQ@mail.gmail.com>
+Message-ID: <CAHk-=wjcOMsxThmFoUJYQ+BUmtzMk2J1XJiRWXFsd1LLXyRMZQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] locking/lockref/x86: Enable ARCH_USE_CMPXCHG_LOCKREF
+ for X86_32 && X86_CMPXCHG64
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Waiman.Long@hp.com" <Waiman.Long@hp.com>,
+        Paul McKenney <paulmck@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 09:50:37AM +0100, Mel Gorman wrote:
-> Changelog since v2
-> o More conversions from page->lru to page->[pcp_list|buddy_list]
-> o Additional test results in changelogs
-> 
-> Changelog since v1
-> o Fix unsafe RT locking scheme
-> o Use spin_trylock on UP PREEMPT_RT
-> 
-> This series has the same intent as Nicolas' series "mm/page_alloc: Remote
-> per-cpu lists drain support" -- avoid interference of a high priority
-> task due to a workqueue item draining per-cpu page lists. While many
-> workloads can tolerate a brief interruption, it may be cause a real-time
-> task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
-> the draining in non-deterministic.
-> 
-> Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
-> The local_lock on its own prevents migration and the IRQ disabling protects
-> from corruption due to an interrupt arriving while a page allocation is
-> in progress. The locking is inherently unsafe for remote access unless
-> the CPU is hot-removed.
-> 
-> This series adjusts the locking. A spinlock is added to struct
-> per_cpu_pages to protect the list contents while local_lock_irq continues
-> to prevent migration and IRQ reentry. This allows a remote CPU to safely
-> drain a remote per-cpu list.
-> 
-> This series is a partial series. Follow-on work should allow the
-> local_irq_save to be converted to a local_irq to avoid IRQs being
-> disabled/enabled in most cases. Consequently, there are some TODO comments
-> highlighting the places that would change if local_irq was used. However,
-> there are enough corner cases that it deserves a series on its own
-> separated by one kernel release and the priority right now is to avoid
-> interference of high priority tasks.
-> 
-> Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
-> 	and when it is storing per-cpu pages.
-> 
-> Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
-> 	this is not necessary but it avoids per_cpu_pages consuming another
-> 	cache line.
-> 
-> Patch 3 is a preparation patch to avoid code duplication.
-> 
-> Patch 4 is a simple micro-optimisation that improves code flow necessary for
-> 	a later patch to avoid code duplication.
-> 
-> Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
-> 	relying on local_lock to prevent migration, stabilise the pcp
-> 	lookup and prevent IRQ reentrancy.
-> 
-> Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
+On Thu, May 26, 2022 at 1:30 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> Perhaps there could be a non-smp implementation of cmpxchg8b
+> that just disables interrupts?
 
-Mel, we saw spontanous "mm_percpu_wq" crash on today's linux-next tree
-while running CPU offlining/onlining, and wondering if you have any
-thoughts?
+As Uros points out, we do have exactly that, but it's not actually
+written to be usable for the "trylock" case. Plus it would be
+pointless for lockrefs, since the non-cmpxchg case that just falls
+back to a spinlock would be faster and simpler (particularly on UP,
+where locking goes away).
 
- WARNING: CPU: 31 PID: 173 at kernel/kthread.c:524 __kthread_bind_mask
- CPU: 31 PID: 173 Comm: kworker/31:0 Not tainted 5.18.0-next-20220526-dirty #127
- Workqueue:  0x0
-  (mm_percpu_wq)
+> While I have used a dual 486 I doubt Linux would run ever
+> have on it. The same is probably true for old dual Pentiums.
 
- pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : __kthread_bind_mask
- lr : __kthread_bind_mask
- sp : ffff800018667c50
- x29: ffff800018667c50
-  x28: ffff800018667d20
-  x27: ffff083678bc2458
- x26: 1fffe1002f5b17a8
-  x25: ffff08017ad8bd40
-  x24: 1fffe106cf17848b
- x23: 1ffff000030ccfa0 x22: ffff0801de2d1ac0
-  x21: ffff0801de2d1ac0
- x20: ffff07ff80286f08 x19: ffff0801de2d1ac0
-  x18: ffffd6056a577d1c
- x17: ffffffffffffffff
-  x16: 1fffe0fff158eb18
-  x15: 1fffe106cf176138
- x14: 000000000000f1f1
-  x13: 00000000f3f3f3f3 x12: ffff7000030ccf3b
- x11: 1ffff000030ccf3a x10: ffff7000030ccf3a x9 : dfff800000000000
- x8 : ffff8000186679d7
-  x7 : 0000000000000001
-  x6 : ffff7000030ccf3a
- x5 : 1ffff000030ccf39 x4 : 1ffff000030ccf4e x3 : 0000000000000000
- x2 : 0000000000000000
-  x1 : ffff07ff8ac74fc0 x0 : 0000000000000000
- Call trace:
-  __kthread_bind_mask
-  kthread_bind_mask
-  create_worker
-  worker_thread
-  kthread
-  ret_from_fork
- irq event stamp: 146
- hardirqs last  enabled at (145):  _raw_spin_unlock_irqrestore
- hardirqs last disabled at (146):  el1_dbg
- softirqs last  enabled at (0):  copy_process
- softirqs last disabled at (0):  0x0
+Yeah, I don't think we ever supported SMP on i486, afaik they all
+needed special system glue.
 
- WARNING: CPU: 31 PID: 173 at kernel/kthread.c:593 kthread_set_per_cpu
- CPU: 31 PID: 173 Comm: kworker/31:0 Tainted: G        W         5.18.0-next-20220526-dirty #127
- Workqueue:  0x0 (mm_percpu_wq)
- pstate: 10400009 (nzcV daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : kthread_set_per_cpu
- lr : worker_attach_to_pool
- sp : ffff800018667be0
- x29: ffff800018667be0 x28: ffff800018667d20 x27: ffff083678bc2458
- x26: 1fffe1002f5b17a8 x25: ffff08017ad8bd40 x24: 1fffe106cf17848b
- x23: 1fffe1003bc5a35d x22: ffff0801de2d1aec x21: 0000000000000007
- x20: ffff4026d8adae00 x19: ffff0801de2d1ac0 x18: ffffd6056a577d1c
- x17: ffffffffffffffff x16: 1fffe0fff158eb18 x15: 1fffe106cf176138
- x14: 000000000000f1f1 x13: 00000000f3f3f3f3 x12: ffff7000030ccf53
- x11: 1ffff000030ccf52 x10: ffff7000030ccf52 x9 : ffffd60563f9a038
- x8 : ffff800018667a97 x7 : 0000000000000001 x6 : ffff7000030ccf52
- x5 : ffff800018667a90 x4 : ffff7000030ccf53 x3 : 1fffe1003bc5a408
- x2 : 0000000000000000 x1 : 000000000000001f x0 : 0000000000208060
- Call trace:
-  kthread_set_per_cpu
-  worker_attach_to_pool at kernel/workqueue.c:1873
-  create_worker
-  worker_thread
-  kthread
-  ret_from_fork
- irq event stamp: 146
- hardirqs last  enabled at (145):  _raw_spin_unlock_irqrestore
- hardirqs last disabled at (146):  el1_dbg
- softirqs last  enabled at (0):  copy_process
- softirqs last disabled at (0):  0x0
+I think the "modern" x86 SMP support with a local APIC was a PPro and
+newer thing historically, but clearly there were then later what
+amounted to Penitum/MMX class cores (ie old Atom) that did support
+SMP.
 
- Unable to handle kernel paging request at virtual address dfff800000000003
- KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
- Mem abort info:
-   ESR = 0x0000000096000004
-   EC = 0x25: DABT (current EL), IL = 32 bits
-   SET = 0, FnV = 0
-   EA = 0, S1PTW = 0
-   FSC = 0x04: level 0 translation fault
- Data abort info:
-   ISV = 0, ISS = 0x00000004
-   CM = 0, WnR = 0
- [dfff800000000003] address between user and kernel address ranges
- Internal error: Oops: 96000004 [#1] PREEMPT SMP
- CPU: 83 PID: 23994 Comm: kworker/31:2 Not tainted 5.18.0-next-20220526-dirty #127
- pstate: 104000c9 (nzcV daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : __lock_acquire
- lr : lock_acquire.part.0
- sp : ffff800071777ac0
- x29: ffff800071777ac0 x28: ffffd60563fa6380
-  x27: 0000000000000018
- x26: 0000000000000080 x25: 0000000000000018 x24: 0000000000000000
- x23: ffff0801de2d1ac0 x22: ffffd6056a66a7e0
-  x21: 0000000000000000
- x20: 0000000000000000 x19: 0000000000000000
-  x18: 0000000000000767
- x17: 0000000000000000 x16: 1fffe1003bc5a473
-  x15: 1fffe806c88e9338
- x14: 000000000000f1f1
-  x13: 00000000f3f3f3f3
-  x12: ffff0801de2d1ac8
- x11: 1ffffac0ad4aefa3
-  x10: ffffd6056a577d18 x9 : 0000000000000000
- x8 : 0000000000000003
-  x7 : ffffd60563fa6380
-  x6 : 0000000000000000
- x5 : 0000000000000080
-  x4 : 0000000000000001
-  x3 : 0000000000000000
- x2 : 0000000000000000 x1 : 0000000000000003
-  x0 : dfff800000000000
-
- Call trace:
-  __lock_acquire at kernel/locking/lockdep.c:4923
-  lock_acquire
-  _raw_spin_lock_irq
-  worker_thread at kernel/workqueue.c:2389
-  kthread
-  ret_from_fork
- Code: d65f03c0 d343ff61 d2d00000 f2fbffe0 (38e06820)
- ---[ end trace 0000000000000000 ]---
- 1424.464630][T23994] Kernel panic - not syncing: Oops: Fatal exception
- SMP: stopping secondary CPUs
- Kernel Offset: 0x56055bdf0000 from 0xffff800008000000
- PHYS_OFFSET: 0x80000000
- CPU features: 0x000,0042e015,19801c82
- Memory Limit: none
+                      Linus

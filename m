@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C0E534DE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6372F534DEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240928AbiEZLOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 07:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
+        id S1345470AbiEZLRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 07:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbiEZLO0 (ORCPT
+        with ESMTP id S233141AbiEZLRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 07:14:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 478A2CFE15
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:14:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653563664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u7bQhPKpC/2vv3TSdrZRb3hAgeC4UybLeZufoqxQdtY=;
-        b=UEXWgvAnOtaA7NzSm+S/LYkgDr3iFOtUi+tI6SUaXSvteRhsGP2tV/yLIJ2mm7Ik/Ky4B6
-        BrXojNCeWUPqC6WjNYrha2xp5Z9cvdYnyuLH1zU0AMgf5j+Ps+d+CAgAxkzyrebTvTOLPL
-        3bPj2+LcWu8CrsBOherIeor6v4jjbzA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-435-Q1-qyA04MbWw1Q4pvuHiig-1; Thu, 26 May 2022 07:14:23 -0400
-X-MC-Unique: Q1-qyA04MbWw1Q4pvuHiig-1
-Received: by mail-wm1-f71.google.com with SMTP id o3-20020a05600c510300b0039743540ac7so760910wms.5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:14:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=u7bQhPKpC/2vv3TSdrZRb3hAgeC4UybLeZufoqxQdtY=;
-        b=VAlLZFfnqbPodcjY/KUPC2VmmYOCJHGMZN/qz1Qy2BWXsEONuOOOBZfZCRZKq847VB
-         7rNrtMZa/vTqX/jfodknGDMQSqrDGtrk3lgJKK+hQ1RW5+91oNAedLIf23giu1QGDPxj
-         It06nm76tUTlB4VlAIHLzdK13cxFrm3/06yuAqY3HNzpiYTD5ZqWB1kmBTbmoLZPOQJa
-         W0eJ8/yjX8rSfmqCf5tB4BbnuR5nin7gmHchwcLzzPIdGwfeaVyTzl57h56RRdf4gjKd
-         4ig4X+nesjhIB+k0Yt1WvuBqlzgOfTCtvMmgJdb7WGL+gLcQyTNQHF3zmpYZbUeNGS0D
-         KrBg==
-X-Gm-Message-State: AOAM531hB6gkvopGLvQTNj+cbDKmPCCt8MUoW0Jq+2mqJPVc9QHd/Ji7
-        Nwlo8/7gLil1BPsUVPt4WPZq17fiP6k8EuG414t0LmxGosC8znpcSpaeVF/5SvQFIpMnMYqjAq2
-        kRYK++PticyX23sxyuBQ4zoZl
-X-Received: by 2002:a5d:64cc:0:b0:20f:e6d6:72e1 with SMTP id f12-20020a5d64cc000000b0020fe6d672e1mr14022752wri.384.1653563661994;
-        Thu, 26 May 2022 04:14:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxNqTc2OdsUsM2oys5V9RV3sUSHMD/A/689Eu2Wl1fyGZ9NhDcupjVv28qYgzeoEVnZw9wl8g==
-X-Received: by 2002:a5d:64cc:0:b0:20f:e6d6:72e1 with SMTP id f12-20020a5d64cc000000b0020fe6d672e1mr14022727wri.384.1653563661736;
-        Thu, 26 May 2022 04:14:21 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
-        by smtp.gmail.com with ESMTPSA id h131-20020a1c2189000000b00394708a3d7dsm4730095wmh.15.2022.05.26.04.14.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 04:14:21 -0700 (PDT)
-Message-ID: <5a7cb5c7c0bf2f9f9540616a2a0e70d36a166a9f.camel@redhat.com>
-Subject: Re: [PATCH] net/mlx5: Fix memory leak in mlx5_sf_dev_add()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jianglei Nie <niejianglei2021@163.com>, saeedm@nvidia.com,
-        leon@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, parav@nvidia.com, vuhuong@nvidia.com,
-        shayd@nvidia.com
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 26 May 2022 13:14:20 +0200
-In-Reply-To: <20220526084411.480472-1-niejianglei2021@163.com>
-References: <20220526084411.480472-1-niejianglei2021@163.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 26 May 2022 07:17:08 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CD395DD2;
+        Thu, 26 May 2022 04:17:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653563827; x=1685099827;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=jl+F2eJ4nE5XySB40dAzATocGz6c62UCpxl8Gn1FUcA=;
+  b=mRFznUDzBIsyBtiz+JLuf77x100bQDEVvZSw7Oxi6LvFTVY2aabyAYwT
+   04uFG2dFZx42nISgDHSfr8qm23XVBCMMvYsNNu9nFmvpRGFsCn6OkemBJ
+   uF0TQFal/t6KUyW2nMAsFg9ESbtC1LDasTdV18n2VzWYZBZBGoJcfUpRU
+   Y=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 May 2022 04:17:06 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 04:17:06 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 26 May 2022 04:17:06 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 26 May
+ 2022 04:17:02 -0700
+Subject: Re: [PATCH v4 1/3] arm64: dts: qcom: sc7280: Add proxy interconnect
+ requirements for modem
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <ohad@wizery.com>, <agross@kernel.org>,
+        <mathieu.poirier@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mka@chromium.org>
+References: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
+ <1652978825-5304-2-git-send-email-quic_sibis@quicinc.com>
+ <YoaqDcB6wkd4zOWR@ripper> <031ebead-4b0d-8493-d8f8-96f2ff9d938a@quicinc.com>
+ <CAE-0n53hDDoetQW0Bz7noq4peuNCyrGsXaJdjFj=4sMkGeZFgw@mail.gmail.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <3e7e8263-fdc1-ffa8-7b7f-188bb027fadf@quicinc.com>
+Date:   Thu, 26 May 2022 16:46:51 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <CAE-0n53hDDoetQW0Bz7noq4peuNCyrGsXaJdjFj=4sMkGeZFgw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,44 +74,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-26 at 16:44 +0800, Jianglei Nie wrote:
-> The variable id is allocated by mlx5_adev_idx_alloc(). When some error
-> happens, the id should be freed by mlx5_adev_idx_free().But when
-> auxiliary_device_add() and xa_insert() fail, the id is not freed,which
-> will lead to a potential memory leak.
-> 
-> We can fix it by calling mlx5_sf_dev_add() when auxiliary_device_add()
-> and xa_insert() fail.
-> 
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c b/drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c
-> index 7da012ff0d41..9f222061a1c0 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c
-> @@ -125,13 +125,16 @@ static void mlx5_sf_dev_add(struct mlx5_core_dev *dev, u16 sf_index, u16 fn_id,
->  
->  	err = auxiliary_device_add(&sf_dev->adev);
->  	if (err) {
-> +		mlx5_adev_idx_free(id);
->  		put_device(&sf_dev->adev.dev);
 
-This looks not correct. put_device() -> mlx5_sf_dev_release() -> should
-already take care of that.
+On 5/21/22 12:37 AM, Stephen Boyd wrote:
+> Quoting Sibi Sankar (2022-05-20 11:08:52)
+>> Hey Bjorn,
+>> Thanks for taking time to review the series.
+>>
+>> On 5/20/22 2:05 AM, Bjorn Andersson wrote:
+>>> On Thu 19 May 09:47 PDT 2022, Sibi Sankar wrote:
+>>>
+>>>> Add interconnects that are required to be proxy voted upon during modem
+>>>> bootup on SC7280 SoCs.
+>>>
+>>> This looks reasonable, but how come the vote is only for DDR frequency?
+>>> What about the buses between modem and ddr?
+>>
+>> The proxy votes that are put in aren't for perf related reasons, the
+>> modem was getting llcc timeouts while trying to read contents from
+>> memory. The hw team recommended the proxy votes as the fix.
+> 
+> Presumably the bootloader sets up some initial modem and ddr bus
+> bandwidth requests? Or the modem bootloader stage (MSA?) handles that
+> part?
 
->  		goto add_err;
->  	}
->  
->  	err = xa_insert(&table->devices, sf_index, sf_dev, GFP_KERNEL);
-> -	if (err)
-> +	if (err) {
-> +		mlx5_adev_idx_free(id);
->  		goto xa_err;
-> +	}
->  	return;
->  
->  xa_err:
+Stephen/Bjorn,
+Sorry for the delay, took a while to dig this up. The modem interconnect
+is connected directly to gemnoc ddr. The path info from modem --> ddr is
+split up into modem --> llcc and llcc --> ddr (Similar to CPUs) i.e. in
+the end scaling of the path involves scaling of the two clocks, gemnoc
+and ddr. There isn't any default vote for modem --> llcc as such but it
+gets implicitly scaled when we vote max for llcc --> ddr path due to
+dependency maintained between the two clocks by rpmh.
 
+-Sibi
+
+> 

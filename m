@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9FC535075
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A38535079
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347618AbiEZOSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 10:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S233343AbiEZOSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 10:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345135AbiEZOR5 (ORCPT
+        with ESMTP id S1347621AbiEZOSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 10:17:57 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E11C5D85;
-        Thu, 26 May 2022 07:17:57 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id n10so1867944pjh.5;
-        Thu, 26 May 2022 07:17:57 -0700 (PDT)
+        Thu, 26 May 2022 10:18:02 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE474C5DA7;
+        Thu, 26 May 2022 07:18:01 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id r71so1501025pgr.0;
+        Thu, 26 May 2022 07:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oqp8p6dvroeiC54jkhE16BLbyPM4g2cKppPUEf1uy+E=;
-        b=DZPOcRp/JiVYvEFcRQAH5tbraHLBq6VaSInl4Yt+QtNgDstXmDNvbJWln1DoENQ3wU
-         8BKqmgVb+rYqa8buGVZi/QVRN1un03iTUNEQV89HTvwSpxJGh6sE9vIWhD6IKenKJRYM
-         oePpRzxdk5wbu/9xdhQebXpcMDg0g4CIvsO5+E6MBJBxdxSlvZBND54oMq1bFIOkHLeJ
-         EkdBPxJqcT/jF4Q1nNJ3T2ryhXjVXegm9eqM83LNCthgz5CxTTAMWsjpfO99mrRbTWBN
-         stX+bbOp7X2dvTfK+MOYjrd8YSDkFiXO2TrD28VZIXeAUyir+6Y55zukfMYkFGI7Az33
-         yDXQ==
+        bh=evzXCRElQX1dPpYOohRZm82+/mRQCembTUZz/W7nKE4=;
+        b=iW5Zb9cUbecEDmbuXsk3dtQB4EwsTes5v02W2nQGnMRr6eyZwUsyk6tPL+59fwNi1Z
+         yTFsJZ5L1yq7t/f/T5HHmKGTJB+ASW2IbG84b7uk82IwKe9QLXJHolSk3n68Zz4kBZts
+         Zx11dZzs2NYHPpgKkli++EMqYuf28rgCVUEHQWHJL5NJFKxA7+Hlmn9vweWHxevlhiCp
+         m0Mr8V73QKw95n030TB9qKsz3/3bQ2aG0IHidaxCyXg/gXOIKla0IzvumCXAJnsh9/EM
+         4tQLuN1XywXWMJaaL+rwiV4RggkqON4hn8bnfBZfO7RqAdkv+05WPl8RjhbVqlE3FNbO
+         EpxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oqp8p6dvroeiC54jkhE16BLbyPM4g2cKppPUEf1uy+E=;
-        b=ib6cwbL753GkCQ2ZDL4vJqlzz0aAIxiEaey3rQeUVur/ZckE5vcqb6n6hrnkfDFVwA
-         GTrPA6rUTBx8yquibP57CrTaW1w+jj/5jA4bJXrA6dsJDP7yOYriyC1RcvLprITzshAl
-         i0ysNQo4x8bwCmTYqYnz9F+AxGt+3WFqNqeXqOerExlfXMewMjowvp1ZHB5rVsZzm1pA
-         WoK7riY7DwuggRLfMJcCW65muP9y3AGB/ZYorOFDBbGz3gapKrQF5meMs2GGdXhoRyy/
-         tk5QvWrb0zYGvXphsbFzJHFuhgO6k+Ue2IN7lSKT24XZ6a0vTsSDzdkLD7fC++AaKo40
-         wYVA==
-X-Gm-Message-State: AOAM5312Rg/KybLEGZgpjXxVq0OaVHlDgo23f8EPqoubRolmVR09av9F
-        SGGb8nKuX0vFf7IU8rk02E5oBJ/iAFq+ig==
-X-Google-Smtp-Source: ABdhPJzXauDC5mHpQro6WPQ6VgZdWHenwZFmdbqW+481l/pRnvkghzR6UXlKA2kcSinaALSorbgICQ==
-X-Received: by 2002:a17:903:20f:b0:158:d86a:f473 with SMTP id r15-20020a170903020f00b00158d86af473mr38357376plh.92.1653574676237;
-        Thu, 26 May 2022 07:17:56 -0700 (PDT)
+        bh=evzXCRElQX1dPpYOohRZm82+/mRQCembTUZz/W7nKE4=;
+        b=dnVByYczqT0LxJu1XeAc3WY9THYg57VhzBVaJf6p7K8fXYjt1ql0ycnenQ47C0xGvk
+         WPuA5naxSTeqUAQw2biRJJiTLjIemsQ+gyEpZsScMwSqOsMZ6HhyqKemmKikOwf+Pi7Q
+         k4LeG7XK7WupLujJ3bRPrs/bfF/fS0sDK4OnfZ7N4/0zxPM5ZeyEbOTP5UHKm1JhlWuq
+         wI2BsoB+e0Fl/hLcdNYkjc6XYriFuqBwbcxDkY6NE8eQelQsuWbysRkxKEQN4ZucmB4Q
+         Z27CblmZD/Z0DlhZ4dyigSxU4lT03csgxcHNw3zWql2XvEwp1n+TH1WMYP5FeZDzcV//
+         pS3Q==
+X-Gm-Message-State: AOAM530m2Bpuhuv2/wUqiGF5/gNzpfnbZptOweTi0jU4FbZkQQFaoa+I
+        jBSZgQ//rkbo3fpSMSpAb7+cmY3/aUOig7g4
+X-Google-Smtp-Source: ABdhPJxBiMhXstsS758IEH4GIK/QjbIPtooIepKzJSkYZqM53K/60JCKuzPaeeMM5odpjZqoqT6L1w==
+X-Received: by 2002:a63:d849:0:b0:3f5:eb01:ae2 with SMTP id k9-20020a63d849000000b003f5eb010ae2mr32608216pgj.230.1653574680711;
+        Thu, 26 May 2022 07:18:00 -0700 (PDT)
 Received: from skynet-linux.local ([122.173.191.164])
-        by smtp.googlemail.com with ESMTPSA id ei3-20020a17090ae54300b001dedb8bbe66sm1546622pjb.33.2022.05.26.07.17.53
+        by smtp.googlemail.com with ESMTPSA id ei3-20020a17090ae54300b001dedb8bbe66sm1546622pjb.33.2022.05.26.07.17.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 07:17:55 -0700 (PDT)
+        Thu, 26 May 2022 07:18:00 -0700 (PDT)
 From:   Sireesh Kodali <sireeshkodali1@gmail.com>
 To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-remoteproc@vger.kernel.org
 Cc:     bjorn.andersson@linaro.org,
         Sireesh Kodali <sireeshkodali1@gmail.com>,
         Andy Gross <agross@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 1/2] remoteproc: qcom: wcnss: Fix handling of IRQs
-Date:   Thu, 26 May 2022 19:47:39 +0530
-Message-Id: <20220526141740.15834-2-sireeshkodali1@gmail.com>
+Subject: [PATCH v2 2/2] arm64: dts: qcom: msm8916: Fix typo in pronto remoteproc node
+Date:   Thu, 26 May 2022 19:47:40 +0530
+Message-Id: <20220526141740.15834-3-sireeshkodali1@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220526141740.15834-1-sireeshkodali1@gmail.com>
 References: <20220526141740.15834-1-sireeshkodali1@gmail.com>
@@ -74,51 +75,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wcnss_get_irq function is expected to return a value > 0 in the
-event that an IRQ is succssfully obtained, but it instead returns 0.
-This causes the stop and ready IRQs to never actually be used despite
-being defined in the device-tree. This patch fixes that.
+The smem-state properties for the pronto node were incorrectly labelled,
+reading `qcom,state*` rather than `qcom,smem-state*`. Fix that, allowing
+the stop state to be used.
 
-Fixes: aed361adca9f ("remoteproc: qcom: Introduce WCNSS peripheral image loader")
+Fixes: 88106096cbf8 ("ARM: dts: msm8916: Add and enable wcnss node")
 Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
 ---
- drivers/remoteproc/qcom_wcnss.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8916.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-index 9a223d394087..68f37296b151 100644
---- a/drivers/remoteproc/qcom_wcnss.c
-+++ b/drivers/remoteproc/qcom_wcnss.c
-@@ -467,6 +467,7 @@ static int wcnss_request_irq(struct qcom_wcnss *wcnss,
- 			     irq_handler_t thread_fn)
- {
- 	int ret;
-+	int irq_number;
+diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+index e34963505e07..7ecd747dc624 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+@@ -1758,8 +1758,8 @@ pronto: remoteproc@a21b000 {
+ 					<&rpmpd MSM8916_VDDMX>;
+ 			power-domain-names = "cx", "mx";
  
- 	ret = platform_get_irq_byname(pdev, name);
- 	if (ret < 0 && optional) {
-@@ -477,14 +478,19 @@ static int wcnss_request_irq(struct qcom_wcnss *wcnss,
- 		return ret;
- 	}
+-			qcom,state = <&wcnss_smp2p_out 0>;
+-			qcom,state-names = "stop";
++			qcom,smem-states = <&wcnss_smp2p_out 0>;
++			qcom,smem-state-names = "stop";
  
-+	irq_number = ret;
-+
- 	ret = devm_request_threaded_irq(&pdev->dev, ret,
- 					NULL, thread_fn,
- 					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
- 					"wcnss", wcnss);
--	if (ret)
-+	if (ret) {
- 		dev_err(&pdev->dev, "request %s IRQ failed\n", name);
-+		return ret;
-+	}
- 
--	return ret;
-+	/* Return the IRQ number if the IRQ was successfully acquired */
-+	return irq_number;
- }
- 
- static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&wcnss_pin_a>;
 -- 
 2.36.1
 

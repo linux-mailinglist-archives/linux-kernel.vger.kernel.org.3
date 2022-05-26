@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11465359AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6302E535303
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242200AbiE0Gxp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 27 May 2022 02:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
+        id S240286AbiEZR6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 13:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiE0Gxh (ORCPT
+        with ESMTP id S233423AbiEZR6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 02:53:37 -0400
-Received: from mail.enamor.com.pl (mail.enamor.com.pl [213.192.90.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60ED16385
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:53:36 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.enamor.com.pl (Postfix) with ESMTP id C164888353F;
-        Fri, 27 May 2022 07:59:56 +0200 (CEST)
-Received: from mail.enamor.com.pl ([127.0.0.1])
-        by localhost (mail.enamor.com.pl [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 1atvbCovQpHE; Fri, 27 May 2022 07:59:56 +0200 (CEST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.enamor.com.pl (Postfix) with ESMTP id 1A2CF8830A3;
-        Fri, 27 May 2022 07:58:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at enamor.com.pl
-Received: from mail.enamor.com.pl ([127.0.0.1])
-        by localhost (mail.enamor.com.pl [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VLvCljdGohWK; Fri, 27 May 2022 07:58:40 +0200 (CEST)
-Received: from [192.168.8.100] (unknown [154.118.2.170])
-        by mail.enamor.com.pl (Postfix) with ESMTPSA id 5947C8831A9;
-        Fri, 27 May 2022 07:56:45 +0200 (CEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 26 May 2022 13:58:05 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BFEDFD7;
+        Thu, 26 May 2022 10:58:03 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id DA6701F458C5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653587881;
+        bh=vKrfmc3boXboPynKhfGf6a+AgAeTRHxWWw/3jLM5Jic=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DGkTuUPwewZwysjZztrVad/lb9S/kXm3+CYcMvUjKexgsyXtFd1nxFQrKIctmAXDE
+         Dg4zWR6Lg/z3Q5upNyDit2RITf3OMKBlmER62SyW0U42xsGGg6QU60mHzng41heGyk
+         NU4P7ccBQDG8c0W5TBR01+lyJcSnh8zyQ8X4MXL0wbrfDi55ocZBn4f47Yq+Qm9r/l
+         dkOwFM8+qVn8evQindIk4K2aIF4MZIQ+S647V8zghD5pI/2CMgkfBp23fAj8XzYIZ6
+         3Mt5DrdIKw58s6+5PISOPPMbS6bEZtDYTHtKIafhS/zxXwZl9zGfofl5uvRKsINlUj
+         HSzFw1AXzb0JQ==
+Message-ID: <45c29859-f7a6-48e5-be48-bd8191ac299a@collabora.com>
+Date:   Thu, 26 May 2022 20:57:56 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Re: From Ivor Rancic...
-To:     Recipients <ivorrancic@protonmail.com>
-From:   ivorrancic@protonmail.com
-Date:   Thu, 26 May 2022 12:56:21 -0500
-Reply-To: ivorrancic1@zohomail.com
-Message-Id: <20220527055645.5947C8831A9@mail.enamor.com.pl>
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DATE_IN_PAST_12_24,
-        FREEMAIL_FROM,NIXSPAM_IXHASH,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5010]
-        *  1.0 DATE_IN_PAST_12_24 Date: is 12 to 24 hours before Received:
-        *      date
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ivorrancic[at]protonmail.com]
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 21/31] soc/tegra: Remove the call to
+ devm_pm_opp_set_clkname()
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 5/26/22 14:42, Viresh Kumar wrote:
+> The OPP core already performs devm_pm_opp_set_clkname() with name as
+> NULL, the callers shouldn't be doing the same unless they have a
+> different clock name to add here.
+> 
+> Drop the call.
+> 
+> Cc: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/soc/tegra/common.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+> index 32c346b72635..49a5360f4507 100644
+> --- a/drivers/soc/tegra/common.c
+> +++ b/drivers/soc/tegra/common.c
+> @@ -108,12 +108,6 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+>  	u32 hw_version;
+>  	int err;
+>  
+> -	err = devm_pm_opp_set_clkname(dev, NULL);
+> -	if (err) {
+> -		dev_err(dev, "failed to set OPP clk: %d\n", err);
+> -		return err;
+> -	}
+> -
+>  	/* Tegra114+ doesn't support OPP yet */
+>  	if (!of_machine_is_compatible("nvidia,tegra20") &&
+>  	    !of_machine_is_compatible("nvidia,tegra30"))
 
-I am Ivor Rancic, i am presently living in Estonia. I am contacting you on behalf of Polina Yumasheva, who was married to Oleg Deripaska. I have her mandate to look for a credible business man, who can receive funds she received from businesses with her ex husband and invest the funds for a long term in a good business with a high return.
+I can't see where OPP core performs devm_pm_opp_set_clkname().
 
-Our proposal is to compensate  you with 30% of the funds and invest the balance 70% on her behalf. The funds are deposited somewhere very safe in Western Europe. All the details and procedures on how to receive this funds will be communicated to you as soon as i get your response.
-
-Please treat this as a very confidential message and respond to through the email address below, if you are serious and interested.
-
-Regards,
-
-Ivor Rancic.
+-- 
+Best regards,
+Dmitry

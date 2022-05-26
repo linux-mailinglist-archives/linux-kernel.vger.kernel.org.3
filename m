@@ -2,38 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4AB5347E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B85D5347EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345581AbiEZBOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
+        id S1345564AbiEZBO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344228AbiEZBOu (ORCPT
+        with ESMTP id S1344150AbiEZBO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:14:50 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0F495A08
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:14:49 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L7qhX0kVDzjX3m;
-        Thu, 26 May 2022 09:14:04 +0800 (CST)
+        Wed, 25 May 2022 21:14:56 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2723690CFD
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:14:56 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L7qgl0g17z1JC4q;
+        Thu, 26 May 2022 09:13:23 +0800 (CST)
 Received: from huawei.com (10.175.112.208) by kwepemi500013.china.huawei.com
  (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 26 May
- 2022 09:14:47 +0800
+ 2022 09:14:53 +0800
 From:   Zheng Yongjun <zhengyongjun3@huawei.com>
-To:     <f.fainelli@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <bcm-kernel-feedback-list@broadcom.com>
-Subject: [PATCH] soc: bcm: brcmstb: Fix refcount leak in brcmstb_pm_probe
-Date:   Thu, 26 May 2022 01:09:48 +0000
-Message-ID: <20220526010948.32211-1-zhengyongjun3@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <lee.jones@linaro.org>
+Subject: [PATCH] mfd: ipaq-micro: Fix IRQ check in micro_probe
+Date:   Thu, 26 May 2022 01:09:54 +0000
+Message-ID: <20220526010954.32288-1-zhengyongjun3@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  kwepemi500013.china.huawei.com (7.221.188.120)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -45,28 +44,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_matching_node() returns a node pointer with refcount incremented,
-we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+platform_get_irq() returns non-zero IRQ number on success,
+negative error number on failure.
+And the doc of platform_get_irq() provides a usage example:
 
-Fixes: 0b741b8234c86 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
+    int irq = platform_get_irq(pdev, 0);
+    if (irq < 0)
+        return irq;
+
+Fix the check of return value to catch errors correctly.
+
+Fixes: dcc21cc09e3c2 ("mfd: Add driver for Atmel Microcontroller on iPaq h3xxx")
 Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
 ---
- drivers/soc/bcm/brcmstb/pm/pm-arm.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mfd/ipaq-micro.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/soc/bcm/brcmstb/pm/pm-arm.c b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-index 3cbb165d6e30..70ad0f3dce28 100644
---- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-+++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-@@ -783,6 +783,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
- 	}
+diff --git a/drivers/mfd/ipaq-micro.c b/drivers/mfd/ipaq-micro.c
+index e92eeeb67a98..ac042bfd38a8 100644
+--- a/drivers/mfd/ipaq-micro.c
++++ b/drivers/mfd/ipaq-micro.c
+@@ -403,8 +403,8 @@ static int __init micro_probe(struct platform_device *pdev)
+ 	micro_reset_comm(micro);
  
- 	ret = brcmstb_init_sram(dn);
-+	of_node_put(dn);
- 	if (ret) {
- 		pr_err("error setting up SRAM for PM\n");
- 		return ret;
+ 	irq = platform_get_irq(pdev, 0);
+-	if (!irq)
+-		return -EINVAL;
++	if (irq < 0)
++		return irq;
+ 	ret = devm_request_irq(&pdev->dev, irq, micro_serial_isr,
+ 			       IRQF_SHARED, "ipaq-micro",
+ 			       micro);
 -- 
 2.17.1
 

@@ -2,59 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328B1534D93
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2EF534D95
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346104AbiEZKtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 06:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S236132AbiEZKuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 06:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242925AbiEZKtd (ORCPT
+        with ESMTP id S232894AbiEZKuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 06:49:33 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4BBCEB89;
-        Thu, 26 May 2022 03:49:31 -0700 (PDT)
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 24QAnCk2027021;
-        Thu, 26 May 2022 19:49:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 24QAnCk2027021
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653562152;
-        bh=7GCJo6V20e403uG9LgMoxWpt4sneMUh4irGbz+bZduM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=znLsEVbJDtf9zQZyWdQMTWyAhsvbAZOkPyEcjyEaMIirmRO3btT+dbZDacS1opEe3
-         dLoz4bQUbdJ8ygZK7IGX7dTT28/QTdn4GyQVnAAmvq5GZGMXgdba5XaniJKNV0w39l
-         ZxqKjJLVYLnkQlbFNFlQ1cK5x1nUyxdRZVSxPLRMPltallGeFDZnjN/iZNaAdhw+tN
-         dipHx0mCqtFcCOBdkEMf5sCcTLw3S2EEKZ0N+dHDiN2DPWJGeuu/x5LSFU33lL+ndB
-         ilBeE5eONBmdaPycUZoDz34nArL+M/yYU9fXC2CsOAJD6IOTWmrkXQ0IL3bPzN7VeQ
-         oKgWPq5r/Gtug==
-X-Nifty-SrcIP: [209.85.210.179]
-Received: by mail-pf1-f179.google.com with SMTP id c14so1404628pfn.2;
-        Thu, 26 May 2022 03:49:12 -0700 (PDT)
-X-Gm-Message-State: AOAM533ExZppQ6HEtyCRpV6tPP2858ci80pz5MrR8qPnCfpvzDHPBgyW
-        A3W79gsTeP+OJk39uXOvu4S6QLQXsY7BoPYSzxg=
-X-Google-Smtp-Source: ABdhPJytWsqi1G+hmryVs21gChH2/swJVdtbGsLKi5B4mH/FnwoBXaG70p6bCa0/4EzLIttY4G+AscSoNbCnum2E+mw=
-X-Received: by 2002:a63:fc5e:0:b0:3db:5804:f3b with SMTP id
- r30-20020a63fc5e000000b003db58040f3bmr32764129pgk.126.1653562151529; Thu, 26
- May 2022 03:49:11 -0700 (PDT)
+        Thu, 26 May 2022 06:50:20 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8867CEB86
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:50:19 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id f4so1178531iov.2
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:50:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TC+g0nLAl/Vtki0o8V8TPa4Q9UDxrM3TqOj5/L4+ixM=;
+        b=YFtSfT1JENMX6vzmwrx9GUbDu6/VrDr0IVJXPX2gPnW/hjKdIBiu33pEJOVxzUsw3Q
+         x8OLELh31z75OJ0Gr5ZVVXHB2/2YyzR17mKXIj2WitC/FOmbvyhKCbcsAnDL871UhB90
+         1c9fp2OQkf/e129KebQgybN3Uf+sWJu2myQSYcc+LGU45Sy4xQH5ntgeP3HOB+7lyVkZ
+         w08YnDMYmP4ap7DT4XwMf5rlSSlldPalKvbouARLM3j7BClrRqllsKQ+d07rEwMZsAHW
+         EQhnlZso+cIP/G8XyqToiCG3T0cYvIJEJXvlE/PWFHx9/+kCow1npxzOtkSXD89wQtbg
+         a+kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TC+g0nLAl/Vtki0o8V8TPa4Q9UDxrM3TqOj5/L4+ixM=;
+        b=l19Qg2Dtsk21rvwLdXnPBhz9wYyR2N8Ssn0n3gVrJMY9e7ukWeKb8f489u51HuiRzf
+         KKmB/ylEXb7EWZgZHUDdA88thkFHr0dRaz9qc73QvFs1zXSlbpGC4Qsex61nrs/lfPWD
+         QzJM1CkF9+5R8qm6XkrMWLDL615glFcPggHTTTCBq9roJfOpkBgOsN4zUXLUuWcqFmtK
+         Cf6ZXMjPgPvzDxowwZ/LfkvxggyEZiYaUgcbMIXM33YbM5bxld5BguIzc7yd1aEJf10Y
+         msmy06lRMpUuT5IBIhTBMwh0MSWo6VVL9bZlUkv0EY3t/lyKwq+lmtPXEqALjBZBdWt9
+         VGoQ==
+X-Gm-Message-State: AOAM533BKHKK5hR+ZTnqDXIs4PmxQDlk3JmTTqyTf3XUsBxyA+uY61UZ
+        wJIkO18o9a8e6HEE7jGW36Shl7l0V9baCuyO
+X-Google-Smtp-Source: ABdhPJwUpV2a90iS2PiXgiTesfBKCL+xwb8RUX/N5sKCYXvl4cOcQJr9lDj9vqIttu3IQmrFrI3nxQ==
+X-Received: by 2002:a05:6638:1c13:b0:32e:c1d:a790 with SMTP id ca19-20020a0566381c1300b0032e0c1da790mr18978604jab.43.1653562219209;
+        Thu, 26 May 2022 03:50:19 -0700 (PDT)
+Received: from n2.us-central1-a.c.spheric-algebra-350919.internal (151.16.70.34.bc.googleusercontent.com. [34.70.16.151])
+        by smtp.gmail.com with ESMTPSA id m1-20020a923f01000000b002d11397f4f9sm409593ila.74.2022.05.26.03.50.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 03:50:18 -0700 (PDT)
+Date:   Thu, 26 May 2022 10:50:17 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alexander Potapenko <glider@google.com>
+Subject: Re: [GIT PULL] slab for 5.19
+Message-ID: <Yo9baUjgXqM63vSS@n2.us-central1-a.c.spheric-algebra-350919.internal>
+References: <8062f61e-5a4d-00a5-be1a-7921d3277e9d@suse.cz>
+ <CAHk-=wiztQWhEw4tLiH3t5gw=gKB7XtoTXC=S2bhxBxoxOVZLw@mail.gmail.com>
+ <6cdbe746-2c6f-f698-11d4-9f86d2c4e5cc@suse.cz>
+ <CAHk-=wjC5nS+fnf6EzRD9yQRJApAhxx7gRB87ZV+pAWo9oVrTg@mail.gmail.com>
+ <af059855-959f-95b8-afc4-fad97e52cb46@suse.cz>
+ <CAHk-=wjDNR5MxVXk17FjXJApUY5e7GWZGUe7t4e98RJALooXDA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220523164626.858340-1-masahiroy@kernel.org> <20220523164626.858340-2-masahiroy@kernel.org>
- <CAKwvOd=fZ=V52fOc47O1=0wy36b8q_LO54J0099_GkouzH0SZA@mail.gmail.com>
-In-Reply-To: <CAKwvOd=fZ=V52fOc47O1=0wy36b8q_LO54J0099_GkouzH0SZA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 26 May 2022 19:47:49 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQWK0GjKab72MoB3E7jTm83gV1c3Xm6rfzUijrOx0WHjA@mail.gmail.com>
-Message-ID: <CAK7LNAQWK0GjKab72MoB3E7jTm83gV1c3Xm6rfzUijrOx0WHjA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] modpost: remove the unused argument of check_sec_ref()
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjDNR5MxVXk17FjXJApUY5e7GWZGUe7t4e98RJALooXDA@mail.gmail.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,388 +84,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 5:44 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, May 23, 2022 at 9:48 AM Masahiro Yamada <masahiroy@kernel.org> wr=
-ote:
+On Wed, May 25, 2022 at 04:07:24PM -0700, Linus Torvalds wrote:
+> On Wed, May 25, 2022 at 3:01 PM Vlastimil Babka <vbabka@suse.cz> wrote:
 > >
-> > check_sec_ref() does not use the first parameter 'mod'.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Perhaps we could enable some -W flags for scripts/mod/?
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> > ---
+> > Yes, running rcutorture will trigger that stackdepot allocation, but as
+> > that's in RCU debugging part of config, I considered it in the same
+> > category as enabling slub debugging.
+> 
+> Yeah, I don't think rcutorture is a problem per se, it was more an
+> example of a random interaction that doesn't actually seem to make
+> much sense.
 
+Creating cache with SLAB_STORE_USER is (currently) done in rcutorture.
+SLAB_STORE_USER means "we're going to track every user of this slab
+cache" so IMO it should not be done if not debugging.
 
-Thanks for your advice.
+Otherwise stackdepot will be used only when user passes slub_debug
+boot parameter. 
 
--Wunused-parameter found more.
+> As far as I can tell, there is nothing in rcutorture that actually
+> wants that stack trace, and it seems to be doing just a test of the
+> object dumping working.
 
-At least, we can clean up find_extable_entry_size().
+dumping an arbitrary object may call kmem_dump_obj(), which will dump
+slab objects and thus printing where it was allocated.
 
+> 
+> So it was more the oddity and randomness of it that made me go
+> "Whaah?" There might be others hiding elsewhere, that rcutorture use
+> just  happened to use the flag explicitly.
+> 
+>              Linus
 
+AFAIK only 1) creating cache with SLAB_STORE_USER or 2) passing
+slub_debug make kernel allocate hash table for stackdepot.
 
+This do not look that odd too me.
 
-  HOSTCC  scripts/mod/mk_elfconfig
-scripts/mod/mk_elfconfig.c: In function =E2=80=98main=E2=80=99:
-scripts/mod/mk_elfconfig.c:8:10: warning: unused parameter =E2=80=98argc=E2=
-=80=99
-[-Wunused-parameter]
-    8 | main(int argc, char **argv)
-      |      ~~~~^~~~
-scripts/mod/mk_elfconfig.c:8:23: warning: unused parameter =E2=80=98argv=E2=
-=80=99
-[-Wunused-parameter]
-    8 | main(int argc, char **argv)
-      |                ~~~~~~~^~~~
-  CC      scripts/mod/empty.o
-  MKELF   scripts/mod/elfconfig.h
-  HOSTCC  scripts/mod/modpost.o
-scripts/mod/modpost.c: In function =E2=80=98find_extable_entry_size=E2=80=
-=99:
-scripts/mod/modpost.c:1538:55: warning: unused parameter =E2=80=98sec=E2=80=
-=99
-[-Wunused-parameter]
- 1538 | static void find_extable_entry_size(const char* const sec,
-const Elf_Rela* r)
-      |                                     ~~~~~~~~~~~~~~~~~~^~~
-scripts/mod/modpost.c: In function =E2=80=98check_sec_ref=E2=80=99:
-scripts/mod/modpost.c:1885:42: warning: unused parameter =E2=80=98mod=E2=80=
-=99
-[-Wunused-parameter]
- 1885 | static void check_sec_ref(struct module *mod, const char *modname,
-      |                           ~~~~~~~~~~~~~~~^~~
-  CC      scripts/mod/devicetable-offsets.s
-  HOSTCC  scripts/mod/file2alias.o
-scripts/mod/file2alias.c: In function =E2=80=98do_hid_entry=E2=80=99:
-scripts/mod/file2alias.c:399:37: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  399 | static int do_hid_entry(const char *filename,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_ieee1394_entry=E2=80=99:
-scripts/mod/file2alias.c:417:42: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  417 | static int do_ieee1394_entry(const char *filename,
-      |                              ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_ccw_entry=E2=80=99:
-scripts/mod/file2alias.c:497:37: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  497 | static int do_ccw_entry(const char *filename,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_ap_entry=E2=80=99:
-scripts/mod/file2alias.c:520:36: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  520 | static int do_ap_entry(const char *filename,
-      |                        ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_css_entry=E2=80=99:
-scripts/mod/file2alias.c:530:37: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  530 | static int do_css_entry(const char *filename,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_serio_entry=E2=80=99:
-scripts/mod/file2alias.c:540:39: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  540 | static int do_serio_entry(const char *filename,
-      |                           ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_acpi_entry=E2=80=99:
-scripts/mod/file2alias.c:565:38: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  565 | static int do_acpi_entry(const char *filename,
-      |                          ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_pcmcia_entry=E2=80=99:
-scripts/mod/file2alias.c:682:40: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  682 | static int do_pcmcia_entry(const char *filename,
-      |                            ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_vio_entry=E2=80=99:
-scripts/mod/file2alias.c:718:37: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  718 | static int do_vio_entry(const char *filename, void *symval,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_input_entry=E2=80=99:
-scripts/mod/file2alias.c:752:39: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  752 | static int do_input_entry(const char *filename, void *symval,
-      |                           ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_eisa_entry=E2=80=99:
-scripts/mod/file2alias.c:809:38: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  809 | static int do_eisa_entry(const char *filename, void *symval,
-      |                          ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_parisc_entry=E2=80=99:
-scripts/mod/file2alias.c:821:40: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  821 | static int do_parisc_entry(const char *filename, void *symval,
-      |                            ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_sdio_entry=E2=80=99:
-scripts/mod/file2alias.c:840:38: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  840 | static int do_sdio_entry(const char *filename,
-      |                          ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_ssb_entry=E2=80=99:
-scripts/mod/file2alias.c:856:37: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  856 | static int do_ssb_entry(const char *filename,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_bcma_entry=E2=80=99:
-scripts/mod/file2alias.c:872:38: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  872 | static int do_bcma_entry(const char *filename,
-      |                          ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_virtio_entry=E2=80=99:
-scripts/mod/file2alias.c:890:40: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  890 | static int do_virtio_entry(const char *filename, void *symval,
-      |                            ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_vmbus_entry=E2=80=99:
-scripts/mod/file2alias.c:910:39: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  910 | static int do_vmbus_entry(const char *filename, void *symval,
-      |                           ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_rpmsg_entry=E2=80=99:
-scripts/mod/file2alias.c:927:39: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  927 | static int do_rpmsg_entry(const char *filename, void *symval,
-      |                           ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_i2c_entry=E2=80=99:
-scripts/mod/file2alias.c:937:37: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  937 | static int do_i2c_entry(const char *filename, void *symval,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_i3c_entry=E2=80=99:
-scripts/mod/file2alias.c:946:37: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  946 | static int do_i3c_entry(const char *filename, void *symval,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_spi_entry=E2=80=99:
-scripts/mod/file2alias.c:965:37: warning: unused parameter =E2=80=98filenam=
-e=E2=80=99
-[-Wunused-parameter]
-  965 | static int do_spi_entry(const char *filename, void *symval,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_dmi_entry=E2=80=99:
-scripts/mod/file2alias.c:1006:37: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1006 | static int do_dmi_entry(const char *filename, void *symval,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_platform_entry=E2=80=99:
-scripts/mod/file2alias.c:1030:42: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1030 | static int do_platform_entry(const char *filename,
-      |                              ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_mdio_entry=E2=80=99:
-scripts/mod/file2alias.c:1038:38: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1038 | static int do_mdio_entry(const char *filename,
-      |                          ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_zorro_entry=E2=80=99:
-scripts/mod/file2alias.c:1063:39: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1063 | static int do_zorro_entry(const char *filename, void *symval,
-      |                           ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_isapnp_entry=E2=80=99:
-scripts/mod/file2alias.c:1073:40: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1073 | static int do_isapnp_entry(const char *filename,
-      |                            ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_ipack_entry=E2=80=99:
-scripts/mod/file2alias.c:1088:39: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1088 | static int do_ipack_entry(const char *filename,
-      |                           ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_mips_cdmm_entry=E2=80=99:
-scripts/mod/file2alias.c:1178:43: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1178 | static int do_mips_cdmm_entry(const char *filename,
-      |                               ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_x86cpu_entry=E2=80=99:
-scripts/mod/file2alias.c:1193:40: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1193 | static int do_x86cpu_entry(const char *filename, void *symval,
-      |                            ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_cpu_entry=E2=80=99:
-scripts/mod/file2alias.c:1212:37: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1212 | static int do_cpu_entry(const char *filename, void *symval, char *a=
-lias)
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_mei_entry=E2=80=99:
-scripts/mod/file2alias.c:1221:37: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1221 | static int do_mei_entry(const char *filename, void *symval,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_rio_entry=E2=80=99:
-scripts/mod/file2alias.c:1239:37: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1239 | static int do_rio_entry(const char *filename,
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_ulpi_entry=E2=80=99:
-scripts/mod/file2alias.c:1258:38: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1258 | static int do_ulpi_entry(const char *filename, void *symval,
-      |                          ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_hda_entry=E2=80=99:
-scripts/mod/file2alias.c:1270:37: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1270 | static int do_hda_entry(const char *filename, void *symval, char *a=
-lias)
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_sdw_entry=E2=80=99:
-scripts/mod/file2alias.c:1286:37: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1286 | static int do_sdw_entry(const char *filename, void *symval, char *a=
-lias)
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_fsl_mc_entry=E2=80=99:
-scripts/mod/file2alias.c:1304:40: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1304 | static int do_fsl_mc_entry(const char *filename, void *symval,
-      |                            ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_tbsvc_entry=E2=80=99:
-scripts/mod/file2alias.c:1315:39: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1315 | static int do_tbsvc_entry(const char *filename, void *symval,
-char *alias)
-      |                           ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_typec_entry=E2=80=99:
-scripts/mod/file2alias.c:1339:39: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1339 | static int do_typec_entry(const char *filename, void *symval,
-char *alias)
-      |                           ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_tee_entry=E2=80=99:
-scripts/mod/file2alias.c:1351:37: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1351 | static int do_tee_entry(const char *filename, void *symval, char *a=
-lias)
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_mhi_entry=E2=80=99:
-scripts/mod/file2alias.c:1387:37: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1387 | static int do_mhi_entry(const char *filename, void *symval, char *a=
-lias)
-      |                         ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_ishtp_entry=E2=80=99:
-scripts/mod/file2alias.c:1395:39: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1395 | static int do_ishtp_entry(const char *filename, void *symval,
-char *alias)
-      |                           ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_auxiliary_entry=E2=80=99:
-scripts/mod/file2alias.c:1406:43: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1406 | static int do_auxiliary_entry(const char *filename, void
-*symval, char *alias)
-      |                               ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_ssam_entry=E2=80=99:
-scripts/mod/file2alias.c:1419:38: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1419 | static int do_ssam_entry(const char *filename, void *symval,
-char *alias)
-      |                          ~~~~~~~~~~~~^~~~~~~~
-scripts/mod/file2alias.c: In function =E2=80=98do_dfl_entry=E2=80=99:
-scripts/mod/file2alias.c:1437:37: warning: unused parameter =E2=80=98filena=
-me=E2=80=99
-[-Wunused-parameter]
- 1437 | static int do_dfl_entry(const char *filename, void *symval, char *a=
-lias)
-      |                         ~~~~~~~~~~~~^~~~~~~~
-
-
-
-
-
-
-
-
-
-
-
-> >
-> >  scripts/mod/modpost.c | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index 845bc438ca49..843c64eebe8b 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -1883,8 +1883,7 @@ static void section_rel(const char *modname, stru=
-ct elf_info *elf,
-> >   * to find all references to a section that reference a section that w=
-ill
-> >   * be discarded and warns about it.
-> >   **/
-> > -static void check_sec_ref(struct module *mod, const char *modname,
-> > -                         struct elf_info *elf)
-> > +static void check_sec_ref(const char *modname, struct elf_info *elf)
-> >  {
-> >         int i;
-> >         Elf_Shdr *sechdrs =3D elf->sechdrs;
-> > @@ -2069,7 +2068,7 @@ static void read_symbols(const char *modname)
-> >                                              sym_get_data(&info, sym));
-> >         }
-> >
-> > -       check_sec_ref(mod, modname, &info);
-> > +       check_sec_ref(modname, &info);
-> >
-> >         if (!mod->is_vmlinux) {
-> >                 version =3D get_modinfo(&info, "version");
-> > --
-> > 2.32.0
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+But I agree not asking size of hash table to user and by 1) using
+rhashtables or 2) deciding size of hash table at runtime would be
+better :)

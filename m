@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC44153534F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D0E535357
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 20:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348595AbiEZSYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 14:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        id S236404AbiEZSbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 14:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345974AbiEZSX5 (ORCPT
+        with ESMTP id S233171AbiEZSbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 14:23:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD7F37A2D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:23:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B9D3B821AA
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10634C385A9;
-        Thu, 26 May 2022 18:23:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653589434;
-        bh=2iPP/ToEyBvLHbKXiR3D+2eq8C5dBc57eaBKfnIkpjg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=knNKHGVMdmBsCR4qyDHj6Qim7hgCka6qXaSXImW1ehS1PL0/Gt3VzxiIaJixyi7Ov
-         vnjzQdjkJcUDQ1A+Uu6usYb1xiPmwKubZ+f5Xy3Ia15rBYpm67jbGZw5oJhb0K3S7Q
-         ZRd+mq3xXOB4WyL2oFiNLh6YOhYR8s0VH5zP4Qbz3nFyOLWi6eujOkbzsQCVKNCiRp
-         dQwaMIBkObymDj9HqMjtRRhcd+wEkucEsdr0a+SRkxP74yPt/pCr91u98zWryIfe7Y
-         UuhfnA744yDpKOslpXv5Yw4QM4v75jJ3IadYBLwsCi3Zup4Rba8+AMJ2jX7IL7Tgbr
-         0p1SAEEPC6/6w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B924B4036D; Thu, 26 May 2022 15:23:51 -0300 (-03)
-Date:   Thu, 26 May 2022 15:23:51 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        "Pawnikar, Sumeet R" <sumeet.r.pawnikar@intel.com>,
-        "Hunter, Adrian" <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [FYI PATCH 1/1] tools arch x86: Sync the msr-index.h copy with
- the kernel sources
-Message-ID: <Yo/Ft1msmmqb2gpX@kernel.org>
-References: <Yo+i/j5+UtE9dcix@kernel.org>
- <1b985724110640719b4073e1bbec07d5@intel.com>
+        Thu, 26 May 2022 14:31:46 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254052714D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:31:43 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id h11so2795486eda.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 11:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OqaDyen+xHLMjM1+kU3vv7vEUmDoXnKLSHCxr0ki/yI=;
+        b=BkgFlzuGNKyb+uNyGnU6TxJ6tLPcnTTz0fIfAd0G6SJqAnBMulcPqqFv87YZb40zBr
+         45DtchsOB/RWvL1ETS2WM5vNZNWwcoQi6eUXN3Y8ht6azoD9p5U3j+SjLzDTj5jRzMFr
+         mWYp8z+Lw27JzV6nLRO784rXgmDzNNVW1X4rPhGqT9CcDL8N1xECKwkUKmAH6hwNip8o
+         tSoFF1Gw5harFb5i08n4Q7kK2a6o3lPbBYAZ1gbMnFKFovTyzUOrKznNLujUO78M392n
+         snBE7BSEouVeDgQ6JuN5/Yu3lgHzFryGE7lN27p/JX2G+Yeoipo1Iq2B6uT8zo0Dp3kg
+         Y26A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OqaDyen+xHLMjM1+kU3vv7vEUmDoXnKLSHCxr0ki/yI=;
+        b=PEnh+uxf7YKYsHPnrLMROIh8cM/kJIPTNTR3c90qT/ui6X4PKtJUb49bRbJ8q/TTY1
+         O1QH1x9NblGdknx6X+kv4jQhRIf75cqMEIS2xU8tvOE7Z6OVlFzz/0ii3THwOTFRGdi+
+         CxO4TlLK2lofObhLdu0EK9GwQVazmMzZFIbJ+W5NEJvRDJbGrhHg8qMamknhB8yCnEB5
+         YDXYDBbhURpkixWLcTNGBR1FS83Lwxo4rEnDAyRnDdBjtbkkYjkOqTQKlTVnvKBAOX4d
+         k261xtz8V7DgczPOECr8Fx4NuXZjhUWIGGKLzAkN9tJC43cgBWrDRdJmH8g+DcPrcV19
+         EY1Q==
+X-Gm-Message-State: AOAM532zprev/AYBzmKi2ppc94wki+/2mXzE3SU8idI1JV6OhFqbBg3D
+        FoRidq9IKkU9/pRUUI66dN/KgenIFC7D/4ttFMwtcA==
+X-Google-Smtp-Source: ABdhPJx0eHADBVzR9F6OjFXojGL3k6dCwZofMe8lUrMYlUp5GceoNL/vvUAdvoESE6uYkZYs+3Ly5be4VSp7LeVAaXM=
+X-Received: by 2002:aa7:dccd:0:b0:42b:d509:b5b with SMTP id
+ w13-20020aa7dccd000000b0042bd5090b5bmr6266347edu.19.1653589902378; Thu, 26
+ May 2022 11:31:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b985724110640719b4073e1bbec07d5@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220526113350.30806-1-linmiaohe@huawei.com> <Yo+B4b0nF+kI35pG@casper.infradead.org>
+ <CA+CK2bBBLjr3kGqc=zA6M5773G6gj83LB_kwwOCNuFX8YoUp+w@mail.gmail.com> <20220526111546.50102da288cccbe913cadbf4@linux-foundation.org>
+In-Reply-To: <20220526111546.50102da288cccbe913cadbf4@linux-foundation.org>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Thu, 26 May 2022 14:31:06 -0400
+Message-ID: <CA+CK2bBJ3baj2Qt+9Wy1r==_Uym_UZJ+S-HRwFAsspPamctk_Q@mail.gmail.com>
+Subject: Re: [PATCH] mm/page_table_check: fix accessing unmapped ptep
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Rientjes <rientjes@google.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,30 +70,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, May 26, 2022 at 04:50:47PM +0000, Luck, Tony escreveu:
-> Sorry for being part of the problem with this getting out of sync.
+> > Miaohe, please store the ptep, or maybe drop this patch entirely.
+>
+> I think it's best to fix it.  I rewrote the changelog as
+>
+> : ptep is unmapped too early, so ptep could theoretically be accessed while
+> : it's unmapped.  This might become a problem if/when CONFIG_HIGHPTE becomes
+> : available on riscv.
+> :
+> : Fix it by deferring pte_unmap() until page table checking is done.
+>
+> I'll retain the Fixes:.  This doesn't imply cc:stable in MM, and anyone
+> who backports the original patchset will want to know about this fixup.
+Makes sense.
 
-There is no problem to be sorry for :-)
- 
-> But, remind me again why tools has *copies* of this and other files.
 
-We used not to have copies, using kernel headers directly. From time to
-time tools/perf broke due to legitimate kernel hacking. At some point
-Linus complained about such direct usage. Then we adopted the current
-model.
+> And I queued a fixup for the thing Matthew noticed.
+Thank you Andrew.
 
-The way these headers are used in perf are not restricted to just
-including them to compile something. There are, as described in the log
-message for this sync, scripts that convert defines into string tables,
-etc, so some change may break one of these scripts, or new MSRs may use
-some different #define pattern, etc.
-
-Having the tools/perf/check-headers.sh script, part of building tools,
-point out new changes in the original files lets people check what
-happened and sometimes just do as I did, update.
- 
->o Seems like pointless work to keep them in sync.
-
-I hope to have clarified.
-
-- Arnaldo
+Pasha

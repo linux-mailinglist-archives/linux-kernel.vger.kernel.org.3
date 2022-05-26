@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDC85354AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0C75354AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbiEZUlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
+        id S244602AbiEZUlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348752AbiEZUlA (ORCPT
+        with ESMTP id S1348822AbiEZUlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:41:00 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A232E2758
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:40:58 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id f21so5035407ejh.11
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:40:58 -0700 (PDT)
+        Thu, 26 May 2022 16:41:06 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D2CE2779
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:41:04 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id q15so3125554edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:41:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=aqhBoLtTEqtC8SyTJYD8D3FCPQDdwFN33ubMEAOxADA=;
-        b=klhTqkkBjZyyKz+geuEig4N438/PxZQ/zSYVKjOQWVE63SWsAaH54JHjaeLTd8Z1+L
-         Xpup8sZb0TTCmS0WHy1GGT0yIZ6eP/qkypf4RDPFgB1Hy6M2iPXO/h4fHFbRDqlBZzrj
-         56EWK8A0soyJck4ID7w0gkqr7OcT+ZVV6V4m5NsAlnwg1wx9P/PLAYgh1wvHjPJJjYq0
-         k2jqM+pbMF5WaDDbV4+k2CLOHC+q3i+lQDQy3ZKuUa9I0nApipuQIQIhcTlc/IxeEysk
-         L1atKlUDrU0KmSEOjeh2lk6spoHkSB0PAH/wpOL15MvWMhnDS9+8pKH8lUfv6lM9SVBe
-         gcWg==
+        bh=FG32quRdmb4L/HcSO6RP7C4liXSjCaPEAfDKdvMB5EA=;
+        b=oQENf9F2y91hwmI2NQjA4MUdDMbDNCVRMpQ0gTwtMMGdQsMzZtArtWGca1ytuRnaAH
+         BhBiSCeklPSR1offhy1ZnhKBGt8gGCgJjs/ADA7TeKR3gqTT+b+gGdetDtbwDES2lrpN
+         i7sl2jtQ0GruOUJl1kv9Y1hdKU3jcxRpquoomW31vooAXHAYtuhcLpxVRaDS4z97yeMG
+         +0gbEzRFYPCBmNRFk47ck7g16o3OxmPecrV4PtIGT5kVCt7AJrU8DWCzLDC1lV4o1P9l
+         c60f73TtUeBWYuXsHIlyxdX70FbFyv2aCu3yv8DmJ6iB3N3T43YJ+ml3Jr6TakH5U5YM
+         Drew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=aqhBoLtTEqtC8SyTJYD8D3FCPQDdwFN33ubMEAOxADA=;
-        b=BuCLPRhZPkwFsvZKjqbySYtwFLxwCljUp0NWpuNFDwmpIYylGn+bAOBb0nJtGccA3c
-         jzqgXX0ig0VExqoLHXwdawW6po7g8+YErUfU7akGndboSofTmLSjassTHmQuFGm7xswq
-         nf4sTbPJiUpVKoVInMkVscl0oNJqJWUy3FP6H0/cqbycME3Vxpy7WVUuFNzf/qlxfdSs
-         upimzHwHkNqZxvZf5uAXH+vYWdUmySEfSo4Oe0YPtmlgIVoIt9g1tykjyxFB9rDIwTQZ
-         CcpO8BPsCRkIVX+ToE96IEqB6aOAcWgpCVofCxIttICu+MKvPcnwlxlQfQTVH8x4Ygju
-         P9Ig==
-X-Gm-Message-State: AOAM533RJzA99njB9bsgwiIhSNOwl+AGBLmdaeMqKozzdKJb0662PL5L
-        S8QDcv9ykm/7oYwBM6ihPXiErA==
-X-Google-Smtp-Source: ABdhPJz01ojWcoqHShRpJ9jXwcNEqh7yWxJDa0rGnMF9Xm3ORBLS6PhyZAenvDbuZhG78ZdanV4IWw==
-X-Received: by 2002:a17:907:9805:b0:6f4:fe0e:5547 with SMTP id ji5-20020a170907980500b006f4fe0e5547mr34631737ejc.426.1653597656769;
-        Thu, 26 May 2022 13:40:56 -0700 (PDT)
+        bh=FG32quRdmb4L/HcSO6RP7C4liXSjCaPEAfDKdvMB5EA=;
+        b=VytrbJArWNYyEiLt2x33ER+1s5Yv4BWmFDL9p3++9EfkSzsDWIWePH2FnY4h+bOX12
+         w93670J20EXBSoaxkapsAYFGHC3uOPA/1Y6d/FsqE/srnWjgvFdgrmBce1mJvO1onkmV
+         xiWhUYgU+GxryG3ug6766eCqdMBcbb6Yug4OOs58m5wkbiF20Z92mywVRoso9PC3gQh/
+         doRtcszTkQnNHHocPGNxaVUREikli/jHAwHM5p20ur+7qCdpf4CusfuUyTuqSz+AisIX
+         cDBSorrvr4t2aSBkGm0oUOP0J7Ag8oPaUTUoT9jqZmDAOhWxrGbevgAwJYfN1sm9kLVX
+         OhaA==
+X-Gm-Message-State: AOAM5339IKJQhS/udz3N8Ng2gJ+3Xq+BO0SLFxrDgfUMhOJN4lTEif0+
+        Mxt4YoicdsjZN8rPYSXnpV4IlQ==
+X-Google-Smtp-Source: ABdhPJxE42lHG/goCri8i5lqNiJ5YCP0nXE1k5un1U2V8/0pyn4A/lrspTOqoo4o+2LEi/0oVt17ZQ==
+X-Received: by 2002:a05:6402:347:b0:42b:c4e3:897e with SMTP id r7-20020a056402034700b0042bc4e3897emr12082472edw.200.1653597663401;
+        Thu, 26 May 2022 13:41:03 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q9-20020a50cc89000000b0042ac2705444sm1200203edi.58.2022.05.26.13.40.55
+        by smtp.gmail.com with ESMTPSA id d3-20020a1709063ec300b006fee2bdf6c6sm811327ejj.169.2022.05.26.13.41.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 13:40:56 -0700 (PDT)
+        Thu, 26 May 2022 13:41:02 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        arm@kernel.org, soc@kernel.org,
-        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ARM: dts: omap: adjust whitespace around '='
-Date:   Thu, 26 May 2022 22:40:44 +0200
-Message-Id: <20220526204044.831656-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ARM: dts: axm: adjust whitespace around '='
+Date:   Thu, 26 May 2022 22:41:00 +0200
+Message-Id: <20220526204100.831742-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -86,226 +80,157 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Output compared with dtx_diff and fdtdump.
 ---
- arch/arm/boot/dts/omap2420-h4.dts           | 2 +-
- arch/arm/boot/dts/omap3-evm-37xx.dts        | 2 +-
- arch/arm/boot/dts/omap3-evm.dts             | 2 +-
- arch/arm/boot/dts/omap3-gta04.dtsi          | 2 +-
- arch/arm/boot/dts/omap3-igep.dtsi           | 2 +-
- arch/arm/boot/dts/omap3-ldp.dts             | 6 +++---
- arch/arm/boot/dts/omap3-lilly-a83x.dtsi     | 2 +-
- arch/arm/boot/dts/omap3-n900.dts            | 4 ++--
- arch/arm/boot/dts/omap3-n950-n9.dtsi        | 4 ++--
- arch/arm/boot/dts/omap3-overo-base.dtsi     | 2 +-
- arch/arm/boot/dts/omap3-pandora-common.dtsi | 2 +-
- arch/arm/boot/dts/omap3430-sdp.dts          | 6 +++---
- arch/arm/boot/dts/omap5-l4.dtsi             | 2 +-
- 13 files changed, 19 insertions(+), 19 deletions(-)
+ arch/arm/boot/dts/axm5516-cpus.dtsi | 32 ++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/arch/arm/boot/dts/omap2420-h4.dts b/arch/arm/boot/dts/omap2420-h4.dts
-index af964f139abf..5acf5dd87c59 100644
---- a/arch/arm/boot/dts/omap2420-h4.dts
-+++ b/arch/arm/boot/dts/omap2420-h4.dts
-@@ -21,7 +21,7 @@ &gpmc {
+diff --git a/arch/arm/boot/dts/axm5516-cpus.dtsi b/arch/arm/boot/dts/axm5516-cpus.dtsi
+index 3bcf4e0a3c85..f13ef80b6637 100644
+--- a/arch/arm/boot/dts/axm5516-cpus.dtsi
++++ b/arch/arm/boot/dts/axm5516-cpus.dtsi
+@@ -73,7 +73,7 @@ CPU0: cpu@0 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x00>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- 	nor@0,0 {
- 		compatible = "cfi-flash";
--		linux,mtd-name= "intel,ge28f256l18b85";
-+		linux,mtd-name = "intel,ge28f256l18b85";
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		reg = <0 0 0x04000000>;
-diff --git a/arch/arm/boot/dts/omap3-evm-37xx.dts b/arch/arm/boot/dts/omap3-evm-37xx.dts
-index c9332195d096..abd403c228c7 100644
---- a/arch/arm/boot/dts/omap3-evm-37xx.dts
-+++ b/arch/arm/boot/dts/omap3-evm-37xx.dts
-@@ -60,7 +60,7 @@ nand@0,0 {
- 		interrupt-parent = <&gpmc>;
- 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
- 			     <1 IRQ_TYPE_NONE>;	/* termcount */
--		linux,mtd-name= "hynix,h8kds0un0mer-4em";
-+		linux,mtd-name = "hynix,h8kds0un0mer-4em";
- 		nand-bus-width = <16>;
- 		gpmc,device-width = <2>;
- 		ti,nand-ecc-opt = "bch8";
-diff --git a/arch/arm/boot/dts/omap3-evm.dts b/arch/arm/boot/dts/omap3-evm.dts
-index 5cc0cf7cd16c..f95eea63b355 100644
---- a/arch/arm/boot/dts/omap3-evm.dts
-+++ b/arch/arm/boot/dts/omap3-evm.dts
-@@ -60,7 +60,7 @@ nand@0,0 {
- 		interrupt-parent = <&gpmc>;
- 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
- 			     <1 IRQ_TYPE_NONE>;	/* termcount */
--		linux,mtd-name= "micron,mt29f2g16abdhc";
-+		linux,mtd-name = "micron,mt29f2g16abdhc";
- 		nand-bus-width = <16>;
- 		gpmc,device-width = <2>;
- 		ti,nand-ecc-opt = "bch8";
-diff --git a/arch/arm/boot/dts/omap3-gta04.dtsi b/arch/arm/boot/dts/omap3-gta04.dtsi
-index 0365f06165e9..28a6a9345be5 100644
---- a/arch/arm/boot/dts/omap3-gta04.dtsi
-+++ b/arch/arm/boot/dts/omap3-gta04.dtsi
-@@ -127,7 +127,7 @@ lcd: td028ttec1@0 {
- 			spi-cpol;
- 			spi-cpha;
+@@ -81,7 +81,7 @@ CPU1: cpu@1 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x01>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
--			backlight= <&backlight>;
-+			backlight = <&backlight>;
- 			label = "lcd";
- 			port {
- 				lcd_in: endpoint {
-diff --git a/arch/arm/boot/dts/omap3-igep.dtsi b/arch/arm/boot/dts/omap3-igep.dtsi
-index 99f5585097a1..219202610463 100644
---- a/arch/arm/boot/dts/omap3-igep.dtsi
-+++ b/arch/arm/boot/dts/omap3-igep.dtsi
-@@ -111,7 +111,7 @@ nand@0,0 {
- 		interrupt-parent = <&gpmc>;
- 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
- 			     <1 IRQ_TYPE_NONE>;	/* termcount */
--		linux,mtd-name= "micron,mt29c4g96maz";
-+		linux,mtd-name = "micron,mt29c4g96maz";
- 		nand-bus-width = <16>;
- 		gpmc,device-width = <2>;
- 		ti,nand-ecc-opt = "bch8";
-diff --git a/arch/arm/boot/dts/omap3-ldp.dts b/arch/arm/boot/dts/omap3-ldp.dts
-index 9c6a92724590..36fc8805e0c1 100644
---- a/arch/arm/boot/dts/omap3-ldp.dts
-+++ b/arch/arm/boot/dts/omap3-ldp.dts
-@@ -103,7 +103,7 @@ nand@0,0 {
- 		interrupt-parent = <&gpmc>;
- 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
- 			     <1 IRQ_TYPE_NONE>;	/* termcount */
--		linux,mtd-name= "micron,nand";
-+		linux,mtd-name = "micron,nand";
- 		nand-bus-width = <16>;
- 		gpmc,device-width = <2>;
- 		ti,nand-ecc-opt = "bch8";
-@@ -215,11 +215,11 @@ &mmc1 {
- };
+@@ -89,7 +89,7 @@ CPU2: cpu@2 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x02>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- &mmc2 {
--	status="disabled";
-+	status = "disabled";
- };
+@@ -97,7 +97,7 @@ CPU3: cpu@3 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x03>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- &mmc3 {
--	status="disabled";
-+	status = "disabled";
- };
+@@ -105,7 +105,7 @@ CPU4: cpu@100 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x100>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- &omap3_pmx_core {
-diff --git a/arch/arm/boot/dts/omap3-lilly-a83x.dtsi b/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
-index 73d477898ec2..c595afe4181d 100644
---- a/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
-+++ b/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
-@@ -372,7 +372,7 @@ nand@0,0 {
- 		gpmc,device-width = <2>;
- 		gpmc,wait-pin = <0>;
- 		gpmc,wait-monitoring-ns = <0>;
--		gpmc,burst-length= <4>;
-+		gpmc,burst-length = <4>;
- 		gpmc,cs-on-ns = <0>;
- 		gpmc,cs-rd-off-ns = <100>;
- 		gpmc,cs-wr-off-ns = <100>;
-diff --git a/arch/arm/boot/dts/omap3-n900.dts b/arch/arm/boot/dts/omap3-n900.dts
-index d40c3d2c4914..dd7971556449 100644
---- a/arch/arm/boot/dts/omap3-n900.dts
-+++ b/arch/arm/boot/dts/omap3-n900.dts
-@@ -568,8 +568,8 @@ MATRIX_KEY(0x07, 0x02, KEY_F8)
- };
+@@ -113,7 +113,7 @@ CPU5: cpu@101 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x101>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- &twl_gpio {
--	ti,pullups	= <0x0>;
--	ti,pulldowns	= <0x03ff3f>; /* BIT(0..5) | BIT(8..17) */
-+	ti,pullups = <0x0>;
-+	ti,pulldowns = <0x03ff3f>; /* BIT(0..5) | BIT(8..17) */
- };
+@@ -121,7 +121,7 @@ CPU6: cpu@102 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x102>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- &i2c2 {
-diff --git a/arch/arm/boot/dts/omap3-n950-n9.dtsi b/arch/arm/boot/dts/omap3-n950-n9.dtsi
-index 7dde9fbb06d3..f68da828b050 100644
---- a/arch/arm/boot/dts/omap3-n950-n9.dtsi
-+++ b/arch/arm/boot/dts/omap3-n950-n9.dtsi
-@@ -162,8 +162,8 @@ twl_power: power {
- };
+@@ -129,7 +129,7 @@ CPU7: cpu@103 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x103>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- &twl_gpio {
--	ti,pullups	= <0x000001>; /* BIT(0) */
--	ti,pulldowns	= <0x008106>; /* BIT(1) | BIT(2) | BIT(8) | BIT(15) */
-+	ti,pullups = <0x000001>; /* BIT(0) */
-+	ti,pulldowns = <0x008106>; /* BIT(1) | BIT(2) | BIT(8) | BIT(15) */
- };
+@@ -137,7 +137,7 @@ CPU8: cpu@200 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x200>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- &vdac {
-diff --git a/arch/arm/boot/dts/omap3-overo-base.dtsi b/arch/arm/boot/dts/omap3-overo-base.dtsi
-index 006a6d97231c..adc714c39825 100644
---- a/arch/arm/boot/dts/omap3-overo-base.dtsi
-+++ b/arch/arm/boot/dts/omap3-overo-base.dtsi
-@@ -222,7 +222,7 @@ &gpmc {
+@@ -145,7 +145,7 @@ CPU9: cpu@201 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x201>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- 	nand@0,0 {
- 		compatible = "ti,omap2-nand";
--		linux,mtd-name= "micron,mt29c4g96maz";
-+		linux,mtd-name = "micron,mt29c4g96maz";
- 		reg = <0 0 4>;	/* CS0, offset 0, IO size 4 */
- 		interrupt-parent = <&gpmc>;
- 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
-diff --git a/arch/arm/boot/dts/omap3-pandora-common.dtsi b/arch/arm/boot/dts/omap3-pandora-common.dtsi
-index 37608af6c07f..559853764487 100644
---- a/arch/arm/boot/dts/omap3-pandora-common.dtsi
-+++ b/arch/arm/boot/dts/omap3-pandora-common.dtsi
-@@ -666,7 +666,7 @@ tsc2046@0 {
+@@ -153,7 +153,7 @@ CPU10: cpu@202 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x202>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- 	lcd: lcd@1 {
- 		reg = <1>;	/* CS1 */
--		compatible =	"tpo,td043mtea1";
-+		compatible = "tpo,td043mtea1";
- 		spi-max-frequency = <100000>;
- 		spi-cpol;
- 		spi-cpha;
-diff --git a/arch/arm/boot/dts/omap3430-sdp.dts b/arch/arm/boot/dts/omap3430-sdp.dts
-index 7d530ae3483b..258ecd9e4519 100644
---- a/arch/arm/boot/dts/omap3430-sdp.dts
-+++ b/arch/arm/boot/dts/omap3430-sdp.dts
-@@ -53,7 +53,7 @@ &gpmc {
+@@ -161,7 +161,7 @@ CPU11: cpu@203 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x203>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  
- 	nor@0,0 {
- 		compatible = "cfi-flash";
--		linux,mtd-name= "intel,pf48f6000m0y1be";
-+		linux,mtd-name = "intel,pf48f6000m0y1be";
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		reg = <0 0 0x08000000>;
-@@ -105,7 +105,7 @@ nand@1,0 {
- 		interrupt-parent = <&gpmc>;
- 		interrupts = <0 IRQ_TYPE_NONE>, /* fifoevent */
- 			     <1 IRQ_TYPE_NONE>;	/* termcount */
--		linux,mtd-name= "micron,mt29f1g08abb";
-+		linux,mtd-name = "micron,mt29f1g08abb";
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		ti,nand-ecc-opt = "sw";
-@@ -148,7 +148,7 @@ partition@780000 {
+@@ -169,7 +169,7 @@ CPU12: cpu@300 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x300>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
+ 
+@@ -177,7 +177,7 @@ CPU13: cpu@301 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x301>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
+ 
+@@ -185,7 +185,7 @@ CPU14: cpu@302 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x302>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
+ 
+@@ -193,7 +193,7 @@ CPU15: cpu@303 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a15";
+ 			reg = <0x303>;
+-			clock-frequency= <1400000000>;
++			clock-frequency = <1400000000>;
+ 			cpu-release-addr = <0>; // Fixed by the boot loader
+ 		};
  	};
- 
- 	onenand@2,0 {
--		linux,mtd-name= "samsung,kfm2g16q2m-deb8";
-+		linux,mtd-name = "samsung,kfm2g16q2m-deb8";
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "ti,omap2-onenand";
-diff --git a/arch/arm/boot/dts/omap5-l4.dtsi b/arch/arm/boot/dts/omap5-l4.dtsi
-index 06cc3a19ddaa..3b505fe415ed 100644
---- a/arch/arm/boot/dts/omap5-l4.dtsi
-+++ b/arch/arm/boot/dts/omap5-l4.dtsi
-@@ -482,7 +482,7 @@ usb3_phy: usb3phy@4400 {
- 				clocks = <&usb_phy_cm_clk32k>,
- 				<&sys_clkin>,
- 				<&l3init_clkctrl OMAP5_USB_OTG_SS_CLKCTRL 8>;
--				clock-names =	"wkupclk",
-+				clock-names = "wkupclk",
- 				"sysclk",
- 				"refclk";
- 				#phy-cells = <0>;
 -- 
 2.34.1
 

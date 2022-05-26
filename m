@@ -2,100 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3660B535216
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2689535227
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343905AbiEZQaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 12:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        id S1348238AbiEZQgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 12:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238832AbiEZQag (ORCPT
+        with ESMTP id S1348120AbiEZQgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 12:30:36 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8840E9CF56
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:30:35 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id m1so1873541plx.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=hft3pFQ744fSdTwXHt92bZsNzbWCW8EWdxZRGP0yF3I=;
-        b=S3SVBC2ysXlMtAljWuti2+MJ2SbWfff+KOU4HhGqrzi0RbdMyzXzMmvBn7gb3HgKQr
-         BMtoEZ7mWkm59aNJ1EqcWVCSyrSoTJSVX0lvCeCGLJKVQSJgonY4yoxlq+5Xq345bF/L
-         Rm0iSs9O1MO0X+0rD2iCVSJq0sslpYlZEje2oxFWQaAmJupGbOyEq9E5TYTx6hKZkZ8x
-         HNaFpVxPwlDjASbhajUejKlHBIaIJkYURunTeT89GaFbILAPmKygbXCA3epFnjiw0R4P
-         jDou3CC8X02jKmxLCE00UmoiWqETaoHzhteSKTQylmwqrPoMkT7FTRF31zQ4IzSlQdWJ
-         sXtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=hft3pFQ744fSdTwXHt92bZsNzbWCW8EWdxZRGP0yF3I=;
-        b=51D2dlTeKetHkVGQ6xdEeCRS0ymBvpfL0cvlcI3q853MUwdbZ8gFzn+iVj6YkWytKi
-         3LaQoZA+m07/Q5vSOnOp/hP6DzaaQCeKAcgjp6pex60o/sG9IbsIfpS8OWuvaniQE2zy
-         zme9TAPengdPyzyrUyQ6lMeAWPYNXSkpwrvWc0cGbVQpxk2d/KtKbGi5Q2myRLbEENhv
-         wFPA6gOiau5UTOfL7kxeE0BC9JEAlgTtv0dxGi3wrjHB1yryQyIbjV7lv+yAnLb+aV/K
-         S8tBB2ObrSuSvXGSkBUkFOB6Vk7wp84UDA0WPliEKqB1DwkAAfz+jLQARNjHlCJRqHNR
-         67Kw==
-X-Gm-Message-State: AOAM533e+QoRrS/0MDuZ0/02LE+KyWmAtk0KFnNQfq3zhRu9xmjajUv/
-        SfjpQUVK/HTmcMgeiTKcPZdM7fGQsYsl18kqCUM=
-X-Google-Smtp-Source: ABdhPJyarPV38Il+LphIisoxEIdJDNN6+UOc8dXR3pLQ3pJMsa0NMLiUGNPoKSZueOimkwk2d/06o7i2O7Uhy9ve1Nw=
-X-Received: by 2002:a17:90b:4ace:b0:1df:cb33:5e7e with SMTP id
- mh14-20020a17090b4ace00b001dfcb335e7emr3415455pjb.5.1653582634792; Thu, 26
- May 2022 09:30:34 -0700 (PDT)
+        Thu, 26 May 2022 12:36:23 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B12A3B3C0;
+        Thu, 26 May 2022 09:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:MIME-Version:Message-Id:Date:Cc:To:From
+        :references:content-disposition:in-reply-to;
+        bh=QFpsM5wOFwLypD3Q3mbBTRFnFWC7MDH6tJU6p0xkT1Y=; b=NXyZRA9h5Q7EUC5SzV4twNKTg5
+        Ub83ZjTYB2jJ9poEN66Fe5NLUqY133CsNgI0/9FmxEPcW/fSxDc5qFdk/+3o13X0xerwiunF7O/6W
+        siQIWX+qoFHWdL8K/pQEPvpGP3BD6V7Ehccqh5AHRYkgigldUgyXsLciGN6m05U2iQIKvrtH7Vsdf
+        NhCOswOP0LvKbnqn+ADxxXf5Xd3q5T92eKzaqDfI4sARME0sNwJyk4QN5qUNFZ1y6MrPgQUbFhbGS
+        HgW+ngbq/IxGzywxAvrGwQhS0DA4vLEoZP3opEMMevJPPBhc3vFpcnoBO6KnZAH7hs0yueBXV9v0R
+        Q4x0AMkQ==;
+Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
+        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1nuGTC-008A7R-ND; Thu, 26 May 2022 10:36:19 -0600
+Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
+        (envelope-from <gunthorp@deltatee.com>)
+        id 1nuGT7-0008X4-QD; Thu, 26 May 2022 10:36:13 -0600
+From:   Logan Gunthorpe <logang@deltatee.com>
+To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiao Ni <xni@redhat.com>, Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <Martin.Oliveira@eideticom.com>,
+        David Sloan <David.Sloan@eideticom.com>,
+        Logan Gunthorpe <logang@deltatee.com>
+Date:   Thu, 26 May 2022 10:35:47 -0600
+Message-Id: <20220526163604.32736-1-logang@deltatee.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Reply-To: mr.a.manga99@gmail.com
-Sender: mrsannahbruun605@gmail.com
-Received: by 2002:a17:90b:4a10:0:0:0:0 with HTTP; Thu, 26 May 2022 09:30:34
- -0700 (PDT)
-From:   "Mr. Amos Manga" <mr.a.manga99@gmail.com>
-Date:   Thu, 26 May 2022 09:30:34 -0700
-X-Google-Sender-Auth: relk0xRbkWGB1Z0LR5py3McFfLg
-Message-ID: <CAEyYVPH-h98Wpcds+gW4-cdKwfKsBLJYPMK4Atc_tNRcqrY0zQ@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
-        LOTS_OF_MONEY,MONEY_FORM_SHORT,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
-        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 172.16.1.31
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, buczek@molgen.mpg.de, guoqing.jiang@linux.dev, xni@redhat.com, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com, logang@deltatee.com
+X-SA-Exim-Mail-From: gunthorp@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v2 00/17] Bug fixes for mdadm tests
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day,
+Hi,
 
-I know this means of communication may not be morally right to you as
-a person but I also have had a great thought about it and I have come
-to conclusion which I am about to share with you.
+This is the updated series with the feedback received in v1[1].
 
-I am a banker; I hope you will cooperate with me as a partner in a
-project of transferring an abandoned fund of late customer of the bank
-worth $18,000,000 (Eighteen Million Dollars only).
+This series includes fixes to fix all the kernel panics in the mdadm
+tests and some, related, sparse issues. The first 12 patches
+clean refactor the raid5-cache code so that the RCU usage of conf->log
+can be cleaned up which is done in patch 13 -- fixing some actual kernel
+NULL pointer dereference crashes in the mdadm test.
 
-This will be disbursed or shared between the both of us in these
-percentages, 55% for me and 45% for you. Contact me immediately if
-that is alright for you so that we can enter into an agreement before
-we start processing for the transfer of the funds. If you are
-satisfied with this proposal, please provide the below details for the
-Mutual Confidentiality Agreement
+Patch 14 fixes some of the remaining sparse warnings that are just
+missing __rcu annotations.
 
-1. Full Name and Address
+Patches 15 provides a cleanup for patches 16 and 17 which fix a couple
+additional hangs seen in an mdadm test.
 
-2. Occupation and Country of Origin
+This series will be followed by another series for mdadm which fixes
+the segfaults and annotates some failing tests to make mdadm tests
+runnable fairly reliably, but I'll wait for a stable hash for this
+series to note the kernel version tested against. Following that,
+v3 of my lock contention series will be sent with more confidence
+of its correctness.
 
-3. Telephone Number
+This series is based on the current md/md-next branch as of today
+(42b805af10). A git branch is available here:
 
-I wait for your response so that we can commence on this transaction
-as soon as possible.
+  https://github.com/sbates130272/linux-p2pmem md-bug_v2
 
-Regards,
+Thanks,
 
-Mr.Amos Manga.
+Logan
+
+[1] https://lore.kernel.org/all/20220519191311.17119-1-logang@deltatee.com
+
+--
+
+Changes since v1:
+  * Add a patch to move the struct r5l_log to raid5-log.h in order
+    to fix a compiler error with rcu_access_pointer() in versions
+    prior to gcc-10
+  * Rework r5c_is_writeback() changes to make less churn (per Christoph)
+  * Change some 1s to trues in rcu_dereference_protected calls (per
+    Christoph)
+  * Fix an odd hunk mistake in the RCU protection patch (per Christoph)
+  * Fix an inverted conditional (noticed by Donald)
+  * Add a patch to add an enum for the overloaded values used by
+    mddev->curr_resync to make the status_resync() fixes clearer
+    (per Christoph)
+
+--
+
+Logan Gunthorpe (17):
+  md/raid5-log: Drop extern decorators for function prototypes
+  md/raid5-cache: Add r5c_conf_is_writeback() helper
+  md/raid5-cache: Refactor r5l_start() to take a struct r5conf
+  md/raid5-cache: Refactor r5l_flush_stripe_to_raid() to take a struct
+    r5conf
+  md/raid5-cache: Refactor r5l_wake_reclaim() to take a struct r5conf
+  md/raid5-cache: Refactor remaining functions to take a r5conf
+  md/raid5-ppl: Drop unused argument from ppl_handle_flush_request()
+  md/raid5-cache: Pass the log through to r5c_finish_cache_stripe()
+  md/raid5-cache: Don't pass conf to r5c_calculate_new_cp()
+  md/raid5-cache: Take struct r5l_log in
+    r5c_log_required_to_flush_cache()
+  md/raid5: Ensure array is suspended for calls to log_exit()
+  md/raid5-cache: Move struct r5l_log definition to raid5-log.h
+  md/raid5-cache: Add RCU protection to conf->log accesses
+  md/raid5-cache: Annotate pslot with __rcu notation
+  md: Use enum for overloaded magic numbers used by mddev->curr_resync
+  md: Ensure resync is reported after it starts
+  md: Notify sysfs sync_completed in md_reap_sync_thread()
+
+ drivers/md/md.c          |  55 +++----
+ drivers/md/md.h          |  15 ++
+ drivers/md/raid5-cache.c | 304 ++++++++++++++++++---------------------
+ drivers/md/raid5-log.h   | 178 ++++++++++++++++-------
+ drivers/md/raid5-ppl.c   |   2 +-
+ drivers/md/raid5.c       |  50 +++----
+ drivers/md/raid5.h       |   2 +-
+ 7 files changed, 336 insertions(+), 270 deletions(-)
+
+
+base-commit: 42b805af102471f53e3c7867b8c2b502ea4eef7e
+--
+2.30.2

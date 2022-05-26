@@ -2,195 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45760534B38
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CFB534B3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346607AbiEZIMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        id S1346410AbiEZINR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiEZIMR (ORCPT
+        with ESMTP id S237858AbiEZINP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:12:17 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CB72495D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:12:13 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220526081208euoutp0257f636d6bc0cb4a3688eb09b2b19deeb~ymXH-mw6M0361603616euoutp02A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:12:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220526081208euoutp0257f636d6bc0cb4a3688eb09b2b19deeb~ymXH-mw6M0361603616euoutp02A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1653552728;
-        bh=sRas2qHYxGK26QnM0GFTIv2tqbVuA6ew52jA7d50Ke4=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=u4CNpUNBsZNfGY8XCXMlSrtQ6OEG7NfUmZhZeUrqECHG7F1B6gaUATwtK1mKRZREp
-         NfckJQ+AMDp36iRSs6fx+52oYdwBwGG6uBxkH0KkgNGx7TGCMidkKw/7bzGI1K4gIq
-         rOis8hnSW/Qq26mGEQOPFxdXiYA6EjKATknN89xg=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220526081207eucas1p262ca8d7088c8d4898fe9d4be45008a35~ymXHoT8V80059300593eucas1p2P;
-        Thu, 26 May 2022 08:12:07 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id B5.78.10260.7563F826; Thu, 26
-        May 2022 09:12:07 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220526081207eucas1p25fb941ce7f8344420295750bb810501d~ymXHKcZIZ1109011090eucas1p2_;
-        Thu, 26 May 2022 08:12:07 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220526081207eusmtrp1b0614131c1302506df87eb12313c097c~ymXHJaB9E2331823318eusmtrp1c;
-        Thu, 26 May 2022 08:12:07 +0000 (GMT)
-X-AuditID: cbfec7f5-bddff70000002814-09-628f3657ef99
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 2E.35.09522.7563F826; Thu, 26
-        May 2022 09:12:07 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220526081206eusmtip24929ef2f4ad0112677d59e7337e17df4~ymXG5LKB43167731677eusmtip2k;
-        Thu, 26 May 2022 08:12:06 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.20) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 26 May 2022 09:12:04 +0100
-Message-ID: <0bb57f61-9a33-0273-4b89-2cdf042e56dd@samsung.com>
-Date:   Thu, 26 May 2022 10:12:03 +0200
+        Thu, 26 May 2022 04:13:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B2AB340CF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:13:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83F4C1474;
+        Thu, 26 May 2022 01:13:13 -0700 (PDT)
+Received: from [10.162.43.8] (unknown [10.162.43.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED1BE3F70D;
+        Thu, 26 May 2022 01:13:05 -0700 (PDT)
+Message-ID: <543af405-32dc-8dd1-9596-c1faf241a7b5@arm.com>
+Date:   Thu, 26 May 2022 13:43:01 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.9.1
-Subject: Re: [PATCH v6 8/8] dm: ensure only power of 2 zone sizes are
- allowed
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] arm64: enable THP_SWAP for arm64
 Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <axboe@kernel.dk>, <snitzer@redhat.com>,
-        <Johannes.Thumshirn@wdc.com>, <hch@lst.de>, <hare@suse.de>
-CC:     <dsterba@suse.com>, <dm-devel@redhat.com>,
-        <jiangbo.365@bytedance.com>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <jaegeuk@kernel.org>, <gost.dev@samsung.com>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <9703ca4c-33cf-cb3a-b46b-6b0e5537cfd6@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        hanchuanhua <hanchuanhua@oppo.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>, =?UTF-8?B?6YOt5YGl?= <guojian@oppo.com>,
+        Barry Song <v-songbaohua@oppo.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>, Shaohua Li <shli@kernel.org>,
+        Rik van Riel <riel@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Steven Price <steven.price@arm.com>
+References: <20220524071403.128644-1-21cnbao@gmail.com>
+ <YoyTWaDmSiBUkaeg@arm.com>
+ <CAGsJ_4xPFkc6Kn2G5pPPk8XJ4iZV=atzan=Quq6Ljc_5vr1fnA@mail.gmail.com>
+ <CAGsJ_4yae=4CpACJQkqTc-B8if47nbOqT9CBHtT0jsKWis4QRQ@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <CAGsJ_4yae=4CpACJQkqTc-B8if47nbOqT9CBHtT0jsKWis4QRQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.20]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOKsWRmVeSWpSXmKPExsWy7djPc7rhZv1JBkd2KlmsvtvPZvH77Hlm
-        i73vZrNaXPjRyGSxZ9EkJouVq48yWTxZP4vZoufABxaLv133mCz23tK2uLxrDpvF/GVP2S3a
-        Nn5ldOD1+HdiDZvH5bOlHptWdbJ5bF5S77H7ZgObx87W+6we7/ddZfNYv+Uqi8fm09UenzfJ
-        ebQf6GYK4I7isklJzcksSy3St0vgyni98j1jwSnxinnzNrA0MJ4R6mLk5JAQMJGYt/04axcj
-        F4eQwApGiZltP9kgnC+MEvfObWEDqRIS+MwosWF2YhcjB1jHvle8EDXLGSVePT8N1QBU07zm
-        JZSzi1Hi9qzfYN28AnYSc9uWsIDYLAKqEnf2NDNCxAUlTs58AhYXFYiQWNn6BswWFvCXOH77
-        LhOIzSwgLnHryXwmkKEiAvMYJeb9+A/mMAvcB9rw/AILyE1sAloSjZ3sIA2cAm4SFxafZ4Vo
-        1pRo3f6bHcKWl9j+dg4zxAtKEtt+mUD8Xyux9tgZdpCREgK3OCXuXO1mgUi4SHQtWMQOYQtL
-        vDq+BcqWkTg9uQeqplri6Y3fzBDNLYwS/TvXs0EssJboO5MDUeMo8bPxGtRePokbbwUhzuGT
-        mLRtOvMERtVZSEExC8nLs5B8MAvJBwsYWVYxiqeWFuempxYb56WW6xUn5haX5qXrJefnbmIE
-        pr3T/45/3cG44tVHvUOMTByMhxglOJiVRHgvPO1NEuJNSaysSi3Kjy8qzUktPsQozcGiJM6b
-        nLkhUUggPbEkNTs1tSC1CCbLxMEp1cAUcvySRJi2Rq69+MXfAq+knJ2PaMwr/3pZS+nIFwtD
-        FdkJEwoZJDpX7tctmjf5PHvUvQehZSbPk/qVVU7usRLqNxB5O1F73UKbyQqV/Cq1M3anR1xQ
-        cjuWYXlzYd0ENQ3DZ/z37/3MfiOXMN3y3fbjuy1OB+yTyuA1E7Hl4rgQcfLQf6aCzVXlAZvV
-        bumX3A1syd+30Kf7xMfkr1HqBYab/obb+YbELrWrLDyd/T1wks2HfZNy/d+qmsg7LCj73JtV
-        9NVaRKueP/JC3HKRsEvb7tr3KMuUvnKSjCnscjA+dJ/BUvR/ptflTuXDNeWi12R74ztr3rdm
-        KVxlO8fcMyFzhp7lqYZZ/W9d2DJElFiKMxINtZiLihMBgYDfpuoDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplleLIzCtJLcpLzFFi42I5/e/4Pd1ws/4kg3vnWS1W3+1ns/h99jyz
-        xd53s1ktLvxoZLLYs2gSk8XK1UeZLJ6sn8Vs0XPgA4vF3657TBZ7b2lbXN41h81i/rKn7BZt
-        G78yOvB6/Duxhs3j8tlSj02rOtk8Ni+p99h9s4HNY2frfVaP9/uusnms33KVxWPz6WqPz5vk
-        PNoPdDMFcEfp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp
-        2yXoZbxe+Z6x4JR4xbx5G1gaGM8IdTFycEgImEjse8XbxcjFISSwlFHi16MLzF2MnEBxGYlP
-        Vz6yQ9jCEn+udbFBFH1klLh4tYEdwtnFKDH33AQ2kCpeATuJuW1LWEBsFgFViTt7mhkh4oIS
-        J2c+AYuLCkRIfFo2gRXEFhbwlZi+8xyYzSwgLnHryXwmkKEiAvMYJeb9+A/mMAvcZ5S4/fwC
-        C8S634wSPff3MIMcziagJdHYCXYfp4CbxIXF56EmaUq0bv/NDmHLS2x/O4cZ4k8liW2/TCDe
-        qZV4dX834wRG0VlI7puF5I5ZSCbNQjJpASPLKkaR1NLi3PTcYkO94sTc4tK8dL3k/NxNjMB0
-        se3Yz807GOe9+qh3iJGJg/EQowQHs5II74WnvUlCvCmJlVWpRfnxRaU5qcWHGE2BgTSRWUo0
-        OR+YsPJK4g3NDEwNTcwsDUwtzYyVxHk9CzoShQTSE0tSs1NTC1KLYPqYODilGpjKi22z3hlt
-        5Yv7I7a81yZKnN+rf9GcV9Kdod3Z8kGGt9/nfdXmWvHBiufWo5L8/UKH5Wq3XWNZELW08uHG
-        DYwPz3DMnXlepSI+U9l/Q6DAlOffBUNPhrNx7CtL53w2S8d+4eyHPfuyuo9+CrhzgOX4uerP
-        InqpynXMBp49KYcVz2pfP7xX9USyb0TDTZZELSXzj6dW6+c8Oj5d1Z61ZJGYyTquldqlq1dn
-        1V7Y0bvgtsvOEqeZGzgu3BYuO3Uka0Ly/VjnxkZ+9ydV/Xem31jR+e/lHjP+ufNO3E5mcbHW
-        yjwxh6M8NqNRPkn7XRPL3QAZaSu3uQ4cD28H8s/ZvTi3PvbYpJu7OY9djLnIlaTEUpyRaKjF
-        XFScCABGat9hoAMAAA==
-X-CMS-MailID: 20220526081207eucas1p25fb941ce7f8344420295750bb810501d
-X-Msg-Generator: CA
-X-RootMTR: 20220525155008eucas1p2c843cc9098f2920e961f80ffaf535789
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220525155008eucas1p2c843cc9098f2920e961f80ffaf535789
-References: <20220525154957.393656-1-p.raghav@samsung.com>
-        <CGME20220525155008eucas1p2c843cc9098f2920e961f80ffaf535789@eucas1p2.samsung.com>
-        <20220525154957.393656-9-p.raghav@samsung.com>
-        <9703ca4c-33cf-cb3a-b46b-6b0e5537cfd6@opensource.wdc.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Damien,
-On 5/26/22 01:13, Damien Le Moal wrote:
-> On 5/26/22 00:49, Pankaj Raghav wrote:
->> Ensure that only power of 2 zoned devices are enabled for dm targets that
->> supports zoned devices. This constraint can be relaxed once non power of
->> 2 zone size support is added to the DM layer.
+
+
+On 5/24/22 16:45, Barry Song wrote:
+> On Tue, May 24, 2022 at 10:05 PM Barry Song <21cnbao@gmail.com> wrote:
 >>
->> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
->> ---
->>  drivers/md/dm-table.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
+>> On Tue, May 24, 2022 at 8:12 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>>>
+>>> On Tue, May 24, 2022 at 07:14:03PM +1200, Barry Song wrote:
+>>>> From: Barry Song <v-songbaohua@oppo.com>
+>>>>
+>>>> THP_SWAP has been proved to improve the swap throughput significantly
+>>>> on x86_64 according to commit bd4c82c22c367e ("mm, THP, swap: delay
+>>>> splitting THP after swapped out").
+>>>> As long as arm64 uses 4K page size, it is quite similar with x86_64
+>>>> by having 2MB PMD THP. So we are going to get similar improvement.
+>>>> For other page sizes such as 16KB and 64KB, PMD might be too large.
+>>>> Negative side effects such as IO latency might be a problem. Thus,
+>>>> we can only safely enable the counterpart of X86_64.
+>>>>
+>>>> Cc: "Huang, Ying" <ying.huang@intel.com>
+>>>> Cc: Minchan Kim <minchan@kernel.org>
+>>>> Cc: Johannes Weiner <hannes@cmpxchg.org>
+>>>> Cc: Hugh Dickins <hughd@google.com>
+>>>> Cc: Shaohua Li <shli@kernel.org>
+>>>> Cc: Rik van Riel <riel@redhat.com>
+>>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+>>>> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+>>>> ---
+>>>>  arch/arm64/Kconfig | 1 +
+>>>>  1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>>>> index d550f5acfaf3..8e3771c56fbf 100644
+>>>> --- a/arch/arm64/Kconfig
+>>>> +++ b/arch/arm64/Kconfig
+>>>> @@ -98,6 +98,7 @@ config ARM64
+>>>>       select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
+>>>>       select ARCH_WANT_LD_ORPHAN_WARN
+>>>>       select ARCH_WANTS_NO_INSTR
+>>>> +     select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
+>>>
+>>> I'm not opposed to this but I think it would break pages mapped with
+>>> PROT_MTE. We have an assumption in mte_sync_tags() that compound pages
+>>> are not swapped out (or in). With MTE, we store the tags in a slab
 >>
->> diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
->> index 03541cfc2317..2a8af70d1d4a 100644
->> --- a/drivers/md/dm-table.c
->> +++ b/drivers/md/dm-table.c
->> @@ -251,6 +251,12 @@ static int device_area_is_invalid(struct dm_target *ti, struct dm_dev *dev,
->>  	if (bdev_is_zoned(bdev)) {
->>  		unsigned int zone_sectors = bdev_zone_sectors(bdev);
->>  
->> +		if (!is_power_of_2(zone_sectors)) {
->> +			DMWARN("%s: %pg only power of two zone size supported",
->> +			       dm_device_name(ti->table->md), bdev);
->> +			return 1;
->> +		}
+>> I assume you mean mte_sync_tags() require that THP is not swapped as a whole,
+>> as without THP_SWP, THP is still swapping after being splitted. MTE doesn't stop
+>> THP from swapping through a couple of splitted pages, does it?
+>>
+>>> object (128-bytes per swapped page) and restore them when pages are
+>>> swapped in. At some point we may teach the core swap code about such
+>>> metadata but in the meantime that was the easiest way.
+>>>
+>>
+>> If my previous assumption is true,  the easiest way to enable THP_SWP
+>> for this moment
+>> might be always letting mm fallback to the splitting way for MTE
+>> hardware. For this
+>> moment, I care about THP_SWP more as none of my hardware has MTE.
+>>
+>> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+>> index 45c358538f13..d55a2a3e41a9 100644
+>> --- a/arch/arm64/include/asm/pgtable.h
+>> +++ b/arch/arm64/include/asm/pgtable.h
+>> @@ -44,6 +44,8 @@
+>>         __flush_tlb_range(vma, addr, end, PUD_SIZE, false, 1)
+>>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>>
+>> +#define arch_thp_swp_supported !system_supports_mte
 >> +
->>  		if (start & (zone_sectors - 1)) {
->>  			DMWARN("%s: start=%llu not aligned to h/w zone size %u of %pg",
->>  			       dm_device_name(ti->table->md),
+>>  /*
+>>   * Outside of a few very special situations (e.g. hibernation), we always
+>>   * use broadcast TLB invalidation instructions, therefore a spurious page
+>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+>> index 2999190adc22..064b6b03df9e 100644
+>> --- a/include/linux/huge_mm.h
+>> +++ b/include/linux/huge_mm.h
+>> @@ -447,4 +447,16 @@ static inline int split_folio_to_list(struct folio *folio,
+>>         return split_huge_page_to_list(&folio->page, list);
+>>  }
+>>
+>> +/*
+>> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
+>> + * limitations in the implementation like arm64 MTE can override this to
+>> + * false
+>> + */
+>> +#ifndef arch_thp_swp_supported
+>> +static inline bool arch_thp_swp_supported(void)
+>> +{
+>> +       return true;
+>> +}
+>> +#endif
+>> +
+>>  #endif /* _LINUX_HUGE_MM_H */
+>> diff --git a/mm/swap_slots.c b/mm/swap_slots.c
+>> index 2b5531840583..dde685836328 100644
+>> --- a/mm/swap_slots.c
+>> +++ b/mm/swap_slots.c
+>> @@ -309,7 +309,7 @@ swp_entry_t get_swap_page(struct page *page)
+>>         entry.val = 0;
+>>
+>>         if (PageTransHuge(page)) {
+>> -               if (IS_ENABLED(CONFIG_THP_SWAP))
+>> +               if (IS_ENABLED(CONFIG_THP_SWAP) && arch_thp_swp_supported())
+>>                         get_swap_pages(1, &entry, HPAGE_PMD_NR);
+>>                 goto out;
+>>         }
+>>
 > 
-> I thought the agreed upon idea is be to add a dm-linear like target to
-> emulate power of 2 zone size so that we can keep btrfs and f2fs running on
-> this new class of device. So why this patch ?
+> Am I actually able to go further to only split MTE tagged pages?
 > 
-> The entire series as is will fragment zoned block device support, which is
-> not a good thing at all. Without the new dm target, none of the current
-> kernel supported zone stuff will work.
+> For mm core:
 > 
-I have mentioned this in my cover letter:
-The support is planned to be added in two phases:
-- Add npo2 support to block, nvme layer and necessary stop gap patches
-  in the filesystems
-- Add dm target for npo2 devices so that they are presented as a po2
-  device to filesystems
+> +/*
+> + * archs that select ARCH_WANTS_THP_SWAP but don't support THP_SWP due to
+> + * limitations in the implementation like arm64 MTE can override this to
+> + * false
+> + */
+> +#ifndef arch_thp_swp_supported
+> +static inline bool arch_thp_swp_supported(struct page *page)
+> +{
+> +       return true;
+> +}
+> +#endif
+> +
+> 
+> For arm64:
+> +#define arch_thp_swp_supported(page) !test_bit(PG_mte_tagged, &page->flags)
 
-This series is targeting the first phase where we have stop gap patches
-and add support to the block and nvme layer and in the next phase we
-will add a dm linear like target for npo2 zone sizes which can be used
-by all the filesystems. This patch makes sure that we can't use npo2
-zoned devices without the proper support that will be added in the next
-phase in the DM.
+Although not entirely sure, but per page arch_thp_swp_supported() callback
+seems bit risky. What if there scenarios or time windows when PG_mte_tagged
+is cleared on an otherwise MTE tagged page ? I guess arch_thp_swp_supported()
+just returning false on a system with MTE support, is a better option.
 
-Even though we decided we would like to take the direction of DM, I am
-still awaiting reply from Christoph who raised concerns about npo2 zoned
-device support and Mike Snitzer about this approach. That is one of the
-reason I split this effort into two phases.
-> The zonefs patch is also gone from the series. Why ? As is, zonefs will
-> break if it is passed a non power of 2 zone size drive.
 > 
-I think this was my mistake. If you agree with the above approach, then
-I can add a stop gap patch also to zonefs npo2 zoned devices. This way
-all the zone filesystem support goes via DM for npo2 zoned devices. I am
-proposing this so that initially we always have only one way of
-accessing a npo2 zoned device (via DM) from **filesystems** until we add
-native support.
+> But I don't have MTE hardware to test. So to me, totally disabling THP_SWP
+> is safer.
+> 
+> thoughts?
+>>> --
+>>> Catalin
+>>
+>> Thanks
+>> Barry
+> 

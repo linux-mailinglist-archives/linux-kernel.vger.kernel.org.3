@@ -2,110 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD8C534B01
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 09:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A6E534B17
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346418AbiEZHxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 03:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        id S1346573AbiEZICD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiEZHxi (ORCPT
+        with ESMTP id S1344941AbiEZIB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 03:53:38 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08269E03E
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:53:36 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id ge11so1142736pjb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FKY1rhZkdMBMrUZfIZycOdY5avxDQ/iGSLMXJ6LNb9Y=;
-        b=cOnZJZkCCOkLxMjqnILedHexQv4MnUbOCfd5g4h+kDF3L/Noq+vogXEzH2Qq8dsCHe
-         FMsx5MJc5GUVWNVZv5ZxpforSlgXZ0RE3SLShVOWJomcSaSzExdB5rzk2u2vddlbpFG6
-         PMBIXaPc+HXXJvFcEAjUQ8UG3JoJaUtzqC1Ks3Nh0dbLVT1YSqpK9cxf6LDRFfPHJOV0
-         m0gkVelPUPm2YjYbDrQFQCRHYOVnARIGpwzbIMPmYbRbltnIxliimz36f3/YTcuTLGPX
-         jcUGEM+njcXYJDAYRvGEH44cP8lOYBqnVEQ+64hJugvXNwp8OZaikuSAm3a4VAA5xjC+
-         lewA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FKY1rhZkdMBMrUZfIZycOdY5avxDQ/iGSLMXJ6LNb9Y=;
-        b=DgjJVsx5ujiKaNRyGMTxNxH1qAk+eN8LzJ7FrIgjgPIhtxykhPyARXo9wfXvzDjE1Q
-         hq4EzP/fDCaTIXL0/RpKH6mjIK1aW/eTR62xmAHmDO0RgCdDigAJhkXz8cjT3mRAiUyE
-         CfFv987lqO6ctf8K5o4G3kBbE29g8/AY7zaWTeEYqbEQmCVBtmHrdhUKLL2P1WgHham5
-         WG0Xm34f02E7MIx9FfyySiqE+Bb9U4cDCwk8d8Ccn6U9EWfj9+GKvJp7r/tpMJCUWgfI
-         3dRAGD1S9/NX+p1saVfBF5B0PjLXVarywX7PUMtgTDz50vA6v2M8A8aEw9tvQNhtvNV2
-         mhZw==
-X-Gm-Message-State: AOAM530X5Tri0dWdaj1YTZssJAB6Hjuv2lysHYT7c5se/pekS/4DoEqQ
-        Bhz9aHXW4c0eUInVNxLWx4lRIFwnt51daCMM
-X-Google-Smtp-Source: ABdhPJxqBIu27yeZ8CeO+ejoJRAiquRkOF+CBgzynV7NDz/kiHon6lkshbFEPrrujS/uC6pdXy7keA==
-X-Received: by 2002:a17:902:ce8f:b0:162:1aa9:f543 with SMTP id f15-20020a170902ce8f00b001621aa9f543mr21167302plg.123.1653551615494;
-        Thu, 26 May 2022 00:53:35 -0700 (PDT)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id q20-20020a170902789400b0015eaa9aee50sm747028pll.202.2022.05.26.00.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 00:53:35 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Helge Deller <deller@gmx.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Gareth Powell <gpowell@broadcom.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: bcm: brcmstb: pm: pm-arm: Fix refcount leak in brcmstb_pm_probe
-Date:   Thu, 26 May 2022 11:53:22 +0400
-Message-Id: <20220526075325.27356-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 26 May 2022 04:01:59 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BBB2DAB5;
+        Thu, 26 May 2022 01:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653552118; x=1685088118;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ehhcr8dN1ah9KufS2J1UEiOkqJ2ds8j89R8gAdWwgPo=;
+  b=HHj7zFAaADnA7e8wbfIeinBznZPqazNCtdiZMbwmOrOKgseSG8+FtMOi
+   v/h6oYOI3L48QaJBa7c/frotQnRys26/N2lTzkVDLmnmyNZTA8STYqJJN
+   BdOz735lFjshRAdyUCpMFlXPiBhGo8f9lJvR2TuaH28s+Lpj5aYOi/O3d
+   M0rrkZlMLgkjqG7CLucOHESR/72R0JiBavG7Tp7e7QorIwhKy89y3K+Wb
+   MfgFhcHL90Ye8VKjpSQ5N540lh9BmG/McGZon6rd8X4Yt0ArPGvLf+yyz
+   ho8sSwOtCdw2jhdQYD2T01XxtCzljrEaJnZv4qbrGqHxfa2Cy6xayhi0B
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="254574758"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="254574758"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 01:01:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="718148414"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by fmsmga001.fm.intel.com with ESMTP; 26 May 2022 01:01:54 -0700
+Date:   Thu, 26 May 2022 15:54:13 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, lee.jones@linaro.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
+Subject: Re: [PATCH v21 1/5] mfd: intel-m10-bmc: Rename n3000bmc-secure driver
+Message-ID: <20220526075413.GB148394@yilunxu-OptiPlex-7050>
+References: <20220521003607.737734-1-russell.h.weight@intel.com>
+ <20220521003607.737734-2-russell.h.weight@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521003607.737734-2-russell.h.weight@intel.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_find_matching_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+On Fri, May 20, 2022 at 05:36:03PM -0700, Russ Weight wrote:
+> The n3000bmc-secure driver has changed to n3000bmc-sec-update. Update
+> the name in the list of the intel-m10-bmc sub-drivers.
+> 
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> ---
+> v21:
+>   - No change
+> v20:
+>   - No change
+> v19:
+>   - No change
+> v18:
+>   - No change
+> v17:
+>   - This is a new patch to change in the name of the secure update
+>     driver.
+> ---
+>  drivers/mfd/intel-m10-bmc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> index 8db3bcf5fccc..f4d0d72573c8 100644
+> --- a/drivers/mfd/intel-m10-bmc.c
+> +++ b/drivers/mfd/intel-m10-bmc.c
+> @@ -26,7 +26,7 @@ static struct mfd_cell m10bmc_d5005_subdevs[] = {
+>  static struct mfd_cell m10bmc_pacn3000_subdevs[] = {
+>  	{ .name = "n3000bmc-hwmon" },
+>  	{ .name = "n3000bmc-retimer" },
+> -	{ .name = "n3000bmc-secure" },
+> +	{ .name = "n3000bmc-sec-update" },
 
-In brcmstb_init_sram, it pass dn to of_address_to_resource(),
-of_address_to_resource() will call of_find_device_by_node() to take
-reference, so we should release the reference returned by
-of_find_matching_node().
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-Fixes: 0b741b8234c8 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/soc/bcm/brcmstb/pm/pm-arm.c | 1 +
- 1 file changed, 1 insertion(+)
+Hi Lee:
 
-diff --git a/drivers/soc/bcm/brcmstb/pm/pm-arm.c b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-index 3cbb165d6e30..70ad0f3dce28 100644
---- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-+++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-@@ -783,6 +783,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = brcmstb_init_sram(dn);
-+	of_node_put(dn);
- 	if (ret) {
- 		pr_err("error setting up SRAM for PM\n");
- 		return ret;
--- 
-2.25.1
+Is it good to you? If yes, could I apply this patch to linux-fpga
+and submit along with the other patches in this series?
 
+Thanks,
+Yilun
+
+>  };
+>  
+>  static struct mfd_cell m10bmc_n5010_subdevs[] = {
+> -- 
+> 2.25.1

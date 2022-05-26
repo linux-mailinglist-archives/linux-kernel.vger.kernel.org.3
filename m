@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274CF5350D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE825350DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347740AbiEZOiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 10:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
+        id S1344332AbiEZOjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 10:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233650AbiEZOhg (ORCPT
+        with ESMTP id S1347750AbiEZOid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 10:37:36 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052CED6820
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:37:31 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id i27so3326523ejd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=j0PQ9KvLcDyhGe/3AHaycqSIR9icXjVWVlUf+JYxn18=;
-        b=ERm27+39gtNECxQMYFX5EkW3ltwET1+2QLwXKG10T6xvWxBHHxrlFqCWX3PptaiPXg
-         Otbc2egol/N+bCdp22qnTPAiTop/KSIiuRi2pW/Qyugyy8Eb0LWGNet2rKcY54LDmpyC
-         GSGV/P5YYmV2gciXxlUxFxehFmYZsYOKWxW9ygr0XX9s/v11mVMJMr+VFRXjPcasdTaC
-         7nitZtcw4E5HimUb9YTQS49PwBD3b0mgqoMWsJpbadGOygjkDROVl7u52ACrO8Vr4ZxE
-         T89UCdcpRqdZk9w5hiu3x/k9PIWTTkg/wE8UNH7pCm4HOlK93XkeOXMpYrmvZdYdMtWl
-         U85g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=j0PQ9KvLcDyhGe/3AHaycqSIR9icXjVWVlUf+JYxn18=;
-        b=71pln+ewYXeRt5THFAGRAzJq9pe+EK+2uOiXAUyLe1AgzqARj4JxNDyHZF+AoLCeS/
-         Y42rsFztD7cErRdlnKg+H0fNA2Bb0bjHhmt3e1f2HY1xBMqlpBpWtZHEokbKCz6Ge+wu
-         c8tHcSzl583G5eHW5pSoYWipceRahGVPy3A1C94kmLis27T08e4eo0pXMTLsjhwH7HDy
-         4tRTRT6UjD4sugbH0txTA73BN4q3CR44JzLSDStb1zYXE34I1cQ9MwL1WbHi4YznHN2O
-         U23t5YvS/mRSoyJcKLmPpUN/LqhUBXUqw7LvWe/GO4oI8sSyMNvkTGvUzgNmgvkS9MLg
-         AtOg==
-X-Gm-Message-State: AOAM533SqeOPV20p1i9QkOCShQ8bU5m6W8wmjFxs+uASZ5DSjzv57Rz3
-        o5s5GtEJUniVC7962+k/670ixw==
-X-Google-Smtp-Source: ABdhPJz0TGEj4D8JCwSgEF4ZkDJuijpUzGCx6tNkMnvHxE5o9H5mGyw//NzbhGFp79EzYVL9MUj2+A==
-X-Received: by 2002:a17:906:b048:b0:6fe:be4a:3ecf with SMTP id bj8-20020a170906b04800b006febe4a3ecfmr23471529ejb.104.1653575849408;
-        Thu, 26 May 2022 07:37:29 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f27-20020a50a6db000000b0042be2dfa8bdsm267962edc.81.2022.05.26.07.37.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 07:37:28 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 7/7] dt-bindings: pinctrl: deprecate header with register constants
-Date:   Thu, 26 May 2022 16:37:07 +0200
-Message-Id: <20220526143707.767490-8-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220526143707.767490-1-krzysztof.kozlowski@linaro.org>
-References: <20220526143707.767490-1-krzysztof.kozlowski@linaro.org>
+        Thu, 26 May 2022 10:38:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71F83E15E4
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653575878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PHeIEU9tmAOSo5oYQbuzvWGVWkOIq11hKGKnfJEPwt0=;
+        b=YuWAqZ5NaHyxYmIRrX/VgtS0ytSjce5DhK2EUy2NEtjQMdtX7QysJhSyb2rrz0qhteyqfS
+        2KR0uVvMx64IxPT9SIaeAPVgJGIW+G7D47/jk/WH+YYjE4PYwx20aacvuh/HaMjjafVa8a
+        z+UEX7m9vYpiQ9TmveQi8c2yaBt/QVU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-374-9t_RVTvVMqmchf4VO1GLaA-1; Thu, 26 May 2022 10:37:52 -0400
+X-MC-Unique: 9t_RVTvVMqmchf4VO1GLaA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9E0885A5BC;
+        Thu, 26 May 2022 14:37:51 +0000 (UTC)
+Received: from fedora (unknown [10.22.16.201])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 5CBF2405D4BF;
+        Thu, 26 May 2022 14:37:48 +0000 (UTC)
+Date:   Thu, 26 May 2022 11:37:47 -0300
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/5] x86/tdx: Add TDX Guest attestation interface
+ driver
+Message-ID: <Yo+Qu5soPel433ln@fedora>
+References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220524040517.703581-2-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524040517.703581-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,129 +73,259 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For convenience (less code duplication, some meaning added to raw
-number), the pin controller pin configuration register values
-were defined in the bindings header.  These are not some IDs or other
-abstraction layer but raw numbers used in the registers
+On Mon, May 23, 2022 at 09:05:13PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> In TDX guest, attestation is used to verify the trustworthiness of a TD
+> to other entities before provisioning secrets to the TD.
+> 
+> One usage example is, when a TD guest uses encrypted drive and if the
+> decryption keys required to access the drive are stored in a secure 3rd
+> party keyserver, the key server can use attestation to verify TD's
+> trustworthiness and release the decryption keys to the TD.
+> 
+> The attestation process consists of two steps: TDREPORT generation and
+> Quote generation.
+> 
+> TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
+> the TDX module which contains TD-specific information (such as TD
+> measurements), platform security version, and the MAC to protect the
+> integrity of the TDREPORT. The TD kernel uses TDCALL[TDG.MR.REPORT] to
+> get the TDREPORT from the TDX module. A user-provided 64-Byte
+> REPORTDATA is used as input and included in the TDREPORT. Typically it
+> can be some nonce provided by attestation service so the TDREPORT can
+> be verified uniquely. More details about TDREPORT can be found in
+> Intel TDX Module specification, section titled "TDG.MR.REPORT Leaf".
+> 
+> TDREPORT can only be verified on local platform as the MAC key is bound
+> to the platform. To support remote verification of the TDREPORT, TDX
+> leverages Intel SGX Quote Enclave (QE) to verify the TDREPORT locally
+> and convert it to a remote verifiable Quote.
+> 
+> After getting the TDREPORT, the second step of the attestation process
+> is to send it to the QE to generate the Quote. TDX doesn't support SGX
+> inside the TD, so the QE can be deployed in the host, or in another
+> legacy VM with SGX support. How to send the TDREPORT to QE and receive
+> the Quote is implementation and deployment specific.
+> 
+> Implement a basic attestation driver to allow TD userspace to get the
+> TDREPORT. The TD userspace attestation software can get the TDREPORT
+> and then choose whatever communication channel available (i.e. vsock)
+> to send the TDREPORT to QE and receive the Quote.
+> 
+> Also note that explicit access permissions are not enforced in this
+> driver because the quote and measurements are not a secret. However
+> the access permissions of the device node can be used to set any
+> desired access policy. The udev default is usually root access
+> only.
+> 
+> Operations like getting TDREPORT or Quote generation involves sending
+> a blob of data as input and getting another blob of data as output. It
+> was considered to use a sysfs interface for this, but it doesn't fit
+> well into the standard sysfs model for configuring values. It would be
+> possible to do read/write on files, but it would need multiple file
+> descriptors, which would be somewhat messy. IOCTLs seems to be the best
+> fitting and simplest model for this use case. Also, the REPORTDATA used
+> in TDREPORT generation can possibly come from attestation service to
+> uniquely verify the Quote (like per instance verification). In such
+> case, since REPORTDATA is a secret, using sysfs to share it is insecure
+> compared to sending it via IOCTL.
+> 
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
+>  arch/x86/coco/tdx/Makefile      |   2 +-
+>  arch/x86/coco/tdx/attest.c      | 118 ++++++++++++++++++++++++++++++++
+>  arch/x86/include/uapi/asm/tdx.h |  42 ++++++++++++
+>  3 files changed, 161 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/x86/coco/tdx/attest.c
+>  create mode 100644 arch/x86/include/uapi/asm/tdx.h
+> 
+> diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
+> index 46c55998557d..d2db3e6770e5 100644
+> --- a/arch/x86/coco/tdx/Makefile
+> +++ b/arch/x86/coco/tdx/Makefile
+> @@ -1,3 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -obj-y += tdx.o tdcall.o
+> +obj-y += tdx.o tdcall.o attest.o
+> diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
+> new file mode 100644
+> index 000000000000..24db0bad4923
+> --- /dev/null
+> +++ b/arch/x86/coco/tdx/attest.c
+> @@ -0,0 +1,118 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * attest.c - TDX guest attestation interface driver.
+> + *
+> + * Implements user interface to trigger attestation process.
+> + *
+> + * Copyright (C) 2022 Intel Corporation
+> + *
+> + */
+> +
+> +#define pr_fmt(fmt) "x86/tdx: attest: " fmt
+> +
+> +#include <linux/miscdevice.h>
+> +#include <linux/mm.h>
+> +#include <linux/io.h>
+> +#include <asm/tdx.h>
+> +#include <uapi/asm/tdx.h>
+> +
+> +#define DRIVER_NAME "tdx-attest"
+> +
+> +/* TDREPORT module call leaf ID */
+> +#define TDX_GET_REPORT			4
+> +
+> +static struct miscdevice miscdev;
+> +
+> +static long tdx_get_report(void __user *argp)
+> +{
+> +	void *reportdata = NULL, *tdreport = NULL;
+> +	long ret;
+> +
+> +	/* Allocate buffer space for REPORTDATA */
+> +	reportdata = kmalloc(TDX_REPORTDATA_LEN, GFP_KERNEL);
+> +	if (!reportdata)
+> +		return -ENOMEM;
+> +
+> +	/* Allocate buffer space for TDREPORT */
+> +	tdreport = kmalloc(TDX_REPORT_LEN, GFP_KERNEL);
+> +	if (!tdreport) {
+> +		ret = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	/* Copy REPORTDATA from the user buffer */
+> +	if (copy_from_user(reportdata, argp, TDX_REPORTDATA_LEN)) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
+> +	 *
+> +	 * Get the TDREPORT using REPORTDATA as input. Refer to
+> +	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
+> +	 * Specification for detailed information.
+> +	 */
+> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
+> +				virt_to_phys(reportdata), 0, 0, NULL);
+> +	if (ret) {
+> +		pr_debug("TDREPORT TDCALL failed, status:%lx\n", ret);
+> +		ret = -EIO;
+> +		goto out;
+> +	}
+> +
+> +	/* Copy TDREPORT back to the user buffer */
+> +	if (copy_to_user(argp, tdreport, TDX_REPORT_LEN))
+> +		ret = -EFAULT;
+> +
+> +out:
+> +	kfree(reportdata);
+> +	kfree(tdreport);
+> +	return ret;
+> +}
+> +
+> +static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
+> +			     unsigned long arg)
+> +{
+> +	void __user *argp = (void __user *)arg;
+> +	long ret = -EINVAL;
+> +
+> +	switch (cmd) {
+> +	case TDX_CMD_GET_REPORT:
+> +		ret = tdx_get_report(argp);
+> +		break;
+> +	default:
+> +		pr_debug("cmd %d not supported\n", cmd);
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct file_operations tdx_attest_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.unlocked_ioctl	= tdx_attest_ioctl,
+> +	.llseek		= no_llseek,
+> +};
+> +
+> +static int __init tdx_attestation_init(void)
+> +{
+> +	int ret;
+> +
+> +	/* Make sure we are in a valid TDX platform */
+> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+> +		return -EIO;
+> +
+> +	miscdev.name = DRIVER_NAME;
+> +	miscdev.minor = MISC_DYNAMIC_MINOR;
+> +	miscdev.fops = &tdx_attest_fops;
+> +
+> +	ret = misc_register(&miscdev);
+> +	if (ret) {
+> +		pr_err("misc device registration failed\n");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +device_initcall(tdx_attestation_init)
+> diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
+> new file mode 100644
+> index 000000000000..8b57dea67eab
+> --- /dev/null
+> +++ b/arch/x86/include/uapi/asm/tdx.h
+> @@ -0,0 +1,42 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _UAPI_ASM_X86_TDX_H
+> +#define _UAPI_ASM_X86_TDX_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/ioctl.h>
+> +
+> +/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
+> +#define TDX_REPORTDATA_LEN		64
+> +
+> +/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
+> +#define TDX_REPORT_LEN			1024
+> +
+> +/**
+> + * struct tdx_report_req: Get TDREPORT using REPORTDATA as input.
+> + *
+> + * @reportdata : User-defined 64-Byte REPORTDATA to be included into
+> + *		 TDREPORT. Typically it can be some nonce provided by
+> + *		 attestation service, so the generated TDREPORT can be
+> + *		 uniquely verified.
+> + * @tdreport   : TDREPORT output from TDCALL[TDG.MR.REPORT] of size
+> + *		 TDX_REPORT_LEN.
+> + *
+> + * Used in TDX_CMD_GET_REPORT IOCTL request.
+> + */
+> +struct tdx_report_req {
+> +	union {
+> +		__u8 reportdata[TDX_REPORTDATA_LEN];
+> +		__u8 tdreport[TDX_REPORT_LEN];
+> +	};
+> +};
+> +
+> +/*
+> + * TDX_CMD_GET_REPORT - Get TDREPORT using TDCALL[TDG.MR.REPORT]
+> + *
+> + * Return 0 on success, -EIO on TDCALL execution failure, and
+> + * standard errno on other general error cases.
+> + *
+> + */
+> +#define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, struct tdx_report_req)
+> +
+> +#endif /* _UAPI_ASM_X86_TDX_H */
+> -- 
+> 2.25.1
+> 
+> 
 
-These constants do not fit the purpose of bindings.  They do not provide
-any abstraction, any hardware and driver independent ID.  With minor
-exceptions, the Linux drivers actually do not use the bindings header at
-all.
-
-All of the constants were moved already to headers local to DTS
-(residing in DTS directory), so remove any references to the bindings
-header and add a warning tha tit is deprecated.
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/pinctrl/samsung/pinctrl-exynos.c  | 6 ++----
- drivers/pinctrl/samsung/pinctrl-exynos.h  | 3 +++
- drivers/pinctrl/samsung/pinctrl-samsung.c | 4 +---
- drivers/pinctrl/samsung/pinctrl-samsung.h | 8 ++++++++
- include/dt-bindings/pinctrl/samsung.h     | 3 +++
- 5 files changed, 17 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/samsung/pinctrl-exynos.c
-index 6d7ca1758292..a8212fc126bf 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.c
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
-@@ -27,8 +27,6 @@
- #include <linux/soc/samsung/exynos-pmu.h>
- #include <linux/soc/samsung/exynos-regs-pmu.h>
- 
--#include <dt-bindings/pinctrl/samsung.h>
--
- #include "pinctrl-samsung.h"
- #include "pinctrl-exynos.h"
- 
-@@ -173,7 +171,7 @@ static int exynos_irq_request_resources(struct irq_data *irqd)
- 
- 	con = readl(bank->pctl_base + reg_con);
- 	con &= ~(mask << shift);
--	con |= EXYNOS_PIN_FUNC_EINT << shift;
-+	con |= EXYNOS_PIN_CON_FUNC_EINT << shift;
- 	writel(con, bank->pctl_base + reg_con);
- 
- 	raw_spin_unlock_irqrestore(&bank->slock, flags);
-@@ -196,7 +194,7 @@ static void exynos_irq_release_resources(struct irq_data *irqd)
- 
- 	con = readl(bank->pctl_base + reg_con);
- 	con &= ~(mask << shift);
--	con |= EXYNOS_PIN_FUNC_INPUT << shift;
-+	con |= PIN_CON_FUNC_INPUT << shift;
- 	writel(con, bank->pctl_base + reg_con);
- 
- 	raw_spin_unlock_irqrestore(&bank->slock, flags);
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.h b/drivers/pinctrl/samsung/pinctrl-exynos.h
-index bfad1ced8017..7bd6d82c9f36 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.h
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.h
-@@ -16,6 +16,9 @@
- #ifndef __PINCTRL_SAMSUNG_EXYNOS_H
- #define __PINCTRL_SAMSUNG_EXYNOS_H
- 
-+/* Values for the pin CON register */
-+#define EXYNOS_PIN_CON_FUNC_EINT	0xf
-+
- /* External GPIO and wakeup interrupt related definitions */
- #define EXYNOS_GPIO_ECON_OFFSET		0x700
- #define EXYNOS_GPIO_EFLTCON_OFFSET	0x800
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
-index 26d309d2516d..4837bceb767b 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.c
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
-@@ -26,8 +26,6 @@
- #include <linux/of_device.h>
- #include <linux/spinlock.h>
- 
--#include <dt-bindings/pinctrl/samsung.h>
--
- #include "../core.h"
- #include "pinctrl-samsung.h"
- 
-@@ -614,7 +612,7 @@ static int samsung_gpio_set_direction(struct gpio_chip *gc,
- 	data = readl(reg);
- 	data &= ~(mask << shift);
- 	if (!input)
--		data |= EXYNOS_PIN_FUNC_OUTPUT << shift;
-+		data |= PIN_CON_FUNC_OUTPUT << shift;
- 	writel(data, reg);
- 
- 	return 0;
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.h b/drivers/pinctrl/samsung/pinctrl-samsung.h
-index fc6f5199c548..9af93e3d8d9f 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.h
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.h
-@@ -53,6 +53,14 @@ enum pincfg_type {
- #define PINCFG_UNPACK_TYPE(cfg)		((cfg) & PINCFG_TYPE_MASK)
- #define PINCFG_UNPACK_VALUE(cfg)	(((cfg) & PINCFG_VALUE_MASK) >> \
- 						PINCFG_VALUE_SHIFT)
-+/*
-+ * Values for the pin CON register, choosing pin function.
-+ * The basic set (input and output) are same between: S3C24xx, S3C64xx, S5PV210,
-+ * Exynos ARMv7, Exynos ARMv8, Tesla FSD.
-+ */
-+#define PIN_CON_FUNC_INPUT		0x0
-+#define PIN_CON_FUNC_OUTPUT		0x1
-+
- /**
-  * enum eint_type - possible external interrupt types.
-  * @EINT_TYPE_NONE: bank does not support external interrupts
-diff --git a/include/dt-bindings/pinctrl/samsung.h b/include/dt-bindings/pinctrl/samsung.h
-index 950970634dfe..23e2ffcf6ab8 100644
---- a/include/dt-bindings/pinctrl/samsung.h
-+++ b/include/dt-bindings/pinctrl/samsung.h
-@@ -10,6 +10,9 @@
- #ifndef __DT_BINDINGS_PINCTRL_SAMSUNG_H__
- #define __DT_BINDINGS_PINCTRL_SAMSUNG_H__
- 
-+#warning "These bindings were deprecated, because they do not match the actual bindings but register values." \
-+	 "Instead include the header in the DTS source directory."
-+
- #define EXYNOS_PIN_PULL_NONE		0
- #define EXYNOS_PIN_PULL_DOWN		1
- #define EXYNOS_PIN_PULL_UP		3
--- 
-2.34.1
+Acked-by: Wander Lairson Costa <wander@redhat.com>
 

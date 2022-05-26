@@ -2,53 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6D95354E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB0F5354EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbiEZUpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
+        id S1348990AbiEZUpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349124AbiEZUok (ORCPT
+        with ESMTP id S1349309AbiEZUpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:44:40 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D63E7309
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:44:22 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id a12-20020a92c54c000000b002d2f39932e8so803994ilj.19
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:44:21 -0700 (PDT)
+        Thu, 26 May 2022 16:45:10 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8757E8B84
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:44:58 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id f9so5232246ejc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=paw5SYFXWn9NCMynf9wnULxZ3Y1uB+T0pzqFJf4vB4I=;
+        b=G4uZJutz3Gwl/OF4uR7la5EZptfaZ2TFeAvIFIBniosgSQzjJu9mSdRL10o1eSILSn
+         tokalQfQipoWGw8o2DPrHHvny4q5rklGbfJOZCFOXbcOo7OCK4zcuYhMdoAip8iHCmHQ
+         MX6/JOrsFZr163129HlRV6xM3jTbHVPAVcdvSKqRr+4sWp5O2MeFO0NPLIiGiwpXvOY3
+         CO7ArHxh+0O/dlWjoPHLeCGjL22MEVM+ePK9SWYtPpte5Umi803RGvndePSxfllsoFV0
+         XEf9v9RpMGIf9dbSTxLMk93pGP6nzvd58yUqNBbZdeBmhd5tDJbUhTRB90Qn6s15IhVm
+         lLVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=YLpfqytwZpazcMvsxOmLyJTXwY63w1jw+WEd0Y5fcQU=;
-        b=wMzO53NVIZwI5kTA/SfXrJ/L8q7Vp76x3tnldj4/+ZbNVqEsFezOmU7SjgwBPN9bI5
-         1/ZOaKhovVlBo1bofR6jh/m9X//5jRo8lAIsMv2+KXFYW5n1EJielfMTydpAgzYQOkYG
-         RAdAfxdB1mBzesonU0S2tEUZot7o8G+UKB566frQ0egn7UXUesdFsELF3zmvLS8U3VXG
-         nujincgqtCyiXaEOuhHsyuBfl7y6iFNqAxGYMKS1NxbyH6MPXj8IxqxfGjXUVLSriTrw
-         RvJn8lmqno+qnWvZwF1Y/kRmq5XgfoW/gBJEss8xqCAEzmFtsXWyxM8RryFfu2Sz+pyM
-         QmFA==
-X-Gm-Message-State: AOAM5325Nl0KAAfaSUeytNCqUq61EJWphsHJTua9rqhms9qxBiGvbAwa
-        XfS0I6smB3tXppuids59sYhIp/XWtPjZE4Ilj/c5ar8aJVlL
-X-Google-Smtp-Source: ABdhPJye1DkXT8FOzDD3SU2FqtfgKeugTAvQ24ijnDcQg0doWCxx+7P0koKkCQdnjEvE5jDNj/01L2W/+nOf10CRx6UHiGi2l9+K
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=paw5SYFXWn9NCMynf9wnULxZ3Y1uB+T0pzqFJf4vB4I=;
+        b=V4e8tEsnfx5zkdmMazNYk6tkXc4dU2UmLgO7XjyzfhCvheo8wRs6gEjBuMmfM9VXNl
+         6Qu+F43NR9l6wtddDHWVIzfGhH4f06oSP751O/YwCeM3vl2GaHVl6q5U8Lc68QABOHK4
+         EDGXJmbAGP8K7pzyS8trZeJJpzYZfPVFKzp9K/uOCIRjV4joi2cgAS7cJGfgtJz8MI2G
+         MjoanCl9YruzxkvhrPwpvqvZl1bHagAKQb+RlLbtjDqLmec0PtR/3O9Bw5uSy4UH7Jca
+         Y6O4/8wrdK9fyBC5Q+LMMpXrZ0693fj7Rah3968zhVIuJ4f1THeQneatY9dTK1qSVoX4
+         CgSA==
+X-Gm-Message-State: AOAM531ZO9UYzNQL8hJZ/36SRmSMjt9bmLfxgHR5v3nLHnXJkEUXUIxc
+        qIFmCdbKBMNzIMlNBO7e2lhdLw==
+X-Google-Smtp-Source: ABdhPJxhuEdarJLR2HwYqRyrz/1r6PmgvWgPUdkDWeAz6mkCle0i8FHB5ebBVjF6tZ92IdprBta6Ig==
+X-Received: by 2002:a17:907:a0c8:b0:6fe:b73c:193f with SMTP id hw8-20020a170907a0c800b006feb73c193fmr27628667ejc.11.1653597897479;
+        Thu, 26 May 2022 13:44:57 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g3-20020a1709063b0300b006feb3d65330sm810982ejf.109.2022.05.26.13.44.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 13:44:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org, Wei Xu <xuwei5@hisilicon.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: hisilicon: adjust whitespace around '='
+Date:   Thu, 26 May 2022 22:44:53 +0200
+Message-Id: <20220526204453.832681-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:170b:b0:2cf:970f:6050 with SMTP id
- u11-20020a056e02170b00b002cf970f6050mr20806107ill.5.1653597861100; Thu, 26
- May 2022 13:44:21 -0700 (PDT)
-Date:   Thu, 26 May 2022 13:44:21 -0700
-In-Reply-To: <000000000000212fec05de1a16ec@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001cc34505dff04143@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in blk_mq_sched_free_rqs
-From:   syzbot <syzbot+3e3f419f4a7816471838@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,204 +72,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Fix whitespace coding style: use single space instead of tabs or
+multiple spaces around '=' sign in property assignment.  No functional
+changes (same DTB).
 
-HEAD commit:    6c465408a770 dt-bindings: net: adin: Fix adi,phy-output-cl..
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=147357d5f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e2c9c27babb4d679
-dashboard link: https://syzkaller.appspot.com/bug?extid=3e3f419f4a7816471838
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1658daf3f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a6a8eef00000
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3e3f419f4a7816471838@syzkaller.appspotmail.com
+---
 
-==================================================================
-BUG: KASAN: use-after-free in blk_mq_sched_free_rqs+0x211/0x250 block/blk-mq-sched.c:631
-Read of size 4 at addr ffff888076e82858 by task udevd/3675
+Output compared with dtx_diff and fdtdump.
+---
+ arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts | 12 ++++++------
+ arch/arm64/boot/dts/hisilicon/hi3660.dtsi         |  8 ++++----
+ arch/arm64/boot/dts/hisilicon/hi3670.dtsi         |  2 +-
+ arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts    | 12 ++++++------
+ arch/arm64/boot/dts/hisilicon/hip06.dtsi          |  6 +++---
+ arch/arm64/boot/dts/hisilicon/hip07.dtsi          |  6 +++---
+ 6 files changed, 23 insertions(+), 23 deletions(-)
 
-CPU: 1 PID: 3675 Comm: udevd Not tainted 5.18.0-syzkaller-04953-g6c465408a770 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- blk_mq_sched_free_rqs+0x211/0x250 block/blk-mq-sched.c:631
- elevator_exit+0x3b/0x70 block/elevator.c:196
- disk_release_mq block/genhd.c:1139 [inline]
- disk_release+0x17c/0x420 block/genhd.c:1168
- device_release+0x9f/0x240 drivers/base/core.c:2229
- kobject_cleanup lib/kobject.c:673 [inline]
- kobject_release lib/kobject.c:704 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1c8/0x540 lib/kobject.c:721
- put_device+0x1b/0x30 drivers/base/core.c:3512
- blkdev_close+0x64/0x80 block/fops.c:495
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f6713525fc3
-Code: 48 ff ff ff b8 ff ff ff ff e9 3e ff ff ff 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
-RSP: 002b:00007ffe588d18a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 00007f671390c6a8 RCX: 00007f6713525fc3
-RDX: 0000000003938700 RSI: 000000000aba9500 RDI: 0000000000000008
-RBP: 00005558b8e42300 R08: 0000000000000001 R09: 00005558b8e41190
-R10: 00000000000001b6 R11: 0000000000000246 R12: 0000000000000002
-R13: 00005558b8e1bef0 R14: 0000000000000008 R15: 00005558b8e1b910
- </TASK>
-
-Allocated by task 21741:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
- kmalloc include/linux/slab.h:588 [inline]
- kzalloc include/linux/slab.h:721 [inline]
- nbd_dev_add+0x4d/0xc90 drivers/block/nbd.c:1729
- nbd_genl_connect+0x11f3/0x1930 drivers/block/nbd.c:1946
- genl_family_rcv_msg_doit+0x228/0x320 net/netlink/genetlink.c:731
- genl_family_rcv_msg net/netlink/genetlink.c:775 [inline]
- genl_rcv_msg+0x328/0x580 net/netlink/genetlink.c:792
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
- genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:734
- ____sys_sendmsg+0x6eb/0x810 net/socket.c:2492
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2546
- __sys_sendmsg net/socket.c:2575 [inline]
- __do_sys_sendmsg net/socket.c:2584 [inline]
- __se_sys_sendmsg net/socket.c:2582 [inline]
- __x64_sys_sendmsg+0x132/0x220 net/socket.c:2582
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Freed by task 3751:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1727 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1753
- slab_free mm/slub.c:3507 [inline]
- kfree+0xd6/0x4d0 mm/slub.c:4555
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-
-Last potentially related work creation:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- __kasan_record_aux_stack+0xbe/0xd0 mm/kasan/generic.c:348
- insert_work+0x48/0x350 kernel/workqueue.c:1358
- __queue_work+0x62e/0x1140 kernel/workqueue.c:1517
- queue_work_on+0xee/0x110 kernel/workqueue.c:1545
- queue_work include/linux/workqueue.h:502 [inline]
- nbd_put drivers/block/nbd.c:279 [inline]
- nbd_put+0xd7/0x120 drivers/block/nbd.c:272
- blkdev_put_whole+0xbb/0xf0 block/bdev.c:696
- blkdev_put+0x226/0x770 block/bdev.c:954
- blkdev_close+0x64/0x80 block/fops.c:495
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-The buggy address belongs to the object at ffff888076e82800
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 88 bytes inside of
- 1024-byte region [ffff888076e82800, ffff888076e82c00)
-
-The buggy address belongs to the physical page:
-page:ffffea0001dba000 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x76e80
-head:ffffea0001dba000 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 0000000000000000 dead000000000001 ffff888010c41dc0
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 19417, tgid 19413 (syz-executor130), ts 1575509356197, free_ts 1575489414721
- prep_new_page mm/page_alloc.c:2441 [inline]
- get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4182
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5408
- __alloc_pages_node include/linux/gfp.h:587 [inline]
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab+0x80/0x3c0 mm/slub.c:1942
- new_slab mm/slub.c:2002 [inline]
- ___slab_alloc+0x985/0xd90 mm/slub.c:3002
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3089
- slab_alloc_node mm/slub.c:3180 [inline]
- kmem_cache_alloc_node_trace+0x185/0x420 mm/slub.c:3278
- kmalloc_node include/linux/slab.h:606 [inline]
- kzalloc_node include/linux/slab.h:732 [inline]
- sbitmap_queue_init_node+0x1d8/0x460 lib/sbitmap.c:438
- bt_alloc block/blk-mq-tag.c:543 [inline]
- blk_mq_init_bitmaps+0x57/0x180 block/blk-mq-tag.c:555
- blk_mq_init_tags+0x10b/0x170 block/blk-mq-tag.c:586
- blk_mq_alloc_rq_map+0x1ba/0x3b0 block/blk-mq.c:3179
- blk_mq_alloc_map_and_rqs+0x4b/0x180 block/blk-mq.c:3630
- blk_mq_sched_alloc_map_and_rqs block/blk-mq-sched.c:507 [inline]
- blk_mq_init_sched+0x2af/0x6d0 block/blk-mq-sched.c:587
- elevator_init_mq+0x2b5/0x4e0 block/elevator.c:709
- device_add_disk+0x102/0xe20 block/genhd.c:425
- add_disk include/linux/blkdev.h:761 [inline]
- nbd_dev_add+0x89f/0xc90 drivers/block/nbd.c:1816
- nbd_genl_connect+0x11f3/0x1930 drivers/block/nbd.c:1946
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1356 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1406
- free_unref_page_prepare mm/page_alloc.c:3328 [inline]
- free_unref_page+0x19/0x6a0 mm/page_alloc.c:3423
- __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2521
- qlink_free mm/kasan/quarantine.c:157 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:176
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:283
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:446
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:750 [inline]
- slab_alloc_node mm/slub.c:3214 [inline]
- slab_alloc mm/slub.c:3222 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
- kmem_cache_alloc+0x204/0x3b0 mm/slub.c:3239
- getname_flags.part.0+0x50/0x4f0 fs/namei.c:139
- getname_flags+0x9a/0xe0 include/linux/audit.h:323
- vfs_fstatat+0x73/0xb0 fs/stat.c:254
- vfs_lstat include/linux/fs.h:3136 [inline]
- __do_sys_newlstat+0x8b/0x110 fs/stat.c:411
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Memory state around the buggy address:
- ffff888076e82700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888076e82780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888076e82800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                    ^
- ffff888076e82880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888076e82900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+diff --git a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
+index f68580dc87d8..d2d1809a99b6 100644
+--- a/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
++++ b/arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts
+@@ -49,9 +49,9 @@ reserved-memory {
+ 		ramoops@32000000 {
+ 			compatible = "ramoops";
+ 			reg = <0x0 0x32000000 0x0 0x00100000>;
+-			record-size	= <0x00020000>;
+-			console-size	= <0x00020000>;
+-			ftrace-size	= <0x00020000>;
++			record-size = <0x00020000>;
++			console-size = <0x00020000>;
++			ftrace-size = <0x00020000>;
+ 		};
+ 	};
+ 
+@@ -63,9 +63,9 @@ reboot-mode {
+ 			compatible = "syscon-reboot-mode";
+ 			offset = <0x0>;
+ 
+-			mode-normal	= <0x77665501>;
+-			mode-bootloader	= <0x77665500>;
+-			mode-recovery	= <0x77665502>;
++			mode-normal = <0x77665501>;
++			mode-bootloader = <0x77665500>;
++			mode-recovery = <0x77665502>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+index 6b3057a09251..8343d0cedde3 100644
+--- a/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
++++ b/arch/arm64/boot/dts/hisilicon/hi3660.dtsi
+@@ -479,7 +479,7 @@ uart1: serial@fdf00000 {
+ 			reg = <0x0 0xfdf00000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
+ 			dma-names = "rx", "tx";
+-			dmas =  <&dma0 2 &dma0 3>;
++			dmas = <&dma0 2 &dma0 3>;
+ 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART1>,
+ 				 <&crg_ctrl HI3660_CLK_GATE_UART1>;
+ 			clock-names = "uartclk", "apb_pclk";
+@@ -493,7 +493,7 @@ uart2: serial@fdf03000 {
+ 			reg = <0x0 0xfdf03000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
+ 			dma-names = "rx", "tx";
+-			dmas =  <&dma0 4 &dma0 5>;
++			dmas = <&dma0 4 &dma0 5>;
+ 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART2>,
+ 				 <&crg_ctrl HI3660_PCLK>;
+ 			clock-names = "uartclk", "apb_pclk";
+@@ -519,7 +519,7 @@ uart4: serial@fdf01000 {
+ 			reg = <0x0 0xfdf01000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>;
+ 			dma-names = "rx", "tx";
+-			dmas =  <&dma0 6 &dma0 7>;
++			dmas = <&dma0 6 &dma0 7>;
+ 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART4>,
+ 				 <&crg_ctrl HI3660_CLK_GATE_UART4>;
+ 			clock-names = "uartclk", "apb_pclk";
+@@ -533,7 +533,7 @@ uart5: serial@fdf05000 {
+ 			reg = <0x0 0xfdf05000 0x0 0x1000>;
+ 			interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+ 			dma-names = "rx", "tx";
+-			dmas =  <&dma0 8 &dma0 9>;
++			dmas = <&dma0 8 &dma0 9>;
+ 			clocks = <&crg_ctrl HI3660_CLK_GATE_UART5>,
+ 				 <&crg_ctrl HI3660_CLK_GATE_UART5>;
+ 			clock-names = "uartclk", "apb_pclk";
+diff --git a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+index 3125c3869c69..886b93c5893a 100644
+--- a/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
++++ b/arch/arm64/boot/dts/hisilicon/hi3670.dtsi
+@@ -324,7 +324,7 @@ gpio3: gpio@e8a0e000 {
+ 			interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
+-			gpio-ranges =  <&pmx0 0 13 4 &pmx0 7 17 1>;
++			gpio-ranges = <&pmx0 0 13 4 &pmx0 7 17 1>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+ 			clocks = <&crg_ctrl HI3670_PCLK_GPIO3>;
+diff --git a/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts b/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts
+index 3df2afb2f637..629e604aa281 100644
+--- a/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts
++++ b/arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts
+@@ -54,9 +54,9 @@ reserved-memory {
+ 		ramoops@21f00000 {
+ 			compatible = "ramoops";
+ 			reg = <0x0 0x21f00000 0x0 0x00100000>;
+-			record-size	= <0x00020000>;
+-			console-size	= <0x00020000>;
+-			ftrace-size	= <0x00020000>;
++			record-size = <0x00020000>;
++			console-size = <0x00020000>;
++			ftrace-size = <0x00020000>;
+ 		};
+ 
+ 		/* global autoconfigured region for contiguous allocations */
+@@ -76,9 +76,9 @@ reboot-mode {
+ 			compatible = "syscon-reboot-mode";
+ 			offset = <0x0>;
+ 
+-			mode-normal	= <0x77665501>;
+-			mode-bootloader	= <0x77665500>;
+-			mode-recovery	= <0x77665502>;
++			mode-normal = <0x77665501>;
++			mode-bootloader = <0x77665500>;
++			mode-recovery = <0x77665502>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/hisilicon/hip06.dtsi b/arch/arm64/boot/dts/hisilicon/hip06.dtsi
+index 70d7732dd348..2f8b03b0d365 100644
+--- a/arch/arm64/boot/dts/hisilicon/hip06.dtsi
++++ b/arch/arm64/boot/dts/hisilicon/hip06.dtsi
+@@ -537,7 +537,7 @@ port@0 {
+ 
+ 			port@1 {
+ 				reg = <1>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <1>;
+ 				port-mode-offset = <1>;
+ 				media-type = "fiber";
+@@ -546,7 +546,7 @@ port@1 {
+ 			port@4 {
+ 				reg = <4>;
+ 				phy-handle = <&phy0>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <4>;
+ 				port-mode-offset = <2>;
+ 				media-type = "copper";
+@@ -555,7 +555,7 @@ port@4 {
+ 			port@5 {
+ 				reg = <5>;
+ 				phy-handle = <&phy1>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <5>;
+ 				port-mode-offset = <3>;
+ 				media-type = "copper";
+diff --git a/arch/arm64/boot/dts/hisilicon/hip07.dtsi b/arch/arm64/boot/dts/hisilicon/hip07.dtsi
+index 6baf6a686450..1a16662f8867 100644
+--- a/arch/arm64/boot/dts/hisilicon/hip07.dtsi
++++ b/arch/arm64/boot/dts/hisilicon/hip07.dtsi
+@@ -1422,7 +1422,7 @@ port@0 {
+ 
+ 			port@1 {
+ 				reg = <1>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				cpld-syscon = <&dsa_cpld 0x4>;
+ 				port-rst-offset = <1>;
+ 				port-mode-offset = <1>;
+@@ -1433,7 +1433,7 @@ port@1 {
+ 			port@4 {
+ 				reg = <4>;
+ 				phy-handle = <&phy0>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <4>;
+ 				port-mode-offset = <2>;
+ 				mc-mac-mask = [ff f0 00 00 00 00];
+@@ -1443,7 +1443,7 @@ port@4 {
+ 			port@5 {
+ 				reg = <5>;
+ 				phy-handle = <&phy1>;
+-				serdes-syscon= <&serdes_ctrl>;
++				serdes-syscon = <&serdes_ctrl>;
+ 				port-rst-offset = <5>;
+ 				port-mode-offset = <3>;
+ 				mc-mac-mask = [ff f0 00 00 00 00];
+-- 
+2.34.1
 

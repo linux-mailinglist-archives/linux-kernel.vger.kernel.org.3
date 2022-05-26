@@ -2,262 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD8B534AAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 09:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FA5534AB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 09:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346369AbiEZHOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 03:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S244643AbiEZHQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 03:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346341AbiEZHO1 (ORCPT
+        with ESMTP id S235691AbiEZHQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 03:14:27 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB68A3969C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:14:25 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id cs3-20020a17090af50300b001e0808b5838so1022587pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:14:25 -0700 (PDT)
+        Thu, 26 May 2022 03:16:09 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB1E37BF1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:16:05 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id i40so741618eda.7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:16:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fnvSBK00HYkhNihK4hUnHuTK0u4mSGiraqCdnpeu1iI=;
-        b=LEs7yybWWw4H+KEp7l+qyYBrZDtmgqpUaifQnnQsILUShrLGXoOIG+ies4ZUpBNr0X
-         OUSpyhHCWMW2wL1Bs6SlZc5oxJlCKc1Ub/q6cVP6m2kz/01Tz1n9ZBi0ipXXSgtcZ3C6
-         fNKl1PJyGc9TaSarr48WiKXbI7fGMY0HHXBbEJkbwaI9QGeeac7xw9lIS5oBy04aJYfL
-         ox8dk6Vm0JQNkKvtIH2pzPcLwUJvP0E4KoLMxwLsi2R/IFxL704JcC6Meu8FfH3Nxa+b
-         3/pkAqF5m2fh/xnIrAG+rnPjKj9si5Jd3CDGnyOMoM7/xX01+ObEVpi3TXvOd9sqAjJL
-         GKvA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vemDBZDCnhpAK2uXIq2WrkheYMWxwrmu5Ee771X7p5k=;
+        b=us3L1pxoQlXucRLuOrHLCMJADLuv6kfsD5XMhrvhSTVYYm4xfsAm+5+cY9YTR39vy5
+         nhby1fQuzH8KdqPSCn2aWeOzCMoTk0a3QzZIuMDZ7pXKVeNSRQ6d6A9QUZ9ZHJK6c0CW
+         K84q1Fq3qVOZlmL4LtpNB66UCbeCe/kG68h0RN1+uUhi47q5zIYlWS7S0V8A0OBfGiW5
+         6Z8AOavjOarpZPPzMrm/coG11ipPMz8fxT8L/Y5Vrbr0M4pE3KsuejP+MTwQES0VdMM+
+         dRTYsXbqb2ffqg6g5kRaozLF+tAsxS36mQeqVkmMP5T7uz9dFWgpJSeujstPyDvHoSjG
+         5t4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fnvSBK00HYkhNihK4hUnHuTK0u4mSGiraqCdnpeu1iI=;
-        b=nI/UcxZA7eeevmO2g5e10yibjfLH6/746moS7tRC/MzJ3ypi4cF5gOZVYUCGv35fGV
-         2fl5Cy7uagvz74PExEv1Duw0OXj2R7+94yyciG9mMJEwAl4bf1vDrRe+BUH7n0KawlLJ
-         W5zkBQ0DgApUmM754vz9nydwga32Vrn4EMGiELRefnV0AL726nBF7wjy0SeYFw0pCek2
-         P2uepv2OxZudYRqT5i2z4OYX82E+pCSIEoQ9IrOcqfRqy3sXTCs3R4Svs8gF2P08jL5r
-         v/8CoY/61ze3W1wGBTkrFE7YmODOxBkxRj+7mazoGuWGHYXjY1VcO1s1hlslbL6JUrQy
-         UbmQ==
-X-Gm-Message-State: AOAM530V2kunlMLX0DgHQgWyAXYhQAoUieCcdZ+m0X/VgwoOOyOCkFr0
-        vxM7HzwiVJslJkb/GEe3xZacoA==
-X-Google-Smtp-Source: ABdhPJyjokAorAGLaFhyF0hLz72hfUPeBbqTarn063k4Q5VxmiWa08W3+mMgeGocLQh0nOlaeWI6Iw==
-X-Received: by 2002:a17:90b:23c4:b0:1e0:9e72:e226 with SMTP id md4-20020a17090b23c400b001e09e72e226mr1182976pjb.136.1653549264915;
-        Thu, 26 May 2022 00:14:24 -0700 (PDT)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id e24-20020aa78c58000000b005184031963bsm640629pfd.85.2022.05.26.00.14.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 00:14:24 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, odin@uged.al
-Cc:     linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v2 2/2] sched/fair: optimize and simplify rq leaf_cfs_rq_list
-Date:   Thu, 26 May 2022 15:13:54 +0800
-Message-Id: <20220526071354.6426-3-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220526071354.6426-1-zhouchengming@bytedance.com>
-References: <20220526071354.6426-1-zhouchengming@bytedance.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vemDBZDCnhpAK2uXIq2WrkheYMWxwrmu5Ee771X7p5k=;
+        b=bG+8DccRxrCXReKLfimM8sY4EDzKV9Oea0n3P9XqRx3fOEC36G6zoMKav/AyIinmAt
+         BbC81tWXyN2aNitoh5s+3M0lF+qwSkui48TR9b7XD2YMmve49AfAqHwA8xRE9mr4u8fT
+         nNodKBEaBy43VJpcaMcg1kv8ustXlw0PskDhrUzyCkHDnCxrIdrb1IJvHRpJXOAR70LS
+         PvS/F1oBZF7I5gGNfIXGrniu/S+BB+wc1XzFiDm2T+qNbqY+XB+lsvPWyGQJU/dkEjZR
+         6KCtgelgWYNm185vwJG/if6ovPFvN7AUwjq3KwtS5sIaNP5lB/sEOq6Vv3yKSnwOJJuf
+         DkGQ==
+X-Gm-Message-State: AOAM530xgKGTlGJiX2RmC7k7eqgo1etcBLugi/gOr33Z9QYoRdvdsoHq
+        eBU7dBNFYMiSxlUUH3YHABc/7g==
+X-Google-Smtp-Source: ABdhPJyKhk21/nQY9A/VVQJDajElTIqAvYmnxdQHegM5RNLrV2nLJPVTJA7zb0PcEHPcMbBE3j4ejQ==
+X-Received: by 2002:a05:6402:1cc1:b0:428:a06e:a30f with SMTP id ds1-20020a0564021cc100b00428a06ea30fmr37677711edb.377.1653549364396;
+        Thu, 26 May 2022 00:16:04 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id b12-20020a50cccc000000b0042ab87ea713sm415510edj.22.2022.05.26.00.16.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 00:16:03 -0700 (PDT)
+Message-ID: <7e019e53-c449-6520-009e-11a45e30df10@linaro.org>
+Date:   Thu, 26 May 2022 09:16:02 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Removal of qcom,board-id and qcom,msm-id
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>, agross@kernel.org,
+        arnd@arndb.de, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        olof@lixom.net, robh@kernel.org, sboyd@kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
+ <20220522195138.35943-1-konrad.dybcio@somainline.org>
+ <53d5999b-88ee-24db-fd08-ff9406e2b7b7@linaro.org>
+ <YowBtNkZ678ns4Ob@builder.lan>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YowBtNkZ678ns4Ob@builder.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We notice the rq leaf_cfs_rq_list has two problems when do bugfix
-backports and some test profiling.
+Thank you all (not only Bjorn here) for comments. These are nice
+arguments to prepare a proper patch.
 
-1. cfs_rqs under throttled subtree could be added to the list, and
-   make their fully decayed ancestors on the list, even though not needed.
+If I got correctly all your feedback, the preference is to document
+board-id/msm-id boards. I can prepare a patch for this, unless someone
+wants to revive old effort (from few years ago).
 
-2. #1 also make the leaf_cfs_rq_list management complex and error prone,
-   this is the list of related bugfix so far:
+On 23/05/2022 23:50, Bjorn Andersson wrote:
+> On Mon 23 May 02:21 CDT 2022, Krzysztof Kozlowski wrote:
+> 
+>> On 22/05/2022 21:51, Konrad Dybcio wrote:
+>>> Hi,
+>>>
+>>> removing these properties will not bring almost any benefit (other than making
+>>> some checks happy any saving some <200 LoC) and will make the lives of almost
+>>> all people doing independent development for linux-on-msm harder. There are
+>>> almost unironically like 3 people outside Linaro and QUIC who have
+>>> non-vendor-fused development boards AND the sources to rebuild the
+>>> bootloader on their own. Making it harder to boot is only going to
+>>> discourage people from developing on these devices, which is already not
+>>> that pleasant, especially with newer platforms where you have to fight with
+>>> the oh-so-bright ideas of Android boot chain..
+>>>
+>>> This only concerns devices released before sm8350, as the new ones will not
+>>> even boot with these properties present (or at least SONY Sagami, but I
+>>> doubt it's an isolated case), so other than completing support for older
+>>> devices, it won't be an issue going forward, anyway. But there are give
+>>> or take 50 locked down devices in mainline right now, and many more waiting
+>>> to be upstreamed in various downstream close-to-mainline trees that should
+>>> not be disregarded just because Qualcomm is far from the best at making
+>>> their BSP software stack clean.
+>>
+>> I actually wonder why do you need these properties for community work on
+>> such boards? You ship kernel with one concatenated DTB and the
+>> bootloader does not need the board-id/msm-id fields, doesn't it?
+>>
+> 
+> During the last years all reference devices that I know of has allowed
+> us to boot Image.gz+dtb concatenated kernels without
+> qcom,{board-msm}-id.
+> 
+> There's however been several end-user devices that for some reason
+> refuse to accept the concatenated dtb unless these values matches.
 
-   commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
-   commit fe61468b2cbc ("sched/fair: Fix enqueue_task_fair warning")
-   commit b34cb07dde7c ("sched/fair: Fix enqueue_task_fair() warning some more")
-   commit 39f23ce07b93 ("sched/fair: Fix unthrottle_cfs_rq() for leaf_cfs_rq list")
-   commit 0258bdfaff5b ("sched/fair: Fix unfairness caused by missing load decay")
-   commit a7b359fc6a37 ("sched/fair: Correctly insert cfs_rq's to list on unthrottle")
-   commit fdaba61ef8a2 ("sched/fair: Ensure that the CFS parent is added after unthrottling")
-   commit 2630cde26711 ("sched/fair: Add ancestors of unthrottled undecayed cfs_rq")
+I think several recently upstreamed boards have board-id/msm-id
+properties, so I wonder how can we judge whether these are needed or not.
 
-commit 31bc6aeaab1d ("sched/fair: Optimize update_blocked_averages()")
-delete every cfs_rq under throttled subtree from rq->leaf_cfs_rq_list,
-and delete the throttled_hierarchy() test in update_blocked_averages(),
-which optimized update_blocked_averages().
+> 
+>> Not mentioning that in the past bootloader was actually not using these
+>> properties at all, because it was the dtbTool who was parsing them. So
+>> in any case either your device works fine without these properties or
+>> you have to use dtbTool, right?
+>>
+> 
+> Unfortunately not. There are the devices which accepts a single appended
+> dtb without these properties, but beyond that it's been a large mix.
+> 
+> I've seen cases where dtbTool packs up a number of dtbs, but the loaded
+> one still need to have these properties, and there are devices out there
+> that supports multiple appended dtbs etc.
+> 
+> 
+> Last but not least, forcing everyone to use dtbTool adds a
+> non-standardized tool to everyone's workflow, a tool that has to be kept
+> up to date with the compatible to msm/board-id mapping.
 
-But those later bugfix add cfs_rqs under throttled subtree back to
-rq->leaf_cfs_rq_list again, with their fully decayed ancestors, for
-the integrity of rq->leaf_cfs_rq_list.
+OK
 
-This patch takes another method, skip all cfs_rqs under throttled
-hierarchy when list_add_leaf_cfs_rq(), to completely make cfs_rqs
-under throttled subtree off the leaf_cfs_rq_list.
+> 
+>>>
+>>> One solution is to chainload another, (n+1)-stage bootloader, but this is
+>>> not ideal, as:
+>>>
+>>> 1) the stock bootloader can boot Linux just fine on most devices (except
+>>> for single exceptions, where beloved OEMs didn't implement arm64 booting or
+>>> something)
+>>>
+>>> 2) the boot chain on MSM is already 3- or 4- stage and adding to that will
+>>> only create an unnecessary mess
+>>>
+>>> 3) the job of kernel people is not to break userspace. If the
+>>> device can not even exit bootloader after a kernel upgrade, it's a big
+>>> failure.
+>>
+>> The job of kernel people is to follow bindings and since they were
+>> introduced 7 years ago, I would say there was plenty of time for that.
+>>
+> 
+> We're following the bindings and don't pick board-id or msm-id unless
+> there's a particular reason for it - which typically is that the
+> downstream bootloader requires it - we don't use the properties on the
+> kernel side.
 
-So we don't need to consider throttled related things in
-enqueue_entity(), unthrottle_cfs_rq() and enqueue_task_fair(),
-which simplify the code a lot. Also optimize update_blocked_averages()
-since cfs_rqs under throttled hierarchy and their ancestors
-won't be on the leaf_cfs_rq_list.
+I meant to follow existing bindings for compatible:
+"qcom,<SoC>[-<soc_version>][-<foundry_id>]-<board>[/<subtype>][-<board_version>]"
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
-v2:
- - move throttled_hierarchy() outside list_add_leaf_cfs_rq(),
-   suggested by Vincent.
----
- kernel/sched/fair.c | 77 ++++++++++++---------------------------------
- 1 file changed, 20 insertions(+), 57 deletions(-)
+I think none of handsets (google, fairphone, lenovo, microsoft, sony,
+xiaomi) follow it.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 5276d05692e0..7438c1865109 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4374,16 +4374,11 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- 		__enqueue_entity(cfs_rq, se);
- 	se->on_rq = 1;
- 
--	/*
--	 * When bandwidth control is enabled, cfs might have been removed
--	 * because of a parent been throttled but cfs->nr_running > 1. Try to
--	 * add it unconditionally.
--	 */
--	if (cfs_rq->nr_running == 1 || cfs_bandwidth_used())
--		list_add_leaf_cfs_rq(cfs_rq);
--
--	if (cfs_rq->nr_running == 1)
-+	if (cfs_rq->nr_running == 1) {
- 		check_enqueue_throttle(cfs_rq);
-+		if (!throttled_hierarchy(cfs_rq))
-+			list_add_leaf_cfs_rq(cfs_rq);
-+	}
- }
- 
- static void __clear_buddies_last(struct sched_entity *se)
-@@ -4998,11 +4993,18 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
- 	/* update hierarchical throttle state */
- 	walk_tg_tree_from(cfs_rq->tg, tg_nop, tg_unthrottle_up, (void *)rq);
- 
--	/* Nothing to run but something to decay (on_list)? Complete the branch */
- 	if (!cfs_rq->load.weight) {
--		if (cfs_rq->on_list)
--			goto unthrottle_throttle;
--		return;
-+		if (!cfs_rq->on_list)
-+			return;
-+		/*
-+		 * Nothing to run but something to decay (on_list)?
-+		 * Complete the branch.
-+		 */
-+		for_each_sched_entity(se) {
-+			if (list_add_leaf_cfs_rq(cfs_rq_of(se)))
-+				break;
-+		}
-+		goto unthrottle_throttle;
- 	}
- 
- 	task_delta = cfs_rq->h_nr_running;
-@@ -5040,31 +5042,12 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
- 		/* end evaluation on encountering a throttled cfs_rq */
- 		if (cfs_rq_throttled(qcfs_rq))
- 			goto unthrottle_throttle;
--
--		/*
--		 * One parent has been throttled and cfs_rq removed from the
--		 * list. Add it back to not break the leaf list.
--		 */
--		if (throttled_hierarchy(qcfs_rq))
--			list_add_leaf_cfs_rq(qcfs_rq);
- 	}
- 
- 	/* At this point se is NULL and we are at root level*/
- 	add_nr_running(rq, task_delta);
- 
- unthrottle_throttle:
--	/*
--	 * The cfs_rq_throttled() breaks in the above iteration can result in
--	 * incomplete leaf list maintenance, resulting in triggering the
--	 * assertion below.
--	 */
--	for_each_sched_entity(se) {
--		struct cfs_rq *qcfs_rq = cfs_rq_of(se);
--
--		if (list_add_leaf_cfs_rq(qcfs_rq))
--			break;
--	}
--
- 	assert_list_leaf_cfs_rq(rq);
- 
- 	/* Determine whether we need to wake up potentially idle CPU: */
-@@ -5719,13 +5702,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
- 		/* end evaluation on encountering a throttled cfs_rq */
- 		if (cfs_rq_throttled(cfs_rq))
- 			goto enqueue_throttle;
--
--               /*
--                * One parent has been throttled and cfs_rq removed from the
--                * list. Add it back to not break the leaf list.
--                */
--               if (throttled_hierarchy(cfs_rq))
--                       list_add_leaf_cfs_rq(cfs_rq);
- 	}
- 
- 	/* At this point se is NULL and we are at root level*/
-@@ -5749,21 +5725,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
- 		update_overutilized_status(rq);
- 
- enqueue_throttle:
--	if (cfs_bandwidth_used()) {
--		/*
--		 * When bandwidth control is enabled; the cfs_rq_throttled()
--		 * breaks in the above iteration can result in incomplete
--		 * leaf list maintenance, resulting in triggering the assertion
--		 * below.
--		 */
--		for_each_sched_entity(se) {
--			cfs_rq = cfs_rq_of(se);
--
--			if (list_add_leaf_cfs_rq(cfs_rq))
--				break;
--		}
--	}
--
- 	assert_list_leaf_cfs_rq(rq);
- 
- 	hrtick_update(rq);
-@@ -11293,9 +11254,10 @@ static inline bool vruntime_normalized(struct task_struct *p)
-  */
- static void propagate_entity_cfs_rq(struct sched_entity *se)
- {
--	struct cfs_rq *cfs_rq;
-+	struct cfs_rq *cfs_rq = cfs_rq_of(se);
- 
--	list_add_leaf_cfs_rq(cfs_rq_of(se));
-+	if (!throttled_hierarchy(cfs_rq))
-+		list_add_leaf_cfs_rq(cfs_rq);
- 
- 	/* Start to propagate at parent */
- 	se = se->parent;
-@@ -11304,7 +11266,8 @@ static void propagate_entity_cfs_rq(struct sched_entity *se)
- 		cfs_rq = cfs_rq_of(se);
- 
- 		update_load_avg(cfs_rq, se, UPDATE_TG);
--		list_add_leaf_cfs_rq(cfs_rq);
-+		if (!throttled_hierarchy(cfs_rq))
-+			list_add_leaf_cfs_rq(cfs_rq);
- 	}
- }
- #else
--- 
-2.36.1
+It seems only Qcom boards (with 'qcom' as vendor prefix) use such
+pattern, but the bindings say "Each board must specify", not "Board for
+such bootloader must specify"...
 
+> 
+>> If the dtbTool support for the bindings is there, then there is no
+>> breakage, because you had to use dtbTool before so you have to use now.
+>>
+> 
+> Among all the platforms I maintain, MSM8916 (db410c) is the only one
+> where I use dtbTool - because it refuses to accept the concatenated
+> dtb.
+
+
+Best regards,
+Krzysztof

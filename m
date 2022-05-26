@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFA55351C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E505351C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 18:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348057AbiEZP6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S1348067AbiEZQAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 12:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348049AbiEZP6q (ORCPT
+        with ESMTP id S1348049AbiEZQAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 11:58:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 431C962CCC
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653580719;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ml+2Un+2KZ3TVl6sG/A1YKmOT5qa0U4xSuVqhe5us5Q=;
-        b=XljZ6GtvORUT9OXJAiKFl+0nXZEhiGw/V/lF4mt2TqFrmOM625lziYtP2caNB9b7s6WG7d
-        qAdLboIv+Ae5uKklD7dhxsKoCcTE4/23tZLP8CgmN0TTMgQoMvBvuMQF4cpfbKrmm36B84
-        4PTDN23vkK0qqCMgIklulUurlyzDOj8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-nyIWnIUcMqSjShNryX3hAA-1; Thu, 26 May 2022 11:58:38 -0400
-X-MC-Unique: nyIWnIUcMqSjShNryX3hAA-1
-Received: by mail-wm1-f70.google.com with SMTP id u12-20020a05600c19cc00b0038ec265155fso3233165wmq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:58:37 -0700 (PDT)
+        Thu, 26 May 2022 12:00:44 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAE69346B
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:00:42 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-300beab2b76so19872887b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 09:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j9xQMdzHNoTHZ+UFq3AI9FpCr84h47csBpAVGEWrE6E=;
+        b=gKUCA8XRy/7JOvVldrZ98O5RkwoNOFqFfVJCWQmSpHW+tyi++EKfJ8iAHZiR6KWIB/
+         eXPp+A43o7gNeTUt2iC4vaJCbp0efqZjXXQLa7Tg62DEzFcMgqR6cljQP7gFMTtrDidc
+         BNsQwJ8T+Jc8UoPqH4rvET9kMgjUG6HS58z9KlosNdNDsRoFLLizwJfFW8is630RPsli
+         vXd+xbKl+O+glH18i+BmZles82K3xg7eviCZDURpyevjzFXUnoffDQ4aAO+z/XSWGWBe
+         /ZeB5HMPgOpniKQud0ZvZJSChAmbL/Ey7iUHW3OaKL2ygAWzbPhE2+8PAVdS+xCdJSmW
+         kwkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Ml+2Un+2KZ3TVl6sG/A1YKmOT5qa0U4xSuVqhe5us5Q=;
-        b=KipGoBxIU3oc2MpEbzyP92JH90hG9zzYynMTjuzaXBdyV6louMw62C/LKrRxfuDOEO
-         WeO5t6CuQSYv3lbu8M6FU0hg6z9/JmaV+NRMeehX4lFDzw63ehDl68h7C1b70qYlePuz
-         zknHaQiYr4f2d07zVsLyLFLzZ1xcBStXcPLffEjDcMiAp/nx36nKThIk9zV3fh0PdIWH
-         fMRPUWAG3iITKypPa1f7RzQUhSpZaMLFBNr0MMBN3REOpO9FmwqUxYDMs+Gvq6O/c1My
-         mKl4WFUp4n7sQA84KAoBg2b9ijdqsYyYdI8JXwYRpW/FoRt459NBQF95eEgv68xYSjbv
-         QtwQ==
-X-Gm-Message-State: AOAM531gUi7e3Thydx152RbalyQk6oYScDaasfPCJGnDa/LO9V1kaWuL
-        M36WE6R+OPOlj/r5fJydXkKlYF8NR/Djm+B83fFNE1JluAUvwvfgv3iHdD94hDnvG41Gt6HRZUy
-        gjRN86/8leKgk7GnZqxjBiVMm
-X-Received: by 2002:a5d:5310:0:b0:20f:d075:a386 with SMTP id e16-20020a5d5310000000b0020fd075a386mr20240814wrv.619.1653580716982;
-        Thu, 26 May 2022 08:58:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzdX8n5lSKWjtB6SLf0Xw9OV0sMrXkpS32U+mbMh81UcGn5/PbIvXgE8ZxMaKh5qUfr3PU+aw==
-X-Received: by 2002:a5d:5310:0:b0:20f:d075:a386 with SMTP id e16-20020a5d5310000000b0020fd075a386mr20240794wrv.619.1653580716775;
-        Thu, 26 May 2022 08:58:36 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id k42-20020a05600c1caa00b003942a244f57sm644180wms.48.2022.05.26.08.58.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 08:58:36 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Robert Dinse <nanook@eskimo.com>,
-        Kees Cook <keescook@chromium.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 2/4] KVM: x86: Harden _regs accesses to guard against
- buggy input
-In-Reply-To: <Yo+hkH9Uy0eSPErf@google.com>
-References: <20220525222604.2810054-1-seanjc@google.com>
- <20220525222604.2810054-3-seanjc@google.com> <87r14gqte2.fsf@redhat.com>
- <Yo+hkH9Uy0eSPErf@google.com>
-Date:   Thu, 26 May 2022 17:58:35 +0200
-Message-ID: <87leuoqo9g.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j9xQMdzHNoTHZ+UFq3AI9FpCr84h47csBpAVGEWrE6E=;
+        b=YC/+9Cxy0CtuCWRrJ4pKfLNxmma717O4zHV8FS2MIv1MgCntOTtDGDDP6f0Yv+6BlR
+         xvIcIVoesABu+fiUR3ij6i0a+yqk0dRqtJn03cYzC3Sk3EzzGBMhleyJgCk579c5q007
+         fl5by7gZsYnt0b6LEAtmLHSGrq5RZZoIeHgdiO8JrGXk7XWbW5Ac8E13JxHy1wB2/fMD
+         YpgdS85xC8Yp/ZAGqP9jFkoYzqx0ci5RHiqJfVXSq8suHLIrETScxJZTvsKirp988xRF
+         06wJXqDPcPlm5LVCIpH8h6nAJud5U6yolgv+6N1HTjL5O+7CNQU68H+MTNLn/0HzJ5RG
+         yYcg==
+X-Gm-Message-State: AOAM531Ou2B+C+rTsNDADQ9FQHPn4equEJBMxnB5uOCfip3ZHSZrGy4V
+        MOuDoCG9CdQN0IXldQLp5fLgb840KSoSDthDcEc/2w==
+X-Google-Smtp-Source: ABdhPJxK8siuCJxx46aoxJ6LyluAf+2SNX+GgURVnLNooDyqYt1tjwqyinR6vVFZqWA4Z9rvJxMXhlSgK313sp+WaGw=
+X-Received: by 2002:a81:3696:0:b0:2ff:2dc1:3a05 with SMTP id
+ d144-20020a813696000000b002ff2dc13a05mr40469644ywa.478.1653580840998; Thu, 26
+ May 2022 09:00:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220525230904.1584480-1-bgardon@google.com> <a3ea7446-901f-1d33-47a9-35755b4d86d5@redhat.com>
+ <Yo+O6AqNNBTg7BMY@xz-m1.local> <a1fbab86-ece9-82e3-64fe-0a19a125513b@redhat.com>
+In-Reply-To: <a1fbab86-ece9-82e3-64fe-0a19a125513b@redhat.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 26 May 2022 09:00:29 -0700
+Message-ID: <CANgfPd8VqKYwr7fprie6h0y0cQEPLrbS5euMrBCjz7osypgkNQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/MMU: Zap non-leaf SPTEs when disabling dirty logging
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Peter Xu <peterx@redhat.com>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
-
-> On Thu, May 26, 2022, Vitaly Kuznetsov wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->> > ---
->> >  arch/x86/kvm/emulate.c | 6 ++++++
->> >  1 file changed, 6 insertions(+)
->> >
->> > diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
->> > index 7226a127ccb4..c58366ae4da2 100644
->> > --- a/arch/x86/kvm/emulate.c
->> > +++ b/arch/x86/kvm/emulate.c
->> > @@ -247,6 +247,9 @@ enum x86_transfer_type {
->> >  
->> >  static ulong reg_read(struct x86_emulate_ctxt *ctxt, unsigned nr)
->> >  {
->> > +	if (WARN_ON_ONCE(nr >= 16))
->> > +		nr &= 16 - 1;
->> 
->> As the result of this is unlikely to match the expectation (and I'm
->> unsure what's the expectation here in the first place :-), why not use 
->> KVM_BUG_ON() here instead?
+On Thu, May 26, 2022 at 8:52 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> ctxt->vcpu is a 'void *' due to the (IMO futile) separation of the emulator from
-> regular KVM.  I.e. this doesn't have access to the 'kvm'.
+> On 5/26/22 16:30, Peter Xu wrote:
+> > On Thu, May 26, 2022 at 02:01:43PM +0200, Paolo Bonzini wrote:
+> >> On 5/26/22 01:09, Ben Gardon wrote:
+> >>> +           WARN_ON(max_mapping_level < iter.level);
+> >>> +
+> >>> +           /*
+> >>> +            * If this page is already mapped at the highest
+> >>> +            * viable level, there's nothing more to do.
+> >>> +            */
+> >>> +           if (max_mapping_level == iter.level)
+> >>> +                   continue;
+> >>> +
+> >>> +           /*
+> >>> +            * The page can be remapped at a higher level, so step
+> >>> +            * up to zap the parent SPTE.
+> >>> +            */
+> >>> +           while (max_mapping_level > iter.level)
+> >>> +                   tdp_iter_step_up(&iter);
+> >>> +
+> >>>             /* Note, a successful atomic zap also does a remote TLB flush. */
+> >>> -           if (tdp_mmu_zap_spte_atomic(kvm, &iter))
+> >>> -                   goto retry;
+> >>> +           tdp_mmu_zap_spte_atomic(kvm, &iter);
+> >>> +
+> >>
+> >> Can you make this a sparate function (for example
+> >> tdp_mmu_zap_collapsible_spte_atomic)?  Otherwise looks great!
+> >
+> > There could be a tiny downside of using a helper in that it'll hide the
+> > step-up of the iterator, which might not be as obvious as keeping it in the
+> > loop?
+>
+> That's true, my reasoning is that zapping at a higher level can only be
+> done by first moving the iterator up.  Maybe
+> tdp_mmu_zap_at_level_atomic() is a better Though, I can very well apply
+> this patch as is.
 
-Well, if we're not emulating something correctly for whatever reason,
-killing the VM is likely the right thing to do so I'm going to vote for
-abandoning the futility, making ctxt->vcpu 'struct kvm_vcpu *' and doing
-KVM_BUG_ON(). (Not necessarily now, the patch looks good to me).
+I'd be inclined to apply the patch as-is for a couple reasons:
+1. As Peter said, hiding the step up could be confusing.
+2. If we want to try the in-place promotion, we'll have to dismantle
+that helper again anyway or else have a bunch of duplicate code.
 
--- 
-Vitaly
-
+>
+> Paolo
+>

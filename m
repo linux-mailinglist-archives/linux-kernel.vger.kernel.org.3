@@ -2,154 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F7B534EFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4D2534F01
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 14:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345574AbiEZMRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 08:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
+        id S239125AbiEZMSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 08:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244794AbiEZMQ7 (ORCPT
+        with ESMTP id S234773AbiEZMSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 08:16:59 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8CFCEB93
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:16:57 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id q15so1563901edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 05:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WgG+T/OxBY4aQd1LFq7PNdagdKTYGqPQcawpOpu83Hw=;
-        b=kqHhtxa8DsR+qtROdGeZStDkz718COk59qOAyNv2L4tklqkyJYvDyJplFJceGVV1h3
-         h2AUQq1A1S9uuXFKXQK9P1anRn0S+wHoFlMWJugW/8eN2OxlzcThif0qRCfDVItsK/jR
-         gutO21xsCOCuWLM/y9lIP0gQ6z2Gmqp9lsjDF4OtAIgT57sj8TDr04NDH7gP3QikIEUk
-         SSaWsM5TQVncss8yxe6XIzKNzSCzGYtLpuTlXHruhVqQMcO6dubbfjBtJjXgPs4hkBtR
-         d4P31EP6gg5jGAtyhAOXBtmcn4Qqz2soRQ6PWm6wX13IIfdyy56sU/KxMiGzdRy0IYR3
-         5riw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WgG+T/OxBY4aQd1LFq7PNdagdKTYGqPQcawpOpu83Hw=;
-        b=6P2BlMOfTk3zkWXlRyXyuAuwZu27x6nws/HniP0S0VfSvojMSa/qLbQNC/96FBajim
-         0pBRS+BViumsnBq5OkNQ1w2+eMJD+l6BOSfpNJ6sP8a2pjtYb2IPMWo85w6enN5tuRFu
-         zpv2oYZ1ay8VHlyW6IawcY1pKRBIfZoXol+ktt5k8ax58KLvCdbePYMJ80iUEzQ1JD5u
-         1zHPyXYh/CnUApJ4LoJSfl1MaoyrGs9KE5cy07ZXAB1oE3kZSW88VoWp+JJEsIC91fUg
-         yH7dNogEVEKH0xR5VHjNNIDYD3xtr5wl97Z8BA2CgjKktVH37XjcIkVXQbX54+FSWyGX
-         NBWw==
-X-Gm-Message-State: AOAM532G9ow1QLiTWHxxvEqMsUBsiVFVv/fnmwEqqsrYB9NqWWs5Ri18
-        DJUZis9F2Q9L4OieTJD/zK9nzw==
-X-Google-Smtp-Source: ABdhPJyIy7ujx1LoHNkv8ke973NyvFGD42vlG2UtAnGb6f89DBj7HneTUz6qJAoHSFYSInNsiHPp0w==
-X-Received: by 2002:a05:6402:1393:b0:42a:c36d:67a6 with SMTP id b19-20020a056402139300b0042ac36d67a6mr39935014edv.158.1653567416423;
-        Thu, 26 May 2022 05:16:56 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id bl16-20020a170906c25000b006fea43db5c1sm480965ejb.21.2022.05.26.05.16.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 05:16:56 -0700 (PDT)
-Message-ID: <1316dd5f-c774-e1c0-892b-7d371936a9eb@linaro.org>
-Date:   Thu, 26 May 2022 14:16:55 +0200
+        Thu, 26 May 2022 08:18:49 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A82CEBA8;
+        Thu, 26 May 2022 05:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=m2FP5IpgKamAC5k0mppMCSKAd6ddAm9dQQpEqx93+S8=; b=GenS8i0287bKb6Z9UL2JzpKbea
+        RETCRElL4hXbU98Szz3b+ye91a8q4My0r3hozB27fhK+RXJ4FiWJox5aqXeUBg7N4qImYW6uMdJgG
+        lOikZQWFAjsEc0lTgRL3m/SFcFZuhWC+DepM9fmHMVUGnvhVP634lu2e66/bg0VKJgrg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nuCRn-004Lll-8e; Thu, 26 May 2022 14:18:35 +0200
+Date:   Thu, 26 May 2022 14:18:35 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: dsa: mv88e6xxx: Fix refcount leak in
+ mv88e6xxx_mdios_register
+Message-ID: <Yo9wG64tuB2Tx0SK@lunn.ch>
+References: <20220526112415.13835-1-linmq006@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V2] dt-bindings: dma: fsl-edma: Convert to DT schema
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, joy.zou@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220526102438.184803-1-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220526102438.184803-1-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526112415.13835-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/05/2022 12:24, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Convert the eDMA controller binding to DT schema.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> 
-> V2:
->  Typo fix
->  Correct interrupts/interrupt-names/AllOf
-> 
->  .../devicetree/bindings/dma/fsl,edma.yaml     | 140 ++++++++++++++++++
->  .../devicetree/bindings/dma/fsl-edma.txt      | 111 --------------
->  2 files changed, 140 insertions(+), 111 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/dma/fsl,edma.yaml
->  delete mode 100644 Documentation/devicetree/bindings/dma/fsl-edma.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/fsl,edma.yaml b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-> new file mode 100644
-> index 000000000000..0a63b0b70f98
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-> @@ -0,0 +1,140 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/dma/fsl,edma.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale enhanced Direct Memory Access(eDMA) Controller
-> +
-> +description: |
-> +  The eDMA channels have multiplex capability by programmable
-> +  memory-mapped registers. channels are split into two groups, called
-> +  DMAMUX0 and DMAMUX1, specific DMA request source can only be multiplexed
-> +  by any channel of certain group, DMAMUX0 or DMAMUX1, but not both.
-> +
-> +maintainers:
-> +  - Peng Fan <peng.fan@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - fsl,vf610-edma
-> +          - fsl,imx7ulp-edma
-> +      - items:
-> +          - const: fsl,ls1028a-edma
-> +          - const: fsl,vf610-edma
-> +
+On Thu, May 26, 2022 at 03:24:15PM +0400, Miaoqian Lin wrote:
+> of_get_child_by_name() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when done.
+> This function missing of_node_put() in an error path.
+> Add missing of_node_put() to avoid refcount leak.
 
-The reg and interrupts should still be there (matching the widest of
-constraints).
+What about releasing the reference on the non error case?
+Where is that.
 
-> +  "#dma-cells":
-> +    const: 2
-> +
-> +  dma-channels:
-> +    const: 32
-> +
-> +  clocks:
-> +    maxItems: 2
-
-Also clock-names with maxItems:2
-
-> +
-> +  big-endian:
-> +    description: |
-> +      If present registers and hardware scatter/gather descriptors of the
-> +      eDMA are implemented in big endian mode, otherwise in little mode.
-> +    type: boolean
-> +
-
-Best regards,
-Krzysztof
+     Andrew

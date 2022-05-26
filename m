@@ -2,105 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6523C5347BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57F15347BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 03:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243530AbiEZBAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 25 May 2022 21:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
+        id S1345196AbiEZBA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 25 May 2022 21:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345819AbiEZBAi (ORCPT
+        with ESMTP id S1345153AbiEZBAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 25 May 2022 21:00:38 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B5369CE8
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:00:36 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so115607otr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:00:36 -0700 (PDT)
+        Wed, 25 May 2022 21:00:52 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D1269CF3
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:00:51 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id x12so284215wrg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 25 May 2022 18:00:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rESdkCwPqse6sStO4+DauKtPsPwAWSccX3gNyrYzPo4=;
-        b=cIZ5ZG536zr5k7KHC1Q2keKZ3UzihzmKNsNtKJZ8RAE6TvCSgB1RLGApmzcAS/dZRP
-         QV6bCinfKsMLL8f3eK3XxqPXB3NhmPe0VZD2nftSF8fxdP2lBPphTnEotg81hgnX/SiN
-         UUnnEEDb09XFjjB8JR67zLVW1qA0SK0/LtEL4UZ+NHH72LckHLOWA0C+qjt9edEjM+xJ
-         HARYdTAxCxCUkRRpZ3UEznN+SrXlUBWWTsnEY+HyOGeZ4iSQ0KnXheHSSn3oa3kHIc4z
-         JDTSOzM4G5NfXXGXGqQCG7hSrYi5SvItORMf5rdyZQHxRPgLOlmcIifLIUX9kkgE3YpI
-         YxqQ==
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=5TA2OkBhz4fpZ+xneLnEgQmjFfE9fpDr0ZbY4GJw0ZQ=;
+        b=ngjsDrz/yXO+HZIkkuhS2JJUxmT3ktjUn6eljHR4XmffVXt5jrXCSTTSgsKbfi6Oe8
+         JVBB11OTWoE93S5+sJxfHN82ZfWCnSjdakYKPMLRBcDEephAbzm6w/vAfCM6tvHou+bY
+         vIlaEq3fftA4+gNfiQN2N51CUWAnT1lbgdCLfopkfG2HNhDd6SG6dASl41YkNbhGbZwO
+         qbggID4XYAuShraxgUDiMdYtL9HgzC3hPzowZ2J4C0FC4oR8ZNwOk/JGzX1lvtMzvWpY
+         FH5qoQSlqMMrUB3AyOY8r6RA6molqT2tOwvmPP8foHwZlMm2PwKcRSUKjwGr0KJalr7x
+         c4zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rESdkCwPqse6sStO4+DauKtPsPwAWSccX3gNyrYzPo4=;
-        b=OGBOQX3eubIrd04/8Fa4YFjC7eewhhaSgs5Y6bqBgjtuoeo3DkTTmBSNJgCJhM67If
-         EcKCDO+KZqgL4XsIfPHDuc/ODJGWvLuCLZh7Id9pX7WGiqkuHtGcpX/DpgD5wVOpvaOO
-         JkNsHlmC9ZikExP5lLc6SigV/UhVuiyPbovSal6j5SYddAHSvyaFlVHWt1d/gIFHv6XQ
-         T+2xYcShCxHFE85yBGBFZ+aZLh8fLWHc0X2wkook+xhDf4m8wF/S5UuAMjJzAOBBVFyt
-         W2vCNvjyqNXFBZa4eL3xMqIlMhVzyUXxxpmaLQuPwsz6HDMURhxDVgAVqtlXDEL7wAmR
-         wAow==
-X-Gm-Message-State: AOAM5323WBWDYiAjdFzOPAKGKhBzwVAz1Tob9hVQVZxlst0N67ZX/amB
-        c7VLi/Ttb4LwPA2R2OAd+yCXRusGpuaCu756ylgtQA==
-X-Google-Smtp-Source: ABdhPJzw3IblBKst7XNW79+bDjJme70ch0qiX3+Acpi7M5r6n+OApvvsHuWk+0EYB9lShYm5w3IHfmkZ8rOZAVNZLqA=
-X-Received: by 2002:a9d:6ac8:0:b0:60b:cce:eff0 with SMTP id
- m8-20020a9d6ac8000000b0060b0cceeff0mr7768045otq.75.1653526835206; Wed, 25 May
- 2022 18:00:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220525210447.2758436-1-seanjc@google.com> <20220525210447.2758436-3-seanjc@google.com>
- <CALMp9eRgiPZeGhKHMnwJVSLPvKjPFo4vKzg3=TXTuLL_LSt_fw@mail.gmail.com> <Yo7Np1N1TVD4drxc@google.com>
-In-Reply-To: <Yo7Np1N1TVD4drxc@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 25 May 2022 18:00:24 -0700
-Message-ID: <CALMp9eQTYY3NiP-3fZgnMn9-nGWTtx7aA3T0-tTvdfeZkhdNrA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: VMX: Add knob to allow rejecting kvm_intel on
- inconsistent VMCS config
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Lei Wang <lei4.wang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=5TA2OkBhz4fpZ+xneLnEgQmjFfE9fpDr0ZbY4GJw0ZQ=;
+        b=s8JYVhPbBD7EcODmtHlZudadZodz23ZxDkYELeLnMuMJSCEaS3PY6Kiauc/1pV+diz
+         jOoQ+YucqwOCLhxXOMIyZ03OEtjWjSF5h/5aNU56sO+DipOAyaM7j0rEG2bvFWirOxVf
+         WY7DQF1K3CxdDiAI9p+q83MMRVULPwM4fyvDYP1MiEV8VuVlH2d5rBvMimTJSBfnsH0O
+         dpkNZk4+4LcjkZi06o4DjFP7p7wmvBmVi49WKbPyrdufYOIGdOGVx+qrXFRfakdZenLN
+         yAvvyobDGkfBd5ouYfLerXpXuQ2LhU7yu4aOgfIPhaucVf/MHWpc6jV30RkHBuM+R7zf
+         FAKA==
+X-Gm-Message-State: AOAM533TbpFGfVkgow5tjRzmI5asM8/y6N3/2BN/01CBd4tqdbJ5xq9A
+        daET/31XlHYczjmyimPfxC9MYw==
+X-Google-Smtp-Source: ABdhPJwrr5kdZD/ajpIquLCdox7ixE/4glrnxGMAf06db+1JZf7fpvikkIUX1ABOhaXULz4UbDL58w==
+X-Received: by 2002:a5d:4601:0:b0:20d:53a:2f39 with SMTP id t1-20020a5d4601000000b0020d053a2f39mr28779139wrq.347.1653526850400;
+        Wed, 25 May 2022 18:00:50 -0700 (PDT)
+Received: from smtpclient.apple (global-5-141.nat-2.net.cam.ac.uk. [131.111.5.141])
+        by smtp.gmail.com with ESMTPSA id v23-20020a7bcb57000000b003958af7d0c8sm213205wmj.45.2022.05.25.18.00.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 25 May 2022 18:00:49 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH V2] riscv: compat: Using seperated vdso_maps for
+ compat_vdso_info
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <20220526003339.2948309-1-guoren@kernel.org>
+Date:   Thu, 26 May 2022 02:00:49 +0100
+Cc:     palmer@rivosinc.com, arnd@arndb.de, linux@roeck-us.net,
+        palmer@dabbelt.com, heiko@sntech.de,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <EC36D0A9-AE06-4C05-A31B-CC348881937D@jrtc27.com>
+References: <20220526003339.2948309-1-guoren@kernel.org>
+To:     guoren@kernel.org
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 5:45 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Wed, May 25, 2022, Jim Mattson wrote:
-> > On Wed, May 25, 2022 at 2:04 PM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > Add an off-by-default module param, reject_inconsistent_vmcs_config, to
-> > > allow rejecting the load of kvm_intel if an inconsistent VMCS config is
-> > > detected.  Continuing on with an inconsistent, degraded config is
-> > > undesirable when the CPU is expected to support a given set of features,
-> > > e.g. can result in a misconfigured VM if userspace doesn't cross-check
-> > > KVM_GET_SUPPORTED_CPUID, and/or can result in poor performance due to
-> > > lack of fast MSR switching.
-> > >
-> > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > > ---
-> > There are several inconsistent VMCS configs that are not rejected here
-> > (e.g. "enable XSAVES/XRSTORS" on a CPU that doesn't support XSAVES).
-> > Do you plan to include more checks in the future, or should this be,
-> > "reject_some_inconsistent_vmcs_configs"? :-)
->
-> I have no plan, it was purely a reaction to continuing on with a known bad entry/exit
-> pair handling being awful.  I hesitated to even apply it to the EPT/VPID stuff, but
-> again it seemed silly to detect an inconsistency and do nothing about it.
->
-> I'm not opposed to adding more checks, though there is definitely a point of
-> diminishing returns.  I'm just picking the really low hanging fruit :-)
+On 26 May 2022, at 01:33, guoren@kernel.org wrote:
+>=20
+> From: Guo Ren <guoren@linux.alibaba.com>
+>=20
+> This is a fixup for vdso implementation which caused musl to
+> fail.
+>=20
+> [   11.600082] Run /sbin/init as init process
+> [   11.628561] init[1]: unhandled signal 11 code 0x1 at
+> 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
+> [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted
+> 5.18.0-rc7-next-20220520 #1
+> [   11.629462] Hardware name: riscv-virtio,qemu (DT)
+> [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp :
+> 00ffffffc58199f0
+> [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 :
+> ffffffffffffffff
+> [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 :
+> 00ffffff8ade0cc0
+> [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 :
+> 00ffffffc5819a00
+> [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 :
+> 00ffffffc5819b00
+> [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 :
+> 0000000000000000
+> [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 :
+> 00ffffff8ade0728
+> [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 :
+> 00ffffffc5819e40
+> [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10:
+> 0000000000000000
+> [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 :
+> 0000000000000001
+> [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
+> [   11.629699] status: 0000000000004020 badaddr: 0000000000000000
+> cause: 000000000000000d
+>=20
+> The last __vdso_init(&compat_vdso_info) replaces the data in normal
+> vdso_info. This is an obvious bug.
+>=20
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> Tested-by: Heiko St=C3=BCbner <heiko@sntech.de>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> ---
+> Changes in V2:
+> - Add Tested-by
+> - Rename vvar & vdso in /proc/<pid>/maps.
 
-The usual KVM approach to a misconfigured guest is to let userspace
-shoot itself in the foot, as long as it doesn't put the host at risk.
-This change seems to run counter to that.
+Why? No other architecture renames it to that, and various pieces of
+software look for the magic [vdso] name, including GDB and LLDB, though
+by my count there are 57 source packages in Debian that contain the
+string literal "[vdso]" (including quotes), including Firefox,
+Android's ART, lvm2 and elfutils.
+
+Jess
+
+> ---
+> arch/riscv/kernel/vdso.c | 15 +++++++++++++--
+> 1 file changed, 13 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+> index 50fe4c877603..957f164c9778 100644
+> --- a/arch/riscv/kernel/vdso.c
+> +++ b/arch/riscv/kernel/vdso.c
+> @@ -206,12 +206,23 @@ static struct __vdso_info vdso_info =
+__ro_after_init =3D {
+> };
+>=20
+> #ifdef CONFIG_COMPAT
+> +static struct vm_special_mapping rv_compat_vdso_maps[] =
+__ro_after_init =3D {
+> +	[RV_VDSO_MAP_VVAR] =3D {
+> +		.name   =3D "[compat vvar]",
+> +		.fault =3D vvar_fault,
+> +	},
+> +	[RV_VDSO_MAP_VDSO] =3D {
+> +		.name   =3D "[compat vdso]",
+> +		.mremap =3D vdso_mremap,
+> +	},
+> +};
+> +
+> static struct __vdso_info compat_vdso_info __ro_after_init =3D {
+> 	.name =3D "compat_vdso",
+> 	.vdso_code_start =3D compat_vdso_start,
+> 	.vdso_code_end =3D compat_vdso_end,
+> -	.dm =3D &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+> -	.cm =3D &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+> +	.dm =3D &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
+> +	.cm =3D &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
+> };
+> #endif
+>=20
+> --=20
+> 2.36.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+

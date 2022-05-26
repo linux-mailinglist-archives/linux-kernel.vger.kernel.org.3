@@ -2,89 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4360F53549D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D20253549E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 22:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245557AbiEZUjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 16:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        id S1345622AbiEZUkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 16:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbiEZUjl (ORCPT
+        with ESMTP id S232903AbiEZUki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 16:39:41 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E860F4A91F
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653597580; x=1685133580;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kR26q/3oLEaaK5OFUbPNoh2OJvAlC5sl0FyJbKaokew=;
-  b=Q6s0RLvpFSfn09tcTLKUhibaEW//204bAS+KtF5bi4TtY4BP5c+6PK05
-   H7qFec2NRA6UCjbdsSDNvtM3UsF2jYA/1LyZ2R/MVO5bam+NHSllORShL
-   vvkwasUEujDIvyAVQEpmMc5eK0n2o44AgufV6aUVNBDBxL1XUQzzRlOZr
-   m5/dDBaLxK+gYEGvjyxDgrM6DHATX+GM3ifrRkEIdw8Hy+dazpW0fJ5hR
-   ZaxhctzwkWyQ1A2ERgYC8Ztg9+OrWnfoKqnmRdzFaSUN2IYXphLRGa4Ft
-   69+7PGc7zMVbOdPadxmVJelTchtE7zSNGFVAnz44iDx70IW8L4GPG4yft
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274285704"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="274285704"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 13:39:40 -0700
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="643060892"
-Received: from tjeziers-mobl1.amr.corp.intel.com (HELO [10.251.23.34]) ([10.251.23.34])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 13:39:39 -0700
-Message-ID: <bb94beeb-061d-c795-7ed6-3c9d2c73191c@intel.com>
-Date:   Thu, 26 May 2022 13:39:37 -0700
+        Thu, 26 May 2022 16:40:38 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E10E15F7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 13:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653597637; x=1685133637;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IJdm9DSkjzkpq4cQM5uzeP+0z5TWT/S2S0U1NnQ9ajs=;
+  b=cjRi6kvGiUqm3LUgzReC9mxZm/0DbYuzuEsHIPujRGiwTYk8xye+ITiS
+   9DpVUkCNPwZ6rbcakUyeQ40JByfZ0YNt+NI+LXmhAMoqNeYrPtCmwxS9T
+   KySyeyHfiBYjWmG/OnyZJaJK5YqUUbd7iMlAp7J70Rb61d0yotVCUpmCC
+   o=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 26 May 2022 13:40:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 13:40:36 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 26 May 2022 13:40:36 -0700
+Received: from ubuntu.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 26 May
+ 2022 13:40:34 -0700
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Marc Zyngier <maz@kernel.org>
+CC:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <kvmarm@lists.cs.columbia.edu>, <linux-kernel@vger.kernel.org>,
+        Qian Cai <quic_qiancai@quicinc.com>
+Subject: [PATCH] KVM: arm64: Fix memory leaks from stage2 pagetable
+Date:   Thu, 26 May 2022 16:39:56 -0400
+Message-ID: <20220526203956.143873-1-quic_qiancai@quicinc.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCHv3 3/3] x86/tdx: Handle load_unaligned_zeropad() page-cross
- to a shared page
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org, ak@linux.intel.com,
-        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        thomas.lendacky@amd.com, x86@kernel.org
-References: <20220524221012.62332-1-kirill.shutemov@linux.intel.com>
- <20220524221012.62332-4-kirill.shutemov@linux.intel.com>
- <6350b927-4b3f-6f43-aa62-f8db19fa8d5b@intel.com>
- <20220526203619.gpyyl67ygk622e5g@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220526203619.gpyyl67ygk622e5g@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/22 13:36, Kirill A. Shutemov wrote:
-> On Thu, May 26, 2022 at 09:20:56AM -0700, Dave Hansen wrote:
->> On 5/24/22 15:10, Kirill A. Shutemov wrote:
->>> +	/*
->>> +	 * MMIO accesses suppose to be naturally aligned and therefore never
->>> +	 * cross a page boundary. Seeing unaligned accesses indicates a bug or
->>> +	 * load_unaligned_zeropad() that steps into unmapped shared page.
->> Wait a sec though...
->>
->> We've been talking all along about how MMIO accesses are in some cases
->> just plain old compiler-generated memory accesses.  It's *probably* bad
->> code that does this, but it's not necessarily a bug.
-> Compiler-generated memory accesses tend to be aligned too. You need to do
-> something make them unalinged, like __packed or pointer trickery.
+Running some SR-IOV workloads could trigger some leak reports from
+kmemleak.
 
-I totally agree.  But, the point is that __packed or pointer trickery is
-goofy, but it's not necessarily a bug.  This might crash the kernel on
-goofy stuff, not bugs.
+unreferenced object 0xffff080243cef500 (size 128):
+  comm "qemu-system-aar", pid 179935, jiffies 4298359506 (age 1629.732s)
+  hex dump (first 32 bytes):
+    28 00 00 00 01 00 00 00 00 e0 4c 52 03 08 ff ff  (.........LR....
+    e0 af a4 7f 7c d1 ff ff a8 3c b3 08 00 80 ff ff  ....|....<......
+  backtrace:
+     kmem_cache_alloc_trace
+     kvm_init_stage2_mmu
+     kvm_arch_init_vm
+     kvm_create_vm
+     kvm_dev_ioctl
+     __arm64_sys_ioctl
+     invoke_syscall
+     el0_svc_common.constprop.0
+     do_el0_svc
+     el0_svc
+     el0t_64_sync_handler
+     el0t_64_sync
+
+Since I yet to find a way to reproduce this at will, I just did a code
+inspection and found this one spot that could happen. It is unlikely
+that will fix my issue because I don't see mine went into the error
+paths. But, we should fix it regardless.
+
+If hardware_enable_all() or kvm_init_mmu_notifier() failed in
+kvm_create_vm(), we ended up leaking stage2 pagetable memory from
+kvm_init_stage2_mmu() because we will no longer call
+kvm_arch_flush_shadow_all().
+
+It seems that it is impossible to simply move kvm_free_stage2_pgd() from
+kvm_arch_flush_shadow_all() into kvm_arch_destroy_vm() due to the issue
+mentioned in the "Fixes" commit below. Thus, fixed it by freeing the
+memory from kvm_arch_destroy_vm() only if the MMU notifier is not even
+initialized.
+
+Fixes: 293f293637b5 ("kvm-arm: Unmap shadow pagetables properly")
+Signed-off-by: Qian Cai <quic_qiancai@quicinc.com>
+---
+ arch/arm64/kvm/arm.c | 3 +++
+ arch/arm64/kvm/mmu.c | 3 ++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 400bb0fe2745..7d12824f2034 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -180,6 +180,9 @@ vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
+  */
+ void kvm_arch_destroy_vm(struct kvm *kvm)
+ {
++	if (!kvm->mmu_notifier.ops)
++		kvm_free_stage2_pgd(&kvm->arch.mmu);
++
+ 	bitmap_free(kvm->arch.pmu_filter);
+ 	free_cpumask_var(kvm->arch.supported_cpus);
+ 
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index f5651a05b6a8..13a527656ba7 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -1739,7 +1739,8 @@ void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen)
+ 
+ void kvm_arch_flush_shadow_all(struct kvm *kvm)
+ {
+-	kvm_free_stage2_pgd(&kvm->arch.mmu);
++	if (kvm->mmu_notifier.ops)
++		kvm_free_stage2_pgd(&kvm->arch.mmu);
+ }
+ 
+ void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
+-- 
+2.32.0
+

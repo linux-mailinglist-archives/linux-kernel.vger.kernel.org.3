@@ -2,254 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13B5534AD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 09:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EBD534AE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 09:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346421AbiEZHfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 03:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        id S1346435AbiEZHhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 03:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiEZHf3 (ORCPT
+        with ESMTP id S233788AbiEZHhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 03:35:29 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D359095494
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:35:27 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id l32so1524008ybe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 00:35:27 -0700 (PDT)
+        Thu, 26 May 2022 03:37:36 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE339BAD3;
+        Thu, 26 May 2022 00:37:35 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id b5so778399plx.10;
+        Thu, 26 May 2022 00:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lq2mT/z36TTERjhSMQY/YGBnpj+e+SOGoCr8PZ2RBeY=;
-        b=TmyGdGayBn+WaAftSvipCS+g4FXfDR0ivQcC+55KtZ5VrthH4CNpsL5enX52geX0UN
-         hwYFx2Myv8czw25tHI2IIOQn+Y3bamb/l0WCPbSkRXSgbMZOv1gUVk9V3w8ji48caEwG
-         +R0OwJ7NAMLDjMbkhfAsCUBJ1DBIyPL9EI1Es=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+NgMOM+ok4zxWwg9Vf/2/wo0zo4GMHikcMmNLxvO/Ws=;
+        b=AEKzVL6iIL3khRFAC+Zjy43JnLL++bZTFEMJFoQfjaKQ1gEKZj0RmVg1Jx4HG/7wwZ
+         5Id/4ij3TEeWyZYRkISruTZeRUQdZF8bwh3ifxpwhR8Na0XnGahVyXxjc5SuJSig9BMk
+         c4cKBPm5ZsQGfkQzE//rV7awKx+KYwENFVNyUs1bhmiSCUe8k7pB8xiVCiKi0LM/Rjcd
+         JjcXBdAJnWvykvFf0y4p789EUuUuFQUOHhDnCaWgPNY2OSx7qEuWRxb5CRB1BuYX2kLb
+         idWCg1PgQl1NCtrKrknnmRQfYgPRGMb14vz1wLAflA7lxrPOvYvv4cI7sk/9A5gBkXW6
+         lG+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lq2mT/z36TTERjhSMQY/YGBnpj+e+SOGoCr8PZ2RBeY=;
-        b=KkMcWs12GdBVDDsX30J1OlRtVK1Q2dNrERkn/behtZCDiDBraQJa0CrLj2/oAeUwSR
-         iR1rd44aPSpA7B47Pym48NZZOLxoI7IfIkgvnL9xjjmqWJPqyd4qblRYP71vIg8gk7F+
-         j1kBojni005eWmpVWpNOFe+DMnhczYeNvBWIbewra/ZZgE/yQ71zBuDhGnHh6Zja8DMs
-         DXh04IHGMx+Pm9aDjpEl502JVgSO1OV2ubd5ga682c7gHYfH2sSqQONQD7nv36A+cE7i
-         7Bu0y29RKGBtbqykC5m92LikKxfDOHZfHj1OArZQIuj1W73/sjh1Y4u94VNQGaLx+Bb4
-         ilrw==
-X-Gm-Message-State: AOAM530wPuwdP6Ua1SC9g2oDeJA/mkOIRDfWur+bSmic19U9aU09bNQQ
-        KJ9H1t0cPJdijkUA8yTkyr1YD1m1GFQO7NSu6nsF
-X-Google-Smtp-Source: ABdhPJzbHFPaT1uxINBkv0WQDLx8ufC4x17Ec2dg8FMYgsPPHvim7AMTvfOvUCddwHDAdzCImkVO89rWZ6u7JhmYlII=
-X-Received: by 2002:a25:316:0:b0:654:a65f:def4 with SMTP id
- 22-20020a250316000000b00654a65fdef4mr9863793ybd.429.1653550527091; Thu, 26
- May 2022 00:35:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+NgMOM+ok4zxWwg9Vf/2/wo0zo4GMHikcMmNLxvO/Ws=;
+        b=Ud5y6gfVI2GWPbrmUHssQslG8lrXFqlC04edb+HzGZ+72vAU3qSkWiGT4RsyH/bEYt
+         4D4dpvHkJtmBe0B4Hu5xtxZCwJZ1BJ+9vD9xufZ7gpkfvOu5DMb3p7Ra02T6QidUshyx
+         UqLkwJm6/ssvTIVgg6zHVQN6dicLa8M/AT3KTBudKFkMOnr6vJ12yHZDUjygbVPG0Woj
+         8f0rkoVL6w5JVMq/NdetaydFr228cV0JiIoU4/RVO3PMVVx6SPRct0Wpeyx8RcUlCPbW
+         fyRWWwzYqbqG2JNvl13YztKEy/r2CBn0vyUGO3FBzFDD5mkGcSdZZuE/55sU/hGSuXRJ
+         blpg==
+X-Gm-Message-State: AOAM533cZR+KAuxsh6kFgQjaYHZ/zjnZ5miwC3hd5bcYT8EtHBEPWp5/
+        pSytwkS+6PJREh7jzzHUfW8=
+X-Google-Smtp-Source: ABdhPJyWPLneCa/1iG6itH+eO72owGWS+56WVHLVWARX419vnc4rka51Hh1VmlMXU1mywT8Y4502ug==
+X-Received: by 2002:a17:90a:4587:b0:1de:c6ee:80f with SMTP id v7-20020a17090a458700b001dec6ee080fmr1245282pjg.196.1653550655010;
+        Thu, 26 May 2022 00:37:35 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id je2-20020a170903264200b0016196bd15f4sm769204plb.15.2022.05.26.00.37.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 00:37:34 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Paul Walmsley <paul@pwsan.com>, Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <santosh.shilimkar@ti.com>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] ARM: omap2: Fix refcount leak in omap3xxx_prm_late_init
+Date:   Thu, 26 May 2022 11:37:24 +0400
+Message-Id: <20220526073724.21169-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220523235057.123882-1-atishp@rivosinc.com> <20220523235057.123882-10-atishp@rivosinc.com>
- <CANzO1D3o2iMV45hJW3-xWFtXW9g-iOO2EsrSUFzm_wDdMBNBSw@mail.gmail.com>
-In-Reply-To: <CANzO1D3o2iMV45hJW3-xWFtXW9g-iOO2EsrSUFzm_wDdMBNBSw@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 26 May 2022 00:35:16 -0700
-Message-ID: <CAOnJCUL0_R18GY3b00tcW3Pez49McuYBL0+Lan2h-w7x1LuOYA@mail.gmail.com>
-Subject: Re: [PATCH v9 09/12] target/riscv: Simplify counter predicate function
-To:     Frank Chang <frank.chang@sifive.com>
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        Alistair Francis <alistair.francis@wdc.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "qemu-devel@nongnu.org Developers" <qemu-devel@nongnu.org>,
-        "open list:RISC-V" <qemu-riscv@nongnu.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 3:24 AM Frank Chang <frank.chang@sifive.com> wrote:
->
-> On Tue, May 24, 2022 at 8:02 AM Atish Patra <atishp@rivosinc.com> wrote:
->>
->> All the hpmcounters and the fixed counters (CY, IR, TM) can be represented
->> as a unified counter. Thus, the predicate function doesn't need handle each
->> case separately.
->>
->> Simplify the predicate function so that we just handle things differently
->> between RV32/RV64 and S/HS mode.
->>
->> Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
->> Acked-by: Alistair Francis <alistair.francis@wdc.com>
->> Signed-off-by: Atish Patra <atishp@rivosinc.com>
->> ---
->>  target/riscv/csr.c | 111 ++++-----------------------------------------
->>  1 file changed, 10 insertions(+), 101 deletions(-)
->>
->> diff --git a/target/riscv/csr.c b/target/riscv/csr.c
->> index 723b52d836d3..e229f53c674d 100644
->> --- a/target/riscv/csr.c
->> +++ b/target/riscv/csr.c
->> @@ -74,6 +74,7 @@ static RISCVException ctr(CPURISCVState *env, int csrno)
->>      CPUState *cs = env_cpu(env);
->>      RISCVCPU *cpu = RISCV_CPU(cs);
->>      int ctr_index;
->> +    target_ulong ctr_mask;
->>      int base_csrno = CSR_CYCLE;
->>      bool rv32 = riscv_cpu_mxl(env) == MXL_RV32 ? true : false;
->>
->> @@ -82,122 +83,30 @@ static RISCVException ctr(CPURISCVState *env, int csrno)
->>          base_csrno += 0x80;
->>      }
->>      ctr_index = csrno - base_csrno;
->> +    ctr_mask = BIT(ctr_index);
->>
->>      if ((csrno >= CSR_CYCLE && csrno <= CSR_INSTRET) ||
->>          (csrno >= CSR_CYCLEH && csrno <= CSR_INSTRETH)) {
->>          goto skip_ext_pmu_check;
->>      }
->>
->> -    if ((!cpu->cfg.pmu_num || !(cpu->pmu_avail_ctrs & BIT(ctr_index)))) {
->> +    if ((!cpu->cfg.pmu_num || !(cpu->pmu_avail_ctrs & ctr_mask))) {
->>          /* No counter is enabled in PMU or the counter is out of range */
->>          return RISCV_EXCP_ILLEGAL_INST;
->>      }
->>
->>  skip_ext_pmu_check:
->>
->> -    if (env->priv == PRV_S) {
->> -        switch (csrno) {
->> -        case CSR_CYCLE:
->> -            if (!get_field(env->mcounteren, COUNTEREN_CY)) {
->> -                return RISCV_EXCP_ILLEGAL_INST;
->> -            }
->> -            break;
->> -        case CSR_TIME:
->> -            if (!get_field(env->mcounteren, COUNTEREN_TM)) {
->> -                return RISCV_EXCP_ILLEGAL_INST;
->> -            }
->> -            break;
->> -        case CSR_INSTRET:
->> -            if (!get_field(env->mcounteren, COUNTEREN_IR)) {
->> -                return RISCV_EXCP_ILLEGAL_INST;
->> -            }
->> -            break;
->> -        case CSR_HPMCOUNTER3...CSR_HPMCOUNTER31:
->> -            if (!get_field(env->mcounteren, 1 << ctr_index)) {
->> -                return RISCV_EXCP_ILLEGAL_INST;
->> -            }
->> -            break;
->> -        }
->> -        if (rv32) {
->> -            switch (csrno) {
->> -            case CSR_CYCLEH:
->> -                if (!get_field(env->mcounteren, COUNTEREN_CY)) {
->> -                    return RISCV_EXCP_ILLEGAL_INST;
->> -                }
->> -                break;
->> -            case CSR_TIMEH:
->> -                if (!get_field(env->mcounteren, COUNTEREN_TM)) {
->> -                    return RISCV_EXCP_ILLEGAL_INST;
->> -                }
->> -                break;
->> -            case CSR_INSTRETH:
->> -                if (!get_field(env->mcounteren, COUNTEREN_IR)) {
->> -                    return RISCV_EXCP_ILLEGAL_INST;
->> -                }
->> -                break;
->> -            case CSR_HPMCOUNTER3H...CSR_HPMCOUNTER31H:
->> -                if (!get_field(env->mcounteren, 1 << ctr_index)) {
->> -                    return RISCV_EXCP_ILLEGAL_INST;
->> -                }
->> -                break;
->> -            }
->> -        }
->> +    if ((env->priv == PRV_S) && (!get_field(env->mcounteren, ctr_mask))) {
->
->
-> Should we also check PRV_U against env->scounteren here?
->
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Ahh yes. That's required while hpmcounter is being accessed from the
-userspace. Good catch. Thanks. Will fix it.
+Fixes: 1e037794f7f0 ("ARM: OMAP3+: PRM: register interrupt information from DT")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ arch/arm/mach-omap2/prm3xxx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Regards,
-> Frank Chang
->
->>
->> +        return RISCV_EXCP_ILLEGAL_INST;
->>      }
->>
->>      if (riscv_cpu_virt_enabled(env)) {
->> -        switch (csrno) {
->> -        case CSR_CYCLE:
->> -            if (!get_field(env->hcounteren, COUNTEREN_CY) &&
->> -                get_field(env->mcounteren, COUNTEREN_CY)) {
->> -                return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->> -            }
->> -            break;
->> -        case CSR_TIME:
->> -            if (!get_field(env->hcounteren, COUNTEREN_TM) &&
->> -                get_field(env->mcounteren, COUNTEREN_TM)) {
->> -                return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->> -            }
->> -            break;
->> -        case CSR_INSTRET:
->> -            if (!get_field(env->hcounteren, COUNTEREN_IR) &&
->> -                get_field(env->mcounteren, COUNTEREN_IR)) {
->> -                return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->> -            }
->> -            break;
->> -        case CSR_HPMCOUNTER3...CSR_HPMCOUNTER31:
->> -            if (!get_field(env->hcounteren, 1 << ctr_index) &&
->> -                 get_field(env->mcounteren, 1 << ctr_index)) {
->> -                return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->> -            }
->> -            break;
->> -        }
->> -        if (rv32) {
->> -            switch (csrno) {
->> -            case CSR_CYCLEH:
->> -                if (!get_field(env->hcounteren, COUNTEREN_CY) &&
->> -                    get_field(env->mcounteren, COUNTEREN_CY)) {
->> -                    return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->> -                }
->> -                break;
->> -            case CSR_TIMEH:
->> -                if (!get_field(env->hcounteren, COUNTEREN_TM) &&
->> -                    get_field(env->mcounteren, COUNTEREN_TM)) {
->> -                    return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->> -                }
->> -                break;
->> -            case CSR_INSTRETH:
->> -                if (!get_field(env->hcounteren, COUNTEREN_IR) &&
->> -                    get_field(env->mcounteren, COUNTEREN_IR)) {
->> -                    return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->> -                }
->> -                break;
->> -            case CSR_HPMCOUNTER3H...CSR_HPMCOUNTER31H:
->> -                if (!get_field(env->hcounteren, 1 << ctr_index) &&
->> -                     get_field(env->mcounteren, 1 << ctr_index)) {
->> -                    return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->> -                }
->> -                break;
->> -            }
->> +        if (!get_field(env->mcounteren, ctr_mask)) {
->> +            /* The bit must be set in mcountern for HS mode access */
->> +            return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->> +        } else if (!get_field(env->hcounteren, ctr_mask)) {
->> +            return RISCV_EXCP_VIRT_INSTRUCTION_FAULT;
->>          }
->>      }
->>  #endif
->> --
->> 2.25.1
->>
->>
-
-
+diff --git a/arch/arm/mach-omap2/prm3xxx.c b/arch/arm/mach-omap2/prm3xxx.c
+index 1b442b128569..63e73e9b82bc 100644
+--- a/arch/arm/mach-omap2/prm3xxx.c
++++ b/arch/arm/mach-omap2/prm3xxx.c
+@@ -708,6 +708,7 @@ static int omap3xxx_prm_late_init(void)
+ 	}
+ 
+ 	irq_num = of_irq_get(np, 0);
++	of_node_put(np);
+ 	if (irq_num == -EPROBE_DEFER)
+ 		return irq_num;
+ 
 -- 
-Regards,
-Atish
+2.25.1
+

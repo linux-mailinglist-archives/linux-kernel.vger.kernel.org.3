@@ -2,156 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B7E534D2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6CB534D42
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245428AbiEZKQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 06:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S1344467AbiEZKX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 06:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbiEZKQx (ORCPT
+        with ESMTP id S232742AbiEZKXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 06:16:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C3B1DE93
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653560211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NEcgtNSPVqH46dnGy7KtC525rBQMD6rVhdUi+/d9+E4=;
-        b=EDp57kzMabYmshqL4+TaO5mC2EtrlHPZNPS5dl4/Rw5WQkLNOuS+YbTiU/mF3NJmI6Li/P
-        7+Ftzjp0c6wQYzIN4hGhHTqULyX+/z4B7TqMWLO18UhIbCf6IOVIxEOpsG1kTaDcsdIqEU
-        VyoL9DF7P9t4qzU1lVy4L2P5NPPOvco=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-26dcZxQIMA27PJR_HI6aFA-1; Thu, 26 May 2022 06:16:50 -0400
-X-MC-Unique: 26dcZxQIMA27PJR_HI6aFA-1
-Received: by mail-ej1-f70.google.com with SMTP id tc8-20020a1709078d0800b006ff04b9bac4so612957ejc.15
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:16:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NEcgtNSPVqH46dnGy7KtC525rBQMD6rVhdUi+/d9+E4=;
-        b=LYut4kEdzU30HUdspGKevL9uR8/N9lA+mALiYltKJ6BE1jo8lxP8hcaGXrl0jdmFAx
-         uw4rWBKUNo3NVSuuAkXIy8PKH620Iln//0cxGWq0L1a/jtY6GxUYukvm3Qe2Z1RmMKtM
-         75pwXCx+8JmvG7/Kw0VOa2+cJW2dUzyzMhTgYMPJAQMdsKjplWF/9uxYmgCydko1FawR
-         2GptGhaqp9bysF/viWYWJP0F5/wjNcC6ULxykiJLCKNj3OL1FFq34nYN8SiYQrTaKJcn
-         ikrl3iMgg+ab2etYY3T2Du0MnC6leZ7cKxKtckXvXzfZEnU3E1O3eptj4/3aBHUfj0kq
-         I4/Q==
-X-Gm-Message-State: AOAM533Az7yx6xMKKZfNixrjzvn/KKGouhpdlmR+OhVZgJh/glzfaFa8
-        tb3EckHE6LKWf6M1niMtWPjZvI72kd4ABQT2Ely9Rs2tpVTuXWXBf00OP82kZwRqNaFxM6qEm04
-        6r37q0OFPm5Sg3Iypt89Qn55a
-X-Received: by 2002:a17:907:9485:b0:6ff:1012:1b94 with SMTP id dm5-20020a170907948500b006ff10121b94mr6844146ejc.39.1653560209101;
-        Thu, 26 May 2022 03:16:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzaFBvLqjttQfZOBiH5gAT3X0rzGq9vNsfQskG7t7W3U9JABao1KA2KuAWcHs1NOym8gFRCUw==
-X-Received: by 2002:a17:907:9485:b0:6ff:1012:1b94 with SMTP id dm5-20020a170907948500b006ff10121b94mr6844125ejc.39.1653560208823;
-        Thu, 26 May 2022 03:16:48 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id u26-20020a50c2da000000b0042a9fcd7c73sm603592edf.46.2022.05.26.03.16.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 03:16:47 -0700 (PDT)
-Message-ID: <8b93ec1f-8aa9-c072-b20f-cfa015625120@redhat.com>
-Date:   Thu, 26 May 2022 12:16:46 +0200
+        Thu, 26 May 2022 06:23:25 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4E8C5DAF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 03:23:23 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 8B90E217A;
+        Thu, 26 May 2022 10:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1653560574;
+        bh=W0DpAQyoq876DrlqhAskeolqdKC31dHHiEqyp43/xeA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=nVKc598zYVkv4trcv6ycpLzm2MBB7bkuHWBKSVJ48+E/dr80+9RoTkfwTODOmZtK2
+         HwcMM/G8xbobEczyaUoIDErAZso5CRSRXydi2RKvyx7TroYYiH4ZhoobB4p5g8JRsO
+         lZVB6lSGUDhHkNY+5vv3KitKM+580cIO1AyD0tao=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 26 May 2022 13:23:21 +0300
+Message-ID: <14b2ae23-2f7b-401a-dcee-cc6114849022@paragon-software.com>
+Date:   Thu, 26 May 2022 13:22:27 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] KVM: x86/pmu: Update pmu->pebs_enable_mask with actual
- counter_mask
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] fs/ntfs3: fix null pointer dereference in
+ d_flags_for_inode
 Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Yanfei Xu <yanfei.xu@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220526085723.91292-1-likexu@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220526085723.91292-1-likexu@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Liangbin Lian <jjm2473@gmail.com>, <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20220506034656.50038-1-jjm2473@gmail.com>
+From:   Almaz Alexandrovich <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20220506034656.50038-1-jjm2473@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/22 10:57, Like Xu wrote:
-> Subject:
-> [PATCH] KVM: x86/pmu: Update pmu->pebs_enable_mask with actual counter_mask
-> From:
-> Like Xu <like.xu.linux@gmail.com>
-> Date:
-> 5/26/22, 10:57
+Hello.
+
+Thank you for reporting this bug.
+The bug happens because we don't initialize i_op for records in $Extend.
+We tested patch on our side, let me know if patch helps you too.
+
+     fs/ntfs3: Fix missing i_op in ntfs_read_mft
+     
+     There is null pointer dereference because i_op == NULL.
+     The bug happens because we don't initialize i_op for records in $Extend.
+     Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
+     
+     Reported-by: Liangbin Lian <jjm2473@gmail.com>
+     Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index 879952254071..b2cc1191be69 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -430,6 +430,7 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+         } else if (fname && fname->home.low == cpu_to_le32(MFT_REC_EXTEND) &&
+                    fname->home.seq == cpu_to_le16(MFT_REC_EXTEND)) {
+                 /* Records in $Extend are not a files or general directories. */
++               inode->i_op = &ntfs_file_inode_operations;
+         } else {
+                 err = -EINVAL;
+                 goto out;
+
+
+On 5/6/22 06:46, Liangbin Lian wrote:
+> ntfs_read_mft may return inode with null i_op, cause null pointer dereference in d_flags_for_inode (inode->i_op->get_link).
+> Reproduce:
+>   - sudo mount -t ntfs3 -o loop ntfs.img ntfs
+>   - ls ntfs/'$Extend/$Quota'
 > 
-> To:
-> Paolo Bonzini <pbonzini@redhat.com>
-> CC:
-> Yanfei Xu <yanfei.xu@intel.com>, Sean Christopherson 
-> <seanjc@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Wanpeng Li 
-> <wanpengli@tencent.com>, Jim Mattson <jmattson@google.com>, Joerg Roedel 
-> <joro@8bytes.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+> The call trace is shown below (striped):
+>   BUG: kernel NULL pointer dereference, address: 0000000000000008
+>   CPU: 0 PID: 577 Comm: ls Tainted: G           OE     5.16.0-0.bpo.4-amd64 #1  Debian 5.16.12-1~bpo11+1
+>   RIP: 0010:d_flags_for_inode+0x65/0x90
+>   Call Trace:
+>   ntfs_lookup
+>   +--- dir_search_u
+>   |    +--- ntfs_iget5
+>   |         +--- ntfs_read_mft
+>   +--- d_splice_alias
+>        +--- __d_add
+>             +--- d_flags_for_inode
 > 
-> 
-> From: Like Xu<likexu@tencent.com>
-> 
-> The blamed commit is posted before the PEBS merge in, but is applied after
-> the latter is merged in. Fix dependency of pebs_enable_mask on
-> a new reusable counter_mask instead of zero-initialized global_ctrl.
-> 
-> Fixes: 94e05293f839 ("KVM: x86/pmu: Don't overwrite the pmu->global_ctrl when refreshing")
-> Signed-off-by: Like Xu<likexu@tencent.com>
+> Signed-off-by: Liangbin Lian <jjm2473@gmail.com>
 > ---
->   arch/x86/kvm/vmx/pmu_intel.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
+>   fs/ntfs3/inode.c | 1 -
+>   1 file changed, 1 deletion(-)
 > 
-> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> index ddf837130d1f..72bbcb3f9f8a 100644
-> --- a/arch/x86/kvm/vmx/pmu_intel.c
-> +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> @@ -621,6 +621,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->   	struct kvm_cpuid_entry2 *entry;
->   	union cpuid10_eax eax;
->   	union cpuid10_edx edx;
-> +	u64 counter_mask;
->   	int i;
+> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+> index 9eab11e3b..b68d26fa8 100644
+> --- a/fs/ntfs3/inode.c
+> +++ b/fs/ntfs3/inode.c
+> @@ -45,7 +45,6 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+>   	struct MFT_REC *rec;
+>   	struct runs_tree *run;
 >   
->   	pmu->nr_arch_gp_counters = 0;
-> @@ -672,8 +673,9 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->   
->   	for (i = 0; i < pmu->nr_arch_fixed_counters; i++)
->   		pmu->fixed_ctr_ctrl_mask &= ~(0xbull << (i * 4));
-> -	pmu->global_ctrl_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
-> +	counter_mask = ~(((1ull << pmu->nr_arch_gp_counters) - 1) |
->   		(((1ull << pmu->nr_arch_fixed_counters) - 1) << INTEL_PMC_IDX_FIXED));
-> +	pmu->global_ctrl_mask = counter_mask;
->   	pmu->global_ovf_ctrl_mask = pmu->global_ctrl_mask
->   			& ~(MSR_CORE_PERF_GLOBAL_OVF_CTRL_OVF_BUF |
->   			    MSR_CORE_PERF_GLOBAL_OVF_CTRL_COND_CHGD);
-> @@ -713,7 +715,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
->   	if (vcpu->arch.perf_capabilities & PERF_CAP_PEBS_FORMAT) {
->   		vcpu->arch.ia32_misc_enable_msr &= ~MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL;
->   		if (vcpu->arch.perf_capabilities & PERF_CAP_PEBS_BASELINE) {
-> -			pmu->pebs_enable_mask = ~pmu->global_ctrl;
-> +			pmu->pebs_enable_mask = counter_mask;
->   			pmu->reserved_bits &= ~ICL_EVENTSEL_ADAPTIVE;
->   			for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
->   				pmu->fixed_ctr_ctrl_mask &=
-> -- 2.36.1
-> 
-
-Squashed, thanks.
-
-Paolo
-
+> -	inode->i_op = NULL;
+>   	/* Setup 'uid' and 'gid' */
+>   	inode->i_uid = sbi->options->fs_uid;
+>   	inode->i_gid = sbi->options->fs_gid;

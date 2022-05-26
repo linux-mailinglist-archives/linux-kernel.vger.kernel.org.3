@@ -2,195 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C710E535425
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 21:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04F6535429
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 21:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348860AbiEZTyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 15:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
+        id S233747AbiEZTz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 15:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiEZTyp (ORCPT
+        with ESMTP id S239722AbiEZTz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 15:54:45 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDF49859D
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 12:54:44 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id i27so4853476ejd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 12:54:43 -0700 (PDT)
+        Thu, 26 May 2022 15:55:56 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C43D880E5;
+        Thu, 26 May 2022 12:55:55 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id bl14so1747054qtb.1;
+        Thu, 26 May 2022 12:55:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tmwNbvKqL71IPMURm6rrBHmYSOm0rciMZ7lSLg0QGx0=;
-        b=VtfhGdnn56bL4F8Lu0E+D37tHxCiMQM7ul1bbl7zzmmumXFHnckqfCO+oAmXgcEh0d
-         yqZutoO8b8VmHmjz9IM5Vkbi48pRUgFKTrEVzdsMxwxViKowfr+DpNO3pMoUL3Hwluwa
-         2NOTqP/ErEIEsMu/Lwr4GaOXK0dmXA/Q4gR4eOiCyleEBt8OYs5f1iBa41Z5dcxb69Je
-         BIoJfToNOzOt2GtBiS0Y3p1nkqAXW+yqJib+zu1XjqJDjnhIoH/g/djC+ExT+sk51jIq
-         IWj2zIT+uBFBBY+InfjwIPFUMIkbKMEv1cIcsqi16FOHIavdApp1bxwb9Kh1jbMDGKA3
-         mucA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=K1mkUeLDGXh6H+DdAZ/Z/GNiMsZS+xgfwmRGEkBJOOM=;
+        b=qREScIhnqP8gtHRLCmwMFZmomqKsVOUsin0bvlBK09yl3E40kv996OFMeNlun3GRiz
+         czz47XNoc3qzDuZVjfb8shSgZs9X6hdB86El6JqCY4i7gTzsydtVJFQVQOuoFPq40lyz
+         ThdWMXCXib6nhbTUIYaU48r8tKRdDL7uHLLK9G3iV2jU9tjIL2sxmLwSJ0vXaQv6zD6g
+         arHF+yqExmQhT0RRb8pefTMczTdgUIu2RkuQGgNeycDSbfDkHBulfR3905xtxQ1m9zof
+         IXXS/28Fs+8rJDF2JFjS8yMLFQ+ljg+hG507/R0LAyJp2+286i+gIVYw7LJRGheeHBuM
+         ttqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tmwNbvKqL71IPMURm6rrBHmYSOm0rciMZ7lSLg0QGx0=;
-        b=Hr5yZwzWYEGjMMA/MO3Db9munCkCtG7P23RivI3Ikqp+oOTsuFpV/bTZGg8vE5ybaW
-         lURmx9WlbvOj+2xcmUr9/KInQV/SwsBuTZJal3PiT4zxHSGNWqXNtYsJWcJzwGP9swU9
-         1XgOXQW9kBP+lE88YZnmaePcYYbCWZfwRwiomuE2/7ev+HWw8yuyao7ao7tUmLUQ/8Cn
-         uJJwTr7dKidgNDp2e2m/snzk2Wwrv/EFm6Cq0KYhzpXKe0M6lvtQEUaKO06DQQSDaGF/
-         befqHbKjyfu/m/0Pi0VnyWW05aHoD4ygkdQ06OvJHfmINU268hTZPNvKw+4hxss5IRcu
-         gQlg==
-X-Gm-Message-State: AOAM533c3iidA+urIKCc6aZb+XflMcBndBkqoKPMCxCxYn+WfoczG92g
-        Iy9p1Rern5euShu1isKefYUDo8uCUYkzSKGp
-X-Google-Smtp-Source: ABdhPJxZdL87x0iMf+OgVyYXKEEQZFVzJS43DDXvqbnUnK/Zthe9bi1Sna9ZaeSIT6mtPmF5L4mEmA==
-X-Received: by 2002:a17:907:9495:b0:6ff:14df:d2a with SMTP id dm21-20020a170907949500b006ff14df0d2amr8065757ejc.338.1653594882571;
-        Thu, 26 May 2022 12:54:42 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k10-20020a17090646ca00b006fed93bf71dsm802130ejs.42.2022.05.26.12.54.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 12:54:42 -0700 (PDT)
-Message-ID: <597de13b-28c8-3341-be11-da51e22304c3@linaro.org>
-Date:   Thu, 26 May 2022 21:54:41 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=K1mkUeLDGXh6H+DdAZ/Z/GNiMsZS+xgfwmRGEkBJOOM=;
+        b=xEz7GFBApIGwZ0pJ6qyAQVBYtpQ1eFuItUBqzdSvU8+4lkemogKEtcmvgLXMMZhZNs
+         uQnexGekbNF9x9kipvifmo0zv/ngBY+Jk6D6gxJVmAkk049ZjwqDjei4XiigAMkG53Nl
+         gKgOvCsH3AGnT9CUpaRGNYvbKA+xlUaMH6UXDIoEcuqk0SPrQ3ZREv65SQ8hjj4wkTZX
+         gPNoG1rXPzQqO5qXpWlcHXpIuoQuGejasEVrJZlx6Kbwi6uXHScLBisx/QbLxkwV8Oob
+         /OkrSShg2Sv2tyeQyJAflh/eoV9NOjgVm/D8VeP5/C5LqBOmGAQpLIKaYXuX0ImbMlLw
+         sxcA==
+X-Gm-Message-State: AOAM53172pYn25FA02kPakdtQc9qo15qVwP4WPg9wodussOrfk4FDQE0
+        cc8oVjUGbg2MXL8qq0GnIxw=
+X-Google-Smtp-Source: ABdhPJxIK2WGJAOGsiK2eeVsCS0VF76lh5sWWj2clMWEp+eUQvy4YNwumx+5jzuSiNkODEb6S37Mzw==
+X-Received: by 2002:a05:622a:1450:b0:2fb:6b97:2e10 with SMTP id v16-20020a05622a145000b002fb6b972e10mr6777937qtx.96.1653594954322;
+        Thu, 26 May 2022 12:55:54 -0700 (PDT)
+Received: from debian-BULLSEYE-live-builder-AMD64 (c-73-60-226-25.hsd1.nh.comcast.net. [73.60.226.25])
+        by smtp.gmail.com with ESMTPSA id u126-20020ae9d884000000b006a35ac236c4sm1682359qkf.113.2022.05.26.12.55.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 12:55:53 -0700 (PDT)
+Date:   Thu, 26 May 2022 15:55:51 -0400
+From:   Eric Whitney <enwlinux@gmail.com>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next] ext4: Fix warning in ext4_da_release_space
+Message-ID: <Yo/bRxbM8OBP0JlI@debian-BULLSEYE-live-builder-AMD64>
+References: <20220520025540.3189247-1-yebin10@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] reset: tps380x: Add TPS380x device driver supprt
-Content-Language: en-US
-To:     Marco Felsch <m.felsch@pengutronix.de>, p.zabel@pengutronix.de,
-        robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20220525142019.3615253-1-m.felsch@pengutronix.de>
- <20220525142019.3615253-2-m.felsch@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220525142019.3615253-2-m.felsch@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520025540.3189247-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2022 16:20, Marco Felsch wrote:
-> The TI TPS380x family [1] is a volatage supervisor with a dedicated
-> manual reset (mr) line input and a reset output. The chip(s) have a
-> build in reset delay, depending on the chip partnumber. This simple
-> driver addresses this so the cosumer don't need to care about it.
+* Ye Bin <yebin10@huawei.com>:
+> We got issue as follows:
+> WARNING: CPU: 2 PID: 1936 at fs/ext4/inode.c:1511 ext4_da_release_space+0x1b9/0x266
+> Modules linked in:
+> CPU: 2 PID: 1936 Comm: dd Not tainted 5.10.0+ #344
+> RIP: 0010:ext4_da_release_space+0x1b9/0x266
+> RSP: 0018:ffff888127307848 EFLAGS: 00010292
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffffffff843f67cc
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffed1024e60ed9
+> RBP: ffff888124dc8140 R08: 0000000000000083 R09: ffffed1075da6d23
+> R10: ffff8883aed36917 R11: ffffed1075da6d22 R12: ffff888124dc83f0
+> R13: ffff888124dc844c R14: ffff888124dc8168 R15: 000000000000000c
+> FS:  00007f6b7247d740(0000) GS:ffff8883aed00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffc1a0b7dd8 CR3: 00000001065ce000 CR4: 00000000000006e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  ext4_es_remove_extent+0x187/0x230
+>  mpage_release_unused_pages+0x3af/0x470
+>  ext4_writepages+0xb9b/0x1160
+>  do_writepages+0xbb/0x1e0
+>  __filemap_fdatawrite_range+0x1b1/0x1f0
+>  file_write_and_wait_range+0x80/0xe0
+>  ext4_sync_file+0x13d/0x800
+>  vfs_fsync_range+0x75/0x140
+>  do_fsync+0x4d/0x90
+>  __x64_sys_fsync+0x1d/0x30
+>  do_syscall_64+0x33/0x40
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 > 
-> [1] https://www.ti.com/product/TPS3801
+> Above issue may happens as follows:
+> 	process1                        process2
+> ext4_da_write_begin
+>   ext4_da_reserve_space
+>     ext4_es_insert_delayed_block[1/1]
+>                                     ext4_da_write_begin
+> 				      ext4_es_insert_delayed_block[0/1]
+> ext4_writepages
+>   ****Delayed block allocation failed****
+>   mpage_release_unused_pages
+>     ext4_es_remove_extent[1/1]
+>       ext4_da_release_space [reserved 0]
 > 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> ext4_da_write_begin
+>   ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)
+>    ->As there exist [0, 1] extent, so will return true
+>                                    ext4_writepages
+> 				   ****Delayed block allocation failed****
+>                                      mpage_release_unused_pages
+> 				       ext4_es_remove_extent[0/1]
+> 				         ext4_da_release_space [reserved 1]
+> 					   ei->i_reserved_data_blocks [1->0]
+> 
+>   ext4_es_insert_delayed_block[1/1]
+> 
+> ext4_writepages
+>   ****Delayed block allocation failed****
+>   mpage_release_unused_pages
+>   ext4_es_remove_extent[1/1]
+>    ext4_da_release_space [reserved 1]
+>     ei->i_reserved_data_blocks[0, -1]
+>     ->As ei->i_reserved_data_blocks already is zero but to_free is 1,
+>     will trigger warning.
+> 
+
+Hi:
+
+Do you have a reproducer for this warning?  I'd like to understand the sequence
+of events that led to the initial block allocation failure in process 1.
+
+A question about your notation - what does "[1/1]" in
+"ext4_es_insert_delayed_block[1/1]" mean?
+
+I'm assuming this failure was seen on a bigalloc filesystem with a 4k block
+size and 64K cluster size?
+
+Thanks,
+Eric
+
+> To solve above issue, introduce i_clu_lock to protect insert delayed
+> block and remove block under cluster delay allocate mode.
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 > ---
->  drivers/reset/Kconfig         |   8 +++
->  drivers/reset/Makefile        |   1 +
->  drivers/reset/reset-tps380x.c | 130 ++++++++++++++++++++++++++++++++++
->  3 files changed, 139 insertions(+)
->  create mode 100644 drivers/reset/reset-tps380x.c
+>  fs/ext4/ext4.h           |  3 +++
+>  fs/ext4/extents_status.c |  5 +++++
+>  fs/ext4/inode.c          | 11 +++++++++--
+>  fs/ext4/super.c          |  1 +
+>  4 files changed, 18 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> index e0fc80e041ea..e2eb616af812 100644
-> --- a/drivers/reset/Kconfig
-> +++ b/drivers/reset/Kconfig
-> @@ -256,6 +256,14 @@ config RESET_TI_SYSCON
->  	  you wish to use the reset framework for such memory-mapped devices,
->  	  say Y here. Otherwise, say N.
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index bcd3b9bf8069..47c88ac4d4a8 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -1169,6 +1169,9 @@ struct ext4_inode_info {
+>  	__u32 i_csum_seed;
 >  
-> +config RESET_TI_TPS380X
-> +	tristate "TI TPS380x Reset Driver"
-> +	select GPIOLIB
-> +	help
-> +	  This enables the reset driver support for TI TPS380x devices. If
-> +	  you wish to use the reset framework for such devices, say Y here.
-> +	  Otherwise, say N.
+>  	kprojid_t i_projid;
 > +
->  config RESET_TN48M_CPLD
->  	tristate "Delta Networks TN48M switch CPLD reset controller"
->  	depends on MFD_TN48M_CPLD || COMPILE_TEST
-> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-> index a80a9c4008a7..66399b92b1bb 100644
-> --- a/drivers/reset/Makefile
-> +++ b/drivers/reset/Makefile
-> @@ -33,6 +33,7 @@ obj-$(CONFIG_RESET_STARFIVE_JH7100) += reset-starfive-jh7100.o
->  obj-$(CONFIG_RESET_SUNXI) += reset-sunxi.o
->  obj-$(CONFIG_RESET_TI_SCI) += reset-ti-sci.o
->  obj-$(CONFIG_RESET_TI_SYSCON) += reset-ti-syscon.o
-> +obj-$(CONFIG_RESET_TI_TPS380X) += reset-tps380x.o
->  obj-$(CONFIG_RESET_TN48M_CPLD) += reset-tn48m.o
->  obj-$(CONFIG_RESET_UNIPHIER) += reset-uniphier.o
->  obj-$(CONFIG_RESET_UNIPHIER_GLUE) += reset-uniphier-glue.o
-> diff --git a/drivers/reset/reset-tps380x.c b/drivers/reset/reset-tps380x.c
-> new file mode 100644
-> index 000000000000..fd2c0929ae2d
-> --- /dev/null
-> +++ b/drivers/reset/reset-tps380x.c
-> @@ -0,0 +1,130 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * TI TPS380x Supply Voltage Supervisor and Reset Controller Driver
-> + *
-> + * Copyright (C) 2022 Pengutronix, Marco Felsch <kernel@pengutronix.de>
-> + *
-> + * Based on Simple Reset Controller Driver
-> + *
-> + * Copyright (C) 2017 Pengutronix, Philipp Zabel <kernel@pengutronix.de>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/reset-controller.h>
-> +
-> +struct tps380x_reset {
-> +	struct reset_controller_dev	rcdev;
-> +	struct gpio_desc		*reset_gpio;
-> +	unsigned int			reset_ms;
-> +};
-> +
-> +struct tps380x_reset_devdata {
-> +	unsigned int min_reset_ms;
-> +	unsigned int typ_reset_ms;
-> +	unsigned int max_reset_ms;
-> +};
-> +
-> +static inline
-> +struct tps380x_reset *to_tps380x_reset(struct reset_controller_dev *rcdev)
-> +{
-> +	return container_of(rcdev, struct tps380x_reset, rcdev);
-> +}
-> +
-> +static int
-> +tps380x_reset_assert(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct tps380x_reset *tps380x = to_tps380x_reset(rcdev);
-> +
-> +	gpiod_set_value_cansleep(tps380x->reset_gpio, 1);
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +tps380x_reset_deassert(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct tps380x_reset *tps380x = to_tps380x_reset(rcdev);
-> +
-> +	gpiod_set_value_cansleep(tps380x->reset_gpio, 0);
-> +	msleep(tps380x->reset_ms);
-> +
-> +	return 0;
-> +}
-> +
-> +const struct reset_control_ops reset_tps380x_ops = {
-
-This looks static.
-
-
-Best regards,
-Krzysztof
+> +	/* Protect concurrent add cluster delayed block and remove block */
+> +	struct mutex i_clu_lock;
+>  };
+>  
+>  /*
+> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
+> index 9a3a8996aacf..dd679014db98 100644
+> --- a/fs/ext4/extents_status.c
+> +++ b/fs/ext4/extents_status.c
+> @@ -1433,6 +1433,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
+>  int ext4_es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
+>  			  ext4_lblk_t len)
+>  {
+> +	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+>  	ext4_lblk_t end;
+>  	int err = 0;
+>  	int reserved = 0;
+> @@ -1455,9 +1456,13 @@ int ext4_es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
+>  	 * so that we are sure __es_shrink() is done with the inode before it
+>  	 * is reclaimed.
+>  	 */
+> +	if (sbi->s_cluster_ratio != 1)
+> +		mutex_lock(&EXT4_I(inode)->i_clu_lock);
+>  	write_lock(&EXT4_I(inode)->i_es_lock);
+>  	err = __es_remove_extent(inode, lblk, end, &reserved);
+>  	write_unlock(&EXT4_I(inode)->i_es_lock);
+> +	if (sbi->s_cluster_ratio != 1)
+> +		mutex_unlock(&EXT4_I(inode)->i_clu_lock);
+>  	ext4_es_print_tree(inode);
+>  	ext4_da_release_space(inode, reserved);
+>  	return err;
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index 01c9e4f743ba..1109d77ad60b 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -1649,17 +1649,22 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
+>  			goto errout;
+>  		reserved = true;
+>  	} else {   /* bigalloc */
+> +		mutex_lock(&EXT4_I(inode)->i_clu_lock);
+>  		if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)) {
+>  			if (!ext4_es_scan_clu(inode,
+>  					      &ext4_es_is_mapped, lblk)) {
+>  				ret = ext4_clu_mapped(inode,
+>  						      EXT4_B2C(sbi, lblk));
+> -				if (ret < 0)
+> +				if (ret < 0) {
+> +					mutex_unlock(&EXT4_I(inode)->i_clu_lock);
+>  					goto errout;
+> +				}
+>  				if (ret == 0) {
+>  					ret = ext4_da_reserve_space(inode);
+> -					if (ret != 0)   /* ENOSPC */
+> +					if (ret != 0) {   /* ENOSPC */
+> +						mutex_unlock(&EXT4_I(inode)->i_clu_lock);
+>  						goto errout;
+> +					}
+>  					reserved = true;
+>  				} else {
+>  					allocated = true;
+> @@ -1671,6 +1676,8 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
+>  	}
+>  
+>  	ret = ext4_es_insert_delayed_block(inode, lblk, allocated);
+> +	if (sbi->s_cluster_ratio != 1)
+> +		mutex_unlock(&EXT4_I(inode)->i_clu_lock);
+>  	if (ret && reserved)
+>  		ext4_da_release_space(inode, 1);
+>  
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index c5021ca0a28a..aa6f2a68bf41 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -1347,6 +1347,7 @@ static struct inode *ext4_alloc_inode(struct super_block *sb)
+>  	INIT_WORK(&ei->i_rsv_conversion_work, ext4_end_io_rsv_work);
+>  	ext4_fc_init_inode(&ei->vfs_inode);
+>  	mutex_init(&ei->i_fc_lock);
+> +	mutex_init(&ei->i_clu_lock);
+>  	return &ei->vfs_inode;
+>  }
+>  
+> -- 
+> 2.31.1
+> 

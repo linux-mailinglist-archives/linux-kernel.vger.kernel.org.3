@@ -2,179 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79094534DFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31994534DF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347100AbiEZLWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 07:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S238866AbiEZLVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 07:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347158AbiEZLWU (ORCPT
+        with ESMTP id S233141AbiEZLVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 07:22:20 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CA4112A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:22:01 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id y189so1435246pfy.10
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:22:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wRyXjUnbuN8AArPJcHoUjYeWkLPL7LreNSYdLAK0u9k=;
-        b=B0xy+3RUGPdeJE34oJ+ShJjF1I809kPfObCH500XadV1bePmTTJKBRbAD2ieBC+ysO
-         2DT6QUCgLMqGimKyXkICXmUcppD2Ndob6ILn9uZGQyL1ZIT9blB4p4eiiaosTyo08Wwo
-         DFzott6m4wObq8TjrTeBfoL9XLRrNnTPpZg8Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wRyXjUnbuN8AArPJcHoUjYeWkLPL7LreNSYdLAK0u9k=;
-        b=B9G34kFOK1qmOFV1Fel+RojvWpmNd968rGZmLC+IMVX3w19th2nYZ/rW7jqQAAEO2d
-         P3mq0Is9lOhrXAV8DrZF8bBuNj7CN+k0voJeRvjQ+sz5y6WR5HV8B4QcAC8vQKWCyjut
-         w9nMzIWbWCcrkTJfncUgqfwI36BIGEennEc/JWBmD4TKBNJK2WMnc9tm+iQ7wwABcMNe
-         8RwtUdAj6qnt5i48dyAuXbql4WZDbGI025mEofsHpd3uuDl02hrLVE9/mkCR5sKtUVbo
-         eq6SaKEM5bEfzApPcFIq0JiTB3Ga1KafQ1KcrWV9RW1qkm/9V4vz1k8/DK0Q9i8oylnX
-         8QJQ==
-X-Gm-Message-State: AOAM531LVfzu2ilaz1POsu0zWdyDM+oVoRTAl+DO4umtxX4ucapdgsWh
-        vf2BbeuV+T4oOFiyp5H1EIC4AA==
-X-Google-Smtp-Source: ABdhPJxnxtIlJ7ULQJ8KTu/+loAsvXfALnBvt6eaj1i0FdCDRbJ9YrYd6QHBB+uN6hwoH0xG8m7HKg==
-X-Received: by 2002:a63:82c7:0:b0:3f9:e153:6a54 with SMTP id w190-20020a6382c7000000b003f9e1536a54mr23972141pgd.409.1653564121453;
-        Thu, 26 May 2022 04:22:01 -0700 (PDT)
-Received: from localhost (174.71.80.34.bc.googleusercontent.com. [34.80.71.174])
-        by smtp.gmail.com with UTF8SMTPSA id 2-20020a170902e9c200b001614cd997a8sm1230287plk.236.2022.05.26.04.21.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 04:22:01 -0700 (PDT)
-From:   Joseph Hwang <josephsih@chromium.org>
-To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
-        luiz.dentz@gmail.com, pali@kernel.org
-Cc:     chromeos-bluetooth-upstreaming@chromium.org, josephsih@google.com,
-        Joseph Hwang <josephsih@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v6 5/5] Bluetooth: let HCI_QUALITY_REPORT persist over adapter power cycle
-Date:   Thu, 26 May 2022 19:21:34 +0800
-Message-Id: <20220526112135.2486883-3-josephsih@chromium.org>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-In-Reply-To: <20220526112135.2486883-1-josephsih@chromium.org>
-References: <20220526112135.2486883-1-josephsih@chromium.org>
+        Thu, 26 May 2022 07:21:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD52C52
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653564102; x=1685100102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E3UfK5LmPaRzbKe05FjBGuRV4gJXJ0211VX0BroG/Lc=;
+  b=Cw0wDGaSwbPvGdSFMs4XRcNKJRRetdnDHufnAXZgM7MRBhSS9pR+j+Pk
+   GsyVgxYT5nHkjyVqdOOPmPHsBegRxuKOwJMi1iqEi0OU9Cax71kOCrGmn
+   NEg12h3ReHAXQFam3ExA2fYYSz5tIKXwSNXjD0yN/24b/7fawYqc18XY+
+   5Fo1vzySZO4nV01sk9pjW8fUib30QNQ5JtBbD4jlDYapkWzpGr3RFgU8/
+   fPd4bX9NqkNw3Nj7VbMcoZs9GV172ji2wYidtZIxFJCSzXc/qxEyUDz1C
+   VGeZ7Kt68uoxB1PO70DizOjyTsz7CIHCdegTv2O1ZwQvKZ3fY0gT0K8ih
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="337170454"
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="337170454"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 04:21:42 -0700
+X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
+   d="scan'208";a="704484668"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 04:21:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nuBYd-000Lfw-TH;
+        Thu, 26 May 2022 14:21:35 +0300
+Date:   Thu, 26 May 2022 14:21:35 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Kees Cook <keescook@chromium.org>,
+        Helge Deller <deller@gmx.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Gareth Powell <gpowell@broadcom.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: bcm: brcmstb: pm: pm-arm: Fix refcount leak in
+ brcmstb_pm_probe
+Message-ID: <Yo9ivyinKV4alJu8@smile.fi.intel.com>
+References: <20220526075325.27356-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526075325.27356-1-linmq006@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The quality report specifications, including AOSP Bluetooth Quality
-Report and Intel Telemetry Event, do not define what happen when
-the adapter is turned off and then on. To be consistent among
-different specifications and vendors, the quality report feature is
-turned off when the adapter is powered off and is turned on when
-the adapter is powered on if the feature has been on before power
-cycle.
+On Thu, May 26, 2022 at 11:53:22AM +0400, Miaoqian Lin wrote:
+> of_find_matching_node() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when not need anymore.
+> Add missing of_node_put() to avoid refcount leak.
+> 
+> In brcmstb_init_sram, it pass dn to of_address_to_resource(),
+> of_address_to_resource() will call of_find_device_by_node() to take
+> reference, so we should release the reference returned by
+> of_find_matching_node().
 
-Signed-off-by: Joseph Hwang <josephsih@chromium.org>
-Reviewed-by: Archie Pusaka <apusaka@chromium.org>
----
+Looks legit,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-(no changes since v5)
+> Fixes: 0b741b8234c8 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/soc/bcm/brcmstb/pm/pm-arm.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/soc/bcm/brcmstb/pm/pm-arm.c b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> index 3cbb165d6e30..70ad0f3dce28 100644
+> --- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> +++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> @@ -783,6 +783,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	ret = brcmstb_init_sram(dn);
+> +	of_node_put(dn);
+>  	if (ret) {
+>  		pr_err("error setting up SRAM for PM\n");
+>  		return ret;
+> -- 
+> 2.25.1
+> 
 
-Changes in v5:
-- This is a new patch in this series changes version.
-
- include/net/bluetooth/hci_core.h |  1 -
- net/bluetooth/hci_sync.c         | 35 +++++++++++++++++++++++++++++++-
- 2 files changed, 34 insertions(+), 2 deletions(-)
-
-diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
-index 9e48d606591e..5788350efa68 100644
---- a/include/net/bluetooth/hci_core.h
-+++ b/include/net/bluetooth/hci_core.h
-@@ -807,7 +807,6 @@ extern struct mutex hci_cb_list_lock;
- 		hci_dev_clear_flag(hdev, HCI_LE_ADV);		\
- 		hci_dev_clear_flag(hdev, HCI_LL_RPA_RESOLUTION);\
- 		hci_dev_clear_flag(hdev, HCI_PERIODIC_INQ);	\
--		hci_dev_clear_flag(hdev, HCI_QUALITY_REPORT);	\
- 	} while (0)
- 
- #define hci_dev_le_state_simultaneous(hdev) \
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index a6ada9dcede5..12a18d046bb6 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -3849,6 +3849,31 @@ static const struct {
- 			 "advertised, but not supported.")
- };
- 
-+static void suspend_resume_quality_report(struct hci_dev *hdev, bool enable)
-+{
-+	int err;
-+
-+	/* Suspend and resume quality report only when the feature has
-+	 * already been enabled. The HCI_QUALITY_REPORT flag, as an indicator
-+	 * whether to re-enable the feature after resume, is not changed by
-+	 * suspend/resume.
-+	 */
-+	if (!hci_dev_test_flag(hdev, HCI_QUALITY_REPORT))
-+		return;
-+
-+	if (hdev->set_quality_report)
-+		err = hdev->set_quality_report(hdev, enable);
-+	else
-+		err = aosp_set_quality_report(hdev, enable);
-+
-+	if (err)
-+		bt_dev_err(hdev, "%s quality report error %d",
-+			   enable ? "resume" : "suspend", err);
-+	else
-+		bt_dev_info(hdev, "%s quality report",
-+			    enable ? "resume" : "suspend");
-+}
-+
- int hci_dev_open_sync(struct hci_dev *hdev)
- {
- 	int ret = 0;
-@@ -4013,6 +4038,7 @@ int hci_dev_open_sync(struct hci_dev *hdev)
- 	if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
- 		msft_do_open(hdev);
- 		aosp_do_open(hdev);
-+		suspend_resume_quality_report(hdev, true);
- 	}
- 
- 	clear_bit(HCI_INIT, &hdev->flags);
-@@ -4095,6 +4121,14 @@ int hci_dev_close_sync(struct hci_dev *hdev)
- 
- 	hci_request_cancel_all(hdev);
- 
-+	/* Disable quality report and close aosp before shutdown()
-+	 * is called. Otherwise, some chips may panic.
-+	 */
-+	if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
-+		suspend_resume_quality_report(hdev, false);
-+		aosp_do_close(hdev);
-+	}
-+
- 	if (!hci_dev_test_flag(hdev, HCI_UNREGISTER) &&
- 	    !hci_dev_test_flag(hdev, HCI_USER_CHANNEL) &&
- 	    test_bit(HCI_UP, &hdev->flags)) {
-@@ -4158,7 +4192,6 @@ int hci_dev_close_sync(struct hci_dev *hdev)
- 	hci_sock_dev_event(hdev, HCI_DEV_DOWN);
- 
- 	if (!hci_dev_test_flag(hdev, HCI_USER_CHANNEL)) {
--		aosp_do_close(hdev);
- 		msft_do_close(hdev);
- 	}
- 
 -- 
-2.36.1.124.g0e6072fb45-goog
+With Best Regards,
+Andy Shevchenko
+
 

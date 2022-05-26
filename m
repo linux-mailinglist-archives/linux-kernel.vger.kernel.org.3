@@ -2,145 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27106535556
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0EF535564
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345458AbiEZVFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 17:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S1348863AbiEZVYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 17:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236259AbiEZVFq (ORCPT
+        with ESMTP id S237337AbiEZVYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 17:05:46 -0400
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80100E7323;
-        Thu, 26 May 2022 14:05:44 -0700 (PDT)
-Received: by mail-qk1-f177.google.com with SMTP id l82so2552702qke.3;
-        Thu, 26 May 2022 14:05:44 -0700 (PDT)
+        Thu, 26 May 2022 17:24:18 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A624C7AA
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:24:17 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id om5-20020a17090b3a8500b001df42f1cbaaso3885217pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=mOpI/+KYEZdbicuZlQkRSCxZ1y9mz9g1l8prxAxeWBQ=;
+        b=WsfHkiW/udderPR0r7wqNd2MXukeGBYWW7b/3FjGwLvQvLB7HuDmwuCi+T2GLYkgo/
+         GwZxyWANLG5Teqq7jC1OKUr7S0Ag/hjj4osE7NLbe4dWfKwRXSbQXrmohE5C73XYwLbk
+         r27+HcOalBxWxQ0rTHQYScxcIRyAP3wxbZr5OV+XZAIjpawDTjyCdormq0QKaDHlKJ7d
+         bkEnd4QmrejzO3Eu5lJZ3YA9Yxs3eeGJX5hloedjrj1i7MtekfY2AW7/aQ2n7vybUmxN
+         6UoYnaKeehZN5gYCwKskPn1sN//Fh4x7SunC79xIjeHSvcwZe+fKYzcByy91G2RXum7X
+         chEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rGFq6ss7N+k24WC+NtUaZFpHQf1enSNC4oSA/gUz+kA=;
-        b=Lovw6lQzCqltoZ6t9wJ9Z42XoSrLyeQTIvzt3813bHlGo4gXysMZeTIuzd98vl/z1r
-         laWKrJn3jt1cw3WVgovmaeEbpnRb1OTHxBymxRhjfgtcZNaf9ZeciZB+04iSlCNZAQEN
-         9LciDRTa7VkqVZitNuYIubgRjlppyPSKMiMLOeid4b7oSEJJKnsTxe4JgQU7z31XUpyl
-         5tLu+h3jaV6vB5Rv0dhCsE3COA14msFZLTn32cKoLLcv0VM9iQdq5FSdcH9H0tYPhK4q
-         v1H4hK+5L2mdIakihgZOmDJayq45Hfaqmz6WGdmYv1PnzdsYbaQUf3OhOmOWIk++ZVVS
-         /8/w==
-X-Gm-Message-State: AOAM532elUMp6CRV3at54Odxh/HMuuGqqFN8S+n4M8fsKTnoguzVCgAA
-        3yq4XfGbp9CIAdNgvM5vOXysxQ4YWS3f2Q==
-X-Google-Smtp-Source: ABdhPJwm0ByPyj1n1kNaqmju4tiG42KoFk8oIjp3b7iCEM4He6FnNYGCCtX2JHmJw8ce47a3oL37wQ==
-X-Received: by 2002:a37:848:0:b0:6a3:25ea:3cd1 with SMTP id 69-20020a370848000000b006a325ea3cd1mr26250661qki.686.1653599143304;
-        Thu, 26 May 2022 14:05:43 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id r14-20020ac87eee000000b002f938f5bb78sm1484176qtc.15.2022.05.26.14.05.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 14:05:43 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2f83983782fso28478237b3.6;
-        Thu, 26 May 2022 14:05:42 -0700 (PDT)
-X-Received: by 2002:a0d:d493:0:b0:300:43da:57f0 with SMTP id
- w141-20020a0dd493000000b0030043da57f0mr12769712ywd.502.1653599142564; Thu, 26
- May 2022 14:05:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220526204231.832090-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220526204231.832090-1-krzysztof.kozlowski@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 26 May 2022 23:05:30 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWvfbbB3578aFAx6twdKNCkB1T-Uihf3OzGLHmcZG047g@mail.gmail.com>
-Message-ID: <CAMuHMdWvfbbB3578aFAx6twdKNCkB1T-Uihf3OzGLHmcZG047g@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: adjust whitespace around '='
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        arm-soc <arm@kernel.org>, arm-soc <soc@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=mOpI/+KYEZdbicuZlQkRSCxZ1y9mz9g1l8prxAxeWBQ=;
+        b=IYinTUOnydTkFryDHPTodKoHZq3RlVIFXSFRa6FtEBQok8Rpwa7WaXZ6C8AsjHMYBA
+         ky3zxoi5Pk8BudT6pzFU4rG7KmdpVuMc0PWDxFh2l6/GcQJvMj0GA/IJnmCjoycXWMqV
+         GvsfBBpS4Vp6gS8dyWqApmtRLViEFmMujCCEDKRXmNHroCCa4mdWdOFCV9zHnZymJz7X
+         uz6Br0H86PQcZRXPsfZrDoCxq/EakogEBABRt3LXrPIlB6Hf6CES89A2mcstdtPMeEdx
+         Vh8tAeRasxQdLmpvniYKfeZo1BXlb03izSvkccEdQOI2Oam3U35XSwDsfoidTC4Slkpr
+         zp2w==
+X-Gm-Message-State: AOAM531Hljmn89KWcq66RYVm/iRk/9SZEL6XE/kWuOtryCDX+PKmwaGV
+        dmMDMpWOqyu/zknR9y9DSjEEDRPXVwQ=
+X-Google-Smtp-Source: ABdhPJxzk5JajMO4kk7EeMLmpp0YUvfoHhz1BHLMWcZFnj442UGh2Ej356Klhh6wHL6kvWZRRscH1w1jr+U=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:170e:b0:519:3571:903e with SMTP id
+ h14-20020a056a00170e00b005193571903emr581498pfc.30.1653600257340; Thu, 26 May
+ 2022 14:24:17 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu, 26 May 2022 21:08:09 +0000
+Message-Id: <20220526210817.3428868-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH v2 0/8] KVM: x86: Emulator _regs fixes and cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Robert Dinse <nanook@eskimo.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Clean up and harden the use of the x86_emulate_ctxt._regs, which is
+surrounded by a fair bit of magic.  This series was prompted by bug reports
+by Kees and Robert where GCC-12 flags an out-of-bounds _regs access.  The
+warning is a false positive due to a now-known GCC bug, but it's cheap and
+easy to harden the _regs usage, and doing so minimizing the risk of more
+precisely handling 32-bit vs. 64-bit GPRs.
 
-On Thu, May 26, 2022 at 10:42 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I didn't tag patch 2 with Fixes or Cc: stable@.  It does remedy the
+GCC-12 warning, but AIUI the GCC-12 bug affects other KVM paths that
+already have explicit guardrails, i.e. fixing this one case doesn't
+guarantee happiness when building with CONFIG_KVM_WERROR=y, let alone
+CONFIG_WERROR=y.  That said, it might be worth sending to the v5.18 stable
+tree[*] as it does appear to make some configs/setups happy.
 
-Thanks for your patch!
+[*] KVM hasn't changed, but the warning=>error was introduced in v5.18 by
+   commit e6148767825c ("Makefile: Enable -Warray-bounds").
 
-> --- a/arch/arm64/boot/dts/renesas/draak.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/draak.dtsi
-> @@ -630,7 +630,7 @@ rsnd_for_ak4613: endpoint {
->                                 bitclock-master = <&rsnd_for_ak4613>;
->                                 frame-master = <&rsnd_for_ak4613>;
->                                 playback = <&ssi3>, <&src5>, <&dvc0>;
-> -                               capture  = <&ssi4>, <&src6>, <&dvc1>;
-> +                               capture = <&ssi4>, <&src6>, <&dvc1>;
+v2:
+  - Collect reviews and tests. [Vitaly, Kees, Robert]
+  - Tweak patch 1's changelog to explicitly call out that dirty_regs is a
+    4 byte field. [Vitaly]
+  - Add Reported-by for Kees and Robert since this does technically fix a
+    build breakage.
+  - Use a raw literal for NR_EMULATOR_GPRS instead of VCPU_REGS_R15+1 to
+    play nice with 32-bit builds. [kernel test robot]
+  - Reduce the number of emulated GPRs to 8 for 32-bit builds.
+  - Add and use KVM_EMULATOR_BUG_ON() to bug/kill the VM when an emulator
+    bug is detected.  [Vitaly]
 
-I think the idea was to align the playback and capture properties,
-for easier comparison.
-Hence I'm a bit undecided if this needs to be fixed or not...
+v1: https://lore.kernel.org/all/20220525222604.2810054-1-seanjc@google.com
 
->                         };
->                 };
->         };
+Sean Christopherson (8):
+  KVM: x86: Grab regs_dirty in local 'unsigned long'
+  KVM: x86: Harden _regs accesses to guard against buggy input
+  KVM: x86: Omit VCPU_REGS_RIP from emulator's _regs array
+  KVM: x86: Use 16-bit fields to track dirty/valid emulator GPRs
+  KVM: x86: Reduce the number of emulator GPRs to '8' for 32-bit KVM
+  KVM: x86: Bug the VM if the emulator accesses a non-existent GPR
+  KVM: x86: Bug the VM if the emulator generates a bogus exception
+    vector
+  KVM: x86: Bug the VM on an out-of-bounds data read
 
-> --- a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
-> @@ -206,12 +206,12 @@ pcm3168a: audio-codec@44 {
->                                 clocks = <&clksndsel>;
->                                 clock-names = "scki";
->
-> -                               VDD1-supply     = <&snd_3p3v>;
-> -                               VDD2-supply     = <&snd_3p3v>;
-> -                               VCCAD1-supply   = <&snd_vcc5v>;
-> -                               VCCAD2-supply   = <&snd_vcc5v>;
-> -                               VCCDA1-supply   = <&snd_vcc5v>;
-> -                               VCCDA2-supply   = <&snd_vcc5v>;
-> +                               VDD1-supply = <&snd_3p3v>;
-> +                               VDD2-supply = <&snd_3p3v>;
-> +                               VCCAD1-supply = <&snd_vcc5v>;
-> +                               VCCAD2-supply = <&snd_vcc5v>;
-> +                               VCCDA1-supply = <&snd_vcc5v>;
-> +                               VCCDA2-supply = <&snd_vcc5v>;
+ arch/x86/kvm/emulate.c     | 26 ++++++++++++++++++++------
+ arch/x86/kvm/kvm_emulate.h | 28 +++++++++++++++++++++++++---
+ arch/x86/kvm/x86.c         |  9 +++++++++
+ 3 files changed, 54 insertions(+), 9 deletions(-)
 
-Same for the various supplies.
 
->
->                                 ports {
->                                         #address-cells = <1>;
-> @@ -438,7 +438,7 @@ rsnd_for_pcm3168a_capture: endpoint {
->                                 bitclock-master;
->                                 frame-master;
->                                 dai-tdm-slot-num = <6>;
-> -                               capture  = <&ssi4>;
-> +                               capture = <&ssi4>;
+base-commit: 90bde5bea810d766e7046bf5884f2ccf76dd78e9
+-- 
+2.36.1.255.ge46751e96f-goog
 
-Right, there's nothing to align here.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

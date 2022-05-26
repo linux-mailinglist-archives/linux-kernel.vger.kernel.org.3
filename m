@@ -2,102 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF15535571
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BDA535559
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 23:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348841AbiEZVZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 17:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S1346702AbiEZVKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 17:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349208AbiEZVYe (ORCPT
+        with ESMTP id S238132AbiEZVKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 17:24:34 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8E3E8B97
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:24:31 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id x16-20020a63f710000000b003f6082673afso1292267pgh.15
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:24:31 -0700 (PDT)
+        Thu, 26 May 2022 17:10:47 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C739F93995
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:10:44 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id gi33so5281869ejc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 14:10:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=sjrWadd+U6s3AE9OlHKd1vSx1dK7nsNaDjQLzkoUXcg=;
-        b=TQVt0Vq76cHTUEa2X6kDVHu+UhrNE6fY2WluDwgnGkC5IRYf796KPXGLhfr04Uy3YZ
-         6kBFEBE021obJjvVQEwo/PWkRY+xLg5Z1XpTssEYByESOvro3h2/ts3s+hfAVhsAxFqn
-         70IeBknD328cT/+s0eWCstTi2PBxxkLVBD6skaLODHTTWc58vzrIeMni8h4pEEr6iTFW
-         fYzf6XTbKN6Lm9Kpw+ZG4tbsdEOKBd9GJnzIMzKjvgGXsggp+y8oQBokLA70b8+BylEg
-         52jqDFIsfdKJVhJIl/iRCeWIcuUWUmsp1vtPsMFHjg7HQGHRRO/QCD7qildWl4DVyUWm
-         M7OA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=n5ISJ9yLZ548Mz4jCd/68AcqRvOzgjUn9wXGD+ASjI4=;
+        b=lZVmHfF6LYBzFMaqjGMVB2ZPV+hPOKUic6CjH+XhRrRzKSyO43nCBJPvX05Nyk6k4Z
+         OdiUk/r7NaOsPqwT9VJG3jgoNjCBThtKaCQuyOkBv8Vi7eqN0eoTgN9ncK6bkGZcKeyC
+         bsoL/H3dLQIWCQfPyEHsnzG4UGGThjGdhCyn9djsqxIL8GWoLBr5U+0C9TU5YJvtn2XJ
+         niDhVthqOEERTZoQjUTgCkyEYs2WmQ8uU8pSswjn9UeW6Xd7qvg567LHcltuktw5tImZ
+         798/3PEQm5cQFgmBuj4ndBuBAp8jRAjdcvNVCUmzJiRqnvefQy1rm3HsUyR8/7BdpDhv
+         oKmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=sjrWadd+U6s3AE9OlHKd1vSx1dK7nsNaDjQLzkoUXcg=;
-        b=ogPb11GGAKqwULekX++bw8mBzTcDzebDpvNNjDo4l4AiL7gOX7qSvEcGkc+ZZDG7p1
-         I4mjKz+l8o1NEArv9JxpUWqtlcJ3gDJm5meGBM8IDkyExXr9J+9E73b9IhvgYP+gvnr0
-         hkdy/drOF5S5z3CRREheNWAfx+KXBjutpSNDQpSrVgiF67FWGELUb6lnvUQ3emnvu6Pp
-         4u9SWNQ8YgJIapSyskoVoXwV6m0xx2nqTyo1fZezvRgs3UBZ/0imAIoEgIkaAagl+pZC
-         R7UMK3201tMdnOe5y/yBluRDxO9buaqYwRWGRWW6YcaAdQj6iwGLjef2IkxqVyFWFexG
-         FTHQ==
-X-Gm-Message-State: AOAM533e0ZBqhv5K/DDGKfnvZ/2W2pRgc/DAtIUXovIor6+RTn6dlJvK
-        vvQ0nOgBoDryLtYoXEtxh0gQraQDZHo=
-X-Google-Smtp-Source: ABdhPJx8M0VoHr57nLlA/sX8zTDrVXkgT1bsVM9bmwFgKG11EQvIc6zvT1j59UbsqyEBKS3z3uAnVG+SZ80=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a62:e819:0:b0:518:6a98:b02 with SMTP id
- c25-20020a62e819000000b005186a980b02mr34100732pfi.74.1653600270603; Thu, 26
- May 2022 14:24:30 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 26 May 2022 21:08:17 +0000
-In-Reply-To: <20220526210817.3428868-1-seanjc@google.com>
-Message-Id: <20220526210817.3428868-9-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220526210817.3428868-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 8/8] KVM: x86: Bug the VM on an out-of-bounds data read
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Robert Dinse <nanook@eskimo.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=n5ISJ9yLZ548Mz4jCd/68AcqRvOzgjUn9wXGD+ASjI4=;
+        b=PMZ7iV80YGqqo7nLO1jRRN0kIrqPE4xzoOFXvA7IU78WQMPm0ZQUhYPiNzSBjhZXkz
+         cfawvGYMDAqh4vLoc4TeuG3UBwPTw0SBDnE9DImdJDZxjo1GSi/ST7w9p9HHPvZSs0oG
+         7LTsJZDyu/0xiM7bikhA70hxNn10k8lem28BKFLJJRe4jw1dyQdBuOAkdLaasbw+XxO7
+         v6dvxWUMEe5bYENEt9H7j9zogDrapHXk03j91axZjTkHyATAHueU/1IVVYNxEwz52T8r
+         DxYNLufeWI1qCQGHDJ21ax3FzIcjEqGTs39iXJ4kyQRHZAIAcX7g/CN6ByAGqeIl6Lqs
+         AOIg==
+X-Gm-Message-State: AOAM531OYzJ+JO57mubj51G9NuVIBYvJWfB7kho0gHjcMDEY4EbYOAEj
+        wlS1edl6ZHR/Df4rwcS+Td+NRcWyau3MA9Tv
+X-Google-Smtp-Source: ABdhPJzH2AYsc87sKJTEJvKhEp90igqSe7vZ4SuRlgUhjJrY2/j5+u/fAOVedF+0min99G5EjJX2IA==
+X-Received: by 2002:a17:906:6985:b0:6fe:988b:d248 with SMTP id i5-20020a170906698500b006fe988bd248mr34031598ejr.226.1653599443354;
+        Thu, 26 May 2022 14:10:43 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id s23-20020a1709064d9700b006fe8b3d8cb6sm851155eju.62.2022.05.26.14.10.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 14:10:42 -0700 (PDT)
+Message-ID: <9ad3b26e-5d71-72f4-1a16-9ab3164141de@linaro.org>
+Date:   Thu, 26 May 2022 23:10:41 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] arm64: dts: renesas: adjust whitespace around '='
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm-soc <arm@kernel.org>, arm-soc <soc@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220526204231.832090-1-krzysztof.kozlowski@linaro.org>
+ <CAMuHMdWvfbbB3578aFAx6twdKNCkB1T-Uihf3OzGLHmcZG047g@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMuHMdWvfbbB3578aFAx6twdKNCkB1T-Uihf3OzGLHmcZG047g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bug the VM and terminate emulation if an out-of-bounds read into the
-emulator's data cache occurs.  Knowingly contuining on all but guarantees
-that KVM will overwrite random kernel data, which is far, far worse than
-killing the VM.
+On 26/05/2022 23:05, Geert Uytterhoeven wrote:
+> Hi Krzysztof,
+> 
+> On Thu, May 26, 2022 at 10:42 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> Fix whitespace coding style: use single space instead of tabs or
+>> multiple spaces around '=' sign in property assignment.  No functional
+>> changes (same DTB).
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Thanks for your patch!
+> 
+>> --- a/arch/arm64/boot/dts/renesas/draak.dtsi
+>> +++ b/arch/arm64/boot/dts/renesas/draak.dtsi
+>> @@ -630,7 +630,7 @@ rsnd_for_ak4613: endpoint {
+>>                                 bitclock-master = <&rsnd_for_ak4613>;
+>>                                 frame-master = <&rsnd_for_ak4613>;
+>>                                 playback = <&ssi3>, <&src5>, <&dvc0>;
+>> -                               capture  = <&ssi4>, <&src6>, <&dvc1>;
+>> +                               capture = <&ssi4>, <&src6>, <&dvc1>;
+> 
+> I think the idea was to align the playback and capture properties,
+> for easier comparison.
+> Hence I'm a bit undecided if this needs to be fixed or not...
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/emulate.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+yeah, but then one should align "frame-master" to "bitclock-master" and
+several other properties.
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 2aa17462a9ac..39ea9138224c 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -1373,7 +1373,8 @@ static int read_emulated(struct x86_emulate_ctxt *ctxt,
- 	if (mc->pos < mc->end)
- 		goto read_cached;
- 
--	WARN_ON((mc->end + size) >= sizeof(mc->data));
-+	if (KVM_EMULATOR_BUG_ON((mc->end + size) >= sizeof(mc->data), ctxt))
-+		return X86EMUL_UNHANDLEABLE;
- 
- 	rc = ctxt->ops->read_emulated(ctxt, addr, mc->data + mc->end, size,
- 				      &ctxt->exception);
--- 
-2.36.1.255.ge46751e96f-goog
+> 
+>>                         };
+>>                 };
+>>         };
+> 
+>> --- a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
+>> +++ b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
+>> @@ -206,12 +206,12 @@ pcm3168a: audio-codec@44 {
+>>                                 clocks = <&clksndsel>;
+>>                                 clock-names = "scki";
 
+like here ^^^ - clocks with clock-names...
+
+>>
+>> -                               VDD1-supply     = <&snd_3p3v>;
+>> -                               VDD2-supply     = <&snd_3p3v>;
+>> -                               VCCAD1-supply   = <&snd_vcc5v>;
+>> -                               VCCAD2-supply   = <&snd_vcc5v>;
+>> -                               VCCDA1-supply   = <&snd_vcc5v>;
+>> -                               VCCDA2-supply   = <&snd_vcc5v>;
+>> +                               VDD1-supply = <&snd_3p3v>;
+>> +                               VDD2-supply = <&snd_3p3v>;
+>> +                               VCCAD1-supply = <&snd_vcc5v>;
+>> +                               VCCAD2-supply = <&snd_vcc5v>;
+>> +                               VCCDA1-supply = <&snd_vcc5v>;
+>> +                               VCCDA2-supply = <&snd_vcc5v>;
+> 
+> Same for the various supplies.
+
+I don't think there is benefit to order few single entries, while entire
+file does not follow that convention. It would be different for some
+multiple-line entries, but that's not the case here.
+
+Anyway that's only my opinion, so I am happy to trim the patch to the
+last part (although then it is a bit churn :) ).
+
+> 
+>>
+>>                                 ports {
+>>                                         #address-cells = <1>;
+>> @@ -438,7 +438,7 @@ rsnd_for_pcm3168a_capture: endpoint {
+>>                                 bitclock-master;
+>>                                 frame-master;
+>>                                 dai-tdm-slot-num = <6>;
+>> -                               capture  = <&ssi4>;
+>> +                               capture = <&ssi4>;
+> 
+> Right, there's nothing to align here.
+
+
+
+Best regards,
+Krzysztof

@@ -2,140 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F54534BF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6921534C01
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 10:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343787AbiEZIt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 04:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
+        id S234703AbiEZIwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 04:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245149AbiEZItU (ORCPT
+        with ESMTP id S230078AbiEZIwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 04:49:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12B1EC3D1A
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 01:49:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B237A1477;
-        Thu, 26 May 2022 01:49:18 -0700 (PDT)
-Received: from [10.1.37.22] (e122027.cambridge.arm.com [10.1.37.22])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA9103F93E;
-        Thu, 26 May 2022 01:49:15 -0700 (PDT)
-Message-ID: <69f132c4-22b0-7cee-96a5-032ca745418b@arm.com>
-Date:   Thu, 26 May 2022 09:49:13 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 8/9] drm/panfrost: Add Mali-G57 "Natt" support
-Content-Language: en-GB
-To:     Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        Thu, 26 May 2022 04:52:22 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CD627FF0;
+        Thu, 26 May 2022 01:52:22 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id n18so922809plg.5;
+        Thu, 26 May 2022 01:52:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O0l0jmgNTZS4lxRaBNrQut0lDAnnNlXWN05NXGO2skU=;
+        b=GkRhcPGhXF0cc0Kd9KWnd4EIDss1xaIf3p71S50DljqPprh5Piyk6KD8mvhTyjdQHZ
+         E8wqfm/ZyBZgCHQq7n4khSkGhbrJBpiIRyZvb17mfVy3Pl4Al+uUFs+MXmJzxp/+XniG
+         1C58GzLG5rcaYcZ0/rmzmxmihSJ/QHlOTYhpAhr+dW6OkdB/UT2+4YGRirL+2Iw0XCEt
+         XOplL2YlU8GfiLiNDOTehWJY3mdIA8fbX1jgX+yP2UlH4XpWc6x3vnhllu+DIRMcStFA
+         zCsm59L50G0NVz4XGwqxGtsa7ACH73gFPjcNAgx27l9l5ocLOhWAxg1JNamxm+37xbZg
+         YE0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O0l0jmgNTZS4lxRaBNrQut0lDAnnNlXWN05NXGO2skU=;
+        b=YXxI3B3lOVT7fih2YUstpKu8Ctyx43dfI36E3VxpLi0dhKN4Skp3KtIgsJGlnmfp6F
+         0WyYVaB5N+QGi6CWbMjNwQ+QmVMv1uUzC9BnLDjdpBi0zoKWHEjP1snP0K1uHgylLfWU
+         03EdkaZKdtWDw5PwzBrHXJI4VxhXpMcJKRn0yxoyXJGSVQ4xvqJyWxRuqJejQ8iW3iLk
+         L4TpfDas1uA4jv69C9CdvEEpR4MPJBq/46dSp6tDws5iZRv+bCcv396Nim0bw0XjOGgR
+         /K2hE1hUiJRllWlzzt5PjGH1SrLrIE8cl9iRlKgL3n/uoBlducsvPGgpxOMtKSummGKM
+         FpCg==
+X-Gm-Message-State: AOAM533orVLywaEG4EWOCcIBiLUY3RmS6KAwCeAkGbohOsBnGH9igW1y
+        8uqmyXlYGKSpUp4f84vltpM=
+X-Google-Smtp-Source: ABdhPJxcQpMISbiUZfTf5fgRewsKF7uFMW5ecepOefgosU2+RzgO+1RQpa0BK5eJUuVvIyUurvq2WA==
+X-Received: by 2002:a17:90b:2250:b0:1df:665c:79d1 with SMTP id hk16-20020a17090b225000b001df665c79d1mr1511629pjb.220.1653555141818;
+        Thu, 26 May 2022 01:52:21 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id o13-20020a17090a4b4d00b001df264610c4sm6039831pjl.0.2022.05.26.01.52.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 01:52:21 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>,
+        Wang Qing <wangqing@vivo.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220525145754.25866-1-alyssa.rosenzweig@collabora.com>
- <20220525145754.25866-9-alyssa.rosenzweig@collabora.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20220525145754.25866-9-alyssa.rosenzweig@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     linmq006@gmail.com
+Subject: [PATCH] net: ethernet: ti: am65-cpsw-nuss: Fix some refcount leaks
+Date:   Thu, 26 May 2022 12:52:08 +0400
+Message-Id: <20220526085211.43913-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2022 15:57, Alyssa Rosenzweig wrote:
-> Add the features, issues, and GPU ID for Mali-G57, a first-generation
-> Valhall GPU. Other first- and second-generation Valhall GPUs should be
-> similar.
-> 
-> v2: Split out issue list for r0p0 from newer Natt GPUs, as TTRX_3485 was
-> fixed in r0p1. Unfortunately, MT8192 has a r0p0, so we do need to handle
-> TTRX_3485.
-> 
-> Signed-off-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-> ---
->  drivers/gpu/drm/panfrost/panfrost_features.h | 12 ++++++++++++
->  drivers/gpu/drm/panfrost/panfrost_gpu.c      |  3 +++
->  drivers/gpu/drm/panfrost/panfrost_issues.h   |  9 +++++++++
->  3 files changed, 24 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_features.h b/drivers/gpu/drm/panfrost/panfrost_features.h
-> index 1a8bdebc86a3..7ed0cd3ea2d4 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_features.h
-> +++ b/drivers/gpu/drm/panfrost/panfrost_features.h
-> @@ -106,6 +106,18 @@ enum panfrost_hw_feature {
->  	BIT_ULL(HW_FEATURE_TLS_HASHING) | \
->  	BIT_ULL(HW_FEATURE_3BIT_EXT_RW_L2_MMU_CONFIG))
->  
-> +#define hw_features_g57 (\
-> +	BIT_ULL(HW_FEATURE_JOBCHAIN_DISAMBIGUATION) | \
-> +	BIT_ULL(HW_FEATURE_PWRON_DURING_PWROFF_TRANS) | \
-> +	BIT_ULL(HW_FEATURE_XAFFINITY) | \
-> +	BIT_ULL(HW_FEATURE_FLUSH_REDUCTION) | \
-> +	BIT_ULL(HW_FEATURE_PROTECTED_MODE) | \
-> +	BIT_ULL(HW_FEATURE_PROTECTED_DEBUG_MODE) | \
-> +	BIT_ULL(HW_FEATURE_COHERENCY_REG) | \
-> +	BIT_ULL(HW_FEATURE_AARCH64_MMU) | \
-> +	BIT_ULL(HW_FEATURE_IDVS_GROUP_SIZE) | \
-> +	BIT_ULL(HW_FEATURE_CLEAN_ONLY_SAFE))
-> +
->  static inline bool panfrost_has_hw_feature(struct panfrost_device *pfdev,
->  					   enum panfrost_hw_feature feat)
->  {
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_gpu.c b/drivers/gpu/drm/panfrost/panfrost_gpu.c
-> index e1a6e763d0dc..6452e4e900dd 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_gpu.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_gpu.c
-> @@ -201,6 +201,9 @@ static const struct panfrost_model gpu_models[] = {
->  	GPU_MODEL(g52, 0x7002),
->  	GPU_MODEL(g31, 0x7003,
->  		GPU_REV(g31, 1, 0)),
-> +
-> +	GPU_MODEL(g57, 0x9001,
-> +		GPU_REV(g57, 0, 0)),
->  };
->  
->  static void panfrost_gpu_init_features(struct panfrost_device *pfdev)
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_issues.h b/drivers/gpu/drm/panfrost/panfrost_issues.h
-> index 4d41e0a13867..c5fa9e897a35 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_issues.h
-> +++ b/drivers/gpu/drm/panfrost/panfrost_issues.h
-> @@ -258,6 +258,15 @@ enum panfrost_hw_issue {
->  
->  #define hw_issues_g76 0
->  
-> +#define hw_issues_g57 (\
-> +	BIT_ULL(HW_ISSUE_TTRX_2968_TTRX_3162) | \
-> +	BIT_ULL(HW_ISSUE_TTRX_3076))
-> +
-> +#define hw_issues_g57_r0p0 (\
-> +	BIT_ULL(HW_ISSUE_TTRX_2968_TTRX_3162) | \
-> +	BIT_ULL(HW_ISSUE_TTRX_3076) | \
-> +	BIT_ULL(HW_ISSUE_TTRX_3485))
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+am65_cpsw_init_cpts() and am65_cpsw_nuss_probe() don't release
+the refcount in error case.
+Add missing of_node_put() to avoid refcount leak.
 
-There's no need to repeat the issues that are generic for g57 in the
-r0p0 list. So this can be simplified to:
+Fixes: b1f66a5bee07 ("net: ethernet: ti: am65-cpsw-nuss: enable packet timestamping support")
+Fixes: 93a76530316a ("net: ethernet: ti: introduce am65x/j721e gigabit eth subsystem driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- #define hw_issues_g57_r0p0 (\
- 	BIT_ULL(HW_ISSUE_TTRX_3485))
-
-With that fixed:
-
-Reviewed-by: Steven Price <steven.price@arm.com>
-
-> +
->  static inline bool panfrost_has_hw_issue(const struct panfrost_device *pfdev,
->  					 enum panfrost_hw_issue issue)
->  {
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+index 34197c67f8d9..0a398338132c 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+@@ -1788,6 +1788,7 @@ static int am65_cpsw_init_cpts(struct am65_cpsw_common *common)
+ 	if (IS_ERR(cpts)) {
+ 		int ret = PTR_ERR(cpts);
+ 
++		of_node_put(node);
+ 		if (ret == -EOPNOTSUPP) {
+ 			dev_info(dev, "cpts disabled\n");
+ 			return 0;
+@@ -2662,9 +2663,9 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
+ 	if (!node)
+ 		return -ENOENT;
+ 	common->port_num = of_get_child_count(node);
++	of_node_put(node);
+ 	if (common->port_num < 1 || common->port_num > AM65_CPSW_MAX_PORTS)
+ 		return -ENOENT;
+-	of_node_put(node);
+ 
+ 	common->rx_flow_id_base = -1;
+ 	init_completion(&common->tdown_complete);
+-- 
+2.25.1
 

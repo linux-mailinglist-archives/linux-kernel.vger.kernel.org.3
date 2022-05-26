@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4897053513B
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1AF53513D
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 17:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347868AbiEZPJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 11:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        id S1347871AbiEZPLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 11:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbiEZPJQ (ORCPT
+        with ESMTP id S232481AbiEZPLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 11:09:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F66237C5;
-        Thu, 26 May 2022 08:09:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF4C161B3B;
-        Thu, 26 May 2022 15:09:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D918EC385A9;
-        Thu, 26 May 2022 15:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653577754;
-        bh=dydi7fFyuY9OpnK8NN7C6YpPCcj1B0Cx7+doASS7d/E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TeuX6h9UXUGfQKMQTEcuQjUo5aNAh6IEjLtBzj/6DBiEjc8prGcADmr58HWejnZek
-         5KWbdGlYOJGuM/A6518EYXj0MrRIB974+oTriqBvOdgbbXaJm4vYcvvynfNPLGA1yK
-         VfoKWnxkGSrwHr+VhJAnWweogUmy7tDgjg3aSoAs=
-Date:   Thu, 26 May 2022 17:09:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jason@zx2c4.com, stable-commits@vger.kernel.org
-Subject: Re: Patch "Subject:random" has been added to the 5.17-stable tree
-Message-ID: <Yo+YFzs5qMqDFmwO@kroah.com>
-References: <16535762872752@kroah.com>
+        Thu, 26 May 2022 11:11:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47125237C6
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 08:11:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D346B1688;
+        Thu, 26 May 2022 08:11:00 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.27.164])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 80D493F66F;
+        Thu, 26 May 2022 08:10:59 -0700 (PDT)
+Date:   Thu, 26 May 2022 16:10:52 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
+        elver@google.com, jbaron@akamai.com, rostedt@goodmis.org,
+        ardb@kernel.org
+Subject: Re: [PATCH 7/7] context_tracking: Always inline empty stubs
+Message-ID: <Yo+YfEWLiCVekG5l@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220526105252.440440893@infradead.org>
+ <20220526105958.134113388@infradead.org>
+ <20220526150206.rqdiyouxmkdgm2jq@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <16535762872752@kroah.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220526150206.rqdiyouxmkdgm2jq@treble>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,34 +46,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 04:44:47PM +0200, gregkh@linuxfoundation.org wrote:
+On Thu, May 26, 2022 at 08:02:06AM -0700, Josh Poimboeuf wrote:
+> On Thu, May 26, 2022 at 12:52:59PM +0200, Peter Zijlstra wrote:
+> > Because GCC is seriously challenged..
 > 
-> This is a note to let you know that I've just added the patch titled
-> 
->     Subject:random
-> 
-> to the 5.17-stable tree which can be found at:
->     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
-> 
-> The filename of the patch is:
->      random.patch
-> and it can be found in the queue-5.17 subdirectory.
-> 
-> If you, or anyone else, feels it should not be added to the stable tree,
-> please let <stable@vger.kernel.org> know about it.
-> 
-> 
-> >From foo@baz Thu May 26 04:19:10 PM CEST 2022
-> From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> Date: Wed, 6 Apr 2022 02:36:16 +0200
-> Subject:random
-> 
-> From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> 
-> commit e3c1c4fd9e6d14059ed93ebfe15e1c57793b1a05 upstream.
+> Or are these CONFIG_DEBUG_SECTION_MISMATCH?
 
-Something went wrong here with your scripts?
+Does it matter?
 
-the subject got confused.
+The fact that CONFIG_DEBUG_SECTION_MISMATCH=y forces GCC to place these
+out-of-line is really a debugging aid, since it shows us what it could
+potentially leave out-of-line. It's not the *only* reason GCC might do this
+(e.g. I see sanitizers and other debug options often have similar effects on
+arm64).
 
-greg k-h
+So FWIW, for the patch:
+
+  Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+... as I'd like this for arm64, even if you don't beleive that's necessary for
+x86.
+
+Thanks,
+Mark.

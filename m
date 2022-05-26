@@ -2,124 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179A3534DDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C0E534DE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 13:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345686AbiEZLKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 07:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S240928AbiEZLOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 07:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235938AbiEZLKL (ORCPT
+        with ESMTP id S233141AbiEZLO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 07:10:11 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6789CFE00;
-        Thu, 26 May 2022 04:10:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CfT2Lwk4hWuGqyUZJE8VVEJLWvV00bhgRCBYd7o8DX8=; b=A+EgxRRc2M8bxF77SWMQlIQMGo
-        +UgaLhHqmA226kX7uWD1zI3iXQ7FHR4cygPJvmW3k1CziNIjCIX39j9UsjBTSo+IIxwiKJY+bsPVs
-        yh8rjACu6Kz0p2ZSwzkrDWKRF9tNPWupatXgJy+QBwaMtNstTe70vZNA7Cwmedcwb1KJaP9q6IjU7
-        E7bgsXxEgXfiK3ih+l7dEvW5yNqL8oavFKXnf7Sgv5/RNGHvylLHCg+XbXGQngt7p94LwglB4Fm3P
-        d22ph/exa4akQq0EAgHWwGpQZC8SXESRnQ1p4vhIdedKzsiVpJjUxAkKqTd077mlnQBoBd9xCFk/x
-        QLa+sLqQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nuBNF-001sax-6V; Thu, 26 May 2022 11:09:50 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4EAE5981124; Thu, 26 May 2022 13:09:47 +0200 (CEST)
-Date:   Thu, 26 May 2022 13:09:47 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, jolsa@kernel.org, namhyung@kernel.org,
-        eranian@google.com, irogers@google.com, jmario@redhat.com,
-        leo.yan@linaro.org, alisaidi@amazon.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, tglx@linutronix.de,
-        bp@alien8.de, x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH 06/13] perf/x86/amd: Support PERF_SAMPLE_PHY_ADDR using
- IBS_DC_PHYSADDR
-Message-ID: <20220526110947.GQ2578@worktop.programming.kicks-ass.net>
-References: <20220525093938.4101-1-ravi.bangoria@amd.com>
- <20220525093938.4101-7-ravi.bangoria@amd.com>
- <Yo4RSY2L80N5muJ9@hirez.programming.kicks-ass.net>
- <e10c3d1b-90a9-2f14-987b-9c0d2471ee53@amd.com>
- <20220526095633.GO2578@worktop.programming.kicks-ass.net>
- <91e7651e-6937-ab20-2b1c-01f8be7933e1@amd.com>
+        Thu, 26 May 2022 07:14:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 478A2CFE15
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653563664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u7bQhPKpC/2vv3TSdrZRb3hAgeC4UybLeZufoqxQdtY=;
+        b=UEXWgvAnOtaA7NzSm+S/LYkgDr3iFOtUi+tI6SUaXSvteRhsGP2tV/yLIJ2mm7Ik/Ky4B6
+        BrXojNCeWUPqC6WjNYrha2xp5Z9cvdYnyuLH1zU0AMgf5j+Ps+d+CAgAxkzyrebTvTOLPL
+        3bPj2+LcWu8CrsBOherIeor6v4jjbzA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-435-Q1-qyA04MbWw1Q4pvuHiig-1; Thu, 26 May 2022 07:14:23 -0400
+X-MC-Unique: Q1-qyA04MbWw1Q4pvuHiig-1
+Received: by mail-wm1-f71.google.com with SMTP id o3-20020a05600c510300b0039743540ac7so760910wms.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 04:14:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=u7bQhPKpC/2vv3TSdrZRb3hAgeC4UybLeZufoqxQdtY=;
+        b=VAlLZFfnqbPodcjY/KUPC2VmmYOCJHGMZN/qz1Qy2BWXsEONuOOOBZfZCRZKq847VB
+         7rNrtMZa/vTqX/jfodknGDMQSqrDGtrk3lgJKK+hQ1RW5+91oNAedLIf23giu1QGDPxj
+         It06nm76tUTlB4VlAIHLzdK13cxFrm3/06yuAqY3HNzpiYTD5ZqWB1kmBTbmoLZPOQJa
+         W0eJ8/yjX8rSfmqCf5tB4BbnuR5nin7gmHchwcLzzPIdGwfeaVyTzl57h56RRdf4gjKd
+         4ig4X+nesjhIB+k0Yt1WvuBqlzgOfTCtvMmgJdb7WGL+gLcQyTNQHF3zmpYZbUeNGS0D
+         KrBg==
+X-Gm-Message-State: AOAM531hB6gkvopGLvQTNj+cbDKmPCCt8MUoW0Jq+2mqJPVc9QHd/Ji7
+        Nwlo8/7gLil1BPsUVPt4WPZq17fiP6k8EuG414t0LmxGosC8znpcSpaeVF/5SvQFIpMnMYqjAq2
+        kRYK++PticyX23sxyuBQ4zoZl
+X-Received: by 2002:a5d:64cc:0:b0:20f:e6d6:72e1 with SMTP id f12-20020a5d64cc000000b0020fe6d672e1mr14022752wri.384.1653563661994;
+        Thu, 26 May 2022 04:14:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxNqTc2OdsUsM2oys5V9RV3sUSHMD/A/689Eu2Wl1fyGZ9NhDcupjVv28qYgzeoEVnZw9wl8g==
+X-Received: by 2002:a5d:64cc:0:b0:20f:e6d6:72e1 with SMTP id f12-20020a5d64cc000000b0020fe6d672e1mr14022727wri.384.1653563661736;
+        Thu, 26 May 2022 04:14:21 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
+        by smtp.gmail.com with ESMTPSA id h131-20020a1c2189000000b00394708a3d7dsm4730095wmh.15.2022.05.26.04.14.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 04:14:21 -0700 (PDT)
+Message-ID: <5a7cb5c7c0bf2f9f9540616a2a0e70d36a166a9f.camel@redhat.com>
+Subject: Re: [PATCH] net/mlx5: Fix memory leak in mlx5_sf_dev_add()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Jianglei Nie <niejianglei2021@163.com>, saeedm@nvidia.com,
+        leon@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, parav@nvidia.com, vuhuong@nvidia.com,
+        shayd@nvidia.com
+Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 26 May 2022 13:14:20 +0200
+In-Reply-To: <20220526084411.480472-1-niejianglei2021@163.com>
+References: <20220526084411.480472-1-niejianglei2021@163.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <91e7651e-6937-ab20-2b1c-01f8be7933e1@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 04:29:22PM +0530, Ravi Bangoria wrote:
-> On 26-May-22 3:26 PM, Peter Zijlstra wrote:
-> > On Thu, May 26, 2022 at 02:16:28PM +0530, Ravi Bangoria wrote:
-> >> On 25-May-22 4:51 PM, Peter Zijlstra wrote:
-> >>> On Wed, May 25, 2022 at 03:09:31PM +0530, Ravi Bangoria wrote:
-> >>>> IBS_DC_PHYSADDR provides the physical data address for the tagged load/
-> >>>> store operation. Populate perf sample physical address using it.
-> >>>>
-> >>>> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> >>>> ---
-> >>>>  arch/x86/events/amd/ibs.c | 26 +++++++++++++++++++++++++-
-> >>>>  1 file changed, 25 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-> >>>> index b57736357e25..c719020c0e83 100644
-> >>>> --- a/arch/x86/events/amd/ibs.c
-> >>>> +++ b/arch/x86/events/amd/ibs.c
-> >>>> @@ -986,13 +986,35 @@ static void perf_ibs_get_data_addr(struct perf_event *event,
-> >>>>  	data->addr = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSDCLINAD)];
-> >>>>  }
-> >>>>  
-> >>>> +static void perf_ibs_get_phy_addr(struct perf_event *event,
-> >>>> +				  struct perf_ibs_data *ibs_data,
-> >>>> +				  struct perf_sample_data *data)
-> >>>> +{
-> >>>> +	union perf_mem_data_src *data_src = &data->data_src;
-> >>>> +	u64 op_data3 = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSOPDATA3)];
-> >>>> +	u64 phy_addr_valid = op_data3 & IBS_DC_PHY_ADDR_VALID_MASK;
-> >>>> +
-> >>>> +	if (!(event->attr.sample_type & PERF_SAMPLE_DATA_SRC))
-> >>>> +		perf_ibs_get_mem_op(op_data3, data);
-> >>>> +
-> >>>> +	if ((data_src->mem_op != PERF_MEM_OP_LOAD &&
-> >>>> +	    data_src->mem_op != PERF_MEM_OP_STORE) ||
-> >>>> +	    !phy_addr_valid) {
-> >>>> +		data->phys_addr = 0x0;
-> >>>> +		return;
-> >>>> +	}
-> >>>> +
-> >>>> +	data->phys_addr = ibs_data->regs[ibs_op_msr_idx(MSR_AMD64_IBSDCPHYSAD)];
-> >>>> +}
-> >>>
-> >>> perf_prepare_sample() will unconditionally overwrite data->phys_addr.
-> >>> There is currently no facility to let the driver set this field.
-> >>
-> >> Thanks for pointing it Peter. Would you mind if I add:
-> > 
-> > I think it's best if you extend/mimic the __PERF_SAMPLE_CALLCHAIN_EARLY
-> > hack. It's more or less the same problem and then at least the solution
-> > is consistent.
+On Thu, 2022-05-26 at 16:44 +0800, Jianglei Nie wrote:
+> The variable id is allocated by mlx5_adev_idx_alloc(). When some error
+> happens, the id should be freed by mlx5_adev_idx_free().But when
+> auxiliary_device_add() and xa_insert() fail, the id is not freed,which
+> will lead to a potential memory leak.
 > 
-> I've one more identical optimization in my list. IBS_OP_DATA3[IbsDcPgSz]
-> can provide PERF_SAMPLE_DATA_PAGE_SIZE. I hope consuming two more bits
-> for internal purpose is okay.
+> We can fix it by calling mlx5_sf_dev_add() when auxiliary_device_add()
+> and xa_insert() fail.
+> 
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c b/drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c
+> index 7da012ff0d41..9f222061a1c0 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/sf/dev/dev.c
+> @@ -125,13 +125,16 @@ static void mlx5_sf_dev_add(struct mlx5_core_dev *dev, u16 sf_index, u16 fn_id,
+>  
+>  	err = auxiliary_device_add(&sf_dev->adev);
+>  	if (err) {
+> +		mlx5_adev_idx_free(id);
+>  		put_device(&sf_dev->adev.dev);
 
-Yeah, I suppose so.. we'll need to hunt for bits once we run out, but
-that's how it is...
+This looks not correct. put_device() -> mlx5_sf_dev_release() -> should
+already take care of that.
+
+>  		goto add_err;
+>  	}
+>  
+>  	err = xa_insert(&table->devices, sf_index, sf_dev, GFP_KERNEL);
+> -	if (err)
+> +	if (err) {
+> +		mlx5_adev_idx_free(id);
+>  		goto xa_err;
+> +	}
+>  	return;
+>  
+>  xa_err:
+

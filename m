@@ -2,86 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC2E534C7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9060534C84
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 11:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241511AbiEZJ2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 05:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S1344403AbiEZJ3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 05:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239161AbiEZJ21 (ORCPT
+        with ESMTP id S232033AbiEZJ3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 05:28:27 -0400
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4D665EBDF
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:28:25 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowAB3fY02SI9i5Yh8Cg--.41227S2;
-        Thu, 26 May 2022 17:28:23 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] mfd: sm501: barco-p50-gpio: Add check for platform_driver_register
-Date:   Thu, 26 May 2022 17:28:19 +0800
-Message-Id: <20220526092819.1469232-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 26 May 2022 05:29:36 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADF0C8BD3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 02:29:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=qHlaIf1SKEc8acyjb+0lgUrClk4IwVEQpDXem5UwINU=;
+        t=1653557374; x=1654766974; b=tGYxo17KXtr9rBdWiQzlvRg5RVhJ4P1Rwh342Pjiu6v2UMo
+        Ee+vDwH4Y6OZh1TIR4+76jGql1fIZg1SypccjlZs4k1M8eyHVnapwJdnWwivjElQxTOO9TjMsEh5K
+        wtB+0LsuJohltQAPKNqv2MZrGG6T+bMH413thSKdQn3QJ2/9CkX+WSIhcK6E9RsxBdTs1YWOd2LsY
+        sALgnMAcnwu8ae9l6OgVhikL/IrDfpxdFLDUKzh4toUZ4Bxo2foQXzxnkcbS55gPe4XnpEPVtqW+O
+        agCECPjEmTDNVFMui/ZiezChe+5vsfIiTL/aWOluIFQZNsGsBc31a/Yv+34XLqFw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nu9o1-0055HB-74;
+        Thu, 26 May 2022 11:29:21 +0200
+Message-ID: <d5558b1a1ce7e1cb878f12462ae63a4d7b1b17a1.camel@sipsolutions.net>
+Subject: Re: [RFC PATCH v3] UML: add support for KASAN under x86_64
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     David Gow <davidgow@google.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 26 May 2022 11:29:20 +0200
+In-Reply-To: <20220526010111.755166-1-davidgow@google.com>
+References: <20220525111756.GA15955@axis.com>
+         <20220526010111.755166-1-davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAB3fY02SI9i5Yh8Cg--.41227S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw18uF43GFyfuw4DKr13twb_yoWfJrb_Cr
-        18WFyxGr4akFna9F4UJ34fZ340yFs09rs3uF10qFy3ta43trnIqr1UZr47A3W8Cr1xA3Zr
-        KwnFkrWfCryakjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbrMaUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As platform_driver_register() could fail, it should be better
-to deal with the return value in order to maintain the code
-consisitency.
+On Wed, 2022-05-25 at 18:01 -0700, David Gow wrote:
+>=20
+> +#ifdef CONFIG_KASAN
+> +void kasan_init(void)
+> +{
+> +	/*
+> +	 * kasan_map_memory will map all of the required address space and
+> +	 * the host machine will allocate physical memory as necessary.
+> +	 */
+> +	kasan_map_memory((void *)KASAN_SHADOW_START, KASAN_SHADOW_SIZE);
+> +	init_task.kasan_depth =3D 0;
+> +	os_info("KernelAddressSanitizer initialized\n");
+>=20
 
-Fixes: b6d6454fdb66 ("[PATCH] mfd: SM501 core driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/mfd/sm501.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Can we remove this? Or maybe print it later somehow, when the other
+KASAN machinery initializes?
 
-diff --git a/drivers/mfd/sm501.c b/drivers/mfd/sm501.c
-index bc0a2c38653e..41c8756bbf88 100644
---- a/drivers/mfd/sm501.c
-+++ b/drivers/mfd/sm501.c
-@@ -1720,7 +1720,12 @@ static struct platform_driver sm501_plat_driver = {
- 
- static int __init sm501_base_init(void)
- {
--	platform_driver_register(&sm501_plat_driver);
-+	int ret;
-+
-+	ret = platform_driver_register(&sm501_plat_driver);
-+	if (ret)
-+		return ret;
-+
- 	return pci_register_driver(&sm501_pci_driver);
- }
- 
--- 
-2.25.1
+As it is, this gets printed even if you run just "./linux --version" or
+"--help", which is a bit strange.
 
+johannes

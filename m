@@ -2,276 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C818535674
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D523F535676
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 01:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348692AbiEZXmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 19:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S237770AbiEZXnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 19:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239878AbiEZXmT (ORCPT
+        with ESMTP id S239878AbiEZXnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 19:42:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4FE24F05
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:42:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD66161CC1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:42:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9BEFC385A9;
-        Thu, 26 May 2022 23:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653608536;
-        bh=yQJ4zavB9f3K4+BfWm2Qw1RauU5GGuYOj7hmO7crWm4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=giVBFwhqwxtG/izeki3MYV9D4MotXELKXmGIHX2gkRovI6w9m5uTMlYfqlLkRxAG7
-         4BaNlQGeJnLGAwcNn7WCdI2hPK56ucUPDSVtrk6VUK39t3YYjXz2YSQHFaJAaOgu2C
-         HOMZ6rZ4tK0M3yFRoEDkbrQs0Fk3TCKIDNNBDzxNRh3TsSCmGfteX2FBZMYS0PPQaT
-         h2EfvVYDQGfksVy7a1b+rI65gTExHljbqeZKugkqcSyakJ0oRs9pIBZXpDTXzaxGW6
-         3wvoZ+6ct1Wjjjx3qEN1VSDcn/znsbAMI8apsDwMGI8rIN99s8K4YU3b/aSlpRG4LL
-         n8i7ByljFGUnA==
-Date:   Fri, 27 May 2022 08:42:12 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, mingo@redhat.com,
-        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 1/4] trace: Add trace any kernel object
-Message-Id: <20220527084212.337e8f7dda680c7bc179173a@kernel.org>
-In-Reply-To: <CAEr6+EDZ3ekYqWzz-0pmR8C5D_mdWdvHoE2dhycSox=hFKh+8g@mail.gmail.com>
-References: <20220512170008.1301613-2-xiehuan09@gmail.com>
-        <202205130923.SJJN7oez-lkp@intel.com>
-        <20220518224849.b195cc2380fde43c593d79c5@kernel.org>
-        <CAEr6+EDZ3ekYqWzz-0pmR8C5D_mdWdvHoE2dhycSox=hFKh+8g@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 26 May 2022 19:43:35 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EEA28725
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:43:34 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id a9so2542889pgv.12
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 16:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LVT+hnAFEArODTLjjL6u957Oo8LFMcs8Kqe5NqWbyq0=;
+        b=50hwK5Xdsh8uEqJ/XEkV/OV3UKXNHFz0lvEkauUBLEMmhAHpB2I1ZJDnIaewr8qiVI
+         ur+pSBNRGjLPzB3v5Xo8zCb2Njei+xAtlPYL7d6CM2xdqjK145tL17zb2MjQAkU+glSt
+         IBqx0NtBPgM7tpTnWyCRWijLZzv2Unn5dh1FhMlEWqW2fDtS1OVG9yMZqLynaVpSCwNW
+         Ymt8MwkTBQ4RJHE8m453cTATa3GYAGlqS254D124yOv+BR6lD+RkZ+SSqLokLtIBl4uz
+         4amiI4oh13Y2e/KHe4T53m+puWtOEeDEvowWW+S9eua1YxkTcbpGG+054W+/FaBvyAcF
+         Ipag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LVT+hnAFEArODTLjjL6u957Oo8LFMcs8Kqe5NqWbyq0=;
+        b=DtkGyMMyANkEQ/UXyApK15lTUSMgkbDG0IYtqmnFO3O/hzpvpdt1/0NY3CvrhM4pMu
+         gpWPK9g+JPFT2Q+dmSYFzCJlqal1PT6MkkyqHrumHdQ5Ob8JCK+n3gCbw/zY0FZVdflM
+         746fn2mofZ/NWRM6JGuCMAoiY5xUYYmknLqRabL10rICEU6OfZHh/i2pzAIQ0UsDbsFi
+         26nyAZXai0kd8Ph82P+VJLUK3sgWQYaBWkykGoDp4cO8FuxbAkAcbKnnhBTfoM/NSlgO
+         UXTUyDWEfCLwHsPdEUDR+KhhTOaWGvP23Rg2SYLmCkAw6dCfNM3nMVgapV5rW4Dp2iun
+         OZlg==
+X-Gm-Message-State: AOAM531xQJUtKVmiOXpuvW2XRsUjDPYLNodE7iU9vkOC+iZAh0icNupr
+        83jVFjZRNaGYh+2Y5uGfzGDuAP+NO/L63A==
+X-Google-Smtp-Source: ABdhPJyAS/kjg2C00QbkfvCAuSDQJgvx0IkWdvaLJ7VQSQaTmaTuPrel1QRS5EoXASHMELn4xvaiWw==
+X-Received: by 2002:a62:ae19:0:b0:518:db6a:5b85 with SMTP id q25-20020a62ae19000000b00518db6a5b85mr13085709pff.61.1653608613048;
+        Thu, 26 May 2022 16:43:33 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e6d:c000:9d26:281f:3d89:5507? ([2409:8a28:e6d:c000:9d26:281f:3d89:5507])
+        by smtp.gmail.com with ESMTPSA id i5-20020a17090332c500b00161b797fc42sm2247016plr.106.2022.05.26.16.43.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 16:43:32 -0700 (PDT)
+Message-ID: <d7309ffb-ee19-6097-9f0d-5b811e14e8b7@bytedance.com>
+Date:   Fri, 27 May 2022 07:43:24 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [Phishing Risk] [External] Re: [PATCH] blk-iocost: fix false
+ positive lagging
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220526133554.21079-1-zhouchengming@bytedance.com>
+ <Yo+8K9MrFMl59BGj@slm.duckdns.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <Yo+8K9MrFMl59BGj@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff,
+Hello,
 
-On Wed, 18 May 2022 22:17:50 +0800
-Jeff Xie <xiehuan09@gmail.com> wrote:
-
->  Hi Masami,
+On 2022/5/27 01:43, Tejun Heo wrote:
+> Hello,
 > 
-> Thank you for your reminder, I feel very strange, this patch series
-> was always  based on:
-> https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-> ftrace/core
+> On Thu, May 26, 2022 at 09:35:54PM +0800, Chengming Zhou wrote:
+>> I found many false positive lagging during iocost test.
+>>
+>> Since iocg->vtime will be advanced to (vnow - margins.target)
+>> in hweight_after_donation(), which called throw away excess,
+>> the iocg->done_vtime will also be advanced that much.
+>>
+>>        period_at_vtime  <--period_vtime-->  vnow
+>>               |                              |
+>>   --------------------------------------------------->
+>>         |<--->|
+>>      margins.target
+>>         |->
+>>   vtime, done_vtime
 > 
-> These compile errors may be because other branches have not merged
-> into Tom's patches.
-> Steve told me before that this patch series should rely on Tom's patch.
+> All it does is shifting the vtime (and done_vtime) within the current window
+> so that we don't build up budget too lage a budget possibly spanning
+> multiple periods. 
 
-OK, when you send the next version, please describe this in the cover
-mail and point Tom's series if it is not merged yet.
+Yes, this is necessary. Suppose in the last timer, the iocg doesn't have inflights
+and have excess, then iocg->vtime = iocg->done_vtime = (period_at_vtime - margins.target)
 
-Thank you,
+> The lagging detection is supposed to detect IOs which are
+> issued two+ periods ago which didn't finish in the last period. So, I don't
+
+Yes, I understand.
+
+> think the above sliding up the window affects that detection given that the
+> lagging detection is done before the window sliding. All it's checking is
+> whether there still are in-flight IOs which were issued two+ windows ago, so
+> how the last window has been fast forwarded shouldn't affect the detection,
+> no?
+
+Right, the lagging detection is done before the window sliding in this period timer.
+The conditions that it checks vtime, done_vtime have been slided in the last timer.
+
+time_after64(vtime, vdone) &&
+time_after64(vtime, now.vnow - MAX_LAGGING_PERIODS * period_vtime) &&
+time_before64(vdone, now.vnow - period_vtime)
+
+The first condition says it has some inflights, the second condition is always true
+if vtime has been slided in the last timer, the third condition will be true if the
+cost of io completed since last timer < ioc->margins.target.
+
+So I think it doesn't check correctly whether it has inflights that were issued two+
+windows ago.
+
+Thanks.
 
 > 
+> Thanks.
 > 
-> On Wed, May 18, 2022 at 9:48 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi Jeff,
-> >
-> > Can you fix these errors, since these looks real bugs.
-> >
-> > Thank you,
-> >
-> > On Fri, 13 May 2022 10:01:48 +0800
-> > kernel test robot <lkp@intel.com> wrote:
-> >
-> > > Hi Jeff,
-> > >
-> > > Thank you for the patch! Perhaps something to improve:
-> > >
-> > > [auto build test WARNING on rostedt-trace/for-next]
-> > > [also build test WARNING on v5.18-rc6 next-20220512]
-> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > > And when submitting patch, we suggest to use '--base' as documented in
-> > > https://git-scm.com/docs/git-format-patch]
-> > >
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220513-010820
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-> > > config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220513/202205130923.SJJN7oez-lkp@intel.com/config)
-> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://github.com/intel-lab-lkp/linux/commit/3c91aa291a0fe8b28b02a14827b0c4ca3ebda601
-> > >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> > >         git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220513-010820
-> > >         git checkout 3c91aa291a0fe8b28b02a14827b0c4ca3ebda601
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/trace/
-> > >
-> > > If you fix the issue, kindly add following tag as appropriate
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > > All warnings (new ones prefixed by >>):
-> > >
-> > >    kernel/trace/trace_object.c:259:13: error: incompatible function pointer types initializing 'int (*)(struct seq_file *, struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'int (struct seq_file *, struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
-> > >            .print                  = trace_object_trigger_print,
-> > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    kernel/trace/trace_object.c:260:12: error: incompatible function pointer types initializing 'int (*)(struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'int (struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
-> > >            .init                   = event_object_trigger_init,
-> > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    kernel/trace/trace_object.c:261:12: error: incompatible function pointer types initializing 'void (*)(struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'void (struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
-> > >            .free                   = trace_object_trigger_free,
-> > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    kernel/trace/trace_object.c:266:13: error: incompatible function pointer types initializing 'int (*)(struct seq_file *, struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'int (struct seq_file *, struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
-> > >            .print                  = trace_object_trigger_print,
-> > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    kernel/trace/trace_object.c:267:12: error: incompatible function pointer types initializing 'int (*)(struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'int (struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
-> > >            .init                   = event_object_trigger_init,
-> > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    kernel/trace/trace_object.c:268:12: error: incompatible function pointer types initializing 'void (*)(struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'void (struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
-> > >            .free                   = trace_object_trigger_free,
-> > >                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > > >> kernel/trace/trace_object.c:335:61: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
-> > >                    pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
-> > >                                                         ~~~                  ^~~~~~~~~~~~~~
-> > >                                                         %u
-> > >    include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
-> > >            printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-> > >                                   ~~~     ^~~~~~~~~~~
-> > >    include/linux/printk.h:446:60: note: expanded from macro 'printk'
-> > >    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-> > >                                                        ~~~    ^~~~~~~~~~~
-> > >    include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-> > >                    _p_func(_fmt, ##__VA_ARGS__);                           \
-> > >                            ~~~~    ^~~~~~~~~~~
-> > >    kernel/trace/trace_object.c:356:3: error: implicit declaration of function 'event_trigger_unregister' [-Werror,-Wimplicit-function-declaration]
-> > >                    event_trigger_unregister(cmd_ops, file, glob+1, trigger_data);
-> > >                    ^
-> > >    kernel/trace/trace_object.c:356:3: note: did you mean 'event_trigger_register'?
-> > >    kernel/trace/trace.h:1650:12: note: 'event_trigger_register' declared here
-> > >    extern int event_trigger_register(struct event_command *cmd_ops,
-> > >               ^
-> > >    kernel/trace/trace_object.c:370:64: error: too few arguments to function call, expected 7, have 4
-> > >            ret = event_trigger_register(cmd_ops, file, glob, trigger_data);
-> > >                  ~~~~~~~~~~~~~~~~~~~~~~                                  ^
-> > >    kernel/trace/trace.h:1650:12: note: 'event_trigger_register' declared here
-> > >    extern int event_trigger_register(struct event_command *cmd_ops,
-> > >               ^
-> > >    1 warning and 8 errors generated.
-> > >
-> > >
-> > > vim +335 kernel/trace/trace_object.c
-> > >
-> > >    296
-> > >    297        static int
-> > >    298        event_object_trigger_parse(struct event_command *cmd_ops,
-> > >    299                               struct trace_event_file *file,
-> > >    300                               char *glob, char *cmd, char *param_and_filter)
-> > >    301        {
-> > >    302                struct event_trigger_data *trigger_data;
-> > >    303                struct objtrace_trigger_data *obj_data;
-> > >    304                struct ftrace_event_field *field;
-> > >    305                char *objtrace_cmd, *arg;
-> > >    306                char *param, *filter;
-> > >    307                int ret;
-> > >    308                bool remove;
-> > >    309
-> > >    310                remove = event_trigger_check_remove(glob);
-> > >    311
-> > >    312                /*
-> > >    313                 * separate the param and the filter:
-> > >    314                 * objtrace:add:OBJ[:COUNT] [if filter]
-> > >    315                 */
-> > >    316                ret = event_trigger_separate_filter(param_and_filter, &param, &filter, true);
-> > >    317                if (ret)
-> > >    318                        return ret;
-> > >    319
-> > >    320                objtrace_cmd = strsep(&param, ":");
-> > >    321                if (!objtrace_cmd || strcmp(objtrace_cmd, "add")) {
-> > >    322                        pr_err("error objtrace command\n");
-> > >    323                        return -EINVAL;
-> > >    324                }
-> > >    325
-> > >    326                arg = strsep(&param, ":");
-> > >    327                if (!arg)
-> > >    328                        return -EINVAL;
-> > >    329
-> > >    330                field = trace_find_event_field(file->event_call, arg);
-> > >    331                if (!field)
-> > >    332                        return -EINVAL;
-> > >    333
-> > >    334                if (field->size != sizeof(void *)) {
-> > >  > 335                        pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
-> > >    336                        return -EINVAL;
-> > >    337                }
-> > >    338
-> > >    339                if (remove && !field_exist(file, cmd_ops, field->name))
-> > >    340                        return -EINVAL;
-> > >    341
-> > >    342                obj_data = kzalloc(sizeof(*obj_data), GFP_KERNEL);
-> > >    343                if (!obj_data)
-> > >    344                        return -ENOMEM;
-> > >    345
-> > >    346                obj_data->field = field;
-> > >    347                obj_data->tr = file->tr;
-> > >    348                snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD_LEN, objtrace_cmd);
-> > >    349
-> > >    350                trigger_data = event_trigger_alloc(cmd_ops, cmd, param, obj_data);
-> > >    351                if (!trigger_data) {
-> > >    352                        kfree(obj_data);
-> > >    353                        return -ENOMEM;
-> > >    354                }
-> > >    355                if (remove) {
-> > >    356                        event_trigger_unregister(cmd_ops, file, glob+1, trigger_data);
-> > >    357                        kfree(obj_data);
-> > >    358                        kfree(trigger_data);
-> > >    359                        return 0;
-> > >    360                }
-> > >    361
-> > >    362                ret = event_trigger_parse_num(param, trigger_data);
-> > >    363                if (ret)
-> > >    364                        goto out_free;
-> > >    365
-> > >    366                ret = event_trigger_set_filter(cmd_ops, file, filter, trigger_data);
-> > >    367                if (ret < 0)
-> > >    368                        goto out_free;
-> > >    369
-> > >    370                ret = event_trigger_register(cmd_ops, file, glob, trigger_data);
-> > >    371                if (ret)
-> > >    372                        goto out_free;
-> > >    373
-> > >    374                return ret;
-> > >    375
-> > >    376         out_free:
-> > >    377                event_trigger_reset_filter(cmd_ops, trigger_data);
-> > >    378                kfree(obj_data);
-> > >    379                kfree(trigger_data);
-> > >    380                return ret;
-> > >    381        }
-> > >    382
-> > >
-> > > --
-> > > 0-DAY CI Kernel Test Service
-> > > https://01.org/lkp
-> >
-> >
-> > --
-> > Masami Hiramatsu <mhiramat@kernel.org>
-> 
-> Thanks,
-> JeffXie
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>

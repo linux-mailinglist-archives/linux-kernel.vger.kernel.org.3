@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C82534D1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42F9534D1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 12:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237919AbiEZKOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 06:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S1347015AbiEZKO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 06:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236103AbiEZKOI (ORCPT
+        with ESMTP id S1346990AbiEZKOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 06:14:08 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D035113F54;
-        Thu, 26 May 2022 03:14:06 -0700 (PDT)
+        Thu, 26 May 2022 06:14:17 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D75C9EFD;
+        Thu, 26 May 2022 03:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653560047; x=1685096047;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=p1t4R8MjMOVp8DsmVzp6Synql5mdHrF2FZ9/ECrFKy0=;
-  b=KmJgtXagNE3rL11YAARWtRDT0mly4eHLtgIHmLftY0Eo3xI3iGMGuufu
-   eo3YfYZ1a3i1qKrkpXu7ESApfJqvnS0NZ5XoUvo7ZHNNfBon/9liUSXx3
-   aPjK9C/fr87k4uVU2GPRW1fYnFGinaO+wV7QG8OeC35a9E7mNOADdCuYN
-   g=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 26 May 2022 03:14:06 -0700
+  t=1653560054; x=1685096054;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=g+cyrhMeyrVoCdu+x9iUHWPiuLCWcz2F2MDq4VUo9l8=;
+  b=dC0jUcGBWATA/4+cvKMP2mfbNrfmBZyvLJr4A5CWZ5nyU0GPLcgVXWL1
+   SwQp93Trb8Vq2vKuohWYpf1yP8u3NExwtpQb6fhKAtepvGgKKoP5Y4fpy
+   g1eFuHEb5+KLrdU3ABH6uWP2t3vOs8Xnx13GzNkhnfvU3PWnAVtSzxHtt
+   8=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 May 2022 03:14:14 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 03:14:06 -0700
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 03:14:13 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 26 May 2022 03:14:05 -0700
+ 15.2.986.22; Thu, 26 May 2022 03:14:13 -0700
 Received: from hu-harshq-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 26 May 2022 03:14:01 -0700
+ 15.2.986.22; Thu, 26 May 2022 03:14:09 -0700
 From:   Harsh Agarwal <quic_harshq@quicinc.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -47,10 +48,12 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 CC:     <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
         <quic_ppratap@quicinc.com>, Harsh Agarwal <quic_harshq@quicinc.com>
-Subject: [RFC v2 0/2] Add support for multiport controller 
-Date:   Thu, 26 May 2022 15:43:47 +0530
-Message-ID: <1653560029-6937-1-git-send-email-quic_harshq@quicinc.com>
+Subject: [RFC v2 1/2] dt-bindings: usb: dwc3: Add support for multiport related properties
+Date:   Thu, 26 May 2022 15:43:48 +0530
+Message-ID: <1653560029-6937-2-git-send-email-quic_harshq@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1653560029-6937-1-git-send-email-quic_harshq@quicinc.com>
+References: <1653560029-6937-1-git-send-email-quic_harshq@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -66,56 +69,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the DWC3 driver supports only single port controller which 
-requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
-DWC3 controller with multiple ports that can operate in host mode. Some of
-the port supports both SS+HS and other port supports only HS mode.
+Added support for multiport, mport, num-ssphy and num-hsphy
+properties. These properties are used to support devices having
+a multiport controller.
 
-This change refactors the PHY logic to support multiport controller. The 
-patches have gone through basic sanity only.
+Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
+---
+ .../devicetree/bindings/usb/snps,dwc3.yaml         | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-For any multiport controller we would define a new node "multiport" inside
-dwc3 and then add subsequent "mport" nodes inside it for individual ports
-that it supports. Now each individual "mport" defines the PHYs that it 
-supports.
-
-Looking for comments/feedback on the device tree bindings. Once the 
-bindings are locked, we can further factor the code.
-
-e.g.
-Consider a Dual port controller where each port supports HS+SS 
-
-multiport {
-	mp_1: mport@1 {
-		usb-phy = <usb2_phy0>, <usb3_phy0>;
-        /* Can define Generic PHYs also */  
-	};	
-	mp_2: mport@2 {
-		usb-phy = <usb2_phy1>, <usb3_phy1>;
-	};	
-
-Changes in v2:
-Added support for Generic PHYs by making use of devm_of_phy_get. It works
-for both normal controller and multiport controller.
-Cleaned up dwc3_core_get_phy and created new API dwc3_core_get_phy_by_node
-which works for both normal and multiport node case.
-Addded new APIs to count PHYs defined in the multiport controller.
-Changed Generic PHY to double pointer to work for multiport controller.
-Added support for GUSB2PHYCFG and GUSB3PIPECTL registers
-for multiport controller.
-
-
-Harsh Agarwal (2):
-  dt-bindings: usb: dwc3: Add support for multiport related properties
-  usb: dwc3: Refactor PHY logic to support Multiport Controller
-
- .../devicetree/bindings/usb/snps,dwc3.yaml         |  55 +++
- drivers/usb/dwc3/core.c                            | 420 +++++++++++++++------
- drivers/usb/dwc3/core.h                            |  12 +-
- drivers/usb/dwc3/drd.c                             |  16 +-
- drivers/usb/dwc3/gadget.c                          |   4 +-
- 5 files changed, 381 insertions(+), 126 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+index f4471f8..3a506aa 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+@@ -341,6 +341,34 @@ properties:
+       This port is used with the 'usb-role-switch' property  to connect the
+       dwc3 to type C connector.
+ 
++  multiport:
++    description:
++      If a single USB controller supports multiple ports, then it's referred to as
++      a multiport controller. Each port of the multiport controller can support
++      either High Speed or Super Speed or both and have their own PHY phandles. Each
++      port is represented by "mport" node and all the "mport" nodes are grouped
++      together inside the "multiport" node where individual "mport" node defines the
++      PHYs supported by that port.
++    required:
++      - mport
++
++  num-hsphy:
++    description: Total number of HS-PHYs defined by the multiport controller.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  num-ssphy:
++    description: Total number of SS-PHYs defined by the multiport controller.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  mport:
++    description: Each mport node represents one port of the multiport controller.
++    oneOf:
++       - required:
++         - usb-phy
++       - required:
++          - phys
++          - phy-names
++
+ unevaluatedProperties: false
+ 
+ required:
+@@ -369,4 +397,31 @@ examples:
+       snps,dis_u2_susphy_quirk;
+       snps,dis_enblslpm_quirk;
+     };
++  - |
++    usb@4a000000 {
++      compatible = "snps,dwc3";
++      reg = <0x4a000000 0xcfff>;
++      interrupts = <0 92 4>;
++
++      multiport {
++
++        MP_1: mport@1 {
++          usb-phy = <&usb2_phy0>, <&usb3_phy0>;
++          /* Can define Generic PHYs also */
++        };
++
++        MP_2: mport@2 {
++          usb-phy = <&usb2_phy1>, <&usb3_phy1>;
++        };
++
++        MP_3: mport@3 {
++          usb-phy = <&usb2_phy2>;
++        };
++
++        MP_4: mport@4 {
++          usb-phy = <&usb2_phy3>;
++        };
++
++      };
++    };
+ ...
 -- 
 2.7.4
 

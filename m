@@ -2,117 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FC453502D
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19B153502E
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 15:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344787AbiEZNso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 09:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S1345309AbiEZNtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 09:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiEZNsl (ORCPT
+        with ESMTP id S231132AbiEZNtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 09:48:41 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AA627B1A;
-        Thu, 26 May 2022 06:48:40 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id D9671320095C;
-        Thu, 26 May 2022 09:48:36 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Thu, 26 May 2022 09:48:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1653572916; x=1653659316; bh=NY
-        IVhGFaH21Cr/Vp3OtFhX0ZaD6txFbd1zpyaA0rArY=; b=iQdmEFfx2FdO1MLAeW
-        jQobK/4JiiJAst/v6oT8eeU6NcPfbhmh+D/kJBp+dwiREv/XbQij6Kc6mgaXJVKz
-        cO8eIKfZu7uTz5ZLXjTqS/HH+0YF7siLGGKRwk4kJZhz0SZk4hYCdMIjyq3bEk8Q
-        DLSfoQUHDNOnSDGX48GBPLrC3jR6Umi44txeZdOQOHLGpc/1T6Zny0fB/PJmrsHx
-        0S7nGbfsZ72f8iNdocA2uuW9t/tKdLZEOOmPsfyEVlZUXo8KgG1xnkefsc/9jg05
-        QEzWT85rDt2Td2nP0Xje3da6UffTGTtHqm6jj7xHE6Z6YdQa4XQ0dj80yFurkuti
-        W5lg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1653572916; x=1653659316; bh=NYIVhGFaH21Cr/Vp3OtFhX0ZaD6t
-        xFbd1zpyaA0rArY=; b=iYhQMtBJ0eLzsXh2lRIhOI/Izn/pVF68W14ULfHSKMt5
-        4A9pHrqMYyc/TSm98fg+roHJbCKbMacZGPAhocAiMNT9tlOqORP3xY0hu9L6F609
-        Hwp3xeZ0QavigR14J/fPR1hKXM6Jve1M5AgPiNMkCk2wBAJEYG8y0yTqSe0gXL+/
-        bEBw/ZuSe+wlMbfYDWtQKPzLcAO02TD9K+ezWJZ6GIkoevE0qp/oq0imeX6fdY6S
-        QfyLpLzy/IbV+ku+pD5WYM+dCLP9VUM1RZCk13zaVRQ3KRAGUPLyEbI04cMo3lx+
-        NzAC8SEqCRobEzGs6c+BP0pwTMIXG0wq3CV1wAVtXA==
-X-ME-Sender: <xms:M4WPYuFM_XOwYaqUYGd3CCgCesTRFYA5fjDBTq3sXTyukzamRBF2uQ>
-    <xme:M4WPYvX9TTsnOswMWkxmbT63bfZ3g8zg1xWVL3AYey6NYi8ZyAo2ToS6p4jXM6IZa
-    F6NV1P0ym1ob-0Vlqs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeejgdeikecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
-    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:M4WPYoKXm912CSVbpJOFGCJQ_VfeNpOPYmIV5o-bJez0vuhlP5tUxw>
-    <xmx:M4WPYoG6GdLV5SUIcWuh27Taj9T3t14prX0zzZMkPeHD_pCHomDRSA>
-    <xmx:M4WPYkUTtJthoRWnkXK4rjlkzi-thUrPTOTXMOirzLe9XNCAxRtXSA>
-    <xmx:NIWPYnHvNpCzbk2jJ-eJvV1PpdJUY5ppGD5H94_9u3jJQ3M5I5QlWA>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A2726A60072; Thu, 26 May 2022 09:48:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
-Mime-Version: 1.0
-Message-Id: <a3636e0e-a804-4701-9240-225a3131b16a@www.fastmail.com>
-In-Reply-To: <20220526014107.2871787-1-robh@kernel.org>
-References: <20220526014107.2871787-1-robh@kernel.org>
-Date:   Thu, 26 May 2022 15:48:15 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Rob Herring" <robh@kernel.org>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Mark Kettenis" <kettenis@openbsd.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: PCI: apple: Add missing 'power-domains' property
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 26 May 2022 09:49:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E63552E6A1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 06:49:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653572954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DKyzE80Pc48cMDLiFmE/M6F8vHHIcOjbw+ucouph1XQ=;
+        b=HOCUx+sXMHIqVP//aIUFhzAJwloSzQkGYSkUFz5KkJ9S/mcy2eoi6YrSShBytUrlfnyU1C
+        BQDqVGGHuAhu84OYqxakcA3zufThLuGEjsJeCU0UsbtgBFsVZm47y3bABXUaD4vRHoPW++
+        G5jR+IrrlZIcIs9815xYI/WOoCMlN8I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-408-QIUMd_NUPGiulMcamOuHuw-1; Thu, 26 May 2022 09:49:10 -0400
+X-MC-Unique: QIUMd_NUPGiulMcamOuHuw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 915158BEE80;
+        Thu, 26 May 2022 13:48:45 +0000 (UTC)
+Received: from fedora (unknown [10.22.16.201])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 3751841638B;
+        Thu, 26 May 2022 13:48:41 +0000 (UTC)
+Date:   Thu, 26 May 2022 10:48:39 -0300
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/5] x86/tdx: Add TDX Guest event notify interrupt
+ support
+Message-ID: <Yo+FN8Utbrn5FYlT@fedora>
+References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220524040517.703581-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524040517.703581-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, May 23, 2022 at 09:05:14PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>  
+> -#define LOCAL_TIMER_VECTOR		0xec
+> +#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
+> +/* Vector on which TDX Guest event notification is delivered */
+> +#define TDX_GUEST_EVENT_NOTIFY_VECTOR	0xec
+> +#endif
 
+We can simplify this a bit by removing the #if conditional without harm
+to the code.
 
-On Thu, May 26, 2022, at 03:41, Rob Herring wrote:
-> The 'unevaluatedProperties' schema checks is not fully working and doesn't
-> catch some cases where there's a $ref to another schema. A fix is pending,
-> but results in new warnings in examples.
->
-> The Apple PCIe host has 3 power domains at least according to the example.
-> Add the 'power-domains' property to the schema.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Ideally, we'd define what each power domain is, but I don't know what
-> they are.
-> ---
+> +
+> +#define LOCAL_TIMER_VECTOR		0xeb
+>  
+>  #define NR_VECTORS			 256
+>  
 
-I think the example is just wrong (or outdated) and we only need a single
-power-domain for pcie.
-
-The hierarchy is ps_pcie_ref -> ps_apcie -> ps_apcie_gp and the pcie
-node then only depends on ps_apcie_gp.
-
-
-
-
-Sven

@@ -2,401 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9E75350FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E215350FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 16:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345752AbiEZOrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 10:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S236894AbiEZOsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 10:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347297AbiEZOrg (ORCPT
+        with ESMTP id S1346511AbiEZOsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 10:47:36 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0754C60E5;
-        Thu, 26 May 2022 07:47:34 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L89l23y4Bz9skL;
-        Thu, 26 May 2022 22:47:26 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 26 May 2022 22:47:30 +0800
-Message-ID: <b5c9a091-17b8-7d6b-705e-e3a9f67d0890@huawei.com>
-Date:   Thu, 26 May 2022 22:47:29 +0800
+        Thu, 26 May 2022 10:48:04 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807205839C
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:48:02 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id u21so1259924vsk.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 07:48:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=3M1pJkrNV2nAQ7sLw6tNTxeHC+mpzUh3rS9LQ55Zcec=;
+        b=O59j5b49OpZTjctrAIiVjpIeOM1E909gOmgAjVx4Q5Hz048uhvg/svaxBb7n2UKIC8
+         prQICrLpeiMyykqcDfDeOA+Npcwf4X8wWlRvScxUNAtZdu9hP7fQdKZudSbWN8h/dFzf
+         rrY/lJtwrDL4t/HRhp1rhq/ZhbvzyG8Va5I1LVdmnvLCndW9fcP8CYAaPw6BX4Rwwr9T
+         sp15skIp00KpKj3i7IBFVLCzqPKvpPGQzwIKnR4r7dJfNHsC6clTjNw4PYFybkzxtXeQ
+         84W3vlBgYr9y9L77OyvSRkVEMsBKj0wO2McsynYPBN+P8XDjNOkVjUyi+r1Ynnv7EIrn
+         WZjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=3M1pJkrNV2nAQ7sLw6tNTxeHC+mpzUh3rS9LQ55Zcec=;
+        b=h0iJd/1eG2Xx+dJkjP5VfUTjPuk9Nx16xaLixl3MjQP//VtARFCmJ5U4+3Q8WihSJr
+         wq3w32S37JW8FVnUG7c+XCUcSA5NCwP3Q4O9js9Pqrh3nehTvHIFArrtSeh7QK9iN5t1
+         H/+PRwOLs+9T/JVpe3K47g5l55i30oEfEwrNQJ1YaTf3WrJaH5P2iFeiZMLiP83v5EgO
+         X9uNkS8boUTN0bQGAvrnSpn0uZlCRd3v3TiE6Rp4SQ4yuNsdtXVGhm3N7kgoLNfrZ3mr
+         yUd783UQ7RNOC6CvvVnPoOS5yFlee0ti7LRQotke2ZITUU9pTD+EdVMdXrP6RLa6ds+B
+         I8Rw==
+X-Gm-Message-State: AOAM530yqkSl6ryplsN+z8oTCahCc05f2pteceZsFpI+MkAniDuh4qj8
+        Xy2xuFFZHTOjJ/2U4hRqFE4LN6/gB7BivBQLIAI=
+X-Google-Smtp-Source: ABdhPJy0Hz3Sj8JRfFw1Yn5IvC2lbaNAGH7JVJN49mODIkt9aqbwoRx9bSxHAmcygIFIL92J7I149Pz8opZXH+h2oTk=
+X-Received: by 2002:a05:6102:e94:b0:337:9faa:4a5d with SMTP id
+ l20-20020a0561020e9400b003379faa4a5dmr10019366vst.43.1653576481419; Thu, 26
+ May 2022 07:48:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v5 4/6] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20220518131638.3401509-1-xukuohai@huawei.com>
- <20220518131638.3401509-5-xukuohai@huawei.com>
- <Yo441FR4mXpa2yNx@FVFF77S0Q05N>
- <b99896a2-8d9e-d224-d5ba-24b917cdab5a@huawei.com>
- <Yo9X0EKU03QbFZk+@FVFF77S0Q05N>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <Yo9X0EKU03QbFZk+@FVFF77S0Q05N>
+Received: by 2002:a1f:3150:0:0:0:0:0 with HTTP; Thu, 26 May 2022 07:48:00
+ -0700 (PDT)
+Reply-To: uchennailobitenone@gmail.com
+From:   uchenna <okeyyoyopa7@gmail.com>
+Date:   Thu, 26 May 2022 14:48:00 +0000
+Message-ID: <CAH8nkvY-d8i5bNsUZcnPHF9bTbx0Q3STPmLLKTU-3_jw0dwYeg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e31 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4988]
+        *  1.0 HK_RANDOM_ENVFROM Envelope sender username looks random
+        *  1.0 HK_RANDOM_FROM From username looks random
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [okeyyoyopa7[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [okeyyoyopa7[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/2022 6:34 PM, Mark Rutland wrote:
-> On Thu, May 26, 2022 at 05:45:30PM +0800, Xu Kuohai wrote:
->> On 5/25/2022 10:10 PM, Mark Rutland wrote:
->>> On Wed, May 18, 2022 at 09:16:36AM -0400, Xu Kuohai wrote:
->>>> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
->>>> it to replace nop with jump, or replace jump with nop.
->>>>
->>>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->>>> Acked-by: Song Liu <songliubraving@fb.com>
->>>> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
->>>> ---
->>>>  arch/arm64/net/bpf_jit.h      |   1 +
->>>>  arch/arm64/net/bpf_jit_comp.c | 107 +++++++++++++++++++++++++++++++---
->>>>  2 files changed, 99 insertions(+), 9 deletions(-)
->>>>
->>>> diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
->>>> index 194c95ccc1cf..1c4b0075a3e2 100644
->>>> --- a/arch/arm64/net/bpf_jit.h
->>>> +++ b/arch/arm64/net/bpf_jit.h
->>>> @@ -270,6 +270,7 @@
->>>>  #define A64_BTI_C  A64_HINT(AARCH64_INSN_HINT_BTIC)
->>>>  #define A64_BTI_J  A64_HINT(AARCH64_INSN_HINT_BTIJ)
->>>>  #define A64_BTI_JC A64_HINT(AARCH64_INSN_HINT_BTIJC)
->>>> +#define A64_NOP    A64_HINT(AARCH64_INSN_HINT_NOP)
->>>>  
->>>>  /* DMB */
->>>>  #define A64_DMB_ISH aarch64_insn_gen_dmb(AARCH64_INSN_MB_ISH)
->>>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->>>> index 8ab4035dea27..5ce6ed5f42a1 100644
->>>> --- a/arch/arm64/net/bpf_jit_comp.c
->>>> +++ b/arch/arm64/net/bpf_jit_comp.c
->>>> @@ -9,6 +9,7 @@
->>>>  
->>>>  #include <linux/bitfield.h>
->>>>  #include <linux/bpf.h>
->>>> +#include <linux/memory.h>
->>>>  #include <linux/filter.h>
->>>>  #include <linux/printk.h>
->>>>  #include <linux/slab.h>
->>>> @@ -18,6 +19,7 @@
->>>>  #include <asm/cacheflush.h>
->>>>  #include <asm/debug-monitors.h>
->>>>  #include <asm/insn.h>
->>>> +#include <asm/patching.h>
->>>>  #include <asm/set_memory.h>
->>>>  
->>>>  #include "bpf_jit.h"
->>>> @@ -235,13 +237,13 @@ static bool is_lsi_offset(int offset, int scale)
->>>>  	return true;
->>>>  }
->>>>  
->>>> +#define BTI_INSNS (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) ? 1 : 0)
->>>> +#define PAC_INSNS (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) ? 1 : 0)
->>>> +
->>>>  /* Tail call offset to jump into */
->>>> -#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || \
->>>> -	IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
->>>> -#define PROLOGUE_OFFSET 9
->>>> -#else
->>>> -#define PROLOGUE_OFFSET 8
->>>> -#endif
->>>> +#define PROLOGUE_OFFSET	(BTI_INSNS + 2 + PAC_INSNS + 8)
->>>> +/* Offset of nop instruction in bpf prog entry to be poked */
->>>> +#define POKE_OFFSET	(BTI_INSNS + 1)
->>>>  
->>>>  static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
->>>>  {
->>>> @@ -279,12 +281,15 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
->>>>  	 *
->>>>  	 */
->>>>  
->>>> +	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
->>>> +		emit(A64_BTI_C, ctx);
->>>> +
->>>> +	emit(A64_MOV(1, A64_R(9), A64_LR), ctx);
->>>> +	emit(A64_NOP, ctx);
->>>
->>> I take it the idea is to make this the same as the regular ftrace patch-site
->>> sequence, so that this can call the same trampoline(s) ?
->>>
->>
->> Yes, we can attach a bpf trampoline to bpf prog.
-> 
-> Just to check, is the BPF trampoline *only* attached to BPF programs, or could
-> that be attached to a regular ftrace patch-site?
-> 
-> I has assumed that the point of adding direct calls support was so that this
-> could be called from regular ftrace patch sites, but your replies below on how
-> the trampoline is protected imply that's not the case.
-> 
-
-Sorry for the confusion. bpf trampoline could be attached to a regular
-ftrace patch-site. In this scenario the patch-site is patched by ftrace.
-
->>> If so, we need some commentary to that effect, and we need some comments in the
->>> ftrace code explaining that this needs to be kept in-sync.
->>>
->>
->> This is patched by bpf_arch_text_poke(), not ftrace.
-> > I understood that, but if the idea is that the instruction sequence
-must match,
-> then we need to make that clear. Otherwise changes to one side may break the
-> other unexpectedly.
-> 
-
-Yes, it's better that these two matches. But I don't think it's a must,
-since the bpf proglogue is patched by bpf_arch_text_poke(), while a
-regular kernel function progolue is patched by ftrace.
-
->>>> +
->>>>  	/* Sign lr */
->>>>  	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
->>>>  		emit(A64_PACIASP, ctx);
->>>> -	/* BTI landing pad */
->>>> -	else if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
->>>> -		emit(A64_BTI_C, ctx);
->>>>  
->>>>  	/* Save FP and LR registers to stay align with ARM64 AAPCS */
->>>>  	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
->>>> @@ -1529,3 +1534,87 @@ void bpf_jit_free_exec(void *addr)
->>>>  {
->>>>  	return vfree(addr);
->>>>  }
->>>> +
->>>> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
->>>> +			     void *addr, u32 *insn)
->>>> +{
->>>> +	if (!addr)
->>>> +		*insn = aarch64_insn_gen_nop();
->>>> +	else
->>>> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
->>>> +						    (unsigned long)addr,
->>>> +						    type);
->>>> +
->>>> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
->>>> +}
->>>> +
->>>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->>>> +		       void *old_addr, void *new_addr)
->>>> +{
->>>> +	int ret;
->>>> +	u32 old_insn;
->>>> +	u32 new_insn;
->>>> +	u32 replaced;
->>>> +	unsigned long offset = ~0UL;
->>>> +	enum aarch64_insn_branch_type branch_type;
->>>> +	char namebuf[KSYM_NAME_LEN];
->>>> +
->>>> +	if (!__bpf_address_lookup((unsigned long)ip, NULL, &offset, namebuf))
->>>> +		/* Only poking bpf text is supported. Since kernel function
->>>> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
->>>> +		 * functions.
->>>> +		 */
->>>> +		return -EINVAL;
->>>> +
->>>> +	/* bpf entry */
->>>> +	if (offset == 0UL)
->>>> +		/* skip to the nop instruction in bpf prog entry:
->>>> +		 * bti c	// if BTI enabled
->>>> +		 * mov x9, x30
->>>> +		 * nop
->>>> +		 */
->>>> +		ip = ip + POKE_OFFSET * AARCH64_INSN_SIZE;
->>>
->>> When is offset non-zero? is this ever called to patch other instructions, and
->>> could this ever be used to try to patch the BTI specifically?
->>
->> bpf_arch_text_poke() is also called to patch other instructions, for
->> example, bpf_tramp_image_put() calls this to skip calling fexit bpf progs:
->>
->> int err = bpf_arch_text_poke(im->ip_after_call, BPF_MOD_JUMP,
->>                              NULL, im->ip_epilogue);
->>
->>
->> Before this is called, a bpf trampoline looks like:
->>
->> 	[...]
->> ip_after_call:
->> 	nop // to be patched
->> 	bl <fexit prog>
->> ip_epilogue:
->> 	bti j
->> 	[...]
->>
->> After:
->> 	[...]
->> ip_after_call:
->> 	b <ip_epilogue> // patched
->> 	bl <fexit prog>
->> ip_epilogue:
->> 	bti j
->> 	[...]
->>
->>
->>> I strongly suspect we need a higher-level API to say "poke the patchable
->>> callsite in the prologue", rather than assuming that offset 0 always means
->>> that, or it'll be *very* easy for this to go wrong.
->>
->> Ah, bpf_arch_text_poke() only patches bpf progs, and the patch-site in
->> bpf prog prologue is constructed for bpf_arch_text_poke(), so we always
->> know the patch-site offset. There's no compiler generated instruction
->> here, so it seems to be not a problem.
-> 
-> I understand all of that. My point is that if anyone ever wants to use
-> bpf_arch_text_poke() to poke the *actual* first instruction, this will go
-> wrong.
-> 
-> I see that x86 does the same thing to skip ENDBR, so if this is just a fragile
-> API, and people are expected to not do that, then fine. It's just confusing.
-> >>>> +
->>>> +	if (poke_type == BPF_MOD_CALL)
->>>> +		branch_type = AARCH64_INSN_BRANCH_LINK;
->>>> +	else
->>>> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
->>>
->>> When is poke_type *not* BPF_MOD_CALL?>
->>
->> The bpf_tramp_image_put() example above uses BPF_MOD_JUMP.
->>
->>> I assume that means BPF also uses this for non-ftrace reasons?
->>>
->>
->> This function is NOT used for ftrace patch-site. It's only used to patch
->> bpf image.
-> 
-> I understand that this isn't ftrace; I meant for the patch site we introduced
-> in the BPF program that is compatible with the patch-site sequence that ftrace
-> uses.
-> 
->>>> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
->>>> +		return -EFAULT;
->>>> +
->>>> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
->>>> +		return -EFAULT;
->>>> +
->>>> +	mutex_lock(&text_mutex);
->>>> +	if (aarch64_insn_read(ip, &replaced)) {
->>>> +		ret = -EFAULT;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	if (replaced != old_insn) {
->>>> +		ret = -EFAULT;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	/* We call aarch64_insn_patch_text_nosync() to replace instruction
->>>> +	 * atomically, so no other CPUs will fetch a half-new and half-old
->>>> +	 * instruction. But there is chance that another CPU fetches the old
->>>> +	 * instruction after bpf_arch_text_poke() finishes, that is, different
->>>> +	 * CPUs may execute different versions of instructions at the same
->>>> +	 * time before the icache is synchronized by hardware.
->>>> +	 *
->>>> +	 * 1. when a new trampoline is attached, it is not an issue for
->>>> +	 *    different CPUs to jump to different trampolines temporarily.
->>>> +	 *
->>>> +	 * 2. when an old trampoline is freed, we should wait for all other
->>>> +	 *    CPUs to exit the trampoline and make sure the trampoline is no
->>>> +	 *    longer reachable, since bpf_tramp_image_put() function already
->>>> +	 *    uses percpu_ref and rcu task to do the sync, no need to call the
->>>> +	 *    sync interface here.
->>>> +	 */
->>>
->>> How is RCU used for that? It's not clear to me how that works for PREEMPT_RCU
->>> (which is the usual configuration for arm64), since we can easily be in a
->>> preemptible context, outside of an RCU read side critical section, yet call
->>> into a trampoline.
->>>
->>> I know that for livepatching we need to use stacktracing to ensure we've
->>> finished using code we'd like to free, and I can't immediately see how you can
->>> avoid that here. I'm suspicious that there's still a race where threads can
->>> enter the trampoline and it can be subsequently freed.
->>>
->>> For ftrace today we get away with entering the existing trampolines when not
->>> intended because those are statically allocated, and the race is caught when
->>> acquiring the ops inside the ftrace core code. This case is different because
->>> the CPU can fetch the instruction and execute that at any time, without any RCU
->>> involvement.
->>>
->>> Can you give more details on how the scheme described above works? How
->>> *exactly*` do you ensure that threads which have entered the trampoline (and
->>> may have been immediately preempted by an interrupt) have returned? Which RCU
->>> mechanism are you using?
->>>
->>> If you can point me at where this is implemented I'm happy to take a look.
->>>
->> IIUC, task rcu's critical section ends at a voluntary context switch,
->> since no volutary context switch occurs in a progoluge, when a task
->> rcu's critical section ends, we can ensure no one is running in the
->> prologue [1].
->>
->> For bpf trampoline, the scenario is similar, except that it may sleep,
->> so a reference count is increased when entering the trampoline and
->> decreased when exiting the trampoline, so we can wait for the reference
->> count to become zero to make sure there is no one in the sleepable
->> region [2].
->>
->> [1] https://lore.kernel.org/all/20140804192017.GA18337@linux.vnet.ibm.com/
->> [2]
->> https://lore.kernel.org/bpf/20210316210007.38949-1-alexei.starovoitov@gmail.com/
-> 
-> Ok. Am I correct in understanding that this means the BPF trampoline is only
-> ever attached to BPF programs and those programs handle this around calling the
-> BPF trampoline?
-> 
-
-bpf trampline could be attached to a regular function. This scenario is
-handled by the same function.
-
-> Thanks,
-> Mark.
-> .
-
+0JLQvdC40LzQsNC90LjQtSDQn9C+0LbQsNC70YPQudGB0YLQsCwNCg0K0K8g0JHQsNGALiB1Y2hl
+bm5hIGlsb2JpICwg0JrQsNC6INC00LXQu9CwLCDQvdCw0LTQtdGO0YHRjCDRgtGLINCyINC/0L7R
+gNGP0LTQutC1INC4INC30LTQvtGA0L7Qsj8NCtCd0LDRgdGC0L7Rj9GJ0LjQvCDRgdC+0L7QsdGJ
+0LDRjiDQstCw0LwsINGH0YLQviDRjyDRg9GB0L/QtdGI0L3QviDQt9Cw0LLQtdGA0YjQuNC7INGC
+0YDQsNC90LfQsNC60YbQuNGOINGBINC/0L7QvNC+0YnRjNGODQrQvdC+0LLQvtCz0L4g0L/QsNGA
+0YLQvdC10YDQsCDQuNC3INCS0LXQvdC10YHRg9GN0LvRiywg0Lgg0YLQtdC/0LXRgNGMINGB0YDQ
+tdC00YHRgtCy0LAg0LHRi9C70Lgg0L/QtdGA0LXQstC10LTQtdC90Ysg0LINCtCS0LXQvdC10YHR
+g9GN0LvRgyDQvdCwINCx0LDQvdC60L7QstGB0LrQuNC5INGB0YfQtdGCINC90L7QstC+0LPQviDQ
+v9Cw0YDRgtC90LXRgNCwLg0KDQrQnNC10LbQtNGDINGC0LXQvCwg0Y8g0YDQtdGI0LjQuyDQstGL
+0L/Qu9Cw0YLQuNGC0Ywg0LLQsNC8INC60L7QvNC/0LXQvdGB0LDRhtC40Y4g0LIg0YDQsNC30LzQ
+tdGA0LUgMzUwIDAwMA0K0LTQvtC70LvQsNGA0L7QsiDQodCo0JAgKNGC0YDQuNGB0YLQsCDQv9GP
+0YLRjNC00LXRgdGP0YIg0YLRi9GB0Y/RhyDQtNC+0LvQu9Cw0YDQvtCyINCh0KjQkCkg0LfQsCDQ
+stCw0YjQuCDQv9GA0L7RiNC70YvQtQ0K0YPRgdC40LvQuNGPLCDRhdC+0YLRjyDQstGLINC80LXQ
+vdGPINGA0LDQt9C+0YfQsNGA0L7QstCw0LvQuC4g0J3Qviwg0YLQtdC8INC90LUg0LzQtdC90LXQ
+tSwg0Y8g0L7Rh9C10L3RjCDRgNCw0LQNCtGD0YHQv9C10YjQvdC+0LzRgyDQt9Cw0LLQtdGA0YjQ
+tdC90LjRjiDRgdC00LXQu9C60Lgg0LHQtdC3INC60LDQutC40YUt0LvQuNCx0L4g0L/RgNC+0LHQ
+u9C10LwsINC4INC40LzQtdC90L3QviDQv9C+0Y3RgtC+0LzRgyDRjw0K0YDQtdGI0LjQuyDQstGL
+0L/Qu9Cw0YLQuNGC0Ywg0LLQsNC8INC60L7QvNC/0LXQvdGB0LDRhtC40Y4g0LIg0YDQsNC30LzQ
+tdGA0LUgMzUwIDAwMCDQtNC+0LvQu9Cw0YDQvtCyINCh0KjQkCwg0YfRgtC+0LHRiw0K0LLRiyDR
+gNCw0LfQtNC10LvQuNC70Lgg0YHQviDQvNC90L7QuSDRgNCw0LTQvtGB0YLRjC4NCg0K0K8g0YHQ
+vtCy0LXRgtGD0Y4g0LLQsNC8INC+0LHRgNCw0YLQuNGC0YzRgdGPINC6INC80L7QtdC80YMg0YHQ
+tdC60YDQtdGC0LDRgNGOINC30LAg0LHQsNC90LrQvtC80LDRgtC90L7QuSDQutCw0YDRgtC+0Lkg
+0L3QsA0KMzUwIDAwMCDQtNC+0LvQu9Cw0YDQvtCyINCh0KjQkCwg0LrQvtGC0L7RgNGD0Y4g0Y8g
+0YHQvtGF0YDQsNC90LjQuyDQtNC70Y8g0LLQsNGBLiDQodCy0Y/QttC40YLQtdGB0Ywg0YEg0L3Q
+uNC8DQrRgdC10LnRh9Cw0YEg0LHQtdC3INC/0YDQvtC80LXQtNC70LXQvdC40Y8uDQoNCtCd0LDQ
+t9Cy0LDQvdC40LU6INCh0L7Qu9C+0LzQvtC90L7QsiDQsdGA0LXQvdC00LgNCg0K0K3Qu9C10LrR
+gtGA0L7QvdC90LDRjyDQv9C+0YfRgtCwOiBzb2xvbW9uYnJhbmR5Zml2ZW9uZUBnbWFpbC5jb20N
+Cg0K0J/QvtC20LDQu9GD0LnRgdGC0LAsINC/0L7QtNGC0LLQtdGA0LTQuNGC0LUg0LXQvNGDINGB
+0LvQtdC00YPRjtGJ0YPRjiDQuNC90YTQvtGA0LzQsNGG0LjRjjoNCg0K0JLQsNGI0LUg0L/QvtC7
+0L3QvtC1INC40LzRj19fX19fX19fX19fX19fX19fX19fX19fX18NCtCS0LDRiCDQsNC00YDQtdGB
+X19fX19fX19fX19fX19fX19fX19fX19fX18NCtCi0LLQvtGPINGB0YLRgNCw0L3QsF9fX19fX19f
+X19fX19fX19fX19fX19fX19fXw0K0JLQsNGIINCy0L7Qt9GA0LDRgdGCX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fDQrQktCw0YjQsCDQv9GA0L7RhNC10YHRgdC40Y9fX19fX19fX19fX19f
+X19fX19fX19fX18NCtCS0LDRiCDQvdC+0LzQtdGAINC80L7QsdC40LvRjNC90L7Qs9C+INGC0LXQ
+u9C10YTQvtC90LBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0KDQrQntCx0YDQ
+sNGC0LjRgtC1INCy0L3QuNC80LDQvdC40LUsINGH0YLQviDQtdGB0LvQuCDQstGLINC90LUg0L7R
+gtC/0YDQsNCy0LjQu9C4INC10LzRgyDQstGL0YjQtdGD0LrQsNC30LDQvdC90YPRjg0K0LjQvdGE
+0L7RgNC80LDRhtC40Y4g0L/QvtC70L3QvtGB0YLRjNGOLCDQvtC9INC90LUg0LLRi9C00LDRgdGC
+INCy0LDQvCDQutCw0YDRgtGDINCx0LDQvdC60L7QvNCw0YLQsCwg0L/QvtGC0L7QvNGDINGH0YLQ
+viDQvtC9DQrQtNC+0LvQttC10L0g0LHRi9GC0Ywg0YPQstC10YDQtdC9LCDRh9GC0L4g0Y3RgtC+
+INCy0YsuINCf0L7Qv9GA0L7RgdC40YLQtSDQtdCz0L4g0LLRi9GB0LvQsNGC0Ywg0LLQsNC8INC+
+0LHRidGD0Y4g0YHRg9C80LzRgw0KKDM1MCAwMDAsMDAg0LTQvtC70LvQsNGA0L7QsiDQodCo0JAp
+INC60LDRgNGC0Ysg0LHQsNC90LrQvtC80LDRgtCwLCDQutC+0YLQvtGA0YPRjiDRjyDRgdC+0YXR
+gNCw0L3QuNC7INC00LvRjyDQstCw0YEuDQoNCtChINC90LDQuNC70YPRh9GI0LjQvNC4INC/0L7Q
+ttC10LvQsNC90LjRj9C80LgsDQoNCtCzLdC9INGD0YfQtdC90L3QsCDQuNC70L7QsdC4DQpWbmlt
+YW5peWUgUG96aGFsdXlzdGEsDQo=

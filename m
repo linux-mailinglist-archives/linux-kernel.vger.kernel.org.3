@@ -2,104 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A537553527E
-	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA06B535283
+	for <lists+linux-kernel@lfdr.de>; Thu, 26 May 2022 19:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348286AbiEZRYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 13:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S1343984AbiEZR0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 13:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233201AbiEZRYV (ORCPT
+        with ESMTP id S244001AbiEZR0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 13:24:21 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954B022BD9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:24:18 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id t5so2621481edc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:24:18 -0700 (PDT)
+        Thu, 26 May 2022 13:26:32 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A21A69299;
+        Thu, 26 May 2022 10:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yvjEOHLIq9Sh9WWlVm5k1WXdPptfENAsp8rVEPdpX98=;
-        b=UyfTK4zCywPFtXtJFpp3tYElNgd0u8UNemNFJTk/Ovitu+cPDOX36ZHi1LFPGMRUOz
-         eyeBGOphBhoOio8YvUH2x0TGXbaUQNJ6rmMfPipjravKYEHsSSGvsdN3Al5pOmJz3Mzi
-         lpN4yiaO/tJ930XEz0yFzopH6FZYXLfmg8iB0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yvjEOHLIq9Sh9WWlVm5k1WXdPptfENAsp8rVEPdpX98=;
-        b=RJgLSMhcwpbkuzcZZ+i4VGTyn1haMnMrGbS4Tys8XEqkO/jj6KG+OvaN4GYNOQfJA+
-         /hLsGDUFow94cUunAmde0Wu3QCa9u+OyDdVAMDcDZiAV8yeJf9CmiiSurVbsPK8aBl87
-         gAda2G6460cTwlWOkTbCl2gF493GmeVLNAYBY8PuLzNIQM0FSZsedrq4Is81JRYEAW1P
-         EU1u/oZ9e+brfEjeg0B5c36O4FcFDdU/Ot5+JTg4tlHi+cRHTAoklO7bSWtUNdjCxLaG
-         Ed9PCZIS/5BXmDPOxjAwFISoEQgmCF4CmnbrccyfuEw8c3UDh7rBLICIX5UiepS6HRDU
-         J75w==
-X-Gm-Message-State: AOAM5325H0WLuatQG/uN58w651S8EsuYhsqiLHltVokNaFqFhVfzJERg
-        Q1jUkUcVFM7KhdHQ3I+esT2JZsoq4PETI7s61ws=
-X-Google-Smtp-Source: ABdhPJye6LapR8XrtnXId70NkfPMuFTLYvczW8a1Tt1nrrc9f/0kW4MiN8bjgtqqG05n5cmwFYKCHg==
-X-Received: by 2002:aa7:d614:0:b0:42b:f24e:e4c2 with SMTP id c20-20020aa7d614000000b0042bf24ee4c2mr67143edr.322.1653585856936;
-        Thu, 26 May 2022 10:24:16 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id m11-20020a056402510b00b0042b6a84b230sm1023750edd.90.2022.05.26.10.24.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 10:24:15 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id t13so2942110wrg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 10:24:15 -0700 (PDT)
-X-Received: by 2002:a5d:58cc:0:b0:20e:643d:e46a with SMTP id
- o12-20020a5d58cc000000b0020e643de46amr30956023wrf.97.1653585854913; Thu, 26
- May 2022 10:24:14 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653585990; x=1685121990;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=qqD5Zj6t+PWfNIQqW1CsB9riwLbmG/FrR6Aus1GUbvk=;
+  b=XVDnrV5CRoU9oED/A4uX8yg8OvjtL0DELcm3cs29oktVOhZufcHku2o/
+   NT/GfesfmcXp1wF9+cQmB9g0/dl53QOg1HCDp8BUjsiW5tG0M4UUs7EHj
+   4EgeTXXY9yY/Lp+0+R2BIxqLOTnGXVHRbcOL1T3Z6o8u47Ihl4qM+TiyV
+   g=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 May 2022 10:26:29 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 10:26:29 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 26 May 2022 10:26:28 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 26 May 2022 10:26:28 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/msm/dp: force link training for display resolution change
+Date:   Thu, 26 May 2022 10:26:18 -0700
+Message-ID: <1653585978-30090-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220525144013.6481-1-ubizjak@gmail.com> <20220525144013.6481-3-ubizjak@gmail.com>
- <CAHk-=whXtP1XT2cVDFKK2-Xz5Z=7AFki4zwFzenm4bbf4iPJKg@mail.gmail.com> <48001b3d732b418eb5f36def228c2c9d@AcuMS.aculab.com>
-In-Reply-To: <48001b3d732b418eb5f36def228c2c9d@AcuMS.aculab.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 26 May 2022 10:23:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjcOMsxThmFoUJYQ+BUmtzMk2J1XJiRWXFsd1LLXyRMZQ@mail.gmail.com>
-Message-ID: <CAHk-=wjcOMsxThmFoUJYQ+BUmtzMk2J1XJiRWXFsd1LLXyRMZQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] locking/lockref/x86: Enable ARCH_USE_CMPXCHG_LOCKREF
- for X86_32 && X86_CMPXCHG64
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Waiman.Long@hp.com" <Waiman.Long@hp.com>,
-        Paul McKenney <paulmck@linux.vnet.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 1:30 AM David Laight <David.Laight@aculab.com> wrote:
->
-> Perhaps there could be a non-smp implementation of cmpxchg8b
-> that just disables interrupts?
+During display resolution changes display have to be disabled first
+followed by display enable with new resolution. This patch force
+main link always be retrained during display enable procedure to
+simplify implementation instead of manually kicking of irq_hpd
+handle.
 
-As Uros points out, we do have exactly that, but it's not actually
-written to be usable for the "trylock" case. Plus it would be
-pointless for lockrefs, since the non-cmpxchg case that just falls
-back to a spinlock would be faster and simpler (particularly on UP,
-where locking goes away).
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    |  6 +++---
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
+ drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++-------
+ 3 files changed, 10 insertions(+), 11 deletions(-)
 
-> While I have used a dual 486 I doubt Linux would run ever
-> have on it. The same is probably true for old dual Pentiums.
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index 5ddb4e8..8b71013 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1545,7 +1545,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
+ 
+ 	ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
+ 	if (!ret)
+-		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl);
++		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl, false);
+ 	else
+ 		DRM_ERROR("failed to enable DP link controller\n");
+ 
+@@ -1802,7 +1802,7 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
+ 	return dp_ctrl_setup_main_link(ctrl, &training_step);
+ }
+ 
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
+ {
+ 	int ret = 0;
+ 	bool mainlink_ready = false;
+@@ -1827,7 +1827,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+ 		}
+ 	}
+ 
+-	if (!dp_ctrl_channel_eq_ok(ctrl))
++	if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
+ 		dp_ctrl_link_retrain(ctrl);
+ 
+ 	/* stop txing train pattern to end link training */
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+index 2433edb..dcc7af21 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+@@ -20,7 +20,7 @@ struct dp_ctrl {
+ };
+ 
+ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train);
+ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
+ int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
+ void dp_ctrl_push_idle(struct dp_ctrl *dp_ctrl);
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index bfc6581..9246421 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -892,7 +892,7 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
+ 		return 0;
+ 	}
+ 
+-	rc = dp_ctrl_on_stream(dp->ctrl);
++	rc = dp_ctrl_on_stream(dp->ctrl, data);
+ 	if (!rc)
+ 		dp_display->power_on = true;
+ 
+@@ -1594,6 +1594,7 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+ 	int rc = 0;
+ 	struct dp_display_private *dp_display;
+ 	u32 state;
++	bool force_link_train = false;
+ 
+ 	dp_display = container_of(dp, struct dp_display_private, dp_display);
+ 	if (!dp_display->dp_mode.drm_mode.clock) {
+@@ -1622,10 +1623,12 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+ 
+ 	state =  dp_display->hpd_state;
+ 
+-	if (state == ST_DISPLAY_OFF)
++	if (state == ST_DISPLAY_OFF) {
+ 		dp_display_host_phy_init(dp_display);
++		force_link_train = 1;
++	}
+ 
+-	dp_display_enable(dp_display, 0);
++	dp_display_enable(dp_display, force_link_train);
+ 
+ 	rc = dp_display_post_enable(dp);
+ 	if (rc) {
+@@ -1634,10 +1637,6 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+ 		dp_display_unprepare(dp);
+ 	}
+ 
+-	/* manual kick off plug event to train link */
+-	if (state == ST_DISPLAY_OFF)
+-		dp_add_event(dp_display, EV_IRQ_HPD_INT, 0, 0);
+-
+ 	/* completed connection */
+ 	dp_display->hpd_state = ST_CONNECTED;
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-Yeah, I don't think we ever supported SMP on i486, afaik they all
-needed special system glue.
-
-I think the "modern" x86 SMP support with a local APIC was a PPro and
-newer thing historically, but clearly there were then later what
-amounted to Penitum/MMX class cores (ie old Atom) that did support
-SMP.
-
-                      Linus

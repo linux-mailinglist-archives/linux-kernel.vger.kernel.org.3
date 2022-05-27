@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11044535FE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB10953610B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351732AbiE0Lnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S1352348AbiE0MAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351550AbiE0Ljv (ORCPT
+        with ESMTP id S1353124AbiE0LvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:39:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BE562BE5;
-        Fri, 27 May 2022 04:38:44 -0700 (PDT)
+        Fri, 27 May 2022 07:51:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6D1140407;
+        Fri, 27 May 2022 04:46:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DBD43B82466;
-        Fri, 27 May 2022 11:38:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A9CC385A9;
-        Fri, 27 May 2022 11:38:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC88061D5C;
+        Fri, 27 May 2022 11:46:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00B8C385A9;
+        Fri, 27 May 2022 11:46:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651521;
-        bh=Dx9FTw2hD0zBHYgrCojlnuEo3ur2EIBl1dIfh/vavCw=;
+        s=korg; t=1653652011;
+        bh=mqr+CmKBFFHkb8QDzclxqHbsHvaX+z4Z1RjSRFRczNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uwUOlGuI8/MdMlOv6V1e1eYDizXlWKvU6wQ0DVrMnhIr0zbYpWVhdgTG7IPYGW4Zg
-         f8ko8W0nCT4p9Ujt2eYU79Gl298WytG+4bQtdRoZAFxQB9C0hpW9Sq/icctrVTvVC/
-         9BAIBUGSlJgPP6rODoZG+hBCbgbe6Dtv3Ptt9j0U=
+        b=NwxmNvHcY7yJOvypWmeCoK4h+xR4TKYVexl8x/le41Sg2GQ+LfwUJSAb51rnwCqOp
+         4lMi35fyAmjAKc0YDoIQIkZc8cbqSej2k3SYZy22AOUgplCM24nB+gnDovTQ/FBtqh
+         tjg7LR2BKmB+EJiMrVS1x2o0Kj3L1xC1iY170Rbc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 051/111] random: replace custom notifier chain with standard one
+Subject: [PATCH 5.15 062/145] random: deobfuscate irq u32/u64 contributions
 Date:   Fri, 27 May 2022 10:49:23 +0200
-Message-Id: <20220527084826.670412702@linuxfoundation.org>
+Message-Id: <20220527084858.094768665@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,222 +57,121 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 5acd35487dc911541672b3ffc322851769c32a56 upstream.
+commit b2f408fe403800c91a49f6589d95b6759ce1b30b upstream.
 
-We previously rolled our own randomness readiness notifier, which only
-has two users in the whole kernel. Replace this with a more standard
-atomic notifier block that serves the same purpose with less code. Also
-unexport the symbols, because no modules use it, only unconditional
-builtins. The only drawback is that it's possible for a notification
-handler returning the "stop" code to prevent further processing, but
-given that there are only two users, and that we're unexporting this
-anyway, that doesn't seem like a significant drawback for the
-simplification we receive here.
+In the irq handler, we fill out 16 bytes differently on 32-bit and
+64-bit platforms, and for 32-bit vs 64-bit cycle counters, which doesn't
+always correspond with the bitness of the platform. Whether or not you
+like this strangeness, it is a matter of fact.  But it might not be a
+fact you well realized until now, because the code that loaded the irq
+info into 4 32-bit words was quite confusing.  Instead, this commit
+makes everything explicit by having separate (compile-time) branches for
+32-bit and 64-bit types.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Theodore Ts'o <tytso@mit.edu>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c  |   67 +++++++++++++------------------------------------
- include/linux/random.h |   10 ++-----
- lib/random32.c         |   12 +++++---
- lib/vsprintf.c         |   10 ++++---
- 4 files changed, 35 insertions(+), 64 deletions(-)
+ drivers/char/random.c |   49 ++++++++++++++++++++++++++++---------------------
+ 1 file changed, 28 insertions(+), 21 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -83,8 +83,8 @@ static int crng_init = 0;
- /* Various types of waiters for crng_init->2 transition. */
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
- static struct fasync_struct *fasync;
--static DEFINE_SPINLOCK(random_ready_list_lock);
--static LIST_HEAD(random_ready_list);
-+static DEFINE_SPINLOCK(random_ready_chain_lock);
-+static RAW_NOTIFIER_HEAD(random_ready_chain);
- 
- /* Control how we warn userspace. */
- static struct ratelimit_state unseeded_warning =
-@@ -147,72 +147,43 @@ EXPORT_SYMBOL(wait_for_random_bytes);
-  *
-  * returns: 0 if callback is successfully added
-  *	    -EALREADY if pool is already initialised (callback not called)
-- *	    -ENOENT if module for callback is not alive
-  */
--int add_random_ready_callback(struct random_ready_callback *rdy)
-+int register_random_ready_notifier(struct notifier_block *nb)
- {
--	struct module *owner;
- 	unsigned long flags;
--	int err = -EALREADY;
-+	int ret = -EALREADY;
- 
- 	if (crng_ready())
--		return err;
-+		return ret;
- 
--	owner = rdy->owner;
--	if (!try_module_get(owner))
--		return -ENOENT;
--
--	spin_lock_irqsave(&random_ready_list_lock, flags);
--	if (crng_ready())
--		goto out;
--
--	owner = NULL;
--
--	list_add(&rdy->list, &random_ready_list);
--	err = 0;
--
--out:
--	spin_unlock_irqrestore(&random_ready_list_lock, flags);
--
--	module_put(owner);
--
--	return err;
-+	spin_lock_irqsave(&random_ready_chain_lock, flags);
-+	if (!crng_ready())
-+		ret = raw_notifier_chain_register(&random_ready_chain, nb);
-+	spin_unlock_irqrestore(&random_ready_chain_lock, flags);
-+	return ret;
+@@ -283,7 +283,10 @@ static void mix_pool_bytes(const void *i
  }
--EXPORT_SYMBOL(add_random_ready_callback);
  
- /*
-  * Delete a previously registered readiness callback function.
+ struct fast_pool {
+-	u32 pool[4];
++	union {
++		u32 pool32[4];
++		u64 pool64[2];
++	};
+ 	unsigned long last;
+ 	u16 reg_idx;
+ 	u8 count;
+@@ -294,10 +297,10 @@ struct fast_pool {
+  * collector.  It's hardcoded for an 128 bit pool and assumes that any
+  * locks that might be needed are taken by the caller.
   */
--void del_random_ready_callback(struct random_ready_callback *rdy)
-+int unregister_random_ready_notifier(struct notifier_block *nb)
+-static void fast_mix(struct fast_pool *f)
++static void fast_mix(u32 pool[4])
  {
- 	unsigned long flags;
--	struct module *owner = NULL;
--
--	spin_lock_irqsave(&random_ready_list_lock, flags);
--	if (!list_empty(&rdy->list)) {
--		list_del_init(&rdy->list);
--		owner = rdy->owner;
--	}
--	spin_unlock_irqrestore(&random_ready_list_lock, flags);
-+	int ret;
+-	u32 a = f->pool[0],	b = f->pool[1];
+-	u32 c = f->pool[2],	d = f->pool[3];
++	u32 a = pool[0],	b = pool[1];
++	u32 c = pool[2],	d = pool[3];
  
--	module_put(owner);
-+	spin_lock_irqsave(&random_ready_chain_lock, flags);
-+	ret = raw_notifier_chain_unregister(&random_ready_chain, nb);
-+	spin_unlock_irqrestore(&random_ready_chain_lock, flags);
-+	return ret;
+ 	a += b;			c += d;
+ 	b = rol32(b, 6);	d = rol32(d, 27);
+@@ -315,9 +318,8 @@ static void fast_mix(struct fast_pool *f
+ 	b = rol32(b, 16);	d = rol32(d, 14);
+ 	d ^= a;			b ^= c;
+ 
+-	f->pool[0] = a;  f->pool[1] = b;
+-	f->pool[2] = c;  f->pool[3] = d;
+-	f->count++;
++	pool[0] = a;  pool[1] = b;
++	pool[2] = c;  pool[3] = d;
  }
--EXPORT_SYMBOL(del_random_ready_callback);
  
  static void process_random_ready_list(void)
- {
- 	unsigned long flags;
--	struct random_ready_callback *rdy, *tmp;
+@@ -784,29 +786,34 @@ void add_interrupt_randomness(int irq)
+ 	struct pt_regs *regs = get_irq_regs();
+ 	unsigned long now = jiffies;
+ 	cycles_t cycles = random_get_entropy();
+-	u32 c_high, j_high;
+-	u64 ip;
  
--	spin_lock_irqsave(&random_ready_list_lock, flags);
--	list_for_each_entry_safe(rdy, tmp, &random_ready_list, list) {
--		struct module *owner = rdy->owner;
--
--		list_del_init(&rdy->list);
--		rdy->func(rdy);
--		module_put(owner);
--	}
--	spin_unlock_irqrestore(&random_ready_list_lock, flags);
-+	spin_lock_irqsave(&random_ready_chain_lock, flags);
-+	raw_notifier_call_chain(&random_ready_chain, 0, NULL);
-+	spin_unlock_irqrestore(&random_ready_chain_lock, flags);
- }
+ 	if (cycles == 0)
+ 		cycles = get_reg(fast_pool, regs);
+-	c_high = (sizeof(cycles) > 4) ? cycles >> 32 : 0;
+-	j_high = (sizeof(now) > 4) ? now >> 32 : 0;
+-	fast_pool->pool[0] ^= cycles ^ j_high ^ irq;
+-	fast_pool->pool[1] ^= now ^ c_high;
+-	ip = regs ? instruction_pointer(regs) : _RET_IP_;
+-	fast_pool->pool[2] ^= ip;
+-	fast_pool->pool[3] ^=
+-		(sizeof(ip) > 4) ? ip >> 32 : get_reg(fast_pool, regs);
  
- #define warn_unseeded_randomness(previous) \
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -10,11 +10,7 @@
+-	fast_mix(fast_pool);
++	if (sizeof(cycles) == 8)
++		fast_pool->pool64[0] ^= cycles ^ rol64(now, 32) ^ irq;
++	else {
++		fast_pool->pool32[0] ^= cycles ^ irq;
++		fast_pool->pool32[1] ^= now;
++	}
++
++	if (sizeof(unsigned long) == 8)
++		fast_pool->pool64[1] ^= regs ? instruction_pointer(regs) : _RET_IP_;
++	else {
++		fast_pool->pool32[2] ^= regs ? instruction_pointer(regs) : _RET_IP_;
++		fast_pool->pool32[3] ^= get_reg(fast_pool, regs);
++	}
++
++	fast_mix(fast_pool->pool32);
++	++fast_pool->count;
  
- #include <uapi/linux/random.h>
+ 	if (unlikely(crng_init == 0)) {
+ 		if (fast_pool->count >= 64 &&
+-		    crng_fast_load(fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
++		    crng_fast_load(fast_pool->pool32, sizeof(fast_pool->pool32)) > 0) {
+ 			fast_pool->count = 0;
+ 			fast_pool->last = now;
+ 			if (spin_trylock(&input_pool.lock)) {
+-				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
++				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
+ 				spin_unlock(&input_pool.lock);
+ 			}
+ 		}
+@@ -820,7 +827,7 @@ void add_interrupt_randomness(int irq)
+ 		return;
  
--struct random_ready_callback {
--	struct list_head list;
--	void (*func)(struct random_ready_callback *rdy);
--	struct module *owner;
--};
-+struct notifier_block;
+ 	fast_pool->last = now;
+-	_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
++	_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
+ 	spin_unlock(&input_pool.lock);
  
- extern void add_device_randomness(const void *, size_t);
- extern void add_bootloader_randomness(const void *, size_t);
-@@ -39,8 +35,8 @@ extern void get_random_bytes(void *buf,
- extern int wait_for_random_bytes(void);
- extern int __init rand_initialize(void);
- extern bool rng_is_initialized(void);
--extern int add_random_ready_callback(struct random_ready_callback *rdy);
--extern void del_random_ready_callback(struct random_ready_callback *rdy);
-+extern int register_random_ready_notifier(struct notifier_block *nb);
-+extern int unregister_random_ready_notifier(struct notifier_block *nb);
- extern size_t __must_check get_random_bytes_arch(void *buf, size_t nbytes);
- 
- #ifndef MODULE
---- a/lib/random32.c
-+++ b/lib/random32.c
-@@ -551,9 +551,11 @@ static void prandom_reseed(struct timer_
-  * To avoid worrying about whether it's safe to delay that interrupt
-  * long enough to seed all CPUs, just schedule an immediate timer event.
-  */
--static void prandom_timer_start(struct random_ready_callback *unused)
-+static int prandom_timer_start(struct notifier_block *nb,
-+			       unsigned long action, void *data)
- {
- 	mod_timer(&seed_timer, jiffies);
-+	return 0;
- }
- 
- #ifdef CONFIG_RANDOM32_SELFTEST
-@@ -617,13 +619,13 @@ core_initcall(prandom32_state_selftest);
-  */
- static int __init prandom_init_late(void)
- {
--	static struct random_ready_callback random_ready = {
--		.func = prandom_timer_start
-+	static struct notifier_block random_ready = {
-+		.notifier_call = prandom_timer_start
- 	};
--	int ret = add_random_ready_callback(&random_ready);
-+	int ret = register_random_ready_notifier(&random_ready);
- 
- 	if (ret == -EALREADY) {
--		prandom_timer_start(&random_ready);
-+		prandom_timer_start(&random_ready, 0, NULL);
- 		ret = 0;
- 	}
- 	return ret;
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -762,14 +762,16 @@ static void enable_ptr_key_workfn(struct
- 
- static DECLARE_WORK(enable_ptr_key_work, enable_ptr_key_workfn);
- 
--static void fill_random_ptr_key(struct random_ready_callback *unused)
-+static int fill_random_ptr_key(struct notifier_block *nb,
-+			       unsigned long action, void *data)
- {
- 	/* This may be in an interrupt handler. */
- 	queue_work(system_unbound_wq, &enable_ptr_key_work);
-+	return 0;
- }
- 
--static struct random_ready_callback random_ready = {
--	.func = fill_random_ptr_key
-+static struct notifier_block random_ready = {
-+	.notifier_call = fill_random_ptr_key
- };
- 
- static int __init initialize_ptr_random(void)
-@@ -783,7 +785,7 @@ static int __init initialize_ptr_random(
- 		return 0;
- 	}
- 
--	ret = add_random_ready_callback(&random_ready);
-+	ret = register_random_ready_notifier(&random_ready);
- 	if (!ret) {
- 		return 0;
- 	} else if (ret == -EALREADY) {
+ 	fast_pool->count = 0;
 
 

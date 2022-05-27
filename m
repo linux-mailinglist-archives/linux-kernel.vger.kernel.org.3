@@ -2,126 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C65536762
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 21:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D89253676B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 21:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353384AbiE0TON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 15:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S1354297AbiE0TUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 15:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236065AbiE0TOL (ORCPT
+        with ESMTP id S236065AbiE0TUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 15:14:11 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0FECCB82D4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:14:07 -0700 (PDT)
-Received: (qmail 108885 invoked by uid 1000); 27 May 2022 15:14:06 -0400
-Date:   Fri, 27 May 2022 15:14:06 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in driver_unregister
-Message-ID: <YpEi/sbT/R/0yKzo@rowland.harvard.edu>
-References: <0000000000008c664105dffae2eb@google.com>
+        Fri, 27 May 2022 15:20:16 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2CA106A44
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653679215; x=1685215215;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JRflB2s+LLo8bgcAQ/cDQrmE4V7NCQmXgL1uFLxJDsI=;
+  b=kmibq/xx4kvgzWmLTvXlsKLs0RjRh4eCokfXfrs5TYEXc23Du25Skx4N
+   F4tqwZeG/RZnhvlVnWySm7/3tc7fLJt4ppCW33/hY7l4fgmx2021mIXMA
+   4eRNdUhjJLfaXm7LQ4owFhCgJkTHrEjPrdrjW7P+9xskAWG3HwzkLNxnK
+   aFW6EOpqKMQ2Sby19RCr/xMg30uQ9pboSpUwilBcu8MV7OyxGKiVwXzVe
+   9ig7FCPkOe7RkfNGH5qLhnJxKGFqblwUWyRyxaAUIJKudut1fMitjVZ3V
+   XMp7HUONbfuge620XDCX1SuG84yNE1K8DMGZjv0z4wCyfdeuu91tWohMk
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274565897"
+X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
+   d="scan'208";a="274565897"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 12:20:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
+   d="scan'208";a="705263600"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 27 May 2022 12:20:12 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nufVL-000541-F2;
+        Fri, 27 May 2022 19:20:11 +0000
+Date:   Sat, 28 May 2022 03:20:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Luca Miccio <lucmiccio@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <stefano.stabellini@xilinx.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Subject: drivers/xen/xenbus/xenbus_probe.c:755:37: sparse: sparse: incorrect
+ type in assignment (different address spaces)
+Message-ID: <202205280304.kVBBNk9M-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0000000000008c664105dffae2eb@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 02:25:19AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    97fa5887cf28 USB: new quirk for Dell Gen 2 devices
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=170ebdc3f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=02b16343704b3af1667e
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1124ad81f00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d6004df00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7e284070abe53d448517b80493863595af4ab5f0
+commit: 5b3353949e89d48b4faf54a9cc241ee5d70df615 xen: add support for initializing xenstore later as HVM domain
+date:   8 days ago
+config: x86_64-randconfig-s021 (https://download.01.org/0day-ci/archive/20220528/202205280304.kVBBNk9M-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-14-g5a0004b5-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5b3353949e89d48b4faf54a9cc241ee5d70df615
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5b3353949e89d48b4faf54a9cc241ee5d70df615
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/xen/xenbus/ kernel/ lib/
 
-There are at least two bugs here.  The first is the failure to select a 
-unique driver name; the raw gadget always uses the name "raw-gadget".  As 
-a result, registrations after the first one fail:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> kobject_add_internal failed for raw-gadget with -EEXIST, don't try to register things with the same name in the same directory.
-> UDC core: USB Raw Gadget: driver registration failed: -17
-> misc raw-gadget: fail, usb_gadget_register_driver returned -17
 
-The most logical solution seems to be to use the driver name provided by 
-the user.  That's what the patch below does.  However, this has the 
-drawback that if the user provides a bad name then the registration 
-attempt will cause a kernel error, because the kernel expects driver names 
-to be controlled by drivers, not by users.  Maybe we should use an 
-ida-generated suffix: "raw-gadget.N".
+sparse warnings: (new ones prefixed by >>)
+>> drivers/xen/xenbus/xenbus_probe.c:755:37: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct xenstore_domain_interface *extern [addressable] [toplevel] xen_store_interface @@     got void [noderef] __iomem * @@
+   drivers/xen/xenbus/xenbus_probe.c:755:37: sparse:     expected struct xenstore_domain_interface *extern [addressable] [toplevel] xen_store_interface
+   drivers/xen/xenbus/xenbus_probe.c:755:37: sparse:     got void [noderef] __iomem *
+   drivers/xen/xenbus/xenbus_probe.c:1011:45: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct xenstore_domain_interface *extern [addressable] [assigned] [toplevel] xen_store_interface @@     got void [noderef] __iomem * @@
+   drivers/xen/xenbus/xenbus_probe.c:1011:45: sparse:     expected struct xenstore_domain_interface *extern [addressable] [assigned] [toplevel] xen_store_interface
+   drivers/xen/xenbus/xenbus_probe.c:1011:45: sparse:     got void [noderef] __iomem *
 
-The second bug is the unexpected unregistration.  The raw-gadget driver is 
-careful to keep track of whether registration succeeded, and it doesn't 
-try to unregister itself if registration failed.  Nevertheless, that 
-happened here:
+vim +755 drivers/xen/xenbus/xenbus_probe.c
 
-> ------------[ cut here ]------------
-> Unexpected driver unregister!
-> WARNING: CPU: 0 PID: 1308 at drivers/base/driver.c:194 driver_unregister drivers/base/driver.c:194 [inline]
-> WARNING: CPU: 0 PID: 1308 at drivers/base/driver.c:194 driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
-> Modules linked in:
-> CPU: 0 PID: 1308 Comm: syz-executor314 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:driver_unregister drivers/base/driver.c:194 [inline]
-> RIP: 0010:driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
-> Code: 68 4c 89 e7 e8 65 b9 db fe 48 89 ef e8 fd a0 ff ff 5d 41 5c e9 75 fa 78 fe e8 70 fa 78 fe 48 c7 c7 80 7a 81 86 e8 12 96 ee 02 <0f> 0b 5d 41 5c e9 5a fa 78 fe e8 75 93 ad fe eb 96 e8 6e 93 ad fe
-> RSP: 0018:ffffc90001087a78 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: ffff88811d184050 RCX: 0000000000000000
-> RDX: ffff88810902d580 RSI: ffffffff812bdce8 RDI: fffff52000210f41
-> RBP: ffff88811d184098 R08: 0000000000000000 R09: 0000000000000000
-> R10: ffffffff812b86be R11: 0000000000000000 R12: 0000000000000000
-> R13: ffff88811d184008 R14: ffff88811d05b1a8 R15: ffff8881008456a0
-> FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fea994ab2d0 CR3: 0000000007825000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  usb_gadget_unregister_driver+0x48/0x70 drivers/usb/gadget/udc/core.c:1590
->  raw_release+0x18a/0x290 drivers/usb/gadget/legacy/raw_gadget.c:401
->  __fput+0x277/0x9d0 fs/file_table.c:317
->  task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+   749	
+   750	static void xenbus_probe(void)
+   751	{
+   752		xenstored_ready = 1;
+   753	
+   754		if (!xen_store_interface) {
+ > 755			xen_store_interface = xen_remap(xen_store_gfn << XEN_PAGE_SHIFT,
+   756							XEN_PAGE_SIZE);
+   757			/*
+   758			 * Now it is safe to free the IRQ used for xenstore late
+   759			 * initialization. No need to unbind: it is about to be
+   760			 * bound again from xb_init_comms. Note that calling
+   761			 * unbind_from_irqhandler now would result in xen_evtchn_close()
+   762			 * being called and the event channel not being enabled again
+   763			 * afterwards, resulting in missed event notifications.
+   764			 */
+   765			free_irq(xs_init_irq, &xb_waitq);
+   766		}
+   767	
+   768		/*
+   769		 * In the HVM case, xenbus_init() deferred its call to
+   770		 * xs_init() in case callbacks were not operational yet.
+   771		 * So do it now.
+   772		 */
+   773		if (xen_store_domain_type == XS_HVM)
+   774			xs_init();
+   775	
+   776		/* Notify others that xenstore is up */
+   777		blocking_notifier_call_chain(&xenstore_chain, 0, NULL);
+   778	}
+   779	
 
-I have no idea how this could have happened; it looks impossible.  Maybe 
-it has something to do with the fact that registration failed for two 
-separate threads (see the syzbot console log).  I can't tell what's going 
-on.
-
-Alan Stern
-
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 97fa5887cf28
-
-Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
-+++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -483,7 +483,7 @@ static int raw_ioctl_init(struct raw_dev
- 	dev->driver.suspend = gadget_suspend;
- 	dev->driver.resume = gadget_resume;
- 	dev->driver.reset = gadget_reset;
--	dev->driver.driver.name = DRIVER_NAME;
-+	dev->driver.driver.name = udc_driver_name;
- 	dev->driver.udc_name = udc_device_name;
- 	dev->driver.match_existing_only = 1;
- 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

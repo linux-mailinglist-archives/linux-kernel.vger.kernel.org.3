@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDECC5368C6
+	by mail.lfdr.de (Postfix) with ESMTP id 71F7B5368C5
 	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351667AbiE0WZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 18:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
+        id S1354670AbiE0WZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 18:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238322AbiE0WZh (ORCPT
+        with ESMTP id S1347838AbiE0WZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 May 2022 18:25:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C245B39818
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:25:35 -0700 (PDT)
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204D43EB96
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:25:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653690335; x=1685226335;
+  t=1653690336; x=1685226336;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=BhBpZHIZWgMKbLkUH5+JOXI8LyYh9I3a43j7pg0i2j0=;
-  b=eAKGWzxddVDaJdgOVxXqSwcKVIRoNa31UPzEW3BxAmn8AHLXE2h/4Zzj
-   nUV1cxVObzfTqkEsIFTd67/dohnBphpQ+nSpy5+2X3hsPBlzJknC0itzs
-   b/s8VaR8efo7d3UQYqcKuOVVuc8FTheav2ZA+WePOiA/w3rXxSXsysgLM
-   ZTiorY4JCBQ7onB0LxoSPIUKPOd98LtE7XpTdYvzvvEx9uTfzUc5+bunK
-   ofWHdsLDEEIT+oGjT3Iu2WisIcxBI26syVBK/dPvpQGFdhSakuyudGAxK
-   ElZo2sos72wv1ysIZCJXDuP15fKbAss/DoR2+ABXgeZgCPrk21l9wasD0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="256662301"
+  bh=dUR1PVCRBUeXcmUnx30IpXtiF/6cUmL+c2fNK9cPJqA=;
+  b=giW43ja3ddJ5b8ET4DB/DzwjNS5zE8s5+ToHYjcxFdXESCsipf79mukO
+   r+01dpIch6rHqzZAHVxoWqQ5vXJPFE+nDwWe93LGOFqnbnSuc6BEkdxDN
+   6XbKE/JE9ZE48zzmkzHWmRthpQtQdq2RiWGca/96BCJeVNZI6YmqbXn0K
+   b+PHeRqHe32V8pRS3/4GbYx769NlJx1oftzBkx6Lse+5laFNKoZoWRte9
+   KNRcA7+y/s486hLtbHJ7iQHiLJbZrNZIlYOx7A1AoX/poD028eb72th9U
+   +sxZI+TzZrPbl/Hhh6+idkxUkrfZhs1aAwRxQL/93t92BgNbvEkHSegs8
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="262208295"
 X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="256662301"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 15:25:35 -0700
+   d="scan'208";a="262208295"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 15:25:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="747282948"
+   d="scan'208";a="604132696"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 May 2022 15:25:34 -0700
+  by orsmga008.jf.intel.com with ESMTP; 27 May 2022 15:25:34 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nuiOj-0005BL-E6;
+        id 1nuiOj-0005BI-D2;
         Fri, 27 May 2022 22:25:33 +0000
-Date:   Sat, 28 May 2022 06:24:39 +0800
+Date:   Sat, 28 May 2022 06:24:47 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/mm] BUILD SUCCESS
- e19d11267f0e6c8aff2d15d2dfed12365b4c9184
-Message-ID: <62914fa7.dmolsByGFg1FA5Yd%lkp@intel.com>
+Subject: [tip:x86/cleanups] BUILD SUCCESS
+ f7081834b2d5bbc77d67073d8ab490bfeaf3c13b
+Message-ID: <62914faf.N9nWrglpxPP6P8Q8%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
-branch HEAD: e19d11267f0e6c8aff2d15d2dfed12365b4c9184  x86/mm: Use PAGE_ALIGNED(x) instead of IS_ALIGNED(x, PAGE_SIZE)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
+branch HEAD: f7081834b2d5bbc77d67073d8ab490bfeaf3c13b  x86: Fix all occurences of the "the the" typo
 
-elapsed time: 721m
+elapsed time: 722m
 
-configs tested: 169
-configs skipped: 72
+configs tested: 166
+configs skipped: 90
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -102,9 +103,6 @@ arc                     haps_hs_smp_defconfig
 powerpc                 mpc8540_ads_defconfig
 sh                            hp6xx_defconfig
 mips                 decstation_r4k_defconfig
-arm                          pxa3xx_defconfig
-sh                ecovec24-romimage_defconfig
-mips                         bigsur_defconfig
 xtensa                    xip_kc705_defconfig
 powerpc                     tqm8555_defconfig
 sh                            shmin_defconfig

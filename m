@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46455536056
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729F5535FDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351911AbiE0LtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S1344058AbiE0Lll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351926AbiE0LpJ (ORCPT
+        with ESMTP id S1351538AbiE0Lki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:45:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B0B127191;
-        Fri, 27 May 2022 04:41:29 -0700 (PDT)
+        Fri, 27 May 2022 07:40:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CED613C1E8;
+        Fri, 27 May 2022 04:39:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63B79B824D7;
-        Fri, 27 May 2022 11:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD14CC385A9;
-        Fri, 27 May 2022 11:41:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC22561CD8;
+        Fri, 27 May 2022 11:39:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4FFC385A9;
+        Fri, 27 May 2022 11:39:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651687;
-        bh=2o7T0INMSwsgvRo+n2iMUuYdHX+489kEgvJn3TjGvY8=;
+        s=korg; t=1653651566;
+        bh=Gzi/MJPh1ygCTGNY7eBfQS7k+1JoXsxG6V4cb1psY9A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZvNvg4N1tcFBLdj8nMoUE4nAC2z+zPvmGimKnWjkac7oCwUnT/8oiEgIr6jkdoweK
-         Xgmfi6hgqhW+kRX3kk65hhrsD1wpGjue7J1ENgMXN1otaFzYXcqBoyYMZ4QXo6BzM7
-         znS3DXxc5wVGJ5A5F4U3PFq4lW2giUMbnluGgzUo=
+        b=n1Y7p2bxpRupsLbnCxRR2h8wf5qKDMMiVJsF5D65iJe5G5h7Sf1us/+zOXWKDMFGl
+         ykMb5c84Vub5I2zPk0wXZtTcvOGqFdnd2cgXJxvwkSlPTL/XQnOxt9lp0NrIrjPP5U
+         /1EwxNtrY9GCCsvb90ulu+PZamR3TJ0rwtZxFDZk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 038/163] random: avoid superfluous call to RDRAND in CRNG extraction
+Subject: [PATCH 5.15 017/145] random: harmonize "crng init done" messages
 Date:   Fri, 27 May 2022 10:48:38 +0200
-Message-Id: <20220527084833.397526828@linuxfoundation.org>
+Message-Id: <20220527084853.060923208@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-References: <20220527084828.156494029@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-commit 2ee25b6968b1b3c66ffa408de23d023c1bce81cf upstream.
+commit 161212c7fd1d9069b232785c75492e50941e2ea8 upstream.
 
-RDRAND is not fast. RDRAND is actually quite slow. We've known this for
-a while, which is why functions like get_random_u{32,64} were converted
-to use batching of our ChaCha-based CRNG instead.
+We print out "crng init done" for !TRUST_CPU, so we should also print
+out the same for TRUST_CPU.
 
-Yet CRNG extraction still includes a call to RDRAND, in the hot path of
-every call to get_random_bytes(), /dev/urandom, and getrandom(2).
-
-This call to RDRAND here seems quite superfluous. CRNG is already
-extracting things based on a 256-bit key, based on good entropy, which
-is then reseeded periodically, updated, backtrack-mutated, and so
-forth. The CRNG extraction construction is something that we're already
-relying on to be secure and solid. If it's not, that's a serious
-problem, and it's unlikely that mixing in a measly 32 bits from RDRAND
-is going to alleviate things.
-
-And in the case where the CRNG doesn't have enough entropy yet, we're
-already initializing the ChaCha key row with RDRAND in
-crng_init_try_arch_early().
-
-Removing the call to RDRAND improves performance on an i7-11850H by
-370%. In other words, the vast majority of the work done by
-extract_crng() prior to this commit was devoted to fetching 32 bits of
-RDRAND.
-
-Reviewed-by: Theodore Ts'o <tytso@mit.edu>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1023,7 +1023,7 @@ static void crng_reseed(struct crng_stat
- static void _extract_crng(struct crng_state *crng,
- 			  __u8 out[CHACHA_BLOCK_SIZE])
- {
--	unsigned long v, flags, init_time;
-+	unsigned long flags, init_time;
- 
- 	if (crng_ready()) {
- 		init_time = READ_ONCE(crng->init_time);
-@@ -1033,8 +1033,6 @@ static void _extract_crng(struct crng_st
- 				    &input_pool : NULL);
+@@ -831,7 +831,7 @@ static void __init crng_initialize_prima
+ 		invalidate_batched_entropy();
+ 		numa_crng_init();
+ 		crng_init = 2;
+-		pr_notice("crng done (trusting CPU's manufacturer)\n");
++		pr_notice("crng init done (trusting CPU's manufacturer)\n");
  	}
- 	spin_lock_irqsave(&crng->lock, flags);
--	if (arch_get_random_long(&v))
--		crng->state[14] ^= v;
- 	chacha20_block(&crng->state[0], out);
- 	if (crng->state[12] == 0)
- 		crng->state[13]++;
+ 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
+ }
 
 

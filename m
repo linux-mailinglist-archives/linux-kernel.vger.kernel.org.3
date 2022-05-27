@@ -2,145 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC813536738
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 20:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E2053673E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 20:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354076AbiE0Szw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 14:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S1354505AbiE0S4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 14:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351455AbiE0Szk (ORCPT
+        with ESMTP id S1351455AbiE0S4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 14:55:40 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACE64D251;
-        Fri, 27 May 2022 11:55:39 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ff7b90e635so56537067b3.5;
-        Fri, 27 May 2022 11:55:39 -0700 (PDT)
+        Fri, 27 May 2022 14:56:08 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69774C796
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:56:07 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id y85-20020a253258000000b0064eaa00a2cbso4868594yby.2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:56:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=342jTvfgyTJ/fKu8Bj0JFN4DakYoNTyydnegV/i2TgI=;
+        b=PYF1hpmpeKbQiDJ/Giw7g7NYnRSZrSPt/VlmV/6M4r4b+0XL11D1xYacFWIZqvAtBQ
+         vHSmkE0rFQ7KBxsBOjVKZCqLFqjc+J5rJPdw0Jbu4PbCZNQl5/3g5LZG3igketLFOd7D
+         X2ZXrF/tVd9fODrr0L3cZhFZauOVLuGN0QGLV6d2ui+IHO/pBKWqNY8ZqDaU20S2hAIM
+         R0dLzRzLLq0/dcasaM8x3vRAJuf1qpiGoVRP0HIyRNW5FyKkVCcelzEbvbHXIX66MRzw
+         NynXbaVdI/lNEgbxseGDoKyrMn2BVsaQXBTlW9vyUJRDtF0+apPC4BMnyDzI49cJuvhH
+         NJWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AiXxBvT5jxe4DGf49rxfmcwLST9ROwPRMdTz8X7oj7c=;
-        b=jtGiyF1yLiWYPFajExqePQ0LWM1I2ZnKhOJoXUyjkVDih1q3aaxLViB3rnhbvoBK3w
-         Pu32Zq46APQO/5bU32Buz7C7YojuwPAzjT65jvIXbBy04ySrVRVaglA2Kzhz+No2NvcL
-         3DwZuWM2pfC1m9uUIdj+hSm7lZyo0//aLCmUdAQM/ojvb9S0eKVOXuIGmq0HFrKD4Kug
-         1Dw2s2YNCGzcrvlYsYZjYYNDpSfQq5AXN0fiEHVa9GLMacaOglH5XAcvEzOzFxSAnAqj
-         EdoCO8cM8a5wgl1yD7ob/HwyTWZn6LdZVwQBgPOc8Ksb64bHoLZae/KWFaAswqV7ek+b
-         k2eQ==
-X-Gm-Message-State: AOAM530K/WFbUh5ZJKX/VA0rlBJmuj9IuNihleDj6/6D1xXA8zRi58ad
-        rY7r7JUB6oXUsvcLYddusW4cwd/wFWlgYzKpjUw=
-X-Google-Smtp-Source: ABdhPJyzekDhy/kwQrCFpa2Go5HoqkV1wJDHQV2O8qnmcW16Da65NIQ459mws4JqQV+oLgovjeqwVECMRQv9j5VeeNQ=
-X-Received: by 2002:a81:4ed6:0:b0:307:224f:eed3 with SMTP id
- c205-20020a814ed6000000b00307224feed3mr3825315ywb.301.1653677739110; Fri, 27
- May 2022 11:55:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <11980172.O9o76ZdvQC@kreacher> <20220526221258.GA409855@bhelgaas>
-In-Reply-To: <20220526221258.GA409855@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 27 May 2022 20:55:28 +0200
-Message-ID: <CAJZ5v0gSxvg7USAvc2UrsrAdFs+UKBw8PGQapey3zuyrQRb4tA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Stefan Gottwald <gottwald@igel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=342jTvfgyTJ/fKu8Bj0JFN4DakYoNTyydnegV/i2TgI=;
+        b=H6+U51cJ6vFirBCoEY6PQpbXU8HsAGbL0uHSPokmyzpvF71sAG8CQvPitTLPb93kcT
+         Gj7VETj3dkMAsCjS19UlI5BWdJHwAHtigj9KLzxrkv7mkbLD67Fop37xCg1/FFCAq4n2
+         ydG1k9vByvwxq8LLoPHh/zcH077155UkXEVsRiHMINP1X3S5FFTc1amdIgo7x12LJxx6
+         bCK9AI2veMSrpPPsuOEB/cmQ7NLTjV000O9JlOLwRjsYh4HlbsMIYBH7WZpOt3b6Cg59
+         i9LTvT5s9TZ9aCzgukbPgOnS3/nb4IXDfJbNIWsrtzh/NjUXXQ7wkDqdjX9fYb/ehrlu
+         cn3g==
+X-Gm-Message-State: AOAM531XCIyyM8gQOBMLLsq6Xl7H0yt7t4zpHwNAxbrQcURgD1g+r1Nd
+        uDuBeokiq+B+eTlC08rEDaXWjNKn4iR5ew==
+X-Google-Smtp-Source: ABdhPJz/QBLvmoj2qBlJY5WE42RVyqoRYZSp2QGQ5nHYPaFHzDB2qiRgsV/jwMBxoLb0CkvVpPclZj6wMdcAxg==
+X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:122e:1813:2b92:fe8e])
+ (user=davidgow job=sendgmr) by 2002:a25:9742:0:b0:64e:2c40:b33e with SMTP id
+ h2-20020a259742000000b0064e2c40b33emr41935567ybo.455.1653677767170; Fri, 27
+ May 2022 11:56:07 -0700 (PDT)
+Date:   Fri, 27 May 2022 11:55:59 -0700
+Message-Id: <20220527185600.1236769-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [PATCH v2 1/2] mm: Add PAGE_ALIGN_DOWN macro
+From:   David Gow <davidgow@google.com>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc:     David Gow <davidgow@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 12:13 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Thu, Mar 31, 2022 at 07:38:51PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > If one of the PCIe root ports on Elo i2 is put into D3cold and then
-> > back into D0, the downstream device becomes permanently inaccessible,
-> > so add a bridge D3 DMI quirk for that system.
-> >
-> > This was exposed by commit 14858dcc3b35 ("PCI: Use
-> > pci_update_current_state() in pci_enable_device_flags()"), but before
-> > that commit the root port in question had never been put into D3cold
-> > for real due to a mismatch between its power state retrieved from the
-> > PCI_PM_CTRL register (which was accessible even though the platform
-> > firmware indicated that the port was in D3cold) and the state of an
-> > ACPI power resource involved in its power management.
-> >
-> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215715
-> > Reported-by: Stefan Gottwald <gottwald@igel.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/pci/pci.c |   10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > Index: linux-pm/drivers/pci/pci.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/pci/pci.c
-> > +++ linux-pm/drivers/pci/pci.c
-> > @@ -2920,6 +2920,16 @@ static const struct dmi_system_id bridge
-> >                       DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
-> >                       DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
-> >               },
-> > +             /*
-> > +              * Downstream device is not accessible after putting a root port
-> > +              * into D3cold and back into D0 on Elo i2.
-> > +              */
-> > +             .ident = "Elo i2",
-> > +             .matches = {
-> > +                     DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
-> > +                     DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
-> > +                     DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
-> > +             },
-> >       },
->
-> This has already made it to Linus' and some stable trees, but I think
-> we need the following touchup.  I plan to send it right after my v5.19
-> pull request.
+This is just the same as PAGE_ALIGN(), but rounds the address down, not
+up.
 
-Ouch, sorry.
+Suggested-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-> commit a99f6bb133df ("PCI/PM: Fix bridge_d3_blacklist[] Elo i2 overwrite of Gigabyte X299")
-> Author: Bjorn Helgaas <bhelgaas@google.com>
-> Date:   Thu May 26 16:52:23 2022 -0500
->
->     PCI/PM: Fix bridge_d3_blacklist[] Elo i2 overwrite of Gigabyte X299
->
->     92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold") omitted
->     braces around the new Elo i2 entry, so it overwrote the existing Gigabyte
->     X299 entry.
->
->     Found by:
->
->       $ make W=1 drivers/pci/pci.o
->         CC      drivers/pci/pci.o
->       drivers/pci/pci.c:2974:12: error: initialized field overwritten [-Werror=override-init]
->        2974 |   .ident = "Elo i2",
->             |            ^~~~~~~~
->
->     Fixes: 92597f97a40b ("PCI/PM: Avoid putting Elo i2 PCIe Ports in D3cold")
->     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
->     Cc: stable@vger.kernel.org  # v5.15+
->
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index d25122fbe98a..5b400a742621 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -2920,6 +2920,8 @@ static const struct dmi_system_id bridge_d3_blacklist[] = {
->                         DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
->                         DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
->                 },
-> +       },
-> +       {
->                 /*
->                  * Downstream device is not accessible after putting a root port
->                  * into D3cold and back into D0 on Elo i2.
+Note: there is no v1 of this patch, it's just part of v2 of the
+UML/KASAN series.
+
+There are almost certainly lots of places where this macro should be
+used: just look for ALIGN_DOWN(..., PAGE_SIZE). I haven't gone through
+to try to replace them all.
+
+---
+ include/linux/mm.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index e34edb775334..e68731f0ef20 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -221,6 +221,9 @@ int overcommit_policy_handler(struct ctl_table *, int, void *, size_t *,
+ /* to align the pointer to the (next) page boundary */
+ #define PAGE_ALIGN(addr) ALIGN(addr, PAGE_SIZE)
+ 
++/* to align the pointer to the (prev) page boundary */
++#define PAGE_ALIGN_DOWN(addr) ALIGN_DOWN(addr, PAGE_SIZE)
++
+ /* test whether an address (unsigned long or pointer) is aligned to PAGE_SIZE */
+ #define PAGE_ALIGNED(addr)	IS_ALIGNED((unsigned long)(addr), PAGE_SIZE)
+ 
+-- 
+2.36.1.124.g0e6072fb45-goog
+

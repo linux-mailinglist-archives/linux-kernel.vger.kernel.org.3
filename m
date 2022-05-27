@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC351535D48
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080C553612A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350406AbiE0JEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
+        id S1352337AbiE0LzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350780AbiE0JAk (ORCPT
+        with ESMTP id S1352608AbiE0Luh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:00:40 -0400
+        Fri, 27 May 2022 07:50:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E328A31B;
-        Fri, 27 May 2022 01:57:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466FA15353C;
+        Fri, 27 May 2022 04:44:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82D5E61D7F;
-        Fri, 27 May 2022 08:57:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47272C385B8;
-        Fri, 27 May 2022 08:56:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D534561D56;
+        Fri, 27 May 2022 11:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F58C385A9;
+        Fri, 27 May 2022 11:44:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641819;
-        bh=vtFNrDwG4XkEmWxVaHM5wkzf3qnqfc1b2p90edXAux0=;
+        s=korg; t=1653651895;
+        bh=i2Ls4FRmXeR8s7LWB/7GTRBtb7/HOAyQN4vOp63lBFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zYaK13xWu+GsSRzJW5mqxUmuzlBjX662+/c5nYZnR8gRTBGuscPWh7vHBZcgkE+Eu
-         vWAkA40+70PbQUrdGkx7KRZ7LEVH6uff1RM3bl61awqpwu8/0qEeapzWPZ73Aioxte
-         1hSd5aZEm21lRjajVmxs6N1Y+QztmuooQ1n+aJjY=
+        b=E/Nml97NzfIzbF6YX4MPF3Z/H9jKBITLKVKEyssIrB9YybQdsquQJM04bQOJBvLTu
+         jmGId2+mPoGNkJaIHdyPMdM4wuBvK8IkfQffH1S5O/uOGEZ7m7ZjHygcbH91TcJgmr
+         j/64cp2OZLLhmLqxFlUsSLA/1YcL8MW/TxMzc4sM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 039/111] random: do not take pool spinlock at boot
+Subject: [PATCH 5.10 071/163] random: use hash function for crng_slow_load()
 Date:   Fri, 27 May 2022 10:49:11 +0200
-Message-Id: <20220527084825.017037657@linuxfoundation.org>
+Message-Id: <20220527084837.899888424@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +58,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit afba0b80b977b2a8f16234f2acd982f82710ba33 upstream.
+commit 66e4c2b9541503d721e936cc3898c9f25f4591ff upstream.
 
-Since rand_initialize() is run while interrupts are still off and
-nothing else is running, we don't need to repeatedly take and release
-the pool spinlock, especially in the RDSEED loop.
+Since we have a hash function that's really fast, and the goal of
+crng_slow_load() is reportedly to "touch all of the crng's state", we
+can just hash the old state together with the new state and call it a
+day. This way we dont need to reason about another LFSR or worry about
+various attacks there. This code is only ever used at early boot and
+then never again.
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/char/random.c |   40 ++++++++++++++--------------------------
+ 1 file changed, 14 insertions(+), 26 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -978,10 +978,10 @@ int __init rand_initialize(void)
- 			rv = random_get_entropy();
- 			arch_init = false;
- 		}
--		mix_pool_bytes(&rv, sizeof(rv));
-+		_mix_pool_bytes(&rv, sizeof(rv));
- 	}
--	mix_pool_bytes(&now, sizeof(now));
--	mix_pool_bytes(utsname(), sizeof(*(utsname())));
-+	_mix_pool_bytes(&now, sizeof(now));
-+	_mix_pool_bytes(utsname(), sizeof(*(utsname())));
+@@ -477,42 +477,30 @@ static size_t crng_fast_load(const u8 *c
+  * all), and (2) it doesn't have the performance constraints of
+  * crng_fast_load().
+  *
+- * So we do something more comprehensive which is guaranteed to touch
+- * all of the primary_crng's state, and which uses a LFSR with a
+- * period of 255 as part of the mixing algorithm.  Finally, we do
+- * *not* advance crng_init_cnt since buffer we may get may be something
+- * like a fixed DMI table (for example), which might very well be
+- * unique to the machine, but is otherwise unvarying.
++ * So, we simply hash the contents in with the current key. Finally,
++ * we do *not* advance crng_init_cnt since buffer we may get may be
++ * something like a fixed DMI table (for example), which might very
++ * well be unique to the machine, but is otherwise unvarying.
+  */
+-static int crng_slow_load(const u8 *cp, size_t len)
++static void crng_slow_load(const u8 *cp, size_t len)
+ {
+ 	unsigned long flags;
+-	static u8 lfsr = 1;
+-	u8 tmp;
+-	unsigned int i, max = sizeof(base_crng.key);
+-	const u8 *src_buf = cp;
+-	u8 *dest_buf = base_crng.key;
++	struct blake2s_state hash;
++
++	blake2s_init(&hash, sizeof(base_crng.key));
  
- 	extract_entropy(base_crng.key, sizeof(base_crng.key));
- 	++base_crng.generation;
+ 	if (!spin_trylock_irqsave(&base_crng.lock, flags))
+-		return 0;
++		return;
+ 	if (crng_init != 0) {
+ 		spin_unlock_irqrestore(&base_crng.lock, flags);
+-		return 0;
++		return;
+ 	}
+-	if (len > max)
+-		max = len;
+ 
+-	for (i = 0; i < max; i++) {
+-		tmp = lfsr;
+-		lfsr >>= 1;
+-		if (tmp & 1)
+-			lfsr ^= 0xE1;
+-		tmp = dest_buf[i % sizeof(base_crng.key)];
+-		dest_buf[i % sizeof(base_crng.key)] ^= src_buf[i % len] ^ lfsr;
+-		lfsr += (tmp << 3) | (tmp >> 5);
+-	}
++	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
++	blake2s_update(&hash, cp, len);
++	blake2s_final(&hash, base_crng.key);
++
+ 	spin_unlock_irqrestore(&base_crng.lock, flags);
+-	return 1;
+ }
+ 
+ static void crng_reseed(void)
 
 

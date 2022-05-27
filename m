@@ -2,200 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F79653688B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 23:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843ED53688E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 23:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343637AbiE0VcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 17:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S1354763AbiE0VeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 17:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiE0VcX (ORCPT
+        with ESMTP id S229752AbiE0VeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 17:32:23 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA261C934;
-        Fri, 27 May 2022 14:32:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653687142; x=1685223142;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=qQXDSqNExWNjOzSPx3uakk/Hs1985vG1YZGgOxtlVeA=;
-  b=cNPLfSeeN/E3UMwNMB3A/AKsfHe6DfwK1TCom/rgeeHZPufAeNJebLFe
-   T9sRzYplZVZCoYHMNhifxaMfzem1u4mBVzS25EFUnN4exSqNtkRqp504g
-   KsOE9oiCE5HqElAblAEr/ZoI3VZXlUVElwC7EH+2skRHrqeShfFpkOAiA
-   k=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 May 2022 14:32:22 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 14:32:21 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 27 May 2022 14:32:21 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 27 May 2022 14:32:20 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4] drm/msm/dp: force link training for display resolution change
-Date:   Fri, 27 May 2022 14:32:13 -0700
-Message-ID: <1653687133-32331-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 27 May 2022 17:34:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761361C934;
+        Fri, 27 May 2022 14:33:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2764AB82522;
+        Fri, 27 May 2022 21:33:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C07C385A9;
+        Fri, 27 May 2022 21:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653687236;
+        bh=gfujXJB2bf8jciwwiwps5AH82Rg/VMT8hb2RsJAdj5c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=faHHxdhtD0wc/aKhgN9YtTBdSTT/+JV2Rn1pV1aS3SS32teQJcMJ0kLlIxGgh02N9
+         tidDnavnUcJAiMmvppKQIAikjejmMGpQJJK1bB8yBbCClm1/ZIXWbiMQu6FdHjWinx
+         1TXuA+136++o5iNz0N2uTf6f64u+jC1oh9lvEIFqQ4gVhkpVQjrNUc2qkxkeoDF4A+
+         Ud7QNmt/sAkZij3vYlrH+X48FTzxEtQPAuD9Tk/ZuHN6ttq/1+1hMag9TjakE0If0/
+         s3N6SAlYelfzSI8vbisbIg6IjiXO05gXaYTVtHLUPQrfjlIB35TRXRrfq4JhoF3MX2
+         yaUA1pbLPmUJQ==
+Date:   Fri, 27 May 2022 21:33:55 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH] f2fs: add sysfs entry to avoid FUA
+Message-ID: <YpFDw3mQjN1LBd2j@gmail.com>
+References: <20220527205955.3251982-1-jaegeuk@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527205955.3251982-1-jaegeuk@kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During display resolution changes display have to be disabled first
-followed by display enabling with new resolution. Display disable
-will turn off both pixel clock and main link clock so that main link
-have to be re trained during display enable to have new video stream
-flow again. At current implementation, display enable function manually
-kicks up irq_hpd_handle which will read panel link status and start link
-training if link status is not in sync state. However, there is rare
-case that a particular panel links status keep staying in sync for
-some period of time after main link had been shut down previously at
-display disabled. Main link retraining will not be executed by
-irq_hdp_handle() if the link status read from pane shows it is in
-sync state. If this was happen, then video stream of newer display
-resolution will fail to be transmitted to panel due to main link is
-not in sync between host and panel. This patch force main link always
-be retrained during display enable procedure to prevent this rare
-failed case from happening. Also this implementation are more
-efficient than manual kicking off irq_hpd_handle function.
+[+Cc linux-block for FUA, and linux-xfs for iomap]
 
-Changes in v2:
--- set force_link_train flag on DP only (is_edp == false)
+On Fri, May 27, 2022 at 01:59:55PM -0700, Jaegeuk Kim wrote:
+> Some UFS storage gives slower performance on FUA than write+cache_flush.
+> Let's give a way to manage it.
+> 
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-Changes in v3:
--- revise commit  text
--- add Fixes tag
+Should the driver even be saying that it has FUA support in this case?  If the
+driver didn't claim FUA support, that would also solve this problem.
 
-Changes in v4:
--- revise commit  text
+> ---
+>  Documentation/ABI/testing/sysfs-fs-f2fs | 7 +++++++
+>  fs/f2fs/data.c                          | 2 ++
+>  fs/f2fs/f2fs.h                          | 1 +
+>  fs/f2fs/sysfs.c                         | 2 ++
+>  4 files changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+> index 9b583dd0298b..cd96b09d7182 100644
+> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
+> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+> @@ -434,6 +434,7 @@ Date:		April 2020
+>  Contact:	"Daeho Jeong" <daehojeong@google.com>
+>  Description:	Give a way to change iostat_period time. 3secs by default.
+>  		The new iostat trace gives stats gap given the period.
+> +
+>  What:		/sys/fs/f2fs/<disk>/max_io_bytes
+>  Date:		December 2020
+>  Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
+> @@ -442,6 +443,12 @@ Description:	This gives a control to limit the bio size in f2fs.
+>  		whereas, if it has a certain bytes value, f2fs won't submit a
+>  		bio larger than that size.
+>  
+> +What:		/sys/fs/f2fs/<disk>/no_fua_dio
+> +Date:		May 2022
+> +Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
+> +Description:	This gives a signal to iomap, which should not use FUA for
+> +		direct IOs. Default: 0.
 
-Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c    |  6 +++---
- drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
- drivers/gpu/drm/msm/dp/dp_display.c | 15 ++++++++-------
- 3 files changed, 12 insertions(+), 11 deletions(-)
+iomap is an implementation detail, so it shouldn't be mentioned in UAPI
+documentation.  UAPI documentation should describe user-visible behavior only.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index af7a80c..bea93eb 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1551,7 +1551,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
- 
- 	ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
- 	if (!ret)
--		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl);
-+		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl, false);
- 	else
- 		DRM_ERROR("failed to enable DP link controller\n");
- 
-@@ -1807,7 +1807,7 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
- 	return dp_ctrl_setup_main_link(ctrl, &training_step);
- }
- 
--int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
-+int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
- {
- 	int ret = 0;
- 	bool mainlink_ready = false;
-@@ -1848,7 +1848,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
- 		return 0;
- 	}
- 
--	if (!dp_ctrl_channel_eq_ok(ctrl))
-+	if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
- 		dp_ctrl_link_retrain(ctrl);
- 
- 	/* stop txing train pattern to end link training */
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-index 0745fde..b563e2e 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-@@ -21,7 +21,7 @@ struct dp_ctrl {
- };
- 
- int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
--int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
-+int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train);
- int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
- int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index c388323..370348d 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -872,7 +872,7 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
- 		return 0;
- 	}
- 
--	rc = dp_ctrl_on_stream(dp->ctrl);
-+	rc = dp_ctrl_on_stream(dp->ctrl, data);
- 	if (!rc)
- 		dp_display->power_on = true;
- 
-@@ -1654,6 +1654,7 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
- 	int rc = 0;
- 	struct dp_display_private *dp_display;
- 	u32 state;
-+	bool force_link_train = false;
- 
- 	dp_display = container_of(dp, struct dp_display_private, dp_display);
- 	if (!dp_display->dp_mode.drm_mode.clock) {
-@@ -1688,10 +1689,14 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
- 
- 	state =  dp_display->hpd_state;
- 
--	if (state == ST_DISPLAY_OFF)
-+	if (state == ST_DISPLAY_OFF) {
- 		dp_display_host_phy_init(dp_display);
- 
--	dp_display_enable(dp_display, 0);
-+		if (!dp->is_edp)
-+			force_link_train = true;
-+	}
-+
-+	dp_display_enable(dp_display, force_link_train);
- 
- 	rc = dp_display_post_enable(dp);
- 	if (rc) {
-@@ -1700,10 +1705,6 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
- 		dp_display_unprepare(dp);
- 	}
- 
--	/* manual kick off plug event to train link */
--	if (state == ST_DISPLAY_OFF)
--		dp_add_event(dp_display, EV_IRQ_HPD_INT, 0, 0);
--
- 	/* completed connection */
- 	dp_display->hpd_state = ST_CONNECTED;
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> +
+>  What:		/sys/fs/f2fs/<disk>/stat/sb_status
+>  Date:		December 2020
+>  Contact:	"Chao Yu" <yuchao0@huawei.com>
+> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> index f5f2b7233982..23486486eab2 100644
+> --- a/fs/f2fs/data.c
+> +++ b/fs/f2fs/data.c
+> @@ -4153,6 +4153,8 @@ static int f2fs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
+>  	if ((inode->i_state & I_DIRTY_DATASYNC) ||
+>  	    offset + length > i_size_read(inode))
+>  		iomap->flags |= IOMAP_F_DIRTY;
+> +	if (F2FS_I_SB(inode)->no_fua_dio)
+> +		iomap->flags |= IOMAP_F_DIRTY;
 
+This is overloading the IOMAP_F_DIRTY flag to mean something other than dirty.
+Perhaps this flag needs to be renamed, or a new flag should be added?
+
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index e10838879538..c2400ea0080b 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -1671,6 +1671,7 @@ struct f2fs_sb_info {
+>  	int dir_level;				/* directory level */
+>  	int readdir_ra;				/* readahead inode in readdir */
+>  	u64 max_io_bytes;			/* max io bytes to merge IOs */
+> +	int no_fua_dio;				/* avoid FUA in DIO */
+
+Make this a bool?
+
+> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+> index 4c50aedd5144..24d628ca92cc 100644
+> --- a/fs/f2fs/sysfs.c
+> +++ b/fs/f2fs/sysfs.c
+> @@ -771,6 +771,7 @@ F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, iostat_period_ms, iostat_period_ms);
+>  #endif
+>  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, readdir_ra, readdir_ra);
+>  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_io_bytes, max_io_bytes);
+> +F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, no_fua_dio, no_fua_dio);
+>  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_pin_file_thresh, gc_pin_file_threshold);
+>  F2FS_RW_ATTR(F2FS_SBI, f2fs_super_block, extension_list, extension_list);
+>  #ifdef CONFIG_F2FS_FAULT_INJECTION
+> @@ -890,6 +891,7 @@ static struct attribute *f2fs_attrs[] = {
+>  #endif
+>  	ATTR_LIST(readdir_ra),
+>  	ATTR_LIST(max_io_bytes),
+> +	ATTR_LIST(no_fua_dio),
+
+Where is it validated that only valid values (0 or 1) can be written to this
+file?
+
+- Eric

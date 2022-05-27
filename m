@@ -2,178 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EE2536747
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 20:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355C6536750
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 21:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354549AbiE0S6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 14:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S1354552AbiE0TDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 15:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354280AbiE0S6E (ORCPT
+        with ESMTP id S240401AbiE0TDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 14:58:04 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A6E21817;
-        Fri, 27 May 2022 11:58:03 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id y15so6033662qtx.4;
-        Fri, 27 May 2022 11:58:03 -0700 (PDT)
+        Fri, 27 May 2022 15:03:17 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F317CB0B
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:03:13 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id 14so5559833qkl.6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:03:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gLBbNa8szjRmsip5647GYDPj8N+sFrnomPibf33jAVM=;
-        b=oLRFIcWbhD5SVuXTQCndflnQNXL+eG+46ICbnvxNMbh2oIVwopiRXzlpazR9OzgcOt
-         1rKhnd7HamvDXtvzH4ver4kWb8ZagNHvrwzlvXRdBi0Q3mwrUQD96Vn5i8K3dEAnQulz
-         EvLk9hAHLpiDjCJFP9VMrt/Vd1qyT5zQk4tyaTfGwreCDZurWHHWmyEzPQfMRvjth/rc
-         nwZTmahE7HSEQHz93UcPC9TvkkQKwWgICqHHmFtiN6MOId7fm78q1hlKFHPKlArNmYS6
-         CDRgbqJ+fX97FNdnNCpj+FvcowrqBo0GHwVG8az7yjiDNRdFjOfIPEshz7qg0aG3INOK
-         QBdA==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UcvAlwIFPvCWC2QoKEFkU5cKb9BXBnxHAgM+z3+VvoE=;
+        b=pCvvJmfpoo0WDFfVQYDyZGy4qzndOFVtgtSqVXTrWRGEyBqzBA7UAXhKvpkD0Q9/6I
+         MSCpLxGE9cFQ1cGdQAtYz+UeGuecy1S3YR7ZbQ9wbQYDjQVRsaTuBol2dHTD44aSUBRR
+         IycaJl0ihzjjIE0NocdjmVE2xhgAzy3ISwyDQK8gAI5+MC0ECVrWBJsD5Ckxr01Dq6tm
+         NfD6L2oXhGqyHayMYe3j/EFrEVhX3h/t4cx5QraZ38JTD9HD3wAryzP4gzJYXUsnDZYo
+         kHgGnIpoEzZEBX8KlbDHtvDbydY35MkFThf2P8sBKcZrGoTNzHOqvBFv/Fi48v3KK05/
+         5Huw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gLBbNa8szjRmsip5647GYDPj8N+sFrnomPibf33jAVM=;
-        b=LCeoi2GCJU530sVxG3SqiBIpVpAkpu3qtNcTKffOjqiZdDl+hQmcmhr7kPoD0MF/6c
-         vcWkX3A+kx3J89WuSVCgyr046h5O5aC9ZUWtOQz6uTYkPDWGbmI/KgUASrycDYqOZ1SD
-         PltyPr7zHq7cPXoYXlSA1IFjlQ6LK/8nsW9BmgvD2UnyS+IKixHqE9H20Gi044pIWce2
-         OqbhcfHbnmno/ke8lzIciPDH2T4inSHJdpERD/mIjoxUjM/s6YFZeyxqKTqjBCngNiK7
-         0ACAmSndfY9udajfNSIH1l5Ll5MeAwDgEau8v+UyZYZUcjc1xA4xuz4bg+hq03aTE1jF
-         VnWg==
-X-Gm-Message-State: AOAM531sieENfdL5J3B5qSHqF/uymdiNvnvbnUfvnBCZBolIfxfT1xro
-        Ya9Xcijkyn6YcZNbNoHMaY8=
-X-Google-Smtp-Source: ABdhPJwzCVPeJVkCUU8D+gWTLUY/9IBxYrI/3Ljk8wSLVhyOrls3IomAXl/25lFFUQ0WCTDj3J8tqg==
-X-Received: by 2002:ac8:57d3:0:b0:2f3:acf2:7981 with SMTP id w19-20020ac857d3000000b002f3acf27981mr34829091qta.81.1653677882753;
-        Fri, 27 May 2022 11:58:02 -0700 (PDT)
-Received: from spruce.. (c-71-206-142-238.hsd1.va.comcast.net. [71.206.142.238])
-        by smtp.gmail.com with ESMTPSA id ey19-20020a05622a4c1300b002fb8bbffa06sm3135037qtb.27.2022.05.27.11.58.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UcvAlwIFPvCWC2QoKEFkU5cKb9BXBnxHAgM+z3+VvoE=;
+        b=qEBh3Dvur/vZvh82492YuDVWpabPSJ1Ze2ePETdbubCNwrqvKl3zoYZUBbdvS8KfXA
+         +eBgkw+HruMm2IMxKiaiQX4WuPU/T0jelKscTaxlV0t3NhmS+iUoi3Aj4leTVKcPj4TV
+         Qk4r+I0AerOsaZOJoMii5LzmiKJIAsyd/opmVDLbwg9Lb8T+zCZFazFlOYbic3aeI0RH
+         RKpiDIlp5XjIpM2ak9IQA1SCcS1RI9yenypNSbgF9eNLs32NOEbAWlobjguJycQHgPUI
+         6ewBCwDxDnmW8YlXze+szPyi7csY8L9RUzrEbQPZaQcEAHHH6nq/j1OdmGlLo53N8ujH
+         dHpA==
+X-Gm-Message-State: AOAM531sAgNTXOwMyxsT9Sif6Ico4QP7tsRyqXRV5d8O9nctsM0/hcsf
+        7XbejWDLzITmFlkba64V9lLPNg==
+X-Google-Smtp-Source: ABdhPJyO25WugHG0nEenLRCgTZGSyoFZr8oLpCObiI0Q0Dbj3autEreqfFCD221s7ojQxz7nAKospA==
+X-Received: by 2002:a05:620a:298e:b0:6a0:94d2:2e2d with SMTP id r14-20020a05620a298e00b006a094d22e2dmr30141554qkp.353.1653678192374;
+        Fri, 27 May 2022 12:03:12 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id 22-20020a05620a079600b0069fe1dfbeffsm3024426qka.92.2022.05.27.12.03.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 11:58:02 -0700 (PDT)
-From:   Joe Simmons-Talbott <joetalbott@gmail.com>
-To:     jic23@kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Joe Simmons-Talbott <joetalbott@gmail.com>
-Subject: [PATCH 1/1] iio: Prefer octal over symbolic permissions.
-Date:   Fri, 27 May 2022 14:56:52 -0400
-Message-Id: <20220527185651.465204-1-joetalbott@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Fri, 27 May 2022 12:03:10 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nufEp-00Dd1y-Rg; Fri, 27 May 2022 16:03:07 -0300
+Date:   Fri, 27 May 2022 16:03:07 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        Stephen Bates <sbates@raithlin.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jakowski Andrzej <andrzej.jakowski@intel.com>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v6 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
+Message-ID: <20220527190307.GG2960187@ziepe.ca>
+References: <20220407154717.7695-1-logang@deltatee.com>
+ <20220407154717.7695-21-logang@deltatee.com>
+ <20220527125501.GD2960187@ziepe.ca>
+ <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported by checkpatch.pl use ocatl permissions rather than symbolic
-permissions.
+On Fri, May 27, 2022 at 09:35:07AM -0600, Logan Gunthorpe wrote:
+> 
+> 
+> On 2022-05-27 06:55, Jason Gunthorpe wrote:
+> > On Thu, Apr 07, 2022 at 09:47:16AM -0600, Logan Gunthorpe wrote:
+> >> +static void pci_p2pdma_unmap_mappings(void *data)
+> >> +{
+> >> +	struct pci_dev *pdev = data;
+> >> +	struct pci_p2pdma *p2pdma = rcu_dereference_protected(pdev->p2pdma, 1);
+> >> +
+> >> +	/* Ensure no new pages can be allocated in mappings */
+> >> +	p2pdma->active = false;
+> >> +	synchronize_rcu();
+> >> +
+> >> +	unmap_mapping_range(p2pdma->inode->i_mapping, 0, 0, 1);
+> >> +
+> >> +	/*
+> >> +	 * On some architectures, TLB flushes are done with call_rcu()
+> >> +	 * so to ensure GUP fast is done with the pages, call synchronize_rcu()
+> >> +	 * before freeing them.
+> >> +	 */
+> >> +	synchronize_rcu();
+> >> +	pci_p2pdma_free_mappings(p2pdma->inode->i_mapping);
+> > 
+> > With the series from Felix getting close this should get updated to
+> > not set pte_devmap and use proper natural refcounting without any of
+> > this stuff.
+> 
+> Can you send a link? I'm not sure what you are referring to.
 
-Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
----
- drivers/iio/industrialio-buffer.c  | 12 ++++++------
- drivers/iio/industrialio-core.c    | 10 +++++-----
- drivers/iio/industrialio-trigger.c |  4 ++--
- 3 files changed, 13 insertions(+), 13 deletions(-)
+IIRC this is the last part:
 
-diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
-index b078eb2f3c9d..c27f74a3c0f3 100644
---- a/drivers/iio/industrialio-buffer.c
-+++ b/drivers/iio/industrialio-buffer.c
-@@ -1391,17 +1391,17 @@ static ssize_t direction_show(struct device *dev,
- 	}
- }
- 
--static DEVICE_ATTR(length, S_IRUGO | S_IWUSR, iio_buffer_read_length,
-+static DEVICE_ATTR(length, 0644, iio_buffer_read_length,
- 		   iio_buffer_write_length);
- static struct device_attribute dev_attr_length_ro = __ATTR(length,
--	S_IRUGO, iio_buffer_read_length, NULL);
--static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR,
-+	0444, iio_buffer_read_length, NULL);
-+static DEVICE_ATTR(enable, 0644,
- 		   iio_buffer_show_enable, iio_buffer_store_enable);
--static DEVICE_ATTR(watermark, S_IRUGO | S_IWUSR,
-+static DEVICE_ATTR(watermark, 0644,
- 		   iio_buffer_show_watermark, iio_buffer_store_watermark);
- static struct device_attribute dev_attr_watermark_ro = __ATTR(watermark,
--	S_IRUGO, iio_buffer_show_watermark, NULL);
--static DEVICE_ATTR(data_available, S_IRUGO,
-+	0444, iio_buffer_show_watermark, NULL);
-+static DEVICE_ATTR(data_available, 0444,
- 		iio_dma_show_data_available, NULL);
- static DEVICE_ATTR_RO(direction);
- 
-diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-index e1ed44dec2ab..35de348d686e 100644
---- a/drivers/iio/industrialio-core.c
-+++ b/drivers/iio/industrialio-core.c
-@@ -1114,12 +1114,12 @@ int __iio_device_attr_init(struct device_attribute *dev_attr,
- 	dev_attr->attr.name = name;
- 
- 	if (readfunc) {
--		dev_attr->attr.mode |= S_IRUGO;
-+		dev_attr->attr.mode |= 0444;
- 		dev_attr->show = readfunc;
- 	}
- 
- 	if (writefunc) {
--		dev_attr->attr.mode |= S_IWUSR;
-+		dev_attr->attr.mode |= 0200;
- 		dev_attr->store = writefunc;
- 	}
- 
-@@ -1401,7 +1401,7 @@ static ssize_t iio_show_dev_name(struct device *dev,
- 	return sysfs_emit(buf, "%s\n", indio_dev->name);
- }
- 
--static DEVICE_ATTR(name, S_IRUGO, iio_show_dev_name, NULL);
-+static DEVICE_ATTR(name, 0444, iio_show_dev_name, NULL);
- 
- static ssize_t iio_show_dev_label(struct device *dev,
- 				 struct device_attribute *attr,
-@@ -1411,7 +1411,7 @@ static ssize_t iio_show_dev_label(struct device *dev,
- 	return sysfs_emit(buf, "%s\n", indio_dev->label);
- }
- 
--static DEVICE_ATTR(label, S_IRUGO, iio_show_dev_label, NULL);
-+static DEVICE_ATTR(label, 0444, iio_show_dev_label, NULL);
- 
- static ssize_t iio_show_timestamp_clock(struct device *dev,
- 					struct device_attribute *attr,
-@@ -1509,7 +1509,7 @@ int iio_device_register_sysfs_group(struct iio_dev *indio_dev,
- 	return 0;
- }
- 
--static DEVICE_ATTR(current_timestamp_clock, S_IRUGO | S_IWUSR,
-+static DEVICE_ATTR(current_timestamp_clock, 0644,
- 		   iio_show_timestamp_clock, iio_store_timestamp_clock);
- 
- static int iio_device_register_sysfs(struct iio_dev *indio_dev)
-diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
-index f504ed351b3e..e22a35634f2c 100644
---- a/drivers/iio/industrialio-trigger.c
-+++ b/drivers/iio/industrialio-trigger.c
-@@ -54,7 +54,7 @@ static ssize_t iio_trigger_read_name(struct device *dev,
- 	return sysfs_emit(buf, "%s\n", trig->name);
- }
- 
--static DEVICE_ATTR(name, S_IRUGO, iio_trigger_read_name, NULL);
-+static DEVICE_ATTR(name, 0444, iio_trigger_read_name, NULL);
- 
- static struct attribute *iio_trig_dev_attrs[] = {
- 	&dev_attr_name.attr,
-@@ -494,7 +494,7 @@ static ssize_t iio_trigger_write_current(struct device *dev,
- 	return ret;
- }
- 
--static DEVICE_ATTR(current_trigger, S_IRUGO | S_IWUSR,
-+static DEVICE_ATTR(current_trigger, 0644,
- 		   iio_trigger_read_current,
- 		   iio_trigger_write_current);
- 
--- 
-2.35.3
+https://lore.kernel.org/linux-mm/20220524190632.3304-1-alex.sierra@amd.com/
 
+And the earlier bit with Christoph's pieces looks like it might get
+merged to v5.19..
+
+The general idea is once pte_devmap is not set then all the
+refcounting works the way it should. This is what all new ZONE_DEVICE
+users should do..
+
+Jason

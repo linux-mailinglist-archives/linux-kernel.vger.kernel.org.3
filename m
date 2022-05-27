@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96F3535D45
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D5C535D2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350316AbiE0JLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
+        id S1350629AbiE0JL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351190AbiE0JKu (ORCPT
+        with ESMTP id S1344759AbiE0JLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:10:50 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64A8129EE1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:07:32 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id t13so5027756wrg.9
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:07:32 -0700 (PDT)
+        Fri, 27 May 2022 05:11:03 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CB31312B1;
+        Fri, 27 May 2022 02:07:58 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id i23so4291928ljb.4;
+        Fri, 27 May 2022 02:07:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=UJBVTCBlNfR7o09N0raMnnAoU4I40RWN+o0wJzKlzU0=;
-        b=WeZWffED+tMab/OrHobFFtlpXTsAMJvGbzi3dM+zScWwPiUQ7S0lF6qZBnFqwrRxxL
-         hkFIA1JE/hJpYS3YK/JCqrIpSp52Tzl2HFK9/Cd7yse0iC/mH9oboIFB0exsW5o/orSw
-         Bz5noAWELeLtI7Njk0G91/ssZpXG8NrTUV88kvEok1JYfKJ+yD9t44ZIKlMEQLnCPC2E
-         iWUCQGwJM1PX1zra+SBu2xFnk8O0SV5BIyiOtdQKAB40lDCChWtgXGqNPqJuK3NL2Vtm
-         RxzMs3+sqn0odx5EeWHyWxq2fa5boWzIHfZDn6WCls9vPW6Ub8huPRFt7SfN4XjEiLac
-         kD3g==
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=QhJy8vAsWRk7rBxT10iDy/5PmoVr3qcRU2Dxdwypg2w=;
+        b=BFYKpQ+8HJ031Pci0GGoXTHAK52LstG0U+QTzwaDWYuNKuqt6XQOmyKDhqE4LpIweq
+         ddrtnQYze5cmPDF816qSS+xaUlDY24jUhRklTLRJHNb2kludEKx1hdd5wHhWDvb08gKa
+         LevUQgwVi8mn9T5XFFOnNVtGY5dWJcNmqREqpjXCUPLR2x7Th55wEZ7xPmUQy6fu7u+S
+         Z9eoeDMEgDTOLUUV3N+I0yEY9OH9OxbB4lxErfv89muikeeaq6/+/ETll0ovphhOM4S1
+         p1BK0EiffcXwJjrp0h/wVqqXZkykAy0GzEo9y6Ws9EoOijhpHwJauuKDRNeNQL0lCu1j
+         qYhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=UJBVTCBlNfR7o09N0raMnnAoU4I40RWN+o0wJzKlzU0=;
-        b=WEa4s1D3oTsWqhxId+ZqulwDZuSWL7lHd9Zg8OZuNPI+DGt8+5ijKWFDvebECYrJZT
-         X9CDjW4VQAKMw+tSyd+F1SA5bDnWj3gRYOPvIPQiPagKn5KVuWvpCGEBmyHoKFc+acma
-         nR2rj8nshhG2C0zl0fsKsDMLKgz223BkXWI5GwJ9fkW8gnWqQ14rQHoNEEC0TmiNo5cG
-         ZrgTM4i9quUuA9RAJrVgwdC5q8s3XUK9z7SV2+Chl5BVOZ0Ww91CB2ClGlkOxg6TLMwC
-         HNgn+nQeFJOp1E6WH3aNpV2rljkh8PwMoZOHSSfbM5WDW7hsHhMXb9nW7AY454CA7W/H
-         P/0A==
-X-Gm-Message-State: AOAM533Zs7ijoPJ+9gkf+LQVn2W4X1NYdah+MeWW7e/iL2Jj8J/yjqDq
-        xVLE13BanKTUBuObKuCoKRsbMu0FvJ8=
-X-Google-Smtp-Source: ABdhPJzKi6ymP17wa0aiakShx7mBScEEzVt8jOCTIL08pDTzC/n6niDrTNiBe36KvCaVyQe+EDWedg==
-X-Received: by 2002:a5d:4351:0:b0:20c:f52c:f869 with SMTP id u17-20020a5d4351000000b0020cf52cf869mr34472072wrr.516.1653642449999;
-        Fri, 27 May 2022 02:07:29 -0700 (PDT)
-Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
-        by smtp.gmail.com with ESMTPSA id t8-20020adfe448000000b0020fe7f7129fsm1133340wrm.100.2022.05.27.02.07.26
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=QhJy8vAsWRk7rBxT10iDy/5PmoVr3qcRU2Dxdwypg2w=;
+        b=Yui6kY0lFPyE6eakMJplHu7mCsciVgebp0xKXqzF1WOcVLYjNFts6/qMgrjoboInee
+         zCCh1qJ/Q/YeFQ/SGF71S4Obn0QFIAUq4W42Z7IJ00PC9vV96/tcycFOzRcIKtsfzeCy
+         +qDt5mSsEMkRlO/yB3vKR7e52BmSMJ9xPcYYfuajEU2e33nKCitiFNxkir5aq6HEBQgN
+         AN6ZJ6Iy18gycIi1l5QCXDtTCUnrNYyGQT2E0M0q2JEyODdjZR7L9iVddN0cEENVKFQf
+         RQ/02c2Ifl+OJ3JZgr431sdkxH8nywo6f8D4d9eGvtUc3uSK+NnS6uq7VMdYk4vjm18U
+         c/VQ==
+X-Gm-Message-State: AOAM532t43qXpmYb1NzB20iQarDeCqzC1TQXXN8HYqy92PfqO+87oKPC
+        HRJHRzOQYtWzm07fZQ1D9XoSgnOjCwmwYA==
+X-Google-Smtp-Source: ABdhPJz3dOSfuDx2uiYcak6q55G0/yRusHjmQ01zeaTTpiKKJVdkc3yPqv08H48DT8wHs1EdQCIjOg==
+X-Received: by 2002:a05:651c:160b:b0:255:3884:7940 with SMTP id f11-20020a05651c160b00b0025538847940mr1469961ljq.379.1653642473217;
+        Fri, 27 May 2022 02:07:53 -0700 (PDT)
+Received: from wse-c0127 (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
+        by smtp.gmail.com with ESMTPSA id b9-20020a056512070900b0047862287498sm783205lfs.208.2022.05.27.02.07.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 02:07:28 -0700 (PDT)
-Date:   Fri, 27 May 2022 10:07:25 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Jani Nikula <jani.nikula@intel.com>
-Cc:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org
-Subject: mainline build failure due to f1e4c916f97f ("drm/edid: add EDID
- block count and size helpers")
-Message-ID: <YpCUzStDnSgQLNFN@debian>
+        Fri, 27 May 2022 02:07:52 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Ido Schimmel <idosch@idosch.org>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 net-next 4/4] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <Yo+OYN/rjdB7wfQu@shredder>
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-5-schultz.hans+netdev@gmail.com>
+ <Yo+OYN/rjdB7wfQu@shredder>
+Date:   Fri, 27 May 2022 11:07:50 +0200
+Message-ID: <86pmjz2vix.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,22 +86,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On tor, maj 26, 2022 at 17:27, Ido Schimmel <idosch@idosch.org> wrote:
+> On Tue, May 24, 2022 at 05:21:44PM +0200, Hans Schultz wrote:
+>> Verify that the MAC-Auth mechanism works by adding a FDB entry with the
+>> locked flag set. denying access until the FDB entry is replaced with a
+>> FDB entry without the locked flag set.
+>> 
+>> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+>> ---
+>>  .../net/forwarding/bridge_locked_port.sh      | 42 ++++++++++++++++---
+>>  1 file changed, 36 insertions(+), 6 deletions(-)
+>> 
+>> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+>> index 5b02b6b60ce7..50b9048d044a 100755
+>> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+>> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+>> @@ -1,7 +1,7 @@
+>>  #!/bin/bash
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  
+>> -ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
+>> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan locked_port_mab"
+>>  NUM_NETIFS=4
+>>  CHECK_TC="no"
+>>  source lib.sh
+>> @@ -94,13 +94,13 @@ locked_port_ipv4()
+>>  	ping_do $h1 192.0.2.2
+>>  	check_fail $? "Ping worked after locking port, but before adding FDB entry"
+>>  
+>> -	bridge fdb add `mac_get $h1` dev $swp1 master static
+>> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
+>>  
+>>  	ping_do $h1 192.0.2.2
+>>  	check_err $? "Ping did not work after locking port and adding FDB entry"
+>>  
+>>  	bridge link set dev $swp1 locked off
+>> -	bridge fdb del `mac_get $h1` dev $swp1 master static
+>> +	bridge fdb del `mac_get $h1` dev $swp1 master
+>>  
+>>  	ping_do $h1 192.0.2.2
+>>  	check_err $? "Ping did not work after unlocking port and removing FDB entry."
+>> @@ -124,13 +124,13 @@ locked_port_vlan()
+>>  	ping_do $h1.100 198.51.100.2
+>>  	check_fail $? "Ping through vlan worked after locking port, but before adding FDB entry"
+>>  
+>> -	bridge fdb add `mac_get $h1` dev $swp1 vlan 100 master static
+>> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
+>>  
+>>  	ping_do $h1.100 198.51.100.2
+>>  	check_err $? "Ping through vlan did not work after locking port and adding FDB entry"
+>>  
+>>  	bridge link set dev $swp1 locked off
+>> -	bridge fdb del `mac_get $h1` dev $swp1 vlan 100 master static
+>> +	bridge fdb del `mac_get $h1` dev $swp1 vlan 100 master
+>>  
+>>  	ping_do $h1.100 198.51.100.2
+>>  	check_err $? "Ping through vlan did not work after unlocking port and removing FDB entry"
+>> @@ -153,7 +153,8 @@ locked_port_ipv6()
+>>  	ping6_do $h1 2001:db8:1::2
+>>  	check_fail $? "Ping6 worked after locking port, but before adding FDB entry"
+>>  
+>> -	bridge fdb add `mac_get $h1` dev $swp1 master static
+>> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
+>> +
+>>  	ping6_do $h1 2001:db8:1::2
+>>  	check_err $? "Ping6 did not work after locking port and adding FDB entry"
+>>  
+>> @@ -166,6 +167,35 @@ locked_port_ipv6()
+>>  	log_test "Locked port ipv6"
+>>  }
+>
+> Why did you change s/add/replace/? Also, from the subject and commit
+> message I understand the patch is about adding a new test, not changing
+> existing ones.
+>
 
-The latest mainline kernel branch fails to build for arm spear3xx_defconfig
-with the error:
+Sorry, I might have lost a bit track of the kernel selftests, as for
+internal reasons there has been a pause in the work. I will remove the
+changes to the previous tests, and I hope it will be fine.
 
-In function 'edid_block_data',
-    inlined from 'drm_edid_is_valid' at drivers/gpu/drm/drm_edid.c:1904:25:
-././include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert_250'
-	declared with attribute error: BUILD_BUG_ON failed: sizeof(*edid) != EDID_LENGTH
-  352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>>  
+>> +locked_port_mab()
+>> +{
+>> +	RET=0
+>> +	check_locked_port_support || return 0
+>> +
+>> +	ping_do $h1 192.0.2.2
+>> +	check_err $? "MAB: Ping did not work before locking port"
+>> +
+>> +	bridge link set dev $swp1 locked on
+>> +	bridge link set dev $swp1 learning on
+>> +
+>> +	bridge fdb del `mac_get $h1` dev $swp1 master
+>
+> Why the delete is needed? Aren't you getting errors on trying to delete
+> a non-existing entry? In previous test cases learning is disabled and it
+> seems the FDB entry is cleaned up.
+>
 
-git bisect pointed to f1e4c916f97f ("drm/edid: add EDID block count and size helpers")
+I guess you are right.
 
-And, reverting it on top of mainline branch has fixed the build failure.
+>> +
+>> +	ping_do $h1 192.0.2.2
+>> +	check_fail $? "MAB: Ping worked on locked port without FDB entry"
+>> +
+>> +	bridge fdb show | grep `mac_get $h1` | grep -q "locked"
+>> +	check_err $? "MAB: No locked fdb entry after ping on locked port"
+>> +
+>> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
+>> +
+>> +	ping_do $h1 192.0.2.2
+>> +	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
+>> +
+>> +	bridge fdb del `mac_get $h1` dev $swp1 master
+>
+> bridge link set dev $swp1 learning off
+>
 
+noted.
 
---
-Regards
-Sudip
+>> +	bridge link set dev $swp1 locked off
+>> +
+>> +	log_test "Locked port MAB"
+>> +}
+>>  trap cleanup EXIT
+>>  
+>>  setup_prepare
+>> -- 
+>> 2.30.2
+>> 

@@ -2,30 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C09535804
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 05:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D7D535805
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 05:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238155AbiE0DSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 23:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S238167AbiE0DVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 23:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbiE0DSJ (ORCPT
+        with ESMTP id S230355AbiE0DU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 23:18:09 -0400
+        Thu, 26 May 2022 23:20:58 -0400
 Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A1899693
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 20:18:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E55A99693
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 20:20:57 -0700 (PDT)
 Received: from [10.28.39.121] (10.28.39.121) by mail-sz.amlogic.com
  (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Fri, 27 May
- 2022 11:18:05 +0800
-Message-ID: <0fc9fc39-a4e2-85fc-ba46-5ab825e6fcbf@amlogic.com>
-Date:   Fri, 27 May 2022 11:18:04 +0800
+ 2022 11:20:55 +0800
+Message-ID: <a71892eb-8482-2905-54fc-dac5e2ba6d51@amlogic.com>
+Date:   Fri, 27 May 2022 11:20:55 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
  Thunderbird/91.9.0
-Subject: Re: [PATCH v5 3/4] mtd: rawnand: meson: refine resource getting in
- probe
+Subject: Re: [PATCH v5 2/4] mtd: rawnand: meson: fix the clock
 Content-Language: en-US
 To:     Kevin Hilman <khilman@baylibre.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -45,9 +44,9 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
 References: <20220513123404.48513-1-liang.yang@amlogic.com>
- <20220513123404.48513-4-liang.yang@amlogic.com> <7hzgj48dj4.fsf@baylibre.com>
+ <20220513123404.48513-3-liang.yang@amlogic.com> <7hwne88dha.fsf@baylibre.com>
 From:   Liang Yang <liang.yang@amlogic.com>
-In-Reply-To: <7hzgj48dj4.fsf@baylibre.com>
+In-Reply-To: <7hwne88dha.fsf@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.28.39.121]
@@ -64,50 +63,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Kevin,
 
-On 2022/5/27 0:27, Kevin Hilman wrote:
+Thanks for your review.
+
+On 2022/5/27 0:28, Kevin Hilman wrote:
 > [ EXTERNAL EMAIL ]
+> 
+> Hi Liang,
 > 
 > Liang Yang <liang.yang@amlogic.com> writes:
 > 
+>> EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK'
+>> which is defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is
+>> the divider and bit6~7 is the mux for fix pll and xtal. At the beginning,
+>> a common MMC and NAND sub-clock was discussed and planed to be implemented
+>> as NFC clock provider, but now this series of patches of a common MMC and
+>> NAND sub-clock are never being accepted.  the reasons for giving up are:
+>> 1. EMMC and NAND, which are mutually exclusive anyway
+>> 2. coupling the EMMC and NAND.
+>> 3. it seems that a common MMC and NAND sub-clock is over engineered.
+>> and let us see the link fot more information:
+>> https://lore.kernel.org/all/20220121074508.42168-5-liang.yang@amlogic.com
+>> so The meson nfc can't work now, let us rework the clock.
+>>
 >> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
-> 
-> Patch should have a changelog.ok, i will add it.
 > 
 > Reviewed-by: Kevin Hilman <khilman@baylibre.com>
 > 
->> ---
->>   drivers/mtd/nand/raw/meson_nand.c | 4 +---
->>   1 file changed, 1 insertion(+), 3 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
->> index cc93667a1e7f..6e50387475bb 100644
->> --- a/drivers/mtd/nand/raw/meson_nand.c
->> +++ b/drivers/mtd/nand/raw/meson_nand.c
->> @@ -1378,7 +1378,6 @@ static int meson_nfc_probe(struct platform_device *pdev)
->>   {
->>   	struct device *dev = &pdev->dev;
->>   	struct meson_nfc *nfc;
->> -	struct resource *res;
->>   	int ret, irq;
->>   
->>   	nfc = devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL);
->> @@ -1395,8 +1394,7 @@ static int meson_nfc_probe(struct platform_device *pdev)
->>   
->>   	nfc->dev = dev;
->>   
->> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> -	nfc->reg_base = devm_ioremap_resource(dev, res);
->> +	nfc->reg_base = devm_platform_ioremap_resource_byname(pdev, "nfc");
->>   	if (IS_ERR(nfc->reg_base))
->>   		return PTR_ERR(nfc->reg_base);
->>   
->> -- 
->> 2.34.1
->>
->>
->> _______________________________________________
->> linux-amlogic mailing list
->> linux-amlogic@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+> Thank you for your persistence in working on multiple iterations of this
+> until we came to a final agreement.
+> 
+> Kevin
 > 
 > .

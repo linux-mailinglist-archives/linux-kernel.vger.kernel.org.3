@@ -2,84 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD35535F28
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E77535F2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351263AbiE0LUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
+        id S244684AbiE0LVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244684AbiE0LUO (ORCPT
+        with ESMTP id S238981AbiE0LVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:20:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1E012698E;
-        Fri, 27 May 2022 04:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B95F61CB6;
-        Fri, 27 May 2022 11:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A012FC34113;
-        Fri, 27 May 2022 11:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653650412;
-        bh=MeNcJ1RMkgY4m5ptE96b0P/31qMrByU6sk4dUWYsWzY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ejlNXm9cWWA8D+vbjsmOZrlO6qZpvsduQp4q9HB/3wj5AKIf3gvM2ZbnIvYNdzUMz
-         wkpTX3H4COpzRn19KL8cEsVYl/JX6N2nDCKSJ0qW45dSTZ3gRpM3DOP7jFq2iI+WkD
-         GLzw4BjA1cUWl3TbmdrIfzCe0ZYke1y/u3rpv8JpyVK4Mn7/2H7fXyxobYQgQcXO7u
-         5GG86ZLUI5A+Qab8f425Vx+mJIzzDvt45Orlgfk5aYZ4xQK+XipeZ7KU93TMrOrSqR
-         wRdiK28FGdspL7jW5FQ1Qb735UBryDAINbxg4olQ9KQckt6akj+Qz3ABVzzx608aoG
-         5Z8zQWKKjyIiw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 83594F03947;
-        Fri, 27 May 2022 11:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 27 May 2022 07:21:00 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01DD1269A1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:20:59 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.191.102])
+        by smtp.orange.fr with ESMTPA
+        id uY1Znrm7w26JCuY1ZnnwBY; Fri, 27 May 2022 13:20:58 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 27 May 2022 13:20:58 +0200
+X-ME-IP: 90.11.191.102
+Message-ID: <e09439a8-d628-9074-7691-3d83a6d20267@wanadoo.fr>
+Date:   Fri, 27 May 2022 13:20:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: =?UTF-8?B?UmU6IOetlOWkjTogW1BBVENIXSBkcml2ZXJzOiBpbnB1dDogRGlyZWN0?=
+ =?UTF-8?Q?ly_use_ida=5falloc=28=29/free=28=29?=
+Content-Language: en-US
+To:     "liuke (AQ)" <liuke94@huawei.com>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "marcoshalano@gmail.com" <marcoshalano@gmail.com>,
+        "michael@michaelcullen.name" <michael@michaelcullen.name>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220527103740.3442548-1-liuke94@huawei.com>
+ <159368be-82fa-f42c-9658-88cd0e1f1882@wanadoo.fr>
+ <9c53080c64424a5ba9d33e789dbd1180@huawei.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <9c53080c64424a5ba9d33e789dbd1180@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: lan743x: PCI11010 / PCI11414 fix
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165365041252.2876.15372602203233940410.git-patchwork-notify@kernel.org>
-Date:   Fri, 27 May 2022 11:20:12 +0000
-References: <20220527041728.3257-1-Raju.Lakkaraju@microchip.com>
-In-Reply-To: <20220527041728.3257-1-Raju.Lakkaraju@microchip.com>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, bryan.whitehead@microchip.com,
-        richardcochran@gmail.com, UNGLinuxDriver@microchip.com,
-        Ian.Saturley@microchip.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 27 May 2022 09:47:28 +0530 you wrote:
-> Fix the MDIO interface declarations to reflect what is currently supported by
-> the PCI11010 / PCI11414 devices (C22 for RGMII and C22_C45 for SGMII)
+Le 27/05/2022 à 12:39, liuke (AQ) a écrit :
+> Sorry ,  I'll be careful next time .
 > 
-> Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-> ---
->  drivers/net/ethernet/microchip/lan743x_main.c | 32 +++++++++++++------
->  1 file changed, 22 insertions(+), 10 deletions(-)
 
-Here is the summary with links:
-  - [net-next] net: lan743x: PCI11010 / PCI11414 fix
-    https://git.kernel.org/netdev/net/c/79dfeb2916d7
+NP for me. It's nice to have someone work on these clean-ups.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Definitively, coccinelle would help you a lot for this kind of patches.
 
-
+CJ

@@ -2,99 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232425358C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 07:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB77F5358CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 07:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243110AbiE0FeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 01:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        id S243177AbiE0FiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 01:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiE0FeN (ORCPT
+        with ESMTP id S231261AbiE0Fh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 01:34:13 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A081139;
-        Thu, 26 May 2022 22:34:11 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gk22so3683466pjb.1;
-        Thu, 26 May 2022 22:34:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mHsgR073nhQ7znBaXl9ZvXV9DZWPaFFSru830DQsQ0Y=;
-        b=CkfNzIX8OnRfpWFXUOnAK2Y2udwIkn+RM//g1UjElnQfxTLLBc5IXRMhx+pU8BWMjc
-         xjmVOlZ1LNnRpS+GBqKYJwfcswbsj/Nc6MOsxNBYvSKC5Pa0OeDiOj6Sj5MZO4UhAJ7a
-         bqzHOY7gzlyaqgtyrM9UJbv35hXoEC6lXjl5fypxLahyTmc0ORExCulIbeIx/MpkSJ5n
-         qvEIYQv2TBox4vgK08jFchhbhM3utHie9tHAwq8Y/pq0rpt5AzCLkCQ87Y1XniD9RRnz
-         eQW5wfPuK2TZRP/WYe/lvISDHqd65pJPObSo730LllZDZpltyVC3SKKMayWBCIjhZku1
-         gtEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mHsgR073nhQ7znBaXl9ZvXV9DZWPaFFSru830DQsQ0Y=;
-        b=yRMwNdt8yLhmYlNJwpeNcvD9nQnTq916LyMhyEtNvNrN0JacHscAewLdplpP7ZAcXN
-         0E/P8osgwBKMWrGeCkkw8Q55ZGztFQlPMfavhSYN1s1F529yutnCOvFGvLklesMxZYFm
-         jxzEXnjKxcp0nDH2jMRFqzENvvC+wcMFV9fYir9FMYV8O02d1PHsyCJJxr+0iG5432DV
-         oRU9LZzFa3HQ+hUN9pyGHaicg/gPfYtHiHuE4OF/FHCPP5D9OFIJOYWUcWgT+JwPRkJZ
-         JEM8kVX9vLToOuw5szUH3d9KKx8TpwhrQ/3rqIgkf4LVuhae1FI2RulRB2R/QRoiDG5X
-         41yw==
-X-Gm-Message-State: AOAM530cGAujfAn7YagZQZmGreFQ2HfFu5KiazHb14kBV9LlKmxfukE1
-        eA5OeiBBJRTUDhachYPMFQE=
-X-Google-Smtp-Source: ABdhPJwfAEUlQxnLazyMiIdYppZUmcBVdFsMafDQPnrug63PbYyjGGPsFKtKok9xhI7YJZ1jY+iD3g==
-X-Received: by 2002:a17:902:a50f:b0:162:28c6:bfac with SMTP id s15-20020a170902a50f00b0016228c6bfacmr22440174plq.99.1653629651318;
-        Thu, 26 May 2022 22:34:11 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:3206:ea0b:ce53:ea86])
-        by smtp.gmail.com with ESMTPSA id fz6-20020a17090b024600b001dbe7ccdd4dsm629302pjb.10.2022.05.26.22.34.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 22:34:10 -0700 (PDT)
-Date:   Thu, 26 May 2022 22:34:07 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, mkorpershoek@baylibre.com,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] Input: mtk-pmic-keys - Transfer per-key bit in
- mtk_pmic_keys_regs
-Message-ID: <YpBiz7fGCgHaKqGs@google.com>
-References: <20220524093505.85438-1-angelogioacchino.delregno@collabora.com>
- <20220524093505.85438-2-angelogioacchino.delregno@collabora.com>
+        Fri, 27 May 2022 01:37:58 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84C84474D
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 22:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653629873; x=1685165873;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B0StCX6RwQbyJoVE+z/qrjWGVToT35XUEx5CRooJFdQ=;
+  b=i3p0i+F8fBhR8cohqE8S4cM6pBbqOnZoYkUBP85jrbge55DCsB5yU7vG
+   Km7+e4h+SfXjcIfyja654ECRXSrcmC4vCYhv+qGY6dOLsv5NFE2fy1c+M
+   73BWtTXqWfnKma+Mkn9TLdSQe1qT7+eBab8xM/AYA4o+/uizPX1x7mP69
+   /7Dext9agrDMr0vi4re3FbazLxYf62bqa5lxghxmI6fxtF8L8DUSuJToA
+   f7MNEIOyxSLD3bnBthRhOmN1iXnD72mhxKx9pmVUbm+jriQ0TWNGe5PgT
+   ITyaOKriALj439snK8OiRes35pt/iX4Xo9oN7xGKjNC6iKNzxoOBlHRYF
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="360772399"
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="360772399"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 22:37:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="718604566"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga001.fm.intel.com with ESMTP; 26 May 2022 22:37:51 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     iommu@lists.linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH 1/1] iommu/vt-d: Remove unused iovad from dmar_domain
+Date:   Fri, 27 May 2022 13:34:24 +0800
+Message-Id: <20220527053424.3111186-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524093505.85438-2-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 11:35:03AM +0200, AngeloGioacchino Del Regno wrote:
-> Place the key bit in struct mtk_pmic_keys_regs to enhance this
-> driver's flexibility, in preparation for adding support for more
-> PMICs.
-> 
-> While at it, remove the definition of MTK_PMIC_RST_KEY_MASK as
-> we are now dynamically setting the keymask relatively to the keys
-> that are defined in the newly added rst_en_mask variable, on a
-> per-key basis.
-> 
-> This commit brings no functional changes.
+Not used anywhere. Cleanup it to avoid dead code.
 
-AngeloGioacchino,
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+---
+ drivers/iommu/intel/iommu.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-Could you please tell me if these devices (currently supported by the
-driver) have 2 fully independent reset settings for HOME and PWR keys,
-or is there are actually 2 separate bits, one to enable/disable key
-reset, and another controlling what keys will cause the reset - only PWR
-or either PWR or HOME?
-
-Thanks.
-
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index 0f9df5a19ef7..a22adfbdf870 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -543,7 +543,6 @@ struct dmar_domain {
+ 	u8 set_pte_snp:1;
+ 
+ 	struct list_head devices;	/* all devices' list */
+-	struct iova_domain iovad;	/* iova's that belong to this domain */
+ 
+ 	struct dma_pte	*pgd;		/* virtual address */
+ 	int		gaw;		/* max guest address width */
 -- 
-Dmitry
+2.25.1
+

@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA1853636A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E39536378
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352616AbiE0Npm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 09:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
+        id S1352727AbiE0Nri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 09:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238218AbiE0Npi (ORCPT
+        with ESMTP id S1352708AbiE0Nr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 09:45:38 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1974F59973
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:45:34 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so2754265wms.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:45:34 -0700 (PDT)
+        Fri, 27 May 2022 09:47:27 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AF018358
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:47:25 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id p10so5934627wrg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:47:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=jBX6sPP/edoe4coCPmiUBmbs1kcK2bMRWX97xjgtvx8=;
-        b=JWLI8KLcxTNF3ggaTQHWvElnpoMg5ySLRYT9qMnjpJ26mb4XV1XZnrtGP6RdIb63oU
-         vVdTAiv6SK9RQ7WGAxamRpwlEDXpQv2X6QNcMsKFNrXb6zdxCIiw6HLV7DD4JV1NqL8R
-         xwau3E89cavQkVogB64htJPJdOo//B6QRNen8YVJ+p2ldlm+MUov87XMIJsBZfMS2Epu
-         1m2Ds2dbBDUbrajs7hUy1hkqjNSYWFRaLX4KS0vsnUy0EqF62XGRK4v6cmlsvcWt+sQB
-         4K5HeuAIW/7e2qjNvc/27xOiqY5E1lmLiUeMsi13xzYP2MG5nF1lpVEvjORm6JdgGPjp
-         j3/A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YJw/68oJ2Ve+rhEVma5/z7ZSptuL9RBQlec5IpwcYH4=;
+        b=4sw+2aoM5gel0Ufzhq13u1+8+tUCQyJBZ/8NvGRz+K92kScpR5fsTYDM9edSlYinjF
+         Wh6D9MGi8S/WUmENkNK45EmIIKIZpZ0d3CohEJb9NFV46/1TNM8G1bqzevuK05rVpPoF
+         x2krQ+Lvs+9W0AYMk5iHdS7wQro28Ad2u+6ctXm2dTyNgxWNPJc1o/j29GVX2kwH2cKb
+         8APPtEOua7S/CUmEz4w4cj9nsnbdrsGea6LocI7e1V3UnU9A5JFbdYjIpgb0aSqoKoHt
+         TDRFruR0hfSy6P/RmD1qRHe5xX2BFu0i6f9+04bOxyY2WCaMOiaf2aJU1cjXkN677AmW
+         6w4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=jBX6sPP/edoe4coCPmiUBmbs1kcK2bMRWX97xjgtvx8=;
-        b=AqMQWOWa9K38EcEweec9D99xEZ+GP+Aba+ECPQ4HFq3eQfsXxbTqjpeP/3dKlZQ9g9
-         6jEt6SAYZYyCrMlUNdnnaqwnGPBLx2rrkHci43AR1XZqpHTGkAj3kmYfXsuzIICJBb0/
-         k4kWpwYOLdsWMfcGp2PBun7IvE9KA5ZEDeHvJFsfixFH66mRzHqYe296hY7XviQn6i5x
-         z68SGpCmH/lnC/AYcwhLIHZ5xLkvSJc1E20n2hJduUIaoNrl+qC9Dvabt9l4QvEw9TCh
-         yYizUH5gcgzdc23pqj7tNChKjDBpLheIBwc69H1pEr6IieYWMGfQAdkRHmgyTcwmd3nD
-         9fEw==
-X-Gm-Message-State: AOAM532NnBy/q3y48PEAsxSZ+0GXl78wUI6yGMAAcTBiTmutR1KehJab
-        CxfVh6rpPbbWfnYRjyKJlU2v2A==
-X-Google-Smtp-Source: ABdhPJzPdKyv3HnK5pKB3f32K0HPpugENpmEnYc8YylJwZqpuwS9yD2Zu4cpYiY8OxyWx4YH6xFk4Q==
-X-Received: by 2002:a05:600c:154d:b0:394:8d64:9166 with SMTP id f13-20020a05600c154d00b003948d649166mr7123702wmg.102.1653659132457;
-        Fri, 27 May 2022 06:45:32 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:f081:5ded:fc86:365d? ([2001:861:44c0:66c0:f081:5ded:fc86:365d])
-        by smtp.gmail.com with ESMTPSA id e7-20020adfa447000000b0020e5d2a9d0bsm2107939wra.54.2022.05.27.06.45.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 May 2022 06:45:32 -0700 (PDT)
-Message-ID: <a6b1fd65-d6c4-e3dc-d237-9cb2e72bbecf@baylibre.com>
-Date:   Fri, 27 May 2022 15:45:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] arm64: dts: meson: add reset controller for Meson-S4 SoC
-Content-Language: en-US
-To:     Zelong Dong <zelong.dong@amlogic.com>, devicetree@vger.kernel.org,
-        p.zabel@pengutronix.de, robh+dt@kernel.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com
-Cc:     linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, jbrunet@baylibre.com
-References: <20220526130158.36651-1-zelong.dong@amlogic.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YJw/68oJ2Ve+rhEVma5/z7ZSptuL9RBQlec5IpwcYH4=;
+        b=aQ+kn9IbHm3O38JfXeSQe6zaUHYMZl+gWdDMai3etgv1BKPFc7PLjsnG8yFY6XxVxI
+         +cHLxXOvPMpyTIrZuEBqT+iYQqGyj3dnzkRP9Vz1lL8NUXsen8fojoF4aQnfRTB0McSo
+         C593HEbDzyCyDz3/unBnGVXQ4plbjF7x9iMrmlXcmiVFDMn2jLCMxPw2cgLKV++p5iKH
+         S2/lvJKzdgK5LsV5oVUgIH1LyNGqruVT/+/Prx2EQNFI/tnRh3rt7bqqTp2pxfMeanBI
+         wa2dGAN34mQqkLVhi1Cub7Yq9B9wBFghpTX+YAweoN9tSrQ7IHLiDZDBhF38dmU8o7Rl
+         hmWA==
+X-Gm-Message-State: AOAM530oFzP58rnQGjQX9xlqLVgz6yC1wZh4hPv9mKBjnid/gaEqKSGU
+        Xr7oz1jv0rVa/VWIDf/RTvXeErWjKJVXOg==
+X-Google-Smtp-Source: ABdhPJxJHwgae8gBZtNLXNeueHSHgMXtd10QHJ2hXwx5BHRITk4XBtLwwmeLjCZkLdEm49xzSETXgQ==
+X-Received: by 2002:a5d:5888:0:b0:20c:9868:9d94 with SMTP id n8-20020a5d5888000000b0020c98689d94mr34917757wrf.433.1653659244342;
+        Fri, 27 May 2022 06:47:24 -0700 (PDT)
+Received: from localhost.localdomain ([2001:861:44c0:66c0:f081:5ded:fc86:365d])
+        by smtp.gmail.com with ESMTPSA id l1-20020a5d6d81000000b0020d02262664sm1763477wrs.25.2022.05.27.06.47.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 06:47:23 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
+To:     khilman@baylibre.com, Zelong Dong <zelong.dong@amlogic.com>,
+        robh+dt@kernel.org, p.zabel@pengutronix.de,
+        martin.blumenstingl@googlemail.com, devicetree@vger.kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, jbrunet@baylibre.com
+Subject: Re: [PATCH] arm64: dts: meson: add reset controller for Meson-S4 SoC
+Date:   Fri, 27 May 2022 15:47:22 +0200
+Message-Id: <165365923903.118001.12421287063580195435.b4-ty@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220526130158.36651-1-zelong.dong@amlogic.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220526130158.36651-1-zelong.dong@amlogic.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/05/2022 15:01, Zelong Dong wrote:
+Hi,
+
+On Thu, 26 May 2022 21:01:58 +0800, Zelong Dong wrote:
 > Add the reset controller device of Meson-S4 SoC family
 > 
-> Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
-> ---
->   arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 6 ++++++
->   1 file changed, 6 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-> index 480afa2cc61f..c750bc60786f 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
-> @@ -94,6 +94,12 @@ uart_B: serial@7a000 {
->   				clocks = <&xtal>, <&xtal>, <&xtal>;
->   				clock-names = "xtal", "pclk", "baud";
->   			};
-> +
-> +			reset: reset-controller@2000 {
-> +				compatible = "amlogic,meson-s4-reset";
-> +				reg = <0x0 0x2000 0x0 0x98>;
-> +				#reset-cells = <1>;
-> +			};
->   		};
->   	};
->   };
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.20/arm64)
+
+[1/1] arm64: dts: meson: add reset controller for Meson-S4 SoC
+      https://git.kernel.org/amlogic/c/ead23b52f539a4d93a541afe208d70b1a9089e1a
+
+These changes has been applied on the intermediate git tree [1].
+
+The v5.20/arm64 branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+-- 
+Neil

@@ -2,179 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3D1535EA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A3A535EA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348241AbiE0Kqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 06:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
+        id S1345991AbiE0Krz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 06:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344688AbiE0Kqi (ORCPT
+        with ESMTP id S239766AbiE0Krw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 06:46:38 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248E4140E2;
-        Fri, 27 May 2022 03:46:37 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id m20so7894959ejj.10;
-        Fri, 27 May 2022 03:46:37 -0700 (PDT)
+        Fri, 27 May 2022 06:47:52 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1A16549
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:47:51 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id v15so2480864edl.9
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:47:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VEAekRrz/FSY4pk4QnV3m6H5QVjhz8BFDYr0EcpVw1E=;
-        b=nXTl96gpCDbYy3bbmZHUFxanwBKanpTD5T3ye91nNt0S5DzRS50X+C3V5calou/Tbd
-         W3tp+Pa5ui5nyk/J9IilzxqUhKzX+QyGcukjZk0ELfa/RtKrZMaq9i+yE1j0RcYeHGEH
-         V+4RtLXDWPxnAymJMfcVpu0JZEZoxenwNXkmgyYKMQXGnN1Ls7NkOSx9TgW4IEazH0HS
-         TOy4lNsQjFRd71dz5D/Ux8BGGU+UgNurAc7P2zcBMC8bJFwbS5pJWekOq461oc+DsRDd
-         eh87WbfBiCTIu2NxwA+S3LoC7J0WxrnESI1Jt77XHjKjToAke3bka2tT28oXpFfiDYxk
-         GFbg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/fT1it2KZU2gPXkEvlWdCKHS58rx52JxhTKoYGvWFsI=;
+        b=RRHjbEWLo2//B4DPzz6ni5o3BsNnS6apiG3aXTQnDHlIWIIzK1KijymcswiWzlHFtY
+         f4mkpH7cLheY6r/TX6hJMUhSaomWTESb3RUoKXH78dVbYDcmz3byk7MprwemE3lMoHSW
+         wUK8bcIJJz2Bz+wUoLKwSwowL5/Xky9sXpdWuaXefgSn90q6kXSIt12TUok6I4kXq8fD
+         IYrnZbMGB2z/eoeNFjIU+Rp07MPbWuCQpNtw+/QZHXQl3HVcKre9Qsw+Itnwwu3Zx7ge
+         +D41kdUtz7/9UjllTAR1Z+MUwIwRF9gRjD2uxegnYRu+HC+WtUnOj5wkl/Sn33XOCida
+         +Qgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=VEAekRrz/FSY4pk4QnV3m6H5QVjhz8BFDYr0EcpVw1E=;
-        b=LO/1f7GqF0w+xraxHPRErJiYfcdeZvbNzV9YGGojCAY5Bupb1bp0W3LZctCENfsFtR
-         /WAKDzDKat2OkwGPW6D9fTl8fLj4Etmld6CZcJPticTjrF4H+haFomQ5h2e2HbYEdbs9
-         rJXKpbLU4YBYdRz+DOOZSbUePDCap7/oqhjphJIaE5H/vNGTmKGyWs34XdICGbJfAF2E
-         FnHaX6s/oiFnVrTvwhnGudEJM0wErbTqenz+2gjOQJe2b/lD6oLvnqlQCGKjtFr1Yece
-         d/2nPYfV3C7ZHShCeCpBEDW/M2LNQKNi0ij4kNVyvIb3aU7A7WLEEfAmvHnsZOmvVZPm
-         eUGQ==
-X-Gm-Message-State: AOAM530kWFv/pmgO/9MV407r0PZ0iD3pk3N1Wphwja2DI6Sdq8+O0cTf
-        4C7lKcUVxCvRV2qALA5lixmZBgoYiWo=
-X-Google-Smtp-Source: ABdhPJyWn7wVchQLELsEVq6TA/gUzEaBn19VUAXtFTYBInhQr0sSQqMx29HcpQwhBHqmmOM8Z+iT0g==
-X-Received: by 2002:a17:907:7baa:b0:6fe:b3dc:2378 with SMTP id ne42-20020a1709077baa00b006feb3dc2378mr30766036ejc.266.1653648395645;
-        Fri, 27 May 2022 03:46:35 -0700 (PDT)
-Received: from gmail.com (563BA16F.dsl.pool.telekom.hu. [86.59.161.111])
-        by smtp.gmail.com with ESMTPSA id i20-20020a17090639d400b006fec1a73e48sm1320742eje.64.2022.05.27.03.46.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/fT1it2KZU2gPXkEvlWdCKHS58rx52JxhTKoYGvWFsI=;
+        b=jMLh13Nv0D+cwokfbTZJ1lqK6A2WjB7SlCWeSyk2y2Z+LUplgL0F1Pf1YfmV/IIjGf
+         lmPlrm9Z1z8rXxGvoZbNU8dLPbXLYUqioYMJuIghJx5tOpRi7KB1vrTXifDX4ikgpEgw
+         nza+SYth2F3LNmloTeYQdNiW8gaXAYUSTAaljZSMuNV1u7gbaJdxEW/wwNzfDBO5KBGb
+         f6fEBuLFSV7NogizUlg1nmbp0BSF77Rx8DwAQ+KT3+9E2PlwANXMD1juQXsM9BpoFlJc
+         FT05xdYt1jpzldpoNDhLk0tO8xNl0cncbnwbLcfatYyNzEwt/0IPVr4+wqHLKYaTTZQj
+         7eig==
+X-Gm-Message-State: AOAM530un/eCrMf9mJvV5HVu+YwpkfSH3zB3Bv2/JxpBxTnJk17hC8BC
+        xkhkIwYY3b/1COt49z3P6lrB0sOCf2/BovB0
+X-Google-Smtp-Source: ABdhPJwd8nCaOgRfb6mdXbAKJwYlhIYmPv5Kq25qkC6wi7PtkgjVQe2mNDQE+tW1St0c5Vc6Lsh7gQ==
+X-Received: by 2002:a05:6402:4392:b0:42b:612:b275 with SMTP id o18-20020a056402439200b0042b0612b275mr41609136edc.288.1653648470130;
+        Fri, 27 May 2022 03:47:50 -0700 (PDT)
+Received: from orion.localdomain ([93.99.228.15])
+        by smtp.gmail.com with ESMTPSA id c13-20020a50d64d000000b0042617ba63cfsm1926153edj.89.2022.05.27.03.47.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 03:46:34 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Fri, 27 May 2022 12:46:31 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Richard Henderson <rth@twiddle.net>,
-        David Hildenbrand <david@redhat.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michal Simek <monstr@monstr.eu>,
-        Russell King <linux@armlinux.org.uk>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-riscv@lists.infradead.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jonas Bonn <jonas@southpole.se>, Will Deacon <will@kernel.org>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        openrisc@lists.librecores.org, linux-s390@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k@lists.linux-m68k.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Chris Zankel <chris@zankel.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        sparclinux@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-xtensa@linux-xtensa.org, Nicholas Piggin <npiggin@gmail.com>,
-        linux-sh@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Borislav Petkov <bp@alien8.de>, linux-mips@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Helge Deller <deller@gmx.de>, Vineet Gupta <vgupta@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-um@lists.infradead.org, linux-alpha@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-ia64@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-snps-arc@lists.infradead.org,
-        Hugh Dickins <hughd@google.com>, Rich Felker <dalias@libc.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-parisc@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v3] mm: Avoid unnecessary page fault retires on shared
- memory types
-Message-ID: <YpCsBwFArieTpvg2@gmail.com>
-References: <20220524234531.1949-1-peterx@redhat.com>
+        Fri, 27 May 2022 03:47:49 -0700 (PDT)
+Received: by orion.localdomain (Postfix, from userid 1003)
+        id 4BD67A028F; Fri, 27 May 2022 12:48:18 +0200 (CEST)
+From:   =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, vbabka@suse.cz, mhocko@kernel.org,
+        mgorman@techsingularity.net, willy@infradead.org,
+        liam.howlett@oracle.com, hughd@google.com, kirill@shutemov.name,
+        riel@surriel.com, rostedt@goodmis.org, peterz@infradead.org,
+        =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>
+Subject: [PATCH 0/2] Refactor of vma_merge and new merge call
+Date:   Fri, 27 May 2022 12:48:08 +0200
+Message-Id: <20220527104810.24736-1-matenajakub@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524234531.1949-1-peterx@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I am currently working on my master's thesis trying to increase
+number of merges of VMAs currently failing because of page offset
+incompatibility and difference in their anon_vmas. The following
+refactor and added merge call included in this series is just two
+smaller upgrades I created along the way.
 
-* Peter Xu <peterx@redhat.com> wrote:
+The rest of the work is still being worked on but was send to mailing
+list as a RFC:
+https://lore.kernel.org/all/20220516125405.1675-1-matenajakub@gmail.com/
 
-> This patch provides a ~12% perf boost on my aarch64 test VM with a simple
-> program sequentially dirtying 400MB shmem file being mmap()ed and these are
-> the time it needs:
->
->   Before: 650.980 ms (+-1.94%)
->   After:  569.396 ms (+-1.38%)
+This patch series is based on tag v5.18-rc2.
 
-Nice!
+Jakub Matěna (2):
+  mm: refactor of vma_merge()
+  mm: add merging after mremap resize
 
->  arch/x86/mm/fault.c           |  4 ++++
+ mm/mmap.c   | 87 +++++++++++++++++++++++------------------------------
+ mm/mremap.c |  8 +++--
+ 2 files changed, 43 insertions(+), 52 deletions(-)
 
-Reviewed-by: Ingo Molnar <mingo@kernel.org>
+-- 
+2.35.1
 
-Minor comment typo:
-
-> +		/*
-> +		 * We should do the same as VM_FAULT_RETRY, but let's not
-> +		 * return -EBUSY since that's not reflecting the reality on
-> +		 * what has happened - we've just fully completed a page
-> +		 * fault, with the mmap lock released.  Use -EAGAIN to show
-> +		 * that we want to take the mmap lock _again_.
-> +		 */
-
-s/reflecting the reality on what has happened
- /reflecting the reality of what has happened
-
->  	ret = handle_mm_fault(vma, address, fault_flags, NULL);
-> +
-> +	if (ret & VM_FAULT_COMPLETED) {
-> +		/*
-> +		 * NOTE: it's a pity that we need to retake the lock here
-> +		 * to pair with the unlock() in the callers. Ideally we
-> +		 * could tell the callers so they do not need to unlock.
-> +		 */
-> +		mmap_read_lock(mm);
-> +		*unlocked = true;
-> +		return 0;
-
-Indeed that's a pity - I guess more performance could be gained here, 
-especially in highly parallel threaded workloads?
-
-Thanks,
-
-	Ingo

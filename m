@@ -2,178 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D225368B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDECC5368C6
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346149AbiE0WKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 18:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S1351667AbiE0WZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 18:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiE0WKQ (ORCPT
+        with ESMTP id S238322AbiE0WZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 18:10:16 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FDA6622F;
-        Fri, 27 May 2022 15:10:12 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id jx22so11008945ejb.12;
-        Fri, 27 May 2022 15:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oukq4BrRroZdnwtsCtnGKzub7xqcAGtJO6v8azC2xEA=;
-        b=XBVQbQpBf//NeoTj4WSNgbW9qr+4TUIyl6au6/UKJpoL1clDXJuPyxyFEe5KgJ3bLh
-         +sVImQkHxvDbJxMotprxSg66yKl30jBNrmBWhhAdNUk5ssvocQvWnLaG68p/0j3Wm6z9
-         5KiRbciA8jCx3Oo/QtTySsMgTRY4CO+kFTGGTQXT9C2xgeMinCa8WhD1Ak+zavmKnQcI
-         KpWXOLztoszMB7oTtCRAHdlAfuhB4Rq47PdTlC4QZIVenpj6KOR9m77ZEOeW4lp7pPa5
-         9OJSggbvyCAo9a7DWm64hps1494GzuZ5HCBw0KDXrQUTk78in9Og8U05MLM4/HHyii7B
-         79Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oukq4BrRroZdnwtsCtnGKzub7xqcAGtJO6v8azC2xEA=;
-        b=1BGW3gdh4dwV4LPbN3HsNSKfbgqI1RI+a/VQo8Aksc0ydntgcQ7yXgcGkEvkY5tYR3
-         shNCeca7vDYg4TaVBfRx/rGrXA3zczV7U8TfRU0TvE6m0di8wlidoN6BNRDkb5h+L4gM
-         fOrmx4ArrZxRfN+F+7yLn9NBTftH4ZYe3LIyo34pILlfRQDQf0Xm0ybUbzfanaed52RG
-         131nOxeIe6aKio75F7JGbbu6eSHafzbYQcfNykgy56M8Hq4+w0LY96wz77kmawomM1Lo
-         r6JQGrn+JrW5erHsF1Q7pwMsp3rMuNgyyAv8M77LXQa3qlqN43Wnbf7VcdxXkqnspJLM
-         Zo6w==
-X-Gm-Message-State: AOAM5322JliUDVayBnTnQPXaH3D6aTNlsiSwu7PIYGWFGJIoG01GAwMk
-        5mZG+pdYOC36GYMyescEUZA=
-X-Google-Smtp-Source: ABdhPJyXtlVDwl/kaymExPY9DtbP6IH3dQddqj8fSOd9q5zj2P3PnryJFUKeMx2AWjlys4A5tDIyxg==
-X-Received: by 2002:a17:906:9753:b0:6fe:dece:982a with SMTP id o19-20020a170906975300b006fedece982amr25834832ejy.560.1653689411016;
-        Fri, 27 May 2022 15:10:11 -0700 (PDT)
-Received: from krava ([83.240.62.49])
-        by smtp.gmail.com with ESMTPSA id o25-20020a509b19000000b0042617ba63a7sm2646180edi.49.2022.05.27.15.10.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 15:10:10 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sat, 28 May 2022 00:10:08 +0200
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH] rethook: Reject getting a rethook if RCU is not watching
-Message-ID: <YpFMQOjvV/tgwsuK@krava>
-References: <165189881197.175864.14757002789194211860.stgit@devnote2>
- <20220524192301.0c2ab08a@gandalf.local.home>
- <20220526232530.cb7d0aed0c60625ef093a735@kernel.org>
- <Yo+TWcfpyHy55Il5@krava>
- <20220527011434.9e8c47d1b40f549baf2cf52a@kernel.org>
+        Fri, 27 May 2022 18:25:37 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C245B39818
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653690335; x=1685226335;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BhBpZHIZWgMKbLkUH5+JOXI8LyYh9I3a43j7pg0i2j0=;
+  b=eAKGWzxddVDaJdgOVxXqSwcKVIRoNa31UPzEW3BxAmn8AHLXE2h/4Zzj
+   nUV1cxVObzfTqkEsIFTd67/dohnBphpQ+nSpy5+2X3hsPBlzJknC0itzs
+   b/s8VaR8efo7d3UQYqcKuOVVuc8FTheav2ZA+WePOiA/w3rXxSXsysgLM
+   ZTiorY4JCBQ7onB0LxoSPIUKPOd98LtE7XpTdYvzvvEx9uTfzUc5+bunK
+   ofWHdsLDEEIT+oGjT3Iu2WisIcxBI26syVBK/dPvpQGFdhSakuyudGAxK
+   ElZo2sos72wv1ysIZCJXDuP15fKbAss/DoR2+ABXgeZgCPrk21l9wasD0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="256662301"
+X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
+   d="scan'208";a="256662301"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 15:25:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
+   d="scan'208";a="747282948"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 May 2022 15:25:34 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuiOj-0005BL-E6;
+        Fri, 27 May 2022 22:25:33 +0000
+Date:   Sat, 28 May 2022 06:24:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/mm] BUILD SUCCESS
+ e19d11267f0e6c8aff2d15d2dfed12365b4c9184
+Message-ID: <62914fa7.dmolsByGFg1FA5Yd%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527011434.9e8c47d1b40f549baf2cf52a@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 01:14:34AM +0900, Masami Hiramatsu wrote:
-> On Thu, 26 May 2022 16:49:26 +0200
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > On Thu, May 26, 2022 at 11:25:30PM +0900, Masami Hiramatsu wrote:
-> > > On Tue, 24 May 2022 19:23:01 -0400
-> > > Steven Rostedt <rostedt@goodmis.org> wrote:
-> > > 
-> > > > On Sat,  7 May 2022 13:46:52 +0900
-> > > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > > 
-> > > > Is this expected to go through the BPF tree?
-> > > > 
-> > > 
-> > > Yes, since rethook (fprobe) is currently used only from eBPF.
-> > > Jiri, can you check this is good for your test case?
-> > 
-> > sure I'll test it.. can't see the original email,
-> > perhaps I wasn't cc-ed.. but I'll find it
-> 
-> Here it is. I Cc-ed your @kernel.org address.
-> https://lore.kernel.org/all/165189881197.175864.14757002789194211860.stgit@devnote2/T/#u
-> 
-> > 
-> > is this also related to tracing 'idle' functions,
-> > as discussed in here?
-> >   https://lore.kernel.org/bpf/20220515203653.4039075-1-jolsa@kernel.org/
-> 
-> Ah, yes. So this may not happen with the above patch, but for the
-> hardening (ensuring it is always safe), I would like to add this.
-> 
-> > 
-> > because that's the one I can reproduce.. but I can
-> > certainly try that with your change as well
-> 
-> Thank you!
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
+branch HEAD: e19d11267f0e6c8aff2d15d2dfed12365b4c9184  x86/mm: Use PAGE_ALIGNED(x) instead of IS_ALIGNED(x, PAGE_SIZE)
 
-it did not help the idle warning as expected, but I did not
-see any problems running bpf tests on top of this
+elapsed time: 721m
 
-jirka
+configs tested: 169
+configs skipped: 72
 
-> 
-> > 
-> > jirka
-> > 
-> > > 
-> > > Thank you,
-> > > 
-> > > 
-> > > > -- Steve
-> > > > 
-> > > > 
-> > > > > Since the rethook_recycle() will involve the call_rcu() for reclaiming
-> > > > > the rethook_instance, the rethook must be set up at the RCU available
-> > > > > context (non idle). This rethook_recycle() in the rethook trampoline
-> > > > > handler is inevitable, thus the RCU available check must be done before
-> > > > > setting the rethook trampoline.
-> > > > > 
-> > > > > This adds a rcu_is_watching() check in the rethook_try_get() so that
-> > > > > it will return NULL if it is called when !rcu_is_watching().
-> > > > > 
-> > > > > Fixes: 54ecbe6f1ed5 ("rethook: Add a generic return hook")
-> > > > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > > ---
-> > > > >  kernel/trace/rethook.c |    9 +++++++++
-> > > > >  1 file changed, 9 insertions(+)
-> > > > > 
-> > > > > diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
-> > > > > index b56833700d23..c69d82273ce7 100644
-> > > > > --- a/kernel/trace/rethook.c
-> > > > > +++ b/kernel/trace/rethook.c
-> > > > > @@ -154,6 +154,15 @@ struct rethook_node *rethook_try_get(struct rethook *rh)
-> > > > >  	if (unlikely(!handler))
-> > > > >  		return NULL;
-> > > > >  
-> > > > > +	/*
-> > > > > +	 * This expects the caller will set up a rethook on a function entry.
-> > > > > +	 * When the function returns, the rethook will eventually be reclaimed
-> > > > > +	 * or released in the rethook_recycle() with call_rcu().
-> > > > > +	 * This means the caller must be run in the RCU-availabe context.
-> > > > > +	 */
-> > > > > +	if (unlikely(!rcu_is_watching()))
-> > > > > +		return NULL;
-> > > > > +
-> > > > >  	fn = freelist_try_get(&rh->pool);
-> > > > >  	if (!fn)
-> > > > >  		return NULL;
-> > > > 
-> > > 
-> > > 
-> > > -- 
-> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc                      pcm030_defconfig
+mips                         db1xxx_defconfig
+sh                          polaris_defconfig
+arm                         assabet_defconfig
+arm                            mps2_defconfig
+m68k                          sun3x_defconfig
+powerpc                      ppc6xx_defconfig
+arm                       multi_v4t_defconfig
+powerpc64                           defconfig
+um                                  defconfig
+sh                               alldefconfig
+arm                           sama5_defconfig
+arm                           imxrt_defconfig
+parisc                           alldefconfig
+arm                         vf610m4_defconfig
+sh                             sh03_defconfig
+xtensa                           alldefconfig
+arc                     haps_hs_smp_defconfig
+powerpc                 mpc8540_ads_defconfig
+sh                            hp6xx_defconfig
+mips                 decstation_r4k_defconfig
+arm                          pxa3xx_defconfig
+sh                ecovec24-romimage_defconfig
+mips                         bigsur_defconfig
+xtensa                    xip_kc705_defconfig
+powerpc                     tqm8555_defconfig
+sh                            shmin_defconfig
+arm                           u8500_defconfig
+sh                           se7712_defconfig
+powerpc                     ep8248e_defconfig
+sh                          sdk7786_defconfig
+xtensa                  cadence_csp_defconfig
+sh                          kfr2r09_defconfig
+ia64                                defconfig
+sparc                       sparc32_defconfig
+arm                            pleb_defconfig
+powerpc                     asp8347_defconfig
+powerpc                    adder875_defconfig
+sh                          r7780mp_defconfig
+m68k                          atari_defconfig
+arm                     eseries_pxa_defconfig
+sparc                       sparc64_defconfig
+sh                        apsh4ad0a_defconfig
+sh                           se7343_defconfig
+microblaze                          defconfig
+m68k                          multi_defconfig
+arm                          pxa910_defconfig
+arc                      axs103_smp_defconfig
+sh                           se7780_defconfig
+powerpc                mpc7448_hpc2_defconfig
+sh                     magicpanelr2_defconfig
+sh                   sh7724_generic_defconfig
+arm                      footbridge_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                           sh2007_defconfig
+sh                         microdev_defconfig
+s390                       zfcpdump_defconfig
+arm                        trizeps4_defconfig
+arm                        shmobile_defconfig
+nios2                         10m50_defconfig
+arm                          lpd270_defconfig
+arm                  randconfig-c002-20220526
+arm                  randconfig-c002-20220524
+x86_64                        randconfig-c001
+ia64                             allmodconfig
+ia64                             allyesconfig
+riscv                             allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220524
+s390                 randconfig-r044-20220524
+riscv                randconfig-r042-20220524
+arc                  randconfig-r043-20220527
+arc                  randconfig-r043-20220526
+s390                 randconfig-r044-20220526
+riscv                randconfig-r042-20220526
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+arm                  randconfig-c002-20220524
+x86_64                        randconfig-c007
+s390                 randconfig-c005-20220524
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220524
+riscv                randconfig-c006-20220524
+mips                 randconfig-c004-20220524
+mips                     loongson2k_defconfig
+mips                          malta_defconfig
+mips                      pic32mzda_defconfig
+powerpc                       ebony_defconfig
+mips                           ip28_defconfig
+arm                        mvebu_v5_defconfig
+mips                  cavium_octeon_defconfig
+mips                           ip22_defconfig
+arm                     am200epdkit_defconfig
+powerpc                          allyesconfig
+powerpc                    mvme5100_defconfig
+arm                      pxa255-idp_defconfig
+arm                       aspeed_g4_defconfig
+mips                     cu1830-neo_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220527
+hexagon              randconfig-r041-20220527
+s390                 randconfig-r044-20220527
+riscv                randconfig-r042-20220527
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

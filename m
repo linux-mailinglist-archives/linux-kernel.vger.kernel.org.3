@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9835366AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389AB5366AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244575AbiE0Rm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 13:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S1353327AbiE0RsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 13:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236171AbiE0Rmy (ORCPT
+        with ESMTP id S231767AbiE0Rr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 13:42:54 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2139BB7;
-        Fri, 27 May 2022 10:42:49 -0700 (PDT)
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 24RHgUrI002068;
-        Sat, 28 May 2022 02:42:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 24RHgUrI002068
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653673351;
-        bh=vO9l5kDkkTIQWSumWYQ1Vkw7B/XqoY7ZfQPx5PWESBs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=t/RUfi9Sh5h28itWUOQb0HeUskZksbBYC0U2grK7iHf83mD7gmeY6+WY5DQxn2pst
-         LvLeoRRjNyowE7U7Ni7dLwGqtu3YaqFDS+74L/C9BQmYytoqcbwBSObFeNnGRYteH9
-         64VVJtWv5hAMA0wIGEx51mm5eCKE3rPpd6hx7aZ6rH/eJ21NQbHHOg+PHw67DGzXRF
-         XH0qHk5Rc6FVAxgFPdVeQ+US4wPL5p3JNeJJxXjvDebmzBAdAguNm7pZhK3Jkl8KGj
-         K1w5TWxnznynXACulsOv5l5mWjTlvaR/6XbUvRm/irKTe9HzptX5huwsjXrvHWUoop
-         XK1vn5dmbrHtA==
-X-Nifty-SrcIP: [209.85.214.182]
-Received: by mail-pl1-f182.google.com with SMTP id m1so4735152plx.3;
-        Fri, 27 May 2022 10:42:30 -0700 (PDT)
-X-Gm-Message-State: AOAM533KckRom8nyn2mzA2yPpVGuC5o0nlVMK610CP6xZqv3IiC1HGRl
-        PNT/30uXYdoDPfE98SkiKHC/8nQUdktwPzZdH9E=
-X-Google-Smtp-Source: ABdhPJwMiVJv7kLsX2ZZRH8xMYaGS8e37WqzfbRucz+6H3VdKMbNmq62R7H5jsGDhOOZp00zV+5CyfxMkWGovyzpsEM=
-X-Received: by 2002:a17:903:1205:b0:15e:8cbc:fd2b with SMTP id
- l5-20020a170903120500b0015e8cbcfd2bmr44301921plh.99.1653673349915; Fri, 27
- May 2022 10:42:29 -0700 (PDT)
+        Fri, 27 May 2022 13:47:58 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E21717A88;
+        Fri, 27 May 2022 10:47:56 -0700 (PDT)
+Date:   Fri, 27 May 2022 10:47:46 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1653673673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GyZxhrFIbciyaIa9/uGSSo/bdh7XAme4AdSjV5SMRRg=;
+        b=ZqRzG1adM/lY8etIuMIydjIQZ2VDwDQ5EbKSiqF0cCHyjgI7PSsx0GyLAGXqymvqrQRzFy
+        m6d0oBpA7fhs0ygGeSr6RnfWTd1tWH9vTAM0+lt4j3iZs9fDLjDmE6+9DdMx46FFB12loF
+        fpzD0JKuyQ8nOhyDo8hiz7eW4QtIg5s=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, kernel@openvz.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Subject: Re: [PATCH] XArray: handle XA_FLAGS_ACCOUNT in xas_split_alloc
+Message-ID: <YpEOwrBe2UzJZr9E@carbon>
+References: <348dc099-737d-94ba-55ad-2db285084c73@openvz.org>
+ <YpAnqqY/c3Y5ZkPG@casper.infradead.org>
+ <CALvZod7iyO5Ti5xhzq36UjDFNAmfEyPk1MQv_t4kUHKuPCeNng@mail.gmail.com>
+ <d4e81087-d057-4edb-5df0-47d99a1c72d9@openvz.org>
 MIME-Version: 1.0
-References: <20220527100155.1996314-1-masahiroy@kernel.org>
- <20220527100155.1996314-9-masahiroy@kernel.org> <20220527155053.i4xfrlupuqfu4kem@treble>
-In-Reply-To: <20220527155053.i4xfrlupuqfu4kem@treble>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 28 May 2022 02:41:06 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQkUJO=8GprusO6-o7=_yg2zVDPHecoNN_075a_Y4U-7w@mail.gmail.com>
-Message-ID: <CAK7LNAQkUJO=8GprusO6-o7=_yg2zVDPHecoNN_075a_Y4U-7w@mail.gmail.com>
-Subject: Re: [PATCH v7 8/8] kbuild: rebuild multi-object modules when objtool
- is updated
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <n.schier@avm.de>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d4e81087-d057-4edb-5df0-47d99a1c72d9@openvz.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 12:50 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> On Fri, May 27, 2022 at 07:01:55PM +0900, Masahiro Yamada wrote:
-> > When CONFIG_LTO_CLANG or CONFIG_X86_KERNEL_IBT is enabled, objtool for
-> > multi-object modules is postponed until the objects are linked together.
-> >
-> > Make sure to re-run objtool and re-link multi-object modules when
-> > objtool is updated.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
-> > Reviewed-by: Nicolas Schier <n.schier@avm.de>
-> > Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
->
-> Hi Masahiro,
->
-> Is it also possible to rebuild vmlinux.o when objtool changes, for
-> CONFIG_LTO_CLANG, CONFIG_X86_KERNEL_IBT, or CONFIG_NOINSTR_VALIDATION?
-> That doesn't seem to be happening.
->
-> --
-> Josh
+On Fri, May 27, 2022 at 02:22:19PM +0300, Vasily Averin wrote:
+> On 5/27/22 04:40, Shakeel Butt wrote:
+> > On Thu, May 26, 2022 at 6:21 PM Matthew Wilcox <willy@infradead.org> wrote:
+> >>
+> >> On Wed, May 25, 2022 at 11:26:37AM +0300, Vasily Averin wrote:
+> >>> Commit 7b785645e8f1 ("mm: fix page cache convergence regression")
+> >>> added support of new XA_FLAGS_ACCOUNT flag into all Xarray allocation
+> >>> functions. Later commit 8fc75643c5e1 ("XArray: add xas_split")
+> >>> introduced xas_split_alloc() but missed about XA_FLAGS_ACCOUNT
+> >>> processing.
+> >>
+> >> Thanks, Vasily.
+> >>
+> >> Johannes, Shakeel, is this right?  I don't fully understand the accounting
+> >> stuff.
+> >>
+> > 
+> > If called from __filemap_add_folio() then this is correct.
+> > 
+> > However from split_huge_page_to_list(), we can not use the memcg from
+> > current as that codepath is called from reclaim which can be triggered
+> > by processes of other memcgs.
+> Btw, Shakeel, Johannes,
+> I would like to understand, when Xarray should use XA_FLAGS_ACCOUNT ?
+> 
+> From my point of view, this should be useless:
+> a) if Xarray stores some index (idr?) - his memory is quite small,
+> and his accounting can be ignored.
+> b) if Xarray stores some accounted - the size of the corresponding Xarray
+> infrastructure is usually significantly smaller than the size of the stored object,
+> sо his accounting can be skipped too.
+> c) if Xarray stores some non-accounted objects - it makes no sense to account 
+> corresponding Xarray infrastructure. In case of necessary it makes much more sense
+> to enable accounting for stored objects (and return to case b).
+> 
+> Am I missed something important perhaps?
+> 
+> I looked for the description of 7b785645e8f1, but o be honest I'm still not sure
+> that I understand correctly why XA_FLAGS_ACCOUNT flag solved the described problem.
+> 
+> Could you please explain this in more details?
+> 
+> Was it because the non-accounted Xarray kept a reference to the stored object
+> and thus prevents it from being reclaimed?
+> 
+> If so, was it some special case, or should it affect all such cases,
+> and my b) statement above is not correct?
 
-Yes.
-Actually, it is already on my TODO list,
-but it requires more effort.
 
-I will aim for v5.20.
-
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+It's all about shadow entries, which are small, so b) is not true for them.
+There is a good description on how it works on top of mm/workingset.c

@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CAD5360E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2828536261
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353097AbiE0L4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S1353677AbiE0MQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352856AbiE0Lu4 (ORCPT
+        with ESMTP id S1352430AbiE0MA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:50:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2C7132A16;
-        Fri, 27 May 2022 04:46:10 -0700 (PDT)
+        Fri, 27 May 2022 08:00:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C359DF3B;
+        Fri, 27 May 2022 04:52:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5323B61CF0;
-        Fri, 27 May 2022 11:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FDD6C385A9;
-        Fri, 27 May 2022 11:46:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00C39B824D7;
+        Fri, 27 May 2022 11:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 435D2C385A9;
+        Fri, 27 May 2022 11:52:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651969;
-        bh=iTYQaJYlXPbDVyH9KPjW3gONTItiebfNQm2WzJRyfxY=;
+        s=korg; t=1653652338;
+        bh=oQxVDb3qfDa/mP64Ou4OppDiWFfVqm1U90EPpmP50V4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jKJNUdHwgjemIdw3eNv/qmczeoE5oSIwa860AmTKtBwghK5Ks0u4A6aLUwBD/CXaG
-         JGvXTUR76Ug/No2JCtCIdgWveImYn8AgakCnh5/LihZ3zD/OLCLoT16oCf+yRl7DAt
-         PngUkmp5pS4h3SxwFBKWNNUH67jn1COT4VV84B/o=
+        b=EiIZOkPrVi7LZVrCYbDUe2vqHzgl84rAtPx7VEUb5Yd++ZzTFslF0pGO+Zi8BYzJz
+         9+grzFA5wqTTu78Zs6b2oUw94CQ0YnvK8LN2NoeO0qn8M8d20Iqgg2+J98iC7XJbsa
+         /I1osgpuwacrxaxRwX3sueHQlwLquLDPHC57NzYo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 095/111] random: remove ratelimiting for in-kernel unseeded randomness
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Arnd Bergmann <arnd@arndb.de>, Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.10 127/163] timekeeping: Add raw clock fallback for random_get_entropy()
 Date:   Fri, 27 May 2022 10:50:07 +0200
-Message-Id: <20220527084832.819481404@linuxfoundation.org>
+Message-Id: <20220527084845.659666197@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,198 +57,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit cc1e127bfa95b5fb2f9307e7168bf8b2b45b4c5e upstream.
+commit 1366992e16bddd5e2d9a561687f367f9f802e2e4 upstream.
 
-The CONFIG_WARN_ALL_UNSEEDED_RANDOM debug option controls whether the
-kernel warns about all unseeded randomness or just the first instance.
-There's some complicated rate limiting and comparison to the previous
-caller, such that even with CONFIG_WARN_ALL_UNSEEDED_RANDOM enabled,
-developers still don't see all the messages or even an accurate count of
-how many were missed. This is the result of basically parallel
-mechanisms aimed at accomplishing more or less the same thing, added at
-different points in random.c history, which sort of compete with the
-first-instance-only limiting we have now.
+The addition of random_get_entropy_fallback() provides access to
+whichever time source has the highest frequency, which is useful for
+gathering entropy on platforms without available cycle counters. It's
+not necessarily as good as being able to quickly access a cycle counter
+that the CPU has, but it's still something, even when it falls back to
+being jiffies-based.
 
-It turns out, however, that nobody cares about the first unseeded
-randomness instance of in-kernel users. The same first user has been
-there for ages now, and nobody is doing anything about it. It isn't even
-clear that anybody _can_ do anything about it. Most places that can do
-something about it have switched over to using get_random_bytes_wait()
-or wait_for_random_bytes(), which is the right thing to do, but there is
-still much code that needs randomness sometimes during init, and as a
-geeneral rule, if you're not using one of the _wait functions or the
-readiness notifier callback, you're bound to be doing it wrong just
-based on that fact alone.
+In the event that a given arch does not define get_cycles(), falling
+back to the get_cycles() default implementation that returns 0 is really
+not the best we can do. Instead, at least calling
+random_get_entropy_fallback() would be preferable, because that always
+needs to return _something_, even falling back to jiffies eventually.
+It's not as though random_get_entropy_fallback() is super high precision
+or guaranteed to be entropic, but basically anything that's not zero all
+the time is better than returning zero all the time.
 
-So warning about this same first user that can't easily change is simply
-not an effective mechanism for anything at all. Users can't do anything
-about it, as the Kconfig text points out -- the problem isn't in
-userspace code -- and kernel developers don't or more often can't react
-to it.
+Finally, since random_get_entropy_fallback() is used during extremely
+early boot when randomizing freelists in mm_init(), it can be called
+before timekeeping has been initialized. In that case there really is
+nothing we can do; jiffies hasn't even started ticking yet. So just give
+up and return 0.
 
-Instead, show the warning for all instances when CONFIG_WARN_ALL_UNSEEDED_RANDOM
-is set, so that developers can debug things need be, or if it isn't set,
-don't show a warning at all.
-
-At the same time, CONFIG_WARN_ALL_UNSEEDED_RANDOM now implies setting
-random.ratelimit_disable=1 on by default, since if you care about one
-you probably care about the other too. And we can clean up usage around
-the related urandom_warning ratelimiter as well (whose behavior isn't
-changing), so that it properly counts missed messages after the 10
-message threshold is reached.
-
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   61 ++++++++++++++------------------------------------
- lib/Kconfig.debug     |    3 --
- 2 files changed, 19 insertions(+), 45 deletions(-)
+ include/linux/timex.h     |    8 ++++++++
+ kernel/time/timekeeping.c |   15 +++++++++++++++
+ 2 files changed, 23 insertions(+)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -86,11 +86,10 @@ static DEFINE_SPINLOCK(random_ready_chai
- static RAW_NOTIFIER_HEAD(random_ready_chain);
+--- a/include/linux/timex.h
++++ b/include/linux/timex.h
+@@ -62,6 +62,8 @@
+ #include <linux/types.h>
+ #include <linux/param.h>
  
- /* Control how we warn userspace. */
--static struct ratelimit_state unseeded_warning =
--	RATELIMIT_STATE_INIT("warn_unseeded_randomness", HZ, 3);
- static struct ratelimit_state urandom_warning =
- 	RATELIMIT_STATE_INIT("warn_urandom_randomness", HZ, 3);
--static int ratelimit_disable __read_mostly;
-+static int ratelimit_disable __read_mostly =
-+	IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM);
- module_param_named(ratelimit_disable, ratelimit_disable, int, 0644);
- MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
++unsigned long random_get_entropy_fallback(void);
++
+ #include <asm/timex.h>
  
-@@ -181,27 +180,15 @@ static void process_random_ready_list(vo
- 	spin_unlock_irqrestore(&random_ready_chain_lock, flags);
- }
- 
--#define warn_unseeded_randomness(previous) \
--	_warn_unseeded_randomness(__func__, (void *)_RET_IP_, (previous))
-+#define warn_unseeded_randomness() \
-+	_warn_unseeded_randomness(__func__, (void *)_RET_IP_)
- 
--static void _warn_unseeded_randomness(const char *func_name, void *caller, void **previous)
-+static void _warn_unseeded_randomness(const char *func_name, void *caller)
- {
--#ifdef CONFIG_WARN_ALL_UNSEEDED_RANDOM
--	const bool print_once = false;
--#else
--	static bool print_once __read_mostly;
--#endif
--
--	if (print_once || crng_ready() ||
--	    (previous && (caller == READ_ONCE(*previous))))
-+	if (!IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM) || crng_ready())
- 		return;
--	WRITE_ONCE(*previous, caller);
--#ifndef CONFIG_WARN_ALL_UNSEEDED_RANDOM
--	print_once = true;
--#endif
--	if (__ratelimit(&unseeded_warning))
--		printk_deferred(KERN_NOTICE "random: %s called from %pS with crng_init=%d\n",
--				func_name, caller, crng_init);
-+	printk_deferred(KERN_NOTICE "random: %s called from %pS with crng_init=%d\n",
-+			func_name, caller, crng_init);
- }
- 
- 
-@@ -454,9 +441,7 @@ static void _get_random_bytes(void *buf,
+ #ifndef random_get_entropy
+@@ -74,8 +76,14 @@
+  *
+  * By default we use get_cycles() for this purpose, but individual
+  * architectures may override this in their asm/timex.h header file.
++ * If a given arch does not have get_cycles(), then we fallback to
++ * using random_get_entropy_fallback().
   */
- void get_random_bytes(void *buf, size_t nbytes)
- {
--	static void *previous;
--
--	warn_unseeded_randomness(&previous);
-+	warn_unseeded_randomness();
- 	_get_random_bytes(buf, nbytes);
- }
- EXPORT_SYMBOL(get_random_bytes);
-@@ -552,10 +537,9 @@ u64 get_random_u64(void)
- 	u64 ret;
- 	unsigned long flags;
- 	struct batched_entropy *batch;
--	static void *previous;
- 	unsigned long next_gen;
++#ifdef get_cycles
+ #define random_get_entropy()	((unsigned long)get_cycles())
++#else
++#define random_get_entropy()	random_get_entropy_fallback()
++#endif
+ #endif
  
--	warn_unseeded_randomness(&previous);
-+	warn_unseeded_randomness();
- 
- 	if  (!crng_ready()) {
- 		_get_random_bytes(&ret, sizeof(ret));
-@@ -591,10 +575,9 @@ u32 get_random_u32(void)
- 	u32 ret;
- 	unsigned long flags;
- 	struct batched_entropy *batch;
--	static void *previous;
- 	unsigned long next_gen;
- 
--	warn_unseeded_randomness(&previous);
-+	warn_unseeded_randomness();
- 
- 	if  (!crng_ready()) {
- 		_get_random_bytes(&ret, sizeof(ret));
-@@ -821,16 +804,9 @@ static void credit_init_bits(size_t nbit
- 		wake_up_interruptible(&crng_init_wait);
- 		kill_fasync(&fasync, SIGIO, POLL_IN);
- 		pr_notice("crng init done\n");
--		if (unseeded_warning.missed) {
--			pr_notice("%d get_random_xx warning(s) missed due to ratelimiting\n",
--				  unseeded_warning.missed);
--			unseeded_warning.missed = 0;
--		}
--		if (urandom_warning.missed) {
-+		if (urandom_warning.missed)
- 			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
- 				  urandom_warning.missed);
--			urandom_warning.missed = 0;
--		}
- 	} else if (orig < POOL_EARLY_BITS && new >= POOL_EARLY_BITS) {
- 		spin_lock_irqsave(&base_crng.lock, flags);
- 		/* Check if crng_init is CRNG_EMPTY, to avoid race with crng_reseed(). */
-@@ -943,10 +919,6 @@ int __init rand_initialize(void)
- 	else if (arch_init && trust_cpu)
- 		credit_init_bits(BLAKE2S_BLOCK_SIZE * 8);
- 
--	if (ratelimit_disable) {
--		urandom_warning.interval = 0;
--		unseeded_warning.interval = 0;
--	}
+ /*
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -17,6 +17,7 @@
+ #include <linux/clocksource.h>
+ #include <linux/jiffies.h>
+ #include <linux/time.h>
++#include <linux/timex.h>
+ #include <linux/tick.h>
+ #include <linux/stop_machine.h>
+ #include <linux/pvclock_gtod.h>
+@@ -2378,6 +2379,20 @@ static int timekeeping_validate_timex(co
  	return 0;
  }
  
-@@ -1392,11 +1364,14 @@ static ssize_t urandom_read(struct file
- {
- 	static int maxwarn = 10;
++/**
++ * random_get_entropy_fallback - Returns the raw clock source value,
++ * used by random.c for platforms with no valid random_get_entropy().
++ */
++unsigned long random_get_entropy_fallback(void)
++{
++	struct tk_read_base *tkr = &tk_core.timekeeper.tkr_mono;
++	struct clocksource *clock = READ_ONCE(tkr->clock);
++
++	if (unlikely(timekeeping_suspended || !clock))
++		return 0;
++	return clock->read(clock);
++}
++EXPORT_SYMBOL_GPL(random_get_entropy_fallback);
  
--	if (!crng_ready() && maxwarn > 0) {
--		maxwarn--;
--		if (__ratelimit(&urandom_warning))
-+	if (!crng_ready()) {
-+		if (!ratelimit_disable && maxwarn <= 0)
-+			++urandom_warning.missed;
-+		else if (ratelimit_disable || __ratelimit(&urandom_warning)) {
-+			--maxwarn;
- 			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
- 				  current->comm, nbytes);
-+		}
- 	}
- 
- 	return get_random_bytes_user(buf, nbytes);
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1566,8 +1566,7 @@ config WARN_ALL_UNSEEDED_RANDOM
- 	  so architecture maintainers really need to do what they can
- 	  to get the CRNG seeded sooner after the system is booted.
- 	  However, since users cannot do anything actionable to
--	  address this, by default the kernel will issue only a single
--	  warning for the first use of unseeded randomness.
-+	  address this, by default this option is disabled.
- 
- 	  Say Y here if you want to receive warnings for all uses of
- 	  unseeded randomness.  This will be of use primarily for
+ /**
+  * do_adjtimex() - Accessor function to NTP __do_adjtimex function
 
 

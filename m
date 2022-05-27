@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F45535FB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72DD535FB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351542AbiE0LlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S238374AbiE0Lmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351737AbiE0LkD (ORCPT
+        with ESMTP id S1351702AbiE0Ll2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:40:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD9913128C;
-        Fri, 27 May 2022 04:39:12 -0700 (PDT)
+        Fri, 27 May 2022 07:41:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291E612815B;
+        Fri, 27 May 2022 04:39:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E9961CD8;
-        Fri, 27 May 2022 11:39:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F254FC385A9;
-        Fri, 27 May 2022 11:39:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1241B82466;
+        Fri, 27 May 2022 11:39:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36BEBC385A9;
+        Fri, 27 May 2022 11:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651551;
-        bh=aARjXd9mcvbcdHWE51vJ2pbllbwuZ37CccrqNv/hH70=;
+        s=korg; t=1653651595;
+        bh=N5fiw4PejwCrYvciUGPEH44DfCxU/YsYTR0gRKooOCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FthS+chxGEIVbSDtksvaPGklXL0sav/c5HtkB4epvvJ2fO1vZcr/+zJe4G6G4hYUE
-         s8n/lnf7ETUpHy/O0+skXij2R/fzXzVrCMxIvISe2CVTiEFFuPIG+HWRSrOqzIDM6c
-         qefLKpIEKvOMqgxYyTWRNtqK28lBg74+3sFkZetM=
+        b=YWbEguUArD+IyL2hn6wx7QnA/XIg2A7jfsdLZgnRmqMtLTqK3w9bM9Kg7q1TzwDWh
+         /GMg4DbNBogI90O4/OmGIHqq/pp6kR9Wi0ctM4Xa7rMaUFAU08k7meOQVylo3tyc9s
+         9d9Qy5pASr5ssumbpxCoobhUQZ+MT4FKKF28E4HM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 032/163] random: do not sign extend bytes for rotation when mixing
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.15 011/145] random: document add_hwgenerator_randomness() with other input functions
 Date:   Fri, 27 May 2022 10:48:32 +0200
-Message-Id: <20220527084832.607944244@linuxfoundation.org>
+Message-Id: <20220527084852.336917701@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-References: <20220527084828.156494029@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,33 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Mark Brown <broonie@kernel.org>
 
-commit 0d9488ffbf2faddebc6bac055bfa6c93b94056a3 upstream.
+commit 2b6c6e3d9ce3aa0e547ac25d60e06fe035cd9f79 upstream.
 
-By using `char` instead of `unsigned char`, certain platforms will sign
-extend the byte when `w = rol32(*bytes++, input_rotate)` is called,
-meaning that bit 7 is overrepresented when mixing. This isn't a real
-problem (unless the mixer itself is already broken) since it's still
-invertible, but it's not quite correct either. Fix this by using an
-explicit unsigned type.
+The section at the top of random.c which documents the input functions
+available does not document add_hwgenerator_randomness() which might lead
+a reader to overlook it. Add a brief note about it.
 
+Signed-off-by: Mark Brown <broonie@kernel.org>
+[Jason: reorganize position of function in doc comment and also document
+ add_bootloader_randomness() while we're at it.]
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -547,7 +547,7 @@ static void _mix_pool_bytes(struct entro
- 	unsigned long i, tap1, tap2, tap3, tap4, tap5;
- 	int input_rotate;
- 	int wordmask = r->poolinfo->poolwords - 1;
--	const char *bytes = in;
-+	const unsigned char *bytes = in;
- 	__u32 w;
- 
- 	tap1 = r->poolinfo->tap1;
+@@ -202,6 +202,9 @@
+  *                                unsigned int value);
+  *	void add_interrupt_randomness(int irq, int irq_flags);
+  * 	void add_disk_randomness(struct gendisk *disk);
++ *	void add_hwgenerator_randomness(const char *buffer, size_t count,
++ *					size_t entropy);
++ *	void add_bootloader_randomness(const void *buf, unsigned int size);
+  *
+  * add_device_randomness() is for adding data to the random pool that
+  * is likely to differ between two devices (or possibly even per boot).
+@@ -228,6 +231,14 @@
+  * particular randomness source.  They do this by keeping track of the
+  * first and second order deltas of the event timings.
+  *
++ * add_hwgenerator_randomness() is for true hardware RNGs, and will credit
++ * entropy as specified by the caller. If the entropy pool is full it will
++ * block until more entropy is needed.
++ *
++ * add_bootloader_randomness() is the same as add_hwgenerator_randomness() or
++ * add_device_randomness(), depending on whether or not the configuration
++ * option CONFIG_RANDOM_TRUST_BOOTLOADER is set.
++ *
+  * Ensuring unpredictability at system startup
+  * ============================================
+  *
 
 

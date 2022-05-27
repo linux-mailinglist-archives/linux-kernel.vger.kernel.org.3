@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0D5536047
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 885F25361AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351900AbiE0Ls4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S1352460AbiE0MDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351935AbiE0LpJ (ORCPT
+        with ESMTP id S1352481AbiE0LzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:45:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2413C351;
-        Fri, 27 May 2022 04:41:31 -0700 (PDT)
+        Fri, 27 May 2022 07:55:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103FF14AF73;
+        Fri, 27 May 2022 04:48:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD52461C3F;
-        Fri, 27 May 2022 11:41:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C766FC385A9;
-        Fri, 27 May 2022 11:41:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74CB5B824D6;
+        Fri, 27 May 2022 11:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB607C34100;
+        Fri, 27 May 2022 11:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651690;
-        bh=5Qvl9MRNPbfZ5zmGTUMKK2Aok2MPBZGiLGgl4WAat1s=;
+        s=korg; t=1653652112;
+        bh=vtFNrDwG4XkEmWxVaHM5wkzf3qnqfc1b2p90edXAux0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lYwx4WEvQ1SNgCUPKmPlqp283w+Z+TdbnJXAsOeZfxvvRtoncvKizDdFf9ENfhsCr
-         HUsiNZovbwAGvHpv7EGiKgl/PgZWjTEnFfobjhc0z78T37aT4x3hruDaGkEmC0TeHB
-         zoD+Gt0K7LtLxmsdp0HtQlfKnnLEXu1J6xHLuc9o=
+        b=PLoL+GbSBJfvSZ6lTsl3XFrkWiFGkkjyFTeAYr30a8KUSBcSjlv2mrGR9pdE2gGe4
+         3Uu3Iv8yB4UDvHZHBkzzGjIWuE2V3eOi2js1pJg7QWUySgy8OlWjeyPtVrDgzNTT9H
+         hST2mT1FMGhbOLuhEDmRjiQ43rbkHV8kIvyCWMKU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 063/111] random: check for signals every PAGE_SIZE chunk of /dev/[u]random
+Subject: [PATCH 5.15 074/145] random: do not take pool spinlock at boot
 Date:   Fri, 27 May 2022 10:49:35 +0200
-Message-Id: <20220527084828.462781628@linuxfoundation.org>
+Message-Id: <20220527084859.513239128@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,107 +57,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit e3c1c4fd9e6d14059ed93ebfe15e1c57793b1a05 upstream.
+commit afba0b80b977b2a8f16234f2acd982f82710ba33 upstream.
 
-In 1448769c9cdb ("random: check for signal_pending() outside of
-need_resched() check"), Jann pointed out that we previously were only
-checking the TIF_NOTIFY_SIGNAL and TIF_SIGPENDING flags if the process
-had TIF_NEED_RESCHED set, which meant in practice, super long reads to
-/dev/[u]random would delay signal handling by a long time. I tried this
-using the below program, and indeed I wasn't able to interrupt a
-/dev/urandom read until after several megabytes had been read. The bug
-he fixed has always been there, and so code that reads from /dev/urandom
-without checking the return value of read() has mostly worked for a long
-time, for most sizes, not just for <= 256.
+Since rand_initialize() is run while interrupts are still off and
+nothing else is running, we don't need to repeatedly take and release
+the pool spinlock, especially in the RDSEED loop.
 
-Maybe it makes sense to keep that code working. The reason it was so
-small prior, ignoring the fact that it didn't work anyway, was likely
-because /dev/random used to block, and that could happen for pretty
-large lengths of time while entropy was gathered. But now, it's just a
-chacha20 call, which is extremely fast and is just operating on pure
-data, without having to wait for some external event. In that sense,
-/dev/[u]random is a lot more like /dev/zero.
-
-Taking a page out of /dev/zero's read_zero() function, it always returns
-at least one chunk, and then checks for signals after each chunk. Chunk
-sizes there are of length PAGE_SIZE. Let's just copy the same thing for
-/dev/[u]random, and check for signals and cond_resched() for every
-PAGE_SIZE amount of data. This makes the behavior more consistent with
-expectations, and should mitigate the impact of Jann's fix for the
-age-old signal check bug.
-
----- test program ----
-
-  #include <unistd.h>
-  #include <signal.h>
-  #include <stdio.h>
-  #include <sys/random.h>
-
-  static unsigned char x[~0U];
-
-  static void handle(int) { }
-
-  int main(int argc, char *argv[])
-  {
-    pid_t pid = getpid(), child;
-    signal(SIGUSR1, handle);
-    if (!(child = fork())) {
-      for (;;)
-        kill(pid, SIGUSR1);
-    }
-    pause();
-    printf("interrupted after reading %zd bytes\n", getrandom(x, sizeof(x), 0));
-    kill(child, SIGTERM);
-    return 0;
-  }
-
-Cc: Jann Horn <jannh@google.com>
-Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ drivers/char/random.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -523,7 +523,6 @@ EXPORT_SYMBOL(get_random_bytes);
- 
- static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
- {
--	bool large_request = nbytes > 256;
- 	ssize_t ret = 0;
- 	size_t len;
- 	u32 chacha_state[CHACHA_STATE_WORDS];
-@@ -549,15 +548,6 @@ static ssize_t get_random_bytes_user(voi
+@@ -978,10 +978,10 @@ int __init rand_initialize(void)
+ 			rv = random_get_entropy();
+ 			arch_init = false;
+ 		}
+-		mix_pool_bytes(&rv, sizeof(rv));
++		_mix_pool_bytes(&rv, sizeof(rv));
  	}
+-	mix_pool_bytes(&now, sizeof(now));
+-	mix_pool_bytes(utsname(), sizeof(*(utsname())));
++	_mix_pool_bytes(&now, sizeof(now));
++	_mix_pool_bytes(utsname(), sizeof(*(utsname())));
  
- 	do {
--		if (large_request) {
--			if (signal_pending(current)) {
--				if (!ret)
--					ret = -ERESTARTSYS;
--				break;
--			}
--			cond_resched();
--		}
--
- 		chacha20_block(chacha_state, output);
- 		if (unlikely(chacha_state[12] == 0))
- 			++chacha_state[13];
-@@ -571,6 +561,13 @@ static ssize_t get_random_bytes_user(voi
- 		nbytes -= len;
- 		buf += len;
- 		ret += len;
-+
-+		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
-+		if (!(ret % PAGE_SIZE) && nbytes) {
-+			if (signal_pending(current))
-+				break;
-+			cond_resched();
-+		}
- 	} while (nbytes);
- 
- 	memzero_explicit(output, sizeof(output));
+ 	extract_entropy(base_crng.key, sizeof(base_crng.key));
+ 	++base_crng.generation;
 
 

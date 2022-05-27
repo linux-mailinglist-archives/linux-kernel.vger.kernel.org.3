@@ -2,135 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2DD75358B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 07:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E2E5358BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 07:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243780AbiE0FSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 01:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
+        id S236549AbiE0FVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 01:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243286AbiE0FSM (ORCPT
+        with ESMTP id S231840AbiE0FVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 01:18:12 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E977A3204C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 22:18:11 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id h186so3050291pgc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 22:18:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=P7OLahpm+kkKBEARj4VmqHAWwKE6JWuCb2y1kO4JlMo=;
-        b=jbbgWDbwDxjGdcveN5opTsfLAmWPWwGxc3+eVGbfsHWg/8rWmYs56+UOro+RogMEZM
-         N62nMVWsUj4S1x1EO9/sOj+RyfnNolADop36vf0W9gI0grwBEj+LHvnS7NObdOChj1fr
-         pdp0MAqHt69N2PVB+On0qE0fzZJgaFk0jSAklcoSCwUR6pMoJ4N8ch2kmRJgzYicZ9g8
-         nlLrckWV6F2Xf89IfGJjZxykmYvwWKkF7yBDRhpy2/xXY+McSVN22CDwjx0K6bd6/K27
-         2TheHSPfI3Q1v5eelfmdXtqX1eqTBKySsvAWD35PX8QXMUzn0ASyQRVsfnxQdZU0In0w
-         pjLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=P7OLahpm+kkKBEARj4VmqHAWwKE6JWuCb2y1kO4JlMo=;
-        b=E97sGWjghZF0o2Jxa7PY/7cCvRGdMwsLau+nvxat0Mp2SD+8XoiYIyIv30AMC/wxFS
-         8Kh9UyYSP/2hFhVpas3nsKdFgN0F/W7jPiF3y1GzxXIAzE2qxO1Yx5zDaD7riKlXaU8c
-         G+9kuSI0vW7b5Uk/RmbSISa6wIgL34qeG0TAtxhAMYGGsGvOcy0CnhBUWBJN9qAjwmZf
-         42ie85Ou27tDvOzFzs9YFqbAuIWIEx+IFLqwAzwdotnLymv0RE5tm1VS4SJ0/Tqz6XFv
-         TaMddaIFLpBa7LcXRLk+ZmaQTBp8SCdm8yopRWwMWv8Hgx6Pftnw8bYRWxBEIIock2S/
-         PL2w==
-X-Gm-Message-State: AOAM530HgyY1qyNTxYENK+ifVc7tdXKfbufwOE6u2HDSWwg3ANpz7uIT
-        EvebLwlBFcfqDaIjRBwvcodBkA==
-X-Google-Smtp-Source: ABdhPJyin/6mDo3jQxnY50FxpZpQL5woePXQ7wxcjU98TpEqhBp6YId9yZPThIcHY/RpYh8wXD0ktw==
-X-Received: by 2002:a05:6a00:88f:b0:510:7a49:b72f with SMTP id q15-20020a056a00088f00b005107a49b72fmr41896359pfj.21.1653628691482;
-        Thu, 26 May 2022 22:18:11 -0700 (PDT)
-Received: from kerodipc.Dlink ([49.206.9.238])
-        by smtp.gmail.com with ESMTPSA id j34-20020a634a62000000b003c14af5063fsm2459003pgl.87.2022.05.26.22.18.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 22:18:11 -0700 (PDT)
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Anup Patel <apatel@ventanamicro.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, Sunil V L <sunil.vl@gmail.com>,
-        Sunil V L <sunilvl@ventanamicro.com>
-Subject: [PATCH V3 5/5] riscv/efi_stub: Add 64bit boot-hartid support on RV64
-Date:   Fri, 27 May 2022 10:47:43 +0530
-Message-Id: <20220527051743.2829940-6-sunilvl@ventanamicro.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220527051743.2829940-1-sunilvl@ventanamicro.com>
-References: <20220527051743.2829940-1-sunilvl@ventanamicro.com>
+        Fri, 27 May 2022 01:21:07 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE21A8889;
+        Thu, 26 May 2022 22:21:01 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L8Y6y2WFFz4xYY;
+        Fri, 27 May 2022 15:20:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653628859;
+        bh=ibK13A/3tHbpREzEni/xsDgo3KPLS5KPT0yq1eh6Xjw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lKGkTIsT5LI3C9Tk245V8D2Hhv31jxdc5uTS6DAXcRqeVnkLVTmKr+bpIEVqse9sL
+         EfTbYgTUYkL6nOjYSkyEu7Xh0oWbKkTx1yapzKRrjMfZePhl9LNVarmBn/j1IabnM0
+         JVfp6CTQO9sH1GQrDBcvhOJWdDzXDWrL6IxkiqI9+YYjAo2qbuuqZwNDq1CS1mqZ6M
+         Zxue/MvF0N3Woi4/+zBhreG4N6Xu8KBgya2JZAoO3VDzF8Qhn/Jio507OQH42fA8kW
+         b3GJk2OhJRmg+klFNtBf+Z8+zsCXMRm4N2l3mQjftwN7stLrk27pwfgO7eYQUQ6K6z
+         JFUDQyllHctqQ==
+Date:   Fri, 27 May 2022 15:20:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     David Disseldorp <ddiss@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: linux-next: manual merge of the mm-nonmm-stable tree with the
+ ftrace tree
+Message-ID: <20220527152057.399bfc2b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/I7USWoSPXy.qoAqEvaVM1/r";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The boot-hartid can be a 64bit value on RV64 platforms but
-the "boot-hartid" in DT is assumed to be 32bit only.
+--Sig_/I7USWoSPXy.qoAqEvaVM1/r
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Detect the size of the "boot-hartid" in DT and use 32bit or 64bit
-read appropriately.
+Hi all,
 
-Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
----
- drivers/firmware/efi/libstub/riscv-stub.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+Today's linux-next merge of the mm-nonmm-stable tree got a conflict in:
 
-diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-index 9e85e58d1f27..b450ebf95977 100644
---- a/drivers/firmware/efi/libstub/riscv-stub.c
-+++ b/drivers/firmware/efi/libstub/riscv-stub.c
-@@ -8,6 +8,7 @@
- 
- #include <asm/efi.h>
- #include <asm/sections.h>
-+#include <asm/unaligned.h>
- 
- #include "efistub.h"
- 
-@@ -29,7 +30,7 @@ static int get_boot_hartid_from_fdt(void)
- {
- 	const void *fdt;
- 	int chosen_node, len;
--	const fdt32_t *prop;
-+	const void *prop;
- 
- 	fdt = get_efi_config_table(DEVICE_TREE_GUID);
- 	if (!fdt)
-@@ -40,10 +41,16 @@ static int get_boot_hartid_from_fdt(void)
- 		return -EINVAL;
- 
- 	prop = fdt_getprop((void *)fdt, chosen_node, "boot-hartid", &len);
--	if (!prop || len != sizeof(u32))
-+	if (!prop)
-+		return -EINVAL;
-+
-+	if (len == sizeof(u32))
-+		hartid = (unsigned long) fdt32_to_cpu(*(fdt32_t *)prop);
-+	else if (len == sizeof(u64))
-+		hartid = (unsigned long) fdt64_to_cpu(__get_unaligned_t(fdt64_t, prop));
-+	else
- 		return -EINVAL;
- 
--	hartid = fdt32_to_cpu(*prop);
- 	return 0;
- }
- 
--- 
-2.25.1
+  init/Kconfig
 
+between commit:
+
+  a2a9d67a26ec ("bootconfig: Support embedding a bootconfig file in kernel")
+
+from the ftrace tree and commit:
+
+  1274aea127b2 ("initramfs: add INITRAMFS_PRESERVE_MTIME Kconfig option")
+
+from the mm-nonmm-stable tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc init/Kconfig
+index 006e086f2724,90cb1ac936db..000000000000
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@@ -1370,25 -1361,16 +1370,35 @@@ config BOOT_CONFI
+ =20
+  	  If unsure, say Y.
+ =20
+ +config BOOT_CONFIG_EMBED
+ +	bool "Embed bootconfig file in the kernel"
+ +	depends on BOOT_CONFIG
+ +	help
+ +	  Embed a bootconfig file given by BOOT_CONFIG_EMBED_FILE in the
+ +	  kernel. Usually, the bootconfig file is loaded with the initrd
+ +	  image. But if the system doesn't support initrd, this option will
+ +	  help you by embedding a bootconfig file while building the kernel.
+ +
+ +	  If unsure, say N.
+ +
+ +config BOOT_CONFIG_EMBED_FILE
+ +	string "Embedded bootconfig file path"
+ +	depends on BOOT_CONFIG_EMBED
+ +	help
+ +	  Specify a bootconfig file which will be embedded to the kernel.
+ +	  This bootconfig will be used if there is no initrd or no other
+ +	  bootconfig in the initrd.
+ +
++ config INITRAMFS_PRESERVE_MTIME
++ 	bool "Preserve cpio archive mtimes in initramfs"
++ 	default y
++ 	help
++ 	  Each entry in an initramfs cpio archive carries an mtime value. When
++ 	  enabled, extracted cpio items take this mtime, with directory mtime
++ 	  setting deferred until after creation of any child entries.
++=20
++ 	  If unsure, say Y.
++=20
+  choice
+  	prompt "Compiler optimization level"
+  	default CC_OPTIMIZE_FOR_PERFORMANCE
+
+--Sig_/I7USWoSPXy.qoAqEvaVM1/r
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKQX7kACgkQAVBC80lX
+0Gw8kAf/SBYC/hUFcIrLqgoKn+1n02iq4DctJIUXI9Y1wzOrxfvQRjx5v0dCPYAq
+TS+7XBEPGlCq9SuzaT06KRzFG6SwesK8wG0tCCyeSI3IIv2aWMDppwKQmKiH0wra
+Esj+rBZN+hsUSoTSXdlnu0TG6cdYPqOTQNej/cK67YibcbsHKqI9iNBxECxXOgad
+etwlFUQqY9WkOVAYheM64KGs+12gWzbfmKyuxbB/oLnIoeBiIeMStkVm67r7uYIW
+8B6IlxfAJ97i0rE/+W7l5SJ/1J97toCZakRIIe4eu0PvuQc1jsNwExqPlWMqwHtg
+NmYZBHDcnNgeJzcEkzmABEfBabHfIA==
+=G7a/
+-----END PGP SIGNATURE-----
+
+--Sig_/I7USWoSPXy.qoAqEvaVM1/r--

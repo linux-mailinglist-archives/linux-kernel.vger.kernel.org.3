@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E75C535D7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627C3535D7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350551AbiE0Jid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S1350626AbiE0Jil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348413AbiE0Jia (ORCPT
+        with ESMTP id S1350599AbiE0Jid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:38:30 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B432949C82
+        Fri, 27 May 2022 05:38:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FBBA4BFC2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653644309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jWBfsIbPUgPp+IdgwSvqqfPkbnVArM00S/JeXJWx878=;
+        b=LuvCXkhgvSY7SimrhUg58SDKzMZz+5qKUZgrX/cBYO8KZjUnkyKUpZh9pbq8w2Nqa4ByIg
+        J5deOFId5F/IReV/d6sEOmR3NPeAfwkYrZ1xfpZQnWlt/Fds+7f5jXbCMmgSjrxvkGOoA1
+        mkDIRwPiMQDTPGzEyNRPXfgxBf2Q42E=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-530-bU2VpNFFNLul-I8BdqfU-A-1; Fri, 27 May 2022 05:38:28 -0400
+X-MC-Unique: bU2VpNFFNLul-I8BdqfU-A-1
+Received: by mail-wr1-f72.google.com with SMTP id w17-20020adf8bd1000000b0020fc99aee61so695890wra.18
         for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:38:28 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id h11so4721170eda.8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:38:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3WnguRZLVfGoSX9zr8213z+cLpZyYlKDXrozeUElf0g=;
-        b=ix1Reun4wWMys+cSnZyVdjcSGZQHsynXRRo+htcqY0nvW5P5nuf8nWQ3i+jzgdgYer
-         eLNMo3m+0s3R4BlXve4U0Q/HbtTILpVtY5RxqYWPQ9wc/ie7ibUHn7Wveea9DBtcd/ZA
-         05S/Jl1AmlDk+T1DN2LXgG7KBw105KbKOIIt8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3WnguRZLVfGoSX9zr8213z+cLpZyYlKDXrozeUElf0g=;
-        b=OaxpSpSE/NeUepRcycSHptxFJ/xLhFRCnWFJeztvdqNPPQThzDIJid4wEY5rXs3dio
-         95C29GFjfFwTsCbBis6mhqy7wTawklvRCgKELKfP5GdtKgIJ50hXn1s1ZTJT5JWGNPWz
-         BYBaJDJ0kQ7f8619vG9vgOjoVL4g+5Sg21OzrUZGdw/Nuxate1+PowwWY5Bvbym7IRIS
-         /MWWCeHVxtHH/7OihFLhc9LFLFx6gNTJrPkAvVWDIYjZB8BInoyq7qfp13BRhMUfIOCe
-         81gNK/C4THCTGZPCG8gycCQyi9Gi0KK4wv1nLIoeO1y2yMySrTC4tbwADndS1uK5Zdc2
-         55Ew==
-X-Gm-Message-State: AOAM531To5IMZfkMkn833bAOXRmp9qyTpTxtWo+4EJjhTxWlXUixQEVN
-        HBpHW/la9dd8mhUmTl+QQpiolw==
-X-Google-Smtp-Source: ABdhPJxd2spwerZv6mnCc7ShmO42K83mj9j0PBdx2nzcPOue7O85RWLIieC+eGRZMA59o6m+M0F1kA==
-X-Received: by 2002:aa7:c0ca:0:b0:42c:5fac:e526 with SMTP id j10-20020aa7c0ca000000b0042c5face526mr2489643edp.219.1653644307249;
-        Fri, 27 May 2022 02:38:27 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-53-154.cust.vodafonedsl.it. [188.217.53.154])
-        by smtp.gmail.com with ESMTPSA id i27-20020a50871b000000b0042ab8c5e99fsm1900671edb.14.2022.05.27.02.38.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=jWBfsIbPUgPp+IdgwSvqqfPkbnVArM00S/JeXJWx878=;
+        b=ERaZBc2VrJ2EJvS1sdcXioE5NVMo5buuVzCc8vTXSn+tWnkquICZD45hLkbd0t0kiK
+         9adTFJTto4ySrcLgPh1hmRVNI91lmSFHDiKY+SsmXLZJdv2bfC71A/qUnfDDmQ8Hb6nk
+         +SexoDaXbmrcfV6skYp0RNBlwIcS4S2PeOk+gHlubySoeTs8F687cDX6wnZxUF4ZqZs8
+         oIKf6qO+IhTHfW96OVFDWPK7DLu/JLhcLrcqcR5/ipsydkfIY7rs/B6mSFwck2rW1fk2
+         ed55GBrvz9EuzrdBldzEEwuYUD5X66oK3IQV+A1FA/GukKUJ1kwpQY9NsUAV66L3X5Fh
+         vUOw==
+X-Gm-Message-State: AOAM533EHGgF0UDhPCwJIk3abSyJcBcPdgKK+YlaRUM6xLWBgeyC90g2
+        vlsFwmECg0J1rtor4c7TF9ArQrgfBjssaueIrbSGIkHiNkN+MgT1gbfYSOXAvTFMXWIvL2UDgik
+        dZCXZQ5gn4hm9Z3K6a2qteaaB
+X-Received: by 2002:a5d:525b:0:b0:20c:e010:b9f3 with SMTP id k27-20020a5d525b000000b0020ce010b9f3mr33297156wrc.291.1653644306389;
         Fri, 27 May 2022 02:38:26 -0700 (PDT)
-Date:   Fri, 27 May 2022 11:38:24 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Ming Qian <ming.qian@nxp.com>
-Cc:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
-        hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] media: imx-jpeg: Leave a blank space before the
- configuration data
-Message-ID: <20220527093824.GF11217@tom-ThinkPad-T14s-Gen-2i>
-References: <20220527075437.16882-1-ming.qian@nxp.com>
- <20220527075437.16882-3-ming.qian@nxp.com>
+X-Google-Smtp-Source: ABdhPJw9dc/h6KnzcMF+c7w6r1D7Te0EsYMnDtoc3WdL3pOVVx8wuoMD5Yc1AuMYCRF28+tQg0N+pg==
+X-Received: by 2002:a5d:525b:0:b0:20c:e010:b9f3 with SMTP id k27-20020a5d525b000000b0020ce010b9f3mr33297141wrc.291.1653644306042;
+        Fri, 27 May 2022 02:38:26 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id j17-20020a05600c191100b00397393419e3sm1815525wmq.28.2022.05.27.02.38.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 02:38:25 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 1/2] cpuhp: make target_store() a nop when target ==
+ state
+In-Reply-To: <20220526160615.7976-2-pauld@redhat.com>
+References: <20220526160615.7976-1-pauld@redhat.com>
+ <20220526160615.7976-2-pauld@redhat.com>
+Date:   Fri, 27 May 2022 10:38:24 +0100
+Message-ID: <xhsmhy1ynl3hr.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527075437.16882-3-ming.qian@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,66 +77,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ming,
-I think have some comments on the code for this would be nice for the
-future
+On 26/05/22 12:06, Phil Auld wrote:
+> writing the current state back in hotplug/target calls cpu_down()
+> which will set cpu dying even when it isn't and then nothing will
+> ever clear it. A stress test that reads values and writes them back
+> for all cpu device files in sysfs will trigger the BUG() in
+> select_fallback_rq once all cpus are marked as dying.
+>
+> kernel/cpu.c::target_store()
+> 	...
+>         if (st->state < target)
+>                 ret = cpu_up(dev->id, target);
+>         else
+>                 ret = cpu_down(dev->id, target);
+>
+> cpu_down() -> cpu_set_state()
+> 	 bool bringup = st->state < target;
+> 	 ...
+> 	 if (cpu_dying(cpu) != !bringup)
+> 		set_cpu_dying(cpu, !bringup);
+>
+> Fix this by letting state==target fall through in the target_store()
+> conditional.
+>
 
-On Fri, May 27, 2022 at 03:54:35PM +0800, Ming Qian wrote:
-> There is a hardware bug that it will load
-> the first 128 bytes of configuration data twice,
-> it will led to some configure error.
-> so shift the configuration data 128 bytes,
-> and make the first 128 bytes all zero,
-> then hardware will load the 128 zero twice,
+To go back on my data race paranoia: writes to both cpu$x/online and
+cpu$x/hotplug/target are serialized by device_hotplug_lock, and so are the
+exported kernel hotplug functions ({add, remove}_cpu()).
 
-From what I've understood you initialize cfg_stm with zeros then
-you start to write the configuration from 0x80 (128 bytes), avoiding the hw issue right?
+That's not cpu_add_remove_lock as I was looking for, but that's still all
+under one lock, so I think we're good. Sorry for that!
 
-> and ignore them as garbage.
-> then the configuration data can be loaded correctly
-> 
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+> Signed-off-by: Phil Auld <pauld@redhat.com>
+
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+
 > ---
->  drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> index 734e1b65fbc7..ad4213e020f3 100644
-> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-> @@ -519,6 +519,7 @@ static bool mxc_jpeg_alloc_slot_data(struct mxc_jpeg_dev *jpeg,
->  				     GFP_ATOMIC);
->  	if (!cfg_stm)
->  		goto err;
-> +	memset(cfg_stm, 0, MXC_JPEG_MAX_CFG_STREAM);
->  	jpeg->slot_data[slot].cfg_stream_vaddr = cfg_stm;
+>  kernel/cpu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index d0a9aa0b42e8..cdb6ac10ad94 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -2315,7 +2315,7 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
 >  
->  skip_alloc:
-> @@ -755,7 +756,7 @@ static unsigned int mxc_jpeg_setup_cfg_stream(void *cfg_stream_vaddr,
->  					      u32 fourcc,
->  					      u16 w, u16 h)
->  {
-> -	unsigned int offset = 0;
-> +	unsigned int offset = 0x80;
->  	u8 *cfg = (u8 *)cfg_stream_vaddr;
->  	struct mxc_jpeg_sof *sof;
->  	struct mxc_jpeg_sos *sos;
+>  	if (st->state < target)
+>  		ret = cpu_up(dev->id, target);
+> -	else
+> +	else if (st->state > target)
+>  		ret = cpu_down(dev->id, target);
+>  out:
+>  	unlock_device_hotplug();
 > -- 
-> 2.36.1
-> 
+> 2.18.0
 
-Thanks,
-Tommaso
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com

@@ -2,155 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E995357F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE745357F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237561AbiE0Czo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
+        id S237649AbiE0Czt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237284AbiE0Czi (ORCPT
+        with ESMTP id S237317AbiE0Czk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:55:38 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FB0E8B8C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:36 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id q4so3003345plr.11
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:36 -0700 (PDT)
+        Thu, 26 May 2022 22:55:40 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64E0E8B8C
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:39 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id 190so3451372qkj.8
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yuwVnApgi9MDFT2rN0f5AwfAJ/OcShQIf6fyKMPeJKY=;
-        b=trgl7zimFq+jjxSKGE+eRM0KjdEFcKXRfyUC1CMFQx2jc5m5ZGc1LDB9U/bGKZq+6k
-         g9Zecb4Kg/Z2nt8zJW1P+UEnfAkbWhti8JLFagRac6ap3LSEUBkZOz69BnCZ/fU7s2mA
-         TDhjiHtPDCE+hfSP1+jCvWCwJsRcTPKA8rxRV+uEEtpGLk13lDAWMBT/sPNNgwIwXlX0
-         9BmvY/XA6zhuYfVaz47ZWsgNp/5KkEWAFKmyKHn8bP1jRpaUCm2UUoyxn2MnsKS1lOb2
-         DqTu50/zB88pZq0wlhGePgVBWC9SsSWrPJis+CC/j4rWkKSSNNHmKapWDfO9kyyldvsa
-         ZRXA==
+        d=soleen.com; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mzG/UnfpEd7zrPeirqI9bxxqOPxgzzlm4lre7luGrs0=;
+        b=TWayWQQdicVogsTlEFK5odfOJVF28f9lszqzOpYocvlt2tF2vvYb2AHtqaDVcf/kM2
+         e9YYOp/mmdVE1x5Sb18AyiuDaJJXRwy3w4HdXWfvO82BiDEFAAjmX+kyxkcJypP88enE
+         KZnuZ2LHoikplcxwefFgZzcV0ojbOoLyiPJsFf9p2yc+s3Z3BBpzv0FuX4hojzjEjHwC
+         76ew1uT+3Mr3DGHdkRuuoiX9xZL1UhKv1uFVxQtXnmJfyutqzWmllFrQR0ETZfiHFrQw
+         LzhpywQs7m/zXlEFC9KOzNdZO6pVUA7uYMSRXyFYYagANq6l2OPUR3/xiX4cEH3MTrZv
+         PFHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yuwVnApgi9MDFT2rN0f5AwfAJ/OcShQIf6fyKMPeJKY=;
-        b=E7/i4EnkW1tymxynSBoi5aHsLr90Im6CmFJLHqr12+hOKpGn/xD/qrYAwDJuiCA6TF
-         nP7jiM58TInfp6FTcvUz5aRNJyt7AQebKBe5nA5X+nne2bwwYKHOTvmRLifBo7cQ7VJ5
-         AmUfy6G/kEBqtHxu/2qWIwJid7Ng+C661+6FtDsfvvWw1Q9MprShZhAH9+QggQAqqCsE
-         CtEJbJxrDYcnyY4CI3CEkhotw5wqTypzJuLVqAXGVW2opoJ0LxpErMlFc0pSxws/BtT4
-         lrjnBVcc+aiIZ6JRxPirl+v7xtmDbONZFzFui/7b38ffzbRr1fqOLY2wZbAkejaF/L81
-         3GRg==
-X-Gm-Message-State: AOAM533C9ig5KEGqixnwd8B6V7bBeYvLfNqgiYpr1zU9ey/zllHeClID
-        9/lKFL2LelWkm2DS+gaacmH8lw==
-X-Google-Smtp-Source: ABdhPJz9Z5VK0bzXKTxJhdyCoPCs/72Zg/kC66tJ8oRkdvuAUXPaG5d/MaaDccUvoakb6rCWvl3RgA==
-X-Received: by 2002:a17:903:2352:b0:163:5f7d:cd0d with SMTP id c18-20020a170903235200b001635f7dcd0dmr10018344plh.35.1653620136172;
-        Thu, 26 May 2022 19:55:36 -0700 (PDT)
-Received: from localhost ([139.177.225.238])
-        by smtp.gmail.com with ESMTPSA id 12-20020a170902c20c00b0015e8d4eb2adsm2365787pll.247.2022.05.26.19.55.35
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mzG/UnfpEd7zrPeirqI9bxxqOPxgzzlm4lre7luGrs0=;
+        b=MH85Van7kUS5xnbH4/pCC7enH8BO/7jh+yt5WOn2LydMO7eXwae3nhg8uMHLC2DOIr
+         U19YeB0XEJn2VJEVzS/rvV2+2mzc67tedho60wE2Xw/jxeleB47NEJQUrsDyPlJ7+1w4
+         XPyLzVd5XqfqKwnEoRmVK9u2bzQZv3t9GM7hlrPczZWgECOE5aZ29RJ23tkMK6KbSQHg
+         u0pyT4xuZpx6MxEMmMSB2Jo0nMCk0Cxbnzpvbl3mURXBO3jC4r/DxTW1CeP5smlwN1j7
+         CBq+9lDoaWqSCfcro11w0ZuLtJHLJaimAmlYmJ0fQyFecAXF/v1TpwFF/hFIWXHIrhPE
+         C8Hw==
+X-Gm-Message-State: AOAM5334cKCzUq6FAPqDhxFodebsH4rNLnC5nw6NqkjwJ4Ci4Cp34Dr3
+        LinNHaOR/b5On+Gadm4NP2bq8g==
+X-Google-Smtp-Source: ABdhPJwUqeyvHjYiti4yPhL4/c5gSOC9pYngAjeKK51N+f1LZWyIBnav+8a4aO4rCqX0RtL6GQWQ4g==
+X-Received: by 2002:a05:620a:28c1:b0:6a5:ba25:1768 with SMTP id l1-20020a05620a28c100b006a5ba251768mr3643291qkp.464.1653620138787;
+        Thu, 26 May 2022 19:55:38 -0700 (PDT)
+Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
+        by smtp.gmail.com with ESMTPSA id r129-20020ae9dd87000000b0069fc13ce224sm2129672qkf.85.2022.05.26.19.55.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 19:55:35 -0700 (PDT)
-Date:   Fri, 27 May 2022 10:55:30 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com
-Subject: Re: [PATCH v4 03/11] mm: memcontrol: make lruvec lock safe when LRU
- pages are reparented
-Message-ID: <YpA9omBZ8O4+szbY@FVFYT0MHHV2J.usts.net>
-References: <20220524060551.80037-1-songmuchun@bytedance.com>
- <20220524060551.80037-4-songmuchun@bytedance.com>
- <Yo0xmKOkBkhRy+bq@cmpxchg.org>
- <Yo38mlkMBFz2h+yP@FVFYT0MHHV2J.googleapis.com>
- <Yo4hVw7B+bUlMzLX@cmpxchg.org>
- <Yo4pPw+IHPBZvZUv@FVFYT0MHHV2J.googleapis.com>
- <Yo5B1tLcYPUoaACS@cmpxchg.org>
- <Yo5NdncOsqL0xP8Q@FVFYT0MHHV2J.googleapis.com>
- <9fe57cf7-9d21-3f91-ef27-e046b426c219@redhat.com>
+        Thu, 26 May 2022 19:55:38 -0700 (PDT)
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, sashal@kernel.org,
+        ebiederm@xmission.com, rburanyi@google.com, gthelen@google.com,
+        viro@zeniv.linux.org.uk, kexec@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Allow to kexec with initramfs larger than 2G
+Date:   Fri, 27 May 2022 02:55:33 +0000
+Message-Id: <20220527025535.3953665-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9fe57cf7-9d21-3f91-ef27-e046b426c219@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 04:17:27PM -0400, Waiman Long wrote:
-> On 5/25/22 11:38, Muchun Song wrote:
-> > On Wed, May 25, 2022 at 10:48:54AM -0400, Johannes Weiner wrote:
-> > > On Wed, May 25, 2022 at 09:03:59PM +0800, Muchun Song wrote:
-> > > > On Wed, May 25, 2022 at 08:30:15AM -0400, Johannes Weiner wrote:
-> > > > > On Wed, May 25, 2022 at 05:53:30PM +0800, Muchun Song wrote:
-> > > > > > On Tue, May 24, 2022 at 03:27:20PM -0400, Johannes Weiner wrote:
-> > > > > > > On Tue, May 24, 2022 at 02:05:43PM +0800, Muchun Song wrote:
-> > > > > > > > @@ -1230,10 +1213,23 @@ void lruvec_memcg_debug(struct lruvec *lruvec, struct folio *folio)
-> > > > > > > >    */
-> > > > > > > >   struct lruvec *folio_lruvec_lock(struct folio *folio)
-> > > > > > > >   {
-> > > > > > > > -	struct lruvec *lruvec = folio_lruvec(folio);
-> > > > > > > > +	struct lruvec *lruvec;
-> > > > > > > > +	rcu_read_lock();
-> > > > > > > > +retry:
-> > > > > > > > +	lruvec = folio_lruvec(folio);
-> > > > > > > >   	spin_lock(&lruvec->lru_lock);
-> > > > > > > > -	lruvec_memcg_debug(lruvec, folio);
-> > > > > > > > +
-> > > > > > > > +	if (unlikely(lruvec_memcg(lruvec) != folio_memcg(folio))) {
-> > > > > > > > +		spin_unlock(&lruvec->lru_lock);
-> > > > > > > > +		goto retry;
-> > > > > > > > +	}
-> > > > > > > > +
-> > > > > > > > +	/*
-> > > > > > > > +	 * Preemption is disabled in the internal of spin_lock, which can serve
-> > > > > > > > +	 * as RCU read-side critical sections.
-> > > > > > > > +	 */
-> > > > > > > > +	rcu_read_unlock();
-> > > > > > > The code looks right to me, but I don't understand the comment: why do
-> > > > > > > we care that the rcu read-side continues? With the lru_lock held,
-> > > > > > > reparenting is on hold and the lruvec cannot be rcu-freed anyway, no?
-> > > > > > > 
-> > > > > > Right. We could hold rcu read lock until end of reparting.  So you mean
-> > > > > > we do rcu_read_unlock in folio_lruvec_lock()?
-> > > > > The comment seems to suggest that disabling preemption is what keeps
-> > > > > the lruvec alive. But it's the lru_lock that keeps it alive. The
-> > > > > cgroup destruction path tries to take the lru_lock long before it even
-> > > > > gets to synchronize_rcu(). Once you hold the lru_lock, having an
-> > > > > implied read-side critical section as well doesn't seem to matter.
-> > > > > 
-> > > > Well, I thought that spinlocks have implicit read-side critical sections
-> > > > because it disables preemption (I learned from the comments above
-> > > > synchronize_rcu() that says interrupts, preemption, or softirqs have been
-> > > > disabled also serve as RCU read-side critical sections).  So I have a
-> > > > question: is it still true in a PREEMPT_RT kernel (I am not familiar with
-> > > > this)?
-> > > Yes, but you're missing my point.
-> > > 
-> > > > > Should the comment be deleted?
-> > > > I think we could remove the comments. If the above question is false, seems
-> > > > like we should continue holding rcu read lock.
-> > > It's true.
-> > > 
-> > Thanks for your answer.
-> > 
-> > > But assume it's false for a second. Why would you need to continue
-> > > holding it? What would it protect? The lruvec would be pinned by the
-> > > spinlock even if it DIDN'T imply an RCU lock, right?
-> > > 
-> > > So I don't understand the point of the comment. If the implied RCU
-> > > lock is protecting something not covered by the bare spinlock itself,
-> > > it should be added to the comment. Otherwise, the comment should go.
-> > > 
-> > Got it. Thanks for your nice explanation. I'll remove
-> > the comment here.
-> 
-> Note that there is a similar comment in patch 6 which may have to be removed
-> as well.
->
+Currently, the largest initramfs that is supported by kexec_file_load()
+syscall is 2G.
 
-I have noticed that. Thank you for remindering me as well.
- 
+This is because kernel_read_file() returns int, and is limited to
+INT_MAX or 2G.
+
+On the other hand, there are kexec based boot loaders (i.e. u-root),
+that may need to boot netboot images that might be larger than 2G.
+
+The first patch changes the return type from int to ssize_t in
+kernel_read_file* functions.
+
+The second patch increases the maximum initramfs file size to 4G.
+
+Tested: verified that can kexec_file_load() works with 4G initramfs
+on x86_64.
+
+Pasha Tatashin (2):
+  fs/kernel_read_file: Allow to read files up-to ssize_t
+  kexec_file: Increase maximum file size to 4G
+
+ fs/kernel_read_file.c            | 38 ++++++++++++++++----------------
+ include/linux/kernel_read_file.h | 32 +++++++++++++--------------
+ include/linux/limits.h           |  1 +
+ kernel/kexec_file.c              | 10 ++++++---
+ 4 files changed, 43 insertions(+), 38 deletions(-)
+
+-- 
+2.36.1.124.g0e6072fb45-goog
+

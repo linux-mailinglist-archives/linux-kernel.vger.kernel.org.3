@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB3E535AFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60667535AFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344493AbiE0IFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S1349252AbiE0IFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349272AbiE0IFL (ORCPT
+        with ESMTP id S1349538AbiE0IFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:05:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C510FD359
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:05:10 -0700 (PDT)
+        Fri, 27 May 2022 04:05:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA36B43EDE
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:05:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653638709;
+        s=mimecast20190719; t=1653638719;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0BNXaqWA1otDLXqlPZtOcrW0E3FZ4yYhwe+GYceYi8I=;
-        b=bG71kPMmuBxipT/6fQIisVtCDxwpToSEuzKEkF7t0pEO7p4y1u4sUMc4KHXzPuIaZLHzl8
-        xY7G3jyTHyyo5HGO2vNai2ntfJIZmKvIkeuXAL/Nvw1zrANCzIxsH3ZhEHYvjqmKZhAGjE
-        rsyUraHmeKzfgUqQdPP+PRsVO8pEEmM=
+        bh=990zi+sfu+1KWMZVgqplhrYTyhVc+VOJOjIr/irisRU=;
+        b=H3xob5f9duKrdRRSYSSjLDG2P55A9+isW/I/Ch1SG1tUNIlkCXQzGrFsj89wHWIWg1gLlh
+        miyNmPmvYutRAdxbi3fEaxAaqdXj2+D1s1XsrXF3Pf3jcy1e6UamUIESsVRvVckALD8xaB
+        A0+4A+rKFLtsgjGYm8MgUMaoeOiCDfY=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-NQFO-vD3OKS2WgVUIQ3FNg-1; Fri, 27 May 2022 04:05:04 -0400
-X-MC-Unique: NQFO-vD3OKS2WgVUIQ3FNg-1
+ us-mta-12-TbYShRdBOM6hGLgfZR7QJg-1; Fri, 27 May 2022 04:05:12 -0400
+X-MC-Unique: TbYShRdBOM6hGLgfZR7QJg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 211233804506;
-        Fri, 27 May 2022 08:05:04 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C116B1C161AE;
+        Fri, 27 May 2022 08:05:11 +0000 (UTC)
 Received: from gshan.redhat.com (ovpn-12-91.pek2.redhat.com [10.72.12.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 391E42026D64;
-        Fri, 27 May 2022 08:04:56 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E4D2A2026D64;
+        Fri, 27 May 2022 08:05:04 +0000 (UTC)
 From:   Gavin Shan <gshan@redhat.com>
 To:     kvmarm@lists.cs.columbia.edu
 Cc:     maz@kernel.org, linux-kernel@vger.kernel.org, eauger@redhat.com,
@@ -46,9 +46,9 @@ Cc:     maz@kernel.org, linux-kernel@vger.kernel.org, eauger@redhat.com,
         james.morse@arm.com, mark.rutland@arm.com,
         shannon.zhaosl@gmail.com, shijie@amperemail.onmicrosoft.com,
         shan.gavin@gmail.com
-Subject: [PATCH v7 10/22] KVM: arm64: Support PE_{MASK, UNMASK} hypercall
-Date:   Fri, 27 May 2022 16:02:41 +0800
-Message-Id: <20220527080253.1562538-11-gshan@redhat.com>
+Subject: [PATCH v7 11/22] KVM: arm64: Support {PRIVATE, SHARED}_RESET hypercall
+Date:   Fri, 27 May 2022 16:02:42 +0800
+Message-Id: <20220527080253.1562538-12-gshan@redhat.com>
 In-Reply-To: <20220527080253.1562538-1-gshan@redhat.com>
 References: <20220527080253.1562538-1-gshan@redhat.com>
 MIME-Version: 1.0
@@ -65,33 +65,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This supports PE_{MASK, UNMASK} hypercall. When PE_UNMASK is called,
-KVM_REQ_SDEI request becomes pending if there are any events need
-to be delivered.
+This supports {PRIVATE, SHARED}_RESET hypercall. There is nothing
+to do if we're going to reset the shared events, which are not
+supported. For the private events, their registered and enabled
+state are cleared.
 
 Signed-off-by: Gavin Shan <gshan@redhat.com>
 ---
- arch/arm64/kvm/sdei.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ arch/arm64/kvm/sdei.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
-index cea523418c75..6afa49b4f3c7 100644
+index 6afa49b4f3c7..42ba6f97b168 100644
 --- a/arch/arm64/kvm/sdei.c
 +++ b/arch/arm64/kvm/sdei.c
-@@ -169,6 +169,21 @@ static unsigned long event_info(struct kvm_vcpu *vcpu)
- 	return ret;
+@@ -184,6 +184,26 @@ static unsigned long pe_mask(struct kvm_vcpu *vcpu, bool mask)
+ 	return SDEI_SUCCESS;
  }
  
-+static unsigned long pe_mask(struct kvm_vcpu *vcpu, bool mask)
++static unsigned long event_reset(struct kvm_vcpu *vcpu, bool private)
 +{
 +	struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
++	unsigned int num;
 +
-+	if (mask) {
-+		vcpu->arch.flags |= KVM_ARM64_SDEI_MASKED;
-+	} else {
-+		vcpu->arch.flags &= ~KVM_ARM64_SDEI_MASKED;
-+		if (vsdei->pending)
-+			kvm_make_request(KVM_REQ_SDEI, vcpu);
++	/*
++	 * Nothing to do if we're going to reset the shared events,
++	 * which are unsupported.
++	 */
++	if (!private)
++		return SDEI_SUCCESS;
++
++	for (num = 0; num < KVM_NR_SDEI_EVENTS; num++) {
++		clear_bit(num, &vsdei->registered);
++		clear_bit(num, &vsdei->enabled);
 +	}
 +
 +	return SDEI_SUCCESS;
@@ -100,15 +106,15 @@ index cea523418c75..6afa49b4f3c7 100644
  int kvm_sdei_call(struct kvm_vcpu *vcpu)
  {
  	struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
-@@ -208,6 +223,12 @@ int kvm_sdei_call(struct kvm_vcpu *vcpu)
- 	case SDEI_1_0_FN_SDEI_EVENT_GET_INFO:
- 		ret = event_info(vcpu);
+@@ -229,6 +249,12 @@ int kvm_sdei_call(struct kvm_vcpu *vcpu)
+ 	case SDEI_1_0_FN_SDEI_PE_UNMASK:
+ 		ret = pe_mask(vcpu, false);
  		break;
-+	case SDEI_1_0_FN_SDEI_PE_MASK:
-+		ret = pe_mask(vcpu, true);
++	case SDEI_1_0_FN_SDEI_PRIVATE_RESET:
++		ret = event_reset(vcpu, true);
 +		break;
-+	case SDEI_1_0_FN_SDEI_PE_UNMASK:
-+		ret = pe_mask(vcpu, false);
++	case SDEI_1_0_FN_SDEI_SHARED_RESET:
++		ret = event_reset(vcpu, false);
 +		break;
  	default:
  		ret = SDEI_NOT_SUPPORTED;

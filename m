@@ -2,183 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972865366DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 20:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA8E5366DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 20:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353016AbiE0SR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 14:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
+        id S1353708AbiE0SU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 14:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbiE0SRy (ORCPT
+        with ESMTP id S235449AbiE0SUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 14:17:54 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5FA13C375
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:17:52 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id h13so4969566pfq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:17:52 -0700 (PDT)
+        Fri, 27 May 2022 14:20:54 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2FF13C37C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:20:53 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id c4-20020a170902c2c400b0015f16fb4a54so3219456pla.22
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:20:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=J7DZV3MmbmXNp2IEVpgLgYDSi0CbAJvCcECCXqiURPs=;
-        b=c+jBv77hDaqPGfUt+E4UyVjKRw/A5niWOFy9W6nwXp2Yig42N2Vl0qnba0sfdPavDg
-         CpC+Icq4NRP6PKjFra9inqaev2buYviauou2yzXbfhen4CqbAsRIig4wA/YPJ2W01vYp
-         27GtZiiq9ZTChjK0BmlXr2+QiRNvhhjgRP12o=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=/ZnwNSV0gcN1ZdzKlLLnwoyIR+Y6RvedzXmRJSVRBRI=;
+        b=IaX8dYEmWYQuBqeWrjmLSrkPkRUFIvT8pKy+PPJ28QbmdPjVfUX1kYH08DPu9G2DcL
+         +K/8E0rCc935Huw4f4AkuqAk2ezyc2f6/HE3By69wmxh3gnDEZRq/TzaZ4MUHm2NSz3E
+         4q9CwXS+9ZYpAGymBPIroPKnCjYuOhliMPuz0fwRwNi7u/07i9QEQCWx9fQ2ej6UKpjy
+         a48mRuiEVoEbslPSO3k7Wi3TtZqC7irLAo1MuXQSaTO/1SVYfVVus7E6msuVuXcPxz1Q
+         hT0NI1TFEvtRY6R+D5cP92DtQ60hAyoxxwiGKXlYpy40NuuIEFRM470XKo7X0MQPkdMp
+         qY9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=J7DZV3MmbmXNp2IEVpgLgYDSi0CbAJvCcECCXqiURPs=;
-        b=daUxiCjLhr8sI+5qH3nIDy7NFDk5DDo2gCvqMXGgMbhb84vQCs+X2PtS+jQFW/BAsp
-         3FcV4ucvtl94uSjeuLWI3fVRC130hNfVOIP+ti2zc7uU1Lm53UftUYz9KuR0mbDGpJZX
-         +SBJv8V7cVNdfIC1kmOcmlTUZwAHsrmrFVu1S0KuopXaS/EJj78Vz4u/PKQcZ3z1Zck8
-         uFAPEVemrorkKWTGU66h+ofS5NAnWyQSPlbX4u1rto7RqWXZ6Wal8wYldHztKzxVgfFf
-         eDKDsXfXwFKDqDXTfBm8ztu/QHzsqcABVRN/XOgpQAbJH3vgZoV4iellTxRpJm8DbZiM
-         ZgLw==
-X-Gm-Message-State: AOAM533X3ohYkxOpcoZwBtdG53eYpGbp1rMpavlwTjDrF4S2kNl3Xiny
-        iQW+2ZjPPf2zahrma4B5Uhnx6Q==
-X-Google-Smtp-Source: ABdhPJySV5+Gh9CRjqGBoqc49MMMsy1ujSWt98sMokWiukshM5httJ1jMEFbKos8yWgMTaNY1uublA==
-X-Received: by 2002:a05:6a00:850:b0:518:a9b2:1a19 with SMTP id q16-20020a056a00085000b00518a9b21a19mr25330595pfk.75.1653675472247;
-        Fri, 27 May 2022 11:17:52 -0700 (PDT)
-Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id o20-20020a63fb14000000b003ed6b3dc52esm3749405pgh.55.2022.05.27.11.17.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 11:17:51 -0700 (PDT)
-From:   Anand Gore <anand.gore@broadcom.com>
-To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
-        florian.fainelli@broadcom.com, dan.beygelman@broadcom.com,
-        samyon.furman@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        tomer.yacoby@broadcom.com, Anand Gore <anand.gore@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: bcmbca: add VFP and NEON fixup for bcm6878 SoC
-Date:   Fri, 27 May 2022 11:17:48 -0700
-Message-Id: <20220527111742.1.I2da72dc550b9c09aa9b83c1028d00d046833a24a@changeid>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001ed25105e00253a9"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=/ZnwNSV0gcN1ZdzKlLLnwoyIR+Y6RvedzXmRJSVRBRI=;
+        b=EMZuaaFZBytm65pdiTpGfXoTV9xytYlek4zdwaRr8+0sQEp8CRfcwZ2DtqSwdjeDb8
+         OXChOHSXWrofME+D7StWPTyC9CRPrTnSwoz6m0WhUOwmlPgLsZ2e9rNlCUsGQ3Yc2z0P
+         lduP+yKcsaWVFsgOUxXJxC6HXQwPyKA00KcDRObiWR2OGOKjdFTrry0wrtLfNrPu6Zu6
+         iZqcPS9sjENwXwk47dVigK3XZQMFRpmzQ9Bp/+MVf0CVGA48/QeIvNoF3JkQ+qOxxdRo
+         QRRdJvuPqnZdBvZLPmWOs/pIqztkytb6YbglKN+/Qa7CF50czD3C3sNpkW6dezRvjGDA
+         mZiQ==
+X-Gm-Message-State: AOAM5307jkuM26WlUCkT9Zaq6V+q58v/9cYctJpXRfLPVu8GBI8bdEMO
+        yyF1Ibo1n7YZWU+tLZ3AuQJkd/WPrAmo
+X-Google-Smtp-Source: ABdhPJyfdnxyrEYEmpeaeMtUHQareJmUAGG2jkqGkrkxhPI7EeeKWxONpjJ8oqqO7e8Cq7Pxd8LjdSqx3TUg
+X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:781f:286a:7724:6870])
+ (user=maskray job=sendgmr) by 2002:a05:6a00:2908:b0:4fa:9297:f631 with SMTP
+ id cg8-20020a056a00290800b004fa9297f631mr45171159pfb.3.1653675653084; Fri, 27
+ May 2022 11:20:53 -0700 (PDT)
+Date:   Fri, 27 May 2022 11:20:39 -0700
+Message-Id: <20220527182039.673248-1-maskray@google.com>
+Mime-Version: 1.0
+Subject: [PATCH v2] perf: Fix segbase for ld.lld linked objects
+From:   Fangrui Song <maskray@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ian Rogers <irogers@google.com>, llvm@lists.linux.dev,
+        Fangrui Song <maskray@google.com>,
+        Sebastian Ullrich <sebasti@nullri.ch>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001ed25105e00253a9
-Content-Transfer-Encoding: 8bit
+segbase is the address of .eh_frame_hdr and table_data is segbase plus
+the header size. find_proc_info computes segbase as `map->start +
+segbase - map->pgoff` which is wrong when
 
-BCM6878 SoC only has VFP and NEON support on core 0. So kernel VPF/NEON
-support is disabled in this chip. Add this fixup to manually turn on
-VFP/NEON in case userspace app need to access them on core 0.
+* .eh_frame_hdr and .text are in different PT_LOAD program headers
+* and their p_vaddr difference does not equal their p_offset difference
 
-Signed-off-by: Anand Gore <anand.gore@broadcom.com>
+Since 10.0, ld.lld's default --rosegment -z noseparate-code layout has
+such R and RX PT_LOAD program headers.
+
+    ld.lld (default) => perf report fails to unwind `perf record
+    --call-graph dwarf` recorded data
+    ld.lld --no-rosegment => ok (trivial, no R PT_LOAD)
+    ld.lld -z separate-code => ok but by luck: there are two PT_LOAD but
+    their p_vaddr difference equals p_offset difference
+
+    ld.bfd -z noseparate-code => ok (trivial, no R PT_LOAD)
+    ld.bfd -z separate-code (default for Linux/x86) => ok but by luck:
+    there are two PT_LOAD but their p_vaddr difference equals p_offset
+    difference
+
+To fix the issue, compute segbase as dso's base address plus
+PT_GNU_EH_FRAME's p_vaddr. The base address is computed by iterating
+over all dso-associated maps and then subtract the first PT_LOAD p_vaddr
+(the minimum guaranteed by generic ABI) from the minimum address.
+
+In libunwind, find_proc_info transitively called by unw_step is cached,
+so the iteration overhead is acceptable.
+
+Reported-by: Sebastian Ullrich <sebasti@nullri.ch>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1646
+Signed-off-by: Fangrui Song <maskray@google.com>
+Cc: Ian Rogers <irogers@google.com>
+
+--
+Changes from v1:
+* Fix elf_base_address to use the first PT_LOAD
+* Use dso::elf_base_addr which is a constant even if the dso is loaded into multiple processes
 ---
+ tools/perf/util/dso.h                    |   2 +
+ tools/perf/util/unwind-libunwind-local.c | 107 ++++++++++++++++-------
+ 2 files changed, 78 insertions(+), 31 deletions(-)
 
- arch/arm/mach-bcm/bcmbca.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm/mach-bcm/bcmbca.c b/arch/arm/mach-bcm/bcmbca.c
-index dbf4d95e824e..60eeb2aa772a 100644
---- a/arch/arm/mach-bcm/bcmbca.c
-+++ b/arch/arm/mach-bcm/bcmbca.c
-@@ -45,6 +45,7 @@ static void __init bcmbca_neon_fixup(void)
+diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+index 3a9fd4d389b5..97047a11282b 100644
+--- a/tools/perf/util/dso.h
++++ b/tools/perf/util/dso.h
+@@ -196,7 +196,9 @@ struct dso {
+ 		u32		 status_seen;
+ 		u64		 file_size;
+ 		struct list_head open_entry;
++		u64		 elf_base_addr;
+ 		u64		 debug_frame_offset;
++		u64		 eh_frame_hdr_addr;
+ 		u64		 eh_frame_hdr_offset;
+ 	} data;
+ 	/* bpf prog information */
+diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
+index 41e29fc7648a..37622699c91a 100644
+--- a/tools/perf/util/unwind-libunwind-local.c
++++ b/tools/perf/util/unwind-libunwind-local.c
+@@ -169,30 +169,64 @@ static int __dw_read_encoded_value(u8 **p, u8 *end, u64 *val,
+ 	__v;                                                    \
+ 	})
  
- static const char *const bcmbca_match[] __initconst = {
-        "brcm,bcm6846",
-+	"brcm,bcm6878",
-        NULL
- };
+-static u64 elf_section_offset(int fd, const char *name)
++static int elf_section_address_and_offset(int fd, const char *name, u64 *address, u64 *offset)
+ {
+ 	Elf *elf;
+ 	GElf_Ehdr ehdr;
+ 	GElf_Shdr shdr;
+-	u64 offset = 0;
++	int ret;
  
+ 	elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
+ 	if (elf == NULL)
+-		return 0;
++		return -1;
+ 
+-	do {
+-		if (gelf_getehdr(elf, &ehdr) == NULL)
+-			break;
++	if (gelf_getehdr(elf, &ehdr) == NULL)
++		goto out_err;
+ 
+-		if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
+-			break;
+-
+-		offset = shdr.sh_offset;
+-	} while (0);
++	if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
++		goto out_err;
+ 
++	*address = shdr.sh_addr;
++	*offset = shdr.sh_offset;
++	ret = 0;
++out_err:
+ 	elf_end(elf);
++	return ret;
++}
++
++#ifndef NO_LIBUNWIND_DEBUG_FRAME
++static u64 elf_section_offset(int fd, const char *name)
++{
++	u64 address, offset;
++
++	if (elf_section_address_and_offset(fd, name, &address, &offset))
++		return 0;
++
+ 	return offset;
+ }
++#endif
++
++static u64 elf_base_address(int fd)
++{
++	Elf *elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
++	GElf_Phdr phdr;
++	u64 retval = 0;
++	size_t i, phdrnum = 0;
++
++	if (elf == NULL)
++		return 0;
++	(void)elf_getphdrnum(elf, &phdrnum);
++	/* PT_LOAD segments are sorted by p_vaddr, so the first has the minimum p_vaddr. */
++	for (i = 0; i < phdrnum; i++) {
++		if (gelf_getphdr(elf, i, &phdr) && phdr.p_type == PT_LOAD) {
++			retval = phdr.p_vaddr & -getpagesize();
++			break;
++		}
++	}
++
++	elf_end(elf);
++	return retval;
++}
+ 
+ #ifndef NO_LIBUNWIND_DEBUG_FRAME
+ static int elf_is_exec(int fd, const char *name)
+@@ -248,8 +282,7 @@ struct eh_frame_hdr {
+ } __packed;
+ 
+ static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
+-			       u64 offset, u64 *table_data, u64 *segbase,
+-			       u64 *fde_count)
++			       u64 offset, u64 *table_data_offset, u64 *fde_count)
+ {
+ 	struct eh_frame_hdr hdr;
+ 	u8 *enc = (u8 *) &hdr.enc;
+@@ -265,35 +298,47 @@ static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
+ 	dw_read_encoded_value(enc, end, hdr.eh_frame_ptr_enc);
+ 
+ 	*fde_count  = dw_read_encoded_value(enc, end, hdr.fde_count_enc);
+-	*segbase    = offset;
+-	*table_data = (enc - (u8 *) &hdr) + offset;
++	*table_data_offset = enc - (u8 *) &hdr;
+ 	return 0;
+ }
+ 
+-static int read_unwind_spec_eh_frame(struct dso *dso, struct machine *machine,
++static int read_unwind_spec_eh_frame(struct dso *dso, struct unwind_info *ui,
+ 				     u64 *table_data, u64 *segbase,
+ 				     u64 *fde_count)
+ {
+-	int ret = -EINVAL, fd;
+-	u64 offset = dso->data.eh_frame_hdr_offset;
++	struct map *map;
++	u64 base_addr = UINT64_MAX;
++	int ret, fd;
+ 
+-	if (offset == 0) {
+-		fd = dso__data_get_fd(dso, machine);
++	if (dso->data.eh_frame_hdr_offset == 0) {
++		fd = dso__data_get_fd(dso, ui->machine);
+ 		if (fd < 0)
+ 			return -EINVAL;
+ 
+ 		/* Check the .eh_frame section for unwinding info */
+-		offset = elf_section_offset(fd, ".eh_frame_hdr");
+-		dso->data.eh_frame_hdr_offset = offset;
++		ret = elf_section_address_and_offset(fd, ".eh_frame_hdr",
++						     &dso->data.eh_frame_hdr_addr,
++						     &dso->data.eh_frame_hdr_offset);
++		dso->data.elf_base_addr = elf_base_address(fd);
+ 		dso__data_put_fd(dso);
++		if (ret || dso->data.eh_frame_hdr_offset == 0)
++			return -EINVAL;
+ 	}
+ 
+-	if (offset)
+-		ret = unwind_spec_ehframe(dso, machine, offset,
+-					  table_data, segbase,
+-					  fde_count);
+-
+-	return ret;
++	maps__for_each_entry(ui->thread->maps, map) {
++		if (map->dso == dso && map->start < base_addr)
++			base_addr = map->start;
++	}
++	base_addr -= dso->data.elf_base_addr;
++	/* Address of .eh_frame_hdr */
++	*segbase = base_addr + dso->data.eh_frame_hdr_addr;
++	ret = unwind_spec_ehframe(dso, ui->machine, dso->data.eh_frame_hdr_offset,
++				   table_data, fde_count);
++	if (ret)
++		return ret;
++	/* binary_search_table offset plus .eh_frame_hdr address */
++	*table_data += *segbase;
++	return 0;
+ }
+ 
+ #ifndef NO_LIBUNWIND_DEBUG_FRAME
+@@ -388,14 +433,14 @@ find_proc_info(unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
+ 	pr_debug("unwind: find_proc_info dso %s\n", map->dso->name);
+ 
+ 	/* Check the .eh_frame section for unwinding info */
+-	if (!read_unwind_spec_eh_frame(map->dso, ui->machine,
++	if (!read_unwind_spec_eh_frame(map->dso, ui,
+ 				       &table_data, &segbase, &fde_count)) {
+ 		memset(&di, 0, sizeof(di));
+ 		di.format   = UNW_INFO_FORMAT_REMOTE_TABLE;
+ 		di.start_ip = map->start;
+ 		di.end_ip   = map->end;
+-		di.u.rti.segbase    = map->start + segbase - map->pgoff;
+-		di.u.rti.table_data = map->start + table_data - map->pgoff;
++		di.u.rti.segbase    = segbase;
++		di.u.rti.table_data = table_data;
+ 		di.u.rti.table_len  = fde_count * sizeof(struct table_entry)
+ 				      / sizeof(unw_word_t);
+ 		ret = dwarf_search_unwind_table(as, ip, &di, pi,
 -- 
-2.25.1
+2.36.1.124.g0e6072fb45-goog
 
-
---0000000000001ed25105e00253a9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
-/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
-MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
-dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
-HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
-bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
-gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
-gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
-KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
-nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
-eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
-LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
-S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
-MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
-YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
-AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIE7Q2RVdHf32ALs1DDyCbdLMs5DzaDMvboYdizrO
-9thhMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDUyNzE4MTc1
-MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
-AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
-hkiG9w0BAQEFAASCAQA3YR5IKl1cbKzSi4Qpd1fWpXJ1s2Y/17lUoA60Q4zJPIDxEDbbTC5pbqFT
-EhSv0upBqkvlpKP60KheaqsJ9yxPVW6j/Ac7CpPA7NKZNnf5dQJ9S1qDndyLdSsXnIgoZ1oDoo7q
-V0N1hIhBRNMmQ8OP3eGEQc2AMtJWtvGV2Ev/Rtl6GVkYFScIhojIzclMykEpywez5JKodooGt0TK
-v2UKtWkvM5O0XXIE0jf6IrBaK/h9R8Y4hLqAtiZWwV1UJ7lUzG/FMTYLKpz/ykmf/w5EPANUUKsU
-npDDJltqgMUo1AU94UeR/EWPklRGAnsBO+RCqrsy7VUT7f/F8521SU/m
---0000000000001ed25105e00253a9--

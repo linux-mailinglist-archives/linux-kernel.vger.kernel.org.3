@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65695357F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858B05357F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237663AbiE0Cz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S237515AbiE0C4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237486AbiE0Czm (ORCPT
+        with ESMTP id S237034AbiE0C4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:55:42 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E0AE8BB1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:41 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id v11so3548021qkf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:41 -0700 (PDT)
+        Thu, 26 May 2022 22:56:38 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A168E027
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:56:37 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id q184so5788162ybg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:56:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=AUlysgyDAL5M9imkvDAX/EZEtCGp/B57KfY/usHuzGA=;
-        b=kPXdVYjRvhZodLa5+GXUsmWnrTe2KPuFWBIwsWiuytjw0zrwoz8zcgtGReAuGdac21
-         3dSjZnos5DqRCsWGUSr1JYj+fO7qNjn6BvDt80K3Hk9N3XRVfonaPgnTLccTIuwVkPYh
-         nsmy1calBX2Z4O8gZdkyixBbPJvBGJX9fugNxhXUD3c3oqBDqOhCFwxW6cco2QcouzMO
-         /hem+98Rngle242xeioy7dZxONTTmbBFQLapkwmctSot2G9eitQE/uEbejXfMDq6xZVF
-         V8ye6L3lXx+kB/i1s+fU1SPQKxnf2SZd28SspA8duIsv2N7a5qVeErjy+2vi7K5eGzFc
-         jnzg==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=JiJSTbLByeBUbNjihqq4ucy2aU+Ryl5bPLbQLP/9oss=;
+        b=Ozb63YSSQHn8iwOg65YeWkay62ruIsX1IEUZM8RRaeZYTflINNHYytQTiqfgbZ61mu
+         5mws/emmuO8H4TIhbNyq7HBsb0ZcExk9JtYfcWdaUKyjqpUt5zZ2H/eH7WPCvqznRTFU
+         vn7z21rNg+0FKzGwGC9M0KcNwx40GaOIjq45cGhlequzhpnACcMJ/+Xb2XWymOXsJSjK
+         FHBURfxDYZRZMuQY1HY768u1aNFpEir4fmRDiCOJ3PWbyieKxv2ohaA375ldJ5/MrzP+
+         WSKiAAV7xCfNim5mKz3ZAqarDnkz+HbFjS9MCp5Ne18S74uqYffqKc5zK4Fe93zkeNEC
+         ayLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AUlysgyDAL5M9imkvDAX/EZEtCGp/B57KfY/usHuzGA=;
-        b=1J3mENg8dvZZnzmhJ3Dfo5OuhNuLnTvZmTgyFG8yC3UOBGTt05h+hc2jloE5mY3Pf2
-         VF5VG6juNI70oxYNjnjrYCY+CsLxxLTYjwXTQeuL2Lyhn7EEZ/pnWwG6lu+KKk863JgM
-         x2bXBeDFooFEXT4JJ9FjDh6LvSOcxGMIfmtWGz8/Ank+uOzuexelk5n/ZrZ5m55sMrTx
-         Z6KMoZhLynzBYG5XScmP027zpxMEOETYS/jN31EATGr0qIJYwIxw54X5D6eS3eGHJgZy
-         cT10cRk6XMLJv7U4jQJxf7OPBqztxbei/gaNgCAfkOnidIFYZy2S6uGkLaril6bYVCRD
-         /piw==
-X-Gm-Message-State: AOAM531ivWkm9LtkMAHU2YX3vbloTV+6NWk7Hbh+MHiX8DYTd9EC8nTo
-        AP4B0EvZgNIp2WjgV4CL6jSEJg==
-X-Google-Smtp-Source: ABdhPJzZdfwzG5RdmK3Rp9m3BPQqsUYok+6kuCjDjU7io1+wHbA0R9cctbgOjFFCkbcyfgI10mTbYQ==
-X-Received: by 2002:a05:620a:2903:b0:6a0:4d8f:8b88 with SMTP id m3-20020a05620a290300b006a04d8f8b88mr26710901qkp.328.1653620140596;
-        Thu, 26 May 2022 19:55:40 -0700 (PDT)
-Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
-        by smtp.gmail.com with ESMTPSA id r129-20020ae9dd87000000b0069fc13ce224sm2129672qkf.85.2022.05.26.19.55.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 19:55:40 -0700 (PDT)
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-To:     pasha.tatashin@soleen.com, sashal@kernel.org,
-        ebiederm@xmission.com, rburanyi@google.com, gthelen@google.com,
-        viro@zeniv.linux.org.uk, kexec@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] kexec_file: Increase maximum file size to 4G
-Date:   Fri, 27 May 2022 02:55:35 +0000
-Message-Id: <20220527025535.3953665-3-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-In-Reply-To: <20220527025535.3953665-1-pasha.tatashin@soleen.com>
-References: <20220527025535.3953665-1-pasha.tatashin@soleen.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=JiJSTbLByeBUbNjihqq4ucy2aU+Ryl5bPLbQLP/9oss=;
+        b=KEfOO05edHEPmdNra8AGnx3rvU7TagUfBZzP0ntHgj1PizChRYPoFltjDhLqQ5SeCJ
+         mAcQVoaHUoi7C69WBRlYhpeA3g3mN5XaYXKRZuKcj2igyM9A1nb9z2nGb8iKeWrjqPe+
+         oDuaNoGOByAK0V9gKciZXI3v+qUWNaRw2rB3CRH9lTb3uwLMSazFQRCUqV5nG9UfOeeV
+         ZuFS3j6vZ2jTRwK9Ki/jT+jXLiy95gSf4tGR/VtnIAr6Wtr8OtD4bK7ij+JMHW1mdFlK
+         T2COpJBd/qCVzO7MCTDnyRy+yawp5magr+ha8wzn+qHxvdk0pS1qoDOkmyPU0hAJK+4m
+         bpgA==
+X-Gm-Message-State: AOAM530PxWiDhkes7XmYx9jnKWjOImwXKmx2suO3fUElsx2Vyda9o7Ek
+        zBFg3XJ4UJ2GRu0gI/7UY0cvvBHsXVx7elpxCMrYdPGy8L1Lkg==
+X-Google-Smtp-Source: ABdhPJyGNTNv40JneTza56EAdqP+zzrItZRZlcDCfYTGf+w+A+P3IpJdqxt7uCEizAutTcCZGWFNaFobAekuwi5gQ/s=
+X-Received: by 2002:a25:814a:0:b0:64f:f06c:cf6d with SMTP id
+ j10-20020a25814a000000b0064ff06ccf6dmr19551467ybm.88.1653620195396; Thu, 26
+ May 2022 19:56:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 27 May 2022 08:26:24 +0530
+Message-ID: <CA+G9fYtDBZaBGkEp5tRMM5C1xHEKeyyNK1S4WoKvrOoFxGm4KQ@mail.gmail.com>
+Subject: Re: mm: change huge_ptep_clear_flush() to return the original pte
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,62 +67,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some case initrd can be large. For example, it could be a netboot
-image loaded by u-root, that is kexec'ing into it.
+Following build failures noticed on arm64 on Linux mainline tree.
 
-The maximum size of initrd is arbitrary set to 2G. Also, the limit is
-not very obvious because it is hidden behind a generic INT_MAX macro.
+Which was detected and discussed at this email thread.
+https://lore.kernel.org/all/20220512193855.4f6ce32f@canb.auug.org.au/T/
 
-Theoretically, we could make it LONG_MAX, but it is safer to keep it
-sane, and just increase it to 4G.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Increase the size to 4G, and make it obvious by having a new macro
-that specifies the maximum file size supported by kexec_file_load()
-syscall: KEXEC_FILE_SIZE_MAX.
+Build errors:
+arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
+arch/arm64/mm/hugetlbpage.c:515:16: error: implicit declaration of
+function 'get_clear_flush'; did you mean 'ptep_clear_flush'?
+[-Werror=implicit-function-declaration]
+  515 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+      |                ^~~~~~~~~~~~~~~
+      |                ptep_clear_flush
+arch/arm64/mm/hugetlbpage.c:515:16: error: incompatible types when
+returning type 'int' but 'pte_t' was expected
+  515 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/arm64/mm/hugetlbpage.c:516:1: error: control reaches end of
+non-void function [-Werror=return-type]
+  516 | }
+      | ^
+cc1: some warnings being treated as errors
 
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
----
- kernel/kexec_file.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+metadata:
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+    git_describe: v5.18-9901-g7f50d4dfe816
+    git_sha: 7f50d4dfe816dd916a7cbf39039674825c2b388b
+    git_short_log: 7f50d4dfe816 (\Merge tag 'for-linus' of
+https://github.com/openrisc/linux\)
+    target_arch: arm64
+    toolchain: gcc-11
 
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 8347fc158d2b..f00cf70d82b9 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -31,6 +31,9 @@
- 
- static int kexec_calculate_store_digests(struct kimage *image);
- 
-+/* Maximum size in bytes for kernel/initrd files. */
-+#define KEXEC_FILE_SIZE_MAX	min_t(s64, 4LL << 30, SSIZE_MAX)
-+
- /*
-  * Currently this is the only default function that is exported as some
-  * architectures need it to do additional handlings.
-@@ -223,11 +226,12 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 			     const char __user *cmdline_ptr,
- 			     unsigned long cmdline_len, unsigned flags)
- {
--	int ret;
-+	ssize_t ret;
- 	void *ldata;
- 
- 	ret = kernel_read_file_from_fd(kernel_fd, 0, &image->kernel_buf,
--				       INT_MAX, NULL, READING_KEXEC_IMAGE);
-+				       KEXEC_FILE_SIZE_MAX, NULL,
-+				       READING_KEXEC_IMAGE);
- 	if (ret < 0)
- 		return ret;
- 	image->kernel_buf_len = ret;
-@@ -247,7 +251,7 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
- 	/* It is possible that there no initramfs is being loaded */
- 	if (!(flags & KEXEC_FILE_NO_INITRAMFS)) {
- 		ret = kernel_read_file_from_fd(initrd_fd, 0, &image->initrd_buf,
--					       INT_MAX, NULL,
-+					       KEXEC_FILE_SIZE_MAX, NULL,
- 					       READING_KEXEC_INITRAMFS);
- 		if (ret < 0)
- 			goto out;
--- 
-2.36.1.124.g0e6072fb45-goog
 
+--
+Linaro LKFT
+https://lkft.linaro.org

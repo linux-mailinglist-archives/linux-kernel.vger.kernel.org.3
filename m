@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D58535CDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A5F536210
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350126AbiE0I6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
+        id S1353704AbiE0MGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345982AbiE0I6E (ORCPT
+        with ESMTP id S1353326AbiE0L4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:58:04 -0400
+        Fri, 27 May 2022 07:56:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42323119909;
-        Fri, 27 May 2022 01:54:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AF2E3A;
+        Fri, 27 May 2022 04:51:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 666DA61D52;
-        Fri, 27 May 2022 08:54:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3923AC385A9;
-        Fri, 27 May 2022 08:54:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0393961D56;
+        Fri, 27 May 2022 11:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1235BC385A9;
+        Fri, 27 May 2022 11:51:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641685;
-        bh=++xc5O0Pwzj5zTbMW+RdWvafvORy33rPu/1F0IGR7Uw=;
+        s=korg; t=1653652285;
+        bh=YAaAnfdN5DGX6izEPZPLbxRmKyDvGykDk8xyS2lO+OE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Eee3oIAUoQTm8G5AeFhfGPKj7MzpU8fGv/mBbXFpmPxVrJ9N63UZYoZ4tI6QaiiAl
-         kd542vekUCQCCDlzaHrBlrgT3VvdfPnyui0HGu0bmJsbRBmIXjkQy4uQNvt1vON3B5
-         jy2c3uP7fg7WURbG9ju2kdA/KPRfN9et2OrAYvCk=
+        b=p43gYKIm1PJrHlis4nhMH4AWu+1/lAC3NqwiH1GRxGFFmEWPSTsKkLO9hSoEQ/E/U
+         +vkJ1G4+kkx5hNvP8zX96zfDgJBZ0aG0NMJjWyHfPWCFP2GxmoQQ+SjIFXqgZ+jUtj
+         ivQl63lvjkhL7M7/abgmOZraprIyGng3GTDRPPG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.18 34/47] random: credit architectural init the exact amount
+Subject: [PATCH 5.15 113/145] arm: use fallback for random_get_entropy() instead of zero
 Date:   Fri, 27 May 2022 10:50:14 +0200
-Message-Id: <20220527084807.032837553@linuxfoundation.org>
+Message-Id: <20220527084904.255902300@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
-References: <20220527084801.223648383@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,59 +58,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 12e45a2a6308105469968951e6d563e8f4fea187 upstream.
+commit ff8a8f59c99f6a7c656387addc4d9f2247d75077 upstream.
 
-RDRAND and RDSEED can fail sometimes, which is fine. We currently
-initialize the RNG with 512 bits of RDRAND/RDSEED. We only need 256 bits
-of those to succeed in order to initialize the RNG. Instead of the
-current "all or nothing" approach, actually credit these contributions
-the amount that is actually contributed.
+In the event that random_get_entropy() can't access a cycle counter or
+similar, falling back to returning 0 is really not the best we can do.
+Instead, at least calling random_get_entropy_fallback() would be
+preferable, because that always needs to return _something_, even
+falling back to jiffies eventually. It's not as though
+random_get_entropy_fallback() is super high precision or guaranteed to
+be entropic, but basically anything that's not zero all the time is
+better than returning zero all the time.
 
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/include/asm/timex.h |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -899,9 +899,8 @@ early_param("random.trust_bootloader", p
-  */
- int __init random_init(const char *command_line)
- {
--	size_t i;
- 	ktime_t now = ktime_get_real();
--	bool arch_init = true;
-+	unsigned int i, arch_bytes;
- 	unsigned long rv;
+--- a/arch/arm/include/asm/timex.h
++++ b/arch/arm/include/asm/timex.h
+@@ -11,5 +11,6 @@
  
- #if defined(LATENT_ENTROPY_PLUGIN)
-@@ -909,11 +908,12 @@ int __init random_init(const char *comma
- 	_mix_pool_bytes(compiletime_seed, sizeof(compiletime_seed));
+ typedef unsigned long cycles_t;
+ #define get_cycles()	({ cycles_t c; read_current_timer(&c) ? 0 : c; })
++#define random_get_entropy() (((unsigned long)get_cycles()) ?: random_get_entropy_fallback())
+ 
  #endif
- 
--	for (i = 0; i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)) {
-+	for (i = 0, arch_bytes = BLAKE2S_BLOCK_SIZE;
-+	     i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)) {
- 		if (!arch_get_random_seed_long_early(&rv) &&
- 		    !arch_get_random_long_early(&rv)) {
- 			rv = random_get_entropy();
--			arch_init = false;
-+			arch_bytes -= sizeof(rv);
- 		}
- 		_mix_pool_bytes(&rv, sizeof(rv));
- 	}
-@@ -924,8 +924,8 @@ int __init random_init(const char *comma
- 
- 	if (crng_ready())
- 		crng_reseed();
--	else if (arch_init && trust_cpu)
--		credit_init_bits(BLAKE2S_BLOCK_SIZE * 8);
-+	else if (trust_cpu)
-+		credit_init_bits(arch_bytes * 8);
- 
- 	return 0;
- }
 
 

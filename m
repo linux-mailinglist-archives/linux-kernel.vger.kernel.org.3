@@ -2,221 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC83535BB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4D0535B94
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349882AbiE0Ii1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S240380AbiE0Igi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349926AbiE0IiB (ORCPT
+        with ESMTP id S1349649AbiE0If7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:38:01 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38881B4;
-        Fri, 27 May 2022 01:37:04 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24R8axc3102241;
-        Fri, 27 May 2022 03:36:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1653640619;
-        bh=y6OTPqS+vc9WZO3WlEaGQoJIO2Ga4vGpk/QBM5b6uQ0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=VSOWX3hnuk6LUKawQbwyP0VSh+j3fhdpjAjXD/jgvN5QV6NfgGLegBf5d8uxAI3IL
-         wE0xkGDvU6M4HVPMPNisBlaT9FL9uTUs3Ws0ZZA5Chn2930LKMqCpMOh0JAUSd841N
-         GyErZ1EyG5dUWyheAw1NbE9LLuRi6MkIMlP8IhsM=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24R8axM5013346
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 27 May 2022 03:36:59 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 27
- May 2022 03:36:58 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 27 May 2022 03:36:59 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24R8avnI060753;
-        Fri, 27 May 2022 03:36:58 -0500
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     <robh+dt@kernel.org>, <nm@ti.com>, <vigneshr@ti.com>,
-        <kishon@ti.com>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <lee.jones@linaro.org>, <rogerq@kernel.org>,
-        <devicetree@vger.kernel.org>, <kristo@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <s-anna@ti.com>,
-        Vijay Pothukuchi <vijayp@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH 2/3] arm64: dts: ti: k3-j721e-*: Add dts nodes for EHRPWMs
-Date:   Fri, 27 May 2022 14:05:55 +0530
-Message-ID: <20220527083556.18864-3-r-ravikumar@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220527083556.18864-1-r-ravikumar@ti.com>
-References: <20220527083556.18864-1-r-ravikumar@ti.com>
+        Fri, 27 May 2022 04:35:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45445F136B;
+        Fri, 27 May 2022 01:35:58 -0700 (PDT)
+Date:   Fri, 27 May 2022 08:35:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653640557;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z087jBODnpj2qiNGQQ0FWu0oa8ABFwGMRBfuD/HWSNQ=;
+        b=Y7M5pvyLmZQcZnW/c37DuEr8pMD4DdUAlypUhqX3C2OZoIJpNn3lvdFOQtxxKVjymRYL6f
+        FKsxv5XFr32CAaLZgn9JUmIiSQJFg1/nIHeoEZxv8+yVHDfNsHpUgSLBhWTjFmDWijv+5c
+        UaSLx/cii/mXkLFUxTR78bE5LrMvvGv2Y6ZDARTwd48b9TVuWp46EZRIInDEqpIkQAkqH9
+        8FbK1zPF98M2ugkVzPv9Qdo4guz5M3VRiTtkrjEwgyDIiY41rLlvZe0VfVQVCzW301znvT
+        CmS31cWvH3aV5mO8ll5BDrwNRy/9KK7Dg7F32meSqpPlvLxo+qsgin+Yvjg9eg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653640557;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z087jBODnpj2qiNGQQ0FWu0oa8ABFwGMRBfuD/HWSNQ=;
+        b=Q5iE3reTf8B4Wq8Cj7jtKBoqmlWaWa49xoqlZ+Jve+L6/pmi6XX/8aoNqsWhUpX7zOJH1Y
+        UvUlRV7V9XkaFtDg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/core] clocksource/drivers/digicolor: Convert to SPDX identifier
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Baruch Siach <baruch@tkos.co.il>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220510171254.655035023@linutronix.de>
+References: <20220510171254.655035023@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <165364055580.4207.15613073810279817437.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vijay Pothukuchi <vijayp@ti.com>
+The following commit has been merged into the timers/core branch of tip:
 
-Add dts nodes for 6 EHRPWM instances on SoC
+Commit-ID:     b3a9ce9d24ffc3e8018dc35a5f4e8f3406cf497f
+Gitweb:        https://git.kernel.org/tip/b3a9ce9d24ffc3e8018dc35a5f4e8f3406cf497f
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Tue, 10 May 2022 19:24:43 +02:00
+Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CommitterDate: Wed, 18 May 2022 11:08:59 +02:00
 
-Signed-off-by: Vijay Pothukuchi <vijayp@ti.com>
-Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+clocksource/drivers/digicolor: Convert to SPDX identifier
+
+The license information clearly states GPL version 2 only. The extra text
+which excludes warranties is an excerpt of the corresponding GPLv2 clause
+11.
+
+So the SPDX identifier covers it completely.
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: linux-arm-kernel@lists.infradead.org
+Acked-by: Baruch Siach <baruch@tkos.co.il>
+Link: https://lore.kernel.org/r/20220510171254.655035023@linutronix.de
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- .../dts/ti/k3-j721e-common-proc-board.dts     | 24 +++++++
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 62 ++++++++++++++++++-
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 24 +++++++
- 3 files changed, 109 insertions(+), 1 deletion(-)
+ drivers/clocksource/timer-digicolor.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-index 2bc26a296496..f7d02fa4d6fc 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-@@ -995,3 +995,27 @@
- &main_mcan13 {
- 	status = "disabled";
- };
-+
-+&main_ehrpwm0 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm1 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm2 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm3 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm4 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm5 {
-+	status = "disabled";
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-index 43b6cf5791ee..3ae3d1cc6570 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-@@ -66,7 +66,67 @@
- 			#mux-control-cells = <1>;
- 			mux-reg-masks = <0x4000 0x8000000>, /* USB0 to SERDES0/3 mux */
- 					<0x4010 0x8000000>; /* USB1 to SERDES1/2 mux */
--	    };
-+		};
-+
-+		ehrpwm_tbclk: clock@4140 {
-+			compatible = "ti,am654-ehrpwm-tbclk", "syscon";
-+			reg = <0x4140 0x18>;
-+			#clock-cells = <1>;
-+		};
-+	};
-+
-+	main_ehrpwm0: pwm@3000000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x0 0x3000000 0x0 0x100>;
-+		power-domains = <&k3_pds 83 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 0>, <&k3_clks 83 0>;
-+		clock-names = "tbclk", "fck";
-+	};
-+
-+	main_ehrpwm1: pwm@3010000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x0 0x3010000 0x0 0x100>;
-+		power-domains = <&k3_pds 84 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 1>, <&k3_clks 84 0>;
-+		clock-names = "tbclk", "fck";
-+	};
-+
-+	main_ehrpwm2: pwm@3020000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x0 0x3020000 0x0 0x100>;
-+		power-domains = <&k3_pds 85 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 2>, <&k3_clks 85 0>;
-+		clock-names = "tbclk", "fck";
-+	};
-+
-+	main_ehrpwm3: pwm@3030000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x0 0x3030000 0x0 0x100>;
-+		power-domains = <&k3_pds 86 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 3>, <&k3_clks 86 0>;
-+		clock-names = "tbclk", "fck";
-+	};
-+
-+	main_ehrpwm4: pwm@3040000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x0 0x3040000 0x0 0x100>;
-+		power-domains = <&k3_pds 87 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 4>, <&k3_clks 87 0>;
-+		clock-names = "tbclk", "fck";
-+	};
-+
-+	main_ehrpwm5: pwm@3050000 {
-+		compatible = "ti,am654-ehrpwm", "ti,am3352-ehrpwm";
-+		#pwm-cells = <3>;
-+		reg = <0x0 0x3050000 0x0 0x100>;
-+		power-domains = <&k3_pds 88 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&ehrpwm_tbclk 5>, <&k3_clks 88 0>;
-+		clock-names = "tbclk", "fck";
- 	};
+diff --git a/drivers/clocksource/timer-digicolor.c b/drivers/clocksource/timer-digicolor.c
+index 1e984a4..559aa96 100644
+--- a/drivers/clocksource/timer-digicolor.c
++++ b/drivers/clocksource/timer-digicolor.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0
+ /*
+  * Conexant Digicolor timer driver
+  *
+@@ -11,10 +12,6 @@
+  * Copyright (C) 2013 Maxime Ripard
+  *
+  * Maxime Ripard <maxime.ripard@free-electrons.com>
+- *
+- * This file is licensed under the terms of the GNU General Public
+- * License version 2.  This program is licensed "as is" without any
+- * warranty of any kind, whether express or implied.
+  */
  
- 	gic500: interrupt-controller@1800000 {
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index 80358cba6954..98a55778f3fe 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -1129,3 +1129,27 @@
- 	memory-region = <&c71_0_dma_memory_region>,
- 			<&c71_0_memory_region>;
- };
-+
-+&main_ehrpwm0 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm1 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm2 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm3 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm4 {
-+	status = "disabled";
-+};
-+
-+&main_ehrpwm5 {
-+	status = "disabled";
-+};
--- 
-2.17.1
-
+ /*

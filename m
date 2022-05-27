@@ -2,65 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C985365B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9465365C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344702AbiE0QIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 12:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S1348503AbiE0QKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 12:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349586AbiE0QIt (ORCPT
+        with ESMTP id S235741AbiE0QKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 12:08:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747B01498FA;
-        Fri, 27 May 2022 09:08:48 -0700 (PDT)
+        Fri, 27 May 2022 12:10:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6DC149AAE;
+        Fri, 27 May 2022 09:10:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1024F61DCE;
-        Fri, 27 May 2022 16:08:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466E1C385A9;
-        Fri, 27 May 2022 16:08:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B992161DCE;
+        Fri, 27 May 2022 16:10:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BE4C385B8;
+        Fri, 27 May 2022 16:10:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653667727;
-        bh=OlBI8wVCIAxvvfasLZa9UH7nUKu5dc9htrYEpiULe6M=;
+        s=k20201202; t=1653667846;
+        bh=itJVIn2kS9CTYYtN7F5XJg9N57RQi68GqnXIyBbsDbA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j8y6/wrgqMG5Oat+epe7h7DytEaI14sZ2BQgUoEE4PpE+UZoDrLkh1p0wzQnlS+Rn
-         hl/EJzYILmBt5XtutCUugflcd316cr3XKq8rns0GY/VXwsxaS4gCRxFLAxN+ft3wum
-         9vOfyJmi4YXWzAK88Dmd6Vs1RYhzTrk9XXXQPkzoX8xK2Hdzu/39EM+xb52mQUqSon
-         bR2sn31VpNjPTWq7gKVfKS1lmhokpmpXAOKTg7nf1dHoa7KXNZHvQNNerAJyCseEDc
-         PbDMhTsXYsKqKTJF8WJyO7rhFY6I2X6yRRjJtRP6IsuBgO1KeMFan/5fCW0cGgTdAn
-         Ixih7UrR73guQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id CFB2D4036D; Fri, 27 May 2022 13:08:43 -0300 (-03)
-Date:   Fri, 27 May 2022 13:08:43 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, broonie@kernel.org,
-        german.gomez@arm.com, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v1 4/6] perf tools: Use dynamic register set for Dwarf
- unwind
-Message-ID: <YpD3i2prgA8ESb7Q@kernel.org>
-References: <20220509144257.1623063-1-james.clark@arm.com>
- <20220509144257.1623063-5-james.clark@arm.com>
- <Yo+gYbLNnYGOPzGs@kernel.org>
- <Yo/EytFDKnOEiWCa@kernel.org>
- <20220527061854.GA829807@leoy-ThinkPad-X240s>
+        b=joYS+nl4UxW45XHGqcuafMlcSrRrjugnBPqgF3oBzTltLYf6wHBeAkim+u/T4/cPR
+         W/qqKoC6iLaQHzv+o9CcPfJ503d5zdPR/rKQvMbLaf4ZlTAapRUohLV6eRTtSrrGCs
+         gZ82TjggIc4JwT/TUmp7C99vDIpSuaihpeqHFPzmeLtt7InLkZZh42ZPgcQxianCz9
+         D7JdlFSX+RDGT2b7ySgpalSsy0YtLlgOmTA/tTBna/S5VZxdxKDhtuVfVVpjaKikLR
+         hDHMPHCg61mRSEfWeF5L4hrkA3h+f3TepE8nKnCqQotBzsMmUZ4JXXp/ZtG1tMlFcw
+         sww9DCcnADGvw==
+Date:   Fri, 27 May 2022 09:10:45 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <dchinner@redhat.com>, Jan Kara <jack@suse.cz>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Linux-NFS <linux-nfs@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux-XFS <linux-xfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/page_alloc: Always attempt to allocate at least one
+ page during bulk allocation
+Message-ID: <YpD4BSZDgF5xv0mL@magnolia>
+References: <20220526091210.GC3441@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220527061854.GA829807@leoy-ThinkPad-X240s>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20220526091210.GC3441@techsingularity.net>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,46 +62,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, May 27, 2022 at 02:18:54PM +0800, Leo Yan escreveu:
-> On Thu, May 26, 2022 at 03:19:54PM -0300, Arnaldo Carvalho de Melo wrote:
+On Thu, May 26, 2022 at 10:12:10AM +0100, Mel Gorman wrote:
+> Peter Pavlisko reported the following problem on kernel bugzilla 216007.
 > 
-> [...]
+> 	When I try to extract an uncompressed tar archive (2.6 milion
+> 	files, 760.3 GiB in size) on newly created (empty) XFS file system,
+> 	after first low tens of gigabytes extracted the process hangs in
+> 	iowait indefinitely. One CPU core is 100% occupied with iowait,
+> 	the other CPU core is idle (on 2-core Intel Celeron G1610T).
 > 
-> > Too old to support?
-> > 
-> >   69     7.19 ubuntu:16.04-x-arm64          : FAIL gcc version 5.4.0 20160609 (Ubuntu/Linaro 5.4.0-6ubuntu1~16.04.9)
-> >     arch/arm64/util/perf_regs.c: In function 'arch__user_reg_mask':
-> >     arch/arm64/util/perf_regs.c:151:28: error: 'HWCAP_SVE' undeclared (first use in this function)
-> >       if (getauxval(AT_HWCAP) & HWCAP_SVE)
-> >                                 ^
-> >     arch/arm64/util/perf_regs.c:151:28: note: each undeclared identifier is reported only once for each function it appears in
-> >     /git/perf-5.18.0/tools/build/Makefile.build:139: recipe for target 'util' failed
-> >     make[5]: *** [util] Error 2
-> >     /git/perf-5.18.0/tools/build/Makefile.build:139: recipe for target 'arm64' failed
-> >     make[4]: *** [arm64] Error 2
-> >     /git/perf-5.18.0/tools/build/Makefile.build:139: recipe for target 'arch' failed
-> >     make[3]: *** [arch] Error 2
-> > 
-> > 
-> > ⬢[acme@toolbox perf]$ find . -name "*.h" | xargs grep -w HWCAP_SVE
-> > ./arch/arm64/include/uapi/asm/hwcap.h:#define HWCAP_SVE		(1 << 22)
-> > ⬢[acme@toolbox perf]$ 
+> It was bisected to c9fa563072e1 ("xfs: use alloc_pages_bulk_array() for
+> buffers") but XFS is only the messenger. The problem is that nothing
+> is waking kswapd to reclaim some pages at a time the PCP lists cannot
+> be refilled until some reclaim happens. The bulk allocator checks that
+> there are some pages in the array and the original intent was that a bulk
+> allocator did not necessarily need all the requested pages and it was
+> best to return as quickly as possible. This was fine for the first user
+> of the API but both NFS and XFS require the requested number of pages
+> be available before making progress. Both could be adjusted to call the
+> page allocator directly if a bulk allocation fails but it puts a burden on
+> users of the API. Adjust the semantics to attempt at least one allocation
+> via __alloc_pages() before returning so kswapd is woken if necessary.
 > 
-> I tested aarch64 GCC-7.4.1 which doesn't support HWCAP_SVE, but
-> aarch64 GCC-8.3.0 and GCC-9.4.0 support it.
+> It was reported via bugzilla that the patch addressed the problem and
+> that the tar extraction completed successfully. This may also address
+> bug 215975 but has yet to be confirmed.
 > 
-> Either we can add below code:
-> 
->   #ifndef HWCAP_SVE
->   #define HWCAP_SVE		(1 << 22)
->   #endif
-> 
-> Or directly include header file <.../asm/hwcap.h>.
-> 
-> Not sure which method is preferred.  Maybe the first approach can be
-> de-couple with Linux kernel code?
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216007
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215975
+> Fixes: 387ba26fb1cb ("mm/page_alloc: add a bulk page allocator")
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> Cc: <stable@vger.kernel.org> # v5.13+
 
-Lets go KISS and just define it if not present, as you suggested above,
-will test now.
+Seems to have survived overnight fstests on XFS, so...
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-- Arnaldo
+--D
+
+> ---
+>  mm/page_alloc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 0e42038382c1..5ced6cb260ed 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5324,8 +5324,8 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+>  		page = __rmqueue_pcplist(zone, 0, ac.migratetype, alloc_flags,
+>  								pcp, pcp_list);
+>  		if (unlikely(!page)) {
+> -			/* Try and get at least one page */
+> -			if (!nr_populated)
+> +			/* Try and allocate at least one page */
+> +			if (!nr_account)
+>  				goto failed_irq;
+>  			break;
+>  		}

@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3006535A8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8CF535A1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347741AbiE0Hf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 03:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S237069AbiE0HPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 03:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347933AbiE0Hfw (ORCPT
+        with ESMTP id S1346442AbiE0HPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 03:35:52 -0400
-Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D47F68BC
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 00:35:42 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.191.102])
-        by smtp.orange.fr with ESMTPA
-        id uUVRn5MANL5fDuUVRnlyEw; Fri, 27 May 2022 09:35:41 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 27 May 2022 09:35:41 +0200
-X-ME-IP: 90.11.191.102
-Message-ID: <131a9514-8ca6-eac2-ba4f-9fafca21e5b4@wanadoo.fr>
-Date:   Fri, 27 May 2022 09:35:33 +0200
+        Fri, 27 May 2022 03:15:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593C340A1D;
+        Fri, 27 May 2022 00:15:10 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L8bcv2V0rzbbtL;
+        Fri, 27 May 2022 15:13:35 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 15:15:08 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 15:15:08 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] rtc: Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 07:36:36 +0000
+Message-ID: <20220527073636.2474546-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] net: phy: Directly use ida_alloc()/free()
-Content-Language: fr
-To:     keliu <liuke94@huawei.com>, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220527074000.2474792-1-liuke94@huawei.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220527074000.2474792-1-liuke94@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
-Le 27/05/2022 à 09:40, keliu a écrit :
-> Use ida_alloc()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
-> 
-> Signed-off-by: keliu <liuke94@huawei.com>
-> ---
->   drivers/net/phy/fixed_phy.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/phy/fixed_phy.c b/drivers/net/phy/fixed_phy.c
-> index c65fb5f5d2dc..63e7922bf257 100644
-> --- a/drivers/net/phy/fixed_phy.c
-> +++ b/drivers/net/phy/fixed_phy.c
-> @@ -180,7 +180,7 @@ static void fixed_phy_del(int phy_addr)
->   			if (fp->link_gpiod)
->   				gpiod_put(fp->link_gpiod);
->   			kfree(fp);
-> -			ida_simple_remove(&phy_fixed_ida, phy_addr);
-> +			ida_free(&phy_fixed_ida, phy_addr);
->   			return;
->   		}
->   	}
-> @@ -250,7 +250,7 @@ static struct phy_device *__fixed_phy_register(unsigned int irq,
->   
->   	ret = fixed_phy_add_gpiod(irq, phy_addr, status, gpiod);
->   	if (ret < 0) {
-> -		ida_simple_remove(&phy_fixed_ida, phy_addr);
-> +		ida_free(&phy_fixed_ida, phy_addr);
->   		return ERR_PTR(ret);
->   	}
->   
+Signed-off-by: keliu <liuke94@huawei.com>
+---
+ drivers/rtc/class.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Hi,
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index 3c8eec2218df..e48223c00c67 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -36,7 +36,7 @@ static void rtc_device_release(struct device *dev)
+ 
+ 	cancel_work_sync(&rtc->irqwork);
+ 
+-	ida_simple_remove(&rtc_ida, rtc->id);
++	ida_free(&rtc_ida, rtc->id);
+ 	mutex_destroy(&rtc->ops_lock);
+ 	kfree(rtc);
+ }
+@@ -262,7 +262,7 @@ static int rtc_device_get_id(struct device *dev)
+ 	}
+ 
+ 	if (id < 0)
+-		id = ida_simple_get(&rtc_ida, 0, 0, GFP_KERNEL);
++		id = ida_alloc(&rtc_ida, GFP_KERNEL);
+ 
+ 	return id;
+ }
+@@ -368,7 +368,7 @@ struct rtc_device *devm_rtc_allocate_device(struct device *dev)
+ 
+ 	rtc = rtc_allocate_device();
+ 	if (!rtc) {
+-		ida_simple_remove(&rtc_ida, id);
++		ida_free(&rtc_ida, id);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
+-- 
+2.25.1
 
-You missed ida_simple_get() that shoud become ida_alloc_max() here.
-
-CJ

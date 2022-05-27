@@ -2,88 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF4F535BE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FD0535FD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243543AbiE0Isu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
+        id S1351737AbiE0LmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiE0Isq (ORCPT
+        with ESMTP id S1351630AbiE0Lkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:48:46 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DA33BF9C;
-        Fri, 27 May 2022 01:48:41 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id q4so3572892plr.11;
-        Fri, 27 May 2022 01:48:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F/TuFldqNWvbTR7kMknQ2sKjIOSGzhXUVTHp1Dts3Bw=;
-        b=Waerq1Kg5SvqcLdZ91WgRWzCShy7ZEJw5Th3INevO7MYiKqxU166flLRKYb6F3n2WE
-         +/jhiCUpHLjXscO+mQm+qzYfcQ6QVGscfz94TDWbs+505PMsEP+VLtuM0nmfmnKsORsx
-         e2rNwgY0TNH0ff4YJnyjGYKYCKLwXdHus/fT3gypmPcIAeRq3baIiEb27H10uQWXYWfr
-         86WDeESm08ae9QxBJNHTwBk5pwNcblO1VibwZ1AnB5yigJm8+lsU84fszGAC0X4wtRRI
-         3kHnhOT13M7HHIjATivsUNe1oExErxDO5MThHSnlAo+zQhu7ZP6+XxwioyoBbQaf/HJZ
-         NFhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=F/TuFldqNWvbTR7kMknQ2sKjIOSGzhXUVTHp1Dts3Bw=;
-        b=V8g66Om94JDOy3U2U+66WDF/nKz9hK1KIUOrVnoAzNWWvpm49FRFX+SXVADuYmUS2i
-         EtZP3RpXv+zhlReOdsCXbJVviIoKSlnF65OGs118F5ek1GrQf83jOtv/xai8qhgFWm1Z
-         G5RAIoZHavRch5GAVfChoJ+0N10U+VppByBhoJ1tRzc5zOIuCmeg0fp2YmYHphTmpQbB
-         XrUCUL6Fs+YX7gGF3bxIBpsVibLG4B9r7WO5tq8tJphdyUD2euy4/HTvlTUBLhW5T/y+
-         mSxhv2gVfmltMJAykF6Wdf8UyYDtHlq6m4lLHDX1IeeGhz63y3b9xAXVTd69+4+WNGGl
-         b+kA==
-X-Gm-Message-State: AOAM531UB3jazNMgi+/H0wW471n+ifP7xbKtdw4NtK3sNQ77XIlk77lK
-        73Ib3G4D0TzjWixwFLepcA8=
-X-Google-Smtp-Source: ABdhPJwqtjzGV0uG1WoBE3y9BQjc+1acwVdSs33qFdDUPmDyP1NaqwM6CP6aSD4H6E3KNP5tm3n0Yw==
-X-Received: by 2002:a17:902:7781:b0:161:c85a:8fff with SMTP id o1-20020a170902778100b00161c85a8fffmr42066123pll.97.1653641321290;
-        Fri, 27 May 2022 01:48:41 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:ac0e])
-        by smtp.gmail.com with ESMTPSA id a16-20020aa78650000000b0050dc7628137sm3002469pfo.17.2022.05.27.01.48.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 01:48:40 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 26 May 2022 22:48:39 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cgroup: wait for css offline when rmdir
-Message-ID: <YpCQZ5RRnxwh7fmK@slm.duckdns.org>
-References: <1653619158-27607-1-git-send-email-zhanghongchen@loongson.cn>
+        Fri, 27 May 2022 07:40:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2258913C34C;
+        Fri, 27 May 2022 04:39:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5FA761CB7;
+        Fri, 27 May 2022 11:39:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4DD9C385A9;
+        Fri, 27 May 2022 11:39:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653651575;
+        bh=RCjUC63k93zeo8gThW8lUvjsEHUUCfLr2HkXszXk9zg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=sP9mY1aiORS6v7kx0Ubl9b5A+GW6bvdwwUCzweLQIlP9Gt0rr11/7651urd4h4h9U
+         bWYDLrKx4ZBFj4UOsgvg7WCyqQwMh1iktkD8IxmclB2j/d6T5mOMvmv6gPaMz5QfVS
+         bEO5RhnNHdVIzUwZ+wsfctzdZAsznHXd/51YHjuQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.15 018/145] random: use IS_ENABLED(CONFIG_NUMA) instead of ifdefs
+Date:   Fri, 27 May 2022 10:48:39 +0200
+Message-Id: <20220527084853.168845601@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1653619158-27607-1-git-send-email-zhanghongchen@loongson.cn>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 10:39:18AM +0800, Hongchen Zhang wrote:
-> when remove a cgroup dir, make sure all the csses associated which
-> the cgroup are all offlined,so that we will be sure that the resources
-> allocated by the csses are all freed when rmdir exit successfully.
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-Offlining doesn't guarantee that resources are freed and there's no definite
-time limit on how long it'd take to free all resources. e.g. for memcg, if
-there isn't sufficient memory pressure, its page cache can remain
-indefinitely. Is there something practical you're trying to achieve?
+commit 7b87324112df2e1f9b395217361626362dcfb9fb upstream.
 
-Thanks.
+Rather than an awkward combination of ifdefs and __maybe_unused, we can
+ensure more source gets parsed, regardless of the configuration, by
+using IS_ENABLED for the CONFIG_NUMA conditional code. This makes things
+cleaner and easier to follow.
 
--- 
-tejun
+I've confirmed that on !CONFIG_NUMA, we don't wind up with excess code
+by accident; the generated object file is the same.
+
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/char/random.c |   32 ++++++++++++--------------------
+ 1 file changed, 12 insertions(+), 20 deletions(-)
+
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -759,7 +759,6 @@ static int credit_entropy_bits_safe(stru
+ 
+ static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
+ 
+-#ifdef CONFIG_NUMA
+ /*
+  * Hack to deal with crazy userspace progams when they are all trying
+  * to access /dev/urandom in parallel.  The programs are almost
+@@ -767,7 +766,6 @@ static DECLARE_WAIT_QUEUE_HEAD(crng_init
+  * their brain damage.
+  */
+ static struct crng_state **crng_node_pool __read_mostly;
+-#endif
+ 
+ static void invalidate_batched_entropy(void);
+ static void numa_crng_init(void);
+@@ -815,7 +813,7 @@ static bool __init crng_init_try_arch_ea
+ 	return arch_init;
+ }
+ 
+-static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
++static void crng_initialize_secondary(struct crng_state *crng)
+ {
+ 	chacha_init_consts(crng->state);
+ 	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
+@@ -866,7 +864,6 @@ static void crng_finalize_init(struct cr
+ 	}
+ }
+ 
+-#ifdef CONFIG_NUMA
+ static void do_numa_crng_init(struct work_struct *work)
+ {
+ 	int i;
+@@ -893,29 +890,24 @@ static DECLARE_WORK(numa_crng_init_work,
+ 
+ static void numa_crng_init(void)
+ {
+-	schedule_work(&numa_crng_init_work);
++	if (IS_ENABLED(CONFIG_NUMA))
++		schedule_work(&numa_crng_init_work);
+ }
+ 
+ static struct crng_state *select_crng(void)
+ {
+-	struct crng_state **pool;
+-	int nid = numa_node_id();
+-
+-	/* pairs with cmpxchg_release() in do_numa_crng_init() */
+-	pool = READ_ONCE(crng_node_pool);
+-	if (pool && pool[nid])
+-		return pool[nid];
+-
+-	return &primary_crng;
+-}
+-#else
+-static void numa_crng_init(void) {}
++	if (IS_ENABLED(CONFIG_NUMA)) {
++		struct crng_state **pool;
++		int nid = numa_node_id();
++
++		/* pairs with cmpxchg_release() in do_numa_crng_init() */
++		pool = READ_ONCE(crng_node_pool);
++		if (pool && pool[nid])
++			return pool[nid];
++	}
+ 
+-static struct crng_state *select_crng(void)
+-{
+ 	return &primary_crng;
+ }
+-#endif
+ 
+ /*
+  * crng_fast_load() can be called by code in the interrupt service
+
+

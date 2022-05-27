@@ -2,145 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CF2536236
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 706DD535CF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343605AbiE0MOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
+        id S1350468AbiE0JBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352649AbiE0MAq (ORCPT
+        with ESMTP id S1350480AbiE0JAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 08:00:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C9A34647;
-        Fri, 27 May 2022 04:52:39 -0700 (PDT)
+        Fri, 27 May 2022 05:00:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6EA46667;
+        Fri, 27 May 2022 01:56:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF1A2B824D6;
-        Fri, 27 May 2022 11:52:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C283C385A9;
-        Fri, 27 May 2022 11:52:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5C22FCE238F;
+        Fri, 27 May 2022 08:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353CAC385A9;
+        Fri, 27 May 2022 08:55:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652356;
-        bh=l+7bztEPpbz6KM86XanhYsrFT42I640PSPvAsSLajYw=;
+        s=korg; t=1653641759;
+        bh=RUEsyhJFnaOVYv98/ybfm3mKHtkusHDBD7ScaWxPpOI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hnaeOuS+r0kinORtf960Rsfk8YxY6ANBOorwSZ2+emK6p7PK58GUmq8rxMSH57tpW
-         Oi4HUudKXmJRQsjBk7w6NHuGnC/98d6+dN3X2Kdl0P3/aukYZUHtTNFvVNpcZi2dxm
-         5dJR9BU475F4C/gTXN6Bd6TtlglFWpcXVRynMssg=
+        b=rqygeeeycRlaqkSXXnvPao9H8kgXd9ePWZwwtyEyorN3WKTgoPkPNHJyMPDoE5caQ
+         NcsYuLT8T3UAwcHeQhqUw5pz9Trqt7VDIfkILZNG6AISTSxHC2q/TyiDMwDL0qb1Wj
+         2436yYkU+M4iELFAoBeLYODdagBKpl3NBO2SS6Rc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 125/145] random: help compiler out with fast_mix() by using simpler arguments
-Date:   Fri, 27 May 2022 10:50:26 +0200
-Message-Id: <20220527084905.724178098@linuxfoundation.org>
+        stable@vger.kernel.org, Edward Matijevic <motolav@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.18 47/47] ALSA: ctxfi: Add SB046x PCI ID
+Date:   Fri, 27 May 2022 10:50:27 +0200
+Message-Id: <20220527084808.977367716@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
+References: <20220527084801.223648383@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Edward Matijevic <motolav@gmail.com>
 
-commit 791332b3cbb080510954a4c152ce02af8832eac9 upstream.
+commit 1b073ebb174d0c7109b438e0a5eb4495137803ec upstream.
 
-Now that fast_mix() has more than one caller, gcc no longer inlines it.
-That's fine. But it also doesn't handle the compound literal argument we
-pass it very efficiently, nor does it handle the loop as well as it
-could. So just expand the code to spell out this function so that it
-generates the same code as it did before. Performance-wise, this now
-behaves as it did before the last commit. The difference in actual code
-size on x86 is 45 bytes, which is less than a cache line.
+Adds the PCI ID for X-Fi cards sold under the Platnum and XtremeMusic names
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Before: snd_ctxfi 0000:05:05.0: chip 20K1 model Unknown (1102:0021) is found
+After: snd_ctxfi 0000:05:05.0: chip 20K1 model SB046x (1102:0021) is found
+
+[ This is only about defining the model name string, and the rest is
+  handled just like before, as a default unknown device.
+  Edward confirmed that the stuff has been working fine -- tiwai ]
+
+Signed-off-by: Edward Matijevic <motolav@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/cae7d1a4-8bd9-7dfe-7427-db7e766f7272@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   44 +++++++++++++++++++++++---------------------
- 1 file changed, 23 insertions(+), 21 deletions(-)
+ sound/pci/ctxfi/ctatc.c      |    2 ++
+ sound/pci/ctxfi/cthardware.h |    3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1031,25 +1031,30 @@ static DEFINE_PER_CPU(struct fast_pool,
-  * and therefore this has no security on its own. s represents the
-  * four-word SipHash state, while v represents a two-word input.
-  */
--static void fast_mix(unsigned long s[4], const unsigned long v[2])
-+static void fast_mix(unsigned long s[4], unsigned long v1, unsigned long v2)
- {
--	size_t i;
--
--	for (i = 0; i < 2; ++i) {
--		s[3] ^= v[i];
- #ifdef CONFIG_64BIT
--		s[0] += s[1]; s[1] = rol64(s[1], 13); s[1] ^= s[0]; s[0] = rol64(s[0], 32);
--		s[2] += s[3]; s[3] = rol64(s[3], 16); s[3] ^= s[2];
--		s[0] += s[3]; s[3] = rol64(s[3], 21); s[3] ^= s[0];
--		s[2] += s[1]; s[1] = rol64(s[1], 17); s[1] ^= s[2]; s[2] = rol64(s[2], 32);
-+#define PERM() do { \
-+	s[0] += s[1]; s[1] = rol64(s[1], 13); s[1] ^= s[0]; s[0] = rol64(s[0], 32); \
-+	s[2] += s[3]; s[3] = rol64(s[3], 16); s[3] ^= s[2]; \
-+	s[0] += s[3]; s[3] = rol64(s[3], 21); s[3] ^= s[0]; \
-+	s[2] += s[1]; s[1] = rol64(s[1], 17); s[1] ^= s[2]; s[2] = rol64(s[2], 32); \
-+} while (0)
- #else
--		s[0] += s[1]; s[1] = rol32(s[1],  5); s[1] ^= s[0]; s[0] = rol32(s[0], 16);
--		s[2] += s[3]; s[3] = rol32(s[3],  8); s[3] ^= s[2];
--		s[0] += s[3]; s[3] = rol32(s[3],  7); s[3] ^= s[0];
--		s[2] += s[1]; s[1] = rol32(s[1], 13); s[1] ^= s[2]; s[2] = rol32(s[2], 16);
-+#define PERM() do { \
-+	s[0] += s[1]; s[1] = rol32(s[1],  5); s[1] ^= s[0]; s[0] = rol32(s[0], 16); \
-+	s[2] += s[3]; s[3] = rol32(s[3],  8); s[3] ^= s[2]; \
-+	s[0] += s[3]; s[3] = rol32(s[3],  7); s[3] ^= s[0]; \
-+	s[2] += s[1]; s[1] = rol32(s[1], 13); s[1] ^= s[2]; s[2] = rol32(s[2], 16); \
-+} while (0)
- #endif
--		s[0] ^= v[i];
--	}
-+
-+	s[3] ^= v1;
-+	PERM();
-+	s[0] ^= v1;
-+	s[3] ^= v2;
-+	PERM();
-+	s[0] ^= v2;
- }
+--- a/sound/pci/ctxfi/ctatc.c
++++ b/sound/pci/ctxfi/ctatc.c
+@@ -36,6 +36,7 @@
+ 			    | ((IEC958_AES3_CON_FS_48000) << 24))
  
- #ifdef CONFIG_SMP
-@@ -1119,10 +1124,8 @@ void add_interrupt_randomness(int irq)
- 	struct pt_regs *regs = get_irq_regs();
- 	unsigned int new_count;
+ static const struct snd_pci_quirk subsys_20k1_list[] = {
++	SND_PCI_QUIRK(PCI_VENDOR_ID_CREATIVE, 0x0021, "SB046x", CTSB046X),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_CREATIVE, 0x0022, "SB055x", CTSB055X),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_CREATIVE, 0x002f, "SB055x", CTSB055X),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_CREATIVE, 0x0029, "SB073x", CTSB073X),
+@@ -64,6 +65,7 @@ static const struct snd_pci_quirk subsys
  
--	fast_mix(fast_pool->pool, (unsigned long[2]){
--		entropy,
--		(regs ? instruction_pointer(regs) : _RET_IP_) ^ swab(irq)
--	});
-+	fast_mix(fast_pool->pool, entropy,
-+		 (regs ? instruction_pointer(regs) : _RET_IP_) ^ swab(irq));
- 	new_count = ++fast_pool->count;
+ static const char *ct_subsys_name[NUM_CTCARDS] = {
+ 	/* 20k1 models */
++	[CTSB046X]	= "SB046x",
+ 	[CTSB055X]	= "SB055x",
+ 	[CTSB073X]	= "SB073x",
+ 	[CTUAA]		= "UAA",
+--- a/sound/pci/ctxfi/cthardware.h
++++ b/sound/pci/ctxfi/cthardware.h
+@@ -26,8 +26,9 @@ enum CHIPTYP {
  
- 	if (new_count & MIX_INFLIGHT)
-@@ -1162,8 +1165,7 @@ static void add_timer_randomness(struct
- 	 * sometime after, so mix into the fast pool.
- 	 */
- 	if (in_hardirq()) {
--		fast_mix(this_cpu_ptr(&irq_randomness)->pool,
--			 (unsigned long[2]){ entropy, num });
-+		fast_mix(this_cpu_ptr(&irq_randomness)->pool, entropy, num);
- 	} else {
- 		spin_lock_irqsave(&input_pool.lock, flags);
- 		_mix_pool_bytes(&entropy, sizeof(entropy));
+ enum CTCARDS {
+ 	/* 20k1 models */
++	CTSB046X,
++	CT20K1_MODEL_FIRST = CTSB046X,
+ 	CTSB055X,
+-	CT20K1_MODEL_FIRST = CTSB055X,
+ 	CTSB073X,
+ 	CTUAA,
+ 	CT20K1_UNKNOWN,
 
 

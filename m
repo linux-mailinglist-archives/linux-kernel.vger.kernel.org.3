@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDCF535A93
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884A8535A2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347856AbiE0HiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 03:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S234770AbiE0HRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 03:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347965AbiE0HiE (ORCPT
+        with ESMTP id S229502AbiE0HRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 03:38:04 -0400
-X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 May 2022 00:38:01 PDT
-Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EA2832EF2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 00:38:01 -0700 (PDT)
-Received: from [192.168.1.56] ([79.0.204.227])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id uUWnnv5ojPF2euUWonSDZm; Fri, 27 May 2022 09:36:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1653637019; bh=9m8PWiplWqc8fhBbjEa1jbrDQ3eBFjsCCd+tIXGM9jU=;
-        h=Date:MIME-Version:Subject:To:From:Content-Type;
-        b=lhtLDKW/CIB+x6eXzVWgsrjsqbXuEpXe0a/GGwYxQDfMIhetOxiNFuT4rFRiQmotu
-         BnQ2NyaYTyW9NzsBcGnKq5oLzmnp8xCYwQ3PPRE72uuShQTSZ6PK9H9aw93jrpGpM4
-         3tybIt/aMw1lrRNOV/u+5vQehk+wzpnaFKe8sU7+jeU/g+YHPYZLXixHNK4p2ReC8z
-         z8eG0YGvG1u9DRafMU9kIKE/51lFdPYctFQwezyCZ60e9DnKcLY4wCmg/jEK6lOFGa
-         tgW8atnOnIYtrmYj8qMl3N032rP3zRLXCxbz985cQ2LLvGrVWV0TPyMiF7KKYUITXc
-         K9HCdTnbZ+UAw==
-Message-ID: <98e236c5-fe7e-51bf-3817-2aa721fe79bc@enneenne.com>
-Date:   Fri, 27 May 2022 09:36:57 +0200
+        Fri, 27 May 2022 03:17:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F86B13D3C;
+        Fri, 27 May 2022 00:17:05 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L8bdP2WBvzRhRD;
+        Fri, 27 May 2022 15:14:01 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 15:17:03 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 15:17:02 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] remoteproc: Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 07:38:32 +0000
+Message-ID: <20220527073832.2474641-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] pps: clients: Directly use ida_alloc()/free()
-Content-Language: en-US
-To:     keliu <liuke94@huawei.com>, gregkh@linuxfoundation.org,
-        andriy.shevchenko@linux.intel.com, linux-kernel@vger.kernel.org
-References: <20220527072520.2374615-1-liuke94@huawei.com>
-From:   Rodolfo Giometti <giometti@enneenne.com>
-In-Reply-To: <20220527072520.2374615-1-liuke94@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfMhSGK3GclRvkLVKhOgOOUjAZHnB2831GNoZMz5vI0bLr4xLHXYjWH+qMG2167U7CMPlnBN+754UAP1IjThi84qdJjx0MXuh56mspf+r9LwXLPbuG+bd
- nsiWhhLSExSDFbif44nt0sHRVJ5lZSpoT2wjP57P2qX6Iy14mcNB63txv7jEbpDVmsyN7YXuy/PU7EMp85n6Sd1rFZiPtkgNsgoU9aX0/OSveRThWJRioKsY
- UZqhthlt/a3Rv2cf/h2lm75KglSwJlP66SPHHp48VJkU91B90Vfd58eXVRFMoNCEETZlfIJ/NtiHg3h6T4E+Iw==
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/05/22 09:25, keliu wrote:
-> Use ida_alloc()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
-> 
-> Signed-off-by: keliu <liuke94@huawei.com>
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
-Acked-by: Rodolfo Giometti <giometti@enneenne.com>
+Signed-off-by: keliu <liuke94@huawei.com>
+---
+ drivers/remoteproc/remoteproc_core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> ---
->   drivers/pps/clients/pps_parport.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pps/clients/pps_parport.c b/drivers/pps/clients/pps_parport.c
-> index 42f93d4c6ee3..af972cdc04b5 100644
-> --- a/drivers/pps/clients/pps_parport.c
-> +++ b/drivers/pps/clients/pps_parport.c
-> @@ -148,7 +148,7 @@ static void parport_attach(struct parport *port)
->   		return;
->   	}
->   
-> -	index = ida_simple_get(&pps_client_index, 0, 0, GFP_KERNEL);
-> +	index = ida_alloc(&pps_client_index, GFP_KERNEL);
->   	memset(&pps_client_cb, 0, sizeof(pps_client_cb));
->   	pps_client_cb.private = device;
->   	pps_client_cb.irq_func = parport_irq;
-> @@ -188,7 +188,7 @@ static void parport_attach(struct parport *port)
->   err_unregister_dev:
->   	parport_unregister_device(device->pardev);
->   err_free:
-> -	ida_simple_remove(&pps_client_index, index);
-> +	ida_free(&pps_client_index, index);
->   	kfree(device);
->   }
->   
-> @@ -208,7 +208,7 @@ static void parport_detach(struct parport *port)
->   	pps_unregister_source(device->pps);
->   	parport_release(pardev);
->   	parport_unregister_device(pardev);
-> -	ida_simple_remove(&pps_client_index, device->index);
-> +	ida_free(&pps_client_index, device->index);
->   	kfree(device);
->   }
->   
-
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index c510125769b9..c872152f4cb7 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -2427,7 +2427,7 @@ static void rproc_type_release(struct device *dev)
+ 	idr_destroy(&rproc->notifyids);
+ 
+ 	if (rproc->index >= 0)
+-		ida_simple_remove(&rproc_dev_index, rproc->index);
++		ida_free(&rproc_dev_index, rproc->index);
+ 
+ 	kfree_const(rproc->firmware);
+ 	kfree_const(rproc->name);
+@@ -2544,9 +2544,9 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
+ 		goto put_device;
+ 
+ 	/* Assign a unique device index and name */
+-	rproc->index = ida_simple_get(&rproc_dev_index, 0, 0, GFP_KERNEL);
++	rproc->index = ida_alloc(&rproc_dev_index, GFP_KERNEL);
+ 	if (rproc->index < 0) {
+-		dev_err(dev, "ida_simple_get failed: %d\n", rproc->index);
++		dev_err(dev, "ida_alloc failed: %d\n", rproc->index);
+ 		goto put_device;
+ 	}
+ 
 -- 
-GNU/Linux Solutions                  e-mail: giometti@enneenne.com
-Linux Device Driver                          giometti@linux.it
-Embedded Systems                     phone:  +39 349 2432127
-UNIX programming                     skype:  rodolfo.giometti
+2.25.1
+

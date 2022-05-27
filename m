@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB4A5357D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E28C5357D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236330AbiE0Ci4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S236635AbiE0CjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiE0Ciy (ORCPT
+        with ESMTP id S236400AbiE0CjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:38:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F0AE52B3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653619133; x=1685155133;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yEciXW/qEZbDrq03ZORk1zmLuw0S76ejkbdaY7mm8r0=;
-  b=InJ1D1OtqSUcDkAqlddoBas9ZrJLhN+vvpR70s6JhBw0+p0ZpFlZszdv
-   Smt10Zk1B+oEtv5uTcFpfp5Ta9+stvjAdT/h+qKmt840AeYTORl4W4F1Y
-   /czIDeYoHiKKXfKtegSILWOMvGiU9PtbwsujGAp8e2Tvvpg2FHwaOOyR3
-   4o58xfng73kxmIQoAwxH40l8SYxJFpUFPhcob4FsMSDeEOhwLTrdNKgAv
-   E6R0VF29VVp7d+a2hM/tBP4ZvnET/xU5lmfdOQK0C8mu7ndYZoD5te+LA
-   wwtp1TrWwNinCA8ZCGPjk+wTBDk4e39uVRe5PrkaxSAjDN3n1Bx6a7B0K
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="335005059"
-X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="335005059"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 19:38:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="704901463"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 May 2022 19:38:51 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuPsI-0004L0-FU;
-        Fri, 27 May 2022 02:38:50 +0000
-Date:   Fri, 27 May 2022 10:37:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [rppt:cet/kvm 38/51] arch/x86/kvm/x86.c:6587:3: error: unannotated
- fall-through between switch labels
-Message-ID: <202205271056.ub1i6GQ8-lkp@intel.com>
+        Thu, 26 May 2022 22:39:00 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75439E7327
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:38:59 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id q92-20020a17090a17e500b001e0817e77f6so5961519pja.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:38:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ufJmyL4u6TL5xtH3DzBKqlIHbWXkaJJ+ESTImboH7N4=;
+        b=PQVrB6z7gTUvlsnP3KfEk10k5SGJgsGe2ZrtFpSQtQbzN3uDQYq7N5cdefLWrO73ur
+         baYf3ZUc3RE8VQaHyiQFM9GtvTHitFNm7VemEHL99rcxLf7gtOFxsVjuFVb+G1FrfI13
+         l3CGOTIZ7P4D8/5r3EfDniCeVhG/f5ycoZ/nFmvW1C1nt1lAREKXdC++bG/8AYiIcC1g
+         /xDJkgBqOjlPC+XRzBR7BuMZJO1xPml8cMIp7KFfVf3i+Yd7UX/70n6LLme+wcp+JJqg
+         DlD3+BWhS27OQMYLs1qzg+4RA4iTLnqoHm+32oIDC/wKYg5WW1ZNIuF7sJuR7NoiMo8k
+         mYhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ufJmyL4u6TL5xtH3DzBKqlIHbWXkaJJ+ESTImboH7N4=;
+        b=xWZBxIyIXSERkxzLJR48odP7YaUwXlkpiSPEk0NSBGU4g0xUc0euzPULe7rZpOuHRX
+         V4kZNQIUAwefFnumL/UrpgWRrGi7cwVHtZajCJFBYPznxaGo/3naUxFrj9QmHC9bDxsw
+         tds+jaOdoOV7GB/Csanv2P0B+wW3KZ8C7N8C3Aq9l65FI8rvmwHUB7mJBP55zpN67OkA
+         OHxAwS6ko+Mg6SOJ/WqCX9VMf1ZDUMu4tMA0ISt2anScCQdyotLmFO0H+8WkibIt7mGi
+         lVgp7NEzZIjYi8QlHzRqwmqgEpbAb2oqn+P1S1za0CuweMiuCRHtURLIDDeHN4RvObfD
+         fCJw==
+X-Gm-Message-State: AOAM531+kdceFnZso50DunM18v1AZeRb03g9TMcOlQP6qhw1tepLLZ4o
+        dRzXDDjLKpxPFKiihxgfnSVgSg==
+X-Google-Smtp-Source: ABdhPJy4+4N4D3o+CwVPEnODYC+5nuXVxD+eTp3J99nDw6yfw878mrTd+QiTXtjQrvObyydy3KCBFQ==
+X-Received: by 2002:a17:90b:1b07:b0:1e0:41c2:9e15 with SMTP id nu7-20020a17090b1b0700b001e041c29e15mr5795071pjb.20.1653619138985;
+        Thu, 26 May 2022 19:38:58 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id h10-20020a63574a000000b003c25dfd7372sm2192904pgm.26.2022.05.26.19.38.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 19:38:58 -0700 (PDT)
+Date:   Fri, 27 May 2022 08:08:56 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: spear: adjust whitespace around '='
+Message-ID: <20220527023856.zl2varrzuuf7huef@vireshk-i7>
+References: <20220526203815.831383-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220526203815.831383-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,151 +74,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+On 26-05-22, 22:38, Krzysztof Kozlowski wrote:
+> Fix whitespace coding style: use single space instead of tabs or
+> multiple spaces around '=' sign in property assignment.  No functional
+> changes (same DTB).
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Output compared with dtx_diff and fdtdump.
+> ---
+>  arch/arm/boot/dts/spear1310-evb.dts | 2 +-
+>  arch/arm/boot/dts/spear1340-evb.dts | 2 +-
+>  arch/arm/boot/dts/spear1340.dtsi    | 2 +-
+>  arch/arm/boot/dts/spear300-evb.dts  | 2 +-
+>  arch/arm/boot/dts/spear310-evb.dts  | 2 +-
+>  arch/arm/boot/dts/spear320-evb.dts  | 2 +-
+>  arch/arm/boot/dts/spear320-hmi.dts  | 2 +-
+>  arch/arm/boot/dts/spear320.dtsi     | 2 +-
+>  8 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/spear1310-evb.dts b/arch/arm/boot/dts/spear1310-evb.dts
+> index ddd1cf4d0554..05408df38203 100644
+> --- a/arch/arm/boot/dts/spear1310-evb.dts
+> +++ b/arch/arm/boot/dts/spear1310-evb.dts
+> @@ -170,7 +170,7 @@ sdhci@b3000000 {
+>  
+>  		smi: flash@ea000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@e6000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear1340-evb.dts b/arch/arm/boot/dts/spear1340-evb.dts
+> index 3a51a41eb5e4..7700f2afc128 100644
+> --- a/arch/arm/boot/dts/spear1340-evb.dts
+> +++ b/arch/arm/boot/dts/spear1340-evb.dts
+> @@ -168,7 +168,7 @@ sdhci@b3000000 {
+>  
+>  		smi: flash@ea000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@e6000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear1340.dtsi b/arch/arm/boot/dts/spear1340.dtsi
+> index 13e1bdb3ddbf..818886e11713 100644
+> --- a/arch/arm/boot/dts/spear1340.dtsi
+> +++ b/arch/arm/boot/dts/spear1340.dtsi
+> @@ -88,7 +88,7 @@ pinmux: pinmux@e0700000 {
+>  		};
+>  
+>  		pwm: pwm@e0180000 {
+> -			compatible ="st,spear13xx-pwm";
+> +			compatible = "st,spear13xx-pwm";
+>  			reg = <0xe0180000 0x1000>;
+>  			#pwm-cells = <2>;
+>  			status = "disabled";
+> diff --git a/arch/arm/boot/dts/spear300-evb.dts b/arch/arm/boot/dts/spear300-evb.dts
+> index 2beb30ca2cba..303ef29fb805 100644
+> --- a/arch/arm/boot/dts/spear300-evb.dts
+> +++ b/arch/arm/boot/dts/spear300-evb.dts
+> @@ -80,7 +80,7 @@ sdhci@70000000 {
+>  
+>  		smi: flash@fc000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@f8000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear310-evb.dts b/arch/arm/boot/dts/spear310-evb.dts
+> index 1c41e4a40334..ea0b53036f7b 100644
+> --- a/arch/arm/boot/dts/spear310-evb.dts
+> +++ b/arch/arm/boot/dts/spear310-evb.dts
+> @@ -94,7 +94,7 @@ gmac: eth@e0800000 {
+>  
+>  		smi: flash@fc000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@f8000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear320-evb.dts b/arch/arm/boot/dts/spear320-evb.dts
+> index c322407a0ade..3c026d021c92 100644
+> --- a/arch/arm/boot/dts/spear320-evb.dts
+> +++ b/arch/arm/boot/dts/spear320-evb.dts
+> @@ -95,7 +95,7 @@ sdhci@70000000 {
+>  
+>  		smi: flash@fc000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@f8000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear320-hmi.dts b/arch/arm/boot/dts/spear320-hmi.dts
+> index b587e4ec11e5..34503ac9c51c 100644
+> --- a/arch/arm/boot/dts/spear320-hmi.dts
+> +++ b/arch/arm/boot/dts/spear320-hmi.dts
+> @@ -167,7 +167,7 @@ sdhci@70000000 {
+>  
+>  		smi: flash@fc000000 {
+>  			status = "okay";
+> -			clock-rate=<50000000>;
+> +			clock-rate = <50000000>;
+>  
+>  			flash@f8000000 {
+>  				#address-cells = <1>;
+> diff --git a/arch/arm/boot/dts/spear320.dtsi b/arch/arm/boot/dts/spear320.dtsi
+> index 47ac4474ed96..b12474446a48 100644
+> --- a/arch/arm/boot/dts/spear320.dtsi
+> +++ b/arch/arm/boot/dts/spear320.dtsi
+> @@ -78,7 +78,7 @@ spi2: spi@a6000000 {
+>  		};
+>  
+>  		pwm: pwm@a8000000 {
+> -			compatible ="st,spear-pwm";
+> +			compatible = "st,spear-pwm";
+>  			reg = <0xa8000000 0x1000>;
+>  			#pwm-cells = <2>;
+>  			status = "disabled";
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git cet/kvm
-head:   6c13d37e6c4ff3a7f86c5490b3d0f4f12d0a40da
-commit: 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7 [38/51] KVM: x86: Report XSS as an MSR to be saved if there are supported features
-config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220527/202205271056.ub1i6GQ8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
-        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
-        git fetch --no-tags rppt cet/kvm
-        git checkout 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kvm/x86.c:6587:3: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
-                   case MSR_IA32_XSS:
-                   ^
-   arch/x86/kvm/x86.c:6587:3: note: insert '__attribute__((fallthrough));' to silence this warning
-                   case MSR_IA32_XSS:
-                   ^
-                   __attribute__((fallthrough)); 
-   arch/x86/kvm/x86.c:6587:3: note: insert 'break;' to avoid fall-through
-                   case MSR_IA32_XSS:
-                   ^
-                   break; 
-   1 error generated.
-
-
-vim +6587 arch/x86/kvm/x86.c
-
-  6513	
-  6514	static void kvm_init_msr_list(void)
-  6515	{
-  6516		struct x86_pmu_capability x86_pmu;
-  6517		u32 dummy[2];
-  6518		unsigned i;
-  6519	
-  6520		BUILD_BUG_ON_MSG(INTEL_PMC_MAX_FIXED != 4,
-  6521				 "Please update the fixed PMCs in msrs_to_saved_all[]");
-  6522	
-  6523		perf_get_x86_pmu_capability(&x86_pmu);
-  6524	
-  6525		num_msrs_to_save = 0;
-  6526		num_emulated_msrs = 0;
-  6527		num_msr_based_features = 0;
-  6528	
-  6529		for (i = 0; i < ARRAY_SIZE(msrs_to_save_all); i++) {
-  6530			if (rdmsr_safe(msrs_to_save_all[i], &dummy[0], &dummy[1]) < 0)
-  6531				continue;
-  6532	
-  6533			/*
-  6534			 * Even MSRs that are valid in the host may not be exposed
-  6535			 * to the guests in some cases.
-  6536			 */
-  6537			switch (msrs_to_save_all[i]) {
-  6538			case MSR_IA32_BNDCFGS:
-  6539				if (!kvm_mpx_supported())
-  6540					continue;
-  6541				break;
-  6542			case MSR_TSC_AUX:
-  6543				if (!kvm_cpu_cap_has(X86_FEATURE_RDTSCP) &&
-  6544				    !kvm_cpu_cap_has(X86_FEATURE_RDPID))
-  6545					continue;
-  6546				break;
-  6547			case MSR_IA32_UMWAIT_CONTROL:
-  6548				if (!kvm_cpu_cap_has(X86_FEATURE_WAITPKG))
-  6549					continue;
-  6550				break;
-  6551			case MSR_IA32_RTIT_CTL:
-  6552			case MSR_IA32_RTIT_STATUS:
-  6553				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT))
-  6554					continue;
-  6555				break;
-  6556			case MSR_IA32_RTIT_CR3_MATCH:
-  6557				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-  6558				    !intel_pt_validate_hw_cap(PT_CAP_cr3_filtering))
-  6559					continue;
-  6560				break;
-  6561			case MSR_IA32_RTIT_OUTPUT_BASE:
-  6562			case MSR_IA32_RTIT_OUTPUT_MASK:
-  6563				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-  6564					(!intel_pt_validate_hw_cap(PT_CAP_topa_output) &&
-  6565					 !intel_pt_validate_hw_cap(PT_CAP_single_range_output)))
-  6566					continue;
-  6567				break;
-  6568			case MSR_IA32_RTIT_ADDR0_A ... MSR_IA32_RTIT_ADDR3_B:
-  6569				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-  6570					msrs_to_save_all[i] - MSR_IA32_RTIT_ADDR0_A >=
-  6571					intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
-  6572					continue;
-  6573				break;
-  6574			case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 17:
-  6575				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
-  6576				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
-  6577					continue;
-  6578				break;
-  6579			case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 17:
-  6580				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
-  6581				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
-  6582					continue;
-  6583				break;
-  6584			case MSR_IA32_XFD:
-  6585			case MSR_IA32_XFD_ERR:
-  6586				if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
-> 6587			case MSR_IA32_XSS:
-  6588				if (!supported_xss)
-  6589					continue;
-  6590				break;
-  6591			default:
-  6592				break;
-  6593			}
-  6594	
-  6595			msrs_to_save[num_msrs_to_save++] = msrs_to_save_all[i];
-  6596		}
-  6597	
-  6598		for (i = 0; i < ARRAY_SIZE(emulated_msrs_all); i++) {
-  6599			if (!static_call(kvm_x86_has_emulated_msr)(NULL, emulated_msrs_all[i]))
-  6600				continue;
-  6601	
-  6602			emulated_msrs[num_emulated_msrs++] = emulated_msrs_all[i];
-  6603		}
-  6604	
-  6605		for (i = 0; i < ARRAY_SIZE(msr_based_features_all); i++) {
-  6606			struct kvm_msr_entry msr;
-  6607	
-  6608			msr.index = msr_based_features_all[i];
-  6609			if (kvm_get_msr_feature(&msr))
-  6610				continue;
-  6611	
-  6612			msr_based_features[num_msr_based_features++] = msr_based_features_all[i];
-  6613		}
-  6614	}
-  6615	
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+viresh

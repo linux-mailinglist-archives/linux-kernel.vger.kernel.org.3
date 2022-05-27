@@ -2,180 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2BC535760
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60906535768
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbiE0Bkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 21:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
+        id S233165AbiE0BuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 21:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiE0Bkn (ORCPT
+        with ESMTP id S233258AbiE0Btz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 21:40:43 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E03DFF77
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:40:40 -0700 (PDT)
-Received: from kwepemi500017.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L8SBx4QsyzgYPc;
-        Fri, 27 May 2022 09:39:05 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500017.china.huawei.com (7.221.188.110) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 09:40:38 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 09:40:36 +0800
-Message-ID: <b992e7ab-b168-672c-128d-fbe5684a3855@huawei.com>
-Date:   Fri, 27 May 2022 09:40:36 +0800
+        Thu, 26 May 2022 21:49:55 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE22DE2758;
+        Thu, 26 May 2022 18:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653616194; x=1685152194;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kut1lyhhg+8YOva3L1ERzYHZ76rCQIBn6vcFl8mahxg=;
+  b=CMShrFktcY0NLyPNxmttBRR/xL8ehJK5Au/otaUsEhJt34VwXKUcY7XQ
+   QbjW1KTa2mfHxXx2Fj0OKjyQRQy99LK2y0HxOwrdNkuq5xi0f4OCOFbOr
+   +GLiTYL593qQCVl+8dLsMs0kcCGdJwF3gMkzxwGOETKNXBzSetLtuwKZD
+   kvkEjDLcpYnGVlBs9xNvv6s3TJlhi/voiiApKirWHm1al0FqXkOrrWjU6
+   xYjArUS7ittlou6gYWz3pbFPXHPNTJeenz9hC70qYbzygpUna/+EWmSQ6
+   2jX+XiFAurMfrEkyfS1LElxct8PsGNMbiCrwjxC+fi1MRD0lMDS5n6S0R
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274451648"
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="274451648"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 18:49:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="631230192"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga008.fm.intel.com with ESMTP; 26 May 2022 18:49:53 -0700
+Received: from linux.intel.com (ssid-ilbpg3-teeminta.png.intel.com [10.88.227.74])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 116F7580B54;
+        Thu, 26 May 2022 18:49:49 -0700 (PDT)
+Date:   Fri, 27 May 2022 09:47:09 +0800
+From:   Tan Tee Min <tee.min.tan@linux.intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Dan Murphy <dmurphy@ti.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Sit Michael Wei Hong <michael.wei.hong.sit@intel.com>,
+        Ling Pei Lee <pei.lee.ling@intel.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>
+Subject: Re: [PATCH net-next v2 1/1] net: phy: dp83867: retrigger SGMII AN
+ when link change
+Message-ID: <20220527014709.GA26992@linux.intel.com>
+References: <20220526090347.128742-1-tee.min.tan@linux.intel.com>
+ <Yo9zTmMduwel8XeZ@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v4 3/7] arm64: add support for machine check error
- safe
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220420030418.3189040-1-tongtiangen@huawei.com>
- <20220420030418.3189040-4-tongtiangen@huawei.com> <Yn54mA7KnlAs1dER@lakrids>
- <46e5954c-a9a8-f4a8-07cc-de42e2753051@huawei.com>
- <Yo3pP/Y+6HHuVBns@FVFF77S0Q05N>
- <87bdb1c6-5803-d9c0-9208-432027ae1d8b@huawei.com>
- <Yo9NX8BvQQXryHDV@FVFF77S0Q05N>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <Yo9NX8BvQQXryHDV@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yo9zTmMduwel8XeZ@lunn.ch>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 26, 2022 at 02:32:14PM +0200, Andrew Lunn wrote:
+> On Thu, May 26, 2022 at 05:03:47PM +0800, Tan Tee Min wrote:
+> > This could cause an issue during power up, when PHY is up prior to MAC.
+> > At this condition, once MAC side SGMII is up, MAC side SGMII wouldn`t
+> > receive new in-band message from TI PHY with correct link status, speed
+> > and duplex info.
+> > 
+> > As suggested by TI, implemented a SW solution here to retrigger SGMII
+> > Auto-Neg whenever there is a link change.
+> 
+> Is there a bit in the PHY which reports host side link? There is no
+> point triggering an AN if there is already link.
+> 
+>       Andrew
 
+Thanks for your comment.
 
-在 2022/5/26 17:50, Mark Rutland 写道:
-> On Thu, May 26, 2022 at 11:36:41AM +0800, Tong Tiangen wrote:
->>
->>
->> 在 2022/5/25 16:30, Mark Rutland 写道:
->>> On Thu, May 19, 2022 at 02:29:54PM +0800, Tong Tiangen wrote:
->>>>
->>>>
->>>> 在 2022/5/13 23:26, Mark Rutland 写道:
->>>>> On Wed, Apr 20, 2022 at 03:04:14AM +0000, Tong Tiangen wrote:
->>>>>> During the processing of arm64 kernel hardware memory errors(do_sea()), if
->>>>>> the errors is consumed in the kernel, the current processing is panic.
->>>>>> However, it is not optimal.
->>>>>>
->>>>>> Take uaccess for example, if the uaccess operation fails due to memory
->>>>>> error, only the user process will be affected, kill the user process
->>>>>> and isolate the user page with hardware memory errors is a better choice.
->>>>>
->>>>> Conceptually, I'm fine with the idea of constraining what we do for a
->>>>> true uaccess, but I don't like the implementation of this at all, and I
->>>>> think we first need to clean up the arm64 extable usage to clearly
->>>>> distinguish a uaccess from another access.
->>>>
->>>> OK,using EX_TYPE_UACCESS and this extable type could be recover, this is
->>>> more reasonable.
->>>
->>> Great.
->>>
->>>> For EX_TYPE_UACCESS_ERR_ZERO, today we use it for kernel accesses in a
->>>> couple of cases, such as
->>>> get_user/futex/__user_cache_maint()/__user_swpX_asm(),
->>>
->>> Those are all user accesses.
->>>
->>> However, __get_kernel_nofault() and __put_kernel_nofault() use
->>> EX_TYPE_UACCESS_ERR_ZERO by way of __{get,put}_mem_asm(), so we'd need to
->>> refactor that code to split the user/kernel cases higher up the callchain.
->>>
->>>> your suggestion is:
->>>> get_user continues to use EX_TYPE_UACCESS_ERR_ZERO and the other cases use
->>>> new type EX_TYPE_FIXUP_ERR_ZERO?
->>>
->>> Yes, that's the rough shape. We could make the latter EX_TYPE_KACCESS_ERR_ZERO
->>> to be clearly analogous to EX_TYPE_UACCESS_ERR_ZERO, and with that I susepct we
->>> could remove EX_TYPE_FIXUP.
->>>
->>> Thanks,
->>> Mark.
->> According to your suggestion, i think the definition is like this:
->>
->> #define EX_TYPE_NONE                    0
->> #define EX_TYPE_FIXUP                   1    --> delete
->> #define EX_TYPE_BPF                     2
->> #define EX_TYPE_UACCESS_ERR_ZERO        3
->> #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD  4
->> #define EX_TYPE_UACCESS		        xx   --> add
->> #define EX_TYPE_KACCESS_ERR_ZERO        xx   --> add
->> [The value defined by the macro here is temporary]
-> 
-> Almost; you don't need to add EX_TYPE_UACCESS here, as you can use
-> EX_TYPE_UACCESS_ERR_ZERO for that.
-> 
-> We already have:
-> 
-> | #define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)		\
-> |         _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, wzr)
-> 
-> ... and we can add:
-> 
-> | #define _ASM_EXTABLE_UACCESS(insn, fixup)			\
-> |         _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, wzr, wzr)
-> 
-> 
-> ... and maybe we should use 'xzr' rather than 'wzr' for clarity.
-> 
->> There are two points to modify:
->>
->> 1、_get_kernel_nofault() and __put_kernel_nofault()  using
->> EX_TYPE_KACCESS_ERR_ZERO, Other positions using EX_TYPE_UACCESS_ERR_ZERO
->> keep unchanged.
-> 
-> That sounds right to me. This will require refactoring __raw_{get,put}_mem()
-> and __{get,put}_mem_asm().
-> 
->> 2、delete EX_TYPE_FIXUP.
->>
->> There is no doubt about others. As for EX_TYPE_FIXUP, I think it needs to be
->> retained, _cond_extable(EX_TYPE_FIXUP) is still in use in assembler.h.
-> 
-> We use _cond_extable for cache maintenance uaccesses, so those should be moved
-> over to to EX_TYPE_UACCESS_ERR_ZERO. We can rename _cond_extable to
-> _cond_uaccess_extable for clarity.
-> 
-> That will require restructuring asm-extable.h a bit. If that turns out to be
-> painful I'm happy to take a look.
-> 
-> Thanks,
-> Mark.
+There is no register bit in TI PHY which reports the SGMII AN link status.
+But, there is a bit that only reports the SGMII AN completion status.
 
-OK, I'll do it these days, thanks a lot.
+In this case, the PHY side SGMII AN has been already completed prior to MAC is up.
+So, once MAC side SGMII is up, MAC side SGMII wouldn`t receive any new
+in-band message from TI PHY.
 
-> .
+Thanks,
+Tee Min
+

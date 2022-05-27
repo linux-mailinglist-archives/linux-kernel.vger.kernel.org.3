@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E57A535D03
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C8A536044
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351229AbiE0JGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S1351888AbiE0Lsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350373AbiE0I7w (ORCPT
+        with ESMTP id S237001AbiE0LoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:59:52 -0400
+        Fri, 27 May 2022 07:44:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C995C874;
-        Fri, 27 May 2022 01:55:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE93514D16;
+        Fri, 27 May 2022 04:41:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 214EB61D6F;
-        Fri, 27 May 2022 08:55:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B0F1C385A9;
-        Fri, 27 May 2022 08:55:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B62C61D22;
+        Fri, 27 May 2022 11:41:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283B9C385A9;
+        Fri, 27 May 2022 11:41:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641741;
-        bh=i2Ls4FRmXeR8s7LWB/7GTRBtb7/HOAyQN4vOp63lBFU=;
+        s=korg; t=1653651672;
+        bh=EPU17ywD4YYi95dXlLRsZHFwvqTuyb00v/jR+ACZSjw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gIJNFahT/Y36NVU0zm0bG4J7vlHqxFjAdC4yf1qogVlG+zEB0QoVEHtZ7GzKjWtSk
-         W/Q/BjPgvQiqJr7quH3Wv3Uw5iPtsEMMI7CtUuOWuDRNaC046rR3qxGAc0r2RAGeUt
-         A4aDWGgCB23IeLYq9qVX7eKRTr1RaaooCJ43/uLM=
+        b=Q1pid/CX6ua9A9d4dZWUwth+g5Mtks3KBu75BAmowBXaeqMNz7UaF1jLVPqbaA3s7
+         acpO6BcqCTahCImpu0cpK0A1qM8Z6nCYfxucXtF7JUrLPHL79QYXMlRnmGA3iADK6d
+         AKqZoqaWeymRNgHE3/1pX5wtvoO24z0TQ4uNQd5s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 018/111] random: use hash function for crng_slow_load()
+Subject: [PATCH 5.15 029/145] random: de-duplicate INPUT_POOL constants
 Date:   Fri, 27 May 2022 10:48:50 +0200
-Message-Id: <20220527084821.857162460@linuxfoundation.org>
+Message-Id: <20220527084854.353480692@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,82 +57,72 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 66e4c2b9541503d721e936cc3898c9f25f4591ff upstream.
+commit 5b87adf30f1464477169a1d653e9baf8c012bbfe upstream.
 
-Since we have a hash function that's really fast, and the goal of
-crng_slow_load() is reportedly to "touch all of the crng's state", we
-can just hash the old state together with the new state and call it a
-day. This way we dont need to reason about another LFSR or worry about
-various attacks there. This code is only ever used at early boot and
-then never again.
+We already had the POOL_* constants, so deduplicate the older INPUT_POOL
+ones. As well, fold EXTRACT_SIZE into the poolinfo enum, since it's
+related.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   40 ++++++++++++++--------------------------
- 1 file changed, 14 insertions(+), 26 deletions(-)
+ drivers/char/random.c |   17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -477,42 +477,30 @@ static size_t crng_fast_load(const u8 *c
-  * all), and (2) it doesn't have the performance constraints of
-  * crng_fast_load().
+@@ -359,13 +359,6 @@
+ /* #define ADD_INTERRUPT_BENCH */
+ 
+ /*
+- * Configuration information
+- */
+-#define INPUT_POOL_SHIFT	12
+-#define INPUT_POOL_WORDS	(1 << (INPUT_POOL_SHIFT-5))
+-#define EXTRACT_SIZE		(BLAKE2S_HASH_SIZE / 2)
+-
+-/*
+  * To allow fractional bits to be tracked, the entropy_count field is
+  * denominated in units of 1/8th bits.
   *
-- * So we do something more comprehensive which is guaranteed to touch
-- * all of the primary_crng's state, and which uses a LFSR with a
-- * period of 255 as part of the mixing algorithm.  Finally, we do
-- * *not* advance crng_init_cnt since buffer we may get may be something
-- * like a fixed DMI table (for example), which might very well be
-- * unique to the machine, but is otherwise unvarying.
-+ * So, we simply hash the contents in with the current key. Finally,
-+ * we do *not* advance crng_init_cnt since buffer we may get may be
-+ * something like a fixed DMI table (for example), which might very
-+ * well be unique to the machine, but is otherwise unvarying.
-  */
--static int crng_slow_load(const u8 *cp, size_t len)
-+static void crng_slow_load(const u8 *cp, size_t len)
- {
- 	unsigned long flags;
--	static u8 lfsr = 1;
--	u8 tmp;
--	unsigned int i, max = sizeof(base_crng.key);
--	const u8 *src_buf = cp;
--	u8 *dest_buf = base_crng.key;
-+	struct blake2s_state hash;
+@@ -440,7 +433,9 @@ enum poolinfo {
+ 	POOL_TAP2 = 76,
+ 	POOL_TAP3 = 51,
+ 	POOL_TAP4 = 25,
+-	POOL_TAP5 = 1
++	POOL_TAP5 = 1,
 +
-+	blake2s_init(&hash, sizeof(base_crng.key));
++	EXTRACT_SIZE = BLAKE2S_HASH_SIZE / 2
+ };
  
- 	if (!spin_trylock_irqsave(&base_crng.lock, flags))
--		return 0;
-+		return;
- 	if (crng_init != 0) {
- 		spin_unlock_irqrestore(&base_crng.lock, flags);
--		return 0;
-+		return;
- 	}
--	if (len > max)
--		max = len;
+ /*
+@@ -503,7 +498,7 @@ MODULE_PARM_DESC(ratelimit_disable, "Dis
+  *
+  **********************************************************************/
  
--	for (i = 0; i < max; i++) {
--		tmp = lfsr;
--		lfsr >>= 1;
--		if (tmp & 1)
--			lfsr ^= 0xE1;
--		tmp = dest_buf[i % sizeof(base_crng.key)];
--		dest_buf[i % sizeof(base_crng.key)] ^= src_buf[i % len] ^ lfsr;
--		lfsr += (tmp << 3) | (tmp >> 5);
--	}
-+	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
-+	blake2s_update(&hash, cp, len);
-+	blake2s_final(&hash, base_crng.key);
-+
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
--	return 1;
+-static u32 input_pool_data[INPUT_POOL_WORDS] __latent_entropy;
++static u32 input_pool_data[POOL_WORDS] __latent_entropy;
+ 
+ static struct {
+ 	/* read-only data: */
+@@ -1964,7 +1959,7 @@ SYSCALL_DEFINE3(getrandom, char __user *
+ #include <linux/sysctl.h>
+ 
+ static int min_write_thresh;
+-static int max_write_thresh = INPUT_POOL_WORDS * 32;
++static int max_write_thresh = POOL_BITS;
+ static int random_min_urandom_seed = 60;
+ static char sysctl_bootid[16];
+ 
+@@ -2021,7 +2016,7 @@ static int proc_do_entropy(struct ctl_ta
+ 	return proc_dointvec(&fake_table, write, buffer, lenp, ppos);
  }
  
- static void crng_reseed(void)
+-static int sysctl_poolsize = INPUT_POOL_WORDS * 32;
++static int sysctl_poolsize = POOL_BITS;
+ extern struct ctl_table random_table[];
+ struct ctl_table random_table[] = {
+ 	{
 
 

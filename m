@@ -2,143 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC47535EE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414C6535EE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351183AbiE0LCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S1351172AbiE0LCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351179AbiE0LCe (ORCPT
+        with ESMTP id S1351166AbiE0LCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:02:34 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC30112088
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653649352; x=1685185352;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BqVMsKuKuFhCglDn4LhU2ZXFc0fT1uxftXQtbO0F3eA=;
-  b=f5GZaLfBicXVaQnKI0w6tWbN+hhI38+HkmRaBPZ+DtEySEvRwIxwv9Cs
-   kLt+9+crXk3xpBUXglrM9iMt2DkiE04iW8YlV1iHOZW+W9YeHkszq659i
-   TC8qK9L/GR6OBTZNRUBc6fBRljj8/LFCi2sSemtiHUsLf9QVc2PCWd37a
-   Le1l7ACHFLz7eiCWKlcLm8stOyzpXY/sHlgUvYSQJDDYmgndbWZAYzohQ
-   yKszXAJJ+mlDtu8TtwG5uYDE5MJgIUJ/mMqXscZ0KTDV181lIGWDJGTfV
-   Pnt7YZLrqc/iMmJk+wb8ixVekN7orSzJuXVk4JEIR2R0fhme8a0Q5q9jM
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="262067843"
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="262067843"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 04:02:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="705084587"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 May 2022 04:02:30 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuXjh-0004h7-OX;
-        Fri, 27 May 2022 11:02:29 +0000
-Date:   Fri, 27 May 2022 19:01:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>
-Subject: [intel-tdx:kvm-upstream-workaround 333/429]
- include/linux/memfile_notifier.h:87:57: error: unknown type name 'flags'
-Message-ID: <202205271903.LhlXvUsN-lkp@intel.com>
+        Fri, 27 May 2022 07:02:24 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D03712E33C
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:02:20 -0700 (PDT)
+Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Cxj+a3r5BiSRAEAA--.20871S2;
+        Fri, 27 May 2022 19:02:15 +0800 (CST)
+From:   Jianmin Lv <lvjianmin@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: [PATCH RFC V2 00/10] irqchip: Add LoongArch-related irqchip drivers
+Date:   Fri, 27 May 2022 19:02:10 +0800
+Message-Id: <1653649335-11998-1-git-send-email-lvjianmin@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Cxj+a3r5BiSRAEAA--.20871S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKFyrWFy5Cr4rWF17CFWUtwb_yoWfZw17pF
+        43Ar1aqF1UtryYqr15Aw48XFy5Grn3Jw4DJ3WxtryxXrykCr1DKr1UJF95ZryxArWxXr1U
+        ZFyjqw4UGw1UCr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
+        AVWUtwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
+        ZEXa7VU18sqtUUUUU==
+X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   49c277ae966b45577acad5c6d98acba3d27d63af
-commit: a46fd36366f3a53f0ea7385cdddef7d5e373edd0 [333/429] mm/shmem: Support memfile_notifier
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220527/202205271903.LhlXvUsN-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/a46fd36366f3a53f0ea7385cdddef7d5e373edd0
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout a46fd36366f3a53f0ea7385cdddef7d5e373edd0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+are already added in the ACPI Specification 6.5(which may be published in
+early June this year and the board is reviewing the draft).
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Currently, LoongArch based processors (e.g. Loongson-3A5000) can only
+work together with LS7A chipsets. The irq chips in LoongArch computers
+include CPUINTC (CPU Core Interrupt Controller), LIOINTC (Legacy I/O
+Interrupt Controller), EIOINTC (Extended I/O Interrupt Controller),
+HTVECINTC (Hyper-Transport Vector Interrupt Controller), PCH-PIC (Main
+Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
+in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
 
-All errors (new ones prefixed by >>):
+CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC/HTVECINTC are
+per-package controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are all
+controllers out of CPU (i.e., in chipsets). These controllers (in other
+words, irqchips) are linked in a hierarchy, and there are two models of
+hierarchy (legacy model and extended model). 
 
-   In file included from include/linux/shmem_fs.h:12,
-                    from kernel/events/uprobes.c:28:
->> include/linux/memfile_notifier.h:87:57: error: unknown type name 'flags'
-      87 | static int memfile_register_notifier(struct file *file, flags,
-         |                                                         ^~~~~
-   include/linux/memfile_notifier.h:93:13: warning: 'memfile_unregister_notifier' defined but not used [-Wunused-function]
-      93 | static void memfile_unregister_notifier(struct memfile_notifier *notifier)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:82:13: warning: 'memfile_notifier_invalidate' defined but not used [-Wunused-function]
-      82 | static void memfile_notifier_invalidate(struct memfile_node *node,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:77:13: warning: 'memfile_notifier_populate' defined but not used [-Wunused-function]
-      77 | static void memfile_notifier_populate(struct memfile_node *node,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:72:12: warning: 'memfile_node_set_flags' defined but not used [-Wunused-function]
-      72 | static int memfile_node_set_flags(struct file *file, unsigned long flags)
-         |            ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:68:13: warning: 'memfile_register_backing_store' defined but not used [-Wunused-function]
-      68 | static void memfile_register_backing_store(struct memfile_backing_store *bs)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
---
-   In file included from include/linux/shmem_fs.h:12,
-                    from include/linux/khugepaged.h:6,
-                    from mm/shmem.c:37:
->> include/linux/memfile_notifier.h:87:57: error: unknown type name 'flags'
-      87 | static int memfile_register_notifier(struct file *file, flags,
-         |                                                         ^~~~~
-   In file included from include/linux/shmem_fs.h:12,
-                    from include/linux/khugepaged.h:6,
-                    from mm/shmem.c:37:
-   include/linux/memfile_notifier.h:93:13: warning: 'memfile_unregister_notifier' defined but not used [-Wunused-function]
-      93 | static void memfile_unregister_notifier(struct memfile_notifier *notifier)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:72:12: warning: 'memfile_node_set_flags' defined but not used [-Wunused-function]
-      72 | static int memfile_node_set_flags(struct file *file, unsigned long flags)
-         |            ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/memfile_notifier.h:68:13: warning: 'memfile_register_backing_store' defined but not used [-Wunused-function]
-      68 | static void memfile_register_backing_store(struct memfile_backing_store *bs)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Legacy IRQ model:
+
+In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+gathered by HTVECINTC, and then go to LIOINTC, and then CPUINTC.
+
+ +---------------------------------------------+
+ |                                             |
+ |    +-----+     +---------+     +-------+    |
+ |    | IPI | --> | CPUINTC | <-- | Timer |    |
+ |    +-----+     +---------+     +-------+    |
+ |                     ^                       |
+ |                     |                       |
+ |                +---------+     +-------+    |
+ |                | LIOINTC | <-- | UARTs |    |
+ |                +---------+     +-------+    |
+ |                     ^                       |
+ |                     |                       |
+ |               +-----------+                 |
+ |               | HTVECINTC |                 |
+ |               +-----------+                 |
+ |                ^         ^                  |
+ |                |         |                  |
+ |          +---------+ +---------+            |
+ |          | PCH-PIC | | PCH-MSI |            |
+ |          +---------+ +---------+            |
+ |            ^     ^           ^              |
+ |            |     |           |              |
+ |    +---------+ +---------+ +---------+      |
+ |    | PCH-LPC | | Devices | | Devices |      |
+ |    +---------+ +---------+ +---------+      |
+ |         ^                                   |
+ |         |                                   |
+ |    +---------+                              |
+ |    | Devices |                              |
+ |    +---------+                              |
+ |                                             |
+ |                                             |
+ +---------------------------------------------+
+
+Extended IRQ model:
+
+In this model, the IPI (Inter-Processor Interrupt) and CPU Local Timer
+interrupt go to CPUINTC directly, CPU UARTS interrupts go to LIOINTC,
+while all other devices interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and
+gathered by EIOINTC, and then go to to CPUINTC directly.
+
+ +--------------------------------------------------------+
+ |                                                        |
+ |         +-----+     +---------+     +-------+          |
+ |         | IPI | --> | CPUINTC | <-- | Timer |          |
+ |         +-----+     +---------+     +-------+          |
+ |                      ^       ^                         |
+ |                      |       |                         |
+ |               +---------+ +---------+     +-------+    |
+ |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
+ |               +---------+ +---------+     +-------+    |
+ |                ^       ^                               |
+ |                |       |                               |
+ |         +---------+ +---------+                        |
+ |         | PCH-PIC | | PCH-MSI |                        |
+ |         +---------+ +---------+                        |
+ |           ^     ^           ^                          |
+ |           |     |           |                          |
+ |   +---------+ +---------+ +---------+                  |
+ |   | PCH-LPC | | Devices | | Devices |                  |
+ |   +---------+ +---------+ +---------+                  |
+ |        ^                                               |
+ |        |                                               |
+ |   +---------+                                          |
+ |   | Devices |                                          |
+ |   +---------+                                          |
+ |                                                        |
+ |                                                        |
+ +--------------------------------------------------------+
+
+The hierarchy model is constructed by parsing irq contronler structures
+in MADT. Some controllers((e.g. LIOINTC, HTVECINTC, EIOINTC and PCH-LPC)
+are hardcodingly connected to their parents, so their irqdomins are
+separately routed to their parents in a fixed way. Some controllers
+(e.g. PCH-PIC and PCH-MSI) could be routed to different parents for different
+CPU. The firmware will config EIOINTC for the newer CPU and config HTVECINTC
+for old CPU in MADT. By this way, PCH-PIC and PCH-MSI irqdomain can only be
+routed one parent irqdomin: HTVECINTC or EIOINTC.
 
 
-vim +/flags +87 include/linux/memfile_notifier.h
+Example of irqchip topology in a system with  two chipsets:
 
-07b4263e3099f7 Chao Peng 2022-01-12  86  
-07b4263e3099f7 Chao Peng 2022-01-12 @87  static int memfile_register_notifier(struct file *file, flags,
-07b4263e3099f7 Chao Peng 2022-01-12  88  				     struct memfile_notifier *notifier)
-07b4263e3099f7 Chao Peng 2022-01-12  89  {
-07b4263e3099f7 Chao Peng 2022-01-12  90  	return -EOPNOTSUPP;
-07b4263e3099f7 Chao Peng 2022-01-12  91  }
-07b4263e3099f7 Chao Peng 2022-01-12  92  
+ +------------------------------------------------------------+
+ |                                                            |
+ |                     +------------------+                   |
+ |                     |      CPUINTC     |                   |
+ |                     +------------------+                   |
+ |                     ^                  ^                   |
+ |                     |                  |                   |
+ |          +----------+                  +----------+        |
+ |          | EIOINTC 0|                  | EIOINTC 1|        |
+ |          +----------+                  +----------+        |
+ |          ^          ^                  ^          ^        |
+ |          |          |                  |          |        |
+ | +----------+   +----------+   +----------+    +----------+ |
+ | | PCH-PIC 0|   | PCH-MSI 0|   | PCH-PIC 1|    | PCH-MSI 1| |
+ | +----------+   +----------+   +----------+    +----------+ |
+ |                                                            |
+ |                                                            |
+ +------------------------------------------------------------+
 
-:::::: The code at line 87 was first introduced by commit
-:::::: 07b4263e3099f776c35284155851f0e202b12a44 mm: Introduce memfile_notifier
+For systems with two chipsets, there are tow group(consists of EIOINTC, PCH-PIC and PCH-MSI) irqdomains, 
+and each group has same node id. So we defined a structure to mantain the relation of node and it's parent irqdomain.
 
-:::::: TO: Chao Peng <chao.p.peng@linux.intel.com>
-:::::: CC: Isaku Yamahata <isaku.yamahata@intel.com>
+struct acpi_vector_group {
+        int node;
+        struct irq_domain *parent;
+};
+
+The initialization and use of acpi_vector_group array are following:
+
+1 Entry of struct acpi_vector_group array initialization:
+
+By parsing MCFG, the node id（from bit44-47 of Base Address）of each pci segment is extracted. And from MADT, we have the node id of each EIOINTC.
+
+entrys[pci segment].node = node id of pci segment
+entrys[pci segment].parent = EIOINTC irqdomain(node id of EIOINTC == node id of pci segment)
+
+2 Get parent irqdomain for PCH-PIC:
+
+From MADT, we have the node id of each PCH-PIC(from bit44-47 of Base Address).
+if (node of entry i == node of PCH-PIC)
+	return entrys[i].parent;
+
+entrys[pci segment].node = node id of pci segment
+entrys[pci segment].parent = EIOINTC irqdomain(node id of EIOINTC == node id of pci segment)
+
+3 Get parent irqdomain for PCH-MSI of pci segment:
+
+	return entrys[pci segment].parent;
+
+4 How to select a correct irqdomain to map irq for a device?
+For devices using legacy irq behind PCH-PIC, GSI is used to select correct PCH-PIC irqdomain.
+For devices using msi irq behind PCH-MSI, the pci segmen of the device is used to select correct PCH-MSI irqdomain.
+
+
+Cross-compile tool chain to build kernel:
+https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-20211202-cross-tools.tar.xz
+
+A CLFS-based Linux distro:
+https://github.com/loongson/build-tools/releases/latest/download/loongarch64-clfs-system-2021-12-02.tar.bz2
+
+Loongson and LoongArch documentations:
+https://github.com/loongson/LoongArch-Documentation
+
+
+V1 -> V2:
+1, Remove queued patches;
+2, Move common logic of DT/ACPI probing to common functions;
+3, Split .suspend()/.resume() functions to separate patches.
+
+V2 -> V3:
+1, Fix a bug for loongson-pch-pic probe;
+2, Some minor improvements for LPC controller.
+
+V3 -> V4:
+1, Rework the CPU interrupt controller driver;
+2, Some minor improvements for other controllers.
+
+V4 -> V5:
+1, Add a description of LoonArch's IRQ model;
+2, Support multiple EIOINTCs in one system;
+3, Some minor improvements for other controllers.
+
+V5 -> V6:
+1, Attach a fwnode to CPUINTC irq domain;
+2, Use raw spinlock instead of generic spinlock;
+3, Improve the method of restoring EIOINTC state;
+4, Update documentation, comments and commit messages.
+
+V6 -> V7:
+1, Fix build warnings reported by kernel test robot.
+
+V7 -> V8:
+1, Add arguments sanity checking for irqchip init functions;
+2, Support Loongson-3C5000 (One NUMA Node includes 4 EIOINTC Node).
+
+V8 -> V9:
+1, Rebase on 5.17-rc5;
+2, Update cover letter;
+3, Some small improvements.
+
+V9 -> V10:
+1, Rebase on 5.17-rc6;
+2, Fix build warnings reported by kernel test robot.
+
+V10 -> V11:
+1, Rebase on 5.18-rc4;
+2, Fix irq affinity setting for EIOINTC;
+3, Fix hwirq allocation failure for EIOINTC.
+
+V11 -> RFC:
+1, Refactored the way to build irqchip hierarchy topology.
+
+RFC -> RFC V2:
+1, Move all IO-interrupt related code to driver/irqchip from arch directory.
+2. Add description for an example of two chipsets system.
+
+Huacai Chen (1):
+  irqchip: Adjust Kconfig for Loongson
+
+Jianmin Lv (9):
+  irqchip: Add LoongArch CPU interrupt controller support
+  irqchip/loongson-pch-pic: Add ACPI init support
+  irqchip/loongson-pch-pic: Add suspend/resume support
+  irqchip/loongson-pch-msi: Add ACPI init support
+  irqchip/loongson-htvec: Add ACPI init support
+  irqchip/loongson-htvec: Add suspend/resume support
+  irqchip/loongson-liointc: Add ACPI init support
+  irqchip: Add Loongson Extended I/O interrupt controller support
+  irqchip: Add Loongson PCH LPC controller support
+
+ drivers/irqchip/Kconfig                    |  38 ++-
+ drivers/irqchip/Makefile                   |   3 +
+ drivers/irqchip/irq-loongarch-cpu.c        | 115 +++++++++
+ drivers/irqchip/irq-loongarch-pic-common.c | 201 +++++++++++++++
+ drivers/irqchip/irq-loongarch-pic-common.h |  44 ++++
+ drivers/irqchip/irq-loongson-eiointc.c     | 385 +++++++++++++++++++++++++++++
+ drivers/irqchip/irq-loongson-htvec.c       | 148 ++++++++---
+ drivers/irqchip/irq-loongson-liointc.c     | 216 ++++++++++------
+ drivers/irqchip/irq-loongson-pch-lpc.c     | 220 +++++++++++++++++
+ drivers/irqchip/irq-loongson-pch-msi.c     | 138 +++++++----
+ drivers/irqchip/irq-loongson-pch-pic.c     | 197 +++++++++++++--
+ include/linux/cpuhotplug.h                 |   1 +
+ 12 files changed, 1519 insertions(+), 187 deletions(-)
+ create mode 100644 drivers/irqchip/irq-loongarch-cpu.c
+ create mode 100644 drivers/irqchip/irq-loongarch-pic-common.c
+ create mode 100644 drivers/irqchip/irq-loongarch-pic-common.h
+ create mode 100644 drivers/irqchip/irq-loongson-eiointc.c
+ create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+1.8.3.1
+

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5279C5361ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB89A536218
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239909AbiE0MJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S1352562AbiE0MI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353314AbiE0L4X (ORCPT
+        with ESMTP id S1353305AbiE0L4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 May 2022 07:56:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87871F9;
-        Fri, 27 May 2022 04:51:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FC113CA0B;
+        Fri, 27 May 2022 04:50:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2363261D9F;
-        Fri, 27 May 2022 11:51:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF50C385A9;
-        Fri, 27 May 2022 11:51:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 455E561D56;
+        Fri, 27 May 2022 11:50:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52B7BC385A9;
+        Fri, 27 May 2022 11:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652267;
-        bh=JWoSuLel7PwTYBN0zYFNGRuSZCQhuOHrSWdEZjoxqOk=;
+        s=korg; t=1653652246;
+        bh=1WMc/E9fz9+3aV9kLfMjQCuQ2UeXYT4lRhJsZ6GhPu4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FBTVjFK9VDhAw73xYvNZisivVl8GmnTycekkJTPHf1Ysr5UTxLE1lTpMviaPr61DN
-         lysoyH0NtGbcxV/pEpg4Aly0yoPw3dS1oWj0U2I6f/DPLoWgW7yiqGenLrsy00BuDD
-         PM+IqvMu9i1QqfUTiPvSskka2N/NhaPfpNZ7un2w=
+        b=jmMDXq/5F9NZFyTj8lRu9Z/p/KuRv1PSkbyZOXT7Ik9MVi8FdCiCWlu9IXLGtbsTP
+         Hn3vHVdVs74UvOQqV1KNekXejoFpe+8bYyDaSn7jyN87aMd57vczfYOL0+GszXwDWh
+         cL3p/zJcONwzOlsxIDpLj0zwC53KtGjWPqfYGKDo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Theodore Tso <tytso@mit.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Stafford Horne <shorne@gmail.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 100/145] random: make random_get_entropy() return an unsigned long
+Subject: [PATCH 5.10 121/163] init: call time_init() before rand_initialize()
 Date:   Fri, 27 May 2022 10:50:01 +0200
-Message-Id: <20220527084902.778910910@linuxfoundation.org>
+Message-Id: <20220527084844.841135009@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,101 +57,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit b0c3e796f24b588b862b61ce235d3c9417dc8983 upstream.
+commit fe222a6ca2d53c38433cba5d3be62a39099e708e upstream.
 
-Some implementations were returning type `unsigned long`, while others
-that fell back to get_cycles() were implicitly returning a `cycles_t` or
-an untyped constant int literal. That makes for weird and confusing
-code, and basically all code in the kernel already handled it like it
-was an `unsigned long`. I recently tried to handle it as the largest
-type it could be, a `cycles_t`, but doing so doesn't really help with
-much.
+Currently time_init() is called after rand_initialize(), but
+rand_initialize() makes use of the timer on various platforms, and
+sometimes this timer needs to be initialized by time_init() first. In
+order for random_get_entropy() to not return zero during early boot when
+it's potentially used as an entropy source, reverse the order of these
+two calls. The block doing random initialization was right before
+time_init() before, so changing the order shouldn't have any complicated
+effects.
 
-Instead let's just make random_get_entropy() return an unsigned long all
-the time. This also matches the commonly used `arch_get_random_long()`
-function, so now RDRAND and RDTSC return the same sized integer, which
-means one can fallback to the other more gracefully.
-
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Reviewed-by: Stafford Horne <shorne@gmail.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   20 +++++++-------------
- include/linux/timex.h |    2 +-
- 2 files changed, 8 insertions(+), 14 deletions(-)
+ init/main.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1015,7 +1015,7 @@ int __init rand_initialize(void)
-  */
- void add_device_randomness(const void *buf, size_t size)
- {
--	cycles_t cycles = random_get_entropy();
-+	unsigned long cycles = random_get_entropy();
- 	unsigned long flags, now = jiffies;
+--- a/init/main.c
++++ b/init/main.c
+@@ -952,11 +952,13 @@ asmlinkage __visible void __init __no_sa
+ 	hrtimers_init();
+ 	softirq_init();
+ 	timekeeping_init();
++	time_init();
  
- 	if (crng_init == 0 && size)
-@@ -1046,8 +1046,7 @@ struct timer_rand_state {
-  */
- static void add_timer_randomness(struct timer_rand_state *state, unsigned int num)
- {
--	cycles_t cycles = random_get_entropy();
--	unsigned long flags, now = jiffies;
-+	unsigned long cycles = random_get_entropy(), now = jiffies, flags;
- 	long delta, delta2, delta3;
+ 	/*
+ 	 * For best initial stack canary entropy, prepare it after:
+ 	 * - setup_arch() for any UEFI RNG entropy and boot cmdline access
+ 	 * - timekeeping_init() for ktime entropy used in rand_initialize()
++	 * - time_init() for making random_get_entropy() work on some platforms
+ 	 * - rand_initialize() to get any arch-specific entropy like RDRAND
+ 	 * - add_latent_entropy() to get any latent entropy
+ 	 * - adding command line entropy
+@@ -966,7 +968,6 @@ asmlinkage __visible void __init __no_sa
+ 	add_device_randomness(command_line, strlen(command_line));
+ 	boot_init_stack_canary();
  
- 	spin_lock_irqsave(&input_pool.lock, flags);
-@@ -1302,8 +1301,7 @@ static void mix_interrupt_randomness(str
- void add_interrupt_randomness(int irq)
- {
- 	enum { MIX_INFLIGHT = 1U << 31 };
--	cycles_t cycles = random_get_entropy();
--	unsigned long now = jiffies;
-+	unsigned long cycles = random_get_entropy(), now = jiffies;
- 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
- 	struct pt_regs *regs = get_irq_regs();
- 	unsigned int new_count;
-@@ -1316,16 +1314,12 @@ void add_interrupt_randomness(int irq)
- 	if (cycles == 0)
- 		cycles = get_reg(fast_pool, regs);
- 
--	if (sizeof(cycles) == 8)
-+	if (sizeof(unsigned long) == 8) {
- 		irq_data.u64[0] = cycles ^ rol64(now, 32) ^ irq;
--	else {
-+		irq_data.u64[1] = regs ? instruction_pointer(regs) : _RET_IP_;
-+	} else {
- 		irq_data.u32[0] = cycles ^ irq;
- 		irq_data.u32[1] = now;
--	}
--
--	if (sizeof(unsigned long) == 8)
--		irq_data.u64[1] = regs ? instruction_pointer(regs) : _RET_IP_;
--	else {
- 		irq_data.u32[2] = regs ? instruction_pointer(regs) : _RET_IP_;
- 		irq_data.u32[3] = get_reg(fast_pool, regs);
- 	}
-@@ -1372,7 +1366,7 @@ static void entropy_timer(struct timer_l
- static void try_to_generate_entropy(void)
- {
- 	struct {
--		cycles_t cycles;
-+		unsigned long cycles;
- 		struct timer_list timer;
- 	} stack;
- 
---- a/include/linux/timex.h
-+++ b/include/linux/timex.h
-@@ -75,7 +75,7 @@
-  * By default we use get_cycles() for this purpose, but individual
-  * architectures may override this in their asm/timex.h header file.
-  */
--#define random_get_entropy()	get_cycles()
-+#define random_get_entropy()	((unsigned long)get_cycles())
- #endif
- 
- /*
+-	time_init();
+ 	perf_event_init();
+ 	profile_init();
+ 	call_function_init();
 
 

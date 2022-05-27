@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB94F535809
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 05:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A94B53580B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 05:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238475AbiE0DZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 23:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S238529AbiE0DbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 23:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235189AbiE0DZ6 (ORCPT
+        with ESMTP id S233702AbiE0DbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 23:25:58 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7926157
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 20:25:53 -0700 (PDT)
-X-UUID: 7865e24b169f481aac22e70d869603c9-20220527
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:03eda090-8508-4b22-9499-3bc0b48689f6,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:59,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:39
-X-CID-INFO: VERSION:1.1.5,REQID:03eda090-8508-4b22-9499-3bc0b48689f6,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:59,FILE:0,RULE:Release_HamU,AC
-        TION:release,TS:39
-X-CID-META: VersionHash:2a19b09,CLOUDID:68ae6eb8-3c45-407b-8f66-25095432a27a,C
-        OID:057e5d723713,Recheck:0,SF:28|100|16|19|48|101,TC:nil,Content:1,EDM:-3,
-        IP:nil,URL:0,File:nil,QS:0,BEC:nil
-X-UUID: 7865e24b169f481aac22e70d869603c9-20220527
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yee.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1065751422; Fri, 27 May 2022 11:25:48 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 27 May 2022 11:25:47 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Fri, 27 May 2022 11:25:47 +0800
-From:   <yee.lee@mediatek.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <patrick.wang.shcn@gmail.com>, <Kuan-Ying.lee@mediatek.com>,
-        <Andrew.Yang@mediatek.com>, <Sunny.Kao@mediatek.com>,
-        <chinwen.chang@mediatek.com>, Yee Lee <yee.lee@mediatek.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH] mm: kmemleak: Skip check in kmemleak_*_phys when pfn bound is not ready
-Date:   Fri, 27 May 2022 11:25:02 +0800
-Message-ID: <20220527032504.30341-1-yee.lee@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 26 May 2022 23:31:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D193D4134
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 20:30:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653622256; x=1685158256;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eta9KP2YzKxZauwVlDJ+10Ju5lJmDiQJnyNSgoBSWLg=;
+  b=kc7WCFjilX6B66BD0b0qc3qQA9S3XKY/z9ECH560TDzr7SI+8JnbZeae
+   jhjc2RsSQJRtBvtBiyIr/DlB8is5dvuvpVFRhGySj42t3P+oKrKLhjzVz
+   OBk9VADYpBIAvaZveTIa4zquTmxHknhcuznMpms8mTkXUe6BqPicAt2FJ
+   O+LvGecldYLE23oOclsLvdYvRc6k5Mh6o5o4W5Zvqy9QIgN4UDOhBl3Bo
+   6nfPuOUZH6cUmMBrv+2SCMy2hDatG3+Mc4JuKTZhZk6Ta/8vtdNQ6mAGc
+   5rOve+Wp7lg2rRCW3Jo5g8VOa04X/O3OWxje1BKmbUOJmTrdPmahoxd3v
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274468683"
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="274468683"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 20:30:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="643192992"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 26 May 2022 20:30:53 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuQge-0004N0-RE;
+        Fri, 27 May 2022 03:30:52 +0000
+Date:   Fri, 27 May 2022 11:30:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
+Subject: [rppt:cet/kvm 12/51] arch/x86/include/asm/pgtable.h:1312:13: error:
+ invalid output size for constraint '+a'
+Message-ID: <202205271127.dwkWLBxL-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,82 +65,225 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yee Lee <yee.lee@mediatek.com>
+Hi Yu-cheng,
 
-In some archs (arm64), memblock allocates memory in boot time when
-the pfn boundary (max_pfn/min_pfn) is not ready. The lowmen checks in
-kmemleak_*_phys() drop those blocks and cause some false leak alarms
-on common kernel objects.
+FYI, the error/warning still remains.
 
-Kmemleak output: (Qemu/arm64)
-unreferenced object 0xffff0000c0170a00 (size 128):
-  comm "swapper/0", pid 1, jiffies 4294892404 (age 126.208s)
-  hex dump (first 32 bytes):
-    62 61 73 65 00 00 00 00 00 00 00 00 00 00 00 00  base............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<(____ptrval____)>] __kmalloc_track_caller+0x1b0/0x2e4
-    [<(____ptrval____)>] kstrdup_const+0x8c/0xc4
-    [<(____ptrval____)>] kvasprintf_const+0xbc/0xec
-    [<(____ptrval____)>] kobject_set_name_vargs+0x58/0xe4
-    [<(____ptrval____)>] kobject_add+0x84/0x100
-    [<(____ptrval____)>] __of_attach_node_sysfs+0x78/0xec
-    [<(____ptrval____)>] of_core_init+0x68/0x104
-    [<(____ptrval____)>] driver_init+0x28/0x48
-    [<(____ptrval____)>] do_basic_setup+0x14/0x28
-    [<(____ptrval____)>] kernel_init_freeable+0x110/0x178
-    [<(____ptrval____)>] kernel_init+0x20/0x1a0
-    [<(____ptrval____)>] ret_from_fork+0x10/0x20
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git cet/kvm
+head:   6c13d37e6c4ff3a7f86c5490b3d0f4f12d0a40da
+commit: b20ff701175a81ee3517a5f2bca5bbac90529892 [12/51] x86/mm: Update ptep_set_wrprotect() and pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220527/202205271127.dwkWLBxL-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=b20ff701175a81ee3517a5f2bca5bbac90529892
+        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
+        git fetch --no-tags rppt cet/kvm
+        git checkout b20ff701175a81ee3517a5f2bca5bbac90529892
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 prepare
 
-This patch relaxs the boundary checking in kmemleak_*_phys api
-if max_low_pfn is uninitialzed.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: 23c2d4 (mm: kmemleak: take a full lowmem check in kmemleak_*_phy)
-Signed-off-by: Yee Lee <yee.lee@mediatek.com>
----
- mm/kmemleak.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index a182f5ddaf68..6b2af544aa0f 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1132,7 +1132,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
- void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
- 			       gfp_t gfp)
- {
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
- 		kmemleak_alloc(__va(phys), size, min_count, gfp);
- }
- EXPORT_SYMBOL(kmemleak_alloc_phys);
-@@ -1146,7 +1146,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
-  */
- void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
- {
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
- 		kmemleak_free_part(__va(phys), size);
- }
- EXPORT_SYMBOL(kmemleak_free_part_phys);
-@@ -1158,7 +1158,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
-  */
- void __ref kmemleak_not_leak_phys(phys_addr_t phys)
- {
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
- 		kmemleak_not_leak(__va(phys));
- }
- EXPORT_SYMBOL(kmemleak_not_leak_phys);
-@@ -1170,7 +1170,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
-  */
- void __ref kmemleak_ignore_phys(phys_addr_t phys)
- {
--	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-+	if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
- 		kmemleak_ignore(__va(phys));
- }
- EXPORT_SYMBOL(kmemleak_ignore_phys);
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+>> arch/x86/include/asm/pgtable.h:1312:13: error: invalid output size for constraint '+a'
+                   } while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
+                             ^
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:172:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+>> arch/x86/include/asm/pgtable.h:1312:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:184:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+>> arch/x86/include/asm/pgtable.h:1312:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:196:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+>> arch/x86/include/asm/pgtable.h:1312:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:208:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/x86/include/asm/pgtable.h:1383:13: error: invalid output size for constraint '+a'
+                   } while (!try_cmpxchg(&pmdp->pmd, &old_pmd.pmd, new_pmd.pmd));
+                             ^
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:172:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/x86/include/asm/pgtable.h:1383:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:184:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/x86/include/asm/pgtable.h:1383:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:196:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/x86/include/asm/pgtable.h:1383:13: error: invalid output size for constraint '+a'
+   include/linux/atomic/atomic-instrumented.h:1978:2: note: expanded from macro 'try_cmpxchg'
+           arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+           ^
+   arch/x86/include/asm/cmpxchg.h:225:2: note: expanded from macro 'arch_try_cmpxchg'
+           __try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+           ^
+   arch/x86/include/asm/cmpxchg.h:222:2: note: expanded from macro '__try_cmpxchg'
+           __raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+           ^
+   arch/x86/include/asm/cmpxchg.h:208:23: note: expanded from macro '__raw_try_cmpxchg'
+                                  [old] "+a" (__old)                       \
+                                              ^
+   8 errors generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +1312 arch/x86/include/asm/pgtable.h
+
+  1293	
+  1294	#define __HAVE_ARCH_PTEP_SET_WRPROTECT
+  1295	static inline void ptep_set_wrprotect(struct mm_struct *mm,
+  1296					      unsigned long addr, pte_t *ptep)
+  1297	{
+  1298		/*
+  1299		 * If Shadow Stack is enabled, pte_wrprotect() moves _PAGE_DIRTY
+  1300		 * to _PAGE_COW (see comments at pte_wrprotect()).
+  1301		 * When a thread reads a RW=1, Dirty=0 PTE and before changing it
+  1302		 * to RW=0, Dirty=0, another thread could have written to the page
+  1303		 * and the PTE is RW=1, Dirty=1 now.  Use try_cmpxchg() to detect
+  1304		 * PTE changes and update old_pte, then try again.
+  1305		 */
+  1306		if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
+  1307			pte_t old_pte, new_pte;
+  1308	
+  1309			old_pte = READ_ONCE(*ptep);
+  1310			do {
+  1311				new_pte = pte_wrprotect(old_pte);
+> 1312			} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
+  1313	
+  1314			return;
+  1315		}
+  1316		clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
+  1317	}
+  1318	
+
 -- 
-2.18.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

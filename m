@@ -2,140 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3383F535DCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8829A535DE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350781AbiE0KEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 06:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        id S1343514AbiE0KG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 06:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350762AbiE0KEi (ORCPT
+        with ESMTP id S1350833AbiE0KGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 06:04:38 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C265106A69;
-        Fri, 27 May 2022 03:04:37 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id x137so7097402ybg.5;
-        Fri, 27 May 2022 03:04:37 -0700 (PDT)
+        Fri, 27 May 2022 06:06:01 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0413F11CA32
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:05:58 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id q15so4773445edb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:05:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5JIYIoPQbAr8+N/6Btv1Jhwnhm7d6XglBceN1Qe6Sgg=;
-        b=RyObOFEt9mrpw1GFgsf97COA3nU0+H88/3PXIdOj5Fnkf4HBbF7C68+ZciXfCILMYf
-         b6hexwK6RaYMbIHqqjO0c2FbFFbMOB1/PhMDDu3kNUkWxnu/lFbJ+6VjEvCmENqwmwQP
-         /9KEPyvyrWQW86Uto87PtYyVxtKsXIdSufp/YJMGGS0FihaaBkb1VSqLi3/K7INqaE61
-         jPr4SprPehyy7tyc3El0xf+3pKgv9S1ZKQrs90IpPDE3QGq5finBWG0Z3uW3ds++wrSM
-         ZaTO2rb2+Cftee2Z9rgG9aGsMThyRMADCLbHlgdD9VAiyboBOyaMdFNVvwM6flGW5H2s
-         6Fag==
+        d=amarulasolutions.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=XO2hMhBNxgx/7TUo7q5hJUYtHpkBHllPRW2Qz6ze9MU=;
+        b=Ynb2zIxQqTfUQ31nIcmQHvLnuM4+B56fwXc8Nqk5ai6IHMUwW0SkxXsX7b+apjVzMl
+         lb6Gvk5FBxU+Hceep9vWqUwdaBmQVHKw4UHfu5F4dG+rBqJ/6I9cZaglEhysfenrPFTS
+         l35X19h1cSa9p9HEu/gmJVF3gZl57awP3VUNI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5JIYIoPQbAr8+N/6Btv1Jhwnhm7d6XglBceN1Qe6Sgg=;
-        b=VI85LRBcUnR/4nd4Y8lArP16KybcdAmfaxFY3nZS3calFbHwmCl+GEXS0k+ga1cjAk
-         hnVrosaRNI7QByPtLjkoHybxfSUgXUOOS4cHW7Eih4b1PuqnDQcs/R3YmIlw4vmqjONR
-         6dykMJrQNWrtMkBntu/I1PLWMia7U9yiVAjHK2p/P0bSu4/RB/Zc2Jhrjwxgs5eB5K0D
-         fHmYGTr/pW8O9l4RNwl23xy+x34aNk+IwWjR/7LAyl7hYOk801gfRyTY1il9S/57fUFl
-         tMqTHZ3RWP5q5Cw0zj1fNWRHcGuq3jY/w5P3FWL5Sr+aQPy3ku3iIpaG1uqqQjuZn8tI
-         fsrA==
-X-Gm-Message-State: AOAM530mwyRK56vpfV/U4TCMFptx2wS/HvyKDF96x/g5Q0vuVxpgmKoN
-        VZxarzh8VzkzLUVuUFqHKEK8V9ahn5sSX2eyhPeVrmlEP1A=
-X-Google-Smtp-Source: ABdhPJxFjKSnq7Y/HKDtruNHyzaSMSuJHcQI86uptqpuKtH7XmDC5NFFJhzVoMiNXmnwoNMYzowzX9ss0zn0OqY420M=
-X-Received: by 2002:a25:40b:0:b0:65b:5f11:2b5b with SMTP id
- 11-20020a25040b000000b0065b5f112b5bmr1049941ybe.520.1653645876784; Fri, 27
- May 2022 03:04:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=XO2hMhBNxgx/7TUo7q5hJUYtHpkBHllPRW2Qz6ze9MU=;
+        b=HYej0RKMdpZt+xk2Vo/c1Ws9CE9ifRBJOmNn30PilXl9kZOzQ3SWpLyYM/5eZPaCDn
+         KYKB/2eiD7o8af3qLZVtXlXe6URHWn1nINooDegIamZetPB+AeXD3LLfnrpCWBY5/M9Z
+         uebxsqg478ITVyiBdmWxbd4DLAAWdPdybYhn/pIR7K5B5EFUnSnqDAKo3PLn4izM+m6Y
+         zAhSLsRNdS+RqX2wZph7cRXe56V8CVxd3c7q82/X0OQPcHzkYJ0UlXfC78y1/n9rtqzC
+         HlW97myjFXNKI2nCo8U7kfWM7WNhGD97UwTR/ZJOG5u45HA+8NP8ZifoCqunQs5sPqOF
+         nCIA==
+X-Gm-Message-State: AOAM532AyvxQl67Qa6e5ED0WQkr58UTPRBGvj1Fz9Agw2iYl2qiAWg5T
+        5UP8TI17a4/bEiifX3udR9btyg==
+X-Google-Smtp-Source: ABdhPJzjEUgEnwu83xVICmetJe6KIo2pNhiM9LyPqQWtChwb56MNYN056FGAeAfU5VJ2yRExyZqCbQ==
+X-Received: by 2002:a05:6402:320f:b0:42b:c876:4e34 with SMTP id g15-20020a056402320f00b0042bc8764e34mr13061196eda.201.1653645956312;
+        Fri, 27 May 2022 03:05:56 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-53-154.cust.vodafonedsl.it. [188.217.53.154])
+        by smtp.gmail.com with ESMTPSA id e4-20020a170906c00400b006fec8e8eff6sm1320036ejz.176.2022.05.27.03.05.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 03:05:55 -0700 (PDT)
+Date:   Fri, 27 May 2022 12:05:53 +0200
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Ming Qian <ming.qian@nxp.com>
+Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
+        "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [EXT] Re: [PATCH] media: imx-jpeg: Leave a blank space before
+ the configuration data
+Message-ID: <20220527100553.GA25548@tom-ThinkPad-T14s-Gen-2i>
+References: <20220527075437.16882-1-ming.qian@nxp.com>
+ <20220527075437.16882-3-ming.qian@nxp.com>
+ <20220527093824.GF11217@tom-ThinkPad-T14s-Gen-2i>
+ <AM6PR04MB634165DE21CEE8B6780CB817E7D89@AM6PR04MB6341.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <CAOuPNLjGWp4+Ub_Ccaw+tx1NQrNcqyjUG5K30uPH3uYTF_wxfw@mail.gmail.com>
- <CAOuPNLgzBA2Sbn6vS4856LwYyBo67OYKQp49+xpwX=Bi+KpLZg@mail.gmail.com> <65f1b675-84ac-b5da-6075-2a9f0353ab37@quicinc.com>
-In-Reply-To: <65f1b675-84ac-b5da-6075-2a9f0353ab37@quicinc.com>
-From:   Pintu Agarwal <pintu.ping@gmail.com>
-Date:   Fri, 27 May 2022 15:34:25 +0530
-Message-ID: <CAOuPNLh-NJ=GK63+iHFE-th9J8yfWZg_S3xmLgHGM_-nCFexvg@mail.gmail.com>
-Subject: Re: Queries: Using ifdef CONFIG condition in dts files
-To:     "T.Michael Turney" <quic_mturney@quicinc.com>
-Cc:     open list <linux-kernel@vger.kernel.org>, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, frowand.list@gmail.com,
-        linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AM6PR04MB634165DE21CEE8B6780CB817E7D89@AM6PR04MB6341.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, May 27, 2022 at 09:52:48AM +0000, Ming Qian wrote:
+> > From: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> > Sent: 2022年5月27日 17:38
+> > To: Ming Qian <ming.qian@nxp.com>
+> > Cc: mchehab@kernel.org; Mirela Rabulea (OSS)
+> > <mirela.rabulea@oss.nxp.com>; hverkuil-cisco@xs4all.nl;
+> > shawnguo@kernel.org; s.hauer@pengutronix.de; kernel@pengutronix.de;
+> > festevam@gmail.com; dl-linux-imx <linux-imx@nxp.com>;
+> > linux-media@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org
+> > Subject: [EXT] Re: [PATCH] media: imx-jpeg: Leave a blank space before the
+> > configuration data
+> > 
+> > Caution: EXT Email
+> > 
+> > Hi Ming,
+> > I think have some comments on the code for this would be nice for the future
+> > 
+> > On Fri, May 27, 2022 at 03:54:35PM +0800, Ming Qian wrote:
+> > > There is a hardware bug that it will load the first 128 bytes of
+> > > configuration data twice, it will led to some configure error.
+> > > so shift the configuration data 128 bytes, and make the first 128
+> > > bytes all zero, then hardware will load the 128 zero twice,
+> > 
+> > From what I've understood you initialize cfg_stm with zeros then you start to
+> > write the configuration from 0x80 (128 bytes), avoiding the hw issue right?
+> > 
+> 
 
-On Thu, 26 May 2022 at 19:53, T.Michael Turney <quic_mturney@quicinc.com> wrote:
->
-> Kernel developers correct me where I go astray, but this seems like the
-> CONFIG_XYZ value is not available in this file.  This would explain why
-> the disable case works.
->
-> At top of dtsi file are you #include <config.h> or whatever the correct
-> syntax is to see the CONFIG values?
+Hi Ming,
 
-Thanks for your comments.
-No, I could not find any specific config,h to be included to make the
-CONFIG values visible to dts.
+> HI Tommaso,
+>     Yes, you're right, there is a hardware bug.
+> I want to write the configuration data from the offset 0x80,
+> And set the first 128 bytes to zero.
+> Then the hardware bug can be avoided.
+
+Thanks for your clarification!
+Unfortunately I can't test this on a real board but the implementation looks
+good to me. Only thing is missing I think we need some notes to keep
+track of this known issue (for the sake of clarity just a note on why we
+start to write from 0x80)
+
+Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 
 Thanks,
-Pintu
+Tommaso
 
->
-> On 5/26/2022 1:46 AM, Pintu Agarwal wrote:
-> > Hi,
-> >
-> > I have a generic question regarding conditional compilation options in
-> > dts/dtsi files.
-> > Our Kernel version is: 4.14
-> > Let's say I have a Kernel config such as CONFIG_XYZ.
-> > This driver uses a CMA reserved memory and its node is defined in a
-> > mysoc.dtsi file.
-> > Like:
-> > #if defined(CONFIG_XYZ)
-> > &reserved_mem {
-> >          xyz_region: xyz_region {
-> >                  compatible = "shared-dma-pool";
-> >                  reusable;
-> >                  size = <0x600000>;
-> >          };
-> > };
-> > #endif
-> >
-> > The problem is as follows:
-> > a) The same kernel/dts source is shared across 2 product versions.
-> > b) In one product we need to enable this CONFIG_XYZ but in another
-> > product we need to disable it.
-> > c) When we disable the CONFIG we wanted this dts node also to be
-> > disabled together.
-> > d) When we add "#if defined(CONFIG_XYZ)" check in the dtsi file, it
-> > works if the CONFIG is disabled, but it does not work if CONFIG is
-> > enabled (node is not getting created).
-> > e) This mysoc.dtsi file is getting included in many other dts files,
-> > so we cannot add a compilation check in Makefile. We will end up
-> > renaming many files just to protect this one change.
-> >
-> > Is there any other better way to handle this situation ?
-> >
-> > I see that in latest kernel we have a conditional compilation added like this:
-> > #ifdef SOC_HAS_USB2_CH2
-> > https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/renesas/salvator-common.dtsi#L1028
-> >
-> > But the same is not recognized by the device tree compiler when using
-> > kernel CONFIG_ check.
-> >
-> > Is it the device-tree compiler issue which got fixed in the latest version ?
-> > Or, is it because Kernel config cannot be shared with device-tree ?
-> >
-> > Please let us know if there is any other opinion.
-> >
-> >
-> > Thank you.
-> >
-> > Regards,
-> > Pintu
+> 
+> Ming.
+> 
+> 
+> > > and ignore them as garbage.
+> > > then the configuration data can be loaded correctly
+> > >
+> > > Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> > > Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+> > > ---
+> > >  drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> > > b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> > > index 734e1b65fbc7..ad4213e020f3 100644
+> > > --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> > > +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> > > @@ -519,6 +519,7 @@ static bool mxc_jpeg_alloc_slot_data(struct
+> > mxc_jpeg_dev *jpeg,
+> > >                                    GFP_ATOMIC);
+> > >       if (!cfg_stm)
+> > >               goto err;
+> > > +     memset(cfg_stm, 0, MXC_JPEG_MAX_CFG_STREAM);
+> > >       jpeg->slot_data[slot].cfg_stream_vaddr = cfg_stm;
+> > >
+> > >  skip_alloc:
+> > > @@ -755,7 +756,7 @@ static unsigned int mxc_jpeg_setup_cfg_stream(void
+> > *cfg_stream_vaddr,
+> > >                                             u32 fourcc,
+> > >                                             u16 w, u16 h)  {
+> > > -     unsigned int offset = 0;
+> > > +     unsigned int offset = 0x80;
+> > >       u8 *cfg = (u8 *)cfg_stream_vaddr;
+> > >       struct mxc_jpeg_sof *sof;
+> > >       struct mxc_jpeg_sos *sos;
+> > > --
+> > > 2.36.1
+> > >
+> > 
+> > Thanks,
+> > Tommaso
+> > 
+> > --
+> > Tommaso Merciai
+> > Embedded Linux Engineer
+> > tommaso.merciai@amarulasolutions.com
+> > __________________________________
+> > 
+> > Amarula Solutions SRL
+> > Via Le Canevare 30, 31100 Treviso, Veneto, IT T. +39 042 243 5310
+> > info@amarulasolutions.com
+> > https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.am
+> > arulasolutions.com%2F&amp;data=05%7C01%7Cming.qian%40nxp.com%7C1
+> > d15c3ca5ba248ae53bc08da3fc4a75b%7C686ea1d3bc2b4c6fa92cd99c5c3016
+> > 35%7C0%7C0%7C637892411093606090%7CUnknown%7CTWFpbGZsb3d8eyJ
+> > WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
+> > C3000%7C%7C%7C&amp;sdata=2%2FZlmaidIXmpurQBNW56roQgaWnY7IElP
+> > OJzhFaZlow%3D&amp;reserved=0
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com

@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81698536655
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6809C53665A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354164AbiE0RHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 13:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S1354187AbiE0RHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 13:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238777AbiE0RHC (ORCPT
+        with ESMTP id S1353963AbiE0RHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 13:07:02 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F5E6C0FD
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:07:01 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id z16-20020a17090a015000b001dbc8da29a1so3030650pje.7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:07:01 -0700 (PDT)
+        Fri, 27 May 2022 13:07:04 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EEA6D4EB
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:07:03 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id z186-20020a6233c3000000b00510a6bc2864so2722316pfz.10
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:07:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=9DJdjdQfpcnVpPyggfIa1qFXIxfq8b79BilK9w/NCMk=;
-        b=VpE0RCMwbMTen5kAKvFC8lT8COxhcuz8NIbXoPPx5NG5zwnsMY47H7V95OAyz8LCzr
-         R6fQRQG9L/ZuTtN9tQUWcWrABH1YkePU7l5rBlHbj6MafvfM7jtvnZCP4kcuPbTw1r0a
-         7wWjhtp5HGbJkBzO4LsIexzDCNMwoUUmLnDqhIOC5rG6FtijeTky5NL5ShGtXOg1nQwx
-         LLwWavtHpb4vRbo5mAROTm3R3K9TYAuM8lTXxs+YZ8S5NtTVEd3Ls9kBm2BLbmMGWtcS
-         YcvCClR2qjnO/3QD+XLyJsRTC0UmWMuWKg9jfJTJ5wIcF61cIPUPtJ5BdRmvThmNKvTN
-         fMWQ==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=XII5Q10d7IHsakcWieNQERcqnrzaW3r3Psj82Eh20aM=;
+        b=aoLBo78gEFsnTeaEtyl/yOVL8Nlif46gSYrgLxN+AxYSm6eLmAHzRamQ52sLcjj4gP
+         7+Busc3BGlBQjxG2BxGhT/bt5YyxaX25hVC1F1PEe37LR/wTZllnnlkaU8ET66WXGciz
+         t+UfNNWyiZGvQawZCzNfpaNeInXdzdZS96Uu5FjDPGgJrlmS9q+z8leELQzFhyLY2aES
+         OPVe4QU6oaq1wXBKgI5+ckIW9pP5BAoIPJ0EdUztR9MYwUXAjyzGtKlgu+P2S/iLBPPn
+         VcrHzkcyLm4wLyH3598hDlUDcU4pOUqnYwkDSQRt0SAiDA5RuFyceNt9Bp8v0M5B8gFl
+         be8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=9DJdjdQfpcnVpPyggfIa1qFXIxfq8b79BilK9w/NCMk=;
-        b=uwuRFbi1Xdu0rKy/KDLGGoAQW+bz8D4zC1HlnqgBOVjSSxOQsZaJhlE33FbhhfyIiN
-         Nw8AWjjzywosgl8zsZGc3x1nOVvNHIK4iM8uGbDPCuKaC96IlKM9eF+gNWrl5uiRfQl9
-         vr2Hf1fNxZU6Fl7hB5YoMADZTGxEYyn1KxIJ2Nfy0Wr1PTIaqztZRwoNE7WQafc1RyRa
-         xXUhqtZt9B8Z6QmGs7dMLBgoNYzB2uBMbPkH2tAV12KugMBYSO1111cxv54v0/VQ4PdX
-         gi8P7qPdHUWboKumS/7cg82Q3puzZzj5h7xiAtILpIFxi1szwHBiljEDBqZuZwDO/HQv
-         Ax/A==
-X-Gm-Message-State: AOAM533ecetdOgRIE0UrIvbqVi93oKYT8BYLa8k++ZZjUsbx3xWzqKHT
-        ITLRYush5mfCFWKCakVvFJleBTyj1SY=
-X-Google-Smtp-Source: ABdhPJy/MxK8R9tE/ppkI9QXVvxv+Y2LEn6i6YQMe01XhN/mFom9mlwlSW5NzeEUm9FlqBFt91qCZ5ZhLXg=
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=XII5Q10d7IHsakcWieNQERcqnrzaW3r3Psj82Eh20aM=;
+        b=oOpEEqTYUpXNP0U7YokYMt/WG4rYrrd6YupwxJzuM1Z9IvGwz3tiotBHVTOAdBdeNe
+         He7aRrnb5KUpeU5hxeLJfCVv0JLy9BpbeRFA71gFZ/S3ocja7r8QquSFWhrWaLbj8UNx
+         0Ze8kLKwEHGqV50Dn1qnUhxfgSeKSFJytLqewjs8ERTXkVdWnNwhpaLQOQHEPxNPQzQo
+         MgllteUMB9lj+Q6NMxSevUOAl1RnktVb6CeT9j4Dj9z025usje0+JfM1I4cRKPpv7I8u
+         P1Ts8fe/y3eYqABXZTfUy3Lpu5Xtre2Ysl00WE3T/JHQpwoaOUOvX2ZB5qtrQyC4yQ+b
+         4hJQ==
+X-Gm-Message-State: AOAM533uGXeAJf5AbdUdNQjwK6/Y6VLdafiQDoJbV7Hypve8FbQ9o6R4
+        Ovp37fKRROfWWvyAUFi2ANZAQ6UmMw0=
+X-Google-Smtp-Source: ABdhPJxqoqZZBsn67a+/tmIpuPg4SlJS7NvBnjiLn5lus3F6VCY441LbmBbN2C6gA0x5Q95LyQVEGob22Nw=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:8698:b0:158:99d4:6256 with SMTP id
- g24-20020a170902869800b0015899d46256mr44760250plo.104.1653671220960; Fri, 27
- May 2022 10:07:00 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:8608:b0:158:c532:d8b2 with SMTP id
+ f8-20020a170902860800b00158c532d8b2mr43964184plo.46.1653671222592; Fri, 27
+ May 2022 10:07:02 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 27 May 2022 17:06:56 +0000
-Message-Id: <20220527170658.3571367-1-seanjc@google.com>
+Date:   Fri, 27 May 2022 17:06:57 +0000
+In-Reply-To: <20220527170658.3571367-1-seanjc@google.com>
+Message-Id: <20220527170658.3571367-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20220527170658.3571367-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 0/2] KVM: VMX: Sanitize VM-Entry/VM-Exit pairs during setup
+Subject: [PATCH v2 1/2] KVM: VMX: Sanitize VM-Entry/VM-Exit control pairs at
+ kvm_intel load time
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -72,33 +76,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sanitize the VM-Entry/VM-Exit load+load and load+clear pairs when kvm_intel
-is loaded instead of checking both controls at runtime.  Not sanitizing
-means KVM ends up setting non-dynamic bits in the VMCS.
+Sanitize the VM-Entry/VM-Exit control pairs (load+load or load+clear)
+during setup instead of checking both controls in a pair at runtime.  If
+only one control is supported, KVM will report the associated feature as
+not available, but will leave the supported control bit set in the VMCS
+config, which could lead to corruption of host state.  E.g. if only the
+VM-Entry control is supported and the feature is not dynamically toggled,
+KVM will set the control in all VMCSes and load zeros without restoring
+host state.
 
-Add an on-by-default knob to reject kvm_intel if an inconsistent VMCS
-config is detected instead of using a degraded and/or potentially broken
-setup.
+Note, while this is technically a bug fix, practically speaking no sane
+CPU or VMM would support only one control.  KVM's behavior of checking
+both controls is mostly pedantry.
 
-v2:
-  - Drop the macros. [Paolo]
-  - Tweak the module param name to try to capture that KVM doesn't check
-    for all possible inconsistencies. [Jim]
-  - Enable the knob by default. [Paolo]
+Cc: Chenyi Qiang <chenyi.qiang@intel.com>
+Cc: Lei Wang <lei4.wang@intel.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/vmx/capabilities.h | 13 ++++---------
+ arch/x86/kvm/vmx/vmx.c          | 32 ++++++++++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+), 9 deletions(-)
 
-v1: https://lore.kernel.org/all/20220525210447.2758436-1-seanjc@google.com
-
-Sean Christopherson (2):
-  KVM: VMX: Sanitize VM-Entry/VM-Exit control pairs at kvm_intel load
-    time
-  KVM: VMX: Reject kvm_intel if an inconsistent VMCS config is detected
-
- arch/x86/kvm/vmx/capabilities.h | 13 +++------
- arch/x86/kvm/vmx/vmx.c          | 52 +++++++++++++++++++++++++++++++--
- 2 files changed, 53 insertions(+), 12 deletions(-)
-
-
-base-commit: 90bde5bea810d766e7046bf5884f2ccf76dd78e9
+diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+index dc2cb8a16e76..464bf39e4835 100644
+--- a/arch/x86/kvm/vmx/capabilities.h
++++ b/arch/x86/kvm/vmx/capabilities.h
+@@ -97,20 +97,17 @@ static inline bool cpu_has_vmx_posted_intr(void)
+ 
+ static inline bool cpu_has_load_ia32_efer(void)
+ {
+-	return (vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_EFER) &&
+-	       (vmcs_config.vmexit_ctrl & VM_EXIT_LOAD_IA32_EFER);
++	return vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_EFER;
+ }
+ 
+ static inline bool cpu_has_load_perf_global_ctrl(void)
+ {
+-	return (vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL) &&
+-	       (vmcs_config.vmexit_ctrl & VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL);
++	return vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
+ }
+ 
+ static inline bool cpu_has_vmx_mpx(void)
+ {
+-	return (vmcs_config.vmexit_ctrl & VM_EXIT_CLEAR_BNDCFGS) &&
+-		(vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_BNDCFGS);
++	return vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_BNDCFGS;
+ }
+ 
+ static inline bool cpu_has_vmx_tpr_shadow(void)
+@@ -377,7 +374,6 @@ static inline bool cpu_has_vmx_intel_pt(void)
+ 	rdmsrl(MSR_IA32_VMX_MISC, vmx_msr);
+ 	return (vmx_msr & MSR_IA32_VMX_MISC_INTEL_PT) &&
+ 		(vmcs_config.cpu_based_2nd_exec_ctrl & SECONDARY_EXEC_PT_USE_GPA) &&
+-		(vmcs_config.vmexit_ctrl & VM_EXIT_CLEAR_IA32_RTIT_CTL) &&
+ 		(vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_RTIT_CTL);
+ }
+ 
+@@ -406,8 +402,7 @@ static inline bool vmx_pebs_supported(void)
+ 
+ static inline bool cpu_has_vmx_arch_lbr(void)
+ {
+-	return (vmcs_config.vmexit_ctrl & VM_EXIT_CLEAR_IA32_LBR_CTL) &&
+-		(vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_LBR_CTL);
++	return vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_LBR_CTL;
+ }
+ 
+ static inline u64 vmx_get_perf_capabilities(void)
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 6927f6e8ec31..a592b424fbbc 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2473,6 +2473,24 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+ 	u64 _cpu_based_3rd_exec_control = 0;
+ 	u32 _vmexit_control = 0;
+ 	u32 _vmentry_control = 0;
++	int i;
++
++	/*
++	 * LOAD/SAVE_DEBUG_CONTROLS are absent because both are mandatory.
++	 * SAVE_IA32_PAT and SAVE_IA32_EFER are absent because KVM always
++	 * intercepts writes to PAT and EFER, i.e. never enables those controls.
++	 */
++	struct {
++		u32 entry_control;
++		u32 exit_control;
++	} const vmcs_entry_exit_pairs[] = {
++		{ VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL,	VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL },
++		{ VM_ENTRY_LOAD_IA32_PAT,		VM_EXIT_LOAD_IA32_PAT },
++		{ VM_ENTRY_LOAD_IA32_EFER,		VM_EXIT_LOAD_IA32_EFER },
++		{ VM_ENTRY_LOAD_BNDCFGS,		VM_EXIT_CLEAR_BNDCFGS },
++		{ VM_ENTRY_LOAD_IA32_RTIT_CTL,		VM_EXIT_CLEAR_IA32_RTIT_CTL },
++		{ VM_ENTRY_LOAD_IA32_LBR_CTL,		VM_EXIT_CLEAR_IA32_LBR_CTL },
++	};
+ 
+ 	memset(vmcs_conf, 0, sizeof(*vmcs_conf));
+ 	min = CPU_BASED_HLT_EXITING |
+@@ -2614,6 +2632,20 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+ 				&_vmentry_control) < 0)
+ 		return -EIO;
+ 
++	for (i = 0; i < ARRAY_SIZE(vmcs_entry_exit_pairs); i++) {
++		u32 n_ctrl = vmcs_entry_exit_pairs[i].entry_control;
++		u32 x_ctrl = vmcs_entry_exit_pairs[i].exit_control;
++
++		if (!(_vmentry_control & n_ctrl) == !(_vmexit_control & x_ctrl))
++			continue;
++
++		pr_warn_once("Inconsistent VM-Entry/VM-Exit pair, entry = %x, exit = %x\n",
++			     _vmentry_control & n_ctrl, _vmexit_control & x_ctrl);
++
++		_vmentry_control &= ~n_ctrl;
++		_vmexit_control &= ~x_ctrl;
++	}
++
+ 	/*
+ 	 * Some cpus support VM_{ENTRY,EXIT}_IA32_PERF_GLOBAL_CTRL but they
+ 	 * can't be used due to an errata where VM Exit may incorrectly clear
 -- 
 2.36.1.255.ge46751e96f-goog
 

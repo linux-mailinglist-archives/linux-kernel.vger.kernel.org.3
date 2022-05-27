@@ -2,217 +2,671 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364E453588F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F01753589C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241554AbiE0Eoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 00:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S243016AbiE0EzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 00:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbiE0Eom (ORCPT
+        with ESMTP id S242737AbiE0Ey4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 00:44:42 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21B3EC3C6;
-        Thu, 26 May 2022 21:44:40 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso3929054wma.0;
-        Thu, 26 May 2022 21:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fJNm7ixmWwLrx0f9ri8FeFPBsjqtPYRN+qD5pi3kNI4=;
-        b=n702XXGYnB7Ab4e+wrUOK9V/3e08brtsUjJ0xGzixtoRxUYZV2JU2VNhp6+UeY+fTI
-         cmy7WXFGsa3KmIR4LeMhQ9gE57tTQ3gS6u89WX97rY4l46l/kvAissogC3oIe5Z8uORK
-         4vMMoxoX9JPsoouHeyMV23lfB6W5NilaYEAMPe+qd9M9x1lcYUPztPMmN4K4QNkNESZP
-         exWrUybz6A5EAXLHbQLnxOfkTOkNcx/mVZHxiLSU6AN487B18zxk67cY5epNZaMg1t0e
-         aMU7w6Hp+fi3pPQr0yLbG1QIdVRUW9fb3trkLXnm8tUwieDfkgPa5hpnknNg5KmOb4A3
-         gCpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fJNm7ixmWwLrx0f9ri8FeFPBsjqtPYRN+qD5pi3kNI4=;
-        b=DHU1/XWrXcs7Cyq0OuowKT4G3OKrFKsj6dOJDglMqkWdcp+n3ZR0a1JCy4/tV1VTaG
-         U66hxT9auj8bFZ1w/DqMpLNlwR9vb4yiDQ+9WTOXp66f5G5wTMc6drm7SIr02kviob1W
-         gPU4SIxr6NmydRnhu6gndi1Dlao3l79wtYGEmwlp6KW3NS0u8EvEBt2WeAmr74BYjU+7
-         yYezpAQfz3J1hfqLb9RM9ixkDwRNLn7yHIO5KQ42DsJkBioo4uAc2ZV8jHi74Hfw8F0w
-         3/QbT4GFN5tJEEx6I6TpK6xy5M0egFguA5ubRShZ9C3naKyDbgDPhpqRMcAabhnLoBaJ
-         yEZA==
-X-Gm-Message-State: AOAM533h5tvBlbR0oZPKbEzVROeFDdOaFMjgLF7VFTwRrZLNxqT1o1AE
-        /DVNBijrzTPW2H1DgfXhoqoRU6Srxj/6gjgqq4g=
-X-Google-Smtp-Source: ABdhPJxnQ7P4GWSwhd0fJWlUiOOLjcblbqPvopZQXdaZqoX0ibmoroj904PTx1r6TvH5Z71MmGQkZWbJwFP8PQF65xQ=
-X-Received: by 2002:a05:600c:4f95:b0:397:82a5:dcf8 with SMTP id
- n21-20020a05600c4f9500b0039782a5dcf8mr4297532wmq.84.1653626679357; Thu, 26
- May 2022 21:44:39 -0700 (PDT)
+        Fri, 27 May 2022 00:54:56 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5762439832;
+        Thu, 26 May 2022 21:54:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653627295; x=1685163295;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Cqdu2fQ/4XmR1sFxs4Cobv29rAgi7FR2cneMp0iAEI0=;
+  b=NpETsjfrk67Jz0XvK4XKBEjY5lWNQiGfIOpF8h3cwlVtU9paMMTiDmk3
+   vo7LObfXZvIyHLbt+DGIapXCDtYbsE1PS1cjhZddSEKHI+yYbqtUpHux4
+   xJPPKiV21MY4BRyCheOM13yDQVbQGK+1jqQXWNMS2uzc7/Nr0yDJoWnrK
+   sKj3uDhJoWrowFSrdHi35lGEzn6NZ6PUe94zXCGq0wBgs0FrojYpaNPrZ
+   eWQJjGTZdva2kAwnoxH4Ii5Es8/5rMk0j2JzSwHJwOsniYqd+JIWWabIY
+   BnjcT6S9zEHv+UG0y7gebzuBsfbDDnC2BrLDuKhusnC4jwAGkmdOW+Tf9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="273191747"
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="273191747"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 21:54:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="574299219"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga007.jf.intel.com with ESMTP; 26 May 2022 21:54:51 -0700
+Date:   Fri, 27 May 2022 12:47:09 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, lee.jones@linaro.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
+Subject: Re: [PATCH v21 5/5] fpga: m10bmc-sec: add max10 secure update
+  functions
+Message-ID: <20220527044709.GA165258@yilunxu-OptiPlex-7050>
+References: <20220521003607.737734-1-russell.h.weight@intel.com>
+ <20220521003607.737734-6-russell.h.weight@intel.com>
+ <20220526074856.GA148394@yilunxu-OptiPlex-7050>
+ <4cd795ae-1648-9f0c-7b1c-68f761e83d79@intel.com>
 MIME-Version: 1.0
-References: <20210728010632.2633470-1-robdclark@gmail.com> <20210728010632.2633470-13-robdclark@gmail.com>
- <84e03c5f-a3af-6592-d19a-a2f5d20b92fb@linux.intel.com> <CAJs_Fx6Nc337LPNh=p2GT2d2yDTdLWH934o4Cof3urDGhUJB6A@mail.gmail.com>
- <904ae104-1c30-d130-129f-ccae381261d5@linux.intel.com> <CAF6AEGuVhXuX63Od+kcJ0QtfAZ2-wqZsN0KOuEzKbivJdouzog@mail.gmail.com>
- <1972f50b-d71a-9e2e-d10b-cc4f13bb208f@linux.intel.com> <CAF6AEGsvmQYjzoFgEMTer3oDmb62y2Hq_unDbq2UEoZ6CA3CSw@mail.gmail.com>
- <d15cccd3-4b77-992e-23f7-0c4808592a9f@linux.intel.com>
-In-Reply-To: <d15cccd3-4b77-992e-23f7-0c4808592a9f@linux.intel.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Thu, 26 May 2022 21:44:36 -0700
-Message-ID: <CAF6AEGuFZ_TRHiEB5S_HORbTQahhc3DoSmQkP56jws8cLr0bPA@mail.gmail.com>
-Subject: Re: [PATCH v4 12/13] drm/msm: Utilize gpu scheduler priorities
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Rob Clark <robdclark@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        David Airlie <airlied@linux.ie>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Sharat Masetty <smasetty@codeaurora.org>,
-        Akhil P Oommen <akhilpo@codeaurora.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>, Sean Paul <sean@poorly.run>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4cd795ae-1648-9f0c-7b1c-68f761e83d79@intel.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 6:29 AM Tvrtko Ursulin
-<tvrtko.ursulin@linux.intel.com> wrote:
->
->
-> On 26/05/2022 04:15, Rob Clark wrote:
-> > On Wed, May 25, 2022 at 9:11 AM Tvrtko Ursulin
-> > <tvrtko.ursulin@linux.intel.com> wrote:
+On Thu, May 26, 2022 at 02:27:15PM -0700, Russ Weight wrote:
+> 
+> 
+> On 5/26/22 00:48, Xu Yilun wrote:
+> > On Fri, May 20, 2022 at 05:36:07PM -0700, Russ Weight wrote:
+> >> Create firmware upload ops and call the Firmware Upload support of the
+> >> Firmware Loader subsystem to enable FPGA image uploads for secure
+> >> updates of BMC images, FPGA images, etc.
 > >>
+> >> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> >> ---
+> >> v21:
+> >>   - Update m10bmc_sec_prepare() to ensure that the base address for an
+> >>     update image is aligned with stride.
+> >>   - Update m10bmc_sec_write() to handle a block size that is not aligned
+> >>     with stride by allocating a zero-filled block that is aligned, and
+> >>     copying the data before calling regmap_bulk_write().
+> >> v20:
+> >>   - No change.
+> >> v19:
+> >>   - Change "card bmc" naming back to "m10 bmc" naming to be consistent
+> >>     with the parent driver.
+> >> v18:
+> >>   - Moved the firmware_upload_register() function here from an earlier
+> >>     patch since this is where the required ops are provided.
+> >>   - Moved the bmc_sec_remove() function here from an earlier patch to
+> >>     unregister the firmware driver and do cleanup.
+> >> v17:
+> >>   - Change "m10bmc" in symbol names to "cardbmc" to reflect the fact that the
+> >>     future devices will not necessarily use the MAX10.
+> >>   - Change from image_load class driver to the new firmware_upload 
+> >>     functionality of the firmware_loader.
+> >>   - fw_upload_ops functions will return "enum fw_upload_err" data types
+> >>     instead of integer values.
+> >> v16:
+> >>   - Use 0 instead of FPGA_IMAGE_ERR_NONE to indicate success.
+> >>   - The size alignment check was moved from the FPGA Image Load framework
+> >>     to the prepare() op.
+> >>   - Added cancel_request boolean flag to struct m10bmc_sec.
+> >>   - Moved the RSU cancellation logic from m10bmc_sec_cancel() to a new
+> >>     rsu_cancel() function.
+> >>   - The m10bmc_sec_cancel() function ONLY sets the cancel_request flag.
+> >>     The cancel_request flag is checked at the beginning of the
+> >>     m10bmc_sec_write() and m10bmc_sec_poll_complete() functions.
+> >>   - Adapt to changed prototypes for the prepare() and write() ops. The
+> >>     m10bmc_sec_write_blk() function has been renamed to
+> >>     m10bmc_sec_write().
+> >>   - Created a cleanup() op, m10bmc_sec_cleanup(), to attempt to cancel an
+> >>     ongoing op during when exiting the update process.
+> >> v15:
+> >>   - Adapted to changes in the FPGA Image Load framework:
+> >>     (1) All enum types (progress and errors) are now type u32
+> >>     (2) m10bmc_sec_write_blk() adds *blk_size and max_size parameters
+> >>         and uses *blk_size as provided by the caller.
+> >>     (3) m10bmc_sec_poll_complete() no long checks the driver_unload
+> >>         flag.
+> >> v14:
+> >>   - Changed symbol names to reflect the renaming of the Security Manager
+> >>     Class driver to FPGA Image Load.
+> >> v13:
+> >>   - No change
+> >> v12:
+> >>   - Updated Date and KernelVersion fields in ABI documentation
+> >>   - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk()
+> >>     no longer has a size parameter, and the block size is determined
+> >>     in this (the lower-level) driver.
+> >> v11:
+> >>   - No change
+> >> v10:
+> >>   - No change
+> >> v9:
+> >>   - No change
+> >> v8:
+> >>   - Previously patch 5/6, otherwise no change
+> >> v7:
+> >>   - No change
+> >> v6:
+> >>   - Changed (size / stride) calculation to ((size + stride - 1) / stride)
+> >>     to ensure that the proper count is passed to regmap_bulk_write().
+> >>   - Removed unnecessary call to rsu_check_complete() in
+> >>     m10bmc_sec_poll_complete() and changed while loop to
+> >>     do/while loop.
+> >> v5:
+> >>   - No change
+> >> v4:
+> >>   - No change
+> >> v3:
+> >>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+> >>   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
+> >>     driver"
+> >>   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
+> >>     underlying functions are now called directly.
+> >>   - Changed calling functions of functions that return "enum fpga_sec_err"
+> >>     to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
+> >> v2:
+> >>   - Reworked the rsu_start_done() function to make it more readable
+> >>   - Reworked while-loop condition/content in rsu_prog_ready()
+> >>   - Minor code cleanup per review comments
+> >>   - Added a comment to the m10bmc_sec_poll_complete() function to
+> >>     explain the context (could take 30+ minutes to complete).
+> >>   - Added m10bmc_ prefix to functions in m10bmc_iops structure
+> >>   - Moved MAX10 BMC address and function definitions to a separate
+> >>     patch.
+> >> ---
+> >>  drivers/fpga/intel-m10-bmc-sec-update.c | 409 ++++++++++++++++++++++++
+> >>  1 file changed, 409 insertions(+)
 > >>
-> >> On 24/05/2022 15:57, Rob Clark wrote:
-> >>> On Tue, May 24, 2022 at 6:45 AM Tvrtko Ursulin
-> >>> <tvrtko.ursulin@linux.intel.com> wrote:
-> >>>>
-> >>>> On 23/05/2022 23:53, Rob Clark wrote:
-> >>>>>
-> >>>>> btw, one fun (but unrelated) issue I'm hitting with scheduler... I'm
-> >>>>> trying to add an igt test to stress shrinker/eviction, similar to the
-> >>>>> existing tests/i915/gem_shrink.c.  But we hit an unfortunate
-> >>>>> combination of circumstances:
-> >>>>> 1. Pinning memory happens in the synchronous part of the submit ioctl,
-> >>>>> before enqueuing the job for the kthread to handle.
-> >>>>> 2. The first run_job() callback incurs a slight delay (~1.5ms) while
-> >>>>> resuming the GPU
-> >>>>> 3. Because of that delay, userspace has a chance to queue up enough
-> >>>>> more jobs to require locking/pinning more than the available system
-> >>>>> RAM..
-> >>>>
-> >>>> Is that one or multiple threads submitting jobs?
-> >>>
-> >>> In this case multiple.. but I think it could also happen with a single
-> >>> thread (provided it didn't stall on a fence, directly or indirectly,
-> >>> from an earlier submit), because of how resume and actual job
-> >>> submission happens from scheduler kthread.
-> >>>
-> >>>>> I'm not sure if we want a way to prevent userspace from getting *too*
-> >>>>> far ahead of the kthread.  Or maybe at some point the shrinker should
-> >>>>> sleep on non-idle buffers?
-> >>>>
-> >>>> On the direct reclaim path when invoked from the submit ioctl? In i915
-> >>>> we only shrink idle objects on direct reclaim and leave active ones for
-> >>>> the swapper. It depends on how your locking looks like whether you could
-> >>>> do them, whether there would be coupling of locks and fs-reclaim context.
-> >>>
-> >>> I think the locking is more or less ok, although lockdep is unhappy
-> >>> about one thing[1] which is I think a false warning (ie. not
-> >>> recognizing that we'd already successfully acquired the obj lock via
-> >>> trylock).  We can already reclaim idle bo's in this path.  But the
-> >>> problem with a bunch of submits queued up in the scheduler, is that
-> >>> they are already considered pinned and active.  So at some point we
-> >>> need to sleep (hopefully interruptabley) until they are no longer
-> >>> active, ie. to throttle userspace trying to shove in more submits
-> >>> until some of the enqueued ones have a chance to run and complete.
-> >>
-> >> Odd I did not think trylock could trigger that. Looking at your code it
-> >> indeed seems two trylocks. I am pretty sure we use the same trylock
-> >> trick to avoid it. I am confused..
-> >
-> > The sequence is,
-> >
-> > 1. kref_get_unless_zero()
-> > 2. trylock, which succeeds
-> > 3. attempt to evict or purge (which may or may not have succeeded)
-> > 4. unlock
-> >
-> >   ... meanwhile this has raced with submit (aka execbuf) finishing and
-> > retiring and dropping *other* remaining reference to bo...
-> >
-> > 5. drm_gem_object_put() which triggers drm_gem_object_free()
-> > 6. in our free path we acquire the obj lock again and then drop it.
-> > Which arguably is unnecessary and only serves to satisfy some
-> > GEM_WARN_ON(!msm_gem_is_locked(obj)) in code paths that are also used
-> > elsewhere
-> >
-> > lockdep doesn't realize the previously successful trylock+unlock
-> > sequence so it assumes that the code that triggered recursion into
-> > shrinker could be holding the objects lock.
->
-> Ah yes, missed that lock after trylock in msm_gem_shrinker/scan(). Well
-> i915 has the same sequence in our shrinker, but the difference is we use
-> delayed work to actually free, _and_ use trylock in the delayed worker.
-> It does feel a bit inelegant (objects with no reference count which
-> cannot be trylocked?!), but as this is the code recently refactored by
-> Maarten so I think best try and sync with him for the full story.
+> >> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> >> index 65fec2a70901..7c48c47a74a6 100644
+> >> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> >> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> >> @@ -17,8 +17,14 @@
+> >>  struct m10bmc_sec {
+> >>  	struct device *dev;
+> >>  	struct intel_m10bmc *m10bmc;
+> >> +	struct fw_upload *fwl;
+> >> +	char *fw_name;
+> >> +	u32 fw_name_id;
+> >> +	bool cancel_request;
+> >>  };
+> >>  
+> >> +static DEFINE_XARRAY_ALLOC(fw_upload_xa);
+> >> +
+> >>  /* Root Entry Hash (REH) support */
+> >>  #define REH_SHA256_SIZE		32
+> >>  #define REH_SHA384_SIZE		48
+> >> @@ -192,10 +198,380 @@ static const struct attribute_group *m10bmc_sec_attr_groups[] = {
+> >>  	NULL,
+> >>  };
+> >>  
+> >> +static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
+> >> +{
+> >> +	u32 auth_result;
+> >> +
+> >> +	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
+> >> +
+> >> +	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
+> >> +		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
+> >> +}
+> >> +
+> >> +static enum fw_upload_err rsu_check_idle(struct m10bmc_sec *sec)
+> >> +{
+> >> +	u32 doorbell;
+> >> +	int ret;
+> >> +
+> >> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+> >> +	if (ret)
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +
+> >> +	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
+> >> +	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_BUSY;
+> >> +	}
+> >> +
+> >> +	return FW_UPLOAD_ERR_NONE;
+> >> +}
+> >> +
+> >> +static inline bool rsu_start_done(u32 doorbell)
+> >> +{
+> >> +	u32 status, progress;
+> >> +
+> >> +	if (doorbell & DRBL_RSU_REQUEST)
+> >> +		return false;
+> >> +
+> >> +	status = rsu_stat(doorbell);
+> >> +	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
+> >> +		return true;
+> >> +
+> >> +	progress = rsu_prog(doorbell);
+> >> +	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
+> >> +		return true;
+> >> +
+> >> +	return false;
+> >> +}
+> >> +
+> >> +static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
+> >> +{
+> >> +	u32 doorbell, status;
+> >> +	int ret;
+> >> +
+> >> +	ret = regmap_update_bits(sec->m10bmc->regmap,
+> >> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
+> >> +				 DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
+> >> +				 DRBL_RSU_REQUEST |
+> >> +				 FIELD_PREP(DRBL_HOST_STATUS,
+> >> +					    HOST_STATUS_IDLE));
+> >> +	if (ret)
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +
+> >> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
+> >> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
+> >> +				       doorbell,
+> >> +				       rsu_start_done(doorbell),
+> >> +				       NIOS_HANDSHAKE_INTERVAL_US,
+> >> +				       NIOS_HANDSHAKE_TIMEOUT_US);
+> >> +
+> >> +	if (ret == -ETIMEDOUT) {
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_TIMEOUT;
+> >> +	} else if (ret) {
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +	}
+> >> +
+> >> +	status = rsu_stat(doorbell);
+> >> +	if (status == RSU_STAT_WEAROUT) {
+> >> +		dev_warn(sec->dev, "Excessive flash update count detected\n");
+> >> +		return FW_UPLOAD_ERR_WEAROUT;
+> >> +	} else if (status == RSU_STAT_ERASE_FAIL) {
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_HW_ERROR;
+> >> +	}
+> >> +
+> >> +	return FW_UPLOAD_ERR_NONE;
+> >> +}
+> >> +
+> >> +static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
+> >> +{
+> >> +	unsigned long poll_timeout;
+> >> +	u32 doorbell, progress;
+> >> +	int ret;
+> >> +
+> >> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+> >> +	if (ret)
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +
+> >> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
+> >> +	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
+> >> +		msleep(RSU_PREP_INTERVAL_MS);
+> >> +		if (time_after(jiffies, poll_timeout))
+> >> +			break;
+> >> +
+> >> +		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+> >> +		if (ret)
+> >> +			return FW_UPLOAD_ERR_RW_ERROR;
+> >> +	}
+> >> +
+> >> +	progress = rsu_prog(doorbell);
+> >> +	if (progress == RSU_PROG_PREPARE) {
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_TIMEOUT;
+> >> +	} else if (progress != RSU_PROG_READY) {
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_HW_ERROR;
+> >> +	}
+> >> +
+> >> +	return FW_UPLOAD_ERR_NONE;
+> >> +}
+> >> +
+> >> +static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
+> >> +{
+> >> +	u32 doorbell;
+> >> +	int ret;
+> >> +
+> >> +	ret = regmap_update_bits(sec->m10bmc->regmap,
+> >> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
+> >> +				 DRBL_HOST_STATUS,
+> >> +				 FIELD_PREP(DRBL_HOST_STATUS,
+> >> +					    HOST_STATUS_WRITE_DONE));
+> >> +	if (ret)
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +
+> >> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
+> >> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
+> >> +				       doorbell,
+> >> +				       rsu_prog(doorbell) != RSU_PROG_READY,
+> >> +				       NIOS_HANDSHAKE_INTERVAL_US,
+> >> +				       NIOS_HANDSHAKE_TIMEOUT_US);
+> >> +
+> >> +	if (ret == -ETIMEDOUT) {
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_TIMEOUT;
+> >> +	} else if (ret) {
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +	}
+> >> +
+> >> +	switch (rsu_stat(doorbell)) {
+> >> +	case RSU_STAT_NORMAL:
+> >> +	case RSU_STAT_NIOS_OK:
+> >> +	case RSU_STAT_USER_OK:
+> >> +	case RSU_STAT_FACTORY_OK:
+> >> +		break;
+> >> +	default:
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_HW_ERROR;
+> >> +	}
+> >> +
+> >> +	return FW_UPLOAD_ERR_NONE;
+> >> +}
+> >> +
+> >> +static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
+> >> +{
+> >> +	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
+> >> +		return -EIO;
+> >> +
+> >> +	switch (rsu_stat(*doorbell)) {
+> >> +	case RSU_STAT_NORMAL:
+> >> +	case RSU_STAT_NIOS_OK:
+> >> +	case RSU_STAT_USER_OK:
+> >> +	case RSU_STAT_FACTORY_OK:
+> >> +		break;
+> >> +	default:
+> >> +		return -EINVAL;
+> >> +	}
+> >> +
+> >> +	switch (rsu_prog(*doorbell)) {
+> >> +	case RSU_PROG_IDLE:
+> >> +	case RSU_PROG_RSU_DONE:
+> >> +		return 0;
+> >> +	case RSU_PROG_AUTHENTICATING:
+> >> +	case RSU_PROG_COPYING:
+> >> +	case RSU_PROG_UPDATE_CANCEL:
+> >> +	case RSU_PROG_PROGRAM_KEY_HASH:
+> >> +		return -EAGAIN;
+> >> +	default:
+> >> +		return -EINVAL;
+> >> +	}
+> >> +}
+> >> +
+> >> +static enum fw_upload_err rsu_cancel(struct m10bmc_sec *sec)
+> >> +{
+> >> +	u32 doorbell;
+> >> +	int ret;
+> >> +
+> >> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+> >> +	if (ret)
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +
+> >> +	if (rsu_prog(doorbell) != RSU_PROG_READY)
+> >> +		return FW_UPLOAD_ERR_BUSY;
+> >> +
+> >> +	ret = regmap_update_bits(sec->m10bmc->regmap,
+> >> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
+> >> +				 DRBL_HOST_STATUS,
+> >> +				 FIELD_PREP(DRBL_HOST_STATUS,
+> >> +					    HOST_STATUS_ABORT_RSU));
+> >> +	if (ret)
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +
+> >> +	return FW_UPLOAD_ERR_CANCELED;
+> >> +}
+> >> +
+> >> +static enum fw_upload_err m10bmc_sec_prepare(struct fw_upload *fwl,
+> >> +					     const u8 *data, u32 size)
+> >> +{
+> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
+> >> +	unsigned int stride;
+> >> +	u32 ret;
+> >> +
+> >> +	sec->cancel_request = false;
+> >> +
+> >> +	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> >> +	if (!IS_ALIGNED((unsigned long)data, stride)) {
+> >> +		dev_err(sec->dev,
+> >> +			"%s address (0x%p) not aligned to stride (0x%x)\n",
+> >> +			__func__, data, stride);
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +	}
+> > Why the base of the source data should be stride aligned? What prevents
+> > the driver from reading out the unaligned data?
+> 
+> This check also exists in regmap_bulk_write(), so regmap_bulk_write() would
+> fail for an unaligned base address with -EINVAL:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/regmap/regmap.c#n2274
 
-ahh, we used to use delayed work for free, but realized that was
-causing janks where we'd get a bunch of bo's queued up to free and at
-some point that would cause us to miss deadlines
+I'm sorry I just see the regmap_bulk_write() checks the alignment of
+register addr, but not the data. Am I missed something?
 
-I suppose instead we could have used an unbound wq for free instead of
-the same one we used (at the time, since transitioned to kthread
-worker to avoid being preempted by RT SF threads) for retiring submits
-
-> >> Otherwise if you can afford to sleep you can of course throttle
-> >> organically via direct reclaim. Unless I am forgetting some key gotcha -
-> >> it's been a while I've been active in this area.
+> 
+> By checking it here, I am able to print something useful to the kernel log.
+> 
 > >
-> > So, one thing that is awkward about sleeping in this path is that
-> > there is no way to propagate back -EINTR, so we end up doing an
-> > uninterruptible sleep in something that could be called indirectly
-> > from userspace syscall.. i915 seems to deal with this by limiting it
-> > to shrinker being called from kswapd.  I think in the shrinker we want
-> > to know whether it is ok to sleep (ie. not syscall trigggered
-> > codepath, and whether we are under enough memory pressure to justify
-> > sleeping).  For the syscall path, I'm playing with something that lets
-> > me pass __GFP_RETRY_MAYFAIL | __GFP_NOWARN to
-> > shmem_read_mapping_page_gfp(), and then stall after the shrinker has
-> > failed, somewhere where we can make it interruptable.  Ofc, that
-> > doesn't help with all the other random memory allocations which can
-> > fail, so not sure if it will turn out to be a good approach or not.
-> > But I guess pinning the GEM bo's is the single biggest potential
-> > consumer of pages in the submit path, so maybe it will be better than
-> > nothing.
->
-> We play similar games, although by a quick look I am not sure we quite
-> manage to honour/propagate signals. This has certainly been a
-> historically fiddly area. If you first ask for no reclaim allocations
-> and invoke the shrinker manually first, then falling back to a bigger
-> hammer, you should be able to do it.
+> > And this may be a too strict rule. I'm not sure who should ensure the
+> > alignment of the firmware data? The firmware upload framework? Or a user
+> > has no idea about the stride and cannot do the right thing.
+> The firmware upload framework uses an array of pages to allocate space
+> for the firmware image, so in its current implementation it will always
+> be aligned.
+> 
+> Would it be better to use regmap_write() for an unaligned start and
+> then follow up with regmap_bulk_write()?
 
-yeah, I think it should.. but I've been fighting a bit today with the
-fact that the state of bo wrt. shrinkable state has grown a bit
-complicated (ie. is it purgeable, evictable, evictable if we are
-willing to wait a short amount of time, vs things that are pinned for
-scanout and we shouldn't bother waiting on, etc.. plus I managed to
-make it a bit worse recently with fenced un-pin of the vma for dealing
-with the case that userspace notices that, for userspace allocated
-iova, it can release the virtual address before the kernel has a
-chance to retire the submit) ;-)
+The driver only supports the firmware upload framework, is it? So if the
+framework ensures the alignment, the extra check is not a must for drivers.
 
-BR,
--R
+> 
+> >
+> >> +
+> >> +	if (!size || size > M10BMC_STAGING_SIZE)
+> >> +		return FW_UPLOAD_ERR_INVALID_SIZE;
+> >> +
+> >> +	ret = rsu_check_idle(sec);
+> >> +	if (ret != FW_UPLOAD_ERR_NONE)
+> >> +		return ret;
+> >> +
+> >> +	ret = rsu_update_init(sec);
+> >> +	if (ret != FW_UPLOAD_ERR_NONE)
+> >> +		return ret;
+> >> +
+> >> +	ret = rsu_prog_ready(sec);
+> >> +	if (ret != FW_UPLOAD_ERR_NONE)
+> >> +		return ret;
+> >> +
+> >> +	if (sec->cancel_request)
+> >> +		return rsu_cancel(sec);
+> >> +
+> >> +	return FW_UPLOAD_ERR_NONE;
+> >> +}
+> >> +
+> >> +#define WRITE_BLOCK_SIZE 0x4000	/* Default write-block size is 0x4000 bytes */
+> >> +
+> >> +static enum fw_upload_err m10bmc_sec_write(struct fw_upload *fwl, const u8 *data,
+> >> +					   u32 offset, u32 size, u32 *written)
+> >> +{
+> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
+> >> +	u32 blk_size, doorbell;
+> >> +	unsigned int stride;
+> >> +	u8 *blk_addr;
+> >> +	int ret;
+> >> +
+> >> +	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> >> +	if (sec->cancel_request)
+> >> +		return rsu_cancel(sec);
+> >> +
+> >> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
+> >> +	if (ret) {
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_HW_ERROR;
+> >> +	}
+> >> +
+> >> +	WARN_ON_ONCE(WRITE_BLOCK_SIZE % stride);
+> >> +	blk_size = min_t(u32, WRITE_BLOCK_SIZE, size);
+> >> +
+> >> +	/*
+> >> +	 * If the source data size does not align to stride, then create
+> >> +	 * a temporary buffer that is aligned, copy the data, and use the
+> >> +	 * temporary buffer as the source for the write.
+> >> +	 */
+> >> +	if (blk_size % stride) {
+> >> +		blk_addr = kzalloc(blk_size + blk_size % stride, GFP_KERNEL);
+> >> +		if (!blk_addr)
+> >> +			return FW_UPLOAD_ERR_RW_ERROR;
+> >> +		memcpy(blk_addr, data + offset, blk_size);
+> > You don't have to alloc and copy the whole block, just copy the last unaligned
+> > bytes to a local variable and regmap_write().
+> OK - I'll do that. And I'll look at doing something similar for a misaligned start.
 
-> Regards,
->
-> Tvrtko
+Please double confirm if the checking for misaligned start is necessary.
+
+Thanks,
+Yilun
+
+> 
+> Thanks,
+> - Russ
+> >
+> > Others are good to me.
+> >
+> > Thanks,
+> > Yilun
+> >
+> >> +	} else {
+> >> +		blk_addr = (u8 *)data + offset;
+> >> +	}
+> >> +
+> >> +	ret = regmap_bulk_write(sec->m10bmc->regmap,
+> >> +				M10BMC_STAGING_BASE + offset, blk_addr,
+> >> +				(blk_size + stride - 1) / stride);
+> >> +
+> >> +	if (blk_size % stride)
+> >> +		kfree(blk_addr);
+> >> +
+> >> +	if (ret)
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +
+> >> +	*written = blk_size;
+> >> +	return FW_UPLOAD_ERR_NONE;
+> >> +}
+> >> +
+> >> +static enum fw_upload_err m10bmc_sec_poll_complete(struct fw_upload *fwl)
+> >> +{
+> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
+> >> +	unsigned long poll_timeout;
+> >> +	u32 doorbell, result;
+> >> +	int ret;
+> >> +
+> >> +	if (sec->cancel_request)
+> >> +		return rsu_cancel(sec);
+> >> +
+> >> +	result = rsu_send_data(sec);
+> >> +	if (result != FW_UPLOAD_ERR_NONE)
+> >> +		return result;
+> >> +
+> >> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
+> >> +	do {
+> >> +		msleep(RSU_COMPLETE_INTERVAL_MS);
+> >> +		ret = rsu_check_complete(sec, &doorbell);
+> >> +	} while (ret == -EAGAIN && !time_after(jiffies, poll_timeout));
+> >> +
+> >> +	if (ret == -EAGAIN) {
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_TIMEOUT;
+> >> +	} else if (ret == -EIO) {
+> >> +		return FW_UPLOAD_ERR_RW_ERROR;
+> >> +	} else if (ret) {
+> >> +		log_error_regs(sec, doorbell);
+> >> +		return FW_UPLOAD_ERR_HW_ERROR;
+> >> +	}
+> >> +
+> >> +	return FW_UPLOAD_ERR_NONE;
+> >> +}
+> >> +
+> >> +/*
+> >> + * m10bmc_sec_cancel() may be called asynchronously with an on-going update.
+> >> + * All other functions are called sequentially in a single thread. To avoid
+> >> + * contention on register accesses, m10bmc_sec_cancel() must only update
+> >> + * the cancel_request flag. Other functions will check this flag and handle
+> >> + * the cancel request synchronously.
+> >> + */
+> >> +static void m10bmc_sec_cancel(struct fw_upload *fwl)
+> >> +{
+> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
+> >> +
+> >> +	sec->cancel_request = true;
+> >> +}
+> >> +
+> >> +static void m10bmc_sec_cleanup(struct fw_upload *fwl)
+> >> +{
+> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
+> >> +
+> >> +	(void)rsu_cancel(sec);
+> >> +}
+> >> +
+> >> +static const struct fw_upload_ops m10bmc_ops = {
+> >> +	.prepare = m10bmc_sec_prepare,
+> >> +	.write = m10bmc_sec_write,
+> >> +	.poll_complete = m10bmc_sec_poll_complete,
+> >> +	.cancel = m10bmc_sec_cancel,
+> >> +	.cleanup = m10bmc_sec_cleanup,
+> >> +};
+> >> +
+> >>  #define SEC_UPDATE_LEN_MAX 32
+> >>  static int m10bmc_sec_probe(struct platform_device *pdev)
+> >>  {
+> >> +	char buf[SEC_UPDATE_LEN_MAX];
+> >>  	struct m10bmc_sec *sec;
+> >> +	struct fw_upload *fwl;
+> >> +	unsigned int len;
+> >> +	int  ret;
+> >>  
+> >>  	sec = devm_kzalloc(&pdev->dev, sizeof(*sec), GFP_KERNEL);
+> >>  	if (!sec)
+> >> @@ -205,6 +581,38 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
+> >>  	sec->m10bmc = dev_get_drvdata(pdev->dev.parent);
+> >>  	dev_set_drvdata(&pdev->dev, sec);
+> >>  
+> >> +	ret = xa_alloc(&fw_upload_xa, &sec->fw_name_id, sec,
+> >> +		       xa_limit_32b, GFP_KERNEL);
+> >> +	if (ret)
+> >> +		return ret;
+> >> +
+> >> +	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
+> >> +			sec->fw_name_id);
+> >> +	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
+> >> +	if (!sec->fw_name)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	fwl = firmware_upload_register(THIS_MODULE, sec->dev, sec->fw_name,
+> >> +				       &m10bmc_ops, sec);
+> >> +	if (IS_ERR(fwl)) {
+> >> +		dev_err(sec->dev, "Firmware Upload driver failed to start\n");
+> >> +		kfree(sec->fw_name);
+> >> +		xa_erase(&fw_upload_xa, sec->fw_name_id);
+> >> +		return PTR_ERR(fwl);
+> >> +	}
+> >> +
+> >> +	sec->fwl = fwl;
+> >> +	return 0;
+> >> +}
+> >> +
+> >> +static int m10bmc_sec_remove(struct platform_device *pdev)
+> >> +{
+> >> +	struct m10bmc_sec *sec = dev_get_drvdata(&pdev->dev);
+> >> +
+> >> +	firmware_upload_unregister(sec->fwl);
+> >> +	kfree(sec->fw_name);
+> >> +	xa_erase(&fw_upload_xa, sec->fw_name_id);
+> >> +
+> >>  	return 0;
+> >>  }
+> >>  
+> >> @@ -218,6 +626,7 @@ MODULE_DEVICE_TABLE(platform, intel_m10bmc_sec_ids);
+> >>  
+> >>  static struct platform_driver intel_m10bmc_sec_driver = {
+> >>  	.probe = m10bmc_sec_probe,
+> >> +	.remove = m10bmc_sec_remove,
+> >>  	.driver = {
+> >>  		.name = "intel-m10bmc-sec-update",
+> >>  		.dev_groups = m10bmc_sec_attr_groups,
+> >> -- 
+> >> 2.25.1

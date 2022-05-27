@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FEB535945
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5008535948
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbiE0GYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 02:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S245276AbiE0G0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 02:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbiE0GYp (ORCPT
+        with ESMTP id S229462AbiE0G0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 02:24:45 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1DD25C4A;
-        Thu, 26 May 2022 23:24:43 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L8ZWH0xDwzjX6Q;
-        Fri, 27 May 2022 14:23:39 +0800 (CST)
+        Fri, 27 May 2022 02:26:18 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B8630576;
+        Thu, 26 May 2022 23:26:17 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L8ZXV2DPwz1JCRr;
+        Fri, 27 May 2022 14:24:42 +0800 (CST)
 Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 14:24:41 +0800
+ 15.1.2375.24; Fri, 27 May 2022 14:26:15 +0800
 Received: from localhost.localdomain (10.175.112.125) by
  dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 14:24:40 +0800
+ 15.1.2375.24; Fri, 27 May 2022 14:26:14 +0800
 From:   keliu <liuke94@huawei.com>
-To:     <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
-        <maciej.fijalkowski@intel.com>, <jonathan.lemon@gmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+To:     <viro@zeniv.linux.org.uk>, <linux-fsdevel@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] net: xdp: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 06:46:09 +0000
-Message-ID: <20220527064609.2358482-1-liuke94@huawei.com>
+Subject: [PATCH] fs: eventfd: Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 06:47:43 +0000
+Message-ID: <20220527064743.2358552-1-liuke94@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  dggpemm500018.china.huawei.com (7.185.36.111)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -60,40 +55,31 @@ ida_simple_get()/ida_simple_remove() .
 
 Signed-off-by: keliu <liuke94@huawei.com>
 ---
- net/xdp/xdp_umem.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/eventfd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index f01ef6bda390..869b9b9b9fad 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -57,7 +57,7 @@ static int xdp_umem_addr_map(struct xdp_umem *umem, struct page **pages,
- static void xdp_umem_release(struct xdp_umem *umem)
+diff --git a/fs/eventfd.c b/fs/eventfd.c
+index 3627dd7d25db..e17a2ea53da9 100644
+--- a/fs/eventfd.c
++++ b/fs/eventfd.c
+@@ -89,7 +89,7 @@ EXPORT_SYMBOL_GPL(eventfd_signal);
+ static void eventfd_free_ctx(struct eventfd_ctx *ctx)
  {
- 	umem->zc = false;
--	ida_simple_remove(&umem_ida, umem->id);
-+	ida_free(&umem_ida, umem->id);
+ 	if (ctx->id >= 0)
+-		ida_simple_remove(&eventfd_ida, ctx->id);
++		ida_free(&eventfd_ida, ctx->id);
+ 	kfree(ctx);
+ }
  
- 	xdp_umem_addr_unmap(umem);
- 	xdp_umem_unpin_pages(umem);
-@@ -242,7 +242,7 @@ struct xdp_umem *xdp_umem_create(struct xdp_umem_reg *mr)
- 	if (!umem)
- 		return ERR_PTR(-ENOMEM);
+@@ -423,7 +423,7 @@ static int do_eventfd(unsigned int count, int flags)
+ 	init_waitqueue_head(&ctx->wqh);
+ 	ctx->count = count;
+ 	ctx->flags = flags;
+-	ctx->id = ida_simple_get(&eventfd_ida, 0, 0, GFP_KERNEL);
++	ctx->id = ida_alloc(&eventfd_ida, GFP_KERNEL);
  
--	err = ida_simple_get(&umem_ida, 0, 0, GFP_KERNEL);
-+	err = ida_alloc(&umem_ida, GFP_KERNEL);
- 	if (err < 0) {
- 		kfree(umem);
- 		return ERR_PTR(err);
-@@ -251,7 +251,7 @@ struct xdp_umem *xdp_umem_create(struct xdp_umem_reg *mr)
- 
- 	err = xdp_umem_reg(umem, mr);
- 	if (err) {
--		ida_simple_remove(&umem_ida, umem->id);
-+		ida_free(&umem_ida, umem->id);
- 		kfree(umem);
- 		return ERR_PTR(err);
- 	}
+ 	flags &= EFD_SHARED_FCNTL_FLAGS;
+ 	flags |= O_RDWR;
 -- 
 2.25.1
 

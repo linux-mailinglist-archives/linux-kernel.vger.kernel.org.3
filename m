@@ -2,174 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3497053633F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741A5536342
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351730AbiE0NSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 09:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        id S1351832AbiE0NTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 09:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235848AbiE0NSt (ORCPT
+        with ESMTP id S1351813AbiE0NTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 09:18:49 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBD712B021
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:18:47 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id s20so4906664ljd.10
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=G/ubRkGNzoAnaLrfe1Abk/gSZHaSvaWBOlXMLf4fhxE=;
-        b=qxI8FKs5YCF+nPhIHGwtmf/do+40NJTWiL8jY/1r+JC2YHNwuQE7AtSmbt+TE07a2T
-         sJ965/d3i0pi4Zl8T0/U3qs3nBJvnqBwupMYttux8Rl95qjAJ6tVXXIuIYEsXt/RXDbl
-         DEhf4nwYkSWvQZpzX19ulHfbg9qo/ED182IQ0Lt1ht/XeOrTwyQe8B+DF49Hkk1sTDTl
-         cRtMfc6SP9vLZyA//JNCRt1HbKrcs0IUYXhDc9Zm1BxPlEAs4oph6ICD7p4G9fkL6a8m
-         2axKTamDztWIqrpzNYYLS4YA4amAl9y5lq6OsllD8nllpeiOhl3iul1vHqux1QBVAQbT
-         hk3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G/ubRkGNzoAnaLrfe1Abk/gSZHaSvaWBOlXMLf4fhxE=;
-        b=jR4nRHDLP1WX1QU5ZkbNIcBoCgUi0DKG+ALrE515kXN25ZMdcVvk350Yu26B1leX5d
-         60d4CLml4gOdUubQ0MJoZVZR70uwZWwXBPKGKOk+TrKx5hSRvBTiOM7JLhl79Snx/hx5
-         hDyu98Km8SHt6Dw8t82DdbCzvi5vKy08vFt2J99+IZ5JV+lTj9yxCCOiL9HJQ4V/vmlT
-         9QSSS0hs17WsfRbs2GjbTHlYF+9fBAe2Qb44UPLbKKOkVOmTIYn8MOZLH5UV/F2B3wpC
-         RxHQkTv6Qk4XAGo1hvvq0ZFa/bs495OqHqLnNl50MHjYnLuD6hBi+mtBO4g2I6Uo1cTY
-         4Dqw==
-X-Gm-Message-State: AOAM533M2o7yshiTA9XKrpKNZ8SkkZNHcrwTJPPp3xyc+1EHtMSZZlMi
-        /PzzBu+7zT0Vpk5yvTWiTvKKfhIFFthak0ixGqw5vg==
-X-Google-Smtp-Source: ABdhPJyf+s/RXaMaf+BP/TioY1XYgPBgIYeDNSNedKH4kFfoKeI1tZrESV1NaQJFutxHLoGI/LVolEYICOxhGhAMBio=
-X-Received: by 2002:a05:651c:1502:b0:253:ed7e:5778 with SMTP id
- e2-20020a05651c150200b00253ed7e5778mr14018377ljf.47.1653657525877; Fri, 27
- May 2022 06:18:45 -0700 (PDT)
+        Fri, 27 May 2022 09:19:03 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6024212E302;
+        Fri, 27 May 2022 06:19:01 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24RCOxSZ008191;
+        Fri, 27 May 2022 13:18:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : reply-to : subject : to : cc : references : from :
+ in-reply-to : content-type : content-transfer-encoding; s=pp1;
+ bh=f23C3xxBBfsLaAopGI9TJZOFDsNE3/fH4UusDvpSzzs=;
+ b=lwQeF+y1C5OywdUER8mFiyJXmXt0N1auPd0VjQyrBXRuyP9uDLX2Ec2SdWjsn8bQBpf4
+ 9xBf3gUK6rowzENwK5Vozuz7sEHvxh6wDZCzIWFn0zyb3GWEksOzqeJIRTp6eU8d5+02
+ JIwYqpDDv0whcF2ykC/TV7KNt8WUaWoz5tRpNwwc4K5FGUm9Dh3rmcTAPd6V6cV6lps1
+ OlvvDqVoyLzuXgyS7PjZYJLqWIB6lriqIeQsvJG5K95w9V+VvAI58i9q6yIVK3wJRTT1
+ poS3PanZYuH4ovmXr6T9bSGHF85TnGCkn3f0h7VNbsZTPx98a+PIqJVjmbz94CgOeuxv lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gaxm9s4gp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 May 2022 13:18:59 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24RCww5K022631;
+        Fri, 27 May 2022 13:18:58 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gaxm9s4ge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 May 2022 13:18:58 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24RDIPeE028572;
+        Fri, 27 May 2022 13:18:57 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma04dal.us.ibm.com with ESMTP id 3g93uugwdu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 May 2022 13:18:57 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24RDIuGO27066646
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 May 2022 13:18:56 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A455028066;
+        Fri, 27 May 2022 13:18:56 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4EEE32805C;
+        Fri, 27 May 2022 13:18:56 +0000 (GMT)
+Received: from [9.60.75.219] (unknown [9.60.75.219])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 27 May 2022 13:18:56 +0000 (GMT)
+Message-ID: <67f17a73-28e2-d458-a052-2782e16fe96d@linux.ibm.com>
+Date:   Fri, 27 May 2022 09:18:56 -0400
 MIME-Version: 1.0
-References: <20220525111756.GA15955@axis.com> <20220526010111.755166-1-davidgow@google.com>
- <e2339dcea553f9121f2d3aad29f7428c2060f25f.camel@sipsolutions.net>
- <CACT4Y+ZVrx9VudKV5enB0=iMCBCEVzhCAu_pmxBcygBZP_yxfg@mail.gmail.com> <6fa1ebe49b8d574fb1c82aefeeb54439d9c98750.camel@sipsolutions.net>
-In-Reply-To: <6fa1ebe49b8d574fb1c82aefeeb54439d9c98750.camel@sipsolutions.net>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 27 May 2022 15:18:34 +0200
-Message-ID: <CACT4Y+bhBMDn80u=W8VBbn4uZg1oD8zsE3RJJC-YJRS2i8Q2oA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3] UML: add support for KASAN under x86_64
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     David Gow <davidgow@google.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Patricia Alfonso <trishalfonso@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        anton.ivanov@cambridgegreys.com,
-        Brendan Higgins <brendanhiggins@google.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Reply-To: jjherne@linux.ibm.com
+Subject: Re: [PATCH v19 10/20] s390/vfio-ap: prepare for dynamic update of
+ guest's APCB on assign/unassign
+Content-Language: en-US
+To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
+        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, kwankhede@nvidia.com,
+        fiuczy@linux.ibm.com
+References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
+ <20220404221039.1272245-11-akrowiak@linux.ibm.com>
+From:   "Jason J. Herne" <jjherne@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <20220404221039.1272245-11-akrowiak@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: genKKtD4RdXLDKXaqDDuq7ISobzM4MVG
+X-Proofpoint-ORIG-GUID: l5PCuPKg7uSX2EpDaUQlvYLJCf2QgPBQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-27_03,2022-05-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
+ suspectscore=0 mlxscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205270063
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 at 15:15, Johannes Berg <johannes@sipsolutions.net> wrote:
->
-> On Fri, 2022-05-27 at 15:09 +0200, Dmitry Vyukov wrote:
-> > > I did note (this is more for kasan-dev@) that the "freed by" is fairly
-> > > much useless when using kfree_rcu(), it might be worthwhile to annotate
-> > > that somehow, so the stack trace is recorded by kfree_rcu() already,
-> > > rather than just showing the RCU callback used for that.
-> >
-> > KASAN is doing it for several years now, see e.g.:
-> > https://groups.google.com/g/syzkaller-bugs/c/eTW9zom4O2o/m/_v7cOo2RFwAJ
-> >
->
-> Hm. It didn't for me:
+On 4/4/22 18:10, Tony Krowiak wrote:
+> The functions backing the matrix mdev's sysfs attribute interfaces to
+> assign/unassign adapters, domains and control domains must take and
+> release the locks required to perform a dynamic update of a guest's APCB
+> in the proper order.
+> 
+> The proper order for taking the locks is:
+> 
+> matrix_dev->guests_lock => kvm->lock => matrix_dev->mdevs_lock
+> 
+> The proper order for releasing the locks is:
+> 
+> matrix_dev->mdevs_lock => kvm->lock => matrix_dev->guests_lock
+> 
+> Two new macros are introduced for this purpose: One to take the locks and
+> the other to release the locks. These macros will be used by the
+> assignment/unassignment functions to prepare for dynamic update of
+> the KVM guest's APCB.
+> 
+> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
+> ---
+>   drivers/s390/crypto/vfio_ap_ops.c | 69 +++++++++++++++++++++++++------
+>   1 file changed, 57 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
+> index 757bbf449b04..2219b1069ceb 100644
+> --- a/drivers/s390/crypto/vfio_ap_ops.c
+> +++ b/drivers/s390/crypto/vfio_ap_ops.c
+> @@ -71,6 +71,51 @@ static const struct vfio_device_ops vfio_ap_matrix_dev_ops;
+>   	mutex_unlock(&matrix_dev->guests_lock);	\
+>   })
+>   
+> +/**
+> + * get_update_locks_for_mdev: Acquire the locks required to dynamically update a
+> + *			      KVM guest's APCB in the proper order.
+> + *
+> + * @matrix_mdev: a pointer to a struct ap_matrix_mdev object containing the AP
+> + *		 configuration data to use to update a KVM guest's APCB.
+> + *
+> + * The proper locking order is:
+> + * 1. matrix_dev->guests_lock: required to use the KVM pointer to update a KVM
+> + *			       guest's APCB.
+> + * 2. matrix_mdev->kvm->lock:  required to update a guest's APCB
+> + * 3. matrix_dev->mdevs_lock:  required to access data stored in a matrix_mdev
+> + *
+> + * Note: If @matrix_mdev is NULL or is not attached to a KVM guest, the KVM
+> + *	 lock will not be taken.
+> + */
 
-Please post a full report with line numbers and kernel version.
+Perhaps the locking order should be documented once at the top of all of the locking
+functions instead of in each comment. The current method seems needlessly verbose.
 
-> > BUG: KASAN: use-after-free in ieee80211_vif_use_reserved_context+0x32d/0x40f [mac80211]
-> > Read of size 4 at addr 0000000065c73340 by task kworker/u2:1/17
->
-> Yes.
->
-> > CPU: 0 PID: 17 Comm: kworker/u2:1 Tainted: G           O      5.18.0-rc1 #5
-> > Workqueue: phy0 ieee80211_chswitch_work [mac80211]
-> > Stack:
-> >  60ba783f 00000000 10000c268f4e 60ba783f
-> >  60e60847 70dc9928 719f6e99 00000000
-> >  71883b20 60bb0b42 60bb0b19 65c73340
-> > Call Trace:
-> >  [<600447ea>] show_stack+0x13e/0x14d
-> >  [<60bb0b42>] dump_stack_lvl+0x29/0x2e
-> >  [<602ef7c0>] print_report+0x15d/0x60b
-> >  [<602efdc0>] kasan_report+0x98/0xbd
-> >  [<602f0cc2>] __asan_report_load4_noabort+0x1b/0x1d
-> >  [<719f6e99>] ieee80211_vif_use_reserved_context+0x32d/0x40f [mac80211]
->
-> This is the user, it just got freed during a function call a few lines
-> up.
->
-> > Allocated by task 16:
-> >  save_stack_trace+0x2e/0x30
-> >  stack_trace_save+0x81/0x9b
-> >  kasan_save_stack+0x2d/0x54
-> >  kasan_set_track+0x34/0x3e
-> >  ____kasan_kmalloc+0x8d/0x99
-> >  __kasan_kmalloc+0x10/0x12
-> >  __kmalloc+0x1f6/0x20b
-> >  ieee80211_alloc_chanctx+0xdc/0x35f [mac80211]
->
-> This makes sense too.
->
-> > Freed by task 8:
-> >  save_stack_trace+0x2e/0x30
-> >  stack_trace_save+0x81/0x9b
-> >  kasan_save_stack+0x2d/0x54
-> >  kasan_set_track+0x34/0x3e
-> >  kasan_set_free_info+0x33/0x44
-> >  ____kasan_slab_free+0x12b/0x149
-> >  __kasan_slab_free+0x19/0x1b
-> >  slab_free_freelist_hook+0x10b/0x16a
-> >  kfree+0x10d/0x1fa
-> >  kvfree+0x38/0x3a
-> >  rcu_process_callbacks+0x2c5/0x349
->
-> This is the RCU callback.
->
-> > Last potentially related work creation:
-> >  save_stack_trace+0x2e/0x30
-> >  stack_trace_save+0x81/0x9b
-> >  kasan_save_stack+0x2d/0x54
-> >  __kasan_record_aux_stack+0xd5/0xe2
-> >  kasan_record_aux_stack_noalloc+0x12/0x14
-> >  insert_work+0x50/0xd7
-> >  __queue_work+0x805/0x95c
-> >  queue_work_on+0xba/0x131
-> >  call_usermodehelper_exec+0x242/0x361
-> >  kobject_uevent_env+0xe46/0xeaf
-> >  kobject_uevent+0x12/0x14
-> >  driver_register+0x37e/0x38d
-> >  pcie_port_service_register+0x19d/0x1a5
->
-> This stuff is completely unrelated.
->
-> > The buggy address belongs to the object at 0000000065c73300
-> >  which belongs to the cache kmalloc-192 of size 192
-> > The buggy address is located 64 bytes inside of
-> >  192-byte region [0000000065c73300, 0000000065c733c0)
-> >
->
-> and that's it?
->
-> johannes
->
-> --
-> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/6fa1ebe49b8d574fb1c82aefeeb54439d9c98750.camel%40sipsolutions.net.
+> +#define get_update_locks_for_mdev(matrix_mdev) ({	\
+> +	mutex_lock(&matrix_dev->guests_lock);		\
+> +	if (matrix_mdev && matrix_mdev->kvm)		\
+> +		mutex_lock(&matrix_mdev->kvm->lock);	\
+> +	mutex_lock(&matrix_dev->mdevs_lock);		\
+> +})
+
+It does not make sense to reference matrix_dev on the first line of this macro and
+then check it for a null value on the next line. If it can be null then the check
+needs to come before the usage. If it cannot be null, then we can remove the check.
+Same comment for the release macro.
+
+> +/**
+> + * release_update_locks_for_mdev: Release the locks used to dynamically update a
+> + *				  KVM guest's APCB in the proper order.
+> + *
+> + * @matrix_mdev: a pointer to a struct ap_matrix_mdev object containing the AP
+> + *		 configuration data to use to update a KVM guest's APCB.
+> + *
+> + * The proper unlocking order is:
+> + * 1. matrix_dev->mdevs_lock
+> + * 2. matrix_mdev->kvm->lock
+> + * 3. matrix_dev->guests_lock
+> + *
+> + * Note: If @matrix_mdev is NULL or is not attached to a KVM guest, the KVM
+> + *	 lock will not be released.
+> + */
+> +#define release_update_locks_for_mdev(matrix_mdev) ({	\
+> +	mutex_unlock(&matrix_dev->mdevs_lock);		\
+> +	if (matrix_mdev && matrix_mdev->kvm)		\
+> +		mutex_unlock(&matrix_mdev->kvm->lock);		\
+> +	mutex_unlock(&matrix_dev->guests_lock);		\
+> +})
+> +
+-- 
+-- Jason J. Herne (jjherne@linux.ibm.com)

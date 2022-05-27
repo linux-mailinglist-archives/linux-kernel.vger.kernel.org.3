@@ -2,213 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1421535791
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B52535793
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbiE0C15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
+        id S235244AbiE0C36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiE0C1y (ORCPT
+        with ESMTP id S230160AbiE0C3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:27:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8269CE52A9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653618473; x=1685154473;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Yp2/XqJRwjTQ9JGo6EQdjU2/rA9oMw9X3T9CsPhkoRs=;
-  b=ijE3a8pVk+Tn/4mydk4GnWEZwe1ZNlXH0lXfCdaDEbPbdljGLwmx6JnY
-   nwQImEwfhyjLWcrpoHh5+y3V7a/CXUmk1Uz72faWuENVsed/Lw9j+dUuK
-   mfJPnK826qIE3/u49a8jYJ3E3Ao42lxGdGjpwQ5z/SWb1sspkG0NIruLG
-   FFnbq6ngahl48KfsgcS+iM8p2szj7QPuMYXENxuBtCMIkrq/8AdI3ZzUX
-   BGaeAFul+L/9GbRVcwFeRq04ysUBjDPL6iw3PQHT7EViRNgAUPfHn3YBa
-   yW/uDGtGMkQq1ll99nyC3AYN0QD6loLu2o43e9sKxBBpfPhiJXDQFJWNx
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="335003411"
-X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="335003411"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 19:27:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="704896264"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 May 2022 19:27:51 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuPhe-0004Kk-9o;
-        Fri, 27 May 2022 02:27:50 +0000
-Date:   Fri, 27 May 2022 10:27:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Yang Weijiang <weijiang.yang@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [rppt:cet/kvm 38/51] arch/x86/kvm/x86.c:6587:3: warning: unannotated
- fall-through between switch labels
-Message-ID: <202205271026.o40Lr8iX-lkp@intel.com>
+        Thu, 26 May 2022 22:29:55 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2042.outbound.protection.outlook.com [40.107.236.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEDBE52BF;
+        Thu, 26 May 2022 19:29:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nd2We91IiAutqXa7W9m2kX4LjFiHuLrqD03WVN4m8ei+wrWHZMrbkgXGxqieDPrprCRif6NI+5xDS5TZSBpqt/zTzRGjSL4n6KfItRhumRG1IYi0SfAVxLltI3+iHmoFilQsDkAG92itIrBvbwBdjD1Gsx6EHOUdfXb3G68SdcYg25ZOoG6xHpZl0c0vo8ONBNoRt7fgXYM+9V9zZAs53ChbskOnpmbf19EcvX4MXn4TrxZaGoTLA5wOrHEuWX8fMn4XdEumS2Q69ofRQT50IVLA8k4y2AnsAgBEuOQeN62CYXIQSR+/Ze2smILHy3MWzrk39KYOBu0TqAA9V7w8rQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=taAb844CzXAnwMVxiU0CCJXxpTisqGHhA+O/iSabAZk=;
+ b=X71MziBWqkZfV0uVlZqGoK3n4KoduAYKpD1KV5KgNXc8eFrBt6QwPmpWN1a/FJ2IL1o7WajzjF1Jski7GDQ4gOZQFYBZg8CWB7SiTUv6wGvLJ9encn1Qg3ej5xwAA08fT7KhL2Xw2WU8DJzQi4y2YRF+faMI+8dhggo6oPzO2VVihSgHVCW5vmtjZUEScfqLs9bzp9V3uzZndtVo2+LKHHbeF6xXhVQxe7b8c6+g+8m9wb8r305bXHmHVPMt+zFSRnrrXS+D3KavhX6Lv673sVCab0ald0+VLb8j6reDm9cMDTQUKHEDiqE2qgCRWJe0ebZ9Ig7w1flXqqVMuKS5Aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=taAb844CzXAnwMVxiU0CCJXxpTisqGHhA+O/iSabAZk=;
+ b=y9bG4Q/toOUH0R5xzg09ecyFEzP0DYN0ou79/PDTogj4EbWs4r4GeIElWOE6knaUAxPRlMiA89YshYB3QbaDVUKI0Yp2Pc75U02Km8caoN6Q4XRTDikfgaDUBdmCZxX7tO4KkZaZI+xjUuPl1TiIFX02PUb5uWDq1LBz/8djTGY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by BN9PR12MB5082.namprd12.prod.outlook.com (2603:10b6:408:133::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Fri, 27 May
+ 2022 02:29:51 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::5044:b3eb:8442:fe92]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::5044:b3eb:8442:fe92%7]) with mapi id 15.20.5273.023; Fri, 27 May 2022
+ 02:29:51 +0000
+Message-ID: <de389d34-22c1-5c62-d6c2-bfb256924a97@amd.com>
+Date:   Fri, 27 May 2022 07:59:32 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v4 3/5] perf/x86/ibs: Add new IBS register bits into
+ header
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>, peterz@infradead.org
+Cc:     irogers@google.com, rrichter@amd.com, mingo@redhat.com,
+        mark.rutland@arm.com, jolsa@kernel.org, namhyung@kernel.org,
+        tglx@linutronix.de, bp@alien8.de, james.clark@arm.com,
+        leo.yan@linaro.org, kan.liang@linux.intel.com, ak@linux.intel.com,
+        eranian@google.com, like.xu.linux@gmail.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20220523033945.1612-1-ravi.bangoria@amd.com>
+ <20220523033945.1612-4-ravi.bangoria@amd.com> <Yo+hbx9c/9FoaiJN@kernel.org>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <Yo+hbx9c/9FoaiJN@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0164.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:de::6) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2be73a95-c592-400c-5974-08da3f88c6da
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5082:EE_
+X-Microsoft-Antispam-PRVS: <BN9PR12MB508267AD50762C9AACE7C89AE0D89@BN9PR12MB5082.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kd1+Pemut+Mg4scaYE4L7xrqhFNQluY1UfhoOTgkWFRpascwuMqSTLZxzH3dzujxjvCyIl2iqh8Fjav66FJ1WybUeLyP05m4RN9RKxV3H+nR4rwFiO+25jqGEDbQM6wyAD5HmD/Os144zf1jo+MrJ17mit4X2a2vHvr7YodKQSKDsqRLhdQ0a5e4QwYPFC5eLHe3834WEIhb31PfbgXCqH598QDaorCe8mmGc7YAmZaZSxJYZys3zvhl/6f0YcYH+QY+eeBSuKvypSjXKZnIZtVol09ojSXaKkFrgBJMpnacyNIShmeprfkwjF/iaNONH0Znf4aFsL0R63bsEdhPh9h5T7PS2KVi5EYm+E22EBYIh7GlrgRvdj0wiSDdbTNyOPONxXIlTgPQMwPLnHKVNGGNpHwf6XxcaC/fu3yw88+Se0xDa0K6HqQseN7wzrJPE6Jcz7xCk3giSZN0hQpQtObv3evQwdxqYKusOvbBl2Nb3wI7Dx3zqNEmSk4P0ZaScBGanzGmRtgJaz9g5waD6PEHPmQvY5WZX/dgECeZYkVVwUpcyc6ZaB5fwG8cN2buqNzauOPc3CLCrGvMvdkVSQ2A/HYqAQfso9b2RadNLcNNBFgIkgEX0lr7v5OLPpw04bMn+LiPpm8AFn9DH2Ym+5ls+FotbJzSFa9dFpmreMjk36rCdPOFeCTfJ3i4wVA7ILNsRreyi3ejKk2LqRoPqrCvwpuYFAfC1oaBSI87dLQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(66946007)(36756003)(6486002)(38100700002)(7416002)(2616005)(31686004)(316002)(186003)(6512007)(4744005)(86362001)(4326008)(66476007)(8676002)(44832011)(66556008)(508600001)(6666004)(53546011)(8936002)(26005)(6506007)(2906002)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Wkl1RjhlUmZrampEaUt6TksvNC9BbFhTVWo3MjM3dmg4RTJRQ0E5aFhCTTNO?=
+ =?utf-8?B?U3FjZTMzUHpDbEFJWTEwWDlOYWtGVGxVbFZnbXlHeFhWcStXYmh3Tkl4a0l3?=
+ =?utf-8?B?dmpKZjJDSExNeDBZUUxEejAydjlLZDVrSlU3b2FXcytJWThwQUhMT3RxbnBS?=
+ =?utf-8?B?U3pkcTgxMFZDUHBDVHFzQlJOd0VVcnByTGN1TjF5ZXljcmpQR1BSRk9HZzU1?=
+ =?utf-8?B?MlVIbW4wUG0yc2puMmhsS3VmRVMzN0s1Znk2MXlXcTdOYlhqU3JoaXEvbi84?=
+ =?utf-8?B?L0pkUVY3OFRNWkJpQmlXM2xLSzhDc294SHlzc0NpNVd0R0hieGptSVI5bCtt?=
+ =?utf-8?B?U2JpWjNObUtPZnNsR3oyUWdaUUd6TlF0TnUvR283dDg1Mk9QZTF4aG8vZm5s?=
+ =?utf-8?B?dGNNY2VzYmFFaHFoQUlwVVJSVEMyOXJMa1hmNHJrVDBjMXh4U1laT3B5Z3BG?=
+ =?utf-8?B?djArLzQxMU01KzFkUENqNWNTUk1sVG91UVJBa1FjY3BLQTRPOWtxdzdLN29H?=
+ =?utf-8?B?d2NIcVk5b3JIcmxpMUpmTlpLUGo5WTZJMzJNbzVQWkJVd1BwUUZOTzA3N3g0?=
+ =?utf-8?B?RDNBRUFJS3V1SEhzMUZJbmI2ckpxYVNFYlA2bExPajdqcVBEZGM3a2ZMeVd6?=
+ =?utf-8?B?T1duRDYxWE15N1FUd3dTbG91MGVIdmg3NnNDTVJ0aEEySnFHbmNkQ2EyT2JE?=
+ =?utf-8?B?c0RzRVdkTGZ0T05JeTlKeXpQTlROVzRRZGVXUXhJSCsyRVkzakdCeEphUCtF?=
+ =?utf-8?B?NGZTcGJtZyt5TStSQ3ZMRVV6SDd1T3ozK0hNdlovK1BwRTZ4OHlUYzZHc0U4?=
+ =?utf-8?B?WGdDQjlwWWR2QmlYK0c2REF5YnkyVG9ZR0ZCdFh0UWVRNVpqa3R6YjlySElP?=
+ =?utf-8?B?NnBNRzZpeldEZDU5RytrUDJsZmEvSWY1L0J1WmxXdEtiQ1lieS9xUjBISkZh?=
+ =?utf-8?B?RlVIQjJuUE4wcGpwMlVyaG9WSU0vaVFFZmdTL0lydU1yRkFXT2gxWXBCY2tY?=
+ =?utf-8?B?Y0RmUHRXbS9ZOEZjbkh5djIrdXNwaVVNN2dLa1R4SllhdURKaytsK1NUTldT?=
+ =?utf-8?B?M09OT0E2ejlLNytGM2RVN0lNdnYzaWRrMHgzSXcwQ2w1S09wNXduTUh1RCth?=
+ =?utf-8?B?Tk1hQ0kzdGJsRC9ETlBzU0ZSUDJFVXNGQUZNVFVsbFlxN2MwS3Qvc3JrbXJl?=
+ =?utf-8?B?K1RJQnd5dWN5NytmNXVQZzROa2o3UUttMkxzcTVKN0VJemptajhCTWtNeStQ?=
+ =?utf-8?B?V0U2UUNaMklZanZIMEh3dzlybEgwMFYwK0pJUm1hVDdwM21OZ1JkbE4rQ0xH?=
+ =?utf-8?B?bnRGVmFIMmx1bU1jS1pOTExnVkhYSmFad0xnUzJMb3ZUSGc5YWxwazdUTDlO?=
+ =?utf-8?B?K1llWnFqaE1NT0s4T0NaYjhpcWVJclV1dHNGTGI3alhnWG0vYzIrRm44bnE5?=
+ =?utf-8?B?Q2czNGJzTkd1dmhreUdGTWNYQ01xWDNpbENuVnVsK3BuRlAwcEJuUDh4ZHhP?=
+ =?utf-8?B?THB6WGVNOURuV3Q2ellwbWg3NFBwd05iRWNQRGxrejF0MVVyY3ozK0tjN3Rt?=
+ =?utf-8?B?TkdpWWNkaXVCdW5LUkdUOCtSMDE3aU9oQ2YzZmFRdlBMQTd1dWJBbUFmdmJu?=
+ =?utf-8?B?RUlBdWhOcVJDZ3NhaEdIUHBTQUNjNVNiTVFqYzd0a3UwOXk0S3loUUxWUkpr?=
+ =?utf-8?B?eDZRanVVay8xY1MzZHQ2ZERsOXYxbzBSUC9mTWRLSUp6alZxdnBWSFFQTFU5?=
+ =?utf-8?B?aUFPOGNGbFJsRTdUQ0psa05hYk14b1FTVjBuMHFxc3QvY3pTWEptUTVaYUt2?=
+ =?utf-8?B?djlvNlRLd2J2UnRJVGtOR1pOYXhhZkVpNHdvS0lkRVc3SUVXeTNBYXhGaElF?=
+ =?utf-8?B?RWxHbkpFbGNVbGNzVU9vMVFiekdxc1ljVHdRbU5IMk9KRnNyZ0NMVXNuTHdO?=
+ =?utf-8?B?dGY1MGp4VVpVT29HTUpDMzVMVFZZMmF1SlRySEs2TFp2MnZDV05OOTdqNllR?=
+ =?utf-8?B?Z2ZlV050NDg5OEU4QmZ0TDZ6ejB0ZjhNSWxMU1Nyd2p6YmFwVzBKYzFINEU4?=
+ =?utf-8?B?MWd3ZEhxcVhtYlZ0UkEwVnpRUEFQWllsM3JhT1Y1b1h0bUY0MU1mODJuODIz?=
+ =?utf-8?B?WlFpNnRoS3BGVXB2T3gzblRBc0NKVnpPVlFyUHdMZm1IQzZJNXVDZTBCQnBL?=
+ =?utf-8?B?Y3Q2K215OEtqQkZiWkN2Ylp3VVYvZDVKQmNtRXJkNzVvUzRJZVlPOTBYdmFF?=
+ =?utf-8?B?cmFCRnJtbCtzbytLV3QvRWwxNmlzOFNzVmdpaUYzbm1RK0RNc1d3Y3RVNUxN?=
+ =?utf-8?B?ODh6TW5pZVlpQ1BDZXVyRDNlbEsvUFBvSVYvN1VmWXk0UTcxRjVFdz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2be73a95-c592-400c-5974-08da3f88c6da
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2022 02:29:51.4240
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c3Ql9zyRZzw1Nz9QuXGBIiL4sXONBT02RXnSkWpc4iti5KnARSt7BFzeJsE8rpr95w0J6uJfhiO/7cmYohm76A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5082
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Hi Arnaldo,
 
-FYI, the error/warning still remains.
+On 26-May-22 9:19 PM, Arnaldo Carvalho de Melo wrote:
+> Em Mon, May 23, 2022 at 09:09:43AM +0530, Ravi Bangoria escreveu:
+>> IBS support has been enhanced with two new features in upcoming uarch:
+>> 1. DataSrc extension and 2. L3 miss filtering. Additional set of bits
+>> has been introduced in IBS registers to exploit these features. Define
+>> these new bits into arch/x86/ header.
+> 
+> You mentioned the kernel bits were already applied and this was a tools
+> only series, this one slipped into :-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git cet/kvm
-head:   6c13d37e6c4ff3a7f86c5490b3d0f4f12d0a40da
-commit: 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7 [38/51] KVM: x86: Report XSS as an MSR to be saved if there are supported features
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220527/202205271026.o40Lr8iX-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
-        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
-        git fetch --no-tags rppt cet/kvm
-        git checkout 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+Right. V1 had a single patch containing both kernel and tools file changes
+and thus Peter might not have applied it. How should we pursues it?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/x86.c:6587:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-                   case MSR_IA32_XSS:
-                   ^
-   arch/x86/kvm/x86.c:6587:3: note: insert '__attribute__((fallthrough));' to silence this warning
-                   case MSR_IA32_XSS:
-                   ^
-                   __attribute__((fallthrough)); 
-   arch/x86/kvm/x86.c:6587:3: note: insert 'break;' to avoid fall-through
-                   case MSR_IA32_XSS:
-                   ^
-                   break; 
-   1 warning generated.
-
-
-vim +6587 arch/x86/kvm/x86.c
-
-  6513	
-  6514	static void kvm_init_msr_list(void)
-  6515	{
-  6516		struct x86_pmu_capability x86_pmu;
-  6517		u32 dummy[2];
-  6518		unsigned i;
-  6519	
-  6520		BUILD_BUG_ON_MSG(INTEL_PMC_MAX_FIXED != 4,
-  6521				 "Please update the fixed PMCs in msrs_to_saved_all[]");
-  6522	
-  6523		perf_get_x86_pmu_capability(&x86_pmu);
-  6524	
-  6525		num_msrs_to_save = 0;
-  6526		num_emulated_msrs = 0;
-  6527		num_msr_based_features = 0;
-  6528	
-  6529		for (i = 0; i < ARRAY_SIZE(msrs_to_save_all); i++) {
-  6530			if (rdmsr_safe(msrs_to_save_all[i], &dummy[0], &dummy[1]) < 0)
-  6531				continue;
-  6532	
-  6533			/*
-  6534			 * Even MSRs that are valid in the host may not be exposed
-  6535			 * to the guests in some cases.
-  6536			 */
-  6537			switch (msrs_to_save_all[i]) {
-  6538			case MSR_IA32_BNDCFGS:
-  6539				if (!kvm_mpx_supported())
-  6540					continue;
-  6541				break;
-  6542			case MSR_TSC_AUX:
-  6543				if (!kvm_cpu_cap_has(X86_FEATURE_RDTSCP) &&
-  6544				    !kvm_cpu_cap_has(X86_FEATURE_RDPID))
-  6545					continue;
-  6546				break;
-  6547			case MSR_IA32_UMWAIT_CONTROL:
-  6548				if (!kvm_cpu_cap_has(X86_FEATURE_WAITPKG))
-  6549					continue;
-  6550				break;
-  6551			case MSR_IA32_RTIT_CTL:
-  6552			case MSR_IA32_RTIT_STATUS:
-  6553				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT))
-  6554					continue;
-  6555				break;
-  6556			case MSR_IA32_RTIT_CR3_MATCH:
-  6557				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-  6558				    !intel_pt_validate_hw_cap(PT_CAP_cr3_filtering))
-  6559					continue;
-  6560				break;
-  6561			case MSR_IA32_RTIT_OUTPUT_BASE:
-  6562			case MSR_IA32_RTIT_OUTPUT_MASK:
-  6563				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-  6564					(!intel_pt_validate_hw_cap(PT_CAP_topa_output) &&
-  6565					 !intel_pt_validate_hw_cap(PT_CAP_single_range_output)))
-  6566					continue;
-  6567				break;
-  6568			case MSR_IA32_RTIT_ADDR0_A ... MSR_IA32_RTIT_ADDR3_B:
-  6569				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
-  6570					msrs_to_save_all[i] - MSR_IA32_RTIT_ADDR0_A >=
-  6571					intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
-  6572					continue;
-  6573				break;
-  6574			case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 17:
-  6575				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
-  6576				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
-  6577					continue;
-  6578				break;
-  6579			case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 17:
-  6580				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
-  6581				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
-  6582					continue;
-  6583				break;
-  6584			case MSR_IA32_XFD:
-  6585			case MSR_IA32_XFD_ERR:
-  6586				if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
-> 6587			case MSR_IA32_XSS:
-  6588				if (!supported_xss)
-  6589					continue;
-  6590				break;
-  6591			default:
-  6592				break;
-  6593			}
-  6594	
-  6595			msrs_to_save[num_msrs_to_save++] = msrs_to_save_all[i];
-  6596		}
-  6597	
-  6598		for (i = 0; i < ARRAY_SIZE(emulated_msrs_all); i++) {
-  6599			if (!static_call(kvm_x86_has_emulated_msr)(NULL, emulated_msrs_all[i]))
-  6600				continue;
-  6601	
-  6602			emulated_msrs[num_emulated_msrs++] = emulated_msrs_all[i];
-  6603		}
-  6604	
-  6605		for (i = 0; i < ARRAY_SIZE(msr_based_features_all); i++) {
-  6606			struct kvm_msr_entry msr;
-  6607	
-  6608			msr.index = msr_based_features_all[i];
-  6609			if (kvm_get_msr_feature(&msr))
-  6610				continue;
-  6611	
-  6612			msr_based_features[num_msr_based_features++] = msr_based_features_all[i];
-  6613		}
-  6614	}
-  6615	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Ravi

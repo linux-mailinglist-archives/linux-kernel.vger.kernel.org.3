@@ -2,310 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAF05365A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E97495365AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353744AbiE0QEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 12:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
+        id S239749AbiE0QGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 12:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345710AbiE0QEE (ORCPT
+        with ESMTP id S1354408AbiE0QFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 12:04:04 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AA211C1B
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:04:02 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id o9so2905862wmd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:04:02 -0700 (PDT)
+        Fri, 27 May 2022 12:05:44 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9645149158;
+        Fri, 27 May 2022 09:05:42 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id i74so5093274ioa.4;
+        Fri, 27 May 2022 09:05:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cBiP6vW4sF/6LQTBgA+dMGRC5zva8gp7vJCCVGRKZkY=;
-        b=PIYjMgdNxRIA2Tuw3Y4gmhqlMeQ0ch8rdEcM/OJfoIEI6Kw/AVbIskGP0tANoqCdOb
-         de3epEKpSYBsAIIbdPdmrL9eP4L5UhC0jFgG/FLz+GLQ0g6a3WT1b1ckisa5dL5Xnpog
-         wFu+YgH2KYGliMVtuBT/2eePV7siWGrfLkDEv7KwOIkMZJ+7wURHITCUCXKfJgHSPJcF
-         1aCWXfxlNmG7DVmUMOQjpEa/uMXK31f52Is0Nmgs3z+5p0Er8Q5dnhSJi7xiKjg4hStY
-         CKSbi1TPZxE5c6F57pQXE1LfsGOF7Yw4QyBSEjnBOq3NqppchUnAux++XQIaW8fMKVBN
-         kJfA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=niIMDzYnGPpPHioLH5FDnM74wPJ4Xv2r6klFhTL9flU=;
+        b=ZGUQEW/meK1edqcD7auFoYHUD7PR6PMF0mSeIaw2fPQ4mv1gEk9d0Y0Q1Lc9MN8kw5
+         vVM0G1AA2gD8T+lA1ubEGan7u54CdGwGUh5eTkByF3fFg/feU9l7CLTKzt55RqHylkhQ
+         7h/29Y9XkjU0TCFCT2JfwH6XkZAhaNDlS1EZzyoRANz0coifKiOR/FQRyzL7NHGv67QP
+         FP8lhXZoSUyOJKnbH+abd7Sz6EjQHIDP3LW+OmPrkYs4KdGN4Emhawu++9fZ2KpqQrOJ
+         5sRmWdTKYxJmxEZ/uy+uOOhKGzVEguLzbOBaT2It8ZSnIKSEF5AB/j992lUkXPqZORkC
+         s5nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cBiP6vW4sF/6LQTBgA+dMGRC5zva8gp7vJCCVGRKZkY=;
-        b=p8lGXWjEfNlRvb0c8rdTcGAiQXCDQmiGcnzWMZcJouaoZk/+qkjZPyYl8RWZBy9Jf+
-         zPIeET+slLCt/wGOwCx+02/6HA6oril6GvCgtbGLUoQ66A3HnxrD30aB4Lc7UDWzMgqL
-         nQu/eQdf9POg7r/PhvuOJBTpa0rvqbDQQKfMGps17Mfyow+7fmLT0Bi+Qbk9QRG4IcJ1
-         sRWEfYamaJQXbLwQUCkXtf1/06wHmctYI150WCX9+fF6k3Y+mRhKXiT2/hqSladteoVh
-         5fVjRetgz7U235kKBZQUtW2caDuuppdpPssg3VfjWRp8gjC8v1s6a5aCJVLBH7Lfxfu0
-         Aekw==
-X-Gm-Message-State: AOAM530EG8mX9PmFpP/BrM7+xlWRGSZwlyb02YwhrxYFx1zFz5//vTnT
-        gd5uLU7yy3+grsnCWsbwO/OK1JwU6Y/+tDlLutPdYg==
-X-Google-Smtp-Source: ABdhPJwEum2+MBzphrcqGv6VA7uucC1mioqzsX+CjRL4+M/OSmP3Dd1iYs0J2lhNtitCSrdygtODmIXNlazfymK1H08=
-X-Received: by 2002:a1c:a301:0:b0:392:9bc5:203c with SMTP id
- m1-20020a1ca301000000b003929bc5203cmr7618104wme.67.1653667440924; Fri, 27 May
- 2022 09:04:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=niIMDzYnGPpPHioLH5FDnM74wPJ4Xv2r6klFhTL9flU=;
+        b=gBFdRZSTn2R21wA52UM09m7m8lIMl2buQMNhE88fNxhtI5olAIaJUw+wbtp8TWZMD4
+         3cfgwK9YVdiA0oZb/m0whVR9v/tJo1CkJwOj7802mtgDYD9ZLBg476lB+nymCPYVg1q8
+         ER0sKdVAFi6kUEEtr3CMh0W8+FILWNQlCljnaN+vUiVVLMpXKWMCcIIvY1n/NppYdZbY
+         5o4ch5pxijIdCLumgqQeuMvmVfwPiairoJs1+J9UHxLahR+a3OHxZ6xpZEkzSSK8kabx
+         K1Th5SFBU0nTFRE8mnNf+qUthjIrgxvdOVHZ0cF8NknZLiSYO/n1IQsjRVgTDeodowyx
+         fFCA==
+X-Gm-Message-State: AOAM532OQ6Wp4mIxz/+FkqBFgECNRgBI7lqEIoyKMefYFZ3KUyXunkGH
+        42sczoEYJLx/5+DvnHyolLXJnOn113sTeH//fsq9yRgGgKSMaA==
+X-Google-Smtp-Source: ABdhPJy3GGJEmBsLauhy6BM+8kVyOSc1PYqod8TWTIy8zmR3xhLmWR/pe8pG7pkEgdxu6Vuikrylvtk2qfbvkPw8ZaU=
+X-Received: by 2002:a05:6638:14cb:b0:32e:cf97:4ac with SMTP id
+ l11-20020a05663814cb00b0032ecf9704acmr13656444jak.80.1653667542084; Fri, 27
+ May 2022 09:05:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220527055217.452307-1-maskray@google.com> <CAP-5=fVk9BmzcinBnjjFKBbNA+ojOo+qjS2m2ZAs7t9c2EkLxw@mail.gmail.com>
-In-Reply-To: <CAP-5=fVk9BmzcinBnjjFKBbNA+ojOo+qjS2m2ZAs7t9c2EkLxw@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 27 May 2022 09:03:46 -0700
-Message-ID: <CAP-5=fU8Pzzz+5W7Vy13tKv0=j8LYNc=+cv12LFvkGoAofJNqA@mail.gmail.com>
-Subject: Re: [PATCH] perf: Fix segbase for ld.lld linked objects
-To:     Fangrui Song <maskray@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Sebastian Ullrich <sebasti@nullri.ch>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
+ <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
+ <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com> <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com>
+In-Reply-To: <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 27 May 2022 18:05:03 +0200
+Message-ID: <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com>
+Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
+ and OpenSSL v3.0.x
+To:     Kees Cook <keescook@chromium.org>
+Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Content-Type: multipart/mixed; boundary="0000000000006c596d05e0007af6"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 11:49 PM Ian Rogers <irogers@google.com> wrote:
+--0000000000006c596d05e0007af6
+Content-Type: text/plain; charset="UTF-8"
+
+On Fri, May 27, 2022 at 9:47 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 >
-> On Thu, May 26, 2022 at 10:52 PM Fangrui Song <maskray@google.com> wrote:
+> On Tue, May 24, 2022 at 9:13 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 > >
-> > segbase is the address of .eh_frame_hdr and table_data is segbase plus
-> > the header size. find_proc_info computes segbase as `map->start +
-> > segbase - map->pgoff` which is wrong when
+> > On Thu, May 19, 2022 at 12:01 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > [ CC Kees and Salvatore ]
+> > >
+> > > The Debian kernel-team ships a fix (4 hours young):
+> > >
+> > > commit: 13e234d459c11946efba647c3daf15e03abb0d99
+> > > "sign-file: Convert API usage to support OpenSSL v3"
+> > >
+> > > *untested*
 > >
-> > * .eh_frame_hdr and .text are in different PT_LOAD program headers
-> > * and their p_vaddr difference does not equal their p_offset difference
+> > @Kees:
 > >
-> > Since 10.0, ld.lld's default --rosegment -z noseparate-code layout has
-> > such R and RX PT_LOAD program headers.
+> > Any updates on the part of certs/extract-cert.c?
 > >
-> >     ld.lld => fail
-> >     ld.lld --no-rosegment => ok
-> >     ld.lld -z separate-code => ok
-> >
-> >     ld.bfd -z separate-code (default for Linux/x86) => ok
-> >     ld.bfd -z noseparate-code => ok
-> >
-> > To fix the issue, compute segbase as dso's base address plus
-> > PT_GNU_EH_FRAME's p_vaddr.
-> >
-> > Reported-by: Sebastian Ullrich <sebasti@nullri.ch>
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1646
-> > Signed-off-by: Fangrui Song <maskray@google.com>
-> > Cc: Ian Rogers <irogers@google.com>
 >
-> Thanks Fangrui! I tested static vs not, bfd and lld, perf test and
-> some hand tests. I couldn't see anything out of order. The code looks
-> good although there could be some ambiguity over the variables ending
-> _addr as these are the ELF given addresses rather than the thread's
-> virtual memory addresses. I'm also trying to get more comments
-> especially on major data structures like dso, but that can be fixed as
-> a follow-on.
+> [ CC Tasmiya Nalatwad ]
 >
-> Tested-by: Ian Rogers <irogers@google.com>
+> There are several more reports on this issue (see [3]).
 >
-> > ---
-> >  tools/perf/util/dso.h                    |  2 +
-> >  tools/perf/util/unwind-libunwind-local.c | 96 ++++++++++++++++--------
-> >  2 files changed, 67 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-> > index 3a9fd4d389b5..ec4fc1a9454b 100644
-> > --- a/tools/perf/util/dso.h
-> > +++ b/tools/perf/util/dso.h
-> > @@ -179,6 +179,7 @@ struct dso {
-> >         bool             loaded;
-> >         u8               rel;
-> >         struct build_id  bid;
-> > +       u64              base_addr;
+> I did a quick test with Kees' patch from [2] and my attached patch
+> "extract-cert: Suppress warnings with OpenSSL v3 API".
+>
+> Now, I see no more warnings due to OpenSSL v3 API:
+>
+> $ egrep 'sign-file|extract-cert'
+> ../build-log_5.18.0-2-amd64-clang14-lto.txt
+> 176:  clang -Wp,-MMD,scripts/.sign-file.d -Wall -Wmissing-prototypes
+> -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
+> -Wdeclaration-after-statement         -o scripts/sign-file
+> scripts/sign-file.c   -lcrypto
+> 2053:  clang -Wp,-MMD,certs/.extract-cert.d -Wall -Wmissing-prototypes
+> -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
+> -Wdeclaration-after-statement       -Wno-deprecated-declarations   -o
+> certs/extract-cert certs/extract-cert.c   -lcrypto
+> 2068:  certs/extract-cert "" certs/x509_certificate_list
+> 2069:  certs/extract-cert "" certs/signing_key.x509
+>
+> config-5.18-dileks: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
+>
+> -Sedat-
+>
+> [1] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
+> [2] https://salsa.debian.org/kernel-team/linux/-/commit/13e234d459c11946efba647c3daf15e03abb0d99
+> [3] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
+>
 
-This is an address in a thread, as one dso can be shared by multiple
-threads/processes it seems unsafe to hold it as the dso may be loaded
-at a different address in a different thread. For now we can just
-recompute the value rather than store it in the dso.
+[ CC James Bottomley ]
 
-> >         u64              text_offset;
-> >         const char       *short_name;
-> >         const char       *long_name;
-> > @@ -197,6 +198,7 @@ struct dso {
-> >                 u64              file_size;
-> >                 struct list_head open_entry;
-> >                 u64              debug_frame_offset;
-> > +               u64              eh_frame_hdr_addr;
+[PATCH] extract-cert: Force build against OpenSSL API Compat v1.1.x
 
-This is the elf section address and safe to hold here.
+...works as well.
 
-Thanks,
-Ian
+-Sedat-
 
-> >                 u64              eh_frame_hdr_offset;
-> >         } data;
-> >         /* bpf prog information */
-> > diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
-> > index 41e29fc7648a..7a0053954e49 100644
-> > --- a/tools/perf/util/unwind-libunwind-local.c
-> > +++ b/tools/perf/util/unwind-libunwind-local.c
-> > @@ -169,30 +169,55 @@ static int __dw_read_encoded_value(u8 **p, u8 *end, u64 *val,
-> >         __v;                                                    \
-> >         })
-> >
-> > -static u64 elf_section_offset(int fd, const char *name)
-> > +static int elf_section_address_and_offset(int fd, const char *name, u64 *address, u64 *offset)
-> >  {
-> >         Elf *elf;
-> >         GElf_Ehdr ehdr;
-> >         GElf_Shdr shdr;
-> > -       u64 offset = 0;
-> > +       int ret;
-> >
-> >         elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
-> >         if (elf == NULL)
-> > -               return 0;
-> > +               return -1;
-> >
-> > -       do {
-> > -               if (gelf_getehdr(elf, &ehdr) == NULL)
-> > -                       break;
-> > +       if (gelf_getehdr(elf, &ehdr) == NULL)
-> > +               goto out_err;
-> >
-> > -               if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
-> > -                       break;
-> > -
-> > -               offset = shdr.sh_offset;
-> > -       } while (0);
-> > +       if (!elf_section_by_name(elf, &ehdr, &shdr, name, NULL))
-> > +               goto out_err;
-> >
-> > +       *address = shdr.sh_addr;
-> > +       *offset = shdr.sh_offset;
-> > +       ret = 0;
-> > +out_err:
-> >         elf_end(elf);
-> > +       return ret;
-> > +}
-> > +
-> > +#ifndef NO_LIBUNWIND_DEBUG_FRAME
-> > +static u64 elf_section_offset(int fd, const char *name)
-> > +{
-> > +       u64 address, offset;
-> > +
-> > +       if (elf_section_address_and_offset(fd, name, &address, &offset))
-> > +               return 0;
-> > +
-> >         return offset;
-> >  }
-> > +#endif
-> > +
-> > +static int elf_base_address(int fd)
-> > +{
-> > +       Elf *elf = elf_begin(fd, PERF_ELF_C_READ_MMAP, NULL);
-> > +       GElf_Phdr phdr;
-> > +       int retval = 0;
-> > +
-> > +       if (gelf_getphdr(elf, 0, &phdr) != NULL)
-> > +               retval = phdr.p_vaddr & -getpagesize();
-> > +
-> > +       elf_end(elf);
-> > +       return retval;
-> > +}
-> >
-> >  #ifndef NO_LIBUNWIND_DEBUG_FRAME
-> >  static int elf_is_exec(int fd, const char *name)
-> > @@ -248,8 +273,7 @@ struct eh_frame_hdr {
-> >  } __packed;
-> >
-> >  static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
-> > -                              u64 offset, u64 *table_data, u64 *segbase,
-> > -                              u64 *fde_count)
-> > +                              u64 offset, u64 *table_data_offset, u64 *fde_count)
-> >  {
-> >         struct eh_frame_hdr hdr;
-> >         u8 *enc = (u8 *) &hdr.enc;
-> > @@ -265,35 +289,45 @@ static int unwind_spec_ehframe(struct dso *dso, struct machine *machine,
-> >         dw_read_encoded_value(enc, end, hdr.eh_frame_ptr_enc);
-> >
-> >         *fde_count  = dw_read_encoded_value(enc, end, hdr.fde_count_enc);
-> > -       *segbase    = offset;
-> > -       *table_data = (enc - (u8 *) &hdr) + offset;
-> > +       *table_data_offset = enc - (u8 *) &hdr;
-> >         return 0;
-> >  }
-> >
-> > -static int read_unwind_spec_eh_frame(struct dso *dso, struct machine *machine,
-> > +static int read_unwind_spec_eh_frame(struct dso *dso, struct unwind_info *ui,
-> >                                      u64 *table_data, u64 *segbase,
-> >                                      u64 *fde_count)
-> >  {
-> > -       int ret = -EINVAL, fd;
-> > -       u64 offset = dso->data.eh_frame_hdr_offset;
-> > +       struct map *map;
-> > +       int ret, fd;
-> >
-> > -       if (offset == 0) {
-> > -               fd = dso__data_get_fd(dso, machine);
-> > +       if (dso->data.eh_frame_hdr_offset == 0) {
-> > +               u64 addr_min = UINT64_MAX;
-> > +
-> > +               fd = dso__data_get_fd(dso, ui->machine);
-> >                 if (fd < 0)
-> >                         return -EINVAL;
-> >
-> >                 /* Check the .eh_frame section for unwinding info */
-> > -               offset = elf_section_offset(fd, ".eh_frame_hdr");
-> > -               dso->data.eh_frame_hdr_offset = offset;
-> > +               ret = elf_section_address_and_offset(fd, ".eh_frame_hdr",
-> > +                                                    &dso->data.eh_frame_hdr_addr,
-> > +                                                    &dso->data.eh_frame_hdr_offset);
-> > +               maps__for_each_entry(ui->thread->maps, map) {
-> > +                       if (map->dso == dso && map->start < addr_min)
-> > +                               addr_min = map->start;
-> > +               }
-> > +               dso->base_addr = addr_min - elf_base_address(fd);
-> >                 dso__data_put_fd(dso);
-> > +               if (ret || dso->data.eh_frame_hdr_offset == 0)
-> > +                   return -EINVAL;
-> >         }
-> >
-> > -       if (offset)
-> > -               ret = unwind_spec_ehframe(dso, machine, offset,
-> > -                                         table_data, segbase,
-> > -                                         fde_count);
-> > -
-> > -       return ret;
-> > +       *segbase = dso->base_addr + dso->data.eh_frame_hdr_addr;
-> > +       ret = unwind_spec_ehframe(dso, ui->machine, dso->data.eh_frame_hdr_offset,
-> > +                                  table_data, fde_count);
-> > +       if (ret)
-> > +           return ret;
-> > +       *table_data += *segbase;
-> > +       return 0;
-> >  }
-> >
-> >  #ifndef NO_LIBUNWIND_DEBUG_FRAME
-> > @@ -388,14 +422,14 @@ find_proc_info(unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
-> >         pr_debug("unwind: find_proc_info dso %s\n", map->dso->name);
-> >
-> >         /* Check the .eh_frame section for unwinding info */
-> > -       if (!read_unwind_spec_eh_frame(map->dso, ui->machine,
-> > +       if (!read_unwind_spec_eh_frame(map->dso, ui,
-> >                                        &table_data, &segbase, &fde_count)) {
-> >                 memset(&di, 0, sizeof(di));
-> >                 di.format   = UNW_INFO_FORMAT_REMOTE_TABLE;
-> >                 di.start_ip = map->start;
-> >                 di.end_ip   = map->end;
-> > -               di.u.rti.segbase    = map->start + segbase - map->pgoff;
-> > -               di.u.rti.table_data = map->start + table_data - map->pgoff;
-> > +               di.u.rti.segbase    = segbase;
-> > +               di.u.rti.table_data = table_data;
-> >                 di.u.rti.table_len  = fde_count * sizeof(struct table_entry)
-> >                                       / sizeof(unw_word_t);
-> >                 ret = dwarf_search_unwind_table(as, ip, &di, pi,
-> > --
-> > 2.36.1.124.g0e6072fb45-goog
-> >
+> > >
+> > > On Thu, May 19, 2022 at 11:55 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > here, I am on Debian/unstable AMD64.
+> > > >
+> > > > Recently (or still) there is/was a transition to OpenSSL see below link.
+> > > >
+> > > > The warnings look like:
+> > > >
+> > > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
+> > > > is deprecated [-Wdeprecated-declarations]
+> > > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
+> > > > [-Wdeprecated-declarations]
+> > > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
+> > > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 395:certs/extract-cert.c:46:14: warning: 'ERR_get_error_line' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 407:certs/extract-cert.c:59:9: warning: 'ERR_get_error_line' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 420:certs/extract-cert.c:124:3: warning: 'ENGINE_load_builtin_engines'
+> > > > is deprecated [-Wdeprecated-declarations]
+> > > > 432:certs/extract-cert.c:126:7: warning: 'ENGINE_by_id' is deprecated
+> > > > [-Wdeprecated-declarations]
+> > > > 444:certs/extract-cert.c:128:7: warning: 'ENGINE_init' is deprecated
+> > > > [-Wdeprecated-declarations]
+> > > > 456:certs/extract-cert.c:133:9: warning: 'ENGINE_ctrl_cmd_string' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 468:certs/extract-cert.c:134:3: warning: 'ENGINE_ctrl_cmd' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > >
+> > > > More detailed output:
+> > > >
+> > > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 190-        while ((e = ERR_get_error_line(&file, &line))) {
+> > > > 191-                    ^
+> > > > 192-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
+> > > > been explicitly marked deprecated here
+> > > > 193-OSSL_DEPRECATEDIN_3_0
+> > > > 194-^
+> > > > 195-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > 196-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > 197-                                                ^
+> > > > 198-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > 'OSSL_DEPRECATED'
+> > > > 199-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > 200-                                                   ^
+> > > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 202-        while (ERR_get_error_line(&file, &line)) {}
+> > > > 203-               ^
+> > > > 204-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
+> > > > been explicitly marked deprecated here
+> > > > 205-OSSL_DEPRECATEDIN_3_0
+> > > > 206-^
+> > > > 207-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > 208-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > 209-                                                ^
+> > > > 210-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > 'OSSL_DEPRECATED'
+> > > > 211-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > 212-                                                   ^
+> > > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
+> > > > is deprecated [-Wdeprecated-declarations]
+> > > > 214-                ENGINE_load_builtin_engines();
+> > > > 215-                ^
+> > > > 216-/usr/include/openssl/engine.h:358:1: note:
+> > > > 'ENGINE_load_builtin_engines' has been explicitly marked deprecated
+> > > > here
+> > > > 217-OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
+> > > > 218-^
+> > > > 219-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > 220-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > 221-                                                ^
+> > > > 222-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > 'OSSL_DEPRECATED'
+> > > > 223-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > 224-                                                   ^
+> > > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
+> > > > [-Wdeprecated-declarations]
+> > > > 226-                e = ENGINE_by_id("pkcs11");
+> > > > 227-                    ^
+> > > > 228-/usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been
+> > > > explicitly marked deprecated here
+> > > > 229-OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
+> > > > 230-^
+> > > > 231-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > 232-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > 233-                                                ^
+> > > > 234-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > 'OSSL_DEPRECATED'
+> > > > 235-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > 236-                                                   ^
+> > > > 237-scripts/sign-file.c:   ld.lld -r -o
+> > > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/objtool-in.o
+> > > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86
+> > > > /special.o /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/decode.o
+> > > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
+> > > > 239-                if (ENGINE_init(e))
+> > > > 240-                    ^
+> > > > 241-/usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been
+> > > > explicitly marked deprecated here
+> > > > 242-OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
+> > > > 243-^
+> > > > 244-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > 245-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > 246-                                                ^
+> > > > 247-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > 'OSSL_DEPRECATED'
+> > > > 248-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > 249-                                                   ^
+> > > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 251-                        ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
+> > > > 252-                             ^
+> > > > 253-/usr/include/openssl/engine.h:478:1: note:
+> > > > 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
+> > > > 254-OSSL_DEPRECATEDIN_3_0
+> > > > 255-^
+> > > > 256-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > 257-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > 258-                                                ^
+> > > > 259-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > 'OSSL_DEPRECATED'
+> > > > 260-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > 261-                                                   ^
+> > > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
+> > > > deprecated [-Wdeprecated-declarations]
+> > > > 263-                private_key = ENGINE_load_private_key(e, private_key_name,
+> > > > 264-                              ^
+> > > > 265-/usr/include/openssl/engine.h:637:1: note:
+> > > > 'ENGINE_load_private_key' has been explicitly marked deprecated here
+> > > > 266-OSSL_DEPRECATEDIN_3_0
+> > > > 267-^
+> > > > 268-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> > > > 'OSSL_DEPRECATEDIN_3_0'
+> > > > 269-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> > > > 270-                                                ^
+> > > > 271-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> > > > 'OSSL_DEPRECATED'
+> > > > 272-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> > > > 273-
+> > > >
+> > > > Relevant OpenSSL v3.0.3 header files are attached.
+> > > > My kernel-config, too.
+> > > >
+> > > > If you need further information, please let me know.
+> > > >
+> > > > Regards,
+> > > > -Sedat-
+> > > >
+> > > > [1] https://release.debian.org/transitions/html/auto-openssl.html
+
+--0000000000006c596d05e0007af6
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-extract-cert-Force-build-against-OpenSSL-API-Compat-.patch"
+Content-Disposition: attachment; 
+	filename="0001-extract-cert-Force-build-against-OpenSSL-API-Compat-.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l3omxg0x0>
+X-Attachment-Id: f_l3omxg0x0
+
+RnJvbSA2MTdlMGNlMDExN2JmMjk3YmU4Y2E0ZWUxMzJjZGZmMDNkYzM0NDQ4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTZWRhdCBEaWxlayA8c2VkYXQuZGlsZWtAZ21haWwuY29tPgpE
+YXRlOiBGcmksIDI3IE1heSAyMDIyIDE3OjQzOjI5ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gZXh0
+cmFjdC1jZXJ0OiBGb3JjZSBidWlsZCBhZ2FpbnN0IE9wZW5TU0wgQVBJIENvbXBhdCB2MS4xLngK
+ClN1cHByZXNzIC1XZGVwcmVjYXRlZC1kZWNsYXJhdGlvbnMgd2FybmluZ3Mgd2hlbiBidWlsZGlu
+ZyBhZ2FpbnN0IE9wZW5TU0wgdjMuMC54LgoKVGVzdGVkIHdpdGggTExWTSB2ZXJzaW9uIDE0LjAu
+NCBhbmQgT3BlblNTTCB2My4wLjMgb24gRGViaWFuL3Vuc3RhYmxlIEFNRDY0LgoKU3VnZ2VzdGVk
+LWJ5OiBKYW1lcyBCb3R0b21sZXkgPEphbWVzLkJvdHRvbWxleUBIYW5zZW5QYXJ0bmVyc2hpcC5j
+b20+ClNpZ25lZC1vZmYtYnk6IFNlZGF0IERpbGVrIDxzZWRhdC5kaWxla0BnbWFpbC5jb20+Ci0t
+LQogY2VydHMvTWFrZWZpbGUgfCAxICsKIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQoK
+ZGlmZiAtLWdpdCBhL2NlcnRzL01ha2VmaWxlIGIvY2VydHMvTWFrZWZpbGUKaW5kZXggZDg0NDNj
+ZmIxYzQwLi5iMTRiYmQwNjc0YzQgMTAwNjQ0Ci0tLSBhL2NlcnRzL01ha2VmaWxlCisrKyBiL2Nl
+cnRzL01ha2VmaWxlCkBAIC03NSw0ICs3NSw1IEBAIHRhcmdldHMgKz0geDUwOV9yZXZvY2F0aW9u
+X2xpc3QKIGhvc3Rwcm9ncyA6PSBleHRyYWN0LWNlcnQKIAogSE9TVENGTEFHU19leHRyYWN0LWNl
+cnQubyA9ICQoc2hlbGwgcGtnLWNvbmZpZyAtLWNmbGFncyBsaWJjcnlwdG8gMj4gL2Rldi9udWxs
+KQorSE9TVENGTEFHU19leHRyYWN0LWNlcnQubyArPSAtRE9QRU5TU0xfQVBJX0NPTVBBVD0weDEw
+MTAwMDAwTAogSE9TVExETElCU19leHRyYWN0LWNlcnQgPSAkKHNoZWxsIHBrZy1jb25maWcgLS1s
+aWJzIGxpYmNyeXB0byAyPiAvZGV2L251bGwgfHwgZWNobyAtbGNyeXB0bykKLS0gCjIuMzYuMQoK
+--0000000000006c596d05e0007af6--

@@ -2,120 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1761535AA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6145C535AA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245187AbiE0Hnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 03:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
+        id S1347816AbiE0HoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 03:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbiE0Hnh (ORCPT
+        with ESMTP id S1347281AbiE0HoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 03:43:37 -0400
-Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C55580D2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 00:43:35 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.191.102])
-        by smtp.orange.fr with ESMTPA
-        id uUd2nKXXuIaWOuUd2ntUeq; Fri, 27 May 2022 09:43:34 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 27 May 2022 09:43:34 +0200
-X-ME-IP: 90.11.191.102
-Message-ID: <a9741fc6-96ef-ccbf-2cb0-2cf0b8923ee7@wanadoo.fr>
-Date:   Fri, 27 May 2022 09:43:24 +0200
+        Fri, 27 May 2022 03:44:05 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 120B3580E3;
+        Fri, 27 May 2022 00:44:04 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AE81A20B894E;
+        Fri, 27 May 2022 00:44:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AE81A20B894E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1653637443;
+        bh=BqceaaB5hBl3Vdpl++pTxf2fnnPWlB8F9bTl6Y9k448=;
+        h=From:To:Subject:Date:From;
+        b=qw7Y2r8RIOI00XuOdIDpCshUlX8CV8et9wcK8CMOlcJ16rAZ2Ch/MimR2gv8uZUrJ
+         I4St6RhB1yecJFKPO0PUEtrVc98XZIOShAC1IvObhWvoeArmSw61roc+uScxlK5o/S
+         fos4AtRaRrOHv3DkG2irs8atet5Mf6bFTvEl+hpo=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ssengar@microsoft.com, mikelley@microsoft.com
+Subject: [RESEND PATCH v2] Drivers: hv: vmbus: Don't assign VMbus channel interrupts to isolated CPUs
+Date:   Fri, 27 May 2022 00:43:59 -0700
+Message-Id: <1653637439-23060-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] mmc: core: Directly use ida_free()
-Content-Language: fr
-To:     keliu <liuke94@huawei.com>, ulf.hansson@linaro.org,
-        axboe@kernel.dk, Avri.Altman@wdc.com, adrian.hunter@intel.com,
-        shawn.lin@rock-chips.com, CLoehle@hyperstone.com,
-        swboyd@chromium.org, digetx@gmail.com, bigeasy@linutronix.de,
-        wsa+renesas@sang-engineering.com, yoshihiro.shimoda.uh@renesas.com,
-        dev@lynxeye.de, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220527075428.2475782-1-liuke94@huawei.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220527075428.2475782-1-liuke94@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 27/05/2022 à 09:54, keliu a écrit :
-> Use ida_free() instead of deprecated
-> ida_simple_remove() .
-> 
-> Signed-off-by: keliu <liuke94@huawei.com>
-> ---
->   drivers/mmc/core/block.c | 8 ++++----
->   drivers/mmc/core/host.c  | 2 +-
->   2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> index 506dc900f5c7..c8d702db483d 100644
-> --- a/drivers/mmc/core/block.c
-> +++ b/drivers/mmc/core/block.c
-> @@ -204,7 +204,7 @@ static void mmc_blk_kref_release(struct kref *ref)
->   	int devidx;
->   
->   	devidx = mmc_get_devidx(md->disk);
-> -	ida_simple_remove(&mmc_blk_ida, devidx);
-> +	ida_free(&mmc_blk_ida, devidx);
->   
->   	mutex_lock(&open_lock);
->   	md->disk->private_data = NULL;
-> @@ -2495,7 +2495,7 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
->    err_kfree:
->   	kfree(md);
->    out:
-> -	ida_simple_remove(&mmc_blk_ida, devidx);
-> +	ida_free(&mmc_blk_ida, devidx);
->   	return ERR_PTR(ret);
->   }
->   
-> @@ -2621,7 +2621,7 @@ static void mmc_blk_rpmb_device_release(struct device *dev)
->   {
->   	struct mmc_rpmb_data *rpmb = dev_get_drvdata(dev);
->   
-> -	ida_simple_remove(&mmc_rpmb_ida, rpmb->id);
-> +	ida_free(&mmc_rpmb_ida, rpmb->id);
->   	kfree(rpmb);
->   }
->   
-> @@ -2643,7 +2643,7 @@ static int mmc_blk_alloc_rpmb_part(struct mmc_card *card,
->   
->   	rpmb = kzalloc(sizeof(*rpmb), GFP_KERNEL);
->   	if (!rpmb) {
-> -		ida_simple_remove(&mmc_rpmb_ida, devidx);
-> +		ida_free(&mmc_rpmb_ida, devidx);
->   		return -ENOMEM;
->   	}
->   
-> diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-> index 2ed2b4d5e5a5..9332e82e175a 100644
-> --- a/drivers/mmc/core/host.c
-> +++ b/drivers/mmc/core/host.c
-> @@ -76,7 +76,7 @@ static void mmc_host_classdev_release(struct device *dev)
->   	struct mmc_host *host = cls_dev_to_mmc_host(dev);
->   	wakeup_source_unregister(host->ws);
->   	if (of_alias_get_id(host->parent->of_node, "mmc") < 0)
-> -		ida_simple_remove(&mmc_host_ida, host->index);
-> +		ida_free(&mmc_host_ida, host->index);
->   	kfree(host);
->   }
->   
+When initially assigning a VMbus channel interrupt to a CPU, don’t choose
+a managed IRQ isolated CPU (as specified on the kernel boot line with
+parameter 'isolcpus=managed_irq,<#cpu>'). Also, when using sysfs to change
+the CPU that a VMbus channel will interrupt, don't allow changing to a
+managed IRQ isolated CPU.
 
-Hi,
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+v2: * Resending v2 with minor correction, please discard the earlier v2
+    * better commit message
+    * Added back empty line, removed by mistake
+    * Removed error print for sysfs error
 
-You missed ida_simple_get() that shoud become ida_alloc_max() here.
+ drivers/hv/channel_mgmt.c | 17 ++++++++++++-----
+ drivers/hv/vmbus_drv.c    |  4 ++++
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-CJ
+diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
+index 97d8f56..127a05b 100644
+--- a/drivers/hv/channel_mgmt.c
++++ b/drivers/hv/channel_mgmt.c
+@@ -21,6 +21,7 @@
+ #include <linux/cpu.h>
+ #include <linux/hyperv.h>
+ #include <asm/mshyperv.h>
++#include <linux/sched/isolation.h>
+ 
+ #include "hyperv_vmbus.h"
+ 
+@@ -728,16 +729,20 @@ static void init_vp_index(struct vmbus_channel *channel)
+ 	u32 i, ncpu = num_online_cpus();
+ 	cpumask_var_t available_mask;
+ 	struct cpumask *allocated_mask;
++	const struct cpumask *hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
+ 	u32 target_cpu;
+ 	int numa_node;
+ 
+ 	if (!perf_chn ||
+-	    !alloc_cpumask_var(&available_mask, GFP_KERNEL)) {
++	    !alloc_cpumask_var(&available_mask, GFP_KERNEL) ||
++	    cpumask_empty(hk_mask)) {
+ 		/*
+ 		 * If the channel is not a performance critical
+ 		 * channel, bind it to VMBUS_CONNECT_CPU.
+ 		 * In case alloc_cpumask_var() fails, bind it to
+ 		 * VMBUS_CONNECT_CPU.
++		 * If all the cpus are isolated, bind it to
++		 * VMBUS_CONNECT_CPU.
+ 		 */
+ 		channel->target_cpu = VMBUS_CONNECT_CPU;
+ 		if (perf_chn)
+@@ -758,17 +763,19 @@ static void init_vp_index(struct vmbus_channel *channel)
+ 		}
+ 		allocated_mask = &hv_context.hv_numa_map[numa_node];
+ 
+-		if (cpumask_equal(allocated_mask, cpumask_of_node(numa_node))) {
++retry:
++		cpumask_xor(available_mask, allocated_mask, cpumask_of_node(numa_node));
++		cpumask_and(available_mask, available_mask, hk_mask);
++
++		if (cpumask_empty(available_mask)) {
+ 			/*
+ 			 * We have cycled through all the CPUs in the node;
+ 			 * reset the allocated map.
+ 			 */
+ 			cpumask_clear(allocated_mask);
++			goto retry;
+ 		}
+ 
+-		cpumask_xor(available_mask, allocated_mask,
+-			    cpumask_of_node(numa_node));
+-
+ 		target_cpu = cpumask_first(available_mask);
+ 		cpumask_set_cpu(target_cpu, allocated_mask);
+ 
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 714d549..547ae33 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -21,6 +21,7 @@
+ #include <linux/kernel_stat.h>
+ #include <linux/clockchips.h>
+ #include <linux/cpu.h>
++#include <linux/sched/isolation.h>
+ #include <linux/sched/task_stack.h>
+ 
+ #include <linux/delay.h>
+@@ -1770,6 +1771,9 @@ static ssize_t target_cpu_store(struct vmbus_channel *channel,
+ 	if (target_cpu >= nr_cpumask_bits)
+ 		return -EINVAL;
+ 
++	if (!cpumask_test_cpu(target_cpu, housekeeping_cpumask(HK_TYPE_MANAGED_IRQ)))
++		return -EINVAL;
++
+ 	/* No CPUs should come up or down during this. */
+ 	cpus_read_lock();
+ 
+-- 
+1.8.3.1
+

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1CC536119
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E808D5360FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348213AbiE0L6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S1352142AbiE0L6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352241AbiE0LuO (ORCPT
+        with ESMTP id S1352764AbiE0Luv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:50:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0708B14D784;
-        Fri, 27 May 2022 04:44:20 -0700 (PDT)
+        Fri, 27 May 2022 07:50:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1B218B36;
+        Fri, 27 May 2022 04:45:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 804B5B8091D;
-        Fri, 27 May 2022 11:44:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6813C385A9;
-        Fri, 27 May 2022 11:44:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 751BCB824D6;
+        Fri, 27 May 2022 11:45:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9E0C385A9;
+        Fri, 27 May 2022 11:45:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651859;
-        bh=IRIB/nfddzpYszgOCi6TNfrnOf4M5Ta9hww7v3gomiQ=;
+        s=korg; t=1653651913;
+        bh=Ve6NfPpdS1r05uyDwxztOFOgYNEeL5kzJRoMP9JvtMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O1Z3D1L3k4Ori+qaiYYZOaqtlToc6GHt/jO2Go4Bl2ucPyeQmGyZ9RYHhLF7ziwXL
-         X9Huk3esW777oKL68bGbJOj0DpD4pY1sPKYWoTO5ziJvTJu2T4D7eyMUFHs4j8F9Ka
-         5ePu03K2dzzdWJqopLoLTnotCs+8FsSbeF5YTzPA=
+        b=gwm9/CYtUV5+WAw9B01qpcmPOqGqwLV0jP4AyRltUyYsO02gPPkXOvaHdhsD7wZLa
+         3Tj6EalI0zXJQ2U192srWx+OQuMtr3yBHDz6se1yHx2X+gWRd69pCCb0zraFdkeAqd
+         rXq5NJgr7tWcMzGSZEiTyrrc/Ktp3vqusAVLIyg4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
         Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 051/145] random: absorb fast pool into input pool after fast load
-Date:   Fri, 27 May 2022 10:49:12 +0200
-Message-Id: <20220527084856.956942421@linuxfoundation.org>
+Subject: [PATCH 5.10 073/163] random: remove outdated INT_MAX >> 6 check in urandom_read()
+Date:   Fri, 27 May 2022 10:49:13 +0200
+Message-Id: <20220527084838.164887740@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,47 +59,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit c30c575db4858f0bbe5e315ff2e529c782f33a1f upstream.
+commit 434537ae54ad37e93555de21b6ac8133d6d773a9 upstream.
 
-During crng_init == 0, we never credit entropy in add_interrupt_
-randomness(), but instead dump it directly into the primary_crng. That's
-fine, except for the fact that we then wind up throwing away that
-entropy later when we switch to extracting from the input pool and
-xoring into (and later in this series overwriting) the primary_crng key.
-The two other early init sites -- add_hwgenerator_randomness()'s use
-crng_fast_load() and add_device_ randomness()'s use of crng_slow_load()
--- always additionally give their inputs to the input pool. But not
-add_interrupt_randomness().
+In 79a8468747c5 ("random: check for increase of entropy_count because of
+signed conversion"), a number of checks were added around what values
+were passed to account(), because account() was doing fancy fixed point
+fractional arithmetic, and a user had some ability to pass large values
+directly into it. One of things in that commit was limiting those values
+to INT_MAX >> 6. The first >> 3 was for bytes to bits, and the next >> 3
+was for bits to 1/8 fractional bits.
 
-This commit fixes that shortcoming by calling mix_pool_bytes() after
-crng_fast_load() in add_interrupt_randomness(). That's partially
-verboten on PREEMPT_RT, where it implies taking spinlock_t from an IRQ
-handler. But this also only happens during early boot and then never
-again after that. Plus it's a trylock so it has the same considerations
-as calling crng_fast_load(), which we're already using.
+However, for several years now, urandom reads no longer touch entropy
+accounting, and so this check serves no purpose. The current flow is:
+
+urandom_read_nowarn()-->get_random_bytes_user()-->chacha20_block()
+
+Of course, we don't want that size_t to be truncated when adding it into
+the ssize_t. But we arrive at urandom_read_nowarn() in the first place
+either via ordinary fops, which limits reads to MAX_RW_COUNT, or via
+getrandom() which limits reads to INT_MAX.
 
 Cc: Theodore Ts'o <tytso@mit.edu>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Jann Horn <jannh@google.com>
 Reviewed-by: Eric Biggers <ebiggers@google.com>
-Suggested-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/char/random.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -850,6 +850,10 @@ void add_interrupt_randomness(int irq)
- 		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
- 			fast_pool->count = 0;
- 			fast_pool->last = now;
-+			if (spin_trylock(&input_pool.lock)) {
-+				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
-+				spin_unlock(&input_pool.lock);
-+			}
- 		}
- 		return;
- 	}
+@@ -1286,9 +1286,8 @@ void rand_initialize_disk(struct gendisk
+ static ssize_t urandom_read_nowarn(struct file *file, char __user *buf,
+ 				   size_t nbytes, loff_t *ppos)
+ {
+-	int ret;
++	ssize_t ret;
+ 
+-	nbytes = min_t(size_t, nbytes, INT_MAX >> 6);
+ 	ret = get_random_bytes_user(buf, nbytes);
+ 	trace_urandom_read(nbytes, input_pool.entropy_count);
+ 	return ret;
 
 

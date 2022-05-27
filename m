@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BBB5357CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1465357CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233771AbiE0Chg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S235995AbiE0Ch5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiE0Che (ORCPT
+        with ESMTP id S229725AbiE0Chz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:37:34 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AF513D09
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:37:33 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id x12so2807172pgj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vEt5uMmj85iIH78diI8VutYncv/+lgRIee1XJuNBlVo=;
-        b=muzq6sxY5PJeaaXrefhfjlS2P1X1QmTcJXVkZ0d34P/1VVi2USpcI64v5sPNPi9n7o
-         1ulMdxT+F9ozYh29oHAdsCji+NTwlugDpeFgCkqc9YsNJ1nK05/JhBf+VWR5ycaQWita
-         +lknEAYNJOl6UACvgYorccKz/3iPu52wEHs0CrND9nit4F/oUW9eSbZWPFrSuAoD0YpI
-         Fw3Za31MnBoy6SvIoYq0NGNsBzo5tUo7b6KME5o4xAx+LL8k2r86lWvR2bC26wXF8JGD
-         JevNyIL1GkDzIyNo8jq+n3kFqWn9P5WJO4LkZMz82rarlWnEKtuorVyBvMaCHYP+LOEv
-         xT9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vEt5uMmj85iIH78diI8VutYncv/+lgRIee1XJuNBlVo=;
-        b=GdWehm1XwjyWhpv0npiW14F4bdvots1VDOS9c7L1nbt8yKckfDHLYDgkcN0Wvh9KXA
-         yYeBAU0WcSLZRBVfaYMOupS2RSYWSBy2JqmQPISaMfu86vI2cmYRUpH0CoAySsyujmZ+
-         tGZCbK0GXcQpMovzIu8gXB5R6qUyh8cJQAoSDjFPHAoMNKJyIPpNm8vACOzLQ3qMGlDw
-         oqSMcphLDsjmmsPPFmVmzzlt+EU5JF4IKYRXAnkmJCx9uNpxRRdj+1xUNIL6mF/nvLR6
-         1GAOdItsjBUSJdPJAuyTikFj8Ilz3WfQeuFL2z6m6semItcR8hyPcx5og8be1QDXr/FI
-         7yLg==
-X-Gm-Message-State: AOAM531d/3VtpNirx3GsVt/wmRsIvCRqDprwSjMQ/+x8c/qEY8pBu6zC
-        ENwJpjhZ05anIn5vOL+ByknfCw==
-X-Google-Smtp-Source: ABdhPJy0reVtBjFCsvHB3Es/3XtifdTMhkeagjyP/aInbKwhnq7FGhxN7io7fV6BRWf7jrn2lBCo9w==
-X-Received: by 2002:a65:6d06:0:b0:3f6:2e7c:da39 with SMTP id bf6-20020a656d06000000b003f62e7cda39mr34347172pgb.23.1653619052785;
-        Thu, 26 May 2022 19:37:32 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id j13-20020a17090a31cd00b001d77f392280sm341426pjf.30.2022.05.26.19.37.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 19:37:32 -0700 (PDT)
-Date:   Fri, 27 May 2022 08:07:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] opp: Fix some kernel-doc comments
-Message-ID: <20220527023729.uz3s2s5mcya46uuz@vireshk-i7>
-References: <20220526132035.112026-1-yang.lee@linux.alibaba.com>
+        Thu, 26 May 2022 22:37:55 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD66213F0B
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653619073; x=1685155073;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AqgDnnRFdPBZJABPx68XXA+tPN5LvAJagEhad89DANE=;
+  b=fMX5pgeH0DIY7Cs5vsg3pmAwxuQo/XnpuYsQc0Wg8LLXu+wURN+1QuOU
+   kiuOICEttfndOxe1AqGf0406HkGsHJqI+/4dPXtHLV/OqPpSMJ9473KHc
+   FeZEWMFjVhS8qrcs50y9v/K4mJ/eutDHsX3VR7sA6O1tkQGcG3LMUkYsZ
+   YvjDNls0NLGJUbv+oWJ/+UKzPLU1l9+q6EaSks8AITqUXyVDiKbzdcdO8
+   VQzSFoGKOol3ffXM9FSZNHVkOxEHNN2oMbZLH09KyAkigdaoB0UQbgOGD
+   8bN8DOV/nk9Rfzl4H+A1Pr7iK3oK5z7rJXjWR3uvoAyaZ2xV7vUDvaqHb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="271930437"
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="271930437"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 19:37:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="527749090"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 26 May 2022 19:37:51 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuPrK-0004Ks-DK;
+        Fri, 27 May 2022 02:37:50 +0000
+Date:   Fri, 27 May 2022 10:37:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
+Subject: include/linux/netdevice.h:2339:11: error: no member named 'use_ipv'
+ in 'struct sk_buff'
+Message-ID: <202205271055.wLZFsaxk-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220526132035.112026-1-yang.lee@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +62,427 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-05-22, 21:20, Yang Li wrote:
-> Make @freq to @bw in dev_pm_opp_find_bw_ceil() and
-> dev_pm_opp_find_bw_floor() kernel-doc comment to
-> remove warnings found by running scripts/kernel-doc,
-> which is caused by using 'make W=1'.
-> 
-> drivers/opp/core.c:753: warning: Function parameter or member 'bw' not
-> described in 'dev_pm_opp_find_bw_ceil'
-> drivers/opp/core.c:753: warning: Excess function parameter 'freq'
-> description in 'dev_pm_opp_find_bw_ceil'
-> drivers/opp/core.c:812: warning: Function parameter or member 'bw' not
-> described in 'dev_pm_opp_find_bw_floor'
-> drivers/opp/core.c:812: warning: Excess function parameter 'freq'
-> description in 'dev_pm_opp_find_bw_floor'
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/opp/core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220526-173254/Vladimir-Oltean/selftests-forwarding-add-Per-Stream-Filtering-and-Policing-test-for-Ocelot/20220501-193132
+head:   32b52188919f424bfabe1d3c0921ff854fb7f4ee
+commit: 32b52188919f424bfabe1d3c0921ff854fb7f4ee selftests: forwarding: add Per-Stream Filtering and Policing test for Ocelot
+date:   17 hours ago
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220527/202205271055.wLZFsaxk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/32b52188919f424bfabe1d3c0921ff854fb7f4ee
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review UPDATE-20220526-173254/Vladimir-Oltean/selftests-forwarding-add-Per-Stream-Filtering-and-Policing-test-for-Ocelot/20220501-193132
+        git checkout 32b52188919f424bfabe1d3c0921ff854fb7f4ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/ethernet/broadcom/bnx2x/ drivers/net/ethernet/mellanox/mlx4/ drivers/net/ethernet/sfc/ net/sched/
 
-Applied. Thanks.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from net/sched/act_gact.c:13:
+   In file included from include/linux/rtnetlink.h:7:
+>> include/linux/netdevice.h:2339:11: error: no member named 'use_ipv' in 'struct sk_buff'
+           if (skb->use_ipv)
+               ~~~  ^
+>> include/linux/netdevice.h:2340:15: error: no member named 'ipv' in 'struct sk_buff'
+                   prio = skb->ipv;
+                          ~~~  ^
+   2 errors generated.
+--
+   In file included from net/sched/act_gate.c:10:
+   In file included from include/linux/rtnetlink.h:7:
+>> include/linux/netdevice.h:2339:11: error: no member named 'use_ipv' in 'struct sk_buff'
+           if (skb->use_ipv)
+               ~~~  ^
+>> include/linux/netdevice.h:2340:15: error: no member named 'ipv' in 'struct sk_buff'
+                   prio = skb->ipv;
+                          ~~~  ^
+>> net/sched/act_gate.c:145:8: error: no member named 'use_ipv' in 'struct sk_buff'
+                   skb->use_ipv = true;
+                   ~~~  ^
+>> net/sched/act_gate.c:146:8: error: no member named 'ipv' in 'struct sk_buff'
+                   skb->ipv = gact->current_ipv;
+                   ~~~  ^
+   4 errors generated.
+--
+   In file included from net/sched/cls_flow.c:17:
+   In file included from include/linux/ipv6.h:93:
+   In file included from include/linux/tcp.h:19:
+   In file included from include/net/sock.h:46:
+>> include/linux/netdevice.h:2339:11: error: no member named 'use_ipv' in 'struct sk_buff'
+           if (skb->use_ipv)
+               ~~~  ^
+>> include/linux/netdevice.h:2340:15: error: no member named 'ipv' in 'struct sk_buff'
+                   prio = skb->ipv;
+                          ~~~  ^
+>> net/sched/cls_flow.c:63:52: warning: shift count >= width of type [-Wshift-count-overflow]
+           return (a & 0xFFFFFFFF) ^ (BITS_PER_LONG > 32 ? a >> 32 : 0);
+                                                             ^  ~~
+   1 warning and 2 errors generated.
+--
+   In file included from drivers/net/ethernet/sfc/farch.c:15:
+   In file included from drivers/net/ethernet/sfc/net_driver.h:13:
+>> include/linux/netdevice.h:2339:11: error: no member named 'use_ipv' in 'struct sk_buff'
+           if (skb->use_ipv)
+               ~~~  ^
+>> include/linux/netdevice.h:2340:15: error: no member named 'ipv' in 'struct sk_buff'
+                   prio = skb->ipv;
+                          ~~~  ^
+   drivers/net/ethernet/sfc/farch.c:188:3: warning: shift count is negative [-Wshift-count-negative]
+                   EFX_POPULATE_QWORD_3(buf_desc,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:434:2: note: expanded from macro 'EFX_POPULATE_QWORD_3'
+           EFX_POPULATE_QWORD_4(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:432:2: note: expanded from macro 'EFX_POPULATE_QWORD_4'
+           EFX_POPULATE_QWORD_5(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:430:2: note: expanded from macro 'EFX_POPULATE_QWORD_5'
+           EFX_POPULATE_QWORD_6(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 19 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
+            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
+            ^
+   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
+             (((u64) (value)) >> (min - low))))
+                              ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   drivers/net/ethernet/sfc/farch.c:188:3: warning: shift count >= width of type [-Wshift-count-overflow]
+                   EFX_POPULATE_QWORD_3(buf_desc,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:434:2: note: expanded from macro 'EFX_POPULATE_QWORD_3'
+           EFX_POPULATE_QWORD_4(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:432:2: note: expanded from macro 'EFX_POPULATE_QWORD_4'
+           EFX_POPULATE_QWORD_5(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:430:2: note: expanded from macro 'EFX_POPULATE_QWORD_5'
+           EFX_POPULATE_QWORD_6(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 19 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
+            EFX_INSERT_NATIVE32(min, max, low, high, value))
+            ^
+   drivers/net/ethernet/sfc/bitfield.h:251:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
+             (((u32) (value)) << (low - min)) :            \
+                              ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   drivers/net/ethernet/sfc/farch.c:188:3: warning: shift count is negative [-Wshift-count-negative]
+                   EFX_POPULATE_QWORD_3(buf_desc,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:434:2: note: expanded from macro 'EFX_POPULATE_QWORD_3'
+           EFX_POPULATE_QWORD_4(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:432:2: note: expanded from macro 'EFX_POPULATE_QWORD_4'
+           EFX_POPULATE_QWORD_5(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:430:2: note: expanded from macro 'EFX_POPULATE_QWORD_5'
+           EFX_POPULATE_QWORD_6(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 19 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
+            EFX_INSERT_NATIVE32(min, max, low, high, value))
+            ^
+   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
+             (((u32) (value)) >> (min - low))))
+                              ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   drivers/net/ethernet/sfc/farch.c:188:3: warning: shift count is negative [-Wshift-count-negative]
+                   EFX_POPULATE_QWORD_3(buf_desc,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:434:2: note: expanded from macro 'EFX_POPULATE_QWORD_3'
+           EFX_POPULATE_QWORD_4(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:432:2: note: expanded from macro 'EFX_POPULATE_QWORD_4'
+           EFX_POPULATE_QWORD_5(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:430:2: note: expanded from macro 'EFX_POPULATE_QWORD_5'
+           EFX_POPULATE_QWORD_6(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 19 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
+            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
+            ^
+   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
+             (((u64) (value)) >> (min - low))))
+                              ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   drivers/net/ethernet/sfc/farch.c:188:3: warning: shift count is negative [-Wshift-count-negative]
+                   EFX_POPULATE_QWORD_3(buf_desc,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:434:2: note: expanded from macro 'EFX_POPULATE_QWORD_3'
+           EFX_POPULATE_QWORD_4(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:432:2: note: expanded from macro 'EFX_POPULATE_QWORD_4'
+           EFX_POPULATE_QWORD_5(qword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:430:2: note: expanded from macro 'EFX_POPULATE_QWORD_5'
+--
+   In file included from drivers/net/ethernet/sfc/siena.c:14:
+   In file included from drivers/net/ethernet/sfc/net_driver.h:13:
+>> include/linux/netdevice.h:2339:11: error: no member named 'use_ipv' in 'struct sk_buff'
+           if (skb->use_ipv)
+               ~~~  ^
+>> include/linux/netdevice.h:2340:15: error: no member named 'ipv' in 'struct sk_buff'
+                   prio = skb->ipv;
+                          ~~~  ^
+   drivers/net/ethernet/sfc/siena.c:44:3: warning: shift count is negative [-Wshift-count-negative]
+                   EFX_POPULATE_DWORD_2(timer_cmd,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:481:2: note: expanded from macro 'EFX_POPULATE_DWORD_2'
+           EFX_POPULATE_DWORD_3(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:479:2: note: expanded from macro 'EFX_POPULATE_DWORD_3'
+           EFX_POPULATE_DWORD_4(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:477:2: note: expanded from macro 'EFX_POPULATE_DWORD_4'
+           EFX_POPULATE_DWORD_5(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 19 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
+            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
+            ^
+   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
+             (((u64) (value)) >> (min - low))))
+                              ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   drivers/net/ethernet/sfc/siena.c:44:3: warning: shift count is negative [-Wshift-count-negative]
+                   EFX_POPULATE_DWORD_2(timer_cmd,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:481:2: note: expanded from macro 'EFX_POPULATE_DWORD_2'
+           EFX_POPULATE_DWORD_3(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:479:2: note: expanded from macro 'EFX_POPULATE_DWORD_3'
+           EFX_POPULATE_DWORD_4(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:477:2: note: expanded from macro 'EFX_POPULATE_DWORD_4'
+           EFX_POPULATE_DWORD_5(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 19 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
+            EFX_INSERT_NATIVE32(min, max, low, high, value))
+            ^
+   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
+             (((u32) (value)) >> (min - low))))
+                              ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   drivers/net/ethernet/sfc/siena.c:50:3: warning: shift count is negative [-Wshift-count-negative]
+                   EFX_POPULATE_DWORD_2(timer_cmd,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:481:2: note: expanded from macro 'EFX_POPULATE_DWORD_2'
+           EFX_POPULATE_DWORD_3(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:479:2: note: expanded from macro 'EFX_POPULATE_DWORD_3'
+           EFX_POPULATE_DWORD_4(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:477:2: note: expanded from macro 'EFX_POPULATE_DWORD_4'
+           EFX_POPULATE_DWORD_5(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 19 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/bitfield.h:256:3: note: expanded from macro 'EFX_INSERT_NATIVE'
+            EFX_INSERT_NATIVE64(min, max, low, high, value) :      \
+            ^
+   drivers/net/ethernet/sfc/bitfield.h:246:21: note: expanded from macro 'EFX_INSERT_NATIVE64'
+             (((u64) (value)) >> (min - low))))
+                              ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   drivers/net/ethernet/sfc/siena.c:50:3: warning: shift count is negative [-Wshift-count-negative]
+                   EFX_POPULATE_DWORD_2(timer_cmd,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:481:2: note: expanded from macro 'EFX_POPULATE_DWORD_2'
+           EFX_POPULATE_DWORD_3(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:479:2: note: expanded from macro 'EFX_POPULATE_DWORD_3'
+           EFX_POPULATE_DWORD_4(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:477:2: note: expanded from macro 'EFX_POPULATE_DWORD_4'
+           EFX_POPULATE_DWORD_5(dword, EFX_DUMMY_FIELD, 0, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   note: (skipping 19 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/ethernet/sfc/bitfield.h:257:3: note: expanded from macro 'EFX_INSERT_NATIVE'
+            EFX_INSERT_NATIVE32(min, max, low, high, value))
+            ^
+   drivers/net/ethernet/sfc/bitfield.h:252:21: note: expanded from macro 'EFX_INSERT_NATIVE32'
+             (((u32) (value)) >> (min - low))))
+                              ^
+   include/uapi/linux/byteorder/little_endian.h:34:51: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                                     ^
+   drivers/net/ethernet/sfc/siena.c:286:18: warning: shift count >= width of type [-Wshift-count-overflow]
+           efx->port_num = EFX_OWORD_FIELD(reg, FRF_CZ_CS_PORT_NUM) - 1;
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:228:26: note: expanded from macro 'EFX_OWORD_FIELD'
+   #define EFX_OWORD_FIELD         EFX_OWORD_FIELD32
+                                   ^
+   drivers/net/ethernet/sfc/bitfield.h:177:2: note: expanded from macro 'EFX_OWORD_FIELD32'
+           EFX_EXTRACT_OWORD32(oword, EFX_LOW_BIT(field),          \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:153:4: note: expanded from macro 'EFX_EXTRACT_OWORD32'
+--
+   In file included from drivers/net/ethernet/sfc/ef10.c:7:
+   In file included from drivers/net/ethernet/sfc/net_driver.h:13:
+>> include/linux/netdevice.h:2339:11: error: no member named 'use_ipv' in 'struct sk_buff'
+           if (skb->use_ipv)
+               ~~~  ^
+>> include/linux/netdevice.h:2340:15: error: no member named 'ipv' in 'struct sk_buff'
+                   prio = skb->ipv;
+                          ~~~  ^
+>> drivers/net/ethernet/sfc/ef10.c:50:9: warning: shift count is negative [-Wshift-count-negative]
+           return EFX_DWORD_FIELD(reg, EFX_WORD_1) == 0xb007 ?
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
+           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:165:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
+           (EFX_EXTRACT32((dword).u32[0], 0, 31, low, high) &      \
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:141:2: note: expanded from macro 'EFX_EXTRACT32'
+           EFX_EXTRACT_NATIVE(le32_to_cpu(element), min, max, low, high)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:127:20: note: expanded from macro 'EFX_EXTRACT_NATIVE'
+            (native_element) << ((min) - (low)))
+                             ^  ~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/sfc/ef10.c:127:3: warning: shift count >= width of type [-Wshift-count-overflow]
+                   MCDI_DWORD(outbuf, GET_CAPABILITIES_OUT_FLAGS1);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
+           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
+           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
+            EFX_MASK32((high) + 1 - (low)))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
+            (((((u32) 1) << (width))) - 1))
+                         ^  ~~~~~~~
+   drivers/net/ethernet/sfc/ef10.c:130:30: warning: shift count >= width of type [-Wshift-count-overflow]
+                   nic_data->datapath_caps2 = MCDI_DWORD(outbuf,
+                                              ^~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
+           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
+           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
+            EFX_MASK32((high) + 1 - (low)))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
+            (((((u32) 1) << (width))) - 1))
+                         ^  ~~~~~~~
+   drivers/net/ethernet/sfc/ef10.c:198:32: warning: shift count >= width of type [-Wshift-count-overflow]
+           nic_data->licensed_features = MCDI_QWORD(outbuf,
+                                         ^~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/mcdi.h:281:3: note: expanded from macro 'MCDI_QWORD'
+           (EFX_DWORD_FIELD(_MCDI_DWORD(_buf, _field)[0], EFX_DWORD_0) |   \
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
+           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
+            EFX_MASK32((high) + 1 - (low)))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
+            (((((u32) 1) << (width))) - 1))
+                         ^  ~~~~~~~
+   drivers/net/ethernet/sfc/ef10.c:198:32: warning: shift count >= width of type [-Wshift-count-overflow]
+           nic_data->licensed_features = MCDI_QWORD(outbuf,
+                                         ^~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/mcdi.h:282:7: note: expanded from macro 'MCDI_QWORD'
+           (u64)EFX_DWORD_FIELD(_MCDI_DWORD(_buf, _field)[1], EFX_DWORD_0) << 32)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
+           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
+            EFX_MASK32((high) + 1 - (low)))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
+            (((((u32) 1) << (width))) - 1))
+                         ^  ~~~~~~~
+   drivers/net/ethernet/sfc/ef10.c:211:7: warning: shift count >= width of type [-Wshift-count-overflow]
+           rc = MCDI_DWORD(outbuf, GET_CLOCK_OUT_SYS_FREQ);
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
+           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
+           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
+            EFX_MASK32((high) + 1 - (low)))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
+            (((((u32) 1) << (width))) - 1))
+                         ^  ~~~~~~~
+   drivers/net/ethernet/sfc/ef10.c:267:27: warning: shift count >= width of type [-Wshift-count-overflow]
+                   efx->timer_quantum_ns = MCDI_DWORD(data,
+                                           ^~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
+           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
+           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
+            EFX_MASK32((high) + 1 - (low)))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:71:16: note: expanded from macro 'EFX_MASK32'
+            (((((u32) 1) << (width))) - 1))
+                         ^  ~~~~~~~
+   drivers/net/ethernet/sfc/ef10.c:269:23: warning: shift count >= width of type [-Wshift-count-overflow]
+                   efx->timer_max_ns = MCDI_DWORD(data,
+                                       ^~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/mcdi.h:218:2: note: expanded from macro 'MCDI_DWORD'
+           EFX_DWORD_FIELD(*_MCDI_DWORD(_buf, _field), EFX_DWORD_0)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:185:2: note: expanded from macro 'EFX_DWORD_FIELD'
+           EFX_EXTRACT_DWORD(dword, EFX_LOW_BIT(field),            \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/sfc/bitfield.h:166:3: note: expanded from macro 'EFX_EXTRACT_DWORD'
+            EFX_MASK32((high) + 1 - (low)))
+..
+
+
+vim +2339 include/linux/netdevice.h
+
+  2332	
+  2333	static inline int skb_get_prio_tc_map(const struct sk_buff *skb,
+  2334					      const struct net_device *dev)
+  2335	{
+  2336		__u32 prio = skb->priority;
+  2337	
+  2338	#if IS_ENABLED(CONFIG_NET_ACT_GATE)
+> 2339		if (skb->use_ipv)
+> 2340			prio = skb->ipv;
+  2341	#endif
+  2342	
+  2343		return netdev_get_prio_tc_map(dev, prio);
+  2344	}
+  2345	
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://01.org/lkp

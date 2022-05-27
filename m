@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA68F535B26
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D30535B21
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242348AbiE0IGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S244703AbiE0IGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349535AbiE0IGV (ORCPT
+        with ESMTP id S1349542AbiE0IGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:06:21 -0400
+        Fri, 27 May 2022 04:06:23 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED5EA1053F4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:06:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75BA51059CB
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:06:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653638761;
+        s=mimecast20190719; t=1653638763;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=k7pKbXrqucn/sAmVex4c4gIiaSEBPmDw6Y4/7YpC/zI=;
-        b=ZkIKNXEia24jGWMVGmqRv6Lnr4mDbWV6zjWlcrESE+IA982gOLHaUTx966fHImuBFQwPSx
-        6S4EgLJq9Kj5X8xJJ1QQ+BmTVBaEMNiVdRDNQNHC4OzztEuQddlaUyCuEh8om5t1FjeHDr
-        sRYxbbsSRBXLx1VGknLoIO/opu4YpEo=
+        bh=g1oE6zW708ThGzA9gQNSKRACZxEySOeeS7EX47PV2eQ=;
+        b=NVbmhFZS7DusoOmiB19RK8U/0orpvUVjFhskHH2bvBZbB/q+ZYyDPQHiN+dXToQBHmq1vd
+        zKPxQeNqvvaq90FpcNM61plAxOq9LVMEDkiHNa89uMzzpZqwpN8DE0g5IKxYCjp3v5AH8u
+        /16v8NA+V8oBzXfbLcoWGNGiUEBqibc=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-571-F2akXvRUPUS7TCab-24vaQ-1; Fri, 27 May 2022 04:05:55 -0400
-X-MC-Unique: F2akXvRUPUS7TCab-24vaQ-1
+ us-mta-423-JYmtOss3NKWCf39IZ3uN1w-1; Fri, 27 May 2022 04:05:58 -0400
+X-MC-Unique: JYmtOss3NKWCf39IZ3uN1w-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB6403804509;
-        Fri, 27 May 2022 08:05:49 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C53E2949BA6;
+        Fri, 27 May 2022 08:05:57 +0000 (UTC)
 Received: from gshan.redhat.com (ovpn-12-91.pek2.redhat.com [10.72.12.91])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 27ABD2026D64;
-        Fri, 27 May 2022 08:05:41 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B4D7C2026D07;
+        Fri, 27 May 2022 08:05:50 +0000 (UTC)
 From:   Gavin Shan <gshan@redhat.com>
 To:     kvmarm@lists.cs.columbia.edu
 Cc:     maz@kernel.org, linux-kernel@vger.kernel.org, eauger@redhat.com,
@@ -46,9 +46,9 @@ Cc:     maz@kernel.org, linux-kernel@vger.kernel.org, eauger@redhat.com,
         james.morse@arm.com, mark.rutland@arm.com,
         shannon.zhaosl@gmail.com, shijie@amperemail.onmicrosoft.com,
         shan.gavin@gmail.com
-Subject: [PATCH v7 15/22] KVM: arm64: Support SDEI_FEATURES hypercall
-Date:   Fri, 27 May 2022 16:02:46 +0800
-Message-Id: <20220527080253.1562538-16-gshan@redhat.com>
+Subject: [PATCH v7 16/22] KVM: arm64: Support SDEI_VERSION hypercall
+Date:   Fri, 27 May 2022 16:02:47 +0800
+Message-Id: <20220527080253.1562538-17-gshan@redhat.com>
 In-Reply-To: <20220527080253.1562538-1-gshan@redhat.com>
 References: <20220527080253.1562538-1-gshan@redhat.com>
 MIME-Version: 1.0
@@ -65,72 +65,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This supports SDEI_FEATURES hypercall. It's used to retrieve the
-supported features, including number of slots for the interrupt
-binding events and relative mode for event handler. Currently,
-we simply return zero, meaning none of them is supported.
+This supports SDEI_VERSION hypercall by returning v1.1, which is
+the specification version we're following. The vendor is set to
+one of the values returned from ARM_SMCCC_VENDOR_HYP_CALL_UID
+hypercall.
 
 Signed-off-by: Gavin Shan <gshan@redhat.com>
 ---
- arch/arm64/kvm/sdei.c         | 16 ++++++++++++++++
- include/uapi/linux/arm_sdei.h |  5 +++++
- 2 files changed, 21 insertions(+)
+ arch/arm64/include/asm/kvm_sdei.h |  3 +++
+ arch/arm64/kvm/sdei.c             | 11 +++++++++++
+ 2 files changed, 14 insertions(+)
 
+diff --git a/arch/arm64/include/asm/kvm_sdei.h b/arch/arm64/include/asm/kvm_sdei.h
+index 735d9ac1a5a2..a1e960943515 100644
+--- a/arch/arm64/include/asm/kvm_sdei.h
++++ b/arch/arm64/include/asm/kvm_sdei.h
+@@ -62,6 +62,9 @@ struct kvm_sdei_vcpu {
+ 	struct kvm_sdei_event_context	ctxt;
+ };
+ 
++/* Returned as vendor through SDEI_VERSION hypercall */
++#define KVM_SDEI_VENDOR	ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2
++
+ /* APIs */
+ int kvm_sdei_call(struct kvm_vcpu *vcpu);
+ int kvm_sdei_inject_event(struct kvm_vcpu *vcpu,
 diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
-index a55797fce06a..d295f84f6940 100644
+index d295f84f6940..f95b9bcce13c 100644
 --- a/arch/arm64/kvm/sdei.c
 +++ b/arch/arm64/kvm/sdei.c
-@@ -277,6 +277,19 @@ static unsigned long event_reset(struct kvm_vcpu *vcpu, bool private)
- 	return SDEI_SUCCESS;
- }
+@@ -13,6 +13,14 @@
+ #include <kvm/arm_hypercalls.h>
+ #include <asm/kvm_sdei.h>
  
-+static unsigned long sdei_features(struct kvm_vcpu *vcpu)
++static unsigned long sdei_version(struct kvm_vcpu *vcpu)
 +{
-+	unsigned int feature = smccc_get_arg(vcpu, 1);
-+
-+	switch (feature) {
-+	case SDEI_FEATURE_BIND_SLOTS:
-+	case SDEI_FEATURE_RELATIVE_MODE:
-+		return 0;
-+	}
-+
-+	return SDEI_INVALID_PARAMETERS;
++	/* v1.1 and vendor ID */
++	return (1UL << SDEI_VERSION_MAJOR_SHIFT) |
++	       (1UL << SDEI_VERSION_MINOR_SHIFT) |
++	       KVM_SDEI_VENDOR;
 +}
 +
- int kvm_sdei_call(struct kvm_vcpu *vcpu)
+ static unsigned long event_register(struct kvm_vcpu *vcpu)
  {
  	struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
-@@ -337,6 +350,9 @@ int kvm_sdei_call(struct kvm_vcpu *vcpu)
- 	case SDEI_1_0_FN_SDEI_SHARED_RESET:
- 		ret = event_reset(vcpu, false);
- 		break;
-+	case SDEI_1_1_FN_SDEI_FEATURES:
-+		ret = sdei_features(vcpu);
-+		break;
- 	default:
- 		ret = SDEI_NOT_SUPPORTED;
+@@ -308,6 +316,9 @@ int kvm_sdei_call(struct kvm_vcpu *vcpu)
  	}
-diff --git a/include/uapi/linux/arm_sdei.h b/include/uapi/linux/arm_sdei.h
-index 72b07114bbfa..5b783cc64617 100644
---- a/include/uapi/linux/arm_sdei.h
-+++ b/include/uapi/linux/arm_sdei.h
-@@ -23,6 +23,7 @@
- #define SDEI_1_0_FN_SDEI_INTERRUPT_BIND			SDEI_1_0_FN(0x0D)
- #define SDEI_1_0_FN_SDEI_INTERRUPT_RELEASE		SDEI_1_0_FN(0x0E)
- #define SDEI_1_1_FN_SDEI_EVENT_SIGNAL			SDEI_1_0_FN(0x0F)
-+#define SDEI_1_1_FN_SDEI_FEATURES			SDEI_1_0_FN(0x10)
- #define SDEI_1_0_FN_SDEI_PRIVATE_RESET			SDEI_1_0_FN(0x11)
- #define SDEI_1_0_FN_SDEI_SHARED_RESET			SDEI_1_0_FN(0x12)
  
-@@ -73,4 +74,8 @@
- #define SDEI_EVENT_PRIORITY_NORMAL		0
- #define SDEI_EVENT_PRIORITY_CRITICAL		1
- 
-+/* SDEI_FEATURES */
-+#define SDEI_FEATURE_BIND_SLOTS			0
-+#define SDEI_FEATURE_RELATIVE_MODE		1
-+
- #endif /* _UAPI_LINUX_ARM_SDEI_H */
+ 	switch (func) {
++	case SDEI_1_0_FN_SDEI_VERSION:
++		ret = sdei_version(vcpu);
++		break;
+ 	case SDEI_1_0_FN_SDEI_EVENT_REGISTER:
+ 		ret = event_register(vcpu);
+ 		break;
 -- 
 2.23.0
 

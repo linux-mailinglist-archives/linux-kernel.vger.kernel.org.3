@@ -2,163 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE80536659
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD56536665
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349258AbiE0RHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 13:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S1345765AbiE0RJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 13:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354165AbiE0RHG (ORCPT
+        with ESMTP id S238663AbiE0RI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 13:07:06 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062A376289
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:07:05 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id c12-20020aa7880c000000b00518c9705941so2710469pfo.20
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=/UYpE3ORfUWUOgObAVh8AEEShSSgV4nNzE6TIkUvoL4=;
-        b=TQeHEjgzosI03XNozW4xpCMZ9JxfuOpyVuGRddKE0ma/DiCtuvES/HGw8OCoLGaaVm
-         FXr+UDQOUghyc8ovjUi+J/5fUG4E0TqoRGE/9BDUmv18uG0XVW6ciqTSD7yuQGrJ1i0l
-         BquCrdDen83aMQ+FJvy9BKijtWgUXWD2EPsSFLBIfBYPEqrmYwQ1FaIfGNp7j/5x+UyJ
-         +hjb1NRq/OEPbEbdJUuE51nrckFUuH40hY48qbAzp2dXxzwk7KyEdrjQW5GYVvfz40Lu
-         GcR4kFxEv3iQeJqee+8IPGGcOJOBgs4XH6rP8EmOJ9H/JnrNZwpRuQSyVG5y0Mpqmhrj
-         ks0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=/UYpE3ORfUWUOgObAVh8AEEShSSgV4nNzE6TIkUvoL4=;
-        b=vxLg5N7O9pkuGQj4YUC6aTLKjwez3kctbsall4BqPjyPAwtWHMwLqVD04+ycRd7WiO
-         U96pjx0HPtPhBYc1cBvUpHS2iYDv9wan4DwSPpfgap79YNMPHUMwJwHquD9fM305jTXR
-         TBfRoQeOPA0wt2Ri5Fh7KyVrm0VaI/zzeKs4g6nuYODr97oXqwE0NO+7xf9kjyxiPfCe
-         lIrkQTL3N1q5WNY+nyl24HjmtOJBuH8PomkVn8fgua+sDXjCaBT+XkmOunBOL1UPeueo
-         qwpbzSFjnvrnSlQ49nCOp3GatRcXM0rHficOrZXlbjt3S/UI64zRBavxoj/I3bsSchad
-         aMTw==
-X-Gm-Message-State: AOAM533UKhR2WkHd6PYf8K/swjwVWwWBZkfyY9IdQN8J3pHU8SUJ3dVP
-        NZvNxfO+zMqwGHH9VqLHNhgvKuoYbXc=
-X-Google-Smtp-Source: ABdhPJzKD8foVyPbZhCsSXtLbePPpsaS3Oi+ipHHra/WbFzZbW5aDHKJGWu55k2n9gGuWs4O+81BestqKnA=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:bb90:b0:158:a031:2ff2 with SMTP id
- m16-20020a170902bb9000b00158a0312ff2mr43681179pls.117.1653671224527; Fri, 27
- May 2022 10:07:04 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 27 May 2022 17:06:58 +0000
-In-Reply-To: <20220527170658.3571367-1-seanjc@google.com>
-Message-Id: <20220527170658.3571367-3-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220527170658.3571367-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH v2 2/2] KVM: VMX: Reject kvm_intel if an inconsistent VMCS
- config is detected
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Lei Wang <lei4.wang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 27 May 2022 13:08:57 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1E613F937;
+        Fri, 27 May 2022 10:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653671337; x=1685207337;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b3q39SUBMABRtjA5ofr43J/nm2AXC7Vx1cy/yv6Brqo=;
+  b=UJrJp2gLfJNtqZsdcpdndTsaJBQKGBWQLmNM7bgDl9j/5L12vivzzx2R
+   NiPfRdIP3PZadTsCeMOWlN88V8SqBS2qxzdgLIqdFQRzNK1LFKksiEDnp
+   X/pSY6cwq5IYEdAYlYVIRv607o39qEROx4yC83rq3mUjrbjx4D2m+9ctH
+   KJlHH9+BR8jMhhmtEUa7CTv9mAEfRmobbZOd1A08TaPYKN6JE+pm7C+od
+   zG+SfGGYf2GqQ0rKztx6hBT+q6ykl8k+mGZ8D1cf2OC5s7hWrAoGcrvub
+   3Doe/oqKx+um7BzYDr36Qb4BkdQcDS0Akk2J6JkefMmTBnCMjvau7xh5/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="254406396"
+X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
+   d="scan'208";a="254406396"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 10:08:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
+   d="scan'208";a="665547883"
+Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 May 2022 10:08:53 -0700
+Date:   Fri, 27 May 2022 19:08:53 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     keliu <liuke94@huawei.com>
+Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
+        jonathan.lemon@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: xdp: Directly use ida_alloc()/free()
+Message-ID: <YpEFpVkxRRFi+Cs8@boxer>
+References: <20220527064609.2358482-1-liuke94@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527064609.2358482-1-liuke94@huawei.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an on-by-default module param, error_on_inconsistent_vmcs_config, to
-allow rejecting the load of kvm_intel if an inconsistent VMCS config is
-detected.  Continuing on with an inconsistent, degraded config is
-undesirable in the vast majority of use cases, e.g. may result in a
-misconfigured VM, poor performance due to lack of fast MSR switching, or
-even security issues in the unlikely event the guest is relying on MPX.
+On Fri, May 27, 2022 at 06:46:09AM +0000, keliu wrote:
+> Use ida_alloc()/ida_free() instead of deprecated
+> ida_simple_get()/ida_simple_remove() .
+> 
+> Signed-off-by: keliu <liuke94@huawei.com>
 
-Practically speaking, an inconsistent VMCS config should never be
-encountered in a production quality environment, e.g. on bare metal it
-indicates a silicon defect (or a disturbing lack of validation by the
-hardware vendor), and in a virtualized machine (KVM as L1) it indicates a
-buggy/misconfigured L0 VMM/hypervisor.
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Provide a module param to override the behavior for testing purposes, or
-in the unlikely scenario that KVM is deployed on a flawed-but-usable CPU
-or virtual machine.
+For future AF_XDP related patches please specify the bpf-next tree in the
+patch subject (or bpf if it's a fix).
 
-Note, what is or isn't an inconsistency is somewhat subjective, e.g. one
-might argue that LOAD_EFER without SAVE_EFER is an inconsistency.  KVM's
-unofficial guideline for an "inconsistency" is either scenarios that are
-completely nonsensical, e.g. the existing checks on having EPT/VPID knobs
-without EPT/VPID, and/or scenarios that prevent KVM from virtualizing or
-utilizing a feature, e.g. the unpaired entry/exit controls checks.  Other
-checks that fall into one or both of the covered scenarios could be added
-in the future, e.g. asserting that a VMCS control exists available if and
-only if the associated feature is supported in bare metal.
+Thanks!
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index a592b424fbbc..74202512f861 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -119,6 +119,9 @@ module_param(nested, bool, S_IRUGO);
- bool __read_mostly enable_pml = 1;
- module_param_named(pml, enable_pml, bool, S_IRUGO);
- 
-+static bool __read_mostly error_on_inconsistent_vmcs_config = true;
-+module_param(error_on_inconsistent_vmcs_config, bool, 0444);
-+
- static bool __read_mostly dump_invalid_vmcs = 0;
- module_param(dump_invalid_vmcs, bool, 0644);
- 
-@@ -2574,15 +2577,23 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 					     CPU_BASED_CR3_STORE_EXITING |
- 					     CPU_BASED_INVLPG_EXITING);
- 	} else if (vmx_cap->ept) {
--		vmx_cap->ept = 0;
- 		pr_warn_once("EPT CAP should not exist if not support "
- 				"1-setting enable EPT VM-execution control\n");
-+
-+		if (error_on_inconsistent_vmcs_config)
-+			return -EIO;
-+
-+		vmx_cap->ept = 0;
- 	}
- 	if (!(_cpu_based_2nd_exec_control & SECONDARY_EXEC_ENABLE_VPID) &&
--		vmx_cap->vpid) {
--		vmx_cap->vpid = 0;
-+	    vmx_cap->vpid) {
- 		pr_warn_once("VPID CAP should not exist if not support "
- 				"1-setting enable VPID VM-execution control\n");
-+
-+		if (error_on_inconsistent_vmcs_config)
-+			return -EIO;
-+
-+		vmx_cap->vpid = 0;
- 	}
- 
- 	if (_cpu_based_exec_control & CPU_BASED_ACTIVATE_TERTIARY_CONTROLS) {
-@@ -2642,6 +2653,9 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 		pr_warn_once("Inconsistent VM-Entry/VM-Exit pair, entry = %x, exit = %x\n",
- 			     _vmentry_control & n_ctrl, _vmexit_control & x_ctrl);
- 
-+		if (error_on_inconsistent_vmcs_config)
-+			return -EIO;
-+
- 		_vmentry_control &= ~n_ctrl;
- 		_vmexit_control &= ~x_ctrl;
- 	}
--- 
-2.36.1.255.ge46751e96f-goog
-
+> ---
+>  net/xdp/xdp_umem.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+> index f01ef6bda390..869b9b9b9fad 100644
+> --- a/net/xdp/xdp_umem.c
+> +++ b/net/xdp/xdp_umem.c
+> @@ -57,7 +57,7 @@ static int xdp_umem_addr_map(struct xdp_umem *umem, struct page **pages,
+>  static void xdp_umem_release(struct xdp_umem *umem)
+>  {
+>  	umem->zc = false;
+> -	ida_simple_remove(&umem_ida, umem->id);
+> +	ida_free(&umem_ida, umem->id);
+>  
+>  	xdp_umem_addr_unmap(umem);
+>  	xdp_umem_unpin_pages(umem);
+> @@ -242,7 +242,7 @@ struct xdp_umem *xdp_umem_create(struct xdp_umem_reg *mr)
+>  	if (!umem)
+>  		return ERR_PTR(-ENOMEM);
+>  
+> -	err = ida_simple_get(&umem_ida, 0, 0, GFP_KERNEL);
+> +	err = ida_alloc(&umem_ida, GFP_KERNEL);
+>  	if (err < 0) {
+>  		kfree(umem);
+>  		return ERR_PTR(err);
+> @@ -251,7 +251,7 @@ struct xdp_umem *xdp_umem_create(struct xdp_umem_reg *mr)
+>  
+>  	err = xdp_umem_reg(umem, mr);
+>  	if (err) {
+> -		ida_simple_remove(&umem_ida, umem->id);
+> +		ida_free(&umem_ida, umem->id);
+>  		kfree(umem);
+>  		return ERR_PTR(err);
+>  	}
+> -- 
+> 2.25.1
+> 

@@ -2,83 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B0C535A23
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C96E535A2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbiE0HOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 03:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
+        id S238933AbiE0HRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 03:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241644AbiE0HOW (ORCPT
+        with ESMTP id S1345573AbiE0HRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 03:14:22 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A400CE28
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 00:14:18 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id c1-20020a928e01000000b002d1b20aa761so2581507ild.6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 00:14:18 -0700 (PDT)
+        Fri, 27 May 2022 03:17:35 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3537113D3F;
+        Fri, 27 May 2022 00:17:34 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id p8so3636920pfh.8;
+        Fri, 27 May 2022 00:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NviM8YCLlg4DLE40qfgZoF5jztBopf1R1io4p6exy/k=;
+        b=Y144HOXVIkomyQ45cz7z/XsKIC2bYEIvqqrO6SDnFxcGZMFcHVqLMFsOnOfPzlAsl3
+         uvi7AQbOFsD7ep1S1fBcLMbKYW18jgvK0oN8RUpGks5RjOAb9SScnt2jL0jymAsejv5D
+         I+r407kkGvCYivG3iXt7kU82h4m0xe/sziATw1h8EObfDQnT+XneYaFJDk9ogl5HAoH3
+         YQpOh4Up4NqtTqMNEwuMRoqyE4bitDf59XIcCPQmnfpoWdnxGAhHbShoGVFcw6C+fxqx
+         Ehc+aOKaEq6zg0MX7KizIu8Pg6CokqCTeLtsBvEbcom/e/3/OFC4a43W3pn8x5xe0NnI
+         udWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ahauavK3k/vHNaBKJ9ifW7woRHJxrv9tXaxi0vivhiE=;
-        b=3cWpOz72n4Ws/Y4zKUBLpqoGSBRzhTsftSXfvDc0ikBClgC4MhG+J1Ct02PGIyXHjP
-         6bmi+/70uQ5MbdIfGU30srv/tLEwHl5TOa5DgH6xWQKO9hE+AfGzEEl2M87/SdpLuAHU
-         UPrTCvOehc1KbVYRp/OU650cEsHEgQNBRIbG3EF89Nqluhu1sOXduTUgNJd+/32HJHKu
-         hb2f1dPShNpBX1c66l6/zVtsisP4ePbHikRec0mcJntVsogtw4k6Zqa2O9u1Urn9VUua
-         RHaX4CxOpLvQaB44SrSdreNP7MxnAeM2Sls5Nqs5rx9rb7ryq5qRxGZBjtoj/N8hhAFe
-         l6Ag==
-X-Gm-Message-State: AOAM533amVx2QArXtkBlfTPOEB5zMV+2akfZ0cHME5rNulrCxjq0eYuR
-        AdE2p8pqjv0BMRPJSlIaTQhbYEp58E5iPk9qmTgotCt58JHK
-X-Google-Smtp-Source: ABdhPJwLstrXc7I3GXxg7NbJpTPh6jnJM3lVI64THmDHJRa3Btt0GIlazr6bkdM1df05eIBnPkc3KcYPuW3TWp5rZRqnhEbAmwah
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NviM8YCLlg4DLE40qfgZoF5jztBopf1R1io4p6exy/k=;
+        b=Fc/TLoy5HF5eIslr70OgP/eaViJxta7NmJoZGk1pwzAoVa9+pxd8rsYridIHXpjXCP
+         PxU89VQFXSVAjIN/N7tTSZ518MXpzUmmcIRug08sNSYWOshm2fGopxugTExW7XGDcJ3q
+         /e3QzHtRSFkw3ww2/k8XAvcYW7Ur5iy7MKMc/DkIPAFjiYkuiMq/22UwNgK2PuTzgIdx
+         vZ4ehV5wNFwHY2cc7Fm5D9eI75vtbEZ1kteegKuTY0FccBrhArLbVTXa++PX8kq8l8pp
+         FGvpT9EFLaBrINDNKma7zXvzQcKLWysh/TURASBthksg2L/POgSnhHmMh2rZZbvgRybr
+         JKvA==
+X-Gm-Message-State: AOAM532LUb/DZJ4tfi65lNH8TmqOrN+uv0fNdtrouql4VP2hOOsmzQZQ
+        Spz8PoMszP6l3Wxd4gqKX4w=
+X-Google-Smtp-Source: ABdhPJzSsPpWp33M6JEVHJFs9PCoC0ND8Lham6rSx+MvvTMg2mD0cWU+9ABJLDc/cSBmGVBris1jpQ==
+X-Received: by 2002:a63:d054:0:b0:3f2:50df:e008 with SMTP id s20-20020a63d054000000b003f250dfe008mr35984784pgi.317.1653635853734;
+        Fri, 27 May 2022 00:17:33 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.15])
+        by smtp.gmail.com with ESMTPSA id p11-20020a1709028a8b00b00163247b64bfsm2805577plo.115.2022.05.27.00.17.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 00:17:32 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, nhorman@tuxdriver.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH net-next 0/3] reorganize the code of the enum skb_drop_reason
+Date:   Fri, 27 May 2022 15:15:19 +0800
+Message-Id: <20220527071522.116422-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:17c9:b0:2d1:a85f:7bd3 with SMTP id
- z9-20020a056e0217c900b002d1a85f7bd3mr13144013ilu.92.1653635657391; Fri, 27
- May 2022 00:14:17 -0700 (PDT)
-Date:   Fri, 27 May 2022 00:14:17 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f2655205dff90da9@google.com>
-Subject: [syzbot] upstream build error (18)
-From:   syzbot <syzbot+a0b95614aef2afe9e488@syzkaller.appspotmail.com>
-To:     anshuman.khandual@arm.com, baolin.wang@linux.alibaba.com,
-        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mike.kravetz@oracle.com,
-        songmuchun@bytedance.com, syzkaller-bugs@googlegroups.com,
-        will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Menglong Dong <imagedong@tencent.com>
 
-syzbot found the following issue on:
+The code of skb_drop_reason is a little wild, let's reorganize them.
+Three things and three patches:
 
-HEAD commit:    7e284070abe5 Merge tag 'for-5.19/dm-changes' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1233ae81f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=854cea6cbaeb1d1b
-dashboard link: https://syzkaller.appspot.com/bug?extid=a0b95614aef2afe9e488
-compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+1) Move the enum 'skb_drop_reason' and related function to the standalone
+   header 'dropreason.h', as Jakub Kicinski suggested, as the skb drop
+   reasons are getting more and more.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a0b95614aef2afe9e488@syzkaller.appspotmail.com
+2) use auto-generation to generate the header that convert enum
+   skb_drop_reason to string.
 
-arch/arm64/mm/hugetlbpage.c:515:9: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
-arch/arm64/mm/hugetlbpage.c:515:9: error: incompatible types when returning type 'int' but 'pte_t' was expected
-arch/arm64/mm/hugetlbpage.c:516:1: error: control reaches end of non-void function [-Werror=return-type]
+3) make the comment of skb drop reasons kernel-doc style.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Menglong Dong (3):
+  net: skb: move enum skb_drop_reason to standalone header file
+  net: skb: use auto-generation to convert skb drop reason to string
+  net: dropreason: reformat the comment fo skb drop reasons
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ include/linux/dropreason.h | 195 +++++++++++++++++++++++++++++++++++++
+ include/linux/skbuff.h     | 179 +---------------------------------
+ include/trace/events/skb.h |  89 +----------------
+ net/core/.gitignore        |   1 +
+ net/core/Makefile          |  14 +++
+ net/core/drop_monitor.c    |  13 ---
+ net/core/skbuff.c          |  12 +++
+ 7 files changed, 224 insertions(+), 279 deletions(-)
+ create mode 100644 include/linux/dropreason.h
+ create mode 100644 net/core/.gitignore
+
+-- 
+2.36.1
+

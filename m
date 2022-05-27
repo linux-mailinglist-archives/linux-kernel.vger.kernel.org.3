@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3556953657D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 17:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED2E536511
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 17:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353990AbiE0P62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 11:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
+        id S1353370AbiE0Pzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 11:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353847AbiE0P5Y (ORCPT
+        with ESMTP id S1345868AbiE0Pzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 11:57:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBE4DED78D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 08:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653667032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RZJZWfsaByLj0ij8xQqPbsK2IaQ+e2uUS77uqtBhMFM=;
-        b=HNYC9/HkZ5ZlNoRScTJCx0QNiAj8i3/Wh8fBM5eN2qk8IIFpqCKEBKpir6pxIewhFawTBu
-        t/evJJVLzxoI/VrwSfXpC0p3nSANRMT7juyNxNd8GmSZBUZliWaPoc2tfLLqSGdB3z/7Mp
-        soYmBYm345g7I5pd8WIbcBfsJWsDljc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-582-tHEDPbcbPs6HXRL3C8C4EQ-1; Fri, 27 May 2022 11:57:08 -0400
-X-MC-Unique: tHEDPbcbPs6HXRL3C8C4EQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 27 May 2022 11:55:48 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEC713F420;
+        Fri, 27 May 2022 08:55:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F3F64101A54E;
-        Fri, 27 May 2022 15:57:07 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.192.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B50372166B26;
-        Fri, 27 May 2022 15:57:05 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 29/37] KVM: selftests: Export _vm_get_page_table_entry()
-Date:   Fri, 27 May 2022 17:55:38 +0200
-Message-Id: <20220527155546.1528910-30-vkuznets@redhat.com>
-In-Reply-To: <20220527155546.1528910-1-vkuznets@redhat.com>
-References: <20220527155546.1528910-1-vkuznets@redhat.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id A6CE5CE259F;
+        Fri, 27 May 2022 15:55:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C648AC385A9;
+        Fri, 27 May 2022 15:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653666943;
+        bh=cCOkIPySWpvVdaAN06SdyUyZG3iiUBVWghvfYHnbzYk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gsAvd6roIaIqzKsnQUK5DspCDPDDGAQJXkPtmL1depNCcT4JpOnPu0V0J752DWZl+
+         4udQcnsOftggPJYYy7C7XYP56rFgNMesvlXZyOBmt5BBYgUQiz8jVobYlLI+XaRcen
+         4YHielmJTa/YwQtL4tzyhq9r0q9aQyS5FGcQsGG/kpLQrS3tsqXUAHETCTT12Oflv+
+         HLfj+9FX+bmJFwyra1PaeHel/GGjyn60TiQNok/9nqvPf+4xGN3EgkpLr4xuVoxQHj
+         rRAHZzTsin6DPOr/ZL4/8zneeY+Y/aeTUKVE+89r5/ZYvSdG+2kbqXCn3l1vAoas0l
+         A9+BQVv7/tceA==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Yonghong Song <yhs@fb.com>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] tracing/kprobes: Check whether get_kretprobe() returns NULL in kretprobe_dispatcher()
+Date:   Sat, 28 May 2022 00:55:39 +0900
+Message-Id: <165366693881.797669.16926184644089588731.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,41 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make it possible for tests to mangle guest's page table entries in
-addition to just getting them (available with vm_get_page_table_entry()).
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+There is a small chance that get_kretprobe(ri) returns NULL in
+kretprobe_dispatcher() when another CPU unregisters the kretprobe
+right after __kretprobe_trampoline_handler().
+
+To avoid this issue, kretprobe_dispatcher() checks the get_kretprobe()
+return value again. And if it is NULL, it returns soon because that
+kretprobe is under unregistering process.
+
+This issue has been introduced when the kretprobe is decoupled
+from the struct kretprobe_instance by commit d741bf41d7c7
+("kprobes: Remove kretprobe hash"). Before that commit, the
+struct kretprob_instance::rp directly points the kretprobe
+and it is never be NULL.
+
+Reported-by: Yonghong Song <yhs@fb.com>
+Fixes: d741bf41d7c7 ("kprobes: Remove kretprobe hash")
+Cc: stable@vger.kernel.org
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- tools/testing/selftests/kvm/include/x86_64/processor.h | 1 +
- tools/testing/selftests/kvm/lib/x86_64/processor.c     | 3 +--
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ kernel/trace/trace_kprobe.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 9ac244fdce73..76cfd7f70add 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -475,6 +475,7 @@ void vcpu_init_descriptor_tables(struct kvm_vm *vm, uint32_t vcpuid);
- void vm_install_exception_handler(struct kvm_vm *vm, int vector,
- 			void (*handler)(struct ex_regs *));
- 
-+uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid, uint64_t vaddr);
- uint64_t vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid, uint64_t vaddr);
- void vm_set_page_table_entry(struct kvm_vm *vm, int vcpuid, uint64_t vaddr,
- 			     uint64_t pte);
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 33ea5e9955d9..dfe54a970410 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -246,8 +246,7 @@ void virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
- 	__virt_pg_map(vm, vaddr, paddr, X86_PAGE_SIZE_4K);
- }
- 
--static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid,
--						       uint64_t vaddr)
-+uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid, uint64_t vaddr)
+diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+index 93507330462c..a245ea673715 100644
+--- a/kernel/trace/trace_kprobe.c
++++ b/kernel/trace/trace_kprobe.c
+@@ -1718,8 +1718,17 @@ static int
+ kretprobe_dispatcher(struct kretprobe_instance *ri, struct pt_regs *regs)
  {
- 	uint16_t index[4];
- 	uint64_t *pml4e, *pdpe, *pde;
--- 
-2.35.3
+ 	struct kretprobe *rp = get_kretprobe(ri);
+-	struct trace_kprobe *tk = container_of(rp, struct trace_kprobe, rp);
++	struct trace_kprobe *tk;
++
++	/*
++	 * There is a small chance that get_kretprobe(ri) returns NULL when
++	 * the kretprobe is unregister on another CPU between kretprobe's
++	 * trampoline_handler and this function.
++	 */
++	if (unlikely(!rp))
++		return 0;
+ 
++	tk = container_of(rp, struct trace_kprobe, rp);
+ 	raw_cpu_inc(*tk->nhit);
+ 
+ 	if (trace_probe_test_flag(&tk->tp, TP_FLAG_TRACE))
 

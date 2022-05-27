@@ -2,585 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B125366CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 20:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972865366DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 20:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353605AbiE0SCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 14:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
+        id S1353016AbiE0SR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 14:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbiE0SCu (ORCPT
+        with ESMTP id S230493AbiE0SRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 14:02:50 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0268C964D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:02:48 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id bj35so2340360vkb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:02:48 -0700 (PDT)
+        Fri, 27 May 2022 14:17:54 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5FA13C375
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:17:52 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id h13so4969566pfq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:17:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=4AkWsHH9GIlT6Mijzl5O9g1IxisxYF8qe2eMQ9dnhUs=;
-        b=qqgw04RZsr9hR/CX3NxyGTgVP4pW3jhAxEQuhysEwsJRqp9EsshLSp7NNCLcQa2CB3
-         ogJa9mcOOl3EKEpUDc6T78DmuSyq4/sNQFw8a7AJUYgmKpaJYhok/HqD5cg6Z9IXr2dQ
-         ibqa2+UvbD2QLvzcWMPgBbA+tsQRGEmwjEYV5uX44h5Jv83UX/wGKDInn7CBBcqIfFk8
-         Bp4O6sjNuTOIaJfDpXlAaCLKQHRFJcyiw/SEj/V17lBxOqkRAngC96VqGuF5Onw18Gak
-         LORaJwnvQylXOCYaqObuMs0aksOzHDhNI+6vX75ch3QsFCY/klxgCrBHQGDbfpd5z9YO
-         UKcg==
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=J7DZV3MmbmXNp2IEVpgLgYDSi0CbAJvCcECCXqiURPs=;
+        b=c+jBv77hDaqPGfUt+E4UyVjKRw/A5niWOFy9W6nwXp2Yig42N2Vl0qnba0sfdPavDg
+         CpC+Icq4NRP6PKjFra9inqaev2buYviauou2yzXbfhen4CqbAsRIig4wA/YPJ2W01vYp
+         27GtZiiq9ZTChjK0BmlXr2+QiRNvhhjgRP12o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=4AkWsHH9GIlT6Mijzl5O9g1IxisxYF8qe2eMQ9dnhUs=;
-        b=P6qIUJtoIp9X4lYbgTHrZlz7CQ3eH+PRDfo1/0Ykp9pLzilP0Ilx76PH9bWTQOIunb
-         7JG0hu2B4PcWS3v/wCc6b4mFx+8tN9e4zxamhZsOyaV30B/6WeG419GwciJ8vZm5LpDL
-         pXwJMe8ZP4Ut28WP8enA+06SPpcUoP0ty5LTt1tE+Av0ra+T6Ydy7QLzKrzjoCuMRnxV
-         BLMpIKe9mXhmSujCD7++Ba+lqJBTvp2jJYA949w2/FDDhi8NPGHIZMEB5EYGt2dL7NXd
-         ZnDKfZTw6+AZ+7QrlEyrAVnN/x9Zas6AyVE/3j4piKXhgh7bJdXPQIhZawCupQX+1ehA
-         6ZwA==
-X-Gm-Message-State: AOAM531EBNwHv0cu2MZDe7IGnvNj12KzBoUcDOUm8pU2LjmD/jU6htMY
-        JQLAljQApB9MMlunDFDbiDcSDl1bi6F1F7/ofyEoYmlLVZ3inW7h
-X-Google-Smtp-Source: ABdhPJwb4xtWIAKCHy39CNcY6ejhN3CnmoJiGiNbrGvokhPSsB/zqMi0IaLqDKeIrIM0aakb4lCfVSft1B/5kNmXbUI=
-X-Received: by 2002:a1f:9b85:0:b0:32d:4d56:cf64 with SMTP id
- d127-20020a1f9b85000000b0032d4d56cf64mr16999685vke.31.1653674567436; Fri, 27
- May 2022 11:02:47 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=J7DZV3MmbmXNp2IEVpgLgYDSi0CbAJvCcECCXqiURPs=;
+        b=daUxiCjLhr8sI+5qH3nIDy7NFDk5DDo2gCvqMXGgMbhb84vQCs+X2PtS+jQFW/BAsp
+         3FcV4ucvtl94uSjeuLWI3fVRC130hNfVOIP+ti2zc7uU1Lm53UftUYz9KuR0mbDGpJZX
+         +SBJv8V7cVNdfIC1kmOcmlTUZwAHsrmrFVu1S0KuopXaS/EJj78Vz4u/PKQcZ3z1Zck8
+         uFAPEVemrorkKWTGU66h+ofS5NAnWyQSPlbX4u1rto7RqWXZ6Wal8wYldHztKzxVgfFf
+         eDKDsXfXwFKDqDXTfBm8ztu/QHzsqcABVRN/XOgpQAbJH3vgZoV4iellTxRpJm8DbZiM
+         ZgLw==
+X-Gm-Message-State: AOAM533X3ohYkxOpcoZwBtdG53eYpGbp1rMpavlwTjDrF4S2kNl3Xiny
+        iQW+2ZjPPf2zahrma4B5Uhnx6Q==
+X-Google-Smtp-Source: ABdhPJySV5+Gh9CRjqGBoqc49MMMsy1ujSWt98sMokWiukshM5httJ1jMEFbKos8yWgMTaNY1uublA==
+X-Received: by 2002:a05:6a00:850:b0:518:a9b2:1a19 with SMTP id q16-20020a056a00085000b00518a9b21a19mr25330595pfk.75.1653675472247;
+        Fri, 27 May 2022 11:17:52 -0700 (PDT)
+Received: from linuxpc-ThinkServer-TS140.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id o20-20020a63fb14000000b003ed6b3dc52esm3749405pgh.55.2022.05.27.11.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 11:17:51 -0700 (PDT)
+From:   Anand Gore <anand.gore@broadcom.com>
+To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     kursad.oney@broadcom.com, joel.peshkin@broadcom.com,
+        florian.fainelli@broadcom.com, dan.beygelman@broadcom.com,
+        samyon.furman@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        tomer.yacoby@broadcom.com, Anand Gore <anand.gore@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: bcmbca: add VFP and NEON fixup for bcm6878 SoC
+Date:   Fri, 27 May 2022 11:17:48 -0700
+Message-Id: <20220527111742.1.I2da72dc550b9c09aa9b83c1028d00d046833a24a@changeid>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Wei Xu <weixugc@google.com>
-Date:   Fri, 27 May 2022 11:02:36 -0700
-Message-ID: <CAAPL-u9Wv+nH1VOZTj=9p9S70Y3Qz3+63EkqncRDdHfubsrjfw@mail.gmail.com>
-Subject: RFC: Memory Tiering Kernel Interfaces (v4)
-To:     Huang Ying <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        David Rientjes <rientjes@google.com>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000001ed25105e00253a9"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change History
-================
-* v4
-  - Reverse the meaning of "rank": higher rank value means higher tier.
-  - Remove "/sys/devices/system/memtier/possible".
-  - Add "/sys/devices/system/memtier/default_tier".
-
-* v3
-  - Updated the design and examples to use "rank" instead of device ID
-    to determine the order between memory tiers for better flexibility.
-
-Overview
-========
-
-The current kernel has the basic memory tiering support: Inactive
-pages on a higher tier NUMA node can be migrated (demoted) to a lower
-tier NUMA node to make room for new allocations on the higher tier
-NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
-migrated (promoted) to a higher tier NUMA node to improve the
-performance.
-
-In the current kernel, memory tiers are defined implicitly via a
-demotion path relationship between NUMA nodes, which is created during
-the kernel initialization and updated when a NUMA node is hot-added or
-hot-removed.  The current implementation puts all nodes with CPU into
-the top tier, and builds the tier hierarchy tier-by-tier by
-establishing the per-node demotion targets based on the distances
-between nodes.
-
-This current memory tier kernel interface needs to be improved for
-several important use cases:
-
-* The current tier initialization code always initializes
-  each memory-only NUMA node into a lower tier.  But a memory-only
-  NUMA node may have a high performance memory device (e.g. a DRAM
-  device attached via CXL.mem or a DRAM-backed memory-only node on
-  a virtual machine) and should be put into a higher tier.
-
-* The current tier hierarchy always puts CPU nodes into the top
-  tier. But on a system with HBM (e.g. GPU memory) devices, these
-  memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
-  with CPUs are better to be placed into the next lower tier.
-
-* Also because the current tier hierarchy always puts CPU nodes
-  into the top tier, when a CPU is hot-added (or hot-removed) and
-  triggers a memory node from CPU-less into a CPU node (or vice
-  versa), the memory tier hierarchy gets changed, even though no
-  memory node is added or removed.  This can make the tier
-  hierarchy unstable and make it difficult to support tier-based
-  memory accounting.
-
-* A higher tier node can only be demoted to selected nodes on the
-  next lower tier as defined by the demotion path, not any other
-  node from any lower tier.  This strict, hard-coded demotion order
-  does not work in all use cases (e.g. some use cases may want to
-  allow cross-socket demotion to another node in the same demotion
-  tier as a fallback when the preferred demotion node is out of
-  space), and has resulted in the feature request for an interface to
-  override the system-wide, per-node demotion order from the
-  userspace.  This demotion order is also inconsistent with the page
-  allocation fallback order when all the nodes in a higher tier are
-  out of space: The page allocation can fall back to any node from
-  any lower tier, whereas the demotion order doesn't allow that.
-
-* There are no interfaces for the userspace to learn about the memory
-  tier hierarchy in order to optimize its memory allocations.
-
-I'd like to propose revised memory tier kernel interfaces based on
-the discussions in the threads:
-
-- https://lore.kernel.org/lkml/20220425201728.5kzm4seu7rep7ndr@offworld/T/
-- https://lore.kernel.org/linux-mm/20220426114300.00003ad8@Huawei.com/t/
-- https://lore.kernel.org/linux-mm/867bc216386eb6cbf54648f23e5825830f5b922e.camel@intel.com/T/
-- https://lore.kernel.org/linux-mm/d6314cfe1c7898a6680bed1e7cc93b0ab93e3155.camel@intel.com/T/
-- https://lore.kernel.org/linux-mm/CAAPL-u_NwJuxWe7Wfn3A1sut+QwEmoZh2QUBQKNPq4bU=NjybA@mail.gmail.com/T/
-
-High-level Design Ideas
-=======================
-
-* Define memory tiers explicitly, not implicitly.
-
-* Memory tiers are defined based on hardware capabilities of memory
-  nodes, not their relative node distances between each other.
-
-* The tier assignment of each node is independent from each other.
-  Moving a node from one tier to another tier doesn't affect the tier
-  assignment of any other node.
-
-* The node-tier association is stable. A node can be reassigned to a
-  different tier only under the specific conditions that don't block
-  future tier-based memory cgroup accounting.
-
-* A node can demote its pages to any nodes of any lower tiers. The
-  demotion target node selection follows the allocation fallback order
-  of the source node, which is built based on node distances.  The
-  demotion targets are also restricted to only the nodes from the tiers
-  lower than the source node.  We no longer need to maintain a separate
-  per-node demotion order (node_demotion[]).
-
-
-Sysfs Interfaces
-================
-
-* /sys/devices/system/memtier/
-
-  This is the directory containing the information about memory tiers.
-
-  Each memory tier has its own subdirectory.
-
-  The order of memory tiers is determined by their rank values, not by
-  their memtier device names.  A higher rank value means a higher tier.
-
-* /sys/devices/system/memtier/default_tier
-
-  Format: int
-  Example: 1
-
-  The default memory tier to which memory would get added via hotplug
-  if the NUMA node is not part of any memory tier.
-
-* /sys/devices/system/memtier/memtierN/
-
-  This is the directory containing the information about a particular
-  memory tier, memtierN, where N is the memtier device ID (e.g. 0, 1).
-
-  The memtier device ID number itself is just an identifier and has no
-  special meaning, i.e. memtier device ID numbers do not determine the
-  order of memory tiers.
-
-  - /sys/devices/system/memtier/memtierN/rank
-
-    Format: int
-    Example: 100
-
-    Read-only.  When read, list the "rank" value associated with memtierN.
-
-    "Rank" is an opaque value. Its absolute value doesn't have any
-    special meaning. But the rank values of different memtiers can be
-    compared with each other to determine the memory tier order.
-
-    For example, if we have 3 memtiers: memtier0, memtier1, memiter2, and
-    their rank values are 100, 10, 50, then the memory tier order is:
-    memtier0 -> memtier2 -> memtier1, where memtier0 is the highest tier
-    and memtier1 is the lowest tier.
-
-    The rank value of each memtier should be unique.
-
-  - /sys/devices/system/memtier/memtierN/nodelist
-
-    Format: node_list
-    Example: 1-2
-
-    Read-only.  When read, list the memory nodes in the specified tier.
-
-* /sys/devices/system/node/nodeN/memtier
-
-  where N = 0, 1, ...
-
-  Format: int or empty
-  Example: 1
-
-  When read, list the device ID of the memory tier that the node belongs
-  to.  Its value is empty for a CPU-only NUMA node.
-
-  When written, the kernel moves the node into the specified memory
-  tier if the move is allowed ("Memory Tier Reassignment" discusses the
-  conditions required for the moves).  The tier assignments of all other
-  nodes are not affected.
-
-  Initially, we can make this interface read-only.
-
-
-Memory Tier Kernel Representation
-=================================
-
-* All memory tiering code is guarded by CONFIG_TIERED_MEMORY.
-
-* #define MAX_MEMORY_TIERS  3
-
-  Support 3 memory tiers for now.  This can be a kconfig option.
-
-* #define MEMORY_DEFAULT_TIER_DEVICE 1
-
-  The default tier device that a memory node is assigned to.
-
-* struct memtier_dev {
-      nodemask_t nodelist;
-      int rank;
-      int tier;
-  } memtier_devices[MAX_MEMORY_TIERS]
-
-  Store memory tiers by device IDs.
-
-* struct memtier_dev *memory_tier(int tier)
-
-  Returns the memtier device for a given memory tier, or NULL if the
-  tier is invalid.
-
-* struct memtier_dev *node_to_memory_tier(int nid)
-
-  Return the memtier device for a given NUMA node, or NULL if the node
-  has no memory tier assigned (e.g. a CPU-only NUMA node).
-
-
-Memory Tier Initialization
-==========================
-
-By default, all memory nodes are assigned to the default tier
-(MEMORY_DEFAULT_TIER_DEVICE).  The default tier device has a rank value
-in the middle of the possible rank value range (e.g. 127 if the range
-is [0..255]).
-
-A device driver can move up or down its memory nodes from the default
-tier.  For example, PMEM can move down its memory nodes below the
-default tier, whereas GPU can move up its memory nodes above the
-default tier.
-
-The kernel initialization code makes the decision on which exact tier
-a memory node should be assigned to based on the requests from the
-device drivers as well as the memory device hardware information
-provided by the firmware.
-
-
-Memory Tier Reassignment
-========================
-
-After a memory node is hot-removed, it can be hot-added back to a
-different memory tier.  This is useful for supporting dynamically
-provisioned CXL.mem NUMA nodes, which may connect to different
-memory devices across hot-plug events.  Such tier changes should
-be compatible with tier-based memory accounting.
-
-The userspace may also reassign an existing online memory node to a
-different tier.  However, this should only be allowed when no pages
-are allocated from the memory node or when there are no non-root
-memory cgroups (e.g. during the system boot).  This restriction is
-important for keeping memory tier hierarchy stable enough for
-tier-based memory cgroup accounting.
-
-Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
-
-
-Memory Allocation for Demotion
-==============================
-
-To allocate a new page as the demotion target for a page, the kernel
-calls the allocation function (__alloc_pages) with the source page
-node as the preferred node and the union of all lower tier nodes as
-the allowed nodemask.  The actual target node selection then follows
-the allocation fallback order that the kernel has already defined.
-
-The pseudo code looks like:
-
-    targets = NODE_MASK_NONE;
-    src_nid = page_to_nid(page);
-    src_tier = node_to_memory_tier(src_nid)->tier;
-    for (i = src_tier + 1; i < MAX_MEMORY_TIERS; i++)
-            nodes_or(targets, targets, memory_tier(i)->nodelist);
-    new_page = __alloc_pages(gfp, order, src_nid, targets);
-
-The memopolicy of cpuset, vma and owner task of the source page can
-be set to refine the demotion target nodemask, e.g. to prevent
-demotion or select a particular allowed node as the demotion target.
-
-
-Memory Allocation for Promotion
-===============================
-
-The page allocation for promotion is similar to demotion, except that (1)
-the target nodemask uses the promotion tiers, (2) the preferred node can
-be the accessing CPU node, not the source page node.
-
-
-Examples
-========
-
-* Example 1:
-
-Node 0 & 1 are DRAM nodes, node 2 & 3 are PMEM nodes.
-
-                  20
-  Node 0 (DRAM)  ----  Node 1 (DRAM)
-       |        \   /       |
-       | 30    40 X 40      | 30
-       |        /   \       |
-  Node 2 (PMEM)  ----  Node 3 (PMEM)
-                  40
-
-node distances:
-node   0    1    2    3
-   0  10   20   30   40
-   1  20   10   40   30
-   2  30   40   10   40
-   3  40   30   40   10
-
-$ cat /sys/devices/system/memtier/default_tier
-1
-
-$ grep '' /sys/devices/system/memtier/memtier*/rank
-/sys/devices/system/memtier/memtier0/rank:192
-/sys/devices/system/memtier/memtier1/rank:128
-/sys/devices/system/memtier/memtier2/rank:64
-
-$ grep '' /sys/devices/system/memtier/memtier*/nodelist
-/sys/devices/system/memtier/memtier0/nodelist:
-/sys/devices/system/memtier/memtier1/nodelist:0-1
-/sys/devices/system/memtier/memtier2/nodelist:2-3
-
-$ grep '' /sys/devices/system/node/node*/memtier
-/sys/devices/system/node/node0/memtier:1
-/sys/devices/system/node/node1/memtier:1
-/sys/devices/system/node/node2/memtier:2
-/sys/devices/system/node/node3/memtier:2
-
-Demotion fallback order:
-node 0: 2, 3
-node 1: 3, 2
-node 2: empty
-node 3: empty
-
-To prevent cross-socket demotion and memory access, the user can set
-mempolicy, e.g. cpuset.mems=0,2.
-
-
-* Example 2:
-
-Node 0 & 1 are DRAM nodes.
-Node 2 is a PMEM node and closer to node 0.
-
-                  20
-  Node 0 (DRAM)  ----  Node 1 (DRAM)
-       |            /
-       | 30       / 40
-       |        /
-  Node 2 (PMEM)
-
-node distances:
-node   0    1    2
-   0  10   20   30
-   1  20   10   40
-   2  30   40   10
-
-$ cat /sys/devices/system/memtier/default_tier
-1
-
-$ grep '' /sys/devices/system/memtier/memtier*/rank
-/sys/devices/system/memtier/memtier0/rank:192
-/sys/devices/system/memtier/memtier1/rank:128
-/sys/devices/system/memtier/memtier2/rank:64
-
-$ grep '' /sys/devices/system/memtier/memtier*/nodelist
-/sys/devices/system/memtier/memtier0/nodelist:
-/sys/devices/system/memtier/memtier1/nodelist:0-1
-/sys/devices/system/memtier/memtier2/nodelist:2
-
-$ grep '' /sys/devices/system/node/node*/memtier
-/sys/devices/system/node/node0/memtier:1
-/sys/devices/system/node/node1/memtier:1
-/sys/devices/system/node/node2/memtier:2
-
-Demotion fallback order:
-node 0: 2
-node 1: 2
-node 2: empty
-
-
-* Example 3:
-
-Node 0 & 1 are DRAM nodes, Node 2 is a memory-only PMEM node.
-
-All nodes are in the same tier.
-
-                  20
-  Node 0 (DRAM)  ----  Node 1 (DRAM)
-         \                 /
-          \ 30            / 30
-           \             /
-             Node 2 (PMEM)
-
-node distances:
-node   0    1    2
-   0  10   20   30
-   1  20   10   30
-   2  30   30   10
-
-$ cat /sys/devices/system/memtier/default_tier
-1
-
-$ grep '' /sys/devices/system/memtier/memtier*/rank
-/sys/devices/system/memtier/memtier0/rank:192
-/sys/devices/system/memtier/memtier1/rank:128
-/sys/devices/system/memtier/memtier2/rank:64
-
-$ grep '' /sys/devices/system/memtier/memtier*/nodelist
-/sys/devices/system/memtier/memtier0/nodelist:
-/sys/devices/system/memtier/memtier1/nodelist:0-2
-/sys/devices/system/memtier/memtier2/nodelist:
-
-$ grep '' /sys/devices/system/node/node*/memtier
-/sys/devices/system/node/node0/memtier:1
-/sys/devices/system/node/node1/memtier:1
-/sys/devices/system/node/node2/memtier:1
-
-Demotion fallback order:
-node 0: empty
-node 1: empty
-node 2: empty
-
-
-* Example 4:
-
-Node 0 is a DRAM node with CPU.
-Node 1 is a PMEM node.
-Node 2 is a GPU node.
-
-                  50
-  Node 0 (DRAM)  ----  Node 2 (GPU)
-         \                 /
-          \ 30            / 60
-           \             /
-             Node 1 (PMEM)
-
-node distances:
-node   0    1    2
-   0  10   30   50
-   1  30   10   60
-   2  50   60   10
-
-$ cat /sys/devices/system/memtier/default_tier
-1
-
-$ grep '' /sys/devices/system/memtier/memtier*/rank
-/sys/devices/system/memtier/memtier0/rank:192
-/sys/devices/system/memtier/memtier1/rank:128
-/sys/devices/system/memtier/memtier2/rank:64
-
-$ grep '' /sys/devices/system/memtier/memtier*/nodelist
-/sys/devices/system/memtier/memtier0/nodelist:2
-/sys/devices/system/memtier/memtier1/nodelist:0
-/sys/devices/system/memtier/memtier2/nodelist:1
-
-$ grep '' /sys/devices/system/node/node*/memtier
-/sys/devices/system/node/node0/memtier:1
-/sys/devices/system/node/node1/memtier:2
-/sys/devices/system/node/node2/memtier:0
-
-Demotion fallback order:
-node 0: 1
-node 1: empty
-node 2: 0, 1
-
-
-* Example 5:
-
-Node 0 is a DRAM node with CPU.
-Node 1 is a GPU node.
-Node 2 is a PMEM node.
-Node 3 is a large, slow DRAM node without CPU.
-
-                    100
-     Node 0 (DRAM)  ----  Node 1 (GPU)
-    /     |               /    |
-   /40    |30        120 /     | 110
-  |       |             /      |
-  |  Node 2 (PMEM) ----       /
-  |        \                 /
-   \     80 \               /
-    ------- Node 3 (Slow DRAM)
-
-node distances:
-node    0    1    2    3
-   0   10  100   30   40
-   1  100   10  120  110
-   2   30  120   10   80
-   3   40  110   80   10
-
-MAX_MEMORY_TIERS=4 (memtier3 is a memory tier added later).
-
-$ cat /sys/devices/system/memtier/default_tier
-1
-
-$ grep '' /sys/devices/system/memtier/memtier*/rank
-/sys/devices/system/memtier/memtier0/rank:192
-/sys/devices/system/memtier/memtier1/rank:128
-/sys/devices/system/memtier/memtier2/rank:64
-/sys/devices/system/memtier/memtier3/rank:96
-
-$ grep '' /sys/devices/system/memtier/memtier*/nodelist
-/sys/devices/system/memtier/memtier0/nodelist:1
-/sys/devices/system/memtier/memtier1/nodelist:0
-/sys/devices/system/memtier/memtier2/nodelist:2
-/sys/devices/system/memtier/memtier3/nodelist:3
-
-$ grep '' /sys/devices/system/node/node*/memtier
-/sys/devices/system/node/node0/memtier:1
-/sys/devices/system/node/node1/memtier:0
-/sys/devices/system/node/node2/memtier:2
-/sys/devices/system/node/node3/memtier:3
-
-Demotion fallback order:
-node 0: 2, 3
-node 1: 0, 3, 2
-node 2: empty
-node 3: 2
+--0000000000001ed25105e00253a9
+Content-Transfer-Encoding: 8bit
+
+BCM6878 SoC only has VFP and NEON support on core 0. So kernel VPF/NEON
+support is disabled in this chip. Add this fixup to manually turn on
+VFP/NEON in case userspace app need to access them on core 0.
+
+Signed-off-by: Anand Gore <anand.gore@broadcom.com>
+---
+
+ arch/arm/mach-bcm/bcmbca.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/mach-bcm/bcmbca.c b/arch/arm/mach-bcm/bcmbca.c
+index dbf4d95e824e..60eeb2aa772a 100644
+--- a/arch/arm/mach-bcm/bcmbca.c
++++ b/arch/arm/mach-bcm/bcmbca.c
+@@ -45,6 +45,7 @@ static void __init bcmbca_neon_fixup(void)
+ 
+ static const char *const bcmbca_match[] __initconst = {
+        "brcm,bcm6846",
++	"brcm,bcm6878",
+        NULL
+ };
+ 
+-- 
+2.25.1
+
+
+--0000000000001ed25105e00253a9
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+dD3eNkKBkknQBWvFfBHcITIVdVccQg5YcIwowkVZhhA3NG0BXGI4l/3o+wjrl2BGO/t969dabQ5x
+/SxGBTK8Vyn6NG7U0Lrjb0VtnrFXgEdxFvJuEQIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
+MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
+HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
+bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
+Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
+gRdhbmFuZC5nb3JlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
+gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUH4HXhI4xxNPqnv0yfNL6is0cLFYwDQYJ
+KoZIhvcNAQELBQADggEBAAU15tMIqa2yrLdoPoNXMk6scL+6XJK/EVe0Lq0Uyq0SV8wpFV09ujno
+nLmSFYTz1RjmiKr1eu/pwyTImqMUj1JAXZ2zgE0rFS5SvchJsSlB8Nv3WeTaf5Lha5ZmRTaB0U/E
+eo7SFjA240UWLCGqXM69XCc5PHk6mWLNTsyDTgK2kLUKP1RVFswACNsI284fxiwA0qSCu2WnOEKE
+LiytE/NBFgzVtBcryeBtcMnhZgMo0PQYRl4O+58O1O703CD1jiO4/ikP+hUTdxWQiiWAzpE89YCH
+S0Pc2d2yC8RWARAiArr1jXHWA4+snG+TS3A1YVSPRZpboS5AXMutIIQ5YZQxggJtMIICaQIBATBr
+MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
+YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxzcZR0ocq9f8sVOu8wDQYJYIZI
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIE7Q2RVdHf32ALs1DDyCbdLMs5DzaDMvboYdizrO
+9thhMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDUyNzE4MTc1
+MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
+hkiG9w0BAQEFAASCAQA3YR5IKl1cbKzSi4Qpd1fWpXJ1s2Y/17lUoA60Q4zJPIDxEDbbTC5pbqFT
+EhSv0upBqkvlpKP60KheaqsJ9yxPVW6j/Ac7CpPA7NKZNnf5dQJ9S1qDndyLdSsXnIgoZ1oDoo7q
+V0N1hIhBRNMmQ8OP3eGEQc2AMtJWtvGV2Ev/Rtl6GVkYFScIhojIzclMykEpywez5JKodooGt0TK
+v2UKtWkvM5O0XXIE0jf6IrBaK/h9R8Y4hLqAtiZWwV1UJ7lUzG/FMTYLKpz/ykmf/w5EPANUUKsU
+npDDJltqgMUo1AU94UeR/EWPklRGAnsBO+RCqrsy7VUT7f/F8521SU/m
+--0000000000001ed25105e00253a9--

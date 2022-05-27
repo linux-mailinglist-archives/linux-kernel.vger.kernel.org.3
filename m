@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B1E53657B
+	by mail.lfdr.de (Postfix) with ESMTP id DE69053657C
 	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 17:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353972AbiE0P5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 11:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
+        id S240328AbiE0P6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 11:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353767AbiE0P5U (ORCPT
+        with ESMTP id S1354031AbiE0P5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 11:57:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DB326220C
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 08:56:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653667006;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F94Tm16Pv+6X1Qxpix8Ro059dU0Hc/OW94AtIQA4pXw=;
-        b=Y6jLD75asQOxFnE7nUuWx5NOUxtvNBc2/zIcFNeXkRt6nBBkF1e7P4Lg8Wi+8K49HAcHYZ
-        CA0JDVxvRbk0KgIbkGDDVxR9erDI2SKgZs2SkNX9vxDswZmlcVcvlX69EnS/iA0tfVrwuZ
-        GeuikZO9o3VHh70iOArt6tioc/niZ9c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-317-r8DvPRaOMHK8fJOuBiYn-Q-1; Fri, 27 May 2022 11:56:42 -0400
-X-MC-Unique: r8DvPRaOMHK8fJOuBiYn-Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C96AE811E76;
-        Fri, 27 May 2022 15:56:41 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.192.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 49ABD2166B26;
-        Fri, 27 May 2022 15:56:39 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 19/37] x86/hyperv: Fix 'struct hv_enlightened_vmcs' definition
-Date:   Fri, 27 May 2022 17:55:28 +0200
-Message-Id: <20220527155546.1528910-20-vkuznets@redhat.com>
-In-Reply-To: <20220527155546.1528910-1-vkuznets@redhat.com>
-References: <20220527155546.1528910-1-vkuznets@redhat.com>
+        Fri, 27 May 2022 11:57:24 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366E1E15D4;
+        Fri, 27 May 2022 08:57:11 -0700 (PDT)
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 24RFuqOk028702;
+        Sat, 28 May 2022 00:56:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 24RFuqOk028702
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1653667013;
+        bh=PA6XyD/D6HG8M6irseqU8qzIX5vvd3VEI+LGWM7fjiE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kSOCR3gCFab/jTHmTELXTDXk+hGIuZptGJR+5pX1I/A0NThoIE4FDEMrlzijbmwly
+         YUbo5AUSJyMBCZE5HJHZsuadQ6t7k9Se1/nDZlPYKAk4ODE2/GQRTZyAT6IruVLv4b
+         oIpnTF7vY4/HcK0Ddpboj87+0IeNxq+H9+GFprhUO52I29OXaUHYLK4j5NsAUNqzXS
+         7pnDjwyv4XRf6788QVKIaC4Tr9jaDlg6sckk+KFqEBiz79uN7IM3GHtZbGXixDout9
+         TOJN20m+85FwmJT0sdsdHK+tO7+u6zm0r2hX2mIp3vrRntRLLMYJJGTHQZ7M7qZMWO
+         w/mMgFAYfaVAQ==
+X-Nifty-SrcIP: [209.85.216.54]
+Received: by mail-pj1-f54.google.com with SMTP id qe5-20020a17090b4f8500b001e26126abccso2689657pjb.0;
+        Fri, 27 May 2022 08:56:52 -0700 (PDT)
+X-Gm-Message-State: AOAM531d+97GMMYerrc7Rk9VAin5P82P+a4atmWFgmrq/QDT5eOxRRAy
+        3/8SUAm4rWTyR+xLtINJeVdDWXfv4pldRcs+PcA=
+X-Google-Smtp-Source: ABdhPJyzgbwKouLhue0pWOSkA4y536KbEctvagZNS0aJMMSJDL2D422HSRK7IZlnsKLwOTFSJDRTZS25B630WBPZWaw=
+X-Received: by 2002:a17:902:f68f:b0:162:23c6:e61b with SMTP id
+ l15-20020a170902f68f00b0016223c6e61bmr26055413plg.136.1653667012039; Fri, 27
+ May 2022 08:56:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220527143931.2161635-1-masahiroy@kernel.org> <133bcb8b-2321-6acb-ea2d-3ab82af19dcb@gmx.de>
+In-Reply-To: <133bcb8b-2321-6acb-ea2d-3ab82af19dcb@gmx.de>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 28 May 2022 00:55:29 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATYbNzfZSOMz02ToE-dN1Bcck0qGWTHHcB-ask49JnAgA@mail.gmail.com>
+Message-ID: <CAK7LNATYbNzfZSOMz02ToE-dN1Bcck0qGWTHHcB-ask49JnAgA@mail.gmail.com>
+Subject: Re: [PATCH] parisc: fix the exit status of arch/parisc/nm
+To:     Helge Deller <deller@gmx.de>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Section 1.9 of TLFS v6.0b says:
+On Sat, May 28, 2022 at 12:32 AM Helge Deller <deller@gmx.de> wrote:
+>
+> On 5/27/22 16:39, Masahiro Yamada wrote:
+> > Parisc overrides 'nm' with a shell script. I was hit by a false-positive
+> > error of $(NM) because this script returns the exit code of grep instead
+> > of ${CROSS_COMPILE}nm. (grep exits with 1 if no lines were selected)
+> >
+> > I tried to fix it, but in the code review, Helge suggested to remove it
+> > entirely. [1]
+> >
+> > This script was added in 2003. [2]
+> >
+> > Presumably, it was a workaround for old toolchains (but even the parisc
+> > maintainer does not know the detail any more).
+> >
+> > Hopefully recent tools should work fine.
+> >
+> > [1]: https://lore.kernel.org/all/1c12cd26-d8aa-4498-f4c0-29478b9578fe@gmx.de/
+> > [2]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=36eaa6e4c0e0b6950136b956b72fd08155b92ca3
+> >
+> > Suggested-by: Helge Deller <deller@gmx.de>
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> Acked-by: Helge Deller <deller@gmx.de>
+>
+> Thank you!
+> Helge
+>
 
-"All structures are padded in such a way that fields are aligned
-naturally (that is, an 8-byte field is aligned to an offset of 8 bytes
-and so on)".
 
-'struct enlightened_vmcs' has a glitch:
+I just forgot to change the patch subject.
 
-...
-        struct {
-                u32                nested_flush_hypercall:1; /*   836: 0  4 */
-                u32                msr_bitmap:1;         /*   836: 1  4 */
-                u32                reserved:30;          /*   836: 2  4 */
-        } hv_enlightenments_control;                     /*   836     4 */
-        u32                        hv_vp_id;             /*   840     4 */
-        u64                        hv_vm_id;             /*   844     8 */
-        u64                        partition_assist_page; /*   852     8 */
-...
+I changed it to
 
-And the observed values in 'partition_assist_page' make no sense at
-all. Fix the layout by padding the structure properly.
+"parisc: remove arch/parisc/nm"
 
-Fixes: 68d1eb72ee99 ("x86/hyper-v: define struct hv_enlightened_vmcs and clean field bits")
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/include/asm/hyperv-tlfs.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Applied to linux-kbuild.
+Thanks for the ack.
 
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 5225a85c08c3..e7ddae8e02c6 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -548,7 +548,7 @@ struct hv_enlightened_vmcs {
- 	u64 guest_rip;
- 
- 	u32 hv_clean_fields;
--	u32 hv_padding_32;
-+	u32 padding32_1;
- 	u32 hv_synthetic_controls;
- 	struct {
- 		u32 nested_flush_hypercall:1;
-@@ -556,7 +556,7 @@ struct hv_enlightened_vmcs {
- 		u32 reserved:30;
- 	}  __packed hv_enlightenments_control;
- 	u32 hv_vp_id;
--
-+	u32 padding32_2;
- 	u64 hv_vm_id;
- 	u64 partition_assist_page;
- 	u64 padding64_4[4];
+
+
 -- 
-2.35.3
-
+Best Regards
+Masahiro Yamada

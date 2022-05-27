@@ -2,98 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B143353578E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1421535791
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbiE0C1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S235054AbiE0C15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234949AbiE0C04 (ORCPT
+        with ESMTP id S233969AbiE0C1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:26:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A9B9DFF49
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653618410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oaDAshEcGYeYhJ5+Zo99OPfgNFs1k3b7zVlzbxHYNl0=;
-        b=MsoZxVsdQq/zRH23U6ED0gdtz1Yg9cjvDnfEgPZDQ9N4Pxa5/ps8AN/SXeYjIzQ8J3gkWe
-        P41sW5r71Ndz4fOchno3wy7tBk1UAVTCV75BTmjC3vn/FZRYi+5Yfb+qPfhvbKGVcig60P
-        iUfbLulsOda9qOalJHCsQ+ZwzDfk68o=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-14-h2i7CJyvNu21s-9IT-eMwQ-1; Thu, 26 May 2022 22:26:49 -0400
-X-MC-Unique: h2i7CJyvNu21s-9IT-eMwQ-1
-Received: by mail-lf1-f69.google.com with SMTP id z14-20020a056512308e00b004786d7fde66so1338313lfd.18
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:26:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oaDAshEcGYeYhJ5+Zo99OPfgNFs1k3b7zVlzbxHYNl0=;
-        b=YotUrf66IIlhjUf+d/K501/D6Zvd9gKfg7bky0yvnNKPpTSfzMjqX4bRmggK5WLRvL
-         n7N2w4/1MKc8DBTHPogwnF4XQqA6wYWKwRG7Muj2ptUwiYfsF8j61QEEwWDtl/iwnMF4
-         rrscKjcf1PwyEKBGTzRtKaI/wKuegNLMt3k2rjRZ4Pnb3NiDjfOaObEiV5nILctkP+Mc
-         jJCxmU5BqbSpKJlyXgISq5WBoYOrIU4KLJXNtS3K09rPBKRaKmkqYwk9sNSGjkqjmBXB
-         KeuXsNQ/4ZHdh4akEDGoL/cw/dSwngEhUPBVX05TozLgPRzjyF7w/Pq2yIYZGO1A2Zc9
-         EQIQ==
-X-Gm-Message-State: AOAM531zLrZOGjeUjX8vR0UHMZzIwM1ZcihXTuufAsnJUX9H3o03bwyU
-        z44EFakMrRMr7oydNhRQtzp4yIZ/TBKRlXgU3OayKCgl+oLwvcgI/MlUWIs8hsoEVAELFvZcrMM
-        QRnp1o5KZ8IXrxVSyzWikIZ75WFJVh3XaV0hrhPal
-X-Received: by 2002:a2e:954c:0:b0:253:d9bf:9f55 with SMTP id t12-20020a2e954c000000b00253d9bf9f55mr21308472ljh.300.1653618407874;
-        Thu, 26 May 2022 19:26:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzHcqEOz1xk1ptv4/JAwcVxyXOZtbrjI3QyKwE3Rw+KFfhLBm5gZOZJQQUeuqyIULlx21HHjnfaD0MAV67KrFc=
-X-Received: by 2002:a2e:954c:0:b0:253:d9bf:9f55 with SMTP id
- t12-20020a2e954c000000b00253d9bf9f55mr21308435ljh.300.1653618407570; Thu, 26
- May 2022 19:26:47 -0700 (PDT)
+        Thu, 26 May 2022 22:27:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8269CE52A9
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:27:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653618473; x=1685154473;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Yp2/XqJRwjTQ9JGo6EQdjU2/rA9oMw9X3T9CsPhkoRs=;
+  b=ijE3a8pVk+Tn/4mydk4GnWEZwe1ZNlXH0lXfCdaDEbPbdljGLwmx6JnY
+   nwQImEwfhyjLWcrpoHh5+y3V7a/CXUmk1Uz72faWuENVsed/Lw9j+dUuK
+   mfJPnK826qIE3/u49a8jYJ3E3Ao42lxGdGjpwQ5z/SWb1sspkG0NIruLG
+   FFnbq6ngahl48KfsgcS+iM8p2szj7QPuMYXENxuBtCMIkrq/8AdI3ZzUX
+   BGaeAFul+L/9GbRVcwFeRq04ysUBjDPL6iw3PQHT7EViRNgAUPfHn3YBa
+   yW/uDGtGMkQq1ll99nyC3AYN0QD6loLu2o43e9sKxBBpfPhiJXDQFJWNx
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="335003411"
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="335003411"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 19:27:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="704896264"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 26 May 2022 19:27:51 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuPhe-0004Kk-9o;
+        Fri, 27 May 2022 02:27:50 +0000
+Date:   Fri, 27 May 2022 10:27:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [rppt:cet/kvm 38/51] arch/x86/kvm/x86.c:6587:3: warning: unannotated
+ fall-through between switch labels
+Message-ID: <202205271026.o40Lr8iX-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220526124338.36247-1-eperezma@redhat.com> <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
-In-Reply-To: <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 27 May 2022 10:26:35 +0800
-Message-ID: <CACGkMEu1YenjBHAssP=FvKX6WxDQ5Aa50r-BsnkfR4zqNTk6hg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Implement vdpasim stop operation
-To:     Parav Pandit <parav@nvidia.com>
-Cc:     =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "martinh@xilinx.com" <martinh@xilinx.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "martinpo@xilinx.com" <martinpo@xilinx.com>,
-        "lvivier@redhat.com" <lvivier@redhat.com>,
-        "pabloc@xilinx.com" <pabloc@xilinx.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        "gautam.dawar@amd.com" <gautam.dawar@amd.com>,
-        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
-        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>,
-        "hanand@xilinx.com" <hanand@xilinx.com>,
-        "dinang@xilinx.com" <dinang@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,70 +64,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 8:54 PM Parav Pandit <parav@nvidia.com> wrote:
->
->
->
-> > From: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > Sent: Thursday, May 26, 2022 8:44 AM
->
-> > Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
-> >
-> > that backend feature and userspace can effectively stop the device.
-> >
-> >
-> >
-> > This is a must before get virtqueue indexes (base) for live migration,
-> >
-> > since the device could modify them after userland gets them. There are
-> >
-> > individual ways to perform that action for some devices
-> >
-> > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there
-> > was no
-> >
-> > way to perform it for any vhost device (and, in particular, vhost-vdpa)=
-.
-> >
-> >
-> >
-> > After the return of ioctl with stop !=3D 0, the device MUST finish any
-> >
-> > pending operations like in flight requests. It must also preserve all
-> >
-> > the necessary state (the virtqueue vring base plus the possible device
-> >
-> > specific states) that is required for restoring in the future. The
-> >
-> > device must not change its configuration after that point.
-> >
-> >
-> >
-> > After the return of ioctl with stop =3D=3D 0, the device can continue
-> >
-> > processing buffers as long as typical conditions are met (vq is enabled=
-,
-> >
-> > DRIVER_OK status bit is enabled, etc).
->
-> Just to be clear, we are adding vdpa level new ioctl() that doesn=E2=80=
-=99t map to any mechanism in the virtio spec.
+Hi Sean,
 
-We try to provide forward compatibility to VIRTIO_CONFIG_S_STOP. That
-means it is expected to implement at least a subset of
-VIRTIO_CONFIG_S_STOP.
+FYI, the error/warning still remains.
 
->
-> Why can't we use this ioctl() to indicate driver to start/stop the device=
- instead of driving it through the driver_ok?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git cet/kvm
+head:   6c13d37e6c4ff3a7f86c5490b3d0f4f12d0a40da
+commit: 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7 [38/51] KVM: x86: Report XSS as an MSR to be saved if there are supported features
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220527/202205271026.o40Lr8iX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6f4644d194da594562027a5d458d9fb7a20ebc39)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/commit/?id=6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
+        git remote add rppt https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git
+        git fetch --no-tags rppt cet/kvm
+        git checkout 6189c6f50e022a416cbd8620b5c17b0a88b6a0c7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
-So the idea is to add capability that does not exist in the spec. Then
-came the stop/resume which can't be done via DRIVER_OK. I think we
-should only allow the stop/resume to succeed after DRIVER_OK is set.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> This is in the context of other discussion we had in the LM series.
+All warnings (new ones prefixed by >>):
 
-Do you see any issue that blocks the live migration?
+>> arch/x86/kvm/x86.c:6587:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+                   case MSR_IA32_XSS:
+                   ^
+   arch/x86/kvm/x86.c:6587:3: note: insert '__attribute__((fallthrough));' to silence this warning
+                   case MSR_IA32_XSS:
+                   ^
+                   __attribute__((fallthrough)); 
+   arch/x86/kvm/x86.c:6587:3: note: insert 'break;' to avoid fall-through
+                   case MSR_IA32_XSS:
+                   ^
+                   break; 
+   1 warning generated.
 
-Thanks
 
+vim +6587 arch/x86/kvm/x86.c
+
+  6513	
+  6514	static void kvm_init_msr_list(void)
+  6515	{
+  6516		struct x86_pmu_capability x86_pmu;
+  6517		u32 dummy[2];
+  6518		unsigned i;
+  6519	
+  6520		BUILD_BUG_ON_MSG(INTEL_PMC_MAX_FIXED != 4,
+  6521				 "Please update the fixed PMCs in msrs_to_saved_all[]");
+  6522	
+  6523		perf_get_x86_pmu_capability(&x86_pmu);
+  6524	
+  6525		num_msrs_to_save = 0;
+  6526		num_emulated_msrs = 0;
+  6527		num_msr_based_features = 0;
+  6528	
+  6529		for (i = 0; i < ARRAY_SIZE(msrs_to_save_all); i++) {
+  6530			if (rdmsr_safe(msrs_to_save_all[i], &dummy[0], &dummy[1]) < 0)
+  6531				continue;
+  6532	
+  6533			/*
+  6534			 * Even MSRs that are valid in the host may not be exposed
+  6535			 * to the guests in some cases.
+  6536			 */
+  6537			switch (msrs_to_save_all[i]) {
+  6538			case MSR_IA32_BNDCFGS:
+  6539				if (!kvm_mpx_supported())
+  6540					continue;
+  6541				break;
+  6542			case MSR_TSC_AUX:
+  6543				if (!kvm_cpu_cap_has(X86_FEATURE_RDTSCP) &&
+  6544				    !kvm_cpu_cap_has(X86_FEATURE_RDPID))
+  6545					continue;
+  6546				break;
+  6547			case MSR_IA32_UMWAIT_CONTROL:
+  6548				if (!kvm_cpu_cap_has(X86_FEATURE_WAITPKG))
+  6549					continue;
+  6550				break;
+  6551			case MSR_IA32_RTIT_CTL:
+  6552			case MSR_IA32_RTIT_STATUS:
+  6553				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT))
+  6554					continue;
+  6555				break;
+  6556			case MSR_IA32_RTIT_CR3_MATCH:
+  6557				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
+  6558				    !intel_pt_validate_hw_cap(PT_CAP_cr3_filtering))
+  6559					continue;
+  6560				break;
+  6561			case MSR_IA32_RTIT_OUTPUT_BASE:
+  6562			case MSR_IA32_RTIT_OUTPUT_MASK:
+  6563				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
+  6564					(!intel_pt_validate_hw_cap(PT_CAP_topa_output) &&
+  6565					 !intel_pt_validate_hw_cap(PT_CAP_single_range_output)))
+  6566					continue;
+  6567				break;
+  6568			case MSR_IA32_RTIT_ADDR0_A ... MSR_IA32_RTIT_ADDR3_B:
+  6569				if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT) ||
+  6570					msrs_to_save_all[i] - MSR_IA32_RTIT_ADDR0_A >=
+  6571					intel_pt_validate_hw_cap(PT_CAP_num_address_ranges) * 2)
+  6572					continue;
+  6573				break;
+  6574			case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR0 + 17:
+  6575				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
+  6576				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
+  6577					continue;
+  6578				break;
+  6579			case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL0 + 17:
+  6580				if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
+  6581				    min(INTEL_PMC_MAX_GENERIC, x86_pmu.num_counters_gp))
+  6582					continue;
+  6583				break;
+  6584			case MSR_IA32_XFD:
+  6585			case MSR_IA32_XFD_ERR:
+  6586				if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
+> 6587			case MSR_IA32_XSS:
+  6588				if (!supported_xss)
+  6589					continue;
+  6590				break;
+  6591			default:
+  6592				break;
+  6593			}
+  6594	
+  6595			msrs_to_save[num_msrs_to_save++] = msrs_to_save_all[i];
+  6596		}
+  6597	
+  6598		for (i = 0; i < ARRAY_SIZE(emulated_msrs_all); i++) {
+  6599			if (!static_call(kvm_x86_has_emulated_msr)(NULL, emulated_msrs_all[i]))
+  6600				continue;
+  6601	
+  6602			emulated_msrs[num_emulated_msrs++] = emulated_msrs_all[i];
+  6603		}
+  6604	
+  6605		for (i = 0; i < ARRAY_SIZE(msr_based_features_all); i++) {
+  6606			struct kvm_msr_entry msr;
+  6607	
+  6608			msr.index = msr_based_features_all[i];
+  6609			if (kvm_get_msr_feature(&msr))
+  6610				continue;
+  6611	
+  6612			msr_based_features[num_msr_based_features++] = msr_based_features_all[i];
+  6613		}
+  6614	}
+  6615	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

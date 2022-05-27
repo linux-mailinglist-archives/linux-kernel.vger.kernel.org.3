@@ -2,221 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E0D53578C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CEF053577D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234758AbiE0C0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S234323AbiE0CXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiE0C00 (ORCPT
+        with ESMTP id S229710AbiE0CW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:26:26 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4285FF5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:26:25 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id t4so69079pld.4
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GTmACc9N/3MLTj6poPRyGy9qcVFfRLI5Sz32EZV0z38=;
-        b=COgXgMZDG8WkP+lglV2Qm8KiYg3OYMJ6q8zRmVVu4YCQhwnr7YHTclag8GvN6sPpqj
-         snyshILu0mVF35uUzY3IlNV9lWALJRWgtcJCwaJ1up/VKMnneFH4I2c4Q/SuqpcT+xJS
-         daVWNio46q8qRqPTPGJPc/nGy+VQMvmJMExBR9jsfPXJBRsunsvuvv5c2vRI0uGs/H42
-         MTteQDv/PoLH7V0fx1W/rcVnFrgqRC/gawvBOz1wSEkGDK7M7tYwSvQDJ1Mj4yC2oeGq
-         NBkIf5iBnZvgvG6zmmMCX9Uo0b9ZtH+3JN2JND1LiwxJgkKye5t/48JP60vScOgML+au
-         nF4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GTmACc9N/3MLTj6poPRyGy9qcVFfRLI5Sz32EZV0z38=;
-        b=AjCncZKgVe9PhuwBejH/d86WW550uFetyYjH/ct7p1m3jXEQWmxcBIi2A68qpLnSqU
-         zQZIbv4B9OKS1kH7XxiV2V3ZK2w0PwC9eiH7GdlDC68tcC5JwBCpXP7gqM9J4eG7am+2
-         8YEx16S2Wv0zfpPtBC2jWNB/K1hpjwWHbwbimriOPLbCJdb7csCAGD9HRfe4g6WQo0GP
-         2X59f7DvoRHy7vff9J0ZFRWNHsol37ejUFCxRNpP8BeE4vnvWs/nnZHm8rFQPmMGi89Y
-         /vut56UeevBZdJGCiqTDThQhr8OfkVi9BgtscZ7zHCMykvRv5DT31JmbF/QeZpcbLXJq
-         5HXA==
-X-Gm-Message-State: AOAM532TNZxPh9QEs2JLtGB4w+nwrHigmzAkr+DODLXGyizoO4dMQp7a
-        LTalXQLx3JTla50uOfm8YHwXfA==
-X-Google-Smtp-Source: ABdhPJwG+lmKSHcrxP6YtEa7GiL6Nr6zjRjr3nP+ihLp9L087u1RV9dVoYNbsckRgYc6uXjSvJ5U9w==
-X-Received: by 2002:a17:902:bf06:b0:14d:8c72:96c6 with SMTP id bi6-20020a170902bf0600b0014d8c7296c6mr40633154plb.156.1653618384636;
-        Thu, 26 May 2022 19:26:24 -0700 (PDT)
-Received: from [10.255.70.20] ([139.177.225.235])
-        by smtp.gmail.com with ESMTPSA id j2-20020a170902690200b0015f4b7a012bsm2247113plk.251.2022.05.26.19.26.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 19:26:23 -0700 (PDT)
-Message-ID: <27062739-74af-7deb-2486-45bb84888433@bytedance.com>
-Date:   Fri, 27 May 2022 10:22:23 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Re: [PATCH 3/3] virtio_balloon: Introduce memory recover
+        Thu, 26 May 2022 22:22:58 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DAB6F494;
+        Thu, 26 May 2022 19:22:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BhNh4LdJytHMSzu4CV9oIWrJfk7r0xBYwZUZlVDYZVNTlUwJAzs7Ckx4yyCj3DvaUcJLKIgZ9ud7YNUWYifJlMPuCwJ7xFP9tTE6dVINaf7cT/EDzKoZrxSjo+qubd4GPiouHTAresUg7xI7qr9wXBZSOqvzVBQW612el++g/krXCaM6tC67FpRdxRTmRdqpJT4/CXYFcFpx9WJk4HQiGgCG5xsdzsBo99BGP/ubBQdrFnyWaiTLE/6zQrdF8SV7iOKeIDq1lSs35+C1RG9+OiqOVk6hESt0rF0Zd394hIDiKy8kfRvzPo1K1yNJjFZznq/feGU6bubUFNPmrKN/1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k02jWeHx6bFmCwiTKqT6QMmOivwi3725B+Sj5tNzmoc=;
+ b=Zd9rJJ4WuUpkn0PvQ8TuxmdCcEfQGL6Al+5eAJIK48UG8OP5v04gtKgna9SMQxAWNnOT+ViGyKeWv+/P6Sm036N+lLB4GwL1Ixfh6iO5vn1eMVEHnJCi6zBZA9WwqYNlcT7GCB1usSB8nZAXK2Gu4DhHmFVO7w3RmEgI8XSBMZoknTi29RXO2J8ILFwKSocomzSIkaIEs0RjMUpMpuuDxAXe+c02mbb8d/1eLLJaBF5/0R2EDFjHOz2Eqb7pOtYWBZU2bXCh+xl0r1Py6f5jLV+OjqwKQMJt7J/8NN2XQbQJvSQ8PM3NDzlYSBBsmOkjaAzk+K/EK/bWv+gztGnrYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k02jWeHx6bFmCwiTKqT6QMmOivwi3725B+Sj5tNzmoc=;
+ b=Ac/ZLUjJSeMixuKXr0Np+v9+VGFUJOSZdN/E6pc2knzL4r7yJA3bkyxPhtqAI2ia47st3j+fpgnrIeVQBbnxKFPc4dNyOqH5Jt1OSDQF1G9iRp0CaY5rmhlnTcpI9r3H8o9QLhcdAaZ7TwgwYTRk4j+i5Bt5s1Y8P9Fnb1qWHBc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by MW5PR12MB5599.namprd12.prod.outlook.com (2603:10b6:303:194::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Fri, 27 May
+ 2022 02:22:51 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::5044:b3eb:8442:fe92]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::5044:b3eb:8442:fe92%7]) with mapi id 15.20.5273.023; Fri, 27 May 2022
+ 02:22:50 +0000
+Message-ID: <05aa0287-ebc4-b85c-4012-f16870caf0b8@amd.com>
+Date:   Fri, 27 May 2022 07:52:31 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v4 2/5] perf header: Parse non-cpu pmu capabilities
 Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>, akpm@linux-foundation.org,
-        naoya.horiguchi@nec.com
-Cc:     david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        pbonzini@redhat.com, peterx@redhat.com, qemu-devel@nongnu.org
-References: <20220520070648.1794132-1-pizhenwei@bytedance.com>
- <20220520070648.1794132-4-pizhenwei@bytedance.com>
- <20220526151507-mutt-send-email-mst@kernel.org>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <20220526151507-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     acme@kernel.org, irogers@google.com, peterz@infradead.org,
+        rrichter@amd.com, mingo@redhat.com, mark.rutland@arm.com,
+        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, james.clark@arm.com, leo.yan@linaro.org,
+        ak@linux.intel.com, eranian@google.com, like.xu.linux@gmail.com,
+        x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20220523033945.1612-1-ravi.bangoria@amd.com>
+ <20220523033945.1612-3-ravi.bangoria@amd.com>
+ <7c072dd2-de6f-e083-a400-17467d6fe6e8@linux.intel.com>
+ <4f7239e2-c065-0800-f679-d4ed797fdecd@amd.com>
+ <adf43431-f828-75b2-359e-652c5fc96dc7@linux.intel.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <adf43431-f828-75b2-359e-652c5fc96dc7@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN2PR01CA0103.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::18) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ffcd9e2f-83c4-46ac-2e17-08da3f87cc1e
+X-MS-TrafficTypeDiagnostic: MW5PR12MB5599:EE_
+X-Microsoft-Antispam-PRVS: <MW5PR12MB55992A8C48C760F2EBA3275FE0D89@MW5PR12MB5599.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4xIeoEoukEoIt5HjYpd80VMXbnUsC2TszAbgcU5lPXdYDCpws5OyjTXVsUYVnieZqiiBdA7QK+mEwjBAqHtNx8Yq6C+wPzx6pzwUBGdBaif6hpbZaran0G51sHGt09JOJbtqwHfv9FeEWs8kFri488k5FoX8q7syduDjlWT3Z0rBX6O8O9+rwGXqiQ/YuxNUtJ3GhNg9goCbO6ilY7qdpBqNiJ8uyqSCJWP4EQCU9YTolEB3qAXi7ebMwxwVMc5Y0PX1bzOrjYbafFny2FPNUowLY77nHTH+NsqqjGSep/0lVKjHw/GN2kewWTAnHJe8CEdlJikbmvRKCuumvmP8T9syu8K7ZuYz1QxNaAf3Dm1gngnyI298qtWCWGKw8KK+zCbtJJVXBApbgjl9gBkBCYMjc7B9zHNOIq1ILlcBurnBIHatDqgnJrXsf5ZfeZ9/tifA5XKbeHLDs0FnlYhFBr3hZmz65/tU3NblCA7WyXalpKs4LAsy4/Zd762ciSBPxB1oD0yYuK57ON9DM9iOkj/AHdTopqFWX2QNASN1CuaD1qlLekyMlP4dqw1+BaSe392/0i+wgMKPEXcLG5mz2lyNm87W6yNXFaPg9CzdD/M8F7DOojQo5s1ooCGHvUBfutFiqtq1TFg+vcJ2GVBLZZH3Zx6mnqna6i3bvejHpiH0CDU43E5oqdy81kV5EOwvB3iFAsZoCqZZATgmcAwTzIYkuSOlr5vOUlXm/LZ+wx0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31686004)(66946007)(66476007)(66556008)(44832011)(8676002)(6666004)(36756003)(2906002)(186003)(4326008)(2616005)(53546011)(6512007)(6916009)(7416002)(6506007)(5660300002)(508600001)(86362001)(6486002)(8936002)(38100700002)(31696002)(26005)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UjlNRVNoRFhHTExSOHBHZCt4bmZxN2xLUEpKUlg0R2NSMElaa013NTdpd2Jy?=
+ =?utf-8?B?d2VsK2JBNFFLeElmcVRtZkY5My9OUDAwTStYUW12TGQycS9Sa3NYeFVpMGhN?=
+ =?utf-8?B?VUFrelR0ZEJGNVMwMkRWK05GVEk2d1loNVFrWXA5bjloM211RDRRK2JvOThW?=
+ =?utf-8?B?Mklod3ZXYlozbUlYZWZiRnFia3FYWk5HdldKYjJSWk9EVm5IUHREWlZLZUtN?=
+ =?utf-8?B?cEU1Z21xZmRIck5kUTFiWGE1eDNJdFVDY25pSUtmbEJ2R0Z0SzlqUjlobEMw?=
+ =?utf-8?B?NVhyNDdOQ004R0IxbUxHOHR2OHZpVzlEbzFSMitJYUIzMG1aMmZpdDd0elpY?=
+ =?utf-8?B?TGM5VVNxck5VUkp5bHpYWWRkeTZWMFRXbGhqalFrb0ZsNUp4N0JaemRqb1Bz?=
+ =?utf-8?B?K2RzNENLVHdGbGplU1dia1RGQzMxTVNHLzVHMEcrUnl6WGh1aTBxL1R0OVRa?=
+ =?utf-8?B?c2hPanFBa1RteUlsTmV3MmVTamlTUlU0R01tbEtVT0UvWTBQUENjOHVCQkxi?=
+ =?utf-8?B?UGF5bjlQQ0xBMnc0RGRpdzdlYTZPcXd5NnJVcjZCUGxyQmtZcHoxczR1b1Z3?=
+ =?utf-8?B?NGc2di8xdUY5NFlhYlBOS3YrS21lQW9rOTd6RFJBME8vMWJYRWZVNEpLcW9F?=
+ =?utf-8?B?Mjh0RnNXK2gzSkl1a0dNc2FReEI4ekIySllqWFNVUmdTckNDR2FUNG1JMEQv?=
+ =?utf-8?B?MllVK0hYeEcvYnA5UUE4VlJSc1A1dVkxQlltUUxMY2RKalZYYXJ2ZEdMV05h?=
+ =?utf-8?B?N1JKc3FxcGhtVE9zQnp6dmoxaU1ISDd1K2xMbWRYb3JGMGZlbnc1ZXN1Y3lx?=
+ =?utf-8?B?a0UrZGxaMFVYeTh6TGo2TDBQVHRZNHFoclZPY0JBTjBrMCtEUURzQzZ2M2ZT?=
+ =?utf-8?B?KzZHbGoycXRFWFJIOHBNb3M2VXRjMWJNaHNnSWwzQk52Y2Ntb0lod3QzTHh3?=
+ =?utf-8?B?eFJvdmlXT1FUZGh3dlMzelJBVzhVTXd0WWUzR1I3K0lnYldRQW9jOTEzZExu?=
+ =?utf-8?B?NkdNWXhJWUwycVJuNjhjWmFJMWhMNVJSclcxbDNlMTlvNm1KTTY3QkYxT3E2?=
+ =?utf-8?B?YnhHR28xL292UjVDUDFVdEQvUkluTW13UlU2Y0FvWEplUHlLM0x3Y3g4cjJ3?=
+ =?utf-8?B?MGVKTW9CZmlSODNtVE9ycHJ6UFE3QmR0dC9IT3hrSjlWK01hWEFxc0tRbFBO?=
+ =?utf-8?B?UXR1dGlTcE1LeGo1RjcwMlZBQklaUG5LR3JmdWY3L2JEU1NvWjNDYjhQVFNq?=
+ =?utf-8?B?R1pCTU1menJydTI3R0lBbHRyWmFHcVF6UDNqRStZSU8zT1BYRmFxZzIraUpX?=
+ =?utf-8?B?ajVCVFhNUEdwR1V4RnBtbHNiZlc1aGZ3Vis3eTBGekV2MWdOMnU5cVJUUHI5?=
+ =?utf-8?B?R2JBR0RPWUEvd2ZHbFIvVDA3aUhFWExRWC9lL2xMcTJUaWJlcitnSDUrNWY4?=
+ =?utf-8?B?MDdETWswZmQrdDlzUUpKVFF5L2xSODhZWWl5NUJBSGszaEdodmVMVTU0NUtM?=
+ =?utf-8?B?aG9xYXQ5Qk5DZFZhelAwbmFMV3JXTDBXMktvQUcrQlk5TUVCVjVkOFRiNnIz?=
+ =?utf-8?B?QXhMeUk2aklOZmJzdWtxQ29CTXNrdjNMTjdVUjlHQ0N4N2hBYlE0a2lvZXYx?=
+ =?utf-8?B?Zno2ajJrVmhsQU9MN2Y5YzJITUw2bFRtWUV3RkxYV2xZS093YThoVGRuNXA3?=
+ =?utf-8?B?UkxEckVzRktxSmRjUVVMQ3BKcGlCVHZTQzhkald3eXF1elNDckt4b3VGMVph?=
+ =?utf-8?B?YWN6ZUFScndBcHNnSXRzb3hHc2tVTUp0Unl1WktJQzhNdW0yK2p2ZTgrZGY4?=
+ =?utf-8?B?YmJYM01EQWVXQXhlSzBIbXh0aHF1SVU0YTFaT3BDa1dIQjl6NzE3VUFxR2dJ?=
+ =?utf-8?B?WmVMRmtPZjRxNTJVZk5reWtlYUd6eENHMGZYdXdwRzlkQXNaZDN3cEpBWXFy?=
+ =?utf-8?B?Z05hUmZ1Vy9ja1NyQVhoYWxZOHI5US9GbmErRm5lVHdZWHNQK3hyYmFEdjkw?=
+ =?utf-8?B?ZWphcFlIY2hqN2s4TU9ydXdyVjBaOUtMUnpnRmcrUFhwK0lGVUVwMnkwYXZF?=
+ =?utf-8?B?WHhCZkdnb3ZGRDNlTXczc2hNbis2UmNpc0Nvc3Ivck45b0dLbEVHMmVRK0Fs?=
+ =?utf-8?B?OEZHMFQ5d1FBTkJkb1ExUWlJNVBHb21lakpPZ2t6K1RYR2FhdnlNTmhXTmR4?=
+ =?utf-8?B?VU4wUE0ySTNuWEtqRHprdVFKTHNpeUhnM0dxaHFYdFJQVkNZdGxSRFFDazNZ?=
+ =?utf-8?B?YmJjTXhUeUFHb0hEaUdRVG9MNFl6RkQvSSt2cHlUYi9sOGdFdTdDZWhQQTlQ?=
+ =?utf-8?B?WFVTbzdnZjVUeHVLd3pEdWx3ejY5OVJqRkpnQXErbUlsMkJ3SzkzQT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ffcd9e2f-83c4-46ac-2e17-08da3f87cc1e
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2022 02:22:50.7773
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fUx9Bvo7N5GKwJSMSEf3Rj9X3x9R+3FtJJtl3nqrRH60R9klp53BVLWlWQB1DbhQ6QdyWdux6iHtGOpe8nVAsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5599
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/27/22 03:18, Michael S. Tsirkin wrote:
-> On Fri, May 20, 2022 at 03:06:48PM +0800, zhenwei pi wrote:
->> Introduce a new queue 'recover VQ', this allows guest to recover
->> hardware corrupted page:
->>
->> Guest              5.MF -> 6.RVQ FE    10.Unpoison page
->>                      /           \            /
->> -------------------+-------------+----------+-----------
->>                     |             |          |
->>                  4.MCE        7.RVQ BE   9.RVQ Event
->>   QEMU             /               \       /
->>               3.SIGBUS              8.Remap
->>                  /
->> ----------------+------------------------------------
->>                  |
->>              +--2.MF
->>   Host       /
->>         1.HW error
->>
->> The workflow:
->> 1, HardWare page error occurs randomly.
->> 2, host side handles corrupted page by Memory Failure mechanism, sends
->>     SIGBUS to the user process if early-kill is enabled.
->> 3, QEMU handles SIGBUS, if the address belongs to guest RAM, then:
->> 4, QEMU tries to inject MCE into guest.
->> 5, guest handles memory failure again.
->>
->> 1-5 is already supported for a long time, the next steps are supported
->> in this patch(also related driver patch):
->> 6, guest balloon driver gets noticed of the corrupted PFN, and sends
->>     request to host side by Recover VQ FrontEnd.
->> 7, QEMU handles request from Recover VQ BackEnd, then:
->> 8, QEMU remaps the corrupted HVA fo fix the memory failure, then:
->> 9, QEMU acks the guest side the result by Recover VQ.
->> 10, guest unpoisons the page if the corrupted page gets recoverd
->>      successfully.
->>
->> Then the guest fixes the HW page error dynamiclly without rebooting.
->>
->> Emulate MCE by QEMU, the guest works fine:
->>   mce: [Hardware Error]: Machine check events logged
->>   Memory failure: 0x61646: recovery action for dirty LRU page: Recovered
->>   virtio_balloon virtio5: recovered pfn 0x61646
->>   Unpoison: Unpoisoned page 0x61646 by virtio-balloon
->>   MCE: Killing stress:24502 due to hardware memory corruption fault at 7f5be2e5a010
->>
->> The 'HardwareCorrupted' in /proc/meminfo also shows 0 kB.
->>
->> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
->> ---
->>   drivers/virtio/virtio_balloon.c     | 243 ++++++++++++++++++++++++++++
->>   include/uapi/linux/virtio_balloon.h |  16 ++
->>   2 files changed, 259 insertions(+)
->>
->> diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
->> index f4c34a2a6b8e..f9d95d1d8a4d 100644
->> --- a/drivers/virtio/virtio_balloon.c
->> +++ b/drivers/virtio/virtio_balloon.c
->> @@ -52,6 +52,7 @@ enum virtio_balloon_vq {
->>   	VIRTIO_BALLOON_VQ_STATS,
->>   	VIRTIO_BALLOON_VQ_FREE_PAGE,
->>   	VIRTIO_BALLOON_VQ_REPORTING,
->> +	VIRTIO_BALLOON_VQ_RECOVER,
->>   	VIRTIO_BALLOON_VQ_MAX
->>   };
->>   
->> @@ -59,6 +60,12 @@ enum virtio_balloon_config_read {
->>   	VIRTIO_BALLOON_CONFIG_READ_CMD_ID = 0,
->>   };
->>   
->> +/* the request body to commucate with host side */
->> +struct __virtio_balloon_recover {
->> +	struct virtio_balloon_recover vbr;
->> +	__virtio32 pfns[VIRTIO_BALLOON_PAGES_PER_PAGE];
->> +};
->> +
+On 26-May-22 9:25 PM, Liang, Kan wrote:
 > 
 > 
-> I don't think this idea of passing 32 bit pfns is going to fly.
-> What is wrong with just passing the pages normally as a s/g list?
-> this is what is done for the hints at the moment.
+> On 5/26/2022 11:08 AM, Ravi Bangoria wrote:
+>> Hi Kan,
+>>
+>> [...]
+>>
+>>>> +static int write_pmu_caps(struct feat_fd *ff, struct evlist *evlist __maybe_unused)
+>>>> +{
+>>>> +    struct perf_pmu_caps *caps = NULL;
+>>>> +    struct perf_pmu *pmu = NULL;
+>>>> +    u32 nr_pmus = 0;
+>>>> +    int ret;
+>>>> +
+>>>> +    while ((pmu = perf_pmu__scan(pmu))) {
+>>>> +        if (!pmu->name || !strncmp(pmu->name, "cpu", 3) ||
+>>>> +            perf_pmu__caps_parse(pmu) <= 0)
+>>>> +            continue;
+>>>> +        nr_pmus++;
+>>>> +    }
+>>>> +
+>>>> +    ret = do_write(ff, &nr_pmus, sizeof(nr_pmus));
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    if (!nr_pmus)
+>>>> +        return 0;
+>>>> +
+>>>> +    while ((pmu = perf_pmu__scan(pmu))) {
+>>>> +        if (!pmu->name || !strncmp(pmu->name, "cpu", 3) || !pmu->nr_caps)
+>>>> +            continue;
+>>>> +
+>>>> +        ret = do_write_string(ff, pmu->name);
+>>>> +        if (ret < 0)
+>>>> +            return ret;
+>>>> +
+>>>> +        ret = do_write(ff, &pmu->nr_caps, sizeof(pmu->nr_caps));
+>>>> +        if (ret < 0)
+>>>> +            return ret;
+>>>> +
+>>>> +        list_for_each_entry(caps, &pmu->caps, list) {
+>>>> +            ret = do_write_string(ff, caps->name);
+>>>> +            if (ret < 0)
+>>>> +                return ret;
+>>>> +
+>>>> +            ret = do_write_string(ff, caps->value);
+>>>> +            if (ret < 0)
+>>>> +                return ret;
+>>>> +        }
+>>>> +    }
+>>>
+>>> The write_per_cpu_pmu_caps() also does a similar thing. Can we factor out a generic write_pmu_caps() which works for both cpu and non-cpu pmu capabilities?
+>>
+>> I might be able to do this but..
+>>
+>>> It seems the print_pmu_caps()/process_pmu_caps() can also does similar factor out.
+>>
+>> not this, see below..
+>>
+>>> Actually, more aggressively, why not use the HEADER_PMU_CAPS to replace the HEADER_HYBRID_CPU_PMU_CAPS? The HEADER_HYBRID_CPU_PMU_CAPS is the last header feature. It seems doable. We can always write/print the "cpu_" kind of PMU first to be compatible with the old tools.
+>>
+>> There are some differences in how capabilities are stored in perf.data header
+>> as well as perf_env. In case of HEADER_CPU_PMU_CAPS or
+>> HEADER_HYBRID_CPU_PMU_CAPS, all capabilities are stored in a single string
+>> separated by NULL character. 
 > 
-> neither should you use __virtio types for new functionality
-> (should all be __le), nor use __virtio for the struct name.
-> 
-> 
+> I think this is the format for the internal string, not the format of the perf.data header.
 
-Guest side sends GPA/PFN to host side by passing the pages normally as a 
-s/g list, this is OK.
+Yeah I just realized that after replying. Anyway, thanks for clarifying.
+Will change internal format of HEADER_HYBRID_CPU_PMU_CAPS (as well as
+HEADER_CPU_PMU_CAPS), and replace HEADER_HYBRID_CPU_PMU_CAPS with
+HEADER_PMU_CAPS.
 
-But in this scenario, guest also needs to get 
-status(recovered?corrupted?failed to recover?) of page from the host side.
-
-For a normal page(Ex, 4K), the host could return the status quite 
-immediately. But for the 2M hugetlb of guest RAM, the host should be 
-pending until the guest requests 512*4K to recover. Once the 2M hugepage 
-gets recovered(or failed to recover), the host returns 512 PFNs with 
-status to guest. There are at most 512 recover requests of a single 2M 
-huge page.
-
-For example, the guest tries to recover a corrupted page:
-struct scatterlist status_sg, page_sg, *sgs[2];
-
-sg_init_one(&status_sg, status, sizeof(*status));
-sgs[0] = &status_sg;
-
-p = page_address(page);
-sg_init_one(&page_sg, p, PAGE_SIZE);
-sgs[1] = &page_sg;
-
-virtqueue_add_sgs(recover_vq, sgs, 1, 1, NULL, GFP_ATOMIC);
-
-The host handles 4K recover request on 2M hugepage, this request is 
-pending until the full 2M huge page gets recovered(or failed).
-
-To avoid too many pending request in virt queue, I designed as this 
-patch(should use __le), passing PFN in request body, using a single IN 
-request only.
-
-
-...
->> --- a/include/uapi/linux/virtio_balloon.h
->> +++ b/include/uapi/linux/virtio_balloon.h
->> @@ -37,6 +37,7 @@
->>   #define VIRTIO_BALLOON_F_FREE_PAGE_HINT	3 /* VQ to report free pages */
->>   #define VIRTIO_BALLOON_F_PAGE_POISON	4 /* Guest is using page poisoning */
->>   #define VIRTIO_BALLOON_F_REPORTING	5 /* Page reporting virtqueue */
->> +#define VIRTIO_BALLOON_F_RECOVER	6 /* Memory recover virtqueue */
->>   
->>   /* Size of a PFN in the balloon interface. */
->>   #define VIRTIO_BALLOON_PFN_SHIFT 12
-> 
-> Please get this feature recorded in the spec with the virtio TC.
-> They will also ask you to supply minimal documentation.
-> 
-
-Sure!
-By the way, this feature depends on the memory&&memory-failure 
-mechanism, what about sending the change of spec to virtio TC after 
-Andrew and Naoya ack?
-
--- 
-zhenwei pi
+Thanks,
+Ravi

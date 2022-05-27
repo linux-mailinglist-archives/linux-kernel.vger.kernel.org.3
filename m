@@ -2,121 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B98535D6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F3B535D6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350544AbiE0J2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        id S1350580AbiE0J2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240627AbiE0J2L (ORCPT
+        with ESMTP id S1350555AbiE0J2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:28:11 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F70B7D2;
-        Fri, 27 May 2022 02:28:10 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 27so4383446ljw.0;
-        Fri, 27 May 2022 02:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Krhf4p2A4F/OozPS2wYakVlCdwv1A4RoS750BCdPKcc=;
-        b=Lw1bpYpSg6Xu8NYSj+hYo9JMrcr1uhDlArl5ZVRhx6dypMyJ7zKZ3kcR9dRux2FrPZ
-         BmVJTGXFFCR3ba14zXc5mJ7+oYZxeWuzvLMfTDBudWpx7eTDF1zVAqJSsDFZW8FP0Jcv
-         LCuSpakjj/F+JPoz5ggzjQkap3QhTs34BCJG+s4ZdWIy9hmIbtufuKALLsn+YPKZ/8Y1
-         qd7PP1O4Mth3HrZXpnbXWo5nZ5CHgpWaodAe2lFGAFpUYjnj5mWQ7XJMknD521TV5LqR
-         E2e17Y6Y6xXevcEbzNJsgqd/z7Zr7cY6OsenyRBQd7sy54/cmLQLf1whxWN2zge/OB8W
-         sCTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Krhf4p2A4F/OozPS2wYakVlCdwv1A4RoS750BCdPKcc=;
-        b=ZCRPsf1KVUc10SrZ9QjvxM3Z0/qU6XKc1y0a4D7Bcra9vuiIA+WbmN8q+ZsgRJG2Eo
-         yC4yBzbBZIfP0VjW6kkTCAOQjN6t2QophnguqhXVoRI7qP1D0AldSDOTQHNGSf2aUa3C
-         fS0ErL4PbMr2nOTzhIbGBbKw0c5spgfxzRFuikOBE4b6RxiR0/Ozvk8mjYtROKDDJIoG
-         wPlnVvdbsg67KoZPVSzPjI1nPPDi5lmxxIbeGXNq+GvgFhFLfBmccWfIoCyiF3GKxzpR
-         C8ozTkWM18Fv/Z2rcDEUxpUQAKHufCirYfSnpwew2od/YxdORf5rNZzGeCj8adR+gm8W
-         gguA==
-X-Gm-Message-State: AOAM531EWxPPt3KjVJo5C3KMqAeKFW6XUyb8+XvlmPbD0HxG1nAeSUuz
-        32TDc/mTRfrbaL6ThQM4cDc=
-X-Google-Smtp-Source: ABdhPJyilFQbXSAMaOm+DGPi2n3CTBILPrU5RfGaNxR0GU6ym+ew2t5uYYPEGFHYpijTzWR52odNHQ==
-X-Received: by 2002:a05:651c:248:b0:253:d7cb:136 with SMTP id x8-20020a05651c024800b00253d7cb0136mr23043541ljn.65.1653643688369;
-        Fri, 27 May 2022 02:28:08 -0700 (PDT)
-Received: from [192.168.0.192] ([194.146.248.76])
-        by smtp.gmail.com with ESMTPSA id k27-20020ac2457b000000b0047255d2114csm792432lfm.123.2022.05.27.02.28.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 May 2022 02:28:07 -0700 (PDT)
-Message-ID: <6531e5e0-d4d5-1a16-5c5c-e8ff443f3275@gmail.com>
-Date:   Fri, 27 May 2022 11:28:06 +0200
+        Fri, 27 May 2022 05:28:17 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028FDDFE9;
+        Fri, 27 May 2022 02:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653643696; x=1685179696;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=efyypdxFtKwj98j5J7dnwyYqKUsUcxzC2VXnwZlhrMk=;
+  b=YQa4NODRyXIeoG2SUk7VC9fA+F5Kyo0XaVoL0yj+0pVqJOjUvS1RSMdc
+   qzvkvJMdPWhGI4Z6FAe6NMkBXq3N6NWbrsF8UQY5xIOdNvoCGfoTLXHON
+   roJk7BeGPt1RZpm6+z5UnoNrzhJdJkJ8knarrhbd44bYPY4Ftoz3KfEK1
+   EyCliRg+SWTlqpJ45S5OMfW+0hOtkSwwTMMwGO6jxHI81YJSNL3o/7kxq
+   o5SfvTC0lNsJ5i/rYc7rXE7ITpFvku3q2QErQx2JaPKGpu4+HOEszxyd/
+   DAli142EQEDXXUs6Xl4xIHYBT9zkeiJ3+9nEPWEpIagSelxkUelrJ5eaR
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="360819280"
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="360819280"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:28:15 -0700
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="705040963"
+Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.254.211.236]) ([10.254.211.236])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:28:13 -0700
+Message-ID: <1bab5e74-70b9-64b0-b4e0-645ba832c3a9@intel.com>
+Date:   Fri, 27 May 2022 17:28:10 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] media: platform: samsung: s5p-jpeg: replace ternary
- operator with max()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v7 5/8] KVM: MMU: Add helper function to get pkr bits
 Content-Language: en-US
-To:     Guo Zhengkui <guozhengkui@vivo.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "moderated list:ARM/SAMSUNG S5P SERIES JPEG CODEC SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/SAMSUNG S5P SERIES JPEG CODEC SUPPORT" 
-        <linux-media@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     zhengkui_guo@outlook.com
-References: <1761ab1a-68ce-4946-24d4-8f4f9575e735@xs4all.nl>
- <20220518120836.126368-1-guozhengkui@vivo.com>
-From:   Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
-In-Reply-To: <20220518120836.126368-1-guozhengkui@vivo.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220424101557.134102-1-lei4.wang@intel.com>
+ <20220424101557.134102-6-lei4.wang@intel.com> <Yo1okaacf2kbvrxh@google.com>
+From:   "Wang, Lei" <lei4.wang@intel.com>
+In-Reply-To: <Yo1okaacf2kbvrxh@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guo Zhengkui,
+On 5/25/2022 7:21 AM, Sean Christopherson wrote:
+> On Sun, Apr 24, 2022, Lei Wang wrote:
+>> Extra the PKR stuff to a separate, non-inline helper, which is a
+> s/Extra/Extract
 
-Sorry about the delay.
+My mistake, will fix it.
 
-W dniu 18.05.2022 o 14:08, Guo Zhengkui pisze:
-> Fix the following coccicheck warning:
-> 
-> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:1712:24-25:
-> WARNING opportunity for max()
-> 
-> max() macro is defined in include/linux/minmax.h. It avoids multiple
-> evaluations of the arguments when non-constant and performs strict
-> type-checking.
-> 
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+>> preparation to introduce pks support.
+> Please provide more justification.  The change is justified, by random readers of
+> this patch/commit will be clueless.
+>
+>    Extract getting the effective PKR bits to a helper that lives in mmu.c
+>    in order to keep the is_cr4_*() helpers contained to mmu.c.  Support for
+>    PKRS (versus just PKRU) will require querying MMU state to see if the
+>    relevant CR4 bit is enabled because pkr_mask will be non-zero if _either_
+>    bit is enabled).
+>
+>    PKR{U,S} are exposed to the guest if and only if TDP is enabled, and
+>    while permission_fault() is performance critical for ia32 shadow paging,
+>    it's a rarely used path with TDP is enabled.  I.e. moving the PKR code
+>    out-of-line is not a performance concern.
 
-Acked-by: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+Will add more justification to make it clearer to random readers.
 
-> ---
-> v1 -> v2: Change the subject according to Hans Verkuil's suggestion.
-> 
->   drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-> index 456287186ad8..55814041b8d8 100644
-> --- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-> +++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-> @@ -1709,7 +1709,7 @@ static int exynos3250_jpeg_try_downscale(struct s5p_jpeg_ctx *ctx,
->   	w_ratio = ctx->out_q.w / r->width;
->   	h_ratio = ctx->out_q.h / r->height;
->   
-> -	scale_factor = w_ratio > h_ratio ? w_ratio : h_ratio;
-> +	scale_factor = max(w_ratio, h_ratio);
->   	scale_factor = clamp_val(scale_factor, 1, 8);
->   
->   	/* Align scale ratio to the nearest power of 2 */
+>> Signed-off-by: Lei Wang <lei4.wang@intel.com>
+>> ---
+>>   arch/x86/kvm/mmu.h     | 20 +++++---------------
+>>   arch/x86/kvm/mmu/mmu.c | 21 +++++++++++++++++++++
+>>   2 files changed, 26 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+>> index cb3f07e63778..cea03053a153 100644
+>> --- a/arch/x86/kvm/mmu.h
+>> +++ b/arch/x86/kvm/mmu.h
+>> @@ -204,6 +204,9 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>>   	return vcpu->arch.mmu->page_fault(vcpu, &fault);
+>>   }
+>>   
+>> +u32 kvm_mmu_pkr_bits(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> kvm_mmu_get_pkr_bits() so that there's a verb in there.
+
+Will fix it.
+
+>> +		     unsigned pte_access, unsigned pte_pkey, unsigned int pfec);
+>> +
+>>   /*
+>>    * Check if a given access (described through the I/D, W/R and U/S bits of a
+>>    * page fault error code pfec) causes a permission fault with the given PTE
+>> @@ -240,21 +243,8 @@ static inline u8 permission_fault(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+>>   
+>>   	WARN_ON(pfec & (PFERR_PK_MASK | PFERR_RSVD_MASK));
+>>   	if (unlikely(mmu->pkr_mask)) {
+>> -		u32 pkr_bits, offset;
+>> -
+>> -		/*
+>> -		* PKRU defines 32 bits, there are 16 domains and 2
+>> -		* attribute bits per domain in pkru.  pte_pkey is the
+>> -		* index of the protection domain, so pte_pkey * 2 is
+>> -		* is the index of the first bit for the domain.
+>> -		*/
+>> -		pkr_bits = (vcpu->arch.pkru >> (pte_pkey * 2)) & 3;
+>> -
+>> -		/* clear present bit, replace PFEC.RSVD with ACC_USER_MASK. */
+>> -		offset = (pfec & ~1) +
+>> -			((pte_access & PT_USER_MASK) << (PFERR_RSVD_BIT - PT_USER_SHIFT));
+>> -
+>> -		pkr_bits &= mmu->pkr_mask >> offset;
+>> +		u32 pkr_bits =
+>> +			kvm_mmu_pkr_bits(vcpu, mmu, pte_access, pte_pkey, pfec);
+> Nit, I prefer wrapping in the params, that way the first line shows the most
+> important information, e.g. what variable is being set and how (by a function call).
+> And then there won't be overflow with the longer helper name:
+>
+> 		u32 pkr_bits = kvm_mmu_get_pkr_bits(vcpu, mmu, pte_access,
+> 						    pte_pkey, pfec);
+
+Make sense, will make the wrapping more reasonable.
+
+> Comment needs to be aligned, and it can be adjust to wrap at 80 chars (its
+> indentation has changed).
+>
+> 	/*
+> 	 * PKRU and PKRS both define 32 bits. There are 16 domains and 2
+> 	 * attribute bits per domain in them. pte_key is the index of the
+> 	 * protection domain, so pte_pkey * 2 is the index of the first bit for
+> 	 * the domain. The use of PKRU versus PKRS is selected by the address
+> 	 * type, as determined by the U/S bit in the paging-structure entries.
+> 	 */
+Will align and adjust it.

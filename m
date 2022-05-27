@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360745359F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7B2535993
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346499AbiE0HKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 03:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S1344117AbiE0Gri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 02:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244974AbiE0HJF (ORCPT
+        with ESMTP id S1344432AbiE0Gr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 03:09:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CD3FC4F1;
-        Fri, 27 May 2022 00:07:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2205B61A4E;
-        Fri, 27 May 2022 07:07:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 227F5C385A9;
-        Fri, 27 May 2022 07:07:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653635262;
-        bh=IUjHTZg8XW3nb4CgLtI/7dZRQzTsTt0OL0lA1dn38Ks=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=u4YwSzyIoiKB1al1FWHnHUO4bdYgCahbKfw4d2m+Gu3WxV8gE+a7TrCEf+qJdBb2p
-         Wdy5nTtMgw4yQ8xJ9rlNVx4SbGJ/DDkxTgQ4PsTuvgsHJe5rG9T1qfXIeyRNEd62En
-         H7HniVWONh1cF6KuKhgyu7EEg0BcrJLOLFKUJZX0Cu/e60Fy7NLbjU3xsmfNsVpUOm
-         SEQQu+90NOP6EsbYoS8XPwDt/ntfN5nilJNw9fgOvdMm171I3ldjBrc+3wImODMwrP
-         Q6gQpFmYhn0dWT8e7aQ2G5FhQkDzy6uzAHZfkfJmC9rqlZzyfP73gl1C6G39z3+c+g
-         HtRni/NuN1ckQ==
-Date:   Fri, 27 May 2022 09:07:38 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-cc:     basavaraj.natikar@amd.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Chang <David.Chang@amd.com>
-Subject: Re: [PATCH v2] HID: amd_sfh: Don't show client init failed as error
- when discovery fails
-In-Reply-To: <20220512181848.27347-1-mario.limonciello@amd.com>
-Message-ID: <nycvar.YFH.7.76.2205270907320.10851@cbobk.fhfr.pm>
-References: <20220512181848.27347-1-mario.limonciello@amd.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Fri, 27 May 2022 02:47:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C08E2772
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:47:22 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L8Zz71qCbzRhRH;
+        Fri, 27 May 2022 14:44:19 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 14:47:21 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 14:47:20 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <peda@axentia.se>, <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] drivers: mux: Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 07:08:46 +0000
+Message-ID: <20220527070846.2359416-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,42 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022, Mario Limonciello wrote:
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
-> When sensor discovery fails, this means that the system doesn't have
-> any sensors connected and a user should only be notified at most one time.
-> A message is already displayed at WARN level of "failed to discover,
-> sensors not enabled".  It's pointless to show that the client init failed
-> at ERR level for the same condition.
-> 
-> Check the return code and don't display this message in those conditions.
-> 
-> Fixes: b5d7f43e97da ("HID: amd_sfh: Add support for sensor discovery")
-> Reported-by: David Chang <David.Chang@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v1->v2:
->  * fix some fat finger typos in commit message
-> 
->  drivers/hid/amd-sfh-hid/amd_sfh_pcie.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-> index dadc491bbf6b..1441787a154a 100644
-> --- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-> +++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-> @@ -327,7 +327,8 @@ static int amd_mp2_pci_probe(struct pci_dev *pdev, const struct pci_device_id *i
->  	rc = amd_sfh_hid_client_init(privdata);
->  	if (rc) {
->  		amd_sfh_clear_intr(privdata);
-> -		dev_err(&pdev->dev, "amd_sfh_hid_client_init failed\n");
-> +		if (rc != -EOPNOTSUPP)
-> +			dev_err(&pdev->dev, "amd_sfh_hid_client_init failed\n");
->  		return rc;
+Signed-off-by: keliu <liuke94@huawei.com>
+---
+ drivers/mux/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thank you.
-
+diff --git a/drivers/mux/core.c b/drivers/mux/core.c
+index 49bedbe6316c..0f5c76109bb6 100644
+--- a/drivers/mux/core.c
++++ b/drivers/mux/core.c
+@@ -66,7 +66,7 @@ static void mux_chip_release(struct device *dev)
+ {
+ 	struct mux_chip *mux_chip = to_mux_chip(dev);
+ 
+-	ida_simple_remove(&mux_ida, mux_chip->id);
++	ida_free(&mux_ida, mux_chip->id);
+ 	kfree(mux_chip);
+ }
+ 
+@@ -113,7 +113,7 @@ struct mux_chip *mux_chip_alloc(struct device *dev,
+ 	mux_chip->dev.of_node = dev->of_node;
+ 	dev_set_drvdata(&mux_chip->dev, mux_chip);
+ 
+-	mux_chip->id = ida_simple_get(&mux_ida, 0, 0, GFP_KERNEL);
++	mux_chip->id = ida_alloc(&mux_ida, GFP_KERNEL);
+ 	if (mux_chip->id < 0) {
+ 		int err = mux_chip->id;
+ 
 -- 
-Jiri Kosina
-SUSE Labs
+2.25.1
 

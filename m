@@ -2,610 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A349536805
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 22:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3BA53681B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 22:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354660AbiE0UYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 16:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
+        id S1350959AbiE0UcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 16:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351978AbiE0UXu (ORCPT
+        with ESMTP id S230135AbiE0UcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 16:23:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5384371D93;
-        Fri, 27 May 2022 13:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653683028; x=1685219028;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YfW+fJ4645D3tYlnsc3jcIPt/MQej5OO39oHCkaw7BU=;
-  b=bh/SprFUEvHsS8X6km2ntnIWE6SVAEXBiHtVOvlfKQ3rzEZCqHOoNKVM
-   gL5mh/DV8V9TPzvXRmKZaemyoO/QEIGi/FWlqWEl1tEPaBC9OlrBlA6Hk
-   zwSx8J4ShKA2fjEv0Hy4qsz3Eu0KVgOihQuO2njaKtA09auw1N4w2WGtO
-   XY3Kvik546OEsZn4DcpvMeDE5foiKfimM4US1tco3My6pJOGIvpSNAIVT
-   xy2aQ0lI26AP8UkNTzmWfGascruiKpVfaW9URhf1GnuPbwnPYVXniIuK/
-   iofWt7yjCUHdv8e4n0nV1d4qIUnGNhnPbkS8L7TNlxtdUSLEfgQstR/XU
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274578115"
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="274578115"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 13:23:47 -0700
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="678142761"
-Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.209.106.48])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 13:23:47 -0700
-From:   Russ Weight <russell.h.weight@intel.com>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        lee.jones@linaro.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
-        matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: [PATCH v22 5/5] fpga: m10bmc-sec: add max10 secure update functions
-Date:   Fri, 27 May 2022 13:23:30 -0700
-Message-Id: <20220527202330.839555-6-russell.h.weight@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220527202330.839555-1-russell.h.weight@intel.com>
-References: <20220527202330.839555-1-russell.h.weight@intel.com>
+        Fri, 27 May 2022 16:32:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF271269B0;
+        Fri, 27 May 2022 13:32:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D57E9B825F5;
+        Fri, 27 May 2022 20:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D468C385B8;
+        Fri, 27 May 2022 20:32:06 +0000 (UTC)
+Date:   Fri, 27 May 2022 16:32:05 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Subject: [PATCH v5] ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
+ weak function
+Message-ID: <20220527163205.421c7828@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create firmware upload ops and call the Firmware Upload support of the
-Firmware Loader subsystem to enable FPGA image uploads for secure
-updates of BMC images, FPGA images, etc.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Tested-by: Tianfei Zhang <tianfei.zhang@intel.com>
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
----
-v22:
-  - Added Tested-by tag from Tianfei.
-  - Removed unnecessary alignment check for source address from
-    m10bmc_sec_prepare().
-  - Changed the handling of a misaligned blk_size in m10bmc_sec_write().
-    Instead of allocating an aligned buffer and copying the block, copy
-    the misaligned bytes into an unsigned int and write with
-    regmap_write().
-v21:
-  - Update m10bmc_sec_prepare() to ensure that the base address for an
-    update image is aligned with stride.
-  - Update m10bmc_sec_write() to handle a block size that is not aligned
-    with stride by allocating a zero-filled block that is aligned, and
-    copying the data before calling regmap_bulk_write().
-v20:
-  - No change.
-v19:
-  - Change "card bmc" naming back to "m10 bmc" naming to be consistent
-    with the parent driver.
-v18:
-  - Moved the firmware_upload_register() function here from an earlier
-    patch since this is where the required ops are provided.
-  - Moved the bmc_sec_remove() function here from an earlier patch to
-    unregister the firmware driver and do cleanup.
-v17:
-  - Change "m10bmc" in symbol names to "cardbmc" to reflect the fact that the
-    future devices will not necessarily use the MAX10.
-  - Change from image_load class driver to the new firmware_upload 
-    functionality of the firmware_loader.
-  - fw_upload_ops functions will return "enum fw_upload_err" data types
-    instead of integer values.
-v16:
-  - Use 0 instead of FPGA_IMAGE_ERR_NONE to indicate success.
-  - The size alignment check was moved from the FPGA Image Load framework
-    to the prepare() op.
-  - Added cancel_request boolean flag to struct m10bmc_sec.
-  - Moved the RSU cancellation logic from m10bmc_sec_cancel() to a new
-    rsu_cancel() function.
-  - The m10bmc_sec_cancel() function ONLY sets the cancel_request flag.
-    The cancel_request flag is checked at the beginning of the
-    m10bmc_sec_write() and m10bmc_sec_poll_complete() functions.
-  - Adapt to changed prototypes for the prepare() and write() ops. The
-    m10bmc_sec_write_blk() function has been renamed to
-    m10bmc_sec_write().
-  - Created a cleanup() op, m10bmc_sec_cleanup(), to attempt to cancel an
-    ongoing op during when exiting the update process.
-v15:
-  - Adapted to changes in the FPGA Image Load framework:
-    (1) All enum types (progress and errors) are now type u32
-    (2) m10bmc_sec_write_blk() adds *blk_size and max_size parameters
-        and uses *blk_size as provided by the caller.
-    (3) m10bmc_sec_poll_complete() no long checks the driver_unload
-        flag.
-v14:
-  - Changed symbol names to reflect the renaming of the Security Manager
-    Class driver to FPGA Image Load.
-v13:
-  - No change
-v12:
-  - Updated Date and KernelVersion fields in ABI documentation
-  - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk()
-    no longer has a size parameter, and the block size is determined
-    in this (the lower-level) driver.
-v11:
-  - No change
-v10:
-  - No change
-v9:
-  - No change
-v8:
-  - Previously patch 5/6, otherwise no change
-v7:
-  - No change
-v6:
-  - Changed (size / stride) calculation to ((size + stride - 1) / stride)
-    to ensure that the proper count is passed to regmap_bulk_write().
-  - Removed unnecessary call to rsu_check_complete() in
-    m10bmc_sec_poll_complete() and changed while loop to
-    do/while loop.
-v5:
-  - No change
-v4:
-  - No change
-v3:
-  - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
-  - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
-    driver"
-  - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
-    underlying functions are now called directly.
-  - Changed calling functions of functions that return "enum fpga_sec_err"
-    to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
-v2:
-  - Reworked the rsu_start_done() function to make it more readable
-  - Reworked while-loop condition/content in rsu_prog_ready()
-  - Minor code cleanup per review comments
-  - Added a comment to the m10bmc_sec_poll_complete() function to
-    explain the context (could take 30+ minutes to complete).
-  - Added m10bmc_ prefix to functions in m10bmc_iops structure
-  - Moved MAX10 BMC address and function definitions to a separate
-    patch.
----
- drivers/fpga/intel-m10-bmc-sec-update.c | 394 ++++++++++++++++++++++++
- 1 file changed, 394 insertions(+)
+If an unused weak function was traced, it's call to fentry will still
+exist, which gets added into the __mcount_loc table. Ftrace will use
+kallsyms to retrieve the name for each location in __mcount_loc to display
+it in the available_filter_functions and used to enable functions via the
+name matching in set_ftrace_filter/notrace. Enabling these functions do
+nothing but enable an unused call to ftrace_caller. If a traced weak
+function is overridden, the symbol of the function would be used for it,
+which will either created duplicate names, or if the previous function was
+not traced, it would be incorrectly be listed in available_filter_functions
+as a function that can be traced.
 
-diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-index 65fec2a70901..72c677c910de 100644
---- a/drivers/fpga/intel-m10-bmc-sec-update.c
-+++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-@@ -17,8 +17,14 @@
- struct m10bmc_sec {
- 	struct device *dev;
- 	struct intel_m10bmc *m10bmc;
-+	struct fw_upload *fwl;
-+	char *fw_name;
-+	u32 fw_name_id;
-+	bool cancel_request;
- };
+This became an issue with BPF[1] as there are tooling that enables the
+direct callers via ftrace but then checks to see if the functions were
+actually enabled. The case of one function that was marked notrace, but
+was followed by an unused weak function that was traced. The unused
+function's call to fentry was added to the __mcount_loc section, and
+kallsyms retrieved the untraced function's symbol as the weak function was
+overridden. Since the untraced function would not get traced, the BPF
+check would detect this and fail.
+
+The real fix would be to fix kallsyms to not show addresses of weak
+functions as the function before it. But that would require adding code in
+the build to add function size to kallsyms so that it can know when the
+function ends instead of just using the start of the next known symbol.
+
+In the mean time, this is a work around. Add a FTRACE_MCOUNT_MAX_OFFSET
+macro that if defined, ftrace will ignore any function that has its call
+to fentry/mcount that has an offset from the symbol that is greater than
+FTRACE_MCOUNT_MAX_OFFSET.
+
+If CONFIG_HAVE_FENTRY is defined for x86, define FTRACE_MCOUNT_MAX_OFFSET
+to zero (unless IBT is enabled), which will have ftrace ignore all locations
+that are not at the start of the function (or one after the ENDBR
+instruction).
+
+A worker thread is added at boot up to scan all the ftrace record entries,
+and will mark any that fail the FTRACE_MCOUNT_MAX_OFFSET test as disabled.
+They will still appear in the available_filter_functions file as:
+
+  __ftrace_invalid_address___<invalid-offset>
+
+(showing the offset that caused it to be invalid).
+
+This is required for tools that use libtracefs (like trace-cmd does) that
+scan the available_filter_functions and enable set_ftrace_filter and
+set_ftrace_notrace using indexes of the function listed in the file (this
+is a speedup, as enabling thousands of files via names is an O(n^2)
+operation and can take minutes to complete, where the indexing takes less
+than a second).
+
+The invalid functions cannot be removed from available_filter_functions as
+the names there correspond to the ftrace records in the array that manages
+them (and the indexing depends on this).
+
+[1] https://lore.kernel.org/all/20220412094923.0abe90955e5db486b7bca279@kernel.org/
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Changes from v4: https://lkml.kernel.org/r/20220526141912.794c2786@gandalf.local.home
+
+ - Had to add logic to keep the invalid functions displayed in
+   available_filter_functions as libtracefs depends on it (as the indexing
+   API depends on it). Instead of not showing the invalid functions,
+   show them as: __ftrace_invalid_address___<invalid-offset>
+
+ - Moved the include of ibt.h into the #ifdef that requires it.
+
+ arch/x86/include/asm/ftrace.h |   7 ++
+ kernel/trace/ftrace.c         | 137 +++++++++++++++++++++++++++++++++-
+ 2 files changed, 142 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index 024d9797646e..b5ef474be858 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -9,6 +9,13 @@
+ # define MCOUNT_ADDR		((unsigned long)(__fentry__))
+ #define MCOUNT_INSN_SIZE	5 /* sizeof mcount call */
  
-+static DEFINE_XARRAY_ALLOC(fw_upload_xa);
++/* Ignore unused weak functions which will have non zero offsets */
++#ifdef CONFIG_HAVE_FENTRY
++# include <asm/ibt.h>
++/* Add offset for endbr64 if IBT enabled */
++# define FTRACE_MCOUNT_MAX_OFFSET	ENDBR_INSN_SIZE
++#endif
 +
- /* Root Entry Hash (REH) support */
- #define REH_SHA256_SIZE		32
- #define REH_SHA384_SIZE		48
-@@ -192,10 +198,365 @@ static const struct attribute_group *m10bmc_sec_attr_groups[] = {
- 	NULL,
- };
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ #define ARCH_SUPPORTS_FTRACE_OPS 1
+ #endif
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index d653ef4febc5..b861756e4002 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -45,6 +45,8 @@
+ #include "trace_output.h"
+ #include "trace_stat.h"
  
-+static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
++#define FTRACE_INVALID_FUNCTION		"__ftrace_invalid_address__"
++
+ #define FTRACE_WARN_ON(cond)			\
+ 	({					\
+ 		int ___r = cond;		\
+@@ -3654,6 +3656,105 @@ static void add_trampoline_func(struct seq_file *m, struct ftrace_ops *ops,
+ 		seq_printf(m, " ->%pS", ptr);
+ }
+ 
++#ifdef FTRACE_MCOUNT_MAX_OFFSET
++/*
++ * Weak functions can still have an mcount/fentry that is saved in
++ * the __mcount_loc section. These can be detected by having a
++ * symbol offset of greater than FTRACE_MCOUNT_MAX_OFFSET, as the
++ * symbol found by kallsyms is not the function that the mcount/fentry
++ * is part of. The offset is much greater in these cases.
++ *
++ * Test the record to make sure that the ip points to a valid kallsyms
++ * and if not, mark it disabled.
++ */
++static int test_for_valid_rec(struct dyn_ftrace *rec)
 +{
-+	u32 auth_result;
++	char str[KSYM_SYMBOL_LEN];
++	unsigned long offset;
++	const char *ret;
 +
-+	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
++	ret = kallsyms_lookup(rec->ip, NULL, &offset, NULL, str);
 +
-+	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
-+		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
-+}
-+
-+static enum fw_upload_err rsu_check_idle(struct m10bmc_sec *sec)
-+{
-+	u32 doorbell;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+	if (ret)
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+
-+	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
-+	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_BUSY;
-+	}
-+
-+	return FW_UPLOAD_ERR_NONE;
-+}
-+
-+static inline bool rsu_start_done(u32 doorbell)
-+{
-+	u32 status, progress;
-+
-+	if (doorbell & DRBL_RSU_REQUEST)
-+		return false;
-+
-+	status = rsu_stat(doorbell);
-+	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
-+		return true;
-+
-+	progress = rsu_prog(doorbell);
-+	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
-+		return true;
-+
-+	return false;
-+}
-+
-+static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
-+{
-+	u32 doorbell, status;
-+	int ret;
-+
-+	ret = regmap_update_bits(sec->m10bmc->regmap,
-+				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				 DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
-+				 DRBL_RSU_REQUEST |
-+				 FIELD_PREP(DRBL_HOST_STATUS,
-+					    HOST_STATUS_IDLE));
-+	if (ret)
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+
-+	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-+				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				       doorbell,
-+				       rsu_start_done(doorbell),
-+				       NIOS_HANDSHAKE_INTERVAL_US,
-+				       NIOS_HANDSHAKE_TIMEOUT_US);
-+
-+	if (ret == -ETIMEDOUT) {
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_TIMEOUT;
-+	} else if (ret) {
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+	}
-+
-+	status = rsu_stat(doorbell);
-+	if (status == RSU_STAT_WEAROUT) {
-+		dev_warn(sec->dev, "Excessive flash update count detected\n");
-+		return FW_UPLOAD_ERR_WEAROUT;
-+	} else if (status == RSU_STAT_ERASE_FAIL) {
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_HW_ERROR;
-+	}
-+
-+	return FW_UPLOAD_ERR_NONE;
-+}
-+
-+static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
-+{
-+	unsigned long poll_timeout;
-+	u32 doorbell, progress;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+	if (ret)
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+
-+	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
-+	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
-+		msleep(RSU_PREP_INTERVAL_MS);
-+		if (time_after(jiffies, poll_timeout))
-+			break;
-+
-+		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+		if (ret)
-+			return FW_UPLOAD_ERR_RW_ERROR;
-+	}
-+
-+	progress = rsu_prog(doorbell);
-+	if (progress == RSU_PROG_PREPARE) {
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_TIMEOUT;
-+	} else if (progress != RSU_PROG_READY) {
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_HW_ERROR;
-+	}
-+
-+	return FW_UPLOAD_ERR_NONE;
-+}
-+
-+static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-+{
-+	u32 doorbell;
-+	int ret;
-+
-+	ret = regmap_update_bits(sec->m10bmc->regmap,
-+				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				 DRBL_HOST_STATUS,
-+				 FIELD_PREP(DRBL_HOST_STATUS,
-+					    HOST_STATUS_WRITE_DONE));
-+	if (ret)
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+
-+	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-+				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				       doorbell,
-+				       rsu_prog(doorbell) != RSU_PROG_READY,
-+				       NIOS_HANDSHAKE_INTERVAL_US,
-+				       NIOS_HANDSHAKE_TIMEOUT_US);
-+
-+	if (ret == -ETIMEDOUT) {
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_TIMEOUT;
-+	} else if (ret) {
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+	}
-+
-+	switch (rsu_stat(doorbell)) {
-+	case RSU_STAT_NORMAL:
-+	case RSU_STAT_NIOS_OK:
-+	case RSU_STAT_USER_OK:
-+	case RSU_STAT_FACTORY_OK:
-+		break;
-+	default:
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_HW_ERROR;
-+	}
-+
-+	return FW_UPLOAD_ERR_NONE;
-+}
-+
-+static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
-+{
-+	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
-+		return -EIO;
-+
-+	switch (rsu_stat(*doorbell)) {
-+	case RSU_STAT_NORMAL:
-+	case RSU_STAT_NIOS_OK:
-+	case RSU_STAT_USER_OK:
-+	case RSU_STAT_FACTORY_OK:
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	switch (rsu_prog(*doorbell)) {
-+	case RSU_PROG_IDLE:
-+	case RSU_PROG_RSU_DONE:
++	/* Weak functions can cause invalid addresses */
++	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET) {
++		rec->flags |= FTRACE_FL_DISABLED;
 +		return 0;
-+	case RSU_PROG_AUTHENTICATING:
-+	case RSU_PROG_COPYING:
-+	case RSU_PROG_UPDATE_CANCEL:
-+	case RSU_PROG_PROGRAM_KEY_HASH:
-+		return -EAGAIN;
-+	default:
-+		return -EINVAL;
 +	}
++	return 1;
 +}
 +
-+static enum fw_upload_err rsu_cancel(struct m10bmc_sec *sec)
-+{
-+	u32 doorbell;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+	if (ret)
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+
-+	if (rsu_prog(doorbell) != RSU_PROG_READY)
-+		return FW_UPLOAD_ERR_BUSY;
-+
-+	ret = regmap_update_bits(sec->m10bmc->regmap,
-+				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-+				 DRBL_HOST_STATUS,
-+				 FIELD_PREP(DRBL_HOST_STATUS,
-+					    HOST_STATUS_ABORT_RSU));
-+	if (ret)
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+
-+	return FW_UPLOAD_ERR_CANCELED;
-+}
-+
-+static enum fw_upload_err m10bmc_sec_prepare(struct fw_upload *fwl,
-+					     const u8 *data, u32 size)
-+{
-+	struct m10bmc_sec *sec = fwl->dd_handle;
-+	u32 ret;
-+
-+	sec->cancel_request = false;
-+
-+	if (!size || size > M10BMC_STAGING_SIZE)
-+		return FW_UPLOAD_ERR_INVALID_SIZE;
-+
-+	ret = rsu_check_idle(sec);
-+	if (ret != FW_UPLOAD_ERR_NONE)
-+		return ret;
-+
-+	ret = rsu_update_init(sec);
-+	if (ret != FW_UPLOAD_ERR_NONE)
-+		return ret;
-+
-+	ret = rsu_prog_ready(sec);
-+	if (ret != FW_UPLOAD_ERR_NONE)
-+		return ret;
-+
-+	if (sec->cancel_request)
-+		return rsu_cancel(sec);
-+
-+	return FW_UPLOAD_ERR_NONE;
-+}
-+
-+#define WRITE_BLOCK_SIZE 0x4000	/* Default write-block size is 0x4000 bytes */
-+
-+static enum fw_upload_err m10bmc_sec_write(struct fw_upload *fwl, const u8 *data,
-+					   u32 offset, u32 size, u32 *written)
-+{
-+	struct m10bmc_sec *sec = fwl->dd_handle;
-+	u32 blk_size, doorbell, extra_offset;
-+	unsigned int stride, extra = 0;
-+	int ret;
-+
-+	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
-+	if (sec->cancel_request)
-+		return rsu_cancel(sec);
-+
-+	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-+	if (ret) {
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_HW_ERROR;
-+	}
-+
-+	WARN_ON_ONCE(WRITE_BLOCK_SIZE % stride);
-+	blk_size = min_t(u32, WRITE_BLOCK_SIZE, size);
-+	ret = regmap_bulk_write(sec->m10bmc->regmap,
-+				M10BMC_STAGING_BASE + offset,
-+				(void *)data + offset,
-+				blk_size / stride);
-+	if (ret)
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+
-+	/*
-+	 * If blk_size is not aligned to stride, then handle the extra
-+	 * bytes with regmap_write.
-+	 */
-+	if (blk_size % stride) {
-+		extra_offset = offset + ALIGN_DOWN(blk_size, stride);
-+		memcpy(&extra, (u8 *)(data + extra_offset), blk_size % stride);
-+		ret = regmap_write(sec->m10bmc->regmap,
-+				   M10BMC_STAGING_BASE + extra_offset, extra);
-+		if (ret)
-+			return FW_UPLOAD_ERR_RW_ERROR;
-+	}
-+
-+	*written = blk_size;
-+	return FW_UPLOAD_ERR_NONE;
-+}
-+
-+static enum fw_upload_err m10bmc_sec_poll_complete(struct fw_upload *fwl)
-+{
-+	struct m10bmc_sec *sec = fwl->dd_handle;
-+	unsigned long poll_timeout;
-+	u32 doorbell, result;
-+	int ret;
-+
-+	if (sec->cancel_request)
-+		return rsu_cancel(sec);
-+
-+	result = rsu_send_data(sec);
-+	if (result != FW_UPLOAD_ERR_NONE)
-+		return result;
-+
-+	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
-+	do {
-+		msleep(RSU_COMPLETE_INTERVAL_MS);
-+		ret = rsu_check_complete(sec, &doorbell);
-+	} while (ret == -EAGAIN && !time_after(jiffies, poll_timeout));
-+
-+	if (ret == -EAGAIN) {
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_TIMEOUT;
-+	} else if (ret == -EIO) {
-+		return FW_UPLOAD_ERR_RW_ERROR;
-+	} else if (ret) {
-+		log_error_regs(sec, doorbell);
-+		return FW_UPLOAD_ERR_HW_ERROR;
-+	}
-+
-+	return FW_UPLOAD_ERR_NONE;
-+}
++static struct workqueue_struct *ftrace_check_wq __initdata;
++static struct work_struct ftrace_check_work __initdata;
 +
 +/*
-+ * m10bmc_sec_cancel() may be called asynchronously with an on-going update.
-+ * All other functions are called sequentially in a single thread. To avoid
-+ * contention on register accesses, m10bmc_sec_cancel() must only update
-+ * the cancel_request flag. Other functions will check this flag and handle
-+ * the cancel request synchronously.
++ * Scan all the mcount/fentry entries to make sure they are valid.
 + */
-+static void m10bmc_sec_cancel(struct fw_upload *fwl)
++static __init void ftrace_check_work_func(struct work_struct *work)
 +{
-+	struct m10bmc_sec *sec = fwl->dd_handle;
++	struct ftrace_page *pg;
++	struct dyn_ftrace *rec;
 +
-+	sec->cancel_request = true;
++	mutex_lock(&ftrace_lock);
++	do_for_each_ftrace_rec(pg, rec) {
++		test_for_valid_rec(rec);
++	} while_for_each_ftrace_rec();
++	mutex_unlock(&ftrace_lock);
 +}
 +
-+static void m10bmc_sec_cleanup(struct fw_upload *fwl)
++static int __init ftrace_check_for_weak_functions(void)
 +{
-+	struct m10bmc_sec *sec = fwl->dd_handle;
++	INIT_WORK(&ftrace_check_work, ftrace_check_work_func);
 +
-+	(void)rsu_cancel(sec);
-+}
++	ftrace_check_wq = alloc_workqueue("ftrace_check_wq", WQ_UNBOUND, 0);
 +
-+static const struct fw_upload_ops m10bmc_ops = {
-+	.prepare = m10bmc_sec_prepare,
-+	.write = m10bmc_sec_write,
-+	.poll_complete = m10bmc_sec_poll_complete,
-+	.cancel = m10bmc_sec_cancel,
-+	.cleanup = m10bmc_sec_cleanup,
-+};
-+
- #define SEC_UPDATE_LEN_MAX 32
- static int m10bmc_sec_probe(struct platform_device *pdev)
- {
-+	char buf[SEC_UPDATE_LEN_MAX];
- 	struct m10bmc_sec *sec;
-+	struct fw_upload *fwl;
-+	unsigned int len;
-+	int  ret;
- 
- 	sec = devm_kzalloc(&pdev->dev, sizeof(*sec), GFP_KERNEL);
- 	if (!sec)
-@@ -205,6 +566,38 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
- 	sec->m10bmc = dev_get_drvdata(pdev->dev.parent);
- 	dev_set_drvdata(&pdev->dev, sec);
- 
-+	ret = xa_alloc(&fw_upload_xa, &sec->fw_name_id, sec,
-+		       xa_limit_32b, GFP_KERNEL);
-+	if (ret)
-+		return ret;
-+
-+	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
-+			sec->fw_name_id);
-+	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
-+	if (!sec->fw_name)
-+		return -ENOMEM;
-+
-+	fwl = firmware_upload_register(THIS_MODULE, sec->dev, sec->fw_name,
-+				       &m10bmc_ops, sec);
-+	if (IS_ERR(fwl)) {
-+		dev_err(sec->dev, "Firmware Upload driver failed to start\n");
-+		kfree(sec->fw_name);
-+		xa_erase(&fw_upload_xa, sec->fw_name_id);
-+		return PTR_ERR(fwl);
-+	}
-+
-+	sec->fwl = fwl;
++	queue_work(ftrace_check_wq, &ftrace_check_work);
 +	return 0;
 +}
 +
-+static int m10bmc_sec_remove(struct platform_device *pdev)
++static int __init ftrace_check_sync(void)
 +{
-+	struct m10bmc_sec *sec = dev_get_drvdata(&pdev->dev);
++	/* Make sure the ftrace_check updates are finished */
++	if (ftrace_check_wq)
++		destroy_workqueue(ftrace_check_wq);
++	return 0;
++}
 +
-+	firmware_upload_unregister(sec->fwl);
-+	kfree(sec->fw_name);
-+	xa_erase(&fw_upload_xa, sec->fw_name_id);
++late_initcall_sync(ftrace_check_sync);
++subsys_initcall(ftrace_check_for_weak_functions);
 +
++static int print_rec(struct seq_file *m, unsigned long ip)
++{
++	unsigned long offset;
++	char str[KSYM_SYMBOL_LEN];
++	char *modname;
++	const char *ret;
++
++	ret = kallsyms_lookup(ip, NULL, &offset, &modname, str);
++	/* Weak functions can cause invalid addresses */
++	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET) {
++		snprintf(str, KSYM_SYMBOL_LEN, "%s_%ld",
++			 FTRACE_INVALID_FUNCTION, offset);
++		ret = NULL;
++	}
++
++	seq_puts(m, str);
++	if (modname)
++		seq_printf(m, " [%s]", modname);
++	return ret == NULL ? -1 : 0;
++}
++#else
++static inline int test_for_valid_rec(struct dyn_ftrace *rec)
++{
++	return 1;
++}
++
++static inline int print_rec(struct seq_file *m, unsigned long ip)
++{
++	seq_printf(m, "%ps", (void *)ip);
++	return 0;
++}
++#endif
++
+ static int t_show(struct seq_file *m, void *v)
+ {
+ 	struct ftrace_iterator *iter = m->private;
+@@ -3678,7 +3779,13 @@ static int t_show(struct seq_file *m, void *v)
+ 	if (!rec)
+ 		return 0;
+ 
+-	seq_printf(m, "%ps", (void *)rec->ip);
++	if (print_rec(m, rec->ip)) {
++		/* This should only happen when a rec is disabled */
++		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
++		seq_putc(m, '\n');
++		return 0;
++	}
++
+ 	if (iter->flags & FTRACE_ITER_ENABLED) {
+ 		struct ftrace_ops *ops;
+ 
+@@ -3996,6 +4103,24 @@ add_rec_by_index(struct ftrace_hash *hash, struct ftrace_glob *func_g,
  	return 0;
  }
  
-@@ -218,6 +611,7 @@ MODULE_DEVICE_TABLE(platform, intel_m10bmc_sec_ids);
++#ifdef FTRACE_MCOUNT_MAX_OFFSET
++static int lookup_ip(unsigned long ip, char **modname, char *str)
++{
++	unsigned long offset;
++
++	kallsyms_lookup(ip, NULL, &offset, modname, str);
++	if (offset > FTRACE_MCOUNT_MAX_OFFSET)
++		return -1;
++	return 0;
++}
++#else
++static int lookup_ip(unsigned long ip, char **modname, char *str)
++{
++	kallsyms_lookup(ip, NULL, NULL, modname, str);
++	return 0;
++}
++#endif
++
+ static int
+ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
+ 		struct ftrace_glob *mod_g, int exclude_mod)
+@@ -4003,7 +4128,11 @@ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
+ 	char str[KSYM_SYMBOL_LEN];
+ 	char *modname;
  
- static struct platform_driver intel_m10bmc_sec_driver = {
- 	.probe = m10bmc_sec_probe,
-+	.remove = m10bmc_sec_remove,
- 	.driver = {
- 		.name = "intel-m10bmc-sec-update",
- 		.dev_groups = m10bmc_sec_attr_groups,
+-	kallsyms_lookup(rec->ip, NULL, NULL, &modname, str);
++	if (lookup_ip(rec->ip, &modname, str)) {
++		/* This should only happen when a rec is disabled */
++		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
++		return 0;
++	}
+ 
+ 	if (mod_g) {
+ 		int mod_matches = (modname) ? ftrace_match(modname, mod_g) : 0;
+@@ -6830,6 +6959,10 @@ void ftrace_module_enable(struct module *mod)
+ 		if (ftrace_start_up)
+ 			cnt += referenced_filters(rec);
+ 
++		/* Weak functions should still be ignored */
++		if (!test_for_valid_rec(rec))
++			continue;
++
+ 		rec->flags &= ~FTRACE_FL_DISABLED;
+ 		rec->flags += cnt;
+ 
 -- 
-2.25.1
+2.35.1
 

@@ -2,42 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D435E535D51
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039FF535D18
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350390AbiE0JXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S1349876AbiE0JVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350392AbiE0JXi (ORCPT
+        with ESMTP id S231964AbiE0JVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:23:38 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE90BF68B8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:23:36 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L8fVm6Pq8zDqWB;
-        Fri, 27 May 2022 17:23:28 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemi500016.china.huawei.com
- (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 27 May
- 2022 17:23:34 +0800
-From:   Zhou Guanghui <zhouguanghui1@huawei.com>
-To:     <akpm@linux-foundation.org>, <rppt@kernel.org>, <will@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>, <xuqiang36@huawei.com>,
-        <zhouguanghui1@huawei.com>
-Subject: [PATCH v3] memblock,arm64: Expand the static memblock memory table
-Date:   Fri, 27 May 2022 09:18:32 +0000
-Message-ID: <20220527091832.63489-1-zhouguanghui1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 27 May 2022 05:21:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF236AA6B;
+        Fri, 27 May 2022 02:21:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8F55B823D0;
+        Fri, 27 May 2022 09:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E4F2C385A9;
+        Fri, 27 May 2022 09:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653643262;
+        bh=ez+vHDC1JZcB/q4Ew/Nyp1xMVHDbgDrO5Einjt3rI1Y=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Fp0qRcCM5reRtgw54xqvPVkW6BPvu4O4gz4OU03NnufzAV4is8i2DjZoOq1zQb8c2
+         UjvtzMWfTZC8s2apsETWVIzqv60bTNo3unCIl+va6LKfel6wdoK0jx2cNL6O3iwWJv
+         n3pwSTz7j5c40e52EJizBgJoxqwF//PPnf4CsBYbn00yREr6BRobJQZAMAsFI808RS
+         Mp42fs4uyS5Zp3R4sXMzZFgXAxpWSam3vEuKwagyq2yYpzF7MhZLOZjIELWLiVEuHj
+         gnt5g/ARK2DT3sp/hzSbxY/I/BOOZ2rfhGVrITvAdA0VoQ3aFzNMsstZOqvkjLOCcf
+         PoCZ35692YRRA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org
+Subject: Re: mainline build failure due to c1918196427b ("iwlwifi: pcie: simplify MSI-X cause mapping")
+References: <YpCWIlVFd7JDPfT+@debian>
+Date:   Fri, 27 May 2022 12:20:55 +0300
+In-Reply-To: <YpCWIlVFd7JDPfT+@debian> (Sudip Mukherjee's message of "Fri, 27
+        May 2022 10:13:06 +0100")
+Message-ID: <875ylrqqko.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,112 +61,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a system using HBM, a multi-bit ECC error occurs, and the BIOS
-will mark the corresponding area (for example, 2 MB) as unusable.
-When the system restarts next time, these areas are not reported
-or reported as EFI_UNUSABLE_MEMORY. Both cases lead to an increase
-in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads to a
-larger number of memblocks.
+Sudip Mukherjee <sudipm.mukherjee@gmail.com> writes:
 
-For example, if the EFI_UNUSABLE_MEMORY type is reported:
-...
-memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
-memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
-memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
-memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
-memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
-memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
-...
+> The latest mainline kernel branch fails to build for mips allmodconfig
+> with the error:
+>
+> drivers/net/wireless/intel/iwlwifi/pcie/trans.c:1093: error: "CAUSE" redefined [-Werror]
+>  1093 | #define CAUSE(reg, mask)                                                \
+>       | 
+> In file included from ./arch/mips/include/asm/ptrace.h:19,
+>                  from ./include/linux/sched/signal.h:14,
+>                  from ./include/linux/rcuwait.h:6,
+>                  from ./include/linux/percpu-rwsem.h:7,
+>                  from ./include/linux/fs.h:33,
+>                  from ./arch/mips/include/asm/elf.h:12,
+>                  from ./include/linux/elf.h:6,
+>                  from ./include/linux/module.h:19,
+>                  from ./include/linux/device/driver.h:21,
+>                  from ./include/linux/device.h:32,
+>                  from ./include/linux/pci.h:37,
+>                  from drivers/net/wireless/intel/iwlwifi/pcie/trans.c:7:
+> ./arch/mips/include/uapi/asm/ptrace.h:18: note: this is the location of the previous definition
+>    18 | #define CAUSE           65
+>
+> git bisect pointed to c1918196427b ("iwlwifi: pcie: simplify MSI-X cause mapping")
+>
+> And, reverting it on top of mainline branch has fixed the build failure.
 
-The EFI memory map is parsed to construct the memblock arrays before
-the memblock arrays can be resized. As the result, memory regions
-beyond INIT_MEMBLOCK_REGIONS are lost.
+We have a fix:
 
-Allow overriding memblock.memory array size with architecture defined
-INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
-INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
+iwlwifi: pcie: rename CAUSE macro
 
-Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
----
- arch/arm64/include/asm/memory.h |  9 +++++++++
- mm/memblock.c                   | 14 +++++++++-----
- 2 files changed, 18 insertions(+), 5 deletions(-)
+https://patchwork.kernel.org/project/linux-wireless/patch/20220523220300.682be2029361.I283200b18da589a975a284073dca8ed001ee107a@changeid/
 
-diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-index 0af70d9abede..eda61c0389c4 100644
---- a/arch/arm64/include/asm/memory.h
-+++ b/arch/arm64/include/asm/memory.h
-@@ -364,6 +364,15 @@ void dump_mem_limit(void);
- # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
- #endif
- 
-+/*
-+ * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
-+ * memory block into multiple parts. As a result, the number of memory regions
-+ * is large.
-+ */
-+#ifdef CONFIG_EFI
-+#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
-+#endif
-+
- #include <asm-generic/memory_model.h>
- 
- #endif /* __ASM_MEMORY_H */
-diff --git a/mm/memblock.c b/mm/memblock.c
-index e4f03a6e8e56..7c63571a69d7 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -29,6 +29,10 @@
- # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
- #endif
- 
-+#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
-+#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
-+#endif
-+
- /**
-  * DOC: memblock overview
-  *
-@@ -55,9 +59,9 @@
-  * the allocator metadata. The "memory" and "reserved" types are nicely
-  * wrapped with struct memblock. This structure is statically
-  * initialized at build time. The region arrays are initially sized to
-- * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
-- * for "reserved". The region array for "physmem" is initially sized to
-- * %INIT_PHYSMEM_REGIONS.
-+ * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
-+ * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
-+ * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
-  * The memblock_allow_resize() enables automatic resizing of the region
-  * arrays during addition of new regions. This feature should be used
-  * with care so that memory allocated for the region array will not
-@@ -102,7 +106,7 @@ unsigned long min_low_pfn;
- unsigned long max_pfn;
- unsigned long long max_possible_pfn;
- 
--static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
-+static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
- static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
- #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
- static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
-@@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
- struct memblock memblock __initdata_memblock = {
- 	.memory.regions		= memblock_memory_init_regions,
- 	.memory.cnt		= 1,	/* empty dummy entry */
--	.memory.max		= INIT_MEMBLOCK_REGIONS,
-+	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
- 	.memory.name		= "memory",
- 
- 	.reserved.regions	= memblock_reserved_init_regions,
+It's marked as accepted but I don't know where it's applied to, Gregory?
+This is failing the build, should Linus apply the fix directly to his
+tree?
+
 -- 
-2.17.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

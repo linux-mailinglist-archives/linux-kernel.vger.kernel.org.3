@@ -2,122 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C24536894
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 23:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE473536899
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 23:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354773AbiE0Vg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 17:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S1354805AbiE0Vhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 17:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351170AbiE0Vgy (ORCPT
+        with ESMTP id S1354787AbiE0Vhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 17:36:54 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CA1FA1ADA7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 14:36:52 -0700 (PDT)
-Received: (qmail 112415 invoked by uid 1000); 27 May 2022 17:36:51 -0400
-Date:   Fri, 27 May 2022 17:36:51 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
-Cc:     andreyknvl@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in driver_unregister
-Message-ID: <YpFEc5zeFK0AXa2q@rowland.harvard.edu>
-References: <YpEi/sbT/R/0yKzo@rowland.harvard.edu>
- <000000000000f9e65705e003513a@google.com>
+        Fri, 27 May 2022 17:37:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C6C1D31D;
+        Fri, 27 May 2022 14:37:49 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24RJsQe0004938;
+        Fri, 27 May 2022 21:37:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type; s=pp1; bh=4qVUQZ971GoqFZHBxjYEnkAjuJBHMZhmstgrBNOV0g4=;
+ b=URmSfWEdPWxrcKeyuyY4OpnvpsJWjH7Pzpa1sKYIsM9Z029AjjnEtrhz1nQlxelzPpOE
+ Gewz87C8TfBfh22tlMaM0mJzf3XGuJmHQzxfy9X/l7e2wsbjpINsdput/CJlXH6i7bGB
+ Nolmm9pCJ5xwej2+uAtrTSgEcjRS9RPN8ZnzeXFk5LHR8bXsVV0ACvhRNO/RCm3HlXT2
+ giSJv5tE2Uufmaxhm6F0wg8Xj2tO8QcfmNkIAC2hcQIveatSgbXUABjypVdAOfBJIQ7o
+ rkYIASSgkY7t+fEXtSbXBZ18h4jjniAHN1shISi+lpIIWBjK8Olu07BWDox2aZSpFCp6 ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gb57c1f6j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 May 2022 21:37:44 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24RLXeTM013262;
+        Fri, 27 May 2022 21:37:43 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gb57c1f6c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 May 2022 21:37:43 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24RLZDAd028849;
+        Fri, 27 May 2022 21:37:43 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma04wdc.us.ibm.com with ESMTP id 3gaenbr7bb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 May 2022 21:37:43 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24RLbg6q19136994
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 May 2022 21:37:42 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 63BB5C6057;
+        Fri, 27 May 2022 21:37:42 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 965AAC6055;
+        Fri, 27 May 2022 21:37:41 +0000 (GMT)
+Received: from [9.163.6.199] (unknown [9.163.6.199])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 27 May 2022 21:37:41 +0000 (GMT)
+Message-ID: <63d645b0-4385-cd1a-6fab-6e17bf01f08b@linux.ibm.com>
+Date:   Fri, 27 May 2022 17:37:40 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000f9e65705e003513a@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
+Content-Language: en-US
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Nayna <nayna@linux.vnet.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Johannes Holland <johannes.holland@infineon.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca
+References: <20220510112902.23213-1-johannes.holland@infineon.com>
+ <YnvTSqRgYkWu0qgp@kernel.org>
+ <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
+ <eb9ef8aeab4c0284028c013a2c86b248719a46ae.camel@HansenPartnership.com>
+ <YoKQchfJ//FUws7i@kernel.org>
+ <e5327191-50c5-85b5-6c01-3f43cffc142b@linux.vnet.ibm.com>
+ <6df9f7af232bbe10a570e426c2bef0e673ab63fe.camel@HansenPartnership.com>
+From:   Ken Goldman <kgold@linux.ibm.com>
+In-Reply-To: <6df9f7af232bbe10a570e426c2bef0e673ab63fe.camel@HansenPartnership.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms050107080400080209050505"
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: q3zqVhdzDaqUNO8dUD-xRPB0ZmZCSR3r
+X-Proofpoint-ORIG-GUID: kCZQ6jlAAfTss3B0VkrmDF-bdu7kpZUw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-27_07,2022-05-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
+ malwarescore=0 clxscore=1011 mlxscore=0 spamscore=0 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205270104
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 12:29:08PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> WARNING in sysfs_create_file_ns
-> 
-> really_probe: driver_sysfs_add(gadget.0) failed
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 2361 at fs/sysfs/file.c:351 sysfs_create_file_ns+0x131/0x1c0 fs/sysfs/file.c:351
-> Modules linked in:
-> CPU: 0 PID: 2361 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:sysfs_create_file_ns+0x131/0x1c0 fs/sysfs/file.c:351
-> Code: e9 03 80 3c 01 00 75 7f 8b 4c 24 38 4d 89 e9 48 89 ee 48 8b 7b 30 44 8b 44 24 48 e8 e9 fa ff ff 41 89 c5 eb 0d e8 cf 7c 9d ff <0f> 0b 41 bd ea ff ff ff e8 c2 7c 9d ff 48 b8 00 00 00 00 00 fc ff
-> RSP: 0018:ffffc900028ffca0 EFLAGS: 00010293
+This is a cryptographically signed message in MIME format.
 
-Here's some extra detail, taken from the console log:
+--------------ms050107080400080209050505
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-[   98.336685][ T2361] really_probe: driver_sysfs_add(gadget.0) failed
-[   98.336836][ T2360] sysfs: cannot create duplicate filename '/bus/gadget/drivers/dummy_udc'
-[   98.343498][ T2361] ------------[ cut here ]------------
-[   98.352154][ T2360] CPU: 1 PID: 2360 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-[   98.357802][ T2361] WARNING: CPU: 0 PID: 2361 at fs/sysfs/file.c:351 sysfs_create_file_ns+0x131/0x1c0
+On 5/18/2022 4:21 PM, James Bottomley wrote:
+> Actually, this is nothing to do with the TIMEOUTS_A-D: those are the
+> maximum times before a command should complete.  This is the minimum
+> time we should wait between pokes of the TPM to see if it is ready.
+> Usually the use case is:
+> 
+> while (read device status gives not ready)
+>     tpm_msleep(something)
+> 
+> The tpm_msleep gives up CPU control (to prevent huge amounts of busy
+> waiting) but before 424eaf910c32 ("tpm: reduce polling time to usecs
+> for even finer granularity") we would sleep for an entire tick (time
+> taken to make the process runnable) before the next poll, and since
+> most TPM commands don't return immediately, that was a gate on how fast
+> you could do simple TPM operations (like PCR extend).
+> 
+> As far as I know, no TCG spec gives any details of the minimum wait
+> time between poll cycles, so this is really something the manufacturer
+> has to tell us.
+> 
+> Just for completeness, my soak test did run to completion, but my TPM
+> has since failed and dropped off the bus, so simply reverting this
+> patch (5ef924d9e2e8) isn't sufficient to fully fix my problem.
 
-Simultaneous splats from two different threads trying to add drivers with 
-the same name suggests there might be a concurrency bug in the sysfs 
-filesystem.  This sort of thing should be an error but it shouldn't bring 
-the kernel to its knees.
+[FYI]
 
-Greg, do you know anyone who could take a look at this?  I don't know much 
-about sysfs.
+The TPM vendors explained that polling interrupts TPM command
+processing. This will make commands take longer.
 
-Alan Stern
+They recommend adaptive sleep time based on (at least) the
+command.  E.g., getcapability, pcrread, ... are fast so a short
+sleep is appropriate.  create, createprimary are slow so
+a longer sleep will have better performance.
 
-> 
-> RAX: 0000000000000000 RBX: ffff88810efd6600 RCX: 0000000000000000
-> RDX: ffff888117a68000 RSI: ffffffff81a6f891 RDI: ffff88810efd6600
-> RBP: ffffffff88041fc0 R08: 0000000000000000 R09: ffff88810095ba13
-> R10: ffffed102012b742 R11: 0000000000000001 R12: 1ffff9200051ff95
-> R13: 0000000000000000 R14: dffffc0000000000 R15: ffff88810efd6630
-> FS:  00007f830048d700(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f830048d718 CR3: 000000010cb4c000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  sysfs_create_file include/linux/sysfs.h:607 [inline]
->  driver_create_file+0x48/0x70 drivers/base/driver.c:107
->  bus_add_driver+0x309/0x630 drivers/base/bus.c:624
->  driver_register+0x220/0x3a0 drivers/base/driver.c:171
->  usb_gadget_register_driver_owner+0xfb/0x1e0 drivers/usb/gadget/udc/core.c:1558
->  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
->  raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:870 [inline]
->  __se_sys_ioctl fs/ioctl.c:856 [inline]
->  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f83005590e9
-> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f830048d168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 00007f830066c100 RCX: 00007f83005590e9
-> RDX: 0000000000000000 RSI: 0000000000005501 RDI: 0000000000000003
-> RBP: 00007f83005b308d R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffc1dbfbf0f R14: 00007f830048d300 R15: 0000000000022000
->  </TASK>
-> 
-> 
-> Tested on:
-> 
-> commit:         97fa5887 USB: new quirk for Dell Gen 2 devices
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-> console output: https://syzkaller.appspot.com/x/log.txt?x=154282bdf00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=02b16343704b3af1667e
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=17eec23df00000
-> 
+--------------ms050107080400080209050505
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+JTNkQWN0YWxpcyUyMFMucC5BLiUyZjAzMzU4NTIwOTY3LGMlM2RJVD9jZXJ0aWZpY2F0ZVJl
+dm9jYXRpb25MaXN0O2JpbmFyeTA9oDugOYY3aHR0cDovL2NybDA1LmFjdGFsaXMuaXQvUmVw
+b3NpdG9yeS9BVVRILVJPT1QvZ2V0TGFzdENSTDAdBgNVHQ4EFgQUvpepqoS/gL8QU30JMvnh
+LjIbz3cwDgYDVR0PAQH/BAQDAgEGMA0GCSqGSIb3DQEBCwUAA4ICAQAmm+cbWQ10sxID6edV
+94SAhc1CwzthHFfHpuYS30gisWUfWpgp43Dg1XzG2in3VGV7XrzCCGZh4JM/XQWp+4oxmyV4
+2Qjz9vc8GRksgo6X2nYObPYZzQjda9wxsCB38i4G3H33w8lf9sFvl0xm4ZXZ2s2bF/PdqvrK
+0ZgvF51+MoIPnli/wJBw3p72xbk5Sb1MneSO3tZ293WFzDmz7tuGU0PfytYUkG7O6annGqbU
+1I6CA6QVKUqeFLPodSODAFqJ3pimKD0vX9MuuSa0QinH7CkiPtZMD0mpwwzIsnSs3qOOl60t
+IZQOTc0I6lCe1LLhrz7Q75J6nNL9N5zVwZ1I3o2Lb8Dt7BA13VFuZvZIzapUGV83R7pmSVaj
+1Bik1nJ/R393e6mwppsT140KDVLh4Oenywmp2VpBDuEj9RgICAO0sibv8n379LbO7ARa0kw9
+y9pggFzN2PAX25b7w0n9m78kpv3z3vW65rs6wl7E8VEHNfv8+cnb81dxN3C51KElz+l31zch
+FTurD5HFEpyEhzO/fMS5AkweRJIzwozxNs7OL/S/SVTpJLJL1ukZ1lnHHX0d3xCzRy/5HqfK
+3uiG22LPB5+RjNDobPAjAz2BKMfkF/+v0pzn8mqqkopQaJzEAbLbMpgQYHRCjvrUxxwjJyUF
+b2Z+40UNtMF4MTK7zTGCA/MwggPvAgEBMIGWMIGBMQswCQYDVQQGEwJJVDEQMA4GA1UECAwH
+QmVyZ2FtbzEZMBcGA1UEBwwQUG9udGUgU2FuIFBpZXRybzEXMBUGA1UECgwOQWN0YWxpcyBT
+LnAuQS4xLDAqBgNVBAMMI0FjdGFsaXMgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIENBIEczAhBe
+LLAGq3EDXaRbRjTikYn/MA0GCWCGSAFlAwQCAQUAoIICLTAYBgkqhkiG9w0BCQMxCwYJKoZI
+hvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMjA1MjcyMTM3NDFaMC8GCSqGSIb3DQEJBDEiBCD9
+9tWlxx1f0vFVBpUfzYTURYQfshRyjh0enQh4R75tIjBsBgkqhkiG9w0BCQ8xXzBdMAsGCWCG
+SAFlAwQBKjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwDgYIKoZIhvcNAwICAgCAMA0GCCqG
+SIb3DQMCAgFAMAcGBSsOAwIHMA0GCCqGSIb3DQMCAgEoMIGnBgkrBgEEAYI3EAQxgZkwgZYw
+gYExCzAJBgNVBAYTAklUMRAwDgYDVQQIDAdCZXJnYW1vMRkwFwYDVQQHDBBQb250ZSBTYW4g
+UGlldHJvMRcwFQYDVQQKDA5BY3RhbGlzIFMucC5BLjEsMCoGA1UEAwwjQWN0YWxpcyBDbGll
+bnQgQXV0aGVudGljYXRpb24gQ0EgRzMCEF4ssAarcQNdpFtGNOKRif8wgakGCyqGSIb3DQEJ
+EAILMYGZoIGWMIGBMQswCQYDVQQGEwJJVDEQMA4GA1UECAwHQmVyZ2FtbzEZMBcGA1UEBwwQ
+UG9udGUgU2FuIFBpZXRybzEXMBUGA1UECgwOQWN0YWxpcyBTLnAuQS4xLDAqBgNVBAMMI0Fj
+dGFsaXMgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIENBIEczAhBeLLAGq3EDXaRbRjTikYn/MA0G
+CSqGSIb3DQEBAQUABIIBACnodQwFvTjq9pPwh88o20Njss2CImB91wpRh6EaQQ2SVulGPUXV
+Ot+2GLOWr0DYWAqjgbK905pI1GPMP7lTakHfkEEcUtc1YU25AM5zw0EUlwAb6SoLO8Awm0CF
+Da5gWyXQxwHt5kJP9KdmBkdxlRucPrrZ+AR7HOLzonc6AV/Stdty3Ni9qTCwpe+XwvcNsVb9
+qYQ0E8l1U6znt+BiKlgf9YxSi0NuI53jXJqgH7nQIUjMblvT6nr0VuI8XDr93jdBeIyZ6RTD
+eVTxXc3g8vW1NX5YL2Z2PT/+rrm76cF5Wim2vhi2l47BMkcAJiheE6frWgwFl5mCUE/NBJAF
+rmQAAAAAAAA=
+--------------ms050107080400080209050505--
+

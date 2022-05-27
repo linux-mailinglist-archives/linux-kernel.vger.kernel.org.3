@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916E7536630
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40E153663C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346455AbiE0Qyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 12:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S1346111AbiE0Q7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 12:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240866AbiE0Qye (ORCPT
+        with ESMTP id S243542AbiE0Q7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 12:54:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E9DED70C;
-        Fri, 27 May 2022 09:54:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CFCCA21ADA;
-        Fri, 27 May 2022 16:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653670470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+u8JHoqLLvsvRVRBUuvCk5vOU0EPwCFY9Y54KiKuKVk=;
-        b=hsMieLInNRiAFgba/ZyPJYd4fTnZWpaKHkD81x/3sHXl8J57s/mbfM10cJZ/tgrYCx4GU3
-        E4pweojjXyzWX8ILfLZZqX2DYyZNLolbQgy+7oLilvuFWqBXX/VnIgybG3/7ew2v/tY2c2
-        LC18jfjBjXvsIReeB0Qutu1x07qBcYw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A639813A84;
-        Fri, 27 May 2022 16:54:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ldeHJ0YCkWL1KAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Fri, 27 May 2022 16:54:30 +0000
-Date:   Fri, 27 May 2022 18:54:29 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Bui Quang Minh <minhquangbui99@gmail.com>
-Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
-Message-ID: <20220527165429.GJ11007@blackbody.suse.cz>
-References: <20220525151517.8430-1-mkoutny@suse.com>
- <20220525151517.8430-3-mkoutny@suse.com>
- <20220525161455.GA16134@blackbody.suse.cz>
- <Yo7KfEOz92kS2z5Y@blackbook>
- <Yo/DtjEU/kYr190u@slm.duckdns.org>
- <904ef8af-13a5-e566-b760-74519f70fa62@linaro.org>
+        Fri, 27 May 2022 12:59:20 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A103B122B62;
+        Fri, 27 May 2022 09:59:18 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-f2cd424b9cso6419321fac.7;
+        Fri, 27 May 2022 09:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=SZg+qjutoG3J1/dsqzOYmd+VngnnX2DTXJc5+dVnkHA=;
+        b=D5imPluKhRiMycaOUzEc4sulOuWTi0wErwu1XFaorpY76cN1Qamdwu9pi5eKpCCWvw
+         2RnIGZi/iHoyK8F7KE4wZ7tqCYSSpHta4aA15x29XV1ujnNs5cLZtIxcyYu8fwkF3Odz
+         Go2hfWJ41Sj2WdAaPjwTJ+cyjepk1X0d4qbmyhlfmGcx332r32KEKjGG223JVMFBaS0n
+         wt31FHMjDB1GMifUvVX8XxOg7K3Bmii3jg3F+8Bho5zw35wbfo7Jez96Kn56AzY0kgJa
+         CCwUbvDJ8BLar/woN4ci/iN0edw2RN9RsY5DXT+B+q+FGmvBMQvlvvID69/JOr1WDfqT
+         +A4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=SZg+qjutoG3J1/dsqzOYmd+VngnnX2DTXJc5+dVnkHA=;
+        b=vIOvANQ9GiVLX5D6SQ97Rf7c7H/5zMw4BPsyzzeghXanRMtI05k+3sI99ALuLyjRyO
+         QPtwLP6Up4bpk19h6ZUS4BDSO9OGL56g/tzGlgTE3AEMi0Bh/ri89dqnoyZ2JTcNsUMl
+         uJk/t3WmGS7QyUSxRrAeDqE8XBLPP24br9Xd3Rff5sglUGh3nfCZ4j2vBAbZIIWwN8jt
+         LCc2AEBE9/BuUzZ8Q6eN+4tavmtECAcl9dxb3+lIYEo0gUoobTHeNWnSyHy5a2rJv8fu
+         STZg9pHn9AXed03uaxI55kppietuANMl42lrZWvCfDBsTQEDXlSZgJK6qIyKMT7mnAjM
+         Aehg==
+X-Gm-Message-State: AOAM530/ukhsxS4xYxSFrPVE7BoRUb7tVZB9K53py1aGuygvDFr8IBX3
+        WEd+8tcFxUPpbjSfghj5WGg=
+X-Google-Smtp-Source: ABdhPJw8ZOepzwBcCrrLBGIJM9X6Wu9CjPk6dJ/62yv58i2lpX3Aio/8u5YKudwwdGONRLJPincDXQ==
+X-Received: by 2002:a05:6870:538d:b0:de:aa91:898e with SMTP id h13-20020a056870538d00b000deaa91898emr4462061oan.54.1653670758024;
+        Fri, 27 May 2022 09:59:18 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w27-20020a9d5a9b000000b0060603221240sm1978304oth.16.2022.05.27.09.59.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 May 2022 09:59:17 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6aed0c5c-bb99-0593-1609-87371db26f44@roeck-us.net>
+Date:   Fri, 27 May 2022 09:59:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <904ef8af-13a5-e566-b760-74519f70fa62@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@denx.de>
+Cc:     Chris.Paterson2@renesas.com, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220527084828.156494029@linuxfoundation.org>
+ <20220527141421.GA13810@duo.ucw.cz> <YpD0CVWSiEqiM+8b@kroah.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 5.10 000/163] 5.10.119-rc1 review
+In-Reply-To: <YpD0CVWSiEqiM+8b@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tadeusz.
+On 5/27/22 08:53, Greg Kroah-Hartman wrote:
+> On Fri, May 27, 2022 at 04:14:21PM +0200, Pavel Machek wrote:
+>> Hi!
+>>
+>>> This is the start of the stable review cycle for the 5.10.119 release.
+>>> There are 163 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
+>>
+>> Is there some kind of back-story why we are doing massive changes to
+>> /dev/random? 5.19-rc1 is not even out, so third of those changes did
+>> not get much testing.
+> 
+> Did you miss the posting on the stable list that described all of this:
+> 	https://lore.kernel.org/all/YouECCoUA6eZEwKf@zx2c4.com/
+> 
 
-On Fri, May 27, 2022 at 09:39:20AM -0700, Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
-> As far as I can see we are trying to test the same thing suggested by Tejun.
-> I just sent a test request to try this:
-> https://github.com/tstruk/linux/commit/master
+That describes _what_ is done, but not _why_ the patches needed to be
+backported to older kernels. Normally I would see those as enhancements,
+not as bug fixes. Given that we (ChromeOS) have been hit by rng related
+issues before (specifically boot stalls on some hardware), I am quite
+concerned about the possible impact of this series for stable releases.
 
-Yup, I've added few more prints to get more fine-grained resolution.
-Also, I decided to use ftrace printk not to interfere with timing too
-much (due to the original race hypothesis).
-
-> Let me know if you have any more tests to run and I will hold off until
-> you are done.
-
-My latest attempt is [1] (tip 5500e05d82fd5b5db2203eedb3f786857d3ccbea).
-
-So far, I'm not convinced, I extract the complete ftrace buffer from the
-syzbot runs, so I'm not drawing any conclusions from the traces I've
-got. I'm not going to continue today. You may have more luck with your
-plain printk (if it's just imbalance and it avoids printk locking
-sensitive paths).
-
-HTH,
-Michal
-
-[1] https://github.com/Werkov/linux/tree/cgroup-ml/css-lifecycle-b2
+Guenter

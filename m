@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E277535C67
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A92653611F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350221AbiE0I7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S1352203AbiE0MAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345645AbiE0I6e (ORCPT
+        with ESMTP id S1352054AbiE0Lvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:58:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAC711E1ED;
-        Fri, 27 May 2022 01:54:54 -0700 (PDT)
+        Fri, 27 May 2022 07:51:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C696013B8F9;
+        Fri, 27 May 2022 04:47:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2633961D54;
-        Fri, 27 May 2022 08:54:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD38C385B8;
-        Fri, 27 May 2022 08:54:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A847F61D56;
+        Fri, 27 May 2022 11:47:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7CC4C34100;
+        Fri, 27 May 2022 11:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641693;
-        bh=o/ZPRmy0lft3vpQyrp5mBtfsH9JO4QKu85LdvA5ukd4=;
+        s=korg; t=1653652044;
+        bh=2oUbVd+6dHSAZdRKmcjumSINDFPdE0+wqNXdZSaOxHI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pDm6zJ6i0emrt9O4ZzDfl4hATc4P+3AfmfNoyaP39ZDOnGMhxnxanrlK8cyWGBYT1
-         jhQjhc59U6QXqMnSBEF4NncBNrQJ5Fw26ZIKyGVzTZ+RX3o40hiNvgovAU4HXQ7dtW
-         QSch8T47+N+4j1RSXSUrR62VsHlojpzIj0fLGX70=
+        b=orIvsSwElZ5so4lG5c5l4uGPSB7rIGqddpPjwajXRvoBmVwOFryYj66znN7cO8l7p
+         803MXau2IM1mHJHgH0TNsUf/Jp4788wdddP+LApIk10GFSejsmFdb6w0QzxKff+ltL
+         6N9jFcIRg6g+2M2bIW5oLByXPe9/kWsGDOCyBiTw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.18 35/47] random: use static branch for crng_ready()
-Date:   Fri, 27 May 2022 10:50:15 +0200
-Message-Id: <20220527084807.168271453@linuxfoundation.org>
+Subject: [PATCH 5.17 104/111] random: move randomize_page() into mm where it belongs
+Date:   Fri, 27 May 2022 10:50:16 +0200
+Message-Id: <20220527084833.997496542@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
-References: <20220527084801.223648383@linuxfoundation.org>
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+References: <20220527084819.133490171@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,95 +56,132 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit f5bda35fba615ace70a656d4700423fa6c9bebee upstream.
+commit 5ad7dd882e45d7fe432c32e896e2aaa0b21746ea upstream.
 
-Since crng_ready() is only false briefly during initialization and then
-forever after becomes true, we don't need to evaluate it after, making
-it a prime candidate for a static branch.
+randomize_page is an mm function. It is documented like one. It contains
+the history of one. It has the naming convention of one. It looks
+just like another very similar function in mm, randomize_stack_top().
+And it has always been maintained and updated by mm people. There is no
+need for it to be in random.c. In the "which shape does not look like
+the other ones" test, pointing to randomize_page() is correct.
 
-One complication, however, is that it changes state in a particular call
-to credit_init_bits(), which might be made from atomic context, which
-means we must kick off a workqueue to change the static key. Further
-complicating things, credit_init_bits() may be called sufficiently early
-on in system initialization such that system_wq is NULL.
+So move randomize_page() into mm/util.c, right next to the similar
+randomize_stack_top() function.
 
-Fortunately, there exists the nice function execute_in_process_context(),
-which will immediately execute the function if !in_interrupt(), and
-otherwise defer it to a workqueue. During early init, before workqueues
-are available, in_interrupt() is always false, because interrupts
-haven't even been enabled yet, which means the function in that case
-executes immediately. Later on, after workqueues are available,
-in_interrupt() might be true, but in that case, the work is queued in
-system_wq and all goes well.
+This commit contains no actual code changes.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/char/random.c  |   32 --------------------------------
+ include/linux/mm.h     |    1 +
+ include/linux/random.h |    2 --
+ mm/util.c              |   32 ++++++++++++++++++++++++++++++++
+ 4 files changed, 33 insertions(+), 34 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -77,8 +77,9 @@ static enum {
- 	CRNG_EMPTY = 0, /* Little to no entropy collected */
- 	CRNG_EARLY = 1, /* At least POOL_EARLY_BITS collected */
- 	CRNG_READY = 2  /* Fully initialized with POOL_READY_BITS collected */
--} crng_init = CRNG_EMPTY;
--#define crng_ready() (likely(crng_init >= CRNG_READY))
-+} crng_init __read_mostly = CRNG_EMPTY;
-+static DEFINE_STATIC_KEY_FALSE(crng_is_ready);
-+#define crng_ready() (static_branch_likely(&crng_is_ready) || crng_init >= CRNG_READY)
- /* Various types of waiters for crng_init->CRNG_READY transition. */
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
- static struct fasync_struct *fasync;
-@@ -108,6 +109,11 @@ bool rng_is_initialized(void)
+@@ -622,38 +622,6 @@ int __cold random_prepare_cpu(unsigned i
  }
- EXPORT_SYMBOL(rng_is_initialized);
+ #endif
  
-+static void crng_set_ready(struct work_struct *work)
+-/**
+- * randomize_page - Generate a random, page aligned address
+- * @start:	The smallest acceptable address the caller will take.
+- * @range:	The size of the area, starting at @start, within which the
+- *		random address must fall.
+- *
+- * If @start + @range would overflow, @range is capped.
+- *
+- * NOTE: Historical use of randomize_range, which this replaces, presumed that
+- * @start was already page aligned.  We now align it regardless.
+- *
+- * Return: A page aligned address within [start, start + range).  On error,
+- * @start is returned.
+- */
+-unsigned long randomize_page(unsigned long start, unsigned long range)
+-{
+-	if (!PAGE_ALIGNED(start)) {
+-		range -= PAGE_ALIGN(start) - start;
+-		start = PAGE_ALIGN(start);
+-	}
+-
+-	if (start > ULONG_MAX - range)
+-		range = ULONG_MAX - start;
+-
+-	range >>= PAGE_SHIFT;
+-
+-	if (range == 0)
+-		return start;
+-
+-	return start + (get_random_long() % range << PAGE_SHIFT);
+-}
+-
+ /*
+  * This function will use the architecture-specific hardware random
+  * number generator if it is available. It is not recommended for
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2678,6 +2678,7 @@ extern int install_special_mapping(struc
+ 				   unsigned long flags, struct page **pages);
+ 
+ unsigned long randomize_stack_top(unsigned long stack_top);
++unsigned long randomize_page(unsigned long start, unsigned long range);
+ 
+ extern unsigned long get_unmapped_area(struct file *, unsigned long, unsigned long, unsigned long, unsigned long);
+ 
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -64,8 +64,6 @@ static inline unsigned long get_random_c
+ 	return get_random_long() & CANARY_MASK;
+ }
+ 
+-unsigned long randomize_page(unsigned long start, unsigned long range);
+-
+ int __init random_init(const char *command_line);
+ bool rng_is_initialized(void);
+ int wait_for_random_bytes(void);
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -343,6 +343,38 @@ unsigned long randomize_stack_top(unsign
+ #endif
+ }
+ 
++/**
++ * randomize_page - Generate a random, page aligned address
++ * @start:	The smallest acceptable address the caller will take.
++ * @range:	The size of the area, starting at @start, within which the
++ *		random address must fall.
++ *
++ * If @start + @range would overflow, @range is capped.
++ *
++ * NOTE: Historical use of randomize_range, which this replaces, presumed that
++ * @start was already page aligned.  We now align it regardless.
++ *
++ * Return: A page aligned address within [start, start + range).  On error,
++ * @start is returned.
++ */
++unsigned long randomize_page(unsigned long start, unsigned long range)
 +{
-+	static_branch_enable(&crng_is_ready);
++	if (!PAGE_ALIGNED(start)) {
++		range -= PAGE_ALIGN(start) - start;
++		start = PAGE_ALIGN(start);
++	}
++
++	if (start > ULONG_MAX - range)
++		range = ULONG_MAX - start;
++
++	range >>= PAGE_SHIFT;
++
++	if (range == 0)
++		return start;
++
++	return start + (get_random_long() % range << PAGE_SHIFT);
 +}
 +
- /* Used by wait_for_random_bytes(), and considered an entropy collector, below. */
- static void try_to_generate_entropy(void);
- 
-@@ -267,7 +273,7 @@ static void crng_reseed(void)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
--	if (!crng_ready())
-+	if (!static_branch_likely(&crng_is_ready))
- 		crng_init = CRNG_READY;
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
- 	memzero_explicit(key, sizeof(key));
-@@ -785,6 +791,7 @@ static void extract_entropy(void *buf, s
- 
- static void credit_init_bits(size_t nbits)
+ #ifdef CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+ unsigned long arch_randomize_brk(struct mm_struct *mm)
  {
-+	static struct execute_work set_ready;
- 	unsigned int new, orig, add;
- 	unsigned long flags;
- 
-@@ -800,6 +807,7 @@ static void credit_init_bits(size_t nbit
- 
- 	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
- 		crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
-+		execute_in_process_context(crng_set_ready, &set_ready);
- 		process_random_ready_list();
- 		wake_up_interruptible(&crng_init_wait);
- 		kill_fasync(&fasync, SIGIO, POLL_IN);
-@@ -1348,7 +1356,7 @@ SYSCALL_DEFINE3(getrandom, char __user *
- 	if (count > INT_MAX)
- 		count = INT_MAX;
- 
--	if (!(flags & GRND_INSECURE) && !crng_ready()) {
-+	if (!crng_ready() && !(flags & GRND_INSECURE)) {
- 		int ret;
- 
- 		if (flags & GRND_NONBLOCK)
 
 

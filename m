@@ -2,104 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A7E536628
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916E7536630
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352420AbiE0Qu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 12:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S1346455AbiE0Qyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 12:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350778AbiE0Qus (ORCPT
+        with ESMTP id S240866AbiE0Qye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 12:50:48 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B28F527E0;
-        Fri, 27 May 2022 09:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653670247; x=1685206247;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5Zd5oXs4G2DMNG/uRxSGRYwoT2gZG7cDj4UtN+8pWG8=;
-  b=IMoFM3dbkm2L5vdmkAIqR/7wtRdH1tFMREH/Z9N7X81NWLBuEdlwNKlM
-   AWpaULE+LAwoUaIxscQsCkm7sp67v3FNfeN4KP/zrimXEdeklw6Lo5Q9b
-   zS5YjZ9EdG0PmQYOV2g/cEftv2oNnCA8uE2E110uqPjR8eAQS/T7YODnW
-   4XFe2MjqcFAox17RM9nSXcG4GuyxdfcqmAjuJklVrun/jpCOSs4clvRnU
-   6hEqtaFPrzbr/0LA9IWDC7dktOFdRv8f2HloMCkFnxYIeJjxAfvyJCs8N
-   K+brPJH/dUVov2iDgzJyzbTA48wGHEE/DsZSXJYGsswVDTRYnU9a5LkOO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274253961"
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="274253961"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 09:50:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="902635036"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 May 2022 09:50:43 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nudAh-0004wH-7T;
-        Fri, 27 May 2022 16:50:43 +0000
-Date:   Sat, 28 May 2022 00:50:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eddie James <eajames@linux.ibm.com>, linux-i2c@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wsa@kernel.org, peda@axentia.se,
-        jic23@kernel.org, lars@metafoo.de, eajames@linux.ibm.com,
-        miltonm@us.ibm.com, joel@jms.id.au
-Subject: Re: [PATCH 1/2] i2c: core: Add mux root adapter operations
-Message-ID: <202205280002.xJm7ad0Z-lkp@intel.com>
-References: <20220526205334.64114-2-eajames@linux.ibm.com>
+        Fri, 27 May 2022 12:54:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E9DED70C;
+        Fri, 27 May 2022 09:54:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CFCCA21ADA;
+        Fri, 27 May 2022 16:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653670470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+u8JHoqLLvsvRVRBUuvCk5vOU0EPwCFY9Y54KiKuKVk=;
+        b=hsMieLInNRiAFgba/ZyPJYd4fTnZWpaKHkD81x/3sHXl8J57s/mbfM10cJZ/tgrYCx4GU3
+        E4pweojjXyzWX8ILfLZZqX2DYyZNLolbQgy+7oLilvuFWqBXX/VnIgybG3/7ew2v/tY2c2
+        LC18jfjBjXvsIReeB0Qutu1x07qBcYw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A639813A84;
+        Fri, 27 May 2022 16:54:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ldeHJ0YCkWL1KAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 27 May 2022 16:54:30 +0000
+Date:   Fri, 27 May 2022 18:54:29 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>
+Cc:     Tejun Heo <tj@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+Message-ID: <20220527165429.GJ11007@blackbody.suse.cz>
+References: <20220525151517.8430-1-mkoutny@suse.com>
+ <20220525151517.8430-3-mkoutny@suse.com>
+ <20220525161455.GA16134@blackbody.suse.cz>
+ <Yo7KfEOz92kS2z5Y@blackbook>
+ <Yo/DtjEU/kYr190u@slm.duckdns.org>
+ <904ef8af-13a5-e566-b760-74519f70fa62@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220526205334.64114-2-eajames@linux.ibm.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <904ef8af-13a5-e566-b760-74519f70fa62@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eddie,
+Hello Tadeusz.
 
-I love your patch! Perhaps something to improve:
+On Fri, May 27, 2022 at 09:39:20AM -0700, Tadeusz Struk <tadeusz.struk@linaro.org> wrote:
+> As far as I can see we are trying to test the same thing suggested by Tejun.
+> I just sent a test request to try this:
+> https://github.com/tstruk/linux/commit/master
 
-[auto build test WARNING on wsa/i2c/for-next]
-[also build test WARNING on jic23-iio/togreg linux/master linus/master v5.18 next-20220527]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Yup, I've added few more prints to get more fine-grained resolution.
+Also, I decided to use ftrace printk not to interfere with timing too
+much (due to the original race hypothesis).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/i2c-core-Add-mux-root-adapter-operations/20220527-050852
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-reproduce: make htmldocs
+> Let me know if you have any more tests to run and I will hold off until
+> you are done.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+My latest attempt is [1] (tip 5500e05d82fd5b5db2203eedb3f786857d3ccbea).
 
-All warnings (new ones prefixed by >>):
+So far, I'm not convinced, I extract the complete ftrace buffer from the
+syzbot runs, so I'm not drawing any conclusions from the traces I've
+got. I'm not going to continue today. You may have more luck with your
+plain printk (if it's just imbalance and it avoids printk locking
+sensitive paths).
 
->> include/linux/i2c.h:858: warning: expecting prototype for i2c_unlock_deslect_bus(). Prototype was for i2c_unlock_deselect_bus() instead
+HTH,
+Michal
 
-vim +858 include/linux/i2c.h
-
-   852	
-   853	/**
-   854	 * i2c_unlock_deslect_bus - Release exclusive access to the root I2C bus
-   855	 * @adapter: Target I2C bus
-   856	 */
-   857	static inline void i2c_unlock_deselect_bus(struct i2c_adapter *adapter)
- > 858	{
-   859		adapter->mux_root_ops->unlock_deselect(adapter);
-   860	}
-   861	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[1] https://github.com/Werkov/linux/tree/cgroup-ml/css-lifecycle-b2

@@ -2,100 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131FB5359A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3A65359A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344576AbiE0GvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 02:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S1344560AbiE0Gu4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 27 May 2022 02:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344512AbiE0Gu4 (ORCPT
+        with ESMTP id S1344462AbiE0Guo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 02:50:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 279A6ED8EE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653634254;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KwscvJb+e3wCc50yy7+Oyvg5tXhryYMBM/Mq6KPfxIo=;
-        b=WXgVfsqZOiY6hqWMKT+sS9hWI+1UBMDCMb31Y7xgmCSMqtkGrMN44tslRukkxmokpkhfep
-        gm8O0CNGaGVSD2Nw3kYRdYSH5M5kQ+tJze6V7/3X2okAcx5ayXgi5LglW97pmhfJc44dJz
-        qB2Os1gxewTCs7vkNcYJlDHZSpDeoeE=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-85-eRBC6XXuPPGIPJNOkl-BCg-1; Fri, 27 May 2022 02:50:52 -0400
-X-MC-Unique: eRBC6XXuPPGIPJNOkl-BCg-1
-Received: by mail-qt1-f200.google.com with SMTP id d13-20020ac85acd000000b002f3be21793dso3672227qtd.12
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:50:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KwscvJb+e3wCc50yy7+Oyvg5tXhryYMBM/Mq6KPfxIo=;
-        b=QmmrJdGIGZyek+1fCBr2UPUzshhqUCzmVEqWefNCaHwVlfhIfEvuGt0Woog54uNWo+
-         Rn+x+9mY7Rp+suPaBJ/dPiUSgkJJbxSG7jv124cqBJPk5KKWM9hI/9gHKdZ7kCH2g5Cq
-         e+laTdVmcG1ikKT0RO4r9rEX8SyYxPl0hf4NlPSFRTKOxBQlkjK+nLPQ0vT6QqyXGmdj
-         v3+yAI1jG9c/gaNrI5DNLtK05zvnKqnpOLEcROSafgYOPpA0P5KjkHfbDSqnOlOVeJEs
-         CEKBbtGfjB1h/P/uNZ/SU0Thqjpy8egR4lGuxsMPOD+5IAYzA/4NUS4vjSNMh6RlLgcw
-         6IfA==
-X-Gm-Message-State: AOAM531x0/ToIRrD9vQJNFEescLVicM/l5AAQW/uUXQCZpQCr4L7atDD
-        Fjf2E0Ap7pcTKATcsevbk/2M0/EvCd6hnjJVkhtQP59kYlBLnZTM8+Y+h7VK4LDevrMCt4DysqW
-        Jx2P2+KjK8lxOE9NNJ4CPAKY5K5jrVmtPw8Rmjb4n
-X-Received: by 2002:ac8:4e81:0:b0:2f9:34e4:8955 with SMTP id 1-20020ac84e81000000b002f934e48955mr19432019qtp.459.1653634252363;
-        Thu, 26 May 2022 23:50:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJywUtKw1p3mNXU5kTpnVECY4gR+23BPRrwgtbbZy68mg1DnclyCldN2lpPi96HQHPp+NMNAgvooJ44JkNz4TYU=
-X-Received: by 2002:ac8:4e81:0:b0:2f9:34e4:8955 with SMTP id
- 1-20020ac84e81000000b002f934e48955mr19432002qtp.459.1653634252144; Thu, 26
- May 2022 23:50:52 -0700 (PDT)
+        Fri, 27 May 2022 02:50:44 -0400
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67B31ED8F5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:50:42 -0700 (PDT)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2049.outbound.protection.outlook.com [104.47.22.49]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-6-HtdqZwZbPQqr9rBOPs_8KA-1; Fri, 27 May 2022 08:50:37 +0200
+X-MC-Unique: HtdqZwZbPQqr9rBOPs_8KA-1
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ ZR0P278MB0441.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:25::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5293.13; Fri, 27 May 2022 06:50:36 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2879:acb:62c8:4987]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::2879:acb:62c8:4987%9]) with mapi id 15.20.5293.013; Fri, 27 May 2022
+ 06:50:36 +0000
+Date:   Fri, 27 May 2022 08:50:35 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        James Dutton <james.dutton@gmail.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
+ linkup
+Message-ID: <20220527065035.GA8349@francesco-nb.int.toradex.com>
+References: <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
+ <20220525215739.GA275957@bhelgaas>
+In-Reply-To: <20220525215739.GA275957@bhelgaas>
+X-ClientProxiedBy: MR2P264CA0151.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:1::14) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-References: <20220525105922.2413991-1-eperezma@redhat.com> <20220525105922.2413991-3-eperezma@redhat.com>
- <BL1PR12MB582520CC9CE024149141327499D69@BL1PR12MB5825.namprd12.prod.outlook.com>
- <CAJaqyWc9_ErCg4whLKrjNyP5z2DZno-LJm7PN=-9uk7PUT4fJw@mail.gmail.com>
- <20220526090706.maf645wayelb7mcp@sgarzare-redhat> <CAJaqyWf7PumZXy1g3PbbTNCdn3u1XH3XQF73tw2w8Py5yLkSAg@mail.gmail.com>
- <20220526132038.GF2168@kadam> <CAJaqyWe4311B6SK997eijEJyhwnAxkBUGJ_0iuDNd=wZSt0DmQ@mail.gmail.com>
- <20220526190630.GJ2168@kadam>
-In-Reply-To: <20220526190630.GJ2168@kadam>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Fri, 27 May 2022 08:50:16 +0200
-Message-ID: <CAJaqyWdfWgC-uthR0aCjitCrBf=ca=Ee1oAB=JumffK=eSLgng@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] vhost-vdpa: introduce STOP backend feature bit
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Stefano Garzarella <sgarzare@redhat.com>,
-        "Dawar, Gautam" <gautam.dawar@amd.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        "martinh@xilinx.com" <martinh@xilinx.com>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        Eli Cohen <elic@nvidia.com>, Parav Pandit <parav@nvidia.com>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        "dinang@xilinx.com" <dinang@xilinx.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "martinpo@xilinx.com" <martinpo@xilinx.com>,
-        "pabloc@xilinx.com" <pabloc@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>,
-        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
-        "lvivier@redhat.com" <lvivier@redhat.com>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        "hanand@xilinx.com" <hanand@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fff961e9-f43f-4dfe-d0e4-08da3fad33f4
+X-MS-TrafficTypeDiagnostic: ZR0P278MB0441:EE_
+X-Microsoft-Antispam-PRVS: <ZR0P278MB04414A6A2730F2FF4E00E942E2D89@ZR0P278MB0441.CHEP278.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: DVg4w9rGOdiBo8gPs6jeIAYWcQ9lq/IgHCqRZdoN1wmgnB4YlsFZIIxMDl94krL6F0736x32p109gLPkr338i02DIKHKd+OFMRBXqDD74faGn6YechukZYOcJVx9f+C0ycjnFXF+8blOUrs25Y32C9kYNMRJtinaInsUrDcgCiRb4dJ30N+OUEqWjr93LgIFx4Ka0xAApzzHFsSutHdT5THGAJI1koWbVxEoD8G4BBNrKCL+A8GleNyLDgRKMobpa21tBKxCZeMn9GBuTA+jeX1rxKaJ5d6XYcPXfq74WviS70oSyPAK2D9wwKYQAH59VF1kWqSKsWknS+qAVeBKY7hDWQV2dYz9O3RGuYBbbWT0AYW6zEhn4PS0PpLQVysk+804vaMXYjQEJiJhYdHx+hKAVaIRNV9TARcPd6UxR48zHQJ15n8wz+SaDY5WkNp8ji5uMB0PrPjAIIdlsFN36jmnCmIpdvJZb2vOWygY7NTogbPdcZ9mDj5Jv7+BUx4fueepvubLXekP73txOcGgeu4X/ik/r7WuOgGXrbjn1hzkeQdd825H/a7K05Osi9wkHUZXZPfkR9JBrfCiCfe18Etmqg/K4b4UzC4rL01+1sspDIdwxzUySRn29VSYkxj+qNFfYPzOyBdEGfQv8yZwHsUF3MV+MEnuGBaADMAHi6Uk2eMMmWwCpRcAEUmKJbAZkOIV2bTrgNFkiZoDq2L5ntT33yaBUNY0xo40tsh7SW4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(346002)(396003)(376002)(136003)(366004)(39850400004)(5660300002)(38100700002)(4326008)(8676002)(66556008)(66946007)(66476007)(38350700002)(508600001)(44832011)(33656002)(2906002)(7416002)(52116002)(8936002)(6506007)(6486002)(186003)(83380400001)(1076003)(41300700001)(26005)(6512007)(316002)(86362001)(54906003)(6916009)(133343001);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zJ5uJ9yXPRkm8Df8a6JXs+ilcLye3l+SnNRAnxgWWH8911eFrg9uCcUq8M/w?=
+ =?us-ascii?Q?+br1vDehCx2qnqxmG1yP9ao3YYyELiQ9K5lcBsBAica9BzFUpOZO7gt9w+od?=
+ =?us-ascii?Q?jW17uA2LaEWEZ66NmLcz0Sj9J7pp6SBBztME86RBXA+aJ3BnUNr8hh00UPqX?=
+ =?us-ascii?Q?fK95S04CYG8yOkigDSOgkF8nUNagJjMoizMlEec8oP7DUQqM00armym8Yy5n?=
+ =?us-ascii?Q?qnxP39zVeDQO+cgTdu/DM4M0S1FKPagaNtB+H7ndDmQm/B1gnBvy5Pvv7bcL?=
+ =?us-ascii?Q?3uV5PeYoLHkroegAmlY8DjWnZry5HcxP1XuUioBtrEgzmUPIAselSz/dGRI5?=
+ =?us-ascii?Q?LLjMZh1A8SnoG+8LzttaOsmylyCjqlrYcvr6REih/w3Deo1m9XCOWoct2WQu?=
+ =?us-ascii?Q?0Gm90qKBmu5ebCK3vu9RliQEBUFeUtU4KAJIz84cEwCqsLfuyhbydw7C9WR3?=
+ =?us-ascii?Q?dBAXuwV7q4VsFQdE+nwhvi7O64NQQTn6LAe2fyI0XqhxBgK9FQXiBfiHuXnB?=
+ =?us-ascii?Q?+mNt0RLkz72x3QfaI0jNu6CrnNqRqwaOrF0x03EPIfVeSFqcxGs6GDURU1er?=
+ =?us-ascii?Q?ThBcveblQjvw/Y72qtEsfUQ3pUCGDGKWhmTlN2G646LZaz4r7KwcPIu90sgw?=
+ =?us-ascii?Q?hoCSO5rhZ4tpkISaS6naHdbkQ7c+PpxUMM+9ZixXJvTk5b/yn5Smhyraz5EM?=
+ =?us-ascii?Q?1ExZ6q4X/gDNUAqYrE+mvGExCWxywZEC+DQrB8gyHu11HWXuYfazJ1HZolhV?=
+ =?us-ascii?Q?M2frSGbNlMUOktKLgFa8ZL7XJM8EMVEMkJa9xp7O7xgZ45rp9Q1NW+srxM3X?=
+ =?us-ascii?Q?8tuLKJxQHM/vgIIyARwX4/3+7atLtVkJmetF7GYHBhPX6hVCUDasKCT8FxvI?=
+ =?us-ascii?Q?bKxooh8VnHYl+ZMx8NqdwwR0M21I4eO4Gkj0kSbfdR5A4SASltL8aYwETp7d?=
+ =?us-ascii?Q?/C2CC/FSAUPsKCatc2fz3f/DS3mdlBpzAkfcxP6pTN+pt9/hbH32mOfwt7Zm?=
+ =?us-ascii?Q?1B1Pi7bhlC1yBoAkboya2cQphQsWQ7Sfxf7Gr/Fmmmt/mzhu0Xz97WnMtEKm?=
+ =?us-ascii?Q?Vgn0OUyNo21i+enSJai0GGwEjMGx5lCUzuwrY6Pe8M60crjdKgQsOtVngxUw?=
+ =?us-ascii?Q?qs6ZeMYzZhpiUtqxoaBAXXTw1WtzFGKuWOmC+6fkkW4TZQteGqfkFctsIZ7I?=
+ =?us-ascii?Q?Fp8jqbRcz8rT9Bq3iz+KMvm7PNF/STbVQp/o6uzCEl0ZLwswKLjSdY83Ywf9?=
+ =?us-ascii?Q?vU9WEuOXUSdXBRRtCu365yGqeuFv99vN5P9RyowLjLrByRurSvdfxlsuLOUl?=
+ =?us-ascii?Q?W4cZfbks8USjVYB/KxjqpIrR8ExaHHItQOpPubNPRUv36yPs/Ks5tPKyKKKy?=
+ =?us-ascii?Q?URr8uWNx/djtCzMCzxUKzGjlBBlk7g/Es/iB8nQCCS6dy9hQpf1ixwVLyuJZ?=
+ =?us-ascii?Q?slI7ClsVICsYGZZeTHuQ0xySy95L0Z08gGzaQdoH8dco2KeTAa5IX8tCuPQv?=
+ =?us-ascii?Q?9a2jhwXtNOohNM1yAkm5iFGkL98+ifO1RGCp7y6ZuOZ/sLOL60KEg5RqxJfY?=
+ =?us-ascii?Q?LD7RlPcLnspa4DfnGBkuiLSKwJgLli4NenNXllfgiqUDbr2fUr6Uwnm9wiSS?=
+ =?us-ascii?Q?kCX3XuA9nBgU5IB8XkjtM8UNK9EjWSMM4GlsMC+Tt6/y1f6u+EnlkZhmi/dR?=
+ =?us-ascii?Q?s6n6UpjZh/MPQ9taya2kwlZwaPnmWfeRJJkIOtWjGJkh/d7Ox/HVeGBPriwi?=
+ =?us-ascii?Q?tKCx/YkjVdvTANvos8LJG+6MAOuS1+U=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fff961e9-f43f-4dfe-d0e4-08da3fad33f4
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2022 06:50:36.1638
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VIHxxFX4O1Q777++pW6xTBuk6IDYC6pJ8jjHbrLRfbunE6q+cu3jBejd0FLTLpc2XmeCZd2iN5nP40gL2g2oCuVCnBTYEmAIW1daEk6imus=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0441
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,48 +127,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 9:07 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Thu, May 26, 2022 at 07:00:06PM +0200, Eugenio Perez Martin wrote:
-> > > It feels like returning any literal that isn't 1 or 0 should trigger a
-> > > warning...  I've written that and will check it out tonight.
-> > >
-> >
-> > I'm not sure this should be so strict, or "literal" does not include pointers?
-> >
->
-> What I mean in exact terms, is that if you're returning a known value
-> and the function returns bool then the known value should be 0 or 1.
-> Don't "return 3;".  This new warning will complain if you return a known
-> pointer as in "return &a;".  It won't complain if you return an
-> unknown pointer "return p;".
->
+On Wed, May 25, 2022 at 04:57:39PM -0500, Bjorn Helgaas wrote:
+> On Tue, May 24, 2022 at 12:54:48PM -0400, Jim Quinlan wrote:
+> > When brcm_pcie_add_bus() is invoked, we will "get" and enable any
+> > regulators that are present in the DT node.  If the busno==1, we will
+> > will also attempt pcie-linkup.  If PCIe linkup fails, which can happen for
+> > multiple reasons but most due to a  missing device, we turn
+> > on "refusal" mode to prevent our unforgiving PCIe HW from causing an
+> > abort on any subsequent PCIe config-space accesses.
+> 
+> > Further, a failed linkup will have brcm_pcie_probe() stopping and
+> > removing the root bus, which in turn invokes  brcm_pcie_remove_bus()
+> > (actually named pci_subdev_regulators_remove_bus() as it may someday
+> > find its way into bus.c), which invokes regulator_bulk_disable() on
+> > any regulators that were enabled by the probe.
+> 
+> Ah, thanks!  This is the detail I missed.  If pci_host_probe()
+> succeeds and the link is down, we call brcm_pcie_remove() (the
+> driver's .remove() method).  That's unusual and possibly unique among
+> native host bridge drivers.  I'm not sure that's the best pattern
+> here.  Most drivers can't do that because they expect multiple devices
+> on the root bus.  And the Root Port is still a functional device on
+> its own, even if its link is down.  Users likely expect to see it in
+> lspci and manipulate it via setpci.  It may have AER logs with clues
+> about why the link didn't come up.
+> 
+> Again something for future discussion, not for this regression.
 
-Ok, thanks for the clarification.
+I experienced the same end result, root port not available unless the
+link is up during probe, with the imx6 PCI driver and I'm also not
+convinced this is the best decision.
 
-> > As an experiment, can Smatch be used to count how many times a
-> > returned pointer is converted to int / bool before returning vs not
-> > converted?
->
-> I'm not super excited to write that code...  :/
->
+I guess one of the reasons for this behavior is to save some power, but
+it should be possible to just disable the PCIe root port in the
+device tree to handle the use case in which PCIe port is not available
+at all on the system.
 
-Sure, I understand. I meant if it was possible or if that is too far
-beyond its scope.
-
-> >
-> > I find Smatch interesting, especially when switching between projects
-> > frequently. Does it support changing the code like clang-format? To
-> > offload cognitive load to tools is usually good :).
->
-> No.  Coccinelle does that really well though.
->
-
-Understood.
-
-Thanks!
-
-> regards,
-> dan carpenter
->
+Francesco
 

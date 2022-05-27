@@ -2,124 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC88536937
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 01:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD4D536941
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 01:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355186AbiE0XpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 19:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S1355203AbiE0XzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 19:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbiE0XpE (ORCPT
+        with ESMTP id S244378AbiE0XzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 19:45:04 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE8065D23
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 16:45:02 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id j10so8886863lfe.12
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 16:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=IALt29wlC4JKslLVMsLFRhR5StYJLg09Im2CzgSWtjU=;
-        b=BSKfdkBpBFTf6f+PiPWq/EXSKA9i8id4uv80ipDYcRnsAuJgnz/nDzvg02VDbWclCK
-         1TAP2co9doBzOdEdmkdVHP8qaNrTPtRuT7tuB4UXYWjHiP/oWai5WXRAVAtk8lZJeJik
-         zzPZ5AQ/Epvcm6XRPzH+jWa0V+SFaFv+OGLsrS5r+m8oB253MVhhyqZL447hADuQyV/y
-         0Nw031lvGm96EZhNUMbUaK4GF3vPSZO4tONyWX2dqdmllE0icr1nUcfAF1zNjNLeSSkl
-         zCA+TmnbcOmXugIUnJ8to7IfOB1iJr1RLAiQPDxiXgFXwZMeedcnL2Mva5gSpKT5gaWg
-         qJJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=IALt29wlC4JKslLVMsLFRhR5StYJLg09Im2CzgSWtjU=;
-        b=EfZZNQzbXFHSgDV/g3PBFuG06PHaGPz4SBSmkDylWxoUdLBZox1u62ku/pRjH01+fP
-         3LVZN20q6cADpHK8bRaHNpPkcC7SB/SGiU+9Rpl8PCZCgl6PLrRN71fOb8uiNSG+yXR+
-         j1MepJ8YxHjz7m0U1oT4Bo5nyPkvxJ2D7b2JWq+t+e6c2pH1YvJtgQAnE5j1ThBmb7Jb
-         +DhQg3JM6asZKZsX/xSWGp7JhKSVw3DVgG1AdXm/M90QROPGkOdCUzhPq/CtQJhlPdza
-         wE2TeGdloXmqgUmNp2c5b2dJHJ0L5bCyWeeLkKaI3muUc13HFIpz1iDZqGnAR34KnlQA
-         NYmg==
-X-Gm-Message-State: AOAM530zzR6syPVTP7ucvMJuf1byvmh5JUnC1MB62ExoDPfHmQU9/ULX
-        55lINVjAwPMDhxMOnVqfhk0fUw==
-X-Google-Smtp-Source: ABdhPJztWwtE94iIyLx6oVtYfG/pmmvgHHVHI/8vyuAAuATDZ9rdARTLukXZNRS229FkwcWe0iv5VQ==
-X-Received: by 2002:a05:6512:130a:b0:477:b632:27eb with SMTP id x10-20020a056512130a00b00477b63227ebmr31008546lfu.131.1653695100867;
-        Fri, 27 May 2022 16:45:00 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id q20-20020a05651232b400b00473c87152bcsm1061360lfe.127.2022.05.27.16.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 16:45:00 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 783451094B9; Sat, 28 May 2022 02:46:57 +0300 (+03)
-Date:   Sat, 28 May 2022 02:46:57 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Jakub =?utf-8?Q?Mat=C4=9Bna?= <matenajakub@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        vbabka@suse.cz, mhocko@kernel.org, mgorman@techsingularity.net,
-        willy@infradead.org, liam.howlett@oracle.com, hughd@google.com,
-        riel@surriel.com, rostedt@goodmis.org, peterz@infradead.org
-Subject: Re: [PATCH 2/2] [PATCH 2/2] mm: add merging after mremap resize
-Message-ID: <20220527234657.nsn6e7jjwttblzyi@box.shutemov.name>
-References: <20220527104810.24736-1-matenajakub@gmail.com>
- <20220527104810.24736-3-matenajakub@gmail.com>
+        Fri, 27 May 2022 19:55:12 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95E5B66AD2;
+        Fri, 27 May 2022 16:55:11 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id CE065538A2A;
+        Sat, 28 May 2022 09:55:10 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nujnR-00HD7K-5X; Sat, 28 May 2022 09:55:09 +1000
+Date:   Sat, 28 May 2022 09:55:09 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH] f2fs: add sysfs entry to avoid FUA
+Message-ID: <20220527235509.GW1098723@dread.disaster.area>
+References: <20220527205955.3251982-1-jaegeuk@kernel.org>
+ <YpFDw3mQjN1LBd2j@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220527104810.24736-3-matenajakub@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YpFDw3mQjN1LBd2j@gmail.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=629164de
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=VwQbUJbxAAAA:8 a=7-415B0cAAAA:8
+        a=SVjUjkoNg4n66X4JJ_kA:9 a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
+        a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 12:48:10PM +0200, Jakub Matěna wrote:
-> When mremap call results in expansion, it might be possible to merge the
-> VMA with the next VMA which might become adjacent. This patch adds
-> vma_merge call after the expansion is done to try and merge.
-> 
-> Signed-off-by: Jakub Matěna <matenajakub@gmail.com>
-> ---
->  mm/mremap.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/mremap.c b/mm/mremap.c
-> index 303d3290b938..c41237e62156 100644
-> --- a/mm/mremap.c
-> +++ b/mm/mremap.c
-> @@ -9,6 +9,7 @@
->   */
->  
->  #include <linux/mm.h>
-> +#include <linux/mm_inline.h>
->  #include <linux/hugetlb.h>
->  #include <linux/shm.h>
->  #include <linux/ksm.h>
-> @@ -1022,8 +1023,11 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
->  				}
->  			}
->  
-> -			if (vma_adjust(vma, vma->vm_start, addr + new_len,
-> -				       vma->vm_pgoff, NULL)) {
-> +			vma = vma_merge(mm, vma, addr + old_len, addr + new_len,
-> +					vma->vm_flags, vma->anon_vma, vma->vm_file,
-> +					vma->vm_pgoff + (old_len >> PAGE_SHIFT), vma_policy(vma),
-> +					vma->vm_userfaultfd_ctx, anon_vma_name(vma));
+On Fri, May 27, 2022 at 09:33:55PM +0000, Eric Biggers wrote:
+> [+Cc linux-block for FUA, and linux-xfs for iomap]
 
-The arguement list gets busy. Maybe some variables would help.
-Calculation around vm_pgoff is not obvious and requires some explanation.
+linux-fsdevel should really be used for iomap stuff...
 
-> +			if (!vma) {
->  				vm_unacct_memory(pages);
->  				ret = -ENOMEM;
->  				goto out;
-> -- 
-> 2.35.1
 > 
+> On Fri, May 27, 2022 at 01:59:55PM -0700, Jaegeuk Kim wrote:
+> > Some UFS storage gives slower performance on FUA than write+cache_flush.
+> > Let's give a way to manage it.
+> > 
+> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> 
+> Should the driver even be saying that it has FUA support in this case?  If the
+> driver didn't claim FUA support, that would also solve this problem.
 
+Agreed, this is a hardware problem that need to addressed with a
+driver quirk to stop it advertising FUA support. The high level
+fs/iomap code should always issue FUA writes where possible and
+the lower layers tell the block layer whether to issue the FUA as
+a FUA or write+cache flush pair.
+
+And, quite frankly, exposing this sort of "hardware needs help" knob
+as a sysfs variable is exactly the sort of thing we should never do.
+
+Users have no idea how to tune stuff like this correctly (even if
+they knew it existed!), yet we know exactly what hardware has this
+problem and the kernel already has mechanisms that would allow it to
+just Do The Right Thing. IOWs, we can fix this without the user even
+having to know that they have garbage hardware that needs special
+help....
+
+Cheers,
+
+Dave.
 -- 
- Kirill A. Shutemov
+Dave Chinner
+david@fromorbit.com

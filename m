@@ -2,69 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452D2535AAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF66535AB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348011AbiE0Hsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 03:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S1348092AbiE0Htn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 03:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242025AbiE0Hs3 (ORCPT
+        with ESMTP id S229510AbiE0Hti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 03:48:29 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6984DED786;
-        Fri, 27 May 2022 00:48:28 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id y20so29495ilq.7;
-        Fri, 27 May 2022 00:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=XMRDa53KYGEJeqmrTrms6VerI5vLLBoWIOzeLBp8C7g=;
-        b=NKen+d0d5ErKsqbIBSLhte8T6UjEYl8Gg5rCqfHWEvvJTGF4YA70B1knvQVl1/z3gc
-         4NJRaQUphAMOX/Mif2TArDBXNNfQYqklO+qsicTH4PgWqioQgHT7sJnW2DLq/OeyhK87
-         sy9v7CqKQr916r0LLcT4C22hu71GGdbSowubwknwNDAHDjzTicIcPZfWkSGBVLOVYNBX
-         vCje7Qt+DII+mIUsBfKPIjs3Yuc/a/jIQfB+cYEhRmDs1Dpfayvl1AwrEc4oxnWz68UY
-         hP7T66qfrQ4Z3zyZfVtWMfo2WXLSzF4hgpPT6hbvQ/JQdSta4m3asVxTfXcn5W387H7v
-         xxAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=XMRDa53KYGEJeqmrTrms6VerI5vLLBoWIOzeLBp8C7g=;
-        b=jxnSWi4gBoXJ4ODfdExGqRxYLpqPMj3kN3LbSUSb4AQZpwTgYJ+0G6cHoRYi4Q20CW
-         PaJY2G04LGMS23CXMUuWpzWH6VaBX2szrDiUxB3fuuhGnbXfJTNYIbCRbbmgTXPN1nLZ
-         4DW0QxJm6iVcaspzznWaX+ydgG13gHavnadz7TGd6ixNkBz0rZeaHUgEZpbKS5rXgMaW
-         O6OjqwIiXJOp6NbXFQMgLNHgQGNZoBgtqJznYgsWQ5iXIvCCx+K1TiF7qvKyh+hwP6sD
-         OjBTcgZuQqshkSaCY0LNSbxgjQEnKeQJaCSz8RR/V7GFGJ7sZfCM0/UK9nhZUKaYMHJX
-         oa3Q==
-X-Gm-Message-State: AOAM533lEPHbhJTPz3ujUjuWvoj00TWMSauJQCMLBU+eRQ3BNLA+hdwu
-        i+nw9Foi0OsWy+0rSAOPZXJ/GQ5SWI31AZsj9GM=
-X-Google-Smtp-Source: ABdhPJxe2AeB3gDKJHmnqBaSCoiBw2JFZc2TaA8ziqxMIGZ3Xifs10Y0GWQCelOj8o5e9vPJ9dVqb+IePcXzHVD1UNE=
-X-Received: by 2002:a05:6e02:174f:b0:2d1:3971:9348 with SMTP id
- y15-20020a056e02174f00b002d139719348mr21623962ill.4.1653637707806; Fri, 27
- May 2022 00:48:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
- <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com> <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com>
-In-Reply-To: <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 27 May 2022 09:47:51 +0200
-Message-ID: <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com>
-Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
- and OpenSSL v3.0.x
-To:     Kees Cook <keescook@chromium.org>
-Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-Content-Type: multipart/mixed; boundary="00000000000029527c05dff98808"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Fri, 27 May 2022 03:49:38 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B3EF6891;
+        Fri, 27 May 2022 00:49:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0VEW9I73_1653637770;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VEW9I73_1653637770)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 27 May 2022 15:49:31 +0800
+Message-ID: <1653637760.5957363-7-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH V6 8/9] virtio: harden vring IRQ
+Date:   Fri, 27 May 2022 15:49:20 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     tglx@linutronix.de, peterz@infradead.org, paulmck@kernel.org,
+        maz@kernel.org, pasic@linux.ibm.com, cohuck@redhat.com,
+        eperezma@redhat.com, lulu@redhat.com, sgarzare@redhat.com,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20220527060120.20964-1-jasowang@redhat.com>
+ <20220527060120.20964-9-jasowang@redhat.com>
+In-Reply-To: <20220527060120.20964-9-jasowang@redhat.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,246 +45,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000029527c05dff98808
-Content-Type: text/plain; charset="UTF-8"
-
-On Tue, May 24, 2022 at 9:13 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+On Fri, 27 May 2022 14:01:19 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> This is a rework on the previous IRQ hardening that is done for
+> virtio-pci where several drawbacks were found and were reverted:
 >
-> On Thu, May 19, 2022 at 12:01 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > [ CC Kees and Salvatore ]
-> >
-> > The Debian kernel-team ships a fix (4 hours young):
-> >
-> > commit: 13e234d459c11946efba647c3daf15e03abb0d99
-> > "sign-file: Convert API usage to support OpenSSL v3"
-> >
-> > *untested*
+> 1) try to use IRQF_NO_AUTOEN which is not friendly to affinity managed IRQ
+>    that is used by some device such as virtio-blk
+> 2) done only for PCI transport
 >
-> @Kees:
+> The vq->broken is re-used in this patch for implementing the IRQ
+> hardening. The vq->broken is set to true during both initialization
+> and reset. And the vq->broken is set to false in
+> virtio_device_ready(). Then vring_interrupt() can check and return
+> when vq->broken is true. And in this case, switch to return IRQ_NONE
+> to let the interrupt core aware of such invalid interrupt to prevent
+> IRQ storm.
 >
-> Any updates on the part of certs/extract-cert.c?
+> The reason of using a per queue variable instead of a per device one
+> is that we may need it for per queue reset hardening in the future.
 >
+> Note that the hardening is only done for vring interrupt since the
+> config interrupt hardening is already done in commit 22b7050a024d7
+> ("virtio: defer config changed notifications"). But the method that is
+> used by config interrupt can't be reused by the vring interrupt
+> handler because it uses spinlock to do the synchronization which is
+> expensive.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Halil Pasic <pasic@linux.ibm.com>
+> Cc: Cornelia Huck <cohuck@redhat.com>
+> Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
 
-[ CC Tasmiya Nalatwad ]
+Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 
-There are several more reports on this issue (see [3]).
-
-I did a quick test with Kees' patch from [2] and my attached patch
-"extract-cert: Suppress warnings with OpenSSL v3 API".
-
-Now, I see no more warnings due to OpenSSL v3 API:
-
-$ egrep 'sign-file|extract-cert'
-../build-log_5.18.0-2-amd64-clang14-lto.txt
-176:  clang -Wp,-MMD,scripts/.sign-file.d -Wall -Wmissing-prototypes
--Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
--Wdeclaration-after-statement         -o scripts/sign-file
-scripts/sign-file.c   -lcrypto
-2053:  clang -Wp,-MMD,certs/.extract-cert.d -Wall -Wmissing-prototypes
--Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
--Wdeclaration-after-statement       -Wno-deprecated-declarations   -o
-certs/extract-cert certs/extract-cert.c   -lcrypto
-2068:  certs/extract-cert "" certs/x509_certificate_list
-2069:  certs/extract-cert "" certs/signing_key.x509
-
-config-5.18-dileks: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
-
--Sedat-
-
-[1] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
-[2] https://salsa.debian.org/kernel-team/linux/-/commit/13e234d459c11946efba647c3daf15e03abb0d99
-[3] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
-
-> >
-> > On Thu, May 19, 2022 at 11:55 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > here, I am on Debian/unstable AMD64.
-> > >
-> > > Recently (or still) there is/was a transition to OpenSSL see below link.
-> > >
-> > > The warnings look like:
-> > >
-> > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
-> > > is deprecated [-Wdeprecated-declarations]
-> > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
-> > > [-Wdeprecated-declarations]
-> > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-> > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 395:certs/extract-cert.c:46:14: warning: 'ERR_get_error_line' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 407:certs/extract-cert.c:59:9: warning: 'ERR_get_error_line' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 420:certs/extract-cert.c:124:3: warning: 'ENGINE_load_builtin_engines'
-> > > is deprecated [-Wdeprecated-declarations]
-> > > 432:certs/extract-cert.c:126:7: warning: 'ENGINE_by_id' is deprecated
-> > > [-Wdeprecated-declarations]
-> > > 444:certs/extract-cert.c:128:7: warning: 'ENGINE_init' is deprecated
-> > > [-Wdeprecated-declarations]
-> > > 456:certs/extract-cert.c:133:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 468:certs/extract-cert.c:134:3: warning: 'ENGINE_ctrl_cmd' is
-> > > deprecated [-Wdeprecated-declarations]
-> > >
-> > > More detailed output:
-> > >
-> > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 190-        while ((e = ERR_get_error_line(&file, &line))) {
-> > > 191-                    ^
-> > > 192-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
-> > > been explicitly marked deprecated here
-> > > 193-OSSL_DEPRECATEDIN_3_0
-> > > 194-^
-> > > 195-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > 'OSSL_DEPRECATEDIN_3_0'
-> > > 196-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > 197-                                                ^
-> > > 198-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > 'OSSL_DEPRECATED'
-> > > 199-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > 200-                                                   ^
-> > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 202-        while (ERR_get_error_line(&file, &line)) {}
-> > > 203-               ^
-> > > 204-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
-> > > been explicitly marked deprecated here
-> > > 205-OSSL_DEPRECATEDIN_3_0
-> > > 206-^
-> > > 207-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > 'OSSL_DEPRECATEDIN_3_0'
-> > > 208-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > 209-                                                ^
-> > > 210-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > 'OSSL_DEPRECATED'
-> > > 211-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > 212-                                                   ^
-> > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
-> > > is deprecated [-Wdeprecated-declarations]
-> > > 214-                ENGINE_load_builtin_engines();
-> > > 215-                ^
-> > > 216-/usr/include/openssl/engine.h:358:1: note:
-> > > 'ENGINE_load_builtin_engines' has been explicitly marked deprecated
-> > > here
-> > > 217-OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
-> > > 218-^
-> > > 219-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > 'OSSL_DEPRECATEDIN_3_0'
-> > > 220-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > 221-                                                ^
-> > > 222-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > 'OSSL_DEPRECATED'
-> > > 223-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > 224-                                                   ^
-> > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
-> > > [-Wdeprecated-declarations]
-> > > 226-                e = ENGINE_by_id("pkcs11");
-> > > 227-                    ^
-> > > 228-/usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been
-> > > explicitly marked deprecated here
-> > > 229-OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
-> > > 230-^
-> > > 231-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > 'OSSL_DEPRECATEDIN_3_0'
-> > > 232-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > 233-                                                ^
-> > > 234-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > 'OSSL_DEPRECATED'
-> > > 235-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > 236-                                                   ^
-> > > 237-scripts/sign-file.c:   ld.lld -r -o
-> > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/objtool-in.o
-> > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86
-> > > /special.o /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/decode.o
-> > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-> > > 239-                if (ENGINE_init(e))
-> > > 240-                    ^
-> > > 241-/usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been
-> > > explicitly marked deprecated here
-> > > 242-OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
-> > > 243-^
-> > > 244-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > 'OSSL_DEPRECATEDIN_3_0'
-> > > 245-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > 246-                                                ^
-> > > 247-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > 'OSSL_DEPRECATED'
-> > > 248-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > 249-                                                   ^
-> > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 251-                        ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
-> > > 252-                             ^
-> > > 253-/usr/include/openssl/engine.h:478:1: note:
-> > > 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
-> > > 254-OSSL_DEPRECATEDIN_3_0
-> > > 255-^
-> > > 256-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > 'OSSL_DEPRECATEDIN_3_0'
-> > > 257-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > 258-                                                ^
-> > > 259-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > 'OSSL_DEPRECATED'
-> > > 260-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > 261-                                                   ^
-> > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
-> > > deprecated [-Wdeprecated-declarations]
-> > > 263-                private_key = ENGINE_load_private_key(e, private_key_name,
-> > > 264-                              ^
-> > > 265-/usr/include/openssl/engine.h:637:1: note:
-> > > 'ENGINE_load_private_key' has been explicitly marked deprecated here
-> > > 266-OSSL_DEPRECATEDIN_3_0
-> > > 267-^
-> > > 268-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > 'OSSL_DEPRECATEDIN_3_0'
-> > > 269-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > 270-                                                ^
-> > > 271-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > 'OSSL_DEPRECATED'
-> > > 272-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > 273-
-> > >
-> > > Relevant OpenSSL v3.0.3 header files are attached.
-> > > My kernel-config, too.
-> > >
-> > > If you need further information, please let me know.
-> > >
-> > > Regards,
-> > > -Sedat-
-> > >
-> > > [1] https://release.debian.org/transitions/html/auto-openssl.html
-
---00000000000029527c05dff98808
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-extract-cert-Suppress-warnings-with-OpenSSL-v3-API.patch"
-Content-Disposition: attachment; 
-	filename="0001-extract-cert-Suppress-warnings-with-OpenSSL-v3-API.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l3o4zbot0>
-X-Attachment-Id: f_l3o4zbot0
-
-RnJvbSAzYjAxOWEyNDFhNzI3NDJjN2YyMzk5NjVlZDkyMzg1ZTlmZmQ5ZWQzIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTZWRhdCBEaWxlayA8c2VkYXQuZGlsZWtAZ21haWwuY29tPgpE
-YXRlOiBGcmksIDI3IE1heSAyMDIyIDA5OjI1OjQ1ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gZXh0
-cmFjdC1jZXJ0OiBTdXBwcmVzcyB3YXJuaW5ncyB3aXRoIE9wZW5TU0wgdjMgQVBJCgpTaWduZWQt
-b2ZmLWJ5OiBTZWRhdCBEaWxlayA8c2VkYXQuZGlsZWtAZ21haWwuY29tPgotLS0KIGNlcnRzL01h
-a2VmaWxlIHwgMSArCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKCmRpZmYgLS1naXQg
-YS9jZXJ0cy9NYWtlZmlsZSBiL2NlcnRzL01ha2VmaWxlCmluZGV4IGQ4NDQzY2ZiMWM0MC4uNTJm
-NzFmMDkyNWUyIDEwMDY0NAotLS0gYS9jZXJ0cy9NYWtlZmlsZQorKysgYi9jZXJ0cy9NYWtlZmls
-ZQpAQCAtNzUsNCArNzUsNSBAQCB0YXJnZXRzICs9IHg1MDlfcmV2b2NhdGlvbl9saXN0CiBob3N0
-cHJvZ3MgOj0gZXh0cmFjdC1jZXJ0CiAKIEhPU1RDRkxBR1NfZXh0cmFjdC1jZXJ0Lm8gPSAkKHNo
-ZWxsIHBrZy1jb25maWcgLS1jZmxhZ3MgbGliY3J5cHRvIDI+IC9kZXYvbnVsbCkKK0hPU1RDRkxB
-R1NfZXh0cmFjdC1jZXJ0Lm8gKz0gLVduby1kZXByZWNhdGVkLWRlY2xhcmF0aW9ucwogSE9TVExE
-TElCU19leHRyYWN0LWNlcnQgPSAkKHNoZWxsIHBrZy1jb25maWcgLS1saWJzIGxpYmNyeXB0byAy
-PiAvZGV2L251bGwgfHwgZWNobyAtbGNyeXB0bykKLS0gCjIuMzYuMQoK
---00000000000029527c05dff98808--
+> ---
+>  drivers/s390/virtio/virtio_ccw.c       |  4 ++++
+>  drivers/virtio/virtio.c                | 15 ++++++++++++---
+>  drivers/virtio/virtio_mmio.c           |  5 +++++
+>  drivers/virtio/virtio_pci_modern_dev.c |  5 +++++
+>  drivers/virtio/virtio_ring.c           | 11 +++++++----
+>  include/linux/virtio_config.h          | 20 ++++++++++++++++++++
+>  6 files changed, 53 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> index c188e4f20ca3..97e51c34e6cf 100644
+> --- a/drivers/s390/virtio/virtio_ccw.c
+> +++ b/drivers/s390/virtio/virtio_ccw.c
+> @@ -971,6 +971,10 @@ static void virtio_ccw_set_status(struct virtio_device *vdev, u8 status)
+>  	ccw->flags = 0;
+>  	ccw->count = sizeof(status);
+>  	ccw->cda = (__u32)(unsigned long)&vcdev->dma_area->status;
+> +	/* We use ssch for setting the status which is a serializing
+> +	 * instruction that guarantees the memory writes have
+> +	 * completed before ssch.
+> +	 */
+>  	ret = ccw_io_helper(vcdev, ccw, VIRTIO_CCW_DOING_WRITE_STATUS);
+>  	/* Write failed? We assume status is unchanged. */
+>  	if (ret)
+> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> index aa1eb5132767..95fac4c97c8b 100644
+> --- a/drivers/virtio/virtio.c
+> +++ b/drivers/virtio/virtio.c
+> @@ -220,6 +220,15 @@ static int virtio_features_ok(struct virtio_device *dev)
+>   * */
+>  void virtio_reset_device(struct virtio_device *dev)
+>  {
+> +	/*
+> +	 * The below virtio_synchronize_cbs() guarantees that any
+> +	 * interrupt for this line arriving after
+> +	 * virtio_synchronize_vqs() has completed is guaranteed to see
+> +	 * vq->broken as true.
+> +	 */
+> +	virtio_break_device(dev);
+> +	virtio_synchronize_cbs(dev);
+> +
+>  	dev->config->reset(dev);
+>  }
+>  EXPORT_SYMBOL_GPL(virtio_reset_device);
+> @@ -428,6 +437,9 @@ int register_virtio_device(struct virtio_device *dev)
+>  	dev->config_enabled = false;
+>  	dev->config_change_pending = false;
+>
+> +	INIT_LIST_HEAD(&dev->vqs);
+> +	spin_lock_init(&dev->vqs_list_lock);
+> +
+>  	/* We always start by resetting the device, in case a previous
+>  	 * driver messed it up.  This also tests that code path a little. */
+>  	virtio_reset_device(dev);
+> @@ -435,9 +447,6 @@ int register_virtio_device(struct virtio_device *dev)
+>  	/* Acknowledge that we've seen the device. */
+>  	virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
+>
+> -	INIT_LIST_HEAD(&dev->vqs);
+> -	spin_lock_init(&dev->vqs_list_lock);
+> -
+>  	/*
+>  	 * device_add() causes the bus infrastructure to look for a matching
+>  	 * driver.
+> diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+> index c9699a59f93c..f9a36bc7ac27 100644
+> --- a/drivers/virtio/virtio_mmio.c
+> +++ b/drivers/virtio/virtio_mmio.c
+> @@ -253,6 +253,11 @@ static void vm_set_status(struct virtio_device *vdev, u8 status)
+>  	/* We should never be setting status to 0. */
+>  	BUG_ON(status == 0);
+>
+> +	/*
+> +	 * Per memory-barriers.txt, wmb() is not needed to guarantee
+> +	 * that the the cache coherent memory writes have completed
+> +	 * before writing to the MMIO region.
+> +	 */
+>  	writel(status, vm_dev->base + VIRTIO_MMIO_STATUS);
+>  }
+>
+> diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+> index 4093f9cca7a6..a0fa14f28a7f 100644
+> --- a/drivers/virtio/virtio_pci_modern_dev.c
+> +++ b/drivers/virtio/virtio_pci_modern_dev.c
+> @@ -467,6 +467,11 @@ void vp_modern_set_status(struct virtio_pci_modern_device *mdev,
+>  {
+>  	struct virtio_pci_common_cfg __iomem *cfg = mdev->common;
+>
+> +	/*
+> +	 * Per memory-barriers.txt, wmb() is not needed to guarantee
+> +	 * that the the cache coherent memory writes have completed
+> +	 * before writing to the MMIO region.
+> +	 */
+>  	vp_iowrite8(status, &cfg->device_status);
+>  }
+>  EXPORT_SYMBOL_GPL(vp_modern_set_status);
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 9c231e1fded7..13a7348cedff 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -1688,7 +1688,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+>  	vq->we_own_ring = true;
+>  	vq->notify = notify;
+>  	vq->weak_barriers = weak_barriers;
+> -	vq->broken = false;
+> +	vq->broken = true;
+>  	vq->last_used_idx = 0;
+>  	vq->event_triggered = false;
+>  	vq->num_added = 0;
+> @@ -2134,8 +2134,11 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+>  		return IRQ_NONE;
+>  	}
+>
+> -	if (unlikely(vq->broken))
+> -		return IRQ_HANDLED;
+> +	if (unlikely(vq->broken)) {
+> +		dev_warn_once(&vq->vq.vdev->dev,
+> +			      "virtio vring IRQ raised before DRIVER_OK");
+> +		return IRQ_NONE;
+> +	}
+>
+>  	/* Just a hint for performance: so it's ok that this can be racy! */
+>  	if (vq->event)
+> @@ -2177,7 +2180,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+>  	vq->we_own_ring = false;
+>  	vq->notify = notify;
+>  	vq->weak_barriers = weak_barriers;
+> -	vq->broken = false;
+> +	vq->broken = true;
+>  	vq->last_used_idx = 0;
+>  	vq->event_triggered = false;
+>  	vq->num_added = 0;
+> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> index 25be018810a7..d4edfd7d91bb 100644
+> --- a/include/linux/virtio_config.h
+> +++ b/include/linux/virtio_config.h
+> @@ -256,6 +256,26 @@ void virtio_device_ready(struct virtio_device *dev)
+>  	unsigned status = dev->config->get_status(dev);
+>
+>  	BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+> +
+> +	/*
+> +	 * The virtio_synchronize_cbs() makes sure vring_interrupt()
+> +	 * will see the driver specific setup if it sees vq->broken
+> +	 * as false (even if the notifications come before DRIVER_OK).
+> +	 */
+> +	virtio_synchronize_cbs(dev);
+> +	__virtio_unbreak_device(dev);
+> +	/*
+> +	 * The transport should ensure the visibility of vq->broken
+> +	 * before setting DRIVER_OK. See the comments for the transport
+> +	 * specific set_status() method.
+> +	 *
+> +	 * A well behaved device will only notify a virtqueue after
+> +	 * DRIVER_OK, this means the device should "see" the coherenct
+> +	 * memory write that set vq->broken as false which is done by
+> +	 * the driver when it sees DRIVER_OK, then the following
+> +	 * driver's vring_interrupt() will see vq->broken as false so
+> +	 * we won't lose any notification.
+> +	 */
+>  	dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
+>  }
+>
+> --
+> 2.25.1
+>

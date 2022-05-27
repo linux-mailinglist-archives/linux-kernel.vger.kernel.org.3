@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C68535DAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8ACD535DAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348188AbiE0JzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S1350405AbiE0J5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237129AbiE0JzO (ORCPT
+        with ESMTP id S237129AbiE0J5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:55:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741EB3C73B;
-        Fri, 27 May 2022 02:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653645313; x=1685181313;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZyWOtJY59nmOplfP/uzgYfu+eDMjfw81LAwJrsXTNIA=;
-  b=S4plgQPK1XNFoG/oshKqLnRuINkHubDLVP2uV8t6+5mV03128NbiiCuX
-   QMsxGi8b0Yj37wLsTPxoGM8/asblPSwQMm7ajfynkdOEk6RNXNyxT047i
-   nljXMy5gji6nVzmAem3846kiLukKooCSBQjCOtzpguqjCaquX9/vPjHOR
-   hFtcEtxE55/11/jQyOdr0VYKxz3wXT1bD65pDnmvs4k7ZXew530U1bi2q
-   bKD6I4d/uDHp0aidtVyBp3b3+0PthLort23KFj9JTDB9ARXbYjn377Uye
-   JHxC8+tTK+n5LhrQHvt05smfIyOPw0mkMTEr8NA8tSlexA1EZh1GuApJV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="256509345"
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="256509345"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:55:13 -0700
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="705049445"
-Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.254.211.236]) ([10.254.211.236])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:55:10 -0700
-Message-ID: <dac0543e-368a-a19e-510a-b9536dc25af6@intel.com>
-Date:   Fri, 27 May 2022 17:55:08 +0800
+        Fri, 27 May 2022 05:57:02 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E3233892
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:57:00 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id w14so6042425lfl.13
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:57:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=e0tqh7qqeg/7ehiexIPgsAiDdSoZS7aeFNTayUPMdOc=;
+        b=ZLNumBwMjmYz6Ddz8l4E2qz1MRkHPqE7mQJC9CNLFuEaHUR0cfrIBdygNdA/Ny4Mv6
+         rp/F0FVbaIMEK/PbDA1txZDM+QZynz6bdG/YBBF7tZdfUrzZLXmoaMTBIGDx4nVetifA
+         RgaYMbHFsRKj3w6ZSXklGPByUn3iubvjr98VjEVQ2J0SMeLhlFwt23IiHavr3PjJdzvw
+         KOq1x7q4bL0pp4pwfnRt9HLodEYBWgQiHaeJaHS1aFTpikMLgsEo4/zNvhcQlybydzYX
+         zwPwiqMWvOtpDMrKi5aTBqxls/5n91GIjM28071jM2dsNQ8xKuyJA68BvePufLBdginC
+         m9Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=e0tqh7qqeg/7ehiexIPgsAiDdSoZS7aeFNTayUPMdOc=;
+        b=WBx3xnswCG3UHC7UAWI3gAI9mZLLbHe2xaVo+EZLznWs6oNLOPvRhpCoSu7wdVpbz2
+         kcmlc7gTh6C+mLc9D6XmYLg9eGEbce4ahfNCOZ4M9AKg8b7BBbFYZ1WlYShKj3/BT+It
+         r0E0znB3TXGvDFd5hDXelb01XAQHv6MAfyEw5QEdhfAh/vJfMrPWdQOx/XfUZvA6XIL2
+         tHya/KFXkFMVznTY51Yx0/eGbhyI1l5ZGSrXLTjEo3xZK7apvO5trimLem0ZK3JSWUPF
+         jKjRJll634D19OWrwqpm2mRYLv12jk75NkoAWRmN/TLpyph8QbqfDwk/HJddkVKaNCH5
+         uubA==
+X-Gm-Message-State: AOAM533255baMQtlDwGSwCs1oQn6HTjtZiDjmUw3ii/vwihR7CM8GXKn
+        GMCV/O5l9J1+oxm02S5HCbxWnUrG7vCvbA==
+X-Google-Smtp-Source: ABdhPJz1lmb5CKBAD9Igt8Z+9gebkQewb8KfLfs/WVghEp6rr2duyaG6bgXXnHEH9ITbnlE44kqHSQ==
+X-Received: by 2002:ac2:4c53:0:b0:478:6908:c76f with SMTP id o19-20020ac24c53000000b004786908c76fmr18791795lfk.634.1653645419012;
+        Fri, 27 May 2022 02:56:59 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id a17-20020a05651c031100b0024f3d1daf04sm911304ljp.140.2022.05.27.02.56.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 May 2022 02:56:58 -0700 (PDT)
+Message-ID: <7c22e193-2a7b-2537-feff-c4656c022f31@linaro.org>
+Date:   Fri, 27 May 2022 12:56:57 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH v7 8/8] KVM: VMX: Enable PKS for nested VM
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220424101557.134102-1-lei4.wang@intel.com>
- <20220424101557.134102-9-lei4.wang@intel.com> <Yobt1XwOfb5M6Dfa@google.com>
-From:   "Wang, Lei" <lei4.wang@intel.com>
-In-Reply-To: <Yobt1XwOfb5M6Dfa@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 -next] drm/display: Fix build error without CONFIG_OF
+Content-Language: en-GB
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     YueHaibing <yuehaibing@huawei.com>, airlied@linux.ie,
+        daniel@ffwll.ch, tzimmermann@suse.de, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20220506123246.21788-1-yuehaibing@huawei.com>
+ <CACRpkdZUwfVNZyS6RgcupJ+TRUZVM+1_3ABj_-f_3+v+wNE6mg@mail.gmail.com>
+ <CACRpkdaKrk+cj9Yvpe3kmR1iJFczi-yckHiKeLGu9F=hRFiU9w@mail.gmail.com>
+ <CAA8EJpq7_V7mZbN+G5fZdK0a4kTcxROAd_bGJtQ5mhzdYr6pNQ@mail.gmail.com>
+ <CACRpkdYATkP2ONCxHq6+XsWM8949tXxd5r=OKM36dgwWp3Sxgg@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CACRpkdYATkP2ONCxHq6+XsWM8949tXxd5r=OKM36dgwWp3Sxgg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,120 +79,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/2022 9:24 AM, Sean Christopherson wrote:
-> Nit, use "KVM: nVMX:" for the shortlog scope.
+On 26/05/2022 23:08, Linus Walleij wrote:
+> On Wed, May 25, 2022 at 3:36 PM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+>> On Mon, 23 May 2022 at 15:55, Linus Walleij <linus.walleij@linaro.org> wrote:
+> 
+>>> Nope, failed:
+>>>
+>>> $ dim push-branch drm-misc-next
+>>> dim: ac890b9eeb9b ("drm/display: Fix build error without CONFIG_OF"):
+>>> Fixes: SHA1 in not pointing at an ancestor:
+>>> dim:     f5d01644921b ("drm/msm: select DRM_DP_AUX_BUS for the AUX bus support")
+>>> dim: ERROR: issues in commits detected, aborting
+>>>
+>>> I don't know what to do with this, sorry. The other committers are maybe better
+>>> with this kind of situations. I think it is designed to stop me from
+>>> shooting myself
+>>> in the foot.
+>>
+>> Linus, can we get an ack from you (or anybody else from DRM core) to
+>> merge it through drm/msm tree?
+> 
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+>> After a second thought, I think the patch contains wrong Fixes tag. It
+>> should be:
+>>
+>> Fixes: 1e0f66420b13 ("drm/display: Introduce a DRM display-helper module")
+>>
+>> With that in place would we be able to merge it through drm-misc? Does
+>> it needs to be resubmitted?
+> 
+> But it doesn't apply to drm-misc... that's my problem :/
 
-Will change it.
+I think it didn't apply because of the Fixes from msm-next.
+If we change that to the mentioned commit (1e0f66420b13), then you 
+should be able to push it.
 
-> On Sun, Apr 24, 2022, Lei Wang wrote:
->> @@ -2433,6 +2437,10 @@ static void prepare_vmcs02_rare(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
->>   		if (kvm_mpx_supported() && vmx->nested.nested_run_pending &&
->>   		    (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS))
->>   			vmcs_write64(GUEST_BNDCFGS, vmcs12->guest_bndcfgs);
->> +
->> +		if (vmx->nested.nested_run_pending &&
->> +		    (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS))
->> +			vmcs_write64(GUEST_IA32_PKRS, vmcs12->guest_ia32_pkrs);
-> As mentioned in the BNDCFGS thread, this does the wrong thing for SMM.  But, after
-> a lot of thought, handling this in nested_vmx_enter_non_root_mode() would be little
-> more than a band-aid, and a messy one at that, because KVM's SMM emulation is
-> horrifically broken with respect to nVMX.
->
-> Entry does to SMM does not modify _any_ state that is not saved in SMRAM.  That
-> we're having to deal with this crap is a symptom of KVM doing the complete wrong
-> thing by piggybacking nested_vmx_vmexit() and nested_vmx_enter_non_root_mode().
->
-> The SDM's description of CET spells this out very, very clearly:
->
->    On processors that support CET shadow stacks, when the processor enters SMM,
->    the processor saves the SSP register to the SMRAM state save area (see Table 31-3)
->    and clears CR4.CET to 0. Thus, the initial execution environment of the SMI handler
->    has CET disabled and all of the CET state of the interrupted program is still in the
->    machine. An SMM that uses CET is required to save the interrupted program’s CET
->    state and restore the CET state prior to exiting SMM.
->
-> It mostly works because no guest SMM handler does anything with most of the MSRs,
-> but it's all wildy wrong.  A concrete example of a lurking bug is if vmcs12 uses
-> the VM-Exit MSR load list, in which case the forced nested_vmx_vmexit() will load
-> state that is never undone.
->
-> So, my very strong vote is to ignore SMM and let someone who actually cares about
-> SMM fix that mess properly by adding custom flows for exiting/re-entering L2 on
-> SMI/RSM.
 
-OK, I will leave the mess alone.
-
->>   	}
->>   
->>   	if (nested_cpu_has_xsaves(vmcs12))
->> @@ -2521,6 +2529,11 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
->>   	if (kvm_mpx_supported() && (!vmx->nested.nested_run_pending ||
->>   	    !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
->>   		vmcs_write64(GUEST_BNDCFGS, vmx->nested.vmcs01_guest_bndcfgs);
->> +	if (kvm_cpu_cap_has(X86_FEATURE_PKS) &&
-> ERROR: trailing whitespace
-> #85: FILE: arch/x86/kvm/vmx/nested.c:3407:
-> +^Iif (kvm_cpu_cap_has(X86_FEATURE_PKS) && $
-
-Sorry for my carelessness, will remove the trailing whitespace.
-
->> +	    (!vmx->nested.nested_run_pending ||
->> +	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS)))
->> +		vmcs_write64(GUEST_IA32_PKRS, vmx->nested.vmcs01_guest_pkrs);
->> +
->>   	vmx_set_rflags(vcpu, vmcs12->guest_rflags);
->>   
->>   	/* EXCEPTION_BITMAP and CR0_GUEST_HOST_MASK should basically be the
->> @@ -2897,6 +2910,10 @@ static int nested_vmx_check_host_state(struct kvm_vcpu *vcpu,
->>   					   vmcs12->host_ia32_perf_global_ctrl)))
->>   		return -EINVAL;
->>   
->> +	if ((vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PKRS) &&
->> +	    CC(!kvm_pkrs_valid(vmcs12->host_ia32_pkrs)))
->> +		return -EINVAL;
->> +
->>   #ifdef CONFIG_X86_64
->>   	ia32e = !!(vmcs12->vm_exit_controls & VM_EXIT_HOST_ADDR_SPACE_SIZE);
->>   #else
->> @@ -3049,6 +3066,10 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
->>   	if (nested_check_guest_non_reg_state(vmcs12))
->>   		return -EINVAL;
->>   
->> +	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS) &&
->> +	    CC(!kvm_pkrs_valid(vmcs12->guest_ia32_pkrs)))
->> +		return -EINVAL;
->> +
->>   	return 0;
->>   }
->>   
->> @@ -3384,6 +3405,10 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
->>   	    (!from_vmentry ||
->>   	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
->>   		vmx->nested.vmcs01_guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
->> +	if (kvm_cpu_cap_has(X86_FEATURE_PKS) &&
->> +	    (!from_vmentry ||
-> This should be "!vmx->nested.nested_run_pending" instead of "!from_vmentry" to
-> avoid the unnecessary VMREAD when restoring L2 with a pending VM-Enter.
-
-Will fix that.
-
->> +	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS)))
->> +		vmx->nested.vmcs01_guest_pkrs = vmcs_read64(GUEST_IA32_PKRS);
->>   
->>   	/*
->>   	 * Overwrite vmcs01.GUEST_CR3 with L1's CR3 if EPT is disabled *and*
-> ...
->
->> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
->> index 91723a226bf3..82f79ac46d7b 100644
->> --- a/arch/x86/kvm/vmx/vmx.h
->> +++ b/arch/x86/kvm/vmx/vmx.h
->> @@ -222,6 +222,8 @@ struct nested_vmx {
->>   	u64 vmcs01_debugctl;
->>   	u64 vmcs01_guest_bndcfgs;
->>   
-> Please pack these together, i.e. don't have a blank line between the various
-> vmcs01_* fields.
-
-OK, will check them and remove the blank lines.
-
+-- 
+With best wishes
+Dmitry

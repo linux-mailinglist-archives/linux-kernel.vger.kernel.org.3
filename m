@@ -2,74 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508BE536900
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9DE5368FA
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355149AbiE0Wpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 18:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
+        id S1354995AbiE0Wtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 18:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352286AbiE0Wpr (ORCPT
+        with ESMTP id S1352519AbiE0Wtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 18:45:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B302C8217E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:45:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 729B6B8264B
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 22:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 23718C34113;
-        Fri, 27 May 2022 22:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653691544;
-        bh=cnsercazjJFgKJLnu0XpEKBZZVJ9ajaURjhCXCksSBs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=X5HdBe0QOR85LWbalGDQxzvLmmNdNypXmFRGZzlUkP7WT08CYfOp0XyrIyTIkoeJk
-         eykjpawmJ+gtXD6L7JEg6KlcSlhf98HrLL/Eoq7hwOZYKgzVc3gGqA8j/NuADGW+jp
-         iS61zHKZwtyat/rJw+qSvfVHf6tgGp1jWVH2npmDy8JDSYwaeONJgDp9745/9MgfqW
-         uxVKVl9j/lo9aFpuIN4dLyX1eUTJwM86gsJMbsskLfU/s6cMXw2C1RERL+tKX/fucY
-         6vKwSCYsjZndlYTesrxIqpCmMffmfElcHHNffmRpFZKq6VyBkUVXakYbGKQck0/Y6w
-         J7fm7slhlkfEw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 12730E8DBDA;
-        Fri, 27 May 2022 22:45:44 +0000 (UTC)
-Subject: Re: [GIT PULL] MFD for v5.19
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YpC8PScrQLKP8pyO@google.com>
-References: <YpC8PScrQLKP8pyO@google.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YpC8PScrQLKP8pyO@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/mfd-next-5.19
-X-PR-Tracked-Commit-Id: f93afd8e7567fa9dcf0089ff4ce5a713bfb5dae7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ea6c3bc6ed93dd032568427e92424f6d33deb99b
-Message-Id: <165369154407.860.15878338171604580341.pr-tracker-bot@kernel.org>
-Date:   Fri, 27 May 2022 22:45:44 +0000
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 27 May 2022 18:49:43 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F4311CA35
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653691780; x=1685227780;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=u9GUuKmZrf3hlF+ZoaG+FgjMraBwA7Z6pCN5eaiTQ9U=;
+  b=hPvf2k0tn7AaLVGGI3KM/KCSSYDg93QjflKjzdQA1X1VC3l+cRNTKo+3
+   krsK4CqHSsEZ7VhkjbpsBcxn+aRlwTTobk8f+crFPqYeuxuonEXq5rJQ/
+   kV3rIDfNFx/78oSq2l92wmwXDLse6MDJovL3bQn2hjgw0YmxrAlCfrfjr
+   zSrkOHnfAY5dvM0iZswWx4TtZ5bVFr5L3XrtJMGlJjmDHEHU+t1iaSR7f
+   QOaXgG0isAnEuys2NdAwg/GLpBSnJs+d971MFbHpiaV3+88CUNdeyzIXT
+   IgarXVFu8MAVlErYX69z1NparKOaWyp/7u23QOzPxUsC7MpGuMMwgOmJo
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274319034"
+X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
+   d="scan'208";a="274319034"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 15:49:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
+   d="scan'208";a="719093848"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 27 May 2022 15:49:38 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuim1-0005CJ-NK;
+        Fri, 27 May 2022 22:49:37 +0000
+Date:   Sat, 28 May 2022 06:49:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: arch/arm64/kernel/fpsimd.c:1944:55: sparse: sparse: dereference of
+ noderef expression
+Message-ID: <202205280635.XKlMkfKD-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 27 May 2022 12:55:41 +0100:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8291eaafed36f575f23951f3ce18407f480e9ecf
+commit: e0838f6373e5cb72516fc4c26bba309097e2a80a arm64/sme: Save and restore streaming mode over EFI runtime calls
+date:   5 weeks ago
+config: arm64-randconfig-s032-20220527 (https://download.01.org/0day-ci/archive/20220528/202205280635.XKlMkfKD-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-14-g5a0004b5-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0838f6373e5cb72516fc4c26bba309097e2a80a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e0838f6373e5cb72516fc4c26bba309097e2a80a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/mfd-next-5.19
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ea6c3bc6ed93dd032568427e92424f6d33deb99b
 
-Thank you!
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm64/kernel/fpsimd.c:1944:55: sparse: sparse: dereference of noderef expression
+
+vim +1944 arch/arm64/kernel/fpsimd.c
+
+  1916	
+  1917	/*
+  1918	 * __efi_fpsimd_end(): clean up FPSIMD after an EFI runtime services call
+  1919	 */
+  1920	void __efi_fpsimd_end(void)
+  1921	{
+  1922		if (!system_supports_fpsimd())
+  1923			return;
+  1924	
+  1925		if (!__this_cpu_xchg(efi_fpsimd_state_used, false)) {
+  1926			kernel_neon_end();
+  1927		} else {
+  1928			if (system_supports_sve() &&
+  1929			    likely(__this_cpu_read(efi_sve_state_used))) {
+  1930				char const *sve_state = this_cpu_ptr(efi_sve_state);
+  1931				bool ffr = true;
+  1932	
+  1933				/*
+  1934				 * Restore streaming mode; EFI calls are
+  1935				 * normal function calls so should not return in
+  1936				 * streaming mode.
+  1937				 */
+  1938				if (system_supports_sme()) {
+  1939					if (__this_cpu_read(efi_sm_state)) {
+  1940						sysreg_clear_set_s(SYS_SVCR_EL0,
+  1941								   0,
+  1942								   SYS_SVCR_EL0_SM_MASK);
+  1943						if (!system_supports_fa64())
+> 1944							ffr = efi_sm_state;
+  1945					}
+  1946				}
+  1947	
+  1948				sve_load_state(sve_state + sve_ffr_offset(sve_max_vl()),
+  1949					       &this_cpu_ptr(&efi_fpsimd_state)->fpsr,
+  1950					       ffr);
+  1951	
+  1952				__this_cpu_write(efi_sve_state_used, false);
+  1953			} else {
+  1954				fpsimd_load_state(this_cpu_ptr(&efi_fpsimd_state));
+  1955			}
+  1956		}
+  1957	}
+  1958	
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,176 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304E05359AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EB55359B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245271AbiE0GxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 02:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
+        id S1344514AbiE0Gyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 02:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiE0GxF (ORCPT
+        with ESMTP id S239207AbiE0Gyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 02:53:05 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234BB631A;
-        Thu, 26 May 2022 23:53:04 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id j7so3444262vsj.7;
-        Thu, 26 May 2022 23:53:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=gVT2+H6zyIakz/UAu5QzrweZZcue1nrsnDfliOy/bQY=;
-        b=ZWR4uRcH/37PhBE9lMQte0rU686WET1ynrPOzj9fzztJUt3B6vfDCnVZzO996dPPgD
-         M949X6ez39wcIWItUp0zaVt/OcKrKyCQo+GpYDnFHKOMzdih275OEvLe8ycO83/0YS7t
-         BjyZfXkbilye/EukOpEVPu3BODovj+ADevH294XyTq+olXe7ViiUVOE6N+ALmWXfG4DP
-         /d/Ju0cqfO8/UH+j/AF/9+daK6N3T5mMuQmmINIeVG4JWqcEYnSVejGeZ/7oQaA+Dno2
-         so6Q7U6CDZpRz53sFTyVcHeMwjf2m5bXWhs/OGHAzGppJReIDPP3N67XOV0JGZJZ5bGc
-         QlqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=gVT2+H6zyIakz/UAu5QzrweZZcue1nrsnDfliOy/bQY=;
-        b=YoWMNpy6+wFVY6JyJb4Vie5IVnT5MCBfzRolHqk+dwhJRmUqTO6fA4TEj71Co4alAH
-         56B2WskJvI2TlpYg1kNy5it8pK3af6Xt3AQGk8knBTum6DCILFKD16Gfg3WrfpjFSGu8
-         QdomS1CmoZG1Szu4cud8WJEcbKwusSUEC5e40aOP3v3sMqKu8FG1H2FgPbKf8H2aTJ4k
-         Oiwwc98qVjfqjApYVXuF3AfiM8y+Shn5kqzGIsL3fkfeXtmpNLAPwyJEg7kW8HlKTJPr
-         OEJfWsP7h1hkZ7Vf6w96aIn1xhejCSywXvUn26MJ4HNSpSzvgneJsUfhGYWI6M6fDRwJ
-         biYg==
-X-Gm-Message-State: AOAM532M6l27zsKE3hzi7CIP0o8+vM4k/8D+ZVbCDP9o3VUpjgDYst+A
-        Im/ASKRRKjNnglhIfvsVJ2IcyfyXkNZEtuHMlhHYbf0LmFA=
-X-Google-Smtp-Source: ABdhPJw9Zy8z+7QhQRtgaQkZNdZDw80Rrd2UwgvhaW6ojTPkzHzMRPNtz/ungVM4MULyegijtz8kbpPevFeINS+UfmM=
-X-Received: by 2002:a05:6102:2137:b0:338:f898:8bbd with SMTP id
- f23-20020a056102213700b00338f8988bbdmr4783224vsg.60.1653634383120; Thu, 26
- May 2022 23:53:03 -0700 (PDT)
+        Fri, 27 May 2022 02:54:41 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2117.outbound.protection.outlook.com [40.107.117.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E8DBCA7
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:54:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XV60BnFKuANmqgkOweW7MVAhvEN6znrr+OATF+EJNKy1TynsbSFZ51nH6b4NXxB9GvHG+unftfUDTu/KAPTZz/kKdU39xCFO/c40p41Ro3jMqpCcgLOVdkBhcRY1c4VIlrSvwl2SiOMrk4JC4WASUiUEVeyaSAwCuD0odPBywef4mt3twSaX7jJSI3kItDQjLryffA5qHO2qNRZfeUsHiWuUj5pgTKfw4I2TnL479P+VACPuqoKnOwcri8EF/ZhxM/O9VPS9EgOhNzbMpUS8lWnK19o5MaZxnGUZOsBgosQbyWc9SLRNu024MjhMxlR4nKTEe6VsBs7bLDwkBZx4TA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sEWL3YXc1rYYEPJpdiOkM5k6qpACnJFEbxJApmZCJWs=;
+ b=WeSWyieknjzeeYiYxPPfc1N0BGNG8QzLNlXsM8ZhnVD6oXdY5cnyKyiT2iO8SweypV+LhJ1NWBJCwpaYehoEpwZEAhVRh4T3VHsYo9mFxzAoqf5OB22Es42sVq/QVPuhCG1BKQ2pKjri62/XeibN3m58MtNkaXdINx9p5t91Ea4+UIdHKafJ4NTm7YRm0eZfP1ZSKsDUOQgVoZ/YUpbHn/4QX90pRRbVGHxUHcYKdeaPvjKHXLIjS+yh+o12oEYXs/E2HCc71UAo9l/A2/v+oy+hLoJqmz89vmwGDHaY8yafO46snwjOfy0DwsJiFlf+mq+KMP3Na+ssKUpUXbLVaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sEWL3YXc1rYYEPJpdiOkM5k6qpACnJFEbxJApmZCJWs=;
+ b=HuNGhQ6lCrVV+KGbVaGardm9JwMhKoFjy/0qqBZH5+SPeA4g+++eS0BMj7y/gmitgQu97YPrFP7sz1c2hHKGa9GP/SzNmkuwyXkpIkYts2/fHGXNwiFS5S+8oQo2QTvXybKjjTsi+EBI87nsPpqTtKpq1rU8X01z/mDZqaNP28w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by HK0PR06MB2371.apcprd06.prod.outlook.com (2603:1096:203:46::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Fri, 27 May
+ 2022 06:54:35 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::a92b:6d92:5ad9:febb]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::a92b:6d92:5ad9:febb%9]) with mapi id 15.20.5293.013; Fri, 27 May 2022
+ 06:54:35 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] ASoC: samsung: i2s: Check before clk_unregister() not needed
+Date:   Thu, 26 May 2022 23:54:12 -0700
+Message-Id: <20220527065412.3677-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR01CA0068.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::32) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 27 May 2022 01:52:52 -0500
-Message-ID: <CAH2r5mug2=wOYp-mwRKWJPRiyh2xtdP06A-i3fVL=JuidMsReQ@mail.gmail.com>
-Subject: [GIT PULL] SMB3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 40245e5b-95e8-4a08-1fae-08da3fadc284
+X-MS-TrafficTypeDiagnostic: HK0PR06MB2371:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR06MB23713D97F5F9BF1739FAD01CA2D89@HK0PR06MB2371.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1JoOhOgqWtkd5qwutXuiy198XO3nfpo8u5/MC5QMBZPZ3f9Ab/tBjxLE6+gd5sJBW07Ww+RjpDvP3tgdIQpbapD/r97BwAW7fI2sBBGriILDo79mF95+dqYhUit2d2VRTkuDRmjJZp00xMXttVvWSX/io6OAf8iSKcTN1vnBc2C+AdK3xrneyt28IYJnlI3R+uL/oskaK8EaN+nLqUhOkQMuj4/lXaXJ3dJaqOutmlF2r+HczzLlQefVQCWV+++dTI4MaCKBFgDeQGHDye6TrrRVIwwghModuWRZ/ycAfj1owxydaU5LeaIf+CNT9vvcdbwmBFaBvxUxNYEGpASHoGqyDyYyDujftvyUZssangfe9zid8ZbFETwz+H/ziFL708KiB6UcZ1D3AjCB7gMCgrrh6R1s8fLQA6HEOesmASr6dPkR0qxJh0n/tCoER1oPmQBB2qMIaf2P05WBMYGKyS2OXFxrWsTBCaG/CIYzvkmWqU7G1OW4VXdhznC58hmGntT21ZCFYneix6iWeMbayi011ZUswqTm/b0Z4PfvJuYXCWoMMZdlFV36maz9XZ3zMEbXMSXHFGhtU/5bii++8sUqzjUaaWqFuzFoxtrH+qi39I9kT3gEd8VJcaejOvJ+ccQ+uxpCZH+76dDJLTtvkXqPu0HADFtWez56ziaqT8JzGYUkFztOlMeKbQ+z5kOM5c5zNhAUpsR/X6FNsIxfrA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(38350700002)(38100700002)(508600001)(8676002)(66556008)(66476007)(4326008)(83380400001)(66946007)(6506007)(36756003)(6666004)(1076003)(6512007)(6486002)(316002)(52116002)(26005)(8936002)(2906002)(4744005)(110136005)(107886003)(186003)(86362001)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LGdXtrTvcoz1LORfrgkjeLF7a/g/T+CHXhBwiEdPJVVplfq8aIuzn4L18rSC?=
+ =?us-ascii?Q?ONI1/EUtmu+j/kPNBhupcoCJreUqeyadVNvuA5AyolIasI0v1/vqe17UAYNd?=
+ =?us-ascii?Q?YMmAY1Urqaz/5/HpuHTJyk8uaPPLg8VJAfn90buih+I93N+CJlFJoQo4E8vc?=
+ =?us-ascii?Q?5xvvLNCcHqqFL+TUWqaj/oo9HXOYDEJkOjNS6u1b/lHO7trZ4JAzhisuwKxw?=
+ =?us-ascii?Q?pJcr3mCLfytG9TW7q4o7Xk1qMPgLh6CcqhOrHbJRcNykXVutL7PLs6MHNSzy?=
+ =?us-ascii?Q?A8+iXoy+EvrD5LPigJ7OzXz2I+95WdBBKaOFvwpWFhoiMDU6SXoS8CvgzwW6?=
+ =?us-ascii?Q?yeAoXLoOWWOHb1rNesWko5ejG5EeQVHqFQAGH3eVrsn7B7sGNLy9Q5My9jPT?=
+ =?us-ascii?Q?pdOtEsBj2/JZnFgmC/sLxwWvk1PYJJpl13BGzD02gudLMwztLW0oKoXFuQcb?=
+ =?us-ascii?Q?BjgO7HOJQ2ZJb6EZoShR4uMkFPgH2NRN1Tey3t8A2Plpd7eqllpZCy0W3XOE?=
+ =?us-ascii?Q?+ggwYp/ExZA7czTi53iSuYAdA5NoszjoBzRsXiKOTWu0bZJvljqPbtlyMs8Y?=
+ =?us-ascii?Q?9cMfYQXXRMlbrAIO/Rx0R7DOYUANLB/OSYgelf+JaESF2nmI/ktKVZ3roEq6?=
+ =?us-ascii?Q?ndJrdJOb9oHiCvX3W2mdiUKDGxJt5Gka15q3KPq+pNdgceAdbAwwqiMb/TWQ?=
+ =?us-ascii?Q?lHfGSLPqcFPI/30YpltH2xVlqxbpK0qVg2c6ghgF1QbXYT/GzvgHJY1g7MOX?=
+ =?us-ascii?Q?qWBXY7u3fDlgi2Ffk62fI4dshq/OtMd9Dn8vuW5VCh58wASbMnC6N/Vc80vb?=
+ =?us-ascii?Q?L+0Hot+NP7fK+OBlyFQcnkjNpp0T0VSyK4s104/sSt8x1nBYNyR8i0VXHTWS?=
+ =?us-ascii?Q?4rn248pRNdBCWIu+TUK+B4amD7T3uPPQ6LObnKSnX4CdDtgTc6rKOC8Ct+Sp?=
+ =?us-ascii?Q?X9VQwdOGNQp3Heet5KyhYtcuQdpe6YnqyWlH2r2CFaccopqlvJNBRTirER3z?=
+ =?us-ascii?Q?kAcNiQNENH0pbfK/TVSetL4xs5K7DjMjHTE8Uc/zu8okTEm12PavxXr01DQd?=
+ =?us-ascii?Q?kFl3lbdjBF+uZQnTnolUeO7gDp43J+fUNcSlTBgjF0DZhtOrvCnVkoMBwSdm?=
+ =?us-ascii?Q?+ATFVV1h90emh3cHRZjKzBrwVeCgIozCCJNfX+XIMXjMjW5FOzX6/mR7LQlZ?=
+ =?us-ascii?Q?orgOk3CLitkUxQiSTism0Ed2YfNPqyhG2xCl8G/lqZczEa3bpw8P22bbOiI/?=
+ =?us-ascii?Q?UJ9+u+UyhmGkIQTTGjmFN0mwUr4saojv/EzY39ySlNcHeuB8WISe1hZKAi/o?=
+ =?us-ascii?Q?xF5CZESbMeXOFYv3mG5sPHVnbLc4H7F/78cgVxy/KS/PlwiMR+e4YGCrjRUJ?=
+ =?us-ascii?Q?SpoQHksH4bYEHaGdCg25CZSTdvc/iYV96OTrwsA4w6+zRmqTcQqWSFmyneRe?=
+ =?us-ascii?Q?exAFfmjGysr/wW3Sdqf2DUqXtO+8Dxp5IFp4pMpgt0NKTdGV30HHYy/+Loex?=
+ =?us-ascii?Q?Gg4L7JVCS9tqA65mZkylsMZArJv/HgJPKC3rOoJlzFWYl334mtw25iWgwfqL?=
+ =?us-ascii?Q?V8Rb4DGo77gCyBKLui/WzElI8gKZIBnh5tIwAqd1h+gw2u0fwU9CmXWe3uKt?=
+ =?us-ascii?Q?KvHBLmqVklmnZTYQbgSjdRL+fB1wx0BmIuFsND8whvaTbPoK8/Z1MoFDVBAP?=
+ =?us-ascii?Q?ZBzGyIE2lVfJmEp6PhgareJiH7qs24quLV38N3rknf3pQZbTTFE7tP+jw6/N?=
+ =?us-ascii?Q?XmAK7c5GTw=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40245e5b-95e8-4a08-1fae-08da3fadc284
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2022 06:54:35.4331
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IwjDLklhzf/TAmC/WvNpDfnFcbJNlhxIxFYTaevyiP415DNWaz48hPnw8kQ46o4yw4HdnzNKZChOzuW9BlU+GA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2371
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-42226c989789d8da4af1de0c31070c96726d990c:
+clk_unregister() already checks the clk ptr using
+!clk || WARN_ON_ONCE(IS_ERR(clk)) so there is no need to check it
+again before calling it.
 
-  Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+ sound/soc/samsung/i2s.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.19-rc-smb3-client-fixes-part1
-
-for you to fetch changes up to 9f114d7bfc6c35ca23a82efce60e0db535a186f1:
-
-  smb3: remove unneeded null check in cifs_readdir (2022-05-26 11:15:14 -0500)
-
-----------------------------------------------------------------
-Twenty eight cifs/smb3 client fixes, including:
-- a series of fixes for multichannel fixes to improve reconnect after
-network failure
-- improved caching of root directory contents (extending benefit of
-directory leases)
-- 2 DFS fixes
-- 3 fixes for improved debugging
-- an NTLMSSP fix for mounts t0 older servers
-- new mount parm to allow disabling creating sparse files
-- various cleanup fixes and minor fixes pointed out by coverity
-- the first part of Dave's updates for iov_iter support
-
-Not included in this P/R are the last two patches in Dave's series
-converting i/o paths in cifs.ko to use iterators,
-as well as some RDMA (smbdirect) fixes and a patch to dynamically
-requery and adjust the network interfaces on the
-fly - all of which are still being tested.
-----------------------------------------------------------------
-ChenXiaoSong (1):
-      cifs: return the more nuanced writeback error on close()
-
-David Howells (4):
-      iov_iter: Add a function to extract an iter's buffers to a bvec iter
-      iov_iter: Add a general purpose iteration function
-      cifs: Add some helper functions
-      cifs: Add a function to read into an iter from a socket
-
-Enzo Matsumiya (3):
-      cifs: don't call cifs_dfs_query_info_nonascii_quirk() if nodfs was set
-      cifs: return ENOENT for DFS lookup_cache_entry()
-      cifs: print TIDs as hex
-
-Julia Lawall (1):
-      cifs: smbd: fix typo in comment
-
-Paulo Alcantara (2):
-      cifs: fix signed integer overflow when fl_end is OFFSET_MAX
-      cifs: fix ntlmssp on old servers
-
-Ronnie Sahlberg (4):
-      cifs: move definition of cifs_fattr earlier in cifsglob.h
-      cifs: check for smb1 in open_cached_dir()
-      cifs: set the CREATE_NOT_FILE when opening the directory in
-use_cached_dir()
-      cifs: cache the dirents for entries in a cached directory
-
-Shyam Prasad N (3):
-      cifs: do not use tcpStatus after negotiate completes
-      cifs: use new enum for ses_status
-      cifs: avoid parallel session setups on same channel
-
-Steve French (10):
-      SMB3: EBADF/EIO errors in rename/open caused by race condition
-in smb2_compound_op
-      smb3: add trace point for lease not found issue
-      smb3: add trace point for oplock not found
-      Add defines for various newer FSCTLs
-      Add various fsctl structs
-      cifs: fix minor compile warning
-      smb3: check for null tcon
-      smb3: don't set rc when used and unneeded in query_info_compound
-      smb3: add mount parm nosparse
-      smb3: remove unneeded null check in cifs_readdir
-
- fs/cifs/cifs_debug.c       |  11 +++-
- fs/cifs/cifsfs.c           |   2 +
- fs/cifs/cifsfs.h           |   3 +
- fs/cifs/cifsglob.h         | 124 +++++++++++++++++++++++++++------------
- fs/cifs/cifsproto.h        |  12 ++++
- fs/cifs/cifssmb.c          |  99 ++++++++++++++++++++++++++++++-
- fs/cifs/connect.c          | 123 +++++++++++++++++++++++----------------
- fs/cifs/dfs_cache.c        |   6 +-
- fs/cifs/file.c             |  13 +++--
- fs/cifs/fs_context.c       |  33 +++--------
- fs/cifs/fs_context.h       |   4 +-
- fs/cifs/misc.c             |  11 ++--
- fs/cifs/readdir.c          | 179
-++++++++++++++++++++++++++++++++++++++++++++++++++++++---
- fs/cifs/sess.c             |  33 ++++++++++-
- fs/cifs/smb2inode.c        |   7 ++-
- fs/cifs/smb2misc.c         |  12 +++-
- fs/cifs/smb2ops.c          |  32 +++++++++--
- fs/cifs/smb2pdu.c          |   5 +-
- fs/cifs/smb2pdu.h          |  22 -------
- fs/cifs/smb2transport.c    |   7 ++-
- fs/cifs/smbdirect.c        |   2 +-
- fs/cifs/trace.h            |   2 +
- fs/cifs/transport.c        |   8 +--
- fs/smbfs_common/smb2pdu.h  | 108 +++++++++++++++++++++++++++++++---
- fs/smbfs_common/smbfsctl.h |   6 ++
- include/linux/uio.h        |   8 +++
- lib/iov_iter.c             | 133 ++++++++++++++++++++++++++++++++++++++++++
- 27 files changed, 816 insertions(+), 189 deletions(-)
-
-
+diff --git a/sound/soc/samsung/i2s.c b/sound/soc/samsung/i2s.c
+index 70c827162be4..84e21f7fc179 100644
+--- a/sound/soc/samsung/i2s.c
++++ b/sound/soc/samsung/i2s.c
+@@ -1247,8 +1247,7 @@ static void i2s_unregister_clocks(struct samsung_i2s_priv *priv)
+ 	int i;
+ 
+ 	for (i = 0; i < priv->clk_data.clk_num; i++) {
+-		if (!IS_ERR(priv->clk_table[i]))
+-			clk_unregister(priv->clk_table[i]);
++		clk_unregister(priv->clk_table[i]);
+ 	}
+ }
+ 
 -- 
-Thanks,
+2.17.1
 
-Steve

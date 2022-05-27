@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B39D5357E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22265357E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236864AbiE0Cwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S236998AbiE0Cxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236758AbiE0Cwp (ORCPT
+        with ESMTP id S236586AbiE0Cxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:52:45 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F82B7C178
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:52:44 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so6009751pju.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UPWllmKFo1Fw7F8K8QyAtjfx5pfLC29DKjd5hqqB6l8=;
-        b=bdN+v1sL1z2M3MueFSRDkPG096pydIpu4/sAPisOwXk3kcyDJZ2weWtHQXahw2H0qB
-         xhKd9yg1TyUJDznvecx3046et2KPweRm65BTVgatKLS7rrTAVbYt8tqf6/iUWfX+Wszu
-         K9etpaWkB4D9WJVUkGypFfWIYOIQFBE3OvU8EVpl+boH8+mUcdvaK0PuV+bEU2NLUKrH
-         ClL1mVgYLMJJ002pLbDTCAX/PLuXVQLtd7gR9BRK8VHpJHm8aFp2Ya3LZZ+bx5PlN+CQ
-         AShCZCo3YtO6KnhdCJDPrjEa2aLqmeqNq3XxrPfZaHLcog+Y9y2XQ6HepHCNZYCTtCAe
-         I1sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UPWllmKFo1Fw7F8K8QyAtjfx5pfLC29DKjd5hqqB6l8=;
-        b=st62PGbb/SVcftysd6Suu0sNy7fHVhfkAZlbkhDZ3PsdRgmEr7qz9YuOxM6awfeYzu
-         gSjn1LWiB8SJjyWj5bGD0SYn+AK2vVZXTHrz4BySz/2wEqQ9NvAqyvxrlBdh/6ZTS9k4
-         WpVakHuJ3qOILCLFw0HDGoSd1TtYspaWtDdgFcaHG66zPms5kBe/faqIXjzZmhyb8w2S
-         wBmQK/upl1ohpUyJzL0CEMw5Rr6EK2Gdlsb/FBJAUREH7dC+ncO5SlKuG1lBEAx92POB
-         f+IFIeEPOwmWePfVBWRYiyl8ArE1CT201lm7Doa8TGjtZYjK36XIHcMKwOBsF+FJgHct
-         ArTA==
-X-Gm-Message-State: AOAM5324v1WFAQkghDCnBKV4V4YG45nwj7CJVOhj69UHhBz6sZzQj2YM
-        ZtK/SNpwtS2GBcKqC77/2bDkJg==
-X-Google-Smtp-Source: ABdhPJxyHwzoH3uH4iRF2pEttIVuof6Vk3DBuB1LyJpSMZetrq9DJ5F73X6BavnXDj6bkZBngRRBzg==
-X-Received: by 2002:a17:90b:4d8b:b0:1dc:aebe:4c8b with SMTP id oj11-20020a17090b4d8b00b001dcaebe4c8bmr5869036pjb.145.1653619963586;
-        Thu, 26 May 2022 19:52:43 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id 12-20020a170902c20c00b0015e8d4eb2adsm2362804pll.247.2022.05.26.19.52.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 19:52:43 -0700 (PDT)
-Date:   Fri, 27 May 2022 08:22:41 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 21/31] soc/tegra: Remove the call to
- devm_pm_opp_set_clkname()
-Message-ID: <20220527025241.z5b5yxjowjzerk5a@vireshk-i7>
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
- <45c29859-f7a6-48e5-be48-bd8191ac299a@collabora.com>
+        Thu, 26 May 2022 22:53:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A14E52B3;
+        Thu, 26 May 2022 19:53:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFAD961D92;
+        Fri, 27 May 2022 02:53:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07DB0C36AE3;
+        Fri, 27 May 2022 02:53:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653620029;
+        bh=jRrmb+WY8SmmVO2qZ6rXbdCeblMikLu5B7yCzBt4omk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QBg48D/uMB9idZo4/veU2bIN9NhwWSP7GRNS3p+U3eRK4n+CRBrLY4f1GajuLDURt
+         OcsqqdflgIO0PdZpO28WUlv2sfIYGpg5hcq4i+R9jmqes00VAUira42Lq5iIpgz97e
+         8tJ+yF3oemeLL6STjS0hfeHsBzSw0Hm21REBNeERgFoGjtmzbQz1G4Ca2WLMCeullX
+         McqKE636CkW1NJF3MCKLLCA5RJJiWCJPQm1xIUuU30OuYuwGUoyYDbCmnYaTeoBgAd
+         uFm35wmiacxyInuMPHfUa8yYwPZH7v/RqTjOSe0HoNjm3btRM4urBapfQ81gRiX1kq
+         ijL3kNJH8BTig==
+Received: by mail-vs1-f52.google.com with SMTP id h4so3097162vsr.13;
+        Thu, 26 May 2022 19:53:48 -0700 (PDT)
+X-Gm-Message-State: AOAM532dh1hqZJQJa3FgPpqwPkbb4YxrlxQuvNJZ3WQNuZwg3JglF7ub
+        g+2e814o9DNvui5tBHfRkxDevG6J3Kv2Gs+VLSI=
+X-Google-Smtp-Source: ABdhPJx67KXeWbGYypI8IYtzCmhK91ZGjgLQH6NToDhTReVD3kt2eb93TvEq8imbj5V9czsxj+H0mpolKkFghtfgBiY=
+X-Received: by 2002:a67:c89c:0:b0:335:d83b:df76 with SMTP id
+ v28-20020a67c89c000000b00335d83bdf76mr15258150vsk.51.1653620027916; Thu, 26
+ May 2022 19:53:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <45c29859-f7a6-48e5-be48-bd8191ac299a@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220525080241.117084-1-liaochang1@huawei.com> <20220527003006.76a52390841f7fba9680d636@kernel.org>
+In-Reply-To: <20220527003006.76a52390841f7fba9680d636@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 27 May 2022 10:53:36 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTW6qpBWw2tEHg+WLywRnAR2G5gqRoYF_inzzS_tEUz=A@mail.gmail.com>
+Message-ID: <CAJF2gTTW6qpBWw2tEHg+WLywRnAR2G5gqRoYF_inzzS_tEUz=A@mail.gmail.com>
+Subject: Re: [PATCH] csky/kprobe: reclaim insn_slot on kprobe unregistration
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Liao Chang <liaochang1@huawei.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        kbuild test robot <lkp@intel.com>,
+        Naveen Rao <naveen.n.rao@linux.vnet.ibm.com>,
+        jszhang@kernel.org, linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,53 +67,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-05-22, 20:57, Dmitry Osipenko wrote:
-> On 5/26/22 14:42, Viresh Kumar wrote:
-> > The OPP core already performs devm_pm_opp_set_clkname() with name as
-> > NULL, the callers shouldn't be doing the same unless they have a
-> > different clock name to add here.
+On Thu, May 26, 2022 at 11:30 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> On Wed, 25 May 2022 16:02:41 +0800
+> Liao Chang <liaochang1@huawei.com> wrote:
+>
+> > On kprobe registration kernel allocate one insn_slot for new kprobe,
+> > but it forget to reclaim the insn_slot on unregistration, leading to a
+> > potential leakage.
+> >
+> > Reported-by: Chen Guokai <chenguokai17@mails.ucas.ac.cn>
+> > Signed-off-by: Liao Chang <liaochang1@huawei.com>
+>
+> This looks good to me too. I think this should go through csky tree.
+Okay, I would add the Fix line and put it into Linux-5.19-rc2.
 
-This is confusing. Updated this as:
-
-    The OPP core already performs clk_get(dev, NULL) by default for everyone
-    and the callers shouldn't try to set clkname unless they have an actual
-    clock name to add here.
-
-
-> > 
-> > Drop the call.
-> > 
-> > Cc: Dmitry Osipenko <digetx@gmail.com>
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+>
+> Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>
+> Thank you,
+>
+>
 > > ---
-> >  drivers/soc/tegra/common.c | 6 ------
-> >  1 file changed, 6 deletions(-)
-> > 
-> > diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-> > index 32c346b72635..49a5360f4507 100644
-> > --- a/drivers/soc/tegra/common.c
-> > +++ b/drivers/soc/tegra/common.c
-> > @@ -108,12 +108,6 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
-> >  	u32 hw_version;
-> >  	int err;
-> >  
-> > -	err = devm_pm_opp_set_clkname(dev, NULL);
-> > -	if (err) {
-> > -		dev_err(dev, "failed to set OPP clk: %d\n", err);
-> > -		return err;
-> > -	}
-> > -
-> >  	/* Tegra114+ doesn't support OPP yet */
-> >  	if (!of_machine_is_compatible("nvidia,tegra20") &&
-> >  	    !of_machine_is_compatible("nvidia,tegra30"))
-> 
-> I can't see where OPP core performs devm_pm_opp_set_clkname().
+> >  arch/csky/kernel/probes/kprobes.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/arch/csky/kernel/probes/kprobes.c b/arch/csky/kernel/probes/kprobes.c
+> > index 42920f25e73c..661da54b418f 100644
+> > --- a/arch/csky/kernel/probes/kprobes.c
+> > +++ b/arch/csky/kernel/probes/kprobes.c
+> > @@ -124,6 +124,10 @@ void __kprobes arch_disarm_kprobe(struct kprobe *p)
+> >
+> >  void __kprobes arch_remove_kprobe(struct kprobe *p)
+> >  {
+> > +     if (p->ainsn.api.insn) {
+> > +             free_insn_slot(p->ainsn.api.insn, 0);
+> > +             p->ainsn.api.insn = NULL;
+> > +     }
+> >  }
+> >
+> >  static void __kprobes save_previous_kprobe(struct kprobe_ctlblk *kcb)
+> > --
+> > 2.17.1
+> >
+>
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Sorry about that, it is clk_get() it performs from
-_update_opp_table_clk().
 
-I don't think you need to call devm_pm_opp_set_clkname() here, but
-lets see if this breaks anything for you.
 
 -- 
-viresh
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

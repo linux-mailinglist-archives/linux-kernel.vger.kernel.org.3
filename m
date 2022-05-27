@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92DB5357F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65695357F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237718AbiE0Czy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S237663AbiE0Cz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237424AbiE0Czm (ORCPT
+        with ESMTP id S237486AbiE0Czm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 26 May 2022 22:55:42 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873CDEAD03
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:40 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id bl14so2892910qtb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:40 -0700 (PDT)
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E0AE8BB1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:41 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id v11so3548021qkf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:55:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=ySBNZU6lTetRSaVW2fEw2gpViA/ZXifxYmfC+h6QNCw=;
-        b=cUeNnxsRG8t2Qzja4DgxxM1AK7sikwqYFTt3KXNyL4gP/pZf6DkawTnReOw+19ZKHg
-         GhvXpFpkN6ImwQTJuQANnzTQWTXa1cZlKIhJ75EOhY+ycqi7LxV2riuaRCDuQQ4d2aHy
-         Zt+Izf1V5ozjavOPXzVHtJYwKa8Bzb8eD5vyAeL1VLaZbMMBAAlxDTogm9AKxWJ/qTPX
-         H8ASzCQCqkhd1ALBs7zfI/ft4Awy2kaRLeNf4LxTbBxZ7OLEZMNC1FjwimmIrjWzJbCf
-         y1pRVKENcyFRHoHSGT0H1/BA0Vb6PhUsREKRwuCqMNbZu8QuXIUY9kXhPW8pZFPz7f0h
-         /NfQ==
+        bh=AUlysgyDAL5M9imkvDAX/EZEtCGp/B57KfY/usHuzGA=;
+        b=kPXdVYjRvhZodLa5+GXUsmWnrTe2KPuFWBIwsWiuytjw0zrwoz8zcgtGReAuGdac21
+         3dSjZnos5DqRCsWGUSr1JYj+fO7qNjn6BvDt80K3Hk9N3XRVfonaPgnTLccTIuwVkPYh
+         nsmy1calBX2Z4O8gZdkyixBbPJvBGJX9fugNxhXUD3c3oqBDqOhCFwxW6cco2QcouzMO
+         /hem+98Rngle242xeioy7dZxONTTmbBFQLapkwmctSot2G9eitQE/uEbejXfMDq6xZVF
+         V8ye6L3lXx+kB/i1s+fU1SPQKxnf2SZd28SspA8duIsv2N7a5qVeErjy+2vi7K5eGzFc
+         jnzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ySBNZU6lTetRSaVW2fEw2gpViA/ZXifxYmfC+h6QNCw=;
-        b=4QO2wgsfNC0m5J3wIuGRm9sZyCGpTxXpJL89VrpnlVFVQZ/QpfgnCPGFmTAJ3WpqOW
-         u/K87PXq38SEEesb4NZ/l9Pki+JEbhdQWpu+Q5Jsj3lnt80N+2YCx1Ndq61tO/FX0Vw1
-         9Q9TP4u7xaRGV+GAJYEtgMIMRXtClYZ4U7Qaj0cdXDf4DADH30cGYXRvM+BCQ67Q6PII
-         2W4/BMEJPYePdhOj/t4AKYYM326PukQvu2cFWnarVn79mEARQdkBrL3zAhfA/9N8ro0Q
-         eK9PcdhdxRQTHpZ5OqMD3KqIOj7OH7eZ82THJvzBPiRi83+PZHfGsjhGIGT3z3NL6ouQ
-         x3bA==
-X-Gm-Message-State: AOAM531Kvk5putJIbJPjDg35S3W1JoqqQiEPPIiiGprn6nDLDbbwpLHK
-        KE+5cwC8DXM/oeq5rowwv/qWnQ==
-X-Google-Smtp-Source: ABdhPJy5SYLrs5scVJFU4c2Qdqz78Vt3mFRyKorqBBppImNA97SE4MLqXAllLhM09+vh74Kd/8pZXA==
-X-Received: by 2002:ac8:5b15:0:b0:2f3:ea22:d265 with SMTP id m21-20020ac85b15000000b002f3ea22d265mr31701014qtw.453.1653620139658;
-        Thu, 26 May 2022 19:55:39 -0700 (PDT)
+        bh=AUlysgyDAL5M9imkvDAX/EZEtCGp/B57KfY/usHuzGA=;
+        b=1J3mENg8dvZZnzmhJ3Dfo5OuhNuLnTvZmTgyFG8yC3UOBGTt05h+hc2jloE5mY3Pf2
+         VF5VG6juNI70oxYNjnjrYCY+CsLxxLTYjwXTQeuL2Lyhn7EEZ/pnWwG6lu+KKk863JgM
+         x2bXBeDFooFEXT4JJ9FjDh6LvSOcxGMIfmtWGz8/Ank+uOzuexelk5n/ZrZ5m55sMrTx
+         Z6KMoZhLynzBYG5XScmP027zpxMEOETYS/jN31EATGr0qIJYwIxw54X5D6eS3eGHJgZy
+         cT10cRk6XMLJv7U4jQJxf7OPBqztxbei/gaNgCAfkOnidIFYZy2S6uGkLaril6bYVCRD
+         /piw==
+X-Gm-Message-State: AOAM531ivWkm9LtkMAHU2YX3vbloTV+6NWk7Hbh+MHiX8DYTd9EC8nTo
+        AP4B0EvZgNIp2WjgV4CL6jSEJg==
+X-Google-Smtp-Source: ABdhPJzZdfwzG5RdmK3Rp9m3BPQqsUYok+6kuCjDjU7io1+wHbA0R9cctbgOjFFCkbcyfgI10mTbYQ==
+X-Received: by 2002:a05:620a:2903:b0:6a0:4d8f:8b88 with SMTP id m3-20020a05620a290300b006a04d8f8b88mr26710901qkp.328.1653620140596;
+        Thu, 26 May 2022 19:55:40 -0700 (PDT)
 Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
-        by smtp.gmail.com with ESMTPSA id r129-20020ae9dd87000000b0069fc13ce224sm2129672qkf.85.2022.05.26.19.55.38
+        by smtp.gmail.com with ESMTPSA id r129-20020ae9dd87000000b0069fc13ce224sm2129672qkf.85.2022.05.26.19.55.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 19:55:39 -0700 (PDT)
+        Thu, 26 May 2022 19:55:40 -0700 (PDT)
 From:   Pasha Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, sashal@kernel.org,
         ebiederm@xmission.com, rburanyi@google.com, gthelen@google.com,
         viro@zeniv.linux.org.uk, kexec@lists.infradead.org,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] fs/kernel_read_file: Allow to read files up-to ssize_t
-Date:   Fri, 27 May 2022 02:55:34 +0000
-Message-Id: <20220527025535.3953665-2-pasha.tatashin@soleen.com>
+Subject: [PATCH v2 2/2] kexec_file: Increase maximum file size to 4G
+Date:   Fri, 27 May 2022 02:55:35 +0000
+Message-Id: <20220527025535.3953665-3-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 In-Reply-To: <20220527025535.3953665-1-pasha.tatashin@soleen.com>
 References: <20220527025535.3953665-1-pasha.tatashin@soleen.com>
@@ -71,162 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the maximum file size that is supported is 2G. This may be
-too small in some cases. For example, kexec_file_load() system call
-loads initramfs. In some netboot cases initramfs can be rather large.
+In some case initrd can be large. For example, it could be a netboot
+image loaded by u-root, that is kexec'ing into it.
 
-Allow to use up-to ssize_t bytes. The callers still can limit the
-maximum file size via buf_size.
+The maximum size of initrd is arbitrary set to 2G. Also, the limit is
+not very obvious because it is hidden behind a generic INT_MAX macro.
+
+Theoretically, we could make it LONG_MAX, but it is safer to keep it
+sane, and just increase it to 4G.
+
+Increase the size to 4G, and make it obvious by having a new macro
+that specifies the maximum file size supported by kexec_file_load()
+syscall: KEXEC_FILE_SIZE_MAX.
 
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- fs/kernel_read_file.c            | 38 ++++++++++++++++----------------
- include/linux/kernel_read_file.h | 32 +++++++++++++--------------
- include/linux/limits.h           |  1 +
- 3 files changed, 36 insertions(+), 35 deletions(-)
+ kernel/kexec_file.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
-index 1b07550485b9..5d826274570c 100644
---- a/fs/kernel_read_file.c
-+++ b/fs/kernel_read_file.c
-@@ -29,15 +29,15 @@
-  * change between calls to kernel_read_file().
-  *
-  * Returns number of bytes read (no single read will be bigger
-- * than INT_MAX), or negative on error.
-+ * than SSIZE_MAX), or negative on error.
-  *
-  */
--int kernel_read_file(struct file *file, loff_t offset, void **buf,
--		     size_t buf_size, size_t *file_size,
--		     enum kernel_read_file_id id)
-+ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
-+			 size_t buf_size, size_t *file_size,
-+			 enum kernel_read_file_id id)
- {
- 	loff_t i_size, pos;
--	size_t copied;
-+	ssize_t copied;
- 	void *allocated = NULL;
- 	bool whole_file;
- 	int ret;
-@@ -58,7 +58,7 @@ int kernel_read_file(struct file *file, loff_t offset, void **buf,
- 		goto out;
- 	}
- 	/* The file is too big for sane activities. */
--	if (i_size > INT_MAX) {
-+	if (i_size > SSIZE_MAX) {
- 		ret = -EFBIG;
- 		goto out;
- 	}
-@@ -124,12 +124,12 @@ int kernel_read_file(struct file *file, loff_t offset, void **buf,
- }
- EXPORT_SYMBOL_GPL(kernel_read_file);
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 8347fc158d2b..f00cf70d82b9 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -31,6 +31,9 @@
  
--int kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
--			       size_t buf_size, size_t *file_size,
--			       enum kernel_read_file_id id)
-+ssize_t kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
-+				   size_t buf_size, size_t *file_size,
-+				   enum kernel_read_file_id id)
+ static int kexec_calculate_store_digests(struct kimage *image);
+ 
++/* Maximum size in bytes for kernel/initrd files. */
++#define KEXEC_FILE_SIZE_MAX	min_t(s64, 4LL << 30, SSIZE_MAX)
++
+ /*
+  * Currently this is the only default function that is exported as some
+  * architectures need it to do additional handlings.
+@@ -223,11 +226,12 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ 			     const char __user *cmdline_ptr,
+ 			     unsigned long cmdline_len, unsigned flags)
  {
- 	struct file *file;
 -	int ret;
 +	ssize_t ret;
+ 	void *ldata;
  
- 	if (!path || !*path)
- 		return -EINVAL;
-@@ -144,14 +144,14 @@ int kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
- }
- EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
- 
--int kernel_read_file_from_path_initns(const char *path, loff_t offset,
--				      void **buf, size_t buf_size,
--				      size_t *file_size,
--				      enum kernel_read_file_id id)
-+ssize_t kernel_read_file_from_path_initns(const char *path, loff_t offset,
-+					  void **buf, size_t buf_size,
-+					  size_t *file_size,
-+					  enum kernel_read_file_id id)
- {
- 	struct file *file;
- 	struct path root;
--	int ret;
-+	ssize_t ret;
- 
- 	if (!path || !*path)
- 		return -EINVAL;
-@@ -171,12 +171,12 @@ int kernel_read_file_from_path_initns(const char *path, loff_t offset,
- }
- EXPORT_SYMBOL_GPL(kernel_read_file_from_path_initns);
- 
--int kernel_read_file_from_fd(int fd, loff_t offset, void **buf,
--			     size_t buf_size, size_t *file_size,
--			     enum kernel_read_file_id id)
-+ssize_t kernel_read_file_from_fd(int fd, loff_t offset, void **buf,
-+				 size_t buf_size, size_t *file_size,
-+				 enum kernel_read_file_id id)
- {
- 	struct fd f = fdget(fd);
--	int ret = -EBADF;
-+	ssize_t ret = -EBADF;
- 
- 	if (!f.file || !(f.file->f_mode & FMODE_READ))
- 		goto out;
-diff --git a/include/linux/kernel_read_file.h b/include/linux/kernel_read_file.h
-index 575ffa1031d3..90451e2e12bd 100644
---- a/include/linux/kernel_read_file.h
-+++ b/include/linux/kernel_read_file.h
-@@ -35,21 +35,21 @@ static inline const char *kernel_read_file_id_str(enum kernel_read_file_id id)
- 	return kernel_read_file_str[id];
- }
- 
--int kernel_read_file(struct file *file, loff_t offset,
--		     void **buf, size_t buf_size,
--		     size_t *file_size,
--		     enum kernel_read_file_id id);
--int kernel_read_file_from_path(const char *path, loff_t offset,
--			       void **buf, size_t buf_size,
--			       size_t *file_size,
--			       enum kernel_read_file_id id);
--int kernel_read_file_from_path_initns(const char *path, loff_t offset,
--				      void **buf, size_t buf_size,
--				      size_t *file_size,
--				      enum kernel_read_file_id id);
--int kernel_read_file_from_fd(int fd, loff_t offset,
--			     void **buf, size_t buf_size,
--			     size_t *file_size,
--			     enum kernel_read_file_id id);
-+ssize_t kernel_read_file(struct file *file, loff_t offset,
-+			 void **buf, size_t buf_size,
-+			 size_t *file_size,
-+			 enum kernel_read_file_id id);
-+ssize_t kernel_read_file_from_path(const char *path, loff_t offset,
-+				   void **buf, size_t buf_size,
-+				   size_t *file_size,
-+				   enum kernel_read_file_id id);
-+ssize_t kernel_read_file_from_path_initns(const char *path, loff_t offset,
-+					  void **buf, size_t buf_size,
-+					  size_t *file_size,
-+					  enum kernel_read_file_id id);
-+ssize_t kernel_read_file_from_fd(int fd, loff_t offset,
-+				 void **buf, size_t buf_size,
-+				 size_t *file_size,
-+				 enum kernel_read_file_id id);
- 
- #endif /* _LINUX_KERNEL_READ_FILE_H */
-diff --git a/include/linux/limits.h b/include/linux/limits.h
-index b568b9c30bbf..f6bcc9369010 100644
---- a/include/linux/limits.h
-+++ b/include/linux/limits.h
-@@ -7,6 +7,7 @@
- #include <vdso/limits.h>
- 
- #define SIZE_MAX	(~(size_t)0)
-+#define SSIZE_MAX	((ssize_t)(SIZE_MAX >> 1))
- #define PHYS_ADDR_MAX	(~(phys_addr_t)0)
- 
- #define U8_MAX		((u8)~0U)
+ 	ret = kernel_read_file_from_fd(kernel_fd, 0, &image->kernel_buf,
+-				       INT_MAX, NULL, READING_KEXEC_IMAGE);
++				       KEXEC_FILE_SIZE_MAX, NULL,
++				       READING_KEXEC_IMAGE);
+ 	if (ret < 0)
+ 		return ret;
+ 	image->kernel_buf_len = ret;
+@@ -247,7 +251,7 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
+ 	/* It is possible that there no initramfs is being loaded */
+ 	if (!(flags & KEXEC_FILE_NO_INITRAMFS)) {
+ 		ret = kernel_read_file_from_fd(initrd_fd, 0, &image->initrd_buf,
+-					       INT_MAX, NULL,
++					       KEXEC_FILE_SIZE_MAX, NULL,
+ 					       READING_KEXEC_INITRAMFS);
+ 		if (ret < 0)
+ 			goto out;
 -- 
 2.36.1.124.g0e6072fb45-goog
 

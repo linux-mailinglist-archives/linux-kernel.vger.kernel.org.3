@@ -2,130 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5B1536798
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 21:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDC75367CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 22:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354583AbiE0Tj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 15:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
+        id S1354597AbiE0UAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 16:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354508AbiE0Tjv (ORCPT
+        with ESMTP id S229523AbiE0T75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 15:39:51 -0400
+        Fri, 27 May 2022 15:59:57 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12F69F136B
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:39:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 083D1192AC
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:59:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653680388;
+        s=mimecast20190719; t=1653681595;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zdu7Pg4zKxm1uKLLvvDVMRmZFDVUqRIRXozl857+hu4=;
-        b=P+nCP3hGDIQjbSUxetjfsWamQ5hkJV0AFxpgoYCmvzQ7q8pCR076MkQ42jTe5t4jnLMrjZ
-        WOlqBl9E2dk3wMnPZBRcdzV1QIX0Aor8CsdwK8eMRTt0jL72t7s9HzcdxOdBbC2oY9232g
-        HRBDOHYVTbNUY2VTjYlcj1zY1uinMp0=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GmY5K/X6EsSC1o+Vcg32RPhZ46OcxmDlz9gsMSy3eXM=;
+        b=GPB90K0nBw4CsjyuB8VvBySzwbPomwOr6bDw9QYy2BPxZSCYatazcyFusHSduwIbT4/+jU
+        6f+DULotQZFozS5r1Q/CJy0NeOrhvXgnprlqWZlBOKdDqVwY3YtxnxRG6zhkT7id2sr4La
+        0/R87imEYvpCkFvODldHY4rGyJbhZ2E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-312-3tr7Trh9NG-emv9a2GlE6w-1; Fri, 27 May 2022 15:39:47 -0400
-X-MC-Unique: 3tr7Trh9NG-emv9a2GlE6w-1
-Received: by mail-il1-f199.google.com with SMTP id x1-20020a056e020f0100b002c98fce9c13so3646738ilj.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:39:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zdu7Pg4zKxm1uKLLvvDVMRmZFDVUqRIRXozl857+hu4=;
-        b=76XqehOW56Oaqktz9EdIoigr49vT62Ma/q6kOJXGCig1NeEUqOeXkou0OGhglqmv5I
-         fV6EFlg1J9x7BD1D28c7fWPRCI+DhO94XWgaTS6/6pH5ix5zpmytmAeJf+nlOZraDU3U
-         q4iqyCGKvAR3zc/4L+GiYWQjAWdxExdJSQDBknAp1lvIZFcuvU8M9gx25mnaAv63jrjS
-         XZ4hGBfzfYLcE6c+v48VhvVuMwlrHYd6BIPCfHiOkmmEF8EX7kzLZptbrbcGBD/fVBYF
-         +EtQCDBZGOGC1n/OTZ1ZGidFN8SimJNOPtqWR5cVSG1jHDruZnb+3xhlfy5B63i25Hev
-         KUSg==
-X-Gm-Message-State: AOAM532ocMbOVtrC9b7Yjtn/gW4RWljEWBHYvhdJnlckUAAnp9xhjJPv
-        U8XvKnANfTzhZTpCtOvSihRb1KZ3hEJNRG1gz5WZj+NY4bAkAmBTFK1KY4TWyEop7tEqmS3ruIK
-        YVshJjEqO06zfUhw/nl/P87u6BOEXcj/45fzBSMIeatcBvswDYrj2O5AyjAP6vRkfnLSnGS1a0Q
-        ==
-X-Received: by 2002:a05:6638:1925:b0:32e:dc08:ced3 with SMTP id p37-20020a056638192500b0032edc08ced3mr11834942jal.212.1653680383897;
-        Fri, 27 May 2022 12:39:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJycszExypDCmz/kq06KoOIqbe7IWTgWCyXrKhxfATY7rwpEo/+Qx+suJB7x0DjnJcxaZa6AhQ==
-X-Received: by 2002:a05:6638:1925:b0:32e:dc08:ced3 with SMTP id p37-20020a056638192500b0032edc08ced3mr11834857jal.212.1653680383300;
-        Fri, 27 May 2022 12:39:43 -0700 (PDT)
-Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id t2-20020a92c902000000b002d10291f973sm1530215ilp.4.2022.05.27.12.39.37
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 27 May 2022 12:39:42 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Will Deacon <will@kernel.org>, Matt Turner <mattst88@gmail.com>,
-        linux-s390@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brian Cain <bcain@quicinc.com>, Borislav Petkov <bp@alien8.de>,
-        linux-alpha@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-snps-arc@lists.infradead.org,
-        Vineet Gupta <vgupta@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Rich Felker <dalias@libc.org>, sparclinux@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        David Hildenbrand <david@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-xtensa@linux-xtensa.org, linux-sh@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org,
-        Richard Henderson <rth@twiddle.net>,
-        Guo Ren <guoren@kernel.org>, linux-parisc@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Helge Deller <deller@gmx.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-um@lists.infradead.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        openrisc@lists.librecores.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-hexagon@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Stafford Horne <shorne@gmail.com>, linux-csky@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-riscv@lists.infradead.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Chris Zankel <chris@zankel.net>,
-        Michal Simek <monstr@monstr.eu>, x86@kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>, peterx@redhat.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Richard Weinberger <richard@nod.at>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: [PATCH v4] mm: Avoid unnecessary page fault retires on shared memory types
-Date:   Fri, 27 May 2022 15:39:36 -0400
-Message-Id: <20220527193936.30678-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.32.0
+ us-mta-500-leEAx3U7ON64q3cGy0xWsA-1; Fri, 27 May 2022 15:59:53 -0400
+X-MC-Unique: leEAx3U7ON64q3cGy0xWsA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 324F83C0ED5D;
+        Fri, 27 May 2022 19:59:53 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.8.134])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B3592166B26;
+        Fri, 27 May 2022 19:59:52 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     jtoppins@redhat.com, andy@greyhouse.net, davem@davemloft.net,
+        edumazet@google.com, j.vosburgh@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com, vfalico@gmail.com
+Subject: [RFC net-next v2] bonding: netlink error message support for options
+Date:   Fri, 27 May 2022 15:59:46 -0400
+Message-Id: <4819dd95dce52d5f68d43a77563580c631593dde.1653681408.git.jtoppins@redhat.com>
+In-Reply-To: <5a6ba6f14b0fad6d4ba077a5230ee71cbf970934.1652819479.git.jtoppins@redhat.com>
+References: <5a6ba6f14b0fad6d4ba077a5230ee71cbf970934.1652819479.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-Content-type: text/plain
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,576 +62,480 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I observed that for each of the shared file-backed page faults, we're very
-likely to retry one more time for the 1st write fault upon no page.  It's
-because we'll need to release the mmap lock for dirty rate limit purpose
-with balance_dirty_pages_ratelimited() (in fault_dirty_shared_page()).
+Add support for reporting errors via extack in both bond_newlink
+and bond_changelink.
 
-Then after that throttling we return VM_FAULT_RETRY.
+Instead of having to look in the kernel log for why an option was not
+correct just report the error to the user via the extack variable.
 
-We did that probably because VM_FAULT_RETRY is the only way we can return
-to the fault handler at that time telling it we've released the mmap lock.
+What is currently reported today:
+  ip link add bond0 type bond
+  ip link set bond0 up
+  ip link set bond0 type bond mode 4
+ RTNETLINK answers: Device or resource busy
 
-However that's not ideal because it's very likely the fault does not need
-to be retried at all since the pgtable was well installed before the
-throttling, so the next continuous fault (including taking mmap read lock,
-walk the pgtable, etc.) could be in most cases unnecessary.
+After this change:
+  ip link add bond0 type bond
+  ip link set bond0 up
+  ip link set bond0 type bond mode 4
+ Error: unable to set option because the bond is up.
 
-It's not only slowing down page faults for shared file-backed, but also add
-more mmap lock contention which is in most cases not needed at all.
-
-To observe this, one could try to write to some shmem page and look at
-"pgfault" value in /proc/vmstat, then we should expect 2 counts for each
-shmem write simply because we retried, and vm event "pgfault" will capture
-that.
-
-To make it more efficient, add a new VM_FAULT_COMPLETED return code just to
-show that we've completed the whole fault and released the lock.  It's also
-a hint that we should very possibly not need another fault immediately on
-this page because we've just completed it.
-
-This patch provides a ~12% perf boost on my aarch64 test VM with a simple
-program sequentially dirtying 400MB shmem file being mmap()ed and these are
-the time it needs:
-
-  Before: 650.980 ms (+-1.94%)
-  After:  569.396 ms (+-1.38%)
-
-I believe it could help more than that.
-
-We need some special care on GUP and the s390 pgfault handler (for gmap
-code before returning from pgfault), the rest changes in the page fault
-handlers should be relatively straightforward.
-
-Another thing to mention is that mm_account_fault() does take this new
-fault as a generic fault to be accounted, unlike VM_FAULT_RETRY.
-
-I explicitly didn't touch hmm_vma_fault() and break_ksm() because they do
-not handle VM_FAULT_RETRY even with existing code, so I'm literally keeping
-them as-is.
-
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-Acked-by: Vineet Gupta <vgupta@kernel.org>
-Acked-by: Guo Ren <guoren@kernel.org>
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
-Reviewed-by: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Peter Xu <peterx@redhat.com>
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
 ---
-v4:
-- Picked up a-bs and r-bs
-- Fix grammar in the comment of faultin_page() [Ingo]
-- Fix s390 for gmap since gmap needs the mmap lock [Heiko]
-v3:
-- Rebase to akpm/mm-unstable
-- Copy arch maintainers
----
- arch/alpha/mm/fault.c         |  4 ++++
- arch/arc/mm/fault.c           |  4 ++++
- arch/arm/mm/fault.c           |  4 ++++
- arch/arm64/mm/fault.c         |  4 ++++
- arch/csky/mm/fault.c          |  4 ++++
- arch/hexagon/mm/vm_fault.c    |  4 ++++
- arch/ia64/mm/fault.c          |  4 ++++
- arch/m68k/mm/fault.c          |  4 ++++
- arch/microblaze/mm/fault.c    |  4 ++++
- arch/mips/mm/fault.c          |  4 ++++
- arch/nios2/mm/fault.c         |  4 ++++
- arch/openrisc/mm/fault.c      |  4 ++++
- arch/parisc/mm/fault.c        |  4 ++++
- arch/powerpc/mm/copro_fault.c |  5 +++++
- arch/powerpc/mm/fault.c       |  5 +++++
- arch/riscv/mm/fault.c         |  4 ++++
- arch/s390/mm/fault.c          | 12 ++++++++++++
- arch/sh/mm/fault.c            |  4 ++++
- arch/sparc/mm/fault_32.c      |  4 ++++
- arch/sparc/mm/fault_64.c      |  5 +++++
- arch/um/kernel/trap.c         |  4 ++++
- arch/x86/mm/fault.c           |  4 ++++
- arch/xtensa/mm/fault.c        |  4 ++++
- include/linux/mm_types.h      |  2 ++
- mm/gup.c                      | 34 +++++++++++++++++++++++++++++++++-
- mm/memory.c                   |  2 +-
- 26 files changed, 139 insertions(+), 2 deletions(-)
 
-diff --git a/arch/alpha/mm/fault.c b/arch/alpha/mm/fault.c
-index ec20c1004abf..ef427a6bdd1a 100644
---- a/arch/alpha/mm/fault.c
-+++ b/arch/alpha/mm/fault.c
-@@ -155,6 +155,10 @@ do_page_fault(unsigned long address, unsigned long mmcsr,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/arc/mm/fault.c b/arch/arc/mm/fault.c
-index dad27e4d69ff..5ca59a482632 100644
---- a/arch/arc/mm/fault.c
-+++ b/arch/arc/mm/fault.c
-@@ -146,6 +146,10 @@ void do_page_fault(unsigned long address, struct pt_regs *regs)
- 		return;
+Notes:
+    v2:
+     Removed the printf support and just added static messages for various
+     error events.
+
+ drivers/net/bonding/bond_netlink.c | 101 +++++++++++++++++++----------
+ drivers/net/bonding/bond_options.c |  29 +++++++--
+ include/net/bond_options.h         |   3 +-
+ 3 files changed, 92 insertions(+), 41 deletions(-)
+
+diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bond_netlink.c
+index f427fa1737c7..565ee0ac3e60 100644
+--- a/drivers/net/bonding/bond_netlink.c
++++ b/drivers/net/bonding/bond_netlink.c
+@@ -151,7 +151,8 @@ static int bond_slave_changelink(struct net_device *bond_dev,
+ 		snprintf(queue_id_str, sizeof(queue_id_str), "%s:%u\n",
+ 			 slave_dev->name, queue_id);
+ 		bond_opt_initstr(&newval, queue_id_str);
+-		err = __bond_opt_set(bond, BOND_OPT_QUEUE_ID, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_QUEUE_ID, &newval,
++				     data[IFLA_BOND_SLAVE_QUEUE_ID], extack);
+ 		if (err)
+ 			return err;
  	}
+@@ -175,7 +176,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int mode = nla_get_u8(data[IFLA_BOND_MODE]);
  
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	/*
- 	 * Fault retry nuances, mmap_lock already relinquished by core mm
- 	 */
-diff --git a/arch/arm/mm/fault.c b/arch/arm/mm/fault.c
-index a062e07516dd..46cccd6bf705 100644
---- a/arch/arm/mm/fault.c
-+++ b/arch/arm/mm/fault.c
-@@ -322,6 +322,10 @@ do_page_fault(unsigned long addr, unsigned int fsr, struct pt_regs *regs)
- 		return 0;
+ 		bond_opt_initval(&newval, mode);
+-		err = __bond_opt_set(bond, BOND_OPT_MODE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_MODE, &newval,
++				     data[IFLA_BOND_MODE], extack);
+ 		if (err)
+ 			return err;
  	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return 0;
-+
- 	if (!(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_RETRY) {
- 			flags |= FAULT_FLAG_TRIED;
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index 77341b160aca..e401d416bbd6 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -607,6 +607,10 @@ static int __kprobes do_page_fault(unsigned long far, unsigned int esr,
- 		return 0;
+@@ -192,7 +194,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			active_slave = slave_dev->name;
+ 		}
+ 		bond_opt_initstr(&newval, active_slave);
+-		err = __bond_opt_set(bond, BOND_OPT_ACTIVE_SLAVE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ACTIVE_SLAVE, &newval,
++				     data[IFLA_BOND_ACTIVE_SLAVE], extack);
+ 		if (err)
+ 			return err;
  	}
+@@ -200,7 +203,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		miimon = nla_get_u32(data[IFLA_BOND_MIIMON]);
  
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return 0;
-+
- 	if (fault & VM_FAULT_RETRY) {
- 		mm_flags |= FAULT_FLAG_TRIED;
- 		goto retry;
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index 7215a46b6b8e..e15f736cca4b 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -285,6 +285,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
- 		return;
+ 		bond_opt_initval(&newval, miimon);
+-		err = __bond_opt_set(bond, BOND_OPT_MIIMON, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_MIIMON, &newval,
++				     data[IFLA_BOND_MIIMON], extack);
+ 		if (err)
+ 			return err;
  	}
+@@ -208,7 +212,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int updelay = nla_get_u32(data[IFLA_BOND_UPDELAY]);
  
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely((fault & VM_FAULT_RETRY) && (flags & FAULT_FLAG_ALLOW_RETRY))) {
- 		flags |= FAULT_FLAG_TRIED;
- 
-diff --git a/arch/hexagon/mm/vm_fault.c b/arch/hexagon/mm/vm_fault.c
-index 4fac4b9eb316..f73c7cbfe326 100644
---- a/arch/hexagon/mm/vm_fault.c
-+++ b/arch/hexagon/mm/vm_fault.c
-@@ -96,6 +96,10 @@ void do_page_fault(unsigned long address, long cause, struct pt_regs *regs)
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	/* The most common case -- we are done. */
- 	if (likely(!(fault & VM_FAULT_ERROR))) {
- 		if (fault & VM_FAULT_RETRY) {
-diff --git a/arch/ia64/mm/fault.c b/arch/ia64/mm/fault.c
-index 07379d1a227f..ef78c2d66cdd 100644
---- a/arch/ia64/mm/fault.c
-+++ b/arch/ia64/mm/fault.c
-@@ -139,6 +139,10 @@ ia64_do_page_fault (unsigned long address, unsigned long isr, struct pt_regs *re
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		/*
- 		 * We ran out of memory, or some other thing happened
-diff --git a/arch/m68k/mm/fault.c b/arch/m68k/mm/fault.c
-index 71aa9f6315dc..4d2837eb3e2a 100644
---- a/arch/m68k/mm/fault.c
-+++ b/arch/m68k/mm/fault.c
-@@ -141,6 +141,10 @@ int do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (fault_signal_pending(fault, regs))
- 		return 0;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return 0;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/microblaze/mm/fault.c b/arch/microblaze/mm/fault.c
-index a9626e6a68af..5c40c3ebe52f 100644
---- a/arch/microblaze/mm/fault.c
-+++ b/arch/microblaze/mm/fault.c
-@@ -222,6 +222,10 @@ void do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
-index 44f98100e84e..6f72bac39bf2 100644
---- a/arch/mips/mm/fault.c
-+++ b/arch/mips/mm/fault.c
-@@ -162,6 +162,10 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 		return;
+ 		bond_opt_initval(&newval, updelay);
+-		err = __bond_opt_set(bond, BOND_OPT_UPDELAY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_UPDELAY, &newval,
++				     data[IFLA_BOND_UPDELAY], extack);
+ 		if (err)
+ 			return err;
  	}
+@@ -216,7 +221,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int downdelay = nla_get_u32(data[IFLA_BOND_DOWNDELAY]);
  
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/nios2/mm/fault.c b/arch/nios2/mm/fault.c
-index a32f14cd72f2..edaca0a6c1c1 100644
---- a/arch/nios2/mm/fault.c
-+++ b/arch/nios2/mm/fault.c
-@@ -139,6 +139,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long cause,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/openrisc/mm/fault.c b/arch/openrisc/mm/fault.c
-index 80bb66ad42f6..c18f7abd64df 100644
---- a/arch/openrisc/mm/fault.c
-+++ b/arch/openrisc/mm/fault.c
-@@ -167,6 +167,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/parisc/mm/fault.c b/arch/parisc/mm/fault.c
-index f114e102aaf2..fe57175a7792 100644
---- a/arch/parisc/mm/fault.c
-+++ b/arch/parisc/mm/fault.c
-@@ -309,6 +309,10 @@ void do_page_fault(struct pt_regs *regs, unsigned long code,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		/*
- 		 * We hit a shared mapping outside of the file, or some
-diff --git a/arch/powerpc/mm/copro_fault.c b/arch/powerpc/mm/copro_fault.c
-index c1cb21a00884..7c507fb48182 100644
---- a/arch/powerpc/mm/copro_fault.c
-+++ b/arch/powerpc/mm/copro_fault.c
-@@ -65,6 +65,11 @@ int copro_handle_mm_fault(struct mm_struct *mm, unsigned long ea,
- 
- 	ret = 0;
- 	*flt = handle_mm_fault(vma, ea, is_write ? FAULT_FLAG_WRITE : 0, NULL);
-+
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (*flt & VM_FAULT_COMPLETED)
-+		return 0;
-+
- 	if (unlikely(*flt & VM_FAULT_ERROR)) {
- 		if (*flt & VM_FAULT_OOM) {
- 			ret = -ENOMEM;
-diff --git a/arch/powerpc/mm/fault.c b/arch/powerpc/mm/fault.c
-index d53fed4eccbd..014005428687 100644
---- a/arch/powerpc/mm/fault.c
-+++ b/arch/powerpc/mm/fault.c
-@@ -511,6 +511,10 @@ static int ___do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (fault_signal_pending(fault, regs))
- 		return user_mode(regs) ? 0 : SIGBUS;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		goto out;
-+
- 	/*
- 	 * Handle the retry right now, the mmap_lock has been released in that
- 	 * case.
-@@ -525,6 +529,7 @@ static int ___do_page_fault(struct pt_regs *regs, unsigned long address,
- 	if (unlikely(fault & VM_FAULT_ERROR))
- 		return mm_fault_error(regs, address, fault);
- 
-+out:
- 	/*
- 	 * Major/minor page fault accounting.
- 	 */
-diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-index 4e9efbe46d5f..d6a87f4137ca 100644
---- a/arch/riscv/mm/fault.c
-+++ b/arch/riscv/mm/fault.c
-@@ -330,6 +330,10 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_RETRY)) {
- 		flags |= FAULT_FLAG_TRIED;
- 
-diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
-index e173b6187ad5..4608cc962ecf 100644
---- a/arch/s390/mm/fault.c
-+++ b/arch/s390/mm/fault.c
-@@ -433,6 +433,17 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
- 			goto out_up;
- 		goto out;
+ 		bond_opt_initval(&newval, downdelay);
+-		err = __bond_opt_set(bond, BOND_OPT_DOWNDELAY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_DOWNDELAY, &newval,
++				     data[IFLA_BOND_DOWNDELAY], extack);
+ 		if (err)
+ 			return err;
  	}
-+
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED) {
-+		/*
-+		 * Gmap will need the mmap lock again, so retake it.  TODO:
-+		 * only conditionally take the lock when CONFIG_PGSTE set.
-+		 */
-+		mmap_read_lock(mm);
-+		goto out_gmap;
+@@ -224,7 +230,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int delay = nla_get_u32(data[IFLA_BOND_PEER_NOTIF_DELAY]);
+ 
+ 		bond_opt_initval(&newval, delay);
+-		err = __bond_opt_set(bond, BOND_OPT_PEER_NOTIF_DELAY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_PEER_NOTIF_DELAY, &newval,
++				     data[IFLA_BOND_PEER_NOTIF_DELAY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -232,7 +239,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int use_carrier = nla_get_u8(data[IFLA_BOND_USE_CARRIER]);
+ 
+ 		bond_opt_initval(&newval, use_carrier);
+-		err = __bond_opt_set(bond, BOND_OPT_USE_CARRIER, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_USE_CARRIER, &newval,
++				     data[IFLA_BOND_USE_CARRIER], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -240,12 +248,14 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int arp_interval = nla_get_u32(data[IFLA_BOND_ARP_INTERVAL]);
+ 
+ 		if (arp_interval && miimon) {
+-			netdev_err(bond->dev, "ARP monitoring cannot be used with MII monitoring\n");
++			NL_SET_ERR_MSG_ATTR(extack, data[IFLA_BOND_ARP_INTERVAL],
++					    "ARP monitoring cannot be used with MII monitoring");
+ 			return -EINVAL;
+ 		}
+ 
+ 		bond_opt_initval(&newval, arp_interval);
+-		err = __bond_opt_set(bond, BOND_OPT_ARP_INTERVAL, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ARP_INTERVAL, &newval,
++				     data[IFLA_BOND_ARP_INTERVAL], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -264,7 +274,9 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 
+ 			bond_opt_initval(&newval, (__force u64)target);
+ 			err = __bond_opt_set(bond, BOND_OPT_ARP_TARGETS,
+-					     &newval);
++					     &newval,
++					     data[IFLA_BOND_ARP_IP_TARGET],
++					     extack);
+ 			if (err)
+ 				break;
+ 			i++;
+@@ -297,7 +309,9 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 
+ 			bond_opt_initextra(&newval, &addr6, sizeof(addr6));
+ 			err = __bond_opt_set(bond, BOND_OPT_NS_TARGETS,
+-					     &newval);
++					     &newval,
++					     data[IFLA_BOND_NS_IP6_TARGET],
++					     extack);
+ 			if (err)
+ 				break;
+ 			i++;
+@@ -312,12 +326,14 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int arp_validate = nla_get_u32(data[IFLA_BOND_ARP_VALIDATE]);
+ 
+ 		if (arp_validate && miimon) {
+-			netdev_err(bond->dev, "ARP validating cannot be used with MII monitoring\n");
++			NL_SET_ERR_MSG_ATTR(extack, data[IFLA_BOND_ARP_INTERVAL],
++					    "ARP validating cannot be used with MII monitoring");
+ 			return -EINVAL;
+ 		}
+ 
+ 		bond_opt_initval(&newval, arp_validate);
+-		err = __bond_opt_set(bond, BOND_OPT_ARP_VALIDATE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ARP_VALIDATE, &newval,
++				     data[IFLA_BOND_ARP_VALIDATE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -326,7 +342,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_ARP_ALL_TARGETS]);
+ 
+ 		bond_opt_initval(&newval, arp_all_targets);
+-		err = __bond_opt_set(bond, BOND_OPT_ARP_ALL_TARGETS, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ARP_ALL_TARGETS, &newval,
++				     data[IFLA_BOND_ARP_ALL_TARGETS], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -340,7 +357,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			primary = dev->name;
+ 
+ 		bond_opt_initstr(&newval, primary);
+-		err = __bond_opt_set(bond, BOND_OPT_PRIMARY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_PRIMARY, &newval,
++				     data[IFLA_BOND_PRIMARY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -349,7 +367,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_PRIMARY_RESELECT]);
+ 
+ 		bond_opt_initval(&newval, primary_reselect);
+-		err = __bond_opt_set(bond, BOND_OPT_PRIMARY_RESELECT, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_PRIMARY_RESELECT, &newval,
++				     data[IFLA_BOND_PRIMARY_RESELECT], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -358,7 +377,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_FAIL_OVER_MAC]);
+ 
+ 		bond_opt_initval(&newval, fail_over_mac);
+-		err = __bond_opt_set(bond, BOND_OPT_FAIL_OVER_MAC, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_FAIL_OVER_MAC, &newval,
++				     data[IFLA_BOND_FAIL_OVER_MAC], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -367,7 +387,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_XMIT_HASH_POLICY]);
+ 
+ 		bond_opt_initval(&newval, xmit_hash_policy);
+-		err = __bond_opt_set(bond, BOND_OPT_XMIT_HASH, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_XMIT_HASH, &newval,
++				     data[IFLA_BOND_XMIT_HASH_POLICY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -376,7 +397,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_RESEND_IGMP]);
+ 
+ 		bond_opt_initval(&newval, resend_igmp);
+-		err = __bond_opt_set(bond, BOND_OPT_RESEND_IGMP, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_RESEND_IGMP, &newval,
++				     data[IFLA_BOND_RESEND_IGMP], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -385,7 +407,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_NUM_PEER_NOTIF]);
+ 
+ 		bond_opt_initval(&newval, num_peer_notif);
+-		err = __bond_opt_set(bond, BOND_OPT_NUM_PEER_NOTIF, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_NUM_PEER_NOTIF, &newval,
++				     data[IFLA_BOND_NUM_PEER_NOTIF], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -394,7 +417,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_ALL_SLAVES_ACTIVE]);
+ 
+ 		bond_opt_initval(&newval, all_slaves_active);
+-		err = __bond_opt_set(bond, BOND_OPT_ALL_SLAVES_ACTIVE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_ALL_SLAVES_ACTIVE, &newval,
++				     data[IFLA_BOND_ALL_SLAVES_ACTIVE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -403,7 +427,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_MIN_LINKS]);
+ 
+ 		bond_opt_initval(&newval, min_links);
+-		err = __bond_opt_set(bond, BOND_OPT_MINLINKS, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_MINLINKS, &newval,
++				     data[IFLA_BOND_MIN_LINKS], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -412,7 +437,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_LP_INTERVAL]);
+ 
+ 		bond_opt_initval(&newval, lp_interval);
+-		err = __bond_opt_set(bond, BOND_OPT_LP_INTERVAL, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_LP_INTERVAL, &newval,
++				     data[IFLA_BOND_LP_INTERVAL], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -421,7 +447,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u32(data[IFLA_BOND_PACKETS_PER_SLAVE]);
+ 
+ 		bond_opt_initval(&newval, packets_per_slave);
+-		err = __bond_opt_set(bond, BOND_OPT_PACKETS_PER_SLAVE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_PACKETS_PER_SLAVE, &newval,
++				     data[IFLA_BOND_PACKETS_PER_SLAVE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -430,7 +457,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int lacp_active = nla_get_u8(data[IFLA_BOND_AD_LACP_ACTIVE]);
+ 
+ 		bond_opt_initval(&newval, lacp_active);
+-		err = __bond_opt_set(bond, BOND_OPT_LACP_ACTIVE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_LACP_ACTIVE, &newval,
++				     data[IFLA_BOND_AD_LACP_ACTIVE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -440,7 +468,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_AD_LACP_RATE]);
+ 
+ 		bond_opt_initval(&newval, lacp_rate);
+-		err = __bond_opt_set(bond, BOND_OPT_LACP_RATE, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_LACP_RATE, &newval,
++				     data[IFLA_BOND_AD_LACP_RATE], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -449,7 +478,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u8(data[IFLA_BOND_AD_SELECT]);
+ 
+ 		bond_opt_initval(&newval, ad_select);
+-		err = __bond_opt_set(bond, BOND_OPT_AD_SELECT, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_AD_SELECT, &newval,
++				     data[IFLA_BOND_AD_SELECT], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -458,7 +488,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u16(data[IFLA_BOND_AD_ACTOR_SYS_PRIO]);
+ 
+ 		bond_opt_initval(&newval, actor_sys_prio);
+-		err = __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYS_PRIO, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYS_PRIO, &newval,
++				     data[IFLA_BOND_AD_ACTOR_SYS_PRIO], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -467,7 +498,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 			nla_get_u16(data[IFLA_BOND_AD_USER_PORT_KEY]);
+ 
+ 		bond_opt_initval(&newval, port_key);
+-		err = __bond_opt_set(bond, BOND_OPT_AD_USER_PORT_KEY, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_AD_USER_PORT_KEY, &newval,
++				     data[IFLA_BOND_AD_USER_PORT_KEY], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -477,7 +509,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 
+ 		bond_opt_initval(&newval,
+ 				 nla_get_u64(data[IFLA_BOND_AD_ACTOR_SYSTEM]));
+-		err = __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYSTEM, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYSTEM, &newval,
++				     data[IFLA_BOND_AD_ACTOR_SYSTEM], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -485,7 +518,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int dynamic_lb = nla_get_u8(data[IFLA_BOND_TLB_DYNAMIC_LB]);
+ 
+ 		bond_opt_initval(&newval, dynamic_lb);
+-		err = __bond_opt_set(bond, BOND_OPT_TLB_DYNAMIC_LB, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_TLB_DYNAMIC_LB, &newval,
++				     data[IFLA_BOND_TLB_DYNAMIC_LB], extack);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -494,7 +528,8 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
+ 		int missed_max = nla_get_u8(data[IFLA_BOND_MISSED_MAX]);
+ 
+ 		bond_opt_initval(&newval, missed_max);
+-		err = __bond_opt_set(bond, BOND_OPT_MISSED_MAX, &newval);
++		err = __bond_opt_set(bond, BOND_OPT_MISSED_MAX, &newval,
++				     data[IFLA_BOND_MISSED_MAX], extack);
+ 		if (err)
+ 			return err;
+ 	}
+diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond_options.c
+index 64f7db2627ce..36945a513770 100644
+--- a/drivers/net/bonding/bond_options.c
++++ b/drivers/net/bonding/bond_options.c
+@@ -636,27 +636,35 @@ static int bond_opt_check_deps(struct bonding *bond,
+ }
+ 
+ static void bond_opt_dep_print(struct bonding *bond,
+-			       const struct bond_option *opt)
++			       const struct bond_option *opt,
++			       struct nlattr *bad_attr,
++			       struct netlink_ext_ack *extack)
+ {
+ 	const struct bond_opt_value *modeval;
+ 	struct bond_params *params;
+ 
+ 	params = &bond->params;
+ 	modeval = bond_opt_get_val(BOND_OPT_MODE, params->mode);
+-	if (test_bit(params->mode, &opt->unsuppmodes))
++	if (test_bit(params->mode, &opt->unsuppmodes)) {
+ 		netdev_err(bond->dev, "option %s: mode dependency failed, not supported in mode %s(%llu)\n",
+ 			   opt->name, modeval->string, modeval->value);
++		NL_SET_ERR_MSG_ATTR(extack, bad_attr,
++                                    "option not supported in mode");
 +	}
-+
- 	if (unlikely(fault & VM_FAULT_ERROR))
- 		goto out_up;
+ }
  
-@@ -452,6 +463,7 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
- 		mmap_read_lock(mm);
- 		goto retry;
- 	}
-+out_gmap:
- 	if (IS_ENABLED(CONFIG_PGSTE) && gmap) {
- 		address =  __gmap_link(gmap, current->thread.gmap_addr,
- 				       address);
-diff --git a/arch/sh/mm/fault.c b/arch/sh/mm/fault.c
-index e175667b1363..acd2f5e50bfc 100644
---- a/arch/sh/mm/fault.c
-+++ b/arch/sh/mm/fault.c
-@@ -485,6 +485,10 @@ asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
- 		if (mm_fault_error(regs, error_code, address, fault))
- 			return;
+ static void bond_opt_error_interpret(struct bonding *bond,
+ 				     const struct bond_option *opt,
+-				     int error, const struct bond_opt_value *val)
++				     int error, const struct bond_opt_value *val,
++				     struct nlattr *bad_attr,
++				     struct netlink_ext_ack *extack)
+ {
+ 	const struct bond_opt_value *minval, *maxval;
+ 	char *p;
  
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (fault & VM_FAULT_RETRY) {
- 		flags |= FAULT_FLAG_TRIED;
- 
-diff --git a/arch/sparc/mm/fault_32.c b/arch/sparc/mm/fault_32.c
-index ad569d9bd124..91259f291c54 100644
---- a/arch/sparc/mm/fault_32.c
-+++ b/arch/sparc/mm/fault_32.c
-@@ -190,6 +190,10 @@ asmlinkage void do_sparc_fault(struct pt_regs *regs, int text_fault, int write,
- 	if (fault_signal_pending(fault, regs))
- 		return;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/arch/sparc/mm/fault_64.c b/arch/sparc/mm/fault_64.c
-index 253e07043298..4acc12eafbf5 100644
---- a/arch/sparc/mm/fault_64.c
-+++ b/arch/sparc/mm/fault_64.c
-@@ -427,6 +427,10 @@ asmlinkage void __kprobes do_sparc64_fault(struct pt_regs *regs)
- 	if (fault_signal_pending(fault, regs))
- 		goto exit_exception;
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		goto lock_released;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-@@ -449,6 +453,7 @@ asmlinkage void __kprobes do_sparc64_fault(struct pt_regs *regs)
- 	}
- 	mmap_read_unlock(mm);
- 
-+lock_released:
- 	mm_rss = get_mm_rss(mm);
- #if defined(CONFIG_TRANSPARENT_HUGEPAGE)
- 	mm_rss -= (mm->context.thp_pte_count * (HPAGE_SIZE / PAGE_SIZE));
-diff --git a/arch/um/kernel/trap.c b/arch/um/kernel/trap.c
-index d1d5d0be0308..d3ce21c4ca32 100644
---- a/arch/um/kernel/trap.c
-+++ b/arch/um/kernel/trap.c
-@@ -76,6 +76,10 @@ int handle_page_fault(unsigned long address, unsigned long ip,
- 		if ((fault & VM_FAULT_RETRY) && fatal_signal_pending(current))
- 			goto out_nosemaphore;
- 
-+		/* The fault is fully completed (including releasing mmap lock) */
-+		if (fault & VM_FAULT_COMPLETED)
-+			return 0;
-+
- 		if (unlikely(fault & VM_FAULT_ERROR)) {
- 			if (fault & VM_FAULT_OOM) {
- 				goto out_of_memory;
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index d0074c6ed31a..12ed70b432d6 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1408,6 +1408,10 @@ void do_user_addr_fault(struct pt_regs *regs,
- 		return;
- 	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	/*
- 	 * If we need to retry the mmap_lock has already been released,
- 	 * and if there is a fatal signal pending there is no guarantee
-diff --git a/arch/xtensa/mm/fault.c b/arch/xtensa/mm/fault.c
-index 06d0973a0d74..5f64305ba8d7 100644
---- a/arch/xtensa/mm/fault.c
-+++ b/arch/xtensa/mm/fault.c
-@@ -118,6 +118,10 @@ void do_page_fault(struct pt_regs *regs)
- 		return;
- 	}
- 
-+	/* The fault is fully completed (including releasing mmap lock) */
-+	if (fault & VM_FAULT_COMPLETED)
-+		return;
-+
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index c09b7f0555b8..decc275db3c9 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -729,6 +729,7 @@ typedef __bitwise unsigned int vm_fault_t;
-  * @VM_FAULT_NEEDDSYNC:		->fault did not modify page tables and needs
-  *				fsync() to complete (for synchronous page faults
-  *				in DAX)
-+ * @VM_FAULT_COMPLETED:		->fault completed, meanwhile mmap lock released
-  * @VM_FAULT_HINDEX_MASK:	mask HINDEX value
-  *
+ 	switch (error) {
+ 	case -EINVAL:
++		NL_SET_ERR_MSG_ATTR(extack, bad_attr, "invalid option value");
+ 		if (val) {
+ 			if (val->string) {
+ 				/* sometimes RAWVAL opts may have new lines */
+@@ -678,13 +686,17 @@ static void bond_opt_error_interpret(struct bonding *bond,
+ 			   opt->name, minval ? minval->value : 0, maxval->value);
+ 		break;
+ 	case -EACCES:
+-		bond_opt_dep_print(bond, opt);
++		bond_opt_dep_print(bond, opt, bad_attr, extack);
+ 		break;
+ 	case -ENOTEMPTY:
++		NL_SET_ERR_MSG_ATTR(extack, bad_attr,
++                                    "unable to set option because the bond device has slaves");
+ 		netdev_err(bond->dev, "option %s: unable to set because the bond device has slaves\n",
+ 			   opt->name);
+ 		break;
+ 	case -EBUSY:
++		NL_SET_ERR_MSG_ATTR(extack, bad_attr,
++                                    "unable to set option because the bond is up");
+ 		netdev_err(bond->dev, "option %s: unable to set because the bond device is up\n",
+ 			   opt->name);
+ 		break;
+@@ -695,6 +707,8 @@ static void bond_opt_error_interpret(struct bonding *bond,
+ 				*p = '\0';
+ 			netdev_err(bond->dev, "option %s: interface %s does not exist!\n",
+ 				   opt->name, val->string);
++			NL_SET_ERR_MSG_ATTR(extack, bad_attr,
++					    "interface does not exist");
+ 		}
+ 		break;
+ 	default:
+@@ -713,7 +727,8 @@ static void bond_opt_error_interpret(struct bonding *bond,
+  * must be obtained before calling this function.
   */
-@@ -746,6 +747,7 @@ enum vm_fault_reason {
- 	VM_FAULT_FALLBACK       = (__force vm_fault_t)0x000800,
- 	VM_FAULT_DONE_COW       = (__force vm_fault_t)0x001000,
- 	VM_FAULT_NEEDDSYNC      = (__force vm_fault_t)0x002000,
-+	VM_FAULT_COMPLETED      = (__force vm_fault_t)0x004000,
- 	VM_FAULT_HINDEX_MASK    = (__force vm_fault_t)0x0f0000,
+ int __bond_opt_set(struct bonding *bond,
+-		   unsigned int option, struct bond_opt_value *val)
++		   unsigned int option, struct bond_opt_value *val,
++		   struct nlattr *bad_attr, struct netlink_ext_ack *extack)
+ {
+ 	const struct bond_opt_value *retval = NULL;
+ 	const struct bond_option *opt;
+@@ -735,7 +750,7 @@ int __bond_opt_set(struct bonding *bond,
+ 	ret = opt->set(bond, retval);
+ out:
+ 	if (ret)
+-		bond_opt_error_interpret(bond, opt, ret, val);
++		bond_opt_error_interpret(bond, opt, ret, val, bad_attr, extack);
+ 
+ 	return ret;
+ }
+@@ -757,7 +772,7 @@ int __bond_opt_set_notify(struct bonding *bond,
+ 
+ 	ASSERT_RTNL();
+ 
+-	ret = __bond_opt_set(bond, option, val);
++	ret = __bond_opt_set(bond, option, val, NULL, NULL);
+ 
+ 	if (!ret && (bond->dev->reg_state == NETREG_REGISTERED))
+ 		call_netdevice_notifiers(NETDEV_CHANGEINFODATA, bond->dev);
+diff --git a/include/net/bond_options.h b/include/net/bond_options.h
+index 61b49063791c..1618b76f4903 100644
+--- a/include/net/bond_options.h
++++ b/include/net/bond_options.h
+@@ -107,7 +107,8 @@ struct bond_option {
  };
  
-diff --git a/mm/gup.c b/mm/gup.c
-index 2e07cff3b31b..a63d330b9d43 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -951,6 +951,25 @@ static int faultin_page(struct vm_area_struct *vma,
- 	}
- 
- 	ret = handle_mm_fault(vma, address, fault_flags, NULL);
-+
-+	if (ret & VM_FAULT_COMPLETED) {
-+		/*
-+		 * With FAULT_FLAG_RETRY_NOWAIT we'll never release the
-+		 * mmap lock in the page fault handler. Sanity check this.
-+		 */
-+		WARN_ON_ONCE(fault_flags & FAULT_FLAG_RETRY_NOWAIT);
-+		if (locked)
-+			*locked = 0;
-+		/*
-+		 * We should do the same as VM_FAULT_RETRY, but let's not
-+		 * return -EBUSY since that's not reflecting the reality of
-+		 * what has happened - we've just fully completed a page
-+		 * fault, with the mmap lock released.  Use -EAGAIN to show
-+		 * that we want to take the mmap lock _again_.
-+		 */
-+		return -EAGAIN;
-+	}
-+
- 	if (ret & VM_FAULT_ERROR) {
- 		int err = vm_fault_to_errno(ret, *flags);
- 
-@@ -1177,6 +1196,7 @@ static long __get_user_pages(struct mm_struct *mm,
- 			case 0:
- 				goto retry;
- 			case -EBUSY:
-+			case -EAGAIN:
- 				ret = 0;
- 				fallthrough;
- 			case -EFAULT:
-@@ -1303,6 +1323,18 @@ int fixup_user_fault(struct mm_struct *mm,
- 		return -EINTR;
- 
- 	ret = handle_mm_fault(vma, address, fault_flags, NULL);
-+
-+	if (ret & VM_FAULT_COMPLETED) {
-+		/*
-+		 * NOTE: it's a pity that we need to retake the lock here
-+		 * to pair with the unlock() in the callers. Ideally we
-+		 * could tell the callers so they do not need to unlock.
-+		 */
-+		mmap_read_lock(mm);
-+		*unlocked = true;
-+		return 0;
-+	}
-+
- 	if (ret & VM_FAULT_ERROR) {
- 		int err = vm_fault_to_errno(ret, 0);
- 
-@@ -1368,7 +1400,7 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
- 			/* VM_FAULT_RETRY couldn't trigger, bypass */
- 			return ret;
- 
--		/* VM_FAULT_RETRY cannot return errors */
-+		/* VM_FAULT_RETRY or VM_FAULT_COMPLETED cannot return errors */
- 		if (!*locked) {
- 			BUG_ON(ret < 0);
- 			BUG_ON(ret >= nr_pages);
-diff --git a/mm/memory.c b/mm/memory.c
-index 54d106e0c999..a8be2d7a8718 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3020,7 +3020,7 @@ static vm_fault_t fault_dirty_shared_page(struct vm_fault *vmf)
- 		balance_dirty_pages_ratelimited(mapping);
- 		if (fpin) {
- 			fput(fpin);
--			return VM_FAULT_RETRY;
-+			return VM_FAULT_COMPLETED;
- 		}
- 	}
- 
+ int __bond_opt_set(struct bonding *bond, unsigned int option,
+-		   struct bond_opt_value *val);
++		   struct bond_opt_value *val,
++		   struct nlattr *bad_attr, struct netlink_ext_ack *extack);
+ int __bond_opt_set_notify(struct bonding *bond, unsigned int option,
+ 			  struct bond_opt_value *val);
+ int bond_opt_tryset_rtnl(struct bonding *bond, unsigned int option, char *buf);
 -- 
-2.32.0
+2.27.0
 

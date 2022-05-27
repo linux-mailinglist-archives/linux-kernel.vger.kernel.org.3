@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E076D535837
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E86535838
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241704AbiE0ERQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 00:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
+        id S241770AbiE0ERw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 00:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240651AbiE0ERI (ORCPT
+        with ESMTP id S240897AbiE0ERn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 00:17:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4A317AA5;
-        Thu, 26 May 2022 21:17:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86A64B8227F;
-        Fri, 27 May 2022 04:17:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 38DCDC385A9;
-        Fri, 27 May 2022 04:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653625021;
-        bh=5c4HbAU+MTfHm4PSTHzcxJJe2w9BAiBt0vlZwKqOTNg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ZEstRGnexIMZTGOdU+xWupdxrcrX7saQ4KyRUkNGIQIgQ9/Ji4bEeb3ZBKnuT+mIj
-         w/WJ9CpW/HE8L385gxL9poO4d4DTxQ3wANvcBUb93jdrBixUHp+zyhC9573pvdNZhr
-         L63cyjGIhwfprDos/HvaS8IaAWyfI/wbaZSI4wAxr6z7mnr+9McB5dj+VIEDQJ8YJp
-         vAI76yh1n6T18uaqygyK3pL4mAPq2JpOS/PqqXLXTmJr424xrdxl2n355iJGWdzlPM
-         wD7o9PICFYzmvP1XyxTbf+JF8hQjqjp5JnUeAric2XiTPAow9dIvq3ccphwG15YZQg
-         2Sq/tGu1cjKPw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 26359E8DBDA;
-        Fri, 27 May 2022 04:17:01 +0000 (UTC)
-Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220526144615.GA3087820@nvidia.com>
-References: <20220526144615.GA3087820@nvidia.com>
-X-PR-Tracked-List-Id: <linux-rdma.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220526144615.GA3087820@nvidia.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
-X-PR-Tracked-Commit-Id: 9c477178a0a187c4718c228cc6e0692564811441
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 780d8ce7162818cfe03e9a5e23b3af192a1d37bc
-Message-Id: <165362502115.11855.9972919363474246528.pr-tracker-bot@kernel.org>
-Date:   Fri, 27 May 2022 04:17:01 +0000
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leonro@nvidia.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 27 May 2022 00:17:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6775A22BE8;
+        Thu, 26 May 2022 21:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1653625061; x=1685161061;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=48BhHJDKMqxcf9JijWKD4BBNU2yVtVD9EUhV8PmRrwI=;
+  b=fBmFDYZgm3wtxK6Q8rc4QP75v7YIpdQmf16O03V2EzUVcXqFTo+5+XU3
+   VNniv9vFzme7l5EIFqaGyvqk6HuNNhIQzRwYhOYPRmTb9AOlAlG3wLRcU
+   WZ6vjht4HCKrUb+d9LRoqpwt+5yJspZJR4bESn/SnQmeaI2XT0gSd8lqq
+   qcLNj/w0EOY94gMlJtjT/8qktk8fVz7QUyFOZ4R1sVkayZXKyhn8mpo5H
+   c5Iyfa4jk4EiczvZjz1EZUp8NTR59em81gxLYOs06O/dy5AKqD3ib4GNo
+   62IDC5HmW60YZRqQjAm5VGFpIC/tEiqIN6n/hqDPTyrzg512sBXAPAopm
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="175335209"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2022 21:17:39 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 26 May 2022 21:17:39 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 26 May 2022 21:17:36 -0700
+From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+To:     <netdev@vger.kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <richardcochran@gmail.com>, <UNGLinuxDriver@microchip.com>,
+        <Ian.Saturley@microchip.com>
+Subject: [PATCH net-next] net: lan743x: PCI11010 / PCI11414 fix
+Date:   Fri, 27 May 2022 09:47:28 +0530
+Message-ID: <20220527041728.3257-1-Raju.Lakkaraju@microchip.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,15 +62,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 26 May 2022 11:46:15 -0300:
+Fix the MDIO interface declarations to reflect what is currently supported by
+the PCI11010 / PCI11414 devices (C22 for RGMII and C22_C45 for SGMII)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+---
+ drivers/net/ethernet/microchip/lan743x_main.c | 32 +++++++++++++------
+ 1 file changed, 22 insertions(+), 10 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/780d8ce7162818cfe03e9a5e23b3af192a1d37bc
-
-Thank you!
-
+diff --git a/drivers/net/ethernet/microchip/lan743x_main.c b/drivers/net/ethernet/microchip/lan743x_main.c
+index efbddf24ba31..af81236b4b4e 100644
+--- a/drivers/net/ethernet/microchip/lan743x_main.c
++++ b/drivers/net/ethernet/microchip/lan743x_main.c
+@@ -1164,9 +1164,14 @@ static int lan743x_phy_open(struct lan743x_adapter *adapter)
+ 		if (!phydev)
+ 			goto return_error;
+ 
+-		ret = phy_connect_direct(netdev, phydev,
+-					 lan743x_phy_link_status_change,
+-					 PHY_INTERFACE_MODE_GMII);
++		if (adapter->is_pci11x1x)
++			ret = phy_connect_direct(netdev, phydev,
++						 lan743x_phy_link_status_change,
++						 PHY_INTERFACE_MODE_RGMII);
++		else
++			ret = phy_connect_direct(netdev, phydev,
++						 lan743x_phy_link_status_change,
++						 PHY_INTERFACE_MODE_GMII);
+ 		if (ret)
+ 			goto return_error;
+ 	}
+@@ -2936,20 +2941,27 @@ static int lan743x_mdiobus_init(struct lan743x_adapter *adapter)
+ 			lan743x_csr_write(adapter, SGMII_CTL, sgmii_ctl);
+ 			netif_dbg(adapter, drv, adapter->netdev,
+ 				  "SGMII operation\n");
++			adapter->mdiobus->probe_capabilities = MDIOBUS_C22_C45;
++			adapter->mdiobus->read = lan743x_mdiobus_c45_read;
++			adapter->mdiobus->write = lan743x_mdiobus_c45_write;
++			adapter->mdiobus->name = "lan743x-mdiobus-c45";
++			netif_dbg(adapter, drv, adapter->netdev,
++				  "lan743x-mdiobus-c45\n");
+ 		} else {
+ 			sgmii_ctl = lan743x_csr_read(adapter, SGMII_CTL);
+ 			sgmii_ctl &= ~SGMII_CTL_SGMII_ENABLE_;
+ 			sgmii_ctl |= SGMII_CTL_SGMII_POWER_DN_;
+ 			lan743x_csr_write(adapter, SGMII_CTL, sgmii_ctl);
+ 			netif_dbg(adapter, drv, adapter->netdev,
+-					  "(R)GMII operation\n");
++				  "RGMII operation\n");
++			// Only C22 support when RGMII I/F
++			adapter->mdiobus->probe_capabilities = MDIOBUS_C22;
++			adapter->mdiobus->read = lan743x_mdiobus_read;
++			adapter->mdiobus->write = lan743x_mdiobus_write;
++			adapter->mdiobus->name = "lan743x-mdiobus";
++			netif_dbg(adapter, drv, adapter->netdev,
++				  "lan743x-mdiobus\n");
+ 		}
+-
+-		adapter->mdiobus->probe_capabilities = MDIOBUS_C22_C45;
+-		adapter->mdiobus->read = lan743x_mdiobus_c45_read;
+-		adapter->mdiobus->write = lan743x_mdiobus_c45_write;
+-		adapter->mdiobus->name = "lan743x-mdiobus-c45";
+-		netif_dbg(adapter, drv, adapter->netdev, "lan743x-mdiobus-c45\n");
+ 	} else {
+ 		adapter->mdiobus->read = lan743x_mdiobus_read;
+ 		adapter->mdiobus->write = lan743x_mdiobus_write;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+

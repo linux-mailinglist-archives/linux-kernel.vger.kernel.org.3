@@ -2,336 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC908535EED
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1551535EF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245444AbiE0LDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S1350765AbiE0LGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351206AbiE0LCw (ORCPT
+        with ESMTP id S242190AbiE0LGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:02:52 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6610A131291
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:02:48 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax_+bSr5BidhAEAA--.20547S6;
-        Fri, 27 May 2022 19:02:44 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Subject: [PATCH RFC V2 10/10] irqchip: Add Loongson PCH LPC controller support
-Date:   Fri, 27 May 2022 19:02:42 +0800
-Message-Id: <1653649362-12091-5-git-send-email-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1653649362-12091-1-git-send-email-lvjianmin@loongson.cn>
-References: <1653649362-12091-1-git-send-email-lvjianmin@loongson.cn>
-X-CM-TRANSID: AQAAf9Ax_+bSr5BidhAEAA--.20547S6
-X-Coremail-Antispam: 1UD129KBjvJXoW3Aw15WrWUXFy3Jw1kAryDAwb_yoW3ur18pa
-        13u3y3JF4UZFs0vw4kCa4UZr45Awn3Kay09a93Gr13JrnrC3s7KF1vyFnrZrsrAr43KF1a
-        y398tFy8ur15CaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBq14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbCeHDUUUUU==
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 27 May 2022 07:06:09 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECEE13276D;
+        Fri, 27 May 2022 04:06:05 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-30a2adffd24so1146427b3.7;
+        Fri, 27 May 2022 04:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fRa2P5R5JHyAbD0921v5jTq/ooDfcVGFwaV7OE0Et6o=;
+        b=kJGGUDKLTlcgvdzeSf1+D3/jxr9Asp7eEdqVnybm5O84SY6IwYmKlOjsAjZ7ecrVva
+         uzAwaXxoJrGr7WCKwmJznP4IpRi68uaZB7JY4qkjUBn6PQz8V7M3MN1/59a9CwWJI4vp
+         BGojBTyC/1v4vfuvjyNAMMfRHb+zNLDVxKTaD3vXgUfj2aW5+Ry/6YW+eAuQQh+JvACH
+         NCsxOXsfQDzr5oSRfOtnHw3Vp6hrHpRP0hNAVxG6GzpyE/RGp8emjDPFXbGUcoTRvgpH
+         9TolshWpMSHkvnjcrK90CYS0cHHfJgXKSsdg/YuhGS0XtGq6l89G+sxadk9kuxexmfg7
+         kTQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fRa2P5R5JHyAbD0921v5jTq/ooDfcVGFwaV7OE0Et6o=;
+        b=YZ/xL5WepA0MSCADt1Q2rSYcS+rs3s7iP64shs8xU6cQz39ljzVVWAfwKqODB0fz3W
+         MtfWtyZFzt04Nf2SeNveqgxriXOSdg4FYBx5WwxFiaDxNxbgxv46InYdZ6rBbrI+hJQA
+         wqTHNhVYFFkrPyDAI8N8dE7l5kF61Y9QTdzE9m727yh86opW2G5pK58Q8dHLpoOP5fuS
+         yauo5V8XTgAjBd6NPrKsA+h363uakEZwRcL91YZKt/yVQEOWhwG9re90/xjh4SST/XMm
+         ckfQ+qtspApmhiqo6CudWwllWliAliuZf997xWgAHKPf6KZuSHfqAqwTlm6Bp17vInxg
+         VZoQ==
+X-Gm-Message-State: AOAM530zv4rewHkjXYsIBnRZIpfoJ3GobjMd31p/n230RbuIsVoe/2zo
+        IsDp+Q453QfNwcS11oQJBDVWuOV+3uIX8UkCX3w=
+X-Google-Smtp-Source: ABdhPJxUmotqC0TlXzdswm1/HGKqKMcvrFQ6HTKOQiniXSSy8vS9J3TvvqymhS0jNEyh4j721BFcwJ4bO0u8WRmY+6U=
+X-Received: by 2002:a81:6c14:0:b0:306:14a:9f7c with SMTP id
+ h20-20020a816c14000000b00306014a9f7cmr2089658ywc.16.1653649565012; Fri, 27
+ May 2022 04:06:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220524172214.5104-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220524172214.5104-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220524172214.5104-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 27 May 2022 12:05:38 +0100
+Message-ID: <CA+V-a8vfzsB55YdFmtx3eim617b=WCYJu+Tm3SO9c1QCB3i0Lw@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/2] irqchip/sifive-plic: Add support for Renesas
+ RZ/Five SoC
+To:     Marc Zyngier <maz@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We are preparing to add new Loongson (based on LoongArch, not compatible
-with old MIPS-based Loongson) support. This patch add Loongson PCH LPC
-interrupt controller support.
+Hi,
 
-PCH-LPC stands for "LPC Interrupts" that described in Section 24.3 of
-"Loongson 7A1000 Bridge User Manual". For more information please refer
-Documentation/loongarch/irq-chip-model.rst.
+On Tue, May 24, 2022 at 6:22 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
+> NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
+> case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
+> edge until the previous completion message has been received and
+> NCEPLIC100 doesn't support pending interrupt counter, hence losing the
+> interrupts if not acknowledged in time.
+>
+> So the workaround for edge-triggered interrupts to be handled correctly
+> and without losing is that it needs to be acknowledged first and then
+> handler must be run so that we don't miss on the next edge-triggered
+> interrupt.
+>
+> This patch adds a new compatible string for Renesas RZ/Five SoC and adds
+> support to change interrupt flow based on the interrupt type. It also
+> implements irq_ack and irq_set_type callbacks.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  drivers/irqchip/Kconfig           |  1 +
+>  drivers/irqchip/irq-sifive-plic.c | 71 ++++++++++++++++++++++++++++++-
+>  2 files changed, 70 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index f3d071422f3b..aea0e4e7e547 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -537,6 +537,7 @@ config SIFIVE_PLIC
+>         bool "SiFive Platform-Level Interrupt Controller"
+>         depends on RISCV
+>         select IRQ_DOMAIN_HIERARCHY
+> +       select IRQ_FASTEOI_HIERARCHY_HANDLERS
+>         help
+>            This enables support for the PLIC chip found in SiFive (and
+>            potentially other) RISC-V systems.  The PLIC controls devices
+> diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> index bb87e4c3b88e..abffce48e69c 100644
+> --- a/drivers/irqchip/irq-sifive-plic.c
+> +++ b/drivers/irqchip/irq-sifive-plic.c
+> @@ -60,10 +60,13 @@
+>  #define        PLIC_DISABLE_THRESHOLD          0x7
+>  #define        PLIC_ENABLE_THRESHOLD           0
+>
+> +#define RENESAS_R9A07G043_PLIC         1
+> +
+>  struct plic_priv {
+>         struct cpumask lmask;
+>         struct irq_domain *irqdomain;
+>         void __iomem *regs;
+> +       u8 of_data;
+>  };
+>
+>  struct plic_handler {
+> @@ -163,10 +166,31 @@ static int plic_set_affinity(struct irq_data *d,
+>  }
+>  #endif
+>
+> +static void plic_irq_ack(struct irq_data *d)
+> +{
+> +       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+> +
+> +       if (irqd_irq_masked(d)) {
+> +               plic_irq_unmask(d);
+> +               writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+> +               plic_irq_mask(d);
+> +       } else {
+> +               writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+> +       }
+> +}
+> +
+I sometimes still see an interrupt miss!
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
----
- drivers/irqchip/Kconfig                |   8 ++
- drivers/irqchip/Makefile               |   1 +
- drivers/irqchip/irq-loongson-pch-lpc.c | 220 +++++++++++++++++++++++++++++++++
- 3 files changed, 229 insertions(+)
- create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
+As per [0], we first need to claim the interrupt by reading the claim
+register which needs to be done in the ack callback (which should be
+doable) for edge interrupts, but the problem arises in the chained
+handler callback where it does claim the interrupt by reading the
+claim register.
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index eea0c15..c56a8db 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -610,6 +610,14 @@ config LOONGSON_PCH_MSI
- 	help
- 	  Support for the Loongson PCH MSI Controller.
- 
-+config LOONGSON_PCH_LPC
-+	bool "Loongson PCH LPC Controller"
-+	depends on MACH_LOONGSON64
-+	default (MACH_LOONGSON64 && LOONGARCH)
-+	select IRQ_DOMAIN_HIERARCHY
-+	help
-+	  Support for the Loongson PCH LPC Controller.
-+
- config MST_IRQ
- 	bool "MStar Interrupt Controller"
- 	depends on ARCH_MEDIATEK || ARCH_MSTARV7 || COMPILE_TEST
-diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-index 0d82759..a57566c 100644
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -112,6 +112,7 @@ obj-$(CONFIG_LOONGSON_HTPIC)		+= irq-loongson-htpic.o
- obj-$(CONFIG_LOONGSON_HTVEC)		+= irq-loongson-htvec.o
- obj-$(CONFIG_LOONGSON_PCH_PIC)		+= irq-loongson-pch-pic.o
- obj-$(CONFIG_LOONGSON_PCH_MSI)		+= irq-loongson-pch-msi.o
-+obj-$(CONFIG_LOONGSON_PCH_LPC)		+= irq-loongson-pch-lpc.o
- obj-$(CONFIG_MST_IRQ)			+= irq-mst-intc.o
- obj-$(CONFIG_SL28CPLD_INTC)		+= irq-sl28cpld.o
- obj-$(CONFIG_MACH_REALTEK_RTL)		+= irq-realtek-rtl.o
-diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
-new file mode 100644
-index 0000000..64cf0b8
---- /dev/null
-+++ b/drivers/irqchip/irq-loongson-pch-lpc.c
-@@ -0,0 +1,220 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Loongson LPC Interrupt Controller support
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+
-+#define pr_fmt(fmt) "lpc: " fmt
-+
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/irqchip.h>
-+#include <linux/irqchip/chained_irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/syscore_ops.h>
-+#include "irq-loongarch-pic-common.h"
-+
-+/* Registers */
-+#define LPC_INT_CTL		0x00
-+#define LPC_INT_ENA		0x04
-+#define LPC_INT_STS		0x08
-+#define LPC_INT_CLR		0x0c
-+#define LPC_INT_POL		0x10
-+#define LPC_COUNT		16
-+
-+struct pch_lpc {
-+	void __iomem		*base;
-+	struct irq_domain	*lpc_domain;
-+	raw_spinlock_t		lpc_lock;
-+	u32			saved_reg_ctl;
-+	u32			saved_reg_ena;
-+	u32			saved_reg_pol;
-+};
-+
-+static struct pch_lpc *pch_lpc_priv;
-+
-+static void ack_lpc_irq(struct irq_data *d)
-+{
-+	unsigned long flags;
-+
-+	raw_spin_lock_irqsave(&pch_lpc_priv->lpc_lock, flags);
-+	writel(0x1 << d->irq, pch_lpc_priv->base + LPC_INT_CLR);
-+	raw_spin_unlock_irqrestore(&pch_lpc_priv->lpc_lock, flags);
-+}
-+static void mask_lpc_irq(struct irq_data *d)
-+{
-+	unsigned long flags;
-+
-+	raw_spin_lock_irqsave(&pch_lpc_priv->lpc_lock, flags);
-+	writel(readl(pch_lpc_priv->base + LPC_INT_ENA) & (~(0x1 << (d->irq))),
-+			pch_lpc_priv->base + LPC_INT_ENA);
-+	raw_spin_unlock_irqrestore(&pch_lpc_priv->lpc_lock, flags);
-+}
-+
-+static void mask_ack_lpc_irq(struct irq_data *d)
-+{
-+}
-+
-+static void unmask_lpc_irq(struct irq_data *d)
-+{
-+	unsigned long flags;
-+
-+	raw_spin_lock_irqsave(&pch_lpc_priv->lpc_lock, flags);
-+	writel(readl(pch_lpc_priv->base + LPC_INT_ENA) | (0x1 << (d->irq)),
-+			pch_lpc_priv->base + LPC_INT_ENA);
-+	raw_spin_unlock_irqrestore(&pch_lpc_priv->lpc_lock, flags);
-+}
-+
-+static int lpc_set_type(struct irq_data *d, unsigned int type)
-+{
-+	u32 val;
-+	u32 mask = 0x1 << (d->hwirq);
-+
-+	if (!(type & IRQ_TYPE_LEVEL_MASK))
-+		return 0;
-+
-+	val = readl(pch_lpc_priv->base + LPC_INT_POL);
-+
-+	if (type == IRQ_TYPE_LEVEL_HIGH)
-+		val |= mask;
-+	else
-+		val &= ~mask;
-+
-+	writel(val, pch_lpc_priv->base + LPC_INT_POL);
-+
-+	return 0;
-+}
-+
-+static struct irq_chip pch_lpc_irq_chip = {
-+	.name			= "PCH LPC",
-+	.irq_mask		= mask_lpc_irq,
-+	.irq_unmask		= unmask_lpc_irq,
-+	.irq_ack		= ack_lpc_irq,
-+	.irq_mask_ack		= mask_ack_lpc_irq,
-+	.irq_eoi		= unmask_lpc_irq,
-+	.irq_set_type		= lpc_set_type,
-+	.flags			= IRQCHIP_SKIP_SET_WAKE,
-+};
-+
-+static void lpc_irq_dispatch(struct irq_desc *desc)
-+{
-+	struct irq_chip *chip = irq_desc_get_chip(desc);
-+	u32 pending;
-+
-+	chained_irq_enter(chip, desc);
-+
-+	pending = readl(pch_lpc_priv->base + LPC_INT_ENA);
-+	pending &= readl(pch_lpc_priv->base + LPC_INT_STS);
-+	if (!pending)
-+		spurious_interrupt();
-+
-+	while (pending) {
-+		int bit = __ffs(pending);
-+
-+		generic_handle_irq(bit);
-+		pending &= ~BIT(bit);
-+	}
-+	chained_irq_exit(chip, desc);
-+}
-+
-+static int pch_lpc_map(struct irq_domain *d, unsigned int irq,
-+			irq_hw_number_t hw)
-+{
-+	irq_set_chip_and_handler(irq, &pch_lpc_irq_chip, handle_level_irq);
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops pch_lpc_domain_ops = {
-+	.map 		= pch_lpc_map,
-+	.translate	= irq_domain_translate_twocell,
-+};
-+
-+static void pch_lpc_reset(struct pch_lpc *priv)
-+{
-+	/* Enable the LPC interrupt, bit31: en  bit30: edge */
-+	writel(0x80000000, priv->base + LPC_INT_CTL);
-+	writel(0, priv->base + LPC_INT_ENA);
-+	/* Clear all 18-bit interrpt bit */
-+	writel(0x3ffff, priv->base + LPC_INT_CLR);
-+}
-+
-+static int pch_lpc_disabled(struct pch_lpc *priv)
-+{
-+	return (readl(priv->base + LPC_INT_ENA) == 0xffffffff) &&
-+			(readl(priv->base + LPC_INT_STS) == 0xffffffff);
-+}
-+
-+static int pch_lpc_suspend(void)
-+{
-+	pch_lpc_priv->saved_reg_ctl = readl(pch_lpc_priv->base + LPC_INT_CTL);
-+	pch_lpc_priv->saved_reg_ena = readl(pch_lpc_priv->base + LPC_INT_ENA);
-+	pch_lpc_priv->saved_reg_pol = readl(pch_lpc_priv->base + LPC_INT_POL);
-+	return 0;
-+}
-+
-+static void pch_lpc_resume(void)
-+{
-+	writel(pch_lpc_priv->saved_reg_ctl, pch_lpc_priv->base + LPC_INT_CTL);
-+	writel(pch_lpc_priv->saved_reg_ena, pch_lpc_priv->base + LPC_INT_ENA);
-+	writel(pch_lpc_priv->saved_reg_pol, pch_lpc_priv->base + LPC_INT_POL);
-+}
-+
-+static struct syscore_ops pch_lpc_syscore_ops = {
-+	.suspend = pch_lpc_suspend,
-+	.resume = pch_lpc_resume,
-+};
-+
-+int __init pch_lpc_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_lpc_pic *acpi_pchlpc)
-+{
-+	int parent_irq;
-+	struct pch_lpc *priv;
-+	struct irq_fwspec fwspec;
-+
-+	if (!acpi_pchlpc)
-+		return -EINVAL;
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	raw_spin_lock_init(&priv->lpc_lock);
-+
-+	priv->base = ioremap(acpi_pchlpc->address, acpi_pchlpc->size);
-+	if (!priv->base)
-+		goto free_priv;
-+
-+	if (pch_lpc_disabled(priv)) {
-+		pr_err("Failed to get LPC status\n");
-+		goto iounmap_base;
-+	}
-+
-+	priv->lpc_domain = irq_domain_add_legacy(NULL, LPC_COUNT, 0, 0,
-+						&pch_lpc_domain_ops, priv);
-+	if (!priv->lpc_domain) {
-+		pr_err("Failed to create IRQ domain\n");
-+		goto iounmap_base;
-+	}
-+	pch_lpc_reset(priv);
-+
-+	fwspec.fwnode = parent->fwnode;
-+	fwspec.param[0] = acpi_pchlpc->cascade;
-+	fwspec.param[1] = IRQ_TYPE_LEVEL_HIGH;
-+	fwspec.param_count = 2;
-+	parent_irq = irq_create_fwspec_mapping(&fwspec);
-+	irq_set_chained_handler_and_data(parent_irq, lpc_irq_dispatch, priv);
-+	pch_lpc_priv = priv;
-+
-+	register_syscore_ops(&pch_lpc_syscore_ops);
-+	pch_lpc_domain = priv->lpc_domain;
-+	return 0;
-+
-+iounmap_base:
-+	iounmap(priv->base);
-+free_priv:
-+	kfree(priv);
-+
-+	return -ENOMEM;
-+}
--- 
-1.8.3.1
+static void plic_handle_irq(struct irq_desc *desc)
+{
+    struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+    struct irq_chip *chip = irq_desc_get_chip(desc);
+    void __iomem *claim = handler->hart_base + CONTEXT_CLAIM;
+    irq_hw_number_t hwirq;
 
+    WARN_ON_ONCE(!handler->present);
+
+    chained_irq_enter(chip, desc);
+
+    while ((hwirq = readl(claim))) {
+        int err = generic_handle_domain_irq(handler->priv->irqdomain,
+                            hwirq);
+        if (unlikely(err))
+            pr_warn_ratelimited("can't find mapping for hwirq %lu\n",
+                    hwirq);
+    }
+
+    chained_irq_exit(chip, desc);
+}
+
+I was thinking I would get around by getting the irqdata in
+plic_handle_irq() callback using the irq_desc (struct irq_data *d =
+&desc->irq_data;) and check the d->hwirq but this will be always 9.
+
+        plic: interrupt-controller@12c00000 {
+            compatible = "renesas-r9a07g043-plic";
+            #interrupt-cells = <2>;
+            #address-cells = <0>;
+            riscv,ndev = <543>;
+            interrupt-controller;
+            reg = <0x0 0x12c00000 0 0x400000>;
+            clocks = <&cpg CPG_MOD R9A07G043_NCEPLIC_ACLK>;
+            clock-names = "plic100ss";
+            power-domains = <&cpg>;
+            resets = <&cpg R9A07G043_NCEPLIC_ARESETN>;
+            interrupts-extended = <&cpu0_intc 11 &cpu0_intc 9>;
+        };
+
+Any pointers on how this could be done sanely.
+
+[0] https://github.com/riscv/riscv-plic-spec/blob/master/images/PLICInterruptFlow.jpg
+
+Cheers,
+Prabhakar
+
+
+>  static void plic_irq_eoi(struct irq_data *d)
+>  {
+>         struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+>
+> +       /*
+> +        * For Renesas R9A07G043 SoC if the interrupt type is EDGE
+> +        * we have already acknowledged it in ack callback.
+> +        */
+> +       if (handler->priv->of_data == RENESAS_R9A07G043_PLIC &&
+> +           !irqd_is_level_type(d))
+> +               return;
+> +
+>         if (irqd_irq_masked(d)) {
+>                 plic_irq_unmask(d);
+>                 writel(d->hwirq, handler->hart_base + CONTEXT_CLAIM);
+> @@ -176,11 +200,37 @@ static void plic_irq_eoi(struct irq_data *d)
+>         }
+>  }
+>
+> +static int plic_irq_set_type(struct irq_data *d, unsigned int type)
+> +{
+> +       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+> +
+> +       if (handler->priv->of_data != RENESAS_R9A07G043_PLIC)
+> +               return 0;
+> +
+> +       switch (type) {
+> +       case IRQ_TYPE_LEVEL_HIGH:
+> +               irq_set_handler_locked(d, handle_fasteoi_irq);
+> +               break;
+> +
+> +       case IRQ_TYPE_EDGE_RISING:
+> +               irq_set_handler_locked(d, handle_fasteoi_ack_irq);
+> +               break;
+> +
+> +       default:
+> +               return -EINVAL;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static struct irq_chip plic_chip = {
+>         .name           = "SiFive PLIC",
+>         .irq_mask       = plic_irq_mask,
+>         .irq_unmask     = plic_irq_unmask,
+> +       .irq_ack        = plic_irq_ack,
+>         .irq_eoi        = plic_irq_eoi,
+> +       .irq_set_type   = plic_irq_set_type,
+> +
+>  #ifdef CONFIG_SMP
+>         .irq_set_affinity = plic_set_affinity,
+>  #endif
+> @@ -198,6 +248,19 @@ static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+>         return 0;
+>  }
+>
+> +static int plic_irq_domain_translate(struct irq_domain *d,
+> +                                    struct irq_fwspec *fwspec,
+> +                                    unsigned long *hwirq,
+> +                                    unsigned int *type)
+> +{
+> +       struct plic_priv *priv = d->host_data;
+> +
+> +       if (priv->of_data == RENESAS_R9A07G043_PLIC)
+> +               return irq_domain_translate_twocell(d, fwspec, hwirq, type);
+> +
+> +       return irq_domain_translate_onecell(d, fwspec, hwirq, type);
+> +}
+> +
+>  static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>                                  unsigned int nr_irqs, void *arg)
+>  {
+> @@ -206,7 +269,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>         unsigned int type;
+>         struct irq_fwspec *fwspec = arg;
+>
+> -       ret = irq_domain_translate_onecell(domain, fwspec, &hwirq, &type);
+> +       ret = plic_irq_domain_translate(domain, fwspec, &hwirq, &type);
+>         if (ret)
+>                 return ret;
+>
+> @@ -220,7 +283,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  }
+>
+>  static const struct irq_domain_ops plic_irqdomain_ops = {
+> -       .translate      = irq_domain_translate_onecell,
+> +       .translate      = plic_irq_domain_translate,
+>         .alloc          = plic_irq_domain_alloc,
+>         .free           = irq_domain_free_irqs_top,
+>  };
+> @@ -293,6 +356,9 @@ static int __init plic_init(struct device_node *node,
+>         if (!priv)
+>                 return -ENOMEM;
+>
+> +       if (of_device_is_compatible(node, "renesas-r9a07g043-plic"))
+> +               priv->of_data = RENESAS_R9A07G043_PLIC;
+> +
+>         priv->regs = of_iomap(node, 0);
+>         if (WARN_ON(!priv->regs)) {
+>                 error = -EIO;
+> @@ -411,5 +477,6 @@ static int __init plic_init(struct device_node *node,
+>  }
+>
+>  IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
+> +IRQCHIP_DECLARE(renesas_r9a07g043_plic, "renesas-r9a07g043-plic", plic_init);
+>  IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy systems */
+>  IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init); /* for firmware driver */
+> --
+> 2.25.1
+>

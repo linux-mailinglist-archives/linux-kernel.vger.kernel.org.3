@@ -2,143 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF5F536617
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C56536622
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344305AbiE0QmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 12:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        id S1344710AbiE0Qub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 12:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240018AbiE0QmL (ORCPT
+        with ESMTP id S236944AbiE0Qua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 12:42:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4417640A23;
-        Fri, 27 May 2022 09:42:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1D9DB825AE;
-        Fri, 27 May 2022 16:42:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD3DC385A9;
-        Fri, 27 May 2022 16:42:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653669726;
-        bh=zglyA33t8Bhax6x2hK4aQE0hBcZgy78FCZh1HsYWP5k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=EUJTlgaEE0bBgBJEX1j/V1QiUNB84hN62hWLTUgWBT/GgmTmH4ml4wmqQZ3+ntc2c
-         zj9asOP0cokWrZSFx8ZpFaW+DmK5c19p2/gv3FM4pvCGbGOlSJVXuFARwx+sscy3MF
-         LtFIMeQ0tg2OqnHm181tlZSHBYvZJOq+k8Fae/3TMPi+G8T1h0BbPVW4j+PgcUmgur
-         5D/Sht8IQ+szcKsdce+wLh7oi90TxpjRwjQscR2tYDbMQlL1LxAncrbyyQAUYJRyrL
-         MXA4XyDDu90ZMgkDKY2CsYDiTQQzkX0qd9vHQI+EtI1JCaUlTj+u0TOjDCyq7MRyUI
-         ti7hwsBE1I92A==
-Date:   Fri, 27 May 2022 11:42:04 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     keliu <liuke94@huawei.com>
-Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, kurt.schwemmer@microsemi.com,
-        logang@deltatee.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: pci: Directly use ida_alloc()/free()
-Message-ID: <20220527164204.GA481720@bhelgaas>
+        Fri, 27 May 2022 12:50:30 -0400
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C185527E0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:50:28 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.191.102])
+        by smtp.orange.fr with ESMTPA
+        id udALn4kbfgoLGudAMnC5Sp; Fri, 27 May 2022 18:50:26 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 27 May 2022 18:50:26 +0200
+X-ME-IP: 90.11.191.102
+Message-ID: <01d80abf-61c3-d4fd-190e-716400230d7d@wanadoo.fr>
+Date:   Fri, 27 May 2022 18:50:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527072005.2360176-1-liuke94@huawei.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] most: Directly use ida_alloc()/free()
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, keliu <liuke94@huawei.com>,
+        gregkh@linuxfoundation.org, christian.gromm@microchip.com,
+        linux-kernel@vger.kernel.org
+References: <20220527083309.2553087-1-liuke94@huawei.com>
+ <7b0181da-7327-0594-ce9a-9601aca56909@infradead.org>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <7b0181da-7327-0594-ce9a-9601aca56909@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 07:20:05AM +0000, keliu wrote:
-> Use ida_alloc()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
+Le 27/05/2022 à 17:37, Randy Dunlap a écrit :
 > 
-> Signed-off-by: keliu <liuke94@huawei.com>
-
-I see you got some feedback about a full name already (here's a
-reference:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?id=v5.17#n407)
-so I'll wait for the update.  When you do, please also update the
-subject line to match previous drivers/pci/ history (use
-"git log --oneline drivers/pci/" to see it).
-
-The patch itself looks good to me.  Thanks for doing this!
-
-> ---
->  drivers/pci/controller/vmd.c   | 6 +++---
->  drivers/pci/switch/switchtec.c | 7 +++----
->  2 files changed, 6 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index eb05cceab964..efcb3a3ca65e 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -893,7 +893,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  		return -ENOMEM;
->  
->  	vmd->dev = dev;
-> -	vmd->instance = ida_simple_get(&vmd_instance_ida, 0, 0, GFP_KERNEL);
-> +	vmd->instance = ida_alloc(&vmd_instance_ida, GFP_KERNEL);
->  	if (vmd->instance < 0)
->  		return vmd->instance;
->  
-> @@ -934,7 +934,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  	return 0;
->  
->   out_release_instance:
-> -	ida_simple_remove(&vmd_instance_ida, vmd->instance);
-> +	ida_free(&vmd_instance_ida, vmd->instance);
->  	kfree(vmd->name);
->  	return err;
->  }
-> @@ -957,7 +957,7 @@ static void vmd_remove(struct pci_dev *dev)
->  	vmd_cleanup_srcu(vmd);
->  	vmd_detach_resources(vmd);
->  	vmd_remove_irq_domain(vmd);
-> -	ida_simple_remove(&vmd_instance_ida, vmd->instance);
-> +	ida_free(&vmd_instance_ida, vmd->instance);
->  	kfree(vmd->name);
->  }
->  
-> diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
-> index c36c1238c604..75be4fe22509 100644
-> --- a/drivers/pci/switch/switchtec.c
-> +++ b/drivers/pci/switch/switchtec.c
-> @@ -1376,8 +1376,7 @@ static struct switchtec_dev *stdev_create(struct pci_dev *pdev)
->  	dev->groups = switchtec_device_groups;
->  	dev->release = stdev_release;
->  
-> -	minor = ida_simple_get(&switchtec_minor_ida, 0, 0,
-> -			       GFP_KERNEL);
-> +	minor = ida_alloc(&switchtec_minor_ida, GFP_KERNEL);
->  	if (minor < 0) {
->  		rc = minor;
->  		goto err_put;
-> @@ -1692,7 +1691,7 @@ static int switchtec_pci_probe(struct pci_dev *pdev,
->  err_devadd:
->  	stdev_kill(stdev);
->  err_put:
-> -	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
-> +	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
->  	put_device(&stdev->dev);
->  	return rc;
->  }
-> @@ -1704,7 +1703,7 @@ static void switchtec_pci_remove(struct pci_dev *pdev)
->  	pci_set_drvdata(pdev, NULL);
->  
->  	cdev_device_del(&stdev->cdev, &stdev->dev);
-> -	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
-> +	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
->  	dev_info(&stdev->dev, "unregistered.\n");
->  	stdev_kill(stdev);
->  	put_device(&stdev->dev);
-> -- 
-> 2.25.1
+> On 5/27/22 01:33, keliu wrote:
+>> Use ida_alloc()/ida_free() instead of deprecated
+>> ida_simple_get()/ida_simple_remove() .
+>>
+>> Signed-off-by: keliu <liuke94@huawei.com>
 > 
+> The Signed-off-by: needs a more complete name (unless that is your full name).
+> 
+> Do any of Christophe's comments apply here?
+
+Hi,
+
+This one looks fine. Thanks keliu.
+
+Should I nitpick, there is an extra <space> in the commit description 
+before the final "." :)
+
+
+In fact, I'm sure of who can give a Reviewed-by: or Acked-by: tag. So up 
+to now, I only comment in-line when I go through patches randomly picked 
+on the linext-kernel ML.
+
+I think it is mainly for maintainer, but if anyone can give them, I'll 
+be glad to add them if it helps in the process.
+
+CJ
+
+
+> 
+> thanks.
+> 
+>> ---
+>>   drivers/most/core.c      | 10 +++++-----
+>>   drivers/most/most_cdev.c |  6 +++---
+>>   2 files changed, 8 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/most/core.c b/drivers/most/core.c
+>> index e4412c7d25b0..81d60d4ee8c2 100644
+>> --- a/drivers/most/core.c
+>> +++ b/drivers/most/core.c
+>> @@ -1286,7 +1286,7 @@ int most_register_interface(struct most_interface *iface)
+>>   	    !iface->poison_channel || (iface->num_channels > MAX_CHANNELS))
+>>   		return -EINVAL;
+>>   
+>> -	id = ida_simple_get(&mdev_id, 0, 0, GFP_KERNEL);
+>> +	id = ida_alloc(&mdev_id, GFP_KERNEL);
+>>   	if (id < 0) {
+>>   		dev_err(iface->dev, "Failed to allocate device ID\n");
+>>   		return id;
+>> @@ -1294,7 +1294,7 @@ int most_register_interface(struct most_interface *iface)
+>>   
+>>   	iface->p = kzalloc(sizeof(*iface->p), GFP_KERNEL);
+>>   	if (!iface->p) {
+>> -		ida_simple_remove(&mdev_id, id);
+>> +		ida_free(&mdev_id, id);
+>>   		return -ENOMEM;
+>>   	}
+>>   
+>> @@ -1308,7 +1308,7 @@ int most_register_interface(struct most_interface *iface)
+>>   		dev_err(iface->dev, "Failed to register interface device\n");
+>>   		kfree(iface->p);
+>>   		put_device(iface->dev);
+>> -		ida_simple_remove(&mdev_id, id);
+>> +		ida_free(&mdev_id, id);
+>>   		return -ENOMEM;
+>>   	}
+>>   
+>> @@ -1366,7 +1366,7 @@ int most_register_interface(struct most_interface *iface)
+>>   	}
+>>   	kfree(iface->p);
+>>   	device_unregister(iface->dev);
+>> -	ida_simple_remove(&mdev_id, id);
+>> +	ida_free(&mdev_id, id);
+>>   	return -ENOMEM;
+>>   }
+>>   EXPORT_SYMBOL_GPL(most_register_interface);
+>> @@ -1397,7 +1397,7 @@ void most_deregister_interface(struct most_interface *iface)
+>>   		device_unregister(&c->dev);
+>>   	}
+>>   
+>> -	ida_simple_remove(&mdev_id, iface->p->dev_id);
+>> +	ida_free(&mdev_id, iface->p->dev_id);
+>>   	kfree(iface->p);
+>>   	device_unregister(iface->dev);
+>>   }
+>> diff --git a/drivers/most/most_cdev.c b/drivers/most/most_cdev.c
+>> index 3722f9abd7b9..27913b1c8128 100644
+>> --- a/drivers/most/most_cdev.c
+>> +++ b/drivers/most/most_cdev.c
+>> @@ -100,7 +100,7 @@ static void destroy_cdev(struct comp_channel *c)
+>>   
+>>   static void destroy_channel(struct comp_channel *c)
+>>   {
+>> -	ida_simple_remove(&comp.minor_id, MINOR(c->devno));
+>> +	ida_free(&comp.minor_id, MINOR(c->devno));
+>>   	kfifo_free(&c->fifo);
+>>   	kfree(c);
+>>   }
+>> @@ -424,7 +424,7 @@ static int comp_probe(struct most_interface *iface, int channel_id,
+>>   	if (c)
+>>   		return -EEXIST;
+>>   
+>> -	current_minor = ida_simple_get(&comp.minor_id, 0, 0, GFP_KERNEL);
+>> +	current_minor = ida_alloc(&comp.minor_id, GFP_KERNEL);
+>>   	if (current_minor < 0)
+>>   		return current_minor;
+>>   
+>> @@ -471,7 +471,7 @@ static int comp_probe(struct most_interface *iface, int channel_id,
+>>   err_free_c:
+>>   	kfree(c);
+>>   err_remove_ida:
+>> -	ida_simple_remove(&comp.minor_id, current_minor);
+>> +	ida_free(&comp.minor_id, current_minor);
+>>   	return retval;
+>>   }
+>>   
+> 
+

@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627C3535D7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCE5535D7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350626AbiE0Jil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
+        id S235100AbiE0Jip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350599AbiE0Jid (ORCPT
+        with ESMTP id S1350605AbiE0Jie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:38:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FBBA4BFC2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:38:30 -0700 (PDT)
+        Fri, 27 May 2022 05:38:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E60F554015
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:38:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653644309;
+        s=mimecast20190719; t=1653644311;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=jWBfsIbPUgPp+IdgwSvqqfPkbnVArM00S/JeXJWx878=;
-        b=LuvCXkhgvSY7SimrhUg58SDKzMZz+5qKUZgrX/cBYO8KZjUnkyKUpZh9pbq8w2Nqa4ByIg
-        J5deOFId5F/IReV/d6sEOmR3NPeAfwkYrZ1xfpZQnWlt/Fds+7f5jXbCMmgSjrxvkGOoA1
-        mkDIRwPiMQDTPGzEyNRPXfgxBf2Q42E=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=+dxJgteJ4eYA2hPblerYsI7xTL/JrWtd/SRhGAQjbDE=;
+        b=FmiB+TrOxqVHTnvNhSrCOXsLZCErWdstIIQNDPgj/v4OoedGxh5KMrhneaIHjFCGm2RxYR
+        pjBqbiUNRDqMLMLFgxJOpjcfCrDB+Z2LA4AUFuJCKOaUnQZ8zqYzdiV0FXpL62m2KfS2nq
+        xEFYxjw3KQhz/rEGoj/B4StZHSxNDbc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-530-bU2VpNFFNLul-I8BdqfU-A-1; Fri, 27 May 2022 05:38:28 -0400
-X-MC-Unique: bU2VpNFFNLul-I8BdqfU-A-1
-Received: by mail-wr1-f72.google.com with SMTP id w17-20020adf8bd1000000b0020fc99aee61so695890wra.18
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:38:28 -0700 (PDT)
+ us-mta-377-79Gj1KbXPXaG2UBnnAxlAw-1; Fri, 27 May 2022 05:38:30 -0400
+X-MC-Unique: 79Gj1KbXPXaG2UBnnAxlAw-1
+Received: by mail-wm1-f70.google.com with SMTP id o2-20020a05600c510200b0039747b0216fso4559600wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:38:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=jWBfsIbPUgPp+IdgwSvqqfPkbnVArM00S/JeXJWx878=;
-        b=ERaZBc2VrJ2EJvS1sdcXioE5NVMo5buuVzCc8vTXSn+tWnkquICZD45hLkbd0t0kiK
-         9adTFJTto4ySrcLgPh1hmRVNI91lmSFHDiKY+SsmXLZJdv2bfC71A/qUnfDDmQ8Hb6nk
-         +SexoDaXbmrcfV6skYp0RNBlwIcS4S2PeOk+gHlubySoeTs8F687cDX6wnZxUF4ZqZs8
-         oIKf6qO+IhTHfW96OVFDWPK7DLu/JLhcLrcqcR5/ipsydkfIY7rs/B6mSFwck2rW1fk2
-         ed55GBrvz9EuzrdBldzEEwuYUD5X66oK3IQV+A1FA/GukKUJ1kwpQY9NsUAV66L3X5Fh
-         vUOw==
-X-Gm-Message-State: AOAM533EHGgF0UDhPCwJIk3abSyJcBcPdgKK+YlaRUM6xLWBgeyC90g2
-        vlsFwmECg0J1rtor4c7TF9ArQrgfBjssaueIrbSGIkHiNkN+MgT1gbfYSOXAvTFMXWIvL2UDgik
-        dZCXZQ5gn4hm9Z3K6a2qteaaB
-X-Received: by 2002:a5d:525b:0:b0:20c:e010:b9f3 with SMTP id k27-20020a5d525b000000b0020ce010b9f3mr33297156wrc.291.1653644306389;
-        Fri, 27 May 2022 02:38:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw9dc/h6KnzcMF+c7w6r1D7Te0EsYMnDtoc3WdL3pOVVx8wuoMD5Yc1AuMYCRF28+tQg0N+pg==
-X-Received: by 2002:a5d:525b:0:b0:20c:e010:b9f3 with SMTP id k27-20020a5d525b000000b0020ce010b9f3mr33297141wrc.291.1653644306042;
-        Fri, 27 May 2022 02:38:26 -0700 (PDT)
+        bh=+dxJgteJ4eYA2hPblerYsI7xTL/JrWtd/SRhGAQjbDE=;
+        b=3ylFN37n2WDybcbgb7Gex91F7DXwdasLH+f4XyK0QSWZIOHrs3zxGImamQmxhFggyJ
+         tUgJx0f4wwmT2ntkXs8weUF13TFrezo/Ao8xke8Xk52qB9fdMaAsbAopsKDj4emTiVQC
+         51QzPfrKB1k+3g1bk8/WiVspYM0aikjvQDvAsHo/hvqqVG3YakOISoUMA0lShzgNDAvD
+         pjkMOllR9aA3FlUY3B4qd37waY7Xpi/LpRwS3JgvIsOMQJh3N3f5xAVjhNFVNU8omSOi
+         2kGJ7jCsDx5q5cTPG/PbGFTvzy1gFRGA0GxzNNvCrRlyQcb1Gd06GH2EImO9GieV92zq
+         Lb3g==
+X-Gm-Message-State: AOAM533Ym/LZYCDbRoBTePT7KlTa0kUb5mVMfhuWjyHlSKqYI4oDvy8R
+        1rJ8ojjxMkg7X2USi7jmQ2687hxNIE3nx72Ows155UL4jLP4fkDxRS9cbKnYnzjVP4lZWUliq9U
+        TZr/UjIere7v0rBhyuWvqacUC
+X-Received: by 2002:adf:d1a1:0:b0:210:1ed6:3c83 with SMTP id w1-20020adfd1a1000000b002101ed63c83mr788491wrc.345.1653644309047;
+        Fri, 27 May 2022 02:38:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx4znpk6L/Ijy6sYnbWXl5A8U/E62h5+UWKn7E+9kCDYCblJJyM55OoA0Gb0FvjZe7tF6JEOg==
+X-Received: by 2002:adf:d1a1:0:b0:210:1ed6:3c83 with SMTP id w1-20020adfd1a1000000b002101ed63c83mr788488wrc.345.1653644308910;
+        Fri, 27 May 2022 02:38:28 -0700 (PDT)
 Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id j17-20020a05600c191100b00397393419e3sm1815525wmq.28.2022.05.27.02.38.25
+        by smtp.gmail.com with ESMTPSA id h9-20020a7bc929000000b003974a3af623sm1705244wml.17.2022.05.27.02.38.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 02:38:25 -0700 (PDT)
+        Fri, 27 May 2022 02:38:28 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 1/2] cpuhp: make target_store() a nop when target ==
- state
-In-Reply-To: <20220526160615.7976-2-pauld@redhat.com>
+Subject: Re: [PATCH v2 2/2] cpuhp: Set cpuhp target for boot cpu
+In-Reply-To: <20220526160615.7976-3-pauld@redhat.com>
 References: <20220526160615.7976-1-pauld@redhat.com>
- <20220526160615.7976-2-pauld@redhat.com>
-Date:   Fri, 27 May 2022 10:38:24 +0100
-Message-ID: <xhsmhy1ynl3hr.mognet@vschneid.remote.csb>
+ <20220526160615.7976-3-pauld@redhat.com>
+Date:   Fri, 27 May 2022 10:38:27 +0100
+Message-ID: <xhsmhwne7l3ho.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -78,57 +77,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 26/05/22 12:06, Phil Auld wrote:
-> writing the current state back in hotplug/target calls cpu_down()
-> which will set cpu dying even when it isn't and then nothing will
-> ever clear it. A stress test that reads values and writes them back
-> for all cpu device files in sysfs will trigger the BUG() in
-> select_fallback_rq once all cpus are marked as dying.
+> Since the boot cpu does not go through the hotplug process it ends
+> up with state == CPUHP_ONLINE but target == CPUHP_OFFLINE.
+> Set the target to match in boot_cpu_hotplug_init().
 >
-> kernel/cpu.c::target_store()
-> 	...
->         if (st->state < target)
->                 ret = cpu_up(dev->id, target);
->         else
->                 ret = cpu_down(dev->id, target);
->
-> cpu_down() -> cpu_set_state()
-> 	 bool bringup = st->state < target;
-> 	 ...
-> 	 if (cpu_dying(cpu) != !bringup)
-> 		set_cpu_dying(cpu, !bringup);
->
-> Fix this by letting state==target fall through in the target_store()
-> conditional.
->
-
-To go back on my data race paranoia: writes to both cpu$x/online and
-cpu$x/hotplug/target are serialized by device_hotplug_lock, and so are the
-exported kernel hotplug functions ({add, remove}_cpu()).
-
-That's not cpu_add_remove_lock as I was looking for, but that's still all
-under one lock, so I think we're good. Sorry for that!
-
 > Signed-off-by: Phil Auld <pauld@redhat.com>
 
 Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 
 > ---
->  kernel/cpu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  kernel/cpu.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
 > diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index d0a9aa0b42e8..cdb6ac10ad94 100644
+> index cdb6ac10ad94..0bb8ad0fa2d9 100644
 > --- a/kernel/cpu.c
 > +++ b/kernel/cpu.c
-> @@ -2315,7 +2315,7 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
+> @@ -2677,6 +2677,7 @@ void __init boot_cpu_hotplug_init(void)
+>  	cpumask_set_cpu(smp_processor_id(), &cpus_booted_once_mask);
+>  #endif
+>  	this_cpu_write(cpuhp_state.state, CPUHP_ONLINE);
+> +	this_cpu_write(cpuhp_state.target, CPUHP_ONLINE);
+>  }
 >  
->  	if (st->state < target)
->  		ret = cpu_up(dev->id, target);
-> -	else
-> +	else if (st->state > target)
->  		ret = cpu_down(dev->id, target);
->  out:
->  	unlock_device_hotplug();
+>  /*
 > -- 
 > 2.18.0
 

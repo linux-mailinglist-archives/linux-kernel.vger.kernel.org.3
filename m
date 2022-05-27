@@ -2,240 +2,592 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469CB535884
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C00535888
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242229AbiE0EcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 00:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S229831AbiE0EhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 00:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiE0EcG (ORCPT
+        with ESMTP id S233956AbiE0EhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 00:32:06 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C9726133
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 21:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653625924; x=1685161924;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QAo4z+N2epTpMkqPp/2Ce7Ax1qWOBU6R7cgIEkCv3zM=;
-  b=Y++4PgjLxblRXjO4VSA9aZK2QsnFpKRpvmlWLIWH+x4VQGWi9LB0gso9
-   DGhBI2gEWfx4V+IzavRnJ6bt7k9lBhlk6TkpDMp/GF1Q8FPhikX8cBiU6
-   YIhIl63w+XFl3X4xwSeeRkWoP2gaHEdhgzfcclcYD/JtOdTRvfOtWfeVl
-   sj/CpAnwubAuxgau5Kv2v5EPn3/h5zFfNmC1oWa8rgov+epbAZibi+XwF
-   TJvgrTC80a4Q3UIw95z2pDHXBkdaZzvI80FJd5WmrRYgXBirVd0WTP7z4
-   jtPOfSByvNrVE8Az+uOB/ybWCDF8Z751k18C+f3XUs0aPgIMV7QfNfUMq
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="335022369"
-X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="335022369"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 21:32:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="527777511"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 26 May 2022 21:32:02 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuRdp-0004PC-O2;
-        Fri, 27 May 2022 04:32:01 +0000
-Date:   Fri, 27 May 2022 12:31:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: net/netfilter/ipvs/ip_vs_core.c:1386 ip_vs_out_hook() warn:
- inconsistent indenting
-Message-ID: <202205271235.DEQpeDHA-lkp@intel.com>
+        Fri, 27 May 2022 00:37:05 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7831EC3C0
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 21:37:02 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id q184so6016457ybg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 21:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TZMZdGgBjhb4+QzgJJ59NFGDDyAJDYq2To7Lg8RYByc=;
+        b=IausGbyacI1RcdR13dwOqGpvbffYIz+ZZ/1kLqnfIgeNz/UBJZXNlKJxSdqzHu01aJ
+         dMqUbfhubBtN/hfcbPOa6+lkbQei23vcjoiOJfHIYX2yP6WQzs38Pib+zL2cZBzozNcg
+         QXRwoKnhMaFzg/9duvDza0WgJVbZZ5F2xiiwEUhGQEyssbcwnl43OtIP1whrvz92wcon
+         fUmolmP2jeGUliIdAcCoVhbUak89ohzEf22wiDZnW9di+usbtqAr1t/K20pXnjfomY38
+         4ddHxsfVxRhYPoh/dT96tmDBi4GjsBQal9z79IjDLvf4yczx7dVGqE7s5ei8lwkqKiig
+         IN0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TZMZdGgBjhb4+QzgJJ59NFGDDyAJDYq2To7Lg8RYByc=;
+        b=OGciYZ4w0riaBjQ7Kt90lXmB01M9MaLe6Rf3uK3LCZtbpe8EmvwvuAOk7yxxcHr1d4
+         u1VliBi644rRThUmwGGVN9UGedHhTWI2f26XB77hmLQUuYXWZDF9jm7QWAl1iotNQf5g
+         UKJuS5mlytzQ4wjBjmRZK83ZBRU0LX0FWLGFbsMAppFR4zNYNj0JmTgZ1Ek4iAasF72d
+         WjiPOy7mylc5oK5PgAoQ3415PaDM7wG48donfDzqEyABipXYBtvLB1REynoVgkpl64IZ
+         AaLTyGcBAmXJzDA9ghtCXAS5zaS+4KlOxm6hCQj56ewoSbWsT6CY5myAa79OeVyVf3U0
+         dsRQ==
+X-Gm-Message-State: AOAM533EyZCr/1EmEkDMkjQ+6WEGxiJ59B6j0iQlGThzVRftzPvkxsXe
+        be7oJXl/eJLDmSLdOTrhM58q0H4Z5DkOy4ShYLSJ7A==
+X-Google-Smtp-Source: ABdhPJxLE/SINaXTvqG8jbuXKOCjUkGCE7QmhP1B5sxMve4VNk/wTAD7+GsbmixbhqfmAeLrxw5T4szSp+ajxB11tk4=
+X-Received: by 2002:a25:a28c:0:b0:65a:37b6:6fe2 with SMTP id
+ c12-20020a25a28c000000b0065a37b66fe2mr2309197ybi.137.1653626221419; Thu, 26
+ May 2022 21:37:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220526112135.2486883-1-josephsih@chromium.org>
+ <20220526192047.v6.2.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid> <CABBYNZLXzc2QDJ-8_XaoOSL+CXnrfHi-t8DPRTjO+wJjmCbV-w@mail.gmail.com>
+In-Reply-To: <CABBYNZLXzc2QDJ-8_XaoOSL+CXnrfHi-t8DPRTjO+wJjmCbV-w@mail.gmail.com>
+From:   Joseph Hwang <josephsih@google.com>
+Date:   Fri, 27 May 2022 12:36:50 +0800
+Message-ID: <CAHFy418Dfyio9ENfdJHfctWmHtmS7a2cOc2F2vyxi8pLESaQTw@mail.gmail.com>
+Subject: Re: [PATCH v6 2/5] Bluetooth: aosp: surface AOSP quality report
+ through mgmt
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        pali@kernel.org, chromeos-bluetooth-upstreaming@chromium.org,
+        kernel test robot <lkp@intel.com>,
+        Archie Pusaka <apusaka@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7f50d4dfe816dd916a7cbf39039674825c2b388b
-commit: 9dd43a5f4b11b161c9dfcce9391e843e65d6a4cc netfilter: ipvs: prepare for hook function reduction
-date:   7 months ago
-config: s390-randconfig-m031-20220524 (https://download.01.org/0day-ci/archive/20220527/202205271235.DEQpeDHA-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
+Hi Luiz:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for your review! The get_ext_vendor_prefix() in the table
+provides a *unique* extended vendor prefix ( =3D vendor prefix + 1-octet
+subcode) that can uniquely identify a vendor event. I am not aware of
+any situation that might cause an event to be incorrectly matched with
+an extended vendor prefix. Maybe I am missing something?
 
-New smatch warnings:
-net/netfilter/ipvs/ip_vs_core.c:1386 ip_vs_out_hook() warn: inconsistent indenting
-net/netfilter/ipvs/ip_vs_core.c:2032 ip_vs_in_hook() warn: inconsistent indenting
+On the other hand, in your comment, to let a driver confirm whether it
+is the vendor event structure it uses might be a bit risky. For
+example, assume that we pass a vendor event to
+msft.c:msft_vendor_evt() to determine whether it is a MSFT event. The
+current implementation of msft_vendor_evt() is to call skb_pull_data()
+to pull the event prefix for comparison with the dynamic MSFT event
+prefix. No matter whether the event matches or not, the event skb has
+been modified already and would cause bad behavior if we pass the
+event skb to other vendor drivers/functions. How can we generally make
+sure that every such vendor drivers/functions are implemented in a
+read-only way that does not modify the skb when comparing the prefix?
+In this patch, we propose to use get_ext_vendor_prefix() which is
+guaranteed not to modify the skb in any possible way.
 
-Old smatch warnings:
-include/net/ip_vs.h:200 ip_vs_dbg_addr() warn: inconsistent indenting
-net/netfilter/ipvs/ip_vs_core.c:741 ip_vs_route_me_harder() warn: inconsistent indenting
-net/netfilter/ipvs/ip_vs_core.c:1406 ip_vs_out_hook() warn: inconsistent indenting
+Please also note that the mechanism here also takes care of older
+controllers that might not support some of the vendor specifications.
+For example, if an older controller does not support the MSFT spec,
+the msft_get_ext_prefix() would return NULL as its prefix. And hence a
+vendor event would not accidentally match the MSFT spec on the older
+controller. Similarly, in the following patch =E2=80=9Cbtintel: setup
+vendor_get_prefix and vendor_evt=E2=80=9D, on an older Intel controller tha=
+t
+does not support Intel telemetry events, the btintel driver would
+*not* set up
 
-vim +1386 net/netfilter/ipvs/ip_vs_core.c
+    hdev->vendor_get_ext_prefix =3D btintel_get_ext_prefix;
 
-4856c84c1358b7 net/ipv4/ipvs/ip_vs_core.c      Malcolm Turnbull       2008-09-05  1328  
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1329  /*
-4856c84c1358b7 net/ipv4/ipvs/ip_vs_core.c      Malcolm Turnbull       2008-09-05  1330   *	Check if outgoing packet belongs to the established ip_vs_conn.
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1331   */
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1332  static unsigned int
-9dd43a5f4b11b1 net/netfilter/ipvs/ip_vs_core.c Florian Westphal       2021-10-12  1333  ip_vs_out_hook(void *priv, struct sk_buff *skb, const struct nf_hook_state *state)
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1334  {
-9dd43a5f4b11b1 net/netfilter/ipvs/ip_vs_core.c Florian Westphal       2021-10-12  1335  	struct netns_ipvs *ipvs = net_ipvs(state->net);
-9dd43a5f4b11b1 net/netfilter/ipvs/ip_vs_core.c Florian Westphal       2021-10-12  1336  	unsigned int hooknum = state->hook;
-51ef348b141837 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1337  	struct ip_vs_iphdr iph;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1338  	struct ip_vs_protocol *pp;
-9330419d9aa4f9 net/netfilter/ipvs/ip_vs_core.c Hans Schillstrom       2011-01-03  1339  	struct ip_vs_proto_data *pd;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1340  	struct ip_vs_conn *cp;
-9dd43a5f4b11b1 net/netfilter/ipvs/ip_vs_core.c Florian Westphal       2021-10-12  1341  	int af = state->pf;
-340c78e5906264 net/netfilter/ipvs/ip_vs_core.c Eric Dumazet           2015-11-12  1342  	struct sock *sk;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1343  
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1344  	EnterFunction(11);
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1345  
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1346  	/* Already marked as IPVS request or reply? */
-6869c4d8e066e2 net/ipv4/ipvs/ip_vs_core.c      Harald Welte           2005-08-09  1347  	if (skb->ipvs_property)
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1348  		return NF_ACCEPT;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1349  
-340c78e5906264 net/netfilter/ipvs/ip_vs_core.c Eric Dumazet           2015-11-12  1350  	sk = skb_to_full_sk(skb);
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1351  	/* Bad... Do not break raw sockets */
-340c78e5906264 net/netfilter/ipvs/ip_vs_core.c Eric Dumazet           2015-11-12  1352  	if (unlikely(sk && hooknum == NF_INET_LOCAL_OUT &&
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1353  		     af == AF_INET)) {
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1354  
-340c78e5906264 net/netfilter/ipvs/ip_vs_core.c Eric Dumazet           2015-11-12  1355  		if (sk->sk_family == PF_INET && inet_sk(sk)->nodefrag)
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1356  			return NF_ACCEPT;
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1357  	}
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1358  
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1359  	if (unlikely(!skb_dst(skb)))
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1360  		return NF_ACCEPT;
-fc604767613b6d net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1361  
-48aed1b029597d net/netfilter/ipvs/ip_vs_core.c Eric W. Biederman      2015-09-21  1362  	if (!ipvs->enable)
-7a4f0761fce32f net/netfilter/ipvs/ip_vs_core.c Hans Schillstrom       2011-05-03  1363  		return NF_ACCEPT;
-7a4f0761fce32f net/netfilter/ipvs/ip_vs_core.c Hans Schillstrom       2011-05-03  1364  
-4fd9beef37f3a1 net/netfilter/ipvs/ip_vs_core.c Alex Gartrell          2015-08-26  1365  	ip_vs_fill_iph_skb(af, skb, false, &iph);
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1366  #ifdef CONFIG_IP_VS_IPV6
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1367  	if (af == AF_INET6) {
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1368  		if (unlikely(iph.protocol == IPPROTO_ICMPV6)) {
-1ca5bb5450aa24 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1369  			int related;
-7b5f689a2c25fb net/netfilter/ipvs/ip_vs_core.c Eric W. Biederman      2015-09-21  1370  			int verdict = ip_vs_out_icmp_v6(ipvs, skb, &related,
-d4383f04d145cc net/netfilter/ipvs/ip_vs_core.c Jesper Dangaard Brouer 2012-09-26  1371  							hooknum, &iph);
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1372  
-f5a41847acc535 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1373  			if (related)
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1374  				return verdict;
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1375  		}
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1376  	} else
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1377  #endif
-51ef348b141837 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1378  		if (unlikely(iph.protocol == IPPROTO_ICMP)) {
-1ca5bb5450aa24 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1379  			int related;
-7b5f689a2c25fb net/netfilter/ipvs/ip_vs_core.c Eric W. Biederman      2015-09-21  1380  			int verdict = ip_vs_out_icmp(ipvs, skb, &related, hooknum);
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1381  
-f5a41847acc535 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1382  			if (related)
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1383  				return verdict;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1384  		}
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1385  
-18d6ade63c8d79 net/netfilter/ipvs/ip_vs_core.c Eric W. Biederman      2015-09-21 @1386  	pd = ip_vs_proto_data_get(ipvs, iph.protocol);
-9330419d9aa4f9 net/netfilter/ipvs/ip_vs_core.c Hans Schillstrom       2011-01-03  1387  	if (unlikely(!pd))
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1388  		return NF_ACCEPT;
-9330419d9aa4f9 net/netfilter/ipvs/ip_vs_core.c Hans Schillstrom       2011-01-03  1389  	pp = pd->pp;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1390  
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1391  	/* reassemble IP fragments */
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1392  #ifdef CONFIG_IP_VS_IPV6
-63dca2c0b0e7a9 net/netfilter/ipvs/ip_vs_core.c Jesper Dangaard Brouer 2012-09-26  1393  	if (af == AF_INET)
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1394  #endif
-56f8a75c17abb8 net/netfilter/ipvs/ip_vs_core.c Paul Gortmaker         2011-06-21  1395  		if (unlikely(ip_is_fragment(ip_hdr(skb)) && !pp->dont_defrag)) {
-57781c1ceead5a net/netfilter/ipvs/ip_vs_core.c Eric W. Biederman      2015-09-21  1396  			if (ip_vs_gather_frags(ipvs, skb,
-1ca5bb5450aa24 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1397  					       ip_vs_defrag_user(hooknum)))
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1398  				return NF_STOLEN;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1399  
-4fd9beef37f3a1 net/netfilter/ipvs/ip_vs_core.c Alex Gartrell          2015-08-26  1400  			ip_vs_fill_iph_skb(AF_INET, skb, false, &iph);
-51ef348b141837 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1401  		}
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1402  
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1403  	/*
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1404  	 * Check if the packet belongs to an existing entry
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1405  	 */
-6ecd754883daff net/netfilter/ipvs/ip_vs_core.c Matteo Croce           2019-01-19  1406  	cp = INDIRECT_CALL_1(pp->conn_out_get, ip_vs_conn_out_get_proto,
-6ecd754883daff net/netfilter/ipvs/ip_vs_core.c Matteo Croce           2019-01-19  1407  			     ipvs, af, skb, &iph);
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1408  
-073b04e76be6d5 net/netfilter/ipvs/ip_vs_core.c longguang.yue          2020-10-05  1409  	if (likely(cp))
-579eb62ac35845 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2014-12-18  1410  		return handle_response(af, skb, pd, cp, &iph, hooknum);
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1411  
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1412  	/* Check for real-server-started requests */
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1413  	if (atomic_read(&ipvs->conn_out_counter)) {
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1414  		/* Currently only for UDP:
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1415  		 * connection oriented protocols typically use
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1416  		 * ephemeral ports for outgoing connections, so
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1417  		 * related incoming responses would not match any VS
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1418  		 */
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1419  		if (pp->protocol == IPPROTO_UDP) {
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1420  			cp = __ip_vs_rs_conn_out(hooknum, ipvs, af, skb, &iph);
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1421  			if (likely(cp))
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1422  				return handle_response(af, skb, pd, cp, &iph,
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1423  						       hooknum);
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1424  		}
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1425  	}
-39b97223153641 net/netfilter/ipvs/ip_vs_core.c Marco Angaroni         2016-04-05  1426  
-2300f0451e5fa5 net/netfilter/ipvs/ip_vs_core.c Eric W. Biederman      2015-09-21  1427  	if (sysctl_nat_icmp_send(ipvs) &&
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1428  	    (pp->protocol == IPPROTO_TCP ||
-2906f66a5682e5 net/netfilter/ipvs/ip_vs_core.c Venkata Mohan Reddy    2010-02-18  1429  	     pp->protocol == IPPROTO_UDP ||
-2906f66a5682e5 net/netfilter/ipvs/ip_vs_core.c Venkata Mohan Reddy    2010-02-18  1430  	     pp->protocol == IPPROTO_SCTP)) {
-014d730d56b559 net/ipv4/ipvs/ip_vs_core.c      Al Viro                2006-09-28  1431  		__be16 _ports[2], *pptr;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1432  
-2f74713d1436b7 net/netfilter/ipvs/ip_vs_core.c Jesper Dangaard Brouer 2012-09-26  1433  		pptr = frag_safe_skb_hp(skb, iph.len,
-6b3d933000cbe5 net/netfilter/ipvs/ip_vs_core.c Gao Feng               2017-11-13  1434  					 sizeof(_ports), _ports);
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1435  		if (pptr == NULL)
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1436  			return NF_ACCEPT;	/* Not for me */
-48aed1b029597d net/netfilter/ipvs/ip_vs_core.c Eric W. Biederman      2015-09-21  1437  		if (ip_vs_has_real_service(ipvs, af, iph.protocol, &iph.saddr,
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1438  					   pptr[0])) {
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1439  			/*
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1440  			 * Notify the real server: there is no
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1441  			 * existing entry if it is not RST
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1442  			 * packet or not TCP packet.
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1443  			 */
-2906f66a5682e5 net/netfilter/ipvs/ip_vs_core.c Venkata Mohan Reddy    2010-02-18  1444  			if ((iph.protocol != IPPROTO_TCP &&
-2906f66a5682e5 net/netfilter/ipvs/ip_vs_core.c Venkata Mohan Reddy    2010-02-18  1445  			     iph.protocol != IPPROTO_SCTP)
-2906f66a5682e5 net/netfilter/ipvs/ip_vs_core.c Venkata Mohan Reddy    2010-02-18  1446  			     || ((iph.protocol == IPPROTO_TCP
-2906f66a5682e5 net/netfilter/ipvs/ip_vs_core.c Venkata Mohan Reddy    2010-02-18  1447  				  && !is_tcp_reset(skb, iph.len))
-2906f66a5682e5 net/netfilter/ipvs/ip_vs_core.c Venkata Mohan Reddy    2010-02-18  1448  				 || (iph.protocol == IPPROTO_SCTP
-2906f66a5682e5 net/netfilter/ipvs/ip_vs_core.c Venkata Mohan Reddy    2010-02-18  1449  					&& !is_sctp_abort(skb,
-2906f66a5682e5 net/netfilter/ipvs/ip_vs_core.c Venkata Mohan Reddy    2010-02-18  1450  						iph.len)))) {
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1451  #ifdef CONFIG_IP_VS_IPV6
-cb59155f21d4c0 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1452  				if (af == AF_INET6) {
-cb59155f21d4c0 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1453  					if (!skb->dev)
-ed1c9f0e78b3b3 net/netfilter/ipvs/ip_vs_core.c David Ahern            2015-10-01  1454  						skb->dev = ipvs->net->loopback_dev;
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1455  					icmpv6_send(skb,
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1456  						    ICMPV6_DEST_UNREACH,
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1457  						    ICMPV6_PORT_UNREACH,
-3ffe533c87281b net/netfilter/ipvs/ip_vs_core.c Alexey Dobriyan        2010-02-18  1458  						    0);
-cb59155f21d4c0 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1459  				} else
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1460  #endif
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1461  					icmp_send(skb,
-2a3b791e6e1169 net/ipv4/ipvs/ip_vs_core.c      Julius Volz            2008-09-02  1462  						  ICMP_DEST_UNREACH,
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1463  						  ICMP_PORT_UNREACH, 0);
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1464  				return NF_DROP;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1465  			}
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1466  		}
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1467  	}
-3c5ab3f395d66a net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2017-04-29  1468  
-b0e010c527de74 net/netfilter/ipvs/ip_vs_core.c Alex Gartrell          2015-08-26  1469  	IP_VS_DBG_PKT(12, af, pp, skb, iph.off,
-cb59155f21d4c0 net/netfilter/ipvs/ip_vs_core.c Julian Anastasov       2010-10-17  1470  		      "ip_vs_out: packet continues traversal as normal");
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1471  	return NF_ACCEPT;
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1472  }
-^1da177e4c3f41 net/ipv4/ipvs/ip_vs_core.c      Linus Torvalds         2005-04-16  1473  
+such that an event would not match as an Intel vendor event in any way.
 
-:::::: The code at line 1386 was first introduced by commit
-:::::: 18d6ade63c8d796c272e2b4922d649cf108d7980 ipvs: Pass ipvs not net to ip_vs_proto_data_get
+Please let me know if I have any misunderstanding.
 
-:::::: TO: Eric W. Biederman <ebiederm@xmission.com>
-:::::: CC: Simon Horman <horms@verge.net.au>
+Thanks and regards,
+Joseph
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+On Fri, May 27, 2022 at 4:25 AM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Hi Joseph,
+>
+> On Thu, May 26, 2022 at 4:21 AM Joseph Hwang <josephsih@chromium.org> wro=
+te:
+> >
+> > When receiving a HCI vendor event, the kernel checks if it is an
+> > AOSP bluetooth quality report. If yes, the event is sent to bluez
+> > user space through the mgmt socket.
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > Signed-off-by: Joseph Hwang <josephsih@chromium.org>
+> > Reviewed-by: Archie Pusaka <apusaka@chromium.org>
+> > ---
+> >
+> > Changes in v6:
+> > - Fixed a sparse check warning about using static for evt_prefixes.
+> >
+> > Changes in v5:
+> > - Define "struct ext_vendor_prefix" to replace "struct vendor_prefix"
+> >   so that extended vendor prefix =3D prefix + 1-octet subcode
+> > - Define aosp_ext_prefix to provide AOSP extended prefix which is
+> >   returned by aosp_get_ext_prefix().
+> > - Redefine struct ext_vendor_event_prefix such that
+> >   . it uses get_ext_vendor_prefix to get prefix and subcodes where
+> >     the prefix and the prefix length may be variable and are not
+> >     unknown until run time;
+> >   . it uses vendor_func to handle a vendor event
+> >   This table handles vendor events in a generic way.
+> > - Rewrite hci_vendor_evt() so that it compares both vendor prefix
+> >   and subcode to match a vendor event.
+> > - Define set_ext_prefix() to create MSFT extended vendor prefix
+> >   which is returned by msft_get_ext_prefix().
+> > - Do not EXPORT_SYMBOL(mgmt_quality_report).
+> > - Keep msft_get_ext_prefix in msft instead of hci_dev since it is
+> >   not used by any drivers.
+> >
+> > Changes in v3:
+> > - Rebase to resolve the code conflict.
+> > - Move aosp_quality_report_evt() from hci_event.c to aosp.c.
+> > - A new patch (3/3) is added to enable the quality report feature.
+> >
+> > Changes in v2:
+> > - Scrap the two structures defined in aosp.c and use constants for
+> >   size check.
+> > - Do a basic size check about the quality report event. Do not pull
+> >   data from the event in which the kernel has no interest.
+> > - Define vendor event prefixes with which vendor events of distinct
+> >   vendor specifications can be clearly differentiated.
+> > - Use mgmt helpers to add the header and data to a mgmt skb.
+> >
+> >  include/net/bluetooth/hci_core.h | 12 +++++++
+> >  include/net/bluetooth/mgmt.h     |  7 +++++
+> >  net/bluetooth/aosp.c             | 50 +++++++++++++++++++++++++++++
+> >  net/bluetooth/aosp.h             | 18 +++++++++++
+> >  net/bluetooth/hci_event.c        | 54 +++++++++++++++++++++++++++++++-
+> >  net/bluetooth/mgmt.c             | 19 +++++++++++
+> >  net/bluetooth/msft.c             | 28 ++++++++++++++++-
+> >  net/bluetooth/msft.h             | 12 +++++--
+> >  8 files changed, 195 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/h=
+ci_core.h
+> > index 64d3a63759a8..f89738c6b973 100644
+> > --- a/include/net/bluetooth/hci_core.h
+> > +++ b/include/net/bluetooth/hci_core.h
+> > @@ -328,6 +328,13 @@ struct amp_assoc {
+> >
+> >  #define HCI_MAX_PAGES  3
+> >
+> > +struct ext_vendor_prefix {
+> > +       __u8 *prefix;
+> > +       __u8 prefix_len;
+> > +       __u8 *subcodes;
+> > +       __u8 subcodes_len;
+> > +};
+> > +
+> >  struct hci_dev {
+> >         struct list_head list;
+> >         struct mutex    lock;
+> > @@ -1876,6 +1883,8 @@ int mgmt_add_adv_patterns_monitor_complete(struct=
+ hci_dev *hdev, u8 status);
+> >  int mgmt_remove_adv_monitor_complete(struct hci_dev *hdev, u8 status);
+> >  void mgmt_adv_monitor_device_lost(struct hci_dev *hdev, u16 handle,
+> >                                   bdaddr_t *bdaddr, u8 addr_type);
+> > +int mgmt_quality_report(struct hci_dev *hdev, void *data, u32 data_len=
+,
+> > +                       u8 quality_spec);
+> >
+> >  u8 hci_le_conn_update(struct hci_conn *conn, u16 min, u16 max, u16 lat=
+ency,
+> >                       u16 to_multiplier);
+> > @@ -1894,4 +1903,7 @@ void hci_copy_identity_address(struct hci_dev *hd=
+ev, bdaddr_t *bdaddr,
+> >
+> >  #define TRANSPORT_TYPE_MAX     0x04
+> >
+> > +#define QUALITY_SPEC_AOSP_BQR          0x0
+> > +#define QUALITY_SPEC_INTEL_TELEMETRY   0x1
+> > +
+> >  #endif /* __HCI_CORE_H */
+> > diff --git a/include/net/bluetooth/mgmt.h b/include/net/bluetooth/mgmt.=
+h
+> > index c1c2fd72d9e3..6ccd0067c295 100644
+> > --- a/include/net/bluetooth/mgmt.h
+> > +++ b/include/net/bluetooth/mgmt.h
+> > @@ -1127,3 +1127,10 @@ struct mgmt_ev_adv_monitor_device_lost {
+> >         __le16 monitor_handle;
+> >         struct mgmt_addr_info addr;
+> >  } __packed;
+> > +
+> > +#define MGMT_EV_QUALITY_REPORT                 0x0031
+> > +struct mgmt_ev_quality_report {
+> > +       __u8    quality_spec;
+> > +       __u32   data_len;
+> > +       __u8    data[];
+> > +} __packed;
+> > diff --git a/net/bluetooth/aosp.c b/net/bluetooth/aosp.c
+> > index 432ae3aac9e3..94faa15b1ea0 100644
+> > --- a/net/bluetooth/aosp.c
+> > +++ b/net/bluetooth/aosp.c
+> > @@ -199,3 +199,53 @@ int aosp_set_quality_report(struct hci_dev *hdev, =
+bool enable)
+> >         else
+> >                 return disable_quality_report(hdev);
+> >  }
+> > +
+> > +/* The following LEN =3D 1-byte Sub-event code + 48-byte Sub-event Par=
+ameters */
+> > +#define BLUETOOTH_QUALITY_REPORT_LEN 49
+> > +
+> > +bool aosp_check_quality_report_len(struct sk_buff *skb)
+> > +{
+> > +       /* skb->len is allowed to be larger than BLUETOOTH_QUALITY_REPO=
+RT_LEN
+> > +        * to accommodate an additional Vendor Specific Parameter (vsp)=
+ field.
+> > +        */
+> > +       if (skb->len < BLUETOOTH_QUALITY_REPORT_LEN) {
+> > +               BT_ERR("AOSP evt data len %d too short (%u expected)",
+> > +                      skb->len, BLUETOOTH_QUALITY_REPORT_LEN);
+> > +               return false;
+> > +       }
+> > +
+> > +       return true;
+> > +}
+> > +
+> > +/* AOSP HCI Requirements use 0x54 and up as sub-event codes without
+> > + * actually defining a vendor prefix. Refer to
+> > + * https://source.android.com/devices/bluetooth/hci_requirements
+> > + * Hence, the other vendor event prefixes should not use the same
+> > + * space to avoid collision.
+> > + * Since the AOSP does not define a prefix, its prefix is NULL
+> > + * and prefix_len is 0.
+> > + * While there are a number of subcodes in AOSP, only interested in
+> > + * Bluetooth Quality Report (0x58) for now.
+> > + */
+> > +#define AOSP_EV_QUALITY_REPORT         0x58
+> > +
+> > +static unsigned char AOSP_SUBCODES[] =3D { AOSP_EV_QUALITY_REPORT };
+> > +
+> > +static struct ext_vendor_prefix aosp_ext_prefix =3D {
+> > +       .prefix         =3D NULL,
+> > +       .prefix_len     =3D 0,
+> > +       .subcodes       =3D AOSP_SUBCODES,
+> > +       .subcodes_len   =3D sizeof(AOSP_SUBCODES),
+> > +};
+> > +
+> > +struct ext_vendor_prefix *aosp_get_ext_prefix(struct hci_dev *hdev)
+> > +{
+> > +       return &aosp_ext_prefix;
+> > +}
+> > +
+> > +void aosp_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb)
+> > +{
+> > +       if (aosp_has_quality_report(hdev) && aosp_check_quality_report_=
+len(skb))
+> > +               mgmt_quality_report(hdev, skb->data, skb->len,
+> > +                                   QUALITY_SPEC_AOSP_BQR);
+> > +}
+> > diff --git a/net/bluetooth/aosp.h b/net/bluetooth/aosp.h
+> > index 2fd8886d51b2..8208e01fffed 100644
+> > --- a/net/bluetooth/aosp.h
+> > +++ b/net/bluetooth/aosp.h
+> > @@ -10,6 +10,9 @@ void aosp_do_close(struct hci_dev *hdev);
+> >
+> >  bool aosp_has_quality_report(struct hci_dev *hdev);
+> >  int aosp_set_quality_report(struct hci_dev *hdev, bool enable);
+> > +bool aosp_check_quality_report_len(struct sk_buff *skb);
+> > +struct ext_vendor_prefix *aosp_get_ext_prefix(struct hci_dev *hdev);
+> > +void aosp_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb);
+> >
+> >  #else
+> >
+> > @@ -26,4 +29,19 @@ static inline int aosp_set_quality_report(struct hci=
+_dev *hdev, bool enable)
+> >         return -EOPNOTSUPP;
+> >  }
+> >
+> > +static inline bool aosp_check_quality_report_len(struct sk_buff *skb)
+> > +{
+> > +       return false;
+> > +}
+> > +
+> > +static inline struct ext_vendor_prefix *
+> > +aosp_get_ext_prefix(struct hci_dev *hdev)
+> > +{
+> > +       return NULL;
+> > +}
+> > +
+> > +static inline void aosp_vendor_evt(struct hci_dev *hdev, struct sk_buf=
+f *skb)
+> > +{
+> > +}
+> > +
+> >  #endif
+> > diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> > index 0270e597c285..8398971eddf4 100644
+> > --- a/net/bluetooth/hci_event.c
+> > +++ b/net/bluetooth/hci_event.c
+> > @@ -37,6 +37,7 @@
+> >  #include "smp.h"
+> >  #include "msft.h"
+> >  #include "eir.h"
+> > +#include "aosp.h"
+> >
+> >  #define ZERO_KEY "\x00\x00\x00\x00\x00\x00\x00\x00" \
+> >                  "\x00\x00\x00\x00\x00\x00\x00\x00"
+> > @@ -4259,6 +4260,57 @@ static void hci_num_comp_blocks_evt(struct hci_d=
+ev *hdev, void *data,
+> >         queue_work(hdev->workqueue, &hdev->tx_work);
+> >  }
+> >
+> > +/* Every distinct vendor specification must have a well-defined vendor
+> > + * event prefix to determine if a vendor event meets the specification=
+.
+> > + * Some vendor prefixes are fixed values while some other vendor prefi=
+xes
+> > + * are only available at run time.
+> > + */
+> > +static struct ext_vendor_event_prefix {
+> > +       /* Some vendor prefixes are variable length. For convenience,
+> > +        * the prefix in struct ext_vendor_prefix is in little endian.
+> > +        */
+> > +       struct ext_vendor_prefix *
+> > +               (*get_ext_vendor_prefix)(struct hci_dev *hdev);
+> > +       void (*vendor_func)(struct hci_dev *hdev, struct sk_buff *skb);
+> > +} evt_prefixes[] =3D {
+> > +       { aosp_get_ext_prefix, aosp_vendor_evt },
+> > +       { msft_get_ext_prefix, msft_vendor_evt },
+> > +
+> > +       /* end with a null entry */
+> > +       {},
+> > +};
+> > +
+> > +static void hci_vendor_evt(struct hci_dev *hdev, void *data,
+> > +                          struct sk_buff *skb)
+> > +{
+> > +       int i, j;
+> > +       struct ext_vendor_prefix *vnd;
+> > +       __u8 subcode;
+> > +
+> > +       for (i =3D 0; evt_prefixes[i].get_ext_vendor_prefix; i++) {
+> > +               vnd =3D evt_prefixes[i].get_ext_vendor_prefix(hdev);
+> > +               if (!vnd)
+> > +                       continue;
+> > +
+> > +               /* Compare the raw prefix data in little endian directl=
+y. */
+> > +               if (memcmp(vnd->prefix, skb->data, vnd->prefix_len))
+> > +                       continue;
+> > +
+> > +               /* Make sure that there are more data after prefix. */
+> > +               if (skb->len <=3D vnd->prefix_len)
+> > +                       continue;
+> > +
+> > +               /* The subcode is the single octet following the prefix=
+. */
+> > +               subcode =3D skb->data[vnd->prefix_len];
+> > +               for (j =3D 0; j < vnd->subcodes_len; j++) {
+> > +                       if (vnd->subcodes[j] =3D=3D subcode) {
+> > +                               evt_prefixes[i].vendor_func(hdev, skb);
+> > +                               break;
+> > +                       }
+> > +               }
+> > +       }
+> > +}
+>
+> I recall saying that having such matching logic applied without the
+> driver confirming that is the structure it using to be a bad idea
+> since it could actually cause an event to misinterpret and cause bad
+> behavior, instead we probably need a callback that gets populated by
+> the driver e.g.(hdev->vendor_evt) then the driver can either populate
+> with hci_vendor_evt if it does use prefixes or its own specialized
+> function or NULL if it doesn't use vendor events, specially for old
+> controllers Id leave it as NULL.
+>
+> >  static void hci_mode_change_evt(struct hci_dev *hdev, void *data,
+> >                                 struct sk_buff *skb)
+> >  {
+> > @@ -6879,7 +6931,7 @@ static const struct hci_ev {
+> >         HCI_EV(HCI_EV_NUM_COMP_BLOCKS, hci_num_comp_blocks_evt,
+> >                sizeof(struct hci_ev_num_comp_blocks)),
+> >         /* [0xff =3D HCI_EV_VENDOR] */
+> > -       HCI_EV_VL(HCI_EV_VENDOR, msft_vendor_evt, 0, HCI_MAX_EVENT_SIZE=
+),
+> > +       HCI_EV_VL(HCI_EV_VENDOR, hci_vendor_evt, 0, HCI_MAX_EVENT_SIZE)=
+,
+> >  };
+> >
+> >  static void hci_event_func(struct hci_dev *hdev, u8 event, struct sk_b=
+uff *skb,
+> > diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+> > index 1ad84f34097f..9d3666bdd07c 100644
+> > --- a/net/bluetooth/mgmt.c
+> > +++ b/net/bluetooth/mgmt.c
+> > @@ -4332,6 +4332,25 @@ static int set_exp_feature(struct sock *sk, stru=
+ct hci_dev *hdev,
+> >                                MGMT_STATUS_NOT_SUPPORTED);
+> >  }
+> >
+> > +int mgmt_quality_report(struct hci_dev *hdev, void *data, u32 data_len=
+,
+> > +                       u8 quality_spec)
+> > +{
+> > +       struct mgmt_ev_quality_report *ev;
+> > +       struct sk_buff *skb;
+> > +
+> > +       skb =3D mgmt_alloc_skb(hdev, MGMT_EV_QUALITY_REPORT,
+> > +                            sizeof(*ev) + data_len);
+> > +       if (!skb)
+> > +               return -ENOMEM;
+> > +
+> > +       ev =3D skb_put(skb, sizeof(*ev));
+> > +       ev->quality_spec =3D quality_spec;
+> > +       ev->data_len =3D data_len;
+> > +       skb_put_data(skb, data, data_len);
+> > +
+> > +       return mgmt_event_skb(skb, NULL);
+> > +}
+> > +
+> >  static int get_device_flags(struct sock *sk, struct hci_dev *hdev, voi=
+d *data,
+> >                             u16 data_len)
+> >  {
+> > diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+> > index f43994523b1f..c003e94faccd 100644
+> > --- a/net/bluetooth/msft.c
+> > +++ b/net/bluetooth/msft.c
+> > @@ -116,6 +116,20 @@ bool msft_monitor_supported(struct hci_dev *hdev)
+> >         return !!(msft_get_features(hdev) & MSFT_FEATURE_MASK_LE_ADV_MO=
+NITOR);
+> >  }
+> >
+> > +/* Add the MSFT vendor event subcodes into MSFT_SUBCODES which
+> > + * msft_vendor_evt() is interested in handling.
+> > + */
+> > +static unsigned char MSFT_SUBCODES[] =3D { MSFT_EV_LE_MONITOR_DEVICE }=
+;
+> > +static struct ext_vendor_prefix msft_ext_prefix =3D { 0 };
+> > +
+> > +static void set_ext_prefix(struct msft_data *msft)
+> > +{
+> > +       msft_ext_prefix.prefix =3D msft->evt_prefix;
+> > +       msft_ext_prefix.prefix_len =3D msft->evt_prefix_len;
+> > +       msft_ext_prefix.subcodes =3D MSFT_SUBCODES;
+> > +       msft_ext_prefix.subcodes_len =3D sizeof(MSFT_SUBCODES);
+> > +}
+> > +
+> >  static bool read_supported_features(struct hci_dev *hdev,
+> >                                     struct msft_data *msft)
+> >  {
+> > @@ -156,6 +170,8 @@ static bool read_supported_features(struct hci_dev =
+*hdev,
+> >         if (msft->features & MSFT_FEATURE_MASK_CURVE_VALIDITY)
+> >                 hdev->msft_curve_validity =3D true;
+> >
+> > +       set_ext_prefix(msft);
+> > +
+> >         kfree_skb(skb);
+> >         return true;
+> >
+> > @@ -742,7 +758,17 @@ static void msft_monitor_device_evt(struct hci_dev=
+ *hdev, struct sk_buff *skb)
+> >                                  handle_data->mgmt_handle);
+> >  }
+> >
+> > -void msft_vendor_evt(struct hci_dev *hdev, void *data, struct sk_buff =
+*skb)
+> > +struct ext_vendor_prefix *msft_get_ext_prefix(struct hci_dev *hdev)
+> > +{
+> > +       struct msft_data *msft =3D hdev->msft_data;
+> > +
+> > +       if (!msft)
+> > +               return NULL;
+> > +
+> > +       return &msft_ext_prefix;
+> > +}
+> > +
+> > +void msft_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb)
+> >  {
+> >         struct msft_data *msft =3D hdev->msft_data;
+> >         u8 *evt_prefix;
+> > diff --git a/net/bluetooth/msft.h b/net/bluetooth/msft.h
+> > index afcaf7d3b1cb..1515ae06c628 100644
+> > --- a/net/bluetooth/msft.h
+> > +++ b/net/bluetooth/msft.h
+> > @@ -17,7 +17,7 @@ void msft_register(struct hci_dev *hdev);
+> >  void msft_unregister(struct hci_dev *hdev);
+> >  void msft_do_open(struct hci_dev *hdev);
+> >  void msft_do_close(struct hci_dev *hdev);
+> > -void msft_vendor_evt(struct hci_dev *hdev, void *data, struct sk_buff =
+*skb);
+> > +void msft_vendor_evt(struct hci_dev *hdev, struct sk_buff *skb);
+> >  __u64 msft_get_features(struct hci_dev *hdev);
+> >  int msft_add_monitor_pattern(struct hci_dev *hdev, struct adv_monitor =
+*monitor);
+> >  int msft_remove_monitor(struct hci_dev *hdev, struct adv_monitor *moni=
+tor,
+> > @@ -27,6 +27,7 @@ int msft_set_filter_enable(struct hci_dev *hdev, bool=
+ enable);
+> >  int msft_suspend_sync(struct hci_dev *hdev);
+> >  int msft_resume_sync(struct hci_dev *hdev);
+> >  bool msft_curve_validity(struct hci_dev *hdev);
+> > +struct ext_vendor_prefix *msft_get_ext_prefix(struct hci_dev *hdev);
+> >
+> >  #else
+> >
+> > @@ -39,8 +40,7 @@ static inline void msft_register(struct hci_dev *hdev=
+) {}
+> >  static inline void msft_unregister(struct hci_dev *hdev) {}
+> >  static inline void msft_do_open(struct hci_dev *hdev) {}
+> >  static inline void msft_do_close(struct hci_dev *hdev) {}
+> > -static inline void msft_vendor_evt(struct hci_dev *hdev, void *data,
+> > -                                  struct sk_buff *skb) {}
+> > +static inline void msft_vendor_evt(struct hci_dev *hdev, struct sk_buf=
+f *skb) {}
+> >  static inline __u64 msft_get_features(struct hci_dev *hdev) { return 0=
+; }
+> >  static inline int msft_add_monitor_pattern(struct hci_dev *hdev,
+> >                                            struct adv_monitor *monitor)
+> > @@ -77,4 +77,10 @@ static inline bool msft_curve_validity(struct hci_de=
+v *hdev)
+> >         return false;
+> >  }
+> >
+> > +static inline struct ext_vendor_prefix *
+> > +msft_get_ext_prefix(struct hci_dev *hdev)
+> > +{
+> > +       return NULL;
+> > +}
+> > +
+> >  #endif
+> > --
+> > 2.36.1.124.g0e6072fb45-goog
+> >
+>
+>
+> --
+> Luiz Augusto von Dentz
+
+
+
+--=20
+
+Joseph Shyh-In Hwang
+Email: josephsih@google.com

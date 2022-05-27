@@ -2,65 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3069535DB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F88535DBA
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350727AbiE0J6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S1350737AbiE0J6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350721AbiE0J6C (ORCPT
+        with ESMTP id S1350728AbiE0J6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:58:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 500C536E37
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653645480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=g70eeQab0Dc/APhWo7A5wxlMInbPG1Rn3g7zC/mVZsg=;
-        b=CPgr3RNSdH1hZM9XPKslEbP6nDyj5rYHhU7tlQNWANQlTWN25/IT/UX9sgyAFEiElCjmbG
-        AyVztofccpN/CgULXzXcJvaohRnolMJ6+MwtVWWNupWlF5gviT6HB8Jv8P7jFAgVWmMf7C
-        /9GSNsfMnNogUw/sfvAntr8PDdhNPkA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-605-4f9NXIa7NfCf9z4YGM0pqw-1; Fri, 27 May 2022 05:57:55 -0400
-X-MC-Unique: 4f9NXIa7NfCf9z4YGM0pqw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6CCDF3803907;
-        Fri, 27 May 2022 09:57:54 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D2DBF2026D64;
-        Fri, 27 May 2022 09:57:52 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Steve French <smfrench@gmail.com>
-cc:     dhowells@redhat.com, willy@infradead.org,
-        Tom Talpey <tom@talpey.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        linux-rdma@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Lockdep splat in RXE (softRoCE) driver in xarray accesses
+        Fri, 27 May 2022 05:58:43 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C854339D;
+        Fri, 27 May 2022 02:58:38 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6FA8E5C015C;
+        Fri, 27 May 2022 05:58:35 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Fri, 27 May 2022 05:58:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1653645515; x=1653731915; bh=EiD5ylETSiKx2sZ0AEuhqhGtVCfZ
+        ZuZgoLENo4nmHjI=; b=nl1wqhKerxlTczMdRkjvSnPtwogU5s5fEPawnMJK9jUi
+        +U9sQE+Xa1qD8B/YVmkLs+aD7AXrZF5/TcXXNqDyFR29gcywdBl6ohsY5JzqUoK4
+        QjJ+Kr7VGpMSB0rSdfvt/gGkgIvHXdPIwpgtJEKihENGGJ9hHO0AcZMYWK0xF2zm
+        +4UF50xRCHd0pMAppOt+J0yqGgj9uLz3FNZ02YlwodsgSlSILClZDP3Q19fBCZW0
+        5jWVH2/Xffs9D0+eMxydw3bJPskA6uDhP82oHM/FBeEnpb9+TLlJRU7wy6tsluic
+        JPgN/u76HcWDZe7U+kxV+HPMfhAUJE8fuvPN7EYU3g==
+X-ME-Sender: <xms:yqCQYi5uVAePkXoWspOvnHh8L_xPLalSW9G1n64DafXVXC6yXvqMug>
+    <xme:yqCQYr5ZTriITbWl1N-V4q5-33eXA3IbLWwpv7d1riob3tw0iqqX0lEqkJ_mufXTg
+    rQs7CVUzS_D2-M>
+X-ME-Received: <xmr:yqCQYhdChVRfZ3YHejad2KTBTfieOxfIkk5VrPNZ-GfoQWOpgJPofCBnAyXTnM8ORIF5-2G1ZF-jpScoCn3_Vd6RoNTqVQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeelgddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeg
+    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:yqCQYvI5NdpEHQGa421oczRfs8oDG5kKWtCpLVA0NKpvWt-F5koyzw>
+    <xmx:yqCQYmLcFD69B14v_s2Vn0FHsm1uIGUmjjTs4MWgDq1kc67F6vIjpw>
+    <xmx:yqCQYgx-INT9hl_02YCP-cqFsfFY6MxkrIRA6wp2aNkIcFQNwZufvA>
+    <xmx:y6CQYndoTV0A5gjPE9GQ_bQeERG3Or7GULDrCHVpljyeLiItw_ia0Q>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 May 2022 05:58:34 -0400 (EDT)
+Date:   Fri, 27 May 2022 12:58:30 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+Message-ID: <YpCgxtJf9Qe7fTFd@shredder>
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+ <Yo+LAj1vnjq0p36q@shredder>
+ <86sfov2w8k.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3301351.1653645472.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 27 May 2022 10:57:52 +0100
-Message-ID: <3301352.1653645472@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86sfov2w8k.fsf@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,148 +89,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhu, Bob, Steve,
+On Fri, May 27, 2022 at 10:52:27AM +0200, Hans Schultz wrote:
+> On tor, maj 26, 2022 at 17:13, Ido Schimmel <idosch@idosch.org> wrote:
+> > On Tue, May 24, 2022 at 05:21:41PM +0200, Hans Schultz wrote:
+> >> Add an intermediate state for clients behind a locked port to allow for
+> >> possible opening of the port for said clients. This feature corresponds
+> >> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
+> >> latter defined by Cisco.
+> >> Locked FDB entries will be limited in number, so as to prevent DOS
+> >> attacks by spamming the port with random entries. The limit will be
+> >> a per port limit as it is a port based feature and that the port flushes
+> >> all FDB entries on link down.
+> >
+> > Why locked FDB entries need a special treatment compared to regular
+> > entries? A port that has learning enabled can be spammed with random
+> > source MACs just as well.
+> >
+> > The authorization daemon that is monitoring FDB notifications can have a
+> > policy to shut down a port if the rate / number of locked entries is
+> > above a given threshold.
+> >
+> > I don't think this kind of policy belongs in the kernel. If it resides
+> > in user space, then the threshold can be adjusted. Currently it's hard
+> > coded to 64 and I don't see how user space can change or monitor it.
+> 
+> In the Mac-Auth/MAB context, the locked port feature is really a form of
+> CPU based learning, and on mv88e6xxx switchcores, this is facilitated by
+> violation interrupts. Based on miss violation interrupts, the locked
+> entries are then added to a list with a timer to remove the entries
+> according to the bridge timeout.
+> As this is very CPU intensive compared to normal operation, the
+> assessment is that all this will jam up most devices if bombarded with
+> random entries at link speed, and my estimate is that any userspace 
+> daemon that listens to the ensuing fdb events will never get a chance
+> to stop this flood and eventually the device will lock down/reset. To
+> prevent this, the limit is introduced.
+> 
+> Ideally this limit could be adjustable from userspace, but in real
+> use-cases a cap like 64 should be more than enough, as that corresponds
+> to 64 possible devices behind a port that cannot authenticate by other
+> means (printers etc.) than having their mac addresses white-listed.
+> 
+> The software bridge behavior was then just set to correspond to the
+> offloaded behavior, but after correspondence with Nik, the software
+> bridge locked entries limit will be removed.
 
-There seems to be a locking bug in the softRoCE driver when mounting a cif=
-s
-share.  See attached trace.  I'm guessing the problem is that a softirq
-handler is accessing the xarray, but other accesses to the xarray aren't
-guarded by _bh or _irq markers on the lock primitives.
+As far as the bridge is concerned, locked entries are not really
+different from regular learned entries in terms of processing and since
+we don't have limits for regular entries I don't think we should have
+limits for locked entries.
 
-I wonder if rxe_pool_get_index() should just rely on the RCU read lock and=
- not
-take the spinlock.
+I do understand the problem you have in mv88e6xxx and I think it would
+be wise to hard code a reasonable limit there. It can be adjusted over
+time based on feedback and possibly exposed to user space.
 
-Alternatively, __rxe_add_to_pool() should be using xa_alloc_cyclic_bh() or
-xa_alloc_cyclic_irq().
-
-I used the following commands:
-
-   rdma link add rxe0 type rxe netdev enp6s0 # andromeda, softRoCE
-   mount //192.168.6.1/scratch /xfstest.scratch -o user=3Dshares,rdma,pass=
-=3D...
-
-talking to ksmbd on the other side.
-
-Kernel is v5.18-rc6.
-
-David
----
-infiniband rxe0: set active
-infiniband rxe0: added enp6s0
-RDS/IB: rxe0: added
-CIFS: No dialect specified on mount. Default has changed to a more secure =
-dialect, SMB2.1 or later (e.g. SMB3.1.1), from CIFS (SMB1). To use the les=
-s secure SMB1 dialect to access old servers which do not support SMB3.1.1 =
-(or even SMB3 or SMB2.1) specify vers=3D1.0 on mount.
-CIFS: Attempting to mount \\192.168.6.1\scratch
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
-WARNING: inconsistent lock state
-5.18.0-rc6-build2+ #465 Not tainted
---------------------------------
-inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
-ksoftirqd/1/20 [HC0[0]:SC1[1]:HE0:SE0] takes:
-ffff888134d11310 (&xa->xa_lock#12){+.?.}-{2:2}, at: rxe_pool_get_index+0x1=
-9/0x69
-{SOFTIRQ-ON-W} state was registered at:
-  mark_usage+0x169/0x17b
-  __lock_acquire+0x50c/0x96a
-  lock_acquire+0x2f4/0x37b
-  _raw_spin_lock+0x2f/0x39
-  xa_alloc_cyclic.constprop.0+0x20/0x55
-  __rxe_add_to_pool+0xe3/0xf2
-  __ib_alloc_pd+0xa2/0x26b
-  ib_mad_port_open+0x1ac/0x4a1
-  ib_mad_init_device+0x9b/0x1b9
-  add_client_context+0x133/0x1b3
-  enable_device_and_get+0x129/0x248
-  ib_register_device+0x256/0x2fd
-  rxe_register_device+0x18e/0x1b7
-  rxe_net_add+0x57/0x71
-  rxe_newlink+0x71/0x8e
-  nldev_newlink+0x200/0x26a
-  rdma_nl_rcv_msg+0x260/0x2ab
-  rdma_nl_rcv+0x108/0x1a7
-  netlink_unicast+0x1fc/0x2b3
-  netlink_sendmsg+0x4ce/0x51b
-  sock_sendmsg_nosec+0x41/0x4f
-  __sys_sendto+0x157/0x1cc
-  __x64_sys_sendto+0x76/0x82
-  do_syscall_64+0x39/0x46
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
-irq event stamp: 194111
-hardirqs last  enabled at (194110): [<ffffffff81094eb2>] __local_bh_enable=
-_ip+0xb8/0xcc
-hardirqs last disabled at (194111): [<ffffffff82040077>] _raw_spin_lock_ir=
-qsave+0x1b/0x51
-softirqs last  enabled at (194100): [<ffffffff8240043a>] __do_softirq+0x43=
-a/0x489
-softirqs last disabled at (194105): [<ffffffff81094d30>] run_ksoftirqd+0x3=
-1/0x56
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&xa->xa_lock#12);
-  <Interrupt>
-    lock(&xa->xa_lock#12);
-
- *** DEADLOCK ***
-
-no locks held by ksoftirqd/1/20.
-
-stack backtrace:
-CPU: 1 PID: 20 Comm: ksoftirqd/1 Not tainted 5.18.0-rc6-build2+ #465
-Hardware name: ASUS All Series/H97-PLUS, BIOS 2306 10/09/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0x45/0x59
- valid_state+0x56/0x61
- mark_lock_irq+0x9b/0x2ec
- ? ret_from_fork+0x1f/0x30
- ? valid_state+0x61/0x61
- ? stack_trace_save+0x8f/0xbe
- ? filter_irq_stacks+0x58/0x58
- ? jhash.constprop.0+0x1ad/0x202
- ? save_trace+0x17c/0x196
- mark_lock.part.0+0x10c/0x164
- mark_usage+0xe6/0x17b
- __lock_acquire+0x50c/0x96a
- lock_acquire+0x2f4/0x37b
- ? rxe_pool_get_index+0x19/0x69
- ? rcu_read_unlock+0x52/0x52
- ? jhash.constprop.0+0x1ad/0x202
- ? lockdep_unlock+0xde/0xe6
- ? validate_chain+0x44a/0x4a8
- ? req_next_wqe+0x312/0x363
- _raw_spin_lock_irqsave+0x41/0x51
- ? rxe_pool_get_index+0x19/0x69
- rxe_pool_get_index+0x19/0x69
- rxe_get_av+0xbe/0x14b
- rxe_requester+0x6b5/0xbb0
- ? rnr_nak_timer+0x16/0x16
- ? lock_downgrade+0xad/0xad
- ? rcu_read_lock_bh_held+0xab/0xab
- ? __wake_up+0xf/0xf
- ? mark_held_locks+0x1f/0x78
- ? __local_bh_enable_ip+0xb8/0xcc
- ? rnr_nak_timer+0x16/0x16
- rxe_do_task+0xb5/0x13d
- ? rxe_detach_mcast+0x1d6/0x1d6
- tasklet_action_common.constprop.0+0xda/0x145
- __do_softirq+0x202/0x489
- ? __irq_exit_rcu+0x108/0x108
- ? _local_bh_enable+0x1c/0x1c
- run_ksoftirqd+0x31/0x56
- smpboot_thread_fn+0x35c/0x376
- ? sort_range+0x1c/0x1c
- kthread+0x164/0x173
- ? kthread_complete_and_exit+0x20/0x20
- ret_from_fork+0x1f/0x30
- </TASK>
-CIFS: VFS: RDMA transport established
-
+Just to give you another data point about how this works in other
+devices, I can say that at least in Spectrum this works a bit
+differently. Packets that ingress via a locked port and incur an FDB
+miss are trapped to the CPU where they should be injected into the Rx
+path so that the bridge will create the 'locked' FDB entry and notify it
+to user space. The packets are obviously rated limited as the CPU cannot
+handle billions of packets per second, unlike the ASIC. The limit is not
+per bridge port (or even per bridge), but instead global to the entire
+device.

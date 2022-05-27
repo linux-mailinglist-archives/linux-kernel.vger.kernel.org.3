@@ -2,129 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C98E5359BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16712535A3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344682AbiE0G6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 02:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S1344822AbiE0HWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 03:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239313AbiE0G6k (ORCPT
+        with ESMTP id S238882AbiE0HWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 02:58:40 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C409C5D93;
-        Thu, 26 May 2022 23:58:38 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L8bFq3ml5z1JCPd;
-        Fri, 27 May 2022 14:57:03 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 14:58:36 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 14:58:35 +0800
-From:   keliu <liuke94@huawei.com>
-To:     <nirmal.patel@linux.intel.com>, <jonathan.derrick@linux.dev>,
-        <lorenzo.pieralisi@arm.com>, <robh@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>, <kurt.schwemmer@microsemi.com>,
-        <logang@deltatee.com>, <linux-pci@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] drivers: pci: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 07:20:05 +0000
-Message-ID: <20220527072005.2360176-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 May 2022 03:22:22 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33C7056C29;
+        Fri, 27 May 2022 00:22:21 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D530120B56AF;
+        Fri, 27 May 2022 00:22:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D530120B56AF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1653636140;
+        bh=PlZcd/dODcl1W11F7uDMCkDb/HUQUqELj/xwFcJVQyQ=;
+        h=From:To:Subject:Date:From;
+        b=CPVHsBvOkUsDWmysmw+HU6g7EV6BFEU9MDPHj5TF3iG3A36N5GIRuTxtoDzKWykcF
+         NOZdxITAn5eeOeUP1mlA4S0yG3LTbGtXBomezb8EuSu/0UADcKcDIjgQzIIilUDN33
+         krbNcu3lklng2hSoBSJnVU8opyxcbYwF2xmlUYhk=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ssengar@microsoft.com, mikelley@microsoft.com
+Subject: [PATCH v2] Drivers: hv: vmbus: Don't assign VMbus channel interrupts to isolated CPUs
+Date:   Fri, 27 May 2022 00:22:16 -0700
+Message-Id: <1653636136-19643-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove() .
+When initially assigning a VMbus channel interrupt to a CPU, don’t choose
+a managed IRQ isolated CPU (as specified on the kernel boot line with
+parameter 'isolcpus=managed_irq,<#cpu>'). Also, when using sysfs to change
+the CPU that a VMbus channel will interrupt, don't allow changing to a
+managed IRQ isolated CPU.
 
-Signed-off-by: keliu <liuke94@huawei.com>
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 ---
- drivers/pci/controller/vmd.c   | 6 +++---
- drivers/pci/switch/switchtec.c | 7 +++----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+v2: * better commit message
+    * Added back empty line, removed by mistake
+    * Removed error print for sysfs error
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index eb05cceab964..efcb3a3ca65e 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -893,7 +893,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		return -ENOMEM;
+ drivers/hv/channel_mgmt.c | 18 ++++++++++++------
+ drivers/hv/vmbus_drv.c    |  4 ++++
+ 2 files changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
+index 97d8f56..e1fe029 100644
+--- a/drivers/hv/channel_mgmt.c
++++ b/drivers/hv/channel_mgmt.c
+@@ -21,6 +21,7 @@
+ #include <linux/cpu.h>
+ #include <linux/hyperv.h>
+ #include <asm/mshyperv.h>
++#include <linux/sched/isolation.h>
  
- 	vmd->dev = dev;
--	vmd->instance = ida_simple_get(&vmd_instance_ida, 0, 0, GFP_KERNEL);
-+	vmd->instance = ida_alloc(&vmd_instance_ida, GFP_KERNEL);
- 	if (vmd->instance < 0)
- 		return vmd->instance;
+ #include "hyperv_vmbus.h"
  
-@@ -934,7 +934,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	return 0;
+@@ -728,16 +729,20 @@ static void init_vp_index(struct vmbus_channel *channel)
+ 	u32 i, ncpu = num_online_cpus();
+ 	cpumask_var_t available_mask;
+ 	struct cpumask *allocated_mask;
++	const struct cpumask *hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
+ 	u32 target_cpu;
+ 	int numa_node;
  
-  out_release_instance:
--	ida_simple_remove(&vmd_instance_ida, vmd->instance);
-+	ida_free(&vmd_instance_ida, vmd->instance);
- 	kfree(vmd->name);
- 	return err;
+ 	if (!perf_chn ||
+-	    !alloc_cpumask_var(&available_mask, GFP_KERNEL)) {
++	    !alloc_cpumask_var(&available_mask, GFP_KERNEL) ||
++	    cpumask_empty(hk_mask)) {
+ 		/*
+ 		 * If the channel is not a performance critical
+ 		 * channel, bind it to VMBUS_CONNECT_CPU.
+ 		 * In case alloc_cpumask_var() fails, bind it to
+ 		 * VMBUS_CONNECT_CPU.
++		 * If all the cpus are isolated, bind it to
++		 * VMBUS_CONNECT_CPU.
+ 		 */
+ 		channel->target_cpu = VMBUS_CONNECT_CPU;
+ 		if (perf_chn)
+@@ -758,17 +763,19 @@ static void init_vp_index(struct vmbus_channel *channel)
+ 		}
+ 		allocated_mask = &hv_context.hv_numa_map[numa_node];
+ 
+-		if (cpumask_equal(allocated_mask, cpumask_of_node(numa_node))) {
++retry:
++		cpumask_xor(available_mask, allocated_mask, cpumask_of_node(numa_node));
++		cpumask_and(available_mask, available_mask, hk_mask);
++
++		if (cpumask_empty(available_mask)) {
+ 			/*
+ 			 * We have cycled through all the CPUs in the node;
+ 			 * reset the allocated map.
+ 			 */
+ 			cpumask_clear(allocated_mask);
++			goto retry;
+ 		}
+ 
+-		cpumask_xor(available_mask, allocated_mask,
+-			    cpumask_of_node(numa_node));
+-
+ 		target_cpu = cpumask_first(available_mask);
+ 		cpumask_set_cpu(target_cpu, allocated_mask);
+ 
+@@ -778,7 +785,6 @@ static void init_vp_index(struct vmbus_channel *channel)
+ 	}
+ 
+ 	channel->target_cpu = target_cpu;
+-
+ 	free_cpumask_var(available_mask);
  }
-@@ -957,7 +957,7 @@ static void vmd_remove(struct pci_dev *dev)
- 	vmd_cleanup_srcu(vmd);
- 	vmd_detach_resources(vmd);
- 	vmd_remove_irq_domain(vmd);
--	ida_simple_remove(&vmd_instance_ida, vmd->instance);
-+	ida_free(&vmd_instance_ida, vmd->instance);
- 	kfree(vmd->name);
- }
  
-diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
-index c36c1238c604..75be4fe22509 100644
---- a/drivers/pci/switch/switchtec.c
-+++ b/drivers/pci/switch/switchtec.c
-@@ -1376,8 +1376,7 @@ static struct switchtec_dev *stdev_create(struct pci_dev *pdev)
- 	dev->groups = switchtec_device_groups;
- 	dev->release = stdev_release;
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 714d549..547ae33 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -21,6 +21,7 @@
+ #include <linux/kernel_stat.h>
+ #include <linux/clockchips.h>
+ #include <linux/cpu.h>
++#include <linux/sched/isolation.h>
+ #include <linux/sched/task_stack.h>
  
--	minor = ida_simple_get(&switchtec_minor_ida, 0, 0,
--			       GFP_KERNEL);
-+	minor = ida_alloc(&switchtec_minor_ida, GFP_KERNEL);
- 	if (minor < 0) {
- 		rc = minor;
- 		goto err_put;
-@@ -1692,7 +1691,7 @@ static int switchtec_pci_probe(struct pci_dev *pdev,
- err_devadd:
- 	stdev_kill(stdev);
- err_put:
--	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
-+	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
- 	put_device(&stdev->dev);
- 	return rc;
- }
-@@ -1704,7 +1703,7 @@ static void switchtec_pci_remove(struct pci_dev *pdev)
- 	pci_set_drvdata(pdev, NULL);
+ #include <linux/delay.h>
+@@ -1770,6 +1771,9 @@ static ssize_t target_cpu_store(struct vmbus_channel *channel,
+ 	if (target_cpu >= nr_cpumask_bits)
+ 		return -EINVAL;
  
- 	cdev_device_del(&stdev->cdev, &stdev->dev);
--	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
-+	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
- 	dev_info(&stdev->dev, "unregistered.\n");
- 	stdev_kill(stdev);
- 	put_device(&stdev->dev);
++	if (!cpumask_test_cpu(target_cpu, housekeeping_cpumask(HK_TYPE_MANAGED_IRQ)))
++		return -EINVAL;
++
+ 	/* No CPUs should come up or down during this. */
+ 	cpus_read_lock();
+ 
 -- 
-2.25.1
+1.8.3.1
 

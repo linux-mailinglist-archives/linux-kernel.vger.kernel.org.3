@@ -2,96 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11C9536441
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 16:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE60C53643F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 16:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353670AbiE0OeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 10:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        id S1346832AbiE0Oft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 10:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353516AbiE0Odp (ORCPT
+        with ESMTP id S235254AbiE0Ofr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 10:33:45 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5925C1498C2;
-        Fri, 27 May 2022 07:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zOBDMvwNpdNtLy6GFqdykdncvAjdAHDTWWUuYlWRS5A=; b=C8RFCHzLUJ/9IyR58bGlzRjL1D
-        1kwOnzQ67QKIhUfXgkKCKO0XcUaZ2uNfBKwC7dZIN/ytPPe0kEURbKEm/Xqe+B52phCICXAP9oKIK
-        WqXsFLi37D5SJ2duHYFJPycUTrj6N47sSJe2yA4sww13PWqrS+4RuY4LMl/7bQY5J5n/wr7QOFymD
-        PW65CDVFDXLli8z8qX+yY9ZCDPc6ATJ4r/A3Mw4Q6oeqHUffL+wciBdRFdYGe4REJ3wzN+PVUB881
-        P7LGdQ0p/Nddd2a+i5xzGAed+k1VjHznpFWJq2nb/J8EnYsuDmwotXJGbJVKHpXM+lmE4ond/bwYB
-        jZKvUHkw==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nub1U-0018YI-59; Fri, 27 May 2022 14:33:04 +0000
-Date:   Fri, 27 May 2022 14:33:04 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/9] iov_iter: Add a general purpose iteration function
-Message-ID: <YpDhIDacnktXvMpS@zeniv-ca.linux.org.uk>
-References: <165364823513.3334034.11209090728654641458.stgit@warthog.procyon.org.uk>
- <165364824973.3334034.10715738699511650662.stgit@warthog.procyon.org.uk>
+        Fri, 27 May 2022 10:35:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844603701A;
+        Fri, 27 May 2022 07:35:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35AF5B8252A;
+        Fri, 27 May 2022 14:35:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E58C34100;
+        Fri, 27 May 2022 14:35:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653662143;
+        bh=cYPrafUlXVQNBb3sN7LraPZL4NtMQ7Z/TH3LC/ErqyU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Dl3EZvrIwQGY2kIbUfZa5w98XqH90bsc2cXnkgL2UC2Akdk8IzH/KboFrUjMdGET0
+         bHqFLXIBsR9E11nY6pa72axBX9D6GVbe93nQels2Zu4Yp+5pAtTrjBQiTgV5GluhXY
+         yd6HPAsaHfMFLhD9ghH9PGjK/EH7pZLU/6gEDNkL1pmHBJYZJo5rCzxmDg4IFbvWxj
+         E5h7C78ETFS12aD/RMqTBPol5wczeIsgnuF3ds/lI5qomruRsOcE/WxIG46ItP2J61
+         IFtbL9hf1dQCA/5+b110cD4PdBy1KIoomm/pjLc19ms7z4lrgt3nud4SAbWWyYeMQ3
+         RZjCKYUpm4rKg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 640F15C017C; Fri, 27 May 2022 07:35:43 -0700 (PDT)
+Date:   Fri, 27 May 2022 07:35:43 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        stable@vger.kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        namit@vmware.com, gor@linux.ibm.com, rdunlap@infradead.org,
+        mingo@kernel.org, jgross@suse.com, gregkh@linuxfoundation.org,
+        mpe@ellerman.id.au
+Subject: Re: [PATCH v4] locking/csd_lock: change csdlock_debug from
+ early_param to __setup
+Message-ID: <20220527143543.GP1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220510094639.106661-1-chenzhongjin@huawei.com>
+ <9b3e61b8-ecab-08ff-a3b6-83d6862ead77@huawei.com>
+ <20220518011101.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <fd69f464-4cc9-859e-d38d-bda85e6b33a6@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <165364824973.3334034.10715738699511650662.stgit@warthog.procyon.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fd69f464-4cc9-859e-d38d-bda85e6b33a6@huawei.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 11:44:09AM +0100, David Howells wrote:
-> Add a function, iov_iter_scan(), to iterate over the buffers described by
-> an I/O iterator, kmapping and passing each contiguous chunk the supplied
-> scanner function in turn, up to the requested amount of data or until the
-> scanner function returns an error.
+On Fri, May 27, 2022 at 02:49:03PM +0800, Chen Zhongjin wrote:
+> Hi,
 > 
-> This can be used, for example, to hash all the data in an iterator by
-> having the scanner function call the appropriate crypto update function.
+> On 2022/5/18 9:11, Paul E. McKenney wrote:
+> > On Tue, May 17, 2022 at 11:22:04AM +0800, Chen Zhongjin wrote:
+> >> On 2022/5/10 17:46, Chen Zhongjin wrote:
+> >>> csdlock_debug uses early_param and static_branch_enable() to enable
+> >>> csd_lock_wait feature, which triggers a panic on arm64 with config:
+> >>> CONFIG_SPARSEMEM=y
+> >>> CONFIG_SPARSEMEM_VMEMMAP=n
+> >>>
+> >>> With CONFIG_SPARSEMEM_VMEMMAP=n, __nr_to_section is called in
+> >>> static_key_enable() and returns NULL which makes NULL dereference
+> >>> because mem_section is initialized in sparse_init() which is later
+> >>> than parse_early_param() stage.
+> >>>
+> >>> For powerpc this is also broken, because early_param stage is
+> >>> earlier than jump_label_init() so static_key_enable won't work.
+> >>> powerpc throws an warning: "static key 'xxx' used before call
+> >>> to jump_label_init()".
+> >>>
+> >>> Thus, early_param is too early for csd_lock_wait to run
+> >>> static_branch_enable(), so changes it to __setup to fix these.
+> >>>
+> >>> Fixes: 8d0968cc6b8f ("locking/csd_lock: Add boot parameter for controlling CSD lock debugging")
+> >>> Cc: stable@vger.kernel.org
+> >>> Reported-by: Chen jingwen <chenjingwen6@huawei.com>
+> >>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> >>> ---
+> >>> Change v3 -> v4:
+> >>> Fix title and description because this fix is also applied
+> >>> to powerpc.
+> >>> For more detailed arm64 bug report see:
+> >>> https://lore.kernel.org/linux-arm-kernel/e8715911-f835-059d-27f8-cc5f5ad30a07@huawei.com/t/
+> >>>
+> >>> Change v2 -> v3:
+> >>> Add module name in title
+> >>>
+> >>> Change v1 -> v2:
+> >>> Fix return 1 for __setup
+> >>> ---
+> >>>  kernel/smp.c | 4 ++--
+> >>>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/kernel/smp.c b/kernel/smp.c
+> >>> index 65a630f62363..381eb15cd28f 100644
+> >>> --- a/kernel/smp.c
+> >>> +++ b/kernel/smp.c
+> >>> @@ -174,9 +174,9 @@ static int __init csdlock_debug(char *str)
+> >>>  	if (val)
+> >>>  		static_branch_enable(&csdlock_debug_enabled);
+> >>>  
+> >>> -	return 0;
+> >>> +	return 1;
+> >>>  }
+> >>> -early_param("csdlock_debug", csdlock_debug);
+> >>> +__setup("csdlock_debug=", csdlock_debug);
+> >>>  
+> >>>  static DEFINE_PER_CPU(call_single_data_t *, cur_csd);
+> >>>  static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
+> >>
+> >> Ping for review. Thanks！
+> > 
+> > I have pulled it into -rcu for testing and further review.  It might
+> > well need to go through some other path, though.
+> >> 								Thanx, Paul
+> > .
+> 
+> So did it have any result? Do we have any idea to fix that except delaying the
+> set timing? I guess that maybe not using static_branch can work for this, but it
+> still needs to be evaluated for performance influence of not enabled situation.
 
-> +ssize_t iov_iter_scan(struct iov_iter *i, size_t bytes,
-> +		      ssize_t (*scanner)(struct iov_iter *i, const void *p,
-> +					 size_t len, size_t off, void *priv),
-> +		      void *priv)
-> +{
-> +	ssize_t ret = 0, scanned = 0;
-> +
-> +	if (!bytes)
-> +		return 0;
-> +	if (iter_is_iovec(i))
-> +		might_fault();
-> +
-> +	iterate_and_advance(
-> +		i, bytes, base, len, off, ({
-> +				ret = scanner(i, base, len, off, priv);
-> +				if (ret < 0)
-> +					break;
-> +				scanned += ret;
-> +			}), ({
-> +				ret = scanner(i, base, len, off, priv);
-> +				if (ret < 0)
-> +					break;
-> +				scanned += ret;
-> +			})
-> +	);
-> +	return ret < 0 ? ret : scanned;
-> +}
+It was in -next for a short time without complaints.  It will go back
+into -next after the merge window closes.  If there are no objections,
+I would include it in my pull request for the next merge window (v5.20).
 
-Have you even tried to run sparse on that?  How could that possibly work?
-You are feeding the same callback both userland and kernel pointers;
-that makes no sense.
-
-NAK.
+							Thanx, Paul

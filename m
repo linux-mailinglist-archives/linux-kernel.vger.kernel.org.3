@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71573536036
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598245361AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351665AbiE0LrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
+        id S1350120AbiE0MMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351989AbiE0LpN (ORCPT
+        with ESMTP id S1352581AbiE0Lz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:45:13 -0400
+        Fri, 27 May 2022 07:55:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F61713C361;
-        Fri, 27 May 2022 04:41:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2D715AB2D;
+        Fri, 27 May 2022 04:48:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BCAD61CE7;
-        Fri, 27 May 2022 11:41:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9E41C34113;
-        Fri, 27 May 2022 11:41:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3ABA61D56;
+        Fri, 27 May 2022 11:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD4CC385A9;
+        Fri, 27 May 2022 11:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651699;
-        bh=hZxyEAMbBobh8dF4JKUDHBDC9LPGBRyQuIRVk05DggI=;
+        s=korg; t=1653652124;
+        bh=0MYS7OwGSsxOj9r4dJeXvJnS30+TdN5SqX5eby8CsFw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dbs5vTX4+ch1f9o93wCcZCCxVn4+1ne+iUGeXALGO8yJnCcsuQqIqGTqNbhp//A//
-         zhYxI7LII9at5XZ4hJcx6cxQAizOgwDRVqxdbZHYizJ/fNKalX78ZywEM/5Kx9ibp8
-         9NhwMd+KwM+0Ktcu0/XinvlfKS/kU7VOw905lGws=
+        b=yZVpVGZdvcaVPfZyWMPf3Db5IDPCU4PQTyqvSt4A/6NBrdCUuym7/54J/9fgmnCYt
+         k1J7SBVI3DOC+uqhXDV7Bekot4HLJGvUgDprHOFGGS0llEvEczow0bGd7n3FSKgeFO
+         MlGwO8TGqNvmSF28lfPw2yUuOjjpWm3pzookXjlk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jann Horn <jannh@google.com>,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 064/111] random: allow partial reads if later user copies fail
-Date:   Fri, 27 May 2022 10:49:36 +0200
-Message-Id: <20220527084828.597913681@linuxfoundation.org>
+Subject: [PATCH 5.15 076/145] random: check for crng_init == 0 in add_device_randomness()
+Date:   Fri, 27 May 2022 10:49:37 +0200
+Message-Id: <20220527084859.878541829@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,98 +58,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 5209aed5137880fa229746cb521f715e55596460 upstream.
+commit 1daf2f387652bf3a7044aea042f5023b3f6b189b upstream.
 
-Rather than failing entirely if a copy_to_user() fails at some point,
-instead we should return a partial read for the amount that succeeded
-prior, unless none succeeded at all, in which case we return -EFAULT as
-before.
+This has no real functional change, as crng_pre_init_inject() (and
+before that, crng_slow_init()) always checks for == 0, not >= 2. So
+correct the outer unlocked change to reflect that. Before this used
+crng_ready(), which was not correct.
 
-This makes it consistent with other reader interfaces. For example, the
-following snippet for /dev/zero outputs "4" followed by "1":
-
-  int fd;
-  void *x = mmap(NULL, 4096, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-  assert(x != MAP_FAILED);
-  fd = open("/dev/zero", O_RDONLY);
-  assert(fd >= 0);
-  printf("%zd\n", read(fd, x, 4));
-  printf("%zd\n", read(fd, x + 4095, 4));
-  close(fd);
-
-This brings that same standard behavior to the various RNG reader
-interfaces.
-
-While we're at it, we can streamline the loop logic a little bit.
-
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Jann Horn <jannh@google.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -523,8 +523,7 @@ EXPORT_SYMBOL(get_random_bytes);
+@@ -1020,7 +1020,7 @@ void add_device_randomness(const void *b
+ 	unsigned long time = random_get_entropy() ^ jiffies;
+ 	unsigned long flags;
  
- static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
- {
--	ssize_t ret = 0;
--	size_t len;
-+	size_t len, left, ret = 0;
- 	u32 chacha_state[CHACHA_STATE_WORDS];
- 	u8 output[CHACHA_BLOCK_SIZE];
+-	if (!crng_ready() && size)
++	if (crng_init == 0 && size)
+ 		crng_pre_init_inject(buf, size, false, false);
  
-@@ -543,37 +542,40 @@ static ssize_t get_random_bytes_user(voi
- 	 * the user directly.
- 	 */
- 	if (nbytes <= CHACHA_KEY_SIZE) {
--		ret = copy_to_user(buf, &chacha_state[4], nbytes) ? -EFAULT : nbytes;
-+		ret = nbytes - copy_to_user(buf, &chacha_state[4], nbytes);
- 		goto out_zero_chacha;
- 	}
- 
--	do {
-+	for (;;) {
- 		chacha20_block(chacha_state, output);
- 		if (unlikely(chacha_state[12] == 0))
- 			++chacha_state[13];
- 
- 		len = min_t(size_t, nbytes, CHACHA_BLOCK_SIZE);
--		if (copy_to_user(buf, output, len)) {
--			ret = -EFAULT;
-+		left = copy_to_user(buf, output, len);
-+		if (left) {
-+			ret += len - left;
- 			break;
- 		}
- 
--		nbytes -= len;
- 		buf += len;
- 		ret += len;
-+		nbytes -= len;
-+		if (!nbytes)
-+			break;
- 
- 		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
--		if (!(ret % PAGE_SIZE) && nbytes) {
-+		if (ret % PAGE_SIZE == 0) {
- 			if (signal_pending(current))
- 				break;
- 			cond_resched();
- 		}
--	} while (nbytes);
-+	}
- 
- 	memzero_explicit(output, sizeof(output));
- out_zero_chacha:
- 	memzero_explicit(chacha_state, sizeof(chacha_state));
--	return ret;
-+	return ret ? ret : -EFAULT;
- }
- 
- /*
+ 	spin_lock_irqsave(&input_pool.lock, flags);
 
 

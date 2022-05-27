@@ -2,66 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B73535BB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3F7535BB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239470AbiE0Ijk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S1344378AbiE0Ij5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiE0Ijh (ORCPT
+        with ESMTP id S1349814AbiE0Ijz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:39:37 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6FCAB;
-        Fri, 27 May 2022 01:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653640774; x=1685176774;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nUtExxzslm+WHneUQWLHkDWMpNsTjMfZCy8Z14gS70o=;
-  b=nqk0AfCsq3cISUdzFsF4g0SWGWEr2+O9RSJuKFRn6wAOYRoCnd2kKMA9
-   4DxOsHq3re3UYrAWKTOw4NIoNMMxm1sOKNUTz1k+8CyAU73WzSL1dnrsw
-   FU9ps1c5qWG+tVDFSroAVI3gqbZd/wOeiScJ3ZTYnyoS9Ok2WgkEccD6N
-   AzxReF1aPFD3eqMZnB0xL6kXLh5HFpuxnVlNTP3odHNjCwbh9FjojJP7b
-   tdC5FlmVfo13P8yYBl8qSGat1uzoyImMBx3Yw7U5D62/ICfQnITVuePVi
-   Iq45TWKkulqFGt0ubnM+4EMmIM1VOUM+424TqC0TeKZsUI7352hJi/920
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274523414"
-X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="274523414"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 01:39:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="560647894"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga002.jf.intel.com with ESMTP; 27 May 2022 01:39:31 -0700
-Date:   Fri, 27 May 2022 16:39:30 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 05/37] KVM: x86: hyper-v: Handle
- HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
-Message-ID: <20220527083930.okdenkvxephom5wq@yy-desk-7060>
-References: <20220525090133.1264239-1-vkuznets@redhat.com>
- <20220525090133.1264239-6-vkuznets@redhat.com>
+        Fri, 27 May 2022 04:39:55 -0400
+Received: from outbound-smtp21.blacknight.com (outbound-smtp21.blacknight.com [81.17.249.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1A15FF3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:39:51 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp21.blacknight.com (Postfix) with ESMTPS id 57240CCBC7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:39:49 +0100 (IST)
+Received: (qmail 13188 invoked from network); 27 May 2022 08:39:49 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 27 May 2022 08:39:49 -0000
+Date:   Fri, 27 May 2022 09:39:46 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
+Message-ID: <20220527083946.GF3441@techsingularity.net>
+References: <20220512085043.5234-1-mgorman@techsingularity.net>
+ <Yo+2qqHqSdpE5l7m@qian>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20220525090133.1264239-6-vkuznets@redhat.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <Yo+2qqHqSdpE5l7m@qian>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,218 +49,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 11:01:01AM +0200, Vitaly Kuznetsov wrote:
-> Currently, HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls are handled
-> the exact same way as HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE{,EX}: by
-> flushing the whole VPID and this is sub-optimal. Switch to handling
-> these requests with 'flush_tlb_gva()' hooks instead. Use the newly
-> introduced TLB flush fifo to queue the requests.
->
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->  arch/x86/kvm/hyperv.c | 102 +++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 90 insertions(+), 12 deletions(-)
->
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 762b0b699fdf..576749973727 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1806,32 +1806,84 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
->  				  sparse_banks, consumed_xmm_halves, offset);
->  }
->
-> -static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu)
-> +static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[],
-> +					int consumed_xmm_halves, gpa_t offset)
-> +{
-> +	return kvm_hv_get_hc_data(kvm, hc, hc->rep_cnt, hc->rep_cnt,
-> +				  entries, consumed_xmm_halves, offset);
-> +}
-> +
-> +static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu, u64 *entries, int count)
->  {
->  	struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
->  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
->  	u64 entry = KVM_HV_TLB_FLUSHALL_ENTRY;
-> +	unsigned long flags;
->
->  	if (!hv_vcpu)
->  		return;
->
->  	tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
->
-> -	kfifo_in_spinlocked(&tlb_flush_fifo->entries, &entry, 1, &tlb_flush_fifo->write_lock);
-> +	spin_lock_irqsave(&tlb_flush_fifo->write_lock, flags);
-> +
-> +	/*
-> +	 * All entries should fit on the fifo leaving one free for 'flush all'
-> +	 * entry in case another request comes in. In case there's not enough
-> +	 * space, just put 'flush all' entry there.
-> +	 */
-> +	if (count && entries && count < kfifo_avail(&tlb_flush_fifo->entries)) {
-> +		WARN_ON(kfifo_in(&tlb_flush_fifo->entries, entries, count) != count);
-> +		goto out_unlock;
-> +	}
-> +
-> +	/*
-> +	 * Note: full fifo always contains 'flush all' entry, no need to check the
-> +	 * return value.
-> +	 */
-> +	kfifo_in(&tlb_flush_fifo->entries, &entry, 1);
-> +
-> +out_unlock:
-> +	spin_unlock_irqrestore(&tlb_flush_fifo->write_lock, flags);
->  }
->
->  void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+On Thu, May 26, 2022 at 01:19:38PM -0400, Qian Cai wrote:
+> On Thu, May 12, 2022 at 09:50:37AM +0100, Mel Gorman wrote:
+> > Changelog since v2
+> > o More conversions from page->lru to page->[pcp_list|buddy_list]
+> > o Additional test results in changelogs
+> > 
+> > Changelog since v1
+> > o Fix unsafe RT locking scheme
+> > o Use spin_trylock on UP PREEMPT_RT
+> > 
+> > This series has the same intent as Nicolas' series "mm/page_alloc: Remote
+> > per-cpu lists drain support" -- avoid interference of a high priority
+> > task due to a workqueue item draining per-cpu page lists. While many
+> > workloads can tolerate a brief interruption, it may be cause a real-time
+> > task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
+> > the draining in non-deterministic.
+> > 
+> > Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
+> > The local_lock on its own prevents migration and the IRQ disabling protects
+> > from corruption due to an interrupt arriving while a page allocation is
+> > in progress. The locking is inherently unsafe for remote access unless
+> > the CPU is hot-removed.
+> > 
+> > This series adjusts the locking. A spinlock is added to struct
+> > per_cpu_pages to protect the list contents while local_lock_irq continues
+> > to prevent migration and IRQ reentry. This allows a remote CPU to safely
+> > drain a remote per-cpu list.
+> > 
+> > This series is a partial series. Follow-on work should allow the
+> > local_irq_save to be converted to a local_irq to avoid IRQs being
+> > disabled/enabled in most cases. Consequently, there are some TODO comments
+> > highlighting the places that would change if local_irq was used. However,
+> > there are enough corner cases that it deserves a series on its own
+> > separated by one kernel release and the priority right now is to avoid
+> > interference of high priority tasks.
+> > 
+> > Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
+> > 	and when it is storing per-cpu pages.
+> > 
+> > Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
+> > 	this is not necessary but it avoids per_cpu_pages consuming another
+> > 	cache line.
+> > 
+> > Patch 3 is a preparation patch to avoid code duplication.
+> > 
+> > Patch 4 is a simple micro-optimisation that improves code flow necessary for
+> > 	a later patch to avoid code duplication.
+> > 
+> > Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
+> > 	relying on local_lock to prevent migration, stabilise the pcp
+> > 	lookup and prevent IRQ reentrancy.
+> > 
+> > Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
+> 
+> Mel, we saw spontanous "mm_percpu_wq" crash on today's linux-next tree
+> while running CPU offlining/onlining, and wondering if you have any
+> thoughts?
+> 
 
-Where's the caller to this kvm_hv_vcpu_flush_tlb() ?
-I didn't see th caller in patch 1-22 and remains are
-self-testing patches, any thing I missed ?
+Do you think it's related to the series and if so why? From the warning,
+it's not obvious to me why it would be given that it's a warning about a
+task not being inactive when it is expected to be.
 
->  {
->  	struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
->  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> +	u64 entries[KVM_HV_TLB_FLUSH_FIFO_SIZE];
-> +	int i, j, count;
-> +	gva_t gva;
->
-> -	kvm_vcpu_flush_tlb_guest(vcpu);
-> -
-> -	if (!hv_vcpu)
-> +	if (!tdp_enabled || !hv_vcpu) {
-> +		kvm_vcpu_flush_tlb_guest(vcpu);
->  		return;
-> +	}
->
->  	tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
->
-> +	count = kfifo_out(&tlb_flush_fifo->entries, entries, KVM_HV_TLB_FLUSH_FIFO_SIZE);
-> +
-> +	for (i = 0; i < count; i++) {
-> +		if (entries[i] == KVM_HV_TLB_FLUSHALL_ENTRY)
-> +			goto out_flush_all;
-> +
-> +		/*
-> +		 * Lower 12 bits of 'address' encode the number of additional
-> +		 * pages to flush.
-> +		 */
-> +		gva = entries[i] & PAGE_MASK;
-> +		for (j = 0; j < (entries[i] & ~PAGE_MASK) + 1; j++)
-> +			static_call(kvm_x86_flush_tlb_gva)(vcpu, gva + j * PAGE_SIZE);
-> +
-> +		++vcpu->stat.tlb_flush;
-> +	}
-> +	goto out_empty_ring;
-> +
-> +out_flush_all:
-> +	kvm_vcpu_flush_tlb_guest(vcpu);
-> +
-> +out_empty_ring:
->  	kfifo_reset_out(&tlb_flush_fifo->entries);
->  }
->
-> @@ -1841,11 +1893,21 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  	struct hv_tlb_flush_ex flush_ex;
->  	struct hv_tlb_flush flush;
->  	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
-> +	/*
-> +	 * Normally, there can be no more than 'KVM_HV_TLB_FLUSH_FIFO_SIZE'
-> +	 * entries on the TLB flush fifo. The last entry, however, needs to be
-> +	 * always left free for 'flush all' entry which gets placed when
-> +	 * there is not enough space to put all the requested entries.
-> +	 */
-> +	u64 __tlb_flush_entries[KVM_HV_TLB_FLUSH_FIFO_SIZE - 1];
-> +	u64 *tlb_flush_entries;
->  	u64 valid_bank_mask;
->  	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
->  	struct kvm_vcpu *v;
->  	unsigned long i;
->  	bool all_cpus;
-> +	int consumed_xmm_halves = 0;
-> +	gpa_t data_offset;
->
->  	/*
->  	 * The Hyper-V TLFS doesn't allow more than 64 sparse banks, e.g. the
-> @@ -1861,10 +1923,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  			flush.address_space = hc->ingpa;
->  			flush.flags = hc->outgpa;
->  			flush.processor_mask = sse128_lo(hc->xmm[0]);
-> +			consumed_xmm_halves = 1;
->  		} else {
->  			if (unlikely(kvm_read_guest(kvm, hc->ingpa,
->  						    &flush, sizeof(flush))))
->  				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +			data_offset = sizeof(flush);
->  		}
->
->  		trace_kvm_hv_flush_tlb(flush.processor_mask,
-> @@ -1888,10 +1952,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  			flush_ex.flags = hc->outgpa;
->  			memcpy(&flush_ex.hv_vp_set,
->  			       &hc->xmm[0], sizeof(hc->xmm[0]));
-> +			consumed_xmm_halves = 2;
->  		} else {
->  			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &flush_ex,
->  						    sizeof(flush_ex))))
->  				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +			data_offset = sizeof(flush_ex);
->  		}
->
->  		trace_kvm_hv_flush_tlb_ex(flush_ex.hv_vp_set.valid_bank_mask,
-> @@ -1907,25 +1973,37 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->
->  		if (all_cpus)
-> -			goto do_flush;
-> +			goto read_flush_entries;
->
->  		if (!hc->var_cnt)
->  			goto ret_success;
->
-> -		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 2,
-> -					  offsetof(struct hv_tlb_flush_ex,
-> -						   hv_vp_set.bank_contents)))
-> +		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, consumed_xmm_halves,
-> +					  data_offset))
-> +			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
-> +		consumed_xmm_halves += hc->var_cnt;
-> +	}
-> +
-> +read_flush_entries:
-> +	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
-> +	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
-> +	    hc->rep_cnt > ARRAY_SIZE(__tlb_flush_entries)) {
-> +		tlb_flush_entries = NULL;
-> +	} else {
-> +		if (kvm_hv_get_tlb_flush_entries(kvm, hc, __tlb_flush_entries,
-> +						consumed_xmm_halves, data_offset))
->  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-> +		tlb_flush_entries = __tlb_flush_entries;
->  	}
->
-> -do_flush:
->  	/*
->  	 * vcpu->arch.cr3 may not be up-to-date for running vCPUs so we can't
->  	 * analyze it here, flush TLB regardless of the specified address space.
->  	 */
->  	if (all_cpus) {
->  		kvm_for_each_vcpu(i, v, kvm)
-> -			hv_tlb_flush_enqueue(v);
-> +			hv_tlb_flush_enqueue(v, tlb_flush_entries, hc->rep_cnt);
->
->  		kvm_make_all_cpus_request(kvm, KVM_REQ_HV_TLB_FLUSH);
->  	} else {
-> @@ -1935,7 +2013,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  			v = kvm_get_vcpu(kvm, i);
->  			if (!v)
->  				continue;
-> -			hv_tlb_flush_enqueue(v);
-> +			hv_tlb_flush_enqueue(v, tlb_flush_entries, hc->rep_cnt);
->  		}
->
->  		kvm_make_vcpus_request_mask(kvm, KVM_REQ_HV_TLB_FLUSH, vcpu_mask);
-> --
-> 2.35.3
->
+-- 
+Mel Gorman
+SUSE Labs

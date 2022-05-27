@@ -2,43 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C13535759
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FE3535761
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbiE0Bek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 21:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S232905AbiE0Bkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 21:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbiE0Beg (ORCPT
+        with ESMTP id S232035AbiE0Bka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 21:34:36 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B3362BDE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:34:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VEUq88P_1653615271;
-Received: from 30.32.82.202(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VEUq88P_1653615271)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 27 May 2022 09:34:32 +0800
-Message-ID: <d6f64c75-053d-57e0-a997-176758523d9e@linux.alibaba.com>
-Date:   Fri, 27 May 2022 09:34:59 +0800
+        Thu, 26 May 2022 21:40:30 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E11C8BCF
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:40:29 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id n18so2916203plg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rsCeaKQYu2owUyCBDwtZbNFjRtUaibD4xCTBzD5NHwQ=;
+        b=h5Os058/7Tkd1AvepTU0323lt2cG3mwUjYbiF3arFls/6rkKiXILKvCHrwLRQsySnZ
+         96/cCr2uqYFgpmz9nwuM3rG0f2J7xv5nQ0hqC6+iVv8nc4HgwHmTAlochAsZhfhqI83i
+         saL36v4tANwGgUtHRDRXTByMQY8bwYbtQ/ll7KeQkIdOsJMyc1FvNm6aEzlzHG2k8jqo
+         +V8bpsIxil8gc9piiCPIB8XYrUg5bo5kaXjbukdEC3xyym+MtICa2qY2Tcir2U37jJ1m
+         4ORO+Hu35zYgIWw/XT9PYNPw2QnLNZ1+Eb9F16UCV9gkZsq4Szql++3KR1rUZ5VhzQ/k
+         YUJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rsCeaKQYu2owUyCBDwtZbNFjRtUaibD4xCTBzD5NHwQ=;
+        b=uexQF+HnD0GR/h3IgkrqGy+2JUsSn0XGn2AvpogRaBkQvqeP6n4J7374zv4fIK/hny
+         +YYkytaYFfyQUSzPpqtUePBxDigpZhCY/bTyoK4ANq1jdnkR7+K7hzrG0WChnvkIVJzx
+         g5smaAzjJWWvqV/E++p7UzlXGPOzoNMjjFIUU98lchmZmoOT/akAr7irbsrzwGd2r/ym
+         9ejS5qEJX6yY3kvu/Ex0y68wqh7OjcNsMjkJM7wEZa471X9b2rwqHgUou5aFtKRKAhCe
+         lVoYD4ocM6YWDRkAjff/Q/lI/hnLYrZzCA8z9NZnGyyyxa+fYQDz3kagGjRRptjO5U0F
+         KQZQ==
+X-Gm-Message-State: AOAM530kZcZUr8Np8vulS5H2aPBiywaojyNouhb05rnR2QFG+5V3jGyt
+        SxCliaF62UuQeOPIvKeW4hNlVkKmK3J+u4iPVJ41RA==
+X-Google-Smtp-Source: ABdhPJzk910Eqiuu/69sbIFt/rEQ4I6MtCDwrXFQ/nJqkbUlb/6Ny4mXvfFnPS95wsU6a5b8EAwIeusUd82ItqgJ2NA=
+X-Received: by 2002:a17:902:b58b:b0:162:2e01:9442 with SMTP id
+ a11-20020a170902b58b00b001622e019442mr20257616pls.6.1653615629019; Thu, 26
+ May 2022 18:40:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] mm/hugetlb: Remove unnecessary
- huge_ptep_set_access_flags() in hugetlb_mcopy_atomic_pte()
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        songmuchun@bytedance.com
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <7cd55152c1a00910afda570d1543a97198b3665b.1653468078.git.baolin.wang@linux.alibaba.com>
- <428c7c69-6ac1-51d5-7c26-5f31de61a909@arm.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <428c7c69-6ac1-51d5-7c26-5f31de61a909@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+References: <348dc099-737d-94ba-55ad-2db285084c73@openvz.org> <YpAnqqY/c3Y5ZkPG@casper.infradead.org>
+In-Reply-To: <YpAnqqY/c3Y5ZkPG@casper.infradead.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Thu, 26 May 2022 18:40:18 -0700
+Message-ID: <CALvZod7iyO5Ti5xhzq36UjDFNAmfEyPk1MQv_t4kUHKuPCeNng@mail.gmail.com>
+Subject: Re: [PATCH] XArray: handle XA_FLAGS_ACCOUNT in xas_split_alloc
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Vasily Averin <vvs@openvz.org>, kernel@openvz.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,31 +69,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 26, 2022 at 6:21 PM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Wed, May 25, 2022 at 11:26:37AM +0300, Vasily Averin wrote:
+> > Commit 7b785645e8f1 ("mm: fix page cache convergence regression")
+> > added support of new XA_FLAGS_ACCOUNT flag into all Xarray allocation
+> > functions. Later commit 8fc75643c5e1 ("XArray: add xas_split")
+> > introduced xas_split_alloc() but missed about XA_FLAGS_ACCOUNT
+> > processing.
+>
+> Thanks, Vasily.
+>
+> Johannes, Shakeel, is this right?  I don't fully understand the accounting
+> stuff.
+>
 
+If called from __filemap_add_folio() then this is correct.
 
-On 5/26/2022 3:01 PM, Anshuman Khandual wrote:
-> 
-> 
-> On 5/25/22 15:56, Baolin Wang wrote:
->> There is no need to update the hugetlb access flags after just setting the
->> hugetlb page table entry by set_huge_pte_at(), since the page table entry
->> value has no changes. Thus remove the unnecessary huge_ptep_set_access_flags()
-> 
-> WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-> #9:
-> value has no changes. Thus remove the unnecessary huge_ptep_set_access_flags()
-> 
-> total: 0 errors, 1 warnings, 8 lines checked
+However from split_huge_page_to_list(), we can not use the memcg from
+current as that codepath is called from reclaim which can be triggered
+by processes of other memcgs.
 
-Sure, will remove checkpatch warning in next verion.
-
-> 
->> in hugetlb_mcopy_atomic_pte().
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> 
-> Otherwise LGTM,
-> 
-> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
-Thanks. Also thanks to Muchun and Mike for reviewing.
+> > Signed-off-by: Vasily Averin <vvs@openvz.org>
+> > ---
+> >  lib/xarray.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/lib/xarray.c b/lib/xarray.c
+> > index 54e646e8e6ee..5f5b42e6f842 100644
+> > --- a/lib/xarray.c
+> > +++ b/lib/xarray.c
+> > @@ -1013,6 +1013,8 @@ void xas_split_alloc(struct xa_state *xas, void *entry, unsigned int order,
+> >       if (xas->xa_shift + XA_CHUNK_SHIFT > order)
+> >               return;
+> >
+> > +     if (xas->xa->xa_flags & XA_FLAGS_ACCOUNT)
+> > +             gfp |= __GFP_ACCOUNT;
+> >       do {
+> >               unsigned int i;
+> >               void *sibling = NULL;
+> > --
+> > 2.31.1
+> >

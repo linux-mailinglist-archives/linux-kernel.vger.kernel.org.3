@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8436E535BA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8055535BAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349865AbiE0Ihd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
+        id S1349879AbiE0Ihh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349775AbiE0Ig0 (ORCPT
+        with ESMTP id S1349807AbiE0Igc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:36:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6BD102758;
-        Fri, 27 May 2022 01:36:07 -0700 (PDT)
-Date:   Fri, 27 May 2022 08:36:03 -0000
+        Fri, 27 May 2022 04:36:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EDA104C8A;
+        Fri, 27 May 2022 01:36:08 -0700 (PDT)
+Date:   Fri, 27 May 2022 08:36:05 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653640565;
+        s=2020; t=1653640566;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Qe7r+pZt7515ooXYBaS43jC8BfWrDe1fjfjtxxWyGgA=;
-        b=ALuFp5Ju2oZ7LHplisAqDy5GEvYK/lXb3bNWm9cMrDLLqHXUlFgzeHKrawdN8WhSmaX+M3
-        q496ob1SE5nDoU7v1vAuIBgvFDWCNHmsOY8SaymWHEAhHXJrdB/F32Mh9PgRt8Ir3SuWop
-        ig0mGf2gPu4cNt6HP44WRgcRKc/1RBxPt0j/A2i8gP7Sz3NaFqVQGAiPtyyzDC/OX/m0Jb
-        E9lhfR5l0qktc7SWoJXwsBcS9k7ZWdRBPVR/M7Zg+a8Yd+FuCFzhghafFM0HABvi5CVwWq
-        Ge9Ha6r0Kop7ry9XhheZEDPFDhvelGaZLJqlTaa0Y/4CbFJTjoSKvKOe+72+Fg==
+        bh=5Ncx3ivK+ZwISDSMM4kljdgZQUQznePRbXqDSNVCPmE=;
+        b=fTTxCW7zVN7TKDWD5M/Q/2czmvsoVTxTbbFD1ye7ID9y4pcAtm9VW6PQE9O7YZzyznz2Ui
+        NYmMkIf1LZyM1JYePlZcnnQU3t8HubddwdHZvFRBVg0oIwA2iUyTZ064/OhxctMPH73qeQ
+        sCfw5Ck0ZctrXsRZDfFpkxpOPdIMITOh7PmzEq5BSYSQJrMWKbnESU32JBodIuwOyQNLVi
+        1pfaSGUG2kiJWjqCjJ5x+x51/RvK7tzadc3OxUlIEFxQXUfh1FURGlTbX1an5+l61HF04v
+        lg6RPOeP+TwxUeHUdvgN4tSPQRTyTTfvPDMRBQfbUoFifx1bCZaXlpfvMiRkMg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653640565;
+        s=2020e; t=1653640566;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Qe7r+pZt7515ooXYBaS43jC8BfWrDe1fjfjtxxWyGgA=;
-        b=rYoeqUnDpeLuUQ1SWW9GXt6kCK7nd+FGKYdUcQo7RuHfmMcYOruySwiU3PA1+J0pDhwq7k
-        r0Kbvbf/7Zc01DAQ==
-From:   "tip-bot2 for Allen-KH Cheng" <tip-bot2@linutronix.de>
+        bh=5Ncx3ivK+ZwISDSMM4kljdgZQUQznePRbXqDSNVCPmE=;
+        b=OGbA8qT2C+y+Pf40HcWB9uFhvcP29hW3VukTKZ2lAGK9g2I4xE3/dxbfOMaAWK5ivR+dtx
+        SPLgbZjS68jLRYBA==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] dt-bindings: timer: Add compatible for Mediatek MT8186
-Cc:     "Allen-KH Cheng" <Allen-KH.Cheng@mediatek.com>,
-        Rob Herring <robh@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220311130732.22706-2-allen-kh.cheng@mediatek.com>
-References: <20220311130732.22706-2-allen-kh.cheng@mediatek.com>
+Subject: [tip: timers/core] Merge tag 'timers-v5.19-rc1' of
+ https://git.linaro.org/people/daniel.lezcano/linux into timers/core
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <b5a83e54-1ee1-f910-4be4-bc3bf1015243@linaro.org>
+References: <b5a83e54-1ee1-f910-4be4-bc3bf1015243@linaro.org>
 MIME-Version: 1.0
-Message-ID: <165364056389.4207.5365427611910591970.tip-bot2@tip-bot2>
+Message-ID: <165364056563.4207.1413260323155955493.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,35 +66,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     b8b1ab133e593f0dbfa47b174a54b852af6f856e
-Gitweb:        https://git.kernel.org/tip/b8b1ab133e593f0dbfa47b174a54b852af6f856e
-Author:        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-AuthorDate:    Fri, 11 Mar 2022 21:07:29 +08:00
-Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Wed, 18 May 2022 11:08:52 +02:00
+Commit-ID:     57963a92a70b037aa22544fbc34742e5be689c04
+Gitweb:        https://git.kernel.org/tip/57963a92a70b037aa22544fbc34742e5be689c04
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Fri, 27 May 2022 10:32:08 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Fri, 27 May 2022 10:32:08 +02:00
 
-dt-bindings: timer: Add compatible for Mediatek MT8186
+Merge tag 'timers-v5.19-rc1' of https://git.linaro.org/people/daniel.lezcano/linux into timers/core
 
-This commit adds dt-binding documentation of timer for Mediatek MT8186 SoC
-Platform.
+Pull clockevent/clocksource driver updates from Daniel Lezcano:
 
-Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220311130732.22706-2-allen-kh.cheng@mediatek.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+  - Add Mediatek MT8186 DT bindings (Allen-KH Cheng)
+
+  - Remove dead code corresponding of the IXP4xx board removal (Linus
+    Walleij)
+
+  - Add CLOCK_EVT_FEAT_C3STOP flag for the RISC-V SBI timer (Samuel
+    Holland)
+
+  - Do not return an error if there are multiple definitions of the sp804
+    timers in the DT (Andre Przywara)
+
+  - Add the missing SPDX identifier (Thomas Gleixner)
+
+  - Remove an unncessary NULL check as it is done right before at probe
+    time for the timer-ti-dm (Dan Carpenter)
+
+  - Fix the irq_of_parse_and_map() return code check on onexas-nps
+    (Krzysztof Kozlowski)
+
+Link: https://lore.kernel.org/lkml/b5a83e54-1ee1-f910-4be4-bc3bf1015243@linaro.org
 ---
- Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
-index fbd76a8..6f1f9db 100644
---- a/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
-+++ b/Documentation/devicetree/bindings/timer/mediatek,mtk-timer.txt
-@@ -23,6 +23,7 @@ Required properties:
- 
- 	For those SoCs that use SYST
- 	* "mediatek,mt8183-timer" for MT8183 compatible timers (SYST)
-+	* "mediatek,mt8186-timer" for MT8186 compatible timers (SYST)
- 	* "mediatek,mt8192-timer" for MT8192 compatible timers (SYST)
- 	* "mediatek,mt8195-timer" for MT8195 compatible timers (SYST)
- 	* "mediatek,mt7629-timer" for MT7629 compatible timers (SYST)

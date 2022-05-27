@@ -2,110 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046E753594D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C603535954
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245430AbiE0G1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 02:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
+        id S245519AbiE0G2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 02:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240291AbiE0G1j (ORCPT
+        with ESMTP id S243636AbiE0G2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 02:27:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BEF313B4;
-        Thu, 26 May 2022 23:27:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 667B2618CB;
-        Fri, 27 May 2022 06:27:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5464AC385A9;
-        Fri, 27 May 2022 06:27:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653632856;
-        bh=L9BhbK5z8mAy1Aa7jHJx4mr/XyGaxNMknk8uKHvbA+8=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=QwO6dq/yaF848AYty2DzrwdCzXIHx4c23FjAG/KyexPdSjS+TRCTPGyuT7p6+B11j
-         XHm2w8jw1C9qhLQtIRHMuyObfB5L5s7gUJSM2vqvg8awqtjqYOfAlmgU28GG2UiymV
-         7ihcuJIOZUjbc0onUBB89VDt69bLQNvit0YrzT8cHA22uhktzXKQDS4eQVUbdhUTq1
-         sdHJmnMtUORv38O0gVYkNeFq5a/OJSwZNiUonpgXzwnnyB1sQGfPWIQySbLCAl/XHS
-         YKeqVqtASVTUrxBReh0oFueogB+bjeRiDHSIFzNOqzVpG93eO1f/qAfpj2HwFP2zWe
-         3rN/BN/I0gPqQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Jianglei Nie <niejianglei2021@163.com>, pizza@shaftnet.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cw1200: Fix memory leak in cw1200_set_key()
-References: <20220526033003.473943-1-niejianglei2021@163.com>
-        <202205261656.CWDWN8nG-lkp@intel.com>
-Date:   Fri, 27 May 2022 09:27:30 +0300
-In-Reply-To: <202205261656.CWDWN8nG-lkp@intel.com> (kernel test robot's
-        message of "Thu, 26 May 2022 17:02:43 +0800")
-Message-ID: <875ylrwkvh.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 27 May 2022 02:28:37 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547523DA76;
+        Thu, 26 May 2022 23:28:36 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id h186so3161657pgc.3;
+        Thu, 26 May 2022 23:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XpmmuYOXBkBP9By6R6nKTLgZB5DybQG//UzfVx711Q0=;
+        b=a2HrE1/SvaCrCtKv6DERQl7xsr/JdXo+y6Kv7qkTXnE0KniWXHqc+04IujKvcX4vMK
+         oIYyuxqY8S6rDGpmnSwbm9vH8LxLWEepZEd/O2/f6++bTuZQi0ceMqbXKrHXogqSJJcC
+         Pg/3g7z1QQorrNnnhDNoR/wPiwF7tM1tZ85CNg+1kj1Tyc3BM+IQsWXBHZu/ygdAm/VY
+         SZL9GWWNH0u7OvDRqdHQC43DJxTsrCLQni6ROX9JSYxi7HwWvJfL2RBIQsNzBl682pRW
+         6E5VfvsGwSLJLjTaXW4luYoHHsIS4y/Y+hkxk7JJp1Gpm+x9jEfATHnKSm16iVCGA10m
+         gd+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XpmmuYOXBkBP9By6R6nKTLgZB5DybQG//UzfVx711Q0=;
+        b=a96u0/kd1MFbBDuRqX5mF0fzyYGGvNtWoZ1cmd+XdH7qUORDNg5GALz9nlAfVWKHce
+         5yoSOu1PAZXVDgqkzHssJRUE1U+4/mYgrOwzSr8cdg1/YgaAdh6/xp9RzBjphx7qjjnq
+         aTcKp+TN4mnYRraYT2KDMScrm1xJ49OIvcRJjG4BSbZJfhCFzQuWlQFInaaBb8uSuvF9
+         9VfB2YSnvC4FJ2q62oi2/OcclZ6/aLzhSUNUNyH1tPVwZsJ+/ihdbu2Nv7QWT8hLSt/y
+         +lKKQ6k2vnLAkDa+3ME813iM5LEpOzC3PlaSPIHfZYyNCFmCKG1z86QDQFazDF/C9ANB
+         oIXQ==
+X-Gm-Message-State: AOAM532UWRmxwG7gnKtV2vXSzQ/h9aOWcODL2+hv3QKjdg+WrggIegWj
+        OSwvHLnQIYaby2npIgh0l81CFRuBkMT2/KUTEOo=
+X-Google-Smtp-Source: ABdhPJzBjOQT3REuxrp043mRJ2tOI4cMLlRM9bIyjSl1sP2f6OlLXS00jjixA0RZnsy5AjDGCgciWveo9vvjC7l7PuQ=
+X-Received: by 2002:a05:6a00:14d4:b0:518:b918:fae4 with SMTP id
+ w20-20020a056a0014d400b00518b918fae4mr20076157pfu.55.1653632915852; Thu, 26
+ May 2022 23:28:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220526204152.831948-1-krzysztof.kozlowski@linaro.org> <CA+H2tpGipB4faYDEdJZ82kjTak5ewW_cp=3LO+JkDa=hYiqZJw@mail.gmail.com>
+In-Reply-To: <CA+H2tpGipB4faYDEdJZ82kjTak5ewW_cp=3LO+JkDa=hYiqZJw@mail.gmail.com>
+From:   Orson Zhai <orsonzhai@gmail.com>
+Date:   Fri, 27 May 2022 14:28:24 +0800
+Message-ID: <CA+H2tpECYtgJAgJbwfgmu++ZVmk+nuoRmK=fX=4pquTFSFyzhg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: sprd: adjust whitespace around '='
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot <lkp@intel.com> writes:
-
-> Hi Jianglei,
+On Fri, May 27, 2022 at 12:35 PM Orson Zhai <orsonzhai@gmail.com> wrote:
 >
-> Thank you for the patch! Yet something to improve:
+> Hi Krzysztof,
 >
-> [auto build test ERROR on wireless-next/main]
-> [also build test ERROR on wireless/main v5.18 next-20220526]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
+> On Fri, May 27, 2022 at 4:42 AM Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> Fix whitespace coding style: use single space instead of tabs or
+>> multiple spaces around '=' sign in property assignment.  No functional
+>> changes (same DTB).
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
 >
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-> config: x86_64-randconfig-a003 (https://download.01.org/0day-ci/archive/20220526/202205261656.CWDWN8nG-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 3d546191ad9d7d2ad2c7928204b9de51deafa675)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/1e40283730dea11a1556d589925313cdca295484
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jianglei-Nie/cw1200-Fix-memory-leak-in-cw1200_set_key/20220526-114747
->         git checkout 1e40283730dea11a1556d589925313cdca295484
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/wireless/st/cw1200/
+> Thanks for your patch.
 >
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+> We have a plan to reconstruct the device tree of SPRD into modular form.
+> sc9836 has been in status of EOL for years and I believe no one will need to run it anymore.
+> We want to remove it as well.
 >
-> All errors (new ones prefixed by >>):
+> But your patch is fine.
+> It could be taken in advance.
 >
->>> drivers/net/wireless/st/cw1200/sta.c:826:26: error: use of undeclared identifier 'idx'
->                            cw1200_free_key(priv, idx);
->                                                  ^
+> Reviewed-by: Orson Zhai <orsonzhai@gmail.com>
 
-So you don't even compile your patches? That is bad.
+Sorry, re-send for my getting failure...
 
-The patches sent to linux-wireless should be properly tested. In some
-trivial cases a compilation test might enough, but even then that needs
-to be clearly documented with "Compile tested only" in the commit log.
+-Orson
 
-I'm getting worried how frequent it has become that people submit
-untested patches or that they test them using simulation tools like
-syzbot, but not on real hardware.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+>
+>> ---
+>>
+>> Output compared with dtx_diff and fdtdump.
+>> ---
+>>  arch/arm64/boot/dts/sprd/sc9836.dtsi  | 10 +++++-----
+>>  arch/arm64/boot/dts/sprd/sc9863a.dtsi |  4 ++--
+>>  arch/arm64/boot/dts/sprd/whale2.dtsi  |  2 +-
+>>  3 files changed, 8 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/sprd/sc9836.dtsi b/arch/arm64/boot/dts/sprd/sc9836.dtsi
+>> index 231436be0e3f..8bb8a70966d2 100644
+>> --- a/arch/arm64/boot/dts/sprd/sc9836.dtsi
+>> +++ b/arch/arm64/boot/dts/sprd/sc9836.dtsi
+>> @@ -207,11 +207,11 @@ gic: interrupt-controller@12001000 {
+>>         };
+>>
+>>         psci {
+>> -               compatible      = "arm,psci";
+>> -               method          = "smc";
+>> -               cpu_on          = <0xc4000003>;
+>> -               cpu_off         = <0x84000002>;
+>> -               cpu_suspend     = <0xc4000001>;
+>> +               compatible = "arm,psci";
+>> +               method = "smc";
+>> +               cpu_on = <0xc4000003>;
+>> +               cpu_off = <0x84000002>;
+>> +               cpu_suspend = <0xc4000001>;
+>>         };
+>>
+>>         timer {
+>> diff --git a/arch/arm64/boot/dts/sprd/sc9863a.dtsi b/arch/arm64/boot/dts/sprd/sc9863a.dtsi
+>> index 8cf4a6575980..22d81ace740a 100644
+>> --- a/arch/arm64/boot/dts/sprd/sc9863a.dtsi
+>> +++ b/arch/arm64/boot/dts/sprd/sc9863a.dtsi
+>> @@ -552,7 +552,7 @@ ap-ahb {
+>>                         ranges;
+>>
+>>                         sdio0: sdio@20300000 {
+>> -                               compatible  = "sprd,sdhci-r11";
+>> +                               compatible = "sprd,sdhci-r11";
+>>                                 reg = <0 0x20300000 0 0x1000>;
+>>                                 interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
+>>
+>> @@ -568,7 +568,7 @@ sdio0: sdio@20300000 {
+>>                         };
+>>
+>>                         sdio3: sdio@20600000 {
+>> -                               compatible  = "sprd,sdhci-r11";
+>> +                               compatible = "sprd,sdhci-r11";
+>>                                 reg = <0 0x20600000 0 0x1000>;
+>>                                 interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
+>>
+>> diff --git a/arch/arm64/boot/dts/sprd/whale2.dtsi b/arch/arm64/boot/dts/sprd/whale2.dtsi
+>> index 79b9591c37aa..957b2658e1fb 100644
+>> --- a/arch/arm64/boot/dts/sprd/whale2.dtsi
+>> +++ b/arch/arm64/boot/dts/sprd/whale2.dtsi
+>> @@ -132,7 +132,7 @@ ap_dma: dma-controller@20100000 {
+>>                         };
+>>
+>>                         sdio3: sdio@50430000 {
+>> -                               compatible  = "sprd,sdhci-r11";
+>> +                               compatible = "sprd,sdhci-r11";
+>>                                 reg = <0 0x50430000 0 0x1000>;
+>>                                 interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
+>>
+>> --
+>> 2.34.1
+>>

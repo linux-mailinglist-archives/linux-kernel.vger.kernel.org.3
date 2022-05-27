@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3250C5356EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 02:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2F25356EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 02:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349642AbiE0AAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 20:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S237350AbiE0AAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 20:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345134AbiE0AAc (ORCPT
+        with ESMTP id S1346078AbiE0AAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 20:00:32 -0400
+        Thu, 26 May 2022 20:00:33 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5686D6F494
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 17:00:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F64A3617A
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 17:00:32 -0700 (PDT)
 Received: from sequoia.corp.microsoft.com (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8D85C20B44CF;
-        Thu, 26 May 2022 17:00:30 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8D85C20B44CF
+        by linux.microsoft.com (Postfix) with ESMTPSA id BF81420B5B4E;
+        Thu, 26 May 2022 17:00:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BF81420B5B4E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653609631;
-        bh=va52FY3CxVCP4CDaqya7zxaHqwkN4nQrlRwZnNMAbec=;
+        s=default; t=1653609632;
+        bh=WyWhT64EqXgi1j+9Im254CVOA49spwfGfom1V/BOPbU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zr3h0vZVzjUnKnzcwb3bRT3m50dMDGbnXvq4t+KjgU8ZKb0L9PW3wNg71DoCtZjny
-         rlAsS83qM8837mn79cM6xnxAiFJadS3UADG4sDuga74kS4IQ1/Lr1urFiKM3/kLY1b
-         OCvI6YQ3xrPV0ZHJNHa2LfTmVTu01U3IPteZWL2E=
+        b=bIse+ow20K7BpanHXQ49cUZmR92pHLe3BfWwyAAZ4EsY5q37ymkoDSmdVFd0TvL/Q
+         K7+e+3sGrdKft2U3/DDB9FKWl2dsfSbjIjli2TdTUUtdC4j6TKNc4R5zav4yirSfco
+         AMuyahFc8Kx/YQEStqu6yesnJ0mDPPL8jhvkZp6c=
 From:   Tyler Hicks <tyhicks@linux.microsoft.com>
 To:     Eric Van Hensbergen <ericvh@gmail.com>,
         Latchesar Ionkov <lucho@ionkov.net>,
@@ -33,9 +33,9 @@ To:     Eric Van Hensbergen <ericvh@gmail.com>,
 Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
         Jianyong Wu <jianyong.wu@arm.com>,
         v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/5] 9p: Make the path walk logic more clear about when cloning is required
-Date:   Thu, 26 May 2022 19:00:01 -0500
-Message-Id: <20220527000003.355812-4-tyhicks@linux.microsoft.com>
+Subject: [PATCH v2 4/5] 9p: Remove unnecessary variable for old fids while walking from d_parent
+Date:   Thu, 26 May 2022 19:00:02 -0500
+Message-Id: <20220527000003.355812-5-tyhicks@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220527000003.355812-1-tyhicks@linux.microsoft.com>
 References: <20220527000003.355812-1-tyhicks@linux.microsoft.com>
@@ -51,54 +51,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cloning during a path component walk is only needed when the old fid
-used for the walk operation is the root fid. Make that clear by
-comparing the two fids rather than using an additional variable.
+Remove the ofid variable that's local to the conditional block in favor
+of the old_fid variable that's local to the entire function.
 
 Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 ---
- fs/9p/fid.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ fs/9p/fid.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/fs/9p/fid.c b/fs/9p/fid.c
-index dae276ca7f7a..dfe98a308612 100644
+index dfe98a308612..d8c70c4cd3c2 100644
 --- a/fs/9p/fid.c
 +++ b/fs/9p/fid.c
-@@ -150,7 +150,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
- {
- 	struct dentry *ds;
- 	const unsigned char **wnames, *uname;
--	int i, n, l, clone, access;
-+	int i, n, l, access;
- 	struct v9fs_session_info *v9ses;
- 	struct p9_fid *fid, *root_fid, *old_fid;
+@@ -169,10 +169,10 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+ 	fid = v9fs_fid_find(ds, uid, any);
+ 	if (fid) {
+ 		/* Found the parent fid do a lookup with that */
+-		struct p9_fid *ofid = fid;
++		old_fid = fid;
  
-@@ -214,7 +214,6 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+-		fid = p9_client_walk(ofid, 1, &dentry->d_name.name, 1);
+-		p9_client_clunk(ofid);
++		fid = p9_client_walk(old_fid, 1, &dentry->d_name.name, 1);
++		p9_client_clunk(old_fid);
+ 		goto fid_out;
  	}
- 	fid = root_fid;
- 	old_fid = root_fid;
--	clone = 1;
- 	i = 0;
- 	while (i < n) {
- 		l = min(n - i, P9_MAXWELEM);
-@@ -222,7 +221,8 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
- 		 * We need to hold rename lock when doing a multipath
- 		 * walk to ensure none of the patch component change
- 		 */
--		fid = p9_client_walk(old_fid, l, &wnames[i], clone);
-+		fid = p9_client_walk(old_fid, l, &wnames[i],
-+				     old_fid == root_fid);
- 		p9_client_clunk(old_fid);
- 		if (IS_ERR(fid)) {
- 			kfree(wnames);
-@@ -230,7 +230,6 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
- 		}
- 		old_fid = fid;
- 		i += l;
--		clone = 0;
- 	}
- 	kfree(wnames);
- fid_out:
+ 	up_read(&v9ses->rename_sem);
 -- 
 2.25.1
 

@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FE5535D67
+	by mail.lfdr.de (Postfix) with ESMTP id F3A4A535D6A
 	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350578AbiE0Jas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        id S236696AbiE0Ja4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350230AbiE0Jar (ORCPT
+        with ESMTP id S1350599AbiE0Jax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:30:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00B8266AE2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653643845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ps73Vyt4yN+27PJzPF0JTccmiXVswx7yZqJIriLMxWk=;
-        b=CHS10T2AEDPne/HtUkhr8Rd8UUBrX/xjMG8SXL3rxe8rIgiESMnWcVodxyANIj1qlND0DH
-        DbAE3OGA04f8IRhWHZxKM1VkFiVQCWg3SLCC4YGRDjDergxPkD1poXMyUlbP/G7rTRiWvG
-        AR47g3RoXjJIfBtovA68lxTYmyqMCVk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-456-iCDgyNaKOam64PAuHzOeKw-1; Fri, 27 May 2022 05:30:41 -0400
-X-MC-Unique: iCDgyNaKOam64PAuHzOeKw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F80B1D32375;
-        Fri, 27 May 2022 09:30:40 +0000 (UTC)
-Received: from rh (vpn2-54-35.bne.redhat.com [10.64.54.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CF8E0492C3B;
-        Fri, 27 May 2022 09:30:39 +0000 (UTC)
-Received: from localhost ([::1] helo=rh)
-        by rh with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <dchinner@redhat.com>)
-        id 1nuWIm-00CFqS-4E; Fri, 27 May 2022 19:30:36 +1000
-Date:   Fri, 27 May 2022 19:30:34 +1000
-From:   Dave Chinner <dchinner@redhat.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v4 3/6] mm: shrinkers: provide shrinkers with names
-Message-ID: <YpCaOmL2NfcLEAHi@rh>
-References: <20220525202600.2910982-1-roman.gushchin@linux.dev>
- <20220525202600.2910982-4-roman.gushchin@linux.dev>
+        Fri, 27 May 2022 05:30:53 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128C3FD37C;
+        Fri, 27 May 2022 02:30:48 -0700 (PDT)
+X-UUID: b7df0aabe2694a75bc2d2f914f191f3d-20220527
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:ebdbe9a2-ce8a-476e-823e-b1af4bf74b6c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:2dc6b847-4fb1-496b-8f1d-39e733fed1ea,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: b7df0aabe2694a75bc2d2f914f191f3d-20220527
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 229779352; Fri, 27 May 2022 17:30:42 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 27 May 2022 17:30:40 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 27 May 2022 17:30:40 +0800
+Message-ID: <997da91ccc893a53cf4e7713ba08b5e32043c507.camel@mediatek.com>
+Subject: Re: [PATCH v18 6/6] soc: mediatek: mutex: add functions that
+ operate registers by CMDQ
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <tfiga@chromium.org>, <drinkcat@chromium.org>,
+        <pihsun@chromium.org>, <hsinyi@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
+        <randy.wu@mediatek.com>, <jason-jh.lin@mediatek.com>,
+        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <cellopoint.kai@gmail.com>
+Date:   Fri, 27 May 2022 17:30:40 +0800
+In-Reply-To: <20220512084139.15086-7-moudy.ho@mediatek.com>
+References: <20220512084139.15086-1-moudy.ho@mediatek.com>
+         <20220512084139.15086-7-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525202600.2910982-4-roman.gushchin@linux.dev>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,62 +83,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 25, 2022 at 01:25:57PM -0700, Roman Gushchin wrote:
-> Currently shrinkers are anonymous objects. For debugging purposes they
-> can be identified by count/scan function names, but it's not always
-> useful: e.g. for superblock's shrinkers it's nice to have at least
-> an idea of to which superblock the shrinker belongs.
+Hi, Moudy:
+
+On Thu, 2022-05-12 at 16:41 +0800, Moudy Ho wrote:
+> Due to HW limitations, MDP3 is necessary to enable MUTEX in each
+> frame
+> for SOF triggering and cooperate with CMDQ control to reduce the
+> amount
+> of interrupts generated(also, reduce frame latency).
 > 
-> This commit adds names to shrinkers. register_shrinker() and
-> prealloc_shrinker() functions are extended to take a format and
-> arguments to master a name.
+> In response to the above situation, a new interface
+> "mtk_mutex_enable_by_cmdq" has been added to achieve the purpose.
 > 
-> In some cases it's not possible to determine a good name at the time
-> when a shrinker is allocated. For such cases shrinker_debugfs_rename()
-> is provided.
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/soc/mediatek/mtk-mutex.c       | 47
+> +++++++++++++++++++++++++-
+>  include/linux/soc/mediatek/mtk-mutex.h |  2 ++
+>  2 files changed, 48 insertions(+), 1 deletion(-)
 > 
-> After this change the shrinker debugfs directory looks like:
->   $ cd /sys/kernel/debug/shrinker/
->   $ ls
->     dqcache-16          sb-hugetlbfs-17  sb-rootfs-2      sb-tmpfs-49
->     kfree_rcu-0         sb-hugetlbfs-33  sb-securityfs-6  sb-tracefs-13
->     sb-aio-20           sb-iomem-12      sb-selinuxfs-22  sb-xfs:vda1-36
->     sb-anon_inodefs-15  sb-mqueue-21     sb-sockfs-8      sb-zsmalloc-19
->     sb-bdev-3           sb-nsfs-4        sb-sysfs-26      shadow-18
->     sb-bpf-32           sb-pipefs-14     sb-tmpfs-1       thp_deferred_split-10
->     sb-btrfs:vda2-24    sb-proc-25       sb-tmpfs-27      thp_zero-9
->     sb-cgroup2-30       sb-proc-39       sb-tmpfs-29      xfs_buf-vda1-37
->     sb-configfs-23      sb-proc-41       sb-tmpfs-35      xfs_inodegc-vda1-38
+> diff --git a/drivers/soc/mediatek/mtk-mutex.c
+> b/drivers/soc/mediatek/mtk-mutex.c
+> index 92afdee14d43..4ec2954f2f43 100644
+> --- a/drivers/soc/mediatek/mtk-mutex.c
+> +++ b/drivers/soc/mediatek/mtk-mutex.c
+> @@ -7,10 +7,12 @@
+>  #include <linux/iopoll.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_address.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/soc/mediatek/mtk-mmsys.h>
+>  #include <linux/soc/mediatek/mtk-mutex.h>
+> +#include <linux/soc/mediatek/mtk-cmdq.h>
+>  
+>  #define MT2701_MUTEX0_MOD0			0x2c
+>  #define MT2701_MUTEX0_SOF0			0x30
+> @@ -176,6 +178,9 @@ struct mtk_mutex_ctx {
+>  	void __iomem			*regs;
+>  	struct mtk_mutex		mutex[10];
+>  	const struct mtk_mutex_data	*data;
+> +	phys_addr_t			addr;
+> +	struct cmdq_client_reg		cmdq_reg;
+> +	bool				has_gce_client_reg;
 
-sb-xfs:vda1-36
-xfs_buf-vda1-37
-xfs_inodegc-vda1-38
+I think this is not necessary. If cmdq_reg.size == 0, that would imply
+cmdq_reg is invalid.
 
-That's a parsing nightmare right there. Please use the same format
-for everything. You have <subsystem>-<type>:<instance>-<id> for
-superblock stuff, but <subsys>_<type>-<instance>-<id> for the XFS
-stuff. Make it consistent so we aren't reduced to pulling out our
-hair trying to parse this in any useful way:
+>  };
+>  
+>  static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+> @@ -531,6 +536,30 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
+>  }
+>  EXPORT_SYMBOL_GPL(mtk_mutex_enable);
+>  
+> +int mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex, void *pkt)
+> +{
+> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
+> mtk_mutex_ctx,
+> +						 mutex[mutex->id]);
+> +#if IS_REACHABLE(CONFIG_MTK_CMDQ)
+> +	struct cmdq_pkt *cmdq_pkt = (struct cmdq_pkt *)pkt;
+> +
+> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
+> +
+> +	if (!mtx->has_gce_client_reg) {
+> +		dev_err(mtx->dev, "mediatek,gce-client-reg hasn't been
+> set in dts");
+> +		return -EINVAL;
+> +	}
+> +
+> +	cmdq_pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys,
+> +		       mtx->addr + DISP_REG_MUTEX_EN(mutex->id), 1);
+> +	return 0;
+> +#else
+> +	dev_err(mtx->dev, "Not support for enable MUTEX by CMDQ");
+> +	return -ENODEV;
+> +#endif
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
+> +
+>  void mtk_mutex_disable(struct mtk_mutex *mutex)
+>  {
+>  	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
+> mtk_mutex_ctx,
+> @@ -655,8 +684,11 @@ static int mtk_mutex_probe(struct
+> platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct mtk_mutex_ctx *mtx;
+> -	struct resource *regs;
+> +	struct resource *regs, addr;
+>  	int i;
+> +#if IS_REACHABLE(CONFIG_MTK_CMDQ)
+> +	int ret;
+> +#endif
+>  
+>  	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
+>  	if (!mtx)
+> @@ -676,6 +708,19 @@ static int mtk_mutex_probe(struct
+> platform_device *pdev)
+>  		}
+>  	}
+>  
+> +	if (of_address_to_resource(dev->of_node, 0, &addr) < 0)
+> +		mtx->addr = 0L;
 
-sb-xfs:vda1-36
-xfs-buf:vda1-37
-xfs-inodegc:vda1-38
+You may return error, or you should check mtx->addr when use it.
 
-FWIW, how we are supposed to know what actually owns these:
+Regards,
+CK
 
-sb-tmpfs-1
-sb-tmpfs-27
-sb-tmpfs-29
-sb-tmpfs-35
-sb-tmpfs-49
-
-tmpfs-27 might own all the memory - how do we link that back to a
-mount point, container, user, workload, etc?
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-dchinner@redhat.com
+> +	else
+> +		mtx->addr = addr.start;
+> +
+> +#if IS_REACHABLE(CONFIG_MTK_CMDQ)
+> +	ret = cmdq_dev_get_client_reg(dev, &mtx->cmdq_reg, 0);
+> +	if (ret)
+> +		dev_dbg(dev, "No mediatek,gce-client-reg!\n");
+> +	else
+> +		mtx->has_gce_client_reg = true;
+> +#endif
+> +
+>  	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	mtx->regs = devm_ioremap_resource(dev, regs);
+>  	if (IS_ERR(mtx->regs)) {
+> diff --git a/include/linux/soc/mediatek/mtk-mutex.h
+> b/include/linux/soc/mediatek/mtk-mutex.h
+> index f174452212d6..80425ae19fb7 100644
+> --- a/include/linux/soc/mediatek/mtk-mutex.h
+> +++ b/include/linux/soc/mediatek/mtk-mutex.h
+> @@ -29,6 +29,8 @@ int mtk_mutex_prepare(struct mtk_mutex *mutex);
+>  void mtk_mutex_add_comp(struct mtk_mutex *mutex,
+>  			enum mtk_ddp_comp_id id);
+>  void mtk_mutex_enable(struct mtk_mutex *mutex);
+> +int mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
+> +			     void *pkt);
+>  void mtk_mutex_disable(struct mtk_mutex *mutex);
+>  void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
+>  			   enum mtk_ddp_comp_id id);
 

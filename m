@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729F5535FDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2544536019
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344058AbiE0Lll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S1351768AbiE0Lql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351538AbiE0Lki (ORCPT
+        with ESMTP id S1351976AbiE0LpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:40:38 -0400
+        Fri, 27 May 2022 07:45:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CED613C1E8;
-        Fri, 27 May 2022 04:39:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD47132766;
+        Fri, 27 May 2022 04:41:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC22561CD8;
-        Fri, 27 May 2022 11:39:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4FFC385A9;
-        Fri, 27 May 2022 11:39:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5D1D61CB7;
+        Fri, 27 May 2022 11:41:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D76C385A9;
+        Fri, 27 May 2022 11:41:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651566;
-        bh=Gzi/MJPh1ygCTGNY7eBfQS7k+1JoXsxG6V4cb1psY9A=;
+        s=korg; t=1653651696;
+        bh=VpQApCs5/lvsmf8+1uF4l3TjOpcku2gXN53TYSaWCMc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n1Y7p2bxpRupsLbnCxRR2h8wf5qKDMMiVJsF5D65iJe5G5h7Sf1us/+zOXWKDMFGl
-         ykMb5c84Vub5I2zPk0wXZtTcvOGqFdnd2cgXJxvwkSlPTL/XQnOxt9lp0NrIrjPP5U
-         /1EwxNtrY9GCCsvb90ulu+PZamR3TJ0rwtZxFDZk=
+        b=kPgKBnhRZ82f9wUZEk9HkEj89/vG59heGmdtDLQOPFa/rTMRbE/YhQRpmaE2u6E8D
+         vKxFU04gApbD0xaw4UEvL2kVTfIa+tbhOkkKgwv1LGYA9p66cNDrc/kEoDoJqQiVbC
+         zkoAXac80NqC30bCTwfK8UPqMaTjIblcfR30mTDw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 017/145] random: harmonize "crng init done" messages
-Date:   Fri, 27 May 2022 10:48:38 +0200
-Message-Id: <20220527084853.060923208@linuxfoundation.org>
+Subject: [PATCH 5.10 039/163] random: dont reset crng_init_cnt on urandom_read()
+Date:   Fri, 27 May 2022 10:48:39 +0200
+Message-Id: <20220527084833.519888990@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,30 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dominik Brodowski <linux@dominikbrodowski.net>
+From: Jann Horn <jannh@google.com>
 
-commit 161212c7fd1d9069b232785c75492e50941e2ea8 upstream.
+commit 6c8e11e08a5b74bb8a5cdd5cbc1e5143df0fba72 upstream.
 
-We print out "crng init done" for !TRUST_CPU, so we should also print
-out the same for TRUST_CPU.
+At the moment, urandom_read() (used for /dev/urandom) resets crng_init_cnt
+to zero when it is called at crng_init<2. This is inconsistent: We do it
+for /dev/urandom reads, but not for the equivalent
+getrandom(GRND_INSECURE).
 
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+(And worse, as Jason pointed out, we're only doing this as long as
+maxwarn>0.)
+
+crng_init_cnt is only read in crng_fast_load(); it is relevant at
+crng_init==0 for determining when to switch to crng_init==1 (and where in
+the RNG state array to write).
+
+As far as I understand:
+
+ - crng_init==0 means "we have nothing, we might just be returning the same
+   exact numbers on every boot on every machine, we don't even have
+   non-cryptographic randomness; we should shove every bit of entropy we
+   can get into the RNG immediately"
+ - crng_init==1 means "well we have something, it might not be
+   cryptographic, but at least we're not gonna return the same data every
+   time or whatever, it's probably good enough for TCP and ASLR and stuff;
+   we now have time to build up actual cryptographic entropy in the input
+   pool"
+ - crng_init==2 means "this is supposed to be cryptographically secure now,
+   but we'll keep adding more entropy just to be sure".
+
+The current code means that if someone is pulling data from /dev/urandom
+fast enough at crng_init==0, we'll keep resetting crng_init_cnt, and we'll
+never make forward progress to crng_init==1. It seems to be intended to
+prevent an attacker from bruteforcing the contents of small individual RNG
+inputs on the way from crng_init==0 to crng_init==1, but that's misguided;
+crng_init==1 isn't supposed to provide proper cryptographic security
+anyway, RNG users who care about getting secure RNG output have to wait
+until crng_init==2.
+
+This code was inconsistent, and it probably made things worse - just get
+rid of it.
+
+Signed-off-by: Jann Horn <jannh@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/random.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -831,7 +831,7 @@ static void __init crng_initialize_prima
- 		invalidate_batched_entropy();
- 		numa_crng_init();
- 		crng_init = 2;
--		pr_notice("crng done (trusting CPU's manufacturer)\n");
-+		pr_notice("crng init done (trusting CPU's manufacturer)\n");
+@@ -1831,7 +1831,6 @@ urandom_read_nowarn(struct file *file, c
+ static ssize_t
+ urandom_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos)
+ {
+-	unsigned long flags;
+ 	static int maxwarn = 10;
+ 
+ 	if (!crng_ready() && maxwarn > 0) {
+@@ -1839,9 +1838,6 @@ urandom_read(struct file *file, char __u
+ 		if (__ratelimit(&urandom_warning))
+ 			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
+ 				  current->comm, nbytes);
+-		spin_lock_irqsave(&primary_crng.lock, flags);
+-		crng_init_cnt = 0;
+-		spin_unlock_irqrestore(&primary_crng.lock, flags);
  	}
- 	crng->init_time = jiffies - CRNG_RESEED_INTERVAL - 1;
- }
+ 
+ 	return urandom_read_nowarn(file, buf, nbytes, ppos);
 
 

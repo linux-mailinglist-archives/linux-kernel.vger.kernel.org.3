@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A9C536610
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF5F536617
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349524AbiE0QjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 12:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
+        id S1344305AbiE0QmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 12:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiE0QjW (ORCPT
+        with ESMTP id S240018AbiE0QmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 12:39:22 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A686A88AB
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:39:22 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id cv10so5036159pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jeA4ER8KbBHKcyc+TaHYMfBnKpuDxMWJ6quO+9dHOWE=;
-        b=NSLHsjgjrWqwX/1FYyNqbRe5eG4yejZ3h0d0GNRHAthad8+JrxNe0WwprdS58sHjLG
-         +DFIEYNpeUJHV1+de7IN6+6hqCPJvHZpAzT/KyT4Uzzs40+wPILx3PmuZDo3ZE7laNTS
-         cwg6C2WrHXDx3w7d9mw/XHohR5XWW2bqpm59bOC9y2hMyncS06X7fS/n/NsOeOA+Auc9
-         yWGy/DpZq9uCpNRVlldmo3BHO8pSLPlvYA2RE6DnbPWcNLlS8+5yHlyGWpFiLVxCzD0r
-         PuYmyh6SzT4L9DJ+6NrhKH9xQH8MHTACWPpile6TcTNUhr0PsJUw3REwgEWUWiHDp7J3
-         0CGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jeA4ER8KbBHKcyc+TaHYMfBnKpuDxMWJ6quO+9dHOWE=;
-        b=L4F1Pt2Ce1ZkzLdvnZKyW6D+VTkStipEl5REUZuRDab3oe+Ms7QkJkBKKvDdp12PLx
-         1qxGfcz0nBxdlrINWeYk0ycNT1ayCJUrjtwChjbiEWCTqvmuu6KZsPJmOuwX3nIYGqiq
-         00nP/PzUyWqbGyaGaqo5kfqHk/OfvwslA6zeUDhp2Yn8B6T4Z7SFszv1CupGfGUGg7zI
-         M//HnKv8VDf7v7Z/8w8s7cNCIuw8FNRRJkMWSO6TJGpTf/QNCD4MY3XRCoMFhVuaovL3
-         lAUvOHIRV8WQlqpl3VxkVlwym7EuhXdoc9/s66OFsKAEeJdV9OcKzoWDJgey+L/vcnjp
-         wc7w==
-X-Gm-Message-State: AOAM532gc34E1ecQGcsCH0pK6u1dQsAmzYaJ626cmbB9+zw3hpdCd0oC
-        pC+86FgHzQn6105cZH/OEyxYuw==
-X-Google-Smtp-Source: ABdhPJyi69Ad1o5E56g2U1o6Hglm4gMSgHsPyLve6/Bw61JoUcE1Pxr/YAer+BxdWsnzdIzVwEuFOQ==
-X-Received: by 2002:a17:90a:8807:b0:1df:78c7:c215 with SMTP id s7-20020a17090a880700b001df78c7c215mr9138624pjn.234.1653669561546;
-        Fri, 27 May 2022 09:39:21 -0700 (PDT)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id z1-20020aa79481000000b0051812f8faa3sm3697788pfk.184.2022.05.27.09.39.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 May 2022 09:39:21 -0700 (PDT)
-Message-ID: <904ef8af-13a5-e566-b760-74519f70fa62@linaro.org>
-Date:   Fri, 27 May 2022 09:39:20 -0700
+        Fri, 27 May 2022 12:42:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4417640A23;
+        Fri, 27 May 2022 09:42:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1D9DB825AE;
+        Fri, 27 May 2022 16:42:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD3DC385A9;
+        Fri, 27 May 2022 16:42:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653669726;
+        bh=zglyA33t8Bhax6x2hK4aQE0hBcZgy78FCZh1HsYWP5k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=EUJTlgaEE0bBgBJEX1j/V1QiUNB84hN62hWLTUgWBT/GgmTmH4ml4wmqQZ3+ntc2c
+         zj9asOP0cokWrZSFx8ZpFaW+DmK5c19p2/gv3FM4pvCGbGOlSJVXuFARwx+sscy3MF
+         LtFIMeQ0tg2OqnHm181tlZSHBYvZJOq+k8Fae/3TMPi+G8T1h0BbPVW4j+PgcUmgur
+         5D/Sht8IQ+szcKsdce+wLh7oi90TxpjRwjQscR2tYDbMQlL1LxAncrbyyQAUYJRyrL
+         MXA4XyDDu90ZMgkDKY2CsYDiTQQzkX0qd9vHQI+EtI1JCaUlTj+u0TOjDCyq7MRyUI
+         ti7hwsBE1I92A==
+Date:   Fri, 27 May 2022 11:42:04 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     keliu <liuke94@huawei.com>
+Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, kurt.schwemmer@microsemi.com,
+        logang@deltatee.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: pci: Directly use ida_alloc()/free()
+Message-ID: <20220527164204.GA481720@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Bui Quang Minh <minhquangbui99@gmail.com>
-References: <20220525151517.8430-1-mkoutny@suse.com>
- <20220525151517.8430-3-mkoutny@suse.com>
- <20220525161455.GA16134@blackbody.suse.cz> <Yo7KfEOz92kS2z5Y@blackbook>
- <Yo/DtjEU/kYr190u@slm.duckdns.org>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <Yo/DtjEU/kYr190u@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527072005.2360176-1-liuke94@huawei.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,55 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/22 11:15, Tejun Heo wrote:
-> Hello, Michal.
+On Fri, May 27, 2022 at 07:20:05AM +0000, keliu wrote:
+> Use ida_alloc()/ida_free() instead of deprecated
+> ida_simple_get()/ida_simple_remove() .
 > 
-> On Thu, May 26, 2022 at 11:56:34AM +0200, Michal Koutný wrote:
->> // ref=A: initial state
->> kill_css()
->>    css_get // ref+=F == A+F: fuse
->>    percpu_ref_kill_and_confirm
->>      __percpu_ref_switch_to_atomic
->>        percpu_ref_get
->>          // ref += 1 == A+F+1: atomic mode, self-protection
->>      percpu_ref_put
->>        // ref -= 1 == A+F: kill the base reference
->>    [via rcu]
->>    percpu_ref_switch_to_atomic_rcu
->>      percpu_ref_call_confirm_rcu
->>        css_killed_ref_fn == refcnt.confirm_switch
->>          queue_work(css->destroy_work)        (1)
->>                                                       [via css->destroy_work]
->>                                                       css_killed_work_fn == wq.func
->>                                                         offline_css() // needs fuse
->>                                                         css_put // ref -= F == A: de-fuse
->>        percpu_ref_put
->>          // ref -= 1 == A-1: remove self-protection
->>          css_release                                   // A <= 1 -> 2nd queue_work explodes!
-> 
-> I'm not sure I'm following it but it's perfectly fine to re-use the work
-> item at this point. The work item actually can be re-cycled from the very
-> beginning of the work function. The only thing we need to make sure is that
-> we don't css_put() prematurely to avoid it being freed while we're using it.
-> 
-> For the sharing to be a problem, we should be queueing the release work item
-> while the destroy instance is still pending, and if that is the case, it
-> doesn't really matter whether we use two separate work items or not. We're
-> already broken and would just be shifting the problem to explode elsewhere.
-> 
-> The only possibility that I can think of is that somehow we're ending up
-> with an extra css_put() somewhere thus triggering the release path
-> prematurely. If that's the case, we'll prolly need to trace get/puts to find
-> out who's causing the ref imbalance.
+> Signed-off-by: keliu <liuke94@huawei.com>
 
-Hi Michal,
-As far as I can see we are trying to test the same thing suggested by Tejun.
-I just sent a test request to try this:
-https://github.com/tstruk/linux/commit/master
+I see you got some feedback about a full name already (here's a
+reference:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?id=v5.17#n407)
+so I'll wait for the update.  When you do, please also update the
+subject line to match previous drivers/pci/ history (use
+"git log --oneline drivers/pci/" to see it).
 
-Let me know if you have any more tests to run and I will hold off until
-you are done.
+The patch itself looks good to me.  Thanks for doing this!
 
--- 
-Thanks,
-Tadeusz
+> ---
+>  drivers/pci/controller/vmd.c   | 6 +++---
+>  drivers/pci/switch/switchtec.c | 7 +++----
+>  2 files changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index eb05cceab964..efcb3a3ca65e 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -893,7 +893,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  		return -ENOMEM;
+>  
+>  	vmd->dev = dev;
+> -	vmd->instance = ida_simple_get(&vmd_instance_ida, 0, 0, GFP_KERNEL);
+> +	vmd->instance = ida_alloc(&vmd_instance_ida, GFP_KERNEL);
+>  	if (vmd->instance < 0)
+>  		return vmd->instance;
+>  
+> @@ -934,7 +934,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  	return 0;
+>  
+>   out_release_instance:
+> -	ida_simple_remove(&vmd_instance_ida, vmd->instance);
+> +	ida_free(&vmd_instance_ida, vmd->instance);
+>  	kfree(vmd->name);
+>  	return err;
+>  }
+> @@ -957,7 +957,7 @@ static void vmd_remove(struct pci_dev *dev)
+>  	vmd_cleanup_srcu(vmd);
+>  	vmd_detach_resources(vmd);
+>  	vmd_remove_irq_domain(vmd);
+> -	ida_simple_remove(&vmd_instance_ida, vmd->instance);
+> +	ida_free(&vmd_instance_ida, vmd->instance);
+>  	kfree(vmd->name);
+>  }
+>  
+> diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
+> index c36c1238c604..75be4fe22509 100644
+> --- a/drivers/pci/switch/switchtec.c
+> +++ b/drivers/pci/switch/switchtec.c
+> @@ -1376,8 +1376,7 @@ static struct switchtec_dev *stdev_create(struct pci_dev *pdev)
+>  	dev->groups = switchtec_device_groups;
+>  	dev->release = stdev_release;
+>  
+> -	minor = ida_simple_get(&switchtec_minor_ida, 0, 0,
+> -			       GFP_KERNEL);
+> +	minor = ida_alloc(&switchtec_minor_ida, GFP_KERNEL);
+>  	if (minor < 0) {
+>  		rc = minor;
+>  		goto err_put;
+> @@ -1692,7 +1691,7 @@ static int switchtec_pci_probe(struct pci_dev *pdev,
+>  err_devadd:
+>  	stdev_kill(stdev);
+>  err_put:
+> -	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+> +	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+>  	put_device(&stdev->dev);
+>  	return rc;
+>  }
+> @@ -1704,7 +1703,7 @@ static void switchtec_pci_remove(struct pci_dev *pdev)
+>  	pci_set_drvdata(pdev, NULL);
+>  
+>  	cdev_device_del(&stdev->cdev, &stdev->dev);
+> -	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+> +	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+>  	dev_info(&stdev->dev, "unregistered.\n");
+>  	stdev_kill(stdev);
+>  	put_device(&stdev->dev);
+> -- 
+> 2.25.1
+> 

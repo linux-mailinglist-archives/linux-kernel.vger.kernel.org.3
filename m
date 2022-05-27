@@ -2,154 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F3B535D6F
+	by mail.lfdr.de (Postfix) with ESMTP id D142B535D70
 	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350580AbiE0J2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+        id S1348941AbiE0JaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350555AbiE0J2R (ORCPT
+        with ESMTP id S232733AbiE0JaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:28:17 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028FDDFE9;
-        Fri, 27 May 2022 02:28:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653643696; x=1685179696;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=efyypdxFtKwj98j5J7dnwyYqKUsUcxzC2VXnwZlhrMk=;
-  b=YQa4NODRyXIeoG2SUk7VC9fA+F5Kyo0XaVoL0yj+0pVqJOjUvS1RSMdc
-   qzvkvJMdPWhGI4Z6FAe6NMkBXq3N6NWbrsF8UQY5xIOdNvoCGfoTLXHON
-   roJk7BeGPt1RZpm6+z5UnoNrzhJdJkJ8knarrhbd44bYPY4Ftoz3KfEK1
-   EyCliRg+SWTlqpJ45S5OMfW+0hOtkSwwTMMwGO6jxHI81YJSNL3o/7kxq
-   o5SfvTC0lNsJ5i/rYc7rXE7ITpFvku3q2QErQx2JaPKGpu4+HOEszxyd/
-   DAli142EQEDXXUs6Xl4xIHYBT9zkeiJ3+9nEPWEpIagSelxkUelrJ5eaR
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="360819280"
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="360819280"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:28:15 -0700
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="705040963"
-Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.254.211.236]) ([10.254.211.236])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:28:13 -0700
-Message-ID: <1bab5e74-70b9-64b0-b4e0-645ba832c3a9@intel.com>
-Date:   Fri, 27 May 2022 17:28:10 +0800
+        Fri, 27 May 2022 05:30:19 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55596B7D2;
+        Fri, 27 May 2022 02:30:18 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id f21so3880280pfa.3;
+        Fri, 27 May 2022 02:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Kb85+2Sd4OjNt+4J6/Cs/eNfwpCKX3GUphCee7XFrA0=;
+        b=dRA5kKlB4Vxde9Kn5agHxoJaXKC90MjU4QDOC+rZq4NLGVzOcNe9EKFibNOB1rPk5T
+         nl2pRDtCiHcdTQDz88k04+KJds+1OdZBIf2XJmViwOYUqIZ/MtRM4xzL2WIpzWVPKoWg
+         a9ahqPsBfneglleaPSt8iRTCBqKiN4QoA4reGENx5hugwB4qrUNK8a5KDQy2LqTysWgy
+         80ns+RyQVtTuv1KGWAOXqtEqGM8J/s4uGOchCsP4s9rgyu79tQyEFIVBNKM1PzI58bhu
+         pfIFqSkrKGl21TtR/UZkJzAnpiOakY0kE3v1ZltbS5HwUDlbxfr/qbNP46ItsiNi+BLF
+         wW9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Kb85+2Sd4OjNt+4J6/Cs/eNfwpCKX3GUphCee7XFrA0=;
+        b=cXM0D5DKOTpzyr3GB5FQbj8P6c5gd09RnaPLp05v/vT8/ga1QKpPGOFJdXqiMtTT/z
+         UiNNsy5I1HRqUb7zv8eW66Lxjms4OmSQUKHlHDE05SVwlMPv3jdwuXhTEB2Znzqn6uDN
+         SF68BeYqyX4dKL3/K2aRKF8FJKW3xtGYaCPG8n0RAfcTP4PqZeM2W0/MOzOZg3LGDQYX
+         c4OTumAvSZP13n1d/Hd9mPmlXjoJYxIFKM70/nfLb5dx+3nI6z/BZaDNMbH4d5H/Z5br
+         yn2tm8n4bvsnbbyDX7ogS7EA4EKk9BkZMdOVIa5GkGTTt81ffx3AeLf4HadGOKADRAPP
+         iG0g==
+X-Gm-Message-State: AOAM533XPBZjrPyiSTkHfuYCn9j0af51CZx212wIbA9qUJoM18iQRI3F
+        STq9q2tWJ15yZFnWn6SK14/Pzr8a0ks=
+X-Google-Smtp-Source: ABdhPJxv3qbdZEQ+ZKYas5PE5Hw73EwjZbafG3koZF/0HUt4zVxZ1LvuI7uC/m+PGHV93tlQTJuj4Q==
+X-Received: by 2002:a65:6a15:0:b0:3f6:1815:f540 with SMTP id m21-20020a656a15000000b003f61815f540mr35560176pgu.45.1653643817739;
+        Fri, 27 May 2022 02:30:17 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-49.three.co.id. [116.206.28.49])
+        by smtp.gmail.com with ESMTPSA id k71-20020a63844a000000b003db7de758besm3042313pgd.5.2022.05.27.02.30.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 May 2022 02:30:16 -0700 (PDT)
+Message-ID: <4ef24dae-bad0-9641-7eb9-7d8207d198be@gmail.com>
+Date:   Fri, 27 May 2022 16:30:11 +0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH v7 5/8] KVM: MMU: Add helper function to get pkr bits
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH net] net/ipv6: Change accept_unsolicited_na to
+ accept_untracked_na
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220424101557.134102-1-lei4.wang@intel.com>
- <20220424101557.134102-6-lei4.wang@intel.com> <Yo1okaacf2kbvrxh@google.com>
-From:   "Wang, Lei" <lei4.wang@intel.com>
-In-Reply-To: <Yo1okaacf2kbvrxh@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, dsahern@kernel.org,
+        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
+        gilligan@arista.com, noureddine@arista.com, gk@arista.com
+References: <20220527073111.14336-1-aajith@arista.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220527073111.14336-1-aajith@arista.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/2022 7:21 AM, Sean Christopherson wrote:
-> On Sun, Apr 24, 2022, Lei Wang wrote:
->> Extra the PKR stuff to a separate, non-inline helper, which is a
-> s/Extra/Extract
-
-My mistake, will fix it.
-
->> preparation to introduce pks support.
-> Please provide more justification.  The change is justified, by random readers of
-> this patch/commit will be clueless.
+On 5/27/22 14:31, Arun Ajith S wrote:
+> This change expands the current implementation to match the RFC. The
+> sysctl knob is also renamed to accept_untracked_na to better reflect the
+> implementation.
 >
->    Extract getting the effective PKR bits to a helper that lives in mmu.c
->    in order to keep the is_cr4_*() helpers contained to mmu.c.  Support for
->    PKRS (versus just PKRU) will require querying MMU state to see if the
->    relevant CR4 bit is enabled because pkr_mask will be non-zero if _either_
->    bit is enabled).
->
->    PKR{U,S} are exposed to the guest if and only if TDP is enabled, and
->    while permission_fault() is performance critical for ia32 shadow paging,
->    it's a rarely used path with TDP is enabled.  I.e. moving the PKR code
->    out-of-line is not a performance concern.
 
-Will add more justification to make it clearer to random readers.
+Say in imperative, "Expand and rename accept_unsolicited na to
+accept_untracked_na" in both commit/patch subject and message.
 
->> Signed-off-by: Lei Wang <lei4.wang@intel.com>
->> ---
->>   arch/x86/kvm/mmu.h     | 20 +++++---------------
->>   arch/x86/kvm/mmu/mmu.c | 21 +++++++++++++++++++++
->>   2 files changed, 26 insertions(+), 15 deletions(-)
->>
->> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
->> index cb3f07e63778..cea03053a153 100644
->> --- a/arch/x86/kvm/mmu.h
->> +++ b/arch/x86/kvm/mmu.h
->> @@ -204,6 +204,9 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->>   	return vcpu->arch.mmu->page_fault(vcpu, &fault);
->>   }
->>   
->> +u32 kvm_mmu_pkr_bits(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
-> kvm_mmu_get_pkr_bits() so that there's a verb in there.
+> -accept_unsolicited_na - BOOLEAN
+> +accept_untracked_na - BOOLEAN
+>  	Add a new neighbour cache entry in STALE state for routers on receiving an
+> -	unsolicited neighbour advertisement with target link-layer address option
+> -	specified. This is as per router-side behavior documented in RFC9131.
+> -	This has lower precedence than drop_unsolicited_na.
+> +	neighbour advertisement with target link-layer address option specified
+> +	if a corresponding entry is not already present.
+> +	This is as per router-side behavior documented in RFC9131.
+>  
+> -	 ====   ======  ======  ==============================================
+> -	 drop   accept  fwding                   behaviour
+> -	 ----   ------  ------  ----------------------------------------------
+> -	    1        X       X  Drop NA packet and don't pass up the stack
+> -	    0        0       X  Pass NA packet up the stack, don't update NC
+> -	    0        1       0  Pass NA packet up the stack, don't update NC
+> -	    0        1       1  Pass NA packet up the stack, and add a STALE
+> -	                        NC entry
+> -	 ====   ======  ======  ==============================================
+> +	This has lower precedence than drop_unsolicited_na.
+>  
 
-Will fix it.
+I think you should have made similar logical expansion of drop_unsolicited_na to
+drop_untracked_na. Otherwise, ...
 
->> +		     unsigned pte_access, unsigned pte_pkey, unsigned int pfec);
->> +
->>   /*
->>    * Check if a given access (described through the I/D, W/R and U/S bits of a
->>    * page fault error code pfec) causes a permission fault with the given PTE
->> @@ -240,21 +243,8 @@ static inline u8 permission_fault(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
->>   
->>   	WARN_ON(pfec & (PFERR_PK_MASK | PFERR_RSVD_MASK));
->>   	if (unlikely(mmu->pkr_mask)) {
->> -		u32 pkr_bits, offset;
->> -
->> -		/*
->> -		* PKRU defines 32 bits, there are 16 domains and 2
->> -		* attribute bits per domain in pkru.  pte_pkey is the
->> -		* index of the protection domain, so pte_pkey * 2 is
->> -		* is the index of the first bit for the domain.
->> -		*/
->> -		pkr_bits = (vcpu->arch.pkru >> (pte_pkey * 2)) & 3;
->> -
->> -		/* clear present bit, replace PFEC.RSVD with ACC_USER_MASK. */
->> -		offset = (pfec & ~1) +
->> -			((pte_access & PT_USER_MASK) << (PFERR_RSVD_BIT - PT_USER_SHIFT));
->> -
->> -		pkr_bits &= mmu->pkr_mask >> offset;
->> +		u32 pkr_bits =
->> +			kvm_mmu_pkr_bits(vcpu, mmu, pte_access, pte_pkey, pfec);
-> Nit, I prefer wrapping in the params, that way the first line shows the most
-> important information, e.g. what variable is being set and how (by a function call).
-> And then there won't be overflow with the longer helper name:
->
-> 		u32 pkr_bits = kvm_mmu_get_pkr_bits(vcpu, mmu, pte_access,
-> 						    pte_pkey, pfec);
+>  	/* RFC 9131 updates original Neighbour Discovery RFC 4861.
+> -	 * An unsolicited NA can now create a neighbour cache entry
+> -	 * on routers if it has Target LL Address option.
+> +	 * NAs with Target LL Address option without a corresponding
+> +	 * entry in the neighbour cache can now create a STALE neighbour
+> +	 * cache entry on routers.
+>  	 *
+> -	 * drop   accept  fwding                   behaviour
+> -	 * ----   ------  ------  ----------------------------------------------
+> -	 *    1        X       X  Drop NA packet and don't pass up the stack
+> -	 *    0        0       X  Pass NA packet up the stack, don't update NC
+> -	 *    0        1       0  Pass NA packet up the stack, don't update NC
+> -	 *    0        1       1  Pass NA packet up the stack, and add a STALE
+> -	 *                          NC entry
+> -	 * Note that we don't do a (daddr == all-routers-mcast) check.
+> +	 *   entry accept  fwding  solicited        behaviour
+> +	 * ------- ------  ------  ---------    ----------------------
+> +	 * present      X       X         0     Set state to STALE
+> +	 * present      X       X         1     Set state to REACHABLE
+> +	 *  absent      0       X         X     Do nothing
+> +	 *  absent      1       0         X     Do nothing
+> +	 *  absent      1       1         X     Add a new STALE entry
+>  	 */
 
-Make sense, will make the wrapping more reasonable.
+The Documentation/ diff above drops behavior table but in the code comment
+it is updated. Why didn't update in Documentation/ instead?
 
-> Comment needs to be aligned, and it can be adjust to wrap at 80 chars (its
-> indentation has changed).
->
-> 	/*
-> 	 * PKRU and PKRS both define 32 bits. There are 16 domains and 2
-> 	 * attribute bits per domain in them. pte_key is the index of the
-> 	 * protection domain, so pte_pkey * 2 is the index of the first bit for
-> 	 * the domain. The use of PKRU versus PKRS is selected by the address
-> 	 * type, as determined by the U/S bit in the paging-structure entries.
-> 	 */
-Will align and adjust it.
+And my nitpick: for consistency, prefer en-US words over en-UK or mixed
+varieties when writing (s/behaviour/behavior/gc, s/neighbour/neighbor/gc).
+
+-- 
+An old man doll... just what I always wanted! - Clara

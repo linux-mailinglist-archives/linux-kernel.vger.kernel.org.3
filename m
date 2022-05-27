@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CC2535FCA
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D415361E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351609AbiE0Ll6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S1347455AbiE0ML6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351574AbiE0Lkr (ORCPT
+        with ESMTP id S1352593AbiE0Lz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:40:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F55913C1F4;
-        Fri, 27 May 2022 04:39:30 -0700 (PDT)
+        Fri, 27 May 2022 07:55:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D474F15AB2A;
+        Fri, 27 May 2022 04:48:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9DB461CC4;
-        Fri, 27 May 2022 11:39:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3772C385A9;
-        Fri, 27 May 2022 11:39:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E709B824CA;
+        Fri, 27 May 2022 11:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6ADC385A9;
+        Fri, 27 May 2022 11:48:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651569;
-        bh=hnMVFKzJakkFudy48mRUI+VFFoGuT+sdo+aAIP6T100=;
+        s=korg; t=1653652127;
+        bh=kK+727lFJ/EMNk+O4EfQALlAPBxYd7tgSmT3zvBhMYo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jsfso5SSCF12QNUW1Sa2P1qYKa3xf/FKQEUq81nEkiuWkHnoRTUr5pqIHvpmywwwI
-         a+SN+ta2zydQv0ROSbcvPcUoSjEvIh9vVn8D+63BX9nb4Rd8qxogDJaD288BfFJk4o
-         i+9taOR7I4gW55rQb/BhNJUGrXfSvGMrxhhx6CSM=
+        b=L81Bcu9OxBIOu2sY0nlD5f6hy5CqyQjLN38uTf49G/4ZQ0BbBqdVV5PUdJmiWg8ww
+         D7+jkYWaUHqeyIPV5hTwnu5jqDlT7o9RiyHOmOkI5qs1E9IAMu8QqGir4EdmUIsSD1
+         kWFPNMFm3FtPuBV4D7n0TR5h/LgWKs0hbx1xMnTI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
         Theodore Tso <tytso@mit.edu>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 059/111] random: mix build-time latent entropy into pool at init
+Subject: [PATCH 5.10 091/163] random: defer fast pool mixing to worker
 Date:   Fri, 27 May 2022 10:49:31 +0200
-Message-Id: <20220527084827.872544791@linuxfoundation.org>
+Message-Id: <20220527084840.749091912@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,41 +62,155 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 1754abb3e7583c570666fa1e1ee5b317e88c89a0 upstream.
+commit 58340f8e952b613e0ead0bed58b97b05bf4743c5 upstream.
 
-Prior, the "input_pool_data" array needed no real initialization, and so
-it was easy to mark it with __latent_entropy to populate it during
-compile-time. In switching to using a hash function, this required us to
-specifically initialize it to some specific state, which means we
-dropped the __latent_entropy attribute. An unfortunate side effect was
-this meant the pool was no longer seeded using compile-time random data.
-In order to bring this back, we declare an array in rand_initialize()
-with __latent_entropy and call mix_pool_bytes() on that at init, which
-accomplishes the same thing as before. We make this __initconst, so that
-it doesn't take up space at runtime after init.
+On PREEMPT_RT, it's problematic to take spinlocks from hard irq
+handlers. We can fix this by deferring to a workqueue the dumping of
+the fast pool into the input pool.
 
-Fixes: 6e8ec2552c7d ("random: use computational hash for entropy extraction")
+We accomplish this with some careful rules on fast_pool->count:
+
+  - When it's incremented to >= 64, we schedule the work.
+  - If the top bit is set, we never schedule the work, even if >= 64.
+  - The worker is responsible for setting it back to 0 when it's done.
+
+There are two small issues around using workqueues for this purpose that
+we work around.
+
+The first issue is that mix_interrupt_randomness() might be migrated to
+another CPU during CPU hotplug. This issue is rectified by checking that
+it hasn't been migrated (after disabling irqs). If it has been migrated,
+then we set the count to zero, so that when the CPU comes online again,
+it can requeue the work. As part of this, we switch to using an
+atomic_t, so that the increment in the irq handler doesn't wipe out the
+zeroing if the CPU comes back online while this worker is running.
+
+The second issue is that, though relatively minor in effect, we probably
+want to make sure we get a consistent view of the pool onto the stack,
+in case it's interrupted by an irq while reading. To do this, we don't
+reenable irqs until after the copy. There are only 18 instructions
+between the cli and sti, so this is a pretty tiny window.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reviewed-by: Sultan Alsawaf <sultan@kerneltoast.com>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/char/random.c |   63 ++++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 49 insertions(+), 14 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -970,6 +970,11 @@ int __init rand_initialize(void)
- 	bool arch_init = true;
- 	unsigned long rv;
+@@ -1178,9 +1178,10 @@ struct fast_pool {
+ 		u32 pool32[4];
+ 		u64 pool64[2];
+ 	};
++	struct work_struct mix;
+ 	unsigned long last;
++	atomic_t count;
+ 	u16 reg_idx;
+-	u8 count;
+ };
  
-+#if defined(LATENT_ENTROPY_PLUGIN)
-+	static const u8 compiletime_seed[BLAKE2S_BLOCK_SIZE] __initconst __latent_entropy;
-+	_mix_pool_bytes(compiletime_seed, sizeof(compiletime_seed));
-+#endif
+ /*
+@@ -1230,12 +1231,49 @@ static u32 get_reg(struct fast_pool *f,
+ 	return *ptr;
+ }
+ 
++static void mix_interrupt_randomness(struct work_struct *work)
++{
++	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
++	u32 pool[4];
 +
- 	for (i = 0; i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)) {
- 		if (!arch_get_random_seed_long_early(&rv) &&
- 		    !arch_get_random_long_early(&rv)) {
++	/* Check to see if we're running on the wrong CPU due to hotplug. */
++	local_irq_disable();
++	if (fast_pool != this_cpu_ptr(&irq_randomness)) {
++		local_irq_enable();
++		/*
++		 * If we are unlucky enough to have been moved to another CPU,
++		 * during CPU hotplug while the CPU was shutdown then we set
++		 * our count to zero atomically so that when the CPU comes
++		 * back online, it can enqueue work again. The _release here
++		 * pairs with the atomic_inc_return_acquire in
++		 * add_interrupt_randomness().
++		 */
++		atomic_set_release(&fast_pool->count, 0);
++		return;
++	}
++
++	/*
++	 * Copy the pool to the stack so that the mixer always has a
++	 * consistent view, before we reenable irqs again.
++	 */
++	memcpy(pool, fast_pool->pool32, sizeof(pool));
++	atomic_set(&fast_pool->count, 0);
++	fast_pool->last = jiffies;
++	local_irq_enable();
++
++	mix_pool_bytes(pool, sizeof(pool));
++	credit_entropy_bits(1);
++	memzero_explicit(pool, sizeof(pool));
++}
++
+ void add_interrupt_randomness(int irq)
+ {
++	enum { MIX_INFLIGHT = 1U << 31 };
+ 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
+ 	struct pt_regs *regs = get_irq_regs();
+ 	unsigned long now = jiffies;
+ 	cycles_t cycles = random_get_entropy();
++	unsigned int new_count;
+ 
+ 	if (cycles == 0)
+ 		cycles = get_reg(fast_pool, regs);
+@@ -1255,12 +1293,13 @@ void add_interrupt_randomness(int irq)
+ 	}
+ 
+ 	fast_mix(fast_pool->pool32);
+-	++fast_pool->count;
++	/* The _acquire here pairs with the atomic_set_release in mix_interrupt_randomness(). */
++	new_count = (unsigned int)atomic_inc_return_acquire(&fast_pool->count);
+ 
+ 	if (unlikely(crng_init == 0)) {
+-		if (fast_pool->count >= 64 &&
++		if (new_count >= 64 &&
+ 		    crng_fast_load(fast_pool->pool32, sizeof(fast_pool->pool32)) > 0) {
+-			fast_pool->count = 0;
++			atomic_set(&fast_pool->count, 0);
+ 			fast_pool->last = now;
+ 			if (spin_trylock(&input_pool.lock)) {
+ 				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
+@@ -1270,20 +1309,16 @@ void add_interrupt_randomness(int irq)
+ 		return;
+ 	}
+ 
+-	if ((fast_pool->count < 64) && !time_after(now, fast_pool->last + HZ))
++	if (new_count & MIX_INFLIGHT)
+ 		return;
+ 
+-	if (!spin_trylock(&input_pool.lock))
++	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
+ 		return;
+ 
+-	fast_pool->last = now;
+-	_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
+-	spin_unlock(&input_pool.lock);
+-
+-	fast_pool->count = 0;
+-
+-	/* Award one bit for the contents of the fast pool. */
+-	credit_entropy_bits(1);
++	if (unlikely(!fast_pool->mix.func))
++		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
++	atomic_or(MIX_INFLIGHT, &fast_pool->count);
++	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+ }
+ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+ 
 
 

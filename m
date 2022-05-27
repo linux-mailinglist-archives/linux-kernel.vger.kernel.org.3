@@ -2,141 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5816D53634A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0C553634D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351697AbiE0NWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 09:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
+        id S1352185AbiE0N1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 09:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242354AbiE0NWr (ORCPT
+        with ESMTP id S235460AbiE0N1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 09:22:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C6E43B54D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653657765;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XQbqWL32WgNp+vr6+IdXD3tIFXkuGIZQKgAX0wF6o5I=;
-        b=gcvQQEvCBfc2kCXZjD6QzbN9Z+P5PK7yGBePhAEZkGPkIq6uoqG8O8RuLwyp3FQl1uvE72
-        t8kYAGp82JdcTIEMOxJ/vDfleeY1F9SfKesa7RB/Ys6A80vaR6DA8LEpN/bhzoR26sr7bn
-        dZcbhVkW2nsz3NTRTeGT1FkW5Nuagsk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-60-DwDo9MTHMZKK_lUYFY3QQg-1; Fri, 27 May 2022 09:22:40 -0400
-X-MC-Unique: DwDo9MTHMZKK_lUYFY3QQg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B5A343C14103;
-        Fri, 27 May 2022 13:22:39 +0000 (UTC)
-Received: from pauld.bos.csb (dhcp-17-51.bos.redhat.com [10.18.17.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 93DC31121315;
-        Fri, 27 May 2022 13:22:39 +0000 (UTC)
-Date:   Fri, 27 May 2022 09:22:38 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 1/2] cpuhp: make target_store() a nop when target ==
- state
-Message-ID: <20220527132156.GB26124@pauld.bos.csb>
-References: <20220526160615.7976-1-pauld@redhat.com>
- <20220526160615.7976-2-pauld@redhat.com>
- <xhsmhy1ynl3hr.mognet@vschneid.remote.csb>
+        Fri, 27 May 2022 09:27:33 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53B83057F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=dJg7G2nPL/gjA12rwYq4JM6XgoNicJnOgK9xyJkk0Gg=;
+        t=1653658052; x=1654867652; b=U9APU1LJPWUieD2+cduNaRIVhwBPzgdMXfn0k3iNE+WTi2M
+        PiizYdN96UrAo0dE4GhM4oEjXOEkAe8QIiyVsGvaIfZiOZU4ncLWqlB8vRoEJVYQNP5o2fABr1DL/
+        IAZyEAmLhBOmoQV0Kbnx/udnWaHZ9mGw+dcVXQNnhFN9XSx5IPingLIElp/TdOa3ql5SISsuJkWXw
+        8j1f9lKIpDOMzf2INWrj3xk+2MUi6oLW8FVYsHeQqIDaEc5Fpeg5V4WRb11kURRxxOqwTSyxgJrHZ
+        Pade4j3CGqEEdGr5JZlOmyDJmQ1YdN7qk0KX7TyCWbnN7eriMCea4mabE5vhA6Ig==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nuZzw-0063Un-KX;
+        Fri, 27 May 2022 15:27:24 +0200
+Message-ID: <134957369d2e0abf51f03817f1e4de7cbf21f76e.camel@sipsolutions.net>
+Subject: Re: [RFC PATCH v3] UML: add support for KASAN under x86_64
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 27 May 2022 15:27:23 +0200
+In-Reply-To: <CACT4Y+bhBMDn80u=W8VBbn4uZg1oD8zsE3RJJC-YJRS2i8Q2oA@mail.gmail.com>
+References: <20220525111756.GA15955@axis.com>
+         <20220526010111.755166-1-davidgow@google.com>
+         <e2339dcea553f9121f2d3aad29f7428c2060f25f.camel@sipsolutions.net>
+         <CACT4Y+ZVrx9VudKV5enB0=iMCBCEVzhCAu_pmxBcygBZP_yxfg@mail.gmail.com>
+         <6fa1ebe49b8d574fb1c82aefeeb54439d9c98750.camel@sipsolutions.net>
+         <CACT4Y+bhBMDn80u=W8VBbn4uZg1oD8zsE3RJJC-YJRS2i8Q2oA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhy1ynl3hr.mognet@vschneid.remote.csb>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 10:38:24AM +0100 Valentin Schneider wrote:
-> On 26/05/22 12:06, Phil Auld wrote:
-> > writing the current state back in hotplug/target calls cpu_down()
-> > which will set cpu dying even when it isn't and then nothing will
-> > ever clear it. A stress test that reads values and writes them back
-> > for all cpu device files in sysfs will trigger the BUG() in
-> > select_fallback_rq once all cpus are marked as dying.
-> >
-> > kernel/cpu.c::target_store()
-> > 	...
-> >         if (st->state < target)
-> >                 ret = cpu_up(dev->id, target);
-> >         else
-> >                 ret = cpu_down(dev->id, target);
-> >
-> > cpu_down() -> cpu_set_state()
-> > 	 bool bringup = st->state < target;
-> > 	 ...
-> > 	 if (cpu_dying(cpu) != !bringup)
-> > 		set_cpu_dying(cpu, !bringup);
-> >
-> > Fix this by letting state==target fall through in the target_store()
-> > conditional.
-> >
-> 
-> To go back on my data race paranoia: writes to both cpu$x/online and
-> cpu$x/hotplug/target are serialized by device_hotplug_lock, and so are the
-> exported kernel hotplug functions ({add, remove}_cpu()).
-> 
-> That's not cpu_add_remove_lock as I was looking for, but that's still all
-> under one lock, so I think we're good. Sorry for that!
-> 
+On Fri, 2022-05-27 at 15:18 +0200, Dmitry Vyukov wrote:
+> On Fri, 27 May 2022 at 15:15, Johannes Berg <johannes@sipsolutions.net> w=
+rote:
+> >=20
+> > On Fri, 2022-05-27 at 15:09 +0200, Dmitry Vyukov wrote:
+> > > > I did note (this is more for kasan-dev@) that the "freed by" is fai=
+rly
+> > > > much useless when using kfree_rcu(), it might be worthwhile to anno=
+tate
+> > > > that somehow, so the stack trace is recorded by kfree_rcu() already=
+,
+> > > > rather than just showing the RCU callback used for that.
+> > >=20
+> > > KASAN is doing it for several years now, see e.g.:
+> > > https://groups.google.com/g/syzkaller-bugs/c/eTW9zom4O2o/m/_v7cOo2RFw=
+AJ
+> > >=20
+> >=20
+> > Hm. It didn't for me:
+>=20
+> Please post a full report with line numbers and kernel version.
 
-Right. This catches it up higher so that we don't get into the code that
-starts actually changing things.  I wonder now in the state == target case
-if we should make sure st->target == target.  With the second patch it's 
-less likely to be needed. Thoughts?
+That was basically it, apart from a few lines snipped from the stack
+traces. Kernel version was admittedly a little older - 5.18.0-rc1 + a
+few UML fixes + this KASAN patch (+ the fixes I pointed out earlier)
 
-Maybe I'll include that if/when I have code to keep cpux/online in sync
-with st->state and cpu_online_mask.
+I guess it doesn't really matter that much, just had to dig a bit to
+understand why it was freed.
 
-> > Signed-off-by: Phil Auld <pauld@redhat.com>
-> 
-> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+johannes
 
-Thanks!
-
-
-Cheers,
-Phil
-
-
-> 
-> > ---
-> >  kernel/cpu.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/cpu.c b/kernel/cpu.c
-> > index d0a9aa0b42e8..cdb6ac10ad94 100644
-> > --- a/kernel/cpu.c
-> > +++ b/kernel/cpu.c
-> > @@ -2315,7 +2315,7 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
-> >  
-> >  	if (st->state < target)
-> >  		ret = cpu_up(dev->id, target);
-> > -	else
-> > +	else if (st->state > target)
-> >  		ret = cpu_down(dev->id, target);
-> >  out:
-> >  	unlock_device_hotplug();
-> > -- 
-> > 2.18.0
-> 
-
--- 
 

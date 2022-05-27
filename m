@@ -2,126 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2544536019
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF4F535BE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351768AbiE0Lql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S243543AbiE0Isu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351976AbiE0LpM (ORCPT
+        with ESMTP id S232051AbiE0Isq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:45:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD47132766;
-        Fri, 27 May 2022 04:41:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5D1D61CB7;
-        Fri, 27 May 2022 11:41:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D76C385A9;
-        Fri, 27 May 2022 11:41:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651696;
-        bh=VpQApCs5/lvsmf8+1uF4l3TjOpcku2gXN53TYSaWCMc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kPgKBnhRZ82f9wUZEk9HkEj89/vG59heGmdtDLQOPFa/rTMRbE/YhQRpmaE2u6E8D
-         vKxFU04gApbD0xaw4UEvL2kVTfIa+tbhOkkKgwv1LGYA9p66cNDrc/kEoDoJqQiVbC
-         zkoAXac80NqC30bCTwfK8UPqMaTjIblcfR30mTDw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 039/163] random: dont reset crng_init_cnt on urandom_read()
-Date:   Fri, 27 May 2022 10:48:39 +0200
-Message-Id: <20220527084833.519888990@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-References: <20220527084828.156494029@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Fri, 27 May 2022 04:48:46 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DA33BF9C;
+        Fri, 27 May 2022 01:48:41 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id q4so3572892plr.11;
+        Fri, 27 May 2022 01:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F/TuFldqNWvbTR7kMknQ2sKjIOSGzhXUVTHp1Dts3Bw=;
+        b=Waerq1Kg5SvqcLdZ91WgRWzCShy7ZEJw5Th3INevO7MYiKqxU166flLRKYb6F3n2WE
+         +/jhiCUpHLjXscO+mQm+qzYfcQ6QVGscfz94TDWbs+505PMsEP+VLtuM0nmfmnKsORsx
+         e2rNwgY0TNH0ff4YJnyjGYKYCKLwXdHus/fT3gypmPcIAeRq3baIiEb27H10uQWXYWfr
+         86WDeESm08ae9QxBJNHTwBk5pwNcblO1VibwZ1AnB5yigJm8+lsU84fszGAC0X4wtRRI
+         3kHnhOT13M7HHIjATivsUNe1oExErxDO5MThHSnlAo+zQhu7ZP6+XxwioyoBbQaf/HJZ
+         NFhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=F/TuFldqNWvbTR7kMknQ2sKjIOSGzhXUVTHp1Dts3Bw=;
+        b=V8g66Om94JDOy3U2U+66WDF/nKz9hK1KIUOrVnoAzNWWvpm49FRFX+SXVADuYmUS2i
+         EtZP3RpXv+zhlReOdsCXbJVviIoKSlnF65OGs118F5ek1GrQf83jOtv/xai8qhgFWm1Z
+         G5RAIoZHavRch5GAVfChoJ+0N10U+VppByBhoJ1tRzc5zOIuCmeg0fp2YmYHphTmpQbB
+         XrUCUL6Fs+YX7gGF3bxIBpsVibLG4B9r7WO5tq8tJphdyUD2euy4/HTvlTUBLhW5T/y+
+         mSxhv2gVfmltMJAykF6Wdf8UyYDtHlq6m4lLHDX1IeeGhz63y3b9xAXVTd69+4+WNGGl
+         b+kA==
+X-Gm-Message-State: AOAM531UB3jazNMgi+/H0wW471n+ifP7xbKtdw4NtK3sNQ77XIlk77lK
+        73Ib3G4D0TzjWixwFLepcA8=
+X-Google-Smtp-Source: ABdhPJwqtjzGV0uG1WoBE3y9BQjc+1acwVdSs33qFdDUPmDyP1NaqwM6CP6aSD4H6E3KNP5tm3n0Yw==
+X-Received: by 2002:a17:902:7781:b0:161:c85a:8fff with SMTP id o1-20020a170902778100b00161c85a8fffmr42066123pll.97.1653641321290;
+        Fri, 27 May 2022 01:48:41 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:ac0e])
+        by smtp.gmail.com with ESMTPSA id a16-20020aa78650000000b0050dc7628137sm3002469pfo.17.2022.05.27.01.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 01:48:40 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 26 May 2022 22:48:39 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup: wait for css offline when rmdir
+Message-ID: <YpCQZ5RRnxwh7fmK@slm.duckdns.org>
+References: <1653619158-27607-1-git-send-email-zhanghongchen@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1653619158-27607-1-git-send-email-zhanghongchen@loongson.cn>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+On Fri, May 27, 2022 at 10:39:18AM +0800, Hongchen Zhang wrote:
+> when remove a cgroup dir, make sure all the csses associated which
+> the cgroup are all offlined,so that we will be sure that the resources
+> allocated by the csses are all freed when rmdir exit successfully.
 
-commit 6c8e11e08a5b74bb8a5cdd5cbc1e5143df0fba72 upstream.
+Offlining doesn't guarantee that resources are freed and there's no definite
+time limit on how long it'd take to free all resources. e.g. for memcg, if
+there isn't sufficient memory pressure, its page cache can remain
+indefinitely. Is there something practical you're trying to achieve?
 
-At the moment, urandom_read() (used for /dev/urandom) resets crng_init_cnt
-to zero when it is called at crng_init<2. This is inconsistent: We do it
-for /dev/urandom reads, but not for the equivalent
-getrandom(GRND_INSECURE).
+Thanks.
 
-(And worse, as Jason pointed out, we're only doing this as long as
-maxwarn>0.)
-
-crng_init_cnt is only read in crng_fast_load(); it is relevant at
-crng_init==0 for determining when to switch to crng_init==1 (and where in
-the RNG state array to write).
-
-As far as I understand:
-
- - crng_init==0 means "we have nothing, we might just be returning the same
-   exact numbers on every boot on every machine, we don't even have
-   non-cryptographic randomness; we should shove every bit of entropy we
-   can get into the RNG immediately"
- - crng_init==1 means "well we have something, it might not be
-   cryptographic, but at least we're not gonna return the same data every
-   time or whatever, it's probably good enough for TCP and ASLR and stuff;
-   we now have time to build up actual cryptographic entropy in the input
-   pool"
- - crng_init==2 means "this is supposed to be cryptographically secure now,
-   but we'll keep adding more entropy just to be sure".
-
-The current code means that if someone is pulling data from /dev/urandom
-fast enough at crng_init==0, we'll keep resetting crng_init_cnt, and we'll
-never make forward progress to crng_init==1. It seems to be intended to
-prevent an attacker from bruteforcing the contents of small individual RNG
-inputs on the way from crng_init==0 to crng_init==1, but that's misguided;
-crng_init==1 isn't supposed to provide proper cryptographic security
-anyway, RNG users who care about getting secure RNG output have to wait
-until crng_init==2.
-
-This code was inconsistent, and it probably made things worse - just get
-rid of it.
-
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/char/random.c |    4 ----
- 1 file changed, 4 deletions(-)
-
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1831,7 +1831,6 @@ urandom_read_nowarn(struct file *file, c
- static ssize_t
- urandom_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos)
- {
--	unsigned long flags;
- 	static int maxwarn = 10;
- 
- 	if (!crng_ready() && maxwarn > 0) {
-@@ -1839,9 +1838,6 @@ urandom_read(struct file *file, char __u
- 		if (__ratelimit(&urandom_warning))
- 			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
- 				  current->comm, nbytes);
--		spin_lock_irqsave(&primary_crng.lock, flags);
--		crng_init_cnt = 0;
--		spin_unlock_irqrestore(&primary_crng.lock, flags);
- 	}
- 
- 	return urandom_read_nowarn(file, buf, nbytes, ppos);
-
-
+-- 
+tejun

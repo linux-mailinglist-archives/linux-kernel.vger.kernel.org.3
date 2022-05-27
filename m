@@ -2,196 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEF9536911
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC38536918
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 01:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355098AbiE0W7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 18:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S1353197AbiE0XC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 19:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346349AbiE0W72 (ORCPT
+        with ESMTP id S234286AbiE0XC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 18:59:28 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECBA13327D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:59:27 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24RKYxNt001972;
-        Fri, 27 May 2022 22:59:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=WklxNc8i9CPt8PvCnvXar2TGFKBokVagIFoHNTNhGKo=;
- b=vWfGeNexUz/QaM91XNIvfPAXg+NfTqmd+5BlCpKINKH30S89xXAfOmgXrEfoL0NQQLtA
- 3FYII0jqGETdlNCoIKvt87Wz9dm4WWI+tlTM0ch2BKQAe6TwtpNisJ5KOBAHBZzBiQbM
- 7JAS0N49NDsoQC1+Xm0RGjaizEuWdeKCs5Mjp51EyC8hlfDngMN+SurVX+kGk+TcsO88
- nRojxZaK13BFmycAdVYzFYLitsO7fobnzFawg5bLJh4FPc3z5+IJ0ZJ8wHUTTp0a+25a
- DcBJQa041kGD9wHnwUQMtibO2NaXjTXO5Qacj5vYO2AyYRvxQkX7HVPIcWlWC0h5aJmQ Bg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g93ta0ane-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 May 2022 22:59:10 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24RMoF9m005421;
-        Fri, 27 May 2022 22:59:09 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2171.outbound.protection.outlook.com [104.47.59.171])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3g93wxq4m8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 May 2022 22:59:08 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZgxzuAPXsLaz+swesbL4pGqZDfivS8TCOh/LZBGePAHqXZvTBbqv+9jw8NFmvsZK5ojvQDo/6CoUTIV9hpmtjn9ncX6dMpiUSAe/lVHqpw6r4LNBE8nV0jNsZz4UrTgijPA8Hm5QTtYH8zgpFnjyGQraQ3tFnF2dqgYFG6LUhDGrcB1Apcv2yciwNtr3yBzgXqS5I0RCQKpDdDKDuah0xFAxo/IMSIX5r1TZx/u7Qx2B6gGwQT4W7RDmsE1KsW6sjWGmsiMUUqTIWaPUPMb8Zwh3lNkY2Bf5S2rr3nNZBIcuzk0TIfFTtklnfK172+cW3AuqHNLOICFQUVx5IBe8Gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WklxNc8i9CPt8PvCnvXar2TGFKBokVagIFoHNTNhGKo=;
- b=AnAkDNz/vZsFiGprJuQdYtuaNijkaMQEymHzzVG5V6zHSyLV7aYiYobZ5FVN+sUWDvu07YYRvGVidZSwkduWAhM5VgHksBSJ9a9YjTxbJdWlGiChM+jSn51VJvjJSWbLExIzFZ/UnTHY/f2rHCVrFtU4xi1HA+10ulOtuu5mRx9VNw8BJSV0HOj1cXvpjKVDaTvcWovY6DiiEM4tCDYfMK+opheuXH0Qgm424fpvVze2fgezecYWBh3DRjhY5jMGrqXqKsI7cgM0PVCHd9M0tuVQo/Ajgh7SHY3fLLt4FMOaMV0hrr9BsaJM1A/j9IUqdAl4rPBLDaKYkibX19H5Cg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 27 May 2022 19:02:56 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84C212E33F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 16:02:54 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id bo5so5536600pfb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 16:02:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WklxNc8i9CPt8PvCnvXar2TGFKBokVagIFoHNTNhGKo=;
- b=M7yb6RZC0JrFz7YRGsX4HN85sAma4q91tEtlvwGlHWhsDFjmPuqp7SNQVhzk32IOtSjNAVws3cFAyyV+xdEawP7vis/e/vhcV+mAYFDdpFG1O3Hbx5NgrXprqHEfmv0JYhtCJHGrXSUfM7IwKd5WlVN9jKD+Mx28dO66l3U0W4s=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by MWHPR10MB1472.namprd10.prod.outlook.com (2603:10b6:300:22::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Fri, 27 May
- 2022 22:59:06 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::2125:9bb7:bfeb:81f9]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::2125:9bb7:bfeb:81f9%9]) with mapi id 15.20.5293.016; Fri, 27 May 2022
- 22:59:06 +0000
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: [RFC PATCH 3/3] hugetlb: Lazy page table copies in fork()
-Date:   Fri, 27 May 2022 15:58:49 -0700
-Message-Id: <20220527225849.284839-4-mike.kravetz@oracle.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220527225849.284839-1-mike.kravetz@oracle.com>
-References: <20220527225849.284839-1-mike.kravetz@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MWHPR17CA0091.namprd17.prod.outlook.com
- (2603:10b6:300:c2::29) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=xYVHCl/Xc9S+LdQbVuLzGS9n/Ik2J15PVCpCDhSAeog=;
+        b=3+WCWlBLrTPP74onI6sVY3zOylHFVssupUpB5BhHRLaoBYi3VIWHfalrCFO0eg/INM
+         PJKLAw/EcUhbuJ09XId4j/cHEqdil6iz2OQm/qZ/rFnj2+aJyh/Wq8tRmEoYS6cvYu0P
+         qKZ5AGH5NeDSRhoNkycdouWcZUInvuJl43UaWLTgs6mRLcfv7hIK3CMpVD4AjI3n4tLf
+         ZG3gh4Ee/+SkLsbmUThfTsn3niXCi1FxmAsbUi/n5KVb8oGM8m1sTGCUxfbj8d9OtwLL
+         YWCicSEM1ccGB40V3Z8Ah8kBuOS3v6BnHaeB960+0PwOAmu8tWJyFJ+2npQDiG2mkyTq
+         b21A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=xYVHCl/Xc9S+LdQbVuLzGS9n/Ik2J15PVCpCDhSAeog=;
+        b=oU+i4lM0oUU5U2eOdseF0EYH14XZ6g4paqG0gnaRI6bYqHqq9mcJQdGZfYWx/iRrhP
+         QB29SK0auDgZwZJ4Byq/vFz+vWhBzOTeGbDlN1qzjTT5OBhCYBstRasoBOcF57o4fneU
+         1ZgzrAagRY08ILr4Gl8dm+7ew8SHahzUF86nCgSAnOFU0Oy+FNYl9Jw4Ibi4YqasbIXO
+         H2Ga5cERjMeSnzYmYrQS6hIREkT5bm9mRae6ZL9Y+R5E3aEjr/N8KNWLG51g3eS8Z7Tq
+         UUQu0Ox/bLKaCTqh0udPXCQzz7wCgeyJ1YbC2jJD+MfxS/VV3ZTLFTztOT7PD9wk1B+p
+         5RiA==
+X-Gm-Message-State: AOAM532WFD/ZE5mGoDa6s+eMrG8o3Kg6V4Nfi5kS21sT17WpOAL6uzvs
+        FfJBPrE71G4uiw80Vdi0aGS37JF/vjMItA8c1sVAMQ==
+X-Google-Smtp-Source: ABdhPJzpmxSaUq/+C3wNgGna1Vs4gnc9QL2CMADJ9qDD7W2F4JZ0oOyJ/VE10sK2MnKm2ffbHBKIk2l8WCtJACkzygg=
+X-Received: by 2002:a63:5610:0:b0:3f2:7e19:1697 with SMTP id
+ k16-20020a635610000000b003f27e191697mr38215091pgb.74.1653692574359; Fri, 27
+ May 2022 16:02:54 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 38b1ad82-696d-4096-e333-08da40348050
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1472:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1472A15E6564FD4539E17756E2D89@MWHPR10MB1472.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZJSVGhB49zG4p2niBOSFXZEvmFyDpAhVIvrgPt0iNS798Qg27wYo1eDbyukAWEPbU0J3l95Naw/kRBT5rwWhTF5VwIsuvbvyNMAA6QwQt3bP41I2uHCkSqy0hMPCIgQkCZK2GtCQ1SgQzISJ1iEohK2tfT/5CCKKaEYHIDaQvmM3yUOSrprfMwLxMqp4yiP0Tm12JOuRzgJ9aszow16w6vASD17yhOehcPWN0Tla6G0THmNKhntTm31kEjGJxvNVwD1Ec/vaV/H71ild90JtxDAelrOjeXpKX/2dsbS+8lPrkkVa9ESBdj90SidF0lJG+ITlvCiGBlsxyoZZfts1sAKJ9v/4189C8rsv5c4p7Fn01aLve2QstvXx7lg2KuedGsFRBZwNWdvT5tLMzU8tO+Y92FuJ9rtsMlNaJ+LI8+Kcxh8jlBA/5wpUJmEBkqvN4PEq9B5OWjImVP5RlmQ+RRVe6MWuZ8MiHLofyQ6a+KPK/b663gterapU1yZyF8aN2o6vMEfICHKYCy3Grd0ga1DahS/JhxBAKTRZ+ByLFTwOnyic5NtjOWravF3APrmEqq6di5A0JPCLSqDgo/0y+/3n8stYfrGHrbjc9XNuOjrc+lBn2lIVHVtyYxWMPcS7BZcK4857MTe0QqbfQ1H6J+YW6XK9ceky0ZN17fWi6AXUARq6ppGKyg1sQfWGZhHutYYtdKjPRvIzJ0ogDUFTkw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(508600001)(6486002)(38100700002)(38350700002)(66476007)(8676002)(4326008)(86362001)(66946007)(66556008)(6666004)(8936002)(2616005)(54906003)(44832011)(186003)(6506007)(5660300002)(316002)(107886003)(1076003)(83380400001)(26005)(36756003)(52116002)(7416002)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pWoDRWnGQaHX7j/LNAxxTQVP/tgUkoSMlVwVsGtZvk2Uc+4V/kwERBfuwvyB?=
- =?us-ascii?Q?eLB9WAV9SbtZcC/WhW0X+2TDJWfE8Md0H35t+RV7ThbbJLTQ946HVb2u9QhV?=
- =?us-ascii?Q?euLnG46HcCb/o9WGsXRGV7xcfv+R82IyxUZz9T4polLWVEhJVKGyrSY9DSV0?=
- =?us-ascii?Q?BYltASTcAvKtZNRPXlGxJzZHFmkkoclyz0NPMUMd1kjZ65nqujTuE8XLKi67?=
- =?us-ascii?Q?76ptDRWLikW0srHyk2KXUxWaBWt45L8r9Uq1YlK2kh5p4DwTVB2UhOjwpypD?=
- =?us-ascii?Q?7siFSywGcWP6GBLFNlqjB05FWbfHcTSb68Tv//hts3RBPK6oPh8zwXqS2F9F?=
- =?us-ascii?Q?SPnaUuaycHM/ldcasCblfCVnZe9beKu6sfV+D4J9KRAYPoQwudOVqiv2DpEQ?=
- =?us-ascii?Q?4wZqqE7dDFYipxVHqR0Unf/VASoCMFbOef6Uk5HpGR9CcAJ2oitJ8tsYoo7g?=
- =?us-ascii?Q?r2SIPzyLdd+tD8e00qKg8YDduSXhsMVg5TiOp9nQpeUC3Vc3+FtCBM8J4NZX?=
- =?us-ascii?Q?7iVt56uQEeuUz4G02e1y1GWPB2/sVZZ0gqp2zUy73Kk9vim9zrnsaA4JHSAN?=
- =?us-ascii?Q?CnLC2TxgT8ED7ahFooGo5yE78s83yKTeZsjTGs9xKT7JE9Dnf5SHZCddRgYC?=
- =?us-ascii?Q?zqQMyA76CAyngaAFweZvqTFsaLZII5GApU2RwePRAx0lNm6H3h6ThRyA1XBM?=
- =?us-ascii?Q?X3j7lxRzg2XJ6jDMPQUigL1njjW4e+hzsPA8NfVmLJR+HHu2qtt7xze5WfNg?=
- =?us-ascii?Q?w3pCQ/gtSmHmbv85EltNDZhnFK1m8byXZu+RhBLpOyRmjee3Ht1sK/IUzu7Q?=
- =?us-ascii?Q?KhZNpjv4Uku08L0/V9BZmWl4TqkKevjy1ELGq2dyq+P6Rze2We5eqzRDjQcc?=
- =?us-ascii?Q?E1tJEBJJIabmTZd8b0GZw5fphgA9ISCDYWHpq9B0WGCyqwJjwmTx2WgiLKtO?=
- =?us-ascii?Q?lFQIDa58dPZBFRsTL083E9VY8ID5rIDI7EnBYYxUsGUMCz75XTb/K+q2hUQm?=
- =?us-ascii?Q?c1/Kdp2pa5FreYvNy0sP37Ovp2l9Wsx7YBkXPmgktsvzZkZkCGJMOpY/xko1?=
- =?us-ascii?Q?EqXbqdjfNpZ8kJnzyhtHykP8sdYWRasXN4Vl0+AsvHOG4cRHG9fYDI17Pxa8?=
- =?us-ascii?Q?c/PeRSzRT1Xk4D2TIGWGc1NYsfsDtAG4Z5An2xD7T07f3Odyh43DXKyBcF4X?=
- =?us-ascii?Q?9sn/guwMCKqH7z9J/edD19X7pDXrzbjvU5WKD7sev+7RYhY2fdskXTOQyXbA?=
- =?us-ascii?Q?MnuB0GFmygWymxoFEvVHqm14NtD8b57rLA8lgyXEMCbBoNn1lYNpLm9r85zD?=
- =?us-ascii?Q?8BUo5TVt41xBJljwPcn3lAZd5kocWrZK7byi/isqojgo0NmwX6ehdSAKYTrW?=
- =?us-ascii?Q?PjaMe7+7mRB8b5W34ZHsNHL4RofiBZWnefc4pYAwEaqEdFBGCi89M0Pr9vGx?=
- =?us-ascii?Q?Gxgh7kqDcg20du3kWljwBB09Au9N4Yz/G4s27sPGGoSr8FevHxmQbMbpllJf?=
- =?us-ascii?Q?5wb8+0+KqU5aMlzP5JAykeVab7l5REP1Xr6FkRdMY2f7co6qJGlbb3yWWjc/?=
- =?us-ascii?Q?aasbNiZ7zFEjdQMDQMzLOk9mpIID2fWuMPDqh1iS9Xv6n/PORfJ4CAHl6oEa?=
- =?us-ascii?Q?rsNn8a8r0cVtDIRCYY7acA966iYPAq+7wx9xt+Jg1J5dy1lPfHXCDat4Jk16?=
- =?us-ascii?Q?88SGrBuhbDOcG9BFQD3p53da55QlQcDjq/+cOcfDXUWTd60dgbEV1suQyFeG?=
- =?us-ascii?Q?aRJd1SA32nS2tbtOQqronDJfbL1hAZc=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38b1ad82-696d-4096-e333-08da40348050
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2022 22:59:06.3482
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q3QPVXQo9Srv3oFBg3RAMwoIYp7oPwTS5rOcqmG95OrbI7J93O2NcfQMEBAA+p/1OxbEwpJdon9/WZogvLcnXQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1472
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
- definitions=2022-05-27_07:2022-05-27,2022-05-27 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=984 malwarescore=0
- adultscore=0 bulkscore=0 suspectscore=0 phishscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205270111
-X-Proofpoint-ORIG-GUID: TFrEPee4ZyygY5vXV5rQUurJbLpg7WSk
-X-Proofpoint-GUID: TFrEPee4ZyygY5vXV5rQUurJbLpg7WSk
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 27 May 2022 16:02:53 -0700
+Message-ID: <CAPcyv4gmk-69G+eqtxqeNUoy0G9XPvdTJg1h32_F9qudbx4SOw@mail.gmail.com>
+Subject: [GIT PULL] Compute Express Link for 5.19
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-cxl@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lazy page table copying at fork time was introduced with commit
-d992895ba2b2 ("Lazy page table copies in fork()").  At the time,
-hugetlb was very new and did not support page faulting.  As a result,
-it was excluded.  When full page fault support was added for hugetlb,
-the exclusion was not removed.
+Hi Linus, please pull from:
 
-Simply remove the check that prevents lazy copying of hugetlb page
-tables at fork.  Of course, like other mappings this only applies to
-shared mappings.
+  git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl tags/cxl-for-5.19
 
-Lazy page table copying at fork will be less advantageous for hugetlb
-mappings because:
-- There are fewer page table entries with hugetlb
-- hugetlb pmds can be shared instead of copied
+...to receive the CXL update for this cycle. The highlight is new
+driver-core infrastructure and CXL subsystem changes for allowing
+lockdep to validate device_lock() usage. Thanks to PeterZ for setting
+me straight on the current capabilities of the lockdep API, and Greg
+acked it as well.
 
-In any case, completely eliminating the copy at fork time shold speed
-things up.
+On the CXL ACPI side this update adds support for CXL _OSC so that
+platform firmware knows that it is safe to still grant Linux native
+control of PCIe hotplug and error handling in the presence of CXL
+devices. A circular dependency problem was discovered between suspend
+and CXL memory for cases where the suspend image might be stored in
+CXL memory where that image also contains the PCI register state to
+restore to re-enable the device. Disable suspend for now until an
+architecture is defined to clarify that conflict.
 
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Lastly a collection of reworks, fixes, and cleanups to the CXL
+subsystem where support for snooping mailbox commands and properly
+handling the "mem_enable" flow are the highlights.
+
+It has appeared in -next for several releases with some fixes from Dan
+and others, but no more outstanding issues as of now.
+
+Please pull, thanks.
+
 ---
- mm/memory.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 21dadf03f089..f390cc11886d 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1245,7 +1245,7 @@ vma_needs_copy(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
- 	if (userfaultfd_wp(dst_vma))
- 		return true;
- 
--	if (src_vma->vm_flags & (VM_HUGETLB | VM_PFNMAP | VM_MIXEDMAP))
-+	if (src_vma->vm_flags & (VM_PFNMAP | VM_MIXEDMAP))
- 		return true;
- 
- 	if (src_vma->anon_vma)
--- 
-2.35.3
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
 
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl tags/cxl-for-5.19
+
+for you to fetch changes up to 34e37b4c432cd0f1842b352fde4b8878b4166888:
+
+  cxl/port: Enable HDM Capability after validating DVSEC Ranges
+(2022-05-20 12:30:53 -0700)
+
+----------------------------------------------------------------
+cxl for 5.19
+
+- Add driver-core infrastructure for lockdep validation of
+  device_lock(), and fixup a deadlock report that was previously hidden
+  behind the 'lockdep no validate' policy.
+
+- Add CXL _OSC support for claiming native control of CXL hotplug and
+  error handling.
+
+- Disable suspend in the presence of CXL memory unless and until a
+  protocol is identified for restoring PCI device context from memory
+  hosted on CXL PCI devices.
+
+- Add support for snooping CXL mailbox commands to protect against
+  inopportune changes, like set-partition with the 'immediate' flag set.
+
+- Rework how the driver detects legacy CXL 1.1 configurations (CXL DVSEC
+  / 'mem_enable') before enabling new CXL 2.0 decode configurations (CXL
+  HDM Capability).
+
+- Miscellaneous cleanups and fixes from -next exposure.
+
+----------------------------------------------------------------
+Alison Schofield (11):
+      cxl/mbox: Move cxl_mem_command construction to helper funcs
+      cxl/mbox: Move raw command warning to raw command validation
+      cxl/mbox: Move build of user mailbox cmd to a helper functions
+      cxl/mbox: Construct a users cxl_mbox_cmd in the validation path
+      cxl/mbox: Remove dependency on cxl_mem_command for a debug msg
+      cxl/mbox: Make handle_mailbox_cmd_from_user() use a mbox param
+      cxl/mbox: Move cxl_mem_command param to a local variable
+      cxl/mbox: Block immediate mode in SET_PARTITION_INFO command
+      cxl/pmem: Remove CXL SET_PARTITION_INFO from exclusive_cmds list
+      cxl/mbox: Use type __u32 for mailbox payload sizes
+      cxl/mbox: Replace NULL check with IS_ERR() after vmemdup_user()
+
+Dan Carpenter (1):
+      cxl/mbox: fix logical vs bitwise typo
+
+Dan Williams (29):
+      cxl/mem: Drop DVSEC vs EFI Memory Map sanity check
+      cxl/pci: Add debug for DVSEC range init failures
+      cxl/mem: Make cxl_dvsec_range() init failure fatal
+      cxl/pci: Make cxl_dvsec_ranges() failure not fatal to cxl_pci
+      cxl/mem: Rename cxl_dvsec_decode_init() to cxl_hdm_decode_init()
+      cxl/mem: Replace redundant debug message with a comment
+      PM: CXL: Disable suspend
+      PCI/ACPI: Prefer CXL _OSC instead of PCIe _OSC for CXL host bridges
+      cxl: Replace lockdep_mutex with local lock classes
+      cxl/acpi: Add root device lockdep validation
+      cxl: Drop cxl_device_lock()
+      nvdimm: Replace lockdep_mutex with local lock classes
+      ACPI: NFIT: Drop nfit_device_lock()
+      nvdimm: Drop nd_device_lock()
+      device-core: Kill the lockdep_mutex
+      nvdimm: Fix firmware activation deadlock scenarios
+      cxl/mem: Drop mem_enabled check from wait_for_media()
+      cxl/pci: Consolidate wait_for_media() and wait_for_media_ready()
+      cxl/pci: Drop wait_for_valid() from cxl_await_media_ready()
+      cxl/mem: Fix cxl_mem_probe() error exit
+      cxl/mem: Validate port connectivity before dvsec ranges
+      cxl/pci: Move cxl_await_media_ready() to the core
+      cxl/mem: Consolidate CXL DVSEC Range enumeration in the core
+      cxl/mem: Skip range enumeration if mem_enable clear
+      cxl/mem: Merge cxl_dvsec_ranges() and cxl_hdm_decode_init()
+      cxl/pci: Drop @info argument to cxl_hdm_decode_init()
+      cxl/port: Move endpoint HDM Decoder Capability init to port driver
+      cxl/port: Reuse 'struct cxl_hdm' context for hdm init
+      cxl/port: Enable HDM Capability after validating DVSEC Ranges
+
+Davidlohr Bueso (4):
+      cxl/mbox: Drop mbox_mutex comment
+      cxl/pci: Use CXL_MBOX_SUCCESS to check against mbox_cmd return code
+      cxl/mbox: Improve handling of mbox_cmd hw return codes
+      cxl/mbox: Use new return_code handling
+
+Vishal Verma (2):
+      PCI/ACPI: add a helper for retrieving _OSC Control DWORDs
+      PCI/ACPI: negotiate CXL _OSC
+
+ drivers/Makefile                |   2 +-
+ drivers/acpi/bus.c              |   2 +-
+ drivers/acpi/nfit/core.c        |  30 ++--
+ drivers/acpi/nfit/nfit.h        |  24 ---
+ drivers/acpi/pci_root.c         | 238 ++++++++++++++++++++++----
+ drivers/base/core.c             |   3 -
+ drivers/cxl/Kconfig             |   4 +
+ drivers/cxl/Makefile            |   2 +-
+ drivers/cxl/acpi.c              |  13 ++
+ drivers/cxl/core/Makefile       |   1 +
+ drivers/cxl/core/mbox.c         | 334 ++++++++++++++++++++++--------------
+ drivers/cxl/core/memdev.c       |   3 +
+ drivers/cxl/core/pci.c          | 364 ++++++++++++++++++++++++++++++++++++++++
+ drivers/cxl/core/pmem.c         |  10 +-
+ drivers/cxl/core/port.c         |  68 ++++----
+ drivers/cxl/core/suspend.c      |  24 +++
+ drivers/cxl/cxl.h               |  78 ---------
+ drivers/cxl/cxlmem.h            |  75 ++++++++-
+ drivers/cxl/cxlpci.h            |   2 +
+ drivers/cxl/mem.c               | 148 +++-------------
+ drivers/cxl/pci.c               | 175 +------------------
+ drivers/cxl/pmem.c              |  13 +-
+ drivers/cxl/port.c              |  28 +++-
+ drivers/nvdimm/btt_devs.c       |  23 +--
+ drivers/nvdimm/bus.c            |  38 ++---
+ drivers/nvdimm/core.c           |  19 +--
+ drivers/nvdimm/dax_devs.c       |   4 +-
+ drivers/nvdimm/dimm_devs.c      |  12 +-
+ drivers/nvdimm/namespace_devs.c |  46 ++---
+ drivers/nvdimm/nd-core.h        |  68 +-------
+ drivers/nvdimm/pfn_devs.c       |  31 ++--
+ drivers/nvdimm/pmem.c           |   2 +-
+ drivers/nvdimm/region.c         |   2 +-
+ drivers/nvdimm/region_devs.c    |  20 ++-
+ include/acpi/acpi_bus.h         |  12 +-
+ include/linux/acpi.h            |  42 ++++-
+ include/linux/device.h          |  48 +++++-
+ include/linux/lockdep.h         |   6 +-
+ include/linux/pm.h              |   9 +
+ include/uapi/linux/cxl_mem.h    |  14 +-
+ kernel/power/hibernate.c        |   2 +-
+ kernel/power/main.c             |   5 +-
+ kernel/power/suspend.c          |   3 +-
+ lib/Kconfig.debug               |  23 ---
+ tools/testing/cxl/Kbuild        |   3 +-
+ tools/testing/cxl/mock_mem.c    |  10 --
+ tools/testing/cxl/test/mem.c    |  17 --
+ tools/testing/cxl/test/mock.c   |  29 ++++
+ 48 files changed, 1266 insertions(+), 863 deletions(-)
+ create mode 100644 drivers/cxl/core/suspend.c
+ delete mode 100644 tools/testing/cxl/mock_mem.c

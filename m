@@ -2,88 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B869D536695
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10D5536697
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354306AbiE0RaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 13:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S1354315AbiE0RaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 13:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354332AbiE0RaG (ORCPT
+        with ESMTP id S1354324AbiE0RaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 13:30:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AC384DF4D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653672604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cefitV8uX/6feCDJMEsFPG76wT6MNXuBQFQNrynOdh0=;
-        b=B8VKkZamol0rMkxsAtoG6KQ9DYFjp5e1bvqXaTNY1mdtUHd0n/xJfA9IhUTi0WYQ/haFeE
-        9WJcxylxlPL8B4LXt/9xlr8vMOnKuZyQAqQiEdZ5/BsctVrXGYqImZwqRND79cj13P3tmr
-        cUBRwcjcpaI06eCRwjOg4OdYGQnbwgE=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-r7V0ERizO7qEEbhr36CngA-1; Fri, 27 May 2022 13:30:03 -0400
-X-MC-Unique: r7V0ERizO7qEEbhr36CngA-1
-Received: by mail-lj1-f199.google.com with SMTP id a8-20020a2e7f08000000b00253c7e7f572so1435866ljd.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:30:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
-         :subject:content-language:to:references:in-reply-to
-         :content-transfer-encoding;
-        bh=cefitV8uX/6feCDJMEsFPG76wT6MNXuBQFQNrynOdh0=;
-        b=EnBs+VMjvpQrv5TEogoL1LUB7RcyKduKp9jyKiZf/awBlk80/ZTzePIPhPlehxWpmz
-         sY2vzPXId2qdJCtFwKZAVAifxtl/5cPeYGVvv/YVZAN/KhikNm5LO3Q+S2YlEwYCKVAR
-         Rm3tkup0KCPnW5NqL8/HPsismSSfuaCdmDD0VBplQN+zivyU2JBQysQX5wIVO75+cD5W
-         dc+FQY+8++2lmDb+Ht3gGmKxsCFPPGDK4HnC3VGSTuDa0fqxygFEQLaSyBFwyu5OwoL4
-         Lpn5MKZ8Jy2u8H8BDFu5snOHavJ23Th6/TNY83oXKSpnHUQ0YebFlwR011xaYBEjKbgR
-         Uj5w==
-X-Gm-Message-State: AOAM53060jOCf5Sq/kUltQVNOBHCvhihKOnd9qdk4UyvvCkQzfRlUgiY
-        kdT77t9fKCAllmdMDRjGZboCAcN8YwG6x7Ht3eJCTVEosqR9ClduAk0aP0Kx6mpk2LEfUATcTa6
-        Q3bcErFePIEfBt1PjvqUohZXa
-X-Received: by 2002:a05:6512:1189:b0:478:8b81:d3b2 with SMTP id g9-20020a056512118900b004788b81d3b2mr13924870lfr.247.1653672601592;
-        Fri, 27 May 2022 10:30:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzHy8Z11UyDeJF1PfQehPGRpRB2pdmd+NOjG8IQ3dm26jx4WasEfdOhzMuSV+x3EkYQK3j+tQ==
-X-Received: by 2002:a05:6512:1189:b0:478:8b81:d3b2 with SMTP id g9-20020a056512118900b004788b81d3b2mr13924859lfr.247.1653672601309;
-        Fri, 27 May 2022 10:30:01 -0700 (PDT)
-Received: from [192.168.0.50] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
-        by smtp.gmail.com with ESMTPSA id bj38-20020a2eaaa6000000b0025541ce7ef1sm134106ljb.11.2022.05.27.10.29.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 May 2022 10:30:00 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <16e1aba3-99af-9cc9-88d5-2cf0f1ed618b@redhat.com>
-Date:   Fri, 27 May 2022 19:29:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Cc:     brouer@redhat.com, "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>, Jan Kara <jack@suse.cz>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Linux-NFS <linux-nfs@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux-XFS <linux-xfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm/page_alloc: Always attempt to allocate at least one
- page during bulk allocation
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220526091210.GC3441@techsingularity.net>
-In-Reply-To: <20220526091210.GC3441@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 27 May 2022 13:30:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B0578905;
+        Fri, 27 May 2022 10:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64E9461DD4;
+        Fri, 27 May 2022 17:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A42ACC385A9;
+        Fri, 27 May 2022 17:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1653672615;
+        bh=DRbdVK7ebjAFaviXvuPpdxj4DfolmqNryDBytbwEKgc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=n15PVRxHeWxwHcvVnGMRW5PrQdfWh0ogIEEZEbE5i0a2izv2KnqPJkcNqeakZi45t
+         srJE0rqhqU8hvLIdjPzxyqQetexMXNN/0u/sOiBqg8ji5m1KMRnGODdCe9T7+cNLd2
+         aTzHx6QsTsGtltG5wNb4GmdgiBn2Uhs+Ko8Dv8qI=
+Date:   Fri, 27 May 2022 10:30:14 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org
+Subject: [GIT PULL] additional MM updates for 5.19-rc1
+Message-Id: <20220527103014.517818624f9f6d4f0ba0b523@linux-foundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,62 +51,114 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Pretty much the final flush here.  Mel's "Drain remote per-cpu
+directly" series might be stabilized later in the merge window.
 
-On 26/05/2022 11.12, Mel Gorman wrote:
-> Peter Pavlisko reported the following problem on kernel bugzilla 216007.
-> 
-> 	When I try to extract an uncompressed tar archive (2.6 milion
-> 	files, 760.3 GiB in size) on newly created (empty) XFS file system,
-> 	after first low tens of gigabytes extracted the process hangs in
-> 	iowait indefinitely. One CPU core is 100% occupied with iowait,
-> 	the other CPU core is idle (on 2-core Intel Celeron G1610T).
-> 
-> It was bisected to c9fa563072e1 ("xfs: use alloc_pages_bulk_array() for
-> buffers") but XFS is only the messenger. The problem is that nothing
-> is waking kswapd to reclaim some pages at a time the PCP lists cannot
-> be refilled until some reclaim happens. The bulk allocator checks that
-> there are some pages in the array and the original intent was that a bulk
-> allocator did not necessarily need all the requested pages and it was
-> best to return as quickly as possible. This was fine for the first user
-> of the API but both NFS and XFS require the requested number of pages
-> be available before making progress. Both could be adjusted to call the
-> page allocator directly if a bulk allocation fails but it puts a burden on
-> users of the API. Adjust the semantics to attempt at least one allocation
-> via __alloc_pages() before returning so kswapd is woken if necessary.
-> 
-> It was reported via bugzilla that the patch addressed the problem and
-> that the tar extraction completed successfully. This may also address
-> bug 215975 but has yet to be confirmed.
-> 
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216007
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215975
-> Fixes: 387ba26fb1cb ("mm/page_alloc: add a bulk page allocator")
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> Cc: <stable@vger.kernel.org> # v5.13+
-> ---
->   mm/page_alloc.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+There's a merge conflict in init/Kconfig.  We resolved that by removing
+the VM_EVENT_COUNTERS..MMAP_ALLOW_UNINITIALIZED entries.
+
+And another in lib/Kconfig.debug.  Similarly resolved by removing the
+DEBUG_SLAB..SLUB_STATS entries.
 
 
-Change looks good, and I checked page_pool will be fine with this change :-)
 
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+I'll shortly be resurrecting Liam's maple-tree patchset for additional
+stabilization and a view to merge that up for 5.20.  And shortly after
+that I'll bring in Yu Zhau's multigen LRU work to get that some
+linux-next testing and hopefully reviewer provocation.
 
 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 0e42038382c1..5ced6cb260ed 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -5324,8 +5324,8 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
->   		page = __rmqueue_pcplist(zone, 0, ac.migratetype, alloc_flags,
->   								pcp, pcp_list);
->   		if (unlikely(!page)) {
-> -			/* Try and get at least one page */
-> -			if (!nr_populated)
-> +			/* Try and allocate at least one page */
-> +			if (!nr_account)
->   				goto failed_irq;
->   			break;
->   		}
-> 
+
+The following changes since commit f403f22f8ccb12860b2b62fec3173c6ccd45938b:
+
+  mm: kfence: use PAGE_ALIGNED helper (2022-05-25 10:47:49 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-2022=
+-05-27
+
+for you to fetch changes up to fa020a2b87d24016723fff4a4237deb612478a32:
+
+  mm/shmem.c: suppress shift warning (2022-05-27 09:33:47 -0700)
+
+----------------------------------------------------------------
+Two followon fixes for the post-5.19 series "Use pageblock_order for cma
+and alloc_contig_range alignment", from Zi Yan.
+
+A series of z3fold cleanups and fixes from Miaohe Lin.
+
+Some memcg selftests work from Michal Koutn=FD <mkoutny@suse.com>
+
+Some swap fixes and cleanups from Miaohe Lin.
+
+Several individual minor fixups.
+
+----------------------------------------------------------------
+Andrew Morton (1):
+      mm/shmem.c: suppress shift warning
+
+Kefeng Wang (1):
+      mm: kasan: fix input of vmalloc_to_page()
+
+Miaohe Lin (14):
+      mm/z3fold: fix sheduling while atomic
+      mm/z3fold: fix possible null pointer dereferencing
+      mm/z3fold: remove buggy use of stale list for allocation
+      mm/z3fold: throw warning on failure of trylock_page in z3fold_alloc
+      revert "mm/z3fold.c: allow __GFP_HIGHMEM in z3fold_alloc"
+      mm/z3fold: put z3fold page back into unbuddied list when reclaim or m=
+igration fails
+      mm/z3fold: always clear PAGE_CLAIMED under z3fold page lock
+      mm/z3fold: fix z3fold_reclaim_page races with z3fold_free
+      mm/z3fold: fix z3fold_page_migrate races with z3fold_map
+      mm/swapfile: unuse_pte can map random data if swap read fails
+      mm/swapfile: fix lost swap bits in unuse_pte()
+      mm/madvise: free hwpoison and swapin error entry in madvise_free_pte_=
+range
+      mm/shmem: fix infinite loop when swap in shmem error at swapoff time
+      mm: filter out swapin error entry in shmem mapping
+
+Michal Koutn=FD (5):
+      selftests: memcg: fix compilation
+      selftests: memcg: expect no low events in unprotected sibling
+      selftests: memcg: adjust expected reclaim values of protected cgroups
+      selftests: memcg: remove protection from top level memcg
+      selftests: memcg: factor out common parts of memory.{low,min} tests
+
+Minchan Kim (1):
+      mm: fix is_pinnable_page against a cma page
+
+Vlastimil Babka (1):
+      mm: Kconfig: reorganize misplaced mm options
+
+Zi Yan (2):
+      mm: page-isolation: skip isolated pageblock in start_isolate_page_ran=
+ge()
+      mm: split free page with properly free memory accounting and without =
+race
+
+ MAINTAINERS                                       |   1 +
+ include/linux/mm.h                                |   9 +-
+ include/linux/swap.h                              |   7 +-
+ include/linux/swapops.h                           |  10 +
+ init/Kconfig                                      |  53 -----
+ lib/Kconfig.debug                                 |  34 ---
+ mm/Kconfig                                        |  56 +++++
+ mm/Kconfig.debug                                  |  31 +++
+ mm/internal.h                                     |   4 +-
+ mm/kasan/report.c                                 |   2 +-
+ mm/madvise.c                                      |  18 +-
+ mm/memory.c                                       |   5 +-
+ mm/page_alloc.c                                   |  32 ++-
+ mm/page_isolation.c                               |  36 +++-
+ mm/shmem.c                                        |  41 +++-
+ mm/swap_state.c                                   |   3 +
+ mm/swapfile.c                                     |  21 +-
+ mm/z3fold.c                                       |  97 ++++-----
+ tools/testing/selftests/cgroup/memcg_protection.m |  89 ++++++++
+ tools/testing/selftests/cgroup/test_memcontrol.c  | 247 ++++++------------=
+----
+ 20 files changed, 434 insertions(+), 362 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/memcg_protection.m
 

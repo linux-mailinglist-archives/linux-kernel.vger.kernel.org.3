@@ -2,131 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC8D5368E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9C85368EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354826AbiE0WhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 18:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
+        id S1354830AbiE0Win (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 18:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348700AbiE0WhU (ORCPT
+        with ESMTP id S233814AbiE0Wil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 18:37:20 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0070C62A13;
-        Fri, 27 May 2022 15:37:18 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id a13so5331127plh.6;
-        Fri, 27 May 2022 15:37:18 -0700 (PDT)
+        Fri, 27 May 2022 18:38:41 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B75562130;
+        Fri, 27 May 2022 15:38:37 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-f2c296d320so7382278fac.8;
+        Fri, 27 May 2022 15:38:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=mTucJIAdTYoZ9+9FflOuOtffCw1Kf5R1Q78VOC2SxTM=;
-        b=UlpD72C/pdaYe8g1qzMZnwicMnDDgsyyi77oCr60uzPBV2ybDM4soXRA3zxsK71Tv/
-         +wfE6e7n/jzRoV73KZBBbKJ5ApIC1JxvVtbVpxHObNhCBLgbkRSa+WoKgp3KE+bYrpX9
-         54vSmRWAyZy7EHp5pqr2YVwBD/j0+4I36h8wdb11SElXPILpMHNmwT8pR7Rg36q2eoKr
-         Dw8cX5D1xrAFbFI92w8FT8ToJi6TbU3377aqlHi3+RhrZHNFpb+CjJWeU4PRRUe4a1ro
-         5D0cIVO7n/XaRWBCGdM7ib3LQ9Mog13uQaZpaRfge3zyjyr+P3DFp6EowueA9x3EG0yD
-         8UYw==
+        bh=k3Y4avxoaaKPGPle+GNBPWTChiAPZ6ALAr72jSGIW10=;
+        b=m8Y5rMgamx/hT+UG/gbLqMrP54vi0TOb0g5Pk2elATpz8YW2/wperpxnVtxpd4gIDb
+         xaVKH6DA76/AviRLJYQCjDA7NiUOOsINplfsoZUvbaqvS6WJYDLZn8JwGJ1NubSzFxUq
+         giNtCNH0cjR6ccP5KXsPnKkfAsVjhoo6LPzy/0TwGvIM7MopfDU+Gjjs4oNSoediADBx
+         KgduGxVuzAJGzhtYZ2qK/IKP/sKp/cqqi0TFlmASnny8a17+CfQ0o5r2RH7gHnfexfNO
+         IdaEFtjOEBX8o5kvxss5FNNBbn3+y+RmmYzRtp9rqkTzJ2T411YlqedRin34AS/xlyMK
+         Vevw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mTucJIAdTYoZ9+9FflOuOtffCw1Kf5R1Q78VOC2SxTM=;
-        b=sZmqFMVE0hcLHfARWxrJRDc8nX0y1AsCeXEwMAl4wE3ExnBSZfamE+kmU+XKeFFrJE
-         eRhr4IRVNXTRy2gih9viYYjuifwo/l6WNImrZGGC1IPN9zSlWVbpg+K4Kqi/8AwlbuoG
-         b00TSbkMUrNvhMOFgVpIEBUBNhjZKUAZWXI3ihJ7jfJfPGE08dJ4i96Uejde/1PYzoro
-         q4soJgQlTiczhVw2Fbj4FFoW65xjYf6YLfYWNYqXCB3iEBvW1vICCQNjb23f3RjtW7gN
-         ahI6R/+syKIwFv25OfCHBkEHdhWs98Jy8eQ7hoboK4EHEOfyxmaqKDRZvni7qZivx/C+
-         A3qw==
-X-Gm-Message-State: AOAM530aQfu1ISA+Mb1tisJaeiPqPgrxzvn3OjVPG2f1dxo2Tb2LzszD
-        BiPdkv1DVht1n3bLJrSklYA=
-X-Google-Smtp-Source: ABdhPJzxI5awUQGI2bH48hM11x0FspvEDs0u+628RbozurSTcwFKJVHkFvrEznQCK3TL/22I8/YIWQ==
-X-Received: by 2002:a17:902:6b03:b0:161:51d6:61b with SMTP id o3-20020a1709026b0300b0016151d6061bmr21052203plk.23.1653691038315;
-        Fri, 27 May 2022 15:37:18 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:331d:9bef:6841:67a4])
-        by smtp.gmail.com with ESMTPSA id n9-20020a17090aab8900b001df82551cf2sm2076195pjq.44.2022.05.27.15.37.16
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=k3Y4avxoaaKPGPle+GNBPWTChiAPZ6ALAr72jSGIW10=;
+        b=xBTlLGl/24fqzrtSM0e+ffY4V0AuirklnqGJbYF67NP4cMw7JXaP/xgsgixDmcbGhh
+         AqMQft7GDulQQPJxIYY3xsrXx/5z4B4l3aenkYQA01Rfu/N1BRrHHlLPj/U71pfREXl+
+         RS8gdkFWtbwS3oEM8rmAhT9vENAr2HQE1STil9h3vWQsMtPR9dPKO9U/xwQWZ8Vvw3rH
+         YXzoqgY4Im6mWFJ0N6v+y1rQ7XWnhnO4p1WkeUjYJ6xN4YIvH6MZseKTg0u45Qw6Nfrr
+         WcimO0RiSDPXFgBLGp/RVxm8EZkGcVUDY8gkgM80s778wlstkNn5swgFiKjb++44oy3c
+         Cl/w==
+X-Gm-Message-State: AOAM531+JrgrBCn4OyXnVHaAUMfe5J6ynHHQ8bpT9chefJWxAVKZGu6v
+        7V+3yVLT7/cdL8RwfYKH3L6ehO8Wjy9/bw==
+X-Google-Smtp-Source: ABdhPJytWw5RLHSyyTjicayYEhMX9aOn90YdL1tPdSZJb2JL0KnEfFJzboTFhaN/tI0e7Di1GUF/sA==
+X-Received: by 2002:a05:6870:c152:b0:f2:c400:e583 with SMTP id g18-20020a056870c15200b000f2c400e583mr5095834oad.159.1653691115856;
+        Fri, 27 May 2022 15:38:35 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p14-20020a9d4e0e000000b0060b39282e7esm2311826otf.35.2022.05.27.15.38.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 15:37:17 -0700 (PDT)
-Date:   Fri, 27 May 2022 15:37:14 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-input@vger.kernel.org, Furquan Shaikh <furquan@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] Input: cros_ec_keyb - handle x86
- detachable/convertible Chromebooks
-Message-ID: <YpFSmsQ8hRM0cYG4@google.com>
-References: <20220526231230.2805147-1-dmitry.torokhov@gmail.com>
- <20220526231230.2805147-2-dmitry.torokhov@gmail.com>
- <CAE-0n51CVEUF4knuSAK7RWACaUF3Fmi3jmMORZb1cVFyARnHTw@mail.gmail.com>
+        Fri, 27 May 2022 15:38:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 27 May 2022 15:38:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@denx.de>, Chris.Paterson2@renesas.com,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/163] 5.10.119-rc1 review
+Message-ID: <20220527223833.GA3166370@roeck-us.net>
+References: <20220527084828.156494029@linuxfoundation.org>
+ <20220527141421.GA13810@duo.ucw.cz>
+ <YpD0CVWSiEqiM+8b@kroah.com>
+ <6aed0c5c-bb99-0593-1609-87371db26f44@roeck-us.net>
+ <YpE+S2H301IsZYzv@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAE-0n51CVEUF4knuSAK7RWACaUF3Fmi3jmMORZb1cVFyARnHTw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <YpE+S2H301IsZYzv@zx2c4.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 05:35:36PM -0400, Stephen Boyd wrote:
-> Quoting Dmitry Torokhov (2022-05-26 16:12:30)
-> > From: Furquan Shaikh <furquan@chromium.org>
-> >
-> > Some detachable/convertible x86 Chromebooks use EC buttons/switches
-> > interface to signal volume up/down and other buttons. This configuration is
-> > signalled via presence of GOOG0007 ACPI device. The main keyboard on such
-> > Chromebooks is still using the standard 8042/atkbd combo.
-> >
-> > Signed-off-by: Furquan Shaikh <furquan@chromium.org>
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > ---
+On Fri, May 27, 2022 at 11:10:35PM +0200, Jason A. Donenfeld wrote:
+> Hi Guenter,
 > 
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> On Fri, May 27, 2022 at 09:59:14AM -0700, Guenter Roeck wrote:
+> > Given that we (ChromeOS) have been hit by rng related
+> > issues before (specifically boot stalls on some hardware), I am quite
+> > concerned about the possible impact of this series for stable releases.
 > 
-> Two questions below.
+> The urandom try_to_generate_entropy() change from 5.18 wasn't backported.
 > 
-> >  drivers/input/keyboard/cros_ec_keyb.c | 21 ++++++++++++++++++---
-> >  1 file changed, 18 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
-> > index e8338b1c5776..c14136b733a9 100644
-> > --- a/drivers/input/keyboard/cros_ec_keyb.c
-> > +++ b/drivers/input/keyboard/cros_ec_keyb.c
-> > @@ -677,14 +678,19 @@ static const struct attribute_group cros_ec_keyb_attr_group = {
-> >
-> >  static int cros_ec_keyb_probe(struct platform_device *pdev)
-> >  {
-> > -       struct cros_ec_device *ec = dev_get_drvdata(pdev->dev.parent);
-> > +       struct cros_ec_device *ec;
-> >         struct device *dev = &pdev->dev;
-> >         struct cros_ec_keyb *ckdev;
-> >         bool buttons_switches_only = device_get_match_data(dev);
-> >         int err;
-> >
-> > -       if (!dev->of_node)
-> > -               return -ENODEV;
-> > +       /*
-> > +        * If the parent ec device has not been probed yet, defer the probe of
-> > +        * this keyboard/button driver until later.
-> > +        */
-> > +       ec = dev_get_drvdata(pdev->dev.parent);
-> 
-> Does cros_ec populate the child node before setting the drvdata? Or in
-> ACPI designs this device is created as a child of cros_ec before the
-> driver probes?
 
-Yes, ACPI "bus" gets scanned and all device objects are created
-regardless of the driver presence and whether probe has completed or
-not.
+Was it not backported on purpose or is it missing ?
 
-Thanks.
+Thanks,
+Guenter
 
--- 
-Dmitry
+> zx2c4@thinkpad ~/Projects/random-linux $ git diff linux-5.10.y:drivers/char/random.c master:drivers/char/random.c
+> [...snip...]
+> @@ -1292,6 +1311,13 @@ static ssize_t urandom_read_iter(struct kiocb *kiocb, struct iov_iter *iter)
+>  {
+>         static int maxwarn = 10;
+> 
+> +       /*
+> +        * Opportunistically attempt to initialize the RNG on platforms that
+> +        * have fast cycle counters, but don't (for now) require it to succeed.
+> +        */
+> +       if (!crng_ready())
+> +               try_to_generate_entropy();
+> +
+>         if (!crng_ready()) {
+>                 if (!ratelimit_disable && maxwarn <= 0)
+>                         ++urandom_warning.missed;
+> 
+> 
+> 
+> Jason

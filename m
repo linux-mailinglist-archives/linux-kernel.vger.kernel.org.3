@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C655359B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201C1535979
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344584AbiE0GzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 02:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
+        id S1343642AbiE0Gh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 02:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344632AbiE0Gy7 (ORCPT
+        with ESMTP id S229561AbiE0Ghu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 02:54:59 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990416BFEE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:54:58 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id l30so392772lfj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=33H7bzlF73boyoKARvolMJlGymprQ+hHPrvlaQBxLsY=;
-        b=cFB7s0A6Vncow/pUpyHYeS5uRA3Sa1oL7zKnv4ZePJIBO1Hlol5vIxoRR8Pf9MTFN9
-         oS93ak0fZyAhEeiY9jUgF6ruvGq0YdAcUA/FlNpE9Yi9Vzbw7BtUCGUziY3UdhZZ/vaf
-         BOcIBSc1JtgDPny3sWXd1/rxfYsgb2ftoQVLZkOGNEO8qVK7fkH47I/rHZNBAPQ9aIBE
-         Ws3Q6Neg6HiOA13NJiFH+4aMsQXXH0Qtnyn5l7BDNF2MbdsXBuc2uQSh4/OKnVb6hoRD
-         /05oteHXZuuGdsvtQhqtoONPPPaSdkAusn+RjVQFzIjchroyCy7VqFLfAJAFNgzS6Elj
-         kkWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=33H7bzlF73boyoKARvolMJlGymprQ+hHPrvlaQBxLsY=;
-        b=cSlkoQem/iTd1rMItVSLNCGJUCffh9pEHYBmJJt8PYcJkfcDNktX0LMaTJ+IME+CnE
-         0DnNvYxx6o9opXik8Z7t1KTEHnRN06arNSDV2P2KYfGxWKkgq6ASZE+ww9zVJUOtg5ww
-         Jh5b6ymaiy17Cc03aP8Rsj5aLbC2cqNJzzijPXFhcAl9TvRC8GwgifKvusliYGSkjvSH
-         Yi6bT2XFGpD0LQqLHkwQnLOaY65HrbzX98PJhAjk3F+SrMqOgiasWi1NODPqMj62pA8s
-         Gcfy89jtwuFQH7rAll8aUuU6B2mtt9pAsB2C7UkXjn6Y3luFcYvY2PO81Yhb72f6F0U7
-         SqBA==
-X-Gm-Message-State: AOAM533bBUj/QOhvvDoRUVovmx002g+6CwF7Belg+zwF/9x/LVStnnqB
-        jDoNuM1wgs4kAr6UqRfRuWOdz+0SeAs93sfg7yQ=
-X-Google-Smtp-Source: ABdhPJxl8H0jAMQNpnwAKcBcQ33aGejJlX/037l/K5+4xKUMvuR/pjYp4WPxSC7JK7gs2uOWP4QKrWTIYDKqWUkuF1k=
-X-Received: by 2002:ac2:5a07:0:b0:478:8433:30c1 with SMTP id
- q7-20020ac25a07000000b00478843330c1mr12757539lfn.377.1653634496714; Thu, 26
- May 2022 23:54:56 -0700 (PDT)
+        Fri, 27 May 2022 02:37:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9E0E2771;
+        Thu, 26 May 2022 23:37:49 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L8Zm553FJzRhQZ;
+        Fri, 27 May 2022 14:34:45 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 14:37:47 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 14:37:47 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <robh@kernel.org>, <gregkh@linuxfoundation.org>,
+        <jirislaby@kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] serdev: Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 06:59:16 +0000
+Message-ID: <20220527065916.2359005-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:6512:b84:0:0:0:0 with HTTP; Thu, 26 May 2022 23:54:56
- -0700 (PDT)
-Reply-To: BAkermarrtin@gmail.com
-From:   Martin Baker <alfaroukkhadija@gmail.com>
-Date:   Fri, 27 May 2022 06:54:56 +0000
-Message-ID: <CAF1Q0JmVfSYK8Jf00Amkz8uT+RCvTW6Tq6L7uA8Gx=d38KfR4w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
+Signed-off-by: keliu <liuke94@huawei.com>
+---
+ drivers/tty/serdev/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I wrote to you this morning because I have something to tell you, please
-let me know if you read my previous post today.
+diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+index 0180e1e4e75d..213f8cb99661 100644
+--- a/drivers/tty/serdev/core.c
++++ b/drivers/tty/serdev/core.c
+@@ -75,7 +75,7 @@ static bool is_serdev_device(const struct device *dev)
+ static void serdev_ctrl_release(struct device *dev)
+ {
+ 	struct serdev_controller *ctrl = to_serdev_controller(dev);
+-	ida_simple_remove(&ctrl_ida, ctrl->nr);
++	ida_free(&ctrl_ida, ctrl->nr);
+ 	kfree(ctrl);
+ }
+ 
+@@ -486,7 +486,7 @@ struct serdev_controller *serdev_controller_alloc(struct device *parent,
+ 	if (!ctrl)
+ 		return NULL;
+ 
+-	id = ida_simple_get(&ctrl_ida, 0, 0, GFP_KERNEL);
++	id = ida_alloc(&ctrl_ida, GFP_KERNEL);
+ 	if (id < 0) {
+ 		dev_err(parent,
+ 			"unable to allocate serdev controller identifier.\n");
+-- 
+2.25.1
+

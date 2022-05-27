@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B42F5361DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A2153604D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345813AbiE0MEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S230377AbiE0LtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352733AbiE0Lzi (ORCPT
+        with ESMTP id S1351895AbiE0LpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:55:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1097F14B67F;
-        Fri, 27 May 2022 04:49:01 -0700 (PDT)
+        Fri, 27 May 2022 07:45:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8664A12FEF1;
+        Fri, 27 May 2022 04:41:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F6C0B824CA;
-        Fri, 27 May 2022 11:49:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB40CC385A9;
-        Fri, 27 May 2022 11:48:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E688761CB7;
+        Fri, 27 May 2022 11:41:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01207C385A9;
+        Fri, 27 May 2022 11:41:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652139;
-        bh=112rpqfBHZG5Knz4Q5D4qmKKkDWxTkkyP+SwPAWWXkY=;
+        s=korg; t=1653651681;
+        bh=S0GE2QBe3vQH8SstAe6gAuiluPqa7/LtbKcsMUsmrik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RTQ+9cjM+XQAd3Kgnv7RxPu6G5FdYtulZDil1QQvhYNlnYs8A/tzSQXDNTp3kbFgB
-         Y76v2jtlTmS4qnkqwdYbNDCw3vrCE3GyIM/xnBR0VbzS8bo3tO/GoaYOZYtPUM03+w
-         DHlo1P0bQAv4bJ3cZJquJNc4YCCYUXWww6wHF6qI=
+        b=mrJhyAqqbHcxsgY8nfx5mdqciGBrDuuP+26bG7sABZobqCs3GPkQdksVsWsuwsroR
+         6sURFgeoba76yHZfMsf/eTyAFtqMU1PronOsaOmqlxF/XyK+KbgS5fKdrJ7Y8V0gXH
+         zf3PSjlT5GIECwGaO6q6l/FGSBwUWGORGWn/CX7Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 103/163] random: dont let 644 read-only sysctls be written to
+Subject: [PATCH 5.17 071/111] parisc: define get_cycles macro for arch-override
 Date:   Fri, 27 May 2022 10:49:43 +0200
-Message-Id: <20220527084842.344288009@linuxfoundation.org>
+Message-Id: <20220527084829.568165652@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-References: <20220527084828.156494029@linuxfoundation.org>
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+References: <20220527084819.133490171@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,54 +57,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 77553cf8f44863b31da242cf24671d76ddb61597 upstream.
+commit 8865bbe6ba1120e67f72201b7003a16202cd42be upstream.
 
-We leave around these old sysctls for compatibility, and we keep them
-"writable" for compatibility, but even after writing, we should keep
-reporting the same value. This is consistent with how userspaces tend to
-use sysctl_random_write_wakeup_bits, writing to it, and then later
-reading from it and using the value.
+PA-RISC defines a get_cycles() function, but it does not do the usual
+`#define get_cycles get_cycles` dance, making it impossible for generic
+code to see if an arch-specific function was defined. While the
+get_cycles() ifdef is not currently used, the following timekeeping
+patch in this series will depend on the macro existing (or not existing)
+when defining random_get_entropy().
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ arch/parisc/include/asm/timex.h |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1669,6 +1669,13 @@ static int proc_do_uuid(struct ctl_table
- 	return proc_dostring(&fake_table, 0, buffer, lenp, ppos);
- }
+--- a/arch/parisc/include/asm/timex.h
++++ b/arch/parisc/include/asm/timex.h
+@@ -13,9 +13,10 @@
  
-+/* The same as proc_dointvec, but writes don't change anything. */
-+static int proc_do_rointvec(struct ctl_table *table, int write, void *buffer,
-+			    size_t *lenp, loff_t *ppos)
-+{
-+	return write ? 0 : proc_dointvec(table, 0, buffer, lenp, ppos);
-+}
-+
- extern struct ctl_table random_table[];
- struct ctl_table random_table[] = {
- 	{
-@@ -1690,14 +1697,14 @@ struct ctl_table random_table[] = {
- 		.data		= &sysctl_random_write_wakeup_bits,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0644,
--		.proc_handler	= proc_dointvec,
-+		.proc_handler	= proc_do_rointvec,
- 	},
- 	{
- 		.procname	= "urandom_min_reseed_secs",
- 		.data		= &sysctl_random_min_urandom_seed,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0644,
--		.proc_handler	= proc_dointvec,
-+		.proc_handler	= proc_do_rointvec,
- 	},
- 	{
- 		.procname	= "boot_id",
+ typedef unsigned long cycles_t;
+ 
+-static inline cycles_t get_cycles (void)
++static inline cycles_t get_cycles(void)
+ {
+ 	return mfctl(16);
+ }
++#define get_cycles get_cycles
+ 
+ #endif
 
 

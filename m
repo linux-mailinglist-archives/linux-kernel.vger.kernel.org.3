@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D13C535DA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C68535DAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344629AbiE0JyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S1348188AbiE0JzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237129AbiE0JyH (ORCPT
+        with ESMTP id S237129AbiE0JzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:54:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6D42C66D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:54:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 81E2A219B6;
-        Fri, 27 May 2022 09:54:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653645245; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IK3a6PD0qoSYqo7B1aTTxeKPPO7iWEIcopk7olsL2NM=;
-        b=v2JTerWqC4yHSUi50CtZG5OnScairg/z16JtWHTdB2eev72vv+WSLPPzZ2QAf9Oxt22tpG
-        9zqivY2b7epDCT/7bikdFSEV2pc6wd9tWvePCDyt8XeerAWyP6bwJtq43APzrp88oKcuSf
-        XFIYzUiZzfVMJHBUy+4esIxtZHyc610=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653645245;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IK3a6PD0qoSYqo7B1aTTxeKPPO7iWEIcopk7olsL2NM=;
-        b=igSTmGQnXR+ufWx3xXuSQN8vj+vCSf7aqGXzm7c7BXKszDLfKuViYMBiFBJh1zLwnXHpfU
-        iGIqiVfSopJuLBBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6B54113A84;
-        Fri, 27 May 2022 09:54:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id o1SUGb2fkGJOXwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 27 May 2022 09:54:05 +0000
-Message-ID: <d66a0383-cbd5-7eda-bf62-5d11e4e82ec5@suse.cz>
-Date:   Fri, 27 May 2022 11:54:05 +0200
+        Fri, 27 May 2022 05:55:14 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741EB3C73B;
+        Fri, 27 May 2022 02:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653645313; x=1685181313;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZyWOtJY59nmOplfP/uzgYfu+eDMjfw81LAwJrsXTNIA=;
+  b=S4plgQPK1XNFoG/oshKqLnRuINkHubDLVP2uV8t6+5mV03128NbiiCuX
+   QMsxGi8b0Yj37wLsTPxoGM8/asblPSwQMm7ajfynkdOEk6RNXNyxT047i
+   nljXMy5gji6nVzmAem3846kiLukKooCSBQjCOtzpguqjCaquX9/vPjHOR
+   hFtcEtxE55/11/jQyOdr0VYKxz3wXT1bD65pDnmvs4k7ZXew530U1bi2q
+   bKD6I4d/uDHp0aidtVyBp3b3+0PthLort23KFj9JTDB9ARXbYjn377Uye
+   JHxC8+tTK+n5LhrQHvt05smfIyOPw0mkMTEr8NA8tSlexA1EZh1GuApJV
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="256509345"
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="256509345"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:55:13 -0700
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="705049445"
+Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.254.211.236]) ([10.254.211.236])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 02:55:10 -0700
+Message-ID: <dac0543e-368a-a19e-510a-b9536dc25af6@intel.com>
+Date:   Fri, 27 May 2022 17:55:08 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] mm: hugetlb_vmemmap: fix
- CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v7 8/8] KVM: VMX: Enable PKS for nested VM
 Content-Language: en-US
-To:     Muchun Song <songmuchun@bytedance.com>, akpm@linux-foundation.org,
-        mike.kravetz@oracle.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220527081948.68832-1-songmuchun@bytedance.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220527081948.68832-1-songmuchun@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220424101557.134102-1-lei4.wang@intel.com>
+ <20220424101557.134102-9-lei4.wang@intel.com> <Yobt1XwOfb5M6Dfa@google.com>
+From:   "Wang, Lei" <lei4.wang@intel.com>
+In-Reply-To: <Yobt1XwOfb5M6Dfa@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +64,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/27/22 10:19, Muchun Song wrote:
-> The following:
-> 
->   commit 47010c040dec ("mm: hugetlb_vmemmap: cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*")
-> 
-> forgot to update CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON used in
-> vmemmap_optimize_mode to CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON.
-> The result is we cannot enable hugetlb_optimize_vmemmap at boot time
-> when we configure CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON. Fix
-> it.
-> 
-> Reported-by: Vlastimil Babka <vbabka@suse.cz>
-> Fixes: 47010c040dec ("mm: hugetlb_vmemmap: cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*")
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+On 5/20/2022 9:24 AM, Sean Christopherson wrote:
+> Nit, use "KVM: nVMX:" for the shortlog scope.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Will change it.
 
-> ---
->  mm/hugetlb_vmemmap.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-> index fcd9f7872064..1089ea8a9c98 100644
-> --- a/mm/hugetlb_vmemmap.c
-> +++ b/mm/hugetlb_vmemmap.c
-> @@ -33,7 +33,7 @@ DEFINE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
->  EXPORT_SYMBOL(hugetlb_optimize_vmemmap_key);
->  
->  static enum vmemmap_optimize_mode vmemmap_optimize_mode =
-> -	IS_ENABLED(CONFIG_HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON);
-> +	IS_ENABLED(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON);
->  
->  static void vmemmap_optimize_mode_switch(enum vmemmap_optimize_mode to)
->  {
+> On Sun, Apr 24, 2022, Lei Wang wrote:
+>> @@ -2433,6 +2437,10 @@ static void prepare_vmcs02_rare(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
+>>   		if (kvm_mpx_supported() && vmx->nested.nested_run_pending &&
+>>   		    (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS))
+>>   			vmcs_write64(GUEST_BNDCFGS, vmcs12->guest_bndcfgs);
+>> +
+>> +		if (vmx->nested.nested_run_pending &&
+>> +		    (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS))
+>> +			vmcs_write64(GUEST_IA32_PKRS, vmcs12->guest_ia32_pkrs);
+> As mentioned in the BNDCFGS thread, this does the wrong thing for SMM.  But, after
+> a lot of thought, handling this in nested_vmx_enter_non_root_mode() would be little
+> more than a band-aid, and a messy one at that, because KVM's SMM emulation is
+> horrifically broken with respect to nVMX.
+>
+> Entry does to SMM does not modify _any_ state that is not saved in SMRAM.  That
+> we're having to deal with this crap is a symptom of KVM doing the complete wrong
+> thing by piggybacking nested_vmx_vmexit() and nested_vmx_enter_non_root_mode().
+>
+> The SDM's description of CET spells this out very, very clearly:
+>
+>    On processors that support CET shadow stacks, when the processor enters SMM,
+>    the processor saves the SSP register to the SMRAM state save area (see Table 31-3)
+>    and clears CR4.CET to 0. Thus, the initial execution environment of the SMI handler
+>    has CET disabled and all of the CET state of the interrupted program is still in the
+>    machine. An SMM that uses CET is required to save the interrupted program’s CET
+>    state and restore the CET state prior to exiting SMM.
+>
+> It mostly works because no guest SMM handler does anything with most of the MSRs,
+> but it's all wildy wrong.  A concrete example of a lurking bug is if vmcs12 uses
+> the VM-Exit MSR load list, in which case the forced nested_vmx_vmexit() will load
+> state that is never undone.
+>
+> So, my very strong vote is to ignore SMM and let someone who actually cares about
+> SMM fix that mess properly by adding custom flows for exiting/re-entering L2 on
+> SMI/RSM.
+
+OK, I will leave the mess alone.
+
+>>   	}
+>>   
+>>   	if (nested_cpu_has_xsaves(vmcs12))
+>> @@ -2521,6 +2529,11 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
+>>   	if (kvm_mpx_supported() && (!vmx->nested.nested_run_pending ||
+>>   	    !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
+>>   		vmcs_write64(GUEST_BNDCFGS, vmx->nested.vmcs01_guest_bndcfgs);
+>> +	if (kvm_cpu_cap_has(X86_FEATURE_PKS) &&
+> ERROR: trailing whitespace
+> #85: FILE: arch/x86/kvm/vmx/nested.c:3407:
+> +^Iif (kvm_cpu_cap_has(X86_FEATURE_PKS) && $
+
+Sorry for my carelessness, will remove the trailing whitespace.
+
+>> +	    (!vmx->nested.nested_run_pending ||
+>> +	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS)))
+>> +		vmcs_write64(GUEST_IA32_PKRS, vmx->nested.vmcs01_guest_pkrs);
+>> +
+>>   	vmx_set_rflags(vcpu, vmcs12->guest_rflags);
+>>   
+>>   	/* EXCEPTION_BITMAP and CR0_GUEST_HOST_MASK should basically be the
+>> @@ -2897,6 +2910,10 @@ static int nested_vmx_check_host_state(struct kvm_vcpu *vcpu,
+>>   					   vmcs12->host_ia32_perf_global_ctrl)))
+>>   		return -EINVAL;
+>>   
+>> +	if ((vmcs12->vm_exit_controls & VM_EXIT_LOAD_IA32_PKRS) &&
+>> +	    CC(!kvm_pkrs_valid(vmcs12->host_ia32_pkrs)))
+>> +		return -EINVAL;
+>> +
+>>   #ifdef CONFIG_X86_64
+>>   	ia32e = !!(vmcs12->vm_exit_controls & VM_EXIT_HOST_ADDR_SPACE_SIZE);
+>>   #else
+>> @@ -3049,6 +3066,10 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
+>>   	if (nested_check_guest_non_reg_state(vmcs12))
+>>   		return -EINVAL;
+>>   
+>> +	if ((vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS) &&
+>> +	    CC(!kvm_pkrs_valid(vmcs12->guest_ia32_pkrs)))
+>> +		return -EINVAL;
+>> +
+>>   	return 0;
+>>   }
+>>   
+>> @@ -3384,6 +3405,10 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+>>   	    (!from_vmentry ||
+>>   	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
+>>   		vmx->nested.vmcs01_guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
+>> +	if (kvm_cpu_cap_has(X86_FEATURE_PKS) &&
+>> +	    (!from_vmentry ||
+> This should be "!vmx->nested.nested_run_pending" instead of "!from_vmentry" to
+> avoid the unnecessary VMREAD when restoring L2 with a pending VM-Enter.
+
+Will fix that.
+
+>> +	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_PKRS)))
+>> +		vmx->nested.vmcs01_guest_pkrs = vmcs_read64(GUEST_IA32_PKRS);
+>>   
+>>   	/*
+>>   	 * Overwrite vmcs01.GUEST_CR3 with L1's CR3 if EPT is disabled *and*
+> ...
+>
+>> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+>> index 91723a226bf3..82f79ac46d7b 100644
+>> --- a/arch/x86/kvm/vmx/vmx.h
+>> +++ b/arch/x86/kvm/vmx/vmx.h
+>> @@ -222,6 +222,8 @@ struct nested_vmx {
+>>   	u64 vmcs01_debugctl;
+>>   	u64 vmcs01_guest_bndcfgs;
+>>   
+> Please pack these together, i.e. don't have a blank line between the various
+> vmcs01_* fields.
+
+OK, will check them and remove the blank lines.
 

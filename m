@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F7B5368C5
+	by mail.lfdr.de (Postfix) with ESMTP id 260A75368C4
 	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354670AbiE0WZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 18:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S1352145AbiE0WZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 18:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347838AbiE0WZh (ORCPT
+        with ESMTP id S1347568AbiE0WZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 May 2022 18:25:37 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204D43EB96
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2990E3EB9C
         for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:25:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1653690336; x=1685226336;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=dUR1PVCRBUeXcmUnx30IpXtiF/6cUmL+c2fNK9cPJqA=;
-  b=giW43ja3ddJ5b8ET4DB/DzwjNS5zE8s5+ToHYjcxFdXESCsipf79mukO
-   r+01dpIch6rHqzZAHVxoWqQ5vXJPFE+nDwWe93LGOFqnbnSuc6BEkdxDN
-   6XbKE/JE9ZE48zzmkzHWmRthpQtQdq2RiWGca/96BCJeVNZI6YmqbXn0K
-   b+PHeRqHe32V8pRS3/4GbYx769NlJx1oftzBkx6Lse+5laFNKoZoWRte9
-   KNRcA7+y/s486hLtbHJ7iQHiLJbZrNZIlYOx7A1AoX/poD028eb72th9U
-   +sxZI+TzZrPbl/Hhh6+idkxUkrfZhs1aAwRxQL/93t92BgNbvEkHSegs8
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="262208295"
+  bh=3HwU97iMg/MeWIHuMjsRL2cPVjB75MmpNk/BScLtpXY=;
+  b=dn6C8HCn3lywVBupwQc4pvXatPX4Xc5JdYuo3h6U5GN2CKlXWcDRDT6h
+   BBlba4Z6Ax0N3Zt2xaTGEAA62OpMABUbdD4utAGqZJhNaP5bh/JnU6hAM
+   u6Jy8QfeZ1lWfAE1gjNTewrVJgIXRCS6s/W+S81o8OAMu7UGBXg2Xspvo
+   lL/RUjm2bTI7Y2/7VjO9AbpGm5ibEYe0RlzwbgeEk09+K62Q09L5RrVwD
+   zPe69pBTd8ChHBen5LzVBcwK7rziqY2nIcgaDaYCKUz/zGaEvhWmomIxO
+   ws1D+0+77b/J9EhMsFw+dK102nDzFCm3UJrL6t5cRv+p680wJPbNYegZv
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="254463616"
 X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="262208295"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 15:25:35 -0700
+   d="scan'208";a="254463616"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 15:25:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="604132696"
+   d="scan'208";a="610545135"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 May 2022 15:25:34 -0700
+  by orsmga001.jf.intel.com with ESMTP; 27 May 2022 15:25:34 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nuiOj-0005BI-D2;
+        id 1nuiOj-0005BO-FI;
         Fri, 27 May 2022 22:25:33 +0000
-Date:   Sat, 28 May 2022 06:24:47 +0800
+Date:   Sat, 28 May 2022 06:24:54 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- f7081834b2d5bbc77d67073d8ab490bfeaf3c13b
-Message-ID: <62914faf.N9nWrglpxPP6P8Q8%lkp@intel.com>
+Subject: [tip:timers/core] BUILD SUCCESS
+ 57963a92a70b037aa22544fbc34742e5be689c04
+Message-ID: <62914fb6.MlpfYA2jPrOIoQ8q%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
-branch HEAD: f7081834b2d5bbc77d67073d8ab490bfeaf3c13b  x86: Fix all occurences of the "the the" typo
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
+branch HEAD: 57963a92a70b037aa22544fbc34742e5be689c04  Merge tag 'timers-v5.19-rc1' of https://git.linaro.org/people/daniel.lezcano/linux into timers/core
 
 elapsed time: 722m
 
-configs tested: 166
-configs skipped: 90
+configs tested: 175
+configs skipped: 4
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -103,6 +102,12 @@ arc                     haps_hs_smp_defconfig
 powerpc                 mpc8540_ads_defconfig
 sh                            hp6xx_defconfig
 mips                 decstation_r4k_defconfig
+sh                            titan_defconfig
+sh                           sh2007_defconfig
+openrisc                         alldefconfig
+arm                          pxa3xx_defconfig
+sh                ecovec24-romimage_defconfig
+mips                         bigsur_defconfig
 xtensa                    xip_kc705_defconfig
 powerpc                     tqm8555_defconfig
 sh                            shmin_defconfig
@@ -133,10 +138,11 @@ sh                     magicpanelr2_defconfig
 sh                   sh7724_generic_defconfig
 arm                      footbridge_defconfig
 sh                  sh7785lcr_32bit_defconfig
-sh                           sh2007_defconfig
 sh                         microdev_defconfig
 s390                       zfcpdump_defconfig
 arm                        trizeps4_defconfig
+m68k                        m5407c3_defconfig
+arc                            hsdk_defconfig
 arm                        shmobile_defconfig
 nios2                         10m50_defconfig
 arm                          lpd270_defconfig
@@ -222,6 +228,8 @@ mips                          malta_defconfig
 mips                      pic32mzda_defconfig
 powerpc                       ebony_defconfig
 mips                           ip28_defconfig
+mips                         tb0287_defconfig
+powerpc                      obs600_defconfig
 arm                        mvebu_v5_defconfig
 mips                  cavium_octeon_defconfig
 mips                           ip22_defconfig

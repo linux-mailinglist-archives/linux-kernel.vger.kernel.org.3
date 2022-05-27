@@ -2,93 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B515359C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72BF535A4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344739AbiE0HD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 03:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
+        id S1345110AbiE0HZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 03:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239176AbiE0HDy (ORCPT
+        with ESMTP id S235703AbiE0HZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 03:03:54 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7926FA05
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 00:03:53 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L8bMt5d4tz1JCSZ;
-        Fri, 27 May 2022 15:02:18 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:03:51 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:03:51 +0800
-From:   keliu <liuke94@huawei.com>
-To:     <giometti@enneenne.com>, <gregkh@linuxfoundation.org>,
-        <liuke94@huawei.com>, <andriy.shevchenko@linux.intel.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] pps: clients: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 07:25:20 +0000
-Message-ID: <20220527072520.2374615-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 May 2022 03:25:41 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78597ED712
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 00:25:39 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=hongnan.li@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VEW7hpz_1653636336;
+Received: from localhost(mailfrom:hongnan.li@linux.alibaba.com fp:SMTPD_---0VEW7hpz_1653636336)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 27 May 2022 15:25:36 +0800
+From:   Hongnan Li <hongnan.li@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] erofs: update ctx->pos for every emitted dirent
+Date:   Fri, 27 May 2022 15:25:36 +0800
+Message-Id: <20220527072536.68516-1-hongnan.li@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove() .
+erofs_readdir update ctx->pos after filling a batch of dentries
+and it may cause dir/files duplication for NFS readdirplus which
+depends on ctx->pos to fill dir correctly. So update ctx->pos for
+every emitted dirent in erofs_fill_dentries to fix it.
 
-Signed-off-by: keliu <liuke94@huawei.com>
+Fixes: 3e917cc305c6 ("erofs: make filesystem exportable")
+Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
 ---
- drivers/pps/clients/pps_parport.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/erofs/dir.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/pps/clients/pps_parport.c b/drivers/pps/clients/pps_parport.c
-index 42f93d4c6ee3..af972cdc04b5 100644
---- a/drivers/pps/clients/pps_parport.c
-+++ b/drivers/pps/clients/pps_parport.c
-@@ -148,7 +148,7 @@ static void parport_attach(struct parport *port)
- 		return;
+diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
+index 18e59821c597..3015974fe2ff 100644
+--- a/fs/erofs/dir.c
++++ b/fs/erofs/dir.c
+@@ -22,11 +22,12 @@ static void debug_one_dentry(unsigned char d_type, const char *de_name,
+ }
+ 
+ static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
+-			       void *dentry_blk, unsigned int *ofs,
++			       void *dentry_blk, void *dentry_begin,
+ 			       unsigned int nameoff, unsigned int maxsize)
+ {
+-	struct erofs_dirent *de = dentry_blk + *ofs;
++	struct erofs_dirent *de = dentry_begin;
+ 	const struct erofs_dirent *end = dentry_blk + nameoff;
++	loff_t begin_pos = ctx->pos;
+ 
+ 	while (de < end) {
+ 		const char *de_name;
+@@ -59,9 +60,9 @@ static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
+ 			/* stopped by some reason */
+ 			return 1;
+ 		++de;
+-		*ofs += sizeof(struct erofs_dirent);
++		ctx->pos += sizeof(struct erofs_dirent);
  	}
- 
--	index = ida_simple_get(&pps_client_index, 0, 0, GFP_KERNEL);
-+	index = ida_alloc(&pps_client_index, GFP_KERNEL);
- 	memset(&pps_client_cb, 0, sizeof(pps_client_cb));
- 	pps_client_cb.private = device;
- 	pps_client_cb.irq_func = parport_irq;
-@@ -188,7 +188,7 @@ static void parport_attach(struct parport *port)
- err_unregister_dev:
- 	parport_unregister_device(device->pardev);
- err_free:
--	ida_simple_remove(&pps_client_index, index);
-+	ida_free(&pps_client_index, index);
- 	kfree(device);
+-	*ofs = maxsize;
++	ctx->pos = begin_pos + maxsize;
+ 	return 0;
  }
  
-@@ -208,7 +208,7 @@ static void parport_detach(struct parport *port)
- 	pps_unregister_source(device->pps);
- 	parport_release(pardev);
- 	parport_unregister_device(pardev);
--	ida_simple_remove(&pps_client_index, device->index);
-+	ida_free(&pps_client_index, device->index);
- 	kfree(device);
- }
+@@ -110,11 +111,9 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
+ 				goto skip_this;
+ 		}
  
+-		err = erofs_fill_dentries(dir, ctx, de, &ofs,
++		err = erofs_fill_dentries(dir, ctx, de, de + ofs,
+ 					  nameoff, maxsize);
+ skip_this:
+-		ctx->pos = blknr_to_addr(i) + ofs;
+-
+ 		if (err)
+ 			break;
+ 		++i;
 -- 
-2.25.1
+2.35.1
 

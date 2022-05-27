@@ -2,227 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A4A535D6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F5B535D6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236696AbiE0Ja4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S1350593AbiE0Ja2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350599AbiE0Jax (ORCPT
+        with ESMTP id S1350555AbiE0JaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:30:53 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128C3FD37C;
-        Fri, 27 May 2022 02:30:48 -0700 (PDT)
-X-UUID: b7df0aabe2694a75bc2d2f914f191f3d-20220527
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:ebdbe9a2-ce8a-476e-823e-b1af4bf74b6c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:2dc6b847-4fb1-496b-8f1d-39e733fed1ea,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: b7df0aabe2694a75bc2d2f914f191f3d-20220527
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 229779352; Fri, 27 May 2022 17:30:42 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 27 May 2022 17:30:40 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 27 May 2022 17:30:40 +0800
-Message-ID: <997da91ccc893a53cf4e7713ba08b5e32043c507.camel@mediatek.com>
-Subject: Re: [PATCH v18 6/6] soc: mediatek: mutex: add functions that
- operate registers by CMDQ
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
-        <randy.wu@mediatek.com>, <jason-jh.lin@mediatek.com>,
-        <roy-cw.yeh@mediatek.com>, <river.cheng@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <cellopoint.kai@gmail.com>
-Date:   Fri, 27 May 2022 17:30:40 +0800
-In-Reply-To: <20220512084139.15086-7-moudy.ho@mediatek.com>
-References: <20220512084139.15086-1-moudy.ho@mediatek.com>
-         <20220512084139.15086-7-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 27 May 2022 05:30:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611B81059C8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:30:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id ED58C1F967;
+        Fri, 27 May 2022 09:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1653643820; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=lChZ3kfPqOiQIGBbbKOf5O0euzOQVluYptAu5MuJjmI=;
+        b=Lo4mTgACrwbxXdGNT/W10C9bRQnbNP+3IlsK9S1gaGC4gYgwKOAGx7aJrbbO+XzDJUpEgJ
+        ESqo0OC2Rnax6bZ0QWWjN+IF5oWVwFL5TcHbEYoTJZWxMYFA57j6yRm0dIZhw2Lsb0bHyh
+        jhQuxFQ5wORG0yc3kjNZwgd2nTS99NI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1653643820;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=lChZ3kfPqOiQIGBbbKOf5O0euzOQVluYptAu5MuJjmI=;
+        b=XpHwPSiLRvXuW5MIh3rkqaUQURfvmJ0ulgL1CAoHYh410ePKZcojrFZ037MTuqbAefw3rI
+        QQlIOqi+A5+pbUBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9CA7F139C4;
+        Fri, 27 May 2022 09:30:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QNCiJCyakGK1VAAAMHmgww
+        (envelope-from <chrubis@suse.cz>); Fri, 27 May 2022 09:30:20 +0000
+Date:   Fri, 27 May 2022 11:32:27 +0200
+From:   Cyril Hrubis <chrubis@suse.cz>
+To:     ltp@lists.linux.it, linux-kernel@vger.kernel.org,
+        libc-alpha@sourceware.org
+Cc:     lwn@lwn.net, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org
+Subject: [ANNOUNCE] The Linux Test Project has been released for MAY 2022 
+Message-ID: <YpCaq7VEb6d5HPBF@yuki>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Moudy:
+Good news everyone,
 
-On Thu, 2022-05-12 at 16:41 +0800, Moudy Ho wrote:
-> Due to HW limitations, MDP3 is necessary to enable MUTEX in each
-> frame
-> for SOF triggering and cooperate with CMDQ control to reduce the
-> amount
-> of interrupts generated(also, reduce frame latency).
-> 
-> In response to the above situation, a new interface
-> "mtk_mutex_enable_by_cmdq" has been added to achieve the purpose.
-> 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/soc/mediatek/mtk-mutex.c       | 47
-> +++++++++++++++++++++++++-
->  include/linux/soc/mediatek/mtk-mutex.h |  2 ++
->  2 files changed, 48 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-mutex.c
-> b/drivers/soc/mediatek/mtk-mutex.c
-> index 92afdee14d43..4ec2954f2f43 100644
-> --- a/drivers/soc/mediatek/mtk-mutex.c
-> +++ b/drivers/soc/mediatek/mtk-mutex.c
-> @@ -7,10 +7,12 @@
->  #include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_address.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
->  #include <linux/soc/mediatek/mtk-mmsys.h>
->  #include <linux/soc/mediatek/mtk-mutex.h>
-> +#include <linux/soc/mediatek/mtk-cmdq.h>
->  
->  #define MT2701_MUTEX0_MOD0			0x2c
->  #define MT2701_MUTEX0_SOF0			0x30
-> @@ -176,6 +178,9 @@ struct mtk_mutex_ctx {
->  	void __iomem			*regs;
->  	struct mtk_mutex		mutex[10];
->  	const struct mtk_mutex_data	*data;
-> +	phys_addr_t			addr;
-> +	struct cmdq_client_reg		cmdq_reg;
-> +	bool				has_gce_client_reg;
+the Linux Test Project test suite stable release for *May 2022* has been
+released.
 
-I think this is not necessary. If cmdq_reg.size == 0, that would imply
-cmdq_reg is invalid.
+Since the last release 298 patches by 25 authors were merged.
 
->  };
->  
->  static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-> @@ -531,6 +536,30 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
->  }
->  EXPORT_SYMBOL_GPL(mtk_mutex_enable);
->  
-> +int mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex, void *pkt)
-> +{
-> +	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> +						 mutex[mutex->id]);
-> +#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-> +	struct cmdq_pkt *cmdq_pkt = (struct cmdq_pkt *)pkt;
-> +
-> +	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-> +
-> +	if (!mtx->has_gce_client_reg) {
-> +		dev_err(mtx->dev, "mediatek,gce-client-reg hasn't been
-> set in dts");
-> +		return -EINVAL;
-> +	}
-> +
-> +	cmdq_pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys,
-> +		       mtx->addr + DISP_REG_MUTEX_EN(mutex->id), 1);
-> +	return 0;
-> +#else
-> +	dev_err(mtx->dev, "Not support for enable MUTEX by CMDQ");
-> +	return -ENODEV;
-> +#endif
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
-> +
->  void mtk_mutex_disable(struct mtk_mutex *mutex)
->  {
->  	struct mtk_mutex_ctx *mtx = container_of(mutex, struct
-> mtk_mutex_ctx,
-> @@ -655,8 +684,11 @@ static int mtk_mutex_probe(struct
-> platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct mtk_mutex_ctx *mtx;
-> -	struct resource *regs;
-> +	struct resource *regs, addr;
->  	int i;
-> +#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-> +	int ret;
-> +#endif
->  
->  	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
->  	if (!mtx)
-> @@ -676,6 +708,19 @@ static int mtk_mutex_probe(struct
-> platform_device *pdev)
->  		}
->  	}
->  
-> +	if (of_address_to_resource(dev->of_node, 0, &addr) < 0)
-> +		mtx->addr = 0L;
+Patch review is what most of the projects struggle with and LTP is no
+different. If you can spare some effort helping with the patch review is more
+than welcomed.
 
-You may return error, or you should check mtx->addr when use it.
+NOTABLE CHANGES
+===============
 
-Regards,
-CK
+* New tests
+  - kvm_pagefault01: aka CVE-2021-38198
+  - fcntl39: test for DN_RENAME (dnotify)
+  - io_control01: first cgroup IO controller test
+  - keyctl09: test encrypted keys with provided decrypted data
+  - memcontrol03, memcontrol04: tests that cgroup memory is partitioned correctly under pressure
+  - setsockopt09: regression test for use-after-free in prb_retire_rx_blk_timer_expired()
+  - setsockopt09: regression test for double free of rx_owner_map aka CVE-2021-22600
+  - pty07: regression test for use-after-free in vt_ioctl()
+  - pty06: regression test for VT_DISALLOCATE freeing in-use virtual console
+  - pidfd_getfd01 basic functional test
+  - pidfd_getfd02 basic error test
+  - pidfd_open04 test with PIDFD_NONBLOCK flag
+  - futex_waitv01 error tests
+  - futex_waitv02 basic functional test with private memory
+  - futex_waitv03 basic functional test with shared memory
+  - inotify11: test opening files after receiving IN_DELETE
+               regression test for a37d9a17f099 (fsnotify: invalidate dcache before IN_DELETE event)
+  - statx09 test for STATX_ATTR_VERITY
+  - wqueue09 tests WATCH_META_LOSS_NOTIFICATION event
+  - wqueue08 tests WATCH_META_REMOVAL_NOTIFICATION event
+  - wqueue07 tests NOTIFY_KEY_SETATTR event
+  - wqueue06 tests NOTIFY_KEY_CLEARED event
+  - wqueue05 tests NOTIFY_KEY_INVALIDATED event
+  - wqueue04 tests NOTIFY_KEY_LINKED event
+  - wqueue03 tests NOTIFY_KEY_REVOKED event
+  - wqueue02 tests NOTIFY_KEY_UNLINKED event
+  - wqueue01 tests NOTIFY_KEY_UPDATED event
 
-> +	else
-> +		mtx->addr = addr.start;
-> +
-> +#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-> +	ret = cmdq_dev_get_client_reg(dev, &mtx->cmdq_reg, 0);
-> +	if (ret)
-> +		dev_dbg(dev, "No mediatek,gce-client-reg!\n");
-> +	else
-> +		mtx->has_gce_client_reg = true;
-> +#endif
-> +
->  	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	mtx->regs = devm_ioremap_resource(dev, regs);
->  	if (IS_ERR(mtx->regs)) {
-> diff --git a/include/linux/soc/mediatek/mtk-mutex.h
-> b/include/linux/soc/mediatek/mtk-mutex.h
-> index f174452212d6..80425ae19fb7 100644
-> --- a/include/linux/soc/mediatek/mtk-mutex.h
-> +++ b/include/linux/soc/mediatek/mtk-mutex.h
-> @@ -29,6 +29,8 @@ int mtk_mutex_prepare(struct mtk_mutex *mutex);
->  void mtk_mutex_add_comp(struct mtk_mutex *mutex,
->  			enum mtk_ddp_comp_id id);
->  void mtk_mutex_enable(struct mtk_mutex *mutex);
-> +int mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-> +			     void *pkt);
->  void mtk_mutex_disable(struct mtk_mutex *mutex);
->  void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
->  			   enum mtk_ddp_comp_id id);
+* Increased coverage
+  - fanotify14, fanotify16: Add tests for FAN_REPORT_TARGET_FID and FAN_RENAME
+  - futex_waitv01: Add test verifies EINVAL for invalid nr_futexes
+  - getcontext01: Test rewritten so that it actually jumps back
+  - fstat02: Validate st_nlink as well
+  - sched_get_priority_max01, sched_get_priority_min01: Add missing policies
 
+* KVM library was written for LTP
+  - a simple library that can spin up a VM and execute payload
+  - see also https://github.com/linux-test-project/ltp/wiki/KVM-Test-API
+
+* The concept of test runtime was introduced
+  - for details see https://people.kernel.org/metan/test-timeout-and-runtime
+
+* Removed tests
+  - syslog tests as these were testing mostly userspace syslog daemon
+    and were broken for most of the syslog daemon implementations
+
+* The test library was fixed to terminate all leftover processes in the case
+  that the main test process dies or exits
+
+* New sparse check for {} terminator for struct arrays in tst_test has been
+  implemented
+
+* Shell library improvements
+  - added support for $TST_FORMAT_DEVICE (.format_device in C API)
+  - preparations for shell API get support for testing on all filesystems (.all_filesystems in C API)
+  - getopts cleanup and changes how is the library sources,
+    which resulted in much simpler library code
+
+* Userns tests were rewritten into the new test API
+
+* Mountns tests were rewritten into the new test API
+
+* 33 tests were rewritten to the new library
+
++ The usual amount of fixes and cleanups
+
+WHAT IS IN THE QUEUE
+====================
+
+In-flight patches include:
+
+- CGroup shell test rewrite that should fix many problems
+
+
+NOTABLE CHANGES IN NETWORK TESTS
+================================
+brought to you by Petr Vorel
+
+* Several fixes (e.g. important nfs_lib: Fix fsid randomisation)
+
+* Ongoing discussion where should be SCTP testsuite home
+
+
+DOWNLOAD AND LINKS
+==================
+
+The latest version of the test-suite contains 3000+ tests for the Linux
+and can be downloaded at:
+
+https://github.com/linux-test-project/ltp/releases/tag/20220527
+
+The project pages as well as GIT repository are hosted on GitHub:
+
+https://github.com/linux-test-project/ltp
+http://linux-test-project.github.io/
+
+If you ever wondered how to write a LTP testcase, don't miss our developer
+documentation at:
+
+https://github.com/linux-test-project/ltp/wiki/Test-Writing-Guidelines
+
+https://github.com/linux-test-project/ltp/wiki/C-Test-API
+
+https://github.com/linux-test-project/ltp/wiki/C-Test-Network-API
+
+https://github.com/linux-test-project/ltp/wiki/Shell-Test-API
+
+https://github.com/linux-test-project/ltp/wiki/C-Test-Case-Tutorial
+
+https://github.com/linux-test-project/ltp/wiki/BuildSystem
+
+Patches, new tests, bugs, comments or questions should go to to our mailing
+list at ltp@lists.linux.it.
+
+CREDITS
+=======
+
+Many thanks to the people contributing to this release:
+
+git shortlog -s -e -n 20220121..
+
+    72  Petr Vorel <pvorel@suse.cz>
+    51  Cyril Hrubis <chrubis@suse.cz>
+    42  Andrea Cervesato <andrea.cervesato@suse.de>
+    22  Li Wang <liwang@redhat.com>
+    21  Richard Palethorpe <rpalethorpe@suse.com>
+    17  Martin Doucha <mdoucha@suse.cz>
+    15  Yang Xu <xuyang2018.jy@fujitsu.com>
+    10  Jan Stancek <jstancek@redhat.com>
+    10  Zhao Gongyi <zhaogongyi@huawei.com>
+     7  Amir Goldstein <amir73il@gmail.com>
+     6  Dai Shili <daisl.fnst@fujitsu.com>
+     6  Bogdan Lezhepekov <blezhepekov@suse.de>
+     4  tangmeng <tangmeng@uniontech.com>
+     2  Chunyu Hu <chuhu@redhat.com>
+     2  Kushal Chand <kushalkataria5@gmail.com>
+     2  xiaoshoukui <xiaoshoukui@ruijie.com.cn>
+     1  Alexander Ivanov <alexander.ivanov@virtuozzo.com>
+     1  Alexander Kanavin <alex@linutronix.de>
+     1  Andrea Arcangeli <aarcange@redhat.com>
+     1  Edward Liaw via ltp <ltp@lists.linux.it>
+     1  Fabrice Fontaine <fontaine.fabrice@gmail.com>
+     1  Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+     1  Wang Kunfeng via ltp <ltp@lists.linux.it>
+     1  Yael Tzur via ltp <ltp@lists.linux.it>
+     1  ihsinme <ihsinme@gmail.com>
+
+And also thanks to patch reviewers:
+
+git log 20220121.. | grep -Ei '(reviewed|acked)-by:' | sed 's/.*by: //' | sort | uniq -c | sort -n -r
+
+    148 Cyril Hrubis <chrubis@suse.cz>
+    105 Petr Vorel <pvorel@suse.cz>
+     73 Li Wang <liwang@redhat.com>
+     21 Yang Xu <xuyang2018.jy@fujitsu.com>
+     17 Richard Palethorpe <rpalethorpe@suse.com>
+     10 Martin Doucha <mdoucha@suse.cz>
+      6 Jan Stancek <jstancek@redhat.com>
+      1 Waiman Long <longman@redhat.com>
+      1 Jan Kara <jack@suse.cz>
+      1 Gabriel Krisman Bertazi <krisman@collabora.com>
+      1 Andrea Cervesato <andrea.cervesato@suse.de>
+      1 Alexey Kodanev <aleksei.kodanev@bell-sw.com>
+
+-- 
+Cyril Hrubis
+chrubis@suse.cz

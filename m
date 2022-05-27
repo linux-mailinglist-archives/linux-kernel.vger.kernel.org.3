@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBB9536062
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80474535C77
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238607AbiE0Lt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
+        id S1350352AbiE0JE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352038AbiE0LpR (ORCPT
+        with ESMTP id S1350461AbiE0I77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:45:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E2413FD72;
-        Fri, 27 May 2022 04:41:48 -0700 (PDT)
+        Fri, 27 May 2022 04:59:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04795D5C0;
+        Fri, 27 May 2022 01:55:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 408E7B824D8;
-        Fri, 27 May 2022 11:41:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEB4C385A9;
-        Fri, 27 May 2022 11:41:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CC4361CB7;
+        Fri, 27 May 2022 08:55:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47306C385B8;
+        Fri, 27 May 2022 08:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651705;
-        bh=1gYXjOiQ/z90nRzb8U321OxJ4EeK2vYVDyO9CPVnJcY=;
+        s=korg; t=1653641756;
+        bh=Ve6NfPpdS1r05uyDwxztOFOgYNEeL5kzJRoMP9JvtMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UlUf2fYsROZXikyjxEsaUndw/nCbTy5JdQz4emaM/MA2dl+EKIyMlOOv3gi1DJ3Sy
-         wRcOIJW74D3cDhWs2ag0KcDlGI0GWdlEopzj1SgV7K1z3t5f/RO4PXjSxQ9Hcv/9wa
-         kVIQIliEGZJadH4omyaHskquXJc8W4cOJNAnZpkw=
+        b=ZY4FmL6y8TdecJTQaoJNhliuhozPzUuSd40UHPGC28C4TsmiizEgo11eqf7ax32j+
+         eVbASixqPL/JkzOB0FM+2zO01u+a8MckK2qpqMAe9CrBX+aO+8UIBXGeeTDaMSdvQq
+         b/rNhxOlG5SdrKzhawc8ywIgbmu3Yyylv/7TVc1w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 031/145] random: cleanup fractional entropy shift constants
+Subject: [PATCH 5.17 020/111] random: remove outdated INT_MAX >> 6 check in urandom_read()
 Date:   Fri, 27 May 2022 10:48:52 +0200
-Message-Id: <20220527084854.599461457@linuxfoundation.org>
+Message-Id: <20220527084822.188475049@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+References: <20220527084819.133490171@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,82 +59,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 18263c4e8e62f7329f38f5eadc568751242ca89c upstream.
+commit 434537ae54ad37e93555de21b6ac8133d6d773a9 upstream.
 
-The entropy estimator is calculated in terms of 1/8 bits, which means
-there are various constants where things are shifted by 3. Move these
-into our pool info enum with the other relevant constants. While we're
-at it, move an English assertion about sizes into a proper BUILD_BUG_ON
-so that the compiler can ensure this invariant.
+In 79a8468747c5 ("random: check for increase of entropy_count because of
+signed conversion"), a number of checks were added around what values
+were passed to account(), because account() was doing fancy fixed point
+fractional arithmetic, and a user had some ability to pass large values
+directly into it. One of things in that commit was limiting those values
+to INT_MAX >> 6. The first >> 3 was for bytes to bits, and the next >> 3
+was for bits to 1/8 fractional bits.
 
+However, for several years now, urandom reads no longer touch entropy
+accounting, and so this check serves no purpose. The current flow is:
+
+urandom_read_nowarn()-->get_random_bytes_user()-->chacha20_block()
+
+Of course, we don't want that size_t to be truncated when adding it into
+the ssize_t. But we arrive at urandom_read_nowarn() in the first place
+either via ordinary fops, which limits reads to MAX_RW_COUNT, or via
+getrandom() which limits reads to INT_MAX.
+
+Cc: Theodore Ts'o <tytso@mit.edu>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Jann Horn <jannh@google.com>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   28 +++++++++++++---------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
+ drivers/char/random.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -359,16 +359,6 @@
- /* #define ADD_INTERRUPT_BENCH */
+@@ -1286,9 +1286,8 @@ void rand_initialize_disk(struct gendisk
+ static ssize_t urandom_read_nowarn(struct file *file, char __user *buf,
+ 				   size_t nbytes, loff_t *ppos)
+ {
+-	int ret;
++	ssize_t ret;
  
- /*
-- * To allow fractional bits to be tracked, the entropy_count field is
-- * denominated in units of 1/8th bits.
-- *
-- * 2*(POOL_ENTROPY_SHIFT + poolbitshift) must <= 31, or the multiply in
-- * credit_entropy_bits() needs to be 64 bits wide.
-- */
--#define POOL_ENTROPY_SHIFT 3
--#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
--
--/*
-  * If the entropy count falls under this number of bits, then we
-  * should wake up processes which are selecting or polling on write
-  * access to /dev/random.
-@@ -425,8 +415,13 @@ enum poolinfo {
- 	POOL_WORDMASK = POOL_WORDS - 1,
- 	POOL_BYTES = POOL_WORDS * sizeof(u32),
- 	POOL_BITS = POOL_BYTES * 8,
--	POOL_BITSHIFT = ilog2(POOL_WORDS) + 5,
--	POOL_FRACBITS = POOL_WORDS << (POOL_ENTROPY_SHIFT + 5),
-+	POOL_BITSHIFT = ilog2(POOL_BITS),
-+
-+	/* To allow fractional bits to be tracked, the entropy_count field is
-+	 * denominated in units of 1/8th bits. */
-+	POOL_ENTROPY_SHIFT = 3,
-+#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
-+	POOL_FRACBITS = POOL_BITS << POOL_ENTROPY_SHIFT,
- 
- 	/* x^128 + x^104 + x^76 + x^51 +x^25 + x + 1 */
- 	POOL_TAP1 = 104,
-@@ -652,6 +647,9 @@ static void credit_entropy_bits(int nbit
- 	int entropy_count, entropy_bits, orig;
- 	int nfrac = nbits << POOL_ENTROPY_SHIFT;
- 
-+	/* Ensure that the multiplication can avoid being 64 bits wide. */
-+	BUILD_BUG_ON(2 * (POOL_ENTROPY_SHIFT + POOL_BITSHIFT) > 31);
-+
- 	if (!nbits)
- 		return;
- 
-@@ -687,13 +685,13 @@ retry:
- 		/* The +2 corresponds to the /4 in the denominator */
- 
- 		do {
--			unsigned int anfrac = min(pnfrac, POOL_FRACBITS/2);
-+			unsigned int anfrac = min(pnfrac, POOL_FRACBITS / 2);
- 			unsigned int add =
--				((POOL_FRACBITS - entropy_count)*anfrac*3) >> s;
-+				((POOL_FRACBITS - entropy_count) * anfrac * 3) >> s;
- 
- 			entropy_count += add;
- 			pnfrac -= anfrac;
--		} while (unlikely(entropy_count < POOL_FRACBITS-2 && pnfrac));
-+		} while (unlikely(entropy_count < POOL_FRACBITS - 2 && pnfrac));
- 	}
- 
- 	if (WARN_ON(entropy_count < 0)) {
+-	nbytes = min_t(size_t, nbytes, INT_MAX >> 6);
+ 	ret = get_random_bytes_user(buf, nbytes);
+ 	trace_urandom_read(nbytes, input_pool.entropy_count);
+ 	return ret;
 
 

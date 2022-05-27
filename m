@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754285368CB
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB2F5368CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347838AbiE0W2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 18:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
+        id S1352945AbiE0W3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 18:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiE0W2o (ORCPT
+        with ESMTP id S235038AbiE0W3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 18:28:44 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FC662130
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653690522; x=1685226522;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=37o5tLPhehU6/zb42CwBz1nIUpHr5ux2rsBX/d2liDc=;
-  b=QB4tGI4YJmXRVI/aHHclfLtCEYvwDtDlSCdve7owsKOpkynWipWQPpMG
-   lJXouivTNnxD4nU2UV3D7cu4r09bVtvkdD0YDqTz6RxiY2dzTzVEUxQu/
-   ikPIBonVPJj6YpcD6gFTtW2soG1vryPf/TNx9Nfs5+BzKfQV34M6oc6u8
-   ma96+WlEoiTRiCCH5kNq/kdEl/pA7gYj0vrUZgpNNghz3PA18/juMcSZu
-   MIjzVa+oZ5M141yKk+yQNHkkaZ0JBnt75zrgNuSgf5lS0RPU882/SBLm2
-   Kpsp1JoxHruQzT0EkKRINCARX3Ez+FvfRCvjw2zBBoTfrPHNKbtgVZJnP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="255082592"
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="255082592"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 15:28:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="705333352"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 May 2022 15:28:34 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuiRd-0005BZ-Hn;
-        Fri, 27 May 2022 22:28:33 +0000
-Date:   Sat, 28 May 2022 06:28:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: fs/buffer.c:2254:5: warning: stack frame size (2128) exceeds limit
- (1024) in 'block_read_full_folio'
-Message-ID: <202205280641.ummbxaI0-lkp@intel.com>
+        Fri, 27 May 2022 18:29:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3E66223E;
+        Fri, 27 May 2022 15:29:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78C7E6155B;
+        Fri, 27 May 2022 22:29:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DA6C385A9;
+        Fri, 27 May 2022 22:29:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653690546;
+        bh=4qsLsvkF6H4ESASFTsGnucXhNyE5JDDpqP62KUKOxe4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WK7ginnKSWF6l5CA7eNoFZQSFTyqip2dYeQn+z1VApkHsW1mZsWrQNFYmjwjpvhxY
+         2uSZsEALzISLymmAnEeikqIMDzcIBs+vbodOV2LWow7KbWlu6DPDd6iPgv+qKE4Np6
+         vXZQqulLC3TA2AC/9sxctqSuXyRcvIVMn0kwp5NlS+/Ur49ha70JEe4vH8e645UI65
+         dsIOarFKhdSI2JC3E2KfRkq9yW1Bi5S2eIFx8KWi/LlIM0tuP08mYRVzZo33PCrxMS
+         3RfvR3uSHn2k2hsQLKKGgXe8gAyQPZSPJwHzwbrnTnYPgM3/S1sk+I0LkM4q+ZKmMV
+         ZBH1d7J4e51kw==
+Date:   Fri, 27 May 2022 15:29:05 -0700
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mark Bloch <mbloch@nvidia.com>,
+        Maor Gottlieb <maorg@nvidia.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net/mlx5: fix invalid structure access
+Message-ID: <20220527222905.chagmk4wfresegfg@sx1>
+References: <20220527110132.102192-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220527110132.102192-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,138 +59,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthew,
+On 27 May 13:01, Alexander Lobakin wrote:
+>After pulling latest bpf-next, I started catching the following:
+>
+>[  577.465121] general protection fault, probably for non-canonical address 0x47454cd000065c49: 0000 [#1] SMP PTI
+>[  577.465173] CPU: 0 PID: 339 Comm: kworker/0:2 Tainted: G          I       5.18.0-rc7-bpf-next+ #91
+>[  577.465211] Hardware name: Intel Corporation S2600WFT/S2600WFT, BIOS SE5C620.86B.02.01.0014.082620210524 08/26/2021
+>[  577.465249] Workqueue: events work_for_cpu_fn
+>[  577.465276] RIP: 0010:next_phys_dev_lag+0x1f/0x100 [mlx5_core]
+>[  577.465458] Code: 00 00 00 00 0f 1f 80 00 00 00 00 f3 0f 1e fa 0f 1f 44 00 00 55 41 57 41 56 53 48 8b 9f f8 02 00 00 48 8b 83 38 03 00 00 31 ed <f6> 40 34 80 0f 84 b3 00 00 00 8b 40 4c 0f c8 a8 10 0f 84 a6 00 00
+>[  577.465524] RSP: 0018:ffffbd020750bd58 EFLAGS: 00010246
+>[  577.465548] RAX: 47454cd000065c15 RBX: ffff9c7d97bb0310 RCX: 0000000000000003
+>[  577.465577] RDX: 0000000000000000 RSI: ffff9c80e7f6a1c0 RDI: ffff9c7daaea3800
+>[  577.465606] RBP: 0000000000000000 R08: ffff9c80a396b400 R09: ffff9c80a396b400
+>[  577.465634] R10: ffffffff910608e8 R11: ffffffffc0d41a00 R12: ffffbd020750bd80
+>[  577.465662] R13: ffff9c7d802a4b40 R14: ffffffffc0d41a00 R15: ffff9c80e7f6a1c0
+>[  577.465690] FS:  0000000000000000(0000) GS:ffff9c8890a00000(0000) knlGS:0000000000000000
+>[  577.465722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>[  577.465748] CR2: 00007fb1baf70fb8 CR3: 0000000b7a010001 CR4: 00000000007706f0
+>[  577.465778] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>[  577.465806] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>[  577.465834] PKRU: 55555554
+>[  577.465849] Call Trace:
+>[  577.465865]  <TASK>
+>[  577.465881]  ? mlx5_get_next_phys_dev_lag+0x80/0x80 [mlx5_core]
+>[  577.466039]  bus_find_device+0x88/0xc0
+>[  577.466062]  mlx5_get_next_phys_dev_lag+0x29/0x80 [mlx5_core]
+>[  577.466193]  mlx5_lag_add_mdev+0x45/0x340 [mlx5_core]
+>[  577.466316]  mlx5_load+0xf3/0x3c0 [mlx5_core]
+>[  577.466436]  mlx5_init_one+0x1b9/0x600 [mlx5_core]
+>[  577.466557]  probe_one+0xa0/0x1c0 [mlx5_core]
+>[  577.466676]  local_pci_probe+0x44/0xc0
+>[  577.466701]  work_for_cpu_fn+0x1a/0x40
+>[  577.466723]  process_one_work+0x1cc/0x380
+>[  577.466745]  worker_thread+0x2eb/0x400
+>[  577.466766]  ? worker_clr_flags+0x80/0x80
+>[  577.466786]  kthread+0xcc/0x100
+>[  577.466804]  ? kthread_blkcg+0x40/0x40
+>[  577.466823]  ret_from_fork+0x22/0x30
+>[  577.466847]  </TASK>
+>[  577.466860] Modules linked in: mlx5_core(+) psample mlxfw tls pci_hyperv_intf qrtr rfkill sunrpc vfat fat intel_rapl_msr intel_rapl_common intel_uncore_frequency intel_uncore_frequency_common isst_if_common skx_edac nfit libnvdimm x86_pkg_temp_thermal intel_powerclamp irdma coretemp kvm_intel ib_uverbs iTCO_wdt kvm intel_pmc_bxt irqbypass ib_core iTCO_vendor_support rapl intel_cstate ipmi_ssif ice i40e intel_uncore i2c_i801 mei_me joydev pcspkr ioatdma mei lpc_ich intel_pch_thermal i2c_smbus dca acpi_ipmi ipmi_si acpi_pad acpi_power_meter zram xfs crct10dif_pclmul crc32_pclmul crc32c_intel ghash_clmulni_intel ast drm_vram_helper drm_ttm_helper ttm wmi pkcs8_key_parser fuse ipmi_devintf ipmi_msghandler
+>[  577.468965] ---[ end trace 0000000000000000 ]---
+>
+>More precisely, sometimes it was nullptr deref at address 0x00000034
+>and sometimes general protection fault.
+>Bisect has lead to commit bc4c2f2e0179 ("net/mlx5: Lag, filter non
+>compatible devices"). However, turned out that those added cap
+>checks only revealed the already present problem:
+>mlx5_get_next_dev() doesn't perform any checks if a device belongs
+>to the mlx5 auxbus, starting dereferencing it as a structure
+>embedded into &mlx5_adev right from the start. Simple debug print
+>says the following:
+>
+>[  145.960793] irdma.gen_1 i40e.iwarp.0: next auxdev
+>[  145.960800] irdma.gen_1 i40e.iwarp.0: no caps
+>[  145.960804] irdma.gen_1 i40e.iwarp.1: next auxdev
+>[  145.960807] irdma.gen_1 i40e.iwarp.1: no caps
+>[  145.960810] irdma ice.roce.0: next auxdev
+>[  145.960813] irdma ice.roce.0: no caps
+>[  145.960816] irdma ice.roce.1: next auxdev
+>[  145.960819] irdma ice.roce.1: no caps
+>[  145.960822] irdma ice.roce.2: next auxdev
+>[  145.960824] irdma ice.roce.2: no caps
+>[  146.224222] irdma.gen_1 i40e.iwarp.0: next auxdev
+>[  146.224228] irdma.gen_1 i40e.iwarp.0: no caps
+>[  146.224231] irdma.gen_1 i40e.iwarp.1: next auxdev
+>[  146.224233] irdma.gen_1 i40e.iwarp.1: no caps
+>[  146.224236] irdma ice.roce.0: next auxdev
+>[  146.224239] irdma ice.roce.0: no caps
+>[  146.224243] irdma ice.roce.1: next auxdev
+>[  146.224245] irdma ice.roce.1: no caps
+>[  146.224247] irdma ice.roce.2: next auxdev
+>[  146.224250] irdma ice.roce.2: no caps
+>[  146.224252] auxiliary mlx5_core.eth.0: next auxdev
+>[  146.735499] irdma.gen_1 i40e.iwarp.0: next auxdev
+>[  146.735506] irdma.gen_1 i40e.iwarp.0: no caps
+>[  146.735511] irdma.gen_1 i40e.iwarp.1: next auxdev
+>[  146.735514] irdma.gen_1 i40e.iwarp.1: no caps
+>[  146.735517] irdma ice.roce.0: next auxdev
+>[  146.735520] irdma ice.roce.0: no caps
+>[  146.735523] irdma ice.roce.1: next auxdev
+>[  146.735525] irdma ice.roce.1: no caps
+>[  146.735528] irdma ice.roce.2: next auxdev
+>[  146.735530] irdma ice.roce.2: no caps
+>[  146.735533] auxiliary mlx5_core.eth.0: next auxdev
+>[  146.735537] auxiliary mlx5_core.rdma.0: next auxdev
+>[  146.735540] auxiliary mlx5_core.eth.1: next auxdev
+>[  146.735543] auxiliary mlx5_core.rdma.1: next auxdev
+>
+>It was only a good luck previously that this wasn't triggering any
+>other faults. It is also not common I guess to have several auxbus
+>drivers on one machine :)
+>Anyways, fix this by filtering the devices passed from
+>bus_find_device(). In case with mlx5, they all have "mlx5_core"
+>prefix defined by %MLX5_ADEV_NAME, so use it here. The results:
+>
+>[  833.042660] auxiliary mlx5_core.eth.0: next auxdev
+>[  833.042666] auxiliary mlx5_core.rdma.0: next auxdev
+>[  833.042670] auxiliary mlx5_core.eth.1: next auxdev
+>[  833.042673] auxiliary mlx5_core.rdma.1: next auxdev
+>[  833.558869] auxiliary mlx5_core.eth.0: next auxdev
+>[  833.558876] auxiliary mlx5_core.rdma.0: next auxdev
+>[  833.558880] auxiliary mlx5_core.eth.1: next auxdev
+>[  833.558882] auxiliary mlx5_core.rdma.1: next auxdev
+>[  833.558886] auxiliary mlx5_core.eth.2: next auxdev
+>
+>Fixes: a925b5e309c9 ("net/mlx5: Register mlx5 devices to auxiliary virtual bus")
+>Fixes: bc4c2f2e0179 ("net/mlx5: Lag, filter non compatible devices")
+>Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+>---
+> drivers/net/ethernet/mellanox/mlx5/core/dev.c | 20 +++++++++++++++----
+> 1 file changed, 16 insertions(+), 4 deletions(-)
+>
+>diff --git a/drivers/net/ethernet/mellanox/mlx5/core/dev.c b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
+>index 11f7c03ae81b..b9d13184ed7c 100644
+>--- a/drivers/net/ethernet/mellanox/mlx5/core/dev.c
+>+++ b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
+>@@ -573,16 +573,28 @@ static int _next_phys_dev(struct mlx5_core_dev *mdev,
+>
+> static int next_phys_dev(struct device *dev, const void *data)
+> {
+>-	struct mlx5_adev *madev = container_of(dev, struct mlx5_adev, adev.dev);
+>-	struct mlx5_core_dev *mdev = madev->mdev;
+>+	const struct mlx5_adev *madev;
+>+	struct mlx5_core_dev *mdev;
+>+
+>+	if (!strstarts(dev_name(dev), MLX5_ADEV_NAME))
+>+		return 0;
+>+
+>+	madev = container_of(dev, struct mlx5_adev, adev.dev);
+>+	mdev = madev->mdev;
 
-FYI, the error/warning still remains.
+We have a similar patch that is being reviewed internally.
+I don't like comparing strings to match devices. Also this could cause mlx5
+unwanted aux devices to be matched, e.g mlx5e, mlx5_ib, mlx5v, etc .., since
+they all share the same prefix ? yes, no ? 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8291eaafed36f575f23951f3ce18407f480e9ecf
-commit: 2c69e2057962b6bd76d72446453862eb59325b49 fs: Convert block_read_full_page() to block_read_full_folio()
-date:   3 weeks ago
-config: hexagon-randconfig-r045-20220527 (https://download.01.org/0day-ci/archive/20220528/202205280641.ummbxaI0-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2c69e2057962b6bd76d72446453862eb59325b49
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 2c69e2057962b6bd76d72446453862eb59325b49
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+We also have another patch/approach that is comparing drivers:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+	if (dev->driver != curr->device->driver)
+		return NULL;
 
-All warnings (new ones prefixed by >>):
+But also this is under discussion.
 
->> fs/buffer.c:2254:5: warning: stack frame size (2128) exceeds limit (1024) in 'block_read_full_folio' [-Wframe-larger-than]
-   int block_read_full_folio(struct folio *folio, get_block_t *get_block)
-       ^
-   1 warning generated.
+I think the whole design of this function is wrong, it's being used to match
+devices of type mlx5_core_dev which are pci devices, but it is using aux class
+to lookup! It works since we always have some aux devices hanging on top of
+mlx5_core pci devs and since all of them share the same wrapper structure
+"mlx5_adev" we find the corresponding mdev "mlx5_core_dev" sort of correctly.
 
-
-vim +/block_read_full_folio +2254 fs/buffer.c
-
-  2246	
-  2247	/*
-  2248	 * Generic "read_folio" function for block devices that have the normal
-  2249	 * get_block functionality. This is most of the block device filesystems.
-  2250	 * Reads the folio asynchronously --- the unlock_buffer() and
-  2251	 * set/clear_buffer_uptodate() functions propagate buffer state into the
-  2252	 * folio once IO has completed.
-  2253	 */
-> 2254	int block_read_full_folio(struct folio *folio, get_block_t *get_block)
-  2255	{
-  2256		struct inode *inode = folio->mapping->host;
-  2257		sector_t iblock, lblock;
-  2258		struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
-  2259		unsigned int blocksize, bbits;
-  2260		int nr, i;
-  2261		int fully_mapped = 1;
-  2262	
-  2263		VM_BUG_ON_FOLIO(folio_test_large(folio), folio);
-  2264	
-  2265		head = create_page_buffers(&folio->page, inode, 0);
-  2266		blocksize = head->b_size;
-  2267		bbits = block_size_bits(blocksize);
-  2268	
-  2269		iblock = (sector_t)folio->index << (PAGE_SHIFT - bbits);
-  2270		lblock = (i_size_read(inode)+blocksize-1) >> bbits;
-  2271		bh = head;
-  2272		nr = 0;
-  2273		i = 0;
-  2274	
-  2275		do {
-  2276			if (buffer_uptodate(bh))
-  2277				continue;
-  2278	
-  2279			if (!buffer_mapped(bh)) {
-  2280				int err = 0;
-  2281	
-  2282				fully_mapped = 0;
-  2283				if (iblock < lblock) {
-  2284					WARN_ON(bh->b_size != blocksize);
-  2285					err = get_block(inode, iblock, bh, 0);
-  2286					if (err)
-  2287						folio_set_error(folio);
-  2288				}
-  2289				if (!buffer_mapped(bh)) {
-  2290					folio_zero_range(folio, i * blocksize,
-  2291							blocksize);
-  2292					if (!err)
-  2293						set_buffer_uptodate(bh);
-  2294					continue;
-  2295				}
-  2296				/*
-  2297				 * get_block() might have updated the buffer
-  2298				 * synchronously
-  2299				 */
-  2300				if (buffer_uptodate(bh))
-  2301					continue;
-  2302			}
-  2303			arr[nr++] = bh;
-  2304		} while (i++, iblock++, (bh = bh->b_this_page) != head);
-  2305	
-  2306		if (fully_mapped)
-  2307			folio_set_mappedtodisk(folio);
-  2308	
-  2309		if (!nr) {
-  2310			/*
-  2311			 * All buffers are uptodate - we can set the folio uptodate
-  2312			 * as well. But not if get_block() returned an error.
-  2313			 */
-  2314			if (!folio_test_error(folio))
-  2315				folio_mark_uptodate(folio);
-  2316			folio_unlock(folio);
-  2317			return 0;
-  2318		}
-  2319	
-  2320		/* Stage two: lock the buffers */
-  2321		for (i = 0; i < nr; i++) {
-  2322			bh = arr[i];
-  2323			lock_buffer(bh);
-  2324			mark_buffer_async_read(bh);
-  2325		}
-  2326	
-  2327		/*
-  2328		 * Stage 3: start the IO.  Check for uptodateness
-  2329		 * inside the buffer lock in case another process reading
-  2330		 * the underlying blockdev brought it uptodate (the sct fix).
-  2331		 */
-  2332		for (i = 0; i < nr; i++) {
-  2333			bh = arr[i];
-  2334			if (buffer_uptodate(bh))
-  2335				end_buffer_async_read(bh, 1);
-  2336			else
-  2337				submit_bh(REQ_OP_READ, 0, bh);
-  2338		}
-  2339		return 0;
-  2340	}
-  2341	EXPORT_SYMBOL(block_read_full_folio);
-  2342	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> 	return _next_phys_dev(mdev, data);
+> }
+>
+> static int next_phys_dev_lag(struct device *dev, const void *data)
+> {
+>-	struct mlx5_adev *madev = container_of(dev, struct mlx5_adev, adev.dev);
+>-	struct mlx5_core_dev *mdev = madev->mdev;
+>+	const struct mlx5_adev *madev;
+>+	struct mlx5_core_dev *mdev;
+>+
+>+	if (!strstarts(dev_name(dev), MLX5_ADEV_NAME))
+>+		return 0;
+>+
+>+	madev = container_of(dev, struct mlx5_adev, adev.dev);
+>+	mdev = madev->mdev;
+>
+> 	if (!MLX5_CAP_GEN(mdev, vport_group_manager) ||
+> 	    !MLX5_CAP_GEN(mdev, lag_master) ||
+>-- 
+>2.36.1
+>

@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4DD5361C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 909E8536217
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353653AbiE0MGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S1353487AbiE0MF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353291AbiE0L4W (ORCPT
+        with ESMTP id S1353312AbiE0L4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:56:22 -0400
+        Fri, 27 May 2022 07:56:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D207913C4D7;
-        Fri, 27 May 2022 04:50:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34E8F4E;
+        Fri, 27 May 2022 04:51:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 631F461D9B;
-        Fri, 27 May 2022 11:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EFEFC385A9;
-        Fri, 27 May 2022 11:50:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FDF661D56;
+        Fri, 27 May 2022 11:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC9DC385A9;
+        Fri, 27 May 2022 11:51:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652237;
-        bh=ELZHOAn0JmY6glc5BEfK96mfL1jQkNz7O6OFXDEyC4o=;
+        s=korg; t=1653652261;
+        bh=+ql9nNXDeCd2anrBZJYw0msrogginvt1Rhe9poFzdTc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qNXlL9Kf1oh97DmjAqSgw+Jb78ZboV+/a+9p+JBreUkPBc7+vIKzDi8XOyR4eOm/M
-         9AJ0dFU93UMs6sZNr+zTW2TLHnYHYst1cXbLnrmlRjh9AwM68lNiiIgFxGC4tjS7JB
-         RKZzlsslFfrS/zlqEx3ATucA8PU4HhIoM8AQeyP4=
+        b=bgO3Ba2fnU10xdd9giQS83LBecOW/A5N4xTMDWfG2QGRMGULi+GKSL1YhpUhpgMvK
+         2USY/Dkbme8XuuRwXIAABdqYfM9nCFsDUm3rUippr4UpSvjKrW3YKHffH0ODjkdf4h
+         tk9dPB0VcGWm+vzRsgi8AtwgIofA1I53rys4MWDE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 120/163] random: fix sysctl documentation nits
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jann Horn <jannh@google.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.15 099/145] random: allow partial reads if later user copies fail
 Date:   Fri, 27 May 2022 10:50:00 +0200
-Message-Id: <20220527084844.715720968@linuxfoundation.org>
+Message-Id: <20220527084902.669039585@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-References: <20220527084828.156494029@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +58,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 069c4ea6871c18bd368f27756e0f91ffb524a788 upstream.
+commit 5209aed5137880fa229746cb521f715e55596460 upstream.
 
-A semicolon was missing, and the almost-alphabetical-but-not ordering
-was confusing, so regroup these by category instead.
+Rather than failing entirely if a copy_to_user() fails at some point,
+instead we should return a partial read for the amount that succeeded
+prior, unless none succeeded at all, in which case we return -EFAULT as
+before.
 
+This makes it consistent with other reader interfaces. For example, the
+following snippet for /dev/zero outputs "4" followed by "1":
+
+  int fd;
+  void *x = mmap(NULL, 4096, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+  assert(x != MAP_FAILED);
+  fd = open("/dev/zero", O_RDONLY);
+  assert(fd >= 0);
+  printf("%zd\n", read(fd, x, 4));
+  printf("%zd\n", read(fd, x + 4095, 4));
+  close(fd);
+
+This brings that same standard behavior to the various RNG reader
+interfaces.
+
+While we're at it, we can streamline the loop logic a little bit.
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jann Horn <jannh@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/admin-guide/sysctl/kernel.rst |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/char/random.c |   22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -1006,6 +1006,9 @@ This is a directory, with the following
- * ``boot_id``: a UUID generated the first time this is retrieved, and
-   unvarying after that;
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -525,8 +525,7 @@ EXPORT_SYMBOL(get_random_bytes);
  
-+* ``uuid``: a UUID generated every time this is retrieved (this can
-+  thus be used to generate UUIDs at will);
-+
- * ``entropy_avail``: the pool's entropy count, in bits;
+ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ {
+-	ssize_t ret = 0;
+-	size_t len;
++	size_t len, left, ret = 0;
+ 	u32 chacha_state[CHACHA_STATE_WORDS];
+ 	u8 output[CHACHA_BLOCK_SIZE];
  
- * ``poolsize``: the entropy pool size, in bits;
-@@ -1013,10 +1016,7 @@ This is a directory, with the following
- * ``urandom_min_reseed_secs``: obsolete (used to determine the minimum
-   number of seconds between urandom pool reseeding). This file is
-   writable for compatibility purposes, but writing to it has no effect
--  on any RNG behavior.
--
--* ``uuid``: a UUID generated every time this is retrieved (this can
--  thus be used to generate UUIDs at will);
-+  on any RNG behavior;
+@@ -545,37 +544,40 @@ static ssize_t get_random_bytes_user(voi
+ 	 * the user directly.
+ 	 */
+ 	if (nbytes <= CHACHA_KEY_SIZE) {
+-		ret = copy_to_user(buf, &chacha_state[4], nbytes) ? -EFAULT : nbytes;
++		ret = nbytes - copy_to_user(buf, &chacha_state[4], nbytes);
+ 		goto out_zero_chacha;
+ 	}
  
- * ``write_wakeup_threshold``: when the entropy count drops below this
-   (as a number of bits), processes waiting to write to ``/dev/random``
+-	do {
++	for (;;) {
+ 		chacha20_block(chacha_state, output);
+ 		if (unlikely(chacha_state[12] == 0))
+ 			++chacha_state[13];
+ 
+ 		len = min_t(size_t, nbytes, CHACHA_BLOCK_SIZE);
+-		if (copy_to_user(buf, output, len)) {
+-			ret = -EFAULT;
++		left = copy_to_user(buf, output, len);
++		if (left) {
++			ret += len - left;
+ 			break;
+ 		}
+ 
+-		nbytes -= len;
+ 		buf += len;
+ 		ret += len;
++		nbytes -= len;
++		if (!nbytes)
++			break;
+ 
+ 		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
+-		if (!(ret % PAGE_SIZE) && nbytes) {
++		if (ret % PAGE_SIZE == 0) {
+ 			if (signal_pending(current))
+ 				break;
+ 			cond_resched();
+ 		}
+-	} while (nbytes);
++	}
+ 
+ 	memzero_explicit(output, sizeof(output));
+ out_zero_chacha:
+ 	memzero_explicit(chacha_state, sizeof(chacha_state));
+-	return ret;
++	return ret ? ret : -EFAULT;
+ }
+ 
+ /*
 
 

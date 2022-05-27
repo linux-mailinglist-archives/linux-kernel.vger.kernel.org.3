@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50473535B47
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF00535B49
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348808AbiE0ISf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S241957AbiE0ISl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiE0ISb (ORCPT
+        with ESMTP id S1348906AbiE0ISi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:18:31 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCF7EC3F6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:18:29 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id e2so4924741wrc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:18:29 -0700 (PDT)
+        Fri, 27 May 2022 04:18:38 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163BBED8F2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:18:37 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id q20so351566wrc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:organization:in-reply-to:content-transfer-encoding;
-        bh=Mlq0w9Sq3JAXLiq6IKhnHlUUJ+iRXBtNrFRhNgWew5s=;
-        b=rqDgQ/xG2NU4MxSBvqKUCi8BfTiMBmKzGuJqymLNx/P6r8Ygk6b/uNL7tAFv3T/Pl9
-         hHkuZ5L1OoGwXcznnrPtr5IIKBdU2UfgPoMa4hLydT6SBOQZ7+X7xK2t4Z9K3UnDSito
-         6UxRheR447juFCnK1od/iMsKLAmWlkjbAJYXi0QnO2MmqL3ZJ/Vj99HB5HH0GxBz/xM+
-         dFUyhfC0oVDkB3rbWbon/vFqxJI5VaHfFgmgFHMrIxT15SbCtYS/PkXEc8mSGg96ilAA
-         rDavvVRqb3fIqM4xEmJF319s4jfwUl198h+I+E+BpdMR0D6D/B3K8qec81fmXDny0aNR
-         ub6A==
+        bh=ZkFo19yN9FE8l6w1oc0IJiQl2EoWP33mdxcOBd2mVFc=;
+        b=Fq9c32hxcx2ufnuS5yUUdwgf84fJ2V+HR5zXjKcBgRRQOBn4Oo+Y8PIBAAJ0eAGKis
+         BFq8Tk+WkMh/OpMKqPxu/qDH20z/0g2Bu6S8gNtK+qUGjyVeDQ+QCHdDUEIhiM69KTww
+         kB3Put3kNcCckMhB+JJdnh7Xq3M0LVZC8tIFMlpEgP3SxokQvFGjVw/RAL3kY8sTL1Kh
+         pqEWSwQcYGhjLE01TMhH1jN7uXz6ebJsZ4yeKtRSOIOJpljU58WV9IlzyfOLS+A16ABz
+         9GQnTG5cJGDEJHaTbumnaHlKut9Gc/NSmWOT5otOpcjqqnNXttpKcqTJXWtIV6XqOQYg
+         iHyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=Mlq0w9Sq3JAXLiq6IKhnHlUUJ+iRXBtNrFRhNgWew5s=;
-        b=fecyhBUj9XXmUr+qIdFuHHMlT0humSDkF39DiWCfcde2h9rWASh28zNZ75P0s3eP+U
-         4aOH55FgghR4G26eeUjez14XUsaZmgLPUWg9jS8fClMHqtYv7Be4XYzwb3W8dtqD8bwO
-         q6Xj2RoQsYmUrNtOlqd3BgezgyicOZOosNHvXhMMJ973YPJGmIxtPK6mHqDyAYFAQDNx
-         uMi7MRftFQNFQxK1KU7aJgU6OFfIMwVVctVXHrpsZQ4ag4TAmH6jkjSTXSrcVLfUrN9J
-         iIdJO3P6+rBxqDYDoQgZ8oLn+OfmgCXVhSL0r5tVSpH7xbDmwYwYPYUcNg1SwjUOZYSf
-         ICXw==
-X-Gm-Message-State: AOAM530fLQbdPLG+lQJyWoZG7KMwnZr0Oxwd8Vf42ADKvsp28FrZohqe
-        Bjznz+gi4WDGy3yciPFDjfY4dg==
-X-Google-Smtp-Source: ABdhPJyYzDfcTwaDTmQ8hJx/lTQ/NCKoiSSHk/AYU3xNnZteyuNsH7HPgEVmJ+crsBlwaPJ1cqlX9g==
-X-Received: by 2002:a5d:6041:0:b0:20d:8e4:7bb8 with SMTP id j1-20020a5d6041000000b0020d08e47bb8mr33591979wrt.652.1653639507562;
-        Fri, 27 May 2022 01:18:27 -0700 (PDT)
+        bh=ZkFo19yN9FE8l6w1oc0IJiQl2EoWP33mdxcOBd2mVFc=;
+        b=xoD6/3uAF6go1gG1j+r+X4ai+qiwB3j8AyODcVDT6uGgqOK0XFAwmp/EtwNzdXhlW0
+         CN8vZS9H5+aeVFIOBM+mAxtOTS0Kzo1hIhktt4zbMuNW1gWH/y3cvEaY+6zwwywBiVgl
+         pGqp/7oS4y5eBd41UbIN9yfIOVAH6DoGpPFiaoNaIt+bL3r3CFgebFaqEBBqRYSiJSUX
+         dZGXWb0Npfx0W6ue8Xhkmj9i20IIN495Rbk6FwmiI21bVmgKMQOyttnw8JcDnir/g5ak
+         D7k/K8LiXBcoy/+NiBlZYZRGawlwgl7tZGuEIaMDEq/PFOAgwRZsYPmrZQ9nly+1xDaP
+         /U/A==
+X-Gm-Message-State: AOAM532brWX8anv2TlU8PZTspK/StPyMRrLv655Il7uvckWeo4GzfF99
+        MBgOpGwQXbFPNuyWcpQ8ASd/xw==
+X-Google-Smtp-Source: ABdhPJz+oqbBEG4R4LguW/AlVaAt1T7SUCg4RxJCopLYPsk+CUpf7UJyCqHBCjs0nVw/onX+8/KQFA==
+X-Received: by 2002:adf:e28a:0:b0:210:b31:722 with SMTP id v10-20020adfe28a000000b002100b310722mr5408462wri.65.1653639515570;
+        Fri, 27 May 2022 01:18:35 -0700 (PDT)
 Received: from ?IPV6:2001:861:44c0:66c0:f081:5ded:fc86:365d? ([2001:861:44c0:66c0:f081:5ded:fc86:365d])
-        by smtp.gmail.com with ESMTPSA id 129-20020a1c0287000000b0039748be12dbsm1439480wmc.47.2022.05.27.01.18.26
+        by smtp.gmail.com with ESMTPSA id v18-20020adfebd2000000b0020c5253d8besm1130050wrn.10.2022.05.27.01.18.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 May 2022 01:18:27 -0700 (PDT)
-Message-ID: <4b3aa028-fd29-0053-e8d3-ce16c5d4b078@baylibre.com>
-Date:   Fri, 27 May 2022 10:18:25 +0200
+        Fri, 27 May 2022 01:18:35 -0700 (PDT)
+Message-ID: <19a9260c-322b-10e1-e361-cc2d5fdd8ff9@baylibre.com>
+Date:   Fri, 27 May 2022 10:18:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] arm64: dts: amlogic: adjust whitespace around '='
+Subject: Re: [PATCH 2/2] ARM: dts: meson: adjust whitespace around '='
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
@@ -66,9 +66,10 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20220526204552.832961-1-krzysztof.kozlowski@linaro.org>
+ <20220526204552.832961-2-krzysztof.kozlowski@linaro.org>
 From:   Neil Armstrong <narmstrong@baylibre.com>
 Organization: Baylibre
-In-Reply-To: <20220526204552.832961-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220526204552.832961-2-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,49 +93,57 @@ On 26/05/2022 22:45, Krzysztof Kozlowski wrote:
 > 
 > Output compared with dtx_diff and fdtdump.
 > ---
->   arch/arm64/boot/dts/amlogic/meson-axg.dtsi                      | 2 +-
->   arch/arm64/boot/dts/amlogic/meson-gx.dtsi                       | 2 +-
->   .../boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts     | 2 +-
->   3 files changed, 3 insertions(+), 3 deletions(-)
+>   arch/arm/boot/dts/meson.dtsi   | 4 ++--
+>   arch/arm/boot/dts/meson8.dtsi  | 2 +-
+>   arch/arm/boot/dts/meson8b.dtsi | 2 +-
+>   3 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-> index 3f5254eeb47b..04f797b5a012 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-> @@ -1535,7 +1535,7 @@ aobus: bus@ff800000 {
+> diff --git a/arch/arm/boot/dts/meson.dtsi b/arch/arm/boot/dts/meson.dtsi
+> index 26eaba3fa96f..8e3860d5d916 100644
+> --- a/arch/arm/boot/dts/meson.dtsi
+> +++ b/arch/arm/boot/dts/meson.dtsi
+> @@ -214,14 +214,14 @@ aobus: aobus@c8100000 {
+>   			ranges = <0x0 0xc8100000 0x100000>;
 >   
->   			sysctrl_AO: sys-ctrl@0 {
->   				compatible = "amlogic,meson-axg-ao-sysctrl", "simple-mfd", "syscon";
-> -				reg =  <0x0 0x0 0x0 0x100>;
-> +				reg = <0x0 0x0 0x0 0x100>;
+>   			ao_arc_rproc: remoteproc@1c {
+> -				compatible= "amlogic,meson-mx-ao-arc";
+> +				compatible = "amlogic,meson-mx-ao-arc";
+>   				reg = <0x1c 0x8>, <0x38 0x8>;
+>   				reg-names = "remap", "cpu";
+>   				status = "disabled";
+>   			};
 >   
->   				clkc_AO: clock-controller {
->   					compatible = "amlogic,meson-axg-aoclkc";
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-> index aa14ea017a61..023a52005494 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-> @@ -450,7 +450,7 @@ aobus: bus@c8100000 {
->   
->   			sysctrl_AO: sys-ctrl@0 {
->   				compatible = "amlogic,meson-gx-ao-sysctrl", "simple-mfd", "syscon";
-> -				reg =  <0x0 0x0 0x0 0x100>;
-> +				reg = <0x0 0x0 0x0 0x100>;
->   
->   				clkc_AO: clock-controller {
->   					compatible = "amlogic,meson-gx-aoclkc";
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
-> index fcb304c5a40f..6831137c5c10 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905w-jethome-jethub-j80.dts
-> @@ -216,7 +216,7 @@ &uart_A {
->   
->   	bluetooth {
->   		compatible = "realtek,rtl8822cs-bt";
-> -		enable-gpios  = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-> +		enable-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
->   		host-wake-gpios = <&gpio GPIOX_18 GPIO_ACTIVE_HIGH>;
->          };
+>   			ir_receiver: ir-receiver@480 {
+> -				compatible= "amlogic,meson6-ir";
+> +				compatible = "amlogic,meson6-ir";
+>   				reg = <0x480 0x20>;
+>   				interrupts = <GIC_SPI 15 IRQ_TYPE_EDGE_RISING>;
+>   				status = "disabled";
+> diff --git a/arch/arm/boot/dts/meson8.dtsi b/arch/arm/boot/dts/meson8.dtsi
+> index 9997a5d0333a..0f8bac8bac8b 100644
+> --- a/arch/arm/boot/dts/meson8.dtsi
+> +++ b/arch/arm/boot/dts/meson8.dtsi
+> @@ -430,7 +430,7 @@ mux {
 >   };
+>   
+>   &ao_arc_rproc {
+> -	compatible= "amlogic,meson8-ao-arc", "amlogic,meson-mx-ao-arc";
+> +	compatible = "amlogic,meson8-ao-arc", "amlogic,meson-mx-ao-arc";
+>   	amlogic,secbus2 = <&secbus2>;
+>   	sram = <&ao_arc_sram>;
+>   	resets = <&reset RESET_MEDIA_CPU>;
+> diff --git a/arch/arm/boot/dts/meson8b.dtsi b/arch/arm/boot/dts/meson8b.dtsi
+> index 94f1c03decce..cf9c04a61ba3 100644
+> --- a/arch/arm/boot/dts/meson8b.dtsi
+> +++ b/arch/arm/boot/dts/meson8b.dtsi
+> @@ -384,7 +384,7 @@ mux {
+>   };
+>   
+>   &ao_arc_rproc {
+> -	compatible= "amlogic,meson8b-ao-arc", "amlogic,meson-mx-ao-arc";
+> +	compatible = "amlogic,meson8b-ao-arc", "amlogic,meson-mx-ao-arc";
+>   	amlogic,secbus2 = <&secbus2>;
+>   	sram = <&ao_arc_sram>;
+>   	resets = <&reset RESET_MEDIA_CPU>;
 
 Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

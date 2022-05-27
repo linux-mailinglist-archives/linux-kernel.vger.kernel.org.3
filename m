@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2797B5360F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DD1535F8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353009AbiE0Lz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
+        id S1351499AbiE0LkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352820AbiE0Luy (ORCPT
+        with ESMTP id S1351443AbiE0Ljb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:50:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4B412B00E;
-        Fri, 27 May 2022 04:45:36 -0700 (PDT)
+        Fri, 27 May 2022 07:39:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774AA606FD;
+        Fri, 27 May 2022 04:38:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46B5AB824CA;
-        Fri, 27 May 2022 11:45:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A60EBC385A9;
-        Fri, 27 May 2022 11:45:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6732B824D7;
+        Fri, 27 May 2022 11:38:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F4EC385A9;
+        Fri, 27 May 2022 11:38:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651934;
-        bh=nyNsl1FhrSkC5K3QNeXt8djsHyg/84AZ3Q0j/O2PnJo=;
+        s=korg; t=1653651512;
+        bh=41Qm0OR+Mf6ZsBxsL2Yv1rcdzmNMckEe0jBWiGIyEPs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mv7u7PS9ccyn6/ESHN8pP5Z7w+T+Yz0w6GOmYnzNQjG2FkQHyirRmFbcIUa3qH4Ad
-         s+rGJl+K8uDWfOm/DBXdI0thH9kg/mimb4drKvKIcfThH2Yj6tuIDlxz3jA1MEC1fM
-         3iy7Wufc/wPeaotkVvSRYWTvW+ZDKUgf3XcW3BSg=
+        b=Mp8Ys6JONgrzYPpjEBzoVlYXtSnAuRuFc0ygCUdQ7lcptSoYRmtYUIoPO4SsGrLgU
+         iBmwe1hrGoO1vET3/Vudyac4M5rmW06lqwv6s6x2vlBF9TiorR4GnqZA8FkWyRXF/L
+         fLhCWfpR9oYrFt0o6T8Hvv9z12LrJantamTF4dYs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 075/163] random: fix locking for crng_init in crng_reseed()
-Date:   Fri, 27 May 2022 10:49:15 +0200
-Message-Id: <20220527084838.433436419@linuxfoundation.org>
+Subject: [PATCH 5.17 044/111] random: round-robin registers as ulong, not u32
+Date:   Fri, 27 May 2022 10:49:16 +0200
+Message-Id: <20220527084825.691156778@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-References: <20220527084828.156494029@linuxfoundation.org>
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+References: <20220527084819.133490171@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dominik Brodowski <linux@dominikbrodowski.net>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 7191c628fe07b70d3f37de736d173d1b115396ed upstream.
+commit da3951ebdcd1cb1d5c750e08cd05aee7b0c04d9a upstream.
 
-crng_init is protected by primary_crng->lock. Therefore, we need
-to hold this lock when increasing crng_init to 2. As we shouldn't
-hold this lock for too long, only hold it for those parts which
-require protection.
+When the interrupt handler does not have a valid cycle counter, it calls
+get_reg() to read a register from the irq stack, in round-robin.
+Currently it does this assuming that registers are 32-bit. This is
+_probably_ the case, and probably all platforms without cycle counters
+are in fact 32-bit platforms. But maybe not, and either way, it's not
+quite correct. This commit fixes that to deal with `unsigned long`
+rather than `u32`.
 
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/char/random.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -502,6 +502,7 @@ static void crng_reseed(void)
- 	int entropy_count;
- 	unsigned long next_gen;
- 	u8 key[CHACHA_KEY_SIZE];
-+	bool finalize_init = false;
+@@ -1261,15 +1261,15 @@ int random_online_cpu(unsigned int cpu)
+ }
+ #endif
  
- 	/*
- 	 * First we make sure we have POOL_MIN_BITS of entropy in the pool,
-@@ -529,12 +530,14 @@ static void crng_reseed(void)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
--	spin_unlock_irqrestore(&base_crng.lock, flags);
--	memzero_explicit(key, sizeof(key));
--
- 	if (crng_init < 2) {
- 		invalidate_batched_entropy();
- 		crng_init = 2;
-+		finalize_init = true;
-+	}
-+	spin_unlock_irqrestore(&base_crng.lock, flags);
-+	memzero_explicit(key, sizeof(key));
-+	if (finalize_init) {
- 		process_random_ready_list();
- 		wake_up_interruptible(&crng_init_wait);
- 		kill_fasync(&fasync, SIGIO, POLL_IN);
+-static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
++static unsigned long get_reg(struct fast_pool *f, struct pt_regs *regs)
+ {
+-	u32 *ptr = (u32 *)regs;
++	unsigned long *ptr = (unsigned long *)regs;
+ 	unsigned int idx;
+ 
+ 	if (regs == NULL)
+ 		return 0;
+ 	idx = READ_ONCE(f->reg_idx);
+-	if (idx >= sizeof(struct pt_regs) / sizeof(u32))
++	if (idx >= sizeof(struct pt_regs) / sizeof(unsigned long))
+ 		idx = 0;
+ 	ptr += idx++;
+ 	WRITE_ONCE(f->reg_idx, idx);
 
 

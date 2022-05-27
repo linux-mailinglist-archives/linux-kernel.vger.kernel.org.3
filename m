@@ -2,194 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322C25365FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A9C536610
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354157AbiE0QbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 12:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
+        id S1349524AbiE0QjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 12:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiE0QbO (ORCPT
+        with ESMTP id S231706AbiE0QjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 12:31:14 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20CBB17;
-        Fri, 27 May 2022 09:31:12 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id n24so1734874uap.13;
-        Fri, 27 May 2022 09:31:12 -0700 (PDT)
+        Fri, 27 May 2022 12:39:22 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A686A88AB
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:39:22 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id cv10so5036159pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ctFpEEv955RYm+y83Gk0sDmbGcbmbbGg5LVscxsmgxo=;
-        b=Pn1KixmuZAFhcxHP25mRFFOo3LdW47hbgFBG9b5TxMqXpnTYtt8PEiUeCiaxpQpy3k
-         ATLkutuV5J9u6WDdntlNfKwUG9KZkAggvgUIhrs8gYKPgdsuaWY4iptzDi7azg11k8jc
-         +cgYeAyo085ddMVP72CcEKTmfMCK8zN52oXep5XEwJhWz83r7D1fQdyfyG+aOy/yFrmv
-         OwE2AOkAec40Ts4tE7ylcJv6cPl79XvSHlpIMXx0r12nnlTLOkplTiDP/VTo5eFNdRRh
-         qX6vOFc1rQocr9xXDTiqhL0DlFrjokdAXt+hLl8f0Xc3ET/rHrRGUHga6GjWxI3rG5si
-         z0Vg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jeA4ER8KbBHKcyc+TaHYMfBnKpuDxMWJ6quO+9dHOWE=;
+        b=NSLHsjgjrWqwX/1FYyNqbRe5eG4yejZ3h0d0GNRHAthad8+JrxNe0WwprdS58sHjLG
+         +DFIEYNpeUJHV1+de7IN6+6hqCPJvHZpAzT/KyT4Uzzs40+wPILx3PmuZDo3ZE7laNTS
+         cwg6C2WrHXDx3w7d9mw/XHohR5XWW2bqpm59bOC9y2hMyncS06X7fS/n/NsOeOA+Auc9
+         yWGy/DpZq9uCpNRVlldmo3BHO8pSLPlvYA2RE6DnbPWcNLlS8+5yHlyGWpFiLVxCzD0r
+         PuYmyh6SzT4L9DJ+6NrhKH9xQH8MHTACWPpile6TcTNUhr0PsJUw3REwgEWUWiHDp7J3
+         0CGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ctFpEEv955RYm+y83Gk0sDmbGcbmbbGg5LVscxsmgxo=;
-        b=5ZBO/KLOufB5rE1L7nnLdh5RAdErRCD5CcMOHU4TEKu8HVn1B0qsfKdTmebA6qjYqc
-         ynSG6/MABVOZl7ygA34QfOtdko8GqNx8Xzh3vTz5g0u7cOR/by5Fyi6wpHOrTz/TAVOr
-         2QD1E5bKNplC6Db3ePIbp6bSMpnhDzJpHgW/1Aod2Cwbe7zp9bPD7d83QTEMj4F179Il
-         8/EJ2YzKHXKnOeT0xP71niDfdleyio3IF3EV/tv1IVeXbZ3iSje+rnZWD8bmdIhdrq9a
-         KqHP+u5OXhdSKAep37WwOEZ0weTzbyTeTCFrcEyK9P8V7YfKGc5jNC+uJ9undEgY86ev
-         yV1g==
-X-Gm-Message-State: AOAM532lZvMS7Lwgr+DHxbDS4yjgKwjLfODTSMtFS54D2ibPw53Uhum1
-        7b7LPdhoZmUt4dw7eETiWLtB/fuZuMjhAckilcw=
-X-Google-Smtp-Source: ABdhPJw1igWtq4LKxiWyloYIkN/kgSJJ/Av3ghuMNGjmv+l7CxiawXBuvCqJJuBSd50EOlst2k98B4M7dUm2UxwA0wY=
-X-Received: by 2002:ab0:2008:0:b0:352:2b3a:6bce with SMTP id
- v8-20020ab02008000000b003522b3a6bcemr16212622uak.19.1653669071678; Fri, 27
- May 2022 09:31:11 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jeA4ER8KbBHKcyc+TaHYMfBnKpuDxMWJ6quO+9dHOWE=;
+        b=L4F1Pt2Ce1ZkzLdvnZKyW6D+VTkStipEl5REUZuRDab3oe+Ms7QkJkBKKvDdp12PLx
+         1qxGfcz0nBxdlrINWeYk0ycNT1ayCJUrjtwChjbiEWCTqvmuu6KZsPJmOuwX3nIYGqiq
+         00nP/PzUyWqbGyaGaqo5kfqHk/OfvwslA6zeUDhp2Yn8B6T4Z7SFszv1CupGfGUGg7zI
+         M//HnKv8VDf7v7Z/8w8s7cNCIuw8FNRRJkMWSO6TJGpTf/QNCD4MY3XRCoMFhVuaovL3
+         lAUvOHIRV8WQlqpl3VxkVlwym7EuhXdoc9/s66OFsKAEeJdV9OcKzoWDJgey+L/vcnjp
+         wc7w==
+X-Gm-Message-State: AOAM532gc34E1ecQGcsCH0pK6u1dQsAmzYaJ626cmbB9+zw3hpdCd0oC
+        pC+86FgHzQn6105cZH/OEyxYuw==
+X-Google-Smtp-Source: ABdhPJyi69Ad1o5E56g2U1o6Hglm4gMSgHsPyLve6/Bw61JoUcE1Pxr/YAer+BxdWsnzdIzVwEuFOQ==
+X-Received: by 2002:a17:90a:8807:b0:1df:78c7:c215 with SMTP id s7-20020a17090a880700b001df78c7c215mr9138624pjn.234.1653669561546;
+        Fri, 27 May 2022 09:39:21 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id z1-20020aa79481000000b0051812f8faa3sm3697788pfk.184.2022.05.27.09.39.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 May 2022 09:39:21 -0700 (PDT)
+Message-ID: <904ef8af-13a5-e566-b760-74519f70fa62@linaro.org>
+Date:   Fri, 27 May 2022 09:39:20 -0700
 MIME-Version: 1.0
-References: <CAH2r5mug2=wOYp-mwRKWJPRiyh2xtdP06A-i3fVL=JuidMsReQ@mail.gmail.com>
-In-Reply-To: <CAH2r5mug2=wOYp-mwRKWJPRiyh2xtdP06A-i3fVL=JuidMsReQ@mail.gmail.com>
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 27 May 2022 11:31:00 -0500
-Message-ID: <CAH2r5mvCkULdPxYQa4nboPZ+EH27iyRAadeKaomMr9CgcTx-fw@mail.gmail.com>
-Subject: Re: [GIT PULL] SMB3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/2] cgroup: Use separate work structs on css release path
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Bui Quang Minh <minhquangbui99@gmail.com>
+References: <20220525151517.8430-1-mkoutny@suse.com>
+ <20220525151517.8430-3-mkoutny@suse.com>
+ <20220525161455.GA16134@blackbody.suse.cz> <Yo7KfEOz92kS2z5Y@blackbook>
+ <Yo/DtjEU/kYr190u@slm.duckdns.org>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <Yo/DtjEU/kYr190u@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Al wants to postpone Dave's iov_iter changes (he had some additional
-things he wants changed in those).  I will resend the P/R without
-those 4 patches from Dave Howells.
+On 5/26/22 11:15, Tejun Heo wrote:
+> Hello, Michal.
+> 
+> On Thu, May 26, 2022 at 11:56:34AM +0200, Michal Koutný wrote:
+>> // ref=A: initial state
+>> kill_css()
+>>    css_get // ref+=F == A+F: fuse
+>>    percpu_ref_kill_and_confirm
+>>      __percpu_ref_switch_to_atomic
+>>        percpu_ref_get
+>>          // ref += 1 == A+F+1: atomic mode, self-protection
+>>      percpu_ref_put
+>>        // ref -= 1 == A+F: kill the base reference
+>>    [via rcu]
+>>    percpu_ref_switch_to_atomic_rcu
+>>      percpu_ref_call_confirm_rcu
+>>        css_killed_ref_fn == refcnt.confirm_switch
+>>          queue_work(css->destroy_work)        (1)
+>>                                                       [via css->destroy_work]
+>>                                                       css_killed_work_fn == wq.func
+>>                                                         offline_css() // needs fuse
+>>                                                         css_put // ref -= F == A: de-fuse
+>>        percpu_ref_put
+>>          // ref -= 1 == A-1: remove self-protection
+>>          css_release                                   // A <= 1 -> 2nd queue_work explodes!
+> 
+> I'm not sure I'm following it but it's perfectly fine to re-use the work
+> item at this point. The work item actually can be re-cycled from the very
+> beginning of the work function. The only thing we need to make sure is that
+> we don't css_put() prematurely to avoid it being freed while we're using it.
+> 
+> For the sharing to be a problem, we should be queueing the release work item
+> while the destroy instance is still pending, and if that is the case, it
+> doesn't really matter whether we use two separate work items or not. We're
+> already broken and would just be shifting the problem to explode elsewhere.
+> 
+> The only possibility that I can think of is that somehow we're ending up
+> with an extra css_put() somewhere thus triggering the release path
+> prematurely. If that's the case, we'll prolly need to trace get/puts to find
+> out who's causing the ref imbalance.
 
-On Fri, May 27, 2022 at 1:52 AM Steve French <smfrench@gmail.com> wrote:
->
-> Please pull the following changes since commit
-> 42226c989789d8da4af1de0c31070c96726d990c:
->
->   Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
->
-> are available in the Git repository at:
->
->   git://git.samba.org/sfrench/cifs-2.6.git tags/5.19-rc-smb3-client-fixes-part1
->
-> for you to fetch changes up to 9f114d7bfc6c35ca23a82efce60e0db535a186f1:
->
->   smb3: remove unneeded null check in cifs_readdir (2022-05-26 11:15:14 -0500)
->
-> ----------------------------------------------------------------
-> Twenty eight cifs/smb3 client fixes, including:
-> - a series of fixes for multichannel fixes to improve reconnect after
-> network failure
-> - improved caching of root directory contents (extending benefit of
-> directory leases)
-> - 2 DFS fixes
-> - 3 fixes for improved debugging
-> - an NTLMSSP fix for mounts t0 older servers
-> - new mount parm to allow disabling creating sparse files
-> - various cleanup fixes and minor fixes pointed out by coverity
-> - the first part of Dave's updates for iov_iter support
->
-> Not included in this P/R are the last two patches in Dave's series
-> converting i/o paths in cifs.ko to use iterators,
-> as well as some RDMA (smbdirect) fixes and a patch to dynamically
-> requery and adjust the network interfaces on the
-> fly - all of which are still being tested.
-> ----------------------------------------------------------------
-> ChenXiaoSong (1):
->       cifs: return the more nuanced writeback error on close()
->
-> David Howells (4):
->       iov_iter: Add a function to extract an iter's buffers to a bvec iter
->       iov_iter: Add a general purpose iteration function
->       cifs: Add some helper functions
->       cifs: Add a function to read into an iter from a socket
->
-> Enzo Matsumiya (3):
->       cifs: don't call cifs_dfs_query_info_nonascii_quirk() if nodfs was set
->       cifs: return ENOENT for DFS lookup_cache_entry()
->       cifs: print TIDs as hex
->
-> Julia Lawall (1):
->       cifs: smbd: fix typo in comment
->
-> Paulo Alcantara (2):
->       cifs: fix signed integer overflow when fl_end is OFFSET_MAX
->       cifs: fix ntlmssp on old servers
->
-> Ronnie Sahlberg (4):
->       cifs: move definition of cifs_fattr earlier in cifsglob.h
->       cifs: check for smb1 in open_cached_dir()
->       cifs: set the CREATE_NOT_FILE when opening the directory in
-> use_cached_dir()
->       cifs: cache the dirents for entries in a cached directory
->
-> Shyam Prasad N (3):
->       cifs: do not use tcpStatus after negotiate completes
->       cifs: use new enum for ses_status
->       cifs: avoid parallel session setups on same channel
->
-> Steve French (10):
->       SMB3: EBADF/EIO errors in rename/open caused by race condition
-> in smb2_compound_op
->       smb3: add trace point for lease not found issue
->       smb3: add trace point for oplock not found
->       Add defines for various newer FSCTLs
->       Add various fsctl structs
->       cifs: fix minor compile warning
->       smb3: check for null tcon
->       smb3: don't set rc when used and unneeded in query_info_compound
->       smb3: add mount parm nosparse
->       smb3: remove unneeded null check in cifs_readdir
->
->  fs/cifs/cifs_debug.c       |  11 +++-
->  fs/cifs/cifsfs.c           |   2 +
->  fs/cifs/cifsfs.h           |   3 +
->  fs/cifs/cifsglob.h         | 124 +++++++++++++++++++++++++++------------
->  fs/cifs/cifsproto.h        |  12 ++++
->  fs/cifs/cifssmb.c          |  99 ++++++++++++++++++++++++++++++-
->  fs/cifs/connect.c          | 123 +++++++++++++++++++++++----------------
->  fs/cifs/dfs_cache.c        |   6 +-
->  fs/cifs/file.c             |  13 +++--
->  fs/cifs/fs_context.c       |  33 +++--------
->  fs/cifs/fs_context.h       |   4 +-
->  fs/cifs/misc.c             |  11 ++--
->  fs/cifs/readdir.c          | 179
-> ++++++++++++++++++++++++++++++++++++++++++++++++++++++---
->  fs/cifs/sess.c             |  33 ++++++++++-
->  fs/cifs/smb2inode.c        |   7 ++-
->  fs/cifs/smb2misc.c         |  12 +++-
->  fs/cifs/smb2ops.c          |  32 +++++++++--
->  fs/cifs/smb2pdu.c          |   5 +-
->  fs/cifs/smb2pdu.h          |  22 -------
->  fs/cifs/smb2transport.c    |   7 ++-
->  fs/cifs/smbdirect.c        |   2 +-
->  fs/cifs/trace.h            |   2 +
->  fs/cifs/transport.c        |   8 +--
->  fs/smbfs_common/smb2pdu.h  | 108 +++++++++++++++++++++++++++++++---
->  fs/smbfs_common/smbfsctl.h |   6 ++
->  include/linux/uio.h        |   8 +++
->  lib/iov_iter.c             | 133 ++++++++++++++++++++++++++++++++++++++++++
->  27 files changed, 816 insertions(+), 189 deletions(-)
->
->
-> --
-> Thanks,
->
-> Steve
+Hi Michal,
+As far as I can see we are trying to test the same thing suggested by Tejun.
+I just sent a test request to try this:
+https://github.com/tstruk/linux/commit/master
 
-
+Let me know if you have any more tests to run and I will hold off until
+you are done.
 
 -- 
 Thanks,
-
-Steve
+Tadeusz

@@ -2,119 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1025363B8
+	by mail.lfdr.de (Postfix) with ESMTP id D8C535363BA
 	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 16:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352952AbiE0OEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 10:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S1352979AbiE0OEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 10:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbiE0OEH (ORCPT
+        with ESMTP id S1352940AbiE0OEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 10:04:07 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFFC275FE;
-        Fri, 27 May 2022 07:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653660245; x=1685196245;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PqdxjODClt15VT2awJtvXXZ53wPVcAebxtqdPJLcC5M=;
-  b=CsK3FrhoN62zDVh5KFm8mwRLncMrsUZrj+42WfCkkM2ynSQ9nfA3FFPE
-   V0/v85vdR5YC42+wsYw3uQr45+8rMWgBR/07BKo/QPHQ5PNAYhogRQtaw
-   vkAPIOtPaZE8vWH40Q9FVxGcDysihxcGmAs5onn0cPV7sz/Eg8LYevGD5
-   ddjFJou+FWJ47W1wyzC2cfflKig/iBdbvlExcIKzk9PpIbbkOHQa/Mxvi
-   6LsH+QW0D7x5ATAjNLKg+CmWBnVsa+wckWguTnA1NEthg9HQ0mLyltTtK
-   pJoR1xumfAXXQoKL23LrvkvGIOJ9PQYMiyoLRngpD7l7G4Mv2IQ73R1/m
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="254980770"
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="254980770"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 07:04:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="603902168"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 May 2022 07:03:59 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuaZK-0004pq-DI;
-        Fri, 27 May 2022 14:03:58 +0000
-Date:   Fri, 27 May 2022 22:03:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     menglong8.dong@gmail.com, kuba@kernel.org
-Cc:     kbuild-all@lists.01.org, rostedt@goodmis.org, mingo@redhat.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        nhorman@tuxdriver.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next 2/3] net: skb: use auto-generation to convert
- skb drop reason to string
-Message-ID: <202205272154.7zdeh6A3-lkp@intel.com>
-References: <20220527071522.116422-3-imagedong@tencent.com>
+        Fri, 27 May 2022 10:04:11 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA3932EEE
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 07:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653660249; x=1685196249;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=8vNTEDP+mGfV74wYP/M2YK+CmSiaNAy8b+kkPHimXPs=;
+  b=oc0EdBeYwyjZJ5/NF0OPN/iYNi4v9fIQX7llH8Iq9xciAkUOB0Hiett2
+   an8fDmeRYm0mZHNeo+SHJ1jRVO8YMBgC+yINQBk3ecTWg/akUGp8Dgqpq
+   3ITI7QHo9SLTUWBSS4TWWQQLD0Ezh5lZarmuHtoqO/yK3wh5mAyHTfxPq
+   w=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 May 2022 07:04:09 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 07:04:09 -0700
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 27 May 2022 07:04:05 -0700
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
+        <sboyd@kernel.org>, <rafael@kernel.org>,
+        <johannes@sipsolutions.net>, <keescook@chromium.org>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v5] devcoredump : Serialize devcd_del work
+Date:   Fri, 27 May 2022 19:33:40 +0530
+Message-ID: <1653660220-19197-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527071522.116422-3-imagedong@tencent.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+In following scenario(diagram), when one thread X running dev_coredumpm()
+adds devcd device to the framework which sends uevent notification to
+userspace and another thread Y reads this uevent and call to
+devcd_data_write() which eventually try to delete the queued timer that
+is not initialized/queued yet.
 
-Thank you for the patch! Yet something to improve:
+So, debug object reports some warning and in the meantime, timer is
+initialized and queued from X path. and from Y path, it gets reinitialized
+again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
 
-[auto build test ERROR on net-next/master]
+To fix this, introduce mutex and a boolean flag to serialize the behaviour.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220527-152050
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220527/202205272154.7zdeh6A3-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/0a1ac892edba0134b4891c9e61e06d462f8262a9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220527-152050
-        git checkout 0a1ac892edba0134b4891c9e61e06d462f8262a9
-        # save the config file
-        make W=1 ARCH=x86_64 
+ 	cpu0(X)			                cpu1(Y)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+    dev_coredump() uevent sent to user space
+    device_add()  ======================> user space process Y reads the
+                                          uevents writes to devcd fd
+                                          which results into writes to
 
-All errors (new ones prefixed by >>):
+                                         devcd_data_write()
+                                           mod_delayed_work()
+                                             try_to_grab_pending()
+                                               del_timer()
+                                                 debug_assert_init()
+   INIT_DELAYED_WORK()
+   schedule_delayed_work()
+                                                   debug_object_fixup()
+                                                     timer_fixup_assert_init()
+                                                       timer_setup()
+                                                         do_init_timer()
+                                                       /*
+                                                        Above call reinitializes
+                                                        the timer to
+                                                        timer->entry.pprev=NULL
+                                                        and this will be checked
+                                                        later in timer_pending() call.
+                                                       */
+                                                 timer_pending()
+                                                  !hlist_unhashed_lockless(&timer->entry)
+                                                    !h->pprev
+                                                /*
+                                                  del_timer() checks h->pprev and finds
+                                                  it to be NULL due to which
+                                                  try_to_grab_pending() stucks.
+                                                */
 
-   In file included from net/core/skbuff.c:85:
-   ./net/core/dropreason_str.h:1:1: error: stray '\' in program
-       1 | \n#define __DEFINE_SKB_DROP_REASON(FN) \
-         | ^
-   ./net/core/dropreason_str.h:1:3: error: stray '#' in program
-       1 | \n#define __DEFINE_SKB_DROP_REASON(FN) \
-         |   ^
->> ./net/core/dropreason_str.h:1:2: error: unknown type name 'n'
-       1 | \n#define __DEFINE_SKB_DROP_REASON(FN) \
-         |  ^
->> ./net/core/dropreason_str.h:1:11: error: expected '=', ',', ';', 'asm' or '__attribute__' before '__DEFINE_SKB_DROP_REASON'
-       1 | \n#define __DEFINE_SKB_DROP_REASON(FN) \
-         |           ^~~~~~~~~~~~~~~~~~~~~~~~
->> net/core/skbuff.c:101:9: error: implicit declaration of function '__DEFINE_SKB_DROP_REASON' [-Werror=implicit-function-declaration]
-     101 |         __DEFINE_SKB_DROP_REASON(FN)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
->> net/core/skbuff.c:101:34: error: 'FN' undeclared here (not in a function)
-     101 |         __DEFINE_SKB_DROP_REASON(FN)
-         |                                  ^~
-   cc1: some warnings being treated as errors
+Link: https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+v4->v5:
+ - Rebased it.
 
+v3->v4:
+ - flg variable renamed to delete_work.
+
+v2->v3:
+ Addressed comments from gregkh
+ - Wrapped the commit text and corrected the alignment.
+ - Described the reason to introduce new variables.
+ - Restored the blank line.
+ - rename the del_wk_queued to flg.
+ Addressed comments from tglx
+ - Added a comment which explains the race which looks obvious however
+   would not occur between disabled_store and devcd_del work.
+
+
+v1->v2:
+ - Added del_wk_queued flag to serialize the race between devcd_data_write()
+   and disabled_store() => devcd_free().
+ drivers/base/devcoredump.c | 83 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 81 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
+index f4d794d..1c06781 100644
+--- a/drivers/base/devcoredump.c
++++ b/drivers/base/devcoredump.c
+@@ -25,6 +25,47 @@ struct devcd_entry {
+ 	struct device devcd_dev;
+ 	void *data;
+ 	size_t datalen;
++	/*
++	 * Here, mutex is required to serialize the calls to del_wk work between
++	 * user/kernel space which happens when devcd is added with device_add()
++	 * and that sends uevent to user space. User space reads the uevents,
++	 * and calls to devcd_data_write() which try to modify the work which is
++	 * not even initialized/queued from devcoredump.
++	 *
++	 *
++	 *
++	 *        cpu0(X)                                 cpu1(Y)
++	 *
++	 *        dev_coredump() uevent sent to user space
++	 *        device_add()  ======================> user space process Y reads the
++	 *                                              uevents writes to devcd fd
++	 *                                              which results into writes to
++	 *
++	 *                                             devcd_data_write()
++	 *                                               mod_delayed_work()
++	 *                                                 try_to_grab_pending()
++	 *                                                   del_timer()
++	 *                                                     debug_assert_init()
++	 *       INIT_DELAYED_WORK()
++	 *       schedule_delayed_work()
++	 *
++	 *
++	 * Also, mutex alone would not be enough to avoid scheduling of
++	 * del_wk work after it get flush from a call to devcd_free()
++	 * mentioned as below.
++	 *
++	 *	disabled_store()
++	 *        devcd_free()
++	 *          mutex_lock()             devcd_data_write()
++	 *          flush_delayed_work()
++	 *          mutex_unlock()
++	 *                                   mutex_lock()
++	 *                                   mod_delayed_work()
++	 *                                   mutex_unlock()
++	 * So, delete_work flag is required.
++	 */
++	struct mutex mutex;
++	bool delete_work;
+ 	struct module *owner;
+ 	ssize_t (*read)(char *buffer, loff_t offset, size_t count,
+ 			void *data, size_t datalen);
+@@ -84,7 +125,12 @@ static ssize_t devcd_data_write(struct file *filp, struct kobject *kobj,
+ 	struct device *dev = kobj_to_dev(kobj);
+ 	struct devcd_entry *devcd = dev_to_devcd(dev);
+ 
+-	mod_delayed_work(system_wq, &devcd->del_wk, 0);
++	mutex_lock(&devcd->mutex);
++	if (!devcd->delete_work) {
++		devcd->delete_work = true;
++		mod_delayed_work(system_wq, &devcd->del_wk, 0);
++	}
++	mutex_unlock(&devcd->mutex);
+ 
+ 	return count;
+ }
+@@ -112,7 +158,12 @@ static int devcd_free(struct device *dev, void *data)
+ {
+ 	struct devcd_entry *devcd = dev_to_devcd(dev);
+ 
++	mutex_lock(&devcd->mutex);
++	if (!devcd->delete_work)
++		devcd->delete_work = true;
++
+ 	flush_delayed_work(&devcd->del_wk);
++	mutex_unlock(&devcd->mutex);
+ 	return 0;
+ }
+ 
+@@ -122,6 +173,30 @@ static ssize_t disabled_show(struct class *class, struct class_attribute *attr,
+ 	return sysfs_emit(buf, "%d\n", devcd_disabled);
+ }
+ 
++/*
++ *
++ *	disabled_store()                                	worker()
++ *	 class_for_each_device(&devcd_class,
++ *		NULL, NULL, devcd_free)
++ *         ...
++ *         ...
++ *	   while ((dev = class_dev_iter_next(&iter))
++ *                                                             devcd_del()
++ *                                                               device_del()
++ *                                                                 put_device() <- last reference
++ *             error = fn(dev, data)                           devcd_dev_release()
++ *             devcd_free(dev, data)                           kfree(devcd)
++ *             mutex_lock(&devcd->mutex);
++ *
++ *
++ * In the above diagram, It looks like disabled_store() would be racing with parallely
++ * running devcd_del() and result in memory abort while acquiring devcd->mutex which
++ * is called after kfree of devcd memory  after dropping its last reference with
++ * put_device(). However, this will not happens as fn(dev, data) runs
++ * with its own reference to device via klist_node so it is not its last reference.
++ * so, above situation would not occur.
++ */
++
+ static ssize_t disabled_store(struct class *class, struct class_attribute *attr,
+ 			      const char *buf, size_t count)
+ {
+@@ -278,13 +353,16 @@ void dev_coredumpm(struct device *dev, struct module *owner,
+ 	devcd->read = read;
+ 	devcd->free = free;
+ 	devcd->failing_dev = get_device(dev);
++	devcd->delete_work = false;
+ 
++	mutex_init(&devcd->mutex);
+ 	device_initialize(&devcd->devcd_dev);
+ 
+ 	dev_set_name(&devcd->devcd_dev, "devcd%d",
+ 		     atomic_inc_return(&devcd_count));
+ 	devcd->devcd_dev.class = &devcd_class;
+ 
++	mutex_lock(&devcd->mutex);
+ 	if (device_add(&devcd->devcd_dev))
+ 		goto put_device;
+ 
+@@ -301,10 +379,11 @@ void dev_coredumpm(struct device *dev, struct module *owner,
+ 
+ 	INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
+ 	schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
+-
++	mutex_unlock(&devcd->mutex);
+ 	return;
+  put_device:
+ 	put_device(&devcd->devcd_dev);
++	mutex_unlock(&devcd->mutex);
+  put_module:
+ 	module_put(owner);
+  free:
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.7.4
+

@@ -2,103 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31905362C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185735362C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350591AbiE0Mlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S1351498AbiE0Mlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353133AbiE0MkM (ORCPT
+        with ESMTP id S1353162AbiE0MkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 08:40:12 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A6F1A825
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:30:05 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id l30so1546416lfj.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/Qa+1ZMKXDipYVZiH4DqDDXVdhhdm8UiF6LTZCsTZAk=;
-        b=jnoWM/4bXd6/3S8i7E6RROWqw5Q3r/Opq8dru2NjrmovsEu31qYWFVYYAFRpKM+xLG
-         iP48vA/CXfRLV0FeddB0j9PD8H781O+xrJg+PP1/fQNXrFOIKRRBvESy5JrsVZbAWpcH
-         Q29xCeNF5oFUNsi2IA2M1nxWl4jI3s/EFnmcfSVqBhPn3avDF98adTNymtz8avaQOSef
-         Di11fGfQf/L63AlmwDNjK6u70mIrdCsfCPZ2HHsAnP0O7kHQbC+rOottO1phPElLhWiu
-         iur0FMiFtnTMCXaJRX40thJS4TZDRhHYzNpqaZFVPjV1UpsFxWxlxPiE7Yd+7/OU6Jaz
-         Clng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/Qa+1ZMKXDipYVZiH4DqDDXVdhhdm8UiF6LTZCsTZAk=;
-        b=hFsminWOq4vCTExjQBscbHT2ZSufFA8/RCxIMFLr4zl/Uaos1VlODM6X+havGy9RUf
-         iyRe3kKfU7ksNDanpJKFhgVdvIfn45gBHDwuBPuoDdYVBsVf0BKYNx/6OxqRSN4dIhvN
-         CwOvD0TGwWdTC/E3syJKx4yXMZu2MTl3qDHPPOlOg9I2l2OhzmOFpJO4VimPPqmkRty3
-         W79nXAd7MlG3+D1dFWWZYk1K1ZOmos23FfcQFAP+ljIBBAgfyLYzKAsrWIV5zwIZoWxn
-         TixTfqYTuog5/uGXMsEt9T/prnDWhwBVsvsimRxEQ9U75oV+cxBVGqgYn7ijvV4HkjZF
-         a4MA==
-X-Gm-Message-State: AOAM53117+0lQTqdNh+LjK/0pwoo/tKW54wgWJJf68AAWzpctXxudMSE
-        Z4+mK0wGFAsQjAatE8th8OtZmWSRHZUyrKZrlU4KeA==
-X-Google-Smtp-Source: ABdhPJyT/zlf0aaVyN/7Ekiu3XK/wY5Ir31SlVnBYaqmXj51swK9kyiUEUYHzU7LhBJqeYOiF8BSDJEHabUlJSHwyow=
-X-Received: by 2002:a05:6512:1588:b0:477:a556:4ab2 with SMTP id
- bp8-20020a056512158800b00477a5564ab2mr29719365lfb.376.1653654603880; Fri, 27
- May 2022 05:30:03 -0700 (PDT)
+        Fri, 27 May 2022 08:40:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B950B1C920;
+        Fri, 27 May 2022 05:30:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 728C7B823D0;
+        Fri, 27 May 2022 12:30:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 903ADC385A9;
+        Fri, 27 May 2022 12:30:45 +0000 (UTC)
+Date:   Fri, 27 May 2022 08:30:43 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Subject: Re: [PATCH v4] ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
+ weak function
+Message-ID: <20220527083043.022e8e36@gandalf.local.home>
+In-Reply-To: <20220526141912.794c2786@gandalf.local.home>
+References: <20220526141912.794c2786@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <000000000000f2655205dff90da9@google.com> <c674af89-5596-3298-1730-47c0bfe6230d@linux.alibaba.com>
-In-Reply-To: <c674af89-5596-3298-1730-47c0bfe6230d@linux.alibaba.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 27 May 2022 14:29:52 +0200
-Message-ID: <CACT4Y+bA4AQvXpuxV19cg-5_LJ7zdYoxEBfNuth2FiAWNiaH0Q@mail.gmail.com>
-Subject: Re: [syzbot] upstream build error (18)
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     syzbot <syzbot+a0b95614aef2afe9e488@syzkaller.appspotmail.com>,
-        anshuman.khandual@arm.com, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mike.kravetz@oracle.com, songmuchun@bytedance.com,
-        syzkaller-bugs@googlegroups.com, will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 at 10:24, Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
->
-> Hi,
->
-> On 5/27/2022 3:14 PM, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    7e284070abe5 Merge tag 'for-5.19/dm-changes' of git://git...
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1233ae81f00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=854cea6cbaeb1d1b
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=a0b95614aef2afe9e488
-> > compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > userspace arch: arm64
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+a0b95614aef2afe9e488@syzkaller.appspotmail.com
-> >
-> > arch/arm64/mm/hugetlbpage.c:515:9: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
-> > arch/arm64/mm/hugetlbpage.c:515:9: error: incompatible types when returning type 'int' but 'pte_t' was expected
-> > arch/arm64/mm/hugetlbpage.c:516:1: error: control reaches end of non-void function [-Werror=return-type]
->
-> I've sent out a fix patch [1], please try it. Thanks.
->
-> [1]
-> https://lore.kernel.org/all/814e20c19b110209ee12ecae7cb05f8a78d021c8.1653625820.git.baolin.wang@linux.alibaba.com/
+On Thu, 26 May 2022 14:19:12 -0400
+Steven Rostedt <rostedt@goodmis.org> (by way of Steven Rostedt
+<rostedt@goodmis.org>) wrote:
 
-Let's tell syzbot about the fix:
+> +++ b/kernel/trace/ftrace.c
+> @@ -3654,6 +3654,31 @@ static void add_trampoline_func(struct seq_file *m, struct ftrace_ops *ops,
+>  		seq_printf(m, " ->%pS", ptr);
+>  }
+>  
+> +#ifdef FTRACE_MCOUNT_MAX_OFFSET
+> +static int print_rec(struct seq_file *m, unsigned long ip)
+> +{
+> +	unsigned long offset;
+> +	char str[KSYM_SYMBOL_LEN];
+> +	char *modname;
+> +	const char *ret;
+> +
+> +	ret = kallsyms_lookup(ip, NULL, &offset, &modname, str);
+> +	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET)
+> +		return -1;
 
-#syz fix: arm64/hugetlb: Fix building errors in huge_ptep_clear_flush()
+Unfortunately, I can't just skip printing these functions. The reason is
+because it breaks trace-cmd (libtracefs specifically). As trace-cmd can
+filter with full regular expressions (regex(3)), and does so by searching
+the available_filter_functions. It collects an index of functions to
+enabled, then passes that into set_ftrace_filter.
+
+As a speed up, set_ftrace_filter allows you to pass an index, defined by the
+line in available_filter_functions, into it that uses array indexing into
+the ftrace table to enable/disable functions for tracing. By skipping
+entries, it breaks the indexing, because the index is a 1 to 1 paring of
+the lines of available_filter_functions.
+
+To solve this, instead of printing nothing, I have this:
+
+	ret = kallsyms_lookup(ip, NULL, &offset, &modname, str);
+	/* Weak functions can cause invalid addresses */
+	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET) {
+		snprintf(str, KSYM_SYMBOL_LEN, "%s_%ld",
+			 FTRACE_INVALID_FUNCTION, offset);
+	}
+
+Where:
+
+#define FTRACE_INVALID_FUNCTION		"__ftrace_invalid_address__"
+
+When doing this, the available_filter_functions file has 546 invalid
+entries. 14 of which are for the kvm module. Probably to deal with the
+differences between Intel and AMD.
+
+When a function is read as invalid, the rec->flags get set as DISABLED,
+which will keep it from being enabled in the future.
+
+Of course, one can just enter in numbers without reading any of the files,
+and that will allow them to be set. It won't do anything bad, it would just
+act like it does today.
+
+Does anyone have any issues with this approach (with
+__ftrace_invalid_address__%d inserted into available_filter_functions)?
+
+
+-- Steve
+
+
+> +
+> +	seq_puts(m, str);
+> +	if (modname)
+> +		seq_printf(m, " [%s]", modname);
+> +	return 0;
+> +}
+> +#else
+> +static int print_rec(struct seq_file *m, unsigned long ip)
+> +{
+> +	seq_printf(m, "%ps", (void *)ip);
+> +	return 0;
+> +}
+> +#endif
+> +

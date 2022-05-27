@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F29535807
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 05:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB94F535809
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 05:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbiE0DYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 23:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S238475AbiE0DZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 23:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238161AbiE0DYD (ORCPT
+        with ESMTP id S235189AbiE0DZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 23:24:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7873CBA7
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 20:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653621840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CNB6nm9imnMhEWbze1yFT3zEAHFqyZg1VlwYfSvOk60=;
-        b=W5CLzHbehrmYxKdNm/vayEP0/yN8b3nOfsiUhhgo2FgNj3bVFqBHQxhiIMWYFHT/DcREsf
-        ShoV6koBYXLdRd9zr0mKIYHwQb19l4EG0ps0l6edo0f0qDNrPdVE8JmGJDnsARsGBrTEju
-        BpC5YaAOyFAmPx1sI+G3KUI95EMfyuw=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-292-CjbQWnsdPUqvO9XNFsPYQw-1; Thu, 26 May 2022 23:23:57 -0400
-X-MC-Unique: CjbQWnsdPUqvO9XNFsPYQw-1
-Received: by mail-lf1-f69.google.com with SMTP id g11-20020a05651222cb00b0047872568226so1437008lfu.3
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 20:23:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CNB6nm9imnMhEWbze1yFT3zEAHFqyZg1VlwYfSvOk60=;
-        b=uPdcjyfaZfxWeRTLvMP59bm3saDTqTJB96OWiOoUCmNYUTV4y64BkUsV75jEEThyb4
-         sKy4KGhvfJ3i6buL9/3pp2DYRdrg6UjrY952LV+hM0HQtDgy9ditExykqrL9wXMTdnWi
-         SKogikQS9hMUry0k0EyzA+gN6vJGmIDszNebBAhkuZbNcIDkTHP1FTPVSKHs8lwOUkjp
-         ocwwUEUesqdUzmB9lNO5RQXvN/U62b5YiEQ/jQHwN5rQPDNQMaKMSECATLdP4LC3FLAF
-         HluhbDPKNhTQmYXKOcDVRNAHxCwufYrq+Q1lH6ZnllKCh+XD7egDFrwkdvgx5ZZpdL4x
-         DoiA==
-X-Gm-Message-State: AOAM532KKTCxKVIU6iHuDJoMVdftXMunrCZc0908tCtRPtPT/JQHLGSX
-        ih+VP/OYgkdrZTUra5DPrQxEmUsuWOkNTfkzbPL7utgmP/aSp5LDGqIEwAVtfdfdqCQ1l4k1Hp3
-        8k4rUdvXGc6tViLD1cGnwEwmEXFj0RG2vvZw3h+gW
-X-Received: by 2002:a2e:5cc1:0:b0:24b:112f:9b36 with SMTP id q184-20020a2e5cc1000000b0024b112f9b36mr24329264ljb.337.1653621836119;
-        Thu, 26 May 2022 20:23:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzq3AlLTRcpnjnf5ISdbmeT1DeOP1a/lGEm/pg7/4+6KtuWTkqiDk1gciDqLWDM7rD1v++15SIHQAin5xa37y4=
-X-Received: by 2002:a2e:5cc1:0:b0:24b:112f:9b36 with SMTP id
- q184-20020a2e5cc1000000b0024b112f9b36mr24329245ljb.337.1653621835775; Thu, 26
- May 2022 20:23:55 -0700 (PDT)
+        Thu, 26 May 2022 23:25:58 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7926157
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 20:25:53 -0700 (PDT)
+X-UUID: 7865e24b169f481aac22e70d869603c9-20220527
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:03eda090-8508-4b22-9499-3bc0b48689f6,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:59,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:39
+X-CID-INFO: VERSION:1.1.5,REQID:03eda090-8508-4b22-9499-3bc0b48689f6,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:59,FILE:0,RULE:Release_HamU,AC
+        TION:release,TS:39
+X-CID-META: VersionHash:2a19b09,CLOUDID:68ae6eb8-3c45-407b-8f66-25095432a27a,C
+        OID:057e5d723713,Recheck:0,SF:28|100|16|19|48|101,TC:nil,Content:1,EDM:-3,
+        IP:nil,URL:0,File:nil,QS:0,BEC:nil
+X-UUID: 7865e24b169f481aac22e70d869603c9-20220527
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <yee.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1065751422; Fri, 27 May 2022 11:25:48 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 27 May 2022 11:25:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Fri, 27 May 2022 11:25:47 +0800
+From:   <yee.lee@mediatek.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <patrick.wang.shcn@gmail.com>, <Kuan-Ying.lee@mediatek.com>,
+        <Andrew.Yang@mediatek.com>, <Sunny.Kao@mediatek.com>,
+        <chinwen.chang@mediatek.com>, Yee Lee <yee.lee@mediatek.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] mm: kmemleak: Skip check in kmemleak_*_phys when pfn bound is not ready
+Date:   Fri, 27 May 2022 11:25:02 +0800
+Message-ID: <20220527032504.30341-1-yee.lee@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220525172427.3692-1-lhenriques@suse.de> <fb3d817d8b6235472e517a9fc9ad0956fb4e8cf2.camel@kernel.org>
- <3cb96552-9747-c6b4-c8d3-81af60e5ae6a@redhat.com> <ca4928507bdf329bbe5b32a7b71f4a4295e5bba1.camel@kernel.org>
- <f238e4a1-ef98-ccfe-6345-51b6d9a34319@redhat.com>
-In-Reply-To: <f238e4a1-ef98-ccfe-6345-51b6d9a34319@redhat.com>
-From:   Gregory Farnum <gfarnum@redhat.com>
-Date:   Thu, 26 May 2022 20:23:39 -0700
-Message-ID: <CAJ4mKGZyw+uKjwkSBseETtKXwJOSV2D8J9mLH-8yB8w98Ow=fA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] ceph: prevent a client from exceeding the MDS
- maximum xattr size
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        =?UTF-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        ceph-devel <ceph-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,53 +67,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 6:10 PM Xiubo Li <xiubli@redhat.com> wrote:
->
->
-> On 5/27/22 8:44 AM, Jeff Layton wrote:
-> > On Fri, 2022-05-27 at 08:36 +0800, Xiubo Li wrote:
-> >> On 5/27/22 2:39 AM, Jeff Layton wrote:
-> >>> A question:
-> >>>
-> >>> How do the MDS's discover this setting? Do they get it from the mons?=
- If
-> >>> so, I wonder if there is a way for the clients to query the mon for t=
-his
-> >>> instead of having to extend the MDS protocol?
-> >> It sounds like what the "max_file_size" does, which will be recorded i=
-n
-> >> the 'mdsmap'.
-> >>
-> >> While currently the "max_xattr_pairs_size" is one MDS's option for eac=
-h
-> >> daemon and could set different values for each MDS.
-> >>
-> >>
-> > Right, but the MDS's in general don't use local config files. Where are
-> > these settings stored? Could the client (potentially) query for them?
->
-> AFAIK, each process in ceph it will have its own copy of the
-> "CephContext". I don't know how to query all of them but I know there
-> have some API such as "rados_conf_set/get" could do similar things.
->
-> Not sure whether will it work in our case.
->
-> >
-> > I'm pretty sure the client does fetch and parse the mdsmap. If it's
-> > there then it could grab the setting for all of the MDS's at mount time
-> > and settle on the lowest one.
-> >
-> > I think a solution like that might be more resilient than having to
-> > fiddle with feature bits and such...
->
-> Yeah, IMO just making this option to be like the "max_file_size" is more
-> appropriate.
+From: Yee Lee <yee.lee@mediatek.com>
 
-Makes sense to me =E2=80=94 this is really a property of the filesystem, no=
-t a
-daemon, so it should be propagated through common filesystem state.
-I guess Luis' https://github.com/ceph/ceph/pull/46357 should be
-updated to do it that way? I see some discussion there about handling
-old clients which don't recognize these limits as well.
--Greg
+In some archs (arm64), memblock allocates memory in boot time when
+the pfn boundary (max_pfn/min_pfn) is not ready. The lowmen checks in
+kmemleak_*_phys() drop those blocks and cause some false leak alarms
+on common kernel objects.
+
+Kmemleak output: (Qemu/arm64)
+unreferenced object 0xffff0000c0170a00 (size 128):
+  comm "swapper/0", pid 1, jiffies 4294892404 (age 126.208s)
+  hex dump (first 32 bytes):
+    62 61 73 65 00 00 00 00 00 00 00 00 00 00 00 00  base............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<(____ptrval____)>] __kmalloc_track_caller+0x1b0/0x2e4
+    [<(____ptrval____)>] kstrdup_const+0x8c/0xc4
+    [<(____ptrval____)>] kvasprintf_const+0xbc/0xec
+    [<(____ptrval____)>] kobject_set_name_vargs+0x58/0xe4
+    [<(____ptrval____)>] kobject_add+0x84/0x100
+    [<(____ptrval____)>] __of_attach_node_sysfs+0x78/0xec
+    [<(____ptrval____)>] of_core_init+0x68/0x104
+    [<(____ptrval____)>] driver_init+0x28/0x48
+    [<(____ptrval____)>] do_basic_setup+0x14/0x28
+    [<(____ptrval____)>] kernel_init_freeable+0x110/0x178
+    [<(____ptrval____)>] kernel_init+0x20/0x1a0
+    [<(____ptrval____)>] ret_from_fork+0x10/0x20
+
+This patch relaxs the boundary checking in kmemleak_*_phys api
+if max_low_pfn is uninitialzed.
+
+Fixes: 23c2d4 (mm: kmemleak: take a full lowmem check in kmemleak_*_phy)
+Signed-off-by: Yee Lee <yee.lee@mediatek.com>
+---
+ mm/kmemleak.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+index a182f5ddaf68..6b2af544aa0f 100644
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -1132,7 +1132,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
+ void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
+ 			       gfp_t gfp)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
+ 		kmemleak_alloc(__va(phys), size, min_count, gfp);
+ }
+ EXPORT_SYMBOL(kmemleak_alloc_phys);
+@@ -1146,7 +1146,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
+  */
+ void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
+ 		kmemleak_free_part(__va(phys), size);
+ }
+ EXPORT_SYMBOL(kmemleak_free_part_phys);
+@@ -1158,7 +1158,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
+  */
+ void __ref kmemleak_not_leak_phys(phys_addr_t phys)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
+ 		kmemleak_not_leak(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+@@ -1170,7 +1170,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+  */
+ void __ref kmemleak_ignore_phys(phys_addr_t phys)
+ {
+-	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
++	if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
+ 		kmemleak_ignore(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_ignore_phys);
+-- 
+2.18.0
 

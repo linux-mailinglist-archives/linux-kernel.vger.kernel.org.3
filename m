@@ -2,44 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D04535C58
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D435E535D51
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344297AbiE0JEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S1350390AbiE0JXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350539AbiE0JAF (ORCPT
+        with ESMTP id S1350392AbiE0JXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:00:05 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3E9F06;
-        Fri, 27 May 2022 01:56:12 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L8dsT26d5zbbs5;
-        Fri, 27 May 2022 16:54:37 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 16:56:10 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 16:56:10 +0800
-From:   keliu <liuke94@huawei.com>
-To:     <jic23@kernel.org>, <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] iio:  Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 09:17:39 +0000
-Message-ID: <20220527091739.2949426-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 May 2022 05:23:38 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE90BF68B8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:23:36 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L8fVm6Pq8zDqWB;
+        Fri, 27 May 2022 17:23:28 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500016.china.huawei.com
+ (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 27 May
+ 2022 17:23:34 +0800
+From:   Zhou Guanghui <zhouguanghui1@huawei.com>
+To:     <akpm@linux-foundation.org>, <rppt@kernel.org>, <will@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <xuqiang36@huawei.com>,
+        <zhouguanghui1@huawei.com>
+Subject: [PATCH v3] memblock,arm64: Expand the static memblock memory table
+Date:   Fri, 27 May 2022 09:18:32 +0000
+Message-ID: <20220527091832.63489-1-zhouguanghui1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500018.china.huawei.com (7.185.36.111)
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -50,77 +46,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove() .
+In a system using HBM, a multi-bit ECC error occurs, and the BIOS
+will mark the corresponding area (for example, 2 MB) as unusable.
+When the system restarts next time, these areas are not reported
+or reported as EFI_UNUSABLE_MEMORY. Both cases lead to an increase
+in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads to a
+larger number of memblocks.
 
-Signed-off-by: keliu <liuke94@huawei.com>
+For example, if the EFI_UNUSABLE_MEMORY type is reported:
+...
+memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
+memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
+memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
+memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
+memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
+memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
+...
+
+The EFI memory map is parsed to construct the memblock arrays before
+the memblock arrays can be resized. As the result, memory regions
+beyond INIT_MEMBLOCK_REGIONS are lost.
+
+Allow overriding memblock.memory array size with architecture defined
+INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
+INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
+
+Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- drivers/iio/industrialio-core.c    | 6 +++---
- drivers/iio/industrialio-trigger.c | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ arch/arm64/include/asm/memory.h |  9 +++++++++
+ mm/memblock.c                   | 14 +++++++++-----
+ 2 files changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-index e1ed44dec2ab..41daa10cd63d 100644
---- a/drivers/iio/industrialio-core.c
-+++ b/drivers/iio/industrialio-core.c
-@@ -1618,7 +1618,7 @@ static void iio_dev_release(struct device *device)
+diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+index 0af70d9abede..eda61c0389c4 100644
+--- a/arch/arm64/include/asm/memory.h
++++ b/arch/arm64/include/asm/memory.h
+@@ -364,6 +364,15 @@ void dump_mem_limit(void);
+ # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
+ #endif
  
- 	iio_device_detach_buffers(indio_dev);
++/*
++ * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
++ * memory block into multiple parts. As a result, the number of memory regions
++ * is large.
++ */
++#ifdef CONFIG_EFI
++#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
++#endif
++
+ #include <asm-generic/memory_model.h>
  
--	ida_simple_remove(&iio_ida, iio_dev_opaque->id);
-+	ida_free(&iio_ida, iio_dev_opaque->id);
- 	kfree(iio_dev_opaque);
- }
+ #endif /* __ASM_MEMORY_H */
+diff --git a/mm/memblock.c b/mm/memblock.c
+index e4f03a6e8e56..7c63571a69d7 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -29,6 +29,10 @@
+ # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+ #endif
  
-@@ -1660,7 +1660,7 @@ struct iio_dev *iio_device_alloc(struct device *parent, int sizeof_priv)
- 	mutex_init(&iio_dev_opaque->info_exist_lock);
- 	INIT_LIST_HEAD(&iio_dev_opaque->channel_attr_list);
++#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
++#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
++#endif
++
+ /**
+  * DOC: memblock overview
+  *
+@@ -55,9 +59,9 @@
+  * the allocator metadata. The "memory" and "reserved" types are nicely
+  * wrapped with struct memblock. This structure is statically
+  * initialized at build time. The region arrays are initially sized to
+- * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
+- * for "reserved". The region array for "physmem" is initially sized to
+- * %INIT_PHYSMEM_REGIONS.
++ * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
++ * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
++ * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
+  * The memblock_allow_resize() enables automatic resizing of the region
+  * arrays during addition of new regions. This feature should be used
+  * with care so that memory allocated for the region array will not
+@@ -102,7 +106,7 @@ unsigned long min_low_pfn;
+ unsigned long max_pfn;
+ unsigned long long max_possible_pfn;
  
--	iio_dev_opaque->id = ida_simple_get(&iio_ida, 0, 0, GFP_KERNEL);
-+	iio_dev_opaque->id = ida_alloc(&iio_ida, GFP_KERNEL);
- 	if (iio_dev_opaque->id < 0) {
- 		/* cannot use a dev_err as the name isn't available */
- 		pr_err("failed to get device id\n");
-@@ -1669,7 +1669,7 @@ struct iio_dev *iio_device_alloc(struct device *parent, int sizeof_priv)
- 	}
+-static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
++static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
+ static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
+ #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
+@@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
+ struct memblock memblock __initdata_memblock = {
+ 	.memory.regions		= memblock_memory_init_regions,
+ 	.memory.cnt		= 1,	/* empty dummy entry */
+-	.memory.max		= INIT_MEMBLOCK_REGIONS,
++	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
+ 	.memory.name		= "memory",
  
- 	if (dev_set_name(&indio_dev->dev, "iio:device%d", iio_dev_opaque->id)) {
--		ida_simple_remove(&iio_ida, iio_dev_opaque->id);
-+		ida_free(&iio_ida, iio_dev_opaque->id);
- 		kfree(iio_dev_opaque);
- 		return NULL;
- 	}
-diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
-index f504ed351b3e..6eb9b721676e 100644
---- a/drivers/iio/industrialio-trigger.c
-+++ b/drivers/iio/industrialio-trigger.c
-@@ -71,7 +71,7 @@ int __iio_trigger_register(struct iio_trigger *trig_info,
- 
- 	trig_info->owner = this_mod;
- 
--	trig_info->id = ida_simple_get(&iio_trigger_ida, 0, 0, GFP_KERNEL);
-+	trig_info->id = ida_alloc(&iio_trigger_ida, GFP_KERNEL);
- 	if (trig_info->id < 0)
- 		return trig_info->id;
- 
-@@ -98,7 +98,7 @@ int __iio_trigger_register(struct iio_trigger *trig_info,
- 	mutex_unlock(&iio_trigger_list_lock);
- 	device_del(&trig_info->dev);
- error_unregister_id:
--	ida_simple_remove(&iio_trigger_ida, trig_info->id);
-+	ida_free(&iio_trigger_ida, trig_info->id);
- 	return ret;
- }
- EXPORT_SYMBOL(__iio_trigger_register);
-@@ -109,7 +109,7 @@ void iio_trigger_unregister(struct iio_trigger *trig_info)
- 	list_del(&trig_info->list);
- 	mutex_unlock(&iio_trigger_list_lock);
- 
--	ida_simple_remove(&iio_trigger_ida, trig_info->id);
-+	ida_free(&iio_trigger_ida, trig_info->id);
- 	/* Possible issue in here */
- 	device_del(&trig_info->dev);
- }
+ 	.reserved.regions	= memblock_reserved_init_regions,
 -- 
-2.25.1
+2.17.1
 

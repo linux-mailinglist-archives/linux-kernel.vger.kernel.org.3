@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41293535EA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE341535EA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351042AbiE0KsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 06:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S1349516AbiE0Kr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 06:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242000AbiE0Krx (ORCPT
+        with ESMTP id S245161AbiE0Krx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 May 2022 06:47:53 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E12F2AE5
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FF71AD
         for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:47:52 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id gi33so8014455ejc.3
+Received: by mail-ed1-x530.google.com with SMTP id v15so2480914edl.9
         for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:47:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ru3bkI46cGQXTo5hSsyPFl2jKgUjs/czASVw2IToYVQ=;
-        b=RMTaAYIppb0iNIn8vopS7Cr2YesNwAFvN/zYLCGwwZnvleh4l/JCv/+kYqZdwKcee7
-         Lg8Y0lEiEHp3O09jIAvbsiGMCAk2PZLifDV+rHZwg6OjCTYBay55PolLGo88EDQKUQzp
-         jHq+2oUZSI1bUZ9KYQWpjHoUG20T4W5PoDpyuhrIENGOFMEnWt2f1XGgYwRPVuXE9HRw
-         VwED6xqVVAjjq118lr/sHCgSJY/yf7BWOQ6oUFwAsWilhCkmpdXWa5oj5o/UHkBlMxJx
-         eWECxyCBfNP6rjELVFh8yNPx8Qzp04sdzNjrCKbIKzs4icqcY93H62xhW7qn7pXWOHQ/
-         lZMw==
+        bh=E8hw1YxRdyFQiBunbdOQafA0vLjTqdy9/4gfOonLrFg=;
+        b=cMw3nqupRwb9iJ0bAiEPeAgnOBYM1beNn1TObGXfHMIOMS1sTGGaToiA5nWxbTPG23
+         7Bz8Tf9v6QAYxGl16dxbYfTSm7cMnx29cgprRiQll1k8U5uaKV9vxmnxwM/ichP5gcNC
+         2MhV/Fgj+5yEwdzZBeNIph23msVCY1g5rCZhKgrErykccuFP7ubdDpN+0sMnTjuyAXgD
+         WlQzdnKIlZD5ZXUjz2BiatWWlSOPzWc4K+AATgFhBrhSUWAhmb/cxMDw9moE2hFmKj7M
+         tL+7T6Ejx28GCXKEAeHuZe351Sitn3HNDzC0SQ+cSYB/9oTan6ZNM36uDM5QH6P2nfo8
+         yO6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ru3bkI46cGQXTo5hSsyPFl2jKgUjs/czASVw2IToYVQ=;
-        b=adwfcJUKzBaiq2ZsuxCbNYnw0GuqE3jEBrqbvt2k+yW2F9K1+xXLAA8WSDJU0FRuuK
-         fiN4KtALLH6CqBIxL+JO998e3bxwQJ+pNP5fNTIv6v3yM7/0Rvkc7NZi7f85IX8hoU2g
-         mV91bplq6TVv6FwcCA81wU5vkFJppu5C91PgX0Omr3hAYZsiX+l0ewbWyHfd9LooErBg
-         kVI3PorIdSkSGmFDcWSa1ptawQXdW4ZoBGZqXejEM1HoqqIchYJIvDgKmCYejqg3LXIN
-         HIC9j2txp194cpHhZPiNYcsmR6WOrztbEQyD0Ii/snvdcv3OD91ekNwj08pDPYpEtCfe
-         xJWQ==
-X-Gm-Message-State: AOAM530fbGW8AmkPAM5o0Wr54eXSWXxhqtuQ0Vvxu0d/dtezJPcWkvyG
-        zC9sMzHynFJcwCpe2/ybuto=
-X-Google-Smtp-Source: ABdhPJwAjCaIQcHY9NNC4R29tI2fkFnzMUb9DOAXPD6YcxngDNqPknClEYm3JJz3kuq3hLflhiqVCg==
-X-Received: by 2002:a17:907:868e:b0:6ff:39e0:2653 with SMTP id qa14-20020a170907868e00b006ff39e02653mr1898679ejc.734.1653648471075;
+        bh=E8hw1YxRdyFQiBunbdOQafA0vLjTqdy9/4gfOonLrFg=;
+        b=rSaXEa/CoWZaJxL28cytNr3yNsZbc1RlFG1zbkTCUnGWoyMFKWf6hqB9j05Hz+fdnv
+         ZLUq2H8PFPL3zTxG6/NrjvvP4uwWSbYHdTYj4+qX3KKzn7BzSWs/V5m61UxpPx70uvdt
+         W88/tVc6SDb2ILOR33/1DoS5VU0smiq9CuP0YZRIvD6yt0I5G3XVuE1A3SO5Jq0+XnZ0
+         oveq2+JyFNgnm4Ufr3bWk9q/pGH0+/thhafqPvxMQ3W5hbcHTqgBa8weB5YU+1AwbWoa
+         UbRzaz0i5y6xb7bStiq5GXcdJdSQW5YIG57FI2vlSbHxTjSVLRqvBMGv8keFIxD+s1XE
+         A9YA==
+X-Gm-Message-State: AOAM533QagcjufrFJp3jVhxKt69V9JBg/S3MEeYoFPlaqGniXhHS4sAJ
+        bWN9y3LpK5SRE1PqlDl4CyE=
+X-Google-Smtp-Source: ABdhPJyTYr0OkS3+nT4wN/g4MnpnJWE858fclOQNBvUdUSBEzGJbKuxqnWjjUb04IleiIrgnKZ+Spw==
+X-Received: by 2002:a05:6402:1cc1:b0:413:2b12:fc49 with SMTP id ds1-20020a0564021cc100b004132b12fc49mr43833744edb.118.1653648471305;
         Fri, 27 May 2022 03:47:51 -0700 (PDT)
 Received: from orion.localdomain ([93.99.228.15])
-        by smtp.gmail.com with ESMTPSA id pg5-20020a170907204500b006f3ef214e6asm1321234ejb.208.2022.05.27.03.47.48
+        by smtp.gmail.com with ESMTPSA id v4-20020a50a444000000b0042ab87ea713sm777389edb.22.2022.05.27.03.47.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 27 May 2022 03:47:49 -0700 (PDT)
 Received: by orion.localdomain (Postfix, from userid 1003)
-        id 4DC43A028E; Fri, 27 May 2022 12:48:18 +0200 (CEST)
+        id 5148EA0293; Fri, 27 May 2022 12:48:18 +0200 (CEST)
 From:   =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>
 To:     akpm@linux-foundation.org
 Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
@@ -58,9 +58,9 @@ Cc:     linux-mm@kvack.org, patches@lists.linux.dev,
         liam.howlett@oracle.com, hughd@google.com, kirill@shutemov.name,
         riel@surriel.com, rostedt@goodmis.org, peterz@infradead.org,
         =?UTF-8?q?Jakub=20Mat=C4=9Bna?= <matenajakub@gmail.com>
-Subject: [PATCH 1/2] [PATCH 1/2] mm: refactor of vma_merge()
-Date:   Fri, 27 May 2022 12:48:09 +0200
-Message-Id: <20220527104810.24736-2-matenajakub@gmail.com>
+Subject: [PATCH 2/2] [PATCH 2/2] mm: add merging after mremap resize
+Date:   Fri, 27 May 2022 12:48:10 +0200
+Message-Id: <20220527104810.24736-3-matenajakub@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220527104810.24736-1-matenajakub@gmail.com>
 References: <20220527104810.24736-1-matenajakub@gmail.com>
@@ -77,145 +77,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor vma_merge() to make it shorter and more understandable.
-Main change is the elimination of code duplicity in the case of
-merge next check. This is done by first doing checks and caching
-the results before executing the merge itself. The variable 'area' is
-divided into 'mid' and 'res' as previously it was used for two purposes,
-as the middle VMA between prev and next and also as the result of the
-merge itself. Exit paths are also unified.
+When mremap call results in expansion, it might be possible to merge the
+VMA with the next VMA which might become adjacent. This patch adds
+vma_merge call after the expansion is done to try and merge.
 
 Signed-off-by: Jakub Matěna <matenajakub@gmail.com>
 ---
- mm/mmap.c | 87 +++++++++++++++++++++++--------------------------------
- 1 file changed, 37 insertions(+), 50 deletions(-)
+ mm/mremap.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 3aa839f81e63..bd0dde2ad3e2 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1170,8 +1170,10 @@ struct vm_area_struct *vma_merge(struct mm_struct *mm,
- 			struct anon_vma_name *anon_name)
- {
- 	pgoff_t pglen = (end - addr) >> PAGE_SHIFT;
--	struct vm_area_struct *area, *next;
--	int err;
-+	struct vm_area_struct *mid, *next, *res;
-+	int err = -1;
-+	bool merge_prev = false;
-+	bool merge_next = false;
+diff --git a/mm/mremap.c b/mm/mremap.c
+index 303d3290b938..c41237e62156 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -9,6 +9,7 @@
+  */
  
- 	/*
- 	 * We later require that vma->vm_flags == vm_flags,
-@@ -1181,75 +1183,60 @@ struct vm_area_struct *vma_merge(struct mm_struct *mm,
- 		return NULL;
+ #include <linux/mm.h>
++#include <linux/mm_inline.h>
+ #include <linux/hugetlb.h>
+ #include <linux/shm.h>
+ #include <linux/ksm.h>
+@@ -1022,8 +1023,11 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+ 				}
+ 			}
  
- 	next = vma_next(mm, prev);
--	area = next;
--	if (area && area->vm_end == end)		/* cases 6, 7, 8 */
-+	mid = next;
-+	if (next && next->vm_end == end)		/* cases 6, 7, 8 */
- 		next = next->vm_next;
- 
- 	/* verify some invariant that must be enforced by the caller */
- 	VM_WARN_ON(prev && addr <= prev->vm_start);
--	VM_WARN_ON(area && end > area->vm_end);
-+	VM_WARN_ON(mid && end > mid->vm_end);
- 	VM_WARN_ON(addr >= end);
- 
--	/*
--	 * Can it merge with the predecessor?
--	 */
-+	/* Can we merge the predecessor? */
- 	if (prev && prev->vm_end == addr &&
- 			mpol_equal(vma_policy(prev), policy) &&
- 			can_vma_merge_after(prev, vm_flags,
- 					    anon_vma, file, pgoff,
- 					    vm_userfaultfd_ctx, anon_name)) {
--		/*
--		 * OK, it can.  Can we now merge in the successor as well?
--		 */
--		if (next && end == next->vm_start &&
--				mpol_equal(policy, vma_policy(next)) &&
--				can_vma_merge_before(next, vm_flags,
--						     anon_vma, file,
--						     pgoff+pglen,
--						     vm_userfaultfd_ctx, anon_name) &&
--				is_mergeable_anon_vma(prev->anon_vma,
--						      next->anon_vma, NULL)) {
--							/* cases 1, 6 */
--			err = __vma_adjust(prev, prev->vm_start,
--					 next->vm_end, prev->vm_pgoff, NULL,
--					 prev);
--		} else					/* cases 2, 5, 7 */
--			err = __vma_adjust(prev, prev->vm_start,
--					 end, prev->vm_pgoff, NULL, prev);
--		if (err)
--			return NULL;
--		khugepaged_enter_vma_merge(prev, vm_flags);
--		return prev;
-+		merge_prev = true;
- 	}
--
--	/*
--	 * Can this new request be merged in front of next?
--	 */
-+	/* Can we merge the successor? */
- 	if (next && end == next->vm_start &&
- 			mpol_equal(policy, vma_policy(next)) &&
- 			can_vma_merge_before(next, vm_flags,
- 					     anon_vma, file, pgoff+pglen,
- 					     vm_userfaultfd_ctx, anon_name)) {
-+		merge_next = true;
-+	}
-+	/* Can we merge both the predecessor and the successor? */
-+	if (merge_prev && merge_next &&
-+			is_mergeable_anon_vma(prev->anon_vma,
-+				next->anon_vma, NULL)) {	 /* cases 1, 6 */
-+		err = __vma_adjust(prev, prev->vm_start,
-+					next->vm_end, prev->vm_pgoff, NULL,
-+					prev);
-+		res = prev;
-+	} else if (merge_prev) {			/* cases 2, 5, 7 */
-+		err = __vma_adjust(prev, prev->vm_start,
-+					end, prev->vm_pgoff, NULL, prev);
-+		res = prev;
-+	} else if (merge_next) {
- 		if (prev && addr < prev->vm_end)	/* case 4 */
- 			err = __vma_adjust(prev, prev->vm_start,
--					 addr, prev->vm_pgoff, NULL, next);
--		else {					/* cases 3, 8 */
--			err = __vma_adjust(area, addr, next->vm_end,
--					 next->vm_pgoff - pglen, NULL, next);
--			/*
--			 * In case 3 area is already equal to next and
--			 * this is a noop, but in case 8 "area" has
--			 * been removed and next was expanded over it.
--			 */
--			area = next;
--		}
--		if (err)
--			return NULL;
--		khugepaged_enter_vma_merge(area, vm_flags);
--		return area;
-+					addr, prev->vm_pgoff, NULL, next);
-+		else					/* cases 3, 8 */
-+			err = __vma_adjust(mid, addr, next->vm_end,
-+					next->vm_pgoff - pglen, NULL, next);
-+		res = next;
- 	}
- 
--	return NULL;
-+	/*
-+	 * Cannot merge with predecessor or successor or error in __vma_adjust?
-+	 */
-+	if (err)
-+		return NULL;
-+	khugepaged_enter_vma_merge(res, vm_flags);
-+	return res;
- }
- 
- /*
+-			if (vma_adjust(vma, vma->vm_start, addr + new_len,
+-				       vma->vm_pgoff, NULL)) {
++			vma = vma_merge(mm, vma, addr + old_len, addr + new_len,
++					vma->vm_flags, vma->anon_vma, vma->vm_file,
++					vma->vm_pgoff + (old_len >> PAGE_SHIFT), vma_policy(vma),
++					vma->vm_userfaultfd_ctx, anon_vma_name(vma));
++			if (!vma) {
+ 				vm_unacct_memory(pages);
+ 				ret = -ENOMEM;
+ 				goto out;
 -- 
 2.35.1
 

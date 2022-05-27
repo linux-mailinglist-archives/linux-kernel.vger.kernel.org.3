@@ -2,183 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEF8535788
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B143353578E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234941AbiE0CY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
+        id S235074AbiE0C1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiE0CY4 (ORCPT
+        with ESMTP id S234949AbiE0C04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:24:56 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0B5E27A5;
-        Thu, 26 May 2022 19:24:54 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id h4so3058898vsr.13;
-        Thu, 26 May 2022 19:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QvhKBJjGUiG7G8PpadcKf8ELEDTEzExAiqgsG99aSxM=;
-        b=mBbmAl6FjJyf8/uGuc+JM8m3jjGD4++wND89c0YwmoUfKv9uxtcnlFOm6SAVysFfR8
-         LuV7S6P1tMqdJ+AWryZ4E+GduRTIiJvOAAlESpU6RQqzaCRI23M9y8FYiyJFgsXUKOcm
-         2L9peqMteW+4GSorZyudGmiIXphWNVVJ/CxXo238lHvM/d5RGvlmwyPsc6kmAlf9+j/9
-         fqPCUG/YS3oABatxSC2rvKJg2XSxHu9X3YrAx2DQoVzHPd2vCGTWf6/2NcPJEng0CRLx
-         jnY/niKmADvaV1vgnSePz9UGymiEJ0qaYdApQ+SnsGkJWg8NcbvJjp8aDYtGYb+OZ8b/
-         knyA==
+        Thu, 26 May 2022 22:26:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A9B9DFF49
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653618410;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oaDAshEcGYeYhJ5+Zo99OPfgNFs1k3b7zVlzbxHYNl0=;
+        b=MsoZxVsdQq/zRH23U6ED0gdtz1Yg9cjvDnfEgPZDQ9N4Pxa5/ps8AN/SXeYjIzQ8J3gkWe
+        P41sW5r71Ndz4fOchno3wy7tBk1UAVTCV75BTmjC3vn/FZRYi+5Yfb+qPfhvbKGVcig60P
+        iUfbLulsOda9qOalJHCsQ+ZwzDfk68o=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-14-h2i7CJyvNu21s-9IT-eMwQ-1; Thu, 26 May 2022 22:26:49 -0400
+X-MC-Unique: h2i7CJyvNu21s-9IT-eMwQ-1
+Received: by mail-lf1-f69.google.com with SMTP id z14-20020a056512308e00b004786d7fde66so1338313lfd.18
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:26:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QvhKBJjGUiG7G8PpadcKf8ELEDTEzExAiqgsG99aSxM=;
-        b=jfrZF8j9l1CcX3/HRUsKGlgQ7bfL0fJWaKJeM8wP4+lg1dBUNVX+Q5P+XJwJM9FYkB
-         +Tj2hhI7n7y5o/rxVrDheHsbeu4WwgZDDqpLs9fk4+FcpSlEWyvXnjB5zRfB6fksDd8Q
-         LecG7Fu2Sd7xBgJ6q228OeFJUdcnrnmEt6d5Fs96AlDtl984rIgVl5IdqJRwNd0HvXrP
-         ePtAp8Fy0T/u/7JZUjolMMDYn2OZTfxGbwsATu7rbuMm8C7Vj9ggC1tWTN4f/Nk0rLqp
-         DwmauooEO4Vr+y15GMYHyQk3R9YzImFvwa7h1FZy47bTgkhBM1HMtxCF2S/PwauT8nuy
-         dLDQ==
-X-Gm-Message-State: AOAM532nKoRFfale2F72KzFjYV51a3zE86u8Tlb75oOwi1hbWiBVcEK2
-        5l5tKFpEM2LR/1xy2R30mc3YraaH4epVUu8nXRQ=
-X-Google-Smtp-Source: ABdhPJwkZPvj4AjNTutTU0UnZb0VBCu1HQ5FumUGt7iv+OBdH1kfcKU5DRWqD7wVat93IE/BS4BJmsVF9rwuvgX1dsM=
-X-Received: by 2002:a67:ef5b:0:b0:335:e3a3:9b33 with SMTP id
- k27-20020a67ef5b000000b00335e3a39b33mr16969880vsr.57.1653618293351; Thu, 26
- May 2022 19:24:53 -0700 (PDT)
+        bh=oaDAshEcGYeYhJ5+Zo99OPfgNFs1k3b7zVlzbxHYNl0=;
+        b=YotUrf66IIlhjUf+d/K501/D6Zvd9gKfg7bky0yvnNKPpTSfzMjqX4bRmggK5WLRvL
+         n7N2w4/1MKc8DBTHPogwnF4XQqA6wYWKwRG7Muj2ptUwiYfsF8j61QEEwWDtl/iwnMF4
+         rrscKjcf1PwyEKBGTzRtKaI/wKuegNLMt3k2rjRZ4Pnb3NiDjfOaObEiV5nILctkP+Mc
+         jJCxmU5BqbSpKJlyXgISq5WBoYOrIU4KLJXNtS3K09rPBKRaKmkqYwk9sNSGjkqjmBXB
+         KeuXsNQ/4ZHdh4akEDGoL/cw/dSwngEhUPBVX05TozLgPRzjyF7w/Pq2yIYZGO1A2Zc9
+         EQIQ==
+X-Gm-Message-State: AOAM531zLrZOGjeUjX8vR0UHMZzIwM1ZcihXTuufAsnJUX9H3o03bwyU
+        z44EFakMrRMr7oydNhRQtzp4yIZ/TBKRlXgU3OayKCgl+oLwvcgI/MlUWIs8hsoEVAELFvZcrMM
+        QRnp1o5KZ8IXrxVSyzWikIZ75WFJVh3XaV0hrhPal
+X-Received: by 2002:a2e:954c:0:b0:253:d9bf:9f55 with SMTP id t12-20020a2e954c000000b00253d9bf9f55mr21308472ljh.300.1653618407874;
+        Thu, 26 May 2022 19:26:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzHcqEOz1xk1ptv4/JAwcVxyXOZtbrjI3QyKwE3Rw+KFfhLBm5gZOZJQQUeuqyIULlx21HHjnfaD0MAV67KrFc=
+X-Received: by 2002:a2e:954c:0:b0:253:d9bf:9f55 with SMTP id
+ t12-20020a2e954c000000b00253d9bf9f55mr21308435ljh.300.1653618407570; Thu, 26
+ May 2022 19:26:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <1653534995-30794-1-git-send-email-u0084500@gmail.com>
- <1653534995-30794-3-git-send-email-u0084500@gmail.com> <20220526100510.3utwh5bov4ax2jmg@maple.lan>
-In-Reply-To: <20220526100510.3utwh5bov4ax2jmg@maple.lan>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Fri, 27 May 2022 10:24:42 +0800
-Message-ID: <CADiBU3_3rJ6uCYx_W+TZJpuPzGtt61QEDwZWtxy_abzynTr8VQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] backlight: rt4831: Add the property parsing for ocp
- level selection
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>, jingoohan1@gmail.com,
-        Pavel Machek <pavel@ucw.cz>, deller@gmx.de,
-        cy_huang <cy_huang@richtek.com>, lucas_tsai@richtek.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
+References: <20220526124338.36247-1-eperezma@redhat.com> <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
+In-Reply-To: <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 27 May 2022 10:26:35 +0800
+Message-ID: <CACGkMEu1YenjBHAssP=FvKX6WxDQ5Aa50r-BsnkfR4zqNTk6hg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Implement vdpasim stop operation
+To:     Parav Pandit <parav@nvidia.com>
+Cc:     =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "martinh@xilinx.com" <martinh@xilinx.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "martinpo@xilinx.com" <martinpo@xilinx.com>,
+        "lvivier@redhat.com" <lvivier@redhat.com>,
+        "pabloc@xilinx.com" <pabloc@xilinx.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
+        "gautam.dawar@amd.com" <gautam.dawar@amd.com>,
+        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
+        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>,
+        "hanand@xilinx.com" <hanand@xilinx.com>,
+        "dinang@xilinx.com" <dinang@xilinx.com>,
+        Longpeng <longpeng2@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel Thompson <daniel.thompson@linaro.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=
-=8826=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=886:05=E5=AF=AB=E9=81=93=
-=EF=BC=9A
+On Thu, May 26, 2022 at 8:54 PM Parav Pandit <parav@nvidia.com> wrote:
 >
-> On Thu, May 26, 2022 at 11:16:35AM +0800, cy_huang wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
+>
+>
+> > From: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > Sent: Thursday, May 26, 2022 8:44 AM
+>
+> > Implement stop operation for vdpa_sim devices, so vhost-vdpa will offer
 > >
-> > Add the property parsing for ocp level selection.
+> > that backend feature and userspace can effectively stop the device.
+> >
+> >
+> >
+> > This is a must before get virtqueue indexes (base) for live migration,
+> >
+> > since the device could modify them after userland gets them. There are
+> >
+> > individual ways to perform that action for some devices
+> >
+> > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there
+> > was no
+> >
+> > way to perform it for any vhost device (and, in particular, vhost-vdpa)=
+.
+> >
+> >
+> >
+> > After the return of ioctl with stop !=3D 0, the device MUST finish any
+> >
+> > pending operations like in flight requests. It must also preserve all
+> >
+> > the necessary state (the virtqueue vring base plus the possible device
+> >
+> > specific states) that is required for restoring in the future. The
+> >
+> > device must not change its configuration after that point.
+> >
+> >
+> >
+> > After the return of ioctl with stop =3D=3D 0, the device can continue
+> >
+> > processing buffers as long as typical conditions are met (vq is enabled=
+,
+> >
+> > DRIVER_OK status bit is enabled, etc).
 >
-> Isn't this just restating the Subject: line?
->
-Ah, that's my fault. I didn't state too much in the patch comment.
-I only left it in the cover letter.
+> Just to be clear, we are adding vdpa level new ioctl() that doesn=E2=80=
+=99t map to any mechanism in the virtio spec.
 
-> It would be better to provide information useful to the reviewer here.
-> Something like:
->
-> "Currently this driver simply inherits whatever over-current protection
-> level is programmed into the hardware when it is handed over. Typically
-> this will be the reset value, <whatever>A, although the bootloader could
-> have established a different value.
->
-> Allow the correct OCP value to be provided by the DT."
->
-> BTW please don't uncritically copy the above into the patch header. It is
-> just made something up as an example and I did no fact checking...
->
-OK, got it.
->
-> >
-> > Reported-by: Lucas Tsai <lucas_tsai@richtek.com>
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> >  drivers/video/backlight/rt4831-backlight.c | 13 +++++++++++++
-> >  1 file changed, 13 insertions(+)
-> >
-> > diff --git a/drivers/video/backlight/rt4831-backlight.c b/drivers/video=
-/backlight/rt4831-backlight.c
-> > index 42155c7..c81f7d9 100644
-> > --- a/drivers/video/backlight/rt4831-backlight.c
-> > +++ b/drivers/video/backlight/rt4831-backlight.c
-> > @@ -12,6 +12,7 @@
-> >  #define RT4831_REG_BLCFG     0x02
-> >  #define RT4831_REG_BLDIML    0x04
-> >  #define RT4831_REG_ENABLE    0x08
-> > +#define RT4831_REG_BLOPT2    0x11
-> >
-> >  #define RT4831_BLMAX_BRIGHTNESS      2048
-> >
-> > @@ -23,6 +24,8 @@
-> >  #define RT4831_BLDIML_MASK   GENMASK(2, 0)
-> >  #define RT4831_BLDIMH_MASK   GENMASK(10, 3)
-> >  #define RT4831_BLDIMH_SHIFT  3
-> > +#define RT4831_BLOCP_MASK    GENMASK(1, 0)
-> > +#define RT4831_BLOCP_SHIFT   0
-> >
-> >  struct rt4831_priv {
-> >       struct device *dev;
-> > @@ -120,6 +123,16 @@ static int rt4831_parse_backlight_properties(struc=
-t rt4831_priv *priv,
-> >       if (ret)
-> >               return ret;
-> >
-> > +     ret =3D device_property_read_u8(dev, "richtek,bled-ocp-sel", &pro=
-pval);
-> > +     if (ret)
-> > +             propval =3D RT4831_BLOCPLVL_1P2A;
->
-> Is 1.2A the reset value for the register?
-Yes, it's the HW default value.
->
-> Additionally, it looks like adding a hard-coded default would cause
-> problems for existing platforms where the bootloader doesn't use
-> richtek,bled-ocp-sel and pre-configures a different value itself.
->
-> Would it be safer (in terms of working nicely with older bootloaders)
-> to only write to the RT4831_BLOCP_MASK if the new property is set?
->
-Ah, my excuse. I really didn't consider the case that you mentioned.
-It seems it's better to do the judgement here for two cases.
-1) property not exist, keep the current HW value
-2) property exist, clamp align and update the suitable selector to HW.
+We try to provide forward compatibility to VIRTIO_CONFIG_S_STOP. That
+means it is expected to implement at least a subset of
+VIRTIO_CONFIG_S_STOP.
 
-Thanks.
 >
-> Daniel.
->
->
->
-> > +
-> > +     propval =3D min_t(u8, propval, RT4831_BLOCPLVL_1P8A);
-> > +     ret =3D regmap_update_bits(priv->regmap, RT4831_REG_BLOPT2, RT483=
-1_BLOCP_MASK,
-> > +                              propval << RT4831_BLOCP_SHIFT);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> >       ret =3D device_property_read_u8(dev, "richtek,channel-use", &prop=
-val);
-> >       if (ret) {
-> >               dev_err(dev, "richtek,channel-use DT property missing\n")=
-;
-> > --
-> > 2.7.4
-> >
+> Why can't we use this ioctl() to indicate driver to start/stop the device=
+ instead of driving it through the driver_ok?
+
+So the idea is to add capability that does not exist in the spec. Then
+came the stop/resume which can't be done via DRIVER_OK. I think we
+should only allow the stop/resume to succeed after DRIVER_OK is set.
+
+> This is in the context of other discussion we had in the LM series.
+
+Do you see any issue that blocks the live migration?
+
+Thanks
+

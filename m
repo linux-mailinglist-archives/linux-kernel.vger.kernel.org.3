@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70256535F60
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F1753612D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351402AbiE0Lhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
+        id S1352638AbiE0Lzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345594AbiE0Lhm (ORCPT
+        with ESMTP id S1352784AbiE0Luv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:37:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738066540C;
-        Fri, 27 May 2022 04:37:33 -0700 (PDT)
+        Fri, 27 May 2022 07:50:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AED132759;
+        Fri, 27 May 2022 04:45:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC9D761CE2;
-        Fri, 27 May 2022 11:37:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0485DC34113;
-        Fri, 27 May 2022 11:37:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACB80B824D6;
+        Fri, 27 May 2022 11:45:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F153BC385A9;
+        Fri, 27 May 2022 11:45:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651452;
-        bh=amemK8Q9YbQzV/hIYUpP+5+ychYfZ9KcS9kDPk/te5c=;
+        s=korg; t=1653651916;
+        bh=nyNsl1FhrSkC5K3QNeXt8djsHyg/84AZ3Q0j/O2PnJo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bIuoGKPcsD4I0+vMHmg/YpdHDERhXAFnOxsdkwULULHPCNVCbHHdDEMS2wsldx311
-         iTVWwljACoWNI2JC8Kwt5OMvNcpzJ31WgHPktDXNxWp/iLIOFCi9PnpqKk8RqOptqK
-         NAGtTAlZmgSJGMuA09uZNtGg8EnGx3OR6NXbYADo=
+        b=pJa1ZrM/kcEyVgTxpBo4cOpBObdfLJKNxX34mw+qS2P7OMYhOEp756qlSERI/b4pj
+         IJEOvmea3bTKhgpudEV2d13PtNDGQxioyMhiVQQq7qorM4yi6TOPa0zJUFs+eSBUaM
+         Jdi/xnXa1RAUzmZs2EeJnebIBg7DSSJ64fSDwn0o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 046/111] random: cleanup UUID handling
+Subject: [PATCH 5.15 057/145] random: fix locking for crng_init in crng_reseed()
 Date:   Fri, 27 May 2022 10:49:18 +0200
-Message-Id: <20220527084825.965332823@linuxfoundation.org>
+Message-Id: <20220527084857.607940798@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,93 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-commit 64276a9939ff414f2f0db38036cf4e1a0a703394 upstream.
+commit 7191c628fe07b70d3f37de736d173d1b115396ed upstream.
 
-Rather than hard coding various lengths, we can use the right constants.
-Strings should be `char *` while buffers should be `u8 *`. Rather than
-have a nonsensical and unused maxlength, just remove it. Finally, use
-snprintf instead of sprintf, just out of good hygiene.
+crng_init is protected by primary_crng->lock. Therefore, we need
+to hold this lock when increasing crng_init to 2. As we shouldn't
+hold this lock for too long, only hold it for those parts which
+require protection.
 
-As well, remove the old comment about returning a binary UUID via the
-binary sysctl syscall. That syscall was removed from the kernel in 5.5,
-and actually, the "uuid_strategy" function and related infrastructure
-for even serving it via the binary sysctl syscall was removed with
-894d2491153a ("sysctl drivers: Remove dead binary sysctl support") back
-in 2.6.33.
-
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   29 +++++++++++++----------------
- 1 file changed, 13 insertions(+), 16 deletions(-)
+ drivers/char/random.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1661,22 +1661,25 @@ const struct file_operations urandom_fop
- static int sysctl_random_min_urandom_seed = 60;
- static int sysctl_random_write_wakeup_bits = POOL_MIN_BITS;
- static int sysctl_poolsize = POOL_BITS;
--static char sysctl_bootid[16];
-+static u8 sysctl_bootid[UUID_SIZE];
+@@ -502,6 +502,7 @@ static void crng_reseed(void)
+ 	int entropy_count;
+ 	unsigned long next_gen;
+ 	u8 key[CHACHA_KEY_SIZE];
++	bool finalize_init = false;
  
- /*
-  * This function is used to return both the bootid UUID, and random
-- * UUID.  The difference is in whether table->data is NULL; if it is,
-+ * UUID. The difference is in whether table->data is NULL; if it is,
-  * then a new UUID is generated and returned to the user.
-- *
-- * If the user accesses this via the proc interface, the UUID will be
-- * returned as an ASCII string in the standard UUID format; if via the
-- * sysctl system call, as 16 bytes of binary data.
-  */
- static int proc_do_uuid(struct ctl_table *table, int write, void *buffer,
- 			size_t *lenp, loff_t *ppos)
- {
--	struct ctl_table fake_table;
--	unsigned char buf[64], tmp_uuid[16], *uuid;
-+	u8 tmp_uuid[UUID_SIZE], *uuid;
-+	char uuid_string[UUID_STRING_LEN + 1];
-+	struct ctl_table fake_table = {
-+		.data = uuid_string,
-+		.maxlen = UUID_STRING_LEN
-+	};
-+
-+	if (write)
-+		return -EPERM;
- 
- 	uuid = table->data;
- 	if (!uuid) {
-@@ -1691,12 +1694,8 @@ static int proc_do_uuid(struct ctl_table
- 		spin_unlock(&bootid_spinlock);
- 	}
- 
--	sprintf(buf, "%pU", uuid);
+ 	/*
+ 	 * First we make sure we have POOL_MIN_BITS of entropy in the pool,
+@@ -529,12 +530,14 @@ static void crng_reseed(void)
+ 		++next_gen;
+ 	WRITE_ONCE(base_crng.generation, next_gen);
+ 	WRITE_ONCE(base_crng.birth, jiffies);
+-	spin_unlock_irqrestore(&base_crng.lock, flags);
+-	memzero_explicit(key, sizeof(key));
 -
--	fake_table.data = buf;
--	fake_table.maxlen = sizeof(buf);
--
--	return proc_dostring(&fake_table, write, buffer, lenp, ppos);
-+	snprintf(uuid_string, sizeof(uuid_string), "%pU", uuid);
-+	return proc_dostring(&fake_table, 0, buffer, lenp, ppos);
- }
- 
- static struct ctl_table random_table[] = {
-@@ -1731,13 +1730,11 @@ static struct ctl_table random_table[] =
- 	{
- 		.procname	= "boot_id",
- 		.data		= &sysctl_bootid,
--		.maxlen		= 16,
- 		.mode		= 0444,
- 		.proc_handler	= proc_do_uuid,
- 	},
- 	{
- 		.procname	= "uuid",
--		.maxlen		= 16,
- 		.mode		= 0444,
- 		.proc_handler	= proc_do_uuid,
- 	},
+ 	if (crng_init < 2) {
+ 		invalidate_batched_entropy();
+ 		crng_init = 2;
++		finalize_init = true;
++	}
++	spin_unlock_irqrestore(&base_crng.lock, flags);
++	memzero_explicit(key, sizeof(key));
++	if (finalize_init) {
+ 		process_random_ready_list();
+ 		wake_up_interruptible(&crng_init_wait);
+ 		kill_fasync(&fasync, SIGIO, POLL_IN);
 
 

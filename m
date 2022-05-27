@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46B453627A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861EC53627F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353695AbiE0MQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S240765AbiE0MST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353063AbiE0MBM (ORCPT
+        with ESMTP id S1353438AbiE0MF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 08:01:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BBC45ACB;
-        Fri, 27 May 2022 04:53:12 -0700 (PDT)
+        Fri, 27 May 2022 08:05:57 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AA0164998;
+        Fri, 27 May 2022 04:54:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6699261DF2;
-        Fri, 27 May 2022 11:53:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70F73C34100;
-        Fri, 27 May 2022 11:53:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8A89FCE251D;
+        Fri, 27 May 2022 11:54:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DBC2C385A9;
+        Fri, 27 May 2022 11:54:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652382;
-        bh=fK+EYPrd5lQ9qg+4y8Rv8XqXi3DjkYgu9k/7iGQiEjU=;
+        s=korg; t=1653652477;
+        bh=hDp19TXdo2+H8Sc+t4bNoCBP5xigjnkqbc4Cm9d2EaM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E+wEebvbpsoR+r+K2CGxkT+GVnzN1wmivVzeXn2jRgwtzOsIQHQvjsn28Wm8xZTbM
-         6TlQLCl7esx1FXbBR81N4f1Bhi3+ayCHpwn7b2QfUfceYfzmYDp3mcaAXxWbkHjDdQ
-         Lm3isEttxDUH707c51kLwO77I2mFmqVkcTPko0n4=
+        b=dO3x/AMpC7TW48GhrKQBSGrMTilh3t6Ao8ptjE3PqkURiHEZMkeaAj3wHwWZKG/z8
+         RQAs56fwY6/BP8xKj0CzgzGNLWRZoDueisTmWkTzatkxg4uH1bp2X8PCwFcMSkN49P
+         M53NZgM1a9fLsJlkuYS/5zmW01sNJWGAde3h0WCo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 129/145] random: move initialization out of reseeding hot path
-Date:   Fri, 27 May 2022 10:50:30 +0200
-Message-Id: <20220527084906.159098085@linuxfoundation.org>
+Subject: [PATCH 5.10 151/163] random: credit architectural init the exact amount
+Date:   Fri, 27 May 2022 10:50:31 +0200
+Message-Id: <20220527084849.320174711@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,93 +57,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 68c9c8b192c6dae9be6278e98ee44029d5da2d31 upstream.
+commit 12e45a2a6308105469968951e6d563e8f4fea187 upstream.
 
-Initialization happens once -- by way of credit_init_bits() -- and then
-it never happens again. Therefore, it doesn't need to be in
-crng_reseed(), which is a hot path that is called multiple times. It
-also doesn't make sense to have there, as initialization activity is
-better associated with initialization routines.
-
-After the prior commit, crng_reseed() now won't be called by multiple
-concurrent callers, which means that we can safely move the
-"finialize_init" logic into crng_init_bits() unconditionally.
+RDRAND and RDSEED can fail sometimes, which is fine. We currently
+initialize the RNG with 512 bits of RDRAND/RDSEED. We only need 256 bits
+of those to succeed in order to initialize the RNG. Instead of the
+current "all or nothing" approach, actually credit these contributions
+the amount that is actually contributed.
 
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   42 +++++++++++++++++++-----------------------
- 1 file changed, 19 insertions(+), 23 deletions(-)
+ drivers/char/random.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -266,7 +266,6 @@ static void crng_reseed(void)
- 	unsigned long flags;
- 	unsigned long next_gen;
- 	u8 key[CHACHA_KEY_SIZE];
--	bool finalize_init = false;
+@@ -896,9 +896,8 @@ early_param("random.trust_bootloader", p
+  */
+ int __init random_init(const char *command_line)
+ {
+-	size_t i;
+ 	ktime_t now = ktime_get_real();
+-	bool arch_init = true;
++	unsigned int i, arch_bytes;
+ 	unsigned long rv;
  
- 	extract_entropy(key, sizeof(key));
+ #if defined(LATENT_ENTROPY_PLUGIN)
+@@ -906,11 +905,12 @@ int __init random_init(const char *comma
+ 	_mix_pool_bytes(compiletime_seed, sizeof(compiletime_seed));
+ #endif
  
-@@ -283,28 +282,10 @@ static void crng_reseed(void)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
--	if (!crng_ready()) {
-+	if (!crng_ready())
- 		crng_init = CRNG_READY;
--		finalize_init = true;
--	}
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
- 	memzero_explicit(key, sizeof(key));
--	if (finalize_init) {
--		process_random_ready_list();
--		wake_up_interruptible(&crng_init_wait);
--		kill_fasync(&fasync, SIGIO, POLL_IN);
--		pr_notice("crng init done\n");
--		if (unseeded_warning.missed) {
--			pr_notice("%d get_random_xx warning(s) missed due to ratelimiting\n",
--				  unseeded_warning.missed);
--			unseeded_warning.missed = 0;
--		}
--		if (urandom_warning.missed) {
--			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
--				  urandom_warning.missed);
--			urandom_warning.missed = 0;
--		}
--	}
+-	for (i = 0; i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)) {
++	for (i = 0, arch_bytes = BLAKE2S_BLOCK_SIZE;
++	     i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)) {
+ 		if (!arch_get_random_seed_long_early(&rv) &&
+ 		    !arch_get_random_long_early(&rv)) {
+ 			rv = random_get_entropy();
+-			arch_init = false;
++			arch_bytes -= sizeof(rv);
+ 		}
+ 		_mix_pool_bytes(&rv, sizeof(rv));
+ 	}
+@@ -921,8 +921,8 @@ int __init random_init(const char *comma
+ 
+ 	if (crng_ready())
+ 		crng_reseed();
+-	else if (arch_init && trust_cpu)
+-		credit_init_bits(BLAKE2S_BLOCK_SIZE * 8);
++	else if (trust_cpu)
++		credit_init_bits(arch_bytes * 8);
+ 
+ 	return 0;
  }
- 
- /*
-@@ -836,10 +817,25 @@ static void credit_init_bits(size_t nbit
- 		new = min_t(unsigned int, POOL_BITS, orig + add);
- 	} while (cmpxchg(&input_pool.init_bits, orig, new) != orig);
- 
--	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS)
--		crng_reseed();
--	else if (orig < POOL_EARLY_BITS && new >= POOL_EARLY_BITS) {
-+	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS) {
-+		crng_reseed(); /* Sets crng_init to CRNG_READY under base_crng.lock. */
-+		process_random_ready_list();
-+		wake_up_interruptible(&crng_init_wait);
-+		kill_fasync(&fasync, SIGIO, POLL_IN);
-+		pr_notice("crng init done\n");
-+		if (unseeded_warning.missed) {
-+			pr_notice("%d get_random_xx warning(s) missed due to ratelimiting\n",
-+				  unseeded_warning.missed);
-+			unseeded_warning.missed = 0;
-+		}
-+		if (urandom_warning.missed) {
-+			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
-+				  urandom_warning.missed);
-+			urandom_warning.missed = 0;
-+		}
-+	} else if (orig < POOL_EARLY_BITS && new >= POOL_EARLY_BITS) {
- 		spin_lock_irqsave(&base_crng.lock, flags);
-+		/* Check if crng_init is CRNG_EMPTY, to avoid race with crng_reseed(). */
- 		if (crng_init == CRNG_EMPTY) {
- 			extract_entropy(base_crng.key, sizeof(base_crng.key));
- 			crng_init = CRNG_EARLY;
 
 

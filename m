@@ -2,80 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9767653690F
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F0053690D
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355056AbiE0Wuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 18:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S1355057AbiE0Wvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 18:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237945AbiE0Wuh (ORCPT
+        with ESMTP id S233958AbiE0Wvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 18:50:37 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F6411E1DF
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:50:35 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id r82so221403ybc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:50:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FiwcNfyqpzXHgrlwtntntw9ZAmxuvgx7Xs3wtYhKf10=;
-        b=Ok905eqDDaK7MZIzvZvLpkPHNUmrk5FmDpg7r6EBr7snWxyRjHKcRuzGoxf37aKL8N
-         IIhycZfrcgIqdY0YdpDzPC9pJwH88HVIbeqUOd2vvfwMG+qeurZq7yDNKNxz/p57mfoK
-         Q6DKbb/SCb7G5X3w1435C4QGWipqLTml8Q+kw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FiwcNfyqpzXHgrlwtntntw9ZAmxuvgx7Xs3wtYhKf10=;
-        b=rmygotr0MB1UC7F9MzWPSEApvbzR8/3isgXFA3scCc86PyTSmgwj5A3Pv4Li3mcYCj
-         n4mYDfqtd/rqN9kvbuR+y0XIqjWNcwECzvW3sRWbQ+FU8lIBqHQlP+QWTvJjdXYp6Pfn
-         D+7ZsvUWvQPwEz52qMUbgNLGU+cM0am53VgiOwnKexxRgk+K+9XhcpGrZ5K7oOZvEbJx
-         Xnpzkig8L8/Nl8P62XgRPifobc70AmoIjpxhdL4cDMvC9V14xZn7VxTOihM0TFubS9+n
-         VEt529U7UdooT8G6dYsON13MTiIg/TL+nJtxMSp6wFLtUi3k64aYHynkJkGIGD6HUlks
-         hAqw==
-X-Gm-Message-State: AOAM533yjv2oJiEPkxpOA6HNSA9Otp75ucoJZAcPnnEGVpJtDoTHTr7C
-        dG2GQWy1bDRfWoLL28Qlis5skIhCwguYQRF5wjLeOrNHgA==
-X-Google-Smtp-Source: ABdhPJy3XY7bjXjduHRyqC53qk4x/PQAAbWviHADReVR7WwIMtwSW8pdP45yCmrazcL0LEyjllFqlzaemAmyyAWps4U=
-X-Received: by 2002:a5b:e91:0:b0:65b:2bee:1a5f with SMTP id
- z17-20020a5b0e91000000b0065b2bee1a5fmr4505655ybr.74.1653691834841; Fri, 27
- May 2022 15:50:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <00000000000038779505d5d8b372@google.com> <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
- <CA+zEjCvu76yW7zfM+qJUe+t5y23oPdzR4KDV1mOdqH8bB4GmTw@mail.gmail.com>
- <CACT4Y+arufrRgwmN66wUU+_FGxMy-sTkjMQnRN8U2H2tQuhB7A@mail.gmail.com>
- <a0769218-c84a-a1d3-71e7-aefd40bf54fe@ghiti.fr> <CANp29Y4WMhsE_-VWvNbwq18+qvb1Qc-ES80h_j_G-N_hcAnRAw@mail.gmail.com>
- <CANp29Y4ujmz901aE9oiBDx9dYWHti4-Jw=6Ewtotm6ck6MN9FQ@mail.gmail.com>
- <CACT4Y+ZvStiHLYBOcPDoAJnk8hquXwm9BgjQTv=APwh7AvgEUQ@mail.gmail.com>
- <CANp29Y56Or0V1AG7rzBfV_ZTph2Crg4JKKHiuw1kcGFFxeWqiQ@mail.gmail.com>
- <CANp29Y5+MuhKAzVxzEDb_k9voXmKWrUFx8k4wnW5=2+5enVFVA@mail.gmail.com>
- <CA+zEjCtvaT0YsxxUgnEGM+V4b5sWuCAs3=3J+Xocf580uT3t1g@mail.gmail.com>
- <CA+zEjCs1FEUTcM+pgV+_MZnixSO5c2hexZFxGxuCQWc2ZMQiRg@mail.gmail.com>
- <CANp29Y4rDSjrfTOxcQqwh+Qm+ocR0v6Oxr7EkFxScf+24M1tNA@mail.gmail.com>
- <CA+zEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag@mail.gmail.com>
- <CACT4Y+Z=3MWEhVUH3mAH150XpOmhdjsGPOHoP1nvBcBwU_sphQ@mail.gmail.com>
- <5e702296-9ce0-f1e6-dae8-cc719bc040b9@ghiti.fr> <CAOnJCULgP_-D3cY2m39k9N912Q55FS7X9JcrRVoUt0GC92tx7w@mail.gmail.com>
- <CAOnJCUKBWx+wEKaq8WOPC1j7jgn38iWcrTh4gO+FzfF-mhPkQg@mail.gmail.com> <CA+zEjCuK7NitU_tdjBo+qmhkN_qmH=NCryffb466E7ebVq0GDw@mail.gmail.com>
-In-Reply-To: <CA+zEjCuK7NitU_tdjBo+qmhkN_qmH=NCryffb466E7ebVq0GDw@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 27 May 2022 15:50:23 -0700
-Message-ID: <CAOnJCUL5=y2QEdJbkR6NtrrwDjw7KALnw2JEqMmXPnKTqEavDQ@mail.gmail.com>
-Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Alexandre Ghiti <alex@ghiti.fr>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
+        Fri, 27 May 2022 18:51:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FA6122B42;
+        Fri, 27 May 2022 15:51:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1AE361976;
+        Fri, 27 May 2022 22:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1168DC385A9;
+        Fri, 27 May 2022 22:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653691910;
+        bh=kcrmwbVJgmeQpC7VwIkR0rPWbm7QoHlUYM7+KxMHgHQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sviv7ZOuXxq48ZDGWG709TP7cQu2vfO9hHSEyZ61ZaxuXmoX0q3d39mgNKcfKRE/X
+         7PkI8AtbpIJbcllaJjkcME/xOVPYzJpx0f6zkz5CmglCGBNllZv/pNY5edxiUM2kmE
+         Dpn6h1O3FJqm71w4GGmPJRRvcOoDHViQab54GbJt17duNgr4y2nfUX1/LMxWX6AJIe
+         K4Nf/9+8mXGNiiomjxo0wyXHFf+yCHlUhljpimUvsJIF01ZRcI2ymnwHD6E4Ks+MEl
+         TWF3V7qYMaQxCqWPxff6sTvC+mwRkux+6fXAc0oPwQKzFERGmNuuTHGNUIhVDkKMBT
+         hUh6OKw+QhpbQ==
+Date:   Fri, 27 May 2022 17:51:48 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH v1 06/11] PCI/PM: Write 0 to PMCSR in pci_power_up() in
+ all cases
+Message-ID: <20220527225148.GA511276@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iteW2K0c7pS+ar1K_iL9L3ujQx=-ZRdrZFzxvkMVZorA@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,328 +59,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 12:33 AM Alexandre Ghiti
-<alexandre.ghiti@canonical.com> wrote:
->
-> Hi Atish,
->
-> On Thu, May 26, 2022 at 11:02 AM Atish Patra <atishp@atishpatra.org> wrote:
+On Fri, May 27, 2022 at 08:52:17PM +0200, Rafael J. Wysocki wrote:
+> On Thu, May 26, 2022 at 9:46 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 > >
-> > On Thu, May 26, 2022 at 1:11 AM Atish Patra <atishp@atishpatra.org> wrote:
-> > >
-> > > On Mon, May 16, 2022 at 5:06 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
+> > On Thu, May 26, 2022 at 11:54:22AM -0500, Bjorn Helgaas wrote:
+> > > On Thu, May 05, 2022 at 08:10:43PM +0200, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > > > >
+> > > > Make pci_power_up() write 0 to the device's PCI_PM_CTRL register in
+> > > > order to put it into D0 regardless of the power state returned by
+> > > > the previous read from that register which should not matter.
 > > > >
-> > > > On 5/12/22 13:48, Dmitry Vyukov wrote:
-> > > > > On Fri, 18 Feb 2022 at 14:45, Alexandre Ghiti
-> > > > > <alexandre.ghiti@canonical.com> wrote:
-> > > > >> Hi Aleksandr,
-> > > > >>
-> > > > >> On Thu, Feb 17, 2022 at 6:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > >>> Hi Alex,
-> > > > >>>
-> > > > >>> On Thu, Feb 17, 2022 at 5:53 PM Alexandre Ghiti
-> > > > >>> <alexandre.ghiti@canonical.com> wrote:
-> > > > >>>> Aleksandr,
-> > > > >>>>
-> > > > >>>> On Wed, Feb 16, 2022 at 5:58 PM Alexandre Ghiti
-> > > > >>>> <alexandre.ghiti@canonical.com> wrote:
-> > > > >>>>> First, thank you for working on this.
-> > > > >>>>>
-> > > > >>>>> On Wed, Feb 16, 2022 at 5:17 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > >>>>>> If I use just defconfig + DEBUG_VIRTUAL, without any KASAN, it begins
-> > > > >>>>>> to boot, but overwhelms me with tons of `virt_to_phys used for
-> > > > >>>>>> non-linear address:` errors.
-> > > > >>>>>>
-> > > > >>>>>> Like that
-> > > > >>>>>>
-> > > > >>>>>> [    2.701271] virt_to_phys used for non-linear address:
-> > > > >>>>>> 00000000b59e31b6 (0xffffffff806c2000)
-> > > > >>>>>> [    2.701727] WARNING: CPU: 0 PID: 1 at arch/riscv/mm/physaddr.c:16
-> > > > >>>>>> __virt_to_phys+0x7e/0x86
-> > > > >>>>>> [    2.702207] Modules linked in:
-> > > > >>>>>> [    2.702393] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W
-> > > > >>>>>>    5.17.0-rc1 #1
-> > > > >>>>>> [    2.702806] Hardware name: riscv-virtio,qemu (DT)
-> > > > >>>>>> [    2.703051] epc : __virt_to_phys+0x7e/0x86
-> > > > >>>>>> [    2.703298]  ra : __virt_to_phys+0x7e/0x86
-> > > > >>>>>> [    2.703547] epc : ffffffff80008448 ra : ffffffff80008448 sp :
-> > > > >>>>>> ffff8f800021bde0
-> > > > >>>>>> [    2.703977]  gp : ffffffff80ed9b30 tp : ffffaf8001230000 t0 :
-> > > > >>>>>> ffffffff80eea56f
-> > > > >>>>>> [    2.704704]  t1 : ffffffff80eea560 t2 : 0000000000000000 s0 :
-> > > > >>>>>> ffff8f800021be00
-> > > > >>>>>> [    2.705153]  s1 : ffffffff806c2000 a0 : 000000000000004f a1 :
-> > > > >>>>>> ffffffff80e723d8
-> > > > >>>>>> [    2.705555]  a2 : 0000000000000010 a3 : fffffffffffffffe a4 :
-> > > > >>>>>> 0000000000000000
-> > > > >>>>>> [    2.706027]  a5 : 0000000000000000 a6 : 0000000000000005 a7 :
-> > > > >>>>>> ffffffffffffffff
-> > > > >>>>>> [    2.706474]  s2 : ffffffff80b80b08 s3 : 00000000000000c2 s4 :
-> > > > >>>>>> ffffffff806c2000
-> > > > >>>>>> [    2.706891]  s5 : ffffffff80edba10 s6 : ffffffff80edb960 s7 :
-> > > > >>>>>> 0000000000000001
-> > > > >>>>>> [    2.707290]  s8 : 00000000000000ff s9 : ffffffff80b80b40 s10:
-> > > > >>>>>> 00000000000000cc
-> > > > >>>>>> [    2.707689]  s11: ffffaf807e1fcf00 t3 : 0000000000000076 t4 :
-> > > > >>>>>> ffffffffffffffff
-> > > > >>>>>> [    2.708092]  t5 : 00000000000001f2 t6 : ffff8f800021bb48
-> > > > >>>>>> [    2.708433] status: 0000000000000120 badaddr: 0000000000000000
-> > > > >>>>>> cause: 0000000000000003
-> > > > >>>>>> [    2.708919] [<ffffffff8011416a>] free_reserved_area+0x72/0x19a
-> > > > >>>>>> [    2.709296] [<ffffffff80003a5a>] free_initmem+0x6c/0x7c
-> > > > >>>>>> [    2.709648] [<ffffffff805f60c8>] kernel_init+0x3a/0x10a
-> > > > >>>>>> [    2.709993] [<ffffffff80002fda>] ret_from_exception+0x0/0xc
-> > > > >>>>>> [    2.710310] ---[ end trace 0000000000000000 ]---
-> > > > >>>>>>
-> > > > >>>>> I was able to reproduce this: the first one regarding init_zero_pfn is
-> > > > >>>>> legit but not wrong, I have to check when it was introduced and how to
-> > > > >>>>> fix this.
-> > > > >>>>> Regarding the huge batch that follows, at first sight, I would say
-> > > > >>>>> this is linked to my sv48 patchset but that does not seem important as
-> > > > >>>>> the address is a kernel mapping address so the use of virt_to_phys is
-> > > > >>>>> right.
-> > > > >>>>>
-> > > > >>>>>> On Wed, Feb 16, 2022 at 5:09 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > >>>>>>> On Wed, Feb 16, 2022 at 12:56 PM Dmitry Vyukov <dvyukov@google.com> wrote:
-> > > > >>>>>>>> On Wed, 16 Feb 2022 at 12:47, Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > >>>>>>>>> On Wed, Feb 16, 2022 at 11:37 AM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > >>>>>>>>>> Hi Alex,
-> > > > >>>>>>>>>>
-> > > > >>>>>>>>>> On Wed, Feb 16, 2022 at 5:14 AM Alexandre Ghiti <alex@ghiti.fr> wrote:
-> > > > >>>>>>>>>>> Hi Dmitry,
-> > > > >>>>>>>>>>>
-> > > > >>>>>>>>>>> On 2/15/22 18:12, Dmitry Vyukov wrote:
-> > > > >>>>>>>>>>>> On Wed, 2 Feb 2022 at 14:18, Alexandre Ghiti
-> > > > >>>>>>>>>>>> <alexandre.ghiti@canonical.com> wrote:
-> > > > >>>>>>>>>>>>> Hi Aleksandr,
-> > > > >>>>>>>>>>>>>
-> > > > >>>>>>>>>>>>> On Wed, Feb 2, 2022 at 12:08 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> > > > >>>>>>>>>>>>>> Hello,
-> > > > >>>>>>>>>>>>>>
-> > > > >>>>>>>>>>>>>> syzbot has already not been able to fuzz its RISC-V instance for 97
-> > > > >>>>>>>>>>>>> That's a longtime, I'll take a look more regularly.
-> > > > >>>>>>>>>>>>>
-> > > > >>>>>>>>>>>>>> days now because the compiled kernel cannot boot. I bisected the issue
-> > > > >>>>>>>>>>>>>> to the following commit:
-> > > > >>>>>>>>>>>>>>
-> > > > >>>>>>>>>>>>>> commit 54c5639d8f507ebefa814f574cb6f763033a72a5
-> > > > >>>>>>>>>>>>>> Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> > > > >>>>>>>>>>>>>> Date:   Fri Oct 29 06:59:27 2021 +0200
-> > > > >>>>>>>>>>>>>>
-> > > > >>>>>>>>>>>>>>       riscv: Fix asan-stack clang build
-> > > > >>>>>>>>>>>>>>
-> > > > >>>>>>>>>>>>>> Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
-> > > > >>>>>>>>>>>>>> enabled. In the previous message syzbot mentions
-> > > > >>>>>>>>>>>>>> "riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
-> > > > >>>>>>>>>>>>>> Binutils for Debian) 2.35.2", but the issue also reproduces finely on
-> > > > >>>>>>>>>>>>>> a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
-> > > > >>>>>>>>>>>>>> 11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
-> > > > >>>>>>>>>>>>>> For convenience, I also duplicate the .config file from the bot's
-> > > > >>>>>>>>>>>>>> message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
-> > > > >>>>>>>>>>>>>>
-> > > > >>>>>>>>>>>>>> Can someone with KASAN and RISC-V expertise please take a look?
-> > > > >>>>>>>>>>>>> I'll take a look at that today.
-> > > > >>>>>>>>>>>>>
-> > > > >>>>>>>>>>>>> Thanks for reporting the issue,
-> > > > >>>>>>>>>>> I took a quick look, not enough to fix it but I know the issue comes
-> > > > >>>>>>>>>>> from the inline instrumentation, I have no problem with the outline
-> > > > >>>>>>>>>>> instrumentation. I need to find some cycles to work on this, my goal is
-> > > > >>>>>>>>>>> to fix this for 5.17.
-> > > > >>>>>>>>>> Thanks for the update!
-> > > > >>>>>>>>>>
-> > > > >>>>>>>>>> Can you please share the .config with which you tested the outline
-> > > > >>>>>>>>>> instrumentation?
-> > > > >>>>>>>>>> I updated the syzbot config to use KASAN_OUTLINE instead of KASAN_INLINE,
-> > > > >>>>>>>>>> but it still does not boot :(
-> > > > >>>>>>>>>>
-> > > > >>>>>>>>>> Here's what I used:
-> > > > >>>>>>>>>> https://gist.github.com/a-nogikh/279c85c2d24f47efcc3e865c08844138
-> > > > >>>>>>>>> Update: it doesn't boot with that big config, but boots if I generate
-> > > > >>>>>>>>> a simple one with KASAN_OUTLINE:
-> > > > >>>>>>>>>
-> > > > >>>>>>>>> make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > >>>>>>>>> ./scripts/config -e KASAN -e KASAN_OUTLINE
-> > > > >>>>>>>>> make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > >>>>>>>>>
-> > > > >>>>>>>>> And it indeed doesn't work if I use KASAN_INLINE.
-> > > > >>>>>>>> It may be an issue with code size. Full syzbot config + KASAN + KCOV
-> > > > >>>>>>>> produce hugely massive .text. It may be hitting some limitation in the
-> > > > >>>>>>>> bootloader/kernel bootstrap code.
-> > > > >>>>> I took a quick glance and it traps on a KASAN address that is not
-> > > > >>>>> mapped, either because it is too soon or because the mapping failed
-> > > > >>>>> somehow.
-> > > > >>>>>
-> > > > >>>>> I'll definitely dive into that tomorrow, sorry for being slow here and
-> > > > >>>>> thanks again for all your work, that helps a lot.
-> > > > >>>>>
-> > > > >>>>> Thanks,
-> > > > >>>>>
-> > > > >>>>> Alex
-> > > > >>>>>
-> > > > >>>>>>> I bisected the difference between the config we use on syzbot and the
-> > > > >>>>>>> simple one that was generated like I described above.
-> > > > >>>>>>> Turns out that it's the DEBUG_VIRTUAL config that makes the difference.
-> > > > >>>>>>>
-> > > > >>>>>>> make defconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > >>>>>>> ./scripts/config -e KASAN -e KASAN_OUTLINE -e DEBUG_VIRTUAL
-> > > > >>>>>>> make olddefconfig ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu-
-> > > > >>>>>>>
-> > > > >>>>>>> And the resulting kernel does not boot.
-> > > > >>>>>>> My env: the `riscv/fixes` branch, commit
-> > > > >>>>>>> 6df2a016c0c8a3d0933ef33dd192ea6606b115e3, qemu 6.2.0.
-> > > > >>>> I fixed a few things today: KASAN + SPARSE_VMEMMAP, DEBUG_VIRTUAL and
-> > > > >>>> maybe KASAN  + KCOV.
-> > > > >>>>
-> > > > >>>> With those small fixes, I was able to boot your large dotconfig with
-> > > > >>>> KASAN_OUTLINE, the inline version still fails, this is my next target
-> > > > >>>> :)
-> > > > >>>> I'll push that tomorrow!
-> > > > >>> Awesome, thank you very much!
-> > > > >>> Looking forward to finally seeing the instance run :)
-> > > > >> I sent a patchset which should fix your config with *outline* instrumentation.
-> > > > > Was this fix merged? The riscv instance still does not boot:
-> > > > > https://syzkaller.appspot.com/bug?id=5f2ff52ad42cba9f222202219baebd4e63e35127
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > ---
+> > > >  drivers/pci/pci.c |   11 +++--------
+> > > >  1 file changed, 3 insertions(+), 8 deletions(-)
 > > > >
+> > > > Index: linux-pm/drivers/pci/pci.c
+> > > > ===================================================================
+> > > > --- linux-pm.orig/drivers/pci/pci.c
+> > > > +++ linux-pm/drivers/pci/pci.c
+> > > > @@ -1230,15 +1230,10 @@ int pci_power_up(struct pci_dev *dev)
+> > > >     }
 > > > >
-> > > > Yes it has been in Linus tree since 5.18-rc1. I'll take a look at that
-> > > > this week.
-> > > >
+> > > >     /*
+> > > > -    * If we're (effectively) in D3, force entire word to 0. This doesn't
+> > > > -    * affect PME_Status, disables PME_En, and sets PowerState to 0.
+> > > > +    * Force the entire word to 0. This doesn't affect PME_Status, disables
+> > > > +    * PME_En, and sets PowerState to 0.
+> > > >      */
+> > > > -   if (state == PCI_D3hot)
+> > > > -           pmcsr = 0;
+> > > > -   else
+> > > > -           pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
+> > > > -
+> > > > -   pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
+> > > > +   pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, 0);
 > > >
-> > > Are you seeing this error or a different one ? I used the
-> > > syzkaller_defconfig from the patch below on v5.18.
+> > > Can you reassure me why this is safe and useful?
 > > >
-> > > https://lore.kernel.org/all/20220419174952.699-1-palmer@rivosinc.com/
+> > > This is a 16-bit write that includes (PCIe r6.0, sec 7.5.2.2):
 > > >
-> > > [   15.076116][    T1] Mandatory Access Control activated.
-> > > [   15.158241][    T1] AppArmor: AppArmor Filesystem Enabled
-> > > [   16.150870][    T1] NET: Registered PF_INET protocol family
-> > > [   16.166167][    T1] IP idents hash table entries: 32768 (order: 6,
-> > > 262144 bytes, linear)
-> > > [   16.188727][    T1] Unable to handle kernel paging request at
-> > > virtual address ffebfffeffff2000
-> > > [   16.192727][    T1] Oops [#1]
-> > > [   16.193479][    T1] Modules linked in:
-> > > [   16.194687][    T1] CPU: 3 PID: 1 Comm: swapper/0 Not tainted
-> > > 5.18.0-00001-g37ac279268bf-dirty #9
-> > > [   16.196486][    T1] Hardware name: riscv-virtio,qemu (DT)
-> > > [   16.197836][    T1] epc : kasan_check_range+0x9e/0x14e
-> > > [   16.199104][    T1]  ra : memset+0x1e/0x4c
-> > > [   16.200091][    T1] epc : ffffffff804787e0 ra : ffffffff80478f30 sp
-> > > : ff600000073ffb70
-> > > [   16.201420][    T1]  gp : ffffffff85879e80 tp : ff600000073f0000 t0
-> > > : 7300000000000000
-> > > [   16.202762][    T1]  t1 : ffebfffeffff21ff t2 : 73746e6564692050 s0
-> > > : ff600000073ffba0
-> > > [   16.204047][    T1]  s1 : 0000000000001000 a0 : ffebfffeffff2200 a1
-> > > : 0000000000001000
-> > > [   16.205312][    T1]  a2 : 0000000000000001 a3 : ffffffff803a4f32 a4
-> > > : ff5ffffffff90000
-> > > [   16.206592][    T1]  a5 : ffebfffeffff2000 a6 : 0000004000000000 a7
-> > > : ff5ffffffff90fff
-> > > [   16.207865][    T1]  s2 : ff5ffffffff90000 s3 : 0000000000000000 s4
-> > > : ffffffff8467ea90
-> > > [   16.209134][    T1]  s5 : 0000000000000000 s6 : ff5ffffffff90000 s7
-> > > : 0000000000000000
-> > > [   16.210394][    T1]  s8 : 0000000000001000 s9 : ffffffff8587ca40
-> > > s10: 0000000000000004
-> > > [   16.211952][    T1]  s11: ffffffff858a03a0 t3 : 0000000000000000 t4
-> > > : 0000000000000040
-> > > [   16.213469][    T1]  t5 : ffebfffeffff2200 t6 : ff600000073ff738
-> > > [   16.214853][    T1] status: 0000000200000120 badaddr:
-> > > ffebfffeffff2000 cause: 000000000000000d
-> > > [   16.216910][    T1] Call Trace:
-> > > [   16.217816][    T1] [<ffffffff803a4f32>] pcpu_alloc+0x844/0x1254
-> > > [   16.219110][    T1] [<ffffffff803a59a0>] __alloc_percpu+0x28/0x34
-> > > [   16.220244][    T1] [<ffffffff8328824a>] ip_rt_init+0x17e/0x382
-> > > [   16.221606][    T1] [<ffffffff8328861c>] ip_init+0x18/0x30
-> > > [   16.222719][    T1] [<ffffffff8328a0ee>] inet_init+0x2a6/0x550
-> > > [   16.223863][    T1] [<ffffffff80003204>] do_one_initcall+0x130/0x7dc
-> > > [   16.225002][    T1] [<ffffffff83201fbc>] kernel_init_freeable+0x510/0x5b4
-> > > [   16.226273][    T1] [<ffffffff8319842a>] kernel_init+0x28/0x21c
-> > > [   16.227337][    T1] [<ffffffff80005818>] ret_from_exception+0x0/0x10
-> > > [   16.229910][    T1] ---[ end trace 0000000000000000 ]---
-> > > [   16.231880][    T1] Kernel panic - not syncing: Fatal exception
+> > >   0x0003 PowerState     RW
+> > >   0x0004                RsvdP
+> > >   0x0008 No_Soft_Reset  RO
+> > >   0x00f0                RsvdP
+> > >   0x0100 PME_En         RW/RWS
+> > >   0x1e00 Data_Select    RW, VF ROZ
+> > >   0x6000 Data_Scale     RO, VF ROZ
+> > >   0x8000 PME_Status     RW1CS
 > > >
+> > > We intend to set PowerState to 0 (D0), apparently intend to clear
+> > > PME_En, and PME_Status is "write 1 to clear" to writing 0 does
+> > > nothing, so those look OK.
 > > >
+> > > But the RsvdP fields are reserved for future RW bits and should be
+> > > preserved, and it looks like clearing Data_Select could potentially
+> > > break the Data Register power consumption reporting (which I don't
+> > > think we support today).
+> > >
+> > > It seems like maybe we should do this instead:
+> > >
+> > >   pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL,
+> > >                         pmcsr & ~PCI_PM_CTRL_STATE_MASK)
+> > >
+> > > to just unconditionally clear PowerState?
 > >
-> > Enabling CONFIG_KASAN_VMALLOC=y solves the issue and I am able to boot
-> > to the userspace.
-> > I have tried enabling/disabling CONFIG_VMAP_STACK as well. Both works fine.
+> > Or I guess this, since we want to clear PME_En as well?
 > >
-> > Looking at the ARM64 Kconfig, KASAN_VMALLOC is enabled if KASAN is enabled.
-> > This diff seems to work for me.
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 00fd9c548f26..cbf0fe227c77 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -122,6 +122,7 @@ config RISCV
-> >         select TRACE_IRQFLAGS_SUPPORT
-> >         select UACCESS_MEMCPY if !MMU
-> >         select ZONE_DMA32 if 64BIT
-> > +       select KASAN_VMALLOC if KASAN
-> >
-> > I am not a kasan expert so I am not sure if this is the correct fix or
-> > just hides the real issue. pcpu_alloc seems to use vmalloc though.
->
-> When this type of thing happens, generally this is because of an error
-> in the kasan page table, I'll take a look this time, sorry I did not
-> do this before.
->
+> >   pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr &
+> >                         ~(PCI_PM_CTRL_STATE_MASK | PCI_PM_CTRL_PME_ENABLE));
+> 
+> Yes.
+> 
+> Also, this patch actually only makes a difference if the device is
+> going into D0 from D1 or D2, because we have always written 0 to the
+> PMCSR during transitions from D3hot.
+> 
+> It is inconsistent and confusing to do different things depending on
+> the initial power state here and the code is simpler when 0 is written
+> regardless.
 
-No worries. But the above diff is applicable anyways. Correct ?
+I agree that depending on the initial power state is confusing (it
+confused me :)).
 
-> Thanks for finding this,
->
-> Alex
->
-> >
-> > > > Thanks,
-> > > >
-> > > > Alex
-> > > >
-> > > >
-> > > > >
-> > > > >> However, as you'll see in the cover letter, I have an issue with
-> > > > >> another KASAN config and if you can take a look at the stacktrace and
-> > > > >> see if that rings a bell, that would be great.
-> > > > >>
-> > > > >> Don't hesitate next time to ping me when the riscv syzbot instance fails :)
-> > > > >>
-> > > > >> Alex
-> > > > >>
-> > > > >>
-> > > > >>> --
-> > > > >>> Best Regards,
-> > > > >>> Aleksandr
-> > > > >>>
-> > > > >>>> Thanks again,
-> > > > >>>>
-> > > > >>>> Alex
-> > > > >> --
-> > > > >> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> > > > >> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> > > > >> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/CA%2BzEjCtB0rTuNAJkrM2q3JQL7D-9fAXBo0Ud0w__gy9CAfo_Ag%40mail.gmail.com.
-> > > >
-> > > > _______________________________________________
-> > > > linux-riscv mailing list
-> > > > linux-riscv@lists.infradead.org
-> > > > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> > >
-> > >
-> > >
-> > > --
-> > > Regards,
-> > > Atish
-> >
-> >
-> >
-> > --
-> > Regards,
-> > Atish
+What would you think of replacing this patch with the one below?
 
 
+commit defde70748bc ("PCI/PM: Always put device in D0 and disable PME in pci_power_up()")
+Author: Bjorn Helgaas <bhelgaas@google.com>
+Date:   Fri May 27 17:45:07 2022 -0500
 
---
-Regards,
-Atish
+    PCI/PM: Always put device in D0 and disable PME in pci_power_up()
+    
+    Unconditionally put the device in PCI_D0 and disable PME generation in
+    pci_power_up(), regardless of the power state returned by the previous read
+    from PCI_PM_CTRL, which should not matter.
+    
+    Based-on-patch-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+    Link: https://lore.kernel.org/r/5748066.MhkbZ0Pkbq@kreacher
+    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index a5b93f85377a..8e42a9dc1944 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -1229,14 +1229,9 @@ int pci_power_up(struct pci_dev *dev)
+ 		goto end;
+ 	}
+ 
+-	/*
+-	 * If we're (effectively) in D3, force entire word to 0. This doesn't
+-	 * affect PME_Status, disables PME_En, and sets PowerState to 0.
+-	 */
+-	if (state == PCI_D3hot)
+-		pmcsr = 0;
+-	else
+-		pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
++	/* Set PowerState to 0 (PCI_D0) and disable PME generation */
++	pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
++	pmcsr &= ~PCI_PM_CTRL_PME_ENABLE;
+ 
+ 	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
+ 

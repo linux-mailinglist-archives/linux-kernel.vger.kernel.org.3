@@ -2,316 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4550536073
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E12753612F
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352737AbiE0Lut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S1352721AbiE0Lzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351894AbiE0Lrt (ORCPT
+        with ESMTP id S1352786AbiE0Luv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:47:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D7C414AC84
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653651793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cwtSE0b0Kap2XlkQ7keZo11av4qenVk73lRytgMZ82Q=;
-        b=WUv7wGLfTl2gBdmnyu6IHnkFP15FbKIw1p6sytzcdaE9iJVK0qUqHyrwLvoQ+nr0M/srUz
-        YZs2dNahBmeuHcvf5PfKU36yk6vlgQQWUtrg2PeeUDcFDs6nmOeZKXK95hXJjhEcRX4gPv
-        KNqxj2wDtixjAwImIVaaPnNWlZ3oNVg=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-182-GQIvWwN0OX-_hA9quNDGCw-1; Fri, 27 May 2022 07:43:12 -0400
-X-MC-Unique: GQIvWwN0OX-_hA9quNDGCw-1
-Received: by mail-ej1-f69.google.com with SMTP id i7-20020a170906850700b006fec53a78c3so2325075ejx.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:43:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=cwtSE0b0Kap2XlkQ7keZo11av4qenVk73lRytgMZ82Q=;
-        b=DpudMdZiTGXDeR9FSGUSQMnMTRRO8JH160TowicmuaZorLgNRn5ZvX+wtBu3Ch+eZB
-         dhD3+QTEjxJeY2kkOLBFS8z8SSPjfSadc15ETFGqFQ+SGu7D1xA7Af2dqm5tn+Yubgq6
-         RAyybJTP+OoFNkuOuQrZnby2+IIUZSw07g0V39jmbomlOA+dwKlMewA8hAEtd6UbYLSO
-         o1WiFNlIIrkQ/1/mY5/lDZOv4SJSttd9PdiwCjGupNkfbFLfd6eb2MbeWrYCbk2eypUj
-         x8HZG7MmakEWfTqNv56IsGYBnH7VobMPrC1m0vIi2+hWk6BcMxK0hujawQPKqNQlYnA+
-         aGvQ==
-X-Gm-Message-State: AOAM530txhRAIlbszcSLylCJRRbQyNvDW3G+JZVGlwO7sNxCAKtMVFsX
-        MWj4RKMWlpb9v1qiUPsBSBGtxfgIY/V52s+29xuFt6W8g4WfnIBo3QIU4B691rjfCJDdwXKnJb9
-        OBLtQ82Us6ytqgk94ZAfXZPbI234yLbx6RK6iUVVEzTrjoyCPSqYtxSvmRZZ9igfQnk0mvatGrs
-        kk
-X-Received: by 2002:a17:906:7217:b0:6fe:9448:6142 with SMTP id m23-20020a170906721700b006fe94486142mr37290936ejk.241.1653651790940;
-        Fri, 27 May 2022 04:43:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyTxyZvA1ixqnVSaX2I+ibcHZfYsvQCjJQOryDC4sHU4QD8REMvk4JBt16Gg4/MiScG2dgpvw==
-X-Received: by 2002:a17:906:7217:b0:6fe:9448:6142 with SMTP id m23-20020a170906721700b006fe94486142mr37290901ejk.241.1653651790624;
-        Fri, 27 May 2022 04:43:10 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id bq8-20020a170906d0c800b006feb71acbb3sm1386134ejb.105.2022.05.27.04.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 04:43:10 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 05/37] KVM: x86: hyper-v: Handle
- HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
-In-Reply-To: <20220527083930.okdenkvxephom5wq@yy-desk-7060>
-References: <20220525090133.1264239-1-vkuznets@redhat.com>
- <20220525090133.1264239-6-vkuznets@redhat.com>
- <20220527083930.okdenkvxephom5wq@yy-desk-7060>
-Date:   Fri, 27 May 2022 13:43:09 +0200
-Message-ID: <87ilprqjzm.fsf@redhat.com>
+        Fri, 27 May 2022 07:50:51 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0409132741
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653651918; x=1685187918;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Ku6DON7XdpvGJoLwbB79r2uuBcp/VCl2MGDwRymTj14=;
+  b=PolJLCZ1nCig/j3RiufAnZVDVWDZsUqhfCZsS9HP/PvmfbGJSjthLVwB
+   U3ro7FxLihJl/7N+2f9Hk7C0UECiL4FHpBt3/6N+Y5DRla3/4QkJHPccm
+   +O3336KQw+YZWhKpmF/MSjH06FZxEqFUYMbYOb+1dCGQHp8PuyiayJedi
+   BhGrtqB5YmenkgihGnUbWNRCz/jSV6Nicu3oiwgzM9dQn0mNMcLQ2mzbi
+   mJj9SKqMkxwfT+n4UHLsOjOF2hMyvpxAV1bspWgxF5kpw8fZoEDrYQe0i
+   X2+dYH3z8nMpXMy3va7Q0xZiftU1dFANdFJnw+7wDVPKGKc/fgoFyQ48H
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274186151"
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="274186151"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 04:45:18 -0700
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="603835273"
+Received: from jtongex-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.35.135])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 04:45:14 -0700
+Message-ID: <dcd9a112fd5761d9cd2c741e52e7ecb3cf06a66e.camel@intel.com>
+Subject: Re: [PATCH v7 1/5] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 27 May 2022 23:45:12 +1200
+In-Reply-To: <20220524040517.703581-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220524040517.703581-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220524040517.703581-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yuan Yao <yuan.yao@linux.intel.com> writes:
+On Mon, 2022-05-23 at 21:05 -0700, Kuppuswamy Sathyanarayanan wrote:
+> In TDX guest, attestation is used to verify the trustworthiness of a TD
+> to other entities before provisioning secrets to the TD.
+> 
+> One usage example is, when a TD guest uses encrypted drive and if the
+> decryption keys required to access the drive are stored in a secure 3rd
+> party keyserver, the key server can use attestation to verify TD's
+> trustworthiness and release the decryption keys to the TD.
+> 
+> The attestation process consists of two steps: TDREPORT generation and
+> Quote generation.
+> 
+> TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
+> the TDX module which contains TD-specific information (such as TD
+> measurements), platform security version, and the MAC to protect the
+> integrity of the TDREPORT. The TD kernel uses TDCALL[TDG.MR.REPORT] to
+> get the TDREPORT from the TDX module. A user-provided 64-Byte
+> REPORTDATA is used as input and included in the TDREPORT. Typically it
+> can be some nonce provided by attestation service so the TDREPORT can
+> be verified uniquely. More details about TDREPORT can be found in
+> Intel TDX Module specification, section titled "TDG.MR.REPORT Leaf".
+> 
+> TDREPORT can only be verified on local platform as the MAC key is bound
+> to the platform. To support remote verification of the TDREPORT, TDX
+> leverages Intel SGX Quote Enclave (QE) to verify the TDREPORT locally
+> and convert it to a remote verifiable Quote.
+> 
+> After getting the TDREPORT, the second step of the attestation process
+> is to send it to the QE to generate the Quote. TDX doesn't support SGX
+> inside the TD, so the QE can be deployed in the host, or in another
+> legacy VM with SGX support. How to send the TDREPORT to QE and receive
+> the Quote is implementation and deployment specific.
+> 
+> Implement a basic attestation driver to allow TD userspace to get the
+> TDREPORT. The TD userspace attestation software can get the TDREPORT
+> and then choose whatever communication channel available (i.e. vsock)
+> to send the TDREPORT to QE and receive the Quote.
+> 
+> Also note that explicit access permissions are not enforced in this
+> driver because the quote and measurements are not a secret. However
+> the access permissions of the device node can be used to set any
+> desired access policy. The udev default is usually root access
+> only.
+> 
+> Operations like getting TDREPORT or Quote generation involves sending
+> a blob of data as input and getting another blob of data as output. It
+> was considered to use a sysfs interface for this, but it doesn't fit
+> well into the standard sysfs model for configuring values. It would be
+> possible to do read/write on files, but it would need multiple file
+> descriptors, which would be somewhat messy. IOCTLs seems to be the best
+> fitting and simplest model for this use case. Also, the REPORTDATA used
+> in TDREPORT generation can possibly come from attestation service to
+> uniquely verify the Quote (like per instance verification). In such
+> case, since REPORTDATA is a secret, using sysfs to share it is insecure
+> compared to sending it via IOCTL.
 
-> On Wed, May 25, 2022 at 11:01:01AM +0200, Vitaly Kuznetsov wrote:
->> Currently, HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls are handled
->> the exact same way as HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE{,EX}: by
->> flushing the whole VPID and this is sub-optimal. Switch to handling
->> these requests with 'flush_tlb_gva()' hooks instead. Use the newly
->> introduced TLB flush fifo to queue the requests.
->>
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  arch/x86/kvm/hyperv.c | 102 +++++++++++++++++++++++++++++++++++++-----
->>  1 file changed, 90 insertions(+), 12 deletions(-)
->>
->> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
->> index 762b0b699fdf..576749973727 100644
->> --- a/arch/x86/kvm/hyperv.c
->> +++ b/arch/x86/kvm/hyperv.c
->> @@ -1806,32 +1806,84 @@ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
->>  				  sparse_banks, consumed_xmm_halves, offset);
->>  }
->>
->> -static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu)
->> +static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[],
->> +					int consumed_xmm_halves, gpa_t offset)
->> +{
->> +	return kvm_hv_get_hc_data(kvm, hc, hc->rep_cnt, hc->rep_cnt,
->> +				  entries, consumed_xmm_halves, offset);
->> +}
->> +
->> +static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu, u64 *entries, int count)
->>  {
->>  	struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
->>  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
->>  	u64 entry = KVM_HV_TLB_FLUSHALL_ENTRY;
->> +	unsigned long flags;
->>
->>  	if (!hv_vcpu)
->>  		return;
->>
->>  	tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
->>
->> -	kfifo_in_spinlocked(&tlb_flush_fifo->entries, &entry, 1, &tlb_flush_fifo->write_lock);
->> +	spin_lock_irqsave(&tlb_flush_fifo->write_lock, flags);
->> +
->> +	/*
->> +	 * All entries should fit on the fifo leaving one free for 'flush all'
->> +	 * entry in case another request comes in. In case there's not enough
->> +	 * space, just put 'flush all' entry there.
->> +	 */
->> +	if (count && entries && count < kfifo_avail(&tlb_flush_fifo->entries)) {
->> +		WARN_ON(kfifo_in(&tlb_flush_fifo->entries, entries, count) != count);
->> +		goto out_unlock;
->> +	}
->> +
->> +	/*
->> +	 * Note: full fifo always contains 'flush all' entry, no need to check the
->> +	 * return value.
->> +	 */
->> +	kfifo_in(&tlb_flush_fifo->entries, &entry, 1);
->> +
->> +out_unlock:
->> +	spin_unlock_irqrestore(&tlb_flush_fifo->write_lock, flags);
->>  }
->>
->>  void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
->
-> Where's the caller to this kvm_hv_vcpu_flush_tlb() ?
-> I didn't see th caller in patch 1-22 and remains are
-> self-testing patches, any thing I missed ?
+Acked-by: Kai Huang <kai.huang@intel.com>
 
-No, I screwed up. It was present in
-kvm_service_local_tlb_flush_requests() in previous versions but somehow
-disappeared. This also means that I haven't tested this properly.
-
-Thanks for catching this! v5 is coming to rescue!
-
-
->
->>  {
->>  	struct kvm_vcpu_hv_tlb_flush_fifo *tlb_flush_fifo;
->>  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
->> +	u64 entries[KVM_HV_TLB_FLUSH_FIFO_SIZE];
->> +	int i, j, count;
->> +	gva_t gva;
->>
->> -	kvm_vcpu_flush_tlb_guest(vcpu);
->> -
->> -	if (!hv_vcpu)
->> +	if (!tdp_enabled || !hv_vcpu) {
->> +		kvm_vcpu_flush_tlb_guest(vcpu);
->>  		return;
->> +	}
->>
->>  	tlb_flush_fifo = &hv_vcpu->tlb_flush_fifo;
->>
->> +	count = kfifo_out(&tlb_flush_fifo->entries, entries, KVM_HV_TLB_FLUSH_FIFO_SIZE);
->> +
->> +	for (i = 0; i < count; i++) {
->> +		if (entries[i] == KVM_HV_TLB_FLUSHALL_ENTRY)
->> +			goto out_flush_all;
->> +
->> +		/*
->> +		 * Lower 12 bits of 'address' encode the number of additional
->> +		 * pages to flush.
->> +		 */
->> +		gva = entries[i] & PAGE_MASK;
->> +		for (j = 0; j < (entries[i] & ~PAGE_MASK) + 1; j++)
->> +			static_call(kvm_x86_flush_tlb_gva)(vcpu, gva + j * PAGE_SIZE);
->> +
->> +		++vcpu->stat.tlb_flush;
->> +	}
->> +	goto out_empty_ring;
->> +
->> +out_flush_all:
->> +	kvm_vcpu_flush_tlb_guest(vcpu);
->> +
->> +out_empty_ring:
->>  	kfifo_reset_out(&tlb_flush_fifo->entries);
->>  }
->>
->> @@ -1841,11 +1893,21 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  	struct hv_tlb_flush_ex flush_ex;
->>  	struct hv_tlb_flush flush;
->>  	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
->> +	/*
->> +	 * Normally, there can be no more than 'KVM_HV_TLB_FLUSH_FIFO_SIZE'
->> +	 * entries on the TLB flush fifo. The last entry, however, needs to be
->> +	 * always left free for 'flush all' entry which gets placed when
->> +	 * there is not enough space to put all the requested entries.
->> +	 */
->> +	u64 __tlb_flush_entries[KVM_HV_TLB_FLUSH_FIFO_SIZE - 1];
->> +	u64 *tlb_flush_entries;
->>  	u64 valid_bank_mask;
->>  	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
->>  	struct kvm_vcpu *v;
->>  	unsigned long i;
->>  	bool all_cpus;
->> +	int consumed_xmm_halves = 0;
->> +	gpa_t data_offset;
->>
->>  	/*
->>  	 * The Hyper-V TLFS doesn't allow more than 64 sparse banks, e.g. the
->> @@ -1861,10 +1923,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  			flush.address_space = hc->ingpa;
->>  			flush.flags = hc->outgpa;
->>  			flush.processor_mask = sse128_lo(hc->xmm[0]);
->> +			consumed_xmm_halves = 1;
->>  		} else {
->>  			if (unlikely(kvm_read_guest(kvm, hc->ingpa,
->>  						    &flush, sizeof(flush))))
->>  				return HV_STATUS_INVALID_HYPERCALL_INPUT;
->> +			data_offset = sizeof(flush);
->>  		}
->>
->>  		trace_kvm_hv_flush_tlb(flush.processor_mask,
->> @@ -1888,10 +1952,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  			flush_ex.flags = hc->outgpa;
->>  			memcpy(&flush_ex.hv_vp_set,
->>  			       &hc->xmm[0], sizeof(hc->xmm[0]));
->> +			consumed_xmm_halves = 2;
->>  		} else {
->>  			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &flush_ex,
->>  						    sizeof(flush_ex))))
->>  				return HV_STATUS_INVALID_HYPERCALL_INPUT;
->> +			data_offset = sizeof(flush_ex);
->>  		}
->>
->>  		trace_kvm_hv_flush_tlb_ex(flush_ex.hv_vp_set.valid_bank_mask,
->> @@ -1907,25 +1973,37 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->>
->>  		if (all_cpus)
->> -			goto do_flush;
->> +			goto read_flush_entries;
->>
->>  		if (!hc->var_cnt)
->>  			goto ret_success;
->>
->> -		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 2,
->> -					  offsetof(struct hv_tlb_flush_ex,
->> -						   hv_vp_set.bank_contents)))
->> +		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, consumed_xmm_halves,
->> +					  data_offset))
->> +			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->> +		data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
->> +		consumed_xmm_halves += hc->var_cnt;
->> +	}
->> +
->> +read_flush_entries:
->> +	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
->> +	    hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX ||
->> +	    hc->rep_cnt > ARRAY_SIZE(__tlb_flush_entries)) {
->> +		tlb_flush_entries = NULL;
->> +	} else {
->> +		if (kvm_hv_get_tlb_flush_entries(kvm, hc, __tlb_flush_entries,
->> +						consumed_xmm_halves, data_offset))
->>  			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->> +		tlb_flush_entries = __tlb_flush_entries;
->>  	}
->>
->> -do_flush:
->>  	/*
->>  	 * vcpu->arch.cr3 may not be up-to-date for running vCPUs so we can't
->>  	 * analyze it here, flush TLB regardless of the specified address space.
->>  	 */
->>  	if (all_cpus) {
->>  		kvm_for_each_vcpu(i, v, kvm)
->> -			hv_tlb_flush_enqueue(v);
->> +			hv_tlb_flush_enqueue(v, tlb_flush_entries, hc->rep_cnt);
->>
->>  		kvm_make_all_cpus_request(kvm, KVM_REQ_HV_TLB_FLUSH);
->>  	} else {
->> @@ -1935,7 +2013,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->>  			v = kvm_get_vcpu(kvm, i);
->>  			if (!v)
->>  				continue;
->> -			hv_tlb_flush_enqueue(v);
->> +			hv_tlb_flush_enqueue(v, tlb_flush_entries, hc->rep_cnt);
->>  		}
->>
->>  		kvm_make_vcpus_request_mask(kvm, KVM_REQ_HV_TLB_FLUSH, vcpu_mask);
->> --
->> 2.35.3
->>
->
-
--- 
-Vitaly
+> 
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
+>  arch/x86/coco/tdx/Makefile      |   2 +-
+>  arch/x86/coco/tdx/attest.c      | 118 ++++++++++++++++++++++++++++++++
+>  arch/x86/include/uapi/asm/tdx.h |  42 ++++++++++++
+>  3 files changed, 161 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/x86/coco/tdx/attest.c
+>  create mode 100644 arch/x86/include/uapi/asm/tdx.h
+> 
+> diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
+> index 46c55998557d..d2db3e6770e5 100644
+> --- a/arch/x86/coco/tdx/Makefile
+> +++ b/arch/x86/coco/tdx/Makefile
+> @@ -1,3 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -obj-y += tdx.o tdcall.o
+> +obj-y += tdx.o tdcall.o attest.o
+> diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
+> new file mode 100644
+> index 000000000000..24db0bad4923
+> --- /dev/null
+> +++ b/arch/x86/coco/tdx/attest.c
+> @@ -0,0 +1,118 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * attest.c - TDX guest attestation interface driver.
+> + *
+> + * Implements user interface to trigger attestation process.
+> + *
+> + * Copyright (C) 2022 Intel Corporation
+> + *
+> + */
+> +
+> +#define pr_fmt(fmt) "x86/tdx: attest: " fmt
+> +
+> +#include <linux/miscdevice.h>
+> +#include <linux/mm.h>
+> +#include <linux/io.h>
+> +#include <asm/tdx.h>
+> +#include <uapi/asm/tdx.h>
+> +
+> +#define DRIVER_NAME "tdx-attest"
+> +
+> +/* TDREPORT module call leaf ID */
+> +#define TDX_GET_REPORT			4
+> +
+> +static struct miscdevice miscdev;
+> +
+> +static long tdx_get_report(void __user *argp)
+> +{
+> +	void *reportdata = NULL, *tdreport = NULL;
+> +	long ret;
+> +
+> +	/* Allocate buffer space for REPORTDATA */
+> +	reportdata = kmalloc(TDX_REPORTDATA_LEN, GFP_KERNEL);
+> +	if (!reportdata)
+> +		return -ENOMEM;
+> +
+> +	/* Allocate buffer space for TDREPORT */
+> +	tdreport = kmalloc(TDX_REPORT_LEN, GFP_KERNEL);
+> +	if (!tdreport) {
+> +		ret = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	/* Copy REPORTDATA from the user buffer */
+> +	if (copy_from_user(reportdata, argp, TDX_REPORTDATA_LEN)) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
+> +	 *
+> +	 * Get the TDREPORT using REPORTDATA as input. Refer to
+> +	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
+> +	 * Specification for detailed information.
+> +	 */
+> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
+> +				virt_to_phys(reportdata), 0, 0, NULL);
+> +	if (ret) {
+> +		pr_debug("TDREPORT TDCALL failed, status:%lx\n", ret);
+> +		ret = -EIO;
+> +		goto out;
+> +	}
+> +
+> +	/* Copy TDREPORT back to the user buffer */
+> +	if (copy_to_user(argp, tdreport, TDX_REPORT_LEN))
+> +		ret = -EFAULT;
+> +
+> +out:
+> +	kfree(reportdata);
+> +	kfree(tdreport);
+> +	return ret;
+> +}
+> +
+> +static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
+> +			     unsigned long arg)
+> +{
+> +	void __user *argp = (void __user *)arg;
+> +	long ret = -EINVAL;
+> +
+> +	switch (cmd) {
+> +	case TDX_CMD_GET_REPORT:
+> +		ret = tdx_get_report(argp);
+> +		break;
+> +	default:
+> +		pr_debug("cmd %d not supported\n", cmd);
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct file_operations tdx_attest_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.unlocked_ioctl	= tdx_attest_ioctl,
+> +	.llseek		= no_llseek,
+> +};
+> +
+> +static int __init tdx_attestation_init(void)
+> +{
+> +	int ret;
+> +
+> +	/* Make sure we are in a valid TDX platform */
+> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+> +		return -EIO;
+> +
+> +	miscdev.name = DRIVER_NAME;
+> +	miscdev.minor = MISC_DYNAMIC_MINOR;
+> +	miscdev.fops = &tdx_attest_fops;
+> +
+> +	ret = misc_register(&miscdev);
+> +	if (ret) {
+> +		pr_err("misc device registration failed\n");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +device_initcall(tdx_attestation_init)
+> diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
+> new file mode 100644
+> index 000000000000..8b57dea67eab
+> --- /dev/null
+> +++ b/arch/x86/include/uapi/asm/tdx.h
+> @@ -0,0 +1,42 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _UAPI_ASM_X86_TDX_H
+> +#define _UAPI_ASM_X86_TDX_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/ioctl.h>
+> +
+> +/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
+> +#define TDX_REPORTDATA_LEN		64
+> +
+> +/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
+> +#define TDX_REPORT_LEN			1024
+> +
+> +/**
+> + * struct tdx_report_req: Get TDREPORT using REPORTDATA as input.
+> + *
+> + * @reportdata : User-defined 64-Byte REPORTDATA to be included into
+> + *		 TDREPORT. Typically it can be some nonce provided by
+> + *		 attestation service, so the generated TDREPORT can be
+> + *		 uniquely verified.
+> + * @tdreport   : TDREPORT output from TDCALL[TDG.MR.REPORT] of size
+> + *		 TDX_REPORT_LEN.
+> + *
+> + * Used in TDX_CMD_GET_REPORT IOCTL request.
+> + */
+> +struct tdx_report_req {
+> +	union {
+> +		__u8 reportdata[TDX_REPORTDATA_LEN];
+> +		__u8 tdreport[TDX_REPORT_LEN];
+> +	};
+> +};
+> +
+> +/*
+> + * TDX_CMD_GET_REPORT - Get TDREPORT using TDCALL[TDG.MR.REPORT]
+> + *
+> + * Return 0 on success, -EIO on TDCALL execution failure, and
+> + * standard errno on other general error cases.
+> + *
+> + */
+> +#define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, struct tdx_report_req)
+> +
+> +#endif /* _UAPI_ASM_X86_TDX_H */
 

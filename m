@@ -2,145 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21562536406
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 16:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF5E53640C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 16:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235282AbiE0OYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 10:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S1353216AbiE0O2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 10:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235867AbiE0OYK (ORCPT
+        with ESMTP id S235867AbiE0O2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 10:24:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E615C1207E4;
-        Fri, 27 May 2022 07:24:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653661449; x=1685197449;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8EpuGnusmRkbVa3/ggOWrpg5luflE/dlqIUDi652zT4=;
-  b=LQvWsZtuLPjcvRpFj3BPgWw2/cmVdWKJy/SQqWGpWi3jLlrpinOzXNzC
-   Gvl8pwkHv8noz+d/+ME3aBextokGjzIVdD1eS6PY8XQW4LEp02+KN5RYV
-   uIGzh0QtzG9XjywzU1K3Ob9z7bViAXOh/N4ertSKqx1pCnr5/EZwNZbkG
-   fVF4xd07OagOioefHI7rPtkVDlFtA0e+G4ftFP4bAZ7NBwQSmX/XUtKf4
-   oJCxrx3FfV40TXaeotFgiJx1ND/qS1NjJGQxZl39JN4lkrAtwOpVhA+Zx
-   XU7/NdhEbpys8m9beGf3n1AqzPaexpy1QBNy5ks5XWBjhJFcihxuzmg4k
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="360878303"
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="360878303"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 07:24:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
-   d="scan'208";a="574857026"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 27 May 2022 07:24:06 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuasn-0004qu-Bg;
-        Fri, 27 May 2022 14:24:05 +0000
-Date:   Fri, 27 May 2022 22:23:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhang Yuchen <zhangyuchen.lcr@bytedance.com>,
-        akpm@linux-foundation.org, david@redhat.com, mingo@redhat.com,
-        ast@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-api@vger.kernel.org, fam.zheng@bytedance.com,
-        Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
-Subject: Re: [PATCH] procfs: add syscall statistics
-Message-ID: <202205272216.w7dE4biW-lkp@intel.com>
-References: <20220527110959.54559-1-zhangyuchen.lcr@bytedance.com>
+        Fri, 27 May 2022 10:28:09 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9277123886
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 07:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=7341L4ChNBrKLI/4kTfzKe7cMWslrU4u2g9ALhgh9pU=;
+        t=1653661687; x=1654871287; b=I39K8qkDcTowR/EVjWM+p5pCYCrxFMXySDyATwRbWiojCrK
+        Ni/f/bICOSHPq40e8Oi1yOuf6s6T41H0QyM5bAhqS9THQLPOXfZONY0dRqU7cBvhDRWCkb3H60Xuq
+        M0mATYvu0tCFsRVyKDClDmuYvcdcYbJQKPL5hUWT6sykalL2sJeHE3Qn1lFVvfQ+n9oxEVd+BjYNF
+        yOkvxl7SqbH+TdeIKsz45W3KEiLoVpMgqVImDncBMhaBGDmQi3vKoyAgPDLFvZ+apQbTSXZhF4p9P
+        UY4+gKJuE1MLU8w2xHM8Z+9i7kYJfrfu4R8kCn03/S/fQ7+/76Sw3azIf23hNXbw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nuawW-0064cA-MV;
+        Fri, 27 May 2022 16:27:56 +0200
+Message-ID: <5eef2f1b43c25447ccca2f50f4964fd77a719b08.camel@sipsolutions.net>
+Subject: Re: [RFC PATCH v3] UML: add support for KASAN under x86_64
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 27 May 2022 16:27:55 +0200
+In-Reply-To: <CACT4Y+aH7LqDUqAyQ7+hkyeZTtkYnMHia73M7=EeAzMYzJ8pQg@mail.gmail.com>
+References: <20220525111756.GA15955@axis.com>
+         <20220526010111.755166-1-davidgow@google.com>
+         <e2339dcea553f9121f2d3aad29f7428c2060f25f.camel@sipsolutions.net>
+         <CACT4Y+ZVrx9VudKV5enB0=iMCBCEVzhCAu_pmxBcygBZP_yxfg@mail.gmail.com>
+         <6fa1ebe49b8d574fb1c82aefeeb54439d9c98750.camel@sipsolutions.net>
+         <CACT4Y+bhBMDn80u=W8VBbn4uZg1oD8zsE3RJJC-YJRS2i8Q2oA@mail.gmail.com>
+         <134957369d2e0abf51f03817f1e4de7cbf21f76e.camel@sipsolutions.net>
+         <CACT4Y+aH7LqDUqAyQ7+hkyeZTtkYnMHia73M7=EeAzMYzJ8pQg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527110959.54559-1-zhangyuchen.lcr@bytedance.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhang,
+On Fri, 2022-05-27 at 15:52 +0200, Dmitry Vyukov wrote:
+> On Fri, 27 May 2022 at 15:27, Johannes Berg <johannes@sipsolutions.net> w=
+rote:
+> >=20
+> > On Fri, 2022-05-27 at 15:18 +0200, Dmitry Vyukov wrote:
+> > > On Fri, 27 May 2022 at 15:15, Johannes Berg <johannes@sipsolutions.ne=
+t> wrote:
+> > > >=20
+> > > > On Fri, 2022-05-27 at 15:09 +0200, Dmitry Vyukov wrote:
+> > > > > > I did note (this is more for kasan-dev@) that the "freed by" is=
+ fairly
+> > > > > > much useless when using kfree_rcu(), it might be worthwhile to =
+annotate
+> > > > > > that somehow, so the stack trace is recorded by kfree_rcu() alr=
+eady,
+> > > > > > rather than just showing the RCU callback used for that.
+[...]
+> Humm... I don't have any explanation based only on this info.
+> Generally call_rcu stacks are memorized and I see the call is still there=
+:
+> https://elixir.bootlin.com/linux/v5.18/source/kernel/rcu/tree.c#L3595
 
-Thank you for the patch! Perhaps something to improve:
+Oh, that's simple then, UML is !SMP && !PREEMPT so it gets TINY_RCU
+instead of TREE_RCU.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on next-20220527]
-[cannot apply to akpm-mm/mm-everything arm64/for-next/core s390/features tip/x86/core v5.18]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Unfortunately, it's not entirely trivial to fix, something like this,
+mostly because of header maze (cannot include kasan.h in rcutiny.h):
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Yuchen/procfs-add-syscall-statistics/20220527-191241
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 7e284070abe53d448517b80493863595af4ab5f0
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220527/202205272216.w7dE4biW-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/979bf5b1b085588caab1cbdce55e40e823c12db9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhang-Yuchen/procfs-add-syscall-statistics/20220527-191241
-        git checkout 979bf5b1b085588caab1cbdce55e40e823c12db9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/proc/
+diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
+index 5fed476f977f..d84e13f2c384 100644
+--- a/include/linux/rcutiny.h
++++ b/include/linux/rcutiny.h
+@@ -38,7 +38,7 @@ static inline void synchronize_rcu_expedited(void)
+  */
+ extern void kvfree(const void *addr);
+=20
+-static inline void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t f=
+unc)
++static inline void __kvfree_call_rcu(struct rcu_head *head, rcu_callback_t=
+ func)
+ {
+ 	if (head) {
+ 		call_rcu(head, func);
+@@ -51,6 +51,15 @@ static inline void kvfree_call_rcu(struct rcu_head *head=
+, rcu_callback_t func)
+ 	kvfree((void *) func);
+ }
+=20
++#ifdef CONFIG_KASAN_GENERIC
++void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func);
++#else
++static inline void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t f=
+unc)
++{
++	__kvfree_call_rcu(head, func);
++}
++#endif
++
+ void rcu_qs(void);
+=20
+ static inline void rcu_softirq_qs(void)
+diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+index 340b3f8b090d..aa235f0332ba 100644
+--- a/kernel/rcu/tiny.c
++++ b/kernel/rcu/tiny.c
+@@ -217,6 +217,18 @@ bool poll_state_synchronize_rcu(unsigned long oldstate=
+)
+ }
+ EXPORT_SYMBOL_GPL(poll_state_synchronize_rcu);
+=20
++void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
++{
++	if (head) {
++		void *ptr =3D (void *) head - (unsigned long) func;
++
++		kasan_record_aux_stack_noalloc(ptr);
++	}
++
++	__kvfree_call_rcu(head, func);
++}
++EXPORT_SYMBOL_GPL(kvfree_call_rcu);
++
+ void __init rcu_init(void)
+ {
+ 	open_softirq(RCU_SOFTIRQ, rcu_process_callbacks);
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/proc/syscall.c:13:5: warning: no previous prototype for 'show_syscalls' [-Wmissing-prototypes]
-      13 | int show_syscalls(struct seq_file *p, void *v)
-         |     ^~~~~~~~~~~~~
 
 
-vim +/show_syscalls +13 fs/proc/syscall.c
 
-    12	
-  > 13	int show_syscalls(struct seq_file *p, void *v)
-    14	{
-    15		int i = *(loff_t *)v, j;
-    16		static int prec;
-    17		const char *syscall_name = get_syscall_name(i);
-    18	
-    19		if (i > NR_syscalls)
-    20			return 0;
-    21	
-    22		/* print header and calculate the width of the first column */
-    23		if (i == 0) {
-    24			for (prec = 3, j = 1000; prec < 10 && j <= NR_syscalls; ++prec)
-    25				j *= 10;
-    26			seq_printf(p, "%*s", prec + 8, "");
-    27			for_each_online_cpu(j)
-    28				seq_printf(p, "CPU%-8d", j);
-    29			seq_putc(p, '\n');
-    30		}
-    31	
-    32		if (syscall_name == NULL)
-    33			return 0;
-    34	
-    35		seq_printf(p, "%*d: ", prec, i);
-    36		for_each_online_cpu(j)
-    37			seq_printf(p, "%10llu ",
-    38				   per_cpu(__per_cpu_syscall_count, j)[i]);
-    39		seq_printf(p, "  %s", syscall_name);
-    40		seq_putc(p, '\n');
-    41	
-    42		return 0;
-    43	}
-    44	
+Or I guess I could copy/paste
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+#ifdef CONFIG_KASAN_GENERIC
+void kasan_record_aux_stack_noalloc(void *ptr);
+#else /* CONFIG_KASAN_GENERIC */
+static inline void kasan_record_aux_stack_noalloc(void *ptr) {}
+#endif /* CONFIG_KASAN_GENERIC */
+
+
+into rcutiny.h, that'd be smaller, and export the symbol ...
+
+johannes

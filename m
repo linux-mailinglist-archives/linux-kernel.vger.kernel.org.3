@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C42C535C6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62079535FFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350358AbiE0I6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S1351582AbiE0LoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350280AbiE0Izy (ORCPT
+        with ESMTP id S1351779AbiE0Ln2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:55:54 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3332F1157D8;
-        Fri, 27 May 2022 01:54:26 -0700 (PDT)
+        Fri, 27 May 2022 07:43:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B46E13F1F4;
+        Fri, 27 May 2022 04:40:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A977DCE238F;
-        Fri, 27 May 2022 08:54:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78FBFC385B8;
-        Fri, 27 May 2022 08:54:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 08F65CE250E;
+        Fri, 27 May 2022 11:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E064C385A9;
+        Fri, 27 May 2022 11:40:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641663;
-        bh=hwxcHasEV/bb2nOwjqLI3dCmvo+Iqwr+zYuY74pKObQ=;
+        s=korg; t=1653651642;
+        bh=aOprigIcG/hpSAFQqHtR2NrqFIOQ6+qE+2D3VkQdaoU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gDW3ldJ7ifKU7ArWkdyp+x2/D0l932+013/M1FExTuFjLRAWjZl3DZDyDtFYe39V4
-         ZJNLJaQ7mFUgQDhQA/bXt2CbM1saIDDPBfc54CyWLZHOL1NbZw3NeEfBqGWhQHvouW
-         T7+DGFlGKcnwdc6MqNELcLY0BrNnBdGyUecMFA7Q=
+        b=pu7RJYtUgETE+WK4An07YY+nQneecxBKYLaYvxlUGYGaIydc2+gfmsJrfjX6pKC4u
+         9zku/2PtPeUbeo+mxitvMRdvYvXEayiEl8Dlvs/0oQrEHpn1njjitPsExLsXiNmyU9
+         CURokARFPnu+7nh4SnLBf5AUHx6Ogcw2UY2ZR/ak=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 015/111] random: do not xor RDRAND when writing into /dev/random
+Subject: [PATCH 5.15 026/145] random: remove unused extract_entropy() reserved argument
 Date:   Fri, 27 May 2022 10:48:47 +0200
-Message-Id: <20220527084821.312132171@linuxfoundation.org>
+Message-Id: <20220527084854.050963390@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,56 +57,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 91c2afca290ed3034841c8c8532e69ed9e16cf34 upstream.
+commit 8b2d953b91e7f60200c24067ab17b77cc7bfd0d4 upstream.
 
-Continuing the reasoning of "random: ensure early RDSEED goes through
-mixer on init", we don't want RDRAND interacting with anything without
-going through the mixer function, as a backdoored CPU could presumably
-cancel out data during an xor, which it'd have a harder time doing when
-being forced through a cryptographic hash function. There's actually no
-need at all to be calling RDRAND in write_pool(), because before we
-extract from the pool, we always do so with 32 bytes of RDSEED hashed in
-at that stage. Xoring at this stage is needless and introduces a minor
-liability.
+This argument is always set to zero, as a result of us not caring about
+keeping a certain amount reserved in the pool these days. So just remove
+it and cleanup the function signatures.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+ drivers/char/random.c |   17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1305,25 +1305,15 @@ static __poll_t random_poll(struct file
- static int write_pool(const char __user *buffer, size_t count)
- {
- 	size_t bytes;
--	u32 t, buf[16];
-+	u8 buf[BLAKE2S_BLOCK_SIZE];
- 	const char __user *p = buffer;
+@@ -519,7 +519,7 @@ struct entropy_store {
+ };
  
- 	while (count > 0) {
--		int b, i = 0;
--
- 		bytes = min(count, sizeof(buf));
--		if (copy_from_user(&buf, p, bytes))
-+		if (copy_from_user(buf, p, bytes))
- 			return -EFAULT;
--
--		for (b = bytes; b > 0; b -= sizeof(u32), i++) {
--			if (!arch_get_random_int(&t))
--				break;
--			buf[i] ^= t;
--		}
--
- 		count -= bytes;
- 		p += bytes;
--
- 		mix_pool_bytes(buf, bytes);
- 		cond_resched();
- 	}
+ static ssize_t extract_entropy(struct entropy_store *r, void *buf,
+-			       size_t nbytes, int min, int rsvd);
++			       size_t nbytes, int min);
+ static ssize_t _extract_entropy(struct entropy_store *r, void *buf,
+ 				size_t nbytes);
+ 
+@@ -989,7 +989,7 @@ static void crng_reseed(struct crng_stat
+ 	} buf;
+ 
+ 	if (r) {
+-		num = extract_entropy(r, &buf, 32, 16, 0);
++		num = extract_entropy(r, &buf, 32, 16);
+ 		if (num == 0)
+ 			return;
+ 	} else {
+@@ -1327,8 +1327,7 @@ EXPORT_SYMBOL_GPL(add_disk_randomness);
+  * This function decides how many bytes to actually take from the
+  * given pool, and also debits the entropy count accordingly.
+  */
+-static size_t account(struct entropy_store *r, size_t nbytes, int min,
+-		      int reserved)
++static size_t account(struct entropy_store *r, size_t nbytes, int min)
+ {
+ 	int entropy_count, orig, have_bytes;
+ 	size_t ibytes, nfrac;
+@@ -1342,7 +1341,7 @@ retry:
+ 	/* never pull more than available */
+ 	have_bytes = entropy_count >> (ENTROPY_SHIFT + 3);
+ 
+-	if ((have_bytes -= reserved) < 0)
++	if (have_bytes < 0)
+ 		have_bytes = 0;
+ 	ibytes = min_t(size_t, ibytes, have_bytes);
+ 	if (ibytes < min)
+@@ -1448,15 +1447,13 @@ static ssize_t _extract_entropy(struct e
+  * returns it in a buffer.
+  *
+  * The min parameter specifies the minimum amount we can pull before
+- * failing to avoid races that defeat catastrophic reseeding while the
+- * reserved parameter indicates how much entropy we must leave in the
+- * pool after each pull to avoid starving other readers.
++ * failing to avoid races that defeat catastrophic reseeding.
+  */
+ static ssize_t extract_entropy(struct entropy_store *r, void *buf,
+-				 size_t nbytes, int min, int reserved)
++				 size_t nbytes, int min)
+ {
+ 	trace_extract_entropy(r->name, nbytes, ENTROPY_BITS(r), _RET_IP_);
+-	nbytes = account(r, nbytes, min, reserved);
++	nbytes = account(r, nbytes, min);
+ 	return _extract_entropy(r, buf, nbytes);
+ }
+ 
 
 

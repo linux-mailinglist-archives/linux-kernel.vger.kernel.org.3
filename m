@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395D8535C0D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38595536208
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240028AbiE0Iwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
+        id S1353251AbiE0MKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350096AbiE0IwE (ORCPT
+        with ESMTP id S1353212AbiE0L4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:52:04 -0400
+        Fri, 27 May 2022 07:56:19 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10495A168;
-        Fri, 27 May 2022 01:51:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF48D15EA72;
+        Fri, 27 May 2022 04:50:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A6A7B823D9;
-        Fri, 27 May 2022 08:51:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B9EBC385A9;
-        Fri, 27 May 2022 08:51:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74194B824CA;
+        Fri, 27 May 2022 11:50:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3E7C34100;
+        Fri, 27 May 2022 11:50:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641509;
-        bh=IrtVp04WXrGF+u/Jx0GCro9bCp6PLkr34Fu9nMRutX8=;
+        s=korg; t=1653652205;
+        bh=7HTA8dBismSNtEddUBqn+LQFyLT1UhrR03jQn5QntLw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GDRgCiaI2zm+Vc8dptGLGjOIm7uxO2F2Ih0KfgmRKHRjLckAgXO9TpK43alsZJD8b
-         1SAF4wJor9F2vgqpccUCXb2RhnI2QsuvXA/SU5qMUVZIt1gnDJq9eOzaJ13xHNXTRU
-         RyfIDpNohWzo+QHwvsrNtU2MmvWY+ZS3WqR09M7I=
+        b=jJ68XqT6fd2ooorFvTeaotE9Mx0bcUgypZjeXqK0iCZEsAixloC0whrqBInkaEq+c
+         ivtp/FpWeiFKlJtqE/b7MosReklaezKR3QHCLL0sTjoT8HFZHsWjpVnPbBvEKpBUdk
+         HtELIW437Q/P2ZLXzSD6Cw6AMjUGQLcW0zTSX8rs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Stafford Horne <shorne@gmail.com>,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.18 04/47] init: call time_init() before rand_initialize()
-Date:   Fri, 27 May 2022 10:49:44 +0200
-Message-Id: <20220527084801.829543626@linuxfoundation.org>
+Subject: [PATCH 5.15 084/145] random: give sysctl_random_min_urandom_seed a more sensible value
+Date:   Fri, 27 May 2022 10:49:45 +0200
+Message-Id: <20220527084900.805851290@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
-References: <20220527084801.223648383@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,48 +57,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit fe222a6ca2d53c38433cba5d3be62a39099e708e upstream.
+commit d0efdf35a6a71d307a250199af6fce122a7c7e11 upstream.
 
-Currently time_init() is called after rand_initialize(), but
-rand_initialize() makes use of the timer on various platforms, and
-sometimes this timer needs to be initialized by time_init() first. In
-order for random_get_entropy() to not return zero during early boot when
-it's potentially used as an entropy source, reverse the order of these
-two calls. The block doing random initialization was right before
-time_init() before, so changing the order shouldn't have any complicated
-effects.
+This isn't used by anything or anywhere, but we can't delete it due to
+compatibility. So at least give it the correct value of what it's
+supposed to be instead of a garbage one.
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Reviewed-by: Stafford Horne <shorne@gmail.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- init/main.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/char/random.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/init/main.c
-+++ b/init/main.c
-@@ -1035,11 +1035,13 @@ asmlinkage __visible void __init __no_sa
- 	softirq_init();
- 	timekeeping_init();
- 	kfence_init();
-+	time_init();
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1619,7 +1619,7 @@ const struct file_operations urandom_fop
+  *   to avoid breaking old userspaces, but writing to it does not
+  *   change any behavior of the RNG.
+  *
+- * - urandom_min_reseed_secs - fixed to the meaningless value "60".
++ * - urandom_min_reseed_secs - fixed to the value CRNG_RESEED_INTERVAL.
+  *   It is writable to avoid breaking old userspaces, but writing
+  *   to it does not change any behavior of the RNG.
+  *
+@@ -1629,7 +1629,7 @@ const struct file_operations urandom_fop
  
- 	/*
- 	 * For best initial stack canary entropy, prepare it after:
- 	 * - setup_arch() for any UEFI RNG entropy and boot cmdline access
- 	 * - timekeeping_init() for ktime entropy used in rand_initialize()
-+	 * - time_init() for making random_get_entropy() work on some platforms
- 	 * - rand_initialize() to get any arch-specific entropy like RDRAND
- 	 * - add_latent_entropy() to get any latent entropy
- 	 * - adding command line entropy
-@@ -1049,7 +1051,6 @@ asmlinkage __visible void __init __no_sa
- 	add_device_randomness(command_line, strlen(command_line));
- 	boot_init_stack_canary();
+ #include <linux/sysctl.h>
  
--	time_init();
- 	perf_event_init();
- 	profile_init();
- 	call_function_init();
+-static int sysctl_random_min_urandom_seed = 60;
++static int sysctl_random_min_urandom_seed = CRNG_RESEED_INTERVAL / HZ;
+ static int sysctl_random_write_wakeup_bits = POOL_MIN_BITS;
+ static int sysctl_poolsize = POOL_BITS;
+ static u8 sysctl_bootid[UUID_SIZE];
 
 

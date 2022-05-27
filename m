@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA08A535A2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7236535A98
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241853AbiE0HSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 03:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        id S1347620AbiE0Hkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 03:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345717AbiE0HSm (ORCPT
+        with ESMTP id S232238AbiE0Hkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 03:18:42 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD201A064;
-        Fri, 27 May 2022 00:18:33 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L8bg53GjZzRhQh;
-        Fri, 27 May 2022 15:15:29 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:18:31 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:18:30 +0800
-From:   keliu <liuke94@huawei.com>
-To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] net: phy: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 07:40:00 +0000
-Message-ID: <20220527074000.2474792-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 May 2022 03:40:40 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BFAF7495;
+        Fri, 27 May 2022 00:40:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R571e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VEW88T-_1653637234;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VEW88T-_1653637234)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 27 May 2022 15:40:35 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     olivierdautricourt@gmail.com
+Cc:     sr@denx.de, vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH v2] dmaengine: altera-msgdma: Fix kernel-doc
+Date:   Fri, 27 May 2022 15:40:08 +0800
+Message-Id: <20220527074008.8458-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove() .
+Fix the following W=1 kernel warnings:
 
-Signed-off-by: keliu <liuke94@huawei.com>
+drivers/dma/altera-msgdma.c:927: warning: expecting prototype for
+msgdma_dma_remove(). Prototype was for msgdma_remove() instead.
+
+drivers/dma/altera-msgdma.c:758: warning: expecting prototype for
+msgdma_chan_remove(). Prototype was for msgdma_dev_remove() instead.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/net/phy/fixed_phy.c | 4 ++--
+Changes in v2:
+  -Make the commit message more clearer,replace msgdma_remove()
+with msgdma_dma_remove() in doc.
+
+ drivers/dma/altera-msgdma.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/phy/fixed_phy.c b/drivers/net/phy/fixed_phy.c
-index c65fb5f5d2dc..63e7922bf257 100644
---- a/drivers/net/phy/fixed_phy.c
-+++ b/drivers/net/phy/fixed_phy.c
-@@ -180,7 +180,7 @@ static void fixed_phy_del(int phy_addr)
- 			if (fp->link_gpiod)
- 				gpiod_put(fp->link_gpiod);
- 			kfree(fp);
--			ida_simple_remove(&phy_fixed_ida, phy_addr);
-+			ida_free(&phy_fixed_ida, phy_addr);
- 			return;
- 		}
- 	}
-@@ -250,7 +250,7 @@ static struct phy_device *__fixed_phy_register(unsigned int irq,
+diff --git a/drivers/dma/altera-msgdma.c b/drivers/dma/altera-msgdma.c
+index 6f56dfd375e3..4153c2edb049 100644
+--- a/drivers/dma/altera-msgdma.c
++++ b/drivers/dma/altera-msgdma.c
+@@ -749,7 +749,7 @@ static irqreturn_t msgdma_irq_handler(int irq, void *data)
+ }
  
- 	ret = fixed_phy_add_gpiod(irq, phy_addr, status, gpiod);
- 	if (ret < 0) {
--		ida_simple_remove(&phy_fixed_ida, phy_addr);
-+		ida_free(&phy_fixed_ida, phy_addr);
- 		return ERR_PTR(ret);
- 	}
+ /**
+- * msgdma_chan_remove - Channel remove function
++ * msgdma_dev_remove() - Device remove function
+  * @mdev: Pointer to the Altera mSGDMA device structure
+  */
+ static void msgdma_dev_remove(struct msgdma_device *mdev)
+@@ -918,7 +918,7 @@ static int msgdma_probe(struct platform_device *pdev)
+ }
  
+ /**
+- * msgdma_dma_remove - Driver remove function
++ * msgdma_remove() - Driver remove function
+  * @pdev: Pointer to the platform_device structure
+  *
+  * Return: Always '0'
 -- 
-2.25.1
+2.20.1.7.g153144c
 

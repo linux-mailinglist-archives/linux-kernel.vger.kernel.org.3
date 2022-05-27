@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A5F536210
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C76E53624A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353704AbiE0MGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
+        id S1353558AbiE0MPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353326AbiE0L4Y (ORCPT
+        with ESMTP id S1352932AbiE0MBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:56:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AF2E3A;
-        Fri, 27 May 2022 04:51:26 -0700 (PDT)
+        Fri, 27 May 2022 08:01:05 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0023D498;
+        Fri, 27 May 2022 04:53:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0393961D56;
-        Fri, 27 May 2022 11:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1235BC385A9;
-        Fri, 27 May 2022 11:51:24 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BF39BCE2511;
+        Fri, 27 May 2022 11:52:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC993C385A9;
+        Fri, 27 May 2022 11:52:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652285;
-        bh=YAaAnfdN5DGX6izEPZPLbxRmKyDvGykDk8xyS2lO+OE=;
+        s=korg; t=1653652377;
+        bh=sbrL44tMkKlNhB/ubeCGu9MeR5vV2zIzvhWF5VTfUMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p43gYKIm1PJrHlis4nhMH4AWu+1/lAC3NqwiH1GRxGFFmEWPSTsKkLO9hSoEQ/E/U
-         +vkJ1G4+kkx5hNvP8zX96zfDgJBZ0aG0NMJjWyHfPWCFP2GxmoQQ+SjIFXqgZ+jUtj
-         ivQl63lvjkhL7M7/abgmOZraprIyGng3GTDRPPG8=
+        b=zm/9DKXLERMry/+IhZ2O4dKafPlvlhUA/a4b2smfxMFozo5AF4uzJ0IHKQ9he5xpw
+         IbHARraN8cj6jGl41xnJmq8gPKs92wsf5f13fAQqAeUCRlUHmKuLkCe0urA2MlxJkj
+         2P5a4lT3qK5Thc3Dt/fbjXMzMfpPYpKz1wUW+dI0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Arnd Bergmann <arnd@arndb.de>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 113/145] arm: use fallback for random_get_entropy() instead of zero
-Date:   Fri, 27 May 2022 10:50:14 +0200
-Message-Id: <20220527084904.255902300@linuxfoundation.org>
+Subject: [PATCH 5.10 135/163] sparc: use fallback for random_get_entropy() instead of zero
+Date:   Fri, 27 May 2022 10:50:15 +0200
+Message-Id: <20220527084847.008112750@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,7 +58,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit ff8a8f59c99f6a7c656387addc4d9f2247d75077 upstream.
+commit ac9756c79797bb98972736b13cfb239fd2cffb79 upstream.
 
 In the event that random_get_entropy() can't access a cycle counter or
 similar, falling back to returning 0 is really not the best we can do.
@@ -69,22 +69,29 @@ random_get_entropy_fallback() is super high precision or guaranteed to
 be entropic, but basically anything that's not zero all the time is
 better than returning zero all the time.
 
+This is accomplished by just including the asm-generic code like on
+other architectures, which means we can get rid of the empty stub
+function here.
+
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Cc: David S. Miller <davem@davemloft.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/include/asm/timex.h |    1 +
- 1 file changed, 1 insertion(+)
+ arch/sparc/include/asm/timex_32.h |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
---- a/arch/arm/include/asm/timex.h
-+++ b/arch/arm/include/asm/timex.h
-@@ -11,5 +11,6 @@
+--- a/arch/sparc/include/asm/timex_32.h
++++ b/arch/sparc/include/asm/timex_32.h
+@@ -9,8 +9,6 @@
  
- typedef unsigned long cycles_t;
- #define get_cycles()	({ cycles_t c; read_current_timer(&c) ? 0 : c; })
-+#define random_get_entropy() (((unsigned long)get_cycles()) ?: random_get_entropy_fallback())
+ #define CLOCK_TICK_RATE	1193180 /* Underlying HZ */
+ 
+-/* XXX Maybe do something better at some point... -DaveM */
+-typedef unsigned long cycles_t;
+-#define get_cycles()	(0)
++#include <asm-generic/timex.h>
  
  #endif
 

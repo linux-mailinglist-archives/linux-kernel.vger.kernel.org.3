@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5592535712
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 02:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E4C535716
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 02:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbiE0Aa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 20:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
+        id S232516AbiE0AbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 20:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbiE0Aa4 (ORCPT
+        with ESMTP id S231130AbiE0AbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 20:30:56 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BDD79823;
-        Thu, 26 May 2022 17:30:55 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-300beab2b76so31924667b3.13;
-        Thu, 26 May 2022 17:30:55 -0700 (PDT)
+        Thu, 26 May 2022 20:31:15 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3B5B0B;
+        Thu, 26 May 2022 17:31:13 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id c62so2913309vsc.10;
+        Thu, 26 May 2022 17:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=elAhUcObwS39lh683eW5heCcXmPEhxRMz3DBXgxXh2M=;
-        b=CBS7mjBjpPqYDkvZ0WwHMXyp+rrb87vDcuge2vvqwOUtirUtYAP2EdfR7XuC0joMTI
-         r2yAaCV8OAIOUCcZGT4QsaplueeCxBdrniz9LXBgDz+8Lyy6T/eMNKvhsEsRwahwzgez
-         LIssmvQdVrpQ2Cls1tnkK7Df9d1Y0nKTA9l9qxZBg7rZXb8YMqM9hrEEDN7sA/Iq9lr2
-         IvyFJQ+v6/35uscqaSJ/SyYAxFsCkkS26GyRbzNA6wU1s4ZD49uALpmSGL/dU6Lwe7Nk
-         W2WCKbK5NvgB3x1Dzd3bD9uE7HvFMp1T3jswbZz8NDvryOWefk3OK7zIF3bwCm4jBNhx
-         UEYQ==
+         :cc:content-transfer-encoding;
+        bh=bx0K5msFh3pNmzh8X+2nPnmbDmrzr93sWsFhFuKypb8=;
+        b=crvQFxy2kETdBwme1u+UE2SJEU3y4X9qCP5+LitHocqZ0XGaNcg6o5EEXugaczwjLW
+         +usd3vggxutmLaSOc7RLyOglDpt3IpzRxkfM4UbU1i2LU8mz9iLFMHpVLI+/9t63pd3v
+         4WiJ7YRnmhS7lg9EO2OiEcK2C29rAvUbwETU91nOQ6d5xDqHEdYYhJYgcyimUmY0LMFJ
+         XuHIHlGE8+mjOFS9xnDI6xQF6kR8eHxHSjkdn2Ob0UF/m3xMCplPMyOdj02nJk1G/eV4
+         u1G9SltfMDPNkY+RgnvfGDUJRWbY0Qu5N7vdFyudAkVwS7JxGBYRK0oqZwIdQ/w+LeEi
+         rCiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=elAhUcObwS39lh683eW5heCcXmPEhxRMz3DBXgxXh2M=;
-        b=0xr/anBohssf1sy4ICxO8iIUzCHLAi34DTGHejlv7bFs9Ec812KkslbR+5vYiki0SE
-         fg6nzO+3XhnFmNHNlfqmarNVQBr+j4qhbseXgdtZ+iB1SRptYBvdL3aP3jIOhE2WD+ow
-         a5ZafqRHmm3xXkE9BDfl5xsXUlNVlFSi/msz0xROgZVAtJLYqxupMT4EjC/jzQwGEJnn
-         R41Or+xPYOPmlCQUgs7n6FtYUcjLKCbgT4+w22wJoYSeMKDgMJNqyGOvoCUghPaocTXo
-         3z8/+TQW7Y9uXndCZh4sqCuYnELjoNr9EA+60ERHUzMf1zmeaePeqLY/StGxr6p3UijM
-         /2HQ==
-X-Gm-Message-State: AOAM532kDgIiXPOP9ZPukSd+29jcYHBs1UlDca8rRIB2xID+U2kK2edQ
-        ofIdOmyx8HyMVqxZxjTY/hbjio70gyVVZor/9q8=
-X-Google-Smtp-Source: ABdhPJwviyj3IkTwElbYE9H3XujG8OQkn3xbfyZh0KNIESdd+4iOJCPPlcBD5I90t2/KDB5Uen6ITGRWz1hvnDRHWtk=
-X-Received: by 2002:a81:5ad6:0:b0:300:3244:341 with SMTP id
- o205-20020a815ad6000000b0030032440341mr15471202ywb.191.1653611454269; Thu, 26
- May 2022 17:30:54 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bx0K5msFh3pNmzh8X+2nPnmbDmrzr93sWsFhFuKypb8=;
+        b=7ycCu4ocOTidIaEmtztwY1KCrFFOFonlm4oWU7WT1aETuG/O8LuDeq6FOnyz5ro95L
+         5lI772GkCciMpe+Q9qltXDR5Js4HPQmOxYOk3fIJFd7KUWoq5qm1yp1lTV6IMjI0Rhoa
+         O92ydbkwrOoG1QPAp2oCq/d87eOzsow4X5o1qh61GA+jZFKD+FoDFbn5ZDoOn/EaSIaz
+         1nThn74I2Jx6w1STByluWmydioquchGc6Zy3+pNgWyHebjmnjQec3cTK2lxWOREUPQgc
+         qSD19MrxG3pJ7UsomOGwQEMxgHDyRVXmQNecz90bdlDd61LnBJVhz79LLcfGa9NwkBgT
+         T2/w==
+X-Gm-Message-State: AOAM532XduddaswA50uBKrPBuZCGKDDMmT7tP69nm0PisxDs8WP18MAd
+        PPA5ixXj6UG1fI/AoYk8RZ0euvABct3BMFIULw==
+X-Google-Smtp-Source: ABdhPJxrv6RK04WOkAO9q9nyChrsL5sj/q/zMxHju9rv19w0OEl+GqzkgGRkR3ymujYxGl7/0mc9r5puVDakCE4dApA=
+X-Received: by 2002:a67:1787:0:b0:337:d8cd:35b2 with SMTP id
+ 129-20020a671787000000b00337d8cd35b2mr6646742vsx.29.1653611472541; Thu, 26
+ May 2022 17:31:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512135901.1377087-1-srinivas.neeli@xilinx.com>
- <CAMZ6Rq+z69CTY6Ec0n9d0-ri6pcyHtKH917M1eTD6hgkmyvGDQ@mail.gmail.com> <DM6PR02MB53868E201FAB1F01D01AAB25AFD99@DM6PR02MB5386.namprd02.prod.outlook.com>
-In-Reply-To: <DM6PR02MB53868E201FAB1F01D01AAB25AFD99@DM6PR02MB5386.namprd02.prod.outlook.com>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Fri, 27 May 2022 09:30:41 +0900
-Message-ID: <CAMZ6RqLKQ-jmQfF7yq5dObpbzky6FcjEFw9acHmfLLhp2v4eXg@mail.gmail.com>
-Subject: Re: [PATCH] can: xilinx_can: Add Transmitter delay compensation (TDC)
- feature support
-To:     Srinivas Neeli <sneeli@xilinx.com>
-Cc:     "wg@grandegger.com" <wg@grandegger.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Appana Durga Kedareswara Rao <appanad@xilinx.com>,
-        Srinivas Goud <sgoud@xilinx.com>,
-        Michal Simek <michals@xilinx.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>
+References: <20220525032341.3182-1-warp5tw@gmail.com> <Yo5ijJ9mqXRNB7d8@smile.fi.intel.com>
+In-Reply-To: <Yo5ijJ9mqXRNB7d8@smile.fi.intel.com>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Fri, 27 May 2022 08:31:01 +0800
+Message-ID: <CACD3sJbGxJMks02qB2uWTivtMvBFhxe9Chq4B4Wyk1UtmqnTUg@mail.gmail.com>
+Subject: Re: [PATCH v6 0/5] i2c: npcm: Bug fixes timeout, spurious interrupts
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wsa@kernel.org, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, jsd@semihalf.com, sven@svenpeter.dev,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,201 +76,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri. 27 May 2022 at 00:51, Srinivas Neeli <sneeli@xilinx.com> wrote:
-> Hi Vincent,
+Hi Andy:
+
+Thank you for your review.
+
+Much appreciated.
+
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> =E6=96=BC 2022=E5=B9=B4=
+5=E6=9C=8826=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:32=E5=AF=AB=E9=
+=81=93=EF=BC=9A
 >
-> > -----Original Message-----
-> > From: Vincent Mailhol <vincent.mailhol@gmail.com>
-> > Sent: Friday, May 13, 2022 6:54 AM
-> > To: Srinivas Neeli <sneeli@xilinx.com>
-> > Cc: wg@grandegger.com; mkl@pengutronix.de; davem@davemloft.net;
-> > edumazet@google.com; Appana Durga Kedareswara Rao
-> > <appanad@xilinx.com>; Srinivas Goud <sgoud@xilinx.com>; Michal Simek
-> > <michals@xilinx.com>; kuba@kernel.org; pabeni@redhat.com; linux-
-> > can@vger.kernel.org; netdev@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git
-> > <git@xilinx.com>
-> > Subject: Re: [PATCH] can: xilinx_can: Add Transmitter delay compensation
-> > (TDC) feature support
+> On Wed, May 25, 2022 at 11:23:36AM +0800, Tyrone Ting wrote:
+> > From: Tyrone Ting <kfting@nuvoton.com>
 > >
-> > On Fri. 13 May 2022 at 07:30, Srinivas Neeli <srinivas.neeli@xilinx.com>
-> > wrote:
-> > > Added Transmitter delay compensation (TDC) feature support.
-> > > In the case of higher measured loop delay with higher baud rates,
-> > > observed bit stuff errors.
-> > > By enabling the TDC feature in a controller, will compensate for the
-> > > measure loop delay in the receive path.
-> > > TDC feature requires BRP values can be 1 or 2.
-> > > The current CAN framework does not limit the brp so while using TDC,
-> > > have to restrict BRP values.
-> > > Ex:
-> > > ip link set can0 type can tq 12 prop-seg 39 phase-seg1 20 phase-seg2
-> > > 20 sjw 20 dtq 12 dprop-seg 5 dphase-seg1 6 dphase-seg2 4 dsjw 4 fd on
-> > > loopback on tdco 12 tdc-mode auto
+> > This patchset includes the following fixes:
 > >
-> > Did you experience some cases in which you had BRP > 2 and saw
-> > transmission errors due to the absence of delay compensation? Could you
-> > show the calculated values?
-> > Usually, you start to observe but stuff error at high bitrates (e.g.
-> > ~5MBPS), and for such bitrates, time quanta has to be small which then
-> > results in a small BRP.
+> > - Add dt-bindings description for NPCM845.
+> > - Bug fix for timeout calculation.
+> > - Better handling of spurious interrupts.
+> > - Fix for event type in slave mode.
+> > - Removal of own slave addresses [2:10].
+> > - Support for next gen BMC (NPCM845).
+> >
+> > The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation boards.
 >
-> yes, we observed errors with higher baud rates(4 and 5 MBPS).
-> Observation:
-> BRPA 1Mbps Sampling 75%
-> BRPD 5MBPS Sampling 75%
-> On NXP PHY observed a delay of 160 ns. so observing the failure.
-> After enabling the TDC feature to work fine.
-
-Can you also share the results of:
-
-| ip --details link show can0
-
-for both the automatic calculation by the CAN framework and for your
-hand calculated values?
-
-
-Thank you!
-
-> > > Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-> > > ---
-> > >  drivers/net/can/xilinx_can.c | 30 +++++++++++++++++++++++++-----
-> > >  1 file changed, 25 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/drivers/net/can/xilinx_can.c
-> > > b/drivers/net/can/xilinx_can.c index e2b15d29d15e..7af518fbed02 100644
-> > > --- a/drivers/net/can/xilinx_can.c
-> > > +++ b/drivers/net/can/xilinx_can.c
-> > > @@ -1,7 +1,7 @@
-> > >  // SPDX-License-Identifier: GPL-2.0-or-later
-> > >  /* Xilinx CAN device driver
-> > >   *
-> > > - * Copyright (C) 2012 - 2014 Xilinx, Inc.
-> > > + * Copyright (C) 2012 - 2022 Xilinx, Inc.
-> > >   * Copyright (C) 2009 PetaLogix. All rights reserved.
-> > >   * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
-> > >   *
-> > > @@ -133,6 +133,8 @@ enum xcan_reg {
-> > >  #define XCAN_DLCR_BRS_MASK             0x04000000 /* BRS Mask in DLC */
-> > >
-> > >  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
-> > > +#define XCAN_BRPR_TDCO_SHIFT_CANFD     8  /* Transmitter Delay
-> > Compensation Offset */
-> >
-> > Having CANFD in the name is redundant (TDC implies CANFD).
-> > #define XCAN_BRPR_TDCO_SHIFT 8
-> update in V2.
+> LGTM,
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 >
+> > Addressed comments from:
+> >  - Wolfram Sang : https://lkml.org/lkml/2022/5/21/51
 > >
-> > > +#define XCAN_BRPR_TDCE_SHIFT_CANFD     16 /* Transmitter Delay
-> > Compensation (TDC) Enable */
+> > Changes since version 5:
+> >  - Shorten npcm_i2caddr array since the number of supported i2c slave
+> >    addresses is reduced.
+> >  - Create a new patch from the original PATCH v5 08/10 to modify the sl=
+ave
+> >    transaction logic.
 > >
-> > Why not:
-> > #define XCAN_BRPR_TDC_ENABLE BIT(16)
-> update in V2.
+> > Changes since version 4:
+> >  - Remove quotes around ref handle to nuvoton,sys-mgr in i2c binding
+> >    document.
+> >  - Keep the "longer line first" order.
+> >  - Correct the SoB chain.
+> >  - Modify the if statement in one line and add new line characters.
+> >  - Modify the commit message format in the patch Remove own slave
+> >    addresses 2:10. Correct the if statement in one line and shorten the
+> >    debug messages.
+> >  - Create a new patch to capitalize the one-line comment in the driver.
+> >
+> > Changes since version 3:
+> >  - Correct the const format in if condition in i2c binding document.
+> >  - Add the oops message statement and register information in register
+> >    access width patch.
+> >  - Add the occurring rate of the i2c spurious interrupt issue and more
+> >    details in driver's behavior to overcome this issue.
+> >  - Address Andy's comments in the patch to support NPCM845.
+> >
+> > Changes since version 2:
+> >  - Keep old code as fallback, if getting nuvoton,sys-mgr property fails=
+.
+> >  - Fix the error reported by running 'make DT_CHECKER_FLAGS=3D-m
+> >    dt_binding_check'.
+> >  - Make nuvoton,sys-mgr required for nuvoton,npcm845-i2c.
+> >  - Correct the patch's subject about changing the way of getting GCR
+> >    regmap and add the description about keeping old code as fallback
+> >    if getting nuvoton,sys-mgr property fails.
+> >  - Correct the patch title and description about removing the unused
+> >    variable clk_regmap.
+> >  - Use the data field directly instead of the macros since macros are
+> >    not constants anymore in this patch.
+> >
+> > Changes since version 1:
+> >  - Add nuvoton,sys-mgr property in NPCM devicetree.
+> >  - Describe the commit message in imperative mood.
+> >  - Modify the description in i2c binding document to cover NPCM series.
+> >  - Add new property in i2c binding document.
+> >  - Create a new patch for client address calculation.
+> >  - Create a new patch for updating gcr property name.
+> >  - Create a new patch for removing unused clock node.
+> >  - Explain EOB in the commit description.
+> >  - Create a new patch for correcting NPCM register access width.
+> >  - Remove some comment since the corresponding logic no longer exists.
+> >  - Remove fixes tag while the patch adds an additional feature.
+> >  - Use devicetree data field to support NPCM845.
+> >
+> > Tali Perry (2):
+> >   i2c: npcm: Remove own slave addresses 2:10
+> >   i2c: npcm: Correct slave role behavior
+> >
+> > Tyrone Ting (3):
+> >   dt-bindings: i2c: npcm: support NPCM845
+> >   i2c: npcm: Support NPCM845
+> >   i2c: npcm: Capitalize the one-line comment
+> >
+> >  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml     |  25 ++-
+> >  drivers/i2c/busses/Kconfig                    |   8 +-
+> >  drivers/i2c/busses/Makefile                   |   2 +-
+> >  drivers/i2c/busses/i2c-npcm7xx.c              | 176 ++++++++++--------
+> >  4 files changed, 124 insertions(+), 87 deletions(-)
+> >
+> > --
+> > 2.17.1
+> >
 >
-> >
-> > >  #define XCAN_BTR_SJW_SHIFT             7  /* Synchronous jump width */
-> > >  #define XCAN_BTR_TS2_SHIFT             4  /* Time segment 2 */
-> > >  #define XCAN_BTR_SJW_SHIFT_CANFD       16 /* Synchronous jump width
-> > */
-> > > @@ -259,7 +261,7 @@ static const struct can_bittiming_const
-> > xcan_bittiming_const_canfd2 = {
-> > >         .tseg2_min = 1,
-> > >         .tseg2_max = 128,
-> > >         .sjw_max = 128,
-> > > -       .brp_min = 2,
-> > > +       .brp_min = 1,
-> >
-> > Was there any reason to have brp_min = 2 in the first place?
-> > I think this change  should be a different patch. If the brp_min = 2 is just a
-> > typo, you might also want to backport it to stable branches.
+> --
+> With Best Regards,
+> Andy Shevchenko
 >
-> On early silicon engineering samples we observed bit shrinking issue when we use brp =1 , hence we updated brp_min =2.
-> As in production silicon this issue is fixed we are planning to revert the patch.
+>
 
-Great!
-
-> > >         .brp_max = 256,
-> > >         .brp_inc = 1,
-> > >  };
-> > > @@ -272,11 +274,21 @@ static struct can_bittiming_const
-> > xcan_data_bittiming_const_canfd2 = {
-> > >         .tseg2_min = 1,
-> > >         .tseg2_max = 16,
-> > >         .sjw_max = 16,
-> > > -       .brp_min = 2,
-> > > +       .brp_min = 1,
-> > >         .brp_max = 256,
-> > >         .brp_inc = 1,
-> > >  };
-> > >
-> > > +/* Transmission Delay Compensation constants for CANFD2.0 and Versal
-> > > +*/ static const struct can_tdc_const xcan_tdc_const = {
-> > > +       .tdcv_min = 0,
-> > > +       .tdcv_max = 0, /* Manual mode not supported. */
-> >
-> > Right, had a look at the datasheet and xilinx indeed does not support setting
-> > TDCV.
-> > However, xilinx still has a TDCV register to report the measured transmission
-> > delay.
-> >
-> > Socket CAN's TDC framework provides can_priv::do_get_auto_tdcv() to
-> > report the measured value through the netlink interface:
-> > https://elixir.bootlin.com/linux/v5.17/source/include/linux/can/dev.h#L87
-> >
-> > Can you implement this call back function?
-> Will implement in V2.
->
-> >
-> > > +       .tdco_min = 0,
-> > > +       .tdco_max = 64,
-> > > +       .tdcf_min = 0, /* Filter window not supported */
-> > > +       .tdcf_max = 0,
-> > > +};
-> > > +
-> > >  /**
-> > >   * xcan_write_reg_le - Write a value to the device register little endian
-> > >   * @priv:      Driver private data structure
-> > > @@ -425,6 +437,11 @@ static int xcan_set_bittiming(struct net_device
-> > *ndev)
-> > >             priv->devtype.cantype == XAXI_CANFD_2_0) {
-> > >                 /* Setting Baud Rate prescalar value in F_BRPR Register */
-> > >                 btr0 = dbt->brp - 1;
-> > > +               if (can_tdc_is_enabled(&priv->can)) {
-> > > +                       btr0 = btr0 |
-> > > +                       (priv->can.tdc.tdco) << XCAN_BRPR_TDCO_SHIFT_CANFD |
-> > > +                       1 << XCAN_BRPR_TDCE_SHIFT_CANFD;
-> >
-> > I don't think the parenthesis around (priv->can.tdc.tdco) are needed.
-> Yes, will update.
-> >
-> >                        btr0 = btr0 |
-> >                        priv->can.tdc.tdco << XCAN_BRPR_TDCO_SHIFT |
-> >                       XCAN_BRPR_TDC_ENABLE
-> >
-> > (c.f. above for macro names)
-> >
-> > > +               }
-> > >
-> > >                 /* Setting Time Segment 1 in BTR Register */
-> > >                 btr1 = dbt->prop_seg + dbt->phase_seg1 - 1; @@
-> > > -1747,13 +1764,16 @@ static int xcan_probe(struct platform_device *pdev)
-> > >                 priv->can.data_bittiming_const =
-> > >                         &xcan_data_bittiming_const_canfd;
-> > >
-> > > -       if (devtype->cantype == XAXI_CANFD_2_0)
-> > > +       if (devtype->cantype == XAXI_CANFD_2_0) {
-> > >                 priv->can.data_bittiming_const =
-> > >                         &xcan_data_bittiming_const_canfd2;
-> > > +               priv->can.tdc_const = &xcan_tdc_const;
-> > > +       }
-> > >
-> > >         if (devtype->cantype == XAXI_CANFD ||
-> > >             devtype->cantype == XAXI_CANFD_2_0)
-> > > -               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
-> > > +               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD |
-> > > +                                               CAN_CTRLMODE_TDC_AUTO;
-> > >
-> > >         priv->reg_base = addr;
-> > >         priv->tx_max = tx_max;
+Best Regards,
+Tyrone

@@ -2,144 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548FC536753
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 21:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C65536762
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 21:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354562AbiE0TFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 15:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
+        id S1353384AbiE0TON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 15:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240401AbiE0TFu (ORCPT
+        with ESMTP id S236065AbiE0TOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 15:05:50 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDACB5C76E;
-        Fri, 27 May 2022 12:05:49 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 6F81D1F464B2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653678348;
-        bh=xy2v0UW9OxkQlEpRbg1MC88ziJi3bs138+XfVpOrkC8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mmjaRwBZTXfnPJGc8bg4toaoo7Nyy0vzqi4EoQOeXyw9L35qvzztiaTKc8D+3NEUo
-         kayJ4EY33oK3oAtrBrOS3xa++5ygl8StkJe0nOsqV/dlMCv6kE7PzCWHRFLNnJzgso
-         8GoqNYPkUfFT7ERTn3CO/vwimAsB3k6g/JBpKfALGev0HUY3dP3wUid8ss7xdZvham
-         py+/vV1fyzp7V/dx21pD7ADBHmbgZdS05Ve6cgbkDn8SLaeo+rWBgX7DaMKlyNsj4q
-         Vii7d9CB0XHlSckHEZBCSUBzrJfH82zot9PVCF+ZLll5iy2uzMFYbHnI0hxOQ4YXXX
-         nsKgtruVhfFNg==
-Date:   Fri, 27 May 2022 15:05:42 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shane Chien <shane.chien@mediatek.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
- properties
-Message-ID: <20220527190542.4jckyflvtkq4n7ie@notapiano>
-References: <20220509205847.607076-1-nfraprado@collabora.com>
- <e8d854c0-e2a5-2382-4b54-c5e879170324@linaro.org>
+        Fri, 27 May 2022 15:14:11 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0FECCB82D4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:14:07 -0700 (PDT)
+Received: (qmail 108885 invoked by uid 1000); 27 May 2022 15:14:06 -0400
+Date:   Fri, 27 May 2022 15:14:06 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in driver_unregister
+Message-ID: <YpEi/sbT/R/0yKzo@rowland.harvard.edu>
+References: <0000000000008c664105dffae2eb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e8d854c0-e2a5-2382-4b54-c5e879170324@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0000000000008c664105dffae2eb@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 08:49:39AM +0200, Krzysztof Kozlowski wrote:
-> On 09/05/2022 22:58, Nícolas F. R. A. Prado wrote:
-> > The Mediatek AFE PCM controller for MT8192 allows two I2S interfaces to
-> > share the same clock and act as a single interface with both input and
-> > output. Add patterns for these properties in the dt-binding. The
-> > property is split into two patterns in order to allow all valid
-> > interface pairings.
-> > 
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > 
-> > ---
-> > The series from v1 of this patch was merged although some changes were
-> > still needed in this patch, so the v1 of this patch was reverted [1] and
-> > this standalone commit addresses the feedback from v1 and readds the
-> > property.
-> > 
-> > [1] https://lore.kernel.org/all/20220509185625.580811-1-nfraprado@collabora.com
-> > 
-> > v1: https://lore.kernel.org/all/20220429203039.2207848-2-nfraprado@collabora.com/
-> > 
-> > Changes in v2:
-> > - Added "mediatek," prefix to property
-> > - Rewrote and added more information to property description
-> > - Split into two patterns to validate that output-input pairings are
-> >   done
-> > 
-> >  .../bindings/sound/mt8192-afe-pcm.yaml           | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> > index 7a25bc9b8060..2abf43c6c2c3 100644
-> > --- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> > +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
-> > @@ -54,6 +54,22 @@ properties:
-> >        - const: aud_infra_clk
-> >        - const: aud_infra_26m_clk
-> >  
-> > +patternProperties:
-> > +  "^mediatek,i2s[13579]-share$":
-> > +    description:
-> > +      Each I2S interface has a single data line, input if its index is even or
-> > +      output if the index is odd. An input and an output I2S interface can be
-> > +      used together as if they were a single I2S interface with both input and
-> > +      output data lines by sharing the same clock. This property represents this
-> > +      pairing. The value should be the name of the interface whose clock is
-> > +      used, and the property name the other interface that depends on this
-> > +      clock.
-> > +    pattern: "^I2S[0268]$"
-> > +
-> > +  "^mediatek,i2s[0268]-share$":
-> > +    description: Same as above.
-> > +    pattern: "^I2S[13579]$"
+On Fri, May 27, 2022 at 02:25:19AM -0700, syzbot wrote:
+> Hello,
 > 
-> Rob's question is still valid - why these are not phandles?
-
-So, instead of having
-
-	i2s9-share = "I2S8";
-
-on the DT, you want us to have something like this:
-
-        afe_i2s8: mediatek,i2s8 { };
-
-        mediatek,i2s9 {
-          mediatek,share-clock = <&afe_i2s8>;
-        };
-
-Or do you mean something else?
-
-It seems like a lot more syntax to express the same thing (and the empty node
-seems awkward), but if that's the DT way, I can change it no problem.
-
+> syzbot found the following issue on:
 > 
-> In any case you miss $ref.
+> HEAD commit:    97fa5887cf28 USB: new quirk for Dell Gen 2 devices
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=170ebdc3f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=02b16343704b3af1667e
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1124ad81f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d6004df00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com
 
-Indeed, sorry, I'll add it in next version.
+There are at least two bugs here.  The first is the failure to select a 
+unique driver name; the raw gadget always uses the name "raw-gadget".  As 
+a result, registrations after the first one fail:
 
-Thanks,
-Nícolas
+> kobject_add_internal failed for raw-gadget with -EEXIST, don't try to register things with the same name in the same directory.
+> UDC core: USB Raw Gadget: driver registration failed: -17
+> misc raw-gadget: fail, usb_gadget_register_driver returned -17
+
+The most logical solution seems to be to use the driver name provided by 
+the user.  That's what the patch below does.  However, this has the 
+drawback that if the user provides a bad name then the registration 
+attempt will cause a kernel error, because the kernel expects driver names 
+to be controlled by drivers, not by users.  Maybe we should use an 
+ida-generated suffix: "raw-gadget.N".
+
+The second bug is the unexpected unregistration.  The raw-gadget driver is 
+careful to keep track of whether registration succeeded, and it doesn't 
+try to unregister itself if registration failed.  Nevertheless, that 
+happened here:
+
+> ------------[ cut here ]------------
+> Unexpected driver unregister!
+> WARNING: CPU: 0 PID: 1308 at drivers/base/driver.c:194 driver_unregister drivers/base/driver.c:194 [inline]
+> WARNING: CPU: 0 PID: 1308 at drivers/base/driver.c:194 driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
+> Modules linked in:
+> CPU: 0 PID: 1308 Comm: syz-executor314 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:driver_unregister drivers/base/driver.c:194 [inline]
+> RIP: 0010:driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
+> Code: 68 4c 89 e7 e8 65 b9 db fe 48 89 ef e8 fd a0 ff ff 5d 41 5c e9 75 fa 78 fe e8 70 fa 78 fe 48 c7 c7 80 7a 81 86 e8 12 96 ee 02 <0f> 0b 5d 41 5c e9 5a fa 78 fe e8 75 93 ad fe eb 96 e8 6e 93 ad fe
+> RSP: 0018:ffffc90001087a78 EFLAGS: 00010282
+> RAX: 0000000000000000 RBX: ffff88811d184050 RCX: 0000000000000000
+> RDX: ffff88810902d580 RSI: ffffffff812bdce8 RDI: fffff52000210f41
+> RBP: ffff88811d184098 R08: 0000000000000000 R09: 0000000000000000
+> R10: ffffffff812b86be R11: 0000000000000000 R12: 0000000000000000
+> R13: ffff88811d184008 R14: ffff88811d05b1a8 R15: ffff8881008456a0
+> FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fea994ab2d0 CR3: 0000000007825000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  usb_gadget_unregister_driver+0x48/0x70 drivers/usb/gadget/udc/core.c:1590
+>  raw_release+0x18a/0x290 drivers/usb/gadget/legacy/raw_gadget.c:401
+>  __fput+0x277/0x9d0 fs/file_table.c:317
+>  task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+
+I have no idea how this could have happened; it looks impossible.  Maybe 
+it has something to do with the fact that registration failed for two 
+separate threads (see the syzbot console log).  I can't tell what's going 
+on.
+
+Alan Stern
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 97fa5887cf28
+
+Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+===================================================================
+--- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
++++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -483,7 +483,7 @@ static int raw_ioctl_init(struct raw_dev
+ 	dev->driver.suspend = gadget_suspend;
+ 	dev->driver.resume = gadget_resume;
+ 	dev->driver.reset = gadget_reset;
+-	dev->driver.driver.name = DRIVER_NAME;
++	dev->driver.driver.name = udc_driver_name;
+ 	dev->driver.udc_name = udc_device_name;
+ 	dev->driver.match_existing_only = 1;
+ 

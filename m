@@ -2,169 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F39535783
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AEF8535788
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234517AbiE0CXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
+        id S234941AbiE0CY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234510AbiE0CXo (ORCPT
+        with ESMTP id S229933AbiE0CY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:23:44 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DCEE27A2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:23:42 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220527022339epoutp013a4b5d0245636e249c5487bc27897d12~y1QJctlFW1441914419epoutp01T
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:23:39 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220527022339epoutp013a4b5d0245636e249c5487bc27897d12~y1QJctlFW1441914419epoutp01T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1653618219;
-        bh=s2MmHWQpAI5TzBRvIxt2lTABEbM+jnc9MwnjQ5g6Gkk=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=UIqzidW+efYkcuBDALVPrwZze22L3J3fT4Q/OGhAJ9hNt9400gvyIAAjnO+2N1VRI
-         qnofE1It/sISB8tNNfX+7j4KF5xnrqdlQkB5+uGyWKFglfMWEOEyJIbCWubKb7W+h+
-         Kd4yHWFTEeO/nf+m7GlusihTXFfUdiND50liXuic=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220527022338epcas5p3e800afaa72b71f73647ab56da7a727b6~y1QJECkgh1694716947epcas5p3S;
-        Fri, 27 May 2022 02:23:38 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4L8TBH359Cz4x9Q5; Fri, 27 May
-        2022 02:23:35 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B8.82.09827.52630926; Fri, 27 May 2022 11:23:33 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220527022333epcas5p44304f5f84734be410e981c73390a470c~y1QD7Cr8n0235002350epcas5p4_;
-        Fri, 27 May 2022 02:23:33 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220527022333epsmtrp24cb6a0e932270d32b5cb0e9b5953bf2d~y1QD6Yiol0125701257epsmtrp27;
-        Fri, 27 May 2022 02:23:33 +0000 (GMT)
-X-AuditID: b6c32a4a-b51ff70000002663-d2-629036258078
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3D.1F.08924.52630926; Fri, 27 May 2022 11:23:33 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220527022332epsmtip1b628263f1036d9e8641082c72a8f9057~y1QCr2OlZ2133521335epsmtip1w;
-        Fri, 27 May 2022 02:23:31 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <20220526204323.832243-1-krzysztof.kozlowski@linaro.org>
-Subject: RE: [PATCH 1/2] arm64: dts: exynos: adjust whitespace around '='
-Date:   Fri, 27 May 2022 07:53:31 +0530
-Message-ID: <025601d87170$c324bbf0$496e33d0$@samsung.com>
+        Thu, 26 May 2022 22:24:56 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0B5E27A5;
+        Thu, 26 May 2022 19:24:54 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id h4so3058898vsr.13;
+        Thu, 26 May 2022 19:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QvhKBJjGUiG7G8PpadcKf8ELEDTEzExAiqgsG99aSxM=;
+        b=mBbmAl6FjJyf8/uGuc+JM8m3jjGD4++wND89c0YwmoUfKv9uxtcnlFOm6SAVysFfR8
+         LuV7S6P1tMqdJ+AWryZ4E+GduRTIiJvOAAlESpU6RQqzaCRI23M9y8FYiyJFgsXUKOcm
+         2L9peqMteW+4GSorZyudGmiIXphWNVVJ/CxXo238lHvM/d5RGvlmwyPsc6kmAlf9+j/9
+         fqPCUG/YS3oABatxSC2rvKJg2XSxHu9X3YrAx2DQoVzHPd2vCGTWf6/2NcPJEng0CRLx
+         jnY/niKmADvaV1vgnSePz9UGymiEJ0qaYdApQ+SnsGkJWg8NcbvJjp8aDYtGYb+OZ8b/
+         knyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QvhKBJjGUiG7G8PpadcKf8ELEDTEzExAiqgsG99aSxM=;
+        b=jfrZF8j9l1CcX3/HRUsKGlgQ7bfL0fJWaKJeM8wP4+lg1dBUNVX+Q5P+XJwJM9FYkB
+         +Tj2hhI7n7y5o/rxVrDheHsbeu4WwgZDDqpLs9fk4+FcpSlEWyvXnjB5zRfB6fksDd8Q
+         LecG7Fu2Sd7xBgJ6q228OeFJUdcnrnmEt6d5Fs96AlDtl984rIgVl5IdqJRwNd0HvXrP
+         ePtAp8Fy0T/u/7JZUjolMMDYn2OZTfxGbwsATu7rbuMm8C7Vj9ggC1tWTN4f/Nk0rLqp
+         DwmauooEO4Vr+y15GMYHyQk3R9YzImFvwa7h1FZy47bTgkhBM1HMtxCF2S/PwauT8nuy
+         dLDQ==
+X-Gm-Message-State: AOAM532nKoRFfale2F72KzFjYV51a3zE86u8Tlb75oOwi1hbWiBVcEK2
+        5l5tKFpEM2LR/1xy2R30mc3YraaH4epVUu8nXRQ=
+X-Google-Smtp-Source: ABdhPJwkZPvj4AjNTutTU0UnZb0VBCu1HQ5FumUGt7iv+OBdH1kfcKU5DRWqD7wVat93IE/BS4BJmsVF9rwuvgX1dsM=
+X-Received: by 2002:a67:ef5b:0:b0:335:e3a3:9b33 with SMTP id
+ k27-20020a67ef5b000000b00335e3a39b33mr16969880vsr.57.1653618293351; Thu, 26
+ May 2022 19:24:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-us
-Thread-Index: AQFpmbHODWxPexdb4OuWVEwoYvb1UgIH/dVSrf9uGzA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKJsWRmVeSWpSXmKPExsWy7bCmuq6q2YQkg6vHzCzmHznHatH34iGz
-        xd7XW9ktNj2+xmpxedccNosZ5/cxWbTuPcLuwO6xaVUnm8eda3vYPDYvqff4vEkugCUq2yYj
-        NTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6AAlhbLEnFKg
-        UEBicbGSvp1NUX5pSapCRn5xia1SakFKToFJgV5xYm5xaV66Xl5qiZWhgYGRKVBhQnbGyyvP
-        WAtW8FS0XWxjbWA8zdXFyMkhIWAicf//fTYQW0hgN6PE1B/eXYxcQPYnRokJL7tYIJzPjBIf
-        n/WzwXT8XP+fCSKxi1HizJ4GVgjnJaPEjAXHGUGq2AR0JXYsbmMDSYgIbGKS+LJ/LztIglPA
-        VaJx6nOwImEBT4l3G56AxVkEVCW2fbzEBGLzClhKdE+dwwZhC0qcnPmEBcRmFpCX2P52DjPE
-        GQoSP58uY4WIi0u8PHoEbI6IgJXEpkV7mUEWSwi0ckismPgFqsFFYumkSewQtrDEq+NboGwp
-        ic/v9gIt4wCyPSQW/ZGCCGdIvF2+nhHCtpc4cGUOC0gJs4CmxPpd+hBr+SR6fz9hgujkleho
-        E4KoVpVofneVBcKWlpjY3c0KYXtIbF38BRpwMxgl2hdPZZ7AqDALyZezkHw5C8lnsxA2L2Bk
-        WcUomVpQnJueWmxaYJSXWg6P8OT83E2M4PSp5bWD8eGDD3qHGJk4GA8xSnAwK4nwXnjamyTE
-        m5JYWZValB9fVJqTWnyI0RQY9BOZpUST84EJPK8k3tDE0sDEzMzMxNLYzFBJnFfgf2OSkEB6
-        YklqdmpqQWoRTB8TB6dUA1PS7edsCq97bLK0T33fL7Vs0UWtxY9UZjBr5J0JFE2M2url4Hfw
-        2+XtJSxvM3q5d+y7L8ZdlSHArdH3fgqHjKPu5ayMZ5qZLEEzNx11+JXf3bXtOcM9T+f6aaW6
-        LTNeSt4+tnf/3kUz9dnnX8uN42BauWF62VamWdFyTpHXGNbpCs1nP7fJfv2sD9saInPzb226
-        GTlFVCgpoE9Tweh1y/Q+E01TMwb1ZzbGbotU53rM0OOalmb4UV/dldHAgjdqybt7zb/nCZzb
-        8zumluGXx0KG2fZH7u9+PrH3XXyTbFzVZlnb7SpPdt8pmHrgfXOQucGebT3nHiQvUFOsOD+z
-        8fOk5f1iPQe0d5T9LOdef0WJpTgj0VCLuag4EQCalf9+KAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrILMWRmVeSWpSXmKPExsWy7bCSnK6q2YQkg0e9/Bbzj5xjteh78ZDZ
-        Yu/rrewWmx5fY7W4vGsOm8WM8/uYLFr3HmF3YPfYtKqTzePOtT1sHpuX1Ht83iQXwBLFZZOS
-        mpNZllqkb5fAlfHyyjPWghU8FW0X21gbGE9zdTFyckgImEj8XP+fqYuRi0NIYAejxJp5Oxkh
-        EtIS1zdOYIewhSVW/nvODlH0nFFiS8sqZpAEm4CuxI7FbWwgCRGBbUwSq5r/sEFUTWOUuD/1
-        PQtIFaeAq0Tj1OdgY4UFPCXebXgCNpZFQFVi28dLTCA2r4ClRPfUOWwQtqDEyZlPgHo5OJgF
-        9CTaNoK1MgvIS2x/O4cZ4iIFiZ9Pl7FCxMUlXh49AjZSRMBKYtOivcwTGIVmIZk0C2HSLCST
-        ZiHpXsDIsopRMrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzhWtLR2MO5Z9UHvECMTB+Mh
-        RgkOZiUR3gtPe5OEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCeWJKanZpakFoEk2Xi
-        4JRqYFrLM1l2jlj2zuhXJvHZesauZkEH1rz1yT/V+PSqiMFZp5PrD347VGqdHxV3Ycmrdv4D
-        +xLkfOTSDsxwqFnE8C259dKWGTv/an7p15qvPkWs3j3mjdKufbbfL83X4JmrF3BX1d1sy6K1
-        H9oZjRVV5+xkVzNq+7ZbestfHv577MLP7lo1SW+bdJuvbGbGMfklCa3ivErBD2ac2fJr4ktx
-        j3/ihjFRrLEGG1ecl/sXuv9TaOOmtQFp7AXhaTMfd4sWHe6/+kF1omyy3XrmfbzzbZWW7VUO
-        b3jHcqBGLGuuj5yWa4NionmfSNE+L6lcA0/hQjHTI8qzNqYWLtrybEeoQfjFXS99PNlWZS5v
-        +ydko8RSnJFoqMVcVJwIAG8qP8MEAwAA
-X-CMS-MailID: 20220527022333epcas5p44304f5f84734be410e981c73390a470c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220526204331epcas5p1aceb59867294b847de073f397abc3798
-References: <CGME20220526204331epcas5p1aceb59867294b847de073f397abc3798@epcas5p1.samsung.com>
-        <20220526204323.832243-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <1653534995-30794-1-git-send-email-u0084500@gmail.com>
+ <1653534995-30794-3-git-send-email-u0084500@gmail.com> <20220526100510.3utwh5bov4ax2jmg@maple.lan>
+In-Reply-To: <20220526100510.3utwh5bov4ax2jmg@maple.lan>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Fri, 27 May 2022 10:24:42 +0800
+Message-ID: <CADiBU3_3rJ6uCYx_W+TZJpuPzGtt61QEDwZWtxy_abzynTr8VQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] backlight: rt4831: Add the property parsing for ocp
+ level selection
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>, jingoohan1@gmail.com,
+        Pavel Machek <pavel@ucw.cz>, deller@gmx.de,
+        cy_huang <cy_huang@richtek.com>, lucas_tsai@richtek.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Daniel Thompson <daniel.thompson@linaro.org> =E6=96=BC 2022=E5=B9=B45=E6=9C=
+=8826=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=886:05=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> On Thu, May 26, 2022 at 11:16:35AM +0800, cy_huang wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add the property parsing for ocp level selection.
+>
+> Isn't this just restating the Subject: line?
+>
+Ah, that's my fault. I didn't state too much in the patch comment.
+I only left it in the cover letter.
 
+> It would be better to provide information useful to the reviewer here.
+> Something like:
+>
+> "Currently this driver simply inherits whatever over-current protection
+> level is programmed into the hardware when it is handed over. Typically
+> this will be the reset value, <whatever>A, although the bootloader could
+> have established a different value.
+>
+> Allow the correct OCP value to be provided by the DT."
+>
+> BTW please don't uncritically copy the above into the patch header. It is
+> just made something up as an example and I did no fact checking...
+>
+OK, got it.
+>
+> >
+> > Reported-by: Lucas Tsai <lucas_tsai@richtek.com>
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> >  drivers/video/backlight/rt4831-backlight.c | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> >
+> > diff --git a/drivers/video/backlight/rt4831-backlight.c b/drivers/video=
+/backlight/rt4831-backlight.c
+> > index 42155c7..c81f7d9 100644
+> > --- a/drivers/video/backlight/rt4831-backlight.c
+> > +++ b/drivers/video/backlight/rt4831-backlight.c
+> > @@ -12,6 +12,7 @@
+> >  #define RT4831_REG_BLCFG     0x02
+> >  #define RT4831_REG_BLDIML    0x04
+> >  #define RT4831_REG_ENABLE    0x08
+> > +#define RT4831_REG_BLOPT2    0x11
+> >
+> >  #define RT4831_BLMAX_BRIGHTNESS      2048
+> >
+> > @@ -23,6 +24,8 @@
+> >  #define RT4831_BLDIML_MASK   GENMASK(2, 0)
+> >  #define RT4831_BLDIMH_MASK   GENMASK(10, 3)
+> >  #define RT4831_BLDIMH_SHIFT  3
+> > +#define RT4831_BLOCP_MASK    GENMASK(1, 0)
+> > +#define RT4831_BLOCP_SHIFT   0
+> >
+> >  struct rt4831_priv {
+> >       struct device *dev;
+> > @@ -120,6 +123,16 @@ static int rt4831_parse_backlight_properties(struc=
+t rt4831_priv *priv,
+> >       if (ret)
+> >               return ret;
+> >
+> > +     ret =3D device_property_read_u8(dev, "richtek,bled-ocp-sel", &pro=
+pval);
+> > +     if (ret)
+> > +             propval =3D RT4831_BLOCPLVL_1P2A;
+>
+> Is 1.2A the reset value for the register?
+Yes, it's the HW default value.
+>
+> Additionally, it looks like adding a hard-coded default would cause
+> problems for existing platforms where the bootloader doesn't use
+> richtek,bled-ocp-sel and pre-configures a different value itself.
+>
+> Would it be safer (in terms of working nicely with older bootloaders)
+> to only write to the RT4831_BLOCP_MASK if the new property is set?
+>
+Ah, my excuse. I really didn't consider the case that you mentioned.
+It seems it's better to do the judgement here for two cases.
+1) property not exist, keep the current HW value
+2) property exist, clamp align and update the suitable selector to HW.
 
->-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
->Sent: Friday, May 27, 2022 2:13 AM
->To: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-><krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
-><alim.akhtar@samsung.com>; devicetree@vger.kernel.org; linux-arm-
->kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
->kernel@vger.kernel.org
->Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->Subject: [PATCH 1/2] arm64: dts: exynos: adjust whitespace around '='
+Thanks.
 >
->Fix whitespace coding style: use single space instead of tabs or multiple
-spaces
->around '=' sign in property assignment.  No functional changes (same DTB).
+> Daniel.
 >
->Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >
-
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-
->---
 >
->Output compared with dtx_diff and fdtdump.
->---
-> arch/arm64/boot/dts/exynos/exynosautov9.dtsi | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
->b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
->index 0ce46ec5cdc3..5827e1228fa9 100644
->--- a/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
->+++ b/arch/arm64/boot/dts/exynos/exynosautov9.dtsi
->@@ -364,7 +364,7 @@ ufs_0_phy: ufs0-phy@17e04000 {
-> 		};
->
-> 		ufs_0: ufs0@17e00000 {
->-			compatible ="samsung,exynosautov9-ufs";
->+			compatible = "samsung,exynosautov9-ufs";
->
-> 			reg = <0x17e00000 0x100>,  /* 0: HCI standard */
-> 				<0x17e01100 0x410>,  /* 1: Vendor-specific
-*/
->--
->2.34.1
-
-
+> > +
+> > +     propval =3D min_t(u8, propval, RT4831_BLOCPLVL_1P8A);
+> > +     ret =3D regmap_update_bits(priv->regmap, RT4831_REG_BLOPT2, RT483=
+1_BLOCP_MASK,
+> > +                              propval << RT4831_BLOCP_SHIFT);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> >       ret =3D device_property_read_u8(dev, "richtek,channel-use", &prop=
+val);
+> >       if (ret) {
+> >               dev_err(dev, "richtek,channel-use DT property missing\n")=
+;
+> > --
+> > 2.7.4
+> >

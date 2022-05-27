@@ -2,163 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FA5536360
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA08B536365
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352423AbiE0Nja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 09:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S232745AbiE0Nly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 09:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240544AbiE0Nj2 (ORCPT
+        with ESMTP id S243477AbiE0Nlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 09:39:28 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F70A146741
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:39:25 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id j7so4267728vsp.12
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:39:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hqlg/w/fu3XfRPgdp6en7FxQt+ggN/0l4WsjVJitcVw=;
-        b=E2N132fvML6LrBTQk8CEDkWoE7iy6xHPtSdsWWbkkJ9qx2SDmdbsk/2gZz41g52LIE
-         TcZrptshVkbF1zidVo3NqoiA1Uj+rRgGCrItspUx/MsbD65NZ8wCsJ+43tj4gSeOdyJT
-         PDceHpT5Vc6O6aiNnu+WO7zRsm/ZUcsQBLdfKAu0+d55JKS4L707dtA0tKPlQhZPO4AQ
-         oOFpQsdwi00qCGrzgNViGIUY0Y1RE5lk7BpBlg5pEVPibtdTb9whrFBl5rzaxws2CT+a
-         sBxIiY+cNOSyLigrEBXnMpZvAUdhsyip742SYxRJRmSF4QJYeqSgWjShR9cflZxibk0M
-         Uodw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hqlg/w/fu3XfRPgdp6en7FxQt+ggN/0l4WsjVJitcVw=;
-        b=AyB24sn5t2FkFSZbK1AsC02C59xYUEty4/YUi6YxB5SmsUxZC6M0Q5QHKJUmrH4rNr
-         8wX1VXnHOcKfhh3XGP+sZ7RgMsy7Wfo4C5vu0rvdKNPdcXCC7kxBEM0QeYlnDBkH3dvG
-         Do/PnOYMwU2eKJ/JbfRORJ5bOHJHv+fRH2NvJMc6Eg8LKVhGLLvX6yP9PUJM+ZV7Mp2R
-         2YKxtypHFftnPOi6zl64rwZAQMC0mA6fViM7QHy27FzO3MQra9TMqQFWVLjeGMaG6moo
-         ZGyNOE7JTQHBb5wq4eO35aSwAyBMN+/oWAOI8ZGSQkAOjH+irBMUPHekj2JnB8nahkXL
-         67JQ==
-X-Gm-Message-State: AOAM530rFMwToG3J0TtDBq4npjHX0IbNqEQuTnf19vYrFme/1Cvtf6ve
-        hHSBjVSqypy1AKqIgLsWgu8YcMR43ZP1hfg4b2M=
-X-Google-Smtp-Source: ABdhPJySDv0PWTGe7FNJUI4axliR/+waikOZH4xVOoaC6lc/giZe/1RKNxnwujNEmpiXphYOtn97ISHWrkU6BVu3v/M=
-X-Received: by 2002:a67:d808:0:b0:337:8cab:6c00 with SMTP id
- e8-20020a67d808000000b003378cab6c00mr14451432vsj.66.1653658764178; Fri, 27
- May 2022 06:39:24 -0700 (PDT)
+        Fri, 27 May 2022 09:41:50 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137EB49251
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:41:50 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24RDelT8023246;
+        Fri, 27 May 2022 13:41:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=zOdP/drjTzGihZLXcMHbI5b4sIdT2KZuKatWTzb/zdg=;
+ b=La1fwbdDEHypRKWo5kr1a4yo+RAJdujdyXPVjlTuOim1WgwBXl75LM3nDo4661HS3tkg
+ BsRPk3cIOXi3ac9oju7ezet8/JdATkmpfTMxB/zPNg0LQK+TyC/SfMkK4gtcVJyx6NWr
+ dY9wEbiBNHZiZYVoibd7PHELbip8ABVtzLDSymzaCTNCgYEF6KxZdhdxNZOCDK+IENsu
+ GRKB+CT/+BjFOg7YuuCEQAbNM0Iv/gsPelosxkWwePeCwkwmmKdbzvKSBksHQgOYK0Wr
+ ux3Y5U3qlaqt4jMqar+NBNXlHQOdo3F+rEV2ANoSOfEt1t5hAWfVEv28DgGU/0FHO6vG 6A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gayqx009e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 May 2022 13:41:18 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24RDfIgh028676;
+        Fri, 27 May 2022 13:41:18 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gayqx006j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 May 2022 13:41:17 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24RDIvWu023541;
+        Fri, 27 May 2022 13:41:05 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3g93v03yu4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 May 2022 13:41:04 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24RDQnjv46596606
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 May 2022 13:26:49 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AB32C5204E;
+        Fri, 27 May 2022 13:41:02 +0000 (GMT)
+Received: from [9.43.91.191] (unknown [9.43.91.191])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E037152050;
+        Fri, 27 May 2022 13:40:56 +0000 (GMT)
+Message-ID: <c453491b-6dc1-a008-d6f4-3c806eebd2ef@linux.ibm.com>
+Date:   Fri, 27 May 2022 19:10:55 +0530
 MIME-Version: 1.0
-References: <20220527032504.30341-1-yee.lee@mediatek.com>
-In-Reply-To: <20220527032504.30341-1-yee.lee@mediatek.com>
-From:   patrick wang <patrick.wang.shcn@gmail.com>
-Date:   Fri, 27 May 2022 21:39:11 +0800
-Message-ID: <CAGcnep9B+z8QG4f4kkW8NF+fM1Kgj=NOV=YRhLK4yK74jbqpAw@mail.gmail.com>
-Subject: Re: [PATCH] mm: kmemleak: Skip check in kmemleak_*_phys when pfn
- bound is not ready
-To:     yee.lee@mediatek.com
-Cc:     linux-kernel@vger.kernel.org, Kuan-Ying.lee@mediatek.com,
-        Andrew.Yang@mediatek.com, Sunny.Kao@mediatek.com,
-        chinwen.chang@mediatek.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: RFC: Memory Tiering Kernel Interfaces (v3)
+Content-Language: en-US
+To:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>, Linux MM <linux-mm@kvack.org>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2ETpv1Ag1m1AG8xaAH-grwbMMCZl3HFv
+X-Proofpoint-ORIG-GUID: Js3ZwWpwPd6A2FJOhOWYEm4xBoJCvbPi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-27_03,2022-05-27_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
+ suspectscore=0 spamscore=0 mlxscore=0 clxscore=1015 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205270064
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 11:25 AM <yee.lee@mediatek.com> wrote:
->
-> From: Yee Lee <yee.lee@mediatek.com>
->
-> In some archs (arm64), memblock allocates memory in boot time when
-> the pfn boundary (max_pfn/min_pfn) is not ready. The lowmen checks in
-> kmemleak_*_phys() drop those blocks and cause some false leak alarms
-> on common kernel objects.
->
-> Kmemleak output: (Qemu/arm64)
-> unreferenced object 0xffff0000c0170a00 (size 128):
->   comm "swapper/0", pid 1, jiffies 4294892404 (age 126.208s)
->   hex dump (first 32 bytes):
->     62 61 73 65 00 00 00 00 00 00 00 00 00 00 00 00  base............
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<(____ptrval____)>] __kmalloc_track_caller+0x1b0/0x2e4
->     [<(____ptrval____)>] kstrdup_const+0x8c/0xc4
->     [<(____ptrval____)>] kvasprintf_const+0xbc/0xec
->     [<(____ptrval____)>] kobject_set_name_vargs+0x58/0xe4
->     [<(____ptrval____)>] kobject_add+0x84/0x100
->     [<(____ptrval____)>] __of_attach_node_sysfs+0x78/0xec
->     [<(____ptrval____)>] of_core_init+0x68/0x104
->     [<(____ptrval____)>] driver_init+0x28/0x48
->     [<(____ptrval____)>] do_basic_setup+0x14/0x28
->     [<(____ptrval____)>] kernel_init_freeable+0x110/0x178
->     [<(____ptrval____)>] kernel_init+0x20/0x1a0
->     [<(____ptrval____)>] ret_from_fork+0x10/0x20
->
-> This patch relaxs the boundary checking in kmemleak_*_phys api
-> if max_low_pfn is uninitialzed.
->
-> Fixes: 23c2d4 (mm: kmemleak: take a full lowmem check in kmemleak_*_phy)
-> Signed-off-by: Yee Lee <yee.lee@mediatek.com>
-> ---
->  mm/kmemleak.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> index a182f5ddaf68..6b2af544aa0f 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-> @@ -1132,7 +1132,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
->  void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
->                                gfp_t gfp)
->  {
-> -       if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-> +       if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
+On 5/27/22 2:52 AM, Wei Xu wrote:
 
-Just skip checking will bring the crash possibility back. Seems it's beyond
-these interfaces' handle scope for this situation, since "min_low_pfn" and
-"max_low_pfn" are depending on arches.
+>    The order of memory tiers is determined by their rank values, not by
+>    their memtier device names.
+> 
+>    - /sys/devices/system/memtier/possible
+> 
+>      Format: ordered list of "memtier(rank)"
+>      Example: 0(64), 1(128), 2(192)
+> 
+>      Read-only.  When read, list all available memory tiers and their
+>      associated ranks, ordered by the rank values (from the highest
+>       tier to the lowest tier).
+> 
 
->                 kmemleak_alloc(__va(phys), size, min_count, gfp);
->  }
->  EXPORT_SYMBOL(kmemleak_alloc_phys);
-> @@ -1146,7 +1146,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
->   */
->  void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
->  {
-> -       if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-> +       if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
->                 kmemleak_free_part(__va(phys), size);
->  }
->  EXPORT_SYMBOL(kmemleak_free_part_phys);
-> @@ -1158,7 +1158,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
->   */
->  void __ref kmemleak_not_leak_phys(phys_addr_t phys)
->  {
-> -       if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-> +       if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
->                 kmemleak_not_leak(__va(phys));
->  }
->  EXPORT_SYMBOL(kmemleak_not_leak_phys);
-> @@ -1170,7 +1170,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
->   */
->  void __ref kmemleak_ignore_phys(phys_addr_t phys)
->  {
-> -       if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
-> +       if (!max_low_pfn || (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn))
->                 kmemleak_ignore(__va(phys));
->  }
->  EXPORT_SYMBOL(kmemleak_ignore_phys);
-> --
-> 2.18.0
->
+Did we discuss the need for this? I haven't done this in the patch 
+series I sent across. We do have 
+/sys/devices/system/memtier/default_rank which should allow user to 
+identify the default rank to which memory would get added via hotplug if 
+the NUMA node is not part of any memory tier.
+
+
+-aneesh

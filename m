@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276D453592D
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286C053597B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244558AbiE0GOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 02:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S1343599AbiE0Gif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 02:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiE0GOD (ORCPT
+        with ESMTP id S240528AbiE0Gib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 02:14:03 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8955D66C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:14:01 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L8ZGM0Gknz1JCD4;
-        Fri, 27 May 2022 14:12:27 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 14:13:59 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 14:13:59 +0800
-From:   keliu <liuke94@huawei.com>
-To:     <vaibhav.sr@gmail.com>, <mgreer@animalcreek.com>,
-        <johan@kernel.org>, <elder@kernel.org>,
-        <gregkh@linuxfoundation.org>, <vireshk@kernel.org>,
-        <pure.logic@nexus-software.ie>, <greybus-dev@lists.linaro.org>,
-        <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] staging: greybus: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 06:35:28 +0000
-Message-ID: <20220527063528.2356712-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 May 2022 02:38:31 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12253E2771
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:38:27 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s68so3158511pgs.10
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xNO87R/X/d1Qe/nRsB/dim8tX8ZL4WufoTOu5cyuOLU=;
+        b=lJ/mfvsOzOUWYJ9ZynEattJvk88vSDphJsOwWXz8R7g+nzXguFfbpxWv6Tl06d51zS
+         kAlRbiWt3fqTRRpiJ3G7JVeqoNxshv+DmCOn0K3yiJr9J2EolwUgwXkS8fINllRLK6HV
+         sEffYKJqVt8U8n+pR0D79bVj6+iI2p49adtutzTOH7wXXSJ5ni7Puqa2I214KRnTwBrn
+         ewi9al7E59ARfQ8OxRqZFU4wzWil0apn2g5SLwi8F8kewa795cNfsqa8zbYL33LqV9Z7
+         mP6DLFIye3xLzdWXT4Q3A4WSFZUkeJKGsQz2rUTdO1dUM2hSZjd4MYibPEt4d3Aa7ZaT
+         XlTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xNO87R/X/d1Qe/nRsB/dim8tX8ZL4WufoTOu5cyuOLU=;
+        b=NzSoW2mWRn7QXeL5qFK8uBXL5ktt4G/8PYraw5CYe7cetSA9nk/buKtGfyNHvhxx1b
+         oncrfJzoBj7ze59NgYFz1I2QvM0uoPqGkBk04chxQEpY6zMhAX4FGN7d4NbJRrjHIVt1
+         uSaPH9vUp9sUZysJqzAA22NlOI60QFjAcM6+Z7aCLiPTHxayFVUsEkZC/vHYTmXVll1I
+         DFAr6DQkWM8UfkB8/UP+KqnUpkWmnhYVJy1fBtHIRQ58J0CsGcCWueLoaAxk4sfE+Ex6
+         aok/mIAkh94rHNXL6kabKLLtSK7V6DGhI0A+DJTdScUisDJWgQe+bKfRVDLujdq4fcFT
+         dZSA==
+X-Gm-Message-State: AOAM530dkTlw2Ef3BkPuNpp+mbAL2EwWJRmxWwKynBrHfH4/aacJ3g7g
+        MKUAljh/a5OBPs4Uh6DswPxlxEZCfDDTPFVo
+X-Google-Smtp-Source: ABdhPJzJ39IUYHF1G2Lbp7RevnHGuQ+O/gkk+bzGl2T9fQVkWQAAiD1mbZS/i6n2eNKPfygDXKAbwA==
+X-Received: by 2002:a63:2bd8:0:b0:3fa:faf9:e6d5 with SMTP id r207-20020a632bd8000000b003fafaf9e6d5mr7845959pgr.247.1653633506414;
+        Thu, 26 May 2022 23:38:26 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s (n058152048195.netvigator.com. [58.152.48.195])
+        by smtp.gmail.com with ESMTPSA id s187-20020a625ec4000000b0050dc7628155sm2632585pfb.47.2022.05.26.23.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 23:38:26 -0700 (PDT)
+Date:   Fri, 27 May 2022 14:38:21 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH] perf test arm-spe: Check if perf-record hangs when
+ recording workload with forks
+Message-ID: <20220527063821.GB829807@leoy-ThinkPad-X240s>
+References: <20220228165655.3920-1-german.gomez@arm.com>
+ <95ede14c-8dc2-d285-9f5b-8d6ee6797f00@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <95ede14c-8dc2-d285-9f5b-8d6ee6797f00@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,277 +76,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove() .
+On Fri, May 13, 2022 at 02:03:52PM +0100, James Clark wrote:
+> 
+> 
+> On 28/02/2022 16:56, German Gomez wrote:
+> > Add shell test to check if perf-record hangs when recording an arm_spe
+> > event with forks.
+> > 
+> > The test FAILS if the Kernel is not patched with Commit 961c391217 ("perf:
+> > Always wake the parent event").
+> > 
+> > Unpatched Kernel:
+> > 
+> >   $ perf test -v 90
+> >   90: Check Arm SPE doesn't hang when there are forks
+> >   --- start ---
+> >   test child forked, pid 14232
+> >   Recording workload with fork
+> >   Log lines = 90 /tmp/__perf_test.stderr.0Nu0U
+> >   Log lines after 1 second = 90 /tmp/__perf_test.stderr.0Nu0U
+> >   SPE hang test: FAIL
+> >   test child finished with -1
+> >   ---- end ----
+> >   Check Arm SPE trace data in workload with forks: FAILED!
+> > 
+> > Patched Kernel:
+> > 
+> >   $ perf test -v 90
+> >   90: Check Arm SPE doesn't hang when there are forks
+> >   --- start ---
+> >   test child forked, pid 2930
+> >   Compiling test program...
+> >   Recording workload...
+> >   Log lines = 478 /tmp/__perf_test.log.026AI
+> >   Log lines after 1 second = 557 /tmp/__perf_test.log.026AI
+> >   SPE hang test: PASS
+> >   Cleaning up files...
+> >   test child finished with 0
+> >   ---- end ----
+> >   Check Arm SPE trace data in workload with forks: Ok
+> > 
+> > Signed-off-by: German Gomez <german.gomez@arm.com>
+> 
+> Reviewed-by: James Clark <james.clark@arm.com>
 
-Signed-off-by: keliu <liuke94@huawei.com>
----
- drivers/staging/greybus/audio_manager.c  |  8 ++++----
- drivers/staging/greybus/authentication.c |  4 ++--
- drivers/staging/greybus/fw-download.c    |  4 ++--
- drivers/staging/greybus/fw-management.c  | 12 ++++++------
- drivers/staging/greybus/gbphy.c          |  4 ++--
- drivers/staging/greybus/loopback.c       |  6 +++---
- drivers/staging/greybus/raw.c            |  6 +++---
- drivers/staging/greybus/vibrator.c       |  6 +++---
- 8 files changed, 25 insertions(+), 25 deletions(-)
+Thanks for review and popping up this patch, James.  LGTM:
 
-diff --git a/drivers/staging/greybus/audio_manager.c b/drivers/staging/greybus/audio_manager.c
-index 9a3f7c034ab4..fa43d35bbcec 100644
---- a/drivers/staging/greybus/audio_manager.c
-+++ b/drivers/staging/greybus/audio_manager.c
-@@ -44,14 +44,14 @@ int gb_audio_manager_add(struct gb_audio_manager_module_descriptor *desc)
- 	int id;
- 	int err;
- 
--	id = ida_simple_get(&module_id, 0, 0, GFP_KERNEL);
-+	id = ida_alloc(&module_id, GFP_KERNEL);
- 	if (id < 0)
- 		return id;
- 
- 	err = gb_audio_manager_module_create(&module, manager_kset,
- 					     id, desc);
- 	if (err) {
--		ida_simple_remove(&module_id, id);
-+		ida_free(&module_id, id);
- 		return err;
- 	}
- 
-@@ -78,7 +78,7 @@ int gb_audio_manager_remove(int id)
- 	list_del(&module->list);
- 	kobject_put(&module->kobj);
- 	up_write(&modules_rwsem);
--	ida_simple_remove(&module_id, id);
-+	ida_free(&module_id, id);
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(gb_audio_manager_remove);
-@@ -92,7 +92,7 @@ void gb_audio_manager_remove_all(void)
- 
- 	list_for_each_entry_safe(module, next, &modules_list, list) {
- 		list_del(&module->list);
--		ida_simple_remove(&module_id, module->id);
-+		ida_free(&module_id, module->id);
- 		kobject_put(&module->kobj);
- 	}
- 
-diff --git a/drivers/staging/greybus/authentication.c b/drivers/staging/greybus/authentication.c
-index 297e69f011c7..01dd1cd958ea 100644
---- a/drivers/staging/greybus/authentication.c
-+++ b/drivers/staging/greybus/authentication.c
-@@ -348,7 +348,7 @@ int gb_cap_connection_init(struct gb_connection *connection)
- err_del_cdev:
- 	cdev_del(&cap->cdev);
- err_remove_ida:
--	ida_simple_remove(&cap_minors_map, minor);
-+	ida_free(&cap_minors_map, minor);
- err_connection_disable:
- 	gb_connection_disable(connection);
- err_list_del:
-@@ -372,7 +372,7 @@ void gb_cap_connection_exit(struct gb_connection *connection)
- 
- 	device_destroy(cap_class, cap->dev_num);
- 	cdev_del(&cap->cdev);
--	ida_simple_remove(&cap_minors_map, MINOR(cap->dev_num));
-+	ida_free(&cap_minors_map, MINOR(cap->dev_num));
- 
- 	/*
- 	 * Disallow any new ioctl operations on the char device and wait for
-diff --git a/drivers/staging/greybus/fw-download.c b/drivers/staging/greybus/fw-download.c
-index 543692c567f9..83652cb04d53 100644
---- a/drivers/staging/greybus/fw-download.c
-+++ b/drivers/staging/greybus/fw-download.c
-@@ -63,7 +63,7 @@ static void fw_req_release(struct kref *kref)
- 	 * just hope that it never happens.
- 	 */
- 	if (!fw_req->timedout)
--		ida_simple_remove(&fw_req->fw_download->id_map,
-+		ida_free(&fw_req->fw_download->id_map,
- 				  fw_req->firmware_id);
- 
- 	kfree(fw_req);
-@@ -212,7 +212,7 @@ static struct fw_request *find_firmware(struct fw_download *fw_download,
- 	return fw_req;
- 
- err_free_id:
--	ida_simple_remove(&fw_download->id_map, fw_req->firmware_id);
-+	ida_free(&fw_download->id_map, fw_req->firmware_id);
- err_free_req:
- 	kfree(fw_req);
- 
-diff --git a/drivers/staging/greybus/fw-management.c b/drivers/staging/greybus/fw-management.c
-index 687c6405c65b..a386a5607c7e 100644
---- a/drivers/staging/greybus/fw-management.c
-+++ b/drivers/staging/greybus/fw-management.c
-@@ -177,7 +177,7 @@ static int fw_mgmt_load_and_validate_operation(struct fw_mgmt *fw_mgmt,
- 				GB_FW_MGMT_TYPE_LOAD_AND_VALIDATE_FW, &request,
- 				sizeof(request), NULL, 0);
- 	if (ret) {
--		ida_simple_remove(&fw_mgmt->id_map,
-+		ida_free(&fw_mgmt->id_map,
- 				  fw_mgmt->intf_fw_request_id);
- 		fw_mgmt->intf_fw_request_id = 0;
- 		dev_err(fw_mgmt->parent,
-@@ -217,7 +217,7 @@ static int fw_mgmt_interface_fw_loaded_operation(struct gb_operation *op)
- 		return -ENODEV;
- 	}
- 
--	ida_simple_remove(&fw_mgmt->id_map, fw_mgmt->intf_fw_request_id);
-+	ida_free(&fw_mgmt->id_map, fw_mgmt->intf_fw_request_id);
- 	fw_mgmt->intf_fw_request_id = 0;
- 	fw_mgmt->intf_fw_status = request->status;
- 	fw_mgmt->intf_fw_major = le16_to_cpu(request->major);
-@@ -327,7 +327,7 @@ static int fw_mgmt_backend_fw_update_operation(struct fw_mgmt *fw_mgmt,
- 				GB_FW_MGMT_TYPE_BACKEND_FW_UPDATE, &request,
- 				sizeof(request), NULL, 0);
- 	if (ret) {
--		ida_simple_remove(&fw_mgmt->id_map,
-+		ida_free(&fw_mgmt->id_map,
- 				  fw_mgmt->backend_fw_request_id);
- 		fw_mgmt->backend_fw_request_id = 0;
- 		dev_err(fw_mgmt->parent,
-@@ -366,7 +366,7 @@ static int fw_mgmt_backend_fw_updated_operation(struct gb_operation *op)
- 		return -ENODEV;
- 	}
- 
--	ida_simple_remove(&fw_mgmt->id_map, fw_mgmt->backend_fw_request_id);
-+	ida_free(&fw_mgmt->id_map, fw_mgmt->backend_fw_request_id);
- 	fw_mgmt->backend_fw_request_id = 0;
- 	fw_mgmt->backend_fw_status = request->status;
- 
-@@ -642,7 +642,7 @@ int gb_fw_mgmt_connection_init(struct gb_connection *connection)
- err_del_cdev:
- 	cdev_del(&fw_mgmt->cdev);
- err_remove_ida:
--	ida_simple_remove(&fw_mgmt_minors_map, minor);
-+	ida_free(&fw_mgmt_minors_map, minor);
- err_connection_disable:
- 	gb_connection_disable(connection);
- err_list_del:
-@@ -666,7 +666,7 @@ void gb_fw_mgmt_connection_exit(struct gb_connection *connection)
- 
- 	device_destroy(fw_mgmt_class, fw_mgmt->dev_num);
- 	cdev_del(&fw_mgmt->cdev);
--	ida_simple_remove(&fw_mgmt_minors_map, MINOR(fw_mgmt->dev_num));
-+	ida_free(&fw_mgmt_minors_map, MINOR(fw_mgmt->dev_num));
- 
- 	/*
- 	 * Disallow any new ioctl operations on the char device and wait for
-diff --git a/drivers/staging/greybus/gbphy.c b/drivers/staging/greybus/gbphy.c
-index 5a5c17a4519b..751d1d580982 100644
---- a/drivers/staging/greybus/gbphy.c
-+++ b/drivers/staging/greybus/gbphy.c
-@@ -46,7 +46,7 @@ static void gbphy_dev_release(struct device *dev)
- {
- 	struct gbphy_device *gbphy_dev = to_gbphy_dev(dev);
- 
--	ida_simple_remove(&gbphy_id, gbphy_dev->id);
-+	ida_free(&gbphy_id, gbphy_dev->id);
- 	kfree(gbphy_dev);
- }
- 
-@@ -231,7 +231,7 @@ static struct gbphy_device *gb_gbphy_create_dev(struct gb_bundle *bundle,
- 
- 	gbphy_dev = kzalloc(sizeof(*gbphy_dev), GFP_KERNEL);
- 	if (!gbphy_dev) {
--		ida_simple_remove(&gbphy_id, id);
-+		ida_free(&gbphy_id, id);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
-diff --git a/drivers/staging/greybus/loopback.c b/drivers/staging/greybus/loopback.c
-index 2471448ba42a..fca69aff9abf 100644
---- a/drivers/staging/greybus/loopback.c
-+++ b/drivers/staging/greybus/loopback.c
-@@ -1029,7 +1029,7 @@ static int gb_loopback_probe(struct gb_bundle *bundle,
- 	gb->file = debugfs_create_file(name, S_IFREG | 0444, gb_dev.root, gb,
- 				       &gb_loopback_dbgfs_latency_fops);
- 
--	gb->id = ida_simple_get(&loopback_ida, 0, 0, GFP_KERNEL);
-+	gb->id = ida_alloc(&loopback_ida, GFP_KERNEL);
- 	if (gb->id < 0) {
- 		retval = gb->id;
- 		goto out_debugfs_remove;
-@@ -1080,7 +1080,7 @@ static int gb_loopback_probe(struct gb_bundle *bundle,
- out_connection_disable:
- 	gb_connection_disable(connection);
- out_ida_remove:
--	ida_simple_remove(&loopback_ida, gb->id);
-+	ida_free(&loopback_ida, gb->id);
- out_debugfs_remove:
- 	debugfs_remove(gb->file);
- out_connection_destroy:
-@@ -1122,7 +1122,7 @@ static void gb_loopback_disconnect(struct gb_bundle *bundle)
- 	spin_unlock_irqrestore(&gb_dev.lock, flags);
- 
- 	device_unregister(gb->dev);
--	ida_simple_remove(&loopback_ida, gb->id);
-+	ida_free(&loopback_ida, gb->id);
- 
- 	gb_connection_destroy(gb->connection);
- 	kfree(gb);
-diff --git a/drivers/staging/greybus/raw.c b/drivers/staging/greybus/raw.c
-index 2a375f407d38..cfaa7ab42ffc 100644
---- a/drivers/staging/greybus/raw.c
-+++ b/drivers/staging/greybus/raw.c
-@@ -178,7 +178,7 @@ static int gb_raw_probe(struct gb_bundle *bundle,
- 	raw->connection = connection;
- 	greybus_set_drvdata(bundle, raw);
- 
--	minor = ida_simple_get(&minors, 0, 0, GFP_KERNEL);
-+	minor = ida_alloc(&minors, GFP_KERNEL);
- 	if (minor < 0) {
- 		retval = minor;
- 		goto error_connection_destroy;
-@@ -211,7 +211,7 @@ static int gb_raw_probe(struct gb_bundle *bundle,
- 	gb_connection_disable(connection);
- 
- error_remove_ida:
--	ida_simple_remove(&minors, minor);
-+	ida_free(&minors, minor);
- 
- error_connection_destroy:
- 	gb_connection_destroy(connection);
-@@ -232,7 +232,7 @@ static void gb_raw_disconnect(struct gb_bundle *bundle)
- 	device_destroy(raw_class, raw->dev);
- 	cdev_del(&raw->cdev);
- 	gb_connection_disable(connection);
--	ida_simple_remove(&minors, MINOR(raw->dev));
-+	ida_free(&minors, MINOR(raw->dev));
- 	gb_connection_destroy(connection);
- 
- 	mutex_lock(&raw->list_lock);
-diff --git a/drivers/staging/greybus/vibrator.c b/drivers/staging/greybus/vibrator.c
-index 0e2b188e5ca3..ccc409280fb5 100644
---- a/drivers/staging/greybus/vibrator.c
-+++ b/drivers/staging/greybus/vibrator.c
-@@ -154,7 +154,7 @@ static int gb_vibrator_probe(struct gb_bundle *bundle,
- 	 * there is a "real" device somewhere in the kernel for this, but I
- 	 * can't find it at the moment...
- 	 */
--	vib->minor = ida_simple_get(&minors, 0, 0, GFP_KERNEL);
-+	vib->minor = ida_alloc(&minors, GFP_KERNEL);
- 	if (vib->minor < 0) {
- 		retval = vib->minor;
- 		goto err_connection_disable;
-@@ -174,7 +174,7 @@ static int gb_vibrator_probe(struct gb_bundle *bundle,
- 	return 0;
- 
- err_ida_remove:
--	ida_simple_remove(&minors, vib->minor);
-+	ida_free(&minors, vib->minor);
- err_connection_disable:
- 	gb_connection_disable(connection);
- err_connection_destroy:
-@@ -198,7 +198,7 @@ static void gb_vibrator_disconnect(struct gb_bundle *bundle)
- 		turn_off(vib);
- 
- 	device_unregister(vib->dev);
--	ida_simple_remove(&minors, vib->minor);
-+	ida_free(&minors, vib->minor);
- 	gb_connection_disable(vib->connection);
- 	gb_connection_destroy(vib->connection);
- 	kfree(vib);
--- 
-2.25.1
-
+Reviewed-by: Leo Yan <leo.yan@linaro.org>

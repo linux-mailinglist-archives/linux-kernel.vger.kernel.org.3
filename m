@@ -2,237 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC38536918
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 01:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3309536919
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 01:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353197AbiE0XC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 19:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S231467AbiE0XFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 19:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234286AbiE0XC4 (ORCPT
+        with ESMTP id S230193AbiE0XFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 19:02:56 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84C212E33F
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 16:02:54 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id bo5so5536600pfb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 16:02:54 -0700 (PDT)
+        Fri, 27 May 2022 19:05:00 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6311312E33F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 16:04:58 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id v15so4636102edl.9
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 16:04:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=xYVHCl/Xc9S+LdQbVuLzGS9n/Ik2J15PVCpCDhSAeog=;
-        b=3+WCWlBLrTPP74onI6sVY3zOylHFVssupUpB5BhHRLaoBYi3VIWHfalrCFO0eg/INM
-         PJKLAw/EcUhbuJ09XId4j/cHEqdil6iz2OQm/qZ/rFnj2+aJyh/Wq8tRmEoYS6cvYu0P
-         qKZ5AGH5NeDSRhoNkycdouWcZUInvuJl43UaWLTgs6mRLcfv7hIK3CMpVD4AjI3n4tLf
-         ZG3gh4Ee/+SkLsbmUThfTsn3niXCi1FxmAsbUi/n5KVb8oGM8m1sTGCUxfbj8d9OtwLL
-         YWCicSEM1ccGB40V3Z8Ah8kBuOS3v6BnHaeB960+0PwOAmu8tWJyFJ+2npQDiG2mkyTq
-         b21A==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6BGoFFgW/Mo0Xp2ZeLbW4T3GKY+VDGTAwfQ7W1wk09o=;
+        b=M1D1Ve7N12RMFQKKTXgwWaa5btEqkDX8TyQBKk1K0II7CkANOnLW1EP4aKbEIGi4sh
+         WwVXtLLKsqhEKaUNouMKfO1QpWYqIxXEWh9U/Dm4Zj/0lsXbf6hCi19sld0JuIE3f3WS
+         QTj+V3awjOgu4xhQTxweoGzYrNbyWekMAmzIM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=xYVHCl/Xc9S+LdQbVuLzGS9n/Ik2J15PVCpCDhSAeog=;
-        b=oU+i4lM0oUU5U2eOdseF0EYH14XZ6g4paqG0gnaRI6bYqHqq9mcJQdGZfYWx/iRrhP
-         QB29SK0auDgZwZJ4Byq/vFz+vWhBzOTeGbDlN1qzjTT5OBhCYBstRasoBOcF57o4fneU
-         1ZgzrAagRY08ILr4Gl8dm+7ew8SHahzUF86nCgSAnOFU0Oy+FNYl9Jw4Ibi4YqasbIXO
-         H2Ga5cERjMeSnzYmYrQS6hIREkT5bm9mRae6ZL9Y+R5E3aEjr/N8KNWLG51g3eS8Z7Tq
-         UUQu0Ox/bLKaCTqh0udPXCQzz7wCgeyJ1YbC2jJD+MfxS/VV3ZTLFTztOT7PD9wk1B+p
-         5RiA==
-X-Gm-Message-State: AOAM532WFD/ZE5mGoDa6s+eMrG8o3Kg6V4Nfi5kS21sT17WpOAL6uzvs
-        FfJBPrE71G4uiw80Vdi0aGS37JF/vjMItA8c1sVAMQ==
-X-Google-Smtp-Source: ABdhPJzpmxSaUq/+C3wNgGna1Vs4gnc9QL2CMADJ9qDD7W2F4JZ0oOyJ/VE10sK2MnKm2ffbHBKIk2l8WCtJACkzygg=
-X-Received: by 2002:a63:5610:0:b0:3f2:7e19:1697 with SMTP id
- k16-20020a635610000000b003f27e191697mr38215091pgb.74.1653692574359; Fri, 27
- May 2022 16:02:54 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6BGoFFgW/Mo0Xp2ZeLbW4T3GKY+VDGTAwfQ7W1wk09o=;
+        b=wqI0uZIYs0Jve7HEjE+5Dp+sF2BLpZY503dMjpgfJaGTh/mTPc6MYXuxcmhw6Ja3qp
+         YwJjKwyy9UtuL7QzQ9wsSWgZDWhLzPzirTuw6cMyOvnZSd27v1DzmsWz4BvAHQzLjSD5
+         uKC8vAS1ohz0rOIEJJufsRGGsYIcpk4yBDDSOkUBO+rXPh68pTGVJNIgPdCDu0sByvGL
+         Hn6QkE4ndixnRemqAo3TuYDJoJBKH7qbw6pRKKwvclP6AUTf1xabpDhQl5Q9OYMT8iG8
+         G4kvX8AD/zIQjAuZGj69WyemLQ2I6sSKdlN3RzPxeQxdGdCdSY68lx2OzxDDNvdsMEzI
+         aAWw==
+X-Gm-Message-State: AOAM5320RKCM/Ac2jo9cOUVq8hyMnULwO9WVdjMHIYIBC+on0dyqn17P
+        2nbgca1uyJxUDOXAnAVMrdq1oAoHGQD8665d
+X-Google-Smtp-Source: ABdhPJznQb9mW8lh0X0k4Oa+fUA5c0qauc1wsIyLA75QsjFzlvp9cYJrs64eRXjdCNxqP74gSlUbWw==
+X-Received: by 2002:a05:6402:270a:b0:42b:3721:4e76 with SMTP id y10-20020a056402270a00b0042b37214e76mr37665296edd.51.1653692696696;
+        Fri, 27 May 2022 16:04:56 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id mu31-20020a1709068a9f00b006feb875503fsm1855001ejc.78.2022.05.27.16.04.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 May 2022 16:04:56 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id e2so7675469wrc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 16:04:56 -0700 (PDT)
+X-Received: by 2002:a05:6000:16c4:b0:20f:cd5d:4797 with SMTP id
+ h4-20020a05600016c400b0020fcd5d4797mr25777297wrf.193.1653692695718; Fri, 27
+ May 2022 16:04:55 -0700 (PDT)
 MIME-Version: 1.0
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 27 May 2022 16:02:53 -0700
-Message-ID: <CAPcyv4gmk-69G+eqtxqeNUoy0G9XPvdTJg1h32_F9qudbx4SOw@mail.gmail.com>
-Subject: [GIT PULL] Compute Express Link for 5.19
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-cxl@vger.kernel.org
+References: <4dc223ba-b0d1-e183-1d83-a03a03c1df97@oracle.com>
+In-Reply-To: <4dc223ba-b0d1-e183-1d83-a03a03c1df97@oracle.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 27 May 2022 16:04:39 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whL6vtgSgFqu3t29DsfU84M7RaZHC9aJz5WN6bNOY563w@mail.gmail.com>
+Message-ID: <CAHk-=whL6vtgSgFqu3t29DsfU84M7RaZHC9aJz5WN6bNOY563w@mail.gmail.com>
+Subject: Re: [GIT PULL] jfs updates for v5.19
+To:     Dave Kleikamp <dave.kleikamp@oracle.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus, please pull from:
+On Fri, May 27, 2022 at 8:10 AM Dave Kleikamp <dave.kleikamp@oracle.com> wrote:
+>
+> JFS: One bug fix and some code cleanup
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl tags/cxl-for-5.19
+Oh, ok...
 
-...to receive the CXL update for this cycle. The highlight is new
-driver-core infrastructure and CXL subsystem changes for allowing
-lockdep to validate device_lock() usage. Thanks to PeterZ for setting
-me straight on the current capabilities of the lockdep API, and Greg
-acked it as well.
+>   10 files changed, 3 insertions(+), 1652 deletions(-)
 
-On the CXL ACPI side this update adds support for CXL _OSC so that
-platform firmware knows that it is safe to still grant Linux native
-control of PCIe hotplug and error handling in the presence of CXL
-devices. A circular dependency problem was discovered between suspend
-and CXL memory for cases where the suspend image might be stored in
-CXL memory where that image also contains the PCI register state to
-restore to re-enable the device. Disable suspend for now until an
-architecture is defined to clarify that conflict.
+.. whee.
 
-Lastly a collection of reworks, fixes, and cleanups to the CXL
-subsystem where support for snooping mailbox commands and properly
-handling the "mem_enable" flow are the highlights.
+Usually when people say "some cleanup" they are talking about fixing
+some nasty code patterns, not removing 1600 lines of 20-year old dead
+code.
 
-It has appeared in -next for several releases with some fixes from Dan
-and others, but no more outstanding issues as of now.
+Thanks,
 
-Please pull, thanks.
-
----
-
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
-
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl tags/cxl-for-5.19
-
-for you to fetch changes up to 34e37b4c432cd0f1842b352fde4b8878b4166888:
-
-  cxl/port: Enable HDM Capability after validating DVSEC Ranges
-(2022-05-20 12:30:53 -0700)
-
-----------------------------------------------------------------
-cxl for 5.19
-
-- Add driver-core infrastructure for lockdep validation of
-  device_lock(), and fixup a deadlock report that was previously hidden
-  behind the 'lockdep no validate' policy.
-
-- Add CXL _OSC support for claiming native control of CXL hotplug and
-  error handling.
-
-- Disable suspend in the presence of CXL memory unless and until a
-  protocol is identified for restoring PCI device context from memory
-  hosted on CXL PCI devices.
-
-- Add support for snooping CXL mailbox commands to protect against
-  inopportune changes, like set-partition with the 'immediate' flag set.
-
-- Rework how the driver detects legacy CXL 1.1 configurations (CXL DVSEC
-  / 'mem_enable') before enabling new CXL 2.0 decode configurations (CXL
-  HDM Capability).
-
-- Miscellaneous cleanups and fixes from -next exposure.
-
-----------------------------------------------------------------
-Alison Schofield (11):
-      cxl/mbox: Move cxl_mem_command construction to helper funcs
-      cxl/mbox: Move raw command warning to raw command validation
-      cxl/mbox: Move build of user mailbox cmd to a helper functions
-      cxl/mbox: Construct a users cxl_mbox_cmd in the validation path
-      cxl/mbox: Remove dependency on cxl_mem_command for a debug msg
-      cxl/mbox: Make handle_mailbox_cmd_from_user() use a mbox param
-      cxl/mbox: Move cxl_mem_command param to a local variable
-      cxl/mbox: Block immediate mode in SET_PARTITION_INFO command
-      cxl/pmem: Remove CXL SET_PARTITION_INFO from exclusive_cmds list
-      cxl/mbox: Use type __u32 for mailbox payload sizes
-      cxl/mbox: Replace NULL check with IS_ERR() after vmemdup_user()
-
-Dan Carpenter (1):
-      cxl/mbox: fix logical vs bitwise typo
-
-Dan Williams (29):
-      cxl/mem: Drop DVSEC vs EFI Memory Map sanity check
-      cxl/pci: Add debug for DVSEC range init failures
-      cxl/mem: Make cxl_dvsec_range() init failure fatal
-      cxl/pci: Make cxl_dvsec_ranges() failure not fatal to cxl_pci
-      cxl/mem: Rename cxl_dvsec_decode_init() to cxl_hdm_decode_init()
-      cxl/mem: Replace redundant debug message with a comment
-      PM: CXL: Disable suspend
-      PCI/ACPI: Prefer CXL _OSC instead of PCIe _OSC for CXL host bridges
-      cxl: Replace lockdep_mutex with local lock classes
-      cxl/acpi: Add root device lockdep validation
-      cxl: Drop cxl_device_lock()
-      nvdimm: Replace lockdep_mutex with local lock classes
-      ACPI: NFIT: Drop nfit_device_lock()
-      nvdimm: Drop nd_device_lock()
-      device-core: Kill the lockdep_mutex
-      nvdimm: Fix firmware activation deadlock scenarios
-      cxl/mem: Drop mem_enabled check from wait_for_media()
-      cxl/pci: Consolidate wait_for_media() and wait_for_media_ready()
-      cxl/pci: Drop wait_for_valid() from cxl_await_media_ready()
-      cxl/mem: Fix cxl_mem_probe() error exit
-      cxl/mem: Validate port connectivity before dvsec ranges
-      cxl/pci: Move cxl_await_media_ready() to the core
-      cxl/mem: Consolidate CXL DVSEC Range enumeration in the core
-      cxl/mem: Skip range enumeration if mem_enable clear
-      cxl/mem: Merge cxl_dvsec_ranges() and cxl_hdm_decode_init()
-      cxl/pci: Drop @info argument to cxl_hdm_decode_init()
-      cxl/port: Move endpoint HDM Decoder Capability init to port driver
-      cxl/port: Reuse 'struct cxl_hdm' context for hdm init
-      cxl/port: Enable HDM Capability after validating DVSEC Ranges
-
-Davidlohr Bueso (4):
-      cxl/mbox: Drop mbox_mutex comment
-      cxl/pci: Use CXL_MBOX_SUCCESS to check against mbox_cmd return code
-      cxl/mbox: Improve handling of mbox_cmd hw return codes
-      cxl/mbox: Use new return_code handling
-
-Vishal Verma (2):
-      PCI/ACPI: add a helper for retrieving _OSC Control DWORDs
-      PCI/ACPI: negotiate CXL _OSC
-
- drivers/Makefile                |   2 +-
- drivers/acpi/bus.c              |   2 +-
- drivers/acpi/nfit/core.c        |  30 ++--
- drivers/acpi/nfit/nfit.h        |  24 ---
- drivers/acpi/pci_root.c         | 238 ++++++++++++++++++++++----
- drivers/base/core.c             |   3 -
- drivers/cxl/Kconfig             |   4 +
- drivers/cxl/Makefile            |   2 +-
- drivers/cxl/acpi.c              |  13 ++
- drivers/cxl/core/Makefile       |   1 +
- drivers/cxl/core/mbox.c         | 334 ++++++++++++++++++++++--------------
- drivers/cxl/core/memdev.c       |   3 +
- drivers/cxl/core/pci.c          | 364 ++++++++++++++++++++++++++++++++++++++++
- drivers/cxl/core/pmem.c         |  10 +-
- drivers/cxl/core/port.c         |  68 ++++----
- drivers/cxl/core/suspend.c      |  24 +++
- drivers/cxl/cxl.h               |  78 ---------
- drivers/cxl/cxlmem.h            |  75 ++++++++-
- drivers/cxl/cxlpci.h            |   2 +
- drivers/cxl/mem.c               | 148 +++-------------
- drivers/cxl/pci.c               | 175 +------------------
- drivers/cxl/pmem.c              |  13 +-
- drivers/cxl/port.c              |  28 +++-
- drivers/nvdimm/btt_devs.c       |  23 +--
- drivers/nvdimm/bus.c            |  38 ++---
- drivers/nvdimm/core.c           |  19 +--
- drivers/nvdimm/dax_devs.c       |   4 +-
- drivers/nvdimm/dimm_devs.c      |  12 +-
- drivers/nvdimm/namespace_devs.c |  46 ++---
- drivers/nvdimm/nd-core.h        |  68 +-------
- drivers/nvdimm/pfn_devs.c       |  31 ++--
- drivers/nvdimm/pmem.c           |   2 +-
- drivers/nvdimm/region.c         |   2 +-
- drivers/nvdimm/region_devs.c    |  20 ++-
- include/acpi/acpi_bus.h         |  12 +-
- include/linux/acpi.h            |  42 ++++-
- include/linux/device.h          |  48 +++++-
- include/linux/lockdep.h         |   6 +-
- include/linux/pm.h              |   9 +
- include/uapi/linux/cxl_mem.h    |  14 +-
- kernel/power/hibernate.c        |   2 +-
- kernel/power/main.c             |   5 +-
- kernel/power/suspend.c          |   3 +-
- lib/Kconfig.debug               |  23 ---
- tools/testing/cxl/Kbuild        |   3 +-
- tools/testing/cxl/mock_mem.c    |  10 --
- tools/testing/cxl/test/mem.c    |  17 --
- tools/testing/cxl/test/mock.c   |  29 ++++
- 48 files changed, 1266 insertions(+), 863 deletions(-)
- create mode 100644 drivers/cxl/core/suspend.c
- delete mode 100644 tools/testing/cxl/mock_mem.c
+              Linus

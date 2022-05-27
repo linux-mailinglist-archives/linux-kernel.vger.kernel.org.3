@@ -2,600 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA975357FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 750765357FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 05:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237575AbiE0C6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
+        id S237933AbiE0DAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 23:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235641AbiE0C6t (ORCPT
+        with ESMTP id S235641AbiE0DAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:58:49 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A724D273
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:58:46 -0700 (PDT)
+        Thu, 26 May 2022 23:00:16 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A133352532;
+        Thu, 26 May 2022 20:00:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653620326; x=1685156326;
-  h=message-id:subject:from:to:date:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=KGUTGZMWaZDLDmFTM7fXGG3Sa4D1+M55pgWF6/T02qs=;
-  b=hnwLLggYy9P4AkNwqUh7VMYgreA0jGR+vwzWYs55oLzGdhclyzTBrnuy
-   FxYAex6xVwnW3eEl6ha9acg5XRg6JyQOuXsMpwqLQMDx61XMNeL5Ghj8X
-   vBzF2T7cJe3JivStxtIVeWEsRCYITEshtkHtyuqeja0YEQDwHGQx31nWj
-   QGdO9PaGb87vV2aNib8MGqT8vuaVWZ+9eXiMuhJQFjGv8uXcRQG56ghKE
-   X8X4csbnB8ZAqBTppL6nt6qO0b5hoVSKjc7IQW/OP7dJ1Cnbt/hsLGZPZ
-   FLUu41E7Oj9zLLBDzWU8DLaJ1+v9LUsq6p+SA7Z+SEDOQQulAJ7f5wih7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="261980321"
+  t=1653620415; x=1685156415;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=y1f7TyXlnUDOQ7rphuzrQfvrJQvroyl/QHEjX2HTuLQ=;
+  b=C3gWp1GtagrRArb3wqsJVnMzx9r59niXYBh0E14EWNsyhz7c9ArJi9XX
+   y0gag+1eh+xgScBHVuWrPtzhU77Ql2CBnF0GATGZmOnCV0rnsnM3im2sR
+   DVFQoG/oj4NIFX1hriLC+0eCF8UnGzZvrDLO7hgKprPwFU+AWte4Iw5J2
+   fB4IT19rYv++WJ1SqVoR/GRqeCgR4nfYiLdrnYVGIn1wBy/3azdVyEu2L
+   OFYBM3al1nM+xKJzMtrCpXuHPhr6HIA+V3IPZTuD/1PqFjif8EDGHCBnd
+   ezXhHk2SWl7/yHDFb7SMn8bmEBarCjSGJoJIm/pG5dxoUTS3yl/toZx5g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="254235823"
 X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="261980321"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 19:58:46 -0700
+   d="scan'208";a="254235823"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 20:00:15 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
-   d="scan'208";a="603600727"
-Received: from penghuil-mobl1.ccr.corp.intel.com ([10.254.212.119])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 19:58:41 -0700
-Message-ID: <a612bf4ff68c2f6a33f01eb06cc97100a0036332.camel@intel.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces (v3)
-From:   Ying Huang <ying.huang@intel.com>
-To:     Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>, Linux MM <linux-mm@kvack.org>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Fri, 27 May 2022 10:58:39 +0800
-In-Reply-To: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
-References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+   d="scan'208";a="560516946"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga002.jf.intel.com with ESMTP; 26 May 2022 20:00:12 -0700
+Date:   Fri, 27 May 2022 11:00:11 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 02/37] KVM: x86: hyper-v: Resurrect dedicated
+ KVM_REQ_HV_TLB_FLUSH flag
+Message-ID: <20220527030011.akn43rpmususefs3@yy-desk-7060>
+References: <20220525090133.1264239-1-vkuznets@redhat.com>
+ <20220525090133.1264239-3-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525090133.1264239-3-vkuznets@redhat.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-26 at 14:22 -0700, Wei Xu wrote:
-> Changes since v2
-> ================
-> * Updated the design and examples to use "rank" instead of device ID
->   to determine the order between memory tiers for better flexibility.
-> 
-> Overview
-> ========
-> 
-> The current kernel has the basic memory tiering support: Inactive
-> pages on a higher tier NUMA node can be migrated (demoted) to a lower
-> tier NUMA node to make room for new allocations on the higher tier
-> NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
-> migrated (promoted) to a higher tier NUMA node to improve the
-> performance.
-> 
-> In the current kernel, memory tiers are defined implicitly via a
-> demotion path relationship between NUMA nodes, which is created during
-> the kernel initialization and updated when a NUMA node is hot-added or
-> hot-removed.  The current implementation puts all nodes with CPU into
-> the top tier, and builds the tier hierarchy tier-by-tier by
-> establishing the per-node demotion targets based on the distances
-> between nodes.
-> 
-> This current memory tier kernel interface needs to be improved for
-> several important use cases:
-> 
-> * The current tier initialization code always initializes
->   each memory-only NUMA node into a lower tier.  But a memory-only
->   NUMA node may have a high performance memory device (e.g. a DRAM
->   device attached via CXL.mem or a DRAM-backed memory-only node on
->   a virtual machine) and should be put into a higher tier.
-> 
-> * The current tier hierarchy always puts CPU nodes into the top
->   tier. But on a system with HBM (e.g. GPU memory) devices, these
->   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
->   with CPUs are better to be placed into the next lower tier.
-> 
-> * Also because the current tier hierarchy always puts CPU nodes
->   into the top tier, when a CPU is hot-added (or hot-removed) and
->   triggers a memory node from CPU-less into a CPU node (or vice
->   versa), the memory tier hierarchy gets changed, even though no
->   memory node is added or removed.  This can make the tier
->   hierarchy unstable and make it difficult to support tier-based
->   memory accounting.
-> 
-> * A higher tier node can only be demoted to selected nodes on the
->   next lower tier as defined by the demotion path, not any other
->   node from any lower tier.  This strict, hard-coded demotion order
->   does not work in all use cases (e.g. some use cases may want to
->   allow cross-socket demotion to another node in the same demotion
->   tier as a fallback when the preferred demotion node is out of
->   space), and has resulted in the feature request for an interface to
->   override the system-wide, per-node demotion order from the
->   userspace.  This demotion order is also inconsistent with the page
->   allocation fallback order when all the nodes in a higher tier are
->   out of space: The page allocation can fall back to any node from
->   any lower tier, whereas the demotion order doesn't allow that.
-> 
-> * There are no interfaces for the userspace to learn about the memory
->   tier hierarchy in order to optimize its memory allocations.
-> 
-> I'd like to propose revised memory tier kernel interfaces based on
-> the discussions in the threads:
-> 
-> - https://lore.kernel.org/lkml/20220425201728.5kzm4seu7rep7ndr@offworld/T/
-> - https://lore.kernel.org/linux-mm/20220426114300.00003ad8@Huawei.com/t/
-> - https://lore.kernel.org/linux-mm/867bc216386eb6cbf54648f23e5825830f5b922e.camel@intel.com/T/
-> - https://lore.kernel.org/linux-mm/d6314cfe1c7898a6680bed1e7cc93b0ab93e3155.camel@intel.com/T/
-> 
-> 
-> High-level Design Ideas
-> =======================
-> 
-> * Define memory tiers explicitly, not implicitly.
-> 
-> * Memory tiers are defined based on hardware capabilities of memory
->   nodes, not their relative node distances between each other.
-> 
-> * The tier assignment of each node is independent from each other.
->   Moving a node from one tier to another tier doesn't affect the tier
->   assignment of any other node.
-> 
-> * The node-tier association is stable. A node can be reassigned to a
->   different tier only under the specific conditions that don't block
->   future tier-based memory cgroup accounting.
-> 
-> * A node can demote its pages to any nodes of any lower tiers. The
->   demotion target node selection follows the allocation fallback order
->   of the source node, which is built based on node distances.  The
->   demotion targets are also restricted to only the nodes from the tiers
->   lower than the source node.  We no longer need to maintain a separate
->   per-node demotion order (node_demotion[]).
-> 
-> 
-> Sysfs Interfaces
-> ================
-> 
-> * /sys/devices/system/memtier/
-> 
->   This is the directory containing the information about memory tiers.
-> 
->   Each memory tier has its own subdirectory.
-> 
->   The order of memory tiers is determined by their rank values, not by
->   their memtier device names.
-> 
->   - /sys/devices/system/memtier/possible
-> 
->     Format: ordered list of "memtier(rank)"
->     Example: 0(64), 1(128), 2(192)
-> 
->     Read-only.  When read, list all available memory tiers and their
->     associated ranks, ordered by the rank values (from the highest
->      tier to the lowest tier).
+On Wed, May 25, 2022 at 11:00:58AM +0200, Vitaly Kuznetsov wrote:
+> In preparation to implementing fine-grained Hyper-V TLB flush and
+> L2 TLB flush, resurrect dedicated KVM_REQ_HV_TLB_FLUSH request bit. As
+> KVM_REQ_TLB_FLUSH_GUEST/KVM_REQ_TLB_FLUSH_GUEST/KVM_REQ_TLB_FLUSH_CURRENT
 
-I like the idea of "possible" file.  And I think we can show default
-tier too.  That is, if "1(128)" is the default tier (tier with DRAM),
-then the list can be,
+Duplicated KVM_REQ_TLB_FLUSH_GUEST here ?
 
-"
-0/64 [1/128] 2/192
-"
-
-To make it more easier to be parsed by shell, I will prefer something
-like,
-
-"
-0	64
-1	128	default
-2	192
-"
-
-But one line format is OK for me too.
-
-> 
-> * /sys/devices/system/memtier/memtierN/
-> 
->   This is the directory containing the information about a particular
->   memory tier, memtierN, where N is the memtier device ID (e.g. 0, 1).
-> 
->   The memtier device ID number itself is just an identifier and has no
->   special meaning, i.e. memtier device ID numbers do not determine the
->   order of memory tiers.
-> 
->   - /sys/devices/system/memtier/memtierN/rank
-> 
->     Format: int
->     Example: 100
-> 
->     Read-only.  When read, list the "rank" value associated with memtierN.
-> 
->     "Rank" is an opaque value. Its absolute value doesn't have any
->     special meaning. But the rank values of different memtiers can be
->     compared with each other to determine the memory tier order.
->     For example, if we have 3 memtiers: memtier0, memtier1, memiter2, and
->     their rank values are 10, 20, 15, then the memory tier order is:
->     memtier0 -> memtier2 -> memtier1, where memtier0 is the highest tier
->     and memtier1 is the lowest tier.
-> 
->     The rank value of each memtier should be unique.
-> 
->   - /sys/devices/system/memtier/memtierN/nodelist
-> 
->     Format: node_list
->     Example: 1-2
-> 
->     Read-only.  When read, list the memory nodes in the specified tier.
-> 
->     If a memory tier has no memory nodes, the kernel can hide the sysfs
->     directory of this memory tier, though the tier itself can still be
->     visible from /sys/devices/system/memtier/possible.
-> 
-> * /sys/devices/system/node/nodeN/memtier
-> 
->   where N = 0, 1, ...
-> 
->   Format: int or empty
->   Example: 1
-> 
->   When read, list the device ID of the memory tier that the node belongs
->   to.  Its value is empty for a CPU-only NUMA node.
-> 
->   When written, the kernel moves the node into the specified memory
->   tier if the move is allowed.  The tier assignment of all other nodes
->   are not affected.
-> 
->   Initially, we can make this interface read-only.
-> 
-> 
-> Kernel Representation
-> =====================
-> 
-> * All memory tiering code is guarded by CONFIG_TIERED_MEMORY.
-> 
-> * #define MAX_MEMORY_TIERS  3
-> 
->   Support 3 memory tiers for now.  This can be a kconfig option.
-> 
-> * #define MEMORY_DEFAULT_TIER_DEVICE 1
-> 
->   The default tier device that a memory node is assigned to.
-> 
-> * struct memtier_dev {
->       nodemask_t nodelist;
->       int rank;
->       int tier;
->   } memtier_devices[MAX_MEMORY_TIERS]
-> 
->   Store memory tiers by device IDs.
-> 
-> * struct memtier_dev *memory_tier(int tier)
-> 
->   Returns the memtier device for a given memory tier.
-> 
-> * int node_tier_dev_map[MAX_NUMNODES]
-> 
->   Map a node to its tier device ID..
-> 
->   For each CPU-only node c, node_tier_dev_map[c] = -1.
-> 
-> 
-> Memory Tier Initialization
-> ==========================
-> 
-> By default, all memory nodes are assigned to the default tier
-> (MEMORY_DEFAULT_TIER_DEVICE).  The default tier device has a rank value
-> in the middle of the possible rank value range (e.g. 127 if the range
-> is [0..255]).
-> 
-> A device driver can move up or down its memory nodes from the default
-> tier.  For example, PMEM can move down its memory nodes below the
-> default tier, whereas GPU can move up its memory nodes above the
-> default tier.
-> 
-> The kernel initialization code makes the decision on which exact tier
-> a memory node should be assigned to based on the requests from the
-> device drivers as well as the memory device hardware information
-> provided by the firmware.
-> 
-> 
-> Memory Tier Reassignment
-> ========================
-> 
-> After a memory node is hot-removed, it can be hot-added back to a
-> different memory tier.  This is useful for supporting dynamically
-> provisioned CXL.mem NUMA nodes, which may connect to different
-> memory devices across hot-plug events.  Such tier changes should
-> be compatible with tier-based memory accounting.
-> 
-> The userspace may also reassign an existing online memory node to a
-> different tier.  However, this should only be allowed when no pages
-> are allocated from the memory node or when there are no non-root
-> memory cgroups (e.g. during the system boot).  This restriction is
-> important for keeping memory tier hierarchy stable enough for
-> tier-based memory cgroup accounting.
-
-One way to do this is hot-remove all memory of a node, change its
-memtier, then hot-add its memory.
-
-Best Regards,
-Huang, Ying
-
-> Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
-> 
-> 
-> Memory Allocation for Demotion
-> ==============================
-> 
-> To allocate a new page as the demotion target for a page, the kernel
-> calls the allocation function (__alloc_pages_nodemask) with the
-> source page node as the preferred node and the union of all lower
-> tier nodes as the allowed nodemask.  The actual target node selection
-> then follows the allocation fallback order that the kernel has
-> already defined.
-> 
-> The pseudo code looks like:
-> 
->     targets = NODE_MASK_NONE;
->     src_nid = page_to_nid(page);
->     src_tier = memtier_devices[node_tier_dev_map[src_nid]].tier;
->     for (i = src_tier + 1; i < MAX_MEMORY_TIERS; i++)
->             nodes_or(targets, targets, memory_tier(i)->nodelist);
->     new_page = __alloc_pages_nodemask(gfp, order, src_nid, targets);
-> 
-> The memopolicy of cpuset, vma and owner task of the source page can
-> be set to refine the demotion target nodemask, e.g. to prevent
-> demotion or select a particular allowed node as the demotion target.
-> 
-> 
-> Memory Allocation for Promotion
-> ===============================
-> 
-> The page allocation for promotion is similar to demotion, except that (1)
-> the target nodemask uses the promotion tiers, (2) the preferred node can
-> be the accessing CPU node, not the source page node.
-> 
-> 
-> Examples
-> ========
-> 
-> * Example 1:
-> 
-> Node 0 & 1 are DRAM nodes, node 2 & 3 are PMEM nodes.
-> 
->                   20
->   Node 0 (DRAM)  ----  Node 1 (DRAM)
->        |        \   /       |
->        | 30    40 X 40      | 30
->        |        /   \       |
->   Node 2 (PMEM)  ----  Node 3 (PMEM)
->                   40
-> 
-> node distances:
-> node   0    1    2    3
->    0  10   20   30   40
->    1  20   10   40   30
->    2  30   40   10   40
->    3  40   30   40   10
-> 
-> $ cat /sys/devices/system/memtier/possible
-> 0(64), 1(128), 2(192)
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/rank
-> /sys/devices/system/memtier/memtier1/rank:128
-> /sys/devices/system/memtier/memtier2/rank:192
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/nodelist
-> /sys/devices/system/memtier/memtier1/nodelist:0-1
-> /sys/devices/system/memtier/memtier2/nodelist:2-3
-> 
-> $ grep '' /sys/devices/system/node/node*/memtier
-> /sys/devices/system/node/node0/memtier:1
-> /sys/devices/system/node/node1/memtier:1
-> /sys/devices/system/node/node2/memtier:2
-> /sys/devices/system/node/node3/memtier:2
-> 
-> Demotion fallback order:
-> node 0: 2, 3
-> node 1: 3, 2
-> node 2: empty
-> node 3: empty
-> 
-> To prevent cross-socket demotion and memory access, the user can set
-> mempolicy, e.g. cpuset.mems=0,2.
-> 
-> 
-> * Example 2:
-> 
-> Node 0 & 1 are DRAM nodes.
-> Node 2 is a PMEM node and closer to node 0.
-> 
->                   20
->   Node 0 (DRAM)  ----  Node 1 (DRAM)
->        |            /
->        | 30       / 40
->        |        /
->   Node 2 (PMEM)
-> 
-> node distances:
-> node   0    1    2
->    0  10   20   30
->    1  20   10   40
->    2  30   40   10
-> 
-> $ cat /sys/devices/system/memtier/possible
-> 0(64), 1(128), 2(192)
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/rank
-> /sys/devices/system/memtier/memtier1/rank:128
-> /sys/devices/system/memtier/memtier2/rank:192
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/nodelist
-> /sys/devices/system/memtier/memtier1/nodelist:0-1
-> /sys/devices/system/memtier/memtier2/nodelist:2
-> 
-> $ grep '' /sys/devices/system/node/node*/memtier
-> /sys/devices/system/node/node0/memtier:1
-> /sys/devices/system/node/node1/memtier:1
-> /sys/devices/system/node/node2/memtier:2
-> 
-> Demotion fallback order:
-> node 0: 2
-> node 1: 2
-> node 2: empty
-> 
-> 
-> * Example 3:
-> 
-> Node 0 & 1 are DRAM nodes, Node 2 is a memory-only DRAM node.
-> 
-> All nodes are in the same tier.
-> 
->                   20
->   Node 0 (DRAM)  ----  Node 1 (DRAM)
->          \                 /
->           \ 30            / 30
->            \             /
->              Node 2 (PMEM)
-> 
-> node distances:
-> node   0    1    2
->    0  10   20   30
->    1  20   10   30
->    2  30   30   10
-> 
-> $ cat /sys/devices/system/memtier/possible
-> 0(64), 1(128), 2(192)
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/rank
-> /sys/devices/system/memtier/memtier1/rank:128
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/nodelist
-> /sys/devices/system/memtier/memtier1/nodelist:0-2
-> 
-> $ grep '' /sys/devices/system/node/node*/memtier
-> /sys/devices/system/node/node0/memtier:1
-> /sys/devices/system/node/node1/memtier:1
-> /sys/devices/system/node/node2/memtier:1
-> 
-> Demotion fallback order:
-> node 0: empty
-> node 1: empty
-> node 2: empty
-> 
-> 
-> * Example 4:
-> 
-> Node 0 is a DRAM node with CPU.
-> Node 1 is a PMEM node.
-> Node 2 is a GPU node.
-> 
->                   50
->   Node 0 (DRAM)  ----  Node 2 (GPU)
->          \                 /
->           \ 30            / 60
->            \             /
->              Node 1 (PMEM)
-> 
-> node distances:
-> node   0    1    2
->    0  10   30   50
->    1  30   10   60
->    2  50   60   10
-> 
-> $ cat /sys/devices/system/memtier/possible
-> 0(64), 1(128), 2(192)
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/rank
-> /sys/devices/system/memtier/memtier0/rank:64
-> /sys/devices/system/memtier/memtier1/rank:128
-> /sys/devices/system/memtier/memtier2/rank:192
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/nodelist
-> /sys/devices/system/memtier/memtier0/nodelist:2
-> /sys/devices/system/memtier/memtier1/nodelist:0
-> /sys/devices/system/memtier/memtier2/nodelist:1
-> 
-> $ grep '' /sys/devices/system/node/node*/memtier
-> /sys/devices/system/node/node0/memtier:1
-> /sys/devices/system/node/node1/memtier:2
-> /sys/devices/system/node/node2/memtier:0
-> 
-> Demotion fallback order:
-> node 0: 1
-> node 1: empty
-> node 2: 0, 1
-> 
-> 
-> * Example 5:
-> 
-> Node 0 is a DRAM node with CPU.
-> Node 1 is a GPU node.
-> Node 2 is a PMEM node.
-> Node 3 is a large, slow DRAM node without CPU.
-> 
->                     100
->      Node 0 (DRAM)  ----  Node 1 (GPU)
->     /     |               /    |
->    /40    |30        120 /     | 110
->   |       |             /      |
->   |  Node 2 (PMEM) ----       /
->   |        \                 /
->    \     80 \               /
->     ------- Node 3 (Slow DRAM)
-> 
-> node distances:
-> node    0    1    2    3
->    0   10  100   30   40
->    1  100   10  120  110
->    2   30  120   10   80
->    3   40  110   80   10
-> 
-> MAX_MEMORY_TIERS=4 (memtier3 is a memory tier added later).
-> 
-> $ cat /sys/devices/system/memtier/possible
-> 0(64), 1(128), 3(160), 2(192)
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/rank
-> /sys/devices/system/memtier/memtier0/rank:64
-> /sys/devices/system/memtier/memtier1/rank:128
-> /sys/devices/system/memtier/memtier2/rank:192
-> /sys/devices/system/memtier/memtier3/rank:160
-> 
-> $ grep '' /sys/devices/system/memtier/memtier*/nodelist
-> /sys/devices/system/memtier/memtier0/nodelist:1
-> /sys/devices/system/memtier/memtier1/nodelist:0
-> /sys/devices/system/memtier/memtier2/nodelist:2
-> /sys/devices/system/memtier/memtier3/nodelist:3
-> 
-> $ grep '' /sys/devices/system/node/node*/memtier
-> /sys/devices/system/node/node0/memtier:1
-> /sys/devices/system/node/node1/memtier:0
-> /sys/devices/system/node/node2/memtier:2
-> /sys/devices/system/node/node3/memtier:3
-> 
-> Demotion fallback order:
-> node 0: 2, 3
-> node 1: 0, 3, 2
-> node 2: empty
-> node 3: 2
-
-
+> are stronger operations, clear KVM_REQ_HV_TLB_FLUSH request in
+> kvm_service_local_tlb_flush_requests() when any of these were also
+> requested.
+>
+> No (real) functional change intended.
+>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  2 ++
+>  arch/x86/kvm/hyperv.c           |  4 ++--
+>  arch/x86/kvm/x86.c              | 10 ++++++++--
+>  3 files changed, 12 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 151880cfab9e..92509ee6ae1b 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -105,6 +105,8 @@
+>  	KVM_ARCH_REQ_FLAGS(30, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>  #define KVM_REQ_MMU_FREE_OBSOLETE_ROOTS \
+>  	KVM_ARCH_REQ_FLAGS(31, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+> +#define KVM_REQ_HV_TLB_FLUSH \
+> +	KVM_ARCH_REQ_FLAGS(32, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>
+>  #define CR0_RESERVED_BITS                                               \
+>  	(~(unsigned long)(X86_CR0_PE | X86_CR0_MP | X86_CR0_EM | X86_CR0_TS \
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 46f9dfb60469..b402ad059eb9 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1876,11 +1876,11 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+>  	 * analyze it here, flush TLB regardless of the specified address space.
+>  	 */
+>  	if (all_cpus) {
+> -		kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH_GUEST);
+> +		kvm_make_all_cpus_request(kvm, KVM_REQ_HV_TLB_FLUSH);
+>  	} else {
+>  		sparse_set_to_vcpu_mask(kvm, sparse_banks, valid_bank_mask, vcpu_mask);
+>
+> -		kvm_make_vcpus_request_mask(kvm, KVM_REQ_TLB_FLUSH_GUEST, vcpu_mask);
+> +		kvm_make_vcpus_request_mask(kvm, KVM_REQ_HV_TLB_FLUSH, vcpu_mask);
+>  	}
+>
+>  ret_success:
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 891507b2eca5..f98503431f8d 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3363,11 +3363,17 @@ static inline void kvm_vcpu_flush_tlb_current(struct kvm_vcpu *vcpu)
+>   */
+>  void kvm_service_local_tlb_flush_requests(struct kvm_vcpu *vcpu)
+>  {
+> -	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu))
+> +	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu)) {
+>  		kvm_vcpu_flush_tlb_current(vcpu);
+> +		kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
+> +	}
+>
+> -	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu))
+> +	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu)) {
+> +		kvm_vcpu_flush_tlb_guest(vcpu);
+> +		kvm_clear_request(KVM_REQ_HV_TLB_FLUSH, vcpu);
+> +	} else if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu)) {
+>  		kvm_vcpu_flush_tlb_guest(vcpu);
+> +	}
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_service_local_tlb_flush_requests);
+>
+> --
+> 2.35.3
+>

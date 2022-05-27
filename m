@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95185536108
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1250535F65
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352855AbiE0Lzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S1348283AbiE0Lin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352798AbiE0Lux (ORCPT
+        with ESMTP id S1351399AbiE0LiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:50:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260FF1157DC;
-        Fri, 27 May 2022 04:45:29 -0700 (PDT)
+        Fri, 27 May 2022 07:38:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FECC108AA9;
+        Fri, 27 May 2022 04:37:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6EF761D5C;
-        Fri, 27 May 2022 11:45:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B99C385A9;
-        Fri, 27 May 2022 11:45:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FF1D61CE3;
+        Fri, 27 May 2022 11:37:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62F23C385A9;
+        Fri, 27 May 2022 11:37:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651928;
-        bh=juTMfNnHEkEI/4BATlKimk/kcIE2Ppl9SYmbPPmO7cs=;
+        s=korg; t=1653651474;
+        bh=ucDUMGX37eDIy4saYwPoYkShV8xHADijJcGiVrrzHbs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DnKR8p7h/hT9fQQ6j1LPd5EyK50mCq3TnL1D0naK0zfJ0mHNIYBM50g/VUwkYRYGV
-         wPW3WE7rQgzuCEUjhYS6BFFpKAub2zKbbTlfJYoU8gV5UoJr8GNCQ9ECtLvXQTVHMg
-         LYzGigc0rs1kEz3SG6oUPDWLnqloUHAb3bP/pg2I=
+        b=v0G3VhNlQpjJVTCN1UK+oUcEqZN4Rkkkrkc/ZeOVUHymg4Mfte0MoUHr6qbCMRJ7K
+         p2FegT7WUFk+u0zQHmEnnrPn9voPG9di4Qlx3YZRBwM7np0PH21EvkEdcn1QZLbsgR
+         fvAhvMOzT0NdC+/XEmlpuCwQ+NGA29X6rgViu5yM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Eric Biggers <ebiggers@google.com>,
+        stable@vger.kernel.org, Sultan Alsawaf <sultan@kerneltoast.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Theodore Tso <tytso@mit.edu>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 058/145] random: tie batched entropy generation to base_crng generation
-Date:   Fri, 27 May 2022 10:49:19 +0200
-Message-Id: <20220527084857.700085331@linuxfoundation.org>
+Subject: [PATCH 5.17 048/111] random: do crng pre-init loading in worker rather than irq
+Date:   Fri, 27 May 2022 10:49:20 +0200
+Message-Id: <20220527084826.224814493@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+References: <20220527084819.133490171@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,129 +62,163 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 0791e8b655cc373718f0f58800fdc625a3447ac5 upstream.
+commit c2a7de4feb6e09f23af7accc0f882a8fa92e7ae5 upstream.
 
-Now that we have an explicit base_crng generation counter, we don't need
-a separate one for batched entropy. Rather, we can just move the
-generation forward every time we change crng_init state or update the
-base_crng key.
+Taking spinlocks from IRQ context is generally problematic for
+PREEMPT_RT. That is, in part, why we take trylocks instead. However, a
+spin_try_lock() is also problematic since another spin_lock() invocation
+can potentially PI-boost the wrong task, as the spin_try_lock() is
+invoked from an IRQ-context, so the task on CPU (random task or idle) is
+not the actual owner.
 
+Additionally, by deferring the crng pre-init loading to the worker, we
+can use the cryptographic hash function rather than xor, which is
+perhaps a meaningful difference when considering this data has only been
+through the relatively weak fast_mix() function.
+
+The biggest downside of this approach is that the pre-init loading is
+now deferred until later, which means things that need random numbers
+after interrupts are enabled, but before workqueues are running -- or
+before this particular worker manages to run -- are going to get into
+trouble. Hopefully in the real world, this window is rather small,
+especially since this code won't run until 64 interrupts had occurred.
+
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Eric Biggers <ebiggers@kernel.org>
 Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   29 ++++++++---------------------
- 1 file changed, 8 insertions(+), 21 deletions(-)
+ drivers/char/random.c |   65 ++++++++++++++------------------------------------
+ 1 file changed, 19 insertions(+), 46 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -430,8 +430,6 @@ static DEFINE_PER_CPU(struct crng, crngs
+@@ -443,10 +443,6 @@ static void crng_make_state(u32 chacha_s
+  * boot time when it's better to have something there rather than
+  * nothing.
+  *
+- * There are two paths, a slow one and a fast one. The slow one
+- * hashes the input along with the current key. The fast one simply
+- * xors it in, and should only be used from interrupt context.
+- *
+  * If account is set, then the crng_init_cnt counter is incremented.
+  * This shouldn't be set by functions like add_device_randomness(),
+  * where we can't trust the buffer passed to it is guaranteed to be
+@@ -455,19 +451,15 @@ static void crng_make_state(u32 chacha_s
+  * Returns the number of bytes processed from input, which is bounded
+  * by CRNG_INIT_CNT_THRESH if account is true.
+  */
+-static size_t crng_pre_init_inject(const void *input, size_t len,
+-				   bool fast, bool account)
++static size_t crng_pre_init_inject(const void *input, size_t len, bool account)
+ {
+ 	static int crng_init_cnt = 0;
++	struct blake2s_state hash;
+ 	unsigned long flags;
  
- static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
+-	if (fast) {
+-		if (!spin_trylock_irqsave(&base_crng.lock, flags))
+-			return 0;
+-	} else {
+-		spin_lock_irqsave(&base_crng.lock, flags);
+-	}
++	blake2s_init(&hash, sizeof(base_crng.key));
  
--static void invalidate_batched_entropy(void);
++	spin_lock_irqsave(&base_crng.lock, flags);
+ 	if (crng_init != 0) {
+ 		spin_unlock_irqrestore(&base_crng.lock, flags);
+ 		return 0;
+@@ -476,21 +468,9 @@ static size_t crng_pre_init_inject(const
+ 	if (account)
+ 		len = min_t(size_t, len, CRNG_INIT_CNT_THRESH - crng_init_cnt);
+ 
+-	if (fast) {
+-		const u8 *src = input;
+-		size_t i;
 -
- /*
-  * crng_fast_load() can be called by code in the interrupt service
-  * path.  So we can't afford to dilly-dally. Returns the number of
-@@ -454,7 +452,7 @@ static size_t crng_fast_load(const void
- 		src++; crng_init_cnt++; len--; ret++;
- 	}
- 	if (crng_init_cnt >= CRNG_INIT_CNT_THRESH) {
--		invalidate_batched_entropy();
-+		++base_crng.generation;
- 		crng_init = 1;
- 	}
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
-@@ -531,7 +529,6 @@ static void crng_reseed(void)
- 	WRITE_ONCE(base_crng.generation, next_gen);
- 	WRITE_ONCE(base_crng.birth, jiffies);
- 	if (crng_init < 2) {
--		invalidate_batched_entropy();
- 		crng_init = 2;
- 		finalize_init = true;
- 	}
-@@ -1256,8 +1253,9 @@ int __init rand_initialize(void)
- 	mix_pool_bytes(utsname(), sizeof(*(utsname())));
+-		for (i = 0; i < len; ++i)
+-			base_crng.key[(crng_init_cnt + i) %
+-				      sizeof(base_crng.key)] ^= src[i];
+-	} else {
+-		struct blake2s_state hash;
+-
+-		blake2s_init(&hash, sizeof(base_crng.key));
+-		blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
+-		blake2s_update(&hash, input, len);
+-		blake2s_final(&hash, base_crng.key);
+-	}
++	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
++	blake2s_update(&hash, input, len);
++	blake2s_final(&hash, base_crng.key);
  
- 	extract_entropy(base_crng.key, sizeof(base_crng.key));
-+	++base_crng.generation;
+ 	if (account) {
+ 		crng_init_cnt += len;
+@@ -1034,7 +1014,7 @@ void add_device_randomness(const void *b
+ 	unsigned long flags, now = jiffies;
+ 
+ 	if (crng_init == 0 && size)
+-		crng_pre_init_inject(buf, size, false, false);
++		crng_pre_init_inject(buf, size, false);
+ 
+ 	spin_lock_irqsave(&input_pool.lock, flags);
+ 	_mix_pool_bytes(&cycles, sizeof(cycles));
+@@ -1155,7 +1135,7 @@ void add_hwgenerator_randomness(const vo
+ 				size_t entropy)
+ {
+ 	if (unlikely(crng_init == 0)) {
+-		size_t ret = crng_pre_init_inject(buffer, count, false, true);
++		size_t ret = crng_pre_init_inject(buffer, count, true);
+ 		mix_pool_bytes(buffer, ret);
+ 		count -= ret;
+ 		buffer += ret;
+@@ -1295,8 +1275,14 @@ static void mix_interrupt_randomness(str
+ 	fast_pool->last = jiffies;
+ 	local_irq_enable();
+ 
+-	mix_pool_bytes(pool, sizeof(pool));
+-	credit_entropy_bits(1);
++	if (unlikely(crng_init == 0)) {
++		crng_pre_init_inject(pool, sizeof(pool), true);
++		mix_pool_bytes(pool, sizeof(pool));
++	} else {
++		mix_pool_bytes(pool, sizeof(pool));
++		credit_entropy_bits(1);
++	}
 +
- 	if (arch_init && trust_cpu && crng_init < 2) {
--		invalidate_batched_entropy();
- 		crng_init = 2;
- 		pr_notice("crng init done (trusting CPU's manufacturer)\n");
- 	}
-@@ -1597,8 +1595,6 @@ struct ctl_table random_table[] = {
- };
- #endif	/* CONFIG_SYSCTL */
- 
--static atomic_t batch_generation = ATOMIC_INIT(0);
--
- struct batched_entropy {
- 	union {
- 		/*
-@@ -1612,8 +1608,8 @@ struct batched_entropy {
- 		u32 entropy_u32[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u32))];
- 	};
- 	local_lock_t lock;
-+	unsigned long generation;
- 	unsigned int position;
--	int generation;
- };
- 
- /*
-@@ -1633,14 +1629,14 @@ u64 get_random_u64(void)
- 	unsigned long flags;
- 	struct batched_entropy *batch;
- 	static void *previous;
--	int next_gen;
-+	unsigned long next_gen;
- 
- 	warn_unseeded_randomness(&previous);
- 
- 	local_lock_irqsave(&batched_entropy_u64.lock, flags);
- 	batch = raw_cpu_ptr(&batched_entropy_u64);
- 
--	next_gen = atomic_read(&batch_generation);
-+	next_gen = READ_ONCE(base_crng.generation);
- 	if (batch->position >= ARRAY_SIZE(batch->entropy_u64) ||
- 	    next_gen != batch->generation) {
- 		_get_random_bytes(batch->entropy_u64, sizeof(batch->entropy_u64));
-@@ -1667,14 +1663,14 @@ u32 get_random_u32(void)
- 	unsigned long flags;
- 	struct batched_entropy *batch;
- 	static void *previous;
--	int next_gen;
-+	unsigned long next_gen;
- 
- 	warn_unseeded_randomness(&previous);
- 
- 	local_lock_irqsave(&batched_entropy_u32.lock, flags);
- 	batch = raw_cpu_ptr(&batched_entropy_u32);
- 
--	next_gen = atomic_read(&batch_generation);
-+	next_gen = READ_ONCE(base_crng.generation);
- 	if (batch->position >= ARRAY_SIZE(batch->entropy_u32) ||
- 	    next_gen != batch->generation) {
- 		_get_random_bytes(batch->entropy_u32, sizeof(batch->entropy_u32));
-@@ -1690,15 +1686,6 @@ u32 get_random_u32(void)
+ 	memzero_explicit(pool, sizeof(pool));
  }
- EXPORT_SYMBOL(get_random_u32);
  
--/* It's important to invalidate all potential batched entropy that might
-- * be stored before the crng is initialized, which we can do lazily by
-- * bumping the generation counter.
-- */
--static void invalidate_batched_entropy(void)
--{
--	atomic_inc(&batch_generation);
--}
+@@ -1329,24 +1315,11 @@ void add_interrupt_randomness(int irq)
+ 	fast_mix(fast_pool->pool32);
+ 	new_count = ++fast_pool->count;
+ 
+-	if (unlikely(crng_init == 0)) {
+-		if (new_count >= 64 &&
+-		    crng_pre_init_inject(fast_pool->pool32, sizeof(fast_pool->pool32),
+-					 true, true) > 0) {
+-			fast_pool->count = 0;
+-			fast_pool->last = now;
+-			if (spin_trylock(&input_pool.lock)) {
+-				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
+-				spin_unlock(&input_pool.lock);
+-			}
+-		}
+-		return;
+-	}
 -
- /**
-  * randomize_page - Generate a random, page aligned address
-  * @start:	The smallest acceptable address the caller will take.
+ 	if (new_count & MIX_INFLIGHT)
+ 		return;
+ 
+-	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
++	if (new_count < 64 && (!time_after(now, fast_pool->last + HZ) ||
++			       unlikely(crng_init == 0)))
+ 		return;
+ 
+ 	if (unlikely(!fast_pool->mix.func))
 
 

@@ -2,99 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8055535BAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9077535B3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349879AbiE0Ihh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        id S1348523AbiE0IO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349807AbiE0Igc (ORCPT
+        with ESMTP id S229753AbiE0IOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:36:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EDA104C8A;
-        Fri, 27 May 2022 01:36:08 -0700 (PDT)
-Date:   Fri, 27 May 2022 08:36:05 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653640566;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Ncx3ivK+ZwISDSMM4kljdgZQUQznePRbXqDSNVCPmE=;
-        b=fTTxCW7zVN7TKDWD5M/Q/2czmvsoVTxTbbFD1ye7ID9y4pcAtm9VW6PQE9O7YZzyznz2Ui
-        NYmMkIf1LZyM1JYePlZcnnQU3t8HubddwdHZvFRBVg0oIwA2iUyTZ064/OhxctMPH73qeQ
-        sCfw5Ck0ZctrXsRZDfFpkxpOPdIMITOh7PmzEq5BSYSQJrMWKbnESU32JBodIuwOyQNLVi
-        1pfaSGUG2kiJWjqCjJ5x+x51/RvK7tzadc3OxUlIEFxQXUfh1FURGlTbX1an5+l61HF04v
-        lg6RPOeP+TwxUeHUdvgN4tSPQRTyTTfvPDMRBQfbUoFifx1bCZaXlpfvMiRkMg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653640566;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Ncx3ivK+ZwISDSMM4kljdgZQUQznePRbXqDSNVCPmE=;
-        b=OGbA8qT2C+y+Pf40HcWB9uFhvcP29hW3VukTKZ2lAGK9g2I4xE3/dxbfOMaAWK5ivR+dtx
-        SPLgbZjS68jLRYBA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] Merge tag 'timers-v5.19-rc1' of
- https://git.linaro.org/people/daniel.lezcano/linux into timers/core
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <b5a83e54-1ee1-f910-4be4-bc3bf1015243@linaro.org>
-References: <b5a83e54-1ee1-f910-4be4-bc3bf1015243@linaro.org>
+        Fri, 27 May 2022 04:14:55 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5408FD37B
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:14:53 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L8cxp6mwbz1JCC8;
+        Fri, 27 May 2022 16:13:18 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 16:14:51 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 16:14:51 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
+        <dave.jiang@intel.com>, <ira.weiny@intel.com>,
+        <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] drivers: nvdimm: Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 08:36:20 +0000
+Message-ID: <20220527083620.2553637-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <165364056563.4207.1413260323155955493.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/core branch of tip:
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
-Commit-ID:     57963a92a70b037aa22544fbc34742e5be689c04
-Gitweb:        https://git.kernel.org/tip/57963a92a70b037aa22544fbc34742e5be689c04
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 27 May 2022 10:32:08 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 27 May 2022 10:32:08 +02:00
-
-Merge tag 'timers-v5.19-rc1' of https://git.linaro.org/people/daniel.lezcano/linux into timers/core
-
-Pull clockevent/clocksource driver updates from Daniel Lezcano:
-
-  - Add Mediatek MT8186 DT bindings (Allen-KH Cheng)
-
-  - Remove dead code corresponding of the IXP4xx board removal (Linus
-    Walleij)
-
-  - Add CLOCK_EVT_FEAT_C3STOP flag for the RISC-V SBI timer (Samuel
-    Holland)
-
-  - Do not return an error if there are multiple definitions of the sp804
-    timers in the DT (Andre Przywara)
-
-  - Add the missing SPDX identifier (Thomas Gleixner)
-
-  - Remove an unncessary NULL check as it is done right before at probe
-    time for the timer-ti-dm (Dan Carpenter)
-
-  - Fix the irq_of_parse_and_map() return code check on onexas-nps
-    (Krzysztof Kozlowski)
-
-Link: https://lore.kernel.org/lkml/b5a83e54-1ee1-f910-4be4-bc3bf1015243@linaro.org
+Signed-off-by: keliu <liuke94@huawei.com>
 ---
+ drivers/nvdimm/btt_devs.c       | 6 +++---
+ drivers/nvdimm/bus.c            | 4 ++--
+ drivers/nvdimm/dax_devs.c       | 4 ++--
+ drivers/nvdimm/dimm_devs.c      | 4 ++--
+ drivers/nvdimm/namespace_devs.c | 6 +++---
+ drivers/nvdimm/pfn_devs.c       | 4 ++--
+ 6 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/nvdimm/btt_devs.c b/drivers/nvdimm/btt_devs.c
+index e5a58520d398..25af0df89400 100644
+--- a/drivers/nvdimm/btt_devs.c
++++ b/drivers/nvdimm/btt_devs.c
+@@ -19,7 +19,7 @@ static void nd_btt_release(struct device *dev)
+ 
+ 	dev_dbg(dev, "trace\n");
+ 	nd_detach_ndns(&nd_btt->dev, &nd_btt->ndns);
+-	ida_simple_remove(&nd_region->btt_ida, nd_btt->id);
++	ida_free(&nd_region->btt_ida, nd_btt->id);
+ 	kfree(nd_btt->uuid);
+ 	kfree(nd_btt);
+ }
+@@ -189,7 +189,7 @@ static struct device *__nd_btt_create(struct nd_region *nd_region,
+ 	if (!nd_btt)
+ 		return NULL;
+ 
+-	nd_btt->id = ida_simple_get(&nd_region->btt_ida, 0, 0, GFP_KERNEL);
++	nd_btt->id = ida_alloc(&nd_region->btt_ida, GFP_KERNEL);
+ 	if (nd_btt->id < 0)
+ 		goto out_nd_btt;
+ 
+@@ -214,7 +214,7 @@ static struct device *__nd_btt_create(struct nd_region *nd_region,
+ 	return dev;
+ 
+ out_put_id:
+-	ida_simple_remove(&nd_region->btt_ida, nd_btt->id);
++	ida_free(&nd_region->btt_ida, nd_btt->id);
+ 
+ out_nd_btt:
+ 	kfree(nd_btt);
+diff --git a/drivers/nvdimm/bus.c b/drivers/nvdimm/bus.c
+index 7b0d1443217a..2fc7409f5f2f 100644
+--- a/drivers/nvdimm/bus.c
++++ b/drivers/nvdimm/bus.c
+@@ -291,7 +291,7 @@ static void nvdimm_bus_release(struct device *dev)
+ 	struct nvdimm_bus *nvdimm_bus;
+ 
+ 	nvdimm_bus = container_of(dev, struct nvdimm_bus, dev);
+-	ida_simple_remove(&nd_ida, nvdimm_bus->id);
++	ida_free(&nd_ida, nvdimm_bus->id);
+ 	kfree(nvdimm_bus);
+ }
+ 
+@@ -346,7 +346,7 @@ struct nvdimm_bus *nvdimm_bus_register(struct device *parent,
+ 	INIT_LIST_HEAD(&nvdimm_bus->list);
+ 	INIT_LIST_HEAD(&nvdimm_bus->mapping_list);
+ 	init_waitqueue_head(&nvdimm_bus->wait);
+-	nvdimm_bus->id = ida_simple_get(&nd_ida, 0, 0, GFP_KERNEL);
++	nvdimm_bus->id = ida_alloc(&nd_ida, GFP_KERNEL);
+ 	if (nvdimm_bus->id < 0) {
+ 		kfree(nvdimm_bus);
+ 		return NULL;
+diff --git a/drivers/nvdimm/dax_devs.c b/drivers/nvdimm/dax_devs.c
+index 99965077bac4..374b195ba8d5 100644
+--- a/drivers/nvdimm/dax_devs.c
++++ b/drivers/nvdimm/dax_devs.c
+@@ -18,7 +18,7 @@ static void nd_dax_release(struct device *dev)
+ 
+ 	dev_dbg(dev, "trace\n");
+ 	nd_detach_ndns(dev, &nd_pfn->ndns);
+-	ida_simple_remove(&nd_region->dax_ida, nd_pfn->id);
++	ida_free(&nd_region->dax_ida, nd_pfn->id);
+ 	kfree(nd_pfn->uuid);
+ 	kfree(nd_dax);
+ }
+@@ -55,7 +55,7 @@ static struct nd_dax *nd_dax_alloc(struct nd_region *nd_region)
+ 		return NULL;
+ 
+ 	nd_pfn = &nd_dax->nd_pfn;
+-	nd_pfn->id = ida_simple_get(&nd_region->dax_ida, 0, 0, GFP_KERNEL);
++	nd_pfn->id = ida_alloc(&nd_region->dax_ida, GFP_KERNEL);
+ 	if (nd_pfn->id < 0) {
+ 		kfree(nd_dax);
+ 		return NULL;
+diff --git a/drivers/nvdimm/dimm_devs.c b/drivers/nvdimm/dimm_devs.c
+index ee507eed42b5..0f0e5851784f 100644
+--- a/drivers/nvdimm/dimm_devs.c
++++ b/drivers/nvdimm/dimm_devs.c
+@@ -194,7 +194,7 @@ static void nvdimm_release(struct device *dev)
+ {
+ 	struct nvdimm *nvdimm = to_nvdimm(dev);
+ 
+-	ida_simple_remove(&dimm_ida, nvdimm->id);
++	ida_free(&dimm_ida, nvdimm->id);
+ 	kfree(nvdimm);
+ }
+ 
+@@ -583,7 +583,7 @@ struct nvdimm *__nvdimm_create(struct nvdimm_bus *nvdimm_bus,
+ 	if (!nvdimm)
+ 		return NULL;
+ 
+-	nvdimm->id = ida_simple_get(&dimm_ida, 0, 0, GFP_KERNEL);
++	nvdimm->id = ida_alloc(&dimm_ida, GFP_KERNEL);
+ 	if (nvdimm->id < 0) {
+ 		kfree(nvdimm);
+ 		return NULL;
+diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+index 62b83b2e26e3..925e75f7382d 100644
+--- a/drivers/nvdimm/namespace_devs.c
++++ b/drivers/nvdimm/namespace_devs.c
+@@ -26,7 +26,7 @@ static void namespace_pmem_release(struct device *dev)
+ 	struct nd_region *nd_region = to_nd_region(dev->parent);
+ 
+ 	if (nspm->id >= 0)
+-		ida_simple_remove(&nd_region->ns_ida, nspm->id);
++		ida_free(&nd_region->ns_ida, nspm->id);
+ 	kfree(nspm->alt_name);
+ 	kfree(nspm->uuid);
+ 	kfree(nspm);
+@@ -1819,7 +1819,7 @@ static struct device *nd_namespace_pmem_create(struct nd_region *nd_region)
+ 	res->name = dev_name(&nd_region->dev);
+ 	res->flags = IORESOURCE_MEM;
+ 
+-	nspm->id = ida_simple_get(&nd_region->ns_ida, 0, 0, GFP_KERNEL);
++	nspm->id = ida_alloc(&nd_region->ns_ida, GFP_KERNEL);
+ 	if (nspm->id < 0) {
+ 		kfree(nspm);
+ 		return NULL;
+@@ -2191,7 +2191,7 @@ int nd_region_register_namespaces(struct nd_region *nd_region, int *err)
+ 			struct nd_namespace_pmem *nspm;
+ 
+ 			nspm = to_nd_namespace_pmem(dev);
+-			id = ida_simple_get(&nd_region->ns_ida, 0, 0,
++			id = ida_alloc(&nd_region->ns_ida,
+ 					    GFP_KERNEL);
+ 			nspm->id = id;
+ 		} else
+diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
+index c31e184bfa45..d814bda8040a 100644
+--- a/drivers/nvdimm/pfn_devs.c
++++ b/drivers/nvdimm/pfn_devs.c
+@@ -20,7 +20,7 @@ static void nd_pfn_release(struct device *dev)
+ 
+ 	dev_dbg(dev, "trace\n");
+ 	nd_detach_ndns(&nd_pfn->dev, &nd_pfn->ndns);
+-	ida_simple_remove(&nd_region->pfn_ida, nd_pfn->id);
++	ida_free(&nd_region->pfn_ida, nd_pfn->id);
+ 	kfree(nd_pfn->uuid);
+ 	kfree(nd_pfn);
+ }
+@@ -321,7 +321,7 @@ static struct nd_pfn *nd_pfn_alloc(struct nd_region *nd_region)
+ 	if (!nd_pfn)
+ 		return NULL;
+ 
+-	nd_pfn->id = ida_simple_get(&nd_region->pfn_ida, 0, 0, GFP_KERNEL);
++	nd_pfn->id = ida_alloc(&nd_region->pfn_ida, GFP_KERNEL);
+ 	if (nd_pfn->id < 0) {
+ 		kfree(nd_pfn);
+ 		return NULL;
+-- 
+2.25.1
+

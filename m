@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FE3535761
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2BC535760
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232905AbiE0Bkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 21:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S233020AbiE0Bkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 21:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiE0Bka (ORCPT
+        with ESMTP id S232035AbiE0Bkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 21:40:30 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E11C8BCF
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:40:29 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id n18so2916203plg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rsCeaKQYu2owUyCBDwtZbNFjRtUaibD4xCTBzD5NHwQ=;
-        b=h5Os058/7Tkd1AvepTU0323lt2cG3mwUjYbiF3arFls/6rkKiXILKvCHrwLRQsySnZ
-         96/cCr2uqYFgpmz9nwuM3rG0f2J7xv5nQ0hqC6+iVv8nc4HgwHmTAlochAsZhfhqI83i
-         saL36v4tANwGgUtHRDRXTByMQY8bwYbtQ/ll7KeQkIdOsJMyc1FvNm6aEzlzHG2k8jqo
-         +V8bpsIxil8gc9piiCPIB8XYrUg5bo5kaXjbukdEC3xyym+MtICa2qY2Tcir2U37jJ1m
-         4ORO+Hu35zYgIWw/XT9PYNPw2QnLNZ1+Eb9F16UCV9gkZsq4Szql++3KR1rUZ5VhzQ/k
-         YUJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rsCeaKQYu2owUyCBDwtZbNFjRtUaibD4xCTBzD5NHwQ=;
-        b=uexQF+HnD0GR/h3IgkrqGy+2JUsSn0XGn2AvpogRaBkQvqeP6n4J7374zv4fIK/hny
-         +YYkytaYFfyQUSzPpqtUePBxDigpZhCY/bTyoK4ANq1jdnkR7+K7hzrG0WChnvkIVJzx
-         g5smaAzjJWWvqV/E++p7UzlXGPOzoNMjjFIUU98lchmZmoOT/akAr7irbsrzwGd2r/ym
-         9ejS5qEJX6yY3kvu/Ex0y68wqh7OjcNsMjkJM7wEZa471X9b2rwqHgUou5aFtKRKAhCe
-         lVoYD4ocM6YWDRkAjff/Q/lI/hnLYrZzCA8z9NZnGyyyxa+fYQDz3kagGjRRptjO5U0F
-         KQZQ==
-X-Gm-Message-State: AOAM530kZcZUr8Np8vulS5H2aPBiywaojyNouhb05rnR2QFG+5V3jGyt
-        SxCliaF62UuQeOPIvKeW4hNlVkKmK3J+u4iPVJ41RA==
-X-Google-Smtp-Source: ABdhPJzk910Eqiuu/69sbIFt/rEQ4I6MtCDwrXFQ/nJqkbUlb/6Ny4mXvfFnPS95wsU6a5b8EAwIeusUd82ItqgJ2NA=
-X-Received: by 2002:a17:902:b58b:b0:162:2e01:9442 with SMTP id
- a11-20020a170902b58b00b001622e019442mr20257616pls.6.1653615629019; Thu, 26
- May 2022 18:40:29 -0700 (PDT)
+        Thu, 26 May 2022 21:40:43 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E03DFF77
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:40:40 -0700 (PDT)
+Received: from kwepemi500017.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L8SBx4QsyzgYPc;
+        Fri, 27 May 2022 09:39:05 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500017.china.huawei.com (7.221.188.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 09:40:38 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 09:40:36 +0800
+Message-ID: <b992e7ab-b168-672c-128d-fbe5684a3855@huawei.com>
+Date:   Fri, 27 May 2022 09:40:36 +0800
 MIME-Version: 1.0
-References: <348dc099-737d-94ba-55ad-2db285084c73@openvz.org> <YpAnqqY/c3Y5ZkPG@casper.infradead.org>
-In-Reply-To: <YpAnqqY/c3Y5ZkPG@casper.infradead.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 26 May 2022 18:40:18 -0700
-Message-ID: <CALvZod7iyO5Ti5xhzq36UjDFNAmfEyPk1MQv_t4kUHKuPCeNng@mail.gmail.com>
-Subject: Re: [PATCH] XArray: handle XA_FLAGS_ACCOUNT in xas_split_alloc
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Vasily Averin <vvs@openvz.org>, kernel@openvz.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v4 3/7] arm64: add support for machine check error
+ safe
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+References: <20220420030418.3189040-1-tongtiangen@huawei.com>
+ <20220420030418.3189040-4-tongtiangen@huawei.com> <Yn54mA7KnlAs1dER@lakrids>
+ <46e5954c-a9a8-f4a8-07cc-de42e2753051@huawei.com>
+ <Yo3pP/Y+6HHuVBns@FVFF77S0Q05N>
+ <87bdb1c6-5803-d9c0-9208-432027ae1d8b@huawei.com>
+ <Yo9NX8BvQQXryHDV@FVFF77S0Q05N>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <Yo9NX8BvQQXryHDV@FVFF77S0Q05N>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,45 +75,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 6:21 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Wed, May 25, 2022 at 11:26:37AM +0300, Vasily Averin wrote:
-> > Commit 7b785645e8f1 ("mm: fix page cache convergence regression")
-> > added support of new XA_FLAGS_ACCOUNT flag into all Xarray allocation
-> > functions. Later commit 8fc75643c5e1 ("XArray: add xas_split")
-> > introduced xas_split_alloc() but missed about XA_FLAGS_ACCOUNT
-> > processing.
->
-> Thanks, Vasily.
->
-> Johannes, Shakeel, is this right?  I don't fully understand the accounting
-> stuff.
->
 
-If called from __filemap_add_folio() then this is correct.
 
-However from split_huge_page_to_list(), we can not use the memcg from
-current as that codepath is called from reclaim which can be triggered
-by processes of other memcgs.
+在 2022/5/26 17:50, Mark Rutland 写道:
+> On Thu, May 26, 2022 at 11:36:41AM +0800, Tong Tiangen wrote:
+>>
+>>
+>> 在 2022/5/25 16:30, Mark Rutland 写道:
+>>> On Thu, May 19, 2022 at 02:29:54PM +0800, Tong Tiangen wrote:
+>>>>
+>>>>
+>>>> 在 2022/5/13 23:26, Mark Rutland 写道:
+>>>>> On Wed, Apr 20, 2022 at 03:04:14AM +0000, Tong Tiangen wrote:
+>>>>>> During the processing of arm64 kernel hardware memory errors(do_sea()), if
+>>>>>> the errors is consumed in the kernel, the current processing is panic.
+>>>>>> However, it is not optimal.
+>>>>>>
+>>>>>> Take uaccess for example, if the uaccess operation fails due to memory
+>>>>>> error, only the user process will be affected, kill the user process
+>>>>>> and isolate the user page with hardware memory errors is a better choice.
+>>>>>
+>>>>> Conceptually, I'm fine with the idea of constraining what we do for a
+>>>>> true uaccess, but I don't like the implementation of this at all, and I
+>>>>> think we first need to clean up the arm64 extable usage to clearly
+>>>>> distinguish a uaccess from another access.
+>>>>
+>>>> OK,using EX_TYPE_UACCESS and this extable type could be recover, this is
+>>>> more reasonable.
+>>>
+>>> Great.
+>>>
+>>>> For EX_TYPE_UACCESS_ERR_ZERO, today we use it for kernel accesses in a
+>>>> couple of cases, such as
+>>>> get_user/futex/__user_cache_maint()/__user_swpX_asm(),
+>>>
+>>> Those are all user accesses.
+>>>
+>>> However, __get_kernel_nofault() and __put_kernel_nofault() use
+>>> EX_TYPE_UACCESS_ERR_ZERO by way of __{get,put}_mem_asm(), so we'd need to
+>>> refactor that code to split the user/kernel cases higher up the callchain.
+>>>
+>>>> your suggestion is:
+>>>> get_user continues to use EX_TYPE_UACCESS_ERR_ZERO and the other cases use
+>>>> new type EX_TYPE_FIXUP_ERR_ZERO?
+>>>
+>>> Yes, that's the rough shape. We could make the latter EX_TYPE_KACCESS_ERR_ZERO
+>>> to be clearly analogous to EX_TYPE_UACCESS_ERR_ZERO, and with that I susepct we
+>>> could remove EX_TYPE_FIXUP.
+>>>
+>>> Thanks,
+>>> Mark.
+>> According to your suggestion, i think the definition is like this:
+>>
+>> #define EX_TYPE_NONE                    0
+>> #define EX_TYPE_FIXUP                   1    --> delete
+>> #define EX_TYPE_BPF                     2
+>> #define EX_TYPE_UACCESS_ERR_ZERO        3
+>> #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD  4
+>> #define EX_TYPE_UACCESS		        xx   --> add
+>> #define EX_TYPE_KACCESS_ERR_ZERO        xx   --> add
+>> [The value defined by the macro here is temporary]
+> 
+> Almost; you don't need to add EX_TYPE_UACCESS here, as you can use
+> EX_TYPE_UACCESS_ERR_ZERO for that.
+> 
+> We already have:
+> 
+> | #define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)		\
+> |         _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, wzr)
+> 
+> ... and we can add:
+> 
+> | #define _ASM_EXTABLE_UACCESS(insn, fixup)			\
+> |         _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, wzr, wzr)
+> 
+> 
+> ... and maybe we should use 'xzr' rather than 'wzr' for clarity.
+> 
+>> There are two points to modify:
+>>
+>> 1、_get_kernel_nofault() and __put_kernel_nofault()  using
+>> EX_TYPE_KACCESS_ERR_ZERO, Other positions using EX_TYPE_UACCESS_ERR_ZERO
+>> keep unchanged.
+> 
+> That sounds right to me. This will require refactoring __raw_{get,put}_mem()
+> and __{get,put}_mem_asm().
+> 
+>> 2、delete EX_TYPE_FIXUP.
+>>
+>> There is no doubt about others. As for EX_TYPE_FIXUP, I think it needs to be
+>> retained, _cond_extable(EX_TYPE_FIXUP) is still in use in assembler.h.
+> 
+> We use _cond_extable for cache maintenance uaccesses, so those should be moved
+> over to to EX_TYPE_UACCESS_ERR_ZERO. We can rename _cond_extable to
+> _cond_uaccess_extable for clarity.
+> 
+> That will require restructuring asm-extable.h a bit. If that turns out to be
+> painful I'm happy to take a look.
+> 
+> Thanks,
+> Mark.
 
-> > Signed-off-by: Vasily Averin <vvs@openvz.org>
-> > ---
-> >  lib/xarray.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/lib/xarray.c b/lib/xarray.c
-> > index 54e646e8e6ee..5f5b42e6f842 100644
-> > --- a/lib/xarray.c
-> > +++ b/lib/xarray.c
-> > @@ -1013,6 +1013,8 @@ void xas_split_alloc(struct xa_state *xas, void *entry, unsigned int order,
-> >       if (xas->xa_shift + XA_CHUNK_SHIFT > order)
-> >               return;
-> >
-> > +     if (xas->xa->xa_flags & XA_FLAGS_ACCOUNT)
-> > +             gfp |= __GFP_ACCOUNT;
-> >       do {
-> >               unsigned int i;
-> >               void *sibling = NULL;
-> > --
-> > 2.31.1
-> >
+OK, I'll do it these days, thanks a lot.
+
+> .

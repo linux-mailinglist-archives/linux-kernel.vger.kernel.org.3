@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8015361C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE73535C26
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352627AbiE0MEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
+        id S1344843AbiE0Iwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352972AbiE0Lzs (ORCPT
+        with ESMTP id S1350064AbiE0IwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:55:48 -0400
+        Fri, 27 May 2022 04:52:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7360215E48F;
-        Fri, 27 May 2022 04:49:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9819B5BE7A;
+        Fri, 27 May 2022 01:52:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B53B61D9B;
-        Fri, 27 May 2022 11:49:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FBEC385A9;
-        Fri, 27 May 2022 11:49:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B45761D3D;
+        Fri, 27 May 2022 08:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030D7C36AE5;
+        Fri, 27 May 2022 08:51:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652166;
-        bh=bSVPVgeyCECwaJ5Y0bqjpISwHhKTwbz8Yl8nQDHYOKA=;
+        s=korg; t=1653641519;
+        bh=bYGVN7kfmeQdES4CFzs8Cvo+1Ksjh/MOcCcr62PeBgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vmsToVmncCbA/IL0jyERMdVwOBUEt5TvlbQK7jXf09lEEkM+xOwvYwzeZn7IimHgi
-         09BNubS5gZjiLQ+K20mY8sY4W46G5zSElW87Q6UbjPR4s7utawOW9i77t7bQu/QzBb
-         MG3kqccXgW6oMbAOkH0IGwH315nn9NCPtmq1FkiI=
+        b=Fx2aPQ8dBcfxCUrq9DKg2BJhBu250l/5zlDNC59ZP4J35N6l4plDjd7DwmKlvoP8O
+         mQcw2heXbTD/zGKR+OHr1nQIydAWi2qEUb+FpJw72qRoNwkcrV4V4NvvCFFKuI2JxD
+         eTMLhVEWmHB4ZPObT3cISs7bzzzkZ5Mrw7rvKM+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 094/145] random: mix build-time latent entropy into pool at init
+Subject: [PATCH 5.18 15/47] nios2: use fallback for random_get_entropy() instead of zero
 Date:   Fri, 27 May 2022 10:49:55 +0200
-Message-Id: <20220527084902.023531532@linuxfoundation.org>
+Message-Id: <20220527084803.834731142@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
+References: <20220527084801.223648383@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,41 +58,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 1754abb3e7583c570666fa1e1ee5b317e88c89a0 upstream.
+commit c04e72700f2293013dab40208e809369378f224c upstream.
 
-Prior, the "input_pool_data" array needed no real initialization, and so
-it was easy to mark it with __latent_entropy to populate it during
-compile-time. In switching to using a hash function, this required us to
-specifically initialize it to some specific state, which means we
-dropped the __latent_entropy attribute. An unfortunate side effect was
-this meant the pool was no longer seeded using compile-time random data.
-In order to bring this back, we declare an array in rand_initialize()
-with __latent_entropy and call mix_pool_bytes() on that at init, which
-accomplishes the same thing as before. We make this __initconst, so that
-it doesn't take up space at runtime after init.
+In the event that random_get_entropy() can't access a cycle counter or
+similar, falling back to returning 0 is really not the best we can do.
+Instead, at least calling random_get_entropy_fallback() would be
+preferable, because that always needs to return _something_, even
+falling back to jiffies eventually. It's not as though
+random_get_entropy_fallback() is super high precision or guaranteed to
+be entropic, but basically anything that's not zero all the time is
+better than returning zero all the time.
 
-Fixes: 6e8ec2552c7d ("random: use computational hash for entropy extraction")
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Theodore Ts'o <tytso@mit.edu>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ arch/nios2/include/asm/timex.h |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -972,6 +972,11 @@ int __init rand_initialize(void)
- 	bool arch_init = true;
- 	unsigned long rv;
+--- a/arch/nios2/include/asm/timex.h
++++ b/arch/nios2/include/asm/timex.h
+@@ -8,5 +8,8 @@
+ typedef unsigned long cycles_t;
  
-+#if defined(LATENT_ENTROPY_PLUGIN)
-+	static const u8 compiletime_seed[BLAKE2S_BLOCK_SIZE] __initconst __latent_entropy;
-+	_mix_pool_bytes(compiletime_seed, sizeof(compiletime_seed));
-+#endif
+ extern cycles_t get_cycles(void);
++#define get_cycles get_cycles
 +
- 	for (i = 0; i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)) {
- 		if (!arch_get_random_seed_long_early(&rv) &&
- 		    !arch_get_random_long_early(&rv)) {
++#define random_get_entropy() (((unsigned long)get_cycles()) ?: random_get_entropy_fallback())
+ 
+ #endif
 
 

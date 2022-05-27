@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09FC536037
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBE3535C29
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbiE0Ls2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S240348AbiE0Ixt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352524AbiE0LqE (ORCPT
+        with ESMTP id S1350153AbiE0Iwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:46:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CA31498D1;
-        Fri, 27 May 2022 04:42:46 -0700 (PDT)
+        Fri, 27 May 2022 04:52:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A47B5C36C;
+        Fri, 27 May 2022 01:52:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65B15B824E0;
-        Fri, 27 May 2022 11:42:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8611C385A9;
-        Fri, 27 May 2022 11:42:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84257B823DE;
+        Fri, 27 May 2022 08:52:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E819C385A9;
+        Fri, 27 May 2022 08:52:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651764;
-        bh=AkmbyX7kj5nPzG+eUDjqwRv35ba6cPqLkRss36eEYDQ=;
+        s=korg; t=1653641549;
+        bh=N+njQa8dbPvGRCd+m8kR8WWw+lhJD4cHuiN1wI+6arY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YZkbgQSLUoPYqzsHpUxQ7ANaaXO29vjLMjYNjQhFRZoWSG9xbgIynvpUvN37oZ6u+
-         I6YLQujgZr4dtugg16fIt7COuhu/Eb46BJS3M4QAyrIu3QTYElmuaEJTR8Zp6v1/8r
-         RSDcMs4qxjHl2lf4GR+x4niMJ51BM7QC4goOUh+8=
+        b=thp6IyqQ6sPg8NGAhhu3HIHyrIKuPqKxh2oDD201S9wrIv8KKN/Bng7OysZNeLvuQ
+         cuMBXHN7er/WcPXOAjaPuDK6XfBDGu3CnjPQKpt5Z6dnV91qIwJ/MJc1yoW45tKNqv
+         Yh6jo06T9kgFfYZQ/CqsMbQBojU0Jq6FY6hHtV+M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-Subject: [PATCH 5.17 080/111] x86/tsc: Use fallback for random_get_entropy() instead of zero
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.18 12/47] riscv: use fallback for random_get_entropy() instead of zero
 Date:   Fri, 27 May 2022 10:49:52 +0200
-Message-Id: <20220527084830.796831598@linuxfoundation.org>
+Message-Id: <20220527084803.239225120@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
+References: <20220527084801.223648383@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,71 +59,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 3bd4abc07a267e6a8b33d7f8717136e18f921c53 upstream.
+commit 6d01238623faa9425f820353d2066baf6c9dc872 upstream.
 
 In the event that random_get_entropy() can't access a cycle counter or
-similar, falling back to returning 0 is suboptimal. Instead, fallback
-to calling random_get_entropy_fallback(), which isn't extremely high
-precision or guaranteed to be entropic, but is certainly better than
-returning zero all the time.
+similar, falling back to returning 0 is really not the best we can do.
+Instead, at least calling random_get_entropy_fallback() would be
+preferable, because that always needs to return _something_, even
+falling back to jiffies eventually. It's not as though
+random_get_entropy_fallback() is super high precision or guaranteed to
+be entropic, but basically anything that's not zero all the time is
+better than returning zero all the time.
 
-If CONFIG_X86_TSC=n, then it's possible for the kernel to run on systems
-without RDTSC, such as 486 and certain 586, so the fallback code is only
-required for that case.
-
-As well, fix up both the new function and the get_cycles() function from
-which it was derived to use cpu_feature_enabled() rather than
-boot_cpu_has(), and use !IS_ENABLED() instead of #ifndef.
-
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/timex.h |    9 +++++++++
- arch/x86/include/asm/tsc.h   |    7 +++----
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ arch/riscv/include/asm/timex.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/x86/include/asm/timex.h
-+++ b/arch/x86/include/asm/timex.h
-@@ -5,6 +5,15 @@
- #include <asm/processor.h>
- #include <asm/tsc.h>
- 
-+static inline unsigned long random_get_entropy(void)
-+{
-+	if (!IS_ENABLED(CONFIG_X86_TSC) &&
-+	    !cpu_feature_enabled(X86_FEATURE_TSC))
-+		return random_get_entropy_fallback();
-+	return rdtsc();
-+}
-+#define random_get_entropy random_get_entropy
-+
- /* Assume we use the PIT time source for the clock tick */
- #define CLOCK_TICK_RATE		PIT_TICK_RATE
- 
---- a/arch/x86/include/asm/tsc.h
-+++ b/arch/x86/include/asm/tsc.h
-@@ -20,13 +20,12 @@ extern void disable_TSC(void);
- 
- static inline cycles_t get_cycles(void)
+--- a/arch/riscv/include/asm/timex.h
++++ b/arch/riscv/include/asm/timex.h
+@@ -41,7 +41,7 @@ static inline u32 get_cycles_hi(void)
+ static inline unsigned long random_get_entropy(void)
  {
--#ifndef CONFIG_X86_TSC
--	if (!boot_cpu_has(X86_FEATURE_TSC))
-+	if (!IS_ENABLED(CONFIG_X86_TSC) &&
-+	    !cpu_feature_enabled(X86_FEATURE_TSC))
- 		return 0;
--#endif
--
- 	return rdtsc();
+ 	if (unlikely(clint_time_val == NULL))
+-		return 0;
++		return random_get_entropy_fallback();
+ 	return get_cycles();
  }
-+#define get_cycles get_cycles
- 
- extern struct system_counterval_t convert_art_to_tsc(u64 art);
- extern struct system_counterval_t convert_art_ns_to_tsc(u64 art_ns);
+ #define random_get_entropy()	random_get_entropy()
 
 

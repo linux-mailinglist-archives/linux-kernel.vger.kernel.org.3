@@ -2,160 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36AE535B48
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68079535BBB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245162AbiE0ISa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S1345797AbiE0Ilz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiE0IS2 (ORCPT
+        with ESMTP id S233348AbiE0Ilv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:18:28 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42361EC3F6;
-        Fri, 27 May 2022 01:18:27 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L8d1w49BGz1JCR4;
-        Fri, 27 May 2022 16:16:52 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 16:18:25 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 16:18:24 +0800
-From:   keliu <liuke94@huawei.com>
-To:     <scott.branden@broadcom.com>,
-        <bcm-kernel-feedback-list@broadcom.com>, <arnd@arndb.de>,
-        <gregkh@linuxfoundation.org>, <gustavo.pimentel@synopsys.com>,
-        <kishon@ti.com>, <lorenzo.pieralisi@arm.com>, <kw@linux.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>
-CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] drivers: misc: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 08:39:53 +0000
-Message-ID: <20220527083953.2636843-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 May 2022 04:41:51 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FCD26AF1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 01:41:48 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VEWfF7V_1653640904;
+Received: from 30.32.82.202(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VEWfF7V_1653640904)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 27 May 2022 16:41:45 +0800
+Message-ID: <a7322d0d-ea60-d2e5-4ac2-df0077b25671@linux.alibaba.com>
+Date:   Fri, 27 May 2022 16:42:12 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] arm64/hugetlb: Fix building errors in
+ huge_ptep_clear_flush()
+To:     Gavin Shan <gshan@redhat.com>, torvalds@linux-foundation.org
+Cc:     catalin.marinas@arm.com, will@kernel.org,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        naresh.kamboju@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <814e20c19b110209ee12ecae7cb05f8a78d021c8.1653625820.git.baolin.wang@linux.alibaba.com>
+ <4707e621-c167-8fff-b210-9babb6a3f2df@redhat.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <4707e621-c167-8fff-b210-9babb6a3f2df@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove() .
 
-Signed-off-by: keliu <liuke94@huawei.com>
----
- drivers/misc/bcm-vk/bcm_vk_dev.c | 6 +++---
- drivers/misc/dw-xdata-pcie.c     | 6 +++---
- drivers/misc/pci_endpoint_test.c | 6 +++---
- 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
-index a16b99bdaa13..a3a82ebbc699 100644
---- a/drivers/misc/bcm-vk/bcm_vk_dev.c
-+++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
-@@ -1401,7 +1401,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		bcm_vk_tty_set_irq_enabled(vk, i);
- 	}
- 
--	id = ida_simple_get(&bcm_vk_ida, 0, 0, GFP_KERNEL);
-+	id = ida_alloc(&bcm_vk_ida, GFP_KERNEL);
- 	if (id < 0) {
- 		err = id;
- 		dev_err(dev, "unable to get id\n");
-@@ -1500,7 +1500,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	misc_device->name = NULL;
- 
- err_ida_remove:
--	ida_simple_remove(&bcm_vk_ida, id);
-+	ida_free(&bcm_vk_ida, id);
- 
- err_irq:
- 	for (i = 0; i < vk->num_irqs; i++)
-@@ -1573,7 +1573,7 @@ static void bcm_vk_remove(struct pci_dev *pdev)
- 	if (misc_device->name) {
- 		misc_deregister(misc_device);
- 		kfree(misc_device->name);
--		ida_simple_remove(&bcm_vk_ida, vk->devid);
-+		ida_free(&bcm_vk_ida, vk->devid);
- 	}
- 	for (i = 0; i < vk->num_irqs; i++)
- 		devm_free_irq(&pdev->dev, pci_irq_vector(pdev, i), vk);
-diff --git a/drivers/misc/dw-xdata-pcie.c b/drivers/misc/dw-xdata-pcie.c
-index 257c25da5199..59617d92a0a3 100644
---- a/drivers/misc/dw-xdata-pcie.c
-+++ b/drivers/misc/dw-xdata-pcie.c
-@@ -333,7 +333,7 @@ static int dw_xdata_pcie_probe(struct pci_dev *pdev,
- 
- 	dw->pdev = pdev;
- 
--	id = ida_simple_get(&xdata_ida, 0, 0, GFP_KERNEL);
-+	id = ida_(&xdata_ida, GFP_KERNEL);
- 	if (id < 0) {
- 		dev_err(dev, "xData: unable to get id\n");
- 		return id;
-@@ -377,7 +377,7 @@ static int dw_xdata_pcie_probe(struct pci_dev *pdev,
- 	kfree(dw->misc_dev.name);
- 
- err_ida_remove:
--	ida_simple_remove(&xdata_ida, id);
-+	ida_free(&xdata_ida, id);
- 
- 	return err;
- }
-@@ -396,7 +396,7 @@ static void dw_xdata_pcie_remove(struct pci_dev *pdev)
- 	dw_xdata_stop(dw);
- 	misc_deregister(&dw->misc_dev);
- 	kfree(dw->misc_dev.name);
--	ida_simple_remove(&xdata_ida, id);
-+	ida_free(&xdata_ida, id);
- }
- 
- static const struct pci_device_id dw_xdata_pcie_id_table[] = {
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index 8f786a225dcf..d909a3f94566 100644
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -838,7 +838,7 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
- 
- 	pci_set_drvdata(pdev, test);
- 
--	id = ida_simple_get(&pci_endpoint_test_ida, 0, 0, GFP_KERNEL);
-+	id = ida_alloc(&pci_endpoint_test_ida, GFP_KERNEL);
- 	if (id < 0) {
- 		err = id;
- 		dev_err(dev, "Unable to get id\n");
-@@ -885,7 +885,7 @@ static int pci_endpoint_test_probe(struct pci_dev *pdev,
- 	kfree(test->name);
- 
- err_ida_remove:
--	ida_simple_remove(&pci_endpoint_test_ida, id);
-+	ida_free(&pci_endpoint_test_ida, id);
- 
- err_iounmap:
- 	for (bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
-@@ -918,7 +918,7 @@ static void pci_endpoint_test_remove(struct pci_dev *pdev)
- 	misc_deregister(&test->miscdev);
- 	kfree(misc_device->name);
- 	kfree(test->name);
--	ida_simple_remove(&pci_endpoint_test_ida, id);
-+	ida_free(&pci_endpoint_test_ida, id);
- 	for (bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
- 		if (test->bar[bar])
- 			pci_iounmap(pdev, test->bar[bar]);
--- 
-2.25.1
+On 5/27/2022 3:12 PM, Gavin Shan wrote:
+> Hi Baolin,
+> 
+> On 5/27/22 12:51 PM, Baolin Wang wrote:
+>> Fix below building errors which was caused by commit ae07562909f3
+>> ("mm: change huge_ptep_clear_flush() to return the original pte")
+>> interacting with commit fb396bb459c1 ("arm64/hugetlb: Drop TLB flush
+>> from get_clear_flush()").
+>>
+>> Due to the new get_clear_contig() has dropped TLB flush, we should
+>> add an explicit TLB flush in huge_ptep_clear_flush() to keep original
+>> semantics when changing to use new get_clear_contig().
+>>
+>> "
+>> arch/arm64/mm/hugetlbpage.c: In function ‘huge_ptep_clear_flush’:
+>> arch/arm64/mm/hugetlbpage.c:515:9: error: implicit declaration of
+>> function ‘get_clear_flush’; did you mean ‘ptep_clear_flush’?
+>> [-Werror=implicit-function-declaration]
+>>    515 |  return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, 
+>> ncontig);
+>>        |         ^~~~~~~~~~~~~~~
+>>        |         ptep_clear_flush
+>> "
+>>
+>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> ---
+>>   arch/arm64/mm/hugetlbpage.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+> 
+> I ran to the compiling failure either and it would be caused by
+> commit fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from 
+> get_clear_flush()").
+> It's worthy to have a "Fixes" tag. With those fixed:
 
+Thanks for reminding. IMHO, better to add 2 related commits' fix tag. 
+Linus, could you help to add them when applying this patch, or need a 
+resend? Thanks.
+
+Fixes: ae07562909f3 ("mm: change huge_ptep_clear_flush() to return the 
+original pte")
+Fixes: fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from 
+get_clear_flush()").
+
+> 
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> 
+> 
+>> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+>> index 0f0c17dfeb9c..e2a5ec9fdc0d 100644
+>> --- a/arch/arm64/mm/hugetlbpage.c
+>> +++ b/arch/arm64/mm/hugetlbpage.c
+>> @@ -507,12 +507,15 @@ pte_t huge_ptep_clear_flush(struct 
+>> vm_area_struct *vma,
+>>   {
+>>       size_t pgsize;
+>>       int ncontig;
+>> +    pte_t orig_pte;
+>>       if (!pte_cont(READ_ONCE(*ptep)))
+>>           return ptep_clear_flush(vma, addr, ptep);
+>>       ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
+>> -    return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
+>> +    orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, 
+>> ncontig);
+>> +    flush_tlb_range(vma, addr, addr + pgsize * ncontig);
+>> +    return orig_pte;
+>>   }
+>>   static int __init hugetlbpage_init(void)
+>>
+> 
+> Thanks,
+> Gavin

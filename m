@@ -2,107 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FC8535E92
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01570535E95
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351052AbiE0KqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 06:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S1351204AbiE0Kqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 06:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351149AbiE0KpH (ORCPT
+        with ESMTP id S1351104AbiE0Kp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 06:45:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECCB649FA9
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653648306;
+        Fri, 27 May 2022 06:45:58 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCB25158F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:45:27 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2A5F8100009;
+        Fri, 27 May 2022 10:45:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653648326;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=m7BeKJHp4Run0Ug5EhP4SxprBH86cV+tauhT+NDg3e8=;
-        b=KHAW4BdUg1xdPcTrrBhqS03eYB7hqNV6KmIEZUDDj18uKpz1VyTJVXAif3BOOFOxdJoANN
-        tIeptphtTJ8VgKoLyCTrGLIqixu46xcdgTKVCQQYaMVTekP7dlshb7bvyQClHlcvDC1piG
-        QxBi9wR160h7ZF+oc1esFI7CMIENtv0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-225-YtvydkA8MhSpA7Q0Xd4snw-1; Fri, 27 May 2022 06:45:02 -0400
-X-MC-Unique: YtvydkA8MhSpA7Q0Xd4snw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CE003804078;
-        Fri, 27 May 2022 10:45:02 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 32D5D2166B26;
-        Fri, 27 May 2022 10:45:01 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH v3 9/9] cifs, ksmbd: Fix MAX_SGE count for softiwarp
-From:   David Howells <dhowells@redhat.com>
-To:     Steve French <smfrench@gmail.com>
-Cc:     dhowells@redhat.com, Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 27 May 2022 11:45:00 +0100
-Message-ID: <165364830049.3334034.6534387884012702192.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165364823513.3334034.11209090728654641458.stgit@warthog.procyon.org.uk>
-References: <165364823513.3334034.11209090728654641458.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        bh=JB0mhdnR46lzp5SeNAr4p9Ad8iU4Z1hWgOymRKFoU7o=;
+        b=eklpqcblb0aQr6N+ca93ufY/mFI+iOkxU18x8X7BkHSFlRBSL5barbpNunBdKp0r99+NdM
+        V/EbLal3hBn+A1frcq4sefFFud94fx6Zf7uZMvez3ZDKdmC98VFxmfuW1gckLSJSmh3SaO
+        uPyByhZrvS5KRx4WcgvAdpv6qyPm97p6dacCM6oir8kBXGgRcW18apvT4Nh6DwEObhl8v1
+        AbqOWz/MfNax4E0ocwykm6TbgyPDMGE5RS2Ik9zXawCJR5+jmu1/0B3Shvrl6WwqMl1F4v
+        NJTYyBeBtHD73G63T4SZAgR8yopyWFgjDN60ZryN/xypJ50LLD/0GC+ynLUuTQ==
+Date:   Fri, 27 May 2022 12:45:21 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] xfs: drop the useless LIST_HEAD in
+ __mtd_del_partition()
+Message-ID: <20220527124521.15ac865e@xps-13>
+In-Reply-To: <1653645678-29049-1-git-send-email-baihaowen@meizu.com>
+References: <1653645678-29049-1-git-send-email-baihaowen@meizu.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+Hi Haowen,
+
+baihaowen@meizu.com wrote on Fri, 27 May 2022 18:01:18 +0800:
+
+> Drop LIST_HEAD where the variable it declares is never used.
+>=20
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+
+The title seems wrong. A fixes tag would be appropriate.
+
+> ---
+>  drivers/mtd/mtdpart.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/mtd/mtdpart.c b/drivers/mtd/mtdpart.c
+> index d442fa94c872..976e9c30244e 100644
+> --- a/drivers/mtd/mtdpart.c
+> +++ b/drivers/mtd/mtdpart.c
+> @@ -326,7 +326,6 @@ static int __mtd_del_partition(struct mtd_info *mtd)
+>  static int __del_mtd_partitions(struct mtd_info *mtd)
+>  {
+>  	struct mtd_info *child, *next;
+> -	LIST_HEAD(tmp_list);
+>  	int ret, err =3D 0;
+> =20
+>  	list_for_each_entry_safe(child, next, &mtd->partitions, part.node) {
 
 
----
-
- fs/cifs/smbdirect.h       |    2 +-
- fs/ksmbd/transport_rdma.c |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/cifs/smbdirect.h b/fs/cifs/smbdirect.h
-index 3a0d39e148e8..12a92054324a 100644
---- a/fs/cifs/smbdirect.h
-+++ b/fs/cifs/smbdirect.h
-@@ -226,7 +226,7 @@ struct smbd_buffer_descriptor_v1 {
- } __packed;
- 
- /* Default maximum number of SGEs in a RDMA send/recv */
--#define SMBDIRECT_MAX_SGE	16
-+#define SMBDIRECT_MAX_SGE	6
- /* The context for a SMBD request */
- struct smbd_request {
- 	struct smbd_connection *info;
-diff --git a/fs/ksmbd/transport_rdma.c b/fs/ksmbd/transport_rdma.c
-index e646d79554b8..70662b3bd590 100644
---- a/fs/ksmbd/transport_rdma.c
-+++ b/fs/ksmbd/transport_rdma.c
-@@ -42,7 +42,7 @@
- /* SMB_DIRECT negotiation timeout in seconds */
- #define SMB_DIRECT_NEGOTIATE_TIMEOUT		120
- 
--#define SMB_DIRECT_MAX_SEND_SGES		8
-+#define SMB_DIRECT_MAX_SEND_SGES		6
- #define SMB_DIRECT_MAX_RECV_SGES		1
- 
- /*
-
-
+Thanks,
+Miqu=C3=A8l

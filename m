@@ -2,123 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE180536347
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5816D53634A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 15:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346019AbiE0NVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 09:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S1351697AbiE0NWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 09:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242354AbiE0NVD (ORCPT
+        with ESMTP id S242354AbiE0NWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 09:21:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8818012E301;
-        Fri, 27 May 2022 06:21:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0642861C18;
-        Fri, 27 May 2022 13:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB72C385A9;
-        Fri, 27 May 2022 13:20:59 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="gAconhhG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653657656;
+        Fri, 27 May 2022 09:22:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C6E43B54D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 06:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653657765;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=N+0wxHmueW5PC6Ruhk71jM9anOT1ArAHVn1hq5ZBoTo=;
-        b=gAconhhG+s5OEFBNojX/Dv8XERWyEqqQgvLVdGk3ldiawbflA55TyjOeGfLCH9cM97InIR
-        QlGBGnCQ6c/7P6Fmw3mtmh+KPg4xxXOwrFzDiBQBKLVebVycSQBJd8UDHuo3R7fjzhzRw0
-        kBrpSx6cemK50G6hKahN7RcoAfgJNlo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 16dba200 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 27 May 2022 13:20:55 +0000 (UTC)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-3003cb4e064so46930397b3.3;
-        Fri, 27 May 2022 06:20:55 -0700 (PDT)
-X-Gm-Message-State: AOAM5301EQKwwPyZlWXSsMAbfl5OXH3O5z9n1OyGoTZPHYDXdd3pf3TA
-        d+R4xsWheVUNg8PPLUu16Zj+KN+sW39s0TfFBak=
-X-Google-Smtp-Source: ABdhPJxDoIQYBw0u5FNf+G4Ms58Dp1JfZMgNq9wGrzUMKtd/kA+5h8kZAEKXLqN65ZZrJa4NTDcMD5uBZ9Rlw5brQuU=
-X-Received: by 2002:a0d:cd04:0:b0:300:4784:caa3 with SMTP id
- p4-20020a0dcd04000000b003004784caa3mr15250404ywd.231.1653657654222; Fri, 27
- May 2022 06:20:54 -0700 (PDT)
+        bh=XQbqWL32WgNp+vr6+IdXD3tIFXkuGIZQKgAX0wF6o5I=;
+        b=gcvQQEvCBfc2kCXZjD6QzbN9Z+P5PK7yGBePhAEZkGPkIq6uoqG8O8RuLwyp3FQl1uvE72
+        t8kYAGp82JdcTIEMOxJ/vDfleeY1F9SfKesa7RB/Ys6A80vaR6DA8LEpN/bhzoR26sr7bn
+        dZcbhVkW2nsz3NTRTeGT1FkW5Nuagsk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-60-DwDo9MTHMZKK_lUYFY3QQg-1; Fri, 27 May 2022 09:22:40 -0400
+X-MC-Unique: DwDo9MTHMZKK_lUYFY3QQg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B5A343C14103;
+        Fri, 27 May 2022 13:22:39 +0000 (UTC)
+Received: from pauld.bos.csb (dhcp-17-51.bos.redhat.com [10.18.17.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 93DC31121315;
+        Fri, 27 May 2022 13:22:39 +0000 (UTC)
+Date:   Fri, 27 May 2022 09:22:38 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 1/2] cpuhp: make target_store() a nop when target ==
+ state
+Message-ID: <20220527132156.GB26124@pauld.bos.csb>
+References: <20220526160615.7976-1-pauld@redhat.com>
+ <20220526160615.7976-2-pauld@redhat.com>
+ <xhsmhy1ynl3hr.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Received: by 2002:a05:7110:6403:b0:17b:2ce3:1329 with HTTP; Fri, 27 May 2022
- 06:20:53 -0700 (PDT)
-In-Reply-To: <ffa404b7427043fda4b9f4a20ea0f068@AcuMS.aculab.com>
-References: <YpCGQvpirQWaAiRF@zx2c4.com> <20220527081106.63227-1-Jason@zx2c4.com>
- <ffa404b7427043fda4b9f4a20ea0f068@AcuMS.aculab.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 27 May 2022 15:20:53 +0200
-X-Gmail-Original-Message-ID: <CAHmME9osMkustaPdiGmJ02A+5gTPvEy1EJwi5ump7REJXb1-TQ@mail.gmail.com>
-Message-ID: <CAHmME9osMkustaPdiGmJ02A+5gTPvEy1EJwi5ump7REJXb1-TQ@mail.gmail.com>
-Subject: Re: [PATCH crypto v2] crypto: blake2s - remove shash module
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        gaochao <gaochao49@huawei.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmhy1ynl3hr.mognet@vschneid.remote.csb>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On Fri, May 27, 2022 at 10:38:24AM +0100 Valentin Schneider wrote:
+> On 26/05/22 12:06, Phil Auld wrote:
+> > writing the current state back in hotplug/target calls cpu_down()
+> > which will set cpu dying even when it isn't and then nothing will
+> > ever clear it. A stress test that reads values and writes them back
+> > for all cpu device files in sysfs will trigger the BUG() in
+> > select_fallback_rq once all cpus are marked as dying.
+> >
+> > kernel/cpu.c::target_store()
+> > 	...
+> >         if (st->state < target)
+> >                 ret = cpu_up(dev->id, target);
+> >         else
+> >                 ret = cpu_down(dev->id, target);
+> >
+> > cpu_down() -> cpu_set_state()
+> > 	 bool bringup = st->state < target;
+> > 	 ...
+> > 	 if (cpu_dying(cpu) != !bringup)
+> > 		set_cpu_dying(cpu, !bringup);
+> >
+> > Fix this by letting state==target fall through in the target_store()
+> > conditional.
+> >
+> 
+> To go back on my data race paranoia: writes to both cpu$x/online and
+> cpu$x/hotplug/target are serialized by device_hotplug_lock, and so are the
+> exported kernel hotplug functions ({add, remove}_cpu()).
+> 
+> That's not cpu_add_remove_lock as I was looking for, but that's still all
+> under one lock, so I think we're good. Sorry for that!
+> 
 
-On 5/27/22, David Laight <David.Laight@aculab.com> wrote:
-> From: Jason A. Donenfeld
->> Sent: 27 May 2022 09:11
->>
->> BLAKE2s has no use as an shash, with no users of it. Just remove all of
->> this unnecessary plumbing. Removing this shash was something we talked
->> about back when we were making BLAKE2s a built-in, but I simply never
->> got around to doing it. So this completes that project.
-> ...
->> diff --git a/lib/crypto/blake2s.c b/lib/crypto/blake2s.c
->> index c71c09621c09..716da32cf4dc 100644
->> --- a/lib/crypto/blake2s.c
->> +++ b/lib/crypto/blake2s.c
->> @@ -16,16 +16,43 @@
->>  #include <linux/init.h>
->>  #include <linux/bug.h>
->>
->> +static inline void blake2s_set_lastblock(struct blake2s_state *state)
->> +{
->> +	state->f[0] = -1;
->> +}
->> +
->>  void blake2s_update(struct blake2s_state *state, const u8 *in, size_t
->> inlen)
->>  {
->> -	__blake2s_update(state, in, inlen, false);
->> +	const size_t fill = BLAKE2S_BLOCK_SIZE - state->buflen;
->> +
->> +	if (unlikely(!inlen))
->> +		return;
->
-> Does this happen often enough to optimise for?
-> The zero length memcpy() should be fine.
-> (though pedants might worry about in == NULL)
->
+Right. This catches it up higher so that we don't get into the code that
+starts actually changing things.  I wonder now in the state == target case
+if we should make sure st->target == target.  With the second patch it's 
+less likely to be needed. Thoughts?
 
-I don't know and don't care here. This is a straight copy and paste
-for the removal. It is not the place for random performance
-optimizations.
+Maybe I'll include that if/when I have code to keep cpux/online in sync
+with st->state and cpu_online_mask.
 
-I have now witnessed you have random performance optimization ideas in
-at least 7 threads, usually unrelated to whatever the topic is. As I
-keep telling you every time: SEND A PATCH. Those capital letters are
-intentional: I care about the same things you do, so please send a
-patch so that all that stuff actually happens. Talk is cheap.
+> > Signed-off-by: Phil Auld <pauld@redhat.com>
+> 
+> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 
-Jason
+Thanks!
+
+
+Cheers,
+Phil
+
+
+> 
+> > ---
+> >  kernel/cpu.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/cpu.c b/kernel/cpu.c
+> > index d0a9aa0b42e8..cdb6ac10ad94 100644
+> > --- a/kernel/cpu.c
+> > +++ b/kernel/cpu.c
+> > @@ -2315,7 +2315,7 @@ static ssize_t target_store(struct device *dev, struct device_attribute *attr,
+> >  
+> >  	if (st->state < target)
+> >  		ret = cpu_up(dev->id, target);
+> > -	else
+> > +	else if (st->state > target)
+> >  		ret = cpu_down(dev->id, target);
+> >  out:
+> >  	unlock_device_hotplug();
+> > -- 
+> > 2.18.0
+> 
+
+-- 
+

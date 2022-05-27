@@ -2,83 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF1C535B11
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0413A535B1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348654AbiE0IGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S1348793AbiE0IHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349354AbiE0IFk (ORCPT
+        with ESMTP id S1349627AbiE0IGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:05:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EBFFF583;
-        Fri, 27 May 2022 01:05:38 -0700 (PDT)
+        Fri, 27 May 2022 04:06:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBC8AF315;
+        Fri, 27 May 2022 01:06:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A72AEB8222A;
-        Fri, 27 May 2022 08:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98AD4C34100;
-        Fri, 27 May 2022 08:05:35 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JFi+EfgR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653638734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=egFvemp/OO1mIsOgG16kHg3dT2DLh+FIRIYNI2ypg1o=;
-        b=JFi+EfgRmro9BNBYct10wu2NqaGsDCM1eL8d2JwRDvzg5xWPo8x7Rh24VzOSx2NFzckLJe
-        0aAptJtLns/CyhwzsWBYEi4EgtOOi8peLurn1ys0P4JQkEoLa92s5jC4nBVVr9Q5BqCwtJ
-        YxXNKSTKkW/vR1DhfzYugZIPo237BXI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 85d4a319 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 27 May 2022 08:05:33 +0000 (UTC)
-Date:   Fri, 27 May 2022 10:05:22 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        herbert@gondor.apana.org.au, gaochao <gaochao49@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH crypto] crypto: blake2s - remove shash module
-Message-ID: <YpCGQvpirQWaAiRF@zx2c4.com>
-References: <20220526092026.207936-1-Jason@zx2c4.com>
- <Yo/Afs61tFwnaOV8@sol.localdomain>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8786A61C01;
+        Fri, 27 May 2022 08:06:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 998CAC34119;
+        Fri, 27 May 2022 08:06:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653638780;
+        bh=bExDxURONoYyEyd2zIv+DcSXNxKTDMG5tYNYaUYxBJc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QnUb/Iotj6TLwlrFaZEv5Mj1e2uWOatVHI1xeiSd6YPEBYzPq1CPU6lowYeMJ66Xa
+         ED3/aVsH5VNu3w1153cjLlkDukyW2Esl4jKOPSJqIK9236GmTJveEIeOPDbjmsFrt6
+         AronjEdLvrWRBdHmFJIerwC2Kz9GaftGPDDqNQ006N23oST9E4Wl9TJu+/YInV20JL
+         r2Uf2Z9gKCYnKNIIVlSv/FwGFN4Q0ALDwXrRaWJHrImdAcrzKQgqpAxx3PzjBIekbK
+         BQtbM4vc4MQJ+7uF/PUaKHkszShaU/wvTxSwoFHc1b5vJR0P7Yr816NWTr7EeyNcdP
+         mDN1TcO4tL21g==
+Date:   Fri, 27 May 2022 13:36:16 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Allen Pais <apais@linux.microsoft.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        olivier.dautricourt@orolia.com, Stefan Roese <sr@denx.de>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Eugeniy.Paltsev@synopsys.com,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Leo Li <leoyang.li@nxp.com>, zw@zh-kernel.org,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Sanjay R Mehta <sanju.mehta@amd.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        green.wan@sifive.com, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Lyra Zhang <zhang.lyra@gmail.com>,
+        Patrice CHOTARD <patrice.chotard@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        dmaengine@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC 1/1] drivers/dma/*: replace tasklets with workqueue
+Message-ID: <YpCGePbo9B/Z7slV@matsya>
+References: <20220419211658.11403-1-apais@linux.microsoft.com>
+ <20220419211658.11403-2-apais@linux.microsoft.com>
+ <CACRpkdZ2DFZRPHS1x0=M3_8zYvU-jpCG5Tm3863dXv51EhY+BA@mail.gmail.com>
+ <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yo/Afs61tFwnaOV8@sol.localdomain>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAK8P3a0j_rziihsgHnG5bHMxmPbOkAhT6_+CCE4iFZy7HzQrLw@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Eric,
-
-On Thu, May 26, 2022 at 11:01:34AM -0700, Eric Biggers wrote:
-> On Thu, May 26, 2022 at 11:20:26AM +0200, Jason A. Donenfeld wrote:
-> > BLAKE2s has no use as an shash and no use is likely to ever come up.
+On 25-05-22, 13:03, Arnd Bergmann wrote:
+> On Wed, May 25, 2022 at 11:24 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Tue, Apr 19, 2022 at 11:17 PM Allen Pais <apais@linux.microsoft.com> wrote:
+> >
+> > > The tasklet is an old API which will be deprecated, workqueue API
+> > > cab be used instead of them.
+> > >
+> > > This patch replaces the tasklet usage in drivers/dma/* with a
+> > > simple work.
+> > >
+> > > Github: https://github.com/KSPP/linux/issues/94
+> > >
+> > > Signed-off-by: Allen Pais <apais@linux.microsoft.com>
+> >
+> > Paging Vincent Guittot and Arnd Bergmann on the following question
+> > on this patch set:
+> >
+> > - Will replacing tasklets with workque like this negatively impact the
+> >   performance on DMA engine bottom halves?
 > 
-> I'm not sure about that.  Anyone who is already using shash (for supporting
-
-I'll tweak the language of the commit message.
-
-> More importantly, this is removing quite a bit of test coverage because the
-> extra self-tests in crypto/testmgr.c are more comprehensive than what
-> lib/crypto/blake2s-selftest.c does.  For example they test the case where the
-> input data is misaligned, as well as the case where the code is executed in a
-> context where SIMD instructions are unavailable.
+> I think it will in some cases but not others. The problem I see is that
+> the short patch description makes it sound like a trivial conversion of a
+> single subsystem, but in reality this interacts with all the drivers using
+> DMA engines, including tty/serial, sound, mmc and spi.
 > 
-> In order for this to be acceptable, I think you'd need to update
-> blake2s-selftest.c to be more comprehensive.
+> In many cases, the change is an improvement, but I can see a number
+> of ways this might go wrong:
+> 
+> - for audio, waiting to schedule the workqueue task may add enough
+>   latency to lead to audible skips
+> 
+> - for serial, transferring a few characters through DMA is probably
+>   more expensive now than using MMIO, which might mean that
+>   there may no longer be a point in using DMA in the first place.
+> 
+> - Some drivers such as dw_mmc schedule another tasklet from the
+>   callback. If the tasklet is turned into a workqueue, this becomes
+>   a bit pointless unless we change the called drivers first.
 
-There actually already is some alignment tests. But I'll add some more
-and also compare implementations. v2 incoming.
+Yes and there are assumptions in the peripheral drivers about the
+context of callback which right now is tasklet, that needs to be updated
+as well..
 
-Jason
+> What might work better in the case of the dmaengine API would
+> be an approach like:
+> 
+> 1. add helper functions to call the callback functions from a
+>     tasklet locally defined in drivers/dma/dmaengine.c to allow
+>     deferring it from hardirq context
+> 
+> 2. Change all  tasklets that are not part of the callback
+>     mechanism to work queue functions, I only see
+>     xilinx_dpdma_chan_err_task in the patch, but there
+>     may be more
+> 
+> 3. change all drivers to move their custom tasklets back into
+>     hardirq context and instead call the new helper for deferring
+>     the callback.
+> 
+> 4. Extend the dmaengine callback API to let slave drivers
+>     pick hardirq, tasklet or task context for the callback.
+>     task context can mean either a workqueue, or a threaded
+>     IRQ here, with the default remaining the tasklet version.
+
+That does sound a good idea, but I dont know who will use the workqueue
+or a threaded context here, it might be that most would default to
+hardirq or tasklet context for obvious reasons...
+
+> 
+> 5. Change slave drivers to pick either hardirq or task context
+>     depending on their requirements
+> 
+> 6. Remove the tasklet version.
+> 
+> This is of course a lot more complicated than Allen's
+> approach, but I think the end result would be much better.
+> 
+>          Arnd
+
+-- 
+~Vinod

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4B8535DDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244B1535DDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350786AbiE0KFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 06:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
+        id S241181AbiE0KFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 06:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350930AbiE0KFP (ORCPT
+        with ESMTP id S1350936AbiE0KFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 06:05:15 -0400
+        Fri, 27 May 2022 06:05:19 -0400
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D0110656D;
-        Fri, 27 May 2022 03:05:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCB110656D;
+        Fri, 27 May 2022 03:05:17 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 24RA2hPV029808;
-        Fri, 27 May 2022 19:02:49 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24RA2hPV029808
+        by conuserg-08.nifty.com with ESMTP id 24RA2hPW029808;
+        Fri, 27 May 2022 19:02:50 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24RA2hPW029808
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653645770;
-        bh=aeTLWp41sB2px7vbsl+AoWvoxM63JuytaCqa9JH2QLY=;
+        s=dec2015msa; t=1653645771;
+        bh=3Oj1DhJn8CmLNtWlFeZrpT6DZfeTSEt5AwsBsBHThdw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HNBXNGONQ3XAXjEyNsT812P/sRM9yUOuKeEx6rV5MeMv1NxMHnZVXWp2u3jL3+YhO
-         hHwEyE27UCcCCype5LopeDwcShy1TIjgvIzb35fNVES8P6DPUjAtO/oKmWQyrjKn7e
-         bNLeFrwGDnwLBGzZ9ECYC+HfWtv1orzRaQxDXtS4bmogZCcZlcfc0L4a8I5xbtRerl
-         AENHInpUJ2umDWLEQ3o3RVbecF3RavfGGRbduj+yTrY6zqZ1VeHFrt267AKy33Vb4M
-         j/NpQV/JGiOhD8mPqsR5WAZPocvvNN8niceVYS/cuIu+CoXuwCESKCAm4kbrQ1JKic
-         Dpe+I0j85Opbg==
+        b=v0PffPwf03F/kuXj7tkaHCU736AoC3p/iSQGFT4EuXdSk7N4AHNFlo+HaQjmoyMK5
+         MYXLldeol6bR3qKJAaweMayW9SJ7L6Ol6Gx2LFBAz6wUIBmKQeNtVMh+l6om88wy+U
+         9sXkPMptAwV2mpoMEItMwB2cESfr5Y0wkSPl1NUMRVGd1ntYQ/pbDemHSt8Yc71iwX
+         ZDOd7CzWE/FqZ/+GM1ZY3esJH3uCAuKs1WCrHQ7JXPKRhsYCDRAqY01YdQQusFIhY8
+         jXOfjZIOwRY7MZIVVBUlPLoYWmd/bZ5dq9bXs3v3fdYJ4Uu2NTj8B9IZyukH/7O3RK
+         JL/jIbsOZOSlQ==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -43,9 +43,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>
-Subject: [PATCH v7 5/8] kbuild: make built-in.a rule robust against too long argument error
-Date:   Fri, 27 May 2022 19:01:52 +0900
-Message-Id: <20220527100155.1996314-6-masahiroy@kernel.org>
+Subject: [PATCH v7 6/8] kbuild: make *.mod rule robust against too long argument error
+Date:   Fri, 27 May 2022 19:01:53 +0900
+Message-Id: <20220527100155.1996314-7-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220527100155.1996314-1-masahiroy@kernel.org>
 References: <20220527100155.1996314-1-masahiroy@kernel.org>
@@ -60,32 +60,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kbuild runs at the top of objtree instead of changing the working
-directory to subdirectories. I think this design is nice overall but
-some commands have a scalability issue.
+Like built-in.a, the command length of the *.mod rule scales with
+the depth of the directory times the number of objects in the Makefile.
 
-The build command of built-in.a is one of them whose length scales with:
-
-    O(D * N)
-
-Here, D is the length of the directory path (i.e. $(obj)/ prefix),
-N is the number of objects in the Makefile, O() is the big O notation.
-
-The deeper directory the Makefile directory is located, the more easily
-it will hit the too long argument error.
-
-We can make it better. Trim the $(obj)/ by Make's builtin function, and
-restore it by a shell command (sed).
-
-With this, the command length scales with:
-
-    O(D + N)
+Add $(obj)/ by the shell command (awk) instead of by Make's builtin
+function.
 
 In-tree modules still have some room to the limit (ARG_MAX=2097152),
 but this is more future-proof for big modules in a deep directory.
 
-For example, you can build i915 as builtin (CONFIG_DRM_I915=y) and
-compare drivers/gpu/drm/i915/.built-in.a.cmd with/without this commit.
+For example, you can build i915 as a module (CONFIG_DRM_I915=m) and
+compare drivers/gpu/drm/i915/.i915.mod.cmd with/without this commit.
+
+The issue is more critical for external modules because the M= path
+can be very long as Jeff Johnson reported before [1].
+
+[1] https://lore.kernel.org/linux-kbuild/4c02050c4e95e4cb8cc04282695f8404@codeaurora.org/
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
@@ -96,32 +86,26 @@ Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 Changes in v7:
   - Add comment to the code
 
-Changes in v2:
-  - New patch
-
- scripts/Makefile.build | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ scripts/Makefile.build | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 0135b4e7f78b..014ebee70fd6 100644
+index 014ebee70fd6..31feb798e16e 100644
 --- a/scripts/Makefile.build
 +++ b/scripts/Makefile.build
-@@ -376,9 +376,14 @@ $(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
- #
- # Rule to compile a set of .o files into one .a file (without symbol table)
- #
+@@ -274,8 +274,10 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
+ 	$(call if_changed_rule,cc_o_c)
+ 	$(call cmd,force_checksrc)
+ 
+-cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
+-	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
 +# To make this rule robust against "Argument list too long" error,
-+# remove $(obj)/ prefix, and restore it by a shell command.
++# ensure to add $(obj)/ prefix by a shell command.
++cmd_mod = echo $(call real-search, $*.o, .o, -objs -y -m) | \
++	$(AWK) -v RS='( |\n)' '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
  
- quiet_cmd_ar_builtin = AR      $@
--      cmd_ar_builtin = rm -f $@; $(AR) cDPrST $@ $(real-prereqs)
-+      cmd_ar_builtin = rm -f $@; \
-+		echo $(patsubst $(obj)/%,%,$(real-prereqs)) | \
-+		sed -E 's:([^ ]+):$(obj)/\1:g' | \
-+		xargs $(AR) cDPrST $@
- 
- $(obj)/built-in.a: $(real-obj-y) FORCE
- 	$(call if_changed,ar_builtin)
+ $(obj)/%.mod: FORCE
+ 	$(call if_changed,mod)
 -- 
 2.32.0
 

@@ -2,259 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A294D535E12
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A501535E13
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350898AbiE0KVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 06:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S1350909AbiE0KVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 06:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241726AbiE0KU7 (ORCPT
+        with ESMTP id S241726AbiE0KVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 06:20:59 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BC9128146;
-        Fri, 27 May 2022 03:20:58 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id p10so5260759wrg.12;
-        Fri, 27 May 2022 03:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5gwPr7LjNcXQJ+T49cK0g1nGx/GxeM1oD069psfY/W4=;
-        b=Vrf44SpKpcAri+VmyqXuuRxeQ21nMXLuq6gDJPJ8OxKdtI/HTOgMm0T7HtsySlMaPV
-         oRnyXucrBmme2bEifUipgV89mevObJVnCH2in3AXg00q5W00oSROiPO/zqdbOtqAMydJ
-         huwz9ID6iYAyhiq3jhvSNGBBGYTqQJYKoWlfAdtJEY3JMNT/tSBEdoGuv8vp7xbigrWY
-         cGitCIOZsD4JdA5EGAKd8QGqCI+A8Z1JAc0mcpa3kKif85AVWm6zBbsWNz9aBAW6vnSy
-         O83ZNvDpkilhNuXMYnnkjyvD5QVeMg+CqWRr0wVIkv4xPhmQ3UbZH4ggxMQto0p7e/Y0
-         5ylw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5gwPr7LjNcXQJ+T49cK0g1nGx/GxeM1oD069psfY/W4=;
-        b=bruWTf9rqbIoLuvZGplnR7r6NFqgQ/DNqshoJRgT5eA0XjjZPiidDqYgdzXGLb2LVL
-         DmhHuyEgSIxUFQYjT8t91Yh9q6UMP103ly6p/4fZrZuXit8CbICaahnwJTagzuFMSuiW
-         4bCYPIEwxBfbCj7EpNJl2q0MWZANUdywLIMmqhGnUXFhzw0MYJuctzcVgClEoOyZYiON
-         1Io/pK3T0QWHNs/eGNu7Y/0LZcNh/n2PwtvUEb5Vhs/INTGihInEPjIE0/Gx2qPM4ONJ
-         Ym4QobHeI3gE0dQCXmZVA6eZYn9yp3BWnMRkPH0y0KbTp1x10vBcfE+NOdqOLXmzh2r9
-         6vcg==
-X-Gm-Message-State: AOAM532P5IkZQKj5/u6LDH9jufs+oy9OPJpn6T/Z7cJGuwhVXv6WsNgG
-        zYTNOvXjd3393mwwo3y4T+g=
-X-Google-Smtp-Source: ABdhPJzvaWZL4k4MQJAF4sP2ZGQW2JCcu0mAYETMK+qMfZtv80OQf+p+NJlvkuYQ4JUpP2As5pNrkg==
-X-Received: by 2002:a5d:4572:0:b0:20f:ca8a:bc5a with SMTP id a18-20020a5d4572000000b0020fca8abc5amr24048553wrc.514.1653646857302;
-        Fri, 27 May 2022 03:20:57 -0700 (PDT)
-Received: from baligh-ThinkCentre-M720q.iliad.local (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.googlemail.com with ESMTPSA id k7-20020a1ca107000000b00394708a3d7dsm1739192wme.15.2022.05.27.03.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 03:20:56 -0700 (PDT)
-From:   Baligh Gasmi <gasmibal@gmail.com>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Baligh Gasmi <gasmibal@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org (open list:MAC80211),
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC PATCH v2 1/1] mac80211: use AQL airtime for expected throughput.
-Date:   Fri, 27 May 2022 12:20:54 +0200
-Message-Id: <20220527102054.3194209-1-gasmibal@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 27 May 2022 06:21:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB58E12814A
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:21:02 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4DC8A1F936;
+        Fri, 27 May 2022 10:21:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653646861; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xAM3Ec0PKi3Ngq/xxr1XceNguttOrlHFme46602QGLY=;
+        b=YsbUSIhDUXjWsYbpBNMVvCyZukqf8EvB0zvuQ4yH+d7GjCleieDYelNA2cGP0F//99s+Ue
+        ToJ6FTLSJ6VFOkq4EfPNrmAKWkNgVS027oCLQFUyL7simZTXq/XJz9Po5YWhud2gVobnVm
+        4zcqgJ+yoLudnYatHInVTsfIpHwYYFw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3F7213A84;
+        Fri, 27 May 2022 10:21:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TScpNgymkGLIagAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 27 May 2022 10:21:00 +0000
+Message-ID: <520d410e-7e71-971e-d21b-2c6dba20cd54@suse.com>
+Date:   Fri, 27 May 2022 12:21:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/2] x86/pat: fix x86_has_pat_wp()
+Content-Language: en-US
+To:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     jbeulich@suse.com, Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-2-jgross@suse.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220503132207.17234-2-jgross@suse.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------MkRkfbgkkUf00fAmq0kPBdET"
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the integration of AQL, packet TX airtime estimation is
-calculated and counted to be used for the dequeue limit.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------MkRkfbgkkUf00fAmq0kPBdET
+Content-Type: multipart/mixed; boundary="------------yEQlXVLdARc0U5tAjrkATLvX";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: xen-devel@lists.xenproject.org, x86@kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: jbeulich@suse.com, Dave Hansen <dave.hansen@linux.intel.com>,
+ Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <520d410e-7e71-971e-d21b-2c6dba20cd54@suse.com>
+Subject: Re: [PATCH 1/2] x86/pat: fix x86_has_pat_wp()
+References: <20220503132207.17234-1-jgross@suse.com>
+ <20220503132207.17234-2-jgross@suse.com>
+In-Reply-To: <20220503132207.17234-2-jgross@suse.com>
 
-Use this estimated airtime to compute expected throughput for
-each station.
+--------------yEQlXVLdARc0U5tAjrkATLvX
+Content-Type: multipart/mixed; boundary="------------TQoYAv19500hJH39vxNvHQJG"
 
-It will be a generic mac80211 implementation. If the driver has
-get_expected_throughput implementation, it will be used instead.
+--------------TQoYAv19500hJH39vxNvHQJG
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Useful for L2 routing protocols, like B.A.T.M.A.N.
+UGluZz8NCg0KT24gMDMuMDUuMjIgMTU6MjIsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IHg4
+Nl9oYXNfcGF0X3dwKCkgaXMgdXNpbmcgYSB3cm9uZyB0ZXN0LCBhcyBpdCByZWxpZXMgb24g
+dGhlIG5vcm1hbA0KPiBQQVQgY29uZmlndXJhdGlvbiB1c2VkIGJ5IHRoZSBrZXJuZWwuIElu
+IGNhc2UgdGhlIFBBVCBNU1IgaGFzIGJlZW4NCj4gc2V0dXAgYnkgYW5vdGhlciBlbnRpdHkg
+KGUuZy4gQklPUyBvciBYZW4gaHlwZXJ2aXNvcikgaXQgbWlnaHQgcmV0dXJuDQo+IGZhbHNl
+IGV2ZW4gaWYgdGhlIFBBVCBjb25maWd1cmF0aW9uIGlzIGFsbG93aW5nIFdQIG1hcHBpbmdz
+Lg0KPiANCj4gRml4ZXM6IDFmNmY2NTVlMDFhZCAoIng4Ni9tbTogQWRkIGEgeDg2X2hhc19w
+YXRfd3AoKSBoZWxwZXIiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jv
+c3NAc3VzZS5jb20+DQo+IC0tLQ0KPiAgIGFyY2gveDg2L21tL2luaXQuYyB8IDMgKystDQo+
+ICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiAN
+Cj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L21tL2luaXQuYyBiL2FyY2gveDg2L21tL2luaXQu
+Yw0KPiBpbmRleCBkOGNmY2UyMjEyNzUuLjcxZTE4MmViY2VkMyAxMDA2NDQNCj4gLS0tIGEv
+YXJjaC94ODYvbW0vaW5pdC5jDQo+ICsrKyBiL2FyY2gveDg2L21tL2luaXQuYw0KPiBAQCAt
+ODAsNyArODAsOCBAQCBzdGF0aWMgdWludDhfdCBfX3B0ZTJjYWNoZW1vZGVfdGJsWzhdID0g
+ew0KPiAgIC8qIENoZWNrIHRoYXQgdGhlIHdyaXRlLXByb3RlY3QgUEFUIGVudHJ5IGlzIHNl
+dCBmb3Igd3JpdGUtcHJvdGVjdCAqLw0KPiAgIGJvb2wgeDg2X2hhc19wYXRfd3Aodm9pZCkN
+Cj4gICB7DQo+IC0JcmV0dXJuIF9fcHRlMmNhY2hlbW9kZV90YmxbX1BBR0VfQ0FDSEVfTU9E
+RV9XUF0gPT0gX1BBR0VfQ0FDSEVfTU9ERV9XUDsNCj4gKwlyZXR1cm4gX19wdGUyY2FjaGVt
+b2RlX3RibFtfX2NhY2hlbW9kZTJwdGVfdGJsW19QQUdFX0NBQ0hFX01PREVfV1BdXSA9PQ0K
+PiArCSAgICAgICBfUEFHRV9DQUNIRV9NT0RFX1dQOw0KPiAgIH0NCj4gICANCj4gICBlbnVt
+IHBhZ2VfY2FjaGVfbW9kZSBwZ3Byb3QyY2FjaGVtb2RlKHBncHJvdF90IHBncHJvdCkNCg0K
 
-Signed-off-by: Baligh Gasmi <gasmibal@gmail.com>
----
- net/mac80211/driver-ops.h |  2 ++
- net/mac80211/sta_info.c   | 39 +++++++++++++++++++++++++++++++++++++++
- net/mac80211/sta_info.h   | 12 ++++++++++++
- net/mac80211/status.c     |  3 ++-
- net/mac80211/tx.c         |  8 +++++++-
- 5 files changed, 62 insertions(+), 2 deletions(-)
+--------------TQoYAv19500hJH39vxNvHQJG
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/net/mac80211/driver-ops.h b/net/mac80211/driver-ops.h
-index 4e2fc1a08681..4331b79647fa 100644
---- a/net/mac80211/driver-ops.h
-+++ b/net/mac80211/driver-ops.h
-@@ -1142,6 +1142,8 @@ static inline u32 drv_get_expected_throughput(struct ieee80211_local *local,
- 	trace_drv_get_expected_throughput(&sta->sta);
- 	if (local->ops->get_expected_throughput && sta->uploaded)
- 		ret = local->ops->get_expected_throughput(&local->hw, &sta->sta);
-+	else
-+		ret = ewma_avg_est_tp_read(&sta->status_stats.avg_est_tp);
- 	trace_drv_return_u32(local, ret);
- 
- 	return ret;
-diff --git a/net/mac80211/sta_info.c b/net/mac80211/sta_info.c
-index 91fbb1ee5c38..f39d7ec2238d 100644
---- a/net/mac80211/sta_info.c
-+++ b/net/mac80211/sta_info.c
-@@ -1985,6 +1985,45 @@ void ieee80211_sta_update_pending_airtime(struct ieee80211_local *local,
- 			       tx_pending, 0);
- }
- 
-+void ieee80211_sta_update_tp(struct ieee80211_local *local,
-+			     struct sta_info *sta,
-+			     struct sk_buff *skb,
-+			     u16 tx_time_est,
-+			     bool ack, int retry)
-+{
-+	unsigned long diff = 0;
-+	struct rate_control_ref *ref = NULL;
-+
-+	if (!skb || !sta || !tx_time_est)
-+		return;
-+
-+	if (test_sta_flag(sta, WLAN_STA_RATE_CONTROL))
-+		ref = sta->rate_ctrl;
-+
-+	if (ref && ref->ops->get_expected_throughput)
-+		return;
-+
-+	if (local->ops->get_expected_throughput)
-+		return;
-+
-+	tx_time_est += ack ? 4 : 0;
-+	tx_time_est += retry ? retry * 2 : 2;
-+
-+	sta->tx_stats.tp_tx_size += (skb->len * 8) * 1000;
-+	sta->tx_stats.tp_tx_time_est += tx_time_est;
-+
-+	diff = jiffies - sta->status_stats.last_tp_update;
-+	if (diff > HZ / 10) {
-+		ewma_avg_est_tp_add(&sta->status_stats.avg_est_tp,
-+				    sta->tx_stats.tp_tx_size /
-+				    sta->tx_stats.tp_tx_time_est);
-+
-+		sta->tx_stats.tp_tx_size = 0;
-+		sta->tx_stats.tp_tx_time_est = 0;
-+		sta->status_stats.last_tp_update = jiffies;
-+	}
-+}
-+
- int sta_info_move_state(struct sta_info *sta,
- 			enum ieee80211_sta_state new_state)
- {
-diff --git a/net/mac80211/sta_info.h b/net/mac80211/sta_info.h
-index 379fd367197f..b285e62ba210 100644
---- a/net/mac80211/sta_info.h
-+++ b/net/mac80211/sta_info.h
-@@ -123,6 +123,7 @@ enum ieee80211_sta_info_flags {
- #define HT_AGG_STATE_STOP_CB		7
- #define HT_AGG_STATE_SENT_ADDBA		8
- 
-+DECLARE_EWMA(avg_est_tp, 8, 16)
- DECLARE_EWMA(avg_signal, 10, 8)
- enum ieee80211_agg_stop_reason {
- 	AGG_STOP_DECLINED,
-@@ -157,6 +158,12 @@ void ieee80211_register_airtime(struct ieee80211_txq *txq,
- 
- struct sta_info;
- 
-+void ieee80211_sta_update_tp(struct ieee80211_local *local,
-+			     struct sta_info *sta,
-+			     struct sk_buff *skb,
-+			     u16 tx_time_est,
-+			     bool ack, int retry);
-+
- /**
-  * struct tid_ampdu_tx - TID aggregation information (Tx).
-  *
-@@ -567,6 +574,7 @@ struct ieee80211_fragment_cache {
-  * @status_stats.last_ack_signal: last ACK signal
-  * @status_stats.ack_signal_filled: last ACK signal validity
-  * @status_stats.avg_ack_signal: average ACK signal
-+ * @status_stats.avg_est_tp: average expected throughput
-  * @frags: fragment cache
-  */
- struct sta_info {
-@@ -641,6 +649,8 @@ struct sta_info {
- 		s8 last_ack_signal;
- 		bool ack_signal_filled;
- 		struct ewma_avg_signal avg_ack_signal;
-+		struct ewma_avg_est_tp avg_est_tp;
-+		unsigned long last_tp_update;
- 	} status_stats;
- 
- 	/* Updated from TX path only, no locking requirements */
-@@ -650,6 +660,8 @@ struct sta_info {
- 		struct ieee80211_tx_rate last_rate;
- 		struct rate_info last_rate_info;
- 		u64 msdu[IEEE80211_NUM_TIDS + 1];
-+		u64 tp_tx_size;
-+		u64 tp_tx_time_est;
- 	} tx_stats;
- 	u16 tid_seq[IEEE80211_QOS_CTL_TID_MASK + 1];
- 
-diff --git a/net/mac80211/status.c b/net/mac80211/status.c
-index e81e8a5bb774..293a0f14a3ad 100644
---- a/net/mac80211/status.c
-+++ b/net/mac80211/status.c
-@@ -18,7 +18,6 @@
- #include "led.h"
- #include "wme.h"
- 
--
- void ieee80211_tx_status_irqsafe(struct ieee80211_hw *hw,
- 				 struct sk_buff *skb)
- {
-@@ -1138,6 +1137,8 @@ void ieee80211_tx_status_ext(struct ieee80211_hw *hw,
- 	ack_signal_valid =
- 		!!(info->status.flags & IEEE80211_TX_STATUS_ACK_SIGNAL_VALID);
- 
-+	ieee80211_sta_update_tp(local, sta, skb, tx_time_est, acked, retry_count);
-+
- 	if (pubsta) {
- 		struct ieee80211_sub_if_data *sdata = sta->sdata;
- 
-diff --git a/net/mac80211/tx.c b/net/mac80211/tx.c
-index b6b20f38de0e..364cca1d688e 100644
---- a/net/mac80211/tx.c
-+++ b/net/mac80211/tx.c
-@@ -3634,6 +3634,7 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
- 	struct ieee80211_tx_data tx;
- 	ieee80211_tx_result r;
- 	struct ieee80211_vif *vif = txq->vif;
-+	struct rate_control_ref *ref = NULL;
- 
- 	WARN_ON_ONCE(softirq_count() == 0);
- 
-@@ -3792,8 +3793,13 @@ struct sk_buff *ieee80211_tx_dequeue(struct ieee80211_hw *hw,
- encap_out:
- 	IEEE80211_SKB_CB(skb)->control.vif = vif;
- 
-+	if (tx.sta && test_sta_flag(tx.sta, WLAN_STA_RATE_CONTROL))
-+		ref = tx.sta->rate_ctrl;
-+
- 	if (vif &&
--	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL)) {
-+	    ((!local->ops->get_expected_throughput &&
-+	     (!ref || !ref->ops->get_expected_throughput)) ||
-+	    wiphy_ext_feature_isset(local->hw.wiphy, NL80211_EXT_FEATURE_AQL))) {
- 		bool ampdu = txq->ac != IEEE80211_AC_VO;
- 		u32 airtime;
- 
--- 
-2.36.1
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
+oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
+kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
+1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
+BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
+N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
+PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
+FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
+UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
+vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
++6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
+qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
+tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
+Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
+CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
+RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
+8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
+BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
+SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
+7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
+nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
+AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
+Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
+hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
+w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
+VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
+OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
+/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
+c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
+F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
+k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
+wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
+5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
+TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
+N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
+AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
+0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
+Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
+LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
+we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
+v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
+Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
+534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
+b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
+yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
+suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------TQoYAv19500hJH39vxNvHQJG--
+
+--------------yEQlXVLdARc0U5tAjrkATLvX--
+
+--------------MkRkfbgkkUf00fAmq0kPBdET
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKQpgwFAwAAAAAACgkQsN6d1ii/Ey+f
+pgf+O+x9fAmzNw6KOMEcBnXM36W9TO48WOHg93MQ/X/sOJRjoFGE5FO6HlhjSRagWLRi8pY2WBqm
+JuyvszHZSzBmyq683HgFmz6x+2GuXQM9AO39NFHILOe8MgaW1BcKxi/sjgtMHT6El/A/0NNRtheA
+LtDuZKaLgU/Sny0wCpXn/1VvBkXwcXTg6X0SG+1qWyUhbL9rzl6rfLDP5HjlbBEg6zmDiwfWb4rs
+pr1NYDeUeQcXMUlfn6B7CTx4zJO7+dS5ufmITV5oeFH6pzd0rpr/lYHu/tpfhWOEYa0sM3Zskhg+
+/BxBPHiBPiU5jKQWIwPGnXKcWl5kG8zrPJqU3/Fpkg==
+=p1bd
+-----END PGP SIGNATURE-----
+
+--------------MkRkfbgkkUf00fAmq0kPBdET--

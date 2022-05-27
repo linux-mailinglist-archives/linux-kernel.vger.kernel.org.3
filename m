@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D089535828
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C4353582A
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbiE0EAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 00:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
+        id S239872AbiE0EAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 00:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiE0EA3 (ORCPT
+        with ESMTP id S229696AbiE0EAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 00:00:29 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8731FE27A8
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 21:00:18 -0700 (PDT)
-X-UUID: 79e3affc5e114130ab9ecb68ccd392f1-20220527
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:e09e3188-6b5e-49a8-95e0-5fa1163c27c4,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:26,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:26
-X-CID-INFO: VERSION:1.1.5,REQID:e09e3188-6b5e-49a8-95e0-5fa1163c27c4,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:26,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:26
-X-CID-META: VersionHash:2a19b09,CLOUDID:44f86fb8-3c45-407b-8f66-25095432a27a,C
-        OID:IGNORED,Recheck:0,SF:28|100|17|19|48|101,TC:nil,Content:0,EDM:-3,IP:ni
-        l,URL:1,File:nil,QS:0,BEC:nil
-X-UUID: 79e3affc5e114130ab9ecb68ccd392f1-20220527
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yee.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 945844797; Fri, 27 May 2022 12:00:12 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Fri, 27 May 2022 12:00:07 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 27 May 2022 12:00:07 +0800
-Message-ID: <bff77f3044c0a4a400e0aa2d92fbd1de45a23473.camel@mediatek.com>
-Subject: Re: [PATCH] mm: kmemleak: take a full lowmem check in
- kmemleak_*_phys()
-From:   Yee Lee <yee.lee@mediatek.com>
-To:     Patrick Wang <patrick.wang.shcn@gmail.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <catalin.marinas@arm.com>, <akpm@linux-foundation.org>,
-        <sunny.kuo@mediatek.com>, <chinwen.chang@mediatek.com>
-Date:   Fri, 27 May 2022 12:00:07 +0800
-In-Reply-To: <20220413122925.33856-1-patrick.wang.shcn@gmail.com>
-References: <20220413122925.33856-1-patrick.wang.shcn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 27 May 2022 00:00:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F72E27A8;
+        Thu, 26 May 2022 21:00:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AF88B82281;
+        Fri, 27 May 2022 04:00:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9A33C385A9;
+        Fri, 27 May 2022 04:00:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653624046;
+        bh=AIn4JDCvAfCC2uEkwjg1qq8LYA0cehvmuztjXF/NZcg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aRsOSLBvnd62P0sGwVb67mpQvRy4aPsy1ClDRfM2GmGBhWWxCfVeafDNxmpiTs0WM
+         kUyVfzVnLYg+nAcs3fq+jsNRAfx+toFcYiz7qCVhD5B1gLWAYDxFQH1J8Jx9hMGN0A
+         UZISU+Ybd60FbtMKglpZ8+wdzDwIpHSk+4gO8DAysauLnnD0KF/xlVOYmE5rAoJ8aA
+         vFc4jSMkDkaqwsJQqMptP/AW2tMU8S6C5gIQrShcgFsL6lLHVsDYmohpKBfa3MRYIx
+         xpbZV4nKpSjO+m3vqkpTLelcgmDS1hZelYMjZqFoG4kugeSv2+Z73ZfnUELw9HMkro
+         abTGLhuKi6Itg==
+Date:   Thu, 26 May 2022 21:00:44 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Luo Jie <luoj@codeaurora.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, Viorel Suman <viorel.suman@nxp.com>
+Subject: Re: [PATCH] net: phy: at803x: disable WOL at probe
+Message-ID: <20220526210044.638128f6@kernel.org>
+In-Reply-To: <20220525103657.22384-1-viorel.suman@oss.nxp.com>
+References: <20220525103657.22384-1-viorel.suman@oss.nxp.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,118 +60,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In arm64, some false leaks happen since memblock allocates memory 
-eariler than that the pfn boundary (max_low_pfn/min_low_pfn) is
-initialized. I would relax the checking condidtion when the boundary
-is not ready. 
+On Wed, 25 May 2022 13:36:57 +0300 Viorel Suman (OSS) wrote:
+> diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
+> index 73926006d319..6277d1b1d814 100644
+> --- a/drivers/net/phy/at803x.c
+> +++ b/drivers/net/phy/at803x.c
+> @@ -443,10 +443,10 @@ static int at803x_set_wol(struct phy_device *phydev,
+>  		AT803X_LOC_MAC_ADDR_0_15_OFFSET,
+>  	};
+>  
+> -	if (!ndev)
+> -		return -ENODEV;
+> -
+>  	if (wol->wolopts & WAKE_MAGIC) {
+> +		if (!ndev)
+> +			return -ENODEV;
 
-Please refer to the patch: https://lkml.org/lkml/2022/5/26/971
-   
-Not sure this work for the other archs like RISCV and for your
-situation. Please help to review it.  
+Please move the ndev variable into the scope.
+It'll make it clear that it can't be used elsewhere
+in this function.
 
-On Wed, 2022-04-13 at 20:29 +0800, Patrick Wang wrote:
-> The kmemleak_*_phys() apis do not check the address for lowmem's min
-> boundary, while the caller may pass an address below lowmem, which
-> will trigger an oops:
-> 
-> # echo scan > /sys/kernel/debug/kmemleak
-> [   54.888353] Unable to handle kernel paging request at virtual
-> address ff5fffffffe00000
-> [   54.888932] Oops [#1]
-> [   54.889102] Modules linked in:
-> [   54.889326] CPU: 2 PID: 134 Comm: bash Not tainted 5.18.0-rc1-
-> next-20220407 #33
-> [   54.889620] Hardware name: riscv-virtio,qemu (DT)
-> [   54.889901] epc : scan_block+0x74/0x15c
-> [   54.890215]  ra : scan_block+0x72/0x15c
-> [   54.890390] epc : ffffffff801e5806 ra : ffffffff801e5804 sp :
-> ff200000104abc30
-> [   54.890607]  gp : ffffffff815cd4e8 tp : ff60000004cfa340 t0 :
-> 0000000000000200
-> [   54.890835]  t1 : 00aaaaaac23954cc t2 : 00000000000003ff s0 :
-> ff200000104abc90
-> [   54.891024]  s1 : ffffffff81b0ff28 a0 : 0000000000000000 a1 :
-> ff5fffffffe01000
-> [   54.891201]  a2 : ffffffff81b0ff28 a3 : 0000000000000002 a4 :
-> 0000000000000001
-> [   54.891377]  a5 : 0000000000000000 a6 : ff200000104abd7c a7 :
-> 0000000000000005
-> [   54.891552]  s2 : ff5fffffffe00ff9 s3 : ffffffff815cd998 s4 :
-> ffffffff815d0e90
-> [   54.891727]  s5 : ffffffff81b0ff28 s6 : 0000000000000020 s7 :
-> ffffffff815d0eb0
-> [   54.891903]  s8 : ffffffffffffffff s9 : ff5fffffffe00000 s10:
-> ff5fffffffe01000
-> [   54.892078]  s11: 0000000000000022 t3 : 00ffffffaa17db4c t4 :
-> 000000000000000f
-> [   54.892271]  t5 : 0000000000000001 t6 : 0000000000000000
-> [   54.892408] status: 0000000000000100 badaddr: ff5fffffffe00000
-> cause: 000000000000000d
-> [   54.892643] [<ffffffff801e5a1c>] scan_gray_list+0x12e/0x1a6
-> [   54.892824] [<ffffffff801e5d3e>] kmemleak_scan+0x2aa/0x57e
-> [   54.892961] [<ffffffff801e633c>] kmemleak_write+0x32a/0x40c
-> [   54.893096] [<ffffffff803915ac>] full_proxy_write+0x56/0x82
-> [   54.893235] [<ffffffff801ef456>] vfs_write+0xa6/0x2a6
-> [   54.893362] [<ffffffff801ef880>] ksys_write+0x6c/0xe2
-> [   54.893487] [<ffffffff801ef918>] sys_write+0x22/0x2a
-> [   54.893609] [<ffffffff8000397c>] ret_from_syscall+0x0/0x2
-> [   54.894183] ---[ end trace 0000000000000000 ]---
-> 
-> So check the address for lowmem's min boundary.
-> 
-> Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
-> ---
->  mm/kmemleak.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> index acd7cbb82..a182f5dda 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-> @@ -1132,7 +1132,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
->  void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int
-> min_count,
->  			       gfp_t gfp)
->  {
-> -	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) <
-> max_low_pfn)
-> +	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) <
-> max_low_pfn)
->  		kmemleak_alloc(__va(phys), size, min_count, gfp);
->  }
->  EXPORT_SYMBOL(kmemleak_alloc_phys);
-> @@ -1146,7 +1146,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
->   */
->  void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
->  {
-> -	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) <
-> max_low_pfn)
-> +	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) <
-> max_low_pfn)
->  		kmemleak_free_part(__va(phys), size);
->  }
->  EXPORT_SYMBOL(kmemleak_free_part_phys);
-> @@ -1158,7 +1158,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
->   */
->  void __ref kmemleak_not_leak_phys(phys_addr_t phys)
->  {
-> -	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) <
-> max_low_pfn)
-> +	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) <
-> max_low_pfn)
->  		kmemleak_not_leak(__va(phys));
->  }
->  EXPORT_SYMBOL(kmemleak_not_leak_phys);
-> @@ -1170,7 +1170,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
->   */
->  void __ref kmemleak_ignore_phys(phys_addr_t phys)
->  {
-> -	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) <
-> max_low_pfn)
-> +	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) <
-> max_low_pfn)
->  		kmemleak_ignore(__va(phys));
->  }
->  EXPORT_SYMBOL(kmemleak_ignore_phys);
+>  		mac = (const u8 *) ndev->dev_addr;
+>  
+>  		if (!is_valid_ether_addr(mac))
+> @@ -857,6 +857,9 @@ static int at803x_probe(struct phy_device *phydev)
+>  	if (phydev->drv->phy_id == ATH8031_PHY_ID) {
+>  		int ccr = phy_read(phydev, AT803X_REG_CHIP_CONFIG);
+>  		int mode_cfg;
+> +		struct ethtool_wolinfo wol = {
+> +			.wolopts = 0,
+> +		};
+>  
+>  		if (ccr < 0)
+>  			goto err;
+> @@ -872,6 +875,13 @@ static int at803x_probe(struct phy_device *phydev)
+>  			priv->is_fiber = true;
+>  			break;
+>  		}
+> +
+> +		/* Disable WOL by default */
+> +		ret = at803x_set_wol(phydev, &wol);
+> +		if (ret < 0) {
+> +			phydev_err(phydev, "failed to disable WOL on probe: %d\n", ret);
+> +			return ret;
 
+Don't you need to goto err; here?
+
+> +		}
+>  	}
+>  
+>  	return 0;

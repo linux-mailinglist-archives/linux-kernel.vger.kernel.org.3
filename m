@@ -2,126 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B15535E6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BD8535E03
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242349AbiE0Khg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 06:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
+        id S239353AbiE0KQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 06:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237584AbiE0Khe (ORCPT
+        with ESMTP id S1350881AbiE0KQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 06:37:34 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1BDFD346
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:37:30 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id t26so4929134edt.0
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 03:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=W7So3PhdjMp2KqaM3P3rQkSF+4mUlCLPgYovIk/NSCw=;
-        b=PUNht9tdP2C3Y0PIKz6i9gtrFmX5JYDN+SFx9BcvHPe7WZ5grwHH0ZBECn0W/r19w7
-         zA4gwdCw9lJ4dBRXH+KW5K1Pt2GaIUXYtfSrMLIO2gYh8+AOJYQp3IqKPzSjQkkn557m
-         jjEE/Oiz8tv8c3ALgpqeBRpPuqK7sZG5QrY69q6sUqjCIdi8m9a2LEv7OWADoxoyDiKe
-         fxR1olI4lOgUqF4n3yNYok4YnYPEOeC+FDy12b7l3zISaS2KUQxX+rDo8p4Y3F8FSW/D
-         7o3RU8OJsTFTOtCqkABeInsEy9xkU1a3ntiJfQxMMmKjeZhTa1HgR0tXv+SrNV8oUxxT
-         ZXbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=W7So3PhdjMp2KqaM3P3rQkSF+4mUlCLPgYovIk/NSCw=;
-        b=LyPHcuvY7mZwA0GogXCFqNdI/Ut7ZyRhZ9I5c3COXfHG2s6P327krFW8oICAUUicRZ
-         iABp39nVujerW5ULHxnoSTNSpaqPXe4rZP+V63+Sj4eQqepP6Qlyzie5cPky5rhy61F2
-         xTHVNrpie+zNakJEO7uXFfPN0wUl0RmkxXIXcMW6N99LAOo2bN5WxuC0LAnwRWxtDOMP
-         /G1pDvCv8gGlut5EFnGa+XXPpdhiRnY4S7TeUwdfipjUUaMg4NAXwOgxvw+e8Xdfhadb
-         YOBxheEG0gvHXilKLA/0XvVvn+PerHfkuWMK5aOvsyJPq2wTSFnlkMxH6r35/UjnMc+8
-         VA2A==
-X-Gm-Message-State: AOAM532H7ZmwmbEYPtkmx6WWaxHUVP91TgJiwxIsjk6XgsVy4r4vtmIT
-        laZuksp3Laxm6B7dQ9k4rgscLX955eg=
-X-Google-Smtp-Source: ABdhPJyrKJcw27l2xBcyc43CQC+hE9P1wSWSmQlKC2t+8P6LD18L9aqjR/BvIXhIB/J4a4118sln8Q==
-X-Received: by 2002:a05:6402:350f:b0:428:43a1:647d with SMTP id b15-20020a056402350f00b0042843a1647dmr6677317edd.62.1653647849163;
-        Fri, 27 May 2022 03:37:29 -0700 (PDT)
-Received: from gmail.com (563BA16F.dsl.pool.telekom.hu. [86.59.161.111])
-        by smtp.gmail.com with ESMTPSA id b17-20020a056402351100b0042bc97322desm1984603edd.43.2022.05.27.03.37.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 03:37:28 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Fri, 27 May 2022 12:37:24 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC PATCH 2/3] x86/microcode: Default-disable late loading
-Message-ID: <YpCp5B7noKAt+91A@gmail.com>
-References: <20220524185324.28395-1-bp@alien8.de>
- <20220524185324.28395-3-bp@alien8.de>
+        Fri, 27 May 2022 06:16:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D7FDE80;
+        Fri, 27 May 2022 03:16:12 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L8gfN17CNzgYpP;
+        Fri, 27 May 2022 18:15:08 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 18:16:10 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 18:16:10 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <dmitry.torokhov@gmail.com>, <marcoshalano@gmail.com>,
+        <michael@michaelcullen.name>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] drivers: input:  Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 10:37:40 +0000
+Message-ID: <20220527103740.3442548-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524185324.28395-3-bp@alien8.de>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
-* Borislav Petkov <bp@alien8.de> wrote:
+Signed-off-by: keliu <liuke94@huawei.com>
+---
+ drivers/input/input.c         | 8 ++++----
+ drivers/input/joystick/xpad.c | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-> From: Borislav Petkov <bp@suse.de>
-> 
-> It is dangerous and it should not be used anyway - there's a nice early
-> loading already.
-> 
-> Requested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> ---
->  arch/x86/Kconfig                     | 11 +++++++++++
->  arch/x86/kernel/cpu/common.c         |  2 ++
->  arch/x86/kernel/cpu/microcode/core.c |  7 ++++++-
->  3 files changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 1c0da2dbfb26..33891b82fb65 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1345,6 +1345,17 @@ config MICROCODE_AMD
->  	  If you select this option, microcode patch loading support for AMD
->  	  processors will be enabled.
->  
-> +config MICROCODE_LATE_LOADING
-> +	bool "Late microcode loading (DANGEROUS)"
-> +	default n
-> +	depends on MICROCODE
-> +	help
+diff --git a/drivers/input/input.c b/drivers/input/input.c
+index 1365c9dfb5f2..1e4a275795f9 100644
+--- a/drivers/input/input.c
++++ b/drivers/input/input.c
+@@ -2618,15 +2618,15 @@ int input_get_new_minor(int legacy_base, unsigned int legacy_num,
+ 	 * locking is needed here.
+ 	 */
+ 	if (legacy_base >= 0) {
+-		int minor = ida_simple_get(&input_ida,
++		int minor = ida_alloc_range(&input_ida,
+ 					   legacy_base,
+-					   legacy_base + legacy_num,
++					   legacy_base + legacy_num - 1,
+ 					   GFP_KERNEL);
+ 		if (minor >= 0 || !allow_dynamic)
+ 			return minor;
+ 	}
+ 
+-	return ida_simple_get(&input_ida,
++	return ida_alloc_range(&input_ida,
+ 			      INPUT_FIRST_DYNAMIC_DEV, INPUT_MAX_CHAR_DEVICES,
+ 			      GFP_KERNEL);
+ }
+@@ -2641,7 +2641,7 @@ EXPORT_SYMBOL(input_get_new_minor);
+  */
+ void input_free_minor(unsigned int minor)
+ {
+-	ida_simple_remove(&input_ida, minor);
++	ida_free(&input_ida, minor);
+ }
+ EXPORT_SYMBOL(input_free_minor);
+ 
+diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
+index 18190b529bca..fafc0d5703dc 100644
+--- a/drivers/input/joystick/xpad.c
++++ b/drivers/input/joystick/xpad.c
+@@ -1456,7 +1456,7 @@ static int xpad_led_probe(struct usb_xpad *xpad)
+ 	if (!led)
+ 		return -ENOMEM;
+ 
+-	xpad->pad_nr = ida_simple_get(&xpad_pad_seq, 0, 0, GFP_KERNEL);
++	xpad->pad_nr = ida_alloc(&xpad_pad_seq, GFP_KERNEL);
+ 	if (xpad->pad_nr < 0) {
+ 		error = xpad->pad_nr;
+ 		goto err_free_mem;
+@@ -1479,7 +1479,7 @@ static int xpad_led_probe(struct usb_xpad *xpad)
+ 	return 0;
+ 
+ err_free_id:
+-	ida_simple_remove(&xpad_pad_seq, xpad->pad_nr);
++	ida_free(&xpad_pad_seq, xpad->pad_nr);
+ err_free_mem:
+ 	kfree(led);
+ 	xpad->led = NULL;
+@@ -1492,7 +1492,7 @@ static void xpad_led_disconnect(struct usb_xpad *xpad)
+ 
+ 	if (xpad_led) {
+ 		led_classdev_unregister(&xpad_led->led_cdev);
+-		ida_simple_remove(&xpad_pad_seq, xpad->pad_nr);
++		ida_free(&xpad_pad_seq, xpad->pad_nr);
+ 		kfree(xpad_led);
+ 	}
+ }
+-- 
+2.25.1
 
-( Small nit: 'default n' is the default, there's no need to list it 
-  explicitly - and that's the convention as well. )
-
-> +	  Loading microcode late, when the system is up and executing instructions
-> +	  is a tricky business and should be avoided if possible. Just the sequence
-> +	  of synchronizing all cores and SMT threads is one fragile dance which does
-> +	  not guarantee that cores might not softlock after the loading. Therefore,
-> +	  use this at your own risk. Late loading taints the kernel too.
-
-Might make sense to outline here valid circumstances under which late 
-loading is used? Such as some weird kernel package that doesn't have the 
-latest firmware included in the initrd?
-
-Because it's hard (for me) to see any valid circumstance under which late 
-loading should be supported at all TBH: new kernels where this patch is 
-active would come with a modern package.
-
-Ie. we should consider removing late loading altogether.
-
-Thanks,
-
-	Ingo

@@ -2,165 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89683536743
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 20:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EE2536747
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 20:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354539AbiE0S5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 14:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S1354549AbiE0S6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 14:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351455AbiE0S5W (ORCPT
+        with ESMTP id S1354280AbiE0S6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 14:57:22 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AC910FFB
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 11:57:21 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24R7IDrM013511;
-        Fri, 27 May 2022 11:57:09 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=v/B4AlQx7PG7tjuY19pO8yuyNMYXuDuePg9o75QMG18=;
- b=WLQoLZQuUEf7/4rayTLZMgu0lhy/i5MmEvonHZ5tluCOCbfjcdlfdppN3X67tjC+GDGw
- jUySkzu/Iy07wRI0k2SQCgeAcDMyiVbnrjOL2rQpHNSGyJ/l9NGLVSp0jR15IaFCNAmC
- TTXTi2qn+t3a/GpeSfmYFYw77079u+EjVY8rYvlImKHviAyFLEiV6djzASV3CmhHlxOZ
- m2mCpIm81ks2VHHKiTDyLxgFCPGMHacnWIE9e8twwmFKUd3Bi6cb6a7r8X7js3bTfP/E
- BQq+cTZ+jP1MgvvKpALkaERwkC8+ytS+gAliwn9P1bbjqUszk+PLrqUO5ZaICsQ0fObF ZA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3gaf2rvr46-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 27 May 2022 11:57:09 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 27 May
- 2022 11:57:07 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Fri, 27 May 2022 11:57:07 -0700
-Received: from BG-SER530.marvell.com (BG-SER530.marvell.com [10.28.8.21])
-        by maili.marvell.com (Postfix) with ESMTP id A222A3F7083;
-        Fri, 27 May 2022 11:57:04 -0700 (PDT)
-From:   Tanmay Jagdale <tanmay@marvell.com>
-To:     <will@kernel.org>, <mark.rutland@arm.com>, <robh@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
-        <lcherian@marvell.com>, <bbhushan2@marvell.com>,
-        <amitsinght@marvell.com>, <james.morse@arm.com>,
-        Tanmay Jagdale <tanmay@marvell.com>
-Subject: [PATCH RESEND] perf/marvell_cn10k: Add MPAM support for TAD PMU
-Date:   Sat, 28 May 2022 00:26:47 +0530
-Message-ID: <20220527185647.3138084-1-tanmay@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 May 2022 14:58:04 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A6E21817;
+        Fri, 27 May 2022 11:58:03 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id y15so6033662qtx.4;
+        Fri, 27 May 2022 11:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gLBbNa8szjRmsip5647GYDPj8N+sFrnomPibf33jAVM=;
+        b=oLRFIcWbhD5SVuXTQCndflnQNXL+eG+46ICbnvxNMbh2oIVwopiRXzlpazR9OzgcOt
+         1rKhnd7HamvDXtvzH4ver4kWb8ZagNHvrwzlvXRdBi0Q3mwrUQD96Vn5i8K3dEAnQulz
+         EvLk9hAHLpiDjCJFP9VMrt/Vd1qyT5zQk4tyaTfGwreCDZurWHHWmyEzPQfMRvjth/rc
+         nwZTmahE7HSEQHz93UcPC9TvkkQKwWgICqHHmFtiN6MOId7fm78q1hlKFHPKlArNmYS6
+         CDRgbqJ+fX97FNdnNCpj+FvcowrqBo0GHwVG8az7yjiDNRdFjOfIPEshz7qg0aG3INOK
+         QBdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gLBbNa8szjRmsip5647GYDPj8N+sFrnomPibf33jAVM=;
+        b=LCeoi2GCJU530sVxG3SqiBIpVpAkpu3qtNcTKffOjqiZdDl+hQmcmhr7kPoD0MF/6c
+         vcWkX3A+kx3J89WuSVCgyr046h5O5aC9ZUWtOQz6uTYkPDWGbmI/KgUASrycDYqOZ1SD
+         PltyPr7zHq7cPXoYXlSA1IFjlQ6LK/8nsW9BmgvD2UnyS+IKixHqE9H20Gi044pIWce2
+         OqbhcfHbnmno/ke8lzIciPDH2T4inSHJdpERD/mIjoxUjM/s6YFZeyxqKTqjBCngNiK7
+         0ACAmSndfY9udajfNSIH1l5Ll5MeAwDgEau8v+UyZYZUcjc1xA4xuz4bg+hq03aTE1jF
+         VnWg==
+X-Gm-Message-State: AOAM531sieENfdL5J3B5qSHqF/uymdiNvnvbnUfvnBCZBolIfxfT1xro
+        Ya9Xcijkyn6YcZNbNoHMaY8=
+X-Google-Smtp-Source: ABdhPJwzCVPeJVkCUU8D+gWTLUY/9IBxYrI/3Ljk8wSLVhyOrls3IomAXl/25lFFUQ0WCTDj3J8tqg==
+X-Received: by 2002:ac8:57d3:0:b0:2f3:acf2:7981 with SMTP id w19-20020ac857d3000000b002f3acf27981mr34829091qta.81.1653677882753;
+        Fri, 27 May 2022 11:58:02 -0700 (PDT)
+Received: from spruce.. (c-71-206-142-238.hsd1.va.comcast.net. [71.206.142.238])
+        by smtp.gmail.com with ESMTPSA id ey19-20020a05622a4c1300b002fb8bbffa06sm3135037qtb.27.2022.05.27.11.58.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 11:58:02 -0700 (PDT)
+From:   Joe Simmons-Talbott <joetalbott@gmail.com>
+To:     jic23@kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Joe Simmons-Talbott <joetalbott@gmail.com>
+Subject: [PATCH 1/1] iio: Prefer octal over symbolic permissions.
+Date:   Fri, 27 May 2022 14:56:52 -0400
+Message-Id: <20220527185651.465204-1-joetalbott@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Q_CWjfyEZ7xhff-tf5pQ3V-Q_Jw0NZ2b
-X-Proofpoint-GUID: Q_CWjfyEZ7xhff-tf5pQ3V-Q_Jw0NZ2b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-27_05,2022-05-27_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The TAD PMU supports following counters that can be filtered by MPAM
-partition id.
-    - (0x1a) tad_alloc_dtg : Allocations to DTG.
-    - (0x1b) tad_alloc_ltg : Allocations to LTG.
-    - (0x1c) tad_alloc_any : Total allocations to DTG/LTG.
-    - (0x1d) tad_hit_dtg   : DTG hits.
-    - (0x1e) tad_hit_ltg   : LTG hits.
-    - (0x1f) tad_hit_any   : Hit in LTG/DTG.
-    - (0x20) tad_tag_rd    : Total tag reads.
+As reported by checkpatch.pl use ocatl permissions rather than symbolic
+permissions.
 
-Add a new 'partid' attribute of 16-bits to get the partition id
-passed from perf tool. This value would be stored in config1 field
-of perf_event_attr structure.
-
-Example:
-perf stat -e tad/tad_alloc_any,partid=0x12/ <program>
-
-- Drop read of TAD_PRF since we don't have to preserve any
-  bit fields and always write an updated value.
-- Update register offsets of TAD_PRF and TAD_PFC.
-
-Signed-off-by: Tanmay Jagdale <tanmay@marvell.com>
+Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
 ---
- drivers/perf/marvell_cn10k_tad_pmu.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ drivers/iio/industrialio-buffer.c  | 12 ++++++------
+ drivers/iio/industrialio-core.c    | 10 +++++-----
+ drivers/iio/industrialio-trigger.c |  4 ++--
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/perf/marvell_cn10k_tad_pmu.c b/drivers/perf/marvell_cn10k_tad_pmu.c
-index 282d3a071a67..f552e6bffcac 100644
---- a/drivers/perf/marvell_cn10k_tad_pmu.c
-+++ b/drivers/perf/marvell_cn10k_tad_pmu.c
-@@ -18,10 +18,12 @@
- #include <linux/perf_event.h>
- #include <linux/platform_device.h>
- 
--#define TAD_PFC_OFFSET		0x0
-+#define TAD_PFC_OFFSET		0x800
- #define TAD_PFC(counter)	(TAD_PFC_OFFSET | (counter << 3))
--#define TAD_PRF_OFFSET		0x100
-+#define TAD_PRF_OFFSET		0x900
- #define TAD_PRF(counter)	(TAD_PRF_OFFSET | (counter << 3))
-+#define TAD_PRF_MATCH_PARTID	(1 << 8)
-+#define TAD_PRF_PARTID_NS	(1 << 10)
- #define TAD_PRF_CNTSEL_MASK	0xFF
- #define TAD_MAX_COUNTERS	8
- 
-@@ -86,23 +88,32 @@ static void tad_pmu_event_counter_start(struct perf_event *event, int flags)
- 	struct hw_perf_event *hwc = &event->hw;
- 	u32 event_idx = event->attr.config;
- 	u32 counter_idx = hwc->idx;
-+	u32 partid_filter = 0;
- 	u64 reg_val;
-+	u32 partid;
- 	int i;
- 
- 	hwc->state = 0;
- 
-+	/* Extract the partid (if any) passed by user */
-+	partid = event->attr.config1 & 0x3f;
-+
- 	/* Typically TAD_PFC() are zeroed to start counting */
- 	for (i = 0; i < tad_pmu->region_cnt; i++)
- 		writeq_relaxed(0, tad_pmu->regions[i].base +
- 			       TAD_PFC(counter_idx));
- 
-+	/* Only some counters are filterable by MPAM */
-+	if (partid && (event_idx > 0x19) && (event_idx < 0x21))
-+		partid_filter = TAD_PRF_MATCH_PARTID | TAD_PRF_PARTID_NS |
-+				(partid << 11);
-+
- 	/* TAD()_PFC() start counting on the write
- 	 * which sets TAD()_PRF()[CNTSEL] != 0
- 	 */
- 	for (i = 0; i < tad_pmu->region_cnt; i++) {
--		reg_val = readq_relaxed(tad_pmu->regions[i].base +
--					TAD_PRF(counter_idx));
--		reg_val |= (event_idx & 0xFF);
-+		reg_val = (event_idx & 0xFF);
-+		reg_val |= partid_filter;
- 		writeq_relaxed(reg_val,	tad_pmu->regions[i].base +
- 			       TAD_PRF(counter_idx));
+diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
+index b078eb2f3c9d..c27f74a3c0f3 100644
+--- a/drivers/iio/industrialio-buffer.c
++++ b/drivers/iio/industrialio-buffer.c
+@@ -1391,17 +1391,17 @@ static ssize_t direction_show(struct device *dev,
  	}
-@@ -221,9 +232,11 @@ static const struct attribute_group tad_pmu_events_attr_group = {
- };
+ }
  
- PMU_FORMAT_ATTR(event, "config:0-7");
-+PMU_FORMAT_ATTR(partid, "config1:0-15");
+-static DEVICE_ATTR(length, S_IRUGO | S_IWUSR, iio_buffer_read_length,
++static DEVICE_ATTR(length, 0644, iio_buffer_read_length,
+ 		   iio_buffer_write_length);
+ static struct device_attribute dev_attr_length_ro = __ATTR(length,
+-	S_IRUGO, iio_buffer_read_length, NULL);
+-static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR,
++	0444, iio_buffer_read_length, NULL);
++static DEVICE_ATTR(enable, 0644,
+ 		   iio_buffer_show_enable, iio_buffer_store_enable);
+-static DEVICE_ATTR(watermark, S_IRUGO | S_IWUSR,
++static DEVICE_ATTR(watermark, 0644,
+ 		   iio_buffer_show_watermark, iio_buffer_store_watermark);
+ static struct device_attribute dev_attr_watermark_ro = __ATTR(watermark,
+-	S_IRUGO, iio_buffer_show_watermark, NULL);
+-static DEVICE_ATTR(data_available, S_IRUGO,
++	0444, iio_buffer_show_watermark, NULL);
++static DEVICE_ATTR(data_available, 0444,
+ 		iio_dma_show_data_available, NULL);
+ static DEVICE_ATTR_RO(direction);
  
- static struct attribute *tad_pmu_format_attrs[] = {
- 	&format_attr_event.attr,
-+	&format_attr_partid.attr,
- 	NULL
- };
+diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+index e1ed44dec2ab..35de348d686e 100644
+--- a/drivers/iio/industrialio-core.c
++++ b/drivers/iio/industrialio-core.c
+@@ -1114,12 +1114,12 @@ int __iio_device_attr_init(struct device_attribute *dev_attr,
+ 	dev_attr->attr.name = name;
+ 
+ 	if (readfunc) {
+-		dev_attr->attr.mode |= S_IRUGO;
++		dev_attr->attr.mode |= 0444;
+ 		dev_attr->show = readfunc;
+ 	}
+ 
+ 	if (writefunc) {
+-		dev_attr->attr.mode |= S_IWUSR;
++		dev_attr->attr.mode |= 0200;
+ 		dev_attr->store = writefunc;
+ 	}
+ 
+@@ -1401,7 +1401,7 @@ static ssize_t iio_show_dev_name(struct device *dev,
+ 	return sysfs_emit(buf, "%s\n", indio_dev->name);
+ }
+ 
+-static DEVICE_ATTR(name, S_IRUGO, iio_show_dev_name, NULL);
++static DEVICE_ATTR(name, 0444, iio_show_dev_name, NULL);
+ 
+ static ssize_t iio_show_dev_label(struct device *dev,
+ 				 struct device_attribute *attr,
+@@ -1411,7 +1411,7 @@ static ssize_t iio_show_dev_label(struct device *dev,
+ 	return sysfs_emit(buf, "%s\n", indio_dev->label);
+ }
+ 
+-static DEVICE_ATTR(label, S_IRUGO, iio_show_dev_label, NULL);
++static DEVICE_ATTR(label, 0444, iio_show_dev_label, NULL);
+ 
+ static ssize_t iio_show_timestamp_clock(struct device *dev,
+ 					struct device_attribute *attr,
+@@ -1509,7 +1509,7 @@ int iio_device_register_sysfs_group(struct iio_dev *indio_dev,
+ 	return 0;
+ }
+ 
+-static DEVICE_ATTR(current_timestamp_clock, S_IRUGO | S_IWUSR,
++static DEVICE_ATTR(current_timestamp_clock, 0644,
+ 		   iio_show_timestamp_clock, iio_store_timestamp_clock);
+ 
+ static int iio_device_register_sysfs(struct iio_dev *indio_dev)
+diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
+index f504ed351b3e..e22a35634f2c 100644
+--- a/drivers/iio/industrialio-trigger.c
++++ b/drivers/iio/industrialio-trigger.c
+@@ -54,7 +54,7 @@ static ssize_t iio_trigger_read_name(struct device *dev,
+ 	return sysfs_emit(buf, "%s\n", trig->name);
+ }
+ 
+-static DEVICE_ATTR(name, S_IRUGO, iio_trigger_read_name, NULL);
++static DEVICE_ATTR(name, 0444, iio_trigger_read_name, NULL);
+ 
+ static struct attribute *iio_trig_dev_attrs[] = {
+ 	&dev_attr_name.attr,
+@@ -494,7 +494,7 @@ static ssize_t iio_trigger_write_current(struct device *dev,
+ 	return ret;
+ }
+ 
+-static DEVICE_ATTR(current_trigger, S_IRUGO | S_IWUSR,
++static DEVICE_ATTR(current_trigger, 0644,
+ 		   iio_trigger_read_current,
+ 		   iio_trigger_write_current);
  
 -- 
-2.34.1
+2.35.3
 

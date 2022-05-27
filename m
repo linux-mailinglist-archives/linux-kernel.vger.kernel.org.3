@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E181B53600E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0FC535FD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351797AbiE0Loz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S231983AbiE0LnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351809AbiE0Ln6 (ORCPT
+        with ESMTP id S1351607AbiE0Ll6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:43:58 -0400
+        Fri, 27 May 2022 07:41:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37F066FB0;
-        Fri, 27 May 2022 04:40:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3BF1339DB;
+        Fri, 27 May 2022 04:40:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F08CF61CB7;
-        Fri, 27 May 2022 11:40:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDCFC34113;
-        Fri, 27 May 2022 11:40:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 722A861D27;
+        Fri, 27 May 2022 11:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD0EC385A9;
+        Fri, 27 May 2022 11:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651648;
-        bh=f9E5EI7jJkflJj4QutB3zPFBUaC/T63F6pOaKTQ3D9I=;
+        s=korg; t=1653651615;
+        bh=xZ9N0in4G15OcftiGqivaOgy9jmbWqCjama5P7l+R9o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e5zMnNmP+SVrGUpqey/iR9Wt+kzNuydn5xQV+aNLDDz2QKeUMsO257Fga+cmcqne4
-         WomhFL/0Q3cVm5S46mi3zaOWy6v0PC+AF00MPDj4SdCrYPv1jxx8K1y6gv5VbEFvlU
-         xx49OmuY2SGnwIzl/4zwB4cz1PijfkDO4x69vVsc=
+        b=xC0pN4zO7MmoR5GU0XLWu/6tmoQ1RTcHMWu1XWqrk4QHDoauSRVa2DVX7u+hrD8yE
+         +C6Aq5FAizUxrilvRY09Ef8QLoF0GgjHXyqqqnAeFitMow7FF6iKzvnpnOF6ttD0E4
+         DZEw7poYJ9OaMiiGqTmOLuqsvr2vjuE7AukMis04=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 043/163] random: remove incomplete last_data logic
-Date:   Fri, 27 May 2022 10:48:43 +0200
-Message-Id: <20220527084834.058330176@linuxfoundation.org>
+Subject: [PATCH 5.15 023/145] random: cleanup poolinfo abstraction
+Date:   Fri, 27 May 2022 10:48:44 +0200
+Message-Id: <20220527084853.695924806@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-References: <20220527084828.156494029@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,109 +57,189 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit a4bfa9b31802c14ff5847123c12b98d5e36b3985 upstream.
+commit 91ec0fe138f107232cb36bc6112211db37cb5306 upstream.
 
-There were a few things added under the "if (fips_enabled)" banner,
-which never really got completed, and the FIPS people anyway are
-choosing a different direction. Rather than keep around this halfbaked
-code, get rid of it so that we can focus on a single design of the RNG
-rather than two designs.
+Now that we're only using one polynomial, we can cleanup its
+representation into constants, instead of passing around pointers
+dynamically to select different polynomials. This improves the codegen
+and makes the code a bit more straightforward.
 
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   39 ++++-----------------------------------
- 1 file changed, 4 insertions(+), 35 deletions(-)
+ drivers/char/random.c |   67 ++++++++++++++++++++++----------------------------
+ 1 file changed, 30 insertions(+), 37 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -337,7 +337,6 @@
- #include <linux/spinlock.h>
- #include <linux/kthread.h>
- #include <linux/percpu.h>
--#include <linux/fips.h>
- #include <linux/ptrace.h>
- #include <linux/workqueue.h>
- #include <linux/irq.h>
-@@ -517,14 +516,12 @@ struct entropy_store {
- 	u16 add_ptr;
- 	u16 input_rotate;
- 	int entropy_count;
--	unsigned int last_data_init:1;
--	u8 last_data[EXTRACT_SIZE];
+@@ -430,14 +430,20 @@ static int random_write_wakeup_bits = 28
+  * polynomial which improves the resulting TGFSR polynomial to be
+  * irreducible, which we have made here.
+  */
+-static const struct poolinfo {
+-	int poolbitshift, poolwords, poolbytes, poolfracbits;
+-#define S(x) ilog2(x)+5, (x), (x)*4, (x) << (ENTROPY_SHIFT+5)
+-	int tap1, tap2, tap3, tap4, tap5;
+-} poolinfo_table[] = {
+-	/* was: x^128 + x^103 + x^76 + x^51 +x^25 + x + 1 */
++enum poolinfo {
++	POOL_WORDS = 128,
++	POOL_WORDMASK = POOL_WORDS - 1,
++	POOL_BYTES = POOL_WORDS * sizeof(u32),
++	POOL_BITS = POOL_BYTES * 8,
++	POOL_BITSHIFT = ilog2(POOL_WORDS) + 5,
++	POOL_FRACBITS = POOL_WORDS << (ENTROPY_SHIFT + 5),
++
+ 	/* x^128 + x^104 + x^76 + x^51 +x^25 + x + 1 */
+-	{ S(128),	104,	76,	51,	25,	1 },
++	POOL_TAP1 = 104,
++	POOL_TAP2 = 76,
++	POOL_TAP3 = 51,
++	POOL_TAP4 = 25,
++	POOL_TAP5 = 1
  };
  
- static ssize_t extract_entropy(struct entropy_store *r, void *buf,
- 			       size_t nbytes, int min, int rsvd);
- static ssize_t _extract_entropy(struct entropy_store *r, void *buf,
--				size_t nbytes, int fips);
-+				size_t nbytes);
+ /*
+@@ -503,7 +509,6 @@ MODULE_PARM_DESC(ratelimit_disable, "Dis
+ struct entropy_store;
+ struct entropy_store {
+ 	/* read-only data: */
+-	const struct poolinfo *poolinfo;
+ 	__u32 *pool;
+ 	const char *name;
  
- static void crng_reseed(struct crng_state *crng, struct entropy_store *r);
- static u32 input_pool_data[INPUT_POOL_WORDS] __latent_entropy;
-@@ -821,7 +818,7 @@ static void crng_initialize_secondary(st
+@@ -525,7 +530,6 @@ static void crng_reseed(struct crng_stat
+ static __u32 input_pool_data[INPUT_POOL_WORDS] __latent_entropy;
  
- static void __init crng_initialize_primary(struct crng_state *crng)
+ static struct entropy_store input_pool = {
+-	.poolinfo = &poolinfo_table[0],
+ 	.name = "input",
+ 	.lock = __SPIN_LOCK_UNLOCKED(input_pool.lock),
+ 	.pool = input_pool_data
+@@ -548,33 +552,26 @@ static __u32 const twist_table[8] = {
+ static void _mix_pool_bytes(struct entropy_store *r, const void *in,
+ 			    int nbytes)
  {
--	_extract_entropy(&input_pool, &crng->state[4], sizeof(u32) * 12, 0);
-+	_extract_entropy(&input_pool, &crng->state[4], sizeof(u32) * 12);
- 	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
- 		invalidate_batched_entropy();
- 		numa_crng_init();
-@@ -1426,22 +1423,13 @@ static void extract_buf(struct entropy_s
- }
+-	unsigned long i, tap1, tap2, tap3, tap4, tap5;
++	unsigned long i;
+ 	int input_rotate;
+-	int wordmask = r->poolinfo->poolwords - 1;
+ 	const unsigned char *bytes = in;
+ 	__u32 w;
  
- static ssize_t _extract_entropy(struct entropy_store *r, void *buf,
--				size_t nbytes, int fips)
-+				size_t nbytes)
+-	tap1 = r->poolinfo->tap1;
+-	tap2 = r->poolinfo->tap2;
+-	tap3 = r->poolinfo->tap3;
+-	tap4 = r->poolinfo->tap4;
+-	tap5 = r->poolinfo->tap5;
+-
+ 	input_rotate = r->input_rotate;
+ 	i = r->add_ptr;
+ 
+ 	/* mix one byte at a time to simplify size handling and churn faster */
+ 	while (nbytes--) {
+ 		w = rol32(*bytes++, input_rotate);
+-		i = (i - 1) & wordmask;
++		i = (i - 1) & POOL_WORDMASK;
+ 
+ 		/* XOR in the various taps */
+ 		w ^= r->pool[i];
+-		w ^= r->pool[(i + tap1) & wordmask];
+-		w ^= r->pool[(i + tap2) & wordmask];
+-		w ^= r->pool[(i + tap3) & wordmask];
+-		w ^= r->pool[(i + tap4) & wordmask];
+-		w ^= r->pool[(i + tap5) & wordmask];
++		w ^= r->pool[(i + POOL_TAP1) & POOL_WORDMASK];
++		w ^= r->pool[(i + POOL_TAP2) & POOL_WORDMASK];
++		w ^= r->pool[(i + POOL_TAP3) & POOL_WORDMASK];
++		w ^= r->pool[(i + POOL_TAP4) & POOL_WORDMASK];
++		w ^= r->pool[(i + POOL_TAP5) & POOL_WORDMASK];
+ 
+ 		/* Mix the result back in with a twist */
+ 		r->pool[i] = (w >> 3) ^ twist_table[w & 7];
+@@ -672,7 +669,6 @@ static void process_random_ready_list(vo
+ static void credit_entropy_bits(struct entropy_store *r, int nbits)
  {
- 	ssize_t ret = 0, i;
- 	u8 tmp[EXTRACT_SIZE];
--	unsigned long flags;
+ 	int entropy_count, orig;
+-	const int pool_size = r->poolinfo->poolfracbits;
+ 	int nfrac = nbits << ENTROPY_SHIFT;
  
- 	while (nbytes) {
- 		extract_buf(r, tmp);
--
--		if (fips) {
--			spin_lock_irqsave(&r->lock, flags);
--			if (!memcmp(tmp, r->last_data, EXTRACT_SIZE))
--				panic("Hardware RNG duplicated output!\n");
--			memcpy(r->last_data, tmp, EXTRACT_SIZE);
--			spin_unlock_irqrestore(&r->lock, flags);
--		}
- 		i = min_t(int, nbytes, EXTRACT_SIZE);
- 		memcpy(buf, tmp, i);
- 		nbytes -= i;
-@@ -1467,28 +1455,9 @@ static ssize_t _extract_entropy(struct e
- static ssize_t extract_entropy(struct entropy_store *r, void *buf,
- 				 size_t nbytes, int min, int reserved)
+ 	if (!nbits)
+@@ -706,25 +702,25 @@ retry:
+ 		 * turns no matter how large nbits is.
+ 		 */
+ 		int pnfrac = nfrac;
+-		const int s = r->poolinfo->poolbitshift + ENTROPY_SHIFT + 2;
++		const int s = POOL_BITSHIFT + ENTROPY_SHIFT + 2;
+ 		/* The +2 corresponds to the /4 in the denominator */
+ 
+ 		do {
+-			unsigned int anfrac = min(pnfrac, pool_size/2);
++			unsigned int anfrac = min(pnfrac, POOL_FRACBITS/2);
+ 			unsigned int add =
+-				((pool_size - entropy_count)*anfrac*3) >> s;
++				((POOL_FRACBITS - entropy_count)*anfrac*3) >> s;
+ 
+ 			entropy_count += add;
+ 			pnfrac -= anfrac;
+-		} while (unlikely(entropy_count < pool_size-2 && pnfrac));
++		} while (unlikely(entropy_count < POOL_FRACBITS-2 && pnfrac));
+ 	}
+ 
+ 	if (WARN_ON(entropy_count < 0)) {
+ 		pr_warn("negative entropy/overflow: pool %s count %d\n",
+ 			r->name, entropy_count);
+ 		entropy_count = 0;
+-	} else if (entropy_count > pool_size)
+-		entropy_count = pool_size;
++	} else if (entropy_count > POOL_FRACBITS)
++		entropy_count = POOL_FRACBITS;
+ 	if (cmpxchg(&r->entropy_count, orig, entropy_count) != orig)
+ 		goto retry;
+ 
+@@ -741,13 +737,11 @@ retry:
+ 
+ static int credit_entropy_bits_safe(struct entropy_store *r, int nbits)
  {
--	u8 tmp[EXTRACT_SIZE];
--	unsigned long flags;
+-	const int nbits_max = r->poolinfo->poolwords * 32;
 -
--	/* if last_data isn't primed, we need EXTRACT_SIZE extra bytes */
--	if (fips_enabled) {
--		spin_lock_irqsave(&r->lock, flags);
--		if (!r->last_data_init) {
--			r->last_data_init = 1;
--			spin_unlock_irqrestore(&r->lock, flags);
--			trace_extract_entropy(r->name, EXTRACT_SIZE,
--					      ENTROPY_BITS(r), _RET_IP_);
--			extract_buf(r, tmp);
--			spin_lock_irqsave(&r->lock, flags);
--			memcpy(r->last_data, tmp, EXTRACT_SIZE);
--		}
--		spin_unlock_irqrestore(&r->lock, flags);
--	}
--
- 	trace_extract_entropy(r->name, nbytes, ENTROPY_BITS(r), _RET_IP_);
- 	nbytes = account(r, nbytes, min, reserved);
--
--	return _extract_entropy(r, buf, nbytes, fips_enabled);
-+	return _extract_entropy(r, buf, nbytes);
- }
+ 	if (nbits < 0)
+ 		return -EINVAL;
  
- #define warn_unseeded_randomness(previous) \
+ 	/* Cap the value to avoid overflows */
+-	nbits = min(nbits,  nbits_max);
++	nbits = min(nbits,  POOL_BITS);
+ 
+ 	credit_entropy_bits(r, nbits);
+ 	return 0;
+@@ -1343,7 +1337,7 @@ static size_t account(struct entropy_sto
+ 	int entropy_count, orig, have_bytes;
+ 	size_t ibytes, nfrac;
+ 
+-	BUG_ON(r->entropy_count > r->poolinfo->poolfracbits);
++	BUG_ON(r->entropy_count > POOL_FRACBITS);
+ 
+ 	/* Can we pull enough? */
+ retry:
+@@ -1409,8 +1403,7 @@ static void extract_buf(struct entropy_s
+ 
+ 	/* Generate a hash across the pool */
+ 	spin_lock_irqsave(&r->lock, flags);
+-	blake2s_update(&state, (const u8 *)r->pool,
+-		       r->poolinfo->poolwords * sizeof(*r->pool));
++	blake2s_update(&state, (const u8 *)r->pool, POOL_BYTES);
+ 	blake2s_final(&state, hash); /* final zeros out state */
+ 
+ 	/*
+@@ -1766,7 +1759,7 @@ static void __init init_std_data(struct
+ 	unsigned long rv;
+ 
+ 	mix_pool_bytes(r, &now, sizeof(now));
+-	for (i = r->poolinfo->poolbytes; i > 0; i -= sizeof(rv)) {
++	for (i = POOL_BYTES; i > 0; i -= sizeof(rv)) {
+ 		if (!arch_get_random_seed_long(&rv) &&
+ 		    !arch_get_random_long(&rv))
+ 			rv = random_get_entropy();
 
 

@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8350A5367E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 22:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F475367F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 22:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350809AbiE0UGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 16:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
+        id S1350492AbiE0UO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 16:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350757AbiE0UF4 (ORCPT
+        with ESMTP id S231445AbiE0UOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 16:05:56 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A133E473AD
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 13:05:53 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id j14so4803623qvo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 13:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=g+pQqkTih63Ty7gF/Ucw70pNIC+bNdQYXn1gaDTT7SA=;
-        b=WlnE80aTu92PLPbZ8osuq8WBerY2I3HSbhRn+z867J97rIIA85Ry4iA5BpjdmP00ex
-         wxzSChNoikfGwEZ1dj67BEwk8h7YmPKgmOw5XbozDe9A07ZOUzv/MZkfkNmxsbWG+CA0
-         QyTVH8LCridQvqfaQcmLtlO55WfXw7Tv6lpe3S4/0IGxKnZrKLFHSE/5KG3EXT3uGiLx
-         8/UZFkE+xtpFJnSO/d44ROEE9E5VRl/GSgJofucWRmxZ7/SDt6WipmFuFNss+EtaW2LP
-         Q9IN7CMbhA+MCr+dqBoOh4O+xFe9mNhR3y+J7ISHF1sxajfMZu8awUL8CvsQKrIHgrzZ
-         SjdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=g+pQqkTih63Ty7gF/Ucw70pNIC+bNdQYXn1gaDTT7SA=;
-        b=S7UdauTPafmbGf0nYlHEKnxxTQy4gkOxiCiznp5VCG4kwH7mdv7RXoioUnw1DwKTkA
-         4CX/xKQ8UPmCptxsSfnwXuOqVXAQTfMAk8tLYoh9zaC+EJ6qGgH8UWch/aTYXBAXpdRm
-         YL9YM7SNb6Ic51J9gDGIE6qW22JuPcbovxk2Oh+8V3Bx0czcHezxHbvNX6aoZwRX0Hl7
-         5nv3KkW4s5dp3l2GmeBjfZHz6rnjWzg/5I1Jh0qq1uksgszbyKIGBWDVhiHyW/cuBTsN
-         cKFCLYuQkK1bfy1oDBufmlYRR/8h4gVe4gXKXshCdLkOhH3ZIvtNtkUpKId07ow3rJad
-         2bDg==
-X-Gm-Message-State: AOAM532zCAlKC4kINHxqH3srr6Ngfyus7TA1EnAjB6L6MmuTUov0QdYf
-        SIJw9JvFXwoJHlh9zSRyTfxWyQ==
-X-Google-Smtp-Source: ABdhPJypfwKyW9QIJgtPwkcsv3L6wbUSugzXr5toVyTpByWMXC9eJMXmJf8swe/WfITuwBOtB1P+8A==
-X-Received: by 2002:ad4:5944:0:b0:462:310a:b54c with SMTP id eo4-20020ad45944000000b00462310ab54cmr24814360qvb.41.1653681952811;
-        Fri, 27 May 2022 13:05:52 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id k25-20020ac84759000000b002fcb0d95f65sm2425544qtp.90.2022.05.27.13.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 13:05:52 -0700 (PDT)
-Message-ID: <fd8c9ef48b48e014c468fe8cf61cd44062d14b1d.camel@ndufresne.ca>
-Subject: Re: [PATCH v2] media: Hantro: Correct G2 init qp field
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Date:   Fri, 27 May 2022 16:05:51 -0400
-In-Reply-To: <20220524115945.2294015-1-benjamin.gaignard@collabora.com>
-References: <20220524115945.2294015-1-benjamin.gaignard@collabora.com>
+        Fri, 27 May 2022 16:14:53 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B61F703C7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 13:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=/JbY6NIfEA9XeqiPP6KIr66UKiO0C7oMhJ4ZgGJq/uk=;
+        t=1653682490; x=1654892090; b=a4yAYzDaNhpN9aT5ZV6TebPFY/3WxaxEFbEEkoS5FYSZZ3p
+        1OqwD8jdSeEIol+yBXwHRxqzrzafQDkZy66tujSxuXZEcnnhYVrxQPDLdZtqBkAyzZzedkdUyO5ge
+        +OQRtPHJN5s63iCoeZ2HVkYSUzYcSD6f/CGThEvqcoqpQ6puukpoegrHOJJ/akqYo2VrKy3wIue2e
+        8/dxJx+JItwbyfqor5Tt86fyjCtSgCAW8QW34ZkXD/q/7J4A54I0I9BKvaEvqxsudibj3swTS7IAm
+        y4LN2o3JNDGVf6qfpvYKN849kREJm+5aXBGyXBAmBQOpULfpU0fYivXSKvCjvuRw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nugM3-006B6d-Au;
+        Fri, 27 May 2022 22:14:39 +0200
+Message-ID: <de38a6b852d31cbe123d033965dbd9b662d29a76.camel@sipsolutions.net>
+Subject: Re: [PATCH v2 2/2] UML: add support for KASAN under x86_64
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     David Gow <davidgow@google.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        anton.ivanov@cambridgegreys.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc:     kasan-dev <kasan-dev@googlegroups.com>,
+        linux-um@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Latypov <dlatypov@google.com>, linux-mm@kvack.org
+Date:   Fri, 27 May 2022 22:14:37 +0200
+In-Reply-To: <20220527185600.1236769-2-davidgow@google.com>
+References: <20220527185600.1236769-1-davidgow@google.com>
+         <20220527185600.1236769-2-davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,42 +65,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 24 mai 2022 =C3=A0 13:59 +0200, Benjamin Gaignard a =C3=A9crit=C2=
-=A0:
-> Documentation said that g2 init_qp field use bits 24 to 30 of
-> the 8th register.
-> Change the field mask to be able to set 7 bits and not only 6 of them.
+On Fri, 2022-05-27 at 11:56 -0700, David Gow wrote:
 >=20
-> Conformance test INITQP_B_Main10_Sony_1 decoding is OK with this
-> patch.
->=20
-> Fixes: cb5dd5a0fa518 ("media: hantro: Introduce G2/HEVC decoder")
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> This is v2 of the KASAN/UML port. It should be ready to go.
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Nice, thanks a lot! :)
 
-> ---
-> With this patch and the patches needed for 10-bit support
-> Fluster HEVC score is 137/147
+> It does benefit significantly from the following patches:
+> - Bugfix for memory corruption, needed for KASAN_STACK support:
+> https://lore.kernel.org/lkml/20220523140403.2361040-1-vincent.whitchurch@=
+axis.com/
+
+Btw, oddly enough, I don't seem to actually see this (tried gcc 10.3 and
+11.3 so far) - is there anything you know about compiler versions
+related to this perhaps? Or clang only?
+
+The kasan_stack_oob test passes though, and generally 45 tests pass and
+10 are skipped.
+
+
+> +# Kernel config options are not included in USER_CFLAGS, but the
+> option for KASAN
+> +# should be included if the KASAN config option was set.
+> +ifdef CONFIG_KASAN
+> +	USER_CFLAGS+=3D-DCONFIG_KASAN=3Dy
+> +endif
 >=20
-> version 2:
-> - Add Fixes tag
->=20
->  drivers/staging/media/hantro/hantro_g2_regs.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/stag=
-ing/media/hantro/hantro_g2_regs.h
-> index 877d663a8181..82606783591a 100644
-> --- a/drivers/staging/media/hantro/hantro_g2_regs.h
-> +++ b/drivers/staging/media/hantro/hantro_g2_regs.h
-> @@ -107,7 +107,7 @@
+
+I'm not sure that's (still?) necessary - you don't #ifdef on it anywhere
+in the user code; perhaps the original intent had been to #ifdef
+kasan_map_memory()?
+
+
+> +++ b/arch/um/os-Linux/user_syms.c
+> @@ -27,10 +27,10 @@ EXPORT_SYMBOL(strstr);
+>  #ifndef __x86_64__
+>  extern void *memcpy(void *, const void *, size_t);
+>  EXPORT_SYMBOL(memcpy);
+> -#endif
+> -
+>  EXPORT_SYMBOL(memmove);
+>  EXPORT_SYMBOL(memset);
+> +#endif
+> +
+>  EXPORT_SYMBOL(printf);
 > =20
->  #define g2_start_code_e		G2_DEC_REG(10, 31, 0x1)
->  #define g2_init_qp_old		G2_DEC_REG(10, 25, 0x3f)
-> -#define g2_init_qp		G2_DEC_REG(10, 24, 0x3f)
-> +#define g2_init_qp		G2_DEC_REG(10, 24, 0x7f)
->  #define g2_num_tile_cols_old	G2_DEC_REG(10, 20, 0x1f)
->  #define g2_num_tile_cols	G2_DEC_REG(10, 19, 0x1f)
->  #define g2_num_tile_rows_old	G2_DEC_REG(10, 15, 0x1f)
+>  /* Here, instead, I can provide a fake prototype. Yes, someone cares: ge=
+nksyms.
+> diff --git a/arch/x86/um/Makefile b/arch/x86/um/Makefile
+> index ba5789c35809..f778e37494ba 100644
+> --- a/arch/x86/um/Makefile
+> +++ b/arch/x86/um/Makefile
+> @@ -28,7 +28,8 @@ else
+> =20
+>  obj-y +=3D syscalls_64.o vdso/
+> =20
+> -subarch-y =3D ../lib/csum-partial_64.o ../lib/memcpy_64.o ../entry/thunk=
+_64.o
+> +subarch-y =3D ../lib/csum-partial_64.o ../lib/memcpy_64.o ../entry/thunk=
+_64.o \
+> +	../lib/memmove_64.o ../lib/memset_64.o
 
+I wonder if we should make these two changes contingent on KASAN too, I
+seem to remember that we had some patches from Anton flying around at
+some point to use glibc string routines, since they can be even more
+optimised (we're in user space, after all).
+
+But I suppose for now this doesn't really matter, and even if we did use
+them, they'd come from libasan anyway?
+
+
+Anyway, looks good to me, not sure the little not above about the user
+cflags matters.
+
+Reviewed-by: Johannes Berg <johannes@sipsolutions.net>
+
+johannes

@@ -2,193 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C8D53574C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2DB535754
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbiE0BZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 21:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S232240AbiE0BaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 21:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiE0BZq (ORCPT
+        with ESMTP id S232055AbiE0BaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 21:25:46 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B503D517EE
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:25:45 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-304ddb9b42cso16238457b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xOB8pdz5YMawh+tE4HzeA8+mu9Tju2B2ZXIXRpGMpRw=;
-        b=HDF2wYgtuU9Zw5wHJkW/PUAU89NXp/Cxl6BPYcfMd9izTtaGCSXBDvOlCoV0vgy8S+
-         G/mYwHmzudfV/hPQFS3w4rjQ40EGbQajpQG/PsZTt9J2urxzEPM7ZGsHqv4b9R81F8Eg
-         BV5GFD9nU7xKKO08afjDufFWRvZwPWiKYSVpI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xOB8pdz5YMawh+tE4HzeA8+mu9Tju2B2ZXIXRpGMpRw=;
-        b=qLrzSVq8NC29vrLrLuzbWOJDO8e2/AjmT5siLJlD6m1n+nDQYila3XHo90HeA8i1mg
-         qd5mm3Xrb8gb7J19XnIA5svmGNYCgMRJQ1Ku48kV3i+WhN14aRhknvgbR/cNwVViicdF
-         CbRBqXomf9+zyd0dtzJ1I3e27c6Jhm94NcZIhOGQj3bIZx/bzVe3PDQlcHvF0xRHCEY8
-         Q4DQ+dxUmU4eZ8CkhaL45FP0v6UzDwb3UNSyd13pQbKBSYooZLx2JYSY1Bo5S7r9x2gr
-         MMdSpR6Twt5oQqpY7qN/lqbE36qJHMgeyuN8ffHJEHV8PTPZoQzRBoD/umuM4c/vlmMO
-         Re9A==
-X-Gm-Message-State: AOAM5320hDw/g9o8Xpf9M0RBqFRPu4/MpJ45tItD3OVQOKU2W/CtDoDm
-        GYFa6t01V6VXRosbe1JW13LjXp2vGzyTlNMd8hYLqg==
-X-Google-Smtp-Source: ABdhPJyhsnVAPLaMcmgCWDAhzi1PgucWk5A9KwG/Q2umXETsbwwzIiu1bfGanEPnbdip2vtnovjMl2T+wtjSv79nkes=
-X-Received: by 2002:a81:802:0:b0:2f7:cd12:9d53 with SMTP id
- 2-20020a810802000000b002f7cd129d53mr39479699ywi.197.1653614744913; Thu, 26
- May 2022 18:25:44 -0700 (PDT)
+        Thu, 26 May 2022 21:30:20 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2060.outbound.protection.outlook.com [40.107.104.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87D4BA56D;
+        Thu, 26 May 2022 18:30:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sp1rv5Ov+XL246HYsdwSdUCrdp1zfbQWWc+OBC/N2TtUCMzKxK+1TOs2LZIyP7y/UVEO7HhdpnYI6/9WMtpyYlbQfap7sJs9Qn1/HP+YRSvjdt3cvAjSqAbuOH71x7x+ppeiC+6qxs8Qa9Ku77XBzOj8AvviUnzV3ikXWqzTG3AmtYHCCqr//V6Le2dYM3ixpl139Sc0S/MWFtcu+LNkIvkW+q4XOFLhBoRdxaSRp5RIq36Ew4/Q2HJQ/dzPp1P/QdSGHdt09YFFV4tzMoC0it27Hdt4L1uJf/6C6YwXFjrQAvKGRWpVq90tCoJHJPldwUZ9aTxEs7R40oH9adlmqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QpriMlHAiL2pyNRwLp2es/eHaj24HXZSgAG6M698UuI=;
+ b=jLds+3qSYUKX2sFBgXLueGkInUdDUOVNS1NpxHadvj3s0I5EYnDzDtDQUQq3JNpmkBaaqdm1JCEdD2kyMIkYbH4fS2vpt1s/0dtNtdBkCi+FzEqunC1D/WRXWkV4unsS7A/VI1101F+51k5Y43IfSx9GM43fB6BqZ7yhtrX7wfWoYL5YEo6QcFTM/J4BkK1xKQIP3TNzAmBChCL3qOCDsDjEg2qrEJhDqchcWp3rZ50tRKqdno852e5mrUaHuuhgvuoQKCi8bpudBdnXlAjHqeVpzqKyiu7tahRkQduCiPRe08z7u+d1cK+m2olZkBQvqZipyfTiX5p9y3mHuh2b8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QpriMlHAiL2pyNRwLp2es/eHaj24HXZSgAG6M698UuI=;
+ b=L9YFXjmUXMFC8NOdL94OIQou/RdMRFAU5jWF769btxUjiFrH0N7UFmX07LJzIWG8go/VbYKkognxf0zlV7fA8Cg8vE4seBxEhJCYTkLLlfqfTkS9mpr0Ag2UFchrLrIxA05LkKljvIp4kr+Z7KuygbIBqvKXDANpPn816bznB2A=
+Received: from DU2PR04MB8949.eurprd04.prod.outlook.com (2603:10a6:10:2e0::13)
+ by DB9PR04MB8477.eurprd04.prod.outlook.com (2603:10a6:10:2c3::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Fri, 27 May
+ 2022 01:30:17 +0000
+Received: from DU2PR04MB8949.eurprd04.prod.outlook.com
+ ([fe80::44f6:d489:435d:a03a]) by DU2PR04MB8949.eurprd04.prod.outlook.com
+ ([fe80::44f6:d489:435d:a03a%4]) with mapi id 15.20.5293.013; Fri, 27 May 2022
+ 01:30:17 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: RE: linux-next: please clean up the soc-fsl tree
+Thread-Topic: linux-next: please clean up the soc-fsl tree
+Thread-Index: AQHYcWO4rzsGKNuwp0uVRPc8dsAEfq0x76Uw
+Date:   Fri, 27 May 2022 01:30:16 +0000
+Message-ID: <DU2PR04MB8949398C0EA9FA9F0911B8868FD89@DU2PR04MB8949.eurprd04.prod.outlook.com>
+References: <20220527105003.1392a238@canb.auug.org.au>
+In-Reply-To: <20220527105003.1392a238@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 19f8ac45-6134-48f8-d0a3-08da3f80749b
+x-ms-traffictypediagnostic: DB9PR04MB8477:EE_
+x-microsoft-antispam-prvs: <DB9PR04MB8477AC88A58F19BE23D2C6158FD89@DB9PR04MB8477.eurprd04.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +vPbfZZfYmZU+Fq3PgG8jsmXjYdclvNi3jX5odSdSHlkGr0KqOr7mVuP+tH3P5TXMfIqdwBlDxi8eHelJfAcQKFG7DQfnhwKJzwM7QrJJCZ1Pe3t0jsxs6zKtc6s4w+UEsCFbt53ZaCQQTj8Ppv7pCQ3Qj0MPIm2WNw5pGWd7LLn56xGDyg/ByTQjz++XGj9XOCDSgHZogV4H0A6fDkbXmfJPGHOafe8FCNAtfLU4LzJmC+n6K1KK6YeiylBxcFwiDt1svi+jQ0rNeLAQZYZX0/v7Sk4YiP2m7MkKfqdoDwoEqDVUjh8hLGsYfPzPnqu/j3JE2Ofa1nMGtcOs7ytlQ9UBVF8nL2RcFKJHDPe4eUyQkxa454x8FKW0CRI19OBbPS6q2dY/kzLYjOIWN9/evZsz5t8QYb8FpgNB7KpndREi4zEY4oUs9xF6hoePVvaH6FVXKbBCKuRRHZnf39k3n17SGL9AAogMyOeGoPAONYfdYklaMIVCq3bMdy4wkMiW843p4TqkDXj9G+bRc4gMbbAEv7vfNZQdHqk76aLapT1QxVG9PfkwA242mxSVGajGfCIlpId0s/QHm7ete/0jAj0FYjbm3fcKnlw65y2E6oR1GU3lAVCkVBP9fWfgvVRHIrt91bYlX8aOhdqLLCmLYY79Klc3DP+jNNwC1L1I10R9i38FOJpdmEt1xwuprEu0QJsANZPyiod0qE+bdf1Zg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8949.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(9686003)(4744005)(55016003)(53546011)(38070700005)(316002)(86362001)(4326008)(8676002)(76116006)(66446008)(66556008)(64756008)(66946007)(66476007)(508600001)(5660300002)(55236004)(8936002)(2906002)(52536014)(38100700002)(7696005)(6506007)(6916009)(33656002)(54906003)(122000001)(71200400001)(83380400001)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LICtBQz6qyOOXOJGUi4WMR1l2cqf8mckARMfvcVa1hbu5sL70Lg0VByNqYMN?=
+ =?us-ascii?Q?h6Mv0VKTHSvDrBKzmSvtJlk2zVT08apIxYH99gjV966TB/VCLZ3/BIi30ksw?=
+ =?us-ascii?Q?kx3Xb+NWyVqpbFnh7HFFkrBhLbkejasnHpxlr3s9FUvuq5mGHo12YOBNsLuW?=
+ =?us-ascii?Q?eAQQcBzFxwS7ws8FVhCpaFNfvvHMjl2MOmHDEbMyYelbtLq3TokIuTtyOyWG?=
+ =?us-ascii?Q?fAcunPWSR63pNvVv6j4AJ1YAG5uA/njWqdQPxyeMjzTZYQa/OT7+fKyS/1uu?=
+ =?us-ascii?Q?Sa+TgHpyzJVge40tHEn9ByO8yypz3H0gt7Ly0YBVo4u9dGkHOcLHIAJPsgaS?=
+ =?us-ascii?Q?wOLcwVvN7h5f9W/oZA+EOTEcB92Sjwa1lSZUI0BlC+jZC7ufBTH74Z2LNbOz?=
+ =?us-ascii?Q?SY1IV/cKkbV4h8KLYG02EhQ/QwpJg040T8yioSzbDO9G7z4AuDuhNOyqWLEG?=
+ =?us-ascii?Q?dnn2L7jU5mtx+0ENccjnnLXtvXVvjnm2wP3wrYPPcLjLAc7WSy6CEAYrdaIq?=
+ =?us-ascii?Q?M5NXPdFCiFWVqNZRWj4bva/G3K6wNN1Uak0Um/UJLD+3/ZzzNsCEradh5OH2?=
+ =?us-ascii?Q?Vxvs+4LrYeF3MK+2kln2F62Lx2vokm8NC0RBCVokspMwJf/9MmG2k3cGfosK?=
+ =?us-ascii?Q?iQAl/SOkOhzNqpR/+NECJjZ1oPKQMXVuhk8i48ZwR2mLg97q2+7L/+3dVxV1?=
+ =?us-ascii?Q?P6/hD4eU5JgbrDBrQFdJuF+6eCM5eep2am8/pi9aoFMpDFIgF1cR3xAEpQ0y?=
+ =?us-ascii?Q?8R4cWtTsB+cGQY//nD3trfg7mz4izLABJ7962QqDe1GWCrM5gP6YVq96IY56?=
+ =?us-ascii?Q?vj24/lES7XOL6A/eVonkyoATpjSrbW5M/M/UsKL5phCkWPK+VnxGo0f6T4Ki?=
+ =?us-ascii?Q?OXqh1/vRPBSzgNKTaV3oeidoJZ5O9xWMaiqAdUgQwh+e4ZaDliR5yiDJ9BHG?=
+ =?us-ascii?Q?6FECGvF5lp+GxePVFYVzv8om5KjNHb556m3YxLaNHFCpL3dUHoMAXras9fA2?=
+ =?us-ascii?Q?y+m3AB88wufchWsLDEHcAxxChavA3pIQIuI425gu+Ut5mW7pXFhOsCCIF4DU?=
+ =?us-ascii?Q?UwriZ3fw1sCLLlReZad9A4gMHFDdi1HVpIWftV98xMLxvAlsWzDfTcdDKY+/?=
+ =?us-ascii?Q?uFlfhfQPUbPtNP4vpkdHb9QPHVu1zkYMaumxrzwaEfXr35szLESo0+XcPFCc?=
+ =?us-ascii?Q?IwQUsbL3uIC2sWKDICm86vp1PihLN/mXJFPWPqiDjx8TgTL/c481xJDl286H?=
+ =?us-ascii?Q?hFvIUhKEheIpSxWYGxRgfjeIy/0jlBPe/dXiFQy8r0PwiwrV0jopVhH89ZGk?=
+ =?us-ascii?Q?gGqgrb6PGUK+1ssR45rMCPdhtcwetVyNxJE4/Kpwodd8w1wREh/48gDtYAVJ?=
+ =?us-ascii?Q?wQnTCJiAF6/4jsD7WxjGwWX7c3W14E0nZRB3dS6qB8f150hB3zXdA3nP0rfG?=
+ =?us-ascii?Q?M2JtlBWw3S0oKB5jjVxoxrlkuLyDgZpHx5RvM/6xoVkESZCE5sR3Ouh3ti39?=
+ =?us-ascii?Q?JwyUCdMBFWcVh4isr25rdpdcabVc3T9zFrvF5gykH0xnToZT1NE+UfoJQWsk?=
+ =?us-ascii?Q?ZiKQES2GC0Q4sbzeNDoIcBz2FSDbtD+juDhMAZsgmzTVk8xaVx6wK9Rzkse3?=
+ =?us-ascii?Q?B17muWMa5jDLFPBLmGfuSN0xpIu69NREl7ENeJ78VENJqmID5kwOYAML5hn7?=
+ =?us-ascii?Q?4wyweslzFt5yr070VmHc+p4UFBe6QdNCx5oxkkFy/ZaBM3qyluGS5WcOrklW?=
+ =?us-ascii?Q?MMUeUshS6g=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20210806103423.3341285-1-stevensd@google.com> <48f72bbddb099b474d7917ff0e7c14a271d31350.camel@linux.ibm.com>
-In-Reply-To: <48f72bbddb099b474d7917ff0e7c14a271d31350.camel@linux.ibm.com>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Fri, 27 May 2022 10:25:34 +0900
-Message-ID: <CAD=HUj62m_P53nr-Zz4bO4Bsn_tgauWX3a28MgRgsB2xShB4Hg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] Add dynamic iommu backed bounce buffers
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        iommu@lists.linux-foundation.org, Will Deacon <will@kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8949.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19f8ac45-6134-48f8-d0a3-08da3f80749b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 May 2022 01:30:17.0453
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SvT4MfhPpayDf3Bow4OhtUB6k/lndi9uycenLYSHvFjR6K0vwMc56z5ezLpED54j62PS0kHIis2GF8yyfA+XFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8477
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 9:27 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
->
-> On Fri, 2021-08-06 at 19:34 +0900, David Stevens wrote:
-> > From: David Stevens <stevensd@chromium.org>
-> >
-> > This patch series adds support for per-domain dynamic pools of iommu
-> > bounce buffers to the dma-iommu API. This allows iommu mappings to be
-> > reused while still maintaining strict iommu protection.
-> >
-> > This bounce buffer support is used to add a new config option that, when
-> > enabled, causes all non-direct streaming mappings below a configurable
-> > size to go through the bounce buffers. This serves as an optimization on
-> > systems where manipulating iommu mappings is very expensive. For
-> > example, virtio-iommu operations in a guest on a linux host require a
-> > vmexit, involvement the VMM, and a VFIO syscall. For relatively small
-> > DMA operations, memcpy can be significantly faster.
-> >
-> > As a performance comparison, on a device with an i5-10210U, I ran fio
-> > with a VFIO passthrough NVMe drive and virtio-iommu with '--direct=1
-> > --rw=read --ioengine=libaio --iodepth=64' and block sizes 4k, 16k, 64k,
-> > and 128k. Test throughput increased by 2.8x, 4.7x, 3.6x, and 3.6x. Time
-> > spent in iommu_dma_unmap_(page|sg) per GB processed decreased by 97%,
-> > 94%, 90%, and 87%. Time spent in iommu_dma_map_(page|sg) decreased
-> > by >99%, as bounce buffers don't require syncing here in the read case.
-> > Running with multiple jobs doesn't serve as a useful performance
-> > comparison because virtio-iommu and vfio_iommu_type1 both have big
-> > locks that significantly limit mulithreaded DMA performance.
-> >
-> > These pooled bounce buffers are also used for subgranule mappings with
-> > untrusted devices, replacing the single use bounce buffers used
-> > currently. The biggest difference here is that the new implementation
-> > maps a whole sglist using a single bounce buffer. The new implementation
-> > does not support using bounce buffers for only some segments of the
-> > sglist, so it may require more copying. However, the current
-> > implementation requires per-segment iommu map/unmap operations for all
-> > untrusted sglist mappings (fully aligned sglists included). On a
-> > i5-10210U laptop with the internal NVMe drive made to appear untrusted,
-> > fio --direct=1 --rw=read --ioengine=libaio --iodepth=64 --bs=64k showed
-> > a statistically significant decrease in CPU load from 2.28% -> 2.17%
-> > with the new iommu bounce buffer optimization enabled.
-> >
-> > Each domain's buffer pool is split into multiple power-of-2 size
-> > classes. Each class allocates a fixed number of buffer slot metadata. A
-> > large iova range is allocated, and each slot is assigned an iova from
-> > the range. This allows the iova to be easily mapped back to the slot,
-> > and allows the critical section of most pool operations to be constant
-> > time. The one exception is finding a cached buffer to reuse. These are
-> > only separated according to R/W permissions - the use of other
-> > permissions such as IOMMU_PRIV may require a linear search through the
-> > cache. However, these other permissions are rare and likely exhibit high
-> > locality, so the should not be a bottleneck in practice.
-> >
-> > Since untrusted devices may require bounce buffers, each domain has a
-> > fallback rbtree to manage single use buffers. This may be necessary if a
-> > very large number of DMA operations are simultaneously in-flight, or for
-> > very large individual DMA operations.
-> >
-> > This patch set does not use swiotlb. There are two primary ways in which
-> > swiotlb isn't compatible with per-domain buffer pools. First, swiotlb
-> > allocates buffers to be compatible with a single device, whereas
-> > per-domain buffer pools don't handle that during buffer allocation as a
-> > single buffer may end up being used by multiple devices. Second, swiotlb
-> > allocation establishes the original to bounce buffer mapping, which
-> > again doesn't work if buffers can be reused. Effectively the only code
-> > that can be shared between the two use cases is allocating slots from
-> > the swiotlb's memory. However, given that we're going to be allocating
-> > memory for use with an iommu, allocating memory from a block of memory
-> > explicitly set aside to deal with a lack of iommu seems kind of
-> > contradictory. At best there might be a small performance improvement if
-> > wiotlb allocation is faster than regular page allocation, but buffer
-> > allocation isn't on the hot path anyway.
-> >
-> > Not using the swiotlb has the benefit that memory doesn't have to be
-> > preallocated. Instead, bounce buffers consume memory only for in-flight
-> > dma transactions (ignoring temporarily cached buffers), which is the
-> > smallest amount possible. This makes it easier to use bounce buffers as
-> > an optimization on systems with large numbers of devices or in
-> > situations where devices are unknown, since it is not necessary to try
-> > to tune how much memory needs to be set aside to achieve good
-> > performance without costing too much memory.
-> >
-> > Finally, this series adds a new DMA_ATTR_PERSISTENT_STREAMING flag. This
-> > is meant to address devices which create long lived streaming mappings
-> > but manage CPU cache coherency without using the dma_sync_* APIs.
-> > Currently, these devices don't function properly with swiotlb=force. The
-> > new flag is used to bypass bounce buffers so such devices will function
-> > when the new bounce buffer optimization is enabled. The flag is added to
-> > the i915 driver, which creates such mappings. It can also be added to
-> > various dma-buf implementations as an optimization, although that is not
-> > done here.
-> >
-> > v1 -> v2:
-> >  - Replace existing untrusted bounce buffers with new bounce
-> >    buffer pools. This includes significant rework to account for
-> >    untrusted bounce buffers being required instead of an
-> >    optimization.
-> >  - Add flag for persistent streaming mappings.
-> >
->
-> Hi David,
->
-> I'm currently looking into converting s390 from our custom IOMMU based
-> DMA API implementation to using dma-iommu.c. We're always using an
-> IOMMU for PCI devices even when doing pass-through to guests (under
-> both the KVM and z/VM hypervisors). In this case I/O TLB flushes, which
-> we use to do the shadowing of the guest I/O translations, are
-> relatively expensive I'm thus very interested in your work. I've tried
-> rebasing it on v5.18 and got it to compile but didn't get DMA to work
-> though it seems to partially work as I don't get probe failures unlike
-> with a completely broken DMA API. Since I might have very well screwed
-> up the rebase and my DMA API conversion is experimental too I was
-> wondering if you're still working on this and might have a current
-> version I could experiment with?
 
-Unfortunately I don't have anything more recent to share. I've come
-across some performance issues caused by pathological usage patterns
-in internal usage, but I haven't seen any correctness issues. I'm
-hoping that I'll be able to address the performance issues and send a
-rebased series within the next month or so.
 
-It's definitely possible that this series has some bugs. I've tested
-it on a range of chromebooks and their various hardware and drivers,
-but that's still all relatively normal x86_64/arm64. If your hardware
-is more particular about its DMA, this series might be missing
-something.
+> -----Original Message-----
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Sent: Thursday, May 26, 2022 7:50 PM
+> To: Leo Li <leoyang.li@nxp.com>
+> Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux Next
+> Mailing List <linux-next@vger.kernel.org>
+> Subject: linux-next: please clean up the soc-fsl tree
+>=20
+> Hi all,
+>=20
+> The soc-fsl tree has not been updated since early January, and all its
+> changess appear to be upstream (though as different commits), so please
+> clean it up as it has started causing conflicts.
 
--David
+Sorry for that.  The branches have been cleaned up now.
+
+Regards,
+Leo

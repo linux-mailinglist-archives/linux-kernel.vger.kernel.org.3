@@ -2,96 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA67535A73
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E655359F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 09:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346951AbiE0Hcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 03:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S1346163AbiE0HMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 03:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiE0Hci (ORCPT
+        with ESMTP id S1347620AbiE0HMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 03:32:38 -0400
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B40F688C
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 00:32:34 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.191.102])
-        by smtp.orange.fr with ESMTPA
-        id uUSUn7gyWN260uUSUnhRNX; Fri, 27 May 2022 09:32:32 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 27 May 2022 09:32:32 +0200
-X-ME-IP: 90.11.191.102
-Message-ID: <a3e0df04-fb94-ef38-c2dc-1c41e6c721d9@wanadoo.fr>
-Date:   Fri, 27 May 2022 09:32:30 +0200
+        Fri, 27 May 2022 03:12:08 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF1FDB3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 00:11:35 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L8bW33QqyzRhR3;
+        Fri, 27 May 2022 15:08:31 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 15:11:33 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 15:11:33 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] virtio: Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 07:33:02 +0000
+Message-ID: <20220527073302.2474073-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] mac80211: Directly use ida_alloc()/free()
-Content-Language: en-AU
-To:     liuke94@huawei.com
-References: <20220527074132.2474867-1-liuke94@huawei.com>
-Cc:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org, kvalo@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220527074132.2474867-1-liuke94@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
-Le 27/05/2022 à 09:41, keliu a écrit :
-> Use ida_alloc()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
-> 
-> Signed-off-by: keliu <liuke94-hv44wF8Li93QT0dZR+AlfA@public.gmane.org>
-> ---
->   drivers/net/wireless/mac80211_hwsim.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
-> index e9ec63e0e395..6ad884d9e9a4 100644
-> --- a/drivers/net/wireless/mac80211_hwsim.c
-> +++ b/drivers/net/wireless/mac80211_hwsim.c
-> @@ -290,8 +290,8 @@ static inline int hwsim_net_set_netgroup(struct net *net)
->   {
->   	struct hwsim_net *hwsim_net = net_generic(net, hwsim_net_id);
->   
-> -	hwsim_net->netgroup = ida_simple_get(&hwsim_netgroup_ida,
-> -					     0, 0, GFP_KERNEL);
-> +	hwsim_net->netgroup = ida_alloc(&hwsim_netgroup_ida,
-> +					     GFP_KERNEL);
-Nitpick: GFP_KERNEL should be on the same line if there is enough space 
-or aligned with &hwsim_netgroup_ida
+Signed-off-by: keliu <liuke94@huawei.com>
+---
+ drivers/virtio/virtio.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-Out of curiosity, how do you generate these patches?
-(coccinelle should be the perfect tool for it, but I thought it would 
-already deal with alignment)
-
-CJ
-
->   	return hwsim_net->netgroup >= 0 ? 0 : -ENOMEM;
->   }
->   
-> @@ -4733,7 +4733,7 @@ static void __net_exit hwsim_exit_net(struct net *net)
->   					 NULL);
->   	}
->   
-> -	ida_simple_remove(&hwsim_netgroup_ida, hwsim_net_get_netgroup(net));
-> +	ida_free(&hwsim_netgroup_ida, hwsim_net_get_netgroup(net));
->   }
->   
->   static struct pernet_operations hwsim_net_ops = {
+diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+index 22f15f444f75..143f94652306 100644
+--- a/drivers/virtio/virtio.c
++++ b/drivers/virtio/virtio.c
+@@ -413,7 +413,7 @@ int register_virtio_device(struct virtio_device *dev)
+ 	device_initialize(&dev->dev);
+ 
+ 	/* Assign a unique device index and hence name. */
+-	err = ida_simple_get(&virtio_index_ida, 0, 0, GFP_KERNEL);
++	err = ida_alloc(&virtio_index_ida, GFP_KERNEL);
+ 	if (err < 0)
+ 		goto out;
+ 
+@@ -451,7 +451,7 @@ int register_virtio_device(struct virtio_device *dev)
+ out_of_node_put:
+ 	of_node_put(dev->dev.of_node);
+ out_ida_remove:
+-	ida_simple_remove(&virtio_index_ida, dev->index);
++	ida_free(&virtio_index_ida, dev->index);
+ out:
+ 	virtio_add_status(dev, VIRTIO_CONFIG_S_FAILED);
+ 	return err;
+@@ -469,7 +469,7 @@ void unregister_virtio_device(struct virtio_device *dev)
+ 	int index = dev->index; /* save for after device release */
+ 
+ 	device_unregister(&dev->dev);
+-	ida_simple_remove(&virtio_index_ida, index);
++	ida_free(&virtio_index_ida, index);
+ }
+ EXPORT_SYMBOL_GPL(unregister_virtio_device);
+ 
+-- 
+2.25.1
 

@@ -2,244 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB51536198
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD175361B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352365AbiE0MCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
+        id S1344000AbiE0MLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352299AbiE0Lxj (ORCPT
+        with ESMTP id S1351969AbiE0L4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:53:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF6E158959;
-        Fri, 27 May 2022 04:47:44 -0700 (PDT)
+        Fri, 27 May 2022 07:56:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533FD5FDA;
+        Fri, 27 May 2022 04:51:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00FC2B824DB;
-        Fri, 27 May 2022 11:47:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E1CC385A9;
-        Fri, 27 May 2022 11:47:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89FDE61DDC;
+        Fri, 27 May 2022 11:51:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E330C385A9;
+        Fri, 27 May 2022 11:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652061;
-        bh=zRqnFMXIDw2Yu96Nrl9zsNmWv/5/4NOdYhmH9t607/c=;
+        s=korg; t=1653652318;
+        bh=o4soIyc1vQYJQ67dGq9GBUeAqDilcx63IcfzN7572IA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eWmA/H9tz34esRs76XFeY+N/tKZyIvVugxzh52Bj7bAv1N9QOBP4R1Inmb6xZrD6y
-         uTYvefknk2pTvKvIFWWoZDgZs6XuSCdtUa11SXLqJk3OrqPwV1IAqfuLqVfK6Dp/2z
-         aUKdU7XkXBy6vWVrVcykrUlnc+SzW0840h25Rwv0=
+        b=wm/EPwP2psFqBjo7efpNrufeKc7W64WW+8zIhqNXW6yZV5bCIlO1q2Q0x9l+cBdqO
+         6XQy7LEJ+1sLmtIcY7GsAg3RBxkgIloa44sjCBSLHWsV28C3gvCL6WpS7bB5+cTXRd
+         tbP9qm6BhR7fTiALy11pmFMNgIBKDGoGOitk/ph0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 106/111] random: convert to using fops->read_iter()
-Date:   Fri, 27 May 2022 10:50:18 +0200
-Message-Id: <20220527084834.270012151@linuxfoundation.org>
+Subject: [PATCH 5.15 118/145] xtensa: use fallback for random_get_entropy() instead of zero
+Date:   Fri, 27 May 2022 10:50:19 +0200
+Message-Id: <20220527084904.805979187@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 1b388e7765f2eaa137cf5d92b47ef5925ad83ced upstream.
+commit e10e2f58030c5c211d49042a8c2a1b93d40b2ffb upstream.
 
-This is a pre-requisite to wiring up splice() again for the random
-and urandom drivers. It also allows us to remove the INT_MAX check in
-getrandom(), because import_single_range() applies capping internally.
+In the event that random_get_entropy() can't access a cycle counter or
+similar, falling back to returning 0 is really not the best we can do.
+Instead, at least calling random_get_entropy_fallback() would be
+preferable, because that always needs to return _something_, even
+falling back to jiffies eventually. It's not as though
+random_get_entropy_fallback() is super high precision or guaranteed to
+be entropic, but basically anything that's not zero all the time is
+better than returning zero all the time.
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-[Jason: rewrote get_random_bytes_user() to simplify and also incorporate
- additional suggestions from Al.]
-Cc: Al Viro <viro@zeniv.linux.org.uk>
+This is accomplished by just including the asm-generic code like on
+other architectures, which means we can get rid of the empty stub
+function here.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   66 ++++++++++++++++++++++----------------------------
- 1 file changed, 30 insertions(+), 36 deletions(-)
+ arch/xtensa/include/asm/timex.h |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -52,6 +52,7 @@
- #include <linux/uuid.h>
- #include <linux/uaccess.h>
- #include <linux/siphash.h>
-+#include <linux/uio.h>
- #include <crypto/chacha.h>
- #include <crypto/blake2s.h>
- #include <asm/processor.h>
-@@ -446,13 +447,13 @@ void get_random_bytes(void *buf, size_t
- }
- EXPORT_SYMBOL(get_random_bytes);
+--- a/arch/xtensa/include/asm/timex.h
++++ b/arch/xtensa/include/asm/timex.h
+@@ -29,10 +29,6 @@
  
--static ssize_t get_random_bytes_user(void __user *ubuf, size_t len)
-+static ssize_t get_random_bytes_user(struct iov_iter *iter)
- {
--	size_t block_len, left, ret = 0;
- 	u32 chacha_state[CHACHA_STATE_WORDS];
--	u8 output[CHACHA_BLOCK_SIZE];
-+	u8 block[CHACHA_BLOCK_SIZE];
-+	size_t ret = 0, copied;
+ extern unsigned long ccount_freq;
  
--	if (!len)
-+	if (unlikely(!iov_iter_count(iter)))
- 		return 0;
- 
- 	/*
-@@ -466,30 +467,22 @@ static ssize_t get_random_bytes_user(voi
- 	 * use chacha_state after, so we can simply return those bytes to
- 	 * the user directly.
- 	 */
--	if (len <= CHACHA_KEY_SIZE) {
--		ret = len - copy_to_user(ubuf, &chacha_state[4], len);
-+	if (iov_iter_count(iter) <= CHACHA_KEY_SIZE) {
-+		ret = copy_to_iter(&chacha_state[4], CHACHA_KEY_SIZE, iter);
- 		goto out_zero_chacha;
- 	}
- 
- 	for (;;) {
--		chacha20_block(chacha_state, output);
-+		chacha20_block(chacha_state, block);
- 		if (unlikely(chacha_state[12] == 0))
- 			++chacha_state[13];
- 
--		block_len = min_t(size_t, len, CHACHA_BLOCK_SIZE);
--		left = copy_to_user(ubuf, output, block_len);
--		if (left) {
--			ret += block_len - left;
--			break;
--		}
+-typedef unsigned long long cycles_t;
 -
--		ubuf += block_len;
--		ret += block_len;
--		len -= block_len;
--		if (!len)
-+		copied = copy_to_iter(block, sizeof(block), iter);
-+		ret += copied;
-+		if (!iov_iter_count(iter) || copied != sizeof(block))
- 			break;
+-#define get_cycles()	(0)
+-
+ void local_timer_setup(unsigned cpu);
  
--		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
-+		BUILD_BUG_ON(PAGE_SIZE % sizeof(block) != 0);
- 		if (ret % PAGE_SIZE == 0) {
- 			if (signal_pending(current))
- 				break;
-@@ -497,7 +490,7 @@ static ssize_t get_random_bytes_user(voi
- 		}
- 	}
+ /*
+@@ -59,4 +55,6 @@ static inline void set_linux_timer (unsi
+ 	xtensa_set_sr(ccompare, SREG_CCOMPARE + LINUX_TIMER);
+ }
  
--	memzero_explicit(output, sizeof(output));
-+	memzero_explicit(block, sizeof(block));
- out_zero_chacha:
- 	memzero_explicit(chacha_state, sizeof(chacha_state));
- 	return ret ? ret : -EFAULT;
-@@ -1226,6 +1219,10 @@ static void __cold try_to_generate_entro
- 
- SYSCALL_DEFINE3(getrandom, char __user *, ubuf, size_t, len, unsigned int, flags)
- {
-+	struct iov_iter iter;
-+	struct iovec iov;
-+	int ret;
++#include <asm-generic/timex.h>
 +
- 	if (flags & ~(GRND_NONBLOCK | GRND_RANDOM | GRND_INSECURE))
- 		return -EINVAL;
- 
-@@ -1236,19 +1233,18 @@ SYSCALL_DEFINE3(getrandom, char __user *
- 	if ((flags & (GRND_INSECURE | GRND_RANDOM)) == (GRND_INSECURE | GRND_RANDOM))
- 		return -EINVAL;
- 
--	if (len > INT_MAX)
--		len = INT_MAX;
--
- 	if (!crng_ready() && !(flags & GRND_INSECURE)) {
--		int ret;
--
- 		if (flags & GRND_NONBLOCK)
- 			return -EAGAIN;
- 		ret = wait_for_random_bytes();
- 		if (unlikely(ret))
- 			return ret;
- 	}
--	return get_random_bytes_user(ubuf, len);
-+
-+	ret = import_single_range(READ, ubuf, len, &iov, &iter);
-+	if (unlikely(ret))
-+		return ret;
-+	return get_random_bytes_user(&iter);
- }
- 
- static __poll_t random_poll(struct file *file, poll_table *wait)
-@@ -1292,8 +1288,7 @@ static ssize_t random_write(struct file
- 	return (ssize_t)len;
- }
- 
--static ssize_t urandom_read(struct file *file, char __user *ubuf,
--			    size_t len, loff_t *ppos)
-+static ssize_t urandom_read_iter(struct kiocb *kiocb, struct iov_iter *iter)
- {
- 	static int maxwarn = 10;
- 
-@@ -1302,23 +1297,22 @@ static ssize_t urandom_read(struct file
- 			++urandom_warning.missed;
- 		else if (ratelimit_disable || __ratelimit(&urandom_warning)) {
- 			--maxwarn;
--			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
--				  current->comm, len);
-+			pr_notice("%s: uninitialized urandom read (%zu bytes read)\n",
-+				  current->comm, iov_iter_count(iter));
- 		}
- 	}
- 
--	return get_random_bytes_user(ubuf, len);
-+	return get_random_bytes_user(iter);
- }
- 
--static ssize_t random_read(struct file *file, char __user *ubuf,
--			   size_t len, loff_t *ppos)
-+static ssize_t random_read_iter(struct kiocb *kiocb, struct iov_iter *iter)
- {
- 	int ret;
- 
- 	ret = wait_for_random_bytes();
- 	if (ret != 0)
- 		return ret;
--	return get_random_bytes_user(ubuf, len);
-+	return get_random_bytes_user(iter);
- }
- 
- static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
-@@ -1380,7 +1374,7 @@ static int random_fasync(int fd, struct
- }
- 
- const struct file_operations random_fops = {
--	.read = random_read,
-+	.read_iter = random_read_iter,
- 	.write = random_write,
- 	.poll = random_poll,
- 	.unlocked_ioctl = random_ioctl,
-@@ -1390,7 +1384,7 @@ const struct file_operations random_fops
- };
- 
- const struct file_operations urandom_fops = {
--	.read = urandom_read,
-+	.read_iter = urandom_read_iter,
- 	.write = random_write,
- 	.unlocked_ioctl = random_ioctl,
- 	.compat_ioctl = compat_ptr_ioctl,
+ #endif	/* _XTENSA_TIMEX_H */
 
 

@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEEA535FB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10A4535C0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351650AbiE0Llg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S1349937AbiE0IvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351758AbiE0LkE (ORCPT
+        with ESMTP id S245159AbiE0Iu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:40:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE129AE43;
-        Fri, 27 May 2022 04:39:15 -0700 (PDT)
+        Fri, 27 May 2022 04:50:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2220CF135A;
+        Fri, 27 May 2022 01:50:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFBE261CE7;
-        Fri, 27 May 2022 11:39:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C2CC385A9;
-        Fri, 27 May 2022 11:39:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4EA35CE237A;
+        Fri, 27 May 2022 08:50:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2F62C385A9;
+        Fri, 27 May 2022 08:50:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651554;
-        bh=dwpettXSFMIp8Nr16jiN9x0EhvkpKHFUq3JB9+fikZk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=diw27DqayOfQ8j1OGySvKXAdXDS6KkKsQsvxzZK2Ct0TsIFZi22VRk0q2urWAVIzu
-         89ex3wbXrUG+gaSjmcwvMYbhcpAvF5DppfFBFfY/NW7UsFW9TRq0MNL5Co+V7Vb784
-         xDnScE1dt0gSuN+E3BXeHd+tCvemUUJcTK/EI21k=
+        s=korg; t=1653641454;
+        bh=ofUkXB5eZZpMIZpuuB99JHmCx+kH//clxwl3lJYJ2T0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Y6F1vKf3W+i4/HpCa1QWWMjAs1z/xWe75ZrJUWckuklyLvN5AGZA2eRKBEmpAMG1I
+         C83BAtIFjxn0PBCRdIq89SSn7Ad1zH+mByWLxrKE43bFKyaTMKjrrs9tntQn08k7gd
+         yZLcwnH1CRt/eDWCXBF2WDOrg0dCs3hZtNWBz6j4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miles Chen <miles.chen@mediatek.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Eric Biggers <ebiggers@google.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 010/145] lib/crypto: blake2s: avoid indirect calls to compression function for Clang CFI
-Date:   Fri, 27 May 2022 10:48:31 +0200
-Message-Id: <20220527084852.192883260@linuxfoundation.org>
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.17 000/111] 5.17.12-rc1 review
+Date:   Fri, 27 May 2022 10:48:32 +0200
+Message-Id: <20220527084819.133490171@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.12-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.17.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.17.12-rc1
+X-KernelTest-Deadline: 2022-05-29T08:48+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -58,224 +62,412 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+This is the start of the stable review cycle for the 5.17.12 release.
+There are 111 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit d2a02e3c8bb6b347818518edff5a4b40ff52d6d8 upstream.
+Responses should be made by Sun, 29 May 2022 08:46:36 +0000.
+Anything received after that time might be too late.
 
-blake2s_compress_generic is weakly aliased by blake2s_compress. The
-current harness for function selection uses a function pointer, which is
-ordinarily inlined and resolved at compile time. But when Clang's CFI is
-enabled, CFI still triggers when making an indirect call via a weak
-symbol. This seems like a bug in Clang's CFI, as though it's bucketing
-weak symbols and strong symbols differently. It also only seems to
-trigger when "full LTO" mode is used, rather than "thin LTO".
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.12-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+and the diffstat can be found below.
 
-[    0.000000][    T0] Kernel panic - not syncing: CFI failure (target: blake2s_compress_generic+0x0/0x1444)
-[    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-mainline-06981-g076c855b846e #1
-[    0.000000][    T0] Hardware name: MT6873 (DT)
-[    0.000000][    T0] Call trace:
-[    0.000000][    T0]  dump_backtrace+0xfc/0x1dc
-[    0.000000][    T0]  dump_stack_lvl+0xa8/0x11c
-[    0.000000][    T0]  panic+0x194/0x464
-[    0.000000][    T0]  __cfi_check_fail+0x54/0x58
-[    0.000000][    T0]  __cfi_slowpath_diag+0x354/0x4b0
-[    0.000000][    T0]  blake2s_update+0x14c/0x178
-[    0.000000][    T0]  _extract_entropy+0xf4/0x29c
-[    0.000000][    T0]  crng_initialize_primary+0x24/0x94
-[    0.000000][    T0]  rand_initialize+0x2c/0x6c
-[    0.000000][    T0]  start_kernel+0x2f8/0x65c
-[    0.000000][    T0]  __primary_switched+0xc4/0x7be4
-[    0.000000][    T0] Rebooting in 5 seconds..
+thanks,
 
-Nonetheless, the function pointer method isn't so terrific anyway, so
-this patch replaces it with a simple boolean, which also gets inlined
-away. This successfully works around the Clang bug.
+greg k-h
 
-In general, I'm not too keen on all of the indirection involved here; it
-clearly does more harm than good. Hopefully the whole thing can get
-cleaned up down the road when lib/crypto is overhauled more
-comprehensively. But for now, we go with a simple bandaid.
+-------------
+Pseudo-Shortlog of commits:
 
-Fixes: 6048fdcc5f26 ("lib/crypto: blake2s: include as built-in")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1567
-Reported-by: Miles Chen <miles.chen@mediatek.com>
-Tested-by: Miles Chen <miles.chen@mediatek.com>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: John Stultz <john.stultz@linaro.org>
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/arm/crypto/blake2s-shash.c   |    4 +--
- arch/x86/crypto/blake2s-shash.c   |    4 +--
- crypto/blake2s_generic.c          |    4 +--
- include/crypto/internal/blake2s.h |   40 +++++++++++++++++++++++---------------
- lib/crypto/blake2s.c              |    4 +--
- 5 files changed, 33 insertions(+), 23 deletions(-)
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.17.12-rc1
 
---- a/arch/arm/crypto/blake2s-shash.c
-+++ b/arch/arm/crypto/blake2s-shash.c
-@@ -13,12 +13,12 @@
- static int crypto_blake2s_update_arm(struct shash_desc *desc,
- 				     const u8 *in, unsigned int inlen)
- {
--	return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
-+	return crypto_blake2s_update(desc, in, inlen, false);
- }
- 
- static int crypto_blake2s_final_arm(struct shash_desc *desc, u8 *out)
- {
--	return crypto_blake2s_final(desc, out, blake2s_compress);
-+	return crypto_blake2s_final(desc, out, false);
- }
- 
- #define BLAKE2S_ALG(name, driver_name, digest_size)			\
---- a/arch/x86/crypto/blake2s-shash.c
-+++ b/arch/x86/crypto/blake2s-shash.c
-@@ -18,12 +18,12 @@
- static int crypto_blake2s_update_x86(struct shash_desc *desc,
- 				     const u8 *in, unsigned int inlen)
- {
--	return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
-+	return crypto_blake2s_update(desc, in, inlen, false);
- }
- 
- static int crypto_blake2s_final_x86(struct shash_desc *desc, u8 *out)
- {
--	return crypto_blake2s_final(desc, out, blake2s_compress);
-+	return crypto_blake2s_final(desc, out, false);
- }
- 
- #define BLAKE2S_ALG(name, driver_name, digest_size)			\
---- a/crypto/blake2s_generic.c
-+++ b/crypto/blake2s_generic.c
-@@ -15,12 +15,12 @@
- static int crypto_blake2s_update_generic(struct shash_desc *desc,
- 					 const u8 *in, unsigned int inlen)
- {
--	return crypto_blake2s_update(desc, in, inlen, blake2s_compress_generic);
-+	return crypto_blake2s_update(desc, in, inlen, true);
- }
- 
- static int crypto_blake2s_final_generic(struct shash_desc *desc, u8 *out)
- {
--	return crypto_blake2s_final(desc, out, blake2s_compress_generic);
-+	return crypto_blake2s_final(desc, out, true);
- }
- 
- #define BLAKE2S_ALG(name, driver_name, digest_size)			\
---- a/include/crypto/internal/blake2s.h
-+++ b/include/crypto/internal/blake2s.h
-@@ -24,14 +24,11 @@ static inline void blake2s_set_lastblock
- 	state->f[0] = -1;
- }
- 
--typedef void (*blake2s_compress_t)(struct blake2s_state *state,
--				   const u8 *block, size_t nblocks, u32 inc);
--
- /* Helper functions for BLAKE2s shared by the library and shash APIs */
- 
--static inline void __blake2s_update(struct blake2s_state *state,
--				    const u8 *in, size_t inlen,
--				    blake2s_compress_t compress)
-+static __always_inline void
-+__blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen,
-+		 bool force_generic)
- {
- 	const size_t fill = BLAKE2S_BLOCK_SIZE - state->buflen;
- 
-@@ -39,7 +36,12 @@ static inline void __blake2s_update(stru
- 		return;
- 	if (inlen > fill) {
- 		memcpy(state->buf + state->buflen, in, fill);
--		(*compress)(state, state->buf, 1, BLAKE2S_BLOCK_SIZE);
-+		if (force_generic)
-+			blake2s_compress_generic(state, state->buf, 1,
-+						 BLAKE2S_BLOCK_SIZE);
-+		else
-+			blake2s_compress(state, state->buf, 1,
-+					 BLAKE2S_BLOCK_SIZE);
- 		state->buflen = 0;
- 		in += fill;
- 		inlen -= fill;
-@@ -47,7 +49,12 @@ static inline void __blake2s_update(stru
- 	if (inlen > BLAKE2S_BLOCK_SIZE) {
- 		const size_t nblocks = DIV_ROUND_UP(inlen, BLAKE2S_BLOCK_SIZE);
- 		/* Hash one less (full) block than strictly possible */
--		(*compress)(state, in, nblocks - 1, BLAKE2S_BLOCK_SIZE);
-+		if (force_generic)
-+			blake2s_compress_generic(state, in, nblocks - 1,
-+						 BLAKE2S_BLOCK_SIZE);
-+		else
-+			blake2s_compress(state, in, nblocks - 1,
-+					 BLAKE2S_BLOCK_SIZE);
- 		in += BLAKE2S_BLOCK_SIZE * (nblocks - 1);
- 		inlen -= BLAKE2S_BLOCK_SIZE * (nblocks - 1);
- 	}
-@@ -55,13 +62,16 @@ static inline void __blake2s_update(stru
- 	state->buflen += inlen;
- }
- 
--static inline void __blake2s_final(struct blake2s_state *state, u8 *out,
--				   blake2s_compress_t compress)
-+static __always_inline void
-+__blake2s_final(struct blake2s_state *state, u8 *out, bool force_generic)
- {
- 	blake2s_set_lastblock(state);
- 	memset(state->buf + state->buflen, 0,
- 	       BLAKE2S_BLOCK_SIZE - state->buflen); /* Padding */
--	(*compress)(state, state->buf, 1, state->buflen);
-+	if (force_generic)
-+		blake2s_compress_generic(state, state->buf, 1, state->buflen);
-+	else
-+		blake2s_compress(state, state->buf, 1, state->buflen);
- 	cpu_to_le32_array(state->h, ARRAY_SIZE(state->h));
- 	memcpy(out, state->h, state->outlen);
- }
-@@ -99,20 +109,20 @@ static inline int crypto_blake2s_init(st
- 
- static inline int crypto_blake2s_update(struct shash_desc *desc,
- 					const u8 *in, unsigned int inlen,
--					blake2s_compress_t compress)
-+					bool force_generic)
- {
- 	struct blake2s_state *state = shash_desc_ctx(desc);
- 
--	__blake2s_update(state, in, inlen, compress);
-+	__blake2s_update(state, in, inlen, force_generic);
- 	return 0;
- }
- 
- static inline int crypto_blake2s_final(struct shash_desc *desc, u8 *out,
--				       blake2s_compress_t compress)
-+				       bool force_generic)
- {
- 	struct blake2s_state *state = shash_desc_ctx(desc);
- 
--	__blake2s_final(state, out, compress);
-+	__blake2s_final(state, out, force_generic);
- 	return 0;
- }
- 
---- a/lib/crypto/blake2s.c
-+++ b/lib/crypto/blake2s.c
-@@ -18,14 +18,14 @@
- 
- void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen)
- {
--	__blake2s_update(state, in, inlen, blake2s_compress);
-+	__blake2s_update(state, in, inlen, false);
- }
- EXPORT_SYMBOL(blake2s_update);
- 
- void blake2s_final(struct blake2s_state *state, u8 *out)
- {
- 	WARN_ON(IS_ENABLED(DEBUG) && !out);
--	__blake2s_final(state, out, blake2s_compress);
-+	__blake2s_final(state, out, false);
- 	memzero_explicit(state, sizeof(*state));
- }
- EXPORT_SYMBOL(blake2s_final);
+Edward Matijevic <motolav@gmail.com>
+    ALSA: ctxfi: Add SB046x PCI ID
+
+Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+    ACPI: sysfs: Fix BERT error region memory mapping
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signals after page of pool writes
+
+Jens Axboe <axboe@kernel.dk>
+    random: wire up fops->splice_{read,write}_iter()
+
+Jens Axboe <axboe@kernel.dk>
+    random: convert to using fops->write_iter()
+
+Jens Axboe <axboe@kernel.dk>
+    random: convert to using fops->read_iter()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: unify batched entropy implementations
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move randomize_page() into mm where it belongs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move initialization functions out of hot pages
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make consistent use of buf and len
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use proper return types on get_random_{int,long}_wait()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove extern from functions in header
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use static branch for crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: credit architectural init the exact amount
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: handle latent entropy and command line from random_init()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use proper jiffies comparison macro
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove ratelimiting for in-kernel unseeded randomness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move initialization out of reseeding hot path
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: avoid initializing twice in credit race
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use symbolic constants for crng_init states
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    siphash: use one source of truth for siphash permutations
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: help compiler out with fast_mix() by using simpler arguments
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not use input pool from hard IRQs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: order timer entropy functions below interrupt functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not pretend to handle premature next security model
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use first 128 bits of input as fast init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not use batches when !crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: insist on random_get_entropy() existing in order to simplify
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    xtensa: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    sparc: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    um: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    x86/tsc: Use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    nios2: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    arm: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    mips: use fallback for random_get_entropy() instead of just c0 random
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    riscv: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    m68k: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    timekeeping: Add raw clock fallback for random_get_entropy()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    powerpc: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    alpha: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    parisc: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    s390: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    ia64: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    init: call time_init() before rand_initialize()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: fix sysctl documentation nits
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: document crng_fast_key_erasure() destination possibility
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make random_get_entropy() return an unsigned long
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: allow partial reads if later user copies fail
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signals every PAGE_SIZE chunk of /dev/[u]random
+
+Jann Horn <jannh@google.com>
+    random: check for signal_pending() outside of need_resched() check
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not allow user to keep crng key around on stack
+
+Jan Varho <jan.varho@gmail.com>
+    random: do not split fast init input in add_hwgenerator_randomness()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: mix build-time latent entropy into pool at init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: re-add removed comment about get_random_{u32,u64} reseeding
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: treat bootloader trust toggle the same way as cpu trust toggle
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: skip fast_init if hwrng provides large chunk of entropy
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signal and try earlier when generating entropy
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: reseed more often immediately after booting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make consistent usage of crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use SipHash as interrupt entropy accumulator
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: replace custom notifier chain with standard one
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: don't let 644 read-only sysctls be written to
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: give sysctl_random_min_urandom_seed a more sensible value
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do crng pre-init loading in worker rather than irq
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: unify cycles_t and jiffies usage and types
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: cleanup UUID handling
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: only wake up writers after zap if threshold was passed
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: round-robin registers as ulong, not u32
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: clear fast pool, crng, and batches in cpuhp bring up
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: pull add_hwgenerator_randomness() declaration into random.h
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for crng_init == 0 in add_device_randomness()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: unify early init crng load accounting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not take pool spinlock at boot
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: defer fast pool mixing to worker
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: rewrite header introductory comment
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group sysctl functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group userspace read/write functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group entropy collection functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group entropy extraction functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group crng functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group initialization wait functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove whitespace and reorder includes
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove useless header comment
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: introduce drain_entropy() helper to declutter crng_reseed()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: deobfuscate irq u32/u64 contributions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: add proper SPDX header
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove unused tracepoints
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove ifdef'd out interrupt bench
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: tie batched entropy generation to base_crng generation
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: fix locking for crng_init in crng_reseed()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: zero buffer after reading entropy from userspace
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove outdated INT_MAX >> 6 check in urandom_read()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make more consistent use of integer types
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use hash function for crng_slow_load()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use simpler fast key erasure flow on per-cpu keys
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: absorb fast pool into input pool after fast load
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not xor RDRAND when writing into /dev/random
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: ensure early RDSEED goes through mixer on init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: inline leaves of rand_initialize()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: get rid of secondary crngs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use RDSEED instead of RDRAND in entropy extraction
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: fix locking in crng_fast_load()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove batched entropy locking
+
+Eric Biggers <ebiggers@google.com>
+    random: remove use_input_pool parameter from crng_reseed()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make credit_entropy_bits() always safe
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: always wake up entropy writers after extraction
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use linear min-entropy accumulation crediting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: simplify entropy debiting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use computational hash for entropy extraction
+
+Paolo Bonzini <pbonzini@redhat.com>
+    KVM: x86/mmu: fix NULL pointer dereference on guest INVPCID
+
+Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+    HID: amd_sfh: Add support for sensor discovery
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/kernel-parameters.txt |    6 +
+ Documentation/admin-guide/sysctl/kernel.rst     |   22 +-
+ Makefile                                        |    4 +-
+ arch/alpha/include/asm/timex.h                  |    1 +
+ arch/arm/include/asm/timex.h                    |    1 +
+ arch/ia64/include/asm/timex.h                   |    1 +
+ arch/m68k/include/asm/timex.h                   |    2 +-
+ arch/mips/include/asm/timex.h                   |   17 +-
+ arch/nios2/include/asm/timex.h                  |    3 +
+ arch/parisc/include/asm/timex.h                 |    3 +-
+ arch/powerpc/include/asm/timex.h                |    1 +
+ arch/riscv/include/asm/timex.h                  |    2 +-
+ arch/s390/include/asm/timex.h                   |    1 +
+ arch/sparc/include/asm/timex_32.h               |    4 +-
+ arch/um/include/asm/timex.h                     |    9 +-
+ arch/x86/include/asm/timex.h                    |    9 +
+ arch/x86/include/asm/tsc.h                      |    7 +-
+ arch/x86/kvm/mmu/mmu.c                          |    6 +-
+ arch/xtensa/include/asm/timex.h                 |    6 +-
+ drivers/acpi/sysfs.c                            |   25 +-
+ drivers/char/Kconfig                            |    3 +-
+ drivers/char/hw_random/core.c                   |    1 +
+ drivers/char/random.c                           | 2868 +++++++++--------------
+ drivers/hid/amd-sfh-hid/amd_sfh_client.c        |   11 +
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.c          |    7 +
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.h          |    4 +
+ include/linux/cpuhotplug.h                      |    2 +
+ include/linux/hw_random.h                       |    2 -
+ include/linux/mm.h                              |    1 +
+ include/linux/prandom.h                         |   23 +-
+ include/linux/random.h                          |  100 +-
+ include/linux/siphash.h                         |   28 +
+ include/linux/timex.h                           |   10 +-
+ include/trace/events/random.h                   |  233 --
+ init/main.c                                     |   13 +-
+ kernel/cpu.c                                    |   11 +
+ kernel/time/timekeeping.c                       |   15 +
+ lib/Kconfig.debug                               |    3 +-
+ lib/random32.c                                  |   14 +-
+ lib/siphash.c                                   |   32 +-
+ lib/vsprintf.c                                  |   10 +-
+ mm/util.c                                       |   32 +
+ sound/pci/ctxfi/ctatc.c                         |    2 +
+ sound/pci/ctxfi/cthardware.h                    |    3 +-
+ 44 files changed, 1365 insertions(+), 2193 deletions(-)
 
 

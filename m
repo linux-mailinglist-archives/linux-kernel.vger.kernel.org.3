@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFD55359B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C98E5359BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 08:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344633AbiE0Gzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 02:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
+        id S1344682AbiE0G6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 02:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234917AbiE0Gzt (ORCPT
+        with ESMTP id S239313AbiE0G6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 02:55:49 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B1FB7FB
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 23:55:48 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L8bCT2T1WzjX4r;
-        Fri, 27 May 2022 14:55:01 +0800 (CST)
+        Fri, 27 May 2022 02:58:40 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C409C5D93;
+        Thu, 26 May 2022 23:58:38 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L8bFq3ml5z1JCPd;
+        Fri, 27 May 2022 14:57:03 +0800 (CST)
 Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 14:55:46 +0800
+ 15.1.2375.24; Fri, 27 May 2022 14:58:36 +0800
 Received: from localhost.localdomain (10.175.112.125) by
  dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 14:55:45 +0800
+ 15.1.2375.24; Fri, 27 May 2022 14:58:35 +0800
 From:   keliu <liuke94@huawei.com>
-To:     <kishon@ti.com>, <vkoul@kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+To:     <nirmal.patel@linux.intel.com>, <jonathan.derrick@linux.dev>,
+        <lorenzo.pieralisi@arm.com>, <robh@kernel.org>, <kw@linux.com>,
+        <bhelgaas@google.com>, <kurt.schwemmer@microsemi.com>,
+        <logang@deltatee.com>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
 CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] drivers: phy: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 07:17:14 +0000
-Message-ID: <20220527071714.2359990-1-liuke94@huawei.com>
+Subject: [PATCH] drivers: pci: Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 07:20:05 +0000
+Message-ID: <20220527072005.2360176-1-liuke94@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  dggpemm500018.china.huawei.com (7.185.36.111)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -55,31 +58,73 @@ ida_simple_get()/ida_simple_remove() .
 
 Signed-off-by: keliu <liuke94@huawei.com>
 ---
- drivers/phy/phy-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/pci/controller/vmd.c   | 6 +++---
+ drivers/pci/switch/switchtec.c | 7 +++----
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
-index 91e28d6ce450..7115727476dc 100644
---- a/drivers/phy/phy-core.c
-+++ b/drivers/phy/phy-core.c
-@@ -910,7 +910,7 @@ struct phy *phy_create(struct device *dev, struct device_node *node,
- 	if (!phy)
- 		return ERR_PTR(-ENOMEM);
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index eb05cceab964..efcb3a3ca65e 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -893,7 +893,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 		return -ENOMEM;
  
--	id = ida_simple_get(&phy_ida, 0, 0, GFP_KERNEL);
-+	id = ida_alloc(&phy_ida, GFP_KERNEL);
- 	if (id < 0) {
- 		dev_err(dev, "unable to get id\n");
- 		ret = id;
-@@ -1180,7 +1180,7 @@ static void phy_release(struct device *dev)
- 	phy = to_phy(dev);
- 	dev_vdbg(dev, "releasing '%s'\n", dev_name(dev));
- 	regulator_put(phy->pwr);
--	ida_simple_remove(&phy_ida, phy->id);
-+	ida_free(&phy_ida, phy->id);
- 	kfree(phy);
+ 	vmd->dev = dev;
+-	vmd->instance = ida_simple_get(&vmd_instance_ida, 0, 0, GFP_KERNEL);
++	vmd->instance = ida_alloc(&vmd_instance_ida, GFP_KERNEL);
+ 	if (vmd->instance < 0)
+ 		return vmd->instance;
+ 
+@@ -934,7 +934,7 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	return 0;
+ 
+  out_release_instance:
+-	ida_simple_remove(&vmd_instance_ida, vmd->instance);
++	ida_free(&vmd_instance_ida, vmd->instance);
+ 	kfree(vmd->name);
+ 	return err;
+ }
+@@ -957,7 +957,7 @@ static void vmd_remove(struct pci_dev *dev)
+ 	vmd_cleanup_srcu(vmd);
+ 	vmd_detach_resources(vmd);
+ 	vmd_remove_irq_domain(vmd);
+-	ida_simple_remove(&vmd_instance_ida, vmd->instance);
++	ida_free(&vmd_instance_ida, vmd->instance);
+ 	kfree(vmd->name);
  }
  
+diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
+index c36c1238c604..75be4fe22509 100644
+--- a/drivers/pci/switch/switchtec.c
++++ b/drivers/pci/switch/switchtec.c
+@@ -1376,8 +1376,7 @@ static struct switchtec_dev *stdev_create(struct pci_dev *pdev)
+ 	dev->groups = switchtec_device_groups;
+ 	dev->release = stdev_release;
+ 
+-	minor = ida_simple_get(&switchtec_minor_ida, 0, 0,
+-			       GFP_KERNEL);
++	minor = ida_alloc(&switchtec_minor_ida, GFP_KERNEL);
+ 	if (minor < 0) {
+ 		rc = minor;
+ 		goto err_put;
+@@ -1692,7 +1691,7 @@ static int switchtec_pci_probe(struct pci_dev *pdev,
+ err_devadd:
+ 	stdev_kill(stdev);
+ err_put:
+-	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
++	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+ 	put_device(&stdev->dev);
+ 	return rc;
+ }
+@@ -1704,7 +1703,7 @@ static void switchtec_pci_remove(struct pci_dev *pdev)
+ 	pci_set_drvdata(pdev, NULL);
+ 
+ 	cdev_device_del(&stdev->cdev, &stdev->dev);
+-	ida_simple_remove(&switchtec_minor_ida, MINOR(stdev->dev.devt));
++	ida_free(&switchtec_minor_ida, MINOR(stdev->dev.devt));
+ 	dev_info(&stdev->dev, "unregistered.\n");
+ 	stdev_kill(stdev);
+ 	put_device(&stdev->dev);
 -- 
 2.25.1
 

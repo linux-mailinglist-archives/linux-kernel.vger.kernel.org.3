@@ -2,81 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4869F535E01
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33652535DFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350872AbiE0KQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 06:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S1350865AbiE0KQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 06:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240890AbiE0KQI (ORCPT
+        with ESMTP id S1344125AbiE0KQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 06:16:08 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87596106A6A;
-        Fri, 27 May 2022 03:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653646567; x=1685182567;
-  h=from:to:cc:subject:date:message-id;
-  bh=JjbnnMSRoLOJod2CWxV4vK/Y2fmBbrZOVMe5g6r53VA=;
-  b=vorBKOXolH+pd6ENe7q1O0mgSGiwVvt9J5Hsxny5z7wYg2MAIezGOHLm
-   DBHSZvlMTlmGMiGat1LBrWL2RokXeBy5AvQBwMtEPmnoLdkJ7U/Faf/Em
-   LwYGopqOf7JLa445Dv3VIZYWt4JbHd5qy3iGTixRaOFpuogsUADUSu1eI
-   I=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 27 May 2022 03:16:07 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 27 May 2022 03:16:06 -0700
-X-QCInternal: smtphost
-Received: from hyd-lablnx377.qualcomm.com ([10.204.178.226])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 27 May 2022 15:45:48 +0530
-Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
-        id DB92520F2F; Fri, 27 May 2022 15:45:47 +0530 (IST)
-From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
-Cc:     mka@chromium.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, quic_hemantg@quicinc.com,
-        quic_bgodavar@quicinc.com, quic_rjliao@quicinc.com,
-        quic_hbandi@quicinc.com, abhishekpandit@chromium.org,
-        mcchou@chromium.org, Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Subject: [RESEND v1] Bluetooth: hci_qca: Return wakeup for qca_wakeup
-Date:   Fri, 27 May 2022 15:45:43 +0530
-Message-Id: <1653646543-349-1-git-send-email-quic_saluvala@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 27 May 2022 06:16:02 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8869B106A62;
+        Fri, 27 May 2022 03:16:01 -0700 (PDT)
+Date:   Fri, 27 May 2022 10:15:58 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653646559;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DqbO8lBAtQQqUxPb04OcA1nfzUcOE4oNGSONA0ML0Tk=;
+        b=zUE0cdL/U16vDerZ3jMzu2PtkGKhCouIBQt/5izxfupVYkSgJ99JbihX4aNHyIZ4WOybKG
+        xgoE9mI3liDNChEF+PLZtCLrJjJGG+8C8fw0gaVBfo/7L/I7afpCZxZao5B0ZNVxYzB7pY
+        Sqhluyv0CWlbSMlE8fLmgiI3dJVnZYqr5FE01Rx1uCmCOyz2sCOev4lCfdVh8UfqMebusi
+        GZOwnQ7RkIbw8d5w65tdiT1aYjjjANm5ORcY3w1AsJXMjM4DypcmxMz4KHVkoqpmty+2Kg
+        KUTWDHjDfNOuZF1fXfnmEJ6lRtNo0k+pwYMpLN/Zm+5D9H1DrDGEfDMLk5j4VA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653646559;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DqbO8lBAtQQqUxPb04OcA1nfzUcOE4oNGSONA0ML0Tk=;
+        b=Qi4iXw1Ql41nsUGgp9FjLiJkdOfC54Au5Viod3TbFJztvZWGdpAZrTYnDY0GQ3/6mniJDT
+        LwsGK7SYg0op2rAA==
+From:   "tip-bot2 for Haowen Bai" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/urgent] perf/core: Remove unused local variable
+Cc:     Haowen Bai <baihaowen@meizu.com>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <1653645835-29206-1-git-send-email-baihaowen@meizu.com>
+References: <1653645835-29206-1-git-send-email-baihaowen@meizu.com>
+MIME-Version: 1.0
+Message-ID: <165364655849.4207.2066662775081437250.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This fixes the return value of qca_wakeup(), since
-.wakeup work inversely with original .prevent_wake.
+The following commit has been merged into the perf/urgent branch of tip:
 
-Fixes: 4539ca67fe8ed (Bluetooth: Rename driver .prevent_wake to .wakeup)
-Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+Commit-ID:     8b4dd2d8627e88dc3bd71bf29c48aaae2b69572b
+Gitweb:        https://git.kernel.org/tip/8b4dd2d8627e88dc3bd71bf29c48aaae2b69572b
+Author:        Haowen Bai <baihaowen@meizu.com>
+AuthorDate:    Fri, 27 May 2022 18:03:54 +08:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Fri, 27 May 2022 12:14:16 +02:00
+
+perf/core: Remove unused local variable
+
+Drop LIST_HEAD() where the variable it declares is never used.
+
+Compiler probably never warned us, because the LIST_HEAD()
+initializer is technically 'usage'.
+
+[ mingo: Tweak changelog. ]
+
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/1653645835-29206-1-git-send-email-baihaowen@meizu.com
 ---
- drivers/bluetooth/hci_qca.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/events/core.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index eab34e2..8df1101 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1588,7 +1588,7 @@ static bool qca_wakeup(struct hci_dev *hdev)
- 	wakeup = device_may_wakeup(hu->serdev->ctrl->dev.parent);
- 	bt_dev_dbg(hu->hdev, "wakeup status : %d", wakeup);
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 950b25c..80782cd 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -4257,7 +4257,6 @@ static void perf_event_remove_on_exec(int ctxn)
+ {
+ 	struct perf_event_context *ctx, *clone_ctx = NULL;
+ 	struct perf_event *event, *next;
+-	LIST_HEAD(free_list);
+ 	unsigned long flags;
+ 	bool modified = false;
  
--	return !wakeup;
-+	return wakeup;
- }
- 
- static int qca_regulator_init(struct hci_uart *hu)
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
-

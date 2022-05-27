@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03196535CBB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02005360D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350259AbiE0Izy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58838 "EHLO
+        id S239138AbiE0Lx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350196AbiE0Iyg (ORCPT
+        with ESMTP id S1352185AbiE0LuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:54:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C136A5A2E3;
-        Fri, 27 May 2022 01:53:17 -0700 (PDT)
+        Fri, 27 May 2022 07:50:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8187314CDCB;
+        Fri, 27 May 2022 04:44:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0217861D3E;
-        Fri, 27 May 2022 08:53:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752CCC385B8;
-        Fri, 27 May 2022 08:53:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF3C861D52;
+        Fri, 27 May 2022 11:44:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B56EC385A9;
+        Fri, 27 May 2022 11:44:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641596;
-        bh=iCWXMb960TC0fIUvQaNI3MVhpABJYPoc4oZGpjNWs94=;
+        s=korg; t=1653651853;
+        bh=WIchkRjGTO416Jgw6cGrJ4/dI+cgw0tsxUh97aeTTjM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tch57Dsl4BVojG7aGgGal7ThowwW7/KJ920h54Ssz0plWFv6+gBBWhxZ6y4gBZU+X
-         bfJ3fYjaCXsfEZgFW83RqgoJTsSPPpIu9EHLrS9SBM6mNe4aAr10rxpHufnD2SmHmo
-         5DjonutogBkBteo1BFoYpU7D9klwdTKq7XTS70W0=
+        b=UFWMi8pYKvLDIjaR0M1p4kPHgb6FcPkRPZR6tEeoyEslkcJEbZXfEnFxWDR41R8fa
+         YydLxhyrOwey0BTUhsfmBYvd57UTXKvfW8WDolg66TLySFpjGxCnJJmZFZnmGQQAeO
+         U/L8zFNJd0ZSnUzDzXBJtnPpznTBoUmPZFKz3uRo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.18 22/47] random: use first 128 bits of input as fast init
-Date:   Fri, 27 May 2022 10:50:02 +0200
-Message-Id: <20220527084805.052097150@linuxfoundation.org>
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.17 091/111] siphash: use one source of truth for siphash permutations
+Date:   Fri, 27 May 2022 10:50:03 +0200
+Message-Id: <20220527084832.319059938@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
-References: <20220527084801.223648383@linuxfoundation.org>
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+References: <20220527084819.133490171@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,305 +55,221 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 5c3b747ef54fa2a7318776777f6044540d99f721 upstream.
+commit e73aaae2fa9024832e1f42e30c787c7baf61d014 upstream.
 
-Before, the first 64 bytes of input, regardless of how entropic it was,
-would be used to mutate the crng base key directly, and none of those
-bytes would be credited as having entropy. Then 256 bits of credited
-input would be accumulated, and only then would the rng transition from
-the earlier "fast init" phase into being actually initialized.
+The SipHash family of permutations is currently used in three places:
 
-The thinking was that by mixing and matching fast init and real init, an
-attacker who compromised the fast init state, considered easy to do
-given how little entropy might be in those first 64 bytes, would then be
-able to bruteforce bits from the actual initialization. By keeping these
-separate, bruteforcing became impossible.
+- siphash.c itself, used in the ordinary way it was intended.
+- random32.c, in a construction from an anonymous contributor.
+- random.c, as part of its fast_mix function.
 
-However, by not crediting potentially creditable bits from those first 64
-bytes of input, we delay initialization, and actually make the problem
-worse, because it means the user is drawing worse random numbers for a
-longer period of time.
+Each one of these places reinvents the wheel with the same C code, same
+rotation constants, and same symmetry-breaking constants.
 
-Instead, we can take the first 128 bits as fast init, and allow them to
-be credited, and then hold off on the next 128 bits until they've
-accumulated. This is still a wide enough margin to prevent bruteforcing
-the rng state, while still initializing much faster.
+This commit tidies things up a bit by placing macros for the
+permutations and constants into siphash.h, where each of the three .c
+users can access them. It also leaves a note dissuading more users of
+them from emerging.
 
-Then, rather than trying to piecemeal inject into the base crng key at
-various points, instead just extract from the pool when we need it, for
-the crng_init==0 phase. Performance may even be better for the various
-inputs here, since there are likely more calls to mix_pool_bytes() then
-there are to get_random_bytes() during this phase of system execution.
-
-Since the preinit injection code is gone, bootloader randomness can then
-do something significantly more straight forward, removing the weird
-system_wq hack in hwgenerator randomness.
-
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |  146 ++++++++++++++++----------------------------------
- 1 file changed, 49 insertions(+), 97 deletions(-)
+ drivers/char/random.c   |   30 +++++++-----------------------
+ include/linux/prandom.h |   23 +++++++----------------
+ include/linux/siphash.h |   28 ++++++++++++++++++++++++++++
+ lib/siphash.c           |   32 ++++++++++----------------------
+ 4 files changed, 52 insertions(+), 61 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -231,10 +231,7 @@ static void _warn_unseeded_randomness(co
-  *
-  *********************************************************************/
+@@ -51,6 +51,7 @@
+ #include <linux/completion.h>
+ #include <linux/uuid.h>
+ #include <linux/uaccess.h>
++#include <linux/siphash.h>
+ #include <crypto/chacha.h>
+ #include <crypto/blake2s.h>
+ #include <asm/processor.h>
+@@ -1014,12 +1015,11 @@ struct fast_pool {
  
--enum {
--	CRNG_RESEED_INTERVAL = 300 * HZ,
--	CRNG_INIT_CNT_THRESH = 2 * CHACHA_KEY_SIZE
--};
-+enum { CRNG_RESEED_INTERVAL = 300 * HZ };
- 
- static struct {
- 	u8 key[CHACHA_KEY_SIZE] __aligned(__alignof__(long));
-@@ -258,6 +255,8 @@ static DEFINE_PER_CPU(struct crng, crngs
- 
- /* Used by crng_reseed() to extract a new seed from the input pool. */
- static bool drain_entropy(void *buf, size_t nbytes, bool force);
-+/* Used by crng_make_state() to extract a new seed when crng_init==0. */
-+static void extract_entropy(void *buf, size_t nbytes);
- 
- /*
-  * This extracts a new crng key from the input pool, but only if there is a
-@@ -382,17 +381,20 @@ static void crng_make_state(u32 chacha_s
- 	/*
- 	 * For the fast path, we check whether we're ready, unlocked first, and
- 	 * then re-check once locked later. In the case where we're really not
--	 * ready, we do fast key erasure with the base_crng directly, because
--	 * this is what crng_pre_init_inject() mutates during early init.
-+	 * ready, we do fast key erasure with the base_crng directly, extracting
-+	 * when crng_init==0.
- 	 */
- 	if (!crng_ready()) {
- 		bool ready;
- 
- 		spin_lock_irqsave(&base_crng.lock, flags);
- 		ready = crng_ready();
--		if (!ready)
-+		if (!ready) {
-+			if (crng_init == 0)
-+				extract_entropy(base_crng.key, sizeof(base_crng.key));
- 			crng_fast_key_erasure(base_crng.key, chacha_state,
- 					      random_data, random_data_len);
-+		}
- 		spin_unlock_irqrestore(&base_crng.lock, flags);
- 		if (!ready)
- 			return;
-@@ -433,48 +435,6 @@ static void crng_make_state(u32 chacha_s
- 	local_unlock_irqrestore(&crngs.lock, flags);
- }
- 
--/*
-- * This function is for crng_init == 0 only. It loads entropy directly
-- * into the crng's key, without going through the input pool. It is,
-- * generally speaking, not very safe, but we use this only at early
-- * boot time when it's better to have something there rather than
-- * nothing.
-- *
-- * If account is set, then the crng_init_cnt counter is incremented.
-- * This shouldn't be set by functions like add_device_randomness(),
-- * where we can't trust the buffer passed to it is guaranteed to be
-- * unpredictable (so it might not have any entropy at all).
-- */
--static void crng_pre_init_inject(const void *input, size_t len, bool account)
--{
--	static int crng_init_cnt = 0;
--	struct blake2s_state hash;
--	unsigned long flags;
--
--	blake2s_init(&hash, sizeof(base_crng.key));
--
--	spin_lock_irqsave(&base_crng.lock, flags);
--	if (crng_init != 0) {
--		spin_unlock_irqrestore(&base_crng.lock, flags);
--		return;
--	}
--
--	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
--	blake2s_update(&hash, input, len);
--	blake2s_final(&hash, base_crng.key);
--
--	if (account) {
--		crng_init_cnt += min_t(size_t, len, CRNG_INIT_CNT_THRESH - crng_init_cnt);
--		if (crng_init_cnt >= CRNG_INIT_CNT_THRESH)
--			crng_init = 1;
--	}
--
--	spin_unlock_irqrestore(&base_crng.lock, flags);
--
--	if (crng_init == 1)
--		pr_notice("fast init done\n");
--}
--
- static void _get_random_bytes(void *buf, size_t nbytes)
- {
- 	u32 chacha_state[CHACHA_STATE_WORDS];
-@@ -787,7 +747,8 @@ EXPORT_SYMBOL(get_random_bytes_arch);
- 
- enum {
- 	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
--	POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
-+	POOL_MIN_BITS = POOL_BITS, /* No point in settling for less. */
-+	POOL_FAST_INIT_BITS = POOL_MIN_BITS / 2
+ static DEFINE_PER_CPU(struct fast_pool, irq_randomness) = {
+ #ifdef CONFIG_64BIT
+-	/* SipHash constants */
+-	.pool = { 0x736f6d6570736575UL, 0x646f72616e646f6dUL,
+-		  0x6c7967656e657261UL, 0x7465646279746573UL }
++#define FASTMIX_PERM SIPHASH_PERMUTATION
++	.pool = { SIPHASH_CONST_0, SIPHASH_CONST_1, SIPHASH_CONST_2, SIPHASH_CONST_3 }
+ #else
+-	/* HalfSipHash constants */
+-	.pool = { 0, 0, 0x6c796765U, 0x74656462U }
++#define FASTMIX_PERM HSIPHASH_PERMUTATION
++	.pool = { HSIPHASH_CONST_0, HSIPHASH_CONST_1, HSIPHASH_CONST_2, HSIPHASH_CONST_3 }
+ #endif
  };
  
- /* For notifying userspace should write into /dev/random. */
-@@ -824,24 +785,6 @@ static void mix_pool_bytes(const void *i
- 	spin_unlock_irqrestore(&input_pool.lock, flags);
- }
- 
--static void credit_entropy_bits(size_t nbits)
--{
--	unsigned int entropy_count, orig, add;
--
--	if (!nbits)
--		return;
--
--	add = min_t(size_t, nbits, POOL_BITS);
--
--	do {
--		orig = READ_ONCE(input_pool.entropy_count);
--		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
--	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
--
--	if (!crng_ready() && entropy_count >= POOL_MIN_BITS)
--		crng_reseed(false);
--}
--
- /*
-  * This is an HKDF-like construction for using the hashed collected entropy
-  * as a PRF key, that's then expanded block-by-block.
-@@ -907,6 +850,33 @@ static bool drain_entropy(void *buf, siz
- 	return true;
- }
- 
-+static void credit_entropy_bits(size_t nbits)
-+{
-+	unsigned int entropy_count, orig, add;
-+	unsigned long flags;
-+
-+	if (!nbits)
-+		return;
-+
-+	add = min_t(size_t, nbits, POOL_BITS);
-+
-+	do {
-+		orig = READ_ONCE(input_pool.entropy_count);
-+		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
-+	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
-+
-+	if (!crng_ready() && entropy_count >= POOL_MIN_BITS)
-+		crng_reseed(false);
-+	else if (unlikely(crng_init == 0 && entropy_count >= POOL_FAST_INIT_BITS)) {
-+		spin_lock_irqsave(&base_crng.lock, flags);
-+		if (crng_init == 0) {
-+			extract_entropy(base_crng.key, sizeof(base_crng.key));
-+			crng_init = 1;
-+		}
-+		spin_unlock_irqrestore(&base_crng.lock, flags);
-+	}
-+}
-+
- 
- /**********************************************************************
-  *
-@@ -950,9 +920,9 @@ static bool drain_entropy(void *buf, siz
-  * entropy as specified by the caller. If the entropy pool is full it will
-  * block until more entropy is needed.
-  *
-- * add_bootloader_randomness() is the same as add_hwgenerator_randomness() or
-- * add_device_randomness(), depending on whether or not the configuration
-- * option CONFIG_RANDOM_TRUST_BOOTLOADER is set.
-+ * add_bootloader_randomness() is called by bootloader drivers, such as EFI
-+ * and device tree, and credits its input depending on whether or not the
-+ * configuration option CONFIG_RANDOM_TRUST_BOOTLOADER is set.
-  *
-  * add_vmfork_randomness() adds a unique (but not necessarily secret) ID
-  * representing the current instance of a VM to the pool, without crediting,
-@@ -1036,9 +1006,6 @@ void add_device_randomness(const void *b
- 	unsigned long entropy = random_get_entropy();
- 	unsigned long flags;
- 
--	if (crng_init == 0 && size)
--		crng_pre_init_inject(buf, size, false);
--
- 	spin_lock_irqsave(&input_pool.lock, flags);
- 	_mix_pool_bytes(&entropy, sizeof(entropy));
- 	_mix_pool_bytes(buf, size);
-@@ -1154,12 +1121,6 @@ void rand_initialize_disk(struct gendisk
- void add_hwgenerator_randomness(const void *buffer, size_t count,
- 				size_t entropy)
- {
--	if (unlikely(crng_init == 0 && entropy < POOL_MIN_BITS)) {
--		crng_pre_init_inject(buffer, count, true);
--		mix_pool_bytes(buffer, count);
--		return;
--	}
--
- 	/*
- 	 * Throttle writing if we're above the trickle threshold.
- 	 * We'll be woken up again once below POOL_MIN_BITS, when
-@@ -1167,7 +1128,7 @@ void add_hwgenerator_randomness(const vo
- 	 * CRNG_RESEED_INTERVAL has elapsed.
- 	 */
- 	wait_event_interruptible_timeout(random_write_wait,
--			!system_wq || kthread_should_stop() ||
-+			kthread_should_stop() ||
- 			input_pool.entropy_count < POOL_MIN_BITS,
- 			CRNG_RESEED_INTERVAL);
- 	mix_pool_bytes(buffer, count);
-@@ -1176,17 +1137,14 @@ void add_hwgenerator_randomness(const vo
- EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
- 
- /*
-- * Handle random seed passed by bootloader.
-- * If the seed is trustworthy, it would be regarded as hardware RNGs. Otherwise
-- * it would be regarded as device data.
-- * The decision is controlled by CONFIG_RANDOM_TRUST_BOOTLOADER.
-+ * Handle random seed passed by bootloader, and credit it if
-+ * CONFIG_RANDOM_TRUST_BOOTLOADER is set.
+@@ -1031,27 +1031,11 @@ static DEFINE_PER_CPU(struct fast_pool,
   */
- void add_bootloader_randomness(const void *buf, size_t size)
+ static void fast_mix(unsigned long s[4], unsigned long v1, unsigned long v2)
  {
-+	mix_pool_bytes(buf, size);
- 	if (trust_bootloader)
--		add_hwgenerator_randomness(buf, size, size * 8);
--	else
--		add_device_randomness(buf, size);
-+		credit_entropy_bits(size * 8);
+-#ifdef CONFIG_64BIT
+-#define PERM() do { \
+-	s[0] += s[1]; s[1] = rol64(s[1], 13); s[1] ^= s[0]; s[0] = rol64(s[0], 32); \
+-	s[2] += s[3]; s[3] = rol64(s[3], 16); s[3] ^= s[2]; \
+-	s[0] += s[3]; s[3] = rol64(s[3], 21); s[3] ^= s[0]; \
+-	s[2] += s[1]; s[1] = rol64(s[1], 17); s[1] ^= s[2]; s[2] = rol64(s[2], 32); \
+-} while (0)
+-#else
+-#define PERM() do { \
+-	s[0] += s[1]; s[1] = rol32(s[1],  5); s[1] ^= s[0]; s[0] = rol32(s[0], 16); \
+-	s[2] += s[3]; s[3] = rol32(s[3],  8); s[3] ^= s[2]; \
+-	s[0] += s[3]; s[3] = rol32(s[3],  7); s[3] ^= s[0]; \
+-	s[2] += s[1]; s[1] = rol32(s[1], 13); s[1] ^= s[2]; s[2] = rol32(s[2], 16); \
+-} while (0)
+-#endif
+-
+ 	s[3] ^= v1;
+-	PERM();
++	FASTMIX_PERM(s[0], s[1], s[2], s[3]);
+ 	s[0] ^= v1;
+ 	s[3] ^= v2;
+-	PERM();
++	FASTMIX_PERM(s[0], s[1], s[2], s[3]);
+ 	s[0] ^= v2;
  }
- EXPORT_SYMBOL_GPL(add_bootloader_randomness);
  
-@@ -1320,13 +1278,8 @@ static void mix_interrupt_randomness(str
- 	fast_pool->last = jiffies;
- 	local_irq_enable();
+--- a/include/linux/prandom.h
++++ b/include/linux/prandom.h
+@@ -10,6 +10,7 @@
  
--	if (unlikely(crng_init == 0)) {
--		crng_pre_init_inject(pool, sizeof(pool), true);
--		mix_pool_bytes(pool, sizeof(pool));
--	} else {
--		mix_pool_bytes(pool, sizeof(pool));
--		credit_entropy_bits(1);
--	}
-+	mix_pool_bytes(pool, sizeof(pool));
-+	credit_entropy_bits(1);
+ #include <linux/types.h>
+ #include <linux/percpu.h>
++#include <linux/siphash.h>
  
- 	memzero_explicit(pool, sizeof(pool));
+ u32 prandom_u32(void);
+ void prandom_bytes(void *buf, size_t nbytes);
+@@ -27,15 +28,10 @@ DECLARE_PER_CPU(unsigned long, net_rand_
+  * The core SipHash round function.  Each line can be executed in
+  * parallel given enough CPU resources.
+  */
+-#define PRND_SIPROUND(v0, v1, v2, v3) ( \
+-	v0 += v1, v1 = rol64(v1, 13),  v2 += v3, v3 = rol64(v3, 16), \
+-	v1 ^= v0, v0 = rol64(v0, 32),  v3 ^= v2,                     \
+-	v0 += v3, v3 = rol64(v3, 21),  v2 += v1, v1 = rol64(v1, 17), \
+-	v3 ^= v0,                      v1 ^= v2, v2 = rol64(v2, 32)  \
+-)
++#define PRND_SIPROUND(v0, v1, v2, v3) SIPHASH_PERMUTATION(v0, v1, v2, v3)
+ 
+-#define PRND_K0 (0x736f6d6570736575 ^ 0x6c7967656e657261)
+-#define PRND_K1 (0x646f72616e646f6d ^ 0x7465646279746573)
++#define PRND_K0 (SIPHASH_CONST_0 ^ SIPHASH_CONST_2)
++#define PRND_K1 (SIPHASH_CONST_1 ^ SIPHASH_CONST_3)
+ 
+ #elif BITS_PER_LONG == 32
+ /*
+@@ -43,14 +39,9 @@ DECLARE_PER_CPU(unsigned long, net_rand_
+  * This is weaker, but 32-bit machines are not used for high-traffic
+  * applications, so there is less output for an attacker to analyze.
+  */
+-#define PRND_SIPROUND(v0, v1, v2, v3) ( \
+-	v0 += v1, v1 = rol32(v1,  5),  v2 += v3, v3 = rol32(v3,  8), \
+-	v1 ^= v0, v0 = rol32(v0, 16),  v3 ^= v2,                     \
+-	v0 += v3, v3 = rol32(v3,  7),  v2 += v1, v1 = rol32(v1, 13), \
+-	v3 ^= v0,                      v1 ^= v2, v2 = rol32(v2, 16)  \
+-)
+-#define PRND_K0 0x6c796765
+-#define PRND_K1 0x74656462
++#define PRND_SIPROUND(v0, v1, v2, v3) HSIPHASH_PERMUTATION(v0, v1, v2, v3)
++#define PRND_K0 (HSIPHASH_CONST_0 ^ HSIPHASH_CONST_2)
++#define PRND_K1 (HSIPHASH_CONST_1 ^ HSIPHASH_CONST_3)
+ 
+ #else
+ #error Unsupported BITS_PER_LONG
+--- a/include/linux/siphash.h
++++ b/include/linux/siphash.h
+@@ -138,4 +138,32 @@ static inline u32 hsiphash(const void *d
+ 	return ___hsiphash_aligned(data, len, key);
  }
-@@ -1348,8 +1301,7 @@ void add_interrupt_randomness(int irq)
- 	if (new_count & MIX_INFLIGHT)
- 		return;
  
--	if (new_count < 64 && (!time_is_before_jiffies(fast_pool->last + HZ) ||
--			       unlikely(crng_init == 0)))
-+	if (new_count < 64 && !time_is_before_jiffies(fast_pool->last + HZ))
- 		return;
++/*
++ * These macros expose the raw SipHash and HalfSipHash permutations.
++ * Do not use them directly! If you think you have a use for them,
++ * be sure to CC the maintainer of this file explaining why.
++ */
++
++#define SIPHASH_PERMUTATION(a, b, c, d) ( \
++	(a) += (b), (b) = rol64((b), 13), (b) ^= (a), (a) = rol64((a), 32), \
++	(c) += (d), (d) = rol64((d), 16), (d) ^= (c), \
++	(a) += (d), (d) = rol64((d), 21), (d) ^= (a), \
++	(c) += (b), (b) = rol64((b), 17), (b) ^= (c), (c) = rol64((c), 32))
++
++#define SIPHASH_CONST_0 0x736f6d6570736575ULL
++#define SIPHASH_CONST_1 0x646f72616e646f6dULL
++#define SIPHASH_CONST_2 0x6c7967656e657261ULL
++#define SIPHASH_CONST_3 0x7465646279746573ULL
++
++#define HSIPHASH_PERMUTATION(a, b, c, d) ( \
++	(a) += (b), (b) = rol32((b), 5), (b) ^= (a), (a) = rol32((a), 16), \
++	(c) += (d), (d) = rol32((d), 8), (d) ^= (c), \
++	(a) += (d), (d) = rol32((d), 7), (d) ^= (a), \
++	(c) += (b), (b) = rol32((b), 13), (b) ^= (c), (c) = rol32((c), 16))
++
++#define HSIPHASH_CONST_0 0U
++#define HSIPHASH_CONST_1 0U
++#define HSIPHASH_CONST_2 0x6c796765U
++#define HSIPHASH_CONST_3 0x74656462U
++
+ #endif /* _LINUX_SIPHASH_H */
+--- a/lib/siphash.c
++++ b/lib/siphash.c
+@@ -18,19 +18,13 @@
+ #include <asm/word-at-a-time.h>
+ #endif
  
- 	if (unlikely(!fast_pool->mix.func))
+-#define SIPROUND \
+-	do { \
+-	v0 += v1; v1 = rol64(v1, 13); v1 ^= v0; v0 = rol64(v0, 32); \
+-	v2 += v3; v3 = rol64(v3, 16); v3 ^= v2; \
+-	v0 += v3; v3 = rol64(v3, 21); v3 ^= v0; \
+-	v2 += v1; v1 = rol64(v1, 17); v1 ^= v2; v2 = rol64(v2, 32); \
+-	} while (0)
++#define SIPROUND SIPHASH_PERMUTATION(v0, v1, v2, v3)
+ 
+ #define PREAMBLE(len) \
+-	u64 v0 = 0x736f6d6570736575ULL; \
+-	u64 v1 = 0x646f72616e646f6dULL; \
+-	u64 v2 = 0x6c7967656e657261ULL; \
+-	u64 v3 = 0x7465646279746573ULL; \
++	u64 v0 = SIPHASH_CONST_0; \
++	u64 v1 = SIPHASH_CONST_1; \
++	u64 v2 = SIPHASH_CONST_2; \
++	u64 v3 = SIPHASH_CONST_3; \
+ 	u64 b = ((u64)(len)) << 56; \
+ 	v3 ^= key->key[1]; \
+ 	v2 ^= key->key[0]; \
+@@ -389,19 +383,13 @@ u32 hsiphash_4u32(const u32 first, const
+ }
+ EXPORT_SYMBOL(hsiphash_4u32);
+ #else
+-#define HSIPROUND \
+-	do { \
+-	v0 += v1; v1 = rol32(v1, 5); v1 ^= v0; v0 = rol32(v0, 16); \
+-	v2 += v3; v3 = rol32(v3, 8); v3 ^= v2; \
+-	v0 += v3; v3 = rol32(v3, 7); v3 ^= v0; \
+-	v2 += v1; v1 = rol32(v1, 13); v1 ^= v2; v2 = rol32(v2, 16); \
+-	} while (0)
++#define HSIPROUND HSIPHASH_PERMUTATION(v0, v1, v2, v3)
+ 
+ #define HPREAMBLE(len) \
+-	u32 v0 = 0; \
+-	u32 v1 = 0; \
+-	u32 v2 = 0x6c796765U; \
+-	u32 v3 = 0x74656462U; \
++	u32 v0 = HSIPHASH_CONST_0; \
++	u32 v1 = HSIPHASH_CONST_1; \
++	u32 v2 = HSIPHASH_CONST_2; \
++	u32 v3 = HSIPHASH_CONST_3; \
+ 	u32 b = ((u32)(len)) << 24; \
+ 	v3 ^= key->key[1]; \
+ 	v2 ^= key->key[0]; \
 
 

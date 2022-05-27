@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDF1535CA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00245361D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350124AbiE0Iy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
+        id S1353169AbiE0MKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350095AbiE0Ixl (ORCPT
+        with ESMTP id S1353433AbiE0L4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:53:41 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E653F5BE74;
-        Fri, 27 May 2022 01:52:53 -0700 (PDT)
+        Fri, 27 May 2022 07:56:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99DA3889;
+        Fri, 27 May 2022 04:51:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4E49ECE23D0;
-        Fri, 27 May 2022 08:52:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2772EC385A9;
-        Fri, 27 May 2022 08:52:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C57CB824CA;
+        Fri, 27 May 2022 11:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC40BC385A9;
+        Fri, 27 May 2022 11:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641570;
-        bh=s6T+HuT78bAP0HH1vMwcpZGWnTvNxrhKCd8tLlgc4lE=;
+        s=korg; t=1653652309;
+        bh=N4I2vRnlz5HhcFVb3tpYEZeesn0q49B0+WAvsvwec5E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FWKfPHEeUnbUdUFe5Mard6fS+hBaFW/bO+aNZ66tYPJ4rslMeJt8SAwVH4BSJG2NX
-         DRY7QUXxUpV4aY003vtTjNN1IHWnE9sFfpoaO4fFiFoOLFfEs6Y0qu23kvfjXVxiLS
-         5ImK7CtEqdJa7MM21Xs24NR6nO3uhfSVFnaQKES4=
+        b=iYb1SSuW8s8o5r4sbk3v4hAxZuN2lE38M/sd/2ukD1v0dgkf2ep7PBC1q4XpJXM2S
+         I3Ce9LcyAEQzOXB3tDS9NuJXFc+HyzeE9Belc+Nvig+t/E4pHKOVRpmkBuQ3jRcMUo
+         xJZAtnrsfOh0Ubbt1gjcgFaGFbg4cDvfB/Pe6xY8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@ozlabs.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.18 29/47] random: avoid initializing twice in credit race
+Subject: [PATCH 5.15 108/145] powerpc: define get_cycles macro for arch-override
 Date:   Fri, 27 May 2022 10:50:09 +0200
-Message-Id: <20220527084806.323914184@linuxfoundation.org>
+Message-Id: <20220527084903.663694172@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
-References: <20220527084801.223648383@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,52 +60,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit fed7ef061686cc813b1f3d8d0edc6c35b4d3537b upstream.
+commit 408835832158df0357e18e96da7f2d1ed6b80e7f upstream.
 
-Since all changes of crng_init now go through credit_init_bits(), we can
-fix a long standing race in which two concurrent callers of
-credit_init_bits() have the new bit count >= some threshold, but are
-doing so with crng_init as a lower threshold, checked outside of a lock,
-resulting in crng_reseed() or similar being called twice.
+PowerPC defines a get_cycles() function, but it does not do the usual
+`#define get_cycles get_cycles` dance, making it impossible for generic
+code to see if an arch-specific function was defined. While the
+get_cycles() ifdef is not currently used, the following timekeeping
+patch in this series will depend on the macro existing (or not existing)
+when defining random_get_entropy().
 
-In order to fix this, we can use the original cmpxchg value of the bit
-count, and only change crng_init when the bit count transitions from
-below a threshold to meeting the threshold.
-
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Benjamin Herrenschmidt <benh@ozlabs.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Acked-by: Michael Ellerman <mpe@ellerman.id.au>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ arch/powerpc/include/asm/timex.h |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -821,7 +821,7 @@ static void extract_entropy(void *buf, s
- 
- static void credit_init_bits(size_t nbits)
+--- a/arch/powerpc/include/asm/timex.h
++++ b/arch/powerpc/include/asm/timex.h
+@@ -19,6 +19,7 @@ static inline cycles_t get_cycles(void)
  {
--	unsigned int init_bits, orig, add;
-+	unsigned int new, orig, add;
- 	unsigned long flags;
+ 	return mftb();
+ }
++#define get_cycles get_cycles
  
- 	if (crng_ready() || !nbits)
-@@ -831,12 +831,12 @@ static void credit_init_bits(size_t nbit
- 
- 	do {
- 		orig = READ_ONCE(input_pool.init_bits);
--		init_bits = min_t(unsigned int, POOL_BITS, orig + add);
--	} while (cmpxchg(&input_pool.init_bits, orig, init_bits) != orig);
-+		new = min_t(unsigned int, POOL_BITS, orig + add);
-+	} while (cmpxchg(&input_pool.init_bits, orig, new) != orig);
- 
--	if (!crng_ready() && init_bits >= POOL_READY_BITS)
-+	if (orig < POOL_READY_BITS && new >= POOL_READY_BITS)
- 		crng_reseed();
--	else if (unlikely(crng_init == CRNG_EMPTY && init_bits >= POOL_EARLY_BITS)) {
-+	else if (orig < POOL_EARLY_BITS && new >= POOL_EARLY_BITS) {
- 		spin_lock_irqsave(&base_crng.lock, flags);
- 		if (crng_init == CRNG_EMPTY) {
- 			extract_entropy(base_crng.key, sizeof(base_crng.key));
+ #endif	/* __KERNEL__ */
+ #endif	/* _ASM_POWERPC_TIMEX_H */
 
 

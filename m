@@ -2,48 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDFF536693
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B869D536695
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 19:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353140AbiE0R3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 13:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        id S1354306AbiE0RaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 13:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240684AbiE0R3v (ORCPT
+        with ESMTP id S1354332AbiE0RaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 13:29:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2A44DF4D;
-        Fri, 27 May 2022 10:29:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B379DB82563;
-        Fri, 27 May 2022 17:29:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D019C385A9;
-        Fri, 27 May 2022 17:29:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1653672588;
-        bh=dXRXn3acix0mFrOqchNGNDczfWUrkP/pulD2yGBjfkQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nrntJh4TXFaYHXCTbctJ1Cj5ZkRZzPRHtfxCQeSXMZ5IdYsRaLGBA54hk73bXJAKT
-         hkaQTUIxdK8dwardv9BvxPLzL3AlinxKNLQWQghX61Y2UUxo9bsNaAhIUT2O5O4y5t
-         TklLgl1oZ1FAsvvYv47ihQiEuGVRKTP2WD5f7cTY=
-Date:   Fri, 27 May 2022 10:29:47 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org
-Subject: [GIT PULL] hotfixes for 5.19-rc1
-Message-Id: <20220527102947.9c7e74d491765ba74bb81374@linux-foundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 27 May 2022 13:30:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AC384DF4D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653672604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cefitV8uX/6feCDJMEsFPG76wT6MNXuBQFQNrynOdh0=;
+        b=B8VKkZamol0rMkxsAtoG6KQ9DYFjp5e1bvqXaTNY1mdtUHd0n/xJfA9IhUTi0WYQ/haFeE
+        9WJcxylxlPL8B4LXt/9xlr8vMOnKuZyQAqQiEdZ5/BsctVrXGYqImZwqRND79cj13P3tmr
+        cUBRwcjcpaI06eCRwjOg4OdYGQnbwgE=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-r7V0ERizO7qEEbhr36CngA-1; Fri, 27 May 2022 13:30:03 -0400
+X-MC-Unique: r7V0ERizO7qEEbhr36CngA-1
+Received: by mail-lj1-f199.google.com with SMTP id a8-20020a2e7f08000000b00253c7e7f572so1435866ljd.1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 10:30:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
+         :subject:content-language:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=cefitV8uX/6feCDJMEsFPG76wT6MNXuBQFQNrynOdh0=;
+        b=EnBs+VMjvpQrv5TEogoL1LUB7RcyKduKp9jyKiZf/awBlk80/ZTzePIPhPlehxWpmz
+         sY2vzPXId2qdJCtFwKZAVAifxtl/5cPeYGVvv/YVZAN/KhikNm5LO3Q+S2YlEwYCKVAR
+         Rm3tkup0KCPnW5NqL8/HPsismSSfuaCdmDD0VBplQN+zivyU2JBQysQX5wIVO75+cD5W
+         dc+FQY+8++2lmDb+Ht3gGmKxsCFPPGDK4HnC3VGSTuDa0fqxygFEQLaSyBFwyu5OwoL4
+         Lpn5MKZ8Jy2u8H8BDFu5snOHavJ23Th6/TNY83oXKSpnHUQ0YebFlwR011xaYBEjKbgR
+         Uj5w==
+X-Gm-Message-State: AOAM53060jOCf5Sq/kUltQVNOBHCvhihKOnd9qdk4UyvvCkQzfRlUgiY
+        kdT77t9fKCAllmdMDRjGZboCAcN8YwG6x7Ht3eJCTVEosqR9ClduAk0aP0Kx6mpk2LEfUATcTa6
+        Q3bcErFePIEfBt1PjvqUohZXa
+X-Received: by 2002:a05:6512:1189:b0:478:8b81:d3b2 with SMTP id g9-20020a056512118900b004788b81d3b2mr13924870lfr.247.1653672601592;
+        Fri, 27 May 2022 10:30:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzHy8Z11UyDeJF1PfQehPGRpRB2pdmd+NOjG8IQ3dm26jx4WasEfdOhzMuSV+x3EkYQK3j+tQ==
+X-Received: by 2002:a05:6512:1189:b0:478:8b81:d3b2 with SMTP id g9-20020a056512118900b004788b81d3b2mr13924859lfr.247.1653672601309;
+        Fri, 27 May 2022 10:30:01 -0700 (PDT)
+Received: from [192.168.0.50] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
+        by smtp.gmail.com with ESMTPSA id bj38-20020a2eaaa6000000b0025541ce7ef1sm134106ljb.11.2022.05.27.10.29.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 May 2022 10:30:00 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <16e1aba3-99af-9cc9-88d5-2cf0f1ed618b@redhat.com>
+Date:   Fri, 27 May 2022 19:29:59 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Cc:     brouer@redhat.com, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>, Jan Kara <jack@suse.cz>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Linux-NFS <linux-nfs@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux-XFS <linux-xfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm/page_alloc: Always attempt to allocate at least one
+ page during bulk allocation
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220526091210.GC3441@techsingularity.net>
+In-Reply-To: <20220526091210.GC3441@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -51,49 +91,62 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-The following changes since commit 9039b8335276569670caaf23606335946625e764:
 
-  MAINTAINERS: add a mailing list for DAMON development (2022-05-09 17:34:29 -0700)
+On 26/05/2022 11.12, Mel Gorman wrote:
+> Peter Pavlisko reported the following problem on kernel bugzilla 216007.
+> 
+> 	When I try to extract an uncompressed tar archive (2.6 milion
+> 	files, 760.3 GiB in size) on newly created (empty) XFS file system,
+> 	after first low tens of gigabytes extracted the process hangs in
+> 	iowait indefinitely. One CPU core is 100% occupied with iowait,
+> 	the other CPU core is idle (on 2-core Intel Celeron G1610T).
+> 
+> It was bisected to c9fa563072e1 ("xfs: use alloc_pages_bulk_array() for
+> buffers") but XFS is only the messenger. The problem is that nothing
+> is waking kswapd to reclaim some pages at a time the PCP lists cannot
+> be refilled until some reclaim happens. The bulk allocator checks that
+> there are some pages in the array and the original intent was that a bulk
+> allocator did not necessarily need all the requested pages and it was
+> best to return as quickly as possible. This was fine for the first user
+> of the API but both NFS and XFS require the requested number of pages
+> be available before making progress. Both could be adjusted to call the
+> page allocator directly if a bulk allocation fails but it puts a burden on
+> users of the API. Adjust the semantics to attempt at least one allocation
+> via __alloc_pages() before returning so kswapd is woken if necessary.
+> 
+> It was reported via bugzilla that the patch addressed the problem and
+> that the tar extraction completed successfully. This may also address
+> bug 215975 but has yet to be confirmed.
+> 
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216007
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215975
+> Fixes: 387ba26fb1cb ("mm/page_alloc: add a bulk page allocator")
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> Cc: <stable@vger.kernel.org> # v5.13+
+> ---
+>   mm/page_alloc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2022-05-27
+Change looks good, and I checked page_pool will be fine with this change :-)
 
-for you to fetch changes up to 24c8e27e63224ce832b4723cb60632d3eddb55de:
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
 
-  mm/page_table_check: fix accessing unmapped ptep (2022-05-27 08:55:18 -0700)
 
-----------------------------------------------------------------
-Six hotfixes.  One from Miaohe Lin is considered a minor thing so it isn't
-for -stable.  The remainder address pre-5.19 issues and are cc:stable.
-
-----------------------------------------------------------------
-Dong Aisheng (1):
-      Revert "mm/cma.c: remove redundant cma_mutex lock"
-
-Mel Gorman (1):
-      mm/page_alloc: always attempt to allocate at least one page during bulk allocation
-
-Miaohe Lin (1):
-      mm/page_table_check: fix accessing unmapped ptep
-
-Mike Kravetz (1):
-      hugetlb: fix huge_pmd_unshare address update
-
-Naveen N. Rao (1):
-      kexec_file: drop weak attribute from arch_kexec_apply_relocations[_add]
-
-Sultan Alsawaf (1):
-      zsmalloc: fix races between asynchronous zspage free and page migration
-
- arch/s390/include/asm/kexec.h | 10 ++++++++++
- arch/x86/include/asm/kexec.h  |  8 ++++++++
- include/linux/kexec.h         | 46 +++++++++++++++++++++++++++++++++++--------
- kernel/kexec_file.c           | 34 --------------------------------
- mm/cma.c                      |  4 +++-
- mm/hugetlb.c                  |  9 ++++++++-
- mm/page_alloc.c               |  4 ++--
- mm/page_table_check.c         |  2 +-
- mm/zsmalloc.c                 | 37 ++++++++++++++++++++++++++++++----
- 9 files changed, 103 insertions(+), 51 deletions(-)
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 0e42038382c1..5ced6cb260ed 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5324,8 +5324,8 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+>   		page = __rmqueue_pcplist(zone, 0, ac.migratetype, alloc_flags,
+>   								pcp, pcp_list);
+>   		if (unlikely(!page)) {
+> -			/* Try and get at least one page */
+> -			if (!nr_populated)
+> +			/* Try and allocate at least one page */
+> +			if (!nr_account)
+>   				goto failed_irq;
+>   			break;
+>   		}
+> 
 

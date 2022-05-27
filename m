@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A48536237
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62BC536246
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353365AbiE0MPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S1353796AbiE0MQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352712AbiE0MAu (ORCPT
+        with ESMTP id S1352263AbiE0MCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 08:00:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D55238BC7;
-        Fri, 27 May 2022 04:52:47 -0700 (PDT)
+        Fri, 27 May 2022 08:02:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C651269A0;
+        Fri, 27 May 2022 04:53:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E780A61D9F;
-        Fri, 27 May 2022 11:52:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0FBFC385A9;
-        Fri, 27 May 2022 11:52:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BD2961DD0;
+        Fri, 27 May 2022 11:53:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18175C385A9;
+        Fri, 27 May 2022 11:53:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652365;
-        bh=ttMzrB/0rNkJjH7iM1jtjNb98Lhq7MGGZDMluDL9J0g=;
+        s=korg; t=1653652397;
+        bh=6k4JH3MCHIPlIoQ+f9lJhN3Yqi52fdTMrhU+Tn3/WXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pb2s6Y6MdLGJ+Qrv95aTSY25ooqmJcDnUJnEX7ednQ4yjwjs+3af9NCuMaQhhOXp7
-         4zWhMhIvG6NSYtypsfFLKffOoefLrCyF4vxnO70OxYXfzRhkB5vRUsg2tkq7ukIHm9
-         p6pvitbZHgj+YSJHuRLzwfFzYGiMJYLVnpIbdIBY=
+        b=yqedq+OqJnLaLg0HUgDAW1HUOWFc7YZ1E0DECzNUX2YhOSWo+96ZA+hSDdvOvCdO0
+         0zcLwVXgT4SJDoWAXjeevoEr9N0XX/LA4XedQSuYgY89hq+BhJLACEotvpB2A1D94E
+         zRMcK5DitxuxrMefbjKEWohqIu8ShgXKOu1IWmUE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Filipe Manana <fdmanana@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>, Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 142/163] random: do not use input pool from hard IRQs
+Subject: [PATCH 5.15 121/145] random: use first 128 bits of input as fast init
 Date:   Fri, 27 May 2022 10:50:22 +0200
-Message-Id: <20220527084848.047372120@linuxfoundation.org>
+Message-Id: <20220527084905.316714298@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-References: <20220527084828.156494029@linuxfoundation.org>
+In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
+References: <20220527084850.364560116@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,145 +57,305 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit e3e33fc2ea7fcefd0d761db9d6219f83b4248f5c upstream.
+commit 5c3b747ef54fa2a7318776777f6044540d99f721 upstream.
 
-Years ago, a separate fast pool was added for interrupts, so that the
-cost associated with taking the input pool spinlocks and mixing into it
-would be avoided in places where latency is critical. However, one
-oversight was that add_input_randomness() and add_disk_randomness()
-still sometimes are called directly from the interrupt handler, rather
-than being deferred to a thread. This means that some unlucky interrupts
-will be caught doing a blake2s_compress() call and potentially spinning
-on input_pool.lock, which can also be taken by unprivileged users by
-writing into /dev/urandom.
+Before, the first 64 bytes of input, regardless of how entropic it was,
+would be used to mutate the crng base key directly, and none of those
+bytes would be credited as having entropy. Then 256 bits of credited
+input would be accumulated, and only then would the rng transition from
+the earlier "fast init" phase into being actually initialized.
 
-In order to fix this, add_timer_randomness() now checks whether it is
-being called from a hard IRQ and if so, just mixes into the per-cpu IRQ
-fast pool using fast_mix(), which is much faster and can be done
-lock-free. A nice consequence of this, as well, is that it means hard
-IRQ context FPU support is likely no longer useful.
+The thinking was that by mixing and matching fast init and real init, an
+attacker who compromised the fast init state, considered easy to do
+given how little entropy might be in those first 64 bytes, would then be
+able to bruteforce bits from the actual initialization. By keeping these
+separate, bruteforcing became impossible.
 
-The entropy estimation algorithm used by add_timer_randomness() is also
-somewhat different than the one used for add_interrupt_randomness(). The
-former looks at deltas of deltas of deltas, while the latter just waits
-for 64 interrupts for one bit or for one second since the last bit. In
-order to bridge these, and since add_interrupt_randomness() runs after
-an add_timer_randomness() that's called from hard IRQ, we add to the
-fast pool credit the related amount, and then subtract one to account
-for add_interrupt_randomness()'s contribution.
+However, by not crediting potentially creditable bits from those first 64
+bytes of input, we delay initialization, and actually make the problem
+worse, because it means the user is drawing worse random numbers for a
+longer period of time.
 
-A downside of this, however, is that the num argument is potentially
-attacker controlled, which puts a bit more pressure on the fast_mix()
-sponge to do more than it's really intended to do. As a mitigating
-factor, the first 96 bits of input aren't attacker controlled (a cycle
-counter followed by zeros), which means it's essentially two rounds of
-siphash rather than one, which is somewhat better. It's also not that
-much different from add_interrupt_randomness()'s use of the irq stack
-instruction pointer register.
+Instead, we can take the first 128 bits as fast init, and allow them to
+be credited, and then hold off on the next 128 bits until they've
+accumulated. This is still a wide enough margin to prevent bruteforcing
+the rng state, while still initializing much faster.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Filipe Manana <fdmanana@suse.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Borislav Petkov <bp@alien8.de>
+Then, rather than trying to piecemeal inject into the base crng key at
+various points, instead just extract from the pool when we need it, for
+the crng_init==0 phase. Performance may even be better for the various
+inputs here, since there are likely more calls to mix_pool_bytes() then
+there are to get_random_bytes() during this phase of system execution.
+
+Since the preinit injection code is gone, bootloader randomness can then
+do something significantly more straight forward, removing the weird
+system_wq hack in hwgenerator randomness.
+
 Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   51 +++++++++++++++++++++++++++++++++++---------------
- 1 file changed, 36 insertions(+), 15 deletions(-)
+ drivers/char/random.c |  146 ++++++++++++++++----------------------------------
+ 1 file changed, 49 insertions(+), 97 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1086,6 +1086,7 @@ static void mix_interrupt_randomness(str
- 	 * we don't wind up "losing" some.
- 	 */
- 	unsigned long pool[2];
-+	unsigned int count;
+@@ -233,10 +233,7 @@ static void _warn_unseeded_randomness(co
+  *
+  *********************************************************************/
  
- 	/* Check to see if we're running on the wrong CPU due to hotplug. */
- 	local_irq_disable();
-@@ -1099,12 +1100,13 @@ static void mix_interrupt_randomness(str
- 	 * consistent view, before we reenable irqs again.
+-enum {
+-	CRNG_RESEED_INTERVAL = 300 * HZ,
+-	CRNG_INIT_CNT_THRESH = 2 * CHACHA_KEY_SIZE
+-};
++enum { CRNG_RESEED_INTERVAL = 300 * HZ };
+ 
+ static struct {
+ 	u8 key[CHACHA_KEY_SIZE] __aligned(__alignof__(long));
+@@ -260,6 +257,8 @@ static DEFINE_PER_CPU(struct crng, crngs
+ 
+ /* Used by crng_reseed() to extract a new seed from the input pool. */
+ static bool drain_entropy(void *buf, size_t nbytes);
++/* Used by crng_make_state() to extract a new seed when crng_init==0. */
++static void extract_entropy(void *buf, size_t nbytes);
+ 
+ /*
+  * This extracts a new crng key from the input pool, but only if there is a
+@@ -384,17 +383,20 @@ static void crng_make_state(u32 chacha_s
+ 	/*
+ 	 * For the fast path, we check whether we're ready, unlocked first, and
+ 	 * then re-check once locked later. In the case where we're really not
+-	 * ready, we do fast key erasure with the base_crng directly, because
+-	 * this is what crng_pre_init_inject() mutates during early init.
++	 * ready, we do fast key erasure with the base_crng directly, extracting
++	 * when crng_init==0.
  	 */
- 	memcpy(pool, fast_pool->pool, sizeof(pool));
-+	count = fast_pool->count;
- 	fast_pool->count = 0;
+ 	if (!crng_ready()) {
+ 		bool ready;
+ 
+ 		spin_lock_irqsave(&base_crng.lock, flags);
+ 		ready = crng_ready();
+-		if (!ready)
++		if (!ready) {
++			if (crng_init == 0)
++				extract_entropy(base_crng.key, sizeof(base_crng.key));
+ 			crng_fast_key_erasure(base_crng.key, chacha_state,
+ 					      random_data, random_data_len);
++		}
+ 		spin_unlock_irqrestore(&base_crng.lock, flags);
+ 		if (!ready)
+ 			return;
+@@ -435,48 +437,6 @@ static void crng_make_state(u32 chacha_s
+ 	local_unlock_irqrestore(&crngs.lock, flags);
+ }
+ 
+-/*
+- * This function is for crng_init == 0 only. It loads entropy directly
+- * into the crng's key, without going through the input pool. It is,
+- * generally speaking, not very safe, but we use this only at early
+- * boot time when it's better to have something there rather than
+- * nothing.
+- *
+- * If account is set, then the crng_init_cnt counter is incremented.
+- * This shouldn't be set by functions like add_device_randomness(),
+- * where we can't trust the buffer passed to it is guaranteed to be
+- * unpredictable (so it might not have any entropy at all).
+- */
+-static void crng_pre_init_inject(const void *input, size_t len, bool account)
+-{
+-	static int crng_init_cnt = 0;
+-	struct blake2s_state hash;
+-	unsigned long flags;
+-
+-	blake2s_init(&hash, sizeof(base_crng.key));
+-
+-	spin_lock_irqsave(&base_crng.lock, flags);
+-	if (crng_init != 0) {
+-		spin_unlock_irqrestore(&base_crng.lock, flags);
+-		return;
+-	}
+-
+-	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
+-	blake2s_update(&hash, input, len);
+-	blake2s_final(&hash, base_crng.key);
+-
+-	if (account) {
+-		crng_init_cnt += min_t(size_t, len, CRNG_INIT_CNT_THRESH - crng_init_cnt);
+-		if (crng_init_cnt >= CRNG_INIT_CNT_THRESH)
+-			crng_init = 1;
+-	}
+-
+-	spin_unlock_irqrestore(&base_crng.lock, flags);
+-
+-	if (crng_init == 1)
+-		pr_notice("fast init done\n");
+-}
+-
+ static void _get_random_bytes(void *buf, size_t nbytes)
+ {
+ 	u32 chacha_state[CHACHA_STATE_WORDS];
+@@ -789,7 +749,8 @@ EXPORT_SYMBOL(get_random_bytes_arch);
+ 
+ enum {
+ 	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
+-	POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
++	POOL_MIN_BITS = POOL_BITS, /* No point in settling for less. */
++	POOL_FAST_INIT_BITS = POOL_MIN_BITS / 2
+ };
+ 
+ /* For notifying userspace should write into /dev/random. */
+@@ -826,24 +787,6 @@ static void mix_pool_bytes(const void *i
+ 	spin_unlock_irqrestore(&input_pool.lock, flags);
+ }
+ 
+-static void credit_entropy_bits(size_t nbits)
+-{
+-	unsigned int entropy_count, orig, add;
+-
+-	if (!nbits)
+-		return;
+-
+-	add = min_t(size_t, nbits, POOL_BITS);
+-
+-	do {
+-		orig = READ_ONCE(input_pool.entropy_count);
+-		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
+-	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
+-
+-	if (!crng_ready() && entropy_count >= POOL_MIN_BITS)
+-		crng_reseed();
+-}
+-
+ /*
+  * This is an HKDF-like construction for using the hashed collected entropy
+  * as a PRF key, that's then expanded block-by-block.
+@@ -909,6 +852,33 @@ static bool drain_entropy(void *buf, siz
+ 	return true;
+ }
+ 
++static void credit_entropy_bits(size_t nbits)
++{
++	unsigned int entropy_count, orig, add;
++	unsigned long flags;
++
++	if (!nbits)
++		return;
++
++	add = min_t(size_t, nbits, POOL_BITS);
++
++	do {
++		orig = READ_ONCE(input_pool.entropy_count);
++		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
++	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
++
++	if (!crng_ready() && entropy_count >= POOL_MIN_BITS)
++		crng_reseed();
++	else if (unlikely(crng_init == 0 && entropy_count >= POOL_FAST_INIT_BITS)) {
++		spin_lock_irqsave(&base_crng.lock, flags);
++		if (crng_init == 0) {
++			extract_entropy(base_crng.key, sizeof(base_crng.key));
++			crng_init = 1;
++		}
++		spin_unlock_irqrestore(&base_crng.lock, flags);
++	}
++}
++
+ 
+ /**********************************************************************
+  *
+@@ -951,9 +921,9 @@ static bool drain_entropy(void *buf, siz
+  * entropy as specified by the caller. If the entropy pool is full it will
+  * block until more entropy is needed.
+  *
+- * add_bootloader_randomness() is the same as add_hwgenerator_randomness() or
+- * add_device_randomness(), depending on whether or not the configuration
+- * option CONFIG_RANDOM_TRUST_BOOTLOADER is set.
++ * add_bootloader_randomness() is called by bootloader drivers, such as EFI
++ * and device tree, and credits its input depending on whether or not the
++ * configuration option CONFIG_RANDOM_TRUST_BOOTLOADER is set.
+  *
+  * add_interrupt_randomness() uses the interrupt timing as random
+  * inputs to the entropy pool. Using the cycle counters and the irq source
+@@ -1033,9 +1003,6 @@ void add_device_randomness(const void *b
+ 	unsigned long entropy = random_get_entropy();
+ 	unsigned long flags;
+ 
+-	if (crng_init == 0 && size)
+-		crng_pre_init_inject(buf, size, false);
+-
+ 	spin_lock_irqsave(&input_pool.lock, flags);
+ 	_mix_pool_bytes(&entropy, sizeof(entropy));
+ 	_mix_pool_bytes(buf, size);
+@@ -1151,12 +1118,6 @@ void rand_initialize_disk(struct gendisk
+ void add_hwgenerator_randomness(const void *buffer, size_t count,
+ 				size_t entropy)
+ {
+-	if (unlikely(crng_init == 0 && entropy < POOL_MIN_BITS)) {
+-		crng_pre_init_inject(buffer, count, true);
+-		mix_pool_bytes(buffer, count);
+-		return;
+-	}
+-
+ 	/*
+ 	 * Throttle writing if we're above the trickle threshold.
+ 	 * We'll be woken up again once below POOL_MIN_BITS, when
+@@ -1164,7 +1125,7 @@ void add_hwgenerator_randomness(const vo
+ 	 * CRNG_RESEED_INTERVAL has elapsed.
+ 	 */
+ 	wait_event_interruptible_timeout(random_write_wait,
+-			!system_wq || kthread_should_stop() ||
++			kthread_should_stop() ||
+ 			input_pool.entropy_count < POOL_MIN_BITS,
+ 			CRNG_RESEED_INTERVAL);
+ 	mix_pool_bytes(buffer, count);
+@@ -1173,17 +1134,14 @@ void add_hwgenerator_randomness(const vo
+ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
+ 
+ /*
+- * Handle random seed passed by bootloader.
+- * If the seed is trustworthy, it would be regarded as hardware RNGs. Otherwise
+- * it would be regarded as device data.
+- * The decision is controlled by CONFIG_RANDOM_TRUST_BOOTLOADER.
++ * Handle random seed passed by bootloader, and credit it if
++ * CONFIG_RANDOM_TRUST_BOOTLOADER is set.
+  */
+ void add_bootloader_randomness(const void *buf, size_t size)
+ {
++	mix_pool_bytes(buf, size);
+ 	if (trust_bootloader)
+-		add_hwgenerator_randomness(buf, size, size * 8);
+-	else
+-		add_device_randomness(buf, size);
++		credit_entropy_bits(size * 8);
+ }
+ EXPORT_SYMBOL_GPL(add_bootloader_randomness);
+ 
+@@ -1283,13 +1241,8 @@ static void mix_interrupt_randomness(str
  	fast_pool->last = jiffies;
  	local_irq_enable();
  
- 	mix_pool_bytes(pool, sizeof(pool));
--	credit_init_bits(1);
-+	credit_init_bits(max(1u, (count & U16_MAX) / 64));
+-	if (unlikely(crng_init == 0)) {
+-		crng_pre_init_inject(pool, sizeof(pool), true);
+-		mix_pool_bytes(pool, sizeof(pool));
+-	} else {
+-		mix_pool_bytes(pool, sizeof(pool));
+-		credit_entropy_bits(1);
+-	}
++	mix_pool_bytes(pool, sizeof(pool));
++	credit_entropy_bits(1);
  
  	memzero_explicit(pool, sizeof(pool));
  }
-@@ -1144,22 +1146,30 @@ struct timer_rand_state {
- 
- /*
-  * This function adds entropy to the entropy "pool" by using timing
-- * delays.  It uses the timer_rand_state structure to make an estimate
-- * of how many bits of entropy this call has added to the pool.
-- *
-- * The number "num" is also added to the pool - it should somehow describe
-- * the type of event which just happened.  This is currently 0-255 for
-- * keyboard scan codes, and 256 upwards for interrupts.
-+ * delays. It uses the timer_rand_state structure to make an estimate
-+ * of how many bits of entropy this call has added to the pool. The
-+ * value "num" is also added to the pool; it should somehow describe
-+ * the type of event that just happened.
-  */
- static void add_timer_randomness(struct timer_rand_state *state, unsigned int num)
- {
- 	unsigned long entropy = random_get_entropy(), now = jiffies, flags;
- 	long delta, delta2, delta3;
-+	unsigned int bits;
- 
--	spin_lock_irqsave(&input_pool.lock, flags);
--	_mix_pool_bytes(&entropy, sizeof(entropy));
--	_mix_pool_bytes(&num, sizeof(num));
--	spin_unlock_irqrestore(&input_pool.lock, flags);
-+	/*
-+	 * If we're in a hard IRQ, add_interrupt_randomness() will be called
-+	 * sometime after, so mix into the fast pool.
-+	 */
-+	if (in_irq()) {
-+		fast_mix(this_cpu_ptr(&irq_randomness)->pool,
-+			 (unsigned long[2]){ entropy, num });
-+	} else {
-+		spin_lock_irqsave(&input_pool.lock, flags);
-+		_mix_pool_bytes(&entropy, sizeof(entropy));
-+		_mix_pool_bytes(&num, sizeof(num));
-+		spin_unlock_irqrestore(&input_pool.lock, flags);
-+	}
- 
- 	if (crng_ready())
+@@ -1311,8 +1264,7 @@ void add_interrupt_randomness(int irq)
+ 	if (new_count & MIX_INFLIGHT)
  		return;
-@@ -1190,11 +1200,22 @@ static void add_timer_randomness(struct
- 		delta = delta3;
  
- 	/*
--	 * delta is now minimum absolute delta.
--	 * Round down by 1 bit on general principles,
--	 * and limit entropy estimate to 12 bits.
-+	 * delta is now minimum absolute delta. Round down by 1 bit
-+	 * on general principles, and limit entropy estimate to 11 bits.
-+	 */
-+	bits = min(fls(delta >> 1), 11);
-+
-+	/*
-+	 * As mentioned above, if we're in a hard IRQ, add_interrupt_randomness()
-+	 * will run after this, which uses a different crediting scheme of 1 bit
-+	 * per every 64 interrupts. In order to let that function do accounting
-+	 * close to the one in this function, we credit a full 64/64 bit per bit,
-+	 * and then subtract one to account for the extra one added.
- 	 */
--	credit_init_bits(min_t(unsigned int, fls(delta >> 1), 11));
-+	if (in_irq())
-+		this_cpu_ptr(&irq_randomness)->count += max(1u, bits * 64) - 1;
-+	else
-+		credit_init_bits(bits);
- }
+-	if (new_count < 64 && (!time_is_before_jiffies(fast_pool->last + HZ) ||
+-			       unlikely(crng_init == 0)))
++	if (new_count < 64 && !time_is_before_jiffies(fast_pool->last + HZ))
+ 		return;
  
- void add_input_randomness(unsigned int type, unsigned int code,
+ 	if (unlikely(!fast_pool->mix.func))
 
 

@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556C5536266
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AD8536274
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351267AbiE0MS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S1352665AbiE0MUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353648AbiE0MGI (ORCPT
+        with ESMTP id S1353649AbiE0MGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 May 2022 08:06:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1538D1666B5;
-        Fri, 27 May 2022 04:55:06 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3581666BE;
+        Fri, 27 May 2022 04:55:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 50700CE251D;
-        Fri, 27 May 2022 11:55:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52713C385A9;
-        Fri, 27 May 2022 11:55:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C21861CD6;
+        Fri, 27 May 2022 11:55:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4988BC385A9;
+        Fri, 27 May 2022 11:55:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652503;
-        bh=bosGeQX7eVZuVUwD8SGaD3sYSzWZCOulil/ea+NDSMQ=;
+        s=korg; t=1653652506;
+        bh=RUEsyhJFnaOVYv98/ybfm3mKHtkusHDBD7ScaWxPpOI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0Zt6j/UFzGIuvkzEIOaHVNx9zuM0EIwxrGW5iutUPy5h7Th6BuHwWF0VyBWAYAuda
-         G7IVNAo9y4HbPCIdIvOXwuI/uaue/Rd3YUuCOiMjc6fHUlcI/04/x0Ykv1VgnP82rp
-         F2q3aal8EDLIO+XsaZST267Cc4G8nbKea+COzPBw=
+        b=QptRGjrppCetVetN43rf6sotoIFqxWkmxqAl29ojQEEJu7JB3fR0M2B8Wwa1QT7Xe
+         K4hZ9YWCVdbefGRufXcM1lOPHEz0emQvoAzb0qQgZt6GJtRyAsPnb2EFM6ehe8qO7L
+         NdGv/hg0/vVV3SvoBIp6HSEuzLsStSlpWD4SbU44=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 162/163] random: check for signals after page of pool writes
-Date:   Fri, 27 May 2022 10:50:42 +0200
-Message-Id: <20220527084850.783635348@linuxfoundation.org>
+        stable@vger.kernel.org, Edward Matijevic <motolav@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 163/163] ALSA: ctxfi: Add SB046x PCI ID
+Date:   Fri, 27 May 2022 10:50:43 +0200
+Message-Id: <20220527084850.931243828@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
 References: <20220527084828.156494029@linuxfoundation.org>
@@ -55,101 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Edward Matijevic <motolav@gmail.com>
 
-commit 1ce6c8d68f8ac587f54d0a271ac594d3d51f3efb upstream.
+commit 1b073ebb174d0c7109b438e0a5eb4495137803ec upstream.
 
-get_random_bytes_user() checks for signals after producing a PAGE_SIZE
-worth of output, just like /dev/zero does. write_pool() is doing
-basically the same work (actually, slightly more expensive), and so
-should stop to check for signals in the same way. Let's also name it
-write_pool_user() to match get_random_bytes_user(), so this won't be
-misused in the future.
+Adds the PCI ID for X-Fi cards sold under the Platnum and XtremeMusic names
 
-Before this patch, massive writes to /dev/urandom would tie up the
-process for an extremely long time and make it unterminatable. After, it
-can be successfully interrupted. The following test program can be used
-to see this works as intended:
+Before: snd_ctxfi 0000:05:05.0: chip 20K1 model Unknown (1102:0021) is found
+After: snd_ctxfi 0000:05:05.0: chip 20K1 model SB046x (1102:0021) is found
 
-  #include <unistd.h>
-  #include <fcntl.h>
-  #include <signal.h>
-  #include <stdio.h>
+[ This is only about defining the model name string, and the rest is
+  handled just like before, as a default unknown device.
+  Edward confirmed that the stuff has been working fine -- tiwai ]
 
-  static unsigned char x[~0U];
-
-  static void handle(int) { }
-
-  int main(int argc, char *argv[])
-  {
-    pid_t pid = getpid(), child;
-    int fd;
-    signal(SIGUSR1, handle);
-    if (!(child = fork())) {
-      for (;;)
-        kill(pid, SIGUSR1);
-    }
-    fd = open("/dev/urandom", O_WRONLY);
-    pause();
-    printf("interrupted after writing %zd bytes\n", write(fd, x, sizeof(x)));
-    close(fd);
-    kill(child, SIGTERM);
-    return 0;
-  }
-
-Result before: "interrupted after writing 2147479552 bytes"
-Result after: "interrupted after writing 4096 bytes"
-
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Edward Matijevic <motolav@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/cae7d1a4-8bd9-7dfe-7427-db7e766f7272@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ sound/pci/ctxfi/ctatc.c      |    2 ++
+ sound/pci/ctxfi/cthardware.h |    3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1255,7 +1255,7 @@ static __poll_t random_poll(struct file
- 	return crng_ready() ? EPOLLIN | EPOLLRDNORM : EPOLLOUT | EPOLLWRNORM;
- }
+--- a/sound/pci/ctxfi/ctatc.c
++++ b/sound/pci/ctxfi/ctatc.c
+@@ -36,6 +36,7 @@
+ 			    | ((IEC958_AES3_CON_FS_48000) << 24))
  
--static ssize_t write_pool(struct iov_iter *iter)
-+static ssize_t write_pool_user(struct iov_iter *iter)
- {
- 	u8 block[BLAKE2S_BLOCK_SIZE];
- 	ssize_t ret = 0;
-@@ -1270,7 +1270,13 @@ static ssize_t write_pool(struct iov_ite
- 		mix_pool_bytes(block, copied);
- 		if (!iov_iter_count(iter) || copied != sizeof(block))
- 			break;
--		cond_resched();
-+
-+		BUILD_BUG_ON(PAGE_SIZE % sizeof(block) != 0);
-+		if (ret % PAGE_SIZE == 0) {
-+			if (signal_pending(current))
-+				break;
-+			cond_resched();
-+		}
- 	}
+ static const struct snd_pci_quirk subsys_20k1_list[] = {
++	SND_PCI_QUIRK(PCI_VENDOR_ID_CREATIVE, 0x0021, "SB046x", CTSB046X),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_CREATIVE, 0x0022, "SB055x", CTSB055X),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_CREATIVE, 0x002f, "SB055x", CTSB055X),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_CREATIVE, 0x0029, "SB073x", CTSB073X),
+@@ -64,6 +65,7 @@ static const struct snd_pci_quirk subsys
  
- 	memzero_explicit(block, sizeof(block));
-@@ -1279,7 +1285,7 @@ static ssize_t write_pool(struct iov_ite
+ static const char *ct_subsys_name[NUM_CTCARDS] = {
+ 	/* 20k1 models */
++	[CTSB046X]	= "SB046x",
+ 	[CTSB055X]	= "SB055x",
+ 	[CTSB073X]	= "SB073x",
+ 	[CTUAA]		= "UAA",
+--- a/sound/pci/ctxfi/cthardware.h
++++ b/sound/pci/ctxfi/cthardware.h
+@@ -26,8 +26,9 @@ enum CHIPTYP {
  
- static ssize_t random_write_iter(struct kiocb *kiocb, struct iov_iter *iter)
- {
--	return write_pool(iter);
-+	return write_pool_user(iter);
- }
- 
- static ssize_t urandom_read_iter(struct kiocb *kiocb, struct iov_iter *iter)
-@@ -1346,7 +1352,7 @@ static long random_ioctl(struct file *f,
- 		ret = import_single_range(WRITE, p, len, &iov, &iter);
- 		if (unlikely(ret))
- 			return ret;
--		ret = write_pool(&iter);
-+		ret = write_pool_user(&iter);
- 		if (unlikely(ret < 0))
- 			return ret;
- 		/* Since we're crediting, enforce that it was all written into the pool. */
+ enum CTCARDS {
+ 	/* 20k1 models */
++	CTSB046X,
++	CT20K1_MODEL_FIRST = CTSB046X,
+ 	CTSB055X,
+-	CT20K1_MODEL_FIRST = CTSB055X,
+ 	CTSB073X,
+ 	CTUAA,
+ 	CT20K1_UNKNOWN,
 
 

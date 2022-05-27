@@ -2,48 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37551535765
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E0D535769
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 03:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbiE0BsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 21:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
+        id S233478AbiE0Bzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 21:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiE0BsE (ORCPT
+        with ESMTP id S233163AbiE0Bzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 21:48:04 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71513702C
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 18:48:02 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L8SP73f2NzDqND;
-        Fri, 27 May 2022 09:47:55 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 09:48:00 +0800
-Subject: Re: [PATCH] mm: use PAGE_ALIGNED instead of IS_ALIGNED
-To:     <bh1scw@gmail.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220526140257.1568744-1-bh1scw@gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <f65a79ca-0cf8-91e1-ecd3-24ede70858ae@huawei.com>
-Date:   Fri, 27 May 2022 09:48:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 26 May 2022 21:55:54 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1B3E2777;
+        Thu, 26 May 2022 18:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653616553; x=1685152553;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4L9nxHFmH9oqt+vCvoDGP6r7G7H9tIQDSf9b5cZbxqE=;
+  b=HxgWM/SjpX40NTTPRLy8LZ+JbNsdb0vWOSkorBql3T74CfreNEPqTn1E
+   YO/rFFxYFs/V1bA8UG8oXu9U4dozB1YX1c5FqWhzrhrVLsftUK18kSXpl
+   p6KfxZzO2J3iR2TotN13YiyZjDK6+0I8JGEgcgLDAeIM9Dz/OibEc15Y3
+   wew9c2L4XlLAHujFX33DvomtXfiCy92rA/qgZdnOvSvclgrlC3n50UUt9
+   eS9C5KAM5+Hf0HvVpYtVYPEL8iyPSQlBjcwFzMvtigF4eKJ2zlx9fDYL2
+   T0HygirJYu6rHVgpTpMKwjIhbqVNMp+SRgkA/JuftwCWPa6/UsfCPKsH4
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="274356482"
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="274356482"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 18:55:51 -0700
+X-IronPort-AV: E=Sophos;i="5.91,254,1647327600"; 
+   d="scan'208";a="704879564"
+Received: from leiwang7-mobl.ccr.corp.intel.com (HELO [10.254.211.236]) ([10.254.211.236])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 18:55:49 -0700
+Message-ID: <be0d476a-b309-5177-2e98-d0a683785d4a@intel.com>
+Date:   Fri, 27 May 2022 09:55:46 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220526140257.1568744-1-bh1scw@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v7 1/8] KVM: VMX: Introduce PKS VMCS fields
 Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, chenyi.qiang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220424101557.134102-1-lei4.wang@intel.com>
+ <20220424101557.134102-2-lei4.wang@intel.com> <Yo1GW/7OuRooi3nT@google.com>
+From:   "Wang, Lei" <lei4.wang@intel.com>
+In-Reply-To: <Yo1GW/7OuRooi3nT@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,36 +64,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/26 22:02, bh1scw@gmail.com wrote:
-> From: Fanjun Kong <bh1scw@gmail.com>
-> 
-> The <linux/mm.h> already provides the PAGE_ALIGNED macro. Let's
-> use this macro instead of IS_ALIGNED and passing PAGE_SIZE directly.
-> 
-> Signed-off-by: Fanjun Kong <bh1scw@gmail.com>
+On 5/25/2022 4:55 AM, Sean Christopherson wrote:
+> Uber nit, PKRS isn't saved if VMX doesn't support the entry control.
+>    Every VM exit saves PKRS into guest-state area if VM_ENTRY_LOAD_IA32_PKRS
+>    is supported by the CPU.
+>
+> With that tweak,
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Thanks!
-
-> ---
->  mm/sparse-vmemmap.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-> index f4fa61dbbee3..49cb15cbe590 100644
-> --- a/mm/sparse-vmemmap.c
-> +++ b/mm/sparse-vmemmap.c
-> @@ -200,8 +200,8 @@ static int vmemmap_remap_range(unsigned long start, unsigned long end,
->  	unsigned long next;
->  	pgd_t *pgd;
->  
-> -	VM_BUG_ON(!IS_ALIGNED(start, PAGE_SIZE));
-> -	VM_BUG_ON(!IS_ALIGNED(end, PAGE_SIZE));
-> +	VM_BUG_ON(!PAGE_ALIGNED(start));
-> +	VM_BUG_ON(!PAGE_ALIGNED(end));
->  
->  	pgd = pgd_offset_k(addr);
->  	do {
-> 
+Make sense, will fix it.
 

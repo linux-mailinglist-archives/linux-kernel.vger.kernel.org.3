@@ -2,94 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355C6536750
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 21:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548FC536753
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 21:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354552AbiE0TDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 15:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
+        id S1354562AbiE0TFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 15:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240401AbiE0TDR (ORCPT
+        with ESMTP id S240401AbiE0TFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 15:03:17 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F317CB0B
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:03:13 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id 14so5559833qkl.6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UcvAlwIFPvCWC2QoKEFkU5cKb9BXBnxHAgM+z3+VvoE=;
-        b=pCvvJmfpoo0WDFfVQYDyZGy4qzndOFVtgtSqVXTrWRGEyBqzBA7UAXhKvpkD0Q9/6I
-         MSCpLxGE9cFQ1cGdQAtYz+UeGuecy1S3YR7ZbQ9wbQYDjQVRsaTuBol2dHTD44aSUBRR
-         IycaJl0ihzjjIE0NocdjmVE2xhgAzy3ISwyDQK8gAI5+MC0ECVrWBJsD5Ckxr01Dq6tm
-         NfD6L2oXhGqyHayMYe3j/EFrEVhX3h/t4cx5QraZ38JTD9HD3wAryzP4gzJYXUsnDZYo
-         kHgGnIpoEzZEBX8KlbDHtvDbydY35MkFThf2P8sBKcZrGoTNzHOqvBFv/Fi48v3KK05/
-         5Huw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UcvAlwIFPvCWC2QoKEFkU5cKb9BXBnxHAgM+z3+VvoE=;
-        b=qEBh3Dvur/vZvh82492YuDVWpabPSJ1Ze2ePETdbubCNwrqvKl3zoYZUBbdvS8KfXA
-         +eBgkw+HruMm2IMxKiaiQX4WuPU/T0jelKscTaxlV0t3NhmS+iUoi3Aj4leTVKcPj4TV
-         Qk4r+I0AerOsaZOJoMii5LzmiKJIAsyd/opmVDLbwg9Lb8T+zCZFazFlOYbic3aeI0RH
-         RKpiDIlp5XjIpM2ak9IQA1SCcS1RI9yenypNSbgF9eNLs32NOEbAWlobjguJycQHgPUI
-         6ewBCwDxDnmW8YlXze+szPyi7csY8L9RUzrEbQPZaQcEAHHH6nq/j1OdmGlLo53N8ujH
-         dHpA==
-X-Gm-Message-State: AOAM531sAgNTXOwMyxsT9Sif6Ico4QP7tsRyqXRV5d8O9nctsM0/hcsf
-        7XbejWDLzITmFlkba64V9lLPNg==
-X-Google-Smtp-Source: ABdhPJyO25WugHG0nEenLRCgTZGSyoFZr8oLpCObiI0Q0Dbj3autEreqfFCD221s7ojQxz7nAKospA==
-X-Received: by 2002:a05:620a:298e:b0:6a0:94d2:2e2d with SMTP id r14-20020a05620a298e00b006a094d22e2dmr30141554qkp.353.1653678192374;
-        Fri, 27 May 2022 12:03:12 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id 22-20020a05620a079600b0069fe1dfbeffsm3024426qka.92.2022.05.27.12.03.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 12:03:10 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nufEp-00Dd1y-Rg; Fri, 27 May 2022 16:03:07 -0300
-Date:   Fri, 27 May 2022 16:03:07 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jakowski Andrzej <andrzej.jakowski@intel.com>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v6 20/21] PCI/P2PDMA: Introduce pci_mmap_p2pmem()
-Message-ID: <20220527190307.GG2960187@ziepe.ca>
-References: <20220407154717.7695-1-logang@deltatee.com>
- <20220407154717.7695-21-logang@deltatee.com>
- <20220527125501.GD2960187@ziepe.ca>
- <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
+        Fri, 27 May 2022 15:05:50 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDACB5C76E;
+        Fri, 27 May 2022 12:05:49 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 6F81D1F464B2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653678348;
+        bh=xy2v0UW9OxkQlEpRbg1MC88ziJi3bs138+XfVpOrkC8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mmjaRwBZTXfnPJGc8bg4toaoo7Nyy0vzqi4EoQOeXyw9L35qvzztiaTKc8D+3NEUo
+         kayJ4EY33oK3oAtrBrOS3xa++5ygl8StkJe0nOsqV/dlMCv6kE7PzCWHRFLNnJzgso
+         8GoqNYPkUfFT7ERTn3CO/vwimAsB3k6g/JBpKfALGev0HUY3dP3wUid8ss7xdZvham
+         py+/vV1fyzp7V/dx21pD7ADBHmbgZdS05Ve6cgbkDn8SLaeo+rWBgX7DaMKlyNsj4q
+         Vii7d9CB0XHlSckHEZBCSUBzrJfH82zot9PVCF+ZLll5iy2uzMFYbHnI0hxOQ4YXXX
+         nsKgtruVhfFNg==
+Date:   Fri, 27 May 2022 15:05:42 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shane Chien <shane.chien@mediatek.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share
+ properties
+Message-ID: <20220527190542.4jckyflvtkq4n7ie@notapiano>
+References: <20220509205847.607076-1-nfraprado@collabora.com>
+ <e8d854c0-e2a5-2382-4b54-c5e879170324@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <a2590e27-41e8-59dc-3576-b5b8d716a198@deltatee.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e8d854c0-e2a5-2382-4b54-c5e879170324@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,45 +64,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 09:35:07AM -0600, Logan Gunthorpe wrote:
-> 
-> 
-> On 2022-05-27 06:55, Jason Gunthorpe wrote:
-> > On Thu, Apr 07, 2022 at 09:47:16AM -0600, Logan Gunthorpe wrote:
-> >> +static void pci_p2pdma_unmap_mappings(void *data)
-> >> +{
-> >> +	struct pci_dev *pdev = data;
-> >> +	struct pci_p2pdma *p2pdma = rcu_dereference_protected(pdev->p2pdma, 1);
-> >> +
-> >> +	/* Ensure no new pages can be allocated in mappings */
-> >> +	p2pdma->active = false;
-> >> +	synchronize_rcu();
-> >> +
-> >> +	unmap_mapping_range(p2pdma->inode->i_mapping, 0, 0, 1);
-> >> +
-> >> +	/*
-> >> +	 * On some architectures, TLB flushes are done with call_rcu()
-> >> +	 * so to ensure GUP fast is done with the pages, call synchronize_rcu()
-> >> +	 * before freeing them.
-> >> +	 */
-> >> +	synchronize_rcu();
-> >> +	pci_p2pdma_free_mappings(p2pdma->inode->i_mapping);
+On Thu, May 26, 2022 at 08:49:39AM +0200, Krzysztof Kozlowski wrote:
+> On 09/05/2022 22:58, Nícolas F. R. A. Prado wrote:
+> > The Mediatek AFE PCM controller for MT8192 allows two I2S interfaces to
+> > share the same clock and act as a single interface with both input and
+> > output. Add patterns for these properties in the dt-binding. The
+> > property is split into two patterns in order to allow all valid
+> > interface pairings.
 > > 
-> > With the series from Felix getting close this should get updated to
-> > not set pte_devmap and use proper natural refcounting without any of
-> > this stuff.
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > 
+> > ---
+> > The series from v1 of this patch was merged although some changes were
+> > still needed in this patch, so the v1 of this patch was reverted [1] and
+> > this standalone commit addresses the feedback from v1 and readds the
+> > property.
+> > 
+> > [1] https://lore.kernel.org/all/20220509185625.580811-1-nfraprado@collabora.com
+> > 
+> > v1: https://lore.kernel.org/all/20220429203039.2207848-2-nfraprado@collabora.com/
+> > 
+> > Changes in v2:
+> > - Added "mediatek," prefix to property
+> > - Rewrote and added more information to property description
+> > - Split into two patterns to validate that output-input pairings are
+> >   done
+> > 
+> >  .../bindings/sound/mt8192-afe-pcm.yaml           | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> > index 7a25bc9b8060..2abf43c6c2c3 100644
+> > --- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> > +++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+> > @@ -54,6 +54,22 @@ properties:
+> >        - const: aud_infra_clk
+> >        - const: aud_infra_26m_clk
+> >  
+> > +patternProperties:
+> > +  "^mediatek,i2s[13579]-share$":
+> > +    description:
+> > +      Each I2S interface has a single data line, input if its index is even or
+> > +      output if the index is odd. An input and an output I2S interface can be
+> > +      used together as if they were a single I2S interface with both input and
+> > +      output data lines by sharing the same clock. This property represents this
+> > +      pairing. The value should be the name of the interface whose clock is
+> > +      used, and the property name the other interface that depends on this
+> > +      clock.
+> > +    pattern: "^I2S[0268]$"
+> > +
+> > +  "^mediatek,i2s[0268]-share$":
+> > +    description: Same as above.
+> > +    pattern: "^I2S[13579]$"
 > 
-> Can you send a link? I'm not sure what you are referring to.
+> Rob's question is still valid - why these are not phandles?
 
-IIRC this is the last part:
+So, instead of having
 
-https://lore.kernel.org/linux-mm/20220524190632.3304-1-alex.sierra@amd.com/
+	i2s9-share = "I2S8";
 
-And the earlier bit with Christoph's pieces looks like it might get
-merged to v5.19..
+on the DT, you want us to have something like this:
 
-The general idea is once pte_devmap is not set then all the
-refcounting works the way it should. This is what all new ZONE_DEVICE
-users should do..
+        afe_i2s8: mediatek,i2s8 { };
 
-Jason
+        mediatek,i2s9 {
+          mediatek,share-clock = <&afe_i2s8>;
+        };
+
+Or do you mean something else?
+
+It seems like a lot more syntax to express the same thing (and the empty node
+seems awkward), but if that's the DT way, I can change it no problem.
+
+> 
+> In any case you miss $ref.
+
+Indeed, sorry, I'll add it in next version.
+
+Thanks,
+Nícolas

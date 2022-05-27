@@ -2,699 +2,660 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215A5535BE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55218535C12
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349930AbiE0IrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S1350061AbiE0IwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349921AbiE0IrM (ORCPT
+        with ESMTP id S1350007AbiE0Ivb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:47:12 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECF32AC74;
-        Fri, 27 May 2022 01:47:10 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id t4so675917pld.4;
-        Fri, 27 May 2022 01:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ircKXkU/J207P0hZbVlMwneiC9EWCk+QuJbTImAfc+E=;
-        b=FypdWyD/1SCCEVwn9SXGe1+N2/ldiRtsnPepIbo64KaUBFimcp99gRXp1//mQO5Ns/
-         jv0KYm/9aJjKrUcFk/4mmap2rpYnoACiFhpeOpHzy/5pBvxwpiqcir/NjV8nUdls0X1s
-         kg+bKsUXpCKWf+DjCRXVZ4VFt+ohrPW0KmHWwERHsWKZK7wuca1agGqgsLci2Rar6ui4
-         OFT8ituCczpTu6Pmp1ASlJmyrViYMxCv/30JzQER0Pq+aBnqDnyh6BnTUX3roeuo1MF2
-         qjHNrFZsVgWMJiVupBeoD9HhTryVf0GH15c2yZw/JUWAr5+tu3OTr1pVvVlsskcBG8Oe
-         N2/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ircKXkU/J207P0hZbVlMwneiC9EWCk+QuJbTImAfc+E=;
-        b=u3+mPBdUvVC5GggFiN/GUBCnbhju5VIyY0ZUN6Nq3GSMVHaEEeCbX9mHX7pWcx6pdI
-         FEt+sM+dD6/1bjPIRt7eBGaNGBzgkdbzPfXw4iArprs3jAxLdjAoYkK0GC3Av/pDIv5F
-         KO8sTxawZaaJ8l7/SFl55XG/tf6jXaDiCXZNaeamsCC7kDvSj0QBJvSqpSZxZpUDrgbi
-         pMRuhYibmBXAhfNArEqbBLAwyknTOtbkpc0a8XCphLQSSlcBWMsQjR4ANVujnCqs6iJL
-         fVtY0ZnNQt8i1BPdY8LJaxfmpvYR0xlh4SJkhp8ycSrVmb6OTE33qF3xOlzIPNHsXqge
-         orIQ==
-X-Gm-Message-State: AOAM5320DLqD4bVTmN0zu6/WiFsZ8P/Oo/zCEQ9l9NtVpie8ZjIg6vBi
-        mmzz2eoTMI2hVO+YW7Myubs=
-X-Google-Smtp-Source: ABdhPJyU/CzjgtNXMiPT/iLq//bo8DD8/RG1zDvNc6NHD6pnT3Yy1nZSyearOuxkg4IBaDVpclwfUA==
-X-Received: by 2002:a17:902:868b:b0:161:f0ac:875f with SMTP id g11-20020a170902868b00b00161f0ac875fmr36251162plo.83.1653641230041;
-        Fri, 27 May 2022 01:47:10 -0700 (PDT)
-Received: from localhost.localdomain ([116.89.143.231])
-        by smtp.gmail.com with ESMTPSA id k12-20020a170902d58c00b0015e8d4eb1ebsm3003254plh.53.2022.05.27.01.47.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 01:47:09 -0700 (PDT)
-From:   medadyoung@gmail.com
-X-Google-Original-From: ctcchien@nuvoton.com
-To:     benjaminfair@google.com, yuenn@google.com, venture@google.com,
-        tali.perry1@gmail.com, tmaimon77@gmail.com, avifishman70@gmail.com,
-        robh+dt@kernel.org, alexandre.belloni@bootlin.com,
-        a.zummo@towertech.it, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
-        JJLIU0@nuvoton.com, KFTING@nuvoton.com, ctcchien@nuvoton.com
-Cc:     openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: [PATCH v3 3/3] RTC: nuvoton: Add NCT3018Y real time clock driver
-Date:   Fri, 27 May 2022 16:46:47 +0800
-Message-Id: <20220527084647.30835-4-ctcchien@nuvoton.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220527084647.30835-1-ctcchien@nuvoton.com>
-References: <20220527084647.30835-1-ctcchien@nuvoton.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 27 May 2022 04:51:31 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB59E4C41A;
+        Fri, 27 May 2022 01:51:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DC9F5CE1A01;
+        Fri, 27 May 2022 08:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B242AC385B8;
+        Fri, 27 May 2022 08:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1653641485;
+        bh=xOcredF0GmNBRomd5oBuCNp3/PjU7CHBltyyu4izCoA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qdjcS4oLLW7DQYCtEgiTAPcB2kuvOsHYvAIaMo7fOWxSPbOoi/81mPDWecBhVmwT9
+         8+N10bRKku0LXkklpk07mg/8/Aohnv+z83mI9SkyC2Q6lHH+1DTHS1IfCCsV7vc1hW
+         6Ax6YMIZotYCNNnvYyxx8efIp8tQuUhulUMTypiM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.10 000/163] 5.10.119-rc1 review
+Date:   Fri, 27 May 2022 10:48:00 +0200
+Message-Id: <20220527084828.156494029@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.119-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.10.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.10.119-rc1
+X-KernelTest-Deadline: 2022-05-29T08:48+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Medad CChien <ctcchien@nuvoton.com>
+This is the start of the stable review cycle for the 5.10.119 release.
+There are 163 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Add real time clock support for NCT3018Y.
+Responses should be made by Sun, 29 May 2022 08:46:26 +0000.
+Anything received after that time might be too late.
 
-Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
----
- MAINTAINERS                |   1 +
- drivers/rtc/Kconfig        |  10 +
- drivers/rtc/Makefile       |   1 +
- drivers/rtc/rtc-nct3018y.c | 559 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 571 insertions(+)
- create mode 100644 drivers/rtc/rtc-nct3018y.c
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.119-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+and the diffstat can be found below.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5a4302e9aad2..7a8f3b04ca61 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2372,6 +2372,7 @@ F:	arch/arm/boot/dts/nuvoton-npcm*
- F:	arch/arm/mach-npcm/
- F:	drivers/*/*npcm*
- F:	drivers/*/*/*npcm*
-+F:	drivers/rtc/rtc-nct3018y.c
- F:	include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
- 
- ARM/NUVOTON WPCM450 ARCHITECTURE
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index d85a3c31347c..a61f9fd0b8fc 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -383,6 +383,16 @@ config RTC_DRV_MAX77686
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-max77686.
- 
-+config RTC_DRV_NCT3018Y
-+	tristate "Nuvoton NCT3018Y"
-+	depends on OF
-+	help
-+	   If you say yes here you get support for the Nuvoton NCT3018Y I2C RTC
-+	   chip.
-+
-+	   This driver can also be built as a module, if so, the module will be
-+	   called "rtc-nct3018y".
-+
- config RTC_DRV_RK808
- 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
- 	depends on MFD_RK808
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index e92f3e943245..d3c100e43d1f 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -112,6 +112,7 @@ obj-$(CONFIG_RTC_DRV_MV)	+= rtc-mv.o
- obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
- obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
- obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
-+obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
- obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
- obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
- obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
-diff --git a/drivers/rtc/rtc-nct3018y.c b/drivers/rtc/rtc-nct3018y.c
-new file mode 100644
-index 000000000000..1a175e8dda9d
---- /dev/null
-+++ b/drivers/rtc/rtc-nct3018y.c
-@@ -0,0 +1,559 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2022 Nuvoton Technology Corporation
-+
-+#include <linux/bcd.h>
-+#include <linux/clk-provider.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+
-+#define NCT3018Y_REG_SC		0x00 /* seconds */
-+#define NCT3018Y_REG_SCA	0x01 /* alarm */
-+#define NCT3018Y_REG_MN		0x02
-+#define NCT3018Y_REG_MNA	0x03 /* alarm */
-+#define NCT3018Y_REG_HR		0x04
-+#define NCT3018Y_REG_HRA	0x05 /* alarm */
-+#define NCT3018Y_REG_DW		0x06
-+#define NCT3018Y_REG_DM		0x07
-+#define NCT3018Y_REG_MO		0x08
-+#define NCT3018Y_REG_YR		0x09
-+#define NCT3018Y_REG_CTRL	0x0A /* timer control */
-+#define NCT3018Y_REG_ST		0x0B /* status */
-+#define NCT3018Y_REG_CLKO	0x0C /* clock out */
-+
-+#define NCT3018Y_BIT_AF		BIT(7)
-+#define NCT3018Y_BIT_ST		BIT(7)
-+#define NCT3018Y_BIT_DM		BIT(6)
-+#define NCT3018Y_BIT_HF		BIT(5)
-+#define NCT3018Y_BIT_DSM	BIT(4)
-+#define NCT3018Y_BIT_AIE	BIT(3)
-+#define NCT3018Y_BIT_OFIE	BIT(2)
-+#define NCT3018Y_BIT_CIE	BIT(1)
-+#define NCT3018Y_BIT_TWO	BIT(0)
-+
-+#define NCT3018Y_REG_BAT_MASK		0x07
-+#define NCT3018Y_REG_CLKO_F_MASK	0x03 /* frequenc mask */
-+#define NCT3018Y_REG_CLKO_CKE		0x80 /* clock out enabled */
-+
-+struct nct3018y {
-+	struct rtc_device *rtc;
-+	struct i2c_client *client;
-+#ifdef CONFIG_COMMON_CLK
-+	struct clk_hw		clkout_hw;
-+#endif
-+};
-+
-+static int nct3018y_set_alarm_mode(struct i2c_client *client, bool on)
-+{
-+	int err, flags;
-+
-+	dev_dbg(&client->dev, "%s:on:%d\n", __func__, on);
-+
-+	flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
-+	if (flags < 0) {
-+		dev_err(&client->dev,
-+			"Failed to read NCT3018Y_REG_CTRL\n");
-+		return flags;
-+	}
-+
-+	if (on)
-+		flags |= NCT3018Y_BIT_AIE;
-+	else
-+		flags &= ~NCT3018Y_BIT_AIE;
-+
-+	flags |= NCT3018Y_BIT_CIE;
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
-+		return err;
-+	}
-+
-+	flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_ST);
-+	if (flags < 0) {
-+		dev_err(&client->dev,
-+			"Failed to read NCT3018Y_REG_ST\n");
-+		return flags;
-+	}
-+
-+	flags &= ~(NCT3018Y_BIT_AF);
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_ST, flags);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write NCT3018Y_REG_ST\n");
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static int nct3018y_get_alarm_mode(struct i2c_client *client, unsigned char *alarm_enable,
-+				  unsigned char *alarm_flag)
-+{
-+	int err, flags;
-+
-+	if (alarm_enable) {
-+		dev_dbg(&client->dev, "%s:NCT3018Y_REG_CTRL\n", __func__);
-+		flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
-+		if (flags < 0)
-+			return flags;
-+		*alarm_enable = flags & NCT3018Y_BIT_AIE;
-+	}
-+
-+	if (alarm_flag) {
-+		dev_dbg(&client->dev, "%s:NCT3018Y_REG_ST\n", __func__);
-+		flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_ST);
-+		if (flags < 0)
-+			return flags;
-+		*alarm_flag = flags & NCT3018Y_BIT_AF;
-+	}
-+
-+	dev_dbg(&client->dev, "%s:alarm_enable:%x alarm_flag:%x\n",
-+		__func__, *alarm_enable, *alarm_flag);
-+
-+	return 0;
-+}
-+
-+static irqreturn_t nct3018y_irq(int irq, void *dev_id)
-+{
-+	struct nct3018y *nct3018y = i2c_get_clientdata(dev_id);
-+	struct i2c_client *client = nct3018y->client;
-+	int err;
-+	unsigned char alarm_flag;
-+	unsigned char alarm_enable;
-+
-+	dev_dbg(&client->dev, "%s:irq:%d\n", __func__, irq);
-+	err = nct3018y_get_alarm_mode(nct3018y->client, &alarm_enable, &alarm_flag);
-+	if (err)
-+		return IRQ_NONE;
-+
-+	if (alarm_flag) {
-+		dev_dbg(&client->dev, "%s:alarm flag:%x\n",
-+			__func__, alarm_flag);
-+		rtc_update_irq(nct3018y->rtc, 1, RTC_IRQF | RTC_AF);
-+		nct3018y_set_alarm_mode(nct3018y->client, 0);
-+		dev_dbg(&client->dev, "%s:IRQ_HANDLED\n", __func__);
-+		return IRQ_HANDLED;
-+	}
-+
-+	return IRQ_NONE;
-+}
-+
-+/*
-+ * In the routines that deal directly with the nct3018y hardware, we use
-+ * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
-+ */
-+static int nct3018y_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	unsigned char buf[10];
-+	int err;
-+
-+	err = i2c_smbus_read_i2c_block_data(client, NCT3018Y_REG_SC, sizeof(buf), buf);
-+	if (err < 0)
-+		return err;
-+
-+	tm->tm_sec = bcd2bin(buf[0] & 0x7F);
-+	tm->tm_min = bcd2bin(buf[2] & 0x7F);
-+	tm->tm_hour = bcd2bin(buf[4] & 0x3F);
-+	tm->tm_wday = buf[6] & 0x07;
-+	tm->tm_mday = bcd2bin(buf[7] & 0x3F);
-+	tm->tm_mon = bcd2bin(buf[8] & 0x1F) - 1;
-+	tm->tm_year = bcd2bin(buf[9]) + 100;
-+
-+	return 0;
-+}
-+
-+static int nct3018y_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	unsigned char buf[4] = {0};
-+	int err;
-+
-+	buf[0] = bin2bcd(tm->tm_sec);
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_SC, buf[0]);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write NCT3018Y_REG_SC\n");
-+		return err;
-+	}
-+
-+	buf[0] = bin2bcd(tm->tm_min);
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_MN, buf[0]);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write NCT3018Y_REG_MN\n");
-+		return err;
-+	}
-+
-+	buf[0] = bin2bcd(tm->tm_hour);
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_HR, buf[0]);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write NCT3018Y_REG_HR\n");
-+		return err;
-+	}
-+
-+	buf[0] = tm->tm_wday & 0x07;
-+	buf[1] = bin2bcd(tm->tm_mday);
-+	buf[2] = bin2bcd(tm->tm_mon+1);
-+	buf[3] = bin2bcd(tm->tm_year - 100);
-+	err = i2c_smbus_write_i2c_block_data(client, NCT3018Y_REG_DW,
-+					     sizeof(buf), buf);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write for day and mon and year\n");
-+		return -EIO;
-+	}
-+
-+	return err;
-+}
-+
-+static int nct3018y_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *tm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	unsigned char buf[5];
-+	int err;
-+
-+	err = i2c_smbus_read_i2c_block_data(client, NCT3018Y_REG_SCA,
-+					    sizeof(buf), buf);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to read date\n");
-+		return -EIO;
-+	}
-+
-+	dev_dbg(&client->dev, "%s: raw data is sec=%02x, min=%02x hr=%02x\n",
-+		__func__, buf[0], buf[2], buf[4]);
-+
-+	tm->time.tm_sec = bcd2bin(buf[0] & 0x7F);
-+	tm->time.tm_min = bcd2bin(buf[2] & 0x7F);
-+	tm->time.tm_hour = bcd2bin(buf[4] & 0x3F);
-+
-+	err = nct3018y_get_alarm_mode(client, &tm->enabled, &tm->pending);
-+	if (err < 0)
-+		return err;
-+
-+	dev_dbg(&client->dev, "%s:s=%d m=%d, hr=%d, enabled=%d, pending=%d\n",
-+		__func__, tm->time.tm_sec, tm->time.tm_min,
-+		tm->time.tm_hour, tm->enabled, tm->pending);
-+
-+	return 0;
-+}
-+
-+static int nct3018y_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *tm)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	unsigned char buf[3];
-+	int err;
-+
-+	dev_dbg(dev, "%s, sec=%d, min=%d hour=%d tm->enabled:%d\n",
-+		__func__, tm->time.tm_sec, tm->time.tm_min, tm->time.tm_hour,
-+		tm->enabled);
-+
-+	buf[0] = bin2bcd(tm->time.tm_sec);
-+	buf[1] = bin2bcd(tm->time.tm_min);
-+	buf[2] = bin2bcd(tm->time.tm_hour);
-+
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_SCA, buf[0]);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write NCT3018Y_REG_SCA\n");
-+		return err;
-+	}
-+
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_MNA, buf[1]);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write NCT3018Y_REG_MNA\n");
-+		return err;
-+	}
-+
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_HRA, buf[2]);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write NCT3018Y_REG_HRA\n");
-+		return err;
-+	}
-+
-+	return nct3018y_set_alarm_mode(client, tm->enabled);
-+}
-+
-+static int nct3018y_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	dev_dbg(dev, "%s: alarm enable=%d\n", __func__, enabled);
-+
-+	return nct3018y_set_alarm_mode(to_i2c_client(dev), enabled);
-+}
-+
-+static int nct3018y_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	int status, flags = 0;
-+
-+	switch (cmd) {
-+	case RTC_VL_READ:
-+		status = i2c_smbus_read_byte_data(client, NCT3018Y_REG_ST);
-+		if (status < 0)
-+			return status;
-+
-+		if (!(status & NCT3018Y_REG_BAT_MASK))
-+			flags |= RTC_VL_DATA_INVALID;
-+
-+		return put_user(flags, (unsigned int __user *)arg);
-+
-+	default:
-+		return -ENOIOCTLCMD;
-+	}
-+}
-+
-+#ifdef CONFIG_COMMON_CLK
-+/*
-+ * Handling of the clkout
-+ */
-+
-+#define clkout_hw_to_nct3018y(_hw) container_of(_hw, struct nct3018y, clkout_hw)
-+
-+static const int clkout_rates[] = {
-+	32768,
-+	1024,
-+	32,
-+	1,
-+};
-+
-+static unsigned long nct3018y_clkout_recalc_rate(struct clk_hw *hw,
-+						 unsigned long parent_rate)
-+{
-+	struct nct3018y *nct3018y = clkout_hw_to_nct3018y(hw);
-+	struct i2c_client *client = nct3018y->client;
-+	int flags;
-+
-+	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CLKO);
-+	if (flags < 0)
-+		return 0;
-+
-+	flags &= NCT3018Y_REG_CLKO_F_MASK;
-+	return clkout_rates[flags];
-+}
-+
-+static long nct3018y_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
-+				       unsigned long *prate)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(clkout_rates); i++)
-+		if (clkout_rates[i] <= rate)
-+			return clkout_rates[i];
-+
-+	return 0;
-+}
-+
-+static int nct3018y_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
-+				   unsigned long parent_rate)
-+{
-+	struct nct3018y *nct3018y = clkout_hw_to_nct3018y(hw);
-+	struct i2c_client *client = nct3018y->client;
-+	int i, flags;
-+
-+	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CLKO);
-+	if (flags < 0)
-+		return flags;
-+
-+	for (i = 0; i < ARRAY_SIZE(clkout_rates); i++)
-+		if (clkout_rates[i] == rate) {
-+			flags &= ~NCT3018Y_REG_CLKO_F_MASK;
-+			flags |= i;
-+			return i2c_smbus_write_byte_data(client, NCT3018Y_REG_CLKO, flags);
-+		}
-+
-+	return -EINVAL;
-+}
-+
-+static int nct3018y_clkout_control(struct clk_hw *hw, bool enable)
-+{
-+	struct nct3018y *nct3018y = clkout_hw_to_nct3018y(hw);
-+	struct i2c_client *client = nct3018y->client;
-+	int flags;
-+
-+	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CLKO);
-+	if (flags < 0)
-+		return flags;
-+
-+
-+	if (enable)
-+		flags |= NCT3018Y_REG_CLKO_CKE;
-+	else
-+		flags &= ~NCT3018Y_REG_CLKO_CKE;
-+
-+	return i2c_smbus_write_byte_data(client, NCT3018Y_REG_CLKO, flags);
-+}
-+
-+static int nct3018y_clkout_prepare(struct clk_hw *hw)
-+{
-+	return nct3018y_clkout_control(hw, 1);
-+}
-+
-+static void nct3018y_clkout_unprepare(struct clk_hw *hw)
-+{
-+	nct3018y_clkout_control(hw, 0);
-+}
-+
-+static int nct3018y_clkout_is_prepared(struct clk_hw *hw)
-+{
-+	struct nct3018y *nct3018y = clkout_hw_to_nct3018y(hw);
-+	struct i2c_client *client = nct3018y->client;
-+	int flags;
-+
-+	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CLKO);
-+	if (flags < 0)
-+		return flags;
-+
-+	return flags & NCT3018Y_REG_CLKO_CKE;
-+}
-+
-+static const struct clk_ops nct3018y_clkout_ops = {
-+	.prepare = nct3018y_clkout_prepare,
-+	.unprepare = nct3018y_clkout_unprepare,
-+	.is_prepared = nct3018y_clkout_is_prepared,
-+	.recalc_rate = nct3018y_clkout_recalc_rate,
-+	.round_rate = nct3018y_clkout_round_rate,
-+	.set_rate = nct3018y_clkout_set_rate,
-+};
-+
-+static struct clk *nct3018y_clkout_register_clk(struct nct3018y *nct3018y)
-+{
-+	struct i2c_client *client = nct3018y->client;
-+	struct device_node *node = client->dev.of_node;
-+	struct clk *clk;
-+	struct clk_init_data init;
-+	int flags, err;
-+
-+	/* disable the clkout output */
-+	flags = 0;
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CLKO, flags);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write oscillator status register\n");
-+		return ERR_PTR(err);
-+	}
-+
-+	init.name = "nct3018y-clkout";
-+	init.ops = &nct3018y_clkout_ops;
-+	init.flags = 0;
-+	init.parent_names = NULL;
-+	init.num_parents = 0;
-+	nct3018y->clkout_hw.init = &init;
-+
-+	/* optional override of the clockname */
-+	of_property_read_string(node, "clock-output-names", &init.name);
-+
-+	/* register the clock */
-+	clk = devm_clk_register(&client->dev, &nct3018y->clkout_hw);
-+
-+	if (!IS_ERR(clk))
-+		of_clk_add_provider(node, of_clk_src_simple_get, clk);
-+
-+	return clk;
-+}
-+#endif
-+
-+static const struct rtc_class_ops nct3018y_rtc_ops = {
-+	.read_time	= nct3018y_rtc_read_time,
-+	.set_time	= nct3018y_rtc_set_time,
-+	.read_alarm	= nct3018y_rtc_read_alarm,
-+	.set_alarm	= nct3018y_rtc_set_alarm,
-+	.alarm_irq_enable = nct3018y_irq_enable,
-+	.ioctl		= nct3018y_ioctl,
-+};
-+
-+static int nct3018y_probe(struct i2c_client *client,
-+			  const struct i2c_device_id *id)
-+{
-+	struct nct3018y *nct3018y;
-+	int err, flags;
-+
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
-+		dev_err(&client->dev, "%s: ENODEV\n", __func__);
-+		return -ENODEV;
-+	}
-+
-+	nct3018y = devm_kzalloc(&client->dev, sizeof(struct nct3018y),
-+				GFP_KERNEL);
-+	if (!nct3018y)
-+		return -ENOMEM;
-+
-+	i2c_set_clientdata(client, nct3018y);
-+	nct3018y->client = client;
-+	device_set_wakeup_capable(&client->dev, 1);
-+
-+	flags = i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
-+	if (flags < 0) {
-+		dev_err(&client->dev, "%s: read error\n", __func__);
-+		return flags;
-+	} else if (flags & NCT3018Y_BIT_TWO)
-+		dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is set\n", __func__);
-+
-+
-+	flags = NCT3018Y_BIT_TWO;
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flags);
-+	if (err < 0) {
-+		dev_err(&client->dev, "Unable to write NCT3018Y_REG_CTRL\n");
-+		return err;
-+	}
-+
-+	flags = 0;
-+	err = i2c_smbus_write_byte_data(client, NCT3018Y_REG_ST, flags);
-+	if (err < 0) {
-+		dev_err(&client->dev, "%s: write error\n", __func__);
-+		return err;
-+	}
-+
-+
-+	nct3018y->rtc = devm_rtc_allocate_device(&client->dev);
-+	if (IS_ERR(nct3018y->rtc))
-+		return PTR_ERR(nct3018y->rtc);
-+
-+	nct3018y->rtc->ops = &nct3018y_rtc_ops;
-+	nct3018y->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	nct3018y->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	if (client->irq > 0) {
-+		err = devm_request_threaded_irq(&client->dev, client->irq,
-+				NULL, nct3018y_irq,
-+				IRQF_ONESHOT | IRQF_TRIGGER_FALLING,
-+				"nct3018y", client);
-+		if (err) {
-+			dev_err(&client->dev, "unable to request IRQ %d\n", client->irq);
-+			return err;
-+		}
-+	}
-+
-+	return devm_rtc_register_device(nct3018y->rtc);
-+
-+#ifdef CONFIG_COMMON_CLK
-+	/* register clk in common clk framework */
-+	nct3018y_clkout_register_clk(nct3018y);
-+#endif
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id nct3018y_id[] = {
-+	{ "nct3018y", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, nct3018y_id);
-+
-+
-+static const struct of_device_id nct3018y_of_match[] = {
-+	{ .compatible = "nuvoton,nct3018y" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, nct3018y_of_match);
-+
-+static struct i2c_driver nct3018y_driver = {
-+	.driver		= {
-+		.name	= "rtc-nct3018y",
-+		.of_match_table = of_match_ptr(nct3018y_of_match),
-+	},
-+	.probe		= nct3018y_probe,
-+	.id_table	= nct3018y_id,
-+};
-+
-+module_i2c_driver(nct3018y_driver);
-+
-+MODULE_AUTHOR("Medad CChien <ctcchien@nuvoton.com>");
-+MODULE_DESCRIPTION("Nuvoton NCT3018Y RTC driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.17.1
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.10.119-rc1
+
+Edward Matijevic <motolav@gmail.com>
+    ALSA: ctxfi: Add SB046x PCI ID
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signals after page of pool writes
+
+Jens Axboe <axboe@kernel.dk>
+    random: wire up fops->splice_{read,write}_iter()
+
+Jens Axboe <axboe@kernel.dk>
+    random: convert to using fops->write_iter()
+
+Jens Axboe <axboe@kernel.dk>
+    random: convert to using fops->read_iter()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: unify batched entropy implementations
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move randomize_page() into mm where it belongs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move initialization functions out of hot pages
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make consistent use of buf and len
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use proper return types on get_random_{int,long}_wait()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove extern from functions in header
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use static branch for crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: credit architectural init the exact amount
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: handle latent entropy and command line from random_init()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use proper jiffies comparison macro
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove ratelimiting for in-kernel unseeded randomness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move initialization out of reseeding hot path
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: avoid initializing twice in credit race
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use symbolic constants for crng_init states
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    siphash: use one source of truth for siphash permutations
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: help compiler out with fast_mix() by using simpler arguments
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not use input pool from hard IRQs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: order timer entropy functions below interrupt functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not pretend to handle premature next security model
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use first 128 bits of input as fast init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not use batches when !crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: insist on random_get_entropy() existing in order to simplify
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    xtensa: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    sparc: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    um: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    x86/tsc: Use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    nios2: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    arm: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    mips: use fallback for random_get_entropy() instead of just c0 random
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    riscv: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    m68k: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    timekeeping: Add raw clock fallback for random_get_entropy()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    powerpc: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    alpha: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    parisc: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    s390: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    ia64: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    init: call time_init() before rand_initialize()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: fix sysctl documentation nits
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: document crng_fast_key_erasure() destination possibility
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make random_get_entropy() return an unsigned long
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: allow partial reads if later user copies fail
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signals every PAGE_SIZE chunk of /dev/[u]random
+
+Jann Horn <jannh@google.com>
+    random: check for signal_pending() outside of need_resched() check
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not allow user to keep crng key around on stack
+
+Jan Varho <jan.varho@gmail.com>
+    random: do not split fast init input in add_hwgenerator_randomness()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: mix build-time latent entropy into pool at init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: re-add removed comment about get_random_{u32,u64} reseeding
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: treat bootloader trust toggle the same way as cpu trust toggle
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: skip fast_init if hwrng provides large chunk of entropy
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signal and try earlier when generating entropy
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: reseed more often immediately after booting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make consistent usage of crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use SipHash as interrupt entropy accumulator
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: replace custom notifier chain with standard one
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: don't let 644 read-only sysctls be written to
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: give sysctl_random_min_urandom_seed a more sensible value
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do crng pre-init loading in worker rather than irq
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: unify cycles_t and jiffies usage and types
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: cleanup UUID handling
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: only wake up writers after zap if threshold was passed
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: round-robin registers as ulong, not u32
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: clear fast pool, crng, and batches in cpuhp bring up
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: pull add_hwgenerator_randomness() declaration into random.h
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for crng_init == 0 in add_device_randomness()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: unify early init crng load accounting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not take pool spinlock at boot
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: defer fast pool mixing to worker
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: rewrite header introductory comment
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group sysctl functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group userspace read/write functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group entropy collection functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group entropy extraction functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group crng functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: group initialization wait functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove whitespace and reorder includes
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove useless header comment
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: introduce drain_entropy() helper to declutter crng_reseed()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: deobfuscate irq u32/u64 contributions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: add proper SPDX header
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove unused tracepoints
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove ifdef'd out interrupt bench
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: tie batched entropy generation to base_crng generation
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: fix locking for crng_init in crng_reseed()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: zero buffer after reading entropy from userspace
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove outdated INT_MAX >> 6 check in urandom_read()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make more consistent use of integer types
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use hash function for crng_slow_load()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use simpler fast key erasure flow on per-cpu keys
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: absorb fast pool into input pool after fast load
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not xor RDRAND when writing into /dev/random
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: ensure early RDSEED goes through mixer on init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: inline leaves of rand_initialize()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: get rid of secondary crngs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use RDSEED instead of RDRAND in entropy extraction
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: fix locking in crng_fast_load()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove batched entropy locking
+
+Eric Biggers <ebiggers@google.com>
+    random: remove use_input_pool parameter from crng_reseed()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make credit_entropy_bits() always safe
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: always wake up entropy writers after extraction
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use linear min-entropy accumulation crediting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: simplify entropy debiting
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use computational hash for entropy extraction
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: only call crng_finalize_init() for primary_crng
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: access primary_pool directly rather than through pointer
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: continually use hwgenerator randomness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: simplify arithmetic function flow in account()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: selectively clang-format where it makes sense
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: access input_pool_data directly rather than through pointer
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: cleanup fractional entropy shift constants
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: prepend remaining pool constants with POOL_
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: de-duplicate INPUT_POOL constants
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove unused OUTPUT_POOL constants
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: rather than entropy_store abstraction, use global
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove unused extract_entropy() reserved argument
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove incomplete last_data logic
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: cleanup integer types
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: cleanup poolinfo abstraction
+
+Schspa Shi <schspa@gmail.com>
+    random: fix typo in comments
+
+Jann Horn <jannh@google.com>
+    random: don't reset crng_init_cnt on urandom_read()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: avoid superfluous call to RDRAND in CRNG extraction
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: early initialization of ChaCha constants
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use IS_ENABLED(CONFIG_NUMA) instead of ifdefs
+
+Dominik Brodowski <linux@dominikbrodowski.net>
+    random: harmonize "crng init done" messages
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: mix bootloader randomness into pool
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not re-init if crng_reseed completes before primary init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not sign extend bytes for rotation when mixing
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use BLAKE2s instead of SHA1 in extraction
+
+Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+    random: remove unused irq_flags argument from add_interrupt_randomness()
+
+Mark Brown <broonie@kernel.org>
+    random: document add_hwgenerator_randomness() with other input functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    lib/crypto: blake2s: avoid indirect calls to compression function for Clang CFI
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    lib/crypto: sha1: re-roll loops to reduce code size
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    lib/crypto: blake2s: move hmac construction into wireguard
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    lib/crypto: blake2s: include as built-in
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - include <linux/bug.h> instead of <asm/bug.h>
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - adjust include guard naming
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - add comment for blake2s_state fields
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - optimize blake2s initialization
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - share the "shash" API boilerplate code
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - move update and final logic to internal/blake2s.h
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - remove unneeded includes
+
+Eric Biggers <ebiggers@google.com>
+    crypto: x86/blake2s - define shash_alg structs using macros
+
+Eric Biggers <ebiggers@google.com>
+    crypto: blake2s - define shash_alg structs using macros
+
+Herbert Xu <herbert@gondor.apana.org.au>
+    crypto: lib/blake2s - Move selftest prototype into header file
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    MAINTAINERS: add git tree for random.c
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    MAINTAINERS: co-maintain random.c
+
+Eric Biggers <ebiggers@google.com>
+    random: remove dead code left over from blocking pool
+
+Ard Biesheuvel <ardb@kernel.org>
+    random: avoid arch_get_random_seed_long() when collecting IRQ randomness
+
+Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+    ACPI: sysfs: Fix BERT error region memory mapping
+
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+    ACPI: sysfs: Make sparse happy about address space in use
+
+Hans Verkuil <hverkuil-cisco@xs4all.nl>
+    media: vim2m: initialize the media device earlier
+
+Sakari Ailus <sakari.ailus@linux.intel.com>
+    media: vim2m: Register video device after setting up internals
+
+Willy Tarreau <w@1wt.eu>
+    secure_seq: use the 64 bits of the siphash for port offset calculation
+
+Eric Dumazet <edumazet@google.com>
+    tcp: change source port randomizarion at connect() time
+
+Paolo Bonzini <pbonzini@redhat.com>
+    KVM: x86/mmu: fix NULL pointer dereference on guest INVPCID
+
+Vitaly Kuznetsov <vkuznets@redhat.com>
+    KVM: x86: Properly handle APF vs disabled LAPIC situation
+
+Denis Efremov (Oracle) <efremov@linux.com>
+    staging: rtl8723bs: prevent ->Ssid overflow in rtw_wx_set_scan()
+
+Daniel Thompson <daniel.thompson@linaro.org>
+    lockdown: also lock down previous kgdb use
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/kernel-parameters.txt |    6 +
+ Documentation/admin-guide/sysctl/kernel.rst     |   22 +-
+ MAINTAINERS                                     |    2 +
+ Makefile                                        |    4 +-
+ arch/alpha/include/asm/timex.h                  |    1 +
+ arch/arm/include/asm/timex.h                    |    1 +
+ arch/ia64/include/asm/timex.h                   |    1 +
+ arch/m68k/include/asm/timex.h                   |    2 +-
+ arch/mips/include/asm/timex.h                   |   17 +-
+ arch/nios2/include/asm/timex.h                  |    3 +
+ arch/parisc/include/asm/timex.h                 |    3 +-
+ arch/powerpc/include/asm/timex.h                |    1 +
+ arch/riscv/include/asm/timex.h                  |    2 +-
+ arch/s390/include/asm/timex.h                   |    1 +
+ arch/sparc/include/asm/timex_32.h               |    4 +-
+ arch/um/include/asm/timex.h                     |    9 +-
+ arch/x86/crypto/Makefile                        |    4 +-
+ arch/x86/crypto/blake2s-glue.c                  |  166 +-
+ arch/x86/crypto/blake2s-shash.c                 |   77 +
+ arch/x86/include/asm/timex.h                    |    9 +
+ arch/x86/include/asm/tsc.h                      |    7 +-
+ arch/x86/kernel/cpu/mshyperv.c                  |    2 +-
+ arch/x86/kvm/lapic.c                            |    6 +
+ arch/x86/kvm/mmu/mmu.c                          |    6 +-
+ arch/x86/kvm/x86.c                              |    2 +-
+ arch/xtensa/include/asm/timex.h                 |    6 +-
+ crypto/Kconfig                                  |    3 +-
+ crypto/blake2s_generic.c                        |  158 +-
+ crypto/drbg.c                                   |   17 +-
+ drivers/acpi/sysfs.c                            |   23 +-
+ drivers/char/Kconfig                            |    3 +-
+ drivers/char/hw_random/core.c                   |    1 +
+ drivers/char/random.c                           | 3035 +++++++++--------------
+ drivers/hv/vmbus_drv.c                          |    2 +-
+ drivers/media/test-drivers/vim2m.c              |   22 +-
+ drivers/net/Kconfig                             |    1 -
+ drivers/net/wireguard/noise.c                   |   45 +-
+ drivers/staging/rtl8723bs/os_dep/ioctl_linux.c  |    6 +-
+ include/crypto/blake2s.h                        |   66 +-
+ include/crypto/chacha.h                         |   15 +-
+ include/crypto/drbg.h                           |    2 +-
+ include/crypto/internal/blake2s.h               |  123 +-
+ include/linux/cpuhotplug.h                      |    2 +
+ include/linux/hw_random.h                       |    2 -
+ include/linux/mm.h                              |    1 +
+ include/linux/prandom.h                         |   23 +-
+ include/linux/random.h                          |  100 +-
+ include/linux/security.h                        |    2 +
+ include/linux/siphash.h                         |   28 +
+ include/linux/timex.h                           |   10 +-
+ include/net/inet_hashtables.h                   |    2 +-
+ include/net/secure_seq.h                        |    4 +-
+ include/trace/events/random.h                   |  330 ---
+ init/main.c                                     |   13 +-
+ kernel/cpu.c                                    |   11 +
+ kernel/debug/debug_core.c                       |   24 +
+ kernel/debug/kdb/kdb_main.c                     |   62 +-
+ kernel/irq/handle.c                             |    2 +-
+ kernel/time/timekeeping.c                       |   15 +
+ lib/Kconfig.debug                               |    3 +-
+ lib/crypto/Kconfig                              |   23 +-
+ lib/crypto/Makefile                             |    9 +-
+ lib/crypto/blake2s-generic.c                    |    6 +-
+ lib/crypto/blake2s-selftest.c                   |   33 +-
+ lib/crypto/blake2s.c                            |   81 +-
+ lib/random32.c                                  |   16 +-
+ lib/sha1.c                                      |   95 +-
+ lib/siphash.c                                   |   32 +-
+ lib/vsprintf.c                                  |   10 +-
+ mm/util.c                                       |   32 +
+ net/core/secure_seq.c                           |    4 +-
+ net/ipv4/inet_hashtables.c                      |   28 +-
+ net/ipv6/inet6_hashtables.c                     |    4 +-
+ security/security.c                             |    2 +
+ sound/pci/ctxfi/ctatc.c                         |    2 +
+ sound/pci/ctxfi/cthardware.h                    |    3 +-
+ 76 files changed, 1865 insertions(+), 3035 deletions(-)
+
 

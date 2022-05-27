@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44355362BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31905362C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350435AbiE0MlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
+        id S1350591AbiE0Mlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352308AbiE0Mjz (ORCPT
+        with ESMTP id S1353133AbiE0MkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 08:39:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F02B11CB42
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653654464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RJxrf4ooyTqpiAItg7I/Q/q7XnsebEkQQNQ2A5YOD9I=;
-        b=Y7GFu+D67F3eWP27RIfvBCxs33FnVNXY0omDhB9Mw/XsxnsQSDqxZe3pYlvwo3aXnK6djs
-        OQnfu6mgvoaiTkg+YVU8EA38N44tVKrpKvMoWvQK+1OMM21wUBsbafa6hETQ10zBJhLX0f
-        mHKapFd8wVdYrevKrJZbPRXVSHr8SZw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-251-jXjVmR17Pi2O2lmDWrKoXw-1; Fri, 27 May 2022 08:27:38 -0400
-X-MC-Unique: jXjVmR17Pi2O2lmDWrKoXw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29875101AA45;
-        Fri, 27 May 2022 12:27:37 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2504E1410DD5;
-        Fri, 27 May 2022 12:27:34 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <202205190704.1DC660E5E@keescook>
-References: <202205190704.1DC660E5E@keescook> <165296786831.3591209.12111293034669289733.stgit@warthog.procyon.org.uk>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     dhowells@redhat.com, jlayton@kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Steve French <smfrench@gmail.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-doc@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fsdevek@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] netfs: Fix gcc-12 warning by embedding vfs inode in netfs_i_context
+        Fri, 27 May 2022 08:40:12 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A6F1A825
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:30:05 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id l30so1546416lfj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/Qa+1ZMKXDipYVZiH4DqDDXVdhhdm8UiF6LTZCsTZAk=;
+        b=jnoWM/4bXd6/3S8i7E6RROWqw5Q3r/Opq8dru2NjrmovsEu31qYWFVYYAFRpKM+xLG
+         iP48vA/CXfRLV0FeddB0j9PD8H781O+xrJg+PP1/fQNXrFOIKRRBvESy5JrsVZbAWpcH
+         Q29xCeNF5oFUNsi2IA2M1nxWl4jI3s/EFnmcfSVqBhPn3avDF98adTNymtz8avaQOSef
+         Di11fGfQf/L63AlmwDNjK6u70mIrdCsfCPZ2HHsAnP0O7kHQbC+rOottO1phPElLhWiu
+         iur0FMiFtnTMCXaJRX40thJS4TZDRhHYzNpqaZFVPjV1UpsFxWxlxPiE7Yd+7/OU6Jaz
+         Clng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/Qa+1ZMKXDipYVZiH4DqDDXVdhhdm8UiF6LTZCsTZAk=;
+        b=hFsminWOq4vCTExjQBscbHT2ZSufFA8/RCxIMFLr4zl/Uaos1VlODM6X+havGy9RUf
+         iyRe3kKfU7ksNDanpJKFhgVdvIfn45gBHDwuBPuoDdYVBsVf0BKYNx/6OxqRSN4dIhvN
+         CwOvD0TGwWdTC/E3syJKx4yXMZu2MTl3qDHPPOlOg9I2l2OhzmOFpJO4VimPPqmkRty3
+         W79nXAd7MlG3+D1dFWWZYk1K1ZOmos23FfcQFAP+ljIBBAgfyLYzKAsrWIV5zwIZoWxn
+         TixTfqYTuog5/uGXMsEt9T/prnDWhwBVsvsimRxEQ9U75oV+cxBVGqgYn7ijvV4HkjZF
+         a4MA==
+X-Gm-Message-State: AOAM53117+0lQTqdNh+LjK/0pwoo/tKW54wgWJJf68AAWzpctXxudMSE
+        Z4+mK0wGFAsQjAatE8th8OtZmWSRHZUyrKZrlU4KeA==
+X-Google-Smtp-Source: ABdhPJyT/zlf0aaVyN/7Ekiu3XK/wY5Ir31SlVnBYaqmXj51swK9kyiUEUYHzU7LhBJqeYOiF8BSDJEHabUlJSHwyow=
+X-Received: by 2002:a05:6512:1588:b0:477:a556:4ab2 with SMTP id
+ bp8-20020a056512158800b00477a5564ab2mr29719365lfb.376.1653654603880; Fri, 27
+ May 2022 05:30:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3598051.1653654453.1@warthog.procyon.org.uk>
-Date:   Fri, 27 May 2022 13:27:33 +0100
-Message-ID: <3598052.1653654453@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <000000000000f2655205dff90da9@google.com> <c674af89-5596-3298-1730-47c0bfe6230d@linux.alibaba.com>
+In-Reply-To: <c674af89-5596-3298-1730-47c0bfe6230d@linux.alibaba.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Fri, 27 May 2022 14:29:52 +0200
+Message-ID: <CACT4Y+bA4AQvXpuxV19cg-5_LJ7zdYoxEBfNuth2FiAWNiaH0Q@mail.gmail.com>
+Subject: Re: [syzbot] upstream build error (18)
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     syzbot <syzbot+a0b95614aef2afe9e488@syzkaller.appspotmail.com>,
+        anshuman.khandual@arm.com, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mike.kravetz@oracle.com, songmuchun@bytedance.com,
+        syzkaller-bugs@googlegroups.com, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+On Fri, 27 May 2022 at 10:24, Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+>
+> Hi,
+>
+> On 5/27/2022 3:14 PM, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    7e284070abe5 Merge tag 'for-5.19/dm-changes' of git://git...
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=1233ae81f00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=854cea6cbaeb1d1b
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=a0b95614aef2afe9e488
+> > compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: arm64
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+a0b95614aef2afe9e488@syzkaller.appspotmail.com
+> >
+> > arch/arm64/mm/hugetlbpage.c:515:9: error: implicit declaration of function 'get_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
+> > arch/arm64/mm/hugetlbpage.c:515:9: error: incompatible types when returning type 'int' but 'pte_t' was expected
+> > arch/arm64/mm/hugetlbpage.c:516:1: error: control reaches end of non-void function [-Werror=return-type]
+>
+> I've sent out a fix patch [1], please try it. Thanks.
+>
+> [1]
+> https://lore.kernel.org/all/814e20c19b110209ee12ecae7cb05f8a78d021c8.1653625820.git.baolin.wang@linux.alibaba.com/
 
-Is v2 good for you?  I realise I left your R-b attached to it when I posted
-it, but I can remove that if you don't have time to review it.
+Let's tell syzbot about the fix:
 
-David
-
+#syz fix: arm64/hugetlb: Fix building errors in huge_ptep_clear_flush()

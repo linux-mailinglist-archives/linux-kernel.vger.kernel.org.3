@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0194B535F75
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AE2535F7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351360AbiE0Lhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S1345706AbiE0LiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351333AbiE0Lh3 (ORCPT
+        with ESMTP id S1351352AbiE0Lhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:37:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CDD63380;
-        Fri, 27 May 2022 04:37:28 -0700 (PDT)
+        Fri, 27 May 2022 07:37:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCC970347;
+        Fri, 27 May 2022 04:37:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1631BB824D9;
-        Fri, 27 May 2022 11:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B987C385A9;
-        Fri, 27 May 2022 11:37:25 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1F2B4CE251F;
+        Fri, 27 May 2022 11:37:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B6A9C3411A;
+        Fri, 27 May 2022 11:37:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651445;
-        bh=j2VFwEiy5AqGYcr1GVEs82OBxC5PnBk4BsCsWy+UcgY=;
+        s=korg; t=1653651455;
+        bh=PORpr+2wqIhjQhXaitWImoIa4fAJzrqRfApNA41YQwg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wWFWIlU9IdOxUwrP3FLp+v60WdRff7TvMbfI71IhmLOxr3jOsdrfjCTrmPxOJ7x4q
-         GOBoUR7LrRHWhvwUhFAGgIHDXt40FFr+81lA1bhyOgg8xmXWw3EWreo0T8347Ro39I
-         hBPklm0vl8C82xtrL0/LNi/DteYDdY/czC1I4YSc=
+        b=VLDpmT5pwGri38ZdOZy9lraN36Vf0is7vJvQ+zxhJ8Wyca+akrR/IVXLdnC6T2fHp
+         xKo5A8hY9+bXYazoYc7Hl27Nx8e7tQ1B652bPCGbq1FMZ2CvgIGBfbHBOaQX0rXycA
+         PKFcJBYmd9vkBAKjMpA0y6hxMLLX86tNX3ZmvEeI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 021/163] crypto: blake2s - optimize blake2s initialization
-Date:   Fri, 27 May 2022 10:48:21 +0200
-Message-Id: <20220527084831.110196319@linuxfoundation.org>
+Subject: [PATCH 5.10 022/163] crypto: blake2s - add comment for blake2s_state fields
+Date:   Fri, 27 May 2022 10:48:22 +0200
+Message-Id: <20220527084831.270485281@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
 References: <20220527084828.156494029@linuxfoundation.org>
@@ -58,22 +58,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Eric Biggers <ebiggers@google.com>
 
-commit 42ad8cf821f0d8564c393e9ad7d00a1a271d18ae upstream.
+commit 7d87131fadd53a0401b5c078dd64e58c3ea6994c upstream.
 
-If no key was provided, then don't waste time initializing the block
-buffer, as its initial contents won't be used.
-
-Also, make crypto_blake2s_init() and blake2s() call a single internal
-function __blake2s_init() which treats the key as optional, rather than
-conditionally calling blake2s_init() or blake2s_init_key().  This
-reduces the compiled code size, as previously both blake2s_init() and
-blake2s_init_key() were being inlined into these two callers, except
-when the key size passed to blake2s() was a compile-time constant.
-
-These optimizations aren't that significant for BLAKE2s.  However, the
-equivalent optimizations will be more significant for BLAKE2b, as
-everything is twice as big in BLAKE2b.  And it's good to keep things
-consistent rather than making optimizations for BLAKE2b but not BLAKE2s.
+The first three fields of 'struct blake2s_state' are used in assembly
+code, which isn't immediately obvious, so add a comment to this effect.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 Acked-by: Ard Biesheuvel <ardb@kernel.org>
@@ -81,107 +69,18 @@ Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/crypto/blake2s.h          |   53 +++++++++++++++++++-------------------
- include/crypto/internal/blake2s.h |    5 ---
- 2 files changed, 28 insertions(+), 30 deletions(-)
+ include/crypto/blake2s.h |    1 +
+ 1 file changed, 1 insertion(+)
 
 --- a/include/crypto/blake2s.h
 +++ b/include/crypto/blake2s.h
-@@ -43,29 +43,34 @@ enum blake2s_iv {
- 	BLAKE2S_IV7 = 0x5BE0CD19UL,
+@@ -24,6 +24,7 @@ enum blake2s_lengths {
  };
  
--void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen);
--void blake2s_final(struct blake2s_state *state, u8 *out);
--
--static inline void blake2s_init_param(struct blake2s_state *state,
--				      const u32 param)
-+static inline void __blake2s_init(struct blake2s_state *state, size_t outlen,
-+				  const void *key, size_t keylen)
- {
--	*state = (struct blake2s_state){{
--		BLAKE2S_IV0 ^ param,
--		BLAKE2S_IV1,
--		BLAKE2S_IV2,
--		BLAKE2S_IV3,
--		BLAKE2S_IV4,
--		BLAKE2S_IV5,
--		BLAKE2S_IV6,
--		BLAKE2S_IV7,
--	}};
-+	state->h[0] = BLAKE2S_IV0 ^ (0x01010000 | keylen << 8 | outlen);
-+	state->h[1] = BLAKE2S_IV1;
-+	state->h[2] = BLAKE2S_IV2;
-+	state->h[3] = BLAKE2S_IV3;
-+	state->h[4] = BLAKE2S_IV4;
-+	state->h[5] = BLAKE2S_IV5;
-+	state->h[6] = BLAKE2S_IV6;
-+	state->h[7] = BLAKE2S_IV7;
-+	state->t[0] = 0;
-+	state->t[1] = 0;
-+	state->f[0] = 0;
-+	state->f[1] = 0;
-+	state->buflen = 0;
-+	state->outlen = outlen;
-+	if (keylen) {
-+		memcpy(state->buf, key, keylen);
-+		memset(&state->buf[keylen], 0, BLAKE2S_BLOCK_SIZE - keylen);
-+		state->buflen = BLAKE2S_BLOCK_SIZE;
-+	}
- }
- 
- static inline void blake2s_init(struct blake2s_state *state,
- 				const size_t outlen)
- {
--	blake2s_init_param(state, 0x01010000 | outlen);
--	state->outlen = outlen;
-+	__blake2s_init(state, outlen, NULL, 0);
- }
- 
- static inline void blake2s_init_key(struct blake2s_state *state,
-@@ -75,12 +80,12 @@ static inline void blake2s_init_key(stru
- 	WARN_ON(IS_ENABLED(DEBUG) && (!outlen || outlen > BLAKE2S_HASH_SIZE ||
- 		!key || !keylen || keylen > BLAKE2S_KEY_SIZE));
- 
--	blake2s_init_param(state, 0x01010000 | keylen << 8 | outlen);
--	memcpy(state->buf, key, keylen);
--	state->buflen = BLAKE2S_BLOCK_SIZE;
--	state->outlen = outlen;
-+	__blake2s_init(state, outlen, key, keylen);
- }
- 
-+void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen);
-+void blake2s_final(struct blake2s_state *state, u8 *out);
-+
- static inline void blake2s(u8 *out, const u8 *in, const u8 *key,
- 			   const size_t outlen, const size_t inlen,
- 			   const size_t keylen)
-@@ -91,11 +96,7 @@ static inline void blake2s(u8 *out, cons
- 		outlen > BLAKE2S_HASH_SIZE || keylen > BLAKE2S_KEY_SIZE ||
- 		(!key && keylen)));
- 
--	if (keylen)
--		blake2s_init_key(&state, outlen, key, keylen);
--	else
--		blake2s_init(&state, outlen);
--
-+	__blake2s_init(&state, outlen, key, keylen);
- 	blake2s_update(&state, in, inlen);
- 	blake2s_final(&state, out);
- }
---- a/include/crypto/internal/blake2s.h
-+++ b/include/crypto/internal/blake2s.h
-@@ -93,10 +93,7 @@ static inline int crypto_blake2s_init(st
- 	struct blake2s_state *state = shash_desc_ctx(desc);
- 	unsigned int outlen = crypto_shash_digestsize(desc->tfm);
- 
--	if (tctx->keylen)
--		blake2s_init_key(state, outlen, tctx->key, tctx->keylen);
--	else
--		blake2s_init(state, outlen);
-+	__blake2s_init(state, outlen, tctx->key, tctx->keylen);
- 	return 0;
- }
- 
+ struct blake2s_state {
++	/* 'h', 't', and 'f' are used in assembly code, so keep them as-is. */
+ 	u32 h[8];
+ 	u32 t[2];
+ 	u32 f[2];
 
 

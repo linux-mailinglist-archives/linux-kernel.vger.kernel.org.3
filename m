@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F95536234
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADBB535BFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352813AbiE0MNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+        id S237859AbiE0Ivl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352092AbiE0Ly2 (ORCPT
+        with ESMTP id S1349987AbiE0IvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:54:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D0414AC85;
-        Fri, 27 May 2022 04:47:54 -0700 (PDT)
+        Fri, 27 May 2022 04:51:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22452AC53;
+        Fri, 27 May 2022 01:51:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AE1461D94;
-        Fri, 27 May 2022 11:47:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2907EC385A9;
-        Fri, 27 May 2022 11:47:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8D87CCE234D;
+        Fri, 27 May 2022 08:51:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38FB6C385A9;
+        Fri, 27 May 2022 08:51:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652073;
-        bh=vExNtks3s2vUV7vJmjZMcrWxyRl5B5nx6iqGjZKV/I4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1+/MsaUmkE0EhhvCodKqtRaPjpWkS7eQRqnhDuB0HtWlZeDUn5DyYLFmBEwlU5qIJ
-         60BuonTiPSbcccY4L8M+srphCgw9Uh2N05dK7HDyUOc2yCzvjUf1djJ4xtZtJqu75c
-         LLammWZlaa5l4wLgSrUVD1MAtIRq6DYczL7TUrKM=
+        s=korg; t=1653641474;
+        bh=IGOsXSlnt3oTDeRyqlMES/yY6b1S4ruEp2zGgq9n+5Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OimFunxxkQm0fLeLFAsRw86vPPDm7sQLd5Un48LXmCVYOT4rsR0db0nes3WHfjKfH
+         exT9O76GCbDT7lvhPkyQRFo+M59jCSpXZEZptOLgayk+AF7TTf3HeHwU8IZutqu28p
+         h1zYoKQUz1Oz7Pi7f/GNcMr070xTG2zxLaojyP/g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Tso <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 078/145] random: clear fast pool, crng, and batches in cpuhp bring up
-Date:   Fri, 27 May 2022 10:49:39 +0200
-Message-Id: <20220527084900.103448057@linuxfoundation.org>
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.18 00/47] 5.18.1-rc1 review
+Date:   Fri, 27 May 2022 10:49:40 +0200
+Message-Id: <20220527084801.223648383@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
-User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.1-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.18.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.18.1-rc1
+X-KernelTest-Deadline: 2022-05-29T08:48+00:00
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,217 +62,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+This is the start of the stable review cycle for the 5.18.1 release.
+There are 47 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-commit 3191dd5a1179ef0fad5a050a1702ae98b6251e8f upstream.
+Responses should be made by Sun, 29 May 2022 08:46:45 +0000.
+Anything received after that time might be too late.
 
-For the irq randomness fast pool, rather than having to use expensive
-atomics, which were visibly the most expensive thing in the entire irq
-handler, simply take care of the extreme edge case of resetting count to
-zero in the cpuhp online handler, just after workqueues have been
-reenabled. This simplifies the code a bit and lets us use vanilla
-variables rather than atomics, and performance should be improved.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.1-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+and the diffstat can be found below.
 
-As well, very early on when the CPU comes up, while interrupts are still
-disabled, we clear out the per-cpu crng and its batches, so that it
-always starts with fresh randomness.
+thanks,
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/char/random.c      |   62 ++++++++++++++++++++++++++++++++++-----------
- include/linux/cpuhotplug.h |    2 +
- include/linux/random.h     |    5 +++
- kernel/cpu.c               |   11 +++++++
- 4 files changed, 65 insertions(+), 15 deletions(-)
+greg k-h
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -698,6 +698,25 @@ u32 get_random_u32(void)
- }
- EXPORT_SYMBOL(get_random_u32);
- 
-+#ifdef CONFIG_SMP
-+/*
-+ * This function is called when the CPU is coming up, with entry
-+ * CPUHP_RANDOM_PREPARE, which comes before CPUHP_WORKQUEUE_PREP.
-+ */
-+int random_prepare_cpu(unsigned int cpu)
-+{
-+	/*
-+	 * When the cpu comes back online, immediately invalidate both
-+	 * the per-cpu crng and all batches, so that we serve fresh
-+	 * randomness.
-+	 */
-+	per_cpu_ptr(&crngs, cpu)->generation = ULONG_MAX;
-+	per_cpu_ptr(&batched_entropy_u32, cpu)->position = UINT_MAX;
-+	per_cpu_ptr(&batched_entropy_u64, cpu)->position = UINT_MAX;
-+	return 0;
-+}
-+#endif
-+
- /**
-  * randomize_page - Generate a random, page aligned address
-  * @start:	The smallest acceptable address the caller will take.
-@@ -1183,7 +1202,7 @@ struct fast_pool {
- 	};
- 	struct work_struct mix;
- 	unsigned long last;
--	atomic_t count;
-+	unsigned int count;
- 	u16 reg_idx;
- };
- 
-@@ -1219,6 +1238,29 @@ static void fast_mix(u32 pool[4])
- 
- static DEFINE_PER_CPU(struct fast_pool, irq_randomness);
- 
-+#ifdef CONFIG_SMP
-+/*
-+ * This function is called when the CPU has just come online, with
-+ * entry CPUHP_AP_RANDOM_ONLINE, just after CPUHP_AP_WORKQUEUE_ONLINE.
-+ */
-+int random_online_cpu(unsigned int cpu)
-+{
-+	/*
-+	 * During CPU shutdown and before CPU onlining, add_interrupt_
-+	 * randomness() may schedule mix_interrupt_randomness(), and
-+	 * set the MIX_INFLIGHT flag. However, because the worker can
-+	 * be scheduled on a different CPU during this period, that
-+	 * flag will never be cleared. For that reason, we zero out
-+	 * the flag here, which runs just after workqueues are onlined
-+	 * for the CPU again. This also has the effect of setting the
-+	 * irq randomness count to zero so that new accumulated irqs
-+	 * are fresh.
-+	 */
-+	per_cpu_ptr(&irq_randomness, cpu)->count = 0;
-+	return 0;
-+}
-+#endif
-+
- static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
- {
- 	u32 *ptr = (u32 *)regs;
-@@ -1243,15 +1285,6 @@ static void mix_interrupt_randomness(str
- 	local_irq_disable();
- 	if (fast_pool != this_cpu_ptr(&irq_randomness)) {
- 		local_irq_enable();
--		/*
--		 * If we are unlucky enough to have been moved to another CPU,
--		 * during CPU hotplug while the CPU was shutdown then we set
--		 * our count to zero atomically so that when the CPU comes
--		 * back online, it can enqueue work again. The _release here
--		 * pairs with the atomic_inc_return_acquire in
--		 * add_interrupt_randomness().
--		 */
--		atomic_set_release(&fast_pool->count, 0);
- 		return;
- 	}
- 
-@@ -1260,7 +1293,7 @@ static void mix_interrupt_randomness(str
- 	 * consistent view, before we reenable irqs again.
- 	 */
- 	memcpy(pool, fast_pool->pool32, sizeof(pool));
--	atomic_set(&fast_pool->count, 0);
-+	fast_pool->count = 0;
- 	fast_pool->last = jiffies;
- 	local_irq_enable();
- 
-@@ -1296,14 +1329,13 @@ void add_interrupt_randomness(int irq)
- 	}
- 
- 	fast_mix(fast_pool->pool32);
--	/* The _acquire here pairs with the atomic_set_release in mix_interrupt_randomness(). */
--	new_count = (unsigned int)atomic_inc_return_acquire(&fast_pool->count);
-+	new_count = ++fast_pool->count;
- 
- 	if (unlikely(crng_init == 0)) {
- 		if (new_count >= 64 &&
- 		    crng_pre_init_inject(fast_pool->pool32, sizeof(fast_pool->pool32),
- 					 true, true) > 0) {
--			atomic_set(&fast_pool->count, 0);
-+			fast_pool->count = 0;
- 			fast_pool->last = now;
- 			if (spin_trylock(&input_pool.lock)) {
- 				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
-@@ -1321,7 +1353,7 @@ void add_interrupt_randomness(int irq)
- 
- 	if (unlikely(!fast_pool->mix.func))
- 		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
--	atomic_or(MIX_INFLIGHT, &fast_pool->count);
-+	fast_pool->count |= MIX_INFLIGHT;
- 	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
- }
- EXPORT_SYMBOL_GPL(add_interrupt_randomness);
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -99,6 +99,7 @@ enum cpuhp_state {
- 	CPUHP_LUSTRE_CFS_DEAD,
- 	CPUHP_AP_ARM_CACHE_B15_RAC_DEAD,
- 	CPUHP_PADATA_DEAD,
-+	CPUHP_RANDOM_PREPARE,
- 	CPUHP_WORKQUEUE_PREP,
- 	CPUHP_POWER_NUMA_PREPARE,
- 	CPUHP_HRTIMERS_PREPARE,
-@@ -238,6 +239,7 @@ enum cpuhp_state {
- 	CPUHP_AP_PERF_CSKY_ONLINE,
- 	CPUHP_AP_WATCHDOG_ONLINE,
- 	CPUHP_AP_WORKQUEUE_ONLINE,
-+	CPUHP_AP_RANDOM_ONLINE,
- 	CPUHP_AP_RCUTREE_ONLINE,
- 	CPUHP_AP_BASE_CACHEINFO_ONLINE,
- 	CPUHP_AP_ONLINE_DYN,
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -156,4 +156,9 @@ static inline bool __init arch_get_rando
- }
- #endif
- 
-+#ifdef CONFIG_SMP
-+extern int random_prepare_cpu(unsigned int cpu);
-+extern int random_online_cpu(unsigned int cpu);
-+#endif
-+
- #endif /* _LINUX_RANDOM_H */
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -34,6 +34,7 @@
- #include <linux/scs.h>
- #include <linux/percpu-rwsem.h>
- #include <linux/cpuset.h>
-+#include <linux/random.h>
- 
- #include <trace/events/power.h>
- #define CREATE_TRACE_POINTS
-@@ -1659,6 +1660,11 @@ static struct cpuhp_step cpuhp_hp_states
- 		.startup.single		= perf_event_init_cpu,
- 		.teardown.single	= perf_event_exit_cpu,
- 	},
-+	[CPUHP_RANDOM_PREPARE] = {
-+		.name			= "random:prepare",
-+		.startup.single		= random_prepare_cpu,
-+		.teardown.single	= NULL,
-+	},
- 	[CPUHP_WORKQUEUE_PREP] = {
- 		.name			= "workqueue:prepare",
- 		.startup.single		= workqueue_prepare_cpu,
-@@ -1782,6 +1788,11 @@ static struct cpuhp_step cpuhp_hp_states
- 		.startup.single		= workqueue_online_cpu,
- 		.teardown.single	= workqueue_offline_cpu,
- 	},
-+	[CPUHP_AP_RANDOM_ONLINE] = {
-+		.name			= "random:online",
-+		.startup.single		= random_online_cpu,
-+		.teardown.single	= NULL,
-+	},
- 	[CPUHP_AP_RCUTREE_ONLINE] = {
- 		.name			= "RCU/tree:online",
- 		.startup.single		= rcutree_online_cpu,
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.18.1-rc1
+
+Edward Matijevic <motolav@gmail.com>
+    ALSA: ctxfi: Add SB046x PCI ID
+
+Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+    ACPI: sysfs: Fix BERT error region memory mapping
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: check for signals after page of pool writes
+
+Jens Axboe <axboe@kernel.dk>
+    random: wire up fops->splice_{read,write}_iter()
+
+Jens Axboe <axboe@kernel.dk>
+    random: convert to using fops->write_iter()
+
+Jens Axboe <axboe@kernel.dk>
+    random: convert to using fops->read_iter()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: unify batched entropy implementations
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move randomize_page() into mm where it belongs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move initialization functions out of hot pages
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: make consistent use of buf and len
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use proper return types on get_random_{int,long}_wait()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove extern from functions in header
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use static branch for crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: credit architectural init the exact amount
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: handle latent entropy and command line from random_init()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use proper jiffies comparison macro
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: remove ratelimiting for in-kernel unseeded randomness
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: move initialization out of reseeding hot path
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: avoid initializing twice in credit race
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use symbolic constants for crng_init states
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    siphash: use one source of truth for siphash permutations
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: help compiler out with fast_mix() by using simpler arguments
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not use input pool from hard IRQs
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: order timer entropy functions below interrupt functions
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not pretend to handle premature next security model
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: use first 128 bits of input as fast init
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: do not use batches when !crng_ready()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: insist on random_get_entropy() existing in order to simplify
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    xtensa: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    sparc: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    um: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    x86/tsc: Use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    nios2: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    arm: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    mips: use fallback for random_get_entropy() instead of just c0 random
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    riscv: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    m68k: use fallback for random_get_entropy() instead of zero
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    timekeeping: Add raw clock fallback for random_get_entropy()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    powerpc: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    alpha: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    parisc: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    s390: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    ia64: define get_cycles macro for arch-override
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    init: call time_init() before rand_initialize()
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: fix sysctl documentation nits
+
+Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+    HID: amd_sfh: Add support for sensor discovery
+
+Daniel Thompson <daniel.thompson@linaro.org>
+    lockdown: also lock down previous kgdb use
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/sysctl/kernel.rst |    8 +-
+ Makefile                                    |    4 +-
+ arch/alpha/include/asm/timex.h              |    1 +
+ arch/arm/include/asm/timex.h                |    1 +
+ arch/ia64/include/asm/timex.h               |    1 +
+ arch/m68k/include/asm/timex.h               |    2 +-
+ arch/mips/include/asm/timex.h               |   17 +-
+ arch/nios2/include/asm/timex.h              |    3 +
+ arch/parisc/include/asm/timex.h             |    3 +-
+ arch/powerpc/include/asm/timex.h            |    1 +
+ arch/riscv/include/asm/timex.h              |    2 +-
+ arch/s390/include/asm/timex.h               |    1 +
+ arch/sparc/include/asm/timex_32.h           |    4 +-
+ arch/um/include/asm/timex.h                 |    9 +-
+ arch/x86/include/asm/timex.h                |    9 +
+ arch/x86/include/asm/tsc.h                  |    7 +-
+ arch/xtensa/include/asm/timex.h             |    6 +-
+ drivers/acpi/sysfs.c                        |   25 +-
+ drivers/char/random.c                       | 1213 +++++++++++----------------
+ drivers/hid/amd-sfh-hid/amd_sfh_client.c    |   11 +
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.c      |    7 +
+ drivers/hid/amd-sfh-hid/amd_sfh_pcie.h      |    4 +
+ include/linux/mm.h                          |    1 +
+ include/linux/prandom.h                     |   23 +-
+ include/linux/random.h                      |   92 +-
+ include/linux/security.h                    |    2 +
+ include/linux/siphash.h                     |   28 +
+ include/linux/timex.h                       |    8 +
+ init/main.c                                 |   13 +-
+ kernel/debug/debug_core.c                   |   24 +
+ kernel/debug/kdb/kdb_main.c                 |   62 +-
+ kernel/time/timekeeping.c                   |   15 +
+ lib/Kconfig.debug                           |    3 +-
+ lib/siphash.c                               |   32 +-
+ mm/util.c                                   |   32 +
+ security/security.c                         |    2 +
+ sound/pci/ctxfi/ctatc.c                     |    2 +
+ sound/pci/ctxfi/cthardware.h                |    3 +-
+ 38 files changed, 821 insertions(+), 860 deletions(-)
 
 

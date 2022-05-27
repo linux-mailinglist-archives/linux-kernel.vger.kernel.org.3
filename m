@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1151F5362BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44355362BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348566AbiE0Mkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
+        id S1350435AbiE0MlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348161AbiE0Mjx (ORCPT
+        with ESMTP id S1352308AbiE0Mjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 08:39:53 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C344039168
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:26:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 27 May 2022 08:39:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F02B11CB42
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653654464;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RJxrf4ooyTqpiAItg7I/Q/q7XnsebEkQQNQ2A5YOD9I=;
+        b=Y7GFu+D67F3eWP27RIfvBCxs33FnVNXY0omDhB9Mw/XsxnsQSDqxZe3pYlvwo3aXnK6djs
+        OQnfu6mgvoaiTkg+YVU8EA38N44tVKrpKvMoWvQK+1OMM21wUBsbafa6hETQ10zBJhLX0f
+        mHKapFd8wVdYrevKrJZbPRXVSHr8SZw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-251-jXjVmR17Pi2O2lmDWrKoXw-1; Fri, 27 May 2022 08:27:38 -0400
+X-MC-Unique: jXjVmR17Pi2O2lmDWrKoXw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L8kYz6fyQz4xZB;
-        Fri, 27 May 2022 22:26:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1653654392;
-        bh=8kHf9FvKoHisBOT3iB2GGapbJm7MtDFPMUhFTVufFU4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=h6xTWr/xIbNE5MMIhiyYm/Ksq4u7oSNskaIOA2dh4qtrXrJF6EBw1CiDynfHqRenx
-         tXNri7tGcG+wzkUrdSRUTnZwJI9ydqvyoFvOMhdY8AutAUHUFaXKTkpvmafINEZflS
-         JAwQFJ5y9KvXdq5CGPqvr1fFNI8XaKb0M+CfMHKiKQ6gsOnN/ifF0Jk/eLm7nfowl5
-         8X0KCK7QeYSbq6JaoNNqdRIQnZHwKG/vhu2nU+sV54yPy521lkeaocrDaMLC54cPpJ
-         kgCTuXNh9747S8/IL3L+jwK2KYSVTcqaA1TGdkhCmuevzBzEXISQN07ANLOM3xARsd
-         vgcARLrxqufGg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Peter Collingbourne <pcc@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 1/2] printk: stop including cache.h from printk.h
-In-Reply-To: <20220523142452.GA3164183@roeck-us.net>
-References: <20220427195820.1716975-1-pcc@google.com>
- <20220523142452.GA3164183@roeck-us.net>
-Date:   Fri, 27 May 2022 22:26:28 +1000
-Message-ID: <87y1ynkvpn.fsf@mpe.ellerman.id.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29875101AA45;
+        Fri, 27 May 2022 12:27:37 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2504E1410DD5;
+        Fri, 27 May 2022 12:27:34 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <202205190704.1DC660E5E@keescook>
+References: <202205190704.1DC660E5E@keescook> <165296786831.3591209.12111293034669289733.stgit@warthog.procyon.org.uk>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     dhowells@redhat.com, jlayton@kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-doc@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fsdevek@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] netfs: Fix gcc-12 warning by embedding vfs inode in netfs_i_context
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3598051.1653654453.1@warthog.procyon.org.uk>
+Date:   Fri, 27 May 2022 13:27:33 +0100
+Message-ID: <3598052.1653654453@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guenter Roeck <linux@roeck-us.net> writes:
-> On Wed, Apr 27, 2022 at 12:58:19PM -0700, Peter Collingbourne wrote:
->> An inclusion of cache.h in printk.h was added in 2014 in
->> commit c28aa1f0a847 ("printk/cache: mark printk_once test variable
->> __read_mostly") in order to bring in the definition of __read_mostly. The
->> usage of __read_mostly was later removed in commit 3ec25826ae33 ("printk:
->> Tie printk_once / printk_deferred_once into .data.once for reset")
->> which made the inclusion of cache.h unnecessary, so remove it.
->> 
->> We have a small amount of code that depended on the inclusion of cache.h
->> from printk.h; fix that code to include the appropriate header.
->> 
->> This fixes a circular inclusion on arm64 (linux/printk.h -> linux/cache.h
->> -> asm/cache.h -> linux/kasan-enabled.h -> linux/static_key.h ->
->> linux/jump_label.h -> linux/bug.h -> asm/bug.h -> linux/printk.h) that
->> would otherwise be introduced by the next patch.
->> 
->> Build tested using {allyesconfig,defconfig} x {arm64,x86_64}.
->
-> But not powerpc:corenet64_smp_defconfig, where it results in lots of
-> build errors such as
->
-> powerpc64-linux-ld: fs/freevxfs/vxfs_fshead.o:(.bss+0x0):
-> 	multiple definition of `____cacheline_aligned';
-> 	fs/freevxfs/vxfs_bmap.o:(.bss+0x0): first defined here
+Hi Kees,
 
-I sent a patch to fix it, and will merge the fix via my tree:
+Is v2 good for you?  I realise I left your R-b attached to it when I posted
+it, but I can remove that if you don't have time to review it.
 
-http://patchwork.ozlabs.org/project/linuxppc-dev/patch/20220527112035.2842155-1-mpe@ellerman.id.au/
+David
 
-cheers

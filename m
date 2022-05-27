@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D41353603F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD2F535CA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243564AbiE0Lra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S1350353AbiE0JBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352143AbiE0Lp3 (ORCPT
+        with ESMTP id S1350300AbiE0I6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:45:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3EC132A2E;
-        Fri, 27 May 2022 04:42:03 -0700 (PDT)
+        Fri, 27 May 2022 04:58:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712F7123884;
+        Fri, 27 May 2022 01:55:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39CAB61D53;
-        Fri, 27 May 2022 11:42:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43DC2C385A9;
-        Fri, 27 May 2022 11:42:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 029CEB823DD;
+        Fri, 27 May 2022 08:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B078C385A9;
+        Fri, 27 May 2022 08:55:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651722;
-        bh=RG6VjW3XhSd7agEEKPH/P8cAoVf6or+rlbFXWJgkVVg=;
+        s=korg; t=1653641703;
+        bh=0ycG1C8R9RfHAaw3cLJ3/vzUv+464neREcYcVWVG6kQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s5rsRHQ5LnTb9kKfhdBjpIyUD1a2J8DagqOanwrwjteKljiiH4BkRrXgo211sOgk6
-         81omEzMCWH5cewV5VCReHaqk8bw9kdWznp6Lnx8aCuk1IvWIV2aZe0HBsiLUel+vtS
-         FnyCZHtIb2JzaE6MH+I7llQCjeuBonnaSGKLEA9c=
+        b=JPONJSJ9ZVopTqZ/QzVYyk+bCTd3kIPiDGnYdF/3s34v28gii25ivJ0TigzX/MaVB
+         EWqOoH+4xPADhJv1WPdfUkZOsi5T+TtyNqg+QyqPu9ZUWARZpPviaK0nS06APoHAUO
+         bgWuAwfW9sMPiQhFWkOBrmzcfP2jVacIhvGhCjaM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 052/163] random: simplify arithmetic function flow in account()
-Date:   Fri, 27 May 2022 10:48:52 +0200
-Message-Id: <20220527084835.269206185@linuxfoundation.org>
+Subject: [PATCH 5.17 021/111] random: zero buffer after reading entropy from userspace
+Date:   Fri, 27 May 2022 10:48:53 +0200
+Message-Id: <20220527084822.362277500@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-References: <20220527084828.156494029@linuxfoundation.org>
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+References: <20220527084819.133490171@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,58 +59,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit a254a0e4093fce8c832414a83940736067eed515 upstream.
+commit 7b5164fb1279bf0251371848e40bae646b59b3a8 upstream.
 
-Now that have_bytes is never modified, we can simplify this function.
-First, we move the check for negative entropy_count to be first. That
-ensures that subsequent reads of this will be non-negative. Then,
-have_bytes and ibytes can be folded into their one use site in the
-min_t() function.
+This buffer may contain entropic data that shouldn't stick around longer
+than needed, so zero out the temporary buffer at the end of write_pool().
 
-Suggested-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Jann Horn <jannh@google.com>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+ drivers/char/random.c |   11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1293,7 +1293,7 @@ EXPORT_SYMBOL_GPL(add_disk_randomness);
-  */
- static size_t account(size_t nbytes, int min)
+@@ -1336,19 +1336,24 @@ static __poll_t random_poll(struct file
+ static int write_pool(const char __user *ubuf, size_t count)
  {
--	int entropy_count, orig, have_bytes;
-+	int entropy_count, orig;
- 	size_t ibytes, nfrac;
+ 	size_t len;
++	int ret = 0;
+ 	u8 block[BLAKE2S_BLOCK_SIZE];
  
- 	BUG_ON(input_pool.entropy_count > POOL_FRACBITS);
-@@ -1301,20 +1301,15 @@ static size_t account(size_t nbytes, int
- 	/* Can we pull enough? */
- retry:
- 	entropy_count = orig = READ_ONCE(input_pool.entropy_count);
--	ibytes = nbytes;
--	/* never pull more than available */
--	have_bytes = entropy_count >> (POOL_ENTROPY_SHIFT + 3);
--
--	if (have_bytes < 0)
--		have_bytes = 0;
--	ibytes = min_t(size_t, ibytes, have_bytes);
--	if (ibytes < min)
--		ibytes = 0;
--
- 	if (WARN_ON(entropy_count < 0)) {
- 		pr_warn("negative entropy count: count %d\n", entropy_count);
- 		entropy_count = 0;
+ 	while (count) {
+ 		len = min(count, sizeof(block));
+-		if (copy_from_user(block, ubuf, len))
+-			return -EFAULT;
++		if (copy_from_user(block, ubuf, len)) {
++			ret = -EFAULT;
++			goto out;
++		}
+ 		count -= len;
+ 		ubuf += len;
+ 		mix_pool_bytes(block, len);
+ 		cond_resched();
  	}
-+
-+	/* never pull more than available */
-+	ibytes = min_t(size_t, nbytes, entropy_count >> (POOL_ENTROPY_SHIFT + 3));
-+	if (ibytes < min)
-+		ibytes = 0;
- 	nfrac = ibytes << (POOL_ENTROPY_SHIFT + 3);
- 	if ((size_t)entropy_count > nfrac)
- 		entropy_count -= nfrac;
+ 
+-	return 0;
++out:
++	memzero_explicit(block, sizeof(block));
++	return ret;
+ }
+ 
+ static ssize_t random_write(struct file *file, const char __user *buffer,
 
 

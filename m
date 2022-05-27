@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72DD535FB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B334535FC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238374AbiE0Lmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S1351049AbiE0Llo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351702AbiE0Ll2 (ORCPT
+        with ESMTP id S1349970AbiE0Lki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:41:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291E612815B;
-        Fri, 27 May 2022 04:39:58 -0700 (PDT)
+        Fri, 27 May 2022 07:40:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F2C13C1D9;
+        Fri, 27 May 2022 04:39:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1241B82466;
-        Fri, 27 May 2022 11:39:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36BEBC385A9;
-        Fri, 27 May 2022 11:39:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9285AB824D9;
+        Fri, 27 May 2022 11:39:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2435C385A9;
+        Fri, 27 May 2022 11:39:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651595;
-        bh=N5fiw4PejwCrYvciUGPEH44DfCxU/YsYTR0gRKooOCQ=;
+        s=korg; t=1653651563;
+        bh=GttTWEuZi0EVDiRVwcJjYuVxU22fnz52STZBwAgK7Z8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YWbEguUArD+IyL2hn6wx7QnA/XIg2A7jfsdLZgnRmqMtLTqK3w9bM9Kg7q1TzwDWh
-         /GMg4DbNBogI90O4/OmGIHqq/pp6kR9Wi0ctM4Xa7rMaUFAU08k7meOQVylo3tyc9s
-         9d9Qy5pASr5ssumbpxCoobhUQZ+MT4FKKF28E4HM=
+        b=EQB6EMt0V+1fsxKmoFH4+KgKXnEfXDdLP7QbWr90pifW1gDuHiwayslEgrkxacOVn
+         C+o3qd5chLC2YTm49/Ff0C6c+8XPSS3bCdxpoSlGz4JIxxGQp4JLXFBV7YGP7l62hJ
+         z91sYKopc92pphj/Sxp11qKUf74keGDLxvg5QDYs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 011/145] random: document add_hwgenerator_randomness() with other input functions
-Date:   Fri, 27 May 2022 10:48:32 +0200
-Message-Id: <20220527084852.336917701@linuxfoundation.org>
+Subject: [PATCH 5.10 033/163] random: do not re-init if crng_reseed completes before primary init
+Date:   Fri, 27 May 2022 10:48:33 +0200
+Message-Id: <20220527084832.748649263@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 2b6c6e3d9ce3aa0e547ac25d60e06fe035cd9f79 upstream.
+commit 9c3ddde3f811aabbb83778a2a615bf141b4909ef upstream.
 
-The section at the top of random.c which documents the input functions
-available does not document add_hwgenerator_randomness() which might lead
-a reader to overlook it. Add a brief note about it.
+If the bootloader supplies sufficient material and crng_reseed() is called
+very early on, but not too early that wqs aren't available yet, then we
+might transition to crng_init==2 before rand_initialize()'s call to
+crng_initialize_primary() made. Then, when crng_initialize_primary() is
+called, if we're trusting the CPU's RDRAND instructions, we'll
+needlessly reinitialize the RNG and emit a message about it. This is
+mostly harmless, as numa_crng_init() will allocate and then free what it
+just allocated, and excessive calls to invalidate_batched_entropy()
+aren't so harmful. But it is funky and the extra message is confusing,
+so avoid the re-initialization all together by checking for crng_init <
+2 in crng_initialize_primary(), just as we already do in crng_reseed().
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-[Jason: reorganize position of function in doc comment and also document
- add_bootloader_randomness() while we're at it.]
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -202,6 +202,9 @@
-  *                                unsigned int value);
-  *	void add_interrupt_randomness(int irq, int irq_flags);
-  * 	void add_disk_randomness(struct gendisk *disk);
-+ *	void add_hwgenerator_randomness(const char *buffer, size_t count,
-+ *					size_t entropy);
-+ *	void add_bootloader_randomness(const void *buf, unsigned int size);
-  *
-  * add_device_randomness() is for adding data to the random pool that
-  * is likely to differ between two devices (or possibly even per boot).
-@@ -228,6 +231,14 @@
-  * particular randomness source.  They do this by keeping track of the
-  * first and second order deltas of the event timings.
-  *
-+ * add_hwgenerator_randomness() is for true hardware RNGs, and will credit
-+ * entropy as specified by the caller. If the entropy pool is full it will
-+ * block until more entropy is needed.
-+ *
-+ * add_bootloader_randomness() is the same as add_hwgenerator_randomness() or
-+ * add_device_randomness(), depending on whether or not the configuration
-+ * option CONFIG_RANDOM_TRUST_BOOTLOADER is set.
-+ *
-  * Ensuring unpredictability at system startup
-  * ============================================
-  *
+@@ -827,7 +827,7 @@ static void __init crng_initialize_prima
+ {
+ 	chacha_init_consts(crng->state);
+ 	_extract_entropy(&input_pool, &crng->state[4], sizeof(__u32) * 12, 0);
+-	if (crng_init_try_arch_early(crng) && trust_cpu) {
++	if (crng_init_try_arch_early(crng) && trust_cpu && crng_init < 2) {
+ 		invalidate_batched_entropy();
+ 		numa_crng_init();
+ 		crng_init = 2;
 
 

@@ -2,215 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A33853619C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20181535C25
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352427AbiE0MDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S1345836AbiE0IuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352167AbiE0LyI (ORCPT
+        with ESMTP id S1349937AbiE0IuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:54:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25CE15897C;
-        Fri, 27 May 2022 04:47:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21F7561D96;
-        Fri, 27 May 2022 11:47:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BBE2C385A9;
-        Fri, 27 May 2022 11:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653652067;
-        bh=kK+727lFJ/EMNk+O4EfQALlAPBxYd7tgSmT3zvBhMYo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HaZRa9Uh7ZIMp9M/gw2qCzfe0+PLCEcecVcE4X57r2zgeT0d45DHFKfNBaiUFOani
-         zsw3k/FsUmvnMxmJhvz1vFd43ESpibN1iATSTKK/ZiWe3b8tV8WUeT42YDSP+xx2bW
-         CIOP3vNGFwGaHjZoe4giO85L391+e2+uMwbZp7HY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Tso <tytso@mit.edu>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 073/145] random: defer fast pool mixing to worker
-Date:   Fri, 27 May 2022 10:49:34 +0200
-Message-Id: <20220527084859.383947660@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Fri, 27 May 2022 04:50:00 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2057.outbound.protection.outlook.com [40.107.22.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A676A04E;
+        Fri, 27 May 2022 01:49:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jeEQj/Ky0TEf7DoIEVJPOZ6Izet5BH1I8uSkD9Sdr9XWKsLlq9rRmLSSZMth4XNbSludurB073npLnB/gh7/Tr12oWndSt9g0nDymvBVY84d9kzyK4QNeKLemHfCY/+7qaVDdDIPr8Wmk0J4UZV9IT2/W+o4sNJ/+qDG3ob3ZUQFTgrnzClVM6tmydUmdDAEhJgg+l9DzXdXBIFb3+Djmi+7km3LHqWOfGzJEX5K/mxxEhGDONSADOBdDrTAUQvOmeRCgWgkbpAzcEgIGne2kzAaa9KE4V8uPRZNtz/S0RY+Yu9CUyNYnKOR0B8SdPlGStL+Jx7NHq1Qfhw8H6gPBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WvQlgn9eRo7NwKa49iWeeGoeZj6uAwyFzLDotFkPFJs=;
+ b=UarvwBjH5tkyccWFyhEPeHbiwNszPKerxO8Cjqyw1odhEb5QUR6/ihiVslYmSygxFlaNtaecX0TXInGmt+PTYXWDxrA+2lbqfHOqhQXA2hzfq04HsrkxfjLTv2fML2d/y/UhsGtAQQajLBaz+BSrzl1Z8QcOUqGV6+mhQlxJcCdrUXYrCnYNi17odAv0mVAzOWa4GZVQ+TiDCe/SKgu8xvUeJW9fX9Hsc1ddigt1U7AH7HhpQvSO7A2dTn8bQ6xwGxBZdkYQ9rpODDKFxNJG4wiGh0bYmNO+uLv0K/471wYPSgkWCT1MR4rATUMNaTTDpPLnsh9quxINl4KXb0vpFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WvQlgn9eRo7NwKa49iWeeGoeZj6uAwyFzLDotFkPFJs=;
+ b=e7F1kkAzSZs4zqc21h3WKmFbIxjZmpbsIvrM8xB+JmSINvrNOk3G32vgsxMkXZwMYKh3Mc3r8ejePhy0SpRT7pC4O50GAZC7W11pjwR72jp3A8IDH+1zJBIFwipLb5kNBFS9ZUDcuKzLvHvMNU1Dz7NDL9DPpvcr9BqV2crG+wE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by VI1PR04MB7182.eurprd04.prod.outlook.com (2603:10a6:800:121::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.13; Fri, 27 May
+ 2022 08:49:56 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::b116:46f0:f42b:cf19]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::b116:46f0:f42b:cf19%3]) with mapi id 15.20.5293.013; Fri, 27 May 2022
+ 08:49:56 +0000
+From:   "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Luo Jie <luoj@codeaurora.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linux-imx@nxp.com, Viorel Suman <viorel.suman@nxp.com>
+Subject: [PATCH v2] net: phy: at803x: disable WOL at probe
+Date:   Fri, 27 May 2022 11:49:34 +0300
+Message-Id: <20220527084935.235274-1-viorel.suman@oss.nxp.com>
+X-Mailer: git-send-email 2.35.3
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: AM8P190CA0028.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:219::33) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: acc23d9b-7ce3-4bec-801d-08da3fbddf78
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7182:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <VI1PR04MB7182333FF0596CD7F6C80526D3D89@VI1PR04MB7182.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jkJp9Cm15Y/8sYherjHHDeiKRaHVelTTMOCAiDszQtrjPQtdhkSobO+VvzDzZRHVE/M7l7XjV6+M2hpgXhXkDtKaf6c3ZIhHRdStIT0/CXAc+BF3a+ECAftw5sWzmoaonLEJlRppRqHWVZRFgcj5acMaft61cmGMTAbMG68FTOBwMUr0SJKJusM+gPc/jEurkellSNfkOsyCT4sw6godvuhkgkB0C+O8epiZY0MGAPPRbS0LfQYDGlPUE00A/NZa5fnvsSN82nsUJfBd6N0/GBzSlfz0WiiMpt0FQ+kuQc40UAhAYYkkI5s8J1nscOHtTVHJgk2ywcWCNFbjfGYrRw87kaoQSs3ungkTsJMUvwT1v5dXBGcP4rIxhRPuVP12Zw2G1XIPKhxndE8St9mT9djhONEAzeMxrWdyP82Bszq3zNCxeplXFo9DQZDutBbRHw9MeXV+mfh0P02M6dKznvishIU8to1EPW5uUFQU7xJHx+tabmHZtMkXz65BpYAq+lZ4uUIxY8A55dnOGddxdiP+L0yJOXKVDhN+ETiyvbewKnQIA+11oZLTXr9Gn0eCnGmleAHKV+UWGacuW4r4g7t7aYg3sTW5HjeQ7aBp36Iwg1PEPqsmXr4cVzVE9n1KsSV6lP7NSZ16eZXrtA+O23CA6Ivto/Bl2rj5L1PAc7kjX1SSp5qQ2wAWmQTbPnTE8Ngh0U9oitGwHQiYfpj3Dqr1MuUAPTKCTirzPODtPUI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(921005)(110136005)(2616005)(83380400001)(66476007)(6666004)(186003)(38350700002)(38100700002)(1076003)(2906002)(5660300002)(8936002)(86362001)(6506007)(316002)(6486002)(7416002)(508600001)(26005)(6512007)(66946007)(8676002)(52116002)(66556008)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jHDMlf7QENbPQ1ECo/fyC4CSXCQ769FLkBqEzLIcA/hqH6dnMtOPt7ASyV0q?=
+ =?us-ascii?Q?OeWEv40I7IVN+lLm0VGF6199mZutubU/SshAyXCV+nfj2se2xTD6GYyFfXjW?=
+ =?us-ascii?Q?jzWjusyYM1kmrVykS1Eaf1VguQhssW56Pd70UhNYr8w0GEMIQKikYUCvd1dA?=
+ =?us-ascii?Q?7lYnqknn+/pN8eOTH1RWvyHi8wKvNgS8YONZAYE5RN/2HfbqaFW47s+sG2uF?=
+ =?us-ascii?Q?BFgrxvAqTtWlAHG8dZDJ2Pzrx2DFOksHu2FgtZqcbLncBpGHjLDbOnQQWETR?=
+ =?us-ascii?Q?rWe9aK2ox0Y9IK80Y/pAnB3Uk7q0/v8+U0/Y5rgACqZK3F7OrIYTDwmJOp8q?=
+ =?us-ascii?Q?MT05o3K6rpUpyZ3pcjj8sQ4Q3cHAjmpnT4FK4A+5zGKQ9WuSMQe1C/+1W7oD?=
+ =?us-ascii?Q?D4bPE07XzN1spf05lMQ4cHngKxWKnddWNp7u2mhHZG9hRiQBgCZ8nMrpsZIH?=
+ =?us-ascii?Q?8ST8trdz2wqtUqzeYVkuOLDBAg+KSA0o0GBuYpZKWFrecd8hHBdGOczyeStx?=
+ =?us-ascii?Q?Yh5kuCd7IjgbX+cKF8hRfe00p7Nk1lnEfZJy0VjBUKwcJ/X5Hw/wxOeqX46V?=
+ =?us-ascii?Q?VNIVJg8VsPT0nI/9cv+wi+ljbbxAVOju5n8X1IlMdo/cD/bwLFKq93wLxcEt?=
+ =?us-ascii?Q?MbJXERuOqajsrMY3aHrmSOaVcbjmC7ID5j9VjniYNByPp8QxE6+5o0wiDQ5y?=
+ =?us-ascii?Q?HDi3m5eJgcmb3Dln3AGs9ccDrCx5nd27hbRnoNabIanPLlubTegQ5OuAY8Wn?=
+ =?us-ascii?Q?Sx8pRN32XzCWJRi6ozjHiDnDeie5U5owiRGxqeLSVhbFiUIr49Ha2tt5Tc8v?=
+ =?us-ascii?Q?6J1+x7I8NvmSk6RL5y8CLJFRj5T8q4RhgQMMIbWwBgQpgbPPuR6p3rBRD8Kb?=
+ =?us-ascii?Q?ncVBIGWJyLAjEh8xE7fB/feo2Hg4L2zoYmA8m5wpaVS0Dko++d2k8MqbRTTj?=
+ =?us-ascii?Q?wv0glQCqJtoK57iHDLBvZ2+8GmpBQF1kg2oxRloRDdfvSb3eObiIlDbnMZ7O?=
+ =?us-ascii?Q?RlMRR2/BzzSpmgiecE1yrRxP2/jVvhDl7zBs0+fk1JWKsw0zyQW0MnEVEopK?=
+ =?us-ascii?Q?5b2s4X8jE9/MA6QqzwpTnclBcfKVeMLSFiL2/IOPbMfn7XhXKTvPjI7ZVD4U?=
+ =?us-ascii?Q?/N83OEc38GwbHPaTanOMsy2uq4iDfzLI2poSp7Vyfy0LXQ3KoguyJLS1KY46?=
+ =?us-ascii?Q?DivuMynoQgU7aavQklfbRcBNyrz5FvK8j3vT8I35MsnV+4a0IWFhLYqJcZJk?=
+ =?us-ascii?Q?WuEKK7EBXutHPVHORMA9GE64AJhBRVDyRiFSlLCNUDsDlrRlSkC3xisdaRRx?=
+ =?us-ascii?Q?8PgANqfFBjOOeY6ais3V7yNoEFI+1MVbsJEm9OdX3GUH8E4wIbzegp0FnjVl?=
+ =?us-ascii?Q?VPmsO/zts2rhAWHvi2W9mZqCcra7Zd7JKJ4SDX3qbw7osQN40wWjqLDR5ch+?=
+ =?us-ascii?Q?ZIbCSNZboZRZpjQ4gpv+MtoLjOhn9u30cFOWZSpTG0zR8+EQWZD7FcYRJknv?=
+ =?us-ascii?Q?hMpTGDPVfakCXIeVBag5qxfP5nJ+YUiRFXDYUBOarYpcQh8Uiq/PehWOEY4z?=
+ =?us-ascii?Q?O+7i8BNBdp2lWmTty1L4NAqwc0XjIod40H8oeYGr4RSWIb6ZwoDcTE8+Nx4o?=
+ =?us-ascii?Q?bd6VwPVY34pvE6JT7C9wUQ6AyCT4qb0V3bVS9iSm1tq/AVR65bCTSz3Dh8YV?=
+ =?us-ascii?Q?yEJKEdaXg+e1zkpjuyZW2jJ4GWCRt503okEtNEQQlu0XiRFVAfEKR7La3kSb?=
+ =?us-ascii?Q?Q8CsVqnGXnIz2de8k5sBHCmssMPtp+Y=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: acc23d9b-7ce3-4bec-801d-08da3fbddf78
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2022 08:49:55.9275
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wfJkfcGupQP1VmL0qxWlDOMOu0+CotzopoVJifn8GXOeFF1SSB2uszTgW7whSYJQmGi0i94jAVwMvEfPm0A/+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7182
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Viorel Suman <viorel.suman@nxp.com>
 
-commit 58340f8e952b613e0ead0bed58b97b05bf4743c5 upstream.
+Before 7beecaf7d507b ("net: phy: at803x: improve the WOL feature") patch
+"at803x_get_wol" implementation used AT803X_INTR_ENABLE_WOL value to set
+WAKE_MAGIC flag, and now AT803X_WOL_EN value is used for the same purpose.
+The problem here is that the values of these two bits are different after
+hardware reset: AT803X_INTR_ENABLE_WOL=0 after hardware reset, but
+AT803X_WOL_EN=1. So now, if called right after boot, "at803x_get_wol" will
+set WAKE_MAGIC flag, even if WOL function is not enabled by calling
+"at803x_set_wol" function. The patch disables WOL function on probe thus
+the behavior is consistent.
 
-On PREEMPT_RT, it's problematic to take spinlocks from hard irq
-handlers. We can fix this by deferring to a workqueue the dumping of
-the fast pool into the input pool.
-
-We accomplish this with some careful rules on fast_pool->count:
-
-  - When it's incremented to >= 64, we schedule the work.
-  - If the top bit is set, we never schedule the work, even if >= 64.
-  - The worker is responsible for setting it back to 0 when it's done.
-
-There are two small issues around using workqueues for this purpose that
-we work around.
-
-The first issue is that mix_interrupt_randomness() might be migrated to
-another CPU during CPU hotplug. This issue is rectified by checking that
-it hasn't been migrated (after disabling irqs). If it has been migrated,
-then we set the count to zero, so that when the CPU comes online again,
-it can requeue the work. As part of this, we switch to using an
-atomic_t, so that the increment in the irq handler doesn't wipe out the
-zeroing if the CPU comes back online while this worker is running.
-
-The second issue is that, though relatively minor in effect, we probably
-want to make sure we get a consistent view of the pool onto the stack,
-in case it's interrupted by an irq while reading. To do this, we don't
-reenable irqs until after the copy. There are only 18 instructions
-between the cli and sti, so this is a pretty tiny window.
-
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Reviewed-by: Sultan Alsawaf <sultan@kerneltoast.com>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7beecaf7d507b ("net: phy: at803x: improve the WOL feature")
+Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
 ---
- drivers/char/random.c |   63 ++++++++++++++++++++++++++++++++++++++------------
- 1 file changed, 49 insertions(+), 14 deletions(-)
+ drivers/net/phy/at803x.c | 33 ++++++++++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 11 deletions(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1178,9 +1178,10 @@ struct fast_pool {
- 		u32 pool32[4];
- 		u64 pool64[2];
- 	};
-+	struct work_struct mix;
- 	unsigned long last;
-+	atomic_t count;
- 	u16 reg_idx;
--	u8 count;
- };
- 
- /*
-@@ -1230,12 +1231,49 @@ static u32 get_reg(struct fast_pool *f,
- 	return *ptr;
- }
- 
-+static void mix_interrupt_randomness(struct work_struct *work)
-+{
-+	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
-+	u32 pool[4];
-+
-+	/* Check to see if we're running on the wrong CPU due to hotplug. */
-+	local_irq_disable();
-+	if (fast_pool != this_cpu_ptr(&irq_randomness)) {
-+		local_irq_enable();
-+		/*
-+		 * If we are unlucky enough to have been moved to another CPU,
-+		 * during CPU hotplug while the CPU was shutdown then we set
-+		 * our count to zero atomically so that when the CPU comes
-+		 * back online, it can enqueue work again. The _release here
-+		 * pairs with the atomic_inc_return_acquire in
-+		 * add_interrupt_randomness().
-+		 */
-+		atomic_set_release(&fast_pool->count, 0);
-+		return;
-+	}
-+
-+	/*
-+	 * Copy the pool to the stack so that the mixer always has a
-+	 * consistent view, before we reenable irqs again.
-+	 */
-+	memcpy(pool, fast_pool->pool32, sizeof(pool));
-+	atomic_set(&fast_pool->count, 0);
-+	fast_pool->last = jiffies;
-+	local_irq_enable();
-+
-+	mix_pool_bytes(pool, sizeof(pool));
-+	credit_entropy_bits(1);
-+	memzero_explicit(pool, sizeof(pool));
-+}
-+
- void add_interrupt_randomness(int irq)
+Changes since v1:
+	- addressed Jakub comments
+
+diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
+index 73926006d319..6a467e7817a6 100644
+--- a/drivers/net/phy/at803x.c
++++ b/drivers/net/phy/at803x.c
+@@ -433,20 +433,21 @@ static void at803x_context_restore(struct phy_device *phydev,
+ static int at803x_set_wol(struct phy_device *phydev,
+ 			  struct ethtool_wolinfo *wol)
  {
-+	enum { MIX_INFLIGHT = 1U << 31 };
- 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
- 	struct pt_regs *regs = get_irq_regs();
- 	unsigned long now = jiffies;
- 	cycles_t cycles = random_get_entropy();
-+	unsigned int new_count;
+-	struct net_device *ndev = phydev->attached_dev;
+-	const u8 *mac;
+ 	int ret, irq_enabled;
+-	unsigned int i;
+-	static const unsigned int offsets[] = {
+-		AT803X_LOC_MAC_ADDR_32_47_OFFSET,
+-		AT803X_LOC_MAC_ADDR_16_31_OFFSET,
+-		AT803X_LOC_MAC_ADDR_0_15_OFFSET,
+-	};
+-
+-	if (!ndev)
+-		return -ENODEV;
  
- 	if (cycles == 0)
- 		cycles = get_reg(fast_pool, regs);
-@@ -1255,12 +1293,13 @@ void add_interrupt_randomness(int irq)
+ 	if (wol->wolopts & WAKE_MAGIC) {
++		struct net_device *ndev = phydev->attached_dev;
++		const u8 *mac;
++		unsigned int i;
++		static const unsigned int offsets[] = {
++			AT803X_LOC_MAC_ADDR_32_47_OFFSET,
++			AT803X_LOC_MAC_ADDR_16_31_OFFSET,
++			AT803X_LOC_MAC_ADDR_0_15_OFFSET,
++		};
++
++		if (!ndev)
++			return -ENODEV;
++
+ 		mac = (const u8 *) ndev->dev_addr;
+ 
+ 		if (!is_valid_ether_addr(mac))
+@@ -857,6 +858,9 @@ static int at803x_probe(struct phy_device *phydev)
+ 	if (phydev->drv->phy_id == ATH8031_PHY_ID) {
+ 		int ccr = phy_read(phydev, AT803X_REG_CHIP_CONFIG);
+ 		int mode_cfg;
++		struct ethtool_wolinfo wol = {
++			.wolopts = 0,
++		};
+ 
+ 		if (ccr < 0)
+ 			goto err;
+@@ -872,6 +876,13 @@ static int at803x_probe(struct phy_device *phydev)
+ 			priv->is_fiber = true;
+ 			break;
+ 		}
++
++		/* Disable WOL by default */
++		ret = at803x_set_wol(phydev, &wol);
++		if (ret < 0) {
++			phydev_err(phydev, "failed to disable WOL on probe: %d\n", ret);
++			goto err;
++		}
  	}
  
- 	fast_mix(fast_pool->pool32);
--	++fast_pool->count;
-+	/* The _acquire here pairs with the atomic_set_release in mix_interrupt_randomness(). */
-+	new_count = (unsigned int)atomic_inc_return_acquire(&fast_pool->count);
- 
- 	if (unlikely(crng_init == 0)) {
--		if (fast_pool->count >= 64 &&
-+		if (new_count >= 64 &&
- 		    crng_fast_load(fast_pool->pool32, sizeof(fast_pool->pool32)) > 0) {
--			fast_pool->count = 0;
-+			atomic_set(&fast_pool->count, 0);
- 			fast_pool->last = now;
- 			if (spin_trylock(&input_pool.lock)) {
- 				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
-@@ -1270,20 +1309,16 @@ void add_interrupt_randomness(int irq)
- 		return;
- 	}
- 
--	if ((fast_pool->count < 64) && !time_after(now, fast_pool->last + HZ))
-+	if (new_count & MIX_INFLIGHT)
- 		return;
- 
--	if (!spin_trylock(&input_pool.lock))
-+	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
- 		return;
- 
--	fast_pool->last = now;
--	_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
--	spin_unlock(&input_pool.lock);
--
--	fast_pool->count = 0;
--
--	/* Award one bit for the contents of the fast pool. */
--	credit_entropy_bits(1);
-+	if (unlikely(!fast_pool->mix.func))
-+		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
-+	atomic_or(MIX_INFLIGHT, &fast_pool->count);
-+	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
- }
- EXPORT_SYMBOL_GPL(add_interrupt_randomness);
- 
-
+ 	return 0;
+-- 
+2.35.3
 

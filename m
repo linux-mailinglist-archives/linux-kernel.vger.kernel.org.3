@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0309D5368A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 23:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2415368AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 23:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238181AbiE0V6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 17:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
+        id S1344993AbiE0V7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 17:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiE0V6c (ORCPT
+        with ESMTP id S231129AbiE0V7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 17:58:32 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903B163534
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 14:58:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653688711; x=1685224711;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GpBpIclkHkO+HLOIhC+fZ6RlUfaROULvv/SMKg2mBTc=;
-  b=iBaBoifjfu6ye5cf9JZ5xuvKYcdvLtVBiH8VqV6r6qUSf4O0iCbNyegN
-   wzBFkfSj6daKAeH7/BtJMYCza1WEkI6hYSJPvmbCEB/pUutRePA7jUkzY
-   KrKdWFPs8PhMq+ckS9hmCHzitLrK7hFr/82ES3uWyT/SO3fGD6Cz2Tl+X
-   jNid9243ycqKHK7pXfhja9XF0vxY9RuK2l+UAdOrB5Eyklpa75N72wAB1
-   nnANI+TpVEyGZw5fIMQ0UnrO9YBHwhuMup/P5aRmVKI95iBYQqesULbMs
-   iSwxo1g9iCqGeftfrhQIooSvsbQOZn6zSjllk8ZrGYAxGS73lhKNdj8oj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274685378"
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="274685378"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 14:58:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="705323923"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 May 2022 14:58:29 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuhyW-0005AF-U9;
-        Fri, 27 May 2022 21:58:28 +0000
-Date:   Sat, 28 May 2022 05:57:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>
-Subject: lib/crypto/blake2s-selftest.c:548:13: warning: stack frame size
- (1176) exceeds limit (1024) in 'blake2s_selftest'
-Message-ID: <202205280544.UeG75XaY-lkp@intel.com>
+        Fri, 27 May 2022 17:59:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AE36622F;
+        Fri, 27 May 2022 14:59:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF7BB60F8C;
+        Fri, 27 May 2022 21:59:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818D8C385A9;
+        Fri, 27 May 2022 21:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653688757;
+        bh=4FvFvuXe3XVJOjCGf3wxjlycHrRIVzIS0OCClcaFxY4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hIYECQug6gWaqXvoyMN2ql5uhxF8iaevpQj9AgmtqMeaOFArgmCGAIUXhmpnTl2d6
+         ix6vehfeSuJpBdxOorQJRXqI9NMRhViGFRsXbh5vpQWgcpxkIbR2lWPd+FdiWqv0fp
+         t2dvdQBO/8mWaAnIBs78jdis6ps6pL5y9OmnQ9ORp0wo1pi0GebPufqSHDoOrgVawr
+         iWNUX1qGJWh51d+N38NuoHeFBcP74pHp9SZUuZVT4X3r3idpJRUdeZfNUWPunu8TEt
+         C9P3b8NbwnJBJaitfNdNadB/tb/aWV7lEq9fDK0W4fnEcQn2hjz3MBFiP2pDqU+RAP
+         B+3+9hl03qjJw==
+Date:   Fri, 27 May 2022 17:08:54 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Ming Qian <ming.qian@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
+        Zhou Peng <eagle.zhou@nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] media: amphion: Replace zero-length array with
+ flexible-array member
+Message-ID: <20220527220854.GA72220@embeddedor>
+References: <20220527212953.797574-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220527212953.797574-1-keescook@chromium.org>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,39 +61,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220527-161529/Jason-A-Donenfeld/crypto-blake2s-remove-shash-module/20220526-172214
-head:   3f36e6ac3553b6d6872d5e575f30112d333a1934
-commit: 3f36e6ac3553b6d6872d5e575f30112d333a1934 crypto: blake2s - remove shash module
-date:   14 hours ago
-config: hexagon-randconfig-r041-20220526 (https://download.01.org/0day-ci/archive/20220528/202205280544.UeG75XaY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3f36e6ac3553b6d6872d5e575f30112d333a1934
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220527-161529/Jason-A-Donenfeld/crypto-blake2s-remove-shash-module/20220526-172214
-        git checkout 3f36e6ac3553b6d6872d5e575f30112d333a1934
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash lib/crypto/
+On Fri, May 27, 2022 at 02:29:53PM -0700, Kees Cook wrote:
+> There is a regular need in the kernel to provide a way to declare
+> having a dynamically sized set of trailing elements in a structure.
+> Kernel code should always use “flexible array members”[1] for these
+> cases. The older style of one-element or zero-length arrays should no
+> longer be used[2][3].
+> 
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+> [3] https://github.com/KSPP/linux/issues/78
+> 
+> Fixes: 9f599f351e86 ("media: amphion: add vpu core driver")
+> Cc: Ming Qian <ming.qian@nxp.com>
+> Cc: Shijie Qin <shijie.qin@nxp.com>
+> Cc: Zhou Peng <eagle.zhou@nxp.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Cc: linux-media@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-All warnings (new ones prefixed by >>):
+Thanks
+--
+Gustavo
 
->> lib/crypto/blake2s-selftest.c:548:13: warning: stack frame size (1176) exceeds limit (1024) in 'blake2s_selftest' [-Wframe-larger-than]
-   bool __init blake2s_selftest(void)
-               ^
-   1 warning generated.
-
-
-vim +/blake2s_selftest +548 lib/crypto/blake2s-selftest.c
-
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  547  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08 @548  bool __init blake2s_selftest(void)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/media/platform/amphion/vpu_dbg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
+> index da62bd718fb8..f72c8a506b22 100644
+> --- a/drivers/media/platform/amphion/vpu_dbg.c
+> +++ b/drivers/media/platform/amphion/vpu_dbg.c
+> @@ -27,7 +27,7 @@ struct print_buf_desc {
+>  	u32 bytes;
+>  	u32 read;
+>  	u32 write;
+> -	char buffer[0];
+> +	char buffer[];
+>  };
+>  
+>  static char *vb2_stat_name[] = {
+> -- 
+> 2.32.0
+> 

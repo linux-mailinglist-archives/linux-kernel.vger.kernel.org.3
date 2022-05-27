@@ -2,118 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886AE535BCE
+	by mail.lfdr.de (Postfix) with ESMTP id D42C9535BCF
 	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344909AbiE0Ipf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
+        id S1349834AbiE0Ipp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349898AbiE0IpF (ORCPT
+        with ESMTP id S1349833AbiE0Ipl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:45:05 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BCE59B9D;
-        Fri, 27 May 2022 01:45:03 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o9-20020a17090a0a0900b001df3fc52ea7so6545389pjo.3;
-        Fri, 27 May 2022 01:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZkWjBvBkp3MoBTy8a44pxEDJROJPPMI6sXaDAZ5cZlw=;
-        b=YoCMcidPaedsig1GXzyyoE7gpzcgzvIWctYQ2AnDmiE/BbnD7KO6EYvvtdCBUF/KB7
-         wcltN1/deBwOsbcIN4K2ovPD5/ajIij3z/kXxj3vnquuN1bA/sBjN6Iw9UF6aJZSLewk
-         j40BsK2lJfFpFX4Mt/wUeuJRVYJZwex1Cpv+7RLr4NaC6PfYkUQD2sAbQc3ErcasJrKD
-         mUrpQHcopSBa6t01z75r2oY9yvGD2Q0ZTogGwlHFiICixwdALAS8HxkY+e9R92iYiyWD
-         ni1prJxJUZ2mrw6HpQxMqdWRM+91HXudVnpj9vkGbSoieNiZMaHc9PO5wx8RyOgdRiSV
-         XEew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ZkWjBvBkp3MoBTy8a44pxEDJROJPPMI6sXaDAZ5cZlw=;
-        b=gsnVbclrNCeOEUrxfFiSIM76Ob92SBGZOriFjJdxw4u4K03QB1byoTjb80JgRVFYsU
-         //wlWaXnyL7BnLuQbZIF3BWQy2rd/rpmzhZsQDOMQNMmpE+S3e/ZkquBwogqqq0cIrcW
-         FooP5MDWsqhWKvZen/1KlyEihWlrLx6L/XDo9Kq4UWvIJsjlBBmIpZ4XU1KZvuxIWGsy
-         1Vat6rV4W91OkHVKFGIXFuHdWYPYgC5t4IB5RrQEiURoPW0a5v9BZKNCaL5ILXJ+x6ec
-         zX7VPd7J9M2MSrN3RddFwxl4asahn6NhLY5rlWsS0c9wpwvm4+pL8/2IAxQ9nHSBM1f7
-         0Blg==
-X-Gm-Message-State: AOAM530JOYQRAF7C23S/c+0x5R357EmHh0bMKYxtKbnrciylba0NQapX
-        QGTWr+5i9CgvtOAWfrqh6ec=
-X-Google-Smtp-Source: ABdhPJxlCIR2YsBdR8OPEoM9FxLLP69+0yBhyaohRPq+NYW/TldFs1Tp3Qiau3Jr4/mxpwRkH5OjhQ==
-X-Received: by 2002:a17:90b:4ace:b0:1df:cb33:5e7e with SMTP id mh14-20020a17090b4ace00b001dfcb335e7emr7083067pjb.5.1653641102713;
-        Fri, 27 May 2022 01:45:02 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:ac0e])
-        by smtp.gmail.com with ESMTPSA id n18-20020aa79852000000b0050dc7628195sm2935711pfq.111.2022.05.27.01.45.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 01:45:02 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 26 May 2022 22:45:00 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        rcu@vger.kernel.org
-Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root
- partitions
-Message-ID: <YpCPjP2jJgLzCo1C@slm.duckdns.org>
-References: <20220525221055.1152307-1-frederic@kernel.org>
- <20220525221055.1152307-5-frederic@kernel.org>
- <Yo/FGcG+uiBh88sT@slm.duckdns.org>
- <20220526225141.GA1214445@lothringen>
- <YpAHEt0j30vBw9au@slm.duckdns.org>
- <9e44bb00-955a-dbc6-a863-be649e0c701f@redhat.com>
- <YpAdSW8JXVPOoNJl@slm.duckdns.org>
- <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain>
+        Fri, 27 May 2022 04:45:41 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854E059B9D;
+        Fri, 27 May 2022 01:45:31 -0700 (PDT)
+X-UUID: 78e4fe7e29704432845ff86dfdad2977-20220527
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:9dd5d495-a196-4dc8-940e-103f1e332e10,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:98917ab8-3c45-407b-8f66-25095432a27a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 78e4fe7e29704432845ff86dfdad2977-20220527
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2107655323; Fri, 27 May 2022 16:45:27 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 27 May 2022 16:45:25 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Fri, 27 May 2022 16:45:25 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <linmq006@gmail.com>
+CC:     <bhelgaas@google.com>, <jianjun.wang@mediatek.com>, <kw@linux.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-pci@vger.kernel.org>,
+        <lorenzo.pieralisi@arm.com>, <matthias.bgg@gmail.com>,
+        <maz@kernel.org>, <robh@kernel.org>, <ryder.lee@mediatek.com>
+Subject: Re: [PATCH] PCI: mediatek-gen3: Fix refcount leak in mtk_pcie_init_irq_domains
+Date:   Fri, 27 May 2022 16:45:25 +0800
+Message-ID: <20220527084525.7170-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220526110246.53502-1-linmq006@gmail.com>
+References: <20220526110246.53502-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Miaoqian,
 
-On Fri, May 27, 2022 at 10:30:18AM +0200, Juri Lelli wrote:
-> FWIW, I was under the impression that this would nicely fit along the
-> side of other feaures towards implenting dynamic isolation of CPUs (say
-> https://lore.kernel.org/lkml/20220510153413.400020-1-longman@redhat.com/
-> for example). Wouldn't be awkward to have to poke different places to
-> achieve isolation at runtime?
+>Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>---
+> drivers/pci/controller/pcie-mediatek-gen3.c | 1 +
+> 1 file changed, 1 insertion(+)
+>
+>diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
+>index 3e8d70bfabc6..da8e9db0abdf 100644
+>--- a/drivers/pci/controller/pcie-mediatek-gen3.c
+>+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+>@@ -600,6 +600,7 @@ static int mtk_pcie_init_irq_domains(struct mtk_gen3_pcie *pcie)
+> 						  &intx_domain_ops, pcie);
+> 	if (!pcie->intx_domain) {
+> 		dev_err(dev, "failed to create INTx IRQ domain\n");
+>+		of_node_put(intc_node);
+> 		return -ENODEV;
+> 	}
 
-So, it were just being part of the isolated domain thing, it would make
-sense, but as a separate flag which isn't hierarchical, it's weird to put it
-there.
+Thanks for doing this.
 
-> Also, I wonder if a proc/sys interface might be problematic for certain
-> middleware that is substantially based on using cgroups. I'll try to ask
-> around. :)
+I checked mtk_pcie_init_irq_domains() and there are multiple exit paths like
+err_msi_domain and err_msi_bottom_domain and the normal path which also
+need of_node_put(intc_node).
 
-There is a downside to making a feature a part of cpuset in that it makes
-cgroup usage mandatory. This is fine for something which benefits from
-hierarchical organization but it is weird to require building cgroup
-hierarchy for straight-forward system-wide features.
+Maybe we can move the of_node_put(intc_node) to #54 below and cover
+all possible paths?
 
-Thanks.
 
--- 
-tejun
+cheers,
+Miles
+
+e.g.,
+
+static int mtk_pcie_init_irq_domains(struct mtk_gen3_pcie *pcie)
+{
+	struct device *dev = pcie->dev;
+	struct device_node *intc_node, *node = dev->of_node;
+	int ret;
+
+	raw_spin_lock_init(&pcie->irq_lock);
+
+	/* Setup INTx */
+	intc_node = of_get_child_by_name(node, "interrupt-controller");
+	if (!intc_node) {
+		dev_err(dev, "missing interrupt-controller node\n");
+		return -ENODEV;
+	}
+
+	pcie->intx_domain = irq_domain_add_linear(intc_node, PCI_NUM_INTX,
+						  &intx_domain_ops, pcie);
+	of_node_put(intc_node);
+	if (!pcie->intx_domain) {
+		dev_err(dev, "failed to create INTx IRQ domain\n");
+		return -ENODEV;
+	}
+
+	/* Setup MSI */
+	mutex_init(&pcie->lock);
+
+	pcie->msi_bottom_domain = irq_domain_add_linear(node, PCIE_MSI_IRQS_NUM,
+				  &mtk_msi_bottom_domain_ops, pcie);
+	if (!pcie->msi_bottom_domain) {
+		dev_err(dev, "failed to create MSI bottom domain\n");
+		ret = -ENODEV;
+		goto err_msi_bottom_domain;
+	}
+
+	pcie->msi_domain = pci_msi_create_irq_domain(dev->fwnode,
+						     &mtk_msi_domain_info,
+						     pcie->msi_bottom_domain);
+	if (!pcie->msi_domain) {
+		dev_err(dev, "failed to create MSI domain\n");
+		ret = -ENODEV;
+		goto err_msi_domain;
+	}
+
+	return 0;
+
+err_msi_domain:
+	irq_domain_remove(pcie->msi_bottom_domain);
+err_msi_bottom_domain:
+	irq_domain_remove(pcie->intx_domain);
+
+	return ret;
+}
+> 
+>-- 
+>2.25.1
+
+

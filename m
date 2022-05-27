@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78188535F6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD41535F88
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351502AbiE0Liv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S238228AbiE0LjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351442AbiE0LiR (ORCPT
+        with ESMTP id S1351489AbiE0Li0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:38:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EAE12B035;
-        Fri, 27 May 2022 04:38:08 -0700 (PDT)
+        Fri, 27 May 2022 07:38:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4199FFD36B;
+        Fri, 27 May 2022 04:38:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26633B824DD;
-        Fri, 27 May 2022 11:38:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA68C385A9;
-        Fri, 27 May 2022 11:38:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB589B824D8;
+        Fri, 27 May 2022 11:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 377A4C34100;
+        Fri, 27 May 2022 11:38:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651485;
-        bh=ZXyitpF3peRkvKwnqrMvERHDgBPpYSOUQQeosSV7WVI=;
+        s=korg; t=1653651494;
+        bh=xkJaroxh/n21Fq3lWERfCpo9pDNRfSiPUirThCsWka4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hg5qzty3TWEv9af6//5HxRjnoP+luaCv0KCEeeUAk60+n6eMW9aa25U4XEgUC+M12
-         WnTRGSry9RFwHky2Otpn/ds58TmbuSxOZL6NEtO5SuIRwasMi0GnQN+TW347iTrrAG
-         qY+a9jxz9inu/B4NLfaO9lYtTp2dhdud35ohAi5c=
+        b=L6wDeo3GZKHeUAFh8u4gaiNozKqmpsTzPy6MzNf6hJn/4vU9OlEWlMCaAg0wqKbHM
+         /7MAVai6++rRwny4dwDOUNTF1tBtR5TSXxT8P0plmC5N8Re7/CzI26Pj6uA+GC2+Ez
+         zPWFUTFT7FuomgurgAEqX3ES6sZn2SpWDJ1Ni8hs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-crypto@vger.kernel.org,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.10 025/163] lib/crypto: blake2s: include as built-in
-Date:   Fri, 27 May 2022 10:48:25 +0200
-Message-Id: <20220527084831.707647946@linuxfoundation.org>
+Subject: [PATCH 5.10 026/163] lib/crypto: blake2s: move hmac construction into wireguard
+Date:   Fri, 27 May 2022 10:48:26 +0200
+Message-Id: <20220527084831.864904102@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
 References: <20220527084828.156494029@linuxfoundation.org>
@@ -59,401 +58,224 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 6048fdcc5f269c7f31d774c295ce59081b36e6f9 upstream.
+commit d8d83d8ab0a453e17e68b3a3bed1f940c34b8646 upstream.
 
-In preparation for using blake2s in the RNG, we change the way that it
-is wired-in to the build system. Instead of using ifdefs to select the
-right symbol, we use weak symbols. And because ARM doesn't need the
-generic implementation, we make the generic one default only if an arch
-library doesn't need it already, and then have arch libraries that do
-need it opt-in. So that the arch libraries can remain tristate rather
-than bool, we then split the shash part from the glue code.
+Basically nobody should use blake2s in an HMAC construction; it already
+has a keyed variant. But unfortunately for historical reasons, Noise,
+used by WireGuard, uses HKDF quite strictly, which means we have to use
+this. Because this really shouldn't be used by others, this commit moves
+it into wireguard's noise.c locally, so that kernels that aren't using
+WireGuard don't get this superfluous code baked in. On m68k systems,
+this shaves off ~314 bytes.
 
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/crypto/Makefile          |    4 +
- arch/x86/crypto/blake2s-glue.c    |   68 ++-------------------------------
- arch/x86/crypto/blake2s-shash.c   |   77 ++++++++++++++++++++++++++++++++++++++
- crypto/Kconfig                    |    3 -
- drivers/net/Kconfig               |    1 
- include/crypto/internal/blake2s.h |    6 +-
- lib/crypto/Kconfig                |   23 ++---------
- lib/crypto/Makefile               |    9 +---
- lib/crypto/blake2s-generic.c      |    6 ++
- lib/crypto/blake2s.c              |    6 --
- 10 files changed, 106 insertions(+), 97 deletions(-)
- create mode 100644 arch/x86/crypto/blake2s-shash.c
+ drivers/net/wireguard/noise.c |   45 ++++++++++++++++++++++++++++++++++++------
+ include/crypto/blake2s.h      |    3 --
+ lib/crypto/blake2s-selftest.c |   31 ----------------------------
+ lib/crypto/blake2s.c          |   37 ----------------------------------
+ 4 files changed, 39 insertions(+), 77 deletions(-)
 
---- a/arch/x86/crypto/Makefile
-+++ b/arch/x86/crypto/Makefile
-@@ -66,7 +66,9 @@ obj-$(CONFIG_CRYPTO_SHA512_SSSE3) += sha
- sha512-ssse3-y := sha512-ssse3-asm.o sha512-avx-asm.o sha512-avx2-asm.o sha512_ssse3_glue.o
- 
- obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += blake2s-x86_64.o
--blake2s-x86_64-y := blake2s-core.o blake2s-glue.o
-+blake2s-x86_64-y := blake2s-shash.o
-+obj-$(if $(CONFIG_CRYPTO_BLAKE2S_X86),y) += libblake2s-x86_64.o
-+libblake2s-x86_64-y := blake2s-core.o blake2s-glue.o
- 
- obj-$(CONFIG_CRYPTO_GHASH_CLMUL_NI_INTEL) += ghash-clmulni-intel.o
- ghash-clmulni-intel-y := ghash-clmulni-intel_asm.o ghash-clmulni-intel_glue.o
---- a/arch/x86/crypto/blake2s-glue.c
-+++ b/arch/x86/crypto/blake2s-glue.c
-@@ -5,7 +5,6 @@
- 
- #include <crypto/internal/blake2s.h>
- #include <crypto/internal/simd.h>
--#include <crypto/internal/hash.h>
- 
- #include <linux/types.h>
- #include <linux/jump_label.h>
-@@ -28,9 +27,8 @@ asmlinkage void blake2s_compress_avx512(
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(blake2s_use_ssse3);
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(blake2s_use_avx512);
- 
--void blake2s_compress_arch(struct blake2s_state *state,
--			   const u8 *block, size_t nblocks,
--			   const u32 inc)
-+void blake2s_compress(struct blake2s_state *state, const u8 *block,
-+		      size_t nblocks, const u32 inc)
- {
- 	/* SIMD disables preemption, so relax after processing each page. */
- 	BUILD_BUG_ON(SZ_4K / BLAKE2S_BLOCK_SIZE < 8);
-@@ -56,49 +54,12 @@ void blake2s_compress_arch(struct blake2
- 		block += blocks * BLAKE2S_BLOCK_SIZE;
- 	} while (nblocks);
+--- a/drivers/net/wireguard/noise.c
++++ b/drivers/net/wireguard/noise.c
+@@ -302,6 +302,41 @@ void wg_noise_set_static_identity_privat
+ 		static_identity->static_public, private_key);
  }
--EXPORT_SYMBOL(blake2s_compress_arch);
+ 
++static void hmac(u8 *out, const u8 *in, const u8 *key, const size_t inlen, const size_t keylen)
++{
++	struct blake2s_state state;
++	u8 x_key[BLAKE2S_BLOCK_SIZE] __aligned(__alignof__(u32)) = { 0 };
++	u8 i_hash[BLAKE2S_HASH_SIZE] __aligned(__alignof__(u32));
++	int i;
++
++	if (keylen > BLAKE2S_BLOCK_SIZE) {
++		blake2s_init(&state, BLAKE2S_HASH_SIZE);
++		blake2s_update(&state, key, keylen);
++		blake2s_final(&state, x_key);
++	} else
++		memcpy(x_key, key, keylen);
++
++	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
++		x_key[i] ^= 0x36;
++
++	blake2s_init(&state, BLAKE2S_HASH_SIZE);
++	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
++	blake2s_update(&state, in, inlen);
++	blake2s_final(&state, i_hash);
++
++	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
++		x_key[i] ^= 0x5c ^ 0x36;
++
++	blake2s_init(&state, BLAKE2S_HASH_SIZE);
++	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
++	blake2s_update(&state, i_hash, BLAKE2S_HASH_SIZE);
++	blake2s_final(&state, i_hash);
++
++	memcpy(out, i_hash, BLAKE2S_HASH_SIZE);
++	memzero_explicit(x_key, BLAKE2S_BLOCK_SIZE);
++	memzero_explicit(i_hash, BLAKE2S_HASH_SIZE);
++}
++
+ /* This is Hugo Krawczyk's HKDF:
+  *  - https://eprint.iacr.org/2010/264.pdf
+  *  - https://tools.ietf.org/html/rfc5869
+@@ -322,14 +357,14 @@ static void kdf(u8 *first_dst, u8 *secon
+ 		 ((third_len || third_dst) && (!second_len || !second_dst))));
+ 
+ 	/* Extract entropy from data into secret */
+-	blake2s256_hmac(secret, data, chaining_key, data_len, NOISE_HASH_LEN);
++	hmac(secret, data, chaining_key, data_len, NOISE_HASH_LEN);
+ 
+ 	if (!first_dst || !first_len)
+ 		goto out;
+ 
+ 	/* Expand first key: key = secret, data = 0x1 */
+ 	output[0] = 1;
+-	blake2s256_hmac(output, output, secret, 1, BLAKE2S_HASH_SIZE);
++	hmac(output, output, secret, 1, BLAKE2S_HASH_SIZE);
+ 	memcpy(first_dst, output, first_len);
+ 
+ 	if (!second_dst || !second_len)
+@@ -337,8 +372,7 @@ static void kdf(u8 *first_dst, u8 *secon
+ 
+ 	/* Expand second key: key = secret, data = first-key || 0x2 */
+ 	output[BLAKE2S_HASH_SIZE] = 2;
+-	blake2s256_hmac(output, output, secret, BLAKE2S_HASH_SIZE + 1,
+-			BLAKE2S_HASH_SIZE);
++	hmac(output, output, secret, BLAKE2S_HASH_SIZE + 1, BLAKE2S_HASH_SIZE);
+ 	memcpy(second_dst, output, second_len);
+ 
+ 	if (!third_dst || !third_len)
+@@ -346,8 +380,7 @@ static void kdf(u8 *first_dst, u8 *secon
+ 
+ 	/* Expand third key: key = secret, data = second-key || 0x3 */
+ 	output[BLAKE2S_HASH_SIZE] = 3;
+-	blake2s256_hmac(output, output, secret, BLAKE2S_HASH_SIZE + 1,
+-			BLAKE2S_HASH_SIZE);
++	hmac(output, output, secret, BLAKE2S_HASH_SIZE + 1, BLAKE2S_HASH_SIZE);
+ 	memcpy(third_dst, output, third_len);
+ 
+ out:
+--- a/include/crypto/blake2s.h
++++ b/include/crypto/blake2s.h
+@@ -101,7 +101,4 @@ static inline void blake2s(u8 *out, cons
+ 	blake2s_final(&state, out);
+ }
+ 
+-void blake2s256_hmac(u8 *out, const u8 *in, const u8 *key, const size_t inlen,
+-		     const size_t keylen);
 -
--static int crypto_blake2s_update_x86(struct shash_desc *desc,
--				     const u8 *in, unsigned int inlen)
--{
--	return crypto_blake2s_update(desc, in, inlen, blake2s_compress_arch);
--}
+ #endif /* _CRYPTO_BLAKE2S_H */
+--- a/lib/crypto/blake2s-selftest.c
++++ b/lib/crypto/blake2s-selftest.c
+@@ -15,7 +15,6 @@
+  * #include <stdio.h>
+  *
+  * #include <openssl/evp.h>
+- * #include <openssl/hmac.h>
+  *
+  * #define BLAKE2S_TESTVEC_COUNT	256
+  *
+@@ -58,16 +57,6 @@
+  *	}
+  *	printf("};\n\n");
+  *
+- *	printf("static const u8 blake2s_hmac_testvecs[][BLAKE2S_HASH_SIZE] __initconst = {\n");
+- *
+- *	HMAC(EVP_blake2s256(), key, sizeof(key), buf, sizeof(buf), hash, NULL);
+- *	print_vec(hash, BLAKE2S_OUTBYTES);
+- *
+- *	HMAC(EVP_blake2s256(), buf, sizeof(buf), key, sizeof(key), hash, NULL);
+- *	print_vec(hash, BLAKE2S_OUTBYTES);
+- *
+- *	printf("};\n");
+- *
+  *	return 0;
+  *}
+  */
+@@ -554,15 +543,6 @@ static const u8 blake2s_testvecs[][BLAKE
+     0xd6, 0x98, 0x6b, 0x07, 0x10, 0x65, 0x52, 0x65, },
+ };
+ 
+-static const u8 blake2s_hmac_testvecs[][BLAKE2S_HASH_SIZE] __initconst = {
+-  { 0xce, 0xe1, 0x57, 0x69, 0x82, 0xdc, 0xbf, 0x43, 0xad, 0x56, 0x4c, 0x70,
+-    0xed, 0x68, 0x16, 0x96, 0xcf, 0xa4, 0x73, 0xe8, 0xe8, 0xfc, 0x32, 0x79,
+-    0x08, 0x0a, 0x75, 0x82, 0xda, 0x3f, 0x05, 0x11, },
+-  { 0x77, 0x2f, 0x0c, 0x71, 0x41, 0xf4, 0x4b, 0x2b, 0xb3, 0xc6, 0xb6, 0xf9,
+-    0x60, 0xde, 0xe4, 0x52, 0x38, 0x66, 0xe8, 0xbf, 0x9b, 0x96, 0xc4, 0x9f,
+-    0x60, 0xd9, 0x24, 0x37, 0x99, 0xd6, 0xec, 0x31, },
+-};
 -
--static int crypto_blake2s_final_x86(struct shash_desc *desc, u8 *out)
--{
--	return crypto_blake2s_final(desc, out, blake2s_compress_arch);
--}
+ bool __init blake2s_selftest(void)
+ {
+ 	u8 key[BLAKE2S_KEY_SIZE];
+@@ -607,16 +587,5 @@ bool __init blake2s_selftest(void)
+ 		}
+ 	}
+ 
+-	if (success) {
+-		blake2s256_hmac(hash, buf, key, sizeof(buf), sizeof(key));
+-		success &= !memcmp(hash, blake2s_hmac_testvecs[0], BLAKE2S_HASH_SIZE);
 -
--#define BLAKE2S_ALG(name, driver_name, digest_size)			\
--	{								\
--		.base.cra_name		= name,				\
--		.base.cra_driver_name	= driver_name,			\
--		.base.cra_priority	= 200,				\
--		.base.cra_flags		= CRYPTO_ALG_OPTIONAL_KEY,	\
--		.base.cra_blocksize	= BLAKE2S_BLOCK_SIZE,		\
--		.base.cra_ctxsize	= sizeof(struct blake2s_tfm_ctx), \
--		.base.cra_module	= THIS_MODULE,			\
--		.digestsize		= digest_size,			\
--		.setkey			= crypto_blake2s_setkey,	\
--		.init			= crypto_blake2s_init,		\
--		.update			= crypto_blake2s_update_x86,	\
--		.final			= crypto_blake2s_final_x86,	\
--		.descsize		= sizeof(struct blake2s_state),	\
+-		blake2s256_hmac(hash, key, buf, sizeof(key), sizeof(buf));
+-		success &= !memcmp(hash, blake2s_hmac_testvecs[1], BLAKE2S_HASH_SIZE);
+-
+-		if (!success)
+-			pr_err("blake2s256_hmac self-test: FAIL\n");
 -	}
 -
--static struct shash_alg blake2s_algs[] = {
--	BLAKE2S_ALG("blake2s-128", "blake2s-128-x86", BLAKE2S_128_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-160", "blake2s-160-x86", BLAKE2S_160_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-224", "blake2s-224-x86", BLAKE2S_224_HASH_SIZE),
--	BLAKE2S_ALG("blake2s-256", "blake2s-256-x86", BLAKE2S_256_HASH_SIZE),
--};
-+EXPORT_SYMBOL(blake2s_compress);
- 
- static int __init blake2s_mod_init(void)
- {
--	if (!boot_cpu_has(X86_FEATURE_SSSE3))
--		return 0;
--
--	static_branch_enable(&blake2s_use_ssse3);
-+	if (boot_cpu_has(X86_FEATURE_SSSE3))
-+		static_branch_enable(&blake2s_use_ssse3);
- 
- 	if (IS_ENABLED(CONFIG_AS_AVX512) &&
- 	    boot_cpu_has(X86_FEATURE_AVX) &&
-@@ -109,26 +70,9 @@ static int __init blake2s_mod_init(void)
- 			      XFEATURE_MASK_AVX512, NULL))
- 		static_branch_enable(&blake2s_use_avx512);
- 
--	return IS_REACHABLE(CONFIG_CRYPTO_HASH) ?
--		crypto_register_shashes(blake2s_algs,
--					ARRAY_SIZE(blake2s_algs)) : 0;
--}
--
--static void __exit blake2s_mod_exit(void)
--{
--	if (IS_REACHABLE(CONFIG_CRYPTO_HASH) && boot_cpu_has(X86_FEATURE_SSSE3))
--		crypto_unregister_shashes(blake2s_algs, ARRAY_SIZE(blake2s_algs));
-+	return 0;
+ 	return success;
  }
- 
- module_init(blake2s_mod_init);
--module_exit(blake2s_mod_exit);
- 
--MODULE_ALIAS_CRYPTO("blake2s-128");
--MODULE_ALIAS_CRYPTO("blake2s-128-x86");
--MODULE_ALIAS_CRYPTO("blake2s-160");
--MODULE_ALIAS_CRYPTO("blake2s-160-x86");
--MODULE_ALIAS_CRYPTO("blake2s-224");
--MODULE_ALIAS_CRYPTO("blake2s-224-x86");
--MODULE_ALIAS_CRYPTO("blake2s-256");
--MODULE_ALIAS_CRYPTO("blake2s-256-x86");
- MODULE_LICENSE("GPL v2");
---- /dev/null
-+++ b/arch/x86/crypto/blake2s-shash.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+/*
-+ * Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+
-+#include <crypto/internal/blake2s.h>
-+#include <crypto/internal/simd.h>
-+#include <crypto/internal/hash.h>
-+
-+#include <linux/types.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/sizes.h>
-+
-+#include <asm/cpufeature.h>
-+#include <asm/processor.h>
-+
-+static int crypto_blake2s_update_x86(struct shash_desc *desc,
-+				     const u8 *in, unsigned int inlen)
-+{
-+	return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
-+}
-+
-+static int crypto_blake2s_final_x86(struct shash_desc *desc, u8 *out)
-+{
-+	return crypto_blake2s_final(desc, out, blake2s_compress);
-+}
-+
-+#define BLAKE2S_ALG(name, driver_name, digest_size)			\
-+	{								\
-+		.base.cra_name		= name,				\
-+		.base.cra_driver_name	= driver_name,			\
-+		.base.cra_priority	= 200,				\
-+		.base.cra_flags		= CRYPTO_ALG_OPTIONAL_KEY,	\
-+		.base.cra_blocksize	= BLAKE2S_BLOCK_SIZE,		\
-+		.base.cra_ctxsize	= sizeof(struct blake2s_tfm_ctx), \
-+		.base.cra_module	= THIS_MODULE,			\
-+		.digestsize		= digest_size,			\
-+		.setkey			= crypto_blake2s_setkey,	\
-+		.init			= crypto_blake2s_init,		\
-+		.update			= crypto_blake2s_update_x86,	\
-+		.final			= crypto_blake2s_final_x86,	\
-+		.descsize		= sizeof(struct blake2s_state),	\
-+	}
-+
-+static struct shash_alg blake2s_algs[] = {
-+	BLAKE2S_ALG("blake2s-128", "blake2s-128-x86", BLAKE2S_128_HASH_SIZE),
-+	BLAKE2S_ALG("blake2s-160", "blake2s-160-x86", BLAKE2S_160_HASH_SIZE),
-+	BLAKE2S_ALG("blake2s-224", "blake2s-224-x86", BLAKE2S_224_HASH_SIZE),
-+	BLAKE2S_ALG("blake2s-256", "blake2s-256-x86", BLAKE2S_256_HASH_SIZE),
-+};
-+
-+static int __init blake2s_mod_init(void)
-+{
-+	if (IS_REACHABLE(CONFIG_CRYPTO_HASH) && boot_cpu_has(X86_FEATURE_SSSE3))
-+		return crypto_register_shashes(blake2s_algs, ARRAY_SIZE(blake2s_algs));
-+	return 0;
-+}
-+
-+static void __exit blake2s_mod_exit(void)
-+{
-+	if (IS_REACHABLE(CONFIG_CRYPTO_HASH) && boot_cpu_has(X86_FEATURE_SSSE3))
-+		crypto_unregister_shashes(blake2s_algs, ARRAY_SIZE(blake2s_algs));
-+}
-+
-+module_init(blake2s_mod_init);
-+module_exit(blake2s_mod_exit);
-+
-+MODULE_ALIAS_CRYPTO("blake2s-128");
-+MODULE_ALIAS_CRYPTO("blake2s-128-x86");
-+MODULE_ALIAS_CRYPTO("blake2s-160");
-+MODULE_ALIAS_CRYPTO("blake2s-160-x86");
-+MODULE_ALIAS_CRYPTO("blake2s-224");
-+MODULE_ALIAS_CRYPTO("blake2s-224-x86");
-+MODULE_ALIAS_CRYPTO("blake2s-256");
-+MODULE_ALIAS_CRYPTO("blake2s-256-x86");
-+MODULE_LICENSE("GPL v2");
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -1936,9 +1936,10 @@ config CRYPTO_STATS
- config CRYPTO_HASH_INFO
- 	bool
- 
--source "lib/crypto/Kconfig"
- source "drivers/crypto/Kconfig"
- source "crypto/asymmetric_keys/Kconfig"
- source "certs/Kconfig"
- 
- endif	# if CRYPTO
-+
-+source "lib/crypto/Kconfig"
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -80,7 +80,6 @@ config WIREGUARD
- 	select CRYPTO
- 	select CRYPTO_LIB_CURVE25519
- 	select CRYPTO_LIB_CHACHA20POLY1305
--	select CRYPTO_LIB_BLAKE2S
- 	select CRYPTO_CHACHA20_X86_64 if X86 && 64BIT
- 	select CRYPTO_POLY1305_X86_64 if X86 && 64BIT
- 	select CRYPTO_BLAKE2S_X86 if X86 && 64BIT
---- a/include/crypto/internal/blake2s.h
-+++ b/include/crypto/internal/blake2s.h
-@@ -11,11 +11,11 @@
- #include <crypto/internal/hash.h>
- #include <linux/string.h>
- 
--void blake2s_compress_generic(struct blake2s_state *state,const u8 *block,
-+void blake2s_compress_generic(struct blake2s_state *state, const u8 *block,
- 			      size_t nblocks, const u32 inc);
- 
--void blake2s_compress_arch(struct blake2s_state *state,const u8 *block,
--			   size_t nblocks, const u32 inc);
-+void blake2s_compress(struct blake2s_state *state, const u8 *block,
-+		      size_t nblocks, const u32 inc);
- 
- bool blake2s_selftest(void);
- 
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -1,7 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--comment "Crypto library routines"
--
- config CRYPTO_LIB_AES
- 	tristate
- 
-@@ -9,14 +7,14 @@ config CRYPTO_LIB_ARC4
- 	tristate
- 
- config CRYPTO_ARCH_HAVE_LIB_BLAKE2S
--	tristate
-+	bool
- 	help
- 	  Declares whether the architecture provides an arch-specific
- 	  accelerated implementation of the Blake2s library interface,
- 	  either builtin or as a module.
- 
- config CRYPTO_LIB_BLAKE2S_GENERIC
--	tristate
-+	def_bool !CRYPTO_ARCH_HAVE_LIB_BLAKE2S
- 	help
- 	  This symbol can be depended upon by arch implementations of the
- 	  Blake2s library interface that require the generic code as a
-@@ -24,15 +22,6 @@ config CRYPTO_LIB_BLAKE2S_GENERIC
- 	  implementation is enabled, this implementation serves the users
- 	  of CRYPTO_LIB_BLAKE2S.
- 
--config CRYPTO_LIB_BLAKE2S
--	tristate "BLAKE2s hash function library"
--	depends on CRYPTO_ARCH_HAVE_LIB_BLAKE2S || !CRYPTO_ARCH_HAVE_LIB_BLAKE2S
--	select CRYPTO_LIB_BLAKE2S_GENERIC if CRYPTO_ARCH_HAVE_LIB_BLAKE2S=n
--	help
--	  Enable the Blake2s library interface. This interface may be fulfilled
--	  by either the generic implementation or an arch-specific one, if one
--	  is available and enabled.
--
- config CRYPTO_ARCH_HAVE_LIB_CHACHA
- 	tristate
- 	help
-@@ -51,7 +40,7 @@ config CRYPTO_LIB_CHACHA_GENERIC
- 	  of CRYPTO_LIB_CHACHA.
- 
- config CRYPTO_LIB_CHACHA
--	tristate "ChaCha library interface"
-+	tristate
- 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
- 	select CRYPTO_LIB_CHACHA_GENERIC if CRYPTO_ARCH_HAVE_LIB_CHACHA=n
- 	help
-@@ -76,7 +65,7 @@ config CRYPTO_LIB_CURVE25519_GENERIC
- 	  of CRYPTO_LIB_CURVE25519.
- 
- config CRYPTO_LIB_CURVE25519
--	tristate "Curve25519 scalar multiplication library"
-+	tristate
- 	depends on CRYPTO_ARCH_HAVE_LIB_CURVE25519 || !CRYPTO_ARCH_HAVE_LIB_CURVE25519
- 	select CRYPTO_LIB_CURVE25519_GENERIC if CRYPTO_ARCH_HAVE_LIB_CURVE25519=n
- 	help
-@@ -111,7 +100,7 @@ config CRYPTO_LIB_POLY1305_GENERIC
- 	  of CRYPTO_LIB_POLY1305.
- 
- config CRYPTO_LIB_POLY1305
--	tristate "Poly1305 library interface"
-+	tristate
- 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	select CRYPTO_LIB_POLY1305_GENERIC if CRYPTO_ARCH_HAVE_LIB_POLY1305=n
- 	help
-@@ -120,7 +109,7 @@ config CRYPTO_LIB_POLY1305
- 	  is available and enabled.
- 
- config CRYPTO_LIB_CHACHA20POLY1305
--	tristate "ChaCha20-Poly1305 AEAD support (8-byte nonce library version)"
-+	tristate
- 	depends on CRYPTO_ARCH_HAVE_LIB_CHACHA || !CRYPTO_ARCH_HAVE_LIB_CHACHA
- 	depends on CRYPTO_ARCH_HAVE_LIB_POLY1305 || !CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	select CRYPTO_LIB_CHACHA
---- a/lib/crypto/Makefile
-+++ b/lib/crypto/Makefile
-@@ -10,11 +10,10 @@ libaes-y					:= aes.o
- obj-$(CONFIG_CRYPTO_LIB_ARC4)			+= libarc4.o
- libarc4-y					:= arc4.o
- 
--obj-$(CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC)	+= libblake2s-generic.o
--libblake2s-generic-y				+= blake2s-generic.o
--
--obj-$(CONFIG_CRYPTO_LIB_BLAKE2S)		+= libblake2s.o
--libblake2s-y					+= blake2s.o
-+# blake2s is used by the /dev/random driver which is always builtin
-+obj-y						+= libblake2s.o
-+libblake2s-y					:= blake2s.o
-+libblake2s-$(CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC)	+= blake2s-generic.o
- 
- obj-$(CONFIG_CRYPTO_LIB_CHACHA20POLY1305)	+= libchacha20poly1305.o
- libchacha20poly1305-y				+= chacha20poly1305.o
---- a/lib/crypto/blake2s-generic.c
-+++ b/lib/crypto/blake2s-generic.c
-@@ -37,7 +37,11 @@ static inline void blake2s_increment_cou
- 	state->t[1] += (state->t[0] < inc);
- }
- 
--void blake2s_compress_generic(struct blake2s_state *state,const u8 *block,
-+void blake2s_compress(struct blake2s_state *state, const u8 *block,
-+		      size_t nblocks, const u32 inc)
-+		      __weak __alias(blake2s_compress_generic);
-+
-+void blake2s_compress_generic(struct blake2s_state *state, const u8 *block,
- 			      size_t nblocks, const u32 inc)
- {
- 	u32 m[16];
 --- a/lib/crypto/blake2s.c
 +++ b/lib/crypto/blake2s.c
-@@ -16,12 +16,6 @@
- #include <linux/init.h>
- #include <linux/bug.h>
+@@ -30,43 +30,6 @@ void blake2s_final(struct blake2s_state
+ }
+ EXPORT_SYMBOL(blake2s_final);
  
--#if IS_ENABLED(CONFIG_CRYPTO_ARCH_HAVE_LIB_BLAKE2S)
--#  define blake2s_compress blake2s_compress_arch
--#else
--#  define blake2s_compress blake2s_compress_generic
--#endif
+-void blake2s256_hmac(u8 *out, const u8 *in, const u8 *key, const size_t inlen,
+-		     const size_t keylen)
+-{
+-	struct blake2s_state state;
+-	u8 x_key[BLAKE2S_BLOCK_SIZE] __aligned(__alignof__(u32)) = { 0 };
+-	u8 i_hash[BLAKE2S_HASH_SIZE] __aligned(__alignof__(u32));
+-	int i;
 -
- void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen)
+-	if (keylen > BLAKE2S_BLOCK_SIZE) {
+-		blake2s_init(&state, BLAKE2S_HASH_SIZE);
+-		blake2s_update(&state, key, keylen);
+-		blake2s_final(&state, x_key);
+-	} else
+-		memcpy(x_key, key, keylen);
+-
+-	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
+-		x_key[i] ^= 0x36;
+-
+-	blake2s_init(&state, BLAKE2S_HASH_SIZE);
+-	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
+-	blake2s_update(&state, in, inlen);
+-	blake2s_final(&state, i_hash);
+-
+-	for (i = 0; i < BLAKE2S_BLOCK_SIZE; ++i)
+-		x_key[i] ^= 0x5c ^ 0x36;
+-
+-	blake2s_init(&state, BLAKE2S_HASH_SIZE);
+-	blake2s_update(&state, x_key, BLAKE2S_BLOCK_SIZE);
+-	blake2s_update(&state, i_hash, BLAKE2S_HASH_SIZE);
+-	blake2s_final(&state, i_hash);
+-
+-	memcpy(out, i_hash, BLAKE2S_HASH_SIZE);
+-	memzero_explicit(x_key, BLAKE2S_BLOCK_SIZE);
+-	memzero_explicit(i_hash, BLAKE2S_HASH_SIZE);
+-}
+-EXPORT_SYMBOL(blake2s256_hmac);
+-
+ static int __init mod_init(void)
  {
- 	__blake2s_update(state, in, inlen, blake2s_compress);
+ 	if (!IS_ENABLED(CONFIG_CRYPTO_MANAGER_DISABLE_TESTS) &&
 
 

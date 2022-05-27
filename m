@@ -2,110 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2ED5363E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 16:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA645363E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 16:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239556AbiE0OOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 10:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
+        id S1353093AbiE0OOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 10:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236208AbiE0OOL (ORCPT
+        with ESMTP id S238735AbiE0OO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 10:14:11 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DB75AA4A;
-        Fri, 27 May 2022 07:14:08 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id wh22so9067983ejb.7;
-        Fri, 27 May 2022 07:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mDpmMrX6ZAj99tYsLUoYw7iDnZGlJpEI/3VF/4/WHsM=;
-        b=hmiV/2279z7xlKaFk+GxCbmDFupUyDQeF53CqctYwc3ylvA1+g67fm9AYwf3aJD52U
-         2Y0VNqCIPfJbF0YC3jT9aXfuCTHrZQH0zxRrdU5jcN1U1Kr3Xyjgnel+Kg8sZAH6ee2U
-         0dRC/R9cIcfp4pxd3fmznfBJMykLh8g3O16PpM3SZgOtK4GcYkW2MzmtU5DshhyBsBBf
-         3dKOBekLlhYbIn1nXTFG8IGd4yeaLAs2b4LMzjf8mjbboq9RHjfL3e/PH9gzng8YZQoR
-         wqBZqmfZxrzbCTzS+9/EGH3SBeLUcCO/TOjFgUVkrnmnGi4VHBCbnbAcC3eLlGOH/cDk
-         d4rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mDpmMrX6ZAj99tYsLUoYw7iDnZGlJpEI/3VF/4/WHsM=;
-        b=XWvs1OzpyEqn2rhMU2sOJAnRMC9Qb0KkWrQvEEpybCDANviWERnMzdKTzV8aiyBUGn
-         HfqcPxGd+loh56t7alMhH3Q0ezryCE1SoGoUud6dfyt939qEQ4TrgjxJjr4BEoNWPvNZ
-         nmKroZJUnPRTnYy980ah4Ud0Ta9/Ccdh3twtCIZrU/dqNDrlTKjQK/GZPi6iKeX3sY0f
-         gWEXI5FzA9O12F2/E7cSft5VY1WiOxWEv4rVUMWSCqIdp44M+qyDKeZR/WAONDI2BG8v
-         K2gQVHlJ3wEXPjZyQtzfG1xN+aWXYySc4QaQiaVBdXQ5mtkDd1o6ca2HmJVlmG6XPbT9
-         ePnA==
-X-Gm-Message-State: AOAM5320hwJ+ArNo4XFq8NN+JwUKClRz+yG1JczUhHhT/Y10LQMQqysQ
-        wQRha3zL6V8EzSfVax4KAaQES3v6XH5Ksu67WVk=
-X-Google-Smtp-Source: ABdhPJzu+h5wDUX4t7z5kJNxgp3+mHRNUPXxSn4d+Qux7XVdKfp9P59rjLYvyQHCXOcEAGyObqTC+BjeidAUXP/vTKc=
-X-Received: by 2002:a17:907:7da5:b0:6fe:d818:ee49 with SMTP id
- oz37-20020a1709077da500b006fed818ee49mr24958685ejc.58.1653660847121; Fri, 27
- May 2022 07:14:07 -0700 (PDT)
+        Fri, 27 May 2022 10:14:29 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16FB5B887;
+        Fri, 27 May 2022 07:14:27 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id DE2431C0B8F; Fri, 27 May 2022 16:14:25 +0200 (CEST)
+Date:   Fri, 27 May 2022 16:14:21 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chris.Paterson2@renesas.com
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/163] 5.10.119-rc1 review
+Message-ID: <20220527141421.GA13810@duo.ucw.cz>
+References: <20220527084828.156494029@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220527110959.54559-1-zhangyuchen.lcr@bytedance.com>
-In-Reply-To: <20220527110959.54559-1-zhangyuchen.lcr@bytedance.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 27 May 2022 07:13:54 -0700
-Message-ID: <CAADnVQL69J8MWhaNzNG=ANL_i8_QqABON+pWJDuqRTkFGPJYUQ@mail.gmail.com>
-Subject: Re: [PATCH] procfs: add syscall statistics
-To:     Zhang Yuchen <zhangyuchen.lcr@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>, fam.zheng@bytedance.com,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="82I3+IH0IqGh5yIs"
+Content-Disposition: inline
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 4:10 AM Zhang Yuchen
-<zhangyuchen.lcr@bytedance.com> wrote:
->
-> Add /proc/syscalls to display percpu syscall count.
 
-I second Peter's nack.
-We don't add debug features to the production kernel.
+--82I3+IH0IqGh5yIs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> We need a less resource-intensive way to count syscall per cpu
-> for system problem location.
->
-> There is a similar utility syscount in the BCC project, but syscount
-> has a high performance cost.
+Hi!
 
-There are two syscount tools in BCC:
-tools/syscount
-libbpf-tools/syscount
+> This is the start of the stable review cycle for the 5.10.119 release.
+> There are 163 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-Which one has this 42% overhead?
+Is there some kind of back-story why we are doing massive changes to
+/dev/random? 5.19-rc1 is not even out, so third of those changes did
+not get much testing.
 
-The former tool is obsolete though.
-It was written in the days when bpf had 1/10 of
-the features it has today.
-Both tools can be optimized.
-They attach to raw_syscalls tracepoint.
-tracepoints are not cheap.
-In terms of overhead:
-tracepoint > raw_tracepoint > fentry.
-bpf can attach to all three.
+It seems we hit some problems, but I'm not sure if they are kernel
+problems or test infrastructure problems. Perhaps Chris can help?
 
-Please profile libbpf-tools/syscount tool
-with perf and unixbench, understand where overhead
-comes from and then optimize the tool.
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/5=
+49589225
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--82I3+IH0IqGh5yIs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYpDcvQAKCRAw5/Bqldv6
+8oMwAJ9yLiI38eadcSo2gJ71qsV+I+HKugCdFA8OgVWWE56Oi//y7qHhL9XbrnE=
+=TfCu
+-----END PGP SIGNATURE-----
+
+--82I3+IH0IqGh5yIs--

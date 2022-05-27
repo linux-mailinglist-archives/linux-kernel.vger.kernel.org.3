@@ -2,65 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD315362F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ABD5362F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344918AbiE0MqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S1344809AbiE0Msv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352322AbiE0Mpn (ORCPT
+        with ESMTP id S240235AbiE0Mso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 08:45:43 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717CA17A9E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:45:00 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 49B8B1F8B5;
-        Fri, 27 May 2022 12:44:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653655499; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QMQDKMfjpYWyX/3tRv8LDken8BHXTV2zfOpRzWIV52Y=;
-        b=IXRZ6IGoJf33MOln5QqVx5cN8lQJT/0fWn4MZxPy+t2c/VShnug1m/OUh4AJNVoZis5aJ3
-        49nxlDp0Zb4ZWpuYrS2qa7kkv2Qly8tXb2kmGEYOO62+3wn8Q1psZCjqvotK3vbCLwoK+g
-        42+UjLaHQ94Lw7nUDzU6nnJ25LGfQMA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653655499;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QMQDKMfjpYWyX/3tRv8LDken8BHXTV2zfOpRzWIV52Y=;
-        b=AO4L36mbm6K7KBiFaSrzGtuGLvBcPwFdcIByA1J+zw7aYS0ZysjwyAqUvBIox7kYqh50XH
-        /+sId8s6V0/tkMCw==
-Received: from lion.mk-sys.cz (unknown [10.100.200.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3F99B2C142;
-        Fri, 27 May 2022 12:44:59 +0000 (UTC)
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-        id 13615608E0; Fri, 27 May 2022 14:44:59 +0200 (CEST)
-Date:   Fri, 27 May 2022 14:44:59 +0200
-From:   Michal Kubecek <mkubecek@suse.cz>
-To:     amd-gfx@lists.freedesktop.org
-Cc:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-kernel@vger.kernel.org
-Subject: (REGRESSION bisected) Re: amdgpu errors (VM fault / GPU fault
- detected) with 5.19 merge window snapshots
-Message-ID: <20220527124459.mfo4tjdsjohamsvy@lion.mk-sys.cz>
-References: <20220527090039.pdrazo5e6mwgo3d3@lion.mk-sys.cz>
+        Fri, 27 May 2022 08:48:44 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5E717AB3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:48:40 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id fd25so5287830edb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EM3junmIgJL5MDcB8Fbmsce/dgWKtd82JnNvIdb7NL8=;
+        b=eGiykh9/rX5xSkjr0lGcfXZu+d4t3VHbBqxcAehu2XlVx77qDA9fii87Gaqg4BovwF
+         /RHqdnGa8ywYUNljIM01Hn212qpYdPFlt6waO1DZ5rqlDKn42bVSXd2yl7JuieYdn3X2
+         gc5nGdPXpo6LTWsQJoZhrKemLegV+sfTnBc9kTDlJsuTyrKT7Z4anLDU8fGs3SblRutB
+         mT/fk+3Ubjfmz/lazij7GveaBbSrNwYA29O5XenDFuvKJouUJLDiDEjSFVfIR2PUBEl/
+         +9HsVTTLhI3tgFv63fA2+9d5kLr8MxAyDARwjOXdByG6Jb72J4AzXlDR12N+sf90vKz1
+         dutQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EM3junmIgJL5MDcB8Fbmsce/dgWKtd82JnNvIdb7NL8=;
+        b=Yh04R3Y1TThgI5wFb0QORw/LKNENS3H/Ty7kFCKi2k0+kB0XfeS1P+F2Zfnc7MVoNa
+         7+24Tdq3zc2bJJVN/Dh0l4YAcJ/W6wEHZihJ/56NbRK8SvPecVDLKdrL1Mse8TlcdvSo
+         deVvDrpVTrH4oVMMlEcD2H5UR4HZtZcJUpOkkKpqHWgfDEc0F/jam3v30t25FbkYJ53J
+         5SatBIT3furL3kSrUtWKvpyyCRC1ykhDaQbAY6hWt3+V/58QNjwGyRNo9O8t12ZRF40N
+         jTMejYEm1gX126K883+PeHQZomVS4Xd1GxqBgoFQNrNgKhVEnhzLB5hPt1C9+Ifh2SyS
+         wjlA==
+X-Gm-Message-State: AOAM530/S9dfarm5WOJSgP5GBqNtZVnUaH9KJe4dsgVMt6umpcw2iGUp
+        pyY4ARFkYJvZormvJCTAFCAu5A==
+X-Google-Smtp-Source: ABdhPJyZE0mb3YQcfGmYAgiLZNdhvEbEh3SU0kWPxJgZcq0vLyj2VUCjJO+GQ5nHhfWrVn4RSjuN0g==
+X-Received: by 2002:a05:6402:160b:b0:42c:1f6d:2fbf with SMTP id f11-20020a056402160b00b0042c1f6d2fbfmr1347111edv.59.1653655718726;
+        Fri, 27 May 2022 05:48:38 -0700 (PDT)
+Received: from [192.168.133.234] (92.40.183.95.threembb.co.uk. [92.40.183.95])
+        by smtp.gmail.com with ESMTPSA id m7-20020a17090679c700b006fec69696a0sm1427105ejo.220.2022.05.27.05.48.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 May 2022 05:48:38 -0700 (PDT)
+Message-ID: <a7f46ad1-6d9e-a38e-31cc-29fddfa2b496@linaro.org>
+Date:   Fri, 27 May 2022 13:50:02 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="avjog5ybobv7z5zu"
-Content-Disposition: inline
-In-Reply-To: <20220527090039.pdrazo5e6mwgo3d3@lion.mk-sys.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: RE: [RESEND PATCH] scsi: ufs: sysfs: support writing boot_lun
+ attr
+Content-Language: en-US
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        "a5b6@riseup.net" <a5b6@riseup.net>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "~postmarketos/upstreaming@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        "phone-devel@vger.kernel.org" <phone-devel@vger.kernel.org>
+References: <20220525164013.93748-1-a5b6@riseup.net>
+ <DM6PR04MB65750969ACD36EEEB48374DFFCD69@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <8d25171a-5d86-9acc-0f94-1a3c6efdb360@riseup.net>
+ <DM6PR04MB65752422396C86EAD4591701FCD89@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <DM6PR04MB65752422396C86EAD4591701FCD89@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,69 +86,153 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---avjog5ybobv7z5zu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 27, 2022 at 11:00:39AM +0200, Michal Kubecek wrote:
-> Hello,
->=20
-> while testing 5.19 merge window snapshots (commits babf0bb978e3 and
-> 7e284070abe5), I keep getting errors like below. I have not seen them
-> with 5.18 final or older.
->=20
-> ------------------------------------------------------------------------
-> [  247.150333] gmc_v8_0_process_interrupt: 46 callbacks suppressed
-> [  247.150336] amdgpu 0000:0c:00.0: amdgpu: GPU fault detected: 147 0x000=
-20802 for process firefox pid 6101 thread firefox:cs0 pid 6116
-> [  247.150339] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECTION_FAUL=
-T_ADDR   0x00107800
-> [  247.150340] amdgpu 0000:0c:00.0: amdgpu:   VM_CONTEXT1_PROTECTION_FAUL=
-T_STATUS 0x0D008002
-> [  247.150341] amdgpu 0000:0c:00.0: amdgpu: VM fault (0x02, vmid 6, pasid=
- 32780) at page 1079296, write from 'TC2' (0x54433200) (8)
-[...]
-> [  249.925909] amdgpu 0000:0c:00.0: amdgpu: IH ring buffer overflow (0x00=
-0844C0, 0x00004A00, 0x000044D0)
-> [  250.434986] [drm] Fence fallback timer expired on ring sdma0
-> [  466.621568] gmc_v8_0_process_interrupt: 122 callbacks suppressed
-[...]
-> ------------------------------------------------------------------------
->=20
-> There does not seem to be any apparent immediate problem with graphics
-> but when running commit babf0bb978e3, there seemed to be a noticeable
-> lag in some operations, e.g. when moving a window or repainting large
-> part of the terminal window in konsole (no idea if it's related).
->=20
-> My GPU is Radeon Pro WX 2100 (1002:6995). What other information should
-> I collect to help debugging the issue?
+On 27/05/2022 07:17, Avri Altman wrote:
+>>
+>> Hi,
+>>
+>> My usecase is enabling boot slot switching on Android A/B devices, where the
+>> active LUN has to be changed in order to facilitate e.g. dual-booting Android
+>> and mainline Linux. A similar interface is exposed by Android, albeit via ioctl. I've
+>> tested this patch and confirmed it enabled the necessary functionality.
+>>
+>> On 25/05/2022 21:34, Avri Altman wrote:
+>>> Hi,
+>>>> Expands sysfs boot_lun attribute to be writable. Necessary to enable
+>>>> proper support for LUN switching on some UFS devices.
+>>> Can you please elaborate why is it necessary?
+>>> What use case are you running?
+> NAK with prejudice.
+Hi Avri,
 
-Bisected to commit 5255e146c99a ("drm/amdgpu: rework TLB flushing").
-There seem to be later commits depending on it so I did not test
-a revert on top of current mainline.
+Could you explain why the NAK here? Boot LUN switching is used on a lot 
+of embedded devices to implement A/B updates, Android devices are just 
+one such example.
 
-I should also mention that most commits tested as "bad" during the
-bisect did behave much worse than current mainline (errors starting as
-early as with sddm, visibly damaged screen content, sometimes even
-crashes). But all of them issued messages similar to those above into
-kernel log.
+Distributions like postmarketOS [1] aim to support upstream Linux on 
+mobile devices, particularly those that are no longer supported by the 
+vendor. Being able to make use of features like A/B updates is something 
+that I expect more distributions to be considering in the future, as we 
+start to see more Linux devices with support for features like this.
 
-Michal Kubecek
+If safety is a concern, or if the values are device specific, we can 
+look at protecting the write functionality and configuration behind DT 
+properties, or coming up with another alternative.
 
---avjog5ybobv7z5zu
-Content-Type: application/pgp-signature; name="signature.asc"
+[1]: https://postmarketos.org
 
------BEGIN PGP SIGNATURE-----
+Kind regards,
+Caleb (they/he)
 
-iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmKQx8UACgkQ538sG/LR
-dpXbnQf9EBOUK6JjIxFbeBAUHln7TMl1+8wR5V/hqAlspjjaTXfZjPm86Q2tMHqB
-Isx5zZ8ax5B5pB+4jqQwSZmqkPBd6n8uXPxkjJ56/WnFKTs1Eh+oeFAwyxrJPb0I
-z+6M5JPCOG5kaaewzkjYom66vJcDTq2PCghR13GwAwd8xTUAXFfx3EODbUP8YZvS
-AmGSKIUsh7r2A+DFvQ790SjWfHsjX2f4I7YWhx1V6uzj00wHhAp7rxEOJVeKD56r
-3ToX438mMPD3GH25wVUijnVazjqG3IQcao1TJ8/Ll9i8r4HBgMaS227YDnpSHoqW
-M2ClzFJBd95wkrazHyuwXAkjzQIrCA==
-=kLOY
------END PGP SIGNATURE-----
-
---avjog5ybobv7z5zu--
+> 
+> Thanks,
+> Avri
+> 
+>>>
+>>>> Signed-off-by: Nia Espera <a5b6@riseup.net>
+>>>> ---
+>>>>    drivers/scsi/ufs/ufs-sysfs.c | 67 +++++++++++++++++++++++++++++++++++-
+>>>>    1 file changed, 66 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/scsi/ufs/ufs-sysfs.c
+>>>> b/drivers/scsi/ufs/ufs-sysfs.c index 5c405ff7b6ea..7bf5d6c3d0ec
+>>>> 100644
+>>>> --- a/drivers/scsi/ufs/ufs-sysfs.c
+>>>> +++ b/drivers/scsi/ufs/ufs-sysfs.c
+>>>> @@ -1047,6 +1047,71 @@ static inline bool ufshcd_is_wb_attrs(enum
+>>>> attr_idn
+>>>> idn)
+>>>>                   idn <= QUERY_ATTR_IDN_CURR_WB_BUFF_SIZE;
+>>>>    }
+>>>>
+>>>> +static ssize_t boot_lun_enabled_show(struct device *dev,
+>>>> +                                    struct device_attribute *attr,
+>>>> +char *buf) {
+>>>> +       struct ufs_hba *hba = dev_get_drvdata(dev);
+>>>> +       u32 slot;
+>>>> +       int ret;
+>>>> +       u8 index = 0;
+>>>> +
+>>>> +       down(&hba->host_sem);
+>>>> +       if (!ufshcd_is_user_access_allowed(hba)) {
+>>>> +               up(&hba->host_sem);
+>>>> +               return -EBUSY;
+>>>> +       }
+>>>> +       if (ufshcd_is_wb_attrs(QUERY_ATTR_IDN_BOOT_LU_EN))
+>>> Clearly bBootLunEn is not a WB attribute.
+>>>
+>>>> +               index = ufshcd_wb_get_query_index(hba);
+>>>> +       ufshcd_rpm_get_sync(hba);
+>>>> +
+>>>> +       ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,
+>>>> +               QUERY_ATTR_IDN_BOOT_LU_EN, index, 0, &slot);
+>>>> +
+>>>> +       ufshcd_rpm_put_sync(hba);
+>>>> +       if (ret) {
+>>>> +               ret = -EINVAL;
+>>>> +               goto out;
+>>>> +       }
+>>>> +
+>>>> +       ret = sysfs_emit(buf, "0x%08X\n", slot);
+>>>> +out:
+>>>> +       up(&hba->host_sem);
+>>>> +       return ret;
+>>>> +}
+>>>> +
+>>>> +static ssize_t boot_lun_enabled_store(struct device *dev,
+>>>> +                                     struct device_attribute *attr,
+>>>> +                                     const char *buf, size_t count)
+>>>> +{
+>>>> +       struct ufs_hba *hba = dev_get_drvdata(dev);
+>>>> +       u32 slot;
+>>>> +       int ret;
+>>>> +       u8 index = 0;
+>>>> +
+>>>> +       if (kstrtouint(buf, 0, &slot) < 0)
+>>>> +               return -EINVAL;
+>>> You need to verify that no one set bBootLunEn = 0x0 because the device won't
+>> boot.
+>>> Better check explicitly that slot != bBootLunEn and its either 1 or 2.
+>>>
+>>> Thanks,
+>>> Avri
+>>>
+>>>> +
+>>>> +       down(&hba->host_sem);
+>>>> +       if (!ufshcd_is_user_access_allowed(hba)) {
+>>>> +               up(&hba->host_sem);
+>>>> +               return -EBUSY;
+>>>> +       }
+>>>> +       if (ufshcd_is_wb_attrs(QUERY_ATTR_IDN_BOOT_LU_EN))
+>>>> +               index = ufshcd_wb_get_query_index(hba);
+>>>> +       ufshcd_rpm_get_sync(hba);
+>>>> +
+>>>> +       ret = ufshcd_query_attr_retry(hba,
+>> UPIU_QUERY_OPCODE_WRITE_ATTR,
+>>>> +                                     QUERY_ATTR_IDN_BOOT_LU_EN, index, 0, &slot);
+>>>> +       ufshcd_rpm_put_sync(hba);
+>>>> +       if (ret) {
+>>>> +               ret = -EINVAL;
+>>>> +               goto out;
+>>>> +       }
+>>>> +out:
+>>>> +       up(&hba->host_sem);
+>>>> +       return ret ? ret : count;
+>>>> +}
+>>>> +
+>>>>    #define UFS_ATTRIBUTE(_name, _uname)                                   \
+>>>>    static ssize_t _name##_show(struct device *dev,                                \
+>>>>           struct device_attribute *attr, char *buf)                       \
+>>>> @@ -1077,8 +1142,8 @@ out:                                                                      \
+>>>>           return ret;                                                     \
+>>>>    }                                                                      \
+>>>>    static DEVICE_ATTR_RO(_name)
+>>>> +static DEVICE_ATTR_RW(boot_lun_enabled);
+>>>>
+>>>> -UFS_ATTRIBUTE(boot_lun_enabled, _BOOT_LU_EN);
+>>>>    UFS_ATTRIBUTE(max_data_size_hpb_single_cmd,
+>> _MAX_HPB_SINGLE_CMD);
+>>>>    UFS_ATTRIBUTE(current_power_mode, _POWER_MODE);
+>>>>    UFS_ATTRIBUTE(active_icc_level, _ACTIVE_ICC_LVL);
+>>>> --
+>>>> 2.36.1

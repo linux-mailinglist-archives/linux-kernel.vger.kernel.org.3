@@ -2,259 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC595368C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754285368CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 00:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349596AbiE0WZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 18:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
+        id S1347838AbiE0W2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 18:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiE0WZg (ORCPT
+        with ESMTP id S231707AbiE0W2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 18:25:36 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57ADA3818A
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:25:35 -0700 (PDT)
+        Fri, 27 May 2022 18:28:44 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FC662130
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 15:28:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653690335; x=1685226335;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bx388u8MjiE+vam0cGXMUtpLNhSDn9oIYiuIRElVYCk=;
-  b=dasLNd+I6KeIqkItBUd/et+AhLF/RVEGuSC9X4Z8ruFrKVXtqZRVo+Qz
-   DP6pskkNr9O/6JjTYQtRFJXGlmOugIEoUing9rjTmiuPfOtEyKFwRRq8O
-   bwct25ZhhCDyi6hdz73AJql9+HPS8nUod/ufGdEIEx293v03p3OvCtYg5
-   n2JEsQOmz4d7eefxOiU8Ivv6x/zO984bte4KL8KBoGAQ25AgAzBlS6Bxp
-   34ZPTBXzOjioQPk9BJK5xY1zVtwvfnn0MNXutrsLdT3iCmZfXI3C5NKOe
-   yTZaM6hE550WVa1NCVZ2uj1M5DVli6Mf/WARKP0bEPonxcOi1YTYnJruB
+  t=1653690522; x=1685226522;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=37o5tLPhehU6/zb42CwBz1nIUpHr5ux2rsBX/d2liDc=;
+  b=QB4tGI4YJmXRVI/aHHclfLtCEYvwDtDlSCdve7owsKOpkynWipWQPpMG
+   lJXouivTNnxD4nU2UV3D7cu4r09bVtvkdD0YDqTz6RxiY2dzTzVEUxQu/
+   ikPIBonVPJj6YpcD6gFTtW2soG1vryPf/TNx9Nfs5+BzKfQV34M6oc6u8
+   ma96+WlEoiTRiCCH5kNq/kdEl/pA7gYj0vrUZgpNNghz3PA18/juMcSZu
+   MIjzVa+oZ5M141yKk+yQNHkkaZ0JBnt75zrgNuSgf5lS0RPU882/SBLm2
+   Kpsp1JoxHruQzT0EkKRINCARX3Ez+FvfRCvjw2zBBoTfrPHNKbtgVZJnP
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274689258"
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="255082592"
 X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="274689258"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 15:25:35 -0700
+   d="scan'208";a="255082592"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 15:28:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,256,1647327600"; 
-   d="scan'208";a="579836220"
+   d="scan'208";a="705333352"
 Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 27 May 2022 15:25:34 -0700
+  by orsmga004.jf.intel.com with ESMTP; 27 May 2022 15:28:34 -0700
 Received: from kbuild by db63a1be7222 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nuiOj-0005BF-C4;
-        Fri, 27 May 2022 22:25:33 +0000
-Date:   Sat, 28 May 2022 06:24:56 +0800
+        id 1nuiRd-0005BZ-Hn;
+        Fri, 27 May 2022 22:28:33 +0000
+Date:   Sat, 28 May 2022 06:28:32 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/urgent] BUILD SUCCESS
- 8b4dd2d8627e88dc3bd71bf29c48aaae2b69572b
-Message-ID: <62914fb8.VWAjAWt+D27X4mfM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: fs/buffer.c:2254:5: warning: stack frame size (2128) exceeds limit
+ (1024) in 'block_read_full_folio'
+Message-ID: <202205280641.ummbxaI0-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/urgent
-branch HEAD: 8b4dd2d8627e88dc3bd71bf29c48aaae2b69572b  perf/core: Remove unused local variable
+Hi Matthew,
 
-elapsed time: 723m
+FYI, the error/warning still remains.
 
-configs tested: 175
-configs skipped: 4
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8291eaafed36f575f23951f3ce18407f480e9ecf
+commit: 2c69e2057962b6bd76d72446453862eb59325b49 fs: Convert block_read_full_page() to block_read_full_folio()
+date:   3 weeks ago
+config: hexagon-randconfig-r045-20220527 (https://download.01.org/0day-ci/archive/20220528/202205280641.ummbxaI0-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2c69e2057962b6bd76d72446453862eb59325b49
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2c69e2057962b6bd76d72446453862eb59325b49
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc                      pcm030_defconfig
-mips                         db1xxx_defconfig
-sh                          polaris_defconfig
-arm                         assabet_defconfig
-arm                            mps2_defconfig
-m68k                          sun3x_defconfig
-powerpc                      ppc6xx_defconfig
-arm                       multi_v4t_defconfig
-powerpc64                           defconfig
-um                                  defconfig
-sh                               alldefconfig
-arm                           sama5_defconfig
-arm                           imxrt_defconfig
-parisc                           alldefconfig
-arm                         vf610m4_defconfig
-sh                             sh03_defconfig
-xtensa                           alldefconfig
-arc                     haps_hs_smp_defconfig
-powerpc                 mpc8540_ads_defconfig
-sh                            hp6xx_defconfig
-mips                 decstation_r4k_defconfig
-sh                            titan_defconfig
-sh                           sh2007_defconfig
-openrisc                         alldefconfig
-arm                          pxa3xx_defconfig
-sh                ecovec24-romimage_defconfig
-mips                         bigsur_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                     tqm8555_defconfig
-sh                            shmin_defconfig
-arm                           u8500_defconfig
-sh                           se7712_defconfig
-powerpc                     ep8248e_defconfig
-sh                          sdk7786_defconfig
-xtensa                  cadence_csp_defconfig
-sh                          kfr2r09_defconfig
-ia64                                defconfig
-sparc                       sparc32_defconfig
-arm                            pleb_defconfig
-powerpc                     asp8347_defconfig
-powerpc                    adder875_defconfig
-sh                          r7780mp_defconfig
-m68k                          atari_defconfig
-arm                     eseries_pxa_defconfig
-sparc                       sparc64_defconfig
-sh                        apsh4ad0a_defconfig
-sh                           se7343_defconfig
-microblaze                          defconfig
-m68k                          multi_defconfig
-arm                          pxa910_defconfig
-arc                      axs103_smp_defconfig
-sh                           se7780_defconfig
-powerpc                mpc7448_hpc2_defconfig
-sh                     magicpanelr2_defconfig
-sh                   sh7724_generic_defconfig
-arm                      footbridge_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                         microdev_defconfig
-s390                       zfcpdump_defconfig
-arm                        trizeps4_defconfig
-m68k                        m5407c3_defconfig
-arc                            hsdk_defconfig
-arm                        shmobile_defconfig
-nios2                         10m50_defconfig
-arm                          lpd270_defconfig
-arm                  randconfig-c002-20220526
-arm                  randconfig-c002-20220524
-x86_64                        randconfig-c001
-ia64                             allmodconfig
-ia64                             allyesconfig
-riscv                             allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220524
-s390                 randconfig-r044-20220524
-riscv                randconfig-r042-20220524
-arc                  randconfig-r043-20220527
-arc                  randconfig-r043-20220526
-s390                 randconfig-r044-20220526
-riscv                randconfig-r042-20220526
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
+All warnings (new ones prefixed by >>):
 
-clang tested configs:
-arm                  randconfig-c002-20220524
-x86_64                        randconfig-c007
-s390                 randconfig-c005-20220524
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220524
-riscv                randconfig-c006-20220524
-mips                 randconfig-c004-20220524
-mips                     loongson2k_defconfig
-mips                          malta_defconfig
-mips                      pic32mzda_defconfig
-powerpc                       ebony_defconfig
-mips                           ip28_defconfig
-mips                         tb0287_defconfig
-powerpc                      obs600_defconfig
-arm                        mvebu_v5_defconfig
-mips                  cavium_octeon_defconfig
-mips                           ip22_defconfig
-arm                     am200epdkit_defconfig
-powerpc                          allyesconfig
-powerpc                    mvme5100_defconfig
-arm                      pxa255-idp_defconfig
-arm                       aspeed_g4_defconfig
-mips                     cu1830-neo_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220527
-hexagon              randconfig-r041-20220527
-s390                 randconfig-r044-20220527
-riscv                randconfig-r042-20220527
+>> fs/buffer.c:2254:5: warning: stack frame size (2128) exceeds limit (1024) in 'block_read_full_folio' [-Wframe-larger-than]
+   int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+       ^
+   1 warning generated.
+
+
+vim +/block_read_full_folio +2254 fs/buffer.c
+
+  2246	
+  2247	/*
+  2248	 * Generic "read_folio" function for block devices that have the normal
+  2249	 * get_block functionality. This is most of the block device filesystems.
+  2250	 * Reads the folio asynchronously --- the unlock_buffer() and
+  2251	 * set/clear_buffer_uptodate() functions propagate buffer state into the
+  2252	 * folio once IO has completed.
+  2253	 */
+> 2254	int block_read_full_folio(struct folio *folio, get_block_t *get_block)
+  2255	{
+  2256		struct inode *inode = folio->mapping->host;
+  2257		sector_t iblock, lblock;
+  2258		struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
+  2259		unsigned int blocksize, bbits;
+  2260		int nr, i;
+  2261		int fully_mapped = 1;
+  2262	
+  2263		VM_BUG_ON_FOLIO(folio_test_large(folio), folio);
+  2264	
+  2265		head = create_page_buffers(&folio->page, inode, 0);
+  2266		blocksize = head->b_size;
+  2267		bbits = block_size_bits(blocksize);
+  2268	
+  2269		iblock = (sector_t)folio->index << (PAGE_SHIFT - bbits);
+  2270		lblock = (i_size_read(inode)+blocksize-1) >> bbits;
+  2271		bh = head;
+  2272		nr = 0;
+  2273		i = 0;
+  2274	
+  2275		do {
+  2276			if (buffer_uptodate(bh))
+  2277				continue;
+  2278	
+  2279			if (!buffer_mapped(bh)) {
+  2280				int err = 0;
+  2281	
+  2282				fully_mapped = 0;
+  2283				if (iblock < lblock) {
+  2284					WARN_ON(bh->b_size != blocksize);
+  2285					err = get_block(inode, iblock, bh, 0);
+  2286					if (err)
+  2287						folio_set_error(folio);
+  2288				}
+  2289				if (!buffer_mapped(bh)) {
+  2290					folio_zero_range(folio, i * blocksize,
+  2291							blocksize);
+  2292					if (!err)
+  2293						set_buffer_uptodate(bh);
+  2294					continue;
+  2295				}
+  2296				/*
+  2297				 * get_block() might have updated the buffer
+  2298				 * synchronously
+  2299				 */
+  2300				if (buffer_uptodate(bh))
+  2301					continue;
+  2302			}
+  2303			arr[nr++] = bh;
+  2304		} while (i++, iblock++, (bh = bh->b_this_page) != head);
+  2305	
+  2306		if (fully_mapped)
+  2307			folio_set_mappedtodisk(folio);
+  2308	
+  2309		if (!nr) {
+  2310			/*
+  2311			 * All buffers are uptodate - we can set the folio uptodate
+  2312			 * as well. But not if get_block() returned an error.
+  2313			 */
+  2314			if (!folio_test_error(folio))
+  2315				folio_mark_uptodate(folio);
+  2316			folio_unlock(folio);
+  2317			return 0;
+  2318		}
+  2319	
+  2320		/* Stage two: lock the buffers */
+  2321		for (i = 0; i < nr; i++) {
+  2322			bh = arr[i];
+  2323			lock_buffer(bh);
+  2324			mark_buffer_async_read(bh);
+  2325		}
+  2326	
+  2327		/*
+  2328		 * Stage 3: start the IO.  Check for uptodateness
+  2329		 * inside the buffer lock in case another process reading
+  2330		 * the underlying blockdev brought it uptodate (the sct fix).
+  2331		 */
+  2332		for (i = 0; i < nr; i++) {
+  2333			bh = arr[i];
+  2334			if (buffer_uptodate(bh))
+  2335				end_buffer_async_read(bh, 1);
+  2336			else
+  2337				submit_bh(REQ_OP_READ, 0, bh);
+  2338		}
+  2339		return 0;
+  2340	}
+  2341	EXPORT_SYMBOL(block_read_full_folio);
+  2342	
 
 -- 
 0-DAY CI Kernel Test Service

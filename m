@@ -2,211 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0520B5363FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 16:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD3A536407
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 16:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353181AbiE0OW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 10:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S1353118AbiE0OXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 10:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353118AbiE0OWz (ORCPT
+        with ESMTP id S237540AbiE0OXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 10:22:55 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B4F1207DD;
-        Fri, 27 May 2022 07:22:53 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 0065C2629;
-        Fri, 27 May 2022 14:22:24 +0000 (UTC)
+        Fri, 27 May 2022 10:23:38 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEF21207E4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 07:23:33 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id y8so4757312iof.10
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 07:23:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1653661344;
-        bh=sICHCfo4uTR9mxXHyCTyqelqqIWYEf1R3oO5FRPMAf0=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=msCE6ahjekAsKMAmi68igLtf3/NyuBiUjfAW/r0yqeP4Z6GKaPq2a61ybqX7JpP2q
-         BOFcVlbiA9ciz5FZ0/T5Hzb5zUdQfVLdY39HjHud1L9UHcVRBT0eL7TfHladY1zykt
-         D0/YxHZVyuyiCFwsqQe5mRfcplYidnjcRRLSo/eM=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id A918A220E;
-        Fri, 27 May 2022 14:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1653661371;
-        bh=sICHCfo4uTR9mxXHyCTyqelqqIWYEf1R3oO5FRPMAf0=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=Pl/r9H/gBYwCQ+ylmGeSeWFFgdyYCo8S3wxh3Cz+JlFNtO19gb6/d0WU/66AlAgHK
-         b7qf2O7huWztDJ4TTi+FjHUvVkJpZU2sQRJD0m+SwoJyDHdQVZqkSCqwm3njCEQyX6
-         6rtJTVpZo6FXqQk5IjxDA7TLKcVmUP+4kqzvx53Q=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 27 May 2022 17:22:51 +0300
-Message-ID: <5de359b4-e3d5-e585-10c4-65139cef6e14@paragon-software.com>
-Date:   Fri, 27 May 2022 17:22:50 +0300
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=Dl3neGbWJuUPrZD+P8vdryuz/5nRnjOm3eWjq/e3Vh0=;
+        b=QuTQClfDaEKtCFxDZXxpBx113hn5JCwCa5KmeRzf9H2LW2g5b55dqf0JqQSQOAUdRA
+         K1SzvBsYWjiyXF1Pt7RU7D23D1b95EWbOYk4yZK/yyye6WlgOUEgbEVk6g8z7uU7x+E5
+         tb6lzYUMH3mrDhuNykUMDq2L5dbQECyvaqoD0nFW3zGzpGlivGJzl6o2MXhtitZo9MNm
+         olGL6qMxKPApuN5SzBidAvn0HYmuOvFLaCmoiHtUp+5QpUsW+bsYwJqTA/SlIvMYCTOx
+         HFDr/XxJBKLBit1JLlIS9M1OmtqOGJI8K/a6/oV2ddrQE0CeTU9jQPjW/+CGvN6u3W1Q
+         ziMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=Dl3neGbWJuUPrZD+P8vdryuz/5nRnjOm3eWjq/e3Vh0=;
+        b=LkNIEWnNGRslibpq4nUKLItf7hOeCqDiJqNNIIJ3FU0LSGIXbwwxgPVjd/wOgumZnm
+         8sNhLHvXliYurz/k65pZ06cHQnLDe8ZoFWBR5TLxO20r2tilbcm/ml9zhaPm0EWx0car
+         ynGuExypQ9YIYQ6uDJQxJbm5xuFpmTqICYOzk2xdaPbyG6vhHWmRxmZqaV6sMwO+e5nM
+         5Bi89ezM+6uuOt1B+hmm6WnLbym2NBRPgKIs3nuonsX+5Jm/mwMyupzjh3cAXs4Z1Jz8
+         KVx/oSI28jM4IhEo7FusVyxVEWQ5gXFp/WsHEed0ZU8q9oVHAFzWuVJ6X4r6jQF8voYQ
+         lTIQ==
+X-Gm-Message-State: AOAM530wGRUuBtbSpK4foUfCalcY8Ligg1vfMQ939TkatzsCkUa1v4b4
+        s/6BVHCN7t0Pl6/DkxAZHmZAZA==
+X-Google-Smtp-Source: ABdhPJwGWdrEGfIXWmlj206LeA00IrZgWciBCp2zZTxFCqvThu44vgP0eYq8ge4I4+TmZf/KvykkiA==
+X-Received: by 2002:a5d:8619:0:b0:668:4b3d:baf0 with SMTP id f25-20020a5d8619000000b006684b3dbaf0mr1883558iol.185.1653661413138;
+        Fri, 27 May 2022 07:23:33 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id d17-20020a0566022bf100b00657b5623333sm1248877ioy.3.2022.05.27.07.23.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 May 2022 07:23:32 -0700 (PDT)
+Message-ID: <d9e3bb1d-b9e6-5047-04be-01e69394d9cf@linaro.org>
+Date:   Fri, 27 May 2022 09:23:31 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: [PATCH 3/3] fs/ntfs3: Refactor ni_try_remove_attr_list function
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] clk: qcom: rpmh: Add note about sleep/wake state for BCMs
 Content-Language: en-US
-From:   Almaz Alexandrovich <almaz.alexandrovich@paragon-software.com>
-To:     <ntfs3@lists.linux.dev>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-References: <75a1215a-eda2-d0dc-b962-0334356eef7c@paragon-software.com>
-In-Reply-To: <75a1215a-eda2-d0dc-b962-0334356eef7c@paragon-software.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Alex Elder <elder@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev, linux-arm-msm@vger.kernel.org
+References: <20220517190949.2922197-1-swboyd@chromium.org>
+ <cb32f8c6-8a4a-cc3d-4154-a4377a238628@linaro.org>
+In-Reply-To: <cb32f8c6-8a4a-cc3d-4154-a4377a238628@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now we save a copy of primary record for restoration.
-Also now we remove all attributes from subrecords.
+On 5/17/22 2:16 PM, Alex Elder wrote:
+> On 5/17/22 2:09 PM, Stephen Boyd wrote:
+>> The sleep/wake state doesn't need to be set here because of specific
+>> RPMh behavior that carries over the active state when sleep/wake state
+>> hasn't been modified. Add a note to the code so we aren't tempted to set
+>> the sleep/wake states.
+>>
+>> Cc: Alex Elder <elder@linaro.org>
+>> Cc: Taniya Das <quic_tdas@quicinc.com>
+>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> 
+> Looks good to me.  Thanks Stephen.
+> 
+> Reviewed-by: Alex Elder <elder@linaro.org>
 
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
----
-  fs/ntfs3/frecord.c | 49 ++++++++++++++++++++++++++++++++++------------
-  fs/ntfs3/record.c  |  5 ++---
-  2 files changed, 39 insertions(+), 15 deletions(-)
+Taniya, do you have anything to say about this patch?  -Alex
 
-diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
-index 18842998c8fa..3576268ee0a1 100644
---- a/fs/ntfs3/frecord.c
-+++ b/fs/ntfs3/frecord.c
-@@ -7,6 +7,7 @@
-  
-  #include <linux/fiemap.h>
-  #include <linux/fs.h>
-+#include <linux/minmax.h>
-  #include <linux/vmalloc.h>
-  
-  #include "debug.h"
-@@ -649,6 +650,7 @@ static int ni_try_remove_attr_list(struct ntfs_inode *ni)
-  	struct mft_inode *mi;
-  	u32 asize, free;
-  	struct MFT_REF ref;
-+	struct MFT_REC *mrec;
-  	__le16 id;
-  
-  	if (!ni->attr_list.dirty)
-@@ -692,11 +694,17 @@ static int ni_try_remove_attr_list(struct ntfs_inode *ni)
-  		free -= asize;
-  	}
-  
-+	/* Make a copy of primary record to restore if error. */
-+	mrec = kmemdup(ni->mi.mrec, sbi->record_size, GFP_NOFS);
-+	if (!mrec)
-+		return 0; /* Not critical. */
-+
-  	/* It seems that attribute list can be removed from primary record. */
-  	mi_remove_attr(NULL, &ni->mi, attr_list);
-  
-  	/*
--	 * Repeat the cycle above and move all attributes to primary record.
-+	 * Repeat the cycle above and copy all attributes to primary record.
-+	 * Do not remove original attributes from subrecords!
-  	 * It should be success!
-  	 */
-  	le = NULL;
-@@ -707,14 +715,14 @@ static int ni_try_remove_attr_list(struct ntfs_inode *ni)
-  		mi = ni_find_mi(ni, ino_get(&le->ref));
-  		if (!mi) {
-  			/* Should never happened, 'cause already checked. */
--			goto bad;
-+			goto out;
-  		}
-  
-  		attr = mi_find_attr(mi, NULL, le->type, le_name(le),
-  				    le->name_len, &le->id);
-  		if (!attr) {
-  			/* Should never happened, 'cause already checked. */
--			goto bad;
-+			goto out;
-  		}
-  		asize = le32_to_cpu(attr->size);
-  
-@@ -724,18 +732,33 @@ static int ni_try_remove_attr_list(struct ntfs_inode *ni)
-  					  le16_to_cpu(attr->name_off));
-  		if (!attr_ins) {
-  			/*
--			 * Internal error.
--			 * Either no space in primary record (already checked).
--			 * Either tried to insert another
--			 * non indexed attribute (logic error).
-+			 * No space in primary record (already checked).
-  			 */
--			goto bad;
-+			goto out;
-  		}
-  
-  		/* Copy all except id. */
-  		id = attr_ins->id;
-  		memcpy(attr_ins, attr, asize);
-  		attr_ins->id = id;
-+	}
-+
-+	/*
-+	 * Repeat the cycle above and remove all attributes from subrecords.
-+	 */
-+	le = NULL;
-+	while ((le = al_enumerate(ni, le))) {
-+		if (!memcmp(&le->ref, &ref, sizeof(ref)))
-+			continue;
-+
-+		mi = ni_find_mi(ni, ino_get(&le->ref));
-+		if (!mi)
-+			continue;
-+
-+		attr = mi_find_attr(mi, NULL, le->type, le_name(le),
-+				    le->name_len, &le->id);
-+		if (!attr)
-+			continue;
-  
-  		/* Remove from original record. */
-  		mi_remove_attr(NULL, mi, attr);
-@@ -748,11 +771,13 @@ static int ni_try_remove_attr_list(struct ntfs_inode *ni)
-  	ni->attr_list.le = NULL;
-  	ni->attr_list.dirty = false;
-  
-+	kfree(mrec);
-+	return 0;
-+out:
-+	/* Restore primary record. */
-+	swap(mrec, ni->mi.mrec);
-+	kfree(mrec);
-  	return 0;
--bad:
--	ntfs_inode_err(&ni->vfs_inode, "Internal error");
--	make_bad_inode(&ni->vfs_inode);
--	return -EINVAL;
-  }
-  
-  /*
-diff --git a/fs/ntfs3/record.c b/fs/ntfs3/record.c
-index 861e35791506..8fe0a876400a 100644
---- a/fs/ntfs3/record.c
-+++ b/fs/ntfs3/record.c
-@@ -445,12 +445,11 @@ struct ATTRIB *mi_insert_attr(struct mft_inode *mi, enum ATTR_TYPE type,
-  	attr = NULL;
-  	while ((attr = mi_enum_attr(mi, attr))) {
-  		diff = compare_attr(attr, type, name, name_len, upcase);
--		if (diff > 0)
--			break;
-+
-  		if (diff < 0)
-  			continue;
-  
--		if (!is_attr_indexed(attr))
-+		if (!diff && !is_attr_indexed(attr))
-  			return NULL;
-  		break;
-  	}
--- 
-2.36.1
-
+> 
+>> ---
+>>
+>> This superseedes a previous patch[1] I sent that tried to fix this.
+>>
+>>   drivers/clk/qcom/clk-rpmh.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+>> index aed907982344..c07cab6905cb 100644
+>> --- a/drivers/clk/qcom/clk-rpmh.c
+>> +++ b/drivers/clk/qcom/clk-rpmh.c
+>> @@ -274,6 +274,11 @@ static int clk_rpmh_bcm_send_cmd(struct clk_rpmh 
+>> *c, bool enable)
+>>           cmd.addr = c->res_addr;
+>>           cmd.data = BCM_TCS_CMD(1, enable, 0, cmd_state);
+>> +        /*
+>> +         * Send only an active only state request. RPMh continues to
+>> +         * use the active state when we're in sleep/wake state as long
+>> +         * as the sleep/wake state has never been set.
+>> +         */
+>>           ret = clk_rpmh_send(c, RPMH_ACTIVE_ONLY_STATE, &cmd, enable);
+>>           if (ret) {
+>>               dev_err(c->dev, "set active state of %s failed: (%d)\n",
+>>
+>> base-commit: 42226c989789d8da4af1de0c31070c96726d990c
+> 
 

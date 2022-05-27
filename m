@@ -2,141 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94582535C0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF1853621E
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236439AbiE0Iva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S1350072AbiE0MEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349994AbiE0IvP (ORCPT
+        with ESMTP id S1353189AbiE0L4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:51:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275A6139;
-        Fri, 27 May 2022 01:51:11 -0700 (PDT)
+        Fri, 27 May 2022 07:56:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC44C15EA5E;
+        Fri, 27 May 2022 04:50:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66E7161D3E;
-        Fri, 27 May 2022 08:51:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB94C385A9;
-        Fri, 27 May 2022 08:51:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7AB2FB8091D;
+        Fri, 27 May 2022 11:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1C02C385A9;
+        Fri, 27 May 2022 11:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641469;
-        bh=BghL1surAkgirDQEAlsYzgJhE3Bu1nCy2mEUcXP8XK4=;
+        s=korg; t=1653652199;
+        bh=7HTA8dBismSNtEddUBqn+LQFyLT1UhrR03jQn5QntLw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aG9qFZHTokKP1Ildca7c2cCwjjsmDaYuSvrklGb/ajJUIh3iXnj1camtzU44xPhHY
-         o2zCwMOvlI0G8aqGPImDPAHYQctguOTvP1BBdhM4JkfS3TPbbQdlzyb2N8rhzjewfW
-         BwxSIYg5h67mp8hKpqKUiuL0CyQ5/14Fgxbdfh8s=
+        b=M4hrG7Ocf6iYHNV7lwWKPRdwTa5Tq24Gxn7SGl1f4CJ6TQmdhpj5yyMLe+JFYT1qg
+         1gvr8GOgZ0HqvvbxPnmRHuf/tUKK2VAINoNbGmUbw/Tsgcf3G05PYT06Ci0DrTmkrX
+         81ZDrgpT8xSQajeksOD2Vtc7pW938FlcQAvZMX1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Subject: [PATCH 5.18 02/47] HID: amd_sfh: Add support for sensor discovery
+        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 102/163] random: give sysctl_random_min_urandom_seed a more sensible value
 Date:   Fri, 27 May 2022 10:49:42 +0200
-Message-Id: <20220527084801.537720164@linuxfoundation.org>
+Message-Id: <20220527084842.168493553@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
-References: <20220527084801.223648383@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit b5d7f43e97dabfa04a4be5ff027ce7da119332be upstream.
+commit d0efdf35a6a71d307a250199af6fce122a7c7e11 upstream.
 
-Sensor discovery status fails in case of broken sensors or
-platform not supported. Hence disable driver on failure
-of sensor discovery.
+This isn't used by anything or anywhere, but we can't delete it due to
+compatibility. So at least give it the correct value of what it's
+supposed to be instead of a garbage one.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Cc: Mario Limonciello <Mario.Limonciello@amd.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/amd-sfh-hid/amd_sfh_client.c |   11 +++++++++++
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.c   |    7 +++++++
- drivers/hid/amd-sfh-hid/amd_sfh_pcie.h   |    4 ++++
- 3 files changed, 22 insertions(+)
+ drivers/char/random.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_client.c
-@@ -227,6 +227,17 @@ int amd_sfh_hid_client_init(struct amd_m
- 		dev_dbg(dev, "sid 0x%x status 0x%x\n",
- 			cl_data->sensor_idx[i], cl_data->sensor_sts[i]);
- 	}
-+	if (privdata->mp2_ops->discovery_status &&
-+	    privdata->mp2_ops->discovery_status(privdata) == 0) {
-+		amd_sfh_hid_client_deinit(privdata);
-+		for (i = 0; i < cl_data->num_hid_devices; i++) {
-+			devm_kfree(dev, cl_data->feature_report[i]);
-+			devm_kfree(dev, in_data->input_report[i]);
-+			devm_kfree(dev, cl_data->report_descr[i]);
-+		}
-+		dev_warn(dev, "Failed to discover, sensors not enabled\n");
-+		return -EOPNOTSUPP;
-+	}
- 	schedule_delayed_work(&cl_data->work_buffer, msecs_to_jiffies(AMD_SFH_IDLE_LOOP));
- 	return 0;
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1619,7 +1619,7 @@ const struct file_operations urandom_fop
+  *   to avoid breaking old userspaces, but writing to it does not
+  *   change any behavior of the RNG.
+  *
+- * - urandom_min_reseed_secs - fixed to the meaningless value "60".
++ * - urandom_min_reseed_secs - fixed to the value CRNG_RESEED_INTERVAL.
+  *   It is writable to avoid breaking old userspaces, but writing
+  *   to it does not change any behavior of the RNG.
+  *
+@@ -1629,7 +1629,7 @@ const struct file_operations urandom_fop
  
---- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c
-@@ -130,6 +130,12 @@ static int amd_sfh_irq_init_v2(struct am
- 	return 0;
- }
+ #include <linux/sysctl.h>
  
-+static int amd_sfh_dis_sts_v2(struct amd_mp2_dev *privdata)
-+{
-+	return (readl(privdata->mmio + AMD_P2C_MSG(1)) &
-+		      SENSOR_DISCOVERY_STATUS_MASK) >> SENSOR_DISCOVERY_STATUS_SHIFT;
-+}
-+
- void amd_start_sensor(struct amd_mp2_dev *privdata, struct amd_mp2_sensor_info info)
- {
- 	union sfh_cmd_param cmd_param;
-@@ -245,6 +251,7 @@ static const struct amd_mp2_ops amd_sfh_
- 	.response = amd_sfh_wait_response_v2,
- 	.clear_intr = amd_sfh_clear_intr_v2,
- 	.init_intr = amd_sfh_irq_init_v2,
-+	.discovery_status = amd_sfh_dis_sts_v2,
- };
- 
- static const struct amd_mp2_ops amd_sfh_ops = {
---- a/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-+++ b/drivers/hid/amd-sfh-hid/amd_sfh_pcie.h
-@@ -39,6 +39,9 @@
- 
- #define AMD_SFH_IDLE_LOOP	200
- 
-+#define SENSOR_DISCOVERY_STATUS_MASK		GENMASK(5, 3)
-+#define SENSOR_DISCOVERY_STATUS_SHIFT		3
-+
- /* SFH Command register */
- union sfh_cmd_base {
- 	u32 ul;
-@@ -143,5 +146,6 @@ struct amd_mp2_ops {
- 	 int (*response)(struct amd_mp2_dev *mp2, u8 sid, u32 sensor_sts);
- 	 void (*clear_intr)(struct amd_mp2_dev *privdata);
- 	 int (*init_intr)(struct amd_mp2_dev *privdata);
-+	 int (*discovery_status)(struct amd_mp2_dev *privdata);
- };
- #endif
+-static int sysctl_random_min_urandom_seed = 60;
++static int sysctl_random_min_urandom_seed = CRNG_RESEED_INTERVAL / HZ;
+ static int sysctl_random_write_wakeup_bits = POOL_MIN_BITS;
+ static int sysctl_poolsize = POOL_BITS;
+ static u8 sysctl_bootid[UUID_SIZE];
 
 

@@ -2,246 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713A85362C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815585362C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352535AbiE0Mlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S1352366AbiE0MlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352529AbiE0Mjx (ORCPT
+        with ESMTP id S1348285AbiE0Mjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 May 2022 08:39:53 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839482CE07;
-        Fri, 27 May 2022 05:26:28 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24RATwTb021454;
-        Fri, 27 May 2022 12:23:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=RVk/+c6nPK5D2qeDI0zLbVO1lqN1tQYD0TzNeMii76M=;
- b=CdGIqDdzBXd3h2dRHpL1DShFdmTRQ/K3BNoowjsJ7U4uRWdEUL24qUkp9B9CCe4qwI1x
- ueMHE+3+v1uC7fMJZdhALNq0R69QTPr2X7t7hmmcYdqjvUF+dOgF+KjoQRzbmFzsymwU
- 4TRs+Fcb59XpwhBMszKHjkfxh5jERETh0DSQF2mQOARMUdDnfiEcL/AxzL9Ab0Nz2WHK
- SDNr7raIw4jjkxtIKRrkZp9dwvFLuLsudS4hJ9Ynj7wBxCmCSFMaztPXonoUGxJ1hjXA
- 3uotVOEbohqQcj6NjHHndqMeFT50tNx88feHmMQrikGztx2louDZC2dPTlWt2pNYYxwq Kg== 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E044960056
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:26:42 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24RBquwV029471;
+        Fri, 27 May 2022 12:26:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=JblZ3n6rUD2DYRD5q3wXgP0A41UUGBVDh5m8Ta46bVE=;
+ b=owXhvYk/hQHb9eVuFH5ONGdXlxJAdYcJI6DtHSKubaO7SD31ki7BQHBMRce60bYCbfHQ
+ d5FiBXsNcqeDByMLyx5/2dmSq2TJvV+1wPhtlbYNgHHtshHMv+JgxbmkjMC+e/j6fkxE
+ 25qhKzydLHxie5tFAPAmn19NAlY/51bUUOr9B5Ad7NLg8KZlKpUWxPMH8C+BIWCjs6sK
+ gda5R9PVPf+fSwwMzDJieP9kb7INGYYhx4KnFPWEqDmq14unmJxhEb0Idpc5OljS6BhM
+ atsJMnkjz2ord1cMLdjze8Q5HGsIHuYeHIteiVoFsgin7fGpn0KXIKYnd+SwWysYiNFh dw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gavxnsywe-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gax5mrmjh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 May 2022 12:23:53 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24RBpM9d025770;
-        Fri, 27 May 2022 12:23:52 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gavxnsyvm-1
+        Fri, 27 May 2022 12:26:27 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24RBtZix009166;
+        Fri, 27 May 2022 12:26:26 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gax5mrmhn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 May 2022 12:23:52 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24RCLTLO021408;
-        Fri, 27 May 2022 12:23:49 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 3g9ucga110-1
+        Fri, 27 May 2022 12:26:26 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24RCKV7Y004717;
+        Fri, 27 May 2022 12:26:24 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma01wdc.us.ibm.com with ESMTP id 3gaas1ew05-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 May 2022 12:23:49 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24RCNkSu32899416
+        Fri, 27 May 2022 12:26:24 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24RCQNOi22282558
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 May 2022 12:23:46 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 225BAAE04D;
-        Fri, 27 May 2022 12:23:46 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A0D99AE045;
-        Fri, 27 May 2022 12:23:43 +0000 (GMT)
-Received: from osiris (unknown [9.145.57.114])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 27 May 2022 12:23:43 +0000 (GMT)
-Date:   Fri, 27 May 2022 14:23:42 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Richard Henderson <rth@twiddle.net>,
-        David Hildenbrand <david@redhat.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michal Simek <monstr@monstr.eu>,
-        Russell King <linux@armlinux.org.uk>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-riscv@lists.infradead.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jonas Bonn <jonas@southpole.se>, Will Deacon <will@kernel.org>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        openrisc@lists.librecores.org, linux-s390@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k@lists.linux-m68k.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Chris Zankel <chris@zankel.net>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Fri, 27 May 2022 12:26:24 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD017AE05C;
+        Fri, 27 May 2022 12:26:23 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DC0EBAE05F;
+        Fri, 27 May 2022 12:26:16 +0000 (GMT)
+Received: from skywalker.ibmuc.com (unknown [9.43.91.191])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri, 27 May 2022 12:26:16 +0000 (GMT)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Alistair Popple <apopple@nvidia.com>,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        sparclinux@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-xtensa@linux-xtensa.org, Nicholas Piggin <npiggin@gmail.com>,
-        linux-sh@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Borislav Petkov <bp@alien8.de>, linux-mips@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Helge Deller <deller@gmx.de>, Vineet Gupta <vgupta@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-um@lists.infradead.org, linux-alpha@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-ia64@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-snps-arc@lists.infradead.org,
-        Hugh Dickins <hughd@google.com>, Rich Felker <dalias@libc.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-parisc@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v3] mm: Avoid unnecessary page fault retires on shared
- memory types
-Message-ID: <YpDCzvLER9AYJJc8@osiris>
-References: <20220524234531.1949-1-peterx@redhat.com>
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Subject: [RFC PATCH v4 0/7] mm/demotion: Memory tiers and demotion
+Date:   Fri, 27 May 2022 17:55:21 +0530
+Message-Id: <20220527122528.129445-1-aneesh.kumar@linux.ibm.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
+References: <CAAPL-u-dFp7PwPH6DfbYdnY8xaGsHz3tRQ0CPGVkiqURvdN8=A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524234531.1949-1-peterx@redhat.com>
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: B856HEmp0-oPmnQmmWvfQf-2fQL_698C
-X-Proofpoint-GUID: YnY8uuN2fOATVDxq6iTcIl1znLlGk8-q
+X-Proofpoint-GUID: gCMUiQZIEMAxn156Nkfu96gvDUp4b_Jo
+X-Proofpoint-ORIG-GUID: TDl52CwLXDlW7fdhEOk6Q1uls_smGEKL
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-27_03,2022-05-27_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 bulkscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1011 mlxlogscore=999 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2205270057
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 impostorscore=0 mlxscore=0 bulkscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1011 mlxlogscore=999 spamscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2205270057
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 07:45:31PM -0400, Peter Xu wrote:
-> I observed that for each of the shared file-backed page faults, we're very
-> likely to retry one more time for the 1st write fault upon no page.  It's
-> because we'll need to release the mmap lock for dirty rate limit purpose
-> with balance_dirty_pages_ratelimited() (in fault_dirty_shared_page()).
-> 
-> Then after that throttling we return VM_FAULT_RETRY.
-> 
-> We did that probably because VM_FAULT_RETRY is the only way we can return
-> to the fault handler at that time telling it we've released the mmap lock.
-> 
-> However that's not ideal because it's very likely the fault does not need
-> to be retried at all since the pgtable was well installed before the
-> throttling, so the next continuous fault (including taking mmap read lock,
-> walk the pgtable, etc.) could be in most cases unnecessary.
-> 
-> It's not only slowing down page faults for shared file-backed, but also add
-> more mmap lock contention which is in most cases not needed at all.
-> 
-> To observe this, one could try to write to some shmem page and look at
-> "pgfault" value in /proc/vmstat, then we should expect 2 counts for each
-> shmem write simply because we retried, and vm event "pgfault" will capture
-> that.
-> 
-> To make it more efficient, add a new VM_FAULT_COMPLETED return code just to
-> show that we've completed the whole fault and released the lock.  It's also
-> a hint that we should very possibly not need another fault immediately on
-> this page because we've just completed it.
-> 
-> This patch provides a ~12% perf boost on my aarch64 test VM with a simple
-> program sequentially dirtying 400MB shmem file being mmap()ed and these are
-> the time it needs:
-> 
->   Before: 650.980 ms (+-1.94%)
->   After:  569.396 ms (+-1.38%)
-> 
-> I believe it could help more than that.
-> 
-> We need some special care on GUP and the s390 pgfault handler (for gmap
-> code before returning from pgfault), the rest changes in the page fault
-> handlers should be relatively straightforward.
-> 
-> Another thing to mention is that mm_account_fault() does take this new
-> fault as a generic fault to be accounted, unlike VM_FAULT_RETRY.
-> 
-> I explicitly didn't touch hmm_vma_fault() and break_ksm() because they do
-> not handle VM_FAULT_RETRY even with existing code, so I'm literally keeping
-> them as-is.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-...
-> diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
-> index e173b6187ad5..9503a7cfaf03 100644
-> --- a/arch/s390/mm/fault.c
-> +++ b/arch/s390/mm/fault.c
-> @@ -339,6 +339,7 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
->  	unsigned long address;
->  	unsigned int flags;
->  	vm_fault_t fault;
-> +	bool need_unlock = true;
->  	bool is_write;
->  
->  	tsk = current;
-> @@ -433,6 +434,13 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
->  			goto out_up;
->  		goto out;
->  	}
-> +
-> +	/* The fault is fully completed (including releasing mmap lock) */
-> +	if (fault & VM_FAULT_COMPLETED) {
-> +		need_unlock = false;
-> +		goto out_gmap;
-> +	}
-> +
->  	if (unlikely(fault & VM_FAULT_ERROR))
->  		goto out_up;
->  
-> @@ -452,6 +460,7 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
->  		mmap_read_lock(mm);
->  		goto retry;
->  	}
-> +out_gmap:
->  	if (IS_ENABLED(CONFIG_PGSTE) && gmap) {
->  		address =  __gmap_link(gmap, current->thread.gmap_addr,
->  				       address);
-> @@ -466,7 +475,8 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
->  	}
->  	fault = 0;
->  out_up:
-> -	mmap_read_unlock(mm);
-> +	if (need_unlock)
-> +		mmap_read_unlock(mm);
->  out:
+The current kernel has the basic memory tiering support: Inactive
+pages on a higher tier NUMA node can be migrated (demoted) to a lower
+tier NUMA node to make room for new allocations on the higher tier
+NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
+migrated (promoted) to a higher tier NUMA node to improve the
+performance.
 
-This seems to be incorrect. __gmap_link() requires the mmap_lock to be
-held. Christian, Janosch, or David, could you please check?
+In the current kernel, memory tiers are defined implicitly via a
+demotion path relationship between NUMA nodes, which is created during
+the kernel initialization and updated when a NUMA node is hot-added or
+hot-removed.  The current implementation puts all nodes with CPU into
+the top tier, and builds the tier hierarchy tier-by-tier by establishing
+the per-node demotion targets based on the distances between nodes.
+
+This current memory tier kernel interface needs to be improved for
+several important use cases:
+
+* The current tier initialization code always initializes
+  each memory-only NUMA node into a lower tier.  But a memory-only
+  NUMA node may have a high performance memory device (e.g. a DRAM
+  device attached via CXL.mem or a DRAM-backed memory-only node on
+  a virtual machine) and should be put into a higher tier.
+
+* The current tier hierarchy always puts CPU nodes into the top
+  tier. But on a system with HBM (e.g. GPU memory) devices, these
+  memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
+  with CPUs are better to be placed into the next lower tier.
+
+* Also because the current tier hierarchy always puts CPU nodes
+  into the top tier, when a CPU is hot-added (or hot-removed) and
+  triggers a memory node from CPU-less into a CPU node (or vice
+  versa), the memory tier hierarchy gets changed, even though no
+  memory node is added or removed.  This can make the tier
+  hierarchy unstable and make it difficult to support tier-based
+  memory accounting.
+
+* A higher tier node can only be demoted to selected nodes on the
+  next lower tier as defined by the demotion path, not any other
+  node from any lower tier.  This strict, hard-coded demotion order
+  does not work in all use cases (e.g. some use cases may want to
+  allow cross-socket demotion to another node in the same demotion
+  tier as a fallback when the preferred demotion node is out of
+  space), and has resulted in the feature request for an interface to
+  override the system-wide, per-node demotion order from the
+  userspace.  This demotion order is also inconsistent with the page
+  allocation fallback order when all the nodes in a higher tier are
+  out of space: The page allocation can fall back to any node from
+  any lower tier, whereas the demotion order doesn't allow that.
+
+* There are no interfaces for the userspace to learn about the memory
+  tier hierarchy in order to optimize its memory allocations.
+
+This patch series make the creation of memory tiers explicit under
+the control of userspace or device driver.
+
+Memory Tier Initialization
+==========================
+
+By default, all memory nodes are assigned to the default tier (1).
+The default tier device has a rank value (200).
+
+A device driver can move up or down its memory nodes from the default
+tier.  For example, PMEM can move down its memory nodes below the
+default tier, whereas GPU can move up its memory nodes above the
+default tier.
+
+The kernel initialization code makes the decision on which exact tier
+a memory node should be assigned to based on the requests from the
+device drivers as well as the memory device hardware information
+provided by the firmware.
+
+Hot-adding/removing CPUs doesn't affect memory tier hierarchy.
+
+Memory Allocation for Demotion
+==============================
+This patch series keep the demotion target page allocation logic same.
+The demotion page allocation pick the closest NUMA node in the
+next lower tier to the current NUMA node allocating pages from.
+
+This will be later improved to use the same page allocation strategy
+using fallback list.
+
+Sysfs Interface:
+-------------
+Listing current list of memory tiers and rank details:
+
+:/sys/devices/system/memtier$ ls
+default_rank  max_tier  memtier1  power  uevent
+:/sys/devices/system/memtier$ cat default_rank 
+200
+:/sys/devices/system/memtier$ cat max_tier 
+3
+:/sys/devices/system/memtier$ 
+
+Per node memory tier details:
+
+For a cpu only NUMA node:
+
+:/sys/devices/system/node# cat node0/memtier 
+:/sys/devices/system/node# echo 1 > node0/memtier 
+:/sys/devices/system/node# cat node0/memtier 
+:/sys/devices/system/node# 
+
+For a NUMA node with memory:
+:/sys/devices/system/node# cat node1/memtier 
+1
+:/sys/devices/system/node# ls ../memtier/
+default_rank  max_tier  memtier1  power  uevent
+:/sys/devices/system/node# echo 2 > node1/memtier 
+:/sys/devices/system/node# 
+:/sys/devices/system/node# ls ../memtier/
+default_rank  max_tier  memtier1  memtier2  power  uevent
+:/sys/devices/system/node# cat node1/memtier 
+2
+:/sys/devices/system/node# 
+:/sys/devices/system/node# cat ../memtier/memtier2/rank 
+300
+:/sys/devices/system/node# 
+:/sys/devices/system/node# cat ../memtier/memtier1/rank 
+200
+:/sys/devices/system/node#
+
+Removing a NUMA node from demotion:
+:/sys/devices/system/node# cat node1/memtier 
+2
+:/sys/devices/system/node# echo none > node1/memtier 
+:/sys/devices/system/node# 
+:/sys/devices/system/node# cat node1/memtier 
+:/sys/devices/system/node# 
+:/sys/devices/system/node# ls ../memtier/
+default_rank  max_tier  memtier1  power  uevent
+:/sys/devices/system/node# 
+
+The above also resulted in removal of memtier2 which was created in the earlier step.
+
+
+Changelog
+----------
+
+v4:
+Add support for explicit memory tiers and ranks.
+
+v3:
+- Modify patch 1 subject to make it more specific
+- Remove /sys/kernel/mm/numa/demotion_targets interface, use
+  /sys/devices/system/node/demotion_targets instead and make
+  it writable to override node_states[N_DEMOTION_TARGETS].
+- Add support to view per node demotion targets via sysfs
+
+v2:
+In v1, only 1st patch of this patch series was sent, which was
+implemented to avoid some of the limitations on the demotion
+target sharing, however for certain numa topology, the demotion
+targets found by that patch was not most optimal, so 1st patch
+in this series is modified according to suggestions from Huang
+and Baolin. Different examples of demotion list comparasion
+between existing implementation and changed implementation can
+be found in the commit message of 1st patch.
+
+
+Aneesh Kumar K.V (2):
+  mm/demotion: Add support to associate rank with memory tier
+  mm/demotion: Add support for removing node from demotion memory tiers
+
+Jagdish Gediya (5):
+  mm/demotion: Add support for explicit memory tiers
+  mm/demotion: Expose per node memory tier to sysfs
+  mm/demotion: Build demotion targets based on explicit memory tiers
+  mm/demotion/dax/kmem: Set node's memory tier to MEMORY_TIER_PMEM
+  mm/demotion: Demote pages according to allocation fallback order
+
+ drivers/base/node.c     |  43 +++
+ drivers/dax/kmem.c      |   4 +
+ include/linux/migrate.h |  39 ++-
+ mm/Kconfig              |  11 +
+ mm/migrate.c            | 756 ++++++++++++++++++++++++++--------------
+ mm/vmscan.c             |  38 +-
+ mm/vmstat.c             |   5 -
+ 7 files changed, 590 insertions(+), 306 deletions(-)
+
+-- 
+2.36.1
+

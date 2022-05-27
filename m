@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D16535BFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B33535F7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244591AbiE0IwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S233981AbiE0Lic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350055AbiE0IwB (ORCPT
+        with ESMTP id S1351451AbiE0LiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:52:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFD652B27;
-        Fri, 27 May 2022 01:51:37 -0700 (PDT)
+        Fri, 27 May 2022 07:38:14 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FBF66FB0;
+        Fri, 27 May 2022 04:38:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53F8B61D40;
-        Fri, 27 May 2022 08:51:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33940C385A9;
-        Fri, 27 May 2022 08:51:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6EA89CE2511;
+        Fri, 27 May 2022 11:37:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F48C385A9;
+        Fri, 27 May 2022 11:37:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641496;
-        bh=XCrtEF3XRbslBZMheQMMnxmSBvlwmKgfm/xo8l2mbcc=;
+        s=korg; t=1653651476;
+        bh=W7ML/ooXjpvPGn0k5AMTGOwT7fa9NaEu/m2lh1oz+78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=emgwb7V5NU6dEoRNCJlFMTwvW1Csr9Pii5WjuaiCEeVsDUK3mu2wr6du0fqZa883v
-         v+IiT6OqwNXS1rrNAkRPZnj8vTlIssAkMnAgZ3EgpvMqVdEgJ32bbKgSHeqiwG3JML
-         IOtQ7hLmLEJPX9ZpmBT9HL3/8ep1DEP0UM3D7yDY=
+        b=DE/VCJr/uP1RlLxt2/5WonuH8IptV3Y1c9l3XGVxOPdPPX6smir2ofN4PIGBJVJDh
+         9cm5hiXD1WqxXkBbRc5P9/b5+D17og048Crns2l4FSWd4/9ZD0uSx17/NdEz40G//X
+         Ms08WKmaW/P9Z2LkKg0RJlE9YOiQ796FnkHNIFFQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yongkang Jia <kangel@zju.edu.cn>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>
-Subject: [PATCH 5.15 002/145] KVM: x86/mmu: fix NULL pointer dereference on guest INVPCID
-Date:   Fri, 27 May 2022 10:48:23 +0200
-Message-Id: <20220527084850.757334839@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 024/163] crypto: blake2s - include <linux/bug.h> instead of <asm/bug.h>
+Date:   Fri, 27 May 2022 10:48:24 +0200
+Message-Id: <20220527084831.551011843@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
-References: <20220527084850.364560116@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 9f46c187e2e680ecd9de7983e4d081c3391acc76 upstream.
+commit bbda6e0f1303953c855ee3669655a81b69fbe899 upstream.
 
-With shadow paging enabled, the INVPCID instruction results in a call
-to kvm_mmu_invpcid_gva.  If INVPCID is executed with CR0.PG=0, the
-invlpg callback is not set and the result is a NULL pointer dereference.
-Fix it trivially by checking for mmu->invlpg before every call.
+Address the following checkpatch warning:
 
-There are other possibilities:
+	WARNING: Use #include <linux/bug.h> instead of <asm/bug.h>
 
-- check for CR0.PG, because KVM (like all Intel processors after P5)
-  flushes guest TLB on CR0.PG changes so that INVPCID/INVLPG are a
-  nop with paging disabled
-
-- check for EFER.LMA, because KVM syncs and flushes when switching
-  MMU contexts outside of 64-bit mode
-
-All of these are tricky, go for the simple solution.  This is CVE-2022-1789.
-
-Reported-by: Yongkang Jia <kangel@zju.edu.cn>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-[fix conflict due to missing b9e5603c2a3accbadfec570ac501a54431a6bdba]
-Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/mmu.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ include/crypto/blake2s.h |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5396,14 +5396,16 @@ void kvm_mmu_invpcid_gva(struct kvm_vcpu
- 	uint i;
+--- a/include/crypto/blake2s.h
++++ b/include/crypto/blake2s.h
+@@ -6,12 +6,11 @@
+ #ifndef _CRYPTO_BLAKE2S_H
+ #define _CRYPTO_BLAKE2S_H
  
- 	if (pcid == kvm_get_active_pcid(vcpu)) {
--		mmu->invlpg(vcpu, gva, mmu->root_hpa);
-+		if (mmu->invlpg)
-+			mmu->invlpg(vcpu, gva, mmu->root_hpa);
- 		tlb_flush = true;
- 	}
++#include <linux/bug.h>
+ #include <linux/types.h>
+ #include <linux/kernel.h>
+ #include <linux/string.h>
  
- 	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
- 		if (VALID_PAGE(mmu->prev_roots[i].hpa) &&
- 		    pcid == kvm_get_pcid(vcpu, mmu->prev_roots[i].pgd)) {
--			mmu->invlpg(vcpu, gva, mmu->prev_roots[i].hpa);
-+			if (mmu->invlpg)
-+				mmu->invlpg(vcpu, gva, mmu->prev_roots[i].hpa);
- 			tlb_flush = true;
- 		}
- 	}
+-#include <asm/bug.h>
+-
+ enum blake2s_lengths {
+ 	BLAKE2S_BLOCK_SIZE = 64,
+ 	BLAKE2S_HASH_SIZE = 32,
 
 

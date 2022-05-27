@@ -2,224 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5029053587B
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A98D535885
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 06:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242002AbiE0Eaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 00:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S242164AbiE0EbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 00:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241986AbiE0EaI (ORCPT
+        with ESMTP id S243040AbiE0EbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 00:30:08 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 832ADEC3E6;
-        Thu, 26 May 2022 21:30:02 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id D9AB320B71D5; Thu, 26 May 2022 21:30:01 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D9AB320B71D5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653625801;
-        bh=42Z9fNBmmifkuVx5f5pfyzCv7xT30xcWjT3LjPfgQG0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SsZ1Xq44KlVO0sHf/LjDDqz7ECT/8fcMNRXqAilohLBazEQxZEgcSXE1iLRd3AOka
-         n2hjLHQv8/4+vtC4bbAUIA2h8+nUTr0RPXxLF0fE7YXKG2qmgM+2QQNd4PK0nqZI5M
-         Po+wQk7CwpUOtrKwaaZ7Xjlq9l4K1UM1lvPjDELQ=
-Date:   Thu, 26 May 2022 21:30:01 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>
-Subject: Re: [PATCH] Drivers: hv: vmbus: Adding isolated cpu support for
- channel interrupts mapping
-Message-ID: <20220527043001.GA25943@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1653591314-7077-1-git-send-email-ssengar@linux.microsoft.com>
- <PH0PR21MB3025DD41E24D239C0ECB11A9D7D99@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Fri, 27 May 2022 00:31:06 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13CAEC3EB
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 21:31:02 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id h186so2981576pgc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 21:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XYes1esmPya3DIZza2UVxgQVJXUPok6oc9i7IGAxizo=;
+        b=NuHdmoauIFfael2DzypDrUaB29wpEPtKw/ROCTuk/nnj5UBKhJ4xlHbTG51Wn4lhzq
+         RZP5hgmj3F5dj0OYbu1IpUHppLPsWWZe7dpeH3XakLGvS3v5kgiZrzPBQ7dpsoR4r0q8
+         2ANi0n6PAKb5ftlK3lRUy0uj2s3kgfNw4vf7RB0J12x2QUVZGeMEXS6yB8t9Bm5Jd9OB
+         w9tHjv/gl/VaNC9uNtmFcRjLFc6AOHOHdB04ByBPKRQsS+LeJVwGfwIO9Q1R0ZeaVaZR
+         0SXFnbw4jqvBbxWBldphQdW9z5GpaKQgAueS0w+UdmuS13hawnNS0TqYf2YUvloLucWm
+         obXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XYes1esmPya3DIZza2UVxgQVJXUPok6oc9i7IGAxizo=;
+        b=uB9Zfm5SDeqVpmf3F1vthlaTOEe5WkP+F75VidSU1UMtPyrW1mHtiuPzzt2d48mEbI
+         BdpX7nG1HPM5mPgQlo2cmmT2ZzSCY3pZMpp8aHUSPnq7/yPhdPAlCtPFz303glZ6wA8c
+         q8cLZa6KHSMYixPZCMEnuj96Z1yrR2GvDH7PpJFmpntH2/AdYTZDvZNVX47oil9EKvCi
+         cbELu7OSFgkOeDPT3wGlFZc4/1Mv3OME6l3QpOmGdLwcxrFqTvSVL8OUr+bvGkw6G80t
+         SSZZ2ZGKQays3/WClmI0uAWmzGvqQEft9EhVf4KJi9Qj+t32mA5jssuDV586Sxc5DncK
+         rKJQ==
+X-Gm-Message-State: AOAM532WICdUf1BTIRTOagMYY7L+IRY1mbvFLk+EURQWqdqHgBUJZ42A
+        LY5NWSB/Ift76F1eZ0avWklgig==
+X-Google-Smtp-Source: ABdhPJwhizjW/dU14hRf3XegG/dTVMUKoHEBKrF3ct6aOAhptm7KfdgWndSaEoBJPsBSZ9Qe+jYOlw==
+X-Received: by 2002:a63:4666:0:b0:3fa:287f:b714 with SMTP id v38-20020a634666000000b003fa287fb714mr21732464pgk.398.1653625862015;
+        Thu, 26 May 2022 21:31:02 -0700 (PDT)
+Received: from sunil-laptop ([49.206.9.238])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902bf4b00b0016392bd5060sm402240pls.142.2022.05.26.21.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 May 2022 21:31:01 -0700 (PDT)
+Date:   Fri, 27 May 2022 10:00:55 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Sunil V L <sunil.vl@gmail.com>
+Subject: Re: [PATCH V2 4/5] riscv: cpu: Support for 64bit hartid
+Message-ID: <20220527043055.GA6225@sunil-laptop>
+References: <20220526101131.2340729-1-sunilvl@ventanamicro.com>
+ <20220526101131.2340729-5-sunilvl@ventanamicro.com>
+ <CAOnJCU+eutRHEEgXi8od+xY+0AyWj117MDwjY-hFVO3ZDjf1bg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR21MB3025DD41E24D239C0ECB11A9D7D99@PH0PR21MB3025.namprd21.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAOnJCU+eutRHEEgXi8od+xY+0AyWj117MDwjY-hFVO3ZDjf1bg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 08:45:33PM +0000, Michael Kelley (LINUX) wrote:
-> From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Thursday, May 26, 2022 11:55 AM
+On Thu, May 26, 2022 at 04:10:51PM -0700, Atish Patra wrote:
+> On Thu, May 26, 2022 at 3:12 AM Sunil V L <sunilvl@ventanamicro.com> wrote:
+> >
+> > Adds support for 64bit hartid in riscv_of_processor_hartid()
 > 
-> > Subject: [PATCH] Drivers: hv: vmbus: Adding isolated cpu support for channel interrupts
-> > mapping
-> 
-> Let me suggest a more compact and precise Subject:
-> 
-> Drivers: hv: vmbus: Don't assign VMbus channel interrupts to isolated CPUs
-[sss]: ok
+> The commit text is a bit misleading as you are adding support for XLEN
+> hartid. For RV32, it is still 32bit.
+> This applies to the entire series.
 
+Thanks Atish. I somehow missed mentioning RV64 in this patch. Will
+update and send.
+
+Thanks
+Sunil
 > 
-> > 
-> > Adding support for vmbus channels to take isolated cpu in consideration
-> > while assigning interrupt to different cpus. This also prevents user from
-> > setting any isolated cpu to vmbus channel interrupt assignment by sysfs
-> > entry. Isolated cpu can be configured by kernel command line parameter
-> > 'isolcpus=managed_irq,<#cpu>'.
-> 
-> Also, for the commit statement:
-> 
-> When initially assigning a VMbus channel interrupt to a CPU, don't choose
-> a managed IRQ isolated CPU (as specified on the kernel boot line with
-> parameter 'isolcpus=managed_irq,<#cpu>').  Also, when using sysfs to
-> change the CPU that a VMbus channel will interrupt, don't allow changing
-> to a managed IRQ isolated CPU.  
->
-[sss] : ok 
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> >   - Separate return value and status code.
+> >   - Make hartid variable type as unsigned long.
+> >   - Update the callers.
+> >
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 > > ---
-> >  drivers/hv/channel_mgmt.c | 18 ++++++++++++------
-> >  drivers/hv/vmbus_drv.c    |  6 ++++++
-> >  2 files changed, 18 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-> > index 97d8f56..e1fe029 100644
-> > --- a/drivers/hv/channel_mgmt.c
-> > +++ b/drivers/hv/channel_mgmt.c
-> > @@ -21,6 +21,7 @@
-> >  #include <linux/cpu.h>
-> >  #include <linux/hyperv.h>
-> >  #include <asm/mshyperv.h>
-> > +#include <linux/sched/isolation.h>
-> > 
-> >  #include "hyperv_vmbus.h"
-> > 
-> > @@ -728,16 +729,20 @@ static void init_vp_index(struct vmbus_channel *channel)
-> >  	u32 i, ncpu = num_online_cpus();
-> >  	cpumask_var_t available_mask;
-> >  	struct cpumask *allocated_mask;
-> > +	const struct cpumask *hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
-> >  	u32 target_cpu;
-> >  	int numa_node;
-> > 
-> >  	if (!perf_chn ||
-> > -	    !alloc_cpumask_var(&available_mask, GFP_KERNEL)) {
-> > +	    !alloc_cpumask_var(&available_mask, GFP_KERNEL) ||
-> > +	    cpumask_empty(hk_mask)) {
-> >  		/*
-> >  		 * If the channel is not a performance critical
-> >  		 * channel, bind it to VMBUS_CONNECT_CPU.
-> >  		 * In case alloc_cpumask_var() fails, bind it to
-> >  		 * VMBUS_CONNECT_CPU.
-> > +		 * If all the cpus are isolated, bind it to
-> > +		 * VMBUS_CONNECT_CPU.
-> >  		 */
-> >  		channel->target_cpu = VMBUS_CONNECT_CPU;
-> >  		if (perf_chn)
-> > @@ -758,17 +763,19 @@ static void init_vp_index(struct vmbus_channel *channel)
-> >  		}
-> >  		allocated_mask = &hv_context.hv_numa_map[numa_node];
-> > 
-> > -		if (cpumask_equal(allocated_mask, cpumask_of_node(numa_node))) {
-> > +retry:
-> > +		cpumask_xor(available_mask, allocated_mask, cpumask_of_node(numa_node));
-> 
-> There's a bug here that existed in the code prior to this patch.  The code
-> checks to make sure cpumask_of_node(numa_node) is not empty, and then
-> later references cpumask_of_node(numa_node) again.  But in between the
-> check and the use, one or more CPUs could go offline, leaving 
-> cpumask_of_node(numa_node) empty since that array of cpumasks contains
-> only online CPUs.  In such a case, execution could get stuck in an infinite
-> loop with available_mask being empty.
-> 
-> The solution is to call cpus_read_lock() before starting the main "for"
-> loop and then call cpus_read_unlock() at the end.  This lock will prevent
-> CPUs from going offline, and hence ensure that the node mask can't
-> become empty.   You'll notice that target_cpu_store() uses that lock
-> to prevent a similar problem.
-> 
-> Fixing this locking problem should probably be a separate patch.
-> 
-> Michael
-[sss] : Got it, will send this fix after this patch review is complete.
-
-> 
-> > +		cpumask_and(available_mask, available_mask, hk_mask);
-> > +
-> > +		if (cpumask_empty(available_mask)) {
-> >  			/*
-> >  			 * We have cycled through all the CPUs in the node;
-> >  			 * reset the allocated map.
-> >  			 */
-> >  			cpumask_clear(allocated_mask);
-> > +			goto retry;
-> >  		}
-> > 
-> > -		cpumask_xor(available_mask, allocated_mask,
-> > -			    cpumask_of_node(numa_node));
-> > -
-> >  		target_cpu = cpumask_first(available_mask);
-> >  		cpumask_set_cpu(target_cpu, allocated_mask);
-> > 
-> > @@ -778,7 +785,6 @@ static void init_vp_index(struct vmbus_channel *channel)
-> >  	}
-> > 
-> >  	channel->target_cpu = target_cpu;
-> > -
-> >  	free_cpumask_var(available_mask);
+> >  arch/riscv/include/asm/processor.h |  4 ++--
+> >  arch/riscv/kernel/cpu.c            | 26 +++++++++++++++-----------
+> >  arch/riscv/kernel/cpufeature.c     |  6 ++++--
+> >  arch/riscv/kernel/smpboot.c        |  9 +++++----
+> >  drivers/clocksource/timer-riscv.c  | 15 ++++++++-------
+> >  drivers/irqchip/irq-riscv-intc.c   |  7 ++++---
+> >  drivers/irqchip/irq-sifive-plic.c  |  7 ++++---
+> >  7 files changed, 42 insertions(+), 32 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+> > index 0749924d9e55..99fae9398506 100644
+> > --- a/arch/riscv/include/asm/processor.h
+> > +++ b/arch/riscv/include/asm/processor.h
+> > @@ -75,8 +75,8 @@ static inline void wait_for_interrupt(void)
 > >  }
-> 
-> Removing the blank line above is a gratuitous change that isn't needed.
-> Generally, a patch should avoid such changes unless the purpose of
-> the patch is code cleanup.
->
-[sss] : Got in by mistake, will remove
-
-> > 
-> > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> > index 714d549..23660a8 100644
-> > --- a/drivers/hv/vmbus_drv.c
-> > +++ b/drivers/hv/vmbus_drv.c
-> > @@ -21,6 +21,7 @@
-> >  #include <linux/kernel_stat.h>
-> >  #include <linux/clockchips.h>
-> >  #include <linux/cpu.h>
-> > +#include <linux/sched/isolation.h>
-> >  #include <linux/sched/task_stack.h>
-> > 
-> >  #include <linux/delay.h>
-> > @@ -1770,6 +1771,11 @@ static ssize_t target_cpu_store(struct vmbus_channel
-> > *channel,
-> >  	if (target_cpu >= nr_cpumask_bits)
-> >  		return -EINVAL;
-> > 
-> > +	if (!cpumask_test_cpu(target_cpu, housekeeping_cpumask(HK_TYPE_MANAGED_IRQ))) {
-> > +		dev_err(&channel->device_obj->device,
-> > +			"cpu (%d) is isolated, can't be assigned\n", target_cpu);
-> 
-> I don't think a message should be output here.  The other errors in this
-> function don't output a message.  Generally, the kernel doesn't output
-> a message just because a user provided bad input.  Doing so makes it
-> too easy for a user (even a sysadmin) to cause the kernel to go wild
-> outputting messages.
-> 
-> Michael
-> 
-[sss] : sure, will remove
-
-> > +		return -EINVAL;
-> > +	}
-> >  	/* No CPUs should come up or down during this. */
-> >  	cpus_read_lock();
-> > 
+> >
+> >  struct device_node;
+> > -int riscv_of_processor_hartid(struct device_node *node);
+> > -int riscv_of_parent_hartid(struct device_node *node);
+> > +int riscv_of_processor_hartid(struct device_node *node, unsigned long *hartid);
+> > +int riscv_of_parent_hartid(struct device_node *node, unsigned long *hartid);
+> >
+> >  extern void riscv_fill_hwcap(void);
+> >  extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
+> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > index ccb617791e56..477a33b34c95 100644
+> > --- a/arch/riscv/kernel/cpu.c
+> > +++ b/arch/riscv/kernel/cpu.c
+> > @@ -14,37 +14,36 @@
+> >   * Returns the hart ID of the given device tree node, or -ENODEV if the node
+> >   * isn't an enabled and valid RISC-V hart node.
+> >   */
+> > -int riscv_of_processor_hartid(struct device_node *node)
+> > +int riscv_of_processor_hartid(struct device_node *node, unsigned long *hart)
+> >  {
+> >         const char *isa;
+> > -       u32 hart;
+> >
+> >         if (!of_device_is_compatible(node, "riscv")) {
+> >                 pr_warn("Found incompatible CPU\n");
+> >                 return -ENODEV;
+> >         }
+> >
+> > -       hart = of_get_cpu_hwid(node, 0);
+> > -       if (hart == ~0U) {
+> > +       *hart = (unsigned long) of_get_cpu_hwid(node, 0);
+> > +       if (*hart == ~0UL) {
+> >                 pr_warn("Found CPU without hart ID\n");
+> >                 return -ENODEV;
+> >         }
+> >
+> >         if (!of_device_is_available(node)) {
+> > -               pr_info("CPU with hartid=%d is not available\n", hart);
+> > +               pr_info("CPU with hartid=%lu is not available\n", *hart);
+> >                 return -ENODEV;
+> >         }
+> >
+> >         if (of_property_read_string(node, "riscv,isa", &isa)) {
+> > -               pr_warn("CPU with hartid=%d has no \"riscv,isa\" property\n", hart);
+> > +               pr_warn("CPU with hartid=%lu has no \"riscv,isa\" property\n", *hart);
+> >                 return -ENODEV;
+> >         }
+> >         if (isa[0] != 'r' || isa[1] != 'v') {
+> > -               pr_warn("CPU with hartid=%d has an invalid ISA of \"%s\"\n", hart, isa);
+> > +               pr_warn("CPU with hartid=%lu has an invalid ISA of \"%s\"\n", *hart, isa);
+> >                 return -ENODEV;
+> >         }
+> >
+> > -       return hart;
+> > +       return 0;
+> >  }
+> >
+> >  /*
+> > @@ -53,11 +52,16 @@ int riscv_of_processor_hartid(struct device_node *node)
+> >   * To achieve this, we walk up the DT tree until we find an active
+> >   * RISC-V core (HART) node and extract the cpuid from it.
+> >   */
+> > -int riscv_of_parent_hartid(struct device_node *node)
+> > +int riscv_of_parent_hartid(struct device_node *node, unsigned long *hartid)
+> >  {
+> > +       int rc;
+> > +
+> >         for (; node; node = node->parent) {
+> > -               if (of_device_is_compatible(node, "riscv"))
+> > -                       return riscv_of_processor_hartid(node);
+> > +               if (of_device_is_compatible(node, "riscv")) {
+> > +                       rc = riscv_of_processor_hartid(node, hartid);
+> > +                       if (!rc)
+> > +                               return 0;
+> > +               }
+> >         }
+> >
+> >         return -1;
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index 1b2d42d7f589..49c05bd9352d 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -67,8 +67,9 @@ void __init riscv_fill_hwcap(void)
+> >         struct device_node *node;
+> >         const char *isa;
+> >         char print_str[NUM_ALPHA_EXTS + 1];
+> > -       int i, j;
+> > +       int i, j, rc;
+> >         static unsigned long isa2hwcap[256] = {0};
+> > +       unsigned long hartid;
+> >
+> >         isa2hwcap['i'] = isa2hwcap['I'] = COMPAT_HWCAP_ISA_I;
+> >         isa2hwcap['m'] = isa2hwcap['M'] = COMPAT_HWCAP_ISA_M;
+> > @@ -86,7 +87,8 @@ void __init riscv_fill_hwcap(void)
+> >                 DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
+> >                 const char *temp;
+> >
+> > -               if (riscv_of_processor_hartid(node) < 0)
+> > +               rc = riscv_of_processor_hartid(node, &hartid);
+> > +               if (rc < 0)
+> >                         continue;
+> >
+> >                 if (of_property_read_string(node, "riscv,isa", &isa)) {
+> > diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+> > index 622f226454d5..4336610a19ee 100644
+> > --- a/arch/riscv/kernel/smpboot.c
+> > +++ b/arch/riscv/kernel/smpboot.c
+> > @@ -76,15 +76,16 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+> >  void __init setup_smp(void)
+> >  {
+> >         struct device_node *dn;
+> > -       int hart;
+> > +       unsigned long hart;
+> >         bool found_boot_cpu = false;
+> >         int cpuid = 1;
+> > +       int rc;
+> >
+> >         cpu_set_ops(0);
+> >
+> >         for_each_of_cpu_node(dn) {
+> > -               hart = riscv_of_processor_hartid(dn);
+> > -               if (hart < 0)
+> > +               rc = riscv_of_processor_hartid(dn, &hart);
+> > +               if (rc < 0)
+> >                         continue;
+> >
+> >                 if (hart == cpuid_to_hartid_map(0)) {
+> > @@ -94,7 +95,7 @@ void __init setup_smp(void)
+> >                         continue;
+> >                 }
+> >                 if (cpuid >= NR_CPUS) {
+> > -                       pr_warn("Invalid cpuid [%d] for hartid [%d]\n",
+> > +                       pr_warn("Invalid cpuid [%d] for hartid [%lu]\n",
+> >                                 cpuid, hart);
+> >                         continue;
+> >                 }
+> > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+> > index 1767f8bf2013..55142c27f0bc 100644
+> > --- a/drivers/clocksource/timer-riscv.c
+> > +++ b/drivers/clocksource/timer-riscv.c
+> > @@ -101,20 +101,21 @@ static irqreturn_t riscv_timer_interrupt(int irq, void *dev_id)
+> >
+> >  static int __init riscv_timer_init_dt(struct device_node *n)
+> >  {
+> > -       int cpuid, hartid, error;
+> > +       int cpuid, error;
+> > +       unsigned long hartid;
+> >         struct device_node *child;
+> >         struct irq_domain *domain;
+> >
+> > -       hartid = riscv_of_processor_hartid(n);
+> > -       if (hartid < 0) {
+> > -               pr_warn("Not valid hartid for node [%pOF] error = [%d]\n",
+> > +       error = riscv_of_processor_hartid(n, &hartid);
+> > +       if (error < 0) {
+> > +               pr_warn("Not valid hartid for node [%pOF] error = [%lu]\n",
+> >                         n, hartid);
+> > -               return hartid;
+> > +               return error;
+> >         }
+> >
+> >         cpuid = riscv_hartid_to_cpuid(hartid);
+> >         if (cpuid < 0) {
+> > -               pr_warn("Invalid cpuid for hartid [%d]\n", hartid);
+> > +               pr_warn("Invalid cpuid for hartid [%lu]\n", hartid);
+> >                 return cpuid;
+> >         }
+> >
+> > @@ -140,7 +141,7 @@ static int __init riscv_timer_init_dt(struct device_node *n)
+> >                 return -ENODEV;
+> >         }
+> >
+> > -       pr_info("%s: Registering clocksource cpuid [%d] hartid [%d]\n",
+> > +       pr_info("%s: Registering clocksource cpuid [%d] hartid [%lu]\n",
+> >                __func__, cpuid, hartid);
+> >         error = clocksource_register_hz(&riscv_clocksource, riscv_timebase);
+> >         if (error) {
+> > diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> > index b65bd8878d4f..499e5f81b3fe 100644
+> > --- a/drivers/irqchip/irq-riscv-intc.c
+> > +++ b/drivers/irqchip/irq-riscv-intc.c
+> > @@ -95,10 +95,11 @@ static const struct irq_domain_ops riscv_intc_domain_ops = {
+> >  static int __init riscv_intc_init(struct device_node *node,
+> >                                   struct device_node *parent)
+> >  {
+> > -       int rc, hartid;
+> > +       int rc;
+> > +       unsigned long hartid;
+> >
+> > -       hartid = riscv_of_parent_hartid(node);
+> > -       if (hartid < 0) {
+> > +       rc = riscv_of_parent_hartid(node, &hartid);
+> > +       if (rc < 0) {
+> >                 pr_warn("unable to find hart id for %pOF\n", node);
+> >                 return 0;
+> >         }
+> > diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> > index bb87e4c3b88e..4710d9741f36 100644
+> > --- a/drivers/irqchip/irq-sifive-plic.c
+> > +++ b/drivers/irqchip/irq-sifive-plic.c
+> > @@ -317,7 +317,8 @@ static int __init plic_init(struct device_node *node,
+> >         for (i = 0; i < nr_contexts; i++) {
+> >                 struct of_phandle_args parent;
+> >                 irq_hw_number_t hwirq;
+> > -               int cpu, hartid;
+> > +               int cpu;
+> > +               unsigned long hartid;
+> >
+> >                 if (of_irq_parse_one(node, i, &parent)) {
+> >                         pr_err("failed to parse parent for context %d.\n", i);
+> > @@ -341,8 +342,8 @@ static int __init plic_init(struct device_node *node,
+> >                         continue;
+> >                 }
+> >
+> > -               hartid = riscv_of_parent_hartid(parent.np);
+> > -               if (hartid < 0) {
+> > +               error = riscv_of_parent_hartid(parent.np, &hartid);
+> > +               if (error < 0) {
+> >                         pr_warn("failed to parse hart ID for context %d.\n", i);
+> >                         continue;
+> >                 }
 > > --
-> > 1.8.3.1
+> > 2.25.1
+> >
+> 
+> Otherwise, it looks good.
+> 
+> Reviewed-by: Atish Patra <atishp@rivosinc.com>
+> 
+> -- 
+> Regards,
+> Atish

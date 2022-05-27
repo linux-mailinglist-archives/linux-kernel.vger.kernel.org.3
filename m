@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705FA53576C
+	by mail.lfdr.de (Postfix) with ESMTP id EF8C653576D
 	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 04:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbiE0CBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 22:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S233582AbiE0CBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 22:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbiE0CBh (ORCPT
+        with ESMTP id S231604AbiE0CBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 22:01:37 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A134B1E3DB
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:01:34 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id i11so5685634ybq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:01:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ftTeYKP9cfFJxUORbZTewghh6E2NdQvJ/R5uaGw+pNM=;
-        b=gzHz70Tr6RZspSCNjG1e+dt5VKS5Nnq1KCvlvCNtiXgdkrj0ytyKL0EWBdF/HuhIz0
-         vlRzvwQ8dc/D7+jJNeNnWTllUHKfGuLIJNsPPeEYjaNm2D4r9f2F9Oa7O1DRnd5rpTlv
-         9f9R4O1D1SmDvDHbElYoIIQPrweXcNNPnM70H5BiP93rTSPMdNesCqxc0Hn5N/0pcO8R
-         XIDkgN2eDMzU9z24QUIYywDKxPHWMmFtDzuJ9Kymyczc/yaXDzkrekV15rHpg6k/7Nmi
-         9KGZKAr7VCrBkbEan8C0WaNF2KsGDvv+rnWp3+JTiB/hirgk/7BkuOZ20oSuB+tjKk5T
-         JeZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ftTeYKP9cfFJxUORbZTewghh6E2NdQvJ/R5uaGw+pNM=;
-        b=Uo7yVesppdCZhB6W6ECWsnreF7yCfhw+ZlqnQxVdkMRApgYaB9qIaJ1G0i8wxnSk1T
-         PkdUptpunZVk4sxaw1Au1m431MdiirRC++31vpBt41Nc3WUiDc+2ydPypBQjd9lw3Dx0
-         B5D++6Z4RAwL5p/vGm3+KK26KNMVXj8WHNUdAyOpdCYV7xtkqXJxqNyCDBF6oBG6Bpj1
-         efXfvO+orpiRNWoYtPYmbWb7OeuRNOO5Gh0UAIhzfXqIk+48kgPnM6AGaXidoORZx+aA
-         bdfQzyCMYODJVV+uUBnNHEK6M4v1bb7nC2L+vdI3RaKqLFhXZHfDgU3XadrIZfRTbsC4
-         amwQ==
-X-Gm-Message-State: AOAM530kq2AErJM+OVWvukDxAihDB7rJdEP0bRadHtRySokAxf43OnS3
-        yx+OTYPXpqGqSZ1AFD2bEHbK4g31pI7YA/kTep6rIA==
-X-Google-Smtp-Source: ABdhPJzDrEKXS6UMHA7U1HfrHmrN2xLUemJnQ4xt0WmmzOwB+698wHv3+OyTpKcScCbxPnfNsEICIL571EOZDcb2Q08=
-X-Received: by 2002:a05:6902:4e4:b0:655:caf6:dc38 with SMTP id
- w4-20020a05690204e400b00655caf6dc38mr9247302ybs.261.1653616893842; Thu, 26
- May 2022 19:01:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220526142038.1582839-1-bh1scw@gmail.com>
-In-Reply-To: <20220526142038.1582839-1-bh1scw@gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Fri, 27 May 2022 10:00:55 +0800
-Message-ID: <CAMZfGtUE5G8hV2tUTLTeU0PwZvLroNfxy3oR3rMYq3hE1rn2Fg@mail.gmail.com>
-Subject: Re: [PATCH] x86/mm: use PAGE_ALIGNED instead of IS_ALIGNED
-To:     bh1scw@gmail.com
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 26 May 2022 22:01:48 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EA3C6E75
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 19:01:45 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VEV-6f9_1653616902;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VEV-6f9_1653616902)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 27 May 2022 10:01:42 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        songmuchun@bytedance.com
+Cc:     anshuman.khandual@arm.com, baolin.wang@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2] mm/hugetlb: Remove unnecessary huge_ptep_set_access_flags() in hugetlb_mcopy_atomic_pte()
+Date:   Fri, 27 May 2022 10:01:35 +0800
+Message-Id: <f3e28b897b53a69967a8b98a6fdcda3be80c9229.1653616175.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 10:21 PM <bh1scw@gmail.com> wrote:
->
-> From: Fanjun Kong <bh1scw@gmail.com>
->
-> The <linux/mm.h> already provides the PAGE_ALIGNED macro. Let's
-> use this macro instead of IS_ALIGNED and passing PAGE_SIZE directly.
->
-> Signed-off-by: Fanjun Kong <bh1scw@gmail.com>
+There is no need to update the hugetlb access flags after just setting the
+hugetlb page table entry by set_huge_pte_at(), since the page table entry
+value has no changes.
 
+Thus remove the unnecessary huge_ptep_set_access_flags() in
+hugetlb_mcopy_atomic_pte().
+
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+Changes from v1:
+ - Update commit message to remove checkpatch.pl complaint.
+ - Collect reviewed-by tags.
+---
+ mm/hugetlb.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 7c468ac..3ad49bf 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6032,8 +6032,6 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 
+ 	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+ 
+-	(void)huge_ptep_set_access_flags(dst_vma, dst_addr, dst_pte, _dst_pte,
+-					dst_vma->vm_flags & VM_WRITE);
+ 	hugetlb_count_add(pages_per_huge_page(h), dst_mm);
+ 
+ 	/* No need to invalidate - it was non-present before */
+-- 
+1.8.3.1
+

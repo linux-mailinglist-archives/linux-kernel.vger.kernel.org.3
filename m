@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED6B535C6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BB55360A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350376AbiE0JDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S232316AbiE0Lvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350733AbiE0JAg (ORCPT
+        with ESMTP id S1351928AbiE0Lrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:00:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C936B014;
-        Fri, 27 May 2022 01:56:51 -0700 (PDT)
+        Fri, 27 May 2022 07:47:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8026613C4CB;
+        Fri, 27 May 2022 04:43:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06365B823DF;
-        Fri, 27 May 2022 08:56:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B443C385B8;
-        Fri, 27 May 2022 08:56:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4530C61CF0;
+        Fri, 27 May 2022 11:43:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6CDC3411D;
+        Fri, 27 May 2022 11:43:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641808;
-        bh=gRkETQJvr2FxHDr9oXch+XuY+cPLZ3ZZHS7YjlX3Skc=;
+        s=korg; t=1653651808;
+        bh=Wf5YjyGS/Miwbxm5fWl0FgB1C4SqltlK0Q2dh7YVefI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Isv6GD2yZROnyZrYjDbVDrr5ogkAuO+fj92IE3tVKBI2wQ0ZdB0NSM6rskTVEtabB
-         KnutOisvQhWVFtv9x9jSzQAtMWfhcXOelgOdaO3TSC9vXassiKZXnTMTue23JIr2YD
-         sNbZEVD4IDtJ6SpZfwgZm77vyl/xOONDNEjqqvmk=
+        b=Uv5UABQI8oSXb7qL0OfhaaAwnJvRXIO69L898a2JMpJossM1ympXTdqN9Xy8T+m0h
+         11J3neF660eBdNcDotDlzixuAVqe9oSN13johcaGdjhFQd1YAUkZQrAT9N4mGS0kqA
+         N9lqe5WvyKAEhbZseD41GQs9+MmvpnCPlu9DIzsM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.17 029/111] random: remove useless header comment
+Subject: [PATCH 5.10 061/163] random: remove use_input_pool parameter from crng_reseed()
 Date:   Fri, 27 May 2022 10:49:01 +0200
-Message-Id: <20220527084823.599592472@linuxfoundation.org>
+Message-Id: <20220527084836.547647749@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
-References: <20220527084819.133490171@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,33 +54,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 6071a6c0fba2d747742cadcbb3ba26ed756ed73b upstream.
+commit 5d58ea3a31cc98b9fa563f6921d3d043bf0103d1 upstream.
 
-This really adds nothing at all useful.
+The primary_crng is always reseeded from the input_pool, while the NUMA
+crngs are always reseeded from the primary_crng.  Remove the redundant
+'use_input_pool' parameter from crng_reseed() and just directly check
+whether the crng is the primary_crng.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/random.h |    6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/char/random.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -1,9 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * include/linux/random.h
-- *
-- * Include file for the random number generator.
-- */
-+
- #ifndef _LINUX_RANDOM_H
- #define _LINUX_RANDOM_H
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -365,7 +365,7 @@ static struct {
  
+ static void extract_entropy(void *buf, size_t nbytes);
+ 
+-static void crng_reseed(struct crng_state *crng, bool use_input_pool);
++static void crng_reseed(struct crng_state *crng);
+ 
+ /*
+  * This function adds bytes into the entropy "pool".  It does not
+@@ -464,7 +464,7 @@ static void credit_entropy_bits(int nbit
+ 	trace_credit_entropy_bits(nbits, entropy_count, _RET_IP_);
+ 
+ 	if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
+-		crng_reseed(&primary_crng, true);
++		crng_reseed(&primary_crng);
+ }
+ 
+ /*********************************************************************
+@@ -701,7 +701,7 @@ static int crng_slow_load(const u8 *cp,
+ 	return 1;
+ }
+ 
+-static void crng_reseed(struct crng_state *crng, bool use_input_pool)
++static void crng_reseed(struct crng_state *crng)
+ {
+ 	unsigned long flags;
+ 	int i;
+@@ -710,7 +710,7 @@ static void crng_reseed(struct crng_stat
+ 		u32 key[8];
+ 	} buf;
+ 
+-	if (use_input_pool) {
++	if (crng == &primary_crng) {
+ 		int entropy_count;
+ 		do {
+ 			entropy_count = READ_ONCE(input_pool.entropy_count);
+@@ -748,7 +748,7 @@ static void _extract_crng(struct crng_st
+ 		init_time = READ_ONCE(crng->init_time);
+ 		if (time_after(READ_ONCE(crng_global_init_time), init_time) ||
+ 		    time_after(jiffies, init_time + CRNG_RESEED_INTERVAL))
+-			crng_reseed(crng, crng == &primary_crng);
++			crng_reseed(crng);
+ 	}
+ 	spin_lock_irqsave(&crng->lock, flags);
+ 	chacha20_block(&crng->state[0], out);
+@@ -1547,7 +1547,7 @@ static long random_ioctl(struct file *f,
+ 			return -EPERM;
+ 		if (crng_init < 2)
+ 			return -ENODATA;
+-		crng_reseed(&primary_crng, true);
++		crng_reseed(&primary_crng);
+ 		WRITE_ONCE(crng_global_init_time, jiffies - 1);
+ 		return 0;
+ 	default:
 
 

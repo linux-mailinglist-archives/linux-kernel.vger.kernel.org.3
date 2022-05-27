@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D84535B8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D709535B9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 10:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349812AbiE0IhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
+        id S229589AbiE0IhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 04:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349741AbiE0IgH (ORCPT
+        with ESMTP id S1349745AbiE0IgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:36:07 -0400
+        Fri, 27 May 2022 04:36:09 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0317FF58C;
-        Fri, 27 May 2022 01:36:03 -0700 (PDT)
-Date:   Fri, 27 May 2022 08:36:01 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CF0FF5B2;
+        Fri, 27 May 2022 01:36:04 -0700 (PDT)
+Date:   Fri, 27 May 2022 08:36:02 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653640562;
+        s=2020; t=1653640563;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YV94WFEBhQ3Vi9i7oZUew/ph+yFRL0KG8U7E6tDma8w=;
-        b=wDGYD1dpOwGzCwvzyVw7xLhZssLpY2JXV4/XEFQG5PdJ1KeUi/DzA1Z0gw9GYSRIbkJYKV
-        xsITEjc5dx1YteQcfsf8ypNsM+rlB5exbhxL4TFgbXQDzdgZg2BPZNkUjEkXr97W1Z34qA
-        O6b4R43N0vgjp6cgnRCCkFOclYih4sUb056fu14bi9M+GTrO0/S00hOk6I2GrM1BtU9R8m
-        ZFGElC/XayKkAleWsfEkAinNep8Wj5aADhCrUHNrA1C+rtmvXLORQiNzKDHPpJoQKAkUw0
-        PS6Rw0J2LGzbWcbVw7kWvfY89DpRMU4Ri5OexLFBeTgxW7nQgjq7bvCtNHgaew==
+        bh=ZiStZ62kTMetBTZYFuwPo3IHsjUKw8tDe9G2BGo6de4=;
+        b=NGPBHrjRJCsYDalSl661x0rNVBKmt5zM6GmbBmQCZHMGpsX08hOJmH/Oyiew+/akhqqkA+
+        PUpM/Pni/C3lom/qTRwZhxlUImoGgocB6zdTJBQqQWKyvkT35ZrMgfywxoG7eXEwu1EDOT
+        AwBK1YFKnPaOSGCJ7PyhbRnkI3edtd9EWJb3G/0gL/VJUe1It0fX/aj6nZsNiHc2+lEjeN
+        7fB5g5xkBkb5F4CtoJ/2rTxk4ykzuvS8iG7HZduGxUWT8v3J5bs23GPl0621+Z30vO0wEJ
+        KmMXojgQpXsVM9Qn0UORYbNaGNDnOepGg4271/78kcLqkIftOijxfBomN0Uxzg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653640562;
+        s=2020e; t=1653640563;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YV94WFEBhQ3Vi9i7oZUew/ph+yFRL0KG8U7E6tDma8w=;
-        b=yKK5iJS0jc5QheMItRJgDAX5LAeFA4MiiBWpbuMzZZkrqxLhIixRkToi7lZo4tC45ExvDr
-        +1YQlxLie8PcSDDQ==
-From:   "tip-bot2 for Andre Przywara" <tip-bot2@linutronix.de>
+        bh=ZiStZ62kTMetBTZYFuwPo3IHsjUKw8tDe9G2BGo6de4=;
+        b=g8ph4PbJVRnzgY3bC+0OTnrYrlMqKbhTRDslc8r9TDOq5AYWrmya1ICV3BpN4Ggb/Zp2fC
+        aauyisZiqArR97CQ==
+From:   "tip-bot2 for Samuel Holland" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/sp804: Avoid error on multiple
- instances
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
+Subject: [tip: timers/core] clocksource/drivers/riscv: Events are stopped
+ during CPU suspend
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Anup Patel <anup@brainfault.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220506162522.3675399-1-andre.przywara@arm.com>
-References: <20220506162522.3675399-1-andre.przywara@arm.com>
+In-Reply-To: <20220509012121.40031-1-samuel@sholland.org>
+References: <20220509012121.40031-1-samuel@sholland.org>
 MIME-Version: 1.0
-Message-ID: <165364056118.4207.17407436599286478766.tip-bot2@tip-bot2>
+Message-ID: <165364056209.4207.17309950751359309277.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,64 +69,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     a98399cbc1e05f7b977419f03905501d566cf54e
-Gitweb:        https://git.kernel.org/tip/a98399cbc1e05f7b977419f03905501d566cf54e
-Author:        Andre Przywara <andre.przywara@arm.com>
-AuthorDate:    Fri, 06 May 2022 17:25:22 +01:00
+Commit-ID:     232ccac1bd9b5bfe73895f527c08623e7fa0752d
+Gitweb:        https://git.kernel.org/tip/232ccac1bd9b5bfe73895f527c08623e7fa0752d
+Author:        Samuel Holland <samuel@sholland.org>
+AuthorDate:    Sun, 08 May 2022 20:21:21 -05:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Wed, 18 May 2022 11:08:52 +02:00
 
-clocksource/drivers/sp804: Avoid error on multiple instances
+clocksource/drivers/riscv: Events are stopped during CPU suspend
 
-When a machine sports more than one SP804 timer instance, we only bring
-up the first one, since multiple timers of the same kind are not useful
-to Linux. As this is intentional behaviour, we should not return an
-error message, as we do today:
-===============
-[    0.000800] Failed to initialize '/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@120000': -22
-===============
+Some implementations of the SBI time extension depend on hart-local
+state (for example, CSRs) that are lost or hardware that is powered
+down when a CPU is suspended. To be safe, the clockevents driver
+cannot assume that timer IRQs will be received during CPU suspend.
 
-Replace the -EINVAL return with a debug message and return 0 instead.
-
-Also we do not reach the init function anymore if the DT node is
-disabled (as this is now handled by OF_DECLARE), so remove the explicit
-check for that case.
-
-This fixes a long standing bogus error when booting ARM's fastmodels.
-
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-Link: https://lore.kernel.org/r/20220506162522.3675399-1-andre.przywara@arm.com
+Fixes: 62b019436814 ("clocksource: new RISC-V SBI timer driver")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Reviewed-by: Anup Patel <anup@brainfault.org>
+Link: https://lore.kernel.org/r/20220509012121.40031-1-samuel@sholland.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/timer-sp804.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/clocksource/timer-riscv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/timer-sp804.c b/drivers/clocksource/timer-sp804.c
-index 401d592..e6a87f4 100644
---- a/drivers/clocksource/timer-sp804.c
-+++ b/drivers/clocksource/timer-sp804.c
-@@ -259,6 +259,11 @@ static int __init sp804_of_init(struct device_node *np, struct sp804_timer *time
- 	struct clk *clk1, *clk2;
- 	const char *name = of_get_property(np, "compatible", NULL);
- 
-+	if (initialized) {
-+		pr_debug("%pOF: skipping further SP804 timer device\n", np);
-+		return 0;
-+	}
-+
- 	base = of_iomap(np, 0);
- 	if (!base)
- 		return -ENXIO;
-@@ -270,11 +275,6 @@ static int __init sp804_of_init(struct device_node *np, struct sp804_timer *time
- 	writel(0, timer1_base + timer->ctrl);
- 	writel(0, timer2_base + timer->ctrl);
- 
--	if (initialized || !of_device_is_available(np)) {
--		ret = -EINVAL;
--		goto err;
--	}
--
- 	clk1 = of_clk_get(np, 0);
- 	if (IS_ERR(clk1))
- 		clk1 = NULL;
+diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+index 1767f8b..593d5a9 100644
+--- a/drivers/clocksource/timer-riscv.c
++++ b/drivers/clocksource/timer-riscv.c
+@@ -34,7 +34,7 @@ static int riscv_clock_next_event(unsigned long delta,
+ static unsigned int riscv_clock_event_irq;
+ static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
+ 	.name			= "riscv_timer_clockevent",
+-	.features		= CLOCK_EVT_FEAT_ONESHOT,
++	.features		= CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
+ 	.rating			= 100,
+ 	.set_next_event		= riscv_clock_next_event,
+ };

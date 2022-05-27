@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97495365AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C30035365A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239749AbiE0QGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 12:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S1353960AbiE0QGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 12:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354408AbiE0QFo (ORCPT
+        with ESMTP id S1354471AbiE0QF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 12:05:44 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9645149158;
-        Fri, 27 May 2022 09:05:42 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id i74so5093274ioa.4;
-        Fri, 27 May 2022 09:05:42 -0700 (PDT)
+        Fri, 27 May 2022 12:05:58 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F10C149150;
+        Fri, 27 May 2022 09:05:57 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id y32so7586470lfa.6;
+        Fri, 27 May 2022 09:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=niIMDzYnGPpPHioLH5FDnM74wPJ4Xv2r6klFhTL9flU=;
-        b=ZGUQEW/meK1edqcD7auFoYHUD7PR6PMF0mSeIaw2fPQ4mv1gEk9d0Y0Q1Lc9MN8kw5
-         vVM0G1AA2gD8T+lA1ubEGan7u54CdGwGUh5eTkByF3fFg/feU9l7CLTKzt55RqHylkhQ
-         7h/29Y9XkjU0TCFCT2JfwH6XkZAhaNDlS1EZzyoRANz0coifKiOR/FQRyzL7NHGv67QP
-         FP8lhXZoSUyOJKnbH+abd7Sz6EjQHIDP3LW+OmPrkYs4KdGN4Emhawu++9fZ2KpqQrOJ
-         5sRmWdTKYxJmxEZ/uy+uOOhKGzVEguLzbOBaT2It8ZSnIKSEF5AB/j992lUkXPqZORkC
-         s5nA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P54iB7Z7qL7odfNZWCq1BQQ072lsjh56kKz4+mPnLGI=;
+        b=e01MKb3qjPMsQKlM76hc8OKrBxfkyHpLrfUCFP3gOzyaf7YxmUYUhIgsVl6QCQaG3F
+         pCSUZ67O0VEHUFWMYytcrkaj6OGPa4K39TGrd54W5EV1MLfPaAo8n3t4yE9sfokUeMjX
+         hOSiYhSUJ6gYpPNlXp1tzOCez/PeoYFVrHK5Zwk2Tey0msfPlICcsNEVYcgB+zR6KUd2
+         naaL5f2o5vUR9bx+uD9MEBWf1KeQrwtbvmIPFz77b13qjInpBgM1vZX06Bj8Wed2AbPu
+         CvQxeT/R5KKJA7XlVPk7aAP2mGTzDx1bwSKH4mzA5Nbz4eQ6MZ49T9N6AS5Dx7VuLwRo
+         AaeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=niIMDzYnGPpPHioLH5FDnM74wPJ4Xv2r6klFhTL9flU=;
-        b=gBFdRZSTn2R21wA52UM09m7m8lIMl2buQMNhE88fNxhtI5olAIaJUw+wbtp8TWZMD4
-         3cfgwK9YVdiA0oZb/m0whVR9v/tJo1CkJwOj7802mtgDYD9ZLBg476lB+nymCPYVg1q8
-         ER0sKdVAFi6kUEEtr3CMh0W8+FILWNQlCljnaN+vUiVVLMpXKWMCcIIvY1n/NppYdZbY
-         5o4ch5pxijIdCLumgqQeuMvmVfwPiairoJs1+J9UHxLahR+a3OHxZ6xpZEkzSSK8kabx
-         K1Th5SFBU0nTFRE8mnNf+qUthjIrgxvdOVHZ0cF8NknZLiSYO/n1IQsjRVgTDeodowyx
-         fFCA==
-X-Gm-Message-State: AOAM532OQ6Wp4mIxz/+FkqBFgECNRgBI7lqEIoyKMefYFZ3KUyXunkGH
-        42sczoEYJLx/5+DvnHyolLXJnOn113sTeH//fsq9yRgGgKSMaA==
-X-Google-Smtp-Source: ABdhPJy3GGJEmBsLauhy6BM+8kVyOSc1PYqod8TWTIy8zmR3xhLmWR/pe8pG7pkEgdxu6Vuikrylvtk2qfbvkPw8ZaU=
-X-Received: by 2002:a05:6638:14cb:b0:32e:cf97:4ac with SMTP id
- l11-20020a05663814cb00b0032ecf9704acmr13656444jak.80.1653667542084; Fri, 27
- May 2022 09:05:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P54iB7Z7qL7odfNZWCq1BQQ072lsjh56kKz4+mPnLGI=;
+        b=r8WIr47u4t53q3IWjpzCX+Xq3gf5IWrp2k9LHL4Zr6zMIgRG9U6CQBdOuLkAu3rKZ9
+         GEp+8YCvy7T7ZEI4v0345AhEGxUCAf2D6mGG6jSVDg0sJzXD20cLJBefjqF48kv2McCc
+         b5uT2xz/U703YUoIjBarTFRYi/9XAL2zv5iEZtzWO8ZQM0agQixyuhv8A/5EKzvJn5WQ
+         QlXjYNHNQwI1+1PMfEv7bpoEbxXLrglpBG4H8wZSxsHq9R9xpsKqOfmIjxgrigK6R5E3
+         qx/7quh00hWRo8QcuFHGRj7r6IZdIq2cP8fh6WkU0kctw4sBy+Y76FQhE05FHce1sLRl
+         5C2Q==
+X-Gm-Message-State: AOAM532wkyTvTXh3bGELTH1ze7Io+1odIT4sLmbnDe6cqgomHwYkON0H
+        bDI92Xt415A220n9Ro8/7h4=
+X-Google-Smtp-Source: ABdhPJzIlyYosjmZD7kVZsk+SOPTmpsmVh2NgrGhteHU9s3q9Jnpe5j+65nWBb7/lvfIH/1mm2jtfA==
+X-Received: by 2002:a05:6512:22c4:b0:477:cc26:c729 with SMTP id g4-20020a05651222c400b00477cc26c729mr28169734lfu.315.1653667555160;
+        Fri, 27 May 2022 09:05:55 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id v4-20020ac25584000000b00477cdd53190sm924918lfg.74.2022.05.27.09.05.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 09:05:54 -0700 (PDT)
+Date:   Fri, 27 May 2022 19:05:51 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 02/13] PCI: dwc: Don't use generic IO-ops for
+ DBI-space access
+Message-ID: <20220527160551.dh6fb5n6xbmtjpaa@mobilestation>
+References: <20220517125058.18488-1-Sergey.Semin@baikalelectronics.ru>
+ <20220517125058.18488-3-Sergey.Semin@baikalelectronics.ru>
+ <20220526212930.GN54904-robh@kernel.org>
 MIME-Version: 1.0
-References: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
- <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
- <CA+icZUW7y3JxQ3dCB8Wy83EjEyYj7z55nFUw-kZ+V4We22HZZg@mail.gmail.com> <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com>
-In-Reply-To: <CA+icZUVyp2CdX7m72GY-=DtK9J+64uHeWPr5-cvo8haQm_4hUw@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 27 May 2022 18:05:03 +0200
-Message-ID: <CA+icZUWiYYQbAav7VxVsT0ikqCeLckym08Au8oSeyYjvJHcNbg@mail.gmail.com>
-Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
- and OpenSSL v3.0.x
-To:     Kees Cook <keescook@chromium.org>
-Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: multipart/mixed; boundary="0000000000006c596d05e0007af6"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526212930.GN54904-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,261 +82,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000006c596d05e0007af6
-Content-Type: text/plain; charset="UTF-8"
+On Thu, May 26, 2022 at 04:29:30PM -0500, Rob Herring wrote:
+> On Tue, May 17, 2022 at 03:50:47PM +0300, Serge Semin wrote:
+> > Commit c2b0c098fbd1 ("PCI: dwc: Use generic config accessors") replaced
+> > the locally defined DW PCIe host controller config-space accessors with
+> > the generic methods pci_generic_config_read() and
+> > pci_generic_config_write(). It was intended that the corresponding
+> > bus-mapping callback returned a correct virtual address of the passed PCI
+> > config-space register. The problem of the proposed solution was that it
+> > didn't take into account the way the host config-space is accessed on the
+> > DW PCIe. Depending on the DW PCIe IP-core synthesize parameters different
+> > interfaces can be used to access the host and peripheral config/memory
+> > spaces. The former one can be accessed via the DBI interface, while the
+> > later ones is reached via the AHB/AXI application bus. In case if the DW
+> > PCIe controller is configured to have a dedicated DBI interface, the way
+> > it is mapped into the IO-memory turns to be platform-specific. For such
+> > setups the DWC PCIe driver provides a set of the callbacks
+> > dw_pcie_ops.{read_dbi,write_dbi} so the platforms glue-drivers would be
+> > able to take into account the DBI bus IO peculiarities. Since
+> > commit c2b0c098fbd1 ("PCI: dwc: Use generic config accessors") these
+> > methods haven't been utilized during the generic host initialization
+> > performed by the PCIe subsystem code.
+> > 
+> > I don't really know how come there have been no problems spotted for the
+> > Histb/Exynos/Kirin PCIe controllers so far, but in our case with dword
+> 
 
-On Fri, May 27, 2022 at 9:47 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Tue, May 24, 2022 at 9:13 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Thu, May 19, 2022 at 12:01 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > >
-> > > [ CC Kees and Salvatore ]
-> > >
-> > > The Debian kernel-team ships a fix (4 hours young):
-> > >
-> > > commit: 13e234d459c11946efba647c3daf15e03abb0d99
-> > > "sign-file: Convert API usage to support OpenSSL v3"
-> > >
-> > > *untested*
-> >
-> > @Kees:
-> >
-> > Any updates on the part of certs/extract-cert.c?
-> >
->
-> [ CC Tasmiya Nalatwad ]
->
-> There are several more reports on this issue (see [3]).
->
-> I did a quick test with Kees' patch from [2] and my attached patch
-> "extract-cert: Suppress warnings with OpenSSL v3 API".
->
-> Now, I see no more warnings due to OpenSSL v3 API:
->
-> $ egrep 'sign-file|extract-cert'
-> ../build-log_5.18.0-2-amd64-clang14-lto.txt
-> 176:  clang -Wp,-MMD,scripts/.sign-file.d -Wall -Wmissing-prototypes
-> -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
-> -Wdeclaration-after-statement         -o scripts/sign-file
-> scripts/sign-file.c   -lcrypto
-> 2053:  clang -Wp,-MMD,certs/.extract-cert.d -Wall -Wmissing-prototypes
-> -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11
-> -Wdeclaration-after-statement       -Wno-deprecated-declarations   -o
-> certs/extract-cert certs/extract-cert.c   -lcrypto
-> 2068:  certs/extract-cert "" certs/x509_certificate_list
-> 2069:  certs/extract-cert "" certs/signing_key.x509
->
-> config-5.18-dileks: LLVM-14 + CONFIG_LTO_CLANG_THIN=y
->
-> -Sedat-
->
-> [1] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
-> [2] https://salsa.debian.org/kernel-team/linux/-/commit/13e234d459c11946efba647c3daf15e03abb0d99
-> [3] https://marc.info/?l=linux-keyrings&m=165330697801670&w=2
->
+> Because they implement their own pci_ops for the root bus. You should 
+> too.
 
-[ CC James Bottomley ]
+Right. I should, but I would do that in a more generic way. Please see
+the next comment.
 
-[PATCH] extract-cert: Force build against OpenSSL API Compat v1.1.x
+> 
+> Who is 'our case'? 
+> 
+> > aligned IO requirement the generic config-space accessors can't be
+> > utilized for the host config-space. Thus in order to make sure the host
+> > config-space is properly accessed via the DBI bus let's get back the
+> > dw_pcie_rd_own_conf() and dw_pcie_wr_own_conf() methods. They are going to
+> > be just wrappers around the already defined
+> > dw_pcie_read_dbi()/dw_pcie_write_dbi() functions with proper arguments
+> > conversion. These methods perform the platform-specific config-space IO if
+> > the DBI accessors are specified, otherwise they call normal MMIO
+> > operations.
+> 
 
-...works as well.
+> The idea was for DWC to not define its own way to have different 
+> read/write for root bus vs. child bus as many PCI host bridges need the 
+> same thing. So the host bridge struct now has 2 pci_ops pointers. And 
+> the mess of function pointer indirection is gone.
 
--Sedat-
+Thanks for clarification. I should have investigated the problem more
+thoroughly. Now I see what was the reason of that change.  It was
+indeed wrong to blame the commit c2b0c098fbd1 ("PCI: dwc: Use generic
+config accessors") that something was done incorrectly. After a more
+thorough commit inspection I realized that you just replaced the
+dw_pcie_rd_own_conf() and dw_pcie_wr_own_conf() with the generic
+pci_generic_config_read and pci_generic_config_write() as they had
+been equivalent anyway.  I thought they didn't have the same semantic
+by confusing the dw_pcie_{read,write}() and dw_pcie_{read,write}_dbi()
+methods usage (see the _dbi suffix) in the original own PCI
+config-space accessors. So to speak I'll need to drop the Fixes tag
+with your commit hash from the patch.
 
-> > >
-> > > On Thu, May 19, 2022 at 11:55 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > here, I am on Debian/unstable AMD64.
-> > > >
-> > > > Recently (or still) there is/was a transition to OpenSSL see below link.
-> > > >
-> > > > The warnings look like:
-> > > >
-> > > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
-> > > > is deprecated [-Wdeprecated-declarations]
-> > > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
-> > > > [-Wdeprecated-declarations]
-> > > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-> > > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 395:certs/extract-cert.c:46:14: warning: 'ERR_get_error_line' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 407:certs/extract-cert.c:59:9: warning: 'ERR_get_error_line' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 420:certs/extract-cert.c:124:3: warning: 'ENGINE_load_builtin_engines'
-> > > > is deprecated [-Wdeprecated-declarations]
-> > > > 432:certs/extract-cert.c:126:7: warning: 'ENGINE_by_id' is deprecated
-> > > > [-Wdeprecated-declarations]
-> > > > 444:certs/extract-cert.c:128:7: warning: 'ENGINE_init' is deprecated
-> > > > [-Wdeprecated-declarations]
-> > > > 456:certs/extract-cert.c:133:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 468:certs/extract-cert.c:134:3: warning: 'ENGINE_ctrl_cmd' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > >
-> > > > More detailed output:
-> > > >
-> > > > 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 190-        while ((e = ERR_get_error_line(&file, &line))) {
-> > > > 191-                    ^
-> > > > 192-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
-> > > > been explicitly marked deprecated here
-> > > > 193-OSSL_DEPRECATEDIN_3_0
-> > > > 194-^
-> > > > 195-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > 196-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > 197-                                                ^
-> > > > 198-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > 'OSSL_DEPRECATED'
-> > > > 199-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > 200-                                                   ^
-> > > > 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 202-        while (ERR_get_error_line(&file, &line)) {}
-> > > > 203-               ^
-> > > > 204-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
-> > > > been explicitly marked deprecated here
-> > > > 205-OSSL_DEPRECATEDIN_3_0
-> > > > 206-^
-> > > > 207-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > 208-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > 209-                                                ^
-> > > > 210-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > 'OSSL_DEPRECATED'
-> > > > 211-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > 212-                                                   ^
-> > > > 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
-> > > > is deprecated [-Wdeprecated-declarations]
-> > > > 214-                ENGINE_load_builtin_engines();
-> > > > 215-                ^
-> > > > 216-/usr/include/openssl/engine.h:358:1: note:
-> > > > 'ENGINE_load_builtin_engines' has been explicitly marked deprecated
-> > > > here
-> > > > 217-OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
-> > > > 218-^
-> > > > 219-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > 220-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > 221-                                                ^
-> > > > 222-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > 'OSSL_DEPRECATED'
-> > > > 223-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > 224-                                                   ^
-> > > > 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
-> > > > [-Wdeprecated-declarations]
-> > > > 226-                e = ENGINE_by_id("pkcs11");
-> > > > 227-                    ^
-> > > > 228-/usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been
-> > > > explicitly marked deprecated here
-> > > > 229-OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
-> > > > 230-^
-> > > > 231-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > 232-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > 233-                                                ^
-> > > > 234-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > 'OSSL_DEPRECATED'
-> > > > 235-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > 236-                                                   ^
-> > > > 237-scripts/sign-file.c:   ld.lld -r -o
-> > > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/objtool-in.o
-> > > > /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86
-> > > > /special.o /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/decode.o
-> > > > 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
-> > > > 239-                if (ENGINE_init(e))
-> > > > 240-                    ^
-> > > > 241-/usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been
-> > > > explicitly marked deprecated here
-> > > > 242-OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
-> > > > 243-^
-> > > > 244-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > 245-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > 246-                                                ^
-> > > > 247-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > 'OSSL_DEPRECATED'
-> > > > 248-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > 249-                                                   ^
-> > > > 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 251-                        ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
-> > > > 252-                             ^
-> > > > 253-/usr/include/openssl/engine.h:478:1: note:
-> > > > 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
-> > > > 254-OSSL_DEPRECATEDIN_3_0
-> > > > 255-^
-> > > > 256-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > 257-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > 258-                                                ^
-> > > > 259-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > 'OSSL_DEPRECATED'
-> > > > 260-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > 261-                                                   ^
-> > > > 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
-> > > > deprecated [-Wdeprecated-declarations]
-> > > > 263-                private_key = ENGINE_load_private_key(e, private_key_name,
-> > > > 264-                              ^
-> > > > 265-/usr/include/openssl/engine.h:637:1: note:
-> > > > 'ENGINE_load_private_key' has been explicitly marked deprecated here
-> > > > 266-OSSL_DEPRECATEDIN_3_0
-> > > > 267-^
-> > > > 268-/usr/include/openssl/macros.h:182:49: note: expanded from macro
-> > > > 'OSSL_DEPRECATEDIN_3_0'
-> > > > 269-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
-> > > > 270-                                                ^
-> > > > 271-/usr/include/openssl/macros.h:62:52: note: expanded from macro
-> > > > 'OSSL_DEPRECATED'
-> > > > 272-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
-> > > > 273-
-> > > >
-> > > > Relevant OpenSSL v3.0.3 header files are attached.
-> > > > My kernel-config, too.
-> > > >
-> > > > If you need further information, please let me know.
-> > > >
-> > > > Regards,
-> > > > -Sedat-
-> > > >
-> > > > [1] https://release.debian.org/transitions/html/auto-openssl.html
+Getting back to the own-bus accessors. DW PCIe RP/EP own-config space
+is accessed over the DBI-bus. If the particular platform is designed
+in a way so the DBI MMIO space access has some non-specific
+peculiarities then that platform implements its own read_dbi/write_dbi
+accessors. In case if these callbacks are defined, the driver must
+use them for all DBI MMIO accesses including for the ones performed
+from the subsystem core in the framework of the host own config-space
+setups. As I mentioned in the patch log currently the only platforms
+with such requirement happen to be Histb, Exynos and Kirin DW PCIe. As
+such we can freely get back the generic dw_pcie_rd_own_conf() and
+dw_pcie_wr_own_conf() methods but use the dw_pcie_{read,write}_dbi()
+methods in there in the same way as it is done in the Histb, Exynos
+and Kirin DW PCIe drivers (see their own PCI config-space accessors
+match). Due to that we can drop the pci_ops redefinition from these
+platforms and just use the own-config space accessors for all such
+platforms as it's suggested in this patch. So this modification can be
+re-qualified to the cleanup one then:
+1) Create the generic own config-space accessors (more portable as
+the DBI-bus access specifics must be always taken into account) as it
+is suggested in this patch already.
+2) Drop the Kirin, Exynos, Histb own config-space re-definition.
+3) Drop the dw_pcie_read_dbi() and dw_pcie_write_dbi() methods exporting.
 
---0000000000006c596d05e0007af6
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-extract-cert-Force-build-against-OpenSSL-API-Compat-.patch"
-Content-Disposition: attachment; 
-	filename="0001-extract-cert-Force-build-against-OpenSSL-API-Compat-.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l3omxg0x0>
-X-Attachment-Id: f_l3omxg0x0
+What do you think?
 
-RnJvbSA2MTdlMGNlMDExN2JmMjk3YmU4Y2E0ZWUxMzJjZGZmMDNkYzM0NDQ4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTZWRhdCBEaWxlayA8c2VkYXQuZGlsZWtAZ21haWwuY29tPgpE
-YXRlOiBGcmksIDI3IE1heSAyMDIyIDE3OjQzOjI5ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gZXh0
-cmFjdC1jZXJ0OiBGb3JjZSBidWlsZCBhZ2FpbnN0IE9wZW5TU0wgQVBJIENvbXBhdCB2MS4xLngK
-ClN1cHByZXNzIC1XZGVwcmVjYXRlZC1kZWNsYXJhdGlvbnMgd2FybmluZ3Mgd2hlbiBidWlsZGlu
-ZyBhZ2FpbnN0IE9wZW5TU0wgdjMuMC54LgoKVGVzdGVkIHdpdGggTExWTSB2ZXJzaW9uIDE0LjAu
-NCBhbmQgT3BlblNTTCB2My4wLjMgb24gRGViaWFuL3Vuc3RhYmxlIEFNRDY0LgoKU3VnZ2VzdGVk
-LWJ5OiBKYW1lcyBCb3R0b21sZXkgPEphbWVzLkJvdHRvbWxleUBIYW5zZW5QYXJ0bmVyc2hpcC5j
-b20+ClNpZ25lZC1vZmYtYnk6IFNlZGF0IERpbGVrIDxzZWRhdC5kaWxla0BnbWFpbC5jb20+Ci0t
-LQogY2VydHMvTWFrZWZpbGUgfCAxICsKIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQoK
-ZGlmZiAtLWdpdCBhL2NlcnRzL01ha2VmaWxlIGIvY2VydHMvTWFrZWZpbGUKaW5kZXggZDg0NDNj
-ZmIxYzQwLi5iMTRiYmQwNjc0YzQgMTAwNjQ0Ci0tLSBhL2NlcnRzL01ha2VmaWxlCisrKyBiL2Nl
-cnRzL01ha2VmaWxlCkBAIC03NSw0ICs3NSw1IEBAIHRhcmdldHMgKz0geDUwOV9yZXZvY2F0aW9u
-X2xpc3QKIGhvc3Rwcm9ncyA6PSBleHRyYWN0LWNlcnQKIAogSE9TVENGTEFHU19leHRyYWN0LWNl
-cnQubyA9ICQoc2hlbGwgcGtnLWNvbmZpZyAtLWNmbGFncyBsaWJjcnlwdG8gMj4gL2Rldi9udWxs
-KQorSE9TVENGTEFHU19leHRyYWN0LWNlcnQubyArPSAtRE9QRU5TU0xfQVBJX0NPTVBBVD0weDEw
-MTAwMDAwTAogSE9TVExETElCU19leHRyYWN0LWNlcnQgPSAkKHNoZWxsIHBrZy1jb25maWcgLS1s
-aWJzIGxpYmNyeXB0byAyPiAvZGV2L251bGwgfHwgZWNobyAtbGNyeXB0bykKLS0gCjIuMzYuMQoK
---0000000000006c596d05e0007af6--
+-Sergey
+
+> 
+> Rob

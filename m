@@ -2,130 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A704B535FE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2513F535FF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351785AbiE0Lnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
+        id S1351795AbiE0Lor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351473AbiE0LmI (ORCPT
+        with ESMTP id S1351126AbiE0Ln6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:42:08 -0400
-Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816B213B8D3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:40:24 -0700 (PDT)
-Received: by mail-oo1-xc41.google.com with SMTP id f5-20020a4aa685000000b0040e7e819183so762322oom.3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=DsUpTMVy3AnG06ab2HPPYE6VPm25Tedt2mleq6KKBcw=;
-        b=UML1lhyckYSy+PFMFGfVuBidpPGB8wStQQlVuZKq6jBsCQ0qcnjGcUnePpAfsoMq/c
-         74P7nwGN/LU8JYydeuv/PRSvDTxyLZ+Ml5oyx3UiLXfRshxhrOViTAGsEae66TfNk+MU
-         ra6GSyrkA8aRyruoVu8mqT0LA3ikybaRzmSLjpml9OFRT5yq6cyagrB/dI4baHwWRHB0
-         bqWe+0larSW9biRBxc0K5MI9hR1vMzZuNRs7YRM3zayvT7kq5MoZH9JHsZa43ueSMY9z
-         Tsfn+SHZgmz/BV8p5+xvw+OKh1MjGx61OFmAQzTfq0eRqTPog4hHxkS+1C/xWpyclekO
-         7XEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=DsUpTMVy3AnG06ab2HPPYE6VPm25Tedt2mleq6KKBcw=;
-        b=pg+qXkDabjjA4Lj2A4qPuWz1LVmnY8i3aBTuSbtVbiEq3rlnR5mBT/gtpArnguWs7O
-         Uunhqh+ENqR/M8e3k1pgV9bfibI+wNDGYNC6OQOdmmpKmxdehy7zPpcuKXy8pjrRPvgt
-         JCon49DXfN0vBEmAq5JCb1Gbw2ey8jekqXmuLZc5Bb8JjLZe97g18WfAUXQhIpAU/MFr
-         B2cY4u5MgH+54AEVOhNx8+zJ8pqSfWZ/rm4ANvFvR0uUMBWUlt09gRHK+h3Ji1y1M7Go
-         oL1Ik0kr5eYQnb2147lcrK62rxzsHDFr4SY37c5DyfZqSSoiS9Uz1hi5B2ymGeWif8Ci
-         Ud7Q==
-X-Gm-Message-State: AOAM531MN8CQUvEbvScnM6sVqPQMX4fAP5g73O9JCpv48FgfGrmU+dfm
-        LO6T6elIs1JZp/gveRkIYEQOKbexOJp/AvAqDGk=
-X-Google-Smtp-Source: ABdhPJymNF1QQ9ebzYsx5GLSeAx+eYmLguulm09jLewWXfRzMChGYpdzcTF4O3Wjz77wQMilzoCghly7eB1li5EJKCw=
-X-Received: by 2002:a4a:4b06:0:b0:35e:e790:1f1e with SMTP id
- q6-20020a4a4b06000000b0035ee7901f1emr16760060ooa.3.1653651623362; Fri, 27 May
- 2022 04:40:23 -0700 (PDT)
+        Fri, 27 May 2022 07:43:58 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271DA65D13
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 04:40:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653651654; x=1685187654;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RGiHMYrBTbn5qGGGzyVkG1d+wPvM4hkxm05f/PDF7A8=;
+  b=DGakbBbF4Q5UWNzh4qFlZeEjMtv229ZeQkNyvLFqDUxSnRcuEC+Vl6Qg
+   s3v0eQ8HjFxqVdZ2rdlXtyFy9QVK2YDZ14H19ZDxn1yKDa29etE/MNX2i
+   sP64OcWVovMqUsai1U3PNt7UNNfZzMW+qpNQPu4I7PYNACXwd6/rWhzJo
+   oGGvSRcPJnPlkehNuH8dPfngzyzdg1NMs+X5WOg7uLMqSgZdfMqOARw+Q
+   yLvZ+ozqQ3szersebesRhSQX4iCTxwViOm99Q/kMTtNzEkkob9erKLH10
+   ilplRIjg5FGR8Z6oxsHHwx83JHUETVwmVaWZGLLDKN/3/tLmXR1+mHh5s
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10359"; a="337502340"
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="337502340"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 04:40:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,255,1647327600"; 
+   d="scan'208";a="528076236"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 27 May 2022 04:40:51 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuYKo-0004hq-SJ;
+        Fri, 27 May 2022 11:40:50 +0000
+Date:   Fri, 27 May 2022 19:40:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>
+Subject: [intel-tdx:kvm-upstream-workaround 333/429]
+ include/linux/memfile_notifier.h:93:13: error: 'memfile_unregister_notifier'
+ defined but not used
+Message-ID: <202205271946.aUffZ0Xh-lkp@intel.com>
 MIME-Version: 1.0
-Sender: mrslila88haber@gmail.com
-Received: by 2002:a4a:d541:0:0:0:0:0 with HTTP; Fri, 27 May 2022 04:40:22
- -0700 (PDT)
-From:   Mrs Lila Haber <mrslilahabe2016@gmail.com>
-Date:   Fri, 27 May 2022 11:40:22 +0000
-X-Google-Sender-Auth: eG7CN5jIv5U9Li9AO-0n2jjpXN0
-Message-ID: <CAODWenY4Sf0Y96tSK5cJE6ye59kjBmzB+P9bKTLjYw1uMa-Sxg@mail.gmail.com>
-Subject: Dear Child of God
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:c41 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6417]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrslilahabe2016[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.3 HK_SCAM No description available.
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  1.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Child of God,
+tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
+head:   49c277ae966b45577acad5c6d98acba3d27d63af
+commit: a46fd36366f3a53f0ea7385cdddef7d5e373edd0 [333/429] mm/shmem: Support memfile_notifier
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220527/202205271946.aUffZ0Xh-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/a46fd36366f3a53f0ea7385cdddef7d5e373edd0
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx kvm-upstream-workaround
+        git checkout a46fd36366f3a53f0ea7385cdddef7d5e373edd0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
-CHRIST the giver of every good thing. Good day and compliments of the
-seasons, i know this letter will definitely come to you as a huge
-surprise, but I implore you to take the time to go through it
-carefully as the decision you make will go off a long way to determine
-my future and continued existence. I am Mrs Lila Haber aging widow of
-57 years old suffering from long time illness.I have some funds I
-inherited from my late husband, the sum of (7.2Million Dollars) and I
-needed a very honest and God fearing who can withdraw this money then
-use the funds for Charity works. I WISH TO GIVE THIS FUNDS TO YOU FOR
-CHARITY WORKS. I found your email address from the internet after
-honest prayers to the LORD to bring me a helper and i decided to
-contact you if you may be willing and interested to handle these trust
-funds in good faith before anything happens to me.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I accept this decision because I do not have any child who will
-inherit this money after I die. I want your urgent reply to me so that
-I will give you the deposit receipt which the SECURITY COMPANY issued
-to me as next of kin for immediate transfer of the money to your
-account in your country, to start the good work of God, I want you to
-use the 25/percent of the total amount to help yourself in doing the
-project. I am desperately in keen need of assistance and I have
-summoned up courage to contact you for this task, you must not fail me
-and the millions of the poor people in our todays WORLD. This is no
-stolen money and there are no dangers involved,100% RISK FREE with
-full legal proof. Please if you would be able to use the funds for the
-Charity works kindly let me know immediately.I will appreciate your
-utmost confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
+All errors (new ones prefixed by >>):
 
-Please kindly respond quickly for further details.
+   In file included from include/linux/shmem_fs.h:12,
+                    from drivers/gpu/drm/i915/gt/shmem_utils.c:9:
+   include/linux/memfile_notifier.h:87:57: error: unknown type name 'flags'
+      87 | static int memfile_register_notifier(struct file *file, flags,
+         |                                                         ^~~~~
+   In file included from include/linux/shmem_fs.h:12,
+                    from drivers/gpu/drm/i915/gt/shmem_utils.c:9:
+>> include/linux/memfile_notifier.h:93:13: error: 'memfile_unregister_notifier' defined but not used [-Werror=unused-function]
+      93 | static void memfile_unregister_notifier(struct memfile_notifier *notifier)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/memfile_notifier.h:82:13: error: 'memfile_notifier_invalidate' defined but not used [-Werror=unused-function]
+      82 | static void memfile_notifier_invalidate(struct memfile_node *node,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/memfile_notifier.h:77:13: error: 'memfile_notifier_populate' defined but not used [-Werror=unused-function]
+      77 | static void memfile_notifier_populate(struct memfile_node *node,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/memfile_notifier.h:72:12: error: 'memfile_node_set_flags' defined but not used [-Werror=unused-function]
+      72 | static int memfile_node_set_flags(struct file *file, unsigned long flags)
+         |            ^~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/memfile_notifier.h:68:13: error: 'memfile_register_backing_store' defined but not used [-Werror=unused-function]
+      68 | static void memfile_register_backing_store(struct memfile_backing_store *bs)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
-Warmest Regards,
-Mrs Lila Haber
+
+vim +/memfile_unregister_notifier +93 include/linux/memfile_notifier.h
+
+07b4263e3099f77 Chao Peng 2022-01-12  66  
+07b4263e3099f77 Chao Peng 2022-01-12  67  #else /* !CONFIG_MEMFILE_NOTIFIER */
+07b4263e3099f77 Chao Peng 2022-01-12 @68  static void memfile_register_backing_store(struct memfile_backing_store *bs)
+07b4263e3099f77 Chao Peng 2022-01-12  69  {
+07b4263e3099f77 Chao Peng 2022-01-12  70  }
+07b4263e3099f77 Chao Peng 2022-01-12  71  
+07b4263e3099f77 Chao Peng 2022-01-12 @72  static int memfile_node_set_flags(struct file *file, unsigned long flags)
+07b4263e3099f77 Chao Peng 2022-01-12  73  {
+07b4263e3099f77 Chao Peng 2022-01-12  74  	return -EOPNOTSUPP;
+07b4263e3099f77 Chao Peng 2022-01-12  75  }
+07b4263e3099f77 Chao Peng 2022-01-12  76  
+07b4263e3099f77 Chao Peng 2022-01-12 @77  static void memfile_notifier_populate(struct memfile_node *node,
+07b4263e3099f77 Chao Peng 2022-01-12  78  				      pgoff_t start, pgoff_t end)
+07b4263e3099f77 Chao Peng 2022-01-12  79  {
+07b4263e3099f77 Chao Peng 2022-01-12  80  }
+07b4263e3099f77 Chao Peng 2022-01-12  81  
+07b4263e3099f77 Chao Peng 2022-01-12 @82  static void memfile_notifier_invalidate(struct memfile_node *node,
+07b4263e3099f77 Chao Peng 2022-01-12  83  					pgoff_t start, pgoff_t end)
+07b4263e3099f77 Chao Peng 2022-01-12  84  {
+07b4263e3099f77 Chao Peng 2022-01-12  85  }
+07b4263e3099f77 Chao Peng 2022-01-12  86  
+07b4263e3099f77 Chao Peng 2022-01-12  87  static int memfile_register_notifier(struct file *file, flags,
+07b4263e3099f77 Chao Peng 2022-01-12  88  				     struct memfile_notifier *notifier)
+07b4263e3099f77 Chao Peng 2022-01-12  89  {
+07b4263e3099f77 Chao Peng 2022-01-12  90  	return -EOPNOTSUPP;
+07b4263e3099f77 Chao Peng 2022-01-12  91  }
+07b4263e3099f77 Chao Peng 2022-01-12  92  
+07b4263e3099f77 Chao Peng 2022-01-12 @93  static void memfile_unregister_notifier(struct memfile_notifier *notifier)
+07b4263e3099f77 Chao Peng 2022-01-12  94  {
+07b4263e3099f77 Chao Peng 2022-01-12  95  }
+07b4263e3099f77 Chao Peng 2022-01-12  96  
+
+:::::: The code at line 93 was first introduced by commit
+:::::: 07b4263e3099f776c35284155851f0e202b12a44 mm: Introduce memfile_notifier
+
+:::::: TO: Chao Peng <chao.p.peng@linux.intel.com>
+:::::: CC: Isaku Yamahata <isaku.yamahata@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

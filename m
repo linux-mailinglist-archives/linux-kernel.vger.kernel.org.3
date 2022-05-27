@@ -2,122 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD7A535812
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 05:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5A0535814
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 05:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238931AbiE0Dgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 26 May 2022 23:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S238982AbiE0Dj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 26 May 2022 23:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbiE0DgW (ORCPT
+        with ESMTP id S229768AbiE0DjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 26 May 2022 23:36:22 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2479313;
-        Thu, 26 May 2022 20:36:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VEVWECf_1653622574;
-Received: from 30.32.82.202(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VEVWECf_1653622574)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 27 May 2022 11:36:16 +0800
-Message-ID: <ac245d62-2295-8cf6-6808-4a6eb6bdbd21@linux.alibaba.com>
-Date:   Fri, 27 May 2022 11:36:43 +0800
+        Thu, 26 May 2022 23:39:22 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6316557
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 20:39:20 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id b13-20020a92c56d000000b002d125a2ab95so2321712ilj.13
+        for <linux-kernel@vger.kernel.org>; Thu, 26 May 2022 20:39:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=CbgmDYSLsmbeCmm9RIC3R+sTBJbYG3oF2mSfvudPXkE=;
+        b=d1NL74GixMAZ3TW4j9nganYHgkxtrzeLUCAoY552lltfwuobEvuNTzkSq+4Bh1cNGo
+         LHTWcZt2yqjeh/xQerc5lC9BQHfLzDDEU5b0boGj72KWhCNPQArGh/bAQARlioh+fAJS
+         mTdrt8CSrXjv9IPCzLvGjpA9Ya+FOQc4wp5Xmm3dGGPOSuypLDvy1jDPmHkDTFhvwqDZ
+         9M0HgDOgd23ATVoXsrVldX9/33Kv1BNakyAkZ43ZNaynqYxre6fQUzpTWb9LQfLMhQJX
+         z3c9t4nJo5GAfCjrXMVYpZgepPKsPTN7SgdlO9k/El/uA9eJICTxjDQM7mIBUDwRkTvV
+         p24w==
+X-Gm-Message-State: AOAM532FQkuKoTvtQFIsWUw8T59VHhvMFPkWf/JL7lNyLCJ77op8MOyV
+        CfdixFDOd1X9ovr+xx5wysCwR1JVmv4fSQWs/d5zqiKt9ilD
+X-Google-Smtp-Source: ABdhPJzllylfqbbGCo/rixmvjSkzNOiB6i7ltnRRWPdVDCjGUbR47zRA75sLjX+/qxGBprHzlT+rW/gNO07B2+HJU7f868kUklL2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: mm: change huge_ptep_clear_flush() to return the original pte
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <CA+G9fYtDBZaBGkEp5tRMM5C1xHEKeyyNK1S4WoKvrOoFxGm4KQ@mail.gmail.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <CA+G9fYtDBZaBGkEp5tRMM5C1xHEKeyyNK1S4WoKvrOoFxGm4KQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1646:b0:2d3:789a:58a with SMTP id
+ v6-20020a056e02164600b002d3789a058amr352292ilu.197.1653622760339; Thu, 26 May
+ 2022 20:39:20 -0700 (PDT)
+Date:   Thu, 26 May 2022 20:39:20 -0700
+In-Reply-To: <00000000000085bef105dd398c3d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000039009305dff60da4@google.com>
+Subject: Re: [syzbot] WARNING in __floppy_read_block_0
+From:   syzbot <syzbot+bac6723617710898abd3@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
+HEAD commit:    babf0bb978e3 Merge tag 'xfs-5.19-for-linus' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1256f1d3f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fb7a468cb4ea251
+dashboard link: https://syzkaller.appspot.com/bug?extid=bac6723617710898abd3
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1107de15f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1104a36df00000
 
-On 5/27/2022 10:56 AM, Naresh Kamboju wrote:
-> Following build failures noticed on arm64 on Linux mainline tree.
-> 
-> Which was detected and discussed at this email thread.
-> https://lore.kernel.org/all/20220512193855.4f6ce32f@canb.auug.org.au/T/
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Build errors:
-> arch/arm64/mm/hugetlbpage.c: In function 'huge_ptep_clear_flush':
-> arch/arm64/mm/hugetlbpage.c:515:16: error: implicit declaration of
-> function 'get_clear_flush'; did you mean 'ptep_clear_flush'?
-> [-Werror=implicit-function-declaration]
->    515 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->        |                ^~~~~~~~~~~~~~~
->        |                ptep_clear_flush
-> arch/arm64/mm/hugetlbpage.c:515:16: error: incompatible types when
-> returning type 'int' but 'pte_t' was expected
->    515 |         return get_clear_flush(vma->vm_mm, addr, ptep, pgsize, ncontig);
->        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> arch/arm64/mm/hugetlbpage.c:516:1: error: control reaches end of
-> non-void function [-Werror=return-type]
->    516 | }
->        | ^
-> cc1: some warnings being treated as errors
-> 
-> metadata:
->      git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
->      git_describe: v5.18-9901-g7f50d4dfe816
->      git_sha: 7f50d4dfe816dd916a7cbf39039674825c2b388b
->      git_short_log: 7f50d4dfe816 (\Merge tag 'for-linus' of
-> https://github.com/openrisc/linux\)
->      target_arch: arm64
->      toolchain: gcc-11
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bac6723617710898abd3@syzkaller.appspotmail.com
 
-That is caused by commit:
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3673 at drivers/block/floppy.c:999 schedule_bh drivers/block/floppy.c:999 [inline]
+WARNING: CPU: 1 PID: 3673 at drivers/block/floppy.c:999 process_fd_request drivers/block/floppy.c:2847 [inline]
+WARNING: CPU: 1 PID: 3673 at drivers/block/floppy.c:999 __floppy_read_block_0.isra.0+0x292/0x330 drivers/block/floppy.c:4160
+Modules linked in:
+CPU: 1 PID: 3673 Comm: syz-executor234 Not tainted 5.18.0-syzkaller-07857-gbabf0bb978e3 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:schedule_bh drivers/block/floppy.c:999 [inline]
+RIP: 0010:process_fd_request drivers/block/floppy.c:2847 [inline]
+RIP: 0010:__floppy_read_block_0.isra.0+0x292/0x330 drivers/block/floppy.c:4160
+Code: 84 24 b8 01 00 00 65 48 2b 04 25 28 00 00 00 0f 85 a0 00 00 00 48 81 c4 c0 01 00 00 5b 5d 41 5c 41 5d 41 5e c3 e8 9e 76 e1 fc <0f> 0b e9 5a ff ff ff e8 62 bc 2d fd e9 7c fe ff ff e8 88 76 e1 fc
+RSP: 0018:ffffc90002b3f6a0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 1ffff92000567ed4 RCX: 0000000000000000
+RDX: ffff888015c3bb00 RSI: ffffffff849851d2 RDI: 0000000000000003
+RBP: ffffea000068d3c0 R08: 0000000000000000 R09: ffffffff8c8e8b47
+R10: ffffffff8498512a R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000001 R14: dffffc0000000000 R15: 0000000000000001
+FS:  0000000000000000(0000) GS:ffff88802cb00000(0063) knlGS:00000000570f32c0
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00000000f7f88ca8 CR3: 0000000018139000 CR4: 0000000000150ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ floppy_revalidate.isra.0+0x801/0xae0 drivers/block/floppy.c:4206
+ floppy_open+0xac5/0xd70 drivers/block/floppy.c:4058
+ blkdev_get_whole+0x99/0x2d0 block/bdev.c:673
+ blkdev_get_by_dev.part.0+0x5ec/0xb90 block/bdev.c:823
+ blkdev_get_by_dev+0x6b/0x80 block/bdev.c:857
+ blkdev_open+0x13c/0x2c0 block/fops.c:481
+ do_dentry_open+0x4a1/0x11e0 fs/open.c:824
+ do_open fs/namei.c:3477 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3610
+ do_filp_open+0x1aa/0x400 fs/namei.c:3637
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1213
+ do_sys_open fs/open.c:1229 [inline]
+ __do_compat_sys_openat fs/open.c:1289 [inline]
+ __se_compat_sys_openat fs/open.c:1287 [inline]
+ __ia32_compat_sys_openat+0x13f/0x1f0 fs/open.c:1287
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x53/0x62
+RIP: 0023:0xf7f15549
+Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000ffb136c0 EFLAGS: 00000246 ORIG_RAX: 0000000000000127
+RAX: ffffffffffffffda RBX: 00000000ffffff9c RCX: 00000000ffb13710
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000f7fbe000
+RBP: 0000000066666667 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	03 74 c0 01          	add    0x1(%rax,%rax,8),%esi
+   4:	10 05 03 74 b8 01    	adc    %al,0x1b87403(%rip)        # 0x1b8740d
+   a:	10 06                	adc    %al,(%rsi)
+   c:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+  10:	10 07                	adc    %al,(%rdi)
+  12:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+  16:	10 08                	adc    %cl,(%rax)
+  18:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1c:	00 00                	add    %al,(%rax)
+  1e:	00 00                	add    %al,(%rax)
+  20:	00 51 52             	add    %dl,0x52(%rcx)
+  23:	55                   	push   %rbp
+  24:	89 e5                	mov    %esp,%ebp
+  26:	0f 34                	sysenter
+  28:	cd 80                	int    $0x80
+* 2a:	5d                   	pop    %rbp <-- trapping instruction
+  2b:	5a                   	pop    %rdx
+  2c:	59                   	pop    %rcx
+  2d:	c3                   	retq
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	90                   	nop
+  31:	90                   	nop
+  32:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  39:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
 
-00df1f1a133b ("mm: change huge_ptep_clear_flush() to return the original 
-pte")
-
-interacting with commit:
-
-fb396bb459c1 ("arm64/hugetlb: Drop TLB flush from get_clear_flush()")
-
-And Catalin has fixed the conflict with below changes [1], not sure why 
-it is not merged.
-
-Linus, should I send a proper patch to fix this conflict for you?
-
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index 30f5b76aabe9..9a999550df8e 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -485,12 +485,15 @@ pte_t huge_ptep_clear_flush(struct vm_area_struct 
-*vma,
-  {
-  	size_t pgsize;
-  	int ncontig;
-+	pte_t orig_pte;
-
-  	if (!pte_cont(READ_ONCE(*ptep)))
-  		return ptep_clear_flush(vma, addr, ptep);
-
-  	ncontig = find_num_contig(vma->vm_mm, addr, ptep, &pgsize);
--	return get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-+	orig_pte = get_clear_contig(vma->vm_mm, addr, ptep, pgsize, ncontig);
-+	flush_tlb_range(vma, addr, addr + pgsize * ncontig);
-+	return orig_pte;
-  }
-
-[1] https://lore.kernel.org/all/YnzqffV7STYS24Yn@arm.com/

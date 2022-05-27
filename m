@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F63A535F7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65333535F67
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 13:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351377AbiE0LiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 07:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S1351448AbiE0LiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 07:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351395AbiE0Lho (ORCPT
+        with ESMTP id S1351400AbiE0LiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 07:37:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2027FC4DF;
-        Fri, 27 May 2022 04:37:41 -0700 (PDT)
+        Fri, 27 May 2022 07:38:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C235C745;
+        Fri, 27 May 2022 04:37:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0D88ECE250E;
-        Fri, 27 May 2022 11:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 148ABC385A9;
-        Fri, 27 May 2022 11:37:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72DFB61CE6;
+        Fri, 27 May 2022 11:37:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 814B3C385A9;
+        Fri, 27 May 2022 11:37:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653651458;
-        bh=dH05+nm25yAB1V5rlmiTDa8rNPRuk2OgpTVPDkjJd30=;
+        s=korg; t=1653651467;
+        bh=xge8s2qT/It6plxGzNdBURTCDS57IQPE84hOj0yKTqs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y3OF+N7MNCxI1A5luuJUY7zDC7xZIlulJV+3VJQ5vDKrBVGHJEJ1ejrnoe97uLZFy
-         g9GoHIEwr9PVoiGxbuHWy6dfC6dhQojPG32waDWi/McQ7+8pQ7DpIx8qF2X7Q8rVEz
-         DJAvOK2V8T+CeaMUKpcjGKrMM3xw2SYg7NhqBDlc=
+        b=1sAnODiq9XIqbA4n3Dhm4+DIoKtxE+fLBssWwD14VmrnfOrHy2WmH/mXEqVsoH1vh
+         7PxYAbhSd4r3ZcoPCQ2xc1zdsEYviFaDqKV1jPhzeqAoodhyPE7gFRzxznaYTmUBZY
+         MsNoh+axq1UrgXy6gN5w2vQ5n+YB36sjxnTQobkI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 005/145] MAINTAINERS: co-maintain random.c
-Date:   Fri, 27 May 2022 10:48:26 +0200
-Message-Id: <20220527084851.215503202@linuxfoundation.org>
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.15 006/145] MAINTAINERS: add git tree for random.c
+Date:   Fri, 27 May 2022 10:48:27 +0200
+Message-Id: <20220527084851.427802617@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220527084850.364560116@linuxfoundation.org>
 References: <20220527084850.364560116@linuxfoundation.org>
@@ -57,16 +55,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 58e1100fdc5990b0cc0d4beaf2562a92e621ac7d upstream.
+commit 9bafaa9375cbf892033f188d8cb624ae328754b5 upstream.
 
-random.c is a bit understaffed, and folks want more prompt reviews. I've
-got the crypto background and the interest to do these reviews, and have
-authored parts of the file already.
+This is handy not just for humans, but also so that the 0-day bot can
+automatically test posted mailing list patches against the right tree.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
@@ -75,11 +68,11 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -15720,6 +15720,7 @@ F:	arch/mips/generic/board-ranchu.c
- 
+@@ -15721,6 +15721,7 @@ F:	arch/mips/generic/board-ranchu.c
  RANDOM NUMBER DRIVER
  M:	"Theodore Ts'o" <tytso@mit.edu>
-+M:	Jason A. Donenfeld <Jason@zx2c4.com>
+ M:	Jason A. Donenfeld <Jason@zx2c4.com>
++T:	git https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
  S:	Maintained
  F:	drivers/char/random.c
  

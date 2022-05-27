@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD905365AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D0D5365B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 18:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348736AbiE0QHj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 27 May 2022 12:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S1349558AbiE0QIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 12:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbiE0QHg (ORCPT
+        with ESMTP id S1343566AbiE0QIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 12:07:36 -0400
-Received: from relay4.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA10C3D0B
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:07:35 -0700 (PDT)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 54528336CD;
-        Fri, 27 May 2022 16:07:34 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 39B3D32;
-        Fri, 27 May 2022 16:07:33 +0000 (UTC)
-Message-ID: <94dd870e498e89e0998dee4dd0dbaaa4b4497929.camel@perches.com>
-Subject: Re: [PATCH 1/3] fs/ntfs3: Refactoring of indx_find function
-From:   Joe Perches <joe@perches.com>
-To:     Almaz Alexandrovich <almaz.alexandrovich@paragon-software.com>,
-        ntfs3@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Date:   Fri, 27 May 2022 09:07:30 -0700
-In-Reply-To: <0f9648cc-66af-077c-88e6-8650fd78f44c@paragon-software.com>
-References: <75a1215a-eda2-d0dc-b962-0334356eef7c@paragon-software.com>
-         <0f9648cc-66af-077c-88e6-8650fd78f44c@paragon-software.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Fri, 27 May 2022 12:08:17 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B90D1498CD
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:08:16 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id x2-20020a17090a1f8200b001e07a64c461so7484072pja.4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 09:08:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=84jyFcXhy+7LS/4BL2qQwkaV7/d2/eHd1cRcTDWz3EI=;
+        b=QmoCCOzPCZXeGFX5CxM6xUDiY5xxA+rTy9f87DS8FUZKehOK7jj4/99vNCnYbkcfJr
+         dF/V4fITPoPzxDK+3WxS+PeU7HHbChP0uUK6b7iniYkYhpqBpXjxZy2m05AeC5DRW8wz
+         7RJubuU1csiLGslSaCj9hkDJ+Uj3by1iGoG8ikhy/9lyaS57pkfvTmTp+MvfhgFqz93W
+         gjF0Qb80xn0/bquGTnwg1C3dSUfhZV9crL6gcbTJdLfRHoeG0ZPDtWsL1QmpxkrnPL5/
+         4aJH5JoMTyRRu5UCLiVQnARlAZ9oMhPG9SFEIr1aJs+zr5lnDe7Rn0pk+0Y01hxGtuRV
+         RPxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=84jyFcXhy+7LS/4BL2qQwkaV7/d2/eHd1cRcTDWz3EI=;
+        b=CVIVODXDnfNUl3T7I5+HHP6riCE6Qmj+m4H1XjE/qi4nigy8qh2AbaIaBu9g7keIzL
+         q7rVuwxEXcR2cP4noK8I0yHE3EsLLyZacWMw7Swfjk5F69eKjFqPmSDwLnK3DyfjFt1t
+         Q2MReUbbzJ67LL4qOQsrwc6sSmyFQV0tDsH50f0hUnhCgD6HLVVSZFX+HhuBfRH6TLUq
+         FT/hWsRfYNZKlo3rs8z2u7m1wHQFO7psLdeI8dKlawCsamcA0ADzOk5eYujS70ArWQIR
+         5bS+zLgnbmMh9YFlvWBJVDGCB4Y68rmy6Hg2bsuSCoHNf8d9PCa1d8N/ZNTzbMJab3ra
+         TQZw==
+X-Gm-Message-State: AOAM531DGrooCY41dCHFSfLyXIEiVMP9kMuB3HhJmpjHueVPbBTijS/X
+        EUrvZ80fCYvXsOS4ZrqPyDYePw==
+X-Google-Smtp-Source: ABdhPJxCYf8ECYcq48k6t4Rw29fmZa2p0+9eyg0bk1zPMkSRqOghqvhNkFmeNCYmK0xgHg8G4SGobg==
+X-Received: by 2002:a17:902:f548:b0:163:90d0:ada8 with SMTP id h8-20020a170902f54800b0016390d0ada8mr5215300plf.22.1653667695905;
+        Fri, 27 May 2022 09:08:15 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902d58c00b0016366fbc155sm3798927plh.255.2022.05.27.09.08.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 09:08:14 -0700 (PDT)
+Date:   Fri, 27 May 2022 16:08:11 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)" 
+        <kvm@vger.kernel.org>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KVM: Only display message about bios support disabled
+ once
+Message-ID: <YpD3a3wMbr9xIsub@google.com>
+References: <20220526213038.2027-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-X-Stat-Signature: dckefw6kzm5u1pwrkyhcm45kktryhqqf
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: 39B3D32
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19VwBNuG8zVMoN9lOhktdWQ7gt5m/9IoJY=
-X-HE-Tag: 1653667653-438087
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220526213038.2027-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-05-27 at 17:21 +0300, Almaz Alexandrovich wrote:
-> This commit makes function a bit more readable
+On Thu, May 26, 2022, Mario Limonciello wrote:
+> On an OEM laptop I see the following message 10 times in my dmesg:
+> "kvm: support for 'kvm_amd' disabled by bios"
+> 
+> This might be useful the first time, but there really isn't a point
+> to showing the error 9 more times.  The BIOS still has it disabled.
+> Change the message to only display one time.
 
-trivia:
+NAK, this has been discussed multiple times in the past[1][2], there are edge cases
+where logging multiple messages is desirable.  Even using a ratelimited printk is
+essentially a workaround for a systemd bug[3], which I'm guessing is the cuplrit here.
 
-> diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
-[]
-> @@ -1042,19 +1042,16 @@ int indx_find(struct ntfs_index *indx, struct ntfs_inode *ni,
->   {
->   	int err;
->   	struct NTFS_DE *e;
-> -	const struct INDEX_HDR *hdr;
->   	struct indx_node *node;
->   
->   	if (!root)
->   		root = indx_get_root(&ni->dir, ni, NULL, NULL);
->   
->   	if (!root) {
-> -		err = -EINVAL;
-> -		goto out;
-> +		/* Should not happed. */
-> +		return -EINVAL;
-
-s/happed/happen/
-
->   	for (;;) {
->   		node = NULL;
->   		if (*diff >= 0 || !de_has_vcn_ex(e)) {
->   			*entry = e;
-> -			goto out;
-> +			return 0;
->   		}
-
-might be nicer with a break; or a while like
-
-	while (*diff < 0 && de_has_vcn_ex(e)) {
-		node = NULL;
-
-
->   		/* Read next level. */
->   		err = indx_read(indx, ni, de_get_vbn(e), &node);
->   		if (err)
-> -			goto out;
-> +			return err;
->   
->   		/* Lookup entry that is <= to the search value. */
->   		e = hdr_find_e(indx, &node->index->ihdr, key, key_len, ctx,
->   			       diff);
->   		if (!e) {
-> -			err = -EINVAL;
->   			put_indx_node(node);
-> -			goto out;
-> +			return -EINVAL;
->   		}
->   
->   		fnd_push(fnd, node, e);
->   	}
-> -
-> -out:
-> -	return err;
-
-and a return 0;
-
-or
-	*entry = e;
-	return 0;
-
-so it appears that the function has a typical return value.
-
+[1] https://lore.kernel.org/all/20190826182320.9089-1-tony.luck@intel.com
+[2] https://lore.kernel.org/all/20200214143035.607115-1-e.velu@criteo.com
+[3] https://github.com/systemd/systemd/issues/14906

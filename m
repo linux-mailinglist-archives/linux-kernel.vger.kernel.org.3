@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30666536291
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81A1536290
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245013AbiE0M2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 08:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S240304AbiE0M22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355044AbiE0M1O (ORCPT
+        with ESMTP id S1355143AbiE0M1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 08:27:14 -0400
+        Fri, 27 May 2022 08:27:24 -0400
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B147414CDF8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:05:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3906614E2E4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:06:05 -0700 (PDT)
 Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BF83F3F19E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:04:36 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 32A173F325
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 12:05:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1653653076;
-        bh=oOCTsXFRjJ2XlQZekYMt58Ab+xoHPAvZsZMQKS0jhWk=;
+        s=20210705; t=1653653144;
+        bh=ELHJEY2eK+muvmAqygYYF3QcvcVcGsf6LdaPdx8n1nw=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=CWlhWRZPrDnF3xdWYhX8UHy0fHsHDcTPSXkcQacWWEDdapa3AGV/+DJccLMZEsqQW
-         PHnjyB13GY6oABn4fs7jDBqWUCzcluGT3qeoJjyuKi+IoKQfdutyo3FlsTYllavW62
-         BzgJyQ4RIIzlUFaguHuFmdU3n1vlAzbKpLyW11f1ZK9eGGxLZ4sMXGVX7v/sZczIHG
-         VxpVTCIfAD8Na9iRmRgY58JOqBVX/tY0xNqsePK+9C4qFd6vJlTtzcYjiggWklg5CJ
-         uJcba6lMOkH5XXgI9wBbgyRSOZns2gGcAPgiZ1STMk98GGSQXo2xznBmgD8HPi+hqx
-         QP/9hlXfeNwGg==
-Received: by mail-ej1-f69.google.com with SMTP id ks1-20020a170906f84100b006fee53b22c2so2309687ejb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:04:36 -0700 (PDT)
+        b=c2y9ErVISxnurLKUWuvbA4e3MXhyStRC/4XRKhJios0Rm8vFBkmI+qVlRy+62PCp2
+         IWeLLpU97k59fXSjNGZFuW44VH9Nh+8YGYGCoo3x749bJYibBa4A3rlGYEO0Uyk9P+
+         H0m4Kj6dIcMA6TlTz+aznjpLfGw0YWg97RjHY0rjukUmjUIMzAOG4SUSiZ4im7huOB
+         WQhT8ulzVkyq39WNENHHk5QzjSV7JKU3vj/Bmcsv+zgY2NByZmltS4/6Wx/lLwOHK7
+         A/nX9QiIHFAMPIE+QRY++dGqkqppv7edq3TkKr+n0k3tkU76rIgCS57B51ChspZ1OK
+         t7qYnSYXpkN3Q==
+Received: by mail-ej1-f69.google.com with SMTP id lf18-20020a170906ae5200b006fec8de9f0cso2329964ejb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 05:05:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oOCTsXFRjJ2XlQZekYMt58Ab+xoHPAvZsZMQKS0jhWk=;
-        b=LV8yWUbg01h+DEXZ/AOhQ/2TJYod9FuTZMY2jhZ8rsh+t8Wi+xNl4ej//oilgLq8Sx
-         mCZOVN9Jy02WEbMSeVjLrg3AQP3PrPSXpvbCrlOq57FbM/m2bv/ci5S0aHmku6Um5QEo
-         sfQ2FqOCOaQ93EZWGP+Ff0mq8joKznZ8FE6gHBgT5+tuPjxUXWn2OSEF9WZO7UY0iBc6
-         n+2Va7VF3/WnDwNTXHOrX+oejcgdzcUyUq5efVn2hmLXE3082kuuMNrtxCWK3fwJLZl1
-         7z9hm1t7cistTdxYjbMF0/eGTN0z2oUMbBs0buPAnq+iRhGT55sLAAfbVrzJddVis5yl
-         YDgg==
-X-Gm-Message-State: AOAM532yIs2fucd3JwZktUjCNiDJAR0P1AZjweVNwwunHFkDSfBRGsbM
-        wsqI0dxoYvxfpUJYfKAR008oVODR5Q518aQITMj2vO7oF7LXVJ3GeoWtb6LdQ29gBpx7WU5AzmO
-        p6w/ZM1l+ZFZd/Sq/7DNhjojKK8yVJ00dLbtPKf/Y6Q==
-X-Received: by 2002:a05:6402:528f:b0:42a:c778:469e with SMTP id en15-20020a056402528f00b0042ac778469emr44092650edb.404.1653653075193;
-        Fri, 27 May 2022 05:04:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzebqk4x0v1u6z1D5wE6Tcbj7WIsf2nELITM9fcePdJZJWGLK19jFqy0txhZTtOE+1rguS0lw==
-X-Received: by 2002:a05:6402:528f:b0:42a:c778:469e with SMTP id en15-20020a056402528f00b0042ac778469emr44092623edb.404.1653653075022;
-        Fri, 27 May 2022 05:04:35 -0700 (PDT)
+        bh=ELHJEY2eK+muvmAqygYYF3QcvcVcGsf6LdaPdx8n1nw=;
+        b=eHqRxIaQIsEt7n3fFYeE2ZIA0inHlq2aXT1q/+U3U+OlPWblcFPXDkBcYe8weAlkKb
+         ikR/JeoqAiJyh8A0fW2laq6eJJBYrRD0GwfG3JU1VYpGn4RBcenU5NrN1R2vQwB5RZYS
+         ERaennHNbAbO2PlybSw7F40gEmala0damsoG2CnPWPOTlDbC580y77exqumZPQjIr18b
+         wda1fNgBPMKhDsXDYymEzdlzc6FeoGrFndC4lshVmEOv+1V7vMTC2uzaaBYK1i2inwmi
+         k9E41Bz7eLGjdu/sHLhl9fxz80VAgiB/+FKnEmdGwu4WeUuRGLZNNFXTEI+Q+4UP/ocl
+         yBAg==
+X-Gm-Message-State: AOAM531yGKkpTv9VR6c0oKOIefs1FKHWsI1axlvs6JRyydsS7Gn2fuuz
+        Jt/dacHTgPPPik0ZdZtL+fe0JmTo3EDT+th7uVSs3Orz5NZ3ZVBoE0BopgYEHQN13lYr4yW4S0M
+        aW4ZwNDEV37Ym5ZnQIH28cYoH4y9xK8Eq0UovkJE7cw==
+X-Received: by 2002:a05:6402:1706:b0:42b:d175:1ef4 with SMTP id y6-20020a056402170600b0042bd1751ef4mr11066738edu.10.1653653143860;
+        Fri, 27 May 2022 05:05:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxKkQu4vwex1CUmBeJ9KoXEu4mtwoV5MbQHQl3N2T9xbM71iOZbr2cqRkGUGMbhsI+DOreR0A==
+X-Received: by 2002:a05:6402:1706:b0:42b:d175:1ef4 with SMTP id y6-20020a056402170600b0042bd1751ef4mr11066724edu.10.1653653143714;
+        Fri, 27 May 2022 05:05:43 -0700 (PDT)
 Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id bw12-20020a170906c1cc00b006f3ef214dc3sm1413242ejb.41.2022.05.27.05.04.33
+        by smtp.gmail.com with ESMTPSA id j20-20020a1709062a1400b006f3ef214dcdsm1401927eje.51.2022.05.27.05.05.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 05:04:33 -0700 (PDT)
+        Fri, 27 May 2022 05:05:43 -0700 (PDT)
 From:   Juerg Haefliger <juerg.haefliger@canonical.com>
 To:     ysato@users.sourceforge.jp, dalias@libc.org,
         linux-sh@vger.kernel.org, sergei.shtylyov@gmail.com
 Cc:     linux-kernel@vger.kernel.org,
         Juerg Haefliger <juerg.haefliger@canonical.com>
-Subject: [PATCH 3/4 v2] sh/boards: Kconfig: Fix indentation and remove trailing whitespaces
-Date:   Fri, 27 May 2022 14:04:30 +0200
-Message-Id: <20220527120430.459187-1-juerg.haefliger@canonical.com>
+Subject: [PATCH 4/4 v2] sh/mm: Kconfig: Fix indentation
+Date:   Fri, 27 May 2022 14:05:40 +0200
+Message-Id: <20220527120540.459462-1-juerg.haefliger@canonical.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <c371fcc7-08ad-7de7-cb9a-aa316a98047c@gmail.com>
-References: <c371fcc7-08ad-7de7-cb9a-aa316a98047c@gmail.com>
+In-Reply-To: <be49dcae-af31-c825-6ab4-05c59deec9d8@gmail.com>
+References: <be49dcae-af31-c825-6ab4-05c59deec9d8@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,71 +80,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two spaces. Fix the lines that violate
-these rules.
-
-While at it, remove trailing whitespaces.
+The convention for indentation seems to be a single tab. Fix the lines
+that violate these rules.
 
 Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
 ---
 v2:
-  Update commit message and subject per review comments.
+  Update commit message per review comments.
 ---
- arch/sh/boards/Kconfig | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/sh/mm/Kconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/sh/boards/Kconfig b/arch/sh/boards/Kconfig
-index 83bcb6d2daca..fbdb3fbfb976 100644
---- a/arch/sh/boards/Kconfig
-+++ b/arch/sh/boards/Kconfig
-@@ -36,7 +36,7 @@ config SH_SOLUTION_ENGINE
- 	select CPU_HAS_IPR_IRQ
- 	depends on CPU_SUBTYPE_SH7705 || CPU_SUBTYPE_SH7709 || CPU_SUBTYPE_SH7710 || \
- 	  CPU_SUBTYPE_SH7712 || CPU_SUBTYPE_SH7750 || CPU_SUBTYPE_SH7750S || \
--	  CPU_SUBTYPE_SH7750R 
-+	  CPU_SUBTYPE_SH7750R
- 	help
- 	  Select SolutionEngine if configuring for a Hitachi SH7705, SH7709,
- 	  SH7710, SH7712, SH7750, SH7750S or SH7750R evaluation board.
-@@ -56,7 +56,7 @@ config SH_7619_SOLUTION_ENGINE
- 	help
- 	  Select 7619 SolutionEngine if configuring for a Hitachi SH7619
- 	  evaluation board.
--	
-+
- config SH_7721_SOLUTION_ENGINE
- 	bool "SolutionEngine7721"
- 	select SOLUTION_ENGINE
-@@ -94,7 +94,7 @@ config SH_7751_SOLUTION_ENGINE
- 	help
- 	  Select 7751 SolutionEngine if configuring for a Hitachi SH7751
- 	  evaluation board.
--	  
-+
- config SH_7780_SOLUTION_ENGINE
- 	bool "SolutionEngine7780"
- 	select SOLUTION_ENGINE
-@@ -167,8 +167,8 @@ config SH_RSK
- 	  CPU_SUBTYPE_SH7264 || CPU_SUBTYPE_SH7269
- 	select REGULATOR_FIXED_VOLTAGE if REGULATOR
- 	help
--	 Select this option if configuring for any of the RSK+ MCU
--	 evaluation platforms.
-+	  Select this option if configuring for any of the RSK+ MCU
-+	  evaluation platforms.
+diff --git a/arch/sh/mm/Kconfig b/arch/sh/mm/Kconfig
+index ba569cfb4368..a563211aeb63 100644
+--- a/arch/sh/mm/Kconfig
++++ b/arch/sh/mm/Kconfig
+@@ -2,7 +2,7 @@
+ menu "Memory management options"
  
- config SH_SDK7780
- 	bool "SDK7780R3"
-@@ -236,7 +236,7 @@ config SH_MIGOR
- 	select REGULATOR_FIXED_VOLTAGE if REGULATOR
+ config MMU
+-        bool "Support for memory management hardware"
++	bool "Support for memory management hardware"
+ 	depends on !CPU_SH2
+ 	default y
  	help
- 	  Select Migo-R if configuring for the SH7722 Migo-R platform
--          by Renesas System Solutions Asia Pte. Ltd.
-+	  by Renesas System Solutions Asia Pte. Ltd.
+@@ -141,8 +141,8 @@ config ARCH_MEMORY_PROBE
+ 	depends on MEMORY_HOTPLUG
  
- config SH_AP325RXA
- 	bool "AP-325RXA"
+ config IOREMAP_FIXED
+-       def_bool y
+-       depends on X2TLB
++	def_bool y
++	depends on X2TLB
+ 
+ config UNCACHED_MAPPING
+ 	bool
 -- 
 2.32.0
 

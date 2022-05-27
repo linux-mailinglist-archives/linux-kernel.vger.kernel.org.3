@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF790535CFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4BD536252
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 14:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348481AbiE0I57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 04:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S1353825AbiE0MQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 08:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350355AbiE0IzR (ORCPT
+        with ESMTP id S1352420AbiE0MC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 04:55:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09AD5C852;
-        Fri, 27 May 2022 01:53:40 -0700 (PDT)
+        Fri, 27 May 2022 08:02:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F05134E1A;
+        Fri, 27 May 2022 04:53:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D1A361D52;
-        Fri, 27 May 2022 08:53:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E25BC385A9;
-        Fri, 27 May 2022 08:53:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 170DB61DB2;
+        Fri, 27 May 2022 11:53:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27633C385A9;
+        Fri, 27 May 2022 11:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653641619;
-        bh=+cyULwU6ekpt09vWb0ZsOkvCDHbbJFY9snnOY1CUj18=;
+        s=korg; t=1653652394;
+        bh=o4soIyc1vQYJQ67dGq9GBUeAqDilcx63IcfzN7572IA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BJ6aO8GIMDKH7583bk1kSjpFfEpINKQ12FqGPgGK5uSqea+EM69DLOma6F/xvueSM
-         KoKy6EiBbj8yG2zq20SA7vF/L7LpUvy0R87MtFLg6I7tgpNAqim7nJbzBh3baE5BU9
-         7r6PO1H4L7B8LZuknZiNdAY6RZSfVO9ZVMogpVAA=
+        b=qdm18dDrdoa7uthILGgrsHoKzko7AUwh1PczUoYlFKChyvfXsCFSdsiUGjp/pGxak
+         OkfBZPhwNKP5vOAm51CTT1gA1nIwmcsSQvraCQufuZAkeZSe2hFSbr6fRNmFpn75Ih
+         nxRfrmkGrB8xYR+zckint7QdAQhzDgfrGCgPLb3Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.18 36/47] random: remove extern from functions in header
+        stable@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 136/163] xtensa: use fallback for random_get_entropy() instead of zero
 Date:   Fri, 27 May 2022 10:50:16 +0200
-Message-Id: <20220527084807.306082742@linuxfoundation.org>
+Message-Id: <20220527084847.139730026@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
-References: <20220527084801.223648383@linuxfoundation.org>
+In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
+References: <20220527084828.156494029@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,148 +58,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 
-commit 7782cfeca7d420e8bb707613d4cfb0f7ff29bb3a upstream.
+commit e10e2f58030c5c211d49042a8c2a1b93d40b2ffb upstream.
 
-Accoriding to the kernel style guide, having `extern` on functions in
-headers is old school and deprecated, and doesn't add anything. So remove
-them from random.h, and tidy up the file a little bit too.
+In the event that random_get_entropy() can't access a cycle counter or
+similar, falling back to returning 0 is really not the best we can do.
+Instead, at least calling random_get_entropy_fallback() would be
+preferable, because that always needs to return _something_, even
+falling back to jiffies eventually. It's not as though
+random_get_entropy_fallback() is super high precision or guaranteed to
+be entropic, but basically anything that's not zero all the time is
+better than returning zero all the time.
 
+This is accomplished by just including the asm-generic code like on
+other architectures, which means we can get rid of the empty stub
+function here.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/random.h |   77 +++++++++++++++++++------------------------------
- 1 file changed, 31 insertions(+), 46 deletions(-)
+ arch/xtensa/include/asm/timex.h |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -12,13 +12,12 @@
+--- a/arch/xtensa/include/asm/timex.h
++++ b/arch/xtensa/include/asm/timex.h
+@@ -29,10 +29,6 @@
  
- struct notifier_block;
+ extern unsigned long ccount_freq;
  
--extern void add_device_randomness(const void *, size_t);
--extern void add_bootloader_randomness(const void *, size_t);
--extern void add_input_randomness(unsigned int type, unsigned int code,
--				 unsigned int value) __latent_entropy;
--extern void add_interrupt_randomness(int irq) __latent_entropy;
--extern void add_hwgenerator_randomness(const void *buffer, size_t count,
--				       size_t entropy);
-+void add_device_randomness(const void *, size_t);
-+void add_bootloader_randomness(const void *, size_t);
-+void add_input_randomness(unsigned int type, unsigned int code,
-+			  unsigned int value) __latent_entropy;
-+void add_interrupt_randomness(int irq) __latent_entropy;
-+void add_hwgenerator_randomness(const void *buffer, size_t count, size_t entropy);
- 
- #if defined(LATENT_ENTROPY_PLUGIN) && !defined(__CHECKER__)
- static inline void add_latent_entropy(void)
-@@ -26,30 +25,20 @@ static inline void add_latent_entropy(vo
- 	add_device_randomness((const void *)&latent_entropy, sizeof(latent_entropy));
- }
- #else
--static inline void add_latent_entropy(void) {}
-+static inline void add_latent_entropy(void) { }
- #endif
- 
- #if IS_ENABLED(CONFIG_VMGENID)
--extern void add_vmfork_randomness(const void *unique_vm_id, size_t size);
--extern int register_random_vmfork_notifier(struct notifier_block *nb);
--extern int unregister_random_vmfork_notifier(struct notifier_block *nb);
-+void add_vmfork_randomness(const void *unique_vm_id, size_t size);
-+int register_random_vmfork_notifier(struct notifier_block *nb);
-+int unregister_random_vmfork_notifier(struct notifier_block *nb);
- #else
- static inline int register_random_vmfork_notifier(struct notifier_block *nb) { return 0; }
- static inline int unregister_random_vmfork_notifier(struct notifier_block *nb) { return 0; }
- #endif
- 
--extern void get_random_bytes(void *buf, size_t nbytes);
--extern int wait_for_random_bytes(void);
--extern int __init random_init(const char *command_line);
--extern bool rng_is_initialized(void);
--extern int register_random_ready_notifier(struct notifier_block *nb);
--extern int unregister_random_ready_notifier(struct notifier_block *nb);
--extern size_t __must_check get_random_bytes_arch(void *buf, size_t nbytes);
+-typedef unsigned long long cycles_t;
 -
--#ifndef MODULE
--extern const struct file_operations random_fops, urandom_fops;
--#endif
+-#define get_cycles()	(0)
 -
-+void get_random_bytes(void *buf, size_t nbytes);
-+size_t __must_check get_random_bytes_arch(void *buf, size_t nbytes);
- u32 get_random_u32(void);
- u64 get_random_u64(void);
- static inline unsigned int get_random_int(void)
-@@ -81,11 +70,17 @@ static inline unsigned long get_random_l
- 
- static inline unsigned long get_random_canary(void)
- {
--	unsigned long val = get_random_long();
--
--	return val & CANARY_MASK;
-+	return get_random_long() & CANARY_MASK;
- }
- 
-+unsigned long randomize_page(unsigned long start, unsigned long range);
-+
-+int __init random_init(const char *command_line);
-+bool rng_is_initialized(void);
-+int wait_for_random_bytes(void);
-+int register_random_ready_notifier(struct notifier_block *nb);
-+int unregister_random_ready_notifier(struct notifier_block *nb);
-+
- /* Calls wait_for_random_bytes() and then calls get_random_bytes(buf, nbytes).
-  * Returns the result of the call to wait_for_random_bytes. */
- static inline int get_random_bytes_wait(void *buf, size_t nbytes)
-@@ -109,8 +104,6 @@ declare_get_random_var_wait(int)
- declare_get_random_var_wait(long)
- #undef declare_get_random_var
- 
--unsigned long randomize_page(unsigned long start, unsigned long range);
--
- /*
-  * This is designed to be standalone for just prandom
-  * users, but for now we include it from <linux/random.h>
-@@ -121,22 +114,10 @@ unsigned long randomize_page(unsigned lo
- #ifdef CONFIG_ARCH_RANDOM
- # include <asm/archrandom.h>
- #else
--static inline bool __must_check arch_get_random_long(unsigned long *v)
--{
--	return false;
--}
--static inline bool __must_check arch_get_random_int(unsigned int *v)
--{
--	return false;
--}
--static inline bool __must_check arch_get_random_seed_long(unsigned long *v)
--{
--	return false;
--}
--static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
--{
--	return false;
--}
-+static inline bool __must_check arch_get_random_long(unsigned long *v) { return false; }
-+static inline bool __must_check arch_get_random_int(unsigned int *v) { return false; }
-+static inline bool __must_check arch_get_random_seed_long(unsigned long *v) { return false; }
-+static inline bool __must_check arch_get_random_seed_int(unsigned int *v) { return false; }
- #endif
+ void local_timer_setup(unsigned cpu);
  
  /*
-@@ -160,8 +141,12 @@ static inline bool __init arch_get_rando
- #endif
+@@ -59,4 +55,6 @@ static inline void set_linux_timer (unsi
+ 	xtensa_set_sr(ccompare, SREG_CCOMPARE + LINUX_TIMER);
+ }
  
- #ifdef CONFIG_SMP
--extern int random_prepare_cpu(unsigned int cpu);
--extern int random_online_cpu(unsigned int cpu);
-+int random_prepare_cpu(unsigned int cpu);
-+int random_online_cpu(unsigned int cpu);
-+#endif
++#include <asm-generic/timex.h>
 +
-+#ifndef MODULE
-+extern const struct file_operations random_fops, urandom_fops;
- #endif
- 
- #endif /* _LINUX_RANDOM_H */
+ #endif	/* _XTENSA_TIMEX_H */
 
 

@@ -2,144 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F872535D32
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D04535C58
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348146AbiE0JQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
+        id S1344297AbiE0JEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242737AbiE0JQq (ORCPT
+        with ESMTP id S1350539AbiE0JAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:16:46 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BE36AA6B;
-        Fri, 27 May 2022 02:16:44 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L8fHT1mF3zRhS6;
-        Fri, 27 May 2022 17:13:41 +0800 (CST)
-Received: from [10.174.178.185] (10.174.178.185) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+        Fri, 27 May 2022 05:00:05 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3E9F06;
+        Fri, 27 May 2022 01:56:12 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L8dsT26d5zbbs5;
+        Fri, 27 May 2022 16:54:37 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 17:16:42 +0800
-Subject: Re: [PATCH -next] ext4: fix super block checksum incorrect after
- mount
-To:     Jan Kara <jack@suse.cz>, Ritesh Harjani <ritesh.list@gmail.com>
-References: <20220525012904.1604737-1-yebin10@huawei.com>
- <20220525075123.rx5v7fe6ocn354wn@riteshh-domain>
- <20220525115400.kr3urpp3cf3hybvi@quack3.lan>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   yebin <yebin10@huawei.com>
-Message-ID: <629096FA.6030801@huawei.com>
-Date:   Fri, 27 May 2022 17:16:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
- Thunderbird/38.1.0
+ 15.1.2375.24; Fri, 27 May 2022 16:56:10 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 27 May 2022 16:56:10 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <jic23@kernel.org>, <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH] iio:  Directly use ida_alloc()/free()
+Date:   Fri, 27 May 2022 09:17:39 +0000
+Message-ID: <20220527091739.2949426-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220525115400.kr3urpp3cf3hybvi@quack3.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.185]
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
 X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500010.china.huawei.com (7.192.105.118)
+ dggpemm500018.china.huawei.com (7.185.36.111)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
+Signed-off-by: keliu <liuke94@huawei.com>
+---
+ drivers/iio/industrialio-core.c    | 6 +++---
+ drivers/iio/industrialio-trigger.c | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-On 2022/5/25 19:54, Jan Kara wrote:
-> On Wed 25-05-22 13:21:23, Ritesh Harjani wrote:
->> On 22/05/25 09:29AM, Ye Bin wrote:
->>> We got issue as follows:
->>> [home]# mount  /dev/sda  test
->>> EXT4-fs (sda): warning: mounting fs with errors, running e2fsck is recommended
->>> [home]# dmesg
->>> EXT4-fs (sda): warning: mounting fs with errors, running e2fsck is recommended
->>> EXT4-fs (sda): Errors on filesystem, clearing orphan list.
->>> EXT4-fs (sda): recovery complete
->>> EXT4-fs (sda): mounted filesystem with ordered data mode. Quota mode: none.
->>> [home]# debugfs /dev/sda
->>> debugfs 1.46.5 (30-Dec-2021)
->>> Checksum errors in superblock!  Retrying...
->>>
->>> Reason is ext4_orphan_cleanup will reset ‘s_last_orphan’ but not update
->>> super block checksum.
->>> To solve above issue, defer update super block checksum after ext4_orphan_cleanup.
->> I agree with the analysis. However after [1], I think all updates to superblock
->> (including checksum computation) should be done within buffer lock.
->> (lock_buffer(), unlock_buffer()).
->>
->> [1]: https://lore.kernel.org/all/20201216101844.22917-4-jack@suse.cz/
-> So technically you're right that we should hold buffer lock all the time
-> from before we modify superblock buffer until we recompute the checksum (so
-> that we avoid writing superblock with mismatched checksum). To do this we'd
-> have to put checksum recomputations and superblock buffer locking into
-> ext4_orphan_cleanup() around setting of es->s_last_orphan (in three places
-> there AFAICS). A bit tedious but it would actually also fix a (theoretical)
-> race that someone decides to write out superblock after we set
-> s_last_orphan but before we set the checksum.
->
-> Overall I'm not convinced this is really necessary so I'd be OK even with
-> what Ye suggested. That is IMHO better than mostly pointless locking just
-> around checksum computation because that just makes reader wonder why is it
-> needed...
->
-> 								Honza
-Thanks for your reply.
-Does my patch need to be adjusted?
->> With lock changes added, feel free to add -
->>
->> Reviewed-by: Ritesh Harjani <ritesh.list@gmail.com>
->>
->>
->>>
->>> Signed-off-by: Ye Bin <yebin10@huawei.com>
->>> ---
->>>   fs/ext4/super.c | 16 ++++++++--------
->>>   1 file changed, 8 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
->>> index f9a3ad683b4a..c47204029429 100644
->>> --- a/fs/ext4/super.c
->>> +++ b/fs/ext4/super.c
->>> @@ -5300,14 +5300,6 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->>>   		err = percpu_counter_init(&sbi->s_freeinodes_counter, freei,
->>>   					  GFP_KERNEL);
->>>   	}
->>> -	/*
->>> -	 * Update the checksum after updating free space/inode
->>> -	 * counters.  Otherwise the superblock can have an incorrect
->>> -	 * checksum in the buffer cache until it is written out and
->>> -	 * e2fsprogs programs trying to open a file system immediately
->>> -	 * after it is mounted can fail.
->>> -	 */
->>> -	ext4_superblock_csum_set(sb);
->>>   	if (!err)
->>>   		err = percpu_counter_init(&sbi->s_dirs_counter,
->>>   					  ext4_count_dirs(sb), GFP_KERNEL);
->>> @@ -5365,6 +5357,14 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->>>   	EXT4_SB(sb)->s_mount_state |= EXT4_ORPHAN_FS;
->>>   	ext4_orphan_cleanup(sb, es);
->>>   	EXT4_SB(sb)->s_mount_state &= ~EXT4_ORPHAN_FS;
->>> +	/*
->>> +	 * Update the checksum after updating free space/inode counters and
->>> +	 * ext4_orphan_cleanup. Otherwise the superblock can have an incorrect
->>> +	 * checksum in the buffer cache until it is written out and
->>> +	 * e2fsprogs programs trying to open a file system immediately
->>> +	 * after it is mounted can fail.
->>> +	 */
->>> +	ext4_superblock_csum_set(sb);
->>>   	if (needs_recovery) {
->>>   		ext4_msg(sb, KERN_INFO, "recovery complete");
->>>   		err = ext4_mark_recovery_complete(sb, es);
->>> --
->>> 2.31.1
->>>
+diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+index e1ed44dec2ab..41daa10cd63d 100644
+--- a/drivers/iio/industrialio-core.c
++++ b/drivers/iio/industrialio-core.c
+@@ -1618,7 +1618,7 @@ static void iio_dev_release(struct device *device)
+ 
+ 	iio_device_detach_buffers(indio_dev);
+ 
+-	ida_simple_remove(&iio_ida, iio_dev_opaque->id);
++	ida_free(&iio_ida, iio_dev_opaque->id);
+ 	kfree(iio_dev_opaque);
+ }
+ 
+@@ -1660,7 +1660,7 @@ struct iio_dev *iio_device_alloc(struct device *parent, int sizeof_priv)
+ 	mutex_init(&iio_dev_opaque->info_exist_lock);
+ 	INIT_LIST_HEAD(&iio_dev_opaque->channel_attr_list);
+ 
+-	iio_dev_opaque->id = ida_simple_get(&iio_ida, 0, 0, GFP_KERNEL);
++	iio_dev_opaque->id = ida_alloc(&iio_ida, GFP_KERNEL);
+ 	if (iio_dev_opaque->id < 0) {
+ 		/* cannot use a dev_err as the name isn't available */
+ 		pr_err("failed to get device id\n");
+@@ -1669,7 +1669,7 @@ struct iio_dev *iio_device_alloc(struct device *parent, int sizeof_priv)
+ 	}
+ 
+ 	if (dev_set_name(&indio_dev->dev, "iio:device%d", iio_dev_opaque->id)) {
+-		ida_simple_remove(&iio_ida, iio_dev_opaque->id);
++		ida_free(&iio_ida, iio_dev_opaque->id);
+ 		kfree(iio_dev_opaque);
+ 		return NULL;
+ 	}
+diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
+index f504ed351b3e..6eb9b721676e 100644
+--- a/drivers/iio/industrialio-trigger.c
++++ b/drivers/iio/industrialio-trigger.c
+@@ -71,7 +71,7 @@ int __iio_trigger_register(struct iio_trigger *trig_info,
+ 
+ 	trig_info->owner = this_mod;
+ 
+-	trig_info->id = ida_simple_get(&iio_trigger_ida, 0, 0, GFP_KERNEL);
++	trig_info->id = ida_alloc(&iio_trigger_ida, GFP_KERNEL);
+ 	if (trig_info->id < 0)
+ 		return trig_info->id;
+ 
+@@ -98,7 +98,7 @@ int __iio_trigger_register(struct iio_trigger *trig_info,
+ 	mutex_unlock(&iio_trigger_list_lock);
+ 	device_del(&trig_info->dev);
+ error_unregister_id:
+-	ida_simple_remove(&iio_trigger_ida, trig_info->id);
++	ida_free(&iio_trigger_ida, trig_info->id);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(__iio_trigger_register);
+@@ -109,7 +109,7 @@ void iio_trigger_unregister(struct iio_trigger *trig_info)
+ 	list_del(&trig_info->list);
+ 	mutex_unlock(&iio_trigger_list_lock);
+ 
+-	ida_simple_remove(&iio_trigger_ida, trig_info->id);
++	ida_free(&iio_trigger_ida, trig_info->id);
+ 	/* Possible issue in here */
+ 	device_del(&trig_info->dev);
+ }
+-- 
+2.25.1
 

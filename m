@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7817A535DDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B29E535DD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 12:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240220AbiE0KFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 06:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
+        id S1350783AbiE0KF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 06:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350915AbiE0KFL (ORCPT
+        with ESMTP id S1350917AbiE0KFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 May 2022 06:05:11 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 May 2022 03:05:10 PDT
 Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102691078B0;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB33106A69;
         Fri, 27 May 2022 03:05:09 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 24RA2hPX029808;
-        Fri, 27 May 2022 19:02:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24RA2hPX029808
+        by conuserg-08.nifty.com with ESMTP id 24RA2hPY029808;
+        Fri, 27 May 2022 19:02:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 24RA2hPY029808
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653645772;
-        bh=/LDGWcsQ86eGZ6AnM0sm302Ykct401VHcmgP1DL7HYM=;
+        s=dec2015msa; t=1653645773;
+        bh=jCYP4PRhKOSnrfF8IZ7vFN4wM6bjQvDGDEXIDORQ8GA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rRtdN563IfYIa8UJiH9R6JJ+H+T8TUQiUgBziOGfpObJBS0vJgoUxq8MvApQYo5aV
-         O71PUr/VsqixjttnfTjeyypDUIv9rUsWLb4ujUwS/UU5A03nVQausNmzgYsgiYd43r
-         05WZFD8zP5J7ZoAldPOyNxWUv3GVaKzQh/fXLSxQJdNBqhfrcpQX3n4pdcni0SDM0A
-         4+PlqZsMPV/nyTcr799AAberdlGpzsfkVc30H9yuFqKcDiiHcXF143AZUtVsD/9Vme
-         2qvC268JrtUk4pUuE7NcTuPbeplTB5qsk4W8ZllSNgK7otYw7cd9E5l9gvfBKOKbTn
-         KnhUoIuWymdYA==
+        b=jikzAhA331ol0PYeJLvjeBEbXdujI+kIf0o3ofXuKIEM+meJCBxUL0pXT+5ICkrrk
+         WGEI+qfbQ/eYfPv2X/mCpePNalEwvJoQquANrW6/9yUIYvayiJG3pecAlquCklvEzu
+         u9CAnTa2xAQfvS1milmRCkFvz1Ows9DtGa22empJVZwYjcSYwicxgZfullj8vV0NpX
+         hX66B4UH9sI7lX+LKJvr0edE2Gsv1wZM/9PTdvP6Iw+GTJyitv6VLegEP4RdZeO1DD
+         0UWOpTu5TFRnHiim7arEAU9NCmnt1bLfqR+NSrzOK26eqN0h/T4CftjLGI9wKkrUH9
+         bW4oOJqflZ3eQ==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -44,9 +45,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>
-Subject: [PATCH v7 7/8] kbuild: add cmd_and_savecmd macro
-Date:   Fri, 27 May 2022 19:01:54 +0900
-Message-Id: <20220527100155.1996314-8-masahiroy@kernel.org>
+Subject: [PATCH v7 8/8] kbuild: rebuild multi-object modules when objtool is updated
+Date:   Fri, 27 May 2022 19:01:55 +0900
+Message-Id: <20220527100155.1996314-9-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220527100155.1996314-1-masahiroy@kernel.org>
 References: <20220527100155.1996314-1-masahiroy@kernel.org>
@@ -61,18 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Separate out the command execution part of if_changed, as we did
-for if_changed_dep.
+When CONFIG_LTO_CLANG or CONFIG_X86_KERNEL_IBT is enabled, objtool for
+multi-object modules is postponed until the objects are linked together.
 
-This allows us to reuse it in if_changed_rule.
-
-  define rule_foo
-          $(call cmd_and_savecmd,foo)
-          $(call cmd,bar)
-  endef
+Make sure to re-run objtool and re-link multi-object modules when
+objtool is updated.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Tested-by: Nathan Chancellor <nathan@kernel.org>
 Reviewed-by: Nicolas Schier <n.schier@avm.de>
 Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
@@ -81,31 +79,39 @@ Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM-14 (x86-64)
 (no changes since v4)
 
 Changes in v4:
-  - New.
-    Resent of my previous submission.
-    https://lore.kernel.org/all/20210831074004.3195284-10-masahiroy@kernel.org/
+  - New
+    Resent of my previous submission
+    https://lore.kernel.org/linux-kbuild/20210831074004.3195284-11-masahiroy@kernel.org/
 
- scripts/Kbuild.include | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ scripts/Makefile.build | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-index 455a0a6ce12d..ece44b735061 100644
---- a/scripts/Kbuild.include
-+++ b/scripts/Kbuild.include
-@@ -142,9 +142,11 @@ check-FORCE = $(if $(filter FORCE, $^),,$(warning FORCE prerequisite is missing)
- if-changed-cond = $(newer-prereqs)$(cmd-check)$(check-FORCE)
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 31feb798e16e..bd5fc2b37387 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -412,13 +412,18 @@ $(obj)/modules.order: $(obj-m) FORCE
+ $(obj)/lib.a: $(lib-y) FORCE
+ 	$(call if_changed,ar)
  
- # Execute command if command has changed or prerequisite(s) are updated.
--if_changed = $(if $(if-changed-cond),                                        \
-+if_changed = $(if $(if-changed-cond),$(cmd_and_savecmd),@:)
+-quiet_cmd_link_multi-m = LD [M]  $@
+-      cmd_link_multi-m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@) $(cmd_objtool)
++quiet_cmd_ld_multi_m = LD [M]  $@
++      cmd_ld_multi_m = $(LD) $(ld_flags) -r -o $@ @$(patsubst %.o,%.mod,$@) $(cmd_objtool)
 +
-+cmd_and_savecmd =                                                            \
- 	$(cmd);                                                              \
--	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
-+	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd
++define rule_ld_multi_m
++	$(call cmd_and_savecmd,ld_multi_m)
++	$(call cmd,gen_objtooldep)
++endef
  
- # Execute the command and also postprocess generated .d dependencies file.
- if_changed_dep = $(if $(if-changed-cond),$(cmd_and_fixdep),@:)
+ $(multi-obj-m): objtool-enabled := $(delay-objtool)
+ $(multi-obj-m): part-of-module := y
+ $(multi-obj-m): %.o: %.mod FORCE
+-	$(call if_changed,link_multi-m)
++	$(call if_changed_rule,ld_multi_m)
+ $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
+ 
+ targets := $(filter-out $(PHONY), $(targets))
 -- 
 2.32.0
 

@@ -2,144 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D142B535D70
-	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FE5535D67
+	for <lists+linux-kernel@lfdr.de>; Fri, 27 May 2022 11:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348941AbiE0JaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 05:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        id S1350578AbiE0Jas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 05:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232733AbiE0JaT (ORCPT
+        with ESMTP id S1350230AbiE0Jar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 05:30:19 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55596B7D2;
-        Fri, 27 May 2022 02:30:18 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id f21so3880280pfa.3;
-        Fri, 27 May 2022 02:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Kb85+2Sd4OjNt+4J6/Cs/eNfwpCKX3GUphCee7XFrA0=;
-        b=dRA5kKlB4Vxde9Kn5agHxoJaXKC90MjU4QDOC+rZq4NLGVzOcNe9EKFibNOB1rPk5T
-         nl2pRDtCiHcdTQDz88k04+KJds+1OdZBIf2XJmViwOYUqIZ/MtRM4xzL2WIpzWVPKoWg
-         a9ahqPsBfneglleaPSt8iRTCBqKiN4QoA4reGENx5hugwB4qrUNK8a5KDQy2LqTysWgy
-         80ns+RyQVtTuv1KGWAOXqtEqGM8J/s4uGOchCsP4s9rgyu79tQyEFIVBNKM1PzI58bhu
-         pfIFqSkrKGl21TtR/UZkJzAnpiOakY0kE3v1ZltbS5HwUDlbxfr/qbNP46ItsiNi+BLF
-         wW9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Kb85+2Sd4OjNt+4J6/Cs/eNfwpCKX3GUphCee7XFrA0=;
-        b=cXM0D5DKOTpzyr3GB5FQbj8P6c5gd09RnaPLp05v/vT8/ga1QKpPGOFJdXqiMtTT/z
-         UiNNsy5I1HRqUb7zv8eW66Lxjms4OmSQUKHlHDE05SVwlMPv3jdwuXhTEB2Znzqn6uDN
-         SF68BeYqyX4dKL3/K2aRKF8FJKW3xtGYaCPG8n0RAfcTP4PqZeM2W0/MOzOZg3LGDQYX
-         c4OTumAvSZP13n1d/Hd9mPmlXjoJYxIFKM70/nfLb5dx+3nI6z/BZaDNMbH4d5H/Z5br
-         yn2tm8n4bvsnbbyDX7ogS7EA4EKk9BkZMdOVIa5GkGTTt81ffx3AeLf4HadGOKADRAPP
-         iG0g==
-X-Gm-Message-State: AOAM533XPBZjrPyiSTkHfuYCn9j0af51CZx212wIbA9qUJoM18iQRI3F
-        STq9q2tWJ15yZFnWn6SK14/Pzr8a0ks=
-X-Google-Smtp-Source: ABdhPJxv3qbdZEQ+ZKYas5PE5Hw73EwjZbafG3koZF/0HUt4zVxZ1LvuI7uC/m+PGHV93tlQTJuj4Q==
-X-Received: by 2002:a65:6a15:0:b0:3f6:1815:f540 with SMTP id m21-20020a656a15000000b003f61815f540mr35560176pgu.45.1653643817739;
-        Fri, 27 May 2022 02:30:17 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-49.three.co.id. [116.206.28.49])
-        by smtp.gmail.com with ESMTPSA id k71-20020a63844a000000b003db7de758besm3042313pgd.5.2022.05.27.02.30.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 May 2022 02:30:16 -0700 (PDT)
-Message-ID: <4ef24dae-bad0-9641-7eb9-7d8207d198be@gmail.com>
-Date:   Fri, 27 May 2022 16:30:11 +0700
+        Fri, 27 May 2022 05:30:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00B8266AE2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 02:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653643845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ps73Vyt4yN+27PJzPF0JTccmiXVswx7yZqJIriLMxWk=;
+        b=CHS10T2AEDPne/HtUkhr8Rd8UUBrX/xjMG8SXL3rxe8rIgiESMnWcVodxyANIj1qlND0DH
+        DbAE3OGA04f8IRhWHZxKM1VkFiVQCWg3SLCC4YGRDjDergxPkD1poXMyUlbP/G7rTRiWvG
+        AR47g3RoXjJIfBtovA68lxTYmyqMCVk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-456-iCDgyNaKOam64PAuHzOeKw-1; Fri, 27 May 2022 05:30:41 -0400
+X-MC-Unique: iCDgyNaKOam64PAuHzOeKw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F80B1D32375;
+        Fri, 27 May 2022 09:30:40 +0000 (UTC)
+Received: from rh (vpn2-54-35.bne.redhat.com [10.64.54.35])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CF8E0492C3B;
+        Fri, 27 May 2022 09:30:39 +0000 (UTC)
+Received: from localhost ([::1] helo=rh)
+        by rh with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <dchinner@redhat.com>)
+        id 1nuWIm-00CFqS-4E; Fri, 27 May 2022 19:30:36 +1000
+Date:   Fri, 27 May 2022 19:30:34 +1000
+From:   Dave Chinner <dchinner@redhat.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v4 3/6] mm: shrinkers: provide shrinkers with names
+Message-ID: <YpCaOmL2NfcLEAHi@rh>
+References: <20220525202600.2910982-1-roman.gushchin@linux.dev>
+ <20220525202600.2910982-4-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH net] net/ipv6: Change accept_unsolicited_na to
- accept_untracked_na
-Content-Language: en-US
-To:     Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, dsahern@kernel.org,
-        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
-        gilligan@arista.com, noureddine@arista.com, gk@arista.com
-References: <20220527073111.14336-1-aajith@arista.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220527073111.14336-1-aajith@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525202600.2910982-4-roman.gushchin@linux.dev>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/27/22 14:31, Arun Ajith S wrote:
-> This change expands the current implementation to match the RFC. The
-> sysctl knob is also renamed to accept_untracked_na to better reflect the
-> implementation.
->
+On Wed, May 25, 2022 at 01:25:57PM -0700, Roman Gushchin wrote:
+> Currently shrinkers are anonymous objects. For debugging purposes they
+> can be identified by count/scan function names, but it's not always
+> useful: e.g. for superblock's shrinkers it's nice to have at least
+> an idea of to which superblock the shrinker belongs.
+> 
+> This commit adds names to shrinkers. register_shrinker() and
+> prealloc_shrinker() functions are extended to take a format and
+> arguments to master a name.
+> 
+> In some cases it's not possible to determine a good name at the time
+> when a shrinker is allocated. For such cases shrinker_debugfs_rename()
+> is provided.
+> 
+> After this change the shrinker debugfs directory looks like:
+>   $ cd /sys/kernel/debug/shrinker/
+>   $ ls
+>     dqcache-16          sb-hugetlbfs-17  sb-rootfs-2      sb-tmpfs-49
+>     kfree_rcu-0         sb-hugetlbfs-33  sb-securityfs-6  sb-tracefs-13
+>     sb-aio-20           sb-iomem-12      sb-selinuxfs-22  sb-xfs:vda1-36
+>     sb-anon_inodefs-15  sb-mqueue-21     sb-sockfs-8      sb-zsmalloc-19
+>     sb-bdev-3           sb-nsfs-4        sb-sysfs-26      shadow-18
+>     sb-bpf-32           sb-pipefs-14     sb-tmpfs-1       thp_deferred_split-10
+>     sb-btrfs:vda2-24    sb-proc-25       sb-tmpfs-27      thp_zero-9
+>     sb-cgroup2-30       sb-proc-39       sb-tmpfs-29      xfs_buf-vda1-37
+>     sb-configfs-23      sb-proc-41       sb-tmpfs-35      xfs_inodegc-vda1-38
 
-Say in imperative, "Expand and rename accept_unsolicited na to
-accept_untracked_na" in both commit/patch subject and message.
+sb-xfs:vda1-36
+xfs_buf-vda1-37
+xfs_inodegc-vda1-38
 
-> -accept_unsolicited_na - BOOLEAN
-> +accept_untracked_na - BOOLEAN
->  	Add a new neighbour cache entry in STALE state for routers on receiving an
-> -	unsolicited neighbour advertisement with target link-layer address option
-> -	specified. This is as per router-side behavior documented in RFC9131.
-> -	This has lower precedence than drop_unsolicited_na.
-> +	neighbour advertisement with target link-layer address option specified
-> +	if a corresponding entry is not already present.
-> +	This is as per router-side behavior documented in RFC9131.
->  
-> -	 ====   ======  ======  ==============================================
-> -	 drop   accept  fwding                   behaviour
-> -	 ----   ------  ------  ----------------------------------------------
-> -	    1        X       X  Drop NA packet and don't pass up the stack
-> -	    0        0       X  Pass NA packet up the stack, don't update NC
-> -	    0        1       0  Pass NA packet up the stack, don't update NC
-> -	    0        1       1  Pass NA packet up the stack, and add a STALE
-> -	                        NC entry
-> -	 ====   ======  ======  ==============================================
-> +	This has lower precedence than drop_unsolicited_na.
->  
+That's a parsing nightmare right there. Please use the same format
+for everything. You have <subsystem>-<type>:<instance>-<id> for
+superblock stuff, but <subsys>_<type>-<instance>-<id> for the XFS
+stuff. Make it consistent so we aren't reduced to pulling out our
+hair trying to parse this in any useful way:
 
-I think you should have made similar logical expansion of drop_unsolicited_na to
-drop_untracked_na. Otherwise, ...
+sb-xfs:vda1-36
+xfs-buf:vda1-37
+xfs-inodegc:vda1-38
 
->  	/* RFC 9131 updates original Neighbour Discovery RFC 4861.
-> -	 * An unsolicited NA can now create a neighbour cache entry
-> -	 * on routers if it has Target LL Address option.
-> +	 * NAs with Target LL Address option without a corresponding
-> +	 * entry in the neighbour cache can now create a STALE neighbour
-> +	 * cache entry on routers.
->  	 *
-> -	 * drop   accept  fwding                   behaviour
-> -	 * ----   ------  ------  ----------------------------------------------
-> -	 *    1        X       X  Drop NA packet and don't pass up the stack
-> -	 *    0        0       X  Pass NA packet up the stack, don't update NC
-> -	 *    0        1       0  Pass NA packet up the stack, don't update NC
-> -	 *    0        1       1  Pass NA packet up the stack, and add a STALE
-> -	 *                          NC entry
-> -	 * Note that we don't do a (daddr == all-routers-mcast) check.
-> +	 *   entry accept  fwding  solicited        behaviour
-> +	 * ------- ------  ------  ---------    ----------------------
-> +	 * present      X       X         0     Set state to STALE
-> +	 * present      X       X         1     Set state to REACHABLE
-> +	 *  absent      0       X         X     Do nothing
-> +	 *  absent      1       0         X     Do nothing
-> +	 *  absent      1       1         X     Add a new STALE entry
->  	 */
+FWIW, how we are supposed to know what actually owns these:
 
-The Documentation/ diff above drops behavior table but in the code comment
-it is updated. Why didn't update in Documentation/ instead?
+sb-tmpfs-1
+sb-tmpfs-27
+sb-tmpfs-29
+sb-tmpfs-35
+sb-tmpfs-49
 
-And my nitpick: for consistency, prefer en-US words over en-UK or mixed
-varieties when writing (s/behaviour/behavior/gc, s/neighbour/neighbor/gc).
+tmpfs-27 might own all the memory - how do we link that back to a
+mount point, container, user, workload, etc?
 
+Cheers,
+
+Dave.
 -- 
-An old man doll... just what I always wanted! - Clara
+Dave Chinner
+dchinner@redhat.com
+

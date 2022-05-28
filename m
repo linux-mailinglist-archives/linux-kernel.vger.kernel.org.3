@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F2A536D15
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 15:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6FC536D1C
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 15:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235801AbiE1NUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 09:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
+        id S235891AbiE1N3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 09:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbiE1NUl (ORCPT
+        with ESMTP id S235834AbiE1N3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 09:20:41 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3BF1A075
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 06:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653744040; x=1685280040;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=B6GjmZla1IYWF1L39TEwqEHfBiLiRLbmuaimjYhTGPI=;
-  b=b6kCPLbbKm14PFSdjWS7FVguq0XkzcCO8nOgtnsFLJqyBsWhucbfONkp
-   Yhxr4EWlueLzWWSqaPBMfckBsxl0/oOE6xDwBYYbF2+Wj0eC6343I8Iw8
-   QgU86Lw3//vmSlHw+cgA/9hPPhrTtfMCkJnqGXArRt4Pv79P7dsjH8Awl
-   1ubRoFELvuZklZbTuUk9C4I01I32/2JSCy7tEwI9sSf1E094yDdB5ety4
-   sPqp0FZ3wUH5WxxQd1VATLua+mrYQslLhEm3v6Eah0FSDK1BPSkDgOZdA
-   4AV5DD/6EFddpdJXJqVBn0WFG617MV95twXnFiDz60zjhxSIHsfOBS3xX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="335325060"
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="335325060"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 06:20:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="665857340"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 May 2022 06:20:38 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nuwMv-0000E6-UO;
-        Sat, 28 May 2022 13:20:37 +0000
-Date:   Sat, 28 May 2022 21:20:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>
-Subject: lib/crypto/blake2s-selftest.c:630:1: warning: the frame size of 1032
- bytes is larger than 1024 bytes
-Message-ID: <202205282155.LdL0Vb6J-lkp@intel.com>
+        Sat, 28 May 2022 09:29:31 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6E91A06F
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 06:29:28 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id 67so6724014vsh.2
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 06:29:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=yHYbw2bx/nsQBLFF3gJlg+vRlUz37DtKoW4ftjnCRHI=;
+        b=Xi3ApVFLNOOWluk36mWVEUZu3dk5y/QtW4TTFQ3J/YX+kiA4CjCpvIXZhT2lf/NG31
+         GMJa2R1LVMyoWH0wPp+BtEjoGS7raU5VLZ5jriCiIA0Qmd+MfslRnHJHdM7EwfD6uB2z
+         s2JN5/rvWkLmqbxnjPl4n1U+Pn+d6IEC7vgPn6Kqy7YcXWX0Crnh0oaGfpBSXr7HJBBs
+         FRqvA6nRroem0/uSeEtR1B678z51GyUpuPqBSo3hIrzz4lR9yEKJQl8KWnc1OToJMGNc
+         Xta9UDxWF0v9Hi5UtfMs1MI1Fbi4nip4OcFj3SmJRbPbgZr8sujEN+xCm+Qs4elMEXNk
+         kFFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=yHYbw2bx/nsQBLFF3gJlg+vRlUz37DtKoW4ftjnCRHI=;
+        b=zDbEy2Dz3JxFUQerJt0pV6IKvKE+tVhT2uvyVbpIyFg25y7hJxqGknCjDUFOGjEnXr
+         uZZPxyq6dPq69n4nIREEXYQsMUPLidnfkhVxe+u2oLH7ew1vhwICF2oqQkxXsLCVRBCi
+         OXICYKn/w7sj+eOh3OUbqtYwzLrfmCQJs/vbWHdM5je8EnAfHqEl3UficxdmWKxGF5KO
+         9N3CcaMmJV+Pj2GSNIJ+cWVlGddC/6fJJvXwdzE1d1s7NdByMSRBVpq/x+okK6ETQKtD
+         xq/G3E8qJf/dgjgbx/iP+F3EbzYwSsovSkqQACKisiQtvXtQoJQFgUo0p0vf3j7/NFuF
+         I1Xw==
+X-Gm-Message-State: AOAM532XqyG3FNUp1FecSear6ZmKZ2Bzg9KIpedhuOm/qUgqvRNmorDs
+        AhNQ/4c1zNgK5oXN8ZbRlJ3FT+/aEMFJNsK8Qos=
+X-Google-Smtp-Source: ABdhPJz6HXhjANVyyNzrNe2CxlCmFoeTKPLztvqJdkMa4OsVZmsYr22BTxzzpweAMJmN3LMXHRpPsP/LzYGA8XSoke8=
+X-Received: by 2002:a67:ca0b:0:b0:337:bace:569f with SMTP id
+ z11-20020a67ca0b000000b00337bace569fmr12926231vsk.19.1653744566964; Sat, 28
+ May 2022 06:29:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:612c:61a:b0:2bd:1783:dbee with HTTP; Sat, 28 May 2022
+ 06:29:26 -0700 (PDT)
+Reply-To: avamedicinemed3@gmail.com
+From:   Dr Ava Smith <mrsnicolemaroisbf@gmail.com>
+Date:   Sat, 28 May 2022 06:29:26 -0700
+Message-ID: <CAAV+NNR98rAGphC9_G5vqGv6iQr7m_40hQEqvbkXvpzB3+z=FA@mail.gmail.com>
+Subject: From Dr Ava Smith from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e35 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrsnicolemaroisbf[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [avamedicinemed3[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/UPDATE-20220528-180939/Jason-A-Donenfeld/crypto-blake2s-remove-shash-module/20220526-172214
-head:   54e31fb223170c2e7f3a6c3b1f3b438e32788f43
-commit: 54e31fb223170c2e7f3a6c3b1f3b438e32788f43 crypto: blake2s - remove shash module
-date:   3 hours ago
-config: h8300-randconfig-r015-20220524 (https://download.01.org/0day-ci/archive/20220528/202205282155.LdL0Vb6J-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/54e31fb223170c2e7f3a6c3b1f3b438e32788f43
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20220528-180939/Jason-A-Donenfeld/crypto-blake2s-remove-shash-module/20220526-172214
-        git checkout 54e31fb223170c2e7f3a6c3b1f3b438e32788f43
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash lib/crypto/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   lib/crypto/blake2s-selftest.c: In function 'blake2s_selftest':
->> lib/crypto/blake2s-selftest.c:630:1: warning: the frame size of 1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-     630 | }
-         | ^
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_SSD130X && HAS_IOMEM && DRM
-
-
-vim +630 lib/crypto/blake2s-selftest.c
-
-54e31fb223170c Jason A. Donenfeld 2022-05-28  612  
-54e31fb223170c Jason A. Donenfeld 2022-05-28  613  		memcpy(&state1, &state, sizeof(state1));
-54e31fb223170c Jason A. Donenfeld 2022-05-28  614  		blake2s_compress(&state1, blocks, 1, BLAKE2S_BLOCK_SIZE);
-54e31fb223170c Jason A. Donenfeld 2022-05-28  615  		for (l = 1; l < sizeof(long); ++l) {
-54e31fb223170c Jason A. Donenfeld 2022-05-28  616  			memcpy(unaligned_block + l, blocks,
-54e31fb223170c Jason A. Donenfeld 2022-05-28  617  			       BLAKE2S_BLOCK_SIZE);
-54e31fb223170c Jason A. Donenfeld 2022-05-28  618  			memcpy(&state2, &state, sizeof(state2));
-54e31fb223170c Jason A. Donenfeld 2022-05-28  619  			blake2s_compress(&state2, unaligned_block + l, 1,
-54e31fb223170c Jason A. Donenfeld 2022-05-28  620  					 BLAKE2S_BLOCK_SIZE);
-54e31fb223170c Jason A. Donenfeld 2022-05-28  621  			if (memcmp(&state1, &state2, sizeof(state1))) {
-54e31fb223170c Jason A. Donenfeld 2022-05-28  622  				pr_err("blake2s random compress align %d self-test %d: FAIL\n",
-54e31fb223170c Jason A. Donenfeld 2022-05-28  623  				       l, i + 1);
-54e31fb223170c Jason A. Donenfeld 2022-05-28  624  				success = false;
-54e31fb223170c Jason A. Donenfeld 2022-05-28  625  			}
-54e31fb223170c Jason A. Donenfeld 2022-05-28  626  		}
-54e31fb223170c Jason A. Donenfeld 2022-05-28  627  	}
-54e31fb223170c Jason A. Donenfeld 2022-05-28  628  
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08  629  	return success;
-66d7fb94e4ffe5 Jason A. Donenfeld 2019-11-08 @630  }
-
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hello Dear,
+how are you today
+My name is Dr Ava Smith,Am English and French
+I will share pictures and more details about me as soon as i hear from you
+Thanks
+Ava

@@ -2,167 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCAC536D84
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 17:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72818536D81
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 17:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237592AbiE1P3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 11:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
+        id S237553AbiE1PZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 11:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233773AbiE1P3Q (ORCPT
+        with ESMTP id S237114AbiE1PZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 11:29:16 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC3813F1F;
-        Sat, 28 May 2022 08:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653751755; x=1685287755;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kVYNnfGX5hHOEUJRrkwZvAzV0mNlGMAMNLdCH/RNBVE=;
-  b=iguF0B7/UgwrT7JHoTPWWFJhopPD9snuOFk6NuFwALzv4x/5ho+AW/qc
-   7hjsUwRRuhZ/mH5kazFclHLIQ5lx8pBciqJS7Jip2UUxVLMi0+gvukNgV
-   OtbrRo0eZBPINomS+eIgUM1iBRf/7cogsFR84fO77bGriyvSfhXqPygTv
-   JT3KEI3DBInB2Q3irGlMpq4bqPDfLOlgbM4g2scsyJqPN5jKWAenuz047
-   hrWqX+VzOAxhmBc7NUzILT+R0AVDTEBNEYsLe3iDUkgCmaeo2boEnqnJW
-   kPIxJxj4xe2q6RMIYpy/DzYCJDt9oqvJXOcC7yc/18gqsJ0BFw/hK/Xpy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="335336484"
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="335336484"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 08:29:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="575284993"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga007.jf.intel.com with ESMTP; 28 May 2022 08:29:11 -0700
-Date:   Sat, 28 May 2022 23:21:27 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
-        trix@redhat.com, gregkh@linuxfoundation.org, ronak.jain@xilinx.com,
-        abhyuday.godhasara@xilinx.com, rajan.vaja@xilinx.com,
-        lakshmi.sai.krishna.potthuri@xilinx.com, piyush.mehta@xilinx.com,
-        harsha.harsha@xilinx.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        git@xilinx.com
-Subject: Re: [PATCH 3/3] fpga: zynqmp-fpga: Adds status interface
-Message-ID: <20220528152127.GA181580@yilunxu-OptiPlex-7050>
-References: <20220524094745.287002-1-nava.manne@xilinx.com>
- <20220524094745.287002-4-nava.manne@xilinx.com>
+        Sat, 28 May 2022 11:25:40 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE356379;
+        Sat, 28 May 2022 08:25:39 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id r9-20020a1c4409000000b00397345f2c6fso503628wma.4;
+        Sat, 28 May 2022 08:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iCcNhyM6zqp+JP2s/nhVAwZzn6FcQLeW7/wEey8U9vk=;
+        b=InMqMHEdIPCtUsGGMI9YYTYACfK9DIejbgRjwjE85QyaAvuB+dPsn07gk4GMYMHVhR
+         2HNdEqPAjnktH4Cm3Vuz+NbQM9MfikOH4Ommb69vdRNssWc9YUl80RHAjZS6YYUh6qei
+         rTLn/Y308LaRQhbKffYFOHOxdys8wCseyNpgSNmLBt4oAyxXLoJh0BxmN3xixkerbto+
+         6hINeMGkULOA9LPKKk4ZtdVhFtLNJqoMdXsMVn4/C+Hr3h8JkS0q1lwwaSG0PXV7648r
+         1+tUXT0qkb4KaxhRRck6zG6KZWwyeoXoYXOrwHI81U13gnJl8SnCSXkPNuk3LA8WlccR
+         4R/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iCcNhyM6zqp+JP2s/nhVAwZzn6FcQLeW7/wEey8U9vk=;
+        b=h7m+6AMxN2KmthDn+J6yEd4dmR65viy414S9V51Z2uu210Eg4ezW3GeGmDshyT/2Nn
+         GyGX5flEmexA4pL5kpjR8a4PLX6OMX2EKlxbSiJ07uAGGWDtH5hbirRm1coYZrsGFQjs
+         npMGYBn/fzyXpYeV/RXkrpQCUJdwexe7MqQM6+d/TbfocXg1hJc4hf+XYVgdG42NNYpR
+         92RRNwFdBSR//ACclwr54ePnWwwCwgcr8dG4pcvFIFVrL9yJmmHYv18uzWptptC6bWlv
+         +FnGUIRFC89PiiII0HuIJFtcVnlGNnmzWDoYMm09PRPpOur6CJRvsNWmpATlX1/RK976
+         q5Cw==
+X-Gm-Message-State: AOAM532jHStUSw3lfH1kQNYbu5JU0lW11srvJn4z5bERziKL2QN/JnGc
+        CqnnV7qzJuYC7eGLKOeuGA0=
+X-Google-Smtp-Source: ABdhPJzFIVYw3G+uLtGylp0NKAcMjv1c2kHDJTjLVb+abUfYsgdjHx99Q3N2zVAEvv1/hN5LiQaEag==
+X-Received: by 2002:a05:600c:5126:b0:39a:eede:5bf4 with SMTP id o38-20020a05600c512600b0039aeede5bf4mr723149wms.81.1653751538388;
+        Sat, 28 May 2022 08:25:38 -0700 (PDT)
+Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
+        by smtp.gmail.com with ESMTPSA id bg34-20020a05600c3ca200b003974df805c7sm5769385wmb.8.2022.05.28.08.25.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 08:25:37 -0700 (PDT)
+Date:   Sat, 28 May 2022 16:25:35 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.17 000/111] 5.17.12-rc1 review
+Message-ID: <YpI+7yNURQTMq9G+@debian>
+References: <20220527084819.133490171@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220524094745.287002-4-nava.manne@xilinx.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 03:17:45PM +0530, Nava kishore Manne wrote:
-> Adds status interface for zynqmp-fpga, It's a read only
-> interface which allows the user to get the PL status.
+Hi Greg,
+
+On Fri, May 27, 2022 at 10:48:32AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.12 release.
+> There are 111 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Usage:
-> To read the PL configuration status
->         cat /sys/class/fpga_manager/<fpga>/status
-> 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> ---
->  drivers/fpga/zynqmp-fpga.c | 52 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
-> 
-> diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
-> index c60f20949c47..07c7b7326726 100644
-> --- a/drivers/fpga/zynqmp-fpga.c
-> +++ b/drivers/fpga/zynqmp-fpga.c
-> @@ -14,6 +14,19 @@
->  
->  /* Constant Definitions */
->  #define IXR_FPGA_DONE_MASK	BIT(3)
-> +#define READ_DMA_SIZE		256U
-> +
-> +/* Error Register */
-> +#define IXR_FPGA_ERR_CRC_ERR		BIT(0)
-> +#define IXR_FPGA_ERR_SECURITY_ERR	BIT(16)
-> +
-> +/* Signal Status Register. For details refer ug570 */
-> +#define IXR_FPGA_END_OF_STARTUP		BIT(4)
-> +#define IXR_FPGA_GST_CFG_B		BIT(5)
-> +#define IXR_FPGA_INIT_B_INTERNAL	BIT(11)
-> +#define IXR_FPGA_DONE_INTERNAL_SIGNAL	BIT(13)
-> +
-> +#define IXR_FPGA_CONFIG_STAT_OFFSET	7U
->  
->  /**
->   * struct zynqmp_fpga_priv - Private data structure
-> @@ -77,8 +90,47 @@ static enum fpga_mgr_states zynqmp_fpga_ops_state(struct fpga_manager *mgr)
->  	return FPGA_MGR_STATE_UNKNOWN;
->  }
->  
-> +static u64 zynqmp_fpga_ops_status(struct fpga_manager *mgr)
-> +{
-> +	unsigned int *buf, reg_val;
-> +	dma_addr_t dma_addr;
-> +	u64 status = 0;
-> +	int ret;
-> +
-> +	buf = dma_alloc_coherent(mgr->dev.parent, READ_DMA_SIZE,
-> +				 &dma_addr, GFP_KERNEL);
-> +	if (!buf)
-> +		return -ENOMEM;
-> +
-> +	ret = zynqmp_pm_fpga_read(IXR_FPGA_CONFIG_STAT_OFFSET, dma_addr,
-> +				  PM_FPGA_READ_CONFIG_REG, &reg_val);
-> +	if (ret) {
-> +		status = FPGA_MGR_STATUS_FIRMWARE_REQ_ERR;
-> +		goto free_dmabuf;
-> +	}
-> +
-> +	if (reg_val & IXR_FPGA_ERR_CRC_ERR)
-> +		status |= FPGA_MGR_STATUS_CRC_ERR;
-> +	if (reg_val & IXR_FPGA_ERR_SECURITY_ERR)
-> +		status |= FPGA_MGR_STATUS_SECURITY_ERR;
-> +	if (!(reg_val & IXR_FPGA_INIT_B_INTERNAL))
-> +		status |= FPGA_MGR_STATUS_DEVICE_INIT_ERR;
-> +	if (!(reg_val & IXR_FPGA_DONE_INTERNAL_SIGNAL))
-> +		status |= FPGA_MGR_STATUS_SIGNAL_ERR;
-> +	if (!(reg_val & IXR_FPGA_GST_CFG_B))
-> +		status |= FPGA_MGR_STATUS_HIGH_Z_STATE_ERR;
-> +	if (!(reg_val & IXR_FPGA_END_OF_STARTUP))
-> +		status |= FPGA_MGR_STATUS_EOS_ERR;
+> Responses should be made by Sun, 29 May 2022 08:46:36 +0000.
+> Anything received after that time might be too late.
 
-I have concern about the status interface. Different vendors have
-differnt error sets defined by Hardwares. If we always define the
-new bits when we cannot find an exact 1:1 mapping. A 64 bits would
-soon be used out. Also it's hard to understand the mixture of
-different error sets.
+Build test:
+mips (gcc version 11.3.1 20220517): 60 configs -> no failure
+arm (gcc version 11.3.1 20220517): 100 configs -> no new failure
+arm64 (gcc version 11.3.1 20220517): 3 configs -> no failure
+x86_64 (gcc version 11.3.1 20220517): 4 configs -> no failure
 
-I'd rather suggest that each driver define its own error reading
-interface.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+arm64: Booted on rpi4b (4GB model). No regression. [1]
+mips: Booted on ci20 board. No regression. [2]
 
-Thanks,
-Yilun
+[1]. https://openqa.qa.codethink.co.uk/tests/1223
+[2]. https://openqa.qa.codethink.co.uk/tests/1224
 
-> +
-> +free_dmabuf:
-> +	dma_free_coherent(mgr->dev.parent, READ_DMA_SIZE, buf, dma_addr);
-> +
-> +	return status;
-> +}
-> +
->  static const struct fpga_manager_ops zynqmp_fpga_ops = {
->  	.state = zynqmp_fpga_ops_state,
-> +	.status = zynqmp_fpga_ops_status,
->  	.write_init = zynqmp_fpga_ops_write_init,
->  	.write = zynqmp_fpga_ops_write,
->  };
-> -- 
-> 2.25.1
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+

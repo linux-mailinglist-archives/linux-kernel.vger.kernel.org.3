@@ -2,36 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8219536A6C
+	by mail.lfdr.de (Postfix) with ESMTP id 21490536A6A
 	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 05:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245347AbiE1DRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 23:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S1351784AbiE1DTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 23:19:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiE1DRr (ORCPT
+        with ESMTP id S231903AbiE1DTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 23:17:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4003834BA3
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 20:17:46 -0700 (PDT)
+        Fri, 27 May 2022 23:19:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9F6517FD;
+        Fri, 27 May 2022 20:19:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7398B8268D
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 03:17:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33BFC34114;
-        Sat, 28 May 2022 03:17:42 +0000 (UTC)
-Date:   Fri, 27 May 2022 23:17:41 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 137D660FBD;
+        Sat, 28 May 2022 03:19:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC1EBC34114;
+        Sat, 28 May 2022 03:18:57 +0000 (UTC)
+Date:   Fri, 27 May 2022 23:18:56 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [for-next][PATCH 00/23] tracing: Last minute fixes and updates
- for 5.19
-Message-ID: <20220527231741.5ef31534@gandalf.local.home>
-In-Reply-To: <20220528025028.850906216@goodmis.org>
-References: <20220528025028.850906216@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Subject: Re: [PATCH v5] ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
+ weak function
+Message-ID: <20220527231856.14000ed1@gandalf.local.home>
+In-Reply-To: <20220527163205.421c7828@gandalf.local.home>
+References: <20220527163205.421c7828@gandalf.local.home>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -45,24 +56,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 May 2022 22:50:28 -0400
+On Fri, 27 May 2022 16:32:05 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> Actually, a lot of these changes were in my queue, I just haven't
-> tested them. But they are mostly fixes and clean ups. No real functional
-> features.
-> 
-> My tests on these have not completely finished, so I may have to rebase.
-> But since this is half way into the merge window, I want these in
-> linux-next for a little bit before sending my pull request.
-> 
+> @@ -4003,7 +4128,11 @@ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
+>  	char str[KSYM_SYMBOL_LEN];
+>  	char *modname;
+>  
+> -	kallsyms_lookup(rec->ip, NULL, NULL, &modname, str);
+> +	if (lookup_ip(rec->ip, &modname, str)) {
+> +		/* This should only happen when a rec is disabled */
+> +		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
 
-> Steven Rostedt (Google) (2):
->       ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding weak function
-
-And my test just failed on this one :-p (Something stupid and minor)
-
-I guess I'll send out a v6 and try again.
+It appears that some of the start up tests can call this before the
+workqueue sets it to DISABLED, so we need to not WARN_ON() here. :-/
 
 -- Steve
 
+
+> +		return 0;
+> +	}
+>  

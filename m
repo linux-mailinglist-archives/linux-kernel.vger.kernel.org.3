@@ -2,80 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B63536ECD
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 01:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3BB536ECC
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 01:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiE1XXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 19:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S230101AbiE1XVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 19:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiE1XXi (ORCPT
+        with ESMTP id S229529AbiE1XVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 19:23:38 -0400
-X-Greylist: delayed 1704 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 28 May 2022 16:23:36 PDT
-Received: from rome.phoronix.com (rome.phoronix.com [192.211.48.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD8298595
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 16:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=michaellarabel.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rSkQingUjf0hyflP8WuA7Yt4okTQlQXsse1eci3zb2Y=; b=RYbFrKcbGCbNnF4uJU970TaQKP
-        /4iiKFnpuXCa51gGO0jPpteZTpHlXzJk6p3Pn7PfX4skjbsPFjE72+XSCFSXLKeSON/7JGSQbI5p9
-        h1eDWvfklSAbHWYk39B68dM+yocZ3WiGdMOzlsM6CKf5C+r1JKXy76ruA2kMq6LVmDmVgDEjlQoDO
-        LA+N79/GMCQMASLJDKZa0v9XFVSUkqobsOnXO/DMA6owOje+h6Ybl6cb9kCieyaaBwoq6eAWERJ7o
-        +LlA61ixjhb4HSJlhmeYDCH94rrLH1K1cgoSJ5ZVP53mAC29mp9SNti3elCsE3nhVA+xdM8O5nruA
-        wmajwwlQ==;
-Received: from c-73-176-63-28.hsd1.in.comcast.net ([73.176.63.28]:44418 helo=[192.168.1.42])
-        by rome.phoronix.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <Michael@MichaelLarabel.com>)
-        id 1nv5Kv-0005AW-7i;
-        Sat, 28 May 2022 18:55:08 -0400
-Message-ID: <134065a4-0446-bbbc-fca8-59f32798cf08@MichaelLarabel.com>
-Date:   Sat, 28 May 2022 17:54:51 -0500
+        Sat, 28 May 2022 19:21:08 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93E68E199
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 16:21:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653780064; x=1685316064;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xkD1V8Zp+AhxWPoBDamev0naFgMpz7P5t4PQTwU+x2k=;
+  b=FiUomkk7TAoTLoWc/HBDwxAE0urvqjEtNhtbPvnn0tjkSU1D7GtYmjT/
+   y+5bHdUUYhoDoI/qCjKhjgHBXzXK6R9O4J1rg9WzhjQ0byzPgywZvIqfm
+   tSRB0m4jmkdGdyIxjZlsaf3jQMhkO81+3Eq3Wnyy6QH5xhYfFYce0DWkN
+   GnpyL8Q8f7I2l6YdMF0u8KLAj02uVGhQcYMQYy1E2hGvEfYmnnTXuTwIv
+   m+VeOFLUmEAoSC4oEZkUbcaWGg0dL2tea7L/l/htXBCW29kgrvCrL3KHV
+   J4zqD66HeoYdUyq25lKteM4zoXtJc1nqCLcRtuFjXy7ZSVxOJfac8vk1d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10361"; a="335374316"
+X-IronPort-AV: E=Sophos;i="5.91,259,1647327600"; 
+   d="scan'208";a="335374316"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 16:21:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,259,1647327600"; 
+   d="scan'208";a="705655142"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 May 2022 16:21:02 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nv5jx-0000bI-Hu;
+        Sat, 28 May 2022 23:21:01 +0000
+Date:   Sun, 29 May 2022 07:20:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:393:28:
+ sparse: sparse: incorrect type in argument 1 (different base types)
+Message-ID: <202205290744.Ox0ZyhF1-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [patch v5] mm: lru_cache_disable: replace work queue
- synchronization with synchronize_rcu
-Content-Language: en-CA
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Minchan Kim <minchan@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-References: <YhUI1wUtV8yguijO@fuller.cnet> <YhUKRzEKxMvlGQ5n@fuller.cnet>
- <YiI+a9gTr/UBCf0X@fuller.cnet>
- <20220304163554.8872fe5d5a9d634f7a2884f5@linux-foundation.org>
- <Yin7hDxdt0s/x+fp@fuller.cnet> <YkWyLaom/r7jXgbA@zn.tnic>
- <YmrWK/KoU1zrAxPI@fuller.cnet>
- <20220528141809.732788db257253396462c79e@linux-foundation.org>
-From:   Michael Larabel <Michael@MichaelLarabel.com>
-In-Reply-To: <20220528141809.732788db257253396462c79e@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - rome.phoronix.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - MichaelLarabel.com
-X-Get-Message-Sender-Via: rome.phoronix.com: authenticated_id: michael@michaellarabel.com
-X-Authenticated-Sender: rome.phoronix.com: michael@michaellarabel.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,58 +61,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/28/22 16:18, Andrew Morton wrote:
-> On Thu, 28 Apr 2022 15:00:11 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
->
->> On Thu, Mar 31, 2022 at 03:52:45PM +0200, Borislav Petkov wrote:
->>> On Thu, Mar 10, 2022 at 10:22:12AM -0300, Marcelo Tosatti wrote:
->> ...
->>
->>> Someone pointed me at this:
->>>
->>> https://www.phoronix.com/scan.php?page=news_item&px=Linux-518-Stress-NUMA-Goes-Boom
->>>
->>> which says this one causes a performance regression with stress-ng's
->>> NUMA test...
->> Michael,
->>
->> This is probably do_migrate_pages that is taking too long due to
->> synchronize_rcu().
->>
->> Switching to synchronize_rcu_expedited() should probably fix it...
->> Can you give it a try, please?
-> I guess not.
->
-> Is anyone else able to demonstrate a stress-ng performance regression
-> due to ff042f4a9b0508?  And if so, are they able to try Marcelo's
-> one-liner?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
+commit: edd4a8667355607345b76d5652adc0f300a28970 s390/boot: get rid of startup archive
+date:   3 weeks ago
+config: s390-randconfig-s032-20220529 (https://download.01.org/0day-ci/archive/20220529/202205290744.Ox0ZyhF1-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-14-g5a0004b5-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=edd4a8667355607345b76d5652adc0f300a28970
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout edd4a8667355607345b76d5652adc0f300a28970
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-Apologies I don't believe I got the email previously (or if it ended up 
-in spam or otherwise overlooked) so just noticed this thread now...
+sparse warnings: (new ones prefixed by >>)
+   arch/s390/boot/decompressor.c: note: in included file (through arch/s390/include/uapi/../../../../lib/decompress_unxz.c):
+>> arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:393:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     expected restricted __le32 const [usertype] *p
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:393:28: sparse:     got unsigned int const [usertype] *
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:427:48: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     expected restricted __le32 const [usertype] *p
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:427:48: sparse:     got unsigned int const [usertype] *
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:435:37: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     expected restricted __le32 const [usertype] *p
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:435:37: sparse:     got unsigned int const [usertype] *
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:459:28: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __le32 const [usertype] *p @@     got unsigned int const [usertype] * @@
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     expected restricted __le32 const [usertype] *p
+   arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c:459:28: sparse:     got unsigned int const [usertype] *
 
-I have the system around and will work on verifying it can reproduce 
-still and can then test the patch, should be able to get it tomorrow.
+vim +393 arch/s390/include/uapi/../../../../lib/xz/xz_dec_stream.c
 
-Thanks and sorry about the delay.
+24fa0402a9b6a5 Lasse Collin 2011-01-12  385  
+24fa0402a9b6a5 Lasse Collin 2011-01-12  386  /* Decode the Stream Header field (the first 12 bytes of the .xz Stream). */
+24fa0402a9b6a5 Lasse Collin 2011-01-12  387  static enum xz_ret dec_stream_header(struct xz_dec *s)
+24fa0402a9b6a5 Lasse Collin 2011-01-12  388  {
+24fa0402a9b6a5 Lasse Collin 2011-01-12  389  	if (!memeq(s->temp.buf, HEADER_MAGIC, HEADER_MAGIC_SIZE))
+24fa0402a9b6a5 Lasse Collin 2011-01-12  390  		return XZ_FORMAT_ERROR;
+24fa0402a9b6a5 Lasse Collin 2011-01-12  391  
+24fa0402a9b6a5 Lasse Collin 2011-01-12  392  	if (xz_crc32(s->temp.buf + HEADER_MAGIC_SIZE, 2, 0)
+24fa0402a9b6a5 Lasse Collin 2011-01-12 @393  			!= get_le32(s->temp.buf + HEADER_MAGIC_SIZE + 2))
+24fa0402a9b6a5 Lasse Collin 2011-01-12  394  		return XZ_DATA_ERROR;
+24fa0402a9b6a5 Lasse Collin 2011-01-12  395  
+24fa0402a9b6a5 Lasse Collin 2011-01-12  396  	if (s->temp.buf[HEADER_MAGIC_SIZE] != 0)
+24fa0402a9b6a5 Lasse Collin 2011-01-12  397  		return XZ_OPTIONS_ERROR;
+24fa0402a9b6a5 Lasse Collin 2011-01-12  398  
+24fa0402a9b6a5 Lasse Collin 2011-01-12  399  	/*
+24fa0402a9b6a5 Lasse Collin 2011-01-12  400  	 * Of integrity checks, we support only none (Check ID = 0) and
+24fa0402a9b6a5 Lasse Collin 2011-01-12  401  	 * CRC32 (Check ID = 1). However, if XZ_DEC_ANY_CHECK is defined,
+24fa0402a9b6a5 Lasse Collin 2011-01-12  402  	 * we will accept other check types too, but then the check won't
+24fa0402a9b6a5 Lasse Collin 2011-01-12  403  	 * be verified and a warning (XZ_UNSUPPORTED_CHECK) will be given.
+24fa0402a9b6a5 Lasse Collin 2011-01-12  404  	 */
+4f8d7abaa413c3 Lasse Collin 2021-10-11  405  	if (s->temp.buf[HEADER_MAGIC_SIZE + 1] > XZ_CHECK_MAX)
+4f8d7abaa413c3 Lasse Collin 2021-10-11  406  		return XZ_OPTIONS_ERROR;
+4f8d7abaa413c3 Lasse Collin 2021-10-11  407  
+24fa0402a9b6a5 Lasse Collin 2011-01-12  408  	s->check_type = s->temp.buf[HEADER_MAGIC_SIZE + 1];
+24fa0402a9b6a5 Lasse Collin 2011-01-12  409  
 
-Michael
+:::::: The code at line 393 was first introduced by commit
+:::::: 24fa0402a9b6a537e87e38341e78b7da86486846 decompressors: add XZ decompressor module
 
+:::::: TO: Lasse Collin <lasse.collin@tukaani.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
-
->
->> diff --git a/mm/swap.c b/mm/swap.c
->> index bceff0cb559c..04a8bbf9817a 100644
->> --- a/mm/swap.c
->> +++ b/mm/swap.c
->> @@ -879,7 +879,7 @@ void lru_cache_disable(void)
->>   	 * lru_disable_count = 0 will have exited the critical
->>   	 * section when synchronize_rcu() returns.
->>   	 */
->> -	synchronize_rcu();
->> +	synchronize_rcu_expedited();
->>   #ifdef CONFIG_SMP
->>   	__lru_add_drain_all(true);
->>   #else
->>
->>
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

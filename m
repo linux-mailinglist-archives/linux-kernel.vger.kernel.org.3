@@ -2,96 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DFF536C6C
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A25536C68
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234217AbiE1Kxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 06:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36236 "EHLO
+        id S1355915AbiE1Kre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 06:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbiE1Kxd (ORCPT
+        with ESMTP id S1355438AbiE1Kr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 06:53:33 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5175E1ADA7;
-        Sat, 28 May 2022 03:53:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653735213; x=1685271213;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y7R3+mu0g0HoCPlWfUYj/osjYVHe4Rcxmekmm9/hr3M=;
-  b=J3vgYbhijVtwFh4+CnX4CgBdhI5e7SJ4xaj6ddI9lkAVC3bWF1w+qjuk
-   tlBMVwp5Z7/2xL4xNECBUJq0XwnHTOLA161dhEO6a/T6qHx6FpJ1vQCeJ
-   5OdJEFOA9dvx2y45abSESFY0UPothfTzGXd7p2p0wXb+ACaMd5dTvb3qy
-   1Ans4z2M8vLNnsC3sQwPyuPtiyrjq7FE+c3cS1HlXe68mSUQMkAR8OuNS
-   fhyGohe24tzBGbTR+i+WsXEaoi7KOZAQQXjiZVnpjzQYJboYppbSxZwDW
-   BWETVCpo6O6iczt91kiSJsKgIMclFvtVgqfxn5zwmzBs3fj+VPg+CL6gY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274385436"
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="274385436"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 03:53:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="575227591"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga007.jf.intel.com with ESMTP; 28 May 2022 03:53:30 -0700
-Date:   Sat, 28 May 2022 18:45:47 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Basheer Ahmed Muddebihal 
-        <basheer.ahmed.muddebihal@linux.intel.com>
-Cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        matthew.gerlach@linux.intel.com, marpagan@redhat.com,
-        tianfei.zhang@intel.com
-Subject: Re: [PATCH 1/3] fpga: dfl: Fix kernel-doc warning in dfl.h for
- revision
-Message-ID: <20220528104547.GA178479@yilunxu-OptiPlex-7050>
-References: <20220519221249.858873-1-basheer.ahmed.muddebihal@linux.intel.com>
- <20220519221249.858873-2-basheer.ahmed.muddebihal@linux.intel.com>
+        Sat, 28 May 2022 06:47:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416E51C123
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 03:47:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC333B816FC
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 10:47:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D341C34116
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 10:47:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eVuGEnTz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653734823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yvkMObBvQuESLA3tgiCHwDOneR72VGk01RLTWqPCrPE=;
+        b=eVuGEnTz50Yxrpvt4R+sJiw58MkzfBHJi0LvrcE1kbAC7fBLcpjtiBRV4uMcHWHAoDXD7x
+        83hvWoDoXVi9k+/xKkdBDfJ5RZxWOUEoGpszpc0izU9pDMSdlfSZiOBYd5+9outKADwy1c
+        6CiHVPazpO02XsvnputRGNWGQDWocfs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fd50f0d3 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Sat, 28 May 2022 10:47:03 +0000 (UTC)
+Received: by mail-yb1-f171.google.com with SMTP id z186so7463432ybz.3
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 03:47:03 -0700 (PDT)
+X-Gm-Message-State: AOAM532VE0+7Zxqck7o8ljPBAx9BJXg4gPn5dsvnTPBMlVesdEYdHYIO
+        2w12J2Fd2g3GfPiAkwxlzcHKExubxUEqKngypy4=
+X-Google-Smtp-Source: ABdhPJyixFhRilZFN5H2fag0QpJjlKI3j15XAKBazx0G7U79AaI/W1qBFYBPpv2ari2zWqKUNAsz/nhQz+HgD3RCdKk=
+X-Received: by 2002:a25:9389:0:b0:65b:afb6:4295 with SMTP id
+ a9-20020a259389000000b0065bafb64295mr5470004ybm.373.1653734822539; Sat, 28
+ May 2022 03:47:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519221249.858873-2-basheer.ahmed.muddebihal@linux.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <YpH84wrg4ZxIkkie@debian>
+In-Reply-To: <YpH84wrg4ZxIkkie@debian>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sat, 28 May 2022 12:46:51 +0200
+X-Gmail-Original-Message-ID: <CAHmME9qHRd-t8mupAG1w0jV-uE5UNrMeRO+8-0b_4N1cCPyM+w@mail.gmail.com>
+Message-ID: <CAHmME9qHRd-t8mupAG1w0jV-uE5UNrMeRO+8-0b_4N1cCPyM+w@mail.gmail.com>
+Subject: Re: mainline build failure due to 8bdc2a190105 ("crypto: poly1305 -
+ cleanup stray CRYPTO_LIB_POLY1305_RSIZE")
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 03:12:47PM -0700, Basheer Ahmed Muddebihal wrote:
-> Fixed the following warning:
+Hi Sudip,
 
-Please help specify which tool reports this issue here. Is it lkp?
+On Sat, May 28, 2022 at 12:43 PM Sudip Mukherjee
+<sudipm.mukherjee@gmail.com> wrote:
+>
+> Hi All,
+>
+> The latest mainline kernel branch fails to build for:
+>
+> arm: imx_v6_v7_defconfig and multi_v7_defconfig
+> mips: decstation_64_defconfig, decstation_defconfig, decstation_r4k_defconfig
+>
+> with errors like:
+>
+> In file included from crypto/chacha20poly1305.c:13:
+> ./include/crypto/poly1305.h:56:46: error: 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE' undeclared here (not in a function); did you mean 'CONFIG_CRYPTO_POLY1305_MODULE'?
+>    56 |                 struct poly1305_key opaque_r[CONFIG_CRYPTO_LIB_POLY1305_RSIZE];
+>       |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+>
+> git bisect pointed to 8bdc2a190105 ("crypto: poly1305 - cleanup stray CRYPTO_LIB_POLY1305_RSIZE")
+>
+> I have checked .config to confirm that it contains:
+>
+> CONFIG_CRYPTO_CHACHA20POLY1305=m
+> # CONFIG_CRYPTO_LIB_POLY1305 is not set
+>
+> so, CONFIG_CRYPTO_LIB_POLY1305_RSIZE will not be defined as it now
+> depends on CONFIG_CRYPTO_LIB_POLY1305.
 
-> drivers/fpga/dfl.h:255: warning: Function parameter or member 'revision' not described in 'dfl_feature'
-> 
+Indeed. There's this v2:
+https://lore.kernel.org/all/20220527201931.63955-1-Jason@zx2c4.com/
 
-Please add the 'Fixes' tag here.
-Please also add the 'Reported-by' tag here.
+I'll send a v1/v2 interdiff shortly.
 
-> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
-> ---
->  drivers/fpga/dfl.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
-> index 06cfcd5e84bb..766429e618f6 100644
-> --- a/drivers/fpga/dfl.h
-> +++ b/drivers/fpga/dfl.h
-> @@ -231,6 +231,7 @@ struct dfl_feature_irq_ctx {
->   *
->   * @dev: ptr to pdev of the feature device which has the sub feature.
->   * @id: sub feature id.
-> + * @revision: sub feature revision.
->   * @resource_index: each sub feature has one mmio resource for its registers.
->   *		    this index is used to find its mmio resource from the
->   *		    feature dev (platform device)'s resources.
-> -- 
-> 2.34.1
+Jason

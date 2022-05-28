@@ -2,97 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35AD536BAB
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 10:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416DA536BAF
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 10:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236886AbiE1Idg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 04:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S231820AbiE1IhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 04:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiE1Ide (ORCPT
+        with ESMTP id S229538AbiE1IhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 04:33:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5861D321
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 01:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653726813; x=1685262813;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O5Jf8AFkuLLjEnuW70tzraQr5gayQ0y+1vLYPyAtXYQ=;
-  b=OyHVa/1z8hVBdmuv/4uN5bjZ59zKNOkmSup2BYQhmWFFQD3wlIWUI+Lf
-   9RK0P9OCgulw+IDpMxiCHRCV2bbb5gIOlmKSKa9sQR5/uVFa+A2abJRl/
-   smuSH6B0h3mO2oRbeJJqt5fqqKhP2zGtgZ+WQZsXrUpK/LpPAkG+cxjfA
-   2RjDZjgc9rKI/N1g9t/qcy+hTKp2q6KhGFu62QgDkA5LBTv2LvTo8udLw
-   eHi6kr4BLWKrv7twPGUyCsnL7Jb8FPJ2W8kZiKNmaSbriAmfJwletXisk
-   8wdc2Kh3METqUSL41N3tywcxnU/b9OpyR+RXrfpBhTQe3dfwtyw5KuPeK
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="335298513"
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="335298513"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 01:33:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="528529475"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 May 2022 01:33:31 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nurt5-00002v-60;
-        Sat, 28 May 2022 08:33:31 +0000
-Date:   Sat, 28 May 2022 16:33:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: kismet: WARNING: unmet direct dependencies detected for
- DRM_DP_AUX_BUS when selected by DRM_MSM
-Message-ID: <202205281602.wAVTngoc-lkp@intel.com>
+        Sat, 28 May 2022 04:37:13 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186FD19012;
+        Sat, 28 May 2022 01:37:11 -0700 (PDT)
+Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L9FPd30RSzjX8C;
+        Sat, 28 May 2022 16:36:05 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 28 May 2022 16:37:09 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 28 May 2022 16:37:08 +0800
+Subject: Re: [PATCH -next v6 1/3] block, bfq: record how many queues are busy
+ in bfq_group
+To:     Paolo Valente <paolo.valente@linaro.org>
+CC:     Jan Kara <jack@suse.cz>, Tejun Heo <tj@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220523131818.2798712-1-yukuai3@huawei.com>
+ <20220523131818.2798712-2-yukuai3@huawei.com>
+ <8D29A46A-4B8A-4F05-BCE3-D9D0F0D2DD5A@linaro.org>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <7628f927-7131-5e7f-33d9-6029dada57fe@huawei.com>
+Date:   Sat, 28 May 2022 16:37:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8D29A46A-4B8A-4F05-BCE3-D9D0F0D2DD5A@linaro.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
-commit: f5d01644921b7cba461fe1cde57d60a0e4ab3518 drm/msm: select DRM_DP_AUX_BUS for the AUX bus support
-date:   4 weeks ago
-config: (https://download.01.org/0day-ci/archive/20220528/202205281602.wAVTngoc-lkp@intel.com/config)
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f5d01644921b7cba461fe1cde57d60a0e4ab3518
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f5d01644921b7cba461fe1cde57d60a0e4ab3518
-        # 1. reproduce by kismet
-           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
-           kismet --linux-ksrc=linux --selectees CONFIG_DRM_DP_AUX_BUS --selectors CONFIG_DRM_MSM -a=x86_64
-        # 2. reproduce by make
-           # save the config file to linux source tree
-           cd linux
-           make ARCH=x86_64 olddefconfig
+ÔÚ 2022/05/28 16:18, Paolo Valente Ð´µÀ:
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+>> /*
+>> @@ -1660,6 +1678,7 @@ void bfq_del_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>> 	bfq_clear_bfqq_busy(bfqq);
+>>
+>> 	bfqd->busy_queues[bfqq->ioprio_class - 1]--;
+>> +	bfq_inc_busy_queues(bfqq);
+>>
+> 
+> Why do you increment the number of busy queues for the group on a
+> del_bfqq_busy, instead of an add_bfqq_busy?
+Hi, Paolo
 
+You'are right, here should be bfq_dec_busy_queues()...
+> 
+> Besides, the name of the function bfq_inc_busy_queues does not mention
+> the target of the update, namely the group.  This creates a little
+> confusion at a first sight, as one sees this function invoked right
+> after the update of a field with the same name: bfqd->busy_queues.
+Ok, that make sense, I'll move the update of 'bfqd->busy_queues' into
+the new api as well.
 
-kismet warnings: (new ones prefixed by >>)
->> kismet: WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS when selected by DRM_MSM
-   
-   WARNING: unmet direct dependencies detected for DRM_DP_AUX_BUS
-     Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && OF [=n]
-     Selected by [y]:
-     - DRM_MSM [=y] && HAS_IOMEM [=y] && DRM [=y] && (ARCH_QCOM || SOC_IMX5 || COMPILE_TEST [=y]) && COMMON_CLK [=y] && IOMMU_SUPPORT [=y] && (QCOM_OCMEM [=n] || QCOM_OCMEM [=n]=n) && (QCOM_LLCC [=n] || QCOM_LLCC [=n]=n) && (QCOM_COMMAND_DB [=n] || QCOM_COMMAND_DB [=n]=n)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Kuai
+> 
+>> 	if (bfqq->wr_coeff > 1)
+>> 		bfqd->wr_busy_queues--;
+>> @@ -1683,6 +1702,7 @@ void bfq_add_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+>>
+>> 	bfq_mark_bfqq_busy(bfqq);
+>> 	bfqd->busy_queues[bfqq->ioprio_class - 1]++;
+>> +	bfq_dec_busy_queues(bfqq);
+> 
+> Same pair of comments as above.
+> 
+> Thanks,
+> Paolo
+> 
+>>
+>> 	if (!bfqq->dispatched)
+>> 		if (bfqq->wr_coeff == 1)
+>> -- 
+>> 2.31.1
+>>
+> 
+> .
+> 

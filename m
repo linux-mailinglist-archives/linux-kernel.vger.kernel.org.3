@@ -2,43 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B67536BDC
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC8A536C06
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbiE1JTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 05:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
+        id S233111AbiE1Jji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 05:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232310AbiE1JTa (ORCPT
+        with ESMTP id S232644AbiE1Jjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 05:19:30 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F558D6;
-        Sat, 28 May 2022 02:19:29 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L9GMX63WBzDqSc;
-        Sat, 28 May 2022 17:19:20 +0800 (CST)
-Received: from container.huawei.com (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 17:19:27 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ap420073@gmail.com>
-Subject: [PATCH net] macsec: fix UAF bug for real_dev
-Date:   Sat, 28 May 2022 17:36:59 +0800
-Message-ID: <20220528093659.3186312-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 28 May 2022 05:39:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F41D17A80;
+        Sat, 28 May 2022 02:39:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF4B6B816F4;
+        Sat, 28 May 2022 09:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44A0C34100;
+        Sat, 28 May 2022 09:39:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653730772;
+        bh=+jA1Bp8CM4ALpWYkpR1+uBpuu0hpBW+rO9hvYyLjKl0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R5eNYLn1ow1UI70uVvuT4iPgQcBxFl80oB08uCUMIJ9KOXreHpAxmDLZ6VY7GT3We
+         ARlfgaYb+MX0G+/RWiYp9vQpBMBC5W1VkFtDShi8dVCyQShQWqGAYWGk/6TORQouY0
+         u8rvHXPAgNyMfP/d68ngBv4QTQ1ZCWc71JAxlHuf/GBAppno033kBVOqWdqTYIdTEh
+         hJjevcPqPw6Ob/wC4AjfLfgTioVz2UGfIprhchOkHYKue8tRMaJjg4pMM9kwu9KGAa
+         0X3mzg67Vvg11O3/8HS4tQx0BRVqjZAL/Mg1GBcYD0nxcRxfVVRVY2m7zRF0I/Imss
+         PP5f90UNJkWQg==
+Received: by mail-oi1-f177.google.com with SMTP id r68so8405023oie.12;
+        Sat, 28 May 2022 02:39:32 -0700 (PDT)
+X-Gm-Message-State: AOAM532cEVFodTrzV0rwFv9GzRUTKAQROMOCtRQXfcRkkpZN4XWD/Ih1
+        SaxU8eolWncXFEkTUsXpww4fk5rbK2PPmdPvAMY=
+X-Google-Smtp-Source: ABdhPJzvrE4SMNE48ZhDXunAUOmUjnaHS3ik+lHHctxdvkid9O+w6XgXzWtWXjh9d3Ly4N8zafm37B4N9P26GH1r2nI=
+X-Received: by 2002:a05:6808:e8d:b0:322:bac0:2943 with SMTP id
+ k13-20020a0568080e8d00b00322bac02943mr6081516oil.126.1653730771880; Sat, 28
+ May 2022 02:39:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <ea51a17e00a10f3ab25d94b9a5885eb9142aa12b.1653377840.git.geert@linux-m68k.org>
+ <CAMj1kXEUiuSLLcuQ-H7A4djyJF_rdr9bD4JrCP_p98Qg3K=Fow@mail.gmail.com>
+In-Reply-To: <CAMj1kXEUiuSLLcuQ-H7A4djyJF_rdr9bD4JrCP_p98Qg3K=Fow@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 28 May 2022 11:39:20 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXF8XUGrLQq+A04_nNEBQzq=8AsyXGQ-ZJoVqxFUeAoH0A@mail.gmail.com>
+Message-ID: <CAMj1kXF8XUGrLQq+A04_nNEBQzq=8AsyXGQ-ZJoVqxFUeAoH0A@mail.gmail.com>
+Subject: Re: [PATCH v2] efi: EFI_DISABLE_RUNTIME should depend on EFI
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,80 +64,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a new macsec device but not get reference to real_dev. That can
-not ensure that real_dev is freed after macsec. That will trigger the
-UAF bug for real_dev as following:
+On Sat, 28 May 2022 at 11:24, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Tue, 24 May 2022 at 09:37, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >
+> > The EFI_DISABLE_RUNTIME config option controls the use of Extensible
+> > Firmware Interface (EFI) runtime services, which matters only if EFI
+> > support is enabled.
+> >
+> > Hence add a dependency on EFI, to prevent asking the user about this
+> > control knob when configuring a kernel without EFI support.
+> >
+> > Fixes: a031651ff2144a3d ("efi: Allow to enable EFI runtime services by default on RT")
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Acked-by: Javier Martinez Canillas <javierm@redhat.com>
+> > ---
+> > v2:
+> >   - Add Acked-by,
+> >   - Fix typo s/with/without/.
+> > ---
+> >  drivers/firmware/efi/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+>
+> Can we just move this option into the menu/endmenu scope that already
+> depends on EFI?
+>
 
-==================================================================
-BUG: KASAN: use-after-free in macsec_get_iflink+0x5f/0x70 drivers/net/macsec.c:3662
-Call Trace:
- ...
- macsec_get_iflink+0x5f/0x70 drivers/net/macsec.c:3662
- dev_get_iflink+0x73/0xe0 net/core/dev.c:637
- default_operstate net/core/link_watch.c:42 [inline]
- rfc2863_policy+0x233/0x2d0 net/core/link_watch.c:54
- linkwatch_do_dev+0x2a/0x150 net/core/link_watch.c:161
+We can, and there are other candidates as well. So I'll drop this
+patch, and send out another one that covers some other options too.
 
-Allocated by task 22209:
- ...
- alloc_netdev_mqs+0x98/0x1100 net/core/dev.c:10549
- rtnl_create_link+0x9d7/0xc00 net/core/rtnetlink.c:3235
- veth_newlink+0x20e/0xa90 drivers/net/veth.c:1748
+Thanks,
+Ard.
 
-Freed by task 8:
- ...
- kfree+0xd6/0x4d0 mm/slub.c:4552
- kvfree+0x42/0x50 mm/util.c:615
- device_release+0x9f/0x240 drivers/base/core.c:2229
- kobject_cleanup lib/kobject.c:673 [inline]
- kobject_release lib/kobject.c:704 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1c8/0x540 lib/kobject.c:721
- netdev_run_todo+0x72e/0x10b0 net/core/dev.c:10327
 
-After commit faab39f63c1f ("net: allow out-of-order netdev unregistration")
-and commit e5f80fcf869a ("ipv6: give an IPv6 dev to blackhole_netdev"), we
-can add dev_hold_track() in macsec_dev_init() and dev_put_track() in
-macsec_free_netdev() to fix the problem.
-
-Fixes: 2bce1ebed17d ("macsec: fix refcnt leak in module exit routine")
-Reported-by: syzbot+d0e94b65ac259c29ce7a@syzkaller.appspotmail.com
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- drivers/net/macsec.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-index 832f09ac075e..75f85e809a89 100644
---- a/drivers/net/macsec.c
-+++ b/drivers/net/macsec.c
-@@ -107,6 +107,7 @@ struct pcpu_secy_stats {
- struct macsec_dev {
- 	struct macsec_secy secy;
- 	struct net_device *real_dev;
-+	netdevice_tracker dev_tracker;
- 	struct pcpu_secy_stats __percpu *stats;
- 	struct list_head secys;
- 	struct gro_cells gro_cells;
-@@ -3459,6 +3460,9 @@ static int macsec_dev_init(struct net_device *dev)
- 	if (is_zero_ether_addr(dev->broadcast))
- 		memcpy(dev->broadcast, real_dev->broadcast, dev->addr_len);
- 
-+	/* Get macsec's reference to real_dev */
-+	dev_hold_track(real_dev, &macsec->dev_tracker, GFP_KERNEL);
-+
- 	return 0;
- }
- 
-@@ -3704,6 +3708,8 @@ static void macsec_free_netdev(struct net_device *dev)
- 	free_percpu(macsec->stats);
- 	free_percpu(macsec->secy.tx_sc.stats);
- 
-+	/* Get rid of the macsec's reference to real_dev */
-+	dev_put_track(macsec->real_dev, &macsec->dev_tracker);
- }
- 
- static void macsec_setup(struct net_device *dev)
--- 
-2.25.1
-
+> > diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
+> > index 4720ba98cec312e7..ff6e7bfa8355cfc2 100644
+> > --- a/drivers/firmware/efi/Kconfig
+> > +++ b/drivers/firmware/efi/Kconfig
+> > @@ -299,6 +299,7 @@ config EFI_CUSTOM_SSDT_OVERLAYS
+> >
+> >  config EFI_DISABLE_RUNTIME
+> >         bool "Disable EFI runtime services support by default"
+> > +       depends on EFI
+> >         default y if PREEMPT_RT
+> >         help
+> >           Allow to disable the EFI runtime services support by default. This can
+> > --
+> > 2.25.1
+> >

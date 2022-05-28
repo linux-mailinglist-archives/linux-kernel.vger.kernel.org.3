@@ -2,114 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC8A536C06
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B49E536C26
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbiE1Jji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 05:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        id S233517AbiE1JuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 05:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbiE1Jjg (ORCPT
+        with ESMTP id S232570AbiE1JuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 05:39:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F41D17A80;
-        Sat, 28 May 2022 02:39:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF4B6B816F4;
-        Sat, 28 May 2022 09:39:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44A0C34100;
-        Sat, 28 May 2022 09:39:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653730772;
-        bh=+jA1Bp8CM4ALpWYkpR1+uBpuu0hpBW+rO9hvYyLjKl0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R5eNYLn1ow1UI70uVvuT4iPgQcBxFl80oB08uCUMIJ9KOXreHpAxmDLZ6VY7GT3We
-         ARlfgaYb+MX0G+/RWiYp9vQpBMBC5W1VkFtDShi8dVCyQShQWqGAYWGk/6TORQouY0
-         u8rvHXPAgNyMfP/d68ngBv4QTQ1ZCWc71JAxlHuf/GBAppno033kBVOqWdqTYIdTEh
-         hJjevcPqPw6Ob/wC4AjfLfgTioVz2UGfIprhchOkHYKue8tRMaJjg4pMM9kwu9KGAa
-         0X3mzg67Vvg11O3/8HS4tQx0BRVqjZAL/Mg1GBcYD0nxcRxfVVRVY2m7zRF0I/Imss
-         PP5f90UNJkWQg==
-Received: by mail-oi1-f177.google.com with SMTP id r68so8405023oie.12;
-        Sat, 28 May 2022 02:39:32 -0700 (PDT)
-X-Gm-Message-State: AOAM532cEVFodTrzV0rwFv9GzRUTKAQROMOCtRQXfcRkkpZN4XWD/Ih1
-        SaxU8eolWncXFEkTUsXpww4fk5rbK2PPmdPvAMY=
-X-Google-Smtp-Source: ABdhPJzvrE4SMNE48ZhDXunAUOmUjnaHS3ik+lHHctxdvkid9O+w6XgXzWtWXjh9d3Ly4N8zafm37B4N9P26GH1r2nI=
-X-Received: by 2002:a05:6808:e8d:b0:322:bac0:2943 with SMTP id
- k13-20020a0568080e8d00b00322bac02943mr6081516oil.126.1653730771880; Sat, 28
- May 2022 02:39:31 -0700 (PDT)
+        Sat, 28 May 2022 05:50:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D976CE0EE;
+        Sat, 28 May 2022 02:50:14 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L9H1L4J6KzgYQ2;
+        Sat, 28 May 2022 17:48:38 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 28 May 2022 17:50:13 +0800
+Subject: Re: [PATCH -next, v2] powerpc: add support for syscall stack
+ randomization
+From:   xiujianfeng <xiujianfeng@huawei.com>
+To:     <mpe@ellerman.id.au>, <benh@kernel.crashing.org>,
+        <paulus@samba.org>, <npiggin@gmail.com>,
+        <christophe.leroy@csgroup.eu>, <tglx@linutronix.de>,
+        <mark.rutland@arm.com>
+CC:     <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>
+References: <20220516073225.112875-1-xiujianfeng@huawei.com>
+Message-ID: <e7b0d68b-914d-7283-827c-101988923929@huawei.com>
+Date:   Sat, 28 May 2022 17:50:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-References: <ea51a17e00a10f3ab25d94b9a5885eb9142aa12b.1653377840.git.geert@linux-m68k.org>
- <CAMj1kXEUiuSLLcuQ-H7A4djyJF_rdr9bD4JrCP_p98Qg3K=Fow@mail.gmail.com>
-In-Reply-To: <CAMj1kXEUiuSLLcuQ-H7A4djyJF_rdr9bD4JrCP_p98Qg3K=Fow@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 28 May 2022 11:39:20 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXF8XUGrLQq+A04_nNEBQzq=8AsyXGQ-ZJoVqxFUeAoH0A@mail.gmail.com>
-Message-ID: <CAMj1kXF8XUGrLQq+A04_nNEBQzq=8AsyXGQ-ZJoVqxFUeAoH0A@mail.gmail.com>
-Subject: Re: [PATCH v2] efi: EFI_DISABLE_RUNTIME should depend on EFI
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220516073225.112875-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 28 May 2022 at 11:24, Ard Biesheuvel <ardb@kernel.org> wrote:
+friendly ping....
+
+ÔÚ 2022/5/16 15:32, Xiu Jianfeng Ð´µÀ:
+> Add support for adding a random offset to the stack while handling
+> syscalls. This patch uses mftb() instead of get_random_int() for better
+> performance.
 >
-> On Tue, 24 May 2022 at 09:37, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > The EFI_DISABLE_RUNTIME config option controls the use of Extensible
-> > Firmware Interface (EFI) runtime services, which matters only if EFI
-> > support is enabled.
-> >
-> > Hence add a dependency on EFI, to prevent asking the user about this
-> > control knob when configuring a kernel without EFI support.
-> >
-> > Fixes: a031651ff2144a3d ("efi: Allow to enable EFI runtime services by default on RT")
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Acked-by: Javier Martinez Canillas <javierm@redhat.com>
-> > ---
-> > v2:
-> >   - Add Acked-by,
-> >   - Fix typo s/with/without/.
-> > ---
-> >  drivers/firmware/efi/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
+> In order to avoid unconditional stack canaries on syscall entry (due to
+> the use of alloca()), also disable stack protector to avoid triggering
+> needless checks and slowing down the entry path. As there is no general
+> way to control stack protector coverage with a function attribute, this
+> must be disabled at the compilation unit level.
 >
-> Can we just move this option into the menu/endmenu scope that already
-> depends on EFI?
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 >
-
-We can, and there are other candidates as well. So I'll drop this
-patch, and send out another one that covers some other options too.
-
-Thanks,
-Ard.
-
-
-> > diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
-> > index 4720ba98cec312e7..ff6e7bfa8355cfc2 100644
-> > --- a/drivers/firmware/efi/Kconfig
-> > +++ b/drivers/firmware/efi/Kconfig
-> > @@ -299,6 +299,7 @@ config EFI_CUSTOM_SSDT_OVERLAYS
-> >
-> >  config EFI_DISABLE_RUNTIME
-> >         bool "Disable EFI runtime services support by default"
-> > +       depends on EFI
-> >         default y if PREEMPT_RT
-> >         help
-> >           Allow to disable the EFI runtime services support by default. This can
-> > --
-> > 2.25.1
-> >
+> ---
+> Changes in v2:
+>    -move choose choose_random_kstack_offset() to the end of system_call_exception
+>    -allow full 6 (10) bits of entropy
+>    -disable stack-protector for interrupt.c
+> ---
+>   arch/powerpc/Kconfig            |  1 +
+>   arch/powerpc/kernel/Makefile    |  7 +++++++
+>   arch/powerpc/kernel/interrupt.c | 19 ++++++++++++++++++-
+>   3 files changed, 26 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index 98309eeae09c..2f0019a0054e 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -192,6 +192,7 @@ config PPC
+>   	select HAVE_ARCH_KASAN			if PPC32 && PPC_PAGE_SHIFT <= 14
+>   	select HAVE_ARCH_KASAN_VMALLOC		if PPC32 && PPC_PAGE_SHIFT <= 14
+>   	select HAVE_ARCH_KFENCE			if PPC_BOOK3S_32 || PPC_8xx || 40x
+> +	select HAVE_ARCH_RANDOMIZE_KSTACK_OFFSET
+>   	select HAVE_ARCH_KGDB
+>   	select HAVE_ARCH_MMAP_RND_BITS
+>   	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if COMPAT
+> diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
+> index 4ddd161aef32..5c5e85b8229b 100644
+> --- a/arch/powerpc/kernel/Makefile
+> +++ b/arch/powerpc/kernel/Makefile
+> @@ -40,6 +40,13 @@ CFLAGS_cputable.o += -DDISABLE_BRANCH_PROFILING
+>   CFLAGS_btext.o += -DDISABLE_BRANCH_PROFILING
+>   endif
+>   
+> +#ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+> +# Remove stack protector to avoid triggering unneeded stack canary
+> +# checks due to randomize_kstack_offset.
+> +CFLAGS_REMOVE_interrupt.o = -fstack-protector -fstack-protector-strong
+> +CFLAGS_interrupt.o += -fno-stack-protector
+> +#endif
+> +
+>   obj-y				:= cputable.o syscalls.o \
+>   				   irq.o align.o signal_$(BITS).o pmc.o vdso.o \
+>   				   process.o systbl.o idle.o \
+> diff --git a/arch/powerpc/kernel/interrupt.c b/arch/powerpc/kernel/interrupt.c
+> index 784ea3289c84..d7cdcb6fc336 100644
+> --- a/arch/powerpc/kernel/interrupt.c
+> +++ b/arch/powerpc/kernel/interrupt.c
+> @@ -4,6 +4,7 @@
+>   #include <linux/err.h>
+>   #include <linux/compat.h>
+>   #include <linux/sched/debug.h> /* for show_regs */
+> +#include <linux/randomize_kstack.h>
+>   
+>   #include <asm/kup.h>
+>   #include <asm/cputime.h>
+> @@ -78,10 +79,12 @@ notrace long system_call_exception(long r3, long r4, long r5,
+>   				   long r6, long r7, long r8,
+>   				   unsigned long r0, struct pt_regs *regs)
+>   {
+> +	long ret;
+>   	syscall_fn f;
+>   
+>   	kuap_lock();
+>   
+> +	add_random_kstack_offset();
+>   	regs->orig_gpr3 = r3;
+>   
+>   	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
+> @@ -229,7 +232,21 @@ notrace long system_call_exception(long r3, long r4, long r5,
+>   		f = (void *)sys_call_table[r0];
+>   	}
+>   
+> -	return f(r3, r4, r5, r6, r7, r8);
+> +	ret = f(r3, r4, r5, r6, r7, r8);
+> +	/*
+> +	 * Ultimately, this value will get limited by KSTACK_OFFSET_MAX(),
+> +	 * so the maximum stack offset is 1k bytes(10 bits).
+> +	 *
+> +	 * The actual entropy will be further reduced by the compiler when
+> +	 * applying stack alignment constraints: the powerpc architecture
+> +	 * may have two kinds of stack alignment(16-bytes and 8-bytes).
+> +	 *
+> +	 * So the resulting 6 or 7 bits of entropy is seen in SP[9:4] or SP[9:3].
+> +	 *
+> +	 */
+> +	choose_random_kstack_offset(mftb());
+> +
+> +	return ret;
+>   }
+>   
+>   static notrace void booke_load_dbcr0(void)

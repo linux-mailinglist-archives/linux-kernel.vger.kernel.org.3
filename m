@@ -2,66 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E160A536B13
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 08:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E4B536B1A
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 08:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbiE1GTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 02:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S1345565AbiE1GYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 02:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiE1GTP (ORCPT
+        with ESMTP id S230407AbiE1GYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 02:19:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556442CE0A;
-        Fri, 27 May 2022 23:19:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA15760ABD;
-        Sat, 28 May 2022 06:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B03C34114;
-        Sat, 28 May 2022 06:19:12 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Dcxzb1A5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653718750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UcatFLxLEDkqwGfbzqMdWU9Nhg9xUpLbAL1L8Q5uIOg=;
-        b=Dcxzb1A5hE14Sb1CGI1rDpsRmZPhQlcQUc2AUUR748F/e+dlym6GwlpY1l6d4GugZ0kwAH
-        oPp9zpkzlifZeXde3gL/9fQdKghuht6IIvSq65c/AtcGqoPOmUCrto/4Sn61Ur7k5gIeWX
-        jEdEceDnRey7EcBRgTlXy0D1+GfBQd0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bc6b639f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sat, 28 May 2022 06:19:10 +0000 (UTC)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-30c143c41e5so8686277b3.3;
-        Fri, 27 May 2022 23:19:10 -0700 (PDT)
-X-Gm-Message-State: AOAM531nG/ztd32s7XBtdMf3i4pRAt1ouq26pRuZx2/2AwZE20xYBbVc
-        upxwi9vzXqFfH/73fa3Ey/NSK0cf/adpXkcftOw=
-X-Google-Smtp-Source: ABdhPJxdstrbygSzyr3pf79qP3cy6V/OSM7xSmwBrQkFaF1jIhRuYDxTKOu5Z2fYsfa9CoOxUv6GIcQXSVcrTvMoC/U=
-X-Received: by 2002:a0d:cd04:0:b0:300:4784:caa3 with SMTP id
- p4-20020a0dcd04000000b003004784caa3mr19109952ywd.231.1653718749409; Fri, 27
- May 2022 23:19:09 -0700 (PDT)
+        Sat, 28 May 2022 02:24:41 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4514E3616F
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 23:24:39 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L9BS52BdBz1JBYf;
+        Sat, 28 May 2022 14:23:01 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 28 May 2022 14:24:35 +0800
+Subject: Re: [PATCH] mm/vmscan: don't try to reclaim freed folios
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220527080451.48549-1-linmiaohe@huawei.com>
+ <YpDoAZtQtQf6U8D2@casper.infradead.org>
+ <e0502c7c-b71d-5356-fcc3-7c048c25d827@huawei.com>
+ <YpGTaCf+bZGdEdNj@casper.infradead.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <354f9b86-44fe-493b-eac4-07c5eeb573cf@huawei.com>
+Date:   Sat, 28 May 2022 14:24:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Received: by 2002:a05:7110:6403:b0:17b:2ce3:1329 with HTTP; Fri, 27 May 2022
- 23:19:09 -0700 (PDT)
-In-Reply-To: <20220528013318.1621047-1-zhengbin13@huawei.com>
-References: <20220528013318.1621047-1-zhengbin13@huawei.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sat, 28 May 2022 08:19:09 +0200
-X-Gmail-Original-Message-ID: <CAHmME9rWfUnUmHR5xo_+WdS0Wgv8yXQb+LqAo24XdoQQR4Wn8w@mail.gmail.com>
-Message-ID: <CAHmME9rWfUnUmHR5xo_+WdS0Wgv8yXQb+LqAo24XdoQQR4Wn8w@mail.gmail.com>
-Subject: Re: [PATCH -next] crypto: curve25519 - Fix build error when
- CRYPTO_MANAGER_DISABLE_TESTS!=y && CRYPTO=m
-To:     Zheng Bin <zhengbin13@huawei.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gaochao49@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YpGTaCf+bZGdEdNj@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,25 +53,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/28/22, Zheng Bin <zhengbin13@huawei.com> wrote:
-> If CRYPTO_MANAGER_DISABLE_TESTS!=y, CRYPTO=m, bulding fails:
->
-> lib/crypto/curve25519-selftest.o: In function `curve25519_selftest':
-> curve25519-selftest.c:(.init.text+0x60): undefined reference to
-> `__crypto_memneq'
-> curve25519-selftest.c:(.init.text+0xec): undefined reference to
-> `__crypto_memneq'
-> curve25519-selftest.c:(.init.text+0x114): undefined reference to
-> `__crypto_memneq'
-> curve25519-selftest.c:(.init.text+0x154): undefined reference to
-> `__crypto_memneq'
->
-> Add depends for CRYPTO_LIB_CURVE25519 to fix this.
+On 2022/5/28 11:13, Matthew Wilcox wrote:
+> On Sat, May 28, 2022 at 10:52:11AM +0800, Miaohe Lin wrote:
+>> On 2022/5/27 23:02, Matthew Wilcox wrote:
+>>> What?  No.  This can absolutely happen.  We have a refcount on the folio,
+>>> which means that any other thread can temporarily raise the refcount,
+>>
+>> IIUC, the folio is only in the isolated page_list now and it's not in the page cache, swap cache, pagetable or
+>> under any use. So there should be no way that any other thread can temporarily raise the refcount when
+>> folio_ref_count == 1. Or am I miss something?
+> 
+> Take a look at something like GUP (fast).  If this page _was_ mapped to
+> userspace, something like this can happen:
+> 
+> Thread A	Thread B
+> load PTE
+> 		unmap page
+> 		refcount goes to 1
+> 		vmscan sees the page
+> try_get_ref
+> 		refcount is now 2.  WARN_ON.
+> 
+> Thread A will see that the PTE has changed and will now drop its
+> reference, but Thread B already spat out the WARN.
+> 
+> A similar thing can happen with the page cache.
 
-In this case, the bug isn't caused by the tests exactly but by the
-curve25519.h inline usage here:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/crypto/curve25519.h#n43
+Oh, I see. Many thanks for your patient explanation! :)
 
-Probably the solution for this one is to move crypto_memneq into lib/crypto.
+> 
+> If this is a worthwhile optimisation (does it happen often that we find
+> a refcount == 1 page?), we could do something like ...
 
-Jason
+No, It should be rare.
+
+> 
+> 		if (folio_ref_freeze(folio, 1)) {
+> 			nr_pages = folio_nr_pages(folio);
+> 			goto free_it;
+> 		}
+> 
+> ... or ...
+> 
+> 		if (folio_ref_count(folio) == 1 &&
+> 		    folio_ref_freeze(folio, 1)) {
+> 
+> ... if we want to test-and-test-and-clear
+
+These proposed code changes look good to me.
+
+> 
+> But this function is far too complicated already.  I really want to
+> see numbers that proves the extra complexity is worth it.
+
+This optimization can save lots of cpu cycles and avoid possible disk I/O in
+that specified case. But that is a somewhat rare case. So there's no numbers
+that proves the extra complexity is worth it.
+
+Should I drop this patch or proceed with the proposed code changes above in
+next version? :)
+
+Many thanks!
+
+> 
+> 
+> .
+> 
+

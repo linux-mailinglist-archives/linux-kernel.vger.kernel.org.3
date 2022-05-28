@@ -2,309 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C60536A6F
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 05:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F97536A73
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 05:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353363AbiE1DU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 23:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S240555AbiE1Dgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 23:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiE1DUY (ORCPT
+        with ESMTP id S229683AbiE1Dgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 23:20:24 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED165D5CC
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 20:20:22 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id z19-20020a05660200d300b0066583f8cf2eso3759701ioe.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 20:20:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=zSbiaklTWP4e9f9tYKPsl7ZSpO4EGSqD2E3JZK3Al8Y=;
-        b=uA0FeoOci4G0BfXKEnAdd1Q+pqtD4ky807xoih1hAkN45xO6eMQ5T1PTTp665YMmpn
-         EgjItNtiHrT/tMO1Ps9c6Er3jOnL9m/ehs8Z46Xj/w3dsxcvmorLyIg0uUohaAkmQCYz
-         jXNOKpGaVtqrGkEJFAJdLdLuZWvl7wdI2cEKGIDtZx43YKyunuCskxcTG2/MEzyNrTKS
-         G4BsWP6uiaZxVd2873rL8yvkEkP5IkJoerpsV2s0SG/l/jQDRWrePMMaOBQiYViAf89K
-         yxDk+F0ENJkwjbOe/E8ZJcIZI3+uBQqNL8dbSaQNvWNgRCnV4QOBHZkWosvFxCn/YUTu
-         K1eA==
-X-Gm-Message-State: AOAM530nOsHzV4lr+Sf0f+tGSoYmrnnDJKWSQgOQyPZLb+Ww1Wcmy1M5
-        74SQDR7ESG3Y+YMENJ65kUubDJCI6dAunYhJudHrf1Wb1XWT
-X-Google-Smtp-Source: ABdhPJyjsjToOBbPFRuXB2o9n2D6plUd72qrVbj3/5tO1fZt2ziR/PL0btjmn+ooxfiqgSuhYeqRiudLtbzScN419pwjYoyeSIHf
+        Fri, 27 May 2022 23:36:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D291511A28
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 20:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653708997; x=1685244997;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JXJb4Sb6zAjxoHyneonrl0atdJFhOhJQ/INRGlHqsJ8=;
+  b=QkIhaXD1Wwhs+JDP9+zF5YhvktYCaw3/6cvWbVVpZFib5EZurca8qIkS
+   TzMDZuq409a+jM/7hbQD+85TphK/jrR5qRQKnnpSr0526wl2JmYFHmukp
+   /JCDztlhkX+72qqpP9gV1NfZ9HYIaS5SqdcKxkX20GHRc4/IR9PUpfDuD
+   4wJMBkXQkV/yZC4YKHZMwyxMlZaWkH7I6TFZnRwrwkQxbgqLISQy3A/Kf
+   qOfbbvVKVRqqE8zQ4/LFWHNSi3DLQZGViXCItFfHzCY+EiFPYB4JYel9Y
+   KgXtCgiyE/MtdPnIStzORodxslt+ACVb6KSXlt4U+WUTlZaEYO4MXxXD3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="337667635"
+X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
+   d="scan'208";a="337667635"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 20:36:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
+   d="scan'208";a="747347549"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 May 2022 20:36:35 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nunFi-0005PZ-Tm;
+        Sat, 28 May 2022 03:36:34 +0000
+Date:   Sat, 28 May 2022 11:36:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: fs/io_uring.c:6212:38: sparse: sparse: incorrect type in assignment
+ (different base types)
+Message-ID: <202205281143.T47kfDb1-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:40a5:b0:331:d3:c282 with SMTP id
- m37-20020a05663840a500b0033100d3c282mr1889620jam.107.1653708021997; Fri, 27
- May 2022 20:20:21 -0700 (PDT)
-Date:   Fri, 27 May 2022 20:20:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000036af2005e009e7e6@google.com>
-Subject: [syzbot] memory leak in xas_nomem
-From:   syzbot <syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a9f94826e4bb6402e67f3eb849dee0811f1de6da
+commit: 58f5c8d39e0ea07fdaaea6a85c49000da83dc0cc io_uring: make apoll_events a __poll_t
+date:   10 days ago
+config: arc-randconfig-s031-20220527 (https://download.01.org/0day-ci/archive/20220528/202205281143.T47kfDb1-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-14-g5a0004b5-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=58f5c8d39e0ea07fdaaea6a85c49000da83dc0cc
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 58f5c8d39e0ea07fdaaea6a85c49000da83dc0cc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash
 
-syzbot found the following issue on:
-
-HEAD commit:    1e57930e9f40 Merge tag 'rcu.2022.05.19a' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17afc423f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5757003cb23a31a7
-dashboard link: https://syzkaller.appspot.com/bug?extid=9e27a75a8c24f3fe75c1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16bc056ef00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116b7d9df00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9e27a75a8c24f3fe75c1@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88810cb35d80 (size 576):
-  comm "syz-executor883", pid 3623, jiffies 4294954631 (age 23.510s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    18 48 36 04 81 88 ff ff 98 5d b3 0c 81 88 ff ff  .H6......]......
-  backtrace:
-    [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
-    [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
-    [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
-    [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
-    [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
-    [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
-    [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
-    [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
-    [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
-    [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
-    [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
-    [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
-    [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
-    [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
-    [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
-    [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
-    [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
-    [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88810cb39d80 (size 576):
-  comm "syz-executor883", pid 3622, jiffies 4294954659 (age 23.230s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    98 f8 cd 0d 81 88 ff ff 98 9d b3 0c 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
-    [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
-    [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
-    [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
-    [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
-    [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
-    [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
-    [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
-    [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
-    [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
-    [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
-    [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
-    [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
-    [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
-    [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
-    [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
-    [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
-    [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88810cb35d80 (size 576):
-  comm "syz-executor883", pid 3623, jiffies 4294954631 (age 29.410s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    18 48 36 04 81 88 ff ff 98 5d b3 0c 81 88 ff ff  .H6......]......
-  backtrace:
-    [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
-    [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
-    [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
-    [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
-    [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
-    [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
-    [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
-    [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
-    [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
-    [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
-    [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
-    [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
-    [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
-    [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
-    [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
-    [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
-    [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
-    [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88810cb39d80 (size 576):
-  comm "syz-executor883", pid 3622, jiffies 4294954659 (age 29.130s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    98 f8 cd 0d 81 88 ff ff 98 9d b3 0c 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
-    [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
-    [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
-    [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
-    [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
-    [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
-    [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
-    [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
-    [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
-    [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
-    [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
-    [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
-    [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
-    [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
-    [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
-    [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
-    [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
-    [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88810cb35d80 (size 576):
-  comm "syz-executor883", pid 3623, jiffies 4294954631 (age 29.450s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    18 48 36 04 81 88 ff ff 98 5d b3 0c 81 88 ff ff  .H6......]......
-  backtrace:
-    [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
-    [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
-    [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
-    [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
-    [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
-    [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
-    [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
-    [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
-    [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
-    [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
-    [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
-    [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
-    [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
-    [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
-    [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
-    [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
-    [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
-    [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88810cb39d80 (size 576):
-  comm "syz-executor883", pid 3622, jiffies 4294954659 (age 29.170s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    98 f8 cd 0d 81 88 ff ff 98 9d b3 0c 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
-    [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
-    [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
-    [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
-    [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
-    [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
-    [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
-    [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
-    [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
-    [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
-    [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
-    [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
-    [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
-    [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
-    [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
-    [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
-    [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
-    [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88810cb35d80 (size 576):
-  comm "syz-executor883", pid 3623, jiffies 4294954631 (age 29.490s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    18 48 36 04 81 88 ff ff 98 5d b3 0c 81 88 ff ff  .H6......]......
-  backtrace:
-    [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
-    [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
-    [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
-    [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
-    [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
-    [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
-    [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
-    [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
-    [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
-    [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
-    [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
-    [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
-    [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
-    [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
-    [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
-    [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
-    [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
-    [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88810cb39d80 (size 576):
-  comm "syz-executor883", pid 3622, jiffies 4294954659 (age 29.210s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    98 f8 cd 0d 81 88 ff ff 98 9d b3 0c 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff8247dfba>] xas_nomem lib/xarray.c:307 [inline]
-    [<ffffffff8247dfba>] xas_nomem+0x4a/0xd0 lib/xarray.c:299
-    [<ffffffff8157b8d0>] split_huge_page_to_list+0x26d0/0x29f0 mm/huge_memory.c:2626
-    [<ffffffff8148a224>] split_huge_page include/linux/huge_mm.h:191 [inline]
-    [<ffffffff8148a224>] truncate_inode_partial_folio+0x3e4/0x5f0 mm/truncate.c:243
-    [<ffffffff814a78a0>] shmem_undo_range+0x3d0/0xbe0 mm/shmem.c:966
-    [<ffffffff814a8e51>] shmem_truncate_range mm/shmem.c:1044 [inline]
-    [<ffffffff814a8e51>] shmem_fallocate+0x1e1/0x910 mm/shmem.c:2671
-    [<ffffffff815b5c6c>] vfs_fallocate+0x31c/0x670 fs/open.c:308
-    [<ffffffff815237e3>] madvise_remove mm/madvise.c:965 [inline]
-    [<ffffffff815237e3>] madvise_vma_behavior+0x7d3/0x1000 mm/madvise.c:989
-    [<ffffffff8151f2fc>] madvise_walk_vmas+0x11c/0x1d0 mm/madvise.c:1221
-    [<ffffffff8152437b>] do_madvise mm/madvise.c:1399 [inline]
-    [<ffffffff8152437b>] do_madvise+0x23b/0x320 mm/madvise.c:1357
-    [<ffffffff8152478a>] __do_sys_madvise mm/madvise.c:1412 [inline]
-    [<ffffffff8152478a>] __se_sys_madvise mm/madvise.c:1410 [inline]
-    [<ffffffff8152478a>] __x64_sys_madvise+0x2a/0x30 mm/madvise.c:1410
-    [<ffffffff84565f15>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84565f15>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-executing program
-executing program
-executing program
-executing program
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+sparse warnings: (new ones prefixed by >>)
+   fs/io_uring.c:5375:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *file @@     got struct file [noderef] __rcu * @@
+   fs/io_uring.c:5375:14: sparse:     expected struct file *file
+   fs/io_uring.c:5375:14: sparse:     got struct file [noderef] __rcu *
+>> fs/io_uring.c:6212:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected signed int [usertype] res @@     got restricted __poll_t @@
+   fs/io_uring.c:6212:38: sparse:     expected signed int [usertype] res
+   fs/io_uring.c:6212:38: sparse:     got restricted __poll_t
+   fs/io_uring.c:6223:56: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6222:66: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __poll_t [usertype] val @@     got unsigned int @@
+   fs/io_uring.c:6222:66: sparse:     expected restricted __poll_t [usertype] val
+   fs/io_uring.c:6222:66: sparse:     got unsigned int
+   fs/io_uring.c:6222:52: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t [usertype] mask @@     got unsigned short @@
+   fs/io_uring.c:6222:52: sparse:     expected restricted __poll_t [usertype] mask
+   fs/io_uring.c:6222:52: sparse:     got unsigned short
+   fs/io_uring.c:6228:50: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected signed int [usertype] res @@     got restricted __poll_t [usertype] mask @@
+   fs/io_uring.c:6228:50: sparse:     expected signed int [usertype] res
+   fs/io_uring.c:6228:50: sparse:     got restricted __poll_t [usertype] mask
+   fs/io_uring.c:6265:68: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6265:57: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __poll_t [usertype] val @@     got unsigned int @@
+   fs/io_uring.c:6265:57: sparse:     expected restricted __poll_t [usertype] val
+   fs/io_uring.c:6265:57: sparse:     got unsigned int
+   fs/io_uring.c:6370:47: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6370:35: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6370:23: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6383:40: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int mask @@     got restricted __poll_t [usertype] mask @@
+   fs/io_uring.c:6383:40: sparse:     expected int mask
+   fs/io_uring.c:6383:40: sparse:     got restricted __poll_t [usertype] mask
+   fs/io_uring.c:6475:24: sparse: sparse: incorrect type in return expression (different base types) @@     expected int @@     got restricted __poll_t [assigned] [usertype] mask @@
+   fs/io_uring.c:6475:24: sparse:     expected int
+   fs/io_uring.c:6475:24: sparse:     got restricted __poll_t [assigned] [usertype] mask
+   fs/io_uring.c:6492:40: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected int mask @@     got restricted __poll_t [assigned] [usertype] mask @@
+   fs/io_uring.c:6492:40: sparse:     expected int mask
+   fs/io_uring.c:6492:40: sparse:     got restricted __poll_t [assigned] [usertype] mask
+   fs/io_uring.c:6527:33: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __poll_t [usertype] mask @@     got int @@
+   fs/io_uring.c:6527:33: sparse:     expected restricted __poll_t [usertype] mask
+   fs/io_uring.c:6527:33: sparse:     got int
+   fs/io_uring.c:6540:22: sparse: sparse: invalid assignment: |=
+   fs/io_uring.c:6540:22: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:6540:22: sparse:    right side has type int
+   fs/io_uring.c:6545:30: sparse: sparse: invalid assignment: &=
+   fs/io_uring.c:6545:30: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:6545:30: sparse:    right side has type int
+   fs/io_uring.c:6547:22: sparse: sparse: invalid assignment: |=
+   fs/io_uring.c:6547:22: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:6547:22: sparse:    right side has type int
+   fs/io_uring.c:6575:33: sparse: sparse: incorrect type in argument 5 (different base types) @@     expected int mask @@     got restricted __poll_t [assigned] [usertype] mask @@
+   fs/io_uring.c:6575:33: sparse:     expected int mask
+   fs/io_uring.c:6575:33: sparse:     got restricted __poll_t [assigned] [usertype] mask
+   fs/io_uring.c:6575:50: sparse: sparse: incorrect type in argument 6 (different base types) @@     expected int events @@     got restricted __poll_t [usertype] events @@
+   fs/io_uring.c:6575:50: sparse:     expected int events
+   fs/io_uring.c:6575:50: sparse:     got restricted __poll_t [usertype] events
+   fs/io_uring.c:6689:24: sparse: sparse: invalid assignment: |=
+   fs/io_uring.c:6689:24: sparse:    left side has type unsigned int
+   fs/io_uring.c:6689:24: sparse:    right side has type restricted __poll_t
+   fs/io_uring.c:6690:65: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6690:29: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6690:38: sparse: sparse: incorrect type in return expression (different base types) @@     expected restricted __poll_t @@     got unsigned int @@
+   fs/io_uring.c:6690:38: sparse:     expected restricted __poll_t
+   fs/io_uring.c:6690:38: sparse:     got unsigned int
+   fs/io_uring.c:6777:43: sparse: sparse: invalid assignment: &=
+   fs/io_uring.c:6777:43: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:6777:43: sparse:    right side has type int
+   fs/io_uring.c:6778:62: sparse: sparse: restricted __poll_t degrades to integer
+   fs/io_uring.c:6778:43: sparse: sparse: invalid assignment: |=
+   fs/io_uring.c:6778:43: sparse:    left side has type restricted __poll_t
+   fs/io_uring.c:6778:43: sparse:    right side has type unsigned int
+   fs/io_uring.c:2610:17: sparse: sparse: context imbalance in 'handle_prev_tw_list' - different lock contexts for basic block
+   fs/io_uring.c:8980:9: sparse: sparse: context imbalance in 'io_sq_thread_unpark' - wrong count at exit
+   fs/io_uring.c:8991:9: sparse: sparse: context imbalance in 'io_sq_thread_park' - wrong count at exit
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+vim +6212 fs/io_uring.c
+
+18bceab101adde Jens Axboe     2020-05-15  6178  
+dbc2564cfe0faf Hao Xu         2022-05-14  6179  static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags);
+aa43477b040251 Pavel Begunkov 2021-12-15  6180  /*
+aa43477b040251 Pavel Begunkov 2021-12-15  6181   * All poll tw should go through this. Checks for poll events, manages
+aa43477b040251 Pavel Begunkov 2021-12-15  6182   * references, does rewait, etc.
+aa43477b040251 Pavel Begunkov 2021-12-15  6183   *
+aa43477b040251 Pavel Begunkov 2021-12-15  6184   * Returns a negative error on failure. >0 when no action require, which is
+aa43477b040251 Pavel Begunkov 2021-12-15  6185   * either spurious wakeup or multishot CQE is served. 0 when it's done with
+cef216fc32d762 Pavel Begunkov 2022-04-12  6186   * the request, then the mask is stored in req->cqe.res.
+aa43477b040251 Pavel Begunkov 2021-12-15  6187   */
+dbc2564cfe0faf Hao Xu         2022-05-14  6188  static int io_poll_check_events(struct io_kiocb *req, bool *locked)
+18bceab101adde Jens Axboe     2020-05-15  6189  {
+18bceab101adde Jens Axboe     2020-05-15  6190  	struct io_ring_ctx *ctx = req->ctx;
+dbc2564cfe0faf Hao Xu         2022-05-14  6191  	int v, ret;
+18bceab101adde Jens Axboe     2020-05-15  6192  
+316319e82f7342 Jens Axboe     2021-08-19  6193  	/* req->task == current here, checking PF_EXITING is safe */
+e09ee510600b94 Pavel Begunkov 2021-07-01  6194  	if (unlikely(req->task->flags & PF_EXITING))
+f22190570b213d Pavel Begunkov 2022-04-15  6195  		return -ECANCELED;
+e09ee510600b94 Pavel Begunkov 2021-07-01  6196  
+aa43477b040251 Pavel Begunkov 2021-12-15  6197  	do {
+aa43477b040251 Pavel Begunkov 2021-12-15  6198  		v = atomic_read(&req->poll_refs);
+aa43477b040251 Pavel Begunkov 2021-12-15  6199  
+aa43477b040251 Pavel Begunkov 2021-12-15  6200  		/* tw handler should be the owner, and so have some references */
+aa43477b040251 Pavel Begunkov 2021-12-15  6201  		if (WARN_ON_ONCE(!(v & IO_POLL_REF_MASK)))
+aa43477b040251 Pavel Begunkov 2021-12-15  6202  			return 0;
+aa43477b040251 Pavel Begunkov 2021-12-15  6203  		if (v & IO_POLL_CANCEL_FLAG)
+aa43477b040251 Pavel Begunkov 2021-12-15  6204  			return -ECANCELED;
+aa43477b040251 Pavel Begunkov 2021-12-15  6205  
+cef216fc32d762 Pavel Begunkov 2022-04-12  6206  		if (!req->cqe.res) {
+2804ecd8d3e373 Jens Axboe     2022-04-11  6207  			struct poll_table_struct pt = { ._key = req->apoll_events };
+cce64ef01308b6 Pavel Begunkov 2022-04-13  6208  			unsigned flags = locked ? 0 : IO_URING_F_UNLOCKED;
+74ce6ce43d4fc6 Jens Axboe     2020-04-13  6209  
+cce64ef01308b6 Pavel Begunkov 2022-04-13  6210  			if (unlikely(!io_assign_file(req, flags)))
+7179c3ce3dbff6 Pavel Begunkov 2022-04-13  6211  				return -EBADF;
+cef216fc32d762 Pavel Begunkov 2022-04-12 @6212  			req->cqe.res = vfs_poll(req->file, &pt) & req->apoll_events;
+e27414bef7b4f2 Pavel Begunkov 2021-04-09  6213  		}
+74ce6ce43d4fc6 Jens Axboe     2020-04-13  6214  
+dbc2564cfe0faf Hao Xu         2022-05-14  6215  		if ((unlikely(!req->cqe.res)))
+dbc2564cfe0faf Hao Xu         2022-05-14  6216  			continue;
+dbc2564cfe0faf Hao Xu         2022-05-14  6217  		if (req->apoll_events & EPOLLONESHOT)
+dbc2564cfe0faf Hao Xu         2022-05-14  6218  			return 0;
+dbc2564cfe0faf Hao Xu         2022-05-14  6219  
+dbc2564cfe0faf Hao Xu         2022-05-14  6220  		/* multishot, just fill a CQE and proceed */
+dbc2564cfe0faf Hao Xu         2022-05-14  6221  		if (!(req->flags & REQ_F_APOLL_MULTISHOT)) {
+dbc2564cfe0faf Hao Xu         2022-05-14  6222  			__poll_t mask = mangle_poll(req->cqe.res &
+dbc2564cfe0faf Hao Xu         2022-05-14  6223  						    req->apoll_events);
+aa43477b040251 Pavel Begunkov 2021-12-15  6224  			bool filled;
+74ce6ce43d4fc6 Jens Axboe     2020-04-13  6225  
+aa43477b040251 Pavel Begunkov 2021-12-15  6226  			spin_lock(&ctx->completion_lock);
+dbc2564cfe0faf Hao Xu         2022-05-14  6227  			filled = io_fill_cqe_aux(ctx, req->cqe.user_data,
+dbc2564cfe0faf Hao Xu         2022-05-14  6228  						 mask, IORING_CQE_F_MORE);
+aa43477b040251 Pavel Begunkov 2021-12-15  6229  			io_commit_cqring(ctx);
+aa43477b040251 Pavel Begunkov 2021-12-15  6230  			spin_unlock(&ctx->completion_lock);
+dbc2564cfe0faf Hao Xu         2022-05-14  6231  			if (filled) {
+aa43477b040251 Pavel Begunkov 2021-12-15  6232  				io_cqring_ev_posted(ctx);
+dbc2564cfe0faf Hao Xu         2022-05-14  6233  				continue;
+a62682f92eedb4 Hao Xu         2021-09-22  6234  			}
+dbc2564cfe0faf Hao Xu         2022-05-14  6235  			return -ECANCELED;
+dbc2564cfe0faf Hao Xu         2022-05-14  6236  		}
+dbc2564cfe0faf Hao Xu         2022-05-14  6237  
+dbc2564cfe0faf Hao Xu         2022-05-14  6238  		io_tw_lock(req->ctx, locked);
+dbc2564cfe0faf Hao Xu         2022-05-14  6239  		if (unlikely(req->task->flags & PF_EXITING))
+dbc2564cfe0faf Hao Xu         2022-05-14  6240  			return -EFAULT;
+dbc2564cfe0faf Hao Xu         2022-05-14  6241  		ret = io_issue_sqe(req,
+dbc2564cfe0faf Hao Xu         2022-05-14  6242  				   IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
+dbc2564cfe0faf Hao Xu         2022-05-14  6243  		if (ret)
+dbc2564cfe0faf Hao Xu         2022-05-14  6244  			return ret;
+7b289c38335ec7 Hao Xu         2021-04-13  6245  
+aa43477b040251 Pavel Begunkov 2021-12-15  6246  		/*
+aa43477b040251 Pavel Begunkov 2021-12-15  6247  		 * Release all references, retry if someone tried to restart
+aa43477b040251 Pavel Begunkov 2021-12-15  6248  		 * task_work while we were executing it.
+aa43477b040251 Pavel Begunkov 2021-12-15  6249  		 */
+aa43477b040251 Pavel Begunkov 2021-12-15  6250  	} while (atomic_sub_return(v & IO_POLL_REF_MASK, &req->poll_refs));
+18bceab101adde Jens Axboe     2020-05-15  6251  
+aa43477b040251 Pavel Begunkov 2021-12-15  6252  	return 1;
+18bceab101adde Jens Axboe     2020-05-15  6253  }
+18bceab101adde Jens Axboe     2020-05-15  6254  
+
+:::::: The code at line 6212 was first introduced by commit
+:::::: cef216fc32d7628206c523994e7e267e7a8dda59 io_uring: explicitly keep a CQE in io_kiocb
+
+:::::: TO: Pavel Begunkov <asml.silence@gmail.com>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

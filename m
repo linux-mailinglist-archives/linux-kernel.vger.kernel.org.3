@@ -2,201 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7BF536EC4
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 00:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3864536EC0
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 May 2022 00:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiE1Woh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 18:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
+        id S229921AbiE1Wrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 18:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiE1Woe (ORCPT
+        with ESMTP id S229805AbiE1Wrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 18:44:34 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F057B36D6;
-        Sat, 28 May 2022 15:44:32 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id b135so7371605pfb.12;
-        Sat, 28 May 2022 15:44:32 -0700 (PDT)
+        Sat, 28 May 2022 18:47:49 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5DE5BE6F;
+        Sat, 28 May 2022 15:47:48 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id t14-20020a9d66ce000000b0060af9ed4b87so5339847otm.9;
+        Sat, 28 May 2022 15:47:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=jKLY2zuvZewS/BwLmJvq6qxpOINA6m+jHazoY1CR+1E=;
-        b=eYyugB7SlJeyfJ8Meaw2RV0Z7j7t43v2JfETGz+J9TpkrtImv7fWN8BqZ65UN2n5Zu
-         Jm/w/rDTsmvrhSXQ5P/7kg3WeCP1JCNi4oSl/3Nf/rWoaqS45qHu1AwPQHbwwpljEjt0
-         hly0K3X5y0Id0Nd4VeILDg2lX4Pw+kj1BtjvH69YZfhhWdO7Z2HCKe1fZ/n9A7BgsZ9h
-         fB2RXRIPO3hunYRrjBQQM+oKYmNatsSmqDsDEiCCo9MD3iLT7K4IJ+OJJgY6pZq64pDn
-         q1yQyURG7ThiNQee3MJw1lKuh+7XCXqs3xdthpzO2/ZmmKUT11yZwQZDylr/axzEAQTu
-         WFiQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TKshfHkC5Pvf7ig5EiZ4GmSmW76KnvCWjyhV6RL/CDU=;
+        b=UwshPpQ3sv/eETtkjsspaFEbkyclPdvMYuf8CQ4Sn6hG2bEMM5qxfNc3Pb7jrYWQ4F
+         0fNtNnhxPe0veQ8CPqxyUgnC/l97XfyLlZ497jO8Rx2CHz1gzOssU0HjhlXRsFPhsUZk
+         KBugrFVKBwr6/k9jenpSUTVUilY4zY4OeuxaVZDRNZxi/Hi7651QEuZ7Saju5+RuHNWd
+         qckO+i5aZsUjhbCGOAJPUsQwor+yJpyq3lC4c+kAMk0Krsnldcd1gV1XqDdMJrQHoUKN
+         XKQ8PoSs/5/G7bidV8+wHJ0V4i76l2fBL4rUwR+f1JkHJZHnrmKl21JpeRA8V1Utrv+K
+         PPdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=jKLY2zuvZewS/BwLmJvq6qxpOINA6m+jHazoY1CR+1E=;
-        b=wyXC34GFvdqX79jP3wRUPT2LX969qkpY0wCdnYG3KDVjx/3wjslZuGmHCl/NLcmAAf
-         xlcn7F8tURXDYJAsj9WuJCGcEQc0Iz0UeRIiUanX2Sw4bZuKwXNDUPx2xlr758XaMi+f
-         T+L5SW4gzhUbHlerUIMJBnIMiT/wMuBxbrNKC1cO3C8mA0m0vstTnAHHMrhKGqYaPqKI
-         9gK7JVxkxTBnJdIPs9i152gmviASyyx2upZpV3WnTNsL+AxcvazLFosjziSdxkBs4VC7
-         SVZJ3zaF4ktwoetvcru7MVp0Bw1K4lPXhdOS8S8RpR1t8QmkIkEHm2XneN49j2SQYeqR
-         u0Ig==
-X-Gm-Message-State: AOAM532G9cPLfYa0UMEHbiL+fUy8WKaGNaw2PC9RDGQQa2TcWMefNYcm
-        HL4n8Rtqz4dNA08mjJ3aT3tgoqtGFZsS5Q==
-X-Google-Smtp-Source: ABdhPJyA/BKlk4Roppn6E2jXmyTWjXLBOuYK4p6OT1DEZxmNyaYvzQPTIaEJqaWY8mTvJ3QnALuFhA==
-X-Received: by 2002:a63:5a23:0:b0:3f2:678b:8de8 with SMTP id o35-20020a635a23000000b003f2678b8de8mr42486377pgb.226.1653777871733;
-        Sat, 28 May 2022 15:44:31 -0700 (PDT)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.11.250])
-        by smtp.gmail.com with ESMTPSA id x22-20020a170902b41600b001635a8f9dfdsm6159514plr.26.2022.05.28.15.44.29
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=TKshfHkC5Pvf7ig5EiZ4GmSmW76KnvCWjyhV6RL/CDU=;
+        b=XLYxNlZb2OMSjSC/hjB/HG2B3FunAe5jf2XJxVaEOBlNNzd91pbDZCxjMhj/dn/cKy
+         z61rWEEQpucV2HAlUpe9BQWNRkyNMdjNMXfR/cBUo6G3wp6JtYa+hp+tIjPi3PlIYQ3c
+         BPrNYzAqkXxXkxsxNBp670IFPfsjxxJ8AXXRawkfWArc1X0CF5G3wUxN05vIlszuAtM9
+         CWnv+FtQC9RYmeEQl3brtXZbi7qE0uugkFMEi8zympjWvQ4db5B3h1Lgg8+6vifYPhL3
+         DdZl7lyVFBzPjbTzCWiZUzXBwKTYVAm6a9rTOqWpEVM/B9pbb4dDHCjVePGD+WPEgcUy
+         ozuw==
+X-Gm-Message-State: AOAM530bNjg00BCyL7T3qPeAzQL6FQ+jx2/X3iJ175otIDCiLQTA8Am6
+        eL71iitmYV1EFiEFoFLuzAk=
+X-Google-Smtp-Source: ABdhPJzfxwBZO8/g/x9lRQ5QRk4I7bGfdsN1gA1y2exJEV+YZZXTThQMguwqH9qoNE8Ad3BAzHwvfg==
+X-Received: by 2002:a05:6830:b85:b0:605:4e76:f077 with SMTP id a5-20020a0568300b8500b006054e76f077mr18436775otv.211.1653778067577;
+        Sat, 28 May 2022 15:47:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r33-20020a056870582100b000f169cbbb32sm1865092oap.43.2022.05.28.15.47.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 15:44:31 -0700 (PDT)
-From:   Jim Quinlan <jim2101024@gmail.com>
-To:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, james.dutton@gmail.com,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com, jim2101024@gmail.com,
-        james.quinlan@broadcom.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 1/1] PCI: brcmstb: Fix regression regarding missing PCIe linkup
-Date:   Sat, 28 May 2022 18:44:23 -0400
-Message-Id: <20220528224423.7017-2-jim2101024@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220528224423.7017-1-jim2101024@gmail.com>
-References: <20220528224423.7017-1-jim2101024@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 28 May 2022 15:47:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 28 May 2022 15:47:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-modules@vger.kernel.org, llvm@lists.linux.dev,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH v6 01/10] modpost: extract symbol versions from *.cmd
+ files
+Message-ID: <20220528224745.GA2501857@roeck-us.net>
+References: <20220513113930.10488-1-masahiroy@kernel.org>
+ <20220513113930.10488-2-masahiroy@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513113930.10488-2-masahiroy@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+Hi,
 
-introduced a regression on the PCIe RPi4 Compute Module.  If the PCIe
-root port DT node described in [2] was missing, no linkup would be attempted,
-and subsequent accesses would cause a panic because this particular PCIe HW
-causes a CPU abort on illegal accesses (instead of returning 0xffffffff).
+On Fri, May 13, 2022 at 08:39:21PM +0900, Masahiro Yamada wrote:
+> Currently, CONFIG_MODVERSIONS needs extra link to embed the symbol
+> versions into ELF objects. Then, modpost extracts the version CRCs
+> from them.
+> 
+[ ... ]
+> This commit changes modpost to extract CRCs from *.cmd files instead of
+> from ELF objects.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-We fix this by allowing the DT root port node to be missing, as it behaved
-before the original patchset messed things up.
+This patch results in
 
-In addition, two small changes are made:
+._muldi3_di.o.cmd: No such file or directory
 
-  1. Having pci_subdev_regulators_remove_bus() call
-     regulator_bulk_free() in addtion to regulator_bulk_disable().
-  2. Having brcm_pcie_add_bus() return 0 if there is an
-     error in calling pci_subdev_regulators_add_bus().
-     Instead, we dev_err() and turn on our refusal mode instead.
+when building parisc64:defconfig, and
 
-It would be best if this commit were tested by someone with a Rpi CM4
-platform, as that is how the regression was found.  I have only emulated
-the problem and fix on different platform.
+._divsi3.o.cmd: No such file or directory
 
-Note that a bisection identified
+when building csky:allmodconfig.
 
-commit 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
+Reverting this patch (and the subsequent kbuild patches to avoid
+conflicts) fixes the problem for both architectures. In case it
+helps, the complete build log when rebuilding an image for csky
+is as follows.
 
-as the first failing commit.  This commit is a regression, but is unrelated
-and was fixed by a subsequent commit in the original patchset.
+#
+# No change to .config
+#
+  HOSTCC  scripts/mod/modpost.o
+  HOSTLD  scripts/mod/modpost
+  CALL    scripts/atomic/check-atomics.sh
+  CALL    scripts/checksyscalls.sh
+  CHK     include/generated/compile.h
+  SO2S    arch/csky/kernel/vdso/vdso-syms.S
+  AS      arch/csky/kernel/vdso/vdso-syms.o
+  AR      arch/csky/kernel/vdso/built-in.a
+  AR      arch/csky/kernel/built-in.a
+  CHK     kernel/kheaders_data.tar.xz
+  GEN     .version
+  CHK     include/generated/compile.h
+  UPD     include/generated/compile.h
+  CC      init/version.o
+  AR      init/built-in.a
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+._divsi3.o.cmd: No such file or directory
+make[1]: *** [scripts/Makefile.modpost:59: vmlinux.symvers] Error 1
+make: *** [Makefile:1159: vmlinux] Error 2
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=215925
-[2] Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+This was seen with gcc 11.2 and 11.3.
 
-Fixes: 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
-Fixes: 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
-Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+Guenter
+
 ---
- drivers/pci/controller/pcie-brcmstb.c | 43 +++++++++++++++++++--------
- 1 file changed, 30 insertions(+), 13 deletions(-)
+bisect on mainline:
 
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index ba5c120816b2..0839325f79ab 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -540,29 +540,42 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
- 
- static int brcm_pcie_add_bus(struct pci_bus *bus)
- {
--	struct device *dev = &bus->dev;
--	struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
-+	struct brcm_pcie *pcie;
- 	int ret;
- 
--	if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
-+	/*
-+	 * Right now we only alloc/enable regulators and initiate pcie link
-+	 * when under the root port bus of the current domain.  In the
-+	 * future we may want to alloc/enable regulators under any port
-+	 * device (e.g. a switch).
-+	 */
-+	if (!bus->parent || !pci_is_root_bus(bus->parent))
- 		return 0;
- 
- 	ret = pci_subdev_regulators_add_bus(bus);
--	if (ret)
--		return ret;
-+	if (ret) {
-+		dev_err(pcie->dev, "failed to alloc/enable regulators\n");
-+		goto err;
-+	}
- 
--	/* Grab the regulators for suspend/resume */
-+	/* Save the regulators for RC suspend/resume */
-+	pcie = (struct brcm_pcie *) bus->sysdata;
- 	pcie->sr = bus->dev.driver_data;
- 
-+	/* Attempt PCIe link-up */
-+	if (brcm_pcie_linkup(pcie) == 0)
-+		return 0;
-+err:
- 	/*
--	 * If we have failed linkup there is no point to return an error as
--	 * currently it will cause a WARNING() from pci_alloc_child_bus().
--	 * We return 0 and turn on the "refusal_mode" so that any further
--	 * accesses to the pci_dev just get 0xffffffff
-+	 * If we have failed linkup or have an error when turning on
-+	 * regulators, there is no point to return an error value to the
-+	 * caller (pci_alloc_child_bus()) as it will summarily execute a
-+	 * WARNING().  Instead, we turn on our "refusal_mode" and return 0
-+	 * so that any further PCIe accesses succeed but do nothing (reads
-+	 * return 0xffffffff).  If we do not turn on refusal mode, our
-+	 * unforgiving PCIe HW will signal a CPU abort.
- 	 */
--	if (brcm_pcie_linkup(pcie) != 0)
--		pcie->refusal_mode = true;
--
-+	pcie->refusal_mode = true;
- 	return 0;
- }
- 
-@@ -570,13 +583,17 @@ static void pci_subdev_regulators_remove_bus(struct pci_bus *bus)
- {
- 	struct device *dev = &bus->dev;
- 	struct subdev_regulators *sr = dev->driver_data;
-+	struct brcm_pcie *pcie;
- 
- 	if (!sr || !bus->parent || !pci_is_root_bus(bus->parent))
- 		return;
- 
- 	if (regulator_bulk_disable(sr->num_supplies, sr->supplies))
- 		dev_err(dev, "failed to disable regulators for downstream device\n");
-+	regulator_bulk_free(sr->num_supplies, sr->supplies);
- 	dev->driver_data = NULL;
-+	pcie = (struct brcm_pcie *) bus->sysdata;
-+	pcie->sr = NULL;
- }
- 
- /* Limits operation to a specific generation (1, 2, or 3) */
--- 
-2.17.1
+# bad: [9d004b2f4fea97cde123e7f1939b80e77bf2e695] Merge tag 'cxl-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl
+# good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+git bisect start 'HEAD' 'v5.18'
+# good: [86c87bea6b42100c67418af690919c44de6ede6e] Merge tag 'devicetree-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
+git bisect good 86c87bea6b42100c67418af690919c44de6ede6e
+# good: [c011dd537ffe47462051930413fed07dbdc80313] Merge tag 'arm-soc-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good c011dd537ffe47462051930413fed07dbdc80313
+# bad: [df202b452fe6c6d6f1351bad485e2367ef1e644e] Merge tag 'kbuild-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+git bisect bad df202b452fe6c6d6f1351bad485e2367ef1e644e
+# good: [d4dcdc53c492a7b9fa9031cb85e238b21208ada2] Merge tag 'qcom-arm64-for-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into arm/dt
+git bisect good d4dcdc53c492a7b9fa9031cb85e238b21208ada2
+# good: [ae862183285cbb2ef9032770d98ffa9becffe9d5] Merge tag 'arm-dt-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good ae862183285cbb2ef9032770d98ffa9becffe9d5
+# good: [cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e] Merge tag 'arm-drivers-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good cc3c470ae4ad758b8ddad825ab199f7eaa8b0a9e
+# good: [ecf0aa5317b0ad6bb015128a5b763c954fd58708] Merge tag 'arm-multiplatform-5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good ecf0aa5317b0ad6bb015128a5b763c954fd58708
+# good: [4484054816cab940fc2fde23fa989174fec889d0] modpost: use doubly linked list for dump_lists
+git bisect good 4484054816cab940fc2fde23fa989174fec889d0
+# good: [16477cdfefdb494235a675cc80563d736991d833] Merge tag 'asm-generic-5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic
+git bisect good 16477cdfefdb494235a675cc80563d736991d833
+# good: [a44abaca0e196cfeef2374ed663b97daa1ad112a] modpost: move *.mod.c generation to write_mod_c_files()
+git bisect good a44abaca0e196cfeef2374ed663b97daa1ad112a
+# good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
+git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
+# bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+# bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
+git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
+# first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
 
+---
+bisect on kbuild-5.19:
+
+# bad: [5ce2176b81f77366bd02c27509b83049f0020544] genksyms: adjust the output format to modpost
+# good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
+git bisect start 'HEAD' 'v5.18-rc1'
+# good: [70ddb48db4aaddd3c2a7d8802463e15b21ce8525] modpost: move struct namespace_list to modpost.c
+git bisect good 70ddb48db4aaddd3c2a7d8802463e15b21ce8525
+# good: [e76cc48d8e6df5d949284132981db73d2dd8c6b5] modpost: make sym_add_exported() always allocate a new symbol
+git bisect good e76cc48d8e6df5d949284132981db73d2dd8c6b5
+# good: [78e9e56af3858bf2c52c065daa6c8bee0d72048c] kbuild: record symbol versions in *.cmd files
+git bisect good 78e9e56af3858bf2c52c065daa6c8bee0d72048c
+# good: [69c4cc99bbcbf3ef2e1901b569954e9226180840] modpost: add sym_find_with_module() helper
+git bisect good 69c4cc99bbcbf3ef2e1901b569954e9226180840
+# bad: [7b4537199a4a8480b8c3ba37a2d44765ce76cd9b] kbuild: link symbol CRCs at final link, removing CONFIG_MODULE_REL_CRCS
+git bisect bad 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b
+# bad: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files
+git bisect bad f292d875d0dc700b3af0bef04c5abc1dc7b3b62c
+# first bad commit: [f292d875d0dc700b3af0bef04c5abc1dc7b3b62c] modpost: extract symbol versions from *.cmd files

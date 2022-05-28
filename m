@@ -2,162 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59AB536C4D
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916E3536C53
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233914AbiE1KY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 06:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
+        id S234044AbiE1KhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 06:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233853AbiE1KYy (ORCPT
+        with ESMTP id S233853AbiE1KhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 06:24:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC902618;
-        Sat, 28 May 2022 03:24:53 -0700 (PDT)
+        Sat, 28 May 2022 06:37:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10522182C;
+        Sat, 28 May 2022 03:37:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8992360DB6;
-        Sat, 28 May 2022 10:24:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329ECC34100;
-        Sat, 28 May 2022 10:24:52 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="l7vpP9LP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653733489;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ilJONe0tMPd3rARKJSnYcnn/Wg6UEmJQnFGT2GeNaZw=;
-        b=l7vpP9LPLvjnDaqvYkk9EqgjqdfbJkS4hSmHGgANqR18oYZuupTKWoss8ZFgcGNKt20q/T
-        qbvr9DZU+KlHqtzfY1G0vh5nNcWR26BJiura9Nix+vYUxT6Fx8C0y7Rss+QD48Et6/75hk
-        RZqJxDBE1GeyfTVsHzNIP+5u6AV4stQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 68b8dd6e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sat, 28 May 2022 10:24:49 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Zheng Bin <zhengbin13@huawei.com>,
-        Eric Biggers <ebiggers@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH crypto] crypto: memneq - move into lib/
-Date:   Sat, 28 May 2022 12:24:29 +0200
-Message-Id: <20220528102429.189731-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9rWfUnUmHR5xo_+WdS0Wgv8yXQb+LqAo24XdoQQR4Wn8w@mail.gmail.com>
-References: <CAHmME9rWfUnUmHR5xo_+WdS0Wgv8yXQb+LqAo24XdoQQR4Wn8w@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CCC460C7E;
+        Sat, 28 May 2022 10:37:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A9CDC34100;
+        Sat, 28 May 2022 10:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653734223;
+        bh=SuKmmY28pKiTzovsqJhz5fPRfTzVYcOhutqCxn2HdxM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BHMvYrexpNW29pfbkhTvPixlvgZptkB5VK+gG+uxxMl0gmUAWMCPwc4Hqh5ciGyf/
+         +OSZpCR21DxBKvvk3OqsPy9mWrUURtQDLCas7WU0isrLJVgHxFrS1M29L1AGjlNe+Q
+         1E0lrXuQWOxVeBMnhofq3ttGtcrI4vLqecvuuPILw73uHAfXhxMYgufUQXpyPTX/K1
+         sLWBeIKMt9edn75Hf0aWU+KhP4ECNLg/uZyM6OHhla917uPl4E24Pi1ap5GUIf92uX
+         OY/sW8mCKoe6KJaWiQ6hNvdo+bcVSpkySZWWHN6Hqc+MhOjoP5uUmr6P3CN0QUMyEA
+         k3hx9edB9rwjA==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nutoa-00EDuu-MA; Sat, 28 May 2022 11:37:00 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sat, 28 May 2022 11:37:00 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anand Gore <anand.gore@broadcom.com>
+Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        dan.beygelman@broadcom.com, samyon.furman@broadcom.com,
+        florian.fainelli@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        tomer.yacoby@broadcom.com, kursad.oney@broadcom.com,
+        joel.peshkin@broadcom.com,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] ARM64: dts: add dts files for bcmbca SoC bcm6858
+In-Reply-To: <20220527101336.1.I66ae43da75911b704f02a759f70d66bc7e542885@changeid>
+References: <20220527171356.2461297-1-anand.gore@broadcom.com>
+ <20220527101336.1.I66ae43da75911b704f02a759f70d66bc7e542885@changeid>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <be2a935ca7f7d14c35dc772cda338e5d@misterjones.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: anand.gore@broadcom.com, linux-arm-kernel@lists.infradead.org, dan.beygelman@broadcom.com, samyon.furman@broadcom.com, florian.fainelli@broadcom.com, william.zhang@broadcom.com, tomer.yacoby@broadcom.com, kursad.oney@broadcom.com, joel.peshkin@broadcom.com, bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is used by code that doesn't need CONFIG_CRYPTO, so move this into
-lib/ with a Kconfig option so that it can be selected by whatever needs
-it.
+On 2022-05-27 18:13, Anand Gore wrote:
+> Add dts for ARMv8 based broadband SoC BCM6858.
+> bcm6858.dtsi is the SoC description dts header
+> and bcm96858.dts is a simple dts file for Broadcom
+> BCM96858 Reference board that only enables the UART port.
+> 
+> Signed-off-by: Anand Gore <anand.gore@broadcom.com>
+> 
+> ---
+> 
+>  arch/arm64/boot/dts/broadcom/bcmbca/Makefile  |   3 +-
+>  .../boot/dts/broadcom/bcmbca/bcm6858.dtsi     | 120 ++++++++++++++++++
+>  .../boot/dts/broadcom/bcmbca/bcm96858.dts     |  30 +++++
+>  3 files changed, 152 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm6858.dtsi
+>  create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm96858.dts
+> 
+> diff --git a/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
+> b/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
+> index d5f89245336c..7d98b0787b8c 100644
+> --- a/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
+> +++ b/arch/arm64/boot/dts/broadcom/bcmbca/Makefile
+> @@ -1,2 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -dtb-$(CONFIG_ARCH_BCMBCA) += bcm963158.dtb
+> +dtb-$(CONFIG_ARCH_BCMBCA) += bcm963158.dtb \
+> +				bcm96858.dtb
+> diff --git a/arch/arm64/boot/dts/broadcom/bcmbca/bcm6858.dtsi
+> b/arch/arm64/boot/dts/broadcom/bcmbca/bcm6858.dtsi
+> new file mode 100644
+> index 000000000000..664b8f399d69
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/broadcom/bcmbca/bcm6858.dtsi
+> @@ -0,0 +1,120 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright 2022 Broadcom Ltd.
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +/ {
+> +	compatible = "brcm,bcm6858", "brcm,bcmbca";
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	interrupt-parent = <&gic>;
+> +
+> +	cpus {
+> +		#address-cells = <2>;
+> +		#size-cells = <0>;
+> +
+> +		B53_0: cpu@0 {
+> +			compatible = "brcm,brahma-b53";
+> +			device_type = "cpu";
+> +			reg = <0x0 0x0>;
+> +			next-level-cache = <&L2_0>;
+> +			enable-method = "psci";
+> +		};
+> +
+> +		B53_1: cpu@1 {
+> +			compatible = "brcm,brahma-b53";
+> +			device_type = "cpu";
+> +			reg = <0x0 0x1>;
+> +			next-level-cache = <&L2_0>;
+> +			enable-method = "psci";
+> +		};
+> +
+> +		B53_2: cpu@2 {
+> +			compatible = "brcm,brahma-b53";
+> +			device_type = "cpu";
+> +			reg = <0x0 0x2>;
+> +			next-level-cache = <&L2_0>;
+> +			enable-method = "psci";
+> +		};
+> +
+> +		B53_3: cpu@3 {
+> +			compatible = "brcm,brahma-b53";
+> +			device_type = "cpu";
+> +			reg = <0x0 0x3>;
+> +			next-level-cache = <&L2_0>;
+> +			enable-method = "psci";
+> +		};
+> +		L2_0: l2-cache0 {
+> +			compatible = "cache";
+> +		};
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | 
+> IRQ_TYPE_LEVEL_LOW)>,
+> +			<GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			<GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			<GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+> +	};
+> +
+> +	pmu: pmu {
+> +		compatible = "arm,armv8-pmuv3";
+> +		interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
+> +			<GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-affinity = <&B53_0>, <&B53_1>,
+> +			<&B53_2>, <&B53_3>;
+> +	};
+> +
+> +	clocks: clocks {
+> +		periph_clk:periph-clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <200000000>;
+> +		};
+> +	};
+> +
+> +	psci {
+> +		compatible = "arm,psci-0.2";
+> +		method = "smc";
+> +		cpu_off = <1>;
+> +		cpu_on = <2>;
 
-This fixes a linker error Zheng pointed out when
-CRYPTO_MANAGER_DISABLE_TESTS!=y and CRYPTO=m:
+No. Either this is PSCI 0.2 (and inventing your own function numbers
+is pointless), or this isn't. Either way, this is wrong.
 
-  lib/crypto/curve25519-selftest.o: In function `curve25519_selftest':
-  curve25519-selftest.c:(.init.text+0x60): undefined reference to `__crypto_memneq'
-  curve25519-selftest.c:(.init.text+0xec): undefined reference to `__crypto_memneq'
-  curve25519-selftest.c:(.init.text+0x114): undefined reference to `__crypto_memneq'
-  curve25519-selftest.c:(.init.text+0x154): undefined reference to `__crypto_memneq'
+> +	};
+> +
+> +	axi@81000000 {
+> +		compatible = "simple-bus";
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges = <0x0 0x0 0x0 0x81000000 0x0 0x4000>;
+> +
+> +		gic: interrupt-controller@1000 {
+> +			compatible = "arm,gic-400";
+> +			#interrupt-cells = <3>;
+> +			#address-cells = <0>;
+> +			interrupt-controller;
+> +			reg = <0x0 0x1000 0x0 0x1000>,
+> +				<0x0 0x2000 0x0 0x2000>;
 
-Reported-by: Zheng Bin <zhengbin13@huawei.com>
-Cc: Eric Biggers <ebiggers@kernel.org>
-Cc: stable@vger.kernel.org
-Fixes: aa127963f1ca ("crypto: lib/curve25519 - re-add selftests")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-I'm traveling over the next week, and there are a few ways to skin this
-cat, so if somebody here sees issue, feel free to pick this v1 up and
-fashion a v2 out of it.
+GIC400 has another two regions for GICH and GICV, and a maintenance
+interrupt. Please add both.
 
- crypto/Kconfig           | 1 +
- crypto/Makefile          | 2 +-
- lib/Kconfig              | 3 +++
- lib/Makefile             | 1 +
- lib/crypto/Kconfig       | 1 +
- {crypto => lib}/memneq.c | 0
- 6 files changed, 7 insertions(+), 1 deletion(-)
- rename {crypto => lib}/memneq.c (100%)
+Thanks,
 
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index f567271ed10d..38601a072b99 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -15,6 +15,7 @@ source "crypto/async_tx/Kconfig"
- #
- menuconfig CRYPTO
- 	tristate "Cryptographic API"
-+	select LIB_MEMNEQ
- 	help
- 	  This option provides the core Cryptographic API.
- 
-diff --git a/crypto/Makefile b/crypto/Makefile
-index 40d4c2690a49..dbfa53567c92 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -4,7 +4,7 @@
- #
- 
- obj-$(CONFIG_CRYPTO) += crypto.o
--crypto-y := api.o cipher.o compress.o memneq.o
-+crypto-y := api.o cipher.o compress.o
- 
- obj-$(CONFIG_CRYPTO_ENGINE) += crypto_engine.o
- obj-$(CONFIG_CRYPTO_FIPS) += fips.o
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 6a843639814f..eaaad4d85bf2 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -120,6 +120,9 @@ config INDIRECT_IOMEM_FALLBACK
- 
- source "lib/crypto/Kconfig"
- 
-+config LIB_MEMNEQ
-+	bool
-+
- config CRC_CCITT
- 	tristate "CRC-CCITT functions"
- 	help
-diff --git a/lib/Makefile b/lib/Makefile
-index 89fcae891361..f01023cda508 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -251,6 +251,7 @@ obj-$(CONFIG_DIMLIB) += dim/
- obj-$(CONFIG_SIGNATURE) += digsig.o
- 
- lib-$(CONFIG_CLZ_TAB) += clz_tab.o
-+lib-$(CONFIG_LIB_MEMNEQ) += memneq.o
- 
- obj-$(CONFIG_GENERIC_STRNCPY_FROM_USER) += strncpy_from_user.o
- obj-$(CONFIG_GENERIC_STRNLEN_USER) += strnlen_user.o
-diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 7ee13c08c970..337d6852643a 100644
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -71,6 +71,7 @@ config CRYPTO_LIB_CURVE25519
- 	tristate "Curve25519 scalar multiplication library"
- 	depends on CRYPTO_ARCH_HAVE_LIB_CURVE25519 || !CRYPTO_ARCH_HAVE_LIB_CURVE25519
- 	select CRYPTO_LIB_CURVE25519_GENERIC if CRYPTO_ARCH_HAVE_LIB_CURVE25519=n
-+	select LIB_MEMNEQ
- 	help
- 	  Enable the Curve25519 library interface. This interface may be
- 	  fulfilled by either the generic implementation or an arch-specific
-diff --git a/crypto/memneq.c b/lib/memneq.c
-similarity index 100%
-rename from crypto/memneq.c
-rename to lib/memneq.c
+         M.
 -- 
-2.35.1
-
+Jazz is not dead. It just smells funny...

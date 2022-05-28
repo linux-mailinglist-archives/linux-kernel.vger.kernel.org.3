@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB208536B1C
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 08:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E085536B2D
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 08:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354465AbiE1G3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 02:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S1355815AbiE1G3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 02:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354883AbiE1G3b (ORCPT
+        with ESMTP id S1354965AbiE1G3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 02:29:31 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45B93121E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 23:29:29 -0700 (PDT)
-Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L9BbN4qW4zDqKD;
-        Sat, 28 May 2022 14:29:20 +0800 (CST)
+        Sat, 28 May 2022 02:29:33 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BE331341
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 23:29:31 -0700 (PDT)
+Received: from kwepemi500004.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L9BZf6BgtzjX87;
+        Sat, 28 May 2022 14:28:42 +0800 (CST)
 Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
+ kwepemi500004.china.huawei.com (7.221.188.17) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 14:29:27 +0800
+ 15.1.2375.24; Sat, 28 May 2022 14:29:28 +0800
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 14:29:25 +0800
+ 15.1.2375.24; Sat, 28 May 2022 14:29:27 +0800
 From:   Tong Tiangen <tongtiangen@huawei.com>
 To:     Mark Rutland <mark.rutland@arm.com>,
         James Morse <james.morse@arm.com>,
@@ -48,9 +48,9 @@ CC:     <linuxppc-dev@lists.ozlabs.org>,
         Xie XiuQi <xiexiuqi@huawei.com>,
         Guohanjun <guohanjun@huawei.com>,
         Tong Tiangen <tongtiangen@huawei.com>
-Subject: [PATCH -next v5 1/8] arm64: extable: add new extable type EX_TYPE_KACCESS_ERR_ZERO support
-Date:   Sat, 28 May 2022 06:50:49 +0000
-Message-ID: <20220528065056.1034168-2-tongtiangen@huawei.com>
+Subject: [PATCH -next v5 2/8] arm64: extable: make uaaccess helper use extable type EX_TYPE_UACCESS_ERR_ZERO
+Date:   Sat, 28 May 2022 06:50:50 +0000
+Message-ID: <20220528065056.1034168-3-tongtiangen@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220528065056.1034168-1-tongtiangen@huawei.com>
 References: <20220528065056.1034168-1-tongtiangen@huawei.com>
@@ -70,219 +70,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, The extable type EX_TYPE_UACCESS_ERR_ZERO is used by
-__get/put_kernel_nofault(), but those helpers are not uaccess type, so we
-add a new extable type EX_TYPE_KACCESS_ERR_ZERO which can be used by
-__get/put_kernel_no_fault().
-
-This is also to prepare for distinguishing the two types in machine check
-safe process.
+Currnetly, the extable type used by __arch_copy_from/to_user() is
+EX_TYPE_FIXUP. In fact, It is more clearly to use meaningful
+EX_TYPE_UACCESS_*.
 
 Suggested-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
 ---
- arch/arm64/include/asm/asm-extable.h | 13 ++++
- arch/arm64/include/asm/uaccess.h     | 94 ++++++++++++++--------------
- arch/arm64/mm/extable.c              |  1 +
- 3 files changed, 61 insertions(+), 47 deletions(-)
+ arch/arm64/include/asm/asm-extable.h |  8 ++++++++
+ arch/arm64/include/asm/asm-uaccess.h | 12 ++++++------
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
 diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
-index c39f2437e08e..56ebe183e78b 100644
+index 56ebe183e78b..9c94ac1f082c 100644
 --- a/arch/arm64/include/asm/asm-extable.h
 +++ b/arch/arm64/include/asm/asm-extable.h
-@@ -7,6 +7,7 @@
- #define EX_TYPE_BPF			2
- #define EX_TYPE_UACCESS_ERR_ZERO	3
- #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	4
-+#define EX_TYPE_KACCESS_ERR_ZERO	5
+@@ -28,6 +28,14 @@
+ 	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_FIXUP, 0)
+ 	.endm
  
- #ifdef __ASSEMBLY__
++/*
++ * Create an exception table entry for uaccess `insn`, which will branch to `fixup`
++ * when an unhandled fault is taken.
++ * ex->data = ~0 means both reg_err and reg_zero is set to wzr(x31).
++ */
++	.macro          _asm_extable_uaccess, insn, fixup
++	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_ERR_ZERO, ~0)
++	.endm
+ /*
+  * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
+  * do nothing.
+diff --git a/arch/arm64/include/asm/asm-uaccess.h b/arch/arm64/include/asm/asm-uaccess.h
+index 0557af834e03..75b211c98dea 100644
+--- a/arch/arm64/include/asm/asm-uaccess.h
++++ b/arch/arm64/include/asm/asm-uaccess.h
+@@ -61,7 +61,7 @@ alternative_else_nop_endif
  
-@@ -73,9 +74,21 @@
- 			    EX_DATA_REG(ZERO, zero)			\
- 			  ")")
- 
-+#define _ASM_EXTABLE_KACCESS_ERR_ZERO(insn, fixup, err, zero)		\
-+	__DEFINE_ASM_GPR_NUMS						\
-+	__ASM_EXTABLE_RAW(#insn, #fixup, 				\
-+			  __stringify(EX_TYPE_KACCESS_ERR_ZERO),	\
-+			  "("						\
-+			    EX_DATA_REG(ERR, err) " | "			\
-+			    EX_DATA_REG(ZERO, zero)			\
-+			  ")")
-+
- #define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)			\
- 	_ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, wzr)
- 
-+#define _ASM_EXTABLE_KACCESS_ERR(insn, fixup, err)			\
-+	_ASM_EXTABLE_KACCESS_ERR_ZERO(insn, fixup, err, wzr)
-+
- #define EX_DATA_REG_DATA_SHIFT	0
- #define EX_DATA_REG_DATA	GENMASK(4, 0)
- #define EX_DATA_REG_ADDR_SHIFT	5
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index 63f9c828f1a7..2fc9f0861769 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -232,34 +232,34 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
-  * The "__xxx_error" versions set the third argument to -EFAULT if an error
-  * occurs, and leave it unchanged on success.
-  */
--#define __get_mem_asm(load, reg, x, addr, err)				\
-+#define __get_mem_asm(load, reg, x, addr, err, type)			\
- 	asm volatile(							\
- 	"1:	" load "	" reg "1, [%2]\n"			\
- 	"2:\n"								\
--	_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %w0, %w1)			\
-+	_ASM_EXTABLE_##type##ACCESS_ERR_ZERO(1b, 2b, %w0, %w1)		\
- 	: "+r" (err), "=&r" (x)						\
- 	: "r" (addr))
- 
--#define __raw_get_mem(ldr, x, ptr, err)					\
--do {									\
--	unsigned long __gu_val;						\
--	switch (sizeof(*(ptr))) {					\
--	case 1:								\
--		__get_mem_asm(ldr "b", "%w", __gu_val, (ptr), (err));	\
--		break;							\
--	case 2:								\
--		__get_mem_asm(ldr "h", "%w", __gu_val, (ptr), (err));	\
--		break;							\
--	case 4:								\
--		__get_mem_asm(ldr, "%w", __gu_val, (ptr), (err));	\
--		break;							\
--	case 8:								\
--		__get_mem_asm(ldr, "%x",  __gu_val, (ptr), (err));	\
--		break;							\
--	default:							\
--		BUILD_BUG();						\
--	}								\
--	(x) = (__force __typeof__(*(ptr)))__gu_val;			\
-+#define __raw_get_mem(ldr, x, ptr, err, type)					\
-+do {										\
-+	unsigned long __gu_val;							\
-+	switch (sizeof(*(ptr))) {						\
-+	case 1:									\
-+		__get_mem_asm(ldr "b", "%w", __gu_val, (ptr), (err), type);	\
-+		break;								\
-+	case 2:									\
-+		__get_mem_asm(ldr "h", "%w", __gu_val, (ptr), (err), type);	\
-+		break;								\
-+	case 4:									\
-+		__get_mem_asm(ldr, "%w", __gu_val, (ptr), (err), type);		\
-+		break;								\
-+	case 8:									\
-+		__get_mem_asm(ldr, "%x",  __gu_val, (ptr), (err), type);	\
-+		break;								\
-+	default:								\
-+		BUILD_BUG();							\
-+	}									\
-+	(x) = (__force __typeof__(*(ptr)))__gu_val;				\
- } while (0)
+ #define USER(l, x...)				\
+ 9999:	x;					\
+-	_asm_extable	9999b, l
++	_asm_extable_uaccess	9999b, l
  
  /*
-@@ -274,7 +274,7 @@ do {									\
- 	__chk_user_ptr(ptr);						\
- 									\
- 	uaccess_ttbr0_enable();						\
--	__raw_get_mem("ldtr", __rgu_val, __rgu_ptr, err);		\
-+	__raw_get_mem("ldtr", __rgu_val, __rgu_ptr, err, U);		\
- 	uaccess_ttbr0_disable();					\
- 									\
- 	(x) = __rgu_val;						\
-@@ -314,40 +314,40 @@ do {									\
- 									\
- 	__uaccess_enable_tco_async();					\
- 	__raw_get_mem("ldr", *((type *)(__gkn_dst)),			\
--		      (__force type *)(__gkn_src), __gkn_err);		\
-+		      (__force type *)(__gkn_src), __gkn_err, K);	\
- 	__uaccess_disable_tco_async();					\
- 									\
- 	if (unlikely(__gkn_err))					\
- 		goto err_label;						\
- } while (0)
+  * Generate the assembly for LDTR/STTR with exception table entries.
+@@ -73,8 +73,8 @@ alternative_else_nop_endif
+ 8889:		ldtr	\reg2, [\addr, #8];
+ 		add	\addr, \addr, \post_inc;
  
--#define __put_mem_asm(store, reg, x, addr, err)				\
-+#define __put_mem_asm(store, reg, x, addr, err, type)			\
- 	asm volatile(							\
- 	"1:	" store "	" reg "1, [%2]\n"			\
- 	"2:\n"								\
--	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)				\
-+	_ASM_EXTABLE_##type##ACCESS_ERR(1b, 2b, %w0)			\
- 	: "+r" (err)							\
- 	: "r" (x), "r" (addr))
+-		_asm_extable	8888b,\l;
+-		_asm_extable	8889b,\l;
++		_asm_extable_uaccess	8888b, \l;
++		_asm_extable_uaccess	8889b, \l;
+ 	.endm
  
--#define __raw_put_mem(str, x, ptr, err)					\
--do {									\
--	__typeof__(*(ptr)) __pu_val = (x);				\
--	switch (sizeof(*(ptr))) {					\
--	case 1:								\
--		__put_mem_asm(str "b", "%w", __pu_val, (ptr), (err));	\
--		break;							\
--	case 2:								\
--		__put_mem_asm(str "h", "%w", __pu_val, (ptr), (err));	\
--		break;							\
--	case 4:								\
--		__put_mem_asm(str, "%w", __pu_val, (ptr), (err));	\
--		break;							\
--	case 8:								\
--		__put_mem_asm(str, "%x", __pu_val, (ptr), (err));	\
--		break;							\
--	default:							\
--		BUILD_BUG();						\
--	}								\
-+#define __raw_put_mem(str, x, ptr, err, type)					\
-+do {										\
-+	__typeof__(*(ptr)) __pu_val = (x);					\
-+	switch (sizeof(*(ptr))) {						\
-+	case 1:									\
-+		__put_mem_asm(str "b", "%w", __pu_val, (ptr), (err), type);	\
-+		break;								\
-+	case 2:									\
-+		__put_mem_asm(str "h", "%w", __pu_val, (ptr), (err), type);	\
-+		break;								\
-+	case 4:									\
-+		__put_mem_asm(str, "%w", __pu_val, (ptr), (err), type);		\
-+		break;								\
-+	case 8:									\
-+		__put_mem_asm(str, "%x", __pu_val, (ptr), (err), type);		\
-+		break;								\
-+	default:								\
-+		BUILD_BUG();							\
-+	}									\
- } while (0)
+ 	.macro user_stp l, reg1, reg2, addr, post_inc
+@@ -82,14 +82,14 @@ alternative_else_nop_endif
+ 8889:		sttr	\reg2, [\addr, #8];
+ 		add	\addr, \addr, \post_inc;
  
- /*
-@@ -362,7 +362,7 @@ do {									\
- 	__chk_user_ptr(__rpu_ptr);					\
- 									\
- 	uaccess_ttbr0_enable();						\
--	__raw_put_mem("sttr", __rpu_val, __rpu_ptr, err);		\
-+	__raw_put_mem("sttr", __rpu_val, __rpu_ptr, err, U);		\
- 	uaccess_ttbr0_disable();					\
- } while (0)
+-		_asm_extable	8888b,\l;
+-		_asm_extable	8889b,\l;
++		_asm_extable_uaccess	8888b,\l;
++		_asm_extable_uaccess	8889b,\l;
+ 	.endm
  
-@@ -400,7 +400,7 @@ do {									\
- 									\
- 	__uaccess_enable_tco_async();					\
- 	__raw_put_mem("str", *((type *)(__pkn_src)),			\
--		      (__force type *)(__pkn_dst), __pkn_err);		\
-+		      (__force type *)(__pkn_dst), __pkn_err, K);	\
- 	__uaccess_disable_tco_async();					\
- 									\
- 	if (unlikely(__pkn_err))					\
-diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-index 489455309695..056591e5ca80 100644
---- a/arch/arm64/mm/extable.c
-+++ b/arch/arm64/mm/extable.c
-@@ -77,6 +77,7 @@ bool fixup_exception(struct pt_regs *regs)
- 	case EX_TYPE_BPF:
- 		return ex_handler_bpf(ex, regs);
- 	case EX_TYPE_UACCESS_ERR_ZERO:
-+	case EX_TYPE_KACCESS_ERR_ZERO:
- 		return ex_handler_uaccess_err_zero(ex, regs);
- 	case EX_TYPE_LOAD_UNALIGNED_ZEROPAD:
- 		return ex_handler_load_unaligned_zeropad(ex, regs);
+ 	.macro user_ldst l, inst, reg, addr, post_inc
+ 8888:		\inst		\reg, [\addr];
+ 		add		\addr, \addr, \post_inc;
+ 
+-		_asm_extable	8888b,\l;
++		_asm_extable_uaccess	8888b, \l;
+ 	.endm
+ #endif
 -- 
 2.25.1
 

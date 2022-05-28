@@ -2,47 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA0E536C7B
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 13:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7229536C98
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 13:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243172AbiE1LOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 07:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S234971AbiE1LkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 07:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbiE1LO0 (ORCPT
+        with ESMTP id S234741AbiE1LkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 07:14:26 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EF41F606
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 04:14:25 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L9Jrm3qcrzRhRL;
-        Sat, 28 May 2022 19:11:20 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 19:14:23 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 19:14:23 +0800
-From:   Ke Liu <liuke94@huawei.com>
-To:     <jk@ozlabs.org>
-CC:     <joel@jms.id.au>, <alistair@popple.id.au>, <eajames@linux.ibm.com>,
-        <linux-fsi@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        Ke Liu <liuke94@huawei.com>
-Subject: [PATCH v2] drivers: fsi: Directly use ida_alloc()/free()
-Date:   Sat, 28 May 2022 11:35:52 +0000
-Message-ID: <20220528113552.1889871-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 28 May 2022 07:40:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15318167DD;
+        Sat, 28 May 2022 04:40:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC5A7B80EAE;
+        Sat, 28 May 2022 11:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 68A31C34118;
+        Sat, 28 May 2022 11:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653738011;
+        bh=ZHpRnFQkeQtmCAXLllnoeiBMgN6AR5loMUWSyWMqj38=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tHv4xzJIVLE7nNzO8MQ4KGbhH82tAQSNStVEI4ylZaL0oP9YoGTqZAz6VvqImcHpg
+         lusq22zRSMJ0Uha/huKJPtrh+cZR6tDWc+yRnOSZlmcmLOgOmBoqHCut0lBiKUJAoQ
+         UDfblPV9QptlLSDsKJzxyopjgbDHhvIMAOSIVmKR0hH+7yhpyPRccwUz17Qaqr6ZMA
+         QBwNRKdHt39j469HA2IIDmnkAm9ksLBZ6lZ8HjR2LChznS7x4aqrzS9XdoVDjmr+HX
+         McxoonhcxUB+gDbEisyZbxlxzQnQeSvVysWx9Bw7QX40gGYSJRRlqf9ApmJBuG7lXT
+         eakuXHko9XsHg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 515ACF03942;
+        Sat, 28 May 2022 11:40:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net/smc: fixes for converting from "struct
+ smc_cdc_tx_pend **" to "struct smc_wr_tx_pend_priv *"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165373801132.32245.12112811414781251794.git-patchwork-notify@kernel.org>
+Date:   Sat, 28 May 2022 11:40:11 +0000
+References: <20220528065457.93676-1-guangguan.wang@linux.alibaba.com>
+In-Reply-To: <20220528065457.93676-1-guangguan.wang@linux.alibaba.com>
+To:     Guangguan Wang <guangguan.wang@linux.alibaba.com>
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, edumazet@google.com, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,121 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove().
+Hello:
 
-Signed-off-by: Ke Liu <liuke94@huawei.com>
----
-v2 fix some bad modify
----
- drivers/fsi/fsi-core.c | 14 +++++++-------
- drivers/fsi/fsi-occ.c  | 17 ++++++++---------
- 2 files changed, 15 insertions(+), 16 deletions(-)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
-index 3a7b78e36701..10ef611058f0 100644
---- a/drivers/fsi/fsi-core.c
-+++ b/drivers/fsi/fsi-core.c
-@@ -951,7 +951,7 @@ static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
- 	if (cid >= 0 && cid < 16 && type < 4) {
- 		/* Try reserving the legacy number */
- 		id = (cid << 4) | type;
--		id = ida_simple_get(&fsi_minor_ida, id, id + 1, GFP_KERNEL);
-+		id = ida_alloc_range(&fsi_minor_ida, id, id, GFP_KERNEL);
- 		if (id >= 0) {
- 			*out_index = fsi_adjust_index(cid);
- 			*out_dev = fsi_base_dev + id;
-@@ -962,8 +962,8 @@ static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
- 			return id;
- 		/* Fallback to non-legacy allocation */
- 	}
--	id = ida_simple_get(&fsi_minor_ida, FSI_CHAR_LEGACY_TOP,
--			    FSI_CHAR_MAX_DEVICES, GFP_KERNEL);
-+	id = ida_alloc_range(&fsi_minor_ida, FSI_CHAR_LEGACY_TOP,
-+			    FSI_CHAR_MAX_DEVICES - 1, GFP_KERNEL);
- 	if (id < 0)
- 		return id;
- 	*out_index = fsi_adjust_index(id);
-@@ -980,7 +980,7 @@ EXPORT_SYMBOL_GPL(fsi_get_new_minor);
- 
- void fsi_free_minor(dev_t dev)
- {
--	ida_simple_remove(&fsi_minor_ida, MINOR(dev));
-+	ida_free(&fsi_minor_ida, MINOR(dev));
- }
- EXPORT_SYMBOL_GPL(fsi_free_minor);
- 
-@@ -1313,13 +1313,13 @@ int fsi_master_register(struct fsi_master *master)
- 	struct device_node *np;
- 
- 	mutex_init(&master->scan_lock);
--	master->idx = ida_simple_get(&master_ida, 0, INT_MAX, GFP_KERNEL);
-+	master->idx = ida_alloc(&master_ida, GFP_KERNEL);
- 	dev_set_name(&master->dev, "fsi%d", master->idx);
- 	master->dev.class = &fsi_master_class;
- 
- 	rc = device_register(&master->dev);
- 	if (rc) {
--		ida_simple_remove(&master_ida, master->idx);
-+		ida_free(&master_ida, master->idx);
- 		return rc;
- 	}
- 
-@@ -1337,7 +1337,7 @@ EXPORT_SYMBOL_GPL(fsi_master_register);
- void fsi_master_unregister(struct fsi_master *master)
- {
- 	if (master->idx >= 0) {
--		ida_simple_remove(&master_ida, master->idx);
-+		ida_free(&master_ida, master->idx);
- 		master->idx = -1;
- 	}
- 
-diff --git a/drivers/fsi/fsi-occ.c b/drivers/fsi/fsi-occ.c
-index c9cc75fbdfb9..63af5cad1015 100644
---- a/drivers/fsi/fsi-occ.c
-+++ b/drivers/fsi/fsi-occ.c
-@@ -630,17 +630,16 @@ static int occ_probe(struct platform_device *pdev)
- 		rc = of_property_read_u32(dev->of_node, "reg", &reg);
- 		if (!rc) {
- 			/* make sure we don't have a duplicate from dts */
--			occ->idx = ida_simple_get(&occ_ida, reg, reg + 1,
--						  GFP_KERNEL);
-+			occ->idx = ida_alloc_range(&occ_ida, reg, reg,
-+						GFP_KERNEL);
- 			if (occ->idx < 0)
--				occ->idx = ida_simple_get(&occ_ida, 1, INT_MAX,
--							  GFP_KERNEL);
-+				occ->idx = ida_alloc_min(&occ_ida, 1,
-+							GFP_KERNEL);
- 		} else {
--			occ->idx = ida_simple_get(&occ_ida, 1, INT_MAX,
--						  GFP_KERNEL);
-+			occ->idx = ida_alloc_min(&occ_ida, 1, GFP_KERNEL);
- 		}
- 	} else {
--		occ->idx = ida_simple_get(&occ_ida, 1, INT_MAX, GFP_KERNEL);
-+		occ->idx = ida_alloc_min(&occ_ida, 1, GFP_KERNEL);
- 	}
- 
- 	platform_set_drvdata(pdev, occ);
-@@ -654,7 +653,7 @@ static int occ_probe(struct platform_device *pdev)
- 	rc = misc_register(&occ->mdev);
- 	if (rc) {
- 		dev_err(dev, "failed to register miscdevice: %d\n", rc);
--		ida_simple_remove(&occ_ida, occ->idx);
-+		ida_free(&occ_ida, occ->idx);
- 		kvfree(occ->buffer);
- 		return rc;
- 	}
-@@ -677,7 +676,7 @@ static int occ_remove(struct platform_device *pdev)
- 
- 	device_for_each_child(&pdev->dev, NULL, occ_unregister_child);
- 
--	ida_simple_remove(&occ_ida, occ->idx);
-+	ida_free(&occ_ida, occ->idx);
- 
- 	return 0;
- }
+On Sat, 28 May 2022 14:54:57 +0800 you wrote:
+> "struct smc_cdc_tx_pend **" can not directly convert
+> to "struct smc_wr_tx_pend_priv *".
+> 
+> Fixes: 2bced6aefa3d ("net/smc: put slot when connection is killed")
+> Signed-off-by: Guangguan Wang <guangguan.wang@linux.alibaba.com>
+> ---
+>  net/smc/smc_cdc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [net] net/smc: fixes for converting from "struct smc_cdc_tx_pend **" to "struct smc_wr_tx_pend_priv *"
+    https://git.kernel.org/netdev/net/c/e225c9a5a74b
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

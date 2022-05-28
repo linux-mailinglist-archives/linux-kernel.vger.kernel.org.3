@@ -2,72 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882F9536C45
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59AB536C4D
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354924AbiE1KQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 06:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
+        id S233914AbiE1KY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 06:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiE1KP7 (ORCPT
+        with ESMTP id S233853AbiE1KYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 06:15:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F9B3A4;
-        Sat, 28 May 2022 03:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653732958; x=1685268958;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M97Hv4CQJ0ZWSyycwTVohvtTA7AthiCJJEilnH5zTtA=;
-  b=daTYLFGuB3U1oOcPUph4xn0pX9pUvYLSx1wDC6sLya1uhba0576IFieg
-   NWjDSNwLCvKyPPwQ4f/3hsOqoP/7rgNq1IrOPTtS+Uu0Npqabxa8OX887
-   fMHEf/9KPS9IoTpq+1iJFLt/cFzQzW9E/ePdn/V3usLcB5m6T/aVHKcMn
-   dbGEKFNoNHOdpED7jnr6lmOITsGaxdlrBI0U30jHRKaPZCkFm+8gS8GQ2
-   gljrRMJ0yJhvzpLGzNmaKn6wyj2aWI0HfuyPg78J+M4vad/BVJSQQg7l6
-   5AqScTsKSdTDPFNhomK3idgMlRREaq0n+ICI7TmVu6hfwEF0SSpy/Q/pg
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="274755380"
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="274755380"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 03:15:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="719230808"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by fmsmga001.fm.intel.com with ESMTP; 28 May 2022 03:15:56 -0700
-Date:   Sat, 28 May 2022 18:08:13 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     tien.sung.ang@intel.com
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fpga: altera-cvp: Truncated bitstream error support
-Message-ID: <20220528100813.GE175008@yilunxu-OptiPlex-7050>
-References: <6939d35f-36a0-568e-bfec-4dd2e3a48604@wanadoo.fr>
- <20220519042135.2805176-1-tien.sung.ang@intel.com>
+        Sat, 28 May 2022 06:24:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC902618;
+        Sat, 28 May 2022 03:24:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8992360DB6;
+        Sat, 28 May 2022 10:24:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329ECC34100;
+        Sat, 28 May 2022 10:24:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="l7vpP9LP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653733489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ilJONe0tMPd3rARKJSnYcnn/Wg6UEmJQnFGT2GeNaZw=;
+        b=l7vpP9LPLvjnDaqvYkk9EqgjqdfbJkS4hSmHGgANqR18oYZuupTKWoss8ZFgcGNKt20q/T
+        qbvr9DZU+KlHqtzfY1G0vh5nNcWR26BJiura9Nix+vYUxT6Fx8C0y7Rss+QD48Et6/75hk
+        RZqJxDBE1GeyfTVsHzNIP+5u6AV4stQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 68b8dd6e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 28 May 2022 10:24:49 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Zheng Bin <zhengbin13@huawei.com>,
+        Eric Biggers <ebiggers@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH crypto] crypto: memneq - move into lib/
+Date:   Sat, 28 May 2022 12:24:29 +0200
+Message-Id: <20220528102429.189731-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9rWfUnUmHR5xo_+WdS0Wgv8yXQb+LqAo24XdoQQR4Wn8w@mail.gmail.com>
+References: <CAHmME9rWfUnUmHR5xo_+WdS0Wgv8yXQb+LqAo24XdoQQR4Wn8w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519042135.2805176-1-tien.sung.ang@intel.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 12:21:35PM +0800, tien.sung.ang@intel.com wrote:
-> Thanks for pointing that out. It is always good to get all the alignments right.
+This is used by code that doesn't need CONFIG_CRYPTO, so move this into
+lib/ with a Kconfig option so that it can be selected by whatever needs
+it.
 
-Please run checkpatch --strict before sending, it helps find out most of
-alignment issues.
+This fixes a linker error Zheng pointed out when
+CRYPTO_MANAGER_DISABLE_TESTS!=y and CRYPTO=m:
 
-Thanks,
-Yilun
+  lib/crypto/curve25519-selftest.o: In function `curve25519_selftest':
+  curve25519-selftest.c:(.init.text+0x60): undefined reference to `__crypto_memneq'
+  curve25519-selftest.c:(.init.text+0xec): undefined reference to `__crypto_memneq'
+  curve25519-selftest.c:(.init.text+0x114): undefined reference to `__crypto_memneq'
+  curve25519-selftest.c:(.init.text+0x154): undefined reference to `__crypto_memneq'
 
-> I will add this to the next revision of the patch.
+Reported-by: Zheng Bin <zhengbin13@huawei.com>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: aa127963f1ca ("crypto: lib/curve25519 - re-add selftests")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+I'm traveling over the next week, and there are a few ways to skin this
+cat, so if somebody here sees issue, feel free to pick this v1 up and
+fashion a v2 out of it.
+
+ crypto/Kconfig           | 1 +
+ crypto/Makefile          | 2 +-
+ lib/Kconfig              | 3 +++
+ lib/Makefile             | 1 +
+ lib/crypto/Kconfig       | 1 +
+ {crypto => lib}/memneq.c | 0
+ 6 files changed, 7 insertions(+), 1 deletion(-)
+ rename {crypto => lib}/memneq.c (100%)
+
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index f567271ed10d..38601a072b99 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -15,6 +15,7 @@ source "crypto/async_tx/Kconfig"
+ #
+ menuconfig CRYPTO
+ 	tristate "Cryptographic API"
++	select LIB_MEMNEQ
+ 	help
+ 	  This option provides the core Cryptographic API.
+ 
+diff --git a/crypto/Makefile b/crypto/Makefile
+index 40d4c2690a49..dbfa53567c92 100644
+--- a/crypto/Makefile
++++ b/crypto/Makefile
+@@ -4,7 +4,7 @@
+ #
+ 
+ obj-$(CONFIG_CRYPTO) += crypto.o
+-crypto-y := api.o cipher.o compress.o memneq.o
++crypto-y := api.o cipher.o compress.o
+ 
+ obj-$(CONFIG_CRYPTO_ENGINE) += crypto_engine.o
+ obj-$(CONFIG_CRYPTO_FIPS) += fips.o
+diff --git a/lib/Kconfig b/lib/Kconfig
+index 6a843639814f..eaaad4d85bf2 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -120,6 +120,9 @@ config INDIRECT_IOMEM_FALLBACK
+ 
+ source "lib/crypto/Kconfig"
+ 
++config LIB_MEMNEQ
++	bool
++
+ config CRC_CCITT
+ 	tristate "CRC-CCITT functions"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index 89fcae891361..f01023cda508 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -251,6 +251,7 @@ obj-$(CONFIG_DIMLIB) += dim/
+ obj-$(CONFIG_SIGNATURE) += digsig.o
+ 
+ lib-$(CONFIG_CLZ_TAB) += clz_tab.o
++lib-$(CONFIG_LIB_MEMNEQ) += memneq.o
+ 
+ obj-$(CONFIG_GENERIC_STRNCPY_FROM_USER) += strncpy_from_user.o
+ obj-$(CONFIG_GENERIC_STRNLEN_USER) += strnlen_user.o
+diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
+index 7ee13c08c970..337d6852643a 100644
+--- a/lib/crypto/Kconfig
++++ b/lib/crypto/Kconfig
+@@ -71,6 +71,7 @@ config CRYPTO_LIB_CURVE25519
+ 	tristate "Curve25519 scalar multiplication library"
+ 	depends on CRYPTO_ARCH_HAVE_LIB_CURVE25519 || !CRYPTO_ARCH_HAVE_LIB_CURVE25519
+ 	select CRYPTO_LIB_CURVE25519_GENERIC if CRYPTO_ARCH_HAVE_LIB_CURVE25519=n
++	select LIB_MEMNEQ
+ 	help
+ 	  Enable the Curve25519 library interface. This interface may be
+ 	  fulfilled by either the generic implementation or an arch-specific
+diff --git a/crypto/memneq.c b/lib/memneq.c
+similarity index 100%
+rename from crypto/memneq.c
+rename to lib/memneq.c
+-- 
+2.35.1
+

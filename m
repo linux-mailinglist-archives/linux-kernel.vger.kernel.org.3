@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4AC536D05
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 14:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C98C536D07
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 14:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbiE1M4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 08:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S1355011AbiE1M5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 08:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235715AbiE1M4c (ORCPT
+        with ESMTP id S1344012AbiE1M5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 08:56:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA081136
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:56:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34027B826FB
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 12:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A74A0C34100;
-        Sat, 28 May 2022 12:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653742584;
-        bh=J7E0lVyIo+juV6HoBpjS0XC2CTEDG/qqYQnsEbI+6KM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OAXCeLmS0ELKIjWVPGhirgLBRU3x4frBF+lzSaeOqheE6zEQCAHO7boLdjdFQk700
-         s4v0CgbBnQfstpnz2kcfzQcPDfTSsmF4zfiiUoB2Rq4nZbIEftL1uJrqqQeWaI4gR6
-         MOaN39L1zpApUUXLgQ3G/IFF0RGXvPqCk613v8NsVeHH8VQpxVZ3WqempZOxNWE0Hp
-         z2xlNlJdsjte1PEHHlpYrLj5FkLUSMs+bw6xcVzl83WpsoBx/+Hb6B6aH/aoLl3UNz
-         7RUQzsCVXA8Vbv539D8qdBcG0QucPIclZEtfa2wgiO0jvrHk2NlZXWrlC03zX62WG8
-         q/kHXkS0/f1Jw==
-Date:   Sat, 28 May 2022 20:56:17 +0800
-From:   Gao Xiang <xiang@kernel.org>
-To:     Hongnan Li <hongnan.li@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org,
+        Sat, 28 May 2022 08:57:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E619A1C93D
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653742661; x=1685278661;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r9ui001kVXv8M7pW7pE1Jz+JNGPM/ArNM3O0+9pDUXk=;
+  b=jrnkUsaovjVpld/gtOTLQi+/8dOhLBz4h3veumsPCGo0OWUp88K2neC+
+   BUtEPl9cOXBmQ+GacFXqoFNoSYh0SG5Bwju5PRN/1MyOAoO9MVp6RCr0B
+   7hCP/BS3wWni3cPeXRU/ayUXMPetlkx6ASqUYbKvx6K6LrHh+qVWzETQw
+   rbnIRB0l+vNYZqVy9dQOpOe+WffdtlUZd7GJxU0vDI2r3THxvoolxDv3B
+   twPegale0qgM3bDyry/zeomzF18OeigIepKS7DwCU1J1702NrFSSpprv1
+   /xbH76QYQvx2rk5MtlFnLzD9LZHqQP2z0sCPDlOVrTPKVEHJwJa8ikcft
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="262288833"
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="262288833"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 05:57:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="719260375"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 28 May 2022 05:57:38 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuw0f-0000DI-Dy;
+        Sat, 28 May 2022 12:57:37 +0000
+Date:   Sat, 28 May 2022 20:57:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yue Zou <zouyue3@huawei.com>, sfr@canb.auug.org.au,
+        akpm@linux-foundation.org, mhiramat@kernel.org,
+        rostedt@goodmis.org, ahalaney@redhat.com, vbabka@suse.cz,
+        Jason@zx2c4.com, mark-pk.tsai@mediatek.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] erofs: update ctx->pos for every emitted dirent
-Message-ID: <YpIb8e7eWy+IFi/j@debian>
-Mail-Followup-To: Hongnan Li <hongnan.li@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220527072536.68516-1-hongnan.li@linux.alibaba.com>
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH -next] smp: Move stub from main.c into smp.h
+Message-ID: <202205282043.QMZuMrL0-lkp@intel.com>
+References: <20220528111122.1888581-1-zouyue3@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220527072536.68516-1-hongnan.li@linux.alibaba.com>
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220528111122.1888581-1-zouyue3@huawei.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hongnan,
+Hi Yue,
 
-On Fri, May 27, 2022 at 03:25:36PM +0800, Hongnan Li wrote:
-> erofs_readdir update ctx->pos after filling a batch of dentries
-> and it may cause dir/files duplication for NFS readdirplus which
-> depends on ctx->pos to fill dir correctly. So update ctx->pos for
-> every emitted dirent in erofs_fill_dentries to fix it.
-> 
-> Fixes: 3e917cc305c6 ("erofs: make filesystem exportable")
-> Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
-> ---
->  fs/erofs/dir.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
-> index 18e59821c597..3015974fe2ff 100644
-> --- a/fs/erofs/dir.c
-> +++ b/fs/erofs/dir.c
-> @@ -22,11 +22,12 @@ static void debug_one_dentry(unsigned char d_type, const char *de_name,
->  }
->  
->  static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
-> -			       void *dentry_blk, unsigned int *ofs,
-> +			       void *dentry_blk, void *dentry_begin,
->  			       unsigned int nameoff, unsigned int maxsize)
->  {
-> -	struct erofs_dirent *de = dentry_blk + *ofs;
-> +	struct erofs_dirent *de = dentry_begin;
->  	const struct erofs_dirent *end = dentry_blk + nameoff;
-> +	loff_t begin_pos = ctx->pos;
->  
->  	while (de < end) {
->  		const char *de_name;
-> @@ -59,9 +60,9 @@ static int erofs_fill_dentries(struct inode *dir, struct dir_context *ctx,
->  			/* stopped by some reason */
->  			return 1;
->  		++de;
-> -		*ofs += sizeof(struct erofs_dirent);
-> +		ctx->pos += sizeof(struct erofs_dirent);
->  	}
-> -	*ofs = maxsize;
-> +	ctx->pos = begin_pos + maxsize;
->  	return 0;
->  }
->  
-> @@ -110,11 +111,9 @@ static int erofs_readdir(struct file *f, struct dir_context *ctx)
->  				goto skip_this;
->  		}
->  
-> -		err = erofs_fill_dentries(dir, ctx, de, &ofs,
-> +		err = erofs_fill_dentries(dir, ctx, de, de + ofs,
->  					  nameoff, maxsize);
+Thank you for the patch! Yet something to improve:
 
-This will break the calculation, since de is a pointer of erofs_dirent
-rather than byte-based.
+[auto build test ERROR on next-20220527]
 
-Thanks,
-Gao Xiang
+url:    https://github.com/intel-lab-lkp/linux/commits/Yue-Zou/smp-Move-stub-from-main-c-into-smp-h/20220528-185146
+base:    d3fde8ff50ab265749704bd7fbcf70d35235421f
+config: arc-randconfig-r043-20220526 (https://download.01.org/0day-ci/archive/20220528/202205282043.QMZuMrL0-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2efe286bd89edfa5448d29a5be89fd54df424c46
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yue-Zou/smp-Move-stub-from-main-c-into-smp-h/20220528-185146
+        git checkout 2efe286bd89edfa5448d29a5be89fd54df424c46
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash lib/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:62,
+                    from include/linux/kref.h:16,
+                    from include/linux/mm_types.h:8,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from lib/test_bitops.c:9:
+>> include/linux/smp.h:186:27: error: 'setup_max_cpus' defined but not used [-Werror=unused-const-variable=]
+     186 | static const unsigned int setup_max_cpus = NR_CPUS;
+         |                           ^~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/setup_max_cpus +186 include/linux/smp.h
+
+   185	
+ > 186	static const unsigned int setup_max_cpus = NR_CPUS;
+   187	static inline void setup_nr_cpu_ids(void) { }
+   188	static inline void smp_prepare_cpus(unsigned int maxcpus) { }
+   189	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

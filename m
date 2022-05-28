@@ -2,148 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD7A536B75
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 09:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DAC1536B73
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 09:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiE1Hm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 03:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S229918AbiE1Hl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 03:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiE1Hmw (ORCPT
+        with ESMTP id S229720AbiE1Hlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 03:42:52 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D55B7EE
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 00:42:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653723770; x=1685259770;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zdBsI9qu/DZM5MSkqcsyLB6OJ9auA7XgqkrZTE+QHIg=;
-  b=LA3lJyZgcbLFsTf7jsYY3BDw5ahZSucAWGLvR5ncas1rYvZ0iCKL+h8W
-   VVfx2w6L1KphUDPtrhv7C/2tl6TU7npYU9bpP7DAYA6McsdfSdAtLZEZx
-   Nban2CZ3hPCGiGv/1pTydPGBdSgFGjaozQxylfh4VkehqjH7XjfUiirQo
-   Y9QmFqwHbh78VYKjfxf14tiaCFxtGsUo+D7N6/lIKkWTU8JWd8dWs1ogQ
-   q5ATT8kFW4NLBJdrMMVTBvubeDv7Qabij4ssczq18s0oQbhwElMHClfSE
-   z0P9jOsvEs2p8C4aZyEMD3e/BaUtHowVsjzwt3J6nI1o0zvSSPCx1AhiM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="256716386"
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="256716386"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 00:42:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="822075607"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 May 2022 00:42:47 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nur5y-0005Zu-NY;
-        Sat, 28 May 2022 07:42:46 +0000
-Date:   Sat, 28 May 2022 15:42:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kenneth Feng <kenneth.feng@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Yang Wang <kevinyang.wang@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1326:12:
- warning: stack frame size (1040) exceeds limit (1024) in
- 'smu_v13_0_7_get_power_profile_mode'
-Message-ID: <202205281546.8st5p4J7-lkp@intel.com>
+        Sat, 28 May 2022 03:41:53 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1093260A
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 00:41:51 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id u30so9794945lfm.9
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 00:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=5AdGIq1npdZwT45hdil7GXgBo5RZT0e5WlXJHtQnvA4=;
+        b=VUkFP11V7NHqyP9pKVQuxrCrLAYh4CXAgqMwlTLdL5+So4X8aPlijKLs7J5FuKiVk9
+         xdVtYnXC+aJSNmJIDSxepqp1LzNyVoJIIlm1bj/HzswB++51Q4LqKt5y5ORophQP5GQ6
+         50UYjqMPmT8zvWZggY8zwysd+XQyL42+6wHGPgv37qnsxg+ZkKG+3ljXI6F+7Fh1Jha7
+         j2pCGoEk+tgq/LfW3VIA1mIMIr98b90BqV8vkrfpv8NcSJqqnacMx9NvEsooQuvgWRw3
+         LLpebgBDRzs9q9Sql0s02BCvsPjNW41eMXUs2/c35wWubRS7BowVdboDfauYBZb3hNQR
+         9ZIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=5AdGIq1npdZwT45hdil7GXgBo5RZT0e5WlXJHtQnvA4=;
+        b=m00CbD66P5Cv1alvHtu4j+wyGFVldDF1e92/Q/jT8uvRhohwvEa0VfYa44geIyYfqJ
+         9IDK3FA3NlpZ77yfDOqVkjIjrcM+O9ANId0u1L4d1d/jgIXX0x/pNeAcDoosqvMrUz9x
+         NLRz16wm8cbqf1Sp/7dCQomluTGMWJ42gYW9lRuM4xDs7AT3oTsR2NAkU9Z4jAX4tITf
+         23nU2AtrwSKei9nikBa8839LsRuksEsolnfrWXxiJINfBsm5Ye4b8TMCMWinMNqcjrK+
+         LVIc0qlUKMtQzLYOhO3iMhjCnn/m/MlAWmyL6UVo2dIXQuGbZeSl5uQQBYpg+Fk36sIP
+         ebnw==
+X-Gm-Message-State: AOAM5307MGT83EBJmY2iKMxdKsDUYPzlVZaDUn7mqdxdrg+q4sPKgrde
+        skG+K381YwvUd6KRkd+Z6G9LQYxDTHuglQ==
+X-Google-Smtp-Source: ABdhPJx8aJAiRY08OkYNZSMia7+ZaPgZ8LWlQbSvjg4xvZctgrt+t9CYYFqgadl1iCEqdzUuAMXbOw==
+X-Received: by 2002:ac2:59dd:0:b0:477:c4e0:1c59 with SMTP id x29-20020ac259dd000000b00477c4e01c59mr32687770lfn.248.1653723710167;
+        Sat, 28 May 2022 00:41:50 -0700 (PDT)
+Received: from [192.168.16.143] (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
+        by smtp.gmail.com with ESMTPSA id y26-20020a05651c107a00b00253bb2564cbsm326745ljm.134.2022.05.28.00.41.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 May 2022 00:41:49 -0700 (PDT)
+Message-ID: <17631d66-7b90-e60b-e3fb-76b25e5eceaa@kvaser.com>
+Date:   Sat, 28 May 2022 09:42:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 00/12] can: kvaser_usb: Various fixes
+Content-Language: en-US
+From:   Jimmy Assarsson <extja@kvaser.com>
+To:     Anssi Hannula <anssi.hannula@bitwise.fi>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
+ <61060501-7edb-4277-acf6-117161e8593f@kvaser.com>
+In-Reply-To: <61060501-7edb-4277-acf6-117161e8593f@kvaser.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kenneth,
+On 5/17/22 10:41, Jimmy Assarsson wrote:
+> On 2022-05-16 15:47, Anssi Hannula wrote:
+>>
+>> Hi all,
+>>
+>> Here's a set of fixes for issues I found while testing kvaser_usb as we
+>> are preparing to start using it in production (with 0bfd:0124).
+> 
+> Hi Anssi,
+> 
+> Thanks for the patches!
+> I will review and test your fixes before the weekend.
+> 
+> Best regards,
+> jimmy
 
-FYI, the error/warning still remains.
+Sorry for the delay!
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
-commit: 334682ae81513638aa49da9615c2c0054a711ed4 drm/amd/pm: enable workload type change on smu_v13_0_7
-date:   3 weeks ago
-config: riscv-randconfig-r026-20220527 (https://download.01.org/0day-ci/archive/20220528/202205281546.8st5p4J7-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 134d7f9a4b97e9035150d970bd9e376043c4577e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=334682ae81513638aa49da9615c2c0054a711ed4
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 334682ae81513638aa49da9615c2c0054a711ed4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/
+To summarize the status.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+These patches look good:
+[PATCH 01/12] can: kvaser_usb_leaf: Fix overread with an invalid command
+[PATCH 02/12] can: kvaser_usb: Fix use of uninitialized completion
+[PATCH 03/12] can: kvaser_usb: Fix possible completions during 
+init_completion
+[PATCH 05/12] can: kvaser_usb_leaf: Set Warning state even without bus 
+errors
+[PATCH 10/12] can: kvaser_usb_leaf: Fix wrong CAN state after stopping
+[PATCH 12/12] can: kvaser_usb_leaf: Fix bogus restart events
 
-All warnings (new ones prefixed by >>):
+This looks good, but see comment regarding explicit queue flush:
+[PATCH 06/12] can: kvaser_usb_leaf: Fix TX queue out of sync after restart
 
-   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:294:5: warning: no previous prototype for function 'smu_v13_0_7_check_fw_status' [-Wmissing-prototypes]
-   int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
-       ^
-   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:294:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int smu_v13_0_7_check_fw_status(struct smu_context *smu) {
-   ^
-   static 
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c:1326:12: warning: stack frame size (1040) exceeds limit (1024) in 'smu_v13_0_7_get_power_profile_mode' [-Wframe-larger-than]
-   static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf)
-              ^
-   2 warnings generated.
+I still need some more time looking into:
+PATCH 07/12] can: kvaser_usb_leaf: Fix CAN state after restart
+PATCH 08/12] can: kvaser_usb_leaf: Fix improved state not being reported
+PATCH 11/12] can: kvaser_usb_leaf: Ignore stale bus-off after start
+
+I want to replace
+[PATCH 04/12] can: kvaser_usb: Mark Mini PCIe 2xHS as supporting error 
+counters
+with a new patch
+"can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device"
+
+I want to split the handling of CMD_ERROR_EVENT and the readback
+functionality. I also want to add parameter readback for
+kvaser_usb_hydra. I need more time to look over the can_bittiming_const
+in kvaser_usb_leaf for the different supported firmware.
+[PATCH 09/12] can: kvaser_usb_leaf: Fix silently failing bus params setup
 
 
-vim +/smu_v13_0_7_get_power_profile_mode +1326 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_7_ppt.c
+I would like to create a V2 series, including my patches, if you are
+okay with it?
 
-  1325	
-> 1326	static int smu_v13_0_7_get_power_profile_mode(struct smu_context *smu, char *buf)
-  1327	{
-  1328		DpmActivityMonitorCoeffIntExternal_t activity_monitor_external[PP_SMC_POWER_PROFILE_COUNT];
-  1329		uint32_t i, j, size = 0;
-  1330		int16_t workload_type = 0;
-  1331		int result = 0;
-  1332	
-  1333		if (!buf)
-  1334			return -EINVAL;
-  1335	
-  1336		size += sysfs_emit_at(buf, size, "                              ");
-  1337		for (i = 0; i <= PP_SMC_POWER_PROFILE_WINDOW3D; i++)
-  1338			size += sysfs_emit_at(buf, size, "%-14s%s", amdgpu_pp_profile_name[i],
-  1339				(i == smu->power_profile_mode) ? "* " : "  ");
-  1340	
-  1341		size += sysfs_emit_at(buf, size, "\n");
-  1342	
-  1343		for (i = 0; i <= PP_SMC_POWER_PROFILE_WINDOW3D; i++) {
-  1344			/* conv PP_SMC_POWER_PROFILE* to WORKLOAD_PPLIB_*_BIT */
-  1345			workload_type = smu_cmn_to_asic_specific_index(smu,
-  1346								       CMN2ASIC_MAPPING_WORKLOAD,
-  1347								       i);
-  1348			if (workload_type < 0)
-  1349				return -EINVAL;
-  1350	
-  1351			result = smu_cmn_update_table(smu,
-  1352						  SMU_TABLE_ACTIVITY_MONITOR_COEFF, workload_type,
-  1353						  (void *)(&activity_monitor_external[i]), false);
-  1354			if (result) {
-  1355				dev_err(smu->adev->dev, "[%s] Failed to get activity monitor!", __func__);
-  1356				return result;
-  1357			}
-  1358		}
-  1359	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+jimmy
+
+
+
+>> The biggest caveat is that I only have two devices to test with [1] and I
+>> don't have HW documentation, so there is a possibility that some of the
+>> fixes might not work properly on all HW variants.
+>> Hopefully Jimmy can confirm they look OK, or suggest alternatives.
+>>
+>> [1] Tested devices:
+>> - 0bfd:0017 Kvaser Memorator Professional HS/HS FW 2.0.50
+>> - 0bfd:0124 Kvaser Mini PCI Express 2xHS FW 4.18.778

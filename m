@@ -2,97 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3AE536DE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA063536DEE
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238975AbiE1RRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 13:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
+        id S239014AbiE1RTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 13:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238748AbiE1RRP (ORCPT
+        with ESMTP id S238811AbiE1RTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 13:17:15 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34D9B1D0
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 10:17:13 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id z7so12739941ybf.7
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 10:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=Evcz97LOKzHfSgT/AL/l+ZvMvf33Mnf2JcLi4+SabJA4RVfVM4/A46bF7LrAex2ihQ
-         DAlRR8/zXtJTnIoEfh6f7bdC2JRR+yXK1eOVqaphmBhPg+nXO/886U3X5GDEMu2yZzTG
-         2QbvLBgO/2ZnaMZ64zlK5XOVIIl1SuH3E1vYjFzTh4ifT/z4GjIOkdCqWZaLHfZRu/L9
-         XInGcHNGmawHrNpuj/q0VbBJWcYR7YDA070uYdD/UQCxkpMMrEj2bhBVT3vnoFUN6ubb
-         FY2vKq+UskzZ+khk4B7ynDvYv4mv8uOY5VIkwWrNQ13Yu6d+0uCVvcPG55NygjZC9ZzA
-         KzyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=NUQA4ef5znFfQrmqiKFxfnG/Fn1HQerk6TaQDIiME9QBNl6Rw8lxcEeQWZpEDK64FL
-         YQK4rRFKHSQw/QX9ik3LXfb06djwfwINESyGQ5oyODl27m9dGewfOM/oAdCvueSfZbdH
-         m5sSJt9kxWaMFanXx4vUEvytdnN791nU1cORpfuk2UeqZijeRVqnoC1YgEXfs/Sluyy4
-         LngTi1MSViAalvZk4BmIbilh8M//Pw0vBf6Kgm3eUoGkYWroyyq6JcXLL7VPJjV5Vfno
-         3DaLaxyKuLmqNXnW0BCN5DzujlD1ndIWig1hnwoYBhg8iLbGFk0D8visv/dF6/qV/M5+
-         6+Qg==
-X-Gm-Message-State: AOAM533rRlyKti3D7L2fcz0fDFSBFVMjS2OmOw5o5g91r8yLzsMtOn8f
-        OLAxIpj9u5NRt2DrM97Msb2t/PNL3DfFs1h+8vE=
-X-Google-Smtp-Source: ABdhPJxPsnNngIXYUzCPybntA0BZ3Hio+So97vpfEl2GjbHePX/ZnvzzyR/z5l50rmRV1R4F3fvnNoPkkQhCO5/mYL4=
-X-Received: by 2002:a25:168b:0:b0:64a:54ba:e88e with SMTP id
- 133-20020a25168b000000b0064a54bae88emr42052597ybw.17.1653758233195; Sat, 28
- May 2022 10:17:13 -0700 (PDT)
+        Sat, 28 May 2022 13:19:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D65396;
+        Sat, 28 May 2022 10:19:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DFBCB8013C;
+        Sat, 28 May 2022 17:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E70C34100;
+        Sat, 28 May 2022 17:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653758378;
+        bh=G7tf9YJZazhJ3zj5XmFBFb8oMtPMYs1ILDRcunfXUOw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MP6gqjJmOFpiYtR3HghPFwUhJrMNT0RmD8A+6eDYU8B1VGfcdBY1O3KDKETkvziu7
+         3eiXllmFK7KgLQr+WfEVA8nkjLGleKFyF5bAguuFNDo2hGVtYjN5izZ2MWBXPGU9MD
+         qCe9ccojxK/hG5lnmw++VzHHYa7gX1b0ZUJszymADCHhxKPu013WxCf1wuPOuzc0q9
+         H60xgPVGjlERTEUil+BvTb4FnuqqKFW0tlh5twnHiSvCKzlvzK5YP4japU4P4iHEZc
+         4rT/mo37jaerJwjwGhHRbKcBWCtI1llWueCSBpiw980ZnYjv9gEATsq9lU5PAySFXv
+         s6Kst1tf92l8w==
+Date:   Sat, 28 May 2022 10:19:36 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        herbert@gondor.apana.org.au, gaochao <gaochao49@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH crypto v2] crypto: blake2s - remove shash module
+Message-ID: <YpJZqJd9j1gEOdTe@sol.localdomain>
+References: <YpCGQvpirQWaAiRF@zx2c4.com>
+ <20220527081106.63227-1-Jason@zx2c4.com>
+ <YpGeIT1KHv9QwF4X@sol.localdomain>
+ <YpHx7arH4lLaZuhm@zx2c4.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7108:768b:0:0:0:0 with HTTP; Sat, 28 May 2022 10:17:12
- -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   Viviane Amouzou <vivianeamouzou5@gmail.com>
-Date:   Sat, 28 May 2022 18:17:12 +0100
-Message-ID: <CAHpnGrhK7NLqZF9qc8c4tF7S0W5tp9A3wdfsMR8bpNThgpvN4w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b2d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5030]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [vivianeamouzou5[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [vivianeamouzou5[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [davidnelson7702626[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YpHx7arH4lLaZuhm@zx2c4.com>
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+On Sat, May 28, 2022 at 11:57:01AM +0200, Jason A. Donenfeld wrote:
+> > Also, the wrong value is being passed for the 'inc' argument.
+> 
+> Are you sure? Not sure I'm seeing what you are on first glance.
+
+Yes, 'inc' is the increment amount per block.  It needs to always be
+BLAKE2S_BLOCK_SIZE unless a partial block is being processed.
+
+- Eric

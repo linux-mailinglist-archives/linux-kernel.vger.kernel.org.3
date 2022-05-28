@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C008536D9D
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 17:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52E7536D9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 17:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350026AbiE1PtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 11:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
+        id S1351005AbiE1PtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 11:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344394AbiE1PtO (ORCPT
+        with ESMTP id S1344876AbiE1PtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 28 May 2022 11:49:14 -0400
 Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2766268;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840F412A;
         Sat, 28 May 2022 08:49:11 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 24SFlthM010610;
+        by conuserg-10.nifty.com with ESMTP id 24SFlthN010610;
         Sun, 29 May 2022 00:47:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 24SFlthM010610
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 24SFlthN010610
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653752877;
-        bh=r13GrFRYMDrikoVJbL6k/JBbfLtkbPflsQEkRN/RT58=;
+        s=dec2015msa; t=1653752878;
+        bh=5leKPORFlta7S8/2ppM4PVrBXwYq/YHCsbo5q5GZZGw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YZKNhujl9v0SS6NCq/L67fCkLmiUYCJTty0C/O6EN+GwAxqQjcLhmHdspH9gDo1G2
-         t4y4/e0iMa6yNkCZYjADyQmsAw9Ej9DA5FS55qPHXLjX0/zdexpqKtcXvr9LgSXkC8
-         T3a4QQr+xWytTol/fPxGFA7NDZuEd2e3YKlre65nEzeSlQL5XtY9q4wBy6vRBp5T8c
-         2aKBsqAQFq+HLqBT9g+F7shx4f2AUibVNXfI6fXu9o0wTCEI7hcP0zWMzv+LgvKpoR
-         gRiJiOalBbJK9OOV3rSVxG2zA4cCnsOhMshsU4GyNtA58/Tp88YrNyChOVYsznr08g
-         XOk8mGe53aAdQ==
+        b=YVczqZLK4g5wTY9Zadm4ebIhkk1uqTE+rV5SA6qD97oyeL9tcX+GdHlD4skCKnK31
+         02fuOs9PiJFaF+x8fUtmWzZrDsUxfkYEi26YF1zt3X3ya7hBqrK0L155wyyijZIFx5
+         /+cOMffA7wD7gyvhu0n3EK84jplYza5HQswZmyWhWLIa6od8L/LxJmgXCTS6hR5hWd
+         dM0yGJTCZEnCC5gACR1gf0coCzB3dZr3Nnn8YLaN73H3RzkwwOhp2QEIhncbcysXFl
+         JFf03uoZdyY7FKBw7xORc3D5oNtgbsUb4Wz/A3Hpi7qQ3lpY76RALE481k5yaBrsqg
+         gLmkUxeVSNnlA==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
-Subject: [PATCH 3/4] kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o
-Date:   Sun, 29 May 2022 00:47:03 +0900
-Message-Id: <20220528154704.2576290-3-masahiroy@kernel.org>
+        Michal Marek <michal.lkml@markovi.net>
+Subject: [PATCH 4/4] kbuild: factor out the common objtool arguments
+Date:   Sun, 29 May 2022 00:47:04 +0900
+Message-Id: <20220528154704.2576290-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220528154704.2576290-1-masahiroy@kernel.org>
 References: <20220528154704.2576290-1-masahiroy@kernel.org>
@@ -55,142 +53,253 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a preparation for the objtool move in the next commit.
+scripts/Makefile.build and scripts/link-vmlinux.sh have similar setups
+for the objtool arguments.
+
+It is difficult to factor out them because the vmlinux build rule is
+written in a shell script. It is somewhat tedious to touch the two
+files every time a new objtool option is supported.
+
+To reduce the code duplication, implement everything about objtool in
+Makefile.
+
+Move the objtool for vmlinux.o into scripts/Makefile.vmlinux_o.
+
+Move the common macros to Makefile.lib so they are shared by
+Makefile.build and Makefile.vmlinux_o.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/Makefile.vmlinux_o | 61 ++++++++++++++++++++++++++++++++++++++
- scripts/link-vmlinux.sh    | 41 +------------------------
- 2 files changed, 62 insertions(+), 40 deletions(-)
- create mode 100644 scripts/Makefile.vmlinux_o
+ scripts/Makefile.build     | 26 --------------
+ scripts/Makefile.lib       | 26 ++++++++++++++
+ scripts/Makefile.vmlinux_o | 26 ++++++++++++++
+ scripts/link-vmlinux.sh    | 71 --------------------------------------
+ 4 files changed, 52 insertions(+), 97 deletions(-)
 
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 4cb7145071b9..1f01ac65c0cd 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -210,38 +210,12 @@ cmd_record_mcount = $(if $(findstring $(strip $(CC_FLAGS_FTRACE)),$(_c_flags)),
+ 	$(sub_cmd_record_mcount))
+ endif # CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
+ 
+-ifdef CONFIG_OBJTOOL
+-
+-objtool := $(objtree)/tools/objtool/objtool
+-
+-objtool_args =								\
+-	$(if $(CONFIG_HAVE_JUMP_LABEL_HACK), --hacks=jump_label)	\
+-	$(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)		\
+-	$(if $(CONFIG_X86_KERNEL_IBT), --ibt)				\
+-	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+-	$(if $(CONFIG_UNWINDER_ORC), --orc)				\
+-	$(if $(CONFIG_RETPOLINE), --retpoline)				\
+-	$(if $(CONFIG_SLS), --sls)					\
+-	$(if $(CONFIG_STACK_VALIDATION), --stackval)			\
+-	$(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)		\
+-	--uaccess							\
+-	$(if $(delay-objtool), --link)					\
+-	$(if $(part-of-module), --module)				\
+-	$(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
+-
+-cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+-cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+-
+-endif # CONFIG_OBJTOOL
+-
+ # 'OBJECT_FILES_NON_STANDARD := y': skip objtool checking for a directory
+ # 'OBJECT_FILES_NON_STANDARD_foo.o := 'y': skip objtool checking for a file
+ # 'OBJECT_FILES_NON_STANDARD_foo.o := 'n': override directory skip for a file
+ 
+ is-standard-object = $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_$(basetarget).o)$(OBJECT_FILES_NON_STANDARD)n),y)
+ 
+-delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
+-
+ $(obj)/%.o: objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
+ 
+ ifdef CONFIG_TRIM_UNUSED_KSYMS
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index f75138385449..f691fb231ce5 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -225,6 +225,32 @@ dtc_cpp_flags  = -Wp,-MMD,$(depfile).pre.tmp -nostdinc                    \
+ 		 $(addprefix -I,$(DTC_INCLUDE))                          \
+ 		 -undef -D__DTS__
+ 
++ifdef CONFIG_OBJTOOL
++
++objtool := $(objtree)/tools/objtool/objtool
++
++objtool_args =								\
++	$(if $(CONFIG_HAVE_JUMP_LABEL_HACK), --hacks=jump_label)	\
++	$(if $(CONFIG_HAVE_NOINSTR_HACK), --hacks=noinstr)		\
++	$(if $(CONFIG_X86_KERNEL_IBT), --ibt)				\
++	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
++	$(if $(CONFIG_UNWINDER_ORC), --orc)				\
++	$(if $(CONFIG_RETPOLINE), --retpoline)				\
++	$(if $(CONFIG_SLS), --sls)					\
++	$(if $(CONFIG_STACK_VALIDATION), --stackval)			\
++	$(if $(CONFIG_HAVE_STATIC_CALL_INLINE), --static-call)		\
++	--uaccess							\
++	$(if $(delay-objtool), --link)					\
++	$(if $(part-of-module), --module)				\
++	$(if $(CONFIG_GCOV_KERNEL), --no-unreachable)
++
++delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT))
++
++cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
++cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
++
++endif # CONFIG_OBJTOOL
++
+ # Useful for describing the dependency of composite objects
+ # Usage:
+ #   $(call multi_depend, multi_used_targets, suffix_to_remove, suffix_to_add)
 diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-new file mode 100644
-index 000000000000..a9b375ca86d5
---- /dev/null
+index a9b375ca86d5..3c97a1564947 100644
+--- a/scripts/Makefile.vmlinux_o
 +++ b/scripts/Makefile.vmlinux_o
-@@ -0,0 +1,61 @@
-+# SPDX-License-Identifier: GPL-2.0-only
+@@ -6,6 +6,9 @@ __default: vmlinux.o
+ include include/config/auto.conf
+ include $(srctree)/scripts/Kbuild.include
+ 
++# for objtool
++include $(srctree)/scripts/Makefile.lib
 +
-+PHONY := __default
-+__default: vmlinux.o
-+
-+include include/config/auto.conf
-+include $(srctree)/scripts/Kbuild.include
-+
-+# Generate a linker script to ensure correct ordering of initcalls for Clang LTO
+ # Generate a linker script to ensure correct ordering of initcalls for Clang LTO
+ # ---------------------------------------------------------------------------
+ 
+@@ -24,6 +27,27 @@ ifdef CONFIG_LTO_CLANG
+ initcalls-lds := .tmp_initcalls.lds
+ endif
+ 
++# objtool for vmlinux.o
 +# ---------------------------------------------------------------------------
++#
++# For LTO and IBT, objtool doesn't run on individual translation units.
++# Run everything on vmlinux instead.
 +
-+quiet_cmd_gen_initcalls_lds = GEN     $@
-+      cmd_gen_initcalls_lds = \
-+	$(PYTHON3) $(srctree)/scripts/jobserver-exec \
-+	$(PERL) $(real-prereqs) > $@
++objtool-enabled := $(or $(delay-objtool),$(CONFIG_NOINSTR_VALIDATION))
 +
-+.tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
-+		$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-+	$(call if_changed,gen_initcalls_lds)
++# Reuse objtool_args defined in scripts/Makefile.lib if LTO or IBT is enabled.
++#
++# Add some more flags as needed.
++# --no-unreachable and --link might be added twice, but it is fine.
++#
++# Expand objtool_args to a simple variable to avoid circular reference.
 +
-+targets := .tmp_initcalls.lds
++objtool_args := \
++	$(if $(delay-objtool),$(objtool_args)) \
++	$(if $(CONFIG_NOINSTR_VALIDATION), --noinstr) \
++	$(if $(CONFIG_GCOV_KERNEL), --no-unreachable) \
++	--link
 +
-+ifdef CONFIG_LTO_CLANG
-+initcalls-lds := .tmp_initcalls.lds
-+endif
-+
-+# Link of vmlinux.o used for section mismatch analysis
-+# ---------------------------------------------------------------------------
-+
-+quiet_cmd_ld_vmlinux.o = LD      $@
-+      cmd_ld_vmlinux.o = \
-+	$(LD) ${KBUILD_LDFLAGS} -r -o $@ \
-+	$(addprefix -T , $(initcalls-lds)) \
-+	--whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
-+	--start-group $(KBUILD_VMLINUX_LIBS) --end-group \
-+
-+define rule_ld_vmlinux.o
-+	$(call cmd_and_savecmd,ld_vmlinux.o)
-+endef
-+
-+vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-+	$(call if_changed_rule,ld_vmlinux.o)
-+
-+targets += vmlinux.o
-+
-+# Add FORCE to the prequisites of a target to force it to be always rebuilt.
-+# ---------------------------------------------------------------------------
-+
-+PHONY += FORCE
-+FORCE:
-+
-+# Read all saved command lines and dependencies for the $(targets) we
-+# may be building above, using $(if_changed{,_dep}). As an
-+# optimization, we don't need to read them if the target does not
-+# exist, we will rebuild anyway in that case.
-+
-+existing-targets := $(wildcard $(sort $(targets)))
-+
-+-include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
-+
-+.PHONY: $(PHONY)
+ # Link of vmlinux.o used for section mismatch analysis
+ # ---------------------------------------------------------------------------
+ 
+@@ -33,9 +57,11 @@ quiet_cmd_ld_vmlinux.o = LD      $@
+ 	$(addprefix -T , $(initcalls-lds)) \
+ 	--whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
+ 	--start-group $(KBUILD_VMLINUX_LIBS) --end-group \
++	$(cmd_objtool)
+ 
+ define rule_ld_vmlinux.o
+ 	$(call cmd_and_savecmd,ld_vmlinux.o)
++	$(call cmd,gen_objtooldep)
+ endef
+ 
+ vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
 diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index b593cb1a8137..90680b6bd710 100755
+index 90680b6bd710..1ac4e180fa3f 100755
 --- a/scripts/link-vmlinux.sh
 +++ b/scripts/link-vmlinux.sh
-@@ -45,45 +45,6 @@ info()
+@@ -45,76 +45,6 @@ info()
  	printf "  %-7s %s\n" "${1}" "${2}"
  }
  
--# Generate a linker script to ensure correct ordering of initcalls.
--gen_initcalls()
+-objtool_link()
 -{
--	info GEN .tmp_initcalls.lds
+-	local objtoolcmd;
+-	local objtoolopt;
 -
--	${PYTHON3} ${srctree}/scripts/jobserver-exec		\
--	${PERL} ${srctree}/scripts/generate_initcall_order.pl	\
--		${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}	\
--		> .tmp_initcalls.lds
--}
--
--# Link of vmlinux.o used for section mismatch analysis
--# ${1} output file
--modpost_link()
--{
--	local objects
--	local lds=""
--
--	objects="--whole-archive				\
--		${KBUILD_VMLINUX_OBJS}				\
--		--no-whole-archive				\
--		--start-group					\
--		${KBUILD_VMLINUX_LIBS}				\
--		--end-group"
--
--	if is_enabled CONFIG_LTO_CLANG; then
--		gen_initcalls
--		lds="-T .tmp_initcalls.lds"
--
--		# This might take a while, so indicate that we're doing
--		# an LTO link
--		info LTO ${1}
--	else
--		info LD ${1}
+-	if ! is_enabled CONFIG_OBJTOOL; then
+-		return;
 -	fi
 -
--	${LD} ${KBUILD_LDFLAGS} -r -o ${1} ${lds} ${objects}
+-	if is_enabled CONFIG_LTO_CLANG || is_enabled CONFIG_X86_KERNEL_IBT; then
+-
+-		# For LTO and IBT, objtool doesn't run on individual
+-		# translation units.  Run everything on vmlinux instead.
+-
+-		if is_enabled CONFIG_HAVE_JUMP_LABEL_HACK; then
+-			objtoolopt="${objtoolopt} --hacks=jump_label"
+-		fi
+-
+-		if is_enabled CONFIG_HAVE_NOINSTR_HACK; then
+-			objtoolopt="${objtoolopt} --hacks=noinstr"
+-		fi
+-
+-		if is_enabled CONFIG_X86_KERNEL_IBT; then
+-			objtoolopt="${objtoolopt} --ibt"
+-		fi
+-
+-		if is_enabled CONFIG_FTRACE_MCOUNT_USE_OBJTOOL; then
+-			objtoolopt="${objtoolopt} --mcount"
+-		fi
+-
+-		if is_enabled CONFIG_UNWINDER_ORC; then
+-			objtoolopt="${objtoolopt} --orc"
+-		fi
+-
+-		if is_enabled CONFIG_RETPOLINE; then
+-			objtoolopt="${objtoolopt} --retpoline"
+-		fi
+-
+-		if is_enabled CONFIG_SLS; then
+-			objtoolopt="${objtoolopt} --sls"
+-		fi
+-
+-		if is_enabled CONFIG_STACK_VALIDATION; then
+-			objtoolopt="${objtoolopt} --stackval"
+-		fi
+-
+-		if is_enabled CONFIG_HAVE_STATIC_CALL_INLINE; then
+-			objtoolopt="${objtoolopt} --static-call"
+-		fi
+-
+-		objtoolopt="${objtoolopt} --uaccess"
+-	fi
+-
+-	if is_enabled CONFIG_NOINSTR_VALIDATION; then
+-		objtoolopt="${objtoolopt} --noinstr"
+-	fi
+-
+-	if [ -n "${objtoolopt}" ]; then
+-
+-		if is_enabled CONFIG_GCOV_KERNEL; then
+-			objtoolopt="${objtoolopt} --no-unreachable"
+-		fi
+-
+-		objtoolopt="${objtoolopt} --link"
+-
+-		info OBJTOOL ${1}
+-		tools/objtool/objtool ${objtoolopt} ${1}
+-	fi
 -}
 -
- objtool_link()
- {
- 	local objtoolcmd;
-@@ -336,7 +297,7 @@ fi;
- ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
+ # Link of vmlinux
+ # ${1} - output file
+ # ${2}, ${3}, ... - optional extra .o files
+@@ -298,7 +228,6 @@ ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
  
  #link vmlinux.o
--modpost_link vmlinux.o
-+${MAKE} -f "${srctree}/scripts/Makefile.vmlinux_o"
- objtool_link vmlinux.o
+ ${MAKE} -f "${srctree}/scripts/Makefile.vmlinux_o"
+-objtool_link vmlinux.o
  
  # Generate the list of objects in vmlinux
+ for f in ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}; do
 -- 
 2.32.0
 

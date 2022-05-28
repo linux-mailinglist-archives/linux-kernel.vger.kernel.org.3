@@ -2,95 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F98E536A6D
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 05:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8219536A6C
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 05:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237460AbiE1DOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 23:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
+        id S245347AbiE1DRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 23:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiE1DN6 (ORCPT
+        with ESMTP id S231903AbiE1DRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 23:13:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D9F5DBE1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 20:13:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QAV4mbxWazsO8YI+Vd3NhlfoJMrxEgaww3Nl7Ft7sy4=; b=ZpwWawJzT58qGKFSMIk13M/5FC
-        9p4UrV/OxAVmLzgYIuRYwdT1bWDnNot5OeYhdm+Bidr0fiKQ4CWpAUqywxsPJL4hpnKnEq4XSl4Rp
-        A1qPMJzt5ONRDli75IUUaJ5+UD/EmHRx+l10pLYlD3C5LjTEvAyXZypMh+mEASRLXAO6bNg7y84C1
-        g1YCoV+Tgqsfglro7Ukg9ZATC4hWSk3gz9AaDNsxpj4H8NptO6gq264WTDZeC/gOWudy2FIC5LQDy
-        BSrL19E88Vvriw39YyroU4Lsta6eqdaSSwC8q6l/O4bUooCm5Kc/Q7aRrdYP6dRI5zdEnYgyVQxeX
-        +m8jRzPA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1numtc-002Zpk-19; Sat, 28 May 2022 03:13:44 +0000
-Date:   Sat, 28 May 2022 04:13:44 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/vmscan: don't try to reclaim freed folios
-Message-ID: <YpGTaCf+bZGdEdNj@casper.infradead.org>
-References: <20220527080451.48549-1-linmiaohe@huawei.com>
- <YpDoAZtQtQf6U8D2@casper.infradead.org>
- <e0502c7c-b71d-5356-fcc3-7c048c25d827@huawei.com>
+        Fri, 27 May 2022 23:17:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4003834BA3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 20:17:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7398B8268D
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 03:17:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33BFC34114;
+        Sat, 28 May 2022 03:17:42 +0000 (UTC)
+Date:   Fri, 27 May 2022 23:17:41 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [for-next][PATCH 00/23] tracing: Last minute fixes and updates
+ for 5.19
+Message-ID: <20220527231741.5ef31534@gandalf.local.home>
+In-Reply-To: <20220528025028.850906216@goodmis.org>
+References: <20220528025028.850906216@goodmis.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e0502c7c-b71d-5356-fcc3-7c048c25d827@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 10:52:11AM +0800, Miaohe Lin wrote:
-> On 2022/5/27 23:02, Matthew Wilcox wrote:
-> > What?  No.  This can absolutely happen.  We have a refcount on the folio,
-> > which means that any other thread can temporarily raise the refcount,
+On Fri, 27 May 2022 22:50:28 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> Actually, a lot of these changes were in my queue, I just haven't
+> tested them. But they are mostly fixes and clean ups. No real functional
+> features.
 > 
-> IIUC, the folio is only in the isolated page_list now and it's not in the page cache, swap cache, pagetable or
-> under any use. So there should be no way that any other thread can temporarily raise the refcount when
-> folio_ref_count == 1. Or am I miss something?
+> My tests on these have not completely finished, so I may have to rebase.
+> But since this is half way into the merge window, I want these in
+> linux-next for a little bit before sending my pull request.
+> 
 
-Take a look at something like GUP (fast).  If this page _was_ mapped to
-userspace, something like this can happen:
+> Steven Rostedt (Google) (2):
+>       ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding weak function
 
-Thread A	Thread B
-load PTE
-		unmap page
-		refcount goes to 1
-		vmscan sees the page
-try_get_ref
-		refcount is now 2.  WARN_ON.
+And my test just failed on this one :-p (Something stupid and minor)
 
-Thread A will see that the PTE has changed and will now drop its
-reference, but Thread B already spat out the WARN.
+I guess I'll send out a v6 and try again.
 
-A similar thing can happen with the page cache.
-
-If this is a worthwhile optimisation (does it happen often that we find
-a refcount == 1 page?), we could do something like ...
-
-		if (folio_ref_freeze(folio, 1)) {
-			nr_pages = folio_nr_pages(folio);
-			goto free_it;
-		}
-
-... or ...
-
-		if (folio_ref_count(folio) == 1 &&
-		    folio_ref_freeze(folio, 1)) {
-
-... if we want to test-and-test-and-clear
-
-But this function is far too complicated already.  I really want to
-see numbers that proves the extra complexity is worth it.
+-- Steve
 

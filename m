@@ -2,96 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5255369EC
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 03:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518C55369F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 03:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351815AbiE1Bxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 21:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S1352031AbiE1B5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 21:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245216AbiE1Bxc (ORCPT
+        with ESMTP id S238672AbiE1B5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 21:53:32 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05A014014
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 18:53:30 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id t144so7669792oie.7
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 18:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FtI25lp7z4LZIoDWgGyoVrLCNBjX3mKlwnGfkQ7hiXg=;
-        b=S0abEByizXkvjju3NZf4tXR3OvTpg5QydyKjKnWgPRTcG91ZB0wyHLea9pkTO4K3i5
-         FGp1BNNsDNnJ8PmSUEdkf+hWax43dxqPPXWa0fPDwxxOOz0p495QqywLiGnjS5ep2hga
-         Z7otyinDIEHZYYA/E8L2pe2PiMQgYWQoDIYEc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=FtI25lp7z4LZIoDWgGyoVrLCNBjX3mKlwnGfkQ7hiXg=;
-        b=CaJV+hsG3V094xBHGyPG/VYhsOWoeiONwKcQ0LTrVVwyH8OWOZQjJFyteTWB/hXljZ
-         gz1zG5NbgVNNpesWn4dGVrevhZw9kEDtEopXhlZ+oUzCzPhEOwTt9GFVamnnwOvbvw21
-         6ZSvmXGB8nwAjEQrqtQLHwe3C6hPyZq91XNFTT6lWDRF202HNttQ7BKC1Hc++bMx+mql
-         J5wCW5ckwSknSodv5FtFf25wW9/LurTnhnjZIW6tu5DaWbSUPFtVdQMpw6Pxv7F7C0Zl
-         sOtqcfygikSntqOu2y5ESctMNj/r+ZdZvCDsjEcu9gY/jkl9/xGTY4m7IKHB5QZIRM4z
-         /F4g==
-X-Gm-Message-State: AOAM5303nTi43Vfkr1Z+IFpa5s36a9NY6KnLsl6nbFMx2zk1NCNFF0ZV
-        2J1SJCWU2C6DuJLHiaKJdigx2Q==
-X-Google-Smtp-Source: ABdhPJxHqRn/G7EkUc5FjYjFt7CzQ46NrTCodQCc1OsQ/iro3GEHyOFs/ZTilzitj67zo8Xre1gERg==
-X-Received: by 2002:a05:6808:f8c:b0:32a:e67f:d20e with SMTP id o12-20020a0568080f8c00b0032ae67fd20emr5049500oiw.88.1653702810215;
-        Fri, 27 May 2022 18:53:30 -0700 (PDT)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id lg11-20020a0568700b8b00b000f193e656c5sm1241788oab.15.2022.05.27.18.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 18:53:29 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Fri, 27 May 2022 20:53:27 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 00/47] 5.18.1-rc1 review
-Message-ID: <YpGAl1lh9vQSxsFV@fedora64.linuxtx.org>
-References: <20220527084801.223648383@linuxfoundation.org>
+        Fri, 27 May 2022 21:57:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DE4BA187
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 18:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653703062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1uLC+oxcDJJvepGvd1tVraFd6/ac0FDp72aGh5ZnEtc=;
+        b=SrTHV7M4JgZlUiW8gLOT6e4XsJRio9+mSimysNm+Gw/wlX9PWSEBu46Z19Z5zRZNdY7iE8
+        iAsHT9SEnsFdx0BHDsI7hHyO4yY0CKUzoPnA98ZDB8yFw4ByKge/S6kmDlljnViU+WhsA2
+        yQR3neeKvADUdfzwA+rWZn9qnm1skec=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-417-XtU76bs8N6eAyLxgcrHZAA-1; Fri, 27 May 2022 21:57:38 -0400
+X-MC-Unique: XtU76bs8N6eAyLxgcrHZAA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 621D9800882;
+        Sat, 28 May 2022 01:57:38 +0000 (UTC)
+Received: from llong.com (unknown [10.22.33.184])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B8D1C40EC002;
+        Sat, 28 May 2022 01:57:37 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Feng Tang <feng.tang@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Larabel <Michael@phoronix.com>,
+        Joe Mario <jmario@redhat.com>,
+        Michey Mehta <mimehta@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] clocksource: Make clocksource watchdog check with WATCHDOG_INTERVAL period
+Date:   Fri, 27 May 2022 21:57:14 -0400
+Message-Id: <20220528015714.109442-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 10:49:40AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.1 release.
-> There are 47 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 29 May 2022 08:46:45 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.1-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Since commit c86ff8c55b8a ("clocksource: Avoid accidental unstable
+marking of clocksource"), a new WD_READ_SKIP value was introduced
+as a possible return value of cs_watchdog_read() to skip the current
+check. However, this has an undesriable side effect of extending the
+time gap between csnow and cs_last to more than one WATCHDOG_INTERVAL
+(0.5s) in case of intermittent WD_READ_SKIP's.
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+There was an instance of reported clocksource watchdog failure with
+the time skew of 485us where the uncertainly threshold is 400us. In
+that particular case, the (now - last) gap was about 2s. Looking at
+the dmesg log, it was clear there was a successful cs_watchdog_read()
+followed by 3 skips and then another successful cs_watchdog_read().
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+If there is an existing skew between the hpet (watchdog) and tsc
+clocksource, enlarging the period by 4x will certainly increase the
+measured skew causing it to exceed the threshold in this case. Fix
+this variable period problem by resetting the CLOCK_SOURCE_WATCHDOG bit
+after each WD_READ_SKIP to force the reloading of wd_last and cs_last
+in the next round. This ensures that we have two consecutive successful
+cs_watchdog_read()'s before checking the clock skew.
+
+Fixes: c86ff8c55b8a ("clocksource: Avoid accidental unstable marking of clocksource")
+Reported-by: Michael Larabel <Michael@phoronix.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/time/clocksource.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+index cee5da1e54c4..173e052c12b6 100644
+--- a/kernel/time/clocksource.c
++++ b/kernel/time/clocksource.c
+@@ -411,9 +411,18 @@ static void clocksource_watchdog(struct timer_list *unused)
+ 		read_ret = cs_watchdog_read(cs, &csnow, &wdnow);
+ 
+ 		if (read_ret != WD_READ_SUCCESS) {
+-			if (read_ret == WD_READ_UNSTABLE)
++			if (read_ret == WD_READ_UNSTABLE) {
+ 				/* Clock readout unreliable, so give it up. */
+ 				__clocksource_unstable(cs);
++			} else { /* WD_READ_SKIP */
++				/*
++				 * Watchdog clock unstable at the moment,
++				 * discard the stored wd_last and cs_last to
++				 * make sure the gap between now and last
++				 * is always one WATCHDOG_INTERVAL.
++				 */
++				cs->flags &= ~CLOCK_SOURCE_WATCHDOG;
++			}
+ 			continue;
+ 		}
+ 
+-- 
+2.31.1
+

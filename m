@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5ED536D86
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 17:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9902536D89
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 17:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237681AbiE1P3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 11:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S237692AbiE1Pbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 11:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233773AbiE1P3V (ORCPT
+        with ESMTP id S233773AbiE1Pbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 11:29:21 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8173175A6;
-        Sat, 28 May 2022 08:29:20 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id k16so4981002wrg.7;
-        Sat, 28 May 2022 08:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RyZiticXf+XdVOEgPcxMcKDhVfj059iHazDCUg4DtB4=;
-        b=Y7LvlM5LMMlY0zJKbWlgqkF1bOb0ZO3jjQ9Q5DER8/DbkdXFUmetKX1dANZkX5LTay
-         iovhwfk+fouRvV/SM/zn5p3tsuVwXB7I7f1Qh3ynMNMay9yhK4Sk3vcaBC8OrytLIJAW
-         beyl7JIH3STHnc2q71OuLFfSpwtaHVgJY7zopnYSRyuIlyrsofRtJAcqq4qLbY/Qy6IH
-         ncOVbS+EDBfDvNrKl+EIYlG3Q0wrHCl+CtwjT8UcH38syC52ci8jOA3La0O8+HbcCta2
-         WQ7v9hzBxe9GHGusRM/0rhu1T1RY+/kMMnJTOSdtskFcZlOXY9cEJq8rjJ7B/ldHF+bD
-         OdlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RyZiticXf+XdVOEgPcxMcKDhVfj059iHazDCUg4DtB4=;
-        b=YX3oK5bTB8EeQvTSmX4DBJV7MIKSrfEDUxcthw/CudKJcdhCaz+zcuVgEgvDhMyHw4
-         resnrl8Qqa+SBZTWb6gfoK3V1k/PFKBgvmVlOrA+nJy0MdZwSnWMZ/oWPnZpTuPIKzUH
-         nZROol02Vn06k4YSwdS3sjKTU9L+Hov7SFGscOQmBqro19ooAsWJj0C3nvakU+ERzY2a
-         tmqqCbJi9f7xwOKZLbE+ee+iGG8dQxAh2535ONySH8WWJtvAHrDZiYygHXF6wm6noyuy
-         qW+5n15vkImGVxWswdcm16jt2hggzkXPfuYz211X/AQwn5E4oWukh1XV0cCd+cJ5k47y
-         TtVg==
-X-Gm-Message-State: AOAM532A2MtPoR3X6a2bcsNK17osRsAy6kY6EQ7hfxuzCFP75fQ8Jo2p
-        6WcfdI/sXUpk+KpqGNV++TXJbOiJWUw=
-X-Google-Smtp-Source: ABdhPJxk8NWwd1MpVxRtvnzynGS+eoL9nGQNsxYYLTa2RavI91tb+Si6G1RHIAzk6w0qnZF3lYhbmQ==
-X-Received: by 2002:adf:ebc7:0:b0:20c:d65d:3f19 with SMTP id v7-20020adfebc7000000b0020cd65d3f19mr39357683wrn.613.1653751759503;
-        Sat, 28 May 2022 08:29:19 -0700 (PDT)
-Received: from debian (host-2-98-37-191.as13285.net. [2.98.37.191])
-        by smtp.gmail.com with ESMTPSA id w1-20020a5d6081000000b0020fdc90aeabsm4399661wrt.82.2022.05.28.08.29.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 08:29:19 -0700 (PDT)
-Date:   Sat, 28 May 2022 16:29:17 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/163] 5.10.119-rc1 review
-Message-ID: <YpI/zcih1HvyobxC@debian>
-References: <20220527084828.156494029@linuxfoundation.org>
+        Sat, 28 May 2022 11:31:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4623117AAA;
+        Sat, 28 May 2022 08:31:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8889960F22;
+        Sat, 28 May 2022 15:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92CB9C34100;
+        Sat, 28 May 2022 15:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653751905;
+        bh=OhZh+NCXc1blY5tIY8ybxiGzNOl9XBbqHxmEXxQG9TI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qEgyafTY41siNa2emFWjR2HdOAJF49//bEVPKV8viMir+Pn+eWJbKGKw8e7FnTHuj
+         8w1nrj/2B7Fv7YAl8tu/J94+Je4/oBtKb3jNYuwSs3hJU2gNmCEPMTFM+L2w9Divv1
+         YlmfrwlObs0Z7EppV5RAX3uuAzg4AEi2UTC3ZxefsZu2RX+CvXVxtLOtsX0+hKM1TY
+         ySOfaC1rZP9Fug+tzn2dQY0RTfk/a9itZmqvBNkRQOVnWvFUus+rNQwHpcvKw0k8pH
+         wb7K8+rkPzZYJEonqAzPysqGMrst1gzqbp5OM82FdRD7N8t22EItrP4V4KhXrrohdt
+         ui9UID28/rW5Q==
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Garrett LeSage <garrett@lesage.us>,
+        IFo Hancroft <contact@ifohancroft.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>
+Subject: [PATCH v2 1/2] docs: move Linux logo into a new `images` folder
+Date:   Sat, 28 May 2022 17:31:31 +0200
+Message-Id: <20220528153132.8636-1-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220527084828.156494029@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Having assets in the top-level `Documentation` directory can make
+it harder to find the documents one needs, especially if we want
+to add more of them later on.
 
-On Fri, May 27, 2022 at 10:48:00AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.119 release.
-> There are 163 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 29 May 2022 08:46:26 +0000.
-> Anything received after that time might be too late.
+Instead, create a new `images` folder inside it that is used
+to hold assets such as logos.
 
-Build test:
-mips (gcc version 11.3.1 20220517): 63 configs -> no failure
-arm (gcc version 11.3.1 20220517): 105 configs -> no new failure
-arm64 (gcc version 11.3.1 20220517): 3 configs -> no failure
-x86_64 (gcc version 11.3.1 20220517): 4 configs -> no failure
+In addition, update the reference in `scripts/spdxcheck-test.sh`.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+Link: https://lore.kernel.org/lkml/8735hicoy7.fsf@meer.lwn.net/
+Suggested-by: Jonathan Corbet <corbet@lwn.net>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+v1: https://lore.kernel.org/lkml/20220510172530.29704-1-ojeda@kernel.org/
+v2:
+  - Added the `scripts/spdxcheck-test.sh` reference update, as noticed
+    by Jonathan Corbet.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1218
-[2]. https://openqa.qa.codethink.co.uk/tests/1220
+ Documentation/{ => images}/COPYING-logo |   0
+ Documentation/{ => images}/logo.gif     | Bin
+ scripts/spdxcheck-test.sh               |   2 +-
+ 3 files changed, 1 insertion(+), 1 deletion(-)
+ rename Documentation/{ => images}/COPYING-logo (100%)
+ rename Documentation/{ => images}/logo.gif (100%)
 
+diff --git a/Documentation/COPYING-logo b/Documentation/images/COPYING-logo
+similarity index 100%
+rename from Documentation/COPYING-logo
+rename to Documentation/images/COPYING-logo
+diff --git a/Documentation/logo.gif b/Documentation/images/logo.gif
+similarity index 100%
+rename from Documentation/logo.gif
+rename to Documentation/images/logo.gif
+diff --git a/scripts/spdxcheck-test.sh b/scripts/spdxcheck-test.sh
+index cb76324756bd..9f6d1a74da6e 100644
+--- a/scripts/spdxcheck-test.sh
++++ b/scripts/spdxcheck-test.sh
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ 
+ # run check on a text and a binary file
+-for FILE in Makefile Documentation/logo.gif; do
++for FILE in Makefile Documentation/images/logo.gif; do
+ 	python3 scripts/spdxcheck.py $FILE
+ 	python3 scripts/spdxcheck.py - < $FILE
+ done
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+base-commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+-- 
+2.36.1
 

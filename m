@@ -2,51 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AB6536BBC
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 10:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88757536BC7
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232022AbiE1Iv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 04:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
+        id S232204AbiE1JN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 05:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbiE1IvY (ORCPT
+        with ESMTP id S230320AbiE1JNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 04:51:24 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DBA231
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 01:51:19 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id b13-20020a92670d000000b002d1a5d6b795so4491461ilc.16
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 01:51:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=J/Bvj0UtmLqlRvJkLZqTVi4pXgT9dcuuCMl+vXAnuic=;
-        b=VzTIWVwlQAcGKb7Aw0zzEUC2OKfctWQZHP3YGmWsyk5jYRBCR4xgxy7aBVH74G1jDe
-         ooAjGh1rqT4NdKMNsQV/vmLwb4KmLvhCuDOb9sDByJlpkdbpl1x1IXLOLB/HUa+Ryg8y
-         1A8IHV9wQ8dphWA8I7aozc59cml6G0NLpvqopKf0f1/OUCfmA8bTzDYChhwdjlGkeEDZ
-         YOQSJcj9XNA9NZAUeUk6isZ3odCGcMg0KRqol/k28LjWew5Rb+Ncm7yRzHgmqCQTnJVK
-         2KuAcaoZC+vKH6/wnSOr6OLhkcLPWjr6CEiyl8sXxVwYzIXALKfdD55U9YOv4FUSBFKW
-         iIvw==
-X-Gm-Message-State: AOAM530Z4NcaJVq6LG84Zf7rp1heMFUriZGyrex42T0PU6rkqbN/Bl4f
-        siwyVUGGHQ0QuPBhmFOqMOtjWIfFP9wgUcacCrTMH+sHo8rP
-X-Google-Smtp-Source: ABdhPJyqQO0DFztvD+Xp8W8VpZqE0oT3XdfAKEC85MMQIeUxEDusQ6f6XCGD7+MLxrZjSbJ9kqWKXhIQWEwtG25ApAfa1zcYYTbI
+        Sat, 28 May 2022 05:13:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532C426A;
+        Sat, 28 May 2022 02:13:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D18260C61;
+        Sat, 28 May 2022 09:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB29C34118;
+        Sat, 28 May 2022 09:13:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653729199;
+        bh=7bnoiHIViPgO9U0WBW7xtT2w4ftinyPcd5Qmfmeu5kY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eb2KkxmW/U6ZjycuVvCALb0qStoqFaa+17w+kMmOA792eQViI1RUTJW2omfWHCY+8
+         /p/mdBGBFl4IsVSBb5qf8j4HRupWvffVZ34Jiwt+G8bn+INuzkqqfqb4sXBQf+Q4oV
+         lgHRw8fC9K/pbxWBRnVloPMcCnkYXwrv9E1yRexYxWIEtTLZrOrwJJGKoekPhqE6yK
+         as1W3uhSrYFXTsSharfEBtivlq8QYti8lGBk2YosQ6wehjlO080YglenVjeSdwdsJi
+         81LPcxg2Fk2cymozZa7vTiT/OxpaJ2QDlVnMG9l/QQziU1owNdM58oGKiuDXyAvlkq
+         lnIoFTld2jIiA==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-edeb6c3642so8488062fac.3;
+        Sat, 28 May 2022 02:13:19 -0700 (PDT)
+X-Gm-Message-State: AOAM533vZjOs9thkXF/o5aj0PsKtcJxVbfuTBRv0Jl7Vxkp5LFkl3tyx
+        duPnAwl23w76A/m59k+ENRphhVgy+gbWMC3P8Ac=
+X-Google-Smtp-Source: ABdhPJxZtGgnd64LAweAANO6XIozQibeM29xEcVKUYcAJvUbDi+OAN2iDLx4o0nLK83aa5xyfeeYn2AwDK0IEfWRnrc=
+X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
+ s37-20020a056870eaa500b000da0b3f2b45mr6130869oap.228.1653729198931; Sat, 28
+ May 2022 02:13:18 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:14c8:b0:664:f10e:5c84 with SMTP id
- b8-20020a05660214c800b00664f10e5c84mr12739965iow.115.1653727877966; Sat, 28
- May 2022 01:51:17 -0700 (PDT)
-Date:   Sat, 28 May 2022 01:51:17 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b8b00505e00e8610@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in ext4_xattr_set_entry (5)
-From:   syzbot <syzbot+43ddf9603437b6bad4e0@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+References: <20220528014132.91052-1-heinrich.schuchardt@canonical.com>
+In-Reply-To: <20220528014132.91052-1-heinrich.schuchardt@canonical.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 28 May 2022 11:13:07 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGmwwD==yOnzfYgPg8Bpz1POK7aPBULcuMdgS-E1G2EAw@mail.gmail.com>
+Message-ID: <CAMj1kXGmwwD==yOnzfYgPg8Bpz1POK7aPBULcuMdgS-E1G2EAw@mail.gmail.com>
+Subject: Re: [PATCH] riscv: read-only pages should not be writable
+To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,106 +67,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, 28 May 2022 at 03:41, Heinrich Schuchardt
+<heinrich.schuchardt@canonical.com> wrote:
+>
+> If EFI pages are marked as read-only,
+> we should remove the _PAGE_WRITE flag.
+>
+> The current code overwrites an unused value.
+>
+> Fixes: b91540d52a08b ("RISC-V: Add EFI runtime services")
+> Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+> ---
+>  arch/riscv/kernel/efi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/kernel/efi.c b/arch/riscv/kernel/efi.c
+> index 024159298231..1aa540350abd 100644
+> --- a/arch/riscv/kernel/efi.c
+> +++ b/arch/riscv/kernel/efi.c
+> @@ -65,7 +65,7 @@ static int __init set_permissions(pte_t *ptep, unsigned long addr, void *data)
+>
+>         if (md->attribute & EFI_MEMORY_RO) {
+>                 val = pte_val(pte) & ~_PAGE_WRITE;
+> -               val = pte_val(pte) | _PAGE_READ;
+> +               val |= _PAGE_READ;
+>                 pte = __pte(val);
+>         }
+>         if (md->attribute & EFI_MEMORY_XP) {
+> --
+> 2.36.1
+>
 
-syzbot found the following issue on:
+Thanks Heinrich
 
-HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e9aa39f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
-dashboard link: https://syzkaller.appspot.com/bug?extid=43ddf9603437b6bad4e0
-compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: riscv64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+43ddf9603437b6bad4e0@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in ext4_xattr_set_entry+0x212/0x2034 fs/ext4/xattr.c:1593
-Read of size 4 at addr ffffaf800f477ffe by task syz-executor.1/5063
-
-CPU: 1 PID: 5063 Comm: syz-executor.1 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
-[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
-[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
-[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
-[<ffffffff8047479e>] print_address_description.constprop.0+0x2a/0x330 mm/kasan/report.c:255
-[<ffffffff80474d4c>] __kasan_report mm/kasan/report.c:442 [inline]
-[<ffffffff80474d4c>] kasan_report+0x184/0x1e0 mm/kasan/report.c:459
-[<ffffffff804759f4>] check_region_inline mm/kasan/generic.c:183 [inline]
-[<ffffffff804759f4>] __asan_load4+0x6e/0x96 mm/kasan/generic.c:255
-[<ffffffff807c17b4>] ext4_xattr_set_entry+0x212/0x2034 fs/ext4/xattr.c:1593
-[<ffffffff807c6c80>] ext4_xattr_ibody_set+0x5c/0x158 fs/ext4/xattr.c:2210
-[<ffffffff807c73da>] ext4_xattr_set_handle+0x65e/0xea0 fs/ext4/xattr.c:2367
-[<ffffffff807c7e6e>] ext4_xattr_set+0x12e/0x2b4 fs/ext4/xattr.c:2480
-[<ffffffff807c9abc>] ext4_xattr_trusted_set+0x34/0x46 fs/ext4/xattr_trusted.c:38
-[<ffffffff8052af96>] __vfs_setxattr+0x106/0x172 fs/xattr.c:180
-[<ffffffff8052cd3e>] __vfs_setxattr_noperm+0xca/0x378 fs/xattr.c:214
-[<ffffffff8052d156>] __vfs_setxattr_locked+0x16a/0x186 fs/xattr.c:275
-[<ffffffff8052d2a8>] vfs_setxattr+0x136/0x296 fs/xattr.c:301
-[<ffffffff8052d61a>] setxattr+0x212/0x29a fs/xattr.c:575
-[<ffffffff8052d844>] path_setxattr+0x1a2/0x1bc fs/xattr.c:595
-[<ffffffff8052daca>] __do_sys_setxattr fs/xattr.c:611 [inline]
-[<ffffffff8052daca>] sys_setxattr+0x36/0x48 fs/xattr.c:607
-[<ffffffff80005716>] ret_from_syscall+0x0/0x2
-
-The buggy address belongs to the page:
-page:ffffaf807aa95178 refcount:2 mapcount:0 mapping:ffffaf800ab50810 index:0xb8 pfn:0x8f677
-memcg:ffffaf80073e0000
-aops:def_blk_aops ino:fd00000
-flags: 0x880000203a(referenced|dirty|lru|active|private|section=17|node=0|zone=0)
-raw: 000000880000203a ffffaf807aa95138 ffffaf807aaa3e08 ffffaf800ab50810
-raw: 00000000000000b8 ffffaf800dbbe910 00000002ffffffff ffffaf80073e0000
-raw: 00000000000007ff
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x148c40(GFP_NOFS|__GFP_NOFAIL|__GFP_COMP|__GFP_HARDWALL), pid 1, ts 83303672800, free_ts 0
- __set_page_owner+0x48/0x136 mm/page_owner.c:183
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0xd0/0x10a mm/page_alloc.c:2427
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0x8da/0x12d8 mm/page_alloc.c:4165
- __alloc_pages+0x150/0x3b6 mm/page_alloc.c:5389
- alloc_pages+0x132/0x2a6 mm/mempolicy.c:2271
- folio_alloc+0x24/0x30 mm/mempolicy.c:2281
- filemap_alloc_folio mm/filemap.c:987 [inline]
- __filemap_get_folio+0x63c/0xd58 mm/filemap.c:1990
- pagecache_get_page+0x2e/0x230 mm/folio-compat.c:125
- find_or_create_page include/linux/pagemap.h:488 [inline]
- grow_dev_page fs/buffer.c:949 [inline]
- grow_buffers fs/buffer.c:1014 [inline]
- __getblk_slow+0x1f2/0x738 fs/buffer.c:1041
- __getblk_gfp+0x74/0x78 fs/buffer.c:1334
- sb_getblk_gfp include/linux/buffer_head.h:334 [inline]
- ext4_sb_breadahead_unmovable+0x46/0xa8 fs/ext4/super.c:264
- __ext4_get_inode_loc+0x9d6/0xc08 fs/ext4/inode.c:4488
- __ext4_get_inode_loc_noinmem+0xb2/0x138 fs/ext4/inode.c:4518
- __ext4_iget+0x348/0x20f8 fs/ext4/inode.c:4711
- ext4_lookup fs/ext4/namei.c:1785 [inline]
- ext4_lookup+0x28a/0x4ea fs/ext4/namei.c:1760
- lookup_open.isra.0+0x6a6/0xd4a fs/namei.c:3308
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffffaf800f477f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffaf800f477f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffffaf800f478000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffffaf800f478080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffffaf800f478100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-EXT4-fs error (device vda): ext4_xattr_set_entry:1596: inode #640: comm syz-executor.1: corrupted xattr entries
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Queued in efi/urgent.

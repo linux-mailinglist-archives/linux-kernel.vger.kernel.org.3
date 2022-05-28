@@ -2,238 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D545F536DF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35CE8536DF6
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239062AbiE1RX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 13:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
+        id S239158AbiE1R2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 13:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbiE1RXW (ORCPT
+        with ESMTP id S231777AbiE1R2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 13:23:22 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B71F611A1E
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 10:23:20 -0700 (PDT)
-Received: (qmail 129814 invoked by uid 1000); 28 May 2022 13:23:20 -0400
-Date:   Sat, 28 May 2022 13:23:20 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
-Cc:     andreyknvl@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in driver_unregister
-Message-ID: <YpJaiGRcRjDzRxQC@rowland.harvard.edu>
-References: <YpJNQN6++raKTXS5@rowland.harvard.edu>
- <0000000000005b7a1b05e0156265@google.com>
+        Sat, 28 May 2022 13:28:36 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225F12662;
+        Sat, 28 May 2022 10:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1653758903;
+        bh=lR1SmAw3TFZ2GVQGx6Xrltu1975YzeKIyfCgmu3IbmI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=TwY7VeAEA96tsQkihp6Y53kt7fF5IFdDfZK0kJxOBVZ3BN2JoTOn2gxG+EPBXayd0
+         1TwauGiZ+ZSWnFHxazRzYiuBm8Wp4/7b3LubTm90l5WpGZl8Em0bmA6eslfp46oUzy
+         YonBZifAugCbrq9EgfOvRT9SQtNkdIyKqODPRRa0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.176.6]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MryXN-1nRjkI0V9B-00nyNC; Sat, 28
+ May 2022 19:28:23 +0200
+Message-ID: <90a293d4-698f-5c9a-9435-3a26ea0ae97f@gmx.de>
+Date:   Sat, 28 May 2022 19:28:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000005b7a1b05e0156265@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] fbdev: vesafb: Fix a use-after-free due early fb_info
+ cleanup
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Pascal Ernster <dri-devel@hardfalcon.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+References: <20220526194752.307192-1-javierm@redhat.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220526194752.307192-1-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Q/afMmrV6TEcA8Ald4h2sa2uBYvXhgfWAKP3dhZtZKDXuX7L5bR
+ 7U8+ZHdeYUwdMiakb0VwOYuClbKKl+haWFBSOYmF+SHHED0qpI0GIqLlrUB0RXSFWtrqhTb
+ AkERe7Q+TtAfR5JiIGY4CIOfm1wpUd4Ipilwn4bw331ESA1gn2Hyv3EYZgRMgmYDnN0B/kz
+ dL+IkvX24bMKe5Hhl+kdQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XqlM8cU89UE=:eTOTT44CHSOooba+fOdkyo
+ y1MrLZk9ZF2hFIn2zAV64IipZRcch4TDAmcOQt1UnVDoWfg8AlPW7kQyvq5Mb0gcIb7YTmMb+
+ Ln6ECUlnPq6IjylwUES9rrADlRUQrT8TxSUSTLlfppRpi/I1tEWt1UIgPkQj3qKiyBDp0T2cW
+ pVPFSD+DWm3PhsvpO1MKsvFNuQyNzj5SE9NYvrhnZMTSXCWEREmugIRmXUXV5N8HXsgFx+1by
+ 0vLeeaxz1f9yPwz8CNloOIkA8JGoGYDg0nc3ih94KY2nQqw99TwbRy5Qv8iL6wqu6C2gRFaqg
+ g5U3IMGg/uDbjSmr+IMTOU6PB22HmuyLFAjMPTfCNKOYfXUjX7Iq50hAN+LYQhPunEIwxK+qr
+ fmqigX0CR00JfCnzuQYt+EFZo7Kt00ocWT2prVauDK4heXV4gwJtzcSVkyy4tKIwYs1LXTIHy
+ NBMByrSq6ZBIYXVmCyvzobNlk8yQ8Edznm5TG19y+B7C3W/mogQAdbSvpl2rWLhuaZMIvnzZQ
+ d90hIfQeIHW3iU4UUwfQxkTvmKBQSaHgIeAfYG9fqWPL3qC1pHnNNIdc0QQ/EWXTdoxz2O/cA
+ vwJHUPPsHbBHNbZ14vv1OAOPZEoSHnawhbLrQDkbAEL43nM0ZWeoSd7MjsgSbxe33DhVDPfcA
+ FVwFhff+sw0KW9pyjcLj2n2bssGVitMJ/8PnASUnAaS4uW6DPyLCBBziIRhexGjAx6+r90zfJ
+ BPW1qpm6QsDSDLMA5k7eZ30AWoWbJAPFPnZW/Z84HZ5TKNN2LvsF48abqc7EdxxFlbo2v1psQ
+ qLU8Pv+vleI3K0geCzXBa33Y/nQK1T8UmMfPLpun4LWaH9J66oMwuSMOO1JmUrLp5+5u7lAY5
+ dszI+2Z36wvyMgor8SOD2QfU2JvAh3jYYFkdDNtjy/RMFuaGcDCEkJQaQxVvMl26N3jMBGAyn
+ xAI7dWt09WCE7bmZPWqmXRjZ4RGnBPKrTjIMSpIgk40wdhpLe9Z3fr32/HAsOs9q8X9Ga7siv
+ NNUnlntJml8yv33RX450oCMkteJrBGzYkUvSqFnKSllLwHNuPpGc1JF8Ahn1iw1HXDlB6jkQe
+ dk+elHRX383UtQQk6OeBRavSUqvawhcFUufJ7Htlgz07/c9V6b5L258Zw==
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 10:02:12AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> WARNING in driver_unregister
-> 
-> ------------[ cut here ]------------
-> Unexpected driver unregister!
-> WARNING: CPU: 0 PID: 2335 at drivers/base/driver.c:194 driver_unregister drivers/base/driver.c:194 [inline]
-> WARNING: CPU: 0 PID: 2335 at drivers/base/driver.c:194 driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
-> Modules linked in:
-> CPU: 0 PID: 2335 Comm: syz-executor.0 Not tainted 5.18.0-rc5-syzkaller-00157-g97fa5887cf28-dirty #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:driver_unregister drivers/base/driver.c:194 [inline]
-> RIP: 0010:driver_unregister+0x8c/0xb0 drivers/base/driver.c:191
-> Code: 68 4c 89 e7 e8 65 b9 db fe 48 89 ef e8 fd a0 ff ff 5d 41 5c e9 75 fa 78 fe e8 70 fa 78 fe 48 c7 c7 80 7a 81 86 e8 12 96 ee 02 <0f> 0b 5d 41 5c e9 5a fa 78 fe e8 75 93 ad fe eb 96 e8 6e 93 ad fe
-> RSP: 0018:ffffc9000267fa78 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: ffff888118006050 RCX: 0000000000000000
-> RDX: ffff888114fe8000 RSI: ffffffff812bdce8 RDI: fffff520004cff41
-> RBP: ffff888118006098 R08: 0000000000000000 R09: 0000000000000001
-> R10: ffffffff812b86be R11: 0000000000000000 R12: 0000000000000000
-> R13: ffff888118006008 R14: ffff88811785e7a8 R15: ffff888100219ca0
-> FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fc6f40b3718 CR3: 0000000007825000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  usb_gadget_unregister_driver+0x48/0x70 drivers/usb/gadget/udc/core.c:1590
->  raw_release+0x18b/0x290 drivers/usb/gadget/legacy/raw_gadget.c:412
+On 5/26/22 21:47, Javier Martinez Canillas wrote:
+> Commit b3c9a924aab6 ("fbdev: vesafb: Cleanup fb_info in .fb_destroy rath=
+er
+> than .remove") fixed a use-after-free error due the vesafb driver freein=
+g
+> the fb_info in the .remove handler instead of doing it in .fb_destroy.
+>
+> This can happen if the .fb_destroy callback is executed after the .remov=
+e
+> callback, since the former tries to access a pointer freed by the latter=
+.
+>
+> But that change didn't take into account that another possible scenario =
+is
+> that .fb_destroy is called before the .remove callback. For example, if =
+no
+> process has the fbdev chardev opened by the time the driver is removed.
+>
+> If that's the case, fb_info will be freed when unregister_framebuffer() =
+is
+> called, making the fb_info pointer accessed in vesafb_remove() after tha=
+t
+> to no longer be valid.
+>
+> To prevent that, move the expression containing the info->par to happen
+> before the unregister_framebuffer() function call.
+>
+> Fixes: b3c9a924aab6 ("fbdev: vesafb: Cleanup fb_info in .fb_destroy rath=
+er than .remove")
+> Reported-by: Pascal Ernster <dri-devel@hardfalcon.net>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-Let's try getting some better information about what's really happening.
+applied to the fbdev git tree.
 
-Alan Stern
+Thanks!
+Helge
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 97fa5887cf28
 
-Index: usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-===================================================================
---- usb-devel.orig/drivers/usb/gadget/legacy/raw_gadget.c
-+++ usb-devel/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -11,6 +11,7 @@
- #include <linux/ctype.h>
- #include <linux/debugfs.h>
- #include <linux/delay.h>
-+#include <linux/idr.h>
- #include <linux/kref.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
-@@ -36,6 +37,9 @@ MODULE_LICENSE("GPL");
- 
- /*----------------------------------------------------------------------*/
- 
-+static DEFINE_IDA(driver_id_numbers);
-+#define DRIVER_DRIVER_NAME_LENGTH_MAX	32
-+
- #define RAW_EVENT_QUEUE_SIZE	16
- 
- struct raw_event_queue {
-@@ -160,6 +164,9 @@ struct raw_dev {
- 	/* Reference to misc device: */
- 	struct device			*dev;
- 
-+	/* Make driver names unique */
-+	int				driver_id_number;
-+
- 	/* Protected by lock: */
- 	enum dev_state			state;
- 	bool				gadget_registered;
-@@ -188,6 +195,7 @@ static struct raw_dev *dev_new(void)
- 	spin_lock_init(&dev->lock);
- 	init_completion(&dev->ep0_done);
- 	raw_event_queue_init(&dev->queue);
-+	dev->driver_id_number = -1;
- 	return dev;
- }
- 
-@@ -198,6 +206,9 @@ static void dev_free(struct kref *kref)
- 
- 	kfree(dev->udc_name);
- 	kfree(dev->driver.udc_name);
-+	kfree(dev->driver.driver.name);
-+	if (dev->driver_id_number >= 0)
-+		ida_free(&driver_id_numbers, dev->driver_id_number);
- 	if (dev->req) {
- 		if (dev->ep0_urb_queued)
- 			usb_ep_dequeue(dev->gadget->ep0, dev->req);
-@@ -398,6 +409,7 @@ static int raw_release(struct inode *ino
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
- 	if (unregister) {
-+		dev_info(dev->dev, "Unregistering driver %d at %px", dev->driver_id_number, dev);
- 		ret = usb_gadget_unregister_driver(&dev->driver);
- 		if (ret != 0)
- 			dev_err(dev->dev,
-@@ -421,6 +433,7 @@ static int raw_ioctl_init(struct raw_dev
- 	struct usb_raw_init arg;
- 	char *udc_driver_name;
- 	char *udc_device_name;
-+	char *driver_driver_name;
- 	unsigned long flags;
- 
- 	if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
-@@ -439,36 +452,44 @@ static int raw_ioctl_init(struct raw_dev
- 		return -EINVAL;
- 	}
- 
-+	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-+	if (ret < 0)
-+		return ret;
-+	dev->driver_id_number = ret;
-+
-+	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
-+	if (!driver_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_id_number;
-+	}
-+	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
-+				DRIVER_NAME ".%d", dev->driver_id_number);
-+
- 	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
--	if (!udc_driver_name)
--		return -ENOMEM;
-+	if (!udc_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_driver_name;
-+	}
- 	ret = strscpy(udc_driver_name, &arg.driver_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_driver_name;
- 	ret = 0;
- 
- 	udc_device_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
- 	if (!udc_device_name) {
--		kfree(udc_driver_name);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto out_free_udc_driver_name;
- 	}
- 	ret = strscpy(udc_device_name, &arg.device_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_device_name;
- 	ret = 0;
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 	if (dev->state != STATE_DEV_OPENED) {
- 		dev_dbg(dev->dev, "fail, device is not opened\n");
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-@@ -483,14 +504,24 @@ static int raw_ioctl_init(struct raw_dev
- 	dev->driver.suspend = gadget_suspend;
- 	dev->driver.resume = gadget_resume;
- 	dev->driver.reset = gadget_reset;
--	dev->driver.driver.name = DRIVER_NAME;
-+	dev->driver.driver.name = driver_driver_name;
- 	dev->driver.udc_name = udc_device_name;
- 	dev->driver.match_existing_only = 1;
- 
- 	dev->state = STATE_DEV_INITIALIZED;
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+	return ret;
- 
- out_unlock:
- 	spin_unlock_irqrestore(&dev->lock, flags);
-+out_free_udc_device_name:
-+	kfree(udc_device_name);
-+out_free_udc_driver_name:
-+	kfree(udc_driver_name);
-+out_free_driver_driver_name:
-+	kfree(driver_driver_name);
-+out_free_driver_id_number:
-+	ida_free(&driver_id_numbers, dev->driver_id_number);
- 	return ret;
- }
- 
-@@ -510,6 +541,7 @@ static int raw_ioctl_run(struct raw_dev
- 	}
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-+	dev_info(dev->dev, "Registering driver %d at %px", dev->driver_id_number, dev);
- 	ret = usb_gadget_register_driver(&dev->driver);
- 
- 	spin_lock_irqsave(&dev->lock, flags);
+> ---
+>
+>  drivers/video/fbdev/vesafb.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/vesafb.c b/drivers/video/fbdev/vesafb.c
+> index e25e8de5ff67..929d4775cb4b 100644
+> --- a/drivers/video/fbdev/vesafb.c
+> +++ b/drivers/video/fbdev/vesafb.c
+> @@ -490,11 +490,12 @@ static int vesafb_remove(struct platform_device *p=
+dev)
+>  {
+>  	struct fb_info *info =3D platform_get_drvdata(pdev);
+>
+> -	/* vesafb_destroy takes care of info cleanup */
+> -	unregister_framebuffer(info);
+>  	if (((struct vesafb_par *)(info->par))->region)
+>  		release_region(0x3c0, 32);
+>
+> +	/* vesafb_destroy takes care of info cleanup */
+> +	unregister_framebuffer(info);
+> +
+>  	return 0;
+>  }
+>
+

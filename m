@@ -2,101 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4926E536B8B
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 10:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA686536B8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 10:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239750AbiE1IBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 04:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S230367AbiE1IBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 04:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiE1IBU (ORCPT
+        with ESMTP id S229998AbiE1IBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 04:01:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93C11FB
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 01:01:17 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nurNe-0002bB-Am; Sat, 28 May 2022 10:01:02 +0200
-Message-ID: <9f278f81-1125-8c54-8f37-922e7b2129a9@pengutronix.de>
-Date:   Sat, 28 May 2022 10:00:48 +0200
+        Sat, 28 May 2022 04:01:03 -0400
+Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBD41142
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 01:00:58 -0700 (PDT)
+Received: from pop-os.home ([90.11.191.102])
+        by smtp.orange.fr with ESMTPA
+        id urNWn1xHmP8ApurNWnc56v; Sat, 28 May 2022 10:00:56 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 28 May 2022 10:00:56 +0200
+X-ME-IP: 90.11.191.102
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     tglx@linutronix.de, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        alsa-devel@alsa-project.org
+Subject: [PATCH] ASoC: ab8500: Remove some leftover from the "Replace GPLv2 boilerplate/reference with SPDX" rules
+Date:   Sat, 28 May 2022 10:00:53 +0200
+Message-Id: <28c0833d4a11f8f75f385e5aad93c23721b06c7e.1653724847.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: kismet: WARNING: unmet direct dependencies detected for
- CRYPTO_DEV_FSL_CAAM_BLOB_GEN when selected by TRUSTED_KEYS_CAAM
-To:     kernel test robot <lkp@intel.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Gstir <david@sigma-star.at>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>
-References: <202205281527.o6zXpTYo-lkp@intel.com>
-Content-Language: en-US
-In-Reply-To: <202205281527.o6zXpTYo-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The "Replace GPLv2 boilerplate/reference with SPDX" has left some empty
+"License terms" paragraphs.
+Remove them as well.
 
-On 28.05.22 09:42, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
-> commit: e9c5048c2de1913d0bcd589bc1487810c2e24bc1 KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
-> date:   5 days ago
-> config: (https://download.01.org/0day-ci/archive/20220528/202205281527.o6zXpTYo-lkp@intel.com/config)
-> reproduce:
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e9c5048c2de1913d0bcd589bc1487810c2e24bc1
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e9c5048c2de1913d0bcd589bc1487810c2e24bc1
->         # 1. reproduce by kismet
->            # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
->            kismet --linux-ksrc=linux --selectees CONFIG_CRYPTO_DEV_FSL_CAAM_BLOB_GEN --selectors CONFIG_TRUSTED_KEYS_CAAM -a=arm64
->         # 2. reproduce by make
->            # save the config file to linux source tree
->            cd linux
->            make ARCH=arm64 olddefconfig
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> 
-> kismet warnings: (new ones prefixed by >>)
->>> kismet: WARNING: unmet direct dependencies detected for CRYPTO_DEV_FSL_CAAM_BLOB_GEN when selected by TRUSTED_KEYS_CAAM
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ sound/soc/codecs/ab8500-codec.c | 2 --
+ sound/soc/codecs/ab8500-codec.h | 2 --
+ 2 files changed, 4 deletions(-)
 
-The referenced config file doesn't have anything CAAM related enabled.
-
-I looked again at the Kconfig and CRYPTO_DEV_FSL_CAAM_BLOB_GEN depends on
-CRYPTO_DEV_FSL_CAAM_JR. TRUSTED_KEYS_CAAM depends on
-CRYPTO_DEV_FSL_CAAM_JR >= TRUSTED_KEYS and only then selects
-CRYPTO_DEV_FSL_CAAM_BLOB_GEN, which still looks correct to me.
-
-Could one of the authors elaborate what issue is being reported here?
-
-Cheers,
-Ahmad
-
-> 
-
-
+diff --git a/sound/soc/codecs/ab8500-codec.c b/sound/soc/codecs/ab8500-codec.c
+index aefafb0b7b97..cbd4a92cb06c 100644
+--- a/sound/soc/codecs/ab8500-codec.c
++++ b/sound/soc/codecs/ab8500-codec.c
+@@ -12,8 +12,6 @@
+  *         Mikko Sarmanne <mikko.sarmanne@symbio.com>,
+  *         Jarmo K. Kuronen <jarmo.kuronen@symbio.com>,
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ #include <linux/kernel.h>
+diff --git a/sound/soc/codecs/ab8500-codec.h b/sound/soc/codecs/ab8500-codec.h
+index 0ac87d0446c2..2a6f6409f1f8 100644
+--- a/sound/soc/codecs/ab8500-codec.h
++++ b/sound/soc/codecs/ab8500-codec.h
+@@ -11,8 +11,6 @@
+  *         Mikko J. Lehto <mikko.lehto@symbio.com>,
+  *         Mikko Sarmanne <mikko.sarmanne@symbio.com>,
+  *         for ST-Ericsson.
+- *
+- * License terms:
+  */
+ 
+ #ifndef AB8500_CODEC_REGISTERS_H
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.34.1
+

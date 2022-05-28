@@ -2,73 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA8D536E67
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 22:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AC1536E77
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 23:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiE1UkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 16:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        id S229981AbiE1Uly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 16:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiE1UkU (ORCPT
+        with ESMTP id S229520AbiE1Ulw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 16:40:20 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA445AA5A
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 13:40:17 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id x13-20020a0566022c4d00b0065491fa5614so4428560iov.9
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 13:40:17 -0700 (PDT)
+        Sat, 28 May 2022 16:41:52 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE971CB32;
+        Sat, 28 May 2022 13:41:50 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id pq9-20020a17090b3d8900b001df622bf81dso7238378pjb.3;
+        Sat, 28 May 2022 13:41:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QB0d8qPqqCPIVqXchb2VdwSKncU7jZ9Koj6t/ZPBJPs=;
+        b=lbHHYp98pfQzfkZj3OkgqeOlQACSzbfJ2B36eVuJsL25lGtHjWcf/LCbx0ULa+RChO
+         AhFAGdfvRml+yHHrtBQi3mDNnwRw3m8qmcQJ+SwmgOxXTM5pmSakup+hxlHrbFApTS2C
+         Juv6CY/k7DKTl7cOWAiBlfBLfNR2zmzMSCipq+hvY8DBnQL9TbqnvQZukUWGcgAUXTZl
+         PAhMbwb4pkxS3pysoc4ZuqVRMJwY9E5IV5TXh6mQzvOodM0bKLi8ueN2MLbMnGa3q9Ig
+         ZFXHxX6qZFr60p1nGBqCvM1QJtIGiBmV9HFy3+YXpuENImS06bBWYyDAvMV5H3wiev5L
+         2XTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=bS6+g7fgBiFwD1ekT/9uQrMvAnNI5lC4ABT63K0ShAw=;
-        b=yjE+v17WlBKTD3NhuAXp6hv6qzi0e0jv8z5QjVyDwUcE6NlLo9CNaBjTgzpa36aW7S
-         MbJuDUkueOxPq+XrPoBG3QHU44gALvAXgadQSmkhn2HHWPh8v3d8y93Mj9Py5Xad//F1
-         7JYsBTfzqQ2SIF33uMY0KwBG9+710pQ0Kw51xcLTwq1YwiDTQB1uMAavw2MnR3f40d5u
-         AElEQv6LnYI4q8dqvGTdiC5iVt/IBJfv5yy6MMKh9WbvApe5/swfB65L6qENS1Ljh0DZ
-         iCCXNLlekJlsKHacuOH1hOvBEOFBC5WOEPmN2JHKpRIfiD+qyFjp0L7WTBtiNM239QY7
-         djWg==
-X-Gm-Message-State: AOAM530btldXNIeHX3VgnXz4A1P2amMfWFKBB9wmUYuKBmDQ/GMlZ3E7
-        YiKmKwCyxo9C4K09UYk366xefyjh9NurgRpUOIEPJ5PVi6bd
-X-Google-Smtp-Source: ABdhPJx+nYBaU8bsqJqVCu9UPQAsPEejq1TMd4ejR6FWyB+2XbrCSX8ah/4visCPxVeFhXXQ0rkVkpoKInc5YTZIuj8KYuf/VAmw
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QB0d8qPqqCPIVqXchb2VdwSKncU7jZ9Koj6t/ZPBJPs=;
+        b=gFswJSEIZjyaLFPWOPoApSfRGRInVQ1/bcWIOkB3IGZBfjkqOdd3MIcE0S1vHzFleC
+         DBc3I1kPLxzTqQgI4QpnwPc9IBEPqadaZ/4yqJHFWeumm4SJTMWtAwzHA2B3wI1WfJN5
+         ttDUdHoncf1449F2zVUE/5nbBoSOhvRe8PdCqj+dPHAm44kIwvnF0WY/4ydQkiG4GVDX
+         7PidlXKZfq4hRZ1nmsEr+zYvihn0XPHjOSBzfwjoLGxsMFPPqIaE6d08LfKdR+s/GSnQ
+         /phXe2k0FsrwBxDL9VyDDXwSO5yRP3BdwWNKT1wttVJKJ8SXzNDyeu9D2RpIkg+OnODw
+         tDqQ==
+X-Gm-Message-State: AOAM533Azc1LUnICmmMicr0zyrpplzcU0VHv049PEOY0w0f89dcK6N5M
+        yK6b9WQn7dl3xIeERv46tKONBTrKDHM=
+X-Google-Smtp-Source: ABdhPJxxfbYj6xnqc6bpdSYCsjrm7FP6qVTfYLOog0RVHQcTCFl2VbTOUzTRLLO1wJjZVkoXWb9iUg==
+X-Received: by 2002:a17:90b:4ace:b0:1df:cb33:5e7e with SMTP id mh14-20020a17090b4ace00b001dfcb335e7emr14798336pjb.5.1653770509468;
+        Sat, 28 May 2022 13:41:49 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:781a:4ab0:a93b:176b])
+        by smtp.gmail.com with ESMTPSA id n18-20020aa79852000000b0050dc7628195sm5852011pfq.111.2022.05.28.13.41.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 May 2022 13:41:48 -0700 (PDT)
+Date:   Sat, 28 May 2022 13:41:45 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andreas Kemnade <andreas@kemnade.info>
+Subject: Re: [PATCH] dt-bindings: input: use generic node names
+Message-ID: <YpKJCQ0hCIw9hb0m@google.com>
+References: <20220524093136.7980-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2513:b0:32e:5298:8264 with SMTP id
- v19-20020a056638251300b0032e52988264mr25780252jat.178.1653770417161; Sat, 28
- May 2022 13:40:17 -0700 (PDT)
-Date:   Sat, 28 May 2022 13:40:17 -0700
-In-Reply-To: <YpKEoBORZLtXG/y9@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000414e8805e0186e9d@google.com>
-Subject: Re: [syzbot] WARNING in driver_unregister
-From:   syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
-To:     andreyknvl@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524093136.7980-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, May 24, 2022 at 11:31:36AM +0200, Krzysztof Kozlowski wrote:
+> Devicetree specification expects nodes to have generic names, if
+> possible, so replace custom ones with something generic.  For gpio-keys,
+> the more popular format is "key-xxx" instead of "xxx-key", so choose the
+> first one.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Applied, thank you.
 
-Reported-and-tested-by: syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         97fa5887 USB: new quirk for Dell Gen 2 devices
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=02b16343704b3af1667e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=103c91e3f00000
-
-Note: testing is done by a robot and is best-effort only.
+-- 
+Dmitry

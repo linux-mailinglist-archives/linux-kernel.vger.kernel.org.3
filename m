@@ -2,92 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7027E536C21
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D28536C41
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbiE1JrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 05:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S1353507AbiE1KJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 06:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241279AbiE1Jqf (ORCPT
+        with ESMTP id S1351073AbiE1KJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 05:46:35 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FE465D3;
-        Sat, 28 May 2022 02:46:34 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L9Gxh3NvrzjX0P;
-        Sat, 28 May 2022 17:45:28 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 17:46:32 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 28 May
- 2022 17:46:31 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>, <tj@kernel.org>
-CC:     <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v3 6/6] block, bfq: remove dead code for updating 'rq_in_driver'
-Date:   Sat, 28 May 2022 17:59:58 +0800
-Message-ID: <20220528095958.270455-7-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220528095958.270455-1-yukuai3@huawei.com>
-References: <20220528095958.270455-1-yukuai3@huawei.com>
+        Sat, 28 May 2022 06:09:26 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3E1FF3;
+        Sat, 28 May 2022 03:09:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653732565; x=1685268565;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ssEQf9Dr8zA9ORwC07rfd2cEchsyeE8yAERhKLbsJHU=;
+  b=jmb7ztuZ4MWj6wo/xYTt72IqiCOETRrGWrrTGfrz644LwF9NnbWLhOhj
+   Pb9vopepUUpP31DpO2HtG3UK7pG/o4qkAAO/ohetdM84TA6uiw5RZc3ly
+   EpR+pKL3QAO9ViELEH+3F4FJA2lKJjD7iPdZtrPtewSY0PeOkegsYLHBD
+   +Fe9Z/RqsCyokFzWrXJAkyTwkiGFZof47TZEKEds2TyGf4KdwJ+mPEplr
+   1WbQbL9yi0u7zs+8+kfUmdLoCXTKpIVxryERIkIGKiNvI63o97wmzwn/8
+   Kd1GN5Gh6PjtyKa1AwoRpINfs8YAk2KZV5ThDr3XVzWf7F29O/a0UJnin
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="256728597"
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="256728597"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 03:09:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
+   d="scan'208";a="719230050"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by fmsmga001.fm.intel.com with ESMTP; 28 May 2022 03:09:23 -0700
+Date:   Sat, 28 May 2022 18:01:40 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     tien.sung.ang@intel.com
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: altera-cvp: Truncated bitstream error support
+Message-ID: <20220528100140.GC175008@yilunxu-OptiPlex-7050>
+References: <3911c8c7-da6d-e6f2-c747-3b601d9cdacc@redhat.com>
+ <20220519043412.2805706-1-tien.sung.ang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519043412.2805706-1-tien.sung.ang@intel.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Such code are not even compiled since they are inside marco "#if 0".
+On Thu, May 19, 2022 at 12:34:12PM +0800, tien.sung.ang@intel.com wrote:
+> The send_buf is always used throughout the life-span of the CvP driver.
+> Hence, we thought it would be wise to just pre-allocate it one time
+> at the start of the probe/init.
+> It is also fine if we do it in the altera_cvp_write. The only issue we
+> see in this is that, a minor hit on the performance as you need to 
+> then, allocate the buffer on every new CvP FPGA configuration write.
+> 
+> As for STEP 16, the previous implementation checks the Error latch bit
+> which stores the previous transaction's result. If an error occurs
+> prior to this, the driver would throw an error which is not right.
+> The correct step is to just check for the current CvP error status 
+> from the register.
+> Hope that is fine with you. Thanks
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
----
- block/bfq-iosched.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+Please comment inline in the mail, like others do.
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 8c7020f8cdf2..79e6a60d61d8 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2321,22 +2321,6 @@ static sector_t get_sdist(sector_t last_pos, struct request *rq)
- 	return 0;
- }
- 
--#if 0 /* Still not clear if we can do without next two functions */
--static void bfq_activate_request(struct request_queue *q, struct request *rq)
--{
--	struct bfq_data *bfqd = q->elevator->elevator_data;
--
--	bfqd->rq_in_driver++;
--}
--
--static void bfq_deactivate_request(struct request_queue *q, struct request *rq)
--{
--	struct bfq_data *bfqd = q->elevator->elevator_data;
--
--	bfqd->rq_in_driver--;
--}
--#endif
--
- static void bfq_remove_request(struct request_queue *q,
- 			       struct request *rq)
- {
--- 
-2.31.1
-
+Thanks,
+Yilun

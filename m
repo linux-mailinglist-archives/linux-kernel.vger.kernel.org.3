@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E7C536BC4
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B510536BF3
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbiE1JKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 05:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S236838AbiE1Jch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 05:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiE1JKQ (ORCPT
+        with ESMTP id S229525AbiE1Jcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 05:10:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC8AF31;
-        Sat, 28 May 2022 02:10:14 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L9G7946B9zgY9h;
-        Sat, 28 May 2022 17:08:37 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 17:10:12 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 17:10:11 +0800
-From:   Ke Liu <liuke94@huawei.com>
-To:     <johannes@sipsolutions.net>
-CC:     <kvalo@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Ke Liu <liuke94@huawei.com>
-Subject: [PATCH v2] mac80211: Directly use ida_alloc()/free()
-Date:   Sat, 28 May 2022 09:31:40 +0000
-Message-ID: <20220528093140.1573816-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 28 May 2022 05:32:36 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C024AEAD;
+        Sat, 28 May 2022 02:32:33 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id g18so63486ljd.0;
+        Sat, 28 May 2022 02:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jqsnSDEFUx4RGESxiA8fNaws5K3TFUXqX5aOXhweVqY=;
+        b=OXJzUQkhHmNbkMrpV5tlj6Kza7rPOQMVCho+Z1VImTEaS5x5/txUufQg17rsyDQOD/
+         n5ZYzcy5DX000GLoVm1QpP4bapXsxgNxFBS/f76in84hozldype6wq95QjmbYUefB1BH
+         0yPD77OXeQAt1T55Xs7Upmocu/vgJW4EZheEgn7b7d/FN3R+Hp4mq4AMajztmPK7hdYe
+         F6Q17yqz1N5QEqYsi4M/hrwRfLUrSADKR6UT6YOrTFBmcb392XUkS8AYaFrQVzSA0k8X
+         9BXAUgkDSepAr4HUq29p+BhFhq4OjNJVI12cT0rzcSWSOLTv3KdTFhkv+MJAkuz30IWj
+         1cBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jqsnSDEFUx4RGESxiA8fNaws5K3TFUXqX5aOXhweVqY=;
+        b=c20Cc5EHimOCmEZ03CsmcHrrplbDAvWumamhBYlAzjVcaQjX/Foj8riq6opzlwgZEK
+         xvU54HIkI3apyEaMjDPnUrj7L8FcLerA6tgB6DDsBjqEzNfXFEGkbYHy9yhTyaMJFyzG
+         xJ1hFX93QYhnVlYvyF0XQZR4ivjTbP1uBqO2yzxnyAvHdGOvKHC8IKiA9YElSAYsWf9v
+         DKO2uGPar5cDEGMj9+JPQvxUKmocnj19CWHifA7zs7bUGIc3/uw3m5lxusafw2SKOekM
+         3B01JwNzq6xsjrW+UzXQGrr5MmUbWj6fZ5lIco4qxvf5hoCAolSy8GltdG79fbGGQ6GY
+         R0vQ==
+X-Gm-Message-State: AOAM532z/THXoiALcsWLUdL+IhVQIMrZIhW/K/X/Se79mPb0FmKK3UYK
+        GdO1cRspGCw3M5wjq+Vwhjw=
+X-Google-Smtp-Source: ABdhPJxAcpY15g7jjyskmgu4GUMwaqF1m0VjEIHzsCeONFiO4rt++dRza6i54U8k58ldRmAiN7QnWQ==
+X-Received: by 2002:a2e:9b4c:0:b0:253:e2e8:2c10 with SMTP id o12-20020a2e9b4c000000b00253e2e82c10mr20988561ljj.228.1653730352144;
+        Sat, 28 May 2022 02:32:32 -0700 (PDT)
+Received: from [10.0.0.127] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
+        by smtp.gmail.com with ESMTPSA id s3-20020a197703000000b004789bfa539fsm1252858lfc.90.2022.05.28.02.32.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 May 2022 02:32:31 -0700 (PDT)
+Message-ID: <6e750770-fcda-d157-21d1-872a611c3bf2@gmail.com>
+Date:   Sat, 28 May 2022 12:33:44 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] dmaengine: ti: Fix a potential under memory allocation
+ issue in edma_setup_from_hw()
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        dan.carpenter@oracle.com, Vinod Koul <vkoul@kernel.org>,
+        Joel Fernandes <joelf@ti.com>, Sekhar Nori <nsekhar@ti.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        dmaengine@vger.kernel.org
+References: <8c95c485be294e64457606089a2a56e68e2ebd1a.1653153959.git.christophe.jaillet@wanadoo.fr>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <8c95c485be294e64457606089a2a56e68e2ebd1a.1653153959.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove().
 
-Signed-off-by: Ke Liu <liuke94@huawei.com>
----
-v2 deal with alignment to fix
----
- drivers/net/wireless/mac80211_hwsim.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
-index 2f746eb64507..bd408d260e9c 100644
---- a/drivers/net/wireless/mac80211_hwsim.c
-+++ b/drivers/net/wireless/mac80211_hwsim.c
-@@ -290,8 +290,7 @@ static inline int hwsim_net_set_netgroup(struct net *net)
- {
- 	struct hwsim_net *hwsim_net = net_generic(net, hwsim_net_id);
- 
--	hwsim_net->netgroup = ida_simple_get(&hwsim_netgroup_ida,
--					     0, 0, GFP_KERNEL);
-+	hwsim_net->netgroup = ida_alloc(&hwsim_netgroup_ida, GFP_KERNEL);
- 	return hwsim_net->netgroup >= 0 ? 0 : -ENOMEM;
- }
- 
-@@ -4733,7 +4732,7 @@ static void __net_exit hwsim_exit_net(struct net *net)
- 					 NULL);
- 	}
- 
--	ida_simple_remove(&hwsim_netgroup_ida, hwsim_net_get_netgroup(net));
-+	ida_free(&hwsim_netgroup_ida, hwsim_net_get_netgroup(net));
- }
- 
- static struct pernet_operations hwsim_net_ops = {
+On 21/05/2022 20:26, Christophe JAILLET wrote:
+> If the 'queue_priority_mapping' is not provided, we need to allocate the
+> correct amount of memory. Each entry takes 2 s8, so actually less memory
+> than needed is allocated.
+> 
+> Update the size of each entry when the memory is devm_kcalloc'ed.
+> 
+> Fixes: 6d10c3950bf4 ("ARM: edma: Get IP configuration from HW (number of channels, tc, etc)")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Note that the devm_kcalloc() in edma_xbar_event_map() looks also spurious.
+> However, this looks fine to me because of the 'nelm >>= 1;' before the
+> 'for' loop.
+
+This has been deprecated ever since we have moved to dma router to
+handle the xbar for various TI platforms, but by the looks it kida looks
+bogus in a same way.
+
+> ---
+>  drivers/dma/ti/edma.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+> index 3ea8ef7f57df..f313e2cf542c 100644
+> --- a/drivers/dma/ti/edma.c
+> +++ b/drivers/dma/ti/edma.c
+> @@ -2121,7 +2121,7 @@ static int edma_setup_from_hw(struct device *dev, struct edma_soc_info *pdata,
+>  	 * priority. So Q0 is the highest priority queue and the last queue has
+>  	 * the lowest priority.
+>  	 */
+> -	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8),
+> +	queue_priority_map = devm_kcalloc(dev, ecc->num_tc + 1, sizeof(s8) * 2,
+>  					  GFP_KERNEL);
+>  	if (!queue_priority_map)
+>  		return -ENOMEM;
+
 -- 
-2.25.1
-
+Péter

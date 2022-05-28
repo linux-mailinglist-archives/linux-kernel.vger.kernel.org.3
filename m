@@ -2,177 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649985369E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 03:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5255369EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 03:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351704AbiE1Bml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 21:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
+        id S1351815AbiE1Bxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 21:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiE1Bmk (ORCPT
+        with ESMTP id S245216AbiE1Bxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 21:42:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CD913C1DE;
-        Fri, 27 May 2022 18:42:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 172B2B82649;
-        Sat, 28 May 2022 01:42:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD6BC34113;
-        Sat, 28 May 2022 01:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653702156;
-        bh=j+FxAMoUxjrnMrkR7+D1UfkLzawirXG78XCfbEzPawQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R0J7/2/Z1LOYV6ZvC1PmKypkWwchOrYxwuMKAaqcXJCLnOBI88CcuguJD/eVPIiD2
-         IsG0nubaNWnNBM8znoo03xQnRefWQPH9rizLT2ZwJdACppyXUh7yWz/5eLaZxwIWl2
-         h+v2nxcdpsZoXSTlMZ//vPxAFjloY8TS3atKPXPvMRZfNrtEbZPq0O5NN9lqDtR/mk
-         dvzcW2qG5BE8/0LnkGXadkRLYjyZ4FIoeMgRP9u0Uz+wf3xJzt+2zQGV5JvClIkEYu
-         1uvQaMaphfvDY5ijvLX149ZhOgdk68QXAS3j4+vz7lWkVsRGywmr7bQgwTh0QPBn3E
-         x/DziNugDCEPQ==
-Date:   Fri, 27 May 2022 18:42:36 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [PATCH] f2fs: add sysfs entry to avoid FUA
-Message-ID: <YpF+DIuXQFhzflag@magnolia>
-References: <20220527205955.3251982-1-jaegeuk@kernel.org>
- <YpFDw3mQjN1LBd2j@gmail.com>
- <YpF1gPrQY3UFsgwC@google.com>
+        Fri, 27 May 2022 21:53:32 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05A014014
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 18:53:30 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id t144so7669792oie.7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 18:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FtI25lp7z4LZIoDWgGyoVrLCNBjX3mKlwnGfkQ7hiXg=;
+        b=S0abEByizXkvjju3NZf4tXR3OvTpg5QydyKjKnWgPRTcG91ZB0wyHLea9pkTO4K3i5
+         FGp1BNNsDNnJ8PmSUEdkf+hWax43dxqPPXWa0fPDwxxOOz0p495QqywLiGnjS5ep2hga
+         Z7otyinDIEHZYYA/E8L2pe2PiMQgYWQoDIYEc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=FtI25lp7z4LZIoDWgGyoVrLCNBjX3mKlwnGfkQ7hiXg=;
+        b=CaJV+hsG3V094xBHGyPG/VYhsOWoeiONwKcQ0LTrVVwyH8OWOZQjJFyteTWB/hXljZ
+         gz1zG5NbgVNNpesWn4dGVrevhZw9kEDtEopXhlZ+oUzCzPhEOwTt9GFVamnnwOvbvw21
+         6ZSvmXGB8nwAjEQrqtQLHwe3C6hPyZq91XNFTT6lWDRF202HNttQ7BKC1Hc++bMx+mql
+         J5wCW5ckwSknSodv5FtFf25wW9/LurTnhnjZIW6tu5DaWbSUPFtVdQMpw6Pxv7F7C0Zl
+         sOtqcfygikSntqOu2y5ESctMNj/r+ZdZvCDsjEcu9gY/jkl9/xGTY4m7IKHB5QZIRM4z
+         /F4g==
+X-Gm-Message-State: AOAM5303nTi43Vfkr1Z+IFpa5s36a9NY6KnLsl6nbFMx2zk1NCNFF0ZV
+        2J1SJCWU2C6DuJLHiaKJdigx2Q==
+X-Google-Smtp-Source: ABdhPJxHqRn/G7EkUc5FjYjFt7CzQ46NrTCodQCc1OsQ/iro3GEHyOFs/ZTilzitj67zo8Xre1gERg==
+X-Received: by 2002:a05:6808:f8c:b0:32a:e67f:d20e with SMTP id o12-20020a0568080f8c00b0032ae67fd20emr5049500oiw.88.1653702810215;
+        Fri, 27 May 2022 18:53:30 -0700 (PDT)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id lg11-20020a0568700b8b00b000f193e656c5sm1241788oab.15.2022.05.27.18.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 18:53:29 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Fri, 27 May 2022 20:53:27 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 00/47] 5.18.1-rc1 review
+Message-ID: <YpGAl1lh9vQSxsFV@fedora64.linuxtx.org>
+References: <20220527084801.223648383@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YpF1gPrQY3UFsgwC@google.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220527084801.223648383@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 06:06:08PM -0700, Jaegeuk Kim wrote:
-> On 05/27, Eric Biggers wrote:
-> > [+Cc linux-block for FUA, and linux-xfs for iomap]
-> > 
-> > On Fri, May 27, 2022 at 01:59:55PM -0700, Jaegeuk Kim wrote:
-> > > Some UFS storage gives slower performance on FUA than write+cache_flush.
-> > > Let's give a way to manage it.
-> > > 
-> > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > 
-> > Should the driver even be saying that it has FUA support in this case?  If the
-> > driver didn't claim FUA support, that would also solve this problem.
+On Fri, May 27, 2022 at 10:49:40AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.1 release.
+> There are 47 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I think there's still some benefit to use FUA such as small chunk writes
-> for checkpoint.
+> Responses should be made by Sun, 29 May 2022 08:46:45 +0000.
+> Anything received after that time might be too late.
 > 
-> > 
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-fs-f2fs | 7 +++++++
-> > >  fs/f2fs/data.c                          | 2 ++
-> > >  fs/f2fs/f2fs.h                          | 1 +
-> > >  fs/f2fs/sysfs.c                         | 2 ++
-> > >  4 files changed, 12 insertions(+)
-> > > 
-> > > diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-> > > index 9b583dd0298b..cd96b09d7182 100644
-> > > --- a/Documentation/ABI/testing/sysfs-fs-f2fs
-> > > +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-> > > @@ -434,6 +434,7 @@ Date:		April 2020
-> > >  Contact:	"Daeho Jeong" <daehojeong@google.com>
-> > >  Description:	Give a way to change iostat_period time. 3secs by default.
-> > >  		The new iostat trace gives stats gap given the period.
-> > > +
-> > >  What:		/sys/fs/f2fs/<disk>/max_io_bytes
-> > >  Date:		December 2020
-> > >  Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
-> > > @@ -442,6 +443,12 @@ Description:	This gives a control to limit the bio size in f2fs.
-> > >  		whereas, if it has a certain bytes value, f2fs won't submit a
-> > >  		bio larger than that size.
-> > >  
-> > > +What:		/sys/fs/f2fs/<disk>/no_fua_dio
-> > > +Date:		May 2022
-> > > +Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
-> > > +Description:	This gives a signal to iomap, which should not use FUA for
-> > > +		direct IOs. Default: 0.
-> > 
-> > iomap is an implementation detail, so it shouldn't be mentioned in UAPI
-> > documentation.  UAPI documentation should describe user-visible behavior only.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
 > 
-> Ok.
+> thanks,
 > 
-> > 
-> > > +
-> > >  What:		/sys/fs/f2fs/<disk>/stat/sb_status
-> > >  Date:		December 2020
-> > >  Contact:	"Chao Yu" <yuchao0@huawei.com>
-> > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> > > index f5f2b7233982..23486486eab2 100644
-> > > --- a/fs/f2fs/data.c
-> > > +++ b/fs/f2fs/data.c
-> > > @@ -4153,6 +4153,8 @@ static int f2fs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
-> > >  	if ((inode->i_state & I_DIRTY_DATASYNC) ||
-> > >  	    offset + length > i_size_read(inode))
-> > >  		iomap->flags |= IOMAP_F_DIRTY;
-> > > +	if (F2FS_I_SB(inode)->no_fua_dio)
-> > > +		iomap->flags |= IOMAP_F_DIRTY;
-> > 
-> > This is overloading the IOMAP_F_DIRTY flag to mean something other than dirty.
-> > Perhaps this flag needs to be renamed, or a new flag should be added?
-> 
-> I'm not sure it's acceptable to add another flag for f2fs only.
+> greg k-h
 
-I think Al and willy have been throwing around patches to tell
-iomap_dio_rw or someone that the caller will handle cache flushes and
-that it shouldn't initiate them on its own; would that help here?
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
---D
-
-> > 
-> > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > > index e10838879538..c2400ea0080b 100644
-> > > --- a/fs/f2fs/f2fs.h
-> > > +++ b/fs/f2fs/f2fs.h
-> > > @@ -1671,6 +1671,7 @@ struct f2fs_sb_info {
-> > >  	int dir_level;				/* directory level */
-> > >  	int readdir_ra;				/* readahead inode in readdir */
-> > >  	u64 max_io_bytes;			/* max io bytes to merge IOs */
-> > > +	int no_fua_dio;				/* avoid FUA in DIO */
-> > 
-> > Make this a bool?
-> 
-> Done.
-> 
-> > 
-> > > diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> > > index 4c50aedd5144..24d628ca92cc 100644
-> > > --- a/fs/f2fs/sysfs.c
-> > > +++ b/fs/f2fs/sysfs.c
-> > > @@ -771,6 +771,7 @@ F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, iostat_period_ms, iostat_period_ms);
-> > >  #endif
-> > >  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, readdir_ra, readdir_ra);
-> > >  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_io_bytes, max_io_bytes);
-> > > +F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, no_fua_dio, no_fua_dio);
-> > >  F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, gc_pin_file_thresh, gc_pin_file_threshold);
-> > >  F2FS_RW_ATTR(F2FS_SBI, f2fs_super_block, extension_list, extension_list);
-> > >  #ifdef CONFIG_F2FS_FAULT_INJECTION
-> > > @@ -890,6 +891,7 @@ static struct attribute *f2fs_attrs[] = {
-> > >  #endif
-> > >  	ATTR_LIST(readdir_ra),
-> > >  	ATTR_LIST(max_io_bytes),
-> > > +	ATTR_LIST(no_fua_dio),
-> > 
-> > Where is it validated that only valid values (0 or 1) can be written to this
-> > file?
-> 
-> Added.
-> 
-> > 
-> > - Eric
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

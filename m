@@ -2,120 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF24536AB5
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 06:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98ADB536AB7
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 06:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355525AbiE1E1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 00:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        id S1355605AbiE1E3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 00:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349774AbiE1E1F (ORCPT
+        with ESMTP id S238534AbiE1E3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 00:27:05 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CA05BE7B;
-        Fri, 27 May 2022 21:26:55 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id jx22so11876239ejb.12;
-        Fri, 27 May 2022 21:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AH8OnCXRC51Mg4MBO4ivuHAwds1YuEo+ZbFbIglk25k=;
-        b=c0VKYFgSHpb0/8AKdLqgatVQSCC+/mDi9S4RMNPyPuqG7IF0j0cFnom/jsmvY2lpWg
-         T2DucG2NXVXOD2Klh8NHl7onmOERFTK3TtK9sL5Us+4Ug54ojF1gyhh130c6DHjstucT
-         NLUT3P8zzdXMrVTg07MSxJGQ5Z0SNtwk+R7RJUDdhM9iaR27ySkGT54Q7Bw6lwEMr9me
-         SoWUnGE7hA0LTMx8owdpPAO7r/5hUbGOqb9qo7D4enZezrKO97kuWutagxdlyr7bHVC6
-         jcbwE6d4ffpAoa3BA03Ld5Wvii1ver+hDfGhxZhwyT/xmDg019/TGHWP/NoaFbSmj3Ln
-         +oiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AH8OnCXRC51Mg4MBO4ivuHAwds1YuEo+ZbFbIglk25k=;
-        b=Coe1xVj7wTZEYC2WfMTuRFyj4MAdmwyrbLjn8gkzPVOytdWUDKn8y28+Rn0eGWnwrX
-         y4dZBrGhMJmMCPnlpLCvF/Bd9tN+3/Ycgqq8YWCoUCetoJk27Y1be09uUGR+mYCJsO1O
-         dfcayziVqmMK+QcBCsKwe7mUWZ6+HDuAojlGFZbE2oh/SJtR4GzznRg2sMI+8DOCh8PG
-         UT3V8rfIvgClXjNJ4Ln7XcYyPdmOB8+/ILXCb18F06Lnj8qlE/nafAezpzQp1fXV7Q9i
-         mrkpTpX/IpyX3uutRLNZUJV+fOK6BQypSS2lDVgkdm/4atMK0KnuD4Cmhj+/iITQS9L3
-         3zBA==
-X-Gm-Message-State: AOAM531mdDdnMcI2Bg3jrx9Fo02QbLNBOksBW/tuFOZQ6fDHqmovHzS9
-        KcbNZyotvVTkd4tcGR1Di07f0AQOv2sb3SmUL0Y=
-X-Google-Smtp-Source: ABdhPJx+Bye2Fi8Q2Yp/a2pdYrI2N1T2SeWCiZr66i3gzr7t/ESq3IlDhQNK/eh3WnVIs1U2wmBM8BN1dVFByGtHOk0=
-X-Received: by 2002:a17:907:3f17:b0:6fe:bc5d:8d8e with SMTP id
- hq23-20020a1709073f1700b006febc5d8d8emr30880227ejc.439.1653712014572; Fri, 27
- May 2022 21:26:54 -0700 (PDT)
+        Sat, 28 May 2022 00:29:42 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A675BE56
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 21:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653712181; x=1685248181;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LBj68ZipfQDG93/AYhFLpML4p/fOJtG/9iR7B+y6gEg=;
+  b=ISNXLcLyt2uBepGO8F/e/gVyJU5Y23EDgSM3ANJaocMGvBLY7TUG1Q96
+   dMgScj7iloU1Y6m8zg8fF8+X11P0RgbODmbxt2cK8pPAbP08l9Ih2Zo11
+   9SLfoDz2IlxY+TMXsvB2xO0tvQSf3RN21wP34rndfyALOOYUGIIS3Aqh2
+   P6hixNrYevbwHT0wFv79p0vMgSvgtF8hFc/Ojb6+1R8I7uke/Fieosnmc
+   AwtJOKx8ZCINpqbrJQAb3q98jJx8VP/rTfvZzHGhnc7G1vBpcDWcrQxMo
+   OBNCYkGY9d6HquKvNXkR9UIHN+Xo95Z1SIbl1iAH1KGuCDkZTq/e+oHSP
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="254501326"
+X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
+   d="scan'208";a="254501326"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 21:29:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,257,1647327600"; 
+   d="scan'208";a="747360059"
+Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 May 2022 21:29:39 -0700
+Received: from kbuild by db63a1be7222 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nuo54-0005RZ-PR;
+        Sat, 28 May 2022 04:29:38 +0000
+Date:   Sat, 28 May 2022 12:29:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/video/fbdev/core/fbcon.c:106:16: sparse: sparse: symbol
+ 'fbcon_registered_fb' was not declared. Should it be static?
+Message-ID: <202205281235.rdumodzg-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220527071522.116422-1-imagedong@tencent.com>
- <20220527071522.116422-3-imagedong@tencent.com> <20220527181426.126367e5@kernel.org>
-In-Reply-To: <20220527181426.126367e5@kernel.org>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Sat, 28 May 2022 12:26:43 +0800
-Message-ID: <CADxym3YJKOmxmZPvqAJGS_WHUv5i+Cb0MSwu583wK+G6BO0MOw@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/3] net: skb: use auto-generation to convert skb
- drop reason to string
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        David Ahern <dsahern@kernel.org>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 9:14 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri, 27 May 2022 15:15:21 +0800 menglong8.dong@gmail.com wrote:
-> > +clean-files := dropreason_str.h
-> > +
-> > +quiet_cmd_dropreason_str = GEN     $@
-> > +cmd_dropreason_str = echo '\n\#define __DEFINE_SKB_DROP_REASON(FN) \' > $@;\
->
-> echo -n
->
-> > +     sed -e '/enum skb_drop_reason {/,/}/!d' $< | \
-> > +     awk -F ',' '/SKB_DROP_REASON_/{printf " FN(%s) \\\n", substr($$1, 18)}' >> $@;\
-> > +     echo '' >> $@
->
-> Trying to figure out when we're in the enum could be more robust
-> in case more stuff gets added to the header:
->
->  | awk -F ',' '/^enum skb_drop/ { dr=1; }
->                /\}\;/           { dr=0; }
->                /^\tSKB_DROP/    { if (dr) {print $1;}}'
->
-> > +$(obj)/dropreason_str.h: $(srctree)/include/linux/dropreason.h
-> > +     $(call cmd,dropreason_str)
-> > +
-> > +$(obj)/skbuff.o: $(obj)/dropreason_str.h
->
-> Since we just generate the array directly now should we generate
-> a source file with it directly instead of generating a header with
-> the huge define?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a9f94826e4bb6402e67f3eb849dee0811f1de6da
+commit: efc3acbc105af79bce2ccf97a6159255b7cf6b38 fbcon: Maintain a private array of fb_info
+date:   7 weeks ago
+config: ia64-randconfig-s031-20220524 (https://download.01.org/0day-ci/archive/20220528/202205281235.rdumodzg-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.3.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-14-g5a0004b5-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=efc3acbc105af79bce2ccf97a6159255b7cf6b38
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout efc3acbc105af79bce2ccf97a6159255b7cf6b38
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/video/fbdev/core/
 
-This seems to be a good idea, which is able to decouple the
-definition of the array with skbuff.c. I'll try this.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks!
-Menglong Dong
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/video/fbdev/core/fbcon.c:106:16: sparse: sparse: symbol 'fbcon_registered_fb' was not declared. Should it be static?
+>> drivers/video/fbdev/core/fbcon.c:107:5: sparse: sparse: symbol 'fbcon_num_registered_fb' was not declared. Should it be static?
+
+vim +/fbcon_registered_fb +106 drivers/video/fbdev/core/fbcon.c
+
+   105	
+ > 106	struct fb_info *fbcon_registered_fb[FB_MAX];
+ > 107	int fbcon_num_registered_fb;
+   108	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

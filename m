@@ -2,118 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464C3536C67
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 12:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A7C536C71
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 13:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353774AbiE1KrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 06:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S235738AbiE1LBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 07:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350071AbiE1Kq7 (ORCPT
+        with ESMTP id S233926AbiE1LBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 06:46:59 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BAB13D66;
-        Sat, 28 May 2022 03:46:57 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L9JHM3v4MzjWyv;
-        Sat, 28 May 2022 18:45:51 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
- (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 28 May
- 2022 18:46:55 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <lczerner@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yebin10@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>
-Subject: [PATCH v3 3/3] ext4: support flex_bg in ext4_mb_normalize_request
-Date:   Sat, 28 May 2022 19:00:17 +0800
-Message-ID: <20220528110017.354175-4-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220528110017.354175-1-libaokun1@huawei.com>
-References: <20220528110017.354175-1-libaokun1@huawei.com>
+        Sat, 28 May 2022 07:01:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCB21EADA
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 04:01:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED0BB60DDE
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 11:01:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D38C34100
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 11:01:36 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hGmhkDsz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653735695;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ebxb2yEET8cq5O+L+DGLBATjTjCW37wGjozGgZgVV2s=;
+        b=hGmhkDszfsTx7fDSH9zSVvZMr7Qelpz+SAiCTluQCf/HK9raU1ZqN7CaO+hgZbe3iFqHyH
+        C9z0nxCjqyrAsIYU7oi+OzBpp/YivLi/Ueq7RRQHdwB0oPt6SOFYwsVu/VE48zbrguXly3
+        yh2fQuromdWGzaYaalNgTmnK54OOyz8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5fb93a62 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Sat, 28 May 2022 11:01:35 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id v26so11823992ybd.2
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 04:01:34 -0700 (PDT)
+X-Gm-Message-State: AOAM532wZZBMiJPT8fqquCu1WRL/X21thBtlJtMJeMba1brz33MewOYW
+        MLiNyOW78OJP3x/yLkn5okXgsNeu8i5OMsCxf+4=
+X-Google-Smtp-Source: ABdhPJzzGNIu2iCowK1yezOBdMlT4bN30byRAHpUpg3bigIt/zt62Jilq3fIdxa6dkm7WUvoVZvyC4lD1V8IjqH8Od0=
+X-Received: by 2002:a5b:dcf:0:b0:64a:6923:bbba with SMTP id
+ t15-20020a5b0dcf000000b0064a6923bbbamr45441492ybr.398.1653735694311; Sat, 28
+ May 2022 04:01:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YpH84wrg4ZxIkkie@debian> <CAHmME9qHRd-t8mupAG1w0jV-uE5UNrMeRO+8-0b_4N1cCPyM+w@mail.gmail.com>
+In-Reply-To: <CAHmME9qHRd-t8mupAG1w0jV-uE5UNrMeRO+8-0b_4N1cCPyM+w@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sat, 28 May 2022 13:01:23 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pS1ODLqJ8rw0hzH5+ZrUW8pwC2nkeD4mLVG4swp8BnQQ@mail.gmail.com>
+Message-ID: <CAHmME9pS1ODLqJ8rw0hzH5+ZrUW8pwC2nkeD4mLVG4swp8BnQQ@mail.gmail.com>
+Subject: Re: mainline build failure due to 8bdc2a190105 ("crypto: poly1305 -
+ cleanup stray CRYPTO_LIB_POLY1305_RSIZE")
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ext4_mb_normalize_request, the size of the allocation request is
-limited to no more than EXT4_BLOCKS_PER_GROUP. Ritesh mentions that this
-does not take into account the case of flex_bg groups. So we should add
-support for flex_bg to make the physical blocks of large files contiguous.
+Hi again,
 
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- fs/ext4/mballoc.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+Actually, I think 8bdc2a190105 should just be reverted wholesale.
+There are too many headers that depend on it (e.g. caam) even if
+there's no .o that winds up using it. I could try to enumerate them
+all in kconfig language, but that doesn't seem much cleaner.
 
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 9e06334771a3..253fc250e9a0 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -4028,6 +4028,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
- 	loff_t size, start_off;
- 	loff_t orig_size __maybe_unused;
- 	ext4_lblk_t start;
-+	ext4_lblk_t bpg;
- 	struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
- 	struct ext4_prealloc_space *pa;
- 
-@@ -4051,6 +4052,11 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
- 	}
- 
- 	bsbits = ac->ac_sb->s_blocksize_bits;
-+	bpg = EXT4_BLOCKS_PER_GROUP(ac->ac_sb);
-+	if (ext4_has_feature_flex_bg(ac->ac_sb) && sbi->s_log_groups_per_flex) {
-+		if (check_shl_overflow(bpg, sbi->s_log_groups_per_flex, &bpg))
-+			bpg = EXT_MAX_BLOCKS;
-+	}
- 
- 	/* first, let's learn actual file size
- 	 * given current request is allocated */
-@@ -4110,8 +4116,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
- 	 * alignment does not move allocation to a different group which
- 	 * makes mballoc fail assertions later.
- 	 */
--	start = max(start, rounddown(ac->ac_o_ex.fe_logical,
--			(ext4_lblk_t)EXT4_BLOCKS_PER_GROUP(ac->ac_sb)));
-+	start = max(start, rounddown(ac->ac_o_ex.fe_logical, bpg));
- 
- 	/* don't cover already allocated blocks in selected range */
- 	if (ar->pleft && start <= ar->lleft) {
-@@ -4125,8 +4130,8 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
- 	 * Trim allocation request for filesystems with artificially small
- 	 * groups.
- 	 */
--	if (size > EXT4_BLOCKS_PER_GROUP(ac->ac_sb))
--		size = EXT4_BLOCKS_PER_GROUP(ac->ac_sb);
-+	if (size > bpg)
-+		size = bpg;
- 
- 	end = start + size;
- 
-@@ -4208,7 +4213,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
- 			 (unsigned long) ac->ac_o_ex.fe_logical);
- 		BUG();
- 	}
--	BUG_ON(size <= 0 || size > EXT4_BLOCKS_PER_GROUP(ac->ac_sb));
-+	BUG_ON(size <= 0 || size > bpg);
- 
- 	/* now prepare goal request */
- 
--- 
-2.31.1
+[Aside: note that none of this was a problem with my proposed "zinc"
+patchset from a few years ago, which cleaned up all this crypto layer
+stuff. The frankenstein that landed instead is just a never ending
+source of annoying bugs like this one. Until there are larger changes,
+I think a lot of the woes of crypto/ are terminally hopeless. :-\]
 
+Jason

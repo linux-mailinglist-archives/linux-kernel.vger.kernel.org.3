@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716C3536C08
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E7C536BC4
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 11:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbiE1Jly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 05:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
+        id S232119AbiE1JKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 05:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbiE1Jlv (ORCPT
+        with ESMTP id S230320AbiE1JKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 05:41:51 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350C61C111;
-        Sat, 28 May 2022 02:41:46 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 8C7BB5FD04;
-        Sat, 28 May 2022 12:41:42 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1653730902;
-        bh=Ex77ge4+cVuN9VwweqWv0CsC0vVpo2OdRP2djs/jzgg=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=KoOHTF7M9/JlRuF2m+QKeCoDpTcLM/8r2P6SOgZVim4uUOODb0JFQ73lS6dNiRxT+
-         KqPiay2xPpfJr4KmiARud8MhGikuSvnEDIRssIPiap8ExLF/0nOwp9v15zSu7QDkp9
-         lRtzvIvyZOBwMZecyLCZDQLmLrqy6ukthfqZ/b9QjJ++KV/gMGa7zyDYqF864AJobI
-         IUyXdRO/eCAMVIkGdwwtq7tun3B8beh1AfwUJo53FyZbfR6m8mCVV+R+QCZV6FaE5c
-         CqXBwPn2oNeeg0/zJSjp75RZ8AwImWdvvsdZEJCGH2VwgDqnkK9lpLQG8dbc5XDYDU
-         +4yQ+nLQUGw5w==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Sat, 28 May 2022 12:41:32 +0300 (MSK)
-From:   Aleksey Romanov <AVRomanov@sberdevices.ru>
-To:     "minchan@kernel.org" <minchan@kernel.org>,
-        "ngupta@vflare.org" <ngupta@vflare.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "axboe@chromium.org" <axboe@chromium.org>
-CC:     kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mnitenko@gmail.com" <mnitenko@gmail.com>
-Subject: Re: [RFC PATCH v1] zram: experimental patch with entropy calculation
-Thread-Topic: [RFC PATCH v1] zram: experimental patch with entropy calculation
-Thread-Index: AQHYbGz3WSsk9a8KK0ibVrkSkBx6g60z4D2A
-Date:   Sat, 28 May 2022 09:30:53 +0000
-Message-ID: <20220528093121.zqejxapd7xxrbu5c@cab-wsm-0029881>
-References: <20220520171309.26768-1-avromanov@sberdevices.ru>
-In-Reply-To: <20220520171309.26768-1-avromanov@sberdevices.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <62DE108081885948A39634B3871D0FB7@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Sat, 28 May 2022 05:10:16 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC8AF31;
+        Sat, 28 May 2022 02:10:14 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L9G7946B9zgY9h;
+        Sat, 28 May 2022 17:08:37 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 28 May 2022 17:10:12 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 28 May 2022 17:10:11 +0800
+From:   Ke Liu <liuke94@huawei.com>
+To:     <johannes@sipsolutions.net>
+CC:     <kvalo@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Ke Liu <liuke94@huawei.com>
+Subject: [PATCH v2] mac80211: Directly use ida_alloc()/free()
+Date:   Sat, 28 May 2022 09:31:40 +0000
+Message-ID: <20220528093140.1573816-1-liuke94@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/05/28 05:16:00 #19603934
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I also try this for /lib and /bin direcories. See results below.
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove().
 
-/lib folder as .tar (not compressed):
-+-----+-------------+------------+--------+--------------+-------------+
-| ent |  orig_size  | compr_size |  time  | instructions | branches    |
-+-----+-------------+------------+--------+--------------+-------------+
-|  Y  | 16527126528 | 5921855963 | 16.46s | 71366805304  | 11693084550 |
-+-----+-------------+------------+--------+--------------+-------------+
-|  N  | 16527126528 | 5594516871 | 21.87s | 112664002524 | 16184998761 |
-+-----+-------------+------------+--------+--------------+-------------+
+Signed-off-by: Ke Liu <liuke94@huawei.com>
+---
+v2 deal with alignment to fix
+---
+ drivers/net/wireless/mac80211_hwsim.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-/bin folder as .tar (not compressed):
-+-----+------------+------------+--------+--------------+------------+
-| ent | orig_size  | compr_size |  time  | instructions | branches   |
-+-----+------------+------------+--------+--------------+------------+
-|  Y  | 5594516871 | 387226648  | 4.772s | 35688596793  | 4486177586 |
-+-----+------------+------------+--------+--------------+------------+
-|  N  | 5594516871 | 326629907  | 5.811s | 43886087430  | 5161907045 |
-+-----+------------+------------+--------+--------------+------------+=
+diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+index 2f746eb64507..bd408d260e9c 100644
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -290,8 +290,7 @@ static inline int hwsim_net_set_netgroup(struct net *net)
+ {
+ 	struct hwsim_net *hwsim_net = net_generic(net, hwsim_net_id);
+ 
+-	hwsim_net->netgroup = ida_simple_get(&hwsim_netgroup_ida,
+-					     0, 0, GFP_KERNEL);
++	hwsim_net->netgroup = ida_alloc(&hwsim_netgroup_ida, GFP_KERNEL);
+ 	return hwsim_net->netgroup >= 0 ? 0 : -ENOMEM;
+ }
+ 
+@@ -4733,7 +4732,7 @@ static void __net_exit hwsim_exit_net(struct net *net)
+ 					 NULL);
+ 	}
+ 
+-	ida_simple_remove(&hwsim_netgroup_ida, hwsim_net_get_netgroup(net));
++	ida_free(&hwsim_netgroup_ida, hwsim_net_get_netgroup(net));
+ }
+ 
+ static struct pernet_operations hwsim_net_ops = {
+-- 
+2.25.1
+

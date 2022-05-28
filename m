@@ -2,257 +2,390 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D86E536DCA
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 18:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E25536DCC
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 18:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238546AbiE1Qk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 12:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S238590AbiE1QmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 12:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238307AbiE1QkX (ORCPT
+        with ESMTP id S238307AbiE1QmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 12:40:23 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A9713EA1;
-        Sat, 28 May 2022 09:40:21 -0700 (PDT)
-Date:   Sun, 29 May 2022 00:41:07 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1653756019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+FSRGYJ5CWwQNcNXNsvsX6b7FMt9Ji3rjbqmnbhCCV8=;
-        b=fxJ8CQ3ukTwvSLk3yAXJhEmIxlVVq1bixVA9RaazQ0TbAszmWjZY/g+tQ5SZs4/xgRUTGj
-        Zgbx5n1/BYoXqvXLVrGWi2pHo9f/0c5eoDKV6gOunaJjhmYeoU4uB8SsJhYtBqWOcuzHL9
-        Ipa5rP6uzroFO6rXWxJv8xQZfqdKPtE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Yu-Jen Chang <arthurchang09@gmail.com>, tao.zhou@linux.dev
-Cc:     ak@linux.intel.com, jdike@linux.intel.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        richard@nod.at, anton.ivanov@cambridgegreys.com,
-        johannes@sipsolutions.net, linux-um@lists.infradead.org,
-        jserv@ccns.ncku.edu.tw
-Subject: Re: [PATCH 1/2] x86/lib: Optimize memchr()
-Message-ID: <YpJQoxUt9RhKb0Pr@geo.homenetwork>
-References: <20220528081236.3020-1-arthurchang09@gmail.com>
- <20220528081236.3020-2-arthurchang09@gmail.com>
+        Sat, 28 May 2022 12:42:08 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A2A15722
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 09:42:06 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id nn3-20020a17090b38c300b001e0e091cf03so4840635pjb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 09:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TKIf6BjVymWgv2rO3Gx5TMyZ4UDQ9h7RGIMPSV8JxQI=;
+        b=jXXsv8Ph7XuKU6SZKL96eYFAstWplbZYRXkGuLuM3XXif0Q+A6ukUbo6AZDR/r7NX3
+         7tQnaeWgxeSkRrz2nB68TrrDqckMxSw+Hs9SYPX5JNEZ/UD0fo8dPa4501HXwJpDo7yv
+         tRS4k2R1peuJKzcmm8kU4288kz4XJvVzRdrQm6/s9D7LnCaEsFCKyoPoum35OBqb4Elf
+         KNHMRF6FoC8PGZWInf7qNnSUpjKQoAYgOW8af0SZo35kOJxUr+H8lm/w78bRxEKgcSXk
+         ORXuQs3Qbb+JYm4O2v+9tGBHVv4Abvk6Fe+ycAq0d7veYJKC+/iAuVVsKUwLuo46nv2F
+         tXEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TKIf6BjVymWgv2rO3Gx5TMyZ4UDQ9h7RGIMPSV8JxQI=;
+        b=46rvAvFKSj7ay4iPLLRvKLiXfTxkMecXOs0knJ95qyi/XjzQ4RYPo3chXcGJt+BYfX
+         XDu38TX7TmqbNQrsgwG/qK40bm5tT/LiD1XeV2a7CKfDIFBLFRIdsua2AzkPsFdmt9qS
+         1IR2UgkLTGJlkNqu56IJZ3z5pqEuf/Q5Svk3VoCRlZOFHklFT8BGNHdj1LlThz0RF8yp
+         MMHCLmD3qbpcG8WXeSVX+Mt6qa8FDRt8rBXMo4s5f7zTwhR2q3LQoD/MaWUjpEORSF6G
+         c6xIHIQM4Teo+h5JFQK+8OKrcSBG731U63e3M5WXwj/oEvSJ2b6m2D79DXv1VJaTEokq
+         rUrA==
+X-Gm-Message-State: AOAM530RZnc1LHL7kYzfkZsgQsTMh7XABws40zdJbfYmM3QAUCdVUDp3
+        Cu3ZoMCht3RK9MZz+ReA+PPGOoWU35oSBYVVHKPimQ==
+X-Google-Smtp-Source: ABdhPJypHpbCQEz/E5KWHzvlCXu6OxkT/+NrP06hmR1paSfbVssL/rvioU2B542O8iQ1IBzr5M4niPPGJOQkin6ZUGU=
+X-Received: by 2002:a17:90b:1e4e:b0:1e0:7e82:24fd with SMTP id
+ pi14-20020a17090b1e4e00b001e07e8224fdmr14283392pjb.201.1653756126281; Sat, 28
+ May 2022 09:42:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220528081236.3020-2-arthurchang09@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220507110114.4128854-1-tongtiangen@huawei.com>
+ <20220507110114.4128854-6-tongtiangen@huawei.com> <20220517135435.GA553@mutt>
+ <CA+CK2bAnfxTo-Osvo9=0t=RkC4rTR+mgg2JSypsu3wm6BZFT=A@mail.gmail.com> <CADYN=9JtrZSAmN8J8KbG_PRVGKPhJ3JkP+nq2bqrpFqEa=Avjg@mail.gmail.com>
+In-Reply-To: <CADYN=9JtrZSAmN8J8KbG_PRVGKPhJ3JkP+nq2bqrpFqEa=Avjg@mail.gmail.com>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Sat, 28 May 2022 18:41:55 +0200
+Message-ID: <CADYN=9JZ_b2OfM8o7Uwf7Oxb_SjgX_dpaqb_=doy1wJ3bM+mvQ@mail.gmail.com>
+Subject: Re: [PATCH -next v7 5/6] arm64/mm: Enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     Tong Tiangen <tongtiangen@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv@lists.infradead.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 28, 2022 at 04:12:35PM +0800, Yu-Jen Chang wrote:
+On Tue, 17 May 2022 at 16:33, Anders Roxell <anders.roxell@linaro.org> wrote:
+>
+> On Tue, 17 May 2022 at 16:02, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+> >
+> > On Tue, May 17, 2022 at 9:54 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+> > >
+> > > On 2022-05-07 11:01, Tong Tiangen wrote:
+> > > > From: Kefeng Wang <wangkefeng.wang@huawei.com>
+> > > >
+> > > > As commit d283d422c6c4 ("x86: mm: add x86_64 support for page table check")
+> > > > , enable ARCH_SUPPORTS_PAGE_TABLE_CHECK on arm64.
+> > > >
+> > > > Add additional page table check stubs for page table helpers, these stubs
+> > > > can be used to check the existing page table entries.
+> > > >
+> > > > Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> > > > Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+> > > > Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > >
+> > > When building and booting an arm64 allmodconfig kernel on the next tree, branch next-20220516,
+> > > see the following kernel oops when booting in QEMU [1]:
+> > >
+> > > T35] ------------[ cut here ]------------
+> > > [  578.695796][   T35] kernel BUG at mm/page_table_check.c:82!
+> > > [  578.697292][   T35] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+> > > [  578.704318][   T35] Modules linked in:
+> > > [  578.705907][   T35] CPU: 0 PID: 35 Comm: khugepaged Tainted: G                T 5.18.0-rc6-next-20220513 #1 893498a5d8159d9fb26e12492a93c07e83dd4b7f
+> > > [  578.711170][   T35] Hardware name: linux,dummy-virt (DT)
+> > > [  578.713315][   T35] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > [  578.716398][   T35] pc : page_table_check_clear.constprop.0+0x1f4/0x280
+> > > [  578.719107][   T35] lr : page_table_check_clear.constprop.0+0x1cc/0x280
+> > > [  578.721781][   T35] sp : ffff80000f3778b0
+> > > [  578.723446][   T35] x29: ffff80000f3778b0 x28: ffff80000b891218 x27: ffff000012dd55f0
+> > > [  578.726667][   T35] x26: 0000000000000008 x25: ffff80000c38cd80 x24: 0000000000000000
+> > > [  578.729870][   T35] x23: ffff80000c38c9c0 x22: 0000000000000000 x21: 0000000000000200
+> > > [  578.733079][   T35] x20: ffff000007bae000 x19: ffff000007bae008 x18: 0000000000000000
+> > > [  578.736299][   T35] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> > > [  578.739505][   T35] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+> > > [  578.742735][   T35] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+> > > [  578.745925][   T35] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+> > > [  578.749145][   T35] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff000007bae00c
+> > > [  578.752348][   T35] x2 : 0000000000000000 x1 : 0000000000000001 x0 : 00000000ffffffff
+> > > [  578.755556][   T35] Call trace:
+> > > [  578.756877][   T35]  page_table_check_clear.constprop.0+0x1f4/0x280
+> > > [  578.759446][   T35]  __page_table_check_pmd_clear+0xc4/0x140
+> > > [  578.761757][   T35]  pmdp_collapse_flush+0xa4/0x1c0
+> > > [  578.763771][   T35]  collapse_huge_page+0x4e4/0xb00
+> > > [  578.765778][   T35]  khugepaged_scan_pmd+0xc18/0xd00
+> > > [  578.767840][   T35]  khugepaged_scan_mm_slot+0x580/0x780
+> > > [  578.770018][   T35]  khugepaged+0x2dc/0x400
+> > > [  578.771786][   T35]  kthread+0x164/0x180
+> > > [  578.773430][   T35]  ret_from_fork+0x10/0x20
+> > > [  578.775253][   T35] Code: 52800021 91001263 14000388 36f80040 (d4210000)
+> > > [  578.777990][   T35] ---[ end trace 0000000000000000 ]---
+> > > [  578.778021][   T35] Kernel panic - not syncing: Oops - BUG: Fatal exception
+> > > [  578.782934][   T35] Kernel Offset: disabled
+> > > [  578.784642][   T35] CPU features: 0x000,00100010,00001086
+> > > [  578.786848][   T35] Memory Limit: none
+> > > [  578.788433][   T35] ---[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
 
-> The original assembly version of memchr() is implemented with
-> the byte-wise comparing technique, which does not fully
-> use 64-bits registers in x86_64 CPU. We use word-wide
-> comparing so that 8 characters can be compared at the same time
-> on x86_64 CPU. First we align the input and then use word-wise
-> comparing to find the first 64-bit word that contain the target.
-> Secondly, we compare every byte in the word and get the output.
-> 
-> We create two files to measure the performance. The first file
-> contains on average 10 characters ahead the target character.
-> The second file contains at least 1000 characters ahead the
-> target character. Our implementation of “memchr()” is slightly
-> better in the first test and nearly 4x faster than the orginal
-> implementation in the second test.
-> 
-> Signed-off-by: Yu-Jen Chang <arthurchang09@gmail.com>
-> Signed-off-by: Ching-Chun (Jim) Huang <jserv@ccns.ncku.edu.tw>
-> ---
->  arch/x86/include/asm/string_64.h |  3 ++
->  arch/x86/lib/Makefile            |  1 +
->  arch/x86/lib/string_64.c         | 78 ++++++++++++++++++++++++++++++++
->  3 files changed, 82 insertions(+)
->  create mode 100644 arch/x86/lib/string_64.c
-> 
-> diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
-> index 6e450827f..edce657e0 100644
-> --- a/arch/x86/include/asm/string_64.h
-> +++ b/arch/x86/include/asm/string_64.h
-> @@ -14,6 +14,9 @@
->  extern void *memcpy(void *to, const void *from, size_t len);
->  extern void *__memcpy(void *to, const void *from, size_t len);
->  
-> +#define __HAVE_ARCH_MEMCHR
-> +extern void *memchr(const void *cs, int c, size_t length);
-> +
->  #define __HAVE_ARCH_MEMSET
->  void *memset(void *s, int c, size_t n);
->  void *__memset(void *s, int c, size_t n);
-> diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
-> index f76747862..4d530e559 100644
-> --- a/arch/x86/lib/Makefile
-> +++ b/arch/x86/lib/Makefile
-> @@ -69,5 +69,6 @@ else
->          lib-y += clear_page_64.o copy_page_64.o
->          lib-y += memmove_64.o memset_64.o
->          lib-y += copy_user_64.o
-> +        lib-y += string_64.o
->  	lib-y += cmpxchg16b_emu.o
->  endif
-> diff --git a/arch/x86/lib/string_64.c b/arch/x86/lib/string_64.c
-> new file mode 100644
-> index 000000000..4e067d5be
-> --- /dev/null
-> +++ b/arch/x86/lib/string_64.c
-> @@ -0,0 +1,78 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/string.h>
-> +#include <linux/export.h>
-> +#include <linux/align.h>
-> +
-> +/* How many bytes are loaded each iteration of the word copy loop */
-> +#define LBLOCKSIZE (sizeof(long))
-> +
-> +#ifdef __HAVE_ARCH_MEMCHR
-> +
-> +void *memchr(const void *cs, int c, size_t length)
-> +{
-> +	const unsigned char *src = (const unsigned char *)cs, d = c;
+Now I see this oops on the mainline kernel too when I'm building and booting an
+arm64 allmodconfig kernel, sha
+9d004b2f4fea ("Merge tag 'cxl-for-5.19' of
+git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl").
 
-I don't know why this 'd = c' is not error.
-d is a char pointer and c is int. At least this is not safe me do not know.
+building and booting an arm64 allmodconfig kernel.
 
-> +	while (!IS_ALIGNED((long)src, sizeof(long))) {
-> +		if (!length--)
-> +			return NULL;
-> +		if (*src == d)
+When I revert 42b2547137f5 ("arm64/mm: enable
+ARCH_SUPPORTS_PAGE_TABLE_CHECK") I'm able to boot.
+The kernel boots fine.
 
-Compare a character value to a pointer value and this value is c.
-May be right do not know.
+This is the config [1].
+Building with tuxmake[2].
+$ tuxmake --runtime podman --target-arch arm64 --toolchain gcc-11
+--kconfig http://ix.io/3YPH
 
-Or:
+Cheers,
+Anders
+[1] http://ix.io/3YPH
 
-char d = c;
-...
-
-> +			return (void *)src;
-> +		src++;
-> +	}
-> +	if (length >= LBLOCKSIZE) {
-> +		unsigned long mask = d << 8 | d;
-> +		unsigned int i = 32;
-> +		long xor, data;
-> +		const long consta = 0xFEFEFEFEFEFEFEFF,
-> +			   constb = 0x8080808080808080;
-
-Two magic number..
-
-> +		/*
-> +		 * Create a 8-bytes mask for word-wise comparing.
-> +		 * For example, a mask for 'a' is 0x6161616161616161.
-> +		 */
-> +
-> +		mask |= mask << 16;
-> +		for (i = 32; i < LBLOCKSIZE * 8; i <<= 1)
-> +			mask |= mask << i;
-> +		/*
-> +		 * We perform word-wise comparing with following operation:
-> +		 *	1. Perform xor on the long word @src and @mask
-> +		 *	   and put into @xor.
-> +		 *	2. Add @xor with @consta.
-> +		 *	3. ~@xor & @constb.
-> +		 *	4. Perform & with the result of step 2 and 3.
-> +		 *
-> +		 * Step 1 creates a byte which is 0 in the long word if
-> +		 * there is at least one target byte in it.
-> +		 *
-> +		 * Step 2 to Step 4 find if there is a byte with 0 in
-> +		 * the long word.
-> +		 */
-> +		asm volatile("1:\n\t"
-> +			     "movq (%0),%1\n\t"
-> +			     "xorq %6,%1\n\t"
-> +			     "lea (%1,%4), %2\n\t"
-> +			     "notq %1\n\t"
-> +			     "andq %5,%1\n\t"
-> +			     "testq %1,%2\n\t"
-> +			     "jne 2f\n\t"
-
-s/jne/jnz/
-
-Lack much here from me. But I give example that should check the 
-CF flag is zero.
-
-1) contain matching byte.
-
-1111111011111111(consta)
-                        +add
-0000000001101100(xor)
-------------------------
-1111111101101011 (%1)
-
-
-1111111110010100(~xor)
-                        &and
-1000000010000000(constb)
-------------------------
-1000000010000000 (%2)
-
-
-the logical and of %1 and %2 is
-1000000000000000 that is not zero.
-
-2) not contain matching byte
-
-1111111011111111
-                 +
-0110111011011100
-----------------
-0110110111011011(%1)
-
-1001000100100011
-                 &
-1000000010000000
-----------------
-1000000000000000(%2)
-
-%1 and %2 is
-0000000000000000 that is zero.
-
-I guess that here should use jump instruction jnz instead.
-Even though, I do not know why that two magic number is so magical..
-
-Thanks,
-Tao
-> +			     "add $8,%0\n\t"
-> +			     "sub $8,%3\n\t"
-> +			     "cmp $7,%3\n\t"
-> +			     "ja 1b\n\t"
-> +			     "2:\n\t"
-> +			     : "=D"(src), "=r"(xor), "=r"(data), "=r"(length)
-> +			     : "r"(consta), "r"(constb), "r"(mask), "0"(src),
-> +			       "1"(xor), "2"(data), "3"(length)
-> +			     : "memory", "cc");
-> +	}
-> +
-> +	while (length--) {
-> +		if (*src == d)
-> +			return (void *)src;
-> +		src++;
-> +	}
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL(memchr);
-> +#endif
-> -- 
-> 2.25.1
-> 
+> > >
+> > > Bisected down to this patch, see the bisect log [2].
+> > >
+> > > When I revert this patch I don't see the issue anymore.
+> >
+> > Thank you for reporting this. I believe, this is the same problem that
+> > Anshuman saw [1].
+>
+> Yes looks like the same issue, I missed that.
+>
+> > However, at that time he could not reproduce it
+> > anymore. Can you please provide QEMU command line
+>
+> $ qemu-system-aarch64 --enable-kvm -cpu cortex-a53 -kernel
+> Image-20220517-1.gz -serial stdio -monitor none -nographic -m 2G -M
+> virt -fsdev local,id=root,path=/srv/kvm/tmp/stretch/arm64,security_model=none,writeout=immediate
+> -device virtio-rng-pci -device
+> virtio-9p-pci,fsdev=root,mount_tag=/dev/root -append "root=/dev/root
+> rootfstype=9p rootflags=trans=virtio,msize=131072
+> console=ttyAMA0,38400n8 earlycon=pl011,0x9000000 initcall_debug
+> softlockup_panic=0 security=none kpti=no kfence.sample_interval=0"
+> -object rng-random,id=rng0,filename=/dev/urandom -device
+> virtio-rng-pci,rng=rng0
+>
+> >, QEMU version,
+>
+> $ qemu-system-aarch64 --version
+> QEMU emulator version 5.2.0 (Debian 1:5.2+dfsg-11+deb11u1)
+> Copyright (c) 2003-2020 Fabrice Bellard and the QEMU Project developers
+>
+> I'm running on an arm64 host.
+>
+> > kernel config
+>
+> Kernel config [1].
+>
+> I build the kernel with tuxmake [2] like this:
+> $ tuxmake --runtime podman --target-arch arm64 --toolchain gcc-11
+> --kconfig http://ix.io/3Y06
+>
+> >, and information about the base image you are using.
+>
+> Using a debian:stretch release when booting up QEMU.
+> Host system debian:bullseye
+>
+> Cheers,
+> Anders
+> [1] http://ix.io/3Y06
+> [2] https://tuxmake.org/install-pypi/
+>
+> >
+> > Thank you,
+> > Pasha
+> >
+> > [1] https://lore.kernel.org/all/1c314feb-cd78-2bb3-462e-4ea3cefe122e@arm.com/
+> >
+> >
+> > >
+> > > Cheers,
+> > > Anders
+> > > [1] https://people.linaro.org/~anders.roxell/output-next-20220513.log
+> > > [2] http://ix.io/3XZB
+> > >
+> > > > ---
+> > > >  arch/arm64/Kconfig               |  1 +
+> > > >  arch/arm64/include/asm/pgtable.h | 61 ++++++++++++++++++++++++++++----
+> > > >  2 files changed, 56 insertions(+), 6 deletions(-)
+> > > >
+> > > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> > > > index 272c75af9302..3055fb5b3fb4 100644
+> > > > --- a/arch/arm64/Kconfig
+> > > > +++ b/arch/arm64/Kconfig
+> > > > @@ -92,6 +92,7 @@ config ARM64
+> > > >       select ARCH_SUPPORTS_ATOMIC_RMW
+> > > >       select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+> > > >       select ARCH_SUPPORTS_NUMA_BALANCING
+> > > > +     select ARCH_SUPPORTS_PAGE_TABLE_CHECK
+> > > >       select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
+> > > >       select ARCH_WANT_DEFAULT_BPF_JIT
+> > > >       select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> > > > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> > > > index 8ebf1cec5d90..4e61cde27f9f 100644
+> > > > --- a/arch/arm64/include/asm/pgtable.h
+> > > > +++ b/arch/arm64/include/asm/pgtable.h
+> > > > @@ -33,6 +33,7 @@
+> > > >  #include <linux/mmdebug.h>
+> > > >  #include <linux/mm_types.h>
+> > > >  #include <linux/sched.h>
+> > > > +#include <linux/page_table_check.h>
+> > > >
+> > > >  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > > >  #define __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
+> > > > @@ -96,6 +97,7 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
+> > > >  #define pte_young(pte)               (!!(pte_val(pte) & PTE_AF))
+> > > >  #define pte_special(pte)     (!!(pte_val(pte) & PTE_SPECIAL))
+> > > >  #define pte_write(pte)               (!!(pte_val(pte) & PTE_WRITE))
+> > > > +#define pte_user(pte)                (!!(pte_val(pte) & PTE_USER))
+> > > >  #define pte_user_exec(pte)   (!(pte_val(pte) & PTE_UXN))
+> > > >  #define pte_cont(pte)                (!!(pte_val(pte) & PTE_CONT))
+> > > >  #define pte_devmap(pte)              (!!(pte_val(pte) & PTE_DEVMAP))
+> > > > @@ -312,8 +314,8 @@ static inline void __check_racy_pte_update(struct mm_struct *mm, pte_t *ptep,
+> > > >                    __func__, pte_val(old_pte), pte_val(pte));
+> > > >  }
+> > > >
+> > > > -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> > > > -                           pte_t *ptep, pte_t pte)
+> > > > +static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+> > > > +                             pte_t *ptep, pte_t pte)
+> > > >  {
+> > > >       if (pte_present(pte) && pte_user_exec(pte) && !pte_special(pte))
+> > > >               __sync_icache_dcache(pte);
+> > > > @@ -343,6 +345,13 @@ static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> > > >       set_pte(ptep, pte);
+> > > >  }
+> > > >
+> > > > +static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> > > > +                           pte_t *ptep, pte_t pte)
+> > > > +{
+> > > > +     page_table_check_pte_set(mm, addr, ptep, pte);
+> > > > +     return __set_pte_at(mm, addr, ptep, pte);
+> > > > +}
+> > > > +
+> > > >  /*
+> > > >   * Huge pte definitions.
+> > > >   */
+> > > > @@ -454,6 +463,8 @@ static inline int pmd_trans_huge(pmd_t pmd)
+> > > >  #define pmd_dirty(pmd)               pte_dirty(pmd_pte(pmd))
+> > > >  #define pmd_young(pmd)               pte_young(pmd_pte(pmd))
+> > > >  #define pmd_valid(pmd)               pte_valid(pmd_pte(pmd))
+> > > > +#define pmd_user(pmd)                pte_user(pmd_pte(pmd))
+> > > > +#define pmd_user_exec(pmd)   pte_user_exec(pmd_pte(pmd))
+> > > >  #define pmd_cont(pmd)                pte_cont(pmd_pte(pmd))
+> > > >  #define pmd_wrprotect(pmd)   pte_pmd(pte_wrprotect(pmd_pte(pmd)))
+> > > >  #define pmd_mkold(pmd)               pte_pmd(pte_mkold(pmd_pte(pmd)))
+> > > > @@ -501,8 +512,19 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
+> > > >  #define pud_pfn(pud)         ((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT)
+> > > >  #define pfn_pud(pfn,prot)    __pud(__phys_to_pud_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
+> > > >
+> > > > -#define set_pmd_at(mm, addr, pmdp, pmd)      set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd))
+> > > > -#define set_pud_at(mm, addr, pudp, pud)      set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud))
+> > > > +static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
+> > > > +                           pmd_t *pmdp, pmd_t pmd)
+> > > > +{
+> > > > +     page_table_check_pmd_set(mm, addr, pmdp, pmd);
+> > > > +     return __set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
+> > > > +}
+> > > > +
+> > > > +static inline void set_pud_at(struct mm_struct *mm, unsigned long addr,
+> > > > +                           pud_t *pudp, pud_t pud)
+> > > > +{
+> > > > +     page_table_check_pud_set(mm, addr, pudp, pud);
+> > > > +     return __set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
+> > > > +}
+> > > >
+> > > >  #define __p4d_to_phys(p4d)   __pte_to_phys(p4d_pte(p4d))
+> > > >  #define __phys_to_p4d_val(phys)      __phys_to_pte_val(phys)
+> > > > @@ -643,6 +665,24 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
+> > > >  #define pud_present(pud)     pte_present(pud_pte(pud))
+> > > >  #define pud_leaf(pud)                (pud_present(pud) && !pud_table(pud))
+> > > >  #define pud_valid(pud)               pte_valid(pud_pte(pud))
+> > > > +#define pud_user(pud)                pte_user(pud_pte(pud))
+> > > > +
+> > > > +#ifdef CONFIG_PAGE_TABLE_CHECK
+> > > > +static inline bool pte_user_accessible_page(pte_t pte)
+> > > > +{
+> > > > +     return pte_present(pte) && (pte_user(pte) || pte_user_exec(pte));
+> > > > +}
+> > > > +
+> > > > +static inline bool pmd_user_accessible_page(pmd_t pmd)
+> > > > +{
+> > > > +     return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
+> > > > +}
+> > > > +
+> > > > +static inline bool pud_user_accessible_page(pud_t pud)
+> > > > +{
+> > > > +     return pud_present(pud) && pud_user(pud);
+> > > > +}
+> > > > +#endif
+> > > >
+> > > >  static inline void set_pud(pud_t *pudp, pud_t pud)
+> > > >  {
+> > > > @@ -876,7 +916,11 @@ static inline int pmdp_test_and_clear_young(struct vm_area_struct *vma,
+> > > >  static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+> > > >                                      unsigned long address, pte_t *ptep)
+> > > >  {
+> > > > -     return __pte(xchg_relaxed(&pte_val(*ptep), 0));
+> > > > +     pte_t pte = __pte(xchg_relaxed(&pte_val(*ptep), 0));
+> > > > +
+> > > > +     page_table_check_pte_clear(mm, address, pte);
+> > > > +
+> > > > +     return pte;
+> > > >  }
+> > > >
+> > > >  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > > > @@ -884,7 +928,11 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+> > > >  static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
+> > > >                                           unsigned long address, pmd_t *pmdp)
+> > > >  {
+> > > > -     return pte_pmd(ptep_get_and_clear(mm, address, (pte_t *)pmdp));
+> > > > +     pmd_t pmd = __pmd(xchg_relaxed(&pmd_val(*pmdp), 0));
+> > > > +
+> > > > +     page_table_check_pmd_clear(mm, address, pmd);
+> > > > +
+> > > > +     return pmd;
+> > > >  }
+> > > >  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+> > > >
+> > > > @@ -918,6 +966,7 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+> > > >  static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+> > > >               unsigned long address, pmd_t *pmdp, pmd_t pmd)
+> > > >  {
+> > > > +     page_table_check_pmd_set(vma->vm_mm, address, pmdp, pmd);
+> > > >       return __pmd(xchg_relaxed(&pmd_val(*pmdp), pmd_val(pmd)));
+> > > >  }
+> > > >  #endif
+> > > > --
+> > > > 2.25.1
+> > > >
+> > >
+> > > --
+> > > Anders Roxell
+> > > anders.roxell@linaro.org
+> > > M: +46 708 22 71 05 | IRC: roxell

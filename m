@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C98C536D07
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 14:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85739536D10
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 15:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355011AbiE1M5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 08:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
+        id S235767AbiE1NKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 09:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344012AbiE1M5n (ORCPT
+        with ESMTP id S235638AbiE1NKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 08:57:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E619A1C93D
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 05:57:40 -0700 (PDT)
+        Sat, 28 May 2022 09:10:44 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0AE14D1C
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 06:10:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653742661; x=1685278661;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r9ui001kVXv8M7pW7pE1Jz+JNGPM/ArNM3O0+9pDUXk=;
-  b=jrnkUsaovjVpld/gtOTLQi+/8dOhLBz4h3veumsPCGo0OWUp88K2neC+
-   BUtEPl9cOXBmQ+GacFXqoFNoSYh0SG5Bwju5PRN/1MyOAoO9MVp6RCr0B
-   7hCP/BS3wWni3cPeXRU/ayUXMPetlkx6ASqUYbKvx6K6LrHh+qVWzETQw
-   rbnIRB0l+vNYZqVy9dQOpOe+WffdtlUZd7GJxU0vDI2r3THxvoolxDv3B
-   twPegale0qgM3bDyry/zeomzF18OeigIepKS7DwCU1J1702NrFSSpprv1
-   /xbH76QYQvx2rk5MtlFnLzD9LZHqQP2z0sCPDlOVrTPKVEHJwJa8ikcft
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="262288833"
+  t=1653743439; x=1685279439;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=itXNkvg1e/eilh7u+TdYWivNHbnrgo3z0DFgqEMjGSw=;
+  b=AvtFbj8qQlsn7AT1eJpCKOsSEvz7zDqtQ09YWZ4TuHsPNJY/1Gkaza9o
+   na4+8qUzqoO4h8/6a4POS/XB8yVERUM7b2Z1ezXrijNwUlWkmGns3DtgA
+   G4bo8jkyaeSlcKSUKifmSawferAnNp02mO/XX6mkGooHL1SlNmluj3RN9
+   V+uWmZ2Nul3MyEr2JLp0mLOq2Qj3QWpZ60bBEdMCiHrN4by2DOQaMvp9Z
+   LZ9coapQf2IIhy9fVLhQlUsP/iqmdRHC432K5yORfcsduvCfQVpFlRdDF
+   C5gKqLgnjvzKuk+w5p2+3YoSwSuQs1/NfamFVHKkGc81SZsA1wk5VgfBN
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10360"; a="361056681"
 X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="262288833"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 05:57:40 -0700
+   d="scan'208";a="361056681"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2022 06:10:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,258,1647327600"; 
-   d="scan'208";a="719260375"
+   d="scan'208";a="610830270"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 May 2022 05:57:38 -0700
+  by orsmga001.jf.intel.com with ESMTP; 28 May 2022 06:10:38 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nuw0f-0000DI-Dy;
-        Sat, 28 May 2022 12:57:37 +0000
-Date:   Sat, 28 May 2022 20:57:24 +0800
+        id 1nuwDF-0000Dk-OD;
+        Sat, 28 May 2022 13:10:37 +0000
+Date:   Sat, 28 May 2022 21:10:11 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Yue Zou <zouyue3@huawei.com>, sfr@canb.auug.org.au,
-        akpm@linux-foundation.org, mhiramat@kernel.org,
-        rostedt@goodmis.org, ahalaney@redhat.com, vbabka@suse.cz,
-        Jason@zx2c4.com, mark-pk.tsai@mediatek.com,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH -next] smp: Move stub from main.c into smp.h
-Message-ID: <202205282043.QMZuMrL0-lkp@intel.com>
-References: <20220528111122.1888581-1-zouyue3@huawei.com>
+To:     Nikolay Aleksandrov <nikolay@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: net/bridge/br_private.h:901 br_multicast_rport_from_node_skb() warn:
+ inconsistent indenting
+Message-ID: <202205282109.Ow9gLt9u-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220528111122.1888581-1-zouyue3@huawei.com>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yue,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on next-20220527]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yue-Zou/smp-Move-stub-from-main-c-into-smp-h/20220528-185146
-base:    d3fde8ff50ab265749704bd7fbcf70d35235421f
-config: arc-randconfig-r043-20220526 (https://download.01.org/0day-ci/archive/20220528/202205282043.QMZuMrL0-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2efe286bd89edfa5448d29a5be89fd54df424c46
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yue-Zou/smp-Move-stub-from-main-c-into-smp-h/20220528-185146
-        git checkout 2efe286bd89edfa5448d29a5be89fd54df424c46
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash lib/
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9d004b2f4fea97cde123e7f1939b80e77bf2e695
+commit: 9632233e7de8da43711bb7cd3e054af32fedcc38 net: bridge: multicast: factor out port multicast context
+date:   10 months ago
+config: arc-randconfig-m031-20220524 (https://download.01.org/0day-ci/archive/20220528/202205282109.Ow9gLt9u-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+New smatch warnings:
+net/bridge/br_private.h:901 br_multicast_rport_from_node_skb() warn: inconsistent indenting
 
-   In file included from include/linux/lockdep.h:14,
-                    from include/linux/spinlock.h:62,
-                    from include/linux/kref.h:16,
-                    from include/linux/mm_types.h:8,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from lib/test_bitops.c:9:
->> include/linux/smp.h:186:27: error: 'setup_max_cpus' defined but not used [-Werror=unused-const-variable=]
-     186 | static const unsigned int setup_max_cpus = NR_CPUS;
-         |                           ^~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
+Old smatch warnings:
+net/bridge/br_forward.c:317 br_multicast_flood() error: we previously assumed 'p' could be null (see line 293)
 
+vim +901 net/bridge/br_private.h
 
-vim +/setup_max_cpus +186 include/linux/smp.h
-
-   185	
- > 186	static const unsigned int setup_max_cpus = NR_CPUS;
-   187	static inline void setup_nr_cpu_ids(void) { }
-   188	static inline void smp_prepare_cpus(unsigned int maxcpus) { }
-   189	
+   890	
+   891	static inline struct net_bridge_port *
+   892	br_multicast_rport_from_node_skb(struct hlist_node *rp, struct sk_buff *skb) {
+   893		struct net_bridge_mcast_port *mctx;
+   894	
+   895	#if IS_ENABLED(CONFIG_IPV6)
+   896		if (skb->protocol == htons(ETH_P_IPV6))
+   897			mctx = hlist_entry_safe(rp, struct net_bridge_mcast_port,
+   898						ip6_rlist);
+   899		else
+   900	#endif
+ > 901			mctx = hlist_entry_safe(rp, struct net_bridge_mcast_port,
+   902						ip4_rlist);
+   903	
+   904		if (mctx)
+   905			return mctx->port;
+   906		else
+   907			return NULL;
+   908	}
+   909	
 
 -- 
 0-DAY CI Kernel Test Service

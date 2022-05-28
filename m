@@ -2,201 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3C6536E75
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 23:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5F3536E7E
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 23:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiE1UnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 16:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S229966AbiE1Uqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 16:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiE1UnN (ORCPT
+        with ESMTP id S229913AbiE1Uqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 16:43:13 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D28B5D663;
-        Sat, 28 May 2022 13:43:12 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so7234789pjf.5;
-        Sat, 28 May 2022 13:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=OW7gvGoD7fY6wRK97c+1pat3jS831FfSUeJ8RYkt18A=;
-        b=GEo2p+G+oTtaIkkANMqT9p/hMumddWCeDCsv4sO43jFcmWWv3PWMAHuNYsQqKLQ0pi
-         RJOoZSWw0QP3AMv66/QCvI809/eakKVb0bMqeuAKRk8sSJ29tmq3lOdjqAYXUclotyS7
-         qi0jIqorOcEmvU+lp4+LBKw2+zdAHmF/fvoGBVeKBEvMlKxq3qHVGHacblBF9HTtv0WT
-         o1oroDJ0Xg9/5W9P1oObLAF886I0qpVRJWQeQTJhAkbKZ98lPU4wekFVBxuKgQc6KcsF
-         +ZvAnsDImagQxmF4+e1xdTbSmR+cFZG1ZrMu4ng6YI+X6ZzVujxhkmVxGgmsfEL6fRUA
-         XBkw==
+        Sat, 28 May 2022 16:46:31 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3674A2184
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 13:46:30 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id q6-20020a056e0215c600b002c2c4091914so5248807ilu.14
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 13:46:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=OW7gvGoD7fY6wRK97c+1pat3jS831FfSUeJ8RYkt18A=;
-        b=In6xbjjdh6kdyKgDy4NkQCF6ZZOr0pbqKNW2nOdqBqzBmvd9eLLCvYaVuIXIehJ1TK
-         TCtL4AIN4cXF0wEWAEDDr9jbvp4ZqM290iX2fgM+CVAYzvwYGpKUDt3+/WUFaa0n7giQ
-         TlWuh0ZrSdL80mNz751ogimy4lS5Q12mLfABmh6Wh46mtVfetkBBql7nR9UTIEUweev3
-         AuFQFNn7jgra8V4g7JsW9ieVTrDx5aaxecIMLUG+CxDAmVWF8D95i0cBNT0DswQWmO+6
-         pdfXN54X7vtOVOtyYBti1OSB0KdRiR3yaRVQFE0Kq9dnRAbtT9A/j+VTJ0H6wtUpuPQp
-         84dQ==
-X-Gm-Message-State: AOAM532FkQor/u17JS2PIRZQvfNkjBveOsypPj0tw+zrrXNu9EYuvVaC
-        yz4kiUkD3v2LJcPww7H1Bu6bb76P9xY=
-X-Google-Smtp-Source: ABdhPJyM0TPLK9uJ+lJbx5JbJ18Gu3uh9E+eOJ6acSoZ6cLD1DdGc2LLu8MLUtiS9jlcz0Cx0gmEHA==
-X-Received: by 2002:a17:902:c2d8:b0:15e:fa17:56cc with SMTP id c24-20020a170902c2d800b0015efa1756ccmr48834783pla.40.1653770591793;
-        Sat, 28 May 2022 13:43:11 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:781a:4ab0:a93b:176b])
-        by smtp.gmail.com with ESMTPSA id v4-20020a1709029a0400b0015f300ed0b7sm1453293plp.76.2022.05.28.13.43.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 13:43:11 -0700 (PDT)
-Date:   Sat, 28 May 2022 13:43:09 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [git pull] Input updates for v5.19-rc0
-Message-ID: <YpKJXdB/5h7Ee0Ys@google.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=plwxnWiwuDRda2tElF8zSuOr/unxfzwclNr7d4wq3r4=;
+        b=OCug+SFNzEuNRLm4JX/UT0wzXo4r8onDh69EsJSRWphU+wlgtcblBg/sDrbOlezOMP
+         ka/h1kOH4/vg94F77WS+FxPVqQvwZ4Y6VPkd3BZ3TmIcaGvcbrKGpeTHsucueCc2n62U
+         YYBn0nhuCDOUzgXIaow02ckpQIYZJQUMnkZtkT1ni0qsXfGKgFlQLUlHEVW/76BSPPSM
+         3syakPqzkhvAEuGb9xjRpdEPXz+NkSEsyR4TEIqO3P3vWzHQyGJlswb4VYLaOo0kN6kY
+         MForkCfklOBc+u3Jb3qxmBSW51MIxwPzlvdPWroKDI/zpVWePXSj6wqstJICwklorSX6
+         is1A==
+X-Gm-Message-State: AOAM533hX6/ICyThDTeH7vlrWY4to5V1HKS+A5KgnhpNCN6FOOoHLsfK
+        h81eaSGs6126THEDGVaZcmzDvuCIb723S5IQMdkwyqNNKK3G
+X-Google-Smtp-Source: ABdhPJxhApFxnQvi8joZ/AIBhnEksxTRD5blkJIkEhELyl/h2FnMLg3S8WfDCj/hv9TWnBdAXRKXwFqYloC4ZQzyIdpx9QAQVcmv
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3388:b0:330:a236:163f with SMTP id
+ h8-20020a056638338800b00330a236163fmr10460245jav.93.1653770789598; Sat, 28
+ May 2022 13:46:29 -0700 (PDT)
+Date:   Sat, 28 May 2022 13:46:29 -0700
+In-Reply-To: <000000000000361f9005dd7fea88@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000743f8505e0188496@google.com>
+Subject: Re: [syzbot] WARNING in wait_til_done
+From:   syzbot <syzbot+3562be49b8e09d424a6f@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+syzbot has found a reproducer for the following issue on:
 
-Please pull from:
+HEAD commit:    9d004b2f4fea Merge tag 'cxl-for-5.19' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=118576f3f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=34d5ab77e4ca65e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=3562be49b8e09d424a6f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10f15913f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=157ad36bf00000
 
-	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v5.19-rc0
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3562be49b8e09d424a6f@syzkaller.appspotmail.com
 
-to receive updates for the input subsystem. You will get:
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3690 at drivers/block/floppy.c:999 schedule_bh drivers/block/floppy.c:999 [inline]
+WARNING: CPU: 0 PID: 3690 at drivers/block/floppy.c:999 wait_til_done+0x350/0x3c0 drivers/block/floppy.c:2018
+Modules linked in:
+CPU: 0 PID: 3690 Comm: syz-executor202 Not tainted 5.18.0-syzkaller-10643-g9d004b2f4fea #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:schedule_bh drivers/block/floppy.c:999 [inline]
+RIP: 0010:wait_til_done+0x350/0x3c0 drivers/block/floppy.c:2018
+Code: fc 41 83 fd 01 7e ac e8 8e 1e e0 fc 4c 89 e6 48 c7 c7 20 7b 8e 8c e8 8f b4 c0 fc e8 7a 1e e0 fc e9 c3 fd ff ff e8 70 1e e0 fc <0f> 0b e9 4b fd ff ff e8 54 38 2c fd e9 0f fe ff ff e8 5a 1e e0 fc
+RSP: 0018:ffffc90002f8f718 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 1ffff920005f1ee3 RCX: 0000000000000000
+RDX: ffff88801430c140 RSI: ffffffff84998450 RDI: 0000000000000007
+RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000001
+R13: ffffffff84995460 R14: 0000000000000000 R15: 0000000000000003
+FS:  0000555556c30300(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000088 CR3: 000000002457a000 CR4: 0000000000150ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ floppy_check_events+0x3d0/0x560 drivers/block/floppy.c:4098
+ disk_check_events+0xc2/0x420 block/disk-events.c:193
+ disk_clear_events block/disk-events.c:248 [inline]
+ bdev_check_media_change+0x12c/0x310 block/disk-events.c:279
+ floppy_open+0x75d/0xd70 drivers/block/floppy.c:4057
+ blkdev_get_whole+0x99/0x2d0 block/bdev.c:673
+ blkdev_get_by_dev.part.0+0x5ec/0xb90 block/bdev.c:823
+ blkdev_get_by_dev+0x6b/0x80 block/bdev.c:857
+ blkdev_open+0x13c/0x2c0 block/fops.c:481
+ do_dentry_open+0x4a1/0x11f0 fs/open.c:824
+ do_open fs/namei.c:3477 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3610
+ do_filp_open+0x1aa/0x400 fs/namei.c:3637
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1254
+ do_sys_open fs/open.c:1270 [inline]
+ __do_sys_openat fs/open.c:1286 [inline]
+ __se_sys_openat fs/open.c:1281 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1281
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f936c227597
+Code: 25 00 00 41 00 3d 00 00 41 00 74 47 64 8b 04 25 18 00 00 00 85 c0 75 6b 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 95 00 00 00 48 8b 4c 24 28 64 48 2b 0c 25
+RSP: 002b:00007ffc43d5dfb0 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f936c227597
+RDX: 0000000000000000 RSI: 00007ffc43d5e030 RDI: 00000000ffffff9c
+RBP: 00007ffc43d5e030 R08: 000000000000ffff R09: 00007ffc43d5dec0
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-- a new driver for Azoteq IQS7222A/B/C capacitive touch controller
-
-- a new driver for Raspberry Pi Sense HAT joystick
-
-- sun4i-lradc-keys gained support of R329 and D1 variants, plus it
-  can be now used as a wakeup source
-
-- pm8941-pwrkey can now properly handle PON GEN3 variants; the driver
-  also implements software debouncing and has a workaround for missing
-  key press events
-
-- assorted driver fixes and cleanups.
-
-
-Changelog:
----------
-
-Alexander Shiyan (1):
-      Input: clps711x-keypad - use syscon_regmap_lookup_by_phandle
-
-AngeloGioacchino Del Regno (1):
-      Input: mt6779-keypad - move iomem pointer to probe function
-
-Anjelique Melendez (2):
-      Input: pm8941-pwrkey - fix error message
-      Input: pm8941-pwrkey - add support for PON GEN3 base addresses
-
-Changcheng Deng (1):
-      Input: remove unneeded variable in input_inhibit_device()
-
-Charles Mirabile (1):
-      Input: add Raspberry Pi Sense HAT joystick driver
-
-Colin Ian King (1):
-      Input: aiptek - remove redundant assignment to variable ret
-
-Dan Carpenter (1):
-      Input: iqs7222 - propagate some error codes correctly
-
-David Collins (2):
-      Input: pm8941-pwrkey - add software key press debouncing support
-      Input: pm8941-pwrkey - simulate missed key press events
-
-Dmitry Torokhov (1):
-      Input: stmfts - do not leave device disabled in stmfts_input_open
-
-Jeff LaBundy (3):
-      dt-bindings: input: Add bindings for Azoteq IQS7222A/B/C
-      Input: add support for Azoteq IQS7222A/B/C
-      Input: iqs7222 - avoid dereferencing a NULL pointer
-
-Julia Lawall (1):
-      Input: cypress_ps2 - fix typo in comment
-
-Lad Prabhakar (1):
-      Input: gpio-keys - cancel delayed work only in case of GPIO
-
-Lv Ruyi (1):
-      Input: ep93xx_keypad - use devm_platform_ioremap_resource() helper
-
-Miaoqian Lin (1):
-      Input: sparcspkr - fix refcount leak in bbc_beep_probe
-
-Ondrej Jirman (1):
-      Input: sun4i-lradc-keys - add wakeup support
-
-Samuel Holland (3):
-      dt-bindings: input: sun4i-lradc-keys: Add R329 and D1 compatibles
-      Input: sun4i-lradc-keys - add optional clock/reset support
-      Input: sun4i-lradc-keys - add support for R329 and D1
-
-Stephen Boyd (3):
-      dt-bindings: google,cros-ec-keyb: Introduce switches only compatible
-      Input: cros-ec-keyb - allow skipping keyboard registration
-      dt-bindings: google,cros-ec-keyb: Fixup bad compatible match
-
-Tetsuo Handa (1):
-      Input: psmouse-smbus - avoid flush_scheduled_work() usage
-
-Wan Jiabing (1):
-      Input: bcm-keypad - remove unneeded NULL check before clk_disable_unprepare
-
-Zongmin Zhou (1):
-      Input: vmmouse - disable vmmouse before entering suspend mode
-
-ran jianping (1):
-      Input: synaptics-rmi4 - remove unnecessary flush_workqueue()
-
-Diffstat:
---------
-
- .../input/allwinner,sun4i-a10-lradc-keys.yaml      |   22 +
- .../devicetree/bindings/input/azoteq,iqs7222.yaml  |  960 ++++++++
- .../bindings/input/google,cros-ec-keyb.yaml        |   36 +-
- drivers/input/input.c                              |    4 +-
- drivers/input/joystick/Kconfig                     |   11 +
- drivers/input/joystick/Makefile                    |    1 +
- drivers/input/joystick/sensehat-joystick.c         |  137 ++
- drivers/input/keyboard/bcm-keypad.c                |    3 +-
- drivers/input/keyboard/clps711x-keypad.c           |    3 +-
- drivers/input/keyboard/cros_ec_keyb.c              |   29 +-
- drivers/input/keyboard/ep93xx_keypad.c             |    7 +-
- drivers/input/keyboard/gpio_keys.c                 |    2 +-
- drivers/input/keyboard/mt6779-keypad.c             |   10 +-
- drivers/input/keyboard/sun4i-lradc-keys.c          |   63 +-
- drivers/input/misc/Kconfig                         |   10 +
- drivers/input/misc/Makefile                        |    1 +
- drivers/input/misc/iqs7222.c                       | 2446 ++++++++++++++++++++
- drivers/input/misc/pm8941-pwrkey.c                 |  127 +-
- drivers/input/misc/sparcspkr.c                     |    1 +
- drivers/input/mouse/cypress_ps2.c                  |    2 +-
- drivers/input/mouse/psmouse-smbus.c                |   11 +-
- drivers/input/mouse/vmmouse.c                      |   14 +
- drivers/input/rmi4/rmi_f54.c                       |    1 -
- drivers/input/tablet/aiptek.c                      |    3 +-
- drivers/input/touchscreen/stmfts.c                 |   16 +-
- 25 files changed, 3852 insertions(+), 68 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/input/azoteq,iqs7222.yaml
- create mode 100644 drivers/input/joystick/sensehat-joystick.c
- create mode 100644 drivers/input/misc/iqs7222.c
-
-Thanks.
-
-
--- 
-Dmitry

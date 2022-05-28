@@ -2,154 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B67536D77
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 17:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036B7536D7F
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 17:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237370AbiE1POh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 11:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
+        id S237506AbiE1PUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 11:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237228AbiE1POf (ORCPT
+        with ESMTP id S237228AbiE1PUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 11:14:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE0E2EE23;
-        Sat, 28 May 2022 08:14:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5609D1063;
-        Sat, 28 May 2022 08:14:33 -0700 (PDT)
-Received: from e123427-lin.arm.com (unknown [10.57.7.209])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81FB73F73D;
-        Sat, 28 May 2022 08:14:31 -0700 (PDT)
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Update my email address to @kernel.org
-Date:   Sat, 28 May 2022 16:14:11 +0100
-Message-Id: <20220528151411.29810-1-lorenzo.pieralisi@arm.com>
-X-Mailer: git-send-email 2.31.0
+        Sat, 28 May 2022 11:20:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979F310E4;
+        Sat, 28 May 2022 08:20:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 376ED60EFC;
+        Sat, 28 May 2022 15:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29BA3C34100;
+        Sat, 28 May 2022 15:20:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="qE1HKzO2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653751247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9JkDzc0LO3wwyFpVhlqaIJZm7f0ZEKGy7IvUB5AiIpI=;
+        b=qE1HKzO2mc8ewbLzhWfVQyEPkHOa+2D7Ml/eLEuVPkrCEBvtuW3xvL2S6BnY/PYYwusLRG
+        fMKl15b/0LtL9NsDhP8+jYOLU3+/cSZkGmLeK0qeYL+QIKzwJxoaoqFdPE/wN/NgNiEqVE
+        6SXy6tnLK9/UtdSBhRVvNIF1zwRAgf8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 12101297 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 28 May 2022 15:20:46 +0000 (UTC)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2ff7b90e635so73364547b3.5;
+        Sat, 28 May 2022 08:20:46 -0700 (PDT)
+X-Gm-Message-State: AOAM530H3tqmjsHvzdCMrhsmOqJVCzbCgkOeEB1//nKQu74nZ0JWSCW/
+        BU5acq5JyrG0M6xN/eELYavh30cz6YidhlUuVw8=
+X-Google-Smtp-Source: ABdhPJxa9gI6GUshjPfnm31KDdrjwhQZ6ZM+t9sLo1ouvhBaw0GtT9VkU9LdsporNFZiEcwJ2OdJylg3+Tv1n1tTCuw=
+X-Received: by 2002:a0d:ea14:0:b0:300:4bc2:ee31 with SMTP id
+ t20-20020a0dea14000000b003004bc2ee31mr19524491ywe.396.1653751245268; Sat, 28
+ May 2022 08:20:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:6403:b0:17b:2ce3:1329 with HTTP; Sat, 28 May 2022
+ 08:20:44 -0700 (PDT)
+In-Reply-To: <01a7891f-7295-3be2-73f3-5405b1e18f45@molgen.mpg.de>
+References: <01a7891f-7295-3be2-73f3-5405b1e18f45@molgen.mpg.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sat, 28 May 2022 17:20:44 +0200
+X-Gmail-Original-Message-ID: <CAHmME9oFDjHjxR8xvns3VCDqGhtUDvEf7rhEy0fgD7NOmkKn=Q@mail.gmail.com>
+Message-ID: <CAHmME9oFDjHjxR8xvns3VCDqGhtUDvEf7rhEy0fgD7NOmkKn=Q@mail.gmail.com>
+Subject: Re: ./include/crypto/poly1305.h:56:46: error: 'CONFIG_CRYPTO_LIB_POLY1305_RSIZE'
+ undeclared here
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
+        TVD_SPACE_RATIO,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I will soon lose my @arm.com email address, so to prevent any possible
-issue let's update all kernel references (inclusive of .mailmap) to my
-@kernel.org alias ahead of time.
-
-My @arm.com address is still working and will likely resume to work at
-some point in the future; nonetheless, it is safer to switch to the
-@kernel.org alias from now onwards so that continuity is guaranteed.
-
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
----
- .mailmap    |  1 +
- MAINTAINERS | 16 ++++++++--------
- 2 files changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/.mailmap b/.mailmap
-index 6d484937f901..9ba38a82aba4 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -236,6 +236,7 @@ Linus Lüssing <linus.luessing@c0d3.blue> <linus.luessing@web.de>
- <linux-hardening@vger.kernel.org> <kernel-hardening@lists.openwall.com>
- Li Yang <leoyang.li@nxp.com> <leoli@freescale.com>
- Li Yang <leoyang.li@nxp.com> <leo@zh-kernel.org>
-+Lorenzo Pieralisi <lpieralisi@kernel.org> <lorenzo.pieralisi@arm.com>
- Lukasz Luba <lukasz.luba@arm.com> <l.luba@partner.samsung.com>
- Maciej W. Rozycki <macro@mips.com> <macro@imgtec.com>
- Maciej W. Rozycki <macro@orcam.me.uk> <macro@linux-mips.org>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 392467e9ab73..4fa6a8da4b83 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -382,7 +382,7 @@ F:	include/acpi/
- F:	tools/power/acpi/
- 
- ACPI FOR ARM64 (ACPI/arm64)
--M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
- M:	Hanjun Guo <guohanjun@huawei.com>
- M:	Sudeep Holla <sudeep.holla@arm.com>
- L:	linux-acpi@vger.kernel.org
-@@ -2946,7 +2946,7 @@ N:	uniphier
- ARM/VERSATILE EXPRESS PLATFORM
- M:	Liviu Dudau <liviu.dudau@arm.com>
- M:	Sudeep Holla <sudeep.holla@arm.com>
--M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- F:	*/*/*/vexpress*
-@@ -5162,7 +5162,7 @@ F:	arch/x86/kernel/cpuid.c
- F:	arch/x86/kernel/msr.c
- 
- CPUIDLE DRIVER - ARM BIG LITTLE
--M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
- M:	Daniel Lezcano <daniel.lezcano@linaro.org>
- L:	linux-pm@vger.kernel.org
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -5182,7 +5182,7 @@ F:	drivers/cpuidle/cpuidle-exynos.c
- F:	include/linux/platform_data/cpuidle-exynos.h
- 
- CPUIDLE DRIVER - ARM PSCI
--M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
- M:	Sudeep Holla <sudeep.holla@arm.com>
- L:	linux-pm@vger.kernel.org
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -15289,7 +15289,7 @@ F:	drivers/pci/controller/pci-v3-semi.c
- 
- PCI ENDPOINT SUBSYSTEM
- M:	Kishon Vijay Abraham I <kishon@ti.com>
--M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
- R:	Krzysztof Wilczyński <kw@linux.com>
- L:	linux-pci@vger.kernel.org
- S:	Supported
-@@ -15352,7 +15352,7 @@ F:	Documentation/devicetree/bindings/pci/xgene-pci-msi.txt
- F:	drivers/pci/controller/pci-xgene-msi.c
- 
- PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS
--M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
- R:	Rob Herring <robh@kernel.org>
- R:	Krzysztof Wilczyński <kw@linux.com>
- L:	linux-pci@vger.kernel.org
-@@ -15905,7 +15905,7 @@ F:	include/linux/dtpm.h
- 
- POWER STATE COORDINATION INTERFACE (PSCI)
- M:	Mark Rutland <mark.rutland@arm.com>
--M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- F:	drivers/firmware/psci/
-@@ -18277,7 +18277,7 @@ F:	drivers/net/ethernet/smsc/smc91x.*
- 
- SECURE MONITOR CALL(SMC) CALLING CONVENTION (SMCCC)
- M:	Mark Rutland <mark.rutland@arm.com>
--M:	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-+M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
- M:	Sudeep Holla <sudeep.holla@arm.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
--- 
-2.31.0
-
+Revert already sent:
+https://lore.kernel.org/lkml/20220528110918.256550-1-Jason@zx2c4.com/

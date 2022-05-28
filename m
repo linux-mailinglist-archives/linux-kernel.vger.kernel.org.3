@@ -2,54 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31202536DD5
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD18536DDB
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 19:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbiE1RBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 13:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        id S238949AbiE1RFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 13:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234364AbiE1RBQ (ORCPT
+        with ESMTP id S238896AbiE1RFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 13:01:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A3215826;
-        Sat, 28 May 2022 10:01:15 -0700 (PDT)
+        Sat, 28 May 2022 13:05:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAEB14024;
+        Sat, 28 May 2022 10:05:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 946A7CE0AD4;
-        Sat, 28 May 2022 17:01:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DB0C34100;
-        Sat, 28 May 2022 17:01:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 878AC60F44;
+        Sat, 28 May 2022 17:05:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC8FC34100;
+        Sat, 28 May 2022 17:05:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653757271;
-        bh=oC6vgq4nGfLuTy6kjDyr8VfSddTB81F1fW/kUUzh1vY=;
+        s=k20201202; t=1653757509;
+        bh=RbAT92bIRAtXe0cIR/KDQSi25eFquv7AlgWb4wDfJMk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QU26R+3iOGigiZ/xysvUEWkmaMWOFbMcQd5jgZmXagq7lhzODFD/9pjK1MiB2qXXO
-         eOHMV/e3kNo7pt6fIy2FU1hSxuj+Ly0pVrtKvZsZ55nJH3vhPkLqe011LTbelBLwEV
-         eUw234dERYiPOJNm2IFOBDu37mw6OdwbQcpZjHuKW5DMARqhSBEMjypL92YKI556f7
-         GwdUqR8U2RRCxWP6wrdmK/9ehY6AlnnXok+6yMLeNUYQQ0mFkGkdUesLwk+p7EbUnT
-         MYUxTmDI9NW0SyjGaiP1dsHv/3ozDTppiUKpFvebV/xkpUupjpvm/vo+C3lFJOGxlX
-         ei8qux+6bvW9A==
-Date:   Sat, 28 May 2022 18:10:04 +0100
+        b=fflB+u6lPkTB015Mj7ATvDLCOSZTNEOaT3vSWNSqD5yc0JjGzo1/rnXSbkidDyJfO
+         4R3V3H39X3NsxdVbxCQ5r2HSOX6ZgCrgUl/US1VZ8Vk9SExltkLN2EKo7LaugATSZu
+         BFibpKLlCuFLF0Y51jN1xNekwkYMqLpF59g84+hQUsUQVRBeVLmyHKtuFWBOrk1eIE
+         RUlUNfqo0OIwV6+OBltfia6A9M85W4wlHFncc9kiZ+mehZKWuTtilb9wOw2QK4CPGc
+         kNgD3Qw/+W+aKr31uCgvCkabw3Fsb7hqMzp87N/aIy3ObSHliD7EDQW5Q4D7FnvIit
+         rm76/vqBdzsvA==
+Date:   Sat, 28 May 2022 18:14:03 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "lorenzo.bianconi83@gmail.com" <lorenzo.bianconi83@gmail.com>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "teodora.baluta@intel.com" <teodora.baluta@intel.com>,
-        "narcisaanamaria12@gmail.com" <narcisaanamaria12@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/5] iio: treewide: rearrange iio trig get/register
-Message-ID: <20220528181004.286e696d@jic23-huawei>
-In-Reply-To: <20220524181150.9240-1-ddrokosov@sberdevices.ru>
-References: <20220524181150.9240-1-ddrokosov@sberdevices.ru>
+To:     Andreas Klinger <ak@it-klinger.de>
+Cc:     Li Zhengyu <lizhengyu3@huawei.com>, lars@metafoo.de,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: srf08: Remove redundant if statement
+Message-ID: <20220528181403.16c0971d@jic23-huawei>
+In-Reply-To: <Yo3Nwnq58tjKp3nl@arbad>
+References: <20220523122755.90638-1-lizhengyu3@huawei.com>
+        <Yo3Nwnq58tjKp3nl@arbad>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -64,48 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 24 May 2022 18:14:37 +0000
-Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
+On Wed, 25 May 2022 08:33:38 +0200
+Andreas Klinger <ak@it-klinger.de> wrote:
 
-> The following patchset resolves problems with iio_trigger_get() and
-> iio_trigger_register() call order in the different IIO drivers.
+> Acked-by: Andreas Klinger <ak@it-klinger.de>
 > 
-> IIO trigger interface function iio_trigger_get() should be called after
-> iio_trigger_register() (or its devm analogue) strictly, because of
-> iio_trigger_get() acquires module refcnt based on the trigger->owner
-> pointer, which is initialized inside iio_trigger_register() to
-> THIS_MODULE.
-> If this call order is wrong, the next iio_trigger_put() (from sysfs
-> callback or "delete module" path) will dereference "default" module
-> refcnt, which is incorrect behaviour.
+> Li Zhengyu <lizhengyu3@huawei.com> schrieb am Mo, 23. Mai 20:27:
+> > (!val) has been checked outside the loop, remove redundant (val &&)
+> > from loop.
+> > 
+> > Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
+Hi Li Zhengyu,
 
-Hi Dmitry,
+Applied to the togreg branch of iio.git which is initially pushed out as testing
+or 0-day to see if we missed anything.
 
-Series applied to the fixes-togreg branch of iio.git and marked for stable.
-
-Do you think it's also worth adding a runtime warning in iio_trigger_get()
-on !trig->owner so that we catch any cases of this introduced in the future?
+I'll push it out for linux-next to pick up once the merge window closes.
 
 Thanks,
 
 Jonathan
 
-> 
-> Changes v1->v2:
->     - provide tag Fixes: for all patches
-> 
-> Dmitry Rokosov (5):
->   iio:accel:bma180: rearrange iio trigger get and register
->   iio:accel:kxcjk-1013: rearrange iio trigger get and register
->   iio:accel:mxc4005: rearrange iio trigger get and register
->   iio:chemical:ccs811: rearrange iio trigger get and register
->   iio:humidity:hts221: rearrange iio trigger get and register
-> 
->  drivers/iio/accel/bma180.c           | 3 ++-
->  drivers/iio/accel/kxcjk-1013.c       | 4 ++--
->  drivers/iio/accel/mxc4005.c          | 4 ++--
->  drivers/iio/chemical/ccs811.c        | 4 ++--
->  drivers/iio/humidity/hts221_buffer.c | 5 ++++-
->  5 files changed, 12 insertions(+), 8 deletions(-)
+> > ---
+> >  drivers/iio/proximity/srf08.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/iio/proximity/srf08.c b/drivers/iio/proximity/srf08.c
+> > index ac1ab7e89d4e..7ed11339c31e 100644
+> > --- a/drivers/iio/proximity/srf08.c
+> > +++ b/drivers/iio/proximity/srf08.c
+> > @@ -354,7 +354,7 @@ static ssize_t srf08_write_sensitivity(struct srf08_data *data,
+> >  		return -EINVAL;
+> >  
+> >  	for (i = 0; i < data->chip_info->num_sensitivity_avail; i++)
+> > -		if (val && (val == data->chip_info->sensitivity_avail[i])) {
+> > +		if (val == data->chip_info->sensitivity_avail[i]) {
+> >  			regval = i;
+> >  			break;
+> >  		}
+> > -- 
+> > 2.17.1
+> >   
 > 
 

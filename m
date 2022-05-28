@@ -2,102 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83ACB536D50
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 16:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E58536D44
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 16:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236664AbiE1Oe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 10:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
+        id S236320AbiE1OZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 10:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234642AbiE1Oey (ORCPT
+        with ESMTP id S235857AbiE1OZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 10:34:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CECF192A0
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 07:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653748491;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XE622bwRFQLXoWlWGwkx558rDBHwnMuHGZROqrwvbw4=;
-        b=dYY7a3Rv5ALiQXiIMK80psAzVlu3N8EupopmJBFch3cnbPNib7UDOkDxeVK+h9nMDuKU6+
-        hBKAPzpg6klq3J0Gwf4UmTM42YOEkhiJQV/SM7qAvV6DqKc6Ew94HleHSxPHHjLBlCYHFu
-        ZUaMsmNzvejQ+zhYurYgpz68HcLOHco=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-20-G0VVI4GrPzaKlIIJFBnDSQ-1; Sat, 28 May 2022 10:34:48 -0400
-X-MC-Unique: G0VVI4GrPzaKlIIJFBnDSQ-1
-Received: by mail-qv1-f70.google.com with SMTP id 13-20020a0562140d4d00b004624a316484so5605575qvr.11
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 07:34:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XE622bwRFQLXoWlWGwkx558rDBHwnMuHGZROqrwvbw4=;
-        b=5LSh8g3ZQiosvhBuYqd61Zx7DsKh0ykPuY4hp32QUvjV1LqAu5xB/7dn7P3Dwj/4Xe
-         PoDv0hiPItSZV1khIC9Xy+Sbq115lPzVIBHV73peIJaYtuw9exeqG60TaNkWweNceik8
-         HBWDKIzrxhoWq99gbpBjKqPzOXPdvEN4iFcz2T/F+WIzEMM/saHxnwnPY6WPNHAP0gDh
-         nA6OtZFFIYojakmNesvaMiXiaezbvoU2u94JNQ8JEB9qOwWK/u8Q998tVAhEGCf4/A20
-         ICrOKSWqxeHEiWFSdMFUIVg88Jk6JY9d8JlTqNZT2opN02fPuPoqPttyliMqW8vYciBu
-         Nzbg==
-X-Gm-Message-State: AOAM532Bc25OxIzIGgOTfipGTf8Rz5qSp+ATtfZ915p3JsUD5Msj3mr1
-        MGZvPeLfuf6ZKnjp36M0ytQ+cDpZ7J9k5pN7i0XBCcOlFcdjesTeOcrnC3UiSADGpMX62Vi6/xY
-        aJF45K5a7oKgTMl6cscRKUR+3
-X-Received: by 2002:a05:622a:186:b0:2f3:b5e1:8f2c with SMTP id s6-20020a05622a018600b002f3b5e18f2cmr37699904qtw.99.1653748487810;
-        Sat, 28 May 2022 07:34:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzfw+zDbPoW1PujPqrT77plf9K/dqh5eJc8Y+lAMBwBf227Q8xlr2ZkX6Cc6T3ziRTt2IzQLA==
-X-Received: by 2002:a05:622a:186:b0:2f3:b5e1:8f2c with SMTP id s6-20020a05622a018600b002f3b5e18f2cmr37699895qtw.99.1653748487608;
-        Sat, 28 May 2022 07:34:47 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id c131-20020a379a89000000b006a098381abcsm4541947qke.114.2022.05.28.07.34.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 May 2022 07:34:46 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/nouveau/fifo/gv100-: set gv100_fifo_runlist storage-class to static
-Date:   Sat, 28 May 2022 10:18:36 -0400
-Message-Id: <20220528141836.4155970-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 28 May 2022 10:25:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E091834B;
+        Sat, 28 May 2022 07:25:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3n7OczS1PtetK1QFTtWOYHDzv4XhdHqp3jM8IwjXG8U=; b=tTg6UwcV3Su/y3ILUPGeurwJEV
+        viPkR2YPdjqbEN100npodPR4sEr6UPd7Oqd+XzBZs+wi0+cPWks3IN222rD02IrC836oczmsLAvVK
+        jbpoBXAfTfiRvefseGe6TCmt1PBcl3CJsbTNKaGSh2jOHkDuygAOTIAlbHmanrksO/lgr0xEw/daX
+        RafXWo+0rCRYJlegaXDjq0RTRcyGo+z6ATe1RwSuGuFEWHPXXewYsD5f/bkSyErLbQTJTPX/XloSu
+        iDubEkqSkkTPzti2NVI3yqst12vbT8lz8W5l+ELn1RURxNI+B+jNTGVyehdvOo1s3HCy9G39fUzMD
+        MRxYMlCg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nuxN7-002uyS-Ak; Sat, 28 May 2022 14:24:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 579DF3002A6;
+        Sat, 28 May 2022 16:24:51 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B598820289D16; Sat, 28 May 2022 16:24:50 +0200 (CEST)
+Date:   Sat, 28 May 2022 16:24:50 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Juri Lelli <juri.lelli@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Waiman Long <longman@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        rcu@vger.kernel.org
+Subject: Re: [RFC PATCH 4/4] cpuset: Support RCU-NOCB toggle on v2 root
+ partitions
+Message-ID: <YpIwsiaY2IPK96WO@hirez.programming.kicks-ass.net>
+References: <20220525221055.1152307-1-frederic@kernel.org>
+ <20220525221055.1152307-5-frederic@kernel.org>
+ <Yo/FGcG+uiBh88sT@slm.duckdns.org>
+ <20220526225141.GA1214445@lothringen>
+ <YpAHEt0j30vBw9au@slm.duckdns.org>
+ <9e44bb00-955a-dbc6-a863-be649e0c701f@redhat.com>
+ <YpAdSW8JXVPOoNJl@slm.duckdns.org>
+ <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220527083018.n43nc73vuuzm5ixo@localhost.localdomain>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sparse reports
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/gv100.c:56:1: warning: symbol 'gv100_fifo_runlist' was not declared. Should it be static?
+On Fri, May 27, 2022 at 10:30:18AM +0200, Juri Lelli wrote:
+> Hi,
+> 
+> On 26/05/22 14:37, Tejun Heo wrote:
+> > On Thu, May 26, 2022 at 08:28:43PM -0400, Waiman Long wrote:
+> > > I am thinking along the line that it will not be hierarchical. However,
+> > > cpuset can be useful if we want to have multiple isolated partitions
+> > > underneath the top cpuset with different isolation attributes, but no more
+> > > sub-isolated partition with sub-attributes underneath them. IOW, we can only
+> > > set them at the first level under top_cpuset. Will that be useful?
+> > 
+> > At that point, I'd just prefer to have it under /proc or /sys.
+> 
+> FWIW, I was under the impression that this would nicely fit along the
+> side of other feaures towards implenting dynamic isolation of CPUs (say
+> https://lore.kernel.org/lkml/20220510153413.400020-1-longman@redhat.com/
+> for example). Wouldn't be awkward to have to poke different places to
+> achieve isolation at runtime?
 
-gv100_fifo_runlist is only used in gv100.c, so change it to static.
+This, that's what I was thinking.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/nouveau/nvkm/engine/fifo/gv100.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My main objection to the whole thing is that it's an RCU_NOCB specific
+interface. *That* I think is daft.
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gv100.c b/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gv100.c
-index 70e16a91ac12..faf0fe9f704c 100644
---- a/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gv100.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gv100.c
-@@ -52,7 +52,7 @@ gv100_fifo_runlist_cgrp(struct nvkm_fifo_cgrp *cgrp,
- 	nvkm_wo32(memory, offset + 0xc, 0x00000000);
- }
- 
--const struct gk104_fifo_runlist_func
-+static const struct gk104_fifo_runlist_func
- gv100_fifo_runlist = {
- 	.size = 16,
- 	.cgrp = gv100_fifo_runlist_cgrp,
--- 
-2.27.0
-
+I was thinking a partition would be able to designate a house-keeping
+sub-partition/mask, but who cares about all the various different
+housekeeping parties.

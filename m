@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA45536A0C
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D324B536A04
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355036AbiE1B7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 21:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
+        id S1355589AbiE1CBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 22:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355548AbiE1B7Z (ORCPT
+        with ESMTP id S240856AbiE1CA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 21:59:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50D8580DB;
-        Fri, 27 May 2022 18:59:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54D0161CDC;
-        Sat, 28 May 2022 01:59:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 665DFC385A9;
-        Sat, 28 May 2022 01:59:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653703163;
-        bh=qgaLQi23K/blCraSc9Uq8n9yu7cewxLnxTYIIgLJaw8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=QxqUYwoRrO7DezsmuTMrdAggNnUjubi93r0+gmxD+7iAhOHbLdxk5JNFOJeDNorFy
-         i81CoBfCC3MGJ1jIyPsO5YTcQohdh/J7LxkNTZk8B+H7rSKfVsIJ7Ch5jgJ/WuLOFj
-         b9ixOtyXOaDeWXoaCfwHDqZdozFp9oviuXhmD2nxypMo/J1HACK4uhj9SwdOLByQXk
-         RW2QXR8CmEOhrdbwRVmXbVX52+8EUMHA8t2ups7dZKIQLSLaZJxXGMFialbHMTF27S
-         Abva/V8dBKWCRKCOPaKNBuqnJVN1et8AsQoxcwrREvt1NpZYbkBYNlgBUSjz5UCj9c
-         YohavMA4Rm3rA==
-Date:   Fri, 27 May 2022 20:59:21 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     Jim Quinlan <jim2101024@gmail.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        James Dutton <james.dutton@gmail.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
- linkup
-Message-ID: <20220528015921.GA524446@bhelgaas>
+        Fri, 27 May 2022 22:00:56 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129935D5E6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 19:00:54 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-f2c296d320so7759557fac.8
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 19:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iPbXkcLbQ4X8axGLAMQzdWp3mU7k/e2Nfqkwli3cCcA=;
+        b=O12hRDx1czOFcYjWN1pkNwT5Oq2V92Cte9x3UUQUcxy6Nz0cFB5C/ZedGfclN4IMgo
+         ITPdnXEtSuOAjRvfJbaoECCgYddqkxAMsgAXpgvo5nPsbDRPrtkR1MDrEF1g2mkKC7pG
+         rp2JLYty+i0jpXVsoho0pk0rLmlsG+NvgsRSA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=iPbXkcLbQ4X8axGLAMQzdWp3mU7k/e2Nfqkwli3cCcA=;
+        b=vo3NB82dV+/EYMH3KRtavp/uDFiecxALzTgptP6CHkFRVXhpcmnZp9YSXK7uGIlBGz
+         yDE2XUe+djSK95p4jhDmmOYqWn40SJtvB0kUR1J0kn++bm58b1pN+A2/vhqLvouBbhQy
+         Zs2jlDVWT0+Tu/fozAQawgpP5OjosnIqQtaZBrzuVRFHOBgmwbWUQYhwzDHe/0FzBYHA
+         59XEndPgTMlTaD3VMw9QuZqMnSieLHqLGytJBn6XVI1xOn2GVXLrgm9F7i83aj4hBfsW
+         GY9hCJLHiVBVijb8L03Uh078X2QSns3FLgzhfMP15buDYNrLG/7hSgEM8cuiZkLrYZ1P
+         eUCA==
+X-Gm-Message-State: AOAM532m7kgSxm7DFhSh6E4GmdFTroIjeMh4kZ+tMEYsp65eoNxJK5vb
+        0P5QtKTz1+mJIG1ixGd8uKtihg==
+X-Google-Smtp-Source: ABdhPJyFDMuuHXQiGMljrcllRO3B/P0zoAE8+QvgbJHyp4g0NrMAosEupa0yh0raWZkzyS2uKF1eKA==
+X-Received: by 2002:a05:6870:fb89:b0:f3:923:643a with SMTP id kv9-20020a056870fb8900b000f30923643amr1535882oab.177.1653703253383;
+        Fri, 27 May 2022 19:00:53 -0700 (PDT)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id z20-20020a9d4694000000b0060b66b6641fsm798871ote.5.2022.05.27.19.00.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 19:00:52 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Fri, 27 May 2022 21:00:50 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.17 000/111] 5.17.12-rc1 review
+Message-ID: <YpGCUsxqcsfjq5qH@fedora64.linuxtx.org>
+References: <20220527084819.133490171@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+-6iNzfT1Ut3P-mn3kL=ZUdso+FV9KJUpQzOZpQfpJAT7BTkQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220527084819.133490171@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 27, 2022 at 08:19:16PM -0400, Jim Quinlan wrote:
-> On Fri, May 27, 2022 at 7:28 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+On Fri, May 27, 2022 at 10:48:32AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.12 release.
+> There are 111 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 29 May 2022 08:46:36 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.12-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-> > Where are we at with this?  Linus just merged my pull request, and I'd
-> > really like to get this resolved before -rc1 (expected June 5 or so),
-> > which means I'd like to ask him to pull the fix early next week.
->
-> I was waiting to see where the email thread was going...
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-My fault for raising all the tangents :)
-
-> I'll send out the v2 regression fix in less than 24 hours.
-
-Great, thanks!
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

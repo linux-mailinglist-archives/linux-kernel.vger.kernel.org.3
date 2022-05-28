@@ -2,43 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C02E536A63
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382A6536A54
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiE1Cxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 22:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S1355651AbiE1CxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 22:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355601AbiE1Cw4 (ORCPT
+        with ESMTP id S1355549AbiE1Cwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 22:52:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A432912E304
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 19:52:55 -0700 (PDT)
+        Fri, 27 May 2022 22:52:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042FE1271A9
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 19:52:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F202CB8268F
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7758361D49
         for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 02:52:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFFABC34118;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDA3C341CF;
         Sat, 28 May 2022 02:52:51 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1numZO-000LQ1-RH;
-        Fri, 27 May 2022 22:52:50 -0400
-Message-ID: <20220528025250.675966313@goodmis.org>
+        id 1numZP-000LQa-0k;
+        Fri, 27 May 2022 22:52:51 -0400
+Message-ID: <20220528025250.861004876@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 27 May 2022 22:50:39 -0400
+Date:   Fri, 27 May 2022 22:50:40 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [for-next][PATCH 11/23] tracing/timerlat: Do not wakeup the thread if the trace stops at the
- IRQ
+        liqiong <liqiong@nfschina.com>
+Subject: [for-next][PATCH 12/23] tracing: Change "char *" string form to "char []"
 References: <20220528025028.850906216@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,36 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@kernel.org>
+From: liqiong <liqiong@nfschina.com>
 
-There is no need to wakeup the timerlat/ thread if stop tracing is hit
-at the timerlat's IRQ handler.
+The "char []" string form declares a single variable. It is better
+than "char *" which creates two variables in the final assembly.
 
-Return before waking up timerlat's thread.
+Link: https://lkml.kernel.org/r/20220512143230.28796-1-liqiong@nfschina.com
 
-Link: https://lkml.kernel.org/r/b392356c91b56aedd2b289513cc56a84cf87e60d.1652175637.git.bristot@kernel.org
-
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Clark Williams <williams@redhat.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: liqiong <liqiong@nfschina.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_osnoise.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/trace.c             | 2 +-
+ kernel/trace/trace_events_hist.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 9b204ee3c6f5..035ec8b84e12 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -1595,6 +1595,8 @@ static enum hrtimer_restart timerlat_irq(struct hrtimer *timer)
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 4825883b2ffd..e38a7ca4cdd0 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -4252,7 +4252,7 @@ static void print_func_help_header_irq(struct array_buffer *buf, struct seq_file
+ 				       unsigned int flags)
+ {
+ 	bool tgid = flags & TRACE_ITER_RECORD_TGID;
+-	const char *space = "            ";
++	static const char space[] = "            ";
+ 	int prec = tgid ? 12 : 2;
  
- 			osnoise_stop_tracing();
- 			notify_new_max_latency(diff);
-+
-+			return HRTIMER_NORESTART;
- 		}
- 	}
+ 	print_event_info(buf, m);
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index c6a65738feb3..48e82e141d54 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -4165,7 +4165,7 @@ static int create_val_field(struct hist_trigger_data *hist_data,
+ 	return __create_val_field(hist_data, val_idx, file, NULL, field_str, 0);
+ }
  
+-static const char *no_comm = "(no comm)";
++static const char no_comm[] = "(no comm)";
+ 
+ static u64 hist_field_execname(struct hist_field *hist_field,
+ 			       struct tracing_map_elt *elt,
 -- 
 2.35.1

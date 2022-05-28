@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF77C536DB3
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 18:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365BC536DB4
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 18:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354625AbiE1QEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 12:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
+        id S1355396AbiE1QEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 12:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348524AbiE1QE3 (ORCPT
+        with ESMTP id S1351950AbiE1QEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 12:04:29 -0400
+        Sat, 28 May 2022 12:04:30 -0400
 Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710A0186FC;
-        Sat, 28 May 2022 09:04:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD33186E9
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 09:04:28 -0700 (PDT)
 Received: from localhost.localdomain (abxh119.neoplus.adsl.tpnet.pl [83.9.1.119])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 753303F75B;
-        Sat, 28 May 2022 18:26:38 +0200 (CEST)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPA id D410B3F757;
+        Sat, 28 May 2022 18:26:40 +0200 (CEST)
 From:   Konrad Dybcio <konrad.dybcio@somainline.org>
 To:     ~postmarketos/upstreaming@lists.sr.ht
 Cc:     martin.botka@somainline.org,
@@ -29,14 +29,15 @@ Cc:     martin.botka@somainline.org,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Emma Anholt <emma@anholt.net>,
         Jonathan Marek <jonathan@marek.ca>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/4] drm/msm/a6xx: Add speedbin support for A619 GPU
-Date:   Sat, 28 May 2022 18:03:50 +0200
-Message-Id: <20220528160353.157870-3-konrad.dybcio@somainline.org>
+Subject: [PATCH v3 4/4] drm/msm/adreno: Fix up formatting
+Date:   Sat, 28 May 2022 18:03:51 +0200
+Message-Id: <20220528160353.157870-4-konrad.dybcio@somainline.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220528160353.157870-1-konrad.dybcio@somainline.org>
 References: <20220528160353.157870-1-konrad.dybcio@somainline.org>
@@ -51,52 +52,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are various SKUs of A619, ranging from 565 MHz to 850 MHz, depending
-on the bin. Add support for distinguishing them, so that proper frequency
-ranges can be applied, depending on the HW.
+Leading spaces are not something checkpatch likes, and it says so when
+they are present. Use tabs consistently to indent function body and
+unwrap a 83-char-long line, as 100 is cool nowadays.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/gpu/drm/msm/adreno/adreno_gpu.h | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 331cd2f6b9e3..a2a30a9ab677 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1836,6 +1836,22 @@ static u32 a618_get_speed_bin(u32 fuse)
- 	return UINT_MAX;
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+index a13a3e5a294b..f73f7b5dfd10 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
++++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
+@@ -199,7 +199,7 @@ static inline int adreno_is_a420(struct adreno_gpu *gpu)
+ 
+ static inline int adreno_is_a430(struct adreno_gpu *gpu)
+ {
+-       return gpu->revn == 430;
++	return gpu->revn == 430;
  }
  
-+static u32 a619_get_speed_bin(u32 fuse)
-+{
-+	if (fuse == 0)
-+		return 0;
-+	else if (fuse == 120)
-+		return 4;
-+	else if (fuse == 138)
-+		return 3;
-+	else if (fuse == 169)
-+		return 2;
-+	else if (fuse == 180)
-+		return 1;
-+
-+	return UINT_MAX;
-+}
-+
- static u32 adreno_7c3_get_speed_bin(u32 fuse)
+ static inline int adreno_is_a506(struct adreno_gpu *gpu)
+@@ -239,7 +239,7 @@ static inline int adreno_is_a540(struct adreno_gpu *gpu)
+ 
+ static inline int adreno_is_a618(struct adreno_gpu *gpu)
  {
- 	if (fuse == 0)
-@@ -1855,6 +1871,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
- 	if (adreno_cmp_rev(ADRENO_REV(6, 1, 8, ANY_ID), rev))
- 		val = a618_get_speed_bin(fuse);
+-       return gpu->revn == 618;
++	return gpu->revn == 618;
+ }
  
-+	if (adreno_cmp_rev(ADRENO_REV(6, 1, 9, ANY_ID), rev))
-+		val = a619_get_speed_bin(fuse);
-+
- 	if (adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), rev))
- 		val = adreno_7c3_get_speed_bin(fuse);
+ static inline int adreno_is_a619(struct adreno_gpu *gpu)
+@@ -249,7 +249,7 @@ static inline int adreno_is_a619(struct adreno_gpu *gpu)
  
+ static inline int adreno_is_a630(struct adreno_gpu *gpu)
+ {
+-       return gpu->revn == 630;
++	return gpu->revn == 630;
+ }
+ 
+ static inline int adreno_is_a640_family(struct adreno_gpu *gpu)
+@@ -259,18 +259,18 @@ static inline int adreno_is_a640_family(struct adreno_gpu *gpu)
+ 
+ static inline int adreno_is_a650(struct adreno_gpu *gpu)
+ {
+-       return gpu->revn == 650;
++	return gpu->revn == 650;
+ }
+ 
+ static inline int adreno_is_7c3(struct adreno_gpu *gpu)
+ {
+ 	/* The order of args is important here to handle ANY_ID correctly */
+-       return adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), gpu->rev);
++	return adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), gpu->rev);
+ }
+ 
+ static inline int adreno_is_a660(struct adreno_gpu *gpu)
+ {
+-       return gpu->revn == 660;
++	return gpu->revn == 660;
+ }
+ 
+ /* check for a615, a616, a618, a619 or any derivatives */
+@@ -281,14 +281,13 @@ static inline int adreno_is_a615_family(struct adreno_gpu *gpu)
+ 
+ static inline int adreno_is_a660_family(struct adreno_gpu *gpu)
+ {
+-       return adreno_is_a660(gpu) || adreno_is_7c3(gpu);
++	return adreno_is_a660(gpu) || adreno_is_7c3(gpu);
+ }
+ 
+ /* check for a650, a660, or any derivatives */
+ static inline int adreno_is_a650_family(struct adreno_gpu *gpu)
+ {
+-       return gpu->revn == 650 || gpu->revn == 620 ||
+-	       adreno_is_a660_family(gpu);
++	return gpu->revn == 650 || gpu->revn == 620 || adreno_is_a660_family(gpu);
+ }
+ 
+ int adreno_get_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
 -- 
 2.36.1
 

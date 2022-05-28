@@ -2,45 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F71C536E90
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 23:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B716E536E8F
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 23:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiE1VRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 May 2022 17:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
+        id S230004AbiE1VSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 May 2022 17:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiE1VRA (ORCPT
+        with ESMTP id S229524AbiE1VSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 May 2022 17:17:00 -0400
-Received: from p-impout004.msg.pkvw.co.charter.net (p-impout004aa.msg.pkvw.co.charter.net [47.43.26.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD34BC22
-        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 14:16:58 -0700 (PDT)
-Received: from 2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com.com ([24.31.246.181])
-        by cmsmtp with ESMTP
-        id v3mLnd6IdgPEBv3mRnEttK; Sat, 28 May 2022 21:15:27 +0000
-X-Authority-Analysis: v=2.4 cv=b8OhX/Kx c=1 sm=1 tr=0 ts=629290ef
- a=cAe/7qmlxnd6JlJqP68I9A==:117 a=cAe/7qmlxnd6JlJqP68I9A==:17
- a=IkcTkHD0fZMA:10 a=yQdBAQUQAAAA:8 a=ag1SF4gXAAAA:8 a=VTP6l_gzy7p3D2MEsWYA:9
- a=QEXdDO2ut3YA:10 a=SzazLyfi1tnkUD6oumHU:22 a=Yupwre4RP9_Eg_Bd0iYG:22
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Larry Finger <Larry.Finger@lwfinger.net>
-Subject: [PATCH 2/2] staging: r8188eu: Fix undersized array in rtw_xmit.c
-Date:   Sat, 28 May 2022 16:14:52 -0500
-Message-Id: <20220528211452.32134-3-Larry.Finger@lwfinger.net>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220528211452.32134-1-Larry.Finger@lwfinger.net>
-References: <20220528211452.32134-1-Larry.Finger@lwfinger.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfCKOQQzV5sOO9cpih/JLzLJJTp15WGk9mISv+QgUqDYfcYI/tir+unI3M3xTKrn+NhGSR1B9rx2jBSbsr5NgAKU3m8jLxlCQOEMRkdVBjajeSaGfIyUD
- uxTCXA2QXgFpHviPswnrPca6aoa05TOG4Pjaa15BmU0Ut16Q0FSW6O24GRVm8bFJ3JgYBx7iVlaCGhmDKIP4e23ftSK/vBS8D6sbicjAdYIFirRVkINPxBoP
- oyP2Q31ravRqgLCYTZ9k3/wsDQ/W4Jd1WVDc6y8rW40BhngY+5TxiDOeAgLuzzujeRnq9pJDvWnLjZVzTtKCNGMi1o+4i4sUtmDIjVEGYqz+E9yLsHYFBVFS
- yHWhZELH
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 28 May 2022 17:18:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B1EBF55
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 14:18:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05CB5B8091D
+        for <linux-kernel@vger.kernel.org>; Sat, 28 May 2022 21:18:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38B0FC34119;
+        Sat, 28 May 2022 21:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1653772690;
+        bh=bdVK0S6unup8QwUoNJ+TWIngI+wu05UsfjpqzIce53A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lMLT/8zjNL8UW586SsXRgRCzdCRdDW+Pgc7yf5SBDZd8NhO2AxWRrwbG9s6n0bKFz
+         nzztLSCvLtnXhPbPy70TgxScg6PtHExb+/ImrzJmXWMGh3OhDMgHQhtOg+ZFZlyk/z
+         5+enSryXaJvV3F5j0zL3YHa30Qf/h78R6ehBO9BE=
+Date:   Sat, 28 May 2022 14:18:09 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Borislav Petkov <bp@alien8.de>, michael@michaellarabel.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Minchan Kim <minchan@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [patch v5] mm: lru_cache_disable: replace work queue
+ synchronization with synchronize_rcu
+Message-Id: <20220528141809.732788db257253396462c79e@linux-foundation.org>
+In-Reply-To: <YmrWK/KoU1zrAxPI@fuller.cnet>
+References: <YhUI1wUtV8yguijO@fuller.cnet>
+        <YhUKRzEKxMvlGQ5n@fuller.cnet>
+        <YiI+a9gTr/UBCf0X@fuller.cnet>
+        <20220304163554.8872fe5d5a9d634f7a2884f5@linux-foundation.org>
+        <Yin7hDxdt0s/x+fp@fuller.cnet>
+        <YkWyLaom/r7jXgbA@zn.tnic>
+        <YmrWK/KoU1zrAxPI@fuller.cnet>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,50 +67,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compiling with -warray-bounds yields the following warning:
+On Thu, 28 Apr 2022 15:00:11 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
 
-drivers/staging/r8188eu/core/rtw_xmit.c: In function ‘rtw_alloc_hwxmits’:
-drivers/staging/r8188eu/core/rtw_xmit.c:1493:24: warning: array subscript 4 is outside array bounds of ‘void[64]’ [-Warray-bounds]
- 1493 |                 hwxmits[4] .sta_queue = &pxmitpriv->be_pending;
-      |                 ~~~~~~~^~~
-In file included from drivers/staging/r8188eu/core/../include/osdep_service.h:19,
-                 from drivers/staging/r8188eu/core/rtw_xmit.c:6:
-In function ‘kmalloc’,
-    inlined from ‘kzalloc’ at ./include/linux/slab.h:733:9,
-    inlined from ‘rtw_alloc_hwxmits’ at drivers/staging/r8188eu/core/rtw_xmit.c:1484:23:
-./include/linux/slab.h:600:24: note: at offset 64 into object of size 64 allocated by ‘kmem_cache_alloc_trace’
-  600 |                 return kmem_cache_alloc_trace(
-      |                        ^~~~~~~~~~~~~~~~~~~~~~~
-  601 |                                 kmalloc_caches[kmalloc_type(flags)][index],
-      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  602 |                                 flags, size);
-      |
+> On Thu, Mar 31, 2022 at 03:52:45PM +0200, Borislav Petkov wrote:
+> > On Thu, Mar 10, 2022 at 10:22:12AM -0300, Marcelo Tosatti wrote:
+> > > 
+> ...
+>
+> > 
+> > Someone pointed me at this:
+> > 
+> > https://www.phoronix.com/scan.php?page=news_item&px=Linux-518-Stress-NUMA-Goes-Boom
+> > 
+> > which says this one causes a performance regression with stress-ng's
+> > NUMA test...
+> 
+> Michael,
+> 
+> This is probably do_migrate_pages that is taking too long due to
+> synchronize_rcu().
+> 
+> Switching to synchronize_rcu_expedited() should probably fix it...
+> Can you give it a try, please?
 
-This warning arises because macro HWXMIT_ENTRY is too small.
+I guess not.
 
-Fixes commit 7884fc0a1473 ("staging: r8188eu: introduce new include dir
-for RTL8188eu driver")
+Is anyone else able to demonstrate a stress-ng performance regression
+due to ff042f4a9b0508?  And if so, are they able to try Marcelo's
+one-liner?
 
-Fixes: 7884fc0a1473 ("staging: r8188eu: introduce new include dir for RTL8188eu driver")
-Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/staging/r8188eu/include/rtw_xmit.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
-index b2df1480d66b..27fa536f51ee 100644
---- a/drivers/staging/r8188eu/include/rtw_xmit.h
-+++ b/drivers/staging/r8188eu/include/rtw_xmit.h
-@@ -69,7 +69,7 @@ do {							\
- 	dot11txpn.val = dot11txpn.val == 0xffffffffffffULL ? 0 : (dot11txpn.val+1);\
- } while (0)
- 
--#define HWXMIT_ENTRY	4
-+#define HWXMIT_ENTRY	5
- 
- #define TXDESC_SIZE 32
- 
--- 
-2.36.1
-
+> diff --git a/mm/swap.c b/mm/swap.c
+> index bceff0cb559c..04a8bbf9817a 100644
+> --- a/mm/swap.c
+> +++ b/mm/swap.c
+> @@ -879,7 +879,7 @@ void lru_cache_disable(void)
+>  	 * lru_disable_count = 0 will have exited the critical
+>  	 * section when synchronize_rcu() returns.
+>  	 */
+> -	synchronize_rcu();
+> +	synchronize_rcu_expedited();
+>  #ifdef CONFIG_SMP
+>  	__lru_add_drain_all(true);
+>  #else
+> 
+> 

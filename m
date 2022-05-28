@@ -2,111 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC670536A49
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF378536A5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 May 2022 04:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352927AbiE1CwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 May 2022 22:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
+        id S1355693AbiE1CyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 May 2022 22:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiE1CwP (ORCPT
+        with ESMTP id S1355638AbiE1CxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 May 2022 22:52:15 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A19880C6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 19:52:13 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L95l155Gvz1JCTL;
-        Sat, 28 May 2022 10:50:37 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 28 May 2022 10:52:11 +0800
-Subject: Re: [PATCH] mm/vmscan: don't try to reclaim freed folios
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220527080451.48549-1-linmiaohe@huawei.com>
- <YpDoAZtQtQf6U8D2@casper.infradead.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <e0502c7c-b71d-5356-fcc3-7c048c25d827@huawei.com>
-Date:   Sat, 28 May 2022 10:52:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 27 May 2022 22:53:09 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D851312E312
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 19:53:07 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id u18-20020a5d8712000000b0064c7a7c497aso3703688iom.18
+        for <linux-kernel@vger.kernel.org>; Fri, 27 May 2022 19:53:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=QWSyAHKfzIY1OHoU9+6VpQoFbsrYf2vgv+jKDLElsyc=;
+        b=bHjl/fcPsAIIZfEc2xXRsr9TiuNOQ56VV7RpcNc7RmbQJeF3D3VmkaeAJOX7dpkK8e
+         uigZ2HZi0SMwuLpOuHfmrLQGh9YbaKz3xi5EWaVf5/x4/+UM3PDZe48M7wr6QngiY916
+         wz1UtVMAXmC3v23CV4f68hZlqqB4lVhVh2EHwWYrsIMepdgEeWN//BwP/brK8nFwv5VC
+         49LDFTV/kCs+C7BwOZcRkFzXB3GS6bXBfKZqffnzjmLKB9mZO2Zjq3s/DNEh+keoSOWB
+         YRvZJiflILwmDE7hu+EcLo8GD2/s/K6qHMSqdBzfrgt+6nc0g4PtZkVBG2ec6t/LaweG
+         H/9g==
+X-Gm-Message-State: AOAM5322fISx0o/ZRPbtv8oXNIzGHAwomBCSyn9KY9pWT0B4Ih+JdeCe
+        8poAW7KYKr4Gq7BuhgL0lC7fpLrdeZkBOp85d2PXDcalwYOj
+X-Google-Smtp-Source: ABdhPJxJi0ol2DMTwrLC0ImM3K7KAEttvHIusR3cF/HqxJ+TrmU+FP4t6DxZBAeXscwC5ONMjXXB+yv24KkMd+6chuCjZCPdVkTE
 MIME-Version: 1.0
-In-Reply-To: <YpDoAZtQtQf6U8D2@casper.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:178f:b0:2d1:b8d7:2ed6 with SMTP id
+ y15-20020a056e02178f00b002d1b8d72ed6mr12839110ilu.275.1653706387216; Fri, 27
+ May 2022 19:53:07 -0700 (PDT)
+Date:   Fri, 27 May 2022 19:53:07 -0700
+In-Reply-To: <20220528023054.3646-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c5debc05e0098538@google.com>
+Subject: Re: [syzbot] WARNING in driver_unregister
+From:   syzbot <syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/27 23:02, Matthew Wilcox wrote:
-> On Fri, May 27, 2022 at 04:04:51PM +0800, Miaohe Lin wrote:
->> If folios were freed from under us, there's no need to reclaim them. Skip
->> these folios to save lots of cpu cycles and avoid possible unnecessary
->> disk IO.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/vmscan.c | 8 +++++++-
->>  1 file changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/mm/vmscan.c b/mm/vmscan.c
->> index f7d9a683e3a7..646dd1efad32 100644
->> --- a/mm/vmscan.c
->> +++ b/mm/vmscan.c
->> @@ -1556,12 +1556,18 @@ static unsigned int shrink_page_list(struct list_head *page_list,
->>  		folio = lru_to_folio(page_list);
->>  		list_del(&folio->lru);
->>  
->> +		nr_pages = folio_nr_pages(folio);
->> +		if (folio_ref_count(folio) == 1) {
->> +			/* folio was freed from under us. So we are done. */
->> +			WARN_ON(!folio_put_testzero(folio));
-> 
-> What?  No.  This can absolutely happen.  We have a refcount on the folio,
-> which means that any other thread can temporarily raise the refcount,
+Hello,
 
-IIUC, the folio is only in the isolated page_list now and it's not in the page cache, swap cache, pagetable or
-under any use. So there should be no way that any other thread can temporarily raise the refcount when
-folio_ref_count == 1. Or am I miss something?
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> so this WARN_ON can trigger.  Also, we don't hold the folio locked,
-> or an extra reference, so nr_pages is unstable because it can be split.
+Reported-and-tested-by: syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com
 
-Yes, you're right. When folio_ref_count != 1, nr_pages is unstable. Will fix it if v2 is possible. :)
+Tested on:
 
-Thanks a lot for review and comment!
+commit:         97fa5887 USB: new quirk for Dell Gen 2 devices
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d7b232ec3adf5c8d
+dashboard link: https://syzkaller.appspot.com/bug?extid=02b16343704b3af1667e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=13564f6bf00000
 
-> 
->> +			goto free_it;
->> +		}
->> +
->>  		if (!folio_trylock(folio))
->>  			goto keep;
->>  
->>  		VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
->>  
->> -		nr_pages = folio_nr_pages(folio);
->>  
->>  		/* Account the number of base pages */
->>  		sc->nr_scanned += nr_pages;
->> -- 
->> 2.23.0
->>
->>
-> 
-> .
-> 
-
+Note: testing is done by a robot and is best-effort only.
